@@ -1,0 +1,64 @@
+<form [formGroup]="formAirfare">
+
+  <div class="po-row">
+    <po-datepicker
+      class="po-md-6"
+      formControlName="startDate"
+      p-clean
+      p-format="dd/mm/yyyy"
+      p-label="Date start"
+      [p-max-date]="formAirfare.get('endDate').value">
+    </po-datepicker>
+
+    <po-datepicker
+      class="po-md-6"
+      formControlName="endDate"
+      p-clean
+      p-format="dd/mm/yyyy"
+      p-label="Date end"
+      [p-min-date]="formAirfare.get('startDate').value">
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      formControlName="origin"
+      p-placeholder="Flight origin"
+      p-label="Origin">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      formControlName="destination"
+      p-label="Destination"
+      p-placeholder="Flight destination">
+    </po-input>
+  </div>
+
+  <div clas="po-row">
+    <po-select
+      class="po-md-6"
+      formControlName="ticketClass"
+      p-label="Class"
+      [p-options]="ticketClassOptions">
+    </po-select>
+
+    <po-select
+      class="po-md-6"
+      formControlName="accompany"
+      p-label="Accompany"
+      [p-options]="accompanyNumber">
+    </po-select>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3 po-offset-md-9 po-offset-lg-9"
+      name="applyButton"
+      p-label="Apply"
+      [p-disabled]="formAirfare.invalid"
+      (p-click)="apply(formAirfare)">
+    </po-button>
+  </div>
+</form>

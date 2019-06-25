@@ -1,0 +1,96 @@
+<form [formGroup]="formCollectiveVacations">
+  <h3>Collective vacations</h3>
+
+  <hr>
+
+  <div class="po-row">
+    <po-datepicker
+      class="po-md-6"
+      name="initialPeriod"
+      formControlName="initialPeriod"
+      p-label="Initial period"
+      p-required>
+    </po-datepicker>
+
+    <po-datepicker
+      class="po-md-6"
+      name="finalPeriod"
+      formControlName="finalPeriod"
+      p-label="Final period"
+      p-required
+      [p-min-date]="getRangeFinalPeriod()">
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-lg-12"
+      name="days"
+      formControlName="days"
+      p-help="Maximum of days that employs can choose"
+      p-label="How many days of vacation the employees will be able to have?"
+      p-required
+      [p-options]="daysOptions">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-multiselect
+      class="po-md-12"
+      name="employeesVacations"
+      formControlName="employeesVacations"
+      p-label="Select your employees for collective vacations"
+      [p-options]="employees"
+      p-required>
+    </po-multiselect>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-4 po-offset-md-5 po-offset-lg-5 po-offset-xl-5"
+      name="Approve Vacations"
+      p-label="Approve Vacations"
+      [p-disabled]="formCollectiveVacations.invalid"
+      (p-click)="updateEmployeesVacations();modalEmployeesVacation.open()">
+    </po-button>
+
+    <po-button
+      class="po-md-3"
+      p-label="Clean"
+      (p-click)="clean()">
+    </po-button>
+  </div>
+</form>
+
+<po-modal #modalEmployeesVacation
+  p-title="Collective Vacation">
+  <div class="po-row">
+    <po-info
+      class="po-md-5"
+      p-label="Initial period"
+      [p-value]="initialPeriod | date:'longDate':'+0000'">
+    </po-info>
+
+    <po-info
+      class="po-md-5"
+      p-label="Final period"
+      [p-value]="finalPeriod | date:'longDate':'+0000'">
+    </po-info>
+
+    <po-info
+      class="po-md-2"
+      p-label="Days"
+      [p-value]="days">
+    </po-info>
+  </div>
+
+  <hr>
+
+  <div class="po-row">
+    <po-info
+      class="po-lg-12"
+      p-label="Employees"
+      [p-value]="nameEmployeesVacations">
+    </po-info>
+  </div>
+</po-modal>

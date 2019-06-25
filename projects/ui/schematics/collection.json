@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Add my library to the project.",
+      "factory": "./ng-add/index",
+      "schema": "./ng-add/schema.json"
+    },
+    "ng-add-setup-project": {
+      "description": "Sets up the specified project after the ng-add dependencies have been installed.",
+      "private": true,
+      "factory": "./ng-add/setup-project"
+    },
+    "sidemenu": {
+      "description": "Crate a app.component with sidemenu layout configured and create a component how sample",
+      "factory": "./ng-generate/sidemenu/index",
+      "schema": "./ng-generate/sidemenu/schema.json"
+    },
+    "po-page-list": {
+      "description": "Crate a component with po-page-list",
+      "factory": "./ng-generate/po-page-list/index",
+      "schema": "./ng-generate/po-page-list/schema.json"
+    },
+    "po-page-edit": {
+      "description": "Crate a component with po-page-edit",
+      "factory": "./ng-generate/po-page-edit/index",
+      "schema": "./ng-generate/po-page-edit/schema.json"
+    },
+    "po-page-detail": {
+      "description": "Crate a component with po-page-detail",
+      "factory": "./ng-generate/po-page-detail/index",
+      "schema": "./ng-generate/po-page-detail/schema.json"
+    },
+    "po-page-default": {
+      "description": "Crate a component with po-page-default",
+      "factory": "./ng-generate/po-page-default/index",
+      "schema": "./ng-generate/po-page-default/schema.json"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+<po-page>
+  <!-- HEADER -->
+  <po-page-header
+    *ngIf="hasPageHeader()"
+    [p-breadcrumb]="breadcrumb"
+    [p-title]="title">
+
+    <!-- OPERATIONS -->
+    <div *ngIf="hasAnyAction()" class="po-page-header-actions">
+      <po-button
+        *ngIf="hasAction('cancel', parentContext)"
+        [p-icon]="getIcon('cancel')"
+        [p-label]="literals.cancel"
+        [p-type]="getType('cancel')"
+        (p-click)="callAction('cancel', parentContext)">
+      </po-button>
+
+      <po-button
+        *ngIf="hasAction('saveNew', parentContext)"
+        [p-disabled]="disableSubmit"
+        [p-icon]="getIcon('saveNew')"
+        [p-label]="literals.saveNew"
+        [p-type]="getType('saveNew')"
+        (p-click)="callAction('saveNew', parentContext)">
+      </po-button>
+
+      <po-button
+        *ngIf="hasAction('save', parentContext)"
+        p-icon="po-icon-ok"
+        p-type="primary"
+        [p-disabled]="disableSubmit"
+        [p-label]="literals.save"
+        (p-click)="callAction('save', parentContext)">
+      </po-button>
+    </div>
+
+  </po-page-header>
+
+  <!-- CONTENT -->
+  <po-page-content>
+    <ng-content>
+    </ng-content>
+  </po-page-content>
+
+</po-page>

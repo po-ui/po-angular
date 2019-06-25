@@ -1,0 +1,45 @@
+<po-field-container
+  [p-help]="help"
+  [p-label]="label"
+  [p-optional]="!required && optional">
+
+  <div class="po-field-container-content">
+
+    <input #inp
+      class="po-input po-datepicker"
+      [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+      type="text"
+      [attr.name]="name"
+      [disabled]="disabled"
+      [placeholder]="placeholder"
+      [readonly]="readonly"
+      [required]="required"
+      (blur)="eventOnBlur($event)"
+      (change)="eventOnChange($event)"
+      (click)="eventOnClick($event)">
+
+    <div class="po-field-icon-container-right">
+      <po-clean [p-element-ref]="inputEl" (p-change-event)="clear()"></po-clean>
+
+      <span #iconDatepicker
+        class="po-icon po-field-icon po-icon-calendar"
+        [class.po-field-icon]="!disabled && !readonly"
+        [class.po-field-icon-disabled]="disabled || readonly"
+        (click)="togglePicker()">
+      </span>
+    </div>
+  </div>
+
+  <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()">
+    <po-calendar #calendar
+      [(p-selected-date)]="date"
+      [p-date-end]="maxDate"
+      [p-date-start]="minDate"
+      [p-locale]="locale"
+      (p-submit)="dateSelected()">
+    </po-calendar>
+  </div>
+
+  <po-field-container-bottom [p-error-pattern]="getErrorPattern()"></po-field-container-bottom>
+
+</po-field-container>

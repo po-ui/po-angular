@@ -1,0 +1,72 @@
+<po-tag
+  [p-icon]="icon"
+  [p-label]="label"
+  [p-orientation]="orientation"
+  [p-type]="type"
+  [p-value]="value"
+  (p-click)="changeEvent('p-click')">
+</po-tag>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Events"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="value"
+      [(ngModel)]="value"
+      p-clean
+      p-label="Value"
+      p-required>
+    </po-input>
+
+    <po-switch
+      class="po-md-12"
+      name="icon"
+      [(ngModel)]="icon"
+      p-label="Icon">
+    </po-switch>
+
+    <po-radio-group
+      class="po-md-6"
+      name="orientation"
+      [(ngModel)]="orientation"
+      p-label="Orientation"
+      [p-options]="orientationOptions">
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-6"
+      name="type"
+      [(ngModel)]="type"
+      p-label="Type"
+      [p-options]="typeOptions">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

@@ -1,0 +1,34 @@
+<div class="po-tabs-header">
+
+  <ng-container *ngFor="let tab of tabs; trackBy: trackByFn">
+    <po-tab-button *ngIf="isVisibleTab(tab)"
+      class="po-tab-button"
+      [p-active]="tab.active"
+      [p-disabled]="tab.disabled"
+      [p-id]="tab.id"
+      [p-hide]="tab.hide"
+      [p-label]="tab.label"
+      [p-small]="small"
+      (keyup.enter)="closePopover()"
+      (p-activated)="onTabActive(tab)"
+      (p-change-state)="onTabChangeState(tab)"
+      (p-click)="selectedTab(tab)">
+    </po-tab-button>
+  </ng-container>
+
+  <po-tab-dropdown #tabDropdown
+    *ngIf="isShowTabDropdown"
+    class="po-tab-button po-tab-dropdown"
+    p-label="Mais"
+    [p-small]="small"
+    [p-tabs]="overflowedTabs"
+    (p-activated)="onTabActive($event)"
+    (p-change-state)="onTabChangeState($event)"
+    (p-click)="selectedTab($event)">
+  </po-tab-dropdown>
+</div>
+
+<div class="po-tabs-container">
+  <ng-content></ng-content>
+</div>
+

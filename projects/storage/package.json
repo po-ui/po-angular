@@ -1,0 +1,24 @@
+{
+  "name": "@portinari/portinari-storage",
+  "version": "0.0.0-PLACEHOLDER",
+  "tag": "dev",
+  "description": "PORTINARI HTML Framework - Storage",
+  "author": "Portinari",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://portinaritfs.visualstudio.com/_git/po"
+  },
+  "dependencies": {
+    "custom-idle-queue": "2.1.2",
+    "localforage": "1.4.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "~8.0.0",
+    "custom-idle-queue": "2.1.2",
+    "localforage": "1.4.0",
+    "rxjs": "~6.4.0",
+    "zone.js": "~0.9.1"
+  }
+}
+

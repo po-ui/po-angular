@@ -1,0 +1,315 @@
+<po-page-login
+  [p-background]="background"
+  [p-contact-email]="contactEmail"
+  [p-custom-field]="customField"
+  [p-environment]="environment"
+  [p-exceeded-attempts-warning]="exceededAttempts"
+  [p-hide-remember-user]="properties.includes('hideRememberUser')"
+  [p-loading]="properties.includes('loading')"
+  [p-literals]="customLiterals"
+  [p-login]="login"
+  [p-login-errors]="loginErrors"
+  [p-login-pattern]="loginPattern"
+  [p-logo]="logo"
+  [p-password-errors]="passwordErrors"
+  [p-password-pattern]="passwordPattern"
+  [p-product-name]="productName"
+  [p-recovery]="recovery"
+  [p-register-url]="registerUrl"
+  [p-secondary-logo]="secondaryLogo"
+  (p-login-submit)="loginSubmit($event)">
+</po-page-login>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"title": "Hello", "submitLabel":"Access System", "highlightInfo": "Awesome, PO is beautiful!!!"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()">
+    </po-input>
+
+    <po-input
+      class="po-lg-6"
+      name="productName"
+      [(ngModel)]="productName"
+      p-clean
+      p-help="A custom name that succeeds the title"
+      p-label="Product Name">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="loginPattern"
+      [(ngModel)]="loginPattern"
+      p-clean
+      p-help="Ex.: ^[a-zA-Z]*$ (Only letters)"
+      p-label="Login Pattern">
+    </po-input>
+
+    <po-input
+      class="po-lg-6"
+      name="login"
+      [(ngModel)]="login"
+      p-clean
+      p-help="Ex.: portinaridev"
+      p-label="Login">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="exceededAttempts"
+      [(ngModel)]="exceededAttempts"
+      p-clean
+      p-help="Ex.: 5"
+      p-label="Exceeded Attempts Warning">
+    </po-input>
+
+    <po-input
+      class="po-lg-6"
+      name="passwordPattern"
+      [(ngModel)]="passwordPattern"
+      p-clean
+      p-help="Ex.: ^(\d*)$ (Only numbers)"
+      p-label="Password Pattern">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="contactMail"
+      [(ngModel)]="contactEmail"
+      p-clean
+      p-label="Contact Email">
+    </po-input>
+
+    <po-input
+      class="po-lg-6"
+      name="environment"
+      [(ngModel)]="environment"
+      p-clean
+      p-label="Environment">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="logo"
+      [(ngModel)]="logo"
+      p-clean
+      p-label="Logo">
+    </po-input>
+
+    <po-input
+      class="po-lg-6"
+      name="secondaryLogo"
+      [(ngModel)]="secondaryLogo"
+      p-clean
+      p-label="Secondary logo">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-4"
+      name="background"
+      [(ngModel)]="background"
+      p-clean
+      p-label="Background">
+    </po-input>
+
+    <po-input
+      class="po-lg-4"
+      name="recovery"
+      [(ngModel)]="recovery"
+      p-clean
+      p-label="Recovery">
+    </po-input>
+
+    <po-input
+      class="po-lg-4"
+      name="registerUrl"
+      [(ngModel)]="registerUrl"
+      p-clean
+      p-label="Register URL">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+
+    <po-checkbox-group
+      class="po-lg-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+  </div>
+
+  <po-divider p-label="Login Errors"></po-divider>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-8"
+      name="loginError"
+      [(ngModel)]="loginError"
+      p-clean
+      p-label="Login Error">
+    </po-input>
+
+    <po-button
+      class="po-md-4 po-mt-4"
+      p-label="Add Login Error"
+      (p-click)="addLoginError()">
+    </po-button>
+  </div>
+
+  <po-divider p-label="Password Errors"></po-divider>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-8"
+      name="passwordError"
+      [(ngModel)]="passwordError"
+      p-clean
+      p-label="Password Error">
+    </po-input>
+
+    <po-button
+      class="po-md-4 po-mt-4"
+      p-label="Add Password Error"
+      (p-click)="addPasswordError()">
+    </po-button>
+  </div>
+
+  <po-divider p-label="Custom Field"></po-divider>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="customFieldProperty"
+      [(ngModel)]="customField.property"
+      p-clean
+      p-help="Ex.: domain"
+      p-label="Custom Field Property"
+      (p-change-model)="onChangeCustomProperties()">
+    </po-input>
+
+    <po-input
+      class="po-lg-6"
+      name="customFieldValue"
+      [(ngModel)]="customField.value"
+      p-clean
+      p-help="Ex.: JV01"
+      p-label="Custom Field Value">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-4"
+      name="customFieldPlaceholder"
+      [(ngModel)]="customField.placeholder"
+      p-clean
+      p-help="Ex.: Enter your domain"
+      p-label="Custom Field Placeholder">
+    </po-input>
+
+    <po-input
+      class="po-lg-4"
+      name="customFieldPattern"
+      [(ngModel)]="customField.pattern"
+      p-clean
+      p-help="Ex.: [a-z]"
+      p-label="Custom Field Pattern">
+    </po-input>
+
+    <po-input
+      class="po-lg-4"
+      name="customFieldErrorPattern"
+      [(ngModel)]="customField.errorPattern"
+      p-clean
+      p-help="Ex.: Value doesn`t match expected"
+      p-label="Custom Field Error Pattern">
+    </po-input>
+  </div>
+
+  <hr>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="customFieldComboUrl"
+      [(ngModel)]="customField.url"
+      p-clean
+      p-help="Ex.: https://portinari.io/sample/api/comboOption/heroes"
+      p-label="Custom Field URL"
+      (p-change-model)="onChangeCustomProperties()">
+    </po-input>
+
+    <po-input
+      class="po-lg-6"
+      name="customFieldComboValue"
+      [(ngModel)]="customField.fieldValue"
+      p-clean
+      p-help="Property to specify the return field. Ex.: value, nickname, label"
+      p-label="Custom Field Field Value"
+      (p-change-model)="onChangeCustomProperties()">
+    </po-input>
+  </div>
+
+  <hr>
+
+  <form #formCustomFieldOptions="ngForm">
+    <div class="po-row">
+      <po-input
+        class="po-md-6"
+        name="customFieldOptionLabel"
+        [(ngModel)]="customFieldOption.label"
+        p-clean
+        p-label="Custom Field Option Label"
+        p-required>
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="customFieldOptionValue"
+        [(ngModel)]="customFieldOption.value"
+        p-clean
+        p-label="Custom Field Option Value"
+        p-required>
+      </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-button
+        class="po-md-6 po-lg-4"
+        p-label="Add Custom Field Option"
+        [p-disabled]="formCustomFieldOptions.invalid"
+        (p-click)="addCustomFieldOption()">
+      </po-button>
+    </div>
+  </form>
+
+  <br>
+
+  <hr>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

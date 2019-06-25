@@ -1,0 +1,79 @@
+<form #f="ngForm">
+  <div class ="po-row">
+    <po-combo
+      class="po-md-4"
+      name="product"
+      [(ngModel)]="product"
+      p-label="Product"
+      p-placeholder="Select a Product"
+      p-required
+      [p-options]="productOptions"
+      (p-change)="checkProduct()">
+    </po-combo>
+
+    <po-number
+      class="po-md-2"
+      name="quantity"
+      [(ngModel)]="quantity"
+      p-label="Quantity"
+      p-min="0"
+      p-placeholder="0"
+      p-required
+      [p-max]="stock"
+      (p-change)="checkQuantity()">
+    </po-number>
+
+    <po-number
+      class="po-md-2"
+      name="price"
+      [(ngModel)]="price"
+      p-disabled
+      p-label="Price"
+      p-placeholder="0"
+      p-required>
+    </po-number>
+
+    <po-number
+      class="po-md-2"
+      name="stock"
+      [(ngModel)]="stock"
+      p-disabled
+      p-label="Stock"
+      p-placeholder="0"
+      p-required>
+    </po-number>
+
+    <po-number
+      class="po-md-2"
+      name="totalPrice"
+      [(ngModel)]="totalPrice"
+      p-disabled
+      p-label="Total Price"
+      p-placeholder="0"
+      p-required>
+    </po-number>
+
+  </div>
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Add To Cart"
+      [p-disabled]="f.form.invalid || stock === 0"
+      (p-click)="addCart()">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<po-table
+  p-striped="true"
+  [p-columns]="columns"
+  [p-items]="products">
+</po-table>
+
+<div class="po-row">
+  <div class="po-pull-right po-lg-12">
+    <span class="po-pull-right po-font-subtitle">Total: R{{ totalPriceSum | currency }} </span>
+  </div>
+</div>

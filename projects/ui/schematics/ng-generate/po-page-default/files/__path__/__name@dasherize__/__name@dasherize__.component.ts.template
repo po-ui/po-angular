@@ -1,0 +1,18 @@
+import { Component, OnInit } from '@angular/core';
+
+import { PoPageAction } from '@portinari/portinari-ui';
+
+@Component({
+  selector: '<%= selector %>',
+  templateUrl: './<%= dasherize(name) %>.component.html',
+  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>']
+})
+export class <%= classify(name) %>Component implements OnInit {
+
+  readonly pageActions: Array<PoPageAction> = [];
+
+  constructor() { }
+
+  ngOnInit() { }
+
+}

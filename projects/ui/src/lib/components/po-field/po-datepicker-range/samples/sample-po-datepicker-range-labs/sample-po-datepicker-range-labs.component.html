@@ -1,0 +1,103 @@
+<po-datepicker-range
+  class="po-sm-12"
+  name="datepickerRange"
+  [(ngModel)]="datepickerRange"
+  [p-clean]="properties.includes('clean')"
+  [p-disabled]="properties.includes('disabled')"
+  [p-end-date]="endDate"
+  [p-help]="help"
+  [p-label]="label"
+  [p-literals]="customLiterals"
+  [p-optional]="properties.includes('optional')"
+  [p-readonly]="properties.includes('readonly')"
+  [p-required]="properties.includes('required')"
+  [p-start-date]="startDate"
+  (p-change)="changeEvent('p-change')">
+</po-datepicker-range>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Model"
+    [p-value]="getDatepickerRange()">
+  </po-info>
+
+  <po-info
+    class="po-md-6"
+    p-label="Event"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+
+  <div class="po-row">
+    <po-datepicker
+      class="po-md-6"
+      name="startDate"
+      [(ngModel)]="startDate"
+      p-clean
+      p-label="Start Date">
+    </po-datepicker>
+
+    <po-datepicker
+      class="po-md-6"
+      name="endDate"
+      [(ngModel)]="endDate"
+      p-clean
+      p-label="End Date">
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="help"
+      [(ngModel)]="help"
+      p-clean
+      p-label="Help">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-6 po-md-12"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: { "invalidFormat": "Date in inconsistent format", "startDateGreaterThanEndDate": "End date less than start date" }'
+      p-label="Literals"
+      (p-change)="changeLiterals()">
+    </po-input>
+
+    <po-checkbox-group
+      class="po-md-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="4"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      name="restore"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+
+</form>

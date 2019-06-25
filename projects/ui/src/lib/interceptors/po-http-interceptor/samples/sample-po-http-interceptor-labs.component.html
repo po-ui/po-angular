@@ -1,0 +1,69 @@
+<form #f="ngForm">
+
+  <div class="po-row">
+    <po-input class="po-lg-5"
+      name="text"
+      [(ngModel)]="text"
+      p-clean
+      p-label="Texto da notificação"
+      p-placeholder="Texto"
+      p-maxlength="50"
+      p-required>
+    </po-input>
+
+    <po-input class="po-md-4 po-lg-2"
+      name="code"
+      [(ngModel)]="code"
+      p-clean
+      p-label="Código"
+      p-maxlength="5"
+      p-placeholder="Código">
+    </po-input>
+
+    <po-url class="po-md-8 po-lg-5"
+      name="help"
+      [(ngModel)]="help"
+      p-clean
+      p-label="Url para Ajuda"
+      p-placeholder="Url">
+    </po-url>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group class="po-md-6"
+      name="type"
+      [(ngModel)]="type"
+      p-label="Tipo de Notificação"
+      p-required
+      [p-options]="typeOptions">
+    </po-radio-group>
+
+    <po-radio-group class="po-md-6"
+      name="status"
+      [(ngModel)]="status"
+      p-label="Status"
+      p-required
+      [p-options]="statusOptions">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-switch class="po-lg-12"
+      name="noErrorHeaderParam"
+      [(ngModel)]="noErrorHeaderParam"
+      p-help="Ativa/desativa o envio do parametro X-Portinari-No-Error no cabeçalho da requisição."
+      p-label="Ativar X-Portinari-No-Error"
+      p-label-off="Não"
+      p-label-on="Sim">
+    </po-switch>
+  </div>
+
+  <div class="po-row">
+    <po-button class="po-md-4"
+      p-label="Gerar Requisição"
+      [p-disabled]="!f.form.valid"
+      (p-click)="processRequest()">
+    </po-button>
+  </div>
+
+</form>

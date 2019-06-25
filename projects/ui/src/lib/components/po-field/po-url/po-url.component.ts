@@ -1,0 +1,88 @@
+import { AfterViewInit, Component, ElementRef, forwardRef, OnDestroy } from '@angular/core';
+import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+
+import { PoInputGeneric } from '../po-input-generic/po-input-generic';
+
+/**
+ * @docsExtends PoInputBaseComponent
+ *
+ * @description
+ *
+ * po-url é um input específico para receber URL, com o pattern já configurado.
+ *
+ * @example
+ *
+ * <example name="po-url-basic" title="Portinari Url Basic">
+ *   <file name="sample-po-url-basic/sample-po-url-basic.component.html"> </file>
+ *   <file name="sample-po-url-basic/sample-po-url-basic.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-url-labs" title="Portinari Url Labs">
+ *   <file name="sample-po-url-labs/sample-po-url-labs.component.html"> </file>
+ *   <file name="sample-po-url-labs/sample-po-url-labs.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-url-shortener" title="Portinari Url - Shortener">
+ *   <file name="sample-po-url-shortener/sample-po-url-shortener.component.html"> </file>
+ *   <file name="sample-po-url-shortener/sample-po-url-shortener.component.ts"> </file>
+ * </example>
+ *
+ */
+@Component({
+  selector: 'po-url',
+  templateUrl: '../po-input/po-input.component.html',
+  providers: [
+  {
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => PoUrlComponent),
+    multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
+    useExisting: forwardRef(() => PoUrlComponent),
+    multi: true
+  }]
+})
+export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
+
+  icon = 'po-icon-world';
+
+  maxlength: number = 254;
+
+  type = 'url';
+
+  pattern = '^((https|http):\\/\\/)?' + // protocol
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+  '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+  '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+  '(\\#[-a-z\\d_]*)?$';
+
+  mask = '';
+
+  private listener = this.validateClassesForPattern.bind(this);
+
+  constructor(el: ElementRef) {
+    super(el);
+  }
+
+  ngAfterViewInit() {
+    // Se não tem ngModel ou reactive form adiciona validação com classes css
+    setTimeout(() => {
+      if (!this.onChangePropagate) {
+        this.inputEl.nativeElement.addEventListener('keyup', this.listener);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (!this.onChangePropagate) {
+      this.inputEl.nativeElement.removeEventListener('keyup', this.listener);
+    }
+  }
+
+  extraValidation(c: AbstractControl): { [key: string]: any; } {
+    return null;
+  }
+
+}

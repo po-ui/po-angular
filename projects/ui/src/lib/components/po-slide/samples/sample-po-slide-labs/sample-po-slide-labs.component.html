@@ -1,0 +1,87 @@
+<po-slide
+  [p-height]="height"
+  [p-interval]="interval"
+  [p-slides]="slideItems">
+</po-slide>
+
+<po-divider p-label="Slide Item"></po-divider>
+
+<form #slideItemForm="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="slideAction"
+      [(ngModel)]="slideItem.action"
+      p-clean
+      p-label="Slide action">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="slideAlt"
+      [(ngModel)]="slideItem.alt"
+      p-clean
+      p-label="Slide alt">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="slideImage"
+      [(ngModel)]="slideItem.image"
+      p-clean
+      p-help="Ex.: https://lorempixel.com/1024/768/"
+      p-label="Slide image"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="slideLink"
+      [(ngModel)]="slideItem.link"
+      p-clean
+      p-help="Ex.: https://portinari.io/home"
+      p-label="Slide link">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Add slide"
+      [p-disabled]="slideItemForm.invalid"
+      (p-click)="addSlide()">
+    </po-button>
+  </div>
+</form>
+
+<po-divider p-label="Properties"></po-divider>
+
+<form #slidePropertiesForm="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="interval"
+      [(ngModel)]="interval"
+      p-clean
+      p-help="Ex.: 7000"
+      p-label="Interval">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="height"
+      [(ngModel)]="height"
+      p-clean
+      p-help="Ex.: 300"
+      p-label="Height">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="slideItemForm.reset(); slidePropertiesForm.reset(); restore()">
+    </po-button>
+  </div>
+</form>

@@ -1,0 +1,148 @@
+<form #formExecution="ngForm">
+  <div class="po-row">
+    <ng-container *ngIf="existProcessAPI; then lookupProcessesID; else inputProcessesID"></ng-container>
+  </div>
+
+  <div class="po-row">
+    <po-divider class="po-md-12" [p-label]="literals.firstExecution"></po-divider>
+
+    <po-datepicker
+      class="po-md-4"
+      name="firstExecution"
+      [(ngModel)]="value.firstExecution"
+      p-placeholder="dd/mm/aaaa"
+      p-required
+      [p-disabled]="isEdit"
+      [p-label]="literals.day"
+      [p-min-date]="startDateFirstExecution">
+    </po-datepicker>
+
+    <po-input
+      class="po-md-2"
+      name="firstExecutionHour"
+      [(ngModel)]="value.firstExecutionHour"
+      p-mask="99:99"
+      p-mask-format-model
+      p-placeholder="HH:mm"
+      p-required
+      [p-disabled]="isEdit"
+      [p-label]="literals.hour"
+      [p-pattern]="timePattern">
+    </po-input>
+
+  </div>
+
+  <hr>
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-sm-12"
+      name="periodicity"
+      [(ngModel)]="value.periodicity"
+      p-columns="4"
+      p-required
+      [p-label]="literals.periodicity"
+      [p-options]="periodicityOptions">
+    </po-radio-group>
+
+    <ng-container *ngIf="value.periodicity !== 'single'">
+      <po-divider class="po-md-12" [p-label]="literals.periodicityData">
+      </po-divider>
+
+      <div class="po-row">
+        <ng-container *ngTemplateOutlet="periodicityTemplates[value.periodicity]">
+        </ng-container>
+      </div>
+
+      <div class="po-row">
+        <po-switch
+          class="po-md-3"
+          name="recurrent"
+          [(ngModel)]="value.recurrent"
+          [p-label]="literals.recurrent"
+          [p-label-off]="literals.no"
+          [p-label-on]="literals.yes">
+        </po-switch>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-template #lookupProcessesID>
+    <po-lookup
+      class="po-md-12"
+      name="processID"
+      [(ngModel)]="value.processID"
+      p-field-label="description"
+      p-field-value="processID"
+      p-required
+      [p-disabled]="isEdit"
+      [p-filter-service]="poPageJobSchedulerLookup"
+      [p-label]="literals.process"
+      [p-placeholder]="literals.enterProcess">
+    </po-lookup>
+  </ng-template>
+
+  <ng-template #inputProcessesID>
+    <po-input
+      class="po-md-12"
+      name="processID"
+      [(ngModel)]="value.processID"
+      p-required
+      [p-disabled]="isEdit"
+      [p-label]="literals.process"
+      [p-placeholder]="literals.enterProcess">
+    </po-input>
+  </ng-template>
+
+  <ng-template #dailyTemplate>
+    <ng-container *ngTemplateOutlet="inputHourTemplate">
+    </ng-container>
+  </ng-template>
+
+  <ng-template #weeklyTemplate>
+    <div class="po-row">
+      <ng-container *ngTemplateOutlet="inputHourTemplate">
+      </ng-container>
+    </div>
+
+    <po-checkbox-group
+      class="po-md-12"
+      name="daysOfWeek"
+      [(ngModel)]="value.daysOfWeek"
+      p-columns="4"
+      p-required
+      [p-label]="literals.weekDays"
+      [p-options]="weekDays">
+    </po-checkbox-group>
+  </ng-template>
+
+  <ng-template #monthlyTemplate>
+    <po-number
+      class="po-md-3"
+      name="dayOfMonth"
+      [(ngModel)]="value.dayOfMonth"
+      p-required
+      [p-error-pattern]="'Dia inválido'"
+      [p-label]="literals.day"
+      [p-max]="31"
+      [p-pattern]="dayPattern">
+    </po-number>
+
+    <ng-container *ngTemplateOutlet="inputHourTemplate">
+    </ng-container>
+  </ng-template>
+
+  <ng-template #inputHourTemplate>
+    <po-input
+      class="po-md-2"
+      name="hour"
+      [(ngModel)]="value.hour"
+      p-mask="99:99"
+      p-mask-format-model
+      p-placeholder="HH:mm"
+      p-required
+      [p-label]="literals.hour"
+      [p-pattern]="timePattern">
+    </po-input>
+  </ng-template>
+</form>

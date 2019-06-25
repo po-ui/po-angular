@@ -1,0 +1,50 @@
+<po-modal
+  p-click-out="false"
+  p-hide-close="false"
+  p-size="lg"
+  [p-primary-action]="primaryAction"
+  [p-secondary-action]="secondaryAction"
+  [p-title]="title">
+
+  <po-field-container
+    class="po-lookup-header po-md-6 po-pull-right"
+    [p-optional]="false">
+
+    <div class="po-field-container-content">
+      <input #inpsearch
+        class="po-input po-input-icon-right"
+        name="contentSearch"
+        [(ngModel)]="searchValue"
+        [placeholder]="literals.modalPlaceholder"
+        type="text">
+
+      <div class="po-field-icon-container-right">
+        <span #iconLookup
+          class="po-icon po-field-icon po-icon-search"
+          (click)="search()">
+        </span>
+      </div>
+    </div>
+
+  </po-field-container>
+
+  <div class="po-row po-lookup-container-table" [style.height.px]="containerHeight">
+
+    <po-table
+      class="po-md-12"
+      p-checkbox="true"
+      p-hide-detail="true"
+      p-single-select="true"
+      p-sort="true"
+      [p-columns]="columns"
+      [p-height]="tableHeight"
+      [p-items]="items"
+      [p-literals]="tableLiterals"
+      [p-loading]="isLoading"
+      [p-show-more-disabled]="!hasNext"
+      (p-show-more)="showMoreEvent()">
+    </po-table>
+
+  </div>
+
+</po-modal>

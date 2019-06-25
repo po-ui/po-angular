@@ -1,0 +1,81 @@
+import { Input } from '@angular/core';
+
+import { convertToBoolean } from './../../../utils/util';
+
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+
+import { PoLoadingOverlayLiterals } from './interfaces/po-loading-overlay-literals.interface';
+
+export const poLoadingOverlayLiteralsDefault = {
+  en: <PoLoadingOverlayLiterals> {
+    loading: 'Loading',
+  },
+  es: <PoLoadingOverlayLiterals> {
+    loading: 'Cargando',
+  },
+  pt: <PoLoadingOverlayLiterals> {
+    loading: 'Carregando',
+  }
+};
+
+/**
+ *
+ * @description
+ *
+ * Este componente mostra ao usuário uma imagem de _loading_ e bloqueia a página inteira ou o container escolhido,
+ * enquanto aguarda a resposta de alguma requisição.
+ */
+export class PoLoadingOverlayBaseComponent {
+
+  private _screenLock?: boolean = false;
+  private _text?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se o _overlay_ será aplicado a um container ou a página inteira.
+   *
+   * @default `false`
+   */
+  @Input('p-screen-lock') set screenLock(screenLock: boolean) {
+    this._screenLock = convertToBoolean(screenLock);
+  }
+
+  get screenLock() {
+    return this._screenLock;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Texto a ser exibido no componente.
+   *
+   * > O valor padrão será traduzido acordo com o idioma configurado no [**PoI18n**](/documentation/po-i18n) ou navegador.
+   *
+   * @default `Carregando`
+   */
+  @Input('p-text') set text(value: string) {
+    this._text = value || this.getTextDefault();
+  }
+
+  get text(): string {
+    return this._text;
+  }
+
+  constructor(private languageService: PoLanguageService) {
+    if (!this.text) {
+      this.text = this.getTextDefault();
+    }
+  }
+
+  private getTextDefault(): string {
+    const language = this.languageService.getShortLanguage();
+
+    return poLoadingOverlayLiteralsDefault[language].loading;
+  }
+
+}

@@ -1,0 +1,51 @@
+<div class="po-row">
+  <po-widget
+    class="po-lg-6"
+    p-primary-label="Know more"
+    (p-primary-action)="knowMore(heroName)">
+
+    <po-combo
+      name="heroName"
+      [(ngModel)]="heroName"
+      p-field-label="nickname"
+      p-field-value="name"
+      p-filter-service="https://portinari.io/sample/api/new/heroes"
+      p-label="Search a Hero"
+      p-sort
+      (p-change)="onChangeHero($event)">
+    </po-combo>
+
+    <ng-container *ngIf="hero$ | async as hero">
+      <div class="po-row">
+        <po-info
+          class="po-md-6"
+          p-label="Name"
+          [p-value]="hero.name">
+        </po-info>
+
+        <po-info
+          class="po-md-6"
+          p-label="Nickname"
+          [p-value]="hero.nickname">
+        </po-info>
+      </div>
+
+      <hr>
+
+      <div class="po-row">
+        <po-info
+          class="po-md-6"
+          p-label="Birthday"
+          p-value="{{hero.birthday | date}}">
+        </po-info>
+
+        <po-info
+          class="po-md-6"
+          p-label="Email"
+          [p-value]="hero.email">
+        </po-info>
+      </div>
+    </ng-container>
+
+  </po-widget>
+</div>

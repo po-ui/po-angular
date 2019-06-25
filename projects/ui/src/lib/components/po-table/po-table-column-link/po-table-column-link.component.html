@@ -1,0 +1,6 @@
+<ng-container [ngSwitch]="type">
+  <p *ngSwitchCase="'disabled'" class="po-table-link-disabled">{{ value }}</p>
+  <a *ngSwitchCase="'action'" class="po-table-link" (click)="action(value, row)">{{ value }}</a>
+  <a *ngSwitchCase="'externalLink'" class="po-table-link" [href]="link" target="_blank">{{ value }}</a>
+  <a *ngSwitchCase="'internalLink'" class="po-table-link" [routerLink]="link">{{ value }}</a>
+</ng-container>

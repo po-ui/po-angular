@@ -1,0 +1,34 @@
+<po-field-container
+  [p-label]="label"
+  [p-help]="help"
+  [p-optional]="!required && optional">
+
+  <div class="po-field-container-content">
+    <div class="po-field-icon-container-left">
+      <span class="po-icon po-field-icon po-icon-user" [class.po-field-icon-disabled]="disabled"></span>
+    </div>
+
+    <input #inp
+      class="po-input po-input-icon-left"
+      [attr.name]="name"
+      [class.po-input-icon-right]="clean"
+      [disabled]="disabled"
+      [placeholder]="placeholder"
+      [readonly]="readonly"
+      [required]="required"
+      [type]="type"
+      (blur)="eventOnBlur($event)"
+      (click)="eventOnClick($event)"
+      (focus)="eventOnFocus($event)"
+      (input)="eventOnInput($event)">
+
+    <div class="po-field-icon-container-right">
+      <po-clean [p-element-ref]="inputEl" (p-change-event)="clear($event)"></po-clean>
+    </div>
+  </div>
+
+  <po-field-container-bottom
+    [p-error-pattern]="getErrorPattern()">
+  </po-field-container-bottom>
+
+</po-field-container>

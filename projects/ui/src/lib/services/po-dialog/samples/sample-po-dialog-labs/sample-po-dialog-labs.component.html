@@ -1,0 +1,84 @@
+<po-button
+  name="openDialog"
+  p-label="Open Dialog"
+  [p-disabled]="f.invalid"
+  (p-click)="openDialog()">
+</po-button>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-12"
+    p-label="Action clicked"
+    [p-value]="action">
+  </po-info>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="title"
+      [(ngModel)]="title"
+      p-clean
+      p-label="Title"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="message"
+      [(ngModel)]="message"
+      p-clean
+      p-label="Message"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-12"
+      name="dialogMethod"
+      [(ngModel)]="dialogMethod"
+      p-label="Dialog method"
+      [p-options]="dialogMethodOptions"
+      (p-change)="changeMethod()">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-12"
+      name="literals"
+      [(ngModel)]="literals"
+      p-clean
+      p-label="Literals"
+      [p-help]="help"
+      (p-blur)="changeLiterals()"
+      (p-change-model)="changeLiterals()">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-md-12"
+      name="actionOptions"
+      [(ngModel)]="actionOptions"
+      p-label="Action options"
+      [p-options]="dialogActionOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+
+</form>

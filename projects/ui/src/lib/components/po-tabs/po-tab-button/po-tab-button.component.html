@@ -1,0 +1,13 @@
+<div
+  class="po-tab-button-md"
+  [attr.tabindex]="disabled ? null : 0"
+  [class.po-tab-button-active]="active"
+  [class.po-tab-button-disabled]="disabled"
+  [class.po-tab-button-sm]="small"
+  (click)="onClick()"
+  (keyup.enter)="onClick()">
+
+  <span class="po-tab-button-label">
+    {{label}}
+  </span>
+</div>

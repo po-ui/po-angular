@@ -1,0 +1,16 @@
+<div class="po-info" [class.po-row]="orientation === poInfoOrientation.Horizontal && labelSize">
+  <div class="po-info-container-title"
+    [ngClass]="labelSize && orientation === poInfoOrientation.Horizontal ? 'po-sm-' + labelSize : ''"
+    [class.po-info-label-horizontal]="orientation === poInfoOrientation.Horizontal"
+    [class.po-text-nowrap]="orientation === poInfoOrientation.Horizontal && !labelSize">
+    <span class="po-info-label">
+      {{ orientation === poInfoOrientation.Horizontal ? label + ':' : label }}
+    </span>
+  </div>
+
+  <div [ngClass]="labelSize && orientation === poInfoOrientation.Horizontal ? 'po-sm-' + (12 - labelSize) : ''"
+    [class.po-info-container-content]="orientation !== poInfoOrientation.Horizontal"
+    [class.po-info-value-horizontal]="orientation === poInfoOrientation.Horizontal">
+    <span class="po-info-value">{{ value }}</span>
+  </div>
+</div>

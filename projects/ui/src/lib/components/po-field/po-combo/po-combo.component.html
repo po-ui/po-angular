@@ -1,0 +1,75 @@
+<po-field-container
+  [p-label]="label"
+  [p-help]="help"
+  [p-optional]="!required && optional">
+
+  <div class="po-field-container-content">
+    <div *ngIf="icon" class="po-field-icon-container-left">
+      <span class="po-icon po-field-icon {{icon}}" [class.po-field-icon-disabled]="disabled"></span>
+    </div>
+
+    <input #inputElement
+      class="po-input po-combo-input"
+      [class.po-input-icon-left]="icon"
+      autocomplete="off"
+      type="text"
+      [attr.name]="name"
+      [disabled]="disabled"
+      [placeholder]="placeholder"
+      [required]="required"
+      (click)="toggleComboVisibility()"
+      (keyup)="onKeyUp($event)"
+      (keyup.enter)="searchOnEnter($event.target.value)"
+      (keydown)="onKeyDown($event)">
+
+    <div class="po-field-icon-container-right">
+      <span #iconArrow
+        class="po-icon po-field-icon {{ comboIcon }}"
+        [class.po-field-icon-disabled]="disabled"
+        [class.po-field-icon]="!disabled"
+        (click)="toggleComboVisibility()">
+      </span>
+    </div>
+  </div>
+
+  <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
+
+    <ng-container *ngIf="isServerSearching; then loadingTemplate; else optionsTemplate">
+    </ng-container>
+
+  </div>
+
+  <po-field-container-bottom></po-field-container-bottom>
+
+</po-field-container>
+
+<ng-template #loadingTemplate>
+  <div class="po-combo-container-loading">
+    <po-loading></po-loading>
+  </div>
+</ng-template>
+
+<ng-template #optionsTemplate>
+  <ng-container *ngIf="visibleOptions.length; then visibleOptionsTemplate ; else noDataTemplate">
+  </ng-container>
+</ng-template>
+
+<ng-template #visibleOptionsTemplate>
+  <ul #contentElement class="po-combo-container-content">
+    <li *ngFor="let option of visibleOptions"
+      [class.po-combo-item-selected]="compareObjects(selectedView, option)"
+      (click)="onOptionClick(option)">
+      <a class="po-combo-item" [innerHTML]="getLabelFormatted(option?.label)"></a>
+    </li>
+  </ul>
+</ng-template>
+
+<ng-template #noDataTemplate>
+  <div class="po-combo-container-no-data">
+    <div class="po-combo-no-data po-text-center">
+      <span>
+        {{ literals.noData }}
+      </span>
+    </div>
+  </div>
+</ng-template>

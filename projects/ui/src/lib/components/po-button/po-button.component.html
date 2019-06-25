@@ -1,0 +1,15 @@
+<button
+  class="po-button po-text-ellipsis"
+  type="button"
+  [class.po-button-danger]="type === 'danger'"
+  [class.po-button-link]="type === 'link'"
+  [class.po-button-primary]="type === 'primary'"
+  [class.po-button-sm] = "small"
+  [class.po-clickable]="type === 'link'"
+  [disabled]="disabled || loading"
+  (click)="onClick()">
+
+  <span *ngIf="loading" class="po-icon po-button-loading-icon"></span>
+  <span *ngIf="icon" class="po-icon {{ icon }}" aria-hidden="true"></span>
+  <span *ngIf="label" class="po-button-label">{{ label }}</span>
+</button>

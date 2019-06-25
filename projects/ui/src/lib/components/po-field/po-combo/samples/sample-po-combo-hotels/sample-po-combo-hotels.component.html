@@ -1,0 +1,91 @@
+<div class="po-text-center">
+  <div class="po-font-title"> Booking a Hotel </div>
+</div>
+
+<form #bookingForm="ngForm">
+
+  <div class="po-row">
+    <po-datepicker
+      class="po-md-4"
+      name="checkin"
+      [(ngModel)]="checkin"
+      p-label="Check In"
+      p-placeholder="dd/mm/yyyy"
+      p-required
+      [p-max-date]="checkout">
+    </po-datepicker>
+
+    <po-datepicker
+      class="po-md-4"
+      name="checkout"
+      [(ngModel)]="checkout"
+      p-label="Check Out"
+      p-placeholder="dd/mm/yyyy"
+      p-required
+      [p-min-date]="checkin">
+    </po-datepicker>
+
+    <po-switch
+      class="po-md-4"
+      name="switch"
+      [(ngModel)]="category"
+      p-label-off="No, thank you."
+      p-label-on="Yes, please."
+      p-label="Only Luxury Category">
+    </po-switch>
+  </div>
+
+  <div class="po-row">
+    <po-select
+      class="po-md-4"
+      name="rooms"
+      [(ngModel)]="rooms"
+      p-label="Rooms"
+      [p-options]="roomsOptions">
+    </po-select>
+
+    <po-select
+      class="po-md-4"
+      name="children"
+      [(ngModel)]="children"
+      p-label="Children"
+      [p-options]="childrenOptions">
+    </po-select>
+
+    <po-select
+      class="po-md-4"
+      name="adults"
+      [(ngModel)]="adults"
+      p-label="Adults"
+      [p-options]="adultsOptions">
+    </po-select>
+  </div>
+
+  <div class="po-row">
+    <po-combo
+      class="po-sm-12"
+      name="hotel"
+      [(ngModel)]="hotel"
+      p-debounce-time="500"
+      p-disabled-init-filter
+      p-filter-minlength="1"
+      p-icon="po-icon-search"
+      p-label="Search a Hotel"
+      p-required
+      p-sort
+      [p-filter-service]="comboService"
+      [p-filter-params]="category">
+    </po-combo>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Booking"
+      p-type="primary"
+      [p-disabled]="bookingForm.invalid"
+      (p-click)="booking()">
+    </po-button>
+  </div>
+
+</form>

@@ -1,0 +1,40 @@
+<po-field-container
+  [p-help]="help"
+  [p-label]="label"
+  [p-optional]="!required && optional">
+
+  <div class="po-field-container-content po-checkbox-group-content">
+    <div class="po-row po-pt-1 po-pb-1">
+
+      <div *ngFor="let option of options; let i = index"
+        class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
+        [class.po-checkbox-group-item-disabled]="option.disabled || disabled">
+
+        <input
+          class="po-input po-checkbox-group-input"
+          type="checkbox"
+          [class.po-checkbox-group-input-checked]="checkedOptions[option.value]"
+          [class.po-checkbox-group-input-indeterminate]="checkedOptions[option.value] === null"
+          [checked]="option.value"
+          [disabled]="option.disabled || disabled"
+          [id]="'checkbox_' + i"
+          [required]="required"
+          [value]="option.value">
+
+        <label #checkboxLabel
+          class="po-checkbox-group-label"
+          [class.po-clickable]="checkboxLabel.tabIndex === 0"
+          [for]="'checkbox_' + i"
+          [tabindex]="option.disabled || disabled ? -1 : 0"
+          (click)="checkOption(option)"
+          (keydown)="onKeyDown($event, option)">
+            {{option.label}}
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <po-field-container-bottom></po-field-container-bottom>
+
+</po-field-container>

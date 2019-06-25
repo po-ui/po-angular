@@ -1,0 +1,95 @@
+<div class="po-text-center">
+  <div class="po-font-title"> Banking Transfer </div>
+</div>
+
+<form #transferForm="ngForm">
+  <div class="po-row">
+    <po-select
+      class="po-md-6"
+      name="typeAccount"
+      [(ngModel)]="typeAccount"
+      p-label="From"
+      p-required
+      [p-options]="typeAccounts">
+    </po-select>
+
+    <po-combo
+      class="po-md-6"
+      name="contact"
+      [(ngModel)]="contact"
+      p-filter-service="https://portinari.io/sample/api/new/customers?poComboOption=true"
+      p-icon="po-icon-user"
+      p-label="To contact"
+      p-placeholder="Select a contact"
+      p-required>
+    </po-combo>
+  </div>
+
+  <div class="po-row">
+    <po-decimal
+      class="po-md-6"
+      name="value"
+      [(ngModel)]="value"
+      p-clean
+      p-label="Value to transfer"
+      p-placeholder="R$ 0,00"
+      p-required>
+    </po-decimal>
+
+    <po-datepicker
+      class="po-md-6"
+      name="dateTransfer"
+      [(ngModel)]="dateTransfer"
+      p-label="Date to transfer"
+      p-placeholder="dd/mm/yyyy"
+      p-required>
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Transfer"
+      p-type="primary"
+      [p-disabled]="transferForm.invalid"
+      (p-click)="transfer()">
+    </po-button>
+  </div>
+</form>
+
+<po-modal
+  p-title="Do you confirm transfer?"
+  [p-primary-action]="confirmAction"
+  [p-secondary-action]="cancelAction">
+
+  <div class="po-row">
+    <po-info
+      class="po-md-6"
+      p-label="From"
+      [p-value]="typeAccount">
+    </po-info>
+
+    <po-info
+      class="po-md-6"
+      p-label="To"
+      [p-value]="contact">
+    </po-info>
+  </div>
+
+  <hr>
+
+  <div class="po-row">
+    <po-info
+      class="po-md-6"
+      p-label="Value"
+      [p-value]="value">
+    </po-info>
+
+    <po-info
+      class="po-md-6"
+      p-label="Date to transfer"
+      p-value="{{dateTransfer | date}}">
+    </po-info>
+  </div>
+
+</po-modal>

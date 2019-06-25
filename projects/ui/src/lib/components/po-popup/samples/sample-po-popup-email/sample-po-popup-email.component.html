@@ -1,0 +1,131 @@
+<po-popup #popup
+  p-position="right"
+  [p-actions]="popupActions"
+  [p-target]="targetRef">
+
+  <div p-popup-header-template>
+    <div class="sample-popup-header-template">
+        Settings
+    </div>
+  </div>
+</po-popup>
+
+<div class="po-row">
+  <po-widget class="po-sm-12" p-title="Send email">
+    <form #formEmail="ngForm">
+
+      <div class="po-row">
+        <po-email
+          class="po-sm-12"
+          name="to"
+          [(ngModel)]="to"
+          p-clean
+          p-label="To"
+          p-required>
+        </po-email>
+
+        <po-email
+          class="po-sm-12"
+          name="cc"
+          [(ngModel)]="cc"
+          p-clean
+          p-label="CC">
+        </po-email>
+
+        <po-input
+          class="po-sm-12"
+          name="subject"
+          [(ngModel)]="subject"
+          p-clean
+          p-label="Subject"
+          p-required>
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-textarea #target
+          class="po-lg-10"
+          name="message"
+          [(ngModel)]="emailText"
+          p-help="Click show settings popup"
+          p-label="Message"
+          p-required
+          (click)="popup.toggle()">
+        </po-textarea>
+
+        <img class="po-lg-2 sample-logo-portinari" src="../../../assets/graphics/portinari.jpg">
+      </div>
+
+      <div class="po-row">
+        <po-button
+          class="po-md-4"
+          p-label="Send"
+          p-type="primary"
+          [p-disabled]="formEmail.form.invalid"
+          (p-click)="send()">
+        </po-button>
+        <po-button
+          class="po-md-4"
+          p-label="Reset"
+          [p-disabled]="formEmail.form.invalid"
+          (p-click)="reset()">
+        </po-button>
+      </div>
+
+    </form>
+  </po-widget>
+</div>
+
+<po-modal
+  p-title="Email successfully sent"
+  [p-primary-action]="primaryAction">
+
+  <div class="po-row">
+    <po-info
+      class="po-md-6"
+      p-label="From:"
+      [p-value]="from">
+    </po-info>
+
+    <po-info
+      class="po-md-6"
+      p-label="To:"
+      [p-value]="to">
+    </po-info>
+  </div>
+
+  <hr>
+
+  <div *ngIf="cc !== ''">
+    <div class="po-row">
+        <po-info
+          class="po-md-12"
+          p-label="CC:"
+          [p-value]="cc">
+        </po-info>
+    </div>
+    <hr>
+  </div>
+
+  <div class="po-row">
+    <po-info
+      class="po-md-12"
+      p-label="subject:"
+      [p-value]="subject">
+    </po-info>
+  </div>
+
+  <hr>
+
+  <div class="po-row">
+    <po-textarea
+      class="po-md-12"
+      name="text"
+      [(ngModel)]="emailText"
+      p-label="E-mail"
+      p-readonly
+      p-rows="6"
+      ngDefaultControl>
+    </po-textarea>
+  </div>
+</po-modal>

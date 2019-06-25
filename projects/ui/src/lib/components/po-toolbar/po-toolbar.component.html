@@ -1,0 +1,20 @@
+<div class="po-toolbar">
+  <div class="po-toolbar-title"> {{title}} </div>
+
+  <div class="po-toolbar-group-icon">
+    <po-toolbar-actions *ngIf="actions && actions.length"
+      [p-actions]="actions"
+      [p-actions-icon]="actionsIcon">
+    </po-toolbar-actions>
+
+    <po-toolbar-notification *ngIf="showNotification && notificationActions"
+      [p-notification-actions]="notificationActions"
+      [p-notification-number]="notificationNumber">
+    </po-toolbar-notification>
+
+    <po-toolbar-profile *ngIf="isShowProfile"
+      [p-profile]="profile || { avatar: userSrc, title: userName }"
+      [p-profile-actions]="profileActions || userActions">
+    </po-toolbar-profile>
+  </div>
+</div>

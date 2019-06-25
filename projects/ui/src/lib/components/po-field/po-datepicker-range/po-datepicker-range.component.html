@@ -1,0 +1,57 @@
+<po-field-container
+  [p-help]="help"
+  [p-label]="label"
+  [p-optional]="!required && optional">
+
+  <div
+    #dateRangeField
+    class="po-datepicker-range-field po-input"
+    [class.po-datepicker-range-field-disabled]="disabled">
+
+    <div class="po-datepicker-range-start-date">
+      <input
+        #startDateInput
+        class="po-datepicker-range-input"
+        maxlength="10"
+        type="text"
+        [disabled]="disabled"
+        [name]="startDateInputName"
+        [readonly]="readonly"
+        (blur)="onBlur()"
+        (focus)="onFocus()"
+        (keydown)="onKeydown($event)"
+        (keyup)="onKeyup($event)">
+    </div>
+
+    <div class="po-datepicker-range-separator">-</div>
+
+    <div class="po-datepicker-range-end-date">
+      <input
+        #endDateInput
+        class="po-datepicker-range-input"
+        maxlength="10"
+        type="text"
+        [disabled]="disabled"
+        [name]="endDateInputName"
+        [readonly]="readonly"
+        (blur)="onBlur()"
+        (focus)="onFocus()"
+        (keydown)="onKeydown($event)"
+        (keyup)="onKeyup($event)">
+    </div>
+
+    <div class="po-datepicker-range-icon">
+      <po-clean *ngIf="enableCleaner" (p-change-event)="clear($event)"></po-clean>
+    </div>
+
+    <div class="po-datepicker-range-icon">
+      <span
+        class="po-icon po-field-icon po-icon-calendar"
+        [class.po-field-icon-disabled]="disabled || readonly">
+      </span>
+    </div>
+
+  </div>
+
+  <po-field-container-bottom [p-error-pattern]="getErrorMessage"></po-field-container-bottom>
+</po-field-container>

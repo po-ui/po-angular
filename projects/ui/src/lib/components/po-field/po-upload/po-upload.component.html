@@ -1,0 +1,72 @@
+<po-field-container
+  [p-label]="label"
+  [p-help]="help"
+  [p-optional]="!required && optional">
+
+  <div class="po-upload">
+    <input
+      #inputFile
+      class="po-upload-input"
+      type="file"
+      [accept]="allowedExtensions"
+      [attr.name]="name"
+      [disabled]="isDisabled"
+      [multiple]="isMultiple"
+      [required]="required"
+      (change)="onFileChange($event)">
+
+    <po-button
+      *ngIf="!hideSelectButton"
+      class="po-upload-button"
+      for="file"
+      [p-disabled]="isDisabled"
+      [p-label]="literals.selectFile"
+      (p-click)="selectFiles()">
+    </po-button>
+
+    <div class="po-upload-progress" *ngFor="let file of currentFiles" [id]="file.uid">
+      <div class="po-upload-progress-status"></div>
+      <div class="po-upload-filename-foreground">
+
+        <div class="po-upload-filename">
+          <span class="po-icon {{ getPoIcon(file) }}"></span> {{ file.name }} - {{ getFileSize(file.size) }}
+        </div>
+
+        <div class="po-upload-group-actions">
+          <span
+            *ngIf="isStatusFile('None', file) || isStatusFile('Error', file)"
+            class="po-upload-action"
+            (click)="removeFile(file)">
+            {{ literals.deleteFile }}
+          </span>
+
+          <span
+            *ngIf="isStatusFile('Uploading', file)"
+            class="po-upload-action"
+            (click)="stopUpload(file)">
+            {{ literals.cancel }}
+          </span>
+
+          <span
+            *ngIf="isStatusFile('Error', file)"
+            class="po-upload-action"
+            (click)="uploadFiles([file])">
+
+            {{ literals.tryAgain }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <po-button
+      *ngIf="displaySendButton"
+      p-type="primary"
+      [p-disabled]="hasAnyFileUploading(currentFiles)"
+      [p-label]="literals.startSending"
+      (p-click)="uploadFiles(currentFiles)">
+    </po-button>
+
+  </div>
+
+</po-field-container>
