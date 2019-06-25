@@ -1,0 +1,68 @@
+:root {
+  --font-field-icon: {
+    @apply --font-subtitle;
+  }
+
+  --font-field-icon-small {
+    @apply --font-text-large
+  }
+}
+
+.po-field-icon-container-left,
+.po-field-icon-container-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.po-field-icon-container-left {
+  padding-left: 10px;
+  pointer-events: none;
+}
+
+.po-field-icon-container-right {
+  right: 10px;
+}
+
+.po-field-icon,
+.po-field-icon-disabled {
+  @apply --font-field-icon;
+  text-align: center;
+  text-decoration: none;
+}
+
+.po-field-icon {
+  color: var(--color-field-icon-color);
+  cursor: pointer;
+}
+
+.po-field-icon-disabled {
+  color: var(--color-field-icon-color-disabled);
+}
+
+.po-field-icon-readonly {
+  cursor: default;
+}
+
+po-combo.ng-invalid.ng-dirty .po-field-icon,
+po-datepicker.ng-invalid.ng-dirty .po-field-icon,
+po-decimal.ng-invalid.ng-dirty .po-field-icon,
+po-email.ng-invalid.ng-dirty .po-field-icon,
+po-input.ng-invalid.ng-dirty .po-field-icon,
+po-login.ng-invalid.ng-dirty .po-field-icon,
+po-lookup.ng-invalid.ng-dirty .po-field-icon,
+po-number.ng-invalid.ng-dirty .po-field-icon,
+po-multiselect.ng-invalid.ng-dirty .po-field-icon,
+po-password.ng-invalid.ng-dirty .po-field-icon,
+po-select.ng-invalid.ng-dirty .po-field-icon,
+po-url.ng-invalid.ng-dirty .po-field-icon {
+  color: var(--color-field-icon-color-error) !important;
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-field-icon, .po-field-icon-disabled {
+    @apply --font-field-icon-small;
+  }
+
+}

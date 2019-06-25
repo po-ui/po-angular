@@ -1,0 +1,222 @@
+:root {
+  --font-calendar-title {
+    @apply --font-text-large-bold;
+  }
+
+  --font-calendar-label {
+    @apply --font-text-small;
+  }
+
+  --font-calendar-nav-icon {
+    @apply --font-subtitle;
+  }
+
+  --font-calendar-content {
+    @apply --font-text
+  }
+
+  --shadow-calendar-box-shadow: var(--shadow-card);
+
+  --po-calendar-width: 288px;
+  --po-calendar-height: 288px;
+}
+
+.po-calendar {
+  background-color: var(--color-calendar-background-color);
+  border-radius: 3px;
+  box-shadow: var(--shadow-calendar-box-shadow);
+  height: var(--po-calendar-height);
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+  width: var(--po-calendar-width);
+}
+
+.po-calendar-mobile {
+  left: calc(50% - (var(--po-calendar-width) / 2));
+  position: fixed !important;
+  top: calc(50% - 145px);
+  z-index: 11;
+}
+
+.po-calendar-overlay {
+  background-color: var(--color-calendar-background-color-mobile-overlay);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 11;
+}
+
+.po-calendar-nav {
+  min-height: 40px;
+  overflow: hidden;
+}
+
+.po-calendar-nav .po-calendar-nav-left,
+.po-calendar-nav .po-calendar-nav-right {
+  @apply --font-calendar-nav-icon;
+  color: var(--color-calendar-arrow);
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+}
+
+.po-calendar-nav .po-calendar-nav-left {
+  left: 16px;
+}
+
+.po-calendar-nav .po-calendar-nav-right {
+  right: 16px;
+}
+
+.po-calendar-nav .po-calendar-nav-title {
+  @apply --font-calendar-title;
+  color: var(--color-calendar-title);
+  margin-top: 16px;
+  text-align: center;
+  width: 100%;
+}
+
+.po-calendar-content {
+  @apply --font-calendar-content;
+  overflow: hidden;
+  width: var(--po-calendar-width);
+}
+
+.po-calendar-content .po-calendar-content-list-day,
+.po-calendar-content .po-calendar-content-list-month,
+.po-calendar-content .po-calendar-content-list-year {
+  position: absolute;
+}
+
+.po-calendar-content .po-calendar-content-list-day {
+  padding: 0 4px;
+  top: 75px;
+}
+
+.po-calendar-content .po-calendar-content-list-day,
+.po-calendar-content .po-calendar-content-list-month {
+  text-align: center;
+}
+
+.po-calendar-content .po-calendar-content-list-month,
+.po-calendar-content .po-calendar-content-list-year {
+  padding: 0 8px;
+  top: 85px;
+}
+
+.po-calendar-content .po-calendar-labels {
+  padding: 0 4px;
+  position: absolute;
+  text-align: center;
+  top: 50px;
+  width: var(--po-calendar-width);
+}
+
+.po-calendar-content .po-calendar-label {
+  @apply --font-calendar-label;
+  color: var(--color-calender-color-content-label);
+  display: inline-block;
+  height: 24px;
+  margin: 0 2px;
+  text-align: center;
+  width: 32px;
+}
+
+.po-calendar-content .po-calendar-day {
+  border-radius: 3px;
+  display: inline-block;
+  line-height: 30px;
+  margin: 2px;
+  text-align: center;
+  width: 32px;
+}
+
+.po-calendar-content .po-calendar-month,
+.po-calendar-content .po-calendar-year {
+  @apply --font-calendar-content;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+  height: 32px;
+  line-height: 32px;
+  margin: 4px 4px 8px;
+  text-align: center;
+  width: 80px;
+}
+
+.po-calendar-box-background {
+  background-color: var(--color-calendar-background-color-box-background-normal);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-calendar-background-color-box-background-hover);
+  }
+
+  &:active {
+    background-color: var(--color-calendar-background-color-box-background-active);
+    color: var(--color-calendar-text-box-background-active);
+  }
+
+  &-selected {
+    background-color: var(--color-calendar-background-color-box-background-selected);
+
+    &-disabled {
+      background-color: var(--color-calendar-background-color-box-background-disabled);
+      pointer-events: none;
+    }
+  }
+
+  &-today {
+    background-color: var(--color-calendar-background-color-box-background-today);
+
+    &-disabled {
+      background-color: var(--color-calendar-background-color-box-background-today);
+      pointer-events: none;
+
+      &:hover {
+        background-color: var(--color-calendar-background-color-box-background-today-hover);
+        pointer-events: none;
+      }
+    }
+
+    &:hover {
+      background-color: var(--color-calendar-background-color-box-background-today-hover);
+    }
+  }
+
+  &-disabled {
+    pointer-events: none;
+  }
+}
+
+.po-calendar-box-foreground {
+  color: var(--color-calendar-color-box-foreground);
+
+  &-selected {
+    color: var(--color-calendar-color-box-foreground-selected);
+    font-family: var(--font-family-bold);
+
+    &-disabled {
+      color: var(--color-calendar-color-box-foreground-disabled);
+      pointer-events: none;
+    }
+  }
+
+  &-today {
+    color: var(--color-calendar-color-box-foreground-today);
+    font-family: var(--font-family-bold);
+
+    &-disabled {
+      color: var(--color-calendar-color-box-foreground-today);
+      pointer-events: none;
+    }
+  }
+
+  &-disabled {
+    color: var(--color-calendar-color-box-foreground-disabled);
+    pointer-events: none;
+  }
+}

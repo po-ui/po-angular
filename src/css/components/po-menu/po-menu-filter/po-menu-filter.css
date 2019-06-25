@@ -1,0 +1,73 @@
+:root {
+  --font-menu-filter-text: {
+    @apply --font-text;
+  }
+
+  --font-menu-filter-icon {
+    @apply --font-text-large;
+  }
+
+  --shadow-menu-filter-box-shadow: var(--shadow-input);
+
+  --menu-filter-height: 36px;
+}
+
+.po-menu-filter-container {
+  padding: 8px;
+  position: relative;
+}
+
+.po-menu-filter-icon {
+  @apply --font-menu-filter-icon;
+  color: var(--color-menu-filter-color-icon);
+  cursor: default;
+  text-align: center;
+  text-decoration: none;
+}
+
+.po-menu-filter-icon.po-loading-icon {
+  line-height: 0;
+}
+
+.po-menu-filter-search-icon-container {
+  left: 12px;
+  text-align: center;
+  width: 30px;
+}
+
+.po-menu-filter {
+  @apply --font-menu-filter-text;
+  appearance: textfield;
+  background-color: var(--color-menu-filter-background-color);
+  border-radius: 18px;
+  border: solid 1px var(--color-menu-filter-border);
+  box-shadow: var(--shadow-menu-filter-box-shadow);
+  color: var(--color-menu-filter-color-text);
+  height: var(--menu-filter-height);
+  padding: 0 34px;
+  width: 100%;
+}
+
+/* Desabilita o clean field e o reveal do IE 10+ */
+.po-menu-filter::-ms-clear, .po-menu-filter::-ms-reveal {
+  display: none;
+}
+
+.po-menu-filter:focus {
+  border: solid 1px var(--color-menu-filter-border-focusable);
+  outline: none;
+}
+
+.po-menu-filter-close-icon-container {
+  right: 20px;
+
+  .po-field-icon {
+    font-size: 16px;
+  }
+}
+
+.po-menu-filter-close-icon-container, .po-menu-filter-search-icon-container {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}

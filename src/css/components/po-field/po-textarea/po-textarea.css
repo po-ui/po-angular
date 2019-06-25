@@ -1,0 +1,78 @@
+
+:root {
+  --font-textarea-text: {
+    @apply --font-text-large;
+  }
+
+  --font-textarea-text-smaller: {
+    @apply --font-text;
+  }
+
+  --font-textarea-error-message: {
+    @apply --font-text-bold;
+  }
+
+  --font-textarea-error-text: {
+    @apply --font-text-small;
+  }
+
+  --shadow-textarea-box-shadow: var(--shadow-input);
+}
+
+.po-textarea {
+  @apply --font-textarea-text;
+  border: solid 1px var(--color-textarea-border) !important;
+  border-radius: 3px;
+  box-shadow: var(--shadow-textarea-box-shadow);
+  background-color: var(--color-textarea-background-color);
+  display: block;
+  padding: 8px 16px;
+  resize: none;
+  width: 100%;
+}
+
+.po-textarea:disabled {
+  background-color: var(--color-textarea-background-color-disabled);
+  border: solid 1px var(--color-textarea-border-color-disabled);
+  color: var(--color-textarea-color-disabled);
+}
+
+.ng-valid .po-textarea:focus {
+  border: solid 1px var(--color-textarea-border-focusable) !important;
+  outline: none;
+}
+
+.po-textarea-label-error {
+  @apply --font-textarea-error-text;
+  color: var(--color-textarea-color-error);
+  display: block;
+  height: 20px;
+  margin-top: 2px;
+  padding-left: 2px;
+  text-align: left;
+}
+
+.po-textarea-label-error .po-textarea-label-error-icon {
+  @apply --font-textarea-error-message;
+  padding-bottom: 2px;
+  vertical-align: middle;
+  width: 16px;
+}
+
+.po-textarea::-webkit-scrollbar {
+  width: 7px;
+}
+
+.po-textarea::-webkit-scrollbar-thumb {
+  background-color: var(--color-textarea-background-color-scrollbar);
+  border-radius: 2px;
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-textarea {
+    @apply --font-textarea-text-smaller;
+    padding: 4px 8px;
+  }
+
+}

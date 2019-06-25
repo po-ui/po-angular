@@ -1,0 +1,69 @@
+<style>
+  .sample-container {
+    height: 100px;
+  }
+
+  div.ng-invalid.ng-dirty .po-input {
+    border: solid 1px #c64840 !important;
+    outline: none;
+    color: #c64840;
+  }
+
+  div.ng-invalid.ng-dirty .po-field-icon {
+    color: #c64840 !important;
+  }
+</style>
+
+<div class="po-row">
+  <div class="sample-container po-md-6">
+    <h4>Input com um ícone (po-clean) </h4>
+
+    <div class="po-field-container-content">
+      <input type="text" class="po-input po-input-icon-right">
+
+      <div class="po-field-icon-container-right">
+        <span class="po-icon po-field-icon po-icon-close"></span>
+      </div>
+    </div>
+
+    <div class="po-field-container-bottom"></div>
+  </div>
+</div>
+
+<div class="po-row">
+  <div class="sample-container po-md-6">
+    <h4>Input com dois ícones (po-clean e po-icon-calendar)</h4>
+
+    <div class="po-field-container-content">
+      <input type="text" class="po-input po-input-double-icon-right">
+
+      <div class="po-field-icon-container-right">
+        <span Class="po-icon po-field-icon po-icon-close"></span>
+        <span Class="po-icon po-field-icon po-icon-calendar"></span>
+      </div>
+    </div>
+
+    <div class="po-field-container-bottom"></div>
+  </div>
+</div>
+
+<div class="po-row">
+  <div class="sample-container po-md-6">
+    <h4>Input com erro de validação </h4>
+
+    <div class="po-field-container-content ng-invalid ng-dirty">
+      <input type="text" class="po-input po-input-icon-right" value="Preenchimento inválido">
+      <div class="po-field-icon-container-right">
+        <span class="po-icon po-field-icon po-icon-close"></span>
+      </div>
+    </div>
+
+    <div class="po-field-container-bottom">
+      <span class="po-field-container-bottom-text-error">
+        <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+        Mensagem de erro
+      </span>
+    </div>
+
+  </div>
+</div>

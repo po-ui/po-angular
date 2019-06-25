@@ -1,0 +1,24 @@
+:root {
+  --font-disclaimer-font-title: {
+    @apply --font-text-bold;
+  }
+}
+
+.po-disclaimer-group {
+  background-color: var(--color-disclaimer-group-background-color);
+  border: solid 1px var(--color-disclaimer-group-border-color);
+  border-radius: 3px;
+  padding: 8px 16px;
+  width: 100%;
+}
+
+.po-disclaimer-group-title {
+  @apply --font-disclaimer-font-title;
+  color: var(--color-disclaimer-group-font-title);
+  padding-bottom: 8px;
+}
+
+.po-disclaimer-group-disclaimer-align {
+  display: inline-block;
+  margin: 0 8px 8px 0;
+}

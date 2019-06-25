@@ -1,0 +1,94 @@
+:root {
+  --shadow-checkbox-group-box-shadow-input: var(--shadow-input);
+
+  --font-checkbox-group-label-smaller: {
+    @apply --font-text;
+  }
+}
+
+.po-checkbox-group-item {
+  height: 44px;
+  padding: 10px 8px 10px 0;
+}
+
+.po-checkbox-group-input {
+  border-radius: 2px;
+  box-shadow: var(--shadow-checkbox-group-box-shadow-input);
+  position: absolute;
+  visibility: hidden;
+}
+
+.po-checkbox-group-input+.po-checkbox-group-label:before {
+  background-color: var(--color-checkbox-group-background-color);
+  border: solid 1px var(--color-checkbox-group-border-input);
+  border-radius: 2px;
+  box-shadow: var(--shadow-checkbox-group-box-shadow-input);
+  content: ' ';
+  display: inline-block;
+  height: 20px;
+  margin-right: 8px;
+  margin-top: -2px;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.po-checkbox-group-input-checked+.po-checkbox-group-label:before,
+.po-checkbox-group-input-indeterminate+.po-checkbox-group-label:before {
+  background-color: var(--color-checkbox-group-background-color-active);
+  border: solid 1px var(--color-checkbox-group-border-input-active);
+  box-shadow: none;
+  color: var(--color-checkbox-group-color-active);
+  font-family: 'PortinariIcon' !important;
+  line-height: 18px;
+  padding-left: 1px;
+}
+
+po-checkbox-group.ng-invalid.ng-dirty .po-checkbox-group-input + .po-checkbox-group-label:before {
+  border: solid 1px var(--color-checkbox-group-border-input-invalid);
+}
+
+.po-checkbox-group-input:disabled + .po-checkbox-group-label:before {
+  background-color: var(--color-checkbox-group-background-color-disabled);
+  border: solid 1px var(--color-checkbox-group-border-input-disabled) !important;
+  color: var(--color-checkbox-group-background-color-icon-disabled);
+}
+
+.po-checkbox-group-input-checked+.po-checkbox-group-label:before {
+  content: '\e937';
+}
+
+.po-checkbox-group-input-indeterminate+.po-checkbox-group-label:before {
+  content: '\e928';
+}
+
+.po-checkbox-group-label:focus {
+  outline: none;
+}
+
+.po-checkbox-group-label:focus::before {
+  box-shadow: inset 0 0 0 1px var(--color-checkbox-group-box-shadow-color-focusable);
+}
+
+.po-checkbox-group-content {
+  display: inline;
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-checkbox-group-item {
+    @apply --font-checkbox-group-label-smaller;
+    height: 32px;
+    padding: 4px 8px 4px 0;
+  }
+
+  .po-checkbox-group-input+.po-checkbox-group-label:before {
+    height: 18px;
+    width: 18px;
+  }
+
+  .po-checkbox-group-input-checked+.po-checkbox-group-label:before,
+  .po-checkbox-group-input-indeterminate+.po-checkbox-group-label:before {
+    line-height: 16px;
+  }
+
+}

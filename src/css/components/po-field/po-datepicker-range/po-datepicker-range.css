@@ -1,0 +1,93 @@
+.po-datepicker-range-end-date {
+  display: table-cell;
+  padding-left: 2px;
+  vertical-align: middle;
+}
+
+.po-datepicker-range-field {
+  appearance: none !important;
+  display: table;
+  margin: 8px 0;
+}
+
+.po-datepicker-range-field-disabled {
+  background-color: var(--color-datepicker-range-background-color-disabled) !important;
+  border: solid 1px var(--color-datepicker-range-border-text);
+  color: var(--color-datepicker-range-color-disabled);
+  pointer-events: none;
+}
+
+.po-datepicker-range-field-focused {
+  border: solid 1px var(--color-datepicker-range-color-focused) !important;
+}
+
+.po-datepicker-range-icon {
+  display: table-cell;
+  font: inherit;
+  padding-top: 3px;
+  text-align: center;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.po-datepicker-range-icon .po-icon-calendar {
+  cursor: default;
+}
+
+.po-datepicker-range-input {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  height: 100%;
+  vertical-align: middle;
+  width: 100%;
+}
+
+/* Desabilita o clean field e o reveal do IE 10+ */
+.po-datepicker-range-input::-ms-clear,
+.po-datepicker-range-input::-ms-reveal {
+  display: none;
+}
+
+.po-datepicker-range-input:focus {
+  outline: none;
+}
+
+.po-datepicker-range-separator {
+  display: table-cell;
+  vertical-align: middle;
+  width: 8px;
+}
+
+.po-datepicker-range-start-date {
+  display: table-cell;
+  vertical-align: middle;
+  width: 80px;
+}
+
+po-datepicker-range.ng-invalid.ng-dirty .po-field-icon {
+  color: var(--color-datepicker-range-color-text-error) !important;
+}
+
+po-datepicker-range.ng-invalid.ng-dirty .po-input {
+  border: 1px solid var(--color-datepicker-range-border-text-error) !important;
+  color: var(--color-datepicker-range-color-text-error);
+  outline: none;
+}
+
+@media screen and (min-width: 1367px) {
+
+  .po-datepicker-range-field {
+    padding: 0 8px 0 16px !important;
+  }
+
+  .po-datepicker-range-icon {
+    width: 28px;
+  }
+
+  .po-datepicker-range-start-date {
+    width: 90px;
+  }
+
+}

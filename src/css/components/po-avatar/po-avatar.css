@@ -1,0 +1,73 @@
+:root {
+  --shadow-avatar-box-shadow-avatar: var(--shadow-input);
+}
+
+.po-avatar {
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 150px;
+  box-shadow: var(--shadow-avatar-box-shadow-avatar);
+  display: flex;
+  margin: 5px;
+  overflow: hidden;
+}
+
+.po-avatar-image {
+  height: 100%;
+}
+
+.po-avatar.po-avatar-xs {
+  height: 24px;
+  width: 24px;
+}
+
+.po-avatar.po-avatar-sm {
+  height: 32px;
+  width: 32px;
+}
+
+.po-avatar.po-avatar-md {
+  height: 64px;
+  width: 64px;
+}
+
+.po-avatar.po-avatar-lg {
+  height: 96px;
+  width: 96px;
+}
+
+.po-avatar.po-avatar-xl {
+  height: 144px;
+  width: 144px;
+}
+
+.po-avatar-default-icon {
+  color: var(--color-avatar-background-color-avatar);
+  text-align: center;
+  width: 100%;
+}
+
+.po-avatar-xs .po-avatar-default-icon {
+  font-size: 12px;
+  padding: 6px 0;
+}
+
+.po-avatar-sm .po-avatar-default-icon {
+  font-size: 16px;
+  padding: 8px 0;
+}
+
+.po-avatar-md .po-avatar-default-icon {
+  font-size: 32px;
+  padding: 16px 0;
+}
+
+.po-avatar-lg .po-avatar-default-icon {
+  font-size: 48px;
+  padding: 24px 0;
+}
+
+.po-avatar-xl .po-avatar-default-icon {
+  font-size: 72px;
+  padding: 36px 0;
+}

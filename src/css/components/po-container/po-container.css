@@ -1,0 +1,54 @@
+:root {
+  --border-container-border-no-shadow: solid 1px var(--color-container-color-shadow);
+  --shadow-container-box-shadow: var(--shadow-container);
+}
+
+.po-container {
+  border-radius: 3px;
+  box-shadow: var(--shadow-container-box-shadow);
+  display: block;
+  height: auto;
+  overflow-y: auto;
+  padding: 16px;
+  width: 100%;
+}
+
+.po-container-no-shadow,
+.po-container-no-border {
+  box-shadow: none;
+}
+
+.po-container-no-shadow {
+  border: var(--border-container-border-no-shadow);
+}
+
+.po-container-no-border {
+  border: none;
+}
+
+.po-container::-webkit-scrollbar {
+  height: 7px;
+  width: 7px;
+}
+
+.po-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-container-background-color-scrollbar);
+  border-radius: 10px;
+}
+
+.po-container::-webkit-scrollbar-track {
+  display: none;
+}
+
+
+@media screen and (max-width: 1366px) {
+
+  .po-container {
+    padding: 8px;
+  }
+
+}
+
+.po-container-no-padding {
+  padding: 0;
+}

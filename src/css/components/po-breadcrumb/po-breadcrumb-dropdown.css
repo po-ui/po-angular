@@ -1,0 +1,41 @@
+:root {
+  --shadow-breadcrumb-box-shadow-dropdown: var(--shadow-card);
+
+  --font-breadcrumb-dropdown: {
+    @apply --font-text;
+  }
+
+  --font-breadcrumb-icon-more: {
+    @apply --font-subtitle;
+  }
+}
+
+.po-breadcrumb-dropdown {
+  @apply --font-breadcrumb-dropdown;
+  background-color: var(--color-breadcrumb-background-color-dropdown);
+  box-shadow: var(--shadow-breadcrumb-box-shadow-dropdown);
+  position: absolute;
+  top: 40px;
+  width: 151px;
+  z-index: 10;
+}
+
+.po-breadcrumb-dropdown-item {
+  color: var(--color-breadcrumb-color-item);
+  list-style: none;
+  min-height: 44px;
+  padding: 10px 16px;
+  word-wrap: break-word;
+}
+
+.po-breadcrumb-dropdown-item:hover {
+  background-color: var(--color-breadcrumb-background-color-dropdown-item-hover);
+  cursor: pointer;
+}
+
+.po-breadcrumb-icon-more {
+  @apply --font-breadcrumb-icon-more;
+  color: var(--color-breadcrumb-color-item);
+  line-height: 30px;
+  padding-left: 8px;
+}

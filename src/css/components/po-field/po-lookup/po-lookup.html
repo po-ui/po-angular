@@ -1,0 +1,597 @@
+<style>
+  div.ng-invalid.ng-dirty .po-input {
+    border: solid 1px #c64840 !important;
+    outline: none;
+    color: #c64840;
+  }
+
+  div.ng-invalid.ng-dirty .po-field-icon {
+    color: #c64840 !important;
+  }
+
+  .sample-po-table-width {
+    width: 30%;
+  }
+
+  .sample-po-lookup-table {
+    height: 300px;
+  }
+
+</style>
+
+<article>
+  <section>
+
+    <div class="po-row">
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Lookup com apoio e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de apoio</div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="" placeholder="Digite o nome">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-search" onClick="document.getElementById('loading').classList.remove('po-invisible');"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Lookup com apoio / preenchido</span>
+          </div>
+          <div class="po-field-help">Texto de apoio</div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="PO">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-search" onClick="document.getElementById('table').classList.remove('po-invisible');"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Lookup com apoio / preenchido</span>
+          </div>
+          <div class="po-field-help">Texto de apoio</div>
+
+          <div class="po-field-container-content ng-invalid ng-dirty">
+            <input type="text" class="po-input po-input-icon-right" value="$#!@">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-search" onClick="document.getElementById('table').classList.remove('po-invisible');"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Valor inválido
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo normal</span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="" placeholder="Digite o nome">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-search" onClick="document.getElementById('table').classList.remove('po-invisible');"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Lookup desabilitado</span>
+          </div>
+
+          <div class="po-field-container-content">
+            <input type="text" class="po-input po-input-icon-right" value="PO" disabled>
+            <div class="po-field-icon-container-right">
+              <span class="po-icon  po-field-icon-disabled po-icon-search" onClick="document.getElementById('table').classList.remove('po-invisible');"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo desabilitado</span>
+          </div>
+
+          <div class="po-field-container-content ng-invalid ng-dirty">
+            <input type="text" class="po-input po-input-icon-right" value="$#!@">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-search po-field-icon-disabled"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Valor inválido
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="po-row">
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title"></span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" placeholder="Digite o nome">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-search" onClick="document.getElementById('table').classList.remove('po-invisible');"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title"></span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="PO">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-search" onClick="document.getElementById('table').classList.remove('po-invisible');"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title"></span>
+          </div>
+
+          <div class="po-field-container-content ng-invalid ng-dirty">
+            <input type="text" class="po-input po-input-icon-right" value="$#!@">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-search"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Valor inválido
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MODAL COM PO TABLE -->
+    <div id="table" class="po-modal po-lookup-modal po-invisible">
+      <div class="po-modal-overlay">
+        <div class="po-modal-container po-p-2">
+          <div class="po-modal-vertical-align">
+            <div tabindex="-1" class="po-modal-content po-modal-lg">
+              <div class="po-modal-header">
+                <div class="po-modal-title">
+                  <a class="po-modal-header-close-button" tabindex="0" onClick="document.getElementById('table').classList.add('po-invisible');">
+                    <span class="po-icon po-icon-close"></span>
+                  </a>
+                  Selecione um destino
+                </div>
+              </div>
+              <div class="po-modal-body">
+                <!-- INICIO - CONTEUDO DA MODAL -->
+                <div class="po-lookup-header po-md-6 po-pull-right">
+                  <div class="po-field-container-content ng-valid">
+                    <input type="text" class="po-input po-input-icon-right" value="" placeholder="Digite o nome">
+
+                    <div class="po-field-icon-container-right">
+                      <span class="po-icon po-field-icon po-icon-search"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-row">
+                  <div class="po-lg-12">
+                    <div class="po-container-no-padding">
+                      <div class="po-table-main-container">
+                        <div class="po-table-wrapper">
+                          <table class="po-table">
+                            <thead>
+                              <tr class="po-table-header">
+                                <th class="po-table-column-checkbox">
+                                </th>
+                                <th class="po-table-header-ellipsis">
+                                  <span class="po-table-header-ellipsis po-table-header-block">Destino</span>
+                                </th>
+                                <th class="po-table-header-ellipsis po-table-header-number po-table-column-right">
+                                  <span class="po-table-header-ellipsis po-table-header-block">Poltrona</span>
+                                </th>
+                                <th class="po-table-header-ellipsis">
+                                  <span class="po-table-header-ellipsis po-table-header-block">Classe</span>
+                                </th>
+                                <th class="po-table-header-ellipsis po-table-header-number po-table-column-right">
+                                  <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox">
+                                  <input type="radio" id="radio2" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio2"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Brasil / São Paulo
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  235
+                                </td>
+                                <td class="po-table-column">
+                                  Econômica
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 300.00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox">
+                                  <input type="radio" id="radio1" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio1"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Chile / Santiago
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  233
+                                </td>
+                                <td class="po-table-column">
+                                  Econômica
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 440.00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox po-table-row-active">
+                                  <input type="radio" id="radio3" class="po-radio-group-input po-radio-group-input-checked">
+                                  <label class="po-radio-group-label po-clickable" for="radio3"></label>
+                                </td>
+                                <td class="po-table-column po-table-row-active">
+                                  Argentina / Buenos Aires
+                                </td>
+                                <td class="po-table-column po-table-column-right po-table-row-active">
+                                  230
+                                </td>
+                                <td class="po-table-column po-table-row-active">
+                                  Primeira classe
+                                </td>
+                                <td class="po-table-column po-table-column-right po-table-row-active">
+                                  R$ 600.00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox ">
+                                  <input type="radio" id="radio3" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio3"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Uruguai / Montevidéu
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  78
+                                </td>
+                                <td class="po-table-column">
+                                  Primeira classe
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 780.00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox">
+                                  <input type="radio" id="radio3" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio3"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Paraguai / Assunção
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  186
+                                </td>
+                                <td class="po-table-column">
+                                  Primeira classe
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 650.00
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="po-row po-table-footer-show-more">
+                        <button type="button" name="button" class="po-button po-offset-xl-4 po-offset-lg-4 po-offset-md-3 po-lg-4 po-md-6">
+                          Carregar mais resultados
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- FINAL - CONTEUDO DA MODAL -->
+              </div>
+              <div class="po-modal-footer">
+                <po-button>
+                  <button
+                    class="po-button"
+                    type="button"
+                    onClick="document.getElementById('table').classList.add('po-invisible');">
+                      Cancelar
+                  </button>
+                </po-button>
+                <po-button class="po-button-modal-first-action">
+                  <button
+                    class="po-button po-button-primary"
+                    type="button"
+                    onClick="document.getElementById('table').classList.add('po-invisible');">
+                      Selecionar
+                  </button>
+                </po-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL COM PO LOADING -->
+    <div id="loading" class="po-modal po-lookup-modal po-invisible">
+      <div class="po-modal-overlay">
+        <div class="po-modal-container po-p-2">
+          <div class="po-modal-vertical-align">
+            <div tabindex="-1" class="po-modal-content po-modal-lg">
+              <div class="po-modal-header">
+                <div class="po-modal-title">
+                  <a class="po-modal-header-close-button" tabindex="0" onClick="document.getElementById('loading').classList.add('po-invisible');">
+                    <span class="po-icon po-icon-close"></span>
+                  </a>
+                  Selecione um destino
+                </div>
+              </div>
+              <div class="po-modal-body">
+                <!-- INICIO - CONTEUDO DA MODAL -->
+                <div class="po-lookup-header po-md-6 po-pull-right">
+                  <div class="po-field-container-content ng-valid">
+                    <input type="text" class="po-input po-input-icon-right" value="" placeholder="Digite o nome">
+
+                    <div class="po-field-icon-container-right">
+                      <span class="po-icon po-field-icon po-icon-search"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-row">
+                  <div class="po-container-no-padding po-lg-12">
+                    <div class="po-table-main-container">
+                      <div class="po-table-wrapper">
+                        <div class="po-table-container-relative">
+                          <div class="po-table-overlay">
+                            <div class="po-table-overlay-content">
+                              <div class="po-loading">
+                                <span class="po-loading-icon"></span>
+                                <span class="po-loading-label">Carregando</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <table class="po-table">
+                            <thead>
+                              <tr class="po-table-header">
+                                <th class="po-table-column-checkbox">
+                                </th>
+                                <th class="po-table-header-ellipsis">
+                                  <span class="po-table-header-ellipsis po-table-header-block">Destino</span>
+                                </th>
+                                <th class="po-table-header-ellipsis po-table-header-number po-table-column-right">
+                                  <span class="po-table-header-ellipsis po-table-header-block">Poltrona</span>
+                                </th>
+                                <th class="po-table-header-ellipsis">
+                                  <span class="po-table-header-ellipsis po-table-header-block">Classe</span>
+                                </th>
+                                <th class="po-table-header-ellipsis po-table-header-number po-table-column-right">
+                                  <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox">
+                                  <input type="radio" id="radio2" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio2"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Brasil / São Paulo
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  235
+                                </td>
+                                <td class="po-table-column">
+                                  Econômica
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 300.00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox">
+                                  <input type="radio" id="radio1" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio1"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Chile / Santiago
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  233
+                                </td>
+                                <td class="po-table-column">
+                                  Econômica
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 440.00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox">
+                                  <input type="radio" id="radio3" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio3"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Argentina / Buenos Aires
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  230
+                                </td>
+                                <td class="po-table-column">
+                                  Primeira classe
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 600.00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox ">
+                                  <input type="radio" id="radio3" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio3"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Uruguai / Montevidéu
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  78
+                                </td>
+                                <td class="po-table-column">
+                                  Primeira classe
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 780.00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody class="po-table-group-row">
+                              <tr class="po-table-row">
+                                <td class="po-table-column po-table-column-checkbox">
+                                  <input type="radio" id="radio3" class="po-radio-group-input">
+                                  <label class="po-radio-group-label po-clickable" for="radio3"></label>
+                                </td>
+                                <td class="po-table-column">
+                                  Paraguai / Assunção
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  186
+                                </td>
+                                <td class="po-table-column">
+                                  Primeira classe
+                                </td>
+                                <td class="po-table-column po-table-column-right">
+                                  R$ 650.00
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- FINAL - CONTEUDO DA MODAL -->
+              </div>
+              <div class="po-modal-footer">
+                <po-button>
+                  <button
+                    class="po-button"
+                    type="button"
+                    onClick="document.getElementById('loading').classList.add('po-invisible');">
+                    Cancelar
+                  </button>
+                </po-button>
+                <po-button class="po-button-modal-first-action">
+                  <button
+                    class="po-button po-button-primary"
+                    type="button"
+                    onClick="document.getElementById('loading').classList.add('po-invisible');">
+                      Selecionar
+                  </button>
+                </po-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</article>

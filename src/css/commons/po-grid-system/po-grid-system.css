@@ -1,0 +1,21 @@
+.po-row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+[class*='po-xl-'], [class*=' po-xl-'], [class*='po-visible-xl-'], [class*=' po-visible-xl-'],
+[class*='po-lg'], [class*=' po-lg-'], [class*='po-visible-lg-'], [class*=' po-visible-lg-'],
+[class*='po-md-'], [class*=' po-md-'], [class*='po-visible-md-'], [class*=' po-visible-md-'],
+[class*='po-sm-'], [class*=' po-sm-'], [class*='po-visible-sm-'], [class*=' po-visible-sm-']
+ {
+  float: left;
+  padding: 0 8px;
+}
+
+.po-visible-xl, [class*='po-visible-xl-'], [class*=' po-visible-xl-'],
+.po-visible-lg, [class*='po-visible-lg-'], [class*=' po-visible-lg-'],
+.po-visible-md, [class*='po-visible-md-'], [class*=' po-visible-md-'],
+.po-visible-sm, [class*='po-visible-sm-'], [class*=' po-visible-sm-'] {
+  display: none;
+}

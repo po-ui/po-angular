@@ -1,0 +1,53 @@
+:root {
+  --font-popover-font-title: {
+    @apply --font-text-bold;
+  }
+
+  --popover-border-radius: 3px;
+
+  --shadow-popover-box-shadow: var(--shadow-popover);
+  --shadow-popover-box-shadow-arrow: var(--shadow-popover-arrow);
+}
+
+.po-popover {
+	background-color: var(--color-white);
+  border-radius: var(--popover-border-radius);
+	box-shadow: var(--shadow-popover-box-shadow);
+  max-height: 800px;
+  max-width: 800px;
+  min-height: 172px;
+  min-width: 240px;
+  position: fixed;
+  z-index: 1000;
+}
+
+.po-popover-arrow {
+	background-color: var(--color-popover-background-color-arrow);
+  box-shadow: var(--shadow-popover-box-shadow-arrow);
+}
+
+.po-popover-content {
+  padding: 16px;
+  width: 100%;
+  max-height: 768px;
+  overflow: auto;
+}
+
+.po-popover-content::-webkit-scrollbar {
+  border-radius: 2px;
+  opacity: 0.5;
+  width: 4px;
+}
+
+.po-popover-content::-webkit-scrollbar-thumb {
+  background-color: var(--color-popover-background-color-scrollbar);
+}
+
+.po-popover-title {
+  @apply --font-popover-font-title;
+  color: var(--color-popover-color-text-title);
+  display: block;
+  line-height: 14px;
+  margin-bottom: 8px;
+}
+

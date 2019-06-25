@@ -1,0 +1,105 @@
+:root {
+  --shadow-chart-box-shadow: var(--shadow-card);
+
+  --font-chart-title: {
+    @apply --font-text-large;
+  }
+
+  --font-chart-legend-text: {
+    @apply --font-text-small;
+  }
+}
+
+.po-chart-wrapper {
+  background: var(--color-chart-background-color);
+  box-shadow: var(--shadow-widget-box-shadow);
+  padding: 24px;
+  width: 100%;
+}
+
+.po-chart-header {
+  @apply --font-chart-title;
+  display: block;
+  margin: 0 auto;
+  padding-bottom: 16px;
+}
+
+.po-chart-body {
+  position: relative;
+}
+
+.po-chart-tooltip {
+  pointer-events: none;
+  position: absolute;
+  user-select: none;
+}
+
+.po-chart-svg-element {
+  display: block;
+}
+
+.po-chart-legend {
+  display: block;
+  overflow-y: auto;
+}
+
+.po-chart-legend-container {
+  margin-top: 16px;
+  max-height: 136px;
+  overflow-y: auto;
+}
+
+.po-chart-legend-container::-webkit-scrollbar {
+  width: 7px;
+}
+
+.po-chart-legend-container::-webkit-scrollbar-track {
+  display: none;
+}
+
+.po-chart-legend-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-chart-legend-wrapper-scrollbar);
+  border-radius: 2px;
+}
+
+.po-chart-legend-item {
+  display: inline-block;
+  line-height: 1px;
+}
+
+.po-chart-legend-item:not(:last-child) {
+  margin-right: 8px;
+}
+
+.po-chart-legend-square {
+  display: inline-block;
+  height: 16px;
+  margin-right: 8px;
+  position: relative;
+  top: 4px;
+  width: 16px;
+}
+
+.po-chart-legend-text {
+  @apply --font-chart-legend-text;
+  display: inline-block;
+}
+
+@media screen and (min-width: 1024px) {
+
+  .po-chart-header {
+    padding-bottom: 24px;
+  }
+
+  .po-chart-legend {
+    display: block;
+    margin: 0 auto;
+    padding-top: 24px;
+    text-align: center;
+  }
+
+  .po-chart-legend-item:not(:last-child) {
+    margin-right: 24px;
+  }
+
+}

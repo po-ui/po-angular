@@ -1,0 +1,247 @@
+<style>
+  .container {
+    margin-top: 8px;
+  }
+
+  .table-sample-po-radio-group td,
+  .table-sample-po-checkbox-group th {
+    padding: 8px;
+  }
+
+  .table-sample-po-radio-group th,
+  .table-sample-po-radio-group td:first-child {
+    font-weight: bold;
+    text-align: center;
+  }
+</style>
+
+<article>
+  <section>
+    <div class="container">
+      <h4>Estados do Po Radio Group</h4>
+      <table class="table-sample-po-radio-group">
+        <tr>
+          <th></th>
+          <th>True</th>
+          <th>False</th>
+          <th>Invalid</th>
+        </tr>
+        <tr>
+          <td>Enable</td>
+          <td>
+            <div class="po-field-container">
+              <div class="po-radio-group-item">
+                <input class="po-radio-group-input po-radio-group-input-checked" type="radio">
+                <label class="po-radio-group-label po-clickable">Enable True</label>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="po-field-container">
+              <div class="po-radio-group-item">
+                <input class="po-radio-group-input" type="radio">
+                <label class="po-radio-group-label po-clickable">Enable False</label>
+              </div>
+            </div>
+          </td>
+          <td>
+            <po-radio-group class="ng-invalid ng-dirty">
+              <div class="po-field-container">
+                <div class="po-radio-group-item po-radio-group-item-error">
+                  <input class="po-radio-group-input" type="radio">
+                  <label class="po-radio-group-label po-clickable">Enable Invalid</label>
+                </div>
+              </div>
+            </po-radio-group>
+          </td>
+        </tr>
+        <tr>
+          <td>Disable</td>
+          <td>
+            <div class="po-field-container">
+              <div class="po-radio-group-item">
+                <input type="radio" class="po-radio-group-input po-radio-group-input-checked" disabled>
+                <label class="po-radio-group-label">Disable True</label>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="po-field-container">
+              <div class="po-radio-group-item">
+                <input type="radio" class="po-radio-group-input" disabled>
+                <label class="po-radio-group-label">Disable False</label>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="po-field-container">
+              <div class="po-radio-group-item">
+                <input type="radio" class="po-radio-group-input" disabled>
+                <label class="po-radio-group-label">Disable Invalid</label>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <h4>Po Radio Group com os estados, 1 coluna e opcional</h4>
+
+      <div class="po-field-container">
+
+        <div class="po-field-container-title">
+          <span class="po-field-title">Campo de texto com apoio</span>
+          <span class="po-field-optional">(Opcional)</span>
+        </div>
+
+        <div class="po-field-help">Texto de ajuda</div>
+
+        <div class="po-field-container">
+          <div class="po-row po-pt-1 po-pb-1">
+            <div class="po-radio-group-item po-md-12 po-lg-12">
+              <input class="po-radio-group-input po-radio-group-input-checked" type="radio">
+              <label class="po-radio-group-label po-clickable">Opção 1</label>
+            </div>
+
+            <div class="po-radio-group-item po-md-12 po-lg-12">
+              <input class="po-radio-group-input" type="radio">
+              <label class="po-radio-group-label po-clickable">Opção 2</label>
+            </div>
+
+            <div class="po-radio-group-item po-md-12 po-lg-12">
+              <input class="po-radio-group-input" disabled type="radio">
+              <label class="po-radio-group-label">Opção 3</label>
+            </div>
+
+            <div class="po-radio-group-item po-md-12 po-lg-12">
+              <input class="po-radio-group-input" disabled type="radio">
+              <label class="po-radio-group-label">Opção 4</label>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <h4>Po Radio Group sem help e com 2 colunas</h4>
+
+      <div class="po-field-container">
+
+        <div class="po-field-container-title">
+          <span class="po-field-title">Campo de texto com apoio</span>
+        </div>
+
+        <div class="po-field-container">
+          <div class="po-row po-pt-1 po-pb-1">
+            <div class="po-radio-group-item po-md-6 po-lg-6">
+              <input class="po-radio-group-input po-radio-group-input-checked" type="radio">
+              <label class="po-radio-group-label po-clickable">Opção 1</label>
+            </div>
+
+            <div class="po-radio-group-item po-md-6 po-lg-6">
+              <input class="po-radio-group-input" type="radio">
+              <label class="po-radio-group-label po-clickable">Opção 2</label>
+            </div>
+
+            <div class="po-radio-group-item po-md-6 po-lg-6">
+              <input class="po-radio-group-input" disabled type="radio">
+              <label class="po-radio-group-label">Opção 3</label>
+            </div>
+
+            <div class="po-radio-group-item po-md-6 po-lg-6">
+              <input class="po-radio-group-input" disabled type="radio">
+              <label class="po-radio-group-label">Opção 4</label>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <h4>Po Radio Group sem label, sem help e com 3 colunas</h4>
+
+      <div class="po-field-container">
+
+        <div class="po-field-container-title"></div>
+
+        <div class="po-field-container">
+          <div class="po-row po-pt-1 po-pb-1">
+            <div class="po-radio-group-item po-lg-4 po-md-6">
+              <input class="po-radio-group-input" type="radio">
+              <label class="po-radio-group-label po-clickable">Opção 1</label>
+            </div>
+
+            <div class="po-radio-group-item po-lg-4 po-md-6">
+              <input class="po-radio-group-input po-radio-group-input-checked" type="radio">
+              <label class="po-radio-group-label po-clickable">Opção 2</label>
+            </div>
+
+            <div class="po-radio-group-item po-lg-4 po-md-6">
+              <input class="po-radio-group-input" disabled type="radio">
+              <label class="po-radio-group-label">Opção 3</label>
+            </div>
+
+            <div class="po-radio-group-item po-lg-4 po-md-6">
+              <input class="po-radio-group-input" disabled type="radio">
+              <label class="po-radio-group-label">Opção 4</label>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <h4>Po Radio Group com campos inválidos e com 4 colunas</h4>
+
+      <po-radio-group class="ng-invalid ng-dirty">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto com apoio</span>
+          </div>
+
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container">
+            <div class="po-row po-pt-1 po-pb-1">
+              <div class="po-radio-group-item po-lg-3 po-md-6">
+                <input class="po-radio-group-input" type="radio">
+                <label class="po-radio-group-label po-clickable">Opção 1</label>
+              </div>
+
+              <div class="po-radio-group-item po-radio-group-item-error po-lg-3 po-md-6">
+                <input class="po-radio-group-input" type="radio">
+                <label class="po-radio-group-label po-clickable">Opção 2</label>
+              </div>
+
+              <div class="po-radio-group-item po-lg-3 po-md-6">
+                <input class="po-radio-group-input" disabled type="radio">
+                <label class="po-radio-group-label">Opção 3</label>
+              </div>
+
+              <div class="po-radio-group-item po-lg-3 po-md-6">
+                <input class="po-radio-group-input" disabled type="radio">
+                <label class="po-radio-group-label">Opção 4</label>
+              </div>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </po-radio-group>
+
+    </div>
+
+  </section>
+</article>

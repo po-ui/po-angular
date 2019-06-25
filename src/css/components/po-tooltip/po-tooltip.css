@@ -1,0 +1,30 @@
+:root {
+  --font-tooltip-font-text: {
+      @apply --font-text;
+  }
+
+  --shadow-tooltip-shadow-balloon: var(--shadow-tooltip);
+
+  --tooltip-border-radius: 3px;
+}
+
+.po-tooltip {
+  background-color: var(--color-tooltip-background-color-balloon);
+  border-radius: var(--tooltip-border-radius);
+  box-shadow: var(--shadow-tooltip-shadow-balloon);
+  max-width: 246px;
+  padding: 8px 16px;
+  position: fixed;
+  z-index: 1000;
+}
+
+.po-tooltip-arrow {
+  background-color: var(--color-tooltip-background-color-balloon);
+}
+
+.po-tooltip-content {
+  @apply --font-tooltip-font-text;
+  color: var(--color-tooltip-color-text-balloon);
+  white-space: normal;
+  word-wrap: break-word;
+}

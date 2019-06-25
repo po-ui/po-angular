@@ -1,0 +1,103 @@
+:root {
+  --font-input-text: {
+    @apply --font-text-large;
+  }
+
+  --font-input-text-smaller: {
+    @apply --font-text;
+  }
+  
+  --shadow-input-box-shadow-input: var(--shadow-input);
+}
+
+.po-input {
+  @apply --font-input-text;
+  appearance: textfield;
+  background-color: var(--color-input-background-color-text);
+  border: solid 1px var(--color-input-border-text);
+  border-radius: 3px;
+  box-shadow: var(--shadow-input-box-shadow-input);
+  height: 44px;
+  padding: 0 16px;
+  width: 100%;
+}
+
+.po-input::placeholder {
+  color: var(--color-input-text-placeholder);
+}
+
+.po-input-icon-left {
+  padding-left: 44px;
+}
+
+.po-input-icon-right {
+  padding-right: 44px;
+}
+
+.po-input-double-icon-right {
+  padding-right: 68px;
+}
+
+/* Desabilita o clean field e o reveal do IE 10+ */
+.po-input::-ms-clear, .po-input::-ms-reveal {
+  display: none;
+}
+
+.po-input:disabled {
+  background-color: var(--color-input-border-text-disabled);
+  border: solid 1px var(--color-input-border-text);
+  color: var(--color-input-color-disabled);
+  pointer-events: none;
+}
+
+.ng-valid .po-input:focus {
+  border: solid 1px var(--color-input-border-text-focusable) !important;
+  outline: none;
+}
+
+po-combo.ng-invalid.ng-dirty .po-input,
+po-datepicker.ng-invalid.ng-dirty .po-input,
+po-decimal.ng-invalid.ng-dirty .po-input,
+po-email.ng-invalid.ng-dirty .po-input,
+po-input.ng-invalid.ng-dirty .po-input,
+po-login.ng-invalid.ng-dirty .po-input,
+po-lookup.ng-invalid.ng-dirty .po-input,
+po-multiselect.ng-invalid.ng-dirty .po-field-container-content > .po-input,
+po-number.ng-invalid.ng-dirty .po-input,
+po-password.ng-invalid.ng-dirty .po-input,
+po-select.ng-invalid.ng-dirty .po-select-button,
+po-textarea.ng-invalid.ng-dirty .po-textarea,
+po-upload.ng-invalid.ng-dirty .po-upload-button button,
+po-url.ng-invalid.ng-dirty .po-input {
+  border: solid 1px var(--color-input-border-text-error) !important;
+  outline: none;
+  color: var(--color-input-text-error);
+}
+
+.po-input::-webkit-outer-spin-button,
+.po-input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-input {
+    @apply --font-input-text-smaller;
+    height: 32px;
+    padding: 0 8px;
+  }
+
+  .po-input-icon-left {
+    padding-left: 32px;
+  }
+
+  .po-input-icon-right {
+    padding-right: 32px;
+  }
+
+  .po-input-double-icon-right {
+    padding-right: 52px;
+  }
+
+}

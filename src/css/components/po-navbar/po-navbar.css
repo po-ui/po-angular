@@ -1,0 +1,100 @@
+:root {
+  --shadow-navbar-box-shadow: var(--shadow-container);
+
+  --navbar-height: 56px;
+}
+
+.po-navbar {
+  background-color: var(--color-navbar-color);
+  display: table;
+  height: var(--navbar-height);
+  left: 0;
+  padding: 0 24px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.po-navbar-shadow {
+  box-shadow: var(--shadow-navbar-box-shadow);
+}
+
+@media screen and (max-width: 768px) {
+
+  .po-navbar {
+    padding: 0 16px;
+  }
+
+}
+
+/*
+Tratamento para utilizar o 'po-wrapper' para ajustar o espaçamento superior dos pages e menu.
+Irá funcionar colocando o 'po-navbar' precedendo e como irmão do 'po-wrapper' na estrutura padrão da aplicação po.
+<po-navbar></po-navbar>
+<po-wrapper>
+  <po-menu></po-menu>
+  <po-page-default></po-page-default>
+</po-wrapper>
+*/
+po-navbar ~ .po-wrapper {
+  margin-top: var(--navbar-height);
+}
+
+@keyframes menuPositionNormal {
+  0% {
+    top: 0px;
+  }
+  1% {
+    top: 56px;
+  }
+  100% {
+    top: 56px;
+  }
+}
+
+po-navbar ~ .po-wrapper .po-menu,
+po-navbar .po-menu {
+  animation: menuPositionNormal 0.2s;
+  top: var(--navbar-height);
+  height: calc(100vh - var(--navbar-height))
+}
+
+po-navbar ~ .po-wrapper .po-menu-mobile,
+po-navbar .po-menu-mobile {
+  background-color: var(--color-navbar-color);
+  position: fixed;
+  top: 8px;
+  z-index: 9998;
+}
+
+po-navbar ~ .po-wrapper {
+  height: calc(100vh - var(--navbar-height));
+}
+
+po-navbar ~ .po-wrapper .po-page{
+  height: calc(100vh - var(--navbar-height));
+}
+
+@media screen and (max-width: 1200px) {
+
+  @keyframes menuPositionResponsive {
+    0% {
+      top: 56px;
+    }
+    99% {
+      top: 56px;
+    }
+    100% {
+      top: 0;
+    }
+  }
+
+  po-navbar ~ .po-wrapper .po-menu,
+  po-navbar .po-menu {
+    animation: menuPositionResponsive 0.2s;
+    top: 0;
+    height: 100%;
+  }
+
+}

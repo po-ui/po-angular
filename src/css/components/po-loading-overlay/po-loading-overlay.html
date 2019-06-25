@@ -1,0 +1,162 @@
+<style>
+  .container {
+    border: 1px solid #c2c2c2;
+    border-style: dotted;
+    height: 30vh;
+  }
+
+  .turnoff-overlay {
+    color: orange;
+    cursor: pointer;
+    left: 97%;
+    position: absolute;
+    top: 1%;
+  }
+
+  .container-relative {
+    position: relative;
+  }
+</style>
+
+<article>
+  <section>
+    <h1>Content locked</h1>
+
+    <div class="po-table-wrapper">
+
+        <div class="container-relative" style="height: 300px;">
+
+          <div class="po-overlay-absolute">
+            <div class="po-loading-overlay-content">
+              <div class="po-loading">
+                <span class="po-loading-icon"></span>
+                <span class="po-loading-label po-text-ellipsis">Carregando</span>
+              </div>
+            </div>
+          </div>
+
+          <table class="po-table">
+            <thead>
+              <tr class="po-table-header">
+                <th class="po-table-header-ellipsis">
+                  <span class="po-table-header-ellipsis po-table-header-block">Destino</span>
+                </th>
+                <th class="po-table-header-ellipsis">
+                  <span class="po-table-header-ellipsis po-table-header-block">Data</span>
+                </th>
+                <th class="po-table-header-ellipsis po-table-column-right">
+                  <span class="po-table-header-ellipsis po-table-header-block">Poltrona</span>
+                </th>
+                <th class="po-table-header-ellipsis">
+                  Classe
+                </th>
+                <th class="po-table-header-ellipsis po-table-column-right">
+                  <span class="po-table-header-ellipsis po-table-header-block">Código Passagem</span>
+                </th>
+                <th class="po-table-header-ellipsis po-table-column-right">
+                  <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr class="po-table-row">
+                <td colspan="6" class="po-table-no-data po-text-center">
+                  <span>
+                    Nenhum dado encontrado.
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+  </section>
+
+  <section>
+    <h1>Content locked com texto grande</h1>
+
+    <div class="po-table-wrapper">
+
+        <div class="container-relative" style="height: 300px;">
+
+          <div class="po-overlay-absolute">
+            <div class="po-loading-overlay-content">
+              <div class="po-loading">
+                <span class="po-loading-icon"></span>
+                <span class="po-loading-label po-text-ellipsis">Carregando dados do servidor da Amazon e Azure</span>
+              </div>
+            </div>
+          </div>
+
+          <table class="po-table">
+            <thead>
+              <tr class="po-table-header">
+                <th class="po-table-header-ellipsis">
+                  <span class="po-table-header-ellipsis po-table-header-block">Destino</span>
+                </th>
+                <th class="po-table-header-ellipsis">
+                  <span class="po-table-header-ellipsis po-table-header-block">Data</span>
+                </th>
+                <th class="po-table-header-ellipsis po-table-column-right">
+                  <span class="po-table-header-ellipsis po-table-header-block">Poltrona</span>
+                </th>
+                <th class="po-table-header-ellipsis">
+                  Classe
+                </th>
+                <th class="po-table-header-ellipsis po-table-column-right">
+                  <span class="po-table-header-ellipsis po-table-header-block">Código Passagem</span>
+                </th>
+                <th class="po-table-header-ellipsis po-table-column-right">
+                  <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr class="po-table-row">
+                <td colspan="6" class="po-table-no-data po-text-center">
+                  <span>
+                    Nenhum dado encontrado.
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+  </section>
+
+  <section>
+    <h1>Full locked</h1>
+
+    <div class="po-row">
+      <div class="po-sm-2">
+        <button
+          class="po-button"
+          type="button"
+          onClick="document.getElementsByClassName('po-overlay-fixed')[0].style.display = 'block';">
+            Show overlay
+        </button>
+      </div>
+    </div>
+
+    <div class="po-overlay-fixed" style="display:none;">
+
+      <a class="turnoff-overlay" tabindex="0" onClick="document.getElementsByClassName('po-overlay-fixed')[0].style.display = 'none';">
+        <span class="po-icon po-icon-close"></span>
+      </a>
+
+      <div class="po-loading-overlay-content">
+        <div class="po-loading">
+          <span class="po-loading-icon"></span>
+          <span class="po-loading-label">Carregando</span>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+</article>

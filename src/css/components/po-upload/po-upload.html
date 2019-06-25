@@ -1,0 +1,157 @@
+
+<style>
+  div.ng-invalid.ng-dirty .po-upload-button {
+    border: solid 1px #c64840 !important;
+    outline: none;
+    color: #c64840;
+  }
+
+  .inline {
+    display: inline-block;
+    padding-right: 16px;
+  }
+
+  .container {
+    padding: 8px;
+  }
+
+  .po-upload-progress-status {
+    width: 60%;
+  }
+</style>
+
+<article>
+  <section>
+
+    <div class="container">
+      <h4>Nenhum arquivo selecionado</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivo</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Nenhum arquivo selecionado com label, help e opcional</h4>
+      <div class="po-upload">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Upload Padrão</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content ng-valid">
+            <input type="file" name="name" id="id" class="po-upload-input">
+            <button type="button" class="po-upload-button po-button po-text-ellipsis">
+              <span class="po-button-label">Selecionar arquivo</span>
+            </button>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Campo inválido</h4>
+      <div class="ng-invalid ng-dirty">
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+          <button type="button" class="po-upload-button po-button po-text-ellipsis">
+            <span class="po-button-label">Selecionar arquivo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Arquivos selecionados</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivo</span>
+        </button>
+      </div>
+
+      <div class="po-upload-progress">
+        <div class="po-upload-filename-foreground">
+          <div class="po-upload-filename">
+            <span class="po-icon po-icon-info"></span>logo-portinari.png - 80 kb
+          </div>
+
+          <div class="po-upload-group-actions">
+            <span class="po-upload-action"> Excluir </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-upload-progress">
+        <div class="po-upload-filename-foreground">
+          <div class="po-upload-filename">
+            <span class="po-icon po-icon-info"></span>foto-po.jpg - 86 kb
+          </div>
+
+          <div class="po-upload-group-actions">
+            <span class="po-upload-action"> Excluir </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="inline">
+        <button type="button" name="button" class="po-button po-button-primary">Iniciar envio</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Carregando arquivos</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis" disabled>
+          <span class="po-button-label">Selecionar arquivo</span>
+        </button>
+
+
+        <div class="po-upload-progress">
+          <!-- Barra de progresso de upload, o width deve ser manipulado de acordo com a % enviada para o server -->
+          <div class="po-upload-progress-status">logo-portinari.png - 48 de 80 kb</div>
+          <div class="po-upload-filename-foreground">
+            <div class="po-upload-filename po-upload-filename-loading">logo-portinari.png - 48 de 80 kb</div>
+
+            <div class="po-upload-group-actions">
+              <span class="po-upload-action"> Cancelar </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="po-upload-progress po-upload-progress-success">
+          <div class="po-upload-filename-foreground">
+            <div class="po-upload-filename po-upload-filename-loading">
+              <span class="po-icon po-icon-ok"></span>foto-po.jpg - 86 kb
+            </div>
+          </div>
+        </div>
+
+        <div class="po-upload-progress po-upload-progress-error">
+          <div class="po-upload-filename-foreground">
+            <div class="po-upload-filename po-upload-filename-loading">
+              <span class="po-icon po-icon-close"></span>foto-fluig.jpg - Erro no upload
+            </div>
+
+            <div class="po-upload-group-actions">
+              <span class="po-upload-action"> Excluir </span>
+
+              <span class="po-upload-action"> Tentar novamente </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inline">
+          <button type="button" name="button" class="po-button po-button-primary" disabled>
+            Iniciar envio
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

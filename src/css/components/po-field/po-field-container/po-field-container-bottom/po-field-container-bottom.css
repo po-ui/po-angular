@@ -1,0 +1,59 @@
+:root {
+  --font-field-container-bottom-text-error: {
+    @apply --font-text-small;
+  }
+
+  --font-field-container-bottom-icon-error: {
+    @apply --font-subtitle;
+  }
+
+  --font-field-container-bottom-icon-error-smaller: {
+    @apply --font-text-large;
+  }
+}
+
+.po-field-container-bottom {
+  color: var(--color-field-container-bottom-color-text-error);
+  display: block;
+}
+
+.po-field-container-bottom-text-error {
+  @apply --font-field-container-bottom-text-error;
+}
+
+.po-field-container-icon-error {
+  @apply --font-field-container-bottom-icon-error;
+  line-height: 24px;
+  vertical-align: top;
+}
+
+.po-field-container-error-container {
+  display: block;
+  margin-top: 4px;
+}
+
+.po-field-container-error-item {
+  display: block;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.po-field-container-error-text {
+  display: block;
+  margin-left: 24px;
+}
+
+.po-field-container-error-item .po-icon-exclamation {
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-field-container-icon-error {
+    @apply --font-field-container-bottom-icon-error-smaller;
+  }
+
+}

@@ -1,0 +1,131 @@
+:root {
+  --font-toolbar-font-bagde {
+    @apply --font-text-smaller;
+  }
+
+  --font-toolbar-font-profile-title {
+    @apply --font-text;
+  }
+
+  --font-toolbar-font-profile-subtitle {
+    @apply --font-text-small;
+  }
+
+  --font-toolbar-font-title {
+    @apply --font-text-uppercase;
+  }
+
+  --font-toolbar-font-size-notification: 24px;
+}
+
+.po-toolbar {
+  background-color:var(--color-toolbar-background-color-toolbar);
+  display: table;
+  height: 48px;
+  padding-right: 16px;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.po-toolbar-title {
+  @apply --font-toolbar-font-title;
+  color: var(--color-toolbar-color-title);
+  display: table-cell;
+  height: 24px;
+  padding-left: 16px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.po-toolbar-group-icon {
+  display: table-cell;
+  padding-top: 6px;
+  text-align: right;
+}
+
+.po-toolbar-icon {
+  color: var(--color-toolbar-color-default);
+  font-size: var(--font-toolbar-font-size-notification);
+  vertical-align: middle;
+}
+
+.po-toolbar-notification-badge {
+  @apply --font-toolbar-font-bagde;
+  background-color: var(--color-toolbar-background-color-badge);
+  border-radius: 3px;
+  color: var(--color-toolbar-color-badge-text);
+  display: inline-block;
+  height: 15px;
+  text-align: center;
+  vertical-align: middle;
+  width: 15px;
+}
+
+.po-toolbar-actions,
+.po-toolbar-notification,
+.po-toolbar-profile {
+  display: inline-block;
+  line-height: 34px;
+  vertical-align: middle;
+}
+
+.po-toolbar-actions,
+.po-toolbar-notification {
+  padding-right: 16px;
+}
+
+.po-toolbar-profile {
+  padding-right: 8px;
+}
+
+.po-toolbar-profile-item-header {
+  align-items: center;
+  border-bottom: 1px solid var(--color-toolbar-border-color-separator);
+  cursor: default;
+  display: inline-flex;
+  height: 56px;
+  padding: 10px 16px;
+  width: 100%;
+}
+
+.po-toolbar-profile-item-avatar {
+  margin: 0;
+}
+
+.po-toolbar-profile-item-header-title,
+.po-toolbar-profile-item-header-subtitle {
+  color: var(--color-toolbar-color-default);
+  max-width: 230px;
+  overflow: hidden;
+  padding-left: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.po-toolbar-profile-item-header-title {
+  @apply --font-toolbar-font-profile-title;
+}
+
+.po-toolbar-profile-item-header-subtitle {
+  @apply --font-toolbar-font-profile-subtitle;
+}
+
+
+@media screen and (max-width: 1366px) {
+
+  .po-toolbar {
+    height: 40px;
+    padding-right: 8px;
+  }
+
+  .po-toolbar-group-icon {
+    padding: 2px 0;
+  }
+
+  .po-toolbar-actions,
+  .po-toolbar-notification {
+    padding-right: 8px;
+  }
+
+}

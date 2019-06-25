@@ -1,0 +1,84 @@
+:root {
+  --shadow-popup-box-shadow-popup: var(--shadow-popup);
+  --shadow-popup-box-shadow-popup-arrow: var(--shadow-popup-arrow);
+
+  --font-popup-font-item: {
+    @apply --font-text;
+  }
+}
+
+.po-popup {
+  background-color: var(--color-popup-background-color-popup);
+  border-radius: 3px;
+  box-shadow: var(--shadow-popup-box-shadow-popup);
+  left: 0;
+  max-width: 300px;
+  position: fixed;
+  text-align: left;
+  width: auto;
+  word-wrap: break-word;
+  z-index: 3;
+}
+
+.po-popup-arrow {
+  background-color: var(--color-popup-background-color-popup);
+  box-shadow: var(--shadow-popup-box-shadow-popup-arrow);
+  z-index: -1;
+}
+
+.po-popup-icon-item {
+  padding-right: 4px;
+}
+
+.po-popup-item-danger,
+.po-popup-item-default {
+  @apply --font-popup-font-item;
+  letter-spacing: normal;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.po-popup-item-danger:hover,
+.po-popup-item-default:hover {
+  background-color: var(--color-popup-background-color-popup-item-hover);
+}
+
+.po-popup-item-danger {
+  color: var(--color-popup-color-danger);
+}
+
+.po-popup-item-default {
+  color: var(--color-popup-color-default);
+}
+
+.po-popup-item-disabled {
+  color: var(--color-popup-color-disabled);
+  cursor: default !important;
+}
+
+.po-popup-item-separator {
+  border-top: 1px solid var(--color-popup-border-color-separator);
+}
+
+.po-popup-item-disabled.po-popup-item-selected {
+  background-color: var(--color-popup-background-color-popup-item-selected-disabled);
+}
+
+.po-popup-item-selected {
+  background-color: var(--color-popup-background-color-popup-item-selected);
+  color: var(--color-popup-color-item-selected);
+}
+
+.po-popup-arrow + .po-popup-item-selected {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.po-popup-item-selected:last-child {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.po-popup-item-selected:hover:not(.po-popup-item-disabled) {
+  background-color: var(--color-popup-background-color-popup-item-selected-hover);
+}

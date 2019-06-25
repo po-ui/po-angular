@@ -1,0 +1,273 @@
+<style>
+  .po-select-container {
+    position: relative;
+  }
+
+  .po-select-content {
+    margin-top: 8px;
+    position: absolute;
+    width: 100%;
+  }
+</style>
+
+<article>
+  <section>
+
+    <div class="po-row">
+      <div class="po-md-12">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Select padrão</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <select name="select1" class="po-select"></select>
+          <div class="po-select-container">
+            <div class="po-select-button">
+              <span> São Paulo </span>
+              <div class="po-field-icon-container-right">
+                <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+              </div>
+            </div>
+            <ul class="po-select-content"></ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-12">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <select name="select1" class="po-select"></select>
+          <div class="po-select-container">
+            <div class="po-select-button">
+              <span> Sem label e sem help </span>
+              <div class="po-field-icon-container-right">
+                <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+              </div>
+            </div>
+            <ul class="po-select-content"></ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-12">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <select name="select1" class="po-select"></select>
+          <div class="po-select-container">
+            <div class="po-select-button po-select-button-readonly">
+              <span> Sem label, sem help e readonly </span>
+              <div class="po-field-icon-container-right">
+                <span class="po-field-icon po-field-icon-readonly po-icon po-icon-arrow-down"></span>
+              </div>
+            </div>
+            <ul class="po-select-content"></ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Desabilitado e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+
+          <select name="select2" class="po-select"></select>
+          <div class="po-select-container">
+            <div class="po-select-button po-select-button-disabled">
+              <span> São Paulo </span>
+              <div class="po-field-icon-container-right">
+                <span class="po-field-icon-disabled po-icon po-icon-arrow-down"></span>
+              </div>
+            </div>
+
+            <ul class="po-select-content"></ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <po-select class="po-md-6 ng-invalid ng-dirty">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Inválido</span>
+          </div>
+
+          <select name="select1" class="po-select"></select>
+          <div class="po-select-container ng-invalid ng-dirty">
+            <div class="po-select-button">
+              <span>São Paulo</span>
+              <div class="po-field-icon-container-right">
+                <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+              </div>
+            </div>
+            <ul class="po-select-content"></ul>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Mensagem de erro
+            </span>
+          </div>
+        </div>
+      </po-select>
+
+      <div class="po-md-6" style="margin-bottom: 200px;">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Ativo e selecionado</span>
+          </div>
+
+          <select name="select3" class="po-select"></select>
+          <div class="po-select-container po-select-show">
+            <div class="po-select-button">
+              <span>São Paulo </span>
+              <div class="po-field-icon-container-right">
+                <span class="po-field-icon po-icon po-icon-arrow-up"></span>
+              </div>
+            </div>
+
+            <ul class="po-select-content">
+              <li value="1" class="po-select-item-selected">
+                <div class="po-select-item">
+                  <span> São Paulo</span>
+                </div>
+              </li>
+              <li value="2">
+                <div class="po-select-item">
+                  <span>Paraná</span>
+                </div>
+              </li>
+              <li value="3">
+                <div class="po-select-item">
+                  <span>Santa Catarina</span>
+                </div>
+              </li>
+              <li value="4">
+                <div class="po-select-item">
+                  <span> Sergipe </span>
+                </div>
+              </li>
+              <li value="5">
+                <div class="po-select-item">
+                  <span> Tocantins</span>
+                </div>
+              </li>
+              <li value="6">
+                <div class="po-select-item">
+                  <span>Pernambuco</span>
+                </div>
+              </li>
+              <li value="7">
+                <div class="po-select-item">
+                  <span>Rio Grande do Sul</span>
+                </div>
+              </li>
+              <li value="8">
+                <div class="po-select-item">
+                  <span>Rio de Janeiro</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+            <div class="po-field-container-bottom"></div>
+          </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Texto que ultrapassou o tamanho do componente ao ser selecionado</span>
+          </div>
+
+          <select name="select3" class="po-select"></select>
+          <div class="po-select-container po-select-show">
+            <div class="po-select-button">
+              <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </span>
+              <div class="po-field-icon-container-right">
+                <span class="po-field-icon po-icon po-icon-arrow-up"></span>
+              </div>
+            </div>
+
+            <ul class="po-select-content">
+              <li value="1" class="po-select-item-selected">
+                <div class="po-select-item">
+                  <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sed interdum arcu, ut imperdiet purus. Sed sagittis orci lacus, nec posuere odio ornare egestas. Aenean hendrerit iaculis lorem, vitae placerat purus ullamcorper sit amet.</span>
+                </div>
+              </li>
+              <li value="2">
+                <div class="po-select-item">
+                  <span> ADVPL</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-12">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Simulando po-select com p-select-option-template e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+
+          <select name="select3" class="po-select"></select>
+          <div class="po-select-container po-select-show">
+            <div class="po-select-button">
+              <span> São Paulo </span>
+              <div class="po-field-icon-container-right">
+                <span class="po-field-icon po-icon po-icon-arrow-up"></span>
+              </div>
+            </div>
+
+            <ul class="po-select-content">
+
+              <li value="1" class="po-select-item-selected">
+                <div class="po-select-item">
+                  <!-- Conteúdo que o desenvolvedor informará -->
+                  <div> <span class="po-icon po-icon-world"></span> São Paulo </div>
+                </div>
+              </li>
+
+              <li value="2">
+                <div class="po-select-item">
+                  <!-- Conteúdo que o desenvolvedor informará -->
+                  <div> <span class="po-icon po-icon-world"></span> Paraná </div>
+                </div>
+              </li>
+
+              <li value="3">
+                <div class="po-select-item">
+                  <!-- Conteúdo que o desenvolvedor informará -->
+                  <div> <span class="po-icon po-icon-world"></span> Santa Catarina </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </section>
+</article>

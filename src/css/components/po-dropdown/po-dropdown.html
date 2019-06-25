@@ -1,0 +1,78 @@
+<style>
+  section {
+    margin-top: 16px;
+  }
+
+  .po-popup {
+    margin-top: 8px;
+    position: absolute;
+    width: 150px;
+  }
+</style>
+
+<article>
+  <section>
+    <h5>Dropdown habilitado</h5>
+
+    <div class="po-dropdown">
+      <div class="po-dropdown-button" tabindex="0">
+        Outras ações
+        <div class="po-dropdown-icon po-icon po-icon-arrow-down"></div>
+      </div>
+    </div>
+  </section>
+</article>
+
+<article>
+  <section>
+    <h5>Dropdown desabilitado</h5>
+
+    <div class="po-dropdown">
+      <div class="po-dropdown-button po-dropdown-button-disabled" tabindex="-1">
+        Outras ações
+        <div class="po-dropdown-icon po-icon po-icon-arrow-down"></div>
+      </div>
+    </div>
+  </section>
+</article>
+
+<article>
+  <section>
+    <h5>Dropdown aberto com a lista de ações com todas opções (selecionado, desabilitado, ícone, separador, danger)</h5>
+
+    <div class="po-dropdown">
+      <div class="po-dropdown-button" tabindex="0">
+        Outras ações
+        <div class="po-dropdown-icon po-icon po-icon-arrow-up"></div>
+      </div>
+
+      <div class="po-popup">
+
+        <div class="po-popup-item-default po-clickable">
+          Imprimir
+        </div>
+
+        <div class="po-popup-item-default po-popup-item-selected">
+          Editar
+        </div>
+
+        <div class="po-popup-item-default po-clickable">
+          <span class="po-icon po-icon-copy po-popup-icon-item"></span> Duplicar
+        </div>
+
+        <div class="po-popup-item-default po-popup-item-disabled">
+          Vincular
+        </div>
+
+        <div class="po-popup-item-default po-popup-item-disabled po-popup-item-selected">
+          Solicitar revisão
+        </div>
+
+        <div class="po-popup-item-danger po-popup-item-separator po-clickable">
+          Remover
+        </div>
+
+      </div>
+    </div>
+  </section>
+</article>

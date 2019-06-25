@@ -1,0 +1,14 @@
+.po-datepicker {
+  position: relative;
+}
+
+.po-datepicker-popup-calendar {
+  height: 288px;
+  position: fixed;
+  width: 288px;
+  z-index: 1000;
+}
+
+.po-datepicker-popup-calendar .po-calendar {
+  position: absolute;
+}

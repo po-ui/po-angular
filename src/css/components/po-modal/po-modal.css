@@ -1,0 +1,202 @@
+:root {
+  --font-modal-body: {
+    @apply --font-text;
+  }
+
+  --font-modal-title: {
+    @apply --font-subtitle;
+  }
+
+  --shadow-modal-content: var(--shadow-modal);
+}
+
+.po-modal {
+  height: 100%;
+  left: 0;
+  min-height: 100%;
+  overflow-y: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.po-modal-container {
+  display: table;
+  height: 100%;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.po-modal-overlay {
+  background-color: var(--color-modal-color-overlay);
+  display: block;
+  /* este calculo resolve o problema do item po-modal/9684, no menu-html não ocupava o espaço todo disponivel. */
+  height: calc(100% + 1px);
+  overflow-y: auto;
+  position: fixed;
+  width: 100%;
+}
+
+.po-modal-vertical-align {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.po-modal-content {
+  background-color: var(--color-modal-background-color-content);
+  border-radius: 3px;
+  box-shadow: var(--shadow-modal-content);
+  display: inline-block;
+  margin: 0 auto;
+  padding: 0 8px;
+  position: relative;
+  max-width: 768px;
+  text-align: left;
+}
+
+.po-modal-content.po-modal-auto {
+  max-width: 90%;
+}
+
+.po-modal-sm {
+  width: 40%;
+}
+
+.po-modal-md {
+  width: 50%;
+}
+
+.po-modal-lg {
+  width: 60%;
+}
+
+.po-modal-xl {
+  width: 70%;
+}
+
+.po-modal-auto {
+  width: auto;
+}
+
+.po-modal-header {
+  @apply --font-modal-title;
+  border: 0;
+  max-width: 100%;
+  padding: 21px 8px;
+}
+
+.po-modal-title {
+  color: var(--color-modal-color-title);
+  max-width: 736px;
+  padding-right: 24px;
+}
+
+.po-modal-header-close-button {
+  border-radius: 1px;
+  color: var(--color-modal-color-header-close-button);
+  cursor: pointer;
+  position: absolute;
+  right: 16px;
+  text-decoration: none;
+  top: 21px;
+  width: 24px;
+}
+
+.po-modal-body {
+  @apply --font-modal-body;
+  color: var(--color-modal-text-color-body);
+  margin: 8px;
+  max-width: 736px;
+  overflow: auto;
+  text-align: left;
+}
+
+.po-modal-body::-webkit-scrollbar {
+  border-radius: 2px;
+  height: 4px;
+  opacity: 0.5;
+  width: 4px;
+}
+
+.po-modal::-webkit-scrollbar {
+  width: 7px;
+}
+
+.po-modal::-webkit-scrollbar-track, .po-modal-body::-webkit-scrollbar-track {
+  display: none;
+}
+
+.po-modal::-webkit-scrollbar-thumb, .po-modal-body::-webkit-scrollbar-thumb {
+  background-color: var(--color-modal-background-color-scrollbar);
+  border-radius: 10px;
+}
+
+.po-modal-footer {
+  background-color: var(--color-modal-background-color-footer);
+  float: right;
+  overflow: auto;
+  padding: 24px 8px;
+  text-align: right;
+  width: 100%;
+}
+
+.po-modal-footer .po-button {
+  margin-left: 12px;
+}
+
+@media screen and (max-width: 480px) {
+
+  .po-modal-content {
+    width: 90%;
+  }
+
+  .po-modal-header-close-button {
+    right: 16px;
+    top: 8px;
+  }
+
+  .po-modal-footer {
+    padding: 16px 0;
+    text-align: center;
+  }
+
+  .po-modal-footer .po-button {
+    margin: 0 6px;
+    padding-left: 0;
+    padding-right: 0;
+    white-space: nowrap;
+    width: calc(50% - 16px);
+  }
+
+  .po-modal-footer .po-button-modal-first-action:only-child .po-button {
+    width: calc(100% - 16px);
+  }
+
+  .po-modal-header {
+    padding: 8px;
+    width: 100%;
+  }
+
+  .po-modal-auto {
+    width: 90%;
+  }
+
+}
+
+@media screen and (min-width: 481px) and (max-width: 960px) {
+
+  .po-modal-content {
+    width: 80%;
+  }
+
+  .po-modal-footer {
+    float: right;
+  }
+
+  .po-modal-auto {
+    width: auto;
+  }
+
+}

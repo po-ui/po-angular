@@ -1,0 +1,70 @@
+:root {
+  --shadow-button-group-box-shadow: var(--shadow-button);
+}
+
+.po-button-group-container {
+  display: flex;
+  width: 100%;
+}
+
+.po-button-group-container .po-button-group {
+  padding: 0;
+}
+
+.po-button-group-container .po-button-group .po-button {
+  border-radius: 0;
+}
+
+.po-button-group-container .po-button-group:first-child .po-button {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.po-button-group-container .po-button-group:last-child .po-button {
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.po-button-group-container .po-button-group + .po-button-group {
+  margin-left: -1px;
+}
+
+.po-button-group-container .po-button-group:not(.po-button-group-disabled) {
+  z-index: 1;
+}
+
+.po-button-group-container .po-button-group.po-button-group-button-selected {
+  z-index: 2;
+}
+
+.po-button-group-container .po-button-group:not(.po-button-group-disabled):hover {
+  z-index: 3;
+}
+
+.po-button-group-container .po-button-group:focus-within {
+  z-index: 4;
+}
+
+.po-button-group-container .po-button-group.po-button-group-button-selected .po-button {
+  background-color: var(--color-button-group-background-selected);
+  border: solid 1px var(--color-button-group-border-selected);
+  color: var(--color-button-group-color-selected);
+}
+
+.po-button-group-container .po-button-group.po-button-group-button-selected:hover .po-button {
+  background-color: var(--color-button-group-background-color-neutral-hover);
+  border: solid 1px var(--color-button-group-background-color-neutral-hover);
+  color: var(--color-button-group-color-neutral-hover);
+}
+
+.po-button-group-container .po-button-group.po-button-group-button-selected .po-button:active {
+  background-color: var(--color-button-group-background-color-neutral-pressed);
+  border: solid 1px var(--color-button-group-border-neutral-pressed);
+  color: var(--color-button-group-color-neutral-pressed);
+}
+
+.po-button-group-container .po-button-group.po-button-group-button-selected .po-button:disabled {
+  background-color: var(--color-button-group-background-color-neutral-disabled);
+  border: solid 1px var(--color-button-group-border-neutral-disabled);
+  color: var(--color-button-group-color-neutral-disabled);
+}

@@ -1,0 +1,349 @@
+:root {
+  --font-page-login-highlight-text: {
+      @apply --font-display;
+  }
+
+  --font-page-login-font-title: {
+      @apply --font-title;
+  }
+
+  --font-page-login-font-title-responsive: {
+      @apply --font-subtitle;
+  }
+
+  --font-page-login-font-link: {
+    @apply --font-text-bold;
+  }
+
+  --shadow-page-login-popover-box-shadow: var(--shadow-popover);
+  --shadow-page-login-popover-box-shadow-arrow: var(--shadow-popover-arrow);
+}
+
+.po-page-login-container {
+  background-color: var(--color-page-login-background-color);
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
+.po-page-login-panel {
+  display: table-cell;
+  height: 100%;
+  margin: 0 auto;
+  padding-bottom: 32px;
+  padding-top: 32px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+
+.po-page-login-body {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.po-page-login-panel-content {
+  margin-bottom: 60px;
+  padding: 84px 0;
+}
+
+.po-page-login-panel .po-page-login-header {
+  text-align: center;
+}
+
+.po-page-login-header-greeting, .po-page-login-header-title {
+  @apply --font-page-login-font-title;
+}
+
+.po-page-login-recovery-link, .po-page-login-register-link {
+  margin-top: 30px;
+  text-align: center;
+  width: 100%;
+}
+
+.po-page-login-recovery-link a, .po-page-login-register-link a {
+  @apply --font-page-login-font-link;
+  color: var(--color-page-login-link-color);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.po-page-login-recovery-link a:hover, .po-page-login-recovery-link a:focus,
+.po-page-login-register-link a:hover, .po-page-login-register-link a:focus {
+  color: var(--color-page-login-link-hover-color);
+  text-decoration: underline;
+}
+
+.po-page-login-highlight-image {
+  background-color: var(--color-page-login-background-highlight-image);
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.po-page-login-highlight-text {
+  display: table;
+}
+
+.po-page-login-highlight-text .po-font-display {
+  @apply --font-page-login-highlight-text;
+  color: var(--color-page-login-highlight-text-color);
+  display: table-cell;
+  max-width: 472px;
+  padding-left: 36px;
+  vertical-align: middle;
+  word-wrap: break-word;
+}
+
+.po-page-login-field-size {
+  width: calc(100% - 34px);
+}
+
+.po-page-login-info-icon-container {
+  display: table-cell;
+  padding: 0 0 12px 10px;
+  vertical-align: bottom;
+  width: 20px;
+}
+
+.po-page-login-info-icon-remember-user {
+  padding-bottom: 0;
+  padding-top: 14px;
+  vertical-align: top;
+}
+
+.po-page-login-info-container {
+  display: table;
+  width: 100%;
+}
+
+.po-page-login-info-field {
+  display: table-cell;
+  padding: 0;
+}
+
+.po-page-login-body .po-field-icon.po-icon-info {
+  cursor: default;
+  text-align: left;
+}
+
+.po-page-login-popover {
+	background-color: var(--color-white);
+  border-radius: 3px;
+	box-shadow: var(--shadow-page-login-popover-box-shadow);
+  max-width: 206px;
+  min-width: 232px;
+  z-index: 1000;
+}
+
+.po-page-login-popover-arrow {
+	background-color: var(--color-popover-background-color-arrow);
+  box-shadow: var(--shadow-page-login-popover-box-shadow-arrow);
+  height: 8px;
+  left: -3px;
+  position: absolute;
+  top: 21px;
+  transform: translateY(-50%) rotate(-45deg);
+  width: 8px;
+}
+
+.po-page-login-popover-content {
+  line-height: 20px;
+  max-height: 768px;
+  overflow: auto;
+  padding: 16px;
+  width: 100%;
+}
+
+.po-page-login-popover-content p:not(.po-page-login-popover-title) {
+  line-height: 20px;
+}
+
+.po-page-login-password-container {
+  display: table;
+  position: relative;
+  width: 100%;
+}
+
+.po-page-login-password-item {
+  display: table-cell;
+}
+
+.po-page-login-password-popover-container {
+  width: 34px;
+}
+
+.po-page-login-popover-container {
+  position: absolute;
+  right: -206px;
+  top: 9px;
+  z-index: 1;
+}
+
+.po-page-login-popover-title {
+  color: var(--color-page-login-popover-color-title);
+  line-height: 24px;
+}
+
+.po-page-login-popover-attempts {
+  color: var(--color-page-login-popover-color-attempts);
+  line-height: 20px;
+}
+
+.po-page-login-popover-link {
+  color: var(--color-page-login-popover-color-attempts);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.po-page-login-popover-link-container {
+  height: 20px;
+  text-align: center;
+}
+
+@media (max-width: 1366px) {
+
+  .po-page-login-field-size {
+    width: calc(100% - 21px);
+  }
+
+  .po-page-login-info-icon-container {
+    padding-left: 5px;
+  }
+
+  .po-page-login-info-icon-remember-user {
+    padding-top: 12px;
+  }
+
+  .po-page-login-password-popover-container {
+    width: 21px;
+  }
+
+  .po-page-login-popover-container {
+    right: -216px;
+  }
+
+  .po-page-login-popover-arrow {
+    top: 16px;
+  }
+
+}
+
+@media (max-width: 998px) {
+  .po-page-login-popover-container {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 48px;
+  }
+
+  .po-page-login-popover {
+    max-width: calc(100% - 21px);
+    min-width: calc(100% - 21px);
+    z-index: 1000;
+  }
+
+  .po-page-login-popover-arrow {
+    left: calc(50% - 4px);
+    top: -3px;
+    transform: rotate(45deg);
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .po-page-login-highlight-image {
+    display: none;
+  }
+
+  .po-page-login-highlight-image-off, .po-page-login-highlight-text {
+    display: none;
+  }
+
+  .po-page-login-password-popover-container {
+    width: 21px;
+  }
+
+}
+
+@media (max-width: 540px) {
+
+  .po-page-login-header-greeting, .po-page-login-header-title {
+    @apply --font-page-login-font-title-responsive;
+  }
+
+  .po-page-login-panel .po-page-login-header {
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .po-page-login-header-greeting {
+    display: none;
+  }
+
+  .po-page-login-panel-content {
+    padding: 32px 0 16px 0;
+  }
+
+  .po-page-login-form {
+    padding-top: 8px;
+  }
+
+  .po-page-login-recovery-link, .po-page-login-register-link {
+    margin-top: 16px;
+  }
+
+  .po-page-login-field-size {
+    width: calc(100% - 21px);
+  }
+
+  .po-page-login-button.po-page-login-field-size {
+    width: 100%;
+  }
+
+  .po-page-login-info-icon-container .po-tooltip {
+    min-width: 200px;
+  }
+
+}
+
+@media (max-width: 320px) {
+
+  .po-page-login-panel {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+
+  .po-page-login-panel .po-page-login-header {
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+
+  .po-page-login-form {
+    padding-top: 0px;
+  }
+
+  .po-page-login-recovery-link, .po-page-login-register-link {
+    margin-top: 8px;
+    text-align: center;
+    width: 50%;
+  }
+
+  .po-page-login-recovery-link {
+    text-align: left;
+    padding-left: 8px;
+  }
+
+  .po-page-login-register-link {
+    text-align: right;
+    padding-right: 8px;
+  }
+
+  .po-page-login-panel-content {
+    padding: 32px 0 0;
+  }
+
+}

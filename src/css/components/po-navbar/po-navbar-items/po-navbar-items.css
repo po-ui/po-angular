@@ -1,0 +1,12 @@
+.po-navbar-items {
+  display: table-cell;
+  max-width: 1px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.po-navbar-items-container {
+  left: 0;
+  position: absolute;
+}

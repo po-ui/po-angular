@@ -1,0 +1,396 @@
+<style>
+.po-navbar {
+  position: relative;
+}
+
+.po-popup {
+  display: none;
+}
+
+.po-tooltip {
+  position: absolute;
+  right: 60px;
+  top: 50px;
+}
+
+.menu-container .po-menu {
+  display: none;
+}
+
+.menu-container .po-menu-overlay {
+  display: none;
+}
+
+.sample-margin-top {
+  margin-top: 120px;
+}
+
+@media screen and (max-width: 768px) {
+
+  .po-popup {
+    display: block;
+    left: unset;
+    position: absolute;
+    right: 12px;
+    top: 51px;
+    width: 135px;
+  }
+
+  .po-tooltip {
+    display: none;
+  }
+
+  .menu-container .po-menu {
+    display: block;
+    height: 800px;
+    left: 0;
+    margin-left: 0;
+    position: absolute;
+    top: 0;
+  }
+
+  .menu-container .po-menu-overlay {
+    display: block;
+    height: 800px;
+    left: 0;
+    position: absolute;
+    top: 0;
+  }
+
+}
+</style>
+
+<article>
+  <section>
+    <br>
+    <h4>Com muitos itens e sem sombra</h4>
+    <!-- PO-NAVBAR - Início -->
+    <header class="po-navbar">
+
+      <!-- PO-NAVBAR-LOGO - Início -->
+      <div class="po-navbar-logo">
+        <a href="./">
+          <img class="po-navbar-logo-image" src="assets/images/portinari-logo-menu.svg" alt="LOGO">
+        </a> 
+      </div>
+      <!-- PO-NAVBAR-LOGO - Final -->
+
+      <!-- PO-NAVBAR-ITEMS - Início -->
+      <nav class="po-navbar-items po-navbar-hidden">
+        <ul class="po-navbar-items-container">
+
+          <!-- PO-NAVBAR-ITEM - Início -->
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 1</a>
+          </li>
+          <li class="po-navbar-item po-clickable po-navbar-item-selected">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item selecionado</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 3</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 4</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 5</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 6</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 7</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 8</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 9</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 10</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 11</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 12</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 13</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 14</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 15</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 16</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 17</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 18</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 19</a>
+          </li>
+          <!-- PO-NAVBAR-ITEM - Final -->
+
+        </ul>
+      </nav>
+      <!-- PO-NAVBAR-ITEMS - Final -->
+
+      <!-- PO-NAVBAR-ITEMS-NAVIGATION - Início -->
+      <div class="po-navbar-item-navigation po-navbar-hidden">
+        <div class="po-navbar-item-navigation-icon po-navbar-item-navigation-icon-disabled">
+          <span class="po-icon po-icon-arrow-left"></span>
+        </div>
+        <div class="po-navbar-item-navigation-icon po-clickable" tabindex="0">
+          <span class="po-icon po-icon-arrow-right"></span>
+        </div>
+      </div>
+      <!-- PO-NAVBAR-ITEMS-NAVIGATION - Final -->
+
+      <!-- PO-NAVBAR-ACTIONS - Início -->
+      <ul class="po-navbar-actions">
+
+        <!-- PO-NAVBAR-ACTION - Início -->
+        <li class="po-navbar-action">
+          <div class="po-navbar-action-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-notification"></span>
+          </div>
+        </li>
+        <li class="po-navbar-action">
+          <div class="po-navbar-action-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-help"></span>
+          </div>
+        </li>
+        <li class="po-navbar-action">
+          <div class="po-navbar-action-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-user"></span>
+          </div>
+        </li>
+        <!-- PO-NAVBAR-ACTION - Final -->
+
+        <!-- PO-NAVBAR-ACTION-POPUP - Início -->
+        <li class="po-navbar-action-popup">
+          <div class="po-navbar-action-popup-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-user"></span>
+          </div>
+        </li>
+        <!-- PO-NAVBAR-ACTION-POPUP - Final -->
+
+      </ul>
+      <!-- PO-NAVBAR-ACTIONS - Final -->
+
+    </header>
+    <!-- PO-NAVBAR - Final -->
+
+  </section>
+
+  <section>
+    <br>
+    <h4>Com poucos itens, tooltip, popup e sombra</h4>
+    <!-- PO-NAVBAR - Início -->
+    <header class="po-navbar po-navbar-shadow">
+
+      <!-- PO-NAVBAR-LOGO - Início -->
+      <div class="po-navbar-logo">
+        <a href="./">
+          <img class="po-navbar-logo-image" src="assets/images/portinari-logo-menu.svg" alt="LOGO">
+        </a>
+      </div>
+      <!-- PO-NAVBAR-LOGO - Final -->
+
+      <!-- PO-NAVBAR-ITEMS - Início -->
+      <nav class="po-navbar-items po-navbar-hidden">
+        <ul class="po-navbar-items-container">
+
+          <!-- PO-NAVBAR-ITEM - Início -->
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 1</a>
+          </li>
+          <li class="po-navbar-item po-clickable po-navbar-item-selected">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item selecionado</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 3</a>
+          </li>
+          <!-- PO-NAVBAR-ITEM - Final -->
+
+        </ul>
+      </nav>
+      <!-- PO-NAVBAR-ITEMS - Final -->
+
+      <!-- PO-NAVBAR-ACTIONS - Início -->
+      <ul class="po-navbar-actions">
+
+        <!-- PO-NAVBAR-ACTION - Início -->
+        <li class="po-navbar-action">
+          <div class="po-navbar-action-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-notification">
+              <!-- PO-TOOLTIP - Inicio -->
+              <div class="po-tooltip">
+                <div class="po-tooltip-arrow po-arrow-top-right"></div>
+                <div class="po-tooltip-content">
+                  Notification
+                </div>
+              </div>
+              <!-- PO-TOOLTIP - Final -->
+            </span>
+          </div>
+        </li>
+        <li class="po-navbar-action">
+          <div class="po-navbar-action-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-user"></span>
+          </div>
+        </li>
+        <!-- PO-NAVBAR-ACTION - Final -->
+
+        <!-- PO-NAVBAR-ACTION-POPUP - Início -->
+        <li class="po-navbar-action-popup">
+          <div class="po-navbar-action-popup-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-user"></span>
+          </div>
+        </li>
+        <!-- PO-NAVBAR-ACTION-POPUP - Final -->
+
+      </ul>
+      <!-- PO-NAVBAR-ACTIONS - Final -->
+
+      <!-- PO-POPUP - Início -->
+      <div class="po-popup">
+        <div class="po-popup-arrow po-arrow-top-right"></div>
+        <div class="po-popup-item-default po-clickable">
+          <span class="po-icon po-icon-user po-popup-icon-item"></span>
+          Usuário
+        </div>
+        <div class="po-popup-item-default po-clickable po-popup-item-separator">
+          <span class="po-icon po-icon-notification po-popup-icon-item"></span>
+          Notificações
+        </div>
+        <div class="po-popup-item-default po-clickable po-popup-item-separator">
+          <span class="po-icon po-icon-help po-popup-icon-item"></span>
+          Ajuda
+        </div>
+      </div>
+      <!-- PO-POPUP - Final -->
+
+    </header>
+    <!-- PO-NAVBAR - Final -->
+
+  </section>
+
+  <section class="sample-margin-top">
+    <br>
+    <h4>Com poucos itens e menu</h4>
+    <!-- PO-NAVBAR - Início -->
+    <header class="po-navbar">
+
+      <!-- PO-NAVBAR-LOGO - Início -->
+      <div class="po-navbar-logo">
+        <a href="./">
+          <img class="po-navbar-logo-image" src="assets/images/portinari-logo-menu.svg" alt="LOGO">
+        </a>
+      </div>
+      <!-- PO-NAVBAR-LOGO - Final -->
+
+      <!-- PO-NAVBAR-ITEMS - Início -->
+      <nav class="po-navbar-items po-navbar-hidden">
+        <ul class="po-navbar-items-container">
+
+          <!-- PO-NAVBAR-ITEM - Início -->
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 1</a>
+          </li>
+          <li class="po-navbar-item po-clickable po-navbar-item-selected">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item selecionado</a>
+          </li>
+          <li class="po-navbar-item po-clickable">
+            <a href="#" class="po-navbar-item-link" tabindex="0">item 3</a>
+          </li>
+          <!-- PO-NAVBAR-ITEM - Final -->
+
+        </ul>
+      </nav>
+      <!-- PO-NAVBAR-ITEMS - Final -->
+
+      <!-- PO-NAVBAR-ACTIONS - Início -->
+      <ul class="po-navbar-actions">
+
+        <!-- PO-NAVBAR-ACTION - Início -->
+        <li class="po-navbar-action">
+          <div class="po-navbar-action-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-notification"></span>
+          </div>
+        </li>
+        <li class="po-navbar-action">
+          <div class="po-navbar-action-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-user"></span>
+          </div>
+        </li>
+        <!-- PO-NAVBAR-ACTION - Final -->
+
+        <!-- PO-NAVBAR-ACTION-POPUP - Início -->
+        <li class="po-navbar-action-popup">
+          <div class="po-navbar-action-popup-content po-clickable" tabindex="0">
+            <span class="po-icon po-icon-user"></span>
+          </div>
+        </li>
+        <!-- PO-NAVBAR-ACTION-POPUP - Final -->
+
+      </ul>
+      <!-- PO-NAVBAR-ACTIONS - Final -->
+
+      <div class="menu-container">
+        <!-- PO-MENU - Início -->
+        <div class="po-menu-overlay"></div>
+        <div class="po-menu">
+          <div>
+            <div class="po-menu-header-container-logo">
+              <a>
+                <div class="po-menu-logo"></div>
+              </a>
+            </div>
+          </div>
+          <nav class="po-menu-body">
+            <!-- Inner e outer para esconder scroll -->
+            <div class="po-menu-outer">
+              <div class="po-menu-inner">
+                <div class="po-menu-item-wrapper">
+                  <div class="po-menu-item-first">   <!-- classe aplicada no primeiro item do menu para remover borda -->
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item">Item 1</div>
+                    </a>
+                  </div>
+                </div>
+                <div class="po-menu-item-wrapper">
+                  <div>  <!-- classe que representa uma tag de item de menu -->
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-selected">Item selecionado</div>
+                    </a>
+                  </div>
+                </div>
+                <div class="po-menu-item-wrapper">
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item">Item 3</div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+        <!-- PO-MENU - Final -->
+      </div>
+
+    </header>
+    <!-- PO-NAVBAR - Final -->
+
+  </section>
+
+</article>

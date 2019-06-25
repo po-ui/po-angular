@@ -1,0 +1,108 @@
+<div class="po-row">
+  <div class="po-xs-4 po-sm-4 po-md-3 po-lg-3 po-xl-3">
+    <button class="po-button" type="button" onClick="document.getElementsByClassName('po-modal')[0].style.display = 'block';">Buscar</button>
+  </div>
+</div>
+
+<div class="po-modal" style="display:none;">
+  <div class="po-modal-overlay">
+    <div class="po-modal-container po-p-2">
+      <div class="po-modal-vertical-align">
+        <div tabindex="-1" class="po-modal-content po-modal-md">
+          <div class="po-modal-header">
+            <div class="po-modal-title">
+              <a class="po-modal-header-close-button" tabindex="0" onClick="document.getElementsByClassName('po-modal')[0].style.display = 'none';">
+                <span class="po-icon po-icon-close"></span>
+              </a>
+              Busca Avançada
+            </div>
+          </div>
+
+          <div  class="po-modal-body">
+            <div class="po-row">
+              <div class="container po-xl-4 po-lg-4 po-md-12 po-sm-12 po-xs-12">
+                <div class="po-field-container">
+
+                  <div class="po-field-container-title">
+                    <span class="po-field-title">Código do cliente</span>
+                  </div>
+
+                  <div class="po-field-container-content ng-valid">
+                    <input type="text" class="po-input">
+                  </div>
+                </div>
+              </div>
+
+              <div class="container po-xl-8 po-lg-8 po-md-12 po-sm-12 po-xs-12">
+                <div class="po-field-container">
+
+                  <div class="po-field-container-title">
+                    <span class="po-field-title">Nome do cliente</span>
+                  </div>
+
+                  <div class="po-field-container-content ng-valid">
+                    <input type="text" class="po-input">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="po-row">
+              <div class="container po-xl-6 po-lg-6 po-md-12 po-sm-12 po-xs-12">
+                <div class="po-field-container">
+
+                  <div class="po-field-container-title">
+                    <span class="po-field-title">Data do Pedido</span>
+                    <span class="po-field-optional">(Opcional)</span>
+                  </div>
+
+                  <div class="po-field-container-content ng-valid">
+                    <input type="text" class="po-input po-input-icon-right" placeholder="dd/mm/aaaa">
+                    <div class="po-field-icon-container-right">
+                      <span class="po-icon po-field-icon po-icon-calendar"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container po-xl-6 po-lg-6 po-md-12 po-sm-12 po-xs-12">
+                <div class="po-field-container">
+                  <div class="po-field-container-title">
+                    <span class="po-field-title">Estado</span>
+                    <span class="po-field-optional">(Opcional)</span>
+                  </div>
+
+                  <div class="po-field-container-content ng-valid">
+                    <input type="text" class="po-input po-input-icon-right" value="São Paulo">
+                    <div class="po-field-icon-container-right">
+                      <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="po-modal-footer">
+            <po-button>
+              <button
+                class="po-button"
+                type="button"
+                onClick="document.getElementsByClassName('po-modal')[0].style.display = 'none';">
+                  Cancelar
+              </button>
+            </po-button>
+            <po-button class="po-button-modal-first-action">
+              <button
+                class="po-button po-button-primary"
+                type="button"
+                onClick="document.getElementsByClassName('po-modal')[0].style.display = 'none';">
+                  Buscar
+              </button>
+            </po-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

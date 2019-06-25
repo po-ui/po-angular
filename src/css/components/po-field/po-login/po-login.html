@@ -1,0 +1,215 @@
+<style>
+  div.ng-invalid.ng-dirty .po-input {
+    border: solid 1px #c64840 !important;
+    outline: none;
+    color: #c64840;
+  }
+
+  div.ng-invalid.ng-dirty .po-field-icon {
+    color: #c64840 !important;
+  }
+</style>
+
+<article>
+  <section>
+    <div class="po-row">
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Login com apoio e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de apoio</div>
+
+          <div class="po-field-container-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-user"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu login">
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Login preenchido</span>
+          </div>
+          <div class="po-field-help">Texto de apoio</div>
+
+          <div class="po-field-container-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-icon-user po-field-icon"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left po-input-icon-right" value="dev@portinari.com">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4 ng-invalid ng-dirty">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Login com mensagem de erro</span>
+          </div>
+          <div class="po-field-help">Texto de apoio</div>
+
+          <div class="po-field-container-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-user"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left po-input-icon-right" value="dev@portinaricom">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Mensagem de erro
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Login sem apoio</span>
+          </div>
+
+          <div class="po-field-container-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-user"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu login">
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Login sem apoio / desabilitado</span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-icon-user po-field-icon-disabled"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" value="dev@portinari.com" disabled>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4 ng-invalid ng-dirty">
+
+        <div class="po-field-container ng-valid">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Login com mensagem de erro</span>
+          </div>
+
+          <div class="po-field-container-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-user"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" value="dev@portinaricom">
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Mensagem de erro
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-field-container-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-user"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu login">
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4">
+
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-field-container-content ng-valid">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-icon-user po-field-icon"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" value="dev@portinari.com">
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+
+      </div>
+
+      <div class="po-md-4 ng-invalid ng-dirty">
+
+        <div class="po-field-container ng-valid">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-field-container-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-user"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" value="dev@portinaricom">
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Mensagem de erro
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</article>

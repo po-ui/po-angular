@@ -1,0 +1,9 @@
+.po-tabs-header {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.po-tabs-container {
+  padding-top: 8px;
+}

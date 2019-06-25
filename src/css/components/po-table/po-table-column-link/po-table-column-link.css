@@ -1,0 +1,23 @@
+.po-table-link, .po-table-link:link, .po-table-link:visited {
+  color: var(--color-table-color-link);
+  text-decoration: none;
+}
+
+.po-table-link:hover {
+  color: var(--color-table-color-link-hover);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.po-table-link:active {
+  color: var(--color-table-color-link-pressed);
+}
+
+.po-table-link-disabled {
+  color: var(--color-table-color-link-disabled);
+}
+
+.po-table-link-disabled:hover {
+  color: var(--color-table-color-link-disabled);
+  cursor: default;
+}

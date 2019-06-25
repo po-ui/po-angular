@@ -1,0 +1,19 @@
+
+:root {
+  --media-small-max: 480px;
+
+  --media-medium-min: 481px;
+
+  --media-medium-max: 960px;
+
+  --media-large-min: 961px;
+
+  --media-large-max: 1366px;
+
+  --media-x-large-min: 1367px;
+
+  --media-padding-small: 1599px;
+
+  --media-padding-large: 1600px;
+
+}
