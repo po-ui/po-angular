@@ -1,0 +1,80 @@
+<po-popover
+  p-trigger="hover"
+  [p-target]="cardcoderef">
+  <img src="assets/graphics/card-code.jpg">
+</po-popover>
+
+<po-popover
+  p-trigger="hover"
+  [p-target]="carddateref">
+  <img src="assets/graphics/card-date.jpg">
+</po-popover>
+
+<po-popover
+  p-trigger="hover"
+  [p-target]="cardnameref">
+  <img src="assets/graphics/card-owner.jpg">
+</po-popover>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      #cardname
+      class="po-lg-6"
+      name="inputCardName"
+      [(ngModel)]="inputCardName"
+      p-clean
+      p-label="Name"
+      p-required>
+    </po-input>
+
+    <po-input
+      #cardcode
+      class="po-lg-4 po-md-9"
+      name="inputCardCode"
+      [(ngModel)]="inputCardCode"
+      p-clean
+      p-label="Code"
+      p-mask="9999 9999 9999 9999"
+      p-mask-format-model
+      p-pattern="\d{4} \d{4} \d{4} \d{4}"
+      p-required>
+    </po-input>
+
+    <po-input
+      #carddate
+      class="po-lg-2 po-md-3"
+      name="inputCardValid"
+      [(ngModel)]="inputCardValid"
+      p-clean
+      p-label="Expiration Date"
+      p-mask="12/99"
+      p-mask-format-model
+      p-pattern="\d{2}\/\d{2}"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-2"
+      p-label="Confirm"
+      [p-disabled]="f.form.invalid"
+      (click)="modalCreditCard.open()">
+    </po-button>
+  </div>
+</form>
+
+<po-modal
+  #modalCreditCard
+  p-title="Your Credit Card">
+  <div class="po-row">
+    <div>Card Code: {{ inputCardCode }}</div>
+  </div>
+  <div class="po-row">
+    <div>Card Expiration: {{ inputCardValid }}</div>
+  </div>
+  <div class="po-row">
+    <div>Card Owner: {{ inputCardName }}</div>
+  </div>
+</po-modal>

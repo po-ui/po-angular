@@ -1,0 +1,184 @@
+<div class="po-wrapper">
+  <po-menu
+    [p-filter]="filter"
+    [p-logo]="logo"
+    [p-menus]="menuItems"
+    [p-params]="params"
+    [p-service]="service"
+    [p-short-logo]="shortLogo">
+  </po-menu>
+
+  <po-page-default p-title="Portinari Menu">
+    <div class="po-row">
+      <po-info
+        class="po-lg-12"
+        p-label="Methods"
+        p-value="Only if all menu items have icon and short label.">
+      </po-info>
+
+      <po-button-group
+        class="po-lg-12"
+        [p-buttons]="buttons">
+      </po-button-group>
+    </div>
+
+    <po-divider></po-divider>
+
+    <div class="po-row">
+      <po-info
+        p-label="Menu Item Selected"
+        [p-value]="menuItemSelected">
+      </po-info>
+    </div>
+
+    <po-divider></po-divider>
+
+    <form #f="ngForm">
+      <div class="po-row">
+        <po-switch
+          class="po-lg-6"
+          name="filterMenu"
+          [(ngModel)]="filter"
+          p-label="Filter"
+          p-label-off="Disabled"
+          p-label-on="Enabled">
+        </po-switch>
+      </div>
+
+      <div class="po-row">
+        <po-select
+          class="po-md-4"
+          name="parent"
+          [(ngModel)]="parent"
+          p-label="Parent"
+          p-placeholder="Add new menu at root level"
+          [p-options]="parentList">
+        </po-select>
+
+        <po-input
+          class="po-md-4"
+          name="label"
+          [(ngModel)]="label"
+          p-label="Label"
+          p-required>
+        </po-input>
+
+        <po-input
+          class="po-md-4"
+          name="shortLabel"
+          [(ngModel)]="shortLabel"
+          p-label="Short Label"
+          p-required>
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-url
+          class="po-md-4"
+          name="link"
+          [(ngModel)]="link"
+          p-label="External link"
+          p-placeholder="http://">
+        </po-url>
+
+        <po-select
+          class="po-md-4"
+          name="badgeColor"
+          [(ngModel)]="badgeColor"
+          p-label="Badge color"
+          p-placeholder="Select a color of badge"
+          [p-options]="badgeColorList">
+
+          <ng-template p-select-option-template let-option>
+            <div>
+              <span class="sample-menu-circle sample-menu-vertical-middle po-{{ option.value }}"></span>
+              <span class="sample-menu-vertical-middle"> {{ option.label }} </span>
+            </div>
+          </ng-template>
+
+        </po-select>
+
+        <po-number
+          class="po-md-4"
+          name="badgeValue"
+          [(ngModel)]="badgeValue"
+          p-label="Badge value"
+          p-required
+          [p-max]="maxBadgeValue">
+        </po-number>
+      </div>
+
+      <div class="po-row">
+        <po-radio-group
+          class="po-lg-12"
+          name="icon"
+          [(ngModel)]="icon"
+          p-columns="3"
+          p-label="Icon"
+          [p-disabled]="parent"
+          [p-options]="iconsOptions">
+        </po-radio-group>
+      </div>
+
+      <div class="po-row">
+        <po-button
+          class="po-xl-2 po-md-4"
+          p-label="Add"
+          (p-click)="addMenuItem()">
+        </po-button>
+      </div>
+
+      <hr>
+
+      <div class="po-row">
+        <po-input
+          class="po-md-6"
+          name="service"
+          [(ngModel)]="service"
+          p-clean
+          p-label="Service"
+          p-help="https://portinari.io/sample/api/menus">
+        </po-input>
+
+        <po-input
+          class="po-md-6"
+          name="menuParams"
+          [(ngModel)]="menuParams"
+          p-clean
+          p-label="Params"
+          p-help='Enter a value to be sent as a parameter. Ex: { "departament": "technology" }'
+          (p-change-model)="onChangeParams($event)">
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-input
+          class="po-md-6"
+          name="logo"
+          [(ngModel)]="logo"
+          p-clean
+          p-help="https://portinari.io/assets/graphics/portinari-logo-grey.svg"
+          p-label="Logo">
+        </po-input>
+
+        <po-input
+          class="po-md-6"
+          name="shortLogo"
+          [(ngModel)]="shortLogo"
+          p-clean
+          p-help="https://portinari.io/assets/graphics/logo-dgeni.png"
+          p-label="Short Logo">
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-button
+          class="po-xl-3 po-md-5"
+          p-label="Sample Restore"
+          (p-click)="restore()">
+        </po-button>
+      </div>
+    </form>
+
+  </po-page-default>
+</div>

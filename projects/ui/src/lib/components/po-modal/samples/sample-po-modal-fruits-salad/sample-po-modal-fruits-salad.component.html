@@ -1,0 +1,45 @@
+<po-modal
+  p-title="Options"
+  [p-primary-action]="confirm"
+  [p-secondary-action]="close">
+
+  <form #optionsForm="ngForm">
+    <div class="po-row">
+      <po-checkbox-group
+        class="po-md-12"
+        name="checkboxGroup"
+        [(ngModel)]="fruits"
+        p-label="Fruits:"
+        p-required
+        [p-options]="fruitsOptions">
+      </po-checkbox-group>
+    </div>
+
+    <div class="po-row">
+      <po-combo
+        class="po-md-12"
+        name="accompaniment"
+        [(ngModel)]="accompaniment"
+        p-label="Accompaniment:"
+        p-required
+        [p-options]="accompanimentOptions">
+      </po-combo>
+    </div>
+
+    <div class="po-row">
+      <po-textarea
+        class="po-md-12"
+        name="orderDetail"
+        [(ngModel)]="orderDetail"
+        p-label="Details:"
+        p-rows="8">
+      </po-textarea>
+    </div>
+  </form>
+
+</po-modal>
+
+<po-button
+  p-label="Buy fruits salad"
+  (p-click)="openQuestionnaire()">
+</po-button>

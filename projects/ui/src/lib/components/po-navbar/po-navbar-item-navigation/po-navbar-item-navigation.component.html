@@ -1,0 +1,12 @@
+<div class="po-navbar-item-navigation-icon"
+  [ngClass]="{'po-navbar-item-navigation-icon-disabled': disableLeft , 'po-clickable': !disableLeft }"
+  tabindex="0"
+  (click)="disableLeft ? undefined : click.emit('left')" >
+  <span class="po-icon po-icon-arrow-left"></span>
+</div>
+<div class="po-navbar-item-navigation-icon"
+  [ngClass]="{'po-navbar-item-navigation-icon-disabled': disableRight , 'po-clickable': !disableRight }"  
+  tabindex="0"
+  (click)="disableRight ? undefined : click.emit('right')">
+  <span class="po-icon po-icon-arrow-right"></span>
+</div>

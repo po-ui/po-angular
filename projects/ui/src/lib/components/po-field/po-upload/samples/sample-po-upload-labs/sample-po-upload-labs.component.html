@@ -1,0 +1,152 @@
+<po-upload
+  name="upload"
+  [(ngModel)]="upload"
+  [p-auto-upload]="properties.includes('autoupload')"
+  [p-disabled]="properties.includes('disabled')"
+  [p-form-field]="formField"
+  [p-help]="help"
+  [p-hide-select-button]="properties.includes('selectButton')"
+  [p-hide-send-button]="properties.includes('sendButton')"
+  [p-label]="label"
+  [p-literals]="customLiterals"
+  [p-multiple]="properties.includes('multiple')"
+  [p-optional]="properties.includes('optional')"
+  [p-required]="properties.includes('required')"
+  [p-restrictions]="restrictions"
+  [p-url]="url"
+  (p-error)="changeEvent('p-error')"
+  (p-success)="changeEvent('p-success')"
+  (p-upload)="changeEvent('p-upload')">
+</po-upload>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Model"
+    [p-value]="upload | json">
+  </po-info>
+
+  <po-info
+    class="po-md-6"
+    p-label="Event"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #fRestrictions="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-3"
+      name="allowedExtensions"
+      [(ngModel)]="allowedExtensions"
+      p-help="Enter the allowed extensions separated by comma"
+      p-label="Allowed Extensions"
+      p-placeholder=".png, .jpeg, .jpg"
+      (p-change)="onChangeExtension()">
+    </po-input>
+
+    <po-number
+      class="po-md-3"
+      name="maxFiles"
+      [(ngModel)]="maxFiles"
+      p-clean
+      p-help="Requires that the 'p-multiple' property be enabled"
+      p-label="Max Files"
+      (p-change)="onChangeMaxFiles(maxFiles)">
+    </po-number>
+
+    <po-number
+      class="po-md-3"
+      name="minSize"
+      [(ngModel)]="minSize"
+      p-clean
+      p-help="In megabytes"
+      p-label="Min File Size"
+      (p-change)="onChangeMinSize(minSize)">
+    </po-number>
+
+    <po-number
+      class="po-md-3"
+      name="maxSize"
+      [(ngModel)]="maxSize"
+      p-clean
+      p-help="In megabytes"
+      p-label="Max File Size"
+      (p-change)="onChangeMaxSize(maxSize)">
+    </po-number>
+  </div>
+</form>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="help"
+      [(ngModel)]="help"
+      p-clean
+      p-label="Help">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="formField"
+      [(ngModel)]="formField"
+      p-clean
+      p-label="Form Field">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="url"
+      [(ngModel)]="url"
+      p-clean
+      p-label="URL"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"selectFile": "Select file", "deleteFile": "Delete file", "cancel": "Cancel sending "}'
+      p-label="Literals"
+      (p-change)="changeLiterals()">
+    </po-input>
+
+    <po-checkbox-group
+      class="po-md-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="4"
+      p-help="Select any options"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

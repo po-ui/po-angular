@@ -1,0 +1,22 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
+import { PoMenuFilter, PoMenuItemFiltered } from '@portinari/portinari-ui';
+
+@Injectable()
+export class SamplePoMenuHumanResourcesService implements PoMenuFilter {
+
+  private url: string = 'https://portinari.io/sample/api/menus';
+
+  constructor(private http: HttpClient) { }
+
+  getFilteredData(search: string): Observable<Array<PoMenuItemFiltered>> {
+    const params = { search };
+
+    return this.http.get(this.url, { params }).pipe(map((response: any) => response.items));
+  }
+
+}

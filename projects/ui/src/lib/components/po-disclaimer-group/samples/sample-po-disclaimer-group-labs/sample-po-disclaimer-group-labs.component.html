@@ -1,0 +1,92 @@
+<po-disclaimer-group
+  [p-disclaimers]="disclaimers"
+  [p-hide-remove-all]="properties?.includes('hideRemoveAll')"
+  [p-title]="title"
+  (p-change)="changeEvent('p-change')">
+</po-disclaimer-group>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Events"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #disclaimerForm="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="disclaimerLabel"
+      [(ngModel)]="disclaimer.label"
+      p-label="Disclaimer Label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="disclaimerValue"
+      [(ngModel)]="disclaimer.value"
+      p-label="Disclaimer Value"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="disclaimerProperty"
+      [(ngModel)]="disclaimer.property"
+      p-label="Disclaimer Property">
+    </po-input>
+
+    <po-switch
+      class="po-md-6"
+      name="disclaimerHideClose"
+      [(ngModel)]="disclaimer.hideClose"
+      p-label="Disclaimer Hide Close">
+    </po-switch>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-6 po-lg-3"
+      p-label="Add Disclaimer"
+      [p-disabled]="disclaimerForm.invalid"
+      (p-click)="addDisclaimer()">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<form #propertiesForm="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="title"
+      [(ngModel)]="title"
+      p-clean
+      p-label="Title">
+    </po-input>
+
+    <po-checkbox-group
+      class="po-md-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="disclaimerForm.reset(); propertiesForm.reset(); restore()">
+    </po-button>
+  </div>
+</form>

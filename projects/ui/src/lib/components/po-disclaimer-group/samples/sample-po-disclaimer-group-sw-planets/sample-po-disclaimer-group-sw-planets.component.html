@@ -1,0 +1,45 @@
+<div class="po-row">
+  <po-input
+    class="po-md-4"
+    name="name"
+    [(ngModel)]="name"
+    p-help="Contains planet name"
+    p-label="Planet Name"
+    (p-change)="addFilter(name, 'name')">
+  </po-input>
+
+  <po-combo
+    class="po-md-4"
+    name="climate"
+    [(ngModel)]="climate"
+    p-help="Planet climate"
+    p-label="Climate"
+    [p-options]="climates"
+    (p-change)="addFilter(climate, 'climate')">
+  </po-combo>
+
+  <po-combo
+    class="po-md-4"
+    [(ngModel)]="terrain"
+    name="terrain"
+    p-help="Planet terrain"
+    p-label="Terrain"
+    [p-options]="terrains"
+    (p-change)="addFilter(terrain, 'terrain')">
+  </po-combo>
+
+  <po-disclaimer-group
+    [p-disclaimers]="filters"
+    (p-change)="changeFilters(filters)">
+  </po-disclaimer-group>
+</div>
+
+<hr>
+
+<div class="po-row">
+  <po-table
+    class="po-md-12"
+    [p-columns]="columns"
+    [p-items]="filteredItems">
+  </po-table>
+</div>

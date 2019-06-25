@@ -1,0 +1,33 @@
+<div class="po-row">
+  <po-widget
+    class="po-lg-6"
+    p-height="300"
+    p-primary-label="Angular"
+    p-secondary-label="Typescript"
+    p-title="Javascript technologies"
+    [p-help]="help"
+    (p-primary-action)="showAngular()"
+    (p-secondary-action)="showTypescript()"
+    (p-title-action)="showJavascriptTechnologies()">
+
+    <po-info
+      [p-label]="label"
+      [p-value]="value">
+    </po-info>
+
+  </po-widget>
+</div>
+
+<po-modal p-title="Javascript Technologies">
+
+  There are several Javascript technologies that help us in the construction of fast and dynamic
+  screens, among them we can mention:
+
+  <div class="po-ml-3">
+    <ul>
+      <li *ngFor="let technology of technologies"> {{ technology }} </li>
+    </ul>
+  </div>
+
+</po-modal>
+

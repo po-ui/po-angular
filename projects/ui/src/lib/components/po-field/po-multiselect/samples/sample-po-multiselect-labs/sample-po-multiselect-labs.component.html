@@ -1,0 +1,147 @@
+<div class="po-row">
+  <po-multiselect
+    class="po-md-12"
+    name="Portinari Multiselect"
+    [(ngModel)]="multiselect"
+    [p-disabled]="properties.includes('disabled')"
+    [p-filter-mode]="filterMode"
+    [p-help]="help"
+    [p-hide-search]="properties.includes('hideSearch')"
+    [p-label]="label"
+    [p-literals]="customLiterals"
+    [p-optional]="properties.includes('optional')"
+    [p-options]="options"
+    [p-placeholder]="placeholder"
+    [p-placeholder-search]="placeholderSearch"
+    [p-required]="properties.includes('required')"
+    [p-sort]="properties.includes('sort')"
+    (p-change)="changeEvent('p-change')">
+  </po-multiselect>
+</div>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Model"
+    [p-value]="multiselect">
+  </po-info>
+
+  <po-info
+    class="po-md-6"
+    p-label="Events"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #fOption="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="optionLabel"
+      [(ngModel)]="option.label"
+      p-label="Option Label"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="optionValue"
+      [(ngModel)]="option.value"
+      p-label="Option Value"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-6 po-lg-3"
+      p-label="Add Option"
+      [p-disabled]="fOption.form.invalid"
+      (p-click)="addOption()">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="help"
+      [(ngModel)]="help"
+      p-clean
+      p-label="Help">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="placeholder"
+      [(ngModel)]="placeholder"
+      p-clean
+      p-label="Placeholder">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="placeholderSearch"
+      [(ngModel)]="placeholderSearch"
+      p-clean
+      p-label="Placeholder Search">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-12"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"noData": "Sem dados a serem exibidos", "placeholderSearch": "Buscar"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-md-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="4"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+
+    <po-radio-group
+      class="po-md-6"
+      name="filterMode"
+      [(ngModel)]="filterMode"
+      p-columns="3"
+      p-label="Filter mode"
+      [p-disabled]="properties.includes('hideSearch')"
+      [p-options]="filterModeOptions">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

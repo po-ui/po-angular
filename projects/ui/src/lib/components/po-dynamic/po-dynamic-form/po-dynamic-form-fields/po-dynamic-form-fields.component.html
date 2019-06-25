@@ -1,0 +1,170 @@
+<div class="po-row" *ngIf="visibleFields && visibleFields.length > 0">
+  <ng-container *ngFor="let field of visibleFields; trackBy: trackBy">
+
+    <po-divider *ngIf="field?.divider?.trim()" class="po-sm-12" [p-label]="field.divider">
+    </po-divider>
+
+    <po-datepicker *ngIf="compareTo(field.control, 'datepicker')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      p-clean
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-max-date]="field.maxValue"
+      [p-min-date]="field.minValue"
+      [p-required]="field.required">
+    </po-datepicker>
+
+    <po-input *ngIf="compareTo(field.control, 'input')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      p-clean
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-mask]="field.mask"
+      [p-maxlength]="field.maxLength"
+      [p-minlength]="field.minLength"
+      [p-pattern]="field.pattern"
+      [p-required]="field.required">
+      </po-input>
+
+    <po-number *ngIf="compareTo(field.control, 'number')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      p-clean
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-min]="field.minValue"
+      [p-max]="field.maxValue"
+      [p-maxlength]="field.maxLength"
+      [p-minlength]="field.minLength"
+      [p-required]="field.required">
+    </po-number>
+
+    <po-decimal *ngIf="compareTo(field.control, 'decimal')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      p-clean
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-required]="field.required">
+    </po-decimal>
+
+    <po-select *ngIf="compareTo(field.control, 'select')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-options]="field.options"
+      [p-required]="field.required">
+    </po-select>
+
+    <po-radio-group *ngIf="compareTo(field.control, 'radioGroup')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      p-columns="3"
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-options]="field.options"
+      [p-required]="field.required">
+    </po-radio-group>
+
+    <po-switch *ngIf="compareTo(field.control, 'switch')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-label-off]="field.booleanFalse"
+      [p-label-on]="field.booleanTrue">
+    </po-switch>
+
+    <po-combo *ngIf="compareTo(field.control, 'combo')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      [p-disabled]="field.disabled"
+      [p-filter-service]="field.optionsService"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-required]="field.required">
+    </po-combo>
+
+    <po-lookup *ngIf="compareTo(field.control, 'lookup')"
+      name="field.property"
+      [(ngModel)]="value[field.property]"
+      p-field-label="label"
+      p-field-value="value"
+      [ngClass]="field.componentClass"
+      [p-columns]="field.columns"
+      [p-disabled]="field.disabled"
+      [p-filter-service]="field.searchService"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-required]="field.required">
+    </po-lookup>
+
+    <po-checkbox-group *ngIf="compareTo(field.control, 'checkboxGroup')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      p-columns="3"
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-options]="field.options"
+      [p-required]="field.required">
+    </po-checkbox-group>
+
+    <po-multiselect *ngIf="compareTo(field.control, 'multiselect')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-options]="field.options"
+      [p-required]="field.required">
+    </po-multiselect>
+
+    <po-textarea *ngIf="compareTo(field.control, 'textarea')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-maxlength]="field.maxLength"
+      [p-minlength]="field.minLength"
+      [p-required]="field.required"
+      [p-rows]="field.rows">
+    </po-textarea>
+
+    <po-password *ngIf="compareTo(field.control, 'password')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      p-clean
+      [p-disabled]="field.disabled"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-maxlength]="field.maxLength"
+      [p-minlength]="field.minLength"
+      [p-required]="field.required">
+  </po-password>
+
+  </ng-container>
+</div>

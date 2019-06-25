@@ -1,0 +1,3 @@
+<po-page-default p-title="<%= classify(name) %>" [p-actions]="pageActions">
+
+</po-page-default>

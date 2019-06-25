@@ -1,0 +1,213 @@
+<po-tabs>
+  <po-tab
+    p-active
+    p-label="Destination">
+
+    <form #formTravel="ngForm">
+      <div class="po-row">
+        <po-input
+          class="po-lg-12"
+          name="origin"
+          [(ngModel)]="origin"
+          p-label="Origin"
+          p-required>
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-input
+          class="po-lg-12"
+          name="destination"
+          [(ngModel)]="destination"
+          p-label="Destination"
+          p-required>
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-datepicker
+          class="po-md-6"
+          name="departDate"
+          [(ngModel)]="departDate"
+          p-label="Depart"
+          p-required>
+        </po-datepicker>
+
+        <po-datepicker
+          class="po-md-6"
+          name="returnDate"
+          [(ngModel)]="returnDate"
+          p-label="Return"
+          p-required
+          [p-min-date]="departDate">
+        </po-datepicker>
+      </div>
+
+      <div class="po-row">
+        <po-radio-group
+          class="po-lg-12"
+          name="transportation"
+          [(ngModel)]="transportation"
+          p-label="Transportation"
+          p-required
+          [p-options]="transportationOptions">
+        </po-radio-group>
+      </div>
+    </form>
+
+  </po-tab>
+  <po-tab
+    p-label="Trains"
+    [p-hide]="transportation!=='train'">
+
+    <form #formTrain="ngForm">
+      <div class="po-row">
+        <po-select
+          class="po-lg-12"
+          name="trainCompany"
+          [(ngModel)]="trainCompany"
+          p-label="Tran Company"
+          p-required
+          [p-options]="trainCompanyOptions">
+        </po-select>
+      </div>
+
+      <div class="po-row">
+        <po-select
+          class="po-lg-12"
+          name="classTrain"
+          [(ngModel)]="classTrain"
+          p-label="Class"
+          p-required
+          [p-options]="classTrainOptions">
+        </po-select>
+      </div>
+    </form>
+
+  </po-tab>
+  <po-tab
+    p-label="Flights"
+    [p-hide]="transportation!=='flight'">
+
+    <form #formFlight="ngForm">
+      <div class="po-row">
+        <po-select
+          class="po-lg-12"
+          name="flightCompany"
+          [(ngModel)]="flightCompany"
+          p-label="Flight Company"
+          p-required
+          [p-options]="flightCompanyOptions">
+        </po-select>
+      </div>
+
+      <div class="po-row">
+        <po-select
+          class="po-lg-12"
+          name="classFlight"
+          [(ngModel)]="classFlight"
+          p-label="Class"
+          p-required
+          [p-options]="classFlightOptions">
+        </po-select>
+      </div>
+    </form>
+  </po-tab>
+  <po-tab
+    p-label="Payment"
+    [p-disabled]="isPaymentEnable(formTravel, formTrain, formFlight)===false">
+
+    <div class="po-row">
+      <po-info
+        class="po-md-6"
+        p-label="Total Cost"
+        [p-value]="getTotalCost()">
+      </po-info>
+    </div>
+
+    <po-tabs p-small>
+      <po-tab
+        p-active
+        p-label="Credit Card">
+
+        <form #formCreditCard="ngForm">
+          <div class="po-row">
+            <po-input
+              class="po-md-8 po-lg-6"
+              name="cardName"
+              [(ngModel)]="cardName"
+              p-clean
+              p-label="Name on Card"
+              p-required>
+            </po-input>
+          </div>
+
+          <div class="po-row">
+            <po-input
+              class="po-md-8 po-lg-6"
+              name="card"
+              [(ngModel)]="card"
+              p-clean
+              p-label="Card Number"
+              p-mask="9999 9999 9999 9999"
+              p-required>
+            </po-input>
+          </div>
+
+          <div class="po-row">
+            <po-input
+              class="po-md-2"
+              name="expiryMonth"
+              [(ngModel)]="expiryMonth"
+              p-clean
+              p-label="Expiry Month"
+              p-mask="19"
+              p-required>
+            </po-input>
+
+            <po-input
+              class="po-md-2"
+              name="expiryYear"
+              [(ngModel)]="expiryYear"
+              p-clean
+              p-label="Year"
+              p-mask="2999"
+              p-required>
+            </po-input>
+
+            <po-input
+              class="po-md-2"
+              name="cvv"
+              [(ngModel)]="cvv"
+              p-clean
+              p-label="CVV"
+              p-mask="9999"
+              p-required>
+            </po-input>
+          </div>
+
+          <div class="po-row">
+            <po-button
+              class="po-md-3"
+              p-label="Pay now"
+              [p-disabled]="!formCreditCard.form.valid || !totalCost"
+              (p-click)="payment()">
+            </po-button>
+          </div>
+        </form>
+      </po-tab>
+
+      <po-tab p-label="Bank Billet">
+        <div class="po-row">
+          <po-button
+            class="po-md-4"
+            p-label="Generate Bank Billet"
+            [p-disabled]="!totalCost"
+            (p-click)="bankBillet()">
+          </po-button>
+        </div>
+      </po-tab>
+    </po-tabs>
+
+  </po-tab>
+</po-tabs>

@@ -1,0 +1,74 @@
+<po-breadcrumb
+  [p-favorite-service]="favoriteService"
+  [p-items]="breadcrumbItems"
+  [p-params-service]="paramsService">
+</po-breadcrumb>
+
+<hr>
+
+<form #breadcrumbForm="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-4"
+      name="breadcrumbAction"
+      [(ngModel)]="breadcrumbItem.action"
+      p-label="Breadcrumb action">
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="breadcrumbLabel"
+      [(ngModel)]="breadcrumbItem.label"
+      p-label="Breadcrumb label"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="breadcrumbLink"
+      [(ngModel)]="breadcrumbItem.link"
+      p-label="Breadcrumb link">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Add breadcrumb"
+      [p-disabled]="breadcrumbForm.invalid"
+      (p-click)="addBreadcrumb()">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<form #propertiesForm="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="favoriteService"
+      [(ngModel)]="favoriteService"
+      p-clean
+      p-help="Ex.: https://portinari.io/sample/api/favorite"
+      p-label="Favorite service">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="paramsService"
+      [(ngModel)]="paramsService"
+      p-clean
+      p-help="Ex.: { id: 14, user: 'dev.portinari' }"
+      p-label="Params service">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="breadcrumbForm.reset(); propertiesForm.reset(); restore()">
+    </po-button>
+  </div>
+</form>

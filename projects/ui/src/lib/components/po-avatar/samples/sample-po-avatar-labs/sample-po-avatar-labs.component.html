@@ -1,0 +1,36 @@
+<po-avatar
+  [p-size]="size"
+  [p-src]="src">
+</po-avatar>
+
+<po-divider p-label="Properties"></po-divider>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-radio-group
+      class="po-lg-6"
+      name="sizes"
+      [(ngModel)]="size"
+      p-help="Select a size for the avatar"
+      p-label="Size"
+      [p-options]="sizeOptions">
+    </po-radio-group>
+
+    <po-input
+      class="po-lg-6"
+      name="src"
+      [(ngModel)]="src"
+      p-clear
+      p-help="Enter a url or path of the image that will be displayed"
+      p-label="Source">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

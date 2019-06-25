@@ -1,0 +1,93 @@
+<div class="po-text-center">
+  <div class="po-font-title"> Pre-appointment scheduling </div>
+</div>
+
+<form #schedulingForm="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="name"
+      [(ngModel)]="name"
+      p-clean
+      p-label="Name"
+      p-required>
+    </po-input>
+
+    <po-email
+      class="po-lg-6"
+      name="email"
+      [(ngModel)]="email"
+      p-clean
+      p-label="Email"
+      p-placeholder="example@domain.com"
+      p-required>
+    </po-email>
+  </div>
+
+  <div class="po-row">
+    <po-datepicker
+      class="po-lg-6"
+      name="birthday"
+      [(ngModel)]="birthday"
+      p-clean
+      p-label="Birthday"
+      p-placeholder="dd/mm/yyyy"
+      p-required>
+    </po-datepicker>
+
+    <po-input
+      class="po-lg-6"
+      name="phone"
+      [(ngModel)]="phone"
+      p-clean
+      p-label="Phone number"
+      p-mask="(99) 99999-9999"
+      p-placeholder="(99) 99999-9999"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-select
+      class="po-lg-6"
+      name="typeScheduling"
+      [(ngModel)]="typeScheduling"
+      p-label="Type scheduling"
+      p-required
+      p-sort
+      [p-options]="typeSchedulings">
+    </po-select>
+
+    <po-combo
+      class="po-lg-6"
+      name="especiality"
+      [(ngModel)]="especiality"
+      p-icon="po-icon-exam"
+      p-label="Especiality/Exam"
+      p-required
+      p-sort
+      [p-options]="especialities">
+    </po-combo>
+  </div>
+
+  <div class="po-row">
+    <po-textarea
+      class="po-sm-12"
+      name="informations"
+      [(ngModel)]="informations"
+      p-help="Additional informations"
+      p-label="Informations">
+    </po-textarea>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Schedule"
+      p-type="primary"
+      [p-disabled]="schedulingForm.invalid"
+      (p-click)="confirmPreAppointment(name)">
+    </po-button>
+  </div>
+</form>
+

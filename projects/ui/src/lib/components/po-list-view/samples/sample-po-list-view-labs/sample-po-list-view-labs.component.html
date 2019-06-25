@@ -1,0 +1,212 @@
+<po-list-view
+  [p-actions]="actions"
+  [p-height]="height"
+  [p-hide-select-all]="properties.includes('hideSelectAll')"
+  [p-items]="items"
+  [p-literals]="customLiterals"
+  [p-property-link]="propertyLink"
+  [p-property-title]="propertyTitle"
+  [p-select]="properties.includes('select')"
+  [p-show-more-disabled]="properties.includes('showMoreDisabled')"
+  (p-show-more)="showMore()"
+  (p-title-action)="changeAction('p-title-action')">
+
+  <ng-template p-list-view-content-template let-item>
+    <div class="po-row">
+      <po-info
+        class="po-md-6 po-lg-3"
+        p-label="Name"
+        [p-value]="item.name">
+      </po-info>
+
+      <po-info
+        class="po-md-6 po-lg-3"
+        p-label="Email"
+        [p-value]="item.email">
+      </po-info>
+
+      <po-info
+        class="po-md-6 po-lg-3"
+        p-label="Location"
+        [p-value]="item.location">
+      </po-info>
+
+      <po-info
+        class="po-md-6 po-lg-3"
+        p-label="Phone"
+        [p-value]="item.phone">
+      </po-info>
+    </div>
+  </ng-template>
+
+  <ng-template p-list-view-detail-template let-item>
+    <div class="po-row">
+      <po-info
+        class="po-md-6 po-lg-3"
+        p-label="Company"
+        [p-value]="item.company">
+      </po-info>
+
+      <po-info
+        class="po-md-6 po-lg-3"
+        p-label="Zip Code"
+        [p-value]="item.zipCode">
+      </po-info>
+    </div>
+  </ng-template>
+
+</po-list-view>
+
+<hr>
+
+<div class="po-row">
+  <po-button
+    class="po-md-3"
+    p-label="Add Item"
+    (p-click)="addItem()">
+  </po-button>
+</div>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Action"
+    [p-value]="titleAction">
+  </po-info>
+</div>
+
+<hr>
+
+<form #propertiesForm="ngForm">
+  <div class="po-row">
+    <po-select
+      class="po-md-6"
+      name="propertyTitle"
+      [(ngModel)]="propertyTitle"
+      p-help='Ex.: email'
+      p-label="Property title"
+      [p-options]="propertyTitleOptions">
+    </po-select>
+
+    <po-number
+      class="po-md-6"
+      name="height"
+      [(ngModel)]="height"
+      p-help="Ex.: 200"
+      p-label="Height"
+      (p-change)="changeLiterals()">
+    </po-number>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-12"
+      name="propertyLinkValue"
+      [(ngModel)]="propertyLinkValue"
+      p-help='Ex.: "http://po.portinari.com.br"'
+      p-label="Title Link">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-12"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: { "hideDetails": "Esconder detalhes", "showDetails": "Ver detalhes", "loadMoreData": "Ver mais", "noData": "Sem itens cadastrados" }'
+      p-label="Literals"
+      (p-change)="changeLiterals()">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-md-12"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="3"
+      p-label="Properties"
+      [p-options]="propertiesOptions"
+      (p-change)="changeActionOptions()">
+    </po-checkbox-group>
+  </div>
+</form>
+
+<hr>
+
+<form #actionForm="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-4"
+      name="actionAction"
+      [(ngModel)]="action.action"
+      p-clean
+      p-label="Action">
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="actionLabel"
+      [(ngModel)]="action.label"
+      p-label="Label"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="actionURL"
+      [(ngModel)]="action.url"
+      p-label="URL">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-select
+      class="po-md-3"
+      name="type"
+      [(ngModel)]="action.type"
+      p-label="Type"
+      [p-options]="typeOptions">
+    </po-select>
+
+    <po-select
+      class="po-md-3"
+      name="icon"
+      [(ngModel)]="action.icon"
+      p-label="Icon"
+      [p-options]="iconOptions">
+    </po-select>
+
+    <po-checkbox-group
+      class="po-md-6"
+      name="action"
+      [(ngModel)]="action"
+      p-columns="4"
+      p-indeterminate
+      p-label="Action properties"
+      [p-options]="actionOptions">
+    </po-checkbox-group>
+
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-6 po-lg-3"
+      p-label="Add Action"
+      [p-disabled]="actionForm.invalid"
+      (p-click)="addAction(action)">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<div class="po-row">
+  <po-button
+    class="po-md-3"
+    p-label="Sample Restore"
+    (p-click)="actionForm.reset(); restore()">
+  </po-button>
+</div>

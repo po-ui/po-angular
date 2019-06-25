@@ -1,0 +1,67 @@
+<po-calendar
+  [(ngModel)]="calendar"
+  [p-locale]="locale"
+  [p-min-date]="minDate"
+  [p-max-date]="maxDate"
+  (p-change)="changeEvent('p-change')">
+</po-calendar>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Model"
+    [p-value]="calendar">
+  </po-info>
+  <po-info
+    class="po-md-6"
+    p-label="Event"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+
+  <div class="po-row">
+    <po-datepicker
+      class="po-md-6"
+      name="minDate"
+      [(ngModel)]="minDate"
+      p-clean
+      p-label="Min Date"
+      [p-max-date]="maxDate">
+    </po-datepicker>
+
+    <po-datepicker
+      class="po-md-6"
+      name="maxDate"
+      [(ngModel)]="maxDate"
+      p-clean
+      p-label="Max Date"
+      [p-min-date]="minDate">
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-6"
+      name="locales"
+      [(ngModel)]="locale"
+      p-columns="3"
+      p-help="Select a locale for the calendar"
+      p-label="Locale"
+      [p-options]="localeOptions">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

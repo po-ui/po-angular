@@ -1,0 +1,28 @@
+<po-page-list p-title="<%= classify(name) %>" [p-actions]="actions">
+<% if(dataView === 'table') { %>
+  <po-table
+    p-container
+    p-sort="true"
+    p-striped="true"
+    [p-columns]="columns"
+    [p-items]="items"
+    [p-height]="400">
+  </po-table>
+<% } else { %>
+  <po-list-view
+    p-property-title="name"
+    [p-items]="items">
+
+    <ng-template p-list-view-content-template let-item>
+      <div class="po-row">
+        <po-info class="po-md-6" p-label="Age" [p-value]="item.age">
+        </po-info>
+
+        <po-info class="po-md-6" p-label="Email" [p-value]="item.email">
+        </po-info>
+      </div>
+    </ng-template>
+
+  </po-list-view>
+<% }%>
+</po-page-list>

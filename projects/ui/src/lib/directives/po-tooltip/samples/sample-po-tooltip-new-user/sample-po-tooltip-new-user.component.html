@@ -1,0 +1,104 @@
+<div class="po-row">
+
+  <po-widget
+    class="po-md-12"
+    p-primary-label="Cancel"
+    p-secondary-label="Confirm"
+    p-title="Register New User"
+    (p-primary-action)="cancel()"
+    (p-secondary-action)="confirm()">
+
+    <form #formNewUser="ngForm">
+      <div class="po-row">
+        <po-input
+          class="po-md-6"
+          name="registration"
+          [(ngModel)]="registration"
+          p-clean
+          p-label="Registration"
+          p-mask="99999-99/99"
+          p-minlength="11"
+          p-required
+          [p-tooltip]="registrationTooltip">
+        </po-input>
+
+        <po-email
+          class="po-md-6"
+          name="email"
+          [(ngModel)]="email"
+          p-clean
+          p-label="Email"
+          p-pattern="@portinari.com"
+          p-required
+          [p-tooltip]="emailTooltip">
+        </po-email>
+      </div>
+
+      <div class="po-row">
+        <po-input
+          class="po-md-6"
+          name="name"
+          [(ngModel)]="name"
+          p-clean
+          p-label="Name"
+          p-required
+          [p-tooltip]="nameTooltip">
+        </po-input>
+
+        <po-input
+          class="po-md-6"
+          name="CPF"
+          [(ngModel)]="CPF"
+          p-clean
+          p-label="CPF"
+          p-mask="999.999.999-99"
+          p-minlength="14"
+          p-required>
+        </po-input>
+      </div>
+
+      <div class=po-row>
+        <po-datepicker
+          class="po-md-6"
+          name="birthDate"
+          [(ngModel)]="birthDate"
+          p-clean
+          p-label="Birth Date">
+        </po-datepicker>
+
+        <po-input
+          class="po-md-6"
+          name="genre"
+          [(ngModel)]="genre"
+          p-clean
+          p-label="Genre">
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-password
+          class="po-md-6"
+          name="password"
+          [(ngModel)]="password"
+          p-clean
+          p-label="Password"
+          p-minlength="8"
+          p-required
+          [p-tooltip]="passwordTooltip">
+        </po-password>
+
+        <po-password
+          class="po-md-6"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          p-clean
+          p-label="Confirm Password"
+          p-required
+          [p-pattern]="password">
+        </po-password>
+      </div>
+    </form>
+
+  </po-widget>
+
+</div>

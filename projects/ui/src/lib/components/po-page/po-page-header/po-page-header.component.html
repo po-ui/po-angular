@@ -1,0 +1,18 @@
+<div class="po-page-header">
+  <!-- Breadcrumb -->
+  <div class="po-page-header-breadcrumb" *ngIf="breadcrumb && breadcrumb.items.length">
+    <po-breadcrumb
+      [p-favorite-service]="breadcrumb.favorite"
+      [p-items]="breadcrumb.items"
+      [p-params-service]="breadcrumb.params">
+    </po-breadcrumb>
+  </div> 
+
+  <!-- Titulo -->
+  <h1 class="po-page-header-title" *ngIf="title">
+    {{ title }}
+  </h1>
+
+  <!-- Operações -->
+  <ng-content></ng-content>
+</div>

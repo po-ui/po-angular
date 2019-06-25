@@ -1,0 +1,14 @@
+<div #chartWrapper class="po-chart-wrapper">
+  <div #chartHeader class="po-chart-header">
+    <div class="po-chart-title">{{ title }}</div>
+  </div>
+  <ng-template #chartContainer></ng-template>
+  <div #chartLegend class="po-chart-legend">
+    <div class="po-chart-legend-container">
+      <div class="po-chart-legend-item" *ngFor="let serie of series; let i = index">
+        <div class="po-chart-legend-square" [style.background]="colors[i]"></div>
+        <span class="po-chart-legend-text">{{ serie.category }}</span>
+      </div>
+    </div>
+  </div>
+</div>

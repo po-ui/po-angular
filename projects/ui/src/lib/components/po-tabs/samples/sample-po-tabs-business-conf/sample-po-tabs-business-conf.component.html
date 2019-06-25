@@ -1,0 +1,91 @@
+<po-page-default p-title="Check the speaker's list">
+
+  <po-tabs>
+    <po-tab *ngFor="let speaker of speakers"
+      p-label="{{ speaker.createdDate | date: 'MMM d' }}"
+      [p-active]="speaker.id === '1'"
+      [p-hide]="speaker.subscribe">
+      <div class="po-row po-mt-5">
+        <div class="po-offset-lg-1 po-offset-xl-1 po-lg-10">
+          <div class="po-row">
+
+            <div class="po-lg-8 po-mb-2">
+              <po-widget>
+                <div class="po-row">
+                  <div class="po-md-5 po-lg-4">
+                    <po-avatar p-size="xl" p-src="assets/graphics/{{ speaker.photo }}"></po-avatar>
+                  </div>
+                  <div class="po-md-7 po-lg-8">
+                    <div class="po-mb-2">
+                      <po-info p-label="Speaker" [p-value]="speaker.name"></po-info>
+                    </div>
+                    <div class="po-mb-2">
+                      <po-info
+                        class="po-mt-5"
+                        p-label="Email"
+                        [p-value]="speaker.email">
+                      </po-info>
+                    </div>
+                    <div class="po-mb-2">
+                      <po-info
+                        class="po-mb-5"
+                        p-label="Description"
+                        [p-value]="speaker.description">
+                      </po-info>
+                    </div>
+                  </div>
+                </div>
+              </po-widget>
+            </div>
+
+            <div class="po-lg-4 po-mb-2">
+              <po-widget p-title="Subscription">
+                <div class="po-font-subtitle po-mb-2">TFace Conference Week</div>
+                <div class="po-font-text-bold po-mb-5">From 21th September until 26th setember 2018</div>
+                <hr>
+                <div class="po-row">
+                  <div class="po-md-6 po-lg-12">
+                    <span class="po-mr-1 po-font-subtitle">
+                      <div class="po-icon po-icon-calendar"></div>
+                    </span>
+                    <span class="po-font-text po-mb-2">{{ speaker.createdDate | date: 'MM/dd/yyyy' }}</span>
+                  </div>
+                  <div class="po-md-6 po-lg-12">
+                    <span class="po-mr-1 po-font-subtitle">
+                      <div class="po-icon po-icon-pin"></div>
+                    </span>
+                    <span class="po-font-text">Av. Braz Leme, 1000, Santana</span>
+                  </div>
+                </div>
+                <div class="po-mt-5">
+                  <po-button
+                    class="po-mt-5"
+                    p-label="Subscription"
+                    (p-click)="confirmSubscription(speaker)">
+                  </po-button>
+                </div>
+              </po-widget>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </po-tab>
+  </po-tabs>
+
+  <hr class="po-offset-lg-1 po-offset-xl-1 po-lg-10 po-mt-0">
+
+  <div class="po-row">
+    <div class="po-offset-lg-1 po-offset-xl-1 po-lg-10">
+      <div class="po-row">
+        <po-button
+          class="po-offset-lg-8 po-offset-xl-8 po-lg-4"
+          p-label="Cancel Subscription"
+          [p-disabled]="disableRestoreBtn"
+          (p-click)="cancelSubscription()">
+        </po-button>
+      </div>
+    </div>
+  </div>
+
+</po-page-default>

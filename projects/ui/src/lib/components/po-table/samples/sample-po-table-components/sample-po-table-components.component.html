@@ -1,0 +1,21 @@
+<div class="po-font-text-large">Portinari Field Commom Components</div>
+
+<hr>
+
+<po-table
+  p-container="shadow"
+  [p-columns]="columns"
+  [p-items]="items">
+</po-table>
+
+<po-modal
+  p-click-out="true"
+  p-size="sm"
+  p-title="{{ title }} - {{ extraInformation?.component }}">
+
+  <ul *ngFor="let extra of extraInformation?.extras">
+    <li class="po-font-text">{{ extra }}</li>
+    <hr>
+  </ul>
+
+</po-modal>

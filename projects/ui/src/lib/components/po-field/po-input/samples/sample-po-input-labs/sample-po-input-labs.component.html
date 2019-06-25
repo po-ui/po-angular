@@ -1,0 +1,146 @@
+<po-input
+  name="input"
+  [(ngModel)]="input"
+  [p-clean]="properties?.includes('clean')"
+  [p-disabled]="properties?.includes('disabled')"
+  [p-error-pattern]="errorPattern"
+  [p-help]="help"
+  [p-icon]="icon"
+  [p-label]="label"
+  [p-mask]="mask"
+  [p-mask-format-model]="properties?.includes('maskFormatModel')"
+  [p-maxlength]="maxlength"
+  [p-minlength]="minlength"
+  [p-pattern]="pattern"
+  [p-placeholder]="placeholder"
+  [p-optional]="properties?.includes('optional')"
+  [p-required]="properties?.includes('required')"
+  [p-readonly]="properties?.includes('readonly')"
+  (p-blur)="changeEvent('p-blur')"
+  (p-change)="changeEvent('p-change')"
+  (p-change-model)="changeEvent('p-change-model')"
+  (p-enter)="changeEvent('p-enter')">
+</po-input>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Model"
+    [p-value]="input">
+  </po-info>
+
+  <po-info
+    class="po-md-6"
+    p-label="Event"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="help"
+      [(ngModel)]="help"
+      p-clean
+      p-label="Help">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="placeholder"
+      [(ngModel)]="placeholder"
+      p-clean
+      p-label="Placeholder">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="errorPattern"
+      [(ngModel)]="errorPattern"
+      p-clean
+      p-label="Error Pattern">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="mask"
+      [(ngModel)]="mask"
+      p-clean
+      p-help="Ex.: Zip code: '99999-999'; License plate: '@@@-9999'"
+      p-label="Mask">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="pattern"
+      [(ngModel)]="pattern"
+      p-clean
+      p-help="Ex.: '^(2[0-3]|[01][0-9]):?([0-5][0-9])$'"
+      p-label="Pattern (Regex)">
+    </po-input>
+  </div>
+
+
+  <div class="po-row">
+    <po-number
+      class="po-md-6"
+      name="minlength"
+      [(ngModel)]="minlength"
+      p-clean
+      p-label="Min Length">
+    </po-number>
+
+    <po-number
+      class="po-md-6"
+      name="maxlength"
+      [(ngModel)]="maxlength"
+      p-clean
+      p-label="Max Length">
+    </po-number>
+  </div>
+
+  <div class="po-row">
+    <po-select
+      class="po-lg-6"
+      name="icon"
+      [(ngModel)]="icon"
+      p-clean
+      p-label="Icon"
+      [p-options]="iconOptions">
+    </po-select>
+
+    <po-checkbox-group
+      class="po-lg-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="3"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="f.reset(); this.restore()">
+    </po-button>
+  </div>
+</form>

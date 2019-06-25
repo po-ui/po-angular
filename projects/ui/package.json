@@ -1,0 +1,29 @@
+{
+  "name": "@portinari/portinari-ui",
+  "version": "0.0.0-PLACEHOLDER",
+  "tag": "dev",
+  "description": "PORTINARI HTML Framework - UI",
+  "author": "Portinari",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://portinaritfs.visualstudio.com/_git/po"
+  },
+  "schematics": "./schematics/collection.json",
+  "dependencies": {
+    "@portinari/style": "0.0.0-PLACEHOLDER"
+  },
+  "peerDependencies": {
+    "@angular/animations": "~8.0.0",
+    "@angular/common": "~8.0.0",
+    "@angular/compiler": "~8.0.0",
+    "@angular/core": "~8.0.0",
+    "@angular/forms": "~8.0.0",
+    "@angular/platform-browser": "~8.0.0",
+    "@angular/platform-browser-dynamic": "~8.0.0",
+    "@angular/router": "~8.0.0",
+    "@portinari/style": "0.0.0-PLACEHOLDER",
+    "rxjs": "~6.4.0",
+    "zone.js": "~0.9.1"
+  }
+}

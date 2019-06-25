@@ -1,0 +1,114 @@
+
+<div
+  [class.po-list-view-main-container-header]="showHeader"
+  [class.po-list-view-main-container]="!showHeader"
+  [style.height.px]="height">
+
+  <div *ngIf="showHeader" class="po-list-view-main-header">
+    <div class="po-checkbox-group-item">
+      <div class="po-list-view-main-select">
+        <input class="po-input po-checkbox-group-input" type="checkbox"
+          [class.po-checkbox-group-input-checked]="selectAll"
+          [class.po-checkbox-group-input-indeterminate]="selectAll === null">
+        <label
+          class="po-checkbox-group-label po-clickable"
+          (click)="selectAllListItems()">
+          {{ literals.selectAll }}
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="po-list-view-main-content">
+    <div class="po-list-view" *ngIf="!hasItems()">
+      <div class="po-list-view-container-no-data po-text-center">
+        <span> {{ literals.noData }} </span>
+      </div>
+    </div>
+
+    <ng-container *ngFor="let item of items; let index = index; trackBy: trackBy">
+      <div class="po-list-view">
+        <div class="po-list-view-container">
+          <div class="po-list-view-header">
+            <div class="po-list-view-title" [ngSwitch]="checkTitleType(item)">
+              <div *ngIf="select" class="po-list-view-select">
+                <input class="po-input po-checkbox-group-input" type="checkbox"
+                  [class.po-checkbox-group-input-checked]="item.$selected">
+                <label class="po-checkbox-group-label po-clickable" (click)="selectListItem(item)"></label>
+              </div>
+              <a *ngSwitchCase="'externalLink'"
+                class="po-list-view-title-link"
+                target="_blank"
+                [href]="item[propertyLink]"
+                (click)="runTitleAction(item)">
+                {{ getItemTitle(item) }}
+              </a>
+              <a *ngSwitchCase="'internalLink'"
+                class="po-list-view-title-link"
+                [routerLink]="item[propertyLink]"
+                (click)="runTitleAction(item)">
+                {{ getItemTitle(item) }}
+              </a>
+              <span *ngSwitchCase="'noLink'"
+                class="po-list-view-title-no-link"
+                [class.po-list-view-title-link]="titleHasAction"
+                (click)="titleHasAction && runTitleAction(item)">
+                {{ getItemTitle(item) }}
+              </span>
+            </div>
+
+            <div *ngIf="showButtonsActions" class="po-list-view-actions">
+              <po-button *ngFor="let action of visibleActions"
+                p-small="true"
+                [p-disabled]="returnBooleanValue(action, item)"
+                [p-icon]="action.icon"
+                [p-label]="action.label"
+                [p-type]="action.type"
+                (p-click)="onClickAction(action, item)">
+              </po-button>
+            </div>
+
+            <div *ngIf="showPopupActions" class="po-list-view-more-actions">
+              <span #popupTarget
+                class="po-icon po-icon-more po-list-view-more-icon po-clickable"
+                (click)="togglePopup(item, popupTarget)">
+              </span>
+            </div>
+
+          </div>
+
+          <div *ngIf="hasContentTemplate" class="po-list-view-content">
+            <ng-template
+              [ngTemplateOutlet]="listViewContentTemplate.templateRef"
+              [ngTemplateOutletContext]="{ $implicit: item, index: index }">
+            </ng-template>
+          </div>
+
+          <div @showHideDetail *ngIf="hasDetailTemplate && item.$showDetail" class="po-list-view-detail">
+            <ng-template
+              [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
+              [ngTemplateOutletContext]="{ $implicit: item, index: index }">
+            </ng-template>
+          </div>
+        </div>
+
+        <div *ngIf="hasDetailTemplate" class="po-list-view-detail-button">
+          <span class="po-clickable" (click)="item.$showDetail = !item.$showDetail">
+            {{ item.$showDetail ? literals.hideDetails : literals.showDetails }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<div *ngIf="displayShowMoreButton" class="po-mb-2 po-text-center">
+  <po-button
+    [p-disabled]="showMoreDisabled"
+    [p-label]="literals.loadMoreData"
+    (p-click)="onShowMore()">
+  </po-button>
+</div>
+
+<po-popup #popup [p-actions]="actions" [p-target]="popupTarget">
+</po-popup>

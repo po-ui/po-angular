@@ -1,0 +1,158 @@
+<po-table
+  [p-actions]="actions"
+  [p-checkbox]="selection.includes('checkbox')"
+  [p-columns]="columns"
+  [p-container]="container"
+  [p-height]="height"
+  [p-hide-detail]="properties.includes('hideDetail')"
+  [p-hide-select-all]="selection.includes('hideSelectAll')"
+  [p-hide-text-overflow]="properties.includes('hideTextOverflow')"
+  [p-items]="items"
+  [p-literals]="customLiterals"
+  [p-loading]="properties.includes('loading')"
+  [p-show-more-disabled]="!properties.includes('showMoreDisabled')"
+  [p-single-select]="selection.includes('singleSelect')"
+  [p-sort]="properties.includes('sort')"
+  [p-striped]="properties.includes('striped')"
+  (p-all-selected)="changeEvent('p-all-selected')"
+  (p-all-unselected)="changeEvent('p-all-unselected')"
+  (p-selected)="changeEvent('p-selected')"
+  (p-show-more)="showMore()"
+  (p-unselected)="changeEvent('p-unselected')">
+</po-table>
+
+<po-divider></po-divider>
+
+<div class="po-row">
+  <po-info
+    class="po-md-12"
+    p-label="Event"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<po-divider></po-divider>
+
+<div class="po-row">
+  <po-button
+    class="po-md-3"
+    p-label="Add Item"
+    (p-click)="addItem()">
+  </po-button>
+</div>
+
+<po-divider></po-divider>
+
+<form #f="ngForm">
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-md-12"
+      name="columnsName"
+      [(ngModel)]="columnsName"
+      p-label="Columns"
+      p-columns="4"
+      [p-options]="columnsOptions"
+      (p-change)="updateColumns()">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-lg-6"
+      name="typeHeader"
+      [(ngModel)]="columnsDefinition.detail.detail.typeHeader"
+      p-label="Column detail typeHeader"
+      [p-options]="typeHeaderOptions">
+    </po-radio-group>
+
+    <po-switch
+      class="po-lg-6"
+      name="hideSelect"
+      [(ngModel)]="columnsDefinition.detail.detail.hideSelect"
+      p-label="Column detail hideSelect">
+    </po-switch>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-lg-12"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-number
+      class="po-md-3"
+      name="height"
+      [(ngModel)]="height"
+      p-clean
+      p-help="Height of table"
+      p-label="Height">
+    </po-number>
+
+    <po-input
+      class="po-md-9"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"noData": "Sem dados a serem exibidos", "noColumns": "Colunas não definidas"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-lg-12"
+      name="actionsDefinition"
+      [(ngModel)]="actionsDefinition"
+      p-columns="4"
+      p-indeterminate
+      p-label="Actions"
+      [p-options]="actionsDefinitionOptions"
+      (p-change)="changeActionOptions()">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-lg-6"
+      name="selection"
+      [(ngModel)]="selection"
+      p-label="Selection"
+      [p-options]="selectionOptions"
+      (p-change)="changeSelectionOptions()">
+    </po-checkbox-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="container"
+      [(ngModel)]="container"
+      p-label="Container"
+      [p-options]="containerOptions">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+
+</form>
+
+<po-modal
+  p-click-out="true"
+  p-size="sm"
+  p-title="Portinari Table">
+
+  <po-info
+    p-label="Chosen Item:"
+    [p-value]="currentItem">
+  </po-info>
+</po-modal>
