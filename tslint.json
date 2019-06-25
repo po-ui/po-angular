@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "@portinari/tslint"
+  ],
+  "rules": {
+    "no-identical-functions": false,
+    "object-literal-key-quotes": false,
+    "only-arrow-functions": false,
+    "object-literal-shorthand": false,
+    "ban-types": false,
+    "max-classes-per-file": false,
+    "prefer-for-of": false,
+    "cognitive-complexity": false,
+    "no-big-function": false,
+    "no-hardcoded-credentials": false,
+    "no-empty-destructuring": false,
+    "no-commented-code": false,
+    "no-duplicated-branches": false,
+    "max-union-size": false
+  }
+}

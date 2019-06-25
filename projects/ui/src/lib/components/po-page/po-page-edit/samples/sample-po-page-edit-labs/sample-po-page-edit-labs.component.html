@@ -1,0 +1,134 @@
+<po-page-edit
+  [p-breadcrumb]="breadcrumb"
+  [p-disable-submit]="properties.includes('disableSubmit')"
+  [p-literals]="customLiterals"
+  [p-title]="title">
+
+  <div class="po-row">
+    <po-info
+      class="po-md-12"
+      p-label="Action"
+      [p-value]="action">
+    </po-info>
+  </div>
+
+  <hr>
+
+  <form>
+    <div class="po-row">
+      <po-input
+        class="po-md-6"
+        name="title"
+        [(ngModel)]="title"
+        p-label="Title">
+      </po-input>
+
+      <po-checkbox-group
+        class="po-md-6"
+        name="properties"
+        [(ngModel)]="properties"
+        p-label="Properties"
+        [p-options]="propertiesOptions">
+      </po-checkbox-group>
+    </div>
+
+    <hr>
+
+    <form #formBreadcrumbFavorite="ngForm">
+      <div class="po-row">
+        <po-input
+          class="po-lg-6"
+          name="breadcrumbFavorite"
+          [(ngModel)]="breadcrumb.favorite"
+          p-clean
+          p-help="https://portinari.io/sample/api/favorite"
+          p-label="Breadcrumb favorite">
+        </po-input>
+      </div>
+    </form>
+
+    <form #formBreadcrumbItems="ngForm">
+      <div class="po-row">
+        <po-input
+          class="po-md-6"
+          name="breadcrumbItemLabel"
+          [(ngModel)]="breadcrumbItem.label"
+          p-clean
+          p-label="Breadcrumb item label"
+          p-required>
+        </po-input>
+
+        <po-input
+          class="po-md-6"
+          name="breadcrumbItemLink"
+          [(ngModel)]="breadcrumbItem.link"
+          p-clean
+          p-label="Breadcrumb item link"
+          p-required>
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-button
+          class="po-md-6 po-lg-4"
+          p-label="Add breadcrumb item"
+          [p-disabled]="formBreadcrumbItems.invalid"
+          (p-click)="addBreadcrumbItem()">
+        </po-button>
+      </div>
+    </form>
+
+    <hr>
+
+    <form #formBreadcrumbParams="ngForm">
+      <div class="po-row">
+        <po-input
+          class="po-md-6"
+          name="breadcrumbParamsProperty"
+          [(ngModel)]="breadcrumbParams.property"
+          p-clean
+          p-label="Breadcrumb params property"
+          p-required>
+        </po-input>
+
+        <po-input
+          class="po-md-6"
+          name="breadcrumbParamsValue"
+          [(ngModel)]="breadcrumbParams.value"
+          p-clean
+          p-label="Breadcrumb params value"
+          p-required>
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-button
+          class="po-md-6 po-lg-4"
+          p-label="Add breadcrumb params"
+          [p-disabled]="formBreadcrumbParams.invalid"
+          (p-click)="addBreadcrumbParam()">
+        </po-button>
+      </div>
+    </form>
+
+    <div class="po-row">
+      <po-input
+        class="po-lg-12"
+        name="literals"
+        [(ngModel)]="literals"
+        p-help='Ex.: {"cancel": "Voltar", "save": "Confirmar", "saveNew": "Confirmar e criar um novo"}'
+        p-label="Literals"
+        (p-change)="changeLiterals()">
+      </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-button
+        class="po-md-3"
+        p-label="Sample Restore"
+        (p-click)="restore()">
+      </po-button>
+    </div>
+  </form>
+
+</po-page-edit>

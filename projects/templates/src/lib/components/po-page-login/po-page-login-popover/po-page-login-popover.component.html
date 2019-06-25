@@ -1,0 +1,41 @@
+<div class="po-page-login-popover-container">
+  <div class="po-page-login-popover">
+    <div class="po-page-login-popover-arrow"></div>
+    <div class="po-page-login-popover-content">
+      <p class="po-font-text-bold po-page-login-popover-title">
+        {{ literals?.titlePopover }}
+      </p>
+      <p class="po-font-text">
+        {{ literals?.forgotYourPassword }}
+      </p>
+      <p class="po-font-text">
+        {{ literals?.ifYouTryHarder }}
+        <span class="po-font-text-bold po-page-login-popover-attempts">
+          {{ literals?.attempts | poI18n:literalParams }}
+        </span>{{ literals?.yourUserWillBeBlocked }}
+      </p>
+      <br>
+      <p class="po-font-text">
+        {{ literals?.createANewPasswordNow }}
+      </p>
+      <div *ngIf="recovery" class="po-font-text-bold po-mt-1 po-page-login-popover-link-container">
+        <a *ngIf="recoveryType === 'internalLink'"
+          class="po-page-login-popover-link"
+          [routerLink]="recovery">
+          {{ literals?.iForgotMyPassword }}
+        </a>
+        <a *ngIf="recoveryType === 'externalLink'"
+          class="po-page-login-popover-link"
+          [href]="recovery"
+          target="_blank">
+          {{ literals?.iForgotMyPassword }}
+        </a>
+        <a *ngIf="!recoveryType"
+          class="po-page-login-popover-link"
+          (click)="onForgotPasswordClick(recovery)">
+          {{ literals?.iForgotMyPassword }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

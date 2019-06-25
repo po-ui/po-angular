@@ -1,0 +1,195 @@
+<po-combo
+  class="po-md-12"
+  name="combo"
+  [(ngModel)]="combo"
+  [p-change-on-enter]="properties.includes('changeOnEnter')"
+  [p-debounce-time]="debounceTime"
+  [p-disabled]="properties.includes('disabled')"
+  [p-disabled-init-filter]="properties.includes('disableInitFilter')"
+  [p-field-label]="fieldLabel"
+  [p-field-value]="fieldValue"
+  [p-filter-minlength]="filterMinlength"
+  [p-filter-mode]="filterMode"
+  [p-filter-service]="filterService"
+  [p-help]="help"
+  [p-icon]="icon"
+  [p-label]="label"
+  [p-literals]="customLiterals"
+  [p-optional]="properties.includes('optional')"
+  [p-options]="options"
+  [p-placeholder]="placeholder"
+  [p-required]="properties.includes('required')"
+  [p-sort]="properties.includes('sort')"
+  (p-change)="changeEvent('p-change')">
+</po-combo>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Model"
+    [p-value]="combo">
+  </po-info>
+
+  <po-info
+    class="po-md-6"
+    p-label="Event"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #fOption="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="optionLabel"
+      [(ngModel)]="option.label"
+      p-label="Option Label"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="optionValue"
+      [(ngModel)]="option.value"
+      p-label="Option Value"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-6 po-lg-3"
+      p-label="Add Option"
+      [p-disabled]="fOption.form.invalid"
+      (p-click)="addOption()">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-4"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label">
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="help"
+      [(ngModel)]="help"
+      p-clean
+      p-label="Help">
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="placeholder"
+      [(ngModel)]="placeholder"
+      p-clean
+      p-label="Placeholder">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-lg-4"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="2"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+
+    <po-radio-group
+      class="po-md-6 po-lg-4"
+      name="icon"
+      [(ngModel)]="icon"
+      p-columns="1"
+      p-label="Icon"
+      [p-options]="iconsOptions">
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-6 po-lg-4"
+      name="filterMode"
+      [(ngModel)]="filterMode"
+      p-columns="1"
+      p-label="Filter Mode"
+      [p-options]="filterModeOptions">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="filterService"
+      [(ngModel)]="filterService"
+      p-clean
+      p-help="https://portinari.io/sample/api/comboOption/heroes"
+      p-label="Filter Service">
+    </po-input>
+
+    <po-input
+      class="po-lg-6"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"noData": "Sem dados a serem exibidos"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()">
+    </po-input>
+
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="fieldValue"
+      [(ngModel)]="fieldValue"
+      p-clean
+      p-label="Field Value">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="fieldLabel"
+      [(ngModel)]="fieldLabel"
+      p-clean
+      p-label="Field Label">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-number
+      class="po-md-6"
+      name="debounceTime"
+      [(ngModel)]="debounceTime"
+      p-clean
+      p-label="Debounce Time">
+    </po-number>
+
+    <po-number
+      class="po-md-6"
+      name="filterMinlength"
+      [(ngModel)]="filterMinlength"
+      p-clean
+      p-label="Filter Min Length">
+    </po-number>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

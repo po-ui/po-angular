@@ -1,0 +1,24 @@
+<!-- menu com link interno -->
+<a *ngIf="menuItemInternal.type === 'internalLink'" [routerLink]="menuItemInternal.link">
+  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+</a>
+
+<!-- menu com link externo -->
+<a *ngIf="menuItemInternal.type === 'externalLink'" [href]="menuItemInternal.link">
+  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+</a>
+
+<!-- menu sem link -->
+<a *ngIf="menuItemInternal.type === 'noLink'" href="javascript:;">
+  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+</a>
+
+<ng-template #menuItemTemplate>
+  <div class="po-menu-panel-item"
+    p-tooltip-position="right"
+    [class.po-menu-panel-item-selected]="menuItemInternal.isSelected"
+    [p-tooltip]="menuItemInternal.label"
+    (click)="clickMenuItem($event);">
+    <span class="po-icon {{menuItemInternal.icon}}"></span>
+  </div>
+</ng-template>

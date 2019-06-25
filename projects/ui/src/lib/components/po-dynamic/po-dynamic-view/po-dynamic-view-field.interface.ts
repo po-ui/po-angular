@@ -1,0 +1,43 @@
+import { PoDynamicField } from '../po-dynamic-field.interface';
+
+/**
+ * @usedBy PoDynamicViewComponent
+ *
+ * @docsExtends PoDynamicField
+ *
+ * @description
+ *
+ * Interface para definição das propriedades dos campos de visualização que serão criados dinamicamente.
+ */
+export interface PoDynamicViewField extends PoDynamicField {
+
+  /**
+   * Indica se o campo será um `po-tag`.
+   *
+   * @default `false`
+   */
+  tag?: boolean;
+
+  /**
+   * Formato de exibição do valor do campo.
+   *
+   * Aplicado para casos específicos de acordo com o tipo do campo.
+   *
+   * **types**:
+   * - `currency`: Aceita valores definidos para a propriedade `currencyCode` do
+   *  [**CurrencyPipe**](https://angular.io/api/common/CurrencyPipe)
+   * + Exemplos: 'BRL', 'USD'.
+   * - `date`: Aceita valores definidos para a propriedade `format` do [**DatePipe**](https://angular.io/api/common/DatePipe)
+   * e também aceita os caracteres de dia(dd), mês(MM ou mm) e ano (yyyy ou yy),
+   * caso não seja informado um formato o mesmo será 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
+   * - `time`: Aceita apenas os caracteres de hora(HH), minutos(mm), segundos(ss) e
+   *  milisegundos(f-ffffff), os milisegundos são opcionais, caso não seja informado um formato o mesmo será
+   * 'HH:mm:ss'. Exemplos: 'HH:mm', 'HH:mm:ss.ffffff', 'HH:mm:ss.ff', 'mm:ss.fff'.
+   * - `number`: Aceita valores definidos para a propriedade `digitsInfo` do [**DecimalPipe**](https://angular.io/api/common/DecimalPipe)
+   *  para formatação, e caso não seja informado, o número será exibido na sua forma original.
+   *
+   *  + Exemplo: com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`.
+   */
+  format?: string;
+
+}

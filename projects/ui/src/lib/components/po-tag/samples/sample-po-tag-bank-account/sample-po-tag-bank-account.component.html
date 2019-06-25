@@ -1,0 +1,90 @@
+<po-page-default p-title="Bank Statement">
+
+  <div class="po-mt-1 po-lg-7">
+    <po-widget class="po-md-12 po-sm-mb-1 po-mb-1 po-lg-mb-1" p-title="User information">
+      <div class="po-row">
+        <div class="po-md-5 po-lg-4">
+          <po-avatar p-size="xl" p-src="assets/graphics/{{ userData.photo }}"></po-avatar>
+        </div>
+        <div class="po-md-7 po-lg-8">
+          <div class="po-mb-2">
+            <po-info
+              p-label="Name"
+              [p-value]="userData.name">
+            </po-info>
+            <po-tag p-value="Premium Account" (p-click)="openModal()">
+            </po-tag>
+          </div>
+          <div class="po-mb-2">
+            <po-info
+              class="po-mt-5"
+              p-label="Email"
+              [p-value]="userData.email">
+            </po-info>
+          </div>
+        </div>
+      </div>
+    </po-widget>
+
+    <po-widget class="po-md-12 po-sm-mt-1 po-mt-1 po-lg-mt-1" p-title="My Investiments">
+      <div class="po-row">
+        <po-tag *ngFor="let investiment of investiments"
+          class="po-md-6 po-lg-3"
+          [p-label]="investiment.label"
+          [p-type]="investiment.type"
+          [p-value]="investiment.value">
+        </po-tag>
+      </div>
+    </po-widget>
+  </div>
+  <po-widget p-title="Last three month operations" class="po-mt-1 po-lg-5">
+    <po-tabs>
+      <po-tab *ngFor="let item of items"
+        p-active
+        p-label="{{ item.month }}">
+        <po-widget class="po-lg-12 po-sm-mb-1 po-mb-1 po-lg-mb-1" *ngFor="let item of item.details">
+          <div class="po-row">
+            <po-info
+              class="po-lg-9 po-md-8"
+              p-label-size="6"
+              p-orientation="horizontal"
+              [p-label]="item.label"
+              [p-value]="item.value">
+            </po-info>
+            <po-tag
+              class="po-lg-3 po-md-4"
+              p-icon
+              p-orientation="horizontal"
+              [p-type]="item.type"
+              [p-value]="item.text">
+            </po-tag>
+          </div>
+        </po-widget>
+      </po-tab>
+    </po-tabs>
+  </po-widget>
+</po-page-default>
+
+<po-modal #modal
+  p-title="Exclusive Premium features">
+  <po-divider p-label="Check your advantages"></po-divider>
+  <div class="po-mb-5">
+    <p *ngFor="let item of advantages" class="po-font-text po-pb-1">
+      <span class="po-icon po-icon-ok po-pr-2"></span>
+      <span class="po-font-text-bold">{{ item.title }}</span>
+      {{ item.description }}
+    </p>
+  </div>
+  <po-divider p-label="Contact infos"></po-divider>
+  <div class="po-row">
+    <div class="po-text-center po-md-6">
+      <p class="po-font-text-bold">Contact your assessor by phone...</p>
+      <h2 class="po-font-subtitle">0800-999-9999</h2>
+    </div>
+    <div class="po-text-center po-md-6">
+      <p class="po-font-text-bold">...or by email.</p>
+      <h2 class="po-font-subtitle">support@company.com</h2>
+    </div>
+    <small class="po-font-text-small po-text-center po-mt-2 po-md-12">*Support 24x7</small>
+  </div>
+</po-modal>

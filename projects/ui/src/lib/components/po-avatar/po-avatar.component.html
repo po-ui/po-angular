@@ -1,0 +1,11 @@
+<div class="po-avatar po-avatar-{{ size }}">
+  <ng-container *ngIf="src; then sourceImage; else defaultIcon"></ng-container>
+</div>
+
+<ng-template #sourceImage>
+  <img class="po-avatar-image" [src]="src" alt="" (error)="onError()">
+</ng-template>
+
+<ng-template #defaultIcon>
+  <span class="po-icon po-icon-user po-avatar-default-icon"></span>
+</ng-template>

@@ -1,0 +1,4 @@
+<po-page-detail p-title="<%= classify(name) %>">
+
+  <!-- BUILD YOUR DATA VIEW HERE -->
+</po-page-detail>

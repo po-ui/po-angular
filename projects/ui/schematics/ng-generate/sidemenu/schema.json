@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsPOSidemenu",
+  "title": "Sidemenu Options Schema",
+  "type": "object",
+  "properties": {
+    "style": {
+      "description": "The file extension or preprocessor to use for style files.",
+      "type": "string",
+      "default": "css",
+      "enum": [
+        "css",
+        "scss",
+        "less",
+        "styl"
+      ]
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "appName": {
+      "type": "string",
+      "description": "The name of application",
+      "default": "AppName"
+    },
+    "skipTests": {
+      "description": "When true, does not create \"spec.ts\" test files for the app.",
+      "type": "boolean",
+      "default": false
+    }
+   },
+  "required": [ ]
+}

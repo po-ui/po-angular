@@ -1,0 +1,49 @@
+
+<div class="po-row">
+  <po-info
+    class="po-lg-6"
+    p-label="New mission found"
+    p-value="Objective: Stop an asteroid collision on Earth" >
+  </po-info>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-lookup
+      class="po-md-6"
+      name="hero"
+      [(ngModel)]="hero"
+      p-field-label="label"
+      p-field-value="label"
+      p-help="Select hero for mission"
+      p-label="Hero"
+      p-required
+      [p-columns]="columns"
+      [p-field-format]="fieldFormat"
+      [p-filter-service]="service"
+      [p-literals]="{'modalTitle' : 'Heroes available for mission'}">
+    </po-lookup>
+
+    <po-select
+      class="po-md-6"
+      name="vehicle"
+      [(ngModel)]="vehicle"
+      p-help="Select a vehicle for the hero"
+      p-label="Vehicle"
+      p-placeholder="None"
+      [p-options]="vehicles">
+    </po-select>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-6"
+      p-label="Start Mission"
+      [p-disabled]="f.form.invalid"
+      (p-click)="startMission()">
+    </po-button>
+  </div>
+
+</form>

@@ -1,0 +1,18 @@
+<div class="po-menu-panel">
+  <div class="po-menu-panel-logo-container">
+    <a href="./">
+      <div class="po-menu-panel-logo"></div>
+    </a>
+  </div>
+
+  <nav class="po-menu-panel-container">
+    <div class="po-menu-panel-inner">
+      <div *ngFor="let menu of menus, let menuIndex = index;" class="po-menu-panel-item-wrapper">
+        <po-menu-panel-item
+          [class.po-menu-panel-item-first]="menuIndex === 0"
+          [p-menu-item-internal]="menu">
+        </po-menu-panel-item>
+      </div>
+    </div>
+  </nav>
+</div>

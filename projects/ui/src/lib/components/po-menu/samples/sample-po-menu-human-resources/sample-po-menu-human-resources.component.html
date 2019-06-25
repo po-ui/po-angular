@@ -1,0 +1,20 @@
+<div class="po-wrapper">
+  <po-menu
+    p-collapsed
+    p-filter
+    [p-menus]="menus"
+    [p-service]="samplePoMenuHumanResourcesService">
+
+    <div *p-menu-header-template class="po-p-2 po-font-title sample-menu-header-text-color">
+      <p> Welcome, </p>
+      <p>
+        <b> John Doe </b>
+      </p>
+    </div>
+
+  </po-menu>
+
+  <po-toolbar p-title="PO - Human Resources" [p-show-notification]="false"></po-toolbar>
+
+  <po-page-default [p-title]="menuItemSelected"></po-page-default>
+</div>

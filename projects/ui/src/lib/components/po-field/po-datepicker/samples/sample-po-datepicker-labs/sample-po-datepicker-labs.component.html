@@ -1,0 +1,138 @@
+<po-datepicker
+  class="po-sm-12"
+  name="datepicker"
+  [(ngModel)]="datepicker"
+  [p-clean]="properties.includes('clean')"
+  [p-disabled]="properties.includes('disabled')"
+  [p-max-date]="maxDate"
+  [p-error-pattern]="errorPattern"
+  [p-format]="format"
+  [p-help]="help"
+  [p-label]="label"
+  [p-locale]="locale"
+  [p-placeholder]="placeholder"
+  [p-optional]="properties.includes('optional')"
+  [p-readonly]="properties.includes('readonly')"
+  [p-required]="properties.includes('required')"
+  [p-min-date]="minDate"
+  (p-blur)="changeEvent('p-blur')"
+  (p-change)="changeEvent('p-change')">
+</po-datepicker>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Model"
+    [p-value]="datepicker">
+  </po-info>
+
+  <po-info
+    class="po-md-6"
+    p-label="Event"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="help"
+      [(ngModel)]="help"
+      p-clean
+      p-label="Help">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="placeholder"
+      [(ngModel)]="placeholder"
+      p-clean
+      p-label="Placeholder">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="errorPattern"
+      [(ngModel)]="errorPattern"
+      p-clean
+      p-label="Error Pattern">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-datepicker
+      class="po-md-6"
+      name="minDate"
+      [(ngModel)]="minDate"
+      p-clean
+      p-label="Min date"
+      [p-max-date]="maxDate"
+      [p-format]="format">
+    </po-datepicker>
+
+    <po-datepicker
+      class="po-md-6"
+      name="maxDate"
+      [(ngModel)]="maxDate"
+      p-clean
+      p-label="Max date"
+      [p-format]="format"
+      [p-min-date]="minDate">
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-sm-12"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="4"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-6"
+      name="format"
+      [(ngModel)]="format"
+      p-columns="3"
+      p-label="Format"
+      [p-options]="formatOptions">
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-6"
+      name="locale"
+      [(ngModel)]="locale"
+      p-columns="3"
+      p-label="Locale"
+      [p-options]="localeOptions">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      name="restore"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

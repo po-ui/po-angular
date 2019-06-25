@@ -1,0 +1,28 @@
+{
+  "name": "@portinari/portinari-code-editor",
+  "version": "0.0.0-PLACEHOLDER",
+  "tag": "dev",
+  "description": "PORTINARI HTML Framework - Code Editor",
+  "author": "Portinari",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://portinaritfs.visualstudio.com/_git/po"
+  },
+  "dependencies": {
+    "@portinari/portinari-ui": "0.0.0-PLACEHOLDER",
+    "monaco-editor": "0.15.6",
+    "core-js": "^2.6.0",
+    "intl": "^1.2.5",
+    "uuid": "^3.3.2"
+  },
+  "peerDependencies": {
+    "@angular/common": "~8.0.0",
+    "@angular/core": "~8.0.0",
+    "@angular/forms": "~8.0.0",
+    "@portinari/portinari-ui": "0.0.0-PLACEHOLDER",
+    "monaco-editor": "0.15.6",
+    "zone.js": "~0.9.1"
+
+  }
+}

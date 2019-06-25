@@ -1,0 +1,11 @@
+<div class="po-toolbar-notification po-clickable" (click)="popup.toggle()">
+  <span #notification class="po-icon po-icon-notification po-toolbar-icon"></span>
+  <div *ngIf="notificationNumber" class="po-toolbar-notification-badge">
+    {{ notificationNumber }}
+  </div>
+</div>
+
+<po-popup #popup
+  [p-actions]="notificationActions"
+  [p-target]="notification">
+</po-popup>

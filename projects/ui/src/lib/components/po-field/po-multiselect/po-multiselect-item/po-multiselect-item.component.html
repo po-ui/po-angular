@@ -1,0 +1,16 @@
+<li [value]="option?.value"
+  (click)="itemClicked()"
+  [class.po-multiselect-item-selected]="selected">
+
+  <a class="po-multiselect-item">
+    <input
+      [checked]="selected"
+      class="po-multiselect-checkbox-input"
+      [class.po-multiselect-checkbox-input-checked]="selected"
+      type="checkbox">
+
+    <label class="po-multiselect-checkbox-label po-clickable">
+      {{ option?.label }}
+    </label>
+  </a>
+</li>

@@ -1,0 +1,10 @@
+<div class="po-field-container">
+  <div class="po-field-container-title">
+    <span class="po-field-title">{{ label }}</span>
+    <span class="po-field-optional" *ngIf="optional && (label || help)">{{ getOptionalText() }}</span>
+  </div>
+
+  <div class="po-field-help" *ngIf="help">{{ help }}</div>
+
+  <ng-content></ng-content>
+</div>

@@ -1,0 +1,38 @@
+<div #profileElement class="po-toolbar-profile po-clickable" (click)="popup.toggle()">
+  <ng-container *ngIf="profile.avatar; then avatar; else userIcon"></ng-container>
+</div>
+
+<po-popup #popup
+  [p-actions]="profileActions"
+  [p-target]="profileElement">
+
+  <div p-popup-header-template
+    *ngIf="profile?.title"
+    class="po-toolbar-profile-item-header">
+
+    <po-avatar
+      class="po-toolbar-profile-item-avatar"
+      p-size="sm"
+      [p-src]="profile.avatar || defaultAvatar">
+    </po-avatar>
+
+    <div>
+      <div class="po-toolbar-profile-item-header-title">
+        {{ profile.title }}
+      </div>
+
+      <div *ngIf="profile.subtitle" class="po-toolbar-profile-item-header-subtitle">
+        {{ profile.subtitle }}
+      </div>
+    </div>
+  </div>
+
+</po-popup>
+
+<ng-template #avatar>
+  <po-avatar p-size="xs" [p-src]="profile.avatar"></po-avatar>
+</ng-template>
+
+<ng-template #userIcon>
+  <span class="po-icon po-icon-user po-toolbar-icon"></span>
+</ng-template>

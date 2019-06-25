@@ -1,0 +1,112 @@
+<po-decimal
+  class="po-md-12"
+  name="decimal"
+  [(ngModel)]="decimal"
+  [p-clean]="properties.includes('clean')"
+  [p-decimals-length]="decimalsLength"
+  [p-disabled]="properties.includes('disabled')"
+  [p-help]="help"
+  [p-icon]="icon"
+  [p-label]="label"
+  [p-optional]="properties.includes('optional')"
+  [p-placeholder]="placeholder"
+  [p-readonly]="properties.includes('readonly')"
+  [p-required]="properties.includes('required')"
+  [p-thousand-maxlength]="thousandMaxlength"
+  (p-blur)="changeEvent('p-blur')"
+  (p-change)="changeEvent('p-change')"
+  (p-change-model)="changeEvent('p-change-model')">
+</po-decimal>
+
+<hr>
+
+<div class="po-row">
+  <po-info
+    class="po-md-6"
+    p-label="Model"
+    [p-value]="decimal">
+  </po-info>
+  <po-info
+    class="po-md-6"
+    p-label="Event"
+    [p-value]="event">
+  </po-info>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="help"
+      [(ngModel)]="help"
+      p-clean
+      p-label="Help">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-number
+      class="po-md-6"
+      name="decimalsLength"
+      [(ngModel)]="decimalsLength"
+      p-clean
+      p-label="Decimals max length">
+    </po-number>
+
+    <po-number
+      class="po-md-6"
+      name="thousandMaxlength"
+      [(ngModel)]="thousandMaxlength"
+      p-clean
+      p-label="Thousand max length">
+    </po-number>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="placeholder"
+      [(ngModel)]="placeholder"
+      p-clean
+      p-label="Placeholder">
+    </po-input>
+
+    <po-select
+      class="po-md-6"
+      name="icon"
+      [(ngModel)]="icon"
+      p-clean
+      p-label="Icon"
+      [p-options]="iconOptions">
+    </po-select>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-md-12"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="4"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+</form>

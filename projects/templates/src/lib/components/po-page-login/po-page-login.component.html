@@ -1,0 +1,157 @@
+<po-page-background #pageLogin
+  p-show-select-language
+  [p-background]="background"
+  [p-highlight-info]="literals.highlightInfo"
+  [p-logo]="logo"
+  [p-secondary-logo]="secondaryLogo"
+  (p-selected-language)="onSelectedLanguage($event)">
+
+  <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+    <div class="po-page-login-header-title po-mb-sm-1">{{ literals.title }}</div>
+    <po-tag
+      *ngIf="environment"
+      p-type="warning"
+      [p-value]="environment">
+    </po-tag>
+  </div>
+
+  <form #loginForm="ngForm" class="po-page-login-form">
+    <div class="po-row">
+      <div class="po-lg-12">
+        <div class="po-page-login-hint po-page-login-info-container">
+          <po-login
+            class="po-page-login-info-field"
+            name="login"
+            [(ngModel)]="login"
+            p-focus
+            p-required
+            [p-label]="literals.loginLabel"
+            [p-pattern]="loginPattern"
+            [p-placeholder]="literals.loginPlaceholder"
+            (click)="closePopover()"
+            (keyup.enter)="loginForm.valid && onLoginSubmit()"
+            (p-change-model)="changeLoginModel()">
+          </po-login>
+
+          <div class="po-page-login-info-icon-container">
+            <span
+              class="po-icon po-field-icon po-icon-info"
+              p-tooltip-position="right"
+              [p-tooltip]="literals.loginHint">
+            </span>
+          </div>
+        </div>
+
+        <div class="po-field-container-bottom po-field-container-error-container">
+          <div *ngFor="let error of allLoginErrors" class="po-field-container-bottom-text-error po-field-container-error-item">
+            <span class="po-icon po-icon-exclamation"></span>
+            <span class="po-field-container-error-text">{{error}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-lg-12">
+        <div class="po-page-login-password-container">
+          <po-password
+            class="po-page-login-field-size po-page-login-password-item"
+            name="password"
+            [(ngModel)]="password"
+            p-required
+            [p-label]="literals.passwordLabel"
+            [p-pattern]="passwordPattern"
+            [p-placeholder]="literals.passwordPlaceholder"
+            (click)="closePopover()"
+            (keyup.enter)="loginForm.valid && onLoginSubmit()"
+            (p-change-model)="changePasswordModel()">
+          </po-password>
+          <div class="po-page-login-password-item po-page-login-password-popover-container">
+            <po-page-login-popover *ngIf="showExceededAttemptsWarning && exceededAttemptsWarning"
+              [p-recovery]="recovery"
+              [p-remaining-attempts]="exceededAttemptsWarning"
+              [p-selected-language]="selectedLanguage"
+              (p-forgot-password) = "openUrl($event)">
+            </po-page-login-popover>
+          </div>
+        </div>
+        <div class="po-field-container-bottom po-field-container-error-container">
+          <div *ngFor="let error of allPasswordErrors" class="po-field-container-bottom-text-error po-field-container-error-item">
+            <span class="po-icon po-icon-exclamation"></span>
+            <span class="po-field-container-error-text">{{error}}</span>
+          </div>
+        </div>
+      </div>
+
+      <po-input *ngIf="customField && customFieldType === 'input'"
+        class="po-page-login-field-size po-lg-12"
+        name="customFieldInput"
+        [(ngModel)]="customFieldObject.value"
+        p-required
+        [p-error-pattern]="customFieldObject.errorPattern || literals.customFieldErrorPattern"
+        [p-pattern]="customFieldObject.pattern"
+        [p-placeholder]="customFieldObject.placeholder || literals.customFieldPlaceholder"
+        (keyup.enter)="loginForm.valid && onLoginSubmit()">
+      </po-input>
+
+      <po-combo *ngIf="customField && customFieldType === 'combo'"
+        class="po-page-login-field-size po-lg-12"
+        name="customFieldCombo"
+        [(ngModel)]="customFieldObject.value"
+        p-required
+        [p-field-value]="customFieldObject.fieldValue"
+        [p-filter-service]="customFieldObject.url"
+        [p-placeholder]="customFieldObject.placeholder || literals.customFieldPlaceholder">
+      </po-combo>
+
+      <po-select *ngIf="customField && customFieldType === 'select'"
+        class="po-page-login-field-size po-lg-12"
+        name="customFieldSelect"
+        [(ngModel)]="customFieldObject.value"
+        p-required
+        [p-placeholder]="customFieldObject.placeholder || literals.customFieldPlaceholder"
+        [p-options]="customFieldObject.options">
+      </po-select>
+
+      <div class="po-lg-12">
+        <div *ngIf="!hideRememberUser" class="po-page-login-hint po-page-login-info-container">
+          <po-switch
+            class="po-page-login-info-field po-lg-7 po-offset-lg-5 po-offset-xl-5"
+            name="rememberUser"
+            [(ngModel)]="rememberUser"
+            p-label-position="1"
+            [p-label-off]="literals.rememberUser"
+            [p-label-on]="literals.rememberUser"
+            (keyup.enter)="loginForm.valid && onLoginSubmit()">
+          </po-switch>
+
+          <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+            <span
+              class="po-icon po-field-icon po-icon-info"
+              p-tooltip-position="right"
+              [p-tooltip]="literals.rememberUserHint">
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+      <po-button
+        class="po-lg-12 po-page-login-button po-page-login-field-size"
+        p-type="primary"
+        [p-disabled]="loginForm.invalid"
+        [p-label]="loading ? literals.submittedLabel : literals.submitLabel"
+        [p-loading]="loading"
+        (p-click)="onLoginSubmit()">
+      </po-button>
+
+      <div *ngIf="recovery"
+        class="po-page-login-recovery-link">
+        <a class="po-font-text-large-bold" (click)="openUrl(recovery)">{{ literals.forgotPassword }}</a>
+      </div>
+
+      <div *ngIf="registerUrl"
+        class="po-page-login-register-link">
+        <a class="po-font-text-large-bold" (click)="openUrl(registerUrl)">{{ literals.registerUrl }}</a>
+      </div>
+    </div>
+  </form>
+</po-page-background>

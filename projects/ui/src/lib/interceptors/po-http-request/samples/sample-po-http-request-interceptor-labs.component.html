@@ -1,0 +1,51 @@
+<div class="po-row">
+  <po-info
+    class="po-lg-12"
+    p-label="Pending Requests"
+    [p-value]="pendingRequests">
+  </po-info>
+</div>
+
+<div class="po-row">
+  <po-input
+    class="po-lg-6"
+    name="url"
+    [(ngModel)]="url"
+    p-help="https://portinari.io/sample/api/comboOption/heroes"
+    p-label="URL"
+    p-required>
+  </po-input>
+</div>
+
+<div class="po-row">
+  <po-switch
+    class="po-lg-6"
+    name="countPendingRequestHeaderParam"
+    [(ngModel)]="countPendingRequestHeaderParam"
+    p-help="Enable/disable the sent param in header of request"
+    p-label="X-Portinari-No-Count-Pending-Requests"
+    p-label-off="Disable"
+    p-label-on="Enable"
+    ngDefaultControl>
+  </po-switch>
+
+  <po-switch
+    class="po-lg-6"
+    name="screenLockHeaderParam"
+    [(ngModel)]="screenLockHeaderParam"
+    p-help="Enable/disable the sent param in header of request"
+    p-label="X-Portinari-Screen-Lock"
+    p-label-off="Disable"
+    p-label-on="Enable"
+    ngDefaultControl>
+  </po-switch>
+</div>
+
+<div class="po-row">
+  <po-button
+    class="po-md-4"
+    p-label="Get request"
+    [p-disabled]="!url"
+    (p-click)="getRequest()">
+  </po-button>
+</div>

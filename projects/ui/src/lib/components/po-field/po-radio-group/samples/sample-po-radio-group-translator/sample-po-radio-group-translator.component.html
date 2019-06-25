@@ -1,0 +1,34 @@
+<form #f="ngForm">
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-lg-4"
+      name="language"
+      [(ngModel)]="language"
+      p-label="Select a Language"
+      p-required
+      [p-options]="languageOptions"
+      (p-change)="changeLanguage($event)">
+    </po-radio-group>
+
+    <po-select
+      class="po-lg-4"
+      name="original"
+      [(ngModel)]="original"
+      p-label="Original Text (Portuguese)"
+      p-required
+      [p-options]="optionsList"
+      (p-change)="changeLanguage($event)">
+    </po-select>
+
+    <po-input
+      class="po-lg-4"
+      name="translated"
+      [(ngModel)]="translated"
+      p-label="Translated Text"
+      p-readonly
+      p-required>
+    </po-input>
+  </div>
+
+</form>

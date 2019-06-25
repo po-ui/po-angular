@@ -1,109 +1,94 @@
-# Introdução
+### Pré-requisitos
 
-Repositório dos arquivos de estilo do PO Core.
+Para começar a utilização do PO tenha em mãos o `Node.js` instalado (deve-se utilizar a versão 10.x ou acima) e o seu gerenciador de pacote favorito atualizado. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
-Esse repositório é usado para atualizar o CDN PO Core que deve ser utilizado como base por todos os projetos front-end da Portinari.
+Instalando com npm:
+```
+npm i -g @angular/cli
+```
 
-# Processo de design
+Caso prefira o yarn:
+```
+yarn global add @angular/cli
+```
 
-Antes de desenvolver um novo componente, verifique se o protótipo tem a especificação para os seguintes status:
+### Passo 1 - Crie o seu primeiro projeto
 
-- Enable
-- Disable
-- Static
-- Hover
-- Focus
-- Active
+O [Angular CLI](https://cli.angular.io/) se encarrega de construir toda estrutura inicial do projeto. Para isso, execute o seguinte comando:
 
-> Quando um componente não tem um destes estados, ele **não deve ser desenvolvido**.
+```
+ng new my-po-project --skipInstall
+```
 
-# Como iniciar
-
-1. Instale as dependências
-`npm install` ou `yarn`
-
-2. Fica observando alterações no projeto e recria o build do projeto em tempo de desenvolvimento
-`npm run watch` ou `yarn watch`
-
-    - Quando você deseja especificar um tema, é necessário adicionar
-    `-- --theme <nomedotema>`
-
-    **Exemplo**: `npm run watch -- --theme green`
-    
-    **Nome do tema**: é o sufixo relacionado ao arquivo `po-theme-<sufixo>.css`, localizado em `src/app/css/themes`;
-
-3. Inicia o servidor (http-server) para testar o projeto
-`npm run dev` ou `yarn dev`
-
-    - Utilizando o `npm run watch` e o `npm run dev`, a cada alteração, apenas dê o refresh na página para visualizar a mesma;
+> O parâmetro `--skip-install` permite criar o projeto, contudo, não instalará as dependências automaticamente.
 
 
-Outros scripts:
-* Faz o build do projeto
-`npm run build` ou `yarn build`
-    * Também é possível informar um tema específico adicionando `-- --theme <nomedotema>`
+#### Passo 1.1 - Instalando as dependências
 
-# Contribuição
+Antes de executar a instalação, é necessário que todas as dependências do projeto estejam declaradas de acordo com a versão
+do PO e Angular no arquivo **package.json**, localizado na raiz da aplicação.
 
-Siga as `convenções de nomenclatura` abaixo:
+```
+  "dependencies": {
+    "@angular/animations": "~8.0.0",
+    "@angular/common": "~8.0.0",
+    "@angular/compiler": "~8.0.0",
+    "@angular/core": "~8.0.0",
+    "@angular/forms": "~8.0.0",
+    "@angular/platform-browser": "~8.0.0",
+    "@angular/platform-browser-dynamic": "~8.0.0",
+    "@angular/platform-server": "~8.0.0",
+    "@angular/router": "~8.0.0",
+    "rxjs": "~6.4.0",
+    "zone.js": "~0.9.1"
+    ...
+  }
+```
 
-O objetivo principal é continuar envolvendo os componentes, tornando-os mais simples de usar em qualquer projeto. O desenvolvimento do CDN 
-PO Core é aberto para todos os desenvolvedores da Portinari, e agradecemos aos desenvolvedores da Portinari que contribuem com melhorias e 
-correções de erros.
+Após verificar as dependencias, acesse a pasta raiz do seu projeto e execute o comando abaixo:
 
-Leia abaixo para saber como você pode participar na melhoria do CDN PO Core.
+Instalando com npm:
+```
+npm install
+```
 
-### Steps
+Caso prefira o yarn:
+```
+yarn install
+```
 
-1. Crie um template HTML com o nome do componente em `src/css/components`
->2. Crie um link em `index.html` para redirecionar para o preview do componente
-3. Crie uma pasta com o nome do componente em `src/css`
-4. Crie um arquivo com o nome do componente e o sufixo `-map.css`
-5. Crie uma `const` para referenciar o componente em `main.js`
-6. Crie uma pasta `css` dentro da pasta que você criou com o nome do componente
-7. Crie um arquivo `css` com o nome do componente
-8. Execute a tarefa `gulp inject` para injetar o `<link href="dist/styles.css" />` localmente
-9. Quando fazer o Pull Request, por favor rode a tarefa `gulp remove-inject` para referenciar o CDN styles
+### Passo 2 - Adiconando o pacote @portinari/portinari-ui
 
-### Exemplo de contribuição
+Utilizando o comando `ng add` do [Angular CLI](https://cli.angular.io/), vamos adicionar o PO em seu projeto e o mesmo se encarregará de configurar o tema, instalar o pacote e importar o módulo do PO.
 
-Nós queremos criar o componente `po-menu`.
-1. O nome do arquivo deve ser: `src/templates/menu.html`
-2. `<a class="col-12 po-link" href="@PATH/src/templates/menu.html">po-Menu</a>`
-3. O nome da pasta deve ser:`src/css/menu`
-4. O nome do arquivo deve ser: `src/css/menu/menu-map.css`
-5. Criar uma constante dentro do arquivo `main.js`: `const menu = require('./src/css/menu/menu-map.css');`
-6. O nome da pasta deve ser: `src/css/menu/css`
-7. O nome do arquivo deve ser: `src/css/menu/css/menu.css`
+Execute o comando abaixo na pasta raiz do seu projeto:
 
-### Dica para contribuir
+```
+ng add @portinari/portinari-ui
+```
 
-* Dentro do arquivo `[<component>]-map.css` você deve usar `@import` dos arquivos CSS.
-  * Exemplo: `@import 'css/menu.css'`
+> Ao executar o comando acima, será perguntado se deseja incluir uma estrutura incial em seu projeto, utilizando componentes do PO, caso desejar, apenas informe: `Y`.
 
-# Convenções de nomenclatura
+### Passo 3 - Rode o seu projeto
 
-### Utilitários
+Agora basta rodar mais um comando para ver seu projeto no ar.
 
-Classes que podem ser aplicadas para os componentes e outros elementos.
+```
+ng serve
+```
 
-| Sintaxe                      | Exemplo                |
-| -----------------------------|------------------------|
-| `.po-u-[<utility>]`         | `.po-u-margin-top-10` |
+Abra seu browser e acesse a url http://localhost:4200. Pronto seu projeto deve estar parecido com essa imagem.
 
-### Componentes
+<p class="po-text-center">
+  <img src="./assets/graphics/app-running.png" width="660px">
+</p>
 
-| Sintax                                        | Exemplo                    |
-| ----------------------------------------------|----------------------------|
-| `.po-[<component>]`                          | `.po-menu`                |
-| `.po-[<component>][-descendent]`             | `.po-menu-header`         |
-| `.po-[<component>][-descendent][--modifier]` | `.po-menu-header--primary`|
-| `.po-[<component>].is[-state]`               | `.po-menu.is-disable`     |
+----
 
-### Assets
+### E agora?
 
-Instalar [SVGO](https://github.com/svg/svgo) para otimizar arquivos SVG.
+Agora é só abrir seu **editor / IDE** favorito e começar a trabalhar no seu projeto.
 
-`$ [sudo] npm install -g svgo`
+O `@portinari/portinari-ui` por padrão irá configurar uma aplicação com menu lateral, isso já vai ajudar bastante se você está começando a se aventurar no PO e/ou em aplicações Angular.
 
-> **Arquivos SVG precisam ser otimizados antes de serem adicionados ao projeto**
+A partir daqui você está apto a adicionar outros componentes do **Portinari**.

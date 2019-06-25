@@ -1,0 +1,63 @@
+<po-page-list
+  p-title="Hiring processes"
+  [p-actions]="pageActions"
+  [p-filter]="filterSettings">
+
+  <po-list-view
+    p-hide-select-all
+    p-property-link="url"
+    p-property-title="name"
+    p-select
+    [p-actions]="actions"
+    [p-items]="hiringProcessesFiltered"
+    (p-title-action)="showDetailModal($event)">
+
+    <ng-template p-list-view-content-template let-item [p-title]="formatTitle">
+      <div class="po-row">
+        <po-info class="po-lg-4" p-label="Id Card" [p-value]="item.idCard"></po-info>
+
+        <po-info class="po-lg-4" p-label="Job description" [p-value]="item.jobDescription"></po-info>
+
+        <po-info class="po-lg-4" p-label="Hire status" p-value="{{ item.hireStatus | uppercase }}"></po-info>
+      </div>
+    </ng-template>
+
+    <ng-template p-list-view-detail-template let-item [p-show-detail]="showDetail">
+      <div class="po-row">
+        <po-info class="po-md-6" p-label="Age" [p-value]="item.age"></po-info>
+
+        <po-info class="po-md-6" p-label="City" [p-value]="item.city"></po-info>
+      </div>
+    </ng-template>
+
+  </po-list-view>
+
+  <po-modal #detailsModal [p-title]="titleDetailsModal">
+    <div class="po-row">
+      <div class="po-md-5 po-lg-4">
+        <po-avatar p-size="xl" p-src="assets/graphics/avatar2.png"></po-avatar>
+      </div>
+      <div class="po-md-7 po-lg-8">
+        <div class="po-mb-1">
+          <po-tag
+            [p-value]="selectedActionItem['hireStatus']"
+            [p-type]="selectedActionItem['hireStatus'] === 'hired' ? 'success' : 'info'">
+          </po-tag>
+        </div>
+        <div class="po-mb-1">
+          <po-info
+            p-label="Email"
+            [p-value]="selectedActionItem['email']">
+          </po-info>
+        </div>
+        <div class="po-mb-1">
+          <po-info
+            p-label="Telephone"
+            [p-value]="selectedActionItem['telephone']">
+          </po-info>
+        </div>
+      </div>
+    </div>
+  </po-modal>
+
+</po-page-list>

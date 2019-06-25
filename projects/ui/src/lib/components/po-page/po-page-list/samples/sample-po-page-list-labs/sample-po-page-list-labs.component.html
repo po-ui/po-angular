@@ -1,0 +1,276 @@
+<po-page-list
+  [p-actions]="actions"
+  [p-breadcrumb]="breadcrumb"
+  [p-disclaimer-group]="disclaimerGroup"
+  [p-filter]="filter"
+  [p-literals]="customLiterals"
+  [p-title]="title">
+
+  <hr>
+
+  <po-info
+    p-label="Model"
+    [p-value]="filterModel">
+  </po-info>
+
+</po-page-list>
+
+<hr>
+
+<form #formAction="ngForm">
+
+  <div class="po-row">
+    <po-input
+      class="po-md-4"
+      name="actionAction"
+      [(ngModel)]="action.action"
+      p-clean
+      p-label="Action">
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="actionLabel"
+      [(ngModel)]="action.label"
+      p-label="Label"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="actionURL"
+      [(ngModel)]="action.url"
+      p-label="URL">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-select
+      class="po-md-3"
+      name="type"
+      [(ngModel)]="action.type"
+      p-label="Type"
+      [p-options]="typeOptions">
+    </po-select>
+
+    <po-select
+      class="po-md-3"
+      name="icon"
+      [(ngModel)]="action.icon"
+      p-label="Icon"
+      [p-options]="iconOptions">
+    </po-select>
+
+    <po-checkbox-group
+      class="po-md-6"
+      name="action"
+      [(ngModel)]="action"
+      p-columns="4"
+      p-indeterminate
+      p-label="Action properties"
+      [p-options]="actionOptions">
+    </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-6 po-lg-3"
+      p-label="Add Action"
+      [p-disabled]="formAction.form.invalid"
+      (p-click)="addAction(action)">
+    </po-button>
+  </div>
+
+</form>
+
+<hr>
+
+<form #formBreadcrumbFavorite="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-lg-6"
+      name="breadcrumbFavorite"
+      [(ngModel)]="breadcrumb.favorite"
+      p-clean
+      p-help="https://portinari.io/sample/api/favorite"
+      p-label="Breadcrumb favorite">
+    </po-input>
+  </div>
+</form>
+
+<form #formBreadcrumbItems="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="breadcrumbItemLabel"
+      [(ngModel)]="breadcrumbItem.label"
+      p-clean
+      p-label="Breadcrumb item label"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="breadcrumbItemLink"
+      [(ngModel)]="breadcrumbItem.link"
+      p-clean
+      p-label="Breadcrumb item link"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Add breadcrumb item"
+      [p-disabled]="formBreadcrumbItems.invalid"
+      (p-click)="addBreadcrumbItem()">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<form #formBreadcrumbParams="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="breadcrumbParamsProperty"
+      [(ngModel)]="breadcrumbParams.property"
+      p-clean
+      p-label="Breadcrumb params property"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="breadcrumbParamsValue"
+      [(ngModel)]="breadcrumbParams.value"
+      p-clean
+      p-label="Breadcrumb params value"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Add breadcrumb params"
+      [p-disabled]="formBreadcrumbParams.invalid"
+      (p-click)="addBreadcrumbParam()">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<div class="po-row">
+  <po-input
+    class="po-md-6"
+    name="disclaimerGroupTitle"
+    [(ngModel)]="disclaimerGroupTitle"
+    p-clean
+    p-label="Disclaimer group title"
+    (p-change-model)="addDisclaimerGroupParam(disclaimerGroupTitle, disclaimerGroupHideRemoveAll)">
+  </po-input>
+
+  <po-switch
+    class="po-md-6"
+    name="disclaimerGroupHideRemoveAll"
+    [(ngModel)]="disclaimerGroupHideRemoveAll"
+    p-label="Disclaimer group hide remove all"
+    (p-change)="onChangeDisclaimerGroupHideRemoveAll($event)"
+    ngDefaultControl>
+  </po-switch>
+</div>
+
+<form #formDisclaimers="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="disclaimerLabel"
+      [(ngModel)]="disclaimerLabel"
+      p-clean
+      p-label="Disclaimer label">
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="disclaimerProperty"
+      [(ngModel)]="disclaimerProperty"
+      p-clean
+      p-label="Disclaimer property">
+    </po-input>
+
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="disclaimerValue"
+      [(ngModel)]="disclaimerValue"
+      p-clean
+      p-label="Disclaimer value"
+      p-required>
+    </po-input>
+
+    <po-switch
+      class="po-md-6"
+      name="disclaimerHideClose"
+      [(ngModel)]="disclaimerHideClose"
+      p-label="Disclaimer hide close">
+    </po-switch>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Add disclaimer"
+      [p-disabled]="formDisclaimers.invalid"
+      (p-click)="addDisclaimer()">
+    </po-button>
+  </div>
+</form>
+
+<hr>
+
+<form #form="ngForm">
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="title"
+      [(ngModel)]="title"
+      p-label="Title"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="filterPlaceholder"
+      [(ngModel)]="filter.placeholder"
+      p-label="Filter placeholder">
+    </po-input>
+  </div>
+
+
+  <div class="po-row">
+    <po-input
+      class="po-lg-12"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"otherActions": "Mais ações"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
+
+</form>

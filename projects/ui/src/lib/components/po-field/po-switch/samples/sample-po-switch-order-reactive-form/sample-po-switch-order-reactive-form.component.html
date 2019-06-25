@@ -1,0 +1,38 @@
+<div class="po-row">
+  <po-widget class="po-md-6 po-lg-4" p-title="Order Summary">
+    <form [formGroup]="formOrderSummary">
+
+      <po-table
+        [p-columns]="columns"
+        [p-items]="items">
+      </po-table>
+
+      <po-switch
+        name="serviceFee"
+        formControlName="serviceFee"
+        p-label="Allow a 10% service fee?"
+        p-label-off="No, thank you."
+        p-label-on="Yes, please."
+        [p-label-position]="labelPosition"
+        (p-change)="addServiceFee()">
+      </po-switch>
+
+      <div class="po-pull-right">
+        <div class="po-font-text-large-bold"> Total value </div>
+        <span class="po-font-text">R$</span>
+        <span class="po-pull-right po-font-title">{{ totalAmount }}</span>
+      </div>
+
+      <div class="po-row">
+        <po-button
+          class="po-md-12"
+          p-icon="po-icon po-icon-ok"
+          p-label="Confirm"
+          p-type="primary"
+          (p-click)="confirm()">
+        </po-button>
+      </div>
+
+    </form>
+  </po-widget>
+</div>

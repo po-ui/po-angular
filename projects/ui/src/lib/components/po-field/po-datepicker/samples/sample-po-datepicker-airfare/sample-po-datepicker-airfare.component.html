@@ -1,0 +1,75 @@
+<form #formAirfare="ngForm">
+  <div class="po-row">
+    <po-datepicker
+      class="po-md-6"
+      name="startDate"
+      [(ngModel)]="startDate"
+      p-clean
+      p-format="dd/mm/yyyy"
+      p-label="Date start"
+      p-required
+      [p-max-date]="endDate">
+    </po-datepicker>
+
+    <po-datepicker
+      class="po-md-6"
+      name="endDate"
+      [(ngModel)]="endDate"
+      p-clean
+      p-format="dd/mm/yyyy"
+      p-label="Date end"
+      p-required
+      [p-min-date]="startDate">
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="origin"
+      [(ngModel)]="origin"
+      p-placeholder="Flight origin"
+      p-label="Origin"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="destination"
+      [(ngModel)]="destination"
+      p-label="Destination"
+      p-placeholder="Flight destination"
+      p-required>
+    </po-input>
+  </div>
+
+  <div clas="po-row">
+    <po-select
+      class="po-md-6"
+      name="ticketClass"
+      [(ngModel)]="ticketClass"
+      p-label="Class"
+      p-required
+      [p-options]="ticketClassOptions">
+    </po-select>
+
+    <po-select
+      class="po-md-6"
+      name="accompany"
+      [(ngModel)]="accompany"
+      p-label="Accompany"
+      p-required
+      [p-options]="accompanyNumber">
+    </po-select>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3 po-offset-md-9 po-offset-lg-9"
+      name="applyButton"
+      p-label="Apply"
+      [p-disabled]="formAirfare.invalid"
+      (p-click)="apply()">
+    </po-button>
+  </div>
+</form>
