@@ -27,7 +27,8 @@ export class PoPageBackgroundComponent implements OnInit {
   selectLanguageOptions: Array<PoSelectOption> = [
     { label: 'English', value: 'en' },
     { label: 'Español', value: 'es' },
-    { label: 'Português', value: 'pt' }
+    { label: 'Português', value: 'pt' },
+    { label: 'Pусский', value: 'ru' }
   ];
 
   /** Insere uma imagem de destaque ao lado direito do container. */
