@@ -12,7 +12,9 @@ const poLocaleKey = 'PO_USER_LOCALE';
  *
  * Serviço responsável por gerenciar as linguagens da aplicação.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoLanguageService {
 
   set languageDefault(language: string) {
