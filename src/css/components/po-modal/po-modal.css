@@ -93,6 +93,10 @@
   padding-right: 24px;
 }
 
+.po-modal-auto .po-modal-title {
+  max-width: 100%;
+}
+
 .po-modal-header-close-button {
   border-radius: 1px;
   color: var(--color-modal-color-header-close-button);
@@ -111,6 +115,10 @@
   max-width: 736px;
   overflow: auto;
   text-align: left;
+}
+
+.po-modal-auto .po-modal-body {
+  max-width: none;
 }
 
 .po-modal-body::-webkit-scrollbar {

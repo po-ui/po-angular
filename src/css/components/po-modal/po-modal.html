@@ -52,13 +52,22 @@
     <button
       class="po-button"
       type="button"
-      onClick="document.getElementsByClassName('po-modal')[7].style.display = 'block';">
-        A large amount of content
+      onClick="document.getElementsByClassName('po-modal')[13].style.display = 'block';">
+        Dynamic with lots of content
     </button>
   </div>
 </div>
 
 <div class="po-row po-mt-2 po-mb-2">
+  <div class="po-sm-2">
+      <button
+        class="po-button"
+        type="button"
+        onClick="document.getElementsByClassName('po-modal')[7].style.display = 'block';">
+          A large amount of content
+      </button>
+  </div>
+
   <div class="po-sm-2">
     <button
       class="po-button"
@@ -634,6 +643,67 @@
                 class="po-button po-button-primary"
                 type="button">
                   Confirm
+              </button>
+            </po-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AUTOMÁTICA COM BASTANTE CONTEÚDO -->
+<div class="po-modal" style="display:none;">
+  <div class="po-modal-overlay">
+    <div class="po-modal-container po-p-2">
+      <div class="po-modal-vertical-align">
+        <div tabindex="-1" class="po-modal-content po-modal-auto">
+          <div class="po-modal-header po-modal-display-table-fixed">
+            <div class="po-modal-title po-text-ellipsis">
+              Portinari Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut dapibus orci, a vehicula turpis. Pellentesque commodo at nisi vi Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut dapibus orci, a vehicula turpis. Pellentesque commodo at nisi vi
+            </div>
+            <a class="po-modal-header-close-button" tabindex="0" onClick="document.getElementsByClassName('po-modal')[13].style.display = 'none';">
+              <span class="po-icon po-icon-close"></span>
+            </a>
+          </div>
+          <div class="po-modal-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut dapibus orci, a vehicula turpis. Pellentesque commodo at nisi vitae tincidunt.
+            In hac habitasse platea dictumst. Morbi eu diam id justo pulvinar consectetur non id erat. Nam vel dictum massa. Morbi et placerat urna, a facilisis purus. Ut semper vitae arcu vel auctor. Integer dapibus porttitor sodales. Sed quis dui vestibulum metus mollis volutpat.
+            Integer quis bibendum purus. Nulla condimentum nisi vel bibendum tincidunt. Aliquam erat volutpat.
+            Donec eu ligula tellus. Nunc placerat consequat massa, et aliquam enim laoreet ac. Quisque efficitur aliquam dolor non ultrices.
+            Pellentesque consectetur odio a enim dapibus dictum ut et erat. Donec dui ante, vulputate vitae mi ut, egestas congue nunc.
+            Quisque purus neque, tempor at eros et, dapibus posuere augue. Duis accumsan leo purus, rhoncus tristique arcu iaculis a.
+            Donec placerat arcu scelerisque sem fringilla, et bibendum lorem dictum. Vivamus id convallis mi. Phasellus tincidunt nec tellus eget mattis.
+            Vivamus bibendum tortor vel feugiat malesuada. Vivamus aliquet, sapien at efficitur mollis, justo ligula vulputate tortor, ac condimentum tortor eros et mi. Etiam in feugiat felis, ac mattis ligula. Morbi ullamcorper nunc orci, in consequat nulla volutpat eget.
+            Fusce eget odio sit amet urna suscipit ullamcorper vel sed orci. Proin quis lobortis lorem, vel efficitur diam.
+            Morbi vitae eleifend lectus, sed tempor nisi. Nam ultricies, nunc ut lacinia dignissim, tellus nisl finibus nunc,
+            sit amet commodo odio enim eu leo. Cras maximus ante odio, eu mattis ipsum gravida nec. Maecenas at efficitur lacus.
+            Duis lacinia turpis et rutrum feugiat. Fusce vehicula feugiat tincidunt. Pellentesque volutpat urna nec dui vestibulum, ac sodales
+            urna blandit. Sed eget consequat est, at tincidunt ipsum. Suspendisse a nisl ac nibh interdum ornare. Vestibulum faucibus efficitur massa,
+            ac aliquet risus. Pellentesque blandit mi vel orci volutpat, vel pretium justo volutpat. Aenean id lectus nisl. Duis porttitor laoreet magna,
+            ac interdum orci mattis quis. Vivamus consectetur justo vitae cursus fermentum. Sed turpis mi, semper vel elit porta, sodales tincidunt est.
+            Nam rhoncus turpis a neque dignissim, venenatis convallis felis fringilla. Cras rhoncus quam id sem volutpat scelerisque. Sed iaculis non est
+            sit amet tempor. Sed sed neque sed urna tempor auctor. Proin fringilla purus vitae imperdiet rhoncus. Praesent eget ultrices nunc.
+            Morbi et nibh nisl. Fusce a arcu eros. Sed tempor consectetur molestie. Suspendisse iaculis dignissim nisl sed dapibus. Vestibulum gravida
+            leo erat, in viverra felis imperdiet vitae. Maecenas metus orci, semper ac enim nec, consequat lacinia nisi. Nunc feugiat nulla ex, vitae
+            suscipit erat maximus sed. In feugiat interdum augue vel accumsan. Suspendisse elementum rutrum mi, et aliquam orci dapibus sed. Phasellus
+            nec efficitur mauris. In mattis arcu porttitor tellus aliquam pretium. Aenean et tellus a felis tempus tristique. Mauris diam ligula,
+            tempus quis leo dapibus, blandit dignissim urna. Suspendisse consequat velit eu pretium egestas. Sed sit amet magna eu risus consectetur
+            ornare. Morbi vestibulum, est et luctus sagittis, eros augue accumsan lorem, non tristique orci dui at tellus.
+          </div>
+          <div class="po-modal-footer">
+            <po-button>
+              <button
+                class="po-button"
+                type="button" onClick="document.getElementsByClassName('po-modal')[13].style.display = 'none';">
+                  Cancelar
+              </button>
+            </po-button>
+            <po-button class="po-button-modal-first-action">
+              <button
+                class="po-button po-button-primary"
+                type="button" onClick="document.getElementsByClassName('po-modal')[13].style.display = 'none';">
+                  Confirmar
               </button>
             </po-button>
           </div>
