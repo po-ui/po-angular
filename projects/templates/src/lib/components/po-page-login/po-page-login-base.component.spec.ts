@@ -315,6 +315,17 @@ describe('ThPageLoginBaseComponent: ', () => {
       expect(component.getLiterals).toHaveBeenCalledWith('pt', validLiterals);
     });
 
+    it('p-literals: should call `getLiterals` with selected Russian language and `literals` as parameters', () => {
+      component['_literals'] = { title: 'Title' };
+      component.selectedLanguage = 'ru';
+      const validLiterals = component['_literals'];
+
+      spyOn(component, <any>'getLiterals');
+
+      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
+      expect(component.getLiterals).toHaveBeenCalledWith('ru', validLiterals);
+    });
+
     it('p-literals: should call `getLiterals` with `browserLanguage` and `literals` as parameters', () => {
       component['_literals'] = { title: 'Title' };
       const validLiterals = component['_literals'];
