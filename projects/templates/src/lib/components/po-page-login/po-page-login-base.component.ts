@@ -88,19 +88,46 @@ export const poPageLoginLiteralsDefault = {
     yourUserWillBeBlocked: 'sem sucesso seu usuário será bloqueado e você fica 24 horas sem poder acessar :(',
     createANewPasswordNow: 'Melhor criar uma senha nova agora! Você vai poder entrar no sistema logo em seguida.',
     iForgotMyPassword: 'Esqueci minha senha'
+  },
+  ru: <PoPageLoginLiterals> {
+    title: 'Добро пожаловать!',
+    loginErrorPattern: 'Неверный логин',
+    loginHint: `Ваш логин был предоставлен вам в первый день.
+    Если у вас нет этой информации, обратитесь в службу поддержки`,
+    loginPlaceholder: 'Вставьте свой адрес электронной почты',
+    passwordErrorPattern: 'Неверный пароль',
+    passwordPlaceholder: 'Введите свой пароль',
+    customFieldErrorPattern: 'Неверное значение.',
+    customFieldPlaceholder: 'Пожалуйста, введите значение',
+    rememberUser: 'Автоматический вход',
+    rememberUserHint: 'Вы можете отключить эту опцию в конфигурации системы',
+    submitLabel: 'Войти',
+    submittedLabel: '3агрузка...',
+    forgotPassword: 'Забыли пароль?',
+    highlightInfo: '',
+    registerUrl: 'Новый регистр',
+    titlePopover: 'Ой!',
+    forgotYourPassword: 'Забыли пароль?',
+    ifYouTryHarder: 'Если вы безуспешно попытаетесь войти еще ',
+    attempts: '{0} раз(а) ',
+    yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
+    createANewPasswordNow: 'Лучше создайте новый пароль сейчас! Вы сможете сразу войти в систему.',
+    iForgotMyPassword: 'Я забыл свой пароль'
   }
 };
 
 export const poPageLoginLiteralIn = {
   en: 'in',
   es: 'en',
-  pt: 'em'
+  pt: 'em',
+  ru: 'в'
 };
 
 export const poPageLoginLiteralTo = {
   en: 'to',
   es: 'al',
   pt: 'ao',
+  ru: 'к'
 };
 
 /**
@@ -421,7 +448,8 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * ```
    *
    *  > O objeto padrão de literais será traduzido de acordo com o idioma do browser (pt, en, es).
-   *  > É também possível alternar o objeto padrão de literais através do seletor de idiomas localizado na parte inferior do template.
+   *  > É também possível alternar o objeto padrão de literais através do seletor de idiomas localizado na parte inferior do template,
+   * nesse caso, há também a opção do idioma russo.
    */
   @Input('p-literals') set literals(value: PoPageLoginLiterals) {
     const language = this.selectedLanguage || browserLanguage();
