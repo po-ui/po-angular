@@ -18,6 +18,10 @@
   visibility: hidden;
 }
 
+.po-checkbox-group-item .po-checkbox-group-input {
+  width: 0;
+}
+
 .po-checkbox-group-input+.po-checkbox-group-label:before {
   background-color: var(--color-checkbox-group-background-color);
   border: solid 1px var(--color-checkbox-group-border-input);

@@ -133,6 +133,7 @@
 .po-select-mobile {
   color: transparent;
   height: 3.5em;
+  position: absolute;
   width: 96%;
   z-index: 1;
 }

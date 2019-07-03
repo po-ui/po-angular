@@ -12,6 +12,10 @@
   }
 }
 
+.po-field-container {
+  position: relative;
+}
+
 /* Classe que possibilita colocar o botão de clean na mesma linha, */
 .po-field-container-content {
   padding: 8px 0;
