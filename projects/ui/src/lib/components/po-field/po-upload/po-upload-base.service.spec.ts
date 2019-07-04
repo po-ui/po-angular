@@ -69,7 +69,7 @@ describe('PoUploadBaseService:', () => {
     expect(fakeThis.requests.length).toBe(1);
   }));
 
-  it('should call sendFiles', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
+  xit('should call sendFiles', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
     const fakeFile = {
       lastModified: 1504558774471,
       lastModifiedDate: new Date(),

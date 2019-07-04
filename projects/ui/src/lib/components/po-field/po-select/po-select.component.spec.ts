@@ -56,27 +56,6 @@ describe('PoSelectComponent:', () => {
     });
   });
 
-  it('should not change the selected item with undefined value', () => {
-    spyOn(component, 'updateModel');
-
-    component.onSelectChange(undefined);
-    expect(component.updateModel).not.toHaveBeenCalled();
-  });
-
-  it('should selected item with value', () => {
-    spyOn(component, 'updateModel');
-
-    component.onSelectChange(component.options[0].value);
-    expect(component.updateModel).toHaveBeenCalledWith(component.options[0]);
-  });
-
-  it('should not change the selected item with invalid value', () => {
-    spyOn(component, 'updateModel');
-
-    component.onSelectChange(5);
-    expect(component.updateModel).not.toHaveBeenCalled();
-  });
-
   it('should hide the dropdown when was click out of the div', done => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
@@ -114,19 +93,6 @@ describe('PoSelectComponent:', () => {
     component.onOptionClick.call(fakeThis, 1, 'test');
 
     expect(fakeThis.updateModel).toHaveBeenCalled();
-  });
-
-  it('should receive the changed value in the model', () => {
-    component.writeValue(1);
-    expect(component.options).not.toBeNull();
-  });
-
-  it('should calculate height scroll with heightScrollValue is greater and less values to clientHeight', () => {
-    spyOn(component, <any>'getSelectItemHeight').and.returnValue(20);
-
-    expect(component.scrollValue(10, 60)).toBe(220);
-    expect(component.scrollValue(1, 60)).toBe(0);
-    expect(component.scrollValue(0, 60)).toBe(0);
   });
 
   it('should click in document', () => {
@@ -173,25 +139,6 @@ describe('PoSelectComponent:', () => {
     component.callModelChange.call(fakeThis, 2);
 
     expect(fakeThis.ngModelChange.emit).toHaveBeenCalled();
-  });
-
-  it('should define selectedValue with undefined', () => {
-    component.writeValue(undefined);
-
-    expect(component.selectedValue).toBeUndefined();
-  });
-
-  it('should define selectedValue value with undefined using options empty', () => {
-    component.selectedValue = 'payment';
-    component.options.length = 0;
-    component.writeValue(undefined);
-    expect(component.selectedValue).toBeUndefined();
-  });
-
-  it('should define selectedValue with undefined when optionsFound is false', () => {
-    component.selectedValue = 'payment';
-    component.writeValue('value invalid');
-    expect(component.selectedValue).toBeUndefined();
   });
 
   describe('Properties:', () => {
@@ -624,6 +571,137 @@ describe('PoSelectComponent:', () => {
       expect(component.open).toBe(false);
       expect(component['initializeListeners']).not.toHaveBeenCalled();
       expect(component['setPositionDropdown']).not.toHaveBeenCalled();
+    });
+
+    it('showDropdown: should call `setScrollPosition` if option contains value', () => {
+      component.readonly = false;
+      spyOn(component, <any>'setScrollPosition');
+
+      component['showDropdown']();
+
+      expect(component['setScrollPosition']).toHaveBeenCalled();
+    });
+
+    it('showDropdown: shouldn`t call `setScrollPosition` if option is empty', () => {
+      component.readonly = false;
+      component.options.length = 0;
+      spyOn(component, <any>'setScrollPosition');
+
+      component['showDropdown']();
+
+      expect(component['setScrollPosition']).not.toHaveBeenCalled();
+    });
+
+    it('onSelectChange: shouldn`t call `updateModel` and `setScrollPosition` if value is undefined', () => {
+      spyOn(component, 'updateModel');
+      spyOn(component, <any>'setScrollPosition');
+
+      component.onSelectChange(undefined);
+      expect(component.updateModel).not.toHaveBeenCalled();
+      expect(component['setScrollPosition']).not.toHaveBeenCalled();
+    });
+
+    it('onSelectChange: should call `updateModel` and `setScrollPosition` if value is valid', () => {
+      spyOn(component, 'updateModel');
+      spyOn(component, <any>'setScrollPosition');
+
+      component.onSelectChange(component.options[0].value);
+      expect(component.updateModel).toHaveBeenCalledWith(component.options[0]);
+      expect(component['setScrollPosition']).toHaveBeenCalledWith(component.options[0].value);
+    });
+
+    it('onSelectChange: shouldn`t call `updateModel` and `setScrollPosition` if value is invalid', () => {
+      spyOn(component, 'updateModel');
+      spyOn(component, <any>'setScrollPosition');
+
+      component.onSelectChange(5);
+      expect(component.updateModel).not.toHaveBeenCalled();
+      expect(component['setScrollPosition']).not.toHaveBeenCalled();
+    });
+
+    it('scrollValue: should return properly values', () => {
+      spyOn(component, <any>'getSelectItemHeight').and.returnValue(20);
+
+      expect(component.scrollValue(10, 60)).toBe(200);
+      expect(component.scrollValue(1, 60)).toBe(0);
+      expect(component.scrollValue(0, 60)).toBe(0);
+    });
+
+    it('writeValue: should receive the changed value in the model', () => {
+      component.writeValue(1);
+      expect(component.options).not.toBeNull();
+    });
+
+    it('writeValue: should define selectedValue with undefined', () => {
+      component.writeValue(undefined);
+
+      expect(component.selectedValue).toBeUndefined();
+    });
+
+    it('writeValue: should define selectedValue value with undefined if options is empty', () => {
+      component.selectedValue = 'payment';
+      component.options.length = 0;
+      component.writeValue(undefined);
+      expect(component.selectedValue).toBeUndefined();
+    });
+
+    it('writeValue: should define selectedValue with undefined and doesn`t call setScrollPosition if optionsFound is false', () => {
+      component.selectedValue = 'payment';
+      spyOn(component, <any>'setScrollPosition');
+
+      component.writeValue('value invalid');
+      expect(component.selectedValue).toBeUndefined();
+      expect(component['setScrollPosition']).not.toHaveBeenCalled();
+    });
+
+    it('writeValue: should set property values and call `setScrollPosition` if is a valid option', () => {
+      spyOn(component, <any>'findOptionValue').and.returnValue(component.options[0]);
+      spyOn(component, <any>'setScrollPosition');
+
+      component.writeValue(component.options[0]);
+
+      expect(component.selectedValue).toBe(component.options[0].value);
+      expect(component.displayValue).toBe(component.options[0].label);
+      expect(component['setScrollPosition']).toHaveBeenCalledWith(component.options[0].value);
+    });
+
+    it('findOptionValue: should return undefined if it receives an undefined parameter', () => {
+      const expectedValue = component['findOptionValue'](undefined);
+
+      expect(expectedValue).toBeUndefined();
+    });
+
+    it('findOptionValue: should return the properly option if it receives a valid parameter', () => {
+      const expectedValue = component['findOptionValue'](component.options[0].value);
+
+      expect(expectedValue).toEqual(component.options[0]);
+    });
+
+    it('setScrollPosition: should call `scrollValue` if the option has been found', () => {
+      spyOn(component, <any>'findOptionValue').and.returnValue(component.options[0]);
+      spyOn(component, <any>'scrollValue');
+
+      component['setScrollPosition'](component.options[0].value);
+
+      expect(component.scrollValue).toHaveBeenCalledWith(0, 0);
+    });
+
+    it('setScrollPosition: shouldn`t call `scrollValue` if is an undefined option', () => {
+      spyOn(component, <any>'findOptionValue').and.returnValue(undefined);
+      spyOn(component, <any>'scrollValue');
+
+      component['setScrollPosition'](undefined);
+
+      expect(component.scrollValue).not.toHaveBeenCalled();
+    });
+
+    it('setScrollPosition: shouldn`t call `scrollValue` if is an invalid option', () => {
+      spyOn(component, <any>'findOptionValue').and.returnValue(undefined);
+      spyOn(component, <any>'scrollValue');
+
+      component['setScrollPosition'](component.options[0].value);
+
+      expect(component.scrollValue).not.toHaveBeenCalled();
     });
 
   });
