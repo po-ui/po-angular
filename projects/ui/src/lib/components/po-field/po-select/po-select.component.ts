@@ -156,24 +156,18 @@ export class PoSelectComponent extends PoSelectBaseComponent implements DoCheck 
   }
 
   onOptionClick(option: PoSelectOption) {
-    this.toggleButton();
     this.updateModel(option);
+    this.toggleButton();
   }
 
   // Altera o valor ao selecionar um item.
   onSelectChange(value: any) {
-    const ulDropdpwn = this.element.nativeElement.querySelector('ul.po-select-content');
-
     if (value && this.options && this.options.length) {
-
-      const optionFound: PoSelectOption = this.options.find(option => {
-        return this.isEqual(option.value, value);
-      });
+      const optionFound: PoSelectOption = this.findOptionValue(value);
 
       if (optionFound) {
-        const index = this.options.indexOf(optionFound);
-        ulDropdpwn.scrollTop =  this.scrollValue(index, ulDropdpwn.clientHeight);
         this.updateModel(optionFound);
+        this.setScrollPosition(optionFound.value);
       }
     }
   }
@@ -185,7 +179,8 @@ export class PoSelectComponent extends PoSelectBaseComponent implements DoCheck 
   }
 
   scrollValue(index, clientHeight) {
-    const heightScrollValue: number = (index + 1) * this.getSelectItemHeight();
+    const heightScrollValue: number = (index) * this.getSelectItemHeight();
+
     return this.scrollPosition = heightScrollValue > clientHeight ? heightScrollValue :  0;
   }
 
@@ -218,15 +213,13 @@ export class PoSelectComponent extends PoSelectBaseComponent implements DoCheck 
 
   // Recebe as alterações do model
   writeValue(value: any) {
-
-    const optionFound = this.options.find(option => {
-      return this.isEqual(option.value, value);
-    });
+    const optionFound: PoSelectOption = this.findOptionValue(value);
 
     if (optionFound) {
       this.selectElement.nativeElement.value = optionFound.value;
       this.selectedValue = optionFound.value;
       this.displayValue = (optionFound.label);
+      this.setScrollPosition(optionFound.value);
 
     } else if (validValue(this.selectedValue)) {
       this.selectElement.nativeElement.value = undefined;
@@ -248,6 +241,10 @@ export class PoSelectComponent extends PoSelectBaseComponent implements DoCheck 
       this.selectElement.nativeElement.style.display = 'block';
       this.toggleButton();
     });
+  }
+
+  private findOptionValue(value: any) {
+    return this.options.find(option => this.isEqual(option.value, value));
   }
 
   private getSelectItemHeight() {
@@ -295,19 +292,32 @@ export class PoSelectComponent extends PoSelectBaseComponent implements DoCheck 
     this.controlPosition.adjustPosition(poSelectContentPositionDefault);
   }
 
+  private setScrollPosition(value: any) {
+    const ulDropdpwn = this.element.nativeElement.querySelector('ul.po-select-content');
+
+    if (value && this.options && this.options.length) {
+      const optionFound: PoSelectOption = this.findOptionValue(value);
+
+      if (optionFound) {
+        const index = this.options.indexOf(optionFound);
+        ulDropdpwn.scrollTop =  this.scrollValue(index, ulDropdpwn.clientHeight);
+      }
+    }
+  }
+
   private showDropdown() {
     if (!this.readonly) {
       this.selectElement.nativeElement.focus();
-      if (this.options && this.options.length) {
-        const ulDropdpwn = this.element.nativeElement.querySelector('ul.po-select-content');
-        ulDropdpwn.scrollTop = this.scrollPosition;
-      }
       this.selectIcon = 'po-icon-arrow-up';
       this.selector('.po-select-container').classList.add('po-select-show');
       this.open = true;
       this.changeDetector.markForCheck();
       this.setPositionDropdown();
       this.initializeListeners();
+
+      if (this.options && this.options.length) {
+        this.setScrollPosition(this.selectedValue);
+      }
     }
   }
 
