@@ -57,6 +57,7 @@ export class SamplePoModalLabsComponent implements OnInit {
     { label: 'Large', value: 'lg' },
     { label: 'Extra large', value: 'xl' },
     { label: 'Automatic', value: 'auto' },
+    { label: 'Full', value: 'full' },
   ];
 
   openModal() {

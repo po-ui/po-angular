@@ -25,7 +25,7 @@ describe('PoModalBaseComponent:', () => {
   });
 
   it('should update property `p-size` with valid values', () => {
-    const validValues = ['sm', 'md', 'lg', 'xl', 'auto'];
+    const validValues = ['sm', 'md', 'lg', 'xl', 'auto', 'full'];
 
     expectPropertiesValues(component, 'size', validValues, validValues);
   });
