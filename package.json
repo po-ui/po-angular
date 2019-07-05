@@ -34,6 +34,7 @@
     "build:sync": "ng build sync && gulp replaceVersion && cd dist/portinari-sync && npm pack",
     "build": "npm run build:ui && npm run build:templates && npm run build:storage && npm run build:sync && npm run build:code-editor",
     "build:lite": "ng build ui && ng build storage && ng build sync && ng build templates && ng build code-editor",
+    "release": "standard-version",
     "sonarqube": "gulp sonarqube"
   },
   "private": true,
@@ -64,18 +65,20 @@
     "@angular/cli": "~8.0.1",
     "@angular/compiler-cli": "~8.0.0",
     "@angular/language-service": "~8.0.0",
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-angular": "^8.0.0",
     "@portinari/tslint": "1.0.0",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.9.4",
     "@types/localforage": "0.0.34",
+    "@types/node": "~8.9.4",
     "@types/systemjs": "^0.20.6",
-    "del": "^3.0.0",
-    "gulp-run": "^1.7.1",
-    "jasmine": "^3.3.1",
-    "typemoq": "^2.1.0",
     "codelyzer": "^5.0.0",
+    "del": "^3.0.0",
     "gulp": "^4.0.2",
+    "gulp-run": "^1.7.1",
+    "husky": "^3.0.0",
+    "jasmine": "^3.3.1",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -86,9 +89,22 @@
     "ng-packagr": "^5.1.0",
     "protractor": "~5.4.0",
     "sonarqube-scanner": "^2.4.1",
+    "standard-version": "^6.0.1",
     "ts-node": "~7.0.0",
     "tsickle": "^0.35.0",
     "tslint": "~5.15.0",
+    "typemoq": "^2.1.0",
     "typescript": "~3.4.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "standard-version": {
+    "skip": {
+      "commit": true,
+      "tag": true
+    }
   }
 }
