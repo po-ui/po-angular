@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+
 import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 import { PoRichTextToolbarButtonGroupItem } from '../interfaces/po-rich-text-toolbar-button-group-item.interface';
 
@@ -95,17 +96,19 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
 
   setButtonsStates(commands: Array<string>) {
     if (!this.readonly) {
-      this.alignButtons.forEach(button => { button.selected = commands.includes(button.command); });
-      this.formatButtons.forEach(button => { button.selected = commands.includes(button.command); });
+      this.alignButtons.forEach(button => button.selected = commands.includes(button.command));
+      this.formatButtons.forEach(button => button.selected = commands.includes(button.command));
       this.listButtons[0].selected = commands.includes(this.listButtons[0].command);
     }
   }
 
   private emitAlignCommand(command: string) {
-    const index = this.alignButtons.findIndex( btn => btn.command === command );
+    const index = this.alignButtons.findIndex(btn => btn.command === command);
+
     if (this.alignButtons[index].selected) {
       this.alignButtons[index].selected = false;
     }
+
     this.command.emit(command);
   }
 
@@ -115,12 +118,14 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
 
   private removeButtonFocus() {
     const buttons = this.toolbarElement.nativeElement.querySelectorAll('button');
-    buttons.forEach(button => { button.setAttribute('tabindex', '-1'); });
+
+    buttons.forEach(button => button.setAttribute('tabindex', '-1'));
   }
 
   private toggleDisableButtons(state: boolean) {
-    this.alignButtons.forEach(button => { button.disabled = state; });
-    this.formatButtons.forEach(button => { button.disabled = state; });
+    this.alignButtons.forEach(button => button.disabled = state);
+    this.formatButtons.forEach(button => button.disabled = state);
+
     this.listButtons[0].disabled = state;
   }
 

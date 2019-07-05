@@ -46,30 +46,6 @@ module.exports = function (config) {
             },
             'src/lib/components/po-field/po-input/po-input.component.ts': {
               branches: 50
-            },
-            'src/lib/components/po-field/po-rich-text/po-rich-text.component.ts': {
-              statements: 0,
-              lines: 0,
-              branches: 0,
-              functions: 0
-            },
-            'src/lib/components/po-field/po-rich-text/po-rich-text-base.component.ts': {
-              statements: 0,
-              lines: 0,
-              branches: 0,
-              functions: 0
-            },
-            'src/lib/components/po-field/po-rich-text/po-rich-text-body/po-rich-text-body.component.ts': {
-              statements: 0,
-              lines: 0,
-              branches: 0,
-              functions: 0
-            },
-            'src/lib/components/po-field/po-rich-text/po-rich-text-toolbar/po-rich-text-toolbar.component.ts': {
-              statements: 0,
-              lines: 0,
-              branches: 0,
-              functions: 0
             }
           }
         }

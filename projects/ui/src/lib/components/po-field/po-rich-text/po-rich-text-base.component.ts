@@ -16,9 +16,10 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   private _height?: number;
   private _placeholder: string;
   private _readonly: boolean;
+  private _required: boolean;
 
-  onChangeModel: any = null;
   invalid: boolean = false;
+  onChangeModel: any = null;
   value: string;
 
   // tslint:disable-next-line
@@ -120,17 +121,22 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   }
 
   /**
+   * @optional
+   *
    * @description
    *
    * Indica que o campo será obrigatório.
    *
    * @default `false`
    */
-  required?: boolean = false;
-  @Input('p-required') set setRequired(required: string) {
-    this.required = convertToBoolean(required);
+  @Input('p-required') set required(value: boolean) {
+    this._required = convertToBoolean(value);
 
     this.validateModel(this.value);
+  }
+
+  get required() {
+    return this._required;
   }
 
   // Função implementada do ControlValueAccessor
