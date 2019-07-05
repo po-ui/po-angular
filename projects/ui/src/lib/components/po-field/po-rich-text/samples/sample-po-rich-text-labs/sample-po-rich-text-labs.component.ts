@@ -9,6 +9,7 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
 export class SamplePoRichTextLabsComponent implements OnInit {
   errorMessage: string;
   help: string;
+  height: number;
   label: string;
   placeholder: string;
   properties: Array<string>;

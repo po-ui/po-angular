@@ -28,7 +28,7 @@ export class PoRichTextBodyComponent implements OnInit {
     this.bodyElement.nativeElement.designMode = 'on';
 
     // timeout necessário para setar o valor vindo do writeValue do componente principal.
-    setTimeout(() => { this.updateValueWithModelValue(); });
+    setTimeout(() => this.updateValueWithModelValue());
   }
 
   executeCommand(command: string) {
@@ -44,28 +44,30 @@ export class PoRichTextBodyComponent implements OnInit {
 
   onKeyUp() {
     // Tratamento necessário para eliminar a tag <br> criada no firefox quando o body for limpo.
-    if (!this.bodyElement.nativeElement.innerText.trim() && this.bodyElement.nativeElement.firstChild) {
-      this.bodyElement.nativeElement.firstChild.remove();
+    const bodyElement = this.bodyElement.nativeElement;
+
+    if (!bodyElement.innerText.trim() && bodyElement.firstChild) {
+      bodyElement.firstChild.remove();
     }
+
     this.updateModel();
     this.emitSelectionCommands();
   }
 
   update() {
-    setTimeout(() => { this.updateModel(); });
-    setTimeout(() => { this.onKeyUp(); });
+    setTimeout(() => this.updateModel());
+    setTimeout(() => this.onKeyUp());
   }
 
   private emitSelectionCommands() {
-    const commands: Array<string> = poRichTextBodyCommands.filter(command => {
-      return document.queryCommandState(command);
-    });
+    const commands = poRichTextBodyCommands.filter(command => document.queryCommandState(command));
 
     this.commands.emit(commands);
   }
 
   private updateModel() {
     this.modelValue = this.bodyElement.nativeElement.innerHTML;
+
     this.value.emit(this.modelValue);
   }
 
