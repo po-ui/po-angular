@@ -11,7 +11,7 @@ export class PoNavbarActionPopupComponent {
   @Input('p-icon-actions') iconActions: Array<PoNavbarIconAction>;
 
   getLastIconAction() {
-    if (this.iconActions && this.iconActions.length > 0) {
+    if (this.iconActions && this.iconActions.length) {
       return this.iconActions[this.iconActions.length - 1].icon;
     }
   }

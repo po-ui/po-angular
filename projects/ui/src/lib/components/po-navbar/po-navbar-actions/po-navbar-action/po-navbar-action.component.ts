@@ -9,8 +9,7 @@ import { callFunction, isExternalLink, openExternalLink } from '../../../../util
 })
 export class PoNavbarActionComponent {
 
-  private param;
-  private parentRef;
+  private parentRef: any;
 
   @Input('p-action') action?: Function;
 
@@ -26,9 +25,10 @@ export class PoNavbarActionComponent {
     this.parentRef = viewContainerRef['_view']['component'];
   }
 
-  onActionClick() {
+  click() {
     if (this.action) {
-      return callFunction(this.action, this.parentRef, this.param || this);
+      callFunction(this.action, this.parentRef || this);
+      return;
     }
 
     if (this.link) {
@@ -37,6 +37,7 @@ export class PoNavbarActionComponent {
   }
 
   private openUrl(url: string) {
+
     if (isExternalLink(url)) {
       return openExternalLink(url);
     }

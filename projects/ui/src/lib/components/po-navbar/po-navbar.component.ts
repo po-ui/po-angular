@@ -1,8 +1,15 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
 
+import { PoMenuItem } from '../po-menu';
 import { PoNavbarBaseComponent } from './po-navbar-base.component';
+import { PoNavbarItem } from './interfaces/po-navbar-item.interface';
 import { PoNavbarItemsComponent } from './po-navbar-items/po-navbar-items.component';
+
+const poNavbarNavigationWidth = 88;
+const poNavbarMenuMedia = 768;
+const poNavbarMatchMedia = `(max-width: ${poNavbarMenuMedia}px)`;
+const poNavbarTiming = '250ms ease';
 
 /**
  * @docsExtends PoNavbarBaseComponent
@@ -16,13 +23,20 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   disableRight: boolean;
   showItemsNavigation: boolean = false;
 
-  private allNavbarItemsWidth: any;
   private mediaQuery: any;
-  private navbarItemsWidth: any;
   private offset: number = 0;
   private player: AnimationPlayer;
+  private menuItems: Array<PoMenuItem>;
 
   protected windowResizeListener: () => void;
+
+  get navbarItemNavigationDisableLeft() {
+    return this.offset === 0;
+  }
+
+  get navbarItemNavigationDisableRight() {
+    return this.disableRight && this.offset !== 0;
+  }
 
   @ViewChild(PoNavbarItemsComponent, { read: ElementRef, static: true }) navbarItemsElement: ElementRef;
 
@@ -35,58 +49,26 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     this.displayItemsNavigation();
-    this.menuWrapperAdjust();
+
+    if (this.menu) {
+      this.initNavbarMenu();
+    }
   }
 
   ngOnDestroy() {
     if (this.mediaQuery) {
-      this.mediaQuery.removeListener();
+      this.mediaQuery.removeListener(this.onMediaQueryChange);
     }
   }
 
-  navigateItems(orientation) {
-
+  navigateItems(orientation: string) {
     orientation === 'left' ? this.navigateLeft() : this.navigateRight();
 
     this.animate(this.offset);
   }
 
-  private adjustNavbarMenu() {
-    const navbarMenu = document.querySelector('po-navbar po-menu');
-    const page = document.querySelector('.po-page');
-    const navbarLogo = document.querySelector('.po-navbar-logo');
-    navbarMenu.setAttribute('style', `display: none`);
-    if (page) {
-      page.setAttribute('style', 'margin-left: 0; width: 100%');
-    }
-    if (navbarLogo) {
-      navbarLogo.setAttribute('style', `padding: 0 16px 0 0!important`);
-    }
-    this.mediaQuery.addListener(changed => {
-      if (changed.matches) {
-        navbarMenu.setAttribute('style', `display: block`);
-        if (page) {
-          page.setAttribute('style', 'margin-left: 256; width: calc(100% - 256px)');
-        }
-      } else {
-        navbarMenu.setAttribute('style', `display: none`);
-        if (page) {
-          page.setAttribute('style', 'margin-left: 0; width: 100%');
-        }
-      }
-    });
-  }
-
-  private adjustUserMenu() {
-    const userMenuItems = this.menu.menus;
-    this.mediaQuery.addListener(changed => {
-      if (changed.matches) {
-        const subItems = [{label: this.literals.navbarLinks, subItems: this.items}] ;
-        this.menu.menus = [...subItems, ...this.menu.menus];
-      } else {
-        this.menu.menus = userMenuItems;
-      }
-    });
+  private allNavbarItemsWidth() {
+    return this.navbarItems.allNavbarItems.reduce((previous: any, current: any) => previous + current.nativeElement.offsetWidth, 0);
   }
 
   private animate(offset: number) {
@@ -99,81 +81,113 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   private buildTransitionAnimation(offset: number) {
     return this.builder.build([
       animate(
-        '250ms ease',
-        keyframes([style({ transform: `translateX(${offset}px)` })])
+        poNavbarTiming,
+        keyframes([style({ transform: `translateX(${-offset}px)` })])
       )
     ]);
   }
 
-  private displayItemsNavigation() {
-    this.navbarItemsWidth = this.navbarItemsElement.nativeElement.offsetWidth;
+  private changeNavbarMenuItems(isCollapsedMedia: any, menuItems: Array<PoMenuItem>, navbarItems: Array<PoNavbarItem>, label: string) {
 
-    this.allNavbarItemsWidth =
-      this.navbarItems.allNavbarItems.reduce((previous: any, current: any) => previous + current.nativeElement.offsetWidth, 0);
-
-    this.showItemsNavigation = this.navbarItemsWidth < this.allNavbarItemsWidth + 88;
-
-    this.changeDetector.detectChanges();
-
-    if (this.offset !== 0) {
-      this.offset = 0;
-      this.animate(this.offset);
+    if (isCollapsedMedia) {
+      const subItems = [{ label, subItems: navbarItems }];
+      this.menu.menus = [...subItems, ...menuItems];
+    } else {
+      this.menu.menus = menuItems;
     }
   }
 
-  private menuWrapperAdjust() {
-    const body = document.querySelector('body');
-    body.setAttribute('style', `height: calc(100% - 56px)`);
-    this.mediaQuery = window.matchMedia('(max-width: 768px)');
+  private calculateLeftNavigation() {
 
-    !this.menu ? this.adjustNavbarMenu() : this.adjustUserMenu();
-  }
-
-  private navigateRight() {
-
-    const maxAllowedOffset = this.allNavbarItemsWidth - this.navbarItemsElement.nativeElement.offsetWidth;
-    const itemBreakPoint = (this.offset * -1) + this.navbarItemsElement.nativeElement.offsetWidth;
-
-    let movementInPixels = 0;
+    let calculatedOffset: number;
 
     this.navbarItems.allNavbarItems.some(navbarItem => {
-      const finalPosition = navbarItem.nativeElement.offsetWidth + navbarItem.nativeElement.offsetLeft;
+      const navbarItemOffset = navbarItem.nativeElement.offsetLeft;
+      const navbarItemWidth = navbarItem.nativeElement.offsetWidth;
+
+      if (navbarItemOffset >= this.offset) {
+        calculatedOffset = navbarItemOffset - (this.navbarItemsWidth() - navbarItemWidth);
+        return true;
+      }
+    });
+    return calculatedOffset;
+  }
+
+  private calculateRightNavigation(itemBreakPoint: number) {
+
+    let calculatedOffset: number;
+
+    this.navbarItems.allNavbarItems.some(navbarItem => {
+      const offsetLeft = navbarItem.nativeElement.offsetLeft;
+      const finalPosition = navbarItem.nativeElement.offsetWidth + offsetLeft;
 
       if (itemBreakPoint < finalPosition) {
-        movementInPixels = navbarItem.nativeElement.offsetLeft;
+        calculatedOffset = offsetLeft;
         return true;
       }
 
     });
+    return calculatedOffset;
+  }
 
-    this.offset = (movementInPixels * -1);
+  private displayItemsNavigation() {
+    this.showItemsNavigation = this.navbarItemsWidth() < this.allNavbarItemsWidth() + poNavbarNavigationWidth;
 
-    if ((this.offset * -1) >= maxAllowedOffset) {
-      this.offset = maxAllowedOffset * -1;
-      this.disableRight = true;
+    this.changeDetector.detectChanges();
+
+    if (this.offset !== 0) {
+      this.setOffsetToZero();
+      this.animate(this.offset);
     }
+  }
+
+  private initNavbarMenu() {
+    this.mediaQuery = window.matchMedia(poNavbarMatchMedia);
+    this.menuItems = this.menu.menus;
+
+    if (window.innerWidth < poNavbarMenuMedia) {
+      this.changeNavbarMenuItems(true, this.menuItems, this.items, this.literals.navbarLinks);
+    }
+
+    this.mediaQuery.addListener(this.onMediaQueryChange);
+  }
+
+  private navbarItemsWidth() {
+    return this.navbarItemsElement.nativeElement.offsetWidth;
   }
 
   private navigateLeft() {
     this.disableRight = false;
 
-    let movementInPixels;
+    this.offset = this.calculateLeftNavigation();
 
-    this.navbarItems.allNavbarItems.some(navbarItem => {
+    if (this.offset < 0) {
+      this.setOffsetToZero();
+    }
+  }
 
-      const navbarItemOffset = navbarItem.nativeElement.offsetLeft;
+  private navigateRight() {
 
-      if (navbarItemOffset >= (this.offset * -1)) {
-        movementInPixels = navbarItemOffset - (this.navbarItemsElement.nativeElement.offsetWidth - navbarItem.nativeElement.offsetWidth);
-        return true;
-      }
+    const maxAllowedOffset = this.allNavbarItemsWidth() - this.navbarItemsWidth();
+    const itemBreakPoint = this.offset + this.navbarItemsWidth();
 
-    });
+    this.offset = this.calculateRightNavigation(itemBreakPoint);
 
-    this.offset = (movementInPixels * -1);
+    this.validateMaxOffset(maxAllowedOffset);
+  }
 
-    if (this.offset > 0) {
-      this.offset = 0;
+  private onMediaQueryChange = changed => {
+    this.changeNavbarMenuItems(changed.matches, this.menuItems, this.items, this.literals.navbarLinks);
+  }
+
+  private setOffsetToZero() {
+    this.offset = 0;
+  }
+
+  private validateMaxOffset(maxAllowedOffset: number) {
+    if (this.offset >= maxAllowedOffset) {
+      this.offset = maxAllowedOffset;
+      this.disableRight = true;
     }
   }
 

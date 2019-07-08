@@ -8,7 +8,7 @@ import { PoNavbarIconAction } from '../interfaces/po-navbar-icon-action.interfac
 })
 export class PoNavbarActionsComponent {
 
-  private _iconActions;
+  private _iconActions: Array<PoNavbarIconAction>;
 
   @Input('p-icon-actions') set iconActions(actions: Array<PoNavbarIconAction>) {
     this._iconActions = actions.map(action => ({ ...action, separator: true, url: action.link }));
