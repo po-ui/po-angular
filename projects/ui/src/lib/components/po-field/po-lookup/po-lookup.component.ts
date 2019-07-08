@@ -113,7 +113,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements OnDestro
     if (this.fieldFormat) {
       this.setInputValueWipoieldFormat(object);
     } else {
-      this.inputEl.nativeElement.value = this.valueToModel ? value : '';
+      this.inputEl.nativeElement.value = this.valueToModel || this.valueToModel === 0 ? value : '';
     }
   }
 
