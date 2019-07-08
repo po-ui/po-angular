@@ -21,17 +21,13 @@ export class PoNavbarItemComponent {
   @Output('p-click') click: EventEmitter<PoNavbarItem> = new EventEmitter<PoNavbarItem>();
 
   get type() {
-    if (isExternalLink(this.link)) {
-      return 'externalLink';
-    }
-
-    return 'internalLink';
+    return isExternalLink(this.link) ? 'externalLink' : 'internalLink';
   }
 
-  itemClick() {
+  itemClick(label: string, link: string) {
 
     if (this.action) {
-      this.action({ label: this.label, link: this.link });
+      this.action({ label, link });
     }
 
     this.click.emit();

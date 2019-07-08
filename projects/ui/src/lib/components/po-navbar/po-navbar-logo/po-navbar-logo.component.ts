@@ -5,7 +5,5 @@ import { Component, Input } from '@angular/core';
   templateUrl: './po-navbar-logo.component.html'
 })
 export class PoNavbarLogoComponent {
-
   @Input('p-logo') logo?: string;
-
 }

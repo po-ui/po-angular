@@ -3,6 +3,7 @@
 
   <po-navbar-logo
     class="po-navbar-logo"
+    [ngClass]="{'po-navbar-logo-menu' : !!menu, 'po-navbar-no-logo' : !logo }"
     [p-logo]="logo">
   </po-navbar-logo>
 
@@ -13,8 +14,8 @@
 
   <po-navbar-item-navigation *ngIf="showItemsNavigation"
     class="po-navbar-item-navigation"
-    [p-disable-left]="offset === 0"
-    [p-disable-right]="disableRight && offset !== 0"
+    [p-disable-left]="navbarItemNavigationDisableLeft"
+    [p-disable-right]="navbarItemNavigationDisableRight"
     (p-click)="navigateItems($event)">
   </po-navbar-item-navigation>
 
