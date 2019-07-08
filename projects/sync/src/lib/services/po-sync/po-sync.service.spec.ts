@@ -13,9 +13,11 @@ import { PoHttpRequestData } from '../po-http-client/interfaces/po-http-request-
 import { PoHttpRequestType } from '../po-http-client/po-http-request-type.enum';
 import { PoNetworkService } from './../po-network/po-network.service';
 import { PoNetworkType } from '../../models/po-network-type.enum';
+import { PoSchemaDefinitionService } from './../po-schema/po-schema-definition/po-schema-definition.service';
+import { PoSchemaService } from './../po-schema/po-schema.service';
+import { PoSchemaUtil } from './../po-schema/po-schema-util/po-schema-util.model';
 import { PoSyncConfig } from './interfaces/po-sync-config.interface';
 import { PoSyncSchema } from './interfaces/po-sync-schema.interface';
-import { PoSchemaDefinitionService, PoSchemaService, PoSchemaUtil } from '../po-schema';
 import { PoSyncService } from './po-sync.service';
 
 class CustomDataTransform extends PoDataTransform {
