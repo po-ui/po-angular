@@ -283,16 +283,19 @@ export function  getFormattedLink(link: string): string {
  * @param ascending Determina se será em ordem ascendente ou descendente.
  */
 export function sortValues(leftSide: string, rightSide: string, ascending: boolean = true): number {
+  const left = isTypeof(leftSide, 'string') ? leftSide.toLowerCase() : leftSide;
+  const right = isTypeof(rightSide, 'string') ? rightSide.toLowerCase() : rightSide;
+
   if (ascending) {
-    if (leftSide < rightSide) {
+    if (left < right) {
       return -1;
-    } else if (leftSide > rightSide) {
+    } else if (left > right) {
       return 1;
     }
   } else if (ascending === false) {
-    if (leftSide < rightSide) {
+    if (left < right) {
       return 1;
-    } else if (leftSide > rightSide) {
+    } else if (left > right) {
       return -1;
     }
   }

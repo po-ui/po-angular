@@ -545,11 +545,29 @@ describe('Function sortValues:', () => {
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
+    it('should return `-1` if `leftSide` is less than `rightSide`, `ascending` is `undefined` and use lower and upper characters', () => {
+      const ascending: boolean = undefined;
+      const expectedReturn: number = -1;
+      const leftSide: string = 'Aaa';
+      const rightSide: string = 'abc';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
     it('should return `-1` if `leftSide` is less than `rightSide` and `ascending` is `true`', () => {
       const ascending: boolean = true;
       const expectedReturn: number = -1;
       const leftSide: string = 'ABC';
       const rightSide: string = 'CBA';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it('should return `-1` if `leftSide` is less than `rightSide`, `ascending` is `true` and use lower and upper characters', () => {
+      const ascending: boolean = true;
+      const expectedReturn: number = -1;
+      const leftSide: string = 'Aaa';
+      const rightSide: string = 'abc';
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -563,11 +581,29 @@ describe('Function sortValues:', () => {
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
+    it('should return `1` if `leftSide` is less than `rightSide`, `ascending` is `false` and use lower and upper characters', () => {
+      const ascending: boolean = false;
+      const expectedReturn: number = 1;
+      const leftSide: string = 'Aaa';
+      const rightSide: string = 'abc';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
     it('should return `1` if `leftSide` is greater than `rightSide` and `ascending` is `undefined`', () => {
       const ascending: boolean = undefined;
       const expectedReturn: number = 1;
       const leftSide: string = 'CBA';
       const rightSide: string = 'ABC';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it('should return `1` if `leftSide` is greater than `rightSide`, `ascending` is `undefined` and use lower and upper characters', () => {
+      const ascending: boolean = undefined;
+      const expectedReturn: number = 1;
+      const leftSide: string = 'abc';
+      const rightSide: string = 'Aaa';
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -581,11 +617,29 @@ describe('Function sortValues:', () => {
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
+    it('should return `1` if `leftSide` is greater than `rightSide`, `ascending` is `true` and use lower and upper characters', () => {
+      const ascending: boolean = true;
+      const expectedReturn: number = 1;
+      const leftSide: string = 'abc';
+      const rightSide: string = 'Aaa';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
     it('should return `-1` if `leftSide` is greater than `rightSide` and `ascending` is `false`', () => {
       const ascending: boolean = false;
       const expectedReturn: number = -1;
       const leftSide: string = 'CBA';
       const rightSide: string = 'ABC';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it('should return `-1` if `leftSide` is greater than `rightSide`, `ascending` is `false` and use lower and upper characters', () => {
+      const ascending: boolean = false;
+      const expectedReturn: number = -1;
+      const leftSide: string = 'abc';
+      const rightSide: string = 'AAA';
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -599,11 +653,29 @@ describe('Function sortValues:', () => {
       expect(sortValues(leftSide, rightSide , ascending)).toBe(expectedReturn);
     });
 
+    it('should return `0` if `leftSide` is equal to `rightSide`, `ascending` is `undefined` and use lower and upper characters', () => {
+      const ascending: boolean = undefined;
+      const expectedReturn: number = 0;
+      const leftSide: string = 'ABC';
+      const rightSide: string = 'abc';
+
+      expect(sortValues(leftSide, rightSide , ascending)).toBe(expectedReturn);
+    });
+
     it('should return `0` if `leftSide` is equal to `rightSide` and `ascending` is `true`', () => {
       const ascending: boolean = true;
       const expectedReturn: number = 0;
       const leftSide: string = 'ABC';
       const rightSide: string = 'ABC';
+
+      expect(sortValues(leftSide, rightSide , ascending)).toBe(expectedReturn);
+    });
+
+    it('should return `0` if `leftSide` is equal to `rightSide`, `ascending` is `true` and use lower and upper characters', () => {
+      const ascending: boolean = true;
+      const expectedReturn: number = 0;
+      const leftSide: string = 'ABC';
+      const rightSide: string = 'abc';
 
       expect(sortValues(leftSide, rightSide , ascending)).toBe(expectedReturn);
     });
@@ -615,6 +687,15 @@ describe('Function sortValues:', () => {
       const rightSide: string = 'ABC';
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it('should return `0` if `leftSide` is equal to `rightSide`, `ascending` is `false` and use lower and upper characters', () => {
+      const ascending: boolean = false;
+      const expectedReturn: number = 0;
+      const leftSide: string = 'ABC';
+      const rightSide: string = 'abc';
+
+      expect(sortValues(leftSide, rightSide , ascending)).toBe(expectedReturn);
     });
 
     it('should return `-1` if `leftSide` is numeric value, `rightSide` is a character value and `ascending` is `true`', () => {
