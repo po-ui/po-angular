@@ -233,6 +233,15 @@ describe('PoLookupComponent: ', () => {
       expect(component['setInputValueWipoieldFormat']).not.toHaveBeenCalled();
     });
 
+    it('setViewValue: should set nativeElement value with value if not have a formatField and valueToModel is 0', () => {
+      component.fieldFormat = undefined;
+      component['valueToModel'] = 0;
+
+      component.setViewValue('valueTeste', objectSelected);
+
+      expect(component.inputEl.nativeElement.value).toBe('valueTeste');
+    });
+
     it('setViewValue: should set nativeElement value with `` when not have a formatField and not have a valueToModel', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = undefined;
