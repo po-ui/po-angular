@@ -2,6 +2,7 @@ import { Input } from '@angular/core';
 
 import { browserLanguage, convertToBoolean, poLocaleDefault } from '../../utils/util';
 
+import { PoMenuComponent } from '../po-menu';
 import { PoNavbarIconAction } from './interfaces/po-navbar-icon-action.interface';
 import { PoNavbarItem } from './interfaces/po-navbar-item.interface';
 import { PoNavbarLiterals } from './interfaces/po-navbar-literals.interface';
@@ -39,7 +40,7 @@ export class PoNavbarBaseComponent {
    * Define uma lista de ações apresentadas em ícones no lado direito do `po-navbar`.
    */
   @Input('p-icon-actions') set iconActions(value: Array<PoNavbarIconAction>) {
-    this._iconActions = value || [];
+    this._iconActions = Array.isArray(value) ? value : [];
   }
 
   get iconActions(): Array<PoNavbarIconAction> {
@@ -54,7 +55,7 @@ export class PoNavbarBaseComponent {
    * Define uma lista de items do `po-navbar`.
    */
   @Input('p-items') set items(value: Array<PoNavbarItem>) {
-    this._items = value || [];
+    this._items = Array.isArray(value) ? value : [];
   }
 
   get items(): Array<PoNavbarItem> {
@@ -133,7 +134,7 @@ export class PoNavbarBaseComponent {
    * </div>
    * ```
    */
-  @Input('p-menu') menu?: any;
+  @Input('p-menu') menu?: PoMenuComponent;
 
   /**
    * @optional

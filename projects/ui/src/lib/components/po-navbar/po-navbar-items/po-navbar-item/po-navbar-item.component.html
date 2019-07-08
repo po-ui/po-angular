@@ -11,6 +11,6 @@
     class="po-navbar-item-link"
     [class.po-clickable]="clickable"
     [routerLink]="link"
-    (click)="itemClick()">{{ label }}</a>
+    (click)="itemClick(label, link)">{{ label }}</a>
 
 </ng-container>
