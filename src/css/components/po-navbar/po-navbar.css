@@ -56,23 +56,23 @@ po-navbar ~ .po-wrapper {
 po-navbar ~ .po-wrapper .po-menu,
 po-navbar .po-menu {
   animation: menuPositionNormal 0.2s;
+  height: calc(100vh - var(--navbar-height));
   top: var(--navbar-height);
-  height: calc(100vh - var(--navbar-height))
 }
 
 po-navbar ~ .po-wrapper .po-menu-mobile,
 po-navbar .po-menu-mobile {
   background-color: var(--color-navbar-color);
   position: fixed;
-  top: 8px;
-  z-index: 9998;
+  top: 12px;
+  z-index: 3;
 }
 
 po-navbar ~ .po-wrapper {
   height: calc(100vh - var(--navbar-height));
 }
 
-po-navbar ~ .po-wrapper .po-page{
+po-navbar ~ .po-wrapper .po-page {
   height: calc(100vh - var(--navbar-height));
 }
 
@@ -93,8 +93,21 @@ po-navbar ~ .po-wrapper .po-page{
   po-navbar ~ .po-wrapper .po-menu,
   po-navbar .po-menu {
     animation: menuPositionResponsive 0.2s;
-    top: 0;
     height: 100%;
+    top: 0;
+  }
+}
+
+@media (min-width: 768px) {
+
+  .po-navbar + po-menu {
+    display: none;
   }
 
+  po-navbar + po-page-list .po-page-header,
+  po-navbar + po-page-detail .po-page-header,
+  po-navbar + po-page-edit .po-page-header,
+  po-navbar + po-page-default .po-page-header {
+    margin-top: 56px;
+  }
 }
