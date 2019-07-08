@@ -15,7 +15,9 @@ import { PoHttpClientService } from './../po-http-client/po-http-client.service'
 import { PoHttpRequestData } from '../po-http-client/interfaces/po-http-request-data.interface';
 import { PoHttpRequestType } from '../po-http-client/po-http-request-type.enum';
 import { PoRequestType } from '../../models/po-request-type.enum';
-import { PoSchemaDefinitionService, PoSchemaService, PoSchemaUtil } from './../po-schema';
+import { PoSchemaDefinitionService } from './../po-schema/po-schema-definition/po-schema-definition.service';
+import { PoSchemaService } from './../po-schema/po-schema.service';
+import { PoSchemaUtil } from './../po-schema/po-schema-util/po-schema-util.model';
 import { PoSyncConfig } from '../po-sync/interfaces/po-sync-config.interface';
 import { PoSyncResponse } from '../po-sync/interfaces/po-sync-response.interface';
 import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
