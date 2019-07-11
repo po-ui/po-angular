@@ -991,7 +991,6 @@
   UPLOAD
 \*------------------------------------*/
 
-  --color-upload-color: var(--color-primary);
   --color-upload-color-text-filename-loading: var(--color-neutral-dark-60);
 
   --color-upload-background-color-disabled: var(--color-white);
@@ -1013,6 +1012,20 @@
   --color-upload-background-color-error: var(--color-danger);
   --color-upload-color-text-load-waiting: var(--color-neutral);
   --color-upload-background-color-progress: var(--color-tertiary-light-90);
+
+  --color-upload-drag-drop-overlay-icon: var(--color-primary-alpha-50);
+  --color-upload-drag-drop-overlay-text: var(--color-primary);
+  --color-upload-drag-drop-area-overlay-background-color: var(--color-white);
+
+  --color-upload-drag-drop-area-icon: var(--color-neutral-light-80);
+  --color-upload-drag-drop-area-label-text: var(--color-neutral);
+  --color-upload-drag-drop-area-select-files-text: var(--color-primary);
+  --color-upload-drag-drop-area-border: var(--color-neutral-light-60);
+  --color-upload-drag-drop-area-border-primary: var(--color-primary);
+  --color-upload-drag-drop-area-border-error: var(--color-danger);
+
+  --color-upload-drag-drop-area-background-color-disabled: var(--color-neutral-light-90);
+  --color-upload-drag-drop-area-color-disabled: var(--color-neutral-light-60);
 
 /*------------------------------------*\
   WIDGET

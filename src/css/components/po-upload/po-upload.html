@@ -1,9 +1,13 @@
-
 <style>
   div.ng-invalid.ng-dirty .po-upload-button {
     border: solid 1px #c64840 !important;
     outline: none;
     color: #c64840;
+  }
+
+  div.ng-invalid.ng-dirty .po-upload-drag-drop-area {
+    border: dashed 2px #c64840 !important;
+    outline: none;
   }
 
   .inline {
@@ -20,7 +24,56 @@
   }
 </style>
 
-<article>
+<script>
+  (function(){
+    let timeout;
+
+    init();
+
+    function init() {
+      document.getElementById('dragDropOverlay').classList.add('po-invisible');
+    }
+
+    function getDragDropArea() {
+      return document.getElementById('dragDropArea');
+    }
+
+    function setBoundClientRect() {
+      let boundingClientRect = getDragDropArea().getBoundingClientRect();
+
+      const dragDropAreaOverlay = document.getElementById('dragDropAreaOverlay');
+
+      dragDropAreaOverlay.style.bottom = boundingClientRect.bottom + 'px';
+      dragDropAreaOverlay.style.height = boundingClientRect.height + 'px';
+      dragDropAreaOverlay.style.left = boundingClientRect.left + 'px';
+      dragDropAreaOverlay.style.right = boundingClientRect.right + 'px';
+      dragDropAreaOverlay.style.top = boundingClientRect.top + 'px';
+      dragDropAreaOverlay.style.width = boundingClientRect.width + 'px';
+    };
+
+    document.getElementById('uploadPage').addEventListener('dragover', function(event) {
+      event.preventDefault();
+
+      clearTimeout(timeout);
+
+      setBoundClientRect();
+
+      document.getElementById('dragDropOverlay').classList.remove('po-invisible');
+    }, false);
+
+    document.getElementById('uploadPage').addEventListener('dragleave', function(event) {
+      event.preventDefault();
+
+      timeout = setTimeout(() => {
+        document.getElementById('dragDropOverlay').classList.add('po-invisible');
+      }, 200)
+    }, false);
+
+  }());
+
+</script>
+
+<article id="uploadPage">
   <section>
 
     <div class="container">
@@ -153,5 +206,140 @@
         </div>
       </div>
     </div>
+
+    <div class="po-row">
+
+      <div class="container po-md-6">
+        <h4>Drag Drop</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP AREA -->
+          <div>
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                <div class="po-upload-drag-drop-area-select-files po-clickable"> ou selecione os arquivos no computador </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+
+          <div class="po-upload-progress po-upload-progress-success">
+            <div class="po-upload-filename-foreground">
+              <div class="po-upload-filename po-upload-filename-loading">
+                <span class="po-icon po-icon-ok"></span>foto-po.jpg - 86 kb
+              </div>
+            </div>
+          </div>
+
+          <div class="inline">
+            <button type="button" name="button" class="po-button po-button-primary" disabled>
+              Iniciar envio
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container po-md-6">
+        <h4>Drag Drop com Drop habilitado</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP OVERLAY -->
+          <div class="po-overlay-fixed" id="dragDropOverlay">
+
+            <div id="dragDropAreaOverlay" class="po-upload-drag-drop-area-overlay">
+
+              <div class="po-upload-drag-drop-area">
+                <div class="po-upload-drag-drop-area-container">
+
+                  <span class="po-upload-drag-drop-area-overlay-icon po-icon po-icon-upload-cloud"></span>
+
+                  <div class="po-upload-drag-drop-area-overlay-label"> Solte os arquivos aqui </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- FIM DRAG DROP OVERLAY -->
+
+          <!-- DRAG DROP AREA -->
+          <div id="dragDropArea">
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                <div class="po-upload-drag-drop-area-select-files po-clickable"> ou selecione os arquivos no computador </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+        </div>
+      </div>
+
+    </div>
+
+    <div class="container po-md-6">
+      <h4>Drag Drop desabilitado</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+        <!-- DRAG DROP AREA -->
+        <div>
+          <div class="po-upload-drag-drop-area po-upload-drag-drop-area-disabled" style="height: 320px">
+
+            <div class="po-upload-drag-drop-area-container">
+              <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+              <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+              <div class="po-upload-drag-drop-area-select-files po-clickable"> ou selecione os arquivos no computador </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- FIM DRAG DROP AREA -->
+      </div>
+    </div>
+
+    <div class="container po-md-6">
+      <h4>Drag Drop inválido</h4>
+
+      <div class="ng-invalid ng-dirty">
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP AREA -->
+          <div>
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                <div class="po-upload-drag-drop-area-select-files po-clickable"> ou selecione os arquivos no computador </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+        </div>
+      </div>
+    </div>
+
   </section>
 </article>

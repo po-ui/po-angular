@@ -1,0 +1,64 @@
+:root{
+  --font-upload-drag-drop-area-select-files-text: {
+    @apply --font-text-large-bold;
+  }
+
+  --font-upload-drag-drop-area-label-text: {
+    @apply --font-subtitle;
+  }
+}
+
+.po-upload-drag-drop-area {
+  border-radius: 1px;
+  border: dashed 2px var(--color-upload-drag-drop-area-border);
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
+.po-upload-drag-drop-area-container {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.po-upload-drag-drop-area-icon {
+  color: var(--color-upload-drag-drop-area-icon);
+  font-size: 48px;
+}
+
+.po-upload-drag-drop-area-select-files {
+  @apply --font-upload-drag-drop-area-select-files-text;
+  color: var(--color-upload-drag-drop-area-select-files-text);
+}
+
+.po-upload-drag-drop-area-label {
+  @apply --font-upload-drag-drop-area-label-text;
+  color: var(--color-upload-drag-drop-area-label-text);
+  margin-bottom: 10px;
+}
+
+.po-upload-drag-drop-area-disabled {
+  background-color: var(--color-upload-drag-drop-area-background-color-disabled);
+  color: var(--color-upload-drag-drop-area-border);
+}
+
+.po-upload-drag-drop-area-disabled .po-upload-drag-drop-area-select-files,
+.po-upload-drag-drop-area-disabled .po-upload-drag-drop-area-label {
+  color: var(--color-upload-drag-drop-area-color-disabled);
+}
+
+.po-upload-drag-drop-area-overlay-icon {
+  color: var(--color-upload-drag-drop-overlay-icon);
+  font-size: 48px;
+}
+
+.po-upload-drag-drop-area-overlay-label {
+  @apply --font-upload-drag-drop-overlay-label-text;
+  color: var(--color-upload-drag-drop-overlay-text);
+}
+
+po-upload.ng-invalid.ng-dirty .po-upload-drag-drop-area {
+  border: dashed 2px var(--color-upload-drag-drop-area-border-error);
+  outline: none;
+}
