@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/portinariui/portinari-angular/compare/v1.1.0...v1.1.1) (2019-07-12)
+
+
+### Bug Fixes
+
+* **lookup:** corrige ordenação das tabelas ([ee62bde](https://github.com/portinariui/portinari-angular/commit/ee62bde))
+* **lookup:** corrige descrição dos registros ([ca9b4b4](https://github.com/portinariui/portinari-angular/commit/ca9b4b4))
+* **sync:** corrige importação do thf-schema ([6e945ae](https://github.com/portinariui/portinari-angular/commit/6e945ae))
+
+### Tests
+
+* **navbar:** adiciona testes unitários ao componente ([4708a87](https://github.com/portinariui/portinari-angular/commit/4708a87))
+* **rich-text:** adiciona testes unitários no componente ([89b6e44](https://github.com/portinariui/portinari-angular/commit/89b6e44))
+
+
 ## 1.1.0 (2019-07-05)
 
 
