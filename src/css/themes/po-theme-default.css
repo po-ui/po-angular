@@ -532,8 +532,9 @@
 /*------------------------------------*\
   LOADING
 \*------------------------------------*/
-
   --color-loading-color-label: var(--color-neutral);
+  --color-loading-icon-color-neutral: var(--color-neutral-light-80);
+  --color-loading-icon-color-primary: var(--color-primary);
 
 /*------------------------------------*\
   LOADING OVERLAY

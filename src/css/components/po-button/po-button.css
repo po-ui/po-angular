@@ -140,8 +140,8 @@
   padding-right: 8px;
 }
 
-.po-button-loading-icon:before {
-  content: url('../images/portinari-loading-icon-gray.svg');
+.po-button-loading-icon .po-loading-icon {
+  top: 3px;
 }
 
 .po-button .po-icon, .po-button-loading-icon {
@@ -167,12 +167,13 @@
   }
 
   .po-button-loading-icon {
-    padding-right: 4px;
     padding-top: 4px;
   }
 
-  .po-button-loading-icon:before {
-    content: url('../images/portinari-loading-icon-gray-small.svg');
+  .po-button-loading-icon .po-loading-icon {
+    height: 12px;
+    top: 2px;
+    width: 12px;
   }
 
 }

@@ -11,16 +11,6 @@
   transform: translate(-50%, -50%);
 }
 
-.po-loading-icon {
-  font-family: PortinariIcon !important;
-  display: block;
-  text-align: center;
-}
-
-.po-loading-icon:before {
-  content: url('../images/portinari-loading-icon.svg');
-}
-
 .po-loading-label {
   @apply --font-loading-text;
   color: var(--color-loading-color-label);
