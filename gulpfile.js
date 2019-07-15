@@ -17,6 +17,8 @@ const customProperties = require('postcss-custom-properties')
 const importCss = require('postcss-import');
 const nested = require('postcss-nested');
 
+const distDirectory = 'style';
+
 const capitalize = string =>
   string.split('-')
     .map(part => part.charAt(0).toUpperCase() + part.substring(1).toLowerCase())
@@ -31,7 +33,7 @@ const cleanTemp = () => del('./.temp');
 const cleanThemeDir = () => del('./dist');
 
 const copyThemeAssets = () =>
-  src('./src/assets/**/*.*').pipe(dest(`./dist/po-theme${argv.theme ? '-' + argv.theme : ''}/`));
+  src('./src/assets/**/*.*').pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/`));
 
 const copyThemePackageJson = () =>
   src('package.json')
@@ -46,7 +48,7 @@ const copyThemePackageJson = () =>
 
       file.contents = new Buffer(JSON.stringify(contents, null, 2), 'utf-8');
     }))
-    .pipe(dest(`./dist/po-theme${argv.theme ? '-' + argv.theme : ''}/`));
+    .pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/`));
 
 const prepareThemeCss = () => src('./src/**/*.css').pipe(dest('./.temp'));
 
@@ -73,7 +75,7 @@ const buildThemeCss = () =>
       console.log(err.toString());
       this.emit('end');
     })
-    .pipe(dest(`./dist/po-theme${argv.theme ? '-' + argv.theme : ''}/`));
+    .pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/`));
 
 // Tarefa otimizada para desenvolvimento
 const buildDevThemeCss = () =>
@@ -93,7 +95,7 @@ const buildDevThemeCss = () =>
       console.log(err.toString());
       this.emit('end');
     })
-    .pipe(dest(`./dist/po-theme${argv.theme ? '-' + argv.theme : ''}/`));
+    .pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/`));
 
 const buildTheme = series(
   cleanTemp,
@@ -116,7 +118,7 @@ const copyAppAssets = () => src('./src/app/assets/**/*.*').pipe(dest('./app-dist
 const copyAppComponents = () => src(['./src/css/**/*.html', './src/css/**/*.js']).pipe(dest('./app-dist/css'));
 
 const copyThemeToApp = () =>
-  src([`./dist/po-theme${argv.theme ? '-' + argv.theme : ''}/**/*.*`, '!./dist/*.json'])
+  src([`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/**/*.*`, '!./dist/*.json'])
     .pipe(dest('./app-dist/assets/'));
 
 const buildAppJs = () =>
