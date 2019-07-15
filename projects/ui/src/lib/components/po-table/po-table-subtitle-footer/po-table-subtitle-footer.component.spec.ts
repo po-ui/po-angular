@@ -61,6 +61,43 @@ describe('PoTableSubtitleFooterComponent:', () => {
       expect(component['removeResizeListener']).toHaveBeenCalled();
     });
 
+    describe('ngDoCheck', () => {
+
+      it(`should call 'toggleShowCompleteSubtitle' and set 'isVisible' to 'true' if 'getContainerSize' returns a value greater than 0
+      and 'isVisible' is  'false'`, () => {
+        component['isVisible'] = false;
+
+        spyOn(component, <any>'getContainerSize').and.returnValue(100);
+        spyOn(component, <any>'toggleShowCompleteSubtitle');
+
+        component.ngDoCheck();
+
+        expect(component['toggleShowCompleteSubtitle']).toHaveBeenCalled();
+        expect(component['isVisible']).toBe(true);
+      });
+
+      it('shouldn`t call `toggleShowCompleteSubtitle` if `isVisible` is `true`', () => {
+        component['isVisible'] = true;
+
+        spyOn(component, <any>'toggleShowCompleteSubtitle');
+
+        component.ngDoCheck();
+
+        expect(component['toggleShowCompleteSubtitle']).not.toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `toggleShowCompleteSubtitle` if `getContainerSize` returns 0', () => {
+        component['isVisible'] = false;
+
+        spyOn(component, <any>'getContainerSize').and.returnValue(0);
+        spyOn(component, <any>'toggleShowCompleteSubtitle');
+
+        component.ngDoCheck();
+
+        expect(component['toggleShowCompleteSubtitle']).not.toHaveBeenCalled();
+      });
+    });
+
     // Teste com problemas intermitentes
     // Uncaught Error: macroTask 'setTimeout': can not transition to 'running', expecting state 'scheduled', was 'notScheduled'.
     // O problema pode estar associada a forma que o componente e está estruturado e o uso do setTimeout.
