@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, ElementRef, Input, OnDestroy, Renderer2 } from '@angular/core';
 
 import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
 
@@ -13,10 +13,11 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
   selector: 'po-table-subtitle-footer',
   templateUrl: './po-table-subtitle-footer.component.html'
 })
-export class PoTableSubtitleFooterComponent implements AfterViewInit, OnDestroy {
+export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, OnDestroy {
 
   showSubtitle: boolean;
 
+  private isVisible: boolean;
   private timeoutResize;
   protected resizeListener: () => void;
 
@@ -31,6 +32,15 @@ export class PoTableSubtitleFooterComponent implements AfterViewInit, OnDestroy 
   ngAfterViewInit() {
     this.initializeResizeListener();
     this.debounceResize();
+  }
+
+  ngDoCheck() {
+
+    if (!this.isVisible && this.getContainerSize() > 0) {
+      this.toggleShowCompleteSubtitle();
+      this.isVisible = true;
+    }
+
   }
 
   ngOnDestroy() {
