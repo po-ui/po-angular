@@ -8,9 +8,11 @@ import { changeBrowserInnerWidth, configureTestSuite } from './../../../util-tes
 
 import * as UtilsFunctions from '../../../utils/util';
 import { removeDuplicatedOptions } from '../../../utils/util';
+
+import { PoLoadingModule } from '../../po-loading/po-loading.module';
+
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
-import { PoLoadingComponent } from '../../po-loading/po-loading.component';
 
 import { PoComboComponent } from './po-combo.component';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
@@ -31,10 +33,10 @@ describe('PoComboComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [ PoLoadingModule ],
       declarations: [
         PoComboComponent,
         PoFieldContainerComponent,
-        PoLoadingComponent,
         PoFieldContainerBottomComponent
       ],
       providers: [ HttpClient, HttpHandler]
@@ -1425,11 +1427,11 @@ describe('PoComboComponent - with service:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        PoLoadingModule
       ],
       declarations: [ PoComboComponent,
         PoFieldContainerComponent,
-        PoLoadingComponent,
         PoFieldContainerBottomComponent
       ],
       providers: [ HttpClient, HttpHandler, PoComboFilterService]

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PoLanguageModule } from './../../services/po-language/po-language.module';
 
 import { PoLoadingComponent } from './po-loading.component';
+import { PoLoadingIconComponent } from './po-loading-icon/po-loading-icon.component';
 import { PoLoadingOverlayComponent } from './po-loading-overlay/po-loading-overlay.component';
 
 /**
@@ -19,10 +20,12 @@ import { PoLoadingOverlayComponent } from './po-loading-overlay/po-loading-overl
   ],
   declarations: [
     PoLoadingComponent,
+    PoLoadingIconComponent,
     PoLoadingOverlayComponent
   ],
   exports: [
     PoLoadingComponent,
+    PoLoadingIconComponent,
     PoLoadingOverlayComponent
   ]
 })

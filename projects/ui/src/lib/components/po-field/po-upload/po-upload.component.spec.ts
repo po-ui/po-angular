@@ -5,7 +5,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
-import { PoButtonComponent } from '../../po-button/po-button.component';
+import { PoButtonModule } from '../../po-button';
 
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
@@ -30,10 +30,10 @@ describe('PoUploadComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [ PoButtonModule ],
       declarations: [
         PoUploadComponent,
         PoFieldContainerComponent,
-        PoButtonComponent,
         PoFieldContainerBottomComponent
       ],
       providers: [ HttpClient, HttpHandler]
