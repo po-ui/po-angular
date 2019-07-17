@@ -8,7 +8,7 @@ import { PoPageBlockedUserContactsComponent } from './po-page-blocked-user-conta
 
 import { configureTestSuite } from '../../../util-test/util-expect.spec';
 
-xdescribe('PoPageBlockedUserContactsComponent: ', () => {
+describe('PoPageBlockedUserContactsComponent: ', () => {
   let component: PoPageBlockedUserContactsComponent;
   let fixture: ComponentFixture<PoPageBlockedUserContactsComponent>;
   let debugElement;
