@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
+import { PoLoadingModule } from '../po-loading';
+
 import { PoButtonComponent } from './po-button.component';
 import { PoButtonBaseComponent } from './po-button-base.component';
 
@@ -15,6 +17,7 @@ describe('PoButtonComponent: ', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [PoLoadingModule],
       declarations: [ PoButtonComponent ]
     });
   });
@@ -140,7 +143,7 @@ describe('PoButtonComponent: ', () => {
 
       it('should disabled button when propertie is setted.', () => {
         expect(button.getAttribute('disabled')).not.toBeNull();
-        expect(button.getElementsByClassName('po-icon po-button-loading-icon').length).toBeTruthy();
+        expect(button.getElementsByClassName('po-button-loading-icon').length).toBeTruthy();
       });
 
       it('should keep button disabled independently of type.', () => {
@@ -150,7 +153,7 @@ describe('PoButtonComponent: ', () => {
           component.type = type;
           fixture.detectChanges();
           expect(button.getAttribute('disabled')).not.toBeNull();
-          expect(button.getElementsByClassName('po-icon po-button-loading-icon').length).toBeTruthy();
+          expect(button.getElementsByClassName('po-button-loading-icon').length).toBeTruthy();
         }
       });
 

@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoLoadingComponent } from './po-loading.component';
+import { PoLoadingIconComponent } from './po-loading-icon/po-loading-icon.component';
 
 describe('PoLoadingComponent', () => {
   let component: PoLoadingComponent;
@@ -11,7 +12,7 @@ describe('PoLoadingComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoLoadingComponent ]
+      declarations: [ PoLoadingComponent, PoLoadingIconComponent ]
     });
   });
 

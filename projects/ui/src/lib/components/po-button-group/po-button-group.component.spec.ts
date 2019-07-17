@@ -2,7 +2,8 @@ import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testi
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
-import { PoButtonComponent } from './../po-button/po-button.component';
+import { PoButtonModule } from '../po-button/po-button.module';
+
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 import { PoButtonGroupComponent } from './po-button-group.component';
 import { PoButtonGroupItem } from './po-button-group-item.interface';
@@ -32,9 +33,8 @@ describe('PoButtonGroupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoTooltipModule],
+      imports: [ PoButtonModule, PoTooltipModule ],
       declarations: [
-        PoButtonComponent,
         PoButtonGroupComponent
       ]
     });

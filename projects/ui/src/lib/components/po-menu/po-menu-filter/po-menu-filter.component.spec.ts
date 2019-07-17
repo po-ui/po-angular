@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoCleanComponent } from './../../po-field/po-clean/po-clean.component';
 
+import { PoLoadingModule } from '../../po-loading';
+
 import { PoMenuFilterComponent } from './po-menu-filter.component';
 
 describe('PoMenuFilterComponent:', () => {
@@ -11,6 +13,7 @@ describe('PoMenuFilterComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [ PoLoadingModule ],
       declarations: [ PoCleanComponent, PoMenuFilterComponent ]
     });
   });

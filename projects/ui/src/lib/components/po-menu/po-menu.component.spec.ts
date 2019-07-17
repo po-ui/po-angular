@@ -11,6 +11,8 @@ import * as utilsFunctions from '../../utils/util';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 
+import { PoLoadingModule } from '../po-loading/po-loading.module';
+
 import { PoBadgeComponent } from '../po-badge';
 import { PoMenuComponent } from './po-menu.component';
 import { PoMenuFilterComponent } from './po-menu-filter/po-menu-filter.component';
@@ -43,7 +45,11 @@ describe('PoMenuComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes)],
+      imports: [
+        HttpClientTestingModule, 
+        RouterTestingModule.withRoutes(routes),
+        PoLoadingModule
+      ],
       declarations: [
         PoCleanComponent,
         PoMenuComponent,
