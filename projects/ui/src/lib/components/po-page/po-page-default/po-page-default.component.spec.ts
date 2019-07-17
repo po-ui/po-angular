@@ -5,9 +5,9 @@ import { Router } from '@angular/router';
 
 import { changeBrowserInnerWidth, configureTestSuite } from '../../../util-test/util-expect.spec';
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
+import { PoButtonModule } from '../../po-button';
 import { PoDropdownModule } from '../../po-dropdown/po-dropdown.module';
 
-import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoPageDefaultComponent } from './po-page-default.component';
 import { PoPageComponent } from '../po-page.component';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
@@ -62,13 +62,13 @@ describe('PoPageDefaultComponent mobile', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        PoBreadcrumbModule,
         RouterTestingModule.withRoutes([]),
-        PoDropdownModule
+        PoBreadcrumbModule,
+        PoButtonModule,
+        PoDropdownModule,
       ],
       declarations: [
         MobileComponent,
-        PoButtonComponent,
         PoPageDefaultComponent,
         PoPageComponent,
         PoPageContentComponent,
@@ -174,13 +174,13 @@ describe('PoPageDefaultComponent desktop', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        PoBreadcrumbModule,
         RouterTestingModule.withRoutes([]),
+        PoBreadcrumbModule,
+        PoButtonModule,
         PoDropdownModule
       ],
       declarations: [
         DesktopComponent,
-        PoButtonComponent,
         PoPageDefaultComponent,
         PoPageComponent,
         PoPageContentComponent,

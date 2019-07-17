@@ -9,7 +9,9 @@
   [disabled]="disabled || loading"
   (click)="onClick()">
 
-  <span *ngIf="loading" class="po-icon po-button-loading-icon"></span>
+  <div *ngIf="loading" class="po-button-loading-icon">
+    <po-loading-icon p-neutral-color></po-loading-icon>
+  </div>
   <span *ngIf="icon" class="po-icon {{ icon }}" aria-hidden="true"></span>
   <span *ngIf="label" class="po-button-label">{{ label }}</span>
 </button>
