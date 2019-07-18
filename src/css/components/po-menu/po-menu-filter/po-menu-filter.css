@@ -25,14 +25,16 @@
   text-decoration: none;
 }
 
-.po-menu-filter-icon.po-loading-icon {
-  line-height: 0;
-}
-
 .po-menu-filter-search-icon-container {
   left: 12px;
   text-align: center;
   width: 30px;
+}
+
+.po-menu-filter-search-icon-container .po-loading-icon {
+  height: 12px;
+  left: 8px;
+  width: 12px;
 }
 
 .po-menu-filter {

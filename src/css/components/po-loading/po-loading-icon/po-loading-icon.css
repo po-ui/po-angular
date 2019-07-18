@@ -1,0 +1,77 @@
+:root {
+  --loading-icon-height: 14px;
+  --loading-icon-width: 14px;
+}
+
+.po-loading .po-loading-icon {
+  margin: 0 auto;
+}
+
+.po-loading-icon {
+  display: block;
+  height: var(--loading-icon-height);;
+  position: relative;
+  width: var(--loading-icon-width);
+}
+
+.po-loading-icon .po-loading-icon-bar {
+  animation: icon-fade 1s linear infinite;
+  background: var(--color-loading-icon-color-primary);
+  border-radius: 50px;
+  height: 35%;
+  left: 44.5%;
+  opacity: 0;
+  position: absolute;
+  top: 37%;
+  width: 15%;
+}
+
+.po-loading-icon-neutral-color .po-loading-icon-bar {
+  background: var(--color-loading-icon-color-neutral);
+}
+
+.po-loading-icon .po-loading-icon-bar-1 {
+  animation-delay: -0.875s;
+  transform:rotate(0deg) translate(0, -142%);
+}    
+
+.po-loading-icon .po-loading-icon-bar-2 {
+  animation-delay: -0.75s;
+  transform:rotate(45deg) translate(0, -142%); 
+}
+
+.po-loading-icon .po-loading-icon-bar-3 {
+  animation-delay: -0.625s;
+  transform:rotate(90deg) translate(0, -142%); 
+}
+
+.po-loading-icon .po-loading-icon-bar-4 {
+  animation-delay: -0.5s;
+  transform:rotate(135deg) translate(0, -142%); 
+}
+
+.po-loading-icon .po-loading-icon-bar-5 {
+  animation-delay: -0.375s;
+  transform:rotate(180deg) translate(0, -142%); 
+}
+
+.po-loading-icon .po-loading-icon-bar-6 {
+  animation-delay: -0.25s;
+  transform:rotate(225deg) translate(0, -142%); 
+}
+
+.po-loading-icon .po-loading-icon-bar-7 {
+  animation-delay: -0.125s;
+  transform:rotate(270deg) translate(0, -142%); 
+}
+
+.po-loading-icon .po-loading-icon-bar-8 {
+  animation-delay: 0s;
+  transform:rotate(315deg) translate(0, -142%); 
+}
+
+@keyframes icon-fade {
+  from {opacity: 1;}
+  to {opacity: 0.25;}
+}
+  
