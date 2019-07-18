@@ -387,6 +387,15 @@ describe('PoNavbarComponent:', () => {
       expect(component['changeNavbarMenuItems']).not.toHaveBeenCalled();
     });
 
+    it(`initNavbarMenu: should call 'validateMenuLogo'`, () => {
+      component.menu = <any> { menus: [] };
+      spyOn(component, <any> 'validateMenuLogo');
+
+      component['initNavbarMenu']();
+
+      expect(component['validateMenuLogo']).toHaveBeenCalled();
+    });
+
     it(`navbarItemsWidth: should return navbar items width`, () => {
       const itemsWidth = 50;
       const fakeThis = {
@@ -528,6 +537,51 @@ describe('PoNavbarComponent:', () => {
         expect(component.disableRight).toBe(false);
       });
 
+    });
+
+    describe('validateMenuLogo', () => {
+
+      const logo = 'logo';
+
+      const fakeMenu = {
+        logo,
+        changeDetector: { detectChanges: () => {} }
+      };
+
+      it(`should set 'menu.logo' as 'undefined' and call 'menu.changeDetector.detectChanges' if has 'logo' and 'menu.logo'`, () => {
+        component.logo = logo;
+        component.menu = <any>fakeMenu;
+
+        spyOn(component.menu.changeDetector, 'detectChanges');
+        component['validateMenuLogo']();
+        fixture.detectChanges();
+
+        expect(component.menu.logo).toBeUndefined();
+        expect(component.menu.changeDetector.detectChanges).toHaveBeenCalled();
+      });
+
+      it(`shouldn't call 'menu.changeDetector.detectChanges' if doesn't have 'menu.logo'`, () => {
+        component.logo = logo;
+        component.menu = <any>fakeMenu;
+        component.menu.logo = undefined;
+
+        spyOn(component.menu.changeDetector, 'detectChanges');
+
+        component['validateMenuLogo']();
+
+        expect(component.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
+      });
+
+      it(`shouldn't call 'menu.changeDetector.detectChanges' if doesn't have 'logo'`, () => {
+        component.logo = undefined;
+        component.menu = <any>fakeMenu;
+
+        spyOn(component.menu.changeDetector, 'detectChanges');
+
+        component['validateMenuLogo']();
+
+        expect(component.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
+      });
     });
 
   });

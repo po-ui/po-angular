@@ -137,12 +137,12 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   private itemSubscription: Subscription;
   private routeSubscription: Subscription;
 
-  constructor(viewRef: ViewContainerRef,
+  constructor(public changeDetector: ChangeDetectorRef,
+              viewRef: ViewContainerRef,
               private element: ElementRef,
               private renderer: Renderer2,
               private router: Router,
               private menuItemsService: PoMenuItemsService,
-              private changeDetector: ChangeDetectorRef,
               menuService: PoMenuService) {
 
     super(menuService);
