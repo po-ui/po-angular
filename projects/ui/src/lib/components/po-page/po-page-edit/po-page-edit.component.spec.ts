@@ -4,7 +4,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
-import { PoButtonComponent } from '../../po-button/po-button.component';
+import { PoButtonModule } from '../../po-button';
+
 import { poLocaleDefault } from './../../../utils/util';
 import { PoPageComponent } from '../po-page.component';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
@@ -45,10 +46,9 @@ describe('PoPageEditComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoBreadcrumbModule ],
+      imports: [ PoBreadcrumbModule, PoButtonModule ],
       declarations: [
         ContainerComponent,
-        PoButtonComponent,
         PoPageComponent,
         PoPageEditComponent,
         PoPageContentComponent,

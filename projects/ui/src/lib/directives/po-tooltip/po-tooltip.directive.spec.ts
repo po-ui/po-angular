@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
-import { PoButtonComponent } from './../../components/po-button/po-button.component';
+import { PoButtonModule } from '../../components/po-button/po-button.module';
 
 import { PoTooltipDirective } from './po-tooltip.directive';
 
@@ -29,7 +29,8 @@ describe('PoTooltipDirective', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoTooltipDirective, PoButtonComponent, TestComponent ]
+      imports: [ PoButtonModule ],
+      declarations: [PoTooltipDirective, TestComponent ]
     });
   });
 

@@ -8,10 +8,10 @@ import * as UtilFunctions from './../../../utils/util';
 import { changeBrowserInnerWidth, configureTestSuite } from '../../../util-test/util-expect.spec';
 
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
+import { PoButtonModule } from '../../po-button/po-button.module';
 import { PoDisclaimerGroupModule } from './../../po-disclaimer-group/po-disclaimer-group.module';
 import { PoDropdownModule } from '../../po-dropdown/po-dropdown.module';
 
-import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
 import { PoPageComponent } from '../po-page.component';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
@@ -78,6 +78,7 @@ describe('PoPageListComponent - Mobile:', () => {
         FormsModule,
         RouterTestingModule.withRoutes([]),
         PoBreadcrumbModule,
+        PoButtonModule,
         PoDisclaimerGroupModule,
         PoDropdownModule
       ],
@@ -86,8 +87,7 @@ describe('PoPageListComponent - Mobile:', () => {
         PoPageComponent,
         PoPageListComponent,
         PoPageHeaderComponent,
-        PoPageContentComponent,
-        PoButtonComponent
+        PoPageContentComponent
       ],
       providers: [
         { provide: Router, useValue: routerStub }
@@ -191,6 +191,7 @@ describe('PoPageListComponent - Desktop:', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
         PoBreadcrumbModule,
+        PoButtonModule,
         PoDisclaimerGroupModule,
         PoDropdownModule
       ],
@@ -199,8 +200,7 @@ describe('PoPageListComponent - Desktop:', () => {
         PoPageComponent,
         PoPageListComponent,
         PoPageHeaderComponent,
-        PoPageContentComponent,
-        PoButtonComponent
+        PoPageContentComponent
       ],
       providers: [
         { provide: Router, useValue: routerStub }

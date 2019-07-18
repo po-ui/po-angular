@@ -3,7 +3,8 @@ import { Component, DebugElement, ViewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
-import { PoButtonComponent } from './../po-button/po-button.component';
+import { PoButtonModule } from '../po-button';
+
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 import {
   PoFieldContainerBottomComponent
@@ -46,10 +47,9 @@ describe('PoModalComponent:', () => {
   beforeEach(() => {
     TestBed
       .configureTestingModule({
-        imports: [FormsModule],
+        imports: [FormsModule, PoButtonModule],
         declarations: [
           PoModalComponent,
-          PoButtonComponent,
           PoInputComponent,
           PoCleanComponent,
           PoFieldContainerComponent,
@@ -473,7 +473,7 @@ describe('PoModalComponent:', () => {
 
     function getModalActionIconLoading() {
       return element.nativeElement.querySelector(`
-        .po-modal .po-modal-footer .po-button-modal-first-action button:disabled span.po-button-loading-icon
+        .po-modal .po-modal-footer .po-button-modal-first-action button:disabled div.po-button-loading-icon
       `);
     }
 

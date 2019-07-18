@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { PoLoadingModule } from './../po-loading/index';
+
 import { PoButtonComponent } from './po-button.component';
 
 /**
@@ -10,7 +12,8 @@ import { PoButtonComponent } from './po-button.component';
  */
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    PoLoadingModule
   ],
   declarations: [
     PoButtonComponent
