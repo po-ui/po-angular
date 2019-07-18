@@ -4,9 +4,13 @@ import * as utilsFunctions from '../../utils/util';
 
 import { PoNavbarBaseComponent, poNavbarLiteralsDefault } from './po-navbar-base.component';
 
+export class PoNavbarComponent extends PoNavbarBaseComponent {
+  validateMenuLogo() {}
+}
+
 describe('PoNavbarBaseComponent:', () => {
 
-  const component = new PoNavbarBaseComponent();
+  const component = new PoNavbarComponent();
 
   it('should be created', () => {
     expect(component instanceof PoNavbarBaseComponent).toBeTruthy();
@@ -91,18 +95,41 @@ describe('PoNavbarBaseComponent:', () => {
       expectPropertiesValues(component, 'literals', invalidValues, poNavbarLiteralsDefault[utilsFunctions.poLocaleDefault]);
     });
 
-    it('shadow: should update property with true if valid values', () => {
+    it('shadow: should update property with true if values are valid', () => {
       const validValues = [true, '', 'true'];
 
       expectPropertiesValues(component, 'shadow', validValues, true);
     });
 
-    it('shadow: should update property with false if invalid values', () => {
+    it('shadow: should update property with false if values are invalid', () => {
       const invalidValues = [false, 'po', null, undefined, NaN];
 
       expectPropertiesValues(component, 'shadow', invalidValues, false);
     });
 
+    it('logo: should call `validateMenuLogo` if has `menu`', () => {
+      spyOn(component, 'validateMenuLogo');
+
+      component.menu = <any> { logo: 'logo' };
+      component.logo = 'logo';
+
+      expect(component.validateMenuLogo).toHaveBeenCalled();
+    });
+
+    it('logo: shouldn`t call `validateMenuLogo` if doesn`t have `menu`', () => {
+      spyOn(component, 'validateMenuLogo');
+
+      component.menu = undefined;
+      component.logo = 'logo';
+
+      expect(component.validateMenuLogo).not.toHaveBeenCalled();
+    });
+
+    it('logo: should update property with valid values', () => {
+      const validValues = ['any string value'];
+
+      expectPropertiesValues(component, 'logo', validValues, 'any string value');
+    });
   });
 
 });

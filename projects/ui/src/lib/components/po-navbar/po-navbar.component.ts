@@ -149,6 +149,8 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
       this.changeNavbarMenuItems(true, this.menuItems, this.items, this.literals.navbarLinks);
     }
 
+    this.validateMenuLogo();
+
     this.mediaQuery.addListener(this.onMediaQueryChange);
   }
 
@@ -188,6 +190,13 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
     if (this.offset >= maxAllowedOffset) {
       this.offset = maxAllowedOffset;
       this.disableRight = true;
+    }
+  }
+
+  protected validateMenuLogo() {
+    if (this.menu.logo && this.logo) {
+      this.menu.logo = undefined;
+      this.menu.changeDetector.detectChanges();
     }
   }
 

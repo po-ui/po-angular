@@ -25,11 +25,12 @@ export const poNavbarLiteralsDefault = {
  * O componente `po-navbar` é um cabeçalho fixo que permite apresentar uma lista de links para facilitar a navegação pelas
  * páginas da aplicação. Também possui ícones com ações.
  */
-export class PoNavbarBaseComponent {
+export abstract class PoNavbarBaseComponent {
 
   private _iconActions: Array<PoNavbarIconAction> = [];
   private _items: Array<PoNavbarItem> = [];
   private _literals: PoNavbarLiterals;
+  private _logo: string;
   private _shadow: boolean = false;
 
   /**
@@ -109,7 +110,16 @@ export class PoNavbarBaseComponent {
    *
    * Define a logo apresentada `po-navbar`.
    */
-  @Input('p-logo') logo?: string;
+  @Input('p-logo') set logo(value: string) {
+    this._logo = value;
+
+    if (this.menu) {
+      this.validateMenuLogo();
+    }
+  }
+  get logo() {
+    return this._logo;
+  }
 
   /**
    * @optional
@@ -118,6 +128,8 @@ export class PoNavbarBaseComponent {
    *
    * Caso já possua um menu na aplicação o mesmo deve ser repassado para essa propriedade para que quando entre em modo
    * responsivo os items do `po-navbar` possam ser adicionados no primeiro item do menu definido.
+   *
+   * > Ao utilizar menu e navbar com logo mantém apenas a logo do navbar.
    *
    * Exemplo:
    *
@@ -152,5 +164,7 @@ export class PoNavbarBaseComponent {
   get shadow(): boolean {
     return this._shadow;
   }
+
+  protected abstract validateMenuLogo(): void;
 
 }
