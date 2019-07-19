@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/portinariui/portinari-angular/compare/v1.1.1...v1.2.0) (2019-07-19)
+
+
+### Bug Fixes
+
+* **loading:** trata o ícone de carregamento para conexões 3g ([ea3ba0a](https://github.com/portinariui/portinari-angular/commit/ea3ba0a))
+* **table:** corrige a exibição do botão de visualizar legenda ([535a1af](https://github.com/portinariui/portinari-angular/commit/535a1af))
+
+
+### Features
+
+* **navbar:** remove a logo do menu utilizado com navbar ([6771395](https://github.com/portinariui/portinari-angular/commit/6771395))
+
+
+### Tests
+
+* **page-blocked-user-contacts:** remove o x do describe ([2ad40b7](https://github.com/portinariui/portinari-angular/commit/2ad40b7))
+
+
+
 ### [1.1.1](https://github.com/portinariui/portinari-angular/compare/v1.1.0...v1.1.1) (2019-07-12)
 
 
