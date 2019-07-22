@@ -3,6 +3,8 @@
   [(ngModel)]="upload"
   [p-auto-upload]="properties.includes('autoupload')"
   [p-disabled]="properties.includes('disabled')"
+  [p-drag-drop]="properties.includes('dragDrop')"
+  [p-drag-drop-height]="dragDropHeight"
   [p-form-field]="formField"
   [p-help]="help"
   [p-hide-select-button]="properties.includes('selectButton')"
@@ -40,7 +42,7 @@
 <form #fRestrictions="ngForm">
   <div class="po-row">
     <po-input
-      class="po-md-3"
+      class="po-md-6"
       name="allowedExtensions"
       [(ngModel)]="allowedExtensions"
       p-help="Enter the allowed extensions separated by comma"
@@ -50,7 +52,7 @@
     </po-input>
 
     <po-number
-      class="po-md-3"
+      class="po-md-6"
       name="maxFiles"
       [(ngModel)]="maxFiles"
       p-clean
@@ -59,8 +61,21 @@
       (p-change)="onChangeMaxFiles(maxFiles)">
     </po-number>
 
+  </div>
+
+  <div class="po-row">
     <po-number
-      class="po-md-3"
+      class="po-md-4"
+      name="dragDropHeight"
+      [(ngModel)]="dragDropHeight"
+      p-clean
+      p-help="Height of drag drop area"
+      p-label="Drag Drop Height"
+      p-min="160">
+    </po-number>
+
+    <po-number
+      class="po-md-4"
       name="minSize"
       [(ngModel)]="minSize"
       p-clean
@@ -70,7 +85,7 @@
     </po-number>
 
     <po-number
-      class="po-md-3"
+      class="po-md-4"
       name="maxSize"
       [(ngModel)]="maxSize"
       p-clean
@@ -123,7 +138,7 @@
 
   <div class="po-row">
     <po-input
-      class="po-md-6"
+      class="po-md-12"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: {"selectFile": "Select file", "deleteFile": "Delete file", "cancel": "Cancel sending "}'
@@ -132,7 +147,7 @@
     </po-input>
 
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-12"
       name="properties"
       [(ngModel)]="properties"
       p-columns="4"
