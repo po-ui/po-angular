@@ -90,7 +90,7 @@ describe('PoUploadBaseComponent:', () => {
     expect(component.allowedExtensions).toBe('');
   });
 
-  describe('Methods: ', () => {
+  describe('Methods:', () => {
 
     let file: PoUploadFile;
 
@@ -410,7 +410,19 @@ describe('PoUploadBaseComponent:', () => {
 
   });
 
-  describe('Properties: ', () => {
+  describe('Properties:', () => {
+
+    it('p-drag-drop: should set `dragDrop` with valid values', () => {
+      const validValues = ['', true, 1, [], {}, 'true'];
+
+      expectPropertiesValues(component, 'dragDrop', validValues, true);
+    });
+
+    it('p-drag-drop: should set `dragDrop` to false with invalid values', () => {
+      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
+
+      expectPropertiesValues(component, 'dragDrop', invalidValues, false);
+    });
 
     it('formField: should set `formField` with valid values', () => {
       const validValues = ['upload', 'files', 'portfolio'];
