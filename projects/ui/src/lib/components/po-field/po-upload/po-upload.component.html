@@ -15,8 +15,15 @@
       [required]="required"
       (change)="onFileChange($event)">
 
-    <po-button
-      *ngIf="!hideSelectButton"
+    <po-upload-drag-drop *ngIf="displayDragDrop"
+      [p-disabled]="isDisabled"
+      [p-drag-drop-height]="dragDropHeight"
+      [p-literals]="literals"
+      (p-file-change)="onFileChangeDragDrop($event)"
+      (p-select-files)="selectFiles()">
+    </po-upload-drag-drop>
+
+    <po-button *ngIf="!hideSelectButton && !displayDragDrop"
       class="po-upload-button"
       for="file"
       [p-disabled]="isDisabled"

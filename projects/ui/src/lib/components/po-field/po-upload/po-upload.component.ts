@@ -1,6 +1,8 @@
 import { Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { isMobile } from '../../../utils/util';
+
 import { PoUploadBaseComponent } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadService } from './po-upload.service';
@@ -24,6 +26,11 @@ import { PoUploadStatus } from './po-upload-status.enum';
  * <example name="po-upload-resume" title="Portinari Upload - Resume">
  *   <file name="sample-po-upload-resume/sample-po-upload-resume.component.html"> </file>
  *   <file name="sample-po-upload-resume/sample-po-upload-resume.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-upload-resume-drag-drop" title="Portinari Upload - Resume Drag Drop">
+ *   <file name="sample-po-upload-resume-drag-drop/sample-po-upload-resume-drag-drop.component.html"> </file>
+ *   <file name="sample-po-upload-resume-drag-drop/sample-po-upload-resume-drag-drop.component.ts"> </file>
  * </example>
  *
  * <example name="po-upload-rs" title="Portinari Upload - Realize & Show">
@@ -58,6 +65,10 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     super(uploadService);
   }
 
+  get displayDragDrop(): boolean {
+    return this.dragDrop && !isMobile();
+  }
+
   get displaySendButton(): boolean {
     const currentFiles = this.currentFiles || [];
     return !this.hideSendButton && !this.autoUpload && (currentFiles.length > 0 && this.hasFileNotUploaded);
@@ -89,6 +100,7 @@ export class PoUploadComponent extends PoUploadBaseComponent {
 
   // Função disparada ao selecionar algum arquivo.
   onFileChange(event): void {
+
     // necessario este tratamento quando para IE, pois nele o change é disparado quando o campo é limpado também
     if (this.calledByCleanInputValue) {
       this.calledByCleanInputValue = false;
@@ -96,17 +108,13 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     }
 
     const files = event.target.files;
-    this.currentFiles = this.currentFiles || [];
-
-    this.currentFiles = this.parseFiles(files);
-
-    this.updateModel([...this.currentFiles]);
-
-    if (this.autoUpload) {
-      this.uploadFiles(this.currentFiles);
-    }
+    this.updateFiles(files);
 
     this.cleanInputValue();
+  }
+
+  onFileChangeDragDrop(files) {
+    this.updateFiles(files);
   }
 
   // Remove o arquivo passado por parametro da lista dos arquivos correntes.
@@ -269,6 +277,16 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     file.status = PoUploadStatus.Uploaded;
     this.setProgressStatus(file.uid, 0, false);
     this.setUploadStatus(file, 'po-upload-progress-success', 100);
+  }
+
+  private updateFiles(files) {
+    this.currentFiles = this.parseFiles(files);
+
+    this.updateModel([...this.currentFiles]);
+
+    if (this.autoUpload) {
+      this.uploadFiles(this.currentFiles);
+    }
   }
 
   // Atualiza o ngModel para os arquivos passados por parâmetro.
