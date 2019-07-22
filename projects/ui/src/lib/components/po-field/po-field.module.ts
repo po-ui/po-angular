@@ -39,6 +39,12 @@ import { PoSelectOptionTemplateDirective } from './po-select/po-select-option-te
 import { PoSwitchComponent } from './po-switch/po-switch.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
+import { PoUploadDragDropComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop.component';
+import { PoUploadDragDropDirective } from './po-upload/po-upload-drag-drop/po-upload-drag-drop.directive';
+import {
+  PoUploadDragDropAreaOverlayComponent
+} from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area-overlay/po-upload-drag-drop-area-overlay.component';
+import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
 import { PoUrlComponent } from './po-url/po-url.component';
 
 /**
@@ -113,6 +119,10 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
+    PoUploadDragDropComponent,
+    PoUploadDragDropDirective,
+    PoUploadDragDropAreaOverlayComponent,
+    PoUploadDragDropAreaComponent,
     PoUrlComponent
   ],
   providers: [],

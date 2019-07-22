@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventEmitter } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
+import * as utilsFunctions from '../../../utils/util';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoButtonModule } from '../../po-button';
@@ -10,6 +11,12 @@ import { PoButtonModule } from '../../po-button';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoUploadComponent } from './po-upload.component';
+import { PoUploadDragDropAreaComponent } from './po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
+import {
+  PoUploadDragDropAreaOverlayComponent
+} from './po-upload-drag-drop/po-upload-drag-drop-area-overlay/po-upload-drag-drop-area-overlay.component';
+import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-drop.component';
+import { PoUploadDragDropDirective } from './po-upload-drag-drop/po-upload-drag-drop.directive';
 import { PoUploadFile } from './po-upload-file';
 
 import { PoUploadStatus } from './po-upload-status.enum';
@@ -34,7 +41,11 @@ describe('PoUploadComponent:', () => {
       declarations: [
         PoUploadComponent,
         PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
+        PoFieldContainerBottomComponent,
+        PoUploadDragDropAreaOverlayComponent,
+        PoUploadDragDropAreaComponent,
+        PoUploadDragDropComponent,
+        PoUploadDragDropDirective
       ],
       providers: [ HttpClient, HttpHandler]
     });
@@ -135,7 +146,8 @@ describe('PoUploadComponent:', () => {
     expect(divUploadProgress.nativeElement.classList.contains('po-upload-progress-success')).toBeTruthy();
   });
 
-  it('onFileChange: should execute file change without auto upload and not call `event.preventDefault`', () => {
+  it(`onFileChange: should execute file change without auto upload and not call 'event.preventDefault' and
+  call 'updateFiles'`, () => {
     const files = [file.rawFile];
 
     // Mock da função que é criada ao utilizar ngmodel para atualizar o mesmo.
@@ -150,6 +162,7 @@ describe('PoUploadComponent:', () => {
 
     spyOn(event, 'preventDefault');
     spyOn(component, <any> 'cleanInputValue');
+    spyOn(component, <any>'updateFiles').and.callThrough();
 
     component.onFileChange(event);
 
@@ -157,6 +170,7 @@ describe('PoUploadComponent:', () => {
     expect(component['cleanInputValue']).toHaveBeenCalled();
     expect(component['calledByCleanInputValue']).toBeFalsy();
     expect(event.preventDefault).not.toHaveBeenCalled();
+    expect(component['updateFiles']).toHaveBeenCalled();
   });
 
   it('should update current files with the value param', () => {
@@ -169,6 +183,34 @@ describe('PoUploadComponent:', () => {
   });
 
   describe('Properties:', () => {
+
+    it('displayDragDrop: should return true if `dragDrop` is `true` and `isMobile` is `false`', () => {
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      component.dragDrop = true;
+
+      expect(component.displayDragDrop).toBe(true);
+    });
+
+    it('displayDragDrop: should return false if `dragDrop` is `true` and `isMobile` is `true`', () => {
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
+      component.dragDrop = true;
+
+      expect(component.displayDragDrop).toBe(false);
+    });
+
+    it('displayDragDrop: should return false if `dragDrop` is `false` and `isMobile` is `true`', () => {
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
+      component.dragDrop = false;
+
+      expect(component.displayDragDrop).toBe(false);
+    });
+
+    it('displayDragDrop: should return false if `dragDrop` is `false` and `isMobile` is `false`', () => {
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      component.dragDrop = false;
+
+      expect(component.displayDragDrop).toBe(false);
+    });
 
     it('hasFileNotUploaded: should return false when `currentFiles` is undefined', () => {
       component.currentFiles = undefined;
@@ -309,6 +351,16 @@ describe('PoUploadComponent:', () => {
       expect(component.currentFiles).toBe(undefined);
       expect(component['updateModel']).toHaveBeenCalled();
       expect(component['cleanInputValue']).toHaveBeenCalled();
+    });
+
+    it('onFileChangeDragDrop: should call `updateFiles` with files.', () => {
+      const files = 'teste';
+
+      spyOn(component, <any>'updateFiles');
+
+      component.onFileChangeDragDrop(files);
+
+      expect(component['updateFiles']).toHaveBeenCalledWith(files);
     });
 
     it('removeFile: should be remove file from currentFiles', () => {
@@ -596,6 +648,42 @@ describe('PoUploadComponent:', () => {
       expect(divUploadProgress.nativeElement.style['width']).toEqual('50%');
     });
 
+    it('updateFiles: should call `parseFiles` with `files` and `updateModel` with `currentFiles`', () => {
+      const files = 'fileMock';
+
+      spyOn(component, <any>'parseFiles').and.returnValue(files);
+      spyOn(component, <any>'updateModel');
+
+      component['updateFiles'](files);
+
+      expect(component['parseFiles']).toHaveBeenCalledWith(files);
+      expect(component['updateModel']).toHaveBeenCalledWith(files);
+    });
+
+    it('updateFiles: should call `uploadFiles` with files if `autoUpload` is `true`', () => {
+      const files = 'fileMock';
+      component.autoUpload = true;
+
+      spyOn(component, <any>'parseFiles').and.returnValue(files);
+      spyOn(component, <any>'uploadFiles');
+
+      component['updateFiles'](files);
+
+      expect(component['uploadFiles']).toHaveBeenCalledWith(files);
+    });
+
+    it('updateFiles: shouldn`t call `uploadFiles` with files if `autoUpload` is `false`', () => {
+      const files = 'fileMock';
+      component.autoUpload = false;
+
+      spyOn(component, <any>'parseFiles').and.returnValue(files);
+      spyOn(component, <any>'uploadFiles');
+
+      component['updateFiles'](files);
+
+      expect(component['uploadFiles']).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('Templates:', () => {
@@ -684,6 +772,25 @@ describe('PoUploadComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-button-primary')).toBeFalsy();
     });
+
+    it('should show `po-upload-drag-drop` and doesn`t show upload button if `displayDragDrop` return true', () => {
+      spyOnProperty(component, 'displayDragDrop').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('po-upload-drag-drop')).toBeTruthy();
+      expect(fixture.debugElement.nativeElement.querySelector('.po-upload-button')).toBeNull();
+    });
+
+    it('shouldn`t show `po-upload-drag-drop` and show upload button if `displayDragDrop` return false', () => {
+      spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('po-upload-drag-drop')).toBeNull();
+      expect(fixture.debugElement.nativeElement.querySelector('.po-upload-button')).toBeTruthy();
+    });
+
   });
 
 });

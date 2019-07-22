@@ -16,21 +16,33 @@ export const poUploadLiteralsDefault = {
     deleteFile: 'Delete',
     cancel: 'Cancel',
     tryAgain: 'Try again',
-    startSending: 'Start sending'
+    startSending: 'Start sending',
+    dragFilesHere: 'Drag files here',
+    selectFilesOnComputer: 'or select files on your computer',
+    dropFilesHere: 'Drop files here',
+    invalidDropArea: 'Files were not dropped in the correct area'
   },
   es: <PoUploadLiterals> {
     selectFile: 'Seleccionar archivo',
     deleteFile: 'Borrar',
     cancel: 'Cancelar',
     tryAgain: 'Intentar de nuevo',
-    startSending: 'Iniciar carga'
+    startSending: 'Iniciar carga',
+    dragFilesHere: 'Arrastra los archivos aquí',
+    selectFilesOnComputer: 'o selecciona los archivos en tu computadora',
+    dropFilesHere: 'Deja los archivos aquí',
+    invalidDropArea: 'Los archivos no se insertaron en la ubicación correcta'
   },
   pt: <PoUploadLiterals> {
     selectFile: 'Selecionar arquivo',
     deleteFile: 'Excluir',
     cancel: 'Cancelar',
     tryAgain: 'Tentar Novamente',
-    startSending: 'Iniciar envio'
+    startSending: 'Iniciar envio',
+    dragFilesHere: 'Arraste os arquivos aqui',
+    selectFilesOnComputer: 'ou selecione os arquivos no computador',
+    dropFilesHere: 'Solte os arquivos aqui',
+    invalidDropArea: 'Os arquivos não foram inseridos no local correto'
   }
 };
 
@@ -47,10 +59,12 @@ const poUploadFormFieldDefault = 'files';
  *  - Restrições de formatos de arquivo e tamanho.
  *  - Função de sucesso que será disparada quando os arquivos forem enviados com sucesso.
  *  - Função de erro que será disparada quando houver erro no envio dos arquivos.
+ *  - Permite habilitar uma área onde os arquivos podem ser arrastados.
  */
 export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
 
   private _disabled?: boolean;
+  private _dragDrop?: boolean = false;
   private _fileRestrictions?: PoUploadFileRestrictions;
   private _formField?: string;
   private _hideSelectButton?: boolean;
@@ -65,6 +79,39 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
   onModelTouched: any;
 
   private validatorChange: any;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define em *pixels* a altura da área onde podem ser arrastados os arquivos. A altura mínima aceita é `160px`.
+   *
+   * > Esta propriedade funciona somente se a propriedade `p-drag-drop` estiver habilitada.
+   *
+   * @default `320`
+   */
+  @Input('p-drag-drop-height') dragDropHeight: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a área onde é possível arrastar e selecionar os arquivos. Quando estiver definida, omite o botão para seleção de arquivos
+   * automaticamente.
+   *
+   * > Recomendamos utilizar apenas um `po-upload` com esta funcionalidade por tela.
+   *
+   * @default `false`
+   */
+  @Input('p-drag-drop') set dragDrop(value: boolean) {
+    this._dragDrop = convertToBoolean(value);
+  }
+
+  get dragDrop() {
+    return this._dragDrop;
+  }
 
   /**
    * @optional
@@ -118,15 +165,15 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
    *
    * ```
    *  const customLiterals: PoUploadLiterals = {
-   *    selectFile: 'Buscar arquivo',
-   *    deleteFile: 'Deletar',
    *    cancel: 'Desistir',
-   *    tryAgain: 'Recomeçar',
-   *    startSending: 'Enviar'
+   *    deleteFile: 'Deletar',
    *  };
-   * ```
    *
-   * Ou passando apenas as literais que deseja customizar:
+   * Ou passando apenas as literais que deseja customizar:,
+   *    selectFile: 'Buscar arquivo',
+   * ```
+   *    startSending: 'Enviar'
+   *   tryAgain: 'Recomeçar',
    *
    * ```
    *  const customLiterals: PoUploadLiterals = {
@@ -170,7 +217,7 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
    *
    * @description
    *
-   * Objeto que segue a definição da interface `PoFileRestrictions`,
+   * Objeto que segue a definição da interface `PoUploadFileRestrictions`,
    * que possibilita definir tamanho máximo/mínimo e extensão dos arquivos permitidos.
    */
   @Input('p-restrictions') set fileRestrictions(restrictions: PoUploadFileRestrictions) {

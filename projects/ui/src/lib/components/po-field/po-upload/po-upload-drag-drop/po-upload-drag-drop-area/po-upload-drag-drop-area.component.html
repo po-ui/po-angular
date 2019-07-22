@@ -1,0 +1,31 @@
+<div
+  class="po-upload-drag-drop-area"
+  [ngClass]="{'po-upload-drag-drop-area-disabled': disabled}"
+  [style.height.px]="height">
+
+  <div class="po-upload-drag-drop-area-container">
+    <ng-container *ngIf="overlay && !disabled; then overlayTemplate; else defaultTemplate">
+    </ng-container>
+  </div>
+
+</div>
+
+<ng-template #overlayTemplate>
+  <span class="po-upload-drag-drop-area-overlay-icon po-icon po-icon-upload-cloud"></span>
+
+  <div class="po-upload-drag-drop-area-overlay-label"> {{ literals?.dropFilesHere }} </div>
+</ng-template>
+
+<ng-template #defaultTemplate>
+  <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+  <div class="po-upload-drag-drop-area-label">
+    {{ literals?.dragFilesHere }}
+  </div>
+
+  <div class="po-upload-drag-drop-area-select-files"
+  [ngClass]="{'po-clickable': !disabled}"
+  (click)="selectFiles.emit()">
+    {{ literals?.selectFilesOnComputer }}
+  </div>
+</ng-template>

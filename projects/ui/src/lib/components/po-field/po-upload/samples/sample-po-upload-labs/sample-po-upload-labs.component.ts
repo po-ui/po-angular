@@ -10,6 +10,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
 
   allowedExtensions: string;
   customLiterals: PoUploadLiterals;
+  dragDropHeight: number;
   event: string;
   formField: string;
   help: string;
@@ -26,6 +27,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'autoupload', label: 'Automatic upload' },
     { value: 'disabled', label: 'Disabled' },
+    { value: 'dragDrop', label: 'Drag Drop' },
     { value: 'multiple', label: 'Multiple upload' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
@@ -68,6 +70,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   restore() {
     this.allowedExtensions = undefined;
     this.customLiterals = undefined;
+    this.dragDropHeight = undefined;
     this.event = undefined;
     this.formField = undefined;
     this.label = undefined;
