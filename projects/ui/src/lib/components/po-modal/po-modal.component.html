@@ -4,7 +4,7 @@
   (keydown.esc)="closeModalOnEscapeKey($event)">
 
   <div class="po-modal-overlay">
-    <div class="po-modal-container po-pb-2 po-pt-2" (click)="onClickOut($event)">
+    <div class="po-modal-container po-pb-2 po-pt-2" (mousedown)="onClickOut($event)">
 
       <div class="po-modal-vertical-align">
         <div #modalContent

@@ -466,6 +466,14 @@ describe('PoComboComponent:', () => {
 
   describe('Methods:', () => {
 
+    const fakeEvent = {
+      target: {
+        value: 'ab'
+      },
+      preventDefault: () => {},
+      stopPropagation: () => {}
+    };
+
     describe('onKeyUp:', () => {
 
       function fakeKeypressEvent(code: number, target: any = 1) {
@@ -682,13 +690,6 @@ describe('PoComboComponent:', () => {
     });
 
     describe('onKeyDown: ', () => {
-      const fakeEvent = {
-        target: {
-          value: 'ab'
-        },
-        preventDefault: () => {},
-        stopPropagation: () => {}
-      };
 
       it('should call `selectPreviousOption` and not call `selectNextOption`', () => {
         component.comboOpen = true;
@@ -911,6 +912,26 @@ describe('PoComboComponent:', () => {
         expect(spyControlComboVisibility).toHaveBeenCalledWith(true);
       });
 
+    });
+
+    it('onOptionClick: should call `stopPropagation` if has an event parameter', () => {
+      const option: PoComboOption = { value: 'value', label: 'label' };
+
+      spyOn(fakeEvent, 'stopPropagation');
+
+      component.onOptionClick(option, fakeEvent);
+
+      expect(fakeEvent.stopPropagation).toHaveBeenCalled();
+    });
+
+    it('onOptionClick: shouldn`t call `stopPropagation` if doesn`t have an event parameter', () => {
+      const option: PoComboOption = { value: 'value', label: 'label' };
+
+      spyOn(fakeEvent, 'stopPropagation');
+
+      component.onOptionClick(option);
+
+      expect(fakeEvent.stopPropagation).not.toHaveBeenCalled();
     });
 
     it('onOptionClick: should call `updateSelectedValue` and `updateComboList` when `option.value` different than `selectedValue`', () => {
