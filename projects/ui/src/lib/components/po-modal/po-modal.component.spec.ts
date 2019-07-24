@@ -507,6 +507,19 @@ describe('PoModalComponent:', () => {
       expect(getModalActionDisabled()).toBeTruthy();
       expect(getModalActionIconLoading()).toBeTruthy();
     });
+
+    it('should call `onClickOut` on mousedown', () => {
+      component.open();
+      fixture.detectChanges();
+
+      const containerElement = fixture.debugElement.query(By.css('.po-modal-container')).nativeElement;
+
+      spyOn(component, 'onClickOut');
+
+      containerElement.dispatchEvent(new Event('mousedown'));
+
+      expect(component.onClickOut).toHaveBeenCalled();
+    });
   });
 
 });
