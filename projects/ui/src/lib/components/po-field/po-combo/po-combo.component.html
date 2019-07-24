@@ -58,7 +58,7 @@
   <ul #contentElement class="po-combo-container-content">
     <li *ngFor="let option of visibleOptions"
       [class.po-combo-item-selected]="compareObjects(selectedView, option)"
-      (click)="onOptionClick(option)">
+      (click)="onOptionClick(option, $event)">
       <a class="po-combo-item" [innerHTML]="getLabelFormatted(option?.label)"></a>
     </li>
   </ul>

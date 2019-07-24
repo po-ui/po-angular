@@ -395,9 +395,13 @@ export class PoComboComponent extends PoComboBaseComponent implements DoCheck, O
     toOpen ? this.open() : this.close();
   }
 
-  onOptionClick(option: PoComboOption) {
+  onOptionClick(option: PoComboOption, event?: any) {
     const inputValue = this.getInputValue();
     const isUpdateModel = (option.value !== this.selectedValue) || !!(this.selectedView && inputValue !== this.selectedView.label);
+
+    if (event) {
+      event.stopPropagation();
+    }
 
     this.updateSelectedValue(option, isUpdateModel);
     this.controlComboVisibility(false);
