@@ -65,7 +65,7 @@ describe('PoUploadComponent:', () => {
 
   it('status should be equal file status', () => {
     file.status = PoUploadStatus.None;
-    const isStatusEquals = component['isStatusFile']('None', file);
+    const isStatusEquals = component.isStatusFile('None', file);
 
     expect(isStatusEquals).toBeTruthy();
   });
@@ -417,36 +417,36 @@ describe('PoUploadComponent:', () => {
     });
 
     it('getFileSize: should be get the text of size in KBytes', () => {
-      let kbSize = component['getFileSize'](3000);
+      let kbSize = component.getFileSize(3000);
 
       expect(kbSize).toEqual('3 KB');
 
-      kbSize = component['getFileSize'](0);
+      kbSize = component.getFileSize(0);
 
       expect(kbSize).toEqual('0 KB');
     });
 
     it('getPoIcon: should get po icon by file status', () => {
-      let poIcon = component['getPoIcon'](file);
+      let poIcon = component.getPoIcon(file);
       expect(poIcon).toEqual('po-icon-info');
 
       file.status = PoUploadStatus.Error;
-      poIcon = component['getPoIcon'](file);
+      poIcon = component.getPoIcon(file);
       expect(poIcon).toEqual('po-icon-close');
 
       file.status = PoUploadStatus.Uploaded;
-      poIcon = component['getPoIcon'](file);
+      poIcon = component.getPoIcon(file);
       expect(poIcon).toEqual('po-icon-ok');
 
       file.status = PoUploadStatus.Uploading;
-      poIcon = component['getPoIcon'](file);
+      poIcon = component.getPoIcon(file);
       expect(poIcon).toEqual('');
     });
 
     it('hasAnyFileUploading: should be check has any file uploading', () => {
       file.status = PoUploadStatus.Uploading;
 
-      const hasFileUploading = component['hasAnyFileUploading']([file]);
+      const hasFileUploading = component.hasAnyFileUploading([file]);
       expect(hasFileUploading).toBeTruthy();
     });
 
@@ -464,7 +464,7 @@ describe('PoUploadComponent:', () => {
 
       spyOn(fakeThis, 'removeFile');
 
-      component['stopUpload'].call(fakeThis, file, 0);
+      component.stopUpload.call(fakeThis, file, 0);
 
       expect(fakeThis.removeFile).toHaveBeenCalled();
     });
@@ -483,7 +483,7 @@ describe('PoUploadComponent:', () => {
 
       spyOn(fakeThis, 'stopUploadHandler');
 
-      component['stopUpload'].call(fakeThis, file, 0);
+      component.stopUpload.call(fakeThis, file, 0);
 
       expect(fakeThis.stopUploadHandler).toHaveBeenCalled();
     });
@@ -505,7 +505,7 @@ describe('PoUploadComponent:', () => {
 
         // Mock da função que é criada ao utilizar ngmodel para atualizar o mesmo.
         component.onModelChange = param => { };
-        component['uploadFiles'] = param => { };
+        component.uploadFiles = param => { };
         component.autoUpload = true;
 
         const event = {
@@ -533,7 +533,7 @@ describe('PoUploadComponent:', () => {
         };
         spyOn(fakeThis, 'uploadingHandler');
 
-        component['uploadFiles'].call(fakeThis, [file]);
+        component.uploadFiles.call(fakeThis, [file]);
 
         expect(fakeThis.uploadingHandler).toHaveBeenCalled();
       });
@@ -551,7 +551,7 @@ describe('PoUploadComponent:', () => {
         };
         spyOn(fakeThis, 'successHandler');
 
-        component['uploadFiles'].call(fakeThis, [file]);
+        component.uploadFiles.call(fakeThis, [file]);
 
         expect(fakeThis.successHandler).toHaveBeenCalled();
       });
@@ -568,7 +568,7 @@ describe('PoUploadComponent:', () => {
         };
         spyOn(fakeThis, 'errorHandler');
 
-        component['uploadFiles'].call(fakeThis, [file]);
+        component.uploadFiles.call(fakeThis, [file]);
 
         expect(fakeThis.errorHandler).toHaveBeenCalled();
       });

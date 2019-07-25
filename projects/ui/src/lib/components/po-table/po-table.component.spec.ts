@@ -275,7 +275,7 @@ describe('PoTableComponent:', () => {
 
     spyOn(tableAction, <any> 'disabled');
 
-    component['validateTableAction'](tableRow, tableAction);
+    component.validateTableAction(tableRow, tableAction);
     expect(tableAction.disabled).toHaveBeenCalled();
   });
 
@@ -284,7 +284,7 @@ describe('PoTableComponent:', () => {
     const tableAction = component.actions[2];
     const tableRow = component.items[0];
 
-    const result = component['validateTableAction'](tableRow, tableAction);
+    const result = component.validateTableAction(tableRow, tableAction);
     expect(result).toBe(true);
   });
 

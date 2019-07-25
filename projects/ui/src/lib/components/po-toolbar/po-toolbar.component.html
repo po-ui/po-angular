@@ -13,8 +13,8 @@
     </po-toolbar-notification>
 
     <po-toolbar-profile *ngIf="isShowProfile"
-      [p-profile]="profile || { avatar: userSrc, title: userName }"
-      [p-profile-actions]="profileActions || userActions">
+      [p-profile]="profile"
+      [p-profile-actions]="profileActions">
     </po-toolbar-profile>
   </div>
 </div>

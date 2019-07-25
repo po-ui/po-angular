@@ -30,8 +30,7 @@ import { callAction, hasAction } from '../po-page-util/po-page-util';
 export class PoPageEditComponent extends PoPageEditBaseComponent {
   hasAction: Function = hasAction;
   callAction: Function = callAction;
-
-  private parentContext: ViewContainerRef;
+  parentContext: ViewContainerRef;
 
   constructor(viewRef: ViewContainerRef) {
     super();

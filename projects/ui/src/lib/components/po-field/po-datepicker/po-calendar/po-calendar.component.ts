@@ -26,11 +26,13 @@ export class PoCalendarComponent {
   private _locale: string;
   private _selectedDate?: Date;
 
+  currentYear: number;
   dayVisible: boolean = false;
   displayDays: Array<number>;
   displayDecade: Array<number>;
   displayFinalDecade: number;
   displayMonth: any;
+  displayMonthNumber: number;
   displayMonths: Array<any> = Array();
   displayStartDecade: number;
   displayWeedDays: Array<any> = Array();
@@ -41,8 +43,6 @@ export class PoCalendarComponent {
   yearVisible: boolean = false;
 
   private currentMonthNumber: number;
-  private currentYear: number;
-  private displayMonthNumber: number;
   private isMobile: any = isMobile;
   private lastDisplay: string;
   private today: Date = new Date();
