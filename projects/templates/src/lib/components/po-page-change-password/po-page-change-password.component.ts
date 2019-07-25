@@ -58,8 +58,8 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
 
   readonly literals: { backButton: string, confirmPassword: string, createNewPassword: string, createNewPasswordPhrase: string,
     currentPassword: string, enterSystemButton: string, forgotPassword: string, newPassword: string, passwordSuccessfullyCreated: string,
-    passwordSuccessfullyUpdated: string, safetyTips: string, safetyTipsPhrase: string, safetyTipsFirst: string, safetyTipsSecond: string,
-    safetyTipsThird: string, saveButton: string } =
+    passwordSuccessfullyUpdated: string, requirements: string, safetyTips: string, safetyTipsPhrase: string, safetyTipsFirst: string,
+    safetyTipsSecond: string, safetyTipsThird: string, saveButton: string } =
     {
       ...poPageChangePasswordLiterals[poLocaleDefault],
       ...poPageChangePasswordLiterals[browserLanguage()],

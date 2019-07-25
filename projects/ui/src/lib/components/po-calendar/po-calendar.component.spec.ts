@@ -98,7 +98,7 @@ describe('PoCalendarComponent:', () => {
       is less then 11`, () => {
 
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 10;
+      component.displayMonthNumber = 10;
 
       spyOn(component, <any>'updateDisplay');
       component.onNextMonth();
@@ -110,7 +110,7 @@ describe('PoCalendarComponent:', () => {
       then 11`, () => {
 
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 11;
+      component.displayMonthNumber = 11;
 
       spyOn(component, <any>'updateDisplay');
       component.onNextMonth();
@@ -122,7 +122,7 @@ describe('PoCalendarComponent:', () => {
       greater then 0`, () => {
 
         component.displayYear = 1997;
-        component['displayMonthNumber'] = 10;
+        component.displayMonthNumber = 10;
 
         spyOn(component, <any>'updateDisplay');
         component.onPreviousMonth();
@@ -132,7 +132,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`onPreviousMonth: should call 'updateDisplay' with 'displayYear -1' and 11 if displayMonthNumber is equal or less then 0`, () => {
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 0;
+      component.displayMonthNumber = 0;
 
       spyOn(component, <any>'updateDisplay');
       component.onPreviousMonth();
@@ -222,7 +222,7 @@ describe('PoCalendarComponent:', () => {
 
       component.onSelectYear(yearParam, 10);
 
-      expect(component['currentYear']).toBe(yearParam);
+      expect(component.currentYear).toBe(yearParam);
     });
 
     it('registerOnChange: should set `propagateChange` with value of the `fnParam`', () => {
@@ -281,7 +281,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`updateYear: should call 'updateDisplay' with '2007' and '11'`, () => {
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 11;
+      component.displayMonthNumber = 11;
       const value = 10;
       const yearExpected = 2007;
 
@@ -293,7 +293,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`updateYear: should call 'updateDisplay' with '1987' and '11'`, () => {
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 11;
+      component.displayMonthNumber = 11;
 
       spyOn(component, <any>'updateDisplay');
       component.updateYear(-10);
@@ -659,8 +659,8 @@ describe('PoCalendarComponent:', () => {
       component['updateDate'](date);
 
       expect(component['currentMonthNumber']).toBe(date.getMonth());
-      expect(component['currentYear']).toBe(date.getFullYear());
-      expect(component['updateDisplay']).toHaveBeenCalledWith(component['currentYear'], component['currentMonthNumber']);
+      expect(component.currentYear).toBe(date.getFullYear());
+      expect(component['updateDisplay']).toHaveBeenCalledWith(component.currentYear, component['currentMonthNumber']);
     });
 
     it(`updateDate: shouldn't call 'updateDisplay' if not have date`, () => {
@@ -708,7 +708,7 @@ describe('PoCalendarComponent:', () => {
 
       component['updateDisplay'](year, month);
 
-      expect(component['displayMonthNumber']).toEqual(month);
+      expect(component.displayMonthNumber).toEqual(month);
       expect(component['displayMonth']).toEqual(component['displayMonths'][month]);
       expect(component['displayYear']).toEqual(year);
       expect(component['getDecadeArray']).toHaveBeenCalledWith(year);

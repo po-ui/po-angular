@@ -98,6 +98,49 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     this.cleanInputValue();
   }
 
+  // Retorna o tamanho do arquivo em KBytes.
+  getFileSize(size: number): string {
+    let kbSize = 0;
+
+    if (size) {
+        kbSize = Math.ceil(size / 1024);
+    }
+
+    return `${kbSize} KB`;
+  }
+
+  // Retorna o po-icon de acordo com o status do arquivo.
+  getPoIcon(file: PoUploadFile): string {
+    switch (file.status) {
+      case PoUploadStatus.Uploaded:
+        return 'po-icon-ok';
+
+      case PoUploadStatus.Error:
+        return 'po-icon-close';
+
+      case PoUploadStatus.None:
+        return 'po-icon-info';
+
+      case PoUploadStatus.Uploading:
+      default:
+        return '';
+    }
+  }
+
+  // Verifica se existe algum arquivo sendo enviado ao serviço.
+  hasAnyFileUploading(files: Array<PoUploadFile>) {
+    if (files && files.length) {
+      return files.some(file => file.status === PoUploadStatus.Uploading);
+    }
+
+    return false;
+  }
+
+  // Valida se o status passado por parâmetro é igual ao status do arquivo.
+  isStatusFile(status: string, file: PoUploadFile) {
+    return file.status === PoUploadStatus[status];
+  }
+
   // Função disparada ao selecionar algum arquivo.
   onFileChange(event): void {
 
@@ -139,51 +182,8 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     }
   }
 
-  // Retorna o tamanho do arquivo em KBytes.
-  protected getFileSize(size: number): string {
-    let kbSize = 0;
-
-    if (size) {
-        kbSize = Math.ceil(size / 1024);
-    }
-
-    return `${kbSize} KB`;
-  }
-
-  // Retorna o po-icon de acordo com o status do arquivo.
-  protected getPoIcon(file: PoUploadFile): string {
-    switch (file.status) {
-      case PoUploadStatus.Uploaded:
-        return 'po-icon-ok';
-
-      case PoUploadStatus.Error:
-        return 'po-icon-close';
-
-      case PoUploadStatus.None:
-        return 'po-icon-info';
-
-      case PoUploadStatus.Uploading:
-      default:
-        return '';
-    }
-  }
-
-  // Verifica se existe algum arquivo sendo enviado ao serviço.
-  protected hasAnyFileUploading(files: Array<PoUploadFile>) {
-    if (files && files.length) {
-      return files.some(file => file.status === PoUploadStatus.Uploading);
-    }
-
-    return false;
-  }
-
-  // Valida se o status passado por parâmetro é igual ao status do arquivo.
-  protected isStatusFile(status: string, file: PoUploadFile) {
-    return file.status === PoUploadStatus[status];
-  }
-
   // Caso o componente estiver no modo AutoUpload, o arquivo também será removido da lista.
-  protected stopUpload(file: PoUploadFile) {
+  stopUpload(file: PoUploadFile) {
     this.uploadService.stopRequestByFile(file, () => {
       if (this.autoUpload) {
         this.removeFile(file);
@@ -194,7 +194,7 @@ export class PoUploadComponent extends PoUploadBaseComponent {
   }
 
   // Envia os arquivos passados por parâmetro, exceto os que já foram enviados ao serviço.
-  protected uploadFiles(files: Array<PoUploadFile>) {
+  uploadFiles(files: Array<PoUploadFile>) {
     const filesFiltered = files.filter(file => {
       return file.status !== PoUploadStatus.Uploaded;
     });

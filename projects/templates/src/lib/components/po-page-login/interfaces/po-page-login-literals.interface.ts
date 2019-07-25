@@ -7,6 +7,12 @@
  */
 export interface PoPageLoginLiterals {
 
+  /** Mensagem de erro apresentada quando o campo customizado está inválido */
+  customFieldErrorPattern?: string;
+
+  /** Placeholder para o campo customizado. */
+  customFieldPlaceholder?: string;
+
   /** Título exibido no topo da página. */
   title?: string;
 

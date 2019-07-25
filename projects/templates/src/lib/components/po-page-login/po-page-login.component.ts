@@ -96,6 +96,23 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     }
   }
 
+  openUrl(recovery: any): void {
+    switch (typeof recovery) {
+      case 'string': {
+        this.setUrlRedirect(recovery);
+        break;
+      }
+      case 'function': {
+        recovery();
+        break;
+      }
+      case 'object': {
+        this.createModalPasswordRecoveryComponent(recovery);
+        break;
+      }
+    }
+  }
+
   private checkingForMetadataProperty(object, property) {
     if (Object.prototype.hasOwnProperty.call(object, property)) {
       return object[property];
@@ -185,23 +202,6 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
         this.changeDetector.detectChanges();
       }
     });
-  }
-
-  protected openUrl(recovery: any): void {
-    switch (typeof recovery) {
-      case 'string': {
-        this.setUrlRedirect(recovery);
-        break;
-      }
-      case 'function': {
-        recovery();
-        break;
-      }
-      case 'object': {
-        this.createModalPasswordRecoveryComponent(recovery);
-        break;
-      }
-    }
   }
 
   protected setLoginErrors(errors: Array<string>) {

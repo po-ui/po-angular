@@ -338,7 +338,7 @@ describe('PoCalendarComponent:', () => {
     it(`onPrevMonth: should call 'updateDisplay' with 'displayYear' and 'displayMonthNumber -1'
       when displayMonthNumber is greater then 0`, () => {
         component.displayYear = 1997;
-        component['displayMonthNumber'] = 10;
+        component.displayMonthNumber = 10;
 
         spyOn(component, <any>'updateDisplay');
         component.onPrevMonth();
@@ -348,7 +348,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`onPrevMonth: should call 'updateDisplay' with 'displayYear -1' and 11 when displayMonthNumber is equal or less then 0`, () => {
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 0;
+      component.displayMonthNumber = 0;
 
       spyOn(component, <any>'updateDisplay');
       component.onPrevMonth();
@@ -359,7 +359,7 @@ describe('PoCalendarComponent:', () => {
     it(`onNextMonth: should call 'updateDisplay' with 'displayYear' and 'displayMonthNumber +1' when displayMonthNumber is less then 11`,
     () => {
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 10;
+      component.displayMonthNumber = 10;
 
       spyOn(component, <any>'updateDisplay');
       component.onNextMonth();
@@ -369,7 +369,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`onNextMonth: should call 'updateDisplay' with 'displayYear +1' and 0 when displayMonthNumber is greater or equal then 11`, () => {
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 11;
+      component.displayMonthNumber = 11;
 
       spyOn(component, <any>'updateDisplay');
       component.onNextMonth();
@@ -440,7 +440,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`updateYear: should call 'updateDisplay' and update 'displayYear' with positive number`, () => {
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 11;
+      component.displayMonthNumber = 11;
 
       spyOn(component, <any>'updateDisplay');
       component.updateYear(10);
@@ -450,7 +450,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`updateYear: should call 'updateDisplay' and update 'displayYear' with negative number`, () => {
       component.displayYear = 1997;
-      component['displayMonthNumber'] = 11;
+      component.displayMonthNumber = 11;
 
       spyOn(component, <any>'updateDisplay');
       component.updateYear(-10);
@@ -477,7 +477,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`updateDate: should call 'updateDisplay' with year and month updated`, () => {
       component['currentMonthNumber'] = 2;
-      component['currentYear'] = 2000;
+      component.currentYear = 2000;
 
       spyOn(component, <any>'updateDisplay');
       component['updateDate'](new Date(2018, 5, 5));
@@ -499,7 +499,7 @@ describe('PoCalendarComponent:', () => {
       spyOn(component, 'getArrayDecade');
       component['updateDisplay'](2000, 5);
 
-      expect(component['displayMonthNumber']).toBe(5);
+      expect(component.displayMonthNumber).toBe(5);
       expect(component.getArrayDecade).toHaveBeenCalledWith(2000);
     });
 

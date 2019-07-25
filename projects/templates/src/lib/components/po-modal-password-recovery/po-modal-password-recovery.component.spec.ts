@@ -994,9 +994,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('should show `email/sms` fields content if modalType value is `Email`', () => {
-      component.emailModalPhrases = {
-        firstPhrase: 'Phrase'
-      };
+      component.emailModalPhrases.firstPhrase = 'Phrase';
       component.modalType = PoModalPasswordRecoveryModalContent.Email;
       component.type = PoModalPasswordRecoveryType.All;
 
@@ -1005,15 +1003,14 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
       const expectedContent = fixture.debugElement.query(By.css('.po-modal-password-recovery-text')).nativeElement;
 
-      expect(expectedContent.innerHTML).toContain(component.emailModalPhrases['firstPhrase']);
+      expect(expectedContent.innerHTML).toContain(component.emailModalPhrases.firstPhrase);
       expect(expectedContent.innerHTML).not.toContain(component.literals.sentSmsCodePhrase);
       expect(expectedContent.innerHTML).not.toContain(component.literals.emailSentConfirmationPhrase);
     });
 
     it('should show `smsCode` field content if modalType value is `SMSCode`', () => {
-      component.emailModalPhrases = {
-        firstPhrase: 'Phrase'
-      };
+      component.emailModalPhrases.firstPhrase = 'Phrase';
+
       component.modalType = PoModalPasswordRecoveryModalContent.SMSCode;
       component.type = PoModalPasswordRecoveryType.Email;
 
@@ -1023,14 +1020,12 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       const expectedContent = fixture.debugElement.query(By.css('.po-modal-password-recovery-text')).nativeElement;
 
       expect(expectedContent.innerHTML).toContain(component.literals.sentSmsCodePhrase);
-      expect(expectedContent.innerHTML).not.toContain(component.emailModalPhrases['firstPhrase']);
+      expect(expectedContent.innerHTML).not.toContain(component.emailModalPhrases.firstPhrase);
       expect(expectedContent.innerHTML).not.toContain(component.literals.emailSentConfirmationPhrase);
     });
 
     it('should show `smsCode` field content if modalType value is `Confirmation`', () => {
-      component.emailModalPhrases = {
-        firstPhrase: 'Phrase'
-      };
+      component.emailModalPhrases.firstPhrase = 'Phrase';
       component.modalType = PoModalPasswordRecoveryModalContent.Confirmation;
       component.type = PoModalPasswordRecoveryType.Email;
 
@@ -1041,7 +1036,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
       expect(expectedContent.innerHTML).toContain(component.literals.emailSentConfirmationPhrase);
       expect(expectedContent.innerHTML).not.toContain(component.literals.sentSmsCodePhrase);
-      expect(expectedContent.innerHTML).not.toContain(component.emailModalPhrases['firstPhrase']);
+      expect(expectedContent.innerHTML).not.toContain(component.emailModalPhrases.firstPhrase);
     });
 
     it('should contain `po-field-container-error-text` class if `invalidEmail` and control are true', () => {

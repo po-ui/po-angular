@@ -44,11 +44,13 @@ export class PoCalendarBaseComponent {
   private _maxDate: Date;
   private _minDate: Date;
 
+  currentYear: number;
   dayVisible: boolean = false;
   displayDays: Array<number>;
   displayDecade: Array<number>;
   displayFinalDecade: number;
   displayMonth: any;
+  displayMonthNumber: number;
   displayMonths: Array<any> = Array();
   displayStartDecade: number;
   displayWeekDays: Array<any> = Array();
@@ -57,10 +59,8 @@ export class PoCalendarBaseComponent {
   yearVisible: boolean = false;
 
   protected currentMonthNumber: number;
-  protected currentYear: number;
   protected date: Date;
   protected dateIso: string;
-  protected displayMonthNumber: number;
   protected lastDisplay: string;
   protected onTouched: any = null;
   protected propagateChange: any = null;

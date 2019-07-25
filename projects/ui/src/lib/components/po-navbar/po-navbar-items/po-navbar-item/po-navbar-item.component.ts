@@ -24,7 +24,7 @@ export class PoNavbarItemComponent {
     return isExternalLink(this.link) ? 'externalLink' : 'internalLink';
   }
 
-  itemClick(label: string, link: string) {
+  itemClick(label?: string, link?: string) {
 
     if (this.action) {
       this.action({ label, link });

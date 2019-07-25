@@ -141,7 +141,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
-      component['parentContext'] = <any> {};
+      component.parentContext = <any> {};
       component.title = undefined;
       component.breadcrumb = { items: [{ label: 'Breadcrumb' }]};
 
@@ -152,7 +152,7 @@ describe('PoPageEditComponent', () => {
       component.breadcrumb = undefined;
       component.title = undefined;
 
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: function() {},
         saveNew: function() {},
         save: function() {}
@@ -162,7 +162,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('hasPageHeader: should return true if has title', () => {
-      component['parentContext'] = <any> {};
+      component.parentContext = <any> {};
       component.breadcrumb = undefined;
       component.title = 'Title';
 
@@ -170,7 +170,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('hasPageHeader: should return false if doesn`t have actions, breadcrumb and title', () => {
-      component['parentContext'] = <any> {};
+      component.parentContext = <any> {};
       component.breadcrumb = undefined;
       component.title = undefined;
 
@@ -178,7 +178,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('isPrimaryAction: should return true if action is "saveNew" and save function is undefined', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: () => {},
         saveNew: () => {},
       };
@@ -187,7 +187,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('isPrimaryAction: should return false if action is "saveNew" and save funtion is defined', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: () => {},
         saveNew: () => {},
         save: () => {}
@@ -197,7 +197,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('isPrimaryAction: should return true if action is "cancel", saveNew and save function are undefined', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: () => {},
       };
 
@@ -205,7 +205,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('isPrimaryAction: should return false if action is "cancel" and saveNew funtion is defined', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: () => {},
         saveNew: () => {},
       };
@@ -214,7 +214,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('isPrimaryAction: should return false if action is "cancel" and save funtion is defined', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: () => {},
         save: () => {},
       };
@@ -223,7 +223,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('isPrimaryAction: should return false if action isn`t "cancel" or "saveNew"', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: () => {},
         save: () => {},
       };
@@ -240,7 +240,7 @@ describe('PoPageEditComponent', () => {
 
       component.literals = poPageEditLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: function() {},
         saveNew: function() {},
         save: function() {}
@@ -261,7 +261,7 @@ describe('PoPageEditComponent', () => {
 
       component.literals = poPageEditLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: function() {},
         saveNew: function() {}
       };
@@ -281,7 +281,7 @@ describe('PoPageEditComponent', () => {
 
       component.literals = poPageEditLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: function() {}
       };
 
@@ -308,7 +308,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('should only contain icon in "save" primary action if "save" function is defined.', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         save: () => {},
         cancel: () => {},
         saveNew: () => {}
@@ -324,7 +324,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('should only contain icon in "saveNew" primary action if "save" function is undefined.', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: () => {},
         saveNew: () => {}
       };
@@ -339,7 +339,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('should only contain icon in "cancel" primary action if "saveNew" and "save" function is undefined.', () => {
-      component['parentContext'] = <any> {
+      component.parentContext = <any> {
         cancel: () => {}
       };
 

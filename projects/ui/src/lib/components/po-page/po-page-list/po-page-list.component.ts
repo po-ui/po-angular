@@ -40,10 +40,10 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
   limitPrimaryActions: number = 3;
+  parentRef: ViewContainerRef;
 
   private isRecalculate = true;
   private maxWidthMobile: number = 480;
-  private parentRef: ViewContainerRef;
 
   callFunction = callFunction;
 

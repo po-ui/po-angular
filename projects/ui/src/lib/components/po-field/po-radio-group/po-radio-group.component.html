@@ -14,7 +14,6 @@
         [checked]="value === option.value"
         [class.po-radio-group-input-checked]="value === option.value"
         [disabled]="option.disabled === true || disabled"
-        [readonly]="readonly"
         [required]="required"
         [value]="option.value"
         (keyup)="onKeyUp($event, option.value)">
