@@ -54,7 +54,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   @ViewChild('chartLegend', { static: true }) chartLegend: ElementRef;
   @ViewChild('chartWrapper', { static: true }) chartWrapper: ElementRef;
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onResize = () => this.windowResizeListener.next()
 
   constructor(

@@ -312,6 +312,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.poPopupComponent.toggle(row);
   }
 
+  validateTableAction(row: any, tableAction: any) {
+    if (typeof tableAction.disabled === 'function') {
+      return tableAction.disabled.call(this.parentRef, row);
+    } else {
+      return tableAction.disabled;
+    }
+  }
+
   protected showContainer(container: string) {
 
     const containerClassList = this.tableContainerElement.nativeElement.firstChild.classList;
@@ -364,14 +372,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     });
 
     return icons;
-  }
-
-  private validateTableAction(row: any, tableAction: any) {
-    if (typeof tableAction.disabled === 'function') {
-      return tableAction.disabled.call(this.parentRef, row);
-    } else {
-      return tableAction.disabled;
-    }
   }
 
   private debounceResize() {

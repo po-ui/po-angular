@@ -299,6 +299,10 @@ export class PoPageDynamicEditComponent implements OnInit {
     return this._detailFields;
   }
 
+  detailActionNew() {
+    this.gridDetail.insertRow();
+  }
+
   private cancel(path) {
     if (this.dynamicForm && this.dynamicForm.form.dirty) {
       this.poDialogService.confirm({
@@ -367,10 +371,6 @@ export class PoPageDynamicEditComponent implements OnInit {
     } else {
       window.history.back();
     }
-  }
-
-  private detailActionNew() {
-    this.gridDetail.insertRow();
   }
 
   private resolveUrl(item: any, path: string) {

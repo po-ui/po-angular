@@ -44,7 +44,7 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   codeMask: string = '9 9 9 9 9 9';
   control: AbstractControl;
   emailModal: boolean = true;
-  emailModalPhrases = {};
+  emailModalPhrases = { firstPhrase: null as string, secondPhrase: null as string };
   endpoint: string = '.';
   invalidCode: boolean = false;
   invalidEmail: boolean = false;
@@ -196,11 +196,11 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
 
   private pipeModalPhrases() {
     if (this.type === PoModalPasswordRecoveryType.SMS) {
-      this.emailModalPhrases['firstPhrase'] = this.setPipeArguments(this.literals.recoveryPasswordPhrase, this.literals.sms);
-      this.emailModalPhrases['secondPhrase'] = this.setPipeArguments(this.literals.supportContact, this.literals.telephone);
+      this.emailModalPhrases.firstPhrase = this.setPipeArguments(this.literals.recoveryPasswordPhrase, this.literals.sms);
+      this.emailModalPhrases.secondPhrase = this.setPipeArguments(this.literals.supportContact, this.literals.telephone);
     } else {
-      this.emailModalPhrases['firstPhrase'] = this.setPipeArguments(this.literals.recoveryPasswordPhrase, this.literals.email);
-      this.emailModalPhrases['secondPhrase'] = this.setPipeArguments(this.literals.supportContact, this.literals.email);
+      this.emailModalPhrases.firstPhrase = this.setPipeArguments(this.literals.recoveryPasswordPhrase, this.literals.email);
+      this.emailModalPhrases.secondPhrase = this.setPipeArguments(this.literals.supportContact, this.literals.email);
     }
   }
 

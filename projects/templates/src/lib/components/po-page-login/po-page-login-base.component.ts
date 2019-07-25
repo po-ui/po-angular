@@ -169,6 +169,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   customizedDefaultLiterals: PoPageLoginLiterals = {};
   loginSubscription: Subscription;
   password: string;
+  rememberUser: boolean = false;
   selectedLanguage: string;
   showExceededAttemptsWarning = false;
 
@@ -190,7 +191,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   private _registerUrl: string;
   private _urlRecovery: string;
 
-  protected rememberUser: boolean = false;
 
   /**
    * @optional

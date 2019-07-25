@@ -76,7 +76,7 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
     emailSentConfirmationPhrase: string, emailSentTitle: string, forgotPasswordTitle: string,
     insertCode: string, insertEmail: string, insertPhone: string, phoneErrorMessagePhrase: string,
     prepositionIn: string, prepositionOr: string, recoveryPasswordPhrase: string, resendEmailButton: string,
-    resendSmsCodePhrase: string, sendAgain: string, sendButton: string, sms: string, smsCode: string,
+    resendSmsCodePhrase: string, sendAgain: string, sendAgainPhrase: string, sendButton: string, sms: string, smsCode: string,
     smsCodeErrorMessagePhrase: string, sentSmsCodePhrase: string, supportContact: string, telephone: string, typeCodeTitle: string } =
     {
       ...poModalPasswordRecoveryLiterals[poLocaleDefault],
