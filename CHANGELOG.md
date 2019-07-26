@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/portinariui/portinari-angular/compare/v1.2.0...v1.3.0) (2019-07-26)
+
+
+### Bug Fixes
+
+* **app:** corrige os erros ao utilizar os samples ([1345cfb](https://github.com/portinariui/portinari-angular/commit/1345cfb))
+* **modal:** corrige fechamento da modal ao selecionar opção no combo ([a5ebc3b](https://github.com/portinariui/portinari-angular/commit/a5ebc3b))
+* **table:** corrige sobreposição do popup em dispositivos mobile iOS ([cf6764b](https://github.com/portinariui/portinari-angular/commit/cf6764b))
+
+
+### Features
+
+* **upload:** permite que o componente aceite drag and drop ([ef47ca8](https://github.com/portinariui/portinari-angular/commit/ef47ca8))
+
+
 ## [1.2.0](https://github.com/portinariui/portinari-angular/compare/v1.1.1...v1.2.0) (2019-07-19)
 
 
