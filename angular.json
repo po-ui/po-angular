@@ -107,7 +107,12 @@
           "options": {
             "browserTarget": "app:build",
             "open": true,
-            "host": "0.0.0.0"
+            "host": "0.0.0.0",
+            "sourceMap": {
+              "scripts": true,
+              "styles": true,
+              "vendor": true
+            }
           },
           "configurations": {
             "production": {
