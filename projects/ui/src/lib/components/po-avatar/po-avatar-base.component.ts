@@ -15,11 +15,15 @@ const PO_AVATAR_SIZE_DEFAULT = 'md';
 export class PoAvatarBaseComponent {
   private _size: string = 'md';
 
+  // This is a test commit hey I`m a nice commit
+
   /**
    * Fonte da imagem que pode ser um caminho local (`./assets/images/logo-black-small.png`)
    * ou um servidor externo (`https://portinari.io/assets/images/logo-black-small.png`).
    */
   @Input('p-src') src: string;
+
+  // I`m also a really nice commit, let`s squash
 
   /**
    * @optional
