@@ -9,7 +9,7 @@ import { PoPageDynamicTableActions } from '@portinari/portinari-templates';
 })
 export class SamplePoPageDynamicTableUsersComponent {
 
-  public readonly serviceApi = 'https://portinari.io/sample/api/po-metadata/v1/people';
+  public readonly serviceApi = 'https://thf.totvs.com.br/sample/api/po-metadata/v1/people';
 
   public readonly actions: PoPageDynamicTableActions = {
     detail: 'dynamic-detail/:id',

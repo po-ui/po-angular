@@ -9,7 +9,7 @@ import { PoComboFilter, PoComboOption } from '@portinari/portinari-ui';
 @Injectable()
 export class SamplePoComboHotelsService implements PoComboFilter {
 
-  private url: string = 'https://portinari.io/sample/api/new/hotels';
+  private url: string = 'https://thf.totvs.com.br/sample/api/new/hotels';
 
   constructor(private http: HttpClient) { }
 

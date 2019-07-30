@@ -17,7 +17,7 @@ export class SamplePoToolbarLoggedComponent {
   ];
 
   profile: PoToolbarProfile = {
-    avatar: 'https://portinari.io/assets/graphics/logo-po.png',
+    avatar: 'https://thf.totvs.com.br/assets/graphics/logo-po.png',
     subtitle: 'dev@portinari.com.br',
     title: 'Mr. Dev Portinari'
   };
@@ -44,7 +44,7 @@ export class SamplePoToolbarLoggedComponent {
   }
 
   onClickNotification(item: PoToolbarAction) {
-    window.open('https://portinari.io/dev', '_blank');
+    window.open('https://thf.totvs.com.br/dev', '_blank');
 
     item.type = 'default';
   }

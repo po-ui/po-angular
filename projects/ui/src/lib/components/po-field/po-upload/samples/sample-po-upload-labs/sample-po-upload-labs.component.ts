@@ -82,7 +82,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.properties = [];
     this.restrictions = {};
     this.upload = undefined;
-    this.url = 'https://portinari.io/sample/api/uploads/addFile';
+    this.url = 'https://thf.totvs.com.br/sample/api/uploads/addFile';
   }
 
   private getValueInBytes(value: number) {
