@@ -24,6 +24,7 @@ export * from './po-navbar/index';
 export * from './po-page/index';
 export * from './po-popover/index';
 export * from './po-popup/index';
+export * from './po-progress/index';
 export * from './po-slide/index';
 export * from './po-stepper/index';
 export * from './po-table/index';

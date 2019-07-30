@@ -24,6 +24,7 @@ import { PoNavbarModule } from './po-navbar/po-navbar.module';
 import { PoPageModule } from './po-page/po-page.module';
 import { PoPopoverModule } from './po-popover/po-popover.module';
 import { PoPopupModule } from './po-popup/po-popup.module';
+import { PoProgressModule } from './po-progress/po-progress.module';
 import { PoSlideModule } from './po-slide/po-slide.module';
 import { PoStepperModule } from './po-stepper/po-stepper.module';
 import { PoTableModule } from './po-table/po-table.module';
@@ -59,6 +60,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoPageModule,
     PoPopoverModule,
     PoPopupModule,
+    PoProgressModule,
     PoSlideModule,
     PoStepperModule,
     PoTableModule,
@@ -92,6 +94,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoPageModule,
     PoPopoverModule,
     PoPopupModule,
+    PoProgressModule,
     PoSlideModule,
     PoStepperModule,
     PoTableModule,

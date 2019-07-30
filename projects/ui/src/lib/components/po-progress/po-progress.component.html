@@ -1,0 +1,30 @@
+<div class="po-progress" [ngClass]="statusClass">
+
+  <label class="po-progress-description-mobile po-progress-description-text">
+    {{ text }}
+  </label>
+
+  <po-progress-bar
+    class="po-progress-bar"
+    [p-indeterminate]="indeterminate"
+    [p-value]="value">
+  </po-progress-bar>
+
+  <div class="po-progress-description">
+    <label class="po-progress-description-text">
+      {{ text }}
+    </label>
+  </div>
+
+  <div class="po-progress-info">
+    <span class="po-progress-info-icon po-icon {{ infoIcon }}"></span>
+    <span class="po-progress-info-text">{{ info }}</span>
+
+    <button *ngIf="isCancel()"
+      class="po-progress-info-icon-close po-icon po-icon-close po-clickable"
+      (click)="emitCancellation()">
+    </button>
+
+  </div>
+
+</div>

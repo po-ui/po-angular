@@ -1,0 +1,24 @@
+<po-page-default p-title="Edit publication">
+
+  <div class="po-row">
+    <po-rich-text class="po-md-9" [(ngModel)]="publication"></po-rich-text>
+
+    <po-divider class="po-md-9"></po-divider>
+
+    <po-progress
+      class="po-md-9"
+      p-text="Loading update"
+      [p-info]="progressBarInfo"
+      [p-value]="progressBarValue">
+    </po-progress>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      p-label="Update publication"
+      [p-disabled]="buttonDisabled"
+      (p-click)="updatePublication()">
+    </po-button>
+  </div>
+
+</po-page-default>
