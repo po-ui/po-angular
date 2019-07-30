@@ -124,6 +124,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     this.inputEl.nativeElement.focus();
     this.inputEl.nativeElement.value = this.formatToDate(this.date);
     this.controlModel(this.date);
+    this.controlChangeEmitter();
     this.closeCalendar();
   }
 
@@ -210,15 +211,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     this.controlChangeEmitter();
 
-  }
-
-  eventOnChange($event) {
-    const elementValue = this.inputEl.nativeElement.value;
-    if (this.verifyMobile()) {
-      this.controlModel(elementValue);
-      this.callOnChange(elementValue);
-    }
-    this.onchange.emit(elementValue);
   }
 
   eventOnClick($event) {

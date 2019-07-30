@@ -412,17 +412,6 @@ describe('PoDatepickerComponent:', () => {
     expect(component.callOnChange).toHaveBeenCalled();
   });
 
-  it('should emit onchange when it is not mobile', () => {
-    const input = fixture.debugElement.nativeElement.querySelector('input');
-    input.value = '01/01/2000';
-
-    spyOn(component.onchange, 'emit');
-
-    component.eventOnChange({});
-
-    expect(component.onchange.emit).toHaveBeenCalled();
-  });
-
   it('simulate click out behavior the datepicker field read-only', () => {
     component.dialogPicker = undefined;
     fixture.detectChanges();
@@ -435,18 +424,6 @@ describe('PoDatepickerComponent:', () => {
   });
 
   // Testes de mobile
-
-  it('should emit onchange when it is mobile', () => {
-    spyOn(component, 'verifyMobile').and.returnValue(['Android']);
-
-    spyOn(component, 'callOnChange');
-    spyOn(component, 'controlModel');
-
-    component.eventOnChange({});
-
-    expect(component.callOnChange).toHaveBeenCalled();
-    expect(component.controlModel).toHaveBeenCalled();
-  });
 
   it('should call eventOnClick when have mobile', () => {
     spyOn(component, 'verifyMobile').and.returnValue(['Android']);
@@ -745,13 +722,15 @@ describe('PoDatepickerComponent:', () => {
       expect(component['closeCalendar']).toHaveBeenCalled();
     });
 
-    it('dateSelected: should call `controlModel`', () => {
+    it('dateSelected: should call `controlModel` and `controlChangeEmitter`', () => {
 
       spyOn(component, 'controlModel');
+      spyOn(component, <any>'controlChangeEmitter');
 
       component.dateSelected();
 
       expect(component.controlModel).toHaveBeenCalled();
+      expect(component['controlChangeEmitter']).toHaveBeenCalled();
     });
 
     it('formatToDate: should call `formatYear` with date year', () => {
@@ -968,24 +947,6 @@ describe('PoDatepickerComponent:', () => {
       component['controlChangeEmitter'].call(fakeThis);
 
       expect(fakeThis.onchange.emit).not.toHaveBeenCalled();
-    });
-
-    it('eventOnChange: should emit value', () => {
-      const value = '30/08/2018' ;
-      const fakeThis = {
-        verifyMobile: () => false,
-        inputEl: {
-          nativeElement: {
-            value: value
-          }
-        },
-        onchange: { emit: () => {} }
-      };
-
-      spyOn(fakeThis.onchange, 'emit');
-      component['eventOnChange'].call(fakeThis);
-
-      expect(fakeThis.onchange.emit).toHaveBeenCalledWith(value);
     });
 
     it('isValidDateIso: should return `true` if value format is `yyyy-mm-dd`.', () => {
