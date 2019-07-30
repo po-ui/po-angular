@@ -7,7 +7,7 @@ import { PoLookupFilter } from '@portinari/portinari-ui';
 @Injectable()
 export class SamplePoLookupService implements PoLookupFilter {
 
-  private url = 'https://portinari.io/sample/api/new/heroes';
+  private url = 'https://thf.totvs.com.br/sample/api/new/heroes';
 
   constructor(private httpClient: HttpClient) { }
 

@@ -43,7 +43,7 @@ export class SamplePoDynamicFormRegisterComponent {
       gridColumns: 6,
       gridSmColumns: 12,
       label: 'Favorite Hero',
-      searchService: 'https://portinari.io/sample/api/comboOption/heroes',
+      searchService: 'https://thf.totvs.com.br/sample/api/comboOption/heroes',
       columns: [ { property: 'nickname', label: 'Hero' }, { property: 'label', label: 'Name' }]
     },
   ];

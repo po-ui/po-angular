@@ -12,7 +12,7 @@ import {
 export class SamplePoModalPasswordRecoveryRequestComponent {
 
   type: PoModalPasswordRecoveryType = PoModalPasswordRecoveryType.All;
-  urlRecovery: string = 'https://portinari.io/sample/api/users';
+  urlRecovery: string = 'https://thf.totvs.com.br/sample/api/users';
 
   @ViewChild(PoModalPasswordRecoveryComponent, { static: false }) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 

@@ -32,7 +32,7 @@ export class SamplePoComboHeroesReactiveFormComponent implements OnInit {
   }
 
   private getHero(heroName: string) {
-    return this.http.get(`https://portinari.io/sample/api/new/heroes/${heroName}`);
+    return this.http.get(`https://thf.totvs.com.br/sample/api/new/heroes/${heroName}`);
   }
 
 }
