@@ -157,6 +157,58 @@
     </div>
 
     <div class="container">
+      <h4>Arquivos selecionados com restrição de arquivos</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivo</span>
+        </button>
+      </div>
+
+      <!-- INICIO FILE RESTRICTIONS -->
+      <div class="po-upload-file-restrictions">
+          <p class="po-font-text-small">
+            Quantidade máxima: 2 arquivo(s)
+          </p>
+          <p class="po-font-text-small">
+            Formatos adotados: .PNG e .ZIP.
+          </p>
+          <p class="po-font-text-small">
+            Limite de tamanho por arquivo: de 1 Bytes até 30.72 KB
+          </p>
+      </div>
+      <!-- FIM FILE RESTRICTIONS -->
+
+      <div class="po-upload-progress">
+        <div class="po-upload-filename-foreground">
+          <div class="po-upload-filename">
+            <span class="po-icon po-icon-info"></span>logo-portinari.png - 80 kb
+          </div>
+
+          <div class="po-upload-group-actions">
+            <span class="po-upload-action"> Excluir </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-upload-progress">
+        <div class="po-upload-filename-foreground">
+          <div class="po-upload-filename">
+            <span class="po-icon po-icon-info"></span>foto-po.jpg - 86 kb
+          </div>
+
+          <div class="po-upload-group-actions">
+            <span class="po-upload-action"> Excluir </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="inline">
+        <button type="button" name="button" class="po-button po-button-primary">Iniciar envio</button>
+      </div>
+    </div>
+
+    <div class="container">
       <h4>Carregando arquivos</h4>
       <div class="po-upload">
         <input type="file" name="name" id="id" class="po-upload-input">
@@ -248,6 +300,62 @@
       </div>
 
       <div class="container po-md-6">
+        <h4>Drag Drop com restrição de arquivos</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP AREA -->
+          <div>
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                <div class="po-upload-drag-drop-area-select-files po-clickable"> ou selecione os arquivos no computador </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+
+          <!-- INICIO FILE RESTRICTIONS -->
+          <div class="po-upload-file-restrictions">
+            <p class="po-font-text-small">
+              Quantidade máxima: 2 arquivo(s)
+            </p>
+            <p class="po-font-text-small">
+              Formatos adotados: .PNG e .ZIP.
+            </p>
+            <p class="po-font-text-small">
+              Limite de tamanho por arquivo: de 1 Bytes até 30.72 KB
+            </p>
+          </div>
+          <!-- FIM FILE RESTRICTIONS -->
+
+          <div class="po-upload-progress po-upload-progress-success">
+            <div class="po-upload-filename-foreground">
+              <div class="po-upload-filename po-upload-filename-loading">
+                <span class="po-icon po-icon-ok"></span>foto-po.jpg - 86 kb
+              </div>
+            </div>
+          </div>
+
+          <div class="inline">
+            <button type="button" name="button" class="po-button po-button-primary" disabled>
+              Iniciar envio
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="po-row">
+
+      <div class="container po-md-6">
         <h4>Drag Drop com Drop habilitado</h4>
 
         <div class="po-upload">
@@ -289,42 +397,16 @@
         </div>
       </div>
 
-    </div>
 
-    <div class="container po-md-6">
-      <h4>Drag Drop desabilitado</h4>
+      <div class="container po-md-6">
+        <h4>Drag Drop desabilitado</h4>
 
-        <div class="po-upload">
-          <input type="file" name="name" id="id" class="po-upload-input">
-
-        <!-- DRAG DROP AREA -->
-        <div>
-          <div class="po-upload-drag-drop-area po-upload-drag-drop-area-disabled" style="height: 320px">
-
-            <div class="po-upload-drag-drop-area-container">
-              <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
-
-              <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
-
-              <div class="po-upload-drag-drop-area-select-files po-clickable"> ou selecione os arquivos no computador </div>
-            </div>
-
-          </div>
-        </div>
-        <!-- FIM DRAG DROP AREA -->
-      </div>
-    </div>
-
-    <div class="container po-md-6">
-      <h4>Drag Drop inválido</h4>
-
-      <div class="ng-invalid ng-dirty">
-        <div class="po-upload">
-          <input type="file" name="name" id="id" class="po-upload-input">
+          <div class="po-upload">
+            <input type="file" name="name" id="id" class="po-upload-input">
 
           <!-- DRAG DROP AREA -->
           <div>
-            <div class="po-upload-drag-drop-area" style="height: 320px">
+            <div class="po-upload-drag-drop-area po-upload-drag-drop-area-disabled" style="height: 320px">
 
               <div class="po-upload-drag-drop-area-container">
                 <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
@@ -339,6 +421,37 @@
           <!-- FIM DRAG DROP AREA -->
         </div>
       </div>
+
+    </div>
+
+    <div class="po-row">
+
+      <div class="container po-md-6">
+        <h4>Drag Drop inválido</h4>
+
+        <div class="ng-invalid ng-dirty">
+          <div class="po-upload">
+            <input type="file" name="name" id="id" class="po-upload-input">
+
+            <!-- DRAG DROP AREA -->
+            <div>
+              <div class="po-upload-drag-drop-area" style="height: 320px">
+
+                <div class="po-upload-drag-drop-area-container">
+                  <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                  <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                  <div class="po-upload-drag-drop-area-select-files po-clickable"> ou selecione os arquivos no computador </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- FIM DRAG DROP AREA -->
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </section>

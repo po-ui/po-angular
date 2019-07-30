@@ -1048,6 +1048,8 @@
   --color-upload-drag-drop-area-background-color-disabled: var(--color-neutral-light-90);
   --color-upload-drag-drop-area-color-disabled: var(--color-neutral-light-60);
 
+  --color-upload-file-restrictions-color-text: var(--color-neutral);
+
 /*------------------------------------*\
   WIDGET
 \*------------------------------------*/
