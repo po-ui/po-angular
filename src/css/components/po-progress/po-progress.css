@@ -1,0 +1,104 @@
+:root {
+
+  --font-progress-bar-text: {
+    @apply --font-text-small-bold;
+  }
+
+}
+
+.po-progress {
+  display: table;
+  margin-bottom: 20px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.po-progress-description {
+  display: none;
+}
+
+.po-progress-description-mobile {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.po-progress-description-text {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.po-progress-info {
+  text-align: right;
+}
+
+.po-progress-info-text,
+.po-progress-description-text {
+  @apply --font-progress-bar-text;
+}
+
+.po-progress-info-icon-close {
+  background-color: transparent;
+  border: none;
+  color: var(--color-progress-color-info-icon);
+  font-size: 16px;
+  margin-left: 16px;
+  position: relative;
+  right: 6px;
+  top: 3px;
+}
+
+.po-progress-info-icon-close:focus {
+  border-radius: 1px;
+  outline: dashed 2px var(--color-progress-border-color-info-icon-close);
+  outline-offset: 4px;
+}
+
+.po-progress-info-icon {
+  font-size: 16px;
+  position: relative;
+  right: 4px;
+  top: 2px;
+}
+
+.po-progress-description-text,
+.po-progress-info {
+  color: var(--color-progress-color-text);
+}
+
+.po-progress-success .po-progress-description-text,
+.po-progress-success .po-progress-info {
+  color: var(--color-progress-color-text-success);
+}
+
+.po-progress-error .po-progress-description-text,
+.po-progress-error .po-progress-info {
+  color: var(--color-progress-color-text-error);
+}
+
+@media screen and (min-width: 481px) {
+
+  .po-progress {
+    display: table;
+  }
+
+  .po-progress-description {
+    display: table-cell;
+    max-width: 0;
+  }
+
+  .po-progress-description-mobile {
+    display: none;
+  }
+
+  .po-progress-description-text {
+    max-width: 368px;
+    text-overflow: ellipsis;
+  }
+
+  .po-progress-info {
+    display: table-cell;
+    white-space: nowrap;
+  }
+
+}

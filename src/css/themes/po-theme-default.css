@@ -780,6 +780,27 @@
   --color-popup-color-item-selected: var(--color-white);
 
 /*------------------------------------*\
+  PROGRESS
+\*------------------------------------*/
+
+  --color-progress-color-info-icon: var(--color-primary);
+  --color-progress-color-text: var(--color-neutral);
+  --color-progress-color-text-success: var(--color-success);
+  --color-progress-color-text-error: var(--color-danger);
+  --color-progress-color-info: var(--color-neutral);
+
+  --color-progress-border-color-info-icon-close: var(--color-secondary);
+
+/*------------------------------------*\
+  PROGRESS BAR
+\*------------------------------------*/
+
+  --color-progress-bar-background-color-bar: var(--color-primary-light-80);
+  --color-progress-bar-background-color-default: var(--color-primary);
+  --color-progress-bar-background-color-success: var(--color-success);
+  --color-progress-bar-background-color-error: var(--color-danger);
+
+/*------------------------------------*\
   RADIO-GROUP
 \*------------------------------------*/
 
