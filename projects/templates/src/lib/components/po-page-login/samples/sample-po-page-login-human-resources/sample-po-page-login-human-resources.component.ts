@@ -30,7 +30,7 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
   passwordErrors = [];
   params: PoPageBlockedUserReasonParams = { attempts: 3, hours: 24 };
   passwordRecovery: PoPageLoginRecovery = {
-    url: 'https://portinari.io/sample/api/users',
+    url: 'https://thf.totvs.com.br/sample/api/users',
     type: PoModalPasswordRecoveryType.All,
     contactMail: 'support@mail.com'
   };

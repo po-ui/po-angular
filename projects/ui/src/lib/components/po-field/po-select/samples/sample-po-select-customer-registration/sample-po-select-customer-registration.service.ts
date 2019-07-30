@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class SamplePoSelectCustomerRegistrationService {
 
-  private url: string = 'https://portinari.io/sample/api/sampleSelect/';
+  private url: string = 'https://thf.totvs.com.br/sample/api/sampleSelect/';
 
   constructor(private http: HttpClient) { }
 

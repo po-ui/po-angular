@@ -9,7 +9,7 @@ import { PoMenuFilter, PoMenuItemFiltered } from '@portinari/portinari-ui';
 @Injectable()
 export class SamplePoMenuHumanResourcesService implements PoMenuFilter {
 
-  private url: string = 'https://portinari.io/sample/api/menus';
+  private url: string = 'https://thf.totvs.com.br/sample/api/menus';
 
   constructor(private http: HttpClient) { }
 

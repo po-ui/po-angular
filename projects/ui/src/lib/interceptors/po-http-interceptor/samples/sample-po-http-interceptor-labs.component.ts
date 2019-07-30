@@ -46,7 +46,7 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy {
     const headers = { 'X-Portinari-No-Error': this.noErrorHeaderParam.toString() };
 
     this.apiSubscription = this.http.get(
-      `https://portinari.io/sample/api/message`,
+      `https://thf.totvs.com.br/sample/api/message`,
       {
         headers: headers,
         params: { status: this.status.toString(), code: this.code, type: this.type, msg: this.text, help: this.help }
