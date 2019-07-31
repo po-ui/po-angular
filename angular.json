@@ -99,13 +99,16 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "es5": {
+              "tsConfig": "projects/app/tsconfig-es5.app.json"
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "app:build",
+            "browserTarget": "app:build:es5",
             "open": true,
             "host": "0.0.0.0",
             "sourceMap": {
@@ -271,6 +274,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "ui"
 }
