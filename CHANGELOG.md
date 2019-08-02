@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/portinariui/portinari-angular/compare/v1.3.0...v1.3.1) (2019-08-02)
+
+
+### Bug Fixes
+
+* **build:** corrige erros de compilação com --prod ([9081b4d](https://github.com/portinariui/portinari-angular/commit/9081b4d))
+* **samples:** altera o caminho dos serviços utilizados nos samples ([e8618c7](https://github.com/portinariui/portinari-angular/commit/e8618c7))
+
+
+
 ## [1.3.0](https://github.com/portinariui/portinari-angular/compare/v1.2.0...v1.3.0) (2019-07-26)
 
 
