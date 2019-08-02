@@ -35,11 +35,10 @@
       class="po-md-12"
       name="resume"
       [(ngModel)]="resume"
-      p-help="Maximum file size limit: 200kb"
       p-label="Resume"
       p-required
-      p-restrictions="{maxSize: 200}"
       p-url="https://thf.totvs.com.br/sample/api/uploads/addFile"
+      [p-restrictions]="{maxFileSize: '204800'}"
       (p-error)="resumeUploadError()"
       (p-success)="resumeUploadSuccess()">
     </po-upload>

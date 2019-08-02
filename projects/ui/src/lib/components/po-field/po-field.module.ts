@@ -36,6 +36,7 @@ import { PoPasswordComponent } from './po-password/po-password.component';
 import { PoRadioGroupComponent } from './po-radio-group/po-radio-group.component';
 import { PoSelectComponent } from './po-select/po-select.component';
 import { PoSelectOptionTemplateDirective } from './po-select/po-select-option-template/po-select-option-template.directive';
+import { PoServicesModule } from '../../services/services.module';
 import { PoSwitchComponent } from './po-switch/po-switch.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
@@ -45,6 +46,7 @@ import {
   PoUploadDragDropAreaOverlayComponent
 } from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area-overlay/po-upload-drag-drop-area-overlay.component';
 import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
+import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
 
 /**
@@ -58,12 +60,13 @@ import { PoUrlComponent } from './po-url/po-url.component';
     CommonModule,
     FormsModule,
     HttpClientModule,
+    PoButtonGroupModule,
     PoButtonModule,
     PoDisclaimerModule,
     PoLoadingModule,
     PoModalModule,
+    PoServicesModule,
     PoTableModule,
-    PoButtonGroupModule
   ],
   exports: [
     PoCheckboxGroupComponent,
@@ -123,6 +126,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoUploadDragDropDirective,
     PoUploadDragDropAreaOverlayComponent,
     PoUploadDragDropAreaComponent,
+    PoUploadFileRestrictionsComponent,
     PoUrlComponent
   ],
   providers: [],

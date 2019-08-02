@@ -26,6 +26,8 @@ class PoUploadComponent extends PoUploadBaseComponent {
   constructor(uploadService: PoUploadService) {
     super(uploadService);
   }
+
+  sendFeedback() {}
 }
 
 describe('PoUploadBaseComponent:', () => {
@@ -291,6 +293,32 @@ describe('PoUploadBaseComponent:', () => {
         expect(component['parseFiles'](<any>files)).toEqual(<any>files);
       });
 
+      it('should set `quantityNotAllowed` with `filesLength - fileRestrictions.maxFiles` if `isExceededFileLimit` returns `true`', () => {
+
+        const files = [
+          { name: 'file1' },
+          { name: 'file2' },
+          { name: 'file3' }
+        ];
+
+        component.fileRestrictions = { maxFiles: 2 };
+
+        spyOn(component, <any>'isExceededFileLimit').and.returnValue(true);
+
+        component['parseFiles'](<any>files);
+
+        expect(component['quantityNotAllowed']).toBe(1);
+      });
+
+      it('should call `sendFeedback`', () => {
+
+        spyOn(component, 'sendFeedback');
+
+        component['parseFiles'](<any>[{ name: 'file1' }]);
+
+        expect(component.sendFeedback).toHaveBeenCalled();
+      });
+
     });
 
     it('checkRestrictions: should be check restrictions', () => {
@@ -321,6 +349,48 @@ describe('PoUploadBaseComponent:', () => {
       const restrictionsOk = component['checkRestrictions'].call(fakeThis, file);
 
       expect(restrictionsOk).toBeTruthy();
+    });
+
+    it('checkRestrictions: should sum `sizeNotAllowed` if `file.size` is less than `minFileSize`', () => {
+
+      const mockFile = {
+        size: 2
+      };
+
+      component['sizeNotAllowed'] = 2;
+      component['fileRestrictions'] = { minFileSize: 3 };
+
+      component['checkRestrictions'](<any>mockFile);
+
+      expect(component['sizeNotAllowed']).toBe(3);
+    });
+
+    it('checkRestrictions: should sum `sizeNotAllowed` if `file.size` is greater than `maxFileSize`', () => {
+
+      const mockFile = {
+        size: 3
+      };
+
+      component['sizeNotAllowed'] = 2;
+      component['fileRestrictions'] = { maxFileSize: 2 };
+
+      component['checkRestrictions'](<any>mockFile);
+
+      expect(component['sizeNotAllowed']).toBe(3);
+    });
+
+    it('checkRestrictions: shouldn`t sum `sizeNotAllowed` if `isAcceptSize` is `true`', () => {
+
+      const mockFile = {
+        size: 2
+      };
+
+      component['sizeNotAllowed'] = 2;
+      component['fileRestrictions'] = { maxFileSize: 2 };
+
+      component['checkRestrictions'](<any>mockFile);
+
+      expect(component['sizeNotAllowed']).toBe(2);
     });
 
     it('existsFileSameName: ', () => {
@@ -375,6 +445,36 @@ describe('PoUploadBaseComponent:', () => {
       expect(component['existsFileSameName']).toHaveBeenCalled();
       expect(files.push).not.toHaveBeenCalledWith(file);
       expect(files.splice).not.toHaveBeenCalled();
+    });
+
+    describe('initRestrictions:', () => {
+
+      it('should return falsy if restrictions is undefined', () => {
+        const restrictions = undefined;
+
+        expect(component['initRestrictions'](restrictions)).toBeFalsy();
+      });
+
+      it('should return default `minFileSize`', () => {
+        const restrictions = { maxFileSize: 1 };
+        const expectedResult = { maxFileSize: 1, minFileSize: 0 };
+
+        expect(component['initRestrictions'](restrictions)).toEqual(expectedResult);
+      });
+
+      it('should return default `maxFileSize`', () => {
+        const restrictions = { minFileSize: 2 };
+        const expectedResult =  { minFileSize: 2, maxFileSize: 31457280 };
+
+        expect(component['initRestrictions'](restrictions)).toEqual(expectedResult);
+      });
+
+      it('should concat default values with file restrictions', () => {
+        const restrictions = { allowedExtensions: ['pdf'], maxFiles: 2 };
+        const expectedResult = { ...restrictions, minFileSize: 0, maxFileSize: 31457280 };
+
+        expect(component['initRestrictions'](restrictions)).toEqual(expectedResult);
+      });
     });
 
     it('isAllowedExtension: should allowed extensions', () => {
@@ -446,6 +546,33 @@ describe('PoUploadBaseComponent:', () => {
       const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
 
       expectPropertiesValues(component, 'disabled', invalidValues, false);
+    });
+
+    it('fileRestrictions: should set `fileRestrictions` calling `initRestrictions` and call `setAllowedExtensions`', () => {
+
+      const restrictions = { minFileSize: 2 };
+      const expectedResult =  { minFileSize: 2, maxFileSize: 31457280 };
+
+      spyOn(component, <any>'initRestrictions').and.callThrough();
+      spyOn(component, <any>'setAllowedExtensions');
+
+      component.fileRestrictions = restrictions;
+
+      expect(component.fileRestrictions).toEqual(expectedResult);
+      expect(component['initRestrictions']).toHaveBeenCalled();
+      expect(component['setAllowedExtensions']).toHaveBeenCalled();
+    });
+
+    it('hideRestrictionsInfo: should set `hideRestrictionsInfo` with valid values', () => {
+      const validValues = ['', true, 1, [], {}, 'true'];
+
+      expectPropertiesValues(component, 'hideRestrictionsInfo', validValues, true);
+    });
+
+    it('hideRestrictionsInfo: should set `hideRestrictionsInfo` to false with invalid values', () => {
+      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
+
+      expectPropertiesValues(component, 'hideRestrictionsInfo', invalidValues, false);
     });
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
