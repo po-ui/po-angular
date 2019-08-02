@@ -15,6 +15,31 @@ export function browserLanguage() {
 }
 
 /**
+ * Converte e formata os bytes em formato mais legível para o usuário.
+ *
+ * Por exemplo:
+ * - 31457280 em 30 MB.
+ * - 21474836480 em 20 GB.
+ * - 12.5666666 em 12.57 Bytes (duas casas decimais).
+ *
+ * @param bytes {number} Valor em bytes
+ * @param decimals {number} Quantidade de casas decimais que terá após a conversão.
+ */
+export function formatBytes(bytes: number, decimals = 2): string {
+
+  if (!bytes) {
+    return undefined;
+  }
+
+  const multiplier = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const result = Math.floor(Math.log(bytes) / Math.log(multiplier));
+  decimals = decimals < 0 ? 0 : decimals;
+
+  return `${parseFloat((bytes / Math.pow(multiplier, result)).toFixed(decimals))} ${sizes[result]}`;
+}
+
+/**
  * Retorna o idioma atual do navegador
  */
 export function getBrowserLanguage(): string {

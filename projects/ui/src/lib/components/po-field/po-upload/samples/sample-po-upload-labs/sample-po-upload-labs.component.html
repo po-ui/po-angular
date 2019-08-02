@@ -8,6 +8,7 @@
   [p-form-field]="formField"
   [p-help]="help"
   [p-hide-select-button]="properties.includes('selectButton')"
+  [p-hide-restrictions-info]="properties.includes('restrictionsInfo')"
   [p-hide-send-button]="properties.includes('sendButton')"
   [p-label]="label"
   [p-literals]="customLiterals"
@@ -141,7 +142,7 @@
       class="po-md-12"
       name="literals"
       [(ngModel)]="literals"
-      p-help='Ex.: {"selectFile": "Select file", "deleteFile": "Delete file", "cancel": "Cancel sending "}'
+      p-help='Ex.: {"selectFile": "Select file", "deleteFile": "Delete file", "cancel": "Cancel sending"}'
       p-label="Literals"
       (p-change)="changeLiterals()">
     </po-input>

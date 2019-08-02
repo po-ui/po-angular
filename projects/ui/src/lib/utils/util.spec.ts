@@ -51,6 +51,77 @@ describe('Function browserLanguage:', () => {
   });
 });
 
+describe('Function formatBytes:', () => {
+  it('formatBytes: should return undefined if bytes is undefined', () => {
+    const bytes = undefined;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBeUndefined();
+  });
+
+  it('formatBytes: should return `2 Bytes` if bytes is 2', () => {
+    const bytes = 2;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBe('2 Bytes');
+  });
+
+  it('formatBytes: should return `12.567 Bytes` if bytes is 12.5666666 and decimals is 3', () => {
+    const bytes = 12.5666666;
+    const decimals = 3;
+
+    expect(UtilFunctions.formatBytes(bytes, decimals)).toBe('12.567 Bytes');
+  });
+
+  it('formatBytes: should return `12.57 Bytes` if bytes is 12.5666666 and decimals is undefined', () => {
+    const bytes = 12.5666666;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBe('12.57 Bytes');
+  });
+
+  it('formatBytes: should return `13 Bytes` if bytes is 12.5666666 and decimals is -1', () => {
+    const bytes = 12.5666666;
+    const decimals = -1;
+
+    expect(UtilFunctions.formatBytes(bytes, decimals)).toBe('13 Bytes');
+  });
+
+  it('formatBytes: should return `30 MB` if bytes is 31457280', () => {
+    const bytes = 31457280;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBe('30 MB');
+  });
+
+  it('formatBytes: should return `20 GB` if bytes is 21474836480', () => {
+    const bytes = 21474836480;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBe('20 GB');
+  });
+
+  it('formatBytes: should return `10 KB` if bytes is 10240', () => {
+    const bytes = 10240;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBe('10 KB');
+  });
+
+  it('formatBytes: should return `23 TB` if bytes is 25288767438848', () => {
+    const bytes = 25288767438848;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBe('23 TB');
+  });
+
+  it('formatBytes: should return `15 PB` if bytes is 16888498602639360', () => {
+    const bytes = 16888498602639360;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBe('15 PB');
+  });
+
+  it('formatBytes: should return `2 EB` if bytes is 2305843009213694000', () => {
+    const bytes = 2305843009213694000;
+
+    expect(UtilFunctions.formatBytes(bytes)).toBe('2 EB');
+  });
+
+});
+
 describe('Function getBrowserLanguage:', () => {
 
   it('should return the value of `navigator.language` if it`s defined', () => {

@@ -7,9 +7,9 @@ import * as utilsFunctions from '../../../utils/util';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoButtonModule } from '../../po-button';
-
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { PoNotificationService, PoServicesModule } from '../../../services';
 import { PoUploadComponent } from './po-upload.component';
 import { PoUploadDragDropAreaComponent } from './po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
 import {
@@ -18,7 +18,8 @@ import {
 import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-drop.component';
 import { PoUploadDragDropDirective } from './po-upload-drag-drop/po-upload-drag-drop.directive';
 import { PoUploadFile } from './po-upload-file';
-
+import { PoUploadFileRestrictionsComponent } from './po-upload-file-restrictions/po-upload-file-restrictions.component';
+import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
 
 describe('PoUploadComponent:', () => {
@@ -37,7 +38,7 @@ describe('PoUploadComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoButtonModule ],
+      imports: [ PoButtonModule, PoServicesModule ],
       declarations: [
         PoUploadComponent,
         PoFieldContainerComponent,
@@ -45,9 +46,10 @@ describe('PoUploadComponent:', () => {
         PoUploadDragDropAreaOverlayComponent,
         PoUploadDragDropAreaComponent,
         PoUploadDragDropComponent,
-        PoUploadDragDropDirective
+        PoUploadDragDropDirective,
+        PoUploadFileRestrictionsComponent
       ],
-      providers: [ HttpClient, HttpHandler]
+      providers: [ HttpClient, HttpHandler, PoNotificationService, PoUploadService],
     });
   });
 
@@ -285,6 +287,31 @@ describe('PoUploadComponent:', () => {
       component['url'] = undefined;
 
       expect(component.isDisabled).toBeTruthy();
+    });
+
+    it('maxFiles: should return false if `isMultiple` is false', () => {
+      component.isMultiple = false;
+
+      expect(component.maxFiles).toBeFalsy();
+    });
+
+    it('maxFiles: should return false if `fileRestrictions` is undefined', () => {
+      component.fileRestrictions = undefined;
+
+      expect(component.maxFiles).toBeFalsy();
+    });
+
+    it('maxFiles: should return false if `fileRestrictions.maxFiles` is undefined', () => {
+      component.fileRestrictions = { maxFiles: undefined };
+
+      expect(component.maxFiles).toBeFalsy();
+    });
+
+    it('maxFiles: should return 2 if `fileRestrictions.maxFiles` is 2 and `isMultiple` is true', () => {
+      component.fileRestrictions = { maxFiles: 2 };
+      component.isMultiple = true;
+
+      expect(component.maxFiles).toBe(2);
     });
 
     it(`displaySendButton: should return true if 'showSendButton' is false, 'autoUpload' false and contain
@@ -682,6 +709,62 @@ describe('PoUploadComponent:', () => {
       component['updateFiles'](files);
 
       expect(component['uploadFiles']).not.toHaveBeenCalled();
+    });
+
+    it('sendFeedback: should call `setPipeArguments` if `sizeNotAllowed`', () => {
+      component['sizeNotAllowed'] = 1;
+      component.fileRestrictions = { minFileSize: 0, maxFiles: 2, maxFileSize: 31457, allowedExtensions: ['.png', '.zip'] };
+      const expectedValueSizeNotAllowed = 1;
+      const expectedValueMinFileSize = '0';
+      const expectedValueMaxFileSize = '30.72 KB';
+      const literalAttr = 'invalidSize';
+
+      spyOn(component, <any>'setPipeArguments');
+
+      component['sendFeedback']();
+
+      expect(component['setPipeArguments']).toHaveBeenCalledWith(
+        literalAttr, [expectedValueSizeNotAllowed, expectedValueMinFileSize, expectedValueMaxFileSize]
+      );
+    });
+
+    it('sendFeedback: should call `setPipeArguments` if `extensionNotAllowed`', () => {
+      component['extensionNotAllowed'] = 1;
+      component.fileRestrictions = { minFileSize: 1, maxFiles: 2, maxFileSize: 31457, allowedExtensions: ['.png', '.zip'] };
+      const expectedValueExtensionNotAllowed = 1;
+      const expectedValueAllowedExtensionsFormatted = '.PNG, .ZIP';
+      const literalAttr = 'invalidFormat';
+
+      spyOn(component, <any>'setPipeArguments');
+
+      component['sendFeedback']();
+
+      expect(component['setPipeArguments']).toHaveBeenCalledWith(
+        literalAttr, [expectedValueExtensionNotAllowed, expectedValueAllowedExtensionsFormatted]
+      );
+    });
+
+    it('sendFeedback: should call `setPipeArguments` if `quantityNotAllowed`', () => {
+      component['quantityNotAllowed'] = 1;
+      component.fileRestrictions = { minFileSize: 1, maxFiles: 2, maxFileSize: 31457, allowedExtensions: ['.png', '.zip'] };
+      const literalAttr = 'invalidAmount';
+      const expectedValueQuantityNotAllowed = 1;
+
+      spyOn(component, <any>'setPipeArguments');
+
+      component['sendFeedback']();
+      expect(component['setPipeArguments']).toHaveBeenCalledWith(literalAttr, [expectedValueQuantityNotAllowed]);
+    });
+
+    it('setPipeArguments: should call `i18nPipe.transform`', () => {
+      const arg = '';
+      const literalAttr = '';
+
+      spyOn(component['i18nPipe'], 'transform').and.callThrough();
+
+      component['setPipeArguments'](literalAttr, arg);
+
+      expect(component['i18nPipe'].transform).toHaveBeenCalled();
     });
 
   });
