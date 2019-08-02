@@ -1,7 +1,9 @@
 import { Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { isMobile } from '../../../utils/util';
+import { formatBytes, isMobile } from '../../../utils/util';
+import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
+import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
 
 import { PoUploadBaseComponent } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
@@ -42,6 +44,7 @@ import { PoUploadStatus } from './po-upload-status.enum';
   selector: 'po-upload',
   templateUrl: './po-upload.component.html',
   providers: [
+    PoI18nPipe,
     PoUploadService,
     {
       provide: NG_VALUE_ACCESSOR,
@@ -61,7 +64,11 @@ export class PoUploadComponent extends PoUploadBaseComponent {
 
   @ViewChild('inputFile', {read: ElementRef, static: true }) private inputFile: ElementRef;
 
-  constructor(private elementRef: ElementRef, uploadService: PoUploadService) {
+  constructor(
+    private elementRef: ElementRef,
+    private i18nPipe: PoI18nPipe,
+    private notification: PoNotificationService,
+    uploadService: PoUploadService) {
     super(uploadService);
   }
 
@@ -89,6 +96,10 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     !this.url ||
     this.disabled ||
     this.isExceededFileLimit(currentFiles.length);
+  }
+
+  get maxFiles(): number {
+    return this.isMultiple && this.fileRestrictions && this.fileRestrictions.maxFiles;
   }
 
   /** Método responsável por **limpar** o(s) arquivo(s) selecionado(s). */
@@ -174,6 +185,31 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     this.inputFile.nativeElement.click();
   }
 
+  sendFeedback(): void {
+
+    if (this.sizeNotAllowed > 0) {
+      const minFileSize = formatBytes(this.fileRestrictions.minFileSize);
+      const maxFileSize = formatBytes(this.fileRestrictions.maxFileSize);
+      const args = [ this.sizeNotAllowed, minFileSize || '0', maxFileSize ];
+      this.setPipeArguments('invalidSize', args);
+      this.sizeNotAllowed = 0;
+    }
+
+    if (this.extensionNotAllowed > 0) {
+      const allowedExtensionsFormatted = this.fileRestrictions.allowedExtensions.join(', ').toUpperCase();
+      const args = [ this.extensionNotAllowed, allowedExtensionsFormatted ];
+      this.setPipeArguments('invalidFormat', args);
+      this.extensionNotAllowed = 0;
+    }
+
+    if (this.quantityNotAllowed > 0) {
+      const args = [ this.quantityNotAllowed ];
+      this.setPipeArguments('invalidAmount', args);
+      this.quantityNotAllowed = 0;
+    }
+
+  }
+
   /** Método responsável por **enviar** o(s) arquivo(s) selecionado(s). */
   sendFiles(): void {
     if (this.currentFiles && this.currentFiles.length) {
@@ -240,6 +276,12 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     const divStatus = this.elementRef.nativeElement.querySelector(`div[id='${uid}'].po-upload-progress`);
     const fileNameDiv = divStatus.querySelector('.po-upload-filename');
     fileNameDiv.classList.remove('po-upload-filename-loading');
+  }
+
+  // método responsável por setar os argumentos do i18nPipe de acordo com a restrição.
+  private setPipeArguments(literalAttributes: string, literalArguments?) {
+    const pipeArguments = this.i18nPipe.transform(this.literals[literalAttributes], literalArguments);
+    this.notification.information(pipeArguments);
   }
 
   // Atualiza o status do progresso do envio do arquivo.

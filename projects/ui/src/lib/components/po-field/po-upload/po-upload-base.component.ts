@@ -20,7 +20,15 @@ export const poUploadLiteralsDefault = {
     dragFilesHere: 'Drag files here',
     selectFilesOnComputer: 'or select files on your computer',
     dropFilesHere: 'Drop files here',
-    invalidDropArea: 'Files were not dropped in the correct area'
+    invalidDropArea: 'Files were not dropped in the correct area',
+    invalidAmount: 'Failed to load {0} file(s), as it exceeds the limit amount of files.',
+    invalidFormat: 'Failed to load {0} file(s), as it does not match the format(s): {1}.',
+    invalidSize: 'Failed to load {0} files(s), as it is not the allowed size: from {1} to {2}.',
+    numberOfFilesAllowed: '{0} file(s) allowed',
+    allowedFormats: 'Accepted file formats: {0}.',
+    allowedFileSizeRange: 'Size limit per file: from {0} to {1}',
+    maxFileSizeAllowed: 'Size limit per file: {0} maximum',
+    minFileSizeAllowed: 'Size limit per file: {0} minimum'
   },
   es: <PoUploadLiterals> {
     selectFile: 'Seleccionar archivo',
@@ -31,7 +39,15 @@ export const poUploadLiteralsDefault = {
     dragFilesHere: 'Arrastra los archivos aquí',
     selectFilesOnComputer: 'o selecciona los archivos en tu computadora',
     dropFilesHere: 'Deja los archivos aquí',
-    invalidDropArea: 'Los archivos no se insertaron en la ubicación correcta'
+    invalidDropArea: 'Los archivos no se insertaron en la ubicación correcta',
+    invalidAmount: 'Error al cargar {0} archivo (s) ya que excede la cantidad limite de archivos.',
+    invalidFormat: 'Error al cargar {0} archivo (s) ya que no coincide con el formato (s): {1}.',
+    invalidSize: 'Error al cargar {0} archivo (s) ya que no cumple con el tamaño permitido: desde {1} hasta {2}.',
+    numberOfFilesAllowed: '{0} archivo(s) permitido(s)',
+    allowedFormats: 'Formatos aceptados: {0}.',
+    allowedFileSizeRange: 'Limite de tamaño de archivo: desde {0} hasta {1}',
+    maxFileSizeAllowed: 'Limite de tamaño de archivo: hasta {0}',
+    minFileSizeAllowed: 'Limite de tamaño de archivo: minimo {0}'
   },
   pt: <PoUploadLiterals> {
     selectFile: 'Selecionar arquivo',
@@ -42,11 +58,22 @@ export const poUploadLiteralsDefault = {
     dragFilesHere: 'Arraste os arquivos aqui',
     selectFilesOnComputer: 'ou selecione os arquivos no computador',
     dropFilesHere: 'Solte os arquivos aqui',
-    invalidDropArea: 'Os arquivos não foram inseridos no local correto'
+    invalidDropArea: 'Os arquivos não foram inseridos no local correto',
+    invalidAmount: 'Falha ao carregar {0} arquivo(s), pois excede(m) a quantidade limite de arquivos.',
+    invalidFormat: 'Falha ao carregar {0} arquivo(s), pois não corresponde(m) ao(s) formato(s): {1}.',
+    invalidSize: 'Falha ao carregar {0} arquivo(s), pois não atende ao tamanho permitido: {1} até {2}.',
+    numberOfFilesAllowed: 'Quantidade máxima: {0} arquivo(s)',
+    allowedFormats: 'Formatos adotados: {0}.',
+    allowedFileSizeRange: 'Limite de tamanho por arquivo: de {0} até {1}',
+    maxFileSizeAllowed: 'Limite de tamanho por arquivo: até {0}',
+    minFileSizeAllowed: 'Limite de tamanho por arquivo: no mínimo {0}'
   }
 };
 
 const poUploadFormFieldDefault = 'files';
+
+const poUploadMaxFileSize = 31457280; // 30MB
+const poUploadMinFileSize = 0;
 
 /**
  * @description
@@ -61,12 +88,13 @@ const poUploadFormFieldDefault = 'files';
  *  - Função de erro que será disparada quando houver erro no envio dos arquivos.
  *  - Permite habilitar uma área onde os arquivos podem ser arrastados.
  */
-export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
+export abstract class PoUploadBaseComponent implements ControlValueAccessor, Validator {
 
   private _disabled?: boolean;
   private _dragDrop?: boolean = false;
   private _fileRestrictions?: PoUploadFileRestrictions;
   private _formField?: string;
+  private _hideRestrictionsInfo?: boolean;
   private _hideSelectButton?: boolean;
   private _hideSendButton?: boolean;
   private _literals?: any;
@@ -79,6 +107,10 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
   onModelTouched: any;
 
   private validatorChange: any;
+
+  protected extensionNotAllowed = 0;
+  protected quantityNotAllowed = 0;
+  protected sizeNotAllowed = 0;
 
   /**
    * @optional
@@ -111,6 +143,23 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
 
   get dragDrop() {
     return this._dragDrop;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Oculta visualmente as informações de restrições para o upload.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-restrictions-info') set hideRestrictionsInfo(value: boolean) {
+    this._hideRestrictionsInfo = convertToBoolean(value);
+  }
+
+  get hideRestrictionsInfo() {
+    return this._hideRestrictionsInfo;
   }
 
   /**
@@ -221,7 +270,7 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
    * que possibilita definir tamanho máximo/mínimo e extensão dos arquivos permitidos.
    */
   @Input('p-restrictions') set fileRestrictions(restrictions: PoUploadFileRestrictions) {
-    this._fileRestrictions = restrictions;
+    this._fileRestrictions = this.initRestrictions(restrictions);
 
     this.setAllowedExtensions(restrictions);
   }
@@ -352,6 +401,8 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
 
   constructor(protected uploadService: PoUploadService) { }
 
+  abstract sendFeedback(): void;
+
   registerOnChange(fn: any): void {
     this.onModelChange = fn;
   }
@@ -403,9 +454,9 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
     for (let i = 0; i < filesLength; i++) {
 
       if (this.isExceededFileLimit(poUploadFiles.length)) {
+        this.quantityNotAllowed = filesLength - this.fileRestrictions.maxFiles;
         break;
       }
-
       const file = new PoUploadFile(files[i]);
 
       if (this.checkRestrictions(file)) {
@@ -413,7 +464,7 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
       }
 
     }
-
+    this.sendFeedback();
     return poUploadFiles;
   }
 
@@ -429,11 +480,15 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
 
     if (restrictions) {
       const allowedExtensions = restrictions.allowedExtensions;
-      const minFileSize = restrictions.minFileSize || 0;
-      const maxFileSize = restrictions.maxFileSize || 31457280; // 30MB
+      const minFileSize = restrictions.minFileSize;
+      const maxFileSize = restrictions.maxFileSize;
 
       const isAccept = allowedExtensions ? this.isAllowedExtension(file.extension, allowedExtensions) : true;
       const isAcceptSize = file.size >= minFileSize && file.size <= maxFileSize;
+
+      if (!isAcceptSize) {
+        this.sizeNotAllowed = this.sizeNotAllowed + 1;
+      }
 
       return isAccept && isAcceptSize;
     }
@@ -468,13 +523,34 @@ export class PoUploadBaseComponent implements ControlValueAccessor, Validator {
   }
 
   private isAllowedExtension(extension: string, allowedExtensions: Array<string> = []): boolean {
-    return allowedExtensions.some(ext => ext.toLowerCase() === extension);
+    const isAllowed = allowedExtensions.some(ext => ext.toLowerCase() === extension);
+    if (!isAllowed) {
+      this.extensionNotAllowed = this.extensionNotAllowed + 1;
+    }
+    return isAllowed;
   }
 
   private setAllowedExtensions(restrictions: PoUploadFileRestrictions = {}) {
     const _allowedExtensions = restrictions.allowedExtensions || [];
 
     this.allowedExtensions = _allowedExtensions.join(',');
+  }
+
+  private initRestrictions(restrictions: PoUploadFileRestrictions): PoUploadFileRestrictions {
+
+    if (!restrictions) {
+      return;
+    }
+
+    const minFileSize = restrictions.minFileSize || poUploadMinFileSize;
+    const maxFileSize = restrictions.maxFileSize || poUploadMaxFileSize;
+
+    return {
+      ...restrictions,
+      maxFileSize: maxFileSize,
+      minFileSize: minFileSize
+    };
+
   }
 
   private updateExistsFileInFiles(newFile: PoUploadFile, files: Array<PoUploadFile>) {
