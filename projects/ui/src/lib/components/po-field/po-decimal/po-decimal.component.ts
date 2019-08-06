@@ -149,7 +149,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   hasLetters(value: string = '') {
-    return value.match(/[a-zA-Z:;+=_´^~"'@#$%¨&*()/\\|]+/);
+    return value.match(/[a-zA-Z:;+=_´`^~"'?!@#$%¨&*()><{}çÇ\[\]/\\|]+/);
   }
 
   isValidNumber(event: any): boolean {

@@ -105,14 +105,6 @@ describe('PoDecimalComponent:', () => {
     expect(component.hasInvalidClass.call(fakeThis)).toBeTruthy();
   });
 
-  it('should return true in hasLetters', () => {
-    expect(component.hasLetters('AAAAAA')).toBeTruthy();
-  });
-
-  it('should return true in hasLetters with undefined param', () => {
-    expect(component.hasLetters(undefined)).toBeFalsy();
-  });
-
   it('blur event must be called', () => {
     const fakeEvent = {
       target: {
@@ -1199,6 +1191,23 @@ describe('PoDecimalComponent:', () => {
       expect(component['setViewValue']).not.toHaveBeenCalled();
       expect(component['setCursorInput']).not.toHaveBeenCalled();
     });
+
+    it('hasLetters: should return true with numbers.', () => {
+      expect(component.hasLetters('333')).toBeFalsy();
+    });
+
+    it('hasLetters: should return true wird letters.', () => {
+      expect(component.hasLetters('AAAAAA')).toBeTruthy();
+    });
+
+    it('hasLetters: should return true with special characteres.', () => {
+      expect(component.hasLetters('!@#$%&')).toBeTruthy();
+    });
+
+    it('hasLetters: should return true with undefined value.', () => {
+      expect(component.hasLetters(undefined)).toBeFalsy();
+    });
+
   });
 
   describe('Templates:', () => {
