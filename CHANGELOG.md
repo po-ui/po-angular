@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/portinariui/portinari-angular/compare/v1.3.1...v1.4.0) (2019-08-09)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige disparo do p-change ([9cbe283](https://github.com/portinariui/portinari-angular/commit/9cbe283))
+* **decimal:** impede a digitação de valores inválidos ([d8d2568](https://github.com/portinariui/portinari-angular/commit/d8d2568))
+* **portinari-app:** possibilita a execução do projeto app localmente no IE ([c9baac4](https://github.com/portinariui/portinari-angular/commit/c9baac4))
+
+
+### Features
+
+* **progress:** cria o componente po-progress ([c3884bf](https://github.com/portinariui/portinari-angular/commit/c3884bf))
+
+
+
 ### [1.3.1](https://github.com/portinariui/portinari-angular/compare/v1.3.0...v1.3.1) (2019-08-02)
 
 
