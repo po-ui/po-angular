@@ -235,6 +235,7 @@
 
 .po-menu-header-template {
   display: inline-block;
+  width: 100%;
 }
 
 .po-menu-badge-alert, .po-menu-badge-alert-collapsed {
