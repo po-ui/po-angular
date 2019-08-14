@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import * as UtilFunctions from './../../../utils/util';
 import { changeBrowserInnerWidth, configureTestSuite } from '../../../util-test/util-expect.spec';
 
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
@@ -531,20 +530,26 @@ describe('PoPageListComponent - Desktop:', () => {
       expect(component.hasPageHeader()).toBe(false);
     });
 
-    it('initFixedLiterals: should return the advanced filter label by browser language.', () => {
-      const browserLanguage = spyOn(UtilFunctions, <any>'browserLanguage');
+    describe('initializeFixedLiterals:', () => {
 
-      browserLanguage.and.returnValue('pt');
+      it('should return the advanced filter label by `pt` language.', () => {
+        component['language'] = 'pt';
 
-      expect(component['initFixedLiterals']()).toBe('Busca avançada');
+        expect(component['initializeFixedLiterals']()).toBe('Busca avançada');
+      });
 
-      browserLanguage.and.returnValue('en');
+      it('should return the advanced filter label by `en` language.', () => {
+        component['language'] = 'en';
 
-      expect(component['initFixedLiterals']()).toBe('Advanced search');
+        expect(component['initializeFixedLiterals']()).toBe('Advanced search');
+      });
 
-      browserLanguage.and.returnValue('es');
+      it('should return the advanced filter label by `es` language.', () => {
+        component['language'] = 'es';
 
-      expect(component['initFixedLiterals']()).toBe('Búsqueda avanzada');
+        expect(component['initializeFixedLiterals']()).toBe('Búsqueda avanzada');
+      });
+
     });
 
   });
