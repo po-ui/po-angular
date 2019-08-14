@@ -1,6 +1,7 @@
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../utils/util';
 import * as UtilFunctions from './../../../utils/util';
+import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
 
@@ -13,64 +14,70 @@ class PoPageListComponent extends PoPageListBaseComponent {
 }
 
 describe('PoPageListBaseComponent:', () => {
-  const component = new PoPageListComponent();
+  const languageService = new PoLanguageService();
+  const component = new PoPageListComponent(languageService);
 
   it('should be created', () => {
     expect(component instanceof PoPageListBaseComponent).toBeTruthy();
   });
 
   describe('Properties:', () => {
-    it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('ru');
 
-      component.literals = {};
+    describe('p-literals:', () => {
 
-      expect(component.literals).toEqual(poPageListLiteralsDefault[poLocaleDefault]);
-    });
+      it('should be in portuguese if `getShortLanguage` return an unsupported language.', () => {
+        component['language'] = 'ru';
 
-    it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('pt');
+        component.literals = {};
 
-      component.literals = {};
+        expect(component.literals).toEqual(poPageListLiteralsDefault[poLocaleDefault]);
+      });
 
-      expect(component.literals).toEqual(poPageListLiteralsDefault.pt);
-    });
+      it('should be in portuguese if `getShortLanguage` return `pt`.', () => {
+        component['language'] = 'pt';
 
-    it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('en');
+        component.literals = {};
 
-      component.literals = {};
+        expect(component.literals).toEqual(poPageListLiteralsDefault.pt);
+      });
 
-      expect(component.literals).toEqual(poPageListLiteralsDefault.en);
-    });
+      it('should be in english if `getShortLanguage` return `en`.', () => {
+        component['language'] = 'en';
 
-    it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('es');
+        component.literals = {};
 
-      component.literals = {};
+        expect(component.literals).toEqual(poPageListLiteralsDefault.en);
+      });
 
-      expect(component.literals).toEqual(poPageListLiteralsDefault.es);
-    });
+      it('should be in spanish if `getShortLanguage` return `es`.', () => {
+        component['language'] = 'es';
 
-    it('p-literals: should accept custom literals', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+        component.literals = {};
 
-      const customLiterals = poPageListLiteralsDefault[poLocaleDefault];
+        expect(component.literals).toEqual(poPageListLiteralsDefault.es);
+      });
 
-      // Custom some literals
-      customLiterals.otherActions = 'Other actions';
+      it('should accept custom literals.', () => {
+        spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
-      component.literals = customLiterals;
+        const customLiterals = poPageListLiteralsDefault[poLocaleDefault];
 
-      expect(component.literals).toEqual(customLiterals);
-    });
+        // Custom some literals
+        customLiterals.otherActions = 'Other actions';
 
-    it('p-literals: should update property with default literals if is setted with invalid values', () => {
-      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+        component.literals = customLiterals;
 
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+        expect(component.literals).toEqual(customLiterals);
+      });
 
-      expectPropertiesValues(component, 'literals', invalidValues, poPageListLiteralsDefault[poLocaleDefault]);
+      it('should update property with default literals if is setted with invalid values.', () => {
+        const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+
+        component['language'] = poLocaleDefault;
+
+        expectPropertiesValues(component, 'literals', invalidValues, poPageListLiteralsDefault[poLocaleDefault]);
+      });
+
     });
 
     it('should return object when set disclaimerGroup with undefined', () => {

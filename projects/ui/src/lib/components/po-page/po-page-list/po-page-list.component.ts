@@ -3,10 +3,12 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { browserLanguage, callFunction, isTypeof } from '../../../utils/util';
-import { PoPageAction } from '../po-page-action.interface';
-import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
+import { callFunction, isTypeof } from '../../../utils/util';
+import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
+import { PoPageAction } from '../po-page-action.interface';
+
+import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageListBaseComponent } from './po-page-list-base.component';
 
 /**
@@ -51,16 +53,17 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
 
   constructor(
     viewRef: ViewContainerRef,
+    languageService: PoLanguageService,
     public renderer: Renderer2,
     private router: Router) {
 
-    super();
+    super(languageService);
     this.parentRef = viewRef['_view']['component'];
     this.initializeListeners();
   }
 
   ngOnInit(): void {
-    this.advancedSearch = this.initFixedLiterals();
+    this.advancedSearch = this.initializeFixedLiterals();
   }
 
   ngAfterContentInit(): void {
@@ -123,24 +126,6 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
     this.callFunction(this.filter[field], this.parentRef);
   }
 
-  initFixedLiterals() {
-    const locale = browserLanguage();
-
-    const literal = {
-      pt: {
-        advancedSearch: 'Busca avançada'
-      },
-      en: {
-        advancedSearch: 'Advanced search'
-      },
-      es: {
-        advancedSearch: 'Búsqueda avanzada'
-      }
-    };
-
-    return literal[locale].advancedSearch;
-  }
-
   onkeypress(key) {
     if (key === 13) {
       this.callActionFilter('action');
@@ -161,6 +146,22 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
     if (this.disclaimerGroup && this.disclaimerGroup.change) {
       this.disclaimerGroup.change(disclaimers);
     }
+  }
+
+  private initializeFixedLiterals() {
+    const literal = {
+      pt: {
+        advancedSearch: 'Busca avançada'
+      },
+      en: {
+        advancedSearch: 'Advanced search'
+      },
+      es: {
+        advancedSearch: 'Búsqueda avanzada'
+      }
+    };
+
+    return literal[this.language].advancedSearch;
   }
 
   private initializeListeners() {

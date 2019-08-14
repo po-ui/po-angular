@@ -8,6 +8,7 @@ import { PoButtonModule } from '../po-button/po-button.module';
 import { PoDisclaimerGroupModule } from '../po-disclaimer-group/po-disclaimer-group.module';
 import { PoDropdownModule } from '../po-dropdown/po-dropdown.module';
 import { PoFieldModule } from '../po-field/po-field.module';
+import { PoLanguageModule } from './../../services/po-language/po-language.module';
 import { PoModalModule } from './../po-modal/po-modal.module';
 import { PoPageComponent } from './po-page.component';
 import { PoPageContentComponent } from './po-page-content/po-page-content.component';
@@ -31,6 +32,7 @@ import { PoPageListComponent } from './po-page-list/po-page-list.component';
     PoDisclaimerGroupModule,
     PoDropdownModule,
     PoFieldModule,
+    PoLanguageModule,
     PoModalModule
   ],
   declarations: [

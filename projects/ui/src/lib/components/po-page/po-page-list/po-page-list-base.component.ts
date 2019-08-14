@@ -1,6 +1,7 @@
 import { Input } from '@angular/core';
 
-import { browserLanguage, poLocaleDefault } from './../../../utils/util';
+import { poLocaleDefault } from './../../../utils/util';
+import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoDisclaimerGroup } from '../../po-disclaimer-group/po-disclaimer-group.interface';
@@ -37,6 +38,9 @@ export abstract class PoPageListBaseComponent extends PoPageDefaultBaseComponent
 
   private _disclaimerGroup?: PoDisclaimerGroup;
   private _literals: PoPageListLiterals;
+
+  protected language: string;
+  protected resizeListener: () => void;
 
   /**
    * @optional
@@ -104,23 +108,28 @@ export abstract class PoPageListBaseComponent extends PoPageDefaultBaseComponent
    * </po-page-list>
    * ```
    *
-   *  > O objeto padrão de literais será traduzido de acordo com o idioma do browser (pt, en, es).
+   * > O valor padrão será traduzido de acordo com o idioma configurado no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
   @Input('p-literals') set literals(value: PoPageListLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poPageListLiteralsDefault[poLocaleDefault],
-        ...poPageListLiteralsDefault[browserLanguage()],
+        ...poPageListLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poPageListLiteralsDefault[browserLanguage()];
+      this._literals = poPageListLiteralsDefault[this.language];
     }
   }
+
   get literals() {
-    return this._literals || poPageListLiteralsDefault[browserLanguage()];
+    return this._literals || poPageListLiteralsDefault[this.language];
   }
 
-  protected resizeListener: () => void;
+  constructor(languageService: PoLanguageService) {
+    super();
+
+    this.language = languageService.getShortLanguage();
+  }
 
 }
