@@ -3,7 +3,7 @@
     margin-bottom: 178px;
   }
 
-  h4:not(:first-child) {
+  h3, h4:not(:first-child) {
     margin-top: 80px;
   }
 
@@ -13,7 +13,7 @@
     right: 5%;
   }
 
-  .po-tab-container:last-child {
+  .po-tab-content:last-child {
     margin-bottom: 100px;
   }
 </style>
@@ -21,163 +21,171 @@
 <article>
   <section>
 
+    <h3>Comportamento DESKTOP</h3>
+
     <h4>Tabs simples:</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 1</span>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1 com nome muito extenso</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 4</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="po-tab-container">
+
+    <div class="po-tabs-content po-tab-content">
       <div style="display:none">Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
       <div style="display:none">Tab 4</div>
     </div>
 
-    <h4>Tabs menores:</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
-          <span class="po-tab-button-label">Tab 1</span>
+    <h4>Tabs simples (small):</h4>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
-          <span class="po-tab-button-label">Tab 4</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="po-tab-container">
+    <div class="po-tabs-content po-tab-content">
       <div style="display:none">Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
       <div style="display:none">Tab 4</div>
     </div>
 
-    <h4>Tab selecionada</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-md po-tab-button-active" tabindex="0">
-          <span class="po-tab-button-label">Tab 1</span>
+    <h4>Tab selecionada:</h4>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-md po-tab-button-active" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 4</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="po-tab-container">
+    <div class="po-tabs-content po-tab-content">
       <div>Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
       <div style="display:none">Tab 4</div>
     </div>
 
-    <h4>Tab desabilitada</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-md po-tab-button-disabled">
-          <span class="po-tab-button-label">Tab 1</span>
+    <h4>Tab desabilitada:</h4>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-md po-tab-button-disabled">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 4</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="po-tab-container">
+    <div class="po-tabs-content po-tab-content">
       <div style="display:none">Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
       <div style="display:none">Tab 4</div>
     </div>
 
-    <h4>Botão "Mais" que aparece partir de 5 tabs e adiciona as demais em um dropdown</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 1</span>
+    <h4>Tabs com dropdown "Mais" fechado, quando haver seis ou mais tabs:</h4>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 4</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
         </div>
-      </div>
-      <div class="po-tab-button po-tab-dropdown">
-        <div class="po-tab-dropdown-content po-tab-button-md" tabindex="0">
-          <div class="po-tab-button-label">
-            Mais
-            <span class="po-icon po-icon-arrow-down"></span>
+        <div class="po-tab-button po-tab-dropdown">
+          <div class="po-tab-dropdown-content po-tab-button-md" tabindex="0">
+            <div class="po-tab-button-label po-text-ellipsis">
+              Mais
+              <span class="po-icon po-icon-arrow-down"></span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="po-tab-container">
+    <div class="po-tabs-content po-tab-content">
       <div style="display:none">Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
@@ -186,77 +194,63 @@
       <div style="display:none">Tab 6</div>
     </div>
 
-    <h4>Botão "Mais" com dropdown aberto</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 1</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 4</span>
-        </div>
-      </div>
-      <div class="po-tab-button po-tab-dropdown">
-        <div class="po-tab-dropdown-content po-tab-button-md" tabindex="0">
-          <div class="po-tab-button-label">
-            Mais
-            <span class="po-icon po-icon-arrow-up"></span>
+    <h4>Tabs com dropdown "Mais" aberto, quando haver seis ou mais tabs:</h4>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
           </div>
         </div>
-        <div class="po-popover">
-          <div class="po-popover-content">
-            <div class="po-tab-dropdown-container">
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 5</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
+        </div>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
+        </div>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-dropdown">
+          <div class="po-tab-dropdown-content po-tab-button-md" tabindex="0">
+            <div class="po-tab-button-label po-text-ellipsis">
+              Mais
+              <span class="po-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+          <div class="po-popover">
+            <div class="po-popover-content">
+              <div class="po-tab-dropdown-container">
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-md" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 5</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 6</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-md" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 6</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 7</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-md" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 7</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 8</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-md" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 8</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 9</span>
-                </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 10</span>
-                </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 11</span>
-                </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 12</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-md" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 9</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -264,7 +258,7 @@
         </div>
       </div>
     </div>
-    <div class="po-tab-container po-tabs-margin-bottom">
+    <div class="po-tab-content po-tabs-margin-bottom">
       <div style="display:none">Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
@@ -279,77 +273,63 @@
       <div style="display:none">Tab 12</div>
     </div>
 
-    <h4>Botão "Mais" com dropdown aberto com small aplicado</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-sm" tabindex="0">
-          <span class="po-tab-button-label">Tab 1</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-sm" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-sm" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-sm" tabindex="0">
-          <span class="po-tab-button-label">Tab 4</span>
-        </div>
-      </div>
-      <div class="po-tab-button po-tab-dropdown">
-        <div class="po-tab-dropdown-content po-tab-button-sm" tabindex="0">
-          <div class="po-tab-button-label">
-            Mais
-            <span class="po-icon po-icon-arrow-up"></span>
+    <h4>Tabs com dropdown "Mais" aberto, quando haver seis ou mais tabs (small):</h4>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
           </div>
         </div>
-        <div class="po-popover">
-          <div class="po-popover-content">
-            <div class="po-tab-dropdown-container-sm">
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-sm" tabindex="0">
-                  <span class="po-tab-button-label">Tab 5</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
+        </div>
+        <div class="po-tab-button">
+          <div class="po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
+        </div>
+        <div class="po-tab-button">
+          <div class="po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-dropdown">
+          <div class="po-tab-dropdown-content po-tab-button-sm" tabindex="0">
+            <div class="po-tab-button-label po-text-ellipsis">
+              Mais
+              <span class="po-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+          <div class="po-popover">
+            <div class="po-popover-content">
+              <div class="po-tab-dropdown-container-sm">
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-sm" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 5</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-sm" tabindex="0">
-                  <span class="po-tab-button-label">Tab 6</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-sm" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 6</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-sm" tabindex="0">
-                  <span class="po-tab-button-label">Tab 7</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-sm" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 7</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-sm" tabindex="0">
-                  <span class="po-tab-button-label">Tab 8</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-sm" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 8</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-sm" tabindex="0">
-                  <span class="po-tab-button-label">Tab 9</span>
-                </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-sm" tabindex="0">
-                  <span class="po-tab-button-label">Tab 10</span>
-                </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-sm" tabindex="0">
-                  <span class="po-tab-button-label">Tab 11</span>
-                </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-sm" tabindex="0">
-                  <span class="po-tab-button-label">Tab 12</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-sm" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 9</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -357,7 +337,7 @@
         </div>
       </div>
     </div>
-    <div class="po-tab-container po-tabs-margin-bottom">
+    <div class="po-tab-content po-tabs-margin-bottom">
       <div style="display:none">Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
@@ -373,46 +353,47 @@
     </div>
 
     <h4>Botão "Mais" com dropdown aberto e tab selecionada</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 1</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 4</span>
-        </div>
-      </div>
-      <div class="po-tab-button po-tab-dropdown">
-        <div class="po-tab-dropdown-content po-tab-button-md" tabindex="0">
-          <div class="po-tab-button-label">
-            Mais
-            <span class="po-icon po-icon-arrow-up"></span>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
           </div>
         </div>
-        <div class="po-popover">
-          <div class="po-popover-content">
-            <div class="po-tab-dropdown-container">
-              <div class="po-tab-dropdown-button po-tab-dropdown-button-active">
-                <div class="po-tab-button-md po-tab-button-active" tabindex="0">
-                  <span class="po-tab-button-label">Tab 5</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
+        </div>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
+        </div>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-dropdown">
+          <div class="po-tab-dropdown-content po-tab-button-md" tabindex="0">
+            <div class="po-tab-button-label po-text-ellipsis">
+              Mais
+              <span class="po-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+          <div class="po-popover">
+            <div class="po-popover-content">
+              <div class="po-tab-dropdown-container">
+                <div class="po-tab-dropdown-button po-tab-dropdown-button-active">
+                  <div class="po-tab-button-md po-tab-button-active" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 5</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 6</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-md" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 6</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -420,7 +401,7 @@
         </div>
       </div>
     </div>
-    <div class="po-tab-container">
+    <div class="po-tabs-content po-tab-content">
       <div style="display:none">Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
@@ -430,46 +411,47 @@
     </div>
 
     <h4>Botão "Mais" com dropdown aberto e tab desabilitada</h4>
-
-    <div class="po-tabs-header">
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 1</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 2</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-          <span class="po-tab-button-label">Tab 3</span>
-        </div>
-      </div>
-      <div class="po-tab-button">
-        <div class="po-tab-button-md" tabindex="0">
-            <span class="po-tab-button-label">Tab 4</span>
-        </div>
-      </div>
-      <div class="po-tab-button po-tab-dropdown">
-        <div class="po-tab-dropdown-content po-tab-button-md" tabindex="0">
-          <div class="po-tab-button-label">
-            Mais
-            <span class="po-icon po-icon-arrow-up"></span>
+    <div class="po-tabs-container">
+      <div class="po-tabs-header">
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
           </div>
         </div>
-        <div class="po-popover">
-          <div class="po-popover-content">
-            <div class="po-tab-dropdown-container">
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md po-tab-button-disabled">
-                  <span class="po-tab-button-label">Tab 5</span>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
+        </div>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
+        </div>
+        <div class="po-tab-button">
+          <div class="po-tab-button-md" tabindex="0">
+              <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-dropdown">
+          <div class="po-tab-dropdown-content po-tab-button-md" tabindex="0">
+            <div class="po-tab-button-label po-text-ellipsis">
+              Mais
+              <span class="po-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+          <div class="po-popover">
+            <div class="po-popover-content">
+              <div class="po-tab-dropdown-container">
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-md po-tab-button-disabled">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 5</span>
+                  </div>
                 </div>
-              </div>
-              <div class="po-tab-dropdown-button">
-                <div class="po-tab-button-md" tabindex="0">
-                  <span class="po-tab-button-label">Tab 6</span>
+                <div class="po-tab-dropdown-button">
+                  <div class="po-tab-button-md" tabindex="0">
+                    <span class="po-tab-button-label po-text-ellipsis">Tab 6</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -477,13 +459,116 @@
         </div>
       </div>
     </div>
-    <div class="po-tab-container">
+    <div class="po-tabs-content po-tab-content">
       <div style="display:none">Tab 1</div>
       <div style="display:none">Tab 2</div>
       <div style="display:none">Tab 3</div>
       <div style="display:none">Tab 4</div>
       <div style="display:none">Tab 5</div>
       <div style="display:none">Tab 6</div>
+    </div>
+
+    <h3>Comportamento MOBILE</h3>
+
+    <h4>Tabs simples com scroll horizontal:</h4>
+    <div class="po-tabs-container po-tabs-container-mobile">
+      <div class="po-tabs-header">
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 5</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 6</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 7</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-tabs-content po-tab-content">
+      <div style="display:none">Tab 1</div>
+      <div style="display:none">Tab 2</div>
+      <div style="display:none">Tab 3</div>
+      <div style="display:none">Tab 4</div>
+      <div style="display:none">Tab 5</div>
+      <div style="display:none">Tab 6</div>
+      <div style="display:none">Tab 7</div>
+    </div>
+
+    <h4>Tabs simples com scroll horizontal (small):</h4>
+    <div class="po-tabs-container po-tabs-container-mobile">
+      <div class="po-tabs-header">
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 1</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 2</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 3</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 4</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 5</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 6</span>
+          </div>
+        </div>
+        <div class="po-tab-button po-tab-button-mobile">
+          <div class="po-tab-button-md po-tab-button-sm" tabindex="0">
+            <span class="po-tab-button-label po-text-ellipsis">Tab 7</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="po-tabs-content po-tab-content">
+      <div style="display:none">Tab 1</div>
+      <div style="display:none">Tab 2</div>
+      <div style="display:none">Tab 3</div>
+      <div style="display:none">Tab 4</div>
+      <div style="display:none">Tab 5</div>
+      <div style="display:none">Tab 6</div>
+      <div style="display:none">Tab 7</div>
     </div>
 
   </section>

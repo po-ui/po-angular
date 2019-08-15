@@ -35,6 +35,7 @@
 }
 
 .po-tab-button-label {
+  padding: 0 16px;
   width: 100%;
 }
 
@@ -45,4 +46,18 @@
 
 .po-tab-button-active {
   box-shadow: inset 0 -3px 0 0 var(--color-tab-button-box-shadow-active);
+}
+
+.po-tab-button-mobile {
+  max-width: 30vw;
+  width: 30vw;
+}
+
+@media screen and (max-width: 480px) {
+
+  .po-tab-button-mobile {
+    max-width: 40vw;
+    width: 40vw;
+  }
+
 }

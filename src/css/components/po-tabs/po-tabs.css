@@ -1,9 +1,21 @@
+.po-tabs-container {
+  overflow: hidden
+}
+
 .po-tabs-header {
   display: table;
   table-layout: fixed;
   width: 100%;
 }
 
-.po-tabs-container {
+.po-tabs-content {
   padding-top: 8px;
+}
+
+.po-tabs-container-mobile {
+  overflow: scroll;
+}
+
+.po-tabs-container-mobile::-webkit-scrollbar {
+  display: none;
 }
