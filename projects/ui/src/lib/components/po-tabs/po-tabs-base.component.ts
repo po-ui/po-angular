@@ -8,8 +8,9 @@ import { convertToBoolean } from '../../utils/util';
  * O componente `po-tabs` é responsável por agrupar [abas](/documentation/po-tab) dispostas numa linha horizontal,
  * ideal para facilitar a organização de conteúdos.
  *
- * Até cinco abas o componente exibe todas normalmente. Contudo, a partir de seis abas, o componente torna visível
- * apenas as quatro primeiras, agrupando todas as demais na quinta aba rotulada de **Mais**.
+ * Em dispositivos móveis o componente exibirá tadas as abas de maneira linear gerando um *scroll* na horizontal. Já em telas telas com
+ * resoluções maiores, o componente exibirá até cinco abas normalmente, porém, à partir de seis abas o componente automaticamente torna
+ * visível apenas as quatro primeiras, agrupando as subsequentes na quinta aba rotulada de **Mais**.
  *
  * > As abas que estiverem agrupadas serão dispostas numa cascata suspensa que será exibida ao clicar no botão **Mais**.
  *
