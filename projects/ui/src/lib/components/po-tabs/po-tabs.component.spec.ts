@@ -2,6 +2,7 @@ import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
+import * as UtilsFunction from './../../utils/util';
 
 import { PoTabsComponent } from './po-tabs.component';
 import { PoTabsModule } from './po-tabs.module';
@@ -9,6 +10,7 @@ import { PoTabsModule } from './po-tabs.module';
 describe('PoTabsComponent:', () => {
   let component: PoTabsComponent;
   let fixture: ComponentFixture<PoTabsComponent>;
+  let nativeElement: any;
 
   let defaultTab;
   let activeTab;
@@ -33,6 +35,8 @@ describe('PoTabsComponent:', () => {
     hiddenTab = { id: '4', hide: true, label: 'Tab 4' };
 
     fixture.detectChanges();
+
+    nativeElement = fixture.debugElement.nativeElement;
   });
 
   it('should be created', () => {
@@ -49,13 +53,15 @@ describe('PoTabsComponent:', () => {
       expect(component.overflowedTabs).toEqual(overflowedTabs);
     });
 
-    it('isShowTabDropdown: should return `true` if `visibleTabs` is greater than `maxNumberOfTabs`', () => {
+    it('isShowTabDropdown: should return `true` if `visibleTabs` is greater than `maxNumberOfTabs` and isn`t a mobile device.', () => {
+      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(false);
       component.tabs = <any> [defaultTab, defaultTab, defaultTab, defaultTab, defaultTab, defaultTab];
 
       expect(component.isShowTabDropdown).toBe(true);
     });
 
-    it('isShowTabDropdown: should return `false` if `visibleTabs` is lower than `maxNumberOfTabs`', () => {
+    it('isShowTabDropdown: should return `false` if `visibleTabs` is lower than `maxNumberOfTabs` and is a mobile device.', () => {
+      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
       component.tabs = <any> [defaultTab, defaultTab, defaultTab, defaultTab];
 
       expect(component.isShowTabDropdown).toBe(false);
@@ -248,6 +254,16 @@ describe('PoTabsComponent:', () => {
 
   describe('Templates:', () => {
 
+    const sixTabs = <any> [
+      {id: '0', label: '0'},
+      {id: '1', label: '1'},
+      {id: '2', label: '2'},
+      {id: '3', label: '3'},
+      {id: '4', label: '4'},
+      {id: '5', label: '5'},
+      {id: '6', label: '6'}
+    ];
+
     it('should call `closePopover` if `enter` is pressed in `po-tab-button`.', () => {
       component.tabs = <any> [{id: '0', label: '0'}];
       fixture.detectChanges();
@@ -259,6 +275,46 @@ describe('PoTabsComponent:', () => {
       poTabButton.dispatchEvent(eventEnterKey);
 
       expect(spyOnClosePopover).toHaveBeenCalled();
+    });
+
+    it('should display `po-tab-dropdown` if has six tabs or more and is not a mobile devide.', () => {
+      component.tabs = sixTabs;
+      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(false);
+
+      fixture.detectChanges();
+      const poTabDropdown = nativeElement.querySelector('.po-tab-button.po-tab-dropdown');
+
+      expect(poTabDropdown).toBeTruthy();
+    });
+
+    it('shouldn`t display `po-tab-dropdown` if has six tabs or more but is a mobile devide.', () => {
+      component.tabs = sixTabs;
+      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
+
+      fixture.detectChanges();
+      const poTabDropdown = nativeElement.querySelector('.po-tab-button.po-tab-dropdown');
+
+      expect(poTabDropdown).toBeNull();
+    });
+
+    it('should find `po-tabs-container-mobile` if mobile device', () => {
+      component.tabs = sixTabs;
+      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
+
+      fixture.detectChanges();
+      const poTabContainerMobile = nativeElement.querySelector('.po-tabs-container-mobile');
+
+      expect(poTabContainerMobile).toBeTruthy();
+    });
+
+    it('should find `po-tab-button-mobile` if mobile device', () => {
+      component.tabs = sixTabs;
+      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
+
+      fixture.detectChanges();
+      const poTabButtonMobile = nativeElement.querySelector('.po-tab-button-mobile');
+
+      expect(poTabButtonMobile).toBeTruthy();
     });
 
   });

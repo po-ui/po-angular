@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, ContentChildren, QueryList, ViewChild } from '@angular/core';
 
+import { isMobile } from './../../utils/util';
+
 import { PoTabComponent } from './po-tab/po-tab.component';
 import { PoTabDropdownComponent } from './po-tab-dropdown/po-tab-dropdown.component';
 import { PoTabsBaseComponent } from './po-tabs-base.component';
@@ -50,8 +52,12 @@ export class PoTabsComponent extends PoTabsBaseComponent {
     super();
   }
 
+  get isMobileDevice() {
+    return isMobile();
+  }
+
   get isShowTabDropdown() {
-    return this.visibleTabs.length > this.maxNumberOfTabs;
+    return !this.isMobileDevice && this.visibleTabs.length > this.maxNumberOfTabs;
   }
 
   // tabs que serão apresentadas na aba "Mais"
@@ -72,6 +78,10 @@ export class PoTabsComponent extends PoTabsBaseComponent {
   }
 
   isVisibleTab(tab) {
+    if (this.isMobileDevice) {
+      return true;
+    }
+
     const visibleTabIndex = this.visibleTabs.findIndex(visibleTab => visibleTab.id === tab.id);
 
     return (this.visibleTabs.length <= this.maxNumberOfTabs) || (visibleTabIndex < (this.maxNumberOfTabs - 1));
