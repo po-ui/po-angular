@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/portinariui/portinari-angular/compare/v1.4.0...v1.5.0) (2019-08-16)
+
+
+### Features
+
+* **page-list:** traduz "busca avançada" com a linguagem utilizada no I18n ([eee5463](https://github.com/portinariui/portinari-angular/commit/eee5463))
+* **tabs:** habilita scroll horizontal das tabs em dispositivos moveis ([30ed4ad](https://github.com/portinariui/portinari-angular/commit/30ed4ad))
+
+
+
 ## [1.4.0](https://github.com/portinariui/portinari-angular/compare/v1.3.1...v1.4.0) (2019-08-09)
 
 
