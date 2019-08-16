@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.5.0](https://github.com/portinariui/portinari-angular/compare/v1.4.0...v1.5.0) (2019-08-16)
 
+### Bug Fixes
+
+* **menu:** aplica largura de 100% na area destinada ao menu-header-template ([23607f9](https://github.com/portinariui/portinari-style/commit/23607f9))
 
 ### Features
 
