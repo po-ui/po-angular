@@ -121,7 +121,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   dateSelected() {
-    this.inputEl.nativeElement.focus();
+    if (!this.verifyMobile()) {
+      this.inputEl.nativeElement.focus();
+    }
+
     this.inputEl.nativeElement.value = this.formatToDate(this.date);
     this.controlModel(this.date);
     this.controlChangeEmitter();
