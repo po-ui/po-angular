@@ -712,25 +712,46 @@ describe('PoDatepickerComponent:', () => {
       expect(component.formatToDate).not.toHaveBeenCalled();
     });
 
-    it('dateSelected: should set `calendar.visible` to false', () => {
-      component.calendar.visible = true;
+    describe('dateSelected:', () => {
 
-      spyOn(component, <any>'closeCalendar');
+      it('should set `calendar.visible` to false', () => {
+        component.calendar.visible = true;
 
-      component.dateSelected();
+        spyOn(component, <any>'closeCalendar');
 
-      expect(component['closeCalendar']).toHaveBeenCalled();
-    });
+        component.dateSelected();
 
-    it('dateSelected: should call `controlModel` and `controlChangeEmitter`', () => {
+        expect(component['closeCalendar']).toHaveBeenCalled();
+      });
 
-      spyOn(component, 'controlModel');
-      spyOn(component, <any>'controlChangeEmitter');
+      it('should call `controlModel` and `controlChangeEmitter`', () => {
+        spyOn(component, 'controlModel');
+        spyOn(component, <any>'controlChangeEmitter');
 
-      component.dateSelected();
+        component.dateSelected();
 
-      expect(component.controlModel).toHaveBeenCalled();
-      expect(component['controlChangeEmitter']).toHaveBeenCalled();
+        expect(component.controlModel).toHaveBeenCalled();
+        expect(component['controlChangeEmitter']).toHaveBeenCalled();
+      });
+
+      it('should call ´focus´ if ´verifyMobile´ returns ´false´.', () => {
+        spyOn(component, 'verifyMobile').and.returnValue(<any> false);
+        const spyInputFocus = spyOn(component.inputEl.nativeElement, 'focus');
+
+        component.dateSelected();
+
+        expect(spyInputFocus).toHaveBeenCalled();
+      });
+
+      it('shouldn´t call ´focus´ if ´verifyMobile´ returns ´true´.', () => {
+        spyOn(component, 'verifyMobile').and.returnValue(<any> true);
+        const spyInputFocus = spyOn(component.inputEl.nativeElement, 'focus');
+
+        component.dateSelected();
+
+        expect(spyInputFocus).not.toHaveBeenCalled();
+      });
+
     });
 
     it('formatToDate: should call `formatYear` with date year', () => {
