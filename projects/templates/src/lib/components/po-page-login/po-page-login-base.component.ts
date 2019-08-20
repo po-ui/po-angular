@@ -189,8 +189,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   private _productName: string;
   private _recovery: string | PoPageLoginRecovery | Function;
   private _registerUrl: string;
-  private _urlRecovery: string;
-
 
   /**
    * @optional
