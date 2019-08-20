@@ -539,48 +539,62 @@ describe('PoNavbarComponent:', () => {
 
     });
 
-    describe('validateMenuLogo', () => {
-
-      const logo = 'logo';
-
-      const fakeMenu = {
-        logo,
-        changeDetector: { detectChanges: () => {} }
-      };
+    describe('validateMenuLogo:', () => {
 
       it(`should set 'menu.logo' as 'undefined' and call 'menu.changeDetector.detectChanges' if has 'logo' and 'menu.logo'`, () => {
-        component.logo = logo;
-        component.menu = <any>fakeMenu;
+        const fakeThis = {
+          logo: 'logo',
+          menu: {
+            logo: 'logo',
+            changeDetector: {
+              detectChanges: () => {}
+            }
+          }
+        };
 
-        spyOn(component.menu.changeDetector, 'detectChanges');
-        component['validateMenuLogo']();
-        fixture.detectChanges();
+        spyOn(fakeThis.menu.changeDetector, <any> 'detectChanges');
+        component['validateMenuLogo'].call(fakeThis);
 
-        expect(component.menu.logo).toBeUndefined();
-        expect(component.menu.changeDetector.detectChanges).toHaveBeenCalled();
+        expect(fakeThis.menu.logo).toBeUndefined();
+        expect(fakeThis.menu.changeDetector.detectChanges).toHaveBeenCalled();
       });
 
       it(`shouldn't call 'menu.changeDetector.detectChanges' if doesn't have 'menu.logo'`, () => {
-        component.logo = logo;
-        component.menu = <any>fakeMenu;
-        component.menu.logo = undefined;
+        const fakeThis = {
+          logo: 'logo',
+          menu: {
+            logo: undefined,
+            changeDetector: {
+              detectChanges: () => {}
+            }
+          }
+        };
 
-        spyOn(component.menu.changeDetector, 'detectChanges');
+        spyOn(fakeThis.menu.changeDetector, 'detectChanges');
 
-        component['validateMenuLogo']();
+        component['validateMenuLogo'].call(fakeThis);
 
-        expect(component.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
+        expect(fakeThis.menu.logo).toBeUndefined();
+        expect(fakeThis.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
       });
 
       it(`shouldn't call 'menu.changeDetector.detectChanges' if doesn't have 'logo'`, () => {
-        component.logo = undefined;
-        component.menu = <any>fakeMenu;
+        const fakeThis = {
+          logo: undefined,
+          menu: {
+            logo: 'logo',
+            changeDetector: {
+              detectChanges: () => {}
+            }
+          }
+        };
 
-        spyOn(component.menu.changeDetector, 'detectChanges');
+        spyOn(fakeThis.menu.changeDetector, 'detectChanges');
 
-        component['validateMenuLogo']();
+        component['validateMenuLogo'].call(fakeThis);
 
-        expect(component.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
+        expect(fakeThis.logo).toBeUndefined();
+        expect(fakeThis.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
       });
     });
 
