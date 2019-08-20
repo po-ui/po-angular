@@ -65,7 +65,7 @@ describe('PoNavbarItemComponent:', () => {
 
       spyOn(component.click, 'emit');
 
-      component.itemClick(undefined, undefined);
+      component.itemClick();
 
       expect(component.click.emit).toHaveBeenCalled();
     });
