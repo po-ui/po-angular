@@ -46,7 +46,7 @@ describe('PoMenuComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, 
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes(routes),
         PoLoadingModule
       ],
