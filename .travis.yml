@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+ - "10.9.0"
+dist: trusty
+sudo: required
+
+branches:
+  only:
+    - master
+
+addons:
+  chrome: stable
+
+before_script:
+  - npm install -g @angular/cli
+
+cache:
+  npm: true
+  directories:
+    - node_modules
+
+script:
+  - npm run lint
+  - npm run build:lite
+  - npm run test
