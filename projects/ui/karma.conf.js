@@ -46,6 +46,10 @@ module.exports = function (config) {
             },
             'src/lib/components/po-field/po-input/po-input.component.ts': {
               branches: 50
+            },
+            'src/lib/components/po-field/po-upload/po-upload-base.service.ts': {
+              statements: 76,
+              lines: 75
             }
           }
         }
