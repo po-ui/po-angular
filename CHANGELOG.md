@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/portinariui/portinari-angular/compare/v1.5.0...v1.6.0) (2019-08-23)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige foco no campo após selecionar data no mobile ([fbb61b8](https://github.com/portinariui/portinari-angular/commit/fbb61b8))
+* **portinari:** corrige a falha no lint do projeto ([4ee6672](https://github.com/portinariui/portinari-angular/commit/4ee6672))
+
+
+### Features
+
+* **upload:** exibe restrições de arquivos ([fccbb10](https://github.com/portinariui/portinari-angular/commit/fccbb10))
+
+
+### Tests
+
+* **navbar:** corrige a falha no teste do método `validateMenuLogo` ([6f9d767](https://github.com/portinariui/portinari-angular/commit/6f9d767))
+
+
+
 ## [1.5.0](https://github.com/portinariui/portinari-angular/compare/v1.4.0...v1.5.0) (2019-08-16)
 
 ### Bug Fixes
@@ -54,6 +74,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * **upload:** permite que o componente aceite drag and drop ([ef47ca8](https://github.com/portinariui/portinari-angular/commit/ef47ca8))
+
 
 
 ## [1.2.0](https://github.com/portinariui/portinari-angular/compare/v1.1.1...v1.2.0) (2019-07-19)
