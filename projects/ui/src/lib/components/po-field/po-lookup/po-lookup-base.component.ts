@@ -29,6 +29,7 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   private _disabled?: boolean = false;
   private _filterService: PoLookupFilter | string;
   private _focus?: boolean = false;
+  private _noAutocomplete: boolean;
   private _required?: boolean = false;
 
   protected getSubscription: Subscription;
@@ -167,6 +168,23 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
 
   get filterService() {
     return this._filterService;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a propriedade nativa `autocomplete` do campo como `off`.
+   *
+   * @default `false`
+   */
+  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
+    this._noAutocomplete = convertToBoolean(value);
+  }
+
+  get noAutocomplete() {
+    return this._noAutocomplete;
   }
 
   /**

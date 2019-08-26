@@ -335,6 +335,22 @@ describe('PoDatepickerComponent:', () => {
     fixture.detectChanges();
   });
 
+  describe('Properties:', () => {
+
+    it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
+      component.noAutocomplete = true;
+
+      expect(component.autocomplete).toBe('off');
+    });
+
+    it('autocomplete: should return `on` if `noAutocomplete` is false', () => {
+      component.noAutocomplete = false;
+
+      expect(component.autocomplete).toBe('on');
+    });
+
+  });
+
   it('should have american format (dd/mm/yyyy) because of locale is different of "en"', () => {
     expect(component.format).toBe('dd/mm/yyyy');
   });

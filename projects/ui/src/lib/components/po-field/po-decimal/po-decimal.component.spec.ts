@@ -43,6 +43,22 @@ describe('PoDecimalComponent:', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('Properties:', () => {
+
+    it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
+      component.noAutocomplete = true;
+
+      expect(component.autocomplete).toBe('off');
+    });
+
+    it('autocomplete: should return `on` if `noAutocomplete` is false', () => {
+      component.noAutocomplete = false;
+
+      expect(component.autocomplete).toBe('on');
+    });
+
+  });
+
   it('should update property `p-decimal-length` with `2` if invalid values', () => {
     const invalidValues = [undefined, null, '', true, false, 'string', [], {}];
 

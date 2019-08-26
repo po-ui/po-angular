@@ -54,6 +54,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _format?: string = poDatepickerFormatDefault;
   private _maxDate: Date;
   private _minDate: Date;
+  private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
 
   protected date: Date;
@@ -67,6 +68,23 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   /* Nome do componente datepicker. */
   @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a propriedade nativa `autocomplete` do campo como `off`.
+   *
+   * @default `false`
+   */
+  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
+    this._noAutocomplete = convertToBoolean(value);
+  }
+
+  get noAutocomplete() {
+    return this._noAutocomplete;
+  }
 
   /**
    * @optional

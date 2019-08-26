@@ -10,6 +10,7 @@
   [p-help]="help"
   [p-label]="label"
   [p-literals]="customLiterals"
+  [p-no-autocomplete]="properties.includes('noAutocomplete')"
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
   [p-required]="properties.includes('required')"
@@ -120,7 +121,7 @@
       class="po-lg-6"
       name="properties"
       [(ngModel)]="properties"
-      p-columns="4"
+      p-columns="3"
       p-label="Properties"
       [p-options]="propertiesOptions"
       (p-change)="onChangeProperties($event)">

@@ -39,6 +39,16 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
   describe('Properties:', () => {
 
+    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
+      const invalidValues = [undefined, null, 0, 'false', 'string'];
+      expectPropertiesValues(component, 'noAutocomplete', invalidValues, false);
+    });
+
+    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
+      const validValues = [true, 'true', 1, ' '];
+      expectPropertiesValues(component, 'noAutocomplete', validValues, true);
+    });
+
     it('clean: should update with true value.', () => {
       const booleanValidTrueValues = [ true, 'true', 1, '' ];
 
