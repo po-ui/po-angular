@@ -10,6 +10,7 @@
       [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       type="text"
       [attr.name]="name"
+      [autocomplete]="autocomplete"
       [disabled]="disabled"
       [placeholder]="placeholder"
       [readonly]="readonly"
@@ -31,10 +32,10 @@
 
   <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()">
     <po-calendar #calendar
-      [(p-selected-date)]="date"
       [p-date-end]="maxDate"
       [p-date-start]="minDate"
       [p-locale]="locale"
+      [(p-selected-date)]="date"
       (p-submit)="dateSelected()">
     </po-calendar>
   </div>

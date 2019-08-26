@@ -24,6 +24,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
   private _maxlength?: number;
   private _minlength?: number;
+  private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
 
   protected passedWriteValue: boolean = false;
@@ -48,6 +49,23 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
   /** Nome e identificador do campo. */
   @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a propriedade nativa `autocomplete` do campo como `off`.
+   *
+   * @default `false`
+   */
+  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
+    this._noAutocomplete = convertToBoolean(value);
+  }
+
+  get noAutocomplete() {
+    return this._noAutocomplete;
+  }
 
   /**
    * @optional

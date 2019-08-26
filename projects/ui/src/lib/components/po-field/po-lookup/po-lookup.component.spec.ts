@@ -103,6 +103,22 @@ describe('PoLookupComponent: ', () => {
     expect(component['selectModel']).not.toHaveBeenCalled();
   }));
 
+  describe('Properties:', () => {
+
+    it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
+      component.noAutocomplete = true;
+
+      expect(component.autocomplete).toBe('off');
+    });
+
+    it('autocomplete: should return `on` if `noAutocomplete` is false', () => {
+      component.noAutocomplete = false;
+
+      expect(component.autocomplete).toBe('on');
+    });
+
+  });
+
   describe('Methods: ', () => {
     const objectSelected = { label: 'teste', value: 123 };
 

@@ -62,6 +62,10 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;
 
+  get autocomplete() {
+    return this.noAutocomplete ? 'off' : 'on';
+  }
+
   get enableCleaner(): boolean {
     return (this.startDateInputValue || this.endDateInputValue) && !this.disabled && !this.readonly;
   }

@@ -44,6 +44,18 @@ describe('PoDatepickerRangeComponent:', () => {
 
   describe('Properties:', () => {
 
+    it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
+      component.noAutocomplete = true;
+
+      expect(component.autocomplete).toBe('off');
+    });
+
+    it('autocomplete: should return `on` if `noAutocomplete` is false', () => {
+      component.noAutocomplete = false;
+
+      expect(component.autocomplete).toBe('on');
+    });
+
     it('enableCleaner: should return true if `startDateInputValue` has value, `disabled` is false and `readonly` is false', () => {
       component.readonly = false;
       component.disabled = false;

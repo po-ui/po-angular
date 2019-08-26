@@ -220,6 +220,16 @@ describe('PoInputBase:', () => {
       expectPropertiesValues(component, 'minlength', invalidValues, undefined);
     });
 
+    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
+      const invalidValues = [undefined, null, 0, 'false', 'string'];
+      expectPropertiesValues(component, 'noAutocomplete', invalidValues, false);
+    });
+
+    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
+      const validValues = [true, 'true', 1, ' '];
+      expectPropertiesValues(component, 'noAutocomplete', validValues, true);
+    });
+
   });
 
   describe('Methods:', () => {

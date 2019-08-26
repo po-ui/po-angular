@@ -11,6 +11,7 @@
   [p-maxlength]="maxlength"
   [p-min]="min"
   [p-minlength]="minlength"
+  [p-no-autocomplete]="properties?.includes('noAutocomplete')"
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
   [p-readonly]="properties.includes('readonly')"
@@ -122,7 +123,7 @@
       class="po-md-6"
       name="properties"
       [(ngModel)]="properties"
-      p-columns="4"
+      p-columns="3"
       p-label="Properties"
       [p-options]="propertiesOptions">
     </po-checkbox-group>

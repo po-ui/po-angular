@@ -79,6 +79,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
 
+  get autocomplete() {
+    return this.noAutocomplete ? 'off' : 'on';
+  }
+
   /**
    * @optional
    *

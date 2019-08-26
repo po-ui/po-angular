@@ -81,6 +81,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   @ViewChild('iconDatepicker', { read: ElementRef, static: true }) iconDatepicker: ElementRef;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
+  get autocomplete() {
+    return this.noAutocomplete ? 'off' : 'on';
+  }
+
   /** Rótulo do campo. */
   @Input('p-label') label?: string;
 

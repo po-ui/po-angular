@@ -31,6 +31,7 @@ export class SamplePoInputLabsComponent implements OnInit {
     { value: 'clean', label: 'Clean' },
     { value: 'disabled', label: 'Disabled' },
     { value: 'maskFormatModel', label: 'Formatted Model' },
+    { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' }
