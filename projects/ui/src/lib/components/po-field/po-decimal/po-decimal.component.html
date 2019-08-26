@@ -11,18 +11,19 @@
 
     <input #inp
       class="po-input"
-      type="text"
-      (input)="onInput($event)"
-      (focus)="onFocus($event)"
-      (blur)="onBlur($event)"
-      (keypress)="onKeyPress($event)"
       [attr.name]="name"
+      [autocomplete]="autocomplete"
       [class.po-input-icon-left]="icon"
       [class.po-input-icon-right]="clean"
       [disabled]="disabled"
       [placeholder]="placeholder"
       [readonly]="readonly"
-      [required]="required">
+      [required]="required"
+      type="text"
+      (blur)="onBlur($event)"
+      (focus)="onFocus($event)"
+      (input)="onInput($event)"
+      (keypress)="onKeyPress($event)">
 
     <div class="po-field-icon-container-right">
       <po-clean [p-element-ref]="inputEl" (p-change-event)="clear($event)"></po-clean>

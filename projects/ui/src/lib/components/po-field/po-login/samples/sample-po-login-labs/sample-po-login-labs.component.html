@@ -8,9 +8,10 @@
   [p-label]="label"
   [p-maxlength]="maxlength"
   [p-minlength]="minlength"
+  [p-no-autocomplete]="properties?.includes('noAutocomplete')"
+  [p-optional]="properties.includes('optional')"
   [p-pattern]="pattern"
   [p-placeholder]="placeholder"
-  [p-optional]="properties.includes('optional')"
   [p-readonly]="properties.includes('readonly')"
   [p-required]="properties.includes('required')"
   (p-blur)="changeEvent('p-blur')"
@@ -40,7 +41,7 @@
 <form #f="ngForm">
   <div class="po-row">
     <po-input
-      class="po-md-6"
+      class="po-md-4"
       name="label"
       [(ngModel)]="label"
       p-clean
@@ -48,48 +49,20 @@
     </po-input>
 
     <po-input
-      class="po-md-6"
+      class="po-md-4"
       name="help"
       [(ngModel)]="help"
       p-clean
       p-label="Help">
     </po-input>
-  </div>
 
-  <div class="po-row">
     <po-input
-      class="po-md-6"
+      class="po-md-4"
       name="placeholder"
       [(ngModel)]="placeholder"
       p-clean
       p-label="Placeholder">
     </po-input>
-
-    <po-input
-      class="po-md-6"
-      name="errorPattern"
-      [(ngModel)]="errorPattern"
-      p-clean
-      p-label="Error Pattern">
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-number
-      class="po-md-6"
-      name="minlength"
-      [(ngModel)]="minlength"
-      p-clean
-      p-label="Min Length">
-    </po-number>
-
-    <po-number
-      class="po-md-6"
-      name="maxlength"
-      [(ngModel)]="maxlength"
-      p-clean
-      p-label="Max Length">
-    </po-number>
   </div>
 
   <div class="po-row">
@@ -102,8 +75,37 @@
       p-label="Pattern (Regex)">
     </po-input>
 
-    <po-checkbox-group
+    <po-input
       class="po-md-6"
+      name="errorPattern"
+      [(ngModel)]="errorPattern"
+      p-clean
+      p-help="Ex.: Required field"
+      p-label="Error pattern">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-number
+      class="po-md-6"
+      name="minlength"
+      [(ngModel)]="minlength"
+      p-clean
+      p-label="Min length">
+    </po-number>
+
+    <po-number
+      class="po-md-6"
+      name="maxlength"
+      [(ngModel)]="maxlength"
+      p-clean
+      p-label="Max length">
+    </po-number>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-md-12"
       name="properties"
       [(ngModel)]="properties"
       p-columns="4"

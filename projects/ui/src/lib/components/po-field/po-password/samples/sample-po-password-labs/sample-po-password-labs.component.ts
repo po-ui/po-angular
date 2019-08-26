@@ -24,6 +24,7 @@ export class SamplePoPasswordLabsComponent implements OnInit {
     { value: 'clean', label: 'Clean' },
     { value: 'disabled', label: 'Disabled' },
     { value: 'hidepasswordpeek', label: 'Hide Password Peek' },
+    { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' }

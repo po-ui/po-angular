@@ -72,6 +72,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _disabled?;
   private _endDate?;
   private _literals?: any;
+  private _noAutocomplete?: boolean = false;
   private _readonly: boolean = false;
   private _required?: boolean = false;
   private _startDate?;
@@ -209,6 +210,23 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
 
   get literals() {
     return this._literals || poDatepickerRangeLiteralsDefault[browserLanguage()];
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a propriedade nativa `autocomplete` do campo como `off`.
+   *
+   * @default `false`
+   */
+  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
+    this._noAutocomplete = convertToBoolean(value);
+  }
+
+  get noAutocomplete() {
+    return this._noAutocomplete;
   }
 
   /**

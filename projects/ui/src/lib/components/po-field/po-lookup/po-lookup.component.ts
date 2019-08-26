@@ -81,6 +81,10 @@ export class PoLookupComponent extends PoLookupBaseComponent implements OnDestro
 
   @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
 
+  get autocomplete() {
+    return this.noAutocomplete ? 'off' : 'on';
+  }
+
   constructor(poLookupFilterService: PoLookupFilterService, private poLookupModalService: PoLookupModalService) {
     super(poLookupFilterService);
   }
