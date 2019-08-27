@@ -29,6 +29,24 @@ describe('PoUploadDragDropAreaComponent:', () => {
     expect(component instanceof PoUploadDragDropAreaComponent).toBeTruthy();
   });
 
+  describe('Methods:', () => {
+
+    it('focus: should call `focus` of `selectFilesLinkElement`', () => {
+      component.selectFilesLinkElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.selectFilesLinkElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.selectFilesLinkElement.nativeElement.focus).toHaveBeenCalled();
+    });
+
+  });
+
   describe('Templates:', () => {
 
     it(`should contain 'po-upload-drag-drop-area' and 'po-upload-drag-drop-area-container' classes.`, () => {
@@ -42,6 +60,22 @@ describe('PoUploadDragDropAreaComponent:', () => {
       changeDetector.detectChanges();
 
       expect(nativeElement.querySelector('.po-upload-drag-drop-area-disabled')).toBeTruthy();
+    });
+
+    it(`should contain 'disabled' property in button if disabled is true`, () => {
+      component.disabled = true;
+
+      changeDetector.detectChanges();
+
+      expect(nativeElement.querySelector('button').hasAttribute('disabled')).toBe(true);
+    });
+
+    it(`shouldn't contain 'disabled' property in button if disabled is false`, () => {
+      component.disabled = false;
+
+      changeDetector.detectChanges();
+
+      expect(nativeElement.querySelector('button').hasAttribute('disabled')).toBe(false);
     });
 
     it(`should contain 'po-upload-drag-drop-area-overlay-icon' and 'po-upload-drag-drop-area-overlay-label' if disabled is false

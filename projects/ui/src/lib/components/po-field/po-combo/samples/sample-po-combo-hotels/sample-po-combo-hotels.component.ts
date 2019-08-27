@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoNotificationService, PoSelectOption } from '@portinari/portinari-ui';
+import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@portinari/portinari-ui';
 
 import { SamplePoComboHotelsService } from './sample-po-combo-hotels.service';
 
@@ -40,6 +40,7 @@ export class SamplePoComboHotelsComponent {
   ];
 
   @ViewChild('bookingForm', { static: true }) form: NgForm;
+  @ViewChild('datepicker', { static: true }) datepickerComponent: PoDatepickerComponent;
 
   constructor(
     public comboService: SamplePoComboHotelsService,
@@ -49,6 +50,8 @@ export class SamplePoComboHotelsComponent {
     this.poNotification.success('Hotel booked successfully');
 
     this.formReset();
+
+    this.datepickerComponent.focus();
   }
 
   private formReset() {

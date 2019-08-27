@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, forwardRef } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoSwitchBaseComponent } from './po-switch-base.component';
@@ -44,12 +44,37 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 })
 export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterViewChecked {
 
+  @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
+
   constructor(private changeDetector: ChangeDetectorRef) {
     super();
   }
 
   ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();
+  }
+
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoSwitchComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoSwitchComponent, { static: true }) switch: PoSwitchComponent;
+   *
+   * focusSwitch() {
+   *   this.switch.focus();
+   * }
+   * ```
+   */
+  focus() {
+    if (!this.disabled) {
+      this.switchContainer.nativeElement.focus();
+    }
   }
 
   getLabelPosition() {

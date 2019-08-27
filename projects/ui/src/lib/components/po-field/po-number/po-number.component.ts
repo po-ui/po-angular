@@ -1,7 +1,6 @@
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { Component, ElementRef, forwardRef, Input } from '@angular/core';
 
-import { convertToBoolean } from '../../../utils/util';
 import { minFailed, maxFailed } from '../validators';
 
 import { PoNumberBaseComponent } from './po-number-base.component';

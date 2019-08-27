@@ -24,8 +24,8 @@ import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
  */
 export abstract class PoTextareaBaseComponent implements ControlValueAccessor, Validator {
 
+  private _autofocus: boolean = false;
   private _disabled: boolean = false;
-  private _focus: boolean = false;
   private _maxlength: number;
   private _minlength: number;
   private _readonly: boolean = false;
@@ -125,16 +125,16 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @description
    *
-   * Indica que o campo iniciará com foco.
+   * Aplica foco no elemento ao ser iniciado.
    *
    * @default `false`
    */
-  @Input('p-focus') set focus(focus: boolean) {
-    this._focus = convertToBoolean(focus);
+  @Input('p-focus') set autofocus(focus: boolean) {
+    this._autofocus = convertToBoolean(focus);
   }
 
-  get focus(): boolean {
-    return this._focus;
+  get autofocus(): boolean {
+    return this._autofocus;
   }
 
   /**

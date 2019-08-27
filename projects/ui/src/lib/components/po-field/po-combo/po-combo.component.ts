@@ -158,6 +158,29 @@ export class PoComboComponent extends PoComboBaseComponent implements DoCheck, O
     }
   }
 
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoComboComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoComboComponent, { static: true }) combo: PoComboComponent;
+   *
+   * focusCombo() {
+   *   this.combo.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (!this.disabled) {
+      this.inputElement.nativeElement.focus();
+    }
+  }
+
   onKeyDown(event?: any) {
     const key = event.keyCode;
     const inputValue = event.target.value;

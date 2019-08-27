@@ -132,6 +132,29 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     this.updateModel(this.dateRange);
   }
 
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoDatepickerRangeComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoDatepickerRangeComponent, { static: true }) datepickerRange: PoDatepickerRangeComponent;
+   *
+   * focusDatepickerRange() {
+   *   this.datepickerRange.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (!this.disabled) {
+      this.startDateInput.nativeElement.focus();
+    }
+  }
+
   onBlur() {
     this.removeFocusFromDatePickerRangeField();
   }

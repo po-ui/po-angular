@@ -61,6 +61,14 @@ describe('PoUploadDragDropAreaComponent:', () => {
 
   describe('Methods:', () => {
 
+    it('focus: should call `dragDropAreaComponent.focus`', () => {
+      spyOn(component.dragDropAreaComponent, 'focus');
+
+      component.focus();
+
+      expect(component.dragDropAreaComponent.focus).toHaveBeenCalled();
+    });
+
     it('onDragLeave: should set `isDragOver` to `false`', () => {
       component.isDragOver = true;
 

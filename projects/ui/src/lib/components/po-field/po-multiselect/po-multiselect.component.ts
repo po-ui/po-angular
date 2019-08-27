@@ -81,7 +81,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   ngAfterViewInit() {
-    if (this.focus) {
+    if (this.autofocus) {
       this.inputElement.nativeElement.focus();
     }
     this.initialized = true;
@@ -100,6 +100,29 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
   ngOnDestroy() {
     this.removeListeners();
+  }
+
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoMultiselectComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoMultiselectComponent, { static: true }) multiselect: PoMultiselectComponent;
+   *
+   * focusMultiselect() {
+   *   this.multiselect.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (!this.disabled) {
+      this.inputElement.nativeElement.focus();
+    }
   }
 
   getInputWidth() {

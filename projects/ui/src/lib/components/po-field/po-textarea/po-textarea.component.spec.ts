@@ -131,6 +131,35 @@ describe('PoTextareaComponent:', () => {
       expect(fakeThis.change.emit).toHaveBeenCalledWith(fakeThis.inputEl.nativeElement.value);
     });
 
+    it('focus: should call `focus` of textarea', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of textarea if `disabled`', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
     it('writeValueModel: should call change if value exists', () => {
       const value = 'value';
       const fakeThis = {

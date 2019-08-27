@@ -58,6 +58,10 @@ export class PoRichTextBodyComponent implements OnInit {
     }
   }
 
+  focus(): void {
+    this.bodyElement.nativeElement.focus();
+  }
+
   onClick() {
     this.emitSelectionCommands();
   }

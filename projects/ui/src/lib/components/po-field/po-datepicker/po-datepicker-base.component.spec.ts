@@ -58,9 +58,9 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should update property p-focus', () => {
-    expectSettersMethod(component, 'setFocus', '', 'focus', true);
-    expectSettersMethod(component, 'setFocus', 'true', 'focus', true);
-    expectSettersMethod(component, 'setFocus', 'false', 'focus', false);
+    expectSettersMethod(component, 'autofocus', '', 'autofocus', true);
+    expectSettersMethod(component, 'autofocus', 'true', 'autofocus', true);
+    expectSettersMethod(component, 'autofocus', 'false', 'autofocus', false);
   });
 
   it('should update property p-clean', () => {

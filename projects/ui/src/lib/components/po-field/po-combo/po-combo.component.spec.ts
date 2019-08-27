@@ -474,6 +474,35 @@ describe('PoComboComponent:', () => {
       stopPropagation: () => {}
     };
 
+    it('focus: should call `focus` of combo', () => {
+      component.inputElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.inputElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputElement.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of combo if `disabled`', () => {
+      component.inputElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.inputElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputElement.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
     describe('onKeyUp:', () => {
 
       function fakeKeypressEvent(code: number, target: any = 1) {

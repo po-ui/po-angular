@@ -47,7 +47,7 @@ describe('PoDatepickerComponent:', () => {
     component.help = 'Help de teste';
     component.format = 'dd/mm/yyyy';
     component.locale = 'en';
-    component.focus = true;
+    component.autofocus = true;
     component.required = true;
     component.clean = true;
     component.date = new Date();
@@ -327,7 +327,7 @@ describe('PoDatepickerComponent:', () => {
     component.label = 'Label de teste';
     component.help = 'Help de teste';
     component.locale = 'pt';
-    component.focus = true;
+    component.autofocus = true;
     component.clean = true;
     component.minDate = new Date(2017, 1, 1);
     component.maxDate = new Date(2017, 11, 10);
@@ -550,7 +550,7 @@ describe('PoDatepickerComponent:', () => {
     it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and call `inputEl.nativeElement.focus` if focus is true.', () => {
       const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
       const inputElFocus = spyOn(component.inputEl.nativeElement, <any>'focus');
-      component.focus = true;
+      component.autofocus = true;
 
       component.ngAfterViewInit();
 
@@ -561,7 +561,7 @@ describe('PoDatepickerComponent:', () => {
     it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and not call `inputEl.nativeElement.focus` if focus is false.', () => {
       const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
       const inputElFocus = spyOn(component.inputEl.nativeElement, <any>'focus');
-      component.focus = false;
+      component.autofocus = false;
 
       component.ngAfterViewInit();
 
@@ -573,6 +573,35 @@ describe('PoDatepickerComponent:', () => {
       const removeListener = spyOn(component, <any>'removeListeners');
       component.ngOnDestroy();
       expect(removeListener).toHaveBeenCalled();
+    });
+
+    it('focus: should call `focus` of datepicker', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of datepicker if `disabled`', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
     });
 
     it('addListener: should call wasClickedOnPicker when click in document', () => {

@@ -1,4 +1,4 @@
-import { Component, DoCheck, ElementRef, forwardRef, Input, IterableDiffers, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, forwardRef, Input, IterableDiffers, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { removeDuplicatedOptions } from '../../../utils/util';
@@ -58,6 +58,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   @Input('p-help') help?: string;
 
   @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChildren('inputRadio') radioLabels: QueryList<ElementRef>;
 
   differ: any;
 
@@ -76,6 +77,33 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   eventClick(value: any, disabled: any) {
     if (!disabled) {
       this.changeValue(value);
+    }
+  }
+
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoRadioGroupComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoRadioGroupComponent, { static: true }) radio: PoRadioGroupComponent;
+   *
+   * focusRadio() {
+   *   this.radio.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (this.radioLabels && !this.disabled) {
+      const radioLabel = this.radioLabels.find((_, index) => !this.options[index].disabled);
+
+      if (radioLabel) {
+        radioLabel.nativeElement.focus();
+      }
     }
   }
 

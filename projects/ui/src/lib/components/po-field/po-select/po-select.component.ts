@@ -131,6 +131,29 @@ export class PoSelectComponent extends PoSelectBaseComponent implements DoCheck 
     }
   }
 
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoSelectComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoSelectComponent, { static: true }) select: PoSelectComponent;
+   *
+   * focusSelect() {
+   *   this.select.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (!this.disabled) {
+      this.selectElement.nativeElement.focus();
+    }
+  }
+
   hideDropDown() {
     this.selectIcon = 'po-icon-arrow-down';
     this.selector('.po-select-container').classList.remove('po-select-show');

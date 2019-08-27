@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, OnDestroy, ViewChild } from '@angular/core';
 
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
+import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
 
 /**
  * @docsExtends PoRichTextBaseComponent
@@ -44,6 +45,8 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
   private listener = this.validateClassesForRequired.bind(this);
   private modelLastUpdate: any;
 
+  @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
+
   get errorMsg() {
     return (this.errorMessage !== '' && !this.value && this.required && this.invalid) ? this.errorMessage : '';
   }
@@ -67,6 +70,27 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
       this.element.nativeElement.removeEventListener('cut', this.listener);
       this.element.nativeElement.removeEventListener('paste', this.listener);
     }
+  }
+
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoRichTextComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoRichTextComponent, { static: true }) richText: PoRichTextComponent;
+   *
+   * focusRichText() {
+   *   this.richText.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    this.bodyElement.focus();
   }
 
   onChangeValue(value: any) {

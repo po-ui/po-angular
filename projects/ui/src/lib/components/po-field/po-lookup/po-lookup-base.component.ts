@@ -26,9 +26,9 @@ import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
  */
 export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnDestroy, OnInit, Validator {
 
+  private _autofocus?: boolean = false;
   private _disabled?: boolean = false;
   private _filterService: PoLookupFilter | string;
-  private _focus?: boolean = false;
   private _noAutocomplete: boolean;
   private _required?: boolean = false;
 
@@ -221,19 +221,20 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   }
 
   /**
+   * @optional
+   *
    * @description
    *
-   * Indica que o campo iniciará com foco.
+   * Aplica foco no elemento ao ser iniciado.
    *
-   * @default false
-   * @optional
+   * @default `false`
    */
-  @Input('p-focus') set focus(focus: boolean) {
-    this._focus = <any>focus === '' ? true : convertToBoolean(focus);
+  @Input('p-focus') set autofocus(focus: boolean) {
+    this._autofocus = convertToBoolean(focus);
   }
 
-  get focus(): boolean {
-    return this._focus;
+  get autofocus(): boolean {
+    return this._autofocus;
   }
 
   /**

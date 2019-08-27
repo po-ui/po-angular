@@ -98,6 +98,15 @@ describe('PoRichTextBodyComponent:', () => {
 
     });
 
+    it('focus: should call `focus` of rich-text', () => {
+
+      spyOn(component.bodyElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.bodyElement.nativeElement.focus).toHaveBeenCalled();
+    });
+
     it('onClick: should call `emitSelectionCommands`', () => {
       spyOn(component, <any>'emitSelectionCommands');
       component.onClick();

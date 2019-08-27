@@ -210,6 +210,35 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.endDateInputValue).toBe('');
     });
 
+    it('focus: should call `focus` of datepicker-range', () => {
+      component.startDateInput = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.startDateInput.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.startDateInput.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of datepicker-range if `disabled`', () => {
+      component.startDateInput = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.startDateInput.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.startDateInput.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
     it('onBlur: should call `removeFocusFromDatePickerRangeField`', () => {
       spyOn(component, <any>'removeFocusFromDatePickerRangeField');
 

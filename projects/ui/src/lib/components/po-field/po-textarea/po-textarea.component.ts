@@ -56,6 +56,29 @@ export class PoTextareaComponent extends PoTextareaBaseComponent {
     super();
   }
 
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoTextareaComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoTextareaComponent, { static: true }) textarea: PoTextareaComponent;
+   *
+   * focusTextarea() {
+   *   this.textarea.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (!this.disabled) {
+      this.inputEl.nativeElement.focus();
+    }
+  }
+
   writeValueModel(value: any): void {
     if (this.inputEl) {
       if (!value) {
