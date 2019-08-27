@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { Input } from '@angular/core';
+import { EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
 import { requiredFailed } from '../validators';
@@ -138,6 +138,12 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   get required() {
     return this._required;
   }
+
+  /** Evento disparado ao deixar o campo e que recebe como parâmetro o valor alterado. */
+  @Output('p-change') change?: EventEmitter<any> = new EventEmitter();
+
+  /** Evento disparado ao modificar valor do model e que recebe como parâmetro o valor alterado. */
+  @Output('p-change-model') changeModel?: EventEmitter<any> = new EventEmitter();
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model

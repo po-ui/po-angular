@@ -10,6 +10,9 @@ const poRichTextBodyCommands = [
 })
 export class PoRichTextBodyComponent implements OnInit {
 
+  private timeoutChange: any;
+  private valueBeforeChange: any;
+
   @ViewChild('bodyElement', { static: true }) bodyElement: ElementRef;
 
   @Input('p-height') height?: string;
@@ -19,6 +22,8 @@ export class PoRichTextBodyComponent implements OnInit {
   @Input('p-placeholder') placeholder?: string;
 
   @Input('p-readonly') readonly?: string;
+
+  @Output('p-change') change = new EventEmitter<any>();
 
   @Output('p-commands') commands = new EventEmitter<any>();
 
@@ -38,8 +43,21 @@ export class PoRichTextBodyComponent implements OnInit {
     this.value.emit(this.modelValue);
   }
 
+  onBlur() {
+    if (this.modelValue !== this.valueBeforeChange) {
+      clearTimeout(this.timeoutChange);
+      this.timeoutChange = setTimeout(() => {
+        this.change.emit(this.modelValue);
+      }, 200);
+    }
+  }
+
   onClick() {
     this.emitSelectionCommands();
+  }
+
+  onFocus() {
+    this.valueBeforeChange = this.modelValue;
   }
 
   onKeyUp() {

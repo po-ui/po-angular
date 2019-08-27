@@ -8,7 +8,9 @@
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
   [p-readonly]="properties.includes('readonly')"
-  [p-required]="properties.includes('required')">
+  [p-required]="properties.includes('required')"
+  (p-change)="changeEvent('p-change')"
+  (p-change-model)="changeEvent('p-change-model')">
 </po-rich-text>
 
 <po-divider></po-divider>
@@ -18,6 +20,12 @@
     class="po-md-6"
     p-label="Model"
     [p-value]="richText">
+  </po-info>
+
+  <po-info
+    class="po-md-6"
+    p-label="Event"
+    [p-value]="event">
   </po-info>
 </div>
 

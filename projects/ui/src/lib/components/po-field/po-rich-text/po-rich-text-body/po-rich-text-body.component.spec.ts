@@ -162,6 +162,54 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component.bodyElement.nativeElement.insertAdjacentHTML).toHaveBeenCalledWith('afterbegin', component.modelValue);
     });
 
+    it('onFocus: should set a value to `valueBeforeChange`', () => {
+      component.modelValue = 'value';
+
+      component.onFocus();
+
+      expect(component['valueBeforeChange']).toBe('value');
+    });
+
+    it('onBlur: should emit modelValue change', fakeAsync((): void => {
+      const fakeThis = {
+        modelValue: 'value',
+        valueBeforeChange: '1',
+        change: component.change,
+        bodyElement: {
+          nativeElement: {
+            innerHTML: 'value'
+          }
+        }
+      };
+
+      spyOn(fakeThis.change, 'emit');
+      component.onBlur.call(fakeThis);
+      tick(250);
+
+      expect(fakeThis.change.emit).toHaveBeenCalledWith(fakeThis.modelValue);
+    }));
+
+    it('onBlur: shouldn`t emit change value doesn`t changed', fakeAsync((): void => {
+      const fakeThis = {
+        modelValue: 'value',
+        valueBeforeChange: 'value',
+        change: {
+          emit: () => {}
+        },
+        bodyElement: {
+          nativeElement: {
+            innerHTML: 'value'
+          }
+        }
+      };
+
+      spyOn(fakeThis.change, 'emit');
+      component.onBlur.call(fakeThis);
+      tick(250);
+
+      expect(fakeThis.change.emit).not.toHaveBeenCalled();
+    }));
+
   });
 
   describe('Templates: ', () => {
