@@ -10,6 +10,7 @@
       [p-model-value]="value"
       [p-placeholder]="placeholder"
       [p-readonly]="readonly"
+      (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar.setButtonsStates($event)"
       (p-value)="updateValue($event)">
     </po-rich-text-body>

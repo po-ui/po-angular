@@ -42,6 +42,7 @@ import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 export class PoRichTextComponent extends PoRichTextBaseComponent implements AfterViewInit, OnDestroy {
 
   private listener = this.validateClassesForRequired.bind(this);
+  private modelLastUpdate: any;
 
   get errorMsg() {
     return (this.errorMessage !== '' && !this.value && this.required && this.invalid) ? this.errorMessage : '';
@@ -68,10 +69,22 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
     }
   }
 
+  onChangeValue(value: any) {
+    this.change.emit(value);
+  }
+
   updateValue(value: string) {
     this.value = value;
     this.invalid = !value;
+    this.controlChangeModelEmitter(this.value);
     this.updateModel(this.value);
+  }
+
+  private controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
+    }
   }
 
   private validateClassesForRequired() {
