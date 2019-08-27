@@ -34,6 +34,12 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     }
   }
 
+  focus() {
+    if (!this.disabled) {
+      this.inputEl.nativeElement.focus();
+    }
+  }
+
   setPaddingInput() {
     setTimeout(() => {
       const selectorIcons = '.po-field-icon-container:not(.po-field-icon-container-left) > .po-icon';
@@ -48,8 +54,8 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   putFocus() {
-    if (this.focus) {
-      this.inputEl.nativeElement.focus();
+    if (this.autofocus) {
+      this.focus();
     }
   }
 

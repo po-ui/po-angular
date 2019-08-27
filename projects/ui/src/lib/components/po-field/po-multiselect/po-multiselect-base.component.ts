@@ -38,9 +38,9 @@ export const poMultiselectLiteralsDefault = {
  */
 export abstract class PoMultiselectBaseComponent implements AfterContentChecked, ControlValueAccessor, OnInit, Validator {
 
+  private _autofocus?: boolean = false;
   private _disabled?: boolean = false;
   private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
-  private _focus?: boolean = false;
   private _hideSearch?: boolean = false;
   private _literals: PoMultiselectLiterals;
   private _options: Array<PoMultiselectOption>;
@@ -240,16 +240,16 @@ export abstract class PoMultiselectBaseComponent implements AfterContentChecked,
    *
    * @description
    *
-   * Indica que o campo iniciará com foco.
+   * Aplica foco no elemento ao ser iniciado.
    *
    * @default `false`
    */
-  @Input('p-focus') set focus(focus: boolean) {
-    this._focus = <any>focus === '' ? true : convertToBoolean(focus);
+  @Input('p-focus') set autofocus(focus: boolean) {
+    this._autofocus = convertToBoolean(focus);
   }
 
-  get focus() {
-    return this._focus;
+  get autofocus() {
+    return this._autofocus;
   }
 
   /**

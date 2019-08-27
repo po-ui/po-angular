@@ -24,6 +24,7 @@
     </po-upload-drag-drop>
 
     <po-button *ngIf="!hideSelectButton && !displayDragDrop"
+      #uploadButton
       class="po-upload-button"
       for="file"
       [p-disabled]="isDisabled"

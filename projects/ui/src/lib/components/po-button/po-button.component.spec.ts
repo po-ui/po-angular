@@ -146,6 +146,21 @@ describe('PoButtonComponent: ', () => {
       expect(component.buttonElement.nativeElement.focus).toHaveBeenCalled();
     });
 
+    it('focus: should`t call `focus` of button if `disabled`', () => {
+      component.buttonElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.buttonElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('Templates: ', () => {

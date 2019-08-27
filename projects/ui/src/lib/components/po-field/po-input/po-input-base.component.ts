@@ -22,6 +22,7 @@ import { PoMask } from './po-mask';
  */
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator {
 
+  private _autofocus?: boolean;
   private _maxlength?: number;
   private _minlength?: number;
   private _noAutocomplete?: boolean = false;
@@ -119,10 +120,21 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     this.validateModel();
   }
 
-  /** Se verdadeiro, o campo iniciará com foco. */
-  focus?: boolean = false;
-  @Input('p-focus') set setFocus(focus: string) {
-    this.focus = focus === '' ? true : convertToBoolean(focus);
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * @default `false`
+   */
+  @Input('p-focus') set autofocus(focus: boolean) {
+    this._autofocus = convertToBoolean(focus);
+  }
+
+  get autofocus() {
+    return this._autofocus;
   }
 
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */
@@ -287,6 +299,25 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       this.modelLastUpdate = value;
     }
   }
+
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoNomeDoComponenteComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoNomeDoComponenteComponent, { static: true }) nomeDoComponente: PoNomeDoComponenteComponent;
+   *
+   * focusComponent() {
+   *   this.nomeDoComponente.focus();
+   * }
+   * ```
+   */
+  abstract focus(): void;
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model

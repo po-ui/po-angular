@@ -7,7 +7,7 @@
     <div *ngFor="let option of options"
       class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
 
-      <input #input
+      <input #inputRadio
         class="po-radio-group-input"
         type="radio"
         [attr.name]="name"
@@ -19,7 +19,7 @@
         (keyup)="onKeyUp($event, option.value)">
         <label
           class="po-radio-group-label"
-          [class.po-clickable]="!input.disabled"
+          [class.po-clickable]="!inputRadio.disabled"
           [for]="name"
           (click)="eventClick(option.value, option.disabled === true || disabled)">
         {{ option.label }}

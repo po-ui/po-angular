@@ -99,6 +99,29 @@ export class PoLookupComponent extends PoLookupBaseComponent implements OnDestro
     super.ngOnInit();
   }
 
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoLookupComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoLookupComponent, { static: true }) lookup: PoLookupComponent;
+   *
+   * focusLookup() {
+   *   this.lookup.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (!this.disabled) {
+      this.inputEl.nativeElement.focus();
+    }
+  }
+
   openLookup(): void {
     if (this.isAllowedOpenModal()) {
       const { service, columns, filterParams, literals } = this;

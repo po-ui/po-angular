@@ -89,7 +89,7 @@ describe('PoMultiselectComponent:', () => {
 
   it('should set focus on input', () => {
     component.initialized = false;
-    component.focus = true;
+    component.autofocus = true;
     component.ngAfterViewInit();
     expect(document.activeElement.tagName.toLowerCase()).toBe('input');
     expect(component.initialized).toBeTruthy();
@@ -97,7 +97,7 @@ describe('PoMultiselectComponent:', () => {
 
   it('shouldn`t set focus on input', () => {
     component.initialized = false;
-    component.focus = false;
+    component.autofocus = false;
     component.ngAfterViewInit();
     expect(document.activeElement.tagName.toLowerCase()).not.toBe('input');
     expect(component.initialized).toBeTruthy();
@@ -325,6 +325,35 @@ describe('PoMultiselectComponent:', () => {
       component.ngOnDestroy();
 
       expect(removeListenersSpy).toHaveBeenCalled();
+    });
+
+    it('focus: should call `focus` of multiselect', () => {
+      component.inputElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.inputElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputElement.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of multiselect if `disabled`', () => {
+      component.inputElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.inputElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputElement.nativeElement.focus).not.toHaveBeenCalled();
     });
 
     it(`calculateVisibleItems: should calc visible items and not set 'isCalculateVisibleItems' to false when

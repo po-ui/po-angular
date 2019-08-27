@@ -126,6 +126,15 @@ describe('PoRichTextComponent:', () => {
       expect(nativeElement.removeEventListener).not.toHaveBeenCalled();
     });
 
+    it('focus: should call input `focus`', () => {
+
+      spyOn(component.bodyElement, 'focus');
+
+      component.focus();
+
+      expect(component.bodyElement.focus).toHaveBeenCalled();
+    });
+
     it('updateValue: should apply values to value, invalid and call updateModel', () => {
       spyOn(component, <any>'updateModel');
       spyOn(component, <any>'controlChangeModelEmitter');

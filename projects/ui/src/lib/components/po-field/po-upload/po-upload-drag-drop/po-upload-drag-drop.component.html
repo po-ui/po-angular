@@ -1,11 +1,11 @@
 <po-upload-drag-drop-area-overlay #dragDropOverlay *ngIf="isDragOver"
   [p-disabled]="disabled"
   [p-literals]="literals"
-  [p-target]="DragDropAreaElement"
+  [p-target]="dragDropAreaComponent.elementRef"
   (p-area-element)="onAreaElement($event)">
 </po-upload-drag-drop-area-overlay>
 
-<po-upload-drag-drop-area #DragDropArea
+<po-upload-drag-drop-area
   p-upload-drag-drop
   [p-area-element]="areaElement"
   [p-disabled]="disabled"

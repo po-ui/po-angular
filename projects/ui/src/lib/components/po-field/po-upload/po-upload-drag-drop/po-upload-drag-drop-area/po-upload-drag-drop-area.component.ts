@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface';
 
@@ -18,5 +18,13 @@ export class PoUploadDragDropAreaComponent {
   @Input('p-overlay') overlay: boolean;
 
   @Output('p-select-files') selectFiles: EventEmitter<any> = new EventEmitter<any>();
+
+  @ViewChild('selectFilesLink', { static: false }) selectFilesLinkElement: ElementRef;
+
+  constructor(public elementRef: ElementRef) {}
+
+  focus() {
+    this.selectFilesLinkElement.nativeElement.focus();
+  }
 
 }

@@ -306,6 +306,58 @@ describe('PoUploadComponent:', () => {
       expect(component['cleanInputValue']).toHaveBeenCalled();
     });
 
+    it('focus: should call `uploadButton.focus` if `uploadButton` is defined', () => {
+      component.hideSelectButton = false;
+      spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      spyOn(component['uploadButton'], 'focus');
+
+      component.focus();
+
+      expect(component['uploadButton'].focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `uploadButton.focus` if `disabled`', () => {
+      component.hideSelectButton = false;
+      component.disabled = true;
+      spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      spyOn(component['uploadButton'], 'focus');
+
+      component.focus();
+
+      expect(component['uploadButton'].focus).not.toHaveBeenCalled();
+    });
+
+    it('focus: should call `poUploadDragDropComponent.focus` if `displayDragDrop` is defined', () => {
+      spyOnProperty(component, 'displayDragDrop').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      spyOn(component['poUploadDragDropComponent'], 'focus');
+
+      component.focus();
+
+      expect(component['poUploadDragDropComponent'].focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `poUploadDragDropComponent.focus` if `disabled`', () => {
+      component.disabled = true;
+      spyOnProperty(component, 'displayDragDrop').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      spyOn(component['poUploadDragDropComponent'], 'focus');
+
+      component.focus();
+
+      expect(component['poUploadDragDropComponent'].focus).not.toHaveBeenCalled();
+    });
+
     it('onFileChangeDragDrop: should call `updateFiles` with files.', () => {
       const files = 'teste';
 

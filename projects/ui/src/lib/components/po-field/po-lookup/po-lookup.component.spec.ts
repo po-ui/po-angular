@@ -171,6 +171,35 @@ describe('PoLookupComponent: ', () => {
       expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
     });
 
+    it('focus: should call `focus` of lookup', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of lookup if `disabled`', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
     it('openLookup: should call `openModal` if `isAllowedOpenModal` return true',
       inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
 

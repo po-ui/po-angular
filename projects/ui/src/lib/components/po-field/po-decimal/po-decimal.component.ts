@@ -140,6 +140,12 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return null;
   }
 
+  focus(): void {
+    if (!this.disabled) {
+      this.inputEl.nativeElement.focus();
+    }
+  }
+
   getScreenValue() {
     return (this.inputEl) ? this.inputEl.nativeElement.value : '';
   }
@@ -449,7 +455,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   private putFocus() {
-    if (this.focus) {
+    if (this.autofocus) {
       this.inputEl.nativeElement.focus();
     }
   }
