@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, forwardRef } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, forwardRef, QueryList, ViewChildren } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
@@ -42,12 +42,41 @@ import { PoCheckboxGroupOption } from './po-checkbox-group-option.interface';
 })
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked {
 
+  @ViewChildren('checkboxLabel') checkboxLabels: QueryList<ElementRef>;
+
   constructor(private changeDetector: ChangeDetectorRef) {
     super();
   }
 
   ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();
+  }
+
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoCheckboxGroupComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoCheckboxGroupComponent, { static: true }) checkbox: PoCheckboxGroupComponent;
+   *
+   * focusCheckbox() {
+   *   this.checkbox.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (this.checkboxLabels && !this.disabled) {
+      const checkboxLabel = this.checkboxLabels.find((_, index) => !this.options[index].disabled);
+
+      if (checkboxLabel) {
+        checkboxLabel.nativeElement.focus();
+      }
+    }
   }
 
   onKeyDown(event: KeyboardEvent, option: PoCheckboxGroupOption) {

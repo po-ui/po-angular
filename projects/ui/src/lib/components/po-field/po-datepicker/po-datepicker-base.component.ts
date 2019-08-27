@@ -51,6 +51,7 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  */
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
+  private _autofocus?: boolean;
   private _format?: string = poDatepickerFormatDefault;
   private _maxDate: Date;
   private _minDate: Date;
@@ -138,10 +139,21 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.validateModel(convertDateToISOExtended(this.date, this.hour));
   }
 
-  /** Aplica foco ao elemento ao ser iniciado. */
-  focus?: boolean = false;
-  @Input('p-focus') set setFocus(focus: string) {
-    this.focus = focus === '' ? true : convertToBoolean(focus);
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * @default `false`
+   */
+  @Input('p-focus') set autofocus(autofocus: boolean) {
+    this._autofocus = convertToBoolean(autofocus);
+  }
+
+  get autofocus() {
+    return this._autofocus;
   }
 
   /** Habilita ação para limpar o campo. */

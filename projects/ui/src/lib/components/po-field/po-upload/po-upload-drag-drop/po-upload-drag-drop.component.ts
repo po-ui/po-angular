@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 
 import { convertToInt } from '../../../../utils/util';
 
+import { PoUploadDragDropAreaComponent } from './po-upload-drag-drop-area/po-upload-drag-drop-area.component';
 import { PoUploadLiterals } from '../interfaces/po-upload-literals.interface';
 
 const PoUploadDragDropHeightDefault = 320;
@@ -20,8 +21,7 @@ export class PoUploadDragDropComponent {
   isDragOver: boolean = false;
 
   @ViewChild('dragDropOverlay', { read: ElementRef, static: false }) dragDropOverlayElement: ElementRef;
-
-  @ViewChild('DragDropArea', { read: ElementRef, static: true }) DragDropAreaElement: ElementRef;
+  @ViewChild(PoUploadDragDropAreaComponent, { static: true }) dragDropAreaComponent: PoUploadDragDropAreaComponent;
 
   @Input('p-disabled') disabled: boolean;
 
@@ -42,6 +42,10 @@ export class PoUploadDragDropComponent {
   @Output('p-select-files') selectFiles: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private changeDetector: ChangeDetectorRef) { }
+
+  focus() {
+    this.dragDropAreaComponent.focus();
+  }
 
   onAreaElement(element: HTMLElement) {
     this.areaElement = element;

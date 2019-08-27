@@ -121,6 +121,35 @@ describe('PoRadioGroupComponent', () => {
 
   describe('Methods:', () => {
 
+    it('focus: should call `focus` of switch', () => {
+      component.switchContainer = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.switchContainer.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.switchContainer.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of switch if `disabled`', () => {
+      component.switchContainer = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.switchContainer.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.switchContainer.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
     describe('onKeyDown:', () => {
 
       let fakeEvent;

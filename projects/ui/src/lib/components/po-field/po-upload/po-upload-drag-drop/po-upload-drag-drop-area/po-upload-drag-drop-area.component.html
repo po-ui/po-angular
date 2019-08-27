@@ -23,9 +23,11 @@
     {{ literals?.dragFilesHere }}
   </div>
 
-  <div class="po-upload-drag-drop-area-select-files"
-  [ngClass]="{'po-clickable': !disabled}"
-  (click)="selectFiles.emit()">
+  <button #selectFilesLink
+    class="po-upload-drag-drop-area-select-files"
+    [disabled]="disabled"
+    [ngClass]="{'po-clickable': !disabled}"
+    (click)="selectFiles.emit()">
     {{ literals?.selectFilesOnComputer }}
-  </div>
+  </button>
 </ng-template>

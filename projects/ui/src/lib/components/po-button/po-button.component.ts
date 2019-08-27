@@ -31,9 +31,25 @@ export class PoButtonComponent extends PoButtonBaseComponent {
 
   /**
    * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoButtonComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoButtonComponent, { static: true }) button: PoButtonComponent;
+   *
+   * focusButton() {
+   *   this.button.focus();
+   * }
+   * ```
    */
   focus(): void {
-    this.buttonElement.nativeElement.focus();
+    if (!this.disabled) {
+      this.buttonElement.nativeElement.focus();
+    }
   }
 
   onClick() {

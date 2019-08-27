@@ -89,16 +89,16 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   it('should set focus', () => {
-    expectSettersMethod(component, 'focus', '', '_focus', true);
-    expectSettersMethod(component, 'focus', 'true', '_focus', true);
-    expectSettersMethod(component, 'focus', true, '_focus', true);
-    expectSettersMethod(component, 'focus', 'false', '_focus', false);
-    expectSettersMethod(component, 'focus', false, '_focus', false);
-    expectSettersMethod(component, 'focus', 'null', 'focus', false);
-    expectSettersMethod(component, 'focus', null, 'focus', false);
-    expectSettersMethod(component, 'focus', NaN, 'focus', false);
-    expectSettersMethod(component, 'focus', 'undefined', 'focus', false);
-    expectSettersMethod(component, 'focus', undefined, 'focus', false);
+    expectSettersMethod(component, 'autofocus', '', '_autofocus', true);
+    expectSettersMethod(component, 'autofocus', 'true', '_autofocus', true);
+    expectSettersMethod(component, 'autofocus', true, '_autofocus', true);
+    expectSettersMethod(component, 'autofocus', 'false', '_autofocus', false);
+    expectSettersMethod(component, 'autofocus', false, '_autofocus', false);
+    expectSettersMethod(component, 'autofocus', 'null', 'autofocus', false);
+    expectSettersMethod(component, 'autofocus', null, 'autofocus', false);
+    expectSettersMethod(component, 'autofocus', NaN, 'autofocus', false);
+    expectSettersMethod(component, 'autofocus', 'undefined', 'autofocus', false);
+    expectSettersMethod(component, 'autofocus', undefined, 'autofocus', false);
   });
 
   it('should register function OnChangePropagate', () => {

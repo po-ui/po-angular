@@ -7,9 +7,13 @@ import { PoInputBaseComponent } from './po-input-base.component';
 import { PoMask } from './po-mask';
 
 class PoInput extends PoInputBaseComponent {
+
   extraValidation(c: AbstractControl): { [key: string]: any; } {
     return null;
   }
+
+  focus(): void { }
+
   getScreenValue(): string {
     return '';
   }
@@ -51,12 +55,6 @@ describe('PoInputBase:', () => {
     expectSettersMethod(component, 'setRequired', 'false', 'required', false);
 
     expect(component['validateModel']).toHaveBeenCalled();
-  });
-
-  it('should set focus', () => {
-    expectSettersMethod(component, 'setFocus', '', 'focus', true);
-    expectSettersMethod(component, 'setFocus', 'true', 'focus', true);
-    expectSettersMethod(component, 'setFocus', 'false', 'focus', false);
   });
 
   it('should set clean', () => {
@@ -179,6 +177,16 @@ describe('PoInputBase:', () => {
   });
 
   describe('Properties:', () => {
+
+    it('p-focus: should update property with `false` if invalid values.', () => {
+      const invalidValues = [undefined, null, 0, false, 'false', 'string'];
+      expectPropertiesValues(component, 'autofocus', invalidValues, false);
+    });
+
+    it('p-focus: should update property with valid values with valid values.', () => {
+      const validValues = [true, 'true', 1];
+      expectPropertiesValues(component, 'autofocus', validValues, true);
+    });
 
     it('p-placeholder: should update property p-placeholder with valid value.', () => {
       component.placeholder = 'teste';

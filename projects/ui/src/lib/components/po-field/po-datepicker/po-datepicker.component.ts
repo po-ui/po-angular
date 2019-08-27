@@ -99,13 +99,36 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   ngAfterViewInit() {
     this.setDialogPickerStyleDisplay('none');
     // Põe o foco no Input, setado pelo p-focus
-    if (this.focus) {
+    if (this.autofocus) {
       this.inputEl.nativeElement.focus();
     }
   }
 
   ngOnDestroy() {
     this.removeListeners();
+  }
+
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoDatepickerComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoDatepickerComponent, { static: true }) datepicker: PoDatepickerComponent;
+   *
+   * focusDatepicker() {
+   *   this.datepicker.focus();
+   * }
+   * ```
+   */
+  focus(): void {
+    if (!this.disabled) {
+      this.inputEl.nativeElement.focus();
+    }
   }
 
   togglePicker() {

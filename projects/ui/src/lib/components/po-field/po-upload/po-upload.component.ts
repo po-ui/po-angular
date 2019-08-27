@@ -2,11 +2,13 @@ import { Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { formatBytes, isMobile } from '../../../utils/util';
+import { PoButtonComponent } from './../../po-button/po-button.component';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 
 import { PoUploadBaseComponent } from './po-upload-base.component';
+import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-drop.component';
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
@@ -82,6 +84,8 @@ export class PoUploadComponent extends PoUploadBaseComponent {
   private calledByCleanInputValue: boolean = false;
 
   @ViewChild('inputFile', {read: ElementRef, static: true }) private inputFile: ElementRef;
+  @ViewChild(PoUploadDragDropComponent, { static: false }) private poUploadDragDropComponent: PoUploadDragDropComponent;
+  @ViewChild('uploadButton', { static: false }) private uploadButton: PoButtonComponent;
 
   constructor(
     private i18nPipe: PoI18nPipe,
@@ -133,6 +137,36 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     this.currentFiles = undefined;
     this.updateModel([]);
     this.cleanInputValue();
+  }
+
+  /**
+   * Função que atribui foco ao componente.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoUploadComponent } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild(PoUploadComponent, { static: true }) upload: PoUploadComponent;
+   *
+   * focusUpload() {
+   *   this.upload.focus();
+   * }
+   * ```
+   */
+  focus() {
+    if (!this.disabled) {
+      if (this.uploadButton) {
+        this.uploadButton.focus();
+        return;
+      }
+
+      if (this.displayDragDrop) {
+        this.poUploadDragDropComponent.focus();
+      }
+    }
   }
 
   // Verifica se existe algum arquivo sendo enviado ao serviço.

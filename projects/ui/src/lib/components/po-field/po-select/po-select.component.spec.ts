@@ -175,6 +175,35 @@ describe('PoSelectComponent:', () => {
 
   describe('Methods:', () => {
 
+    it('focus: should call `focus` of select', () => {
+      component.selectElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.selectElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.selectElement.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of select if `disabled`', () => {
+      component.selectElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.selectElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.selectElement.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
     it('getSelectItemHeight: should return height of po-select-item class', () => {
       const selectItem: any = { clientHeight: 5 };
 

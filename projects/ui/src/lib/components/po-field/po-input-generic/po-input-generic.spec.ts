@@ -70,26 +70,6 @@ describe('PoInputGeneric:', () => {
     expect(component.setPaddingInput).toHaveBeenCalled();
   });
 
-  it('should set focus', () => {
-    const fakeThis = {
-      focus: true,
-      inputEl: component.inputEl
-    };
-    spyOn(fakeThis.inputEl.nativeElement, 'focus');
-    component.putFocus.call(fakeThis);
-    expect(fakeThis.inputEl.nativeElement.focus).toHaveBeenCalled();
-  });
-
-  it('should not set focus', () => {
-    const fakeThis = {
-      focus: false,
-      inputEl: component.inputEl
-    };
-    spyOn(fakeThis.inputEl.nativeElement, 'focus');
-    component.putFocus.call(fakeThis);
-    expect(fakeThis.inputEl.nativeElement.focus).not.toHaveBeenCalled();
-  });
-
   it('should calc icons position with clean', fakeAsync(() => {
     const fakeThis = {
       clean: true,
@@ -452,6 +432,35 @@ describe('PoInputGeneric:', () => {
       expect(component.setPaddingInput).not.toHaveBeenCalled();
     });
 
+    it('focus: should call `focus` of input', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of input if `disabled`', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
     it('getScreenValue: should get input numeric value when call `getScreenValue` method.', () => {
       component.type = 'number';
       component.inputEl.nativeElement.value = '123.1';
@@ -493,6 +502,32 @@ describe('PoInputGeneric:', () => {
       spyOn(fakeThis.objMask, 'keyup');
       component.onKeyup.call(fakeThis, fakeEvent);
       expect(fakeThis.objMask.keyup).not.toHaveBeenCalled();
+    });
+
+    it('putFocus: should call `focus` if autofocus is true', () => {
+      const fakeThis = {
+        autofocus: true,
+        focus: () => {}
+      };
+
+      spyOn(fakeThis, 'focus');
+
+      component.putFocus.call(fakeThis);
+
+      expect(fakeThis.focus).toHaveBeenCalled();
+    });
+
+    it('putFocus: shouldn`t call `focus` if autofocus is false', () => {
+      const fakeThis = {
+        autofocus: false,
+        focus: () => {}
+      };
+
+      spyOn(fakeThis, 'focus');
+
+      component.putFocus.call(fakeThis);
+
+      expect(fakeThis.focus).not.toHaveBeenCalled();
     });
 
     it('eventOnBlur: should call `objMask.blur` when exists a `mask`.', () => {

@@ -105,6 +105,47 @@ describe('PoCheckboxGroupComponent:', () => {
 
   describe('Methods:', () => {
 
+    it('focus: should call `focus` of checkbox', () => {
+      component.options = [{ label: 'teste1', value: 'teste1' }, { label: 'teste2', value: 'teste2' }];
+
+      fixture.detectChanges();
+
+      spyOn(component.checkboxLabels.toArray()[0].nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.checkboxLabels.toArray()[0].nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of checkbox if option is `disabled`', () => {
+      component.options = [{ label: 'teste1', value: 'teste1', disabled: true }, { label: 'teste2', value: 'teste2' }];
+
+      fixture.detectChanges();
+
+      spyOn(component.checkboxLabels.toArray()[0].nativeElement, 'focus');
+      spyOn(component.checkboxLabels.toArray()[1].nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.checkboxLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
+      expect(component.checkboxLabels.toArray()[1].nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of checkbox if `disabled`', () => {
+      component.options = [{ label: 'teste1', value: 'teste1', disabled: true }, { label: 'teste2', value: 'teste2' }];
+      component.disabled = true;
+
+      fixture.detectChanges();
+
+      spyOn(component.checkboxLabels.toArray()[0].nativeElement, 'focus');
+      spyOn(component.checkboxLabels.toArray()[1].nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.checkboxLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
+      expect(component.checkboxLabels.toArray()[1].nativeElement.focus).not.toHaveBeenCalled();
+    });
+
     describe('onKeyDown:', () => {
       let option;
       let fakeEvent: any;

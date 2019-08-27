@@ -297,7 +297,7 @@ describe('PoDecimalComponent:', () => {
 
   it('should set focus', () => {
     const fakeThis = {
-      focus: true,
+      autofocus: true,
       inputEl: component.inputEl
     };
 
@@ -718,6 +718,35 @@ describe('PoDecimalComponent:', () => {
 
   // testes já utilizando boas práticas.
   describe('Methods:', () => {
+
+    it('focus: should call `focus` of decimal', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focus: should`t call `focus` of decimal if `disabled`', () => {
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+      component.disabled = true;
+
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
+    });
 
     it('setInitialSelectionRange: should set cursor position if selectionStart and selectionEnd is 1', () => {
       const fakeTarget = {
