@@ -3,8 +3,10 @@
   [attr.contenteditable]="!readonly"
   [attr.data-placeholder]="placeholder"
   [style.height.px]="height"
+  (blur)="onBlur()"
   (click)="onClick()"
   (cut)="update()"
+  (focus)="onFocus()"
   (keyup)="onKeyUp()"
   (paste)="update()">
 </div>

@@ -8,6 +8,7 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
 })
 export class SamplePoRichTextLabsComponent implements OnInit {
   errorMessage: string;
+  event: string;
   help: string;
   height: number;
   label: string;
@@ -23,6 +24,10 @@ export class SamplePoRichTextLabsComponent implements OnInit {
 
   ngOnInit() {
     this.restore();
+  }
+
+  changeEvent(event: string) {
+    this.event = event;
   }
 
   restore() {

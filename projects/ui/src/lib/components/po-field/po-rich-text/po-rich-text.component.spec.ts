@@ -128,12 +128,14 @@ describe('PoRichTextComponent:', () => {
 
     it('updateValue: should apply values to value, invalid and call updateModel', () => {
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'controlChangeModelEmitter');
 
       component.updateValue('value');
 
       expect(component.value).toBe('value');
       expect(component.invalid).toBeFalsy();
       expect(component['updateModel']).toHaveBeenCalledWith(component.value);
+      expect(component['controlChangeModelEmitter']).toHaveBeenCalledWith(component.value);
     });
 
     it('validateClassesForRequired: should add ng-invalid and dirty classes if value is null and is required', fakeAsync(() => {
@@ -167,5 +169,36 @@ describe('PoRichTextComponent:', () => {
 
       expect(nativeElement.classList).not.toContain('ng-invalid');
     }));
+
+    it('onChangeValue: should emit change', () => {
+      spyOn(component.change, 'emit');
+
+      component.onChangeValue('value');
+
+      expect(component.change.emit).toHaveBeenCalledWith('value');
+    });
+
+    it('controlChangeModelEmitter: should emit changeModel and set modelLastUpdate value', () => {
+      const value = 'value';
+      component['modelLastUpdate'] = '1';
+
+      spyOn(component.changeModel, 'emit');
+
+      component['controlChangeModelEmitter'](value);
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(value);
+      expect(component['modelLastUpdate']).toBe(value);
+    });
+
+    it('controlChangeModelEmitter: shouldn`t emit changeModel if modelLastValue and value have same value', () => {
+      const value = 'value';
+      component['modelLastUpdate'] = 'value';
+
+      spyOn(component.changeModel, 'emit');
+
+      component['controlChangeModelEmitter'](value);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
   });
 });
