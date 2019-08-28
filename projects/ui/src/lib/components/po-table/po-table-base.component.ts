@@ -5,6 +5,8 @@ import { PoDateService } from '../../services/po-date/po-date.service';
 
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
+import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
 
 export const poTableContainer = ['border', 'shadow'];
@@ -383,8 +385,23 @@ export abstract class PoTableBaseComponent implements OnChanges {
   /**
    * Recebe uma ação de clique para o botão "Carregar mais resultados", caso nenhuma ação for definida o mesmo
    * não é visível.
+   *
+   * Recebe um objeto `{ column, type }` onde:
+   *
+   * - column (`PoTableColumn`): objeto da coluna que está ordenada.
+   * - type (`PoTableColumnSortType`): tipo da ordenação.
    */
-  @Output('p-show-more') showMore?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-show-more') showMore?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
+
+  /**
+   * Ação executada ao ordenar colunas da tabela. Se houver ação definida, a ordenação padrão da tabela não será executada.
+   *
+   * Recebe um objeto `{ column, type }` onde:
+   *
+   * - column (`PoTableColumn`): objeto da coluna que foi clicada/ordenada.
+   * - type (`PoTableColumnSortType`): tipo da ordenação.
+   */
+  @Output('p-sort-by') sortBy?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
   /**
    * Ação executada ao desmarcar a seleção de uma linha do `po-table`.
@@ -393,6 +410,14 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   selectAll = false;
   sortedColumn = { property: <PoTableColumn>null, ascending: true };
+
+  private get isSortBy(): boolean {
+    return this.sortBy.observers.length > 0;
+  }
+
+  private get sortType(): PoTableColumnSortType {
+    return this.sortedColumn.ascending ? PoTableColumnSortType.Ascending : PoTableColumnSortType.Descending;
+  }
 
   constructor(private poDate: PoDateService) { }
 
@@ -511,7 +536,8 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
     this.sortedColumn.ascending = this.sortedColumn.property === column ? !this.sortedColumn.ascending : true;
 
-    this.sortArray(column, this.sortedColumn.ascending);
+    this.isSortBy ? this.sortBy.emit({ column, type: this.sortType}) : this.sortArray(column, this.sortedColumn.ascending);
+
     this.sortedColumn.property = column;
   }
 
@@ -530,7 +556,9 @@ export abstract class PoTableBaseComponent implements OnChanges {
   }
 
   onShowMore(): void {
-    this.showMore.emit(null);
+    const sort = this.sortedColumn.property ? { column: this.sortedColumn.property, type: this.sortType } : undefined;
+
+    this.showMore.emit(sort);
   }
 
   protected getDefaultColumns(item: any) {

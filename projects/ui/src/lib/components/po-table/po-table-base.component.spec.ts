@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import * as utilsFunctions from '../../utils/util';
 import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -827,6 +829,56 @@ describe('PoTableBaseComponent:', () => {
       expect(column).toEqual([]);
     });
 
+    it(`sortColumn: should emit sortBy twice toggling the object parameter value between
+    'ascending', 'descending' and not call 'sortArray'`, () => {
+      const column = component.columns[1];
+      component.sort = true;
+      component.sortBy.observers = <any>[{ next: () => { }}];
+
+      spyOn(component.sortBy, 'emit').and.callThrough();
+      spyOn(component, 'sortArray').and.callThrough();
+
+      component.sortColumn(column);
+      expect(component.sortBy.emit).toHaveBeenCalledWith({column, type: 'ascending'});
+      expect(component.sortArray).not.toHaveBeenCalled();
+
+      component.sortColumn(column);
+      expect(component.sortBy.emit).toHaveBeenCalledWith({column, type: 'descending'});
+      expect(component.sortArray).not.toHaveBeenCalled();
+    });
+
+    it(`onShowMore: 'showMore' should emit an object parameter containing 'ascending' as value of property 'type'` , () => {
+      const column = component.columns[1];
+      component.sortedColumn.property = column;
+      spyOn(component.showMore, 'emit');
+
+      component.onShowMore();
+
+      expect(component.showMore.emit).toHaveBeenCalledWith({ column: component.sortedColumn.property, type: 'ascending'});
+    });
+
+    it(`onShowMore: 'showMore' should emit an object parameter containing 'descending' as value of property 'type'` , () => {
+      const column = component.columns[1];
+      component.sortedColumn.property = column;
+      component.sortedColumn.ascending = false;
+
+      spyOn(component.showMore, 'emit');
+
+      component.onShowMore();
+
+      expect(component.showMore.emit).toHaveBeenCalledWith({ column: component.sortedColumn.property, type: 'descending'});
+    });
+
+    it(`onShowMore: 'showMore' should emit an object parameter containing 'undefined' if 'sortedColumn.property' is 'undefined'` , () => {
+      component.sortedColumn.property = undefined;
+      spyOnProperty(component, <any>'isSortBy');
+
+      spyOn(component.showMore, 'emit');
+
+      component.onShowMore();
+
+      expect(component.showMore.emit).toHaveBeenCalledWith(undefined);
+    });
   });
 
   describe('Properties:', () => {
@@ -948,6 +1000,30 @@ describe('PoTableBaseComponent:', () => {
 
       expectPropertiesValues(component, 'container', invalidValues, 'border');
       expect(component['showContainer']).toHaveBeenCalled();
+    });
+
+    it('isSortBy: should return `true` if `observers.length` is greater than 0.', () => {
+      component.sortBy.observers.length = 1;
+
+      expect(component['isSortBy']).toBe(true);
+    });
+
+    it('isSortBy: should return `false` if `observers.length` is 0.', () => {
+      component.sortBy.observers.length = 0;
+
+      expect(component['isSortBy']).toBe(false);
+    });
+
+    it('sortType: should return `ascending` if `sortedColumn.ascending` is `true`.', () => {
+      component.sortedColumn.ascending = true;
+
+      expect(component['sortType']).toBe('ascending');
+    });
+
+    it('sortType: should return `descending` if `sortedColumn.ascending` is `false`.', () => {
+      component.sortedColumn.ascending = false;
+
+      expect(component['sortType']).toBe('descending');
     });
 
   });
