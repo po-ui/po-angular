@@ -5,7 +5,11 @@
 <po-table
   p-container="shadow"
   [p-columns]="columns"
-  [p-items]="items">
+  [p-items]="items"
+  [p-show-more-disabled]="showMoreDisabled"
+  [p-sort]="true"
+  (p-show-more)="showMore($event)"
+  (p-sort-by)="sort($event)">
 </po-table>
 
 <po-modal
