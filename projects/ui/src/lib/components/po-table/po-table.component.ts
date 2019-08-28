@@ -49,6 +49,7 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
  * <example name="po-table-components" title="Portinari Table - Po Field Components">
  *  <file name="sample-po-table-components/sample-po-table-components.component.ts"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.component.html"> </file>
+ *  <file name="sample-po-table-components/sample-po-table-components.service.ts"> </file>
  * </example>
  */
 @Component({

@@ -1,15 +1,20 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoModalComponent, PoTableColumn } from '@portinari/portinari-ui';
+import { PoModalComponent, PoTableColumn, PoTableColumnSort } from '@portinari/portinari-ui';
+
+import { SamplePoTableComponentsService } from './sample-po-table-components.service';
 
 @Component({
   selector: 'sample-po-table-components',
   templateUrl: './sample-po-table-components.component.html',
+  providers: [ SamplePoTableComponentsService ]
 })
 export class SamplePoTableComponentsComponent {
 
   extraInformation: any;
+  items: Array<any> = this.sampleComponents.getItems();
+  showMoreDisabled: boolean = false;
   title: any;
 
   public readonly columns: Array<PoTableColumn> = [
@@ -41,129 +46,9 @@ export class SamplePoTableComponentsComponent {
     ]}
   ];
 
-  public readonly items: Array<any> = [
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Checkbox',
-      description: 'Group of square buttons that allows multiple items to be selected',
-      link: '/documentation/po-checkbox-group',
-      extra: 'Best Practices',
-      extras: [ 'Short and objective texts for items', 'Use with short lists', 'For big lists use Portinari Multiselect' ],
-      status: 'stable'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Combo',
-      description: 'Display a list of items with filter and allows selection',
-      link: '/documentation/po-combo',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'stable'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Select',
-      description: 'Display a list of items and allows selection',
-      link: '/documentation/po-select',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'stable'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari MultiSelect',
-      description: 'Display a list of items and allows multiple selection',
-      link: '/documentation/po-multiselect',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'experimental'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Input',
-      description: 'Input for general texts',
-      link: '/documentation/po-input',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'stable'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Textarea',
-      description: 'Larger input for big texts',
-      link: '/documentation/po-textarea' ,
-      extra: 'Best Practices',
-      extras: [ 'Recommended to large texts like observations and details', 'For short texts use po-input' ],
-      status: 'experimental'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Number',
-      description: 'Input that allows only numbers',
-      link: '/documentation/po-number',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'experimental'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Datepicker',
-      description: 'Input with calendar for dates',
-      link: '/documentation/po-datepicker',
-      extra: 'Features',
-      extras: [ 'Multiple idioms ( pt, es , en)', 'Custom date formats', 'Period validation (start date and end date)' ],
-      status: 'experimental'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Email',
-      description: 'Input that allows valid email texts (username@email.com)',
-      link: '/documentation/po-email',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'stable'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Url',
-      description: 'Input that expects a valid url as text (http://www.url.com)',
-      link: '/documentation/po-url',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'stable'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Password',
-      description: 'Input with bullet text to type passwords',
-      link: '/documentation/po-password',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'stable'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Login',
-      description: 'Input with a user icon that represents a login field',
-      link: '/documentation/po-login',
-      extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
-      status: 'stable'
-    },
-    {
-      favorite: ['favorite', 'documentation'],
-      component: 'Portinari Upload',
-      description: 'Upload file(s) with a loading bar',
-      link: '/documentation/po-upload',
-      extra: 'Features',
-      extras: [ 'Multiple file selection', 'Automatic upload after click', 'File format and size restriction' ],
-      status: 'experimental'
-    }
-  ];
-
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor(private router: Router) { }
+  constructor(public sampleComponents: SamplePoTableComponentsService, private router: Router) { }
 
   experimentalColor(row) {
     return row.status === 'experimental' ? 'color-08' : 'color-11';
@@ -180,6 +65,15 @@ export class SamplePoTableComponentsComponent {
     this.router.navigate([row.link]);
   }
 
+  showMore(sort: PoTableColumnSort) {
+    this.showMoreDisabled = true;
+    this.items = this.getItems(sort);
+  }
+
+  sort(sort: PoTableColumnSort) {
+    this.items = this.getItems(sort);
+  }
+
   private canGoToDocumentation(row) {
     return row.status !== 'stable';
   }
@@ -192,6 +86,10 @@ export class SamplePoTableComponentsComponent {
 
   private favorite(row) {
     row.isFavorite = !row.isFavorite;
+  }
+
+  private getItems(sort: PoTableColumnSort) {
+    return this.sampleComponents.getItems(sort, this.showMoreDisabled);
   }
 
   private isFavorite(row) {
