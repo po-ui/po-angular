@@ -29,7 +29,10 @@
 
 .po-upload-drag-drop-area-select-files {
   @apply --font-upload-drag-drop-area-select-files-text;
+  background: none;
+  border: none;
   color: var(--color-upload-drag-drop-area-select-files-text);
+  -webkit-appearance: none;
 }
 
 .po-upload-drag-drop-area-label {
