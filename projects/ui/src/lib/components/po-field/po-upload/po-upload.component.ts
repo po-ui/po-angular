@@ -4,6 +4,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { formatBytes, isMobile } from '../../../utils/util';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
+import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 
 import { PoUploadBaseComponent } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
@@ -60,12 +61,29 @@ import { PoUploadStatus } from './po-upload-status.enum';
 })
 export class PoUploadComponent extends PoUploadBaseComponent {
 
+  infoByUploadStatus: { [key: string ]: { text: (percent?: number) => string, icon?: string } } = {
+    [PoUploadStatus.Uploaded]: {
+      text: () => this.literals.sentWithSuccess,
+      icon: 'po-icon-ok'
+    },
+    [PoUploadStatus.Error]: {
+      text: () => this.literals.errorOccurred
+    },
+    [PoUploadStatus.Uploading]: {
+      text: percent => percent + '%'
+    }
+  };
+
+  progressStatusByFileStatus = {
+    [PoUploadStatus.Uploaded]: PoProgressStatus.Success,
+    [PoUploadStatus.Error]: PoProgressStatus.Error
+  };
+
   private calledByCleanInputValue: boolean = false;
 
   @ViewChild('inputFile', {read: ElementRef, static: true }) private inputFile: ElementRef;
 
   constructor(
-    private elementRef: ElementRef,
     private i18nPipe: PoI18nPipe,
     private notification: PoNotificationService,
     uploadService: PoUploadService) {
@@ -92,14 +110,22 @@ export class PoUploadComponent extends PoUploadBaseComponent {
   get isDisabled(): boolean {
     const currentFiles = this.currentFiles || [];
 
-    return this.hasAnyFileUploading(this.currentFiles) ||
+    return !!(this.hasAnyFileUploading(currentFiles) ||
     !this.url ||
     this.disabled ||
-    this.isExceededFileLimit(currentFiles.length);
+    this.isExceededFileLimit(currentFiles.length));
   }
 
   get maxFiles(): number {
     return this.isMultiple && this.fileRestrictions && this.fileRestrictions.maxFiles;
+  }
+
+  cancel(file: PoUploadFile) {
+    if (file.status === PoUploadStatus.Uploading) {
+      return this.stopUpload(file);
+    }
+
+    this.removeFile(file);
   }
 
   /** Método responsável por **limpar** o(s) arquivo(s) selecionado(s). */
@@ -107,35 +133,6 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     this.currentFiles = undefined;
     this.updateModel([]);
     this.cleanInputValue();
-  }
-
-  // Retorna o tamanho do arquivo em KBytes.
-  getFileSize(size: number): string {
-    let kbSize = 0;
-
-    if (size) {
-        kbSize = Math.ceil(size / 1024);
-    }
-
-    return `${kbSize} KB`;
-  }
-
-  // Retorna o po-icon de acordo com o status do arquivo.
-  getPoIcon(file: PoUploadFile): string {
-    switch (file.status) {
-      case PoUploadStatus.Uploaded:
-        return 'po-icon-ok';
-
-      case PoUploadStatus.Error:
-        return 'po-icon-close';
-
-      case PoUploadStatus.None:
-        return 'po-icon-info';
-
-      case PoUploadStatus.Uploading:
-      default:
-        return '';
-    }
   }
 
   // Verifica se existe algum arquivo sendo enviado ao serviço.
@@ -147,14 +144,13 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     return false;
   }
 
-  // Valida se o status passado por parâmetro é igual ao status do arquivo.
-  isStatusFile(status: string, file: PoUploadFile) {
-    return file.status === PoUploadStatus[status];
+  // retorna se o status do arquivo é diferente de enviado
+  isAllowCancelEvent(status: PoUploadStatus) {
+    return status !== PoUploadStatus.Uploaded;
   }
 
   // Função disparada ao selecionar algum arquivo.
   onFileChange(event): void {
-
     // necessario este tratamento quando para IE, pois nele o change é disparado quando o campo é limpado também
     if (this.calledByCleanInputValue) {
       this.calledByCleanInputValue = false;
@@ -229,34 +225,26 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     });
   }
 
-  // Envia os arquivos passados por parâmetro, exceto os que já foram enviados ao serviço.
-  uploadFiles(files: Array<PoUploadFile>) {
-    const filesFiltered = files.filter(file => {
-      return file.status !== PoUploadStatus.Uploaded;
-    });
-
-    this.uploadService.upload(this.url, filesFiltered, this.onUpload,
-      (file, percent): any => {
-        // UPLOADING
-        this.uploadingHandler(file, percent);
-
-      }, (file, eventResponse): any => {
-        // SUCCESS
-        this.successHandler(file);
-        this.onSuccess.emit(eventResponse);
-
-      }, (file, eventError): any => {
-        // Error
-        this.errorHandler(file);
-        this.onError.emit(eventError);
-    });
+  trackByFn(index, file: PoUploadFile) {
+    return file.uid;
   }
 
-  // Atualiza a classe da div, que conter a classe 'po-upload-filename', para 'po-upload-filename-loading'.
-  private addFileNameClass(uid: string) {
-    const divStatus = this.elementRef.nativeElement.querySelector(`div[id='${uid}'].po-upload-progress`);
-    const fileNameDiv = divStatus.querySelector('.po-upload-filename');
-    fileNameDiv.classList.add('po-upload-filename-loading');
+  // Envia os arquivos passados por parâmetro, exceto os que já foram enviados ao serviço.
+  uploadFiles(files: Array<PoUploadFile>) {
+    const filesFiltered = files.filter(file => file.status !== PoUploadStatus.Uploaded);
+
+    this.uploadService.upload(this.url, filesFiltered, this.onUpload,
+      (file, percent): any => { // UPLOADING
+        this.uploadingHandler(file, percent);
+
+      }, (file, eventResponse): any => { // SUCCESS
+        this.responseHandler(file, PoUploadStatus.Uploaded);
+        this.onSuccess.emit(eventResponse);
+
+      }, (file, eventError): any => { // Error
+        this.responseHandler(file, PoUploadStatus.Error);
+        this.onError.emit(eventError);
+    });
   }
 
   private cleanInputValue() {
@@ -264,18 +252,10 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     this.inputFile.nativeElement.value = '';
   }
 
-  // Função disparada quando é retornado um erro no envio do arquivo.
-  private errorHandler(file: PoUploadFile) {
-    file.status = PoUploadStatus.Error;
-    this.setProgressStatus(file.uid, 0, false);
-    this.setUploadStatus(file, 'po-upload-progress-error', 100);
-  }
-
-  // Remove a classe 'po-upload-filename-loading' da div que conter a classe 'po-upload-filename'.
-  private removeFileNameClass(uid: string) {
-    const divStatus = this.elementRef.nativeElement.querySelector(`div[id='${uid}'].po-upload-progress`);
-    const fileNameDiv = divStatus.querySelector('.po-upload-filename');
-    fileNameDiv.classList.remove('po-upload-filename-loading');
+  // função disparada na resposta do sucesso ou error
+  private responseHandler(file: PoUploadFile, status: PoUploadStatus) {
+    file.status = status;
+    file.percent = 100;
   }
 
   // método responsável por setar os argumentos do i18nPipe de acordo com a restrição.
@@ -284,41 +264,10 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     this.notification.information(pipeArguments);
   }
 
-  // Atualiza o status do progresso do envio do arquivo.
-  private setProgressStatus(uid: string, percent: number, isShow: boolean) {
-    const divStatus = this.elementRef.nativeElement.querySelector(`div[id='${uid}'].po-upload-progress`);
-    const divProgress = divStatus.querySelector('.po-upload-progress-status');
-    const isDisplay = isShow ? 'block' : 'none';
-
-    divProgress.setAttribute('style', `display: ${isDisplay};`);
-    divProgress.setAttribute('style', `width: ${percent}%;`);
-  }
-
-  // Atualiza o status do envio de arquivos.
-  private setUploadStatus(file, className: string, percent: number) {
-    const uid = file.uid;
-    const divStatus = this.elementRef.nativeElement.querySelector(`div[id='${uid}'].po-upload-progress`);
-    divStatus.classList.remove('po-upload-progress-error', 'po-upload-progress-success');
-    divStatus.classList.add(className);
-
-    if (percent > 5 && file.status !== PoUploadStatus.None) {
-      this.addFileNameClass(uid);
-    }
-  }
-
   // Função disparada ao parar um envio de arquivo.
   private stopUploadHandler(file: PoUploadFile) {
     file.status = PoUploadStatus.None;
-    this.removeFileNameClass(file.uid);
-    this.setProgressStatus(file.uid, 0, false);
-    this.setUploadStatus(file, 'po-upload-progress', 100);
-  }
-
-  // Função disparada quando o envio é realizado com sucesso.
-  private successHandler(file: PoUploadFile) {
-    file.status = PoUploadStatus.Uploaded;
-    this.setProgressStatus(file.uid, 0, false);
-    this.setUploadStatus(file, 'po-upload-progress-success', 100);
+    file.percent = 0;
   }
 
   private updateFiles(files) {
@@ -333,14 +282,25 @@ export class PoUploadComponent extends PoUploadBaseComponent {
 
   // Atualiza o ngModel para os arquivos passados por parâmetro.
   private updateModel(files: Array<PoUploadFile>) {
-    this.onModelChange ? this.onModelChange(files) : this.ngModelChange.emit(files);
+    const modelFiles: Array<PoUploadFile> = this.mapCleanUploadFiles(files);
+
+    this.onModelChange ? this.onModelChange(modelFiles) : this.ngModelChange.emit(modelFiles);
   }
 
   // Função disparada enquanto o arquivo está sendo enviado ao serviço.
-  private uploadingHandler(file: PoUploadFile, percent: number) {
+  private uploadingHandler(file: any, percent: number) {
     file.status = PoUploadStatus.Uploading;
-    this.setProgressStatus(file.uid, percent, true);
-    this.setUploadStatus(file, 'po-upload-progress', percent);
+    file.percent = percent;
   }
 
+  // retorna os objetos do array sem as propriedades: percent e displayName
+  private mapCleanUploadFiles(files: Array<PoUploadFile>): Array<PoUploadFile> {
+    const mapedByUploadFile = progressFile => {
+      const { percent, displayName, ...uploadFile } = progressFile;
+
+      return uploadFile;
+    };
+
+    return files.map(mapedByUploadFile);
+  }
 }

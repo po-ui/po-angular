@@ -28,7 +28,9 @@ export const poUploadLiteralsDefault = {
     allowedFormats: 'Accepted file formats: {0}.',
     allowedFileSizeRange: 'Size limit per file: from {0} to {1}',
     maxFileSizeAllowed: 'Size limit per file: {0} maximum',
-    minFileSizeAllowed: 'Size limit per file: {0} minimum'
+    minFileSizeAllowed: 'Size limit per file: {0} minimum',
+    errorOccurred: 'An error has occurred',
+    sentWithSuccess: 'Sent with success'
   },
   es: <PoUploadLiterals> {
     selectFile: 'Seleccionar archivo',
@@ -47,7 +49,9 @@ export const poUploadLiteralsDefault = {
     allowedFormats: 'Formatos aceptados: {0}.',
     allowedFileSizeRange: 'Limite de tamaño de archivo: desde {0} hasta {1}',
     maxFileSizeAllowed: 'Limite de tamaño de archivo: hasta {0}',
-    minFileSizeAllowed: 'Limite de tamaño de archivo: minimo {0}'
+    minFileSizeAllowed: 'Limite de tamaño de archivo: minimo {0}',
+    errorOccurred: 'Ocurrio un error',
+    sentWithSuccess: 'Enviado con éxito'
   },
   pt: <PoUploadLiterals> {
     selectFile: 'Selecionar arquivo',
@@ -66,7 +70,9 @@ export const poUploadLiteralsDefault = {
     allowedFormats: 'Formatos adotados: {0}.',
     allowedFileSizeRange: 'Limite de tamanho por arquivo: de {0} até {1}',
     maxFileSizeAllowed: 'Limite de tamanho por arquivo: até {0}',
-    minFileSizeAllowed: 'Limite de tamanho por arquivo: no mínimo {0}'
+    minFileSizeAllowed: 'Limite de tamanho por arquivo: no mínimo {0}',
+    errorOccurred: 'Ocorreu um erro',
+    sentWithSuccess: 'Enviado com sucesso'
   }
 };
 

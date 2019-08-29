@@ -15,9 +15,16 @@ export class PoUploadFile {
   // Tamanho do arquivo em bytes;
   public size: number;
 
+  // propriedade para auxiliar a exibição do texto no componente progress
+  displayName?: string;
+
+  // porcentagem utilizada para repassar ao componente progress
+  percent?: number;
+
   constructor(file: any) {
     if (file) {
       this.name = file.name;
+      this.displayName = `${file.name} - ${this.getFileSize(file.size)}`;
       this.extension = this.getExtension(file.name);
       this.size = file.size;
       this.rawFile = file;
@@ -45,4 +52,16 @@ export class PoUploadFile {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
       s4() + '-' + s4() + s4() + s4();
   }
+
+  // Retorna o tamanho do arquivo em KBytes.
+  private getFileSize(size: number): string {
+    let kbSize = 0;
+
+    if (size) {
+        kbSize = Math.ceil(size / 1024);
+    }
+
+    return `${kbSize} KB`;
+  }
+
 }

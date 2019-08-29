@@ -1,12 +1,12 @@
-import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventEmitter } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import * as utilsFunctions from '../../../utils/util';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
+import { PoButtonModule } from '../../po-button/po-button.module';
+import { PoProgressModule } from '../../po-progress/po-progress.module';
 
-import { PoButtonModule } from '../../po-button';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoNotificationService, PoServicesModule } from '../../../services';
@@ -38,7 +38,7 @@ describe('PoUploadComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoButtonModule, PoServicesModule ],
+      imports: [ PoButtonModule, PoProgressModule, PoServicesModule ],
       declarations: [
         PoUploadComponent,
         PoFieldContainerComponent,
@@ -63,116 +63,6 @@ describe('PoUploadComponent:', () => {
 
   it('should be created', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('status should be equal file status', () => {
-    file.status = PoUploadStatus.None;
-    const isStatusEquals = component.isStatusFile('None', file);
-
-    expect(isStatusEquals).toBeTruthy();
-  });
-
-  it('should be execute uploading handler', () => {
-    const fakeThis = {
-      setProgressStatus: function(uid, percent, isShow) {},
-      setUploadStatus: function(fileParam, className, percent) {}
-    };
-
-    component['uploadingHandler'].call(fakeThis, file, 0);
-
-    expect(file.status).toEqual(PoUploadStatus.Uploading);
-  });
-
-  it('should be execute success handler', () => {
-    const fakeThis = {
-      setProgressStatus: function(uid, percent, isShow) {},
-      setUploadStatus: function(fileParam, className, percent) {}
-    };
-
-    component['successHandler'].call(fakeThis, file, 0);
-
-    expect(file.status).toEqual(PoUploadStatus.Uploaded);
-  });
-
-  it('should be execute error handler', () => {
-    const fakeThis = {
-      setProgressStatus: function(uid, percent, isShow) {},
-      setUploadStatus: function(fileParam, className, percent) {}
-    };
-
-    component['errorHandler'].call(fakeThis, file, 0);
-
-    expect(file.status).toEqual(PoUploadStatus.Error);
-  });
-
-  it('should be execute updateModel with onModelChange', () => {
-    const fakeThis = {
-      onModelChange: function(param) {}
-    };
-    spyOn(fakeThis, 'onModelChange');
-
-    component['updateModel'].call(fakeThis, [file]);
-    expect(fakeThis.onModelChange).toHaveBeenCalled();
-
-    component['updateModel'].call(fakeThis, []);
-    expect(fakeThis.onModelChange).toHaveBeenCalled();
-  });
-
-  it('should be execute updateModel with ngModelChange', () => {
-    const fakeThis = {
-      ngModelChange: new EventEmitter<any>()
-    };
-
-    spyOn(fakeThis.ngModelChange, 'emit');
-
-    component['updateModel'].call(fakeThis, [file]);
-    expect(fakeThis.ngModelChange.emit).toHaveBeenCalled();
-
-    component['updateModel'].call(fakeThis, []);
-    expect(fakeThis.ngModelChange.emit).toHaveBeenCalled();
-  });
-
-  it('should set the upload status', () => {
-    file.status = PoUploadStatus.Uploaded;
-
-    fixture.componentInstance.currentFiles = [file];
-    fixture.detectChanges();
-
-    component['setUploadStatus'](file, 'po-upload-progress-success', 2);
-
-    const divUploadProgress = fixture.debugElement.query(By.css(`div[id='${file.uid}'].po-upload-progress`));
-    expect(divUploadProgress.nativeElement.classList.contains('po-upload-progress-success')).toBeTruthy();
-
-    component['setUploadStatus'](file, 'po-upload-progress-success', 10);
-
-    expect(divUploadProgress.nativeElement.classList.contains('po-upload-progress-success')).toBeTruthy();
-  });
-
-  it(`onFileChange: should execute file change without auto upload and not call 'event.preventDefault' and
-  call 'updateFiles'`, () => {
-    const files = [file.rawFile];
-
-    // Mock da função que é criada ao utilizar ngmodel para atualizar o mesmo.
-    component.onModelChange = param => { };
-
-    const event = {
-      target: {
-        files
-      },
-      preventDefault: () => {}
-    };
-
-    spyOn(event, 'preventDefault');
-    spyOn(component, <any> 'cleanInputValue');
-    spyOn(component, <any>'updateFiles').and.callThrough();
-
-    component.onFileChange(event);
-
-    expect(component.currentFiles.length).toBeTruthy();
-    expect(component['cleanInputValue']).toHaveBeenCalled();
-    expect(component['calledByCleanInputValue']).toBeFalsy();
-    expect(event.preventDefault).not.toHaveBeenCalled();
-    expect(component['updateFiles']).toHaveBeenCalled();
   });
 
   it('should update current files with the value param', () => {
@@ -364,6 +254,42 @@ describe('PoUploadComponent:', () => {
 
       expect(component.displaySendButton).toBeFalsy();
     });
+
+    it('infoByUploadStatus: should return info by uploaded status', () => {
+      const fileStatus = PoUploadStatus.Uploaded;
+      const expectedValue = {
+        text: () => component.literals.sentWithSuccess,
+        icon: 'po-icon-ok'
+      };
+
+      const infoByUploadStatus = component.infoByUploadStatus[fileStatus];
+
+      expect(infoByUploadStatus.text()).toBe(expectedValue.text());
+      expect(infoByUploadStatus.icon).toBe(expectedValue.icon);
+    });
+
+    it('infoByUploadStatus: should return info by error status', () => {
+      const fileStatus = PoUploadStatus.Error;
+      const expectedValue = {
+        text: () => component.literals.errorOccurred
+      };
+
+      const infoByUploadStatus = component.infoByUploadStatus[fileStatus];
+
+      expect(infoByUploadStatus.text()).toBe(expectedValue.text());
+    });
+
+    it('infoByUploadStatus: should return info by uploading status', () => {
+      const fileStatus = PoUploadStatus.Uploading;
+      const percent = 10;
+      const expectedValue = percent + '%';
+
+      const infoByUploadStatus = component.infoByUploadStatus[fileStatus];
+
+      expect(infoByUploadStatus.text(percent)).toBe(expectedValue);
+      expect(infoByUploadStatus.icon).toBeUndefined();
+    });
+
   });
 
   describe('Methods:', () => {
@@ -443,33 +369,6 @@ describe('PoUploadComponent:', () => {
       expect(uploadFiles).not.toHaveBeenCalled();
     });
 
-    it('getFileSize: should be get the text of size in KBytes', () => {
-      let kbSize = component.getFileSize(3000);
-
-      expect(kbSize).toEqual('3 KB');
-
-      kbSize = component.getFileSize(0);
-
-      expect(kbSize).toEqual('0 KB');
-    });
-
-    it('getPoIcon: should get po icon by file status', () => {
-      let poIcon = component.getPoIcon(file);
-      expect(poIcon).toEqual('po-icon-info');
-
-      file.status = PoUploadStatus.Error;
-      poIcon = component.getPoIcon(file);
-      expect(poIcon).toEqual('po-icon-close');
-
-      file.status = PoUploadStatus.Uploaded;
-      poIcon = component.getPoIcon(file);
-      expect(poIcon).toEqual('po-icon-ok');
-
-      file.status = PoUploadStatus.Uploading;
-      poIcon = component.getPoIcon(file);
-      expect(poIcon).toEqual('');
-    });
-
     it('hasAnyFileUploading: should be check has any file uploading', () => {
       file.status = PoUploadStatus.Uploading;
 
@@ -516,13 +415,20 @@ describe('PoUploadComponent:', () => {
     });
 
     it('stopUploadHandler: should set `file.status` to equal `PoUploadStatus.None`.', () => {
-      const fakeThis = {
-        removeFileNameClass: function(uid) {},
-        setProgressStatus: function(uid, percent, isShow) {},
-        setUploadStatus: function(fileParam, className, percent) {}
-      };
-      component['stopUploadHandler'].call(fakeThis, file, 0);
-      expect(file.status).toEqual(PoUploadStatus.None);
+      const localFile: any = { name: 'filename.jpg' };
+
+      component['stopUploadHandler'](localFile);
+
+      expect(localFile.status).toBe(PoUploadStatus.None);
+      expect(localFile.percent).toBe(0);
+    });
+
+    it('trackByFn: should return uid', () => {
+      const uid = '12';
+
+      const localFile: any = { name: 'filename.jpg', uid };
+
+      expect(component.trackByFn(undefined, localFile)).toBe(uid);
     });
 
     describe('uploadFiles:', () => {
@@ -565,66 +471,68 @@ describe('PoUploadComponent:', () => {
         expect(fakeThis.uploadingHandler).toHaveBeenCalled();
       });
 
-      it('should call successHandler function when upload files', () => {
-
+      it('should call responseHandler function when upload files', () => {
         const fakeThis = {
           uploadService: {
             upload: function(url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
               return successCallback(file, 100);
             }
           },
-          successHandler: function() { },
+          responseHandler: function() { },
           onSuccess: new EventEmitter<any>()
         };
-        spyOn(fakeThis, 'successHandler');
+
+        spyOn(fakeThis, 'responseHandler');
 
         component.uploadFiles.call(fakeThis, [file]);
 
-        expect(fakeThis.successHandler).toHaveBeenCalled();
+        expect(fakeThis.responseHandler).toHaveBeenCalled();
       });
 
-      it('should call errorCallback function when upload files', () => {
+      it('should call responseHandler function when upload files', () => {
         const fakeThis = {
           uploadService: {
             upload: function(url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
               return errorCallback(file, 100);
             }
           },
-          errorHandler: function() { },
+          responseHandler: function() { },
           onError: new EventEmitter<any>()
         };
-        spyOn(fakeThis, 'errorHandler');
+        spyOn(fakeThis, 'responseHandler');
 
         component.uploadFiles.call(fakeThis, [file]);
 
-        expect(fakeThis.errorHandler).toHaveBeenCalled();
+        expect(fakeThis.responseHandler).toHaveBeenCalled();
       });
 
     });
 
-    it('addFileNameClass: should be add file name loading class', () => {
-      fixture.componentInstance.currentFiles = [file];
-      fixture.detectChanges();
+    it(`onFileChange: should execute file change without auto upload and not call 'event.preventDefault' and
+    call 'updateFiles'`, () => {
+      const files = [file.rawFile];
 
-      // ADD File Name Loading class
-      component['addFileNameClass'](file.uid);
+      // Mock da função que é criada ao utilizar ngmodel para atualizar o mesmo.
+      component.onModelChange = param => { };
 
-      const divFileName = fixture.debugElement.query(By.css(`div[id='${file.uid}'].po-upload-progress .po-upload-filename`));
-      expect(divFileName.nativeElement.classList.contains('po-upload-filename-loading')).toBeTruthy();
-    });
+      const event = {
+        target: {
+          files
+        },
+        preventDefault: () => {}
+      };
 
-    it('removeFileNameClass: should be remove file name loading class', () => {
-      fixture.componentInstance.currentFiles = [file];
-      fixture.detectChanges();
+      spyOn(event, 'preventDefault');
+      spyOn(component, <any> 'cleanInputValue');
+      spyOn(component, <any>'updateFiles').and.callThrough();
 
-      // ADD File Name Loading class
-      component['addFileNameClass'](file.uid);
+      component.onFileChange(event);
 
-      // Remove File Name Loading class
-      component['removeFileNameClass'](file.uid);
-      const divFileName = fixture.debugElement.query(By.css(`div[id='${file.uid}'].po-upload-progress .po-upload-filename`));
-
-      expect(divFileName.nativeElement.classList.contains('po-upload-filename-loading')).toBeFalsy();
+      expect(component.currentFiles.length).toBeTruthy();
+      expect(component['cleanInputValue']).toHaveBeenCalled();
+      expect(component['calledByCleanInputValue']).toBeFalsy();
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(component['updateFiles']).toHaveBeenCalled();
     });
 
     it('onFileChange: shoud call `event.preventDefault` when `calledByCleanInputValue` is true', () => {
@@ -656,25 +564,6 @@ describe('PoUploadComponent:', () => {
       expect(component[calledByCleanInputValue]).toBeTruthy();
     });
 
-    it('setProgressStatus: should set progress status', () => {
-      let divUploadProgress;
-
-      file.status = PoUploadStatus.Uploading;
-
-      fixture.componentInstance.currentFiles = [file];
-      fixture.detectChanges();
-
-      component['setProgressStatus'](file.uid, 50, true);
-
-      divUploadProgress = fixture.debugElement.query(By.css(`div[id='${file.uid}'].po-upload-progress > .po-upload-progress-status`));
-      expect(divUploadProgress.nativeElement.style['width']).toEqual('50%');
-
-      component['setProgressStatus'](file.uid, 50, false);
-
-      divUploadProgress = fixture.debugElement.query(By.css(`div[id='${file.uid}'].po-upload-progress > .po-upload-progress-status`));
-      expect(divUploadProgress.nativeElement.style['width']).toEqual('50%');
-    });
-
     it('updateFiles: should call `parseFiles` with `files` and `updateModel` with `currentFiles`', () => {
       const files = 'fileMock';
 
@@ -693,10 +582,12 @@ describe('PoUploadComponent:', () => {
 
       spyOn(component, <any>'parseFiles').and.returnValue(files);
       spyOn(component, <any>'uploadFiles');
+      spyOn(component, <any>'updateModel');
 
       component['updateFiles'](files);
 
       expect(component['uploadFiles']).toHaveBeenCalledWith(files);
+      expect(component['updateModel']).toHaveBeenCalled();
     });
 
     it('updateFiles: shouldn`t call `uploadFiles` with files if `autoUpload` is `false`', () => {
@@ -705,10 +596,12 @@ describe('PoUploadComponent:', () => {
 
       spyOn(component, <any>'parseFiles').and.returnValue(files);
       spyOn(component, <any>'uploadFiles');
+      spyOn(component, <any>'updateModel');
 
       component['updateFiles'](files);
 
       expect(component['uploadFiles']).not.toHaveBeenCalled();
+      expect(component['updateModel']).toHaveBeenCalled();
     });
 
     it('sendFeedback: should call `setPipeArguments` if `sizeNotAllowed`', () => {
@@ -767,32 +660,115 @@ describe('PoUploadComponent:', () => {
       expect(component['i18nPipe'].transform).toHaveBeenCalled();
     });
 
+    it('uploadingHandler: should set file.status and file.percent with respectives params', () => {
+      const localFile: any = { name: 'filename.jpg', size: 1234 };
+      const percent = 30;
+
+      component['uploadingHandler'](localFile, percent);
+
+      expect(localFile.status).toEqual(PoUploadStatus.Uploading);
+      expect(localFile.percent).toBe(percent);
+    });
+
+    it('responseHandler: should set file.percent with 100 and assign status param to file.status', () => {
+      const testFile: any = { name: 'filename.jpg' };
+
+      component['responseHandler'](testFile, PoUploadStatus.Error);
+
+      expect(testFile.status).toEqual(PoUploadStatus.Error);
+      expect(testFile.percent).toBe(100);
+    });
+
+    it('updateModel: should call onModelChange with cleanFiles', () => {
+      component['onModelChange'] = files => {};
+
+      const cleanFile = {
+        name: 'filename.jpg',
+        size: 123,
+        extension: '.jpg'
+      };
+
+      const dirtyFile = {
+        ...cleanFile,
+        percent: 50,
+        displayName: 'filename.jpg - 1kb'
+      };
+
+      const currentFiles: any = [ dirtyFile ];
+
+      const spyOnModelChange = spyOn(component, 'onModelChange');
+
+      component['updateModel'](currentFiles);
+
+      expect(spyOnModelChange).toHaveBeenCalledWith([cleanFile]);
+    });
+
+    it('updateModel: should call ngModelChange.emit with cleanFiles if onModelChange is undefined', () => {
+      const fn: any = { emit: () => {} };
+
+      component['onModelChange'] = undefined;
+      component['ngModelChange'] = fn;
+
+      const cleanFile = {
+        name: 'filename.jpg',
+        size: 123,
+        extension: '.jpg'
+      };
+
+      const dirtyFile = {
+        ...cleanFile,
+        percent: 50,
+        displayName: 'filename.jpg - 1kb'
+      };
+
+      const currentFiles: any = [ dirtyFile ];
+
+      const spyNgModelChange = spyOn(component.ngModelChange, 'emit');
+
+      component['updateModel'](currentFiles);
+
+      expect(spyNgModelChange).toHaveBeenCalledWith([cleanFile]);
+    });
+
+    it('cancel: should call stopUpload with file if file.status is Uploading', () => {
+      const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Uploading };
+
+      const spyRemoveFile = spyOn(component, 'removeFile');
+      const spyStopUpload = spyOn(component, 'stopUpload');
+
+      component.cancel(localFile);
+
+      expect(spyStopUpload).toHaveBeenCalledWith(localFile);
+      expect(spyRemoveFile).not.toHaveBeenCalled();
+    });
+
+    it('cancel: should call removeFile with file if file.status isn´t Uploading', () => {
+      const localFile: any = { name: 'filename.jpg' };
+
+      const spyStopUpload = spyOn(component, 'stopUpload');
+      const spyRemoveFile = spyOn(component, 'removeFile');
+
+      component.cancel(localFile);
+
+      expect(spyRemoveFile).toHaveBeenCalledWith(localFile);
+      expect(spyStopUpload).not.toHaveBeenCalled();
+    });
+
+    it('isAllowCancelEvent: should return true if `status` is different than Uploaded', () => {
+      const fileStatus = PoUploadStatus.Error;
+
+      expect(component.isAllowCancelEvent(fileStatus)).toBe(true);
+    });
+
+    it('isAllowCancelEvent: should return false if `status` is Uploaded', () => {
+      const fileStatus = PoUploadStatus.Uploaded;
+
+      expect(component.isAllowCancelEvent(fileStatus)).toBe(false);
+    });
+
   });
 
   describe('Templates:', () => {
-
-    it('should show remove button and retry button when file status `Error`', () => {
-      component.literals = {'deleteFile' : 'Excluir', 'tryAgain' : 'Tentar Novamente'};
-      file.status = PoUploadStatus.Error; // error status
-      component.currentFiles = <any> [file];
-      fixture.detectChanges();
-
-      const divUploadActions = fixture.debugElement.nativeElement.querySelectorAll('.po-upload-action');
-
-      expect(divUploadActions[0].innerHTML.trim()).toBe('Excluir');
-      expect(divUploadActions[1].innerHTML.trim()).toBe('Tentar Novamente');
-    });
-
-    it('should show remove button when file status `None`', () => {
-      component.literals = {'deleteFile' : 'Excluir'};
-      file.status = PoUploadStatus.None; // error status
-      component.currentFiles = <any> [file];
-      fixture.detectChanges();
-
-      const divUploadAction = fixture.debugElement.nativeElement.querySelector('.po-upload-action');
-
-      expect(divUploadAction.innerHTML.trim()).toBe('Excluir');
-    });
 
     it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
       component.required = false;
@@ -872,6 +848,22 @@ describe('PoUploadComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('po-upload-drag-drop')).toBeNull();
       expect(fixture.debugElement.nativeElement.querySelector('.po-upload-button')).toBeTruthy();
+    });
+
+    it('should find `po-upload-progress-container` if currentFiles is greater than 0', () => {
+      component.currentFiles = [file];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-upload-progress-container')).toBeTruthy();
+    });
+
+    it('shouldn`t find `po-upload-progress-container` if currentFiles is 0', () => {
+      component.currentFiles = [];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-upload-progress-container')).toBeNull();
     });
 
   });
