@@ -40,49 +40,27 @@
       [p-min-file-size]="fileRestrictions?.minFileSize">
     </po-upload-file-restrictions>
 
-    <div class="po-upload-progress" *ngFor="let file of currentFiles" [id]="file.uid">
-      <div class="po-upload-progress-status"></div>
-      <div class="po-upload-filename-foreground">
-
-        <div class="po-upload-filename">
-          <span class="po-icon {{ getPoIcon(file) }}"></span> {{ file.name }} - {{ getFileSize(file.size) }}
-        </div>
-
-        <div class="po-upload-group-actions">
-          <span
-            *ngIf="isStatusFile('None', file) || isStatusFile('Error', file)"
-            class="po-upload-action"
-            (click)="removeFile(file)">
-            {{ literals.deleteFile }}
-          </span>
-
-          <span
-            *ngIf="isStatusFile('Uploading', file)"
-            class="po-upload-action"
-            (click)="stopUpload(file)">
-            {{ literals.cancel }}
-          </span>
-
-          <span
-            *ngIf="isStatusFile('Error', file)"
-            class="po-upload-action"
-            (click)="uploadFiles([file])">
-
-            {{ literals.tryAgain }}
-          </span>
-        </div>
-
-      </div>
+    <div *ngIf="currentFiles && currentFiles.length" class="po-upload-progress-container">
+      <po-progress
+        *ngFor="let file of currentFiles; trackBy: trackByFn"
+        [p-info]="infoByUploadStatus[file.status]?.text(file.percent)"
+        [p-info-icon]="infoByUploadStatus[file.status]?.icon"
+        [p-status]="progressStatusByFileStatus[file.status]"
+        [p-text]="file.displayName"
+        [p-value]="file.percent"
+        (p-cancel)="cancel(file)"
+        (p-retry)="uploadFiles([file])">
+      </po-progress>
     </div>
 
     <po-button
       *ngIf="displaySendButton"
+      class="po-upload-send-button"
       p-type="primary"
       [p-disabled]="hasAnyFileUploading(currentFiles)"
       [p-label]="literals.startSending"
       (p-click)="uploadFiles(currentFiles)">
     </po-button>
-
   </div>
 
 </po-field-container>
