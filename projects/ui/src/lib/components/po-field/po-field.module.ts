@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { PoButtonGroupModule } from '../po-button-group/index';
-import { PoButtonModule } from '../../components/po-button/index';
+import { PoButtonModule } from '../po-button/index';
 import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
-import { PoLoadingModule } from '../../components/po-loading/index';
-import { PoModalModule } from '../../components/po-modal/po-modal.module';
-import { PoTableModule } from '../../components/po-table/po-table.module';
+import { PoLoadingModule } from '../po-loading/index';
+import { PoModalModule } from '../po-modal/po-modal.module';
+import { PoProgressModule } from './../po-progress/po-progress.module';
+import { PoServicesModule } from '../../services/services.module';
+import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
 
 import { PoCalendarComponent } from './po-datepicker/po-calendar/po-calendar.component';
@@ -37,7 +39,6 @@ import { PoPasswordComponent } from './po-password/po-password.component';
 import { PoRadioGroupComponent } from './po-radio-group/po-radio-group.component';
 import { PoSelectComponent } from './po-select/po-select.component';
 import { PoSelectOptionTemplateDirective } from './po-select/po-select-option-template/po-select-option-template.directive';
-import { PoServicesModule } from '../../services/services.module';
 import { PoSwitchComponent } from './po-switch/po-switch.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
@@ -66,6 +67,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoDisclaimerModule,
     PoLoadingModule,
     PoModalModule,
+    PoProgressModule,
     PoServicesModule,
     PoTableModule,
     PoTooltipModule

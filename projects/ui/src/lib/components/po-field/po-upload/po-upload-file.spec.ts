@@ -39,4 +39,20 @@ describe('PoUploadFile', () => {
     expect(poUploadFile.extension).toEqual('');
   });
 
+  describe('Methods:', () => {
+
+    it('getFileSize: should return the size in kbytes', () => {
+      poUploadFile = new PoUploadFile(null);
+
+      let kbSize = poUploadFile['getFileSize'](3000);
+
+      expect(kbSize).toEqual('3 KB');
+
+      kbSize = poUploadFile['getFileSize'](0);
+
+      expect(kbSize).toEqual('0 KB');
+    });
+
+  });
+
 });
