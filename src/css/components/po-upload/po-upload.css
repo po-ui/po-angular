@@ -1,13 +1,3 @@
-:root{
-  --font-upload-item-text-bold: {
-    @apply --font-text-bold
-  }
-
-  --font-upload-item-text: {
-    @apply --font-text
-  }
-}
-
 .po-upload {
   position: relative;
 }
@@ -22,88 +12,19 @@
   opacity: 0.01;
 }
 
-.po-upload-progress {
-  @apply --font-upload-item-text-bold;
-  background-color: var(--color-upload-background-color-progress);
-  border-radius: 3px;
-  color: var(--color-upload-color-progress);
-  margin: 8px 0;
-  min-height: 21px;
-  overflow: hidden;
-  padding: 8px 16px;
-  position: relative;
-
-  &-success {
-    background-color: var(--color-upload-background-color-success);
-    color: var(--color-upload-color-text-load);
-  }
-
-  &-error {
-    background-color: var(--color-upload-background-color-error);
-    color: var(--color-upload-color-text-load);
-  }
-
-  &-status {
-    background-color: var(--color-upload-background-color-load-progress);
-    height: 100%;
-    left: 0px;
-    position: absolute;
-    top: 0px;
-    z-index: 1;
-  }
+.po-upload-progress-container {
+  padding-top: 16px;
 }
 
-.po-upload-filename {
-  color: var(--color-upload-color-text-load-waiting);
-  float: left;
-
-  &-loading {
-    color: var(--color-upload-color-text-load);
-  }
-}
-
-.po-upload-progress-status ~ .po-upload-filename-foreground .po-upload-filename-loading,
-.po-upload-progress-status ~ .po-upload-filename-foreground .po-upload-action {
-  color: var(--color-upload-color-text-filename-loading);
-}
-
-.po-upload-filename-loading > .po-icon {
-  font-weight: bold;
-  padding-top: 4px;
-  padding-right: 8px;
-}
-
-.po-upload-filename .po-icon-info {
-  color: var(--color-upload-color-progress);
-  font-weight: bold;
-  padding-top: 4px;
-  padding-left: 4px;
-  padding-right: 12px;
-}
-
-.po-upload-filename-foreground {
-  position: relative;
-  z-index: 10;
-}
-
-.po-upload-group-actions {
-  float: right;
-}
-
-.po-upload-action {
-  @apply --font-upload-item-text-bold;
-  cursor: pointer;
-  display: inline-block;
-  float: right;
-  margin-left: 16px;
+.po-upload-send-button {
+  display: block;
+  padding: 8px 0;
 }
 
 @media screen and (max-width: 1366px) {
 
-  .po-upload-progress {
-    @apply --font-upload-item-text;
-    margin: 4px 0;
-    padding: 4px 8px;
+  .po-upload-send-button {
+    padding-top: 0;
   }
 
 }
