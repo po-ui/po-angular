@@ -28,7 +28,7 @@ describe('PoRichTextBodyComponent:', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Methods: ', () => {
+  describe('Methods:', () => {
 
     it('onInit: should update `bodyElement`', () => {
       const expectedValue = 'on';
@@ -46,41 +46,56 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component['updateValueWithModelValue']).toHaveBeenCalled();
     }));
 
-    it('executeCommand: should call `focus`', () => {
-      const spyFocus = spyOn(component.bodyElement.nativeElement, <any> 'focus');
-      const fakeValue = 'p';
+    describe('executeCommand:', () => {
 
-      component.executeCommand(fakeValue);
+      it('should call `focus`', () => {
+        const spyFocus = spyOn(component.bodyElement.nativeElement, <any> 'focus');
+        const fakeValue = 'p';
 
-      expect(spyFocus).toHaveBeenCalled();
-    });
+        component.executeCommand(fakeValue);
 
-    it('executeCommand: should call `execCommand`', () => {
-      const spyExecCommand = spyOn(component.bodyElement.nativeElement, <any> 'focus');
-      const fakeValue = 'p';
+        expect(spyFocus).toHaveBeenCalled();
+      });
 
-      component.executeCommand(fakeValue);
+      it('should call `execCommand` with string as parameter.', () => {
+        const spyExecCommand = spyOn(document, <any> 'execCommand');
+        const fakeValue = 'p';
 
-      expect(spyExecCommand).toHaveBeenCalled();
-    });
+        component.executeCommand(fakeValue);
 
-    it('executeCommand: should call `updateModel`', () => {
-      const fakeValue = 'p';
-      spyOn(component, <any>'updateModel');
+        expect(spyExecCommand).toHaveBeenCalledWith(fakeValue, false, null);
+      });
 
-      component.executeCommand(fakeValue);
+      it('should call `execCommand` with object as parameter.', () => {
+        const command = 'foreColor';
+        const value = '#000000';
+        const spyExecCommand = spyOn(document, <any> 'execCommand');
+        const fakeValue = { command, value } ;
 
-      expect(component['updateModel']).toHaveBeenCalled();
-    });
+        component.executeCommand(fakeValue);
 
-    it('executeCommand: should call `value.emit` with `modelValue`', () => {
-      component.modelValue = 'teste';
-      const fakeValue = 'p';
+        expect(spyExecCommand).toHaveBeenCalledWith(fakeValue.command, false, fakeValue.value);
+      });
 
-      spyOn(component.value, 'emit');
-      component.executeCommand(fakeValue);
+      it('should call `updateModel`', () => {
+        const fakeValue = 'p';
+        spyOn(component, <any>'updateModel');
 
-      expect(component.value.emit).toHaveBeenCalledWith(component.modelValue);
+        component.executeCommand(fakeValue);
+
+        expect(component['updateModel']).toHaveBeenCalled();
+      });
+
+      it('should call `value.emit` with `modelValue`', () => {
+        component.modelValue = 'teste';
+        const fakeValue = 'p';
+
+        spyOn(component.value, 'emit');
+        component.executeCommand(fakeValue);
+
+        expect(component.value.emit).toHaveBeenCalledWith(component.modelValue);
+      });
+
     });
 
     it('onClick: should call `emitSelectionCommands`', () => {
@@ -170,6 +185,14 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component['valueBeforeChange']).toBe('value');
     });
 
+    it('rgbToHex: should return the hexadecimal value`', () => {
+      const rbg = 'rgb(0, 128, 255)';
+      const hex = '#0080ff';
+      const result = component['rgbToHex'](rbg);
+
+      expect(result).toBe(hex);
+    });
+
     it('onBlur: should emit modelValue change', fakeAsync((): void => {
       const fakeThis = {
         modelValue: 'value',
@@ -212,7 +235,7 @@ describe('PoRichTextBodyComponent:', () => {
 
   });
 
-  describe('Templates: ', () => {
+  describe('Templates:', () => {
 
   it('should contain `po-rich-text-body`', () => {
 

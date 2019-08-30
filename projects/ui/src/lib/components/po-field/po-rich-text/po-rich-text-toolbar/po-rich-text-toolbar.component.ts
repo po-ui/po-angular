@@ -1,9 +1,12 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
+import { isIE } from './../../../../utils/util';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 
 import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 import { PoRichTextToolbarButtonGroupItem } from '../interfaces/po-rich-text-toolbar-button-group-item.interface';
+
+const poRichTextDefaultColor = '#000000';
 
 @Component({
   selector: 'po-rich-text-toolbar',
@@ -75,6 +78,8 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     }
   ];
 
+  @ViewChild('colorPickerInput', { read: ElementRef, static: false }) colorPickerInput: ElementRef;
+
   @ViewChild('toolbarElement', { static: true }) toolbarElement: ElementRef;
 
   @Input('p-readonly') set readonly(value: boolean) {
@@ -86,19 +91,31 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return this._readonly;
   }
 
-  @Output('p-command') command = new EventEmitter<string>();
+  @Output('p-command') command = new EventEmitter<string | { command: string, value: string }>();
+
+  get isInternetExplorer() {
+    return isIE();
+  }
 
   constructor(private languageService: PoLanguageService) { }
 
   ngAfterViewInit() {
     this.removeButtonFocus();
+    this.setColorInColorPicker(poRichTextDefaultColor);
   }
 
-  setButtonsStates(commands: Array<string>) {
+  changeTextColor(value) {
+    const command = 'foreColor';
+
+    this.command.emit({ command, value });
+  }
+
+  setButtonsStates(obj: {commands: Array<string>, hexColor: string}) {
     if (!this.readonly) {
-      this.alignButtons.forEach(button => button.selected = commands.includes(button.command));
-      this.formatButtons.forEach(button => button.selected = commands.includes(button.command));
-      this.listButtons[0].selected = commands.includes(this.listButtons[0].command);
+      this.alignButtons.forEach(button => button.selected = obj.commands.includes(button.command));
+      this.formatButtons.forEach(button => button.selected = obj.commands.includes(button.command));
+      this.listButtons[0].selected = obj.commands.includes(this.listButtons[0].command);
+      this.setColorInColorPicker(obj.hexColor);
     }
   }
 
@@ -122,10 +139,13 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     buttons.forEach(button => button.setAttribute('tabindex', '-1'));
   }
 
+  private setColorInColorPicker(color: string): void {
+    this.colorPickerInput.nativeElement.value = color;
+  }
+
   private toggleDisableButtons(state: boolean) {
     this.alignButtons.forEach(button => button.disabled = state);
     this.formatButtons.forEach(button => button.disabled = state);
-
     this.listButtons[0].disabled = state;
   }
 
