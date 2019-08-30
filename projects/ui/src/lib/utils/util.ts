@@ -214,6 +214,13 @@ export function isIEOrEdge() {
   return /msie\s|trident\/|edge\//i.test(userAgent);
 }
 
+// Verifica se o navegador em que está sendo usado é Internet Explorer
+export function isIE() {
+  const userAgent = window.navigator.userAgent;
+
+  return /msie\s|trident/i.test(userAgent);
+}
+
 // Verifica qual o dispositivo que está sendo usado
 export function isMobile() {
   const userAgent = window.navigator.userAgent;

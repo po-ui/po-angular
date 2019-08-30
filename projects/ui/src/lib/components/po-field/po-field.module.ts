@@ -9,6 +9,7 @@ import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
 import { PoLoadingModule } from '../../components/po-loading/index';
 import { PoModalModule } from '../../components/po-modal/po-modal.module';
 import { PoTableModule } from '../../components/po-table/po-table.module';
+import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
 
 import { PoCalendarComponent } from './po-datepicker/po-calendar/po-calendar.component';
 import { PoCheckboxGroupComponent } from './po-checkbox-group/po-checkbox-group.component';
@@ -67,6 +68,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoModalModule,
     PoServicesModule,
     PoTableModule,
+    PoTooltipModule
   ],
   exports: [
     PoCheckboxGroupComponent,

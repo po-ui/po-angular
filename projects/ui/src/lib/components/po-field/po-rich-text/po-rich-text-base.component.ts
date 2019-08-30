@@ -10,6 +10,8 @@ import { requiredFailed } from '../validators';
  * O componente `po-rich-text` é um editor de textos enriquecidos.
  *
  * Para edição de texto simples sem formatação recomenda-se o uso do componente [**po-textarea**](/documentation/po-textarea).
+ *
+ * > No navegador Internet Explorer não é possível alterar a cor do texto.
  */
 export abstract class PoRichTextBaseComponent implements ControlValueAccessor, Validator {
 

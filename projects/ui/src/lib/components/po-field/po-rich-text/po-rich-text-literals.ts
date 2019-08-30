@@ -7,6 +7,7 @@ export const poRichTextLiteralsDefault = {
     center: 'Center',
     right: 'Right',
     justify: 'Justify',
+    textColor: 'Text color',
     unorderedList: 'Bulleted list'
   },
   es: {
@@ -17,6 +18,7 @@ export const poRichTextLiteralsDefault = {
     center: 'Centro',
     right: 'Derecha',
     justify: 'Justificado',
+    textColor: 'Color del texto',
     unorderedList: 'Lista con viñetas'
   },
   pt: {
@@ -27,6 +29,7 @@ export const poRichTextLiteralsDefault = {
     center: 'Centro',
     right: 'Direita',
     justify: 'Justificado',
+    textColor: 'Cor do texto',
     unorderedList: 'Lista com marcadores'
   }
 };
