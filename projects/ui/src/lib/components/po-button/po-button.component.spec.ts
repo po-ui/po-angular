@@ -130,6 +130,24 @@ describe('PoButtonComponent: ', () => {
 
   });
 
+  describe('Methods:', () => {
+
+    it('focus: should call `focus` of button', () => {
+      component.buttonElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.buttonElement.nativeElement, 'focus');
+
+      component.focus();
+
+      expect(component.buttonElement.nativeElement.focus).toHaveBeenCalled();
+    });
+
+  });
+
   describe('Templates: ', () => {
 
     describe('Loading: ', () => {
