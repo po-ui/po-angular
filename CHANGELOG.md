@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/portinariui/portinari-angular/compare/v1.6.0...v1.7.0) (2019-08-30)
+
+
+### Features
+
+* **fields:** implementa a propriedade `no-autocomplete` nos campos de entrada ([881d7b1](https://github.com/portinariui/portinari-angular/commit/881d7b1))
+* **rich-text:** adiciona eventos de mudança de valores ([1b7444c](https://github.com/portinariui/portinari-angular/commit/1b7444c))
+* **table:** adiciona evento para ordenação de colunas ([4dbd51a](https://github.com/portinariui/portinari-angular/commit/4dbd51a))
+
+
+
 ## [1.6.0](https://github.com/portinariui/portinari-angular/compare/v1.5.0...v1.6.0) (2019-08-23)
 
 
