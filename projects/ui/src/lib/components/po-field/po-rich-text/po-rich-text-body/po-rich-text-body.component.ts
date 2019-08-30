@@ -36,9 +36,15 @@ export class PoRichTextBodyComponent implements OnInit {
     setTimeout(() => this.updateValueWithModelValue());
   }
 
-  executeCommand(command: string) {
+  executeCommand(command: (string | { command: any, value: string })) {
     this.bodyElement.nativeElement.focus();
-    document.execCommand(command, false, null);
+
+    if (typeof (command) === 'object') {
+      document.execCommand(command.command, false, command.value);
+    } else {
+      document.execCommand(command, false, null);
+    }
+
     this.updateModel();
     this.value.emit(this.modelValue);
   }
@@ -79,8 +85,31 @@ export class PoRichTextBodyComponent implements OnInit {
 
   private emitSelectionCommands() {
     const commands = poRichTextBodyCommands.filter(command => document.queryCommandState(command));
+    const rgbColor = document.queryCommandValue('ForeColor');
+    const hexColor = this.rgbToHex(rgbColor);
+    this.commands.emit({commands, hexColor});
+  }
 
-    this.commands.emit(commands);
+  private rgbToHex(rgb) {
+    // Tratamento necessário para converter o código rgb para hexadecimal.
+    const sep = rgb.indexOf(',') > -1 ? ',' : ' ';
+    rgb = rgb.substr(4).split(')')[0].split(sep);
+
+    let r = (+rgb[0]).toString(16);
+    let g = (+rgb[1]).toString(16);
+    let b = (+rgb[2]).toString(16);
+
+    if (r.length === 1) {
+      r = '0' + r;
+    }
+    if (g.length === 1) {
+      g = '0' + g;
+    }
+    if (b.length === 1) {
+      b = '0' + b;
+    }
+
+    return '#' + r + g + b;
   }
 
   private updateModel() {

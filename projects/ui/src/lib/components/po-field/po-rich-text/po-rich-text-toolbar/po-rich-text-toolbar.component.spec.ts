@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import * as UtilsFunction from '../../../../utils/util';
 import { configureTestSuite } from '../../../../util-test/util-expect.spec';
-
 import { PoButtonGroupModule } from '../../../po-button-group';
+import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
+
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
 
 describe('PoRichTextToolbarComponent:', () => {
@@ -12,7 +14,10 @@ describe('PoRichTextToolbarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoButtonGroupModule ],
+      imports: [
+        PoButtonGroupModule,
+        PoTooltipModule
+      ],
       declarations: [
         PoRichTextToolbarComponent,
       ],
@@ -31,6 +36,7 @@ describe('PoRichTextToolbarComponent:', () => {
   });
 
   describe('Properties:', () => {
+
     it('readonly: should call toggleDisableButtons', () => {
       spyOn(component, <any>'toggleDisableButtons');
 
@@ -38,22 +44,34 @@ describe('PoRichTextToolbarComponent:', () => {
 
       expect(component['toggleDisableButtons']).toHaveBeenCalledWith(true);
     });
+
+    it('isInternetExplorer: should call isIE', () => {
+      const spyIsIE = spyOn(UtilsFunction, 'isIE');
+
+      expect(component.isInternetExplorer).toBeFalsy();
+      expect(spyIsIE).toHaveBeenCalled();
+    });
+
   });
 
   describe('Methods:', () => {
-    it('ngAfterViewInit: should call removeButtonFocus', () => {
-      spyOn(component, <any>'removeButtonFocus');
+
+    it('ngAfterViewInit: should call removeButtonFocus and setColorInColorPicker', () => {
+      const spyOnRemoveButtonFocus = spyOn(component, <any>'removeButtonFocus');
+      const spyOnSetColorInColorPicker = spyOn(component, <any>'setColorInColorPicker');
 
       component.ngAfterViewInit();
 
-      expect(component['removeButtonFocus']).toHaveBeenCalled();
+      expect(spyOnRemoveButtonFocus).toHaveBeenCalled();
+      expect(spyOnSetColorInColorPicker).toHaveBeenCalled();
     });
 
     describe('setButtonsStates:', () => {
-      const commandStates = [ 'bold', 'italic', 'justifycenter' ];
+      const commands = [ 'bold', 'italic', 'justifycenter' ];
+      const hexColor = '#000000';
 
       it('should map alignButtons and apply `selected` true only for `justifycenter` option', () => {
-        component.setButtonsStates(commandStates);
+        component.setButtonsStates({ commands, hexColor });
 
         expect(component.alignButtons[0].selected).toBeFalsy();
         expect(component.alignButtons[1].selected).toBeTruthy();
@@ -62,7 +80,7 @@ describe('PoRichTextToolbarComponent:', () => {
       });
 
       it('should map formatButtons and apply `selected` true only for `bold` and `italic` options', () => {
-        component.setButtonsStates(commandStates);
+        component.setButtonsStates({ commands, hexColor });
 
         expect(component.formatButtons[0].selected).toBeTruthy();
         expect(component.formatButtons[1].selected).toBeTruthy();
@@ -70,7 +88,7 @@ describe('PoRichTextToolbarComponent:', () => {
       });
 
       it('should map listButtons and doesn`t apply `selected` true', () => {
-        component.setButtonsStates(commandStates);
+        component.setButtonsStates({ commands, hexColor });
 
         expect(component.listButtons[0].selected).toBeFalsy();
       });
@@ -79,7 +97,7 @@ describe('PoRichTextToolbarComponent:', () => {
         component.readonly = true;
         component.alignButtons[0].selected = undefined;
 
-        component.setButtonsStates(commandStates);
+        component.setButtonsStates({ commands, hexColor });
 
         component.alignButtons.forEach(alignButton => {
           expect(alignButton.selected).toBeFalsy();
@@ -88,6 +106,16 @@ describe('PoRichTextToolbarComponent:', () => {
           expect(formatButton.selected).toBeFalsy();
         });
       });
+
+      it(`should call 'setColorInColorPicker' if 'readonly' is 'false'.`, () => {
+        component.readonly = false;
+        const spyOnSetColorInColorPicker = spyOn(component, <any> 'setColorInColorPicker');
+
+        component.setButtonsStates({ commands, hexColor });
+
+        expect(spyOnSetColorInColorPicker).toHaveBeenCalled();
+      });
+
     });
 
     it('emitAlignCommand: should emit command', () => {
@@ -133,7 +161,7 @@ describe('PoRichTextToolbarComponent:', () => {
       });
     });
 
-    it('toggleDisableButtons: should apply the state to alignButtons, formatButtons and lisButtons `disabled` attributes', () => {
+    it('toggleDisableButtons: should apply the state `disabled` to alignButtons, formatButtons and lisButtons', () => {
       component['toggleDisableButtons'](true);
 
       component.alignButtons.forEach(alignButton => {
@@ -144,5 +172,60 @@ describe('PoRichTextToolbarComponent:', () => {
       });
       expect(component.listButtons[0].disabled).toBeTruthy();
     });
+
+    it('toggleDisableButtons: shouldn`t apply the state `disabled` to alignButtons, formatButtons and lisButtons.', () => {
+      component['toggleDisableButtons'](false);
+
+      component.alignButtons.forEach(alignButton => {
+        expect(alignButton.disabled).toBeFalsy();
+      });
+      component.formatButtons.forEach(formatButton => {
+        expect(formatButton.disabled).toBeFalsy();
+      });
+      expect(component.listButtons[0].disabled).toBeFalsy();
+    });
+
+    it(`changeTextColor: should call 'command.emit'.`, () => {
+      const spyOnEmit = spyOn(component.command, 'emit');
+      const command = 'foreColor';
+      const value = '#000000';
+
+      component['changeTextColor'](value);
+
+      expect(spyOnEmit).toHaveBeenCalledWith({ command, value });
+    });
+
+    it(`setColorInColorPicker: should update the 'colorPickerInput' to new value.`, () => {
+      component.colorPickerInput.nativeElement.value = undefined;
+      const color: string = '#000000';
+
+      component['setColorInColorPicker'](color);
+
+      expect(component.colorPickerInput.nativeElement.value).toBe(color);
+    });
+
   });
+
+  describe('Templates:', () => {
+
+    it('should change color picker to disabled if readonly is true.', () => {
+      component.readonly = true;
+
+      fixture.detectChanges();
+
+      const colorPickerButton = nativeElement.querySelector('.po-rich-text-toolbar-color-picker-button:disabled');
+      const colorPickerInput = nativeElement.querySelector('.po-rich-text-toolbar-color-picker-input:disabled');
+
+      expect(colorPickerButton).toBeTruthy();
+      expect(colorPickerInput).toBeTruthy();
+    });
+
+    it('should find `.po-rich-text-toolbar-color-picker-input` if browser isn`t IE', () => {
+      const colorPickerInput = nativeElement.querySelector('.po-rich-text-toolbar-color-picker-input');
+
+      expect(colorPickerInput).toBeTruthy();
+    });
+
+  });
+
 });
