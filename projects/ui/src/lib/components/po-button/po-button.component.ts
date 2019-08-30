@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
@@ -26,6 +26,15 @@ import { PoButtonBaseComponent } from './po-button-base.component';
   templateUrl: './po-button.component.html'
 })
 export class PoButtonComponent extends PoButtonBaseComponent {
+
+  @ViewChild('button', { static: true }) buttonElement: ElementRef;
+
+  /**
+   * Função que atribui foco ao componente.
+   */
+  focus(): void {
+    this.buttonElement.nativeElement.focus();
+  }
 
   onClick() {
     this.click.emit(null);
