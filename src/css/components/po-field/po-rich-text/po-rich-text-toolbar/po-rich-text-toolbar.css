@@ -37,11 +37,47 @@
 
 /* Necessário para fixar a altura do po-button pois o mesmo tem tratamento para responsividade */
 .po-rich-text-toolbar .po-button-group > .po-button {
+  font-size: 16px;
   height: var(--rich-text-toolbar-button-group-height);
   padding: 0;
+}
+
+/* Seletor necessário para sobrepor o padding 0 */
+.po-rich-text-toolbar .po-button-group > .po-rich-text-toolbar-color-picker-button {
+  padding: 4px;
+  vertical-align: middle;
+}
+
+.po-rich-text-toolbar-color-picker-button {
+  font-size: 16px;
+  height: 32px;
+  padding: 0;
+  width: 32px;
+}
+
+.po-rich-text-toolbar-color-picker-container {
+  display: flex;
 }
 
 /* Altera o tamanho do ícone dos po-buttons para respeitar o tamanho definido pela UX */
 .po-rich-text-toolbar .po-button-group .po-icon {
   @apply --font-rich-text-toolbar-button-icon;
+  height: var(--rich-text-toolbar-button-group-height);
+}
+
+.po-rich-text-toolbar-color-picker-input {
+  background-color: transparent;
+  border: none;
+  height: 32px;
+  padding: 8px;
+  vertical-align: middle;
+  width: 30px;
+}
+
+.po-rich-text-toolbar-color-picker-input::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+
+.po-rich-text-toolbar-color-picker-input::-webkit-color-swatch {
+	border: none;
 }
