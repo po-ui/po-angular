@@ -29,6 +29,18 @@ import { PoProgressStatus } from './enums/po-progress-status.enum';
 })
 export class PoProgressComponent extends PoProgressBaseComponent {
 
+  get isAllowCancel(): boolean {
+    return !!this.cancel.observers.length && this.status !== PoProgressStatus.Success;
+  }
+
+  get isAllowProgressInfo(): boolean {
+    return !!(this.info || this.infoIcon || this.isAllowCancel || this.isAllowRetry);
+  }
+
+  get isAllowRetry(): boolean {
+    return !!this.retry.observers.length && this.status === PoProgressStatus.Error;
+  }
+
   get statusClass(): string {
 
     if (this.status === PoProgressStatus.Success) {
@@ -40,6 +52,14 @@ export class PoProgressComponent extends PoProgressBaseComponent {
     }
 
     return 'po-progress-default';
+  }
+
+  emitCancellation() {
+    this.cancel.emit(this.status);
+  }
+
+  emitRetry() {
+    this.retry.emit();
   }
 
 }
