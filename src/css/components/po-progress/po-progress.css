@@ -37,21 +37,24 @@
   @apply --font-progress-bar-text;
 }
 
-.po-progress-info-icon-close {
+.po-progress-info-icon-action {
   background-color: transparent;
   border: none;
   color: var(--color-progress-color-info-icon);
   font-size: 16px;
   margin-left: 16px;
   position: relative;
-  right: 6px;
   top: 3px;
 }
 
-.po-progress-info-icon-close:focus {
+.po-progress-info-icon-action:focus {
   border-radius: 1px;
   outline: dashed 2px var(--color-progress-border-color-info-icon-close);
   outline-offset: 4px;
+}
+
+.po-progress-info .po-progress-info-icon-action:last-child {
+  margin-right: 6px;
 }
 
 .po-progress-info-icon {
