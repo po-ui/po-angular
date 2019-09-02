@@ -1,6 +1,6 @@
 <div class="po-progress" [ngClass]="statusClass">
 
-  <label class="po-progress-description-mobile po-progress-description-text">
+  <label *ngIf="text" class="po-progress-description-mobile po-progress-description-text">
     {{ text }}
   </label>
 
@@ -10,18 +10,23 @@
     [p-value]="value">
   </po-progress-bar>
 
-  <div class="po-progress-description">
+  <div *ngIf="text" class="po-progress-description">
     <label class="po-progress-description-text">
       {{ text }}
     </label>
   </div>
 
-  <div class="po-progress-info">
-    <span class="po-progress-info-icon po-icon {{ infoIcon }}"></span>
-    <span class="po-progress-info-text">{{ info }}</span>
+  <div *ngIf="isAllowProgressInfo" class="po-progress-info">
+    <span *ngIf="infoIcon" class="po-progress-info-icon po-icon {{ infoIcon }}"></span>
+    <span *ngIf="info" class="po-progress-info-text">{{ info }}</span>
 
-    <button *ngIf="isCancel()"
-      class="po-progress-info-icon-close po-icon po-icon-close po-clickable"
+    <button *ngIf="isAllowRetry"
+      class="po-progress-info-icon-action po-icon po-icon-refresh po-clickable"
+      (click)="emitRetry()">
+    </button>
+
+    <button *ngIf="isAllowCancel"
+      class="po-progress-info-icon-action po-icon po-icon-close po-clickable"
       (click)="emitCancellation()">
     </button>
 

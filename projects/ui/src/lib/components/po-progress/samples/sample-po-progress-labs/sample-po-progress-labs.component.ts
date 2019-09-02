@@ -37,8 +37,8 @@ export class SamplePoProgressLabsComponent implements OnInit {
     this.restore();
   }
 
-  cancel() {
-    this.event = 'cancel';
+  onEvent(event) {
+    this.event = event;
   }
 
   restore() {
