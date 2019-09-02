@@ -5,7 +5,8 @@
   [p-status]="status"
   [p-text]="text"
   [p-value]="value"
-  (p-cancel)="cancel()">
+  (p-cancel)="onEvent('p-cancel')"
+  (p-retry)="onEvent('p-retry')">
 </po-progress>
 
 <po-divider></po-divider>

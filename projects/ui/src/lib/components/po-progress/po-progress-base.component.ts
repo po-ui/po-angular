@@ -24,19 +24,6 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
-   * Evento que será disparado ao clicar no ícone de cancelamento ("x") na parte inferior da barra de progresso.
-   *
-   * Ao ser disparado, a função receberá como parâmetro o status atual da barra de progresso.
-   *
-   * > Se nenhuma função for passada para o evento, o ícone de cancelamento não será exibido.
-   */
-  @Output('p-cancel') cancel: EventEmitter<any> = new EventEmitter();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Habilita o modo indeterminado na barra de progresso, que mostra uma animação fixa sem um valor estabelecido.
    *
    * Esta opção pode ser utilizada quando não souber quanto tempo levará para que um processo seja concluído.
@@ -116,15 +103,33 @@ export class PoProgressBaseComponent {
     return this._value;
   }
 
-  emitCancellation() {
-    this.cancel.emit(this.status);
-  }
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento que será disparado ao clicar no ícone de cancelamento ("x") na parte inferior da barra de progresso.
+   *
+   * Ao ser disparado, a função receberá como parâmetro o status atual da barra de progresso.
+   *
+   * > Se nenhuma função for passada para o evento ou a barra de progresso estiver com o status `PoProgressStatus.Success`,
+   * o ícone de cancelamento não será exibido.
+   */
+  @Output('p-cancel') cancel: EventEmitter<any> = new EventEmitter();
 
-  isCancel(): boolean {
-    return !!this.cancel.observers.length;
-  }
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento que será disparado ao clicar no ícone de tentar novamente na parte inferior da barra de progresso.
+   *
+   * > o ícone será exibido apenas se informar uma função neste evento e o status da barra de progresso for
+   * `PoProgressStatus.Error`.
+   */
+  @Output('p-retry') retry: EventEmitter<any> = new EventEmitter();
 
-  isProgressRangeValue(value: number): boolean {
+  private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;
   }
 

@@ -33,6 +33,30 @@ describe('PoProgressComponent:', () => {
     expect(component instanceof PoProgressComponent).toBeTruthy();
   });
 
+  describe('Methods:', () => {
+
+    it(`emitCancellation: should call 'emit' with 'status'`, () => {
+      component.status = PoProgressStatus.Success;
+
+      spyOn(component.cancel, 'emit');
+
+      component.emitCancellation();
+
+      expect(component.cancel.emit).toHaveBeenCalledWith(component.status);
+    });
+
+    it(`emitRetry: should call 'emit'`, () => {
+      component.status = PoProgressStatus.Success;
+
+      spyOn(component.retry, 'emit');
+
+      component.emitRetry();
+
+      expect(component.retry.emit).toHaveBeenCalled();
+    });
+
+  });
+
   describe('Properties:', () => {
 
     it('statusClass: should return `po-progress-success` if `status` is `PoProgressStatus.Success`', () => {
@@ -65,6 +89,52 @@ describe('PoProgressComponent:', () => {
       expect(component.statusClass).toBe('po-progress-default');
     });
 
+    it(`isAllowCancel: should be 'true' if 'cancel' contain 'function' and status is PoProgressStatus.Default`, () => {
+      const cancelFunction = () => {};
+      component.cancel.observers.push(<any>[new Observable(cancelFunction)]);
+      component.status = PoProgressStatus.Default;
+
+      expect(component.isAllowCancel).toBe(true);
+    });
+
+    it(`isAllowCancel: should be 'false' if 'cancel' does not contain 'function' and status is PoProgressStatus.Success`, () => {
+      component.cancel.observers.length = 0;
+      component.status = PoProgressStatus.Success;
+
+      expect(component.isAllowCancel).toBe(false);
+    });
+
+    it(`isAllowCancel: should be 'false' if 'cancel' contain 'function' and status is PoProgressStatus.Success`, () => {
+      const cancelFunction = () => {};
+      component.cancel.observers.push(<any>[new Observable(cancelFunction)]);
+      component.status = PoProgressStatus.Success;
+
+      expect(component.isAllowCancel).toBe(false);
+    });
+
+    it(`isAllowRetry: should be 'true' if 'retry' contain 'function' and status is PoProgressStatus.Error`, () => {
+      const retryFunction = () => {};
+      component.retry.observers.push(<any>[new Observable(retryFunction)]);
+      component.status = PoProgressStatus.Error;
+
+      expect(component.isAllowRetry).toBe(true);
+    });
+
+    it(`isAllowRetry: should be 'false' if 'retry' does not contain 'function' and status isn't PoProgressStatus.Error`, () => {
+      component.retry.observers.length = 0;
+      component.status = PoProgressStatus.Default;
+
+      expect(component.isAllowRetry).toBe(false);
+    });
+
+    it(`isAllowRetry: should be 'false' if 'retry' contain 'function' and status isn't PoProgressStatus.Error`, () => {
+      const retryFunction = () => {};
+      component.retry.observers.push(<any>[new Observable(retryFunction)]);
+      component.status = PoProgressStatus.Default;
+
+      expect(component.isAllowRetry).toBe(false);
+    });
+
   });
 
   describe('Templates:', () => {
@@ -92,6 +162,16 @@ describe('PoProgressComponent:', () => {
       expect(infoIcon.classList).toContain('po-icon-agro-business');
     });
 
+    it('shouldn`t find `.po-progress-info-icon` if `infoIcon` is `undefined`', () => {
+      component.infoIcon = undefined;
+
+      fixture.detectChanges();
+
+      const infoIcon = nativeElement.querySelector('.po-progress-info-icon');
+
+      expect(infoIcon).toBe(null);
+    });
+
     it('should contain `p-info` value', () => {
       component.info = 'test info';
 
@@ -100,6 +180,16 @@ describe('PoProgressComponent:', () => {
       const info = nativeElement.querySelector('.po-progress-info-text').textContent.trim();
 
       expect(info).toBe(component.info);
+    });
+
+    it('shouldn`t find `.po-progress-info-text` if `info` is undefined ', () => {
+      component.info = undefined;
+
+      fixture.detectChanges();
+
+      const info = nativeElement.querySelector('.po-progress-info-text');
+
+      expect(info).toBe(null);
     });
 
     it('should contain `po-progress-default` if `status` is `default`', () => {
@@ -180,6 +270,56 @@ describe('PoProgressComponent:', () => {
       nativeElement.querySelector('.po-icon-close').click();
 
       expect(component.cancel.emit).toHaveBeenCalledWith(component.status);
+    });
+
+    it('should emit retry with status if `retry` is clicked', () => {
+      const retryFunction = () => {};
+
+      component.retry.observers.push(<any>[new Observable(retryFunction)]);
+      component.status = PoProgressStatus.Error;
+
+      fixture.detectChanges();
+
+      spyOn(component.retry, 'emit');
+
+      nativeElement.querySelector('.po-icon-refresh').click();
+
+      expect(component.retry.emit).toHaveBeenCalled();
+    });
+
+    it('shouldn`t find `.po-progress-description` and `.po-progress-description-mobile` if `text` is undefined', () => {
+      component.text = undefined;
+
+      fixture.detectChanges();
+
+      const descriptionMobile = nativeElement.querySelector('.po-progress-description-mobile');
+      const description = nativeElement.querySelector('.po-progress-description');
+
+      expect(descriptionMobile).toBe(null);
+      expect(description).toBe(null);
+    });
+
+    it('should find `.po-progress-info` if `info` is truthy', () => {
+      component.info = 'filename.jpg';
+
+      fixture.detectChanges();
+
+      const progressInfo = nativeElement.querySelector('.po-progress-info');
+
+      expect(progressInfo).toBeTruthy();
+    });
+
+    it('shouldn`t find `.po-progress-info` if `info`, `infoIcon`, `isAllowRetry` and `isAllowCancel` are falsy', () => {
+      component.info = undefined;
+      component.infoIcon = undefined;
+      component.retry.observers.length = 0;
+      component.cancel.observers.length = 0;
+
+      fixture.detectChanges();
+
+      const progressInfo = nativeElement.querySelector('.po-progress-info');
+
+      expect(progressInfo).toBe(null);
     });
 
   });
