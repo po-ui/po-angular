@@ -21,6 +21,10 @@ export class SamplePoComboHeroesReactiveFormComponent implements OnInit {
     });
   }
 
+  get knowMoreLabel() {
+    return this.form.valid ? 'Know more' : undefined;
+  }
+
   knowMore() {
     const heroName = this.form.get('hero').value;
 
