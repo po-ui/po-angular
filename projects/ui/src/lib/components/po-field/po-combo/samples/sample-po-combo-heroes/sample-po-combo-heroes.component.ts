@@ -14,6 +14,10 @@ export class SamplePoComboHeroesComponent {
 
   constructor(private http: HttpClient) { }
 
+  get knowMoreLabel() {
+    return this.heroName ? 'Know more' : undefined;
+  }
+
   knowMore(heroName: string) {
     window.open(`http://google.com/search?q=${heroName}`, '_blank');
   }

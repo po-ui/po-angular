@@ -1,7 +1,7 @@
 <div class="po-row">
   <po-widget
     class="po-lg-6"
-    p-primary-label="Know more"
+    [p-primary-label]="knowMoreLabel"
     (p-primary-action)="knowMore(heroName)">
 
     <po-combo
@@ -30,7 +30,7 @@
         </po-info>
       </div>
 
-      <hr>
+      <po-divider></po-divider>
 
       <div class="po-row">
         <po-info
