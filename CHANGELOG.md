@@ -1,6 +1,44 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+## [1.8.0](https://github.com/portinariui/portinari-angular/compare/v1.7.0...v1.8.0) (2019-09-06)
+
+
+### Bug Fixes
+
+* **combo:** corrige links quebrados dos exemplos de heróis ([18b9539](https://github.com/portinariui/portinari-angular/commit/18b9539))
+* **multiselect:** corrige comportamento do componente no IE, que ao informar valores grandes na propriedade `p-options`
+não abria a lista supensa ([d82a6dc](https://github.com/portinariui/portinari-angular/commit/d82a6dc))
+
+
+### Features
+
+* **button:** implementa o método `focus` que habilita o foco no componente ([71ccfc8](https://github.com/portinariui/portinari-angular/commit/71ccfc8))
+* **fields:** implementa o método `focus` que habilita o foco nos componentes: ([015f617](https://github.com/portinariui/portinari-angular/commit/015f617))
+  - Checkbox Group
+  - Combo
+  - Datepicker
+  - Datepicker Range
+  - Decimal
+  - Email
+  - Input
+  - Login
+  - Lookup
+  - Multiselect
+  - Number
+  - Password
+  - Radio Group
+  - Rich Text
+  - Select
+  - Switch
+  - Textarea
+  - Upload
+  - Url
+
+* **progress:** adiciona evento o `p-retry` que habilita um ícone de tentar novamente ([c06e7c9](https://github.com/portinariui/portinari-angular/commit/c06e7c9))
+* **rich-text:** possibilita que usuário mude a cor do texto ([3e11fe7](https://github.com/portinariui/portinari-angular/commit/3e11fe7))
+* **upload:** utiliza o componente `po-progress` como barra de progresso e deprecia as propriedades: `cancel`, `deleteFile` e `tryAgain` da interface `PoUploadLiterals` ([9593412](https://github.com/portinariui/portinari-angular/commit/9593412))
+
+
 
 ## [1.7.0](https://github.com/portinariui/portinari-angular/compare/v1.6.0...v1.7.0) (2019-08-30)
 
