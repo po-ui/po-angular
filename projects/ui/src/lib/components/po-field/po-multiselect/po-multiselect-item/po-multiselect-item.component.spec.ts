@@ -17,8 +17,6 @@ describe('PoMultiselectItemComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoMultiselectItemComponent);
     component = fixture.componentInstance;
-
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
