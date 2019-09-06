@@ -1,6 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-
-import { PoMultiselectOption } from './../po-multiselect-option.interface';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -11,12 +9,13 @@ import { PoMultiselectOption } from './../po-multiselect-option.interface';
  */
 @Component({
   selector: 'po-multiselect-item',
-  templateUrl: './po-multiselect-item.component.html'
+  templateUrl: './po-multiselect-item.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoMultiselectItemComponent {
 
-  /** Opção que irá gerar o item, implementando a interface PoMultiselectOption. */
-  @Input('p-option') option: PoMultiselectOption = null;
+  /** Rótulo do item. */
+  @Input('p-label') label: string;
 
   /** Esta propriedade indica se o campo está selecionado ou não. */
   @Input('p-selected') selected?: boolean = false;
