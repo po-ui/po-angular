@@ -1,5 +1,6 @@
 export * from './components.module';
 
+export * from './po-accordion/index';
 export * from './po-avatar/index';
 export * from './po-breadcrumb/index';
 export * from './po-button-group/index';

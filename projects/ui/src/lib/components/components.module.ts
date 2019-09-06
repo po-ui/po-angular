@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 
+import { PoAccordionModule } from './po-accordion/po-accordion.module';
 import { PoAvatarModule } from './po-avatar/po-avatar.module';
 import { PoBreadcrumbModule } from './po-breadcrumb/po-breadcrumb.module';
 import { PoButtonModule } from './po-button/po-button.module';
@@ -36,6 +37,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
 @NgModule({
   declarations: [],
   imports: [
+    PoAccordionModule,
     PoAvatarModule,
     PoBreadcrumbModule,
     PoButtonModule,
@@ -70,6 +72,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoWidgetModule
   ],
   exports: [
+    PoAccordionModule,
     PoAvatarModule,
     PoBreadcrumbModule,
     PoButtonModule,
