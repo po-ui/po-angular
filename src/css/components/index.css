@@ -1,6 +1,7 @@
 
 @import './../commons';
 
+@import './po-accordion';
 @import './po-avatar';
 @import './po-badge';
 @import './po-breadcrumb';

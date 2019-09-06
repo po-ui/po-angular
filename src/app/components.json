@@ -1,6 +1,7 @@
 [
   {"path": "#", "title": "Components", "subItems":
     [
+      { "path": "./css/components/po-accordion/po-accordion.html", "title": "Po Accordion" },
       { "path": "./css/components/po-avatar/po-avatar.html", "title": "Po Avatar" },
       { "path": "./css/components/po-breadcrumb/po-breadcrumb.html", "title": "Po Breadcrumb" },
       { "path": "./css/components/po-button/po-button.html", "title": "Po Button" },

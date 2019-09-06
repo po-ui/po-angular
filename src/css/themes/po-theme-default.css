@@ -10,6 +10,7 @@
  * Commons.....................variáveis do Commons / Genéricas.
  *
  * COMPONENTS
+ * Accordion......................variáveis do Accordion.
  * Avatar......................variáveis do Avatar.
  * Button......................variáveis do Button.
  * Badge.......................variáveis do Badge.
@@ -227,6 +228,33 @@
   COMPONENTS
 \*------------------------------------*/
 :root {
+/*------------------------------------*\
+  ACCORDION
+\*------------------------------------*/
+
+/**
+ * Accordion Item
+ */
+  --color-accordion-item-border-color: var(--color-neutral-light-90);
+
+/**
+ * Accordion Item Header
+ */
+  --color-accordion-header-button-background-color: var(--color-white);
+  --color-accordion-header-color-primary: var(--color-primary);
+  --color-accordion-header-color-hover: var(--color-secondary);
+
+/**
+ * Accordion Item Header Button
+ */
+ --color-accordion-item-header-button-background-color: var(--color-transparent);
+ --color-accordion-item-header-button-focus: var(--color-secondary);
+
+ /**
+ * Accordion Item Body
+ */
+  --color-accordion-item-body-color: var(--color-neutral);
+
 /*------------------------------------*\
   AVATAR
 \*------------------------------------*/
