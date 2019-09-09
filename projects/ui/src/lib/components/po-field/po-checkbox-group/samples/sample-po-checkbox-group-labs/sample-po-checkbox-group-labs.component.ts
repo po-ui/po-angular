@@ -38,7 +38,7 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
   }
 
   addOption() {
-    this.options.push(this.option);
+    this.options = [...this.options, this.option];
     this.clearOption();
   }
 
