@@ -1,8 +1,9 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, forwardRef, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef,
+  forwardRef, QueryList, ViewChildren } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
-import { PoCheckboxGroupOption } from './po-checkbox-group-option.interface';
+import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 
 /**
  * @docsExtends PoCheckboxGroupBaseComponent
@@ -27,6 +28,7 @@ import { PoCheckboxGroupOption } from './po-checkbox-group-option.interface';
 @Component({
   selector: 'po-checkbox-group',
   templateUrl: './po-checkbox-group.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -87,6 +89,10 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
 
       event.preventDefault();
     }
+  }
+
+  trackByFn(index) {
+    return index;
   }
 
 }

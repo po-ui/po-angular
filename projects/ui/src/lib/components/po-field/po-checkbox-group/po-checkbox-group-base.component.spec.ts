@@ -5,7 +5,7 @@ import * as ValidatorsFunctions from '../validators';
 import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
-import { PoCheckboxGroupOption } from './po-checkbox-group-option.interface';
+import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 
 describe('PoCheckboxGroupBaseComponent: ', () => {
   let component: PoCheckboxGroupBaseComponent;
@@ -340,6 +340,17 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
       expect(component['getGridSystemColumns'](columns, maxColumns)).toBe(6);
     });
 
+    it('setCheckboxGroupOptionsView: should set `checkboxGroupOptionsView` with an id property in each option item', () => {
+      spyOn(UtilsFunction, 'uuid');
+
+      component['setCheckboxGroupOptionsView'](options);
+
+      expect(UtilsFunction.uuid).toHaveBeenCalled();
+      component.checkboxGroupOptionsView.forEach(checkboxOption => {
+        expect(checkboxOption.hasOwnProperty('id')).toBeTruthy();
+      });
+    });
+
   });
 
   describe('Properties: ', () => {
@@ -370,7 +381,12 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     it('p-options: should be update with valid values.', () => {
       const validValues = [[], [{label: '1', value: '2'}]];
 
+      spyOn(component, <any> 'removeDuplicatedOptions');
+      spyOn(component, <any> 'setCheckboxGroupOptionsView');
+
       expectPropertiesValues(component, 'options', validValues, validValues);
+      expect(component['removeDuplicatedOptions']).toHaveBeenCalled();
+      expect(component['setCheckboxGroupOptionsView']).toHaveBeenCalledWith(component.options);
     });
 
     it('p-columns: should update property with valid values', () => {
