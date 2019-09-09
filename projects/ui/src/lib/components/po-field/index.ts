@@ -1,4 +1,4 @@
-export * from './po-checkbox-group/po-checkbox-group-option.interface';
+export * from './po-checkbox-group/interfaces/po-checkbox-group-option.interface';
 export * from './po-checkbox-group/po-checkbox-group.component';
 export * from './po-combo/po-combo-filter-mode.enum';
 export * from './po-combo/interfaces/po-combo-filter.interface';

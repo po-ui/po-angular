@@ -1,10 +1,11 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 import { EventEmitter, Input, Output } from '@angular/core';
 
-import { convertToBoolean, convertToInt } from './../../../utils/util';
+import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
 import { requiredFailed } from '../validators';
 
-import { PoCheckboxGroupOption } from './po-checkbox-group-option.interface';
+import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
+import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
 
 const poCheckboxGroupColumnsDefaultLength: number = 6;
 const poCheckboxGroupColumnsTotalLength: number = 12;
@@ -40,6 +41,7 @@ const poCheckboxGroupColumnsTotalLength: number = 12;
  */
 export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Validator {
 
+  checkboxGroupOptionsView: Array<PoCheckboxGroupOptionView>;
   checkedOptions: any = {};
   checkedOptionsList: any = [];
   mdColumns: number = poCheckboxGroupColumnsDefaultLength;
@@ -152,6 +154,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Input('p-options') set options(value: Array<PoCheckboxGroupOption>) {
     this._options = Array.isArray(value) ? value : [];
     this.removeDuplicatedOptions();
+    this.setCheckboxGroupOptionsView(this.options);
   }
 
   get options() {
@@ -298,6 +301,12 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
       if (!duplicatedIndex) {
         this.options.splice(this.options.indexOf(option), 1);
       }
+    });
+  }
+
+  private setCheckboxGroupOptionsView(optionsList: Array<PoCheckboxGroupOption>) {
+    this.checkboxGroupOptionsView = optionsList.map(option => {
+      return { ...option, id: uuid() };
     });
   }
 
