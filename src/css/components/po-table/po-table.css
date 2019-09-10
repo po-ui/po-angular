@@ -52,6 +52,7 @@
 .po-table-main-container {
   line-height: normal;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .po-table-wrapper {
