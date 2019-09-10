@@ -8,7 +8,7 @@ import { PoPageBlockedUserContactsComponent } from './po-page-blocked-user-conta
 
 import { configureTestSuite } from '../../../util-test/util-expect.spec';
 
-describe('PoPageBlockedUserContactsComponent: ', () => {
+xdescribe('PoPageBlockedUserContactsComponent: ', () => {
   let component: PoPageBlockedUserContactsComponent;
   let fixture: ComponentFixture<PoPageBlockedUserContactsComponent>;
   let debugElement;
@@ -53,7 +53,7 @@ describe('PoPageBlockedUserContactsComponent: ', () => {
       expect(component['checkContactItemWidth']).not.toHaveBeenCalled();
     });
 
-    it('ngOnChanges: should call `checkContactItemWidth`', () => {
+    xit('ngOnChanges: should call `checkContactItemWidth`', () => {
 
       component.phone = '55-22-98787-8787';
 

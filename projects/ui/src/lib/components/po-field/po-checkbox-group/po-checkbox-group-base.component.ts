@@ -65,6 +65,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    * - Para resolução `sm` a colunagem invariavelmente passa para `1` coluna.
    * - Quando se trata de resolução `md` e o valor estabelecido para colunas for superior a `2`,
    * o *grid system* será composto por `2` colunas.
+   * - Para evitar a quebra de linha, prefira a utilização de `1` coluna para opções com textos grandes.
    *
    * @default `2`
    *
