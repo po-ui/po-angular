@@ -7,8 +7,9 @@
 }
 
 .po-checkbox-group-item {
-  height: 44px;
+  min-height: 44px;
   padding: 10px 8px 10px 0;
+  position: relative;
 }
 
 .po-checkbox-group-input {
@@ -16,6 +17,11 @@
   box-shadow: var(--shadow-checkbox-group-box-shadow-input);
   position: absolute;
   visibility: hidden;
+}
+
+.po-checkbox-group-label {
+  display: block;
+  margin-left: 28px;
 }
 
 .po-checkbox-group-item .po-checkbox-group-input {
@@ -30,8 +36,11 @@
   content: ' ';
   display: inline-block;
   height: 20px;
+  left: 0;
   margin-right: 8px;
   margin-top: -2px;
+  position: absolute;
+  top: 12px;
   vertical-align: middle;
   width: 20px;
 }
@@ -81,13 +90,19 @@ po-checkbox-group.ng-invalid.ng-dirty .po-checkbox-group-input + .po-checkbox-gr
 
   .po-checkbox-group-item {
     @apply --font-checkbox-group-label-smaller;
-    height: 32px;
-    padding: 4px 8px 4px 0;
+    line-height: 20px;
+    min-height: 32px;
+    padding: 8px 8px 4px 0;
   }
 
   .po-checkbox-group-input+.po-checkbox-group-label:before {
     height: 18px;
+    top: 10px;
     width: 18px;
+  }
+
+  .po-checkbox-group-label {
+    margin-left: 26px;
   }
 
   .po-checkbox-group-input-checked+.po-checkbox-group-label:before,
