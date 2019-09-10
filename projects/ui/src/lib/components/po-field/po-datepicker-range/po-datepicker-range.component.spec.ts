@@ -1459,7 +1459,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.endDateInput.nativeElement.value).toBe('24/12/2019');
     });
 
-    it('should set cursor to end date input if last letter of start date is typed', () => {
+    xit('should set cursor to end date input if last letter of start date is typed', () => {
       spyOn(component.endDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.value = '24/11/2018';
@@ -1488,7 +1488,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.startDateInput.nativeElement.selectionEnd).toBe(10);
     });
 
-    it('should set cursor to end date input if typed key is arrowRight and cursor position is last number of start date', () => {
+    xit('should set cursor to end date input if typed key is arrowRight and cursor position is last number of start date', () => {
       const arrowRightKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 39 });
       spyOn(component.endDateInput.nativeElement, 'focus');
 
@@ -1503,7 +1503,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.endDateInput.nativeElement.selectionEnd).toBe(0);
     });
 
-    it('should set cursor to start date input if typed key is arrowLeft and cursor position is first number of end date', () => {
+    xit('should set cursor to start date input if typed key is arrowLeft and cursor position is first number of end date', () => {
       const arrowLeftKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 37 });
       spyOn(component.startDateInput.nativeElement, 'focus');
 
@@ -1518,7 +1518,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.startDateInput.nativeElement.selectionEnd).toBe(10);
     });
 
-    it('should set focus on end date input if cursor position is at the end of start date input', () => {
+    xit('should set focus on end date input if cursor position is at the end of start date input', () => {
       const arrowRightKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 39 });
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '';
@@ -1536,7 +1536,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.endDateInput.nativeElement.selectionEnd).toBe(0);
     });
 
-    it(`should delete last caracter of start date input if element is end data input, typed key is backspace and cursor
+    xit(`should delete last caracter of start date input if element is end data input, typed key is backspace and cursor
       position is 0`, () => {
 
       // keyCode 8 is backspace
@@ -1555,7 +1555,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.startDateInput.nativeElement.value).toBe('24/');
     });
 
-    it(`should delete last caracter of start date input if element is start date input, typed key is backspace and
+    xit(`should delete last caracter of start date input if element is start date input, typed key is backspace and
       end date cursor position is 0`, () => {
 
       // keyCode 8 is backspace
@@ -1575,7 +1575,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.startDateInput.nativeElement.value).toBe('24/1');
     });
 
-    it(`should delete last caracter of start date input if typed key is backspace, end date cursor position is 0 and
+    xit(`should delete last caracter of start date input if typed key is backspace, end date cursor position is 0 and
       end date input has value`, () => {
 
       // keyCode 8 is backspace
@@ -1605,7 +1605,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.endDateInput.nativeElement.value).toBe('12/02/2003');
     });
 
-    it('should delete last caracter of start date input if typed key is backspace and start date input cursor position is 5', () => {
+    xit('should delete last caracter of start date input if typed key is backspace and start date input cursor position is 5', () => {
 
       // keyCode 8 is backspace
       const keyupBoardEventBackspace = new KeyboardEvent('keyup', <any>{ keyCode: 8 });
@@ -1629,7 +1629,7 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.startDateInput.nativeElement.value).toBe('24/1');
     });
 
-    it('should keep end date input active if first caracter is deleted', () => {
+    xit('should keep end date input active if first caracter is deleted', () => {
 
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
         keyCode: 8, // keyCode 8 is backspace
