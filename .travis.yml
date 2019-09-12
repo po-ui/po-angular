@@ -14,11 +14,6 @@ addons:
 before_script:
   - npm install -g @angular/cli
 
-cache:
-  npm: true
-  directories:
-    - node_modules
-
 script:
   - npm run lint
   - npm run build:lite
