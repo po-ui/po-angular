@@ -5,9 +5,10 @@
   "description": "PORTINARI HTML Framework - UI",
   "author": "Portinari",
   "license": "MIT",
+  "homepage": "https://portinari.io",
   "repository": {
     "type": "git",
-    "url": "https://portinaritfs.visualstudio.com/_git/po"
+    "url": "https://github.com/portinariui/portinari-angular"
   },
   "schematics": "./schematics/collection.json",
   "dependencies": {
