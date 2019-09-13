@@ -1,5 +1,15 @@
 # Changelog
 
+### [1.8.1](https://github.com/portinariui/portinari-angular/compare/v1.8.0...v1.8.1) (2019-09-13)
+
+
+### Bug Fixes
+
+* **checkbox-group:** corrige texto sobreposto quando há quebra de linha com textos grandes. ([a04f569](https://github.com/portinariui/portinari-angular/commit/a04f569))
+* **checkbox-group:** corrige inconsistência de uso no Edge e IE ([8319b3c](https://github.com/portinariui/portinari-angular/commit/8319b3c))
+* **table:** remove scroll duplo do eixo y no IE ao utilizá-lo dentro do lookup ([d09e58d](https://github.com/portinariui/portinari-style/commit/d09e58d))
+
+
 ## [1.8.0](https://github.com/portinariui/portinari-angular/compare/v1.7.0...v1.8.0) (2019-09-06)
 
 

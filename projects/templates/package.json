@@ -5,9 +5,10 @@
   "description": "PORTINARI HTML Framework - Templates",
   "author": "Portinari",
   "license": "MIT",
+  "homepage": "https://portinari.io",
   "repository": {
     "type": "git",
-    "url": "https://portinaritfs.visualstudio.com/_git/po"
+    "url": "https://github.com/portinariui/portinari-angular"
   },
   "dependencies": {
     "@portinari/portinari-ui": "0.0.0-PLACEHOLDER"
