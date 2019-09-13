@@ -1,8 +1,8 @@
 {
   "name": "portinari-sources",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Portinari",
-  "homepage": "",
+  "homepage": "https://portinari.io",
   "license": "MIT",
   "repository": {
     "type": "git",
