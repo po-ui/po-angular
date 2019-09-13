@@ -3,11 +3,12 @@ import { EventEmitter, Input, Output } from '@angular/core';
 import { convertToInt, isTypeof } from '../../utils/util';
 
 import { PoChartType } from './enums/po-chart-type.enum';
-import { PoPieChartSeries } from './interfaces/po-chart-series.interface';
+import { PoDonutChartSeries } from './po-chart-types/po-chart-donut/po-chart-donut-series.interface';
+import { PoPieChartSeries } from './po-chart-types/po-chart-pie/po-chart-pie-series.interface';
 
 const poChartDefaultHeight = 400;
-const poChartTypeDefault = PoChartType.Pie;
 const poChartMinHeight = 200;
+const poChartTypeDefault = PoChartType.Pie;
 
 /**
  * @description
@@ -15,8 +16,11 @@ const poChartMinHeight = 200;
  * O `po-chart` é um componente para renderização de dados através de gráficos, com isso facilitando a compreensão e tornando a
  * visualização destes dados mais agradável.
  *
- * Este componente também possibilita a definição das seguintes propriedades: altura do gráfico; série(s) que irão compor o gráfico;
- * título do gráfico; e tipo de gráfico.
+ * Este componente também possibilita a definição das seguintes propriedades:
+ *  - altura
+ *  - series
+ *  - tipo
+ *  - título
  *
  * Além das definições de propriedades, também é possível definir uma ação que será executada ao clicar em determinado elemento do gráfico
  * e outra que será executada ao passar o *mouse* sobre o elemento.
@@ -64,29 +68,35 @@ export abstract class PoChartBaseComponent {
   }
 
   /**
-   * Coleção de objetos que implementam a interface `PoPieChartSeries`, para definição dos elementos do gráfico que serão criados
-   * dinâmicamente.
+   * @description
+   *
+   * Define os elementos do gráfico que serão criados dinamicamente.
+   *
+   * > A coleção de objetos deve implementar alguma das interfaces abaixo:
+   * - `PoDonutChartSeries`
+   * - `PoPieChartSeries`
    */
-  @Input('p-series') series: Array<PoPieChartSeries>;
+  @Input('p-series') series: Array<PoDonutChartSeries | PoPieChartSeries>;
 
   /** Define o título do gráfico. */
   @Input('p-title') title?: string;
 
-  // TODO quando houver a necessidade de informar um type.
-  // /**
-  //  * @optional
-  //  *
-  //  * @description
-  //  *
-  //  * Define o tipo de gráfico.
-  //  *
-  //  * > Veja os valores válidos no *enum* `PoChartType`.
-  //  *
-  //  * @default `PoChartType.Pie`
-  //  */
-  // @Input('p-type') set type(value: PoChartType) {
-  //   this._type = (<any>Object).values(PoChartType).includes(value) ? value : poChartTypeDefault;
-  // }
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tipo de gráfico.
+   *
+   * > Veja os valores válidos no *enum* `PoChartType`.
+   *
+   * @default `PoChartType.Pie`
+   */
+  @Input('p-type') set type(value: PoChartType) {
+    this._type = (<any>Object).values(PoChartType).includes(value) ? value : poChartTypeDefault;
+
+    this.rebuildComponent();
+  }
 
   get type(): PoChartType {
     return this._type;

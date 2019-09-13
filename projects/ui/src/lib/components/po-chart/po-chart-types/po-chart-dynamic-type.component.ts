@@ -2,7 +2,9 @@ import { ElementRef, ViewChild } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
-import { PoPieChartSeries } from '../interfaces/po-chart-series.interface';
+import { PoChartType } from '../enums/po-chart-type.enum';
+import { PoDonutChartSeries } from './po-chart-donut/po-chart-donut-series.interface';
+import { PoPieChartSeries } from './po-chart-pie/po-chart-pie-series.interface';
 
 const Padding: number = 24;
 
@@ -19,8 +21,9 @@ export abstract class PoChartDynamicTypeComponent {
   chartWrapper: number;
   colors: Array<string>;
   height: number;
-  onSerieClick: Subject<PoPieChartSeries> = new Subject();
-  onSerieHover: Subject<PoPieChartSeries> = new Subject();
+  innerRadius: number = 0;
+  onSerieClick: Subject<PoDonutChartSeries | PoPieChartSeries> = new Subject();
+  onSerieHover: Subject<PoDonutChartSeries | PoPieChartSeries> = new Subject();
   series: Array<any> = [];
   svgElement: HTMLObjectElement;
   svgHeight: number;
@@ -28,6 +31,7 @@ export abstract class PoChartDynamicTypeComponent {
   tooltipElement: HTMLObjectElement;
   tooltipText: string;
   totalValue: number;
+  type: PoChartType;
 
   @ViewChild('chartBody', { static: true }) chartBody: ElementRef;
 

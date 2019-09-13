@@ -3,6 +3,7 @@ import { EventEmitter } from '@angular/core';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoChartBaseComponent } from './po-chart-base.component';
+import { PoChartType } from './enums/po-chart-type.enum';
 
 class PoCharComponent extends PoChartBaseComponent {
 
@@ -54,18 +55,17 @@ describe('PoChartBaseComponent:', () => {
       expect(component.rebuildComponent).toHaveBeenCalled();
     });
 
-    // TODO quando aceitar types
-    // it('p-type: should update property with valid values.', () => {
-    //   const validValues = (<any>Object).values(PoChartType);
+    it('p-type: should update property with valid values.', () => {
+      const validValues = (<any>Object).values(PoChartType);
 
-    //   expectPropertiesValues(poChartBase, 'type', validValues, validValues);
-    // });
+      expectPropertiesValues(component, 'type', validValues, validValues);
+    });
 
-    // it('p-type: should update property with `PoChartType.Pie` if contains invalid values', () => {
-    //   const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
+    it('p-type: should update property with `PoChartType.Pie` if contains invalid values', () => {
+      const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
 
-    //   expectPropertiesValues(poChartBase, 'type', invalidValues, PoChartType.Pie);
-    // });
+      expectPropertiesValues(component, 'type', invalidValues, PoChartType.Pie);
+    });
 
   });
 
