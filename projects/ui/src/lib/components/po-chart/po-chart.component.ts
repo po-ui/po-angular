@@ -1,10 +1,11 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, HostListener,
-  IterableDiffers, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
+  IterableDiffers, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartColors } from './po-chart-colors.constant';
+import { PoChartDonutComponent } from './po-chart-types/po-chart-donut/po-chart-donut.component';
 import { PoChartDynamicTypeComponent } from './po-chart-types/po-chart-dynamic-type.component';
 import { PoChartPieComponent } from './po-chart-types/po-chart-pie/po-chart-pie.component';
 import { PoChartType } from './enums/po-chart-type.enum';
@@ -43,6 +44,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
   private mappings = {
     [PoChartType.Pie]: PoChartPieComponent,
+    [PoChartType.Donut]: PoChartDonutComponent
   };
 
   colors: Array<string>;
@@ -173,6 +175,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     instance.colors = this.colors;
     instance.height = this.height;
     instance.series = this.series || [];
+    instance.type = this.type;
   }
 
   private setClickSubscribe(instance: PoChartDynamicTypeComponent) {

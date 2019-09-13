@@ -1,17 +1,15 @@
+import { PoCircularChartSeries } from '../po-chart-circular/po-chart-circular-series.interface';
+
 /**
  * @usedBy PoChartComponent
  *
  * @description
  *
- * Interface que define cada objeto do `PoPieChartSeries`.
+ * Interface que define o objeto da série `PoChartType.Pie`.
+ *
+ * @docsExtends PoCircularChartSeries
  */
-export interface PoPieChartSeries {
-
-  /** Define o valor da categoria do objeto. */
-  category: string;
-
-  /** Define o valor do objeto. */
-  value: number;
+export interface PoPieChartSeries extends PoCircularChartSeries {
 
   /**
    * @optional

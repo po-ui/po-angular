@@ -3,12 +3,17 @@
  *
  * @description
  *
- * *Enum* `PoChartType` para os tipos de gráficos.
+ * *Enum* `PoChartType` para especificação dos tipos de gráficos.
  */
 export enum PoChartType {
 
   /**
-   * **Gráfico pizza:** utilizado para exibir proporções de valores a partir de um todo.
+   * Exibe os dados em formato de rosca, dividindo em partes proporcionais.
+   */
+  Donut = 'donut',
+
+  /**
+   * Exibe os dados em formato circular, dividindo proporcionalmente em fatias.
    */
   Pie = 'pie'
 

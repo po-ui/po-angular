@@ -32,6 +32,12 @@ module.exports = function (config) {
           lines: 80,
           functions: 80,
           overrides: {
+            'src/lib/components/po-chart/po-chart-types/po-chart-donut/po-chart-donut.component.ts': {
+              branches: 50
+            },
+            'src/lib/components/po-chart/po-chart-types/po-chart-pie/po-chart-pie.component.ts': {
+              branches: 50
+            },
             'src/lib/components/po-chart/po-chart-types/po-chart-dynamic-type.component.ts': {
               branches: 50
             },
