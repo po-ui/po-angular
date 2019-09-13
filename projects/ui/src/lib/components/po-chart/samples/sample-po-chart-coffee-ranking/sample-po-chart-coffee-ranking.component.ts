@@ -8,7 +8,7 @@ import { PoChartType, PoDialogService, PoPieChartSeries } from '@portinari/porti
 })
 export class SamplePoChartCoffeeRankingComponent {
 
-  chartType: PoChartType = PoChartType.Pie;
+  coffeConsumingChartType: PoChartType = PoChartType.Donut;
 
   coffeeConsumption: Array<PoPieChartSeries> = [
     { category: 'Finland', value: 9.6, tooltip: 'Finland (Europe)' },

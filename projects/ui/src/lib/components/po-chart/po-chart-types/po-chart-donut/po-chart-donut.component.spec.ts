@@ -1,27 +1,27 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoChartCircular } from '../po-chart-circular/po-chart-circular';
-import { PoChartPieComponent } from './po-chart-pie.component';
+import { PoChartDonutComponent } from './po-chart-donut.component';
 
-describe('PoChartPieComponent:', () => {
+describe('PoChartDonutComponent:', () => {
 
-  let component: PoChartPieComponent;
-  let fixture: ComponentFixture<PoChartPieComponent>;
+  let component: PoChartDonutComponent;
+  let fixture: ComponentFixture<PoChartDonutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoChartPieComponent ]
+      declarations: [ PoChartDonutComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PoChartPieComponent);
+    fixture = TestBed.createComponent(PoChartDonutComponent);
     component = fixture.componentInstance;
   });
 
   it('should be created', () => {
-    expect(component instanceof PoChartPieComponent).toBeTruthy();
+    expect(component instanceof PoChartDonutComponent).toBeTruthy();
     expect(component instanceof PoChartCircular).toBeTruthy();
   });
 

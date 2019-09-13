@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoPieChartSeries } from '@portinari/portinari-ui';
+import { PoChartType, PoDonutChartSeries, PoPieChartSeries, PoRadioGroupOption } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-chart-labs',
@@ -11,10 +11,16 @@ export class SamplePoChartLabsComponent implements OnInit {
   category: string;
   event: string;
   height: number;
-  series: Array<PoPieChartSeries>;
+  series: Array<PoDonutChartSeries | PoPieChartSeries>;
   title: string;
   tooltip: string;
   value: number;
+  type: PoChartType;
+
+  readonly typeOptions: Array<PoRadioGroupOption> = [
+    { label: 'Donut', value: PoChartType.Donut },
+    { label: 'Pie', value: PoChartType.Pie }
+  ];
 
   ngOnInit() {
     this.restore();
@@ -36,6 +42,7 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.title = undefined;
     this.tooltip = undefined;
     this.value = undefined;
+    this.type = undefined;
   }
 
 }

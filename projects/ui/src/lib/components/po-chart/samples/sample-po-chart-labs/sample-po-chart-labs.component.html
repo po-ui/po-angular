@@ -2,6 +2,7 @@
   [p-height]="height"
   [p-series]="series"
   [p-title]="title"
+  [p-type]="type"
   (p-series-click)="changeEvent('p-series-click', $event)"
   (p-series-hover)="changeEvent('p-series-hover', $event)">
 </po-chart>
@@ -57,15 +58,23 @@
 
 <form>
   <div class="po-row">
+    <po-radio-group
+      class="po-md-4"
+      name="type"
+      [(ngModel)]="type"
+      p-label="Type"
+      [p-options]="typeOptions">
+    </po-radio-group>
+
     <po-input
-      class="po-md-6"
+      class="po-md-4"
       name="title"
       [(ngModel)]="title"
       p-label="Title">
     </po-input>
 
     <po-number
-      class="po-md-6"
+      class="po-md-4"
       name="height"
       [(ngModel)]="height"
       p-label="Height">
