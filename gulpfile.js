@@ -154,11 +154,15 @@ const watchers = () => {
   console.warn('\n');
   console.warn('   ╔═════════════════════════════════════════════════╗');
   console.warn('   ║                                                 ║');
+  console.warn('       >> TEMA UTILIZADO: ' + argv.theme || 'default' + ' <<');
+  console.warn('   ║                                                 ║');
   console.warn('   ║   NÃO ESQUEÇA DE INICIAR O SEU SERVIDOR HTTP!   ║');
   console.warn('   ║                                                 ║');
-  console.warn('   ║   Use o servidor que você achar melhor:         ║');
+  console.warn('   ║   Execute em outro terminal (http-server):      ║');
+  console.warn('   ║   - npm run dev                                 ║');
+  console.warn('   ║                                                 ║');
+  console.warn('   ║   Ou use o servidor que você achar melhor:      ║');
   console.warn('   ║   - live-server                                 ║');
-  console.warn('   ║   - http-server                                 ║');
   console.warn('   ║   - tanto faz ...                               ║');
   console.warn('   ║                                                 ║');
   console.warn('   ║   Ao atualizar um arquivo CSS ou HTML a sua     ║');

@@ -11,7 +11,8 @@
   "scripts": {
     "build": "gulp build",
     "build:app": "gulp build:app",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "dev": "http-server ./app-dist -o -c-1"
   },
   "devDependencies": {
     "autoprefixer": "^9.6.0",
@@ -24,6 +25,7 @@
     "gulp-postcss": "^8.0.0",
     "gulp-rename": "^1.4.0",
     "gulp-tap": "^1.0.1",
+    "http-server": "^0.11.1",
     "postcss-apply": "^0.12.0",
     "postcss-custom-properties": "^8.0.10",
     "postcss-import": "^12.0.1",
