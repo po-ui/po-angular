@@ -1,3 +1,23 @@
+
+<p align="center">
+  <a href="https://portinari.io">
+    <img width="250" src="./logo.jpg">
+  </a>
+</p>
+
+<div align="center">
+
+Biblioteca de componentes de UI para Angular.
+
+[![Travis branch](https://img.shields.io/travis/com/portinariui/portinari-angular/master?style=flat-square)](https://travis-ci.com/portinariui/portinari-angular)
+[![npm package](https://img.shields.io/npm/v/@portinari/portinari-ui?color=%23c9357d&style=flat-square)](https://www.npmjs.org/package/@portinari/portinari-ui)
+[![NPM downloads](https://img.shields.io/npm/dm/@portinari/portinari-ui?color=c9357d&label=npm%20downloads&style=flat-square)](https://npmjs.com/package/@portinari/portinari-ui)
+[![GitHub license](https://img.shields.io/npm/l/@portinari/portinari-ui?color=%23c9357d&style=flat-square)](https://github.com/portinariui/portinari-angular/blob/master/LICENSE)
+
+</div>
+
+---
+
 ### Pré-requisitos
 
 Para começar a utilização do PO tenha em mãos o `Node.js` instalado (deve-se utilizar a versão 10.x ou acima) e o seu gerenciador de pacote favorito atualizado. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
@@ -77,11 +97,7 @@ Agora basta rodar mais um comando para ver seu projeto no ar.
 ng serve
 ```
 
-Abra seu browser e acesse a url http://localhost:4200. Pronto seu projeto deve estar parecido com essa imagem.
-
-<p class="po-text-center">
-  <img src="./assets/graphics/app-running.png" width="660px">
-</p>
+Pronto, agora abra seu browser e acesse a url http://localhost:4200 para ver o resultado.
 
 ----
 
