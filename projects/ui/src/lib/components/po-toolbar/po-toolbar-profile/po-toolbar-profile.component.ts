@@ -5,8 +5,6 @@ import { PoControlPositionService } from '../../../services/po-control-position/
 import { PoToolbarProfile } from './po-toolbar-profile.interface';
 import { PoToolbarAction } from '../po-toolbar-action.interface';
 
-const poToolbarProfileDefaultAvatar = './assets/images/portinari-logo-user.svg';
-
 /**
  * @docsPrivate
  *
@@ -29,6 +27,8 @@ export class PoToolbarProfileComponent {
   /** Define uma lista de ações. */
   @Input('p-profile-actions') profileActions?: Array<PoToolbarAction>;
 
-  readonly defaultAvatar = poToolbarProfileDefaultAvatar;
+  get profileAvatar() {
+    return this.profile ? this.profile.avatar : undefined;
+  }
 
 }

@@ -1,5 +1,5 @@
 <div #profileElement class="po-toolbar-profile po-clickable" (click)="popup.toggle()">
-  <ng-container *ngIf="profile.avatar; then avatar; else userIcon"></ng-container>
+  <po-avatar p-size="xs" [p-src]="profileAvatar"></po-avatar>
 </div>
 
 <po-popup #popup
@@ -13,7 +13,7 @@
     <po-avatar
       class="po-toolbar-profile-item-avatar"
       p-size="sm"
-      [p-src]="profile.avatar || defaultAvatar">
+      [p-src]="profileAvatar">
     </po-avatar>
 
     <div>
@@ -28,11 +28,3 @@
   </div>
 
 </po-popup>
-
-<ng-template #avatar>
-  <po-avatar p-size="xs" [p-src]="profile.avatar"></po-avatar>
-</ng-template>
-
-<ng-template #userIcon>
-  <span class="po-icon po-icon-user po-toolbar-icon"></span>
-</ng-template>

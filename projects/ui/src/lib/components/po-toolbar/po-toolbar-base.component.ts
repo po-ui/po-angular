@@ -72,7 +72,7 @@ export class PoToolbarBaseComponent {
     return this._notificationNumber;
   }
 
-  get isShowProfile() {
-    return this.profile || this.profileActions;
+  get isShowProfile(): boolean {
+    return !!(this.profile || this.profileActions);
   }
 }

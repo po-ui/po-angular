@@ -2,14 +2,14 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import { PoToolbarBaseComponent } from './po-toolbar-base.component';
 
-describe('PoToolbarBaseComponent: ', () => {
+describe('PoToolbarBaseComponent:', () => {
   const component = new PoToolbarBaseComponent();
 
   it('should be created', () => {
     expect(component instanceof PoToolbarBaseComponent).toBeTruthy();
   });
 
-  describe('Properties: ', () => {
+  describe('Properties:', () => {
     it('notificationNumber: should set with invalid values and receive 0 value', () => {
       const invalidValues = [undefined, 'menu', true, false, NaN, [], {}];
 
@@ -25,23 +25,30 @@ describe('PoToolbarBaseComponent: ', () => {
 
   describe('Methods: ', () => {
 
-    describe('isShowProfile: ', () => {
+    describe('isShowProfile:', () => {
 
       beforeEach(() => {
         component.profile = undefined;
         component.profileActions = undefined;
       });
 
-      it('should return true when have a profile', () => {
+      it('should return `true` if have a profile.', () => {
         component.profile = {title: 'Jhony', avatar: 'link'};
 
-        expect(component.isShowProfile).toBeTruthy();
+        expect(component.isShowProfile).toBe(true);
       });
 
-      it('should return true when have a profileItems', () => {
+      it('should return `true` if have a profileItems.', () => {
         component.profileActions = [{ label: 'Ação', action: () => {} }];
 
-        expect(component.isShowProfile).toBeTruthy();
+        expect(component.isShowProfile).toBe(true);
+      });
+
+      it('should return `false` if not have a profile or profileItems', () => {
+        component.profile = undefined;
+        component.profileActions = undefined;
+
+        expect(component.isShowProfile).toBe(false);
       });
 
     });
