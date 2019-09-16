@@ -9,7 +9,7 @@ import { PoPopupComponent } from '../../po-popup//po-popup.component';
 
 import { PoToolbarProfileComponent } from './po-toolbar-profile.component';
 
-describe('PoToolbarProfileComponent: ', () => {
+describe('PoToolbarProfileComponent:', () => {
   let component: PoToolbarProfileComponent;
   let fixture: ComponentFixture<PoToolbarProfileComponent>;
   let nativeElement;
@@ -46,24 +46,34 @@ describe('PoToolbarProfileComponent: ', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Templates: ', () => {
+  describe('Templates:', () => {
 
-    it('should show template avatar when have profile avatar', () => {
+    it('should display avatar if have profile.', () => {
       component.profile = { title: 'teste', avatar: 'teste2' };
 
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-avatar')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-toolbar-icon')).toBeFalsy();
     });
 
-    it('should show template userIcon when not have profile avatar', () => {
-      component.profile = { title: 'teste' };
+  });
 
-      fixture.detectChanges();
+  describe('Methods:', () => {
 
-      expect(nativeElement.querySelector('.po-toolbar-icon')).toBeTruthy();
-      expect(nativeElement.querySelector('po-avatar:not(.po-toolbar-profile-item-avatar)')).toBeFalsy();
+    describe('isShowProfile: ', () => {
+
+      it('should return `true` if have a profile.', () => {
+        component.profile = {title: 'Jhony', avatar: 'link'};
+
+        expect(component.profileAvatar).toBeTruthy();
+      });
+
+      it('should return `undefined` if not have a profile.', () => {
+        component.profile = undefined;
+
+        expect(component.profileAvatar).toBeUndefined();
+      });
+
     });
 
   });
