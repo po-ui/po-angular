@@ -79,6 +79,12 @@ describe('PoSchemaService:', () => {
       expect(PoSchemaService['isSchemaKey'](data, 'schemaName')).toBeFalsy();
     });
 
+    it('isSchemaKey: should return false if doesn`t have data', () => {
+      const data = undefined;
+
+      expect(PoSchemaService['isSchemaKey'](data, 'schemaName')).toBeFalsy();
+    });
+
     it('create: should call PoSchemaUtil.getRecordId and save with schema, record, id and return value of save', async () => {
       const id = 'id';
       const saveReturn = { field: 'save return' };

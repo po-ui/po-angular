@@ -6,6 +6,7 @@
   },
   "whitelistedNonPeerDependencies": [
     "custom-idle-queue",
-    "localforage"
+    "localforage",
+    "lokijs"
   ]
 }

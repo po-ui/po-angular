@@ -16,9 +16,10 @@ export interface PoStorageConfig {
    * Os *drivers* utilizados pelo `PoStorageService` são:
    * - `indexeddb`;
    * - `websql`;
-   * - `localstorage`.
+   * - `localstorage`;
+   * - `lokijs`.
    *
-   * Exemplo de ordem de preferência: `['websql', 'indexeddb', 'localstorage']`.
+   * Exemplo de ordem de preferência: `['lokijs', 'websql', 'indexeddb', 'localstorage']`.
    */
   driverOrder?: Array<string>;
 
