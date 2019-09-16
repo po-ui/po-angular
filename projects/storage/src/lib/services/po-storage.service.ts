@@ -3,6 +3,7 @@ import { Inject, Injectable, InjectionToken } from '@angular/core';
 import * as LocalForage from 'localforage';
 import IdleQueue from 'custom-idle-queue';
 
+import { PoLokiDriver } from '../drivers/lokijs/po-loki-driver';
 import { PoStorageConfig } from './po-storage-config.interface';
 
 export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOKEN');
@@ -12,12 +13,17 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  *
  * O PO Storage é uma biblioteca que fornece um serviço para armazenamento de dados no dispositivo local, sendo semelhante
  * ao funcionamento do [IonicStorage](https://ionicframework.com/docs/storage/).
- * Possilitando armazenar os dados no [Websql](https://dev.w3.org/html5/webdatabase/), [Indexeddb](https://www.w3.org/TR/IndexedDB/)
- * ou no [LocalStorage](https://html.spec.whatwg.org/multipage/webstorage.html).
+ * É possível utilizar os drivers [Websql](https://dev.w3.org/html5/webdatabase/), [Indexeddb](https://www.w3.org/TR/IndexedDB/),
+ * [LocalStorage](https://html.spec.whatwg.org/multipage/webstorage.html) e também [LokiJS](https://github.com/techfort/LokiJS/wiki).
+ *
+ * Para um melhor ganho de performance ao buscar e salvar dados, recomendamos a utilização do `LokiJS`, um *database*
+ * orientado a documento semelhante ao MongoDB, que além de permitir a persistência dos dados no dispositivo possibilita
+ * também o armazenamento dos dados em memória. Outra vantagem, é o aumento do limite de armazenamento para
+ * aproximadamente `300mb`.
  *
  * A estrutura utilizada para armazenar os dados é a de chave/valor, onde uma chave funciona como um identificador exclusivo.
  *
- * Para utilizá-lo é necessário importar o módulo `PoStorageModule` no módulo da sua aplicação, por exemplo:
+ * Para utilizar é necessário importar o módulo `PoStorageModule` no módulo da sua aplicação, por exemplo:
  *
  * ```typescript
  * import { PoStorageModule } from '@portinari/portinari-storage';
@@ -45,7 +51,9 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  * que serve para configurar as opções personalizadas do armazenamento, como por exemplo: o tipo de armazenamento
  * preferêncial.
  *
- * Exemplo de utilização:
+ * Caso não seja passada nenhuma configuração a ordem padrão será: ['websql', 'indexeddb', 'localstorage', 'lokijs'].
+ *
+ * Abaixo segue um exemplo de configuração onde o storage preferencial passa a ser o `lokijs`:
  *
  * ```typescript
  * import { PoStorageModule } from '@portinari/portinari-storage';
@@ -57,7 +65,7 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  *    PoStorageModule.forRoot({
  *      name: 'mystorage',
  *      storeName: '_mystore',
- *      driverOrder: ['websql', 'indexeddb', 'localstorage']
+ *      driverOrder: ['lokijs', 'websql', 'indexeddb', 'localstorage']
  *    }),
  *  ],
  *  bootstrap: [IonicApp],
@@ -73,6 +81,7 @@ export class PoStorageService {
   private driver: string = null;
   private idleQueue = new IdleQueue();
   private storagePromise: Promise<LocalForage>;
+  private lokijsDriver: PoLokiDriver;
 
   /**
    * Retorna a configuração padrão para o armazenamento. Caso nenhuma configuração seja inserida,
@@ -84,7 +93,7 @@ export class PoStorageService {
     return {
       name: '_postorage',
       storeName: '_pokv',
-      driverOrder: ['websql', 'indexeddb', 'localstorage']
+      driverOrder: ['websql', 'indexeddb', 'localstorage', 'lokijs']
     };
   }
 
@@ -103,6 +112,7 @@ export class PoStorageService {
   }
 
   constructor(@Inject(PO_STORAGE_CONFIG_TOKEN) config?: PoStorageConfig) {
+    this.lokijsDriver = new PoLokiDriver();
     this.setStoragePromise(config);
   }
 
@@ -208,14 +218,13 @@ export class PoStorageService {
    * @returns {Promise<any>} Promessa que é resolvida após o item ser buscado.
    */
   async get(key: string, lock: boolean = false): Promise<any> {
-    const store = await this.storagePromise;
-
     if (lock) {
       await this.requestIdlePromise();
-      return await this.idleQueue.wrapCall(() => store.getItem(key));
+      return await this.idleQueue.wrapCall(async () => {
+        await this.getImmutableItem(key);
+      });
     }
-
-    return store.getItem(key);
+    return await this.getImmutableItem(key);
   }
 
   /**
@@ -382,7 +391,7 @@ export class PoStorageService {
    * ```
    *
    * @param {string} key Chave da lista que contém o item que será removido.
-   * @param {sring} field O campo a ser filtrado no item.
+   * @param {string} field O campo a ser filtrado no item.
    * @param {string} value O valor do filtro.
    * @returns {Promise<any>} Promessa que é resolvida quando o objeto for removido da lista.
    */
@@ -437,13 +446,14 @@ export class PoStorageService {
    */
   async set(key: string, value: any, lock: boolean = false): Promise<any> {
     const store = await this.storagePromise;
+    const newValue = typeof value === 'object' ? JSON.parse(JSON.stringify(value)) : value;
 
     if (lock) {
       await this.requestIdlePromise();
-      return this.idleQueue.wrapCall(() => store.setItem(key, value));
+      return this.idleQueue.wrapCall(() => store.setItem(key, newValue));
     }
 
-    return store.setItem(key, value);
+    return store.setItem(key, newValue);
   }
 
   /**
@@ -489,6 +499,18 @@ export class PoStorageService {
     return data || [];
   }
 
+  private async getImmutableItem(key: string) {
+    const store = await this.storagePromise;
+    const items = await store.getItem(key);
+    return items ? JSON.parse(JSON.stringify(items)) : null;
+  }
+
+  private async defineLocalForageDriver(localForageInstance: any, driverOrder) {
+    await localForageInstance.defineDriver(this.lokijsDriver.getDriver());
+    await this.setDriver(localForageInstance, driverOrder);
+    return localForageInstance;
+  }
+
   private getDriverOrder(driverOrder: Array<string>): Array<string> {
     return driverOrder.map(driver => {
       switch (driver) {
@@ -498,6 +520,8 @@ export class PoStorageService {
           return LocalForage.WEBSQL;
         case 'localstorage':
           return LocalForage.LOCALSTORAGE;
+        default:
+        return driver;
       }
     });
   }
@@ -523,10 +547,7 @@ export class PoStorageService {
     const localForageInstance = LocalForage.createInstance(actualConfig);
 
     try {
-
-      await this.setDriver(localForageInstance, actualConfig.driverOrder);
-      return localForageInstance;
-
+      return await this.defineLocalForageDriver(localForageInstance, actualConfig.driverOrder);
     } catch {
       throw new Error(`Cannot use this drivers: ${actualConfig.driverOrder.join(', ')}.`);
     }

@@ -43,7 +43,7 @@ export class PoSchemaService {
    * @param {string} schemaName Nome do *schema*.
    */
   private static isSchemaKey(data: string, schemaName: string): boolean {
-    return data.startsWith(`${schemaName}:`);
+    return data ? data.startsWith(`${schemaName}:`) : false;
   }
 
   constructor(private poSchemaDefinitionService: PoSchemaDefinitionService , private poStorage: PoStorageService) { }
