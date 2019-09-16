@@ -34,6 +34,7 @@
 }
 
 .po-rich-text-body::-webkit-scrollbar {
+  height: 7px;
   width: 7px;
 }
 
