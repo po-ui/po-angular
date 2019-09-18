@@ -33,6 +33,7 @@ import { PoMultiselectItemComponent } from './po-multiselect/po-multiselect-item
 import { PoMultiselectSearchComponent } from './po-multiselect/po-multiselect-search/po-multiselect-search.component';
 import { PoRichTextBodyComponent } from './po-rich-text/po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextComponent } from './po-rich-text/po-rich-text.component';
+import { PoRichTextModalComponent } from './po-rich-text/po-rich-text-modal/po-rich-text-modal.component';
 import { PoRichTextToolbarComponent } from './po-rich-text/po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoInputComponent } from './po-input/po-input.component';
 import { PoNumberComponent } from './po-number/po-number.component';
@@ -122,6 +123,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoRadioGroupComponent,
     PoRichTextBodyComponent,
     PoRichTextComponent,
+    PoRichTextModalComponent,
     PoRichTextToolbarComponent,
     PoSelectComponent,
     PoSelectOptionTemplateDirective,
@@ -138,7 +140,8 @@ import { PoUrlComponent } from './po-url/po-url.component';
   providers: [],
   entryComponents: [
     PoCalendarComponent,
-    PoLookupModalComponent
+    PoLookupModalComponent,
+    PoRichTextModalComponent
   ]
 })
 export class PoFieldModule { }

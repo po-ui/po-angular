@@ -446,3 +446,19 @@ export function mapObjectByProperties(object: any = {}, properties: Array<string
 export function valuesFromObject(object: any = {}): Array<any> {
   return Object.keys(object).map(property => object[property]);
 }
+
+/**
+ * Converte um arquivo em base64.
+ *
+ * @param file arquivo que será convertido.
+ */
+export function convertImageToBase64(file: File): Promise<any> {
+  return new Promise((resolve, reject) => {
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}

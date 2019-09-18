@@ -74,8 +74,8 @@ export class PoRichTextBodyComponent implements OnInit {
     // Tratamento necessário para eliminar a tag <br> criada no firefox quando o body for limpo.
     const bodyElement = this.bodyElement.nativeElement;
 
-    if (!bodyElement.innerText.trim() && bodyElement.firstChild) {
-      bodyElement.firstChild.remove();
+    if (!bodyElement.innerText.trim() && bodyElement.childNodes.length === 1 && bodyElement.querySelector('br')) {
+      bodyElement.querySelector('br').remove();
     }
 
     this.updateModel();

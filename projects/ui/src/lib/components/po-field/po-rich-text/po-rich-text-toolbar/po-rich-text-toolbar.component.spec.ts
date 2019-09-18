@@ -2,10 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import * as UtilsFunction from '../../../../utils/util';
 import { configureTestSuite } from '../../../../util-test/util-expect.spec';
-import { PoButtonGroupModule } from '../../../po-button-group';
-import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
 
+import { PoButtonGroupModule } from '../../../po-button-group';
+import { PoFieldModule } from '../../po-field.module';
+import { PoModalModule } from '../../../po-modal/po-modal.module';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
+import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
 
 describe('PoRichTextToolbarComponent:', () => {
   let component: PoRichTextToolbarComponent;
@@ -16,11 +18,11 @@ describe('PoRichTextToolbarComponent:', () => {
     TestBed.configureTestingModule({
       imports: [
         PoButtonGroupModule,
-        PoTooltipModule
+        PoModalModule,
+        PoTooltipModule,
+        PoFieldModule
       ],
-      declarations: [
-        PoRichTextToolbarComponent,
-      ],
+      declarations: [],
     });
   });
 
@@ -50,6 +52,14 @@ describe('PoRichTextToolbarComponent:', () => {
 
       expect(component.isInternetExplorer).toBeFalsy();
       expect(spyIsIE).toHaveBeenCalled();
+    });
+
+    it('mediaButtons: should call modal', () => {
+      spyOn(component.modal, <any>'emit');
+
+      component.mediaButtons[0].action();
+
+      expect(component.modal.emit).toHaveBeenCalled();
     });
 
   });
@@ -171,6 +181,7 @@ describe('PoRichTextToolbarComponent:', () => {
         expect(formatButton.disabled).toBeTruthy();
       });
       expect(component.listButtons[0].disabled).toBeTruthy();
+      expect(component.mediaButtons[0].disabled).toBeTruthy();
     });
 
     it('toggleDisableButtons: shouldn`t apply the state `disabled` to alignButtons, formatButtons and lisButtons.', () => {
@@ -183,6 +194,7 @@ describe('PoRichTextToolbarComponent:', () => {
         expect(formatButton.disabled).toBeFalsy();
       });
       expect(component.listButtons[0].disabled).toBeFalsy();
+      expect(component.mediaButtons[0].disabled).toBeFalsy();
     });
 
     it(`changeTextColor: should call 'command.emit'.`, () => {
