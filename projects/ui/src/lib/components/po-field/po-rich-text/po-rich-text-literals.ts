@@ -8,7 +8,11 @@ export const poRichTextLiteralsDefault = {
     right: 'Right',
     justify: 'Justify',
     textColor: 'Text color',
-    unorderedList: 'Bulleted list'
+    unorderedList: 'Bulleted list',
+    cancel: 'Cancel',
+    insert: 'Insert',
+    insertImage: 'Insert image',
+    urlImage: 'URL image'
   },
   es: {
     bold: 'Negrita',
@@ -19,7 +23,11 @@ export const poRichTextLiteralsDefault = {
     right: 'Derecha',
     justify: 'Justificado',
     textColor: 'Color del texto',
-    unorderedList: 'Lista con viñetas'
+    unorderedList: 'Lista con viñetas',
+    cancel: 'Cancelar',
+    insert: 'Insertar',
+    insertImage: 'Insertar imagen',
+    urlImage: 'Imagen URL'
   },
   pt: {
     bold: 'Negrito',
@@ -30,6 +38,10 @@ export const poRichTextLiteralsDefault = {
     right: 'Direita',
     justify: 'Justificado',
     textColor: 'Cor do texto',
-    unorderedList: 'Lista com marcadores'
+    unorderedList: 'Lista com marcadores',
+    cancel: 'Cancelar',
+    insert: 'Inserir',
+    insertImage: 'Inserir imagem',
+    urlImage: 'Imagem em URL'
   }
 };

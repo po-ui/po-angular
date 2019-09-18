@@ -114,12 +114,28 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component['emitSelectionCommands']).toHaveBeenCalled();
     });
 
-    it('onKeyUp: should call `updateModel`', () => {
-      const element = document.createElement('div');
+    it('onKeyUp: should remove tag `br`', () => {
+      const element = document.createElement('br');
       element.classList.add('teste');
       component.bodyElement.nativeElement.appendChild(element);
       component.onKeyUp();
       expect(nativeElement.querySelector('.teste')).toBeFalsy();
+    });
+
+    it('onKeyUp: should`t remove tag `br`', () => {
+      const div = document.createElement('div');
+      const br = document.createElement('br');
+
+      br.classList.add('teste-br');
+      div.classList.add('teste-div');
+
+      component.bodyElement.nativeElement.appendChild(div);
+      component.bodyElement.nativeElement.appendChild(br);
+
+      component.onKeyUp();
+
+      expect(nativeElement.querySelector('.teste-br')).toBeTruthy();
+      expect(nativeElement.querySelector('.teste-div')).toBeTruthy();
     });
 
     it('onKeyUp: should call `updateModel`', () => {

@@ -1,8 +1,8 @@
-import { changePhantomProperties, expectBrowserLanguageMethod } from './../util-test/util-expect.spec';
+import { changePhantomProperties, expectBrowserLanguageMethod, handleThrowError } from './../util-test/util-expect.spec';
 
 import {
-  callFunction, capitalizeFirstLetter, convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertToBoolean,
-  convertToInt, formatYear, getFormattedLink, isEquals, isKeyCodeEnter, isExternalLink, isTypeof, mapArrayByProperties,
+  callFunction, capitalizeFirstLetter, convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertImageToBase64,
+  convertToBoolean, convertToInt, formatYear, getFormattedLink, isEquals, isKeyCodeEnter, isExternalLink, isTypeof, mapArrayByProperties,
   mapObjectByProperties, openExternalLink, removeDuplicatedOptions, removeUndefinedAndNullOptions, setYearFrom0To100,
   sortOptionsByProperty, sortValues, validateDateRange, validValue, valuesFromObject
 } from './util';
@@ -1257,4 +1257,22 @@ describe('Function valuesFromObject:', () => {
     expect(valuesFromObject()).toEqual([]);
   });
 
+});
+
+describe('Function convertImageToBase64:', () => {
+  it(`should resolve of promise if file is defined.`, async () => {
+    const file = new File([''], 'filename', { type: 'text/html' });
+
+    const result = await convertImageToBase64(file);
+
+    expect(result).toBeDefined();
+  });
+
+  it(`should return a error if file is invalid.`, async () => {
+    const file = <any>'invalid file';
+
+    const result = await handleThrowError(convertImageToBase64(file));
+
+    expect(result).toThrow();
+  });
 });

@@ -16,11 +16,14 @@
 <po-divider></po-divider>
 
 <div class="po-row">
-  <po-info
+  <po-textarea
     class="po-md-6"
+    name="model"
+    [(ngModel)]="richText"
     p-label="Model"
-    [p-value]="richText">
-  </po-info>
+    p-readonly
+    p-rows="8">
+  </po-textarea>
 
   <po-info
     class="po-md-6"

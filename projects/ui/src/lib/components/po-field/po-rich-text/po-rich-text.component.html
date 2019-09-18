@@ -17,8 +17,12 @@
 
     <po-rich-text-toolbar #richTextToolbar
       [p-readonly]="readonly"
-      (p-command)="richTextBody.executeCommand($event)">
+      (p-command)="richTextBody.executeCommand($event)"
+      (p-modal)="richTextModal.openModal($event)">
     </po-rich-text-toolbar>
+    <po-rich-text-modal #richTextModal
+      (p-command)="richTextBody.executeCommand($event)">
+    </po-rich-text-modal>
 
   </div>
 
