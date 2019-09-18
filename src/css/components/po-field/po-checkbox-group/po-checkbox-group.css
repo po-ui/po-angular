@@ -67,11 +67,11 @@ po-checkbox-group.ng-invalid.ng-dirty .po-checkbox-group-input + .po-checkbox-gr
 }
 
 .po-checkbox-group-input-checked+.po-checkbox-group-label:before {
-  content: '\e937';
+  content: '\e938';
 }
 
 .po-checkbox-group-input-indeterminate+.po-checkbox-group-label:before {
-  content: '\e928';
+  content: '\e929';
 }
 
 .po-checkbox-group-label:focus {
