@@ -21,6 +21,7 @@ import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.c
  * </example>
  *
  * <example name="po-rich-text-recipe" title="Portinari Rich Text Recipe">
+ *   <file name="sample-po-rich-text-recipe/sample-po-rich-text-recipe-image-base-64.ts"> </file>
  *   <file name="sample-po-rich-text-recipe/sample-po-rich-text-recipe.component.html"> </file>
  *   <file name="sample-po-rich-text-recipe/sample-po-rich-text-recipe.component.ts"> </file>
  * </example>

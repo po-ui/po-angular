@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { isIE } from './../../../../utils/util';
+import { isIE } from '../../../../utils/util';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 
+import { PoButtonGroupItem } from '../../../po-button-group';
 import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
+import { PoRichTextModalType } from '../enums/po-rich-text-modal-type.enum';
 import { PoRichTextToolbarButtonGroupItem } from '../interfaces/po-rich-text-toolbar-button-group-item.interface';
 
 const poRichTextDefaultColor = '#000000';
@@ -78,6 +80,14 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     }
   ];
 
+  mediaButtons: Array<PoButtonGroupItem> = [
+    {
+      tooltip: this.literals.insertImage,
+      icon: 'po-icon-picture',
+      action: () => this.modal.emit(PoRichTextModalType.Image)
+    }
+  ];
+
   @ViewChild('colorPickerInput', { read: ElementRef, static: false }) colorPickerInput: ElementRef;
 
   @ViewChild('toolbarElement', { static: true }) toolbarElement: ElementRef;
@@ -92,6 +102,8 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   }
 
   @Output('p-command') command = new EventEmitter<string | { command: string, value: string }>();
+
+  @Output('p-modal') modal = new EventEmitter<any>();
 
   get isInternetExplorer() {
     return isIE();
@@ -147,6 +159,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.alignButtons.forEach(button => button.disabled = state);
     this.formatButtons.forEach(button => button.disabled = state);
     this.listButtons[0].disabled = state;
+    this.mediaButtons[0].disabled = state;
   }
 
 }

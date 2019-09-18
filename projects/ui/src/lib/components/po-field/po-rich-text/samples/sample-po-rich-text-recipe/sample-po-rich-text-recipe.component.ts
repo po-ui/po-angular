@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import image from './sample-po-rich-text-recipe-image-base-64';
 
 @Component({
   selector: 'sample-po-rich-text-recipe',
@@ -10,9 +11,11 @@ export class SamplePoRichTextRecipeComponent {
     <div style="text-align: center;"><b>Quick Hummus Recipe</b></div>
     <div><br></div>
     <div style="text-align: start;">
-      <div><b><u>Preparation Time:</u></b>&nbsp;less than 30 mins</div>
-      <div><b><u>Serves</u></b>: 3 people</div>
+    <div><b><u>Preparation Time:</u></b>&nbsp;less than 30 mins</div>
+    <div><b><u>Serves</u></b>: 3 people</div>
     </div>
+    <div><br></div>
+    <img src="${image}">
     <div style="text-align: start;"><br></div>
     <div style="text-align: start;"><u><b>Ingredients</b></u>&nbsp;<br></div>
     <div style="text-align: start;"><u><br></u></div>
@@ -51,5 +54,4 @@ export class SamplePoRichTextRecipeComponent {
         oven for three minutes, and cut into quarters.
       </div>
     </div>`;
-
 }
