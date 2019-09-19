@@ -28,6 +28,7 @@ class PoUploadComponent extends PoUploadBaseComponent {
   }
 
   sendFeedback() {}
+  setDirectoryAttribute() {}
 }
 
 describe('PoUploadBaseComponent:', () => {
@@ -431,6 +432,22 @@ describe('PoUploadBaseComponent:', () => {
       expect(component['updateExistsFileInFiles']).not.toHaveBeenCalled();
     });
 
+    it('insertFileInFiles: should call `files.push` with newFile if `directory` is true and `existsFileSameName` is false', () => {
+      const files = [];
+      component.directory = true;
+      component.isMultiple = true;
+
+      spyOn(files, 'push');
+      spyOn(component, <any> 'existsFileSameName').and.returnValue(false);
+      spyOn(component, <any> 'updateExistsFileInFiles');
+
+      component['insertFileInFiles'](file, files);
+
+      expect(files.push).toHaveBeenCalledWith(file);
+      expect(component['existsFileSameName']).toHaveBeenCalled();
+      expect(component['updateExistsFileInFiles']).not.toHaveBeenCalled();
+    });
+
     it('insertFileInFiles: should call `updateExistsFileInFiles` when `existsFileSameName` is true', () => {
       const files = [];
 
@@ -668,6 +685,96 @@ describe('PoUploadBaseComponent:', () => {
       const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
 
       expectPropertiesValues(component, 'hideSendButton', invalidValues, false);
+    });
+
+    it('directory: should set `directory` with valid values', () => {
+      const validValues = ['', true, 1, [], {}, 'true'];
+
+      expectPropertiesValues(component, 'directory', validValues, true);
+    });
+
+    it('directory: should set `directory` to false with invalid values', () => {
+      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
+
+      expectPropertiesValues(component, 'directory', invalidValues, false);
+    });
+
+    it('directory: should apply true to `canHandleDirectory` if directory is true and `isIE` plus `isMobile` return false', () => {
+      component.canHandleDirectory = undefined;
+
+      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+
+      component.directory = true;
+
+      expect(component.canHandleDirectory).toBeTruthy();
+    });
+
+    it('directory: should apply false to `canHandleDirectory` if directory is true but `isIE` returns true', () => {
+      spyOn(utilsFunctions, <any>'isIE').and.returnValue(true);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+
+      component.directory = true;
+
+      expect(component.canHandleDirectory).toBeFalsy();
+    });
+
+    it('directory: should apply false to `canHandleDirectory` if directory is true but `isMobile` returns true', () => {
+      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
+
+      component.directory = true;
+
+      expect(component.canHandleDirectory).toBeFalsy();
+    });
+
+    it('directory: should apply false to `canHandleDirectory` if directory is false', () => {
+      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+
+      component.directory = false;
+
+      expect(component.canHandleDirectory).toBeFalsy();
+    });
+
+    it(`directory: call 'setDirectoryAttribute' passing true as parameter`, () => {
+      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      spyOn(component, 'setDirectoryAttribute');
+
+      component.directory = true;
+
+      expect(component['canHandleDirectory']).toBe(true);
+      expect(component.setDirectoryAttribute).toHaveBeenCalledWith(true);
+    });
+
+    it(`directory: should call 'setDirectoryAttribute' passing false as parameter`, () => {
+      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
+      spyOn(component, 'setDirectoryAttribute');
+
+      component.directory = false;
+
+      expect(component['canHandleDirectory']).toBe(false);
+      expect(component.setDirectoryAttribute).toHaveBeenCalledWith(false);
+    });
+
+    it('isMultiple: should set `isMultiple` with `true` if valid values', () => {
+      const validValues = ['', true, 1, [], {}, 'true'];
+
+      expectPropertiesValues(component, 'isMultiple', validValues, true);
+    });
+
+    it('isMultiple: should set `isMultiple` with `false` if invalid values', () => {
+      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
+
+      expectPropertiesValues(component, 'isMultiple', invalidValues, false);
+    });
+
+    it('isMultiple: should return true if `diretory` is true', () => {
+      component.directory = true;
+
+      expect(component.isMultiple).toBe(true);
     });
 
   });

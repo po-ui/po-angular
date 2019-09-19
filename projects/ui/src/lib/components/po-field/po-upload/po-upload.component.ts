@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, Renderer2, ViewChild } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { formatBytes, isMobile } from '../../../utils/util';
@@ -31,11 +31,6 @@ import { PoUploadStatus } from './po-upload-status.enum';
  * <example name="po-upload-resume" title="Portinari Upload - Resume">
  *   <file name="sample-po-upload-resume/sample-po-upload-resume.component.html"> </file>
  *   <file name="sample-po-upload-resume/sample-po-upload-resume.component.ts"> </file>
- * </example>
- *
- * <example name="po-upload-resume-drag-drop" title="Portinari Upload - Resume Drag Drop">
- *   <file name="sample-po-upload-resume-drag-drop/sample-po-upload-resume-drag-drop.component.html"> </file>
- *   <file name="sample-po-upload-resume-drag-drop/sample-po-upload-resume-drag-drop.component.ts"> </file>
  * </example>
  *
  * <example name="po-upload-rs" title="Portinari Upload - Realize & Show">
@@ -88,9 +83,10 @@ export class PoUploadComponent extends PoUploadBaseComponent {
   @ViewChild('uploadButton', { static: false }) private uploadButton: PoButtonComponent;
 
   constructor(
+    uploadService: PoUploadService,
+    public renderer: Renderer2,
     private i18nPipe: PoI18nPipe,
-    private notification: PoNotificationService,
-    uploadService: PoUploadService) {
+    private notification: PoNotificationService) {
     super(uploadService);
   }
 
@@ -101,6 +97,24 @@ export class PoUploadComponent extends PoUploadBaseComponent {
   get displaySendButton(): boolean {
     const currentFiles = this.currentFiles || [];
     return !this.hideSendButton && !this.autoUpload && (currentFiles.length > 0 && this.hasFileNotUploaded);
+  }
+
+  get selectFileButtonLabel() {
+    if (this.canHandleDirectory) {
+      return this.literals.selectFolder;
+    } else if (this.isMultiple) {
+      return this.literals.selectFiles;
+    } else {
+      return this.literals.selectFile;
+    }
+  }
+
+  get hasMoreThanFourItems(): boolean {
+    return this.currentFiles && this.currentFiles.length > 4;
+  }
+
+  get hasMultipleFiles(): boolean {
+    return this.currentFiles && this.currentFiles.length > 1;
   }
 
   get hasFileNotUploaded(): boolean {
@@ -185,7 +199,8 @@ export class PoUploadComponent extends PoUploadBaseComponent {
 
   // Função disparada ao selecionar algum arquivo.
   onFileChange(event): void {
-    // necessario este tratamento quando para IE, pois nele o change é disparado quando o campo é limpado também
+
+    // necessário este tratamento quando para IE, pois nele o change é disparado quando o campo é limpado também
     if (this.calledByCleanInputValue) {
       this.calledByCleanInputValue = false;
       return event.preventDefault();
@@ -201,7 +216,7 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     this.updateFiles(files);
   }
 
-  // Remove o arquivo passado por parametro da lista dos arquivos correntes.
+  // Remove o arquivo passado por parâmetro da lista dos arquivos correntes.
   removeFile(file): void {
     const index = this.currentFiles.indexOf(file);
     this.currentFiles.splice(index, 1);
@@ -210,7 +225,7 @@ export class PoUploadComponent extends PoUploadBaseComponent {
   }
 
   /** Método responsável por **abrir** a janela para seleção de arquivo(s). */
-  selectFiles(): void {
+  selectFiles() {
     this.calledByCleanInputValue = false;
     this.inputFile.nativeElement.click();
   }
@@ -245,6 +260,14 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     if (this.currentFiles && this.currentFiles.length) {
 
       this.uploadFiles(this.currentFiles);
+    }
+  }
+
+  setDirectoryAttribute(canHandleDirectory: boolean) {
+    if (canHandleDirectory) {
+      this.renderer.setAttribute(this.inputFile.nativeElement, 'webkitdirectory', 'true');
+    } else {
+      this.renderer.removeAttribute(this.inputFile.nativeElement, 'webkitdirectory');
     }
   }
 
@@ -317,7 +340,6 @@ export class PoUploadComponent extends PoUploadBaseComponent {
   // Atualiza o ngModel para os arquivos passados por parâmetro.
   private updateModel(files: Array<PoUploadFile>) {
     const modelFiles: Array<PoUploadFile> = this.mapCleanUploadFiles(files);
-
     this.onModelChange ? this.onModelChange(modelFiles) : this.ngModelChange.emit(modelFiles);
   }
 

@@ -13,21 +13,17 @@
 <ng-template #overlayTemplate>
   <span class="po-upload-drag-drop-area-overlay-icon po-icon po-icon-upload-cloud"></span>
 
-  <div class="po-upload-drag-drop-area-overlay-label"> {{ literals?.dropFilesHere }} </div>
+  <div class="po-upload-drag-drop-area-overlay-label">{{ directoryCompatible ? literals?.dropFoldersHere : literals?.dropFilesHere }}</div>
 </ng-template>
 
 <ng-template #defaultTemplate>
   <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
 
-  <div class="po-upload-drag-drop-area-label">
-    {{ literals?.dragFilesHere }}
-  </div>
+  <div class="po-upload-drag-drop-area-label">{{ directoryCompatible ? literals?.dragFoldersHere : literals?.dragFilesHere }}</div>
 
   <button #selectFilesLink
     class="po-upload-drag-drop-area-select-files"
     [disabled]="disabled"
     [ngClass]="{'po-clickable': !disabled}"
-    (click)="selectFiles.emit()">
-    {{ literals?.selectFilesOnComputer }}
-  </button>
+    (click)="selectFiles.emit()">{{ directoryCompatible ? literals?.selectFolderOnComputer : literals?.selectFilesOnComputer }}</button>
 </ng-template>

@@ -12,6 +12,8 @@ export class PoUploadDragDropAreaOverlayComponent implements AfterViewInit {
 
   @ViewChild('DragDropAreaFixed', { read: ElementRef, static: true }) DragDropAreaFixed: ElementRef;
 
+  @Input('p-directory-compatible') directoryCompatible: boolean;
+
   @Input('p-disabled') disabled: boolean;
 
   @Input('p-literals') literals: PoUploadLiterals;

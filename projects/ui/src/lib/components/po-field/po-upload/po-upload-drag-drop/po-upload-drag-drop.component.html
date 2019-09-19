@@ -1,4 +1,5 @@
 <po-upload-drag-drop-area-overlay #dragDropOverlay *ngIf="isDragOver"
+  [p-directory-compatible]="directoryCompatible"
   [p-disabled]="disabled"
   [p-literals]="literals"
   [p-target]="dragDropAreaComponent.elementRef"
@@ -8,6 +9,7 @@
 <po-upload-drag-drop-area
   p-upload-drag-drop
   [p-area-element]="areaElement"
+  [p-directory-compatible]="directoryCompatible"
   [p-disabled]="disabled"
   [p-height]="dragDropHeight"
   [p-literals]="literals"

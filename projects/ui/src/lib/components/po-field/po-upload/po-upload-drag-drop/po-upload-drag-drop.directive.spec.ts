@@ -124,8 +124,7 @@ describe('PoUploadDragDropDirective:', () => {
       expect(directive.dragOver.emit).toHaveBeenCalled();
     });
 
-    it(`onDrop: should call 'preventDefault' and 'stopPropagation'`, () => {
-      directive.disabled = true;
+    it(`should call 'preventDefault', 'stopPropagation', 'getFilesFromDataTransferItems' and 'dragLeave.emit'`, () => {
       const fakeEvent = {
         preventDefault: () => {},
         stopPropagation: () => {},
@@ -136,56 +135,240 @@ describe('PoUploadDragDropDirective:', () => {
 
       spyOn(fakeEvent, 'preventDefault');
       spyOn(fakeEvent, 'stopPropagation');
+      spyOn(directive, <any>'getFilesFromDataTransferItems');
+      spyOn(directive.dragLeave, 'emit');
 
       directive.onDrop(fakeEvent);
 
       expect(fakeEvent.preventDefault).toHaveBeenCalled();
       expect(fakeEvent.stopPropagation).toHaveBeenCalled();
+      expect(directive.dragLeave.emit).toHaveBeenCalled();
+      expect(directive['getFilesFromDataTransferItems']).toHaveBeenCalled();
     });
 
-    it(`onDrop: should call 'dragLeave.emit', 'getOnlyFiles' and 'sendFiles' with 'event' and 'files' if 'disabled' is false`, () => {
-      const fakeFiles = 'fakeFiles';
+    it(`getFilesFromDataTransferItems: should call 'getOnlyFiles' and 'sendFiles' if 'directoryCompatible' is false`, () => {
+      directive.disabled = false;
+      directive['directoryCompatible'] = false;
+
       const fakeEvent = {
-        preventDefault: () => {},
-        stopPropagation: () => {},
         dataTransfer: {
           files: undefined
         }
       };
 
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(fakeEvent, 'stopPropagation');
-      spyOn(directive.dragLeave, 'emit');
+      spyOn(directive, <any>'getOnlyFiles');
       spyOn(directive, <any>'sendFiles');
-      spyOn(directive, <any>'getOnlyFiles').and.returnValue(fakeFiles);
+      spyOn(directive, <any>'getOnlyDirectories');
 
-      directive.onDrop(fakeEvent);
+      directive['getFilesFromDataTransferItems'](fakeEvent);
 
-      expect(directive.dragLeave.emit).toHaveBeenCalled();
       expect(directive['getOnlyFiles']).toHaveBeenCalled();
-      expect(directive['sendFiles']).toHaveBeenCalledWith(fakeEvent, fakeFiles);
+      expect(directive['sendFiles']).toHaveBeenCalled();
+      expect(directive['getOnlyDirectories']).not.toHaveBeenCalled();
     });
 
-    it(`onDrop: shouldn't call 'dragLeave.emit', 'getOnlyFiles' and 'sendFiles' if 'disabled' is true`, () => {
-      const fakeEvent = {
-        preventDefault: () => {},
-        stopPropagation: () => {}
+    it(`getFilesFromDataTransferItems: should call 'getOnlyDirectories' and 'sendFiles'
+    if 'directoryCompatible' is true`, () => {
+      const fakeThis = {
+        files: [],
+        disabled: false,
+        directoryCompatible: true,
+        invalidFileType: 0,
+        getOnlyDirectories: () => {
+          return { then: callback => callback() };
+        },
+        sendFiles: () => {},
+        getOnlyFiles: () => {}
       };
 
-      directive.disabled = true;
+      const fakeEvent = {
+        dataTransfer: {
+          items: {name: 'name'}
+        }
+      };
 
-      spyOn(directive.dragLeave, 'emit');
-      spyOn(directive, <any>'sendFiles');
-      spyOn(directive, <any>'getOnlyFiles');
+      spyOn(fakeThis, <any>'getOnlyDirectories').and.callThrough();
+      spyOn(fakeThis, <any>'sendFiles').and.callFake(() => {});
+      spyOn(fakeThis, <any>'getOnlyFiles');
 
-      directive.onDrop(fakeEvent);
+      directive['getFilesFromDataTransferItems'].call(fakeThis, fakeEvent);
 
-      expect(directive.dragLeave.emit).not.toHaveBeenCalled();
-      expect(directive['getOnlyFiles']).not.toHaveBeenCalled();
-      expect(directive['sendFiles']).not.toHaveBeenCalled();
+      expect(fakeThis['getOnlyFiles']).not.toHaveBeenCalled();
+      expect(fakeThis['sendFiles']).toHaveBeenCalledWith(fakeEvent, fakeThis.files);
+      expect(fakeThis['getOnlyDirectories']).toHaveBeenCalledWith(fakeEvent.dataTransfer.items);
     });
 
-    it(`getOnlyFiles: should return an array of files that only contain type`, () => {
+    it('getFilesFromDataTransferItems: shouldn`t call any method if `disabled` is true', () => {
+      directive['disabled'] = true;
+      const fakeEvent = {
+        dataTransfer: {
+          files: undefined
+        }
+      };
+
+      spyOn(directive, <any>'getOnlyFiles');
+      spyOn(directive, <any>'sendFiles');
+      spyOn(directive, <any>'sendFeedback');
+      spyOn(directive, <any>'getOnlyDirectories');
+
+      directive['getFilesFromDataTransferItems'](fakeEvent);
+
+      expect(directive['getOnlyFiles']).not.toHaveBeenCalled();
+      expect(directive['sendFiles']).not.toHaveBeenCalled();
+      expect(directive['sendFeedback']).not.toHaveBeenCalled();
+      expect(directive['getOnlyDirectories']).not.toHaveBeenCalled();
+    });
+
+    it('getFilesFromEntry: should call `readFile` if `entry.isFile`', () => {
+      const entry = {
+        isFile: true,
+        isDirectory: false,
+        file: callback => {
+          callback(callback);
+        }
+      };
+
+      spyOn(directive, <any>'readFile');
+      spyOn(directive, <any>'readDirectory');
+
+      directive['getFilesFromEntry'](entry);
+
+      expect(directive['readFile']).toHaveBeenCalledWith(entry);
+      expect(directive['readDirectory']).not.toHaveBeenCalled();
+    });
+
+    it('getFilesFromEntry: should call `readDirectory` if entry.isDirectory', () => {
+      const entry = {
+        isFile: false,
+        isDirectory: true,
+        file: callback => {
+          callback(callback);
+        }
+      };
+
+      spyOn(directive, <any>'readDirectory');
+      spyOn(directive, <any>'readFile');
+
+      directive['getFilesFromEntry'](entry);
+
+      expect(directive['readDirectory']).toHaveBeenCalledWith(entry);
+      expect(directive['readFile']).not.toHaveBeenCalled();
+    });
+
+    it('getOnlyDirectories: should call `webkitGetAsEntry`, increment `invalidFileType` and not to call `getFilesFromEntry`', () => {
+      const dataTransfer = [{ webkitGetAsEntry: () => {
+          return { isFile: true };
+        }}];
+      directive['invalidFileType'] = 0;
+
+      spyOn(dataTransfer[0], 'webkitGetAsEntry').and.returnValue({ isFile: true });
+      spyOn(directive, <any>'getFilesFromEntry');
+
+      directive['getOnlyDirectories'](dataTransfer);
+
+      expect(dataTransfer[0].webkitGetAsEntry).toHaveBeenCalled();
+      expect(directive['invalidFileType']).toBe(1);
+      expect(directive['getFilesFromEntry']).not.toHaveBeenCalled();
+    });
+
+    it('getOnlyDirectories: should call `webkitGetAsEntry`, not increment `invalidFileType` and call `getFilesFromEntry`', () => {
+      const dataTransfer = [{ webkitGetAsEntry: () => {
+          return { isFile: false };
+        }}];
+      directive['invalidFileType'] = 0;
+
+      spyOn(dataTransfer[0], 'webkitGetAsEntry').and.returnValue({ isFile: false });
+      spyOn(directive, <any>'getFilesFromEntry');
+
+      directive['getOnlyDirectories'](dataTransfer);
+
+      expect(dataTransfer[0].webkitGetAsEntry).toHaveBeenCalled();
+      expect(directive['invalidFileType']).toBe(0);
+      expect(directive['getFilesFromEntry']).toHaveBeenCalledWith({ isFile: false });
+    });
+
+    it('readFile: should call `file` and return expected value', async () => {
+      const file = {name: 'name.jpg', lastModified: 1527109493000};
+      const fakeEntry = { file: callback => callback(file) };
+
+      spyOn(fakeEntry, 'file').and.callThrough();
+
+      const result = await directive['readFile'](fakeEntry);
+
+      expect(fakeEntry.file).toHaveBeenCalled();
+      expect(result).toEqual(file);
+    });
+
+    it('readDirectory: should call `createRender`, `readDirectoryEntries` and return expected result', async () => {
+      const file = [{name: 'name.jpg', lastModified: 1527109493000}];
+      const fakeEntry = {
+        createReader: () => {}
+      };
+
+      spyOn(fakeEntry, 'createReader');
+      spyOn(directive, <any>'readDirectoryEntries').and.returnValue(Promise.resolve(file));
+
+      const result = await directive['readDirectory'](fakeEntry);
+
+      expect(fakeEntry.createReader).toHaveBeenCalled();
+      expect(directive['readDirectoryEntries']).toHaveBeenCalled();
+      expect(result).toEqual(file);
+    });
+
+    it('readDirectoryEntries: should call `readEntries`, `getFilesFromEntry` and return expected result', async () => {
+      const file = [{name: 'name.jpg', lastModified: 1527109493000}];
+      const directoryReader = {
+        readEntries: callback => {
+          callback([file]);
+        }
+      };
+
+      spyOn(directoryReader, <any>'readEntries').and.callThrough();
+      spyOn(directive, <any>'getFilesFromEntry').and.returnValue(Promise.resolve(file));
+
+      const result = await directive['readDirectoryEntries'](directoryReader);
+
+      expect(directoryReader.readEntries).toHaveBeenCalled();
+      expect(directive['getFilesFromEntry']).toHaveBeenCalled();
+      expect(result).toEqual(file);
+    });
+
+    it('sendFeedback: should call `setPipeArguments` if `invalidFileType` is higher than 0', () => {
+      const invalidFiles = 1;
+
+      spyOn(directive, <any>'setPipeArguments');
+
+      directive['sendFeedback'](invalidFiles);
+
+      expect(directive['setPipeArguments']).toHaveBeenCalledWith('invalidFileType', invalidFiles);
+    });
+
+    it('sendFeedback: shouldn`t call `setPipeArguments` if `invalidFileType` is equal to 0', () => {
+      const invalidFiles = 0;
+
+      spyOn(directive, <any>'setPipeArguments');
+
+      directive['sendFeedback'](invalidFiles);
+
+      expect(directive['setPipeArguments']).not.toHaveBeenCalled();
+    });
+
+    it('setPipeArguments: should call `i18nPipe.transform`', () => {
+      directive.literals = {
+        invalidFileType: 'fileType {0}'
+      };
+
+      spyOn(directive.i18nPipe, 'transform').and.returnValue('fileType 2');
+      spyOn(directive.notification, 'information');
+
+      directive['setPipeArguments']('invalidFileType', 2);
+
+      expect(directive.i18nPipe.transform).toHaveBeenCalled();
+      expect(directive.notification.information).toHaveBeenCalledWith('fileType 2');
+    });
+
+    it(`getOnlyFiles: should return an array of files that only contain type and increment 'invalidFileType'`, () => {
+      directive['invalidFileType'] = 0;
       const fileList = [
         { name: 'file1', type: '', size: 300 },
         { name: 'file2', type: '.pdf', size: 500 },
@@ -199,10 +382,11 @@ describe('PoUploadDragDropDirective:', () => {
       ];
 
       expect(directive.getOnlyFiles(fileList)).toEqual(result);
+      expect(directive['invalidFileType']).toBe(2);
     });
 
     it(`sendFiles: should call 'fileChange.emit' with 'files' if 'areaElement' contains 'event.target' and 'files.length'
-    is greater than 0 and doesn't call 'notification.information'`, () => {
+    is greater than 0, 'sendFeedback' and doesn't call 'setPipeArguments'`, () => {
       const fakeThis = {
         areaElement: {
           contains: () => true,
@@ -216,9 +400,9 @@ describe('PoUploadDragDropDirective:', () => {
         literals: {
           invalidDropArea: 'invalid area'
         },
-        notification: {
-          information: () => {}
-        }
+        setPipeArguments: () => {},
+        sendFeedback: () => {},
+        invalidFileType: true
       };
 
       const fakeFiles = [
@@ -231,12 +415,14 @@ describe('PoUploadDragDropDirective:', () => {
       };
 
       spyOn(fakeThis.fileChange, 'emit');
-      spyOn(fakeThis.notification, 'information');
+      spyOn(fakeThis, 'setPipeArguments');
+      spyOn(fakeThis, 'sendFeedback');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 
       expect(fakeThis.fileChange.emit).toHaveBeenCalledWith(fakeFiles);
-      expect(fakeThis.notification.information).not.toHaveBeenCalled();
+      expect(fakeThis.sendFeedback).toHaveBeenCalledWith(fakeThis.invalidFileType);
+      expect(fakeThis.setPipeArguments).not.toHaveBeenCalled();
     });
 
     it(`sendFiles: shouldn't call 'fileChange.emit' if 'areaElement' doesn't contains 'event.target'`, () => {
@@ -253,9 +439,7 @@ describe('PoUploadDragDropDirective:', () => {
         literals: {
           invalidDropArea: 'invalid area'
         },
-        notification: {
-          information: () => {}
-        }
+        setPipeArguments: () => {}
       };
 
       const fakeFiles = [
@@ -274,7 +458,7 @@ describe('PoUploadDragDropDirective:', () => {
       expect(fakeThis.fileChange.emit).not.toHaveBeenCalled();
     });
 
-    it(`sendFiles: shouldn't call 'fileChange.emit' if 'files.length is less than 1`, () => {
+    it(`sendFiles: shouldn't call 'fileChange.emit' if 'files.length is less than 1 and call 'sendFeedback'`, () => {
       const fakeThis = {
         areaElement: {
           contains: () => true,
@@ -288,9 +472,8 @@ describe('PoUploadDragDropDirective:', () => {
         literals: {
           invalidDropArea: 'invalid area'
         },
-        notification: {
-          information: () => {}
-        }
+        setPipeArguments: () => {},
+        sendFeedback: () => {}
       };
 
       const fakeFiles = [];
@@ -300,13 +483,15 @@ describe('PoUploadDragDropDirective:', () => {
       };
 
       spyOn(fakeThis.fileChange, 'emit');
+      spyOn(fakeThis, 'sendFeedback');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 
       expect(fakeThis.fileChange.emit).not.toHaveBeenCalled();
+      expect(fakeThis.sendFeedback).toHaveBeenCalled();
     });
 
-    it(`sendFiles: shouldn't call 'notification.information' if 'areaElement' doesn't contains 'event.target'`, () => {
+    it(`sendFiles: should call 'setPipeArguments' if 'areaElement' doesn't contains 'event.target'`, () => {
       const fakeThis = {
         areaElement: {
           contains: () => false,
@@ -320,9 +505,7 @@ describe('PoUploadDragDropDirective:', () => {
         literals: {
           invalidDropArea: 'invalid area'
         },
-        notification: {
-          information: () => {}
-        }
+        setPipeArguments: () => {}
       };
 
       const fakeFiles = [
@@ -334,13 +517,86 @@ describe('PoUploadDragDropDirective:', () => {
         target: '<div></div>'
       };
 
-      spyOn(fakeThis.notification, 'information');
+      spyOn(fakeThis, 'setPipeArguments');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 
-      expect(fakeThis.notification.information).toHaveBeenCalled();
+      expect(fakeThis.setPipeArguments).toHaveBeenCalled();
     });
 
+    it(`sendFiles: should pass 'invalidDropArea' and 'literals.folders' as params to 'setPipeArguments'
+    if 'directoryCompatible' is true`, () => {
+      const fakeThis = {
+        directoryCompatible: true,
+        areaElement: {
+          contains: () => false,
+          event: {
+            target: undefined
+          }
+        },
+        fileChange: {
+          emit: () => {}
+        },
+        literals: {
+          invalidDropArea: 'invalid area',
+          folders: 'folder',
+          files: 'files'
+        },
+        setPipeArguments: () => {}
+      };
+
+      const fakeFiles = [
+        { name: 'file1', type: '.txt', size: 300 },
+        { name: 'file2', type: '.pdf', size: 500 }
+      ];
+
+      const fakeEvent = {
+        target: '<div></div>'
+      };
+
+      spyOn(fakeThis, 'setPipeArguments');
+
+      directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
+
+      expect(fakeThis.setPipeArguments).toHaveBeenCalledWith('invalidDropArea', fakeThis.literals.folders);
+    });
+
+    it(`sendFiles: should pass 'invalidDropArea' and 'literals.files' as params to 'setPipeArguments'
+    if 'directoryCompatible' is false`, () => {
+      const fakeThis = {
+        directoryCompatible: false,
+        areaElement: {
+          contains: () => false,
+          event: {
+            target: undefined
+          }
+        },
+        fileChange: {
+          emit: () => {}
+        },
+        literals: {
+          invalidDropArea: 'invalid area',
+          folders: 'folder',
+          files: 'files'
+        },
+        setPipeArguments: () => {}
+      };
+
+      const fakeFiles = [
+        { name: 'file1', type: '.txt', size: 300 },
+        { name: 'file2', type: '.pdf', size: 500 }
+      ];
+
+      const fakeEvent = {
+        target: '<div></div>'
+      };
+
+      spyOn(fakeThis, 'setPipeArguments');
+
+      directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
+
+      expect(fakeThis.setPipeArguments).toHaveBeenCalledWith('invalidDropArea', fakeThis.literals.files);
+    });
   });
 
 });

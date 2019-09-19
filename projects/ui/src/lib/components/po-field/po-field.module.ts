@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { PoButtonGroupModule } from '../po-button-group/index';
 import { PoButtonModule } from '../po-button/index';
+import { PoContainerModule } from '../po-container/index';
 import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
 import { PoLoadingModule } from '../po-loading/index';
 import { PoModalModule } from '../po-modal/po-modal.module';
@@ -64,6 +65,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     HttpClientModule,
     PoButtonGroupModule,
     PoButtonModule,
+    PoContainerModule,
     PoDisclaimerModule,
     PoLoadingModule,
     PoModalModule,
