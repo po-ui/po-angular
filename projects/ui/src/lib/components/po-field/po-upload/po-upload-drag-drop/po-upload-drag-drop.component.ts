@@ -23,6 +23,8 @@ export class PoUploadDragDropComponent {
   @ViewChild('dragDropOverlay', { read: ElementRef, static: false }) dragDropOverlayElement: ElementRef;
   @ViewChild(PoUploadDragDropAreaComponent, { static: true }) dragDropAreaComponent: PoUploadDragDropAreaComponent;
 
+  @Input('p-directory-compatible') directoryCompatible: boolean;
+
   @Input('p-disabled') disabled: boolean;
 
   @Input('p-drag-drop-height') set dragDropHeight(value: number) {

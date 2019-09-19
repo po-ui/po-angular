@@ -9,6 +9,8 @@ import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface'
 })
 export class PoUploadDragDropAreaComponent {
 
+  @Input('p-directory-compatible') directoryCompatible: boolean;
+
   @Input('p-disabled') disabled: boolean;
 
   @Input('p-height') height: number;

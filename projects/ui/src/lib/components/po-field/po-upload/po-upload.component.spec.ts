@@ -5,6 +5,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import * as utilsFunctions from '../../../utils/util';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoButtonModule } from '../../po-button/po-button.module';
+import { PoContainerModule } from '../../po-container/po-container.module';
 import { PoProgressModule } from '../../po-progress/po-progress.module';
 
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
@@ -38,7 +39,7 @@ describe('PoUploadComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoButtonModule, PoProgressModule, PoServicesModule ],
+      imports: [ PoButtonModule, PoContainerModule, PoProgressModule, PoServicesModule ],
       declarations: [
         PoUploadComponent,
         PoFieldContainerComponent,
@@ -288,6 +289,50 @@ describe('PoUploadComponent:', () => {
 
       expect(infoByUploadStatus.text(percent)).toBe(expectedValue);
       expect(infoByUploadStatus.icon).toBeUndefined();
+    });
+
+    it('selectFileButtonLabel: should return `literals.selectFolder` if canHandleDirectory is true', () => {
+      component.canHandleDirectory = true;
+
+      expect(component.selectFileButtonLabel).toBe(component.literals.selectFolder);
+    });
+
+    it('selectFileButtonLabel: should return `literals.selectFiles` if canHandleDirectory is false and isMultiple is true', () => {
+      component.canHandleDirectory = false;
+      component.isMultiple = true;
+
+      expect(component.selectFileButtonLabel).toBe(component.literals.selectFiles);
+    });
+
+    it('selectFileButtonLabel: should return `literals.selectFile` if canHandleDirectory and isMultiple are false', () => {
+      component.canHandleDirectory = false;
+      component.isMultiple = false;
+
+      expect(component.selectFileButtonLabel).toBe(component.literals.selectFile);
+    });
+
+    it('hasMoreThanFourItems: should return true if currentFiles.length is greater than 4', () => {
+      component.currentFiles = [fileMock, fileMock, fileMock, fileMock, fileMock];
+
+      expect(component.hasMoreThanFourItems).toBe(true);
+    });
+
+    it('hasMoreThanFourItems: should return false if currentFiles.length is lower than 4', () => {
+      component.currentFiles = [fileMock];
+
+      expect(component.hasMoreThanFourItems).toBe(false);
+    });
+
+    it('hasMultipleFiles: should return true if currentFiles.length is greater than 1', () => {
+      component.currentFiles = [fileMock, fileMock];
+
+      expect(component.hasMultipleFiles).toBe(true);
+    });
+
+    it('hasMultipleFiles: should return false if currentFiles.length lower than 1', () => {
+      component.currentFiles = [fileMock];
+
+      expect(component.hasMultipleFiles).toBe(false);
     });
 
   });
@@ -617,7 +662,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('updateFiles: should call `parseFiles` with `files` and `updateModel` with `currentFiles`', () => {
-      const files = 'fileMock';
+      const files = ['fileMock'];
 
       spyOn(component, <any>'parseFiles').and.returnValue(files);
       spyOn(component, <any>'updateModel');
@@ -629,7 +674,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('updateFiles: should call `uploadFiles` with files if `autoUpload` is `true`', () => {
-      const files = 'fileMock';
+      const files = ['fileMock'];
       component.autoUpload = true;
 
       spyOn(component, <any>'parseFiles').and.returnValue(files);
@@ -643,7 +688,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('updateFiles: shouldn`t call `uploadFiles` with files if `autoUpload` is `false`', () => {
-      const files = 'fileMock';
+      const files = ['fileMock'];
       component.autoUpload = false;
 
       spyOn(component, <any>'parseFiles').and.returnValue(files);
@@ -818,6 +863,27 @@ describe('PoUploadComponent:', () => {
       expect(component.isAllowCancelEvent(fileStatus)).toBe(false);
     });
 
+    it(`setDirectoryAttribute: should call 'setAttribute' if canHandleDirectory is true`, () => {
+      const canHandleDirectory = true;
+
+      spyOn(component.renderer, <any>'setAttribute');
+
+      component.setDirectoryAttribute(canHandleDirectory);
+
+      expect(component.renderer.setAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    it(`setDirectoryAttribute: should call 'removeAttribute' if 'canHandleDirectory' is false`, () => {
+      component.canHandleDirectory = false;
+
+      spyOn(component.renderer, <any>'removeAttribute');
+
+      component.setDirectoryAttribute(component.canHandleDirectory);
+
+      expect(component.renderer.removeAttribute).toHaveBeenCalledWith(component['inputFile'].nativeElement, 'webkitdirectory');
+      expect(component.renderer.removeAttribute).toHaveBeenCalledTimes(1);
+    });
+
   });
 
   describe('Templates:', () => {
@@ -916,6 +982,42 @@ describe('PoUploadComponent:', () => {
       fixture.detectChanges();
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-upload-progress-container')).toBeNull();
+    });
+
+    it('should add `po-upload-progress-container-area` class if `hasMoreThanFourItems` is true', () => {
+      component.currentFiles = [file];
+      spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-upload-progress-container-area')).toBeTruthy();
+    });
+
+    it('shouldn`t add `po-upload-progress-container-area` class if `hasMoreThanFourItems` is false', () => {
+      component.currentFiles = [file];
+      spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-upload-progress-container-area')).toBeFalsy();
+    });
+
+    it('should fix the height of `po-container` to `280px` if `hasMoreThanFourItems` is true', () => {
+      component.currentFiles = [file];
+      spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-container').style.height).toBe('280px');
+    });
+
+    it('should fix the height of `po-container` to `auto` if `hasMoreThanFourItems` is false', () => {
+      component.currentFiles = [file];
+      spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-container').style.height).toBe('auto');
     });
 
   });

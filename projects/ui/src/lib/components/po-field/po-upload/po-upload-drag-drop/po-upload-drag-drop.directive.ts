@@ -1,16 +1,23 @@
 import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
+import { PoI18nPipe } from '../../../../services/po-i18n/po-i18n.pipe';
 import { PoNotificationService } from '../../../../services/po-notification/po-notification.service';
 import { PoUploadLiterals } from '../interfaces/po-upload-literals.interface';
 
 @Directive({
-  selector: '[p-upload-drag-drop]'
+  selector: '[p-upload-drag-drop]',
+  providers: [ PoI18nPipe ]
 })
 export class PoUploadDragDropDirective {
 
   timeout: any;
 
+  private files: Array<File>;
+  private invalidFileType: number;
+
   @Input('p-area-element') areaElement: HTMLElement;
+
+  @Input('p-directory-compatible') directoryCompatible: boolean;
 
   @Input('p-disabled') disabled: boolean;
 
@@ -22,7 +29,7 @@ export class PoUploadDragDropDirective {
 
   @Output('p-file-change') fileChange: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private notification: PoNotificationService) {}
+  constructor(private i18nPipe: PoI18nPipe, private notification: PoNotificationService) { }
 
   @HostListener('document:dragleave', ['$event']) onDragLeave(event) {
     event.preventDefault();
@@ -46,30 +53,120 @@ export class PoUploadDragDropDirective {
     event.preventDefault();
     event.stopPropagation();
 
+    this.getFilesFromDataTransferItems(event);
+    this.dragLeave.emit();
+  }
+
+  private getFilesFromDataTransferItems(event: DragEvent) {
     if (!this.disabled) {
-      const files = this.getOnlyFiles(event.dataTransfer.files);
-
-      this.sendFiles(event, files);
-
-      this.dragLeave.emit();
+      this.invalidFileType = 0;
+      if (this.directoryCompatible) {
+        this.getOnlyDirectories(event.dataTransfer.items).then(() => {
+          this.sendFiles(event, this.files);
+        });
+      } else {
+        const files = this.getOnlyFiles(event.dataTransfer.files);
+        this.sendFiles(event, files);
+      }
     }
   }
 
-  // return only file, folder is ignored
+  // analisa as entradas recursivamente
+  private async getFilesFromEntry(entry) {
+    if (entry.isFile) {
+      const file = await this.readFile(entry);
+      return [file];
+    } else if (entry.isDirectory) {
+      return await this.readDirectory(entry);
+    }
+  }
+
+  private async getOnlyDirectories(dataTransferItems) {
+    const entries = [];
+
+    // lista todas as entradas antes de analisá-las
+    for (const item of dataTransferItems) {
+      entries.push(item.webkitGetAsEntry());
+    }
+
+    this.files = [];
+    for (const entry of entries) {
+      if (entry.isFile) {
+        this.invalidFileType++;
+      } else {
+        const newFiles = await this.getFilesFromEntry(entry);
+        this.files = this.files.concat(newFiles);
+      }
+    }
+  }
+
+  // return only files. If it is a directory, invalidFileType counts.
   private getOnlyFiles(fileList: FileList): Array<File> {
-    return Array.from(fileList).reduce((newFiles, file) =>
-      file.type ? newFiles.concat(file) : newFiles,
-    []);
+    return Array.from(fileList).reduce((newFiles, file) => {
+      if (file.type) {
+        return newFiles.concat(file);
+      } else {
+        this.invalidFileType++;
+      }
+      return newFiles;
+    }, []);
+  }
+
+  private readFile(entry) {
+    return new Promise(resolve => {
+      entry.file(file => {
+        resolve(file);
+      });
+    });
+  }
+
+  private async readDirectory(entry) {
+    const dirReader = entry.createReader();
+    let files = [];
+    let newFiles;
+
+    newFiles = await this.readDirectoryEntries(dirReader);
+    files = files.concat(newFiles);
+    return files;
+  }
+
+  private readDirectoryEntries(dirReader) {
+    return new Promise(resolve => {
+      dirReader.readEntries(async entries => {
+        let files = [];
+        for (const entry of entries) {
+          const itemFiles = await this.getFilesFromEntry(entry);
+          files = files.concat(itemFiles);
+        }
+        resolve(files);
+      });
+    });
+  }
+
+  private sendFeedback(invalidFiles: number) {
+    if (invalidFiles) {
+      this.setPipeArguments('invalidFileType', invalidFiles);
+    }
   }
 
   private sendFiles(event, files) {
     if (this.areaElement.contains(event.target)) {
+
       if (files.length > 0) {
         this.fileChange.emit(files);
       }
+
+      this.sendFeedback(this.invalidFileType);
     } else {
-      this.notification.information(this.literals.invalidDropArea);
+      const invalidDropAreaArg = this.directoryCompatible ? this.literals.folders : this.literals.files;
+      this.setPipeArguments('invalidDropArea', invalidDropAreaArg);
     }
+  }
+
+  // método responsável por setar os argumentos do i18nPipe.
+  private setPipeArguments(literalAttributes: string, args?) {
+    const pipeArguments = this.i18nPipe.transform(this.literals[literalAttributes], args);
+    this.notification.information(pipeArguments);
   }
 
 }

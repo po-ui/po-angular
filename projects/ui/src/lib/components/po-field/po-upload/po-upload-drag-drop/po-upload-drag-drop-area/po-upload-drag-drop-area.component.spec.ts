@@ -2,8 +2,10 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from '../../../../../util-test/util-expect.spec';
+import { poLocaleDefault } from 'projects/ui/src/lib/utils/util';
 
 import { PoUploadDragDropAreaComponent } from './po-upload-drag-drop-area.component';
+import { poUploadLiteralsDefault } from '../../po-upload-base.component';
 
 describe('PoUploadDragDropAreaComponent:', () => {
   let changeDetector: any;
@@ -134,6 +136,59 @@ describe('PoUploadDragDropAreaComponent:', () => {
       expect(areaContainer.classList).not.toContain('po-clickable');
     });
 
+    it('should apply literals `dropFoldersHere`, if directoryCompatible is true ', () => {
+      component.disabled = false;
+      component.overlay = true;
+      component.directoryCompatible = true;
+      component.literals = {...poUploadLiteralsDefault[poLocaleDefault]};
+
+      changeDetector.detectChanges();
+
+      const overlayLabel = nativeElement.querySelector('.po-upload-drag-drop-area-overlay-label');
+
+      expect(overlayLabel.innerHTML).toBe(poUploadLiteralsDefault[poLocaleDefault].dropFoldersHere);
+    });
+
+    it('should apply literals `dropFilesHere`, if directoryCompatible is true ', () => {
+      component.disabled = false;
+      component.overlay = true;
+      component.directoryCompatible = false;
+      component.literals = {...poUploadLiteralsDefault[poLocaleDefault]};
+
+      changeDetector.detectChanges();
+
+      const overlayLabel = nativeElement.querySelector('.po-upload-drag-drop-area-overlay-label');
+
+      expect(overlayLabel.innerHTML).toBe(poUploadLiteralsDefault[poLocaleDefault].dropFilesHere);
+    });
+
+    it('should apply literals `dragFoldersHere` and `selectFolderOnComputer`, if directoryCompatible is true ', () => {
+      component.disabled = false;
+      component.directoryCompatible = true;
+      component.literals = {...poUploadLiteralsDefault[poLocaleDefault]};
+
+      changeDetector.detectChanges();
+
+      const dragAreaLabel = nativeElement.querySelector('.po-upload-drag-drop-area-label');
+      const dragAreaButton = nativeElement.querySelector('.po-upload-drag-drop-area-select-files');
+
+      expect(dragAreaLabel.innerHTML).toBe(poUploadLiteralsDefault[poLocaleDefault].dragFoldersHere);
+      expect(dragAreaButton.innerHTML).toBe(poUploadLiteralsDefault[poLocaleDefault].selectFolderOnComputer);
+    });
+
+    it('should apply literals `dragFilesHere` and `selectFilesOnComputer`, if directoryCompatible is true ', () => {
+      component.disabled = false;
+      component.directoryCompatible = false;
+      component.literals = {...poUploadLiteralsDefault[poLocaleDefault]};
+
+      changeDetector.detectChanges();
+
+      const dragAreaLabel = nativeElement.querySelector('.po-upload-drag-drop-area-label');
+      const dragAreaButton = nativeElement.querySelector('.po-upload-drag-drop-area-select-files');
+
+      expect(dragAreaLabel.innerHTML).toBe(poUploadLiteralsDefault[poLocaleDefault].dragFilesHere);
+      expect(dragAreaButton.innerHTML).toBe(poUploadLiteralsDefault[poLocaleDefault].selectFilesOnComputer);
+    });
   });
 
 });

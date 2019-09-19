@@ -1,7 +1,7 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 import { EventEmitter, Input, Output } from '@angular/core';
 
-import { browserLanguage, convertToBoolean, isEquals, poLocaleDefault } from '../../../utils/util';
+import { browserLanguage, convertToBoolean, isEquals, isIE, isMobile, poLocaleDefault } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoUploadFile } from './po-upload-file';
@@ -12,15 +12,23 @@ import { PoUploadStatus } from './po-upload-status.enum';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals> {
+    files: 'files',
+    folders: 'folders',
     selectFile: 'Select file',
+    selectFiles: 'Select files',
+    selectFolder: 'Select folder',
     deleteFile: 'Delete',
     cancel: 'Cancel',
     tryAgain: 'Try again',
     startSending: 'Start sending',
     dragFilesHere: 'Drag files here',
+    dragFoldersHere: 'Drag folders here',
     selectFilesOnComputer: 'or select files on your computer',
+    selectFolderOnComputer: 'or select folder on your computer',
     dropFilesHere: 'Drop files here',
-    invalidDropArea: 'Files were not dropped in the correct area',
+    dropFoldersHere: 'Drop folders here',
+    invalidDropArea: '{0} were not dropped in the correct area',
+    invalidFileType: 'Failed to load {0} file(s) as it is not the allowed file type.',
     invalidAmount: 'Failed to load {0} file(s), as it exceeds the limit amount of files.',
     invalidFormat: 'Failed to load {0} file(s), as it does not match the format(s): {1}.',
     invalidSize: 'Failed to load {0} files(s), as it is not the allowed size: from {1} to {2}.',
@@ -33,15 +41,23 @@ export const poUploadLiteralsDefault = {
     sentWithSuccess: 'Sent with success'
   },
   es: <PoUploadLiterals> {
+    files: 'archivos',
+    folders: 'carpetas',
     selectFile: 'Seleccionar archivo',
+    selectFiles: 'Seleccionar archivos',
+    selectFolder: 'Seleccionar carpeta',
     deleteFile: 'Borrar',
     cancel: 'Cancelar',
     tryAgain: 'Intentar de nuevo',
     startSending: 'Iniciar carga',
     dragFilesHere: 'Arrastra los archivos aquí',
+    dragFoldersHere: 'Arrastra las carpetas aquí',
     selectFilesOnComputer: 'o selecciona los archivos en tu computadora',
+    selectFolderOnComputer: 'o selecciona la carpeta en tu computadora',
     dropFilesHere: 'Deja los archivos aquí',
-    invalidDropArea: 'Los archivos no se insertaron en la ubicación correcta',
+    dropFoldersHere: 'Deja las carpetas aquí',
+    invalidDropArea: 'Los {0} no se insertaron en la ubicación correcta',
+    invalidFileType: 'Error al cargar {0} archivo (s) ya que no es el tipo de archivo permitido',
     invalidAmount: 'Error al cargar {0} archivo (s) ya que excede la cantidad limite de archivos.',
     invalidFormat: 'Error al cargar {0} archivo (s) ya que no coincide con el formato (s): {1}.',
     invalidSize: 'Error al cargar {0} archivo (s) ya que no cumple con el tamaño permitido: desde {1} hasta {2}.',
@@ -54,15 +70,23 @@ export const poUploadLiteralsDefault = {
     sentWithSuccess: 'Enviado con éxito'
   },
   pt: <PoUploadLiterals> {
+    files: 'arquivos',
+    folders: 'diretórios',
     selectFile: 'Selecionar arquivo',
+    selectFiles: 'Selecionar arquivos',
+    selectFolder: 'Selecionar pasta',
     deleteFile: 'Excluir',
     cancel: 'Cancelar',
     tryAgain: 'Tentar Novamente',
     startSending: 'Iniciar envio',
     dragFilesHere: 'Arraste os arquivos aqui',
+    dragFoldersHere: 'Arraste as pastas aqui',
     selectFilesOnComputer: 'ou selecione os arquivos no computador',
+    selectFolderOnComputer: 'ou selecione a pasta no computador',
     dropFilesHere: 'Solte os arquivos aqui',
-    invalidDropArea: 'Os arquivos não foram inseridos no local correto',
+    dropFoldersHere: 'Solte as pastas aqui',
+    invalidDropArea: 'Os {0} não foram inseridos no local correto',
+    invalidFileType: 'Falha ao carregar {0} arquivo (s), pois não é o tipo de arquivo permitido',
     invalidAmount: 'Falha ao carregar {0} arquivo(s), pois excede(m) a quantidade limite de arquivos.',
     invalidFormat: 'Falha ao carregar {0} arquivo(s), pois não corresponde(m) ao(s) formato(s): {1}.',
     invalidSize: 'Falha ao carregar {0} arquivo(s), pois não atende ao tamanho permitido: {1} até {2}.',
@@ -86,6 +110,7 @@ const poUploadMinFileSize = 0;
  *
  * O componente `po-upload` permite que o usuário envie arquivo(s) ao servidor e acompanhe o progresso.
  * Este componente também possibilita algumas configurações como:
+ *  – Envio de diretórios, onde ele acessa o diretório selecionado assim como seus sub-diretórios;
  *  - Múltipla seleção, onde o usuário pode enviar mais de um arquivo ao servidor.
  *  - Auto envio, onde o arquivo é enviado imediatamente após a seleção do usuário, não necessitando que o usuário
  * clique em enviar.
@@ -96,6 +121,7 @@ const poUploadMinFileSize = 0;
  */
 export abstract class PoUploadBaseComponent implements ControlValueAccessor, Validator {
 
+  private _directory?: boolean;
   private _disabled?: boolean;
   private _dragDrop?: boolean = false;
   private _fileRestrictions?: PoUploadFileRestrictions;
@@ -103,12 +129,14 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _hideRestrictionsInfo?: boolean;
   private _hideSelectButton?: boolean;
   private _hideSendButton?: boolean;
+  private _isMultiple?: boolean;
   private _literals?: any;
   private _required?: boolean;
 
   allowedExtensions: string;
   currentFiles: Array<PoUploadFile>;
 
+  canHandleDirectory: boolean;
   onModelChange: any;
   onModelTouched: any;
 
@@ -117,6 +145,30 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   protected extensionNotAllowed = 0;
   protected quantityNotAllowed = 0;
   protected sizeNotAllowed = 0;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a seleção de diretórios contendo um ou mais arquivos para envio.
+   *
+   * > A habilitação desta propriedade se restringe apenas à seleção de diretórios.
+   *
+   * > Definição não suportada pelo browser **Internet Explorer**, todavia será possível a seleção de arquivos padrão.
+   *
+   * @default `false`
+   */
+  @Input('p-directory') set directory(value: boolean) {
+    this._directory = convertToBoolean(value);
+
+    this.canHandleDirectory = this._directory && !isIE() && !isMobile();
+    this.setDirectoryAttribute(this.canHandleDirectory);
+  }
+
+  get directory() {
+    return this._directory;
+  }
 
   /**
    * @optional
@@ -341,8 +393,16 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @description
    *
    * Define se pode selecionar mais de um arquivo.
+   *
+   * > Se utilizada a `p-directory`, habilita-se automaticamente esta propriedade.
    */
-  @Input('p-multiple') isMultiple?: boolean;
+  @Input('p-multiple') set isMultiple(value: boolean) {
+    this._isMultiple = convertToBoolean(value);
+  }
+
+  get isMultiple() {
+    return this.canHandleDirectory ? true : this._isMultiple;
+  }
 
   /**
    * @optional
@@ -568,5 +628,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
     return files;
   }
+
+  abstract setDirectoryAttribute(value: boolean);
 
 }
