@@ -69,7 +69,7 @@
   <section>
 
     <div class="container">
-      <h4>Nenhum arquivo selecionado</h4>
+      <h4>Botão para seleção de um único arquivo</h4>
       <div class="po-upload">
         <input type="file" name="name" id="id" class="po-upload-input">
         <button type="button" class="po-upload-button po-button po-text-ellipsis">
@@ -78,6 +78,26 @@
       </div>
     </div>
 
+    <div class="container">
+      <h4>Botão para seleção de múltiplos arquivos</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivos</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Botão para seleção de pastas</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar pasta</span>
+        </button>
+      </div>
+    </div>
+    
     <div class="container">
       <h4>Nenhum arquivo selecionado com label, help e opcional</h4>
       <div class="po-upload">
@@ -111,58 +131,61 @@
     </div>
 
     <div class="container">
-      <h4>Arquivos selecionados</h4>
+      <h4>Menos de cinco arquivos selecionados</h4>
       <div class="po-upload">
         <input type="file" name="name" id="id" class="po-upload-input">
         <button type="button" class="po-upload-button po-button po-text-ellipsis">
-          <span class="po-button-label">Selecionar arquivo</span>
+          <span class="po-button-label">Selecionar arquivos</span>
         </button>
 
         <!-- PROGRESS -->
         <div class="po-upload-progress-container">
-          <div class="po-progress po-progress-default">
+          <div class="po-container po-container-no-border po-container-no-padding po-container-no-shadow" style="height: auto;">
 
-            <label class="po-progress-description-mobile po-progress-description-text">
-              Planilha_de_colaboradores XMLS - 754KB
-            </label>
+            <div class="po-progress po-progress-default">
 
-            <div class="po-progress-bar">
-              <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
-              <div class="po-progress-bar-element po-progress-bar-secondary"></div>
-            </div>
-
-            <div class="po-progress-description">
-              <label class="po-progress-description-text">
+              <label class="po-progress-description-mobile po-progress-description-text">
                 Planilha_de_colaboradores XMLS - 754KB
               </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  Planilha_de_colaboradores XMLS - 754KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text"></span>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
             </div>
 
-            <div class="po-progress-info">
-              <span class="po-progress-info-text"></span>
-              <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
-            </div>
-          </div>
+            <div class="po-progress po-progress-default">
 
-          <div class="po-progress po-progress-default">
-
-            <label class="po-progress-description-mobile po-progress-description-text">
-              logo_portinari - 16KB
-            </label>
-
-            <div class="po-progress-bar">
-              <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
-              <div class="po-progress-bar-element po-progress-bar-secondary"></div>
-            </div>
-
-            <div class="po-progress-description">
-              <label class="po-progress-description-text">
+              <label class="po-progress-description-mobile po-progress-description-text">
                 logo_portinari - 16KB
               </label>
-            </div>
 
-            <div class="po-progress-info">
-              <span class="po-progress-info-text"></span>
-              <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo_portinari - 16KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text"></span>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
             </div>
           </div>
         </div>
@@ -174,11 +197,172 @@
     </div>
 
     <div class="container">
+      <h4>Mais de cinco arquivos selecionados</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivos</span>
+        </button>
+
+        <!-- PROGRESS -->
+        <div class="po-upload-progress-container">
+          <div class="po-container po-container-no-shadow" style="height: 280px;">
+
+            <div class="po-upload-progress-container-area po-pt-2 po-pl-1">
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  Planilha_de_colaboradores XMLS - 754KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    Planilha_de_colaboradores XMLS - 754KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  logo_portinari - 16KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    logo_portinari - 16KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  image_20191021.jpg - 44KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    image_20191021.jpg - 44KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  image_20191022.jpg - 44KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    image_20191022.jpg - 44KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  image_20191023.jpg - 59KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    image_20191023.jpg - 59KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  image_20191024.jpg - 97KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    image_20191024.jpg - 97KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="po-upload-send-button po-mt-3">
+          <button type="button" name="button" class="po-button po-button-primary">Iniciar envio</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
       <h4>Arquivos selecionados com restrição de arquivos</h4>
       <div class="po-upload">
         <input type="file" name="name" id="id" class="po-upload-input">
         <button type="button" class="po-upload-button po-button po-text-ellipsis">
-          <span class="po-button-label">Selecionar arquivo</span>
+          <span class="po-button-label">Selecionar arquivos</span>
         </button>
 
         <!-- INICIO FILE RESTRICTIONS -->
@@ -197,51 +381,53 @@
 
         <!-- PROGRESS -->
         <div class="po-upload-progress-container">
-          <div class="po-progress po-progress-default">
-            <label class="po-progress-description-mobile po-progress-description-text">
-              Planilha_de_colaboradores XMLS - 754KB
-            </label>
+          <div class="po-container po-container-no-border po-container-no-padding po-container-no-shadow" style="height: auto;">
 
-            <div class="po-progress-bar">
-              <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0.6);"></div>
-              <div class="po-progress-bar-element po-progress-bar-secondary"></div>
-            </div>
-
-            <div class="po-progress-description">
-              <label class="po-progress-description-text">
+            <div class="po-progress po-progress-default">
+              <label class="po-progress-description-mobile po-progress-description-text">
                 Planilha_de_colaboradores XMLS - 754KB
               </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0.6);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  Planilha_de_colaboradores XMLS - 754KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text"></span>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
             </div>
 
-            <div class="po-progress-info">
-              <span class="po-progress-info-text"></span>
-              <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
-            </div>
-          </div>
-
-          <div class="po-progress po-progress-default">
-            <label class="po-progress-description-mobile po-progress-description-text">
-              logo-portinari.png - 80 KB
-            </label>
-
-            <div class="po-progress-bar">
-              <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
-              <div class="po-progress-bar-element po-progress-bar-secondary"></div>
-            </div>
-
-            <div class="po-progress-description">
-              <label class="po-progress-description-text">
+            <div class="po-progress po-progress-default">
+              <label class="po-progress-description-mobile po-progress-description-text">
                 logo-portinari.png - 80 KB
               </label>
-            </div>
 
-            <div class="po-progress-info">
-              <span class="po-progress-info-text"></span>
-              <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo-portinari.png - 80 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text"></span>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
             </div>
           </div>
         </div>
-
         <div class="po-upload-send-button">
           <button type="button" name="button" class="po-button po-button-primary">Iniciar envio</button>
         </div>
@@ -253,78 +439,81 @@
       <div class="po-upload">
         <input type="file" name="name" id="id" class="po-upload-input">
         <button type="button" class="po-upload-button po-button po-text-ellipsis" disabled>
-          <span class="po-button-label">Selecionar arquivo</span>
+          <span class="po-button-label">Selecionar arquivos</span>
         </button>
 
         <!-- PROGRESS -->
         <div class="po-upload-progress-container">
-          <div class="po-progress po-progress-default">
-            <label class="po-progress-description-mobile po-progress-description-text">
-              Planilha_de_colaboradores XMLS - 754KB
-            </label>
-
-            <div class="po-progress-bar">
-              <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0.6);"></div>
-              <div class="po-progress-bar-element po-progress-bar-secondary"></div>
-            </div>
-
-            <div class="po-progress-description">
-              <label class="po-progress-description-text">
-                Planilha_de_colaboradores XMLS - 754 KB
+          <div class="po-container po-container-no-border po-container-no-padding po-container-no-shadow" style="height: auto;">
+            
+            <div class="po-progress po-progress-default">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                Planilha_de_colaboradores XMLS - 754KB
               </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0.6);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  Planilha_de_colaboradores XMLS - 754 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
             </div>
 
-            <div class="po-progress-info">
-              <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
-            </div>
-          </div>
-
-          <div class="po-progress po-progress-success">
-            <label class="po-progress-description-mobile po-progress-description-text">
-              logo-portinari.png - 80 KB
-            </label>
-
-            <div class="po-progress-bar">
-              <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
-              <div class="po-progress-bar-element po-progress-bar-secondary"></div>
-            </div>
-
-            <div class="po-progress-description">
-              <label class="po-progress-description-text">
+            <div class="po-progress po-progress-success">
+              <label class="po-progress-description-mobile po-progress-description-text">
                 logo-portinari.png - 80 KB
               </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo-portinari.png - 80 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-icon po-icon po-icon-ok"></span>
+                <span class="po-progress-info-text">Enviado com sucesso</span>
+              </div>
             </div>
 
-            <div class="po-progress-info">
-              <span class="po-progress-info-icon po-icon po-icon-ok"></span>
-              <span class="po-progress-info-text">Enviado com sucesso</span>
-            </div>
-          </div>
-
-          <div class="po-progress po-progress-error">
-            <label class="po-progress-description-mobile po-progress-description-text">
-              image_20191020.jpg - 44KB
-            </label>
-
-            <div class="po-progress-bar">
-              <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
-              <div class="po-progress-bar-element po-progress-bar-secondary"></div>
-            </div>
-
-            <div class="po-progress-description">
-              <label class="po-progress-description-text">
-                  image_20191020.jpg - 44KB
+            <div class="po-progress po-progress-error">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                image_20191020.jpg - 44KB
               </label>
-            </div>
 
-            <div class="po-progress-info">
-              <span class="po-progress-info-text">Ocorreu um erro</span>
-              <button class="po-progress-info-icon-action po-icon po-icon-refresh po-clickable"></button>
-              <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                    image_20191020.jpg - 44KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text">Ocorreu um erro</span>
+                <button class="po-progress-info-icon-action po-icon po-icon-refresh po-clickable"></button>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
             </div>
           </div>
-        </div>
 
+        </div>
         <div class="po-upload-send-button">
           <button type="button" name="button" class="po-button po-button-primary" disabled>
             Iniciar envio
@@ -336,7 +525,7 @@
     <div class="po-row">
 
       <div class="container po-md-6">
-        <h4>Drag Drop</h4>
+        <h4>Drag Drop de arquivos</h4>
 
         <div class="po-upload">
           <input type="file" name="name" id="id" class="po-upload-input">
@@ -352,6 +541,65 @@
 
                 <button class="po-upload-drag-drop-area-select-files po-clickable">
                   ou selecione os arquivos no computador
+                </button>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+
+
+          <!-- PROGRESS -->
+          <div class="po-upload-progress-container">
+            <div class="po-progress po-progress-success">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                logo-portinari.png - 80 KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo-portinari.png - 80 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-icon po-icon po-icon-ok"></span>
+                <span class="po-progress-info-text">Enviado com sucesso</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-upload-send-button">
+            <button type="button" name="button" class="po-button po-button-primary" disabled>
+              Iniciar envio
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="container po-md-6">
+        <h4>Drag Drop de diretórios</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP AREA -->
+          <div>
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste as pastas aqui </div>
+
+                <button class="po-upload-drag-drop-area-select-files po-clickable">
+                  ou selecione as pastas no computador
                 </button>
               </div>
 
