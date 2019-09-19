@@ -16,6 +16,7 @@
       (change)="onFileChange($event)">
 
     <po-upload-drag-drop *ngIf="displayDragDrop"
+      [p-directory-compatible]="canHandleDirectory"
       [p-disabled]="isDisabled"
       [p-drag-drop-height]="dragDropHeight"
       [p-literals]="literals"
@@ -28,7 +29,7 @@
       class="po-upload-button"
       for="file"
       [p-disabled]="isDisabled"
-      [p-label]="literals.selectFile"
+      [p-label]="selectFileButtonLabel"
       (p-click)="selectFiles()">
     </po-button>
 
@@ -42,21 +43,30 @@
     </po-upload-file-restrictions>
 
     <div *ngIf="currentFiles && currentFiles.length" class="po-upload-progress-container">
-      <po-progress
-        *ngFor="let file of currentFiles; trackBy: trackByFn"
-        [p-info]="infoByUploadStatus[file.status]?.text(file.percent)"
-        [p-info-icon]="infoByUploadStatus[file.status]?.icon"
-        [p-status]="progressStatusByFileStatus[file.status]"
-        [p-text]="file.displayName"
-        [p-value]="file.percent"
-        (p-cancel)="cancel(file)"
-        (p-retry)="uploadFiles([file])">
-      </po-progress>
+      <po-container
+        p-no-shadow
+        [p-height]="hasMoreThanFourItems ? 280 : 'auto'"
+        [p-no-border]="!hasMoreThanFourItems"
+        [p-no-padding]="!hasMoreThanFourItems">
+        <div [ngClass]="{'po-upload-progress-container-area po-pt-2 po-pl-1': hasMoreThanFourItems}">
+          <po-progress
+            *ngFor="let file of currentFiles; trackBy: trackByFn"
+            [p-info]="infoByUploadStatus[file.status]?.text(file.percent)"
+            [p-info-icon]="infoByUploadStatus[file.status]?.icon"
+            [p-status]="progressStatusByFileStatus[file.status]"
+            [p-text]="file.displayName"
+            [p-value]="file.percent"
+            (p-cancel)="cancel(file)"
+            (p-retry)="uploadFiles([file])">
+          </po-progress>
+        </div>
+      </po-container>
     </div>
 
     <po-button
       *ngIf="displaySendButton"
       class="po-upload-send-button"
+      [class.po-mt-3]="hasMoreThanFourItems"
       p-type="primary"
       [p-disabled]="hasAnyFileUploading(currentFiles)"
       [p-label]="literals.startSending"

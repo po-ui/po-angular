@@ -26,6 +26,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'autoupload', label: 'Automatic upload' },
+    { value: 'directory', label: 'Directory' },
     { value: 'disabled', label: 'Disabled' },
     { value: 'dragDrop', label: 'Drag Drop' },
     { value: 'multiple', label: 'Multiple upload' },
