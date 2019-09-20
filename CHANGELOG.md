@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.0](https://github.com/portinariui/portinari-angular/compare/v1.8.1...v1.9.0) (2019-09-20)
+
+
+### Features
+
+* **chart:** adiciona gráfico do tipo donut ([f4403cc](https://github.com/portinariui/portinari-angular/commit/f4403cc))
+
+
+
 ### [1.8.1](https://github.com/portinariui/portinari-angular/compare/v1.8.0...v1.8.1) (2019-09-13)
 
 
