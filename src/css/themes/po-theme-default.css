@@ -6,8 +6,8 @@
  * CONTENTS
  *
  * SETTINGS
- * Commons.....................variáveis do Commons.
  * Global......................variáveis globais e configurações.
+ * Commons.....................variáveis do Commons / Genéricas.
  *
  * COMPONENTS
  * Avatar......................variáveis do Avatar.
@@ -77,13 +77,6 @@
   SETTINGS
 \*------------------------------------*/
 :root {
-/*------------------------------------*\
-  COMMONS
-\*------------------------------------*/
-
-  --color-wrapper-menu-panel-color-background: var(--color-white);
-  --color-overlay-background-color-overlay: var(--color-secondary-dark-60-alpha-70);
-
 /*------------------------------------*\
   GLOBAL
 \*------------------------------------*/
@@ -218,6 +211,16 @@
   src: url('./../fonts/Roboto/Roboto-Bold.ttf');
   font-weight: bold;
   font-style: normal;
+}
+
+/*------------------------------------*\
+  COMMONS
+\*------------------------------------*/
+:root {
+  --color-wrapper-menu-panel-color-background: var(--color-white);
+  --color-overlay-background-color-overlay: var(--color-secondary-dark-60-alpha-70);
+
+  --color-hr-border-top: var(--color-neutral-light-90);
 }
 
 /*------------------------------------*\
@@ -732,7 +735,7 @@
   PAGE HEADER
 \*------------------------------------*/
 
-  -color-page-header-color-title: var(--color-neutral);
+  --color-page-header-color-title: var(--color-neutral);
 
 /*------------------------------------*\
   PAGE LIST
@@ -835,7 +838,7 @@
   --color-select-background-color: var(--color-white);
   --color-select-background-color-disabled: var(--color-neutral-light-90);
 
-  --color-select-background-color-item-hover: var(--color-primary-light-95); /* Vericar com equipe de UX */
+  --color-select-background-color-item-hover: var(--color-primary-light-95);
   --color-select-background-color-scrollbar: var(--color-primary-alpha-50);
 
   --color-select-border-button: var(--color-neutral-light-60);

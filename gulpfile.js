@@ -46,18 +46,27 @@ const copyThemePackageJson = () =>
       contents.name = `@portinari/style${argv.theme ? '-' + argv.theme : ''}`;
       contents.description = `Portinari - Theme${argv.theme ? ' ' + capitalize(argv.theme) : ''}`;
 
-      file.contents = new Buffer(JSON.stringify(contents, null, 2), 'utf-8');
+      file.contents = Buffer.from(JSON.stringify(contents, null, 2), 'utf-8');
     }))
     .pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/`));
 
+const copyThemeVariablesCss = () =>
+  src(`./src/css/themes/po-theme-default.css`)
+    .pipe(rename(`po-theme-default-variables.css`))
+    .on('error', err => {
+      console.log(err.toString());
+      this.emit('end');
+    })
+    .pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/css/`));
+
 const prepareThemeCss = () => src('./src/**/*.css').pipe(dest('./.temp'));
 
-const buildThemeCss = () =>
-  src('./.temp/css/index.css')
+const buildThemeCss = modern =>
+  src(`./.temp/css/index${modern ? '-modern' : ''}.css`)
     .pipe(tap(file => {
       const contents = file.contents.toString().replace(/\${theme}/, (argv.theme || 'default'));
 
-      file.contents = new Buffer(contents, 'utf-8');
+      file.contents = Buffer.from(contents, 'utf-8');
     }))
     .pipe(postcss([
       importCss(),
@@ -70,12 +79,22 @@ const buildThemeCss = () =>
       autoprefixer(),
       cssnano()
     ]))
-    .pipe(rename(`css/po-theme-default.min.css`))
+    .pipe(rename(modern ? `css/po-theme-core.min.css` : `css/po-theme-default.min.css`))
     .on('error', err => {
       console.log(err.toString());
       this.emit('end');
     })
     .pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/`));
+
+const buildThemeVariablesCss = () =>
+  src(`./.temp/css/themes/po-theme-${argv.theme ? argv.theme : 'default'}.css`)
+    .pipe(postcss([ cssnano() ]))
+    .pipe(rename(`po-theme-${argv.theme ? argv.theme : 'default'}-variables.min.css`))
+    .on('error', err => {
+      console.log(err.toString());
+      this.emit('end');
+    })
+    .pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/css/`));
 
 // Tarefa otimizada para desenvolvimento
 const buildDevThemeCss = () =>
@@ -83,7 +102,7 @@ const buildDevThemeCss = () =>
     .pipe(tap(file => {
       const contents = file.contents.toString().replace(/\${theme}/, (argv.theme || 'default'));
 
-      file.contents = new Buffer(contents, 'utf-8');
+      file.contents = Buffer.from(contents, 'utf-8');
     }))
     .pipe(postcss([
       importCss(),
@@ -97,10 +116,13 @@ const buildDevThemeCss = () =>
     })
     .pipe(dest(`./dist/${distDirectory}${argv.theme ? '-' + argv.theme : ''}/`));
 
+const buildThemeCssModern = () => buildThemeCss(true);
+const buildThemeCssLegacy = () => buildThemeCss(false);
+
 const buildTheme = series(
   cleanTemp,
-  parallel(copyThemeAssets, copyThemePackageJson, prepareThemeCss),
-  buildThemeCss,
+  parallel(copyThemeAssets, copyThemePackageJson, copyThemeVariablesCss, prepareThemeCss),
+  parallel(buildThemeCssModern, buildThemeVariablesCss, buildThemeCssLegacy),
   cleanTemp
 );
 buildTheme.displayName = 'build';
@@ -131,7 +153,7 @@ const buildAppJs = () =>
       noSource: true
     }))
     .pipe(tap(file => {
-      file.contents = new Buffer(`var version = '${version}';` + file.contents.toString(), 'utf-8');
+      file.contents = Buffer.from(`var version = '${version}';` + file.contents.toString(), 'utf-8');
     }))
     .pipe(dest('./app-dist/js'));
 
@@ -150,11 +172,11 @@ buildApp.displayName = 'build:app';
  */
 const clean = parallel(cleanThemeDir, cleanAppDir, cleanTemp);
 
+const configThemeName = () => (argv.theme || 'default').substring(0, 29).padEnd(30);
+
 const watchers = () => {
   console.warn('\n');
   console.warn('   ╔═════════════════════════════════════════════════╗');
-  console.warn('   ║                                                 ║');
-  console.warn('       >> TEMA UTILIZADO: ' + argv.theme || 'default' + ' <<');
   console.warn('   ║                                                 ║');
   console.warn('   ║   NÃO ESQUEÇA DE INICIAR O SEU SERVIDOR HTTP!   ║');
   console.warn('   ║                                                 ║');
@@ -167,6 +189,8 @@ const watchers = () => {
   console.warn('   ║                                                 ║');
   console.warn('   ║   Ao atualizar um arquivo CSS ou HTML a sua     ║');
   console.warn('   ║   aplicação será carregada automaticamente!     ║');
+  console.warn('   ║                                                 ║');
+  console.warn('   ║   TEMA UTILIZADO: ' + configThemeName()      + '║');
   console.warn('   ║                                                 ║');
   console.warn('   ╚═════════════════════════════════════════════════╝');
 
@@ -183,7 +207,7 @@ const watchers = () => {
 exports.clean = clean;
 
 // gulp build
-exports.build = buildTheme;
+exports.build = series(clean, buildTheme);
 
 // gulp build:app
 exports.buildApp = buildApp;

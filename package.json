@@ -15,21 +15,21 @@
     "dev": "http-server ./app-dist -o -c-1"
   },
   "devDependencies": {
-    "autoprefixer": "^9.6.0",
+    "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
-    "del": "^4.1.1",
+    "del": "^5.1.0",
     "gulp": "4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-copy": "^4.0.1",
     "gulp-minify": "^3.1.0",
     "gulp-postcss": "^8.0.0",
     "gulp-rename": "^1.4.0",
-    "gulp-tap": "^1.0.1",
+    "gulp-tap": "^2.0.0",
     "http-server": "^0.11.1",
     "postcss-apply": "^0.12.0",
-    "postcss-custom-properties": "^8.0.10",
+    "postcss-custom-properties": "^9.0.2",
     "postcss-import": "^12.0.1",
     "postcss-nested": "^4.1.2",
-    "yargs": "^13.2.4"
+    "yargs": "^14.0.0"
   }
 }
