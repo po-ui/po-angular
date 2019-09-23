@@ -454,9 +454,11 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
 
     if (value) {
       this.getLiterals(language, value);
+      const { title, loginHint} = this.literals;
+
       this.containsCustomLiterals =
-        !this.literals.title.includes(poPageLoginLiteralsDefault[language].title) ||
-        !this.literals.loginHint.includes(poPageLoginLiteralsDefault[language].loginHint);
+        !!(title && !title.includes(poPageLoginLiteralsDefault[language].title)) ||
+        !!(loginHint && !loginHint.includes(poPageLoginLiteralsDefault[language].loginHint));
     } else {
       this.containsCustomLiterals = false;
       this._literals = poPageLoginLiteralsDefault[language];
@@ -922,11 +924,14 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   setTitleLiteral(language: string, value: string) {
     const defaultTitleLiteral = poPageLoginLiteralsDefault[language].title;
     const prepositionLiteral = poPageLoginLiteralTo[language];
+
+    const customTitle = this.literals.title || '';
+
     if (value) {
       this.concatenateLiteral(value, 'title', defaultTitleLiteral, prepositionLiteral);
-    } else if (!value && this.literals.title.includes(defaultTitleLiteral)) {
-        this.literals = { title: defaultTitleLiteral };
-      }
+    } else if (!value && customTitle.includes(defaultTitleLiteral)) {
+      this.literals = { title: defaultTitleLiteral };
+    }
   }
 
   private concatenate(defaultLiteral: string, prefixLiteral: string, value: string) {
