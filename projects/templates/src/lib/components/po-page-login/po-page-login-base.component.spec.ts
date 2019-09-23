@@ -266,7 +266,7 @@ describe('ThPageLoginBaseComponent: ', () => {
 
     });
 
-    it('p-literals: should set `constainsLiterals` with true if `literals.title` and `literalsDefault.title` don`t match', () => {
+    it('p-literals: should set `containsCustomLiterals` with true if `literals.title` and `literalsDefault.loginHint` don`t match', () => {
       component['_literals'] = { title: 'Title', loginHint: poPageLoginLiteralsDefault[poLocaleDefault].loginHint };
       component.selectedLanguage = poLocaleDefault;
       const validLiterals = component['_literals'];
@@ -279,7 +279,19 @@ describe('ThPageLoginBaseComponent: ', () => {
 
     });
 
-    it('p-literals: should set `constainsLiterals` with false if `literals.title` and `literalsDefault.title` match', () => {
+    it('p-literals: should set `containsCustomLiterals` with false if `literals.title` and `literals.loginHint` are undefined', () => {
+      component['_literals'] = { title: undefined, loginHint: undefined };
+      component.selectedLanguage = poLocaleDefault;
+      const validLiterals = component['_literals'];
+
+      spyOn(component, <any>'getLiterals');
+
+      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
+      expect(component.getLiterals).toHaveBeenCalledWith(poLocaleDefault, validLiterals);
+      expect(component.containsCustomLiterals).toBe(false);
+    });
+
+    it('p-literals: should set `containsCustomLiterals` with false if `literals.title` and `literalsDefault.loginHint` match', () => {
       component['_literals'] = {
         title: poPageLoginLiteralsDefault[poLocaleDefault].title,
         loginHint: poPageLoginLiteralsDefault[poLocaleDefault].loginHint
@@ -295,7 +307,7 @@ describe('ThPageLoginBaseComponent: ', () => {
 
     });
 
-    xit('p-literals: should set `constainsLiterals` with true if `literals.loginHint` and `literalsDefault.loginHint` match', () => {
+    xit('p-literals: should set `containsCustomLiterals` with true if `literals.loginHint` and `literalsDefault.loginHint` match', () => {
       component['_literals'] = poPageLoginLiteralsDefault[poLocaleDefault];
       const validLiterals = component['_literals'];
 
@@ -792,6 +804,20 @@ describe('ThPageLoginBaseComponent: ', () => {
       component.setTitleLiteral(poLocaleDefault, title);
 
       expect(component.literals.title).toBe(poPageLoginLiteralsDefault[poLocaleDefault].title);
+      expect(component['concatenateLiteral']).not.toHaveBeenCalled();
+    });
+
+    it(`setTitleLiteral: shouldn´t set literals.title with default value if value is undefined`, () => {
+      const title = undefined;
+      const literals = { title, loginHint: 'Teste 1' };
+
+      component.literals = { ...literals };
+
+      spyOn(component, <any>'concatenateLiteral');
+
+      component.setTitleLiteral(poLocaleDefault, title);
+
+      expect(component.literals.title).toEqual(title);
       expect(component['concatenateLiteral']).not.toHaveBeenCalled();
     });
 
