@@ -11,7 +11,6 @@ import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
-import { PoTableColumnIcon } from './po-table-column-icon/po-table-column-icon.interface';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
@@ -93,8 +92,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     renderer: Renderer2,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
-    // tslint:disable-next-line
-    private router: Router){
+    private router: Router) {
 
     super(poDate);
 
@@ -202,25 +200,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return rowValue;
   }
 
-  getColumnIcons(row: any, columnIcon: PoTableColumn): any {
-    const columnValues = row[columnIcon.property];
-
-    if (columnIcon.icons) {
-
-      if (columnValues instanceof Array) {
-        return this.mergeCustomIcons(columnValues, columnIcon.icons);
-      }
-
-      if (typeof columnValues === 'string') {
-        const customIcon = columnIcon.icons.find(icon => columnValues === icon.value);
-        if (customIcon) {
-          return [ customIcon ];
-        }
-      }
-
+  getColumnIcons(row: any, column: PoTableColumn) {
+    if (column.icons && column.icons.length) {
+      return column.icons;
     }
 
-    return columnValues;
+    const rowIcons = row[column.property];
+
+    if (rowIcons && rowIcons.length) {
+      return this.getColumnIconsFromProperty(rowIcons, column);
+    }
   }
 
   getColumnLabel(row: any, columnLabel: PoTableColumn): PoTableColumnLabel {
@@ -362,19 +351,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     containerClassList.remove('po-container');
   }
 
-  private mergeCustomIcons(columnValues: Array<string>, customIcons: Array<PoTableColumnIcon>) {
-    const icons = [];
-
-    columnValues.forEach(columnValue => {
-
-      const foundCustomIcon = customIcons.find(customIcon => columnValue === customIcon.icon || columnValue === customIcon.value);
-      foundCustomIcon ? icons.push(foundCustomIcon) : icons.push(columnValue);
-
-    });
-
-    return icons;
-  }
-
   private debounceResize() {
     clearTimeout(this.timeoutResize);
     this.timeoutResize = setTimeout(() => {
@@ -383,6 +359,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       // show the table
       this.setTableOpacity(1);
     });
+  }
+
+  private getColumnIconsFromProperty(rowIcons: Array<string>, column: PoTableColumn) {
+
+    const icons = [];
+    const { action, color, disabled } = column;
+
+    const icon = { action, color, disabled };
+
+    rowIcons.forEach(value => icons.push( typeof value === 'string' ? { ...icon, value } : value));
+
+    return icons;
   }
 
   private removeListeners() {

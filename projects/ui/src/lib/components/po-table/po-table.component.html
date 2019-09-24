@@ -156,13 +156,12 @@
               [p-row]="row"
               [p-value]="row[column.property]">
             </po-table-column-link>
-            <span *ngSwitchCase="'icon'">
-              <po-table-column-icon
-                [p-icons]="getColumnIcons(row, column)"
-                [p-column]="column"
-                [p-row]="row">
-              </po-table-column-icon>
-            </span>
+
+            <po-table-column-icon *ngSwitchCase="'icon'"
+              [p-icons]="getColumnIcons(row, column)"
+              [p-row]="row">
+            </po-table-column-icon>
+
             <span *ngSwitchCase="'subtitle'">
               <po-table-subtitle-circle [p-subtitle]="getSubtitleColumn(row, column)"></po-table-subtitle-circle>
             </span>

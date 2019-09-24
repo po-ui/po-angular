@@ -34,6 +34,7 @@ export class SamplePoTableComponentsComponent {
         action: this.favorite.bind(this),
         color: this.isFavorite.bind(this),
         icon: 'po-icon-star',
+        tooltip: 'Favorite',
         value: 'favorite'
       },
       {

@@ -1,10 +1,8 @@
-<ng-container *ngFor="let iconColumn of icons">
-  <span class="po-icon"
-    [class.po-clickable]="!checkDisabled(iconColumn) && iconColumn.action || column.action "
-    [ngClass]="[checkDisabled(iconColumn) ? 'po-table-icon-disabled' : getIconColorClass(iconColumn), iconColumn.icon || iconColumn.value]"
-    [p-tooltip]="tooltipText"
-    (click)="onIconClick(iconColumn)"
-    (mouseenter)="tooltipMouseEnter(iconColumn.tooltip, iconColumn)"
-    (mouseleave)="tooltipMouseLeave()">
-  </span>
-</ng-container>
+<po-table-icon *ngFor="let column of icons trackBy: trackByFunction"
+  [p-clickable]="isClickable(column)"
+  [p-color]="getColor(column)"
+  [p-disabled]="isDisabled(column)"
+  [p-icon]="getIcon(column)"
+  [p-icon-tooltip]="column.tooltip"
+  (p-click)="click(column)">
+</po-table-icon>
