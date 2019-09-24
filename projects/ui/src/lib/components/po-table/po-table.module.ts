@@ -15,6 +15,7 @@ import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-co
 import { PoTableColumnLinkComponent } from './po-table-column-link/po-table-column-link.component';
 import { PoTableComponent } from './po-table.component';
 import { PoTableDetailComponent } from './po-table-detail/po-table-detail.component';
+import { PoTableIconComponent } from './po-table-icon/po-table-icon.component';
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableShowSubtitleComponent } from './po-table-show-subtitle/po-table-show-subtitle.component';
 import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle/po-table-subtitle-circle.component';
@@ -42,6 +43,7 @@ import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-ta
     PoTableColumnLabelComponent,
     PoTableColumnLinkComponent,
     PoTableDetailComponent,
+    PoTableIconComponent,
     PoTableRowTemplateDirective,
     PoTableShowSubtitleComponent,
     PoTableSubtitleCircleComponent,

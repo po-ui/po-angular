@@ -1,6 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
-import { PoTableColumn } from '../interfaces/po-table-column.interface';
 import { PoTableColumnIcon } from './po-table-column-icon.interface';
 
 /**
@@ -12,77 +11,52 @@ import { PoTableColumnIcon } from './po-table-column-icon.interface';
  */
 @Component({
   selector: 'po-table-column-icon',
-  templateUrl: './po-table-column-icon.component.html'
+  templateUrl: './po-table-column-icon.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PoTableColumnIconComponent {
 
-  tooltipText: string;
+  private _icons: Array<PoTableColumnIcon> = [];
 
-  private _icons: Array<PoTableColumnIcon>;
-
-  @Input('p-column') column: PoTableColumn;
-
-  /** Lista de um ou mais ícones que serão exibidos em sua respectiva coluna. */
-  @Input('p-icons') set icons(value: Array<PoTableColumnIcon> | Array<string> | string) {
-    this._icons = this.convertToColumnIcon(value);
+  /** Lista de colunas com ícones. */
+  @Input('p-icons') set icons(icons: Array<PoTableColumnIcon>) {
+    this._icons = icons || [];
   }
 
   get icons() {
     return this._icons;
   }
 
-  @Input('p-row') row;
+  /** Dados da linha da tabela. */
+  @Input('p-row') row: any;
 
-  checkDisabled(iconColumn: PoTableColumnIcon) {
-    return iconColumn.disabled ? iconColumn.disabled(this.row) : false;
+  click(column: PoTableColumnIcon): void {
+    column.action(this.row, column);
   }
 
-  getIconColorClass(columnIcon: PoTableColumnIcon) {
-    const color = this.getIconColor(columnIcon) || this.getIconColor(this.column);
+  getColor(column: PoTableColumnIcon): string {
+    const color =  typeof column.color === 'function' ? column.color(this.row, column) : column.color;
 
-    return color ? `po-text-${color}` : '';
-  }
-
-  onIconClick(iconColumn: PoTableColumnIcon) {
-    const isAbleAction = !this.checkDisabled(iconColumn);
-
-    if (iconColumn.action && isAbleAction) {
-      iconColumn.action(this.row, iconColumn);
-    } else if (this.column.action && isAbleAction) {
-      this.column.action(this.row, iconColumn || this.column);
+    if (color) {
+      return `po-text-${color}`;
     }
   }
 
-  tooltipMouseEnter(text: string, iconColumn: PoTableColumnIcon) {
-    if (this.checkDisabled(iconColumn)) {
-      this.tooltipText = undefined;
-    } else {
-      this.tooltipText = text;
-    }
+  getIcon(column: PoTableColumnIcon) {
+    return column.icon || column.value;
   }
 
-  tooltipMouseLeave() {
-    this.tooltipText = undefined;
+  isClickable(column: PoTableColumnIcon): boolean {
+    return column.action && !this.isDisabled(column);
   }
 
-  private convertToColumnIcon(value: any): Array<PoTableColumnIcon> {
-
-    if (value instanceof Array) {
-      return value.map(val => {
-        return typeof val === 'string' ? { value: val } : val;
-      });
-    }
-
-    if (typeof value === 'string') {
-      return [{ value }];
-    }
-
-    return [];
+  isDisabled(column: PoTableColumnIcon): boolean {
+    return column.disabled ? column.disabled(this.row) : false;
   }
 
-  private getIconColor(column: PoTableColumnIcon | PoTableColumn) {
-    return typeof column.color === 'function' ? column.color(this.row, column) : column.color;
+  trackByFunction(index) {
+    return index;
   }
 
 }
