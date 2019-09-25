@@ -14,13 +14,15 @@ import { PoModalComponent } from '../../components/po-modal/po-modal.component';
 export const poDialogAlertLiteralsDefault = {
   en: <PoDialogAlertLiterals> { ok: 'Ok' },
   es: <PoDialogAlertLiterals> { ok: 'Ok' },
-  pt: <PoDialogAlertLiterals> { ok: 'Ok' }
+  pt: <PoDialogAlertLiterals> { ok: 'Ok' },
+  ru: <PoDialogAlertLiterals> { ok: 'Ок' }
 };
 
 export const poDialogConfirmLiteralsDefault = {
   en: <PoDialogConfirmLiterals> { cancel: 'Cancel', confirm: 'Confirm' },
   es: <PoDialogConfirmLiterals> { cancel: 'Cancelar', confirm: 'Confirmar' },
-  pt: <PoDialogConfirmLiterals> { cancel: 'Cancelar', confirm: 'Confirmar' }
+  pt: <PoDialogConfirmLiterals> { cancel: 'Cancelar', confirm: 'Confirmar' },
+  ru: <PoDialogConfirmLiterals> { cancel: 'отменить', confirm: 'подтвердить' }
 };
 
 /**

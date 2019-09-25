@@ -26,7 +26,7 @@ describe('PoPageListBaseComponent:', () => {
     describe('p-literals:', () => {
 
       it('should be in portuguese if `getShortLanguage` return an unsupported language.', () => {
-        component['language'] = 'ru';
+        component['language'] = 'zw';
 
         component.literals = {};
 
@@ -55,6 +55,14 @@ describe('PoPageListBaseComponent:', () => {
         component.literals = {};
 
         expect(component.literals).toEqual(poPageListLiteralsDefault.es);
+      });
+
+      it('should be in russian if `getShortLanguage` return `ru`.', () => {
+        component['language'] = 'ru';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poPageListLiteralsDefault.ru);
       });
 
       it('should accept custom literals.', () => {

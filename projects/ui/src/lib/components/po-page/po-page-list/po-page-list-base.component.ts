@@ -18,6 +18,9 @@ export const poPageListLiteralsDefault = {
   },
   pt: <PoPageListLiterals> {
     otherActions: 'Outras ações'
+  },
+  ru: <PoPageListLiterals> {
+    otherActions: 'Другие действия'
   }
 };
 

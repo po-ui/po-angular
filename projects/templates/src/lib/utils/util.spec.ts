@@ -28,6 +28,12 @@ describe('Function browserLanguage:', () => {
 
     expect(UtilFunctions.browserLanguage()).toBe('es');
   });
+
+  it('should return `ru` if browser language is `ru`', () => {
+    changePhantomProperties(navigator, 'language', 'ru');
+
+    expect(UtilFunctions.browserLanguage()).toBe('ru');
+  });
 });
 
 describe('Function getBrowserLanguage:', () => {
@@ -53,12 +59,19 @@ describe('Function getBrowserLanguage:', () => {
     expect(UtilFunctions.getBrowserLanguage()).toBe('es');
   });
 
+  it('should return undefined if `navigator.language` and `navigator.userLanguage` are undefined', () => {
+    changePhantomProperties(navigator, 'language', undefined);
+    changePhantomProperties(navigator, 'userLanguage', 'ru');
+
+    expect(UtilFunctions.getBrowserLanguage()).toBe('ru');
+  });
+
 });
 
 describe('Function getShortBrowserLanguage:', () => {
   xit('should return `pt` as default language', () => {
     expectBrowserLanguageMethod('', UtilFunctions, 'getShortBrowserLanguage', 'pt');
-    expectBrowserLanguageMethod('ru', UtilFunctions, 'getShortBrowserLanguage', 'pt');
+    expectBrowserLanguageMethod('zw', UtilFunctions, 'getShortBrowserLanguage', 'pt');
   });
 
   it('should return `pt` if browser language is `pt` or `pt-BR`', () => {
@@ -74,6 +87,11 @@ describe('Function getShortBrowserLanguage:', () => {
   it('should return `pt` if browser language is `es` or `es-ES`', () => {
     expectBrowserLanguageMethod('es', UtilFunctions, 'getShortBrowserLanguage', 'es');
     expectBrowserLanguageMethod('es-ES', UtilFunctions, 'getShortBrowserLanguage', 'es');
+  });
+
+  it('should return `ru` if browser language is `ru` or `ru-RU`', () => {
+    expectBrowserLanguageMethod('ru', UtilFunctions, 'getShortBrowserLanguage', 'ru');
+    expectBrowserLanguageMethod('ru-RU', UtilFunctions, 'getShortBrowserLanguage', 'ru');
   });
 });
 

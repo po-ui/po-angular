@@ -13,7 +13,7 @@ export const poTableContainer = ['border', 'shadow'];
 export const poTableContainerDefault = 'border';
 
 export const poTableLiteralsDefault = {
-  en: <PoTableLiterals> {
+  en: <PoTableLiterals>{
     noColumns: 'Columns are not defined',
     noData: 'No data found',
     loadingData: 'Loading',
@@ -21,7 +21,7 @@ export const poTableLiteralsDefault = {
     seeCompleteSubtitle: 'See complete subtitle',
     completeSubtitle: 'Complete subtitle'
   },
-  es: <PoTableLiterals> {
+  es: <PoTableLiterals>{
     noColumns: 'Columnas no definidas',
     noData: 'Datos no encontrados',
     loadingData: 'Cargando datos',
@@ -29,13 +29,21 @@ export const poTableLiteralsDefault = {
     seeCompleteSubtitle: 'Ver subtitulo completo',
     completeSubtitle: 'Subtitulo completo'
   },
-  pt: <PoTableLiterals> {
+  pt: <PoTableLiterals>{
     noColumns: 'Nenhuma definição de colunas',
     noData: 'Nenhum dado encontrado',
     loadingData: 'Carregando',
     loadMoreData: 'Carregar mais resultados',
     seeCompleteSubtitle: 'Ver legenda completa',
     completeSubtitle: 'Legenda completa'
+  },
+  ru: <PoTableLiterals>{
+    noColumns: 'Нет определения столбца',
+    noData: 'Данные не найдены',
+    loadingData: 'погрузка',
+    loadMoreData: 'загрузка',
+    seeCompleteSubtitle: 'Посмотреть полный субтитр',
+    completeSubtitle: 'Полный заголовок'
   }
 };
 
@@ -106,7 +114,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
       this.setColumnLink();
       this.calculateWidthHeaders();
     } else if (this.hasItems()) {
-      this._columns =  this.getDefaultColumns(this.items[0]);
+      this._columns = this.getDefaultColumns(this.items[0]);
     }
   }
 
@@ -471,7 +479,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
   }
 
   getClassColor(row, column) {
-    return column.color ? `po-text-${this.getColumnColor(row, column)}` : '' ;
+    return column.color ? `po-text-${this.getColumnColor(row, column)}` : '';
   }
 
   getColumnColor(row, column) {
@@ -536,7 +544,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
     this.sortedColumn.ascending = this.sortedColumn.property === column ? !this.sortedColumn.ascending : true;
 
-    this.isSortBy ? this.sortBy.emit({ column, type: this.sortType}) : this.sortArray(column, this.sortedColumn.ascending);
+    this.isSortBy ? this.sortBy.emit({ column, type: this.sortType }) : this.sortArray(column, this.sortedColumn.ascending);
 
     this.sortedColumn.property = column;
   }
@@ -545,7 +553,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
     this.items.sort((leftSide, rightSide): number => {
 
-      if (column.type === 'date' || column.type === 'dateTime' ) {
+      if (column.type === 'date' || column.type === 'dateTime') {
         return this.poDate.sortDate(leftSide[column.property], rightSide[column.property], ascending);
       } else {
         return sortValues(leftSide[column.property], rightSide[column.property], ascending);
@@ -565,7 +573,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
     const keys = Object.keys(item);
 
     return keys.filter(key => (typeof item[key] !== 'object')).map(key => {
-      return { label: capitalizeFirstLetter(key) , property: key };
+      return { label: capitalizeFirstLetter(key), property: key };
     });
   }
 

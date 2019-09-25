@@ -108,7 +108,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('ru');
+      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('zw');
 
       component.literals = {};
 
@@ -149,6 +149,14 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       component.literals = {};
 
       expect(component.literals).toEqual(poDatepickerRangeLiteralsDefault.es);
+    });
+
+    it('literals: should be in russian if browser is setted with `ru`', () => {
+      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('ru');
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poDatepickerRangeLiteralsDefault.ru);
     });
 
     it('literals: should update property with default literals if is setted with invalid values', () => {

@@ -14,6 +14,9 @@ export const poPageBlockedUserButtonLiterals: Object = {
   },
   pt: <any> {
     primaryButton: 'Voltar para o início',
+  },
+  ru: <any> {
+    primaryButton: 'Перейти к началу страницы',
   }
 };
 

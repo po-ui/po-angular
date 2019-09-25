@@ -21,6 +21,11 @@ export const poPageDetailLiteralsDefault = {
     back: 'Voltar',
     edit: 'Editar',
     remove: 'Remover'
+  },
+  ru: <PoPageDetailLiterals> {
+    back: 'возвращение',
+    edit: 'редактировать',
+    remove: 'удаление'
   }
 };
 

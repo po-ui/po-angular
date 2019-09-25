@@ -66,7 +66,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('ru');
+      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('zw');
 
       component.literals = {};
 
@@ -95,6 +95,14 @@ describe('PoListViewBaseComponent:', () => {
       component.literals = {};
 
       expect(component.literals).toEqual(poListViewLiteralsDefault.es);
+    });
+
+    it('p-literals: should be in russian if browser is setted with `ru`', () => {
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poListViewLiteralsDefault.ru);
     });
 
     it('p-literals: should accept custom literals', () => {

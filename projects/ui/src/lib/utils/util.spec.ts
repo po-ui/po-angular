@@ -14,6 +14,7 @@ describe('Function isLanguage:', () => {
   it('should return true if value is a language', () => {
     expect(UtilFunctions.isLanguage('pt')).toBe(true);
     expect(UtilFunctions.isLanguage('en')).toBe(true);
+    expect(UtilFunctions.isLanguage('ru')).toBe(true);
     expect(UtilFunctions.isLanguage('en-US')).toBe(true);
     expect(UtilFunctions.isLanguage('pt-PT')).toBe(true);
     expect(UtilFunctions.isLanguage('pt-br')).toBe(true);
@@ -48,6 +49,12 @@ describe('Function browserLanguage:', () => {
     changePhantomProperties(navigator, 'language', 'es');
 
     expect(UtilFunctions.browserLanguage()).toBe('es');
+  });
+
+  it('should return `ru` if browser language is `ru`', () => {
+    changePhantomProperties(navigator, 'language', 'ru');
+
+    expect(UtilFunctions.browserLanguage()).toBe('ru');
   });
 });
 

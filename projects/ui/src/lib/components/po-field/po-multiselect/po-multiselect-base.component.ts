@@ -21,6 +21,10 @@ export const poMultiselectLiteralsDefault = {
   pt: <PoMultiselectLiterals> {
     noData: 'Nenhum dado encontrado',
     placeholderSearch: 'Buscar'
+  },
+  ru: <PoMultiselectLiterals>{
+    noData: 'Данные не найдены',
+    placeholderSearch: 'искать'
   }
 };
 

@@ -41,7 +41,7 @@ export class PoLanguageService {
    *
    *   3 - o idioma do navegador utilizado.
    *
-   * > Caso o idioma do navegador não seja suportado pelo PO (`pt`, `en` ou `es`), será retornado valor `pt`.
+   * > Caso o idioma do navegador não seja suportado pelo PO (`pt`, `en`, `es` ou `ru`), será retornado valor `pt`.
    *
    * **Retorno:** `string` com a sigla do idioma ativo.
    */

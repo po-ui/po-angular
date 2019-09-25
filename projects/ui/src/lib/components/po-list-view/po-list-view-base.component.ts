@@ -26,6 +26,13 @@ export const poListViewLiteralsDefault = {
     noData: 'Nenhum dado encontrado',
     selectAll: 'Selecionar todos',
     showDetails: 'Exibir detalhes'
+  },
+  ru: <PoListViewLiterals> {
+    hideDetails: 'Скрыть детали',
+    loadMoreData: 'Загрузить больше результатов',
+    noData: 'Данные не найдены',
+    selectAll: 'Выбрать все',
+    showDetails: 'Посмотреть детали'
   }
 };
 

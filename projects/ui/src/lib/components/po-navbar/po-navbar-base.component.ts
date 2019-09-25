@@ -16,6 +16,9 @@ export const poNavbarLiteralsDefault = {
   },
   pt: <PoNavbarLiterals> {
     navbarLinks: 'Navbar links'
+  },
+  ru: <PoNavbarLiterals> {
+    navbarLinks: 'Navbar связи'
   }
 };
 
