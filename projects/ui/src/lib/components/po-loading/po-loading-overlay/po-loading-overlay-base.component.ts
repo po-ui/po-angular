@@ -15,6 +15,9 @@ export const poLoadingOverlayLiteralsDefault = {
   },
   pt: <PoLoadingOverlayLiterals> {
     loading: 'Carregando',
+  },
+  ru: <PoLoadingOverlayLiterals> {
+    loading: 'погрузка',
   }
 };
 

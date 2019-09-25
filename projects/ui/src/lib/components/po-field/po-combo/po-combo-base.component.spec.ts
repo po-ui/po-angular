@@ -142,6 +142,14 @@ describe('PoComboBaseComponent:', () => {
         expect(component.literals).toEqual(poComboLiteralsDefault.es);
       });
 
+      it('should be in russian if browser is set with `ru`.', () => {
+        spyOn(Utils, <any>'browserLanguage').and.returnValue('ru');
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poComboLiteralsDefault.ru);
+      });
+
       it('should accept custom literals.', () => {
         spyOn(Utils, <any>'browserLanguage').and.returnValue(Utils.poLocaleDefault);
 

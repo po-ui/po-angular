@@ -21,6 +21,11 @@ export const poPageEditLiteralsDefault = {
     cancel: 'Cancelar',
     save: 'Salvar',
     saveNew: 'Salvar e Novo'
+  },
+  ru: <PoPageEditLiterals> {
+    cancel: 'отменить',
+    save: 'экономить',
+    saveNew: 'Сохранить и новый'
   }
 };
 

@@ -1,5 +1,5 @@
 // Idiomas suportados pelas páginas
-export const poLocales = ['pt', 'en', 'es'];
+export const poLocales = ['pt', 'en', 'es', 'ru'];
 // Idioma padrão
 export const poLocaleDefault = 'pt';
 

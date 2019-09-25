@@ -1,5 +1,5 @@
 export const poModalPasswordRecoveryLiterals = {
-  en: <any> {
+  en: <any>{
     cancelButton: 'Cancel',
     closeButton: 'Close',
     continueButton: 'Continue',
@@ -28,7 +28,7 @@ export const poModalPasswordRecoveryLiterals = {
     telephone: 'telephone',
     typeCodeTitle: 'Enter sent code'
   },
-  es: <any> {
+  es: <any>{
     cancelButton: 'Cancelar',
     closeButton: 'Cerrar',
     continueButton: 'Continuar',
@@ -57,7 +57,7 @@ export const poModalPasswordRecoveryLiterals = {
     telephone: 'teléfono',
     typeCodeTitle: 'Escribir código enviado'
   },
-  pt: <any> {
+  pt: <any>{
     cancelButton: 'Cancelar',
     closeButton: 'Fechar',
     continueButton: 'Continuar',
@@ -85,5 +85,34 @@ export const poModalPasswordRecoveryLiterals = {
     supportContact: 'Se não tiver acesso ao {0} contacte o suporte',
     telephone: 'telefone',
     typeCodeTitle: 'Digitar código enviado'
+  },
+  ru: <any>{
+    cancelButton: 'отменить',
+    closeButton: 'близко',
+    continueButton: 'близко',
+    email: 'по электронной почте',
+    emailErrorMessagePhrase: 'Неверный формат электронной почты',
+    emailSentConfirmationPhrase: `Мы отправили инструкции и новую ссылку для создания пароля для вашей электронной почты.
+Если вы не получили его в течение нескольких минут, установите флажок Спам или нажмите Далее.`,
+    emailSentTitle: 'Письмо отправлено',
+    forgotPasswordTitle: 'Забыли пароль?',
+    insertCode: 'Введите код',
+    insertEmail: 'Введите адрес электронной почты',
+    insertPhone: 'Введите номер вашего мобильного телефона',
+    phoneErrorMessagePhrase: 'Неверный номер телефона',
+    prepositionIn: 'в',
+    prepositionOr: 'или',
+    recoveryPasswordPhrase: 'Для восстановления вашего пароля мы вышлем {0} с инструкциями.',
+    resendEmailButton: 'Отправить еще раз',
+    resendSmsCodePhrase: 'Если код не приходит через несколько минут, попробуйте еще раз.',
+    sendAgain: 'отправить снова.',
+    sendAgainPhrase: 'Если код не приходит через несколько минут',
+    sendButton: 'послать',
+    sentSmsCodePhrase: 'Мы отправляем код на ваш зарегистрированный мобильный телефон.',
+    sms: 'SMS',
+    smsCodeErrorMessagePhrase: 'Неверный код. Повторите или обратитесь в службу поддержки',
+    supportContact: 'Если у вас нет доступа к {0}, обратитесь в службу поддержки',
+    telephone: 'телефон',
+    typeCodeTitle: 'Введите отправленный код'
   }
 };
