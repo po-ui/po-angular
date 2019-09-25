@@ -13,7 +13,7 @@ describe('PoPageDefaultBaseComponent:', () => {
 
   describe('Properties: ', () => {
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('ru');
+      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('zw');
 
       component.literals = {};
 
@@ -42,6 +42,14 @@ describe('PoPageDefaultBaseComponent:', () => {
       component.literals = {};
 
       expect(component.literals).toEqual(poPageDetailLiteralsDefault.es);
+    });
+
+    it('p-literals: should be in russian if browser is setted with `ru`', () => {
+      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('ru');
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poPageDetailLiteralsDefault.ru);
     });
 
     it('p-literals: should accept custom literals', () => {

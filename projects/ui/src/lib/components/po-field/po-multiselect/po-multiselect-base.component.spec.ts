@@ -406,7 +406,7 @@ describe('PoMultiselectBaseComponent:', () => {
   describe('Properties:', () => {
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('ru');
+      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('zw');
 
       component.literals = {};
 
@@ -435,6 +435,14 @@ describe('PoMultiselectBaseComponent:', () => {
       component.literals = {};
 
       expect(component.literals).toEqual(poMultiselectLiteralsDefault.es);
+    });
+
+    it('p-literals: should be in russian if browser is setted with `ru`', () => {
+      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('ru');
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poMultiselectLiteralsDefault.ru);
     });
 
     it('p-literals: should accept custom literals', () => {

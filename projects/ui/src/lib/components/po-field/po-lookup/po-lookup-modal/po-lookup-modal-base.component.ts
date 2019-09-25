@@ -41,6 +41,16 @@ export const poLookupLiteralsDefault = {
     modalTableNoData: poTableLiteralsDefault.pt.noData,
     modalTableLoadingData: poTableLiteralsDefault.pt.loadingData,
     modalTableLoadMoreData: poTableLiteralsDefault.pt.loadMoreData
+  },
+  ru: <PoLookupLiterals>{
+    modalPrimaryActionLabel: 'выбирать',
+    modalSecondaryActionLabel: 'отменить',
+    modalPlaceholder: 'поиск',
+    modalTitle: 'Выберите запись',
+    modalTableNoColumns: poTableLiteralsDefault.ru.noColumns,
+    modalTableNoData: poTableLiteralsDefault.ru.noData,
+    modalTableLoadingData: poTableLiteralsDefault.ru.loadingData,
+    modalTableLoadMoreData: poTableLiteralsDefault.ru.loadMoreData
   }
 };
 

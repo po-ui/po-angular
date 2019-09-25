@@ -886,7 +886,7 @@ describe('PoTableBaseComponent:', () => {
     const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
 
       component.literals = {};
 
@@ -915,6 +915,14 @@ describe('PoTableBaseComponent:', () => {
       component.literals = {};
 
       expect(component.literals).toEqual(poTableLiteralsDefault.es);
+    });
+
+    it('p-literals: should be in russian if browser is setted with `ru`', () => {
+      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poTableLiteralsDefault.ru);
     });
 
     it('p-literals: should accept custom literals', () => {

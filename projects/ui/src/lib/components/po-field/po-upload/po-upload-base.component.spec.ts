@@ -593,7 +593,7 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
 
       component.literals = {};
 
@@ -622,6 +622,14 @@ describe('PoUploadBaseComponent:', () => {
       component.literals = {};
 
       expect(component.literals).toEqual(poUploadLiteralsDefault.es);
+    });
+
+    it('p-literals: should be in russian if browser is setted with `ru`', () => {
+      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poUploadLiteralsDefault.ru);
     });
 
     it('p-literals: should accept custom literals', () => {

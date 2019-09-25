@@ -43,7 +43,7 @@ describe('PoNavbarBaseComponent:', () => {
     });
 
     it('literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
 
       component.literals = {};
 
@@ -72,6 +72,14 @@ describe('PoNavbarBaseComponent:', () => {
       component.literals = {};
 
       expect(component.literals).toEqual(poNavbarLiteralsDefault.es);
+    });
+
+    it('literals: should be in russian if browser is setted with `ru`', () => {
+      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poNavbarLiteralsDefault.ru);
     });
 
     it('literals: should accept custom literals', () => {

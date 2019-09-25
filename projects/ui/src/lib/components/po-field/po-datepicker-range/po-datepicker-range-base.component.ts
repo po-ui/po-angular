@@ -20,6 +20,10 @@ export const poDatepickerRangeLiteralsDefault = {
   pt: <PoDatepickerRangeLiterals> {
     invalidFormat: 'Data no formato inválido',
     startDateGreaterThanEndDate: 'Data inicial maior que data final',
+  },
+  ru: <PoDatepickerRangeLiterals> {
+    invalidFormat: 'Дата в неверном формате',
+    startDateGreaterThanEndDate: 'Дата начала больше даты окончания',
   }
 };
 

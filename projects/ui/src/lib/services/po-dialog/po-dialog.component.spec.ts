@@ -281,6 +281,14 @@ describe('PoDialogComponent:', () => {
       expect(component.literalsConfirm).toEqual(poDialogConfirmLiteralsDefault.es);
     });
 
+    it(`setDialogLiterals: should set 'literalsAlert' in russian.`, () => {
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+
+      component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
+
+      expect(component.literalsAlert).toEqual(poDialogAlertLiteralsDefault.ru);
+    });
+
     it(`setDialogLiterals: should set 'literalsConfirm' in portuguese.`, () => {
       spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('pt');
 

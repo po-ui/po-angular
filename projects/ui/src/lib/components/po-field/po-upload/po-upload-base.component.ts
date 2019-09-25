@@ -11,7 +11,7 @@ import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
 
 export const poUploadLiteralsDefault = {
-  en: <PoUploadLiterals> {
+  en: <PoUploadLiterals>{
     files: 'files',
     folders: 'folders',
     selectFile: 'Select file',
@@ -40,7 +40,7 @@ export const poUploadLiteralsDefault = {
     errorOccurred: 'An error has occurred',
     sentWithSuccess: 'Sent with success'
   },
-  es: <PoUploadLiterals> {
+  es: <PoUploadLiterals>{
     files: 'archivos',
     folders: 'carpetas',
     selectFile: 'Seleccionar archivo',
@@ -69,7 +69,7 @@ export const poUploadLiteralsDefault = {
     errorOccurred: 'Ocurrio un error',
     sentWithSuccess: 'Enviado con éxito'
   },
-  pt: <PoUploadLiterals> {
+  pt: <PoUploadLiterals>{
     files: 'arquivos',
     folders: 'diretórios',
     selectFile: 'Selecionar arquivo',
@@ -97,6 +97,35 @@ export const poUploadLiteralsDefault = {
     minFileSizeAllowed: 'Limite de tamanho por arquivo: no mínimo {0}',
     errorOccurred: 'Ocorreu um erro',
     sentWithSuccess: 'Enviado com sucesso'
+  },
+  ru: <PoUploadLiterals>{
+    files: 'файлы',
+    folders: 'папки с файлами',
+    selectFile: 'Выберите файл',
+    selectFiles: 'Выберите файлы',
+    selectFolder: 'Выберите папку с файлами',
+    deleteFile: 'удалять',
+    cancel: 'отменить',
+    tryAgain: 'попробуйте еще раз',
+    startSending: 'Начать загрузку',
+    dragFilesHere: 'Перетащите файлы сюда',
+    dragFoldersHere: 'Перетащите сюда папки',
+    selectFilesOnComputer: 'или выберите файлы на компьютере',
+    selectFolderOnComputer: 'или выберите папку на вашем компьютере',
+    dropFilesHere: 'Оставьте файлы здесь',
+    dropFoldersHere: 'Перетащите сюда папки',
+    invalidDropArea: '{0} не были вставлены в правильном месте.',
+    invalidFileType: 'Не удалось загрузить файлы {0}, так как это неверный тип файла',
+    invalidAmount: 'Não foi possível carregar os arquivos {0} porque eles excederam o limite de arquivos.',
+    invalidFormat: 'Не удалось загрузить файлы {0}, так как они не соответствуют формату (ам): {1}.',
+    invalidSize: 'Не удалось загрузить файлы {0}, поскольку они не соответствуют разрешенному размеру: от {1} до {2}.',
+    numberOfFilesAllowed: 'Максимальное количество: {0} файлов',
+    allowedFormats: 'Форматы приняты: {0}.',
+    allowedFileSizeRange: 'Ограничение размера файла: от {0} до {1}',
+    maxFileSizeAllowed: 'Ограничение размера файла: до {0}',
+    minFileSizeAllowed: 'Ограничение размера файла: не менее {0}',
+    errorOccurred: 'Произошла ошибка.',
+    sentWithSuccess: 'Успешно отправлено'
   }
 };
 

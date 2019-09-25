@@ -23,6 +23,9 @@ export const poComboLiteralsDefault = {
   },
   pt: <PoComboLiterals> {
     noData: 'Nenhum dado encontrado'
+  },
+  ru: <PoComboLiterals> {
+    noData: 'Данные не найдены'
   }
 };
 
