@@ -19,13 +19,37 @@
   white-space: nowrap;
 }
 
-.po-tag {
-  border-radius: 3px;
-  color: var(--color-tag-color);
+.po-tag-sub-container {
   display: inline-table;
   height: 20px;
-  padding: 2px 8px;
+  position: relative;
+  vertical-align: middle;
+}
+
+.po-tag {
+  border: none;
+  border-radius: 3px;
+  color: var(--color-tag-color);
+  display: table;
+  height: 20px;
+  padding: 0 8px;
   word-wrap: break-word;
+}
+
+.po-tag:focus {
+  outline: none;
+}
+
+.po-tag:focus:before {
+  border-radius: 1px;
+  border: 2px dashed var(--color-tag-border-color-dashed-focus);
+  box-sizing: border-box;
+  content: "";
+  height: calc(100% + 8px);
+  left: -4px;
+  position: absolute;
+  top: -4px;
+  width: calc(100% + 8px);
 }
 
 .po-tag-value {
@@ -36,7 +60,7 @@
 
 .po-tag-title {
   display: table;
-  padding-bottom: 5px; /* alinhamento com po-info vertical */
+  padding-bottom: 8px; /* alinhamento com po-info vertical */
   vertical-align: middle;
 }
 
@@ -54,10 +78,6 @@
   padding: 0 8px 0 0;
 }
 
-.po-tag-container-horizontal .po-tag-value {
-  line-height: 8px;
-}
-
 .po-tag .po-icon {
   @apply --font-tag-font-icon;
   display: table-cell;
@@ -65,7 +85,7 @@
 }
 
 .po-tag .po-icon::before {
-  margin: 0 2px 0 -2px;
+  margin: 0 4px 0 -2px;
 }
 
 .po-tag-danger {

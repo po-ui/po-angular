@@ -969,6 +969,8 @@
   TAG
 \*------------------------------------*/
 
+  --color-tag-border-color-dashed-focus: var(--color-secondary);
+
   --color-tag-color: var(--color-white);
   --color-tag-color-text-label: var(--color-neutral);
 
