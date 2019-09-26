@@ -18,7 +18,7 @@ export class SamplePoLookupHeroReactiveFormComponent implements OnInit {
 
   public readonly columns: Array<PoLookupColumn> = [
     { property: 'nickname', label: 'Hero' },
-    { property: 'label', label: 'Name' }
+    { property: 'name', label: 'Name' }
   ];
 
   public readonly vehicles: Array<PoSelectOption> = [

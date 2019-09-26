@@ -27,8 +27,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
   properties: Array<string>;
 
   private readonly columnsDefinition = {
-    value: <PoLookupColumn>{ property: 'value', label: 'Id' },
-    label: <PoLookupColumn>{ property: 'label', label: 'Name' },
+    value: <PoLookupColumn>{ property: 'id', label: 'Id' },
+    label: <PoLookupColumn>{ property: 'name', label: 'Name' },
     phone: <PoLookupColumn>{ property: 'phone', label: 'Phone' },
     email: <PoLookupColumn>{ property: 'email', label: 'Email' }
   };

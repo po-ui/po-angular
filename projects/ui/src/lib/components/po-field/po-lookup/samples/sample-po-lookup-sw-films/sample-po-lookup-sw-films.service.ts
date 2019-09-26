@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { PoLookupFilter, PoLookupResponseApi } from '@portinari/portinari-ui';
+import { PoLookupFilter, PoLookupResponseApi, PoLookupFilteredItemsParams } from '@portinari/portinari-ui';
 
 @Injectable()
 export class SamplePoLookupSwFilmsService implements PoLookupFilter {
@@ -18,10 +18,14 @@ export class SamplePoLookupSwFilmsService implements PoLookupFilter {
     return this.http.get(this.filmsUrl);
   }
 
-  getFilteredData(filter: string, page: number, pageSize, filterParams: any): Observable<PoLookupResponseApi> {
-    const searchParam = { params: { page: page.toString(), search: filter } };
+  getFilteredItems({ filter, page, filterParams }: PoLookupFilteredItemsParams): Observable<PoLookupResponseApi> {
+    const params = { page: page.toString() };
 
-    return this.http.get(`${this.baseUrl}/${filterParams}`, searchParam)
+    if (filter) {
+      params['search'] = filter;
+    }
+
+    return this.http.get(`${this.baseUrl}/${filterParams}`, { params })
       .pipe(map((response: { results: Array<any>, next: string }) => {
         return {
           items: response.results,

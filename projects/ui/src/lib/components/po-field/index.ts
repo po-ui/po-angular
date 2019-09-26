@@ -15,6 +15,7 @@ export * from './po-input/po-input.component';
 export * from './po-login/po-login.component';
 export * from './po-lookup/interfaces/po-lookup-column.interface';
 export * from './po-lookup/interfaces/po-lookup-filter.interface';
+export * from './po-lookup/interfaces/po-lookup-filtered-items-params.interface';
 export * from './po-lookup/interfaces/po-lookup-literals.interface';
 export * from './po-lookup/interfaces/po-lookup-response-api.interface';
 export * from './po-lookup/po-lookup.component';

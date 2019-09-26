@@ -2,14 +2,17 @@ import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angu
 
 import { Observable , Subscription } from 'rxjs';
 import { browserLanguage, isTypeof, poLocaleDefault } from '../../../../utils/util';
+import { PoModalAction } from '../../../../components/po-modal';
+import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
+import { PoTableColumnSortType } from '../../../po-table';
+import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
 
 import { PoLookupColumn } from '../interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
+import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-items-params.interface';
 import { PoLookupLiterals } from '../interfaces/po-lookup-literals.interface';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
-import { PoModalAction } from '../../../../components/po-modal';
-import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
-import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
 
 export const poLookupLiteralsDefault = {
   en: <PoLookupLiterals> {
@@ -88,6 +91,8 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     label: this.literals.modalSecondaryActionLabel
   };
   tableLiterals: any;
+
+  protected sort: PoTableColumnSort;
 
   private filterSubscription: Subscription;
   private searchSubscription: Subscription;
@@ -168,7 +173,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     this.page = 1;
     if (this.searchValue) {
       this.isLoading = true;
-      this.searchSubscription = this.getFilteredData(this.searchValue).subscribe(data => {
+      this.searchSubscription = this.getFilteredItems(this.searchValue).subscribe(data => {
         this.items = data.items;
         this.hasNext = data.hasNext;
         this.isLoading = false;
@@ -181,7 +186,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   showMoreEvent() {
     this.page ++;
     this.isLoading = true;
-    this.showMoreSubscription = this.getFilteredData(this.searchValue).subscribe(data => {
+    this.showMoreSubscription = this.getFilteredItems(this.searchValue).subscribe(data => {
       data.items.forEach(item => {
         this.items.push(item);
       });
@@ -193,13 +198,52 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   // Método responsável por abrir a modal de busca das informações.
   abstract openModal(): void;
 
-  private getFilteredData(searchValue): Observable<PoLookupResponseApi> {
-    return this.filterService.getFilteredData(searchValue, this.page, this.pageSize, this.filterParams);
+  private getFilteredItems(filter: string): Observable<PoLookupResponseApi> {
+    const { page, pageSize, filterParams } = this;
+
+    if (this.filterService.getFilteredItems) {
+      const filteredParams: PoLookupFilteredItemsParams = this.getFilteredParams(filter);
+
+      return this.filterService.getFilteredItems(filteredParams);
+    }
+
+    return this.filterService.getFilteredData(filter, page, pageSize, filterParams);
+  }
+
+  private getFilteredParams(filter: string) {
+    const { page, pageSize, filterParams, sort } = this;
+
+    const filteredParams = {};
+    const order = this.getOrderParam(sort);
+    const params = { filter, page, pageSize, order, filterParams };
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key) && params[key]) {
+        filteredParams[key] = params[key];
+      }
+    }
+
+    return filteredParams;
+  }
+
+  private getOrderParam(sort: PoTableColumnSort = { type: undefined }) {
+    const { column, type } = sort;
+
+    if (!column) {
+      return;
+    }
+
+    if (type === PoTableColumnSortType.Descending) {
+      return `-${column.property}`;
+    }
+
+    return `${column.property}`;
   }
 
   private initializeData(): void {
     this.isLoading = true;
-    this.filterSubscription = this.getFilteredData('').subscribe(data => {
+
+    this.filterSubscription = this.getFilteredItems('').subscribe(data => {
       this.items = data.items;
       this.hasNext = data.hasNext;
       this.isLoading = false;

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { isTypeof } from '../../../../utils/util';
 
 import { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
+import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-items-params.interface';
 
 /**
  * @docsPrivate
@@ -21,13 +22,14 @@ export class PoLookupFilterService implements PoLookupFilter {
 
   constructor(private httpClient: HttpClient) {}
 
-  getFilteredData(filter: any, page: number, pageSize?: number, filterParams?: any): Observable<any> {
+  getFilteredItems(filteredItemsParams: PoLookupFilteredItemsParams): Observable<any> {
+    const { filterParams, ...restFilteredItemsParams } = filteredItemsParams;
+
     const validatedFilterParams = this.validateParams(filterParams);
 
-    return this.httpClient.get(
-      this.url,
-      { params: { page: page.toString(), pageSize: pageSize.toString(), ...validatedFilterParams, filter } }
-    );
+    const params = { ...restFilteredItemsParams, ...validatedFilterParams };
+
+    return this.httpClient.get(this.url, { params });
   }
 
   getObjectByValue(value: string, filterParams?: any): Observable<any> {
