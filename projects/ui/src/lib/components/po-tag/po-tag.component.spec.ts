@@ -36,7 +36,7 @@ describe('PoTagComponent:', () => {
     expect(component instanceof PoTagComponent).toBeTruthy();
   });
 
-  describe('Methods', () => {
+  describe('Methods:', () => {
     it('ngOnInit: should set `isClickable` with `true` if `p-click` @Output is wire up', () => {
       component.click.observers.push(<any>[new Observable()]);
 
@@ -53,6 +53,57 @@ describe('PoTagComponent:', () => {
       expect(component.isClickable).toBe(false);
     });
 
+    it('iconFromType: should update property with valid values', () => {
+      component.type = PoTagType.Danger;
+      expect(component.iconFromType).toBe(PoTagIcon.Danger);
+
+      component.type = PoTagType.Info;
+      expect(component.iconFromType).toBe(PoTagIcon.Info);
+
+      component.type = PoTagType.Success;
+      expect(component.iconFromType).toBe(PoTagIcon.Success);
+
+      component.type = PoTagType.Warning;
+      expect(component.iconFromType).toBe(PoTagIcon.Warning);
+    });
+
+    it('iconTypeString: should return `true` if is string value.', () => {
+      component.icon = 'po-icon-portinari';
+      expect(component.iconTypeString).toBe(true);
+    });
+
+    it('iconTypeString: should return `false` if isn`t string value.', () => {
+      component.icon = false;
+      expect(component.iconTypeString).toBe(false);
+    });
+
+    it('tagColor: should return tag type.', () => {
+      component.type = PoTagType.Danger;
+      expect(component.tagColor).toBe('po-tag-danger');
+    });
+
+    it('tagColor: should return tag color.', () => {
+      component.color = 'color-07';
+      component.type = undefined;
+      expect(component.tagColor).toBe('po-color-07');
+    });
+
+    it('tagColor: should return tag type default.', () => {
+      component.color = undefined;
+      component.type = undefined;
+      expect(component.tagColor).toBe('po-tag-info');
+    });
+
+    it('tagOrientation: should return true if orientation is horizontal.', () => {
+      component.orientation = PoTagOrientation.Horizontal;
+      expect(component.tagOrientation).toBe(true);
+    });
+
+    it('tagOrientation: should return false if orientation isn`t horizontal.', () => {
+      component.orientation = PoTagOrientation.Vertical;
+      expect(component.tagOrientation).toBe(false);
+    });
+
     it('onClick: click should emit submittedTagItem value', () => {
       component.value = 'value';
       component.type = PoTagType.Danger;
@@ -63,9 +114,38 @@ describe('PoTagComponent:', () => {
 
       expect(component.click.emit).toHaveBeenCalledWith({ 'value': component.value, 'type': component.type });
     });
+
+    it('onKeyPressed: should call `onClick` if is key enter.', () => {
+      const eventEscKey = new KeyboardEvent('keydown', <any>{ keyCode: 13 });
+      const spyOnClick = spyOn(component, 'onClick');
+
+      component.onKeyPressed(eventEscKey, 'enter');
+
+      expect(spyOnClick).toHaveBeenCalled();
+    });
+
+    it('onKeyPressed: should call `onClick` if is key space.', () => {
+      const eventSpaceKey = new KeyboardEvent('keydown', <any>{ keyCode: 32 });
+      const spyOnClick = spyOn(component, 'onClick');
+
+      component.onKeyPressed(eventSpaceKey, 'space');
+
+      expect(spyOnClick).toHaveBeenCalled();
+    });
+
+    it('onKeyPressed: shouldn`t call `onClick` if isn`t key space or enter.', () => {
+      const eventCapsLockKey = new KeyboardEvent('keypress', <any>{ keyCode: 20 });
+      const spyOnClick = spyOn(component, 'onClick');
+
+      component.onKeyPressed(eventCapsLockKey, 'CapsLock');
+
+      expect(spyOnClick).not.toHaveBeenCalled();
+    });
+
   });
 
-  describe('Template:', () => {
+  describe('Templates:', () => {
+
     it('should only start with default classes, shouldn`t have variations.', () => {
       const value = 'Po Tag';
       component.value = value;
@@ -163,22 +243,13 @@ describe('PoTagComponent:', () => {
       expect(nativeElement.querySelector('.po-tag-warning')).toBeTruthy();
     });
 
-    it('should add `po-icon` and `po-icon-info` default icon if `icon` is true.', () => {
-      component.icon = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-icon')).toBeTruthy();
-      expect(nativeElement.querySelector(`.po-icon-${PoTagIcon.Info}`)).toBeTruthy();
-    });
-
     it('should add `PoTagIcon.Danger` if type is `PoTagType.Danger and `icon` is true`.', () => {
       component.type = PoTagType.Danger;
       component.icon = true;
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector(`.po-icon-${PoTagIcon.Danger}`)).toBeTruthy();
+      expect(nativeElement.querySelector(`.${PoTagIcon.Danger}`)).toBeTruthy();
     });
 
     it('should add `PoTagIcon.Info` if type is `PoTagType.Info and `icon` is true`.', () => {
@@ -187,7 +258,7 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector(`.po-icon-${PoTagIcon.Info}`)).toBeTruthy();
+      expect(nativeElement.querySelector(`.${PoTagIcon.Info}`)).toBeTruthy();
     });
 
     it('should add `PoTagIcon.Success` if type is `PoTagType.Success and `icon` is true`.', () => {
@@ -196,7 +267,7 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector(`.po-icon-${PoTagIcon.Success}`)).toBeTruthy();
+      expect(nativeElement.querySelector(`.${PoTagIcon.Success}`)).toBeTruthy();
     });
 
     it('should add `PoTagIcon.Warning` if type is `PoTagType.Warning and `icon` is true`.', () => {
@@ -205,7 +276,7 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector(`.po-icon-${PoTagIcon.Warning}`)).toBeTruthy();
+      expect(nativeElement.querySelector(`.${PoTagIcon.Warning}`)).toBeTruthy();
     });
 
     it('should add `po-clickable` if `p-click` @Output is wire up`.', () => {
@@ -221,6 +292,7 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
       expect(nativeElement.querySelector('.po-clickable')).toBeFalsy();
     });
+
   });
 
 });

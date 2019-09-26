@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
+import { PoKeyCodeEnum } from '../../enums/po-key-code.enum';
+
 import { PoTagBaseComponent } from './po-tag-base.component';
+import { PoTagIcon } from './enums/po-tag-icon.enum';
 import { PoTagItem } from './interfaces/po-tag-item.interface';
+import { PoTagType } from './enums/po-tag-type.enum';
+
+const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
 
 /**
  * @docsExtends PoTagBaseComponent
@@ -35,9 +41,53 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
     this.isClickable = this.click.observers.length > 0;
   }
 
+  get iconFromType() {
+    switch (this.type) {
+      case PoTagType.Danger: return PoTagIcon.Danger;
+
+      case PoTagType.Info: return PoTagIcon.Info;
+
+      case PoTagType.Success: return PoTagIcon.Success;
+
+      case PoTagType.Warning: return PoTagIcon.Warning;
+    }
+  }
+
+  get iconTypeString() {
+    return typeof this.icon === 'string';
+  }
+
+  get tagColor() {
+    if (this.type) {
+      return 'po-tag-' + this.type;
+    }
+
+    if (this.color && !this.type) {
+      return 'po-' + this.color;
+    }
+
+    if (!this.type && !this.color) {
+      return poTagTypeDefault;
+    }
+  }
+
+  get tagOrientation() {
+    return this.orientation === this.poTagOrientation.Horizontal;
+  }
+
   onClick() {
     const submittedTagItem: PoTagItem = { value: this.value, type: this.type };
-
     this.click.emit(submittedTagItem);
   }
+
+  onKeyPressed(event: any, keyCode: string) {
+    const isValidKey = event.keyCode === PoKeyCodeEnum[keyCode];
+
+    if (isValidKey) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.onClick();
+    }
+  }
+
 }
