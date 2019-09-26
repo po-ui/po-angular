@@ -28,43 +28,43 @@ describe('PoLookupFilterService', () => {
 
   describe('Methods:', () => {
 
-    it(`getFilteredData: should return the request response and create request with url, page, pageSize, filter
+    it(`getFilteredItems: should return the request response and create request with url, page, pageSize, filter
       and params correctly`, () => {
 
       service['url'] = 'http://url.com';
       const page = 1;
       const pageSize = 20;
       const filter = 'name';
-      const params = { name: 'test' };
+      const filterParams = { name: 'test' };
       const expectedResponse = { user: 'test' };
 
-      service.getFilteredData(filter, page, pageSize, params).subscribe(response =>
+      service.getFilteredItems({ filter, page, pageSize, filterParams }).subscribe(response =>
         expect(response).toEqual(expectedResponse)
       );
 
       httpMock.expectOne(httpRequest => {
         return httpRequest.url === service['url'] &&
           httpRequest.method === 'GET' &&
-          httpRequest.params.get('page') === page.toString() &&
-          httpRequest.params.get('pageSize') === pageSize.toString() &&
+          httpRequest.params.get('page') === <any> page &&
+          httpRequest.params.get('pageSize') === <any> pageSize &&
           httpRequest.params.get('filter') === 'name' &&
           httpRequest.params.get('name') === 'test';
       }).flush(expectedResponse);
 
     });
 
-    it(`getFilteredData: should call 'validateParams' and set its return as the request parameter`, () => {
+    it(`getFilteredItems: should call 'validateParams' and set its return as the request parameter`, () => {
 
       service['url'] = 'http://url.com';
       const page = 1;
       const pageSize = 20;
       const filter = undefined;
-      const params = { name: 'test' };
+      const filterParams = { name: 'test' };
 
-      spyOn(service, <any>'validateParams').and.returnValue(params);
+      spyOn(service, <any>'validateParams').and.returnValue(filterParams);
 
-      service.getFilteredData(filter, page, pageSize, params).subscribe(() => {
-        expect(service['validateParams']).toHaveBeenCalledWith(params);
+      service.getFilteredItems({ filter, page, pageSize, filterParams }).subscribe(() => {
+        expect(service['validateParams']).toHaveBeenCalledWith(filterParams);
       });
 
       httpMock.expectOne(httpRequest => httpRequest.params.get('name') === 'test').flush({});

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
-import { PoLookupFilter } from '@portinari/portinari-ui';
+import { PoLookupFilter, PoLookupFilteredItemsParams } from '@portinari/portinari-ui';
 
 @Injectable()
 export class SamplePoLookupService implements PoLookupFilter {
@@ -11,8 +12,11 @@ export class SamplePoLookupService implements PoLookupFilter {
 
   constructor(private httpClient: HttpClient) { }
 
-  getFilteredData(filter: string, page: number, pageSize: number): Observable<any> {
-    return this.httpClient.get(this.url, { params: { page: page.toString(), pageSize: pageSize.toString(), filter } });
+  getFilteredItems(filteredParams: PoLookupFilteredItemsParams): Observable<any> {
+    const { page, pageSize } = filteredParams;
+    const params = { ...filteredParams, page: page.toString(), pageSize: pageSize.toString() };
+
+    return this.httpClient.get(this.url, { params });
   }
 
   getObjectByValue(value: string): Observable<any> {

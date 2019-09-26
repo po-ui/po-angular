@@ -3,6 +3,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
+
 import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-base.component';
 
 /**
@@ -44,6 +46,10 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   openModal() {
     this.poModal.open();
+  }
+
+  sortBy(sort: PoTableColumnSort) {
+    this.sort = sort;
   }
 
   private setTableHeight() {

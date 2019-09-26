@@ -42,7 +42,8 @@
       [p-literals]="tableLiterals"
       [p-loading]="isLoading"
       [p-show-more-disabled]="!hasNext"
-      (p-show-more)="showMoreEvent()">
+      (p-show-more)="showMoreEvent()"
+      (p-sort-by)="sortBy($event)">
     </po-table>
 
   </div>

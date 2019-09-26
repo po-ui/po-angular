@@ -402,7 +402,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
   @Output('p-show-more') showMore?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
   /**
-   * Ação executada ao ordenar colunas da tabela. Se houver ação definida, a ordenação padrão da tabela não será executada.
+   * Ação executada ao ordenar colunas da tabela.
    *
    * Recebe um objeto `{ column, type }` onde:
    *
@@ -418,10 +418,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   selectAll = false;
   sortedColumn = { property: <PoTableColumn>null, ascending: true };
-
-  private get isSortBy(): boolean {
-    return this.sortBy.observers.length > 0;
-  }
 
   private get sortType(): PoTableColumnSortType {
     return this.sortedColumn.ascending ? PoTableColumnSortType.Ascending : PoTableColumnSortType.Descending;
@@ -544,7 +540,8 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
     this.sortedColumn.ascending = this.sortedColumn.property === column ? !this.sortedColumn.ascending : true;
 
-    this.isSortBy ? this.sortBy.emit({ column, type: this.sortType }) : this.sortArray(column, this.sortedColumn.ascending);
+    this.sortArray(column, this.sortedColumn.ascending);
+    this.sortBy.emit({ column, type: this.sortType});
 
     this.sortedColumn.property = column;
   }
