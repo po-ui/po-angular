@@ -1,12 +1,19 @@
-<div class="po-tag-container" [class.po-tag-container-horizontal]="orientation === poTagOrientation.Horizontal">
+<div class="po-tag-container" [class.po-tag-container-horizontal]="tagOrientation">
   <div *ngIf="label" class="po-tag-title po-text-nowrap">
-    <span class="po-tag-label">{{ orientation === poTagOrientation.Horizontal ? label + ':' : label }}</span>
+    <span class="po-tag-label">{{ tagOrientation ? label + ':' : label }}</span>
   </div>
-  <div 
-    class="po-tag po-tag-{{ type }}" 
-    [ngClass]="{'po-clickable': isClickable}"
-    (click)="onClick()">
-    <span *ngIf="icon" class="po-icon po-icon-{{ iconFromType }}"></span>
-    <span class="po-tag-value">{{value}}</span>
+
+  <div class="po-tag-sub-container">
+    <div class="po-tag"
+      [class.po-clickable]="isClickable"
+      [ngClass]="tagColor"
+      tabindex="0"
+      (click)="onClick()"
+      (keydown)="onKeyPressed($event, 'enter')"
+      (keyup)="onKeyPressed($event, 'space')">
+
+      <span *ngIf="icon" class="po-icon" [ngClass]="!type && iconTypeString ? icon : iconFromType"></span>
+      <span class="po-tag-value">{{value}}</span>
+    </div>
   </div>
 </div>

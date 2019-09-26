@@ -1,4 +1,5 @@
 <po-tag
+  [p-color]="color"
   [p-icon]="icon"
   [p-label]="label"
   [p-orientation]="orientation"
@@ -37,26 +38,55 @@
       p-label="Value"
       p-required>
     </po-input>
+  </div>
 
-    <po-switch
-      class="po-md-12"
+  <div class="po-row">
+    <po-select
+      class="po-md-6"
+      name="color"
+      [(ngModel)]="color"
+      p-label="Color"
+      [p-options]="colorList">
+
+      <ng-template p-select-option-template let-option>
+        <div>
+          <span class="sample-tag-color-circle po-{{ option.value }}"></span>
+          <span class="sample-menu-vertical-middle"> {{ option.label }} </span>
+        </div>
+      </ng-template>
+    </po-select>
+
+    <po-select *ngIf="!type"
+      class="po-md-6"
+      name="icon"
+      [(ngModel)]="icon"
+      p-label="Icon"
+      [p-options]="iconList">
+    </po-select>
+
+    <po-switch *ngIf="type"
+      class="po-md-6"
       name="icon"
       [(ngModel)]="icon"
       p-label="Icon">
     </po-switch>
+  </div>
 
+  <div class="po-row">
     <po-radio-group
-      class="po-md-6"
+      class="po-md-4"
       name="orientation"
       [(ngModel)]="orientation"
+      p-columns="1"
       p-label="Orientation"
       [p-options]="orientationOptions">
     </po-radio-group>
 
     <po-radio-group
-      class="po-md-6"
+      class="po-md-8"
       name="type"
       [(ngModel)]="type"
+      p-columns="3"
       p-label="Type"
       [p-options]="typeOptions">
     </po-radio-group>
