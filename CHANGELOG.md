@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.10.0](https://github.com/portinariui/portinari-angular/compare/v1.9.0...v1.10.0) (2019-09-27)
+
+
+### Bug Fixes
+
+* **page-login:** corrige erro ao usar `title` e `loginHint` com `undefined` ([20a36f9](https://github.com/portinariui/portinari-angular/commit/20a36f9))
+* **toolbar:** corrige o funcionamento sem o `p-profile` ([c26f85a](https://github.com/portinariui/portinari-angular/commit/c26f85a))
+
+
+### Features
+
+* **upload:** adiciona propriedade `p-directory`, possibilitando envio de pastas ([6e6de71](https://github.com/portinariui/portinari-angular/commit/6e6de71))
+
+
+
 ## [1.9.0](https://github.com/portinariui/portinari-angular/compare/v1.8.1...v1.9.0) (2019-09-20)
 
 
