@@ -251,8 +251,8 @@ export class PoPageDynamicEditComponent implements OnInit {
   /** Título da página. */
   @Input('p-title') title: string;
 
-  @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
-  @ViewChild('gridDetail', { static: true }) gridDetail: PoGridComponent;
+  @ViewChild('dynamicForm', { static: false }) dynamicForm: PoDynamicFormComponent;
+  @ViewChild('gridDetail', { static: false }) gridDetail: PoGridComponent;
 
   constructor(
     private router: Router,

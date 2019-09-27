@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -13,6 +13,7 @@ import { configureTestSuite, expectPropertiesValues } from './../../util-test/ut
 
 import { PoPageDynamicEditComponent } from './po-page-dynamic-edit.component';
 import { PoPageDynamicEditActions } from './po-page-dynamic-edit-actions.interface';
+import { PoDynamicFormStubComponent } from './test/po-dynamic-form-stub-component';
 
 describe('PoPageDynamicEditComponent: ', () => {
   let component: PoPageDynamicEditComponent;
@@ -28,7 +29,8 @@ describe('PoPageDynamicEditComponent: ', () => {
       ],
       providers: [],
       declarations: [
-        PoPageDynamicEditComponent
+        PoPageDynamicEditComponent,
+        PoDynamicFormStubComponent
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
@@ -43,6 +45,15 @@ describe('PoPageDynamicEditComponent: ', () => {
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set dynamicForm ViewChild properly', () => {
+    const form: NgForm = {
+      dirty: true
+    } as NgForm;
+
+    component.dynamicForm.form = form;
+    expect(component.dynamicForm.form.dirty).toBeTruthy();
   });
 
   describe('Properties: ', () => {
