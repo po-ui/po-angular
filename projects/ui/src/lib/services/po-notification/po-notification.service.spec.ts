@@ -1,5 +1,5 @@
 import { Component, NgModule } from '@angular/core';
-import { TestBed, inject,  ComponentFixture } from '@angular/core/testing';
+import { TestBed, inject, ComponentFixture } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
@@ -25,7 +25,7 @@ class TestModule { }
 })
 class TestComponent {
 
-  constructor(service: PoNotificationService) {}
+  constructor(service: PoNotificationService) { }
 }
 
 describe('PoNotificationService ', () => {
@@ -58,7 +58,8 @@ describe('PoNotificationService ', () => {
       message: '',
       type: PoToasterType.Error,
       orientation: PoToasterOrientation.Top,
-      position: 1
+      position: 1,
+      duration: 10000
     });
 
     jasmine.clock().tick(10001);
@@ -73,7 +74,8 @@ describe('PoNotificationService ', () => {
       message: '',
       type: PoToasterType.Error,
       orientation: PoToasterOrientation.Bottom,
-      position: 1
+      position: 1,
+      duration: 10000
     });
 
     jasmine.clock().tick(5001);
@@ -82,7 +84,8 @@ describe('PoNotificationService ', () => {
       message: '',
       type: PoToasterType.Error,
       orientation: PoToasterOrientation.Bottom,
-      position: 1
+      position: 1,
+      duration: 10000
     });
 
     jasmine.clock().tick(5000);
@@ -105,4 +108,38 @@ describe('PoNotificationService ', () => {
     expect(poNotificationService.stackTop.length === 0).toBeFalsy();
   }));
 
- });
+  describe('Methods: ', () => {
+
+    it('should be a create toaster with 3 seconds duration',
+      inject([PoNotificationService], (poNotificationService: PoNotificationService) => {
+
+      poNotificationService.createToaster({
+        message: '',
+        type: PoToasterType.Success,
+        position: 1,
+        duration: 3000
+      });
+
+      jasmine.clock().tick(3001);
+
+      expect(poNotificationService.stackTop.length === 0).toBeTruthy();
+
+    }));
+
+    it('should be a create toaster with 3 seconds duration as default duration',
+      inject([PoNotificationService], (poNotificationService: PoNotificationService) => {
+
+      poNotificationService.setDefaultDuration(3000);
+      poNotificationService.createToaster({
+        message: '',
+        type: PoToasterType.Success,
+        position: 1
+      });
+
+      jasmine.clock().tick(3001);
+
+      expect(poNotificationService.stackTop.length === 0).toBeTruthy();
+
+    }));
+  });
+});

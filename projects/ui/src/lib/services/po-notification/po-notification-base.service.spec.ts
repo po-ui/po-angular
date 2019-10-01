@@ -171,6 +171,34 @@ describe('PoNotificationService ', () => {
     expect(notification.action).toHaveBeenCalledWith();
   });
 
+  describe('Methods: ', () => {
+
+    it('should be duration 10000 when not informed', () => {
+      spyOn(service, 'createToaster');
+      service.success({message: 'teste'});
+
+      expect(service.createToaster).toHaveBeenCalledWith(
+        mockToaster({type: PoToasterType.Success, duration: 10000})
+      );
+    });
+
+    it('should be duration equals 5 seconds', () => {
+      spyOn(service, 'createToaster');
+      service.success({message: 'teste', duration: 5000});
+
+      expect(service.createToaster).toHaveBeenCalledWith(
+        mockToaster({type: PoToasterType.Success, duration: 5000})
+      );
+    });
+
+    it('should change default duration to 3 seconds', () => {
+      spyOn(service, 'setDefaultDuration').and.callThrough();
+      service.setDefaultDuration(3000);
+
+      expect(service.setDefaultDuration).toHaveBeenCalledWith(3000);
+      expect(service['defaultDuration']).toBe(3000);
+    });
+  });
 });
 
 function mockToaster(obj: any) {
@@ -181,7 +209,8 @@ function mockToaster(obj: any) {
     orientation: PoToasterOrientation.Bottom,
     action: undefined,
     actionLabel: undefined,
-    position: 0
+    position: 0,
+    duration: 10000
   };
 
   for (const prop in obj) {
