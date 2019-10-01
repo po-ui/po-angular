@@ -55,7 +55,7 @@ export class PoNotificationService extends PoNotificationBaseService {
     if (toaster.action === undefined) {
       setTimeout(() => {
         this.destroyToaster(componentRef);
-      }, this.durationToaster);
+      }, toaster.duration);
     }
   }
 

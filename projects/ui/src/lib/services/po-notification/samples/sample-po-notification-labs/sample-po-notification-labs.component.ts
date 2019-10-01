@@ -21,6 +21,7 @@ export class SamplePoNotificationLabsComponent implements OnInit {
   message: string;
   orientation: number ;
   type: number;
+  duration: number;
 
   public readonly orientationOptions: Array<PoRadioGroupOption> = [
     { label: 'Top', value: PoToasterOrientation.Top },
@@ -48,6 +49,7 @@ export class SamplePoNotificationLabsComponent implements OnInit {
     this.orientation = undefined;
     this.action = false;
     this.actionLabel = '';
+    this.duration = undefined;
   }
 
   showNotification() {
@@ -55,7 +57,8 @@ export class SamplePoNotificationLabsComponent implements OnInit {
       message: this.message,
       orientation: this.orientation,
       action: undefined,
-      actionLabel: this.actionLabel
+      actionLabel: this.actionLabel,
+      duration: this.duration
     };
 
     if (this.action) {

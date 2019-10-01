@@ -26,4 +26,7 @@ export interface PoNotification {
    * @default `Bottom`
    */
   orientation?: PoToasterOrientation;
+
+  /** Define em milissegundos o tempo de duração que a notificação ficará disponível em tela. */
+  duration?: number;
 }
