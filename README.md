@@ -24,12 +24,12 @@ Para começar a utilização do PO tenha em mãos o `Node.js` instalado (deve-se
 
 Instalando com npm:
 ```
-npm i -g @angular/cli
+npm i -g @angular/cli@8.0.0
 ```
 
 Caso prefira o yarn:
 ```
-yarn global add @angular/cli
+yarn global add @angular/cli@8.0.0
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
