@@ -104,7 +104,7 @@
     </po-combo>
 
     <po-lookup *ngIf="compareTo(field.control, 'lookup')"
-      name="field.property"
+      [name]="field.property"
       [(ngModel)]="value[field.property]"
       p-field-label="label"
       p-field-value="value"
