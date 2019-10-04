@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable } from 'rxjs';
 
-import { PoDialogModule, PoNotificationModule } from '@portinari/portinari-ui';
+import { PoDialogModule, PoNotificationModule, PoTableColumnSort, PoTableColumnSortType } from '@portinari/portinari-ui';
 
 import * as utilsFunctions from '../../utils/util';
 import { configureTestSuite, expectPropertiesValues } from '../../util-test/util-expect.spec';
@@ -571,6 +571,45 @@ describe('PoPageDynamicTableComponent:', () => {
       component['setTableActions'](actions);
 
       expect(component.tableActions).toEqual(tableActions);
+    });
+
+    it('getOrderParam: should return { order: `column.property` } of PoTableColumnSort object if sort type is Ascending', () => {
+      const sortedColumn: PoTableColumnSort = { column: { property: 'name' }, type: PoTableColumnSortType.Ascending };
+      const expectedValue = { order: 'name' };
+
+      const orderParam = component['getOrderParam'](sortedColumn);
+
+      expect(orderParam).toEqual(expectedValue);
+    });
+
+    it('getOrderParam: should return { order: `-column.property` } of PoTableColumnSort object if sort type is Descending', () => {
+      const sortedColumn: PoTableColumnSort = { column: { property: 'name' }, type: PoTableColumnSortType.Descending };
+      const expectedValue = { order: '-name' };
+
+      const orderParam = component['getOrderParam'](sortedColumn);
+
+      expect(orderParam).toEqual(expectedValue);
+    });
+
+    it('getOrderParam: should return {} if PoTableColumnSort.column is undefined', () => {
+      const expectedValue = {};
+
+      component['sortedColumn'] = undefined;
+
+      const orderParam = component['getOrderParam']();
+
+      expect(orderParam).toEqual(expectedValue);
+    });
+
+    it('onSort: should set sortedColumn property', () => {
+      const sortedColumn = { column: { property: 'name' }, type: PoTableColumnSortType.Ascending };
+      const expectedValue: PoTableColumnSort = { ...sortedColumn };
+
+      component['sortedColumn'] = undefined;
+
+      component.onSort(sortedColumn);
+
+      expect(component['sortedColumn']).toEqual(expectedValue);
     });
 
   });
