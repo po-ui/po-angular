@@ -9,8 +9,9 @@
     "url": "https://github.com/portinariui/portinari-style"
   },
   "scripts": {
-    "build": "gulp build",
+    "build": "gulp build && gulp build:cli",
     "build:app": "gulp build:app",
+    "build:cli": "gulp build:cli",
     "watch": "gulp watch",
     "dev": "http-server ./app-dist -o -c-1"
   },

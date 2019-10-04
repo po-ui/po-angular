@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'PortinariIcon';
-  src:  url('./../fonts/PortinariIcon.eot?31xwv');
-  src:  url('./../fonts/PortinariIcon.eot?31xwv#iefix') format('embedded-opentype'),
-    url('./../fonts/PortinariIcon.ttf?31xwv') format('truetype'),
-    url('./../fonts/PortinariIcon.woff?31xwv') format('woff'),
-    url('./../fonts/PortinariIcon.svg?31xwv#PortinariIcon') format('svg');
+  src:  url('./../icons/PortinariIcon.eot?31xwv');
+  src:  url('./../icons/PortinariIcon.eot?31xwv#iefix') format('embedded-opentype'),
+    url('./../icons/PortinariIcon.ttf?31xwv') format('truetype'),
+    url('./../icons/PortinariIcon.woff?31xwv') format('woff'),
+    url('./../icons/PortinariIcon.svg?31xwv#PortinariIcon') format('svg');
   font-weight: normal;
   font-style: normal;
 }

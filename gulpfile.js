@@ -165,6 +165,11 @@ const buildApp = series(
 );
 buildApp.displayName = 'build:app';
 
+const buildCli = () =>
+  src([`./src/cli/**/*.*`, '!./src/cli/node_modules/**/*.*'])
+    .pipe(dest('./dist/cli/'));
+buildCli.displayName = 'build:cli';
+
 /**
  * ============================================================
  * TAREFAS GENÉRICAS
@@ -211,6 +216,9 @@ exports.build = series(clean, buildTheme);
 
 // gulp build:app
 exports.buildApp = buildApp;
+
+// gulp build:app
+exports.buildCli = buildCli;
 
 // gulp
 exports.default = series(clean, buildApp);
