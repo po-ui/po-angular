@@ -14,7 +14,8 @@
     [p-columns]="columns"
     [p-items]="items"
     [p-show-more-disabled]="!hasNext"
-    (p-show-more)="showMore()">
+    (p-show-more)="showMore()"
+    (p-sort-by)="onSort($event)">
   </po-table>
 
 </po-page-dynamic-search>
