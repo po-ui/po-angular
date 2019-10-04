@@ -65,6 +65,15 @@ export class PoPageDynamicListBaseComponent {
    *
    * Endpoint usado pelo template para requisição dos recursos que serão exibidos.
    *
+   * Ao realizar requisições de busca, podem ser enviados os parâmetros (caso possuam valor): `page`, `pageSize`, `search` e `order`.
+   *
+   * Caso a coluna estiver ordenada descendentemente será enviada da seguinte forma: `-name`, se for ordenada
+   * ascendentemente será enviada apenas com o nome da coluna, por exemplo: `name`.
+   *
+   * Exemplo de uma requisição de busca:
+   *
+   * > `GET {end-point}/{resource}?page=1&pageSize=10&search=components&order=-name`
+   *
    * Caso a ação `remove` estiver configurada, será feito uma requisição de exclusão nesse mesmo endpoint passando os campos
    * setados como `key: true`.
    *

@@ -1,7 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 
-import { PoDialogConfirmOptions, PoDialogService, PoNotificationService, PoPageAction, PoTableAction } from '@portinari/portinari-ui';
+import {
+  PoDialogConfirmOptions,
+  PoDialogService,
+  PoNotificationService,
+  PoPageAction,
+  PoTableAction,
+  PoTableColumnSort,
+  PoTableColumnSortType
+} from '@portinari/portinari-ui';
 
 import * as util from '../../utils/util';
 
@@ -93,6 +101,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   private page: number = 1;
   private params = {};
+  private sortedColumn: PoTableColumnSort;
 
   hasNext = false;
   items = [];
@@ -164,6 +173,10 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.params = filter ? { search: filter } : {};
   }
 
+  onSort(sortedColumn: PoTableColumnSort) {
+    this.sortedColumn = sortedColumn;
+  }
+
   showMore() {
     this.loadData({ page: ++this.page, ...this.params });
   }
@@ -206,14 +219,29 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return util.valuesFromObject(keys).join('|');
   }
 
+  private getOrderParam(sortedColumn: PoTableColumnSort = { type: undefined }) {
+    const { column, type } = sortedColumn;
+
+    if (!column) {
+      return {};
+    }
+
+    if (type === PoTableColumnSortType.Descending) {
+      return { order: `-${column.property}` };
+    }
+
+    return { order: `${column.property}` };
+  }
+
   private loadData(params: { page?: number, search?: string } = {}) {
     if (!this.serviceApi) {
       this.poNotification.error(this.literals.loadDataErrorNotification);
       return;
     }
 
+    const orderParam = this.getOrderParam(this.sortedColumn);
     const defaultParams: any = { page: 1, pageSize: 10 };
-    const fullParams: any = { ...defaultParams, ...params };
+    const fullParams: any = { ...defaultParams, ...params, ...orderParam };
 
     this.poPageDynamicService.getResources(fullParams).toPromise().then((response: any) => {
       this.items = fullParams.page === 1 ? response.items : [...this.items, ...response.items];
