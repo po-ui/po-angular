@@ -1,5 +1,46 @@
 # Changelog
 
+
+## [1.11.0](https://github.com/portinariui/portinari-angular/compare/v1.10.0...v1.11.0) (2019-10-04)
+
+
+### Bug Fixes
+
+* **dynamic-form:** `name` não estava sendo repassado corretamente ao componente `po-lookup` ([f924060](https://github.com/portinariui/portinari-angular/commit/f924060))
+* **readme:** fixada a versão do angular-cli@8.0.0 ([8a95f2e](https://github.com/portinariui/portinari-angular/commit/8a95f2e))
+* **table:** utiliza ordenação local mesmo utilizando o evento `p-sort-by` ([1cacc4d](https://github.com/portinariui/portinari-angular/commit/1cacc4d))
+
+
+### Features
+
+* **accordion:** novo componente ([ca05d1b](https://github.com/portinariui/portinari-angular/commit/ca05d1b))
+* **lookup:** inclui coluna de ordenação na chamada do serviço ([1cacc4d](https://github.com/portinariui/portinari-angular/commit/1cacc4d))
+* **notification:** permite alterar tempo de duração da notificação através da propriedade `PoNotification.duration` ([23eb81a](https://github.com/portinariui/portinari-angular/commit/23eb81a))
+* **page-dynamic-table:** inclui coluna de ordenação na chamada do serviço([a9718f6](https://github.com/portinariui/portinari-angular/commit/a9718f6))
+* **rich-text:** permite inclusão de imagem ([303bf04](https://github.com/portinariui/portinari-angular/commit/303bf04))
+* **storage:** adiciona `po-loki-driver` no storage ([0cf3222](https://github.com/portinariui/portinari-angular/commit/0cf3222))
+* **tag:** permite o uso da paleta de cores e ícones através das propriedade `p-color`e `p-icon` ([13587a4](https://github.com/portinariui/portinari-angular/commit/13587a4))
+* **ui:** adiciona suporte para o idioma russo nos componentes: ([d5ae905](https://github.com/portinariui/portinari-angular/commit/d5ae905))
+  - Componentes do pacote `@portinari/portinari-templates`:
+    - PoModalPasswordRecovery;
+    - PoPageBlockedUser;
+    - PoPageChangePassword;
+
+  - Componentes e seviço do pacote `@portinari/portinari-ui`:
+    - PoCombo;
+    - PoDatePickerRange;
+    - PoLookup;
+    - PoMultiselect;
+    - PoUpload;
+    - PoListView;
+    - PoLoadingOverlay;
+    - PoNavbar;
+    - PoPageDetail;
+    - PoPageEdit;
+    - PoPageList;
+    - PoTable;
+    - PoDialog;
+
 ## [1.10.0](https://github.com/portinariui/portinari-angular/compare/v1.9.0...v1.10.0) (2019-09-27)
 
 
