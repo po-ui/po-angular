@@ -60,6 +60,7 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
     // Se não tem ngModel ou reactive form adiciona validação com classes css
     if (!this.onChangeModel) {
       this.element.nativeElement.addEventListener('keyup', this.listener);
+      this.element.nativeElement.addEventListener('keydown', this.listener);
       this.element.nativeElement.addEventListener('cut', this.listener);
       this.element.nativeElement.addEventListener('paste', this.listener);
     }
@@ -68,6 +69,7 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
   ngOnDestroy() {
     if (!this.onChangeModel) {
       this.element.nativeElement.removeEventListener('keyup', this.listener);
+      this.element.nativeElement.removeEventListener('keydown', this.listener);
       this.element.nativeElement.removeEventListener('cut', this.listener);
       this.element.nativeElement.removeEventListener('paste', this.listener);
     }
