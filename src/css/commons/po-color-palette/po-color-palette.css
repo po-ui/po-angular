@@ -1,95 +1,95 @@
 .po-color-01 {
-  background-color: #0c9abe;
+  background-color: var(--color-01);
 }
 
 .po-color-02 {
-  background-color: #2c85c8;
+  background-color: var(--color-02);
 }
 
 .po-color-03 {
-  background-color: #2c43c8;
+  background-color: var(--color-03);
 }
 
 .po-color-04 {
-  background-color: #5843c8;
+  background-color: var(--color-04);
 }
 
 .po-color-05 {
-  background-color: #ab43c8;
+  background-color: var(--color-05);
 }
 
 .po-color-06 {
-  background-color: #ab4391;
+  background-color: var(--color-06);
 }
 
 .po-color-07 {
-  background-color: #c64840;
+  background-color: var(--color-07);
 }
 
 .po-color-08 {
-  background-color: #ea9b3e;
+  background-color:var(--color-08);
 }
 
 .po-color-09 {
-  background-color: #abc249;
+  background-color:var(--color-09);
 }
 
 .po-color-10 {
-  background-color: #56b96b;
+  background-color: var(--color-10);
 }
 
 .po-color-11 {
-  background-color: #00b28e;
+  background-color: var(--color-11);
 }
 
 .po-color-12 {
-  background-color: #06a6a5;
+  background-color: var(--color-12);
 }
 
 .po-text-color-01 {
-  color: #0c9abe !important;
+  color: var(--color-01) !important;
 }
 
 .po-text-color-02 {
-  color: #2c85c8 !important;
+  color: var(--color-02) !important;
 }
 
 .po-text-color-03 {
-  color: #2c43c8 !important;
+  color: var(--color-03) !important;
 }
 
 .po-text-color-04 {
-  color: #5843c8 !important;
+  color: var(--color-04) !important;
 }
 
 .po-text-color-05 {
-  color: #ab43c8 !important;
+  color: var(--color-05) !important;
 }
 
 .po-text-color-06 {
-  color: #ab4391 !important;
+  color: var(--color-06) !important;
 }
 
 .po-text-color-07 {
-  color: #c64840 !important;
+  color: var(--color-07) !important;
 }
 
 .po-text-color-08 {
-  color: #ea9b3e !important;
+  color: var(--color-08) !important;
 }
 
 .po-text-color-09 {
-  color: #abc249 !important;
+  color: var(--color-09) !important;
 }
 
 .po-text-color-10 {
-  color: #56b96b !important;
+  color: var(--color-10) !important;
 }
 
 .po-text-color-11 {
-  color: #00b28e !important;
+  color: var(--color-11) !important;
 }
 
 .po-text-color-12 {
-  color: #06a6a5 !important;
+  color: var(--color-12) !important;
 }

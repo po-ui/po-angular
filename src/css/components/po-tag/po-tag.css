@@ -1,5 +1,5 @@
 :root {
-  --font-tag-font {
+  --font-tag-font: {
     @apply --font-text-smaller;
     line-height: 0;
   }
@@ -34,6 +34,10 @@
   height: 20px;
   padding: 0 8px;
   word-wrap: break-word;
+}
+
+.po-tag-inverse {
+  background-color: var(--color-tag-background-color-white);
 }
 
 .po-tag:focus {
@@ -92,16 +96,88 @@
   background-color: var(--color-tag-background-color-danger);
 }
 
+.po-tag-danger-inverse {
+  background-color: var(--color-tag-background-color-white);
+  border: 1px solid var(--color-tag-color-danger);
+  color: var(--color-tag-color-danger);
+}
+
 .po-tag-info {
   background-color: var(--color-tag-background-color-info);
+}
+
+.po-tag-info-inverse {
+  background-color: var(--color-tag-background-color-white);
+  border: 1px solid var(--color-tag-color-info);
+  color: var(--color-tag-color-info);
 }
 
 .po-tag-success {
   background-color: var(--color-tag-background-color-success);
 }
 
+.po-tag-success-inverse {
+  background-color: var(--color-tag-background-color-white);
+  border: 1px solid var(--color-tag-color-success);
+  color: var(--color-tag-color-success);
+}
+
 .po-tag-warning {
   background-color: var(--color-tag-background-color-warning);
+}
+
+.po-tag-warning-inverse {
+  background-color: var(--color-tag-background-color-white);
+  border: 1px solid var(--color-tag-color-warning);
+  color: var(--color-tag-color-warning);
+}
+
+.po-tag-inverse.po-text-color-01 {
+  border: 1px solid var(--color-tag-inverse-border-color-01);
+}
+
+.po-tag-inverse.po-text-color-02 {
+  border: 1px solid var(--color-tag-inverse-border-color-02);
+}
+
+.po-tag-inverse.po-text-color-03 {
+  border: 1px solid var(--color-tag-inverse-border-color-03);
+}
+
+.po-tag-inverse.po-text-color-04 {
+  border: 1px solid var(--color-tag-inverse-border-color-04);
+}
+
+.po-tag-inverse.po-text-color-05 {
+  border: 1px solid var(--color-tag-inverse-border-color-05);
+}
+
+.po-tag-inverse.po-text-color-06 {
+  border: 1px solid var(--color-tag-inverse-border-color-06);
+}
+
+.po-tag-inverse.po-text-color-07 {
+  border: 1px solid var(--color-tag-inverse-border-color-07);
+}
+
+.po-tag-inverse.po-text-color-08 {
+  border: 1px solid var(--color-tag-inverse-border-color-08);
+}
+
+.po-tag-inverse.po-text-color-09 {
+  border: 1px solid var(--color-tag-inverse-border-color-09);
+}
+
+.po-tag-inverse.po-text-color-10 {
+  border: 1px solid var(--color-tag-inverse-border-color-10);
+}
+
+.po-tag-inverse.po-text-color-11 {
+  border: 1px solid var(--color-tag-inverse-border-color-11);
+}
+
+.po-tag-inverse.po-text-color-12 {
+  border: 1px solid var(--color-tag-inverse-border-color-12);
 }
 
 @media print {

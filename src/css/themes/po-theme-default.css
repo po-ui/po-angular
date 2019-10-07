@@ -5,12 +5,14 @@
 /**
  * CONTENTS
  *
- * SETTINGS
- * Global......................variáveis globais e configurações.
- * Commons.....................variáveis do Commons / Genéricas.
+ * COMMONS
+ * Common......................configurações.
+ * Color.......................variáveis globais de cores.
+ * Color Palette...............variáveis da peleta de cores.
+ * Font........................variáveis de fontes.
  *
  * COMPONENTS
- * Accordion......................variáveis do Accordion.
+ * Accordion...................variáveis do Accordion.
  * Avatar......................variáveis do Avatar.
  * Button......................variáveis do Button.
  * Badge.......................variáveis do Badge.
@@ -75,13 +77,25 @@
  */
 
 /*------------------------------------*\
-  SETTINGS
-\*------------------------------------*/
-:root {
-/*------------------------------------*\
-  GLOBAL
+  COMMONS
 \*------------------------------------*/
 
+/*------------------------------------*\
+  COMMON
+\*------------------------------------*/
+
+:root {
+  --color-wrapper-menu-panel-color-background: var(--color-white);
+  --color-overlay-background-color-overlay: var(--color-secondary-dark-60-alpha-70);
+
+  --color-hr-border-top: var(--color-neutral-light-90);
+}
+
+/*------------------------------------*\
+  COLOR
+\*------------------------------------*/
+
+:root {
   /* Cor do background da linha da tabela */
   --color-primary-light-95: #FCF6F9;
 
@@ -99,7 +113,6 @@
 
   /* Pressed do Botão primário, Links, Cor da borda do botão secundário */
   --color-primary-dark-40: #8B255A;
-
 
   /* Secondary */
   --color-secondary: #8241a4;
@@ -182,6 +195,28 @@
 
   --color-transparent: transparent;
 
+/*------------------------------------*\
+  COLOR-PALETTE
+\*------------------------------------*/
+
+  /* Cores que podem ser utilizadas na coluna de labels, legenda e cor de icones do componente table, também utilizadas na tag e badge */
+  --color-01: #0c9abe;
+  --color-02: #2c85c8;
+  --color-03: #2c43c8;
+  --color-04: #5843c8;
+  --color-05: #ab43c8;
+  --color-06: #ab4391;
+  --color-07: #c64840;
+  --color-08: #ea9b3e;
+  --color-09: #abc249;
+  --color-10: #56b96b;
+  --color-11: #00b28e;
+  --color-12: #06a6a5;
+
+/*------------------------------------*\
+  FONT
+\*------------------------------------*/
+
   /**
    * Variáveis para definições de fontes. O PO utiliza as variantes *extra light*, *regular* e *bold* em seus componentes e, para cada uma delas,
    * é atribuído um @font-face específico. Os nomes elencados no `font-family` no @font-face devem ser os mesmos atribuídos como valor para as variáveis.
@@ -212,16 +247,6 @@
   src: url('./../fonts/Roboto/Roboto-Bold.ttf');
   font-weight: bold;
   font-style: normal;
-}
-
-/*------------------------------------*\
-  COMMONS
-\*------------------------------------*/
-:root {
-  --color-wrapper-menu-panel-color-background: var(--color-white);
-  --color-overlay-background-color-overlay: var(--color-secondary-dark-60-alpha-70);
-
-  --color-hr-border-top: var(--color-neutral-light-90);
 }
 
 /*------------------------------------*\
@@ -343,6 +368,7 @@
 /*------------------------------------*\
   BREADCRUMB
 \*------------------------------------*/
+
 /**
  * Breadcrumb
  */
@@ -1000,12 +1026,30 @@
   --color-tag-border-color-dashed-focus: var(--color-secondary);
 
   --color-tag-color: var(--color-white);
+  --color-tag-color-danger: var(--color-danger);
+  --color-tag-color-info: var(--color-neutral);
+  --color-tag-color-success: var(--color-success);
+  --color-tag-color-warning: var(--color-warning);
   --color-tag-color-text-label: var(--color-neutral);
 
   --color-tag-background-color-danger: var(--color-danger);
   --color-tag-background-color-info: var(--color-neutral);
   --color-tag-background-color-success: var(--color-success);
   --color-tag-background-color-warning: var(--color-warning);
+  --color-tag-background-color-white:var(--color-white);
+
+  --color-tag-inverse-border-color-01: var(--color-01);
+  --color-tag-inverse-border-color-02: var(--color-02);
+  --color-tag-inverse-border-color-03: var(--color-03);
+  --color-tag-inverse-border-color-04: var(--color-04);
+  --color-tag-inverse-border-color-05: var(--color-05);
+  --color-tag-inverse-border-color-06: var(--color-06);
+  --color-tag-inverse-border-color-07: var(--color-07);
+  --color-tag-inverse-border-color-08: var(--color-08);
+  --color-tag-inverse-border-color-09: var(--color-09);
+  --color-tag-inverse-border-color-10: var(--color-10);
+  --color-tag-inverse-border-color-11: var(--color-11);
+  --color-tag-inverse-border-color-12: var(--color-12);
 
 /*------------------------------------*\
   TEXTAREA
@@ -1104,4 +1148,5 @@
   --color-widget-background-color-disabled: var(--color-neutral-light-90);
   --color-widget-background-color-scroll-disabled: var(--color-neutral-light-40);
   --color-widget-color-disabled: var(--color-neutral-light-40);
-  }
+
+}
