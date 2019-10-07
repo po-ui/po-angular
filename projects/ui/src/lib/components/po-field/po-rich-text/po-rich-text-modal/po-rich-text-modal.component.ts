@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { AbstractControl, NgForm } from '@angular/forms';
 
 import { convertImageToBase64 } from '../../../../utils/util';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
@@ -26,6 +26,10 @@ export class PoRichTextModalComponent {
     allowedExtensions: uploadRestrictions
   };
   urlImage: string;
+  urlLink: string;
+  urlLinkText: string;
+
+  private savedSelection: Range | null;
 
   readonly literals = {
     ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
@@ -45,12 +49,26 @@ export class PoRichTextModalComponent {
     action: () => this.insertElementRef()
   };
 
+  modalLinkConfirmAction = {
+    label: this.literals.insertLink,
+    disabled: true,
+    action: () => this.toInsertLink(this.urlLink, this.urlLinkText)
+  };
+
+  get modalTitle(): string {
+    return this.modalType === 'image' ? this.literals.insertImage : this.literals.insertLink;
+  }
+
   get isUploadValid(): boolean {
     return !!(this.uploadModel && this.uploadModel.length);
   }
 
   get isUrlValid(): boolean {
     return !!this.urlImage && this.modalImageForm && this.modalImageForm.valid;
+  }
+
+  get modalPrimaryAction() {
+    return this.modalType === 'image' ? this.modalConfirmAction : this.modalLinkConfirmAction;
   }
 
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
@@ -61,7 +79,11 @@ export class PoRichTextModalComponent {
 
   @ViewChild('modalImage', { static: true }) modalImage: ElementRef;
 
-  @Output('p-command') command = new EventEmitter<string | { command: string, value: string }>();
+  @ViewChild('modalLink', { static: true }) modalLink: PoModalComponent;
+
+  @ViewChild('modalLinkForm', { static: false }) modalLinkForm: NgForm;
+
+  @Output('p-command') command = new EventEmitter<string | { command: string, value: string | any }>();
 
   constructor(private languageService: PoLanguageService) {}
 
@@ -78,6 +100,10 @@ export class PoRichTextModalComponent {
       command = 'insertImage';
       this.command.emit(({ command, value }));
     }
+  }
+
+  formModelValidate() {
+    return this.modalLinkConfirmAction.disabled = this.modalLinkForm && this.modalLinkForm.invalid;
   }
 
   async insertElementRef() {
@@ -99,13 +125,45 @@ export class PoRichTextModalComponent {
 
   openModal(type: PoRichTextModalType) {
     this.modalType = type;
-    this.saveCursorPosition();
+
+    if (this.modalType === PoRichTextModalType.Image) {
+      this.saveCursorPosition();
+    } else {
+      this.saveSelectionTextRange();
+      this.formReset(this.modalLinkForm.control);
+      this.formModelValidate();
+    }
+
     this.modal.open();
+  }
+
+  private checkIfIsEmpty(urlLink: string, urlLinkText: string) {
+    return urlLinkText === undefined || urlLinkText.trim() === '' ? urlLink : urlLinkText;
   }
 
   private cleanUpFields() {
     this.urlImage = undefined;
+    this.urlLink = undefined;
+    this.urlLinkText = undefined;
     this.uploadModel = undefined;
+  }
+
+  private formReset(control: AbstractControl) {
+    control.markAsPristine();
+    control.markAsUntouched();
+    control.updateValueAndValidity();
+  }
+
+  private restoreSelection() {
+    if (this.savedSelection) {
+      if (this.selection) {
+        this.selection.removeAllRanges();
+        this.selection.addRange(this.savedSelection);
+      }
+      return true;
+    }  else {
+      return false;
+    }
   }
 
   private retrieveCursorPosition() {
@@ -114,6 +172,28 @@ export class PoRichTextModalComponent {
 
   private saveCursorPosition() {
     this.savedCursorPosition = [ this.selection.focusNode, this.selection.focusOffset ];
+  }
+
+  private saveSelectionTextRange() {
+    if (this.selection.anchorNode !== null) {
+      this.savedSelection = this.selection.getRangeAt(0);
+      this.urlLinkText = this.selection.toString();
+    } else {
+      return null;
+    }
+  }
+
+  private toInsertLink(urlLink, urlLinkText) {
+    this.modal.close();
+    this.restoreSelection();
+
+    const urlLinkTextValue = this.checkIfIsEmpty(urlLink, urlLinkText);
+    const command: string = 'InsertHTML';
+    const value = { urlLink: urlLink, urlLinkText: urlLinkTextValue };
+
+    this.command.emit({ command, value });
+
+    this.cleanUpFields();
   }
 
 }

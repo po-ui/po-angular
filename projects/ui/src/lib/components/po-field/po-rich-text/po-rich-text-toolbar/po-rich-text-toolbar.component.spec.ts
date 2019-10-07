@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
 import * as UtilsFunction from '../../../../utils/util';
 import { configureTestSuite } from '../../../../util-test/util-expect.spec';
@@ -17,6 +18,7 @@ describe('PoRichTextToolbarComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
+        FormsModule,
         PoButtonGroupModule,
         PoModalModule,
         PoTooltipModule,
@@ -62,6 +64,14 @@ describe('PoRichTextToolbarComponent:', () => {
       expect(component.modal.emit).toHaveBeenCalled();
     });
 
+    it('linkButtons: should call modal.emit', () => {
+      spyOn(component.modal, 'emit');
+
+      component.linkButtons[0].action();
+
+      expect(component.modal.emit).toHaveBeenCalled();
+    });
+
   });
 
   describe('Methods:', () => {
@@ -103,7 +113,14 @@ describe('PoRichTextToolbarComponent:', () => {
         expect(component.listButtons[0].selected).toBeFalsy();
       });
 
-      it('shouldn`t map neither set a `selected` value at alignButtons, formatButtons and listButtons arrays list if it`s readonly', () => {
+      it('should map linktButtons and doesn`t apply `selected` true', () => {
+        component.setButtonsStates({ commands, hexColor });
+
+        expect(component.linkButtons[0].selected).toBeFalsy();
+      });
+
+      it(`shouldn't map neither set a 'selected' value at alignButtons, formatButtons,
+      linkButtons and listButtons arrays list if it's readonly`, () => {
         component.readonly = true;
         component.alignButtons[0].selected = undefined;
 
@@ -114,6 +131,10 @@ describe('PoRichTextToolbarComponent:', () => {
         });
         component.formatButtons.forEach(formatButton => {
           expect(formatButton.selected).toBeFalsy();
+        });
+
+        component.linkButtons.forEach(linkButton => {
+          expect(linkButton.selected).toBeFalsy();
         });
       });
 
@@ -171,7 +192,7 @@ describe('PoRichTextToolbarComponent:', () => {
       });
     });
 
-    it('toggleDisableButtons: should apply the state `disabled` to alignButtons, formatButtons and lisButtons', () => {
+    it('toggleDisableButtons: should apply the state `disabled` to alignButtons, formatButtons, linkButtons and lisButtons', () => {
       component['toggleDisableButtons'](true);
 
       component.alignButtons.forEach(alignButton => {
@@ -181,10 +202,11 @@ describe('PoRichTextToolbarComponent:', () => {
         expect(formatButton.disabled).toBeTruthy();
       });
       expect(component.listButtons[0].disabled).toBeTruthy();
+      expect(component.linkButtons[0].disabled).toBeTruthy();
       expect(component.mediaButtons[0].disabled).toBeTruthy();
     });
 
-    it('toggleDisableButtons: shouldn`t apply the state `disabled` to alignButtons, formatButtons and lisButtons.', () => {
+    it('toggleDisableButtons: shouldn`t apply the state `disabled` to alignButtons, formatButtons, linkButtons and lisButtons.', () => {
       component['toggleDisableButtons'](false);
 
       component.alignButtons.forEach(alignButton => {
@@ -194,6 +216,7 @@ describe('PoRichTextToolbarComponent:', () => {
         expect(formatButton.disabled).toBeFalsy();
       });
       expect(component.listButtons[0].disabled).toBeFalsy();
+      expect(component.linkButtons[0].disabled).toBeFalsy();
       expect(component.mediaButtons[0].disabled).toBeFalsy();
     });
 
@@ -214,6 +237,14 @@ describe('PoRichTextToolbarComponent:', () => {
       component['setColorInColorPicker'](color);
 
       expect(component.colorPickerInput.nativeElement.value).toBe(color);
+    });
+
+    it('shortcutTrigger: should call `openModalLink`', () => {
+      spyOn(component.modal, <any>'emit');
+
+      component.shortcutTrigger();
+
+      expect(component.modal.emit).toHaveBeenCalled();
     });
 
   });

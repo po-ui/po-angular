@@ -1,10 +1,10 @@
 <po-modal #modal
   p-hide-close
-  [p-primary-action]="modalConfirmAction"
+  [p-primary-action]="modalPrimaryAction"
   [p-secondary-action]="modalCancelAction"
-  [p-title]="literals.insertImage">
+  [p-title]="modalTitle">
 
-  <ng-container *ngIf="modalType === 'image'; then modalImage"></ng-container>
+  <ng-container *ngTemplateOutlet="modalType === 'image' ? modalImage : modalLink"></ng-container>
 </po-modal>
 
 <ng-template #modalImage>
@@ -32,6 +32,30 @@
         [(ngModel)]="urlImage"
         [p-label]="literals.urlImage"
         [p-disabled]="isUploadValid">
+      </po-url>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #modalLink>
+  <form #modalLinkForm="ngForm">
+    <div class="po-row">
+      <po-input class="po-md-12 po-mb-2"
+        name="urlLinkText"
+        [(ngModel)]="urlLinkText"
+        p-optional
+        [p-label]="literals.linkTextLabel"
+        [p-placeholder]="literals.linkTextLabel">
+      </po-input>
+
+      <po-url class="po-md-12"
+        name="urlLink"
+        [(ngModel)]="urlLink"
+        p-label="Link"
+        p-required
+        [p-help]="literals.linkUrlTextHelper"
+        [p-placeholder]="literals.linkUrlTextPlaceholder"
+        (p-change-model)="formModelValidate()">
       </po-url>
     </div>
   </form>

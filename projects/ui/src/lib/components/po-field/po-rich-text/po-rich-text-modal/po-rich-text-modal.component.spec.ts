@@ -83,6 +83,30 @@ describe('PoRichTextModalComponent:', () => {
       expect(component['isUrlValid']).toBeFalsy();
     });
 
+    it('modalPrimaryAction: should return `modalConfirmAction` if modalType is `image`', () => {
+      component.modalType = PoRichTextModalType.Image;
+
+      expect(component['modalPrimaryAction']).toBe(component['modalConfirmAction']);
+    });
+
+    it('modalPrimaryAction: should return `modalLinkConfirmAction` if modalType is `link`', () => {
+      component.modalType = PoRichTextModalType.Link;
+
+      expect(component['modalPrimaryAction']).toBe(component['modalLinkConfirmAction']);
+    });
+
+    it('modalTitle: should return  `literals.insertImage` if modalType is `image`', () => {
+      component.modalType = PoRichTextModalType.Image;
+
+      expect(component['modalTitle']).toBe(component.literals.insertImage);
+    });
+
+    it('modalTitle: should return  `literals.insertLink` if modalType is `link`', () => {
+      component.modalType = PoRichTextModalType.Link;
+
+      expect(component['modalTitle']).toBe(component.literals.insertLink);
+    });
+
     it('modalCancelAction: should call modal.close and cleanUpFields', () => {
       spyOn(component.modal, <any>'close');
       spyOn(component, <any>'cleanUpFields');
@@ -100,19 +124,60 @@ describe('PoRichTextModalComponent:', () => {
 
       expect(component.insertElementRef).toHaveBeenCalled();
     });
+
+    it('modalConfirmAction: should call toInsertLink', () => {
+      spyOn(component, <any>'toInsertLink');
+
+      component.modalLinkConfirmAction.action();
+
+      expect(component['toInsertLink']).toHaveBeenCalled();
+    });
+
   });
 
   describe('Methods:', () => {
 
-    it(`openModal: should call 'saveCursorPosition', 'modal' and 'open'.`, () => {
+    it(`openModal: should call 'modal.open'`, () => {
       const fakeType = PoRichTextModalType.Image;
-      spyOn(component, <any>'saveCursorPosition');
+
       spyOn(component.modal, 'open');
+      spyOn(component, <any>'formModelValidate');
+
+      component.openModal(fakeType);
+
+      expect(component.modal.open).toHaveBeenCalled();
+    });
+
+    it('should call `saveCursorPosition` if modalType is `image`', () => {
+      const fakeType = PoRichTextModalType.Image;
+
+      spyOn(component, <any>'saveCursorPosition');
+      spyOn(component, <any>'saveSelectionTextRange');
+      spyOn(component, <any>'formModelValidate');
+      spyOn(component, <any>'formReset');
 
       component.openModal(fakeType);
 
       expect(component['saveCursorPosition']).toHaveBeenCalled();
-      expect(component.modal.open).toHaveBeenCalled();
+      expect(component['saveSelectionTextRange']).not.toHaveBeenCalled();
+      expect(component['formModelValidate']).not.toHaveBeenCalled();
+      expect(component['formReset']).not.toHaveBeenCalled();
+    });
+
+    it('should call `saveSelectionTextRange`, `formModelValidate` and `formReset` if modalType is `link`', () => {
+      const fakeType = PoRichTextModalType.Link;
+
+      spyOn(component, <any>'saveCursorPosition');
+      spyOn(component, <any>'saveSelectionTextRange');
+      spyOn(component, <any>'formReset');
+      spyOn(component, <any>'formModelValidate');
+
+      component.openModal(fakeType);
+
+      expect(component['saveSelectionTextRange']).toHaveBeenCalled();
+      expect(component['formModelValidate']).toHaveBeenCalled();
+      expect(component['formReset']).toHaveBeenCalledWith(component.modalLinkForm.control);
+      expect(component['saveCursorPosition']).not.toHaveBeenCalled();
     });
 
     it(`convertToBase64: should call 'convertImageToBase64'.`, async () => {
@@ -256,6 +321,8 @@ describe('PoRichTextModalComponent:', () => {
 
       expect(component.urlImage).toBe(undefined);
       expect(component.uploadModel).toBe(undefined);
+      expect(component.urlLink).toBe(undefined);
+      expect(component.urlLinkText).toBe(undefined);
     });
 
     it(`retrieveCursorPosition: should call 'selection.collapse'.`, () => {
@@ -275,6 +342,186 @@ describe('PoRichTextModalComponent:', () => {
       component['saveCursorPosition']();
 
       expect(component.savedCursorPosition).toEqual(expectedValueSaved);
+    });
+
+    it('toInsertLink: should call `restoreSelection`, `cleanUpFields` and `modal.close`', () => {
+      const urlLink = 'urlLink';
+      const urlLinkText = 'url link text';
+
+      spyOn(component, <any>'restoreSelection');
+      spyOn(component, <any>'cleanUpFields');
+      spyOn(component.modal, 'close');
+
+      component['toInsertLink'](urlLink, urlLinkText);
+
+      expect(component['restoreSelection']).toHaveBeenCalled();
+      expect(component['cleanUpFields']).toHaveBeenCalled();
+      expect(component.modal.close).toHaveBeenCalled();
+    });
+
+    it('toInsertLink: should call `checkIfIsEmpty` and `command.emit`', () => {
+      const urlLink = 'urlLink';
+      const urlLinkText = 'url link text';
+
+      spyOn(component, <any>'checkIfIsEmpty').and.callThrough();
+      spyOn(component.command, 'emit');
+
+      component['toInsertLink'](urlLink, urlLinkText);
+
+      expect(component['checkIfIsEmpty']).toHaveBeenCalled();
+      expect(component.command.emit).toHaveBeenCalledWith({command: 'InsertHTML', value: { urlLink: urlLink, urlLinkText: urlLinkText } });
+    });
+
+    it('formModelValidate: should apply `true` to `modalLinkForm.disabled` if `modalLinkForm.invalid` is `true`', () => {
+      const fakeThis = {
+        urlLink : null,
+        modalLinkConfirmAction: {
+          disabled : undefined
+        },
+        modalLinkForm : {
+          invalid : true
+        }
+      };
+
+      component.formModelValidate.call(fakeThis);
+
+      expect(fakeThis.modalLinkConfirmAction.disabled).toBeTruthy();
+    });
+
+    it('formModelValidate: should apply `false` to `modalLinkForm.disabled` if `modalLinkForm.invalid` is `false`', () => {
+      const fakeThis = {
+        urlLink : null,
+        modalLinkConfirmAction: {
+          disabled : undefined
+        },
+        modalLinkForm : {
+          invalid : false
+        }
+      };
+
+      component.formModelValidate.call(fakeThis);
+
+      expect(fakeThis.modalLinkConfirmAction.disabled).toBeFalsy();
+    });
+
+    it('restoreSelection: should return `false` if `savedSelection is `false`', () => {
+      component['savedSelection'] = null;
+
+      const expectedResult = component['restoreSelection']();
+
+      expect(expectedResult).toBe(false);
+    });
+
+    it('restoreSelection: should return `true` if `savedSelection is `true`', () => {
+      const fakeThis = {
+        savedSelection: true,
+      };
+
+      const expectedResult = component['restoreSelection'].call(fakeThis);
+
+      expect(expectedResult).toBe(true);
+    });
+
+    it('restoreSelection: should call `removeAllRanges`, `addRange` and return `true` if `savedSelection is `true`', () => {
+      const fakeThis = {
+        savedSelection: true,
+        selection: {
+          removeAllRanges: () => {},
+          addRange: () => {}
+        }
+      };
+
+      spyOn(fakeThis.selection, 'removeAllRanges');
+      spyOn(fakeThis.selection, 'addRange');
+
+      const expectedResult = component['restoreSelection'].call(fakeThis);
+
+      expect(expectedResult).toBe(true);
+      expect(fakeThis.selection.removeAllRanges).toHaveBeenCalled();
+      expect(fakeThis.selection.addRange).toHaveBeenCalledWith(fakeThis.savedSelection);
+    });
+
+    it('saveSelectionTextRange: should return null if selection.anchorNode is null', () => {
+      const fakeThis = {
+        selection: {
+          anchorNode: null
+        }
+      };
+
+      const expectedResult = component['saveSelectionTextRange'].call(fakeThis);
+
+      expect(expectedResult).toBe(null);
+    });
+
+    it(`saveSelectionTextRange: should call 'getRangeAt', 'toString' and apply values to 'savedSelection' and 'urlLinkText'
+    if 'selection.anchorNode' is different from 'null'`, () => {
+      const fakeThis = {
+        savedSelection: {},
+        urlLinkText: '',
+        selection: {
+          anchorNode: 'div',
+          getRangeAt: () => {
+            return { endOffset: 0 };
+          },
+          toString: () => 'value'
+        }
+      };
+
+      spyOn(fakeThis.selection, 'getRangeAt').and.callThrough();
+      spyOn(fakeThis.selection, 'toString').and.callThrough();
+
+      component['saveSelectionTextRange'].call(fakeThis);
+
+      expect(fakeThis.selection.getRangeAt).toHaveBeenCalled();
+      expect(fakeThis.selection.toString).toHaveBeenCalled();
+      expect(fakeThis.urlLinkText).toBe('value');
+      expect(fakeThis.savedSelection).toEqual({ endOffset: 0 });
+    });
+
+    it('checkIfIsEmpty: should return `urlLinkText`value if it contains a value', () => {
+      const urlLink = 'link';
+      const urlLinkText = 'linkText';
+
+      const expectedValue = component['checkIfIsEmpty'](urlLink, urlLinkText);
+
+      expect(expectedValue).toBe(urlLinkText);
+    });
+
+    it('checkIfIsEmpty: should return `urlLink` value if `urlLinkText` is empty', () => {
+      const urlLink = 'link';
+      const urlLinkText = '';
+
+      const expectedValue = component['checkIfIsEmpty'](urlLink, urlLinkText);
+
+      expect(expectedValue).toBe(urlLink);
+    });
+
+    it('checkIfIsEmpty: should return `urlLink` value if `urlLinkText` is undefined', () => {
+      const urlLink = 'link';
+      const urlLinkText = undefined;
+
+      const expectedValue = component['checkIfIsEmpty'](urlLink, urlLinkText);
+
+      expect(expectedValue).toBe(urlLink);
+    });
+
+    it('formReset: should call markAsPristine, markAsUntouched and updateValueAndValidity', () => {
+      const fakeControl = {
+        markAsPristine: () => {},
+        markAsUntouched: () => {},
+        updateValueAndValidity: () => {}
+      };
+
+      spyOn(fakeControl, 'markAsPristine');
+      spyOn(fakeControl, 'markAsUntouched');
+      spyOn(fakeControl, 'updateValueAndValidity');
+
+      // component.recoveryModalElement.open();
+      component['formReset'](<any>fakeControl);
+
+      expect(fakeControl.markAsPristine).toHaveBeenCalled();
+      expect(fakeControl.markAsUntouched).toHaveBeenCalled();
+      expect(fakeControl.updateValueAndValidity).toHaveBeenCalled();
     });
 
   });
@@ -315,6 +562,16 @@ describe('PoRichTextModalComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-upload-drag-drop')).toBeFalsy();
+    });
+
+    it('should include link fields into modal if modalType is `Link`', () => {
+      component.modalType = PoRichTextModalType.Link;
+
+      component.modal.open();
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-input')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-modal-title').innerHTML).toBe(` ${component.literals.insertLink} `);
     });
   });
 
