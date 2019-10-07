@@ -17,6 +17,7 @@ const poRichTextDefaultColor = '#000000';
 export class PoRichTextToolbarComponent implements AfterViewInit {
 
   private _readonly: boolean;
+  private selection = document.getSelection();
 
   readonly literals = {
     ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
@@ -80,6 +81,15 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     }
   ];
 
+  linkButtons: Array<PoRichTextToolbarButtonGroupItem> = [
+    {
+      command: 'Createlink',
+      icon: 'po-icon-link',
+      tooltip: `${this.literals.insertLink} (Ctrl + L)`,
+      action: () => this.modal.emit(PoRichTextModalType.Link)
+    }
+  ];
+
   mediaButtons: Array<PoButtonGroupItem> = [
     {
       tooltip: this.literals.insertImage,
@@ -127,8 +137,13 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
       this.alignButtons.forEach(button => button.selected = obj.commands.includes(button.command));
       this.formatButtons.forEach(button => button.selected = obj.commands.includes(button.command));
       this.listButtons[0].selected = obj.commands.includes(this.listButtons[0].command);
+      this.linkButtons[0].selected = obj.commands.includes(this.linkButtons[0].command);
       this.setColorInColorPicker(obj.hexColor);
     }
+  }
+
+  shortcutTrigger() {
+    this.modal.emit(PoRichTextModalType.Link);
   }
 
   private emitAlignCommand(command: string) {
@@ -159,6 +174,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.alignButtons.forEach(button => button.disabled = state);
     this.formatButtons.forEach(button => button.disabled = state);
     this.listButtons[0].disabled = state;
+    this.linkButtons[0].disabled = state;
     this.mediaButtons[0].disabled = state;
   }
 

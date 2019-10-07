@@ -1,5 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -26,7 +27,8 @@ describe('PoRichTextComponent:', () => {
       ],
       schemas: [ NO_ERRORS_SCHEMA ],
       imports: [
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        FormsModule
       ]
     });
   });

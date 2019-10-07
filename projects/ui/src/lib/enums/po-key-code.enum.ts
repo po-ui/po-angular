@@ -25,6 +25,9 @@ export enum PoKeyCodeEnum {
     /** Esc */
     esc = 27,
 
+    /** Tecla L */
+    keyL = 76,
+
     /** Espaço */
     space = 32,
 
