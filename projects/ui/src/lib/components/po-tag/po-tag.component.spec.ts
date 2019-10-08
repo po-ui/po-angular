@@ -77,21 +77,44 @@ describe('PoTagComponent:', () => {
       expect(component.iconTypeString).toBe(false);
     });
 
-    it('tagColor: should return tag type.', () => {
+    it('tagColor: should return tag type without `inverse`.', () => {
       component.type = PoTagType.Danger;
+      component.inverse = false;
       expect(component.tagColor).toBe('po-tag-danger');
     });
 
-    it('tagColor: should return tag color.', () => {
+    it('tagColor: should return tag type with `inverse`.', () => {
+      component.type = PoTagType.Danger;
+      component.inverse = true;
+      expect(component.tagColor).toBe('po-tag-danger-inverse');
+    });
+
+    it('tagColor: should return tag color without `text`.', () => {
       component.color = 'color-07';
       component.type = undefined;
+      component.inverse = false;
       expect(component.tagColor).toBe('po-color-07');
     });
 
-    it('tagColor: should return tag type default.', () => {
+    it('tagColor: should return tag color with `text`.', () => {
+      component.color = 'color-07';
+      component.type = undefined;
+      component.inverse = true;
+      expect(component.tagColor).toBe('po-text-color-07');
+    });
+
+    it('tagColor: should return tag type default without `inverse`.', () => {
       component.color = undefined;
       component.type = undefined;
+      component.inverse = false;
       expect(component.tagColor).toBe('po-tag-info');
+    });
+
+    it('tagColor: should return tag type default with `inverse`.', () => {
+      component.color = undefined;
+      component.type = undefined;
+      component.inverse = true;
+      expect(component.tagColor).toBe('po-tag-info-inverse');
     });
 
     it('tagOrientation: should return true if orientation is horizontal.', () => {
@@ -291,6 +314,20 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
       expect(nativeElement.querySelector('.po-clickable')).toBeFalsy();
+    });
+
+    it('should add `po-tag-inverse` if `inverse` is true.', () => {
+      component.inverse = true;
+
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-tag-inverse')).toBeTruthy();
+    });
+
+    it('shouldn`t add `po-tag-inverse` if `inverse` is false.', () => {
+      component.inverse = false;
+
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-tag-inverse')).toBeFalsy();
     });
 
   });

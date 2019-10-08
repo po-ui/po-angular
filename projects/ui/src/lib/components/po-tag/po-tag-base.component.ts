@@ -25,6 +25,7 @@ export class PoTagBaseComponent {
 
   private _color?: string;
   private _icon?: boolean | string;
+  private _inverse?: boolean;
   private _orientation?: PoTagOrientation = poTagOrientationDefault;
   private _type?: PoTagType;
 
@@ -90,6 +91,26 @@ export class PoTagBaseComponent {
 
   get icon(): boolean | string {
     return this._icon;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ativa a inversão de cores configuradas no componente, possibilitando uma visualização de status ativo e inativo.
+   *
+   * > A cor do texto, do ícone e da borda ficam com a cor utilizada na propriedade `p-color` ou a cor correspondente ao `p-type`,
+   * e a cor do fundo fica branca.
+   *
+   * @default `false`
+   */
+  @Input('p-inverse') set inverse(value: boolean) {
+    this._inverse = convertToBoolean(value);
+  }
+
+  get inverse(): boolean {
+    return this._inverse;
   }
 
   /**
