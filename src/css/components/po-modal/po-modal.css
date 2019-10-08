@@ -113,7 +113,8 @@
   color: var(--color-modal-text-color-body);
   margin: 8px;
   max-width: 736px;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   text-align: left;
 }
 
