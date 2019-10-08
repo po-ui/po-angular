@@ -21,6 +21,7 @@ export class SamplePoTagLabsComponent implements OnInit {
   color: string;
   event: string;
   icon: boolean | string;
+  inverse: boolean;
   label: string;
   orientation: PoTagOrientation;
   type: PoTagType;
@@ -79,6 +80,7 @@ export class SamplePoTagLabsComponent implements OnInit {
     this.value = 'Portinari Tag';
     this.type = undefined;
     this.event = '';
+    this.inverse = false;
   }
 
 }
