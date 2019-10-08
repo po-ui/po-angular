@@ -59,15 +59,15 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
 
   get tagColor() {
     if (this.type) {
-      return 'po-tag-' + this.type;
+      return this.inverse ? `po-tag-${this.type}-inverse` : `po-tag-${this.type}`;
     }
 
     if (this.color && !this.type) {
-      return 'po-' + this.color;
+      return this.inverse ? `po-text-${this.color}` : `po-${this.color}`;
     }
 
     if (!this.type && !this.color) {
-      return poTagTypeDefault;
+      return this.inverse ? `${poTagTypeDefault}-inverse` : poTagTypeDefault;
     }
   }
 
