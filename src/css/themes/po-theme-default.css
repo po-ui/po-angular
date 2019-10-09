@@ -881,8 +881,10 @@
   --color-rich-text-placeholder-color: var(--color-neutral-light-40);
   --color-rich-text-body-text-error: var(--color-danger);
   --color-rich-text-body-border-error: var(--color-danger);
+  --color-rich-text-body-text-link: var(--color-primary);
+  --color-rich-text-body-text-link-hover: var(--color-primary-dark-20);
   --color-rich-text-body-text-selected-color: var(--color-primary-light-80);
-
+  
   --color-rich-text-toolbar-background-color: var(--color-rich-text-body-background-color);
 
 /*------------------------------------*\

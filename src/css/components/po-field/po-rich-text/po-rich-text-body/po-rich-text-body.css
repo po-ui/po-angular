@@ -33,6 +33,25 @@
   @apply --font-rich-text-bold;
 }
 
+.po-rich-text-body .po-rich-text-link {
+  cursor: text;
+}
+
+.po-rich-text-link {
+  @apply --font-rich-text-bold;
+  color: var(--color-rich-text-body-text-link);
+  text-decoration: underline;
+}
+
+.po-rich-text-link:hover {
+  color: var(--color-rich-text-body-text-link-hover);
+}
+
+/* tratamento necessário para a customização de cores */
+.po-rich-text-body font .po-rich-text-link {
+  color: inherit !important;
+}
+
 .po-rich-text-body::-webkit-scrollbar {
   height: 7px;
   width: 7px;
