@@ -39,20 +39,20 @@ async function command(themeName) {
       name: themeName,
       version: '1.0.0',
       author: '',
-      description: `Custom Theme - ${themeName}`,
+      description: `Po Custom Theme - ${themeName}`,
       repository: {},
       license: 'MIT',
       scripts: {
         build: 'po-theme build'
       },
       devDependencies: {
-        '@portinari/style': '1.10.0-alpha.2'
+        '@portinari/style': '^1.11.0'
       }
     };
 
     fs.writeFileSync(destination + '/package.json', JSON.stringify(package, {}, 2));
 
-    fs.writeFileSync(destination + '/src/index.css', 
+    fs.writeFileSync(destination + '/src/index.css',
       '@import \'../../node_modules/@portinari/style/css/po-theme-core.min.css\';' + '\r\n\r\n' +
       '@import \'./po-theme-custom.css\';'
     );

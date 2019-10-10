@@ -40,6 +40,8 @@ pasta do projeto:
 po-theme build
 ```
 
+> Caso queira atribuir um nome ao arquivo a ser gerado, deve-se utilizar o parâmetro `--name` informando o nome desejado.
+
 > Se você estiver customizando as fontes do tema, você deve usar o parâmetro `--fonts`.
 
 Após a execução do comando de *build*, irá ser gerado uma pasta chamada `dist` dentro do diretório

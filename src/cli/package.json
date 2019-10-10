@@ -1,18 +1,19 @@
 {
   "name": "@portinari/theme-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "tag": "dev",
   "description": "cli theme",
   "bin": {
     "po-theme": "bin/cli.js"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
+  "author": "Portinari UI",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/portinariui/portinari-style"
+  },
   "dependencies": {
-    "@portinari/style": "^1.9.0",
+    "@portinari/style": "^1.11.0",
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
     "gulp": "4.0.2",
@@ -21,11 +22,10 @@
     "postcss-custom-properties": "^9.0.2",
     "postcss-import": "^12.0.1",
     "chalk": "2.4.2",
-    "commander": "2.9.0",
-    "cross-spawn": "6.0.5",
-    "figlet": "1.2.1",
-    "inquirer": "6.2.1",
+    "commander": "3.0.2",
+    "cross-spawn": "7.0.1",
+    "inquirer": "7.0.0",
     "shelljs": "0.8.3",
-    "yargs": "^14.0.0"
+    "yargs": "^14.2.0"
   }
 }

@@ -117,6 +117,10 @@
   /* Secondary */
   --color-secondary: #8241a4;
 
+  --color-secondary-dark-20: #733B8E;
+
+  --color-secondary-dark-40: #5E2E73;
+
   /* Overlay de Modal e Menu (70% de opacidade) */
   --color-secondary-dark-60-alpha-70: rgba(59, 28, 74, 0.7);
 
@@ -132,6 +136,10 @@
 
   /* Cor de gráficos, botão do disclaimer */
   --color-tertiary-dark-5: #F4D069;
+
+  --color-tertiary-dark-40: #D2B25A;
+
+  --color-tertiary-dark-60: #AC9249;
 
   --color-white: #ffffff;
 
@@ -180,6 +188,9 @@
 
   /* Background do Feedback de atenção */
   --color-warning: #ea9b3e;
+
+
+  --color-danger-light-40: #cd5f58;
 
   /* Background do Feedback de erro, Borda de Input com erro */
   --color-danger: #c64840;
@@ -298,12 +309,12 @@
   --color-button-color: var(--color-secondary);
 
   --color-button-background-color-hover: var(--color-transparent);
-  --color-button-border-hover: #733B8E;
-  --color-button-color-hover: #733B8E;
+  --color-button-border-hover: var(--color-secondary-dark-20);
+  --color-button-color-hover: var(--color-secondary-dark-20);
 
   --color-button-background-color-pressed: var(--color-transparent);
-  --color-button-border-pressed: #5E2E73;
-  --color-button-color-pressed: #5E2E73;
+  --color-button-border-pressed: var(--color-secondary-dark-40);
+  --color-button-color-pressed: var(--color-secondary-dark-40);
 
   --color-button-background-color-disabled: var(--color-transparent);
   --color-button-border-disabled: var(--color-neutral-light-60);
@@ -315,12 +326,12 @@
   --color-button-border-primary: var(--color-tertiary);
   --color-button-color-primary: var(--color-neutral-dark-60);
 
-  --color-button-background-color-primary-hover: #D2B25A;
-  --color-button-border-primary-hover: #D2B25A;
+  --color-button-background-color-primary-hover: var(--color-tertiary-dark-40);
+  --color-button-border-primary-hover: var(--color-tertiary-dark-40);
   --color-button-color-primary-hover: var(--color-neutral-dark-60);
 
-  --color-button-background-color-primary-pressed: #AC9249;
-  --color-button-border-primary-pressed: #AC9249;
+  --color-button-background-color-primary-pressed: var(--color-tertiary-dark-60);
+  --color-button-border-primary-pressed: var(--color-tertiary-dark-60);
   --color-button-color-primary-pressed: var(--color-neutral-dark-60);
 
   --color-button-background-color-primary-disabled: var(--color-neutral-light-60);
@@ -527,8 +538,8 @@
   --color-dropdown-button-color: var(--color-secondary);
   --color-dropdown-button-border-color: var(--color-secondary);
 
-  --color-dropdown-button-color-hover: #733B8E;
-  --color-dropdown-button-border-color-hover: #733B8E;
+  --color-dropdown-button-color-hover: var(--color-secondary-dark-20);
+  --color-dropdown-button-border-color-hover: var(--color-secondary-dark-20);
 
   --color-dropdown-button-color-disabled: var(--color-neutral-light-60);
   --color-dropdown-button-border-color-disabled: var(--color-neutral-light-60);
@@ -615,7 +626,7 @@
   --color-menu-color-menu-collapse-icon: var(--color-primary);
   --color-menu-color-menu-item-text: var(--color-primary);
   --color-menu-color-menu-item-selected: var(--color-primary);
-  --color-menu-color-menu-sub-item-text: #d1506b;
+  --color-menu-color-menu-sub-item-text: var(--color-danger-light-40);
   --color-menu-color-menu-sub-item-selected: var(--color-neutral-dark-60);
   --color-menu-color-menu-responsive: var(--color-primary);
 
@@ -628,7 +639,7 @@
   --color-menu-background-color-sub-items: var(--color-neutral-light-98);
   --color-menu-background-color-sub-item-selected: var(--color-neutral-light-80);
 
-  --color-menu-border-color-menu-item-selected: #f37673;
+  --color-menu-border-color-menu-item-selected: var(--color-danger-light-40);
   --color-menu-border-left-item: var(--color-transparent);
   --color-menu-border-top-item-grouper-up-hover: var(--color-neutral-light-80) ;
   --color-menu-border-top-logo: var(--color-neutral-light-80) ;
@@ -735,7 +746,7 @@
 
   --color-navbar-item-color: var(--color-primary);
   --color-navbar-item-color-selected: var(--color-neutral);
-  --color-navbar-item-color-shadow-selected: #f37673;
+  --color-navbar-item-color-shadow-selected: var(--color-danger-light-40);
 
 /*------------------------------------*\
   NAVBAR ITEM NAVIGATION

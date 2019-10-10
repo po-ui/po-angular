@@ -15,30 +15,29 @@ async function command() {
   console.log('\n ' + chalk.white.bold('Build custom theme ...'));
 
   const customFonts = argv.fonts;
+  const customName = argv.name || 'custom';
 
   const cleanDirTemp = () => del('./.temp');
   const cleanDirDist = () => del('./dist');
-  
-  const copyAssets = (assetType, custom = false) => 
+
+  const copyAssets = (assetType, custom = false) =>
     src(`${custom ? './src/assets/' : './node_modules/@portinari/style/'}${assetType}/**/*.*`)
       .pipe(dest(`./dist/${assetType}/`));
-  
-  const copyPackageJson = () =>
-    src('package.json')
-      .pipe(dest(`./dist/`));
-  
+
+  const copyPackageJson = () => src('package.json').pipe(dest(`./dist/`));
+
   const copyCssToDirTemp = () => src('./src/**/*.css').pipe(dest('./.temp/css/'));
-  
+
   const buildThemeVariablesCss = () =>
     src(`./.temp/css/po-theme-custom.css`)
       .pipe(postcss([ cssnano() ]))
-      .pipe(rename(`po-theme-custom-variables.min.css`))
+      .pipe(rename(`po-theme-${customName}-variables.min.css`))
       .on('error', err => {
         console.log(err.toString());
         this.emit('end');
       })
       .pipe(dest(`./dist/css/`));
-  
+
   const buildThemeCssLegacy = () =>
     src('./.temp/css/index.css')
       .pipe(postcss([
@@ -49,13 +48,13 @@ async function command() {
         }),
         cssnano()
       ]))
-      .pipe(rename(`css/po-theme-custom.min.css`))
+      .pipe(rename(`css/po-theme-${customName}.min.css`))
       .on('error', err => {
         console.log(err.toString());
         this.emit('end');
       })
       .pipe(dest(`./dist/`));
-  
+
   const copyAssetsImages = () => copyAssets('images');
   const copyAssetsIcons = () => copyAssets('icons');
   const copyAssetsFonts = () => copyAssets('fonts', customFonts);
@@ -71,7 +70,7 @@ async function command() {
     parallel(cleanDirDist, cleanDirTemp),
     parallel(copyAssetsImages, copyAssetsIcons, copyAssetsFonts, copyPackageJson, copyCssToDirTemp),
     parallel(buildThemeVariablesCss, buildThemeCssLegacy),
-    cleanDirTemp, showFinalMessage
+    parallel(cleanDirTemp, showFinalMessage)
   ))();
 }
 
