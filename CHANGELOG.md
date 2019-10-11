@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.12.0](https://github.com/portinariui/portinari-angular/compare/v1.11.0...v1.12.0) (2019-10-11)
+
+
+### Bug Fixes
+
+* **page-dynamic-edit:** alterado para `{ static: false}` no ViewChild do PoDynamicFormComponent ([b9cf19b](https://github.com/portinariui/portinari-angular/commit/b9cf19b))
+
+
+### Features
+
+* **rich-text:** permite inclusão de links ([238385b](https://github.com/portinariui/portinari-angular/commit/238385b))
+* **tag:** adiciona a propriedade `p-inverse` que permite inversão de cores ([338dfd0](https://github.com/portinariui/portinari-angular/commit/338dfd0))
+
+
 
 ## [1.11.0](https://github.com/portinariui/portinari-angular/compare/v1.10.0...v1.11.0) (2019-10-04)
 
