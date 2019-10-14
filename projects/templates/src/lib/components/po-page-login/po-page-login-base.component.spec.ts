@@ -5,12 +5,7 @@ import { configureTestSuite, expectPropertiesValues, getObservable } from '../..
 import { poLocaleDefault } from './../../utils/util';
 import * as UtilFunctions from './../../utils/util';
 
-import {
-  PoPageLoginBaseComponent,
-  poPageLoginLiteralIn,
-  poPageLoginLiteralTo,
-  poPageLoginLiteralsDefault
-} from './po-page-login-base.component';
+import { PoPageLoginBaseComponent, poPageLoginLiteralsDefault } from './po-page-login-base.component';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
 import { PoPageLoginService } from './po-page-login.service';
 
@@ -19,6 +14,8 @@ const routerStub = {
 };
 
 export class PoPageLoginComponent extends PoPageLoginBaseComponent {
+  protected concatenateLoginHintWithContactEmail(contactEmail: string): void { }
+  protected concatenateTitleWithProductName(productName: string): void { }
   protected setLoginErrors(value: Array<string>): void { }
   protected setPasswordErrors(value: Array<string>): void { }
 }
@@ -165,6 +162,20 @@ describe('ThPageLoginBaseComponent: ', () => {
       expectPropertiesValues(component, 'registerUrl', validValuesCustomField, undefined);
     });
 
+    it('language: should return `selectedLanguage` if its is defined', () => {
+      component.selectedLanguage = 'pt';
+
+      expect(component.language).toBe('pt');
+    });
+
+    it('language: should return `getShortBrowserLanguage` if `selectedLanguage` is undefined', () => {
+      component.selectedLanguage = undefined;
+
+      spyOn(UtilFunctions, 'getShortBrowserLanguage').and.returnValue('en');
+
+      expect(component.language).toBe('en');
+    });
+
     it('p-loading: should set `true` when attributed valid values.', () => {
       const validValues = [true, 'true', 1, ''];
       expectPropertiesValues(component, 'loading', validValues, true);
@@ -195,27 +206,60 @@ describe('ThPageLoginBaseComponent: ', () => {
       expect(component.showExceededAttemptsWarning).toBe(expectedValue);
     });
 
-    describe('contactEmail', () => {
-      it('should call `setLoginHintLiteral` with `selectedLanguage` and `contactEmail` as parameteres', () => {
-        const email = 'test@mail.com';
-        component.selectedLanguage = 'pt';
+    it('pageLoginLiterals: should spread an object overlapped by `customLiterals`', () => {
 
-        spyOn(component, <any>'setLoginHintLiteral').and.returnValue(email);
+      spyOnProperty(component, 'language').and.returnValue('en');
 
-        expectPropertiesValues(component, 'contactEmail', email, email);
-        expect(component.setLoginHintLiteral).toHaveBeenCalledWith(component.selectedLanguage, component.contactEmail);
-      });
+      component.literals = {
+        'title': 'Custom Title',
+        'loginHint': 'Custom Login Hint'
+      };
 
-      it('should call `setLoginHintLiteral` with `browserLanguage` and `contactEmail` as parameters', () => {
-        const email = 'text@mail.com';
-        component.selectedLanguage = undefined;
+      component.productName = 'Produto';
+      component.contactEmail = 'user@mail.com';
 
-        spyOn(component, <any>'setLoginHintLiteral').and.returnValue(email);
+      const concatedLoginHint = { 'loginHint': 'Custom Login Hint user@mail.com' };
+      const concatedTitle = { 'title': 'Custom Title on Produto' };
+      const expectedResult = {
+        ...poPageLoginLiteralsDefault[poLocaleDefault],
+        ...poPageLoginLiteralsDefault[component.language],
+        ...concatedLoginHint,
+        ...concatedTitle,
+        ...component.literals
+      };
 
-        expectPropertiesValues(component, 'contactEmail', email, email);
-        expect(component.setLoginHintLiteral).toHaveBeenCalledWith(UtilFunctions.browserLanguage(), component.contactEmail);
-      });
+      expect(component.pageLoginLiterals).toEqual(expectedResult);
+    });
 
+    it('pageLoginLiterals: should spread an object without `contactEmail` and `productName`', () => {
+
+      spyOnProperty(component, 'language').and.returnValue('en');
+
+      component.literals = {
+        'title': 'Custom Title',
+        'loginHint': 'Custom Login Hint'
+      };
+
+      component.productName = undefined;
+      component.contactEmail = undefined;
+
+      const expectedResult = {
+        ...poPageLoginLiteralsDefault[poLocaleDefault],
+        ...poPageLoginLiteralsDefault[component.language],
+        ...component.literals
+      };
+
+      expect(component.pageLoginLiterals).toEqual(expectedResult);
+    });
+
+    it('p-environment: should set environment with max length of 40', () => {
+      const largeText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quisua.';
+      const shortText = 'Lorem ipsum dolor';
+      const expectedLargeValue = 'Lorem ipsum dolor sit amet, consectetur ';
+      const expectedShortValue = 'Lorem ipsum dolor';
+
+      expectPropertiesValues(component, 'environment', largeText, expectedLargeValue);
+      expectPropertiesValues(component, 'environment', shortText, expectedShortValue);
     });
 
     describe('loginErrors', () => {
@@ -243,118 +287,11 @@ describe('ThPageLoginBaseComponent: ', () => {
         expect(component['setLoginErrors']).toHaveBeenCalledWith(validValues);
       });
     });
-    describe('productName', () => {
-      it('should call `setTitleLiteral` with `selectedLanguage` and `productName` as parameteres', () => {
-        const email = 'test@mail.com';
-        component.selectedLanguage = 'pt';
 
-        spyOn(component, <any>'setTitleLiteral').and.returnValue(email);
+    it('p-literals: should update property with valid values.', () => {
+      const validValues = {'title': 'Custom Title', 'loginHint': 'Custom Login Hint'};
 
-        expectPropertiesValues(component, 'productName', email, email);
-        expect(component.setTitleLiteral).toHaveBeenCalledWith(component.selectedLanguage, component.productName);
-      });
-
-      it('should call `setTitleLiteral` with `browserLanguage` and `productName` as parameters', () => {
-        const email = 'text@mail.com';
-        component.selectedLanguage = undefined;
-
-        spyOn(component, <any>'setTitleLiteral').and.returnValue(email);
-
-        expectPropertiesValues(component, 'productName', email, email);
-        expect(component.setTitleLiteral).toHaveBeenCalledWith(UtilFunctions.browserLanguage(), component.productName);
-      });
-
-    });
-
-    it('p-literals: should set `containsCustomLiterals` with true if `literals.title` and `literalsDefault.loginHint` don`t match', () => {
-      component['_literals'] = { title: 'Title', loginHint: poPageLoginLiteralsDefault[poLocaleDefault].loginHint };
-      component.selectedLanguage = poLocaleDefault;
-      const validLiterals = component['_literals'];
-
-      spyOn(component, <any>'getLiterals');
-
-      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
-      expect(component.getLiterals).toHaveBeenCalledWith(poLocaleDefault, validLiterals);
-      expect(component.containsCustomLiterals).toBe(true);
-
-    });
-
-    it('p-literals: should set `containsCustomLiterals` with false if `literals.title` and `literals.loginHint` are undefined', () => {
-      component['_literals'] = { title: undefined, loginHint: undefined };
-      component.selectedLanguage = poLocaleDefault;
-      const validLiterals = component['_literals'];
-
-      spyOn(component, <any>'getLiterals');
-
-      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
-      expect(component.getLiterals).toHaveBeenCalledWith(poLocaleDefault, validLiterals);
-      expect(component.containsCustomLiterals).toBe(false);
-    });
-
-    it('p-literals: should set `containsCustomLiterals` with false if `literals.title` and `literalsDefault.loginHint` match', () => {
-      component['_literals'] = {
-        title: poPageLoginLiteralsDefault[poLocaleDefault].title,
-        loginHint: poPageLoginLiteralsDefault[poLocaleDefault].loginHint
-      };
-      component.selectedLanguage = poLocaleDefault;
-      const validLiterals = component['_literals'];
-
-      spyOn(component, <any>'getLiterals');
-
-      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
-      expect(component.getLiterals).toHaveBeenCalledWith(poLocaleDefault, validLiterals);
-      expect(component.containsCustomLiterals).toBe(false);
-
-    });
-
-    xit('p-literals: should set `containsCustomLiterals` with true if `literals.loginHint` and `literalsDefault.loginHint` match', () => {
-      component['_literals'] = poPageLoginLiteralsDefault[poLocaleDefault];
-      const validLiterals = component['_literals'];
-
-      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
-
-      expect(component.containsCustomLiterals).toBe(true);
-    });
-
-    it('p-literals: should call `getLiterals` with `selectedLanguage` and `literals` as parameters', () => {
-      component['_literals'] = { title: 'Title' };
-      component.selectedLanguage = 'pt';
-      const validLiterals = component['_literals'];
-
-      spyOn(component, <any>'getLiterals');
-
-      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
-      expect(component.getLiterals).toHaveBeenCalledWith('pt', validLiterals);
-    });
-
-    it('p-literals: should call `getLiterals` with selected Russian language and `literals` as parameters', () => {
-      component['_literals'] = { title: 'Title' };
-      component.selectedLanguage = 'ru';
-      const validLiterals = component['_literals'];
-
-      spyOn(component, <any>'getLiterals');
-
-      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
-      expect(component.getLiterals).toHaveBeenCalledWith('ru', validLiterals);
-    });
-
-    it('p-literals: should call `getLiterals` with `browserLanguage` and `literals` as parameters', () => {
-      component['_literals'] = { title: 'Title' };
-      const validLiterals = component['_literals'];
-
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
-      spyOn(component, <any>'getLiterals');
-
-      expectPropertiesValues(component, 'literals', validLiterals, validLiterals);
-      expect(component.getLiterals).toHaveBeenCalledWith('pt', validLiterals);
-    });
-
-    it('p-literals: should update property with default literals if it contains invalid values', () => {
-      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
-
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
-
-      expectPropertiesValues(component, 'literals', invalidValues, poPageLoginLiteralsDefault[poLocaleDefault]);
+      expectPropertiesValues(component, 'literals', validValues, validValues);
     });
 
     it('p-authentication-url: should update property `authenticationUrl` with valid value', () => {
@@ -412,18 +349,12 @@ describe('ThPageLoginBaseComponent: ', () => {
 
       expect(component.loginChange.emit).toHaveBeenCalled();
     });
-  });
 
-  it('p-literals: sbhouldn`t call `getLiterals` and set `containsCustomLiterals` with false if doesn`t contain a value', () => {
-    const invalidValue = [undefined];
+    it('p-recovery: should update property `p-recovery` with valid value', () => {
+      const validValue = ['value', () => {}, {'url': 'http://url.com'}];
 
-    spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
-    spyOn(component, <any>'getLiterals');
-
-    expectPropertiesValues(component, 'literals', invalidValue, poPageLoginLiteralsDefault[poLocaleDefault]);
-    expect(component.getLiterals).not.toHaveBeenCalled();
-    expect(component.containsCustomLiterals).toBe(false);
-
+      expectPropertiesValues(component, 'recovery', validValue, validValue);
+    });
   });
 
   describe('passwordErrors', () => {
@@ -665,236 +596,6 @@ describe('ThPageLoginBaseComponent: ', () => {
       component.closePopover();
 
       expect(component.showExceededAttemptsWarning).toBeFalsy();
-    });
-
-    it('concatenate: should concatenate the received parameters', () => {
-      const expectedResult = component['concatenate']('Welcome', 'to', 'Company');
-
-      expect(expectedResult).toBe('Welcome to Company');
-    });
-
-    it(`concatenateLiteral: should call 'concatenate' if 'value' has a value
-      and 'literals.title' contains 'value'`, () => {
-      const value = 'Portal RH';
-      const currentLiteral = 'title';
-      const defaultLiteral = 'Welcome';
-      const prepositionLiteral = 'to';
-
-      component.literals = { title: 'Portal RH'};
-
-      spyOn(component, <any>'concatenate').and.returnValue(value);
-      component['concatenateLiteral'](value, currentLiteral, defaultLiteral, prepositionLiteral);
-
-      expect(component['concatenate']).toHaveBeenCalledWith(defaultLiteral, prepositionLiteral, value);
-    });
-
-    it(`concatenateLiteral: should call 'concatenate' if 'value' has a value
-    and 'literals.title' contains 'defaultLiteral'`, () => {
-      const value = 'Portal RH';
-      const currentLiteral = 'title';
-      const defaultLiteral = 'Welcome';
-      const prepositionLiteral = 'to';
-
-      component.literals = { title: poPageLoginLiteralsDefault['en'].title };
-      // component.literals.title = poPageLoginLiteralsDefault['en'].title;
-
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('en');
-      spyOn(component, <any>'getLiterals').and.callThrough();
-      spyOn(component, <any>'concatenate').and.returnValue(value);
-
-      component['concatenateLiteral'](value, currentLiteral, defaultLiteral, prepositionLiteral);
-
-      expect(component['concatenate']).toHaveBeenCalledWith(defaultLiteral, prepositionLiteral, value);
-    });
-
-    it(`concatenateLiteral: shouldn't call 'concatenate' if 'value' doesn't have any value`, () => {
-      const value = undefined;
-      const currentLiteral = 'title';
-      const defaultLiteral = 'Welcome';
-      const prepositionLiteral = 'to';
-
-      component.literals = { title: poPageLoginLiteralsDefault['en'].title };
-
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('en');
-      spyOn(component, <any>'concatenate');
-
-      component['concatenateLiteral'](value, currentLiteral, defaultLiteral, prepositionLiteral);
-
-      expect(component['concatenate']).not.toHaveBeenCalled();
-    });
-
-    it(`concatenateLiteral: shouldn't call 'concatenate' if 'value' contains value
-      however 'literals.title' is different from 'defaultLiteral' and 'value'`, () => {
-      const value = 'Portal RH';
-      const currentLiteral = 'title';
-      const defaultLiteral = 'Welcome';
-      const prepositionLiteral = 'to';
-
-      component.literals = { title: 'Datasul' };
-
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('en');
-      spyOn(component, <any>'concatenate');
-
-      component['concatenateLiteral'](value, currentLiteral, defaultLiteral, prepositionLiteral);
-
-      expect(component['concatenate']).not.toHaveBeenCalled();
-    });
-
-    it(`setLoginHintLiteral: should call 'concatenateLiteral' if has value`, () => {
-      const email = 'email@mail.com';
-      const defaultLoginHintLiteral = poPageLoginLiteralsDefault[poLocaleDefault].loginHint;
-      const prepositionLiteral = poPageLoginLiteralIn[poLocaleDefault];
-
-      spyOn(component, <any>'concatenateLiteral');
-
-      component.setLoginHintLiteral(poLocaleDefault, email);
-
-      expect(component['concatenateLiteral']).toHaveBeenCalledWith(email, 'loginHint', defaultLoginHintLiteral, prepositionLiteral);
-    });
-
-    it('setLoginHintLiteral: shouldn`t call `concatenateLiteral` if does not have value', () => {
-      const email = undefined;
-
-      spyOn(component, <any>'concatenateLiteral');
-
-      component.setLoginHintLiteral(poLocaleDefault, email);
-
-      expect(component['concatenateLiteral']).not.toHaveBeenCalled();
-    });
-
-    it(`setLoginHintLiteral: should set literals.loginHint with default value if value is undefined`, () => {
-      const email = undefined;
-
-      spyOn(component, <any>'concatenateLiteral');
-
-      component.setLoginHintLiteral(poLocaleDefault, email);
-
-      expect(component.literals.loginHint).toBe(poPageLoginLiteralsDefault[poLocaleDefault].loginHint);
-      expect(component['concatenateLiteral']).not.toHaveBeenCalled();
-    });
-
-    it(`setTitleLiteral: should call 'concatenateLiteral' if contains value`, () => {
-      const title = 'email@mail.com';
-      const defaultTitleLiteral = poPageLoginLiteralsDefault[poLocaleDefault].title;
-      const prepositionLiteral = poPageLoginLiteralTo[poLocaleDefault];
-
-      spyOn(component, <any>'concatenateLiteral');
-
-      component.setTitleLiteral(poLocaleDefault, title);
-
-      expect(component['concatenateLiteral']).toHaveBeenCalledWith(title, 'title', defaultTitleLiteral, prepositionLiteral);
-    });
-
-    it('setTitleLiteral: shouldn`t call `concatenateLiteral` if does not have value', () => {
-      const title = undefined;
-
-      spyOn(component, <any>'concatenateLiteral');
-
-      component.setTitleLiteral(poLocaleDefault, title);
-
-      expect(component['concatenateLiteral']).not.toHaveBeenCalled();
-    });
-
-    it(`setTitleLiteral: should set literals.title with default value if value is undefined`, () => {
-      const title = undefined;
-      component.literals = poPageLoginLiteralsDefault[poLocaleDefault];
-
-      spyOn(component, <any>'concatenateLiteral');
-
-      component.setTitleLiteral(poLocaleDefault, title);
-
-      expect(component.literals.title).toBe(poPageLoginLiteralsDefault[poLocaleDefault].title);
-      expect(component['concatenateLiteral']).not.toHaveBeenCalled();
-    });
-
-    it(`setTitleLiteral: shouldn´t set literals.title with default value if value is undefined`, () => {
-      const title = undefined;
-      const literals = { title, loginHint: 'Teste 1' };
-
-      component.literals = { ...literals };
-
-      spyOn(component, <any>'concatenateLiteral');
-
-      component.setTitleLiteral(poLocaleDefault, title);
-
-      expect(component.literals.title).toEqual(title);
-      expect(component['concatenateLiteral']).not.toHaveBeenCalled();
-    });
-
-    it(`getLiterals: should set 'p-literals' with browser language if 'language' and 'value' parameters haven't been passed
-      and the browser is set with an unsupported language`, () => {
-      component.literals = {};
-
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('aa');
-
-      component.getLiterals(poLocaleDefault);
-
-      expect(component.literals).toEqual(poPageLoginLiteralsDefault[poLocaleDefault]);
-    });
-
-    it(`getLiterals: should set 'p-literals' with browser language if 'language' and 'value' parameters haven't been passed and
-      browser is set with a supported language`, () => {
-      component.literals = {};
-
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('es');
-
-      component.getLiterals();
-
-      expect(component.literals).toEqual(poPageLoginLiteralsDefault['es']);
-    });
-
-    it(`getLiterals: should set 'p-literals' with browser language when has been passed only a value as parameter`, () => {
-      const customLiterals = {};
-      component.literals = {};
-
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('es');
-
-      component.getLiterals(undefined, customLiterals);
-
-      expect(component.literals).toEqual(poPageLoginLiteralsDefault['es']);
-    });
-
-    it(`getLiterals: should set 'p-literals' in spanish if the passed 'language' is 'es'`, () => {
-      component.literals = {};
-
-      component.getLiterals('es');
-
-      expect(component.literals).toEqual(poPageLoginLiteralsDefault['es']);
-    });
-
-    it(`getLiterals: should set 'p-literals' in portuguese if the passed 'language' is 'pt'`, () => {
-      component.literals = {};
-
-      component.getLiterals('pt');
-
-      expect(component.literals).toEqual(poPageLoginLiteralsDefault['pt']);
-    });
-
-    it(`getLiterals: should set 'p-literals' in english if the passed 'language' is 'en'`, () => {
-      component.literals = {};
-
-      component.getLiterals('en');
-
-      expect(component.literals).toEqual(poPageLoginLiteralsDefault['en']);
-    });
-
-    it('getLiterals: should set `p-literals` custom literals when the developer set differ literals ', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('en');
-
-      const customLiterals = {
-        title: 'Custom title',
-        submitLabel: 'Submit custom',
-        highlightInfo: 'Custom info'
-      };
-
-      const expectedLiterals = {
-        ...poPageLoginLiteralsDefault['en'],
-        ...customLiterals
-      };
-
-      component.getLiterals('en', customLiterals);
-
-      expect(component.literals).toEqual(expectedLiterals);
     });
 
     it('redirectBlockedUrl: should call `openExternalLink` if blockedUrl is an external link', () => {

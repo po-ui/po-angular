@@ -8,7 +8,8 @@ import { PoComponentInjectorService } from '@portinari/portinari-ui';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
-import { PoPageLoginBaseComponent } from './po-page-login-base.component';
+import { PoPageLoginBaseComponent, poPageLoginLiteralIn, poPageLoginLiteralTo, poPageLoginLiteralsDefault
+} from './po-page-login-base.component';
 import { PoPageLoginRecovery } from './interfaces/po-page-login-recovery.interface';
 import { PoPageLoginService } from './po-page-login.service';
 
@@ -96,6 +97,10 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     }
   }
 
+  onSelectedLanguage(language: string) {
+    this.selectedLanguage = language;
+  }
+
   openUrl(recovery: any): void {
     switch (typeof recovery) {
       case 'string': {
@@ -127,6 +132,14 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
       this.recovery = this.checkingForMetadataProperty(data, 'recovery') || this.recovery;
       this.registerUrl = this.checkingForMetadataProperty(data, 'registerUrl') || this.registerUrl;
     }
+  }
+
+  private concatenate(defaultLiteral: string, prefixLiteral: string, value: string) {
+    return `${defaultLiteral} ${prefixLiteral} ${value}`;
+  }
+
+  private concatenateLiteral(value: string, literal: string, defaultLiteral: string, prepositionLiteral: string) {
+    return { [literal]: this.concatenate(defaultLiteral, prepositionLiteral, value) };
   }
 
   private createModalPasswordRecoveryComponent(poPageLoginRecovery: PoPageLoginRecovery) {
@@ -186,7 +199,6 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
         control.setErrors(this.customPasswordError);
       }
     }
-
   }
 
   private setUrlRedirect(url) {
@@ -204,21 +216,28 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     });
   }
 
+  protected concatenateLoginHintWithContactEmail(contactEmail: string) {
+    const defaultLoginHintLiteral = poPageLoginLiteralsDefault[this.language].loginHint;
+    const prepositionLiteral = poPageLoginLiteralIn[this.language];
+
+    return this.concatenateLiteral(contactEmail, 'loginHint', defaultLoginHintLiteral, prepositionLiteral);
+  }
+
+  protected concatenateTitleWithProductName(productName: string) {
+    const defaultTitleLiteral = poPageLoginLiteralsDefault[this.language].title;
+    const prepositionLiteral = poPageLoginLiteralTo[this.language];
+
+    return this.concatenateLiteral(productName, 'title', defaultTitleLiteral, prepositionLiteral);
+  }
+
   protected setLoginErrors(errors: Array<string>) {
     const control = this.loginForm.form.controls['login'];
-    this.setControlErrors('allLoginErrors', control, errors, this.literals.loginErrorPattern);
+    this.setControlErrors('allLoginErrors', control, errors, this.pageLoginLiterals.loginErrorPattern);
   }
 
   protected setPasswordErrors(errors: Array<string>) {
     const control = this.loginForm.form.controls['password'];
-    this.setControlErrors('allPasswordErrors', control, errors, this.literals.passwordErrorPattern);
-  }
-
-  onSelectedLanguage(language: string) {
-    this.selectedLanguage = language;
-    this.getLiterals(language, this.containsCustomLiterals ? this.customizedDefaultLiterals : undefined);
-    this.setTitleLiteral(language, this.productName);
-    this.setLoginHintLiteral(language, this.contactEmail);
+    this.setControlErrors('allPasswordErrors', control, errors, this.pageLoginLiterals.passwordErrorPattern);
   }
 
 }

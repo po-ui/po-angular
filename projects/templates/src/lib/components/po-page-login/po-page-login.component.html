@@ -1,13 +1,13 @@
 <po-page-background #pageLogin
   p-show-select-language
   [p-background]="background"
-  [p-highlight-info]="literals.highlightInfo"
+  [p-highlight-info]="pageLoginLiterals.highlightInfo"
   [p-logo]="logo"
   [p-secondary-logo]="secondaryLogo"
   (p-selected-language)="onSelectedLanguage($event)">
 
   <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
-    <div class="po-page-login-header-title po-mb-sm-1">{{ literals.title }}</div>
+    <div class="po-page-login-header-title po-mb-sm-1">{{ pageLoginLiterals.title }}</div>
     <po-tag
       *ngIf="environment"
       p-type="warning"
@@ -25,9 +25,9 @@
             [(ngModel)]="login"
             p-focus
             p-required
-            [p-label]="literals.loginLabel"
+            [p-label]="pageLoginLiterals.loginLabel"
             [p-pattern]="loginPattern"
-            [p-placeholder]="literals.loginPlaceholder"
+            [p-placeholder]="pageLoginLiterals.loginPlaceholder"
             (click)="closePopover()"
             (keyup.enter)="loginForm.valid && onLoginSubmit()"
             (p-change-model)="changeLoginModel()">
@@ -37,7 +37,7 @@
             <span
               class="po-icon po-field-icon po-icon-info"
               p-tooltip-position="right"
-              [p-tooltip]="literals.loginHint">
+              [p-tooltip]="pageLoginLiterals.loginHint">
             </span>
           </div>
         </div>
@@ -57,18 +57,18 @@
             name="password"
             [(ngModel)]="password"
             p-required
-            [p-label]="literals.passwordLabel"
+            [p-label]="pageLoginLiterals.passwordLabel"
             [p-pattern]="passwordPattern"
-            [p-placeholder]="literals.passwordPlaceholder"
+            [p-placeholder]="pageLoginLiterals.passwordPlaceholder"
             (click)="closePopover()"
             (keyup.enter)="loginForm.valid && onLoginSubmit()"
             (p-change-model)="changePasswordModel()">
           </po-password>
           <div class="po-page-login-password-item po-page-login-password-popover-container">
             <po-page-login-popover *ngIf="showExceededAttemptsWarning && exceededAttemptsWarning"
+              [p-literals]="pageLoginLiterals"
               [p-recovery]="recovery"
               [p-remaining-attempts]="exceededAttemptsWarning"
-              [p-selected-language]="selectedLanguage"
               (p-forgot-password) = "openUrl($event)">
             </po-page-login-popover>
           </div>
@@ -86,9 +86,9 @@
         name="customFieldInput"
         [(ngModel)]="customFieldObject.value"
         p-required
-        [p-error-pattern]="customFieldObject.errorPattern || literals.customFieldErrorPattern"
+        [p-error-pattern]="customFieldObject.errorPattern || pageLoginLiterals.customFieldErrorPattern"
         [p-pattern]="customFieldObject.pattern"
-        [p-placeholder]="customFieldObject.placeholder || literals.customFieldPlaceholder"
+        [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
         (keyup.enter)="loginForm.valid && onLoginSubmit()">
       </po-input>
 
@@ -99,7 +99,7 @@
         p-required
         [p-field-value]="customFieldObject.fieldValue"
         [p-filter-service]="customFieldObject.url"
-        [p-placeholder]="customFieldObject.placeholder || literals.customFieldPlaceholder">
+        [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder">
       </po-combo>
 
       <po-select *ngIf="customField && customFieldType === 'select'"
@@ -107,7 +107,7 @@
         name="customFieldSelect"
         [(ngModel)]="customFieldObject.value"
         p-required
-        [p-placeholder]="customFieldObject.placeholder || literals.customFieldPlaceholder"
+        [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
         [p-options]="customFieldObject.options">
       </po-select>
 
@@ -118,8 +118,8 @@
             name="rememberUser"
             [(ngModel)]="rememberUser"
             p-label-position="1"
-            [p-label-off]="literals.rememberUser"
-            [p-label-on]="literals.rememberUser"
+            [p-label-off]="pageLoginLiterals.rememberUser"
+            [p-label-on]="pageLoginLiterals.rememberUser"
             (keyup.enter)="loginForm.valid && onLoginSubmit()">
           </po-switch>
 
@@ -127,7 +127,7 @@
             <span
               class="po-icon po-field-icon po-icon-info"
               p-tooltip-position="right"
-              [p-tooltip]="literals.rememberUserHint">
+              [p-tooltip]="pageLoginLiterals.rememberUserHint">
             </span>
           </div>
         </div>
@@ -138,19 +138,19 @@
         class="po-lg-12 po-page-login-button po-page-login-field-size"
         p-type="primary"
         [p-disabled]="loginForm.invalid"
-        [p-label]="loading ? literals.submittedLabel : literals.submitLabel"
+        [p-label]="loading ? pageLoginLiterals.submittedLabel : pageLoginLiterals.submitLabel"
         [p-loading]="loading"
         (p-click)="onLoginSubmit()">
       </po-button>
 
       <div *ngIf="recovery"
         class="po-page-login-recovery-link">
-        <a class="po-font-text-large-bold" (click)="openUrl(recovery)">{{ literals.forgotPassword }}</a>
+        <a class="po-font-text-large-bold" (click)="openUrl(recovery)">{{ pageLoginLiterals.forgotPassword }}</a>
       </div>
 
       <div *ngIf="registerUrl"
         class="po-page-login-register-link">
-        <a class="po-font-text-large-bold" (click)="openUrl(registerUrl)">{{ literals.registerUrl }}</a>
+        <a class="po-font-text-large-bold" (click)="openUrl(registerUrl)">{{ pageLoginLiterals.registerUrl }}</a>
       </div>
     </div>
   </form>

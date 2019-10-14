@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs';
 import { EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { browserLanguage, convertToBoolean, convertToInt, isExternalLink, isTypeof, poLocaleDefault } from './../../utils/util';
+import { convertToBoolean, convertToInt, getShortBrowserLanguage, isExternalLink, isTypeof, poLocaleDefault } from './../../utils/util';
 
 import { PoPageLogin } from './interfaces/po-page-login.interface';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
@@ -163,10 +163,8 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
 
   allLoginErrors: Array<string> = [];
   allPasswordErrors: Array<string> = [];
-  containsCustomLiterals: boolean = false;
   customFieldObject: PoPageLoginCustomField;
   customFieldType: string;
-  customizedDefaultLiterals: PoPageLoginLiterals = {};
   loginSubscription: Subscription;
   password: string;
   rememberUser: boolean = false;
@@ -303,10 +301,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * Personaliza o e-mail que é exibido na mensagem de dica de login padrão para contato de suporte.
    */
   @Input('p-contact-email') set contactEmail(value: string) {
-    const language = this.selectedLanguage || browserLanguage();
     this._contactEmail = value;
-
-    this.setLoginHintLiteral(language, value);
   }
   get contactEmail() {
     return this._contactEmail;
@@ -325,10 +320,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    */
   @Input('p-product-name') set productName(value: string) {
-    const language = this.selectedLanguage || browserLanguage();
     this._productName = value;
-
-    this.setTitleLiteral(language, value);
   }
   get productName() {
     return this._productName;
@@ -410,6 +402,13 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * ```
    *  const customLiterals: PoPageLoginLiterals = {
+   *    attempts: '{0} vez(es) ',
+   *    createANewPasswordNow: 'Melhor criar uma senha nova agora! Você vai poder entrar no sistema logo em seguida.',
+   *    forgotPassword: 'Esqueceu sua senha?',
+   *    forgotYourPassword: 'Esqueceu sua senha?',
+   *    highlightInfo: '',
+   *    iForgotMyPassword: 'Esqueci minha senha'
+   *    ifYouTryHarder: 'Se tentar mais ',
    *    title: 'Seja bem-vindo',
    *    loginErrorPattern: 'Login obrigatório',
    *    loginHint: 'Caso não possua usuário entre em contato com o suporte',
@@ -420,10 +419,13 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *    passwordPlaceholder: 'Insira sua senha de acesso'
    *    customFieldErrorPattern: 'Campo customizado inválido',
    *    customFieldPlaceholder: 'Por favor insira um valor',
+   *    registerUrl: 'Novo registro',
    *    rememberUser: 'Lembrar usuário',
    *    rememberUserHint: 'Esta opção pode ser desabilitada nas configurações do sistema',
    *    submitLabel: 'Acessar sistema',
-   *    forgotPassword: 'Esqueceu sua senha?'
+   *    submittedLabel: 'Carregando...',
+   *    titlePopover: 'Opa!',
+   *    yourUserWillBeBlocked: 'sem sucesso seu usuário será bloqueado e você fica 24 horas sem poder acessar :(',
    *  };
    * ```
    *
@@ -449,24 +451,14 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *  > É também possível alternar o objeto padrão de literais através do seletor de idiomas localizado na parte inferior do template,
    * nesse caso, há também a opção do idioma russo.
    */
+  // @Input('p-literals') literals? : PoPageLoginLiterals;
+
   @Input('p-literals') set literals(value: PoPageLoginLiterals) {
-    const language = this.selectedLanguage || browserLanguage();
-
-    if (value) {
-      this.getLiterals(language, value);
-      const { title, loginHint} = this.literals;
-
-      this.containsCustomLiterals =
-        !!(title && !title.includes(poPageLoginLiteralsDefault[language].title)) ||
-        !!(loginHint && !loginHint.includes(poPageLoginLiteralsDefault[language].loginHint));
-    } else {
-      this.containsCustomLiterals = false;
-      this._literals = poPageLoginLiteralsDefault[language];
-    }
+    this._literals = value;
   }
 
   get literals() {
-    return this._literals || poPageLoginLiteralsDefault[browserLanguage()];
+    return this._literals;
   }
 
   /**
@@ -847,6 +839,24 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    */
   @Output('p-password-change') passwordChange?: EventEmitter<string> = new EventEmitter<string>();
 
+  get language(): string {
+    return this.selectedLanguage || getShortBrowserLanguage();
+  }
+
+  get pageLoginLiterals(): PoPageLoginLiterals {
+    const loginHintWithContactEmail = this.contactEmail ? this.concatenateLoginHintWithContactEmail(this.contactEmail) : undefined;
+
+    const titleWithProductName = this.productName ? this.concatenateTitleWithProductName(this.productName) : undefined;
+
+    return {
+      ...poPageLoginLiteralsDefault[poLocaleDefault],
+      ...poPageLoginLiteralsDefault[this.language],
+      ...loginHintWithContactEmail,
+      ...titleWithProductName,
+      ...this.literals
+    };
+  }
+
   constructor(private loginService: PoPageLoginService, public router: Router) { }
 
   ngOnDestroy() {
@@ -857,27 +867,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
 
   closePopover() {
     this.showExceededAttemptsWarning = false;
-  }
-
-  getLiterals(language?: string, value?) {
-    language = language || browserLanguage();
-
-    if (value instanceof Object && !(value instanceof Array)) {
-      this.customizedDefaultLiterals = {
-        ...this.customizedDefaultLiterals,
-        ...value
-      };
-
-      this._literals = {
-        ...poPageLoginLiteralsDefault[poLocaleDefault],
-        ...poPageLoginLiteralsDefault[language],
-        ...this.customizedDefaultLiterals,
-        ...value
-      };
-    } else {
-      this.containsCustomLiterals = false;
-      this._literals = poPageLoginLiteralsDefault[language];
-    }
   }
 
   onLoginSubmit(): void {
@@ -908,41 +897,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
     } else {
       this.loginSubmit.emit(loginForm);
       this.showExceededAttemptsWarning = this.exceededAttemptsWarning > 0;
-    }
-  }
-
-  setLoginHintLiteral(language: string, value: string) {
-    const defaultLoginHintLiteral = poPageLoginLiteralsDefault[language].loginHint;
-    const prepositionLiteral = poPageLoginLiteralIn[language];
-    if (value) {
-      this.concatenateLiteral(value, 'loginHint', defaultLoginHintLiteral, prepositionLiteral);
-    } else if (!value) {
-      this.literals = { loginHint: defaultLoginHintLiteral };
-    }
-  }
-
-  setTitleLiteral(language: string, value: string) {
-    const defaultTitleLiteral = poPageLoginLiteralsDefault[language].title;
-    const prepositionLiteral = poPageLoginLiteralTo[language];
-
-    const customTitle = this.literals.title || '';
-
-    if (value) {
-      this.concatenateLiteral(value, 'title', defaultTitleLiteral, prepositionLiteral);
-    } else if (!value && customTitle.includes(defaultTitleLiteral)) {
-      this.literals = { title: defaultTitleLiteral };
-    }
-  }
-
-  private concatenate(defaultLiteral: string, prefixLiteral: string, value: string) {
-    return `${defaultLiteral} ${prefixLiteral} ${value}`;
-  }
-
-  private concatenateLiteral(value: string, literal: string, defaultLiteral: string, prepositionLiteral: string) {
-    if (value && this.literals[literal].includes(defaultLiteral) || this.literals[literal].includes(value)) {
-      this.literals = {
-        [literal]: this.concatenate(defaultLiteral, prepositionLiteral, value)
-      };
     }
   }
 
@@ -978,6 +932,10 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
       this.blockedUrl = '';
     }
   }
+
+  protected abstract concatenateLoginHintWithContactEmail(contactEmail: string);
+
+  protected abstract concatenateTitleWithProductName(productName: string);
 
   protected abstract setLoginErrors(value: Array<string>): void;
 
