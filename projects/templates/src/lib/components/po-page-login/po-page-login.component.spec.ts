@@ -20,7 +20,8 @@ import { poLocaleDefault } from './../../utils/util';
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
-import { PoPageLoginBaseComponent, poPageLoginLiteralsDefault } from './po-page-login-base.component';
+import { PoPageLoginBaseComponent, poPageLoginLiteralIn, poPageLoginLiteralTo, poPageLoginLiteralsDefault
+} from './po-page-login-base.component';
 import { PoPageLoginComponent } from './po-page-login.component';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
 import { PoPageLoginLiterals } from './interfaces/po-page-login-literals.interface';
@@ -144,7 +145,7 @@ describe('PoPageLoginComponent: ', () => {
     const divRecovery = nativeElement.querySelector('div.po-page-login-recovery-link');
 
     expect(divRecovery).toBeTruthy();
-    expect(divRecovery.innerHTML).toContain(component.literals.forgotPassword);
+    expect(divRecovery.innerHTML).toContain(component.pageLoginLiterals.forgotPassword);
   });
 
   it('should show a new user when `p-register` set a value', () => {
@@ -155,7 +156,7 @@ describe('PoPageLoginComponent: ', () => {
     const divRegisterUrl = nativeElement.querySelector('div.po-page-login-register-link');
 
     expect(divRegisterUrl).toBeTruthy();
-    expect(divRegisterUrl.innerHTML).toContain(component.literals.registerUrl);
+    expect(divRegisterUrl.innerHTML).toContain(component.pageLoginLiterals.registerUrl);
   });
 
   describe('Methods:', () => {
@@ -534,39 +535,11 @@ describe('PoPageLoginComponent: ', () => {
       expect(component['setControlErrors']).toHaveBeenCalled();
     });
 
-    it('onSelectedLanguage: should set `selectedLanguage` and call `setLoginHintLiteral` and `setTitleLiteral`', () => {
-      component.contactEmail = 'email';
-      component.productName = 'product';
-
-      spyOn(component, <any>'setLoginHintLiteral');
-      spyOn(component, <any>'setTitleLiteral');
+    it('onSelectedLanguage: should set `selectedLanguage` with `en`', () => {
 
       component.onSelectedLanguage('en');
 
       expect(component.selectedLanguage).toBe('en');
-      expect(component.setLoginHintLiteral).toHaveBeenCalledWith('en', component.contactEmail );
-      expect(component.setTitleLiteral).toHaveBeenCalledWith('en', component.productName );
-    });
-
-    it('onSelectedLanguage: should call `getLiterals` passing the language and `customizedDefaultLiterals` as parameters', () => {
-      component.containsCustomLiterals = true;
-      component.customizedDefaultLiterals = {};
-
-      spyOn(component, <any>'getLiterals');
-
-      component.onSelectedLanguage('en');
-
-      expect(component.getLiterals).toHaveBeenCalledWith('en', component.customizedDefaultLiterals);
-    });
-
-    it('onSelectedLanguage: should call `getLiterals` passing the language and `undefined` as parameters', () => {
-      component.containsCustomLiterals = false;
-
-      spyOn(component, <any>'getLiterals');
-
-      component.onSelectedLanguage('en');
-
-      expect(component.getLiterals).toHaveBeenCalledWith('en', undefined);
     });
 
     it('setUrlRedirect: should call `window.open` with external url', () => {
@@ -770,6 +743,52 @@ describe('PoPageLoginComponent: ', () => {
       expect(component.authenticationType).toEqual(PoPageLoginAuthenticationType.Bearer);
     });
 
+    it(`concatenateLoginHintWithContactEmail: should call 'concatenateLiteral'`, () => {
+      const email = 'email@mail.com';
+      const defaultLoginHintLiteral = poPageLoginLiteralsDefault[poLocaleDefault].loginHint;
+      const prepositionLiteral = poPageLoginLiteralIn[poLocaleDefault];
+
+      spyOn(component, <any>'concatenateLiteral');
+      spyOnProperty(component, 'language').and.returnValue(poLocaleDefault);
+
+      component['concatenateLoginHintWithContactEmail'](email);
+
+      expect(component['concatenateLiteral']).toHaveBeenCalledWith(email, 'loginHint', defaultLoginHintLiteral, prepositionLiteral);
+    });
+
+    it(`concatenateTitleWithProductName: should call 'concatenateLiteral'`, () => {
+      const title = 'email@mail.com';
+      const defaultTitleLiteral = poPageLoginLiteralsDefault[poLocaleDefault].title;
+      const prepositionLiteral = poPageLoginLiteralTo[poLocaleDefault];
+
+      spyOn(component, <any>'concatenateLiteral');
+      spyOnProperty(component, 'language').and.returnValue(poLocaleDefault);
+
+      component['concatenateTitleWithProductName'](title);
+
+      expect(component['concatenateLiteral']).toHaveBeenCalledWith(title, 'title', defaultTitleLiteral, prepositionLiteral);
+    });
+
+    it(`concatenateLiteral: should call 'concatenate' and return expected value`, () => {
+      const value = 'Portal RH';
+      const currentLiteral = 'title';
+      const defaultLiteral = 'Welcome';
+      const prepositionLiteral = 'to';
+      const result = { title: 'Welcome to Portal RH' };
+
+      spyOn(component, <any>'concatenate').and.callThrough();
+
+      const expectedResult = component['concatenateLiteral'](value, currentLiteral, defaultLiteral, prepositionLiteral);
+
+      expect(component['concatenate']).toHaveBeenCalledWith(defaultLiteral, prepositionLiteral, value);
+      expect(expectedResult).toEqual(result);
+    });
+
+    it('concatenate: should concatenate the received parameters', () => {
+      const expectedResult = component['concatenate']('Welcome', 'to', 'Company');
+
+      expect(expectedResult).toBe('Welcome to Company');
+    });
   });
 
   describe('Templates: ', () => {

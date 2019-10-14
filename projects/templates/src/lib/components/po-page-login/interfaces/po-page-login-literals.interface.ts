@@ -7,14 +7,29 @@
  */
 export interface PoPageLoginLiterals {
 
+  /** Texto que informa a quantidade de tentativas restantes no popover de aviso de bloqueio. */
+  attempts?: string;
+
+  /** Texto exibido no popover de aviso de bloqueio, que orienta o usuário, caso ele tenha esquecido a senha, a criar uma nova senha. */
+  createANewPasswordNow?: string;
+
   /** Mensagem de erro apresentada quando o campo customizado está inválido */
   customFieldErrorPattern?: string;
 
   /** Placeholder para o campo customizado. */
   customFieldPlaceholder?: string;
 
+  /** Texto que questiona o esquecimento da senha no popover de aviso de bloqueio. */
+  forgotYourPassword?: string;
+
   /** Título exibido no topo da página. */
   title?: string;
+
+  /** Texto do link de 'esqueci minha senha' exibido no popover de aviso de bloqueio. */
+  iForgotMyPassword?: string;
+
+  /** Texto de aviso de tentativas exibido no popover de aviso de bloqueio. */
+  ifYouTryHarder?: string;
 
   /** Mensagem de erro apresentada quando o campo de login está inválido. */
   loginErrorPattern?: string;
@@ -57,5 +72,11 @@ export interface PoPageLoginLiterals {
 
   /** Texto exibido no link de novo cadastro. */
   registerUrl?: string;
+
+  /** Título do popover para aviso de bloqueio. */
+  titlePopover?: string;
+
+  /** Texto que informa ao usuário que o mesmo será bloqueado e por quanto tempo no popover de aviso de bloqueio. */
+  yourUserWillBeBlocked?: string;
 
 }
