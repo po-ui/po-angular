@@ -60,41 +60,9 @@ describe('ThPageLoginPopoverComponent: ', () => {
       expect(component.recovery).toBe(url);
       expect(component.recoveryType).toBe(undefined);
     });
-
-    it('p-selected-language: should call `getLiterals` with valid `value`', () => {
-      spyOn(component, <any>'getLiterals');
-      component.selectedLanguage = 'es';
-
-      expect(component['getLiterals']).toHaveBeenCalledWith(component.selectedLanguage);
-    });
-
-    it('p-remaining-attempts: should call `getLiterals` with valid `value`', () => {
-      spyOn(component, <any>'getLiterals');
-      component.selectedLanguage = 'es';
-
-      expect(component['getLiterals']).toHaveBeenCalledWith(component.selectedLanguage);
-    });
   });
 
   describe('Methods: ', () => {
-
-    it('ngOnInit: should call `getLiterals`', () => {
-      spyOn(component, <any>'getLiterals');
-      component.ngOnInit();
-      expect(component['getLiterals']).toHaveBeenCalled();
-    });
-
-    it('getLiterals: should call `changeDetector.detectChanges`', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('en');
-      spyOn(component['changeDetector'], 'detectChanges');
-      component.remainingAttempts = 3;
-      const expectedValue = 3;
-
-      component['getLiterals']();
-
-      expect(component.literalParams).toBe(expectedValue);
-      expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
-    });
 
     it('onForgotPasswordClick: should emit forgotPassword with recovery as param', () => {
       component.recovery = { url: 'url'};
