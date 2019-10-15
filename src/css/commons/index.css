@@ -6,7 +6,7 @@
 @import './po-common.css';
 @import './po-font/po-font.css';
 @import './po-grid-system';
-@import './po-icon/po-icon.css';
+@import './po-icon';
 @import './po-media-query/po-media-query.css';
 @import './po-shadow/po-shadow.css';
 @import './po-spacing';
