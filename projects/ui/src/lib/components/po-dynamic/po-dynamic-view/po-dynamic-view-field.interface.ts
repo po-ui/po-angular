@@ -19,6 +19,43 @@ export interface PoDynamicViewField extends PoDynamicField {
   tag?: boolean;
 
   /**
+   * Define uma cor para o campo do tipo *tag*.
+   *
+   * Valores válidos:
+   *  - <span class="dot po-color-01"></span> `color-01`
+   *  - <span class="dot po-color-02"></span> `color-02`
+   *  - <span class="dot po-color-03"></span> `color-03`
+   *  - <span class="dot po-color-04"></span> `color-04`
+   *  - <span class="dot po-color-05"></span> `color-05`
+   *  - <span class="dot po-color-06"></span> `color-06`
+   *  - <span class="dot po-color-07"></span> `color-07`
+   *  - <span class="dot po-color-08"></span> `color-08`
+   *  - <span class="dot po-color-09"></span> `color-09`
+   *  - <span class="dot po-color-10"></span> `color-10`
+   *  - <span class="dot po-color-11"></span> `color-11`
+   *  - <span class="dot po-color-12"></span> `color-12`
+   */
+  color?: string;
+
+  /**
+   * Define um ícone que será exibido ao lado do valor para o campo do tipo *tag*.
+   *
+   * > Veja os valores válidos na [biblioteca de ícones](guides/icons).
+   */
+  icon?: string;
+
+  /**
+   * Possibilita a inversão de cores para o campo do tipo `tag`,
+   * tornando possível uma visualização de status ativo e inativo.
+   *
+   * > A cor do texto, do ícone e da borda ficam com a cor utilizada na propriedade `color` ou a cor default,
+   * e a cor do fundo fica branca.
+   *
+   * @default `false`
+   */
+  inverse?: boolean;
+
+  /**
    * Formato de exibição do valor do campo.
    *
    * Aplicado para casos específicos de acordo com o tipo do campo.

@@ -21,6 +21,9 @@
 
 <ng-template #poTag let-field>
   <po-tag [ngClass]="field.cssClass"
+    [p-color]="field.color"
+    [p-icon]="field.icon"
+    [p-inverse]="field.inverse"
     [p-label]="field.label"
     [p-value]="field.value">
   </po-tag>
