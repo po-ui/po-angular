@@ -238,6 +238,131 @@ describe('PoDynamicViewComponent:', () => {
       expect(tagElement.length).toBe(fieldsTag.length);
     });
 
+    it(`should create 'po-tag' with icon if properties 'tag' and 'icon' contain values.`, () => {
+      component.fields = [
+        { property: 'cpf', label: 'CPF', tag: true, icon: 'po-icon-ok' },
+      ];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-icon-ok')).toBeTruthy();
+    });
+
+    it(`should create 'po-tag' without icon if 'tag' is true but 'icon' is not defined.`, () => {
+      component.fields = [
+        { property: 'cpf', label: 'CPF', tag: true },
+      ];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-icon-ok')).toBeFalsy();
+    });
+
+    it(`should create 'po-tag' with a custom color if 'tag' and 'color' properties contain values.`, () => {
+      component.fields = [
+        { property: 'cpf', label: 'CPF', tag: true, color: 'color-07' },
+      ];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-color-07')).toBeTruthy();
+    });
+
+    it(`should create 'po-tag' without a customized color.`, () => {
+      component.fields = [
+        { property: 'cpf', label: 'CPF', tag: true },
+      ];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-color-07')).toBeFalsy();
+    });
+
+    it(`should create 'po-tag-inverse' with custom and inverse colors if 'color', 'tag' and 'inverse' properties contain values.`, () => {
+      component.fields = [
+        { property: 'cpf', label: 'CPF', tag: true, color: 'color-07', inverse: true },
+      ];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-tag-inverse')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-text-color-07')).toBeTruthy();
+    });
+
+    it(`should create 'po-tag' with a custom color and without 'inverse' if only 'tag' and 'color' contain values.`, () => {
+      component.fields = [
+        { property: 'cpf', label: 'CPF', tag: true, color: 'color-07', inverse: false },
+      ];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-tag-inverse')).toBeFalsy();
+      expect(nativeElement.querySelector('.po-text-color-07')).toBeFalsy();
+      expect(nativeElement.querySelector('.po-color-07')).toBeTruthy();
+    });
+
+    it(`should create 'po-tag-inverse' if 'tag' is 'default' and 'inverse'.`, () => {
+      component.fields = [
+        { property: 'cpf', label: 'CPF', tag: true, inverse: true },
+      ];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-tag-inverse')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-tag-info-inverse')).toBeTruthy();
+    });
+
+    it(`shouldn't create 'po-tag-inverse' if 'tag' is 'default' and 'inverse' is false.`, () => {
+      component.fields = [
+        { property: 'cpf', label: 'CPF', tag: true, inverse: false },
+      ];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-tag-inverse')).toBeFalsy();
+      expect(nativeElement.querySelector('.po-tag-info-inverse')).toBeFalsy();
+      expect(nativeElement.querySelector('.po-tag-info')).toBeTruthy();
+    });
+
   });
 
 });
