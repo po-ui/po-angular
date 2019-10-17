@@ -25,6 +25,7 @@
 }
 
 .po-checkbox-group-item .po-checkbox-group-input {
+  height: 0;
   width: 0;
 }
 

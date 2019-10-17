@@ -1,2 +1,3 @@
 @import './po-table.css';
-@import './po-table-column-link/po-table-column-link.css'
+@import './po-table-column-link/po-table-column-link.css';
+@import './po-table-column-manager/po-table-column-manager.css'

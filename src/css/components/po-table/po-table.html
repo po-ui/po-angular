@@ -19,6 +19,10 @@
     width: 230px;
   }
 
+  .sample-po-table-column-manager {
+    margin-bottom: 220px;
+  }
+
   .po-tooltip {
     position: absolute;
   }
@@ -27,12 +31,21 @@
     margin-top: 36px;
   }
 
-  .po-popup {
+  .po-popup,
+  .po-popover {
     display: inline-block;
     position: absolute;
+  }
+
+  .po-popup {
     margin-left: -90px;
     margin-top: 24px;
     text-align: left;
+  }
+
+  .po-popover {
+    margin-top: 42px;
+    right: 20px;
   }
 
   h4 {
@@ -50,9 +63,31 @@
     margin-left: 32px;
   }
 
+  .po-sample-table-column-manager-tooltip {
+    margin-top: -33px;
+    margin-left: -181px;
+  }
 </style>
 
 <div class="container">
+  <h4>Tipos de ordenação</h4>
+  <table style="border-spacing:10px;width:50%">
+    <tr>
+      <th>Ordenação ascendente</th>
+      <th>Ordenação descendente</th>
+      <th>Sem ordenação</th>
+    </tr>
+    <tr>
+      <td style="text-align:center">
+        <span class="po-table-header-icon-ascending"></span>
+      </td>
+      <td style="text-align:center">
+        <span class="po-table-header-icon-descending"></span>
+      </td>
+      <td style="text-align:center">
+        <span class="po-table-header-icon-unselected"></span>
+    </tr>
+  </table>
 
   <h4>Tabela simples</h4>
   <div class="po-container-no-padding">
@@ -78,6 +113,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -114,6 +154,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -148,6 +189,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -182,6 +224,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -216,6 +259,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -250,6 +294,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -284,6 +329,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -316,6 +362,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager po-table-header-column-manager-border">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -351,6 +402,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -385,6 +437,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -419,6 +472,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -452,6 +506,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager po-table-header-column-manager-border">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -490,9 +549,9 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
-
           <tbody class="po-table-group-row">
             <tr class="po-table-row">
               <td class="po-table-column-detail-toggle">
@@ -528,9 +587,9 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
-
           <tbody class="po-table-group-row">
             <tr class="po-table-row">
               <td class="po-table-column-detail-toggle">
@@ -566,82 +625,84 @@
                   R$ 635.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
 
           <tbody class="po-table-group-row">
-              <tr class="po-table-row">
-                <td class="po-table-column-detail-toggle">
-                  <span class="po-icon po-icon-arrow-up po-clickable"></span>
-                </td>
-                <td class="po-table-column">
-                  <div class="po-table-column-cell">
-                    Argentina / Buenos Aires
-                  </div>
-                </td>
-                <td class="po-table-column">
-                  <div class="po-table-column-cell">
-                    13/02/2018
-                  </div>
-                </td>
-                <td class="po-table-column po-table-column-right">
-                  <div class="po-table-column-cell">
-                    233
-                  </div>
-                </td>
-                <td class="po-table-column">
-                  <div class="po-table-column-cell">
-                    Primeira classe
-                  </div>
-                </td>
-                <td class="po-table-column po-table-column-right">
-                  <div class="po-table-column-cell">
-                    1231234
-                  </div>
-                </td>
-                <td class="po-table-column po-table-column-right">
-                  <div class="po-table-column-cell">
-                    R$ 600.00
-                  </div>
-                </td>
-              </tr>
+            <tr class="po-table-row">
+              <td class="po-table-column-detail-toggle">
+                <span class="po-icon po-icon-arrow-up po-clickable"></span>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Argentina / Buenos Aires
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  13/02/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  233
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Primeira classe
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  1231234
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  R$ 600.00
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
 
-              <tr>
-                <td class="po-table-column-detail" colspan="7">
-                  <table class="po-table-master-detail">
-                    <tbody>
-                      <tr class="po-table-detail-row">
-                        <td class="po-table-column-master-detail-space"></td>
-                        <td class="po-table-column-master-detail po-table-master-detail-label">
-                          <strong>Pacote:</strong> Básico
-                        </td>
-                        <td class="po-table-column-master-detail po-table-master-detail-label">
-                          <strong> Passeios: </strong> Tour pela cidade com ônibus coletivo e visita aos principais museus.
-                        </td>
-                      </tr>
-                      <tr class="po-table-detail-row">
-                        <td class="po-table-column-master-detail-space"></td>
-                        <td class="po-table-column-master-detail po-table-master-detail-label">
-                          <strong> Pacote: </strong> Intermediário
-                        </td>
-                        <td class="po-table-column-master-detail po-table-master-detail-label">
-                          <strong>Passeios: </strong> Tour pela cidade com van turística e visita com guia aos principais museus.
-                        </td>
-                      </tr>
-                      <tr class="po-table-detail-row">
-                        <td class="po-table-column-master-detail-space"></td>
-                        <td class="po-table-column-master-detail po-table-master-detail-label">
-                          <strong>Pacote: </strong> Completo
-                        </td>
-                        <td class="po-table-column-master-detail po-table-master-detail-label">
-                          <strong> Passeios: </strong> Tour VIP pela cidade, show de tango com jantar e visita com guia aos principais museus.
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-            </tbody>
+            <tr>
+              <td class="po-table-column-detail" colspan="8">
+                <table class="po-table-master-detail">
+                  <tbody>
+                    <tr class="po-table-detail-row">
+                      <td class="po-table-column-master-detail-space"></td>
+                      <td class="po-table-column-master-detail po-table-master-detail-label">
+                        <strong>Pacote:</strong> Básico
+                      </td>
+                      <td class="po-table-column-master-detail po-table-master-detail-label">
+                        <strong> Passeios: </strong> Tour pela cidade com ônibus coletivo e visita aos principais museus.
+                      </td>
+                    </tr>
+                    <tr class="po-table-detail-row">
+                      <td class="po-table-column-master-detail-space"></td>
+                      <td class="po-table-column-master-detail po-table-master-detail-label">
+                        <strong> Pacote: </strong> Intermediário
+                      </td>
+                      <td class="po-table-column-master-detail po-table-master-detail-label">
+                        <strong>Passeios: </strong> Tour pela cidade com van turística e visita com guia aos principais museus.
+                      </td>
+                    </tr>
+                    <tr class="po-table-detail-row">
+                      <td class="po-table-column-master-detail-space"></td>
+                      <td class="po-table-column-master-detail po-table-master-detail-label">
+                        <strong>Pacote: </strong> Completo
+                      </td>
+                      <td class="po-table-column-master-detail po-table-master-detail-label">
+                        <strong> Passeios: </strong> Tour VIP pela cidade, show de tango com jantar e visita com guia aos principais museus.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -671,6 +732,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager po-table-header-column-manager-border">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -707,6 +773,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -741,6 +808,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -775,6 +843,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -807,12 +876,17 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
           <tbody>
             <tr class="po-table-row">
-              <td colspan="6" class="po-table-no-data po-text-center">
+              <td colspan="7" class="po-table-no-data po-text-center">
                 <span>
                   Nenhum dado encontrado.
                 </span>
@@ -874,6 +948,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -911,6 +990,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -947,6 +1027,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -989,6 +1070,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -1023,6 +1105,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -1059,6 +1146,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1093,6 +1181,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1127,6 +1216,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1161,6 +1251,7 @@
                   R$ 235.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -1195,6 +1286,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -1234,6 +1330,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1273,6 +1370,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1312,6 +1410,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -1346,6 +1445,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -1385,6 +1489,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1422,6 +1527,7 @@
                   R$ 500.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1459,6 +1565,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1502,6 +1609,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -1539,6 +1647,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -1580,6 +1693,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1619,6 +1733,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1658,6 +1773,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -1709,6 +1825,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -1749,6 +1870,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1788,6 +1910,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1827,6 +1950,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -1864,6 +1988,11 @@
               <th class="po-table-header-ellipsis">
                 <span class="po-table-header-ellipsis po-table-header-block">Descrição</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -1879,6 +2008,7 @@
                   Cor 01
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1893,6 +2023,7 @@
                   Cor 02
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1907,6 +2038,7 @@
                   Cor 3
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1921,6 +2053,7 @@
                   Cor 4
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1935,6 +2068,7 @@
                   Cor 5
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1949,6 +2083,7 @@
                   Cor 6
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1963,6 +2098,7 @@
                   Cor 7
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1977,6 +2113,7 @@
                   Cor 8
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -1991,6 +2128,7 @@
                   Cor 9
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2005,6 +2143,7 @@
                   Cor 10
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2019,6 +2158,7 @@
                   Cor 11
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2033,6 +2173,7 @@
                   Cor 12
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -2203,6 +2344,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -2243,6 +2389,7 @@
                   R$ 1211.43
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2282,6 +2429,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2321,6 +2469,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2366,6 +2515,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -2400,6 +2550,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -2436,6 +2591,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2470,6 +2626,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2504,6 +2661,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -2543,6 +2701,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -2584,6 +2747,7 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2623,6 +2787,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -2662,6 +2827,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -2749,7 +2915,11 @@
                       <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
                     </div>
                   </th>
-                  <th class="po-table-header-action"></th>
+                  <th class="po-table-header-column-manager">
+                    <div class="po-table-header-column-manager-fixed-inner">
+                      <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                    </div>
+                  </th>
                 </tr>
               </thead>
 
@@ -3100,7 +3270,11 @@
                       <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
                     </div>
                   </th>
-                  <th class="po-table-header-action"></th>
+                  <th class="po-table-header-column-manager">
+                    <div class="po-table-header-column-manager-fixed-inner">
+                      <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                    </div>
+                  </th>
                 </tr>
               </thead>
 
@@ -3379,7 +3553,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
-              <th class="po-table-header-single-action"></th>
+              <th class="po-table-header-single-action">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -3569,7 +3747,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
-              <th class="po-table-header-single-action"></th>
+              <th class="po-table-header-single-action">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -3769,7 +3951,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
-              <th class="po-table-header-action"></th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -3933,7 +4119,11 @@
               <th class="po-table-header-ellipsis po-table-header-number po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
-              <th class="po-table-header-action"></th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -4092,7 +4282,11 @@
               <th class="po-table-header-ellipsis po-table-header-number po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
-              <th class="po-table-header-action"></th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -4250,6 +4444,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -4288,10 +4487,11 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
 
             <tr>
-              <td class="po-table-column-detail" colspan="7">
+              <td class="po-table-column-detail" colspan="8">
                 <table class="po-table-master-detail">
                   <tbody>
                     <tr class="po-table-detail-row">
@@ -4362,6 +4562,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
 
@@ -4400,6 +4601,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
 
@@ -4438,6 +4640,7 @@
                   R$ 635.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -4470,6 +4673,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -4512,7 +4720,7 @@
             </tr>
 
             <tr>
-              <td class="po-table-column-detail" colspan="7">
+              <td class="po-table-column-detail" colspan="8">
                 <table class="po-table-master-detail">
                   <tbody>
                     <tr class="po-table-detail-row">
@@ -4536,9 +4744,11 @@
                     <tr class="po-table-detail-row">
                       <td class="po-table-column-master-detail-space"></td>
                       <td class="po-table-column-master-detail po-table-master-detail-label">
-                        Completo</td>
+                        Completo
+                      </td>
                       <td class="po-table-column-master-detail po-table-master-detail-label">
-                        Tour VIP pela cidade, show de tango com jantar e visita com guia aos principais museus.</td>
+                        Tour VIP pela cidade, show de tango com jantar e visita com guia aos principais museus.
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -4581,6 +4791,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
 
@@ -4619,6 +4830,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
 
@@ -4657,6 +4869,7 @@
                   R$ 635.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -4689,6 +4902,11 @@
               </th>
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -4728,10 +4946,11 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
 
             <tr>
-              <td class="po-table-column-detail" colspan="7">
+              <td class="po-table-column-detail" colspan="8">
                 <table class="po-table-master-detail">
                   <thead>
                     <tr>
@@ -4813,6 +5032,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
 
@@ -4851,6 +5071,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
 
@@ -4889,6 +5110,7 @@
                   R$ 635.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -4926,11 +5148,15 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
           <tbody class="po-table-group-row">
-
             <tr class="po-table-row po-table-row-active">
               <td class="po-table-column po-table-column-checkbox">
                 <input type="checkbox" id="checkbox1" checked class="po-table-checkbox po-table-checkbox-checked">
@@ -4969,14 +5195,14 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
 
             <tr>
-              <td class="po-table-column-detail" colspan="8">
+              <td class="po-table-column-detail" colspan="9">
                 <table class="po-table-master-detail">
                   <tbody>
                     <tr class="po-table-detail-row po-table-row-active">
-
                       <td class="po-table-column-master-detail-space-checkbox"></td>
                       <td class="po-table-column po-table-column-checkbox">
                         <input type="checkbox" id="checkbox1" checked class="po-table-checkbox po-table-checkbox-checked">
@@ -5011,13 +5237,12 @@
                       <td class="po-table-column-master-detail po-table-master-detail-label">
                         <strong> Passeios: </strong> Tour VIP pela cidade, show de tango com jantar e visita com guia aos principais museus.</td>
                     </tr>
-
                   </tbody>
                 </table>
               </td>
             </tr>
-
           </tbody>
+
           <tbody class="po-table-group-row">
             <tr class="po-table-row po-table-row-active">
               <td class="po-table-column po-table-column-checkbox">
@@ -5057,6 +5282,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -5098,6 +5324,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -5139,6 +5366,7 @@
                   R$ 635.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -5146,7 +5374,7 @@
     </div>
   </div>
 
-  <h4>Tabela com master-detail, checkbox, e sem checkbox no detail</h4>
+  <h4>Tabela com master-detail, checkbox e sem checkbox no detail</h4>
   <div class="po-container-no-padding">
     <div class="po-table-main-container">
       <div class="po-table-wrapper">
@@ -5176,11 +5404,15 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
           <tbody class="po-table-group-row">
-
             <tr class="po-table-row po-table-row-active">
               <td class="po-table-column po-table-column-checkbox">
                 <input type="checkbox" id="checkbox1" checked class="po-table-checkbox po-table-checkbox-checked">
@@ -5219,19 +5451,22 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column po-table-row-active"></td>
             </tr>
 
             <tr>
-              <td class="po-table-column-detail" colspan="8">
+              <td class="po-table-column-detail" colspan="9">
                 <table class="po-table-master-detail">
                   <tbody>
                     <tr class="po-table-detail-row">
                       <td class="po-table-column-master-detail-space-checkbox"></td>
                       <td class="po-table-column po-table-column-checkbox"></td>
                       <td class="po-table-column-master-detail po-table-master-detail-label">
-                        <strong>Pacote:</strong> Básico</td>
+                        <strong>Pacote:</strong> Básico
+                      </td>
                       <td class="po-table-column-master-detail po-table-master-detail-label">
-                        <strong> Passeios: </strong> Tour pela cidade com ônibus coletivo e visita aos principais museus.</td>
+                        <strong> Passeios: </strong> Tour pela cidade com ônibus coletivo e visita aos principais museus.
+                      </td>
                     </tr>
 
                     <tr class="po-table-detail-row">
@@ -5240,7 +5475,8 @@
                       <td class="po-table-column-master-detail po-table-master-detail-label">
                         <strong> Pacote: </strong> Intermediário</td>
                       <td class="po-table-column-master-detail po-table-master-detail-label">
-                        <strong>Passeios: </strong> Tour pela cidade com van turística e visita com guia aos principais museus.</td>
+                        <strong>Passeios: </strong> Tour pela cidade com van turística e visita com guia aos principais museus.
+                      </td>
                     </tr>
 
                     <tr class="po-table-detail-row">
@@ -5249,15 +5485,15 @@
                       <td class="po-table-column-master-detail po-table-master-detail-label">
                         <strong>Pacote: </strong> Completo</td>
                       <td class="po-table-column-master-detail po-table-master-detail-label">
-                        <strong> Passeios: </strong> Tour VIP pela cidade, show de tango com jantar e visita com guia aos principais museus.</td>
+                        <strong> Passeios: </strong> Tour VIP pela cidade, show de tango com jantar e visita com guia aos principais museus.
+                      </td>
                     </tr>
-
                   </tbody>
                 </table>
               </td>
             </tr>
-
           </tbody>
+
           <tbody class="po-table-group-row">
             <tr class="po-table-row po-table-row-active">
               <td class="po-table-column po-table-column-checkbox">
@@ -5297,8 +5533,10 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column po-table-row-active"></td>
             </tr>
           </tbody>
+
           <tbody class="po-table-group-row">
             <tr class="po-table-row">
               <td class="po-table-column po-table-column-checkbox">
@@ -5338,6 +5576,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -5379,6 +5618,7 @@
                   R$ 635.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -5412,6 +5652,11 @@
               <th class="po-table-header-ellipsis po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -5454,7 +5699,7 @@
             </tr>
 
             <tr>
-              <td colspan="8" class="po-table-row-template-container">
+              <td colspan="9" class="po-table-row-template-container">
                 <div class="po-font-title po-md-6">
                   BRA
                   <div class="po-font-subtitle">Internacional Airport Guarulhos</div>
@@ -5485,6 +5730,7 @@
                 </div>
               </td>
             </tr>
+            <td class="po-table-column"></td>
 
           </tbody>
           <tbody class="po-table-group-row">
@@ -5522,6 +5768,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -5559,6 +5806,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -5596,6 +5844,7 @@
                   R$ 635.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
@@ -5634,7 +5883,11 @@
                 <span class="po-table-header-icon-unselected"></span>
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
-              <th class="po-table-header-action"></th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -5782,6 +6035,11 @@
               <th class="po-table-header-ellipsis po-table-header-number po-clickable po-table-column-right">
                 <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
               </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -5828,6 +6086,7 @@
                   R$ 300.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -5867,6 +6126,7 @@
                   R$ 440.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
           <tbody class="po-table-group-row">
@@ -5906,31 +6166,13 @@
                   R$ 600.00
                 </div>
               </td>
+              <td class="po-table-column"></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-
-  <h4>Tipos de ordenação</h4>
-  <table style="border-spacing:10px;width:50%">
-    <tr>
-      <th>Ordenação ascendente</th>
-      <th>Ordenação descendente</th>
-      <th>Sem ordenação</th>
-    </tr>
-    <tr>
-      <td style="text-align:center">
-        <span class="po-table-header-icon-ascending"></span>
-      </td>
-      <td style="text-align:center">
-        <span class="po-table-header-icon-descending"></span>
-      </td>
-      <td style="text-align:center">
-        <span class="po-table-header-icon-unselected"></span>
-    </tr>
-  </table>
 
   <h4>Tabela simples com Loading</h4>
   <div class="po-container-no-padding">
@@ -5977,6 +6219,11 @@
                 <th class="po-table-header-ellipsis po-table-column-right">
                   <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
                 </th>
+                <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
               </tr>
             </thead>
 
@@ -6012,6 +6259,7 @@
                     R$ 600.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
             <tbody class="po-table-group-row">
@@ -6046,6 +6294,7 @@
                     R$ 300.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
             <tbody class="po-table-group-row">
@@ -6080,6 +6329,7 @@
                     R$ 300.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
             <tbody class="po-table-group-row">
@@ -6114,6 +6364,7 @@
                     R$ 300.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
             <tbody class="po-table-group-row">
@@ -6146,6 +6397,7 @@
                     R$ 300.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
             <tbody class="po-table-group-row">
@@ -6180,6 +6432,7 @@
                     R$ 440.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
           </table>
@@ -6233,6 +6486,11 @@
                 <th class="po-table-header-ellipsis po-table-column-right">
                   <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
                 </th>
+                <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
               </tr>
             </thead>
 
@@ -6268,6 +6526,7 @@
                     R$ 600.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
           </table>
@@ -6326,7 +6585,7 @@
 
             <tbody>
               <tr class="po-table-row">
-                <td colspan="6" class="po-table-no-data po-text-center">
+                <td colspan="7" class="po-table-no-data po-text-center">
                   <span>
                     Nenhum dado encontrado.
                   </span>
@@ -6384,6 +6643,11 @@
                 <th class="po-table-header-ellipsis po-table-column-right">
                   <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
                 </th>
+                <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
               </tr>
             </thead>
 
@@ -6419,6 +6683,7 @@
                     R$ 600.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
             <tbody class="po-table-group-row">
@@ -6453,6 +6718,7 @@
                     R$ 300.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
             <tbody class="po-table-group-row">
@@ -6487,6 +6753,7 @@
                     R$ 440.00
                   </div>
                 </td>
+                <td class="po-table-column"></td>
               </tr>
             </tbody>
           </table>
@@ -6497,6 +6764,519 @@
       <button type="button" name="button" class="po-button po-offset-xl-4 po-offset-lg-4 po-offset-md-3 po-lg-4 po-md-6">
         Carregar mais resultados
       </button>
+    </div>
+  </div>
+
+  <h4>Tabela com o mouse posicionado sobre o column manager</h4>
+  <div class="po-container-no-padding">
+    <div class="po-table-main-container">
+      <div class="po-table-wrapper">
+        <table class="po-table">
+          <thead>
+            <tr class="po-table-header">
+              <th class="po-table-header-ellipsis">
+                <span class="po-table-header-ellipsis po-table-header-block">Destino</span>
+              </th>
+              <th class="po-table-header-ellipsis">
+                <span class="po-table-header-ellipsis po-table-header-block">Data</span>
+              </th>
+              <th class="po-table-header-ellipsis po-table-column-right">
+                <span class="po-table-header-ellipsis po-table-header-block">Poltrona</span>
+              </th>
+              <th class="po-table-header-ellipsis">
+                Classe
+              </th>
+              <th class="po-table-header-ellipsis po-table-column-right">
+                <span class="po-table-header-ellipsis po-table-header-block">Código Passagem</span>
+              </th>
+              <th class="po-table-header-ellipsis po-table-column-right">
+                <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+                <!-- COLUMN MANAGER TOOLTIP START -->
+                <div class="po-tooltip po-sample-table-column-manager-tooltip">
+                  <div class="po-tooltip-arrow po-arrow-right"></div>
+                  <div class="po-tooltip-content">
+                    Gerenciador de colunas
+                  </div>
+                </div>
+                <!-- COLUMN MANAGER TOOLTIP END -->
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Argentina / Buenos Aires
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  13/02/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  233
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Primeira classe
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  1231234
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  R$ 600.00
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Brasil / São Paulo
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  21/04/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  235
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Econômica
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  112234
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  R$ 300.00
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Chile / Santiago
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  01/05/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  230
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Econômica
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  12312
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  R$ 440.00
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <h4>Tabela com column manager aberto</h4>
+  <div class="po-container-no-padding sample-po-table-column-manager">
+    <div class="po-table-main-container">
+      <div class="po-table-wrapper">
+        <table class="po-table">
+          <thead>
+            <tr class="po-table-header">
+              <th class="po-table-header-ellipsis">
+                <span class="po-table-header-ellipsis po-table-header-block">Destino</span>
+              </th>
+              <th class="po-table-header-ellipsis">
+                <span class="po-table-header-ellipsis po-table-header-block">Data</span>
+              </th>
+              <th class="po-table-header-ellipsis po-table-column-right">
+                <span class="po-table-header-ellipsis po-table-header-block">Poltrona</span>
+              </th>
+              <th class="po-table-header-ellipsis">
+                Classe
+              </th>
+              <th class="po-table-header-ellipsis po-table-column-right">
+                <span class="po-table-header-ellipsis po-table-header-block">Código Passagem</span>
+              </th>
+              <th class="po-table-header-ellipsis po-table-column-right">
+                <span class="po-table-header-ellipsis po-table-header-block">Valor</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
+              <po-table-column-manager>
+                <div class="po-popover">
+                  <div class="po-popover-arrow po-arrow-top-right"></div>
+                  <div class="po-popover-content">
+
+                    <div class="po-table-column-manager-header">
+                      <div class="po-table-column-manager-header-title">Gerenciador de colunas</div>
+
+                      <div class="po-table-column-manager-header-close">
+                        <button class="po-table-column-manager-header-close-button po-clickable po-icon po-icon-close"></button>
+                      </div>
+                    </div>
+
+                    <div class="po-table-column-manager-body">
+                      <div><!-- CHECKBOX-GROUP START -->
+                        <div class="po-field-container">
+                          <div class="po-field-container-title">
+                            <div class="po-field-container-content po-checkbox-group-content">
+                              <div class="po-row po-pt-1 po-pb-1">
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="Destino">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> Destino </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="Data">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> Data </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="Poltrona">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> Poltrona </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="Classe">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> Classe </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="codigopassagem">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> Código Passagem </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="valor">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> valor </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div><!-- CHECKBOX-GROUP START -->
+                    </div>
+
+                    <div class="po-table-column-manager-footer">
+                      <po-button class="po-table-column-manager-footer-restore">
+                        <button class="po-button po-text-ellipsis po-button-link po-button-sm po-clickable" type="button">
+                          <span class="po-button-label">Restaurar padrão</span>
+                        </button>
+                      </po-button>
+                    </div>
+                  </div>
+                </div>
+              </po-table-column-manager>
+            </tr>
+          </thead>
+
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Argentina / Buenos Aires
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  13/02/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  233
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Primeira classe
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  1231234
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  R$ 600.00
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Brasil / São Paulo
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  21/04/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  235
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Econômica
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  112234
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  R$ 300.00
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Chile / Santiago
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  01/05/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  230
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Econômica
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  12312
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  R$ 440.00
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <h4>Tabela com column manager aberto e max-columns igual a três</h4>
+  <div class="po-container-no-padding sample-po-table-column-manager">
+    <div class="po-table-main-container">
+      <div class="po-table-wrapper">
+        <table class="po-table">
+          <thead>
+            <tr class="po-table-header">
+              <th class="po-table-header-ellipsis">
+                <span class="po-table-header-ellipsis po-table-header-block">Destino</span>
+              </th>
+              <th class="po-table-header-ellipsis">
+                <span class="po-table-header-ellipsis po-table-header-block">Data</span>
+              </th>
+              <th class="po-table-header-ellipsis po-table-column-right">
+                <span class="po-table-header-ellipsis po-table-header-block">Poltrona</span>
+              </th>
+              <th class="po-table-header-column-manager">
+                <div>
+                  <button class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"></button>
+                </div>
+              </th>
+              <po-table-column-manager>
+                <div class="po-popover">
+                  <div class="po-popover-arrow po-arrow-top-right"></div>
+                  <div class="po-popover-content">
+
+                    <div class="po-table-column-manager-header">
+                      <div class="po-table-column-manager-header-title">Gerenciador de colunas</div>
+
+                      <div class="po-table-column-manager-header-close">
+                        <button class="po-table-column-manager-header-close-button po-clickable po-icon po-icon-close"></button>
+                      </div>
+                    </div>
+
+                    <div class="po-table-column-manager-body">
+                      <div><!-- CHECKBOX-GROUP START -->
+                        <div class="po-field-container">
+                          <div class="po-field-container-title">
+                            <div class="po-field-container-content po-checkbox-group-content">
+                              <div class="po-row po-pt-1 po-pb-1">
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="Destino">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> Destino </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="Data">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> Data </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input po-checkbox-group-input-checked" type="checkbox" value="Poltrona">
+                                  <label class="po-checkbox-group-label po-clickable" tabindex="0"> Poltrona </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input" type="checkbox" value="Classe" disabled>
+                                  <label class="po-checkbox-group-label" tabindex="-1"> Classe </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input" type="checkbox" value="codigopassagem" disabled>
+                                  <label class="po-checkbox-group-label" tabindex="-1"> Código Passagem </label>
+                                </div>
+
+                                <div class="po-checkbox-group-item po-md-12 po-lg-12">
+                                  <input class="po-input po-checkbox-group-input" type="checkbox" value="valor" disabled>
+                                  <label class="po-checkbox-group-label" tabindex="-1"> valor </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div><!-- CHECKBOX-GROUP START -->
+                    </div>
+
+                    <div class="po-table-column-manager-footer">
+                      <po-button class="po-table-column-manager-footer-restore">
+                        <button class="po-button po-text-ellipsis po-button-link po-button-sm po-clickable" type="button">
+                          <span class="po-button-label">Restaurar padrão</span>
+                        </button>
+                      </po-button>
+                    </div>
+                  </div>
+                </div>
+              </po-table-column-manager>
+            </tr>
+          </thead>
+
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Argentina / Buenos Aires
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  13/02/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  233
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Brasil / São Paulo
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  21/04/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  235
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+          <tbody class="po-table-group-row">
+            <tr class="po-table-row">
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  Chile / Santiago
+                </div>
+              </td>
+              <td class="po-table-column">
+                <div class="po-table-column-cell">
+                  01/05/2018
+                </div>
+              </td>
+              <td class="po-table-column po-table-column-right">
+                <div class="po-table-column-cell">
+                  230
+                </div>
+              </td>
+              <td class="po-table-column"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

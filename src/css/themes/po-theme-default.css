@@ -68,6 +68,7 @@
  * Tab Dropdown................variáveis do Tab Dropdown.
  * Table.......................variáveis do Table.
  * Table Column Link...........variáveis do Table Column Link.
+ * Table Column Manager .......variáveis do Table Column Manager.
  * Tag.........................variáveis do Tag.
  * Textarea....................variáveis do Textarea.
  * Toolbar.....................variáveis do Toolbar.
@@ -887,15 +888,18 @@
   RICH TEXT
 \*------------------------------------*/
 
-  --color-rich-text-body-background-color: var(--color-white);
   --color-rich-text-background-color-scrollbar: var(--color-primary-alpha-50);
-  --color-rich-text-placeholder-color: var(--color-neutral-light-40);
-  --color-rich-text-body-text-error: var(--color-danger);
+
+  --color-rich-text-body-background-color: var(--color-white);
   --color-rich-text-body-border-error: var(--color-danger);
+
+  --color-rich-text-body-text-error: var(--color-danger);
   --color-rich-text-body-text-link: var(--color-primary);
   --color-rich-text-body-text-link-hover: var(--color-primary-dark-20);
   --color-rich-text-body-text-selected-color: var(--color-primary-light-80);
-  
+
+  --color-rich-text-placeholder-color: var(--color-neutral-light-40);
+
   --color-rich-text-toolbar-background-color: var(--color-rich-text-body-background-color);
 
 /*------------------------------------*\
@@ -1031,6 +1035,16 @@
   --color-table-color-link-disabled: var(--color-neutral-light-80);
   --color-table-color-link-hover: var(--color-primary-dark-20);
   --color-table-color-link-pressed: var(--color-primary-dark-40);
+
+/*------------------------------------*\
+  TABLE COLUMN MANAGER
+\*------------------------------------*/
+
+  --color-table-column-manager-body-color-background-scrollbar: var(--color-primary);
+  --color-table-column-manager-border-color: var(--color-neutral-light-90);
+  --color-table-column-manager-close-button-color: var(--color-primary);
+  --color-table-column-manager-header-title: var(--color-neutral-dark-60);
+  --color-table-column-manager-outline-color-focus: var(--color-secondary);
 
 /*------------------------------------*\
   TAG

@@ -141,7 +141,7 @@
 
 .po-table-container-fixed-inner {
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .po-table-header-fixed {
@@ -209,13 +209,6 @@
   vertical-align: middle
 }
 
-/* table column actions */
-.po-table-header-action {
-  max-width: 50px;
-  min-width: 50px;
-  width: 50px;
-}
-
 .po-table-header-single-action {
   max-width: 120px;
   min-width: 120px;
@@ -253,11 +246,11 @@
   border-bottom: 1px solid var(--color-table-border-rows);
   color: var(--color-table-color-header);
   cursor: default;
-  max-width: 50px;
-  min-width: 50px;
+  max-width: 40px;
+  min-width: 40px;
   position: relative;
   text-align: center;
-  width: 50px;
+  width: 40px;
 }
 
 .po-table-column-icons {
@@ -291,7 +284,8 @@
 
 .po-container .po-table-group-row:last-child .po-table-column,
 .po-container .po-table-group-row:last-child .po-table-column-detail,
-.po-container .po-table-group-row:last-child .po-table-column-icons {
+.po-container .po-table-group-row:last-child .po-table-column-icons,
+.po-container .po-table-group-row:last-child .po-table-column-actions {
   border-bottom: none;
 }
 
@@ -549,6 +543,46 @@
   background-color: var(--color-table-background-color-scrollbar);
 }
 
+.po-table-header-column-manager,
+.po-table-header-single-action {
+  text-align: center;
+}
+
+.po-table-header-column-manager {
+  max-width: 40px;
+  min-width: 40px;
+  width: 40px;
+}
+
+.po-table-header-column-manager-button {
+  color: var(--color-table-color-header);
+  font-size: 16px;
+  padding: 6px;
+}
+
+.po-table-header-column-manager-button:focus {
+  border-radius: 1px;
+  outline: dashed 2px var(--color-table-column-manager-outline-color-focus);
+}
+
+.po-table-header-column-manager-fixed-inner {
+  height: 42px;
+  padding-top: 8px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 40px;
+}
+
+.po-table-header-column-manager-border {
+  border-left: 1px solid var(--color-table-column-manager-border-color);
+}
+
+.po-table-header-column-manager-button {
+  background-color: transparent;
+  border: none;
+}
+
 @media screen and (max-width: 1366px) {
 
   .po-table,
@@ -611,6 +645,15 @@
   .po-table-column-checkbox .po-table-checkbox + .po-table-checkbox-label:before {
     height: 18px;
     width: 18px;
+  }
+
+  .po-table-header-column-manager-button {
+    padding: 4px;
+  }
+
+  .po-table-header-column-manager-fixed-inner {
+    height: 30px;
+    padding-top: 4px;
   }
 
 }
