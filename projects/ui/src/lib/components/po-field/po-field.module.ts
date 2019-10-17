@@ -5,8 +5,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { PoButtonGroupModule } from '../po-button-group/index';
 import { PoButtonModule } from '../po-button/index';
+import { PoCheckboxGroupModule } from './po-checkbox-group/po-checkbox-group.module';
 import { PoContainerModule } from '../po-container/index';
 import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
+import { PoFieldContainerModule } from './po-field-container/po-field-container.module';
 import { PoLoadingModule } from '../po-loading/index';
 import { PoModalModule } from '../po-modal/po-modal.module';
 import { PoProgressModule } from './../po-progress/po-progress.module';
@@ -15,15 +17,12 @@ import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
 
 import { PoCalendarComponent } from './po-datepicker/po-calendar/po-calendar.component';
-import { PoCheckboxGroupComponent } from './po-checkbox-group/po-checkbox-group.component';
 import { PoCleanComponent } from './po-clean/po-clean.component';
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoDatepickerComponent } from './po-datepicker/po-datepicker.component';
 import { PoDatepickerRangeComponent } from './po-datepicker-range/po-datepicker-range.component';
 import { PoDecimalComponent } from './po-decimal/po-decimal.component';
 import { PoEmailComponent } from './po-email/po-email.component';
-import { PoFieldContainerComponent } from './po-field-container/po-field-container.component';
-import { PoFieldContainerBottomComponent } from './po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoLoginComponent } from './po-login/po-login.component';
 import { PoLookupComponent } from './po-lookup/po-lookup.component';
 import { PoLookupModalComponent } from './po-lookup/po-lookup-modal/po-lookup-modal.component';
@@ -66,8 +65,10 @@ import { PoUrlComponent } from './po-url/po-url.component';
     HttpClientModule,
     PoButtonGroupModule,
     PoButtonModule,
+    PoCheckboxGroupModule,
     PoContainerModule,
     PoDisclaimerModule,
+    PoFieldContainerModule,
     PoLoadingModule,
     PoModalModule,
     PoProgressModule,
@@ -76,7 +77,8 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoTooltipModule
   ],
   exports: [
-    PoCheckboxGroupComponent,
+    PoCheckboxGroupModule,
+
     PoCleanComponent,
     PoComboComponent,
     PoDecimalComponent,
@@ -101,15 +103,12 @@ import { PoUrlComponent } from './po-url/po-url.component';
   ],
   declarations: [
     PoCalendarComponent,
-    PoCheckboxGroupComponent,
     PoCleanComponent,
     PoComboComponent,
     PoDecimalComponent,
     PoDatepickerComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
-    PoFieldContainerComponent,
-    PoFieldContainerBottomComponent,
     PoInputComponent,
     PoLoginComponent,
     PoLookupComponent,

@@ -58,9 +58,20 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
 
+  private _managerTarget: ElementRef;
+
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
 
   @ViewChild('popup', { static: false }) poPopupComponent: PoPopupComponent;
+  @ViewChild('columnManagerTarget', { static: false }) set managerTarget(value: ElementRef) {
+    this._managerTarget = value;
+
+    this.changeDetector.detectChanges();
+  }
+
+  get managerTarget() {
+    return this._managerTarget;
+  }
 
   @ViewChild('tableContainer', { read: ElementRef, static: true }) tableContainerElement;
   @ViewChild('tableFooter', { read: ElementRef, static: true }) tableFooterElement;
@@ -75,12 +86,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   popupTarget;
   tableOpacity: number = 0;
   tooltipText: string;
+  visibleElement = false;
 
   private differ;
   private footerHeight;
   private initialized = false;
   private timeoutResize;
-  private visibleElement = false;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -161,11 +172,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   columnCountForMasterDetail() {
-    return (this.getMainColumns().length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.checkbox ? 1 : 0);
+    const columnManager = 1;
+    return (this.getMainColumns().length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.checkbox ? 1 : 0) + columnManager;
   }
 
   columnCount() {
+    const columnsManager = 1;
+
     return (
+      columnsManager +
       this.getMainColumns().length +
       (this.actions.length > 0 ? 1 : 0) +
       (this.checkbox ? 1 : 0) +
@@ -259,6 +274,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       !this.hasRowTemplate;
   }
 
+  onVisibleColumnsChange(columns) {
+    this.columns = columns;
+
+    this.changeDetector.detectChanges();
+  }
+
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
     this.tooltipText = undefined;
 
@@ -326,7 +347,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.selectAll = null;
     }
 
-    if (changesItems && !this.hasColumns() && this.hasItems()) {
+    if (changesItems && !this.hasColumns && this.hasItems()) {
       this.columns = this.getDefaultColumns(this.items[0]);
     }
   }

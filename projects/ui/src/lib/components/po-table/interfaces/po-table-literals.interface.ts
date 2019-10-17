@@ -25,4 +25,6 @@ export interface PoTableLiterals {
   /** Título da modal 'Legenda completa' que aparece ao clicar no botão 'Ver legenda completa'. */
   completeSubtitle?: string;
 
+  columnsManager?: string;
+
 }
