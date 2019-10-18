@@ -742,14 +742,14 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('hasColumns: should return `true` if have columns and columns.length is greater then 0', () => {
-      expect(component.hasColumns()).toBe(true);
+      expect(component.hasColumns).toBe(true);
     });
 
     it('hasColumns: should return `false` if not have columns', () => {
       component.items = undefined;
       component.columns = undefined;
 
-      expect(component.hasColumns()).toBeFalsy();
+      expect(component.hasColumns).toBeFalsy();
     });
 
     it('hasItems: should return `true` if have items and items.length is greater then 0', () => {

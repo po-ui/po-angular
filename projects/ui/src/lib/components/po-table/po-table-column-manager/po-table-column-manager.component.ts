@@ -43,8 +43,6 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
 
   private defaultColumns: Array<PoTableColumn> = [];
 
-  @Input('p-target') target: ElementRef;
-
   @Input('p-columns') columns: Array<PoTableColumn>;
 
   @Input('p-max-columns') set maxColumns(value: number) {
@@ -54,6 +52,8 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
   get maxColumns() {
     return this._maxColumns;
   }
+
+  @Input('p-target') target: ElementRef;
 
   @Output('p-visible-columns-change') visibleColumnsChange = new EventEmitter<Array<PoTableColumn>>();
 
