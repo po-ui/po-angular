@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.13.0](https://github.com/portinariui/portinari-angular/compare/v1.12.0...v1.13.0) (2019-10-18)
+
+
+### Bug Fixes
+
+* **page-login:** corrige literais customizadas ao trocar de idioma ([7538c6b](https://github.com/portinariui/portinari-angular/commit/7538c6b))
+
+
+## Code Refactoring
+
+* **table:** melhoria na componentização do componente interno `po-table-column-icon` ([98009bd](https://github.com/portinariui/portinari-angular/commit/98009bd))
+
+
+### Features
+
+* **dynamic-view:** permite definir cores e ícones para o tipo tag ([95eca9d](https://github.com/portinariui/portinari-angular/commit/95eca9d))
+
+
+
 ## [1.12.0](https://github.com/portinariui/portinari-angular/compare/v1.11.0...v1.12.0) (2019-10-11)
 
 
