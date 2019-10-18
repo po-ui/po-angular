@@ -4,22 +4,33 @@ import { PoFieldModule } from '../../po-field';
 import { PoPopoverModule } from '../../po-popover';
 
 import { PoTableColumnManagerComponent } from './po-table-column-manager.component';
+import { configureTestSuite } from '../../../util-test/util-expect.spec';
+import { PoTableModule } from '../po-table.module';
 
-describe('PoTableColumnManagerComponent:', () => {
+fdescribe('PoTableColumnManagerComponent:', () => {
   let component: PoTableColumnManagerComponent;
   let fixture: ComponentFixture<PoTableColumnManagerComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoTableColumnManagerComponent ],
-      imports: [ PoPopoverModule, PoFieldModule ]
+      declarations: [ ],
+      imports: [ PoPopoverModule, PoFieldModule, PoTableModule ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTableColumnManagerComponent);
     component = fixture.componentInstance;
+
+    component.columns = [
+      { property: 'id', label: 'Code', type: 'number' },
+      { property: 'initial', label: 'initial' },
+      { property: 'name', label: 'Name' },
+      { property: 'total', label: 'Total', type: 'currency', format: 'BRL' },
+      { property: 'atualization', label: 'Atualization', type: 'date' }
+    ];
+
     fixture.detectChanges();
   });
 
