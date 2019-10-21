@@ -84,6 +84,91 @@ describe('PoUrlComponent:', () => {
       expect(component.inputEl.nativeElement.removeEventListener).not.toHaveBeenCalled();
     });
 
+    it('url: should be valid with the values', fakeAsync(() => {
+      const urls = [
+        `http://foo.com/blah_blah/`,
+        `http://foo.com/blah_blah?ah5SF0-Hgr`,
+        `http://foo.com/blah_blah?ah5SF0Hgr`,
+        `http://foo.com/blah_blah/`,
+        `http://www.example.com/wpstyle/?p=364`,
+        `https://www.example.com/foo/?bar=baz&inga=42&quux`,
+        `http://142.42.1.1/`,
+        `http://142.42.1.1:8080/`,
+        `http://j.mp`,
+        `http://foo.bar/?q=Test%20URL-encoded%20stuff`,
+        `http://1337.net`,
+        `http://a.b-c.de`,
+        `http://223.255.255.254`,
+        `http://0.0.0.0`,
+        `http://a.b--c.de/`,
+        `foo.com`
+      ];
+
+      const regExpUrl = new RegExp(component.pattern);
+
+      urls.forEach(url => {
+        expect(regExpUrl.test(url)).toBeTruthy(`URL ${url} is not a valid URL.`);
+      });
+    }));
+
+    it('url: shouldn`t be valid with the values', fakeAsync(() => {
+      const urls = [
+        `http://`,
+        `http://.`,
+        `http://.. `,
+        `http://../`,
+        `http://?`,
+        `http://?? `,
+        `http://??/`,
+        `http://#`,
+        `http://## `,
+        `http://##/`,
+        `http://foo.bar?q=Spaces should be encoded `,
+        `//`,
+        `//a `,
+        `///a`,
+        `/// `,
+        `http:///a `,
+        `rdar://1234 `,
+        `h://test`,
+        `http:// shouldfail.com  `,
+        `:// should fail `,
+        `http://foo.bar/foo(bar)baz quux `,
+        `ftps://foo.bar/ `,
+        `http://-error-.invalid/ `,
+        `http://-a.b.co`,
+        `http://a.b-.co`,
+        `http://1.1.1.1.1`,
+        `http://123.123.123`,
+        `http://3628126748 `,
+        `http://.www.foo.bar/`,
+        `http://www.foo.bar./`,
+        `http://.www.foo.bar./ `,
+        `http://foo.com/blah_blah_(wikipedia)`,
+        `http://foo.com/blah_blah_(wikipedia)_(again)`,
+        `http://✪df.ws/123 `,
+        `http://userid:password@example.com:8080 `,
+        `http://userid:password@example.com:8080/`,
+        `http://userid@example.com `,
+        `http://userid:password@example.com`,
+        `http://⌘.ws `,
+        `http://foo.com/blah_(wikipedia)#cite-1`,
+        `http://foo.com/unicode_(✪)_in_parens`,
+        `http://foo.com/(something)?after=parens `,
+        `http://☺.damowmow.com/`,
+        `http://code.google.com/events/#&product=browser `,
+        `ftp://foo.bar/baz `,
+        `http://-.~_!$&'()*+,;=:%40:80%2f::::::@example.com`,
+        `https://foo_bar.example.com/`
+      ];
+
+      const regExpUrl = new RegExp(component.pattern);
+
+      urls.forEach(url => {
+        expect(regExpUrl.test(url)).toBeFalsy(`URL ${url} is a valid URL.`);
+      });
+    }));
+
   });
 
   describe('Templates:', () => {
@@ -140,6 +225,36 @@ describe('PoUrlComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
+
+    it('url: should be valid and have `ng-valid`', fakeAsync(() => {
+      component.ngAfterViewInit();
+      tick(200);
+
+      const input = component.inputEl.nativeElement;
+      const fakeURL = 'http://foo.com/blah_blah/';
+      input.value = fakeURL;
+      input.dispatchEvent(eventKeyup);
+
+      fixture.detectChanges();
+
+      expect(input.value).toContain(fakeURL);
+      expect(fixture.debugElement.nativeElement.querySelectorAll('po-url.ng-dirty.ng-valid')).toBeTruthy();
+    }));
+
+    it('url: should be invalid and have `ng-invalid`', fakeAsync(() => {
+      component.ngAfterViewInit();
+      tick(200);
+
+      const input = component.inputEl.nativeElement;
+      const fakeURL = 'http://';
+      input.value = fakeURL;
+      input.dispatchEvent(eventKeyup);
+
+      fixture.detectChanges();
+
+      expect(input.value).toContain(fakeURL);
+      expect(fixture.debugElement.nativeElement.querySelectorAll('po-url.ng-dirty.ng-invalid')).toBeTruthy();
+    }));
 
   });
 
