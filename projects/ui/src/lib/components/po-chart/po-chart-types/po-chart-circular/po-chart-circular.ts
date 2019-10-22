@@ -18,12 +18,22 @@ const poChartWhiteColor = '#ffffff';
 
 export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDestroy, OnInit {
 
+  private _series: Array<PoPieChartSeries | PoDonutChartSeries>;
+
   private animationRunning: boolean;
   private chartItemEndAngle: number;
   private chartItemStartAngle: number;
   private chartItemsEndAngleList: Array<number> = [];
   private svgPathElementsList: Array<string> = [];
   private svgTextElementsList: Array<string> = [];
+
+  set series(value: Array<PoPieChartSeries | PoDonutChartSeries>) {
+    this._series = this.getSeriesWithValue(value);
+  }
+
+  get series() {
+    return this._series;
+  }
 
   private static calculateEndAngle(value: number, totalValue: number): number {
     return value / totalValue * (Math.PI * 2);
@@ -97,11 +107,11 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     return poPageContent.length ? poPageContent[0] : window;
   }
 
-  private createPath(index: number, serie: PoCircularChartSeries, svgPathsWrapper: any) {
+  private createPath(serie: PoCircularChartSeries, svgPathsWrapper: any) {
     const svgPath = this.renderer.createElement('svg:path', 'svg');
 
     this.renderer.setAttribute(svgPath, 'class', 'po-path-item');
-    this.renderer.setAttribute(svgPath, 'fill', this.colors[index]);
+    this.renderer.setAttribute(svgPath, 'fill', serie.color);
 
     this.setTooltipAttributes(svgPath, serie);
 
@@ -115,17 +125,17 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   private createPaths() {
     const svgPathsWrapper = this.renderer.createElement('svg:g', 'svg');
 
-    this.series.forEach((serie, index) => this.createPath(index, serie, svgPathsWrapper));
+    this.series.forEach(serie => this.createPath(serie, svgPathsWrapper));
   }
 
-  private createText(index: number, serie: PoCircularChartSeries) {
+  private createText(serie: PoCircularChartSeries) {
     const { value } = serie;
 
     const svgG = this.renderer.createElement('svg:g', 'svg');
     const svgText = this.renderer.createElement('svg:text', 'svg');
 
     const fontSize = this.getFontSize();
-    const textColor = this.getTextColor(this.colors[index]);
+    const textColor = this.getTextColor(serie.color);
 
     svgText.textContent = this.getPercentValue(value, this.totalValue) + '%' ;
 
@@ -136,14 +146,15 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
 
     this.setTooltipAttributes(svgText, serie);
 
-    svgG.appendChild(svgText);
+    this.renderer.appendChild(svgG, svgText);
+
     this.renderer.appendChild(this.svgElement, svgG);
     this.svgTextElementsList.push(svgText);
   }
 
   private createTexts() {
     if (this.type === PoChartType.Donut) {
-      this.series.forEach((serie, index) => this.createText(index, serie));
+      this.series.forEach(serie => this.createText(serie));
     }
   }
 
@@ -160,6 +171,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
 
     this.createPaths();
     this.createTexts();
+
   }
 
   private drawPath(path, chartItemStartAngle, chartItemEndAngle) {
@@ -257,6 +269,18 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
       parseFloat(percentValue.toFixed(2)) : parseFloat(<any> percentValue);
 
     return String(floatPercentValue).replace('.', ',');
+  }
+
+  private getSeriesWithValue(series: Array<PoCircularChartSeries>) {
+    const newSeries = [];
+
+    series.forEach((serie, index) => {
+      if (serie.value > 0) {
+        newSeries.push({ ...serie, color: this.colors[index] });
+      }
+    });
+
+    return newSeries;
   }
 
   private getTextColor(color: string) {

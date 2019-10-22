@@ -222,6 +222,19 @@ describe('PoChartComponent:', () => {
 
     });
 
+    it('setChartProperties: should set `instance.colors` with empty array if `component.colors` is undefined', () => {
+      const instance: any = {};
+
+      component['colors'] = undefined;
+      component.chartHeader = {nativeElement: {offsetHeight: 200}};
+      component.chartLegend = {nativeElement: {offsetHeight: 200}};
+      component.chartWrapper = {nativeElement: {offsetWidth: 200}};
+
+      component['setChartProperties'](instance);
+
+      expect(instance.colors).toEqual([]);
+    });
+
     it('setClickSubscribe: should call `onSeriesClick` if onSerieClick emits an event', () => {
       const event = { data: 10 };
 
