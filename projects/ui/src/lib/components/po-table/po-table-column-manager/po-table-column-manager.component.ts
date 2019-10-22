@@ -62,29 +62,36 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const { columns } = changes;
+    const { columns, maxColumns } = changes;
 
     if (columns) {
-      const { firstChange, currentValue } = columns;
+      const { firstChange, currentValue, previousValue = [] } = columns;
 
-      // atualizara o defaultColumns, quando for a primeira vez, quando não tiver defaultColumns e o currentValue possuir valor
-      // ou quando o defaultColumns for diferente do currentValue
-      if (((firstChange || !this.defaultColumns.length) && currentValue && currentValue.length) ||
-        (this.defaultColumns.length !== currentValue.length)) {
-        this.defaultColumns = currentValue;
+      // atualizara o defaultColumns, quando for a primeira vez ou quando o defaultColumns for diferente do currentValue
+      if (Array.isArray(currentValue)) {
+
+        if (firstChange || (this.defaultColumns.length !== currentValue.length)) {
+          this.defaultColumns = currentValue;
+        }
+
+        // verifica se o valor anterior é diferente do atual para atualizar as columnsOptions apenas quando for necessario
+        if (previousValue.length !== currentValue.length) {
+          this.updateColumnsOptions(currentValue);
+        }
       }
+    }
 
-      this.visibleColumns = this.getVisibleColumns(currentValue);
-      this.columnsOptions = this.mapTableColumnsToCheckboxOptions(currentValue);
+    if (maxColumns) {
+      this.updateColumnsOptions(this.columns);
     }
   }
 
   onChangeColumns(checkedColumns: Array<string>) {
     this.disabledColumns(this.columnsOptions);
 
-    const visibleColumns = this.getVisibleTableColumns(checkedColumns);
+    const visibleTableColumns = this.getVisibleTableColumns(checkedColumns);
 
-    this.visibleColumnsChange.emit(visibleColumns);
+    this.visibleColumnsChange.emit(visibleTableColumns);
   }
 
   restore() {
@@ -97,9 +104,13 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.columnsOptions = columns.map(column => ({
         ...column,
-        disabled: this.visibleColumns.length >= this.maxColumns ? !this.visibleColumns.includes(column.value) : false
+        disabled: this.isDisableColumn(column.value)
       }));
     });
+  }
+
+  private isDisableColumn(property: string): boolean {
+    return this.visibleColumns.length >= this.maxColumns ? !this.visibleColumns.includes(property) : false;
   }
 
   private getColumnTitleLabel(column: PoTableColumn) {
@@ -111,7 +122,7 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
     const visibleColumns = [];
 
     columns.forEach(column => {
-      if (column.visible !== false && visibleColumns.length < this.maxColumns) {
+      if (column.visible !== false && visibleColumns.length < this.maxColumns && column.type !== 'detail') {
 
         visibleColumns.push(column.property);
       }
@@ -136,7 +147,7 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
         columnsOptions.push({
           value: column.property,
           label: this.getColumnTitleLabel(column),
-          disabled: this.visibleColumns.length >= this.maxColumns ? !this.visibleColumns.includes(column.property) : false
+          disabled: this.isDisableColumn(column.property)
         });
       }
 
