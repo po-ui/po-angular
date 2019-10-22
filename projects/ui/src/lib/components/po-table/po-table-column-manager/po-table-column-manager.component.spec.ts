@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import * as utilsFunctions from '../../../utils/util';
 import { configureTestSuite } from '../../../util-test/util-expect.spec';
@@ -24,7 +24,6 @@ describe('PoTableColumnManagerComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTableColumnManagerComponent);
     component = fixture.componentInstance;
-
 
     fixture.detectChanges();
   });
@@ -63,28 +62,7 @@ describe('PoTableColumnManagerComponent:', () => {
         }
       };
 
-      spyOn(component, <any>'getVisibleColumns');
-      spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
-
-      component.ngOnChanges(<any>changes);
-
-      expect(component['defaultColumns']).toEqual(<any>changes.columns.currentValue);
-    });
-
-    it(`ngOnChanges: should set 'defaultColumns' with 'columns.currentValue' if 'defaultColumns' is empty and 'currentValue'
-    not is empty`, () => {
-
-      component['defaultColumns'] = <any>[];
-
-      const changes = {
-        columns : {
-        firstChange: false,
-        currentValue: ['column 3', 'column 4']
-        }
-      };
-
-      spyOn(component, <any>'getVisibleColumns');
-      spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
+      spyOn(component, <any>'updateColumnsOptions');
 
       component.ngOnChanges(<any>changes);
 
@@ -95,20 +73,36 @@ describe('PoTableColumnManagerComponent:', () => {
       not is empty`, () => {
 
       component['defaultColumns'] = <any>[];
-
       const changes = {
         columns : {
         firstChange: true,
-        currentValue: ['column 3', 'column 4']
+        currentValue: ['column 1']
         }
       };
 
-      spyOn(component, <any>'getVisibleColumns');
-      spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
+      spyOn(component, <any>'updateColumnsOptions');
 
       component.ngOnChanges(<any>changes);
 
       expect(component['defaultColumns']).toEqual(<any>changes.columns.currentValue);
+    });
+
+    it(`ngOnChanges: should set 'defaultColumns' with empty array if 'firstChange' is true and 'currentValue' is undefined`, () => {
+
+      component['defaultColumns'] = <any>[];
+
+      const changes = {
+        columns : {
+        firstChange: true,
+        currentValue: undefined
+        }
+      };
+
+      spyOn(component, <any>'updateColumnsOptions');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['defaultColumns']).toEqual([]);
     });
 
     it(`ngOnChanges: shouldn't set 'defaultColumns' with 'columns.currentValue' if 'defaultColumns' and 'currentValue' is
@@ -123,52 +117,71 @@ describe('PoTableColumnManagerComponent:', () => {
         }
       };
 
-      spyOn(component, <any>'getVisibleColumns');
-      spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
+      spyOn(component, <any>'updateColumnsOptions');
 
       component.ngOnChanges(<any>changes);
 
       expect(component['defaultColumns']).not.toBe(<any>changes.columns.currentValue);
     });
 
-    it(`ngOnChanges: should call 'getVisibleColumns' to set 'visibleColumns'`, () => {
-      component['defaultColumns'] = <any>['column 3', 'column 4'];
+    it(`ngOnChanges: should call 'updateColumnsOptions' with 'columns' if 'maxColumns' is defined`, () => {
+      component.columns = [
+        { property: 'id', label: 'Code' },
+        { property: 'initial', label: 'initial' },
+        { property: 'name', label: 'Name' },
+        { property: 'total', label: 'Total' },
+        { property: 'atualization', label: 'Atualization' }
+      ];
 
-      const changes = {
-        columns : {
-          firstChange: false,
-          currentValue: ['column 3', 'column 4']
-        }
-      };
-      const visibleColumns = ['visible column'];
+      const changes = { columns: undefined, maxColumns: 2 };
 
-      spyOn(component, <any>'getVisibleColumns').and.returnValue(visibleColumns);
-      spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
+      spyOn(component, <any>'updateColumnsOptions');
 
       component.ngOnChanges(<any>changes);
 
-      expect(component.visibleColumns).toEqual(visibleColumns);
-      expect(component['getVisibleColumns']).toHaveBeenCalledWith(changes.columns.currentValue);
+      expect(component['updateColumnsOptions']).toHaveBeenCalledWith(component.columns);
     });
 
-    it(`ngOnChanges: should call 'mapTableColumnsToCheckboxOptions' to set 'columnsOptions'`, () => {
-      component['defaultColumns'] = <any>['column 3', 'column 4'];
-
+    it(`ngOnChanges: should call 'updateColumnsOptions' with 'currentValue' if 'previousValue' and ' currentValue' are different`, () => {
       const changes = {
-        columns : {
-          firstChange: false,
-          currentValue: ['column 3', 'column 4']
+        columns: {
+          previousValue: [
+            { property: 'name', label: 'Name' },
+            { property: 'total', label: 'Total' },
+          ],
+          currentValue: [
+            { property: 'name', label: 'Name' },
+          ]
         }
       };
-      const columnsOptions = ['columns options'];
 
-      spyOn(component, <any>'getVisibleColumns');
-      spyOn(component, <any>'mapTableColumnsToCheckboxOptions').and.returnValue(columnsOptions);
+      spyOn(component, <any>'updateColumnsOptions');
 
       component.ngOnChanges(<any>changes);
 
-      expect(component.columnsOptions).toEqual(<any>columnsOptions);
-      expect(component['mapTableColumnsToCheckboxOptions']).toHaveBeenCalledWith(changes.columns.currentValue);
+      expect(component['updateColumnsOptions']).toHaveBeenCalledWith(changes.columns.currentValue);
+    });
+
+    it(`ngOnChanges: shouldn't call 'updateColumnsOptions' if 'previousValue' and ' currentValue' are equals
+      and 'maxColumns' is undefined`, () => {
+
+      const changes = {
+        columns: {
+          previousValue: [
+            { property: 'name', label: 'Name' },
+          ],
+          currentValue: [
+            { property: 'name', label: 'Name' },
+          ]
+        },
+        maxColumns: undefined
+      };
+
+      spyOn(component, <any>'updateColumnsOptions');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['updateColumnsOptions']).not.toHaveBeenCalled();
     });
 
     it('onChangeColumns: should call `disabledColumns` with `columnsOptions`', () => {
@@ -228,6 +241,18 @@ describe('PoTableColumnManagerComponent:', () => {
         { value: 'total', label: 'Total', disabled: true },
         { value: 'atualization', label: 'Atualization', disabled: true }
       ];
+
+      component['disabledColumns'](columns);
+
+      tick();
+
+      expect(component.columnsOptions).toEqual(columnsOptionsExpected);
+    }));
+
+    it('disabledColumns: should set `columnsOptions` with empty array if `columns` is undefined ', fakeAsync(() => {
+      component.columnsOptions = undefined;
+      const columns = undefined;
+      const columnsOptionsExpected = [];
 
       component['disabledColumns'](columns);
 
@@ -372,6 +397,100 @@ describe('PoTableColumnManagerComponent:', () => {
       component.maxColumns = 2;
 
       expect(component['isDisableColumn']('column 3')).toBe(false);
+    });
+
+    it(`isDisableColumn: should return false if 'visibleColumns' is less than 'maxColumns'`, () => {
+
+      component.visibleColumns = [ 'column 1' ];
+      component.maxColumns = 2;
+
+      expect(component['isDisableColumn']('column 2')).toBe(false);
+    });
+
+    it(`mapTableColumnsToCheckboxOptions: should convert table columns to checkbox options and return it without detail columns`, () => {
+      const tableColumns = [
+        { property: 'id', label: 'Code', type: 'number' },
+        { property: 'initial', label: 'initial', type: 'detail' },
+        { property: 'name', label: 'Name' },
+        { property: 'total', label: 'Total', type: 'currency', format: 'BRL' },
+        { property: 'atualization', label: 'Atualization', type: 'date' }
+      ];
+
+      spyOn(component, <any>'isDisableColumn').and.returnValues(false, true, true, true);
+
+      const checkboxOptions = [
+        { value: 'id', label: 'Code', disabled: false },
+        { value: 'name', label: 'Name', disabled: true },
+        { value: 'total', label: 'Total', disabled: true },
+        { value: 'atualization', label: 'Atualization', disabled: true }
+      ];
+
+      const result = component['mapTableColumnsToCheckboxOptions'](tableColumns);
+
+      expect(result).toEqual(checkboxOptions);
+    });
+
+    it(`mapTableColumnsToCheckboxOptions: should return empty array if 'tableColumns' is undefined`, () => {
+      const tableColumns = undefined;
+
+      const result = component['mapTableColumnsToCheckboxOptions'](tableColumns);
+
+      expect(result).toEqual([]);
+    });
+
+    describe('updateColumnsOptions:', () => {
+      const columns = [
+        { property: 'id', label: 'Code', type: 'number' },
+        { property: 'initial', label: 'initial', type: 'detail' },
+        { property: 'name', label: 'Name' },
+        { property: 'total', label: 'Total', type: 'currency', format: 'BRL' },
+        { property: 'atualization', label: 'Atualization', type: 'date' }
+      ];
+
+      it(`should call 'getVisibleColumns' with 'columns' to set 'visibleColumns'`, () => {
+        const visibleColumns = [ 'code', 'name' ];
+        component.visibleColumns = undefined;
+
+        spyOn(component, <any>'getVisibleColumns').and.returnValue(visibleColumns);
+        spyOn(component, <any>'onChangeColumns');
+        spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
+
+        component['updateColumnsOptions'](columns);
+
+        expect(component['getVisibleColumns']).toHaveBeenCalledWith(columns);
+        expect(component.visibleColumns).toEqual(visibleColumns);
+      });
+
+      it(`should call 'onChangeColumns' with 'visibleColumns'`, () => {
+        const visibleColumns = [ 'code', 'name' ];
+        component.visibleColumns = undefined;
+
+        spyOn(component, <any>'getVisibleColumns').and.returnValue(visibleColumns);
+        spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
+        spyOn(component, <any>'onChangeColumns');
+
+        component['updateColumnsOptions'](columns);
+
+        expect(component['onChangeColumns']).toHaveBeenCalledWith(visibleColumns);
+      });
+
+      it(`should call 'mapTableColumnsToCheckboxOptions' with 'columns' to set 'columnsOptions'`, () => {
+        const columnsOptions = [
+          { value: 'id', label: 'Code', disabled: false },
+          { value: 'name', label: 'Name', disabled: true },
+          { value: 'total', label: 'Total', disabled: true },
+          { value: 'atualization', label: 'Atualization', disabled: true }
+        ];
+
+        spyOn(component, <any>'getVisibleColumns');
+        spyOn(component, <any>'onChangeColumns');
+        spyOn(component, <any>'mapTableColumnsToCheckboxOptions').and.returnValue(columnsOptions);
+
+        component['updateColumnsOptions'](columns);
+
+        expect(component['mapTableColumnsToCheckboxOptions']).toHaveBeenCalledWith(columns);
+        expect(component.columnsOptions).toEqual(columnsOptions);
+      });
     });
 
   });
