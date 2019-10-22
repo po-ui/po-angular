@@ -2,9 +2,9 @@ import { changePhantomProperties, expectBrowserLanguageMethod, handleThrowError 
 
 import {
   callFunction, capitalizeFirstLetter, convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertImageToBase64,
-  convertToBoolean, convertToInt, formatYear, getFormattedLink, isEquals, isKeyCodeEnter, isExternalLink, isTypeof, mapArrayByProperties,
-  mapObjectByProperties, openExternalLink, removeDuplicatedOptions, removeUndefinedAndNullOptions, setYearFrom0To100,
-  sortOptionsByProperty, sortValues, validateDateRange, validValue, valuesFromObject
+  convertNumberToDecimal, convertToBoolean, convertToInt, formatYear, getFormattedLink, isEquals, isKeyCodeEnter,
+  isExternalLink, isTypeof, mapArrayByProperties, mapObjectByProperties, openExternalLink, removeDuplicatedOptions,
+  removeUndefinedAndNullOptions, setYearFrom0To100, sortOptionsByProperty, sortValues, validateDateRange, validValue, valuesFromObject
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -1274,5 +1274,26 @@ describe('Function convertImageToBase64:', () => {
     const result = await handleThrowError(convertImageToBase64(file));
 
     expect(result).toThrow();
+  });
+});
+
+describe('Function convertNumberToDecimals:', () => {
+  it('should convert number to float', () => {
+    expect(convertNumberToDecimal(12.567, 2)).toBe(12.57);
+    expect(convertNumberToDecimal(12.56, 2)).toBe(12.56);
+    expect(convertNumberToDecimal(12.5649584958748574897, 2)).toBe(12.56);
+    expect(convertNumberToDecimal(12.5649584958748574897, 4)).toBe(12.5650);
+    expect(convertNumberToDecimal(12.56, 1)).toBe(12.6);
+    expect(convertNumberToDecimal('12.56', 1)).toBe(12.6);
+    expect(convertNumberToDecimal('12', 1)).toBe(12);
+    expect(convertNumberToDecimal(12, 1)).toBe(12);
+    expect(convertNumberToDecimal(0, 0)).toBe(0);
+    expect(convertNumberToDecimal(0, 1)).toBe(0);
+    expect(convertNumberToDecimal(100, 1)).toBe(100);
+    expect(convertNumberToDecimal(100, 0)).toBe(100);
+    expect(convertNumberToDecimal(undefined, 0)).toBe(undefined);
+    expect(convertNumberToDecimal('test', 0)).toBe(undefined);
+    expect(convertNumberToDecimal(null, 0)).toBe(undefined);
+    expect(convertNumberToDecimal(NaN, 1)).toBe(undefined);
   });
 });

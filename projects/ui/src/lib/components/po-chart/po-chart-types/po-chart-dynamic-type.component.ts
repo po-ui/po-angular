@@ -2,6 +2,7 @@ import { ElementRef, ViewChild } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
+import { PoChartGaugeSerie } from './po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../enums/po-chart-type.enum';
 import { PoDonutChartSeries } from './po-chart-donut/po-chart-donut-series.interface';
 import { PoPieChartSeries } from './po-chart-pie/po-chart-pie-series.interface';
@@ -15,6 +16,7 @@ export abstract class PoChartDynamicTypeComponent {
 
   centerX: number;
   chartElementCategory: any;
+  chartElementDescription: any;
   chartElementValue: any;
   chartHeader: number;
   chartLegend: number;
@@ -22,8 +24,8 @@ export abstract class PoChartDynamicTypeComponent {
   colors: Array<string>;
   height: number;
   innerRadius: number = 0;
-  onSerieClick: Subject<PoDonutChartSeries | PoPieChartSeries> = new Subject();
-  onSerieHover: Subject<PoDonutChartSeries | PoPieChartSeries> = new Subject();
+  onSerieClick: Subject<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie> = new Subject();
+  onSerieHover: Subject<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie> = new Subject();
   series: Array<any> = [];
   svgElement: HTMLObjectElement;
   svgHeight: number;
@@ -37,6 +39,10 @@ export abstract class PoChartDynamicTypeComponent {
 
   @ViewChild('svgContainer', { static: true }) svgContainer: ElementRef;
 
+  get isChartGaugeType(): boolean {
+    return this.type === PoChartType.Gauge;
+  }
+
   calculateSVGContainerDimensions(chartWrapperElement: number, chartHeaderElement: number, chartLegendElement: number) {
     const svgContainerHeightCalc = this.height - chartHeaderElement - chartLegendElement - (Padding * 2);
 
@@ -45,8 +51,7 @@ export abstract class PoChartDynamicTypeComponent {
   }
 
   calculateTotalValue() {
-    this.totalValue = this.series.reduce(
-      (previousValue, serie) => previousValue + serie.value, 0);
+    this.totalValue = this.type === PoChartType.Gauge ? 100 : this.series.reduce((previousValue, serie) => previousValue + serie.value, 0);
   }
 
 }

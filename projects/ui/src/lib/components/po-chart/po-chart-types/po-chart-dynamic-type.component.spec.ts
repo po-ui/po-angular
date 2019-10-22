@@ -1,4 +1,5 @@
 import { PoChartDynamicTypeComponent } from './po-chart-dynamic-type.component';
+import { PoChartType } from '../enums/po-chart-type.enum';
 
 class PoChartDynamicTypeComponentMock extends PoChartDynamicTypeComponent {}
 
@@ -10,6 +11,21 @@ describe('PoChartDynamicTypeComponent:', () => {
 
     component = new PoChartDynamicTypeComponentMock();
 
+  });
+
+  describe('Properties:', () => {
+
+    it('isChartGaugeType: should return `true` if type is equal `PoChartType.Gauge`', () => {
+      component.type = PoChartType.Gauge;
+
+      expect(component.isChartGaugeType).toBeTruthy();
+    });
+
+    it('isChartGaugeType: should return `false` if type is diferent from `PoChartType.Gauge`', () => {
+      component.type = PoChartType.Pie;
+
+      expect(component.isChartGaugeType).toBeFalsy();
+    });
   });
 
   describe('Methods:', () => {

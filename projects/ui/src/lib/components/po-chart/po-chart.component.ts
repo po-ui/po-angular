@@ -7,6 +7,7 @@ import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartColors } from './po-chart-colors.constant';
 import { PoChartDonutComponent } from './po-chart-types/po-chart-donut/po-chart-donut.component';
 import { PoChartDynamicTypeComponent } from './po-chart-types/po-chart-dynamic-type.component';
+import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
 import { PoChartPieComponent } from './po-chart-types/po-chart-pie/po-chart-pie.component';
 import { PoChartType } from './enums/po-chart-type.enum';
 
@@ -43,8 +44,9 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   private windowResizeListener: Subject<any> = new Subject();
 
   private mappings = {
-    [PoChartType.Pie]: PoChartPieComponent,
-    [PoChartType.Donut]: PoChartDonutComponent
+    [PoChartType.Donut]: PoChartDonutComponent,
+    [PoChartType.Gauge]: PoChartGaugeComponent,
+    [PoChartType.Pie]: PoChartPieComponent
   };
 
   colors: Array<string> = [];
@@ -53,7 +55,9 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   chartContainer: ViewContainerRef;
 
   @ViewChild('chartHeader', { static: true }) chartHeader: ElementRef;
-  @ViewChild('chartLegend', { static: true }) chartLegend: ElementRef;
+
+  @ViewChild('chartLegend', { static: false, read: ElementRef }) chartLegend: ElementRef;
+
   @ViewChild('chartWrapper', { static: true }) chartWrapper: ElementRef;
 
   @HostListener('window:resize')
@@ -66,6 +70,10 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
       super();
 
       this.differ = this.differs.find([]).create(null);
+  }
+
+  get isChartGaugeType(): boolean {
+    return this.type === PoChartType.Gauge;
   }
 
   ngAfterViewInit() {
@@ -97,13 +105,18 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   rebuildComponent() {
     if (this.componentRef) {
       this.componentRef.destroy();
+      this.getSeriesColor();
       this.dynamicComponentSetting();
     }
   }
 
+  private chartLegendHeight(chartLegend: ElementRef) {
+    return chartLegend ? chartLegend.nativeElement.offsetHeight : 0;
+  }
+
   private checkingForSerieChanges() {
     if (this.componentRef && this.differ) {
-      const changeSeries = this.differ.diff(this.series);
+      const changeSeries = this.differ.diff(this.chartSeries);
       if (changeSeries) {
         this.getSeriesColor();
         this.rebuildComponent();
@@ -140,11 +153,14 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   private getSeriesColor() {
     const colorsLength = PoChartColors.length - 1;
 
-    if (!this.series) {
+    if (!this.chartSeries) {
       return this.colors = PoChartColors[colorsLength];
     }
+    if (this.type === PoChartType.Gauge) {
+      return this.colors = PoChartColors[0];
+    }
 
-    const seriesLength = this.series.length - 1;
+    const seriesLength = this.chartSeries.length - 1;
 
     if (seriesLength > colorsLength) {
       let colors = PoChartColors[colorsLength];
@@ -170,12 +186,12 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
   private setChartProperties(instance: PoChartDynamicTypeComponent) {
     instance.chartHeader = this.chartHeader.nativeElement.offsetHeight;
-    instance.chartLegend = this.chartLegend.nativeElement.offsetHeight;
+    instance.chartLegend = this.chartLegendHeight(this.chartLegend);
     instance.chartWrapper = this.chartWrapper.nativeElement.offsetWidth;
     instance.colors = Array.isArray(this.colors) ? [...this.colors] : [];
     instance.height = this.height;
-    instance.series = this.series || [];
     instance.type = this.type;
+    instance.series = this.chartSeries || [];
   }
 
   private setClickSubscribe(instance: PoChartDynamicTypeComponent) {
@@ -193,7 +209,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   private setResizeListenerSubscribe(instance: PoChartDynamicTypeComponent) {
     this.windowResizeListener.subscribe(() => {
       instance.chartHeader = this.chartHeader.nativeElement.offsetHeight;
-      instance.chartLegend = this.chartLegend.nativeElement.offsetHeight;
+      instance.chartLegend = this.chartLegendHeight(this.chartLegend);
       instance.chartWrapper = this.chartWrapper.nativeElement.offsetWidth;
     });
   }

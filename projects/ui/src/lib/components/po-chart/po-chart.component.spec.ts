@@ -35,6 +35,21 @@ describe('PoChartComponent:', () => {
     expect(component instanceof PoChartBaseComponent).toBeTruthy();
   });
 
+  describe('Properties', () => {
+
+    it('isChartGaugeType: should return `true` if type is equal `PoChartType.Gauge`', () => {
+      component.type = PoChartType.Gauge;
+
+      expect(component.isChartGaugeType).toBeTruthy();
+    });
+
+    it('isChartGaugeType: should return `false` if type is diferent from `PoChartType.Gauge`', () => {
+      component.type = PoChartType.Pie;
+
+      expect(component.isChartGaugeType).toBeFalsy();
+    });
+  });
+
   describe('Methods:', () => {
 
     it('ngOnDestroy: should call `removeWindowResizeListener`', () => {
@@ -129,17 +144,19 @@ describe('PoChartComponent:', () => {
         expect(component['setChartProperties']).toHaveBeenCalled();
     });
 
-    it('rebuildComponent: should call `dynamicComponentSetting` and destroy method from componentRef', () => {
+    it('rebuildComponent: should call `dynamicComponentSetting`, `getSeriesColor` and destroy method from componentRef', () => {
       const sourceObject = { componentRef: { destroy: () => {} } };
       Object.assign(component, sourceObject);
 
       spyOn(sourceObject.componentRef, 'destroy');
       spyOn(component, <any>'dynamicComponentSetting');
+      spyOn(component, <any>'getSeriesColor');
 
       component['rebuildComponent']();
 
       expect(sourceObject.componentRef.destroy).toHaveBeenCalled();
       expect(component['dynamicComponentSetting']).toHaveBeenCalled();
+      expect(component['getSeriesColor']).toHaveBeenCalled();
 
     });
 
@@ -199,7 +216,11 @@ describe('PoChartComponent:', () => {
     });
 
     it('setChartProperties: should attribute some PoChartDynamicTypeComponent property values', () => {
-      const instance: any = {};
+      const instance: any = {
+        chartHeader: {nativeElement: {offsetHeight: 200}},
+        chartLegend: {nativeElement: {offsetHeight: 200}},
+        chartWrapper: {nativeElement: {offsetWidth: 200}}
+      };
 
       component.height = 400;
       component['series'] = <any>[
@@ -207,9 +228,6 @@ describe('PoChartComponent:', () => {
         { category: 'B', value: 10 },
       ];
       component['colors'] = [ 'orange', 'red' ];
-      component.chartHeader = {nativeElement: {offsetHeight: 200}};
-      component.chartLegend = {nativeElement: {offsetHeight: 200}};
-      component.chartWrapper = {nativeElement: {offsetWidth: 200}};
 
       component['setChartProperties'](instance);
 
@@ -217,7 +235,7 @@ describe('PoChartComponent:', () => {
       expect(instance.series).toEqual(component['series']);
       expect(instance.colors).toEqual(component['colors']);
       expect(instance.chartHeader).toBe(component.chartHeader.nativeElement.offsetHeight);
-      expect(instance.chartLegend).toBe(component.chartLegend.nativeElement.offsetHeight);
+      expect(instance.chartLegend).toBe(component['chartLegend'].nativeElement.offsetHeight);
       expect(instance.chartWrapper).toBe(component.chartWrapper.nativeElement.offsetWidth);
 
     });
@@ -263,21 +281,23 @@ describe('PoChartComponent:', () => {
       expect(component.onSeriesHover).toHaveBeenCalledWith(event);
     });
 
-    it('setResizeListenerSubscribe: should call `windowResizeListener` if windowResizeListener emits', () => {
+    it('setResizeListenerSubscribe: should call `windowResizeListener` and `chartLegendHeight` if windowResizeListener emits', () => {
       const instance: any = {};
 
       component.chartHeader = { nativeElement: { offsetHeight: 200 } };
-      component.chartLegend = { nativeElement: { offsetHeight: 200 } };
+      component['chartLegend'] = { nativeElement: { offsetHeight: 200 } };
       component.chartWrapper = { nativeElement: { offsetWidth: 200 } };
 
       component['windowResizeListener'] = <any> of([]);
 
       spyOn(component, <any>'windowResizeListener');
+      spyOn(component, <any>'chartLegendHeight').and.callThrough();
 
       component['setResizeListenerSubscribe'](instance);
 
+      expect(component['chartLegendHeight']).toHaveBeenCalledWith(component['chartLegend']);
       expect(instance.chartHeader).toBe(component.chartHeader.nativeElement.offsetHeight);
-      expect(instance.chartLegend).toBe(component.chartLegend.nativeElement.offsetHeight);
+      expect(instance.chartLegend).toBe(component['chartLegend'].nativeElement.offsetHeight);
       expect(instance.chartWrapper).toBe(component.chartWrapper.nativeElement.offsetWidth);
     });
 
@@ -308,6 +328,13 @@ describe('PoChartComponent:', () => {
       const poChartColorsAll = PoChartColors.length - 1;
 
       expect(component['getSeriesColor']()).toEqual(PoChartColors[poChartColorsAll]);
+    });
+
+    it('getSeriesColor: should return first color if type is `gauge`', () => {
+      component.type = PoChartType.Gauge;
+      component.series = Array(14);
+
+      expect(component['getSeriesColor']()).toEqual(PoChartColors[0]);
     });
 
     it('getSeriesColor: should return four colors if `series` legth is four', () => {
@@ -351,6 +378,22 @@ describe('PoChartComponent:', () => {
       component['removeWindowResizeListener']();
 
       expect(component['onResize']).toBeUndefined();
+    });
+
+    it('chartLegendHeight: should return `chartLegend.nativeElement.offsetHeight` if `chartLegend` has value', () => {
+      component['chartLegend'] = { nativeElement: { offsetHeight: 200 } };
+
+      const expectedResult = component['chartLegendHeight'](component['chartLegend']);
+
+      expect(expectedResult).toBe(component['chartLegend'].nativeElement.offsetHeight);
+    });
+
+    it('chartLegendHeight: should return `0` if `chartLegend` is undefined', () => {
+      component['chartLegend'] = undefined;
+
+      const expectedResult = component['chartLegendHeight'](component['chartLegend']);
+
+      expect(expectedResult).toBe(0);
     });
 
   });
