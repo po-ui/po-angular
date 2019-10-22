@@ -47,7 +47,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     [PoChartType.Donut]: PoChartDonutComponent
   };
 
-  colors: Array<string>;
+  colors: Array<string> = [];
 
   @ViewChild('chartContainer', { read: ViewContainerRef, static: true })
   chartContainer: ViewContainerRef;
@@ -172,7 +172,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     instance.chartHeader = this.chartHeader.nativeElement.offsetHeight;
     instance.chartLegend = this.chartLegend.nativeElement.offsetHeight;
     instance.chartWrapper = this.chartWrapper.nativeElement.offsetWidth;
-    instance.colors = this.colors;
+    instance.colors = Array.isArray(this.colors) ? [...this.colors] : [];
     instance.height = this.height;
     instance.series = this.series || [];
     instance.type = this.type;
