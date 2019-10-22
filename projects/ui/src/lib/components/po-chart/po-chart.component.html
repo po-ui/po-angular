@@ -3,12 +3,15 @@
     <div class="po-chart-title">{{ title }}</div>
   </div>
   <ng-template #chartContainer></ng-template>
-  <div #chartLegend class="po-chart-legend">
-    <div class="po-chart-legend-container">
-      <div class="po-chart-legend-item" *ngFor="let serie of series; let i = index">
-        <div class="po-chart-legend-square" [style.background]="colors[i]"></div>
-        <span class="po-chart-legend-text">{{ serie.category }}</span>
-      </div>
-    </div>
+
+  <div *ngIf="!isChartGaugeType">
+    <ng-container *ngTemplateOutlet="chartLegendGroup"></ng-container>
   </div>
 </div>
+
+<ng-template #chartLegendGroup>
+  <po-chart-legend #chartLegend
+    [p-colors]="colors"
+    [p-series]="series">
+  </po-chart-legend>
+</ng-template>

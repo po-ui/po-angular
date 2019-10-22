@@ -2,6 +2,7 @@ import { EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToInt, isTypeof } from '../../utils/util';
 
+import { PoChartGaugeSerie } from './po-chart-types/po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoDonutChartSeries } from './po-chart-types/po-chart-donut/po-chart-donut-series.interface';
 import { PoPieChartSeries } from './po-chart-types/po-chart-pie/po-chart-pie-series.interface';
@@ -10,30 +11,32 @@ const poChartDefaultHeight = 400;
 const poChartMinHeight = 200;
 const poChartTypeDefault = PoChartType.Pie;
 
+export type PoChartSeries = Array<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie>;
+
 /**
  * @description
  *
  * O `po-chart` é um componente para renderização de dados através de gráficos, com isso facilitando a compreensão e tornando a
  * visualização destes dados mais agradável.
  *
- * Este componente também possibilita a definição das seguintes propriedades:
- *  - altura
- *  - series
- *  - tipo
- *  - título
+ * Através de suas principais propriedades é possível definir o tipo de gráfico, uma altura e um título.
  *
- * Além das definições de propriedades, também é possível definir uma ação que será executada ao clicar em determinado elemento do gráfico
+ * Além disso, também é possível definir uma ação que será executada ao clicar em determinado elemento do gráfico
  * e outra que será executada ao passar o *mouse* sobre o elemento.
  *
  * #### Boas práticas
  *
  * - Para que o gráfico não fique ilegível e incompreensível, evite uma quantia excessiva de séries.
- *
+ * - Para exibir a intensidade de um único dado dê preferência ao tipo `gauge`.
  */
 export abstract class PoChartBaseComponent {
 
-  private _height?: number = poChartDefaultHeight;
+  private _height: number;
+  private _series: Array<PoDonutChartSeries | PoPieChartSeries> | PoChartGaugeSerie;
   private _type: PoChartType = poChartTypeDefault;
+
+  // manipulação das séries tratadas internamente para preservar 'p-series';
+  protected chartSeries: PoChartSeries;
 
   public readonly poChartType = PoChartType;
 
@@ -44,7 +47,11 @@ export abstract class PoChartBaseComponent {
    *
    * Define a altura do gráfico.
    *
-   * > O valor mínimo que pode ser informado é 200.
+   * O valor padrão dos gráficos são:
+   * - para o tipo *gauge*: `200px`;
+   * - para os demais tipos: `400px`.
+   *
+   * > O valor mínimo aceito nesta propriedade é 200.
    *
    * @default `400px`
    */
@@ -55,7 +62,7 @@ export abstract class PoChartBaseComponent {
     if (isTypeof(value, 'number')) {
       height = intValue <= poChartMinHeight ? poChartMinHeight : intValue;
     } else {
-      height = poChartDefaultHeight;
+      height = this.setDefaultHeight();
     }
 
     this._height = height;
@@ -64,7 +71,7 @@ export abstract class PoChartBaseComponent {
   }
 
   get height(): number {
-    return this._height;
+    return this._height || this.setDefaultHeight();
   }
 
   /**
@@ -75,8 +82,17 @@ export abstract class PoChartBaseComponent {
    * > A coleção de objetos deve implementar alguma das interfaces abaixo:
    * - `PoDonutChartSeries`
    * - `PoPieChartSeries`
+   * - `PoChartGaugeSerie`
    */
-  @Input('p-series') series: Array<PoDonutChartSeries | PoPieChartSeries>;
+  @Input('p-series') set series(value: PoChartGaugeSerie | Array<PoDonutChartSeries | PoPieChartSeries>) {
+    this._series = value || [];
+
+    this.chartSeries = Array.isArray(this._series) ? [...this._series] : this.transformObjectToArrayObject(this._series);
+  }
+
+  get series() {
+    return this._series;
+  }
 
   /** Define o título do gráfico. */
   @Input('p-title') title?: string;
@@ -103,20 +119,28 @@ export abstract class PoChartBaseComponent {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento executado quando o usuário clicar sobre um elemento do gráfico.
    *
    * > Será passado por parâmetro um objeto contendo a categoria e valor da série.
    */
   @Output('p-series-click')
-  seriesClick?: EventEmitter<any> = new EventEmitter<any>();
+  seriesClick = new EventEmitter<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento executado quando o usuário passar o *mouse* sobre um elemento do gráfico.
    *
    * > Será passado por parâmetro um objeto contendo a categoria e valor da série.
    */
   @Output('p-series-hover')
-  seriesHover?: EventEmitter<any> = new EventEmitter<any>();
+  seriesHover = new EventEmitter<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie>();
 
   onSeriesClick(event: any): void {
     this.seriesClick.emit(event);
@@ -124,6 +148,14 @@ export abstract class PoChartBaseComponent {
 
   onSeriesHover(event: any): void {
     this.seriesHover.emit(event);
+  }
+
+  private setDefaultHeight() {
+    return this.type === PoChartType.Gauge ? poChartMinHeight : poChartDefaultHeight;
+  }
+
+  private transformObjectToArrayObject(serie: PoChartGaugeSerie) {
+    return typeof serie === 'object' && Object.keys(serie).length ? [{...serie}] : [];
   }
 
   abstract rebuildComponent(): void;

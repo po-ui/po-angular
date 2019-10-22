@@ -45,6 +45,15 @@ describe('PoChartBaseComponent:', () => {
       expect(component.rebuildComponent).toHaveBeenCalled();
     });
 
+    it('p-height: should call `setDefaultHeight` if height isn`t defined`', () => {
+      spyOn(component, <any>'setDefaultHeight').and.callThrough();
+
+      const expectedHeight = component.height;
+
+      expect(component.height).toBe(expectedHeight);
+      expect(component['setDefaultHeight']).toHaveBeenCalled();
+    });
+
     it('p-height: should update property with 400 if invalid values.', () => {
       const invalidValues = [null, undefined, '', 'string', {}, [], false, true];
 
@@ -65,6 +74,26 @@ describe('PoChartBaseComponent:', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
 
       expectPropertiesValues(component, 'type', invalidValues, PoChartType.Pie);
+    });
+
+    it('p-series: should update property with valid values', () => {
+      const validValues = [[{ value: 1, category: 'value' }], [], { value: 1, description: 'value' }];
+
+      expectPropertiesValues(component, 'series', validValues, validValues);
+    });
+
+    it('p-series: should update property if invalid values', () => {
+      const invalidValues = [undefined, null, '', false, 0];
+
+      expectPropertiesValues(component, 'series', invalidValues, []);
+    });
+
+    it('p-series: should call `transformObjectToArrayObject` if series is an object', () => {
+      spyOn(component, <any>'transformObjectToArrayObject');
+
+      component.series = { value: 1, description: 'value' };
+
+      expect(component['transformObjectToArrayObject']).toHaveBeenCalledWith(component.series);
     });
 
   });
@@ -91,6 +120,36 @@ describe('PoChartBaseComponent:', () => {
       component.onSeriesHover(eventMock);
 
       expect(component.seriesHover.emit).toHaveBeenCalledWith(eventMock);
+    });
+
+    it('setDefaultHeight: should return `200` if type is `Gauge`', () => {
+      component.type = PoChartType.Gauge;
+
+      const expectedResult = component['setDefaultHeight']();
+
+      expect(expectedResult).toBe(200);
+    });
+
+    it('setDefaultHeight: should return `400` if type is different from `Gauge`', () => {
+      component.type = PoChartType.Pie;
+
+      const expectedResult = component['setDefaultHeight']();
+
+      expect(expectedResult).toBe(400);
+    });
+
+    it('transformObjectToArrayObject: should return an array containing the serie`s object', () => {
+      const serie = {value: 1, description: 'description'};
+      const expectedResult = component['transformObjectToArrayObject'](serie);
+
+      expect(expectedResult).toEqual([serie]);
+    });
+
+    it('transformObjectToArrayObject: should return an empty array if the serie is an object without length', () => {
+      const serie = <any>{};
+      const expectedResult = component['transformObjectToArrayObject'](serie);
+
+      expect(expectedResult).toEqual([]);
     });
 
   });

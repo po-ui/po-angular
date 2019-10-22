@@ -1,12 +1,18 @@
 import { ElementRef, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Subject } from 'rxjs';
+
+import { convertNumberToDecimal } from '../../../../utils/util';
 
 import {
   poChartAngleStepInterval,
   poChartCompleteCircle,
+  poChartDonutSerieWidth,
+  poChartGaugeSerieWidth,
   poChartPadding,
   poChartStartAngle
 } from './po-chart-circular.constant';
 import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component';
+import { PoChartGaugeSerie } from '../po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../../enums/po-chart-type.enum';
 import { PoCircularChartSeries } from './po-chart-circular-series.interface';
 import { PoDonutChartSeries } from '../po-chart-donut/po-chart-donut-series.interface';
@@ -18,16 +24,19 @@ const poChartWhiteColor = '#ffffff';
 
 export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDestroy, OnInit {
 
-  private _series: Array<PoPieChartSeries | PoDonutChartSeries>;
+  chartItemStartAngle = poChartStartAngle;
+  windowResizeEmitter: Subject<any> = new Subject();
+
+  // tslint:disable-next-line: use-type-alias
+  protected _series: Array<PoPieChartSeries | PoDonutChartSeries | PoChartGaugeSerie>;
 
   private animationRunning: boolean;
   private chartItemEndAngle: number;
-  private chartItemStartAngle: number;
   private chartItemsEndAngleList: Array<number> = [];
   private svgPathElementsList: Array<string> = [];
   private svgTextElementsList: Array<string> = [];
 
-  set series(value: Array<PoPieChartSeries | PoDonutChartSeries>) {
+  set series(value: Array<PoPieChartSeries | PoDonutChartSeries | PoChartGaugeSerie>) {
     this._series = this.getSeriesWithValue(value);
   }
 
@@ -35,11 +44,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     return this._series;
   }
 
-  private static calculateEndAngle(value: number, totalValue: number): number {
-    return value / totalValue * (Math.PI * 2);
-  }
-
-  constructor(private el: ElementRef, private ngZone: NgZone, private renderer: Renderer2) {
+  constructor(protected el: ElementRef, private ngZone: NgZone, private renderer: Renderer2) {
     super();
   }
 
@@ -54,16 +59,79 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     this.setEventListeners();
   }
 
+  removeTooltip() {
+    if (this.tooltipElement) {
+      this.renderer.addClass(this.tooltipElement, 'po-invisible');
+    }
+  }
+
+  protected drawPath(path, chartItemStartAngle, chartItemEndAngle) {
+    const largeArc = chartItemEndAngle - chartItemStartAngle > Math.PI;
+
+    const sinAlpha = Math.sin(chartItemStartAngle);
+    const cosAlpha = Math.cos(chartItemStartAngle);
+
+    const sinBeta = Math.sin(chartItemEndAngle);
+    const cosBeta = Math.cos(chartItemEndAngle);
+
+    const startX = this.centerX + cosAlpha * this.centerX;
+    const startY = this.centerX + sinAlpha * this.centerX;
+
+    const endX = this.centerX + cosBeta * this.centerX;
+    const endY = this.centerX + sinBeta * this.centerX;
+
+    const startInnerX = this.centerX + cosAlpha * this.innerRadius;
+    const startInnerY = this.centerX + sinAlpha * this.innerRadius;
+
+    const endInnerX = this.centerX + cosBeta * this.innerRadius;
+    const endInnerY = this.centerX + sinBeta * this.innerRadius;
+
+    const halfGaugeCoordinates = [
+      'M', startX, startY,
+      'A', this.centerX, this.centerX, 0, '0,1', endX, endY,
+      'A', 1, 1, 0, '0,1', endInnerX, endInnerY,
+      'A', this.innerRadius, this.innerRadius, 0, '0,0', startInnerX, startInnerY,
+      'A', 1, 1, 0, '0,1', startX, startY,
+      'Z'].join(' ');
+
+    const pathCoordinates = [
+      'M', startX, startY,
+      'A', this.centerX, this.centerX, 0, largeArc ? '1,1' : '0,1', endX, endY,
+      'L', endInnerX, endInnerY,
+      'A', this.innerRadius, this.innerRadius, 0, largeArc ? '1,0' : '0,0', startInnerX, startInnerY,
+      'Z'].join(' ');
+
+    return path.setAttribute('d', this.isChartGaugeType ? halfGaugeCoordinates : pathCoordinates);
+  }
+
+  protected getSeriesWithValue(series: Array<PoCircularChartSeries | PoChartGaugeSerie>) {
+    const newSeries = [];
+
+    series.forEach((serie, index) => {
+      if (serie.value > 0) {
+        newSeries.push({ ...serie, color: this.colors[index] });
+      }
+    });
+
+    return newSeries;
+  }
+
   private animationSetup() {
-    this.chartItemStartAngle = poChartStartAngle;
     this.chartItemEndAngle = this.chartItemsEndAngleList[0];
     this.animationRunning = true;
     this.drawPathInit();
   }
 
+  private appendGaugeBackgroundPathElement(svgPathsWrapper: any) {
+    const svgPath = this.renderer.createElement('svg:path', 'svg');
+    this.renderer.setAttribute(svgPath, 'class', 'po-chart-gauge-base-path');
+    svgPathsWrapper.appendChild(svgPath);
+    this.renderer.appendChild(this.svgElement, svgPathsWrapper);
+  }
+
   private calculateAngleRadians() {
     this.series.forEach((serie, index) =>
-      this.chartItemsEndAngleList[index] = PoChartCircular.calculateEndAngle(serie.value, this.totalValue)
+      this.chartItemsEndAngleList[index] = this.calculateEndAngle(serie.value, this.totalValue)
     );
   }
 
@@ -77,10 +145,16 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     }
   }
 
+  private calculateEndAngle(value: number, totalValue: number): number {
+    const endAngle = value / totalValue * (Math.PI * 2);
+
+    return this.isChartGaugeType ? (endAngle / 2) : endAngle;
+  }
+
   private calculateSVGDimensions() {
     this.calculateSVGContainerDimensions(this.chartWrapper, this.chartHeader, this.chartLegend);
 
-    this.setInnerRadius();
+    this.innerRadius = this.setInnerRadius(this.type);
   }
 
   private changeTooltipPosition(event: MouseEvent) {
@@ -107,13 +181,13 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     return poPageContent.length ? poPageContent[0] : window;
   }
 
-  private createPath(serie: PoCircularChartSeries, svgPathsWrapper: any) {
+  private createPath(serie: PoCircularChartSeries | PoChartGaugeSerie, svgPathsWrapper: any) {
     const svgPath = this.renderer.createElement('svg:path', 'svg');
 
     this.renderer.setAttribute(svgPath, 'class', 'po-path-item');
     this.renderer.setAttribute(svgPath, 'fill', serie.color);
 
-    this.setTooltipAttributes(svgPath, serie);
+    this.setElementAttributes(svgPath, serie);
 
     svgPathsWrapper.appendChild(svgPath);
 
@@ -125,10 +199,18 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   private createPaths() {
     const svgPathsWrapper = this.renderer.createElement('svg:g', 'svg');
 
+    if (this.isChartGaugeType) {
+      this.appendGaugeBackgroundPathElement(svgPathsWrapper);
+      // Tratamento para evitar que o path desenhe os arcos referentes ao border radius do path.
+      if (this.isSerieValueEqualZero()) {
+        return;
+      }
+    }
+
     this.series.forEach(serie => this.createPath(serie, svgPathsWrapper));
   }
 
-  private createText(serie: PoCircularChartSeries) {
+  private createText(serie: PoCircularChartSeries | PoChartGaugeSerie) {
     const { value } = serie;
 
     const svgG = this.renderer.createElement('svg:g', 'svg');
@@ -144,7 +226,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     this.renderer.setAttribute(svgText, 'font-size', fontSize);
     this.renderer.setAttribute(svgText, 'fill-opacity', '0');
 
-    this.setTooltipAttributes(svgText, serie);
+    this.setElementAttributes(svgText, serie);
 
     this.renderer.appendChild(svgG, svgText);
 
@@ -159,54 +241,24 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private createSVGElements() {
+    const viewBoxHeight = this.isChartGaugeType ? this.centerX + (this.centerX * poChartGaugeSerieWidth) : this.chartWrapper;
+    const preserveAspectRatio = this.isChartGaugeType ? 'xMidYMax' : 'xMidYMin';
+
     this.svgElement = this.renderer.createElement('svg:svg', 'svg');
 
-    this.renderer.setAttribute(this.svgElement, 'viewBox', `0 0 ${this.chartWrapper} ${this.centerX * 2}`);
-    this.renderer.setAttribute(this.svgElement, 'preserveAspectRatio', 'xMidYMin meet');
+    this.renderer.setAttribute(this.svgElement, 'viewBox', `0 0 ${this.chartWrapper} ${viewBoxHeight}`);
+    this.renderer.setAttribute(this.svgElement, 'preserveAspectRatio', `${preserveAspectRatio} meet`);
     this.renderer.setAttribute(this.svgElement, 'class', 'po-chart-svg-element');
-    this.renderer.setAttribute(this.svgElement, 'width', `${this.chartWrapper - poChartPadding * 2}`);
+    this.renderer.setAttribute(this.svgElement, 'width', `${this.centerX}`);
     this.renderer.setAttribute(this.svgElement, 'height', `${this.svgHeight}`);
 
     this.svgContainer.nativeElement.appendChild(this.svgElement);
 
     this.createPaths();
     this.createTexts();
-
-  }
-
-  private drawPath(path, chartItemStartAngle, chartItemEndAngle) {
-    const largeArc = chartItemEndAngle - chartItemStartAngle > Math.PI;
-
-    const sinAlpha = Math.sin(chartItemStartAngle);
-    const cosAlpha = Math.cos(chartItemStartAngle);
-
-    const sinBeta = Math.sin(chartItemEndAngle);
-    const cosBeta = Math.cos(chartItemEndAngle);
-
-    const startX = this.centerX + cosAlpha * this.centerX;
-    const startY = this.centerX + sinAlpha * this.centerX;
-
-    const endX = this.centerX + cosBeta * this.centerX;
-    const endY = this.centerX + sinBeta * this.centerX;
-
-    const startInnerX = this.centerX + cosAlpha * this.innerRadius;
-    const startInnerY = this.centerX + sinAlpha * this.innerRadius;
-
-    const endInnerX = this.centerX + cosBeta * this.innerRadius;
-    const endInnerY = this.centerX + sinBeta * this.innerRadius;
-
-    const pathCoordinates = [
-      'M', startX, startY,
-      'A', this.centerX, this.centerX, 0, largeArc ? '1,1' : '0,1', endX, endY,
-      'L', endInnerX, endInnerY,
-      'A', this.innerRadius, this.innerRadius, 0, largeArc ? '1,0' : '0,0', startInnerX, startInnerY,
-      'Z'].join(' ');
-
-    return path.setAttribute('d', pathCoordinates);
   }
 
   private drawPathInit() {
-
     if (!this.animationRunning) {
       return;
     } else {
@@ -241,14 +293,14 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
       this.setTextProperties(
         this.svgTextElementsList[currentSerieIndex],
         this.chartItemStartAngle,
-        this.calculateCurrentEndAngle(angleCurrentPosition));
+        this.calculateCurrentEndAngle(angleCurrentPosition)
+      );
     }
 
     window.requestAnimationFrame(this.drawSeries.bind(this, currentSerieIndex, angleCurrentPosition));
-
   }
 
-  private emitEventOnEnter(event: PoCircularChartSeries) {
+  private emitEventOnEnter(event: PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie) {
     this.onSerieHover.next(event);
   }
 
@@ -263,24 +315,9 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   private getPercentValue(value: number, totalValue: number) {
     const percentValue = (value / totalValue) * 100;
 
-    // caso tiver mais que duas casas decimais, fixa até duas, ex: 10.6575 => 10.65
-    // se não retorna o valor com parsefloat que remove casa decimal desencessaria, ex: 10.60 => 10.6
-    const floatPercentValue = this.isMoreThanTwoDecimalsPlaces(percentValue) ?
-      parseFloat(percentValue.toFixed(2)) : parseFloat(<any> percentValue);
+    const floatPercentValue = convertNumberToDecimal(percentValue, 2);
 
     return String(floatPercentValue).replace('.', ',');
-  }
-
-  private getSeriesWithValue(series: Array<PoCircularChartSeries>) {
-    const newSeries = [];
-
-    series.forEach((serie, index) => {
-      if (serie.value > 0) {
-        newSeries.push({ ...serie, color: this.colors[index] });
-      }
-    });
-
-    return newSeries;
   }
 
   private getTextColor(color: string) {
@@ -299,40 +336,50 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     return this.getPercentValue(value, this.totalValue) + '%';
   }
 
-  private isMoreThanTwoDecimalsPlaces(value: number = 0) {
-    const [, valueAfterDot ] = value.toString().split('.');
-
-    return valueAfterDot && valueAfterDot.length > 2;
+  private isSerieValueEqualZero(): boolean {
+    return this.series.length && this.series[0].value === 0;
   }
 
   private onMouseClick() {
-    const serieOnClick: PoCircularChartSeries = { category: this.chartElementCategory, value: this.chartElementValue };
+    let serieOnClick: PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie;
+
+    if (this.isChartGaugeType) {
+      const { color, ...serie } = this.series[0];
+      serieOnClick = serie;
+    } else {
+      serieOnClick = { category: this.chartElementCategory, value: this.chartElementValue };
+    }
 
     this.onSerieClick.next(serieOnClick);
   }
 
   private onMouseEnter(event) {
-    this.tooltipElement = this.chartBody.nativeElement.lastChild;
-    this.chartElementCategory = event.target.getAttributeNS(null, 'data-tooltip-category');
-    this.chartElementValue = event.target.getAttributeNS(null, 'data-tooltip-value');
-    this.tooltipText = event.target.getAttributeNS(null, 'data-tooltip-text');
-    this.showTooltip();
-    this.changeTooltipPosition(event);
+    let serieOnEnter: PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie;
 
-    const serieOnEnter = { category: this.chartElementCategory, value: this.chartElementValue };
+    if (!this.isChartGaugeType) {
+      this.tooltipElement = this.chartBody.nativeElement.lastChild;
+      this.chartElementCategory = event.target.getAttributeNS(null, 'data-tooltip-category');
+      this.chartElementValue = event.target.getAttributeNS(null, 'data-tooltip-value');
+      this.tooltipText = event.target.getAttributeNS(null, 'data-tooltip-text');
+      this.showTooltip();
+      this.changeTooltipPosition(event);
+
+      serieOnEnter = { category: this.chartElementCategory, value: this.chartElementValue };
+    } else {
+      const { color, ...serie } = this.series[0];
+
+      this.chartElementDescription = event.target.getAttributeNS(null, 'data-tooltip-category');
+      serieOnEnter = serie;
+    }
+
     this.emitEventOnEnter(serieOnEnter);
   }
 
   private onWindowResize() {
     this.calculateSVGDimensions();
-    this.renderer.setAttribute(this.svgElement, 'width', `${this.chartWrapper - poChartPadding * 2}`);
+    this.renderer.setAttribute(this.svgElement, 'width', `${this.centerX}`);
     this.renderer.setAttribute(this.svgElement, 'height', `${this.svgHeight}`);
-  }
-
-  private removeTooltip() {
-    if (this.tooltipElement) {
-      this.renderer.addClass(this.tooltipElement, 'po-invisible');
-    }
+    this.windowResizeEmitter.next();
   }
 
   private removeWindowResizeListener() {
@@ -350,23 +397,39 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   private setEventListeners() {
     let chartSeries: Array<string> = this.el.nativeElement.querySelectorAll('.po-path-item');
     chartSeries = Array.from(chartSeries);
-
     chartSeries.forEach(serie => {
       this.renderer.listen(serie, 'click', this.onMouseClick.bind(this));
       this.renderer.listen(serie, 'mouseenter', this.onMouseEnter.bind(this));
-      this.renderer.listen(serie, 'mousemove', this.changeTooltipPosition.bind(this));
-      this.renderer.listen(serie, 'mouseleave', this.removeTooltip.bind(this));
+
+      if (!this.isChartGaugeType) {
+        this.renderer.listen(serie, 'mousemove', this.changeTooltipPosition.bind(this));
+        this.renderer.listen(serie, 'mouseleave', this.removeTooltip.bind(this));
+      }
     });
 
     this.windowResizeListener = this.renderer.listen(window, 'resize', this.onWindowResize.bind(this));
     this.windowScrollListener = this.renderer.listen(this.checkingIfScrollsWithPoPage(), 'scroll', this.removeTooltip.bind(this));
   }
 
-  private setInnerRadius() {
-    // tamanho da largua da serie proporcional ao grafico, o valor 0.27 fica proximo de 32px
-    const serieWidth = 0.27;
+  private setInnerRadius(type: PoChartType) {
+    let serieWidth;
 
-    this.innerRadius = this.type === PoChartType.Pie ? 0 : this.centerX - (this.centerX * serieWidth);
+    switch (type) {
+      case PoChartType.Donut: {
+        serieWidth = poChartDonutSerieWidth;
+
+        break;
+      }
+      case PoChartType.Gauge: {
+        serieWidth = poChartGaugeSerieWidth;
+        break;
+      }
+      case PoChartType.Pie: {
+        return 0;
+      }
+    }
+
+    return this.centerX - (this.centerX * serieWidth);
   }
 
   private setTextProperties(text, startAngle: number, endAngle: number) {
@@ -383,7 +446,6 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
 
       const xCoordinate = radius * Math.cos(centerAngle) + this.centerX - (halfTextWidth);
       const yCoordinate = radius * Math.sin(centerAngle) + this.centerX + (halfTextHeight / 2);
-
       text.setAttribute('x', xCoordinate);
       text.setAttribute('y', yCoordinate);
       text.setAttribute('fill-opacity', '1');
@@ -399,14 +461,20 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     };
   }
 
-  private setTooltipAttributes(svgElement, serie: PoPieChartSeries | PoDonutChartSeries) {
-    const { value, category, tooltip } = serie;
+  private setElementAttributes(svgElement, serie) {
+    const { value, category, tooltip, description } = serie;
 
-    const tooltipValue = this.getTooltipValue(value);
-
-    this.renderer.setAttribute(svgElement, 'data-tooltip-category', category);
     this.renderer.setAttribute(svgElement, 'data-tooltip-value', `${value}`);
-    this.renderer.setAttribute(svgElement, 'data-tooltip-text', tooltip || `${category}: ${tooltipValue}`);
+
+    if (this.isChartGaugeType) {
+      this.renderer.setAttribute(svgElement, 'data-tooltip-description', description);
+    } else {
+      const tooltipValue = this.getTooltipValue(value);
+
+      this.renderer.setAttribute(svgElement, 'data-tooltip-category', category);
+      this.renderer.setAttribute(svgElement, 'data-tooltip-text', tooltip || `${category}: ${tooltipValue}`);
+    }
+
   }
 
   private showTooltip() {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoChartType, PoDonutChartSeries, PoPieChartSeries, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoChartGaugeSerie, PoChartType, PoDonutChartSeries, PoPieChartSeries, PoRadioGroupOption } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-chart-labs',
@@ -9,9 +9,12 @@ import { PoChartType, PoDonutChartSeries, PoPieChartSeries, PoRadioGroupOption }
 export class SamplePoChartLabsComponent implements OnInit {
 
   category: string;
+  description: string;
   event: string;
   height: number;
-  series: Array<PoDonutChartSeries | PoPieChartSeries>;
+  multipleSeries: Array<PoPieChartSeries | PoDonutChartSeries>;
+  series: Array<PoPieChartSeries | PoDonutChartSeries> | PoChartGaugeSerie;
+  singleSerie: PoChartGaugeSerie;
   title: string;
   tooltip: string;
   value: number;
@@ -19,6 +22,7 @@ export class SamplePoChartLabsComponent implements OnInit {
 
   readonly typeOptions: Array<PoRadioGroupOption> = [
     { label: 'Donut', value: PoChartType.Donut },
+    { label: 'Gauge', value: PoChartType.Gauge },
     { label: 'Pie', value: PoChartType.Pie }
   ];
 
@@ -26,8 +30,22 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.restore();
   }
 
+  get isSingleSerie(): boolean {
+    return this.type === PoChartType.Gauge;
+  }
+
   addData() {
-    this.series.push({ category: this.category, value: this.value, tooltip: this.tooltip });
+    if (this.isSingleSerie) {
+      this.singleSerie = { value: this.value, description: this.description };
+    } else {
+      this.multipleSeries = [...this.multipleSeries, { category: this.category, value: this.value, tooltip: this.tooltip }];
+    }
+
+    this.applySeriesData();
+  }
+
+  applySeriesData() {
+    this.series = this.isSingleSerie ? this.singleSerie : this.multipleSeries;
   }
 
   changeEvent(eventName: string, serieEvent: PoPieChartSeries): void {
@@ -38,10 +56,13 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.category = undefined;
     this.event = undefined;
     this.height = undefined;
+    this.singleSerie = undefined;
+    this.multipleSeries = [];
     this.series = [];
     this.title = undefined;
     this.tooltip = undefined;
     this.value = undefined;
+    this.description = undefined;
     this.type = undefined;
   }
 
