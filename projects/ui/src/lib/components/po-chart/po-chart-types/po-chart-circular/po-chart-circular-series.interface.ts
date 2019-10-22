@@ -6,4 +6,6 @@ export interface PoCircularChartSeries {
   /** Define o valor do objeto. */
   value: number;
 
+  color?: string;
+
 }
