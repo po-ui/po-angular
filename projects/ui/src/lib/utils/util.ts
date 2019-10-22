@@ -462,3 +462,24 @@ export function convertImageToBase64(file: File): Promise<any> {
     reader.onerror = error => reject(error);
   });
 }
+
+/**
+ * Converte um número em decimal baseado na quantidade de casas decimais.
+ *
+ * Caso o valor seja inválido, será retornado o valor `undefined`.
+ * Valores inválidos são: `false`, `NaN`, `strings` que não numéricas, `undefined` e `null`.
+ *
+ * @param number valor que será convertido
+ * @param decimalsPlace quantidade de casas decimais
+ */
+export function convertNumberToDecimal(number: any, decimalsPlace: number): number {
+  const isValidValue = (number || number === 0) && !isNaN(number);
+
+  const floatValue = isValidValue ? parseFloat(number) : undefined;
+
+  try {
+    return parseFloat(floatValue.toFixed(decimalsPlace));
+  } catch {
+    return floatValue;
+  }
+}

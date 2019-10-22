@@ -13,6 +13,12 @@ export enum PoChartType {
   Donut = 'donut',
 
   /**
+   * O gráfico de *gauge* fornece como opção uma melhor relação de intensidade de dados que nos gráficos de pizza padrão ou rosca, uma vez
+   * que o centro em branco pode ser usado para exibir dados adicionais relacionados.
+   */
+  Gauge = 'gauge',
+
+  /**
    * Exibe os dados em formato circular, dividindo proporcionalmente em fatias.
    */
   Pie = 'pie'

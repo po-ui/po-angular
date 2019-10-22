@@ -3,8 +3,9 @@ import { Component, ElementRef, NgZone, Renderer2 } from '@angular/core';
 
 import { PoChartCircular } from './po-chart-circular';
 import { PoChartColors, PoSeriesTextBlack } from '../../po-chart-colors.constant';
+import { poChartCompleteCircle, poChartGaugeSerieWidth } from './po-chart-circular.constant';
 import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component';
-import { poChartStartAngle, poChartCompleteCircle } from './po-chart-circular.constant';
+import { PoChartGaugeSerie } from '../po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../../enums/po-chart-type.enum';
 import { PoDonutChartSeries } from '../po-chart-donut/po-chart-donut-series.interface';
 import { PoPieChartSeries } from '../po-chart-pie/po-chart-pie-series.interface';
@@ -67,14 +68,6 @@ describe('PoChartCircular:', () => {
       expect(component['setEventListeners']).toHaveBeenCalled();
     });
 
-    it('animationSetup: should set `chartItemStartAngle` with `poChartStartAngle`', () => {
-      component['chartItemStartAngle'] = undefined;
-
-      component['animationSetup']();
-
-      expect(component['chartItemStartAngle']).toBe(poChartStartAngle);
-    });
-
     it('animationSetup: should set `chartItemEndAngle` with `chartItemsEndAngleList` item first', () => {
       const itemFirstAngle = 123;
       component['chartItemEndAngle'] = undefined;
@@ -104,7 +97,7 @@ describe('PoChartCircular:', () => {
     it('calculateAngleRadians: should set `chartItemsEndAngleList` with items end angle', () => {
       const itemsEndAngle = [ 0.1, 0.2, 0.3, 0.4 ];
 
-      spyOn(PoChartCircular, <any>'calculateEndAngle').and.returnValues(...itemsEndAngle);
+      spyOn(component, <any>'calculateEndAngle').and.returnValues(...itemsEndAngle);
 
       component.colors = PoChartColors[3];
       component['series'] = [
@@ -117,7 +110,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('calculateAngleRadians: should call `calculateEndAngle` with value series and `totalValue`', () => {
-      spyOn(PoChartCircular, <any>'calculateEndAngle');
+      spyOn(component, <any>'calculateEndAngle');
       component['totalValue'] = 24;
 
       component.colors = PoChartColors[3];
@@ -127,10 +120,10 @@ describe('PoChartCircular:', () => {
 
       component['calculateAngleRadians']();
 
-      expect(PoChartCircular['calculateEndAngle']).toHaveBeenCalledWith(1, component['totalValue']);
-      expect(PoChartCircular['calculateEndAngle']).toHaveBeenCalledWith(2, component['totalValue']);
-      expect(PoChartCircular['calculateEndAngle']).toHaveBeenCalledWith(3, component['totalValue']);
-      expect(PoChartCircular['calculateEndAngle']).toHaveBeenCalledWith(4, component['totalValue']);
+      expect(component['calculateEndAngle']).toHaveBeenCalledWith(1, component['totalValue']);
+      expect(component['calculateEndAngle']).toHaveBeenCalledWith(2, component['totalValue']);
+      expect(component['calculateEndAngle']).toHaveBeenCalledWith(3, component['totalValue']);
+      expect(component['calculateEndAngle']).toHaveBeenCalledWith(4, component['totalValue']);
     });
 
     it('calculateCurrentEndAngle: should return value of end angle if the series drawing is completed', () => {
@@ -209,7 +202,7 @@ describe('PoChartCircular:', () => {
       expect(component['svgPathElementsList'].length).toEqual(1);
     });
 
-    it(`createPath: should call 'setTooltipAttributes' with 'svgPath' and 'serie'`, () => {
+    it(`createPath: should call 'setElementAttributes' with 'svgPath' and 'serie'`, () => {
       const index = 0;
       const tooltipText = 'tooltipText';
       const serie: PoPieChartSeries = { category: 'po', value: 2, tooltip: tooltipText };
@@ -220,11 +213,11 @@ describe('PoChartCircular:', () => {
       spyOn(component['renderer'], 'setAttribute');
       spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
       spyOn(component['renderer'], 'appendChild');
-      spyOn(component, <any> 'setTooltipAttributes');
+      spyOn(component, <any> 'setElementAttributes');
 
       component['createPath'](serie, svgPathsWrapper);
 
-      expect(component['setTooltipAttributes']).toHaveBeenCalledWith(svgPath, serie);
+      expect(component['setElementAttributes']).toHaveBeenCalledWith(svgPath, serie);
     });
 
     it('onMouseEnter: should call `showTooltip`, `changeTooltipPosition` and `emitEventOnEnter`', () => {
@@ -243,6 +236,24 @@ describe('PoChartCircular:', () => {
       expect(component['showTooltip']).toHaveBeenCalled();
       expect(component['changeTooltipPosition']).toHaveBeenCalled();
       expect(component['emitEventOnEnter']).toHaveBeenCalledWith(eventMock);
+    });
+
+    it('onMouseEnter: should emit serie object and set `chartElementDescription` if tye is gauge', () => {
+      const eventMock = { target: { getAttributeNS: () => 'First' } };
+      const serie = { value: 10, description: 'First' };
+
+      component.type = PoChartType.Gauge;
+      component.colors = PoChartColors[0];
+      component['series'] = [{ ...serie }];
+
+      spyOn(component, <any>'emitEventOnEnter')(eventMock);
+      spyOn(eventMock.target, 'getAttributeNS').and.callThrough();
+
+      component['onMouseEnter'](eventMock);
+
+      expect(component['chartElementDescription']).toEqual('First');
+      expect(eventMock.target.getAttributeNS).toHaveBeenCalled();
+      expect(component['emitEventOnEnter']).toHaveBeenCalledWith(serie);
     });
 
     it('removeTooltip: expect that `tooltipElement` has the class `po-invisible` being added', () => {
@@ -323,13 +334,72 @@ describe('PoChartCircular:', () => {
       expect(path.d.includes('Z')).toBe(true);
     });
 
-    it('onMouseClick: should call `onSerieClick.next`', () => {
+    it('drawPath: should call `setAttribute` with `d` and `coordinates` of path without line `L` if type is gauge', () => {
+      const chartItemStartAngle = 10;
+      const chartItemEndAngle = 20;
+
+      const path = {
+        d: '',
+        setAttribute: function f(attr, value) {
+          this[attr] = value;
+        }
+      };
+
+      component['centerX'] = 10;
+      component.type = PoChartType.Gauge;
+
+      spyOn(path, 'setAttribute').and.callThrough();
+
+      component['drawPath'](path, chartItemStartAngle, chartItemEndAngle);
+
+      expect(typeof path.d === 'string').toBe(true);
+      expect(path.setAttribute).toHaveBeenCalled();
+      expect(path.d.includes('M')).toBe(true);
+      expect(path.d.includes('A')).toBe(true);
+      expect(path.d.includes('L')).toBe(false);
+      expect(path.d.includes('Z')).toBe(true);
+    });
+
+    it(`onMouseClick: should call 'onSerieClick.next' passing 'chartElementCategory' and 'chartElementValue'
+    as object values if type is Pie`, () => {
+      component.type = PoChartType.Pie;
+      component.chartElementCategory = 'category';
+      component.chartElementValue = 10;
+      const expectedParameterValue = { category: component.chartElementCategory, value: component.chartElementValue };
 
       spyOn(component['onSerieClick'], 'next');
 
       component['onMouseClick']();
 
-      expect(component['onSerieClick'].next).toHaveBeenCalled();
+      expect(component['onSerieClick'].next).toHaveBeenCalledWith(expectedParameterValue);
+    });
+
+    it(`onMouseClick: should call 'onSerieClick.next' passing 'chartElementCategory' and 'chartElementValue'
+    as object values if type is Donut`, () => {
+      component.type = PoChartType.Donut;
+      component.chartElementCategory = 'category';
+      component.chartElementValue = 10;
+      const expectedParameterValue = { category: component.chartElementCategory, value: component.chartElementValue };
+
+      spyOn(component['onSerieClick'], 'next');
+
+      component['onMouseClick']();
+
+      expect(component['onSerieClick'].next).toHaveBeenCalledWith(expectedParameterValue);
+    });
+
+    it(`onMouseClick: should call 'onSerieClick.next' passing the serie object if type is gauge`, () => {
+      const serie = { value: 10, description: 'First' };
+
+      component.type = PoChartType.Gauge;
+      component.colors = PoChartColors[0];
+      component['series'] = [{ ...serie }];
+
+      spyOn(component['onSerieClick'], 'next');
+
+      component['onMouseClick']();
+
+      expect(component['onSerieClick'].next).toHaveBeenCalledWith(serie);
     });
 
     it('emitEventOnEnter: should call `onSerieHover.next`', () => {
@@ -397,12 +467,47 @@ describe('PoChartCircular:', () => {
       spyOn(component['renderer'], 'createElement');
       spyOn(component['series'], 'forEach').and.callThrough();
       spyOn(component, <any> 'createPath');
+      spyOn(component, <any>'appendGaugeBackgroundPathElement');
 
       component['createPaths']();
 
       expect(component['renderer'].createElement).toHaveBeenCalledWith('svg:g', 'svg');
       expect(component['series'].forEach).toHaveBeenCalled();
       expect(component['createPath']).toHaveBeenCalled();
+      expect(component['appendGaugeBackgroundPathElement']).not.toHaveBeenCalled();
+    });
+
+    it('createPaths: should call `appendGaugeBackgroundPathElement` if type is `gauge`', () => {
+      component.colors = PoChartColors[0];
+      component['series'] = [{ value: 10, description: 'First'}];
+      component.type = PoChartType.Gauge;
+
+      spyOn(component, <any>'appendGaugeBackgroundPathElement');
+
+      component['createPaths']();
+
+      expect(component['appendGaugeBackgroundPathElement']).toHaveBeenCalled();
+    });
+
+    it('createPaths: shouldn`t call `createPath` if type is gauge and serie`s property value is equal 0', () => {
+      const fakeThis = {
+        colors: PoChartColors[1],
+        series: [{ value: 0, description: 'First'}],
+        type: PoChartType.Gauge,
+        isChartGaugeType: true,
+        renderer: {
+          createElement: () => {}
+        },
+        createPath: () => {},
+        appendGaugeBackgroundPathElement: () => {},
+        isSerieValueEqualZero: () => true
+      };
+
+      spyOn(fakeThis, 'createPath');
+
+      component['createPaths'].call(fakeThis);
+
+      expect(fakeThis.createPath).not.toHaveBeenCalled();
     });
 
     it(`createSVGElements: should create svgElement and call 'createPaths', 'createTexts',
@@ -423,6 +528,57 @@ describe('PoChartCircular:', () => {
       expect(component['renderer'].createElement).toHaveBeenCalledWith('svg:svg', 'svg');
       expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(5);
       expect(component['svgContainer'].nativeElement.appendChild).toHaveBeenCalledWith(component.svgElement);
+    });
+
+    it('createSVGElements: should set `xMidYMax` to `preservAspectRatio` if type is `gauge`', () => {
+      const expectedPreserveAspectRatio = 'xMidYMax meet';
+      component.type = PoChartType.Gauge;
+      component.colors = PoChartColors[0];
+      component.series = [{ category: 'po', value: 1 }];
+      component.centerX = 500;
+      component.chartWrapper = 1000;
+
+      component['createSVGElements']();
+
+      expect(component['svgElement'].getAttribute('preserveAspectRatio')).toEqual(expectedPreserveAspectRatio);
+    });
+
+    it('createSVGElements: should set `xMidYMin` to `preservAspectRatio` if type different from `gauge`', () => {
+      const expectedPreserveAspectRatio = 'xMidYMin meet';
+      component.type = PoChartType.Pie;
+      component.colors = PoChartColors[0];
+      component.series = [{ category: 'po', value: 1 }];
+      component.centerX = 500;
+      component.chartWrapper = 1000;
+
+      component['createSVGElements']();
+
+      expect(component['svgElement'].getAttribute('preserveAspectRatio')).toEqual(expectedPreserveAspectRatio);
+    });
+
+    it('createSVGElements: should set properly viewBox attribute values if type is different from `gauge``', () => {
+      component.type = PoChartType.Pie;
+      component.colors = PoChartColors[0];
+      component.series = [{ category: 'po', value: 1 }];
+      component.centerX = 500;
+      component.chartWrapper = 1000;
+
+      component['createSVGElements']();
+
+      expect(component['svgElement'].getAttribute('viewBox')).toEqual(`0 0 ${component.chartWrapper} ${component.chartWrapper}`);
+    });
+
+    it('createSVGElements: should set properly viewBox attribute values if type is `gauge`', () => {
+      component.type = PoChartType.Gauge;
+      component.colors = PoChartColors[0];
+      component.series = [{ category: 'po', value: 1 }];
+      component.centerX = 500;
+      component.chartWrapper = 1000;
+      const expectedGaugeHeight =  (component.centerX + (component.centerX * poChartGaugeSerieWidth)).toString();
+
+      component['createSVGElements']();
+
+      expect(component['svgElement'].getAttribute('viewBox')).toEqual(`0 0 ${component.chartWrapper} ${expectedGaugeHeight}`);
     });
 
     it('setEventListeners: should call `renderer.listen` ten times and set `windowResizeListener`', () => {
@@ -449,6 +605,30 @@ describe('PoChartCircular:', () => {
       expect(component['windowResizeListener']).toBeDefined();
       expect(component['windowScrollListener']).toBeDefined();
       expect(component['renderer'].listen).toHaveBeenCalledTimes(10);
+    });
+
+    it('setEventListeners: should call `renderer.listen` 6 times if type is `gauge`', () => {
+      const chartSeries = [
+        '<svg:path class="po-path-item" fill="#0C6C94" data-tooltip-value="1"></svg:path>',
+        '<svg:path class="po-path-item" fill="#0B92B4" data-tooltip-value="2"></svg:path>'
+      ];
+
+      component['el'] = <any> {
+        nativeElement: {
+          querySelectorAll: () => {}
+        }
+      };
+
+      component.type = PoChartType.Gauge;
+
+      spyOn(component['el'].nativeElement, 'querySelectorAll').and.returnValue(chartSeries);
+      spyOn(component, <any> 'checkingIfScrollsWithPoPage').and.returnValue(window);
+
+      spyOn(component['renderer'], 'listen').and.returnValue(() => {});
+
+      component['setEventListeners']();
+
+      expect(component['renderer'].listen).toHaveBeenCalledTimes(6);
     });
 
     it('setEventListeners: should call `renderer.listen` twice times and set `windowResizeListener` and `windowScrollListener`', () => {
@@ -518,12 +698,16 @@ describe('PoChartCircular:', () => {
     });
 
     it('calculateEndAngle: should return endAngle number', () => {
-      const endAngle = PoChartCircular['calculateEndAngle'](10, 100);
+      const expectedResult = component['calculateEndAngle'](10, 100);
+      expect(typeof expectedResult === 'number').toBe(true);
 
-      expect(typeof endAngle === 'number').toBe(true);
+      component.type = PoChartType.Gauge;
+
+      const expectedGaugeResult = component['calculateEndAngle'](10, 100);
+      expect(typeof expectedGaugeResult === 'number').toBe(true);
     });
 
-    it('setTooltipAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text`', () => {
+    it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text`', () => {
       const serie: PoPieChartSeries = { category: 'po', value: 2 };
       const svgPath = '<text></text>';
       component.type = PoChartType.Pie;
@@ -532,7 +716,7 @@ describe('PoChartCircular:', () => {
       spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
       spyOn(component, <any> 'getTooltipValue').and.callThrough();
 
-      component['setTooltipAttributes'](svgPath, serie);
+      component['setElementAttributes'](svgPath, serie);
 
       expect(component['getTooltipValue']).toHaveBeenCalledWith(serie.value);
       expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(3);
@@ -540,20 +724,19 @@ describe('PoChartCircular:', () => {
         .toHaveBeenCalledWith(svgPath, 'data-tooltip-text', `${serie.category}: ${serie.value}`);
     });
 
-    it('isMoreThanTwoDecimalsPlaces: should return false if value has less than two decimals places', () => {
-      const value = 10.51;
+    it('setElementAttributes: shouldn`t call `getTooltipValue` and call `setAttribute` passing `description` as param`', () => {
+      const serie: PoChartGaugeSerie = { description: 'Description', value: 2 };
+      const svgPath = '<text></text>';
+      component.type = PoChartType.Gauge;
 
-      expect(component['isMoreThanTwoDecimalsPlaces'](value)).toBe(false);
-    });
+      spyOn(component['renderer'], 'setAttribute');
+      spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
+      spyOn(component, <any> 'getTooltipValue').and.callThrough();
 
-    it('isMoreThanTwoDecimalsPlaces: should return true if value has more than two decimals places', () => {
-      const value = 10.5132;
+      component['setElementAttributes'](svgPath, serie);
 
-      expect(component['isMoreThanTwoDecimalsPlaces'](value)).toBe(true);
-    });
-
-    it('isMoreThanTwoDecimalsPlaces: should return falsy if value param is undefined', () => {
-      expect(component['isMoreThanTwoDecimalsPlaces']()).toBeFalsy();
+      expect(component['getTooltipValue']).not.toHaveBeenCalled();
+      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(svgPath, 'data-tooltip-description', `${serie.description}`);
     });
 
     it('getTooltipValue: should return value as string if `type` is pie', () => {
@@ -658,7 +841,7 @@ describe('PoChartCircular:', () => {
       spyOn(component, <any> 'getFontSize');
       spyOn(component, <any> 'getTextColor');
       spyOn(component, <any> 'getPercentValue');
-      spyOn(component, <any> 'setTooltipAttributes');
+      spyOn(component, <any> 'setElementAttributes');
 
       spyOn(component['renderer'], 'createElement').and.callThrough();
       spyOn(component['renderer'], 'setAttribute');
@@ -669,7 +852,7 @@ describe('PoChartCircular:', () => {
       expect(component['getFontSize']).toHaveBeenCalled();
       expect(component['getTextColor']).toHaveBeenCalled();
       expect(component['getPercentValue']).toHaveBeenCalled();
-      expect(component['setTooltipAttributes']).toHaveBeenCalled();
+      expect(component['setElementAttributes']).toHaveBeenCalled();
 
       expect(component['renderer'].createElement).toHaveBeenCalledTimes(2);
       expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(4);
@@ -730,22 +913,33 @@ describe('PoChartCircular:', () => {
     it('setInnerRadius: should update `innerRadius` with 0 if `type` is pie', () => {
       const expectedValue = 0;
 
-      component.type = PoChartType.Pie;
+      const type = PoChartType.Pie;
 
-      component['setInnerRadius']();
+      const expectedResult = component['setInnerRadius'](type);
 
-      expect(component.innerRadius).toBe(expectedValue);
+      expect(expectedResult).toBe(expectedValue);
     });
 
     it('setInnerRadius: should update `innerRadius` with `365` if `type` is donut', () => {
       const expectedValue = 365;
 
       component.centerX = 500;
-      component.type = PoChartType.Donut;
+      const type = PoChartType.Donut;
 
-      component['setInnerRadius']();
+      const expectedResult = component['setInnerRadius'](type);
 
-      expect(component.innerRadius).toBe(expectedValue);
+      expect(expectedResult).toBe(expectedValue);
+    });
+
+    it('setInnerRadius: should update `innerRadius` with `470` if `type` is gauge', () => {
+      const expectedValue = 470;
+
+      component.centerX = 500;
+      const type = PoChartType.Gauge;
+
+      const expectedResult = component['setInnerRadius'](type);
+
+      expect(expectedResult).toBe(expectedValue);
     });
 
     it('getSeriesWithValue: should return only series with value and color attr', () => {
@@ -775,6 +969,32 @@ describe('PoChartCircular:', () => {
       const validSeries = component['getSeriesWithValue'](invalidSeries);
 
       expect(validSeries).toEqual([]);
+    });
+
+    it('appendGaugeBackgroundPathElement: should create a svg path and append it into `svgPathsWrapper`', () => {
+      const svgPathsWrapper = {appendChild: () => {}};
+
+      spyOn(component['renderer'], 'setAttribute');
+      spyOn(component['renderer'], 'appendChild');
+      spyOn(svgPathsWrapper, 'appendChild');
+
+      component['appendGaugeBackgroundPathElement'](svgPathsWrapper);
+
+      expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(1);
+      expect(component['renderer'].appendChild).toHaveBeenCalledTimes(1);
+      expect(svgPathsWrapper.appendChild).toHaveBeenCalled();
+    });
+
+    it('isSerieValueEqualZero: should return true if serie`s value is equal 0', () => {
+      const fakeSerie = {series: [{ value: 0, description: 'Zero'}]};
+
+      expect(component['isSerieValueEqualZero'].call(fakeSerie)).toBeTruthy();
+    });
+
+    it('isSerieValueEqualZero: should return false if serie`s value different from 0', () => {
+      const fakeSerie = {series: [{ value: 1, description: 'One'}]};
+
+      expect(component['isSerieValueEqualZero'].call(fakeSerie)).toBeFalsy();
     });
 
   });

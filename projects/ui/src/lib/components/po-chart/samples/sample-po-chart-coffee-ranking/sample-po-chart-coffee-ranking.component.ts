@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 
-import { PoChartType, PoDialogService, PoPieChartSeries } from '@portinari/portinari-ui';
+import { PoChartGaugeSerie, PoChartType, PoDialogService, PoPieChartSeries } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-chart-coffee-ranking',
   templateUrl: './sample-po-chart-coffee-ranking.component.html'
 })
 export class SamplePoChartCoffeeRankingComponent {
+
+  brazilianCoffeeProduction: PoChartGaugeSerie = { value: 33, description: `of world's coffee beans were produced in Brazil` };
+
+  brazilianCoffeeProductionChartType: PoChartType = PoChartType.Gauge;
 
   coffeConsumingChartType: PoChartType = PoChartType.Donut;
 
