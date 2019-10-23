@@ -1,7 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit,
+  Output, SimpleChange, SimpleChanges, Renderer2, ViewChild  } from '@angular/core';
 
 import { browserLanguage, capitalizeFirstLetter, convertToInt, poLocaleDefault } from '../../../utils/util';
 import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
+import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
@@ -30,7 +32,7 @@ export const poTableColumnManagerLiteralsDefault = {
   selector: 'po-table-column-manager',
   templateUrl: './po-table-column-manager.component.html'
 })
-export class PoTableColumnManagerComponent implements OnInit, OnChanges {
+export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestroy {
 
   private _maxColumns: number = PoTableColumnManagerMaxColumnsDefault;
 
@@ -42,8 +44,9 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
   visibleColumns: Array<string> = [];
 
   private defaultColumns: Array<PoTableColumn> = [];
+  private resizeListener: () => void;
 
-  @Input('p-columns') columns: Array<PoTableColumn>;
+  @Input('p-columns') columns: Array<PoTableColumn> = [];
 
   @Input('p-max-columns') set maxColumns(value: number) {
     this._maxColumns = convertToInt(value, PoTableColumnManagerMaxColumnsDefault);
@@ -57,28 +60,23 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
 
   @Output('p-visible-columns-change') visibleColumnsChange = new EventEmitter<Array<PoTableColumn>>();
 
+  @ViewChild(PoPopoverComponent, { static: false }) popover: PoPopoverComponent;
+
+  constructor(private renderer: Renderer2) {}
+
   ngOnInit() {
     this.updateColumnsOptions(this.columns);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const { columns, maxColumns } = changes;
+    const { columns, maxColumns, target } = changes;
+
+    if (target && target.firstChange) {
+      this.initializeListeners();
+    }
 
     if (columns) {
-      const { firstChange, currentValue, previousValue = [] } = columns;
-
-      // atualizara o defaultColumns, quando for a primeira vez ou quando o defaultColumns for diferente do currentValue
-      if (Array.isArray(currentValue)) {
-
-        if (firstChange || (this.defaultColumns.length !== currentValue.length)) {
-          this.defaultColumns = currentValue;
-        }
-
-        // verifica se o valor anterior é diferente do atual para atualizar as columnsOptions apenas quando for necessario
-        if (previousValue.length !== currentValue.length) {
-          this.updateColumnsOptions(currentValue);
-        }
-      }
+      this.onChangeColumns(columns);
     }
 
     if (maxColumns) {
@@ -86,8 +84,12 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
     }
   }
 
-  onChangeColumns(checkedColumns: Array<string>) {
-    this.disabledColumns(this.columnsOptions);
+  ngOnDestroy() {
+    this.removeListeners();
+  }
+
+  onChangeVisibleColumns(checkedColumns: Array<string>) {
+    this.disableColumnsOptions(this.columnsOptions);
 
     const visibleTableColumns = this.getVisibleTableColumns(checkedColumns);
 
@@ -98,8 +100,8 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
     this.updateColumnsOptions(this.defaultColumns);
   }
 
-  /** desabilitará as colunas, que não estiverem selecionadas, após exeder o numero maximo de colunas. */
-  private disabledColumns(columns: Array<PoCheckboxGroupOption>) {
+  // desabilitará as colunas, que não estiverem selecionadas, após exeder o numero maximo de colunas.
+  private disableColumnsOptions(columns: Array<PoCheckboxGroupOption> = []) {
     // necessario timeout para que seja possivel atualizar os columnsOptions apos a mudança do model
     setTimeout(() => {
       this.columnsOptions = columns.map(column => ({
@@ -107,10 +109,6 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
         disabled: this.isDisableColumn(column.value)
       }));
     });
-  }
-
-  private isDisableColumn(property: string): boolean {
-    return this.visibleColumns.length >= this.maxColumns ? !this.visibleColumns.includes(property) : false;
   }
 
   private getColumnTitleLabel(column: PoTableColumn) {
@@ -139,6 +137,19 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
     }));
   }
 
+  private initializeListeners() {
+    this.resizeListener = this.renderer.listen('window', 'resize', () => {
+      if (this.popover) {
+        this.popover.close();
+      }
+    });
+
+  }
+
+  private isDisableColumn(property: string): boolean {
+    return this.visibleColumns.length >= this.maxColumns ? !this.visibleColumns.includes(property) : false;
+  }
+
   private mapTableColumnsToCheckboxOptions(columns: Array<PoTableColumn> = []) {
     const columnsOptions = [];
 
@@ -156,11 +167,31 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges {
     return columnsOptions;
   }
 
+  private onChangeColumns(columns: SimpleChange) {
+    const { firstChange, currentValue = [], previousValue = [] } = columns;
+
+    // atualizara o defaultColumns, quando for a primeira vez ou quando o defaultColumns for diferente do currentValue
+    if (firstChange || (this.defaultColumns.length !== currentValue.length)) {
+      this.defaultColumns = currentValue;
+    }
+
+    // verifica se o valor anterior é diferente do atual para atualizar as columnsOptions apenas quando for necessario
+    if (previousValue.length !== currentValue.length) {
+      this.updateColumnsOptions(currentValue);
+    }
+  }
+
+  private removeListeners() {
+    if (this.removeListeners) {
+      this.resizeListener();
+    }
+  }
+
   private updateColumnsOptions(columns: Array<PoTableColumn>) {
     this.visibleColumns = this.getVisibleColumns(columns);
     this.columnsOptions = this.mapTableColumnsToCheckboxOptions(columns);
 
-    this.onChangeColumns(this.visibleColumns);
+    this.onChangeVisibleColumns(this.visibleColumns);
   }
 
 }
