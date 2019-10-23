@@ -182,7 +182,7 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
   }
 
   private removeListeners() {
-    if (this.removeListeners) {
+    if (this.resizeListener) {
       this.resizeListener();
     }
   }
