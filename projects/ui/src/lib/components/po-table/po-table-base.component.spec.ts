@@ -443,16 +443,6 @@ describe('PoTableBaseComponent:', () => {
     expect(component.getNameColumnDetail.call(fakeThis)).toBeNull();
   });
 
-  it('should return columns with type or without type', () => {
-    const fakeThis = {
-      columns: [
-        { label: 'Textos', property: 'textData', type: 'string' },
-        { label: 'Números', property: 'numberData' }]
-    };
-
-    expect(component.getMainColumns.call(fakeThis).length).toBe(2);
-  });
-
   it('should not return the columns of type subtitle', () => {
     expect(component.getSubtitleColumns().length).toBe(0);
   });
@@ -466,10 +456,6 @@ describe('PoTableBaseComponent:', () => {
     ]
     });
     expect(component.getSubtitleColumns().length).toBe(1);
-  });
-
-  it('should return the columns of type valid', () => {
-    expect(component.getMainColumns().length).toBe(4);
   });
 
   it('should return false when items undefined in hasItems method', () => {
@@ -877,23 +863,6 @@ describe('PoTableBaseComponent:', () => {
       expect(component.showMore.emit).toHaveBeenCalledWith(undefined);
     });
 
-    it('getMainColumns: should return only visible columns', () => {
-      const invisibleColumns: Array<PoTableColumn> = [
-        { property: 'name', visible: false }
-      ];
-
-      const visibleColumns: Array<PoTableColumn> = [
-        { property: 'age' },
-        { property: 'email' }
-      ];
-
-      component.columns = [ ...invisibleColumns, ...visibleColumns];
-
-      const mainColumns = component.getMainColumns();
-
-      expect(mainColumns.length).toBe(visibleColumns.length);
-      expect(mainColumns.every(mainColumn => mainColumn.visible !== false)).toBe(true);
-    });
   });
 
   describe('Properties:', () => {

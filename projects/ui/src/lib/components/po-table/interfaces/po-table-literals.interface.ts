@@ -13,6 +13,9 @@ export interface PoTableLiterals {
   /** Texto exibido quando não existem itens para serem exibidos na tabela. */
   noData?: string;
 
+  /** Texto exibido quando não existem colunas visíveis para a tabela. */
+  noVisibleColumn?: string;
+
   /** Texto exibido enquanto uma requisição está sendo executada para carregar dados na tabela. */
   loadingData?: string;
 

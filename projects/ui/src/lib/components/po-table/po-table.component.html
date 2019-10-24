@@ -61,13 +61,22 @@
           class="po-table-header-column po-table-header-master-detail">
         </th>
 
-        <th *ngIf="!hasMainColumns" class="po-table-header-column po-text-center po-full-width">
-          <div [class.po-table-header-fixed-inner]="height" class="po-full-width">
-            {{ literals.noColumns }}
-          </div>
+        <th *ngIf="!hasMainColumns" #noColumnsHeader class="po-table-header-column po-text-center">
+          <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
+
+          <ng-template #noColumnsWithHeight>
+            <div class="po-table-header-fixed-inner" [style.width.px]="noColumnsHeader.offsetWidth">
+              {{ hasValidColumns ? literals.noVisibleColumn : literals.noColumns }}
+            </div>
+          </ng-template>
+
+          <ng-template #noColumnsWithoutHeight>
+            {{ hasValidColumns ? literals.noVisibleColumn : literals.noColumns }}
+          </ng-template>
+
         </th>
 
-        <th *ngFor="let column of getMainColumns(); let i = index" #headersTable
+        <th *ngFor="let column of mainColumns; let i = index" #headersTable
           class="po-table-header-ellipsis"
           [style.width]="column.width" [style.max-width]="column.width" [style.min-width]="column.width"
           [class.po-clickable]="sort"
@@ -154,7 +163,7 @@
             </span>
           </td>
 
-          <td *ngFor="let column of getMainColumns(), let columnIndex = index;"
+          <td *ngFor="let column of mainColumns, let columnIndex = index;"
             [style.width]="column.width" [style.max-width]="column.width" [style.min-width]="column.width"
             [class.po-table-column]="column.type !== 'icon'"
             [class.po-table-column-right]="column.type == 'currency' || column.type == 'number'"

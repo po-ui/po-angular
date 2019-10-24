@@ -138,20 +138,34 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   get hasMainColumns() {
-    return !!this.getMainColumns().length;
+    return !!this.mainColumns.length;
   }
 
   get hasMasterDetailColumn(): boolean {
     return this.hasMainColumns &&
-    (this.hasItems() && !this.hideDetail && this.getColumnMasterDetail() !== undefined || this.hasRowTemplate);
+    this.hasItems() && !this.hideDetail && (this.getColumnMasterDetail() !== undefined || this.hasRowTemplate);
   }
 
   get hasRowTemplate(): boolean {
     return !!this.tableRowTemplate;
   }
 
+  get hasValidColumns() {
+    return !!this.validColumns.length;
+  }
+
   get hasVisibleSubtitleColumns() {
     return this.getSubtitleColumns().some(column => column.visible !== false);
+  }
+
+  // Colunas que são inseridas no <head> da tabela
+  get mainColumns() {
+    return this.validColumns.filter(col => col.visible !== false);
+  }
+
+  get validColumns() {
+    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon'];
+    return this.columns.filter(col => !col.type || typesValid.includes(col.type));
   }
 
   get visibleActions() {
@@ -194,15 +208,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   columnCountForMasterDetail() {
     const columnManager = 1;
-    return (this.getMainColumns().length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.checkbox ? 1 : 0) + columnManager;
+    return (this.mainColumns.length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.checkbox ? 1 : 0) + columnManager;
   }
 
   columnCount() {
-    const columnsManager = 1;
 
-    return (
-      columnsManager +
-      this.getMainColumns().length +
+    return (this.mainColumns.length +
       (this.actions.length > 0 ? 1 : 0) +
       (this.checkbox ? 1 : 0) +
       (!this.hideDetail && this.getColumnMasterDetail() !== undefined ? 1 : 0)
@@ -257,8 +268,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   verifyWidthColumnsPixels() {
-    const columns = this.getMainColumns();
-    return columns.length ? columns.every(column => column.width && column.width.includes('px')) : false;
+    return this.hasMainColumns ? this.mainColumns.every(column => column.width && column.width.includes('px')) : false;
   }
 
   calculateWidthHeaders() {

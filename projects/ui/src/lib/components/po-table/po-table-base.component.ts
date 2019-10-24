@@ -16,6 +16,7 @@ export const poTableLiteralsDefault = {
   en: <PoTableLiterals>{
     noColumns: 'Columns are not defined',
     noData: 'No data found',
+    noVisibleColumn: 'No visible column',
     loadingData: 'Loading',
     loadMoreData: 'Load more data',
     seeCompleteSubtitle: 'See complete subtitle',
@@ -25,6 +26,7 @@ export const poTableLiteralsDefault = {
   es: <PoTableLiterals>{
     noColumns: 'Columnas no definidas',
     noData: 'Datos no encontrados',
+    noVisibleColumn: 'Sin columnas visibles',
     loadingData: 'Cargando datos',
     loadMoreData: 'Cargar más resultados',
     seeCompleteSubtitle: 'Ver subtitulo completo',
@@ -34,6 +36,7 @@ export const poTableLiteralsDefault = {
   pt: <PoTableLiterals>{
     noColumns: 'Nenhuma definição de colunas',
     noData: 'Nenhum dado encontrado',
+    noVisibleColumn: 'Nenhuma coluna visível',
     loadingData: 'Carregando',
     loadMoreData: 'Carregar mais resultados',
     seeCompleteSubtitle: 'Ver legenda completa',
@@ -43,6 +46,7 @@ export const poTableLiteralsDefault = {
   ru: <PoTableLiterals>{
     noColumns: 'Нет определения столбца',
     noData: 'Данные не найдены',
+    noVisibleColumn: 'нет видимых столбцов',
     loadingData: 'погрузка',
     loadMoreData: 'загрузка',
     seeCompleteSubtitle: 'Посмотреть полный субтитр',
@@ -483,12 +487,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   selectDetailRow(row: any) {
     this.emitSelectEvents(row);
-  }
-
-  // Colunas que são inseridas no <head> da tabela
-  getMainColumns() {
-    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon'];
-    return this.columns.filter(col => col.visible !== false && (!col.type || typesValid.includes(col.type)));
   }
 
   // Retorna a coluna da lista de colunas que é do tipo detail

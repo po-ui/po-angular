@@ -439,21 +439,21 @@ describe('PoTableComponent:', () => {
     component.hideDetail = false;
     component.actions = actions;
 
-    expect(component.columnCount()).toBe(9);
+    expect(component.columnCount()).toBe(8);
   });
 
   it('should count the number columns of table with master-detail undefined', () => {
     component.columns = [...columns];
     component.checkbox = true;
     component.actions = actions;
-    expect(component.columnCount()).toBe(8);
+    expect(component.columnCount()).toBe(7);
   });
 
   it('should count the number columns of table with checkbox false', () => {
     component.columns = [...columns];
     component.checkbox = false;
     component.actions = actions;
-    expect(component.columnCount()).toBe(7);
+    expect(component.columnCount()).toBe(6);
   });
 
   it('should count the number columns of table with hideDetail false', () => {
@@ -461,14 +461,14 @@ describe('PoTableComponent:', () => {
     component.actions = actions;
     component.checkbox = true;
     component.hideDetail = true;
-    expect(component.columnCount()).toBe(8);
+    expect(component.columnCount()).toBe(7);
   });
 
   it('should count the number columns of table without action', () => {
     component.columns = columnsWithDetail;
     component.checkbox = true;
     component.actions.length = 0;
-    expect(component.columnCount()).toBe(8);
+    expect(component.columnCount()).toBe(7);
   });
 
   it('should toggle column sort', () => {
@@ -1819,6 +1819,70 @@ describe('PoTableComponent:', () => {
       component.columns = [ ...columnsSubtitle ];
 
       expect(component.hasVisibleSubtitleColumns).toBe(false);
+    });
+
+    it('mainColumns: should return columns with type or without type', () => {
+      component.columns = [ ...columns ];
+
+      expect(component.mainColumns.length).toBe(columns.length);
+    });
+
+    it('mainColumns: should return only visible columns', () => {
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'name', visible: false }
+      ];
+
+      const visibleColumns: Array<PoTableColumn> = [
+        { property: 'age' },
+        { property: 'email' }
+      ];
+
+      component.columns = [ ...invisibleColumns, ...visibleColumns ];
+
+      const mainColumns = component.mainColumns;
+
+      expect(mainColumns.length).toBe(visibleColumns.length);
+      expect(mainColumns.every(mainColumn => mainColumn.visible !== false)).toBe(true);
+    });
+
+    it('hasValidColumns: ', () => {
+      const invalidColumns = [
+        { property: 'email', type: 'email' }
+      ];
+
+      component.columns = [ ...columns, ...invalidColumns ];
+
+      expect(component.hasValidColumns).toBe(true);
+    });
+
+    it('hasValidColumns: ', () => {
+      const invalidColumns = [
+        { property: 'email', type: 'email' }
+      ];
+
+      component.columns = [ ...invalidColumns ];
+
+      expect(component.hasValidColumns).toBe(false);
+    });
+
+    it('validColumns: ', () => {
+      const invalidColumns = [
+        { property: 'email', type: 'email' }
+      ];
+
+      component.columns = [ ...columns, ...invalidColumns ];
+
+      expect(component.validColumns).toEqual(columns);
+    });
+
+    it('validColumns: ', () => {
+      const invalidColumns = [
+        { property: 'email', type: 'email' }
+      ];
+
+      component.columns = [ ...invalidColumns ];
+
+      expect(component.validColumns).toEqual([]);
     });
 
   });
