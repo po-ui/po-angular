@@ -1773,6 +1773,79 @@ describe('PoTableComponent:', () => {
       expect(component.columnManagerTarget).toBeTruthy();
     });
 
+    it(`hasCheckboxColumn: should return true if 'checkbox', 'hasItems' and 'hasMainColumns' are true`, () => {
+      component.checkbox = true;
+
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+
+      expect(component.hasCheckboxColumn).toBe(true);
+    });
+
+    it(`hasCheckboxColumn: should return false if 'checkbox', 'hasItems' and 'hasMainColumns' are false`, () => {
+      component.checkbox = false;
+
+      spyOn(component, 'hasItems').and.returnValue(false);
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
+
+      expect(component.hasCheckboxColumn).toBe(false);
+    });
+
+    it(`hasCheckboxColumn: should return false if 'checkbox', 'hasItems' are true and 'hasMainColumns' is false`, () => {
+      component.checkbox = true;
+
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
+
+      expect(component.hasCheckboxColumn).toBe(false);
+    });
+
+    it(`hasCheckboxColumn: should return false if 'checkbox', 'hasMainColumns' are true and 'hasItems' is false`, () => {
+      component.checkbox = true;
+
+      spyOn(component, 'hasItems').and.returnValue(false);
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+
+      expect(component.hasCheckboxColumn).toBe(false);
+    });
+
+    it(`hasCheckboxColumn: should return false if 'hasItems', 'hasMainColumns' are true and 'checkbox' is false`, () => {
+      component.checkbox = false;
+
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+
+      expect(component.hasCheckboxColumn).toBe(false);
+    });
+
+    it(`hasFooter: should return false if 'hasItems' and 'hasVisibleSubtitleColumns' are false`, () => {
+      spyOn(component, 'hasItems').and.returnValue(false);
+      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(false);
+
+      expect(component.hasFooter).toBe(false);
+    });
+
+    it(`hasFooter: should return true if 'hasItems' and 'hasVisibleSubtitleColumns' are true`, () => {
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(true);
+
+      expect(component.hasFooter).toBe(true);
+    });
+
+    it(`hasFooter: should return false if 'hasItems' is true and 'hasVisibleSubtitleColumns' is false`, () => {
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(false);
+
+      expect(component.hasFooter).toBe(false);
+    });
+
+    it(`hasFooter: should return false if 'hasItems' is false and 'hasVisibleSubtitleColumns' is true`, () => {
+      spyOn(component, 'hasItems').and.returnValue(false);
+      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(true);
+
+      expect(component.hasFooter).toBe(false);
+    });
+
     it('hasMainColumns: should return true if `columns` contains visible columns', () => {
       const invisibleColumns: Array<PoTableColumn> = [
         { property: 'name', visible: false }
@@ -1803,6 +1876,67 @@ describe('PoTableComponent:', () => {
       component.columns = [];
 
       expect(component.hasMainColumns).toBe(false);
+    });
+
+    it(`hasMasterDetailColumn: should return true if 'hasMainColumns', 'hasItems', 'getColumnMasterDetail' are true and
+      'hideDetail' is false`, () => {
+
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>true);
+
+      component.hideDetail = false;
+
+      expect(component.hasMasterDetailColumn).toBe(true);
+    });
+
+    it(`hasMasterDetailColumn: should return true if 'hasMainColumns', 'hasItems', 'hasRowTemplate' are true and
+      'hideDetail' and 'getColumnMasterDetail' are false`, () => {
+
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>false);
+
+      component.hideDetail = false;
+
+      expect(component.hasMasterDetailColumn).toBe(true);
+    });
+
+    it(`hasMasterDetailColumn: should return false if 'hasMainColumns' is false and 'hasItems', 'hasRowTemplate' are true and
+      'hideDetail' and 'getColumnMasterDetail' are false`, () => {
+
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>false);
+
+      component.hideDetail = false;
+
+      expect(component.hasMasterDetailColumn).toBe(false);
+    });
+
+    it(`hasMasterDetailColumn: should return false if 'hasMainColumns', 'hasItems', 'hasRowTemplate', 'hideDetail' are true`, () => {
+
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOn(component, 'hasItems').and.returnValue(true);
+
+      component.hideDetail = true;
+
+      expect(component.hasMasterDetailColumn).toBe(false);
+    });
+
+    it(`hasRowTemplate: should return true if 'tableRowTemplate' is defined`, () => {
+      component.tableRowTemplate = <any>'mock tableRowTemplate';
+
+      expect(component.hasRowTemplate).toBe(true);
+    });
+
+    it(`hasRowTemplate: should return false if 'tableRowTemplate' is undefined`, () => {
+      component.tableRowTemplate = undefined;
+
+      expect(component.hasRowTemplate).toBe(false);
     });
 
     it('hasVisibleSubtitleColumns: should return true if subtitleColumn is visible', () => {
