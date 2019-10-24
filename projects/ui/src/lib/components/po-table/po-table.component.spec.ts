@@ -8,27 +8,13 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
-import { PoLoadingModule } from '../po-loading/po-loading.module';
-import { PoPopupModule } from '../po-popup/po-popup.module';
-import { PoTimePipe } from '../../pipes/po-time/po-time.pipe';
-import { PoTooltipDirective } from '../../directives/po-tooltip/po-tooltip.directive';
 import * as utilsFunctions from '../../utils/util';
 
-import { PoButtonComponent } from '../po-button/po-button.component';
-import { PoContainerComponent } from '../po-container/po-container.component';
-import { PoModalComponent } from '../po-modal/po-modal.component';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
-import { PoTableColumnIconComponent } from './po-table-column-icon/po-table-column-icon.component';
-import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-column-label.component';
-import { PoTableColumnLinkComponent } from './po-table-column-link/po-table-column-link.component';
 import { PoTableComponent } from './po-table.component';
-import { PoTableDetailComponent } from './po-table-detail/po-table-detail.component';
-import { PoTableIconComponent } from './po-table-icon/po-table-icon.component';
-import { PoTableShowSubtitleComponent } from './po-table-show-subtitle/po-table-show-subtitle.component';
-import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle/po-table-subtitle-circle.component';
-import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-table-subtitle-footer.component';
+import { PoTableModule } from './po-table.module';
 
 @Component({ template: 'Search' })
 export class SearchComponent { }
@@ -178,24 +164,10 @@ describe('PoTableComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoLoadingModule, PoPopupModule],
+      imports: [RouterTestingModule.withRoutes(routes), PoTableModule],
       declarations: [
-        PoTableComponent,
-        PoTableColumnLabelComponent,
-        PoTableColumnLinkComponent,
-        PoTableShowSubtitleComponent,
-        PoTableSubtitleFooterComponent,
-        PoTableSubtitleCircleComponent,
-        PoTableColumnIconComponent,
-        PoTableDetailComponent,
-        PoTableIconComponent,
-        PoButtonComponent,
-        PoContainerComponent,
-        PoModalComponent,
         TestMenuComponent,
-        SearchComponent,
-        PoTooltipDirective,
-        PoTimePipe
+        SearchComponent
       ],
       providers: [PoControlPositionService, PoDateService, DecimalPipe, PoColorPaletteService]
     });
@@ -467,21 +439,21 @@ describe('PoTableComponent:', () => {
     component.hideDetail = false;
     component.actions = actions;
 
-    expect(component.columnCount()).toBe(8);
+    expect(component.columnCount()).toBe(9);
   });
 
   it('should count the number columns of table with master-detail undefined', () => {
     component.columns = [...columns];
     component.checkbox = true;
     component.actions = actions;
-    expect(component.columnCount()).toBe(7);
+    expect(component.columnCount()).toBe(8);
   });
 
   it('should count the number columns of table with checkbox false', () => {
     component.columns = [...columns];
     component.checkbox = false;
     component.actions = actions;
-    expect(component.columnCount()).toBe(6);
+    expect(component.columnCount()).toBe(7);
   });
 
   it('should count the number columns of table with hideDetail false', () => {
@@ -489,14 +461,14 @@ describe('PoTableComponent:', () => {
     component.actions = actions;
     component.checkbox = true;
     component.hideDetail = true;
-    expect(component.columnCount()).toBe(7);
+    expect(component.columnCount()).toBe(8);
   });
 
   it('should count the number columns of table without action', () => {
     component.columns = columnsWithDetail;
     component.checkbox = true;
     component.actions.length = 0;
-    expect(component.columnCount()).toBe(7);
+    expect(component.columnCount()).toBe(8);
   });
 
   it('should toggle column sort', () => {
@@ -674,8 +646,10 @@ describe('PoTableComponent:', () => {
   }));
 
   it('should count columns for master detail', () => {
+    const columnManager = 1;
     component.columns = [...columns];
-    const countColumns = columns.length + 1;
+
+    const countColumns = columns.length + 1 + columnManager;
 
     expect(component.columnCountForMasterDetail()).toBe(countColumns);
 
@@ -1548,6 +1522,18 @@ describe('PoTableComponent:', () => {
       expect(utilsFunctions.capitalizeFirstLetter).toHaveBeenCalledWith(propertyValue);
     });
 
+    it('onVisibleColumnsChange: should set `columns` and call `detectChanges`', () => {
+      const newColumns: Array<PoTableColumn> = [ { property: 'age', visible: false } ];
+
+      component.columns = [];
+
+      const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+
+      component.onVisibleColumnsChange(newColumns);
+
+      expect(spyDetectChanges).toHaveBeenCalled();
+    });
+
   });
 
   describe('Templates:', () => {
@@ -1733,7 +1719,7 @@ describe('PoTableComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(tableElement.querySelector('.po-table-header-column').innerHTML).toBe(noColumnsMessage);
+      expect(tableElement.querySelector('.po-table-header-column').innerHTML.includes(noColumnsMessage)).toBe(true);
     });
 
     it('shouldn`t display action if it is single and `visible` is `false`.', () => {
@@ -1776,6 +1762,63 @@ describe('PoTableComponent:', () => {
       const firstAction = actions[0];
 
       expect(component.firstAction).toEqual(firstAction);
+    });
+
+    it('columnManagerTarget: should set property and call `detectChanges`', () => {
+      const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+
+      component.columnManagerTarget = new ElementRef('<th></th>');
+
+      expect(spyDetectChanges).toHaveBeenCalled();
+      expect(component.columnManagerTarget).toBeTruthy();
+    });
+
+    it('hasMainColumns: should return true if `columns` contains visible columns', () => {
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'name', visible: false }
+      ];
+
+      const visibleColumns: Array<PoTableColumn> = [
+        { property: 'age' },
+        { property: 'email' }
+      ];
+
+      component.columns = [ ...invisibleColumns, ...visibleColumns];
+
+      expect(component.hasMainColumns).toBe(true);
+    });
+
+    it('hasMainColumns: should return false if `columns` has only invisble columns', () => {
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'name', visible: false }
+      ];
+
+      component.columns = [ ...invisibleColumns ];
+
+      expect(component.hasMainColumns).toBe(false);
+    });
+
+    it('hasMainColumns: should return false if `columns` is empty', () => {
+      component.items = [];
+      component.columns = [];
+
+      expect(component.hasMainColumns).toBe(false);
+    });
+
+    it('hasVisibleSubtitleColumns: should return true if subtitleColumn is visible', () => {
+      const columnsSubtitle = [ columnSubtitle ];
+
+      component.columns = [ ...columnsSubtitle ];
+
+      expect(component.hasVisibleSubtitleColumns).toBe(true);
+    });
+
+    it('hasVisibleSubtitleColumns: should return false if subtitleColumn is invisible', () => {
+      const columnsSubtitle = [ { ...columnSubtitle, visible: false } ];
+
+      component.columns = [ ...columnsSubtitle ];
+
+      expect(component.hasVisibleSubtitleColumns).toBe(false);
     });
 
   });

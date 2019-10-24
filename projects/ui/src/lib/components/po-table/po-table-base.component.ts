@@ -461,10 +461,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
     return this.columns && this.columns.length > 0;
   }
 
-  get hasMainColumns() {
-    return !!this.getMainColumns().length;
-  }
-
   selectAllRows() {
     if (!this.hideSelectAll) {
       this.selectAll = !this.selectAll;
@@ -487,10 +483,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   selectDetailRow(row: any) {
     this.emitSelectEvents(row);
-  }
-
-  get columnsValidToManager() {
-    return this.columns.filter(col => col.type !== 'detail');
   }
 
   // Colunas que são inseridas no <head> da tabela
@@ -517,10 +509,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
   // Retorna as colunas com status
   getSubtitleColumns() {
     return this.columns.filter(col => col.type === 'subtitle');
-  }
-
-  get hasVisibleSubtitleColumns() {
-    return this.getSubtitleColumns().some(column => column.visible !== false);
   }
 
   // Retorna as colunas com ícones

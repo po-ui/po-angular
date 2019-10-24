@@ -36,6 +36,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   height: number;
   items: Array<any>;
   literals: string;
+  maxColumns: number;
   properties: Array<string>;
   selection: Array<string>;
 
@@ -151,6 +152,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.height = undefined;
     this.items = [];
     this.literals = '';
+    this.maxColumns = undefined;
     this.properties = [];
     this.selection = [];
 

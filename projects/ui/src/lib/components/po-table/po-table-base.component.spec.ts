@@ -876,6 +876,24 @@ describe('PoTableBaseComponent:', () => {
 
       expect(component.showMore.emit).toHaveBeenCalledWith(undefined);
     });
+
+    it('getMainColumns: should return only visible columns', () => {
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'name', visible: false }
+      ];
+
+      const visibleColumns: Array<PoTableColumn> = [
+        { property: 'age' },
+        { property: 'email' }
+      ];
+
+      component.columns = [ ...invisibleColumns, ...visibleColumns];
+
+      const mainColumns = component.getMainColumns();
+
+      expect(mainColumns.length).toBe(visibleColumns.length);
+      expect(mainColumns.every(mainColumn => mainColumn.visible !== false)).toBe(true);
+    });
   });
 
   describe('Properties:', () => {

@@ -58,19 +58,34 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
 
-  private _managerTarget: ElementRef;
+  private _columnManagerTarget: ElementRef;
+
+  heightTableContainer;
+  parentRef: any;
+  popupTarget;
+  tableOpacity: number = 0;
+  tooltipText: string;
+
+  private differ;
+  private footerHeight;
+  private initialized = false;
+  private timeoutResize;
+  private visibleElement = false;
+
+  private clickListener: () => void;
+  private resizeListener: () => void;
 
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
 
   @ViewChild('popup', { static: false }) poPopupComponent: PoPopupComponent;
-  @ViewChild('columnManagerTarget', { static: false }) set managerTarget(value: ElementRef) {
-    this._managerTarget = value;
+  @ViewChild('columnManagerTarget', { static: false }) set columnManagerTarget(value: ElementRef) {
+    this._columnManagerTarget = value;
 
     this.changeDetector.detectChanges();
   }
 
-  get managerTarget() {
-    return this._managerTarget;
+  get columnManagerTarget() {
+    return this._columnManagerTarget;
   }
 
   @ViewChild('tableContainer', { read: ElementRef, static: true }) tableContainerElement;
@@ -80,21 +95,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
   @ViewChildren('headersTable') headersTable: QueryList<any>;
-
-  heightTableContainer;
-  parentRef: any;
-  popupTarget;
-  tableOpacity: number = 0;
-  tooltipText: string;
-  visibleElement = false;
-
-  private differ;
-  private footerHeight;
-  private initialized = false;
-  private timeoutResize;
-
-  private clickListener: () => void;
-  private resizeListener: () => void;
 
   constructor(
     poDate: PoDateService,
@@ -129,8 +129,29 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.visibleActions && this.visibleActions[0];
   }
 
+  get hasCheckboxColumn(): boolean {
+    return this.checkbox && this.hasItems() && this.hasMainColumns;
+  }
+
+  get hasFooter(): boolean {
+    return this.hasItems() && this.hasVisibleSubtitleColumns;
+  }
+
+  get hasMainColumns() {
+    return !!this.getMainColumns().length;
+  }
+
+  get hasMasterDetailColumn(): boolean {
+    return this.hasMainColumns &&
+    (this.hasItems() && !this.hideDetail && this.getColumnMasterDetail() !== undefined || this.hasRowTemplate);
+  }
+
   get hasRowTemplate(): boolean {
     return !!this.tableRowTemplate;
+  }
+
+  get hasVisibleSubtitleColumns() {
+    return this.getSubtitleColumns().some(column => column.visible !== false);
   }
 
   get visibleActions() {
@@ -274,7 +295,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       !this.hasRowTemplate;
   }
 
-  onVisibleColumnsChange(columns) {
+  onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
 
     this.changeDetector.detectChanges();
