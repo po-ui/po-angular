@@ -393,7 +393,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * Define uma quantidade máxima de colunas que serão exibidas na tabela.
    *
    * Quando chegar no valor informado, as colunas que não estiverem selecionadas ficarão
-   * desabilitadas e caso houver mais colunas visiveis do que o permitido, as excedentes
+   * desabilitadas e caso houver mais colunas visíveis do que o permitido, as excedentes
    * serão ignoradas por ordem de posição.
    */
   @Input('p-max-columns') maxColumns?: number;

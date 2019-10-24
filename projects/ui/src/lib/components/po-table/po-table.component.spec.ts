@@ -1979,7 +1979,7 @@ describe('PoTableComponent:', () => {
       expect(mainColumns.every(mainColumn => mainColumn.visible !== false)).toBe(true);
     });
 
-    it('hasValidColumns: ', () => {
+    it('hasValidColumns: should return true if `validColumns.length` not is empty', () => {
       const invalidColumns = [
         { property: 'email', type: 'email' }
       ];
@@ -1989,7 +1989,7 @@ describe('PoTableComponent:', () => {
       expect(component.hasValidColumns).toBe(true);
     });
 
-    it('hasValidColumns: ', () => {
+    it('hasValidColumns: should return true if `validColumns.length` is empty', () => {
       const invalidColumns = [
         { property: 'email', type: 'email' }
       ];
@@ -1999,7 +1999,7 @@ describe('PoTableComponent:', () => {
       expect(component.hasValidColumns).toBe(false);
     });
 
-    it('validColumns: ', () => {
+    it('validColumns: should return only valid columns', () => {
       const invalidColumns = [
         { property: 'email', type: 'email' }
       ];
@@ -2009,7 +2009,7 @@ describe('PoTableComponent:', () => {
       expect(component.validColumns).toEqual(columns);
     });
 
-    it('validColumns: ', () => {
+    it('validColumns: should return an empty array if all columns are invalid', () => {
       const invalidColumns = [
         { property: 'email', type: 'email' }
       ];
