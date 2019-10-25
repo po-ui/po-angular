@@ -1,6 +1,6 @@
 {
   "name": "portinari-sources",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "description": "Portinari",
   "homepage": "https://portinari.io",
   "license": "MIT",
@@ -49,7 +49,7 @@
     "@angular/router": "~8.0.0",
     "@ionic-native/core": "4.18.0",
     "@ionic-native/network": "4.18.0",
-    "@portinari/style": "1.13.0",
+    "@portinari/style": "1.13.1",
     "core-js": "3.1.4",
     "custom-idle-queue": "2.1.2",
     "http-status-codes": "^1.3.0",

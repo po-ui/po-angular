@@ -1,5 +1,15 @@
 # Changelog
 
+### [1.13.1](https://github.com/portinariui/portinari-angular/compare/v1.13.0...v1.13.1) (2019-10-25)
+
+
+### Bug Fixes
+
+* **chart:** corrige animação em loop em series com valores zerados ([5fedcd5](https://github.com/portinariui/portinari-angular/commit/5fedcd5))
+* **url:** corrige validação de links que contenham caracteres maiúsculos ([3b45ccb](https://github.com/portinariui/portinari-angular/commit/3b45ccb))
+
+
+
 ## [1.13.0](https://github.com/portinariui/portinari-angular/compare/v1.12.0...v1.13.0) (2019-10-18)
 
 
