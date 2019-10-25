@@ -4,31 +4,17 @@ import { DecimalPipe } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
 
+import * as utilsFunctions from '../../utils/util';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
-import { PoLoadingModule } from '../po-loading/po-loading.module';
-import { PoPopupModule } from '../po-popup/po-popup.module';
-import { PoTimePipe } from '../../pipes/po-time/po-time.pipe';
-import { PoTooltipDirective } from '../../directives/po-tooltip/po-tooltip.directive';
-import * as utilsFunctions from '../../utils/util';
 
-import { PoButtonComponent } from '../po-button/po-button.component';
-import { PoContainerComponent } from '../po-container/po-container.component';
-import { PoModalComponent } from '../po-modal/po-modal.component';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
-import { PoTableColumnIconComponent } from './po-table-column-icon/po-table-column-icon.component';
-import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-column-label.component';
-import { PoTableColumnLinkComponent } from './po-table-column-link/po-table-column-link.component';
 import { PoTableComponent } from './po-table.component';
-import { PoTableDetailComponent } from './po-table-detail/po-table-detail.component';
-import { PoTableIconComponent } from './po-table-icon/po-table-icon.component';
-import { PoTableShowSubtitleComponent } from './po-table-show-subtitle/po-table-show-subtitle.component';
-import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle/po-table-subtitle-circle.component';
-import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-table-subtitle-footer.component';
+import { PoTableModule } from './po-table.module';
 
 @Component({ template: 'Search' })
 export class SearchComponent { }
@@ -178,24 +164,10 @@ describe('PoTableComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoLoadingModule, PoPopupModule],
+      imports: [RouterTestingModule.withRoutes(routes), PoTableModule],
       declarations: [
-        PoTableComponent,
-        PoTableColumnLabelComponent,
-        PoTableColumnLinkComponent,
-        PoTableShowSubtitleComponent,
-        PoTableSubtitleFooterComponent,
-        PoTableSubtitleCircleComponent,
-        PoTableColumnIconComponent,
-        PoTableDetailComponent,
-        PoTableIconComponent,
-        PoButtonComponent,
-        PoContainerComponent,
-        PoModalComponent,
         TestMenuComponent,
-        SearchComponent,
-        PoTooltipDirective,
-        PoTimePipe
+        SearchComponent
       ],
       providers: [PoControlPositionService, PoDateService, DecimalPipe, PoColorPaletteService]
     });
@@ -674,8 +646,10 @@ describe('PoTableComponent:', () => {
   }));
 
   it('should count columns for master detail', () => {
+    const columnManager = 1;
     component.columns = [...columns];
-    const countColumns = columns.length + 1;
+
+    const countColumns = columns.length + 1 + columnManager;
 
     expect(component.columnCountForMasterDetail()).toBe(countColumns);
 
@@ -1548,6 +1522,18 @@ describe('PoTableComponent:', () => {
       expect(utilsFunctions.capitalizeFirstLetter).toHaveBeenCalledWith(propertyValue);
     });
 
+    it('onVisibleColumnsChange: should set `columns` and call `detectChanges`', () => {
+      const newColumns: Array<PoTableColumn> = [ { property: 'age', visible: false } ];
+
+      component.columns = [];
+
+      const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+
+      component.onVisibleColumnsChange(newColumns);
+
+      expect(spyDetectChanges).toHaveBeenCalled();
+    });
+
   });
 
   describe('Templates:', () => {
@@ -1733,7 +1719,7 @@ describe('PoTableComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(tableElement.querySelector('.po-table-header-column').innerHTML).toBe(noColumnsMessage);
+      expect(tableElement.querySelector('.po-table-header-column').innerHTML.includes(noColumnsMessage)).toBe(true);
     });
 
     it('shouldn`t display action if it is single and `visible` is `false`.', () => {
@@ -1761,6 +1747,41 @@ describe('PoTableComponent:', () => {
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
       expect(nativeElement.querySelector('.po-container-no-shadow')).toBeFalsy();
     });
+
+    it('should find .po-table-header-column-manager if has columns and actions is undefined', () => {
+      component.columns = [...columns];
+      component.actions = [];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-table-header-column-manager')).toBeTruthy();
+    });
+
+    it('should find .po-table-header-column-manager-button if has columns and actions', () => {
+      component.columns = [...columns];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-table-header-column-manager-button')).toBeTruthy();
+    });
+
+    it('shouldn`t find .po-table-header-column-manager-button if hasn`t columns and items', () => {
+      component.items = undefined;
+      component.columns = undefined;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-table-header-column-manager-button')).toBe(null);
+    });
+
+    it('shouldn`t find .po-table-header-column-manager-button if has only type detail columns', () => {
+      component.columns = [...columnsDetail];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-table-header-column-manager-button')).toBe(null);
+    });
+
   });
 
   describe('Properties:', () => {
@@ -1776,6 +1797,295 @@ describe('PoTableComponent:', () => {
       const firstAction = actions[0];
 
       expect(component.firstAction).toEqual(firstAction);
+    });
+
+    it('columnManagerTarget: should set property and call `detectChanges`', () => {
+      const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+
+      component.columnManagerTarget = new ElementRef('<th></th>');
+
+      expect(spyDetectChanges).toHaveBeenCalled();
+      expect(component.columnManagerTarget).toBeTruthy();
+    });
+
+    describe(`hasCheckboxColumn`, () => {
+
+      it(`should return true if 'checkbox', 'hasItems' and 'hasMainColumns' are true`, () => {
+        component.checkbox = true;
+
+        spyOn(component, 'hasItems').and.returnValue(true);
+        spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+
+        expect(component.hasCheckboxColumn).toBe(true);
+      });
+
+      it(`should return false if 'checkbox', 'hasItems' and 'hasMainColumns' are false`, () => {
+        component.checkbox = false;
+
+        spyOn(component, 'hasItems').and.returnValue(false);
+        spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
+
+        expect(component.hasCheckboxColumn).toBe(false);
+      });
+
+      it(`should return false if 'checkbox', 'hasItems' are true and 'hasMainColumns' is false`, () => {
+        component.checkbox = true;
+
+        spyOn(component, 'hasItems').and.returnValue(true);
+        spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
+
+        expect(component.hasCheckboxColumn).toBe(false);
+      });
+
+      it(`should return false if 'checkbox', 'hasMainColumns' are true and 'hasItems' is false`, () => {
+        component.checkbox = true;
+
+        spyOn(component, 'hasItems').and.returnValue(false);
+        spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+
+        expect(component.hasCheckboxColumn).toBe(false);
+      });
+
+      it(`should return false if 'hasItems', 'hasMainColumns' are true and 'checkbox' is false`, () => {
+        component.checkbox = false;
+
+        spyOn(component, 'hasItems').and.returnValue(true);
+        spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+
+        expect(component.hasCheckboxColumn).toBe(false);
+      });
+
+    });
+
+    it(`hasFooter: should return false if 'hasItems' and 'hasVisibleSubtitleColumns' are false`, () => {
+      spyOn(component, 'hasItems').and.returnValue(false);
+      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(false);
+
+      expect(component.hasFooter).toBe(false);
+    });
+
+    it(`hasFooter: should return true if 'hasItems' and 'hasVisibleSubtitleColumns' are true`, () => {
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(true);
+
+      expect(component.hasFooter).toBe(true);
+    });
+
+    it(`hasFooter: should return false if 'hasItems' is true and 'hasVisibleSubtitleColumns' is false`, () => {
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(false);
+
+      expect(component.hasFooter).toBe(false);
+    });
+
+    it(`hasFooter: should return false if 'hasItems' is false and 'hasVisibleSubtitleColumns' is true`, () => {
+      spyOn(component, 'hasItems').and.returnValue(false);
+      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(true);
+
+      expect(component.hasFooter).toBe(false);
+    });
+
+    it('hasMainColumns: should return true if `columns` contains visible columns', () => {
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'name', visible: false }
+      ];
+
+      const visibleColumns: Array<PoTableColumn> = [
+        { property: 'age' },
+        { property: 'email' }
+      ];
+
+      component.columns = [ ...invisibleColumns, ...visibleColumns];
+
+      expect(component.hasMainColumns).toBe(true);
+    });
+
+    it('hasMainColumns: should return false if `columns` has only invisble columns', () => {
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'name', visible: false }
+      ];
+
+      component.columns = [ ...invisibleColumns ];
+
+      expect(component.hasMainColumns).toBe(false);
+    });
+
+    it('hasMainColumns: should return false if `columns` is empty', () => {
+      component.items = [];
+      component.columns = [];
+
+      expect(component.hasMainColumns).toBe(false);
+    });
+
+    it(`hasMasterDetailColumn: should return true if 'hasMainColumns', 'hasItems', 'getColumnMasterDetail' are true and
+      'hideDetail' is false`, () => {
+
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>true);
+
+      component.hideDetail = false;
+
+      expect(component.hasMasterDetailColumn).toBe(true);
+    });
+
+    it(`hasMasterDetailColumn: should return true if 'hasMainColumns', 'hasItems', 'hasRowTemplate' are true and
+      'hideDetail' and 'getColumnMasterDetail' are false`, () => {
+
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>false);
+
+      component.hideDetail = false;
+
+      expect(component.hasMasterDetailColumn).toBe(true);
+    });
+
+    it(`hasMasterDetailColumn: should return false if 'hasMainColumns' is false and 'hasItems', 'hasRowTemplate' are true and
+      'hideDetail' and 'getColumnMasterDetail' are false`, () => {
+
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>false);
+
+      component.hideDetail = false;
+
+      expect(component.hasMasterDetailColumn).toBe(false);
+    });
+
+    it(`hasMasterDetailColumn: should return false if 'hasMainColumns', 'hasItems', 'hasRowTemplate', 'hideDetail' are true`, () => {
+
+      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOn(component, 'hasItems').and.returnValue(true);
+
+      component.hideDetail = true;
+
+      expect(component.hasMasterDetailColumn).toBe(false);
+    });
+
+    it(`hasRowTemplate: should return true if 'tableRowTemplate' is defined`, () => {
+      component.tableRowTemplate = <any>'mock tableRowTemplate';
+
+      expect(component.hasRowTemplate).toBe(true);
+    });
+
+    it(`hasRowTemplate: should return false if 'tableRowTemplate' is undefined`, () => {
+      component.tableRowTemplate = undefined;
+
+      expect(component.hasRowTemplate).toBe(false);
+    });
+
+    it('hasVisibleSubtitleColumns: should return true if subtitleColumn is visible', () => {
+      const columnsSubtitle = [ columnSubtitle ];
+
+      component.columns = [ ...columnsSubtitle ];
+
+      expect(component.hasVisibleSubtitleColumns).toBe(true);
+    });
+
+    it('hasVisibleSubtitleColumns: should return false if subtitleColumn is invisible', () => {
+      const columnsSubtitle = [ { ...columnSubtitle, visible: false } ];
+
+      component.columns = [ ...columnsSubtitle ];
+
+      expect(component.hasVisibleSubtitleColumns).toBe(false);
+    });
+
+    it('mainColumns: should return columns with type or without type', () => {
+      component.columns = [ ...columns ];
+
+      expect(component.mainColumns.length).toBe(columns.length);
+    });
+
+    it('mainColumns: should return only visible columns', () => {
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'name', visible: false }
+      ];
+
+      const visibleColumns: Array<PoTableColumn> = [
+        { property: 'age' },
+        { property: 'email' }
+      ];
+
+      component.columns = [ ...invisibleColumns, ...visibleColumns ];
+
+      const mainColumns = component.mainColumns;
+
+      expect(mainColumns.length).toBe(visibleColumns.length);
+      expect(mainColumns.every(mainColumn => mainColumn.visible !== false)).toBe(true);
+    });
+
+    it('hasValidColumns: should return true if `validColumns.length` not is empty', () => {
+      const invalidColumns = [
+        { property: 'email', type: 'email' }
+      ];
+
+      component.columns = [ ...columns, ...invalidColumns ];
+
+      expect(component.hasValidColumns).toBe(true);
+    });
+
+    it('hasValidColumns: should return true if `validColumns.length` is empty', () => {
+      const invalidColumns = [
+        { property: 'email', type: 'email' }
+      ];
+
+      component.columns = [ ...invalidColumns ];
+
+      expect(component.hasValidColumns).toBe(false);
+    });
+
+    it('validColumns: should return only valid columns', () => {
+      const invalidColumns = [
+        { property: 'email', type: 'email' }
+      ];
+
+      component.columns = [ ...columns, ...invalidColumns ];
+
+      expect(component.validColumns).toEqual(columns);
+    });
+
+    it('validColumns: should return an empty array if all columns are invalid', () => {
+      const invalidColumns = [
+        { property: 'email', type: 'email' }
+      ];
+
+      component.columns = [ ...invalidColumns ];
+
+      expect(component.validColumns).toEqual([]);
+    });
+
+    it('displayColumnManagerCell: should return false if has visible actions', () => {
+      component.actions = [ ...singleAction ];
+
+      expect(component.displayColumnManagerCell).toBe(false);
+    });
+
+    it('displayColumnManagerCell: should return true if visible actions is empty', () => {
+      component.actions = [];
+
+      expect(component.displayColumnManagerCell).toBe(true);
+    });
+
+    it('isSingleAction: should return true if has one visible actions', () => {
+      component.actions = [ ...singleAction ];
+
+      expect(component.isSingleAction).toBe(true);
+    });
+
+    it('isSingleAction: should return false if visible actions is empty', () => {
+      component.actions = [];
+
+      expect(component.isSingleAction).toBe(false);
+    });
+
+    it('isSingleAction: should return false if has more than one visible actions', () => {
+      component.actions = [ ...actions ];
+
+      expect(component.isSingleAction).toBe(false);
     });
 
   });

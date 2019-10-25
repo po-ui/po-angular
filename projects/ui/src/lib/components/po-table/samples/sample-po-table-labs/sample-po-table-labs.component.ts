@@ -36,14 +36,21 @@ export class SamplePoTableLabsComponent implements OnInit {
   height: number;
   items: Array<any>;
   literals: string;
+  maxColumns: number;
   properties: Array<string>;
   selection: Array<string>;
 
-  public readonly actionsDefinitionOptions: Array<PoCheckboxGroupOption> = [
+  actionsDefinitionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Actions', value: 'actions' },
     { label: 'Disable first action', value: 'disableAction', disabled: true },
     { label: 'Single action', value: 'singleAction' },
     { label: 'First action visible', value: 'visibleAction' }
+  ];
+
+  selectionOptions: Array<PoCheckboxGroupOption> = [
+    { label: 'Checkbox', value: 'checkbox' },
+    { label: 'Hide select all', value: 'hideSelectAll', disabled: true },
+    { label: 'Single select', value: 'singleSelect', disabled: true }
   ];
 
   public readonly columnsDefinition = this.samplePoTableLabsService.getColumns();
@@ -78,12 +85,6 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Loading', value: 'loading'}
   ];
 
-  public readonly selectionOptions: Array<PoCheckboxGroupOption> = [
-    { label: 'Checkbox', value: 'checkbox' },
-    { label: 'Hide select all', value: 'hideSelectAll', disabled: true },
-    { label: 'Single select', value: 'singleSelect', disabled: true }
-  ];
-
   public readonly typeHeaderOptions: Array<PoRadioGroupOption> = [
     { label: 'Inline', value: 'inline' },
     { label: 'None', value: 'none' },
@@ -104,9 +105,13 @@ export class SamplePoTableLabsComponent implements OnInit {
 
   changeActionOptions() {
     const actions = this.actionsDefinition.actions;
+
     this.actionsDefinitionOptions[1].disabled = !actions;
     this.actionsDefinitionOptions[2].disabled = !actions;
     this.actionsDefinitionOptions[3].disabled = !actions;
+
+    this.actionsDefinitionOptions = [].concat(this.actionsDefinitionOptions);
+
     this.actions = actions ?
       this.actionsDefinition.singleAction ? [this.actionTableFirst] : [this.actionTableFirst, this.actionTableSecond] : [];
     this.actionTableFirst.visible = this.actionsDefinition.visibleAction;
@@ -130,6 +135,8 @@ export class SamplePoTableLabsComponent implements OnInit {
 
     this.selectionOptions[1].disabled = singleSelect || !checkbox;
     this.selectionOptions[2].disabled = !checkbox;
+
+    this.selectionOptions = [].concat(this.selectionOptions);
   }
 
   disableAction() {
@@ -151,6 +158,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.height = undefined;
     this.items = [];
     this.literals = '';
+    this.maxColumns = undefined;
     this.properties = [];
     this.selection = [];
 

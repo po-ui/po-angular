@@ -10,6 +10,7 @@
   [p-items]="items"
   [p-literals]="customLiterals"
   [p-loading]="properties.includes('loading')"
+  [p-max-columns]="maxColumns"
   [p-show-more-disabled]="!properties.includes('showMoreDisabled')"
   [p-single-select]="selection.includes('singleSelect')"
   [p-sort]="properties.includes('sort')"
@@ -95,13 +96,22 @@
     </po-number>
 
     <po-input
-      class="po-md-9"
+      class="po-md-6"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: {"noData": "Sem dados a serem exibidos", "noColumns": "Colunas não definidas"}'
       p-label="Literals"
       (p-change)="changeLiterals()">
     </po-input>
+
+    <po-number
+      class="po-md-3"
+      name="maxColumns"
+      [(ngModel)]="maxColumns"
+      p-clean
+      p-help="Max columns to be visible"
+      p-label="Max Columns">
+    </po-number>
   </div>
 
   <div class="po-row">

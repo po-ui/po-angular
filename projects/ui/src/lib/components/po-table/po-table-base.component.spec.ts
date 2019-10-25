@@ -443,16 +443,6 @@ describe('PoTableBaseComponent:', () => {
     expect(component.getNameColumnDetail.call(fakeThis)).toBeNull();
   });
 
-  it('should return columns with type or without type', () => {
-    const fakeThis = {
-      columns: [
-        { label: 'Textos', property: 'textData', type: 'string' },
-        { label: 'Números', property: 'numberData' }]
-    };
-
-    expect(component.getMainColumns.call(fakeThis).length).toBe(2);
-  });
-
   it('should not return the columns of type subtitle', () => {
     expect(component.getSubtitleColumns().length).toBe(0);
   });
@@ -466,10 +456,6 @@ describe('PoTableBaseComponent:', () => {
     ]
     });
     expect(component.getSubtitleColumns().length).toBe(1);
-  });
-
-  it('should return the columns of type valid', () => {
-    expect(component.getMainColumns().length).toBe(4);
   });
 
   it('should return false when items undefined in hasItems method', () => {
@@ -742,14 +728,14 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('hasColumns: should return `true` if have columns and columns.length is greater then 0', () => {
-      expect(component.hasColumns()).toBe(true);
+      expect(component.hasColumns).toBe(true);
     });
 
     it('hasColumns: should return `false` if not have columns', () => {
       component.items = undefined;
       component.columns = undefined;
 
-      expect(component.hasColumns()).toBeFalsy();
+      expect(component.hasColumns).toBeFalsy();
     });
 
     it('hasItems: should return `true` if have items and items.length is greater then 0', () => {
@@ -876,6 +862,7 @@ describe('PoTableBaseComponent:', () => {
 
       expect(component.showMore.emit).toHaveBeenCalledWith(undefined);
     });
+
   });
 
   describe('Properties:', () => {
