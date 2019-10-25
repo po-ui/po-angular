@@ -14,6 +14,7 @@ export const poRichTextLiteralsDefault = {
     linkUrlTextHelper: 'Paste in the text box below the copied browser link',
     linkUrlTextPlaceholder: 'Enter the link address that will be attached to the text.',
     cancel: 'Cancel',
+    editLink: 'Edit link',
     insert: 'Insert',
     insertImage: 'Insert image',
     urlImage: 'URL image'
@@ -33,6 +34,7 @@ export const poRichTextLiteralsDefault = {
     linkUrlTextHelper: 'Pegue en el cuadro de texto debajo del enlace del navegador copiado',
     linkUrlTextPlaceholder: 'Ingrese la dirección del enlace que se adjuntará al texto.',
     cancel: 'Cancelar',
+    editLink: 'Editar enlace',
     insert: 'Insertar',
     insertImage: 'Insertar imagen',
     urlImage: 'Imagen URL'
@@ -52,6 +54,7 @@ export const poRichTextLiteralsDefault = {
     linkUrlTextHelper: 'Cole na caixa de texto abaixo o link copiado do navegador',
     linkUrlTextPlaceholder: 'Insira o endereço do link que será anexado ao texto',
     cancel: 'Cancelar',
+    editLink: 'Editar link',
     insert: 'Inserir',
     insertImage: 'Inserir imagem',
     urlImage: 'Imagem em URL'
