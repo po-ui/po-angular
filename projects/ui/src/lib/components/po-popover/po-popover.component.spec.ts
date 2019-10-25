@@ -172,30 +172,23 @@ describe('PoPopoverComponent:', () => {
     const fakeThis = {
       addScrollEventListener: () => {},
       isHidden: true,
-      arrowDirection: 'top',
       position: 'top',
-      setOpacity: () => {},
-      poControlPosition: {
-        adjustPosition: () => {},
-        getArrowDirection: () => 'bottom'
-      }
-
+      setPopoverPosition: () => {},
+      setElementsControlPosition: () => {},
+      setOpacity: () => {}
     };
 
     spyOn(fakeThis, 'addScrollEventListener');
     spyOn(fakeThis, 'setOpacity');
-    spyOn(fakeThis.poControlPosition, 'adjustPosition');
-    spyOn(fakeThis.poControlPosition, 'getArrowDirection').and.callThrough();
+    spyOn(fakeThis, 'setElementsControlPosition');
     component.open.call(fakeThis);
 
     tick(300);
 
     expect(fakeThis.isHidden).toBeFalsy();
-    expect(fakeThis.poControlPosition.adjustPosition).toHaveBeenCalledWith('top');
-    expect(fakeThis.poControlPosition.getArrowDirection).toHaveBeenCalled();
     expect(fakeThis.addScrollEventListener).toHaveBeenCalled();
-    expect(fakeThis.arrowDirection).toBe('bottom');
     expect(fakeThis.setOpacity).toHaveBeenCalledWith(1);
+    expect(fakeThis.setElementsControlPosition).toHaveBeenCalled();
   }));
 
   it('should close popover', () => {
@@ -234,6 +227,14 @@ describe('PoPopoverComponent:', () => {
   });
 
   describe('Methods:', () => {
+
+    it(`ngAfterViewInit: should call 'setElementsControlPosition'`, () => {
+      spyOn(component, <any>'setElementsControlPosition');
+
+      component.ngAfterViewInit();
+
+      expect(component['setElementsControlPosition']).toHaveBeenCalled();
+    });
 
     it('ngOnDestroy: should call removeListeners.', () => {
 
@@ -319,6 +320,24 @@ describe('PoPopoverComponent:', () => {
       component.togglePopup.call(fakeThis, fakeEvent);
 
       expect(fakeThis.close).toHaveBeenCalled();
+    });
+
+    it(`setElementsControlPosition: should call 'poControlPosition.setElements' with 'popoverElement.nativeElement',
+     target and popoverOffset equals to 8`, () => {
+
+      const popoverOffset = 8;
+      component.popoverElement.nativeElement = '<po-popover></po-popover>';
+      component.target = <any>'<div></div>';
+
+      spyOn(component['poControlPosition'], 'setElements');
+
+      component['setElementsControlPosition']();
+
+      expect(component['poControlPosition'].setElements).toHaveBeenCalledWith(
+        component.popoverElement.nativeElement,
+        popoverOffset,
+        component.target
+      );
     });
 
   });
