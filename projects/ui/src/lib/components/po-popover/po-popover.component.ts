@@ -45,8 +45,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   ngAfterViewInit(): void {
     this.initEventListenerFunction();
 
-    const popoverOffset = 8;
-    this.poControlPosition.setElements(this.popoverElement.nativeElement, popoverOffset, this.target);
+    this.setElementsControlPosition();
 
     this.setRendererListenInit();
   }
@@ -73,8 +72,8 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     this.setOpacity(0);
 
     setTimeout(() => {
-      this.poControlPosition.adjustPosition(this.position);
-      this.arrowDirection = this.poControlPosition.getArrowDirection();
+      this.setElementsControlPosition();
+      this.setPopoverPosition();
       this.setOpacity(1);
     });
   }
@@ -147,6 +146,11 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     this.resizeListener();
 
     window.removeEventListener('scroll', this.eventListenerFunction, true);
+  }
+
+  private setElementsControlPosition() {
+    const popoverOffset = 8;
+    this.poControlPosition.setElements(this.popoverElement.nativeElement, popoverOffset, this.target);
   }
 
 }
