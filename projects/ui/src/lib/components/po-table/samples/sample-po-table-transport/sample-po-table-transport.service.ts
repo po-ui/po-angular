@@ -11,9 +11,9 @@ export class SamplePoTableTransportService {
       { property: 'product' },
       { property: 'customer' },
       { property: 'exit_forecast', label: 'Exit forecast', type: 'dateTime' },
-      { property: 'time_since_purchase', label: 'Time since purchase', type: 'time' },
-      { property: 'quantity', label: 'Quantity (Tons)', type: 'number', width: '15%'},
-      { property: 'icms', label: 'ICMS', type: 'number', format: '1.2-5'},
+      { property: 'time_since_purchase', label: 'Time since purchase', type: 'time', visible: false },
+      { property: 'quantity', label: 'Quantity (Tons)', type: 'number', width: '15%', visible: false },
+      { property: 'icms', label: 'ICMS', type: 'number', format: '1.2-5', visible: false },
       { property: 'status', type: 'label', width: '8%', labels: [
         { value: 'delivered', color: 'color-11', label: 'Delivered' },
         { value: 'transport', color: 'color-08', label: 'Transport' },

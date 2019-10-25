@@ -16,51 +16,61 @@ export const poTableLiteralsDefault = {
   en: <PoTableLiterals>{
     noColumns: 'Columns are not defined',
     noData: 'No data found',
+    noVisibleColumn: 'No visible column',
     loadingData: 'Loading',
     loadMoreData: 'Load more data',
     seeCompleteSubtitle: 'See complete subtitle',
-    completeSubtitle: 'Complete subtitle'
+    completeSubtitle: 'Complete subtitle',
+    columnsManager: 'Columns manager'
   },
   es: <PoTableLiterals>{
     noColumns: 'Columnas no definidas',
     noData: 'Datos no encontrados',
+    noVisibleColumn: 'Sin columnas visibles',
     loadingData: 'Cargando datos',
     loadMoreData: 'Cargar más resultados',
     seeCompleteSubtitle: 'Ver subtitulo completo',
-    completeSubtitle: 'Subtitulo completo'
+    completeSubtitle: 'Subtitulo completo',
+    columnsManager: 'Gerente de columna'
   },
   pt: <PoTableLiterals>{
     noColumns: 'Nenhuma definição de colunas',
     noData: 'Nenhum dado encontrado',
+    noVisibleColumn: 'Nenhuma coluna visível',
     loadingData: 'Carregando',
     loadMoreData: 'Carregar mais resultados',
     seeCompleteSubtitle: 'Ver legenda completa',
-    completeSubtitle: 'Legenda completa'
+    completeSubtitle: 'Legenda completa',
+    columnsManager: 'Gerenciador de colunas'
   },
   ru: <PoTableLiterals>{
     noColumns: 'Нет определения столбца',
     noData: 'Данные не найдены',
+    noVisibleColumn: 'нет видимых столбцов',
     loadingData: 'погрузка',
     loadMoreData: 'загрузка',
     seeCompleteSubtitle: 'Посмотреть полный субтитр',
-    completeSubtitle: 'Полный заголовок'
+    completeSubtitle: 'Полный заголовок',
+    columnsManager: 'менеджер колонок'
   }
 };
 
 /**
  * @description
  *
- * Este componente de tabela é utilizado para exibição de listas, com diferentes tipos de dados que podem ser texto,
- * data, horário e número com formato personalizado.
+ * Este componente de tabela é utilizado para exibição de dados com diferentes tipos como por exemplo textos, data, horas e números com
+ * formato personalizado.
  *
- * É possivel criar uma tabela com ordenação de dados, linhas com detalhes, coluna de seleção de linhas,
- * coluna com ações e também carregamento por demanda com o botão "Carregar mais resultados".
+ * Também é possivel criar tabelas com ordenação de dados, linhas com detalhes, coluna para seleção de linhas, coluna com ações e também
+ * carregamento por demanda através do botão **Carregar mais resultados**.
  *
- * Também existe a possibilidade de utilizar _template_ para os detalhes das linhas,
- * veja mais em **[p-table-row-template](/documentation/po-table-row-template)**.
+ * > As linhas de detalhes podem também ser customizadas através do [`p-table-row-template`](/documentation/po-table-row-template).
  *
- * Quando a largura de todas as colunas for definida, caso o tamanho total delas seja maior que a tabela, será exibido um scroll horizontal.
+ * O componente permite gerenciar a exibição das colunas dinamicamente. Esta funcionalidade pode ser acessada através do ícone de engrenagem
+ * no canto superior direito do cabeçalho da tabela.
  *
+ * Caso a largura de todas as colunas forem definidas e o total ultrapassar o tamanho tabela, será exibido um *scroll* na horizontal para a
+ * completa visualização dos dados.
  */
 export abstract class PoTableBaseComponent implements OnChanges {
 
@@ -87,7 +97,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
     // when haven't items, selectAll should be unchecked.
     if (!this.hasItems()) {
       this.selectAll = false;
-    } else if (!this.hasColumns()) {
+    } else if (!this.hasColumns) {
       this.columns = this.getDefaultColumns(items[0]);
     }
   }
@@ -376,6 +386,19 @@ export abstract class PoTableBaseComponent implements OnChanges {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma quantidade máxima de colunas que serão exibidas na tabela.
+   *
+   * Quando chegar no valor informado, as colunas que não estiverem selecionadas ficarão
+   * desabilitadas e caso houver mais colunas visíveis do que o permitido, as excedentes
+   * serão ignoradas por ordem de posição.
+   */
+  @Input('p-max-columns') maxColumns?: number;
+
+  /**
    * Ação executada quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas.
    */
   @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();
@@ -438,6 +461,10 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   protected abstract showContainer(container);
 
+  get hasColumns(): boolean {
+    return this.columns && this.columns.length > 0;
+  }
+
   selectAllRows() {
     if (!this.hideSelectAll) {
       this.selectAll = !this.selectAll;
@@ -460,13 +487,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   selectDetailRow(row: any) {
     this.emitSelectEvents(row);
-  }
-
-  // Colunas que são inseridas no <head> da tabela
-  getMainColumns() {
-    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon'];
-
-    return this.columns.filter(col => !col.type || typesValid.includes(col.type));
   }
 
   // Retorna a coluna da lista de colunas que é do tipo detail
@@ -512,10 +532,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   getUnselectedRows() {
     return this.items.filter(item => !item.$selected);
-  }
-
-  hasColumns(): boolean {
-    return this.columns && this.columns.length > 0;
   }
 
   hasItems(): boolean {

@@ -58,17 +58,7 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
 
-  @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
-
-  @ViewChild('popup', { static: false }) poPopupComponent: PoPopupComponent;
-
-  @ViewChild('tableContainer', { read: ElementRef, static: true }) tableContainerElement;
-  @ViewChild('tableFooter', { read: ElementRef, static: true }) tableFooterElement;
-  @ViewChild('tableWrapper', { read: ElementRef, static: true }) tableWrapperElement;
-
-  @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
-  @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
-  @ViewChildren('headersTable') headersTable: QueryList<any>;
+  private _columnManagerTarget: ElementRef;
 
   heightTableContainer;
   parentRef: any;
@@ -84,6 +74,27 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private clickListener: () => void;
   private resizeListener: () => void;
+
+  @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
+
+  @ViewChild('popup', { static: false }) poPopupComponent: PoPopupComponent;
+  @ViewChild('columnManagerTarget', { static: false }) set columnManagerTarget(value: ElementRef) {
+    this._columnManagerTarget = value;
+
+    this.changeDetector.detectChanges();
+  }
+
+  get columnManagerTarget() {
+    return this._columnManagerTarget;
+  }
+
+  @ViewChild('tableContainer', { read: ElementRef, static: true }) tableContainerElement;
+  @ViewChild('tableFooter', { read: ElementRef, static: true }) tableFooterElement;
+  @ViewChild('tableWrapper', { read: ElementRef, static: true }) tableWrapperElement;
+
+  @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
+  @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
+  @ViewChildren('headersTable') headersTable: QueryList<any>;
 
   constructor(
     poDate: PoDateService,
@@ -114,12 +125,55 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return masterDetail && masterDetail.detail ? masterDetail.detail.hideSelect : false;
   }
 
+  get displayColumnManagerCell() {
+    return !this.visibleActions.length;
+  }
+
   get firstAction(): PoTableAction {
     return this.visibleActions && this.visibleActions[0];
   }
 
+  get hasCheckboxColumn(): boolean {
+    return this.checkbox && this.hasItems() && this.hasMainColumns;
+  }
+
+  get hasFooter(): boolean {
+    return this.hasItems() && this.hasVisibleSubtitleColumns;
+  }
+
+  get hasMainColumns() {
+    return !!this.mainColumns.length;
+  }
+
+  get hasMasterDetailColumn(): boolean {
+    return this.hasMainColumns &&
+    this.hasItems() && !this.hideDetail && (this.getColumnMasterDetail() !== undefined || this.hasRowTemplate);
+  }
+
   get hasRowTemplate(): boolean {
     return !!this.tableRowTemplate;
+  }
+
+  get hasValidColumns() {
+    return !!this.validColumns.length;
+  }
+
+  get hasVisibleSubtitleColumns() {
+    return this.getSubtitleColumns().some(column => column.visible !== false);
+  }
+
+  get isSingleAction() {
+    return this.visibleActions.length === 1;
+  }
+
+  // Colunas que são inseridas no <head> da tabela
+  get mainColumns() {
+    return this.validColumns.filter(col => col.visible !== false);
+  }
+
+  get validColumns() {
+    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon'];
+    return this.columns.filter(col => !col.type || typesValid.includes(col.type));
   }
 
   get visibleActions() {
@@ -161,12 +215,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   columnCountForMasterDetail() {
-    return (this.getMainColumns().length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.checkbox ? 1 : 0);
+    const columnManager = 1;
+    return (this.mainColumns.length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.checkbox ? 1 : 0) + columnManager;
   }
 
   columnCount() {
-    return (
-      this.getMainColumns().length +
+
+    return (this.mainColumns.length +
       (this.actions.length > 0 ? 1 : 0) +
       (this.checkbox ? 1 : 0) +
       (!this.hideDetail && this.getColumnMasterDetail() !== undefined ? 1 : 0)
@@ -221,8 +276,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   verifyWidthColumnsPixels() {
-    const columns = this.getMainColumns();
-    return columns.length ? columns.every(column => column.width && column.width.includes('px')) : false;
+    return this.hasMainColumns ? this.mainColumns.every(column => column.width && column.width.includes('px')) : false;
   }
 
   calculateWidthHeaders() {
@@ -257,6 +311,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       row.$showDetail &&
       this.containsMasterDetail(row) &&
       !this.hasRowTemplate;
+  }
+
+  onVisibleColumnsChange(columns: Array<PoTableColumn>) {
+    this.columns = columns;
+
+    this.changeDetector.detectChanges();
   }
 
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
@@ -326,7 +386,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.selectAll = null;
     }
 
-    if (changesItems && !this.hasColumns() && this.hasItems()) {
+    if (changesItems && !this.hasColumns && this.hasItems()) {
       this.columns = this.getDefaultColumns(this.items[0]);
     }
   }
