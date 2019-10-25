@@ -221,6 +221,13 @@ export function isIE() {
   return /msie\s|trident/i.test(userAgent);
 }
 
+// Verifica se o navegador em que está sendo usado é Firefox
+export function isFirefox() {
+  const userAgent = window.navigator.userAgent;
+
+  return userAgent.toLowerCase().indexOf('firefox') > -1;
+}
+
 // Verifica qual o dispositivo que está sendo usado
 export function isMobile() {
   const userAgent = window.navigator.userAgent;

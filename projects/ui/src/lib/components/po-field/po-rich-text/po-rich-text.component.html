@@ -12,6 +12,7 @@
       [p-readonly]="readonly"
       (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar.setButtonsStates($event)"
+      (p-selected-link)="richTextModal.selectedLink($event)"
       (p-shortcut-command)="richTextToolbar.shortcutTrigger()"
       (p-value)="updateValue($event)">
     </po-rich-text-body>
@@ -23,7 +24,8 @@
     </po-rich-text-toolbar>
 
     <po-rich-text-modal #richTextModal
-      (p-command)="richTextBody.executeCommand($event)">
+      (p-command)="richTextBody.executeCommand($event)"
+      (p-link-editing)="richTextBody.linkEditing($event)">
     </po-rich-text-modal>
 
   </div>

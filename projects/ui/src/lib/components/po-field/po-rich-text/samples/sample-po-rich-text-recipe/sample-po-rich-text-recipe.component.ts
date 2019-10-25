@@ -14,7 +14,7 @@ export class SamplePoRichTextRecipeComponent {
     <div><b><u>Preparation Time:</u></b>&nbsp;less than 30 mins</div>
     <div><b><u>Serves</u></b>: 3 people</div>
     <div><b><u>Reference</u></b>:
-      <a class="po-rich-text-link" href="en.wikipedia.org/wiki/hummus" target="_blank">Hummus Delicious Recipe</a>
+      <a class="po-rich-text-link" href="http://en.wikipedia.org/wiki/hummus" target="_blank">Hummus Delicious Recipe</a>
     </div>
     </div>
     <div><br></div>
