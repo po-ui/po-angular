@@ -200,6 +200,12 @@
               <span *ngSwitchCase="'label'">
                 <po-table-column-label [p-value]="getColumnLabel(row, column)"></po-table-column-label>
               </span>
+              <span *ngSwitchCase="'raw'">
+                <ng-container
+                  [ngTemplateOutlet]="getTemplate(row, column)"
+                  [ngTemplateOutletContext]="{ row: row }">
+                </ng-container>
+              </span>
               <span *ngSwitchDefault>{{ row[column.property] }}</span>
             </div>
           </td>
