@@ -20,6 +20,7 @@ import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-ro
 import { PoTableShowSubtitleComponent } from './po-table-show-subtitle/po-table-show-subtitle.component';
 import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle/po-table-subtitle-circle.component';
 import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-table-subtitle-footer.component';
+import { PoTableColumnActionsComponent } from './po-table-column-actions/po-table-column-actions.component';
 
 /**
  * @description
@@ -47,7 +48,8 @@ import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-ta
     PoTableRowTemplateDirective,
     PoTableShowSubtitleComponent,
     PoTableSubtitleCircleComponent,
-    PoTableSubtitleFooterComponent
+    PoTableSubtitleFooterComponent,
+    PoTableColumnActionsComponent
   ],
   exports: [
     PoTableComponent,
