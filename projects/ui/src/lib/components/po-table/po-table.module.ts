@@ -17,6 +17,7 @@ import { PoTableColumnIconComponent } from './po-table-column-icon/po-table-colu
 import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-column-label.component';
 import { PoTableColumnLinkComponent } from './po-table-column-link/po-table-column-link.component';
 import { PoTableColumnManagerComponent } from './po-table-column-manager/po-table-column-manager.component';
+import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableComponent } from './po-table.component';
 import { PoTableDetailComponent } from './po-table-detail/po-table-detail.component';
 import { PoTableIconComponent } from './po-table-icon/po-table-icon.component';
@@ -55,10 +56,12 @@ import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-ta
     PoTableRowTemplateDirective,
     PoTableShowSubtitleComponent,
     PoTableSubtitleCircleComponent,
-    PoTableSubtitleFooterComponent
+    PoTableSubtitleFooterComponent,
+    PoTableColumnTemplateDirective
   ],
   exports: [
     PoTableComponent,
+    PoTableColumnTemplateDirective,
     PoTableRowTemplateDirective
   ],
   providers: [DecimalPipe]

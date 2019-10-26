@@ -1,6 +1,7 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, ContentChild, DoCheck, ElementRef, IterableDiffers,
-  OnDestroy, QueryList, Renderer2, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+  AfterViewInit, ChangeDetectorRef, Component, ContentChild, ContentChildren, DoCheck, ElementRef, IterableDiffers,
+  OnDestroy, QueryList, Renderer2, ViewChild, ViewChildren, ViewContainerRef
+} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -14,6 +15,7 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
+import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -57,6 +59,9 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
   providers: [PoDateService]
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
+
+  @ContentChildren(PoTableColumnTemplateDirective)
+  tableColumnTemplate: QueryList<PoTableColumnTemplateDirective>;
 
   private _columnManagerTarget: ElementRef;
 
@@ -172,7 +177,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   get validColumns() {
-    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon'];
+    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon', 'raw'];
     return this.columns.filter(col => !col.type || typesValid.includes(col.type));
   }
 
@@ -372,6 +377,19 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     } else {
       return tableAction.disabled;
     }
+  }
+
+  getTemplate(row: any, column: PoTableColumn) {
+    const template = this.tableColumnTemplate
+      .toArray()
+      .find(t => t.column === column.property);
+
+    if (!template) {
+      console.warn(`Couldn't find a template for column: ${column.property}`);
+      return null;
+    }
+
+    return template.templateRef;
   }
 
   protected showContainer(container: string) {
