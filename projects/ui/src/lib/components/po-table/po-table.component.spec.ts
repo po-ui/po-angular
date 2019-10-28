@@ -29,6 +29,7 @@ import { PoTableIconComponent } from './po-table-icon/po-table-icon.component';
 import { PoTableShowSubtitleComponent } from './po-table-show-subtitle/po-table-show-subtitle.component';
 import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle/po-table-subtitle-circle.component';
 import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-table-subtitle-footer.component';
+import { PoTableColumnActionsComponent } from './po-table-column-actions/po-table-column-actions.component';
 
 @Component({ template: 'Search' })
 export class SearchComponent { }
@@ -86,7 +87,8 @@ describe('PoTableComponent:', () => {
           { property: 'tour', label: 'Passeio' },
           { property: 'package', label: 'Pacote' }
         ]
-      }}
+      }
+    }
     ];
 
     columnsDetailInterface = [{
@@ -147,14 +149,14 @@ describe('PoTableComponent:', () => {
     ];
 
     actions = [
-      { label: 'addItem', action: () => {} },
+      { label: 'addItem', action: () => { } },
       { label: 'deleteItem', action: () => { }, disabled: false },
       { label: 'insertItem', action: () => { }, disabled: true },
-      { label: 'editItem', action: () => {}, disabled: () => true },
+      { label: 'editItem', action: () => { }, disabled: () => true },
     ];
 
     singleAction = [
-      { label: 'addItem', action: () => {}, disabled: () => true }
+      { label: 'addItem', action: () => { }, disabled: () => true }
     ];
 
     fakeThisDoCheck = {
@@ -181,6 +183,7 @@ describe('PoTableComponent:', () => {
       imports: [RouterTestingModule.withRoutes(routes), PoLoadingModule, PoPopupModule],
       declarations: [
         PoTableComponent,
+        PoTableColumnActionsComponent,
         PoTableColumnLabelComponent,
         PoTableColumnLinkComponent,
         PoTableShowSubtitleComponent,
@@ -275,7 +278,7 @@ describe('PoTableComponent:', () => {
     const tableAction = component.actions[2];
     const tableRow = component.items[0];
 
-    spyOn(tableAction, <any> 'disabled');
+    spyOn(tableAction, <any>'disabled');
 
     component.validateTableAction(tableRow, tableAction);
     expect(tableAction.disabled).toHaveBeenCalled();
@@ -664,7 +667,7 @@ describe('PoTableComponent:', () => {
 
   it('should call calculateWidthHeaders and setTableOpacity in debounceResize', fakeAsync(() => {
     spyOn(component, 'calculateWidthHeaders');
-    spyOn(component, <any> 'setTableOpacity');
+    spyOn(component, <any>'setTableOpacity');
 
     component['debounceResize']();
     tick(500);
@@ -692,9 +695,9 @@ describe('PoTableComponent:', () => {
     const fakeThis = {
       getHeightTableFooter: () => 0,
       heightTableContainer: 0,
-      setTableOpacity: () => {},
+      setTableOpacity: () => { },
       changeDetector: {
-        detectChanges: () => {}
+        detectChanges: () => { }
       }
     };
 
@@ -712,9 +715,9 @@ describe('PoTableComponent:', () => {
     const fakeThis = {
       getHeightTableFooter: () => 0,
       heightTableContainer: 0,
-      setTableOpacity: () => {},
+      setTableOpacity: () => { },
       changeDetector: {
-        detectChanges: () => {}
+        detectChanges: () => { }
       }
     };
 
@@ -918,7 +921,7 @@ describe('PoTableComponent:', () => {
           property: 'extra',
           label: 'Extras',
           type: 'link',
-          action: () => {},
+          action: () => { },
           disabled: () => true
         };
         const tableRow = component.items[0];
@@ -934,7 +937,7 @@ describe('PoTableComponent:', () => {
           property: 'extra',
           label: 'Extras',
           type: 'link',
-          action: () => {}
+          action: () => { }
         };
         const tableRow = component.items[0];
 
@@ -1017,7 +1020,7 @@ describe('PoTableComponent:', () => {
       it(`should return 'Sim' if 'rowValue' is 'true', 'column.boolean' is valid and
       'column.boolean.trueLabel' is not defined.`, () => {
         const column: PoTableColumn = {
-          property: 'boolean', label: 'Boolean', type: 'boolean', boolean: { }
+          property: 'boolean', label: 'Boolean', type: 'boolean', boolean: {}
         };
         const expectedLabel: string = 'Sim';
         const rowValue: boolean = true;
@@ -1028,7 +1031,7 @@ describe('PoTableComponent:', () => {
       it(`should return 'Não' if 'rowValue' is 'false', 'column.boolean' is valid and
       'column.boolean.falseLabel' is not defined.`, () => {
         const column: PoTableColumn = {
-          property: 'boolean', label: 'Boolean', type: 'boolean', boolean: { }
+          property: 'boolean', label: 'Boolean', type: 'boolean', boolean: {}
         };
         const expectedLabel: string = 'Não';
         const rowValue: boolean = false;
@@ -1137,7 +1140,7 @@ describe('PoTableComponent:', () => {
 
     it(`getColumnIcons: should call 'getColumnIconsFromProperty' if 'row' contains a property that combine
     with 'column.property.value' and it should has length`, () => {
-      const col: any = { property: 'favorite', icons: [] } ;
+      const col: any = { property: 'favorite', icons: [] };
       const row: any = { favorite: ['favorite', 'documentation'] };
 
       spyOn(component, <any>'getColumnIconsFromProperty');
@@ -1149,7 +1152,7 @@ describe('PoTableComponent:', () => {
 
     it(`getColumnIcons: shouldn't call 'getColumnIconsFromProperty' if 'row' contains a property that combine
     with 'column.property.value' however it doesn't have length`, () => {
-      const col: any = { property: 'favorite', icons: [] } ;
+      const col: any = { property: 'favorite', icons: [] };
       const row: any = { favorite: [] };
 
       spyOn(component, <any>'getColumnIconsFromProperty');
@@ -1161,7 +1164,7 @@ describe('PoTableComponent:', () => {
 
     it(`getColumnIcons: shouldn't call 'getColumnIconsFromProperty' if 'row' doesn't contain any
     property name that match with 'column.property.value'`, () => {
-      const col: any = { property: 'favorite', icons: [] } ;
+      const col: any = { property: 'favorite', icons: [] };
       const row: any = { anotherProperty: '' };
 
       spyOn(component, <any>'getColumnIconsFromProperty');
@@ -1172,7 +1175,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('getColumnIconsFromProperty: should return only one object.', () => {
-      const col: any = { property: 'favorite', disabled: true, action: true, color: true } ;
+      const col: any = { property: 'favorite', disabled: true, action: true, color: true };
       const rowIcons: Array<string> = ['favorite'];
       const get = component['getColumnIconsFromProperty'](rowIcons, col);
       const expectedResult = [{ action: true, color: true, disabled: true, value: 'favorite' }];
@@ -1181,7 +1184,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('getColumnIconsFromProperty: should return two objects.', () => {
-      const col: any = { property: 'favorite', disabled: true, action: true, color: true } ;
+      const col: any = { property: 'favorite', disabled: true, action: true, color: true };
       const rowIcons: Array<string> = ['favorite', 'documentation'];
       const get = component['getColumnIconsFromProperty'](rowIcons, col);
       const expectedResult = [
@@ -1193,8 +1196,8 @@ describe('PoTableComponent:', () => {
     });
 
     it('getColumnIconsFromProperty: should return rowIcons.', () => {
-      const col: any = { property: 'favorite', disabled: true, action: true, color: true } ;
-      const rowIcons: Array<any> = [{ teste: 'teste'}];
+      const col: any = { property: 'favorite', disabled: true, action: true, color: true };
+      const rowIcons: Array<any> = [{ teste: 'teste' }];
       const get = component['getColumnIconsFromProperty'](rowIcons, col);
 
       expect(get).toEqual(rowIcons);
@@ -1212,11 +1215,11 @@ describe('PoTableComponent:', () => {
     offsetWidth is lower than scrollWidth and innerText isn't empty,`, () => {
       component.hideTextOverflow = true;
       const fakeEvent = {
-            target: {
-              offsetWidth: 30,
-              scrollWidth: 43,
-              innerText: 'teste'
-            }
+        target: {
+          offsetWidth: 30,
+          scrollWidth: 43,
+          innerText: 'teste'
+        }
       };
 
       component.tooltipMouseEnter(fakeEvent);
@@ -1246,11 +1249,11 @@ describe('PoTableComponent:', () => {
     and doesn't have 'column' as parameter`, () => {
       component.hideTextOverflow = false;
       const fakeEvent = {
-            target: {
-              offsetWidth: 30,
-              scrollWidth: 43,
-              innerText: 'teste'
-            }
+        target: {
+          offsetWidth: 30,
+          scrollWidth: 43,
+          innerText: 'teste'
+        }
       };
 
       component.tooltipMouseEnter(fakeEvent);
@@ -1262,11 +1265,11 @@ describe('PoTableComponent:', () => {
     and doesn't have 'column' as parameter`, () => {
       component.hideTextOverflow = true;
       const fakeEvent = {
-            target: {
-              offsetWidth: 43,
-              scrollWidth: 43,
-              innerText: 'teste'
-            }
+        target: {
+          offsetWidth: 43,
+          scrollWidth: 43,
+          innerText: 'teste'
+        }
       };
 
       component.tooltipMouseEnter(fakeEvent);
@@ -1289,7 +1292,7 @@ describe('PoTableComponent:', () => {
       const column = { type: 'label', tooltip: 'Label Tooltip Value' };
       const row = {};
 
-      spyOn(component, <any>'getColumnLabel').and.returnValue({tooltip: column.tooltip});
+      spyOn(component, <any>'getColumnLabel').and.returnValue({ tooltip: column.tooltip });
 
       component['checkingIfColumnHasTooltip'](column, row);
 
@@ -1308,11 +1311,11 @@ describe('PoTableComponent:', () => {
     it(`calculateHeightTableContainer: should call 'detectChanges'`, () => {
       const fakeThis = {
         heightTableContainer: 400,
-        setTableOpacity: () => {},
+        setTableOpacity: () => { },
         changeDetector: {
-          detectChanges: () => {}
+          detectChanges: () => { }
         },
-        getHeightTableFooter: () => {}
+        getHeightTableFooter: () => { }
       };
 
       spyOn(fakeThis.changeDetector, 'detectChanges');
@@ -1369,7 +1372,7 @@ describe('PoTableComponent:', () => {
       const fakeTable = {
         tableContainerElement: {
           nativeElement: {
-            firstChild: { classList: { remove: () => {} } }
+            firstChild: { classList: { remove: () => { } } }
           }
         }
       };
@@ -1388,7 +1391,7 @@ describe('PoTableComponent:', () => {
       const fakeTable = {
         tableContainerElement: {
           nativeElement: {
-            firstChild: { classList: { add: () => {} } }
+            firstChild: { classList: { add: () => { } } }
           }
         }
       };
@@ -1410,7 +1413,7 @@ describe('PoTableComponent:', () => {
       const fakeTable = {
         tableContainerElement: {
           nativeElement: {
-            firstChild: { classList: { add: () => {}, remove: () => {} } }
+            firstChild: { classList: { add: () => { }, remove: () => { } } }
           }
         }
       };

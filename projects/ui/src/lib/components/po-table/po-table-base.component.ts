@@ -464,7 +464,8 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   // Colunas que são inseridas no <head> da tabela
   getMainColumns() {
-    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon'];
+    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime',
+      'currency', 'subtitle', 'link', 'label', 'icon', 'actions'];
 
     return this.columns.filter(col => !col.type || typesValid.includes(col.type));
   }
@@ -541,7 +542,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
     this.sortedColumn.ascending = this.sortedColumn.property === column ? !this.sortedColumn.ascending : true;
 
     this.sortArray(column, this.sortedColumn.ascending);
-    this.sortBy.emit({ column, type: this.sortType});
+    this.sortBy.emit({ column, type: this.sortType });
 
     this.sortedColumn.property = column;
   }
