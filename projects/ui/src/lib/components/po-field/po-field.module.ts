@@ -83,6 +83,8 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoDatepickerComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
+    PoFieldContainerComponent,
+    PoFieldContainerBottomComponent,
     PoInputComponent,
     PoLoginComponent,
     PoLookupComponent,
