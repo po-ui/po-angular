@@ -26,8 +26,6 @@ describe('PoButtonComponent: ', () => {
     fixture = TestBed.createComponent(PoButtonComponent);
     component = fixture.componentInstance;
 
-    fixture.detectChanges();
-
     nativeElement = fixture.debugElement.nativeElement;
   });
 
