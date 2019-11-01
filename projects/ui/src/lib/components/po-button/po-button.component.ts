@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
@@ -23,7 +23,8 @@ import { PoButtonBaseComponent } from './po-button-base.component';
  */
 @Component({
   selector: 'po-button',
-  templateUrl: './po-button.component.html'
+  templateUrl: './po-button.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoButtonComponent extends PoButtonBaseComponent {
 
