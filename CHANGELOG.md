@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.14.0](https://github.com/portinariui/portinari-angular/compare/v1.13.1...v1.14.0) (2019-11-01)
+
+
+### Features
+
+* **popover:** permite informar o target dinamicamente ([3c0ff80](https://github.com/portinariui/portinari-angular/commit/3c0ff80))
+* **table:** adiciona gerenciador de colunas ([35d1157](https://github.com/portinariui/portinari-angular/commit/35d1157))
+
+
+
 ### [1.13.1](https://github.com/portinariui/portinari-angular/compare/v1.13.0...v1.13.1) (2019-10-25)
 
 
