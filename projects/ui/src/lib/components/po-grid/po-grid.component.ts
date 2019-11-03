@@ -31,8 +31,7 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
  */
 @Component({
   selector: 'po-grid',
-  templateUrl: './po-grid.component.html',
-  styleUrls: ['./po-grid.component.css']
+  templateUrl: './po-grid.component.html'
 })
 export class PoGridComponent implements OnDestroy {
 

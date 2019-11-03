@@ -2,8 +2,7 @@ import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@ang
 
 @Component({
   selector: 'po-grid-head',
-  templateUrl: './po-grid-head.component.html',
-  styleUrls: ['./po-grid-head.component.css']
+  templateUrl: './po-grid-head.component.html'
 })
 export class PoGridHeadComponent {
 
