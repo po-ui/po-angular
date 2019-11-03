@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'po-grid-cell-action',
-  templateUrl: './po-grid-cell-action.component.html',
-  styleUrls: ['./po-grid-cell-action.component.css']
+  templateUrl: './po-grid-cell-action.component.html'
 })
 export class PoGridCellActionComponent {
 
