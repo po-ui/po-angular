@@ -21,6 +21,7 @@
       { "path": "./css/components/po-dropdown/po-dropdown.html", "title": "Po Dropdown" },
       { "path": "./css/components/po-field/po-field-icon/po-field-icon.html", "title": "Po Field Icon" },
       { "path": "./css/components/po-page/po-page-list/po-dynamic-advanced-filter/po-dynamic-advanced-filter.html", "title": "Po Filtro Avançado Dinâmico" },
+      { "path": "./css/components/po-grid/po-grid.html", "title": "Po Grid" },
       { "path": "./css/components/po-info/po-info.html", "title": "Po Info" },
       { "path": "./css/components/po-field/po-input/po-input.html", "title": "Po Input" },
       { "path": "./css/components/po-list-view/po-list-view.html", "title": "Po List View" },

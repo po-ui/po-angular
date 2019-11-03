@@ -16,6 +16,7 @@
 @import './po-divider';
 @import './po-dropdown';
 @import './po-field';
+@import './po-grid';
 @import './po-info';
 @import './po-list-view';
 @import './po-loading';

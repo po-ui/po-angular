@@ -1,0 +1,41 @@
+:root {
+  --font-grid-head-content-font-bold: {
+    @apply --font-text-bold;
+  }
+
+  --color-grid-head-content-border-bottom-color: var(--color-primary-light-80);
+  --color-grid-head-content-border-right-color: var(--color-neutral-light-90);
+  --color-grid-head-content-color: var(--color-primary);
+}
+
+.po-grid-head-content {
+  @apply --font-grid-head-content-font-bold;
+  border-bottom: 2px solid var(--color-grid-head-content-border-bottom-color);
+  border-left: none;
+  border-right: 1px solid var(--color-grid-head-content-border-right-color);
+  border-top: none;
+  color: var(--color-grid-head-content-color);
+  height: 44px;
+  line-height: 1.71;
+  margin: 0;
+  max-height: 44px;
+  min-height: 44px;
+  overflow: hidden;
+  padding: 10px 16px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.po-grid-head-center {
+  text-align: center;
+}
+
+.po-grid-head-right {
+  text-align: right;
+}
+
+.po-grid-head-content:focus {
+  border: 1px solid var(--color-grid-head-content-color);
+  outline: none;
+}
