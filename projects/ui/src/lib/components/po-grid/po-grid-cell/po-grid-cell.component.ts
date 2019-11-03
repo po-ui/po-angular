@@ -2,8 +2,7 @@ import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef, Output, Eve
 
 @Component({
   selector: 'po-grid-cell',
-  templateUrl: './po-grid-cell.component.html',
-  styleUrls: ['./po-grid-cell.component.css']
+  templateUrl: './po-grid-cell.component.html'
 })
 export class PoGridCellComponent {
 
