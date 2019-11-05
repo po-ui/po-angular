@@ -1403,6 +1403,28 @@ describe('PoComboComponent:', () => {
       expect(nativeElement.querySelector('.po-combo-content')).toBeNull();
     });
 
+    it('shouldn`t have a child span tag inside `po-combo-item` if `comboOptionTemplate` is true', () => {
+      component.comboOptionTemplate = <any> { templateRef: null };
+      component.options = [{ label: '1', value: '1' }];
+
+      fixture.detectChanges();
+
+      const defaultSpan = nativeElement.querySelector('.po-combo-item > span');
+
+      expect(defaultSpan).toBeNull();
+    });
+
+    it('should contain a child span tag inside `po-combo-item` if `comboOptionTemplate` is false', () => {
+      component.comboOptionTemplate = undefined;
+      component.options = [{ label: '1', value: '1' }];
+
+      fixture.detectChanges();
+
+      const defaultSpan = nativeElement.querySelector('.po-combo-item > span');
+
+      expect(defaultSpan).toBeTruthy();
+    });
+
   });
 
   describe('Integration:', () => {

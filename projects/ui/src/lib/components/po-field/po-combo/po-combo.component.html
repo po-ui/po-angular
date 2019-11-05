@@ -59,7 +59,20 @@
     <li *ngFor="let option of visibleOptions"
       [class.po-combo-item-selected]="compareObjects(selectedView, option)"
       (click)="onOptionClick(option, $event)">
-      <a class="po-combo-item" [innerHTML]="getLabelFormatted(option?.label)"></a>
+      <a class="po-combo-item">
+
+        <ng-container *ngIf="comboOptionTemplate; then optionTemplate; else defaultOptionTemplate"></ng-container>
+        
+        <ng-template #defaultOptionTemplate>
+          <span [innerHTML]="getLabelFormatted(option?.label)"></span>
+        </ng-template>
+
+        <ng-template #optionTemplate
+          [ngTemplateOutlet]="comboOptionTemplate?.templateRef"
+          [ngTemplateOutletContext]="{$implicit: option}">
+        </ng-template>
+
+      </a>
     </li>
   </ul>
 </ng-template>
