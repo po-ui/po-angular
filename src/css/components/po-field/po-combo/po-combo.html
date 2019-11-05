@@ -221,19 +221,19 @@
           <div class="po-combo-container">
             <ul class="po-combo-container-content">
               <li value="1" class="po-combo-item-selected">
-                <a class="po-combo-item"> São Paulo</a>
+                <a class="po-combo-item"><span>São Paulo</span></a>
               </li>
               <li value="2">
-                <a class="po-combo-item"> Paraná</a>
+                <a class="po-combo-item"><span>Paraná</span></a>
               </li>
               <li value="3">
-                <a class="po-combo-item"> Santa Catarina</a>
+                <a class="po-combo-item"><span>Santa Catarina</span></a>
               </li>
               <li value="4">
-                <a class="po-combo-item"> Sergipe </a>
+                <a class="po-combo-item"><span>Sergipe</span></a>
               </li>
               <li value="5">
-                <a class="po-combo-item"> Tocantins</a>
+                <a class="po-combo-item"><span>Tocantins</span></a>
               </li>
             </ul>
           </div>
@@ -268,6 +268,59 @@
             </div>
           </div>
 
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-sm-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Simulando com p-combo-option-template e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="São Paulo">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+
+          <div class="po-combo-container">
+            <ul class="po-combo-container-content">
+              <li value="1" class="po-combo-item-selected">
+                <a class="po-combo-item">
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>São Paulo
+                </a>
+              </li>
+              <li value="2">
+                <a class="po-combo-item"> 
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>Paraná
+                </a>
+              </li>
+              <li value="3">
+                <a class="po-combo-item">
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>Santa Catarina
+                </a>
+              </li>
+              <li value="4">
+                <a class="po-combo-item"> 
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>Sergipe
+                </a>
+              </li>
+              <li value="5">
+                <a class="po-combo-item"> 
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>Tocantins
+                </a>
+              </li>
+            </ul>
+          </div>
           <div class="po-field-container-bottom"></div>
         </div>
       </div>
