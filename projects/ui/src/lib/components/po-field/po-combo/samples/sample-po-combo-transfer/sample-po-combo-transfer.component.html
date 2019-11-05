@@ -22,6 +22,17 @@
       p-label="To contact"
       p-placeholder="Select a contact"
       p-required>
+
+      <ng-template p-combo-option-template let-option>
+        <div class="po-row">
+          <po-avatar class="po-sm-2 po-md-3 po-lg-1" p-size="sm"></po-avatar>
+
+          <div class="po-sm-10 po-md-9 po-lg-11">
+            <div class="po-font-text-large-bold"> {{ option.label }} </div>
+            <div class="po-font-text-smaller"> Account: {{ option.value }} </div>
+          </div>
+        </div>
+      </ng-template>
     </po-combo>
   </div>
 
@@ -76,7 +87,7 @@
     </po-info>
   </div>
 
-  <hr>
+  <po-divider></po-divider>
 
   <div class="po-row">
     <po-info

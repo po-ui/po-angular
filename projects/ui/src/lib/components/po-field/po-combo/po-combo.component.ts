@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, DoCheck, ElementRef, forwardRef,
+import { ChangeDetectorRef, Component, ContentChild, DoCheck, ElementRef, forwardRef,
   IterableDiffers, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -14,6 +14,7 @@ import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
 
 const poComboContainerOffset = 8;
 const poComboContainerPositionDefault = 'bottom';
@@ -99,6 +100,8 @@ export class PoComboComponent extends PoComboBaseComponent implements DoCheck, O
 
   private filterSubscription: Subscription;
   private getSubscription: Subscription;
+
+  @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;
 
   @ViewChild('containerElement', { read: ElementRef, static: false }) containerElement: ElementRef;
   @ViewChild('contentElement', { read: ElementRef, static: false }) contentElement: ElementRef;

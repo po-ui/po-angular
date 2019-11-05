@@ -19,6 +19,7 @@ import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module
 import { PoCalendarComponent } from './po-datepicker/po-calendar/po-calendar.component';
 import { PoCleanComponent } from './po-clean/po-clean.component';
 import { PoComboComponent } from './po-combo/po-combo.component';
+import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
 import { PoDatepickerComponent } from './po-datepicker/po-datepicker.component';
 import { PoDatepickerRangeComponent } from './po-datepicker-range/po-datepicker-range.component';
 import { PoDecimalComponent } from './po-decimal/po-decimal.component';
@@ -80,6 +81,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoCheckboxGroupModule,
     PoCleanComponent,
     PoComboComponent,
+    PoComboOptionTemplateDirective,
     PoDecimalComponent,
     PoDatepickerComponent,
     PoDatepickerRangeComponent,
@@ -104,6 +106,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoCalendarComponent,
     PoCleanComponent,
     PoComboComponent,
+    PoComboOptionTemplateDirective,
     PoDecimalComponent,
     PoDatepickerComponent,
     PoDatepickerRangeComponent,
