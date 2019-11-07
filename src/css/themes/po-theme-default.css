@@ -73,6 +73,7 @@
  * Textarea....................variáveis do Textarea.
  * Toolbar.....................variáveis do Toolbar.
  * Tooltip.....................variáveis do Tooltip.
+ * Tree View...................variáveis do Tree View.
  * Upload......................variáveis do Upload.
  * Widget......................variáveis do Widget.
  */
@@ -1118,6 +1119,18 @@
 
   --color-tooltip-background-color-balloon: var(--color-neutral);
   --color-tooltip-color-text-balloon: var(--color-white);
+
+/*------------------------------------*\
+  TREEVIEW
+\*------------------------------------*/
+
+  /** Tree View Item */
+  --color-tree-view-item-border-bottom-color: var(--color-neutral-light-90);
+
+  /** Tree View Item Header */
+  --color-tree-view-item-header-button-color: var(--color-primary);
+  --color-tree-view-item-header-button-focus: var(--color-secondary);
+  --color-tree-view-item-header-label-text-color: var(--color-neutral);
 
 /*------------------------------------*\
   UPLOAD

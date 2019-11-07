@@ -35,6 +35,7 @@
 @import './po-tag';
 @import './po-toolbar';
 @import './po-tooltip';
+@import './po-tree-view';
 @import './po-upload';
 @import './po-widget';
 

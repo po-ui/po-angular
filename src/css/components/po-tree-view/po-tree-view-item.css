@@ -1,0 +1,14 @@
+.po-tree-view-item {
+  border-bottom: 1px solid var(--color-tree-view-item-border-bottom-color);
+  list-style-type: none;
+  min-height: 56px;
+  width: 100%;
+}
+
+.po-tree-view-item .po-tree-view-item {
+  border-bottom: none;
+}
+
+.po-tree-view-item-group {
+  padding-left: 28px;
+}

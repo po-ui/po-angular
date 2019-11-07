@@ -1,0 +1,75 @@
+:root {
+
+  --font-tree-view-item-header-label-font-bold: {
+    @apply --font-text-bold;
+  }
+
+  --font-tree-view-item-header-label-font-normal: {
+    @apply --font-text;
+  }
+
+}
+
+.po-tree-view-item-header {
+  display: table;
+  height: 56px;
+  min-height: 56px;
+  padding: 16px;
+}
+
+.po-tree-view-item-header-button {
+  background-color: transparent;
+  border: none;
+  color: var(--color-tree-view-item-header-button-color);
+  cursor: pointer;
+  font-size: 20px;
+  margin-right: 8px;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.po-tree-view-item-header-button::-moz-focus-inner {
+  border: 0;
+}
+
+.po-tree-view-item-header-button:focus {
+  border-radius: 1px;
+  outline: dashed 2px var(--color-tree-view-item-header-button-focus);
+  outline-offset: 4px;
+}
+
+.po-tree-view-item-header-button-icon {
+  display: block;
+  transform: rotate(0deg);
+  transition: transform .3s cubic-bezier(.07,.88,.58,.92);
+}
+
+.po-tree-view-item-header-button-icon-transform {
+  transform: rotate(180deg);
+}
+
+.po-tree-view-item-header-label {
+  color: var(--color-tree-view-item-header-label-text-color);
+  display: table-cell;
+  vertical-align: top;
+}
+
+.po-tree-view-item .po-tree-view-item-header-label {
+  @apply --font-tree-view-item-header-label-font-bold;
+}
+
+.po-tree-view-item .po-tree-view-item .po-tree-view-item-header-label {
+  @apply --font-tree-view-item-header-label-font-normal;
+}
+
+.po-tree-view-item-header-label-padding {
+  padding-left: 28px;
+}
+
+@media screen and (max-width: 360px) {
+
+  .po-tree-view-item-header {
+    padding: 16px 8px;
+  }
+
+}
