@@ -1,5 +1,22 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.15.0](https://github.com/portinariui/portinari-angular/compare/v1.14.0...v1.15.0) (2019-11-08)
+
+
+### Bug Fixes
+
+* **page-job-scheduler:** corrige altura do container ([a8aaae8](https://github.com/portinariui/portinari-angular/commit/a8aaae8))
+
+
+### Features
+
+* **button:** implementa ChangeDetectionStrategy.OnPush ([91b3189](https://github.com/portinariui/portinari-angular/commit/91b3189))
+* **combo:** permite customizar a lista de opções ([b0afdf9](https://github.com/portinariui/portinari-angular/commit/b0afdf9))
+
+
+
 ## [1.14.0](https://github.com/portinariui/portinari-angular/compare/v1.13.1...v1.14.0) (2019-11-01)
 
 
