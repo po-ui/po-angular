@@ -36,6 +36,11 @@
 
 .po-chart-svg-element {
   display: block;
+  margin: 0 auto;
+}
+
+po-chart-legend {
+  display: block;
 }
 
 .po-chart-legend {

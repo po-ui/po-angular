@@ -453,6 +453,13 @@
   --color-chart-background-color: var(--color-white);
   --color-chart-legend-wrapper-scrollbar: var(--color-primary-alpha-50);
 
+  /**
+   * Chart Types
+   */
+   --color-chart-gauge-base-path-color: var(--color-neutral-light-80);
+   --color-chart-gauge-text-content-focus: var(--color-secondary);
+   --color-chart-gauge-text-description-color: var(--color-neutral);
+
 /*------------------------------------*\
   CHECKBOX GROUP
 \*------------------------------------*/
