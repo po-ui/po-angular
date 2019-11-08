@@ -32,6 +32,7 @@ import { PoTableModule } from './po-table/po-table.module';
 import { PoTabsModule } from './po-tabs/po-tabs.module';
 import { PoTagModule } from './po-tag/po-tag.module';
 import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
+import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
 
 @NgModule({
@@ -69,6 +70,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoTabsModule,
     PoTagModule,
     PoToolbarModule,
+    PoTreeViewModule,
     PoWidgetModule
   ],
   exports: [
@@ -104,6 +106,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoTabsModule,
     PoTagModule,
     PoToolbarModule,
+    PoTreeViewModule,
     PoWidgetModule
   ],
   providers: [],
