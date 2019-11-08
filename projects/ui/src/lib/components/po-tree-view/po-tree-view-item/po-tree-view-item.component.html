@@ -1,0 +1,22 @@
+<li class="po-tree-view-item">
+
+  <po-tree-view-item-header
+    [p-expanded]="expanded"
+    [p-has-sub-items]="hasSubItems"
+    [p-label]="label"
+    (p-click)="onClick($event)">
+  </po-tree-view-item-header>
+
+  <ul *ngIf="hasSubItems"
+    class="po-tree-view-item-group"
+    [@toggleBody]="expanded ? 'expanded' : 'collapsed'">
+
+    <po-tree-view-item *ngFor="let subItem of subItems"
+      [p-expanded]="subItem.expanded"
+      [p-label]="subItem.label"
+      [p-sub-items]="subItem.subItems"
+      [p-value]="subItem.value">
+    </po-tree-view-item>
+  </ul>
+
+</li>
