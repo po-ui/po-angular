@@ -483,3 +483,21 @@ export function convertNumberToDecimal(number: any, decimalsPlace: number): numb
     return floatValue;
   }
 }
+
+/**
+ * Retorna uma copia do objeto sujo, sem as propriedades nulas ou indefinidas.
+ * Retorna o objeto sem as propriedades que contém valores nulos ou indefinidos.
+ *
+ * @param dirtyObject
+ */
+export function clearObject(dirtyObject: object): any {
+  const cleanObject = {};
+
+  Object.keys(dirtyObject).forEach(key => {
+    if (dirtyObject[key] !== null && dirtyObject[key] !== undefined) {
+      cleanObject[key] = dirtyObject[key];
+    }
+  });
+
+  return cleanObject;
+}

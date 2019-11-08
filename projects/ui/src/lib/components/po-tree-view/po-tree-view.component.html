@@ -1,0 +1,10 @@
+<po-container *ngIf="hasItems" p-no-padding p-no-shadow>
+  <ul class="po-tree-view">
+    <po-tree-view-item *ngFor="let item of items"
+      [p-expanded]="item.expanded"
+      [p-label]="item.label"
+      [p-sub-items]="item.subItems"
+      [p-value]="item.value">
+    </po-tree-view-item>
+  </ul>
+</po-container>

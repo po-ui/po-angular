@@ -1,7 +1,7 @@
 import { changePhantomProperties, expectBrowserLanguageMethod, handleThrowError } from './../util-test/util-expect.spec';
 
 import {
-  callFunction, capitalizeFirstLetter, convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertImageToBase64,
+  callFunction, capitalizeFirstLetter, clearObject, convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertImageToBase64,
   convertNumberToDecimal, convertToBoolean, convertToInt, formatYear, getFormattedLink, isEquals, isKeyCodeEnter,
   isExternalLink, isTypeof, mapArrayByProperties, mapObjectByProperties, openExternalLink, removeDuplicatedOptions,
   removeUndefinedAndNullOptions, setYearFrom0To100, sortOptionsByProperty, sortValues, validateDateRange, validValue, valuesFromObject
@@ -1295,5 +1295,17 @@ describe('Function convertNumberToDecimals:', () => {
     expect(convertNumberToDecimal('test', 0)).toBe(undefined);
     expect(convertNumberToDecimal(null, 0)).toBe(undefined);
     expect(convertNumberToDecimal(NaN, 1)).toBe(undefined);
+  });
+});
+
+describe('Function clearObject:', () => {
+
+  it('should return object without null or undefined value', () => {
+    const expectedValue = { name: 'john doe' };
+    const dirtyObject = { ...expectedValue, age: undefined, email: null};
+
+    const cleanObject = clearObject(dirtyObject);
+
+    expect(cleanObject).toEqual(expectedValue);
   });
 });

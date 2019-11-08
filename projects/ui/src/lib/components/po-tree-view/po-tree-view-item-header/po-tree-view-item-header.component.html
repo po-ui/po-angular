@@ -1,0 +1,16 @@
+<div class="po-tree-view-item-header">
+
+  <button *ngIf="hasSubItems"
+    class="po-tree-view-item-header-button"
+    (click)="click.emit($event)">
+    <span class="po-icon po-icon-arrow-down po-tree-view-item-header-button-icon"
+      [class.po-tree-view-item-header-button-icon-transform]="expanded">
+    </span>
+  </button>
+
+  <span
+    class="po-tree-view-item-header-label"
+    [class.po-tree-view-item-header-label-padding]="!hasSubItems">
+    {{ label }}
+  </span>
+</div>
