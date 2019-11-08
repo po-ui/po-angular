@@ -25,6 +25,7 @@
 .po-tooltip-content {
   @apply --font-tooltip-font-text;
   color: var(--color-tooltip-color-text-balloon);
+  font-style: normal;
   white-space: normal;
   word-wrap: break-word;
 }
