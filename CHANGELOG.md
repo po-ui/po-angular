@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/portinariui/portinari-angular/compare/v1.15.0...v1.16.0) (2019-11-18)
+
+
+### Features
+
+* **chart:** adiciona gráfico do tipo gauge ([a6ffb69](https://github.com/portinariui/portinari-angular/commit/a6ffb69))
+* **tree-view:** novo componente ([5ee70df](https://github.com/portinariui/portinari-angular/commit/5ee70df))
+
+
+
 ## [1.15.0](https://github.com/portinariui/portinari-angular/compare/v1.14.0...v1.15.0) (2019-11-08)
 
 
