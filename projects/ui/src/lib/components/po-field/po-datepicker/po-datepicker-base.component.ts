@@ -6,6 +6,8 @@ import { convertDateToISODate, convertDateToISOExtended, convertIsoToDate, conve
 import { dateFailed, requiredFailed } from './../validators';
 import { PoMask } from '../po-input/po-mask';
 
+import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
+
 const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
 
 /**
@@ -22,7 +24,8 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  * O datepicker aceita três formatos de data: o E8601DZw (yyyy-mm-ddThh:mm:ss+|-hh:mm), o E8601DAw (yyyy-mm-dd) e o
  * Date padrão do Javascript.
  *
- * > O formato de saída do *model* se ajusta conforme o formato de entrada, veja abaixo:
+ * > Por padrão, o formato de saída do *model* se ajustará conforme o formato de entrada. Se por acaso precisar controlar o valor de saída,
+ * a propriedade `p-iso-format` provê esse controle independentemente do formato de entrada. Veja abaixo os formatos disponíveis:
  *
  * - Formato de entrada e saída (E8601DZw) - `'2017-11-28T00:00:00-02:00'`;
  *
@@ -53,6 +56,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   private _autofocus?: boolean;
   private _format?: string = poDatepickerFormatDefault;
+  private _isoFormat: PoDatepickerIsoFormat;
   private _maxDate: Date;
   private _minDate: Date;
   private _noAutocomplete?: boolean = false;
@@ -251,6 +255,26 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   get format() {
     return this._format;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Padrão de formatação para saída do *model*, independentemente do formato de entrada.
+   *
+   * > Veja os valores válidos no *enum* `PoDatepickerIsoFormat`.
+   */
+  @Input('p-iso-format') set isoFormat(value: PoDatepickerIsoFormat) {
+    if (Object.values(PoDatepickerIsoFormat).includes(value)) {
+      this._isoFormat = value;
+      this.isExtendedISO = value === PoDatepickerIsoFormat.Extended;
+    }
+  }
+
+  get isoFormat() {
+    return this._isoFormat;
   }
 
   /**
