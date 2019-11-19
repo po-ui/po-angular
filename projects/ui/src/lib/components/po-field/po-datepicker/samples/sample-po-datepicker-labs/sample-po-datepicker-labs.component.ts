@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoDatepickerIsoFormat, PoRadioGroupOption } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-datepicker-labs',
@@ -14,11 +14,17 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
   event: string;
   format: string;
   help: string;
+  isoFormat: PoDatepickerIsoFormat;
   label: string;
   locale: string;
   placeholder: string;
   properties: Array<string>;
   minDate: string | Date;
+
+  public readonly isoFormatOptions: Array<PoRadioGroupOption> = [
+    { label: 'Basic', value: PoDatepickerIsoFormat.Basic },
+    { label: 'Extended', value: PoDatepickerIsoFormat.Extended }
+  ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
@@ -56,6 +62,7 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
     this.errorPattern = undefined;
     this.format = undefined;
     this.help = undefined;
+    this.isoFormat = undefined;
     this.label = undefined;
     this.locale = undefined;
     this.placeholder = undefined;

@@ -5,6 +5,7 @@ export * from './po-combo/interfaces/po-combo-filter.interface';
 export * from './po-combo/interfaces/po-combo-literals.interface';
 export * from './po-combo/interfaces/po-combo-option.interface';
 export * from './po-combo/po-combo.component';
+export * from './po-datepicker/enums/po-datepicker-iso-format.enum';
 export * from './po-datepicker/po-datepicker.component';
 export * from './po-datepicker-range/interfaces/po-datepicker-range.interface';
 export * from './po-datepicker-range/interfaces/po-datepicker-range-literals.interface';

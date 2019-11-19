@@ -286,12 +286,14 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
       } else if (this.isValidDateIso(value) || this.isValidExtendedIso(value)) {
 
-        if (this.isValidDateIso(value)) {
-          this.isExtendedISO = false;
-        } else {
+        if (this.isValidExtendedIso(value)) {
           this.hour = value.substring(10, 25);
-          this.isExtendedISO = true;
         }
+
+        if (this.isoFormat === undefined) {
+          this.isExtendedISO = this.isValidExtendedIso(value);
+        }
+
         const day = parseInt(value.substring(8, 10), 10);
         const month = parseInt(value.substring(5, 7), 10) - 1;
         const year = parseInt(value.substring(0, 4), 10);

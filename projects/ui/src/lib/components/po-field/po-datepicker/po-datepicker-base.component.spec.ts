@@ -7,6 +7,7 @@ import { convertDateToISOExtended, formatYear, getShortBrowserLanguage, setYearF
 import { expectSettersMethod, expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
+import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoMask } from '../po-input/po-mask';
 
 class PoDatepickerComponent extends PoDatepickerBaseComponent {
@@ -580,6 +581,31 @@ describe('PoDatepickerBaseComponent:', () => {
 
       expect(setYearFrom0To100).toHaveBeenCalled();
     });
+
+    it('p-iso-format: should update with valid value', () => {
+      const validValue = [PoDatepickerIsoFormat.Basic, PoDatepickerIsoFormat.Extended, 'basic', 'extended'];
+
+      expectPropertiesValues(component, 'isoFormat', validValue , validValue);
+    });
+
+    it('p-iso-format: should set isExtendedISO with `false` if isoFormat value is `PoDatepickerIsoFormat.Basic`', () => {
+      component.isoFormat = PoDatepickerIsoFormat.Basic;
+
+      expect(component['isExtendedISO']).toBe(false);
+    });
+
+    it('p-iso-format: should set isExtendedISO with `true` if isoFormat value is `PoDatepickerIsoFormat.Extended`', () => {
+      component.isoFormat = PoDatepickerIsoFormat.Extended;
+
+      expect(component['isExtendedISO']).toBe(true);
+    });
+
+    it('p-iso-format: should be set with `undefined` if it receives an invalid value', () => {
+      const invalidValues = [ undefined, 0, 1, 3, 'valor', [], true, false ];
+
+      expectPropertiesValues(component, 'isoFormat', invalidValues, undefined);
+    });
+
   });
 
 });

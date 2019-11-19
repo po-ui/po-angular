@@ -13,6 +13,7 @@ import { PoCalendarService } from './po-calendar/po-calendar.service';
 import { PoCalendarComponent } from './po-calendar/po-calendar.component';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { PoDatepickerComponent } from './po-datepicker.component';
+import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 
@@ -836,15 +837,6 @@ describe('PoDatepickerComponent:', () => {
       expect(setYearFrom0To100).toHaveBeenCalled();
     });
 
-    it('writeValue: should set `isExtendedISO` to `false` if `isValidDateIso` is `true`', () => {
-      component['isExtendedISO'] = true;
-      const date = '2017-08-05';
-
-      component.writeValue(date);
-
-      expect(component['isExtendedISO']).toBe(false);
-    });
-
     it(`writeValue: should update 'valueBeforeChange' with 'formatToDate' return and call 'formatToDate'
       with 'this.date'`, () => {
 
@@ -1109,6 +1101,45 @@ describe('PoDatepickerComponent:', () => {
 
       component['setDialogPickerStyleDisplay']('block');
       expect(component.dialogPicker.nativeElement.style.display).toBe('block');
+    });
+
+    it('writeValue: should set `isExtendedISO` with `false` if `isoFormat` is `undefined` and `isValidExtendedIso` is `false`', () => {
+      component['isExtendedISO'] = false;
+      const date = '2019-11-21';
+
+      component.writeValue(date);
+
+      expect(component['isExtendedISO']).toBeFalsy();
+    });
+
+    it('writeValue: should set `isExtendedISO` with `true` if `isoFormat` is `undefined` and `isValidExtendedIso` is `true`', () => {
+      component['isExtendedISO'] = false;
+      const date = '2019-11-21T16:26:05-03:00';
+
+      component.writeValue(date);
+
+      expect(component['isExtendedISO']).toBeTruthy();
+    });
+
+    it('writeValue: shouldn`t change `isExtendedISO` value if `isoFormat` has a valid value', () => {
+      component.isoFormat = PoDatepickerIsoFormat.Basic;
+      const date = '2019-11-21';
+
+      component.writeValue(date);
+
+      expect(component['isExtendedISO']).toBeFalsy();
+    });
+
+    it('writeValue: should set `hour` value if date is an extended iso format', () => {
+      component.writeValue('2019-11-21T00:00:00-03:00');
+
+      expect(component.hour).toBe('T00:00:00-03:00');
+    });
+
+    it('writeValue: should keep `hour` with it`s default value if date isn`t an extended iso format', () => {
+      component.writeValue('2019-11-21');
+
+      expect(component.hour).toBe('T00:00:01-00:00');
     });
 
   });

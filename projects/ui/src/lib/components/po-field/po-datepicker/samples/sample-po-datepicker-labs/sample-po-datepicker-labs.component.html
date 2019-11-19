@@ -8,6 +8,7 @@
   [p-error-pattern]="errorPattern"
   [p-format]="format"
   [p-help]="help"
+  [p-iso-format]="isoFormat"
   [p-label]="label"
   [p-locale]="locale"
   [p-min-date]="minDate"
@@ -98,17 +99,6 @@
   </div>
 
   <div class="po-row">
-    <po-checkbox-group
-      class="po-sm-12"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="4"
-      p-label="Properties"
-      [p-options]="propertiesOptions">
-    </po-checkbox-group>
-  </div>
-
-  <div class="po-row">
     <po-radio-group
       class="po-md-6"
       name="format"
@@ -126,6 +116,26 @@
       p-label="Locale"
       [p-options]="localeOptions">
     </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-4"
+      name="isoFormat"
+      [(ngModel)]="isoFormat"
+      p-columns="1"
+      p-label="Iso Format"
+      [p-options]="isoFormatOptions">
+    </po-radio-group>
+
+    <po-checkbox-group
+      class="po-sm-8"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="3"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
   </div>
 
   <div class="po-row">
