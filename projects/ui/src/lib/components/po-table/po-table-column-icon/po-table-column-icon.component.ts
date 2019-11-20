@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
+import { PoTableColumn } from '../interfaces/po-table-column.interface';
 import { PoTableColumnIcon } from './po-table-column-icon.interface';
 
 /**
@@ -19,9 +20,12 @@ export class PoTableColumnIconComponent {
 
   private _icons: Array<PoTableColumnIcon> = [];
 
+  /** Definição da coluna que utiliza os icones. */
+  @Input('p-column') column: PoTableColumn;
+
   /** Lista de colunas com ícones. */
-  @Input('p-icons') set icons(icons: Array<PoTableColumnIcon>) {
-    this._icons = icons || [];
+  @Input('p-icons') set icons(icons: Array<PoTableColumnIcon> | Array<string> | string) {
+    this._icons = this.convertToColumnIcon(icons);
   }
 
   get icons() {
@@ -31,12 +35,19 @@ export class PoTableColumnIconComponent {
   /** Dados da linha da tabela. */
   @Input('p-row') row: any;
 
-  click(column: PoTableColumnIcon): void {
-    column.action(this.row, column);
+  click(columnIcon: PoTableColumnIcon): void {
+    const isAbleAction = !this.isDisabled(columnIcon);
+
+    if (columnIcon.action && isAbleAction) {
+      columnIcon.action(this.row, columnIcon);
+    } else if (this.column.action && isAbleAction) {
+      this.column.action(this.row, columnIcon);
+    }
+
   }
 
   getColor(column: PoTableColumnIcon): string {
-    const color =  typeof column.color === 'function' ? column.color(this.row, column) : column.color;
+    const color = typeof column.color === 'function' ? column.color(this.row, column) : column.color;
 
     if (color) {
       return `po-text-${color}`;
@@ -47,8 +58,8 @@ export class PoTableColumnIconComponent {
     return column.icon || column.value;
   }
 
-  isClickable(column: PoTableColumnIcon): boolean {
-    return column.action && !this.isDisabled(column);
+  isClickable(columnIcon: PoTableColumnIcon): boolean {
+    return !!(!this.isDisabled(columnIcon) && (columnIcon.action || this.column.action));
   }
 
   isDisabled(column: PoTableColumnIcon): boolean {
@@ -57,6 +68,19 @@ export class PoTableColumnIconComponent {
 
   trackByFunction(index) {
     return index;
+  }
+
+  private convertToColumnIcon(rowIcons: Array<PoTableColumnIcon> | Array<string> | string): Array<PoTableColumnIcon> {
+
+    if (Array.isArray(rowIcons)) {
+      return (<any> rowIcons).map(rowIcon => typeof rowIcon === 'string' ? { value: rowIcon } : rowIcon);
+    }
+
+    if (typeof rowIcons === 'string') {
+      return [{ value: rowIcons }];
+    }
+
+    return [];
   }
 
 }
