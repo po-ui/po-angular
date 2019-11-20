@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
+import { PoTableColumnIcon } from './po-table-column-icon.interface';
 import { PoTableColumnIconComponent } from './po-table-column-icon.component';
 import { PoTableModule } from '../po-table.module';
 import { PoTooltipModule } from '../../../directives/po-tooltip';
@@ -170,20 +171,63 @@ describe('PoTableColumnIconComponent:', () => {
       expect(expectedValue).toBe(expectedIcon);
     });
 
-    it('click: should call column.action', () => {
+    it('click: shouldn`t call columnIcon.action or column.action if columnIcon.disabled is true', () => {
       const fakeRow = component.row = {};
-      const fakeColumn = {
+      const fakeColumnIcon = {
         color: 'color-08',
         value: 'po-icon-copy',
         action: () => true,
         disabled: () => true
       };
+      component.column = { property: 'columnIcon', type: 'icon', action: () => true };
 
-      spyOn(fakeColumn, 'action');
+      spyOn(component, 'isDisabled').and.callThrough();
+      spyOn(fakeColumnIcon, 'action');
+      spyOn(component.column, 'action');
 
-      component.click(fakeColumn);
+      component.click(fakeColumnIcon);
 
-      expect(fakeColumn.action).toHaveBeenCalledWith(fakeRow, fakeColumn);
+      expect(component.column.action).not.toHaveBeenCalledWith(fakeColumnIcon);
+      expect(fakeColumnIcon.action).not.toHaveBeenCalledWith(fakeRow, fakeColumnIcon);
+      expect(component['isDisabled']).toHaveBeenCalledWith(fakeColumnIcon);
+    });
+
+    it('click: should call columnIcon.action if isDisabled is false', () => {
+      const fakeRow = component.row = {};
+      const fakeColumnIcon = {
+        color: 'color-08',
+        value: 'po-icon-copy',
+        action: () => true,
+        disabled: () => false
+      };
+      component.column = { property: 'columnIcon', type: 'icon', action: () => {} };
+
+      spyOn(component, 'isDisabled').and.callThrough();
+      spyOn(component.column, 'action');
+      spyOn(fakeColumnIcon, 'action');
+
+      component.click(fakeColumnIcon);
+
+      expect(fakeColumnIcon.action).toHaveBeenCalledWith(fakeRow, fakeColumnIcon);
+      expect(component.column.action).not.toHaveBeenCalledWith(fakeColumnIcon);
+      expect(component['isDisabled']).toHaveBeenCalledWith(fakeColumnIcon);
+    });
+
+    it('click: should call column.action with columnIcon if isDisabled is falsy and columnIcon.action is undefined', () => {
+      const fakeRow = component.row = {};
+      const fakeColumnIcon = {
+        color: 'color-08',
+        value: 'po-icon-copy'
+      };
+      component.column = { property: 'columnIcon', type: 'icon', action: () => {} };
+
+      spyOn(component, 'isDisabled').and.callThrough();
+      spyOn(component.column, 'action');
+
+      component.click(fakeColumnIcon);
+
+      expect(component.column.action).toHaveBeenCalledWith(fakeRow, fakeColumnIcon);
+      expect(component['isDisabled']).toHaveBeenCalledWith(fakeColumnIcon);
     });
 
     it('trackByFunction: should return index', () => {
@@ -191,6 +235,26 @@ describe('PoTableColumnIconComponent:', () => {
       const trackBy = component.trackByFunction(fakeIndex);
 
       expect(trackBy).toBe(fakeIndex);
+    });
+
+    it('convertToColumnIcon: should convert to columnIcon pattern if pass string', () => {
+      const icon = 'po-icon-copy';
+      const columnIcons: Array<PoTableColumnIcon> = [{ value: icon }];
+
+      expect(component['convertToColumnIcon'](icon)).toEqual(columnIcons);
+    });
+
+    it('convertToColumnIcon: should convert to columnIcon pattern if pass array of string', () => {
+      const icons = ['po-icon-copy', 'po-icon-edit'];
+      const columnIcons: Array<PoTableColumnIcon> = [{ value: 'po-icon-copy' }, { value: 'po-icon-edit' }];
+
+      expect(component['convertToColumnIcon'](icons)).toEqual(columnIcons);
+    });
+
+    it('convertToColumnIcon: should return `icons` if is correct pattern', () => {
+      const columnIcons: Array<PoTableColumnIcon> = [{ value: 'po-icon-copy' }, { value: 'po-icon-edit' }];
+
+      expect(component['convertToColumnIcon'](columnIcons)).toEqual(columnIcons);
     });
 
   });

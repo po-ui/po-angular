@@ -189,6 +189,7 @@
               </po-table-column-link>
 
               <po-table-column-icon *ngSwitchCase="'icon'"
+                [p-column]="column"
                 [p-icons]="getColumnIcons(row, column)"
                 [p-row]="row">
               </po-table-column-icon>
