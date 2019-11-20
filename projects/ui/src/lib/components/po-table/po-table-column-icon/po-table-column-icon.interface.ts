@@ -40,9 +40,9 @@ export interface PoTableColumnIcon {
   disabled?: Function;
 
   /**
-   * Ícone a ser exibido.
+   * Ícone que será exibido, veja os valores válidos na [biblioteca de ícones](/guides/icons).
    *
-   * > Veja os valores válidos na [Biblioteca de ícones](/guides/icons).
+   * > Caso esta propriedade não seja definida, a mesma receberá o valor contido em `value`.
    */
   icon?: string;
 
@@ -50,9 +50,7 @@ export interface PoTableColumnIcon {
   tooltip?: string;
 
   /**
-   * Define o valor do respectivo ícone que será exibido, o qual se refere a propriedade `icon`.
-   *
-   * > Caso propriedade `icon` não for informada, o componente utilizará o próprio `value` como valor.
+   * Define o valor do ícone que será exibido.
    */
   value: string;
 

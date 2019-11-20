@@ -41,6 +41,7 @@ describe('PoTableComponent:', () => {
   let columns: Array<PoTableColumn>;
   let columnsDetail: Array<PoTableColumn>;
   let columnsDetailInterface: Array<PoTableColumn>;
+  let columnIcons: PoTableColumn;
   let columnSubtitle: PoTableColumn;
   let columnsWithDetail: Array<PoTableColumn>;
   let columnsWithDetailInterface: Array<PoTableColumn>;
@@ -84,6 +85,10 @@ describe('PoTableComponent:', () => {
         typeHeader: 'inline'
       }
     }];
+
+    columnIcons = { property: 'portinari', type: 'icon', icons: [
+      { value: 'favorite' }, { value: 'documentation' }
+    ]};
 
     columnsWithDetail = columns.concat(columnsDetail);
 
@@ -1100,78 +1105,100 @@ describe('PoTableComponent:', () => {
       expect(fakeThisDoCheck.verifyCalculateHeightTableContainer).toHaveBeenCalled();
     });
 
-    it('getColumnIcons: should return `column.icons` if it has a length`', () => {
-      const col: any = { property: 'iconsColumn', icons: 'po-icon-close' };
-      const row: any = { property: 'teste' };
+    describe('getColumnIcons:', () => {
 
-      const expectedResult = component.getColumnIcons(row, col);
+      it('should call `mergeCustomIcons` if has `column.icons` and `rowIcons` is an array.', () => {
+        const row: any = { portinari: ['favorite', 'documentation'] };
 
-      expect(expectedResult).toEqual(col.icons);
+        const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons').and.callThrough();
+        const expectedReturn = component.getColumnIcons(row, columnIcons);
+
+        expect(spyOnMergeCustomIcons).toHaveBeenCalled();
+        expect(expectedReturn).toEqual(columnIcons.icons);
+      });
+
+      it('should call `findCustomIcon` if has `column.icons` and `rowIcons` isn´t an array.', () => {
+        const row: any = { portinari: 'favorite' };
+
+        const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon').and.callThrough();
+        const expectedReturn = component.getColumnIcons(row, columnIcons);
+
+        expect(spyOFindCustomIcon).toHaveBeenCalled();
+        expect(expectedReturn).toEqual([columnIcons.icons[0]]);
+      });
+
+      it(`shouldn't call 'mergeCustomIcons' neither 'findCustomIcon' if doesn't have column.icons and return row[column.property].`, () => {
+        const row: any = { portinari: 'favorite' };
+        const column: any = { property: 'portinari', type: 'icon' };
+
+        const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons');
+        const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon');
+        const expectedReturn = component.getColumnIcons(row, column);
+
+        expect(spyOnMergeCustomIcons).not.toHaveBeenCalled();
+        expect(spyOFindCustomIcon).not.toHaveBeenCalled();
+        expect(expectedReturn).toEqual(row[column.property]);
+      });
+
+      it(`shouldn't call 'mergeCustomIcons' or 'findCustomIcon' if doesn't have column.icons and return undefined.`, () => {
+        const row: any = { portinari: 'favorite' };
+        const column: any = { type: 'icon' };
+
+        const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons');
+        const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon');
+        const expectedReturn = component.getColumnIcons(row, column);
+
+        expect(spyOnMergeCustomIcons).not.toHaveBeenCalled();
+        expect(spyOFindCustomIcon).not.toHaveBeenCalled();
+        expect(expectedReturn).toEqual(row[column.property]);
+      });
+
     });
 
-    it(`getColumnIcons: should call 'getColumnIconsFromProperty' if 'row' contains a property that combine
-    with 'column.property.value' and it should has length`, () => {
-      const col: any = { property: 'favorite', icons: [] } ;
-      const row: any = { favorite: ['favorite', 'documentation'] };
+    describe('mergeCustomIcons:', () => {
 
-      spyOn(component, <any>'getColumnIconsFromProperty');
+      let customCloseIcon;
+      let customCopyIcon;
+      let columnValues;
+      let customIcons;
 
-      component.getColumnIcons(row, col);
+      beforeEach(() => {
+        customCloseIcon = { value: 'po-icon-close', color: 'blue' };
+        customCopyIcon = { value: 'po-icon-copy', color: 'blue' };
 
-      expect(component['getColumnIconsFromProperty']).toHaveBeenCalledWith(row.favorite, col);
+        columnValues = ['po-icon-delete', 'po-icon-star'];
+        customIcons = [customCopyIcon, customCloseIcon];
+      });
+
+      it('should return an array according with columnValues', () => {
+        expect(component['mergeCustomIcons'](columnValues, customIcons)).toEqual(columnValues);
+      });
+
+      it('should return array only with customIcons', () => {
+        columnValues = ['po-icon-copy', 'po-icon-close'];
+
+        expect(component['mergeCustomIcons'](columnValues, customIcons)).toEqual([...customIcons]);
+      });
+
+      it('should return array with customIcons and icons that not have customIcon', () => {
+        const icons = ['po-icon-copy', 'po-icon-close', ...columnValues];
+
+        expect(component['mergeCustomIcons'](icons, customIcons)).toEqual([...customIcons, ...columnValues]);
+      });
+
     });
 
-    it(`getColumnIcons: shouldn't call 'getColumnIconsFromProperty' if 'row' contains a property that combine
-    with 'column.property.value' however it doesn't have length`, () => {
-      const col: any = { property: 'favorite', icons: [] } ;
-      const row: any = { favorite: [] };
+    it('findCustomIcon: should return an array containing an object with icon value.', () => {
+      const rowColumnProperty = 'favorite';
+      const expectedValue: any = { value: rowColumnProperty };
 
-      spyOn(component, <any>'getColumnIconsFromProperty');
-
-      component.getColumnIcons(row, col);
-
-      expect(component['getColumnIconsFromProperty']).not.toHaveBeenCalled();
+      expect(component['findCustomIcon'](rowColumnProperty, columnIcons)).toEqual([expectedValue]);
     });
 
-    it(`getColumnIcons: shouldn't call 'getColumnIconsFromProperty' if 'row' doesn't contain any
-    property name that match with 'column.property.value'`, () => {
-      const col: any = { property: 'favorite', icons: [] } ;
-      const row: any = { anotherProperty: '' };
+    it('findCustomIcon: should return a undefined value.', () => {
+      const rowColumnProperty = '';
 
-      spyOn(component, <any>'getColumnIconsFromProperty');
-
-      component.getColumnIcons(row, col);
-
-      expect(component['getColumnIconsFromProperty']).not.toHaveBeenCalled();
-    });
-
-    it('getColumnIconsFromProperty: should return only one object.', () => {
-      const col: any = { property: 'favorite', disabled: true, action: true, color: true } ;
-      const rowIcons: Array<string> = ['favorite'];
-      const get = component['getColumnIconsFromProperty'](rowIcons, col);
-      const expectedResult = [{ action: true, color: true, disabled: true, value: 'favorite' }];
-
-      expect(get).toEqual(expectedResult);
-    });
-
-    it('getColumnIconsFromProperty: should return two objects.', () => {
-      const col: any = { property: 'favorite', disabled: true, action: true, color: true } ;
-      const rowIcons: Array<string> = ['favorite', 'documentation'];
-      const get = component['getColumnIconsFromProperty'](rowIcons, col);
-      const expectedResult = [
-        { action: true, color: true, disabled: true, value: 'favorite' },
-        { action: true, color: true, disabled: true, value: 'documentation' }
-      ];
-
-      expect(get).toEqual(expectedResult);
-    });
-
-    it('getColumnIconsFromProperty: should return rowIcons.', () => {
-      const col: any = { property: 'favorite', disabled: true, action: true, color: true } ;
-      const rowIcons: Array<any> = [{ teste: 'teste'}];
-      const get = component['getColumnIconsFromProperty'](rowIcons, col);
-
-      expect(get).toEqual(rowIcons);
+      expect(component['findCustomIcon'](rowColumnProperty, columnIcons)).toEqual(undefined);
     });
 
     it(`tooltipMouseLeave: should set tooltipText to undefined`, () => {
@@ -1780,6 +1807,24 @@ describe('PoTableComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-table-header-column-manager-button')).toBe(null);
+    });
+
+    it('should display one icon.', () => {
+      component.items = [{ portinari: 'favorite' }];
+      component.columns = [columnIcons];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelectorAll(`po-table-column-icon po-table-icon`).length).toBe(1);
+    });
+
+    it('should display two icons.', () => {
+      component.items = [{ portinari: ['favorite', 'documentation'] }];
+      component.columns = [columnIcons];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelectorAll(`po-table-column-icon po-table-icon`).length).toBe(2);
     });
 
   });

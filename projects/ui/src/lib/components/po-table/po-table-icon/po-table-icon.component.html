@@ -1,5 +1,5 @@
 <span
-  class="po-icon {{ icon }} {{ color }}"
+  class="po-icon {{ icon }} {{ disabled ? '' : color }}"
   [ngClass]="{'po-clickable': clickable, 'po-table-icon-disabled': disabled}"
   [p-tooltip]="tooltip"
   (click)="onClick()"

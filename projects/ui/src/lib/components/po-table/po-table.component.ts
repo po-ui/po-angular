@@ -256,15 +256,17 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   getColumnIcons(row: any, column: PoTableColumn) {
-    if (column.icons && column.icons.length) {
-      return column.icons;
-    }
-
     const rowIcons = row[column.property];
 
-    if (rowIcons && rowIcons.length) {
-      return this.getColumnIconsFromProperty(rowIcons, column);
+    if (column.icons) {
+      if (Array.isArray(rowIcons)) {
+        return this.mergeCustomIcons(rowIcons, column.icons);
+      } else {
+        return this.findCustomIcon(rowIcons, column);
+      }
     }
+
+    return rowIcons;
   }
 
   getColumnLabel(row: any, columnLabel: PoTableColumn): PoTableColumnLabel {
@@ -402,6 +404,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
   }
 
+  private findCustomIcon(rowIcons, column: PoTableColumn) {
+    const customIcon = column.icons.find(icon => rowIcons === icon.value);
+    return customIcon ? [ customIcon ] : undefined;
+  }
+
   private getHeightTableFooter() {
     return this.tableFooterElement ? this.tableFooterElement.nativeElement.offsetHeight : 0;
   }
@@ -421,16 +428,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     });
   }
 
-  private getColumnIconsFromProperty(rowIcons: Array<string>, column: PoTableColumn) {
+  private mergeCustomIcons(rowIcons: Array<string>, customIcons: Array<any>) {
+    const mergedIcons = [];
 
-    const icons = [];
-    const { action, color, disabled } = column;
+    rowIcons.forEach(columnValue => {
+      const foundCustomIcon = customIcons.find(customIcon => columnValue === customIcon.icon || columnValue === customIcon.value);
+      foundCustomIcon ? mergedIcons.push(foundCustomIcon) : mergedIcons.push(columnValue);
+    });
 
-    const icon = { action, color, disabled };
-
-    rowIcons.forEach(value => icons.push( typeof value === 'string' ? { ...icon, value } : value));
-
-    return icons;
+    return mergedIcons;
   }
 
   private removeListeners() {
