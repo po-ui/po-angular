@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 import { changeBrowserInnerWidth, configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import * as UtilsFunctions from '../../../utils/util';
-import { removeDuplicatedOptions } from '../../../utils/util';
 
 import { PoLoadingModule } from '../../po-loading/po-loading.module';
 
@@ -62,32 +61,6 @@ describe('PoComboComponent:', () => {
 
   it('should have a Help', () => {
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
-  });
-
-  it('should call removeDuplicatedOptions', () => {
-    const fakeThis = {
-      differ: {
-        diff: (opt: any) => true
-      },
-      removeDuplicatedOptions: () => {},
-      validAndSortOptions: () => {}
-    };
-
-    spyOn(UtilsFunctions, 'removeDuplicatedOptions');
-    component.ngDoCheck.call(fakeThis);
-    expect(removeDuplicatedOptions).toHaveBeenCalled();
-  });
-
-  it('shouldn`t call removeDuplicatedOptions', () => {
-    const fakeThis = {
-      differ: {
-        diff: (opt: any) => false
-      }
-    };
-
-    spyOn(UtilsFunctions, 'removeDuplicatedOptions');
-    component.ngDoCheck.call(fakeThis);
-    expect(removeDuplicatedOptions).not.toHaveBeenCalled();
   });
 
   it('should call some functions when typed "tab" and shouldn`t call updateComboList when is service', () => {
@@ -159,18 +132,6 @@ describe('PoComboComponent:', () => {
     spyOn(component, 'searchForLabel');
     component.applyFilter('teste');
     expect(component.searchForLabel).toHaveBeenCalled();
-  });
-
-  it('should apply filter and update cacheOptions', () => {
-    const fakeService: any = getFakeService([{label: 'label', value: 1}]);
-    component.service = fakeService;
-    component.isFirstFilter = true;
-    component.cacheOptions = [];
-
-    spyOn(component, 'searchForLabel');
-    component.applyFilter('label');
-    expect(component.searchForLabel).toHaveBeenCalled();
-    expect(component.cacheOptions.length).toBe(1);
   });
 
   it('should call updateOptionByFilteredValue if not exists selectedValue', () => {
@@ -306,7 +267,7 @@ describe('PoComboComponent:', () => {
     component.setOptionsByApplyFilter('', []);
     expect(component.searchForLabel).toHaveBeenCalled();
     expect(component.controlComboVisibility).toHaveBeenCalled();
-    expect(JSON.stringify(component.cacheOptions)).toBe(JSON.stringify(component.options));
+    expect(component.isFirstFilter).toBeFalsy();
   });
 
   it('should show combo and not save the cache', () => {
@@ -319,7 +280,7 @@ describe('PoComboComponent:', () => {
     component.setOptionsByApplyFilter('', []);
     expect(component.searchForLabel).toHaveBeenCalled();
     expect(component.controlComboVisibility).toHaveBeenCalled();
-    expect(JSON.stringify(component.cacheOptions)).not.toBe(JSON.stringify(component.options));
+    expect(component.isFirstFilter).toBeFalsy();
   });
 
   it('should toogle paramenter of the function', () => {
@@ -1127,18 +1088,38 @@ describe('PoComboComponent:', () => {
       expect(SpyApplyFilter).toHaveBeenCalledWith('');
     });
 
-    it('scrollTo: should call setScrollTop with 44 ', () => {
+    it('scrollTo: should call setScrollTop with -88 ', () => {
       const index = 3;
+
+      component.options = [
+        {value: '1', label: '1'},
+        {value: '2', label: '2'},
+        {value: '3', label: '3'},
+      ];
+      component.selectedView = {value: '3', label: '3'};
+
+      const spySetScrollTop = spyOn(component, <any> 'setScrollTop');
+
+      fixture.detectChanges();
+
+      component.scrollTo(index);
+      expect(spySetScrollTop).toHaveBeenCalledWith(-88);
+    });
+
+    it('scrollTo: should call setScrollTop with 0 if index is equal 1', () => {
+      const index = 1;
 
       const spySetScrollTop = spyOn(component, <any> 'setScrollTop');
 
       component.scrollTo(index);
 
-      expect(spySetScrollTop).toHaveBeenCalledWith(44);
+      expect(spySetScrollTop).toHaveBeenCalledWith(0);
     });
 
-    it('scrollTo: should call setScrollTop with 0', () => {
-      const index = 1;
+    it('scrollTo: should call setScrollTop with 0 if selectedView is undefined', () => {
+      const index = 13;
+
+      component.selectedView = undefined;
 
       const spySetScrollTop = spyOn(component, <any> 'setScrollTop');
 
@@ -1423,6 +1404,78 @@ describe('PoComboComponent:', () => {
       const defaultSpan = nativeElement.querySelector('.po-combo-item > span');
 
       expect(defaultSpan).toBeTruthy();
+    });
+
+    it('should call `onOptionClick` if clicked option isnt`t an option group title', () => {
+      component.options = [{ label: '1', value: '1' }];
+
+      const spyOnOptionClick = spyOn(component, 'onOptionClick');
+
+      fixture.detectChanges();
+
+      const optionItem = component.contentElement.nativeElement.querySelectorAll('li')[0];
+
+      optionItem.click();
+
+      expect(spyOnOptionClick).toHaveBeenCalled();
+    });
+
+    it('shouldn`t call `onOptionClick` if clicked option is an option group title', () => {
+      component.options = [{ label: '1', options: [{ value: 'value'}]}];
+
+      const spyOnOptionClick = spyOn(component, 'onOptionClick');
+
+      fixture.detectChanges();
+
+      const optionItem = component.contentElement.nativeElement.querySelectorAll('li')[0];
+
+      optionItem.click();
+
+      expect(spyOnOptionClick).not.toHaveBeenCalled();
+    });
+
+    it('should contain `po-combo-item` if `comboOptionTemplate` is true and combo options dont`t have groups', () => {
+      component.comboOptionTemplate = <any> { templateRef: null };
+      component.options = [{ label: '1', value: '1' }];
+
+      fixture.detectChanges();
+
+      const comboItemLink = nativeElement.querySelector('.po-combo-item');
+
+      expect(comboItemLink).toBeTruthy();
+    });
+
+    it('shouldn`t contain `po-combo-item` if `comboOptionTemplate` is true but combo options have groups', () => {
+      component.comboOptionTemplate = <any> { templateRef: null };
+      component.options = [{ label: '1', options: [ { value: 'value' } ] }];
+
+      fixture.detectChanges();
+
+      const comboItemLink = nativeElement.querySelector('.po-combo-item');
+
+      expect(comboItemLink).toBeFalsy();
+    });
+
+    it('should contain a class `po-combo-item-title` if comboOptionTemplate is false and combo options have groups', () => {
+      component.comboOptionTemplate = <any> undefined;
+      component.options = [{ label: '1', options: [ { value: 'value' } ] }];
+
+      fixture.detectChanges();
+
+      const comboItemLink = nativeElement.querySelector('.po-combo-item-title');
+
+      expect(comboItemLink).toBeTruthy();
+    });
+
+    it('shouldn`t contain a class `po-combo-item-title` if comboOptionTemplate is false and combo options don`t have groups', () => {
+      component.comboOptionTemplate = <any> undefined;
+      component.options = [{ label: '1', value: '2' }, { label: '2', value: '2' }];
+
+      fixture.detectChanges();
+
+      const comboItemLink = nativeElement.querySelector('.po-combo-item-title');
+
+      expect(comboItemLink).toBeFalsy();
     });
 
   });

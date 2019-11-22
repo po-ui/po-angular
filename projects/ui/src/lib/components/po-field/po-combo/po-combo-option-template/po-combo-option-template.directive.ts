@@ -42,6 +42,28 @@ import { Directive, TemplateRef } from '@angular/core';
  * ...
  *
  * ```
+ * Para o caso de personalização de opções com agrupamentos, deve-se seguir a mesma orientação acima. Porém, cabe ao desenvolvedor
+ * a responsabilidade de estilização dos elementos da lista, tais como título e links dos grupos. Abaixo há um exemplo de aplicação:
+ *
+ * ```
+ * ...
+ * <ng-template p-combo-option-template let-option>
+ *   <ng-container *ngIf="option.options; then optionsGroupTitle; else optionsGroupList"></ng-container>
+ *   <ng-template #optionsGroupTitle>
+ *     <p class="po-combo-item-title" [innerHtml]="option.label"></p>
+ *   </ng-template>
+ *   <ng-template #optionsGroupList>
+ *     <div class="po-combo-item">
+ *       <div class="po-row">
+ *         <po-avatar class="po-md-1" p-size="sm"></po-avatar>
+ *         <div class="po-md-11" [innerHtml]="option.label"></div>
+ *       </div>
+ *     </div>
+ *   </ng-template>
+ * </ng-template>
+ * ...
+ *
+ * ```
  */
 @Directive({
   selector: '[p-combo-option-template]'

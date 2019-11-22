@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ContentChild, DoCheck, ElementRef, forwardRef,
+import { ChangeDetectorRef, Component, ContentChild, ElementRef, forwardRef,
   IterableDiffers, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -6,13 +6,13 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 
-import { removeDuplicatedOptions } from '../../../utils/util';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
+import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
 
@@ -42,6 +42,7 @@ const poComboContainerPositionDefault = 'bottom';
  * <example name="po-combo-scheduling" title="Portinari Combo - Scheduling">
  *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.component.html"> </file>
  *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.component.ts"> </file>
+ *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.service.ts"> </file>
  * </example>
  *
  * <example name="po-combo-transfer" title="Portinari Combo - Banking Transfer">
@@ -83,7 +84,7 @@ const poComboContainerPositionDefault = 'bottom';
     }
   ]
 })
-export class PoComboComponent extends PoComboBaseComponent implements DoCheck, OnDestroy {
+export class PoComboComponent extends PoComboBaseComponent implements OnDestroy {
 
   private _isServerSearching: boolean = false;
 
@@ -139,14 +140,6 @@ export class PoComboComponent extends PoComboBaseComponent implements DoCheck, O
 
   get isServerSearching() {
     return this._isServerSearching;
-  }
-
-  ngDoCheck() {
-    const change = this.differ.diff(this.options);
-    if (change) {
-      this.validAndSortOptions();
-      removeDuplicatedOptions(this.options);
-    }
   }
 
   ngOnDestroy() {
@@ -263,7 +256,7 @@ export class PoComboComponent extends PoComboBaseComponent implements DoCheck, O
         if (!this.service && this.previousSearchValue !== inputValue) {
           this.shouldMarkLetters = true;
           this.isFiltering = true;
-          this.searchForLabel(inputValue, this.options, this.filterMode);
+          this.searchForLabel(inputValue, this.comboOptionsList, this.filterMode);
         }
 
       } else {
@@ -345,7 +338,7 @@ export class PoComboComponent extends PoComboBaseComponent implements DoCheck, O
     if (this.isFirstFilter) {
       this.isFirstFilter = !this.isFirstFilter;
 
-      this.cacheOptions = this.options;
+      this.cacheOptions = this.comboOptionsList;
     }
   }
 
@@ -421,7 +414,7 @@ export class PoComboComponent extends PoComboBaseComponent implements DoCheck, O
     toOpen ? this.open() : this.close();
   }
 
-  onOptionClick(option: PoComboOption, event?: any) {
+  onOptionClick(option: PoComboOption | PoComboGroup, event?: any) {
     const inputValue = this.getInputValue();
     const isUpdateModel = (option.value !== this.selectedValue) || !!(this.selectedView && inputValue !== this.selectedView.label);
 
@@ -437,7 +430,8 @@ export class PoComboComponent extends PoComboBaseComponent implements DoCheck, O
   }
 
   scrollTo(index) {
-    const scrollTop = (index <= 2) ? 0 : (index * 44) - 88;
+    const selectedItem = this.element.nativeElement.querySelectorAll('.po-combo-item-selected');
+    const scrollTop = !selectedItem.length || (index <= 1) ? 0 : selectedItem[0].offsetTop - 88;
 
     this.setScrollTop(scrollTop);
   }

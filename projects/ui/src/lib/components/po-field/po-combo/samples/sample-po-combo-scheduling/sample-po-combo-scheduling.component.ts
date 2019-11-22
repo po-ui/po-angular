@@ -1,21 +1,23 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoComboOption, PoSelectOption } from '@portinari/portinari-ui';
-
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoComboOption, PoComboOptionGroup, PoNotificationService, PoSelectOption } from '@portinari/portinari-ui';
+import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.service';
 
 @Component({
   selector: 'sample-po-combo-scheduling',
-  templateUrl: './sample-po-combo-scheduling.component.html'
+  templateUrl: './sample-po-combo-scheduling.component.html',
+  providers: [ SamplePoComboSchedulingService ]
 })
 export class SamplePoComboSchedulingComponent implements OnInit {
 
   birthday: string;
+  citiesOptions: Array<PoComboOptionGroup>;
+  city: string;
   email: string;
-  especialities: Array<PoComboOption>;
-  especiality: string;
   informations: string;
+  medicalSpecialty: string;
+  medicalSpecialtyOptions: Array<PoComboOption>;
   name: string;
   phone: string;
   typeScheduling: string;
@@ -27,10 +29,11 @@ export class SamplePoComboSchedulingComponent implements OnInit {
 
   @ViewChild('schedulingForm', { static: true }) form: NgForm;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService, private schedulingService: SamplePoComboSchedulingService) { }
 
   ngOnInit() {
-    this.especialities = this.getEspecialities();
+    this.citiesOptions = this.schedulingService.getcities();
+    this.medicalSpecialtyOptions = this.schedulingService.getMedicalSpecialty();
   }
 
   confirmPreAppointment(name: string = '') {
@@ -39,18 +42,14 @@ export class SamplePoComboSchedulingComponent implements OnInit {
     this.form.reset();
   }
 
-  private getEspecialities() {
-    return [
-      { label: 'Allergist', value: 'allergist' },
-      { label: 'Cardiologist', value: 'cardiologist' },
-      { label: 'General practitioner', value: 'generalPractitioner' },
-      { label: 'Dermatologist', value: 'dermatologist' },
-      { label: 'Gynecologist', value: 'gynecologist' },
-      { label: 'Nutritionist', value: 'nutritionist' },
-      { label: 'Pediatrist', value: 'pediatrist' },
-      { label: 'Psychiatrist', value: 'psychiatrist' },
-      { label: 'Orthopaedist', value: 'orthopaedist' }
-    ];
+  getStateByLabel(state: string) {
+    const stateByLabel = {
+      ['São Paulo']: 'sp',
+      ['Santa Catarina']: 'sc',
+      ['Paraná']: 'pr',
+    };
+
+    return `https://thf.totvs.com.br/sample/api/static/assets/${stateByLabel[state]}.png`;
   }
 
 }

@@ -7,8 +7,10 @@ import { requiredFailed } from '../validators';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
+import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
@@ -32,25 +34,19 @@ export const poComboLiteralsDefault = {
 /**
  * @description
  *
- * O po-combo, semelhante ao po-select, exibe uma lista de valores e permite ao usuário fazer a seleção de um desses valores,
- * mas no caso do po-combo, o usuário ainda consegue filtrar os valores disponibilizados para seleção.
+ * O `po-combo` exibe uma lista de opções com fácil seleção e filtragem.
  *
- * Também há a possibilidade de usar serviço no po-combo, através da propriedade p-filter-service.
+ * Além da exibição padrão, nele é possível listar as opões em agrupamentos.
  *
- * O comportamento do po-combo permite ao usuário:
- *  - selecionar um item através do mouse;
- *  - navegar pelos itens utilizando as setas do teclado confirmando a seleção com "Enter";
- *  - pesquisar os itens da lista de seleção e em seguida navegar com as setas ou com o mouse;
- *  - digitar a descrição completa.
+ * É possível selecionar e navegar entre as opções da lista tanto através do *mouse* quanto do teclado. No teclado navegue com
+ * as setas e pressione *Enter* na opção que desejar.
  *
- * O po-combo guarda o último valor caso o usuário desista de uma busca, deixando o campo ou teclando "ESC".
- * Caso seja digitado no campo de busca a descrição completa de um item, então a seleção será automaticamente efetuada
- * ao deixar o campo ou pressionando "Enter".
+ * Com ele também é possível definir uma lista à partir da requisição de um serviço definido em `p-filter-service`.
  *
- * É necessário que os itens da lista de selecão contenham sempre valor (value) e descrição (label) para que os itens apareçam corretamente
- * no po-combo, itens que não estejam implementando corretamenta a interface PoComboOption, serão descartados.
+ * Em `p-filter-mode`, o filtro poderá ser configurado para buscar opões que correspondam ao início, fim ou que contenha o valor digitado.
  *
- * O po-combo ainda permite definir o modo que será feito o filtro, através da propriedade p-filter-mode.
+ * O `po-combo` guarda o último valor caso o usuário desista de uma busca, deixando o campo ou pressionando *Esc*. Caso seja digitado no
+ * campo de busca a descrição completa de um item, então a seleção será automaticamente efetuada ao deixar o campo ou pressionando *Enter*.
  */
 export abstract class PoComboBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
@@ -65,11 +61,14 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _filterParams?: any;
   private _filterService?: PoComboFilter | string;
   private _literals?: PoComboLiterals;
-  private _options: Array<PoComboOption> = [];
+  private _options: Array<PoComboOption | PoComboOptionGroup> = [];
   private _required?: boolean = false;
+  private _sort?: boolean = false;
 
-  cacheOptions: Array<PoComboOption> = [];
-  cacheStaticOptions: Array<PoComboOption> = [];
+  protected cacheStaticOptions: Array<PoComboOption | PoComboGroup> = [];
+  protected comboOptionsList: Array<PoComboOption | PoComboGroup> = [];
+
+  cacheOptions: Array<PoComboOption | PoComboGroup> = [];
   defaultService: PoComboFilterService;
   firstInWriteValue: boolean = true;
   isFirstFilter: boolean = true;
@@ -78,11 +77,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   onModelChange: any;
   onModelTouched: any;
   previousSearchValue: string = '';
-  selectedOption: PoComboOption;
+  selectedOption: PoComboOption | PoComboGroup;
   selectedValue: any;
   selectedView: any;
   service: PoComboFilterService;
-  visibleOptions: Array<PoComboOption> = [];
+  visibleOptions: Array<PoComboOption | PoComboGroup> = [];
 
   private validatorChange: any;
 
@@ -292,18 +291,32 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    */
   @Input('p-icon') icon?: string;
 
+  /** Indica que a lista definida na propriedade p-options será ordenada pela descrição. */
+  @Input('p-sort') set sort(sort: boolean) {
+    this._sort = convertToBoolean(sort);
+    this.comboListDefinitions();
+  }
+
+  get sort() {
+    return this._sort;
+  }
+
   /**
-   * Nesta propriedade deve ser definida uma lista de objetos que implementam a interface PoComboOption.
-   * Esta lista conterá os valores e as descrições que serão apresentados na tela.
+   * Nesta propriedade define a lista de opções do `po-combo`.
+   *
+   * > A lista pode ser definida em dois formatos, simples ou com agrupamentos.
+   * - Utilize `PoComboOption` para lista de opções simples.
+   * - Utilize `PoComboOptionGroup` para lista de opções com agrupamento.
+   *
+   * **Importante:**
+   * - A lista deve seguir as definições descritas nas respectivas interfaces, caso contrário não exibirá a(as) opção(ões) fora dos padrões.
+   * - O componente interpretará o formato da lista de acordo com a interface utilizada e só exibirá as opções correspondentes à ela.
+   * - Um agrupamento só será exibido se houver pelo menos uma opção válida.
    */
-  @Input('p-options') set options(options: Array<PoComboOption>) {
+  @Input('p-options') set options(options: Array<PoComboOption | PoComboOptionGroup>) {
     this._options = Array.isArray(options) ? options : [];
 
-    this.cacheStaticOptions = this.options;
-
-    this.validAndSortOptions();
-    removeDuplicatedOptions(this.options);
-    this.updateComboList();
+    this.comboListDefinitions();
   }
 
   get options() {
@@ -324,14 +337,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `false`
    */
   @Input('p-optional') optional: boolean;
-
-  /** Indica que a lista definida na propriedade p-options será ordenada pela descrição. */
-  sort?: boolean = false;
-  @Input('p-sort') set setSort(sort: string) {
-    this.sort = sort === '' ? true : convertToBoolean(sort);
-
-    this.validAndSortOptions();
-  }
 
   /**
    * @optional
@@ -369,6 +374,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @description
    *
    * Valor que será repassado como parâmetro aos métodos do serviço que implementam a interface *PoComboFilter*.
+   *
+   * > Caso a lista contenha agrupamentos, os mesmos só serão exibidos se houver no mínimo uma opção que corresponda à pesquisa.
    */
   @Input('p-filter-params') set filterParams(filterParams: any) {
     this._filterParams = (filterParams || filterParams === 0 || filterParams === false) ? filterParams : undefined;
@@ -435,6 +442,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   abstract initInputObservable(): void;
 
+  get isOptionGroupList(): boolean {
+    return this._options.length && this._options[0].hasOwnProperty('options');
+  }
+
   ngOnInit() {
     this.updateComboList();
   }
@@ -457,37 +468,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  validAndSortOptions() {
-    if (this.options && this.options.length > 0) {
-      // Remove os objetos que não contém valor e atribui o valor ao label caso este esteja vazio
-      for (let i = 0; i < this.options.length; i++) {
-        if (!validValue(this.options[i]['value'])) {
-          this.options.splice(i, 1);
-        } else if (!this.options[i]['label']) {
-          this.options[i]['label'] = this.options[i]['value'].toString();
-        }
-      }
-    }
-    this.sortOptions();
-  }
-
-  sortOptions() {
-    if (this.options && this.options.length > 0 && this.sort) {
-      this.options.sort(this.compareOptions);
-    }
-  }
-
-  compareOptions(a: any, b: any) {
-    if (a.label.toString().toLowerCase() < b.label.toString().toLowerCase()) {
-      return -1;
-    }
-    if (a.label.toString().toLowerCase() > b.label.toString().toLowerCase()) {
-      return 1;
-    }
-    return 0;
-  }
-
-  compareMethod(search: string, option: PoComboOption, filterMode: PoComboFilterMode) {
+  compareMethod(search: string, option: PoComboOption | PoComboGroup, filterMode: PoComboFilterMode) {
     switch (filterMode) {
       case PoComboFilterMode.startsWith:
         return this.startsWith(search, option);
@@ -498,15 +479,15 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  startsWith(search: string, option: PoComboOption) {
+  startsWith(search: string, option: PoComboOption | PoComboGroup) {
     return option.label.toLowerCase().startsWith(search.toLowerCase());
   }
 
-  contains(search: string, option: PoComboOption) {
+  contains(search: string, option: PoComboOption | PoComboGroup) {
     return option.label.toLowerCase().indexOf(search.toLowerCase()) > -1;
   }
 
-  endsWith(search: string, option: PoComboOption) {
+  endsWith(search: string, option: PoComboOption | PoComboGroup) {
     return option.label.toLowerCase().endsWith(search.toLowerCase());
   }
 
@@ -524,7 +505,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  updateSelectedValue(option: PoComboOption, isUpdateModel: boolean = true, isWriteValue = false) {
+  updateSelectedValue(option: PoComboOption | PoComboGroup, isUpdateModel: boolean = true, isWriteValue = false) {
     const optionLabel = option && option.label || '';
 
     this.updateInternalVariables(option);
@@ -553,33 +534,45 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       return value.toString() === inputValue.toString();
     }
 
-    if ((value === null && inputValue !== null) ||
-        (value === undefined && inputValue !== undefined)) {
+    if ((value === null && inputValue !== null) || (value === undefined && inputValue !== undefined)) {
       value = `${value}`; // Transformando em string
     }
 
     return value === inputValue;
   }
 
-  searchForLabel(search: string, options: Array<PoComboOption>, filterMode: PoComboFilterMode) {
+  searchForLabel(search: string, options: Array<PoComboOption | PoComboGroup>, filterMode: PoComboFilterMode) {
     if (search && options && options.length) {
-      const newOptions: Array<PoComboOption> = [];
+      const newOptions: Array<PoComboOption | PoComboGroup> = [];
+      let addedOptionsGroupTitle: boolean = false;
+      let optionsGroupTitle: PoComboGroup;
 
       options.forEach(option => {
+
+        if ('options' in option) {
+          addedOptionsGroupTitle = false;
+          return optionsGroupTitle = option;
+        }
+
         if (option.label && (this.compareMethod(search, option, filterMode) || this.service)) {
+          if (this.isOptionGroupList && !addedOptionsGroupTitle) {
+            newOptions.push(optionsGroupTitle);
+            addedOptionsGroupTitle = true;
+          }
+
           newOptions.push(option);
         }
       });
 
-      this.selectedView = newOptions[0];
+      this.selectedView = newOptions[this.isOptionGroupList ? 1 : 0];
       this.updateComboList(newOptions);
     } else {
       this.updateComboList();
     }
   }
 
-  updateComboList(options?: Array<PoComboOption>) {
-    const copyOptions = options || [...this.options];
+  updateComboList(options?: Array<PoComboOption | PoComboGroup>) {
+    const copyOptions = options || [...this.comboOptionsList];
 
     const newOptions = !options && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
 
@@ -587,32 +580,28 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       this.visibleOptions = newOptions;
 
       if (!this.selectedView && this.visibleOptions.length) {
-        this.selectedView = this.visibleOptions[0];
+        this.selectedView = copyOptions.find(option => option.value !== undefined);
       }
     }
   }
 
-  getNextOption(value: any, options: Array<PoComboOption>, reverse: boolean = false) {
-    const newOptions = [].concat(options);
+  getNextOption(value: any, options: Array<PoComboOption | PoComboGroup>, reverse: boolean = false) {
+    const optionsList = reverse ? options.slice(0).reverse() : options.slice(0);
     let optionFound = null;
     let found = false;
 
-    if (reverse) {
-      newOptions.reverse();
-    }
-
-    for (let i = 0; i < newOptions.length; i++) {
-      const option = newOptions [i];
-      if (!optionFound) {
+    for (const option of optionsList) {
+      if (option.value && !optionFound) {
         optionFound = option;
       }
-      if (found) {
+      if (option.value && found) {
         return option;
       }
       if (this.isEqual(option.value, value)) {
         found = true;
       }
     }
+
     return optionFound;
   }
 
@@ -632,7 +621,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   verifyValidOption() {
     const inputValue = this.getInputValue();
 
-    const optionFound = this.getOptionFromLabel(inputValue, this.options);
+    const optionFound = this.getOptionFromLabel(inputValue, this.comboOptionsList);
 
     if (optionFound && optionFound.value !== this.selectedValue) {
 
@@ -661,8 +650,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   // Recebe as alterações do model
   writeValue(value: any) {
 
-    if (validValue(value) && !this.service && this.options && this.options.length) {
-      const option = this.getOptionFromValue(value, this.options);
+    if (validValue(value) && !this.service && this.comboOptionsList && this.comboOptionsList.length) {
+      const option = this.getOptionFromValue(value, this.comboOptionsList);
       this.updateSelectedValue(option);
       this.updateComboList();
       return;
@@ -710,18 +699,123 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
+  private comboListDefinitions() {
+    this.comboOptionsList = this.options.length > 0 ? this.listingComboOptions(this.options) : this.options;
+    this.cacheStaticOptions = this.comboOptionsList;
+
+    this.updateComboList();
+  }
+
+  private compareOptions(optionA: any, optionB: any) {
+    const labelA = optionA.label.toString().toLowerCase();
+    const labelB = optionB.label.toString().toLowerCase();
+
+    return (labelA < labelB) ? -1 : (labelA > labelB) ? 1 : 0;
+  }
+
   private configAfterSetFilterService(service: PoComboFilter | string) {
     if (service) {
-      this.options = [];
+      this.comboOptionsList = [];
       this.unsubscribeKeyupObservable();
       this.onInitService();
     } else {
       this.service = undefined;
-      this.options = this.cacheStaticOptions;
+      this.comboOptionsList = this.cacheStaticOptions;
     }
 
     this.visibleOptions = [];
     this.isFirstFilter = true;
+  }
+
+  private hasDuplicatedOption(
+    options: Array<PoComboOption | PoComboGroup>,
+    currentOption: string,
+    accumulatedGroupOptions?: Array<PoComboGroup>) {
+    return options.some(option => option.label === currentOption) ||
+    accumulatedGroupOptions && accumulatedGroupOptions.some(option => option.label === currentOption);
+  }
+
+  private listingComboOptions(comboOptions: Array<PoComboOption | PoComboOptionGroup>) {
+    const comboOptionsList = comboOptions.concat();
+    const verifiedComboOptionsList = this.verifyComboOptions(comboOptionsList);
+
+    this.sortOptions(verifiedComboOptionsList);
+
+    if (this.isOptionGroupList && verifiedComboOptionsList.length > 0) {
+      return this.verifyComboOptionsGroup(verifiedComboOptionsList);
+    }
+
+    return verifiedComboOptionsList;
+  }
+
+  private sortOptions(comboOptionsList: Array<PoComboGroup>) {
+    if (comboOptionsList.length > 0 && this.sort) {
+      return comboOptionsList.sort(this.compareOptions);
+    }
+  }
+
+  private validateValue(currentOption: PoComboGroup, verifyingOptionsGroup?: boolean) {
+    const { label, options, value } = currentOption;
+
+    if (this.isOptionGroupList) {
+      return validValue(label) && options && options.length > 0 || verifyingOptionsGroup === true && validValue(value);
+    }
+
+    return validValue(value) && !options;
+  }
+
+  private verifyComboOptions(
+    comboOptions: Array<PoComboOption | PoComboOptionGroup>,
+    verifyingOptionsGroup?: boolean,
+    accumulatedGroupOptions?: Array<PoComboGroup>) {
+    return comboOptions.reduce((accumulatedOptions, currentOption) => {
+      if (
+        !this.verifyIfHasLabel(currentOption) ||
+        this.hasDuplicatedOption(accumulatedOptions, currentOption.label, accumulatedGroupOptions) ||
+        !this.validateValue(currentOption, verifyingOptionsGroup)
+      ) {
+        return accumulatedOptions;
+      }
+
+      accumulatedOptions.push(currentOption);
+      return accumulatedOptions;
+    }, []);
+  }
+
+  private verifyComboOptionsGroup(comboOptionsList: Array<PoComboOptionGroup>) {
+    return comboOptionsList.reduce((accumulatedGroupOptions, currentOption) => {
+      const { options, label } = currentOption;
+      const verifiedComboOptionsGroupList = this.verifyComboOptions(options, true, accumulatedGroupOptions);
+
+      if (verifiedComboOptionsGroupList.length > 0) {
+        this.sortOptions(verifiedComboOptionsGroupList);
+
+        accumulatedGroupOptions.push(
+          { label: label, options: true },
+          ...verifiedComboOptionsGroupList
+        );
+      }
+
+      return accumulatedGroupOptions;
+    }, []);
+  }
+
+  private verifyIfHasLabel(currentOption: PoComboGroup) {
+    const { label, options, value } = currentOption;
+
+    if (
+      this.isOptionGroupList && options && !label ||
+      !label && !value ||
+      !this.isOptionGroupList && options ) {
+      return false;
+    }
+
+    if (!currentOption.label) {
+      currentOption.label = currentOption.value.toString();
+      return true;
+    }
+
+    return true;
   }
 
   private unsubscribeKeyupObservable() {
@@ -730,7 +824,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  private updateInternalVariables(option: PoComboOption) {
+  private updateInternalVariables(option: PoComboOption | PoComboGroup) {
     if (option) {
       this.selectedView = option;
       this.selectedOption = option;
@@ -754,7 +848,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   }
 
   private updateSelectedValueWithOldOption() {
-    const oldOption = this.getOptionFromValue(this.selectedValue, this.options);
+    const oldOption = this.getOptionFromValue(this.selectedValue, this.comboOptionsList);
 
     if (oldOption && oldOption.label) {
       return this.updateSelectedValue(oldOption);

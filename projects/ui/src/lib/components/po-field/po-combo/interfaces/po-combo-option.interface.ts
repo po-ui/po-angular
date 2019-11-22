@@ -3,7 +3,7 @@
  *
  * @description
  *
- * Interface dos itens da coleção que será exibida no dropdown do po-combo.
+ * Interface que define as opções que serão exibidas na lista do `po-combo`.
  */
 export interface PoComboOption {
 
@@ -11,12 +11,14 @@ export interface PoComboOption {
    * @optional
    *
    * @description
-   * Label exibido nos itens da lista.
    *
-   * > Caso não informar o `label`, será utilizado o valor informado na propriedade `value`.
+   * Descrição exibida nas opções da lista.
+   *
+   * > Caso não seja definida será assumido o valor definido na propriedade `value`.
    */
   label?: string;
 
-  /** Valor do objeto que será atribuído ao model. */
+  /** Valor do objeto que será atribuído ao *model*. */
   value: string | number;
+
 }
