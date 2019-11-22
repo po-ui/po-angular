@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoComboLiterals, PoComboOption, PoRadioGroupOption } from '@portinari/portinari-ui';
+import {
+  PoCheckboxGroupOption,
+  PoComboLiterals,
+  PoComboOption,
+  PoComboOptionGroup,
+  PoRadioGroupOption,
+  PoSelectOption
+} from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-combo-labs',
@@ -9,6 +16,7 @@ import { PoCheckboxGroupOption, PoComboLiterals, PoComboOption, PoRadioGroupOpti
 export class SamplePoComboLabsComponent implements OnInit {
 
   combo: string;
+  comboOptionGroupSwitch: boolean;
   customLiterals: PoComboLiterals;
   debounceTime: number;
   event: string;
@@ -23,11 +31,14 @@ export class SamplePoComboLabsComponent implements OnInit {
   icon: string;
   label: string;
   literals: string;
+  optionsGroup: string;
+  optionsGroupList: Array<PoSelectOption>;
   placeholder: string;
   properties: Array<string>;
 
   option: PoComboOption;
-  options: Array<PoComboOption>;
+  options: Array<PoComboOption | PoComboOptionGroup>;
+  selectedOptionsGroup: string;
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Starts With', value: 'startsWith' },
@@ -55,7 +66,7 @@ export class SamplePoComboLabsComponent implements OnInit {
   }
 
   addOption() {
-    this.options = [...this.options, Object.assign({}, this.option)];
+    this.options = this.verifyOptionObject(this.options.concat(), this.option, this.optionsGroup);
     this.option = { label: undefined, value: undefined };
   }
 
@@ -71,8 +82,13 @@ export class SamplePoComboLabsComponent implements OnInit {
     }
   }
 
+  optionsGroupSelection() {
+    this.optionsGroup = this.selectedOptionsGroup;
+  }
+
   restore() {
     this.combo = undefined;
+    this.comboOptionGroupSwitch = false;
     this.customLiterals = undefined;
     this.event = '';
 
@@ -90,8 +106,34 @@ export class SamplePoComboLabsComponent implements OnInit {
 
     this.option = {label: undefined, value: undefined};
     this.options = [];
+    this.optionsGroup = undefined;
+    this.optionsGroupList = [];
     this.placeholder = '';
     this.properties = [];
+    this.selectedOptionsGroup = undefined;
+  }
+
+  private insertGroupIntoSelectInput(value: string) {
+    this.selectedOptionsGroup = value;
+    this.optionsGroupList = [ ...this.optionsGroupList, { label: value, value } ];
+  }
+
+  private verifyOptionObject(options: Array<PoComboOption | PoComboOptionGroup>, option: PoComboOption, optionsGroup?: string) {
+    const { label, value } = option;
+
+    if (optionsGroup) {
+      const indexItem = options.findIndex((optionItem: PoComboOptionGroup) => optionItem.label === optionsGroup && 'options' in optionItem);
+
+      if (indexItem === -1) {
+        this.insertGroupIntoSelectInput(optionsGroup);
+        return [ ...options, { label: optionsGroup, options: [ { label, value } ] } ];
+      }
+
+      (options as Array<PoComboOptionGroup>)[indexItem].options.push({ label, value });
+      return options;
+    }
+
+    return [...options, { label, value }];
   }
 
 }

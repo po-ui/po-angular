@@ -88,26 +88,15 @@ describe('PoComboBaseComponent:', () => {
       expectPropertiesValues(component, 'options', validValues, validValues);
     });
 
-    it('p-options: should set options and set cacheStaticOptions', () => {
-      component['options'] = [{ label: '1', value: '1' }];
-
-      expect(component.options.length).toBe(1);
-      expect(component['cacheStaticOptions']).toEqual(component['options']);
-    });
-
-    it('p-options: should set options and call `validAndSortOptions`, `removeDuplicatedOptions` and `updateComboList`', () => {
+    it('p-options: should set options and call `comboListDefinitions`', () => {
       const options = [{ label: '1', value: '1'}];
 
-      const spyValidAndSortOptions = spyOn(component, 'validAndSortOptions');
-      const spyRemoveDuplicatedOptions = spyOn(Utils, 'removeDuplicatedOptions');
-      const spyUpdateComboList = spyOn(component, 'updateComboList');
+      const spycomboListDefinitions = spyOn(component, <any>'comboListDefinitions');
 
-      component['options'] = options;
+      component.options = options;
 
       expect(component.options).toEqual(options);
-      expect(spyUpdateComboList).toHaveBeenCalled();
-      expect(spyRemoveDuplicatedOptions).toHaveBeenCalled();
-      expect(spyValidAndSortOptions).toHaveBeenCalled();
+      expect(spycomboListDefinitions).toHaveBeenCalled();
     });
 
     describe('p-literals:', () => {
@@ -160,14 +149,28 @@ describe('PoComboBaseComponent:', () => {
         expect(component.literals).toEqual(customLiterals);
       });
 
+      describe('p-sort: ', () => {
+        const booleanInvalidValues = [undefined, null, 2, 'string'];
+        const booleanValidTrueValues = [true, 'true', 1, ''];
+
+        it('should update property `p-sort` with valid values.', () => {
+          expectPropertiesValues(component, 'sort', booleanValidTrueValues, true);
+        });
+
+        it('should update property `p-sort` with invalid values.', () => {
+          expectPropertiesValues(component, 'sort', booleanInvalidValues, false);
+        });
+
+        it('should call `comboListDefinitions`', () => {
+          const spycomboListDefinitions = spyOn(component, <any> 'comboListDefinitions').and.callThrough();
+
+          component.sort = true;
+
+          expect(spycomboListDefinitions).toHaveBeenCalled();
+        });
+      });
     });
 
-  });
-
-  it('should set sort', () => {
-    expectSettersMethod(component, 'setSort', '', 'sort', true);
-    expectSettersMethod(component, 'setSort', 'true', 'sort', true);
-    expectSettersMethod(component, 'setSort', 'false', 'sort', false);
   });
 
   it('should update property p-filter-mode', () => {
@@ -202,63 +205,6 @@ describe('PoComboBaseComponent:', () => {
     const validValues = [5, '10'];
 
     expectPropertiesValues(component, 'filterMinlength', validValues, [5, 10]);
-  });
-
-  it('should return options with 5 object', () => {
-    const fakeThis = {
-      options: [
-        {value: 'valor'},
-        {label: 'label'},
-        {label: 'label', value: 'valor'},
-        {label: 'label', value: true},
-        {label: 'label', value: false},
-        {label: 'label', value: 0},
-      ],
-      sort: true,
-      compareOptions: component.compareOptions,
-      sortOptions: component.sortOptions
-    };
-
-    component.validAndSortOptions.call(fakeThis);
-    expect(fakeThis.options.length).toBe(5);
-  });
-
-  it('should return options with 0 object', () => {
-    const fakeThis = {
-      options: Array(),
-      sort: true,
-      compareOptions: component.compareOptions,
-      sortOptions: component.sortOptions
-    };
-
-    component.validAndSortOptions.call(fakeThis);
-    expect(fakeThis.options.length).toBe(0);
-  });
-
-  it('should sort options', () => {
-    component.sort = true;
-    component.options = [
-      {label: '2', value: 'valor 2'},
-      {label: 'B', value: 'valor B'},
-      {label: 'a', value: 'valor a'},
-      {label: 'c', value: 'valor c'},
-      {label: '1', value: 'valor 1'}
-    ];
-    component.sortOptions();
-
-    expect(component.options[0].label).toBe('1');
-    expect(component.options[1].label).toBe('2');
-    expect(component.options[2].label).toBe('a');
-    expect(component.options[3].label).toBe('B');
-    expect(component.options[4].label).toBe('c');
-  });
-
-  it('should compare options', () => {
-    expect(component.compareOptions({label: 'a'}, {label: 'b'})).toBe(-1);
-    expect(component.compareOptions({label: 'c'}, {label: 'b'})).toBe(1);
-    expect(component.compareOptions({label: 'c'}, {label: 'c'})).toBe(0);
-    expect(component.compareOptions({label: 'A'}, {label: 'b'})).toBe(-1);
-    expect(component.compareOptions({label: 'a'}, {label: 'C'})).toBe(-1);
   });
 
   it('should register onModelChange', () => {
@@ -749,12 +695,12 @@ describe('PoComboBaseComponent:', () => {
 
     });
 
-    it(`configAfterSetFilterService: shouldn't contain objects in the 'option' if filterService is defined.`, () => {
+    it(`configAfterSetFilterService: shouldn't contain objects in the 'comboOptionsList' if filterService is defined.`, () => {
       const filterService = 'https://portinari.io/sample/api/new/heroes';
 
       component['configAfterSetFilterService'](filterService);
 
-      expect(component.options.length).toBe(0);
+      expect(component['comboOptionsList'].length).toBe(0);
     });
 
     it('configAfterSetFilterService: should return `service` with undefined if filterService is undefined.', () => {
@@ -765,13 +711,13 @@ describe('PoComboBaseComponent:', () => {
       expect(component.service).toBeUndefined();
     });
 
-    it('configAfterSetFilterService: should contain 1 object in the options if filterService is undefined.', () => {
+    it('configAfterSetFilterService: should contain 1 object in comboOptionsList if filterService is undefined.', () => {
       const filterService = undefined;
-      component.cacheStaticOptions = [{ label: '1', value: '1'}];
+      component['cacheStaticOptions'] = [{ label: '1', value: '1'}];
 
       component['configAfterSetFilterService'](filterService);
 
-      expect(component.options.length).toBe(1);
+      expect(component['comboOptionsList'].length).toBe(1);
     });
 
     it('configAfterSetFilterService: shouldn`t contain objects in the `visibleOptions` if it doesn`t have `filterService`.', () => {
@@ -889,7 +835,8 @@ describe('PoComboBaseComponent:', () => {
       expect(spyUpdateModel).not.toHaveBeenCalled();
     });
 
-    it('updateComboList: should set `visibleOptions` with `component.options` if `options param` and `selectedValue` are falsy', () => {
+    it(`updateComboList: should set 'visibleOptions' with 'component.comboOptionsList'
+    if 'options param' and 'selectedValue' are falsy`, () => {
       component.options = [{ label: '1', value: '1' }];
       component.selectedValue = undefined;
 
@@ -898,7 +845,7 @@ describe('PoComboBaseComponent:', () => {
       expect(component.visibleOptions).toEqual(component.options);
     });
 
-    it('updateComboList: should set `visibleOptions` with `options param` if `options param` is true and `selectedValue` is falsy', () => {
+    it('updateComboList: should set `visibleOptions` with `options param` if `options param` is true and `selectedValue` is false', () => {
       const options = [{ label: '1', value: '1' }];
 
       component.selectedValue = undefined;
@@ -908,7 +855,7 @@ describe('PoComboBaseComponent:', () => {
       expect(component.visibleOptions).toEqual(options);
     });
 
-    it(`updateComboList: should set 'visibleOptions' with 'selectedOption' if 'options param' is falsy
+    it(`updateComboList: should set 'visibleOptions' with 'selectedOption' if 'options param' is false
       and 'selectedValue' is truthy`, () => {
       const option = { label: '1', value: '1' };
 
@@ -951,6 +898,328 @@ describe('PoComboBaseComponent:', () => {
       expect(component.selectedView).toEqual(undefined);
     });
 
+    it('sortOptions: return options list param sorted ', () => {
+      component.sort = true;
+      component.options = [
+        {label: '2', value: 'valor 2'},
+        {label: 'B', value: 'valor B'},
+        {label: 'a', value: 'valor a'},
+        {label: 'c', value: 'valor c'},
+        {label: '1', value: 'valor 1'}
+      ];
+      component['sortOptions'](component.options);
+
+      expect(component.options[0].label).toBe('1');
+      expect(component.options[1].label).toBe('2');
+      expect(component.options[2].label).toBe('a');
+      expect(component.options[3].label).toBe('B');
+      expect(component.options[4].label).toBe('c');
+    });
+
+    it('compareOptions: should compare received param options', () => {
+      expect(component['compareOptions']({label: 'a'}, {label: 'b'})).toBe(-1);
+      expect(component['compareOptions']({label: 'c'}, {label: 'b'})).toBe(1);
+      expect(component['compareOptions']({label: 'c'}, {label: 'c'})).toBe(0);
+      expect(component['compareOptions']({label: 'A'}, {label: 'b'})).toBe(-1);
+      expect(component['compareOptions']({label: 'a'}, {label: 'C'})).toBe(-1);
+    });
+
+    describe('ValidateValue', () => {
+      it('should return true if `isOptionGroupList`, option label is valid and has options', () => {
+        component.options = [ { label: 'label group A', options: [{ value: 'value A'}]} ];
+
+        expect(component['validateValue'](component.options[0])).toBeTruthy();
+      });
+
+      it('should return true if `isOptionGroupList`, verifyingOptionsGroup param is true and has valid value', () => {
+        component.options = [ { label: 'label', options: [{ value: 'value'}]} ];
+
+        expect(component['validateValue']({ value: 'value', label: 'value'}, true)).toBeTruthy();
+      });
+
+      it('should return false if `isOptionsGroupList` but has invalid label', () => {
+        component.options = [ { label: '', options: [{ value: 'value A'}]} ];
+
+        expect(component['validateValue'](component.options[0])).toBeFalsy();
+      });
+
+      it('should return false if `isOptionsGroupList`, `verifyingOptionsGroup` is true but has invalid value', () => {
+        component.options = [ { label: 'label', options: [ { value: '', label: '' } ]} ];
+
+        expect(component['validateValue']({ label: '', value: ''}, true)).toBeFalsy();
+      });
+
+      it('should return true if `isOptionsGroupList` is false, has valid value and doesn`t have options', () => {
+        component.options = [ { label: 'label', value: 'value'} ];
+
+        expect(component['validateValue'](component.options[0])).toBeTruthy();
+      });
+
+      it('should return false if `isOptionsGroupList` is false, but has invalid value', () => {
+        component.options = [ { label: 'label', value: ''} ];
+
+        expect(component['validateValue'](component.options[0])).toBeFalsy();
+      });
+
+    });
+
+    it('hasDuplicatedOption: should return true if contains a duplicated option label', () => {
+      const comboOptions = [
+        { label: 'labelA', value: 'valueA' },
+        { label: 'labelB', value: 'valueB' },
+      ];
+
+      const expectedValue = component['hasDuplicatedOption'](comboOptions, 'labelA');
+
+      expect(expectedValue).toBeTruthy();
+    });
+
+    it('hasDuplicatedOption: should return false if contains a duplicated option label', () => {
+      const comboOptions = [
+        { label: 'labelB', value: 'valueB' },
+        { label: 'labelC', value: 'valueC' }
+      ];
+
+      const expectedValue = component['hasDuplicatedOption'](comboOptions, 'labelA');
+
+      expect(expectedValue).toBeFalsy();
+    });
+
+    it('hasDuplicatedOption: should return true if contains a duplicated option label in `accumulatedGroupOptions`', () => {
+      const comboOptions = [
+        { label: 'labelE', value: 'valueE' },
+        { label: 'labelF', value: 'valueF' }
+      ];
+
+      const accumulatedGroupOptions = [
+        { label: 'Title', options: true },
+        { label: 'labelA', value: 'valueA' },
+        { label: 'labelB', value: 'valueB' },
+        { label: 'TitleB', options: true },
+        { label: 'labelC', value: 'valueC' },
+        { label: 'labelD', value: 'valueD' }
+      ];
+
+      const expectedValue = component['hasDuplicatedOption'](comboOptions, 'labelA', <any>accumulatedGroupOptions);
+
+      expect(expectedValue).toBeTruthy();
+    });
+
+    it(`listingComboOptions: should call 'verifyComboOptions', 'sortOptions'
+    and doesn't call 'verifyComboOptionsGroup' if isn´t group list`, () => {
+      component.options = [
+        { label: 'labelA', value: 'valueA' },
+        { label: 'labelB', value: 'valueB' },
+      ];
+
+      const spyVerifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
+      const spySortOptions = spyOn(component, <any>'sortOptions');
+      const spyVerifyComboOptionsGroup = spyOn(component, <any>'verifyComboOptionsGroup');
+      const expectedValue = component['listingComboOptions'](component.options);
+
+      expect(spyVerifyComboOptions).toHaveBeenCalledWith(component.options);
+      expect(spySortOptions).toHaveBeenCalledWith(component.options);
+      expect(spyVerifyComboOptionsGroup).not.toHaveBeenCalledWith();
+      expect(expectedValue).toEqual(component.options);
+    });
+
+    it(`listingComboOptions: should call 'verifyComboOptions', 'sortOptions' and 'verifyComboOptionsGroup' if is a group list`, () => {
+      component.options = [
+        { label: 'labelA', options: [ { value: 'valueA' } ] },
+      ];
+
+      const formattedOptions = [
+        { label: 'labelA', options: true },
+        { label: 'valueA', value: 'valueA'}
+      ];
+
+      const spyVerifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
+      const spySortOptions = spyOn(component, <any>'sortOptions');
+      const spyVerifyComboOptionsGroup = spyOn(component, <any>'verifyComboOptionsGroup').and.callThrough();
+      const expectedValue = component['listingComboOptions'](component.options);
+
+      expect(spyVerifyComboOptions).toHaveBeenCalledWith(component.options);
+      expect(spySortOptions).toHaveBeenCalledWith(component.options);
+      expect(spyVerifyComboOptionsGroup).toHaveBeenCalledWith(component.options);
+      expect(expectedValue).toEqual(formattedOptions);
+    });
+
+    it('verifyComboOptions: should call `verifyIfHasLabel`, `hasDuplicatedOption` and `validateValue`', () => {
+      component.options = [
+        { label: 'labelA', value: 'valueA' },
+        { label: 'labelB', value: 'valueB' },
+      ];
+
+      const spyVerifyIfHasLabel = spyOn(component, <any>'verifyIfHasLabel').and.callThrough();
+      const spyhasDuplicatedOption = spyOn(component, <any>'hasDuplicatedOption').and.callThrough();
+      const spyvalidateValue = spyOn(component, <any>'validateValue').and.callThrough();
+
+      component['verifyComboOptions'](component.options);
+
+      expect(spyVerifyIfHasLabel).toHaveBeenCalled();
+      expect(spyhasDuplicatedOption).toHaveBeenCalled();
+      expect(spyvalidateValue).toHaveBeenCalled();
+    });
+
+    it('verifyComboOptions: should verify each option and return a properly options list`', () => {
+      component.options = [
+        { label: 'labelA', value: 'valueA' },
+        { label: 'labelB', value: 'valueB' },
+      ];
+
+      const expectedValue = component['verifyComboOptions'](component.options);
+
+      expect(expectedValue).toEqual(component.options);
+    });
+
+    it('verifyComboOptions: should verify each option and return a properly options list`', () => {
+      component.options = [
+        { label: '', value: 'valueA' },
+        { label: 'labelB', value: 'valueB' },
+        { label: 'labelB', value: 'valueB' },
+        { label: 'labelB', value: '' },
+      ];
+
+      const formattedOptions = [
+        { label: 'valueA', value: 'valueA' },
+        { label: 'labelB', value: 'valueB' },
+      ];
+      const expectedValue = component['verifyComboOptions'](component.options);
+
+      expect(expectedValue).toEqual(formattedOptions);
+    });
+
+    it('verifyComboOptionsGroup: should only call `verifyComboOptions` if option group length is 0', () => {
+      component.options = [{ label: 'labelGroup', options: []}];
+      component['comboOptionsList'] = component.options;
+
+      const spyverifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
+      const spySortOptions = spyOn(component, <any>'sortOptions');
+      const expectedResult = component['verifyComboOptionsGroup'](<any>component['comboOptionsList']);
+
+      expect(spyverifyComboOptions).toHaveBeenCalled();
+      expect(spySortOptions).not.toHaveBeenCalled();
+      expect(expectedResult).toEqual([]);
+    });
+
+    it('verifyComboOptionsGroup: should call `verifyComboOptions` and `sortOptions` if option group has length', () => {
+      component.options = [{ label: 'labelGroup', options: [{ value: 'value' }]}];
+      component['comboOptionsList'] = component.options;
+
+      const formattedOptions = [{ label: 'labelGroup', options: true }, { value: 'value', label: 'value'}];
+      const spyverifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
+      const spySortOptions = spyOn(component, <any>'sortOptions');
+      const expectedResult = component['verifyComboOptionsGroup'](<any>component['comboOptionsList']);
+
+      expect(spyverifyComboOptions).toHaveBeenCalled();
+      expect(spySortOptions).toHaveBeenCalled();
+      expect(expectedResult).toEqual(formattedOptions);
+    });
+
+    it(`verifyIfHasLabel: should return false if is option group and doesn't have label'`, () => {
+      component.options = [ { label: 'label', options: [] }];
+      const option = { label: '', options: [ { value: 'value' } ] };
+
+      expect(component['verifyIfHasLabel'](option)).toBeFalsy();
+    });
+
+    it(`verifyIfHasLabel: should return false if option doesn't have label neither value'`, () => {
+      component.options = [ { label: 'label', options: [] }];
+      const option = { label: '', value: '' };
+
+      expect(component['verifyIfHasLabel'](option)).toBeFalsy();
+    });
+
+    it(`verifyIfHasLabel: should return false if isn't option group and has option'`, () => {
+      component.options = [ { value: 'value' }];
+      const option = { label: 'label', options: [ { value: 'value' } ] };
+
+      expect(component['verifyIfHasLabel'](option)).toBeFalsy();
+    });
+
+    it(`verifyIfHasLabel: should return true and apply label value if is a valid option`, () => {
+      component.options = [ { value: 'value' }];
+      const option = { value: 'value', label: undefined };
+
+      expect(component['verifyIfHasLabel'](option)).toBeTruthy();
+      expect(option.label).toEqual('value');
+    });
+
+    it(`verifyIfHasLabel: should return true if is a valid option`, () => {
+      component.options = [ { value: 'value' }];
+      const option = { value: 'value', label: 'label' };
+
+      expect(component['verifyIfHasLabel'](option)).toBeTruthy();
+    });
+
+    it(`searchForLabel: should search for label and update the combo list including the options group title
+    and set selectedView skipping the option group title item`, () => {
+      component.options = [
+        { label: 'Valor 1', options: [ { value: 'value' } ]},
+      ];
+
+      const options = [
+        { label: 'group', options: true },
+        { label: 'value 1', value: 'value 1' },
+        { label: 'value 2', value: 'value 2' },
+        { label: 'option 3', value: 'option 3' }
+      ];
+
+      component.searchForLabel('option', <any>options, PoComboFilterMode.startsWith);
+
+      expect(component.visibleOptions.length).toBe(2);
+      expect(component.selectedView).toEqual(options[3]);
+    });
+
+    it(`searchForLabel: should add 6 items into visibleItems array list`, () => {
+      component.options = [
+        { label: 'val', options: [ { value: 'value' } ]},
+      ];
+
+      const options = [
+        { label: 'group', options: true },
+        { label: 'value 1', value: 'value 1' },
+        { label: 'value 2', value: 'value 2' },
+        { label: 'group 2', options: true },
+        { label: 'value 3', value: 'value 3' },
+        { label: 'value 4', value: 'value 4' },
+      ];
+
+      component.searchForLabel('value', <any>options, PoComboFilterMode.startsWith);
+
+      expect(component.visibleOptions.length).toBe(6);
+    });
+
+    it('comboListDefinitions: should set `cacheStaticOptions` and call `updateComboList`', () => {
+      component.options = [{ label: '1', value: '1' }];
+
+      const spyUpdateComboList = spyOn(component, 'updateComboList');
+
+      component['comboListDefinitions']();
+
+      expect(component['cacheStaticOptions']).toEqual(component.options);
+      expect(spyUpdateComboList).toHaveBeenCalled();
+    });
+
+    it('comboListDefinitions: should call `listingComboOptions` if options length is more than 0', () => {
+      component.options = [{ label: '1', value: '1' }];
+
+      const spyListingComboOptions = spyOn(component, <any> 'listingComboOptions').and.callThrough();
+
+      component['comboListDefinitions']();
+
+      expect(spyListingComboOptions).toHaveBeenCalled();
+    });
+
+    it('comboListDefinitions: shouldn`t call `listingComboOptions` if options length is 0', () => {
+      component.options = [];
+
+      const spyListingComboOptions = spyOn(component, <any>'listingComboOptions');
+
+      component['comboListDefinitions']();
+
+      expect(spyListingComboOptions).not.toHaveBeenCalled();
+    });
   });
 
 });
