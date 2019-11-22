@@ -462,6 +462,23 @@
    --color-chart-gauge-text-description-color: var(--color-neutral);
 
 /*------------------------------------*\
+  CHECKBOX
+\*------------------------------------*/
+
+--color-checkbox-background-color: var(--color-white);
+--color-checkbox-background-color-active: var(--color-primary);
+--color-checkbox-background-color-disabled: var(--color-neutral-light-90);
+--color-checkbox-background-color-icon-disabled: var(--color-neutral-light-60);
+--color-checkbox-box-shadow-color-focusable: var(--color-primary-dark-20);
+
+--color-checkbox-border-input: var(--color-neutral-light-60);
+--color-checkbox-border-input-active: var(--color-primary);
+--color-checkbox-border-input-disabled: var(--color-neutral-light-60);
+--color-checkbox-border-input-invalid: var(--color-danger);
+
+--color-checkbox-color-active: var(--color-white);
+
+/*------------------------------------*\
   CHECKBOX GROUP
 \*------------------------------------*/
 

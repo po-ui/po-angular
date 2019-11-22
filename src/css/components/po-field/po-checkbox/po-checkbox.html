@@ -1,0 +1,137 @@
+<style>
+  .container {
+    margin-top: 10px;
+  }
+
+  .table-sample-po-checkbox td, .table-sample-po-checkbox th{
+    padding: 0 10px;
+    text-align: left;
+  }
+
+  .table-sample-po-checkbox th, .table-sample-po-checkbox td:first-child {
+    font-weight: bold;
+  }
+
+</style>
+
+<article>
+  <section>
+    <div class="container">
+      <h4>Estados do po-checkbox</h4>
+
+      <table class="table-sample-po-checkbox">
+        <tr>
+          <th></th>
+          <th>True</th>
+          <th>False</th>
+          <th>Indeterminate</th>
+          <th>Required</th>
+        </tr>
+
+        <tr>
+          <td>Enable</td>
+          <td>
+            <div class="po-checkbox">
+              <input class="po-input po-checkbox-input po-checkbox-input-checked" checked type="checkbox">
+              <label tabindex="0" class="po-checkbox-label po-clickable">Enable True</label>
+            </div>
+          </td>
+          <td>
+            <div class="po-checkbox">
+              <input class="po-input po-checkbox-input" type="checkbox">
+              <label tabindex="0" class="po-checkbox-label po-clickable">Enable False</label>
+            </div>
+          </td>
+          <td>
+            <div class="po-checkbox">
+              <input class="po-input po-checkbox-input po-checkbox-input-indeterminate" type="checkbox">
+              <label tabindex="0" class="po-checkbox-label po-clickable">Enable Indeterminate</label>
+            </div>
+          </td>
+          <td>
+            <po-checkbox class="ng-invalid ng-dirty">
+              <div class="po-checkbox">
+                <input class="po-input po-checkbox-input">
+                <label tabindex="0" class="po-checkbox-label po-clickable">Enable Required</label>
+              </div>
+            </po-checkbox>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Disable</td>
+          <td>
+            <div class="po-checkbox">
+              <input class="po-input po-checkbox-input po-checkbox-input-checked" checked type="checkbox" disabled>
+              <label tabindex="0" class="po-checkbox-label">Disabled True</label>
+            </div>
+          </td>
+          <td>
+            <div class="po-checkbox">
+              <input class="po-input po-checkbox-input" type="checkbox" disabled>
+              <label tabindex="0" class="po-checkbox-label">Disabled False</label>
+            </div>
+          </td>
+          <td>
+            <div class="po-checkbox">
+              <input class="po-input po-checkbox-input po-checkbox-input-indeterminate" type="checkbox" disabled>
+              <label tabindex="0" class="po-checkbox-label">Disabled Indeterminate</label>
+            </div>
+          </td>
+          <td>
+            <div class="po-checkbox">
+              <input class="po-input po-checkbox-input" type="checkbox" disabled>
+              <label tabindex="0" class="po-checkbox-label">Disabled Required</label>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="container">
+      <h4>Utilizando o po-checkbox-group com label muito grande</h4>
+
+      <div class="po-checkbox-group-item po-md-6">
+        <input class="po-input po-checkbox-group-input" type="checkbox">
+        <label class="po-checkbox-group-label po-clickable">
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        </label>
+      </div>
+
+      <div class="po-checkbox-group-item po-md-6">
+        <input class="po-input po-checkbox-group-input" type="checkbox">
+        <label class="po-checkbox-group-label po-clickable">
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+          laborum."
+        </label>
+      </div>
+
+      <div class="po-checkbox-group-item po-md-6">
+        <input class="po-input po-checkbox-group-input" type="checkbox">
+        <label class="po-checkbox-group-label po-clickable">
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+          laborum."
+        </label>
+      </div>
+
+      <div class="po-checkbox-group-item po-md-6">
+        <input class="po-input po-checkbox-group-input" type="checkbox">
+        <label class="po-checkbox-group-label po-clickable">
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        </label>
+      </div>
+    </div>
+  </section>
+</article>

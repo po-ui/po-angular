@@ -8,6 +8,7 @@
       { "path": "./css/components/po-button-group/po-button-group.html", "title": "Po Button Group" },
       { "path": "./css/components/po-calendar/po-calendar.html", "title": "Po Calendar" },
       { "path": "./css/components/po-chart/po-chart.html", "title": "Po Chart" },
+      { "path": "./css/components/po-field/po-checkbox/po-checkbox.html", "title": "Po Checkbox" },
       { "path": "./css/components/po-field/po-checkbox-group/po-checkbox-group.html", "title": "Po Checkbox Group" },
       { "path": "./css/components/po-field/po-combo/po-combo.html", "title": "Po Combo" },
       { "path": "./css/components/po-container/po-container.html", "title": "Po Container" },
