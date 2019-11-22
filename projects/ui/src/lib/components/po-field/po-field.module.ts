@@ -18,6 +18,7 @@ import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module
 
 import { PoCalendarComponent } from './po-datepicker/po-calendar/po-calendar.component';
 import { PoCleanComponent } from './po-clean/po-clean.component';
+import { PoCheckboxComponent } from './po-checkbox/po-checkbox.component';
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
 import { PoDatepickerComponent } from './po-datepicker/po-datepicker.component';
@@ -56,8 +57,9 @@ import { PoUrlComponent } from './po-url/po-url.component';
 /**
  * @description
  *
- * Módulo dos componentes po-combo, po-checkbox-group, po-datepicker, po-datepicker-range, po-email, po-input, po-lookup,
- * po-number, po-multiselect, po-password, po-radio-group, po-select, po-switch, po-textarea, po-upload e po-url.
+ * Módulo dos componentes: po-checkbox, po-checkbox-group, po-combo, po-datepicker, po-datepicker-range, po-email, po-input,
+ * po-lookup, po-number, po-multiselect, po-password, po-radio-group, po-select, po-switch, po-textarea, po-upload
+ * e po-url.
  */
 @NgModule({
   imports: [
@@ -78,6 +80,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoTooltipModule
   ],
   exports: [
+    PoCheckboxComponent,
     PoCheckboxGroupModule,
     PoCleanComponent,
     PoComboComponent,
@@ -105,6 +108,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
   declarations: [
     PoCalendarComponent,
     PoCleanComponent,
+    PoCheckboxComponent,
     PoComboComponent,
     PoComboOptionTemplateDirective,
     PoDecimalComponent,
