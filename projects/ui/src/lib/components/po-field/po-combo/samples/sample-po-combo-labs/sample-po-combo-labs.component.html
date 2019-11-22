@@ -42,6 +42,41 @@
 <hr>
 
 <form #fOption="ngForm">
+
+  <po-divider p-label="Po combo options group"></po-divider>
+
+  <div class="po-row">
+
+    <po-switch
+      class="po-md-2"
+      name="comboOptionGroupSwitch"
+      [(ngModel)]="comboOptionGroupSwitch"
+      p-label="Combo options group">
+    </po-switch>
+
+    <po-select
+      class="po-md-5"
+      name="selectedsOptionsGroup"
+      [(ngModel)]="selectedOptionsGroup"
+      p-label="Options group list"
+      [p-disabled]="!comboOptionGroupSwitch"
+      [p-options]="optionsGroupList"
+      (p-change)="optionsGroupSelection()">
+    </po-select>
+    
+    <po-input
+      class="po-md-5"
+      name="optionsGroup"
+      [(ngModel)]="optionsGroup"
+      p-label="New Options Group"
+      [p-disabled]="!comboOptionGroupSwitch"
+      p-required>
+    </po-input>
+
+  </div>
+
+  <po-divider p-label="Po combo options"></po-divider>
+
   <div class="po-row">
     <po-input
       class="po-md-6"
