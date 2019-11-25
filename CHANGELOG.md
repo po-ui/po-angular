@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/portinariui/portinari-angular/compare/v1.16.0...v1.17.0) (2019-11-25)
+
+
+### Bug Fixes
+
+* **table:** corrige exibição dos ícones de acordo com o valor da coluna ([aad0013](https://github.com/portinariui/portinari-angular/commit/aad0013))
+
+
+### Features
+
+* **datepicker:** permite definir formato de data ([7477b6d](https://github.com/portinariui/portinari-angular/commit/7477b6d))
+
+
+
 ## [1.16.0](https://github.com/portinariui/portinari-angular/compare/v1.15.0...v1.16.0) (2019-11-18)
 
 
