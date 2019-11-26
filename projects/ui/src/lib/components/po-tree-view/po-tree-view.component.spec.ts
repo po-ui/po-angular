@@ -48,16 +48,32 @@ describe('PoTreeViewComponent:', () => {
 
   describe('Methods: ', () => {
 
-    it('ngOnInit: should subscribe receiveEvent and call emitEvent with treeViewItem', () => {
+    it('ngOnInit: should subscribe onExpand and call emitExpanded with treeViewItem', () => {
       const expectedValue: PoTreeViewItem = { label: 'Nivel 01', value: 1 };
 
-      const spyReceiveEvent = spyOn(component['treeViewService'], 'receiveEvent').and.returnValue(of(expectedValue));
-      const spyEmitEvent = spyOn(component, <any> 'emitEvent');
+      const spyReceiveEvent = spyOn(component['treeViewService'], 'onExpand').and.returnValue(of(expectedValue));
+      const spyEmitEvent = spyOn(component, <any> 'emitExpanded');
 
       component.ngOnInit();
 
       expect(spyReceiveEvent).toHaveBeenCalled();
       expect(spyEmitEvent).toHaveBeenCalledWith(expectedValue);
+    });
+
+    it('ngOnInit: should subscribe onChecked and call emitSelected with treeViewItem', () => {
+      const expectedValue: PoTreeViewItem = { label: 'Nivel 01', value: 1 };
+
+      const spyOnChecked = spyOn(component['treeViewService'], 'onSelect').and.returnValue(of(expectedValue));
+      const spyEmitChecked = spyOn(component, <any> 'emitSelected');
+
+      component.ngOnInit();
+
+      expect(spyOnChecked).toHaveBeenCalled();
+      expect(spyEmitChecked).toHaveBeenCalledWith(expectedValue);
+    });
+
+    it('trackByFunction: should return index param', () => {
+      expect(component.trackByFunction(1)).toBe(1);
     });
 
   });

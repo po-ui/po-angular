@@ -1,4 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+
+import { PoFieldModule } from '../../po-field/po-field.module';
 
 import { PoTreeViewItemHeaderComponent } from './po-tree-view-item-header.component';
 
@@ -9,6 +12,7 @@ describe('PoTreeViewItemHeaderComponent:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ FormsModule, PoFieldModule ],
       declarations: [ PoTreeViewItemHeaderComponent ]
     })
     .compileComponents();
@@ -29,7 +33,11 @@ describe('PoTreeViewItemHeaderComponent:', () => {
   describe('Templates: ', () => {
 
     it('shouldn`t find .po-tree-view-item-header-button if hasSubItems is false', () => {
-      component.hasSubItems = false;
+      component.item = {
+        label: 'Nivel 02',
+        value: '02',
+        subItems: []
+      };
 
       fixture.detectChanges();
 
@@ -37,7 +45,11 @@ describe('PoTreeViewItemHeaderComponent:', () => {
     });
 
     it('should find .po-tree-view-item-header-button if hasSubItems is true', () => {
-      component.hasSubItems = true;
+      component.item = {
+        label: 'Nivel 02',
+        value: '02',
+        subItems: [ { label: 'Nivel 02', value: '02' } ]
+      };
 
       fixture.detectChanges();
 
@@ -45,7 +57,12 @@ describe('PoTreeViewItemHeaderComponent:', () => {
     });
 
     it('shouldn`t find .po-tree-view-item-header-button-icon-transform if expanded is false', () => {
-      component.expanded = false;
+      component.item = {
+        label: 'Nivel 02',
+        value: '02',
+        expanded: false,
+        subItems: [ { label: 'Nivel 02', value: '02' } ]
+      };
 
       fixture.detectChanges();
 
@@ -53,28 +70,68 @@ describe('PoTreeViewItemHeaderComponent:', () => {
     });
 
     it('should find .po-tree-view-item-header-button-icon-transform if expanded and hasSubItems are true', () => {
-      component.hasSubItems = true;
-      component.expanded = true;
+      component.item = {
+        label: 'Nivel 02',
+        value: '02',
+        expanded: true,
+        subItems: [ { label: 'Nivel 02', value: '02' } ]
+      };
 
       fixture.detectChanges();
 
       expect(debugNativeElement.querySelector('.po-tree-view-item-header-button-icon-transform')).toBeTruthy();
     });
 
-    it('should find .po-tree-view-item-header-label-padding if hasSubItems is false', () => {
-      component.hasSubItems = false;
+    it('should find .po-tree-view-item-header-padding if hasSubItems is false', () => {
+      component.item = {
+        label: 'Nivel 02',
+        value: '02',
+        subItems: []
+      };
 
       fixture.detectChanges();
 
-      expect(debugNativeElement.querySelector('.po-tree-view-item-header-label-padding')).toBeTruthy();
+      expect(debugNativeElement.querySelector('.po-tree-view-item-header-padding')).toBeTruthy();
     });
 
-    it('shouldn`t find .po-tree-view-item-header-label-padding if hasSubItems is true', () => {
-      component.hasSubItems = true;
+    it('shouldn`t find .po-tree-view-item-header-padding if hasSubItems is true', () => {
+      component.item = {
+        label: 'Nivel 02',
+        value: '02',
+        subItems: [ { label: 'Nivel 02', value: '02' } ]
+      };
 
       fixture.detectChanges();
 
-      expect(debugNativeElement.querySelector('.po-tree-view-item-header-label-padding')).toBe(null);
+      expect(debugNativeElement.querySelector('.po-tree-view-item-header-padding')).toBe(null);
+    });
+
+    it('should find .po-tree-view-item-header-checkbox and shouldn`t find .po-tree-view-item-header-label if selectable is true', () => {
+      component.selectable = true;
+      component.item = {
+        label: 'Nivel 02',
+        value: '02',
+        subItems: [ { label: 'Nivel 02', value: '02' } ]
+      };
+
+      fixture.detectChanges();
+
+      expect(debugNativeElement.querySelector('.po-tree-view-item-header-checkbox')).toBeTruthy();
+      expect(debugNativeElement.querySelector('.po-tree-view-item-header-label')).toBe(null);
+    });
+
+    it('shouldn`t find .po-tree-view-item-header-checkbox and should find .po-tree-view-item-header-label if selectable is false', () => {
+      component.selectable = false;
+      component.item = {
+        label: 'Nivel 02',
+        value: '02',
+        subItems: [ { label: 'Nivel 02', value: '02' } ]
+      };
+
+      fixture.detectChanges();
+
+      expect(debugNativeElement.querySelector('.po-tree-view-item-header-checkbox')).toBe(null);
+      expect(debugNativeElement.querySelector('.po-tree-view-item-header-label')).toBeTruthy();
     });
 
   });

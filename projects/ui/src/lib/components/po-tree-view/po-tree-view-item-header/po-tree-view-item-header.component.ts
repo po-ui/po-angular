@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+
+import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface';
 
 @Component({
   selector: 'po-tree-view-item-header',
@@ -7,12 +9,18 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 })
 export class PoTreeViewItemHeaderComponent {
 
-  @Input('p-expanded') expanded: boolean = false;
+  @ViewChild('inputCheckbox', { static: false }) inputCheckbox;
 
-  @Input('p-has-sub-items') hasSubItems: boolean = false;
+  @Input('p-item') item: PoTreeViewItem;
 
-  @Input('p-label') label: string;
+  @Input('p-selectable') selectable: boolean = false;
 
-  @Output('p-click') click = new EventEmitter<MouseEvent>();
+  @Output('p-expanded') expanded = new EventEmitter<MouseEvent>();
+
+  @Output('p-selected') selected = new EventEmitter<any>();
+
+  get hasSubItems() {
+    return !!(this.item.subItems && this.item.subItems.length);
+  }
 
 }

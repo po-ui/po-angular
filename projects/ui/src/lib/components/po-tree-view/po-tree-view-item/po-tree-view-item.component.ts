@@ -1,8 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { clearObject } from '../../../utils/util';
-
 import { PoTreeViewItem } from './po-tree-view-item.interface';
 import { PoTreeViewService } from '../services/po-tree-view.service';
 
@@ -33,16 +31,12 @@ import { PoTreeViewService } from '../services/po-tree-view.service';
 })
 export class PoTreeViewItemComponent {
 
-  @Input('p-expanded') expanded: boolean;
+  @Input('p-item') item: PoTreeViewItem;
 
-  @Input('p-label') label: string;
-
-  @Input('p-sub-items') subItems: Array<PoTreeViewItem>;
-
-  @Input('p-value') value: string | number;
+  @Input('p-selectable') selectable: boolean;
 
   get hasSubItems() {
-    return !!(this.subItems && this.subItems.length);
+    return !!(this.item.subItems && this.item.subItems.length);
   }
 
   constructor(private treeViewService: PoTreeViewService) { }
@@ -51,17 +45,16 @@ export class PoTreeViewItemComponent {
     event.preventDefault();
     event.stopPropagation();
 
-    this.expanded = !this.expanded;
+    this.item.expanded = !this.item.expanded;
 
-    const treeViewItem = this.getTreeViewItemObject();
-
-    this.treeViewService.emitEvent(treeViewItem);
+    this.treeViewService.emitExpandedEvent({ ...this.item });
   }
 
-  private getTreeViewItemObject() {
-    const { label, value, expanded, subItems } = this;
-
-    return clearObject({ label, value, expanded, subItems });
+  onSelect(selectedItem: PoTreeViewItem) {
+    this.treeViewService.emitSelectedEvent({ ...selectedItem });
   }
 
+  trackByFunction(index: number) {
+    return index;
+  }
 }

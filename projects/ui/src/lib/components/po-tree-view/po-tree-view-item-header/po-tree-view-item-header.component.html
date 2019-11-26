@@ -2,15 +2,28 @@
 
   <button *ngIf="hasSubItems"
     class="po-tree-view-item-header-button"
-    (click)="click.emit($event)">
+    (click)="expanded.emit($event)">
     <span class="po-icon po-icon-arrow-down po-tree-view-item-header-button-icon"
-      [class.po-tree-view-item-header-button-icon-transform]="expanded">
+      [class.po-tree-view-item-header-button-icon-transform]="item.expanded">
     </span>
   </button>
 
-  <span
-    class="po-tree-view-item-header-label"
-    [class.po-tree-view-item-header-label-padding]="!hasSubItems">
-    {{ label }}
-  </span>
+  <ng-container *ngIf="selectable; then checkboxTemplate; else labelTemplate"></ng-container>
+
 </div>
+
+<ng-template #labelTemplate>
+  <span class="po-tree-view-item-header-label" [class.po-tree-view-item-header-padding]="!hasSubItems">
+    {{ item.label }}
+  </span>
+</ng-template>
+
+<ng-template #checkboxTemplate>
+  <po-checkbox
+    class="po-tree-view-item-header-checkbox"
+    [class.po-tree-view-item-header-padding]="!hasSubItems"
+    [p-label]="item.label"
+    [(ngModel)]="item.selected"
+    (p-change)="selected.emit(item)">
+  </po-checkbox>
+</ng-template>

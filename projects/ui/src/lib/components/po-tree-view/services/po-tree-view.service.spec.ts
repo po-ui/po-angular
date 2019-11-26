@@ -16,23 +16,42 @@ describe('PoTreeViewService:', () => {
     treeViewService = TestBed.get(PoTreeViewService);
   });
 
-  it('emitEvent: should call event.next with treeViewItem', () => {
+  it('emitExpandedEvent: should call expandedEvent.next with treeViewItem', () => {
     const treeViewItem: PoTreeViewItem = {
       label: 'Nível 01',
       value: 1
     };
 
-    const spyEmitEvent = spyOn(treeViewService['event'], 'next');
+    const spyEmitExpandedEvent = spyOn(treeViewService['expandedEvent'], 'next');
 
-    treeViewService.emitEvent(treeViewItem);
+    treeViewService.emitExpandedEvent(treeViewItem);
 
-    expect(spyEmitEvent).toHaveBeenCalledWith(treeViewItem);
+    expect(spyEmitExpandedEvent).toHaveBeenCalledWith(treeViewItem);
   });
 
-  it('receiveEvent: should return an instanceof Observable receiveEvent', () => {
-    const receiveEvent = treeViewService.receiveEvent();
+  it('onExpand: should return an instanceof Observable', () => {
+    const onExpand = treeViewService.onExpand();
 
-    expect(receiveEvent instanceof Observable).toBeTruthy();
+    expect(onExpand instanceof Observable).toBeTruthy();
+  });
+
+  it('emitSelectedEvent: should call selectedEvent.next with treeViewItem', () => {
+    const treeViewItem: PoTreeViewItem = {
+      label: 'Nível 01',
+      value: 1
+    };
+
+    const spyEmitSelectedEvent = spyOn(treeViewService['selectedEvent'], 'next');
+
+    treeViewService.emitSelectedEvent(treeViewItem);
+
+    expect(spyEmitSelectedEvent).toHaveBeenCalledWith(treeViewItem);
+  });
+
+  it('onSelect: should return an instanceof Observable', () => {
+    const onSelect = treeViewService.onSelect();
+
+    expect(onSelect instanceof Observable).toBeTruthy();
   });
 
 });
