@@ -7,14 +7,23 @@ import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface
 @Injectable()
 export class PoTreeViewService {
 
-  private event = new Subject<PoTreeViewItem>();
+  private expandedEvent = new Subject<PoTreeViewItem>();
+  private selectedEvent = new Subject<PoTreeViewItem>();
 
-  emitEvent(treeViewItem: PoTreeViewItem) {
-    return this.event.next(treeViewItem);
+  emitExpandedEvent(treeViewItem: PoTreeViewItem) {
+    return this.expandedEvent.next(treeViewItem);
   }
 
-  receiveEvent() {
-    return this.event.asObservable();
+  emitSelectedEvent(treeViewItem: PoTreeViewItem) {
+    return this.selectedEvent.next(treeViewItem);
+  }
+
+  onExpand() {
+    return this.expandedEvent.asObservable();
+  }
+
+  onSelect() {
+    return this.selectedEvent.asObservable();
   }
 
 }

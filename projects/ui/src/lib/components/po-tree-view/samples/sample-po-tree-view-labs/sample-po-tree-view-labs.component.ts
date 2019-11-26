@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoSelectOption, PoTreeViewItem } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoSelectOption, PoTreeViewItem } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-tree-view-labs',
@@ -10,15 +10,26 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
 
   event: string;
   items: Array<PoTreeViewItem>;
+  itemProperties: Array<string>;
   parent: string;
   parentList: Array<PoSelectOption>;
+  selectable: boolean;
   treeViewItem: PoTreeViewItem;
+
+  readonly itemPropertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'selected', label: 'Selected' },
+    { value: 'expanded', label: 'Expanded' }
+  ];
 
   ngOnInit() {
     this.restore();
   }
 
   add(treeViewItem: PoTreeViewItem) {
+
+    treeViewItem.selected = this.itemProperties.includes('selected');
+    treeViewItem.expanded = this.itemProperties.includes('expanded');
+
     const treeViewItemClone = { ...treeViewItem };
 
     if (!this.parent) {
@@ -46,6 +57,8 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
     this.items = [];
     this.parent = undefined;
     this.parentList = [];
+    this.itemProperties = [];
+    this.selectable = undefined;
     this.treeViewItem = <any> {};
   }
 

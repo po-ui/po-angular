@@ -1,0 +1,45 @@
+<po-page-default p-title="Welcome to the Portinari Supermarket">
+  <div class="po-offset-md-3 po-offset-lg-2 po-offset-xl-2">
+    <div class="po-row">
+
+      <po-stepper #stepper p-step-icons class="po-md-9 po-lg-8 po-mb-1">
+
+        <po-step p-label="Step 1">
+          <p class="po-font-subtitle">Please, select your items:</p>
+
+          <po-tree-view
+            p-selectable
+            [p-items]="items"
+            (p-selected)="addItem($event)"
+            (p-unselected)="removeItem($event)">
+          </po-tree-view>
+        </po-step>
+
+        <po-step p-label="Step 2" [p-can-active-next-step]="isConfirmed.bind(this)">
+          <po-widget
+            p-primary-label="Confirm"
+            p-title="Selected items"
+            [p-disabled]="itemsListSelected.length < 1"
+            (p-primary-action)="checkOut()">
+
+            <po-table
+              p-striped
+              [p-columns]="columnsItemsSelected"
+              [p-items]="itemsListSelected">
+            </po-table>
+          </po-widget>
+        </po-step>
+
+        <po-step p-label="Step 3">
+          <po-widget>
+            <div class="po-row po-font-display">
+              <p>Order dispatched</p>
+              <span class="po-icon po-icon-ok"></span>
+            </div>
+          </po-widget>
+        </po-step>
+      </po-stepper>
+
+    </div>
+  </div>
+</po-page-default>
