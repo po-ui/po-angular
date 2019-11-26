@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { PoContainerModule } from '../po-container/po-container.module';
+import { PoFieldModule } from '../po-field/po-field.module';
 
 import { PoTreeViewComponent } from './po-tree-view.component';
 import { PoTreeViewItemComponent } from './po-tree-view-item/po-tree-view-item.component';
@@ -49,7 +51,9 @@ import { PoTreeViewItemHeaderComponent } from './po-tree-view-item-header/po-tre
   ],
   imports: [
     CommonModule,
-    PoContainerModule
+    FormsModule,
+    PoContainerModule,
+    PoFieldModule
   ]
 })
 export class PoTreeViewModule { }

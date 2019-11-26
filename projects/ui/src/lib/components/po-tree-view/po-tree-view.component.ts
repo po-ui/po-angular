@@ -24,6 +24,10 @@ import { PoTreeViewService } from './services/po-tree-view.service';
  *  <file name="sample-po-tree-view-folder-structure/sample-po-tree-view-folder-structure.component.ts"> </file>
  * </example>
  *
+ * <example name="po-tree-view-supermarket" title="Portinari Tree View - Supermarket">
+ *  <file name="sample-po-tree-view-supermarket/sample-po-tree-view-supermarket.component.html"> </file>
+ *  <file name="sample-po-tree-view-supermarket/sample-po-tree-view-supermarket.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-tree-view',
@@ -42,9 +46,16 @@ export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnIn
   }
 
   ngOnInit() {
-    this.treeViewService.receiveEvent().subscribe((treeViewItem: PoTreeViewItem) => {
-      this.emitEvent(treeViewItem);
+    this.treeViewService.onExpand().subscribe((treeViewItem: PoTreeViewItem) => {
+      this.emitExpanded(treeViewItem);
+    });
+
+    this.treeViewService.onSelect().subscribe((treeViewItem: PoTreeViewItem) => {
+      this.emitSelected(treeViewItem);
     });
   }
 
+  trackByFunction(index: number) {
+    return index;
+  }
 }
