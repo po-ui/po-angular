@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://github.com/portinariui/portinari-angular/compare/v1.17.0...v1.18.0) (2019-11-29)
+
+
+### Bug Fixes
+
+* **grid:** remove arquivos css ([137c96e](https://github.com/portinariui/portinari-angular/commit/137c96e))
+
+
+### Features
+
+* **checkbox:** novo componente ([bed9970](https://github.com/portinariui/portinari-angular/commit/bed9970))
+* **rich-text:** permite que o usuário edite um link adicionado ([a4f4970](https://github.com/portinariui/portinari-angular/commit/a4f4970))
+* **tree-view:** adiciona a opção de seleção de item ([3033b40](https://github.com/portinariui/portinari-angular/commit/3033b40))
+
+
+
 ## [1.17.0](https://github.com/portinariui/portinari-angular/compare/v1.16.0...v1.17.0) (2019-11-25)
 
 
