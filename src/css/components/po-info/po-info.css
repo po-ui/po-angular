@@ -51,6 +51,21 @@
   width: 100%;
 }
 
+.po-info-link, .po-info-link:link, .po-info-link:visited {
+  color: var(--color-info-color-link);
+  text-decoration: none;
+}
+
+.po-info-link:hover {
+  color: var(--color-info-color-link-hover);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.po-info-link:active {
+  color: var(--color-info-color-link-pressed);
+}
+
 @media screen and (max-width: 1366px) {
 
   .po-info-value {

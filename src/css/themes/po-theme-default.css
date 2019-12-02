@@ -600,6 +600,10 @@
   --color-info-color-text-label: var(--color-neutral);
   --color-info-color-text-value: var(--color-neutral-dark-60);
 
+  --color-info-color-link: var(--color-primary);
+  --color-info-color-link-hover: var(--color-primary-dark-20);
+  --color-info-color-link-pressed: var(--color-primary-dark-40);
+
 /*------------------------------------*\
   INPUT
 \*------------------------------------*/
