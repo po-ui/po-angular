@@ -12,6 +12,7 @@ import { PoTimePipe } from '../../pipes/po-time/po-time.pipe';
 import { PoDynamicFormComponent } from './po-dynamic-form/po-dynamic-form.component';
 import { PoDynamicFormFieldsComponent } from './po-dynamic-form/po-dynamic-form-fields/po-dynamic-form-fields.component';
 import { PoDynamicViewComponent } from './po-dynamic-view/po-dynamic-view.component';
+import { PoDynamicViewService } from './po-dynamic-view/po-dynamic-view.service';
 
 @NgModule({
   imports: [
@@ -32,6 +33,6 @@ import { PoDynamicViewComponent } from './po-dynamic-view/po-dynamic-view.compon
     PoDynamicFormComponent,
     PoDynamicViewComponent
   ],
-  providers: [ CurrencyPipe, DatePipe, DecimalPipe, PoTimePipe, TitleCasePipe ]
+  providers: [ CurrencyPipe, DatePipe, DecimalPipe, PoTimePipe, TitleCasePipe, PoDynamicViewService ]
 })
 export class PoDynamicModule { }
