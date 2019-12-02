@@ -1,10 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import { SimpleChange } from '@angular/core';
+
+import { of } from 'rxjs';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoDynamicModule } from '../po-dynamic.module';
 import { PoDynamicViewComponent } from './po-dynamic-view.component';
+import { PoDynamicViewService } from './po-dynamic-view.service';
 
 describe('PoDynamicViewComponent:', () => {
   let component: PoDynamicViewComponent;
@@ -13,7 +17,8 @@ describe('PoDynamicViewComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoDynamicModule ]
+      imports: [ PoDynamicModule ],
+      providers: [HttpClient, HttpHandler, PoDynamicViewService]
     });
   });
 
@@ -21,7 +26,6 @@ describe('PoDynamicViewComponent:', () => {
     fixture = TestBed.createComponent(PoDynamicViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
     nativeElement = fixture.debugElement.nativeElement;
   });
 
@@ -84,6 +88,47 @@ describe('PoDynamicViewComponent:', () => {
 
     });
 
+    it('ngOnInit: should call `updateValuesAndFieldsOnLoad` if typeof `load` is truthy', () => {
+      component.load = 'teste';
+
+      spyOn(component, <any>'updateValuesAndFieldsOnLoad');
+
+      component.ngOnInit();
+
+      expect(component['updateValuesAndFieldsOnLoad']).toHaveBeenCalled();
+    });
+
+    it(`getValuesAndFieldsFromLoad: should call 'dynamicViewService.onLoad' if 'component.load' is string`, async () => {
+      const expectedValue = { value: { name: 'teste 2'}, fields: [ { property: 'name', tag: true, inverse: true } ] };
+
+      component.load = 'teste';
+
+      spyOn(component['dynamicViewService'], 'onLoad').and.returnValue(of(expectedValue).toPromise());
+
+      expect(await component['getValuesAndFieldsFromLoad']()).toEqual(expectedValue);
+      expect(component['dynamicViewService'].onLoad).toHaveBeenCalled();
+    });
+
+    it(`getValuesAndFieldsFromLoad: should call 'component.load' if 'component.load' is function`, async () => {
+      const expectedValue = { value: { rg: '6.111' } };
+
+      component.load = () => {
+        return expectedValue;
+      };
+
+      expect(await component['getValuesAndFieldsFromLoad']()).toEqual(expectedValue);
+    });
+
+    it(`getValuesAndFieldsFromLoad: shouldn't call 'component.load' or 'dynamicService.onLoad' if 'component.load' isn't
+      string or function`, async () => {
+      component.load = <any> [];
+
+      spyOn(component['dynamicViewService'], 'onLoad').and.returnValue(of({}).toPromise());
+
+      expect(await component['getValuesAndFieldsFromLoad']()).toEqual({});
+      expect(component['dynamicViewService'].onLoad).not.toHaveBeenCalled();
+    });
+
     it('getVisibleFields: should return `getMergedFields` if `showAllValue` is true', () => {
       component.showAllValue = true;
 
@@ -117,6 +162,85 @@ describe('PoDynamicViewComponent:', () => {
       component['getVisibleFields']();
 
       expect(component['getValueFields']).toHaveBeenCalled();
+    });
+
+    it(`setFieldOnLoad: should update field value if it is an existing field`, () => {
+      const field = { property: 'name', tag: true };
+      const fakeFieldOnLoad = { ...field, inverse: true };
+
+      component.fields = [{ ...field }];
+
+      const expectedValue = <any>{ property: 'name', tag: true, inverse: true };
+
+      component['setFieldOnLoad'](fakeFieldOnLoad);
+
+      expect(component.fields[0]).toEqual(expectedValue);
+    });
+
+    it(`setFieldOnLoad: should update 'fields' with field param if it is a new field`, () => {
+      component.value = { name: 'teste'};
+      component.fields = [{ property: 'name' }];
+
+      const fakeFieldOnLoad = {
+        property: 'age',
+        tag: true,
+        inverse: true
+      };
+
+      const expectedFields = [{ property: 'name' }, { ...fakeFieldOnLoad }];
+
+      component['setFieldOnLoad'](fakeFieldOnLoad);
+
+      expect(component.fields).toEqual(expectedFields);
+    });
+
+    it(`setFieldsOnLoad: should call 'setFieldOnLoad' if 'fields' is array`, () => {
+      const fakeField = { property: 'name', tag: true, inverse: true };
+      const fakeFieldsOnLoad = [ { ...fakeField } ];
+
+      spyOn(component, <any>'setFieldOnLoad');
+
+      component['setFieldsOnLoad'](fakeFieldsOnLoad);
+
+      expect(component['setFieldOnLoad']).toHaveBeenCalledWith(fakeField);
+    });
+
+    it(`setFieldsOnLoad: shouldn't call 'setFieldOnLoad' if 'fields' is undefined`, () => {
+      const fakeFieldsOnLoad = undefined;
+      const fakeField = { property: 'name', tag: true, inverse: true };
+
+      spyOn(component, <any>'setFieldOnLoad');
+
+      component['setFieldsOnLoad'](fakeFieldsOnLoad);
+
+      expect(component['setFieldOnLoad']).not.toHaveBeenCalledWith(fakeField);
+    });
+
+    it(`setValueOnLoad: should update 'value' with 'newValue' param`, () => {
+      const fakeNewValue = { name: 'teste 2', age: '22' };
+      component.value = { name: 'teste 1' };
+
+      const expectedValue = { ...component.value, ...fakeNewValue };
+
+      component['setValueOnLoad'](fakeNewValue);
+
+      expect(component.value).toEqual(expectedValue);
+    });
+
+    it(`updateValuesAndFieldsOnLoad: should call 'getValuesAndFieldsFromLoad', 'setValueOnLoad', 'setFieldsOnLoad'
+    and 'getVisibleFields'`, async () => {
+      const fakeDataOnLoad = { value: { name: 'teste 2'}, fields: [ { property: 'name', tag: true, inverse: true } ] };
+      spyOn(component, <any>'getValuesAndFieldsFromLoad').and.returnValue(fakeDataOnLoad);
+      spyOn(component, <any>'setValueOnLoad');
+      spyOn(component, <any>'setFieldsOnLoad');
+      spyOn(component, <any>'getVisibleFields');
+
+      await component['updateValuesAndFieldsOnLoad']();
+
+      expect(component['getValuesAndFieldsFromLoad']).toHaveBeenCalled();
+      expect(component['setValueOnLoad']).toHaveBeenCalledWith(fakeDataOnLoad.value);
+      expect(component['setFieldsOnLoad']).toHaveBeenCalledWith(fakeDataOnLoad.fields);
+      expect(component['getVisibleFields']).toHaveBeenCalled();
     });
 
   });

@@ -1,4 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -6,6 +7,7 @@ import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 
 import * as PoDynamicUtil from '../po-dynamic.util';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
+import { PoDynamicViewService } from './po-dynamic-view.service';
 
 describe('PoDynamicViewBaseComponent:', () => {
   let component: PoDynamicViewBaseComponent;
@@ -15,6 +17,7 @@ describe('PoDynamicViewBaseComponent:', () => {
   let decimalPipe;
   let timePipe;
   let currencyPipe;
+  let dynamicViewService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -23,7 +26,10 @@ describe('PoDynamicViewBaseComponent:', () => {
         DatePipe,
         DecimalPipe,
         CurrencyPipe,
-        PoTimePipe
+        PoTimePipe,
+        PoDynamicViewService,
+        HttpClient,
+        HttpHandler
       ]
     });
 
@@ -32,8 +38,9 @@ describe('PoDynamicViewBaseComponent:', () => {
     datePipe = TestBed.get(DatePipe);
     timePipe = TestBed.get(PoTimePipe);
     currencyPipe = TestBed.get(CurrencyPipe);
+    dynamicViewService = TestBed.get(PoDynamicViewService);
 
-    component = new PoDynamicViewBaseComponent(titleCase, decimalPipe, currencyPipe, datePipe, timePipe);
+    component = new PoDynamicViewBaseComponent(titleCase, decimalPipe, currencyPipe, datePipe, timePipe, dynamicViewService);
   });
 
   it('should be created', () => {
