@@ -1,14 +1,11 @@
-import { TestBed } from '@angular/core/testing';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
+import { PoComponentInjectorService } from './../../services/po-component-injector/po-component-injector.service';
+import { PoNotificationService } from './../../services/po-notification/po-notification.service';
 
 import { PoHttpInterceptorBaseService } from './po-http-interceptor-base.service';
-
-import { PoDialogService } from './../../services/po-dialog/po-dialog.service';
-import { PoNotificationService } from './../../services/po-notification/po-notification.service';
-import { PoComponentInjectorService } from './../../services/po-component-injector/po-component-injector.service';
-
 import { PoHttpInterceptorService } from './po-http-interceptor.service';
 
 describe('PoHttpInterceptor', () => {
@@ -17,7 +14,6 @@ describe('PoHttpInterceptor', () => {
     TestBed.configureTestingModule({
       providers: [
         PoNotificationService,
-        PoDialogService,
         PoComponentInjectorService,
         {
           provide: HTTP_INTERCEPTORS,
@@ -30,9 +26,9 @@ describe('PoHttpInterceptor', () => {
 
   it('should be created', () => {
     const notification = TestBed.get(PoNotificationService);
-    const dialog = TestBed.get(PoDialogService);
+    const componentInjector = TestBed.get(PoComponentInjectorService);
 
-    const service = new PoHttpInterceptorService(notification, dialog);
+    const service = new PoHttpInterceptorService(notification, componentInjector);
 
     expect(service instanceof PoHttpInterceptorService).toBeTruthy();
     expect(service instanceof PoHttpInterceptorBaseService).toBeTruthy();

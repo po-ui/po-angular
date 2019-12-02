@@ -1,28 +1,22 @@
-import { Injectable } from '@angular/core';
-import { inject, TestBed } from '@angular/core/testing';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HTTP_INTERCEPTORS, HttpRequest, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HTTP_INTERCEPTORS, HttpRequest } from '@angular/common/http';
+import { inject, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
-import { PoHttpInterceptorBaseService } from './po-http-interceptor-base.service';
+import { PoComponentInjectorService } from '../../services/po-component-injector/po-component-injector.service';
+
+import { PoHttpInterceptorDetail } from './po-http-interceptor-detail/po-http-interceptor-detail.interface';
+import { PoHttpInterceptorModule } from './po-http-interceptor.module';
+import { PoHttpInterceptorService } from './po-http-interceptor.service';
+
 import { PoToasterOrientation } from '../../services/po-notification/po-toaster/po-toaster-orientation.enum';
 
 const mockNotification = {
   success: (message: string) => { },
   error: (message: string, orientation: PoToasterOrientation, actionLabel: string, action: Function) => { }
 };
-
-const mockDialog = {
-  alert: (title: string, message: string, ok: Function) => { }
-};
-
-@Injectable()
-class PoHttpInterceptor extends PoHttpInterceptorBaseService {
-  constructor() {
-    super(mockNotification, mockDialog);
-  }
-}
 
 describe('PoHttpInterceptorBaseService', () => {
 
@@ -34,16 +28,22 @@ describe('PoHttpInterceptorBaseService', () => {
   let mockSuccessResponse;
   let portinariErrorMessage;
   let messages;
-  let service: PoHttpInterceptor;
+  let service;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{
-        provide: HTTP_INTERCEPTORS,
-        useClass: PoHttpInterceptor,
-        multi: true
-      }]
+      imports: [
+        HttpClientTestingModule,
+        PoHttpInterceptorModule
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        PoComponentInjectorService,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: PoHttpInterceptorService,
+          multi: true
+        }],
     });
   });
 
@@ -53,7 +53,7 @@ describe('PoHttpInterceptorBaseService', () => {
     mockSuccessResponse = { status: 200, statusText: 'Success' };
     portinariErrorMessage = { message: 'erro portinari', code: '1', detailedMessage: '', details: [{}], helpUrl: '' };
     messages = { type: 'success', message: 'portinari', code: '2' };
-    service = new PoHttpInterceptor();
+    service = TestBed.get(PoHttpInterceptorService);
   });
 
   it('should show success notification',
@@ -61,25 +61,24 @@ describe('PoHttpInterceptorBaseService', () => {
       const actionLabel = undefined;
       const action = undefined;
 
-      spyOn(mockNotification, 'success');
+      spyOn(service.notification, 'success');
 
       http.get('/data').subscribe(res => response = res, err => errResponse = err);
-
       httpMock.expectOne('/data').flush({ _messages: messages }, mockSuccessResponse);
 
-      expect(mockNotification.success).toHaveBeenCalledWith({ message: messages.message, actionLabel, action });
+      expect(service.notification.success).toHaveBeenCalledWith({ message: messages.message, actionLabel, action });
     }));
 
   it('should show success notifications',
     inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
 
-      spyOn(mockNotification, 'success');
+      spyOn(service.notification, 'success');
 
       http.get('/data').subscribe(res => response = res, err => errResponse = err);
 
       httpMock.expectOne('/data').flush({ _messages: [messages, messages] }, mockSuccessResponse);
 
-      expect(mockNotification.success).toHaveBeenCalledTimes(2);
+      expect(service.notification.success).toHaveBeenCalledTimes(4);
     }));
 
   it('should not show invalid type notification',
@@ -111,7 +110,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show error notification',
     inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
 
-      spyOn(mockNotification, 'error');
+      spyOn(service.notification, 'error');
 
       portinariErrorMessage.details = undefined;
       portinariErrorMessage.detailedMessage = undefined;
@@ -120,14 +119,14 @@ describe('PoHttpInterceptorBaseService', () => {
 
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
 
-      expect(mockNotification.error).toHaveBeenCalledWith(
+      expect(service.notification.error).toHaveBeenCalledWith(
         { message: portinariErrorMessage.message, actionLabel: undefined, action: undefined });
     }));
 
   it('should show error notification with details',
     inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
 
-      spyOn(mockNotification, 'error');
+      spyOn(service.notification, 'error');
 
       portinariErrorMessage.details = [{ code: '1', message: 'detalhe' }];
 
@@ -136,7 +135,7 @@ describe('PoHttpInterceptorBaseService', () => {
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
 
       // TODO: Validar notification function
-      expect(mockNotification.error).toHaveBeenCalledWith(
+      expect(service.notification.error).toHaveBeenCalledWith(
         {
           message: portinariErrorMessage.message, actionLabel: 'Detalhes', action: jasmine.any(Function)
         });
@@ -145,7 +144,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show error notification with help url',
     inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
 
-      spyOn(mockNotification, 'error');
+      spyOn(service.notification, 'error');
 
       portinariErrorMessage.details = undefined;
       portinariErrorMessage.detailedMessage = undefined;
@@ -156,7 +155,7 @@ describe('PoHttpInterceptorBaseService', () => {
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
 
       // TODO: Validar help Url
-      expect(mockNotification.error).toHaveBeenCalledWith(
+      expect(service.notification.error).toHaveBeenCalledWith(
         {
           message: portinariErrorMessage.message, actionLabel: 'Ajuda', action: jasmine.any(Function)
         });
@@ -165,7 +164,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show error notification if server not responding',
     inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
 
-      spyOn(mockNotification, 'error');
+      spyOn(service.notification, 'error');
 
       portinariErrorMessage.details = undefined;
       portinariErrorMessage.detailedMessage = undefined;
@@ -174,7 +173,7 @@ describe('PoHttpInterceptorBaseService', () => {
 
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorServerNotResponding);
 
-      expect(mockNotification.error).toHaveBeenCalledWith(
+      expect(service.notification.error).toHaveBeenCalledWith(
         { message: 'Servidor não está respondendo.', actionLabel: 'Detalhes', action: jasmine.any(Function) });
     }));
 
@@ -201,42 +200,18 @@ describe('PoHttpInterceptorBaseService', () => {
     expect(window.open).toHaveBeenCalledWith(helpUrl, '_blank');
   });
 
-  it('should open dialog detail', () => {
-
-    spyOn(mockDialog, 'alert');
-
-    service['generateDialogDetailFunction'](portinariErrorMessage, portinariErrorMessage.message)();
-
-    expect(mockDialog.alert).toHaveBeenCalledWith({
-      title: portinariErrorMessage.code, message: portinariErrorMessage.message, ok: undefined
-    });
-  });
-
-  it('should open dialog detail without help', () => {
-
-    spyOn(mockDialog, 'alert');
-
-    portinariErrorMessage.helpUrl = undefined;
-
-    service['generateDialogDetailFunction'](portinariErrorMessage, portinariErrorMessage.message)();
-
-    expect(mockDialog.alert).toHaveBeenCalledWith({
-      title: portinariErrorMessage.code, message: portinariErrorMessage.message, ok: undefined
-    });
-  });
-
   it('should not show notification when defined noErrorNotification with value true',
     inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-    const headers = { 'X-Portinari-No-Error': 'true' };
+      const headers = { 'X-Portinari-No-Error': 'true' };
 
-    spyOn(mockNotification, 'error');
+      spyOn(mockNotification, 'error');
 
-    http.get('/data', { headers: headers }).subscribe(res => response = res, err => errResponse = err);
+      http.get('/data', { headers: headers }).subscribe(res => response = res, err => errResponse = err);
 
-    httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
+      httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
 
-    expect(mockNotification.error).not.toHaveBeenCalled();
-  }));
+      expect(mockNotification.error).not.toHaveBeenCalled();
+    }));
 
   it('hasNoErrorParam should return true when the param `X-Portinari-No-Error` value is true in header of request', () => {
 
@@ -260,6 +235,206 @@ describe('PoHttpInterceptorBaseService', () => {
 
     const hasNoErrorParam = service['hasNoErrorParam'](undefined);
     expect(hasNoErrorParam).toBeFalsy();
+  });
+
+  describe('Methods:', () => {
+
+    it('hasNoMessageParam should return true if `X-Portinari-No-Error` value is true in request header', () => {
+
+      ['true', 'TRUE'].forEach(value => {
+        const request = createHttpRequest('X-Portinari-No-Message', value);
+        expect(service['hasNoMessageParam'](request)).toBeTruthy(true);
+      });
+    });
+
+    it('hasNoMessageParam should return false if `X-Portinari-No-Error` value is falsy in request header', () => {
+
+      ['false', 'FALSE', ''].forEach(value => {
+        const request = createHttpRequest('X-Portinari-No-Message', value);
+        expect(service['hasNoMessageParam'](request)).toBeFalsy(false);
+      });
+    });
+
+    it('hasNoMessageParam should return false if request parameter is undefined', () => {
+      const hasNoMessageParam = service['hasNoMessageParam'](undefined);
+      expect(hasNoMessageParam).toBeFalsy();
+    });
+
+    it('createModal: should create instance of `PoHttpInterceptorDetail`, set detail, subscribe to closed, and call open.', () => {
+      const detail: PoHttpInterceptorDetail = { code: 'code', detailedMessage: 'detailed message', message: 'message' };
+
+      const detailComponentFake = {
+        instance: {
+          detail: '',
+          title: '',
+          closed: { subscribe: callback => callback() },
+          open: () => { }
+        }
+      };
+
+      spyOn(service['componentInjector'], 'createComponentInApplication').and.returnValue(detailComponentFake);
+      spyOn(service, 'destroyModal');
+      spyOn(detailComponentFake.instance, <any>'open');
+
+      service['createModal'](detail);
+
+      const detailComponent = service['httpInterceptorDetailComponent'];
+
+      expect(service['componentInjector'].createComponentInApplication).toHaveBeenCalled();
+      expect(service['destroyModal']).toHaveBeenCalled();
+      expect(detailComponentFake.instance['open']).toHaveBeenCalled();
+      expect(detailComponent.instance.detail).toEqual([detail]);
+    });
+
+    it('createModal: should create instance of `PoHttpInterceptorDetail` with details array', () => {
+      const detail: PoHttpInterceptorDetail = {
+        code: 'code', detailedMessage: 'detailed message', message: 'message',
+        details: [
+          { code: 'detail code', detailedMessage: 'detailed message', message: 'detail message' },
+          { code: 'detail code', detailedMessage: 'detailed message', message: 'detail message 2' }
+        ]
+      };
+
+      const expectedDetails = [
+        { code: 'code', detailedMessage: 'detailed message', message: 'message', details: detail.details },
+        { code: 'detail code', detailedMessage: 'detailed message', message: 'detail message' },
+        { code: 'detail code', detailedMessage: 'detailed message', message: 'detail message 2' }
+      ];
+
+      const detailComponentFake = {
+        instance: {
+          detail: '',
+          title: '',
+          closed: { subscribe: callback => callback() },
+          open: () => { }
+        }
+      };
+
+      spyOn(service['componentInjector'], 'createComponentInApplication').and.returnValue(detailComponentFake);
+      spyOn(service, 'destroyModal');
+      spyOn(detailComponentFake.instance, <any>'open');
+
+      service['createModal'](detail);
+
+      const detailComponent = service['httpInterceptorDetailComponent'];
+
+      expect(service['componentInjector'].createComponentInApplication).toHaveBeenCalled();
+      expect(service['destroyModal']).toHaveBeenCalled();
+      expect(detailComponentFake.instance['open']).toHaveBeenCalled();
+      expect(detailComponent.instance.detail).toEqual(expectedDetails);
+    });
+
+    it('destroyModal: should destroy detail component if httpInterceptorDetailComponent is defined', () => {
+      service.createModal({});
+
+      spyOn(service.componentInjector, 'destroyComponentInApplication');
+
+      service['destroyModal']();
+
+      expect(service.httpInterceptorDetailComponent).toBeUndefined();
+      expect(service.componentInjector.destroyComponentInApplication).toHaveBeenCalled();
+    });
+
+    it('destroyModal: shouldn`t call destroyComponentInApplication if httpInterceptorDetailComponent is undefined', () => {
+      service.httpInterceptorDetailComponent = undefined;
+
+      spyOn(service.componentInjector, 'destroyComponentInApplication');
+
+      service['destroyModal']();
+
+      expect(service.componentInjector.destroyComponentInApplication).not.toHaveBeenCalled();
+    });
+
+    it('generateDetailModal: should call createModal if modal isn`t created', () => {
+      service.httpInterceptorDetailComponent = undefined;
+
+      spyOn(service, <any>'createModal');
+
+      service.generateDetailModal({})();
+
+      expect(service['createModal']).toHaveBeenCalled();
+    });
+
+    it('generateDetailModal: shouldn`t call createModal if modal is created', () => {
+      service['createModal']({});
+
+      spyOn(service, <any>'createModal');
+
+      service.generateDetailModal()();
+
+      expect(service['createModal']).not.toHaveBeenCalled();
+    });
+
+    it('cloneRequestWithoutParameters: should return request without `X-Portinari-No-Error` and `X-Portinari-No-Message`', () => {
+      const headers = new HttpHeaders()
+        .append('X-Portinari-No-Error', 'true')
+        .append('X-Portinari-No-Message', 'false')
+        .append('other-header', 'test');
+
+      const expectedHeaders = new HttpHeaders()
+        .append('other-header', 'test');
+
+      const request = new HttpRequest('GET', 'http://test.com', { headers });
+
+      const expectedRequest = new HttpRequest('GET', 'http://test.com', {
+        headers: expectedHeaders
+      });
+
+      const result = service.cloneRequestWithoutParameters(request);
+
+      expect(result.headers.keys()).toEqual(expectedRequest.headers.keys());
+    });
+
+    it('processResponse: shouldn`t call showNotification if hasNoMessageParam is true', () => {
+      spyOn(service, 'hasNoMessageParam').and.returnValue(true);
+      spyOn(service, <any>'showNotification');
+
+      const request = new HttpRequest('GET', 'http://test.com', { headers: new HttpHeaders() });
+      response = new HttpResponse({
+        body: { items: [], _messages: 'test' },
+        headers: new HttpHeaders().append('X-Portinari-No-Message', 'true')
+      });
+
+      service.processResponse(response, request);
+
+      expect(service['showNotification']).not.toHaveBeenCalled();
+    });
+
+    it('processResponse: should call showNotification if hasNoMessageParam is false, body and _messages are true', () => {
+      spyOn(service, 'hasNoMessageParam').and.returnValue(false);
+      spyOn(service, <any>'showNotification');
+
+      const request = new HttpRequest('GET', 'http://test.com', { headers: new HttpHeaders() });
+      response = new HttpResponse({
+        body: { items: [], _messages: 'test' },
+        headers: new HttpHeaders()
+      });
+
+      service.processResponse(response, request);
+
+      expect(service['showNotification']).toHaveBeenCalled();
+    });
+
+    it('showNotification: shouldn`t call notification if no has message', () => {
+      response = { message: '', code: '200', type: 'information' };
+
+      spyOn(service.notification, <any>'information');
+
+      service.showNotification(response);
+
+      expect(service.notification.information).not.toHaveBeenCalled();
+    });
+
+    it('showNotification: should call notification if has message', () => {
+      response = { message: 'Created with success', code: '200', type: 'success' };
+
+      spyOn(service.notification, <any>'success');
+
+      service.showNotification(response);
+
+      expect(service.notification.success).toHaveBeenCalled();
+    });
+
   });
 
 });
