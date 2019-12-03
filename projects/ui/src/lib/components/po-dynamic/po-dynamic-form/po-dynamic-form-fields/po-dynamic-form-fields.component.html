@@ -1,10 +1,11 @@
 <div class="po-row" *ngIf="visibleFields && visibleFields.length > 0">
-  <ng-container *ngFor="let field of visibleFields; trackBy: trackBy">
+  <ng-container *ngFor="let field of visibleFields; let index = index; trackBy: trackBy">
 
     <po-divider *ngIf="field?.divider?.trim()" class="po-sm-12" [p-label]="field.divider">
     </po-divider>
 
     <po-datepicker *ngIf="compareTo(field.control, 'datepicker')"
+      #component
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
@@ -18,6 +19,7 @@
     </po-datepicker>
 
     <po-input *ngIf="compareTo(field.control, 'input')"
+      #component
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
@@ -29,7 +31,8 @@
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
       [p-pattern]="field.pattern"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeFieldValue(field, index)">
       </po-input>
 
     <po-number *ngIf="compareTo(field.control, 'number')"

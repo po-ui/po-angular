@@ -437,8 +437,14 @@ export function mapArrayByProperties(items: Array<any> = [], properties: Array<s
  *
  * @returns Array<any>
  */
-export function mapObjectByProperties(object: any = {}, properties: Array<string> = []) {
-  const getSelectedProperties = (selectedProperties, property) => ({ ...selectedProperties, [property]: object[property] });
+export function mapObjectByProperties(object: any = {}, properties: Array<string> = [], removeInvalidProperties: boolean = false) {
+  const getSelectedProperties = (selectedProperties, property) => {
+    if (object.hasOwnProperty(property) || !removeInvalidProperties) {
+      return { ...selectedProperties, [property]: object[property] };
+    } else {
+      return { ...selectedProperties };
+    }
+  };
 
   return properties.reduce(getSelectedProperties, {});
 }
