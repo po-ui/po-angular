@@ -7,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { isTypeof, mapObjectByProperties } from '../../../../utils/util';
 import { PoDynamicFieldValidation } from './po-dynamic-form-field-validation.interface';
-import { loading } from './test';
 
 const fieldProperties = [
   'columns',
@@ -56,34 +55,27 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     }
   }
 
-  onChangeFieldValue(field: PoDynamicFormField, index: number) {
-    const param = { value: this.value[field.property], field: field.property };
+  async onChangeFieldValue(field: PoDynamicFormField, index: number) {
+    const changedValue = { value: this.value[field.property], field: field.property };
 
-    // buscar servidor
-    if (isTypeof(field.onChange, 'string')) {
-      this.validateFieldOnServer(field, param, index);
-    } else {
-      // buscar da funcao do usuário
-      // field.onChange.emit(param);
-    }
-
-  }
-
-  private validateFieldOnServer(field: PoDynamicFormField, param: { value: any; field: string; }, index: number) {
-    const beforeFieldDisabledValue = field.disabled;
+    const previousDisabled = field.disabled;
     field.disabled = true;
 
-    this.http.post(field.onChange, param).subscribe((fieldValidation: PoDynamicFieldValidation) => {
+    try {
+      const fieldValidation: PoDynamicFieldValidation = typeof field.onChange === 'string' ?
+        await this.validateFieldOnServer(field.onChange, changedValue) : field.onChange(changedValue);
 
       field.disabled = fieldValidation.field.hasOwnProperty('disabled') ?
-        fieldValidation.field.disabled : beforeFieldDisabledValue;
+      fieldValidation.field.disabled : previousDisabled;
 
       this.applyValidationField(index, field, fieldValidation);
+    } catch {
+      field.disabled = previousDisabled;
+    }
+  }
 
-    }, () => {
-      field.disabled = beforeFieldDisabledValue;
-    });
-
+  private validateFieldOnServer(url: string, changedValue: { value: any; field: string; }) {
+    return this.http.post(url, changedValue).toPromise();
   }
 
   private applyValidationField(index: number, field: PoDynamicFormField, fieldValidation: PoDynamicFieldValidation) {
