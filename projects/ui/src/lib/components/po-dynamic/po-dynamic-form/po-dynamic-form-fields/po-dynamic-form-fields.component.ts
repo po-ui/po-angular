@@ -1,8 +1,8 @@
-import { Component, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
 
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
-import { TitleCasePipe } from '@angular/common';
-import { ControlContainer, NgForm } from '@angular/forms';
 
 /**
  * @docsPrivate
@@ -18,6 +18,8 @@ import { ControlContainer, NgForm } from '@angular/forms';
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
 
+  @ViewChildren('component') components: QueryList<{ name: string, focus: () => void }>;
+
   constructor(titleCasePipe: TitleCasePipe) {
     super(titleCasePipe);
   }
@@ -25,6 +27,13 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fields) {
       this.visibleFields = this.getVisibleFields();
+    }
+  }
+
+  focus(property: string) {
+    const foundComponent = this.components.find(component => component.name === property);
+    if (foundComponent) {
+      foundComponent.focus();
     }
   }
 

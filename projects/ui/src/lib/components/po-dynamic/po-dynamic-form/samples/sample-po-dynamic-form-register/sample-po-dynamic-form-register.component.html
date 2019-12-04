@@ -1,4 +1,5 @@
 <po-dynamic-form #dynamicForm
+  p-auto-focus="name"
   [p-fields]="fields"
   [p-value]="person">
 </po-dynamic-form>
@@ -6,7 +7,7 @@
 <div class="po-row">
   <po-button
     class="po-md-3"
-    p-label="Salvar"
+    p-label="Save"
     [p-disabled]="dynamicForm?.form.invalid"
     (p-click)="poNotification.success('Data saved successfully!'); dynamicForm.form.reset()">
   </po-button>
