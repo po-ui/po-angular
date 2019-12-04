@@ -140,4 +140,6 @@ export class PoDynamicFormBaseComponent {
     return this._groupForm;
   }
 
+  @Input('p-validate') validate?: string | Function;
+
 }

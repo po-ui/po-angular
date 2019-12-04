@@ -11,7 +11,11 @@
 
   <form #dynamicForm="ngForm">
 
-    <po-dynamic-form-fields [p-fields]="fields" [p-value]="value"></po-dynamic-form-fields>
+    <po-dynamic-form-fields
+      [p-fields]="fields"
+      [p-validate]="validate"
+      [p-value]="value">
+    </po-dynamic-form-fields>
 
   </form>
 

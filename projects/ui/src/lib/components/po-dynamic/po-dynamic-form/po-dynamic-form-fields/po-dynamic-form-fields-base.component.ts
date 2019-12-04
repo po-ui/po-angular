@@ -34,6 +34,8 @@ export class PoDynamicFormFieldsBaseComponent {
     return this._value;
   }
 
+  @Input('p-validate') validate?: string | Function;
+
   constructor(private titleCasePipe: TitleCasePipe) {}
 
   compareTo(value, compareTo) {
