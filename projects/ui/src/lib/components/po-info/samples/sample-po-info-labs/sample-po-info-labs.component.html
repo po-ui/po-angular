@@ -1,8 +1,8 @@
-
 <po-info
   [p-label]="label"
   [p-label-size]="labelSize"
   [p-orientation]="orientation"
+  [p-url]="url"
   [p-value]="value">
 </po-info>
 
@@ -26,17 +26,19 @@
       p-clean
       p-label="Value">
     </po-input>
+  </div>
 
-    <po-radio-group
-      class="po-md-8"
-      name="orientation"
-      [(ngModel)]="orientation"
-      p-label="Orientation"
-      [p-options]="orientationOptions">
-    </po-radio-group>
+  <div class="po-row">
+    <po-input
+      class="po-lg-4 po-md-6"
+      name="url"
+      [(ngModel)]="url"
+      p-clean
+      p-label="Url">
+    </po-input>
 
     <po-number
-      class="po-md-4"
+      class="po-lg-2 po-md-6"
       name="labelSize"
       [(ngModel)]="labelSize"
       p-clean
@@ -44,6 +46,14 @@
       p-max="11"
       p-min="1">
     </po-number>
+
+    <po-radio-group
+      class="po-lg-6 po-md-12"
+      name="orientation"
+      [(ngModel)]="orientation"
+      p-label="Orientation"
+      [p-options]="orientationOptions">
+    </po-radio-group>
   </div>
 
   <div class="po-row">

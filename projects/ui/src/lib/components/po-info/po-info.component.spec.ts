@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
 
+import * as UtilsFunctions from './../../utils/util';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoInfoBaseComponent } from './po-info-base.component';
@@ -14,6 +16,7 @@ describe('PoInfoComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [ RouterModule.forRoot([]) ],
       declarations: [ PoInfoComponent ]
     });
   });
@@ -22,14 +25,34 @@ describe('PoInfoComponent', () => {
     fixture = TestBed.createComponent(PoInfoComponent);
     component = fixture.componentInstance;
 
-    fixture.detectChanges();
-
     nativeElement = fixture.debugElement.nativeElement;
   });
 
   it('should be created', () => {
     expect(component instanceof PoInfoBaseComponent).toBeTruthy();
     expect(component instanceof PoInfoComponent).toBeTruthy();
+  });
+
+  describe('Properties:', () => {
+
+    it('isExternalLink: should return true if `component.url` is truthy', () => {
+      component.url = 'http://portinari.io';
+
+      const spyIsExternalLink = spyOn(UtilsFunctions, 'isExternalLink').and.callThrough();
+
+      expect(component.isExternalLink).toBe(true);
+      expect(spyIsExternalLink).toHaveBeenCalled();
+    });
+
+    it('isExternalLink: should return false if `component.url` is falsy', () => {
+      component.url = '';
+
+      const spyIsExternalLink = spyOn(UtilsFunctions, 'isExternalLink').and.callThrough();
+
+      expect(component.isExternalLink).toBe(false);
+      expect(spyIsExternalLink).toHaveBeenCalled();
+    });
+
   });
 
   describe('Template:', () => {
@@ -157,6 +180,34 @@ describe('PoInfoComponent', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-text-nowrap')).toBeTruthy();
+    });
+
+    it('should find `a.po-info-link` if `component.url` is truthy', () => {
+      component.value = 'John Doe';
+      component.url = 'http://portinari.io';
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('a.po-info-link[target=_blank]')).toBeTruthy();
+    });
+
+    it('shouldn`t find `a.po-info-link` if `component.url` is falsy', () => {
+      component.value = 'John Doe';
+      component.url = '';
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('a.po-info-link')).toBeNull();
+    });
+
+    it('should find `a.po-info-link` and not find `a.po-info-link[target=_blank]` if URL is an internal link ', () => {
+      component.value = 'John Doe';
+      component.url = '/customers';
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('a.po-info-link[target=_blank]')).toBeNull();
+      expect(nativeElement.querySelector('a.po-info-link')).toBeTruthy();
     });
 
   });

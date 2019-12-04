@@ -11,6 +11,7 @@ export class SamplePoInfoLabsComponent implements OnInit {
   label: string;
   labelSize: number;
   orientation: PoInfoOrientation;
+  url: string;
   value: string;
 
   public readonly orientationOptions: Array<PoRadioGroupOption> = [
@@ -26,6 +27,7 @@ export class SamplePoInfoLabsComponent implements OnInit {
     this.label = 'Portinari Info';
     this.labelSize = undefined;
     this.orientation = undefined;
+    this.url = undefined;
     this.value = undefined;
   }
 

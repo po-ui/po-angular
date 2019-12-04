@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { isExternalLink } from '../../utils/util';
 
 import { PoInfoBaseComponent } from './po-info-base.component';
 
@@ -24,6 +26,13 @@ import { PoInfoBaseComponent } from './po-info-base.component';
  */
 @Component({
   selector: 'po-info',
-  templateUrl: './po-info.component.html'
+  templateUrl: './po-info.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoInfoComponent extends PoInfoBaseComponent { }
+export class PoInfoComponent extends PoInfoBaseComponent {
+
+  get isExternalLink() {
+    return isExternalLink(this.url);
+  }
+
+}
