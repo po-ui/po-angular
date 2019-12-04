@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PoInfoComponent } from './po-info.component';
+import { RouterModule } from '@angular/router';
 /**
  * @description
  *
@@ -9,7 +10,8 @@ import { PoInfoComponent } from './po-info.component';
  */
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   declarations: [
     PoInfoComponent
