@@ -80,7 +80,7 @@ export interface PoDynamicFormField extends PoDynamicField {
   /** Valor mínimo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*. */
   minValue?: string | number;
 
-  /** Quantidade de linhas exibidas no po-textarea */
+  /** Quantidade de linhas exibidas no `po-textarea`. */
   rows?: number;
 
   /** Esconde a informação estilo *password*, pode ser utilizado quando o tipo de dado for *string*. */

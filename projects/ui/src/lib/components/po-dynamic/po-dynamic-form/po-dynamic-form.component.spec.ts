@@ -7,7 +7,7 @@ import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormComponent } from './po-dynamic-form.component';
 import { PoDynamicModule } from '../po-dynamic.module';
 
-describe('PoDynamicFormComponent: ', () => {
+describe('PoDynamicFormComponent:', () => {
   let component: PoDynamicFormComponent;
   let fixture: ComponentFixture<PoDynamicFormComponent>;
 
@@ -33,7 +33,7 @@ describe('PoDynamicFormComponent: ', () => {
     expect(component instanceof PoDynamicFormBaseComponent).toBeTruthy();
   });
 
-  describe('Properties: ', () => {
+  describe('Properties:', () => {
 
     it('form: should call `emitForm` and set property', fakeAsync(() => {
       spyOn(component, <any> 'emitForm');
@@ -52,7 +52,7 @@ describe('PoDynamicFormComponent: ', () => {
 
   });
 
-  describe('Methods: ', () => {
+  describe('Methods:', () => {
 
     it('emitForm: should call `formOutput.emit` if contains `formOutput.observers`', () => {
       const fakeThis = { formOutput: { observers: [{}], emit: () => {} } };
@@ -74,9 +74,17 @@ describe('PoDynamicFormComponent: ', () => {
       expect(fakeThis.formOutput.emit).not.toHaveBeenCalled();
     });
 
+    it('focus: should call `fieldsComponent.focus`.', () => {
+      const spyFieldsComponentFocus = spyOn(component.fieldsComponent, 'focus');
+
+      component.focus('field');
+
+      expect(spyFieldsComponentFocus).toHaveBeenCalled();
+    });
+
   });
 
-  describe('Templates: ', () => {
+  describe('Templates:', () => {
 
     it('should find `form` and `po-dynamic-form-fields` tags if `groupForm` is falsy', () => {
       component.fields = [];

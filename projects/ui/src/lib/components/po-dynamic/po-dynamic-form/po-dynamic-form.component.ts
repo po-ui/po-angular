@@ -40,6 +40,40 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     return this._form || <any> {};
   }
 
+  @ViewChild('fieldsComponent', { static: false }) fieldsComponent: {focus: (property: string) => void };
+
+  /**
+   * Função que atribui foco ao campo desejado.
+   *
+   * Para utilizá-la é necessário capturar a instância do `dynamic form`, como por exemplo:
+   *
+   * ``` html
+   * <po-dynamic-form #dynamicForm [p-fields]="fields"></po-dynamic-form>
+   * ```
+   *
+   * ``` javascript
+   * import { PoDynamicFormComponent, PoDynamicFormField } from '@portinari/portinari-ui';
+   *
+   * ...
+   *
+   * @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
+   *
+   * fields: Array<PoDynamicFormField> = [
+   *   { property: 'fieldOne' },
+   *   { property: 'fieldTwo' }
+   * ];
+   *
+   * fieldFocus() {
+   *   this.dynamicForm.focus('fieldTwo');
+   * }
+   * ```
+   *
+   * @param {string} property Nome da propriedade atribuída ao `PoDynamicFormField.property`.
+   */
+  focus(property: string) {
+    this.fieldsComponent.focus(property);
+  }
+
   private emitForm() {
     if (!this.groupForm && this.formOutput.observers.length) {
       this.formOutput.emit(this.form);
