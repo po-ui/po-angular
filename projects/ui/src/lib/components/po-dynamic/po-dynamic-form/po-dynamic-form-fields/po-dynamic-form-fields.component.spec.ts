@@ -67,6 +67,26 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(component.trackBy(index)).toBe(index);
     });
 
+    it('focus: should call `fieldComponent.focus` if find field by property param.', () => {
+      const fieldComponent = { focus: () => {}, name: 'newField' };
+      component.components = <any>[fieldComponent];
+
+      const spyOnFocus = spyOn(fieldComponent, 'focus');
+      component.focus('newField');
+
+      expect(spyOnFocus).toHaveBeenCalled();
+    });
+
+    it('focus: shouldn´t call `fieldsComponent.focus` if not find field by property param.', () => {
+      const fieldComponent = { focus: () => {}, name: 'newField' };
+      component.components = <any>[fieldComponent];
+
+      const spyOnFocus = spyOn(fieldComponent, 'focus');
+      component.focus('otherField');
+
+      expect(spyOnFocus).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('Templates: ', () => {

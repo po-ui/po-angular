@@ -15,6 +15,8 @@ export class PoDynamicFormFieldsBaseComponent {
 
   visibleFields: Array<PoDynamicFormFieldInternal> = [];
 
+  @Input('p-auto-focus') autoFocus?: string;
+
   // array de objetos que implementam a interface PoDynamicFormField, que serão exibidos no componente.
   @Input('p-fields') set fields(value: Array<PoDynamicFormField>) {
     this._fields = Array.isArray(value) ? [...value] : [];
@@ -77,6 +79,7 @@ export class PoDynamicFormFieldsBaseComponent {
   private createField(field: PoDynamicFormField): PoDynamicFormFieldInternal {
     const control = this.getComponentControl(field);
     const options = !!field.options ? this.convertOptions(field.options) : undefined;
+    const focus = this.hasFocus(field);
 
     const componentClass = getGridColumnsClasses(field.gridSmColumns,
       field.gridMdColumns,
@@ -89,6 +92,7 @@ export class PoDynamicFormFieldsBaseComponent {
       ...field,
       componentClass,
       control,
+      focus,
       options
     };
   }
@@ -134,6 +138,10 @@ export class PoDynamicFormFieldsBaseComponent {
     }
 
     return 'input';
+  }
+
+  private hasFocus(field: PoDynamicFormField) {
+    return !!this.autoFocus && this.autoFocus === field.property;
   }
 
   private isCheckboxGroup(field: PoDynamicFormField) {

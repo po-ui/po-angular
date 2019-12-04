@@ -28,7 +28,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Properties: ', () => {
+  describe('Properties:', () => {
     it('fields: should set `fields` to `[]` if not Array value' , () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
 
@@ -133,13 +133,14 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       expect(convertedOptions.length).toBe(options.length);
     });
 
-    it(`createField: should call 'getGridColumnsClasses', and not call 'convertOptions' and return an
-      object that overrides the values of the same properties`, () => {
+    it(`createField: should call 'getGridColumnsClasses' and 'hasFocus', not call 'convertOptions' and return an
+      object that overrides the values of the same properties.`, () => {
       const field = { property: 'propertyName', label: 'labelName' };
 
       const spyTitleCasePipeTransform = spyOn(component['titleCasePipe'], 'transform').and.returnValue('propertyName');
       const spyGetGridColumnsClasses = spyOn(PoDynamicUtil, 'getGridColumnsClasses').and.callThrough();
       const spyConvertOptions = spyOn(component, <any> 'convertOptions').and.callThrough();
+      const spyHasFocus = spyOn(component, <any> 'hasFocus');
 
       const newField = component['createField'](field);
 
@@ -150,15 +151,17 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       expect(spyTitleCasePipeTransform).toHaveBeenCalled();
       expect(spyGetGridColumnsClasses).toHaveBeenCalled();
       expect(spyConvertOptions).not.toHaveBeenCalled();
+      expect(spyHasFocus).toHaveBeenCalled();
     });
 
-    it(`createField: should call 'getGridColumnsClasses', 'convertOptions' and return an
+    it(`createField: should call 'getGridColumnsClasses', 'convertOptions', 'hasFocus' and return an
       object that overrides the values of the same properties`, () => {
       const field = { property: 'propertyName', label: 'labelName', options: ['Option 1', 'Option 2'] };
 
       const spyTitleCasePipeTransform = spyOn(component['titleCasePipe'], 'transform').and.returnValue('propertyName');
       const spyGetGridColumnsClasses = spyOn(PoDynamicUtil, 'getGridColumnsClasses').and.callThrough();
       const spyConvertOptions = spyOn(component, <any> 'convertOptions').and.callThrough();
+      const spyHasFocus = spyOn(component, <any> 'hasFocus');
 
       const newField = component['createField'](field);
 
@@ -169,6 +172,31 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       expect(spyTitleCasePipeTransform).toHaveBeenCalled();
       expect(spyGetGridColumnsClasses).toHaveBeenCalled();
       expect(spyConvertOptions).toHaveBeenCalled();
+      expect(spyHasFocus).toHaveBeenCalled();
+    });
+
+    it(`hasFocus: should return true if 'autoFocus' is equal to 'field.property'`, () => {
+      const field = { property: 'field' };
+
+      component.autoFocus = 'field';
+
+      expect(component['hasFocus'](field)).toBe(true);
+    });
+
+    it(`hasFocus: should return undefined if 'autoFocus' is undefined`, () => {
+      const field = { property: 'field' };
+
+      component.autoFocus = undefined;
+
+      expect(component['hasFocus'](field)).toBe(false);
+    });
+
+    it(`hasFocus: should return undefined if 'autoFocus' isn't equal to 'field.property'`, () => {
+      const field = { property: 'field' };
+
+      component.autoFocus = 'otherField';
+
+      expect(component['hasFocus'](field)).toBe(false);
     });
 
     it('existsProperty: should return `true` if property exists in fields', () => {
