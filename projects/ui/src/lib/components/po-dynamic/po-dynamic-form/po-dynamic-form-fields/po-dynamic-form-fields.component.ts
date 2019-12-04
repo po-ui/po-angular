@@ -55,22 +55,21 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     }
   }
 
-  async onChangeFieldValue(field: PoDynamicFormField, index: number) {
+  async onChangeFieldValue(index: number) {
+    const field = this.fields[index];
     const changedValue = { value: this.value[field.property], field: field.property };
 
     const previousDisabled = field.disabled;
-    field.disabled = true;
+    this.visibleFields[index].disabled = true;
 
     try {
       const fieldValidation: PoDynamicFieldValidation = typeof field.onChange === 'string' ?
         await this.validateFieldOnServer(field.onChange, changedValue) : field.onChange(changedValue);
 
-      field.disabled = fieldValidation.field.hasOwnProperty('disabled') ?
-      fieldValidation.field.disabled : previousDisabled;
-
       this.applyValidationField(index, field, fieldValidation);
+
     } catch {
-      field.disabled = previousDisabled;
+      this.visibleFields[index].disabled = previousDisabled;
     }
   }
 
@@ -82,8 +81,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     const fieldValidationClean = mapObjectByProperties(fieldValidation.field, fieldProperties, true);
 
     this.fields[index] = { ...field, ...fieldValidationClean };
+    this.fields = [...this.fields];
     this.value[field.property] = fieldValidation.value;
-    this.visibleFields = this.getVisibleFields();
 
     if (fieldValidation.focus) {
       this.component.toArray()[index].focus();
