@@ -16,8 +16,11 @@
   [p-columns]="columns"
   [p-items]="items"
   [p-max-columns]="6"
+  (p-collapsed)="collapseDetail($event)"
+  (p-expanded)="expandDetail($event)"
   (p-selected)="sumTotal($event)"
   (p-unselected)="decreaseTotal($event)">
+
 </po-table>
 
 <po-divider></po-divider>
@@ -29,12 +32,29 @@
   p-value="{{total | currency:'USD'}}">
 </po-info>
 
+<po-info
+  class="po-md-6 po-mb-sm-2 po-mb-md-2 po-lb-lg-2"
+  p-label="Expanded Itens"
+  p-orientation="horizontal"
+  p-value="{{totalExpanded}}">
+</po-info>
+
 <div class="po-row">
   <po-button
     class="po-md-3"
     p-icon="po-icon-cart"
     p-label="Add items to cart"
     (p-click)="addToCart()">
+  </po-button>
+  <po-button
+    class="po-md-3"
+    p-label="Expand all detail"
+    (p-click)="expandAll()">
+  </po-button>
+  <po-button
+    class="po-md-3"
+    p-label="Collapse all detail"
+    (p-click)="collapseAll()">
   </po-button>
 </div>
 

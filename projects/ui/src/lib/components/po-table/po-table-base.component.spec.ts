@@ -863,71 +863,210 @@ describe('PoTableBaseComponent:', () => {
       expect(component.showMore.emit).toHaveBeenCalledWith(undefined);
     });
 
+    describe('toggleDetail:', () => {
+      it('should change status of row with detail', () => {
+        const currentRow = {
+          id: 1,
+          $selected: true,
+          details: [{ id: 4 }],
+          $showDetail: true
+        };
+        component.toggleDetail(currentRow);
+        expect(currentRow.$showDetail).toBeFalsy();
+      });
+    });
+
+    describe('expand:', () => {
+      it('should expand a row with detail and emit a expanded event', () => {
+        const currentRow = {
+          id: 2,
+          $selected: true,
+          details: [{ id: 5 }],
+          $showDetail: false
+        };
+        const spyEmit = spyOn(component.expanded, 'emit');
+        component.expand(currentRow);
+        expect(spyEmit).toHaveBeenCalledWith(currentRow);
+      });
+
+      it('with index: should expand a row with detail and emit a expanded event', () => {
+        const rows = [{
+          id: 1,
+          $selected: true,
+          details: [{ id: 4 }],
+          $showDetail: true
+        }, {
+          id: 2,
+          $selected: true,
+          details: [{ id: 5 }],
+          $showDetail: false
+        }];
+
+        component.items = rows;
+        const spyEmit = spyOn(component.expanded, 'emit');
+        component.expand(1);
+        expect(spyEmit).toHaveBeenCalledWith(rows[1]);
+      });
+
+      it('with index: should set row to zero if you call with a negative index', () => {
+        const rows = [{
+          id: 1,
+          $selected: true,
+          details: [{ id: 4 }],
+          $showDetail: true
+        }, {
+          id: 2,
+          $selected: true,
+          details: [{ id: 5 }],
+          $showDetail: false
+        }];
+
+        component.items = rows;
+        const spyEmit = spyOn(component.expanded, 'emit');
+        component.expand(-10);
+        expect(spyEmit).toHaveBeenCalledWith(rows[0]);
+      });
+    });
+
+    describe('collapse:', () => {
+      it('should collapse a row with detail and emit a expanded event', () => {
+        const currentRow = {
+          id: 2,
+          $selected: true,
+          details: [{ id: 5 }],
+          $showDetail: false
+        };
+        const spyEmit = spyOn(component.collapsed, 'emit');
+        component.collapse(currentRow);
+        expect(spyEmit).toHaveBeenCalledWith(currentRow);
+      });
+
+      it('with index: should collapse a row with detail and emit a expanded event', () => {
+        const rows = [{
+          id: 1,
+          $selected: true,
+          details: [{ id: 4 }],
+          $showDetail: true
+        }, {
+          id: 2,
+          $selected: true,
+          details: [{ id: 5 }],
+          $showDetail: false
+        }];
+
+        component.items = rows;
+        const spyEmit = spyOn(component.collapsed, 'emit');
+        component.collapse(1);
+        expect(spyEmit).toHaveBeenCalledWith(rows[1]);
+      });
+
+      it('with index: should set row to zero if you call with a negative index', () => {
+        const rows = [{
+          id: 1,
+          $selected: true,
+          details: [{ id: 4 }],
+          $showDetail: true
+        }, {
+          id: 2,
+          $selected: true,
+          details: [{ id: 5 }],
+          $showDetail: false
+        }];
+
+        component.items = rows;
+        const spyEmit = spyOn(component.collapsed, 'emit');
+        component.collapse(-10);
+        expect(spyEmit).toHaveBeenCalledWith(rows[0]);
+      });
+
+      it('with index: should handle when an invalid index is sent', () => {
+        const rows = [{
+          id: 1,
+          $selected: true,
+          details: [{ id: 4 }],
+          $showDetail: true
+        }];
+        spyOn((component as any), 'changeShowDetail').and.callThrough();
+
+        component.items = rows;
+        component.collapse(55);
+
+        expect((component as any).changeShowDetail).toHaveBeenCalled();
+      });
+    });
+
   });
 
   describe('Properties:', () => {
     const booleanValidTrueValues = [true, 'true', 1, ''];
     const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
 
-    it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
+    describe('p-literals:', () => {
+      it('should be in portuguese if browser is setted with an unsupported language', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault[poLocaleDefault]);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault[poLocaleDefault]);
+      });
 
-    it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      it('should be in portuguese if browser is setted with `pt`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.pt);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.pt);
+      });
 
-    it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('en');
+      it('should be in english if browser is setted with `en`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('en');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.en);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.en);
+      });
 
-    it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      it('should be in spanish if browser is setted with `es`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('es');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.es);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.es);
+      });
 
-    it('p-literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      it('should be in russian if browser is setted with `ru`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.ru);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.ru);
+      });
 
-    it('p-literals: should accept custom literals', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      it('should accept custom literals', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
-      const customLiterals = Object.assign({}, poTableLiteralsDefault[poLocaleDefault]);
+        const customLiterals = Object.assign({}, poTableLiteralsDefault[poLocaleDefault]);
 
-      // Custom some literals
-      customLiterals.noData = 'No data custom';
+        // Custom some literals
+        customLiterals.noData = 'No data custom';
 
-      component.literals = customLiterals;
+        component.literals = customLiterals;
 
-      expect(component.literals).toEqual(customLiterals);
-    });
+        expect(component.literals).toEqual(customLiterals);
+      });
 
-    it('p-literals: should update property with default literals if is setted with invalid values', () => {
-      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+      it('should update property with default literals if is setted with invalid values', () => {
+        const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
-      expectPropertiesValues(component, 'literals', invalidValues, poTableLiteralsDefault[poLocaleDefault]);
+        expectPropertiesValues(component, 'literals', invalidValues, poTableLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should get literals directly from poTableLiteralsDefault if it not initialized', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+        expect(component.literals).toEqual(poTableLiteralsDefault['pt']);
+      });
     });
 
     it('p-loading: should update property `p-loading` with valid values.', () => {
@@ -1005,7 +1144,6 @@ describe('PoTableBaseComponent:', () => {
 
       expect(component['sortType']).toBe('descending');
     });
-
   });
 
 });

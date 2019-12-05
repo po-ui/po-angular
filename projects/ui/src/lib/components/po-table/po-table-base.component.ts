@@ -398,19 +398,19 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Input('p-max-columns') maxColumns?: number;
 
-  /**
-   * Ação executada quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas.
-   */
+  /** Ação executada quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();
 
-  /**
-   * Ação executada quando a seleção das linhas é desmarcada por meio do *checkbox* que seleciona todas as linhas.
-   */
+  /** Ação executada quando a seleção das linhas é desmarcada por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-unselected') allUnselected?: EventEmitter<any> = new EventEmitter<any>();
 
-  /**
-   * Ação executada ao selecionar uma linha do `po-table`.
-   */
+  /** Ação executada ao colapsar uma linha do `po-table`. */
+  @Output('p-collapsed') collapsed?: EventEmitter<any> = new EventEmitter<any>();
+
+  /** Ação executada ao expandir uma linha do `po-table`. */
+  @Output('p-expanded') expanded?: EventEmitter<any> = new EventEmitter<any>();
+
+  /** Ação executada ao selecionar uma linha do `po-table`. */
   @Output('p-selected') selected?: EventEmitter<any> = new EventEmitter<any>();
 
   /**
@@ -434,9 +434,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Output('p-sort-by') sortBy?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
-  /**
-   * Ação executada ao desmarcar a seleção de uma linha do `po-table`.
-   */
+  /** Ação executada ao desmarcar a seleção de uma linha do `po-table`. */
   @Output('p-unselected') unselected?: EventEmitter<any> = new EventEmitter<any>();
 
   selectAll = false;
@@ -458,6 +456,27 @@ export abstract class PoTableBaseComponent implements OnChanges {
   abstract calculateHeightTableContainer(height);
 
   abstract calculateWidthHeaders();
+
+  private changeShowDetail(row: any, showDetail: boolean) {
+    if (!!row) {
+      row.$showDetail = showDetail;
+      this.emitExpandEvents(row);
+    }
+  }
+
+  /** Método onde usuário pode via programação colapsar o detalhe de uma linha. */
+  collapse(param: any | number) {
+    this.setShowDetail(param, false) ;
+  }
+
+  /** Método onde usuário pode via programação expandir o detalhe de uma linha. */
+  expand(param: any | number) {
+    this.setShowDetail(param, true) ;
+  }
+
+  private emitExpandEvents(row: any) {
+    row.$showDetail ? this.expanded.emit(row) : this.collapsed.emit(row);
+  }
 
   protected abstract showContainer(container);
 
@@ -536,6 +555,11 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   hasItems(): boolean {
     return this.items && this.items.length > 0;
+  }
+
+  /** Método que expande e colapsa o detalhe da linha. */
+  toggleDetail(row: any) {
+    this.setShowDetail(row, !row.$showDetail) ;
   }
 
   toggleRowAction(row: any) {
@@ -630,6 +654,15 @@ export abstract class PoTableBaseComponent implements OnChanges {
         column['link'] = 'link';
       }
     });
+  }
+
+  private setShowDetail(param: any | number, showDetail: boolean) {
+    if (typeof param === 'number') {
+      const index = param < 0 ? 0 : param;
+      this.changeShowDetail(this.items[index], showDetail);
+    } else {
+      this.changeShowDetail(param, showDetail);
+    }
   }
 
   private unselectOtherRows(rows: Array<any>, row) {

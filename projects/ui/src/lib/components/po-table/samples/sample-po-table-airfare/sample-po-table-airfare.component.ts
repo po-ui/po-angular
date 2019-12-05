@@ -26,6 +26,7 @@ export class SamplePoTableAirfareComponent {
   detail: any;
   items: Array<any> = this.sampleAirfare.getItems();
   total: number = 0;
+  totalExpanded = 0;
 
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
   @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
@@ -65,6 +66,19 @@ export class SamplePoTableAirfareComponent {
     this.items.forEach(item => item.$selected = false);
   }
 
+  collapseAll() {
+    this.items.forEach(item => {
+      if (item.detail) {
+        this.poTable.collapse(item);
+      }
+    });
+  }
+
+  collapseDetail(row: any) {
+    this.totalExpanded -= 1;
+    this.totalExpanded = this.totalExpanded < 0 ? 0 : this.totalExpanded ;
+  }
+
   decreaseTotal(row: any) {
     if (row.value) {
       this.total -= row.value;
@@ -81,6 +95,19 @@ export class SamplePoTableAirfareComponent {
       item.value = item.value - (item.value * 0.2);
       item.disableDiscount = true;
     }
+  }
+
+  expandAll() {
+    this.totalExpanded = 0;
+    this.items.forEach((item, index) => {
+      if (item.detail) {
+        this.poTable.expand(index);
+      }
+    });
+  }
+
+  expandDetail(row: any) {
+    this.totalExpanded += 1;
   }
 
   sumTotal(row: any) {
