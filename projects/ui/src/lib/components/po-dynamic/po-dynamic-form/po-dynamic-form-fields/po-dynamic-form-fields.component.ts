@@ -2,9 +2,10 @@ import { Component, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@a
 import { ControlContainer, NgForm } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
 
-import { PoDynamicFieldValidation } from './po-dynamic-form-field-validation.interface';
+import { PoDynamicFieldValidation } from './po-dynamic-form-fields-validation/po-dynamic-form-field-validation.interface';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
-import { PoDynamicFormValidationService } from './po-dynamic-form-fields-validation.service';
+import { PoDynamicFormValidationService } from './po-dynamic-form-fields-validation/po-dynamic-form-fields-validation.service';
+import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 
 /**
  * @docsPrivate
@@ -21,6 +22,8 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-fields-validat
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
 
+  isDisableAllForm: boolean;
+
   @ViewChildren('component') component: QueryList<{ focus: () => void }>;
 
   constructor(titleCasePipe: TitleCasePipe, private validationService: PoDynamicFormValidationService) {
@@ -33,35 +36,35 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     }
   }
 
-  onChangeFieldValue(index: number) {
-    this.validateField(index);
-    this.validateFields(index);
+  isDisabled(field: PoDynamicFormField): boolean {
+    return field.disabled || this.isDisableAllForm;
   }
 
-  async validateFields(index: number) {
+  onChangeFieldValue(index: number) {
+    this.validateField(index)
+      .then(() => this.validateForm(index));
+  }
+
+  async validateForm(index: number) {
     const changeValue = {
       field: this.fields[index].property,
       value: this.value,
     };
 
-    const validatedFields = await this.validationService.validateFields(this.validate, changeValue);
+    this.isDisableAllForm = true;
 
-    // TO DO: disabled form
-    this.applyValidateFields(validatedFields);
+    try {
+      const validatedFields = await this.validationService.validateForm(this.validate, changeValue);
+      this.applyValidateForm(validatedFields);
+      this.isDisableAllForm = false;
+    } catch {
+      this.isDisableAllForm = false;
+    }
   }
 
-  private applyValidateFields(validatedFields: any) {
+  private applyValidateForm(validatedFields: any) {
     this.value = { ...this.value, ...validatedFields.value };
-
-    validatedFields.fields.forEach(validatedField => {
-      const index = this.fields.findIndex(field => field.property === validatedField.property);
-
-      if (index >= 0) {
-        this.fields[index] = { ...this.fields[index], ...validatedField };
-        this.fields = [...this.fields];
-      }
-
-    });
+    this.fields = this.validationService.updateFieldsForm(validatedFields, this.fields);
   }
 
   async validateField(index: number) {

@@ -1,4 +1,4 @@
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import { PoDynamicFormField } from '../../po-dynamic-form-field.interface';
 
 export interface PoDynamicFieldValidation {
 
