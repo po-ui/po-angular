@@ -177,9 +177,7 @@ export class PoI18nBaseService {
    *
    * > Caso o idioma do navegador não seja suportado pelo PO (`pt`, `en` ou `es`), será retornado valor `pt`.
    *
-   * **Retorno:**
-   *
-   * `string` com a sigla do idioma padrão.
+   * @returns {string} sigla do idioma padrão.
    */
   getLanguage(): string {
     return this.languageService.getLanguage();
@@ -191,9 +189,7 @@ export class PoI18nBaseService {
    *
    * A busca deste idioma é baseada no método [**getLanguage()**](/documentation/po-i18n#get-language).
    *
-   * **Retorno:**
-   *
-   * `string` com a sigla do idioma padrão.
+   * @returns {string} sigla do idioma padrão.
    */
   getShortLanguage(): string {
     return this.languageService.getShortLanguage();
@@ -206,14 +202,14 @@ export class PoI18nBaseService {
    * Ao utilizar este método, o idioma ficará gravado no armazenamento local do navegador, que será utilizado pelo
    * serviço do `i18n` para buscar as literais no idioma padrão.
    *
-   * @param language {string} Sigla do idioma.
+   * @param {string} language Sigla do idioma.
    *
    * Esta sigla deve ser composta por duas letras representando o idioma,
    * podendo ser adicionado outras duas letras representando o país, por exemplo: `pt`, `pt-BR`, `pt-br`, `en` ou `en-US`.
    *
    * > Caso seja informado um valor diferente deste padrão, o mesmo será ignorado.
    *
-   * @param reload {boolean} Indica se a página atual poderá ser recarregada após a alteração do idioma.
+   * @param {boolean} reload Indica se a página atual poderá ser recarregada após a alteração do idioma.
    *
    * Este recurso pode ser útil para os usuários que utilizam o método `getLiterals()` do serviço do i18n para poder
    * buscar novamente as literais no novo idioma configurado.
