@@ -32,12 +32,14 @@ export class PoDynamicFormValidationService {
   constructor(private http: HttpClient) { }
 
   async validateField(field, value: any) {
-    const changedValue = { value: value, field: field.property };
+    const changedValue = { value: value, property: field.property };
 
     const validatedField = typeof field.validate === 'string' ?
       await this.validateFieldOnServer(field.validate, changedValue) : field.validate(changedValue);
 
-    return mapObjectByProperties(validatedField.field, fieldProperties, true);
+    const newField = mapObjectByProperties(validatedField.field, fieldProperties, true)
+
+    return { ...validatedField, field: newField };
   }
 
   updateFieldsForm(validatedFields: PoDynamicFormValidation, fields: Array<PoDynamicFormField>) {
@@ -58,12 +60,17 @@ export class PoDynamicFormValidationService {
     return fieldsCopy;
   }
 
-  async validateForm(validate, changedValue): Promise<PoDynamicFormValidation> {
+  async validateForm(validate: Function | string, field: PoDynamicFormField, value: Array<any>): Promise<PoDynamicFormValidation> {
+    const changedValue = {
+      property: field.property,
+      value: value,
+    };
+
     return typeof validate === 'string' ?
       await this.validateFieldOnServer(validate, changedValue) : validate(changedValue);
   }
 
-  private validateFieldOnServer(url: string, changedValue: { value: any; field: string; }) {
+  private validateFieldOnServer(url: string, changedValue: { value: any; property: string; }) {
     return this.http.post(url, changedValue).toPromise();
   }
 

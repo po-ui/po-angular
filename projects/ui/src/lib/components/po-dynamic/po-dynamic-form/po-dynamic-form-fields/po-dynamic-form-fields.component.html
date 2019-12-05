@@ -16,7 +16,7 @@
       [p-max-date]="field.maxValue"
       [p-min-date]="field.minValue"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-datepicker>
 
     <po-input *ngIf="compareTo(field.control, 'input')"
@@ -33,7 +33,7 @@
       [p-minlength]="field.minLength"
       [p-pattern]="field.pattern"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
       </po-input>
 
     <po-number *ngIf="compareTo(field.control, 'number')"
@@ -49,7 +49,7 @@
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-number>
 
     <po-decimal *ngIf="compareTo(field.control, 'decimal')"
@@ -61,7 +61,7 @@
       [p-help]="field.help"
       [p-label]="field.label"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-decimal>
 
     <po-select *ngIf="compareTo(field.control, 'select')"
@@ -73,7 +73,7 @@
       [p-label]="field.label"
       [p-options]="field.options"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-select>
 
     <po-radio-group *ngIf="compareTo(field.control, 'radioGroup')"
@@ -86,7 +86,7 @@
       [p-label]="field.label"
       [p-options]="field.options"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-radio-group>
 
     <po-switch *ngIf="compareTo(field.control, 'switch')"
@@ -98,7 +98,7 @@
       [p-label]="field.label"
       [p-label-off]="field.booleanFalse"
       [p-label-on]="field.booleanTrue"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-switch>
 
     <po-combo *ngIf="compareTo(field.control, 'combo')"
@@ -110,7 +110,7 @@
       [p-help]="field.help"
       [p-label]="field.label"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-combo>
 
     <po-lookup *ngIf="compareTo(field.control, 'lookup')"
@@ -125,7 +125,7 @@
       [p-help]="field.help"
       [p-label]="field.label"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-lookup>
 
     <po-checkbox-group *ngIf="compareTo(field.control, 'checkboxGroup')"
@@ -138,7 +138,7 @@
       [p-label]="field.label"
       [p-options]="field.options"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-checkbox-group>
 
     <po-multiselect *ngIf="compareTo(field.control, 'multiselect')"
@@ -150,7 +150,7 @@
       [p-label]="field.label"
       [p-options]="field.options"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-multiselect>
 
     <po-textarea *ngIf="compareTo(field.control, 'textarea')"
@@ -164,7 +164,7 @@
       [p-minlength]="field.minLength"
       [p-required]="field.required"
       [p-rows]="field.rows"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
     </po-textarea>
 
     <po-password *ngIf="compareTo(field.control, 'password')"
@@ -178,7 +178,7 @@
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(index)">
+      (p-change)="onChangeFieldValue(field, index)">
   </po-password>
 
   </ng-container>
