@@ -3,7 +3,11 @@
 
 <ng-template #reuseFormTemplate>
 
-  <po-dynamic-form-fields [p-fields]="fields" [p-value]="value"></po-dynamic-form-fields>
+  <po-dynamic-form-fields #fieldsComponent
+    [p-auto-focus]="autoFocus"
+    [p-fields]="fields"
+    [p-value]="value">
+  </po-dynamic-form-fields>
 
 </ng-template>
 
@@ -11,7 +15,8 @@
 
   <form #dynamicForm="ngForm">
 
-    <po-dynamic-form-fields
+    <po-dynamic-form-fields #fieldsComponent
+      [p-auto-focus]="autoFocus"
       [p-fields]="fields"
       [p-validate]="validate"
       [p-value]="value">

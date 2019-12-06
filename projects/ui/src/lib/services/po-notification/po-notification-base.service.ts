@@ -36,7 +36,7 @@ export abstract class PoNotificationBaseService {
   /**
    * Emite uma notificação de sucesso.
    *
-   * @param notification {PoNotification | string} Objeto com os dados da notificação ou somente a string com a mensagem da notificação.
+   * @param {PoNotification | string} notification Objeto com os dados da notificação ou somente a string com a mensagem da notificação.
    */
   public success(notification: PoNotification | string) {
     this.createToaster(this.buildToaster(notification, PoToasterType.Success));
@@ -45,7 +45,7 @@ export abstract class PoNotificationBaseService {
   /**
    * Emite uma notificação de atenção.
    *
-   * @param notification {PoNotification | string} Objeto com os dados da notificação ou somente a string com a mensagem da notificação
+   * @param {PoNotification | string} notification Objeto com os dados da notificação ou somente a string com a mensagem da notificação
    */
   public warning(notification: PoNotification | string) {
     this.createToaster(this.buildToaster(notification, PoToasterType.Warning));
@@ -54,7 +54,7 @@ export abstract class PoNotificationBaseService {
   /**
    * Emite uma notificação de erro.
    *
-   * @param notification {PoNotification | string} Objeto com os dados da notificação ou somente a string com a mensagem da notificação
+   * @param {PoNotification | string} notification Objeto com os dados da notificação ou somente a string com a mensagem da notificação
    */
   public error(notification: PoNotification | string) {
     this.createToaster(this.buildToaster(notification, PoToasterType.Error));
@@ -63,7 +63,7 @@ export abstract class PoNotificationBaseService {
   /**
    * Emite uma notificação de informação.
    *
-   * @param notification {PoNotification | string} Objeto com os dados da notificação ou somente a string com a mensagem da notificação
+   * @param {PoNotification | string} notification Objeto com os dados da notificação ou somente a string com a mensagem da notificação
    */
   public information(notification: PoNotification | string) {
     this.createToaster(this.buildToaster(notification, PoToasterType.Information));
@@ -74,7 +74,7 @@ export abstract class PoNotificationBaseService {
    *
    * > Padrão 10 segundos.
    *
-   * @param defaultDuration {number} Duração em milisegundos
+   * @param {number} defaultDuration Duração em milisegundos
    */
   public setDefaultDuration(defaultDuration: number) {
     this.defaultDuration = defaultDuration;
@@ -85,7 +85,7 @@ export abstract class PoNotificationBaseService {
    *
    * Cria um objeto do tipo PoToaster de acordo o tipo.
    *
-   * @param notification {PoNotification | string} Objeto PoNotification com os dados da notificação
+   * @param {PoNotification | string} notification Objeto PoNotification com os dados da notificação
    */
   private buildToaster(notification: PoNotification | string, type: PoToasterType): PoToaster {
     let index = 0;
@@ -126,7 +126,7 @@ export abstract class PoNotificationBaseService {
    *
    * Método responsável por criar o po-toaster.
    *
-   * @param toaster {PoToaster} Objeto contendo as informações do toaster.
+   * @param {PoToaster} toaster Objeto contendo as informações do toaster.
    */
   abstract createToaster(toaster: PoToaster): void;
 
@@ -135,8 +135,8 @@ export abstract class PoNotificationBaseService {
    *
    * Método responsável por destruir o po-toaster.
    *
-   * @param toaster {ComponentRef} Número da posição ou instancia do toaster a ser destruído.
-   * @param orientation {PoToasterOrientation} Orientação do PoToaster: Top ou Bottom
+   * @param {ComponentRef} toaster Número da posição ou instancia do toaster a ser destruído.
+   * @param {PoToasterOrientation} orientation Orientação do PoToaster: Top ou Bottom
    */
   abstract destroyToaster(toaster: ComponentRef<any>): void;
 

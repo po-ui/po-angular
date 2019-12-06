@@ -65,7 +65,7 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
    *
    * > Este método é valido apenas para as implementações que utilizam o componente [**po-step**](/documentation/po-step).
    *
-   * @param index {number} Índice do `po-step` que se deseja ativar.
+   * @param {number} index Índice do `po-step` que se deseja ativar.
    */
   active(index: number): void {
     if (!this.usePoSteps) {

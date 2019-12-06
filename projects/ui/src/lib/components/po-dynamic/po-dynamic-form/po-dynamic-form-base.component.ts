@@ -21,6 +21,22 @@ export class PoDynamicFormBaseComponent {
   private _groupForm?: boolean = false;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Nome da propriedade, atribuída ao `PoDynamicFormField.property`, que iniciará o campo com foco.
+   *
+   * > Não é possivel iniciar os componentes abaixo com foco:
+   *  - `po-checkbox-group`
+   *  - `po-combo`
+   *  - `po-radio-group`
+   *  - `po-select`
+   *  - `po-switch`
+   */
+  @Input('p-auto-focus') autoFocus?: string;
+
+  /**
    * @description
    *
    * Coleção de objetos que implementam a interface `PoDynamicFormField`, para definição dos campos que serão criados

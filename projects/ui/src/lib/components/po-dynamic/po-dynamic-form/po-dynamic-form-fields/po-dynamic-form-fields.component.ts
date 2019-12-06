@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnChanges, QueryList, SimpleChanges, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
 
@@ -23,6 +23,8 @@ import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
 
   isDisableAllForm: boolean;
+
+  @ViewChildren('component') components: QueryList<{ name: string, focus: () => void }>;
 
   constructor(titleCasePipe: TitleCasePipe, private validationService: PoDynamicFormValidationService, private changes: ChangeDetectorRef) {
     super(titleCasePipe);
@@ -95,6 +97,13 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     //   this.component.toArray()[index].focus();
     // }
 
+  }
+
+  focus(property: string) {
+    const foundComponent = this.components.find(component => component.name === property);
+    if (foundComponent) {
+      foundComponent.focus();
+    }
   }
 
   trackBy(index) {
