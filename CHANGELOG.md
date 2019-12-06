@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.19.0](https://github.com/portinariui/portinari-angular/compare/v1.18.0...v1.19.0) (2019-12-06)
+
+
+### Build System
+
+* **tsconfig:** altera annotateForClosureCompiler para false ([6a861e9](https://github.com/portinariui/portinari-angular/commit/6a861e9))
+
+
+### Features
+
+* **dynamic-form:** permite atribuir foco nos campos ([4bdab45](https://github.com/portinariui/portinari-angular/commit/4bdab45))
+* **info:** possibilita transformar o valor em um *link* ([99c2eee](https://github.com/portinariui/portinari-angular/commit/99c2eee))
+
+
+
 ## [1.18.0](https://github.com/portinariui/portinari-angular/compare/v1.17.0...v1.18.0) (2019-11-29)
 
 
