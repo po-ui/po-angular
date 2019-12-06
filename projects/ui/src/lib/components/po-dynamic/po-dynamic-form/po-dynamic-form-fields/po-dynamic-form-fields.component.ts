@@ -2,10 +2,10 @@ import { Component, OnChanges, QueryList, SimpleChanges, ViewChildren, ChangeDet
 import { ControlContainer, NgForm } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
 
-import { PoDynamicFieldValidation } from './po-dynamic-form-fields-validation/po-dynamic-form-field-validation.interface';
-import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
-import { PoDynamicFormValidationService } from './po-dynamic-form-fields-validation/po-dynamic-form-fields-validation.service';
+import { PoDynamicFieldValidation } from '../po-dynamic-form-fields-validation/po-dynamic-form-field-validation.interface';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
+import { PoDynamicFormValidationService } from '../po-dynamic-form-fields-validation/po-dynamic-form-fields-validation.service';
 
 /**
  * @docsPrivate
@@ -22,8 +22,6 @@ import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
 
-  isDisableAllForm: boolean;
-
   @ViewChildren('component') components: QueryList<{ name: string, focus: () => void }>;
 
   constructor(titleCasePipe: TitleCasePipe, private validationService: PoDynamicFormValidationService, private changes: ChangeDetectorRef) {
@@ -36,63 +34,34 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     }
   }
 
-  isDisabled(field: PoDynamicFormField): boolean {
-    return field.disabled || this.isDisableAllForm;
+  focus(property: string) {
+    const foundComponent = this.components.find(component => component.name === property);
+    if (foundComponent) {
+      foundComponent.focus();
+    }
   }
 
-  async onChangeFieldValue(field: PoDynamicFormField, index: number) {
+  isDisabled(field: PoDynamicFormField): boolean {
+    return field.disabled || this.isDisableForm;
+  }
+
+  async onChangeField(field: PoDynamicFormField, index: number) {
     if (field.validate) {
       await this.validateField(field, index);
     }
 
-    if (this.validate) {
-      this.validateForm(field);
+    const hasValidationForm = this.validate && this.formValidate.observers.length;
+
+    if (hasValidationForm) {
+      this.formValidate.emit({ field, index });
     }
   }
 
-  async validateForm(field: PoDynamicFormField) {
-    const focusElement = document.activeElement;
-    this.isDisableAllForm = true;
-
-    try {
-      const validatedFields = await this.validationService.validateForm(this.validate, field, this.value);
-      this.applyValidateForm(validatedFields);
-      this.isDisableAllForm = false;
-
-      this.changes.detectChanges();
-
-      if (validatedFields.focus) {
-        this.focus(validatedFields.focus);
-      } else {
-        focusElement['focus']();
-      }
-
-    } catch {
-      this.isDisableAllForm = false;
-    }
+  trackBy(index) {
+    return index;
   }
 
-  private applyValidateForm(validatedFields: any) {
-    this.value = { ...this.value, ...validatedFields.value };
-    this.fields = this.validationService.updateFieldsForm(validatedFields, this.fields);
-  }
-
-  async validateField(field: PoDynamicFormField, index: number) {
-    const value = this.value[field.property];
-
-    const previousDisabled = field.disabled;
-    this.visibleFields[index].disabled = true;
-
-    try {
-      const validatedField = await this.validationService.validateField(field, value);
-      this.applyValidationField(index, validatedField);
-
-    } catch {
-      this.visibleFields[index].disabled = previousDisabled;
-    }
-  }
-
-  private applyValidationField(index: number, validatedField: PoDynamicFieldValidation) {
+  private applyFieldValidation(index: number, validatedField: PoDynamicFieldValidation) {
     const field = this.fields[index];
 
     this.fields[index] = { ...field, ...validatedField.field };
@@ -108,15 +77,19 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   }
 
-  focus(property: string) {
-    const foundComponent = this.components.find(component => component.name === property);
-    if (foundComponent) {
-      foundComponent.focus();
-    }
-  }
+  private async validateField(field: PoDynamicFormField, fieldIndex: number) {
+    const value = this.value[field.property];
 
-  trackBy(index) {
-    return index;
+    const previousDisabled = field.disabled;
+    this.visibleFields[fieldIndex].disabled = true;
+
+    try {
+      const validatedField = await this.validationService.sendFieldChange(field, value);
+      this.applyFieldValidation(fieldIndex, validatedField);
+
+    } catch {
+      this.visibleFields[fieldIndex].disabled = previousDisabled;
+    }
   }
 
 }

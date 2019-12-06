@@ -18,8 +18,10 @@
     <po-dynamic-form-fields #fieldsComponent
       [p-auto-focus]="autoFocus"
       [p-fields]="fields"
+      [p-is-disable-form]="isDisableForm"
       [p-validate]="validate"
-      [p-value]="value">
+      [p-value]="value"
+      (p-form-validate)="validateForm($event)">
     </po-dynamic-form-fields>
 
   </form>

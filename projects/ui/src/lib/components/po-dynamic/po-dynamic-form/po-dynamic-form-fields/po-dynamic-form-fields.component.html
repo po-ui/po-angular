@@ -16,7 +16,7 @@
       [p-max-date]="field.maxValue"
       [p-min-date]="field.minValue"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-datepicker>
 
     <po-input #component *ngIf="compareTo(field.control, 'input')"
@@ -33,7 +33,7 @@
       [p-minlength]="field.minLength"
       [p-pattern]="field.pattern"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
       </po-input>
 
     <po-number #component *ngIf="compareTo(field.control, 'number')"
@@ -50,7 +50,7 @@
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-number>
 
     <po-decimal #component *ngIf="compareTo(field.control, 'decimal')"
@@ -63,7 +63,7 @@
       [p-help]="field.help"
       [p-label]="field.label"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-decimal>
 
     <po-select #component *ngIf="compareTo(field.control, 'select')"
@@ -75,7 +75,7 @@
       [p-label]="field.label"
       [p-options]="field.options"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-select>
 
     <po-radio-group #component *ngIf="compareTo(field.control, 'radioGroup')"
@@ -88,7 +88,7 @@
       [p-label]="field.label"
       [p-options]="field.options"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-radio-group>
 
     <po-switch #component *ngIf="compareTo(field.control, 'switch')"
@@ -100,7 +100,7 @@
       [p-label]="field.label"
       [p-label-off]="field.booleanFalse"
       [p-label-on]="field.booleanTrue"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-switch>
 
     <po-combo #component *ngIf="compareTo(field.control, 'combo')"
@@ -112,7 +112,7 @@
       [p-help]="field.help"
       [p-label]="field.label"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-combo>
 
     <po-lookup #component *ngIf="compareTo(field.control, 'lookup')"
@@ -128,7 +128,7 @@
       [p-help]="field.help"
       [p-label]="field.label"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-lookup>
 
     <po-checkbox-group #component *ngIf="compareTo(field.control, 'checkboxGroup')"
@@ -141,7 +141,7 @@
       [p-label]="field.label"
       [p-options]="field.options"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-checkbox-group>
 
     <po-multiselect #component *ngIf="compareTo(field.control, 'multiselect')"
@@ -154,7 +154,7 @@
       [p-label]="field.label"
       [p-options]="field.options"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-multiselect>
 
     <po-textarea #component *ngIf="compareTo(field.control, 'textarea')"
@@ -169,7 +169,7 @@
       [p-minlength]="field.minLength"
       [p-required]="field.required"
       [p-rows]="field.rows"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
     </po-textarea>
 
     <po-password #component *ngIf="compareTo(field.control, 'password')"
@@ -184,7 +184,7 @@
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
       [p-required]="field.required"
-      (p-change)="onChangeFieldValue(field, index)">
+      (p-change)="onChangeField(field, index)">
   </po-password>
 
   </ng-container>

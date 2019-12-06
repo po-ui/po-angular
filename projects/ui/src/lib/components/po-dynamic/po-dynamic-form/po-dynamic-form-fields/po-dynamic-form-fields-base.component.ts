@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, EventEmitter, Output } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 
 import { isTypeof } from '../../../../utils/util';
@@ -36,7 +36,11 @@ export class PoDynamicFormFieldsBaseComponent {
     return this._value;
   }
 
+  @Input('p-is-disable-form') isDisableForm: boolean;
+
   @Input('p-validate') validate?: string | Function;
+
+  @Output('p-form-validate') formValidate = new EventEmitter<any>();
 
   constructor(private titleCasePipe: TitleCasePipe) {}
 
