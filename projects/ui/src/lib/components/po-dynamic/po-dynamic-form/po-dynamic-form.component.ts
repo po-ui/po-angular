@@ -2,8 +2,8 @@ import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
-import { PoDynamicFormValidationService } from './po-dynamic-form-fields-validation/po-dynamic-form-fields-validation.service';
-import { PoDynamicFormValidation } from './po-dynamic-form-fields-validation/po-dynamic-form-validation.interface';
+import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-dynamic-form-validation.service';
+import { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic-form-validation.interface';
 
 /**
  * @docsExtends PoDynamicFormBaseComponent
