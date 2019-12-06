@@ -5,7 +5,6 @@
     </po-divider>
 
     <po-datepicker *ngIf="compareTo(field.control, 'datepicker')"
-      #component
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
@@ -20,7 +19,6 @@
     </po-datepicker>
 
     <po-input *ngIf="compareTo(field.control, 'input')"
-      #component
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"

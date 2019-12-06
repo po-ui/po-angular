@@ -1,4 +1,4 @@
-import { Component, OnChanges, QueryList, SimpleChanges, ViewChildren, ChangeDetectorRef } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
 
@@ -24,8 +24,6 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   isDisableAllForm: boolean;
 
-  @ViewChildren('component') component: QueryList<{ focus: () => void }>;
-
   constructor(titleCasePipe: TitleCasePipe, private validationService: PoDynamicFormValidationService, private changes: ChangeDetectorRef) {
     super(titleCasePipe);
   }
@@ -41,13 +39,17 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   }
 
   onChangeFieldValue(field: PoDynamicFormField, index: number) {
-    this.validateField(field, index);
+    // this.validateField(field, index);
 
-    if (this.validate) {
-      this.validateForm(field);
-    }
-    // this.validateField(field, index)
-    //   .then(() => this.validateForm(field));
+    // if (this.validate) {
+    //   this.validateForm(field);
+    // }
+    this.validateField(field, index)
+      .then(() => {
+        if (this.validate) {
+          this.validateForm(field);
+        }
+    });
   }
 
   async validateForm(field: PoDynamicFormField) {
@@ -89,9 +91,9 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
     this.changes.detectChanges();
 
-    if (validatedField.focus) {
-      this.component.toArray()[index].focus();
-    }
+    // if (validatedField.focus) {
+    //   this.component.toArray()[index].focus();
+    // }
 
   }
 
