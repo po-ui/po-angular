@@ -40,27 +40,33 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     return field.disabled || this.isDisableAllForm;
   }
 
-  onChangeFieldValue(field: PoDynamicFormField, index: number) {
-    // this.validateField(field, index);
+  async onChangeFieldValue(field: PoDynamicFormField, index: number) {
+    if (field.validate) {
+      await this.validateField(field, index);
+    }
 
-    // if (this.validate) {
-    //   this.validateForm(field);
-    // }
-    this.validateField(field, index)
-      .then(() => {
-        if (this.validate) {
-          this.validateForm(field);
-        }
-    });
+    if (this.validate) {
+      this.validateForm(field);
+    }
   }
 
   async validateForm(field: PoDynamicFormField) {
+    const focusElement = document.activeElement;
     this.isDisableAllForm = true;
 
     try {
       const validatedFields = await this.validationService.validateForm(this.validate, field, this.value);
       this.applyValidateForm(validatedFields);
       this.isDisableAllForm = false;
+
+      this.changes.detectChanges();
+
+      if (validatedFields.focus) {
+        this.focus(validatedFields.focus);
+      } else {
+        focusElement['focus']();
+      }
+
     } catch {
       this.isDisableAllForm = false;
     }
@@ -87,15 +93,18 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   }
 
   private applyValidationField(index: number, validatedField: PoDynamicFieldValidation) {
-    this.fields[index] = { ...this.fields[index], ...validatedField };
+    const field = this.fields[index];
+
+    this.fields[index] = { ...field, ...validatedField.field };
     this.fields = [...this.fields];
-    this.value[this.fields[index].property] = validatedField.value;
+
+    this.value[field.property] = validatedField.value;
 
     this.changes.detectChanges();
 
-    // if (validatedField.focus) {
-    //   this.component.toArray()[index].focus();
-    // }
+    if (validatedField.focus) {
+      this.focus(field.property);
+    }
 
   }
 
