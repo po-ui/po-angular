@@ -1,6 +1,8 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
+import { finalize } from 'rxjs/operators';
+
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-dynamic-form-validation.service';
 import { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic-form-validation.interface';
@@ -85,30 +87,34 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
   async validateForm({ field, index: fieldIndex }) {
     this.fields[fieldIndex] = field;
     const previousFocusElement = document.activeElement;
-    this.isDisableForm = true;
 
-    try {
-      const validatedFields = await this.validationService.sendFormChange(this.validate, field, this.value);
-      this.applyFormValidation(validatedFields);
+    this.onDisabledForm(true);
 
-      this.isDisableForm = false;
-      this.changes.detectChanges();
-
-      this.setFocusOnValidation(validatedFields, previousFocusElement);
-    } catch {
-      this.isDisableForm = false;
-    }
+    this.validationService.sendFormChange(this.validate, field, this.value)
+      .pipe(finalize(() => this.onDisabledForm(false)))
+      .subscribe(this.applyFormValidation(previousFocusElement));
   }
 
-  private applyFormValidation(validatedFields: any) {
-    this.value = { ...this.value, ...validatedFields.value };
-    this.fields = this.validationService.updateFieldsForm(validatedFields, this.fields);
+  private applyFormValidation(previousFocusElement: Element): (value: any) => void {
+    return validatedFields => {
+
+      this.value = { ...this.value, ...validatedFields.value };
+      this.fields = this.validationService.updateFieldsForm(validatedFields, this.fields);
+
+      this.setFocusOnValidation(validatedFields, previousFocusElement);
+
+    };
   }
 
   private emitForm() {
     if (!this.groupForm && this.formOutput.observers.length) {
       this.formOutput.emit(this.form);
     }
+  }
+
+  private onDisabledForm(value: boolean) {
+    this.isDisableForm = value;
+    this.changes.detectChanges();
   }
 
   private setFocusOnValidation(validatedFields: PoDynamicFormValidation, previousFocusElement: Element) {

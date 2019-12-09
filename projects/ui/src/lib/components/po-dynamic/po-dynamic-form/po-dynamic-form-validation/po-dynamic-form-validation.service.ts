@@ -1,11 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { mapObjectByProperties } from '../../../../utils/util';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormValidation } from './po-dynamic-form-validation.interface';
 
 const fieldProperties = [
+  'key',
+  'label',
+  'gridColumns',
+  'gridSmColumns',
+  'gridMdColumns',
+  'gridLgColumns',
+  'gridXlColumns',
+  'visible',
+  'divider',
+  'type',
+  'property',
   'columns',
   'required',
   'options',
@@ -31,22 +45,27 @@ export class PoDynamicFormValidationService {
 
   constructor(private http: HttpClient) { }
 
-  async sendFieldChange(field: PoDynamicFormField, value: any) {
-    const changedValue = { property: field.property, value };
-
-    const validatedField = typeof field.validate === 'string' ?
-      await this.validateFieldOnServer(field.validate, changedValue) : field.validate(changedValue);
-
-    const newField = mapObjectByProperties(validatedField.field, fieldProperties, true);
-
-    return { ...validatedField, field: newField };
-  }
-
-  async sendFormChange(validate: Function | string, field: PoDynamicFormField, value: Array<any>): Promise<PoDynamicFormValidation> {
+    sendChanges(validate: Function | string, field: PoDynamicFormField, value: any) {
     const changedValue = { property: field.property, value };
 
     return typeof validate === 'string' ?
-      await this.validateFieldOnServer(validate, changedValue) : validate(changedValue);
+      this.validateFieldOnServer(validate, changedValue) : of(validate(changedValue));
+  }
+
+  sendFieldChange(field: PoDynamicFormField, value: any) {
+    return this.sendChanges(field.validate, field, value).pipe(map(this.removeInvalidProperties()));
+  }
+
+  sendFormChange(validate: Function | string, field: PoDynamicFormField, value: Array<any>) {
+    return this.sendChanges(validate, field, value).pipe(
+      map(validatedFields => {
+        const newFields = validatedFields.fields
+           .map(validatedField => mapObjectByProperties(validatedField, fieldProperties, true));
+        validatedFields.fields = newFields;
+
+        return validatedFields;
+      })
+    );
   }
 
   updateFieldsForm(validatedFields: PoDynamicFormValidation, fields: Array<PoDynamicFormField>) {
@@ -67,8 +86,15 @@ export class PoDynamicFormValidationService {
     return fieldsCopy;
   }
 
+  private removeInvalidProperties(): (value: any, index: number) => any {
+    return validatedField => {
+      const newField = mapObjectByProperties(validatedField.field, fieldProperties, true);
+      return { ...validatedField, field: newField };
+    };
+  }
+
   private validateFieldOnServer(url: string, changedValue: { value: any; property: string; }) {
-    return this.http.post(url, changedValue).toPromise();
+    return this.http.post(url, changedValue);
   }
 
 }

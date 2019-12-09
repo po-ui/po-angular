@@ -82,9 +82,10 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
     const previousDisabled = field.disabled;
     this.visibleFields[fieldIndex].disabled = true;
+    this.changes.detectChanges();
 
     try {
-      const validatedField = await this.validationService.sendFieldChange(field, value);
+      const validatedField = await this.validationService.sendFieldChange(field, value).toPromise();
       this.applyFieldValidation(fieldIndex, validatedField);
 
     } catch {
