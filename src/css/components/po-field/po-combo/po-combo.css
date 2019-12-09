@@ -7,6 +7,10 @@
     @apply --font-text;
   }
 
+  --font-combo-group-title: {
+    @apply --font-text-small;
+  }
+
   --font-combo-text-bold: {
     @apply --font-text-bold;
   }
@@ -43,14 +47,24 @@ po-combo.ng-invalid.ng-dirty .po-input {
   height: 96px;
 }
 
+.po-combo-item-title,
 .po-combo-item {
-  @apply --font-combo-text;
-  color: var(--color-combo-color-primary);
-  cursor: pointer;
   display: block;
   padding: 10px 16px;
   text-align: left;
   word-wrap: break-word;
+}
+
+.po-combo-item-title {
+  @apply --font-combo-group-title;
+  background: var(--color-combo-background-color-group-title);
+  color: var(--color-combo-color-group-title);
+}
+
+.po-combo-item {
+  @apply --font-combo-text;
+  color: var(--color-combo-color-primary);
+  cursor: pointer;
 
   &:hover {
     background-color: var(--color-combo-background-color-item-hover) !important;
@@ -88,9 +102,13 @@ po-combo.ng-invalid.ng-dirty .po-input {
 }
 
 @media screen and (max-width: 1366px) {
-
+ 
   .po-combo-item {
     @apply --font-combo-text-smaller;
+  }
+
+  .po-combo-item-title, 
+  .po-combo-item {
     padding: 7px 8px;
   }
 
