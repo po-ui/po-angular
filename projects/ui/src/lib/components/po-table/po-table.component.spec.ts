@@ -650,23 +650,6 @@ describe('PoTableComponent:', () => {
     expect(component['setTableOpacity']).toHaveBeenCalled();
   }));
 
-  it('should count columns for master detail', () => {
-    const columnManager = 1;
-    component.columns = [...columns];
-
-    const countColumns = columns.length + 1 + columnManager;
-
-    expect(component.columnCountForMasterDetail()).toBe(countColumns);
-
-    component.actions = [...actions];
-    fixture.detectChanges();
-    expect(component.columnCountForMasterDetail()).toBe(countColumns + 1);
-
-    component.checkbox = true;
-    fixture.detectChanges();
-    expect(component.columnCountForMasterDetail()).toBe(countColumns + 2);
-  });
-
   it('should calculate when height is a number in function calculateHeightTableContainer', () => {
     const fakeThis = {
       getHeightTableFooter: () => 0,
@@ -1559,6 +1542,41 @@ describe('PoTableComponent:', () => {
       component.onVisibleColumnsChange(newColumns);
 
       expect(spyDetectChanges).toHaveBeenCalled();
+    });
+
+    it('columnCountForMasterDetail: should return 7 columnCount if has actions and 5 columns', () => {
+      component.actions = [...singleAction];
+      component.columns = [...columns];
+
+      const columnCountAction = 1;
+
+      const countColumns = columns.length + 1 + columnCountAction;
+
+      expect(component.columnCountForMasterDetail()).toBe(countColumns);
+    });
+
+    it('columnCountForMasterDetail: should return 7 columnCount if actions is empty and has 5 columns', () => {
+      component.actions = [];
+      component.columns = [...columns];
+
+      const columnCountColumnManager = 1;
+
+      const countColumns = columns.length + 1 + columnCountColumnManager;
+
+      expect(component.columnCountForMasterDetail()).toBe(countColumns);
+    });
+
+    it('columnCountForMasterDetail: should return 8 columnCount if actions is empty, has 5 columns and has checkbox', () => {
+      component.actions = [];
+      component.columns = [...columns];
+      component.checkbox = true;
+
+      const columnCountColumnManager = 1;
+      const columnCountCheckbox = 1;
+
+      const countColumns = columns.length + 1 + columnCountColumnManager + columnCountCheckbox;
+
+      expect(component.columnCountForMasterDetail()).toBe(countColumns);
     });
 
   });
