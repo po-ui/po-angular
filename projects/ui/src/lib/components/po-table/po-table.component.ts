@@ -215,7 +215,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   columnCountForMasterDetail() {
-    const columnManager = 1;
+    // caso tiver ações será utilizado a sua coluna para exibir o columnManager
+    const columnManager = this.actions.length ? 0 : 1;
+
     return (this.mainColumns.length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.checkbox ? 1 : 0) + columnManager;
   }
 
