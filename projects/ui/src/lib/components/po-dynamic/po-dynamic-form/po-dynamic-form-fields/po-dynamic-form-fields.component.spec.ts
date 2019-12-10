@@ -2,13 +2,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { SimpleChange } from '@angular/core';
 
+import { of } from 'rxjs';
+
 import { configureTestSuite } from './../../../../util-test/util-expect.spec';
 
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormFieldsComponent } from './po-dynamic-form-fields.component';
 import { PoDynamicModule } from '../../po-dynamic.module';
 
-fdescribe('PoDynamicFormFieldsComponent: ', () => {
+describe('PoDynamicFormFieldsComponent: ', () => {
   let component: PoDynamicFormFieldsComponent;
   let fixture: ComponentFixture<PoDynamicFormFieldsComponent>;
 
@@ -199,6 +201,51 @@ fdescribe('PoDynamicFormFieldsComponent: ', () => {
       expect(spyFocus).not.toHaveBeenCalled();
     });
 
+    it(`validateField: should set 'disabled' with true to 'visibleFields[index]'
+    and call 'detectChanges', 'validationService.sendFieldChange' and 'applyFieldValidation'`, async () => {
+      const field = { property: 'name', required: true, visible: true, disabled: false };
+      const index = 0;
+
+      component.value = [{ name: 'user 1' }, { age: 'user 2' }, { rg: 'user 3' }];
+      component.visibleFields = [
+        { property: 'name', required: false, visible: true, disabled: false },
+        { property: 'age', required: false, visible: false, help: 'test help' },
+        { property: 'rg', required: false, visible: false, help: 'test help 2' },
+      ];
+
+      const spySendFieldChange = spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(field));
+      const spyChanges = spyOn(component['changes'], 'detectChanges');
+      const spyApplyFieldValidation = spyOn(component, <any>'applyFieldValidation');
+
+      await component['validateField'](field, index);
+
+      expect(component.visibleFields[0].disabled).toBeTruthy();
+      expect(spySendFieldChange).toHaveBeenCalledWith(field, component.value[field.property]);
+      expect(spyChanges).toHaveBeenCalled();
+      expect(spyApplyFieldValidation).toHaveBeenCalledWith(index, field);
+    });
+
+    it(`validateField: should not call 'applyFieldValidation'
+    and should set 'disabled' with it's previous value into 'visibleFields[index]'`, async () => {
+      const field = { property: 'name', required: true, visible: true, disabled: false };
+      const index = 0;
+
+      component.value = [{ name: 'user 1' }, { age: 'user 2' }, { rg: 'user 3' }];
+      component.visibleFields = [
+        { property: 'name', required: false, visible: true, disabled: false },
+        { property: 'age', required: false, visible: false, help: 'test help' },
+        { property: 'rg', required: false, visible: false, help: 'test help 2' },
+      ];
+
+      const spySendFieldChange = spyOn(component['validationService'], 'sendFieldChange').and.throwError('Error');
+      const spyApplyFieldValidation = spyOn(component, <any>'applyFieldValidation');
+
+      await component['validateField'](field, index);
+
+      expect(spySendFieldChange).toHaveBeenCalledWith(field, component.value[field.property]);
+      expect(component.visibleFields[0].disabled).toBeFalsy();
+      expect(spyApplyFieldValidation).not.toHaveBeenCalled();
+    });
   });
 
   describe('Templates: ', () => {
