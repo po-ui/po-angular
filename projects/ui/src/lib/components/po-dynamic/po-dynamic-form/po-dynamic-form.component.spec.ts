@@ -2,6 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { NgForm } from '@angular/forms';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
+import { of } from 'rxjs';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormComponent } from './po-dynamic-form.component';
@@ -80,6 +81,168 @@ describe('PoDynamicFormComponent:', () => {
       component.focus('field');
 
       expect(spyFieldsComponentFocus).toHaveBeenCalled();
+    });
+
+    it('validateForm: should update current field changed', () => {
+      const updatedField = { property: 'new test', disabled: true };
+      const fieldIndex = 0;
+
+      component.fields = [ { property: 'test' } ];
+
+      spyOn(component, <any>'disableForm');
+      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
+
+      component['validateForm']({ field: updatedField, fieldIndex });
+
+      expect(component.fields).toEqual([ updatedField ]);
+    });
+
+    it('validateForm: should call disabledForm with true and false on observable finalize', () => {
+      const updatedField = { property: 'test', disabled: true };
+      const fieldIndex = 0;
+
+      component.fields = [ { property: 'test' } ];
+
+      spyOn(component, <any>'disableForm');
+
+      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
+
+      spyOn(component, <any>'applyFormValidation');
+
+      component['validateForm']({ field: updatedField, fieldIndex });
+
+      expect(component['disableForm']).toHaveBeenCalledWith(true);
+      expect(component['disableForm']).toHaveBeenCalledWith(false);
+    });
+
+    it('validateForm: should call applyFormValidation', () => {
+      const updatedField = { property: 'test', disabled: true };
+      const fieldIndex = 0;
+
+      component.fields = [ { property: 'test' } ];
+
+      spyOn(component, <any>'disableForm');
+      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
+      spyOn(component, <any>'applyFormValidation');
+
+      component['validateForm']({ field: updatedField, fieldIndex });
+
+      expect(component['applyFormValidation']).toHaveBeenCalled();
+    });
+
+    it('applyFormValidation: should merge value with validatedFields.value', () => {
+      const previousFocusElement = document.activeElement;
+
+      const validatedFields = {
+        value: {
+          name: 'new value'
+        }
+      };
+
+      component.value = {
+        name: 'value',
+        age: '23'
+      };
+
+      const expectedValue = {
+        name: 'new value',
+        age: '23'
+      };
+
+      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component['validationService'], 'updateFieldsForm');
+
+      component['applyFormValidation'](previousFocusElement)(validatedFields);
+
+      expect(component.value).toEqual(expectedValue);
+    });
+
+    it('applyFormValidation: should call updateFieldsForm to set fields', () => {
+      const previousFocusElement = document.activeElement;
+
+      const validatedFields = { value: undefined };
+
+      const fields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: false, visible: true },
+      ];
+
+      component.fields = [...fields];
+
+      const expectedFields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: false, visible: true, help: 'test help' },
+        { property: 'test5', required: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component['validationService'], 'updateFieldsForm').and.returnValue(expectedFields);
+
+      component['applyFormValidation'](previousFocusElement)(validatedFields);
+
+      expect(component.fields).toEqual(expectedFields);
+      expect(component['validationService'].updateFieldsForm).toHaveBeenCalledWith(validatedFields, fields);
+    });
+
+    it('applyFormValidation: should call setFocusOnValidation with validatedFields and previousFocusElement', () => {
+      const previousFocusElement = document.activeElement;
+
+      const validatedFields = { value: undefined, focus: 'test1' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component['validationService'], 'updateFieldsForm');
+
+      component['applyFormValidation'](previousFocusElement)(validatedFields);
+
+      expect(component['setFocusOnValidation']).toHaveBeenCalledWith(validatedFields, previousFocusElement);
+    });
+
+    it('disableForm: should update isDisableForm to true if param is true', () => {
+      component.disabledForm = false;
+      component['disableForm'](true);
+
+      expect(component.disabledForm).toBe(true);
+    });
+
+    it('disableForm: should update isDisableForm to false if param is false', () => {
+      component.disabledForm = true;
+      component['disableForm'](false);
+
+      expect(component.disabledForm).toBe(false);
+    });
+
+    it('disableForm: should call detectChanges', () => {
+      spyOn(component['changes'], 'detectChanges');
+
+      component['disableForm'](false);
+
+      expect(component['changes'].detectChanges).toHaveBeenCalled();
+    });
+
+    it('setFocusOnValidation: should call focus if validatedFields.focus is defined', () => {
+      const validatedFields = { focus: 'name' };
+      const previousFocusElement = document.activeElement;
+
+      spyOn(component, 'focus');
+
+      component['setFocusOnValidation'](validatedFields, previousFocusElement);
+
+      expect(component.focus).toHaveBeenCalledWith(validatedFields.focus);
+    });
+
+    it('setFocusOnValidation: should call previousElement.focus if validatedFields.focus is undefined', () => {
+      const validatedFields = { focus: undefined };
+      const previousFocusElement = document.activeElement;
+
+      spyOn(previousFocusElement, <any>'focus');
+
+      component['setFocusOnValidation'](validatedFields, previousFocusElement);
+
+      expect(previousFocusElement['focus']).toHaveBeenCalled();
     });
 
   });

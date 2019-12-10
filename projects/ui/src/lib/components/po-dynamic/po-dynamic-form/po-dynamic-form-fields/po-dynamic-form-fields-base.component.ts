@@ -36,7 +36,7 @@ export class PoDynamicFormFieldsBaseComponent {
     return this._value;
   }
 
-  @Input('p-is-disable-form') isDisableForm: boolean;
+  @Input('p-disabled-form') disabledForm: boolean;
 
   @Input('p-validate') validate?: string | Function;
 

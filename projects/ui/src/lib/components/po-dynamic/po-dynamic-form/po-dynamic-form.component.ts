@@ -30,7 +30,7 @@ import { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic
 })
 export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
 
-  isDisableForm: boolean;
+  disabledForm: boolean;
 
   private _form: NgForm;
 
@@ -84,14 +84,14 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     this.fieldsComponent.focus(property);
   }
 
-  async validateForm({ field, index: fieldIndex }) {
+  async validateForm({ field, fieldIndex }) {
     this.fields[fieldIndex] = field;
     const previousFocusElement = document.activeElement;
 
-    this.onDisabledForm(true);
+    this.disableForm(true);
 
     this.validationService.sendFormChange(this.validate, field, this.value)
-      .pipe(finalize(() => this.onDisabledForm(false)))
+      .pipe(finalize(() => this.disableForm(false)))
       .subscribe(this.applyFormValidation(previousFocusElement));
   }
 
@@ -112,8 +112,8 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     }
   }
 
-  private onDisabledForm(value: boolean) {
-    this.isDisableForm = value;
+  private disableForm(value: boolean) {
+    this.disabledForm = value;
     this.changes.detectChanges();
   }
 

@@ -42,18 +42,18 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   }
 
   isDisabled(field: PoDynamicFormField): boolean {
-    return field.disabled || this.isDisableForm;
+    return field.disabled || this.disabledForm;
   }
 
-  async onChangeField(field: PoDynamicFormField, index: number) {
+  async onChangeField(field: PoDynamicFormField, fieldIndex: number) {
     if (field.validate) {
-      await this.validateField(field, index);
+      await this.validateField(field, fieldIndex);
     }
 
     const hasValidationForm = this.validate && this.formValidate.observers.length;
 
     if (hasValidationForm) {
-      this.formValidate.emit({ field, index });
+      this.formValidate.emit({ field, fieldIndex });
     }
   }
 

@@ -90,7 +90,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     describe('onChangeField', () => {
-      const index = 0;
+      const fieldIndex = 0;
 
       it('should call `onChangeField` if `field.validate` has value', () => {
         const field = { property: 'test1', required: true, visible: true, validate: 'http://po.portinari.com.br/api' };
@@ -99,7 +99,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         component.onChangeField(field, 0);
 
-        expect(spyValidateField).toHaveBeenCalledWith(field, index);
+        expect(spyValidateField).toHaveBeenCalledWith(field, fieldIndex);
       });
 
       it('shouldn`t call `onChangeField` if `field.validate` doesn`t have value', () => {
@@ -107,7 +107,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         const spyValidateField = spyOn(component, <any>'validateField');
 
-        component.onChangeField(field, index);
+        component.onChangeField(field, fieldIndex);
 
         expect(spyValidateField).not.toHaveBeenCalled();
       });
@@ -119,9 +119,9 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         const spyEmit = spyOn(component.formValidate, 'emit');
 
-        component.onChangeField(field, index);
+        component.onChangeField(field, fieldIndex);
 
-        expect(spyEmit).toHaveBeenCalledWith({ field, index });
+        expect(spyEmit).toHaveBeenCalledWith({ field, fieldIndex });
       });
 
       it('shouldn`t emit `formValidate` if `validate` has value but `formValidate.observers` length is 0', () => {
@@ -131,7 +131,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         const spyEmit = spyOn(component.formValidate, 'emit');
 
-        component.onChangeField(field, index);
+        component.onChangeField(field, fieldIndex);
 
         expect(spyEmit).not.toHaveBeenCalled();
       });
@@ -539,6 +539,28 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(nativeElement.querySelectorAll('po-select').length).toBe(1);
       expect(nativeElement.querySelectorAll('po-textarea').length).toBe(1);
     });
+
+    // fit('should call url using httpClient if it is a string', () => {
+    //   component.fields = [
+    //     { property: 'name', onChange: 'http://test.com' }
+    //   ];
+
+    //   component.value['name'] = 'name';
+
+    //   component.ngOnChanges({
+    //     fields: new SimpleChange(null, component.fields, true)
+    //   });
+
+    //   fixture.detectChanges();
+
+    //   component.value['name'] = 'new name';
+
+    //   fixture.detectChanges();
+
+    //   spyOn(component['http'], 'post').and.returnValue(<any>{ subscribe: (callback, error) => callback() });
+
+    //   expect(component['http'].post).toHaveBeenCalled();
+    // });
 
   });
 
