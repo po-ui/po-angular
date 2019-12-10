@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { PoDynamicFormField, PoNotificationService } from '@portinari/portinari-ui';
+import { PoDynamicFormValidation } from 'projects/ui/src/lib';
 
 @Component({
   selector: 'sample-po-dynamic-form-register',
@@ -27,6 +28,7 @@ export class SamplePoDynamicFormRegisterComponent {
       { label: 'Rio de Janeiro', value: 3 },
       { label: 'Minas Gerais', value: 4 }
     ]},
+    { property: 'city', visible: false},
     { property: 'entryTime', label: 'Entry time', type: 'time', divider: 'Work data', gridColumns: 6 },
     { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 6 },
     { property: 'wage', type: 'currency', gridColumns: 6 },
@@ -49,5 +51,61 @@ export class SamplePoDynamicFormRegisterComponent {
   ];
 
   constructor(public poNotification: PoNotificationService) { }
+
+  onChangeFields(changeValue): PoDynamicFormValidation {
+
+    if (changeValue.property === 'state') {
+
+      return {
+        value: { city: undefined},
+        fields: [
+          { property: 'city', gridColumns: 6, options: this.getCity(changeValue.value.state), visible: true}
+        ],
+        focus: 'city'
+      };
+
+    } else {
+      return {};
+    }
+
+  }
+
+  private getCity(state?) {
+    switch (state) {
+      case 1: {
+        return [
+          { label: 'Palhoça', value: 5 },
+          { label: 'Lages', value: 6 },
+          { label: 'Balneário Camboriú', value: 7 },
+          { label: 'Brusque', value: 8 },
+        ];
+      }
+      case 2: {
+        return [
+          { label: 'São Paulo', value: 9 },
+          { label: 'Guarulhos', value: 10 },
+          { label: 'Campinas', value: 11 },
+          { label: 'São Bernardo do Campo', value: 12 }
+        ];
+      }
+      case 3: {
+        return [
+          { label: 'Rio de Janeiro', value: 13 },
+          { label: 'São Gonçalo', value: 14 },
+          { label: 'Duque de Caxias', value: 15 },
+          { label: 'Nova Iguaçu', value: 16 }
+        ];
+      }
+      case 4: {
+        return [
+          { label: 'Belo Horizonte', value: 17 },
+          { label: 'Uberlândia', value: 18 },
+          { label: 'Contagem', value: 19 },
+          { label: 'Juiz de Fora', value: 20 }
+        ];
+      }
+    }
+    return [];
+  }
 
 }
