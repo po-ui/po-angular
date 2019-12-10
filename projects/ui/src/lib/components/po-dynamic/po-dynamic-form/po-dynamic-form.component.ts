@@ -96,10 +96,10 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
   }
 
   private applyFormValidation(previousFocusElement: Element): (value: any) => void {
-    return validatedFields => {
+    return (validatedFields = {}) => {
 
       this.value = { ...this.value, ...validatedFields.value };
-      this.fields = this.validationService.updateFieldsForm(validatedFields, this.fields);
+      this.fields = this.validationService.updateFieldsForm(validatedFields.fields, this.fields);
 
       this.setFocusOnValidation(validatedFields, previousFocusElement);
 

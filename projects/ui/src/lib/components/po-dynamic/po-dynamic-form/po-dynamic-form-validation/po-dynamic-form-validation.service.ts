@@ -25,8 +25,8 @@ export class PoDynamicFormValidationService {
     return this.sendChanges(validate, field, value);
   }
 
-  updateFieldsForm(validatedFields: PoDynamicFormValidation, fields: Array<PoDynamicFormField>) {
-    return [ ...validatedFields.fields ].reduce((updatedFields, validatedField) => {
+  updateFieldsForm(validatedFields: Array<PoDynamicFormField> = [], fields: Array<PoDynamicFormField> = []) {
+    return [ ...validatedFields ].reduce((updatedFields, validatedField) => {
       const index = updatedFields.findIndex(field => field.property === validatedField.property);
       const hasProperty = index >= 0;
 
