@@ -8,7 +8,7 @@ import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.
 import { PoDynamicFormFieldsComponent } from './po-dynamic-form-fields.component';
 import { PoDynamicModule } from '../../po-dynamic.module';
 
-describe('PoDynamicFormFieldsComponent: ', () => {
+fdescribe('PoDynamicFormFieldsComponent: ', () => {
   let component: PoDynamicFormFieldsComponent;
   let fixture: ComponentFixture<PoDynamicFormFieldsComponent>;
 
@@ -85,6 +85,118 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       component.focus('otherField');
 
       expect(spyOnFocus).not.toHaveBeenCalled();
+    });
+
+    describe('onChangeField', () => {
+      const index = 0;
+
+      it('should call `onChangeField` if `field.validate` has value', () => {
+        const field = { property: 'test1', required: true, visible: true, validate: 'http://po.portinari.com.br/api' };
+
+        const spyValidateField = spyOn(component, <any>'validateField');
+
+        component.onChangeField(field, 0);
+
+        expect(spyValidateField).toHaveBeenCalledWith(field, index);
+      });
+
+      it('shouldn`t call `onChangeField` if `field.validate` doesn`t have value', () => {
+        const field = { property: 'test1', required: true, visible: true };
+
+        const spyValidateField = spyOn(component, <any>'validateField');
+
+        component.onChangeField(field, index);
+
+        expect(spyValidateField).not.toHaveBeenCalled();
+      });
+
+      it('should emit `formValidate` if `validate` has value and `formValidate.observers` has length', () => {
+        const field = { property: 'test1', required: true, visible: true };
+        component.formValidate.observers.length = 1;
+        component.validate = 'http://po.portinari.com.br/api';
+
+        const spyEmit = spyOn(component.formValidate, 'emit');
+
+        component.onChangeField(field, index);
+
+        expect(spyEmit).toHaveBeenCalledWith({ field, index });
+      });
+
+      it('shouldn`t emit `formValidate` if `validate` has value but `formValidate.observers` length is 0', () => {
+        const field = { property: 'test1', required: true, visible: true };
+        component.formValidate.observers.length = 0;
+        component.validate = 'http://po.portinari.com.br/api';
+
+        const spyEmit = spyOn(component.formValidate, 'emit');
+
+        component.onChangeField(field, index);
+
+        expect(spyEmit).not.toHaveBeenCalled();
+      });
+    });
+
+    it('applyFieldValidation: should merge fields and validatedFields and apply new value to `fields` and `value``', () => {
+      const index = 1;
+      const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value' };
+      const expectedField = { property: 'test2', required: false, visible: true, help: 'test help' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: true, visible: false, help: 'test help' },
+      ];
+
+      component['applyFieldValidation'](index, validatedField);
+
+      expect(component.fields[index]).toEqual(expectedField);
+      expect(component.value[component.fields[index].property]).toEqual(validatedField.value);
+    });
+
+    it('applyFieldValidation: should call `detectChanges`', () => {
+      const index = 1;
+      const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: true, visible: false, help: 'test help' },
+      ];
+
+      const spyChanges = spyOn(component['changes'], 'detectChanges');
+
+      component['applyFieldValidation'](index, validatedField);
+
+      expect(spyChanges).toHaveBeenCalled();
+    });
+
+    it('applyFieldValidation: should call `focus` if `validatedFIeld` has `focus` property', () => {
+      const index = 1;
+      const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value', focus: true };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: true, visible: false, help: 'test help' },
+      ];
+
+      const spyFocus = spyOn(component, 'focus');
+
+      component['applyFieldValidation'](index, validatedField);
+
+      expect(spyFocus).toHaveBeenCalled();
+    });
+
+    it('applyFieldValidation: should call `focus` if `validatedFIeld` has `focus` property', () => {
+      const index = 1;
+      const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value', focus: false };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: true, visible: false, help: 'test help' },
+      ];
+
+      const spyFocus = spyOn(component, 'focus');
+
+      component['applyFieldValidation'](index, validatedField);
+
+      expect(spyFocus).not.toHaveBeenCalled();
     });
 
   });
