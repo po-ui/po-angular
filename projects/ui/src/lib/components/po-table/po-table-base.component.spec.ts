@@ -863,71 +863,222 @@ describe('PoTableBaseComponent:', () => {
       expect(component.showMore.emit).toHaveBeenCalledWith(undefined);
     });
 
+    it('toggleDetail: should set showDetail to false', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+      component.toggleDetail(currentRow);
+      expect(currentRow.$showDetail).toBe(false);
+    });
+
+    it('toggleDetail: should set showDetail to true', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+      component.toggleDetail(currentRow);
+      expect(currentRow.$showDetail).toBe(true);
+    });
+
+    it('toggleDetail: should emit expanded if detail is opened', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      spyOn(component.expanded, 'emit');
+
+      component.toggleDetail(currentRow);
+      expect(component.expanded.emit).toHaveBeenCalled();
+    });
+
+    it('toggleDetail: should emit collapsed if detail is closed', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      spyOn(component.collapsed, 'emit');
+
+      component.toggleDetail(currentRow);
+      expect(component.collapsed.emit).toHaveBeenCalled();
+    });
+
+    it('expand: should set showDetail to true', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [ currentRow ];
+
+      component.expand(0);
+
+      expect(component.items[0].$showDetail).toBe(true);
+    });
+
+    it('expand: should keep showDetail to true', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [ currentRow ];
+
+      component.expand(0);
+
+      expect(component.items[0].$showDetail).toBe(true);
+    });
+
+    it('expand: shouldn`t emit expanded', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [ currentRow ];
+
+      spyOn(component.expanded, 'emit');
+
+      component.expand(0);
+
+      expect(component.expanded.emit).not.toHaveBeenCalled();
+    });
+
+    it('collapse: should set showDetail to false', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [ currentRow ];
+
+      component.collapse(0);
+
+      expect(component.items[0].$showDetail).toBe(false);
+    });
+
+    it('collapse: should keep showDetail to false', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [ currentRow ];
+
+      component.collapse(0);
+
+      expect(component.items[0].$showDetail).toBe(false);
+    });
+
+    it('collapse: shouldn`t emit collapsed', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [ currentRow ];
+
+      spyOn(component.collapsed, 'emit');
+
+      component.collapse(0);
+
+      expect(component.collapsed.emit).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('Properties:', () => {
     const booleanValidTrueValues = [true, 'true', 1, ''];
     const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
 
-    it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
+    describe('p-literals:', () => {
+      it('should be in portuguese if browser is setted with an unsupported language', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault[poLocaleDefault]);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault[poLocaleDefault]);
+      });
 
-    it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      it('should be in portuguese if browser is setted with `pt`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.pt);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.pt);
+      });
 
-    it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('en');
+      it('should be in english if browser is setted with `en`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('en');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.en);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.en);
+      });
 
-    it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      it('should be in spanish if browser is setted with `es`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('es');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.es);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.es);
+      });
 
-    it('p-literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      it('should be in russian if browser is setted with `ru`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.ru);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.ru);
+      });
 
-    it('p-literals: should accept custom literals', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      it('should accept custom literals', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
-      const customLiterals = Object.assign({}, poTableLiteralsDefault[poLocaleDefault]);
+        const customLiterals = Object.assign({}, poTableLiteralsDefault[poLocaleDefault]);
 
-      // Custom some literals
-      customLiterals.noData = 'No data custom';
+        // Custom some literals
+        customLiterals.noData = 'No data custom';
 
-      component.literals = customLiterals;
+        component.literals = customLiterals;
 
-      expect(component.literals).toEqual(customLiterals);
-    });
+        expect(component.literals).toEqual(customLiterals);
+      });
 
-    it('p-literals: should update property with default literals if is setted with invalid values', () => {
-      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+      it('should update property with default literals if is setted with invalid values', () => {
+        const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
-      expectPropertiesValues(component, 'literals', invalidValues, poTableLiteralsDefault[poLocaleDefault]);
+        expectPropertiesValues(component, 'literals', invalidValues, poTableLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should get literals directly from poTableLiteralsDefault if it not initialized', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+        expect(component.literals).toEqual(poTableLiteralsDefault['pt']);
+      });
     });
 
     it('p-loading: should update property `p-loading` with valid values.', () => {
@@ -1005,7 +1156,6 @@ describe('PoTableBaseComponent:', () => {
 
       expect(component['sortType']).toBe('descending');
     });
-
   });
 
 });

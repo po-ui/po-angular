@@ -151,7 +151,7 @@
           </td>
           <td *ngIf="(getColumnMasterDetail() !== undefined) && !hideDetail || hasRowTemplate"
             class="po-table-column-detail-toggle"
-            (click)="row.$showDetail = !row.$showDetail">
+            (click)="toggleDetail(row)">
             <span *ngIf="(containsMasterDetail(row) && !hasRowTemplate) || isShowRowTemplate(row, rowIndex) && hasRowTemplate"
               class="po-icon po-clickable"
               [class.po-icon-arrow-up]="row.$showDetail"
