@@ -90,56 +90,81 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     describe('onChangeField', () => {
-      const fieldIndex = 0;
+      const changedFieldIndex = 0;
 
-      it('should call `validateField` if `field.validate` has value', async () => {
-        const property = 'test1';
+      it('should call `getField` with `propertyOfVisibleFields`.', () => {
+        const fakeVisibleField = { property: 'test1', validate: 'teste' };
         component.fields = [
           { property: 'test1', validate: 'teste' }
         ];
-        const expectedChangedField = { property: 'test1', validate: 'teste' };
+        const field = { changedField: fakeVisibleField, changedFieldIndex };
 
-        const spyValidateField = spyOn(component, <any>'validateField');
+        spyOn(component, <any>'getField').and.returnValue(field);
+        component.onChangeField(fakeVisibleField);
 
-        component.onChangeField(property);
-
-        await expect(spyValidateField).toHaveBeenCalledWith(expectedChangedField, fieldIndex);
+        expect(component['getField']).toHaveBeenCalledWith(fakeVisibleField.property);
       });
 
-      it('shouldn`t call `onChangeField` if `field.validate` doesn`t have value', () => {
-        const property = 'test1';
+      it('should call `validateField` if `changedField.validate` has value', async () => {
+        const fakeVisibleField = { property: 'test1', validate: 'teste' };
+        component.fields = [
+          { property: 'test1', validate: 'teste' }
+        ];
+        const field = { changedField: fakeVisibleField, changedFieldIndex };
 
-        const spyValidateField = spyOn(component, <any>'validateField');
+        spyOn(component, <any>'getField').and.returnValue(field);
+        spyOn(component, <any>'validateField');
 
-        component.onChangeField(property);
+        await component.onChangeField(fakeVisibleField);
 
-        expect(spyValidateField).not.toHaveBeenCalled();
+        expect(component['validateField']).toHaveBeenCalledWith(fakeVisibleField, changedFieldIndex, fakeVisibleField);
+      });
+
+      it('shouldn`t call `validateField` if `changedField.validate` doesn`t have value', async () => {
+        const fakeVisibleField = { property: 'test1'};
+        component.fields = [
+          { property: 'test1'}
+        ];
+        const field = { changedField: fakeVisibleField, changedFieldIndex };
+
+        spyOn(component, <any>'getField').and.returnValue(field);
+        spyOn(component, <any>'validateField');
+
+        await component.onChangeField(fakeVisibleField);
+
+        expect(component['validateField']).not.toHaveBeenCalledWith(fakeVisibleField, changedFieldIndex, fakeVisibleField);
       });
 
       it('should emit `formValidate` if `validate` has value and `formValidate.observers` has length', async () => {
-        const property = 'test1';
+        const fakeVisibleField = { property: 'test1', validate: 'teste' };
+        const expectedChangedField = { property: 'test1', validate: 'teste', disabled: undefined };
+        const field = { changedField: fakeVisibleField, changedFieldIndex };
+
         component.formValidate.observers.length = 1;
+        component.validate = 'http://po.portinari.com.br/api';
+        component.fields = [{ property: 'test1', validate: 'teste' }];
+
+        spyOn(component, <any>'getField').and.returnValue(field);
+        const spyEmit = spyOn(component.formValidate, 'emit');
+
+        await component.onChangeField(fakeVisibleField);
+
+        expect(spyEmit).toHaveBeenCalledWith({ field: expectedChangedField, fieldIndex: changedFieldIndex });
+      });
+
+      it('shouldn`t emit `formValidate` if `validate` has value but `formValidate.observers` length is 0', () => {
+        const fakeVisibleField = { property: 'test1', validate: 'teste' };
+        component.formValidate.observers.length = 0;
         component.validate = 'http://po.portinari.com.br/api';
         component.fields = [
           { property: 'test1', validate: 'teste' }
         ];
-        const expectedChangedField = { property: 'test1', validate: 'teste' };
+        const field = { changedField: fakeVisibleField, changedFieldIndex };
 
+        spyOn(component, <any>'getField').and.returnValue(field);
         const spyEmit = spyOn(component.formValidate, 'emit');
 
-        await component.onChangeField(property);
-
-        expect(spyEmit).toHaveBeenCalledWith({ field: expectedChangedField, fieldIndex: fieldIndex });
-      });
-
-      it('shouldn`t emit `formValidate` if `validate` has value but `formValidate.observers` length is 0', () => {
-        const property = 'test1';
-        component.formValidate.observers.length = 0;
-        component.validate = 'http://po.portinari.com.br/api';
-
-        const spyEmit = spyOn(component.formValidate, 'emit');
-
-        component.onChangeField(property);
+        component.onChangeField(fakeVisibleField);
 
         expect(spyEmit).not.toHaveBeenCalled();
       });
@@ -209,34 +234,51 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(spyFocus).not.toHaveBeenCalled();
     });
 
-    it(`validateField: should set 'disabled' with true to 'visibleFields[index]'
-    and call 'detectChanges', 'validationService.sendFieldChange' and 'applyFieldValidation'`, async () => {
-      const field = { property: 'name', required: true, visible: true, disabled: false };
-      const index = 0;
+    it('getField: should return `changedField` and `changedFieldIndex`', () => {
+      const fakeProperty = 'test1';
+      const changedFieldIndex = 0;
+      const fakeVisibleField = { property: 'test1', validate: 'teste' };
+      const expectedReturn = { changedField: fakeVisibleField, changedFieldIndex };
 
-      component.value = [{ name: 'user 1' }, { age: 'user 2' }, { rg: 'user 3' }];
-      component.visibleFields = [
-        { property: 'name', required: false, visible: true, disabled: false },
-        { property: 'age', required: false, visible: false, help: 'test help' },
-        { property: 'rg', required: false, visible: false, help: 'test help 2' },
+      component.fields = [
+        { property: 'test1', validate: 'teste' }
       ];
 
-      const spySendFieldChange = spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(field));
-      const spyChanges = spyOn(component['changes'], 'detectChanges');
-      const spyApplyFieldValidation = spyOn(component, <any>'applyFieldValidation');
+      const spyGetFields = component['getField'](fakeProperty);
 
-      await component['validateField'](field, index);
-
-      expect(component.visibleFields[0].disabled).toBeTruthy();
-      expect(spySendFieldChange).toHaveBeenCalledWith(field, component.value[field.property]);
-      expect(spyChanges).toHaveBeenCalled();
-      expect(spyApplyFieldValidation).toHaveBeenCalledWith(index, field);
+      expect(spyGetFields).toEqual(expectedReturn);
     });
+
+    // it(`validateField: should set 'disabled' with true to 'visibleFields[index]'
+    // and call 'detectChanges', 'validationService.sendFieldChange' and 'applyFieldValidation'`, async () => {
+    //   const field = { property: 'name', required: true, visible: true, disabled: false };
+    //   const index = 0;
+    //   const fakeVisibleField = { property: 'test1', validate: 'teste' };
+
+    //   component.value = [{ name: 'user 1' }, { age: 'user 2' }, { rg: 'user 3' }];
+    //   component.visibleFields = [
+    //     { property: 'name', required: false, visible: true, disabled: false },
+    //     { property: 'age', required: false, visible: false, help: 'test help' },
+    //     { property: 'rg', required: false, visible: false, help: 'test help 2' },
+    //   ];
+
+    //   const spySendFieldChange = spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(field));
+    //   const spyChanges = spyOn(component['changes'], 'detectChanges');
+    //   const spyApplyFieldValidation = spyOn(component, <any>'applyFieldValidation');
+
+    //   await component['validateField'](field, index, fakeVisibleField);
+
+    //   expect(component.visibleFields[0].disabled).toBeTruthy();
+    //   expect(spySendFieldChange).toHaveBeenCalledWith(field, component.value[field.property]);
+    //   expect(spyChanges).toHaveBeenCalled();
+    //   expect(spyApplyFieldValidation).toHaveBeenCalledWith(index, field);
+    // });
 
     it(`validateField: should not call 'applyFieldValidation'
     and should set 'disabled' with it's previous value into 'visibleFields[index]'`, async () => {
       const field = { property: 'name', required: true, visible: true, disabled: false };
       const index = 0;
+      const fakeVisibleField = { property: 'test1', validate: 'teste' };
 
       component.value = [{ name: 'user 1' }, { age: 'user 2' }, { rg: 'user 3' }];
       component.visibleFields = [
@@ -248,7 +290,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const spySendFieldChange = spyOn(component['validationService'], 'sendFieldChange').and.throwError('Error');
       const spyApplyFieldValidation = spyOn(component, <any>'applyFieldValidation');
 
-      await component['validateField'](field, index);
+      await component['validateField'](field, index, fakeVisibleField);
 
       expect(spySendFieldChange).toHaveBeenCalledWith(field, component.value[field.property]);
       expect(component.visibleFields[0].disabled).toBeFalsy();
