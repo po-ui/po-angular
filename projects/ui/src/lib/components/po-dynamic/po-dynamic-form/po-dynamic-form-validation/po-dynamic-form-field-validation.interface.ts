@@ -1,6 +1,6 @@
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 
-export interface PoDynamicFieldValidation {
+export interface PoDynamicFormFieldValidation {
 
   field?: PoDynamicFormField;
 

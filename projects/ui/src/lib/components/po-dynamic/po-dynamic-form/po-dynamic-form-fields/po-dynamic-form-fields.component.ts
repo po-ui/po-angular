@@ -2,7 +2,7 @@ import { Component, OnChanges, QueryList, SimpleChanges, ViewChildren, ChangeDet
 import { ControlContainer, NgForm } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
 
-import { PoDynamicFieldValidation } from '../po-dynamic-form-validation/po-dynamic-form-field-validation.interface';
+import { PoDynamicFormFieldValidation } from '../po-dynamic-form-validation/po-dynamic-form-field-validation.interface';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormValidationService } from '../po-dynamic-form-validation/po-dynamic-form-validation.service';
@@ -45,15 +45,18 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     return field.disabled || this.disabledForm;
   }
 
-  async onChangeField(field: PoDynamicFormField, fieldIndex: number) {
-    if (field.validate) {
-      await this.validateField(field, fieldIndex);
+  async onChangeField(property: string) {
+    const changedFieldIndex = this.fields.findIndex(field => field.property === property);
+    const changedField = this.fields[changedFieldIndex];
+
+    if (changedField.validate) {
+      await this.validateField(changedField, changedFieldIndex);
     }
 
     const hasValidationForm = this.validate && this.formValidate.observers.length;
 
     if (hasValidationForm) {
-      this.formValidate.emit({ field, fieldIndex });
+      this.formValidate.emit({ field: changedField, fieldIndex:  changedFieldIndex});
     }
   }
 
@@ -61,7 +64,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     return index;
   }
 
-  private applyFieldValidation(index: number, validatedField: PoDynamicFieldValidation) {
+  private applyFieldValidation(index: number, validatedField: PoDynamicFormFieldValidation) {
     const field = this.fields[index];
 
     this.fields[index] = { ...field, ...validatedField.field };

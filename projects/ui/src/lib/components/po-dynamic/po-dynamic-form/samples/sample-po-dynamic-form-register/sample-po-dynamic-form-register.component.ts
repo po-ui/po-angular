@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { PoDynamicFormField, PoNotificationService } from '@portinari/portinari-ui';
-import { PoDynamicFormValidation } from 'projects/ui/src/lib';
+import { PoDynamicFormValidation } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-dynamic-form-register',
@@ -28,7 +28,7 @@ export class SamplePoDynamicFormRegisterComponent {
       { label: 'Rio de Janeiro', value: 3 },
       { label: 'Minas Gerais', value: 4 }
     ]},
-    { property: 'city', visible: false},
+    { property: 'city', disabled: true },
     { property: 'entryTime', label: 'Entry time', type: 'time', divider: 'Work data', gridColumns: 6 },
     { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 6 },
     { property: 'wage', type: 'currency', gridColumns: 6 },
@@ -59,13 +59,9 @@ export class SamplePoDynamicFormRegisterComponent {
       return {
         value: { city: undefined},
         fields: [
-          { property: 'city', gridColumns: 6, options: this.getCity(changeValue.value.state), visible: true}
-        ],
-        focus: 'city'
+          { property: 'city', gridColumns: 6, options: this.getCity(changeValue.value.state), disabled: false }
+        ]
       };
-
-    } else {
-      return {};
     }
 
   }
