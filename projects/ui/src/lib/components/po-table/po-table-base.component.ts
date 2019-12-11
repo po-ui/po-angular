@@ -398,19 +398,27 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Input('p-max-columns') maxColumns?: number;
 
-  /**
-   * Ação executada quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas.
-   */
+  /** Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();
 
-  /**
-   * Ação executada quando a seleção das linhas é desmarcada por meio do *checkbox* que seleciona todas as linhas.
-   */
+  /** Evento executado quando a seleção das linhas é desmarcada por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-unselected') allUnselected?: EventEmitter<any> = new EventEmitter<any>();
 
   /**
-   * Ação executada ao selecionar uma linha do `po-table`.
+   * Evento executado ao colapsar uma linha do `po-table`.
+   *
+   * > Como parâmetro o componente envia o item colapsado.
    */
+  @Output('p-collapsed') collapsed?: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * Evento executado ao expandir uma linha do `po-table`.
+   *
+   * > Como parâmetro o componente envia o item expandido.
+   */
+  @Output('p-expanded') expanded?: EventEmitter<any> = new EventEmitter<any>();
+
+  /** Evento executado ao selecionar uma linha do `po-table`. */
   @Output('p-selected') selected?: EventEmitter<any> = new EventEmitter<any>();
 
   /**
@@ -425,7 +433,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
   @Output('p-show-more') showMore?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
   /**
-   * Ação executada ao ordenar colunas da tabela.
+   * Evento executado ao ordenar colunas da tabela.
    *
    * Recebe um objeto `{ column, type }` onde:
    *
@@ -434,9 +442,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Output('p-sort-by') sortBy?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
-  /**
-   * Ação executada ao desmarcar a seleção de uma linha do `po-table`.
-   */
+  /** Evento executado ao desmarcar a seleção de uma linha do `po-table`. */
   @Output('p-unselected') unselected?: EventEmitter<any> = new EventEmitter<any>();
 
   selectAll = false;
@@ -463,6 +469,26 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   get hasColumns(): boolean {
     return this.columns && this.columns.length > 0;
+  }
+
+  /**
+   * Método que colapsa uma linha com detalhe quando executada.
+   *
+   * @param { number } rowIndex Índice da linha que será colapsada.
+   * > Ao reordenar os dados da tabela, o valor contido neste índice será alterado conforme a ordenação.
+   */
+  collapse(rowIndex: number) {
+    this.setShowDetail(rowIndex, false);
+  }
+
+  /**
+   * Método que expande uma linha com detalhe quando executada.
+   *
+   * @param { number } rowIndex Índice da linha que será expandida.
+   * > Ao reordenar os dados da tabela, o valor contido neste índice será alterado conforme a ordenação.
+   */
+  expand(rowIndex: number) {
+    this.setShowDetail(rowIndex, true);
   }
 
   selectAllRows() {
@@ -538,6 +564,11 @@ export abstract class PoTableBaseComponent implements OnChanges {
     return this.items && this.items.length > 0;
   }
 
+  toggleDetail(row: any) {
+    this.setShowDetail(row, !row.$showDetail);
+    this.emitExpandEvents(row);
+  }
+
   toggleRowAction(row: any) {
     const toggleShowAction = row.$showAction;
 
@@ -601,6 +632,10 @@ export abstract class PoTableBaseComponent implements OnChanges {
     }
   }
 
+  private emitExpandEvents(row: any) {
+    row.$showDetail ? this.expanded.emit(row) : this.collapsed.emit(row);
+  }
+
   private emitSelectAllEvents(selectAll: boolean, rows: any) {
     selectAll ? this.allSelected.emit(rows) : this.allUnselected.emit(rows);
   }
@@ -630,6 +665,15 @@ export abstract class PoTableBaseComponent implements OnChanges {
         column['link'] = 'link';
       }
     });
+  }
+
+  private setShowDetail(rowIdentifier: any | number, isShowDetail: boolean) {
+
+    const isRowIndex = typeof rowIdentifier === 'number' && this.items[rowIdentifier];
+
+    const row = isRowIndex ? this.items[rowIdentifier] : rowIdentifier;
+
+    row.$showDetail = isShowDetail;
   }
 
   private unselectOtherRows(rows: Array<any>, row) {
