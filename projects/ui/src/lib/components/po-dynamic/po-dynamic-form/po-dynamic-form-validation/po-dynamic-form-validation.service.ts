@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { of } from 'rxjs';
+
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { PoDynamicFormValidation } from './po-dynamic-form-validation.interface';
 
 @Injectable()
 export class PoDynamicFormValidationService {
