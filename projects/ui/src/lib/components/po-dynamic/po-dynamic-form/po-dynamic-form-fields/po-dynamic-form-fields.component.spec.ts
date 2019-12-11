@@ -92,46 +92,54 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     describe('onChangeField', () => {
       const fieldIndex = 0;
 
-      it('should call `onChangeField` if `field.validate` has value', () => {
-        const field = { property: 'test1', required: true, visible: true, validate: 'http://po.portinari.com.br/api' };
+      it('should call `validateField` if `field.validate` has value', async () => {
+        const property = 'test1';
+        component.fields = [
+          { property: 'test1', validate: 'teste' }
+        ];
+        const expectedChangedField = { property: 'test1', validate: 'teste' };
 
         const spyValidateField = spyOn(component, <any>'validateField');
 
-        component.onChangeField(field, 0);
+        component.onChangeField(property);
 
-        expect(spyValidateField).toHaveBeenCalledWith(field, fieldIndex);
+        await expect(spyValidateField).toHaveBeenCalledWith(expectedChangedField, fieldIndex);
       });
 
       it('shouldn`t call `onChangeField` if `field.validate` doesn`t have value', () => {
-        const field = { property: 'test1', required: true, visible: true };
+        const property = 'test1';
 
         const spyValidateField = spyOn(component, <any>'validateField');
 
-        component.onChangeField(field, fieldIndex);
+        component.onChangeField(property);
 
         expect(spyValidateField).not.toHaveBeenCalled();
       });
 
-      it('should emit `formValidate` if `validate` has value and `formValidate.observers` has length', () => {
-        const field = { property: 'test1', required: true, visible: true };
+      it('should emit `formValidate` if `validate` has value and `formValidate.observers` has length', async () => {
+        const property = 'test1';
         component.formValidate.observers.length = 1;
         component.validate = 'http://po.portinari.com.br/api';
+        component.fields = [
+          { property: 'test1', validate: 'teste' }
+        ];
+        const expectedChangedField = { property: 'test1', validate: 'teste' };
 
         const spyEmit = spyOn(component.formValidate, 'emit');
 
-        component.onChangeField(field, fieldIndex);
+        await component.onChangeField(property);
 
-        expect(spyEmit).toHaveBeenCalledWith({ field, fieldIndex });
+        expect(spyEmit).toHaveBeenCalledWith({ field: expectedChangedField, fieldIndex: fieldIndex });
       });
 
       it('shouldn`t emit `formValidate` if `validate` has value but `formValidate.observers` length is 0', () => {
-        const field = { property: 'test1', required: true, visible: true };
+        const property = 'test1';
         component.formValidate.observers.length = 0;
         component.validate = 'http://po.portinari.com.br/api';
 
         const spyEmit = spyOn(component.formValidate, 'emit');
 
-        component.onChangeField(field, fieldIndex);
+        component.onChangeField(property);
 
         expect(spyEmit).not.toHaveBeenCalled();
       });

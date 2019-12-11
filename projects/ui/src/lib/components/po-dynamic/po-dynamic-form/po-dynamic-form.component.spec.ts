@@ -160,7 +160,7 @@ describe('PoDynamicFormComponent:', () => {
     it('applyFormValidation: should call updateFieldsForm to set fields', () => {
       const previousFocusElement = document.activeElement;
 
-      const validatedFields = { value: undefined };
+      const validatedFields = { value: undefined, fields: undefined };
 
       const fields = [
         { property: 'test1', required: true, visible: true },
@@ -181,7 +181,7 @@ describe('PoDynamicFormComponent:', () => {
       component['applyFormValidation'](previousFocusElement)(validatedFields);
 
       expect(component.fields).toEqual(expectedFields);
-      expect(component['validationService'].updateFieldsForm).toHaveBeenCalledWith(validatedFields, fields);
+      expect(component['validationService'].updateFieldsForm).toHaveBeenCalledWith(validatedFields.fields, fields);
     });
 
     it('applyFormValidation: should call setFocusOnValidation with validatedFields and previousFocusElement', () => {

@@ -80,11 +80,11 @@ describe('PoDynamicFormValidationService:', () => {
         { property: 'test4', required: false, visible: false }
       ];
 
-      const validatedFields = { fields: [
+      const validatedFields = [
         { property: 'test2', required: false, help: 'test help' },
         { property: 'test3', required: true, visible: false },
         { property: 'test5', required: true }
-      ]};
+      ];
 
       const expectedField = [
         { property: 'test1', required: true, visible: true },
