@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import { PoDynamicFormFieldChanged } from './po-dynamic-form-field-changed.interface';
 
 @Injectable()
 export class PoDynamicFormValidationService {
@@ -11,7 +12,7 @@ export class PoDynamicFormValidationService {
   constructor(private http: HttpClient) { }
 
   sendChanges(validate: Function | string, field: PoDynamicFormField, value: any) {
-    const changedValue = { property: field.property, value };
+    const changedValue: PoDynamicFormFieldChanged = { property: field.property, value };
 
     return typeof validate === 'string' ?
       this.validateFieldOnServer(validate, changedValue) : of(validate(changedValue));

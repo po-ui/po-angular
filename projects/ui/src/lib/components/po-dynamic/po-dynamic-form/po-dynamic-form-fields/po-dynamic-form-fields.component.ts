@@ -45,8 +45,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     return field.disabled || this.disabledForm;
   }
 
-  async onChangeField(property: string) {
-    const { changedField, changedFieldIndex } = this.getField(property);
+  async onChangeField(propertyOfVisibleFields: string) {
+    const { changedField, changedFieldIndex } = this.getField(propertyOfVisibleFields);
 
     if (changedField.validate) {
       await this.validateField(changedField, changedFieldIndex);

@@ -160,13 +160,13 @@ export class PoDynamicFormBaseComponent {
    * Função ou serviço para validar as **mudanças do formulário**.
    *
    * Ao ser executado, irá receber como parâmetro um objeto com o nome da propriedade
-   * alterada e o novo valor:
+   * alterada e o novo valor, conforme a interface `PoDynamicFormFieldChanged`:
    *
    * ```
    * { property: 'property name', value: 'new value' }
    * ```
    *
-   * O retorno desta função deve ser do tipo `PoDynamicFormValidation`,
+   * O retorno desta função deve ser do tipo [PoDynamicFormValidation](documentation/po-dynamic-form#po-dynamic-form-validation),
    * onde o usuário poderá determinar as novas atualizações dos campos.
    * Por exemplo:
    *

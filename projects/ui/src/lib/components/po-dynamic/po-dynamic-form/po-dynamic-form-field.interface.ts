@@ -90,13 +90,13 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Função ou serviço para validar as **mudanças do campo**.
    *
    * Ao ser executado, irá receber como parâmetro um objeto com o nome da propriedade
-   * alterada e o novo valor:
+   * alterada e o novo valor, conforme a interface `PoDynamicFormFieldChanged`:
    *
    * ```
    * { property: 'property name', value: 'new value' }
    * ```
    *
-   * O retorno desta função deve ser do tipo `PoDynamicFormFieldValidation`,
+   * O retorno desta função deve ser do tipo [PoDynamicFormFieldValidation](documentation/po-dynamic-form#po-dynamic-form-field-validation),
    * onde o usuário poderá determinar as novas propriedades do campo.
    * Por exemplo:
    *
@@ -104,7 +104,6 @@ export interface PoDynamicFormField extends PoDynamicField {
    * onChangeField(changeValue): PoDynamicFormFieldValidation {
    *
    * if (changeValue.property === 'birthday' && !this.validate('birthday')) {
-   *
    *   return {
    *     value: '',
    *     field: { property: 'birthday', required: true },

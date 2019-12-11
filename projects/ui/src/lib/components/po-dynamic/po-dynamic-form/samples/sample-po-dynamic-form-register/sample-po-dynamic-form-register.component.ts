@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoDynamicFormField, PoNotificationService } from '@portinari/portinari-ui';
-import { PoDynamicFormValidation } from '@portinari/portinari-ui';
+import { PoDynamicFormField, PoDynamicFormFieldChanged, PoDynamicFormValidation, PoNotificationService } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-dynamic-form-register',
@@ -52,14 +51,14 @@ export class SamplePoDynamicFormRegisterComponent {
 
   constructor(public poNotification: PoNotificationService) { }
 
-  onChangeFields(changeValue): PoDynamicFormValidation {
+  onChangeFields(changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation {
 
-    if (changeValue.property === 'state') {
+    if (changedValue.property === 'state') {
 
       return {
         value: { city: undefined},
         fields: [
-          { property: 'city', gridColumns: 6, options: this.getCity(changeValue.value.state), disabled: false }
+          { property: 'city', gridColumns: 6, options: this.getCity(changedValue.value.state), disabled: false }
         ]
       };
     }
