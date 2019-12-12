@@ -117,9 +117,11 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     this.changes.detectChanges();
   }
 
-  private setFocusOnValidation(validatedFields: PoDynamicFormValidation, previousFocusElement: Element) {
+  private setFocusOnValidation(validatedFields: PoDynamicFormValidation = {}, previousFocusElement: Element) {
     if (validatedFields.focus) {
-      this.focus(validatedFields.focus);
+      // precisa do timeout para que o valor seja atribuido no campo antes de setar o focus,
+      // para nao disparar a mudança posteriormente. Situação ocorre quando retornar campo com valor e focus atribuido a ele.
+      setTimeout(() => this.focus(validatedFields.focus));
     } else {
       previousFocusElement['focus']();
     }

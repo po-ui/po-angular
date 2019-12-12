@@ -24,6 +24,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   @ViewChildren('component') components: QueryList<{ name: string, focus: () => void }>;
 
+  private previousValue = {};
+
   constructor(titleCasePipe: TitleCasePipe, private validationService: PoDynamicFormValidationService, private changes: ChangeDetectorRef) {
     super(titleCasePipe);
   }
@@ -46,13 +48,20 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   }
 
   async onChangeField(visibleField: PoDynamicFormField) {
-    const { changedField, changedFieldIndex } = this.getField(visibleField.property);
+    const { property } = visibleField;
 
-    if (changedField.validate) {
-      await this.validateField(changedField, changedFieldIndex, visibleField);
+    if (this.previousValue[property] !== this.value[property]) {
+
+      const { changedField, changedFieldIndex } = this.getField(property);
+
+      if (changedField.validate) {
+        await this.validateField(changedField, changedFieldIndex, visibleField);
+      }
+
+      this.triggerValidationOnForm(changedFieldIndex);
     }
 
-    this.triggerValidationOnForm(changedFieldIndex);
+    this.previousValue[property] = this.value[property];
   }
 
   trackBy(index) {
