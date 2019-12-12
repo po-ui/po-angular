@@ -83,7 +83,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     this.fieldsComponent.focus(property);
   }
 
-  async validateForm(field: PoDynamicFormField) {
+  validateForm(field: PoDynamicFormField) {
     const previousFocusElement = document.activeElement;
 
     this.disableForm(true);
@@ -93,7 +93,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
       .subscribe(this.applyFormValidation(previousFocusElement), errorOnValidation);
   }
 
-  private applyFormValidation(previousFocusElement: Element): (value: any) => void {
+  private applyFormValidation(previousFocusElement: Element): (validatedFields: PoDynamicFormValidation) => void {
     return validatedFields => {
       this.updateModelWithValidation(validatedFields);
       this.disableForm(false);
@@ -101,7 +101,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     };
   }
 
-  private updateModelWithValidation(validatedFields: PoDynamicFormValidation = {}) {
+  private updateModelWithValidation(validatedFields: PoDynamicFormValidation) {
     Object.assign(this.value, validatedFields.value);
     this.fields = this.validationService.updateFieldsForm(validatedFields.fields, this.fields);
   }
@@ -117,7 +117,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     this.changes.detectChanges();
   }
 
-  private setFocusOnValidation(validatedFields: PoDynamicFormValidation = {}, previousFocusElement: Element) {
+  private setFocusOnValidation(validatedFields: PoDynamicFormValidation, previousFocusElement: Element) {
     if (validatedFields.focus) {
       // precisa do timeout para que o valor seja atribuido no campo antes de setar o focus,
       // para nao disparar a mudança posteriormente. Situação ocorre quando retornar campo com valor e focus atribuido a ele.

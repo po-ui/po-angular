@@ -15,18 +15,16 @@ export class PoDynamicFormValidationService {
   sendChanges(validate: Function | string, field: PoDynamicFormField, value: any) {
     const changedValue: PoDynamicFormFieldChanged = { property: field.property, value };
 
-    const validateFieldsObservable = typeof validate === 'string' ?
+    return typeof validate === 'string' ?
       this.validateFieldOnServer(validate, changedValue) : of(validate(changedValue));
-
-    return validateFieldsObservable.pipe(map(validateFields => this.setDefaultIfEmpty(validateFields)));
   }
 
   sendFieldChange(field: PoDynamicFormField, value: any) {
-    return this.sendChanges(field.validate, field, value);
+    return this.sendChanges(field.validate, field, value).pipe(map(validateFields => this.setFieldDefaultIfEmpty(validateFields)));
   }
 
   sendFormChange(validate: Function | string, field: PoDynamicFormField, value: Array<any>) {
-    return this.sendChanges(validate, field, value);
+    return this.sendChanges(validate, field, value).pipe(map(validateFields => this.setFormDefaultIfEmpty(validateFields)));
   }
 
   updateFieldsForm(validatedFields: Array<PoDynamicFormField> = [], fields: Array<PoDynamicFormField> = []) {
@@ -44,8 +42,18 @@ export class PoDynamicFormValidationService {
     }, [ ...fields ]);
   }
 
-  private setDefaultIfEmpty(validateFields: any): any {
-    return validateFields || {};
+  private setFieldDefaultIfEmpty(validateFields: any): any {
+    return validateFields || {
+      field: {}
+    };
+  }
+
+  private setFormDefaultIfEmpty(validateFields: any): any {
+    return validateFields || {
+      value: {},
+      fields: [],
+      focus: undefined
+    };
   }
 
   private validateFieldOnServer(url: string, changedValue: { value: any; property: string; }) {

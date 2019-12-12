@@ -74,7 +74,9 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     this.fields[index] = { ...field, ...validatedField.field };
     this.updateFields();
 
-    this.value[field.property] = validatedField.value;
+    if (validatedField.hasOwnProperty('value')) {
+      this.value[field.property] = validatedField.value;
+    }
 
     this.changes.detectChanges();
 
