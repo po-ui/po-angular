@@ -52,11 +52,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       await this.validateField(changedField, changedFieldIndex, visibleField);
     }
 
-    const hasValidationForm = this.validate && this.formValidate.observers.length;
-
-    if (hasValidationForm) {
-      this.formValidate.emit({ field: changedField, fieldIndex:  changedFieldIndex });
-    }
+    this.triggerValidationOnForm(changedFieldIndex);
   }
 
   trackBy(index) {
@@ -67,7 +63,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     const field = this.fields[index];
 
     this.fields[index] = { ...field, ...validatedField.field };
-    this.fields = [...this.fields];
+    this.updateFields();
 
     this.value[field.property] = validatedField.value;
 
@@ -86,6 +82,21 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     return { changedField, changedFieldIndex };
   }
 
+  private triggerValidationOnForm(changedFieldIndex: number) {
+    const hasValidationForm = this.validate && this.formValidate.observers.length;
+
+    if (hasValidationForm) {
+      const updatedField = this.fields[changedFieldIndex];
+      this.formValidate.emit(updatedField);
+    }
+
+  }
+
+  private updateFields() {
+    this.fieldsChange.emit(this.fields);
+    this.visibleFields = this.getVisibleFields();
+  }
+
   private async validateField(field: PoDynamicFormField, fieldIndex: number, visibleField: PoDynamicFormField) {
     const value = this.value[field.property];
 
@@ -96,7 +107,6 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     try {
       const validatedField = await this.validationService.sendFieldChange(field, value).toPromise();
       this.applyFieldValidation(fieldIndex, validatedField);
-
     } catch {
       visibleField.disabled = previousDisabled;
     }

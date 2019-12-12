@@ -1,11 +1,10 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { finalize } from 'rxjs/operators';
-
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
-import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-dynamic-form-validation.service';
+import { PoDynamicFormField } from './po-dynamic-form-field.interface';
 import { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic-form-validation.interface';
+import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-dynamic-form-validation.service';
 
 /**
  * @docsExtends PoDynamicFormBaseComponent
@@ -84,26 +83,27 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     this.fieldsComponent.focus(property);
   }
 
-  async validateForm({ field, fieldIndex }) {
-    this.fields[fieldIndex] = field;
+  async validateForm(field: PoDynamicFormField) {
     const previousFocusElement = document.activeElement;
 
     this.disableForm(true);
+    const errorOnValidation = () => this.disableForm(false);
 
     this.validationService.sendFormChange(this.validate, field, this.value)
-      .pipe(finalize(() => this.disableForm(false)))
-      .subscribe(this.applyFormValidation(previousFocusElement));
+      .subscribe(this.applyFormValidation(previousFocusElement), errorOnValidation);
   }
 
   private applyFormValidation(previousFocusElement: Element): (value: any) => void {
-    return (validatedFields = {}) => {
-
-      this.value = { ...this.value, ...validatedFields.value };
-      this.fields = this.validationService.updateFieldsForm(validatedFields.fields, this.fields);
-
+    return validatedFields => {
+      this.updateModelWithValidation(validatedFields);
+      this.disableForm(false);
       this.setFocusOnValidation(validatedFields, previousFocusElement);
-
     };
+  }
+
+  private updateModelWithValidation(validatedFields: PoDynamicFormValidation = {}) {
+    Object.assign(this.value, validatedFields.value);
+    this.fields = this.validationService.updateFieldsForm(validatedFields.fields, this.fields);
   }
 
   private emitForm() {

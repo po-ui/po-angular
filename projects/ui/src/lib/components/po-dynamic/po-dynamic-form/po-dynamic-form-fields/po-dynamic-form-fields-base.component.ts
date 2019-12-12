@@ -20,12 +20,13 @@ export class PoDynamicFormFieldsBaseComponent {
   // array de objetos que implementam a interface PoDynamicFormField, que serão exibidos no componente.
   @Input('p-fields') set fields(value: Array<PoDynamicFormField>) {
     this._fields = Array.isArray(value) ? [...value] : [];
-    this.visibleFields = this.getVisibleFields();
   }
 
   get fields() {
     return this._fields;
   }
+
+  @Output('p-fieldsChange') fieldsChange = new EventEmitter<any>();
 
   // valor que será utilizado para iniciar valor no componente.
   @Input('p-value') set value(value: any) {
