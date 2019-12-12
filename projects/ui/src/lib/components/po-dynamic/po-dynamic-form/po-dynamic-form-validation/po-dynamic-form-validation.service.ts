@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
@@ -14,8 +15,10 @@ export class PoDynamicFormValidationService {
   sendChanges(validate: Function | string, field: PoDynamicFormField, value: any) {
     const changedValue: PoDynamicFormFieldChanged = { property: field.property, value };
 
-    return typeof validate === 'string' ?
+    const validateFieldsObservable = typeof validate === 'string' ?
       this.validateFieldOnServer(validate, changedValue) : of(validate(changedValue));
+
+    return validateFieldsObservable.pipe(map(validateFields => this.setDefaultIfEmpty(validateFields)));
   }
 
   sendFieldChange(field: PoDynamicFormField, value: any) {
@@ -39,6 +42,10 @@ export class PoDynamicFormValidationService {
 
       return updatedFields;
     }, [ ...fields ]);
+  }
+
+  private setDefaultIfEmpty(validateFields: any): any {
+    return validateFields || {};
   }
 
   private validateFieldOnServer(url: string, changedValue: { value: any; property: string; }) {
