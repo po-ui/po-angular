@@ -156,4 +156,44 @@ export class PoDynamicFormBaseComponent {
     return this._groupForm;
   }
 
+  /**
+   * Função ou serviço para validar as **mudanças do formulário**.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - **String**: Endpoint usado pelo componente para requisição via `POST`.
+   * - **Function**: Método que será executado.
+   *
+   * Ao ser executado, irá receber como parâmetro um objeto com o nome da propriedade
+   * alterada e o novo valor, conforme a interface `PoDynamicFormFieldChanged`:
+   *
+   * ```
+   * { property: 'property name', value: 'new value' }
+   * ```
+   *
+   * O retorno desta função deve ser do tipo [PoDynamicFormValidation](documentation/po-dynamic-form#po-dynamic-form-validation),
+   * onde o usuário poderá determinar as novas atualizações dos campos.
+   * Por exemplo:
+   *
+   * ```
+   * onChangeFields(changeValue): PoDynamicFormValidation {
+   *
+   * if (changeValue.property === 'state') {
+   *
+   *   return {
+   *     value: { city: undefined },
+   *     fields: [
+   *       { property: 'city', options: this.getCity(changeValue.value.state) }
+   *     ],
+   *     focus: 'city'
+   *   };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-validate]="this.myFunction.bind(this)"
+   * ```
+   */
+  @Input('p-validate') validate?: string | Function;
+
 }

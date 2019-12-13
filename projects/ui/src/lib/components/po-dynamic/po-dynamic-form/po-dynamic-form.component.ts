@@ -1,7 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
+import { PoDynamicFormField } from './po-dynamic-form-field.interface';
+import { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic-form-validation.interface';
+import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-dynamic-form-validation.service';
 
 /**
  * @docsExtends PoDynamicFormBaseComponent
@@ -21,11 +24,14 @@ import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 
 @Component({
   selector: 'po-dynamic-form',
-  templateUrl: './po-dynamic-form.component.html'
+  templateUrl: './po-dynamic-form.component.html',
+  providers: [ PoDynamicFormValidationService ]
 })
 export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
 
   private _form: NgForm;
+
+  disabledForm: boolean;
 
   @ViewChild('dynamicForm', { static: false }) set form(value: NgForm) {
     // necessario para nao ocorrer o ExpressionChangedAfterItHasBeenCheckedError
@@ -42,6 +48,9 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
 
   @ViewChild('fieldsComponent', { static: false }) fieldsComponent: {focus: (property: string) => void };
 
+  constructor(private changes: ChangeDetectorRef, private validationService: PoDynamicFormValidationService) {
+    super();
+  }
   /**
    * Função que atribui foco ao campo desejado.
    *
@@ -74,10 +83,48 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     this.fieldsComponent.focus(property);
   }
 
+  validateForm(field: PoDynamicFormField) {
+    const previousFocusElement = document.activeElement;
+
+    this.disableForm(true);
+    const errorOnValidation = () => this.disableForm(false);
+
+    this.validationService.sendFormChange(this.validate, field, this.value)
+      .subscribe(this.applyFormValidation(previousFocusElement), errorOnValidation);
+  }
+
+  private applyFormValidation(previousFocusElement: Element): (validatedFields: PoDynamicFormValidation) => void {
+    return validatedFields => {
+      this.updateModelWithValidation(validatedFields);
+      this.disableForm(false);
+      this.setFocusOnValidation(validatedFields, previousFocusElement);
+    };
+  }
+
   private emitForm() {
     if (!this.groupForm && this.formOutput.observers.length) {
       this.formOutput.emit(this.form);
     }
+  }
+
+  private disableForm(value: boolean) {
+    this.disabledForm = value;
+    this.changes.detectChanges();
+  }
+
+  private setFocusOnValidation(validatedFields: PoDynamicFormValidation, previousFocusElement: Element) {
+    if (validatedFields.focus) {
+      // precisa do timeout para que o valor seja atribuido no campo antes de setar o focus,
+      // para nao disparar a mudança posteriormente. Situação ocorre quando retornar campo com valor e focus atribuido a ele.
+      setTimeout(() => this.focus(validatedFields.focus));
+    } else {
+      previousFocusElement['focus']();
+    }
+  }
+
+  private updateModelWithValidation(validatedFields: PoDynamicFormValidation) {
+    Object.assign(this.value, validatedFields.value);
+    this.fields = this.validationService.updateFieldsForm(validatedFields.fields, this.fields);
   }
 
 }

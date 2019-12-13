@@ -86,4 +86,41 @@ export interface PoDynamicFormField extends PoDynamicField {
   /** Esconde a informação estilo *password*, pode ser utilizado quando o tipo de dado for *string*. */
   secret?: boolean;
 
+  /**
+   * Função ou serviço para validar as **mudanças do campo**.
+   *
+   * * A propriedade aceita os seguintes tipos:
+   * - **String**: Endpoint usado pelo componente para requisição via `POST`.
+   * - **Function**: Método que será executado.
+   *
+   * Ao ser executado, irá receber como parâmetro um objeto com o nome da propriedade
+   * alterada e o novo valor, conforme a interface `PoDynamicFormFieldChanged`:
+   *
+   * ```
+   * { property: 'property name', value: 'new value' }
+   * ```
+   *
+   * O retorno desta função deve ser do tipo [PoDynamicFormFieldValidation](documentation/po-dynamic-form#po-dynamic-form-field-validation),
+   * onde o usuário poderá determinar as novas propriedades do campo.
+   * Por exemplo:
+   *
+   * ```
+   * onChangeField(changeValue): PoDynamicFormFieldValidation {
+   *
+   * if (changeValue.property === 'birthday' && !this.validate('birthday')) {
+   *   return {
+   *     value: '',
+   *     field: { property: 'birthday', required: true },
+   *     focus: true
+   *   };
+   * }
+   * ```
+   *
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   * { property: 'state', gridColumns: 6, validate: this.myFunction.bind(this) }
+   * ```
+   */
+  validate?: string | Function;
+
 }

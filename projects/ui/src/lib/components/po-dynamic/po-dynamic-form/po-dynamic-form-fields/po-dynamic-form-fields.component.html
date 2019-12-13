@@ -9,13 +9,14 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-clean
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-max-date]="field.maxValue"
       [p-min-date]="field.minValue"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-datepicker>
 
     <po-input #component *ngIf="compareTo(field.control, 'input')"
@@ -23,7 +24,7 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-clean
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
@@ -31,15 +32,16 @@
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
       [p-pattern]="field.pattern"
-      [p-required]="field.required">
-    </po-input>
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
+      </po-input>
 
     <po-number #component *ngIf="compareTo(field.control, 'number')"
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-clean
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
@@ -47,7 +49,8 @@
       [p-max]="field.maxValue"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-number>
 
     <po-decimal #component *ngIf="compareTo(field.control, 'decimal')"
@@ -55,22 +58,24 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-clean
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-decimal>
 
     <po-select #component *ngIf="compareTo(field.control, 'select')"
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-options]="field.options"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-select>
 
     <po-radio-group #component *ngIf="compareTo(field.control, 'radioGroup')"
@@ -78,33 +83,36 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-columns="3"
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-options]="field.options"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-radio-group>
 
     <po-switch #component *ngIf="compareTo(field.control, 'switch')"
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-label-off]="field.booleanFalse"
-      [p-label-on]="field.booleanTrue">
+      [p-label-on]="field.booleanTrue"
+      (p-change)="onChangeField(field)">
     </po-switch>
 
     <po-combo #component *ngIf="compareTo(field.control, 'combo')"
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-filter-service]="field.optionsService"
       [p-help]="field.help"
       [p-label]="field.label"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-combo>
 
     <po-lookup #component *ngIf="compareTo(field.control, 'lookup')"
@@ -114,12 +122,13 @@
       p-field-value="value"
       [ngClass]="field.componentClass"
       [p-columns]="field.columns"
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-filter-service]="field.searchService"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-lookup>
 
     <po-checkbox-group #component *ngIf="compareTo(field.control, 'checkboxGroup')"
@@ -127,37 +136,40 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-columns="3"
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-options]="field.options"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-checkbox-group>
 
     <po-multiselect #component *ngIf="compareTo(field.control, 'multiselect')"
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-options]="field.options"
-      [p-required]="field.required">
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
     </po-multiselect>
 
     <po-textarea #component *ngIf="compareTo(field.control, 'textarea')"
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
       [p-required]="field.required"
-      [p-rows]="field.rows">
+      [p-rows]="field.rows"
+      (p-change)="onChangeField(field)">
     </po-textarea>
 
     <po-password #component *ngIf="compareTo(field.control, 'password')"
@@ -165,14 +177,15 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-clean
-      [p-disabled]="field.disabled"
+      [p-disabled]="isDisabled(field)"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
-      [p-required]="field.required">
-    </po-password>
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)">
+  </po-password>
 
   </ng-container>
 </div>
