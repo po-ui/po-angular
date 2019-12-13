@@ -1,6 +1,7 @@
 <po-dynamic-form #dynamicForm
   p-auto-focus="name"
   [p-fields]="fields"
+  [p-validate]="this.onChangeFields.bind(this)"
   [p-value]="person">
 </po-dynamic-form>
 

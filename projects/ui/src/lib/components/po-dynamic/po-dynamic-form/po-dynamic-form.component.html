@@ -16,9 +16,12 @@
   <form #dynamicForm="ngForm">
 
     <po-dynamic-form-fields #fieldsComponent
+      [(p-fields)]="fields"
       [p-auto-focus]="autoFocus"
-      [p-fields]="fields"
-      [p-value]="value">
+      [p-disabled-form]="disabledForm"
+      [p-validate]="validate"
+      [p-value]="value"
+      (p-form-validate)="validateForm($event)">
     </po-dynamic-form-fields>
 
   </form>
