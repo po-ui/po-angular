@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { NgForm } from '@angular/forms';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormComponent } from './po-dynamic-form.component';
@@ -83,41 +83,56 @@ describe('PoDynamicFormComponent:', () => {
       expect(spyFieldsComponentFocus).toHaveBeenCalled();
     });
 
-    it('validateForm: should update current field changed', () => {
-      const updatedField = { property: 'new test', disabled: true };
-      const fieldIndex = 0;
+    it('validateForm: should call sendFormChange with validate, field and value', () => {
+      const updatedField = { property: 'test', disabled: true };
+      component.validate = 'http://test.com';
+      component.value = { test: 'new value' };
 
       component.fields = [ { property: 'test' } ];
 
       spyOn(component, <any>'disableForm');
       spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
 
-      component['validateForm']({ field: updatedField, fieldIndex });
+      component['validateForm'](updatedField);
 
-      expect(component.fields).toEqual([ updatedField ]);
+      expect(component['validationService'].sendFormChange)
+        .toHaveBeenCalledWith(component.validate, updatedField, component.value);
     });
 
-    it('validateForm: should call disabledForm with true and false on observable finalize', () => {
+    it('validateForm: should call disabledForm with false if observable returns an error', () => {
       const updatedField = { property: 'test', disabled: true };
-      const fieldIndex = 0;
 
       component.fields = [ { property: 'test' } ];
 
       spyOn(component, <any>'disableForm');
 
-      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
+      spyOn(component['validationService'], 'sendFormChange').and.returnValue(throwError('error'));
 
       spyOn(component, <any>'applyFormValidation');
 
-      component['validateForm']({ field: updatedField, fieldIndex });
+      component['validateForm'](updatedField);
+
+      expect(component['disableForm']).toHaveBeenCalledWith(false);
+    });
+
+    it('validateForm: should call disabledForm with true on subcribe of observable', () => {
+      const updatedField = { property: 'test', disabled: true };
+
+      component.fields = [ { property: 'test' } ];
+
+      spyOn(component, <any>'disableForm');
+
+      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of(updatedField));
+
+      spyOn(component, <any>'applyFormValidation');
+
+      component['validateForm'](updatedField);
 
       expect(component['disableForm']).toHaveBeenCalledWith(true);
-      expect(component['disableForm']).toHaveBeenCalledWith(false);
     });
 
     it('validateForm: should call applyFormValidation', () => {
       const updatedField = { property: 'test', disabled: true };
-      const fieldIndex = 0;
 
       component.fields = [ { property: 'test' } ];
 
@@ -125,14 +140,92 @@ describe('PoDynamicFormComponent:', () => {
       spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
       spyOn(component, <any>'applyFormValidation');
 
-      component['validateForm']({ field: updatedField, fieldIndex });
+      component['validateForm'](updatedField);
 
       expect(component['applyFormValidation']).toHaveBeenCalled();
     });
 
-    it('applyFormValidation: should merge value with validatedFields.value', () => {
+    it('applyFormValidation: should call setFocusOnValidation with validatedFields and previousFocusElement', () => {
       const previousFocusElement = document.activeElement;
 
+      const validatedFields = { value: undefined, focus: 'test1' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component, <any>'updateModelWithValidation');
+      spyOn(component, <any>'disableForm');
+
+      component['applyFormValidation'](previousFocusElement)(validatedFields);
+
+      expect(component['setFocusOnValidation']).toHaveBeenCalledWith(validatedFields, previousFocusElement);
+    });
+
+    it('applyFormValidation: should call disableForm with false', () => {
+      const previousFocusElement = document.activeElement;
+
+      const validatedFields = { value: undefined, focus: 'test1' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component, <any>'updateModelWithValidation');
+      spyOn(component, <any>'disableForm');
+
+      component['applyFormValidation'](previousFocusElement)(validatedFields);
+
+      expect(component['disableForm']).toHaveBeenCalledWith(false);
+    });
+
+    it('applyFormValidation: should call updateModelWithValidation with validatedFields', () => {
+      const previousFocusElement = document.activeElement;
+
+      const validatedFields = { value: undefined, focus: 'test1' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component, <any>'updateModelWithValidation');
+      spyOn(component, <any>'disableForm');
+
+      component['applyFormValidation'](previousFocusElement)(validatedFields);
+
+      expect(component['updateModelWithValidation']).toHaveBeenCalledWith(validatedFields);
+    });
+
+    it('updateModelWithValidation: should call updateFieldsForm to set fields', () => {
+      const validatedFields = { value: {}, fields: undefined };
+
+      const fields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: false, visible: true },
+      ];
+
+      component.value = {};
+      component.fields = [...fields];
+
+      const expectedFields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: false, visible: true, help: 'test help' },
+        { property: 'test5', required: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component['validationService'], 'updateFieldsForm').and.returnValue(expectedFields);
+
+      component['updateModelWithValidation'](validatedFields);
+
+      expect(component.fields).toEqual(expectedFields);
+      expect(component['validationService'].updateFieldsForm).toHaveBeenCalledWith(validatedFields.fields, fields);
+    });
+
+    it('updateModelWithValidation: should merge value with validatedFields.value', () => {
       const validatedFields = {
         value: {
           name: 'new value'
@@ -152,53 +245,9 @@ describe('PoDynamicFormComponent:', () => {
       spyOn(component, <any>'setFocusOnValidation');
       spyOn(component['validationService'], 'updateFieldsForm');
 
-      component['applyFormValidation'](previousFocusElement)(validatedFields);
+      component['updateModelWithValidation'](validatedFields);
 
       expect(component.value).toEqual(expectedValue);
-    });
-
-    it('applyFormValidation: should call updateFieldsForm to set fields', () => {
-      const previousFocusElement = document.activeElement;
-
-      const validatedFields = { value: undefined, fields: undefined };
-
-      const fields = [
-        { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: false, visible: true },
-      ];
-
-      component.fields = [...fields];
-
-      const expectedFields = [
-        { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: false, visible: true, help: 'test help' },
-        { property: 'test5', required: true }
-      ];
-
-      spyOn(component, <any>'setFocusOnValidation');
-      spyOn(component['validationService'], 'updateFieldsForm').and.returnValue(expectedFields);
-
-      component['applyFormValidation'](previousFocusElement)(validatedFields);
-
-      expect(component.fields).toEqual(expectedFields);
-      expect(component['validationService'].updateFieldsForm).toHaveBeenCalledWith(validatedFields.fields, fields);
-    });
-
-    it('applyFormValidation: should call setFocusOnValidation with validatedFields and previousFocusElement', () => {
-      const previousFocusElement = document.activeElement;
-
-      const validatedFields = { value: undefined, focus: 'test1' };
-
-      component.fields = [
-        { property: 'test1', required: true, visible: true }
-      ];
-
-      spyOn(component, <any>'setFocusOnValidation');
-      spyOn(component['validationService'], 'updateFieldsForm');
-
-      component['applyFormValidation'](previousFocusElement)(validatedFields);
-
-      expect(component['setFocusOnValidation']).toHaveBeenCalledWith(validatedFields, previousFocusElement);
     });
 
     it('disableForm: should update isDisableForm to true if param is true', () => {
@@ -223,16 +272,17 @@ describe('PoDynamicFormComponent:', () => {
       expect(component['changes'].detectChanges).toHaveBeenCalled();
     });
 
-    it('setFocusOnValidation: should call focus if validatedFields.focus is defined', () => {
+    it('setFocusOnValidation: should call focus if validatedFields.focus is defined', fakeAsync(() => {
       const validatedFields = { focus: 'name' };
       const previousFocusElement = document.activeElement;
 
       spyOn(component, 'focus');
 
       component['setFocusOnValidation'](validatedFields, previousFocusElement);
+      tick();
 
       expect(component.focus).toHaveBeenCalledWith(validatedFields.focus);
-    });
+    }));
 
     it('setFocusOnValidation: should call previousElement.focus if validatedFields.focus is undefined', () => {
       const validatedFields = { focus: undefined };

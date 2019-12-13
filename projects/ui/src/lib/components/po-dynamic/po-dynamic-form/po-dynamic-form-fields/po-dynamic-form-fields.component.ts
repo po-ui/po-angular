@@ -49,8 +49,9 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   async onChangeField(visibleField: PoDynamicFormField) {
     const { property } = visibleField;
+    const isChangedValueField = this.previousValue[property] !== this.value[property];
 
-    if (this.previousValue[property] !== this.value[property]) {
+    if (isChangedValueField) {
 
       const { changedField, changedFieldIndex } = this.getField(property);
 

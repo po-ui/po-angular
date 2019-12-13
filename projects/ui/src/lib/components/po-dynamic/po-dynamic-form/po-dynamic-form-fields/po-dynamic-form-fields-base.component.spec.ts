@@ -41,17 +41,6 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       expectPropertiesValues(component, 'fields', validValues, validValues);
     });
 
-    it('fields: should call getVisibleFields to set visibleFields', () => {
-      component.visibleFields = [];
-      const visibleFields = [{ property: 'Teste 1' }];
-
-      spyOn(component, <any>'getVisibleFields').and.returnValue(visibleFields);
-
-      component.fields = [{ property: 'Teste 1' }, { property: 'Teste 2', visible: false }];
-
-      expect(component.visibleFields).toEqual(visibleFields);
-    });
-
     it('value: should set `value` to `{}` if not object value' , () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string'];
 
