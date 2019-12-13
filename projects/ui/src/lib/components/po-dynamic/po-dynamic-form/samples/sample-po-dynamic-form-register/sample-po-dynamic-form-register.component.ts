@@ -65,7 +65,7 @@ export class SamplePoDynamicFormRegisterComponent {
 
   }
 
-  private getCity(state?) {
+  private getCity(state: number) {
     switch (state) {
       case 1: {
         return [

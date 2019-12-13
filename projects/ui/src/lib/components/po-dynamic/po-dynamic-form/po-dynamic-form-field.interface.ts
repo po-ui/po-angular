@@ -89,6 +89,10 @@ export interface PoDynamicFormField extends PoDynamicField {
   /**
    * Função ou serviço para validar as **mudanças do campo**.
    *
+   * * A propriedade aceita os seguintes tipos:
+   * - **String**: Endpoint usado pelo componente para requisição via `POST`.
+   * - **Function**: Método que será executado.
+   *
    * Ao ser executado, irá receber como parâmetro um objeto com o nome da propriedade
    * alterada e o novo valor, conforme a interface `PoDynamicFormFieldChanged`:
    *

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
@@ -29,9 +29,9 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-
 })
 export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
 
-  disabledForm: boolean;
-
   private _form: NgForm;
+
+  disabledForm: boolean;
 
   @ViewChild('dynamicForm', { static: false }) set form(value: NgForm) {
     // necessario para nao ocorrer o ExpressionChangedAfterItHasBeenCheckedError
@@ -101,11 +101,6 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     };
   }
 
-  private updateModelWithValidation(validatedFields: PoDynamicFormValidation) {
-    Object.assign(this.value, validatedFields.value);
-    this.fields = this.validationService.updateFieldsForm(validatedFields.fields, this.fields);
-  }
-
   private emitForm() {
     if (!this.groupForm && this.formOutput.observers.length) {
       this.formOutput.emit(this.form);
@@ -125,6 +120,11 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     } else {
       previousFocusElement['focus']();
     }
+  }
+
+  private updateModelWithValidation(validatedFields: PoDynamicFormValidation) {
+    Object.assign(this.value, validatedFields.value);
+    this.fields = this.validationService.updateFieldsForm(validatedFields.fields, this.fields);
   }
 
 }

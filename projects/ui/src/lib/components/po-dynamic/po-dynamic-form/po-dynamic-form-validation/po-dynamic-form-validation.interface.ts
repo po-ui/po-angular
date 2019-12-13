@@ -17,7 +17,7 @@ export interface PoDynamicFormValidation {
    */
   fields?: Array<PoDynamicFormField>;
 
-  /** Nome da campo que receberá o foco.
+  /** Nome do campo que receberá o foco.
    *
    * Exemplo:
    *
