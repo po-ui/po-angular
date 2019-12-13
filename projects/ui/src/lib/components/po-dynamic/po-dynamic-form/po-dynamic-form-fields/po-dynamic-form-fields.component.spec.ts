@@ -679,4 +679,72 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
   });
 
+  describe('Integration:', () => {
+
+    describe('onChangeField:', () => {
+
+      beforeEach(() => {
+        component.fields = [ { property: 'name' } ];
+        component.value['name'] = 'name';
+
+        component.ngOnChanges({
+          fields: new SimpleChange(null, component.fields, true)
+        });
+
+        fixture.detectChanges();
+      });
+
+      it('should update field of visibleFields with disabled true', async () => {
+        const validate = () => {
+          return {
+            field: { disabled: true }
+          };
+        };
+
+        component.fields[0].validate = validate;
+        spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(validate()));
+
+        await component.onChangeField(component.visibleFields[0]);
+
+        expect(component.visibleFields[0].disabled).toBe(true);
+      });
+
+      it('should update field of visibleFields with help', async () => {
+        const validate = () => {
+          return {
+            field: { help: 'new help' }
+          };
+        };
+
+        component.fields[0].validate = validate;
+
+        spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(validate()));
+
+        await component.onChangeField(component.visibleFields[0]);
+
+        expect(component.visibleFields[0].help).toBe('new help');
+      });
+
+      it('should update field value', async () => {
+        const expectedValue = 'new value';
+
+        const validate = () => {
+          return {
+            value: expectedValue,
+            field: { help: 'new help' }
+          };
+        };
+
+        component.fields[0].validate = validate;
+
+        spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(validate()));
+        await component.onChangeField(component.visibleFields[0]);
+
+        expect(component.value.name).toBe(expectedValue);
+      });
+
+    });
+
+  });
+
 });
