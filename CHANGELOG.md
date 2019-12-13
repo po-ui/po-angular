@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/portinariui/portinari-angular/compare/v1.19.0...v1.20.0) (2019-12-13)
+
+
+### Bug Fixes
+
+* **table:** corrige colspan quando *detail* estiver expandido ([0ef53d7](https://github.com/portinariui/portinari-angular/commit/0ef53d7))
+
+
+### Features
+
+* **combo:** permite agrupamento dos itens ([a851fe2](https://github.com/portinariui/portinari-angular/commit/a851fe2))
+* **dynamic-form:** adiciona métodos para validação dos campos ([941cfdb](https://github.com/portinariui/portinari-angular/commit/941cfdb))
+* **dynamic-view:** permite executar uma função durante a inicialização ([2791236](https://github.com/portinariui/portinari-angular/commit/2791236))
+
+
+
 ## [1.19.0](https://github.com/portinariui/portinari-angular/compare/v1.18.0...v1.19.0) (2019-12-06)
 
 
