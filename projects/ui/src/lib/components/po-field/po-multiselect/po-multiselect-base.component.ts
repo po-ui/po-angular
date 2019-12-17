@@ -1,4 +1,4 @@
-import { AfterContentChecked, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { browserLanguage, convertToBoolean, removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty,
@@ -40,7 +40,7 @@ export const poMultiselectLiteralsDefault = {
  * Este componente também não deve ser utilizado em casos onde a seleção seja única. Nesses casos, deve-se utilizar o
  * po-select, po-combo ou po-radio-group.
  */
-export abstract class PoMultiselectBaseComponent implements AfterContentChecked, ControlValueAccessor, OnInit, Validator {
+export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
   private _autofocus?: boolean = false;
   private _disabled?: boolean = false;
@@ -55,7 +55,7 @@ export abstract class PoMultiselectBaseComponent implements AfterContentChecked,
   private onModelChange: any;
   // tslint:disable-next-line
   private onModelTouched: any;
-  private readyToValidation = false;
+  private validatorChange: any;
 
   selectedOptions: Array<PoMultiselectOption> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption> = [];
@@ -159,7 +159,7 @@ export abstract class PoMultiselectBaseComponent implements AfterContentChecked,
    */
   @Input('p-required') set required(required: boolean) {
     this._required = <any>required === '' ? true : convertToBoolean(required);
-    this.updateModelToValidate();
+    this.validateModel();
   }
 
   get required() {
@@ -177,7 +177,7 @@ export abstract class PoMultiselectBaseComponent implements AfterContentChecked,
    */
   @Input('p-disabled') set disabled(disabled: boolean) {
     this._disabled = <any>disabled === '' ? true : convertToBoolean(disabled);
-    this.updateModelToValidate();
+    this.validateModel();
 
     this.updateVisibleItems();
   }
@@ -295,13 +295,6 @@ export abstract class PoMultiselectBaseComponent implements AfterContentChecked,
     this.updateList(this.options);
   }
 
-  ngAfterContentChecked() {
-    // Seta esta variável para indicar que a tela já foi carregada e podem ser aplicadas as validações.
-    // A partir desse momento, toda vez que uma propriedade que interfere na validação, for alterada, o model será atualizado
-    // para que o campo seja validado novamente.
-    this.readyToValidation = true;
-  }
-
   validAndSortOptions() {
     if (this.options && this.options.length) {
 
@@ -326,18 +319,6 @@ export abstract class PoMultiselectBaseComponent implements AfterContentChecked,
   updateList(options: Array<PoMultiselectOption>) {
     if (options) {
       this.visibleOptionsDropdown = options;
-    }
-  }
-
-  // Emite a atualização do model caso esta propriedade seja alterada dinamicamente.
-  updateModelToValidate() {
-    if (this.readyToValidation) {
-
-      // Este timeout é necessário para quando for atualizado o model e uma propriedade do Datepicker ao mesmo tempo.
-      // Caso contrário, o writeValue não é disparado, não atualizando o model do componente.
-      setTimeout(() => {
-        this.callOnChange(this.selectedOptions);
-      });
     }
   }
 
@@ -429,10 +410,7 @@ export abstract class PoMultiselectBaseComponent implements AfterContentChecked,
   }
 
   writeValue(values: any): void {
-    if (!values) {
-      values = [];
-      this.callOnChange([]);
-    }
+    values = values || [];
 
     // Validar se todos os items existem entre os options, senão atualizar o model
     this.updateSelectedOptions(values);
@@ -448,6 +426,16 @@ export abstract class PoMultiselectBaseComponent implements AfterContentChecked,
 
   registerOnTouched(fn: any): void {
     this.onModelTouched = fn;
+  }
+
+  registerOnValidatorChange(fn: () => void) {
+    this.validatorChange = fn;
+  }
+
+  private validateModel() {
+    if (this.validatorChange) {
+      this.validatorChange();
+    }
   }
 
   abstract updateVisibleItems(): void;
