@@ -11,6 +11,8 @@ import { PoTimePipe } from '../../pipes/po-time/po-time.pipe';
 
 import { PoDynamicFormComponent } from './po-dynamic-form/po-dynamic-form.component';
 import { PoDynamicFormFieldsComponent } from './po-dynamic-form/po-dynamic-form-fields/po-dynamic-form-fields.component';
+import { PoDynamicFormLoadService } from './po-dynamic-form/po-dynamic-form-load/po-dynamic-form-load.service';
+import { PoDynamicFormValidationService } from './po-dynamic-form/po-dynamic-form-validation/po-dynamic-form-validation.service';
 import { PoDynamicViewComponent } from './po-dynamic-view/po-dynamic-view.component';
 import { PoDynamicViewService } from './po-dynamic-view/po-dynamic-view.service';
 
@@ -33,6 +35,15 @@ import { PoDynamicViewService } from './po-dynamic-view/po-dynamic-view.service'
     PoDynamicFormComponent,
     PoDynamicViewComponent
   ],
-  providers: [ CurrencyPipe, DatePipe, DecimalPipe, PoTimePipe, TitleCasePipe, PoDynamicViewService ]
+  providers: [
+    CurrencyPipe,
+    DatePipe,
+    DecimalPipe,
+    PoTimePipe,
+    TitleCasePipe,
+    PoDynamicFormLoadService,
+    PoDynamicFormValidationService,
+    PoDynamicViewService
+  ]
 })
 export class PoDynamicModule { }

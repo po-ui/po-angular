@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { PoDynamicFormField, PoDynamicFormFieldChanged, PoDynamicFormValidation, PoNotificationService } from '@portinari/portinari-ui';
+import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.service';
 
 @Component({
   selector: 'sample-po-dynamic-form-register',
-  templateUrl: './sample-po-dynamic-form-register.component.html'
+  templateUrl: './sample-po-dynamic-form-register.component.html',
+  providers: [ PoDynamicFormRegisterService ]
 })
-export class SamplePoDynamicFormRegisterComponent {
+export class SamplePoDynamicFormRegisterComponent implements OnInit {
 
-  person = {};
+  person = { };
 
   fields: Array<PoDynamicFormField> = [
     { property: 'name', divider: 'PERSONAL DATA', required: true, minLength: 4, maxLength: 50, gridColumns: 6, gridSmColumns: 12 },
-    { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12 },
     { property: 'birthday', type: 'date', gridColumns: 6, gridSmColumns: 12 },
+    { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
+    { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'genre', gridColumns: 6, gridSmColumns: 12, options: ['Male', 'Female', 'Other'] },
     { property: 'shortDescription', label: 'Short Description', gridColumns: 12, gridSmColumns: 12, rows: 5 },
     { property: 'secretKey', label: 'Secret Key', gridColumns: 6, secret: true },
@@ -49,7 +52,15 @@ export class SamplePoDynamicFormRegisterComponent {
     },
   ];
 
-  constructor(public poNotification: PoNotificationService) { }
+  constructor(public poNotification: PoNotificationService, private registerService: PoDynamicFormRegisterService) { }
+
+  ngOnInit() {
+    this.person = {
+      name: 'Tony Stark',
+      birthday: '1970-05-29',
+      isJuridicPerson: false
+    };
+  }
 
   onChangeFields(changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation {
 
@@ -58,49 +69,15 @@ export class SamplePoDynamicFormRegisterComponent {
       return {
         value: { city: undefined},
         fields: [
-          { property: 'city', gridColumns: 6, options: this.getCity(changedValue.value.state), disabled: false }
+          { property: 'city', gridColumns: 6, options: this.registerService.getCity(changedValue.value.state), disabled: false }
         ]
       };
     }
 
   }
 
-  private getCity(state: number) {
-    switch (state) {
-      case 1: {
-        return [
-          { label: 'Palhoça', value: 5 },
-          { label: 'Lages', value: 6 },
-          { label: 'Balneário Camboriú', value: 7 },
-          { label: 'Brusque', value: 8 },
-        ];
-      }
-      case 2: {
-        return [
-          { label: 'São Paulo', value: 9 },
-          { label: 'Guarulhos', value: 10 },
-          { label: 'Campinas', value: 11 },
-          { label: 'São Bernardo do Campo', value: 12 }
-        ];
-      }
-      case 3: {
-        return [
-          { label: 'Rio de Janeiro', value: 13 },
-          { label: 'São Gonçalo', value: 14 },
-          { label: 'Duque de Caxias', value: 15 },
-          { label: 'Nova Iguaçu', value: 16 }
-        ];
-      }
-      case 4: {
-        return [
-          { label: 'Belo Horizonte', value: 17 },
-          { label: 'Uberlândia', value: 18 },
-          { label: 'Contagem', value: 19 },
-          { label: 'Juiz de Fora', value: 20 }
-        ];
-      }
-    }
-    return [];
+  onLoadFields(value: any) {
+    return this.registerService.getUserDocument(value);
   }
 
 }
