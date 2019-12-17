@@ -117,12 +117,13 @@ describe('PoDynamicFormComponent:', () => {
 
     it('validateForm: should call disabledForm with true on subcribe of observable', () => {
       const updatedField = { property: 'test', disabled: true };
+      const updatedFormField = { fields: [{ property: 'test', disabled: true }] };
 
       component.fields = [ { property: 'test' } ];
 
       spyOn(component, <any>'disableForm');
 
-      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of(updatedField));
+      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of(updatedFormField));
 
       spyOn(component, <any>'applyFormValidation');
 
@@ -145,7 +146,7 @@ describe('PoDynamicFormComponent:', () => {
       expect(component['applyFormValidation']).toHaveBeenCalled();
     });
 
-    it('applyFormValidation: should call setFocusOnValidation with validatedFields and previousFocusElement', () => {
+    it('applyFormValidation: should call setFocusOnFieldByProperty with property and previousFocusElement', () => {
       const previousFocusElement = document.activeElement;
 
       const validatedFields = { value: undefined, focus: 'test1' };
@@ -154,13 +155,13 @@ describe('PoDynamicFormComponent:', () => {
         { property: 'test1', required: true, visible: true }
       ];
 
-      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelWithValidation');
       spyOn(component, <any>'disableForm');
 
       component['applyFormValidation'](previousFocusElement)(validatedFields);
 
-      expect(component['setFocusOnValidation']).toHaveBeenCalledWith(validatedFields, previousFocusElement);
+      expect(component['setFocusOnFieldByProperty']).toHaveBeenCalledWith(validatedFields.focus, previousFocusElement);
     });
 
     it('applyFormValidation: should call disableForm with false', () => {
@@ -172,7 +173,7 @@ describe('PoDynamicFormComponent:', () => {
         { property: 'test1', required: true, visible: true }
       ];
 
-      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelWithValidation');
       spyOn(component, <any>'disableForm');
 
@@ -190,7 +191,7 @@ describe('PoDynamicFormComponent:', () => {
         { property: 'test1', required: true, visible: true }
       ];
 
-      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelWithValidation');
       spyOn(component, <any>'disableForm');
 
@@ -216,7 +217,7 @@ describe('PoDynamicFormComponent:', () => {
         { property: 'test5', required: true }
       ];
 
-      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component['validationService'], 'updateFieldsForm').and.returnValue(expectedFields);
 
       component['updateModelWithValidation'](validatedFields);
@@ -242,7 +243,7 @@ describe('PoDynamicFormComponent:', () => {
         age: '23'
       };
 
-      spyOn(component, <any>'setFocusOnValidation');
+      spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component['validationService'], 'updateFieldsForm');
 
       component['updateModelWithValidation'](validatedFields);
@@ -272,27 +273,244 @@ describe('PoDynamicFormComponent:', () => {
       expect(component['changes'].detectChanges).toHaveBeenCalled();
     });
 
-    it('setFocusOnValidation: should call focus if validatedFields.focus is defined', fakeAsync(() => {
-      const validatedFields = { focus: 'name' };
+    it('setFocusOnFieldByProperty: should call focus if property is defined', fakeAsync(() => {
+      const property = 'name';
       const previousFocusElement = document.activeElement;
 
       spyOn(component, 'focus');
 
-      component['setFocusOnValidation'](validatedFields, previousFocusElement);
+      component['setFocusOnFieldByProperty'](property, previousFocusElement);
       tick();
 
-      expect(component.focus).toHaveBeenCalledWith(validatedFields.focus);
+      expect(component.focus).toHaveBeenCalledWith(property);
     }));
 
-    it('setFocusOnValidation: should call previousElement.focus if validatedFields.focus is undefined', () => {
-      const validatedFields = { focus: undefined };
+    it('setFocusOnFieldByProperty: should call previousElement.focus if property is undefined', () => {
+      const property = undefined;
       const previousFocusElement = document.activeElement;
 
       spyOn(previousFocusElement, <any>'focus');
 
-      component['setFocusOnValidation'](validatedFields, previousFocusElement);
+      component['setFocusOnFieldByProperty'](property, previousFocusElement);
 
       expect(previousFocusElement['focus']).toHaveBeenCalled();
+    });
+
+    it('ngOnInit: should call `loadDataOnInitialize` if `load` is truthy', () => {
+      component.load = 'http://service/api';
+
+      const spyLoadDataOnInitialize = spyOn(component, <any> `loadDataOnInitialize`);
+
+      component.ngOnInit();
+
+      expect(spyLoadDataOnInitialize).toHaveBeenCalled();
+    });
+
+    it('ngOnInit: shouldn`t call `loadDataOnInitialize` if `load` is falsy', () => {
+      component.load = undefined;
+
+      const spyLoadDataOnInitialize = spyOn(component, <any> `loadDataOnInitialize`);
+
+      component.ngOnInit();
+
+      expect(spyLoadDataOnInitialize).not.toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: should call `removeListeners`', () => {
+      const spyRemoveListeners = spyOn(component, <any> `removeListeners`);
+
+      component.ngOnDestroy();
+
+      expect(spyRemoveListeners).toHaveBeenCalled();
+    });
+
+    it(`removeListeners: should call 'onLoadSubscription.unsubscribe' and 'spySendFormSubscription.unsubscribe' if
+      they are truthy`, () => {
+      component['onLoadSubscription'] = <any> { unsubscribe: () => {} };
+      component['sendFormSubscription'] = <any> { unsubscribe: () => {} };
+
+      const spyOnLoadSubscription = spyOn(component['onLoadSubscription'], <any> 'unsubscribe');
+      const spySendFormSubscription = spyOn(component['sendFormSubscription'], <any> 'unsubscribe');
+
+      component['removeListeners']();
+
+      expect(spyOnLoadSubscription).toHaveBeenCalled();
+      expect(spySendFormSubscription).toHaveBeenCalled();
+    });
+
+    it(`removeListeners: shouldn't call 'onLoadSubscription.unsubscribe' and 'spySendFormSubscription.unsubscribe'
+      if they are falsy`, () => {
+      component['onLoadSubscription'] = <any> { unsubscribe: () => {} };
+      component['sendFormSubscription'] = <any> { unsubscribe: () => {} };
+
+      const spyOnLoadSubscription = spyOn(component['onLoadSubscription'], <any> 'unsubscribe');
+      const spySendFormSubscription = spyOn(component['sendFormSubscription'], <any> 'unsubscribe');
+
+      component['onLoadSubscription'] = undefined;
+      component['sendFormSubscription'] = undefined;
+
+      component['removeListeners']();
+
+      expect(spyOnLoadSubscription).not.toHaveBeenCalled();
+      expect(spySendFormSubscription).not.toHaveBeenCalled();
+    });
+
+    it('updateModelOnLoad: should call `createAndUpdateFieldsForm` to set fields', () => {
+      const loadedFormData = {
+        value: {},
+        fields: [
+          { property: 'test1', required: false, visible: false, label: 'TESTE' },
+          { property: 'cpf', required: true }
+        ]
+    };
+
+      const fields = [
+        { property: 'test1', required: true, visible: true },
+        { property: 'test2', required: false, visible: true },
+      ];
+
+      component.value = {};
+      component.fields = [...fields];
+
+      const expectedFields = [
+        { property: 'test1', required: false, visible: false, label: 'TESTE' },
+        { property: 'test2', required: false, visible: true },
+        { property: 'cpf', required: true }
+      ];
+
+      const spyCreateAndUpdateFieldsForm = spyOn(component['loadService'], 'createAndUpdateFieldsForm').and.callThrough();
+
+      component['updateModelOnLoad'](loadedFormData);
+
+      expect(component.fields).toEqual(expectedFields);
+      expect(spyCreateAndUpdateFieldsForm).toHaveBeenCalledWith(loadedFormData.fields, fields);
+    });
+
+    it('updateModelOnLoad: should merge value with loadedFormData.value', () => {
+      const loadedFormData = {
+        value: {
+          name: 'new value'
+        }
+      };
+
+      component.value = {
+        name: 'value',
+        age: '23'
+      };
+
+      const expectedValue = {
+        name: 'new value',
+        age: '23'
+      };
+
+      spyOn(component, <any>'setFocusOnFieldByProperty');
+      spyOn(component['loadService'], 'createAndUpdateFieldsForm');
+
+      component['updateModelOnLoad'](loadedFormData);
+
+      expect(component.value).toEqual(expectedValue);
+    });
+
+    it('applyFormUpdatesOnLoad: should call setFocusOnFieldByProperty with property and previousFocusElement', () => {
+      const previousFocusElement = document.activeElement;
+
+      const validatedFields = { value: undefined, focus: 'test1' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnFieldByProperty');
+      spyOn(component, <any>'updateModelOnLoad');
+      spyOn(component, <any>'disableForm');
+
+      component['applyFormUpdatesOnLoad'](previousFocusElement)(validatedFields);
+
+      expect(component['setFocusOnFieldByProperty']).toHaveBeenCalledWith(validatedFields.focus, previousFocusElement);
+    });
+
+    it('applyFormUpdatesOnLoad: should call disableForm with false', () => {
+      const previousFocusElement = document.activeElement;
+
+      const validatedFields = { value: undefined, focus: 'test1' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnFieldByProperty');
+      spyOn(component, <any>'updateModelOnLoad');
+      spyOn(component, <any>'disableForm');
+
+      component['applyFormUpdatesOnLoad'](previousFocusElement)(validatedFields);
+
+      expect(component['disableForm']).toHaveBeenCalledWith(false);
+    });
+
+    it('applyFormUpdatesOnLoad: should call updateModelOnLoad with loadedFormData', () => {
+      const previousFocusElement = document.activeElement;
+
+      const loadedFormData = { value: undefined, focus: 'test1' };
+
+      component.fields = [
+        { property: 'test1', required: true, visible: true }
+      ];
+
+      spyOn(component, <any>'setFocusOnFieldByProperty');
+      spyOn(component, <any>'updateModelOnLoad');
+      spyOn(component, <any>'disableForm');
+
+      component['applyFormUpdatesOnLoad'](previousFocusElement)(loadedFormData);
+
+      expect(component['updateModelOnLoad']).toHaveBeenCalledWith(loadedFormData);
+    });
+
+    it('loadDataOnInitialize: should call executeLoad with load and value', () => {
+      component.load = 'http://test.com';
+      component.value = { test: 'new value' };
+
+      spyOn(component, <any>'disableForm');
+      const spyExecuteLoad = spyOn(component['loadService'], 'executeLoad').and.returnValue(of());
+
+      component['loadDataOnInitialize']();
+
+      expect(spyExecuteLoad).toHaveBeenCalledWith(component.load, component.value);
+    });
+
+    it('loadDataOnInitialize: should call disabledForm with false if observable returns an error', () => {
+      component.fields = [ { property: 'test' } ];
+      component.disabledForm = true;
+
+      spyOn(component['loadService'], 'executeLoad').and.returnValue(throwError('error'));
+      spyOn(component, <any>'applyFormUpdatesOnLoad');
+
+      component['loadDataOnInitialize']();
+
+      expect(component.disabledForm).toBe(false);
+    });
+
+    it('loadDataOnInitialize: should call disabledForm with true on subcribe of observable', () => {
+      const loadedFormData = { fields: [{ property: 'test', disabled: true }] };
+
+      component.fields = [ { property: 'test' } ];
+
+      spyOn(component['loadService'], 'executeLoad').and.returnValue(of(loadedFormData));
+      spyOn(component, <any>'applyFormUpdatesOnLoad');
+
+      component['loadDataOnInitialize']();
+
+      expect(component.disabledForm).toBe(true);
+    });
+
+    it('loadDataOnInitialize: should call applyFormUpdatesOnLoad', () => {
+      component.fields = [ { property: 'test' } ];
+
+      spyOn(component['loadService'], 'executeLoad').and.returnValue(of());
+      const spyApplyFormUpdatesOnLoad = spyOn(component, <any>'applyFormUpdatesOnLoad');
+
+      component['loadDataOnInitialize']();
+
+      expect(spyApplyFormUpdatesOnLoad).toHaveBeenCalled();
     });
 
   });

@@ -36,38 +36,23 @@ describe('PoDynamicFormValidationService:', () => {
   describe('Methods:', () => {
     const spyValidateFunction = jasmine.createSpy('validateFunction');
 
-    it('sendChanges: should call `validateFieldOnServer` if `validate` param is a string', () => {
-      const spyValidateFieldOnServer = spyOn(service, <any>'validateFieldOnServer').and.returnValue(of());
+    it('sendFieldChange: should call `execute` with `field.validate`, `field` and `value`', () => {
+      const changedValue = { property: field.property, value };
 
-      service.sendChanges(mockURL, field, value);
-
-      expect(spyValidateFieldOnServer).toHaveBeenCalledWith(mockURL, { property: field.property, value });
-    });
-
-    it('sendChanges: should call the function passed as param if `validate` isn`t a string', () => {
-      const spyValidateFieldOnServer = spyOn(service, <any>'validateFieldOnServer');
-
-      service.sendChanges(spyValidateFunction, field, value);
-
-      expect(spyValidateFunction).toHaveBeenCalledWith({ property: field.property, value });
-      expect(spyValidateFieldOnServer).not.toHaveBeenCalledWith();
-    });
-
-    it('sendFieldChange: should call `sendChanges` with `field.validate`, `field` and `value`', () => {
       field.validate = mockURL;
 
-      const spySendChanges = spyOn(service, 'sendChanges').and.returnValue(of());
+      const spyExecute = spyOn(service, <any> 'execute').and.returnValue(of());
 
       service.sendFieldChange(field, value);
 
-      expect(spySendChanges).toHaveBeenCalledWith(field.validate, field, value);
+      expect(spyExecute).toHaveBeenCalledWith(field.validate, changedValue);
 
     });
 
     it('sendFieldChange: should return value if return of server is not null', done => {
       const validatedField = { field: { disabled: false }};
 
-      spyOn(service, <any>'sendChanges').and.returnValue(of(validatedField));
+      spyOn(service, <any>'execute').and.returnValue(of(validatedField));
 
       service.sendFieldChange(field, value).subscribe(validateField => {
         expect(validateField).toEqual(validatedField);
@@ -80,7 +65,7 @@ describe('PoDynamicFormValidationService:', () => {
         field: {}
       };
 
-      spyOn(service, <any>'sendChanges').and.returnValue(of(null));
+      spyOn(service, <any>'execute').and.returnValue(of(null));
 
       service.sendFieldChange(field, value).subscribe(validateField => {
         expect(validateField).toEqual(defaultField);
@@ -88,14 +73,14 @@ describe('PoDynamicFormValidationService:', () => {
       });
     });
 
-    it('sendFormChange: should call `sendChanges` with `validate`, `field` and `value`', () => {
-      const valuesList = [{ name: 'username' }, { age: '20'}];
+    it('sendFormChange: should call `execute` with `validate` and `changedValue`', () => {
+      const changedValue = { property: field.property, value };
 
-      const spySendChanges = spyOn(service, 'sendChanges').and.returnValue(of());
+      const spyExecute = spyOn(service, <any> 'execute').and.returnValue(of());
 
-      service.sendFormChange(spyValidateFunction, field, valuesList);
+      service.sendFormChange(spyValidateFunction, field, value);
 
-      expect(spySendChanges).toHaveBeenCalledWith(spyValidateFunction, field, valuesList);
+      expect(spyExecute).toHaveBeenCalledWith(spyValidateFunction, changedValue);
     });
 
     it('sendFormChange: should return default form if return of server is null', done => {
@@ -105,7 +90,7 @@ describe('PoDynamicFormValidationService:', () => {
         focus: undefined
       };
 
-      spyOn(service, <any>'sendChanges').and.returnValue(of(null));
+      spyOn(service, <any>'execute').and.returnValue(of(null));
 
       service.sendFormChange('validate', field, value).subscribe(validateField => {
         expect(validateField).toEqual(defaultForm);
@@ -114,9 +99,9 @@ describe('PoDynamicFormValidationService:', () => {
     });
 
     it('sendFormChange: should return value if return of server is not null', done => {
-      const validatedField = { field: { disabled: false }};
+      const validatedField = { fields: [{ ...field }]};
 
-      spyOn(service, <any>'sendChanges').and.returnValue(of(validatedField));
+      spyOn(service, <any>'execute').and.returnValue(of(validatedField));
 
       service.sendFormChange('validate', field, value).subscribe(validateField => {
         expect(validateField).toEqual(validatedField);
@@ -124,7 +109,7 @@ describe('PoDynamicFormValidationService:', () => {
       });
     });
 
-    it('updateFieldsForm: should return merged fields between `fields` and `validatFields`', () => {
+    it('updateFieldsForm: should return merged fields between `fields` and `validatFields`, ignoring new fields', () => {
       const fields = [
         { property: 'test1', required: true, visible: true },
         { property: 'test2', required: false, visible: true },
@@ -142,8 +127,7 @@ describe('PoDynamicFormValidationService:', () => {
         { property: 'test1', required: true, visible: true },
         { property: 'test2', required: false, visible: true, help: 'test help' },
         { property: 'test3', required: true, visible: false },
-        { property: 'test4', required: false, visible: false },
-        { property: 'test5', required: true }
+        { property: 'test4', required: false, visible: false }
       ];
 
       const result = service.updateFieldsForm(validatedFields, fields);
@@ -177,32 +161,6 @@ describe('PoDynamicFormValidationService:', () => {
       expect(service['setFieldDefaultIfEmpty'](undefined)).toEqual(defaultField);
     });
 
-    it('setFormDefaultIfEmpty: should return value if its is defined', () => {
-      const validatedField = { value: 'new value' };
-
-      expect(service['setFormDefaultIfEmpty'](validatedField)).toEqual(validatedField);
-    });
-
-    it('setFormDefaultIfEmpty: should return default form if its is undefined', () => {
-      const defaultForm = {
-        value: {},
-        fields: [],
-        focus: undefined
-      };
-
-      expect(service['setFormDefaultIfEmpty'](undefined)).toEqual(defaultForm);
-    });
-
-    it('validateFieldOnServer: should call `POST` method', () => {
-      const changedValue = { property: field.property, value: value };
-
-      service['validateFieldOnServer'](mockURL, changedValue).subscribe(response => {
-        expect(response).toBeDefined();
-      });
-
-      const req = httpMock.expectOne(`${mockURL}`);
-      expect(req.request.method).toBe('POST');
-    });
   });
 
 });
