@@ -36,7 +36,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
-describe('PoLookupComponent: ', () => {
+describe('PoLookupComponent:', () => {
   let component: PoLookupComponent;
   let fixture: ComponentFixture<PoLookupComponent>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
@@ -119,7 +119,7 @@ describe('PoLookupComponent: ', () => {
 
   });
 
-  describe('Methods: ', () => {
+  describe('Methods:', () => {
     const objectSelected = { label: 'teste', value: 123 };
 
     it('searchEvent: should call `searchById` when the current value isn`t equal to the old value.',
@@ -377,6 +377,14 @@ describe('PoLookupComponent: ', () => {
 
   describe('Templates:', () => {
 
+    let nativeElement;
+    const eventClick = document.createEvent('MouseEvents');
+    eventClick.initEvent('click', true, false);
+
+    beforeEach(() => {
+      nativeElement = fixture.debugElement.nativeElement;
+    });
+
     xit('focus of search span should focus input', fakeAsync(() => {
       const element = fixture.debugElement.nativeElement;
       const input = element.querySelector('.po-input');
@@ -387,6 +395,24 @@ describe('PoLookupComponent: ', () => {
       tick();
 
       expect(input.focus).toHaveBeenCalled();
+    }));
+
+    it('should apply focus on field after model is closed.', inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+      const input = nativeElement.querySelector('.po-input.po-input-icon-right');
+      input.dispatchEvent(eventClick);
+
+      component.service = lookupFilterService;
+      spyOn(component['poLookupModalService'], 'openModal').and.callThrough();
+      spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+      component.openLookup();
+      fixture.detectChanges();
+
+      const closeButton = document.querySelector('.po-modal-header-close-button .po-icon.po-icon-close');
+      closeButton.dispatchEvent(eventClick);
+      fixture.detectChanges();
+
+      const activeElement = document.activeElement.querySelector('.po-input.po-input-icon-right');
+      expect(activeElement).toEqual(input);
     }));
 
     it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
