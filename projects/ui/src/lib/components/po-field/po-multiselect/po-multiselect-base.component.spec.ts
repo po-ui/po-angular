@@ -28,9 +28,9 @@ describe('PoMultiselectBaseComponent:', () => {
     expectSettersMethod(component, 'required', 'undefined', 'required', false);
     expectSettersMethod(component, 'required', undefined, 'required', false);
 
-    spyOn(component, 'updateModelToValidate');
+    spyOn(component, <any>'validateModel');
     component.disabled = true;
-    expect(component.updateModelToValidate).toHaveBeenCalled();
+    expect(component['validateModel']).toHaveBeenCalled();
   });
 
   it('should set disabled', () => {
@@ -42,10 +42,10 @@ describe('PoMultiselectBaseComponent:', () => {
     expectSettersMethod(component, 'disabled', 'undefined', 'disabled', false);
     expectSettersMethod(component, 'disabled', undefined, 'disabled', false);
 
-    spyOn(component, 'updateModelToValidate');
+    spyOn(component, <any>'validateModel');
     spyOn(component, 'updateVisibleItems');
     component.disabled = true;
-    expect(component.updateModelToValidate).toHaveBeenCalled();
+    expect(component['validateModel']).toHaveBeenCalled();
     expect(component.updateVisibleItems).toHaveBeenCalled();
   });
 
@@ -105,12 +105,6 @@ describe('PoMultiselectBaseComponent:', () => {
     component.options = [];
     component.ngOnInit();
     expect(component.updateList).toHaveBeenCalledWith([]);
-  });
-
-  it('should set variable readyToValidation to true', () => {
-    component['readyToValidation'] = false;
-    component.ngAfterContentChecked();
-    expect(component['readyToValidation']).toBeTruthy();
   });
 
   it('should call validation functions and sort function', () => {
@@ -176,25 +170,6 @@ describe('PoMultiselectBaseComponent:', () => {
     component.updateList(null);
     expect(component.visibleOptionsDropdown.length).toBe(1);
   });
-
-  it('should call method callOnChange with selectedOptions', fakeAsync(() => {
-    component['readyToValidation'] = true;
-    component['selectedOptions'] = [];
-    spyOn(component, 'callOnChange');
-    component.updateModelToValidate();
-
-    tick(100);
-    expect(component.callOnChange).toHaveBeenCalledWith([]);
-  }));
-
-  it('shouldn`t call method callOnChange', fakeAsync(() => {
-    component['readyToValidation'] = false;
-    spyOn(component, 'callOnChange');
-    component.updateModelToValidate();
-
-    tick(100);
-    expect(component.callOnChange).not.toHaveBeenCalled();
-  }));
 
   it('should call onModelChange and eventChange', () => {
     const fakeThis = {
@@ -343,16 +318,6 @@ describe('PoMultiselectBaseComponent:', () => {
     expect(component.selectedOptions.length).toBe(1);
   });
 
-  it('should call `callOnChange` and `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
-    spyOn(component, 'updateSelectedOptions');
-    spyOn(component, 'callOnChange');
-
-    component.writeValue(null);
-
-    expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
-    expect(component.callOnChange).toHaveBeenCalledWith([]);
-  });
-
   it('should update model if the values is different of the selectedOptions.', () => {
     component.selectedOptions = [];
     component.options = [{value: 1, label: '1'}, {value: 2, label: '2'}];
@@ -400,6 +365,39 @@ describe('PoMultiselectBaseComponent:', () => {
       spyOn(component.change, 'emit');
       component.eventChange([{value: 1, label : '1'}]);
       expect(component.change.emit).not.toHaveBeenCalled();
+    });
+
+    it('registerOnValidatorChange: should register validatorChange function', () => {
+      const registerOnValidatorChangeFn = () => {};
+
+      component.registerOnValidatorChange(registerOnValidatorChangeFn);
+      expect(component['validatorChange']).toBe(registerOnValidatorChangeFn);
+    });
+
+    it('validateModel: shouldn`t call `validatorChange` when it is falsy', () => {
+      component['validatorChange'] = undefined;
+
+      component['validateModel']();
+
+      expect(component['validatorChange']).toBeUndefined();
+    });
+
+    it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
+      component['validatorChange'] = () => {};
+
+      spyOn(component, <any> 'validatorChange');
+
+      component['validateModel']();
+
+      expect(component['validatorChange']).toHaveBeenCalledWith();
+    });
+
+    it('writeValue: should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
+      spyOn(component, 'updateSelectedOptions');
+
+      component.writeValue(null);
+
+      expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
     });
   });
 
