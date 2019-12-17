@@ -36,7 +36,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
-describe('PoLookupComponent: ', () => {
+describe('PoLookupComponent:', () => {
   let component: PoLookupComponent;
   let fixture: ComponentFixture<PoLookupComponent>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
@@ -119,7 +119,7 @@ describe('PoLookupComponent: ', () => {
 
   });
 
-  describe('Methods: ', () => {
+  describe('Methods:', () => {
     const objectSelected = { label: 'teste', value: 123 };
 
     it('searchEvent: should call `searchById` when the current value isn`t equal to the old value.',
