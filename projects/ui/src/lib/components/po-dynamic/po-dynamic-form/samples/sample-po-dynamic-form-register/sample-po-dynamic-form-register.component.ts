@@ -27,7 +27,7 @@ export class SamplePoDynamicFormRegisterComponent {
       { label: 'Rio de Janeiro', value: 3 },
       { label: 'Minas Gerais', value: 4 }
     ]},
-    { property: 'city', disabled: true },
+    { property: 'city', disabled: true, gridColumns: 6 },
     { property: 'entryTime', label: 'Entry time', type: 'time', divider: 'Work data', gridColumns: 6 },
     { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 6 },
     { property: 'wage', type: 'currency', gridColumns: 6 },
@@ -43,7 +43,7 @@ export class SamplePoDynamicFormRegisterComponent {
       property: 'favoriteHero',
       gridColumns: 6,
       gridSmColumns: 12,
-      label: 'Favorite Hero',
+      label: 'Favorite hero',
       searchService: 'https://thf.totvs.com.br/sample/api/comboOption/heroes',
       columns: [ { property: 'nickname', label: 'Hero' }, { property: 'label', label: 'Name' }]
     },
