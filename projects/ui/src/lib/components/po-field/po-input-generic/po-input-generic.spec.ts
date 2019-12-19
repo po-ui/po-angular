@@ -225,17 +225,25 @@ describe('PoInputGeneric:', () => {
     expect(fakeThis.inputEl.nativeElement.value).toBe('12345');
   });
 
-  it('should not call "callOnChange" on eventInput with mask', () => {
+  it('should call mask.blur on eventInput with mask', () => {
     const fakeThis = {
       mask: true,
-      callOnChange: () => {},
-      validMaxLength: () => {},
-      maxlength: ''
+      callOnChange: (v: any) => {},
+      inputEl: component.inputEl,
+      objMask: {
+        blur: (v: any) => {},
+        valueToInput: '',
+        valueToModel: ''
+      }
     };
 
+    fakeEvent.target.value = '1234567890';
+
+    spyOn(fakeThis.objMask, 'blur');
     spyOn(fakeThis, 'callOnChange');
     component.eventOnInput.call(fakeThis, fakeEvent);
-    expect(fakeThis.callOnChange).not.toHaveBeenCalled();
+    expect(fakeThis.callOnChange).toHaveBeenCalled();
+    expect(fakeThis.objMask.blur).toHaveBeenCalled();
   });
 
   it('should valid maxlength when its defined', () => {
