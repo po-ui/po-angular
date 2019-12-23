@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.21.0](https://github.com/portinariui/portinari-angular/compare/v1.20.0...v1.21.0) (2019-12-23)
+
+
+### Bug Fixes
+
+* **input:** corrige o *bug* ao colar um texto com o *mouse* no input ([0b48421](https://github.com/portinariui/portinari-angular/commit/0b48421)), closes [#146](https://github.com/portinariui/portinari-angular/issues/146)
+* **lookup:** corrige comportamento focal na tabulação do html ([4e2432b](https://github.com/portinariui/portinari-angular/commit/4e2432b))
+* **multiselect:** corrige disparo do evento de *change* na inicialização ([d1b7124](https://github.com/portinariui/portinari-angular/commit/d1b7124))
+
+
+### Features
+
+* **dynamic-form:** adiciona métodos para inicialização ([d68ecef](https://github.com/portinariui/portinari-angular/commit/d68ecef))
+* **table:** adiciona eventos e métodos para colapsar e expandir ([e632fbc](https://github.com/portinariui/portinari-angular/commit/e632fbc))
+
+
+
 ## [1.20.0](https://github.com/portinariui/portinari-angular/compare/v1.19.0...v1.20.0) (2019-12-13)
 
 
