@@ -1,3 +1,4 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Observable } from 'rxjs';
@@ -10,15 +11,24 @@ import { PoTagIcon } from './enums/po-tag-icon.enum';
 import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
 
+@Component({
+  template: `<po-tag p-label="Mock" (p-click)="onClick()"></po-tag>`
+})
+class PoTagClickableComponent {
+  onClick() {}
+}
+
 describe('PoTagComponent:', () => {
   let component: PoTagComponent;
   let fixture: ComponentFixture<PoTagComponent>;
+
+  let fixtureClickable: ComponentFixture<PoTagClickableComponent>;
 
   let nativeElement: any;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoTagComponent ]
+      declarations: [ PoTagComponent, PoTagClickableComponent ]
     });
   });
 
@@ -26,7 +36,7 @@ describe('PoTagComponent:', () => {
     fixture = TestBed.createComponent(PoTagComponent);
     component = fixture.componentInstance;
 
-    fixture.detectChanges();
+    fixtureClickable = TestBed.createComponent(PoTagClickableComponent);
 
     nativeElement = fixture.debugElement.nativeElement;
   });
@@ -231,6 +241,8 @@ describe('PoTagComponent:', () => {
     });
 
     it('should add `po-tag-info` as default.', () => {
+      fixture.detectChanges();
+
       expect(nativeElement.querySelector('.po-tag-info')).toBeTruthy();
     });
 
@@ -303,10 +315,9 @@ describe('PoTagComponent:', () => {
     });
 
     it('should add `po-clickable` if `p-click` @Output is wire up`.', () => {
-      component.isClickable = true;
+      fixtureClickable.detectChanges();
 
-      fixture.detectChanges();
-      expect(nativeElement.querySelector('.po-clickable')).toBeTruthy();
+      expect(fixtureClickable.debugElement.nativeElement.querySelector('.po-clickable')).toBeTruthy();
     });
 
     it('shouldn`t add `po-clickable` if `p-click` @Output isn`t wire up`.', () => {
