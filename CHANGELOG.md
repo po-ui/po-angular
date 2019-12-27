@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.22.0](https://github.com/portinariui/portinari-angular/compare/v1.21.0...v1.22.0) (2019-12-27)
+
+
+### Features
+
+* **http-interceptor:** permite a exibição de múltiplas mensagens do backend e depreciado o parâmetro `X-Portinari-No-Error` ([b7505dc](https://github.com/portinariui/portinari-angular/commit/b7505dc))
+
+
+
 ## [1.21.0](https://github.com/portinariui/portinari-angular/compare/v1.20.0...v1.21.0) (2019-12-23)
 
 
