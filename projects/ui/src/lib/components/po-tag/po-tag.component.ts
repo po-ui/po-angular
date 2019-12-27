@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { PoKeyCodeEnum } from '../../enums/po-key-code.enum';
 
@@ -31,7 +31,8 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
  */
 @Component({
   selector: 'po-tag',
-  templateUrl: './po-tag.component.html'
+  templateUrl: './po-tag.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTagComponent extends PoTagBaseComponent implements OnInit {
 
