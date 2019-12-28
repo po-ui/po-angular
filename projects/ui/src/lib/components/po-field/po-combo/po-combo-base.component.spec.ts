@@ -1220,6 +1220,21 @@ describe('PoComboBaseComponent:', () => {
 
       expect(spyListingComboOptions).not.toHaveBeenCalled();
     });
+
+    it('clear: should call `callModelChange` and `updateSelectedValue` and `updateComboList`', () => {
+      component.clean = true;
+
+      spyOn(component, 'callModelChange');
+      spyOn(component, 'updateSelectedValue');
+      spyOn(component, 'updateComboList');
+
+      component.clear('');
+
+      expect(component.callModelChange).toHaveBeenCalled();
+      expect(component.updateSelectedValue).toHaveBeenCalled();
+      expect(component.updateComboList).toHaveBeenCalled();
+      expect(component.selectedValue).toEqual(undefined);
+    });
   });
 
 });

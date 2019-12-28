@@ -13,6 +13,7 @@ import { PoLoadingModule } from '../../po-loading/po-loading.module';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 
+import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { PoComboComponent } from './po-combo.component';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
@@ -36,7 +37,8 @@ describe('PoComboComponent:', () => {
       declarations: [
         PoComboComponent,
         PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
+        PoFieldContainerBottomComponent,
+        PoCleanComponent
       ],
       providers: [ HttpClient, HttpHandler]
     });
@@ -1557,7 +1559,8 @@ describe('PoComboComponent - with service:', () => {
       ],
       declarations: [ PoComboComponent,
         PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
+        PoFieldContainerBottomComponent,
+        PoCleanComponent
       ],
       providers: [ HttpClient, HttpHandler, PoComboFilterService]
     });

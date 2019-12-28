@@ -8,7 +8,7 @@
       <span class="po-icon po-field-icon {{icon}}" [class.po-field-icon-disabled]="disabled"></span>
     </div>
 
-    <input #inputElement
+    <input #inputEl
       class="po-input po-combo-input"
       [class.po-input-icon-left]="icon"
       autocomplete="off"
@@ -21,6 +21,14 @@
       (keyup)="onKeyUp($event)"
       (keyup.enter)="searchOnEnter($event.target.value)"
       (keydown)="onKeyDown($event)">
+
+    <div class="po-field-second-icon-container-right">
+      <po-clean 
+        [class.po-field-icon-disabled]="disabled"
+        (p-change-event)="clear($event)"
+        [p-element-ref]="inputElement">
+      </po-clean>
+    </div>
 
     <div class="po-field-icon-container-right">
       <span #iconArrow
