@@ -17,6 +17,7 @@ import { PoComboComponent } from './po-combo.component';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { PoCleanComponent } from '../po-clean/po-clean.component';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -36,7 +37,8 @@ describe('PoComboComponent:', () => {
       declarations: [
         PoComboComponent,
         PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
+        PoFieldContainerBottomComponent,
+        PoCleanComponent
       ],
       providers: [ HttpClient, HttpHandler]
     });
@@ -1557,7 +1559,8 @@ describe('PoComboComponent - with service:', () => {
       ],
       declarations: [ PoComboComponent,
         PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
+        PoFieldContainerBottomComponent,
+        PoCleanComponent
       ],
       providers: [ HttpClient, HttpHandler, PoComboFilterService]
     });

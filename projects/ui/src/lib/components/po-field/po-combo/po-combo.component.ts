@@ -107,7 +107,7 @@ export class PoComboComponent extends PoComboBaseComponent implements OnDestroy 
   @ViewChild('containerElement', { read: ElementRef, static: false }) containerElement: ElementRef;
   @ViewChild('contentElement', { read: ElementRef, static: false }) contentElement: ElementRef;
   @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
-  @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
+  @ViewChild('inputEl', { read: ElementRef, static: true }) inputElement: ElementRef;
 
   constructor(
     public element: ElementRef,
