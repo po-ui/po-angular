@@ -31,7 +31,6 @@ describe('PoTableColumnLabelComponent:', () => {
       { value: 'danger', label: 'Danger', color: 'color-07' },
     ];
 
-    fixture.detectChanges();
   });
 
   it('should be created', () => {

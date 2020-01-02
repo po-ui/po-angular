@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -9,7 +9,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
  */
 @Component({
   selector: 'po-table-icon',
-  templateUrl: './po-table-icon.component.html'
+  templateUrl: './po-table-icon.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PoTableIconComponent {

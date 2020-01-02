@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { isExternalLink } from '../../../utils/util';
 
@@ -11,7 +11,8 @@ import { isExternalLink } from '../../../utils/util';
  */
 @Component({
   selector: 'po-table-column-link',
-  templateUrl: './po-table-column-link.component.html'
+  templateUrl: './po-table-column-link.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PoTableColumnLinkComponent {
