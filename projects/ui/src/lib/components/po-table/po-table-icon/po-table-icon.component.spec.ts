@@ -25,7 +25,6 @@ describe('PoTableIconComponent:', () => {
     fixture = TestBed.createComponent(PoTableIconComponent);
     component = fixture.componentInstance;
 
-    fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
   });
 
