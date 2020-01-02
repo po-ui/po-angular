@@ -438,44 +438,6 @@ describe('PoTableComponent:', () => {
     expect(columnDetails).toBeNull();
   });
 
-  it('should count the number columns of table', () => {
-    component.columns = columnsWithDetail;
-    component.checkbox = true;
-    component.hideDetail = false;
-    component.actions = actions;
-
-    expect(component.columnCount()).toBe(8);
-  });
-
-  it('should count the number columns of table with master-detail undefined', () => {
-    component.columns = [...columns];
-    component.checkbox = true;
-    component.actions = actions;
-    expect(component.columnCount()).toBe(7);
-  });
-
-  it('should count the number columns of table with checkbox false', () => {
-    component.columns = [...columns];
-    component.checkbox = false;
-    component.actions = actions;
-    expect(component.columnCount()).toBe(6);
-  });
-
-  it('should count the number columns of table with hideDetail false', () => {
-    component.columns = columnsWithDetail;
-    component.actions = actions;
-    component.checkbox = true;
-    component.hideDetail = true;
-    expect(component.columnCount()).toBe(7);
-  });
-
-  it('should count the number columns of table without action', () => {
-    component.columns = columnsWithDetail;
-    component.checkbox = true;
-    component.actions.length = 0;
-    expect(component.columnCount()).toBe(7);
-  });
-
   it('should toggle column sort', () => {
     const itemSorted = component.columns[0];
     component.sort = true;
@@ -614,7 +576,7 @@ describe('PoTableComponent:', () => {
       { property: 'test', width: '40px', label: 'test' },
       { property: 'test', width: '20px', label: 'test' }
     ];
-    expect(component.verifyWidthColumnsPixels()).toBe(true);
+    expect(component['verifyWidthColumnsPixels']()).toBe(true);
   });
 
   it('verifyWidthColumnsPixels should return false if one colum doesn`t have pixel width', () => {
@@ -623,13 +585,13 @@ describe('PoTableComponent:', () => {
       { property: 'test', width: '40px', label: 'test' },
       { property: 'test', width: '20px', label: 'test' }
     ];
-    expect(component.verifyWidthColumnsPixels()).toBe(false);
+    expect(component['verifyWidthColumnsPixels']()).toBe(false);
   });
 
   it('verifyWidthColumnsPixels should return false if doesn`t have columns', () => {
     component.items = [];
     component.columns = [];
-    expect(component.verifyWidthColumnsPixels()).toBe(false);
+    expect(component['verifyWidthColumnsPixels']()).toBe(false);
   });
 
   xit('should set table height', () => {
@@ -640,13 +602,13 @@ describe('PoTableComponent:', () => {
   });
 
   it('should call calculateWidthHeaders and setTableOpacity in debounceResize', fakeAsync(() => {
-    spyOn(component, 'calculateWidthHeaders');
+    spyOn(component, <any> 'calculateWidthHeaders');
     spyOn(component, <any> 'setTableOpacity');
 
     component['debounceResize']();
     tick(500);
 
-    expect(component.calculateWidthHeaders).toHaveBeenCalled();
+    expect(component['calculateWidthHeaders']).toHaveBeenCalled();
     expect(component['setTableOpacity']).toHaveBeenCalled();
   }));
 
@@ -660,13 +622,13 @@ describe('PoTableComponent:', () => {
       }
     };
 
-    component.calculateHeightTableContainer.call(fakeThis, '10');
+    component['calculateHeightTableContainer'].call(fakeThis, '10');
     expect(fakeThis.heightTableContainer).toBe(10);
 
-    component.calculateHeightTableContainer.call(fakeThis, '100');
+    component['calculateHeightTableContainer'].call(fakeThis, '100');
     expect(fakeThis.heightTableContainer).toBe(100);
 
-    component.calculateHeightTableContainer.call(fakeThis, 50);
+    component['calculateHeightTableContainer'].call(fakeThis, 50);
     expect(fakeThis.heightTableContainer).toBe(50);
   });
 
@@ -680,13 +642,13 @@ describe('PoTableComponent:', () => {
       }
     };
 
-    component.calculateHeightTableContainer.call(fakeThis, 'a10');
+    component['calculateHeightTableContainer'].call(fakeThis, 'a10');
     expect(fakeThis.heightTableContainer).toBeUndefined();
 
-    component.calculateHeightTableContainer.call(fakeThis, undefined);
+    component['calculateHeightTableContainer'].call(fakeThis, undefined);
     expect(fakeThis.heightTableContainer).toBeUndefined();
 
-    component.calculateHeightTableContainer.call(fakeThis, null);
+    component['calculateHeightTableContainer'].call(fakeThis, null);
     expect(fakeThis.heightTableContainer).toBeUndefined();
   });
 
@@ -694,14 +656,14 @@ describe('PoTableComponent:', () => {
     component['footerHeight'] = 1;
     spyOn(component, <any>'getHeightTableFooter').and.returnValue(10);
 
-    expect(component.verifyChangeHeightInFooter()).toBeTruthy();
+    expect(component['verifyChangeHeightInFooter']()).toBeTruthy();
   });
 
   it('should return false in verifyChangeHeightInFooter', () => {
     component['footerHeight'] = 10;
     spyOn(component, <any>'getHeightTableFooter').and.returnValue(10);
 
-    expect(component.verifyChangeHeightInFooter()).toBeFalsy();
+    expect(component['verifyChangeHeightInFooter']()).toBeFalsy();
   });
 
   it('should calculate height when change the footer height', () => {
@@ -710,10 +672,11 @@ describe('PoTableComponent:', () => {
 
     spyOn(component, <any>'verifyChangeHeightInFooter').and.returnValue(true);
     spyOn(component, <any>'getHeightTableFooter').and.returnValue(10);
-    spyOn(component, 'calculateHeightTableContainer');
-    component.verifyCalculateHeightTableContainer();
+    spyOn(component, <any> 'calculateHeightTableContainer');
 
-    expect(component.calculateHeightTableContainer).toHaveBeenCalled();
+    component['verifyCalculateHeightTableContainer']();
+
+    expect(component['calculateHeightTableContainer']).toHaveBeenCalled();
     expect(component['footerHeight']).toBe(10);
   });
 
@@ -722,10 +685,11 @@ describe('PoTableComponent:', () => {
     component['footerHeight'] = 100;
 
     spyOn(component, <any>'verifyChangeHeightInFooter').and.returnValue(false);
-    spyOn(component, 'calculateHeightTableContainer');
-    component.verifyCalculateHeightTableContainer();
+    spyOn(component, <any> 'calculateHeightTableContainer');
 
-    expect(component.calculateHeightTableContainer).not.toHaveBeenCalled();
+    component['verifyCalculateHeightTableContainer']();
+
+    expect(component['calculateHeightTableContainer']).not.toHaveBeenCalled();
   });
 
   it('should not create column`s header dynamics and footer when not exists items', () => {
@@ -1284,7 +1248,7 @@ describe('PoTableComponent:', () => {
     it(`calculateHeightTableContainer: should call 'setTableOpacity' with 1`, () => {
       spyOn(component, <any>'setTableOpacity');
 
-      component.calculateHeightTableContainer(400);
+      component['calculateHeightTableContainer'](400);
 
       expect(component['setTableOpacity']).toHaveBeenCalledWith(1);
     });
@@ -1301,7 +1265,7 @@ describe('PoTableComponent:', () => {
 
       spyOn(fakeThis.changeDetector, 'detectChanges');
 
-      component.calculateHeightTableContainer.call(fakeThis, 400);
+      component['calculateHeightTableContainer'].call(fakeThis, 400);
 
       expect(fakeThis.changeDetector.detectChanges).toHaveBeenCalled();
 
@@ -1514,24 +1478,6 @@ describe('PoTableComponent:', () => {
       expect(component['getDefaultColumns']).not.toHaveBeenCalled();
     });
 
-    it('getColumnTitleLabel: should return `column.label` value if `column.label` is valid', () => {
-      const label = 'Label';
-      const column: PoTableColumn = { label: label };
-
-      expect(component.getColumnTitleLabel(column)).toBe(label);
-    });
-
-    it(`getColumnTitleLabel: should return the 'column.property' value with uppercase first letter if 'column.label'
-        is invalid and 'capitalizeFirstLetter' is called with property value`, () => {
-      const label = 'Label';
-      const propertyValue = 'label';
-      const column: PoTableColumn = { property: propertyValue };
-      spyOn(utilsFunctions, 'capitalizeFirstLetter').and.returnValue(label);
-
-      expect(component.getColumnTitleLabel(column)).toBe(label);
-      expect(utilsFunctions.capitalizeFirstLetter).toHaveBeenCalledWith(propertyValue);
-    });
-
     it('onVisibleColumnsChange: should set `columns` and call `detectChanges`', () => {
       const newColumns: Array<PoTableColumn> = [ { property: 'age', visible: false } ];
 
@@ -1544,39 +1490,11 @@ describe('PoTableComponent:', () => {
       expect(spyDetectChanges).toHaveBeenCalled();
     });
 
-    it('columnCountForMasterDetail: should return 7 columnCount if has actions and 5 columns', () => {
-      component.actions = [...singleAction];
-      component.columns = [...columns];
+    it('trackBy: should return index param', () => {
+      const index = 1;
+      const expectedValue = index;
 
-      const columnCountAction = 1;
-
-      const countColumns = columns.length + 1 + columnCountAction;
-
-      expect(component.columnCountForMasterDetail()).toBe(countColumns);
-    });
-
-    it('columnCountForMasterDetail: should return 7 columnCount if actions is empty and has 5 columns', () => {
-      component.actions = [];
-      component.columns = [...columns];
-
-      const columnCountColumnManager = 1;
-
-      const countColumns = columns.length + 1 + columnCountColumnManager;
-
-      expect(component.columnCountForMasterDetail()).toBe(countColumns);
-    });
-
-    it('columnCountForMasterDetail: should return 8 columnCount if actions is empty, has 5 columns and has checkbox', () => {
-      component.actions = [];
-      component.columns = [...columns];
-      component.checkbox = true;
-
-      const columnCountColumnManager = 1;
-      const columnCountCheckbox = 1;
-
-      const countColumns = columns.length + 1 + columnCountColumnManager + columnCountCheckbox;
-
-      expect(component.columnCountForMasterDetail()).toBe(countColumns);
+      expect(component.trackBy(index)).toBe(expectedValue);
     });
 
   });
@@ -1875,45 +1793,45 @@ describe('PoTableComponent:', () => {
 
       it(`should return true if 'checkbox', 'hasItems' and 'hasMainColumns' are true`, () => {
         component.checkbox = true;
+        component.columns = [...columns];
 
-        spyOn(component, 'hasItems').and.returnValue(true);
-        spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+        spyOnProperty(component, 'hasItems').and.returnValue(true);
 
         expect(component.hasCheckboxColumn).toBe(true);
       });
 
       it(`should return false if 'checkbox', 'hasItems' and 'hasMainColumns' are false`, () => {
         component.checkbox = false;
+        component.columns = [];
 
-        spyOn(component, 'hasItems').and.returnValue(false);
-        spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
+        spyOnProperty(component, 'hasItems').and.returnValue(false);
 
         expect(component.hasCheckboxColumn).toBe(false);
       });
 
       it(`should return false if 'checkbox', 'hasItems' are true and 'hasMainColumns' is false`, () => {
         component.checkbox = true;
+        component.hasMainColumns = false;
 
-        spyOn(component, 'hasItems').and.returnValue(true);
-        spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
+        spyOnProperty(component, 'hasItems').and.returnValue(true);
 
         expect(component.hasCheckboxColumn).toBe(false);
       });
 
       it(`should return false if 'checkbox', 'hasMainColumns' are true and 'hasItems' is false`, () => {
         component.checkbox = true;
+        component.hasMainColumns = true;
 
-        spyOn(component, 'hasItems').and.returnValue(false);
-        spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+        spyOnProperty(component, 'hasItems').and.returnValue(false);
 
         expect(component.hasCheckboxColumn).toBe(false);
       });
 
       it(`should return false if 'hasItems', 'hasMainColumns' are true and 'checkbox' is false`, () => {
         component.checkbox = false;
+        component.hasMainColumns = true;
 
-        spyOn(component, 'hasItems').and.returnValue(true);
-        spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
+        spyOnProperty(component, 'hasItems').and.returnValue(true);
 
         expect(component.hasCheckboxColumn).toBe(false);
       });
@@ -1921,28 +1839,28 @@ describe('PoTableComponent:', () => {
     });
 
     it(`hasFooter: should return false if 'hasItems' and 'hasVisibleSubtitleColumns' are false`, () => {
-      spyOn(component, 'hasItems').and.returnValue(false);
+      spyOnProperty(component, 'hasItems').and.returnValue(false);
       spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(false);
 
       expect(component.hasFooter).toBe(false);
     });
 
     it(`hasFooter: should return true if 'hasItems' and 'hasVisibleSubtitleColumns' are true`, () => {
-      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasItems').and.returnValue(true);
       spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(true);
 
       expect(component.hasFooter).toBe(true);
     });
 
     it(`hasFooter: should return false if 'hasItems' is true and 'hasVisibleSubtitleColumns' is false`, () => {
-      spyOn(component, 'hasItems').and.returnValue(true);
+      spyOnProperty(component, 'hasItems').and.returnValue(true);
       spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(false);
 
       expect(component.hasFooter).toBe(false);
     });
 
     it(`hasFooter: should return false if 'hasItems' is false and 'hasVisibleSubtitleColumns' is true`, () => {
-      spyOn(component, 'hasItems').and.returnValue(false);
+      spyOnProperty(component, 'hasItems').and.returnValue(false);
       spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(true);
 
       expect(component.hasFooter).toBe(false);
@@ -1980,51 +1898,47 @@ describe('PoTableComponent:', () => {
       expect(component.hasMainColumns).toBe(false);
     });
 
-    it(`hasMasterDetailColumn: should return true if 'hasMainColumns', 'hasItems', 'getColumnMasterDetail' are true and
+    it(`hasMasterDetailColumn: should return true if 'hasMainColumns', 'hasItems', 'columnMasterDetail' are true and
       'hideDetail' is false`, () => {
-
-      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
-      spyOn(component, 'hasItems').and.returnValue(true);
-      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>true);
-
+      component.hasMainColumns = true;
+      component.columnMasterDetail = columnsDetail[0];
       component.hideDetail = false;
+
+      spyOnProperty(component, 'hasItems').and.returnValue(true);
 
       expect(component.hasMasterDetailColumn).toBe(true);
     });
 
     it(`hasMasterDetailColumn: should return true if 'hasMainColumns', 'hasItems', 'hasRowTemplate' are true and
-      'hideDetail' and 'getColumnMasterDetail' are false`, () => {
-
-      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
-      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-      spyOn(component, 'hasItems').and.returnValue(true);
-      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>false);
-
+      'hideDetail' and 'columnMasterDetail' are false`, () => {
+      component.hasMainColumns = true;
+      component.columnMasterDetail = undefined;
       component.hideDetail = false;
+
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOnProperty(component, 'hasItems').and.returnValue(true);
 
       expect(component.hasMasterDetailColumn).toBe(true);
     });
 
     it(`hasMasterDetailColumn: should return false if 'hasMainColumns' is false and 'hasItems', 'hasRowTemplate' are true and
-      'hideDetail' and 'getColumnMasterDetail' are false`, () => {
-
-      spyOnProperty(component, 'hasMainColumns').and.returnValue(false);
-      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-      spyOn(component, 'hasItems').and.returnValue(true);
-      spyOn(component, 'getColumnMasterDetail').and.returnValue(<any>false);
-
+      'hideDetail' and 'columnMasterDetail' are false`, () => {
+      component.hasMainColumns = false;
+      component.columnMasterDetail = undefined;
       component.hideDetail = false;
+
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOnProperty(component, 'hasItems').and.returnValue(true);
 
       expect(component.hasMasterDetailColumn).toBe(false);
     });
 
     it(`hasMasterDetailColumn: should return false if 'hasMainColumns', 'hasItems', 'hasRowTemplate', 'hideDetail' are true`, () => {
-
-      spyOnProperty(component, 'hasMainColumns').and.returnValue(true);
-      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-      spyOn(component, 'hasItems').and.returnValue(true);
-
+      component.hasMainColumns = false;
       component.hideDetail = true;
+
+      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+      spyOnProperty(component, 'hasItems').and.returnValue(true);
 
       expect(component.hasMasterDetailColumn).toBe(false);
     });
@@ -2149,6 +2063,79 @@ describe('PoTableComponent:', () => {
       component.actions = [ ...actions ];
 
       expect(component.isSingleAction).toBe(false);
+    });
+
+    it('columnCountForMasterDetail: should return 7 columnCount if has actions and 5 columns', () => {
+      component.actions = [...singleAction];
+      component.columns = [...columns];
+
+      const columnCountAction = 1;
+
+      const countColumns = columns.length + 1 + columnCountAction;
+
+      expect(component.columnCountForMasterDetail).toBe(countColumns);
+    });
+
+    it('columnCountForMasterDetail: should return 7 columnCount if actions is empty and has 5 columns', () => {
+      component.actions = [];
+      component.columns = [...columns];
+
+      const columnCountColumnManager = 1;
+
+      const countColumns = columns.length + 1 + columnCountColumnManager;
+
+      expect(component.columnCountForMasterDetail).toBe(countColumns);
+    });
+
+    it('columnCountForMasterDetail: should return 8 columnCount if actions is empty, has 5 columns and has checkbox', () => {
+      component.actions = [];
+      component.columns = [...columns];
+      component.checkbox = true;
+
+      const columnCountColumnManager = 1;
+      const columnCountCheckbox = 1;
+
+      const countColumns = columns.length + 1 + columnCountColumnManager + columnCountCheckbox;
+
+      expect(component.columnCountForMasterDetail).toBe(countColumns);
+    });
+
+    it('columnCount: should count the number columns of table', () => {
+      component.columns = columnsWithDetail;
+      component.checkbox = true;
+      component.hideDetail = false;
+      component.actions = actions;
+
+      expect(component.columnCount).toBe(8);
+    });
+
+    it('columnCount: should count the number columns of table with master-detail undefined', () => {
+      component.columns = [...columns];
+      component.checkbox = true;
+      component.actions = actions;
+      expect(component.columnCount).toBe(7);
+    });
+
+    it('columnCount: should count the number columns of table with checkbox false', () => {
+      component.columns = [...columns];
+      component.checkbox = false;
+      component.actions = actions;
+      expect(component.columnCount).toBe(6);
+    });
+
+    it('columnCount: should count the number columns of table with hideDetail false', () => {
+      component.columns = columnsWithDetail;
+      component.actions = actions;
+      component.checkbox = true;
+      component.hideDetail = true;
+      expect(component.columnCount).toBe(7);
+    });
+
+    it('columnCount: should count the number columns of table without action', () => {
+      component.columns = columnsWithDetail;
+      component.checkbox = true;
+      component.actions.length = 0;
+      expect(component.columnCount).toBe(7);
     });
 
   });

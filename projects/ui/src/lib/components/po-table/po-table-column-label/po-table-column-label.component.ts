@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { PoColorPaletteService } from './../../../services/po-color-palette/po-color-palette.service';
 import { PoTableColumnLabel } from './po-table-column-label.interface';
@@ -13,7 +13,8 @@ import { PoTableColumnLabel } from './po-table-column-label.interface';
 
 @Component({
   selector: 'po-table-column-label',
-  templateUrl: './po-table-column-label.component.html'
+  templateUrl: './po-table-column-label.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTableColumnLabelComponent {
 
