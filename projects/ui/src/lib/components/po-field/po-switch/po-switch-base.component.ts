@@ -1,9 +1,7 @@
-import { ControlValueAccessor } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
-
-import { convertToBoolean } from '../../../utils/util';
+import { Input, ViewChild, ElementRef } from '@angular/core';
 
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
+import { PoField } from '../po-field';
 
 /**
  * @description
@@ -18,23 +16,13 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  *
  * > O componente não altera o valor incial informado no *model*, portanto indica-se inicializa-lo caso ter necessidade.
  */
-export class PoSwitchBaseComponent implements ControlValueAccessor {
+export class PoSwitchBaseComponent extends PoField<boolean> {
 
-  private _disabled?: boolean = false;
+  @ViewChild('switchContainer', { read: ElementRef, static: true }) switchContainer: ElementRef;
 
-  propagateChange: any;
   switchValue: boolean = false;
 
-  /** Nome do componente. */
-  @Input('name') name: string;
-
-  /** Rótulo exibido pelo componente. */
-  @Input('p-label') label?: string;
-
-  /** Texto de apoio para o campo. */
-  @Input('p-help') help?: string;
-
-  /**
+  /*
    * Texto exibido quando o valor do componente for `true`.
    *
    * @default `true`
@@ -68,39 +56,22 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
     this.labelPosition = (position in PoSwitchLabelPosition) ? parseInt(<any>position, 10) : PoSwitchLabelPosition.Right;
   }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Indica se o campo será desabilitado.
-   *
-   * @default `false`
-   */
-  @Input('p-disabled') set disabled(disabled: boolean) {
-    this._disabled = convertToBoolean(disabled);
-  }
-
-  get disabled() {
-    return this._disabled;
-  }
-
-  /** Evento disparado ao alterar valor do campo. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
-
-  // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
-  @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
-
   changeValue(value: any) {
     if (this.switchValue !== value) {
       this.switchValue = value;
 
-      if (this.propagateChange) {
-        this.propagateChange(value);
-      } else {
-        this.ngModelChange.emit(value);
-      }
+      this.changeModel(value);
+
       this.change.emit(this.switchValue);
+    }
+  }
+
+  /**
+   * Focar o componente
+   */
+  focus() {
+    if (!this.disabled) {
+      this.switchContainer.nativeElement.focus();
     }
   }
 
@@ -110,13 +81,7 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
     }
   }
 
-  registerOnChange(fn: any): void {
-    this.propagateChange = fn;
-  }
-
-  registerOnTouched(fn: any): void { }
-
-  writeValue(value: any): void {
+  onWriteValue(value: boolean) {
     if (value !== this.switchValue) {
       this.switchValue = !!value;
     }

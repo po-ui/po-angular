@@ -42,7 +42,6 @@ import { PoPasswordComponent } from './po-password/po-password.component';
 import { PoRadioGroupComponent } from './po-radio-group/po-radio-group.component';
 import { PoSelectComponent } from './po-select/po-select.component';
 import { PoSelectOptionTemplateDirective } from './po-select/po-select-option-template/po-select-option-template.directive';
-import { PoSwitchComponent } from './po-switch/po-switch.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
 import { PoUploadDragDropComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop.component';
@@ -53,6 +52,7 @@ import {
 import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
+import { PoSwitchModule } from './po-switch/po-switch.module';
 
 /**
  * @description
@@ -76,6 +76,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoModalModule,
     PoProgressModule,
     PoServicesModule,
+    PoSwitchModule,
     PoTableModule,
     PoTooltipModule
   ],
@@ -100,7 +101,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoRichTextComponent,
     PoSelectComponent,
     PoSelectOptionTemplateDirective,
-    PoSwitchComponent,
+    PoSwitchModule,
     PoTextareaComponent,
     PoUploadComponent,
     PoUrlComponent
@@ -132,7 +133,6 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoRichTextToolbarComponent,
     PoSelectComponent,
     PoSelectOptionTemplateDirective,
-    PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
     PoUploadDragDropComponent,
