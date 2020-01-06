@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.22.1](https://github.com/portinariui/portinari-angular/compare/v1.22.0...v1.22.1) (2020-01-06)
+
+
+### Performance
+
+* **divider:**: adiciona ChangeDetectionStrategy.OnPush ([4b8f3ce](https://github.com/portinariui/portinari-angular/commit/4b8f3ce))
+
+* **table:**  implementa alguns itens de performance ([30ac592](https://github.com/portinariui/portinari-angular/commit/30ac592))
+
+* **tag:** adiciona ChangeDetectionStrategy.OnPush ([2fe04cf](https://github.com/portinariui/portinari-angular/commit/2fe04cf))
+
+
 ## [1.22.0](https://github.com/portinariui/portinari-angular/compare/v1.21.0...v1.22.0) (2019-12-27)
 
 
