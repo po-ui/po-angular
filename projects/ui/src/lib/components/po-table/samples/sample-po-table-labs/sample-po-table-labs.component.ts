@@ -48,7 +48,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   ];
 
   selectionOptions: Array<PoCheckboxGroupOption> = [
-    { label: 'Checkbox', value: 'checkbox' },
+    { label: 'Selectable', value: 'selectable' },
     { label: 'Hide select all', value: 'hideSelectAll', disabled: true },
     { label: 'Single select', value: 'singleSelect', disabled: true }
   ];
@@ -131,10 +131,10 @@ export class SamplePoTableLabsComponent implements OnInit {
 
   changeSelectionOptions() {
     const singleSelect = this.selection.includes('singleSelect');
-    const checkbox = this.selection.includes('checkbox');
+    const selectable = this.selection.includes('selectable');
 
-    this.selectionOptions[1].disabled = singleSelect || !checkbox;
-    this.selectionOptions[2].disabled = !checkbox;
+    this.selectionOptions[1].disabled = singleSelect || !selectable;
+    this.selectionOptions[2].disabled = !selectable;
 
     this.selectionOptions = [].concat(this.selectionOptions);
   }

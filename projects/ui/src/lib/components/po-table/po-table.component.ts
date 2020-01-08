@@ -125,7 +125,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   get columnCount() {
     return (this.mainColumns.length +
       (this.actions.length > 0 ? 1 : 0) +
-      (this.checkbox ? 1 : 0) +
+      (this.selectable ? 1 : 0) +
       (!this.hideDetail && this.columnMasterDetail !== undefined ? 1 : 0)
     );
   }
@@ -134,7 +134,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     // caso tiver ações será utilizado a sua coluna para exibir o columnManager
     const columnManager = this.actions.length ? 0 : 1;
 
-    return (this.mainColumns.length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.checkbox ? 1 : 0) + columnManager;
+    return (this.mainColumns.length + 1) + (this.actions.length > 0 ? 1 : 0) + (this.selectable ? 1 : 0) + columnManager;
   }
 
   get detailHideSelect() {
@@ -150,10 +150,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.visibleActions && this.visibleActions[0];
   }
 
-  get hasCheckboxColumn(): boolean {
-    return this.checkbox && this.hasItems && this.hasMainColumns;
-  }
-
   get hasFooter(): boolean {
     return this.hasItems && this.hasVisibleSubtitleColumns;
   }
@@ -166,6 +162,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   get hasRowTemplate(): boolean {
     return !!this.tableRowTemplate;
+  }
+
+  get hasSelectableColumn(): boolean {
+    return this.selectable && this.hasItems && this.hasMainColumns;
   }
 
   get hasValidColumns() {

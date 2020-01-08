@@ -1,7 +1,7 @@
 <table class="po-table-master-detail">
   <thead *ngIf="typeHeaderTop">
     <tr>
-      <th class="po-table-header po-table-column-checkbox" *ngIf="hasCheckbox"></th>
+      <th class="po-table-header po-table-column-selectable" *ngIf="isSelectable"></th>
       <th class="po-table-header po-table-header-column po-table-header-master-detail"></th>
       <th class="po-table-header po-table-header-ellipsis" *ngFor="let detail of detail.columns">
         {{ getColumnTitleLabel(detail) }}
@@ -10,13 +10,13 @@
   </thead>
   <tbody>
     <tr class="po-table-detail-row"
-        [class.po-table-row-active]="item.$selected && hasCheckbox"
+        [class.po-table-row-active]="item.$selected && isSelectable"
         *ngFor="let item of items">
 
-      <ng-container *ngIf="hasCheckbox; else masterDetailSpace">
+      <ng-container *ngIf="isSelectable; else masterDetailSpace">
 
         <td class="po-table-column-master-detail-space-checkbox"></td>
-        <td class="po-table-column po-table-column-checkbox">
+        <td class="po-table-column po-table-column-selectable">
           <input
             class="po-table-checkbox"
             type="checkbox"
@@ -32,7 +32,7 @@
       </ng-template>
 
       <td class="po-table-column-master-detail po-table-master-detail-label"
-        (click)="hasCheckbox ? onSelectRow(item) : 'javascript:;'"
+        (click)="isSelectable ? onSelectRow(item) : 'javascript:;'"
         *ngFor="let detail of detailColumns">
         <strong *ngIf="typeHeaderInline"> {{ getColumnTitleLabel(detail) }}: </strong>
 

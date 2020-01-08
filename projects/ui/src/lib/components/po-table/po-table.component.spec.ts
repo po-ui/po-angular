@@ -267,19 +267,19 @@ describe('PoTableComponent:', () => {
     expect(result).toBe(true);
   });
 
-  it('should allow checkbox selection', () => {
-    let checkboxColumn = tableElement.querySelector('.po-table-column-checkbox');
-    expect(checkboxColumn).toBeFalsy();
+  it('should allow selection', () => {
+    let selectableColumn = tableElement.querySelector('.po-table-column-selectable');
+    expect(selectableColumn).toBeFalsy();
 
-    component.checkbox = true;
+    component.selectable = true;
     fixture.detectChanges();
 
-    checkboxColumn = tableElement.querySelector('.po-table-column-checkbox');
-    expect(checkboxColumn).toBeTruthy();
+    selectableColumn = tableElement.querySelector('.po-table-column-selectable');
+    expect(selectableColumn).toBeTruthy();
   });
 
   it('should allow single row selection', () => {
-    component.checkbox = true;
+    component.selectable = true;
     component.singleSelect = true;
     component.hideSelectAll = true;
     component.selectRow(component.items[0]);
@@ -290,12 +290,12 @@ describe('PoTableComponent:', () => {
     const checkedColumns = tableElement.querySelectorAll('.po-radio-group-input-checked');
     expect(checkedColumns.length).toBe(1);
 
-    const checkboxHeader = tableElement.querySelector('th.po-table-column-checkbox .po-table-checkbox');
-    expect(checkboxHeader).toBeFalsy();
+    const selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
+    expect(selectableHeader).toBeFalsy();
   });
 
   it('should allow multiple row selection', () => {
-    component.checkbox = true;
+    component.selectable = true;
     component.singleSelect = false;
     component.selectRow(component.items[0]);
     component.selectRow(component.items[1]);
@@ -306,24 +306,24 @@ describe('PoTableComponent:', () => {
     expect(checkedColumns.length).toBe(2);
   });
 
-  it('should show indeterminate checkbox', () => {
-    component.checkbox = true;
+  it('should show indeterminate selectable', () => {
+    component.selectable = true;
     fixture.detectChanges();
 
-    let checkboxHeader = tableElement.querySelector('th.po-table-column-checkbox .po-table-checkbox-indeterminate');
-    expect(checkboxHeader).toBeFalsy();
+    let selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox-indeterminate');
+    expect(selectableHeader).toBeFalsy();
 
     component.selectRow(component.items[0]);
     component.selectRow(component.items[1]);
     fixture.detectChanges();
 
-    checkboxHeader = tableElement.querySelector('th.po-table-column-checkbox .po-table-checkbox-indeterminate');
-    expect(checkboxHeader).toBeTruthy();
+    selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox-indeterminate');
+    expect(selectableHeader).toBeTruthy();
   });
 
   it('should select one row', () => {
     const itemSelected = component.items[0];
-    component.checkbox = true;
+    component.selectable = true;
     component.hideDetail = true;
     component.columns = columnsWithDetail;
     component.selectRow(itemSelected);
@@ -338,35 +338,35 @@ describe('PoTableComponent:', () => {
   });
 
   it('should select all rows', () => {
-    component.checkbox = true;
+    component.selectable = true;
     component.selectAllRows();
 
     fixture.detectChanges();
 
-    const rowSelected = tableElement.querySelectorAll('tr.po-table-row-active>td.po-table-column-checkbox');
+    const rowSelected = tableElement.querySelectorAll('tr.po-table-row-active>td.po-table-column-selectable');
 
     expect(rowSelected).toBeTruthy();
     expect(rowSelected.length).toBe(component.items.length);
   });
 
-  it('should hide checkbox select all', () => {
-    component.checkbox = true;
+  it('should hide the option to select all', () => {
+    component.selectable = true;
     component.hideSelectAll = true;
 
     fixture.detectChanges();
 
-    const checkboxColumnHeader = tableElement.querySelector('th.po-table-column-checkbox .po-table-checkbox');
-    expect(checkboxColumnHeader).toBeFalsy();
+    const selectableColumnHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
+    expect(selectableColumnHeader).toBeFalsy();
   });
 
-  it('should show checkbox select all', () => {
-    component.checkbox = true;
+  it('should show the option to select all', () => {
+    component.selectable = true;
     component.hideSelectAll = false;
 
     fixture.detectChanges();
 
-    const checkboxColumnHeader = tableElement.querySelector('th.po-table-column-checkbox .po-table-checkbox');
-    expect(checkboxColumnHeader).toBeTruthy();
+    const selectableColumnHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
+    expect(selectableColumnHeader).toBeTruthy();
   });
 
   it('shouldn`t show more button', () => {
@@ -694,15 +694,15 @@ describe('PoTableComponent:', () => {
 
   it('should not create column`s header dynamics and footer when not exists items', () => {
     component.items = undefined;
-    component.checkbox = true;
+    component.selectable = true;
     component.actions = actions;
     component.hideDetail = false;
     component.columns = columnsWithDetail;
 
     fixture.detectChanges();
 
-    const checkboxColumn = nativeElement.querySelector('.po-table-column-checkbox');
-    expect(checkboxColumn).toBeNull();
+    const selectableColumn = nativeElement.querySelector('.po-table-column-selectable');
+    expect(selectableColumn).toBeNull();
 
     const masterDetailColumn = nativeElement.querySelector('.po-table-header-master-detail');
     expect(masterDetailColumn).toBeNull();
@@ -1591,9 +1591,9 @@ describe('PoTableComponent:', () => {
       expect(tableElement.querySelector('.po-table-column-actions')).toBeTruthy();
     });
 
-    it('should show detail checkbox if detail hideSelect is undefined', () => {
+    it('should show detail selectable if detail hideSelect is undefined', () => {
       component.columns = columnsWithDetailInterface;
-      component.checkbox = true;
+      component.selectable = true;
       component.hideDetail = false;
       component.items[0].$showDetail = true;
       fixture.detectChanges();
@@ -1603,10 +1603,10 @@ describe('PoTableComponent:', () => {
       expect(details).toBeTruthy();
     });
 
-    it('should show detail checkbox if detail hideSelect is false', () => {
+    it('should show detail selectable if detail hideSelect is false', () => {
       component.columns = columnsWithDetailInterface;
       component.columns[5].detail.hideSelect = false;
-      component.checkbox = true;
+      component.selectable = true;
       component.hideDetail = false;
       component.items[0].$showDetail = true;
       fixture.detectChanges();
@@ -1616,10 +1616,10 @@ describe('PoTableComponent:', () => {
       expect(details).toBeTruthy();
     });
 
-    it('shouldn`t show detail checkbox if detail hideSelect is true', () => {
+    it('shouldn`t show detail selectable if detail hideSelect is true', () => {
       component.columns = columnsWithDetailInterface;
       component.columns[5].detail.hideSelect = true;
-      component.checkbox = true;
+      component.selectable = true;
       component.hideDetail = false;
       component.items[0].$showDetail = true;
       fixture.detectChanges();
@@ -1629,9 +1629,9 @@ describe('PoTableComponent:', () => {
       expect(details).toBeNull();
     });
 
-    it('should show detail checkbox if not have a detail interface', () => {
+    it('should show detail selectable if not have a detail interface', () => {
       component.columns = columnsWithDetail;
-      component.checkbox = true;
+      component.selectable = true;
       component.hideDetail = false;
       component.items[0].$showDetail = true;
       fixture.detectChanges();
@@ -1789,51 +1789,51 @@ describe('PoTableComponent:', () => {
       expect(component.columnManagerTarget).toBeTruthy();
     });
 
-    describe(`hasCheckboxColumn`, () => {
+    describe(`hasSelectableColumn`, () => {
 
-      it(`should return true if 'checkbox', 'hasItems' and 'hasMainColumns' are true`, () => {
-        component.checkbox = true;
+      it(`should return true if 'selectable', 'hasItems' and 'hasMainColumns' are true`, () => {
+        component.selectable = true;
         component.columns = [...columns];
 
         spyOnProperty(component, 'hasItems').and.returnValue(true);
 
-        expect(component.hasCheckboxColumn).toBe(true);
+        expect(component.hasSelectableColumn).toBe(true);
       });
 
-      it(`should return false if 'checkbox', 'hasItems' and 'hasMainColumns' are false`, () => {
-        component.checkbox = false;
+      it(`should return false if 'selectable', 'hasItems' and 'hasMainColumns' are false`, () => {
+        component.selectable = false;
         component.columns = [];
 
         spyOnProperty(component, 'hasItems').and.returnValue(false);
 
-        expect(component.hasCheckboxColumn).toBe(false);
+        expect(component.hasSelectableColumn).toBe(false);
       });
 
-      it(`should return false if 'checkbox', 'hasItems' are true and 'hasMainColumns' is false`, () => {
-        component.checkbox = true;
+      it(`should return false if 'selectable', 'hasItems' are true and 'hasMainColumns' is false`, () => {
+        component.selectable = true;
         component.hasMainColumns = false;
 
         spyOnProperty(component, 'hasItems').and.returnValue(true);
 
-        expect(component.hasCheckboxColumn).toBe(false);
+        expect(component.hasSelectableColumn).toBe(false);
       });
 
-      it(`should return false if 'checkbox', 'hasMainColumns' are true and 'hasItems' is false`, () => {
-        component.checkbox = true;
+      it(`should return false if 'selectable', 'hasMainColumns' are true and 'hasItems' is false`, () => {
+        component.selectable = true;
         component.hasMainColumns = true;
 
         spyOnProperty(component, 'hasItems').and.returnValue(false);
 
-        expect(component.hasCheckboxColumn).toBe(false);
+        expect(component.hasSelectableColumn).toBe(false);
       });
 
-      it(`should return false if 'hasItems', 'hasMainColumns' are true and 'checkbox' is false`, () => {
-        component.checkbox = false;
+      it(`should return false if 'hasItems', 'hasMainColumns' are true and 'selectable' is false`, () => {
+        component.selectable = false;
         component.hasMainColumns = true;
 
         spyOnProperty(component, 'hasItems').and.returnValue(true);
 
-        expect(component.hasCheckboxColumn).toBe(false);
+        expect(component.hasSelectableColumn).toBe(false);
       });
 
     });
@@ -2087,10 +2087,10 @@ describe('PoTableComponent:', () => {
       expect(component.columnCountForMasterDetail).toBe(countColumns);
     });
 
-    it('columnCountForMasterDetail: should return 8 columnCount if actions is empty, has 5 columns and has checkbox', () => {
+    it('columnCountForMasterDetail: should return 8 columnCount if actions is empty, has 5 columns and is selectable', () => {
       component.actions = [];
       component.columns = [...columns];
-      component.checkbox = true;
+      component.selectable = true;
 
       const columnCountColumnManager = 1;
       const columnCountCheckbox = 1;
@@ -2102,7 +2102,7 @@ describe('PoTableComponent:', () => {
 
     it('columnCount: should count the number columns of table', () => {
       component.columns = columnsWithDetail;
-      component.checkbox = true;
+      component.selectable = true;
       component.hideDetail = false;
       component.actions = actions;
 
@@ -2111,14 +2111,14 @@ describe('PoTableComponent:', () => {
 
     it('columnCount: should count the number columns of table with master-detail undefined', () => {
       component.columns = [...columns];
-      component.checkbox = true;
+      component.selectable = true;
       component.actions = actions;
       expect(component.columnCount).toBe(7);
     });
 
-    it('columnCount: should count the number columns of table with checkbox false', () => {
+    it('columnCount: should count the number columns of table with selectable false', () => {
       component.columns = [...columns];
-      component.checkbox = false;
+      component.selectable = false;
       component.actions = actions;
       expect(component.columnCount).toBe(6);
     });
@@ -2126,14 +2126,14 @@ describe('PoTableComponent:', () => {
     it('columnCount: should count the number columns of table with hideDetail false', () => {
       component.columns = columnsWithDetail;
       component.actions = actions;
-      component.checkbox = true;
+      component.selectable = true;
       component.hideDetail = true;
       expect(component.columnCount).toBe(7);
     });
 
     it('columnCount: should count the number columns of table without action', () => {
       component.columns = columnsWithDetail;
-      component.checkbox = true;
+      component.selectable = true;
       component.actions.length = 0;
       expect(component.columnCount).toBe(7);
     });

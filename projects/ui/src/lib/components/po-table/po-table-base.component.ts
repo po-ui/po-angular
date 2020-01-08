@@ -75,7 +75,6 @@ export const poTableLiteralsDefault = {
 export abstract class PoTableBaseComponent implements OnChanges {
 
   private _actions?: Array<PoTableAction> = [];
-  private _checkbox?: boolean;
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
   private _height?: number;
@@ -84,6 +83,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
   private _items: Array<PoTableColumn>;
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
+  private _selectable?: boolean;
 
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
@@ -288,7 +288,12 @@ export abstract class PoTableBaseComponent implements OnChanges {
   /**
    * @optional
    *
+   * @deprecated 2.X.X
    * @description
+   *
+   * **Deprecated**
+   *
+   * > Esta propriedade está depreciada, utilize a propriedade `p-selectable`.
    *
    * Habilita na primeira coluna a opção de selecionar linhas,
    * todos os itens da lista possuem a propriedade dinâmica `$selected` para identificar se a linha está selecionada.
@@ -298,12 +303,11 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * @default `false`
    */
   @Input('p-checkbox') set checkbox(checkbox: boolean) {
-    this._checkbox = <any>checkbox === '' ? true : convertToBoolean(checkbox);
-    this.calculateWidthHeaders();
+    this.selectable = checkbox;
   }
 
   get checkbox() {
-    return this._checkbox;
+    return this.selectable;
   }
 
   /**
@@ -327,6 +331,30 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   get actions() {
     return this._actions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a seleção de linhas na tabela e, caso a propriedade `p-single-select` esteja definida será possível
+   * selecionar apenas uma única linha.
+   *
+   * **Importante:**
+   *  - As linhas de detalhe definidas em `PoTableDetail` possuem comportamento independente da linha mestre;
+   *  - Cada linha possui por padrão a propriedade dinâmica `$selected`, na qual é possível validar se a linha
+   * está selecionada, por exemplo: `item.$selected` ou `item['$selected']`.
+   *
+   * @default `false`
+   */
+  @Input('p-selectable') set selectable(value: boolean) {
+    this._selectable = <any>value === '' ? true : convertToBoolean(value);
+    this.calculateWidthHeaders();
+  }
+
+  get selectable() {
+    return this._selectable;
   }
 
   /**

@@ -49,7 +49,7 @@
     <thead>
       <tr [class.po-table-header]="!height">
 
-        <th *ngIf="hasCheckboxColumn" class="po-table-column-checkbox">
+        <th *ngIf="hasSelectableColumn" class="po-table-column-selectable">
           <div [class.po-table-header-fixed-inner]="height">
             <input *ngIf="!hideSelectAll" type="checkbox" class="po-table-checkbox"
             [class.po-table-checkbox-checked]="selectAll"
@@ -110,8 +110,8 @@
     <ng-container *ngIf="hasMainColumns">
 
       <tbody class="po-table-group-row" *ngFor="let row of items, let rowIndex = index; trackBy: trackBy">
-        <tr class="po-table-row" [class.po-table-row-active]="row.$selected || row.$selected === null && checkbox">
-          <td *ngIf="checkbox" class="po-table-column po-table-column-checkbox">
+        <tr class="po-table-row" [class.po-table-row-active]="row.$selected || row.$selected === null && selectable">
+          <td *ngIf="selectable" class="po-table-column po-table-column-selectable">
             <ng-container
               *ngTemplateOutlet="singleSelect ? inputRadio : inputCheckbox; context: { $implicit: row }">
             </ng-container>
@@ -133,7 +133,7 @@
             [class.po-table-column-center]="column.type === 'subtitle'"
             [class.po-table-column-icons]="column.type === 'icon'"
             [ngClass]="getClassColor(row, column)"
-            (click)="checkbox ? selectRow(row) : 'javascript:;'">
+            (click)="selectable ? selectRow(row) : 'javascript:;'">
 
             <div class="po-table-column-cell"
               [class.po-table-body-ellipsis]="hideTextOverflow"
@@ -201,7 +201,7 @@
           <td class="po-table-column-detail" [colSpan]="columnCountForMasterDetail">
 
             <po-table-detail
-              [p-checkbox]="checkbox && !detailHideSelect"
+              [p-selectable]="selectable && !detailHideSelect"
               [p-detail]="columnMasterDetail.detail"
               [p-items]="row[nameColumnDetail]"
               (p-select-row)="selectDetailRow($event)">
@@ -221,12 +221,12 @@
 
 <ng-template #inputRadio let-row>
   <input type="radio" class="po-radio-group-input" [class.po-radio-group-input-checked]="row.$selected">
-  <label class="po-radio-group-label po-clickable" (click)="checkbox ? selectRow(row) : 'javascript:;'"></label>
+  <label class="po-radio-group-label po-clickable" (click)="selectable ? selectRow(row) : 'javascript:;'"></label>
 </ng-template>
 
 <ng-template #inputCheckbox let-row>
   <input type="checkbox" class="po-table-checkbox" [class.po-table-checkbox-checked]="row.$selected">
-  <label class="po-table-checkbox-label po-clickable" (click)="checkbox ? selectRow(row) : 'javascript:;'"></label>
+  <label class="po-table-checkbox-label po-clickable" (click)="selectable ? selectRow(row) : 'javascript:;'"></label>
 </ng-template>
 
 <ng-template #contentHeaderTemplate let-column>
