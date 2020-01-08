@@ -1,6 +1,5 @@
 <po-table
   [p-actions]="actions"
-  [p-checkbox]="selection.includes('checkbox')"
   [p-columns]="columns"
   [p-container]="container"
   [p-height]="height"
@@ -11,6 +10,7 @@
   [p-literals]="customLiterals"
   [p-loading]="properties.includes('loading')"
   [p-max-columns]="maxColumns"
+  [p-selectable]="selection.includes('selectable')"
   [p-show-more-disabled]="!properties.includes('showMoreDisabled')"
   [p-single-select]="selection.includes('singleSelect')"
   [p-sort]="properties.includes('sort')"
@@ -134,6 +134,7 @@
       class="po-lg-6"
       name="selection"
       [(ngModel)]="selection"
+      p-help="To enable 'hide select all' and 'single select' check 'selectable'."
       p-label="Selection"
       [p-options]="selectionOptions"
       (p-change)="changeSelectionOptions()">

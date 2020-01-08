@@ -22,11 +22,6 @@ export class PoTableDetailComponent {
   private _detail: PoTableDetail;
 
   /**
-   * Define se a tabela possui a opção de `checkbox` habilitada.
-   */
-  @Input('p-checkbox') hasCheckbox?: boolean = false;
-
-  /**
    * Configuração da linha de detalhes.
    */
   @Input('p-detail') set detail(value: PoTableDetail) {
@@ -41,6 +36,11 @@ export class PoTableDetailComponent {
    * Lista de itens do _detail_ da tabela.
    */
   @Input('p-items') items: Array<any>;
+
+  /**
+   * Define se a tabela possui a opção de `selectable` habilitada.
+   */
+  @Input('p-selectable') isSelectable?: boolean = false;
 
   /**
    * Ação executada ao selecionar ou desmarcar a seleção de uma linha de detalhe do `po-table`.
