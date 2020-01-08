@@ -427,7 +427,7 @@
   white-space: nowrap;
 }
 
-.po-table .po-table-column-checkbox {
+.po-table .po-table-column-selectable {
   padding: 0 8px;
   min-width: 36px;
   max-width: 36px;
@@ -445,7 +445,7 @@
   width: 20px;
 }
 
-.po-table-column-checkbox .po-table-checkbox+.po-table-checkbox-label:before {
+.po-table-column-selectable .po-table-checkbox+.po-table-checkbox-label:before {
   border: solid 1px var(--color-table-border-select-checkbox);
   border-radius: 2px;
   box-shadow: inset 0px 2px 8px 0 var(--color-table-box-shadow-checkbox);
@@ -458,7 +458,7 @@
   width: 20px;
 }
 
-.po-table-column-checkbox .po-table-checkbox-checked+.po-table-checkbox-label:before,
+.po-table-column-selectable .po-table-checkbox-checked+.po-table-checkbox-label:before,
 .po-table-checkbox-indeterminate+.po-table-checkbox-label:before {
   background-color: var(--color-table-background-color-selected);
   border: solid 1px var(--color-table-border-selected-checkbox)!important;
@@ -469,7 +469,7 @@
   padding-left: 1px;
 }
 
-.po-table-column-checkbox .po-table-checkbox-checked+.po-table-checkbox-label:before {
+.po-table-column-selectable .po-table-checkbox-checked+.po-table-checkbox-label:before {
   content: '\e938';
 }
 
@@ -642,7 +642,7 @@
     padding: 8px 0;
   }
 
-  .po-table-column-checkbox .po-table-checkbox + .po-table-checkbox-label:before {
+  .po-table-column-selectable .po-table-checkbox + .po-table-checkbox-label:before {
     height: 18px;
     width: 18px;
   }
