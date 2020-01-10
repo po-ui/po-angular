@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.22.2](https://github.com/portinariui/portinari-angular/compare/v1.22.1...v1.22.2) (2020-01-10)
+
+
+### Code Refactoring
+
+* **table:** propriedade `p-selectable` substitui a propriedade `p-checkbox` ([9cdd3d4](https://github.com/portinariui/portinari-angular/commit/9cdd3d4))
+
+
 ### [1.22.1](https://github.com/portinariui/portinari-angular/compare/v1.22.0...v1.22.1) (2020-01-06)
 
 
@@ -154,7 +162,7 @@ All notable changes to this project will be documented in this file. See [standa
 * **page-login:** corrige literais customizadas ao trocar de idioma ([7538c6b](https://github.com/portinariui/portinari-angular/commit/7538c6b))
 
 
-## Code Refactoring
+### Code Refactoring
 
 * **table:** melhoria na componentização do componente interno `po-table-column-icon` ([98009bd](https://github.com/portinariui/portinari-angular/commit/98009bd))
 
