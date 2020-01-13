@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoResponse } from './interfaces/po-response.interface';
+import { validateObjectType } from '../../../utils/util';
 
 /**
  * @docsPrivate
@@ -29,17 +30,18 @@ export class PoComboFilterService implements PoComboFilter {
 
   getFilteredData(param: any, filterParams?: any): Observable<Array<PoComboOption>> {
     const value = param.value;
+    const filterParamsValidated = validateObjectType(filterParams);
 
-    const params = new HttpParams({
-      fromString: `filter=${value}`
-    });
+    const params = { ...filterParamsValidated, filter: value };
 
     return this.http.get(`${this.url}`, {responseType: 'json', params: params})
       .pipe(map((response: PoResponse) => this.parseToArrayComboOption(response.items)));
   }
 
   getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
-    return this.http.get(`${this.url}/${value}`).pipe(map(item => this.parseToComboOption(item)));
+    const filterParamsValidated = validateObjectType(filterParams);
+
+    return this.http.get(`${this.url}/${value}`, { params: filterParamsValidated }).pipe(map(item => this.parseToComboOption(item)));
   }
 
   configProperties(url: string, fieldLabel: string, fieldValue: string) {
