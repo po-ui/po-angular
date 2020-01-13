@@ -108,9 +108,16 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * Caso utilizado uma URL, o serviço deve ser retornado no padrão API TOTVS e utiliza as propriedades
    * `p-field-label` e `p-field-value` para a construção da lista de itens.
    *
-   * Quando utilizada uma URL de serviço, então será concateanada nesta URL o valor que deseja-se filtrar da seguinte forma:
+   * Quando utilizada uma URL de serviço, então será concatenada nesta URL o valor que deseja-se filtrar da seguinte forma:
    * ```
    * url + ?filter=Peter
+   * ```
+   *
+   * Se for definida a propriedade `p-filter-params`, a mesma também será concatenada. Por exemplo, para o
+   * parâmetro `{ age: 23 }` a URL ficaria:
+   *
+   * ```
+   * url + ?page=1&pageSize=20&age=23&filter=Peter
    * ```
    */
   @Input('p-filter-service') set filterService(service: PoComboFilter | string) {
@@ -373,7 +380,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
-   * Valor que será repassado como parâmetro aos métodos do serviço que implementam a interface *PoComboFilter*.
+   * Valor que será repassado como parâmetro para a URL ou aos métodos do serviço que implementam a interface *PoComboFilter*.
    *
    * > Caso a lista contenha agrupamentos, os mesmos só serão exibidos se houver no mínimo uma opção que corresponda à pesquisa.
    */

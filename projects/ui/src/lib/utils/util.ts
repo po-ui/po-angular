@@ -508,3 +508,7 @@ export function clearObject(dirtyObject: object): any {
 
   return cleanObject;
 }
+
+export function validateObjectType(value: any) {
+  return isTypeof(value, 'object') && !Array.isArray(value) ? value : undefined;
+}
