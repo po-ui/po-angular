@@ -123,4 +123,16 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   validate?: string | Function;
 
+  /**
+   * Objeto que será enviado como parâmetro nas requisições de busca usados pelos componentes `po-lookup` e
+   * `po-combo`.
+   *
+   * Por exemplo, para o parâmetro `{ age: 23 }` a URL da requisição ficaria:
+   *
+   * ```
+   * url + ?age=23&filter=Peter
+   * ```
+   */
+  params?: any;
+
 }
