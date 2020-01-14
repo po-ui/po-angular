@@ -5,7 +5,7 @@ import { PoSelectOption } from '../../po-field/po-select/po-select-option.interf
 import { PoDynamicField } from '../po-dynamic-field.interface';
 
 /**
- * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent
+ * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent, PoPageDynamicSearchComponent
  *
  * @docsExtends PoDynamicField
  *

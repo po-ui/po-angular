@@ -37,8 +37,8 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
 
   public readonly filters: Array<any> = [
     { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
-    { property: 'name', label: 'Name', gridColumns: 6 },
-    { property: 'city', label: 'City', gridColumns: 6 },
+    { property: 'name', gridColumns: 6 },
+    { property: 'city', gridColumns: 6 },
     { property: 'jobDescription', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 },
   ];
 
