@@ -2,6 +2,7 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 import { EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
+import { InputBoolean } from '../../../decorators';
 import { requiredFailed } from '../validators';
 
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
@@ -53,6 +54,19 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   private _indeterminate?: boolean = false;
   private _options?: Array<PoCheckboxGroupOption>;
   private _required?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /** Nome dos checkboxes */
   @Input('name') name: string;
