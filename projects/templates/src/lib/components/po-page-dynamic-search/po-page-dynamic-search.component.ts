@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 
 import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoPageFilter } from '@portinari/portinari-ui';
 
-import { getBrowserLanguage } from '../../utils/util';
+import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
 
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
 import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.component';
@@ -104,11 +104,11 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
 
     Object.keys(filters).forEach(filter => {
       const field = this.getFieldByProperty(this.filters, filter);
-
+      const label = field.label || capitalizeFirstLetter(field.property);
       const value = field.type === PoDynamicFieldType.Date ? this.formatDate(filters[filter]) : filters[filter];
 
       disclaimers.push({
-        label: `${field.label}: ${value}`,
+        label: `${label}: ${value}`,
         property: filter,
         value: filters[filter]
       });

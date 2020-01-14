@@ -250,6 +250,24 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component['formatDate']).not.toHaveBeenCalled();
     });
 
+    it(`setDisclaimers: should apply 'field.property' with uppercase first letter to label's value
+      if 'field.label' is 'undefined'`, () => {
+
+      component.filters = [
+        { property: 'name' },
+        { property: 'genre' },
+      ];
+
+      const filters = { name: 'Name1', genre: 'male' } ;
+
+      const result = [
+        { label: 'Name: Name1', property: 'name', value: 'Name1' },
+        { label: 'Genre: male', property: 'genre', value: 'male' }
+      ];
+
+      expect(component['setDisclaimers'](filters)).toEqual(result);
+    });
+
   });
 
 });
