@@ -1,4 +1,5 @@
-import { Component, DoCheck, ElementRef, forwardRef, Input, IterableDiffers, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, ElementRef, forwardRef, Input, IterableDiffers, QueryList, ViewChild,
+  ViewChildren } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { removeDuplicatedOptions } from '../../../utils/util';
@@ -49,7 +50,7 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
     }
   ]
 })
-export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements DoCheck {
+export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck {
 
   /** Label do campo. */
   @Input('p-label') label?: string;
@@ -65,6 +66,12 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   constructor(differs: IterableDiffers) {
     super();
     this.differ = differs.find([]).create(null);
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
+    }
   }
 
   ngDoCheck() {
