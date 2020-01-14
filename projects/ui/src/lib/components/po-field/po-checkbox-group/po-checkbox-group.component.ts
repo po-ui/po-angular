@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef,
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef,
   forwardRef, QueryList, ViewChildren } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -42,7 +42,7 @@ import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.int
     }
   ]
 })
-export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked {
+export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
 
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<ElementRef>;
 
@@ -52,6 +52,12 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
 
   ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
+    }
   }
 
   /**
