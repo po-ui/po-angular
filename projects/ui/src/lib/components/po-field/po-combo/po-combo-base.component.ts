@@ -2,6 +2,7 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 import { EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { browserLanguage, convertToBoolean, isTypeof, removeDuplicatedOptions, poLocaleDefault, validValue } from '../../../utils/util';
+import { InputBoolean } from '../../../decorators';
 import { requiredFailed } from '../validators';
 
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
@@ -84,6 +85,19 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   visibleOptions: Array<PoComboOption | PoComboGroup> = [];
 
   private validatorChange: any;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /** Label no componente. */
   @Input('p-label') label?: string;
