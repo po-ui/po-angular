@@ -2,6 +2,7 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 import { ChangeDetectorRef, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean, removeDuplicatedOptions, removeUndefinedAndNullOptions } from '../../../utils/util';
+import { InputBoolean } from '../../../decorators';
 import { requiredFailed } from '../validators';
 
 import { PoSelectOption } from './po-select-option.interface';
@@ -27,6 +28,19 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
   private _required?: boolean = false;
 
   private onValidatorChange;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   * > Caso mais de um elemento seja configurado com essa propriedade,
+   * o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /** Adiciona uma label no componente. */
   @Input('p-label') label?: string;
