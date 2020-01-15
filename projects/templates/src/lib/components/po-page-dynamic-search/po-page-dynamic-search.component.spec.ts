@@ -6,6 +6,7 @@ import { TitleCasePipe } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { configureTestSuite, expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
+import { PoDynamicFieldType } from '@portinari/portinari-ui';
 
 import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component';
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
@@ -266,6 +267,75 @@ describe('PoPageDynamicSearchComponent:', () => {
       ];
 
       expect(component['setDisclaimers'](filters)).toEqual(result);
+    });
+
+    it('getFilterValueToDisclaimer: should return formated date if field type is PoDynamicFieldType.Date', () => {
+      const field = { type: PoDynamicFieldType.Date, property: '1', label: 'date' };
+      const value = '2020-08-12';
+
+      spyOn(component, <any>'formatDate').and.returnValue('12/08/2020');
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('12/08/2020');
+    });
+
+    it('getFilterValueToDisclaimer: should return label of option if options and label are defined', () => {
+      const field = { property: '1', label: 'field label', options: [
+        { value: '1', label: 'test 1'}, {value: '2', label: 'test 2' }
+      ]};
+
+      const value = '2';
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('test 2');
+    });
+
+    it('getFilterValueToDisclaimer: should return value of option if options is defined and label is undefined', () => {
+      const field = { property: '1', label: 'field label', options: [
+        { value: '1' }, {value: '2' }
+      ]};
+
+      const value = '2';
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('2');
+    });
+
+    it('getFilterValueToDisclaimer: should return option label if options and label are defined and optionsMulti is true', () => {
+      const field = { property: '1', label: 'field label', optionsMulti: true, options: [
+        { value: '1', label: 'test 1'}, {value: '2', label: 'test 2' }, {value: '3', label: 'test 3' }
+      ]};
+
+      const value = ['2', '3'];
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('test 2, test 3');
+    });
+
+    it('getFilterValueToDisclaimer: should return option value if options is defined, label is undefined and optionsMulti is true', () => {
+      const field = { property: '1', label: 'field label', optionsMulti: true, options: [
+        { value: '1' }, { value: '2' }, { value: '3' }
+      ]};
+
+      const value = ['2', '3'];
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('2, 3');
+    });
+
+    it('getFilterValueToDisclaimer: should return value if options is undefined and type isn`t PoDynamicFieldType.Date', () => {
+      const field = { property: '1', label: 'field label'};
+
+      const value = 'test value 1';
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('test value 1');
     });
 
   });

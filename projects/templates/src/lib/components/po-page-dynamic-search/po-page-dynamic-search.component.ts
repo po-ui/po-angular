@@ -83,6 +83,18 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.advancedSearch.emit(filters);
   }
 
+  private applyDisclaimerLabelValue(field: any, filterValue: any) {
+    const values = Array.isArray(filterValue) ? filterValue : [ filterValue ];
+
+    const labels = values.map(value => {
+      const filteredField = field.options.find(option => option.value === value);
+
+      return filteredField.label || filteredField.value;
+    });
+
+    return labels.join(', ');
+  }
+
   private formatDate(date: string) {
     const year = parseInt(date.substr(0, 4), 10);
     const month = parseInt(date.substr(5, 2), 10);
@@ -95,22 +107,36 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return fields.find((field: PoDynamicFormField) => field.property === fieldName);
   }
 
+  private getFilterValueToDisclaimer(field: any, value: any) {
+
+    if (field.type === PoDynamicFieldType.Date) {
+      return this.formatDate(value);
+    }
+
+    if (field.options) {
+      return this.applyDisclaimerLabelValue(field, value);
+    }
+
+    return value;
+  }
+
   private onChangeDisclaimerGroup(disclaimers) {
     this.changeDisclaimersEnabled ? this.changeDisclaimers.emit(disclaimers) : this.changeDisclaimersEnabled = true;
   }
 
   private setDisclaimers(filters) {
     const disclaimers = [];
+    const properties = Object.keys(filters);
 
-    Object.keys(filters).forEach(filter => {
-      const field = this.getFieldByProperty(this.filters, filter);
+    properties.forEach(property => {
+      const field = this.getFieldByProperty(this.filters, property);
       const label = field.label || capitalizeFirstLetter(field.property);
-      const value = field.type === PoDynamicFieldType.Date ? this.formatDate(filters[filter]) : filters[filter];
+      const value = filters[property];
 
       disclaimers.push({
-        label: `${label}: ${value}`,
-        property: filter,
-        value: filters[filter]
+        label: `${label}: ${this.getFilterValueToDisclaimer(field, value)}`,
+        property,
+        value
       });
     });
 

@@ -20,9 +20,9 @@ export class SamplePoPageDynamicSearchHiringProcessesService {
   getColumns(): Array<PoTableColumn> {
     return [
       { property: 'hireStatus', label: 'Status', type: 'subtitle', subtitles: [
-        { value: 'hired', color: 'success', label: 'Hired', content: '1' },
-        { value: 'progress', color: 'warning', label: 'Progress', content: '2' },
-        { value: 'canceled', color: 'danger', label: 'Canceled', content: '3' }
+        { value: '1', color: 'success', label: 'Hired', content: '1' },
+        { value: '2', color: 'warning', label: 'Progress', content: '2' },
+        { value: '3', color: 'danger', label: 'Canceled', content: '3' }
       ]},
       { property: 'idCard', label: 'Identity card', type: 'string' },
       { property: 'name', label: 'Name'},
@@ -34,34 +34,36 @@ export class SamplePoPageDynamicSearchHiringProcessesService {
 
   getHireStatus() {
     return [
-      { value: 'hired', label: 'Hired' },
-      { value: 'progress', label: 'Progress' },
-      { value: 'canceled', label: 'Canceled'}
+      { value: '1', label: 'Hired' },
+      { value: '2', label: 'Progress' },
+      { value: '3', label: 'Canceled'}
     ];
   }
 
   getItems() {
     return [
-      { hireStatus: 'hired', name: 'James Johnson', city: 'Ontario', age: 24, idCard: 'AB34lxi90', jobDescription: 'Systems Analyst' },
-      { hireStatus: 'progress', name: 'Brian Brown', city: 'Buffalo', age: 23, idCard: 'HG56lds54', jobDescription: 'Trainee' },
-      { hireStatus: 'canceled', name: 'Mary Davis', city: 'Albany', age: 31, idCard: 'DF23cfr65', jobDescription: 'Programmer' },
-      { hireStatus: 'hired', name: 'Margaret Garcia', city: 'New York', age: 29, idCard: 'GF45fgh34', jobDescription: 'Web developer' },
-      { hireStatus: 'hired', name: 'Emma Hall', city: 'Ontario', age: 34, idCard: 'RF76jut21', jobDescription: 'Recruiter' },
-      { hireStatus: 'progress', name: 'Lucas Clark', city: 'Utica', age: 32, idCard: 'HY21kgu65', jobDescription: 'Consultant' },
-      { hireStatus: 'hired', name: 'Ella Scott', city: 'Ontario', age: 24, idCard: 'UL78flg68', jobDescription: 'DBA' },
-      { hireStatus: 'progress', name: 'Chloe Walker', city: 'Albany', age: 29, idCard: 'JH12oli98', jobDescription: 'Programmer' },
+      { hireStatus: '1', name: 'James Johnson', city: 'Ontario', age: 24, idCard: 'AB34lxi90', job: 'abc',
+        jobDescription: 'Systems Analyst' },
+      { hireStatus: '2', name: 'Brian Brown', city: 'Buffalo', age: 23, idCard: 'HG56lds54', job: 'def', jobDescription: 'Trainee' },
+      { hireStatus: '3', name: 'Mary Davis', city: 'Albany', age: 31, idCard: 'DF23cfr65', job: 'ghi', jobDescription: 'Programmer' },
+      { hireStatus: '1', name: 'Margaret Garcia', city: 'New York', age: 29, idCard: 'GF45fgh34', job: 'jkl',
+        jobDescription: 'Web developer' },
+      { hireStatus: '1', name: 'Emma Hall', city: 'Ontario', age: 34, idCard: 'RF76jut21', job: 'mno', jobDescription: 'Recruiter' },
+      { hireStatus: '2', name: 'Lucas Clark', city: 'Utica', age: 32, idCard: 'HY21kgu65', job: 'pqr', jobDescription: 'Consultant' },
+      { hireStatus: '1', name: 'Ella Scott', city: 'Ontario', age: 24, idCard: 'UL78flg68', job: 'stu', jobDescription: 'DBA' },
+      { hireStatus: '2', name: 'Chloe Walker', city: 'Albany', age: 29, idCard: 'JH12oli98', job: 'ghi', jobDescription: 'Programmer' }
     ];
   }
 
   getJobs() {
     return [
-      { value: 'Systems Analyst', label: 'Systems Analyst' },
-      { value: 'Trainee', label: 'Trainee' },
-      { value: 'Programmer', label: 'Programmer'},
-      { value: 'Web Developer', label: 'Web developer'},
-      { value: 'Recruiter', label: 'Recruiter'},
-      { value: 'Consultant', label: 'Consultant'},
-      { value: 'DBA', label: 'DBA'}
+      { value: 'abc', label: 'Systems Analyst' },
+      { value: 'def', label: 'Trainee' },
+      { value: 'ghi', label: 'Programmer'},
+      { value: 'jkl', label: 'Web developer'},
+      { value: 'mno', label: 'Recruiter'},
+      { value: 'pqr', label: 'Consultant'},
+      { value: 'stu', label: 'DBA'}
     ];
   }
 
