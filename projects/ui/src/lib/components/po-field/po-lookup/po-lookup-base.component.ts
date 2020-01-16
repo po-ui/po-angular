@@ -113,7 +113,7 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   /** Indica a coluna que será utilizada como descrição do campo e como filtro dentro da janela. */
   @Input('p-field-label') fieldLabel: string;
 
-  /** Valor que será repassado como parâmetro aos métodos do serviço que implementam a interface `PoLookupFilter`. */
+  /** Valor que será repassado como parâmetro para a URL ou aos métodos do serviço que implementam a interface `PoLookupFilter`. */
   @Input('p-filter-params') filterParams?: any;
 
   /**
