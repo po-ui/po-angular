@@ -19,6 +19,34 @@ const NO_MESSAGE_HEADER_PARAM = 'X-Portinari-No-Message';
  * [**Guia de implementação das APIs TOTVS**](http://tdn.totvs.com/pages/viewpage.action?pageId=484701395) para adaptá-lo
  * ao modelo do PO.
  *
+ * > Para o correto funcionamento do interceptor `po-http-interceptor`, deve ser importado o módulo `BrowserAnimationsModule` no
+ * > módulo principal da sua aplicação.
+ *
+ * Módulo da aplicação:
+ * ```
+ * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+ * import { PoModule } from '@portinari/portinari-ui';
+ * ...
+ *
+ * @NgModule({
+ *   imports: [
+ *     BrowserModule,
+ *     BrowserAnimationsModule,
+ *     ...
+ *     PoModule
+ *   ],
+ *   declarations: [
+ *     AppComponent,
+ *     ...
+ *   ],
+ *   providers: [],
+ *   bootstrap: [AppComponent]
+ * })
+ * export class AppModule { }
+ * ```
+ *
+ * ### Funcionamento do interceptor
+ *
  * Ao analisar o objeto `_messages` retornado pela requisição, o serviço exibirá notificações com mensagens na tela.
  * Os retornos de erros com códigos 4xx e 5xx são tratados automaticamente, sem a necessidade de incluir o `_messages`.
  *
