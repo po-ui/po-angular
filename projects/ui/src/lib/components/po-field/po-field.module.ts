@@ -60,6 +60,9 @@ import { PoUrlComponent } from './po-url/po-url.component';
  * Módulo dos componentes: po-checkbox, po-checkbox-group, po-combo, po-datepicker, po-datepicker-range, po-email, po-input,
  * po-lookup, po-number, po-multiselect, po-password, po-radio-group, po-select, po-switch, po-textarea, po-upload
  * e po-url.
+ *
+ * > Não esqueça de importar o módulo `FormsModule` para usar os componentes de formulários e caso esteja trabalhando com
+ * > formulários reativos, importe o módulo `ReactiveFormsModule`, ambos nativos do Angular.
  */
 @NgModule({
   imports: [
