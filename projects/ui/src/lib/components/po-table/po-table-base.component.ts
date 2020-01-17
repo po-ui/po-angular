@@ -84,6 +84,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
   private _selectable?: boolean;
+  private _hideColumnManager?: boolean = false;
 
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
@@ -435,6 +436,25 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * serão ignoradas por ordem de posição.
    */
   @Input('p-max-columns') maxColumns?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se o gerenciamento de colunas da tabela será removido da tela
+   *
+   * O valor é padrão é false, o gerenciamento de colunas será sempre apresentando em tela
+   * só será removido se for declarado no componente: p-hide-column-manager="true"
+   *
+   */
+  @Input('p-hide-column-manager') set hideColumnManager(hideColumnManager: boolean) {
+    this._hideColumnManager = hideColumnManager.toString() === '' ? false : convertToBoolean(hideColumnManager);
+  }
+
+  get hideColumnManager() {
+    return this._hideColumnManager;
+  }
 
   /** Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();
