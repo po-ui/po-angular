@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.23.0](https://github.com/portinariui/portinari-angular/compare/v1.22.2...v1.23.0) (2020-01-17)
+
+
+### Bug Fixes
+
+* **page-dynamic-search:** corrige disclaimer com label undefined ([0cd6f1d](https://github.com/portinariui/portinari-angular/commit/0cd6f1d))
+* **page-dynamic-search:** corrige disclaimers da busca avançada ([f56bfed](https://github.com/portinariui/portinari-angular/commit/f56bfed))
+
+
+### Features
+
+* **combo:** permite utilizar `p-filter-params` nas requisições ([faf2505](https://github.com/portinariui/portinari-angular/commit/faf2505))
+* **dynamic-form:** nova propriedade `params` ([9c0aed5](https://github.com/portinariui/portinari-angular/commit/9c0aed5))
+* **dynamic-form:** inclui novos `fields` na propriedade `p-auto-focus` ([f7fb47c](https://github.com/portinariui/portinari-angular/commit/f7fb47c))
+* **combo:** implementa a propriedade `p-auto-focus` ([72c4f35](https://github.com/portinariui/portinari-angular/commit/72c4f35))
+* **checkbox-group:** implementa a propriedade `p-auto-focus` ([497fee0](https://github.com/portinariui/portinari-angular/commit/497fee0))
+* **radio-group:** implementa a propriedade `p-auto-focus` ([52caaf2](https://github.com/portinariui/portinari-angular/commit/52caaf2))
+* **select:** implementa a propriedade `p-auto-focus` ([83b157b](https://github.com/portinariui/portinari-angular/commit/83b157b))
+* **switch:** implementa a propriedade `p-auto-focus` ([d4c4f8b](https://github.com/portinariui/portinari-angular/commit/d4c4f8b))
+
+
+
 ### [1.22.2](https://github.com/portinariui/portinari-angular/compare/v1.22.1...v1.22.2) (2020-01-10)
 
 
