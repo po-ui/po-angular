@@ -3,6 +3,7 @@ import { EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
+import { InputBoolean } from '../../../decorators';
 
 /**
  * @description
@@ -24,7 +25,6 @@ import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
  */
 export abstract class PoTextareaBaseComponent implements ControlValueAccessor, Validator {
 
-  private _autofocus: boolean = false;
   private _disabled: boolean = false;
   private _maxlength: number;
   private _minlength: number;
@@ -37,6 +37,19 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   // tslint:disable-next-line
   private onTouched: any = null;
   private validatorChange: any;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /** Label do campo. */
   @Input('p-label') label?: string;
@@ -123,18 +136,19 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   /**
    * @optional
    *
+   * @deprecated 2.0.0
    * @description
+   *
+   * **Deprecated**
+   *
+   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
    *
    * Aplica foco no elemento ao ser iniciado.
    *
    * @default `false`
    */
-  @Input('p-focus') set autofocus(focus: boolean) {
-    this._autofocus = convertToBoolean(focus);
-  }
-
-  get autofocus(): boolean {
-    return this._autofocus;
+  @Input('p-focus') set oldfocus(focus: boolean) {
+    this.autoFocus = focus;
   }
 
   /**

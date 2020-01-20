@@ -295,28 +295,6 @@ describe('PoDecimalComponent:', () => {
     expect(component.getScreenValue.apply(fakeThis)).toEqual('');
   });
 
-  it('should set focus', () => {
-    const fakeThis = {
-      autofocus: true,
-      inputEl: component.inputEl
-    };
-
-    spyOn(fakeThis.inputEl.nativeElement, 'focus');
-    component['putFocus'].call(fakeThis);
-    expect(fakeThis.inputEl.nativeElement.focus).toHaveBeenCalled();
-  });
-
-  it('should not set focus', () => {
-    const fakeThis = {
-      focus: false,
-      inputEl: component.inputEl
-    };
-
-    spyOn(fakeThis.inputEl.nativeElement, 'focus');
-    component['putFocus'].call(fakeThis);
-    expect(fakeThis.inputEl.nativeElement.focus).not.toHaveBeenCalled();
-  });
-
   it('should have a call replaceCommaToDot method', () => {
     const fakeThis = {
       regex: {
@@ -746,6 +724,26 @@ describe('PoDecimalComponent:', () => {
       component.focus();
 
       expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
+    describe('ngAfterViewInit:', () => {
+      let inputFocus: jasmine.Spy;
+
+      beforeEach(() => {
+        inputFocus = spyOn(component, 'focus');
+      });
+
+      it('should call `focus` if autoFocus is true.', () => {
+        component.autoFocus = true;
+        component.ngAfterViewInit();
+        expect(inputFocus).toHaveBeenCalled();
+      });
+
+      it('should not call `focus` if autoFocus is false.', () => {
+        component.autoFocus = false;
+        component.ngAfterViewInit();
+        expect(inputFocus).not.toHaveBeenCalled();
+      });
     });
 
     it('setInitialSelectionRange: should set cursor position if selectionStart and selectionEnd is 1', () => {

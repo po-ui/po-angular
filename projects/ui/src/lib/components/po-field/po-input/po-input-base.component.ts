@@ -3,6 +3,7 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 
 import { convertToBoolean } from '../../../utils/util';
 import { requiredFailed, maxlengpoailed, minlengpoailed, patternFailed } from './../validators';
+import { InputBoolean } from '../../../decorators';
 import { PoMask } from './po-mask';
 
 /**
@@ -22,7 +23,6 @@ import { PoMask } from './po-mask';
  */
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator {
 
-  private _autofocus?: boolean;
   private _maxlength?: number;
   private _minlength?: number;
   private _noAutocomplete?: boolean = false;
@@ -30,6 +30,19 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
   protected passedWriteValue: boolean = false;
   protected validatorChange: any;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
    * @optional
@@ -123,18 +136,19 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   /**
    * @optional
    *
+   * @deprecated 2.0.0
    * @description
+   *
+   * **Deprecated**
+   *
+   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
    *
    * Aplica foco no elemento ao ser iniciado.
    *
    * @default `false`
    */
-  @Input('p-focus') set autofocus(focus: boolean) {
-    this._autofocus = convertToBoolean(focus);
-  }
-
-  get autofocus() {
-    return this._autofocus;
+  @Input('p-focus') set oldfocus(focus: boolean) {
+    this.autoFocus = focus;
   }
 
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */

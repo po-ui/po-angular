@@ -127,7 +127,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   ngAfterViewInit() {
-    this.putFocus();
+    this.verifyAutoFocus();
     this.setPaddingInput();
   }
 
@@ -454,9 +454,9 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return (charCode === 44 && this.decimalsLength === 0);
   }
 
-  private putFocus() {
-    if (this.autofocus) {
-      this.inputEl.nativeElement.focus();
+  private verifyAutoFocus() {
+    if (this.autoFocus) {
+      this.focus();
     }
   }
 

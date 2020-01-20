@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
@@ -53,7 +53,7 @@ const poDatepickerRangeDateLengthDefault = 10;
     multi: true,
   }]
 })
-export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent implements OnInit {
+export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent implements AfterViewInit, OnInit {
 
   private poDatepickerRangeElement: ElementRef<any>;
   private poMaskObject: PoMask;
@@ -117,6 +117,12 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   constructor(poDateService: PoDateService, poDatepickerRangeElement: ElementRef) {
     super(poDateService);
     this.poDatepickerRangeElement = poDatepickerRangeElement;
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
+    }
   }
 
   ngOnInit() {

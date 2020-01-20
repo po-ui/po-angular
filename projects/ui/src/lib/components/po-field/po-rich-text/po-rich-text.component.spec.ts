@@ -78,31 +78,52 @@ describe('PoRichTextComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('ngAfterViewInit: should apply eventListeners if onChangeModel is null', fakeAsync(() => {
-      component.onChangeModel = null;
 
-      spyOn(nativeElement, 'addEventListener');
+    describe('ngAfterViewInit:', () => {
+      let inputFocus: jasmine.Spy;
 
-      component.ngAfterViewInit();
-      tick();
+      beforeEach(() => {
+        inputFocus = spyOn(component, 'focus');
+      });
 
-      expect(nativeElement.addEventListener).toHaveBeenCalledWith('keyup', component['listener']);
-      expect(nativeElement.addEventListener).toHaveBeenCalledWith('cut', component['listener']);
-      expect(nativeElement.addEventListener).toHaveBeenCalledWith('paste', component['listener']);
-    }));
+      it('should apply eventListeners if onChangeModel is null', fakeAsync(() => {
+        component.onChangeModel = null;
 
-    it('ngAfterViewInit: shouldn`t apply eventListeners if onChangeModel is not null', fakeAsync(() => {
-      component.onChangeModel = () => {};
+        spyOn(nativeElement, 'addEventListener');
 
-      spyOn(nativeElement, 'addEventListener');
+        component.ngAfterViewInit();
+        tick();
 
-      component.ngAfterViewInit();
-      tick();
+        expect(nativeElement.addEventListener).toHaveBeenCalledWith('keyup', component['listener']);
+        expect(nativeElement.addEventListener).toHaveBeenCalledWith('cut', component['listener']);
+        expect(nativeElement.addEventListener).toHaveBeenCalledWith('paste', component['listener']);
+      }));
 
-      expect(nativeElement.addEventListener).not.toHaveBeenCalled();
-      expect(nativeElement.addEventListener).not.toHaveBeenCalled();
-      expect(nativeElement.addEventListener).not.toHaveBeenCalled();
-    }));
+      it('shouldn`t apply eventListeners if onChangeModel is not null', fakeAsync(() => {
+        component.onChangeModel = () => {};
+
+        spyOn(nativeElement, 'addEventListener');
+
+        component.ngAfterViewInit();
+        tick();
+
+        expect(nativeElement.addEventListener).not.toHaveBeenCalled();
+        expect(nativeElement.addEventListener).not.toHaveBeenCalled();
+        expect(nativeElement.addEventListener).not.toHaveBeenCalled();
+      }));
+
+      it('should call `focus` if autoFocus is true.', () => {
+        component.autoFocus = true;
+        component.ngAfterViewInit();
+        expect(inputFocus).toHaveBeenCalled();
+      });
+
+      it('should not call `focus` if autoFocus is false.', () => {
+        component.autoFocus = false;
+        component.ngAfterViewInit();
+        expect(inputFocus).not.toHaveBeenCalled();
+      });
+    });
 
     it('ngOnDestroy: should remove eventListeners if onChangeModel is null', () => {
       component.onChangeModel = null;
