@@ -27,6 +27,15 @@ export interface PoDynamicFormField extends PoDynamicField {
   /** Define a obrigatoriedade do campo. */
   required?: boolean;
 
+  /**
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > A indicação não será exibida, se:
+   * - O campo for `required`, ou;
+   * - Não possuir `help` e `label`.
+   */
+  optional?: boolean;
+
   /** Lista de opções que serão exibidos em um componente, podendo selecionar uma opção. */
   options?: Array<string> | Array<PoSelectOption> | Array<PoMultiselectOption>;
 
