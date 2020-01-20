@@ -9,6 +9,7 @@ import { PoUploadFileRestrictions } from './interfaces/po-upload-file-restrictio
 import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
 import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
+import { InputBoolean } from '../../../decorators';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals>{
@@ -174,6 +175,19 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   protected extensionNotAllowed = 0;
   protected quantityNotAllowed = 0;
   protected sizeNotAllowed = 0;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
    * @optional

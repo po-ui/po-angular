@@ -70,6 +70,7 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
         this.inputEl.nativeElement.addEventListener('keyup', this.listener);
       }
     });
+    super.ngAfterViewInit();
   }
 
   ngOnDestroy() {

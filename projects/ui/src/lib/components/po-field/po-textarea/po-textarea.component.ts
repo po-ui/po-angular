@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, ViewChild, AfterViewInit } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
@@ -45,7 +45,7 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
     }
   ]
 })
-export class PoTextareaComponent extends PoTextareaBaseComponent {
+export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit {
 
   @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
 
@@ -76,6 +76,12 @@ export class PoTextareaComponent extends PoTextareaBaseComponent {
   focus(): void {
     if (!this.disabled) {
       this.inputEl.nativeElement.focus();
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
     }
   }
 
