@@ -39,6 +39,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       divider: 'MORE INFO',
       gridColumns: 6,
       gridSmColumns: 12,
+      optional: true,
       options: ['Soccer', 'Basketball', 'Bike', 'Yoga', 'Travel', 'Run'],
       optionsMulti: true
     },
@@ -47,6 +48,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridColumns: 6,
       gridSmColumns: 12,
       label: 'Favorite hero',
+      optional: true,
       searchService: 'https://thf.totvs.com.br/sample/api/comboOption/heroes',
       columns: [ { property: 'nickname', label: 'Hero' }, { property: 'label', label: 'Name' }]
     },

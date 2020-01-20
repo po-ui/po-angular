@@ -15,6 +15,7 @@
       [p-label]="field.label"
       [p-max-date]="field.maxValue"
       [p-min-date]="field.minValue"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-datepicker>
@@ -31,6 +32,7 @@
       [p-mask]="field.mask"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
+      [p-optional]="field.optional"
       [p-pattern]="field.pattern"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -49,6 +51,7 @@
       [p-max]="field.maxValue"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-number>
@@ -62,6 +65,7 @@
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-decimal>
@@ -74,6 +78,7 @@
       [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -88,6 +93,7 @@
       [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -116,6 +122,7 @@
       [p-filter-service]="field.optionsService"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-combo>
@@ -133,6 +140,7 @@
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-lookup>
@@ -146,6 +154,7 @@
       [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -159,6 +168,7 @@
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -174,6 +184,7 @@
       [p-label]="field.label"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       [p-rows]="field.rows"
       (p-change)="onChangeField(field)">
@@ -190,9 +201,10 @@
       [p-label]="field.label"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
-  </po-password>
+    </po-password>
 
   </ng-container>
 </div>
