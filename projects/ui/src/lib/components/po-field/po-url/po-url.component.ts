@@ -73,6 +73,7 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
         this.inputEl.nativeElement.addEventListener('keyup', this.listener);
       }
     });
+    super.ngAfterViewInit();
   }
 
   ngOnDestroy() {

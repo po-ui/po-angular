@@ -58,12 +58,8 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
 
   ngAfterViewInit() {
     // Se não tem ngModel ou reactive form adiciona validação com classes css
-    if (!this.onChangeModel) {
-      this.element.nativeElement.addEventListener('keyup', this.listener);
-      this.element.nativeElement.addEventListener('keydown', this.listener);
-      this.element.nativeElement.addEventListener('cut', this.listener);
-      this.element.nativeElement.addEventListener('paste', this.listener);
-    }
+    this.addKeyListeners();
+    this.verifyAutoFocus();
   }
 
   ngOnDestroy() {
@@ -107,10 +103,25 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
     this.updateModel(this.value);
   }
 
+  private addKeyListeners() {
+    if (!this.onChangeModel) {
+      this.element.nativeElement.addEventListener('keyup', this.listener);
+      this.element.nativeElement.addEventListener('keydown', this.listener);
+      this.element.nativeElement.addEventListener('cut', this.listener);
+      this.element.nativeElement.addEventListener('paste', this.listener);
+    }
+  }
+
   private controlChangeModelEmitter(value: any) {
     if (this.modelLastUpdate !== value) {
       this.changeModel.emit(value);
       this.modelLastUpdate = value;
+    }
+  }
+
+  private verifyAutoFocus() {
+    if (this.autoFocus) {
+      this.focus();
     }
   }
 

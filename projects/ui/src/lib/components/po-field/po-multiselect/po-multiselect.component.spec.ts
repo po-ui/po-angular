@@ -89,7 +89,7 @@ describe('PoMultiselectComponent:', () => {
 
   it('should set focus on input', () => {
     component.initialized = false;
-    component.autofocus = true;
+    component.autoFocus = true;
     component.ngAfterViewInit();
     expect(document.activeElement.tagName.toLowerCase()).toBe('input');
     expect(component.initialized).toBeTruthy();
@@ -97,7 +97,7 @@ describe('PoMultiselectComponent:', () => {
 
   it('shouldn`t set focus on input', () => {
     component.initialized = false;
-    component.autofocus = false;
+    component.autoFocus = false;
     component.ngAfterViewInit();
     expect(document.activeElement.tagName.toLowerCase()).not.toBe('input');
     expect(component.initialized).toBeTruthy();
@@ -255,6 +255,26 @@ describe('PoMultiselectComponent:', () => {
   });
 
   describe('Methods:', () => {
+
+    describe('ngAfterViewInit:', () => {
+      let inputFocus: jasmine.Spy;
+
+      beforeEach(() => {
+        inputFocus = spyOn(component, 'focus');
+      });
+
+      it('should call `focus` if autoFocus is true.', () => {
+        component.autoFocus = true;
+        component.ngAfterViewInit();
+        expect(inputFocus).toHaveBeenCalled();
+      });
+
+      it('should not call `focus` if autoFocus is false.', () => {
+        component.autoFocus = false;
+        component.ngAfterViewInit();
+        expect(inputFocus).not.toHaveBeenCalled();
+      });
+    });
 
     it('ngDoCheck: should call debounceResize', () => {
       const fakeThis = {

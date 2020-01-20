@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, Renderer2, ViewChild, AfterViewInit } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { formatBytes, isMobile } from '../../../utils/util';
@@ -56,7 +56,7 @@ import { PoUploadStatus } from './po-upload-status.enum';
     }
   ]
 })
-export class PoUploadComponent extends PoUploadBaseComponent {
+export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
 
   infoByUploadStatus: { [key: string ]: { text: (percent?: number) => string, icon?: string } } = {
     [PoUploadStatus.Uploaded]: {
@@ -144,6 +144,12 @@ export class PoUploadComponent extends PoUploadBaseComponent {
     }
 
     this.removeFile(file);
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
+    }
   }
 
   /** Método responsável por **limpar** o(s) arquivo(s) selecionado(s). */

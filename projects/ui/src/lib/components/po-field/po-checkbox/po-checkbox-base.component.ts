@@ -2,6 +2,7 @@ import { ControlValueAccessor } from '@angular/forms';
 import { EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean, uuid } from './../../../utils/util';
+import { InputBoolean } from '../../../decorators';
 
 /**
  * @description
@@ -24,6 +25,19 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
 
   /** Define o nome do *checkbox*. */
   @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
    * @optional

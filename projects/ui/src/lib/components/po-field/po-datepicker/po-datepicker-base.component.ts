@@ -4,6 +4,7 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 import { convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertToBoolean, formatYear,
   getShortBrowserLanguage, isTypeof, setYearFrom0To100, validateDateRange } from '../../../utils/util';
 import { dateFailed, requiredFailed } from './../validators';
+import { InputBoolean } from '../../../decorators';
 import { PoMask } from '../po-input/po-mask';
 
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
@@ -54,7 +55,6 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  */
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
-  private _autofocus?: boolean;
   private _format?: string = poDatepickerFormatDefault;
   private _isoFormat: PoDatepickerIsoFormat;
   private _maxDate: Date;
@@ -70,6 +70,19 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   protected onChangeModel: any = null;
   protected onTouchedModel: any = null;
   protected validatorChange: any;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /* Nome do componente datepicker. */
   @Input('name') name: string;
@@ -146,18 +159,19 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   /**
    * @optional
    *
+   * @deprecated 2.0.0
    * @description
+   *
+   * **Deprecated**
+   *
+   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
    *
    * Aplica foco no elemento ao ser iniciado.
    *
    * @default `false`
    */
-  @Input('p-focus') set autofocus(autofocus: boolean) {
-    this._autofocus = convertToBoolean(autofocus);
-  }
-
-  get autofocus() {
-    return this._autofocus;
+  @Input('p-focus') set oldfocus(focus: boolean) {
+    this.autoFocus = focus;
   }
 
   /** Habilita ação para limpar o campo. */

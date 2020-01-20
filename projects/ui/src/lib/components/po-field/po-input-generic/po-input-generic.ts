@@ -28,7 +28,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   afterViewInit() {
-    this.putFocus();
+    this.verifyAutoFocus();
     if (this.type !== 'password') {
       this.setPaddingInput();
     }
@@ -53,8 +53,8 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     });
   }
 
-  putFocus() {
-    if (this.autofocus) {
+  verifyAutoFocus() {
+    if (this.autoFocus) {
       this.focus();
     }
   }
