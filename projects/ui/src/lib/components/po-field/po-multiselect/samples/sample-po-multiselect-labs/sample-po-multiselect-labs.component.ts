@@ -45,7 +45,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   }
 
   addOption() {
-    this.options.push(this.option);
+    this.options = [...this.options, {...this.option}];
     this.option = {label: undefined, value: undefined};
   }
 
