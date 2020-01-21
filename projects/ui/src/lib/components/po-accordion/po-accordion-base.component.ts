@@ -22,6 +22,6 @@
  * O componente já faz o controle de abertura e fechamento dos itens automaticamente.
  *
  * Caso houver a necessidade de abrir algum dos `po-accordion-item` via Typescript
- * acesse a [documentamentação do PoAccordionItem](/documentation/po-accordion-item).
+ * acesse a [documentação do PoAccordionItem](/documentation/po-accordion-item).
  */
 export class PoAccordionBaseComponent {}
