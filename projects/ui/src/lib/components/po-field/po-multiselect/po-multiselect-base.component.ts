@@ -208,6 +208,12 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * Nesta propriedade deve ser definida uma lista de objetos que implementam a interface PoMultiselectOption.
    * Esta lista deve conter os valores e os labels que serão apresentados na tela.
+   *
+   * > Para atualizar a lista de opções do `po-multiselect` dinamicamente deve-se utilizar dados imutáveis.
+   * Exemplo de adição de um novo item com spread:
+   * ```
+   * this.options = [...this.options, { label: 'Example', value: 'example' }];
+   * ```
    */
   @Input('p-options') set options(options: Array<PoMultiselectOption>) {
     this._options = options;
