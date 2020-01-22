@@ -10,6 +10,7 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
+      [p-error-pattern]="field.errorMessage"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
@@ -26,6 +27,7 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
+      [p-error-pattern]="field.errorMessage"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
@@ -44,6 +46,7 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
+      [p-error-pattern]="field.errorMessage"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
@@ -196,12 +199,14 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
+      [p-error-pattern]="field.errorMessage"
       [p-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
       [p-optional]="field.optional"
+      [p-pattern]="field.pattern"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-password>
