@@ -144,4 +144,16 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   params?: any;
 
+  /**
+   * Mensagem que será apresentada quando o campo ficar inválido.
+   *
+   * O campo fica inválido quando as seguintes propriedades não forem respeitadas:
+   *  - pattern;
+   *  - minValue;
+   *  - maxValue;
+   *
+   * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
+   */
+  errorMessage?: string;
+
 }
