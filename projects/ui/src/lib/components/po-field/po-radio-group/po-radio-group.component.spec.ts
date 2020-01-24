@@ -10,7 +10,7 @@ import { PoFieldContainerComponent } from '../po-field-container/po-field-contai
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 import { PoRadioGroupComponent } from './po-radio-group.component';
 
-describe('PoRadioGroupComponent: ', () => {
+describe('PoRadioGroupComponent:', () => {
   let component: PoRadioGroupComponent;
   let fixture: ComponentFixture<PoRadioGroupComponent>;
 
@@ -87,55 +87,77 @@ describe('PoRadioGroupComponent: ', () => {
     expect(removeDuplicatedOptions).not.toHaveBeenCalled();
   });
 
-  describe('Methods: ', () => {
+  describe('Methods:', () => {
     const fakeEventArrowKey: any = {
       keyCode: 37,
       which: 37
     };
 
-    it('focus: should call `focus` of radio', () => {
-      component.options = [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }];
+    it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
+      component.autoFocus = true;
 
-      fixture.detectChanges();
+      const spyFocus = spyOn(component, 'focus');
+      component.ngAfterViewInit();
 
-      spyOn(component.radioLabels.toArray()[0].nativeElement, 'focus');
-
-      component.focus();
-
-      expect(component.radioLabels.toArray()[0].nativeElement.focus).toHaveBeenCalled();
+      expect(spyFocus).toHaveBeenCalled();
     });
 
-    it('focus: should`t call `focus` of radio if option is `disabled`', () => {
-      component.options = [
-        { label: 'Option 1', value: '1', disabled: true },
-        { label: 'Option 2', value: '2' },
-        { label: 'Option 3', value: '3' }
-      ];
+    it('ngAfterViewInit: shouldn´t call `focus` if `autoFocus` is false.', () => {
+      component.autoFocus = false;
 
-      fixture.detectChanges();
+      const spyFocus = spyOn(component, 'focus');
+      component.ngAfterViewInit();
 
-      spyOn(component.radioLabels.toArray()[0].nativeElement, 'focus');
-      spyOn(component.radioLabels.toArray()[1].nativeElement, 'focus');
-
-      component.focus();
-
-      expect(component.radioLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
-      expect(component.radioLabels.toArray()[1].nativeElement.focus).toHaveBeenCalled();
+      expect(spyFocus).not.toHaveBeenCalled();
     });
 
-    it('focus: should`t call `focus` of radio if `disabled`', () => {
-      component.options = [{ label: 'Option 1', value: '1', disabled: true }, { label: 'Option 2', value: '2' }];
-      component.disabled = true;
+    describe('focus:', () => {
 
-      fixture.detectChanges();
+      it('should call `focus` of radio', () => {
+        component.options = [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }];
 
-      spyOn(component.radioLabels.toArray()[0].nativeElement, 'focus');
-      spyOn(component.radioLabels.toArray()[1].nativeElement, 'focus');
+        fixture.detectChanges();
 
-      component.focus();
+        spyOn(component.radioLabels.toArray()[0].nativeElement, 'focus');
 
-      expect(component.radioLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
-      expect(component.radioLabels.toArray()[1].nativeElement.focus).not.toHaveBeenCalled();
+        component.focus();
+
+        expect(component.radioLabels.toArray()[0].nativeElement.focus).toHaveBeenCalled();
+      });
+
+      it('should call second radio option if the first option is disabled', () => {
+        component.options = [
+          { label: 'Option 1', value: '1', disabled: true },
+          { label: 'Option 2', value: '2' },
+          { label: 'Option 3', value: '3' }
+        ];
+
+        fixture.detectChanges();
+
+        spyOn(component.radioLabels.toArray()[0].nativeElement, 'focus');
+        spyOn(component.radioLabels.toArray()[1].nativeElement, 'focus');
+
+        component.focus();
+
+        expect(component.radioLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
+        expect(component.radioLabels.toArray()[1].nativeElement.focus).toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `focus` of radio if `disabled` property of component is true', () => {
+        component.options = [{ label: 'Option 1', value: '1', disabled: true }, { label: 'Option 2', value: '2' }];
+        component.disabled = true;
+
+        fixture.detectChanges();
+
+        spyOn(component.radioLabels.toArray()[0].nativeElement, 'focus');
+        spyOn(component.radioLabels.toArray()[1].nativeElement, 'focus');
+
+        component.focus();
+
+        expect(component.radioLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
+        expect(component.radioLabels.toArray()[1].nativeElement.focus).not.toHaveBeenCalled();
+      });
+
     });
 
     it('onKeyUp: should call `changeValue` when `isArrowKey` is true.', () => {
@@ -173,7 +195,7 @@ describe('PoRadioGroupComponent: ', () => {
 
   });
 
-  describe('Templates: ', () => {
+  describe('Templates:', () => {
 
     const eventKeyBoard = document.createEvent('KeyboardEvent');
     eventKeyBoard.initEvent('keyup', true, true);

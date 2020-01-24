@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ContentChild, ElementRef, forwardRef,
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, forwardRef,
   IterableDiffers, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -84,7 +84,7 @@ const poComboContainerPositionDefault = 'bottom';
     }
   ]
 })
-export class PoComboComponent extends PoComboBaseComponent implements OnDestroy {
+export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnDestroy {
 
   private _isServerSearching: boolean = false;
 
@@ -140,6 +140,12 @@ export class PoComboComponent extends PoComboBaseComponent implements OnDestroy 
 
   get isServerSearching() {
     return this._isServerSearching;
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
+    }
   }
 
   ngOnDestroy() {

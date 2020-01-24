@@ -48,7 +48,7 @@ describe('PoDatepickerComponent:', () => {
     component.help = 'Help de teste';
     component.format = 'dd/mm/yyyy';
     component.locale = 'en';
-    component.autofocus = true;
+    component.autoFocus = true;
     component.required = true;
     component.clean = true;
     component.date = new Date();
@@ -328,7 +328,7 @@ describe('PoDatepickerComponent:', () => {
     component.label = 'Label de teste';
     component.help = 'Help de teste';
     component.locale = 'pt';
-    component.autofocus = true;
+    component.autoFocus = true;
     component.clean = true;
     component.minDate = new Date(2017, 1, 1);
     component.maxDate = new Date(2017, 11, 10);
@@ -548,26 +548,26 @@ describe('PoDatepickerComponent:', () => {
       }
     };
 
-    it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and call `inputEl.nativeElement.focus` if focus is true.', () => {
+    it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and call `focus` if autoFocus is true.', () => {
       const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
-      const inputElFocus = spyOn(component.inputEl.nativeElement, <any>'focus');
-      component.autofocus = true;
+      const inputFocus = spyOn(component, 'focus');
+      component.autoFocus = true;
 
       component.ngAfterViewInit();
 
       expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(inputElFocus).toHaveBeenCalled();
+      expect(inputFocus).toHaveBeenCalled();
     });
 
-    it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and not call `inputEl.nativeElement.focus` if focus is false.', () => {
+    it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and not call `focus` if autoFocus is false.', () => {
       const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
-      const inputElFocus = spyOn(component.inputEl.nativeElement, <any>'focus');
-      component.autofocus = false;
+      const inputFocus = spyOn(component, 'focus');
+      component.autoFocus = false;
 
       component.ngAfterViewInit();
 
       expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(inputElFocus).not.toHaveBeenCalled();
+      expect(inputFocus).not.toHaveBeenCalled();
     });
 
     it('ngOnDestroy: should call `removeListeners`.', () => {

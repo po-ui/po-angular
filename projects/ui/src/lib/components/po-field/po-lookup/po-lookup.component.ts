@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NG_VALIDATORS , NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -75,7 +75,7 @@ import { PoLookupModalService } from './services/po-lookup-modal.service';
       multi: true,
     }]
 })
-export class PoLookupComponent extends PoLookupBaseComponent implements OnDestroy, OnInit {
+export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private modalSubscription: Subscription;
 
@@ -87,6 +87,12 @@ export class PoLookupComponent extends PoLookupBaseComponent implements OnDestro
 
   constructor(poLookupFilterService: PoLookupFilterService, private poLookupModalService: PoLookupModalService) {
     super(poLookupFilterService);
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
+    }
   }
 
   ngOnDestroy() {

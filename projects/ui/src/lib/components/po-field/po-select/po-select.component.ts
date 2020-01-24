@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, ContentChild, Component, DoCheck, ElementRef, forwardRef, HostListener,
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ContentChild, Component, DoCheck, ElementRef, forwardRef, HostListener,
   IterableDiffers, Renderer2, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
@@ -54,7 +54,7 @@ const poSelectContentPositionDefault = 'bottom';
     PoControlPositionService
   ]
 })
-export class PoSelectComponent extends PoSelectBaseComponent implements DoCheck {
+export class PoSelectComponent extends PoSelectBaseComponent implements AfterViewInit, DoCheck {
 
   displayValue;
   isMobile: any = isMobile();
@@ -120,6 +120,12 @@ export class PoSelectComponent extends PoSelectBaseComponent implements DoCheck 
     if (this.open && charCode === PoKeyCodeEnum.tab) {
       $event.preventDefault();
       this.toggleButton();
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
     }
   }
 

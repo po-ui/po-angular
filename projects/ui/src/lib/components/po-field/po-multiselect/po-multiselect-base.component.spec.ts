@@ -59,16 +59,6 @@ describe('PoMultiselectBaseComponent:', () => {
     expectSettersMethod(component, 'hideSearch', undefined, 'hideSearch', false);
   });
 
-  it('should set focus', () => {
-    expectSettersMethod(component, 'autofocus', '', 'autofocus', true);
-    expectSettersMethod(component, 'autofocus', 'true', 'autofocus', true);
-    expectSettersMethod(component, 'autofocus', true, 'autofocus', true);
-    expectSettersMethod(component, 'autofocus', 'null', 'autofocus', false);
-    expectSettersMethod(component, 'autofocus', null, 'autofocus', false);
-    expectSettersMethod(component, 'autofocus', 'undefined', 'autofocus', false);
-    expectSettersMethod(component, 'autofocus', undefined, 'autofocus', false);
-  });
-
   it('should set p-filter-mode', () => {
     expectSettersMethod(component, 'filterMode', '', 'filterMode', PoMultiselectFilterMode.startsWith);
     expectSettersMethod(component, 'filterMode', 'startsWith', 'filterMode', PoMultiselectFilterMode.startsWith);

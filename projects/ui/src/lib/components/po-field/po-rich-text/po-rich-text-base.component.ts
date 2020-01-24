@@ -3,6 +3,7 @@ import { EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
 import { requiredFailed } from '../validators';
+import { InputBoolean } from '../../../decorators';
 
 /**
  * @description
@@ -27,6 +28,19 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   // tslint:disable-next-line
   private onTouched: any = null;
   private validatorChange: any;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
    * @description

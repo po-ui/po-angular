@@ -42,27 +42,47 @@ describe('PoUrlComponent:', () => {
 
   describe('Methods:', () => {
 
-    it('ngAfterViewInit: should add keyup eventListener if `onChangePropagate` is null', fakeAsync(() => {
-      component.onChangePropagate = null;
+    describe('ngAfterViewInit:', () => {
+      let inputFocus: jasmine.Spy;
 
-      spyOn(component.inputEl.nativeElement, 'addEventListener');
+      beforeEach(() => {
+        inputFocus = spyOn(component, 'focus');
+      });
 
-      component.ngAfterViewInit();
-      tick();
+      it('should call `focus` if autoFocus is true.', () => {
+        component.autoFocus = true;
+        component.ngAfterViewInit();
+        expect(inputFocus).toHaveBeenCalled();
+      });
 
-      expect(component.inputEl.nativeElement.addEventListener).toHaveBeenCalledWith('keyup', component['listener']);
-    }));
+      it('should not call `focus` if autoFocus is false.', () => {
+        component.autoFocus = false;
+        component.ngAfterViewInit();
+        expect(inputFocus).not.toHaveBeenCalled();
+      });
 
-    it('ngAfterViewInit: shouldn`t add keyup eventListener if `onChangePropagate` is not null', fakeAsync(() => {
-      component.onChangePropagate = () => {};
+      it('should add keyup eventListener if `onChangePropagate` is null', fakeAsync(() => {
+        component.onChangePropagate = null;
 
-      spyOn(component.inputEl.nativeElement, 'addEventListener');
+        spyOn(component.inputEl.nativeElement, 'addEventListener');
 
-      component.ngAfterViewInit();
-      tick();
+        component.ngAfterViewInit();
+        tick();
 
-      expect(component.inputEl.nativeElement.addEventListener).not.toHaveBeenCalled();
-    }));
+        expect(component.inputEl.nativeElement.addEventListener).toHaveBeenCalledWith('keyup', component['listener']);
+      }));
+
+      it('shouldn`t add keyup eventListener if `onChangePropagate` is not null', fakeAsync(() => {
+        component.onChangePropagate = () => {};
+
+        spyOn(component.inputEl.nativeElement, 'addEventListener');
+
+        component.ngAfterViewInit();
+        tick();
+
+        expect(component.inputEl.nativeElement.addEventListener).not.toHaveBeenCalled();
+      }));
+    });
 
     it('ngOnDestroy: should remove keyup event listener if `onChangePropagate` is null', () => {
       component.onChangePropagate = null;

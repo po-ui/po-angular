@@ -2,6 +2,108 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.24.0](https://github.com/portinariui/portinari-angular/compare/v1.23.0...v1.24.0) (2020-01-24)
+
+
+### Documentation
+
+* **multiselect:** corrige mutabilidade no sample labs ([01e6576](https://github.com/portinariui/portinari-angular/commit/01e6576))
+
+
+### Features
+
+* **dynamic-form:** adiciona a propriedade `PoDynamicFormField.optional` ([f54cdc1](https://github.com/portinariui/portinari-angular/commit/f54cdc1))
+* **dynamic-form:** implementa a propriedade `PoDynamicFormField.errorMessage` ([1467cae](https://github.com/portinariui/portinari-angular/commit/1467cae))
+* **field:** cria nova propriedade `p-auto-focus` e deprecia a propriedade `p-focus` ([e9e2eac](https://github.com/portinariui/portinari-angular/commit/e9e2eac))
+
+Componentes atualizados:
+* checkbox
+* datepicker
+* datepicker-range
+* decimal
+* email
+* input
+* lookup
+* login
+* number
+* multiselect
+* password
+* textarea
+* upload
+* url
+* richtext
+
+Antes:
+```
+<po-input
+  name="input"
+  p-focus
+  p-label="Portinari Input">
+</po-input>
+```
+Agora:
+```
+<po-input
+  name="input"
+  p-auto-focus
+  p-label="Portinari Input">
+</po-input>
+```
+
+
+
+
+## [1.23.0](https://github.com/portinariui/portinari-angular/compare/v1.22.2...v1.23.0) (2020-01-17)
+
+
+### Bug Fixes
+
+* **page-dynamic-search:** corrige disclaimer com label undefined ([0cd6f1d](https://github.com/portinariui/portinari-angular/commit/0cd6f1d))
+* **page-dynamic-search:** corrige disclaimers da busca avançada ([f56bfed](https://github.com/portinariui/portinari-angular/commit/f56bfed))
+
+
+### Features
+
+* **combo:** permite utilizar `p-filter-params` nas requisições ([faf2505](https://github.com/portinariui/portinari-angular/commit/faf2505))
+* **dynamic-form:** nova propriedade `params` ([9c0aed5](https://github.com/portinariui/portinari-angular/commit/9c0aed5))
+* **dynamic-form:** inclui novos `fields` na propriedade `p-auto-focus` ([f7fb47c](https://github.com/portinariui/portinari-angular/commit/f7fb47c))
+* **combo:** implementa a propriedade `p-auto-focus` ([72c4f35](https://github.com/portinariui/portinari-angular/commit/72c4f35))
+* **checkbox-group:** implementa a propriedade `p-auto-focus` ([497fee0](https://github.com/portinariui/portinari-angular/commit/497fee0))
+* **radio-group:** implementa a propriedade `p-auto-focus` ([52caaf2](https://github.com/portinariui/portinari-angular/commit/52caaf2))
+* **select:** implementa a propriedade `p-auto-focus` ([83b157b](https://github.com/portinariui/portinari-angular/commit/83b157b))
+* **switch:** implementa a propriedade `p-auto-focus` ([d4c4f8b](https://github.com/portinariui/portinari-angular/commit/d4c4f8b))
+
+
+
+### [1.22.2](https://github.com/portinariui/portinari-angular/compare/v1.22.1...v1.22.2) (2020-01-10)
+
+
+### Code Refactoring
+
+* **table:** propriedade `p-selectable` substitui a propriedade `p-checkbox` ([9cdd3d4](https://github.com/portinariui/portinari-angular/commit/9cdd3d4))
+
+
+### [1.22.1](https://github.com/portinariui/portinari-angular/compare/v1.22.0...v1.22.1) (2020-01-06)
+
+
+### Performance
+
+* **divider:**: adiciona ChangeDetectionStrategy.OnPush ([4b8f3ce](https://github.com/portinariui/portinari-angular/commit/4b8f3ce))
+
+* **table:**  implementa alguns itens de performance ([30ac592](https://github.com/portinariui/portinari-angular/commit/30ac592))
+
+* **tag:** adiciona ChangeDetectionStrategy.OnPush ([2fe04cf](https://github.com/portinariui/portinari-angular/commit/2fe04cf))
+
+
+## [1.22.0](https://github.com/portinariui/portinari-angular/compare/v1.21.0...v1.22.0) (2019-12-27)
+
+
+### Features
+
+* **http-interceptor:** permite a exibição de múltiplas mensagens do backend e depreciado o parâmetro `X-Portinari-No-Error` ([b7505dc](https://github.com/portinariui/portinari-angular/commit/b7505dc))
+
+
+
 ## [1.21.0](https://github.com/portinariui/portinari-angular/compare/v1.20.0...v1.21.0) (2019-12-23)
 
 
@@ -133,7 +235,7 @@ All notable changes to this project will be documented in this file. See [standa
 * **page-login:** corrige literais customizadas ao trocar de idioma ([7538c6b](https://github.com/portinariui/portinari-angular/commit/7538c6b))
 
 
-## Code Refactoring
+### Code Refactoring
 
 * **table:** melhoria na componentização do componente interno `po-table-column-icon` ([98009bd](https://github.com/portinariui/portinari-angular/commit/98009bd))
 

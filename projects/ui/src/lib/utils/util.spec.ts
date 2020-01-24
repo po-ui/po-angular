@@ -4,7 +4,8 @@ import {
   callFunction, capitalizeFirstLetter, clearObject, convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertImageToBase64,
   convertNumberToDecimal, convertToBoolean, convertToInt, formatYear, getFormattedLink, isEquals, isKeyCodeEnter,
   isExternalLink, isTypeof, mapArrayByProperties, mapObjectByProperties, openExternalLink, removeDuplicatedOptions,
-  removeUndefinedAndNullOptions, setYearFrom0To100, sortOptionsByProperty, sortValues, validateDateRange, validValue, valuesFromObject
+  removeUndefinedAndNullOptions, setYearFrom0To100, sortOptionsByProperty, sortValues, validateDateRange, validateObjectType, validValue,
+  valuesFromObject
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -1308,4 +1309,30 @@ describe('Function clearObject:', () => {
 
     expect(cleanObject).toEqual(expectedValue);
   });
+});
+
+describe('Function validateObjectType:', () => {
+
+  it('should return value if it`s an object', () => {
+    const value = { key: 'value' };
+
+    expect(validateObjectType(value)).toEqual(value);
+  });
+
+  it('should return undefined if it isn`t an object', () => {
+    let value: any;
+
+    value = 'value';
+    expect(validateObjectType(value)).toBe(undefined);
+
+    value = 1;
+    expect(validateObjectType(value)).toBe(undefined);
+
+    value = false;
+    expect(validateObjectType(value)).toBe(undefined);
+
+    value = [ 'value' ];
+    expect(validateObjectType(value)).toBe(undefined);
+  });
+
 });

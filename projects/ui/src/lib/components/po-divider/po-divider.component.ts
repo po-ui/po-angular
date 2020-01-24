@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { PoDividerBaseComponent } from './po-divider-base.component';
 
@@ -25,5 +25,6 @@ import { PoDividerBaseComponent } from './po-divider-base.component';
 @Component({
   selector: 'po-divider',
   templateUrl: './po-divider.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoDividerComponent extends PoDividerBaseComponent { }

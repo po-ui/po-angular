@@ -8,6 +8,7 @@ import { requiredFailed } from './../validators';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
 import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { InputBoolean } from '../../../decorators';
 
 export const poMultiselectLiteralsDefault = {
   en: <PoMultiselectLiterals> {
@@ -42,7 +43,6 @@ export const poMultiselectLiteralsDefault = {
  */
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
-  private _autofocus?: boolean = false;
   private _disabled?: boolean = false;
   private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
   private _hideSearch?: boolean = false;
@@ -60,6 +60,19 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   selectedOptions: Array<PoMultiselectOption> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption> = [];
   visibleDisclaimers = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /** Label no componente. */
   @Input('p-label') label?: string;
@@ -208,6 +221,12 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * Nesta propriedade deve ser definida uma lista de objetos que implementam a interface PoMultiselectOption.
    * Esta lista deve conter os valores e os labels que serão apresentados na tela.
+   *
+   * > Para atualizar a lista de opções do `po-multiselect` dinamicamente deve-se utilizar dados imutáveis.
+   * Exemplo de adição de um novo item com spread:
+   * ```
+   * this.options = [...this.options, { label: 'Example', value: 'example' }];
+   * ```
    */
   @Input('p-options') set options(options: Array<PoMultiselectOption>) {
     this._options = options;
@@ -242,18 +261,19 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   /**
    * @optional
    *
+   * @deprecated 2.0.0
    * @description
+   *
+   * **Deprecated**
+   *
+   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
    *
    * Aplica foco no elemento ao ser iniciado.
    *
    * @default `false`
    */
-  @Input('p-focus') set autofocus(focus: boolean) {
-    this._autofocus = convertToBoolean(focus);
-  }
-
-  get autofocus() {
-    return this._autofocus;
+  @Input('p-focus') set oldfocus(focus: boolean) {
+    this.autoFocus = focus;
   }
 
   /**
