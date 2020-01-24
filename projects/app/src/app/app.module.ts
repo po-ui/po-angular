@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { PoModule } from '@portinari/portinari-ui';
 
 import { AppComponent } from './app.component';
+// import { PoModule } from 'projects/ui/src/lib/po.module';
 
 @NgModule({
   declarations: [

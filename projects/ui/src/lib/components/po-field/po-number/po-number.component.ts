@@ -1,7 +1,7 @@
-import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { Component, ElementRef, forwardRef, Input } from '@angular/core';
+import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidationErrors } from '@angular/forms';
+import { Component, ElementRef, forwardRef, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
-import { minFailed, maxFailed } from '../validators';
+import { minFailed, maxFailed, maxlengpoailed, minlengpoailed } from '../validators';
 
 import { PoNumberBaseComponent } from './po-number-base.component';
 
@@ -34,6 +34,7 @@ import { PoNumberBaseComponent } from './po-number-base.component';
 @Component({
   selector: 'po-number',
   templateUrl: './po-number.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
   {
     provide: NG_VALUE_ACCESSOR,
@@ -47,6 +48,8 @@ import { PoNumberBaseComponent } from './po-number-base.component';
   }]
 })
 export class PoNumberComponent extends PoNumberBaseComponent {
+
+  @ViewChild('inp', { static: true }) inputEl: ElementRef;
 
   /** Valor mínimo. */
   min?: number;
@@ -75,11 +78,71 @@ export class PoNumberComponent extends PoNumberBaseComponent {
    */
   @Input('p-step') step?: string = '1';
 
-  constructor(el: ElementRef) {
-    super(el);
+  // constructor(el: ElementRef) {
+  //   super(el);
+  // }
+
+  get autocomplete() {
+    return this.noAutocomplete ? 'off' : 'on';
   }
 
-  extraValidation(abstractControl: AbstractControl): { [key: string]: any; } {
+  get check() {
+    console.log('NUMBER');
+    return '';
+  }
+
+  constructor(private el: ElementRef) {
+    super();
+  }
+
+  onInput(e: any) {
+    let value = e.target.value;
+    const valueMaxlength = this.validMaxLength(this.maxlength, value); // rever
+
+    if (value !== valueMaxlength) {
+      value = valueMaxlength;
+
+      this.inputEl.nativeElement.value = value;
+    }
+
+    this.updateModel(this.formatNumber(value));
+    this.emitChange(this.formatNumber(value));
+  }
+
+  onBlur(e) {
+
+  }
+
+  onFocus(e) {
+
+  }
+
+  onWriteValue(value: number) {
+    if (this.inputEl) {
+      if (value || value === 0) {
+        this.inputEl.nativeElement.value = value;
+      } else { // Se for o valor for undefined, deve limpar o campo
+        this.inputEl.nativeElement.value = '';
+      }
+    }
+
+    // Emite evento quando o model é atualizado, inclusive a primeira vez
+
+    // this.changeModel.emit(value);
+  }
+
+  focus() {
+    // throw new Error("Method not implemented.");
+    if (!this.disabled) {
+      this.inputEl.nativeElement.focus();
+    }
+  }
+
+  getErrorPattern() {
+    return (this.errorPattern !== '' && this.hasInvalidClass()) ? this.errorPattern : '';
+  }
+
+  stateValidate(abstractControl: AbstractControl): { [key: string]: any; } {
 
     if (minFailed(this.min, abstractControl.value)) {
       return { min: {
@@ -93,7 +156,27 @@ export class PoNumberComponent extends PoNumberBaseComponent {
       }};
     }
 
+    if (maxlengpoailed(this.maxlength, abstractControl.value)) {
+      return { maxlength: {
+        valid: false,
+      }};
+    }
+
+    if (minlengpoailed(this.minlength, abstractControl.value)) {
+      return { minlength: {
+        valid: false,
+      }};
+    }
+
     return null;
+  }
+
+  private hasInvalidClass() {
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') &&
+      this.el.nativeElement.classList.contains('ng-dirty') &&
+      this.inputEl.nativeElement.value !== ''
+    );
   }
 
 }

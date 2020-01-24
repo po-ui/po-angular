@@ -11,7 +11,7 @@ export abstract class PoField<T> implements ControlValueAccessor {
 
   @Input('name') name: string;
 
-  @Input('p-auto-focus') autoFocus: boolean;
+  @Input('p-focus') autoFocus: boolean;
 
   @Output('change') change = new EventEmitter<T>();
 
@@ -23,7 +23,16 @@ export abstract class PoField<T> implements ControlValueAccessor {
 
   abstract focus();
 
-  changeModel(value: T) {
+  /**
+   * Dispara o evento de change.emit
+   *
+   * @param value
+   */
+  emitChange(value) {
+    this.change.emit(value);
+  }
+
+  updateModel(value: T) {
     if (this.onModelChange) {
       this.onModelChange(value);
     }

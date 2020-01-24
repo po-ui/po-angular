@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoSwitchBaseComponent } from './po-switch-base.component';
@@ -34,6 +34,7 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 @Component({
   selector: 'po-switch',
   templateUrl: './po-switch.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -48,6 +49,11 @@ export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterVie
 
   constructor(private changeDetector: ChangeDetectorRef) {
     super();
+  }
+
+  get check() {
+    console.log('SWITCH');
+    return '';
   }
 
   ngAfterViewChecked(): void {

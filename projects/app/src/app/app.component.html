@@ -1,0 +1,16 @@
+<po-switch p-label="Label 01"></po-switch>
+
+<hr>
+
+
+<po-number
+  p-label="Olha eu ai!!"
+  p-help="TESTE"
+  [(ngModel)]="model"
+  name="model"
+  [p-minlength]="10"
+  [p-maxlength]="25"
+  [p-step]="5">
+</po-number>
+
+{{ model }}
