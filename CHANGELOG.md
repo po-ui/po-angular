@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.24.0](https://github.com/portinariui/portinari-angular/compare/v1.23.0...v1.24.0) (2020-01-24)
+
+
+### Documentation
+
+* **multiselect:** corrige mutabilidade no sample labs ([01e6576](https://github.com/portinariui/portinari-angular/commit/01e6576))
+
+
+### Features
+
+* **dynamic-form:** adiciona a propriedade `PoDynamicFormField.optional` ([f54cdc1](https://github.com/portinariui/portinari-angular/commit/f54cdc1))
+* **dynamic-form:** implementa a propriedade `PoDynamicFormField.errorMessage` ([1467cae](https://github.com/portinariui/portinari-angular/commit/1467cae))
+* **field:** cria nova propriedade `p-auto-focus` e deprecia a propriedade `p-focus` ([e9e2eac](https://github.com/portinariui/portinari-angular/commit/e9e2eac))
+
+Componentes atualizados:
+* checkbox
+* datepicker
+* datepicker-range
+* decimal
+* email
+* input
+* lookup
+* login
+* number
+* multiselect
+* password
+* textarea
+* upload
+* url
+* richtext
+
+Antes:
+```
+<po-input
+  name="input"
+  p-focus
+  p-label="Portinari Input">
+</po-input>
+```
+Agora:
+```
+<po-input
+  name="input"
+  p-auto-focus
+  p-label="Portinari Input">
+</po-input>
+```
+
+
+
+
 ## [1.23.0](https://github.com/portinariui/portinari-angular/compare/v1.22.2...v1.23.0) (2020-01-17)
 
 
