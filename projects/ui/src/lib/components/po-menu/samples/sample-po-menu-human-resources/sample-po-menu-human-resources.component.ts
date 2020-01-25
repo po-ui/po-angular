@@ -20,6 +20,22 @@ export class SamplePoMenuHumanResourcesComponent {
 
   menus: Array<PoMenuItem> = [
     { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction, icon: 'po-icon-user', shortLabel: 'Register' },
     { label: 'Timekeeping', action: this.printMenuAction, icon: 'po-icon-clock', shortLabel: 'Timekeeping', badge: { value: 1 } },
     { label: 'Useful links', icon: 'po-icon-share', shortLabel: 'Links', subItems: [
       { label: 'Ministry of Labour', action: this.printMenuAction, link: 'http://trabalho.gov.br/' },

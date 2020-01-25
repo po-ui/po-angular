@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { PoBadgeModule } from '../po-badge/po-badge.module';
 import { PoFieldModule } from '../po-field/po-field.module';
@@ -22,7 +23,8 @@ import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
     RouterModule,
     PoBadgeModule,
     PoFieldModule,
-    PoLoadingModule
+    PoLoadingModule,
+    ScrollingModule
   ],
   declarations: [
     PoMenuComponent,

@@ -7,7 +7,8 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
-  ViewContainerRef
+  ViewContainerRef,
+  ViewChild,
 } from '@angular/core';
 
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
@@ -23,6 +24,7 @@ import { PoMenuItem } from './po-menu-item.interface';
 import { PoMenuItemFiltered } from './po-menu-item/po-menu-item-filtered.interface';
 import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
+import { ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
 
 const poMenuDebounceTime = 400;
 const poMenuMinLength = 3;
@@ -118,6 +120,7 @@ const poMenuRootLevel = 1;
 export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, OnInit, DoCheck {
 
   @ContentChild(PoMenuHeaderTemplateDirective, { static: true }) menuHeaderTemplate: PoMenuHeaderTemplateDirective;
+  @ViewChild('menuBody', { static: false }) menuBody: ElementRef;
 
   activeMenuItem: PoMenuItem;
   collapsedMobile: boolean;
@@ -143,10 +146,21 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
               private renderer: Renderer2,
               private router: Router,
               private menuItemsService: PoMenuItemsService,
+              private scrollDispatcher: ScrollDispatcher,
               menuService: PoMenuService) {
 
     super(menuService);
     this.parentRef = viewRef['_view']['component'];
+  }
+
+  ngAfterViewInit() {
+    // tem acesso ao scroll top dessas duas formas:
+    // sempre que o scrollTop for igual a zero, é porque não está mais scrollando
+    this.scrollDispatcher.scrolled().subscribe((value: CdkScrollable) => console.log('scrolled:', value.measureScrollOffset('top')));
+
+    this.menuBody.nativeElement.addEventListener('scroll', () => {
+      console.log('Scroll top do menu body:', this.menuBody.nativeElement.scrollTop);
+    });
   }
 
   private get isActiveItemMenuSubMenu() {
