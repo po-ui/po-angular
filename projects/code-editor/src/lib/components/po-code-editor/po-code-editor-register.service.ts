@@ -18,7 +18,7 @@ import { PoCodeEditorRegisterableOptions } from './interfaces/po-code-editor-reg
  * import { PoCodeEditorModule, PoCodeEditorRegisterable } from '@portinari/portinari-code-editor';
  *
  * const customEditor: PoCodeEditorRegisterable = {
- *   language: 'terraform'
+ *   language: 'terraform',
  *   options: {
  *     keywords: ['resource', 'provider', 'variable', 'output', 'module', 'true', 'false'],
  *     operators: ['{', '}', '(', ')', '[', ']', '?', ':'],
