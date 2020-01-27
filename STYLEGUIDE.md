@@ -5,8 +5,8 @@
   - Separar em grupos
     - Angular
     - Terceiros
-    - Componentes / Interfaces externos (thf)
-    - Componentes / Interfaces internos (thf)
+    - Componentes / Interfaces externos (po)
+    - Componentes / Interfaces internos (po)
 
 - Atributos e métodos (ordem)
   - Atributos
@@ -32,7 +32,7 @@ Devem seguir o seguinte modelo:
 private _: = ;
 
 /** Documentação */
-@Input(’t-’) set (value: ) {
+@Input(’p-’) set (value: ) {
 this._ = value;
 }
 get (): {
@@ -71,8 +71,8 @@ Onde prop é o nome da propriedade e type é o tipo da propriedade, sempre decla
 
   - @default sm
 - Para arrays utilize Array ao invés de type[]
-  - t-items: Array = []; // BOM
-  - t-items: any[] = []; // RUIM
+  - p-items: Array = []; // BOM
+  - p-items: any[] = []; // RUIM
 
 - Em casos que a propriedade deve ser usada em conjunto com outra propriedade / componente, deve ser exibido algum trecho de código exemplificando o uso da propriedade.
 - Quando for necessário / possível utilize links principalmente quando citar outros componente / referências (inclusive do angular).
@@ -87,11 +87,11 @@ Onde prop é o nome da propriedade e type é o tipo da propriedade, sempre decla
 - Separar os samples por pastas.
 
 - Propriedades do tipo “label” usar o nome do componente
-  - “Totvs Button”
+  - “Portinari Button”
 - Propriedades do tipo boolean devem ser usadas sem valor sempre que possível
-  - t-required // BOM
-  - t-required=“true” // RUIM
-- Propriedades do tipo boolean podem ser agrupadas com um thf-checkbox-group
+  - p-required // BOM
+  - p-required=“true” // RUIM
+- Propriedades do tipo boolean podem ser agrupadas com um po-checkbox-group
   - Quando possível quebrar em mais de uma grupo
 - Propriedades dos elementos devem seguir a seguinte ordem:
   - class (CSS)
@@ -101,34 +101,34 @@ Onde prop é o nome da propriedade e type é o tipo da propriedade, sempre decla
   - propriedades com bind (ordenadas)
   - eventos (ordenados)
 ```html
-<thf-button
-class="thf-sm-12"
-[t-disabled]="properties.includes('disabled')"
-[t-icon]="icon"
-[t-label]="label"
-[t-small]="properties.includes('small')"
-[t-type]="type"
-(t-click)="buttonClick()">
+<po-button
+class="po-sm-12"
+[p-disabled]="properties.includes('disabled')"
+[p-icon]="icon"
+[p-label]="label"
+[p-small]="properties.includes('small')"
+[p-type]="type"
+(p-click)="buttonClick()">
 
-<thf-input
-class="thf-md-6"
+<po-input
+class="po-md-6"
 name="label"
 [(ngModel)]="label"
-t-clean
-t-placeholder="Enter a label for the button"
-t-required
-[t-label]=“labelTitle”
-(t-change)=“change()”>
+p-clean
+p-placeholder="Enter a label for the button"
+p-required
+[p-label]=“labelTitle”
+(p-change)=“change()”>
 ```
 
 - Usar aspas duplas para incluir o sample na documentação.
 - Pular uma linha após tag @example
 - Pular linha entre os samples
 - incluir um espaço entre pois o dgeni não processa tags “vazias”
-- Sempre incluir o título do sample iniciando com o nome do componente “Totvs Componente …”
-  - Totvs Avatar Basic
-  - Totvs Avatar Labs
-  - Totvs Avatar - Caso de Uso
+- Sempre incluir o título do sample iniciando com o nome do componente “Portinari Componente …”
+  - Portinari Avatar Basic
+  - Portinari Avatar Labs
+  - Portinari Avatar - Caso de Uso
 - **CUIDADO**: Não incentive práticas ruins, lembre-se nossos exemplos serão base para muitos desenvolvedores.
 
 **Tipos que deve ser implementados**
@@ -140,19 +140,19 @@ t-required
 
   - Componente: Deve ter o componente separado com / ou outros componentes para auxiliar na demonstração do comportamento do componente;
   - Separador: Usar um <hr> para separar as duas partes;
-  - Thf-info com o model e os eventos ;
+  - po-info com o model e os eventos ;
   - Separador: Usar um <hr> para separar as duas partes;
-  - Propriedades: Deve ser composto por inputs (entre outros componentes) que auxiliaram na alteração do comportamento do componente. Use a propriedade t-required quando a propriedade for obrigatório.
+  - Propriedades: Deve ser composto por inputs (entre outros componentes) que auxiliaram na alteração do comportamento do componente. Use a propriedade p-required quando a propriedade for obrigatório.
   - Propriedades devem ter os valores default de acordo com a documentação
   - Criar função de restore do sample
   - Chamar restore() no ngOnInit e não no construtor.
   - Incluir botão do restore sempre ao final do sample.
   - Usar button com o tipo “default”
 ```
-<thf-button
-class="thf-md-3"
-t-label="Sample Restore"
-(t-click)="restore()">
+<po-button
+class="po-md-3"
+p-label="Sample Restore"
+(p-click)="restore()">
 
 
 ngOnInit() {
@@ -165,26 +165,26 @@ this.size = undefined;
 }
 ```
 - Caso de Uso (0..n): Podem ser exemplos de uso do componente dentro de algum contexto, por exemplo:
-  - uso do thf-email dentro de um formulário de contato ou assinatura de newsletter. [foco=dev]
+  - uso do po-email dentro de um formulário de contato ou assinatura de newsletter. [foco=dev]
   - Criatividade é o limite.
   - Os exemplos mais complexos devem abordar situações reais para melhorar o entendimento do uso do componente.
   Classes / Components
 
 - Não use chaves vazia com quebra de linhas
 ```
-export class SampleThfAvatarBasicComponent { } // BOM, não esqueoa do espaço
-export class SampleThfAvatarBasicComponent { // RUIM
+export class SamplepoAvatarBasicComponent { } // BOM, não esqueoa do espaço
+export class SamplepoAvatarBasicComponent { // RUIM
 }
 ```
 
 - Sempre coloque uma linha em branco antes das declarações das propriedades / métodos da classe e no final da classe;
 ```
-export class SampleThfButtonBasicComponent {
+export class SamplepoButtonBasicComponent {
 // LINHA EM BRANCO
 text: string;
 
 onClick() {
-alert('Thf Button!');
+alert('po Button!');
 }
 // LINHA EM BRANCO
 }
@@ -195,5 +195,5 @@ alert('Thf Button!');
 - Base
   - Testar a instancia correta do componente
   - Testar as propriedades (getters and setters)
-  - Se uma propriedade usar uma interface, validar os tipos dessa interface com typeof (thf-button-group)
+  - Se uma propriedade usar uma interface, validar os tipos dessa interface com typeof (po-button-group)
   - Para os testes use a função expectPropertiesValues (leia documentação no fonte).
