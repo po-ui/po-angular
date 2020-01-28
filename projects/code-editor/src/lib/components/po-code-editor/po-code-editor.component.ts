@@ -3,6 +3,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
 import { PoCodeEditorRegister } from './po-code-editor-register.service';
+import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
 
 let loadedMonaco: boolean = false;
 let loadPromise: Promise<void>;
@@ -61,6 +62,7 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
 
   ngAfterViewInit(): void {
     if (loadedMonaco) {
+      /* istanbul ignore next */
       loadPromise.then(() => {
         setTimeout( () => {
           if (this.el.nativeElement.offsetWidth) {
@@ -75,6 +77,7 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
       loadedMonaco = true;
       loadPromise = new Promise<void>((resolve: any) => {
 
+        /* istanbul ignore next */
         const onGotAmdLoader: any = () => {
           (<any>window).require.config({ paths: { 'vs': './assets/monaco/vs' } });
           (<any>window).require(['vs/editor/editor.main'], () => {
@@ -151,6 +154,18 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
     this.editor.updateOptions({readOnly: readOnly});
   }
 
+  /* istanbul ignore next */
+  setSuggestions(suggestions: Array<PoCodeEditorRegisterableSuggestion>) {
+    if (!suggestions) {
+      return;
+    }
+
+    monaco.languages.registerCompletionItemProvider(
+      this.language,
+      { provideCompletionItems: () => ({ suggestions: suggestions }) }
+    );
+  }
+
   writeValue(value) {
     this.value = value && value instanceof Array ? value[0] : value;
     this.modifiedValue = value && value instanceof Array && value.length > 0 ? value[1] : '';
@@ -185,6 +200,7 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
     }
     setTimeout(() => {
       this.setLanguage(this.language);
+      this.setSuggestions(this.suggestions);
     }, 500);
   }
 
@@ -196,8 +212,20 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
   private registerCustomLanguage() {
     if (this.codeEditorRegister.language) {
       monaco.languages.register({ id: this.codeEditorRegister.language });
-      monaco.languages.setMonarchTokensProvider(this.codeEditorRegister.language,
-                                                this.codeEditorRegister.options);
+
+      if (this.codeEditorRegister.options) {
+        monaco.languages.setMonarchTokensProvider(
+          this.codeEditorRegister.language,
+          this.codeEditorRegister.options
+        );
+      }
+
+      if (this.codeEditorRegister.suggestions) {
+        monaco.languages.registerCompletionItemProvider(
+          this.codeEditorRegister.language,
+          this.codeEditorRegister.suggestions
+        );
+      }
     }
   }
 }

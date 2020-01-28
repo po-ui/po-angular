@@ -1,12 +1,14 @@
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
+import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
 
 class PoCodeEditorTestComponent extends PoCodeEditorBaseComponent {
   writeValue(value: any) { }
   setLanguage(value: any) { }
   setReadOnly(value: any) { }
   setTheme(value: any) { }
+  setSuggestions(value: any) { }
 }
 
 describe('PoCodeEditorBaseComponent', () => {
@@ -27,6 +29,49 @@ describe('PoCodeEditorBaseComponent', () => {
     spyOn(component, 'setLanguage');
     expectPropertiesValues(component, 'language', validValues, validValues);
     expect(component.setLanguage).toHaveBeenCalled();
+  });
+
+  it('shouldn`t call `setLanguage` when setting `language` with a configured editor', () => {
+    const language = 'java';
+
+    component.editor = undefined;
+
+    spyOn(component, 'setLanguage');
+
+    component.language = language;
+
+    expect(component.setLanguage).not.toHaveBeenCalled();
+  });
+
+  it('should call `setSuggestions` when setting `suggestions` with a configured editor', () => {
+    const suggestions: Array<PoCodeEditorRegisterableSuggestion> = [
+      { label: 'po', insertText: 'Portinari UI'},
+      { label: 'ng', insertText: 'Angular', documentation: 'Framework Javascript.'}
+    ];
+
+    component.editor = {};
+
+    spyOn(component, 'setSuggestions');
+
+    component.suggestions = suggestions;
+
+    expect(component.setSuggestions).toHaveBeenCalled();
+    expect(component.suggestions).toEqual(suggestions);
+  });
+
+  it('shouldn`t call `setSuggestions` when setting `suggestions` with a configured editor', () => {
+    const suggestions: Array<PoCodeEditorRegisterableSuggestion> = [
+      { label: 'po', insertText: 'Portinari UI'}
+    ];
+
+    component.editor = undefined;
+
+    spyOn(component, 'setSuggestions');
+
+    component.suggestions = suggestions;
+
+    expect(component.setSuggestions).not.toHaveBeenCalled();
+    expect(component.suggestions).toEqual(suggestions);
   });
 
   it('should set show-diff', () => {
@@ -59,6 +104,30 @@ describe('PoCodeEditorBaseComponent', () => {
 
     expectPropertiesValues(component, 'readonly', booleanValidFalseValues, false);
     expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
+  });
+
+  it('should call `setReadOnly` when setting `readonly` with a configured editor', () => {
+    const readonly = true;
+
+    component.editor = {};
+
+    spyOn(component, 'setReadOnly');
+
+    component.readonly = readonly;
+
+    expect(component.setReadOnly).toHaveBeenCalled();
+  });
+
+  it('shouldn`t call `setReadOnly` when setting `readonly` with a configured editor', () => {
+    const readonly = true;
+
+    component.editor = undefined;
+
+    spyOn(component, 'setReadOnly');
+
+    component.readonly = readonly;
+
+    expect(component.setReadOnly).not.toHaveBeenCalled();
   });
 
   it('should set height', () => {

@@ -1,5 +1,49 @@
 import { PoCodeEditorRegisterable } from '@portinari/portinari-code-editor';
 
+declare const monaco: any;
+
+/** Definição da lista de sugestões para o autocomplete.
+ *
+ * > A função `provideCompletionItems` precisa ser exportada para ser compatível com AOT.
+ *
+ * Documentação: https://microsoft.github.io/monaco-editor/playground.html#extending-language-services-custom-languages
+ */
+export function provideCompletionItems() {
+  const suggestions = [
+    {
+      label: 'terraform',
+      kind: monaco.languages.CompletionItemKind.Text,
+      insertText: '#terraform language'
+    }, {
+      label: 'resource',
+      documentation: 'Read more in https://www.terraform.io/docs/configuration/resources.html',
+      insertText: [
+        'resource "${1:instance}" "${2:type}" {',
+        '\tami           = "${3:ami}"',
+        '\tinstance_type = "${4:instance_type}"',
+        '}'
+      ].join('\n'),
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+    }, {
+      label: 'provider',
+      documentation: 'Read more in https://www.terraform.io/docs/configuration/providers.html',
+      insertText: [
+        'provider "${1:name}" {',
+        '\tproject = "${2:project}"',
+        '\tregion  = "${3:region}"',
+        '}'
+      ].join('\n'),
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+    }, {
+      label: 'server',
+      insertText: 'server ${1:ip}',
+      insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+    }
+  ];
+
+  return { suggestions: suggestions };
+}
+
 /** Definindo propriedades de uma nova sintaxe. */
 export const customRegister: PoCodeEditorRegisterable = {
 
@@ -43,6 +87,6 @@ export const customRegister: PoCodeEditorRegisterable = {
         ['', '', '@pop'],
       ],
     },
-  }
-
+  },
+  suggestions: { provideCompletionItems: provideCompletionItems }
 };

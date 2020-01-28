@@ -1,6 +1,8 @@
 import { Input } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
+import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
+
 const PO_CODE_EDITOR_THEMES = ['vs-dark', 'vs', 'hc-black'];
 const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
 
@@ -60,6 +62,7 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
   private _language = 'plainText';
   private _readonly: boolean = false;
   private _showDiff: boolean = false;
+  private _suggestions: Array<PoCodeEditorRegisterableSuggestion>;
   private _theme = PO_CODE_EDITOR_THEME_DEFAULT;
 
   editor: any;
@@ -147,6 +150,38 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
    *
    * @description
    *
+   * Lista de sugestões usadas pelo autocomplete dentro do editor.
+   *
+   * Para visualizar a lista de sugestões use o comando `CTRL + SPACE`.
+   *
+   * Caso o editor esteja usando uma linguagem que já tenha uma lista de sugestões pré definida, o valor passado será adicionado
+   * a lista pré existente, aumentando as opções para o usuário.
+   *
+   * ```
+   *  <po-code-editor
+   *    [p-suggestions]="[{ label: 'po', insertText: 'Portinari UI' }, { label: 'ng', insertText: 'Angular' }]">
+   *  </po-code-editor>
+   * ```
+   *
+   * Ao fornecer uma lista de sugestões é possível acelerar a escrita de scripts pelos usuários.
+   */
+  @Input('p-suggestions') set suggestions(values: Array<PoCodeEditorRegisterableSuggestion>) {
+    this._suggestions = values;
+
+    if (this.editor && this._suggestions) {
+      this.setSuggestions(this._suggestions);
+    }
+  }
+
+  get suggestions(): Array<PoCodeEditorRegisterableSuggestion> {
+    return this._suggestions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define um tema para o editor.
    *
    * Temas válidos:
@@ -189,7 +224,9 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
     return `${this._height}px`;
   }
 
+  /* istanbul ignore next */
   onTouched = (value: any) => {};
+  /* istanbul ignore next */
   onChangePropagate = (value: any) => {};
 
   getOptions() {
@@ -211,6 +248,8 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
   abstract setTheme(value: any);
 
   abstract setReadOnly(value: any);
+
+  abstract setSuggestions(value: any);
 
   protected convertToBoolean(val: any): boolean {
     if (typeof val === 'string') {

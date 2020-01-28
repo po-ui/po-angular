@@ -22,15 +22,15 @@ module.exports = function (config) {
       thresholds: {
         emitWarning: false, // set to 'true' to not fail the test command when thresholds are not met
         global: {
-          statements: 86,
-          branches: 84,
-          functions: 79,
-          lines: 86
+          statements: 95,
+          branches: 95,
+          functions: 95,
+          lines: 95
         }, each: {
-          statements: 70,
-          branches: 70,
-          lines: 70,
-          functions: 70
+          statements: 90,
+          branches: 90,
+          lines: 90,
+          functions: 90
         }
       }
     },

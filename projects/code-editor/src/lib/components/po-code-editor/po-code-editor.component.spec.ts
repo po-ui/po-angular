@@ -73,26 +73,104 @@ describe('PoCodeEditorComponent', () => {
     expect(fakeThis.setMonacoLanguage).toHaveBeenCalledTimes(1);
   });
 
-  it('should call monaco register sintax', () => {
+  it('should call monaco `register` sintax', () => {
     const fakeThis = {
       codeEditorRegister: {
-        language: 'terraform'
+        language: 'terraform',
+        options: {},
+        suggestions: {}
       }
     };
 
     (<any>window).monaco = {
       languages: {
         register: () => {},
-        setMonarchTokensProvider: () => {}
+        setMonarchTokensProvider: () => {},
+        registerCompletionItemProvider: () => {}
       },
     };
 
     spyOn((<any>window).monaco.languages, <any>'register');
     spyOn((<any>window).monaco.languages, <any>'setMonarchTokensProvider');
+    spyOn((<any>window).monaco.languages, <any>'registerCompletionItemProvider');
 
     component['registerCustomLanguage'].call(fakeThis);
     expect((<any>window).monaco.languages.register).toHaveBeenCalled();
     expect((<any>window).monaco.languages.setMonarchTokensProvider).toHaveBeenCalled();
+    expect((<any>window).monaco.languages.registerCompletionItemProvider).toHaveBeenCalled();
+  });
+
+  it('shouldn`t call monaco `register` without a defined language', () => {
+    const fakeThis = {
+      codeEditorRegister: {
+        language: undefined,
+        options: {},
+        suggestions: {}
+      }
+    };
+
+    (<any>window).monaco = {
+      languages: {
+        register: () => {},
+        setMonarchTokensProvider: () => {},
+        registerCompletionItemProvider: () => {}
+      },
+    };
+
+    spyOn((<any>window).monaco.languages, <any>'register');
+    spyOn((<any>window).monaco.languages, <any>'setMonarchTokensProvider');
+    spyOn((<any>window).monaco.languages, <any>'registerCompletionItemProvider');
+
+    component['registerCustomLanguage'].call(fakeThis);
+    expect((<any>window).monaco.languages.register).not.toHaveBeenCalled();
+    expect((<any>window).monaco.languages.setMonarchTokensProvider).not.toHaveBeenCalled();
+    expect((<any>window).monaco.languages.registerCompletionItemProvider).not.toHaveBeenCalled();
+  });
+
+  it('shouldn`t call monaco `setMonarchTokensProvider` without a defined options', () => {
+    const fakeThis = {
+      codeEditorRegister: {
+        language: 'PoLanguage',
+        options: undefined,
+        suggestions: {}
+      }
+    };
+
+    (<any>window).monaco = {
+      languages: {
+        register: () => {},
+        setMonarchTokensProvider: () => {},
+        registerCompletionItemProvider: () => {}
+      },
+    };
+
+    spyOn((<any>window).monaco.languages, <any>'setMonarchTokensProvider');
+
+    component['registerCustomLanguage'].call(fakeThis);
+    expect((<any>window).monaco.languages.setMonarchTokensProvider).not.toHaveBeenCalled();
+  });
+
+  it('shouldn`t call monaco `registerCompletionItemProvider` without a defined suggestions', () => {
+    const fakeThis = {
+      codeEditorRegister: {
+        language: 'PoLanguage',
+        options: {},
+        suggestions: undefined
+      }
+    };
+
+    (<any>window).monaco = {
+      languages: {
+        register: () => {},
+        setMonarchTokensProvider: () => {},
+        registerCompletionItemProvider: () => {}
+      },
+    };
+
+    spyOn((<any>window).monaco.languages, <any>'registerCompletionItemProvider');
+
+    component['registerCustomLanguage'].call(fakeThis);
+    expect((<any>window).monaco.languages.registerCompletionItemProvider).not.toHaveBeenCalled();
   });
 
   it('should init monaco in ngDoCheck', () => {
