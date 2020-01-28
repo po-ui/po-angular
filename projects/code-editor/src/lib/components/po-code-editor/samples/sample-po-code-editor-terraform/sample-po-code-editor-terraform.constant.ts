@@ -1,4 +1,28 @@
+import { PoCodeEditorRegisterableSuggestion } from '@po-ui/ng-code-editor';
 import { PoCodeEditorRegisterable } from '@po-ui/ng-code-editor';
+
+declare const monaco: any;
+
+/** Definição da lista de sugestões para o autocomplete.
+ *
+ * > A função `provideCompletionItems` precisa ser exportada para ser compatível com AOT.
+ *
+ * Documentação: https://microsoft.github.io/monaco-editor/playground.html#extending-language-services-custom-languages
+ */
+export function provideCompletionItems() {
+  const suggestions: Array<PoCodeEditorRegisterableSuggestion> = [
+    {
+      label: 'terraform',
+      insertText: '#terraform language'
+    },
+    {
+      label: 'server',
+      insertText: 'server ${1:ip}'
+    }
+  ];
+
+  return { suggestions };
+}
 
 /** Definindo propriedades de uma nova sintaxe. */
 export const customRegister: PoCodeEditorRegisterable = {
@@ -42,5 +66,6 @@ export const customRegister: PoCodeEditorRegisterable = {
         ['', '', '@pop']
       ]
     }
-  }
+  },
+  suggestions: { provideCompletionItems: provideCompletionItems }
 };

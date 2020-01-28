@@ -1,6 +1,8 @@
 import { Input, Directive } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
+import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
+
 const PO_CODE_EDITOR_THEMES = ['vs-dark', 'vs', 'hc-black'];
 const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
 
@@ -9,7 +11,7 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  *
  * O `po-code-editor` é um componente para edição de código fonte baseado no Monaco Editor da Microsoft.
  *
- * Sendo assim, algumas configurações presentes no Monaco podem ser utilizadas aqui, como a escolha da liguagem
+ * Sendo assim, algumas configurações presentes no Monaco podem ser utilizadas aqui, como a escolha da linguagem
  * (utilizando o highlight syntax específico), escolha do tema e opção de diff, além de ser muito similar ao Visual
  * Studio Code, com autocomplete e fechamento automático de brackets.
  *
@@ -68,6 +70,7 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
   private _language = 'plainText';
   private _readonly: boolean = false;
   private _showDiff: boolean = false;
+  private _suggestions: Array<PoCodeEditorRegisterableSuggestion>;
   private _theme = PO_CODE_EDITOR_THEME_DEFAULT;
 
   editor: any;
@@ -154,6 +157,41 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
    *
    * @description
    *
+   * Lista de sugestões usadas pelo autocomplete dentro do editor.
+   *
+   * Para visualizar a lista de sugestões use o comando `CTRL + SPACE`.
+   *
+   * Caso o editor esteja usando uma linguagem que já tenha uma lista de sugestões predefinida, o valor passado será adicionado
+   * a lista preexistente, aumentando as opções para o usuário.
+   *
+   * Caso tenha mais de um editor da mesma linguagem na aplicação, as sugestões serão adicionadas para que todos os editores da mesma linguagem
+   * tenham as mesmas sugestões.
+   *
+   * ```
+   *  <po-code-editor
+   *    [p-suggestions]="[{ label: 'po', insertText: 'Portinari UI' }, { label: 'ng', insertText: 'Angular' }]">
+   *  </po-code-editor>
+   * ```
+   *
+   * Ao fornecer uma lista de sugestões é possível acelerar a escrita de scripts pelos usuários.
+   */
+  @Input('p-suggestions') set suggestions(values: Array<PoCodeEditorRegisterableSuggestion>) {
+    this._suggestions = values;
+
+    if (this.editor && this._suggestions) {
+      this.setSuggestions(this._suggestions);
+    }
+  }
+
+  get suggestions(): Array<PoCodeEditorRegisterableSuggestion> {
+    return this._suggestions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define um tema para o editor.
    *
    * Temas válidos:
@@ -196,8 +234,10 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
     return `${this._height}px`;
   }
 
-  onTouched = (value: any) => undefined;
-  onChangePropagate = (value: any) => undefined;
+  /* istanbul ignore next */
+  onTouched = (value: any) => {};
+  /* istanbul ignore next */
+  onChangePropagate = (value: any) => {};
 
   getOptions() {
     return { language: this.language, theme: this.theme, readOnly: this.readonly };
@@ -218,6 +258,8 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
   abstract setTheme(value: any);
 
   abstract setReadOnly(value: any);
+
+  abstract setSuggestions(value: any);
 
   protected convertToBoolean(val: any): boolean {
     if (typeof val === 'string') {

@@ -3,6 +3,8 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
 import { PoCodeEditorRegister } from './po-code-editor-register.service';
+import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
+import { PoCodeEditorSuggestionService } from './po-code-editor-suggestion.service';
 
 // variáveis relacionadas ao Monaco
 let loadedMonaco: boolean = false;
@@ -48,6 +50,11 @@ const providers: Array<Provider> = [
  *  <file name="sample-po-code-editor-terraform/sample-po-code-editor-terraform.constant.ts"> </file>
  *  <file name="sample-po-code-editor-terraform/sample-po-code-editor-terraform.module.ts"> </file>
  * </example>
+ *
+ * <example name="po-code-editor-suggestion" title="PO Code Editor Suggestion">
+ *  <file name="sample-po-code-editor-suggestion/sample-po-code-editor-suggestion.component.html"> </file>
+ *  <file name="sample-po-code-editor-suggestion/sample-po-code-editor-suggestion.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-code-editor',
@@ -59,13 +66,19 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
 
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef;
 
-  constructor(private zone: NgZone, private el: ElementRef, private codeEditorRegister?: PoCodeEditorRegister) {
+  constructor(
+    private zone: NgZone,
+    private el: ElementRef,
+    private poCodeEditorSuggestionService: PoCodeEditorSuggestionService,
+    private codeEditorRegister?: PoCodeEditorRegister
+  ) {
     super();
   }
 
   /* istanbul ignore next */
   ngAfterViewInit(): void {
     if (loadedMonaco) {
+      /* istanbul ignore next */
       loadPromise.then(() => {
         setTimeout(() => {
           if (this.el.nativeElement.offsetWidth) {
@@ -79,6 +92,7 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
     } else {
       loadedMonaco = true;
       loadPromise = new Promise<void>((resolve: any) => {
+        /* istanbul ignore next */
         const onGotAmdLoader: any = () => {
           (<any>window).require.config({ paths: { 'vs': './assets/monaco/vs' } });
           (<any>window).require(['vs/editor/editor.main'], () => {
@@ -155,6 +169,19 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
     this.editor.updateOptions({ readOnly: readOnly });
   }
 
+  /* istanbul ignore next */
+  setSuggestions(newSuggestions: Array<PoCodeEditorRegisterableSuggestion>, language = this.language) {
+    if (!newSuggestions) {
+      return;
+    }
+
+    const suggestions = this.poCodeEditorSuggestionService.getSuggestion(language, newSuggestions);
+
+    monaco.languages.registerCompletionItemProvider(language, {
+      provideCompletionItems: () => ({ suggestions })
+    });
+  }
+
   writeValue(value) {
     this.value = value && value instanceof Array ? value[0] : value;
     this.modifiedValue = value && value instanceof Array && value.length > 0 ? value[1] : '';
@@ -187,6 +214,7 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
     }
     setTimeout(() => {
       this.setLanguage(this.language);
+      this.setSuggestions(this.suggestions);
     }, 500);
   }
 
@@ -198,7 +226,17 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
   private registerCustomLanguage() {
     if (this.codeEditorRegister.language) {
       monaco.languages.register({ id: this.codeEditorRegister.language });
-      monaco.languages.setMonarchTokensProvider(this.codeEditorRegister.language, this.codeEditorRegister.options);
+
+      if (this.codeEditorRegister.options) {
+        monaco.languages.setMonarchTokensProvider(this.codeEditorRegister.language, this.codeEditorRegister.options);
+      }
+
+      if (this.codeEditorRegister.suggestions) {
+        this.setSuggestions(
+          this.codeEditorRegister.suggestions.provideCompletionItems().suggestions,
+          this.codeEditorRegister.language
+        );
+      }
     }
   }
 }
