@@ -4,6 +4,7 @@ import { PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } fro
 
 import { poLocaleDefault } from '../../utils/util';
 
+import { PoPageDynamicOptions } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
 import { poAdvancedFiltersLiteralsDefault } from './po-advanced-filter/po-advanced-filter-base.component';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
@@ -134,6 +135,38 @@ export class PoPageDynamicSearchBaseComponent {
   get filters(): Array<PoDynamicFormField> {
     return this._filters;
   }
+
+  /**
+   * Função ou serviço que será executado na inicialização do componente.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
+   * - `function`: Método que será executado.
+   *
+   * O retorno desta função deve ser do tipo `PoPageDynamicOptions`,
+   * onde o usuário poderá customizar novos filtros, breadcrumb, title e actions
+   *
+   * Por exemplo:
+   *
+   * ```
+   * getPageOptions(): PoPageDynamicOptions {
+   * return {
+   *   actions: [
+   *     { label: 'Find on Google' },
+   *   ],
+   *   filters: [
+   *     { property: 'idCard', gridColumns: 6 }
+   *   ]
+   * };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-load]="onLoadOptions.bind(this)"
+   * ```
+   */
+  @Input('p-load') onLoad: string | (() => PoPageDynamicOptions );
 
   /** Título da página. */
   @Input('p-title') title: string;
