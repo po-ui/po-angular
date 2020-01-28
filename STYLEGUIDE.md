@@ -82,8 +82,7 @@ Onde prop é o nome da propriedade e type é o tipo da propriedade, sempre decla
 - Use as classes do System Grid sempre que necessário e de forma correta. (TIRA O BR)
 - Verifique se seu exemplo é responsivo.
 - Use inglês e não português para as variáveis e para os textos exibidos nos exemplos.
-- Não use focus nos samples.
-- Incluir teste com Protractor.
+- Não use p-auto-focus nos samples.
 - Separar os samples por pastas.
 
 - Propriedades do tipo “label” usar o nome do componente
@@ -97,9 +96,9 @@ Onde prop é o nome da propriedade e type é o tipo da propriedade, sempre decla
   - class (CSS)
   - name (nome do componente quando houver necessidade, inputs, buttons, etc…)
   - ngModel (quando existir)
-  - propriedades sem bind (ordenadas)
-  - propriedades com bind (ordenadas)
-  - eventos (ordenados)
+  - propriedades sem bind 
+  - propriedades com bind 
+  - eventos
 ```html
 <po-button
 class="po-sm-12"
