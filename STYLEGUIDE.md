@@ -45,7 +45,7 @@ Onde prop é o nome da propriedade e type é o tipo da propriedade, sempre decla
 - Usar _ para a variável interna e privada
 - Declarar a propriedade privada no início da classe
 - Declare sempre o set antes do get, propriedades do tipo readonly não precisam de set
-- Cuidado com propriedade booleanas.
+- Para propriedades booleanas utilize o decorator @InputBoolean
 
 
 ## Documentação
