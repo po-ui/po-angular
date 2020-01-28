@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 
 import { PoComponentsModule } from './components/components.module';
+import { PoServicesModule } from './services/services.module';
 
 @NgModule({
   imports: [
-    PoComponentsModule
+    PoComponentsModule,
+    PoServicesModule
   ],
   exports: [
-    PoComponentsModule
+    PoComponentsModule,
+    PoServicesModule
   ]
 })
 export class PoTemplatesModule { }
