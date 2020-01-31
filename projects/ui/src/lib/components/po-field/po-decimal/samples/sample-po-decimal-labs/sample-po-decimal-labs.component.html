@@ -61,7 +61,10 @@
       name="decimalsLength"
       [(ngModel)]="decimalsLength"
       p-clean
-      p-label="Decimals max length">
+      p-help="By default is equal 2, check the behavior in doc."
+      p-label="Decimals max length"
+      p-min="0"
+      [p-max]="maxDecimalsLength">
     </po-number>
 
     <po-number
@@ -69,7 +72,10 @@
       name="thousandMaxlength"
       [(ngModel)]="thousandMaxlength"
       p-clean
-      p-label="Thousand max length">
+      p-help="By default is equal 13, check the behavior in doc."
+      p-label="Thousand max length"
+      p-min="0"
+      [p-max]="maxThousandMaxlength">
     </po-number>
   </div>
 
