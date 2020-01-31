@@ -59,28 +59,41 @@ describe('PoDecimalComponent:', () => {
 
   });
 
-  it('should update property `p-decimal-length` with `2` if invalid values', () => {
-    const invalidValues = [undefined, null, '', true, false, 'string', [], {}];
-
-    expectPropertiesValues(component, 'decimalsLength', invalidValues, 2);
+  it('decimalsLength: should update property with default value if is invalid value.', () => {
+    const invalidValues = [undefined, null, '', true, false, 'string', [], {}, 16, -1];
+    const defaultValue = 2;
+    expectPropertiesValues(component, 'decimalsLength', invalidValues, defaultValue);
   });
 
-  it('should update property `p-decimals-length` with valid values', () => {
-    const validValues = [0, 4];
-
+  it('decimalsLength: should update property with valid values.', () => {
+    let validValues = [0, 3];
+    expectPropertiesValues(component, 'decimalsLength', validValues, validValues);
+    validValues = [3, 15];
+    component.thousandMaxlength = 1;
     expectPropertiesValues(component, 'decimalsLength', validValues, validValues);
   });
 
-  it('should update property `p-thousand-maxlength` with `13` if invalid values', () => {
-    const invalidValues = [undefined, null, '', true, false, 'string', [], {}, 15];
+  it('thousandMaxlength: should update property with remaining value of total limit minus `decimalsLength`.', () => {
+    component.decimalsLength = 7;
+    component.thousandMaxlength = undefined;
+    const remainingValue = 16 - component.decimalsLength;
 
-    expectPropertiesValues(component, 'thousandMaxlength', invalidValues, 13);
+    expect(component.decimalsLength).toEqual(7);
+    expect(component.thousandMaxlength).toEqual(remainingValue);
   });
 
-  it('should update property `p-thousand-maxlength` with valid values', () => {
-    const validValues = [5, 8];
+  it('thousandMaxlength: should update property with default value if is invalid values.', () => {
+    const invalidValues = [undefined, null, '', true, false, 'string', [], {}, 15];
+    const defaultValue = 13;
+    expectPropertiesValues(component, 'thousandMaxlength', invalidValues, defaultValue);
+  });
 
+  it('thousandMaxlength: should update property with valid values.', () => {
+    let validValues = [5, 8];
     expectPropertiesValues(component, 'thousandMaxlength', validValues, validValues);
+    validValues = [13, 21];
+    component.decimalsLength = 4;
+    expectPropertiesValues(component, 'thousandMaxlength', validValues, 13);
   });
 
   it('should create button clean', () => {
@@ -1249,6 +1262,40 @@ describe('PoDecimalComponent:', () => {
 
     it('hasLetters: should return true with undefined value.', () => {
       expect(component.hasLetters(undefined)).toBeFalsy();
+    });
+
+    it('isGreaterThanTotalLengthLimit: should return `false` if total sum is 16.', () => {
+      let decimalsMaxLength = 1;
+      let thousandMaxlength = 15;
+      expect(component['isGreaterThanTotalLengthLimit'](decimalsMaxLength, thousandMaxlength)).toBe(false);
+
+      decimalsMaxLength = 14;
+      thousandMaxlength = 2;
+      expect(component['isGreaterThanTotalLengthLimit'](decimalsMaxLength, thousandMaxlength)).toBe(false);
+    });
+
+    it('isGreaterThanTotalLengthLimit: should return `true` if total sum is greater than 16.', () => {
+      const decimalsMaxLength = 13;
+      const thousandMaxlength = 4;
+      expect(component['isGreaterThanTotalLengthLimit'](decimalsMaxLength, thousandMaxlength)).toBe(true);
+    });
+
+    it('isGreaterThanTotalLengthLimit: should return `false` if total sum is less than 16.', () => {
+      const decimalsMaxLength = 3;
+      const thousandMaxlength = 6;
+      expect(component['isGreaterThanTotalLengthLimit'](decimalsMaxLength, thousandMaxlength)).toBe(false);
+    });
+
+    it('isValueBetweenAllowed: should return `true` if is value between allowed.', () => {
+      expect(component['isValueBetweenAllowed'](3, 9)).toBe(true);
+    });
+
+    it('isValueBetweenAllowed: should return `false` if is value over allowed.', () => {
+      expect(component['isValueBetweenAllowed'](10, 9)).toBe(false);
+    });
+
+    it('isValueBetweenAllowed: should return `false` if is value below allowed.', () => {
+      expect(component['isValueBetweenAllowed'](-1, 9)).toBe(false);
     });
 
   });
