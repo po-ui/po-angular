@@ -51,7 +51,7 @@ describe('PoPageDynamicSearchComponent:', () => {
 
     it('get filterSettings: should return `filterSettings` with `advancedAction` equal to `undefined` if haven`t filters', () => {
       const result = { action: 'onAction', advancedAction: undefined, ngModel: 'quickFilter',
-        placeholder: component.literals.filterSettingsPlaceholder };
+        placeholder: component.literals.searchPlaceholder };
 
       expect(component.filterSettings).toEqual(result);
     });
@@ -63,7 +63,7 @@ describe('PoPageDynamicSearchComponent:', () => {
 
       component.filters = filters;
       const result = { action: 'onAction', advancedAction: 'onAdvancedAction', ngModel: 'quickFilter',
-        placeholder: component.literals.filterSettingsPlaceholder };
+        placeholder: component.literals.searchPlaceholder };
 
       expect(component.filterSettings).toEqual(result);
     });
@@ -336,6 +336,14 @@ describe('PoPageDynamicSearchComponent:', () => {
       const result = component['getFilterValueToDisclaimer'](field, value);
 
       expect(result).toBe('test value 1');
+    });
+
+    it('ngOnInit: should call setAdvancedFilterLiterals with component.literals', () => {
+      spyOn(component, <any> 'setAdvancedFilterLiterals');
+
+      component.ngOnInit();
+
+      expect(component['setAdvancedFilterLiterals']).toHaveBeenCalledWith(component.literals);
     });
 
   });

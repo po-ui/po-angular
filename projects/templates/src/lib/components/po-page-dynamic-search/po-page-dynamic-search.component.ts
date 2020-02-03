@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoPageFilter } from '@portinari/portinari-ui';
+import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoLanguageService, PoPageFilter } from '@portinari/portinari-ui';
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
 
@@ -27,7 +27,7 @@ import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.
   selector: 'po-page-dynamic-search',
   templateUrl: './po-page-dynamic-search.component.html'
 })
-export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent {
+export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit {
 
   private readonly _disclaimerGroup: PoDisclaimerGroup = {
     change: this.onChangeDisclaimerGroup.bind(this),
@@ -39,7 +39,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     action: 'onAction',
     advancedAction: 'onAdvancedAction',
     ngModel: 'quickFilter',
-    placeholder: this.literals.filterSettingsPlaceholder
+    placeholder: this.literals.searchPlaceholder
   };
 
   // Flag to control when changeDisclaimerGroup should be called
@@ -49,14 +49,22 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
 
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
 
+  constructor(languageService: PoLanguageService) {
+    super(languageService);
+  }
+
+  ngOnInit() {
+    this.setAdvancedFilterLiterals(this.literals);
+  }
+
   get disclaimerGroup() {
-    return Object.assign({}, this._disclaimerGroup);
+    return Object.assign({}, this._disclaimerGroup, { title: this.literals.disclaimerGroupTitle });
   }
 
   get filterSettings() {
     this._filterSettings.advancedAction = this.filters.length === 0 ? undefined : 'onAdvancedAction';
 
-    return Object.assign({}, this._filterSettings);
+    return Object.assign({}, this._filterSettings, { placeholder: this.literals.searchPlaceholder });
   }
 
   onAction() {

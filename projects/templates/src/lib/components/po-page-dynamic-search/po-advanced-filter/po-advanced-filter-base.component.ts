@@ -1,24 +1,31 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { PoDynamicFormField } from '@portinari/portinari-ui';
+import { PoDynamicFormField, PoLanguageService, PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
 
-import { browserLanguage, poLocaleDefault } from '../../../utils/util';
+import { poLocaleDefault } from '../../../utils/util';
+
+import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
 
 export const poAdvancedFiltersLiteralsDefault = {
-  en: {
+  en: <PoAdvancedFilterLiterals> {
     title: 'Advanced search',
-    primaryActionLabel: 'Apply filters',
-    secondaryActionLabel: 'Cancel'
+    cancelLabel: 'Cancel',
+    confirmLabel: 'Apply filters'
   },
-  es: {
+  es: <PoAdvancedFilterLiterals> {
     title: 'Búsqueda avanzada',
-    primaryActionLabel: 'Aplicar filtros',
-    secondaryActionLabel: 'Cancelar'
+    cancelLabel: 'Cancelar',
+    confirmLabel: 'Aplicar filtros'
   },
-  pt: {
+  pt: <PoAdvancedFilterLiterals> {
     title: 'Busca avançada',
-    primaryActionLabel: 'Aplicar filtros',
-    secondaryActionLabel: 'Cancelar'
+    cancelLabel: 'Cancelar',
+    confirmLabel: 'Aplicar filtros'
+  },
+  ru: <PoAdvancedFilterLiterals> {
+    title: 'Расширенный поиск',
+    cancelLabel: 'отменить',
+    confirmLabel: 'Применить фильтры'
   }
 };
 
@@ -32,11 +39,29 @@ export const poAdvancedFiltersLiteralsDefault = {
  */
 export class PoAdvancedFilterBaseComponent {
 
-  private _filters: Array<PoDynamicFormField> = [];
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  literals = {
-    ...poAdvancedFiltersLiteralsDefault[poLocaleDefault],
-    ...poAdvancedFiltersLiteralsDefault[browserLanguage()]
+  private _filters: Array<PoDynamicFormField> = [];
+  private _literals: PoAdvancedFilterLiterals;
+
+  filter = {};
+  language: string = poLocaleDefault;
+
+  primaryAction: PoModalAction = {
+    action: () => {
+      const models = this.getValuesFromForm();
+
+      this.searchEvent.emit(models);
+      this.poModal.close();
+    },
+    label: this.literals.confirmLabel
+  };
+
+  secondaryAction: PoModalAction = {
+    action: () => {
+      this.poModal.close();
+    },
+    label: this.literals.cancelLabel
   };
 
   /**
@@ -51,7 +76,42 @@ export class PoAdvancedFilterBaseComponent {
     return this._filters;
   }
 
+  /** Objeto com as literais usadas no `po-advanced-filter`. */
+  @Input('p-literals') set literals(value: PoAdvancedFilterLiterals) {
+    if (value instanceof Object && !(value instanceof Array)) {
+      this._literals = {
+        ...poAdvancedFiltersLiteralsDefault[poLocaleDefault],
+        ...poAdvancedFiltersLiteralsDefault[this.language],
+        ...value
+      };
+    } else {
+      this._literals = poAdvancedFiltersLiteralsDefault[this.language];
+    }
+
+    this.primaryAction.label = this.literals.confirmLabel;
+    this.secondaryAction.label = this.literals.cancelLabel;
+  }
+
+  get literals() {
+    return this._literals || poAdvancedFiltersLiteralsDefault[this.language];
+  }
+
   /** Função que será disparada e receberá os valores do formulário ao ser clicado no botão buscar. */
   @Output('p-search-event') searchEvent = new EventEmitter<any>();
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
+
+    // Retorna os models dos campos preenchidos
+  private getValuesFromForm() {
+    Object.keys(this.filter).forEach(property => {
+      if (this.filter[property] === undefined || this.filter[property] === '') {
+        delete this.filter[property];
+      }
+    });
+
+    return this.filter;
+  }
 
 }
