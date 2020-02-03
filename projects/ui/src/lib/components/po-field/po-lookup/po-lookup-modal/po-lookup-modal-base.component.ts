@@ -83,7 +83,6 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     label: this.literals.modalPrimaryActionLabel
   };
   searchValue: string = '';
-
   secondaryAction: PoModalAction = {
     action: () => {
       this.model.emit(null);

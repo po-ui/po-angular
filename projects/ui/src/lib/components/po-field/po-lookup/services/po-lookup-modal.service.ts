@@ -44,7 +44,6 @@ export class PoLookupModalService {
     this.componentRef.instance.filterService = service;
     this.componentRef.instance.filterParams = filterParams;
     this.componentRef.instance.literals = literals;
-
     this.componentRef.instance.model.subscribe($event => {
       this.selectValue($event);
     });
