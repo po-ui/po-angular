@@ -3,9 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoModule } from '@portinari/portinari-ui';
+import { PoModule } from '../../../../projects/ui/src/lib/po.module';
 
 import { AppComponent } from './app.component';
+import { AccountService } from './account.service';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,9 @@ import { AppComponent } from './app.component';
     RouterModule.forRoot([]),
     PoModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [
+    AccountService
+  ]
 })
 export class AppModule { }

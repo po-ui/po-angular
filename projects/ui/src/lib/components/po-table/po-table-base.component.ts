@@ -8,6 +8,7 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
+import { InputBoolean } from '../../decorators/input-boolean/input-boolean.decorator';
 
 export const poTableContainer = ['border', 'shadow'];
 export const poTableContainerDefault = 'border';
@@ -84,7 +85,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
   private _selectable?: boolean;
-  private _hideColumnManager?: boolean = false;
 
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
@@ -448,13 +448,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * só será removido se for declarado no componente: p-hide-column-manager="true"
    *
    */
-  @Input('p-hide-column-manager') set hideColumnManager(hideColumnManager: boolean) {
-    this._hideColumnManager = hideColumnManager.toString() === '' ? false : convertToBoolean(hideColumnManager);
-  }
-
-  get hideColumnManager() {
-    return this._hideColumnManager;
-  }
+  @Input('p-hide-column-manager') @InputBoolean() hideColumnManager: boolean;
 
   /** Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();

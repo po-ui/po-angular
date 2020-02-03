@@ -124,9 +124,9 @@ export class PoLookupComponent extends PoLookupBaseComponent implements OnDestro
 
   openLookup(): void {
     if (this.isAllowedOpenModal()) {
-      const { service, columns, filterParams, literals } = this;
+      const { service, columns, filterParams, literals, searchFields } = this;
 
-      this.poLookupModalService.openModal({ service, columns, filterParams, title: this.label, literals });
+      this.poLookupModalService.openModal({ service, columns, filterParams, title: this.label, literals, searchFields });
 
       if (!this.modalSubscription) {
         this.modalSubscription = this.poLookupModalService.selectValueEvent.subscribe(element => {

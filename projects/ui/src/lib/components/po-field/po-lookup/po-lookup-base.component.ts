@@ -10,6 +10,7 @@ import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
+import { PoLookupSearchFields } from './interfaces/po-lookup-search-fields.interface';
 
 /**
  * @description
@@ -180,6 +181,18 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   get filterService() {
     return this._filterService;
   }
+
+  /**
+   * @optional
+   *
+   * @p-search-fields
+   *
+   * Lista com os campos que serão apresentados na modal de busca de registro ao lado do campo de pesquisa
+   * Caso não seja informado itens, nada será apresentado
+   *
+   * @default ``
+   */
+  @Input('p-search-fields') searchFields?: Array<PoLookupSearchFields>;
 
   /**
    * @optional

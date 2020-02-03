@@ -11,7 +11,7 @@
   "scripts": {
     "ng": "ng",
     "tsc": "tsc",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.js --serve-path / --host=0.0.0.0 --disable-host-check",
     "lint": "ng lint --type-check --format=stylish",
     "lint:storage": "ng lint storage --type-check --format=stylish",
     "lint:sync": "ng lint sync --type-check --format=stylish",

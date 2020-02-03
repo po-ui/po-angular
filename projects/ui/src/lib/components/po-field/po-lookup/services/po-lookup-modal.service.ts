@@ -5,6 +5,7 @@ import { PoLookupColumn } from '../../../../components/po-field/po-lookup/interf
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupLiterals } from '../interfaces/po-lookup-literals.interface';
 import { PoLookupModalComponent } from '../po-lookup-modal/po-lookup-modal.component';
+import { PoLookupSearchFields } from '../../po-lookup/interfaces/po-lookup-search-fields.interface';
 
 /**
  * @docsPrivate
@@ -34,9 +35,10 @@ export class PoLookupModalService {
     columns: Array<PoLookupColumn>,
     filterParams: any,
     title: string,
-    literals: PoLookupLiterals
+    literals: PoLookupLiterals,
+    searchFields?: Array<PoLookupSearchFields>
   }): void {
-    const { service, columns, filterParams, title, literals } = params;
+    const { service, columns, filterParams, title, literals, searchFields } = params;
 
     this.componentRef = this.poComponentInjector.createComponentInApplication(PoLookupModalComponent);
     this.componentRef.instance.title = title;
@@ -44,6 +46,15 @@ export class PoLookupModalService {
     this.componentRef.instance.filterService = service;
     this.componentRef.instance.filterParams = filterParams;
     this.componentRef.instance.literals = literals;
+    this.componentRef.instance.searchFields = searchFields;
+
+    if (searchFields && searchFields.length > 0) {
+      const defaultField = searchFields.find(item => item.default);
+      if (defaultField) {
+        this.componentRef.instance.searchField = defaultField.value;
+      }
+    }
+
     this.componentRef.instance.model.subscribe($event => {
       this.selectValue($event);
     });
