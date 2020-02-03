@@ -6,14 +6,6 @@
   [p-secondary-action]="secondaryAction"
   [p-title]="title">
 
-  <po-field-container *ngIf="searchFields && searchFields.length > 0"
-    class="po-lookup-header po-md-6 po-pull-left">
-    <po-select name="combo"
-               [(ngModel)]="searchField"
-               [p-options]="searchFields">
-    </po-select>
-  </po-field-container>
-
   <po-field-container
     class="po-lookup-header po-md-6 po-pull-right"
     [p-optional]="false">
@@ -24,7 +16,7 @@
         name="contentSearch"
         [(ngModel)]="searchValue"
         [placeholder]="literals.modalPlaceholder"
-        type="number">
+        type="text">
 
       <div class="po-field-icon-container-right">
         <span #iconLookup

@@ -83,7 +83,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     label: this.literals.modalPrimaryActionLabel
   };
   searchValue: string = '';
-  searchField: string = '';
+
   secondaryAction: PoModalAction = {
     action: () => {
       this.model.emit(null);
@@ -215,13 +215,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     const { page, pageSize, filterParams, sort } = this;
     const filteredParams = {};
     const order = this.getOrderParam(sort);
-    const params = { page, pageSize, order, filterParams };
-
-    if (this.searchField.trim().length > 0) {
-      params[this.searchField] = filter;
-    } else {
-      params['filter'] = filter;
-    }
+    const params = { filter, page, pageSize, order, filterParams };
 
     for (const key in params) {
       if (params.hasOwnProperty(key) && params[key]) {
