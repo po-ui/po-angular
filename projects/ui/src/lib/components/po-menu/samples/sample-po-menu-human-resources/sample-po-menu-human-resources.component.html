@@ -1,16 +1,22 @@
+<po-navbar
+ [p-items]="[{ label: 'Item 1', link: 'http://trabalho.gov.br/' },
+ { label: 'Item 2', link: 'http://www.sindpd.com.br/' }]"
+ [p-menu]="menu">
+</po-navbar>
 <div class="po-wrapper">
   <po-menu
-    p-collapsed
+    #menu
     p-filter
     [p-menus]="menus"
+    p-logo="https://portinari.io/assets/graphics/portinari.svg"
     [p-service]="samplePoMenuHumanResourcesService">
 
-    <div *p-menu-header-template class="po-p-2 po-font-title sample-menu-header-text-color">
+    <!-- <div *p-menu-header-template class="po-p-2 po-font-title sample-menu-header-text-color">
       <p> Welcome, </p>
       <p>
         <b> John Doe </b>
       </p>
-    </div>
+    </div> -->
 
   </po-menu>
 

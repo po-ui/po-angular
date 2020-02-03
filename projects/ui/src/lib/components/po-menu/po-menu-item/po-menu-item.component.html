@@ -3,21 +3,24 @@
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
 <!-- menu com link externo -->
+
 <a *ngIf="type === 'externalLink'" class="po-menu-item-link" [href]="link">
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
+
 <!-- menu sem link -->
-<a *ngIf="type === 'noLink'" class="po-menu-item-link" href="javascript:;">
+<div *ngIf="type === 'noLink'" class="po-menu-item-link">
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-</a>
+</div>
+
 <!-- menu com sub itens -->
-<div *ngIf="type === 'subItems'" class="po-menu-item-link po-clickable">
+<ul *ngIf="type === 'subItems'" class="po-menu-item-link po-clickable">
   <ng-container *ngTemplateOutlet="menuItemTemplate;"></ng-container>
   <div #menuSubItems
     class="po-menu-sub-items"
     [hidden]="collapsedMenu"
     [style.maxHeight.px]="maxHeight">
-    <div *ngFor="let subItem of subItems">
+    <li *ngFor="let subItem of subItems">
       <po-menu-item
         p-is-sub-item
         [p-action]="subItem.action"
@@ -31,9 +34,9 @@
         [p-sub-items]="subItem.subItems"
         [p-type]="subItem.type">
       </po-menu-item>
-    </div>
+    </li>
   </div>
-</div>
+</ul>
 
 <ng-template #menuItemTemplate>
   <div class="po-menu-item"
