@@ -1,7 +1,9 @@
-import { Component, ElementRef, forwardRef } from '@angular/core';
-import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { Component, ElementRef, forwardRef, ViewChild, Renderer2 } from '@angular/core';
+import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidationErrors } from '@angular/forms';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
+import { PoFieldInput } from '../po-field-input';
+// import { PoFieldInput } from '@portinari/portinari-ui/lib/components/po-field/po-field-input';
 
 /**
  * @docsExtends PoInputBaseComponent
@@ -42,16 +44,38 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
     multi: true,
   }]
 })
-export class PoLoginComponent extends PoInputGeneric {
+export class PoLoginComponent extends PoFieldInput<any> {
 
-  type = 'text';
+  @ViewChild('inp', { static: false }) inputElement: ElementRef<HTMLInputElement>;
+  // export class PoLoginComponent extends PoInputGeneric {
+  // type = 'text';
 
-  constructor(el: ElementRef) {
-    super(el);
+  constructor(renderer: Renderer2) {
+    super(renderer);
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
-    return null;
+  // stateValidate(control: AbstractControl): ValidationErrors {
+  //   // throw new Error("Method not implemented.");
+  //   return;
+  // }
+
+  onFocus($event) {
+
   }
+
+  onBlur($event) {
+
+  }
+
+  onInput($event) {
+
+  }
+  // onWriteValue(value: any) {
+  //   // throw new Error("Method not implemented.");
+  // }
+
+  // focus() {
+  //   // throw new Error("Method not implemented.");
+  // }
 
 }

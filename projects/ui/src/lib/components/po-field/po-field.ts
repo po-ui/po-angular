@@ -1,22 +1,37 @@
-import { Input, Output, EventEmitter } from '@angular/core';
+import { Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
+import { convertToBoolean } from '../../utils/util';
 
-export abstract class PoField<T> implements ControlValueAccessor {
+export abstract class PoField<T> implements AfterViewInit, ControlValueAccessor {
+
+  _disabled = false;
 
   @Input('p-label') label: string;
 
   @Input('p-help') help: string;
 
-  @Input('p-disabled') disabled: boolean;
+  @Input('p-disabled') set disabled(value: boolean) {
+    this._disabled = convertToBoolean(value);
+  }
+
+  get disabled() {
+    return this._disabled;
+  }
 
   @Input('name') name: string;
 
   @Input('p-focus') autoFocus: boolean;
 
-  @Output('change') change = new EventEmitter<T>();
+  @Output('p-change') change = new EventEmitter<T>();
 
   private onModelChange: any;
   private onModelTouched: any;
+
+  ngAfterViewInit(): void {
+    if (this.autoFocus) {
+      this.focus();
+    }
+  }
 
   // AVALIAR GENERIC TYPE
   abstract onWriteValue(value: T);

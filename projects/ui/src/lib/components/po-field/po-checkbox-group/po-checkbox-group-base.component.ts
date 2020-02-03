@@ -1,4 +1,4 @@
-import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
 import { EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
@@ -6,6 +6,7 @@ import { requiredFailed } from '../validators';
 
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
+import { PoFieldGroup } from '../po-field-group';
 
 const poCheckboxGroupColumnsDefaultLength: number = 6;
 const poCheckboxGroupColumnsTotalLength: number = 12;
@@ -39,23 +40,23 @@ const poCheckboxGroupColumnsTotalLength: number = 12;
  * };
  * ```
  */
-export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Validator {
+export abstract class PoCheckboxGroupBaseComponent extends PoFieldGroup<any> implements ControlValueAccessor, Validator {
 
-  checkboxGroupOptionsView: Array<PoCheckboxGroupOptionView>;
+  // checkboxGroupOptionsView: Array<PoCheckboxGroupOptionView>;
   checkedOptions: any = {};
   checkedOptionsList: any = [];
-  mdColumns: number = poCheckboxGroupColumnsDefaultLength;
-  propagateChange: any;
-  validatorChange: any;
+  // mdColumns: number = poCheckboxGroupColumnsDefaultLength;
+  // propagateChange: any;
+  // validatorChange: any;
 
-  private _columns: number = poCheckboxGroupColumnsDefaultLength;
-  private _disabled?: boolean = false;
+  // private _columns: number = poCheckboxGroupColumnsDefaultLength;
+  // private _disabled?: boolean = false;
   private _indeterminate?: boolean = false;
-  private _options?: Array<PoCheckboxGroupOption>;
-  private _required?: boolean = false;
+  // private _options?: Array<PoCheckboxGroupOption>;
+  // private _required?: boolean = false;
 
   /** Nome dos checkboxes */
-  @Input('name') name: string;
+  // @Input('name') name: string;
 
   /**
    * @optional
@@ -72,38 +73,38 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    * @default `2`
    *
    */
-  @Input('p-columns') set columns(value: number) {
-    const columns = convertToInt(value, poCheckboxGroupColumnsDefaultLength);
+  // @Input('p-columns') set columns(value: number) {
+  //   const columns = convertToInt(value, poCheckboxGroupColumnsDefaultLength);
 
-    this._columns = this.getGridSystemColumns(columns, 4);
-    this.mdColumns = this.getGridSystemColumns(columns, 2);
-  }
+  //   this._columns = this.getGridSystemColumns(columns, 4);
+  //   this.mdColumns = this.getGridSystemColumns(columns, 2);
+  // }
 
-  get columns() {
-    return this._columns;
-  }
+  // get columns() {
+  //   return this._columns;
+  // }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Desabilita todos os itens do checkbox.
-   *
-   * @default `false`
-   */
-  @Input('p-disabled') set disabled(value: boolean) {
-    this._disabled = convertToBoolean(value);
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Desabilita todos os itens do checkbox.
+  //  *
+  //  * @default `false`
+  //  */
+  // @Input('p-disabled') set disabled(value: boolean) {
+  //   this._disabled = convertToBoolean(value);
 
-    this.validateModel(this.checkIndeterminate());
-  }
+  //   this.validateModel(this.checkIndeterminate());
+  // }
 
-  get disabled(): boolean {
-    return this._disabled;
-  }
+  // get disabled(): boolean {
+  //   return this._disabled;
+  // }
 
-  /** Texto de apoio do campo */
-  @Input('p-help') help?: string;
+  // /** Texto de apoio do campo */
+  // @Input('p-help') help?: string;
 
   /**
    * @optional
@@ -126,40 +127,40 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     return this._indeterminate;
   }
 
-  /** Label do campo */
-  @Input('p-label') label?: string;
+  // /** Label do campo */
+  // @Input('p-label') label?: string;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Define se a indicação de campo opcional será exibida.
+  //  *
+  //  * > Não será exibida a indicação se:
+  //  * - O campo conter `p-required`;
+  //  * - Não possuir `p-help` e/ou `p-label`.
+  //  *
+  //  * @default `false`
+  //  */
+  // @Input('p-optional') optional: boolean;
 
-  /**
-   * @optional
-   *
-   * @description
-   * Lista de opções que serão exibidas
-   * Nesta propriedade deve ser definido um array de objetos que implementam a interface PoCheckboxGroupOption
-   */
-  @Input('p-options') set options(value: Array<PoCheckboxGroupOption>) {
-    this._options = Array.isArray(value) ? value : [];
-    this.removeDuplicatedOptions();
-    this.setCheckboxGroupOptionsView(this.options);
-  }
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  * Lista de opções que serão exibidas
+  //  * Nesta propriedade deve ser definido um array de objetos que implementam a interface PoCheckboxGroupOption
+  //  */
+  // @Input('p-options') set options(value: Array<PoCheckboxGroupOption>) {
+  //   this._options = Array.isArray(value) ? value : [];
+  //   this.removeDuplicatedOptions();
+  //   this.setCheckboxGroupOptionsView(this.options);
+  // }
 
-  get options() {
-    return this._options;
-  }
+  // get options() {
+  //   return this._options;
+  // }
 
   /**
    * @optional
@@ -170,33 +171,29 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
+  // @Input('p-required') set required(required: boolean) {
+  //   this._required = convertToBoolean(required);
 
-    this.validateModel(this.checkIndeterminate());
-  }
+  //   this.validateModel(this.checkIndeterminate());
+  // }
 
-  get required() {
-    return this._required;
-  }
+  // get required() {
+  //   return this._required;
+  // }
 
   // Função para atualizar o `ngModel` do componente, necessário quando não for utilizado dentro da tag form.
-  @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
+  // @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
 
   /** Evento disparado ao alterar valor do campo */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
+  // @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
 
   changeValue() {
 
     const value = this.checkIndeterminate();
 
-    if (this.propagateChange) {
-      this.propagateChange(value);
-    } else {
-      this.ngModelChange.emit(value);
-    }
+    this.updateModel(value);
 
-    this.change.emit(value);
+    this.emitChange(value);
   }
 
   checkIndeterminate() {
@@ -210,24 +207,28 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     }
   }
 
-  registerOnChange(fn: any): void {
-    this.propagateChange = fn;
-  }
+  // registerOnChange(fn: any): void {
+  //   this.propagateChange = fn;
+  // }
 
-  registerOnTouched(fn: any): void { }
+  // registerOnTouched(fn: any): void { }
 
-  writeValue(optionsModel: any) {
-    if (optionsModel && this.checkedOptions !== optionsModel) {
-      this.generateCheckOptions(optionsModel);
-    } else {
-      this.checkedOptionsList = [];
-      this.checkedOptions = {};
-    }
-  }
+  // writeValue(optionsModel: any) {
+  //   if (optionsModel && this.checkedOptions !== optionsModel) {
+  //     this.generateCheckOptions(optionsModel);
+  //   } else {
+  //     this.checkedOptionsList = [];
+  //     this.checkedOptions = {};
+  //   }
+  // }
 
-  registerOnValidatorChange(fn: () => void) {
-    this.validatorChange = fn;
-  }
+  // stateValidate(control: AbstractControl): ValidationErrors {
+  //   return null;
+  // }
+
+  // registerOnValidatorChange(fn: () => void) {
+  //   this.validatorChange = fn;
+  // }
 
   validate(abstractControl: AbstractControl): { [key: string]: any; } {
 
@@ -241,17 +242,17 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
 
   }
 
-  protected validateModel(model: any) {
-    if (this.validatorChange) {
-      this.validatorChange(model);
-    }
-  }
+  // protected validateModel(model: any) {
+  //   if (this.validatorChange) {
+  //     this.validatorChange(model);
+  //   }
+  // }
 
-  private checkColumnsRange(columns, maxColumns): boolean {
-    const minColumns = 1;
+  // private checkColumnsRange(columns, maxColumns): boolean {
+  //   const minColumns = 1;
 
-    return columns >= minColumns && columns <= maxColumns;
-  }
+  //   return columns >= minColumns && columns <= maxColumns;
+  // }
 
   private checkOptionModel(optionChecked: PoCheckboxGroupOption) {
     this.checkedOptions[optionChecked.value] = !this.checkedOptions[optionChecked.value];
@@ -264,7 +265,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     }
   }
 
-  private generateCheckOptions(optionsModel: any) {
+  protected generateCheckOptions(optionsModel: any) {
 
     this.checkedOptions = {};
 
@@ -282,11 +283,11 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     }
   }
 
-  private getGridSystemColumns(columns: number, maxColumns: number): number {
-    const gridSystemColumns = poCheckboxGroupColumnsTotalLength / columns;
+  // private getGridSystemColumns(columns: number, maxColumns: number): number {
+  //   const gridSystemColumns = poCheckboxGroupColumnsTotalLength / columns;
 
-    return this.checkColumnsRange(columns, maxColumns) ? gridSystemColumns : poCheckboxGroupColumnsDefaultLength;
-  }
+  //   return this.checkColumnsRange(columns, maxColumns) ? gridSystemColumns : poCheckboxGroupColumnsDefaultLength;
+  // }
 
   private isInvalidIndeterminate() {
     if (this.indeterminate && this.required && this.checkedOptions) {
@@ -295,19 +296,19 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     return false;
   }
 
-  private removeDuplicatedOptions() {
-    this.options.forEach((option, index) => {
-      const duplicatedIndex = this.options.findIndex((optionFind: any) => optionFind.value === option.value) === index;
-      if (!duplicatedIndex) {
-        this.options.splice(this.options.indexOf(option), 1);
-      }
-    });
-  }
+  // private removeDuplicatedOptions() {
+  //   this.options.forEach((option, index) => {
+  //     const duplicatedIndex = this.options.findIndex((optionFind: any) => optionFind.value === option.value) === index;
+  //     if (!duplicatedIndex) {
+  //       this.options.splice(this.options.indexOf(option), 1);
+  //     }
+  //   });
+  // }
 
-  private setCheckboxGroupOptionsView(optionsList: Array<PoCheckboxGroupOption>) {
-    this.checkboxGroupOptionsView = optionsList.map(option => {
-      return { ...option, id: uuid() };
-    });
-  }
+  // private setCheckboxGroupOptionsView(optionsList: Array<PoCheckboxGroupOption>) {
+  //   this.checkboxGroupOptionsView = optionsList.map(option => {
+  //     return { ...option, id: uuid() };
+  //   });
+  // }
 
 }

@@ -53,6 +53,7 @@ import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/p
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
 import { PoSwitchModule } from './po-switch/po-switch.module';
+import { PoInputDirective } from './po-input/po-input.directive';
 
 /**
  * @description
@@ -104,7 +105,8 @@ import { PoSwitchModule } from './po-switch/po-switch.module';
     PoSwitchModule,
     PoTextareaComponent,
     PoUploadComponent,
-    PoUrlComponent
+    PoUrlComponent,
+    PoInputDirective
   ],
   declarations: [
     PoCalendarComponent,
@@ -140,7 +142,8 @@ import { PoSwitchModule } from './po-switch/po-switch.module';
     PoUploadDragDropAreaOverlayComponent,
     PoUploadDragDropAreaComponent,
     PoUploadFileRestrictionsComponent,
-    PoUrlComponent
+    PoUrlComponent,
+    PoInputDirective
   ],
   providers: [],
   entryComponents: [

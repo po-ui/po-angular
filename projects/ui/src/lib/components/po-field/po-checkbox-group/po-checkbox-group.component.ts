@@ -1,6 +1,6 @@
 import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef,
-  forwardRef, QueryList, ViewChildren } from '@angular/core';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+  forwardRef, QueryList, ViewChildren, AfterViewInit } from '@angular/core';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, AbstractControl } from '@angular/forms';
 
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
@@ -42,7 +42,7 @@ import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.int
     }
   ]
 })
-export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked {
+export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
 
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<ElementRef>;
 
@@ -53,6 +53,13 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
   ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();
   }
+
+  // ngAfterViewInit() {
+  //   // console.log(this.autoFocus)
+  //   if (this.autoFocus) {
+  //     this.focus();
+  //   }
+  // }
 
   /**
    * Função que atribui foco ao componente.
@@ -71,13 +78,30 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
    * }
    * ```
    */
-  focus(): void {
-    if (this.checkboxLabels && !this.disabled) {
-      const checkboxLabel = this.checkboxLabels.find((_, index) => !this.options[index].disabled);
+  // focus(): void {
+  //   if (this.checkboxLabels && !this.disabled) {
+  //     const checkboxLabel = this.checkboxLabels.find((_, index) => !this.options[index].disabled);
 
-      if (checkboxLabel) {
-        checkboxLabel.nativeElement.focus();
-      }
+  //     if (checkboxLabel) {
+  //       checkboxLabel.nativeElement.focus();
+  //     }
+  //   }
+  // }
+
+  getGroupItems(): QueryList<ElementRef> {
+    return this.checkboxLabels;
+  }
+
+  stateValidate(control: AbstractControl): ValidationErrors {
+    return null;
+  }
+
+  onWriteValue(optionsModel: any) {
+    if (optionsModel && this.checkedOptions !== optionsModel) {
+      this.generateCheckOptions(optionsModel);
+    } else {
+      this.checkedOptionsList = [];
+      this.checkedOptions = {};
     }
   }
 

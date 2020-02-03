@@ -62,7 +62,7 @@ export class PoSwitchBaseComponent extends PoField<boolean> {
 
       this.updateModel(value);
 
-      this.change.emit(this.switchValue);
+      this.emitChange(this.switchValue);
     }
   }
 

@@ -77,11 +77,11 @@ export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterVie
    * }
    * ```
    */
-  focus() {
-    if (!this.disabled) {
-      this.switchContainer.nativeElement.focus();
-    }
-  }
+  // focus() {
+  //   if (!this.disabled) {
+  //     this.switchContainer.nativeElement.focus();
+  //   }
+  // }
 
   getLabelPosition() {
     switch (this.labelPosition) {

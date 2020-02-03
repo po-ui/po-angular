@@ -6,7 +6,7 @@
   <div class="po-field-container-content po-checkbox-group-content">
     <div class="po-row po-pt-1 po-pb-1">
 
-      <div *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
+      <div *ngFor="let option of options; trackBy: trackByFn"
         class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
         [class.po-checkbox-group-item-disabled]="option.disabled || disabled">
 
@@ -17,14 +17,14 @@
           [class.po-checkbox-group-input-indeterminate]="checkedOptions[option.value] === null"
           [checked]="option.value"
           [disabled]="option.disabled || disabled"
-          [id]="option.id"
+          [id]="option.value"
           [required]="required"
           [value]="option.value">
 
         <label #checkboxLabel
           class="po-checkbox-group-label"
           [class.po-clickable]="!option.disabled && !disabled"
-          [for]="option.id"
+          [for]="option.value"
           [tabindex]="option.disabled || disabled ? -1 : 0"
           (click)="checkOption(option)"
           (keydown)="onKeyDown($event, option)">

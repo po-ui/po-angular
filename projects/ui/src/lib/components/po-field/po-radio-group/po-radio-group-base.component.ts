@@ -1,13 +1,14 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+// import { EventEmitter, Input, Output } from '@angular/core';
 
-import { convertToBoolean, convertToInt, removeDuplicatedOptions } from '../../../utils/util';
+// import { convertToBoolean, convertToInt, removeDuplicatedOptions } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
-import { PoRadioGroupOption } from './po-radio-group-option.interface';
+// import { PoRadioGroupOption } from './po-radio-group-option.interface';
+import { PoFieldGroup } from '../po-field-group';
 
-const poRadioGroupColumnsDefaultLength: number = 6;
-const poRadioGroupColumnsTotalLength: number = 12;
+// const poRadioGroupColumnsDefaultLength: number = 6;
+// const poRadioGroupColumnsTotalLength: number = 12;
 
 /**
  * @description
@@ -21,181 +22,19 @@ const poRadioGroupColumnsTotalLength: number = 12;
  *
  * > Ao passar um valor para o *model* que não esteja na lista de opções, o mesmo será definido como `undefined`.
  */
-export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor, Validator {
+export abstract class PoRadioGroupBaseComponent extends PoFieldGroup<string | number> implements ControlValueAccessor, Validator {
 
-  private _columns: number = poRadioGroupColumnsDefaultLength;
-  private _disabled?: boolean = false;
-  private _options: Array<PoRadioGroupOption>;
-  private _required?: boolean = false;
-
-  mdColumns: number = poRadioGroupColumnsDefaultLength;
   value: any;
-
-  private onChangePropagate: any = null;
-  private validatorChange;
-
-  /** Nome das opções. */
-  @Input('name') name: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define a quantidade de colunas para exibição das opções.
-   *
-   * **Considerações:**
-   *  - É possível exibir as opções entre `1` e `4` colunas.
-   *  - O número máximo de colunas é invariável nas seguintes resoluções:
-   *    + `sm`: `1`
-   *    + `md`: `2`
-   *
-   * @default `2`
-   */
-  @Input('p-columns') set columns(value: number) {
-    const columns = convertToInt(value, poRadioGroupColumnsDefaultLength);
-
-    this._columns = this.getGridSystemColumns(columns, 4);
-    this.mdColumns = this.getGridSystemColumns(columns, 2);
-  }
-
-  get columns() {
-    return this._columns;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Indica que o campo será desabilitado.
-   *
-   * @default `false`
-   */
-  @Input('p-disabled') set disabled(disabled: boolean) {
-    this._disabled = convertToBoolean(disabled);
-
-    this.validateModel();
-  }
-
-  get disabled() {
-    return this._disabled;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Indica que o campo será obrigatório.
-   *
-   * @default `false`
-   */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
-
-    this.validateModel();
-  }
-
-  get required() {
-    return this._required;
-  }
-
-  /**
-   * Lista de opções que serão exibidas.
-   * Nesta propriedade deve ser definido um array de objetos que implementam a interface PoRadioGroupOption.
-   */
-  @Input('p-options') set options(value: Array<PoRadioGroupOption>) {
-    this._options = value;
-    removeDuplicatedOptions(this.options);
-  }
-  get options() {
-    return this._options;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
-
-  /** Evento ao alterar valor do campo. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
-
-  // Deve retornar o valor elemento que contém o valor passado por parâmetro
-  abstract getElementByValue(value: any): any;
 
   // Função que controla quando deve ser emitido onChange e atualiza o Model
   changeValue(changedValue: any) {
-    if (this.onChangePropagate) {
-      this.onChangePropagate(changedValue);
-    }
+    this.updateModel(changedValue);
 
     if (this.value !== changedValue) {
-      this.change.emit(changedValue);
+      this.emitChange(changedValue);
     }
 
     this.value = changedValue;
-  }
-
-  registerOnChange(fn: any) {
-    this.onChangePropagate = fn;
-  }
-
-  registerOnTouched(fn: any) { }
-
-  registerOnValidatorChange(fn: any) {
-    this.validatorChange = fn;
-  }
-
-  validate(abstractControl: AbstractControl): { [key: string]: any; } {
-
-    if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
-      return {
-        required: {
-          valid: false,
-        }
-      };
-    }
-
-  }
-
-  writeValue(modelValue: any) {
-    this.value = modelValue;
-
-    // Busca radio com o valor especificado
-    const element = this.getElementByValue(modelValue);
-    if (!element && this.onChangePropagate) {
-      this.value = undefined;
-      this.onChangePropagate(this.value);
-    }
-  }
-
-  private checkColumnsRange(columns, maxColumns): boolean {
-    const minColumns = 1;
-
-    return columns >= minColumns && columns <= maxColumns;
-  }
-
-  private getGridSystemColumns(columns: number, maxColumns: number): number {
-    const gridSystemColumns = poRadioGroupColumnsTotalLength / columns;
-
-    return this.checkColumnsRange(columns, maxColumns) ? gridSystemColumns : poRadioGroupColumnsDefaultLength;
-  }
-
-  private validateModel() {
-    if (this.validatorChange) {
-      this.validatorChange();
-    }
   }
 
 }

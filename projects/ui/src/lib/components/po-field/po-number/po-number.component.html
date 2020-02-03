@@ -5,7 +5,7 @@
 
   <div class="po-field-container-content">
     <input #inp
-      class="po-input"
+      p-input
       type="number"
       [attr.max]="max"
       [attr.min]="min"
@@ -22,12 +22,14 @@
       (focus)="onFocus($event)"
       (input)="onInput($event)">
 
-    <!-- <div class="po-field-icon-container-right">
-      <po-clean [p-default-value]="null"
-        [p-element-ref]="inputEl"
+    <div class="po-field-icon-container-right">
+      <po-clean
+        [p-default-value]="null"
+        [p-element-ref]="inputElement"
         (p-change-event)="clear($event)">
       </po-clean>
-    </div> -->
+
+    </div>
   </div>
 
   <po-field-container-bottom

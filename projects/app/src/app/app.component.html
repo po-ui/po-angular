@@ -1,16 +1,114 @@
-<po-switch p-label="Label 01"></po-switch>
+<!-- <po-switch p-label="Label 01"></po-switch>
+
+<hr> -->
+
+<!-- <po-checkbox-group #checkboxGroup
+  [p-focus]="true"
+  class="po-md-12"
+  [(ngModel)]="list"
+  p-label="LISTA DE CHECKBOX"
+  p-help="AUXILIO O LABEL"
+  name="list"
+  p-auto-focus
+  [p-columns]="1"
+  p-optional
+  [p-options]="[{ label: 'EXAMPLO 1', value: '1'}, { label: 'EXAMPLO 2', value: '2'}]"
+  (p-change)="onChange($event)">
+</po-checkbox-group>
 
 <hr>
 
+{{ list | json }} -->
+
+<po-login
+  class="po-md-12"
+  name="user"
+  [(ngModel)]="user">
+</po-login>
+
+{{ user }}
+
+<hr>
 
 <po-number
   p-label="Olha eu ai!!"
   p-help="TESTE"
   [(ngModel)]="model"
-  name="model"
-  [p-minlength]="10"
-  [p-maxlength]="25"
-  [p-step]="5">
+  name="address">
+</po-number>
+<!-- <po-login
+      class="po-md-6"
+      name=""
+      p-focus="true"
+      [(ngModel)]=""
+      (p-blur)="onBlurLogin($event)"
+      (p-enter)="onEnterLogin($event)"
+      (p-change)="onChangeLogin($event)"
+      (p-change-model)="onChangeModelLogin($event)"
+      p-clean="true"
+      p-disabled="false"
+      p-error-pattern=""
+      p-label=""
+      p-help=""
+      p-icon="po-icon-agro-business"
+      p-maxlength=""
+      p-minlength=""
+      p-mask=""
+      p-mask-format-model="false"
+      p-no-autocomplete="false"
+      p-optional="false"
+      p-placeholder=""
+      p-pattern=""
+      p-readonly="false"
+      p-required="true">
+</po-login> -->
+
+<!-- <po-radio-group
+  #checkboxGroup
+  class="po-md-12"
+  [(ngModel)]="list"
+  p-label="LISTA DE CHECKBOX"
+  p-help="AUXILIO O LABEL"
+  [p-columns]="1"
+  name="list"
+  p-optional
+  [p-options]="[{ label: 'EXAMPLO 1', value: '1'}, { label: 'EXAMPLO 2', value: '2'}]"
+  (p-change)="onChange($event)">
+</po-radio-group> -->
+
+<!-- <button (click)="dialog(list)">BUT</button> -->
+<!-- <po-checkbox-group
+    p-optional="false"
+    [p-options]="checkboxGroupOptions"
+    p-required="false"
+    (p-change)="onChangeCheckboxOption($event)"
+    p-auto-focus="false">
+</po-checkbox-group> -->
+<!-- <po-number
+  p-label="Olha eu ai!!"
+  p-help="TESTE"
+  [(ngModel)]="model"
+  name="address"
+  [p-minlength]="2"
+  [p-min]="5"
+  [p-max]="15"
+  [p-maxlength]="15"
+  [p-step]="5"
+  [p-optional]="true"
+  [p-required]="true"
+  [p-clean]="true"
+  [p-placeholder]="'NUMERO'"
+  [p-error-pattern]="'MINMIN'"
+  [p-no-autocomplete]="true"
+  (p-blur)="onBlur()"
+  (p-enter)="onEnter()"
+  (p-change)="onChange($event)"
+  (p-change-model)="onChangeModel($event)">
 </po-number>
 
-{{ model }}
+{{ model }} -->
+
+<!-- <po-upload
+  name="files" [(ngModel)]="files" p-required p-url="http://api"></po-upload>
+
+{{ files }} -->

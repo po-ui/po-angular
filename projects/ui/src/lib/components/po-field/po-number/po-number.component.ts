@@ -1,5 +1,5 @@
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidationErrors } from '@angular/forms';
-import { Component, ElementRef, forwardRef, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, forwardRef, Input, ViewChild, ChangeDetectionStrategy, AfterViewInit, Renderer2 } from '@angular/core';
 
 import { minFailed, maxFailed, maxlengpoailed, minlengpoailed } from '../validators';
 
@@ -47,9 +47,12 @@ import { PoNumberBaseComponent } from './po-number-base.component';
     multi: true,
   }]
 })
-export class PoNumberComponent extends PoNumberBaseComponent {
+export class PoNumberComponent extends PoNumberBaseComponent implements AfterViewInit {
 
-  @ViewChild('inp', { static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { static: true }) inputElement: ElementRef<HTMLInputElement>;
+
+  valueBeforeChange: any;
+  timeoutChange;
 
   /** Valor mínimo. */
   min?: number;
@@ -82,47 +85,71 @@ export class PoNumberComponent extends PoNumberBaseComponent {
   //   super(el);
   // }
 
-  get autocomplete() {
-    return this.noAutocomplete ? 'off' : 'on';
-  }
+  // get autocomplete() {
+  //   return this.noAutocomplete ? 'off' : 'on';
+  // }
 
   get check() {
-    console.log('NUMBER');
+    // console.log('NUMBER');
     return '';
   }
 
-  constructor(private el: ElementRef) {
-    super();
+  constructor(renderer: Renderer2, private el: ElementRef) {
+    super(renderer);
   }
 
-  onInput(e: any) {
-    let value = e.target.value;
-    const valueMaxlength = this.validMaxLength(this.maxlength, value); // rever
+  // ngAfterViewInit() {
+  //   if (this.autoFocus) {
+  //     this.focus();
+  //   }
+  // }
 
-    if (value !== valueMaxlength) {
-      value = valueMaxlength;
+  updateModel(e) {
+    super.updateModel(e);
+    // this.updateModel(e);
+    this.emitChangeModel(e);
+  }
 
-      this.inputEl.nativeElement.value = value;
+  onInput(inputValue: any) {
+    const valueMaxlength = this.validMaxLength(this.maxlength, inputValue); // rever
+
+    if (inputValue !== valueMaxlength) {
+      inputValue = valueMaxlength;
+
+      this.inputElement.nativeElement.value = inputValue;
     }
 
-    this.updateModel(this.formatNumber(value));
-    this.emitChange(this.formatNumber(value));
-  }
-
-  onBlur(e) {
-
+    this.updateModel(this.formatNumber(inputValue));
+    // this.emitChangeModel(this.formatNumber(value));
   }
 
   onFocus(e) {
+    this.valueBeforeChange = this.inputElement.nativeElement.value;
 
+    this.emitEnter();
   }
 
+  // controlChangeEmitter() {
+  //   const elementValue = this.inputElement.nativeElement.value;
+
+  //   // Emite o evento change manualmente quando o campo é alterado
+  //   // Este evento é controlado manualmente devido ao preventDefault existente na máscara
+  //   // e devido ao controle do p-clean, que também precisa emitir change
+  //   // console.log(elementValue, this.valueBeforeChange)
+  //   if (elementValue !== this.valueBeforeChange) {
+  //     clearTimeout(this.timeoutChange);
+  //     this.timeoutChange = setTimeout(() => {
+  //       this.emitChange(elementValue);
+  //     }, 200);
+  //   }
+  // }
+
   onWriteValue(value: number) {
-    if (this.inputEl) {
+    if (this.inputElement) {
       if (value || value === 0) {
-        this.inputEl.nativeElement.value = value;
+        this.inputElement.nativeElement.value = <any> value;
       } else { // Se for o valor for undefined, deve limpar o campo
-        this.inputEl.nativeElement.value = '';
+        this.inputElement.nativeElement.value = '';
       }
     }
 
@@ -131,18 +158,18 @@ export class PoNumberComponent extends PoNumberBaseComponent {
     // this.changeModel.emit(value);
   }
 
-  focus() {
-    // throw new Error("Method not implemented.");
-    if (!this.disabled) {
-      this.inputEl.nativeElement.focus();
-    }
-  }
+  // focus() {
+  //   // throw new Error("Method not implemented.");
+  //   if (!this.disabled) {
+  //     this.inputElement.nativeElement.focus();
+  //   }
+  // }
 
   getErrorPattern() {
     return (this.errorPattern !== '' && this.hasInvalidClass()) ? this.errorPattern : '';
   }
 
-  stateValidate(abstractControl: AbstractControl): { [key: string]: any; } {
+  stateValidate(abstractControl: AbstractControl): ValidationErrors {
 
     if (minFailed(this.min, abstractControl.value)) {
       return { min: {
@@ -175,7 +202,7 @@ export class PoNumberComponent extends PoNumberBaseComponent {
     return (
       this.el.nativeElement.classList.contains('ng-invalid') &&
       this.el.nativeElement.classList.contains('ng-dirty') &&
-      this.inputEl.nativeElement.value !== ''
+      this.inputElement.nativeElement.value !== ''
     );
   }
 

@@ -1,5 +1,5 @@
 
-import { Input } from '@angular/core';
+import { Input, Renderer2 } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
 
@@ -8,25 +8,38 @@ import { PoFieldInput } from '../po-field-input';
 
 export abstract class PoNumberBaseComponent extends PoFieldInput<number> {
 
-  private _noAutocomplete: boolean = false;
+  // private _noAutocomplete: boolean = false;
+  private _readonly: boolean = false;
 
-  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
-    this._noAutocomplete = convertToBoolean(value);
+  // @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
+  //   this._noAutocomplete = convertToBoolean(value);
+  // }
+
+  // get noAutocomplete() {
+  //   return this._noAutocomplete;
+  // }
+
+  // @Input('p-clean') clean: boolean;
+
+  @Input('p-readonly') set readonly(value: boolean) {
+    this._readonly = convertToBoolean(value);
   }
 
-  get noAutocomplete() {
-    return this._noAutocomplete;
+  get readonly() {
+    return this._readonly;
   }
 
-  @Input('p-clean') clean: boolean;
-
-  @Input('p-readonly') readonly: boolean; // PROVAVELMENTE VAI PARA O FIELD
-
+  // PROVAVELMENTE VAI PARA O FIELD
   @Input('p-minlength') minlength: number;
 
   @Input('p-maxlength') maxlength: number;
 
-  @Input('p-error-pattern') errorPattern: string;
+  // SUGESTÃO
+  // @Input('p-validator-message') validatorMessage: string | Array<{ key: 'min|max|maxlength|minlength', message: '' }>;
+
+  constructor(renderer: Renderer2) {
+    super(renderer);
+  }
 
   validMaxLength(maxlength: number, value: string) {
 

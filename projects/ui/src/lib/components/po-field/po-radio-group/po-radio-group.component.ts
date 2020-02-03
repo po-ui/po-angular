@@ -1,5 +1,5 @@
 import { Component, DoCheck, ElementRef, forwardRef, Input, IterableDiffers, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR, AbstractControl, ValidationErrors } from '@angular/forms';
 
 import { removeDuplicatedOptions } from '../../../utils/util';
 
@@ -51,12 +51,6 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 })
 export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements DoCheck {
 
-  /** Label do campo. */
-  @Input('p-label') label?: string;
-
-  /** Texto de apoio do campo. */
-  @Input('p-help') help?: string;
-
   @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChildren('inputRadio') radioLabels: QueryList<ElementRef>;
 
@@ -80,33 +74,6 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     }
   }
 
-  /**
-   * Função que atribui foco ao componente.
-   *
-   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
-   *
-   * ```
-   * import { PoRadioGroupComponent } from '@portinari/portinari-ui';
-   *
-   * ...
-   *
-   * @ViewChild(PoRadioGroupComponent, { static: true }) radio: PoRadioGroupComponent;
-   *
-   * focusRadio() {
-   *   this.radio.focus();
-   * }
-   * ```
-   */
-  focus(): void {
-    if (this.radioLabels && !this.disabled) {
-      const radioLabel = this.radioLabels.find((_, index) => !this.options[index].disabled);
-
-      if (radioLabel) {
-        radioLabel.nativeElement.focus();
-      }
-    }
-  }
-
   getElementByValue(value) {
     return this.inputEl.nativeElement.querySelector(`input[value='${value}']`);
   }
@@ -121,6 +88,25 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   private isArrowKey(key: number) {
     return key >= 37 && key <= 40;
+  }
+
+  getGroupItems(): QueryList<ElementRef> {
+    return this.radioLabels;
+  }
+
+  stateValidate(control: AbstractControl): ValidationErrors {
+    return null;
+  }
+
+  onWriteValue(value: string | number) {
+    this.value = value;
+
+    // Busca radio com o valor especificado
+    const element = this.getElementByValue(value);
+    if (!element) {
+      this.value = undefined;
+      this.updateModel(this.value); // ERRADO
+    }
   }
 
 }

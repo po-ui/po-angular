@@ -94,7 +94,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
    */
   @Input('p-decimals-length') set decimalsLength(value: number) {
     this._decimalsLength = convertToInt(value, PO_DECIMAL_DEFAULT_DECIMALS_LENGTH);
-
   }
 
   get decimalsLength() {
