@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { PoPageDynamicSearchLiterals } from '@portinari/portinari-templates';
+
 import {
   PoBreadcrumb,
   PoPageAction,
@@ -41,6 +43,12 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     { property: 'city', gridColumns: 6 },
     { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 },
   ];
+
+  readonly literals: PoPageDynamicSearchLiterals = {
+    filterConfirmLabel: 'Aplicar',
+    filterTitle: 'Filtro avançado',
+    quickSearchLabel: 'Valor pesquisado:'
+  };
 
   constructor(
     private sampleHiringProcessesService: SamplePoPageDynamicSearchHiringProcessesService,

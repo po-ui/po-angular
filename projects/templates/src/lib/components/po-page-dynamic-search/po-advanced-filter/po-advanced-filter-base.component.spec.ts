@@ -1,9 +1,17 @@
-import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.component';
-
+import * as utilsFunctions from './../../../utils/util';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import { PoLanguageService } from '../../../../../../ui/src/lib/services/po-language/po-language.service';
+
+import { PoAdvancedFilterBaseComponent, poAdvancedFiltersLiteralsDefault } from './po-advanced-filter-base.component';
 
 describe('PoAdvancedFilterBaseComponent', () => {
-  const component = new PoAdvancedFilterBaseComponent();
+  let component;
+
+  const languageService = new PoLanguageService();
+
+  beforeEach(() => {
+    component = new PoAdvancedFilterBaseComponent(languageService);
+  });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
@@ -21,6 +29,114 @@ describe('PoAdvancedFilterBaseComponent', () => {
       const validValues = [ [{ property: 'Teste 1' }], [{ property: 'Teste 2' }] ];
 
       expectPropertiesValues(component, 'filters', validValues, validValues);
+    });
+
+    describe('literals:', () => {
+      const poLocaleDefault = utilsFunctions.poLocaleDefault;
+
+      it('should be in portuguese if browser is setted with an unsupported language', () => {
+        component['language'] = 'zw';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poAdvancedFiltersLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should be in portuguese if browser is setted with `pt`', () => {
+        component['language'] = 'pt';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poAdvancedFiltersLiteralsDefault.pt);
+      });
+
+      it('should be in english if browser is setted with `en`', () => {
+        component['language'] = 'en';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poAdvancedFiltersLiteralsDefault.en);
+      });
+
+      it('should be in spanish if browser is setted with `es`', () => {
+        component['language'] = 'es';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poAdvancedFiltersLiteralsDefault.es);
+      });
+
+      it('should be in russian if browser is setted with `ru`', () => {
+        component['language'] = 'ru';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poAdvancedFiltersLiteralsDefault.ru);
+      });
+
+      it('should accept custom literals', () => {
+        component['language'] = poLocaleDefault;
+
+        const customLiterals = Object.assign({}, poAdvancedFiltersLiteralsDefault[poLocaleDefault]);
+
+        customLiterals.title = 'Filtro avançado';
+        customLiterals.cancelLabel = 'Fechar';
+        customLiterals.confirmLabel = 'Aplicar';
+
+        component.literals = customLiterals;
+
+        expect(component.literals).toEqual(customLiterals);
+      });
+
+      it('should update property with default literals if is setted with invalid values', () => {
+        const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+
+        component['language'] = 'pt';
+
+        expectPropertiesValues(component, 'literals', invalidValues, poAdvancedFiltersLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should get literals directly from poAdvancedFiltersLiteralsDefault if it not initialized', () => {
+        component['language'] = 'pt';
+
+        expect(component.literals).toEqual(poAdvancedFiltersLiteralsDefault['pt']);
+      });
+    });
+
+  });
+
+  describe('Methods:', () => {
+
+    it('getValuesFromForm: should return all items that property isn´t undefined or ``.', () => {
+      component.filter = { name: 'name', birthdate: 'Birthdate', age: '', Adress: undefined };
+
+      const filteredItems = { name: 'name', birthdate: 'Birthdate' };
+
+      expect(component['getValuesFromForm']()).toEqual(filteredItems);
+    });
+
+    it('primaryAction: should emit `searchEvent` and call `getValuesFromForm` and `poModal.close`', () => {
+      component.poModal = <any> { close: () => {} };
+
+      spyOn(component.searchEvent, 'emit');
+      spyOn(component.poModal, 'close');
+      spyOn(component, <any> 'getValuesFromForm');
+
+      component.primaryAction.action();
+
+      expect(component.searchEvent.emit).toHaveBeenCalled();
+      expect(component.poModal.close).toHaveBeenCalled();
+      expect(component['getValuesFromForm']).toHaveBeenCalled();
+    });
+
+    it('secondaryAction: should call `poModal.close`', () => {
+      component.poModal = <any> { close: () => {} };
+
+      spyOn(component.poModal, 'close');
+
+      component.secondaryAction.action();
+
+      expect(component.poModal.close).toHaveBeenCalled();
     });
 
   });
