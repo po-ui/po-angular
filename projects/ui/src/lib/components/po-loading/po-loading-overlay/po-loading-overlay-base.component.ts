@@ -38,7 +38,20 @@ export class PoLoadingOverlayBaseComponent {
    *
    * @description
    *
-   * Define se o _overlay_ será aplicado a um container ou a página inteira.
+   * Define se o *overlay* será aplicado a um *container* ou a página inteira.
+   *
+   * Para utilizar o componente como um *container*, o elemento pai deverá receber uma posição relativa, por exemplo:
+   *
+   * ```
+   * <div style="position: relative">
+   *
+   *  <po-chart [p-series]="[{ value: 10, category: 'Example' }]">
+   *  </po-chart>
+   *
+   *  <po-loading-overlay>
+   *  </po-loading-overlay>
+   * </div>
+   * ```
    *
    * @default `false`
    */
