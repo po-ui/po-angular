@@ -1,10 +1,11 @@
+import { PoPageDynamicOptionsSchema } from './po-page-dynamic-options.interface';
 import { TestBed, async, fakeAsync, tick } from '@angular/core/testing';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { PoPageCustomizationService } from './po-page-customization.service';
-import { PoPageDynamicOptions } from './po-page-dynamic-options.interface';
+import { PoPageDynamicSearchOptions } from '../../components/po-page-dynamic-search/po-page-dynamic-search-options.interface';
 
-const originalPageOptions: PoPageDynamicOptions = {
+const originalPageOptions: PoPageDynamicSearchOptions = {
   title: 'Original Title',
   breadcrumb: {
     items: [
@@ -22,13 +23,33 @@ const originalPageOptions: PoPageDynamicOptions = {
   ]
 };
 
-const mergedPageOptions: PoPageDynamicOptions = {
+const newPageOptions: PoPageDynamicSearchOptions = {
   title: 'New Title',
   breadcrumb: {
     items: [
       { label: 'Test' },
       { label: 'Test2' }
-    ]
+    ],
+    favorite: 'teste/teste'
+  },
+  actions: [
+    { label: 'Feature 1', url: '/new-feature1' },
+    { label: 'Feature 3', url: '/new-feature3' }
+  ],
+  filters: [
+    { property: 'filter1' },
+    { property: 'filter3' }
+  ]
+};
+
+const mergedPageOptions: PoPageDynamicSearchOptions = {
+  title: 'New Title',
+  breadcrumb: {
+    items: [
+      { label: 'Test' },
+      { label: 'Test2' }
+    ],
+    favorite: 'teste/teste'
   },
   actions: [
     { label: 'Feature 1', url: '/new-feature1' },
@@ -42,25 +63,29 @@ const mergedPageOptions: PoPageDynamicOptions = {
   ]
 };
 
-const newPageOptions: PoPageDynamicOptions = {
-  title: 'New Title',
-  breadcrumb: {
-    items: [
-      { label: 'Test' },
-      { label: 'Test2' }
-    ]
-  },
-  actions: [
-    { label: 'Feature 1', url: '/new-feature1' },
-    { label: 'Feature 3', url: '/new-feature3' }
-  ],
-  filters: [
-    { property: 'filter1' },
-    { property: 'filter3' }
+const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicSearchOptions> = {
+  schema: [
+    {
+      nameProp: 'filters',
+      merge: true,
+      keyForMerge: 'property'
+    },
+    {
+      nameProp: 'actions',
+      merge: true,
+      keyForMerge: 'label'
+    },
+    {
+      nameProp: 'breadcrumb',
+      merge: true
+    },
+    {
+      nameProp: 'title'
+    }
   ]
 };
 
-function customOptionFunctionMock(): PoPageDynamicOptions {
+function customOptionFunctionMock(): PoPageDynamicSearchOptions {
   return newPageOptions;
 }
 
@@ -122,7 +147,7 @@ describe('PoPageCustomizationService:', () => {
     describe('getCustomOptions:', () => {
       it('should get customized option from a function', async(() => {
         poPageCustomizationService
-          .getCustomOptions(customOptionFunctionMock, originalPageOptions)
+          .getCustomOptions(customOptionFunctionMock, originalPageOptions, pageOptionSchema)
           .subscribe(optionResult => {
             expect(optionResult).toEqual(mergedPageOptions);
           });
@@ -133,7 +158,7 @@ describe('PoPageCustomizationService:', () => {
       }));
 
       it('should keep the original title and breadcrumb if url do not return it', fakeAsync(() => {
-        const originalOption: PoPageDynamicOptions = {
+        const originalOption: PoPageDynamicSearchOptions = {
           title: 'Original Title',
           breadcrumb: {
             items: [
@@ -142,13 +167,13 @@ describe('PoPageCustomizationService:', () => {
             ]
           }
         };
-        const newOption: PoPageDynamicOptions = {
+        const newOption: PoPageDynamicSearchOptions = {
           filters: [
             { property: 'filter1' },
             { property: 'filter3' }
           ]
         };
-        const mergedOptions: PoPageDynamicOptions = {
+        const mergedOptions: PoPageDynamicSearchOptions = {
           title: 'Original Title',
           breadcrumb: {
             items: [
@@ -167,14 +192,14 @@ describe('PoPageCustomizationService:', () => {
       }));
 
       it('should keep the original action if url do not return it', fakeAsync(() => {
-        const originalOption: PoPageDynamicOptions = {
+        const originalOption: PoPageDynamicSearchOptions = {
           actions: [
             { label: 'Feature 1', url: '/feature1' },
             { label: 'Feature 2', url: '/feature2' }
           ]
         };
-        const newOption: PoPageDynamicOptions = {};
-        const mergedOptions: PoPageDynamicOptions = {
+        const newOption: PoPageDynamicSearchOptions = {};
+        const mergedOptions: PoPageDynamicSearchOptions = {
           actions: [
             { label: 'Feature 1', url: '/feature1' },
             { label: 'Feature 2', url: '/feature2' }
@@ -185,14 +210,14 @@ describe('PoPageCustomizationService:', () => {
       }));
 
       it('should keep the original filter if url do not return it', fakeAsync(() => {
-        const originalOption: PoPageDynamicOptions = {
+        const originalOption: PoPageDynamicSearchOptions = {
           filters: [
             { property: 'filter1' },
             { property: 'filter3' }
           ]
         };
-        const newOption: PoPageDynamicOptions = {};
-        const mergedOptions: PoPageDynamicOptions = {
+        const newOption: PoPageDynamicSearchOptions = {};
+        const mergedOptions: PoPageDynamicSearchOptions = {
           filters: [
             { property: 'filter1' },
             { property: 'filter3' }
@@ -203,7 +228,7 @@ describe('PoPageCustomizationService:', () => {
       }));
 
       it('should deep merge the objects inside arrays.', fakeAsync(() => {
-        const originalOption: PoPageDynamicOptions = {
+        const originalOption: PoPageDynamicSearchOptions = {
           filters: [
             { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
             { property: 'name', gridColumns: 6 },
@@ -211,12 +236,12 @@ describe('PoPageCustomizationService:', () => {
             { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
           ]
         };
-        const newOption: PoPageDynamicOptions = {
+        const newOption: PoPageDynamicSearchOptions = {
           filters: [
             { property: 'hireStatus', gridColumns: 12 }
           ]
         };
-        const mergedOptions: PoPageDynamicOptions = {
+        const mergedOptions: PoPageDynamicSearchOptions = {
           filters: [
             { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 12 },
             { property: 'name', gridColumns: 6 },
@@ -228,10 +253,11 @@ describe('PoPageCustomizationService:', () => {
         testUrl(originalOption, newOption, mergedOptions);
       }));
 
-      function testUrl(originalOption: PoPageDynamicOptions, newOption: PoPageDynamicOptions, mergedOptions: PoPageDynamicOptions) {
+      function testUrl(originalOption: PoPageDynamicSearchOptions,
+                       newOption: PoPageDynamicSearchOptions, mergedOptions: PoPageDynamicSearchOptions) {
         const url = '/test/api';
         poPageCustomizationService
-          .getCustomOptions(url, originalOption)
+          .getCustomOptions(url, originalOption, pageOptionSchema)
           .subscribe(optionResult => {
             expect(optionResult).toEqual(mergedOptions);
           });

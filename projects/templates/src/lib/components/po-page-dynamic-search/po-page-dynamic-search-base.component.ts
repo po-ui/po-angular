@@ -4,10 +4,10 @@ import { PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } fro
 
 import { poLocaleDefault } from '../../utils/util';
 
-import { PoPageDynamicOptions } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
 import { poAdvancedFiltersLiteralsDefault } from './po-advanced-filter/po-advanced-filter-base.component';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
+import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
 
 export const poPageDynamicSearchLiteralsDefault = {
   en: <PoPageDynamicSearchLiterals> {
@@ -143,13 +143,13 @@ export class PoPageDynamicSearchBaseComponent {
    * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
    * - `function`: Método que será executado.
    *
-   * O retorno desta função deve ser do tipo `PoPageDynamicOptions`,
+   * O retorno desta função deve ser do tipo `PoPageDynamicSearchOptions`,
    * onde o usuário poderá customizar novos filtros, breadcrumb, title e actions
    *
    * Por exemplo:
    *
    * ```
-   * getPageOptions(): PoPageDynamicOptions {
+   * getPageOptions(): PoPageDynamicSearchOptions {
    * return {
    *   actions: [
    *     { label: 'Find on Google' },
@@ -166,7 +166,7 @@ export class PoPageDynamicSearchBaseComponent {
    *  [p-load]="onLoadOptions.bind(this)"
    * ```
    */
-  @Input('p-load') onLoad: string | (() => PoPageDynamicOptions );
+  @Input('p-load') onLoad: string | (() => PoPageDynamicSearchOptions );
 
   /** Título da página. */
   @Input('p-title') title: string;

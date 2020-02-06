@@ -8,6 +8,8 @@ import { PoTableModule } from '@portinari/portinari-ui';
 import { PoPageDynamicSearchModule } from '../po-page-dynamic-search/po-page-dynamic-search.module';
 
 import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
+import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
+import { PoPageDynamicModule } from '../../services/po-page-dynamic';
 
 /**
  * @description
@@ -21,7 +23,9 @@ import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
     RouterModule,
 
     PoTableModule,
-    PoPageDynamicSearchModule
+    PoPageDynamicSearchModule,
+    PoPageCustomizationModule,
+    PoPageDynamicModule
   ],
   declarations: [
     PoPageDynamicTableComponent

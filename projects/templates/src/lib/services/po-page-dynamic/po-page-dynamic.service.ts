@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoPageDynamicService {
 
   private endpoint = '/';
@@ -21,14 +23,14 @@ export class PoPageDynamicService {
     this.metadata = config.metadata || this.metadata;
   }
 
-  getMetadata(type: string = 'list'): Observable<any> {
+  getMetadata<T>(type: string = 'list'): Observable<T> {
     const key = `${this.endpoint}-${type}-metadata`;
     const cache = JSON.parse(localStorage.getItem(key)) || {};
     const metadataUrlBase = this.metadata || `${this.endpoint}/metadata`;
 
     const url = `${metadataUrlBase}?type=${type}&version=${cache.version || ''}`;
 
-    return this.http.get(url).pipe(map((response: any) => {
+    return this.http.get<T>(url).pipe(map((response: any) => {
       if (response.version === cache.version) {
         return cache;
       }
@@ -50,7 +52,7 @@ export class PoPageDynamicService {
   }
 
   // Busca uma lista de recursos
-  getResources(params: {} = {}): Observable<any> {
+  getResources(params?: HttpParams): Observable<any> {
     return this.http.get(this.endpoint, { headers: this.headers, params });
   }
 
