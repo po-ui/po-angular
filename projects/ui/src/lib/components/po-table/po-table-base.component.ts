@@ -446,7 +446,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
    *
    * @default `false`
    */
-  @Input('p-hide-column-manager') @InputBoolean() hideColumnManager: boolean;
+  @Input('p-hide-columns-manager') @InputBoolean() hideColumnsManager: boolean;
 
   /** Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();
