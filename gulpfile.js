@@ -201,6 +201,7 @@ const watchers = () => {
 
   watch('./src/**/*.html', copyAppComponents);
   watch('./src/**/*.css', series(prepareThemeCss, buildDevThemeCss, copyThemeToApp));
+  watch('./src/**/*.js', buildAppJs);
 }
 
 /**
