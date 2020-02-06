@@ -442,11 +442,9 @@ export abstract class PoTableBaseComponent implements OnChanges {
    *
    * @description
    *
-   * Define se o gerenciamento de colunas da tabela será removido da tela
+   * Esconde o **Gerenciador de colunas** localizado no canto superior direito da tabela.
    *
-   * O valor é padrão é false, o gerenciamento de colunas será sempre apresentando em tela
-   * só será removido se for declarado no componente: p-hide-column-manager="true"
-   *
+   * @default `false`
    */
   @Input('p-hide-column-manager') @InputBoolean() hideColumnManager: boolean;
 
