@@ -1,6 +1,6 @@
-import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
+import { PoPageDynamicListBaseComponent } from '../po-page-dynamic-list-base.component';
 
-import { expectPropertiesValues } from '../../util-test/util-expect.spec';
+import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 describe('PoPageDynamicListBaseComponent:', () => {
   const component = new PoPageDynamicListBaseComponent();

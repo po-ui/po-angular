@@ -16,7 +16,7 @@ import * as util from './../../utils/util';
 
 import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
 import { PoPageDynamicEditField } from './interfaces/po-page-dynamic-edit-field.interface';
-import { PoPageDynamicService } from './po-page-dynamic.service';
+import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
 
 export const poPageDynamicEditLiteralsDefault = {
   en: {
@@ -398,7 +398,7 @@ export class PoPageDynamicEditComponent implements OnInit {
   private loadMetadata(paramId: string | number, duplicate: string) {
     const typeMetadata = paramId ? 'edit' : 'create';
 
-    this.poPageDynamicService.getMetadata(typeMetadata).toPromise().then(response => {
+    this.poPageDynamicService.getMetadata<any>(typeMetadata).toPromise().then(response => {
       this.autoRouter = response.autoRouter;
       this.actions = response.actions || {};
       this.breadcrumb = response.breadcrumb || { items : [] };

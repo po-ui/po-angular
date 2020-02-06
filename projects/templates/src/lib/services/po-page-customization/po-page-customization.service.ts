@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PoPageDynamicOptionsSchema, PoPageDynamicOptionsProp } from './po-page-dynamic-options.interface';
 
-import { PoPageDynamicOptions, UrlOrPoCustomizationFunction } from './po-page-dynamic-options.interface';
+type urlOrFunction = string | Function ;
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,9 @@ export class PoPageCustomizationService {
 
   constructor(private http: HttpClient) { }
 
-  getCustomOptions(origin: UrlOrPoCustomizationFunction, originalOption: PoPageDynamicOptions): Observable<PoPageDynamicOptions> {
-    return this.createObservable(origin).pipe(
-      map(newPageOptions => this.mergePageOptions(originalOption, newPageOptions))
+  getCustomOptions<T>(origin: urlOrFunction, originalOption: T, optionSchema: PoPageDynamicOptionsSchema<T>): Observable<T> {
+    return this.createObservable<T>(origin).pipe(
+      map(newPageOptions => this.mergePageOptions<T>(originalOption, newPageOptions, optionSchema))
     );
   }
 
@@ -39,27 +40,34 @@ export class PoPageCustomizationService {
     });
   }
 
-  private createObservable(origin: UrlOrPoCustomizationFunction): Observable<PoPageDynamicOptions> {
+  private createObservable<T>(origin: urlOrFunction): Observable<T> {
     if (typeof origin === 'string') {
-      return this.http.post<PoPageDynamicOptions>(origin, {});
+      return this.http.post<T>(origin, {});
     }
     return from(Promise.resolve(origin()));
   }
 
-  private mergePageOptions(originalOption: PoPageDynamicOptions, newPageOptions: PoPageDynamicOptions): PoPageDynamicOptions {
-    const mergePageOptions: PoPageDynamicOptions = {
-      filters: this.mergeOptions(originalOption.filters, newPageOptions.filters, 'property'),
-      actions: this.mergeOptions(originalOption.actions, newPageOptions.actions, 'label'),
-      breadcrumb: newPageOptions.breadcrumb ? newPageOptions.breadcrumb : originalOption.breadcrumb,
-      title: newPageOptions.title ? newPageOptions.title : originalOption.title
-    };
+  private mergePageOptions<T>(originalOption: T, newPageOptions: T, optionSchema: PoPageDynamicOptionsSchema<T>) {
+
+    const mergePageOptions: T = optionSchema.schema.reduce(
+      (objWithNewProp, prop) =>
+      ({...objWithNewProp, [prop.nameProp]: this.createNewProp(prop, originalOption, newPageOptions)})
+      , {} as T);
 
     Object.keys(mergePageOptions).forEach(key => !mergePageOptions[key] && delete mergePageOptions[key]);
 
     return mergePageOptions;
   }
 
-  private mergeOptions<T>(originalOptions: Array<T>, newOptions: Array<T>, filterProp: keyof T): Array<T> {
+  private createNewProp<T>(prop: PoPageDynamicOptionsProp<T>, originalOption: T, newPageOptions: T) {
+    if (prop.merge) {
+        return this.mergeOptions(originalOption[prop.nameProp], newPageOptions[prop.nameProp], prop.keyForMerge  );
+    } else {
+      return newPageOptions[prop.nameProp] || originalOption[prop.nameProp];
+    }
+  }
+
+  private mergeOptions<T>(originalOptions: (Array<T> | T) , newOptions: (Array<T> | T) , filterProp?: keyof T) {
 
     if (!originalOptions && !newOptions) {
       return;
@@ -71,6 +79,15 @@ export class PoPageCustomizationService {
       return newOptions;
     }
 
+    if (originalOptions instanceof Array && newOptions instanceof Array ) {
+      return this.mergeOptionsArray(originalOptions, newOptions, filterProp);
+    }
+
+    return {...originalOptions, ...newOptions};
+
+  }
+
+  private mergeOptionsArray<T>(originalOptions: Array<T>, newOptions: Array<T>, filterProp: keyof T) {
     const deduplicateNewOptions = newOptions.filter(
       newItem => !originalOptions.find(originalItem => originalItem[filterProp] === newItem[filterProp]));
     const mergedOriginalOptions = originalOptions.map(originalItem => {
@@ -78,7 +95,6 @@ export class PoPageCustomizationService {
         return {...originalItem, ...newItem};
       }
     );
-
     return [...mergedOriginalOptions, ...deduplicateNewOptions];
   }
 }

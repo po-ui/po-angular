@@ -1,5 +1,7 @@
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Subscription, Observable, EMPTY, throwError, concat } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import {
   PoDialogConfirmOptions,
@@ -14,11 +16,16 @@ import {
 import * as util from '../../utils/util';
 
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
-// import { PoPageDynamicEditComponent } from '../po-page-dynamic-edit/po-page-dynamic-edit.component';
 
 import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
-import { PoPageDynamicService } from './po-page-dynamic.service';
-import { PoPageDynamicTableActions } from './po-page-dynamic-table-actions.interface';
+import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
+import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableOptions } from './interfaces/po-page-dynamic-table-options.interface';
+import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
+import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
+import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
+
+type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions );
 
 export const poPageDynamicTableLiteralsDefault = {
   en: {
@@ -76,6 +83,63 @@ export const poPageDynamicTableLiteralsDefault = {
  * O `po-page-dynamic-table` é uma página que exibe uma lista de registros em uma tabela baseado em uma lista de fields,
  * o mesmo também suporta metadados conforme especificado na documentação.
  *
+ * ### Utilização via rota
+ *
+ * Ao utilizar as rotas para carregar o template, o `page-dynamic-table` disponibiliza propriedades para
+ * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
+ *
+ * ```
+ * {
+ *   path: 'people',
+ *   component: PoPageDynamicTableComponent,
+ *   data: {
+ *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata' // endpoint dos metadados
+ *   }
+ * }
+ * ```
+ *
+ * Para carregar com um recurso já existente, deve-se ser incluído um parâmetro na rota chamado `id`:
+ *
+ * ```
+ * {
+ *   path: 'people/:id',
+ *   component: PoPageDynamicTableComponent,
+ *   data: {
+ *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata' // endpoint dos metadados
+ *   }
+ * }
+ * ```
+ *
+ * A requisição dos metadados é feita na inicialização do template para buscar os metadados da página passando o
+ * tipo do metadado esperado e a versão cacheada pelo browser.
+ *
+ * O formato esperado na resposta da requisição está especificado na interface
+ * [PoPageDynamicTableMetadata](/documentation/po-page-dynamic-table#po-page-dynamic-table-metadata). Por exemplo:
+ *
+ * ```
+ *  {
+ *   version: 1,
+ *   title: 'Person Table',
+ *   fields: [
+ *     { property: 'id', key: true, disabled: true },
+ *     { property: 'status' },
+ *     { property: 'name' },
+ *     { property: 'nickname' },
+ *     { property: 'birthdate', label: 'Birth date' },
+ *     { property: 'genre' },
+ *     { property: 'city' },
+ *     { property: 'country' }
+ *   ]
+ * }
+ * ```
+ *
+ * > Caso o endpoint dos metadados não seja especificado, será feito uma requisição utilizando o `serviceApi` da seguinte forma:
+ * ```
+ * GET {end-point}/metadata?type=list&version={version}
+ * ```
+ *
  * @example
  *
  * <example name="po-page-dynamic-table-basic" title="Portinari Page Dynamic Table Basic">
@@ -93,7 +157,7 @@ export const poPageDynamicTableLiteralsDefault = {
   templateUrl: './po-page-dynamic-table.component.html',
   providers: [ PoPageDynamicService ]
 })
-export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit {
+export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
 
   private _actions: PoPageDynamicTableActions = {};
   private _pageActions: Array<PoPageAction> = [];
@@ -102,6 +166,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private page: number = 1;
   private params = {};
   private sortedColumn: PoTableColumnSort;
+  private subscriptions: Array<Subscription> = [];
 
   hasNext = false;
   items = [];
@@ -109,6 +174,38 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     ...poPageDynamicTableLiteralsDefault[util.poLocaleDefault],
     ...poPageDynamicTableLiteralsDefault[util.browserLanguage()]
   };
+
+  /**
+   * Função ou serviço que será executado na inicialização do componente.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
+   * - `function`: Método que será executado.
+   *
+   * O retorno desta função deve ser do tipo `PoPageDynamicTableOptions`,
+   * onde o usuário poderá customizar novos campos, breadcrumb, title e actions
+   *
+   * Por exemplo:
+   *
+   * ```
+   * getPageOptions(): PoPageDynamicTableOptions {
+   * return {
+   *   actions: [
+   *     { label: 'Find on Google' },
+   *   ],
+   *   fields: [
+   *     { property: 'idCard', gridColumns: 6 }
+   *   ]
+   * };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-load]="onLoadOptions.bind(this)"
+   * ```
+   */
+  @Input('p-load') onLoad: string | (() => PoPageDynamicTableOptions );
 
   /**
    * @optional
@@ -134,27 +231,25 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     private activatedRoute: ActivatedRoute,
     private poDialogService: PoDialogService,
     private poNotification: PoNotificationService,
-    private poPageDynamicService: PoPageDynamicService
+    private poPageDynamicService: PoPageDynamicService,
+    private poPageCustomizationService: PoPageCustomizationService
     ) {
     super();
   }
 
   ngOnInit(): void {
-    if (this.activatedRoute.snapshot.data.serviceApi) {
-      this.serviceApi = this.activatedRoute.snapshot.data.serviceApi;
-
-      this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi });
-
-      this.loadMetadata();
-    } else {
-      this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi });
-
-      this.loadData();
-    }
+    this.loadDataFromAPI();
   }
 
+  ngOnDestroy() {
+    if (this.subscriptions) {
+      this.subscriptions.forEach(subscription => {
+        subscription.unsubscribe();
+      });
+    }
+  }
   onAdvancedSearch(filter) {
-    this.loadData({ page: 1, ...filter });
+    this.subscriptions.push(this.loadData({ page: 1, ...filter }).subscribe());
     this.params = filter;
   }
 
@@ -169,7 +264,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   onQuickSearch(filter) {
-    this.loadData(filter ? { page: 1, search: filter } : undefined);
+    this.subscriptions.push(this.loadData(filter ? { page: 1, search: filter } : undefined).subscribe());
     this.params = filter ? { search: filter } : {};
   }
 
@@ -178,7 +273,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   showMore() {
-    this.loadData({ page: ++this.page, ...this.params });
+    this.subscriptions.push(this.loadData({ page: ++this.page, ...this.params }).subscribe());
   }
 
   get hasActionRemoveAll() {
@@ -236,30 +331,36 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private loadData(params: { page?: number, search?: string } = {}) {
     if (!this.serviceApi) {
       this.poNotification.error(this.literals.loadDataErrorNotification);
-      return;
+      return throwError(this.literals.loadDataErrorNotification);
     }
 
     const orderParam = this.getOrderParam(this.sortedColumn);
     const defaultParams: any = { page: 1, pageSize: 10 };
     const fullParams: any = { ...defaultParams, ...params, ...orderParam };
 
-    this.poPageDynamicService.getResources(fullParams).toPromise().then((response: any) => {
+    return this.poPageDynamicService.getResources(fullParams).pipe(
+     tap(response => {
       this.items = fullParams.page === 1 ? response.items : [...this.items, ...response.items];
       this.page = fullParams.page;
       this.hasNext = response.hasNext;
-    });
+     })
+   );
   }
 
-  private loadMetadata() {
-    this.poPageDynamicService.getMetadata().toPromise().then(response => {
-      this.autoRouter = response.autoRouter;
-      this.actions = response.actions || {};
-      this.breadcrumb = response.breadcrumb || { items : [] };
-      this.fields = response.fields || [];
-      this.title = response.title;
+  private getMetadata(serviceApi: string): Observable<PoPageDynamicTableMetaData> {
+    if (serviceApi) {
+      return this.poPageDynamicService.getMetadata<PoPageDynamicTableMetaData>().pipe(
+       tap(response => {
+         this.autoRouter = response.autoRouter || this.autoRouter;
+         this.actions = response.actions || this.actions;
+         this.breadcrumb = response.breadcrumb || this.breadcrumb;
+         this.fields = response.fields || this.fields;
+         this.title = response.title || this.title;
+       })
+     );
+    }
 
-      this.loadData();
-    });
+    return EMPTY;
   }
 
   // @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
@@ -288,19 +389,16 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const duplicates = util.mapObjectByProperties(item, this.duplicates);
 
     this.navigateTo({ path, params: { duplicate: JSON.stringify(duplicates) } });
-    // this.navigateTo({ path, params: { duplicate: JSON.stringify(duplicates) } , component: PoPageDynamicEditComponent });
   }
 
   private openEdit(path: string, item) {
     const url = this.resolveUrl(item, path);
 
     this.navigateTo({ path, url });
-    // this.navigateTo({ path, url, component: PoPageDynamicEditComponent });
   }
 
   private openNew(path: string) {
     this.navigateTo({ path });
-    // this.navigateTo({ path, component: PoPageDynamicEditComponent });
   }
 
   /**
@@ -382,6 +480,57 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         }
       ];
     }
+  }
+
+  private loadDataFromAPI() {
+    const { serviceApi } = this.activatedRoute.snapshot.data;
+    this.serviceApi = serviceApi || this.serviceApi;
+    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi});
+    const metadata$ = this.getMetadata(serviceApi);
+    const data$ = this.loadData();
+    const customOption$ = this.loadOptionsOnInitialize(this.onLoad);
+    this.subscriptions.push(concat(metadata$, data$, customOption$).subscribe());
+  }
+
+  private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
+
+    if (onLoad) {
+      return this.getPoDynamicPageOptions(onLoad).pipe(
+        tap(responsePoOption => this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)));
+    }
+
+    return EMPTY;
+  }
+
+  private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicTableOptions> {
+    const originalOption: PoPageDynamicTableOptions = {
+      fields: this.fields,
+      actions: this.actions,
+      breadcrumb: this.breadcrumb,
+      title: this.title
+    };
+
+    const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicTableOptions> = {
+      schema: [
+        {
+          nameProp: 'fields',
+          merge: true,
+          keyForMerge: 'property'
+        },
+        {
+          nameProp: 'actions',
+          merge: true
+        },
+        {
+          nameProp: 'breadcrumb'
+        },
+        {
+          nameProp: 'title'
+        }
+      ]
+    };
+
+    return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
   }
 
 }

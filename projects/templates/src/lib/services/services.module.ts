@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 
 import { PoPageCustomizationModule } from './po-page-customization/po-page-customization.module';
+import { PoPageDynamicModule } from './po-page-dynamic';
 
 @NgModule({
   imports: [
-    PoPageCustomizationModule
+    PoPageCustomizationModule,
+    PoPageDynamicModule
   ],
   exports: [
-    PoPageCustomizationModule
+    PoPageCustomizationModule,
+    PoPageDynamicModule
   ]
 })
 export class PoServicesModule { }

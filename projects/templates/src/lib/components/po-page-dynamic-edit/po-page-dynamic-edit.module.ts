@@ -13,6 +13,7 @@ import {
 } from '@portinari/portinari-ui';
 
 import { PoPageDynamicEditComponent } from './po-page-dynamic-edit.component';
+import { PoPageDynamicModule } from '../../services/po-page-dynamic';
 
 /**
  * @description
@@ -30,7 +31,8 @@ import { PoPageDynamicEditComponent } from './po-page-dynamic-edit.component';
     PoDynamicModule,
     PoGridModule,
     PoPageModule,
-    PoWidgetModule
+    PoWidgetModule,
+    PoPageDynamicModule
   ],
   declarations: [
     PoPageDynamicEditComponent
