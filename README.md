@@ -13,6 +13,7 @@ Biblioteca de componentes de UI para Angular.
 [![npm package](https://img.shields.io/npm/v/@portinari/portinari-ui?color=%23c9357d&style=flat-square)](https://www.npmjs.org/package/@portinari/portinari-ui)
 [![NPM downloads](https://img.shields.io/npm/dm/@portinari/portinari-ui?color=c9357d&label=npm%20downloads&style=flat-square)](https://npmjs.com/package/@portinari/portinari-ui)
 [![GitHub license](https://img.shields.io/npm/l/@portinari/portinari-ui?color=%23c9357d&style=flat-square)](https://github.com/portinariui/portinari-angular/blob/master/LICENSE)
+[![Twitter](https://img.shields.io/badge/Twitter-PortinariUI-c9357d?style=flat-square&logo=twitter)](https://twitter.com/portinariui)
 
 </div>
 
