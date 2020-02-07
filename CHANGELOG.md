@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.25.0](https://github.com/portinariui/portinari-angular/compare/v1.24.0...v1.25.0) (2020-02-07)
+
+
+### Bug Fixes
+
+* **decimal:** corrige falha no arredondamento dos decimais ([08f2382](https://github.com/portinariui/portinari-angular/commit/08f2382))
+
+
+### Features
+
+* **page-dynamic-search:** adiciona a propriedade `p-literals` ([ec298f9](https://github.com/portinariui/portinari-angular/commit/ec298f9))
+* **page-dynamic-search:** implementa a propriedade `p-load` ([36160f2](https://github.com/portinariui/portinari-angular/commit/36160f2))
+
+### Documentation
+
+* **sync:** atualização das versões do tutorial ([acf5afb](https://github.com/portinariui/portinari-angular/commit/acf5afb))
+* **loading-overlay:** documenta como utilizar `p-screen-lock="false"` ([65dedd7](https://github.com/portinariui/portinari-angular/commit/65dedd7))
+
 ## [1.24.0](https://github.com/portinariui/portinari-angular/compare/v1.23.0...v1.24.0) (2020-01-24)
 
 
