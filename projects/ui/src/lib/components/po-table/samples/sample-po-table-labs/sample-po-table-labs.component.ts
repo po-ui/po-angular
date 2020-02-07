@@ -77,6 +77,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { label: 'Hide columns manager', value: 'hideColumnsManager' },
     { label: 'Hide text overflow', value: 'hideTextOverflow' },
     { label: 'Sort', value: 'sort' },
     { label: 'Striped', value: 'striped' },
