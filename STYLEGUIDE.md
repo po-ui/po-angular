@@ -85,13 +85,13 @@ Onde prop é o nome da propriedade e type é o tipo da propriedade, sempre decla
 - Não use p-auto-focus nos samples.
 - Separar os samples por pastas.
 
-- Propriedades do tipo “label” usar o nome do componente
+- Propriedades do tipo “label” devem usar o nome do componente
   - “Portinari Button”
 - Propriedades do tipo boolean devem ser usadas sem valor sempre que possível
   - p-required // BOM
   - p-required=“true” // RUIM
 - Propriedades do tipo boolean podem ser agrupadas com um po-checkbox-group
-  - Quando possível quebrar em mais de uma grupo
+  - Quando possível quebrar em mais de um grupo
 - Propriedades dos elementos devem seguir a seguinte ordem:
   - class (CSS)
   - name (nome do componente quando houver necessidade, inputs, buttons, etc…)
@@ -141,7 +141,7 @@ p-required
   - Separador: Usar um <hr> para separar as duas partes;
   - po-info com o model e os eventos ;
   - Separador: Usar um <hr> para separar as duas partes;
-  - Propriedades: Deve ser composto por inputs (entre outros componentes) que auxiliaram na alteração do comportamento do componente. Use a propriedade p-required quando a propriedade for obrigatório.
+  - Propriedades: Deve ser composto por inputs (entre outros componentes) que auxiliarão na alteração do comportamento do componente. Use a propriedade p-required quando a propriedade for obrigatório.
   - Propriedades devem ter os valores default de acordo com a documentação
   - Criar função de restore do sample
   - Chamar restore() no ngOnInit e não no construtor.
@@ -171,7 +171,7 @@ this.size = undefined;
 
 - Não use chaves vazia com quebra de linhas
 ```
-export class SamplepoAvatarBasicComponent { } // BOM, não esqueoa do espaço
+export class SamplepoAvatarBasicComponent { } // BOM, não esqueça do espaço
 export class SamplepoAvatarBasicComponent { // RUIM
 }
 ```
