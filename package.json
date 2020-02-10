@@ -75,6 +75,7 @@
     "@types/localforage": "0.0.34",
     "@types/node": "~8.9.4",
     "@types/systemjs": "^0.20.6",
+    "@types/uuid": "^3.4.7",
     "codelyzer": "^5.0.0",
     "del": "^3.0.0",
     "gulp": "^4.0.2",
