@@ -111,3 +111,11 @@ po-navbar ~ .po-wrapper .po-page {
     margin-top: 56px;
   }
 }
+
+@media print {
+
+  .po-navbar ~ po-menu, .po-navbar {
+    display: none;
+  }
+
+}
