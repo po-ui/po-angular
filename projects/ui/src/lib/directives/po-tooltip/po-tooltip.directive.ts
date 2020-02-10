@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 
-import { PoControlPositionService } from './../../services/po-control-position/po-control-position.service';
 import { PoTooltipBaseDirective } from './po-tooltip-base.directive';
+import { PoTooltipControlPositionService } from './po-tooltip-control-position.service';
 
 /**
  * @docsExtends PoTooltipBaseDirective
@@ -26,7 +26,7 @@ import { PoTooltipBaseDirective } from './po-tooltip-base.directive';
  */
 @Directive({
   selector: '[p-tooltip]',
-  providers: [ PoControlPositionService ]
+  providers: [ PoTooltipControlPositionService ]
 })
 export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit {
 
@@ -43,7 +43,7 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
 
   constructor(private elementRef: ElementRef,
               private renderer: Renderer2,
-              private poControlPosition: PoControlPositionService) {
+              private poControlPosition: PoTooltipControlPositionService) {
 
     super();
   }
