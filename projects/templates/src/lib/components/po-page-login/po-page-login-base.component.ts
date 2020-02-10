@@ -110,7 +110,7 @@ export const poPageLoginLiteralsDefault = {
     forgotYourPassword: 'Забыли пароль?',
     ifYouTryHarder: 'Если вы безуспешно попытаетесь войти еще ',
     attempts: '{0} раз(а) ',
-    yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
+    yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
     createANewPasswordNow: 'Лучше создайте новый пароль сейчас! Вы сможете сразу войти в систему.',
     iForgotMyPassword: 'Я забыл свой пароль'
   }
