@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { Observable, throwError } from 'rxjs';
+import { throwError, of } from 'rxjs';
 
 import { PoDialogService } from '@portinari/portinari-ui';
 
@@ -12,7 +12,7 @@ import * as util from '../../utils/util';
 import { configureTestSuite, expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import { PoPageDynamicDetailComponent } from './po-page-dynamic-detail.component';
-import { PoPageDynamicDetailActions } from './po-page-dynamic-detail-actions.interface';
+import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 
 describe('PoPageDynamicDetailComponent:', () => {
   let component: PoPageDynamicDetailComponent;
@@ -103,6 +103,14 @@ describe('PoPageDynamicDetailComponent:', () => {
 
       expectPropertiesValues(component, 'autoRouter', invalidValues, false);
     });
+
+    it('duplicates: get duplicates', () => {
+      const duplicates = [{property: 'name'}];
+
+      component['_duplicates'] = duplicates;
+
+      expect(component.duplicates).toEqual(duplicates);
+    });
   });
 
   describe('Methods: ', () => {
@@ -122,7 +130,7 @@ describe('PoPageDynamicDetailComponent:', () => {
 
       component['navigateTo'](route);
 
-      tick(50);
+      tick();
 
       expect(component['navigateTo']).toHaveBeenCalledTimes(1);
       expect(component['router'].config.unshift).not.toHaveBeenCalled();
@@ -144,7 +152,7 @@ describe('PoPageDynamicDetailComponent:', () => {
 
       component['navigateTo'](route);
 
-      tick(50);
+      tick();
 
       expect(component['navigateTo']).toHaveBeenCalledTimes(2);
       expect(component['router'].config.unshift).toHaveBeenCalledWith({ ...route, data: { serviceApi: this.serviceApi, autoRouter: true }});
@@ -158,13 +166,13 @@ describe('PoPageDynamicDetailComponent:', () => {
       component.model = { id: 1 , name: 'Angular' };
 
       spyOn(component, <any> 'formatUniqueKey').and.returnValue(uniqueKey);
-      spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(getObservable({}));
+      spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
       spyOn(component, <any> 'navigateTo');
       spyOn(component['poNotification'], 'success');
 
       component['remove'](path);
 
-      tick(50);
+      tick();
 
       expect(component['poNotification'].success).toHaveBeenCalled();
       expect(component['formatUniqueKey']).toHaveBeenCalledWith(component.model);
@@ -172,107 +180,270 @@ describe('PoPageDynamicDetailComponent:', () => {
       expect(component['navigateTo']).toHaveBeenCalledWith({ path/*, component: PoPageDynamicTableComponent*/ });
     }));
 
-    it('ngOnInit: should call `loadData` with `paramId` if `activatedRoute.snapshot.data.serviceApi` is falsy', () => {
-      const id = 1;
-      const activatedRoute: any = {
-        snapshot: {
-          data: { },
-          params: { id }
-        }
-      };
-
-      component.serviceApi = 'localhost:4300/api/people';
-
-      spyOn(component, <any> 'loadData');
-      spyOn(component['poPageDynamicService'], <any> 'configServiceApi');
-
-      component['activatedRoute'] = activatedRoute;
-
-      component.ngOnInit();
-
-      expect(component['loadData']).toHaveBeenCalledWith(id);
-      expect(component['poPageDynamicService'].configServiceApi).toHaveBeenCalledWith({ endpoint: component.serviceApi });
-    });
-
-    it('ngOnInit: should call `loadMetadata` with `id` and set `serviceApi` if `activatedRoute.snapshot.data.serviceApi` is truthy',
-      () => {
+    describe('ngOnInit:', () => {
+      it('should call `loadData` with `paramId` if `activatedRoute.snapshot.data.serviceApi` is falsy', () => {
         const id = 1;
         const activatedRoute: any = {
           snapshot: {
-            data: {
-              serviceApi: 'localhost:4300/api/people'
-            },
+            data: { },
             params: { id }
           }
         };
 
-        component.serviceApi = undefined;
+        component.serviceApi = 'localhost:4300/api/people';
 
-        spyOn(component, <any> 'loadMetadata');
+        spyOn(component, <any> 'getMetadata').and.returnValue(of({}));
+        spyOn(component, <any> 'loadData').and.returnValue(of({}));
+        spyOn(component, <any> 'loadOptionsOnInitialize').and.returnValue(of({}));
         spyOn(component['poPageDynamicService'], <any> 'configServiceApi');
 
         component['activatedRoute'] = activatedRoute;
 
         component.ngOnInit();
 
-        expect(component.serviceApi).toEqual(activatedRoute.snapshot.data.serviceApi);
-        expect(component['loadMetadata']).toHaveBeenCalledWith(id);
-        expect(component['poPageDynamicService'].configServiceApi).toHaveBeenCalledWith({ endpoint: component.serviceApi });
+        expect(component['loadData']).toHaveBeenCalledWith(id);
+        expect(component['poPageDynamicService'].configServiceApi)
+          .toHaveBeenCalledWith({ endpoint: component.serviceApi, metadata: undefined });
       });
 
-    it('loadMetadata: should call `getMetadata` and set properties', fakeAsync(() => {
-      const id = 1;
-      const response = {
-        autoRouter: false,
-        actions: undefined,
-        breadcrumb: undefined,
-        fields: [],
-        title: 'Title'
-      };
+      it('should call `loadDataFromAPI` with `id` and set `serviceApi` if `activatedRoute.snapshot.data.serviceApi` is truthy',
+        () => {
+          const id = 1;
+          const activatedRoute: any = {
+            snapshot: {
+              data: {
+                serviceApi: 'localhost:4300/api/people',
+                serviceMetadataApi: 'localhost:4300/api/people/metadata'
+              },
+              params: { id }
+            }
+          };
 
-      spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(getObservable(response));
-      spyOn(component, <any> 'loadData');
+          component.serviceApi = undefined;
 
-      component['loadMetadata'](id);
+          spyOn(component, <any> 'getMetadata').and.returnValue(of({}));
+          spyOn(component, <any> 'loadData').and.returnValue(of({}));
+          spyOn(component, <any> 'loadOptionsOnInitialize').and.returnValue(of({}));
+          spyOn(component['poPageDynamicService'], <any> 'configServiceApi');
 
-      tick(50);
+          component['activatedRoute'] = activatedRoute;
 
-      expect(component.autoRouter).toEqual(response.autoRouter);
-      expect(component.fields).toEqual(response.fields);
-      expect(component.title).toEqual(response.title);
-      expect(component['loadData']).toHaveBeenCalledWith(id);
-    }));
+          component.ngOnInit();
 
-    it('loadData: should set `model` with response data', fakeAsync(() => {
-      const id = 1;
-      const actions = { edit: '/edit' };
-      const response = { id, name: 'angular' };
+          expect(component.serviceApi).toEqual(activatedRoute.snapshot.data.serviceApi);
+          expect(component['getMetadata']).toHaveBeenCalled();
+          expect(component['poPageDynamicService'].configServiceApi).toHaveBeenCalledWith({
+            endpoint: component.serviceApi,
+            metadata: 'localhost:4300/api/people/metadata' });
+        });
 
-      spyOn(component['poPageDynamicService'], 'getResource').and.returnValue(getObservable(response));
+      it('should configure properties based on the return of onload function', fakeAsync(() => {
+          component.actions = {
+            remove: '/datail',
+            edit: '/edit'
+          };
+          component.breadcrumb = {
+            items: [
+              { label: 'Home' },
+              { label: 'Hiring processes' }
+            ]
+          };
+          component.fields = [
+            { property: 'filter1' },
+            { property: 'filter2' }
+          ];
+          component.title = 'Original Title';
 
-      component.actions = actions;
-      component['loadData'](id);
+          component.onLoad = () => {
+            return{
+              title: 'New Title',
+              breadcrumb: {
+                items: [
+                  { label: 'Test' },
+                  { label: 'Test2' }
+                ]
+              },
+              actions: {
+                remove: '/new_datail'
+              },
+              fields: [
+                { property: 'filter1' },
+                { property: 'filter3' }
+              ]
+            };
+          };
 
-      tick(50);
+          spyOn(component, <any>'loadData').and.returnValue(of({}));
 
-      expect(component.model).toEqual(response);
-      expect(component.pageActions.length).toBe(2);
-    }));
+          component.ngOnInit();
 
-    it('loadData: should set `model` and `actions` to undefined if catch error on `getResource`', fakeAsync(() => {
-      const id = 1;
-      const actions = { edit: '/edit' };
+          tick();
 
-      spyOn(component['poPageDynamicService'], 'getResource').and.returnValue(throwError(''));
+          expect(component.title).toBe('New Title');
+          expect(component.actions).toEqual({
+            remove: '/new_datail',
+            edit: '/edit'
+          });
+          expect(component.fields).toEqual([
+            { property: 'filter1' },
+            { property: 'filter2' },
+            { property: 'filter3' }
+          ]);
+          expect(component.breadcrumb).toEqual({
+            items: [
+              { label: 'Test' },
+              { label: 'Test2' }
+            ]
+          });
 
-      component.actions = actions;
-      component['loadData'](id);
+          component['subscriptions'] = null;
+          component.ngOnDestroy();
+        }));
 
-      tick(50);
+      it('should configure properties based on the return of onload route', fakeAsync(() => {
 
-      expect(component.model).toEqual(undefined);
-      expect(component.pageActions.length).toBe(1);
-    }));
+        component.autoRouter = false;
+        component.actions = <any>{};
+        component.breadcrumb = <any>{};
+        component.fields = [];
+        component.title = '';
+
+        const activatedRoute: any = {
+          snapshot: {
+            data: {
+              serviceApi: 'localhost:4300/api/people',
+              serviceMetadataApi: 'localhost:4300/api/people/metadata',
+              serviceLoadApi: 'localhost:4300/api/people/metadata'
+            },
+            params: { id: 1 }
+          }
+        };
+
+        const metadata = {
+          breadcrumb : {
+            items: [
+              { label: 'Home' },
+              { label: 'Hiring processes' }
+            ]
+          },
+          title: 'Original Title'
+        };
+
+        const custom = {title: 'New Title'};
+
+        spyOn(component, <any>'loadData').and.returnValue(of({}));
+        spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(metadata));
+        spyOn(<any>component['poPageCustomizationService'], 'createObservable').and.returnValue(of(custom));
+
+        component['activatedRoute'] = activatedRoute;
+
+        component.ngOnInit();
+
+        tick();
+
+        expect(component.title).toBe('New Title');
+        expect(component.breadcrumb).toEqual({
+            items: [
+              { label: 'Home' },
+              { label: 'Hiring processes' }
+            ]
+          });
+        }));
+    });
+
+    describe('loadDataFromAPI', () => {
+      it('should load the metadata and keep it if the onload property returns empty', fakeAsync(() => {
+
+        const activatedRoute: any = {
+          snapshot: {
+            data: {
+              serviceApi: 'localhost:4300/api/people',
+              serviceMetadataApi: 'localhost:4300/api/people/metadata'
+            },
+            params: { id: 1 }
+          }
+        };
+
+        const response = {
+          autoRouter: false,
+          actions: undefined,
+          breadcrumb: undefined,
+          fields: [],
+          title: 'Title'
+        };
+
+        spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
+        spyOn(component, <any> 'loadData').and.returnValue(of({}));
+        spyOn(component, <any> 'loadOptionsOnInitialize').and.returnValue(of({}));
+        component['activatedRoute'] = activatedRoute;
+        component['loadDataFromAPI']();
+
+        tick();
+
+        expect(component.autoRouter).toEqual(response.autoRouter);
+        expect(component.fields).toEqual(response.fields);
+        expect(component.title).toEqual(response.title);
+
+      }));
+
+      it('should call `getMetadata` and mantain properties when response is empty', fakeAsync(() => {
+        const activatedRoute: any = {
+          snapshot: {
+            data: {
+              serviceApi: 'localhost:4300/api/people',
+              serviceMetadataApi: 'localhost:4300/api/people/metadata'
+            },
+            params: { id: 1 }
+          }
+        };
+
+        component.autoRouter = true;
+        component.title = 'Test';
+
+        spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of({}));
+        spyOn(component, <any> 'loadData').and.returnValue(of({}));
+        spyOn(component, <any> 'loadOptionsOnInitialize').and.returnValue(of({}));
+        component['activatedRoute'] = activatedRoute;
+        component['loadDataFromAPI']();
+
+        tick();
+
+        expect(component.autoRouter).toEqual(true);
+        expect(component.title).toEqual('Test');
+      }));
+    });
+
+    describe('loadData:', () => {
+      it('should set `model` with response data', fakeAsync(() => {
+        const id = 1;
+        const actions = { edit: '/edit' };
+        const response = { id, name: 'angular' };
+
+        spyOn(component['poPageDynamicService'], 'getResource').and.returnValue(of(response));
+
+        component.actions = actions;
+        component['loadData'](id).subscribe(() => {
+          expect(component.model).toEqual(response);
+          expect(component.pageActions.length).toBe(2);
+        });
+        tick();
+      }));
+
+      it('should set `model` and `actions` to undefined if catch error on `getResource`', fakeAsync(() => {
+        const id = 1;
+        const actions = { edit: '/edit' };
+
+        spyOn(component['poPageDynamicService'], 'getResource').and.returnValue(throwError(''));
+
+        component.actions = actions;
+        component['loadData'](id).subscribe(() => {}, () => {
+          expect(component.model).toEqual(undefined);
+          expect(component.pageActions.length).toBe(1);
+        });
+        tick();
+      }));
+
+    });
 
     it('formatUniqueKey: should return value with `|` between keys', () => {
       const keys = { id: 1, code: 3 };
@@ -457,10 +628,3 @@ describe('PoPageDynamicDetailComponent:', () => {
   });
 
 });
-
-function getObservable(response): any {
-  return new Observable(obs => {
-    obs.next(response);
-    obs.complete();
-  });
-}

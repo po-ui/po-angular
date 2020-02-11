@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PoButtonGroupItem } from './po-button-group-item.interface';
@@ -25,6 +25,7 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  *
  * > As recomendações do `po-button` também valem para o `po-button-group`.
  */
+@Directive()
 export class PoButtonGroupBaseComponent {
 
   private _small?: boolean = false;

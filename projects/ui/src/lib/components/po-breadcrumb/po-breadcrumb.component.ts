@@ -36,7 +36,7 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
   private timeoutResize;
 
   @ViewChild('breadcrumb', { read: ElementRef, static: true }) breadcrumbElement: ElementRef;
-  @ViewChild('dropdownIcon', { read: ElementRef, static: false }) dropdownIcon: ElementRef;
+  @ViewChild('dropdownIcon', { read: ElementRef }) dropdownIcon: ElementRef;
 
   constructor(differs: IterableDiffers, private element: ElementRef, public renderer: Renderer2) {
     super();

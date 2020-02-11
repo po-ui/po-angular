@@ -6,6 +6,7 @@ import * as UtilsFunctions from '../../../utils/util';
 import { PoAccordionModule } from '../../../components/po-accordion/po-accordion.module';
 import { PoHttpInterceptorDetail } from './po-http-interceptor-detail.interface';
 import { PoHttpInterceptorDetailComponent } from './po-http-interceptor-detail.component';
+import { poHttpInterceptorDetailLiteralsDefault } from './po-http-interceptor-detail-literals.interface';
 import { PoModalModule } from '../../../components/po-modal/po-modal.module';
 import { PoTagModule } from '../../../components/po-tag/po-tag.module';
 
@@ -27,6 +28,8 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
+
+    component.literals = poHttpInterceptorDetailLiteralsDefault['en'];
   });
 
   it('should create', () => {

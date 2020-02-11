@@ -17,7 +17,7 @@ describe('PoAccordionService:', () => {
       providers: [PoAccordionService]
     });
 
-    accordionService = TestBed.get(PoAccordionService);
+    accordionService = TestBed.inject(PoAccordionService);
 
   });
 

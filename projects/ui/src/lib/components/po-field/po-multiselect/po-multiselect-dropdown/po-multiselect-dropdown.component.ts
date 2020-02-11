@@ -51,7 +51,7 @@ export class PoMultiselectDropdownComponent {
 
   @ViewChild('container', { read: ElementRef, static: true }) container: ElementRef;
   @ViewChild('ulElement', {read: ElementRef, static: true }) ulElement: ElementRef;
-  @ViewChild('searchElement', { static: false }) searchElement: PoMultiselectSearchComponent;
+  @ViewChild('searchElement') searchElement: PoMultiselectSearchComponent;
 
   scrollTo(index) {
     this.scrollTop = (index <= 2) ? 0 : (index * 44) - 88;

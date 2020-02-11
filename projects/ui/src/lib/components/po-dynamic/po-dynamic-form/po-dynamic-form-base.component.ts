@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -13,6 +13,7 @@ import { PoDynamicFormField } from './po-dynamic-form-field.interface';
  *
  * Também é possível verificar se o formulário está válido e informar valores para a exibição de informações.
  */
+@Directive()
 export class PoDynamicFormBaseComponent {
 
   private _groupForm?: boolean = false;

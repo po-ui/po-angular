@@ -39,6 +39,6 @@ export class PoButtonGroupComponent extends PoButtonGroupBaseComponent {
     super();
 
     // Get instance of parent to execute the actions
-    this.parentRef = viewRef['_view']['component'];
+    this.parentRef = viewRef['_hostView'][8];
   }
 }

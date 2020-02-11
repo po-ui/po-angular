@@ -30,7 +30,6 @@ import { PoHttpInterceptorService } from './po-http-interceptor.service';
       useClass: PoHttpInterceptorService,
       multi: true
     }
-  ],
-  entryComponents: [PoHttpInterceptorDetailComponent]
+  ]
 })
 export class PoHttpInterceptorModule { }

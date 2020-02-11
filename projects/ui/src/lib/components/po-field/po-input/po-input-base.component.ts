@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -21,6 +21,7 @@ import { PoMask } from './po-mask';
  * Então você precisa informar o atributo name ou o atributo [ngModelOptions]="{standalone: true}".
  * Exemplo: [(ngModel)]="pessoa.nome" [ngModelOptions]="{standalone: true}"
  */
+@Directive()
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator {
 
   private _maxlength?: number;
@@ -131,24 +132,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     this.required = required === '' ? true : convertToBoolean(required);
 
     this.validateModel();
-  }
-
-  /**
-   * @optional
-   *
-   * @deprecated 2.0.0
-   * @description
-   *
-   * **Deprecated**
-   *
-   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * @default `false`
-   */
-  @Input('p-focus') set oldfocus(focus: boolean) {
-    this.autoFocus = focus;
   }
 
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */

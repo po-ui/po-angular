@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
@@ -23,6 +23,7 @@ import { InputBoolean } from '../../../decorators';
  * </po-textarea>
  * ```
  */
+@Directive()
 export abstract class PoTextareaBaseComponent implements ControlValueAccessor, Validator {
 
   private _disabled: boolean = false;
@@ -131,24 +132,6 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
 
   get required(): boolean {
     return this._required;
-  }
-
-  /**
-   * @optional
-   *
-   * @deprecated 2.0.0
-   * @description
-   *
-   * **Deprecated**
-   *
-   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * @default `false`
-   */
-  @Input('p-focus') set oldfocus(focus: boolean) {
-    this.autoFocus = focus;
   }
 
   /**

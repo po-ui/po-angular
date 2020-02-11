@@ -16,12 +16,12 @@
     "lokijs": "1.5.7"
   },
   "peerDependencies": {
-    "@angular/core": "~8.0.0",
+    "@angular/core": "~9.0.4",
     "custom-idle-queue": "2.1.2",
     "localforage": "1.4.0",
     "lokijs": "1.5.7",
-    "rxjs": "~6.4.0",
-    "zone.js": "~0.9.1"
+    "rxjs": "~6.5.4",
+    "zone.js": "~0.10.2"
   }
 }
 

@@ -13,8 +13,8 @@ describe('PoDynamicViewService:', () => {
       providers: [PoDynamicViewService]
     });
 
-    poDynamicViewService = TestBed.get(PoDynamicViewService);
-    httpMock = TestBed.get(HttpTestingController);
+    poDynamicViewService = TestBed.inject(PoDynamicViewService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

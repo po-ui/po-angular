@@ -1,11 +1,12 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { PoBreadcrumb } from '@portinari/portinari-ui';
 
 import { convertToBoolean } from '../../utils/util';
 
-import { PoPageDynamicTableField } from './po-page-dynamic-table-field.interface';
+import { PoPageDynamicTableField } from './interfaces/po-page-dynamic-table-field.interface';
 
+@Directive()
 export class PoPageDynamicListBaseComponent {
 
   private _autoRouter: boolean = false;

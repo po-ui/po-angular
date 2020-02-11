@@ -10,17 +10,48 @@ import { PoDropdownModule } from '../po-dropdown/po-dropdown.module';
 import { PoFieldModule } from '../po-field/po-field.module';
 import { PoLanguageModule } from './../../services/po-language/po-language.module';
 import { PoModalModule } from './../po-modal/po-modal.module';
-import { PoPageComponent } from './po-page.component';
 import { PoPageContentComponent } from './po-page-content/po-page-content.component';
 import { PoPageDefaultComponent } from './po-page-default/po-page-default.component';
 import { PoPageDetailComponent } from './po-page-detail/po-page-detail.component';
 import { PoPageEditComponent } from './po-page-edit/po-page-edit.component';
 import { PoPageHeaderComponent } from './po-page-header/po-page-header.component';
 import { PoPageListComponent } from './po-page-list/po-page-list.component';
+import { PoPageSlideComponent } from './po-page-slide/po-page-slide.component';
+import { PoPageSlideService } from './po-page-slide/po-page-slide.service';
+import { PoPageComponent } from './po-page.component';
 
 /**
  * @description
- * Módulo dos componentes po-page-default, po-page-edit, po-page-list, po-page-login e po-page-detail.
+ * Módulo dos componentes po-page-default, po-page-detail, po-page-edit,
+ * po-page-list, po-page-login e po-page-slide.
+ *
+ * > Para o correto funcionamento do componente `po-page-slide` deve ser
+ * importado o módulo `BrowserAnimationsModule` no módulo principal da sua
+ * aplicação.
+ *
+ * Módulo da aplicação:
+ *
+ * ```typescript
+ * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+ * import { PoModule } from '@portinari/portinari-ui';
+ * ...
+ *
+ * @NgModule({
+ *   imports: [
+ *     BrowserModule,
+ *     BrowserAnimationsModule,
+ *     ...
+ *     PoModule
+ *   ],
+ *   declarations: [
+ *     AppComponent,
+ *     ...
+ *   ],
+ *   providers: [],
+ *   bootstrap: [AppComponent]
+ * })
+ * export class AppModule { }
+ * ```
  */
 @NgModule({
   imports: [
@@ -42,13 +73,16 @@ import { PoPageListComponent } from './po-page-list/po-page-list.component';
     PoPageDetailComponent,
     PoPageEditComponent,
     PoPageHeaderComponent,
-    PoPageListComponent
+    PoPageListComponent,
+    PoPageSlideComponent
   ],
   exports: [
-    PoPageDetailComponent,
     PoPageDefaultComponent,
+    PoPageDetailComponent,
     PoPageEditComponent,
-    PoPageListComponent
-  ]
+    PoPageListComponent,
+    PoPageSlideComponent
+  ],
+  providers: [PoPageSlideService]
 })
-export class PoPageModule { }
+export class PoPageModule {}

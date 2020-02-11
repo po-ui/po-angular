@@ -14,8 +14,8 @@ describe('PoPageLoginService:', () => {
       providers: [PoPageLoginService]
     });
 
-    poPageLoginService = TestBed.get(PoPageLoginService);
-    httpMock = TestBed.get(HttpTestingController);
+    poPageLoginService = TestBed.inject(PoPageLoginService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

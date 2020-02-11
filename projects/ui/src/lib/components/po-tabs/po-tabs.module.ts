@@ -23,10 +23,6 @@ import { PoTabsComponent } from './po-tabs.component';
     PoTabDropdownComponent,
     PoTabsComponent
   ],
-  entryComponents: [
-    PoTabButtonComponent,
-    PoTabDropdownComponent
-  ],
   exports: [
     PoTabComponent,
     PoTabsComponent

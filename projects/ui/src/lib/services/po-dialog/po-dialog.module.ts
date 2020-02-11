@@ -14,9 +14,6 @@ import { PoDialogService } from './po-dialog.service';
   exports: [
     PoDialogComponent
   ],
-  entryComponents: [
-    PoDialogComponent
-  ],
   providers: [
     PoDialogService
   ]

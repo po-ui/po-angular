@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, convertToInt, removeDuplicatedOptions } from '../../../utils/util';
 import { InputBoolean } from '../../../decorators';
@@ -22,6 +22,7 @@ const poRadioGroupColumnsTotalLength: number = 12;
  *
  * > Ao passar um valor para o *model* que não esteja na lista de opções, o mesmo será definido como `undefined`.
  */
+@Directive()
 export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor, Validator {
 
   private _columns: number = poRadioGroupColumnsDefaultLength;

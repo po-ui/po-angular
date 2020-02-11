@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { v4 as uuid } from 'uuid';
 import { isExternalLink } from '../../utils/util';
@@ -15,6 +15,7 @@ import { PoMenuPanelItemInternal } from './po-menu-panel-item/po-menu-panel-item
  * O componente `po-menu-panel` recebe uma lista de objetos do tipo `MenuPanelItem` com as informações dos
  * itens de menu como textos, links para redirecionamento, ações e ícones.
  */
+@Directive()
 export class PoMenuPanelBaseComponent {
 
   private _menus;

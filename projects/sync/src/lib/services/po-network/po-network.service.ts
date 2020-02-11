@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { fromEvent, merge, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Network } from '@ionic-native/network';
+import { Network } from '@ionic-native/network/ngx';
 
 import { PoNetworkStatus } from './../../models';
 

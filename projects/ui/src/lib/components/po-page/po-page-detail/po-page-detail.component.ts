@@ -35,7 +35,7 @@ export class PoPageDetailComponent extends PoPageDetailBaseComponent {
 
   constructor(viewRef: ViewContainerRef) {
     super();
-    this.parentContext = viewRef['_view']['component'];
+    this.parentContext = viewRef['_hostView'][8];
   }
 
   hasAnyAction(): boolean {

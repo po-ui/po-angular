@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../utils/util';
 
@@ -14,6 +14,7 @@ const poProgressMinValue = 0;
  *
  * Este componente pode ser utilizado no *upload* de arquivos, uma atualização no sistema ou o processamento de uma imagem.
  */
+@Directive()
 export class PoProgressBaseComponent {
 
   private _indeterminate?: boolean;

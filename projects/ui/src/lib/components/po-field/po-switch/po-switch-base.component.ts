@@ -1,5 +1,5 @@
 import { ControlValueAccessor } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
 import { InputBoolean } from '../../../decorators';
@@ -19,6 +19,7 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  *
  * > O componente não altera o valor incial informado no *model*, portanto indica-se inicializa-lo caso ter necessidade.
  */
+@Directive()
 export class PoSwitchBaseComponent implements ControlValueAccessor {
 
   private _disabled?: boolean = false;

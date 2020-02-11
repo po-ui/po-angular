@@ -26,7 +26,7 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
       ]
     });
 
-    serviceJobScheduler = TestBed.get(PoPageJobSchedulerService);
+    serviceJobScheduler = TestBed.inject(PoPageJobSchedulerService);
 
     component = new PoPageJobSchedulerBaseComponent(serviceJobScheduler);
   });

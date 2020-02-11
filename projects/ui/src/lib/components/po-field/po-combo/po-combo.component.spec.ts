@@ -1571,8 +1571,8 @@ describe('PoComboComponent - with service:', () => {
 
     fixture.detectChanges();
 
-    comboService = TestBed.get(PoComboFilterService);
-    httpMock = TestBed.get(HttpTestingController);
+    comboService = TestBed.inject(PoComboFilterService);
+    httpMock = TestBed.inject(HttpTestingController);
 
     comboService.configProperties(mockURL, 'name', 'id');
 

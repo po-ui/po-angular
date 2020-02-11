@@ -21,7 +21,7 @@ export class PoUploadDragDropAreaComponent {
 
   @Output('p-select-files') selectFiles: EventEmitter<any> = new EventEmitter<any>();
 
-  @ViewChild('selectFilesLink', { static: false }) selectFilesLinkElement: ElementRef;
+  @ViewChild('selectFilesLink') selectFilesLinkElement: ElementRef;
 
   constructor(public elementRef: ElementRef) {}
 

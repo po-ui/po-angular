@@ -59,8 +59,8 @@ describe('PoLookupModalService:', () => {
       schemas: [ NO_ERRORS_SCHEMA ]
     });
 
-    poLookupModalService = TestBed.get(PoLookupModalService);
-    lookupFilterService = TestBed.get(LookupFilterService);
+    poLookupModalService = TestBed.inject(PoLookupModalService);
+    lookupFilterService = TestBed.inject(LookupFilterService);
   });
 
   afterEach(() => {

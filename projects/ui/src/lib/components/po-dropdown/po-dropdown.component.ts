@@ -36,7 +36,7 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   private resizeListener: () => void;
 
   @ViewChild('dropdownRef', { read: ElementRef, static: true }) dropdownRef: ElementRef;
-  @ViewChild('popupRef', { static: false }) popupRef: any;
+  @ViewChild('popupRef') popupRef: any;
 
   constructor(private renderer: Renderer2) {
     super();

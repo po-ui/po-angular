@@ -34,7 +34,7 @@ export class PoPageEditComponent extends PoPageEditBaseComponent {
 
   constructor(viewRef: ViewContainerRef) {
     super();
-    this.parentContext = viewRef['_view']['component'];
+    this.parentContext = viewRef['_hostView'][8];
   }
 
   getIcon(icon: string): string {

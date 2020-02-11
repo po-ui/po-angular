@@ -16,7 +16,6 @@ class TestComponent {
 @NgModule({
   imports: [CommonModule],
   declarations: [TestComponent],
-  entryComponents: [TestComponent],
   providers: [
     PoComponentInjectorService
   ]

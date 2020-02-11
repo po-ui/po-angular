@@ -15,12 +15,15 @@ const NO_MESSAGE_HEADER_PARAM = 'X-Portinari-No-Message';
 /**
  * @description
  *
- * O serviço Portinari Http Interceptor realiza o tratamento de requisições HTTP conforme o padrão do
- * [**Guia de implementação das APIs TOTVS**](http://tdn.totvs.com/pages/viewpage.action?pageId=484701395) para adaptá-lo
- * ao modelo do PO.
+ * O *interceptor* tem a finalidade de exibir notificações com mensagens na tela, baseado nas respostas das requisições HTTP.
  *
- * > Para o correto funcionamento do interceptor `po-http-interceptor`, deve ser importado o módulo `BrowserAnimationsModule` no
- * > módulo principal da sua aplicação.
+ * Pode ser utilizado para dar feedback das ações do usuário como, por exemplo: erro de autorização, mensagens de regras de negócio,
+ * atualizações de registros, erro quando o servidor estiver indisponível e entre outros.
+ *
+ * ## Configuração
+ *
+ * Para o correto funcionamento do interceptor `po-http-interceptor`, deve ser importado o `BrowserAnimationsModule` no
+ * módulo principal da sua aplicação.
  *
  * Módulo da aplicação:
  * ```
@@ -45,45 +48,6 @@ const NO_MESSAGE_HEADER_PARAM = 'X-Portinari-No-Message';
  * export class AppModule { }
  * ```
  *
- * ### Funcionamento do interceptor
- *
- * Ao analisar o objeto `_messages` retornado pela requisição, o serviço exibirá notificações com mensagens na tela.
- * Os retornos de erros com códigos 4xx e 5xx são tratados automaticamente, sem a necessidade de incluir o `_messages`.
- *
- * É possível dispensar a notificação para o usuário utilizando-se no cabeçalho da requisição os parâmetros listados abaixo com o valor
- * igual a `true`:
- *
- * - `X-Portinari-No-Message`: Não exibe notificações de erro e/ou sucesso.
- *
- * - **Depreciado** `X-Portinari-No-Error`: não mostra notificações de erro com códigos `4xx` e `5xx`.
- *
- * ```
- * ...
- *  const headers = { 'X-Portinari-No-Message': 'true' };
- *
- *  this.http.get(`/customers/1`, { headers: headers });
- * ...
- *
- * ```
- *
- * Mais detalhes no tópico sobre cabeçalhos customizados no
- * [**Guia de implementação das APIs TOTVS**](http://tdn.totvs.com/pages/viewpage.action?pageId=484701395)
- *
- * > Após a validação no interceptor, os parâmetros serão removidos do cabeçalho da requisição.
- *
- * O `Content-Type` deve ser `application/json` e a estrutura de mensagem recebida pelo serviço deve seguir o
- * [**Guia de implementação das APIs TOTVS**](http://tdn.totvs.com/pages/viewpage.action?pageId=484701395)
- * (em Mensagens de sucesso para coleções), exemplo:
- *  - _messages: lista de mensagens ou objeto de mensagem, resultante do serviço.
- *    - type: success, warning, error, e information (será exibido a `tag` apenas se esta propriedade possuir valor);
- *    - code: título ou código da mensagem;
- *    - message: texto da mensagem;
- *    - detailedMessage: detalhamento do erro ou informativo;
- *
- * Ao clicar na ação 'Detalhes' no
- * [`po-notification`](/documentation/po-notification) os detalhes das mensagens de sucesso e de erro são apresentados em
- * um [`po-modal`](/documentation/po-modal) com um [`po-accordion`](/documentation/po-accordion) que possui um item por mensagem.
- *
  * Ao importar o módulo `PoModule` na aplicação, o `po-http-interceptor` é automaticamente configurado sem a necessidade
  * de qualquer configuração extra.
  *
@@ -107,6 +71,70 @@ const NO_MESSAGE_HEADER_PARAM = 'X-Portinari-No-Message';
  *
  * }
  * ```
+ *
+ * ## Como usar
+ *
+ * Para exibir as noticações é necessário informar a mensagem no retorno da requisição. A estrutura da mensagem
+ * é feita com base no status da resposta, conforme será apresentado nos próximos tópicos.
+ *
+ * ### Estrutura das mensagens
+ *
+ * #### Mensagens de sucesso `2xx`
+ *
+ * Para exibir mensagens ao retornar uma lista ou um item, deve-se incluir a propriedade `_messages` no objeto de retorno.
+ * Por exemplo:
+ * ```
+ * {
+ *   "_messages": [
+ *     {
+ *       "type": "success" || "warning" || "error" || "information" (será exibido a `tag` apenas se esta propriedade possuir valor),
+ *       "code": "título ou código da mensagem",
+ *       "message": "texto da mensagem",
+ *       "detailedMessage": "detalhamento da mensagem"
+ *     }
+ *   ]
+ * }
+ * ```
+ *
+ * #### Mensagens de erro `4xx` ou `5xx`
+ *
+ * Ao retornar erro, o objeto não necessita ter `_messages`, deve-se retornar o objeto diretamente:
+ *
+ * ```
+ * {
+ *    "code": "título ou código da mensagem",
+ *    "message": "texto da mensagem",
+ *    "detailedMessage": "detalhamento da mensagem"
+ * }
+ * ```
+ *
+ * Também é possível informar as seguintes propriedades:
+ *
+ * - `helpUrl`: link para a documentação do erro;
+ *    - Caso for informado, será exibido uma ação de "Ajuda" na notificação, para isso não deverá ter a propriedade `detailedMessage`.
+ * - `details`: Uma lista de objetos de mensagem (recursiva) com mais detalhes sobre a mensagem principal.
+ *
+ * > Veja o [Guia de implementação de APIs](guides/api) para mais detalhes sobre a estrutura das mensagens.
+ *
+ * ### Cabeçalho
+ *
+ * É possível dispensar a notificação para o usuário utilizando no cabeçalho da requisição os parâmetros listados abaixo com o valor
+ * igual a `true`:
+ *
+ * - `X-Portinari-No-Message`: Não exibe notificações de erro e/ou sucesso.
+ *
+ * - **Depreciado** `X-Portinari-No-Error`: não mostra notificações de erro com códigos `4xx` e `5xx`.
+ *
+ * ```
+ * ...
+ *  const headers = { 'X-Portinari-No-Message': 'true' };
+ *
+ *  this.http.get(`/customers/1`, { headers: headers });
+ * ...
+ *
+ * ```
+ *
+ * > Após a validação no *interceptor*, os parâmetros serão removidos do cabeçalho da requisição.
  *
  */
 export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {

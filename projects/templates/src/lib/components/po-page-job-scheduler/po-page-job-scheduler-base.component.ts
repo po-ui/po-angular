@@ -1,5 +1,5 @@
 import { AbstractControl } from '@angular/forms';
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { PoBreadcrumb } from '@portinari/portinari-ui';
 
@@ -10,62 +10,113 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 /**
  * @description
  *
- * O `po-page-job-scheduler` é uma página para criação e atualização do *Job Scheduler* de forma simplificada, apenas informando
- * o serviço (endpoint) para consumo, sem a necessidade de criar componentes e tratamentos dos dados.
+ * O `po-page-job-scheduler` é uma página para criação e atualização de agendamentos da execução de processos (Job Scheduler),
+ * como por exemplo: a geração da folha de pagamento dos funcionários.
+ *
+ * Para utilizar esta página, basta informar o serviço (endpoint) para consumo,
+ * sem a necessidade de criar componentes e tratamentos dos dados.
+ *
+ * Veja mais sobre os padrões utilizados nas requisições no [Guia de implementação de APIs](guides/api).
  */
+@Directive()
 export class PoPageJobSchedulerBaseComponent {
 
-  /** Objeto com propriedades do breadcrumb. */
+  /** Objeto com as propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
 
   /**
-   * Endpoint usado pelo template para requisição do recurso que será utilizado para criação e edição.
+   * Endpoint usado pelo componente para busca dos processos e parâmetros que serão utilizados para criação e edição dos agendamentos.
    *
    * #### Processos
    *
-   * Em sua inicialização será verificado a existência do endpoint `{end-point}/processes`.
-   * Caso o endpoint seja válido, será utilizado um componente para selecionar o processo e filtrá-los.
-   * Caso não seja válido, será utilizado um campo de entrada de texto para informar o endpoint.
+   * Os processos são as tarefas que estarão disponíveis para o usuário poder fazer os agendamentos.
+   * Ao inicializar o componente, será feito uma requisição `GET` para o endpoint `{service-api}/processes`, para buscar
+   * essa lista de processos.
    *
-   * Para realizar o filtro de busca do processo, será enviado o conteúdo a ser filtrado através da propriedade *search*.
-   * Os processos devem retornar uma lista de objetos que seguem a definição de dados abaixo:
+   * Este endpoint `{service-api}/processes` deve retornar uma lista de objetos que seguem a definição de dados abaixo:
    *
    * ```
-   * GET {end-point}/processes?search=ac04
+   * GET {service-api}/processes
+   * ```
+   *
+   * ```
+   * {
+   *   items: [
+   *     { "processID": "ac4f", "description": "Gerar folha de pagamento" },
+   *     { "processID": "df6l", "description": "Relatório de imposto a recolher" },
+   *     { "processID": "dk3p", "description": "Títulos em aberto" },
+   *   ]
+   * }
+   * ```
+   *
+   * Desta forma será renderizado um componente para selecionar o processo e/ou filtrá-los.
+   *
+   * Para realizar o filtro de busca do processo, será feita uma requisição enviando o conteúdo digitado na busca através do
+   * parâmetro `search`. Da seguinte forma:
+   *
+   * ```
+   * GET {service-api}/processes?search=relatorio
+   * ```
+   *
+   * > Veja mais sobre paginação e filtros no [Guia de implementação de APIs](guides/api).
+   *
+   * Também é possível fazer um agendamento de um processo específico, sem que seja necessário um endpoint para busca desses
+   * processos. Então, caso o endpoint `{service-api}/processes` não seja válido, será apresentado um campo de entrada de
+   * texto para o usuário informar diretamente
+   * o **identificador do processo - `processID`** e ao salvar será enviado um `POST` para o endpoint difinido `serviceApi` conforme abaixo:
+   *
+   * ```
+   * POST {service-api}
+   * ```
+   *
+   * *Request payload* - estrutura de dados enviada no corpo da requisição conforme interface `PoJobScheduler`:
+   *
+   * ```
+   * {
+   *   "daily": { "hour": 10, "minute": 12 },
+   *   "firstExecution": "2018-12-07T00:00:01-00:00",
+   *   "recurrent": true,
+   *   "processID": "ac0405"
+   *   ...
+   * }
+   * ```
+   *
+   * Caso seja necessário informar parâmetros e adicionar configurações no processo selecionado, será realizado um `GET`
+   * como exemplificado abaixo. Os parâmetros devem retornar uma lista de objetos que seguem a interface
+   * [PoDynamicFormField](/documentation/po-dynamic-form).
+   *
+   * ```
+   * GET {service-api}/processes/:id/parameters
    * ...
-   * { "processID": "string", "description": "string" }
-   * ```
-   *
-   * Para retornar parâmetros dos processos, será realizado um `GET` como exemplificado abaixo.
-   * Os parâmetros devem retornar uma lista de objetos que seguem a interface [PoDynamicFormField](/documentation/po-dynamic-form).
-   *
-   * ```
-   * GET {end-point}/processes/:id/parameters
-   * ...
-   * { items: [{ "property": "server" }, { "property": "program" }] }
+   * {
+   *   items: [
+   *     { "property": "vencimento", type: "date" },
+   *     { "property": "imposto-retido", "label": "Imposto Retido", type: "boolean" }
+   *   ]
+   * }
    * ```
    *
    * #### Salvar e Atualizar
    *
-   * Para salvar o recurso, será feito uma requisição de criação no mesmo endpoint, passando os valores
-   * preenchidos pelo usuário via *payload*. Abaixo uma requisição `POST` disparada,
-   * onde as propriedades do *Job Scheduler* foram preenchidas:
+   * Para salvar o agendamento, será feita uma requisição de criação, passando os valores preenchidos pelo usuário via *payload*.
+   * Abaixo uma requisição `POST` disparada, onde as propriedades do *Job Scheduler* foram preenchidas:
    *
    * ```
-   *  POST /api/po-samples/v1/jobschedulers HTTP/1.1
-   *  Host: localhost:4000
-   *  Connection: keep-alive
-   *  Accept: application/json, text/plain
-   *  ...
+   *  POST {service-api}
    * ```
    *
-   * *Request payload*:
+   * *Request payload* - estrutura de dados enviada no corpo da requisição conforme interface `PoJobScheduler`:
    *
    * ```
-   * { "firstExecution": "2018-12-07T00:00:01-00:00", "recurrent": true, "daily": { "hour": 10, "minute": 12 }, "processID": "ac0405" }
+   * {
+   *   "firstExecution": "2018-12-07T00:00:01-00:00",
+   *   "recurrent": true,
+   *   "daily": { "hour": 10, "minute": 12 },
+   *   "processID": "ac0405"
+   * }
    * ```
    *
-   * Caso queira que o template carregue um recurso já existente, deve ser incluído um parâmetro na rota chamado `id`.
+   * Caso queira que o componente carregue um agendamento já existente, deve ser incluído um parâmetro na rota chamado `id`.
    *
    * Exemplo de configuração de rota:
    *
@@ -80,24 +131,25 @@ export class PoPageJobSchedulerBaseComponent {
    * Baseado nisso, na inicialização do template será disparado uma requisição para buscar o recurso que será editado.
    *
    * ```
-   * GET {end-point}/{id}
+   * GET {service-api}/{id}
    * ```
    *
-   * Ao salvar o recurso será disparado um `PUT` com os dados preenchidos. Abaixo uma requisição `PUT` disparada,
-   * onde a propriedade *recurrent* e *daily* foram preenchidas/atualizadas e o `id` da url é 1:
+   * Ao atualizar o agendamento, será disparado um `PUT` com os dados preenchidos.
+   * Veja abaixo uma requisição `PUT` disparada, onde a propriedade *recurrent* e *daily* foram atualizadas:
    *
    * ```
-   *  PUT /api/po-samples/v1/jobschedulers/1 HTTP/1.1
-   *  Host: localhost:4000
-   *  Connection: keep-alive
-   *  Accept: application/json, text/plain
-   *  ...
+   *  PUT {service-api}/{id}
    * ```
    *
-   * *Request payload*:
+   * *Request payload* - estrutura de dados enviada no corpo da requisição conforme interface `PoJobScheduler`:
    *
    * ```
-   * { "firstExecution": "2018-12-07T00:00:01-00:00", "recurrent": false, "daily": { "hour": 11, "minute": 30 }, "processID": "ac0405" }
+   * {
+   *   "firstExecution": "2018-12-07T00:00:01-00:00",
+   *   "recurrent": false,
+   *   "daily": { "hour": 11, "minute": 30 },
+   *   "processID": "ac0405"
+   * }
    * ```
    */
   @Input('p-service-api') serviceApi: string;

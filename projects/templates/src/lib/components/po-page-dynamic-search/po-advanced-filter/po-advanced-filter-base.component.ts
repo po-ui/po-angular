@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { EventEmitter, Input, Output, ViewChild, Directive } from '@angular/core';
 
 import { PoDynamicFormField, PoLanguageService, PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
 
@@ -37,6 +37,7 @@ export const poAdvancedFiltersLiteralsDefault = {
  * Filtro de busca avançada criado a partir de um formulário dinâmico.
  * Componente de uso interno.
  */
+@Directive()
 export class PoAdvancedFilterBaseComponent {
 
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

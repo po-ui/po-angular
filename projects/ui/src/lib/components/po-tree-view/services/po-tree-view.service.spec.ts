@@ -13,7 +13,7 @@ describe('PoTreeViewService:', () => {
       providers: [ PoTreeViewService ]
     });
 
-    treeViewService = TestBed.get(PoTreeViewService);
+    treeViewService = TestBed.inject(PoTreeViewService);
   });
 
   it('emitExpandedEvent: should call expandedEvent.next with treeViewItem', () => {

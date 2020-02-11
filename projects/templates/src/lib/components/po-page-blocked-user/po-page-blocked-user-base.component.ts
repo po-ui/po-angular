@@ -1,4 +1,4 @@
-import { Input, OnInit } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { PoPageBlockedUserReason } from './enums/po-page-blocked-user-reason.enum';
 import { PoPageBlockedUserReasonParams } from './interfaces/po-page-blocked-user-reason-params.interface';
@@ -66,6 +66,7 @@ const PoPageBlockedUserParamsDefault: PoPageBlockedUserReasonParams = { attempts
  * > É essencial que siga a nomenclatura dos atributos exemplificados acima para sua efetiva funcionalidade.
  *
  */
+@Directive()
 export class PoPageBlockedUserBaseComponent {
 
   private _params: PoPageBlockedUserReasonParams = {...PoPageBlockedUserParamsDefault};

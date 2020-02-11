@@ -35,7 +35,6 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  *    PoStorageModule.forRoot(),
  *  ],
  *  bootstrap: [IonicApp],
- *  entryComponents: [...],
  *  providers: [...]
  * })
  * export class AppModule {}
@@ -69,7 +68,6 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  *    }),
  *  ],
  *  bootstrap: [IonicApp],
- *  entryComponents: [...],
  *  providers: [...]
  * })
  * export class AppModule {}

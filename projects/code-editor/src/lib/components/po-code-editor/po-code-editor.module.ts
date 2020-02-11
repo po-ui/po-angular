@@ -26,7 +26,7 @@ import { PoCodeEditorRegisterable } from './interfaces/po-code-editor-registerab
 })
 export class PoCodeEditorModule {
 
-  static forRegister(props: PoCodeEditorRegisterable): ModuleWithProviders {
+  static forRegister(props: PoCodeEditorRegisterable): ModuleWithProviders<PoCodeEditorModule> {
     return {
       ngModule: PoCodeEditorModule,
       providers: [

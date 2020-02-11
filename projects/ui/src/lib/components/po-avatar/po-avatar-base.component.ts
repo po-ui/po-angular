@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 const PO_AVATAR_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'];
 const PO_AVATAR_SIZE_DEFAULT = 'md';
@@ -12,6 +12,7 @@ const PO_AVATAR_SIZE_DEFAULT = 'md';
  * Além de poder ser utilizado separadamente, é possível usar o `po-avatar` juntamente com outros componentes e criar
  * layouts ricos e bem interessantes para os usuários, como por exemplo, uma lista de itens ou produtos.
  */
+@Directive()
 export class PoAvatarBaseComponent {
   private _size: string = 'md';
 

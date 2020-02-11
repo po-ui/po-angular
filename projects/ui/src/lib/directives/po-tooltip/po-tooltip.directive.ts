@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 
-import { PoControlPositionService } from './../../services/po-control-position/po-control-position.service';
 import { PoTooltipBaseDirective } from './po-tooltip-base.directive';
+import { PoTooltipControlPositionService } from './po-tooltip-control-position.service';
 
 /**
  * @docsExtends PoTooltipBaseDirective
@@ -26,7 +26,7 @@ import { PoTooltipBaseDirective } from './po-tooltip-base.directive';
  */
 @Directive({
   selector: '[p-tooltip]',
-  providers: [ PoControlPositionService ]
+  providers: [ PoTooltipControlPositionService ]
 })
 export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit {
 
@@ -43,7 +43,7 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
 
   constructor(private elementRef: ElementRef,
               private renderer: Renderer2,
-              private poControlPosition: PoControlPositionService) {
+              private poControlPosition: PoTooltipControlPositionService) {
 
     super();
   }
@@ -71,7 +71,11 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   }
 
   @HostListener('mouseleave') onMouseLeave() {
-    this.hideTooltip();
+    // necessita do timeout para conseguir adicionar ".po-invisible", pois quando tem alguns elementos
+    // próximos com tooltips e ficar passando o mouse em cima, os mesmos não estavam ficando invisiveis.
+    setTimeout(() => {
+      this.hideTooltip();
+    });
   }
 
   private addArrow(arrowDirection) {

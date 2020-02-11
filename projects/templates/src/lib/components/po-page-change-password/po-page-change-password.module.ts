@@ -27,9 +27,6 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
   declarations: [
     PoPageChangePasswordComponent
   ],
-  entryComponents: [
-    PoModalPasswordRecoveryComponent
-  ],
   providers: [
     PoPageChangePasswordService
   ],
