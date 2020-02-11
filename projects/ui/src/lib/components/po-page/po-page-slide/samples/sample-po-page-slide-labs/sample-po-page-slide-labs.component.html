@@ -1,0 +1,90 @@
+<po-page-slide
+  [p-hide-close]="hideClose"
+  [p-title]="title"
+  [p-subtitle]="subtitle"
+  [p-size]="size"
+  [p-align]="align"
+  #pageSlide>
+  {{ content }}
+</po-page-slide>
+
+<div class="po-row">
+  <po-button
+    class="po-sm-3"
+    p-label="Reveal Page Slide"
+    [p-disabled]="f.form.invalid"
+    (p-click)="pageSlide.open()">
+  </po-button>
+</div>
+
+<hr>
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="Title"
+      [(ngModel)]="title"
+      p-clean
+      p-label="Title"
+      p-required>
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="Subtitle"
+      [(ngModel)]="subtitle"
+      p-clean
+      p-label="Subtitle"
+      p-optional>
+    </po-input>
+
+    <po-input
+      class="po-sm-12"
+      name="Content"
+      [(ngModel)]="content"
+      p-clean
+      p-label="Content"
+      p-required>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-switch
+      class="po-sm-4"
+      name="Hide close"
+      [(ngModel)]="hideClose"
+      p-label="Hide close?"
+      p-label-off="Show"
+      p-label-on="Hide"
+      p-optional>
+    </po-switch>
+
+    <po-radio-group
+      class="po-sm-4"
+      name="Size"
+      [(ngModel)]="size"
+      p-label="Size"
+      [p-options]="sizeOptions"
+      p-optional>
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-sm-4"
+      name="Align"
+      [(ngModel)]="align"
+      p-label="Align"
+      [p-options]="alignOptions"
+      p-optional>
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-sm-3"
+      p-label="Sample Restore"
+      (p-click)="restore()"
+      p-type="danger">
+    </po-button>
+  </div>
+</form>

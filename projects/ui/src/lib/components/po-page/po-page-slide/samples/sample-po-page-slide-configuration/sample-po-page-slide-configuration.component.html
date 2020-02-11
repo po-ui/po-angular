@@ -1,0 +1,92 @@
+<po-page-slide
+  p-title="Configuration"
+  p-size="sm"
+  p-align="right"
+  #pageSlide>
+  <div class="po-row po-mb-2">
+    <po-button
+      class="po-sm-6"
+      (p-click)="bluetooth = !bluetooth"
+      p-icon="po-icon-bluetooth"
+      p-label="Bluetooth {{ bluetooth ? 'On' : 'Off' }}">
+    </po-button>
+    <po-button
+      class="po-sm-6"
+      (p-click)="locked = !locked"
+      p-icon="{{ locked ? 'po-icon-lock' : 'po-icon po-icon-lock-off' }}"
+      p-label="{{ locked ? 'Locked' : 'Unlocked' }}">
+    </po-button>
+  </div>
+  <div class="po-row po-mb-2">
+    <po-button
+      class="po-sm-6"
+      (p-click)="microphone = !microphone"
+      p-icon="po-icon-microphone"
+      p-label="Microphone {{ microphone ? 'On' : 'Off' }}">
+    </po-button>
+    <po-button
+      class="po-sm-6"
+      (p-click)="notification = !notification"
+      p-icon="po-icon-notification"
+      p-label="Notification {{ notification ? 'On' : 'Off' }}">
+    </po-button>
+  </div>
+  <div class="po-row po-mb-2">
+    <po-button
+      class="po-sm-6"
+      (p-click)="localization = !localization"
+      p-icon="po-icon-pin"
+      p-label="Localization {{ localization ? 'On' : 'Off' }}">
+    </po-button>
+    <po-button
+      class="po-sm-6"
+      (p-click)="favorited = !favorited"
+      p-icon="{{ favorited ? 'po-icon po-icon-star-filled' : 'po-icon po-icon-star' }}"
+      p-label="{{ favorited ? 'Favorited' : 'Not favorited' }}">
+    </po-button>
+  </div>
+  <hr/>
+  
+  <h1 class="po-font-title">About Page Slide</h1>
+  
+  <section class="po-m-2">
+    <h2 class="po-font-subtitle po-mb-1">Usage</h2>
+    <ul class="po-ml-2">
+      <li>To reveal additional navigation controls</li>
+      <li>In TV or mobile space since controls and/or space is limited</li>
+      <li>To expose a configuration panel (similar to the Module Configure Pattern)</li>
+      <li>To a lesser extent to reveal help or contextual information (the partial hiding of the related content might make it a poor choice for this)</li>
+    </ul>
+  </section>
+  
+  <section class="po-m-2">
+    <h2 class="po-font-subtitle po-mb-1">Challenges</h2>
+    <ul class="po-ml-2">
+      <li>Discoverability</li>
+      <li>Losing context with the rest of the page</li>
+      <li>Make the disruption work for you</li>
+    </ul>
+  </section>
+
+  <section class="po-m-2">
+    <h2 class="po-font-subtitle po-mb-1">Recommendations</h2>
+    <ul class="po-ml-2">
+      <li>Use it sparingly only for major context switches</li>
+      <li>Make the animation fast. No reason to wow the user with your ability to scroll</li>
+      <li>Make the activation/deactivation dead simple</li>
+    </ul>
+  </section>
+  
+  <p>
+    For more information visit
+    <a href="http://designingwebinterfaces.com/page-slide-stay-on-the-page-pattern" target="_blank" rel="noopener">Designing Web Interfaces: Page Slide</a>
+  </p>
+</po-page-slide>
+
+<div class="po-row">
+  <po-button
+    class="po-sm-3"
+    p-label="Open Configuration"
+    (p-click)="pageSlide.open()">
+  </po-button>
+</div>
