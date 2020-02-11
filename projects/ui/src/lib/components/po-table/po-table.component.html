@@ -255,6 +255,7 @@
 </ng-template>
 
 <po-table-column-manager
+  *ngIf="!hideColumnsManager"
   [p-columns]="columns"
   [p-max-columns]="maxColumns"
   [p-target]="columnManagerTarget"
