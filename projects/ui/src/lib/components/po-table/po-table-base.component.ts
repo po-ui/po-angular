@@ -8,6 +8,7 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
+import { InputBoolean } from '../../decorators/input-boolean/input-boolean.decorator';
 
 export const poTableContainer = ['border', 'shadow'];
 export const poTableContainerDefault = 'border';
@@ -435,6 +436,17 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * serão ignoradas por ordem de posição.
    */
   @Input('p-max-columns') maxColumns?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Esconde o **Gerenciador de colunas** localizado no canto superior direito da tabela.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-columns-manager') @InputBoolean() hideColumnsManager: boolean;
 
   /** Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();
