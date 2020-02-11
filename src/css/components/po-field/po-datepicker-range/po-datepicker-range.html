@@ -1,0 +1,364 @@
+<style>
+  .po-datepicker-range-field.ng-invalid.ng-dirty {
+    border: solid 1px #c64840 !important;
+    color: #c64840;
+    outline: none;
+  }
+
+  div.ng-invalid.ng-dirty .po-field-icon {
+    color: #c64840 !important;
+  }
+</style>
+<article>
+  <section>
+    <div class="po-row">
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker Range com apoio e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-datepicker-range-field po-input">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker Range preenchido / apoio</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-datepicker-range-field po-input">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker Range com mensagem de erro</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-datepicker-range-field po-input ng-invalid ng-dirty">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Data inválida
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker Range com foco no input</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-datepicker-range-field po-input po-datepicker-range-field-focused">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker Range sem apoio</span>
+          </div>
+
+          <div class="po-datepicker-range-field po-input">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker Range preenchido / sem apoio</span>
+          </div>
+
+          <div class="po-datepicker-range-field po-input">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker Range preenchido / desabilitado</span>
+          </div>
+
+          <div class="po-datepicker-range-field po-input po-datepicker-range-field-disabled">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" disabled value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" disabled value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon-disabled po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker Range com mensagem de erro</span>
+          </div>
+
+          <div class="po-datepicker-range-field po-input ng-invalid ng-dirty">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Data inválida
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-datepicker-range-field po-input">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-datepicker-range-field po-input po-datepicker-range-field-disabled">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" disabled value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" disabled value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon-disabled po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-datepicker-range-field po-input ng-invalid ng-dirty">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="15/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="20/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Data inválida
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-datepicker-range-field po-input po-datepicker-range-field-disabled ng-invalid ng-dirty">
+            <div class="po-datepicker-range-start-date">
+              <input type="text" class="po-datepicker-range-input" value="20/06/2018">
+            </div>
+
+            <div class="po-datepicker-range-separator">-</div>
+
+            <div class="po-datepicker-range-end-date">
+              <input type="text" class="po-datepicker-range-input" value="15/06/2018">
+            </div>
+            <div class="po-datepicker-range-icon">
+              <span class="po-icon po-field-icon-disabled po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Data inválida
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</article>

@@ -1,0 +1,31 @@
+{
+  "name": "@portinari/theme-cli",
+  "version": "1.1.0",
+  "tag": "dev",
+  "description": "cli theme",
+  "bin": {
+    "po-theme": "bin/cli.js"
+  },
+  "author": "Portinari UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/portinariui/portinari-style"
+  },
+  "dependencies": {
+    "@portinari/style": "^1.11.0",
+    "cssnano": "^4.1.10",
+    "del": "^5.1.0",
+    "gulp": "4.0.2",
+    "gulp-postcss": "^8.0.0",
+    "gulp-rename": "^1.4.0",
+    "postcss-custom-properties": "^9.0.2",
+    "postcss-import": "^12.0.1",
+    "chalk": "2.4.2",
+    "commander": "3.0.2",
+    "cross-spawn": "7.0.1",
+    "inquirer": "7.0.0",
+    "shelljs": "0.8.3",
+    "yargs": "^14.2.0"
+  }
+}

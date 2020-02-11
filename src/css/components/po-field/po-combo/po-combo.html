@@ -1,0 +1,374 @@
+<style>
+  .po-combo-container {
+    position: relative;
+  }
+</style>
+
+<article>
+  <section>
+    <div class="po-row">
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Combobox padrão</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="São Paulo">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Combobox padrão com ícone</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content ng-valid">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-portinari"></span>
+            </div>
+
+            <input type="text" class="po-input po-input-icon-right po-input-icon-left" value="Joinville">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" placeholder="Sem label e sem help">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+          <div class="po-field-container-content ng-valid">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-company"></span>
+            </div>
+
+            <input type="text" class="po-input po-input-icon-right po-input-icon-left" placeholder="Sem label, sem help e com ícone">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row"></div>
+      <div class="po-sm-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Combobox desabilitado</span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="São Paulo" disabled>
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon-disabled po-icon-arrow-down"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-sm-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Combobox desabilitado e com ícone</span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-stock po-field-icon-disabled"></span>
+            </div>
+
+            <input type="text" class="po-input po-input-icon-right po-input-icon-left" value="São Paulo" disabled>
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon-disabled po-icon-arrow-down"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row"></div>
+      <div class="po-sm-6">
+        <po-combo class="ng-invalid ng-dirty">
+          <div class="po-field-container">
+            <div class="po-field-container-title">
+              <span class="po-field-title">Combobox inválido</span>
+            </div>
+            <div class="po-field-help">Texto de ajuda</div>
+            <div class="po-field-container-content ng-valid">
+              <input type="text" class="po-input po-input-icon-right" value="" placeholder="Selecione um estado">
+              <div class="po-field-icon-container-right">
+                <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+              </div>
+            </div>
+            <div class="po-field-container-bottom">
+              <span class="po-field-container-bottom-text-error">
+                <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+                Mensagem de erro
+              </span>
+            </div>
+          </div>
+        </po-combo>
+      </div>
+
+      <div class="po-sm-6">
+        <po-combo class="ng-invalid ng-dirty">
+          <div class="po-field-container">
+            <div class="po-field-container-title">
+              <span class="po-field-title">Combobox inválido e com ícone</span>
+            </div>
+            <div class="po-field-help">Texto de ajuda</div>
+            <div class="po-field-container-content ng-valid">
+              <div *ngIf="icon" class="po-field-icon-container-left">
+                <span class="po-icon po-field-icon po-icon-finance"></span>
+              </div>
+
+              <input type="text" class="po-input po-input-icon-right po-input-icon-left" value="" placeholder="Selecione um estado">
+              <div class="po-field-icon-container-right">
+                <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+              </div>
+            </div>
+            <div class="po-field-container-bottom">
+              <span class="po-field-container-bottom-text-error">
+                <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+                Mensagem de erro
+              </span>
+            </div>
+          </div>
+        </po-combo>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-sm-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Buscando as opções em um serviço</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content">
+            <input type="text" class="po-input po-input-icon-right" value="São Paulo">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+
+          <div class="po-combo-container">
+            <div class="po-combo-container-loading">
+              <div class="po-loading">
+                <div class="po-loading-icon">
+                  <span class="po-loading-icon-bar po-loading-icon-bar-1"></span>
+                  <span class="po-loading-icon-bar po-loading-icon-bar-2"></span>
+                  <span class="po-loading-icon-bar po-loading-icon-bar-3"></span>
+                  <span class="po-loading-icon-bar po-loading-icon-bar-4"></span>
+                  <span class="po-loading-icon-bar po-loading-icon-bar-5"></span>
+                  <span class="po-loading-icon-bar po-loading-icon-bar-6"></span>
+                  <span class="po-loading-icon-bar po-loading-icon-bar-7"></span>
+                  <span class="po-loading-icon-bar po-loading-icon-bar-8"></span>
+                </div>
+                <span class="po-loading-label">Carregando</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-sm-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Ativo, selecionado e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="São Paulo">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+
+          <div class="po-combo-container">
+            <ul class="po-combo-container-content">
+              <li value="1" class="po-combo-item-selected">
+                <a class="po-combo-item"><span>São Paulo</span></a>
+              </li>
+              <li value="2">
+                <a class="po-combo-item"><span>Paraná</span></a>
+              </li>
+              <li value="3">
+                <a class="po-combo-item"><span>Santa Catarina</span></a>
+              </li>
+              <li value="4">
+                <a class="po-combo-item"><span>Sergipe</span></a>
+              </li>
+              <li value="5">
+                <a class="po-combo-item"><span>Tocantins</span></a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-sm-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Sem dados encontrados</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content">
+            <input type="text" class="po-input po-input-icon-right" value="São Paulo">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+
+          <div class="po-combo-container">
+            <div class="po-combo-container-no-data">
+              <div class="po-combo-no-data po-text-center">
+                <span>
+                  Nenhum dado encontrado.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-sm-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Simulando com p-combo-option-template e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="São Paulo">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+
+          <div class="po-combo-container">
+            <ul class="po-combo-container-content">
+              <li value="1" class="po-combo-item-selected">
+                <a class="po-combo-item">
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>São Paulo
+                </a>
+              </li>
+              <li value="2">
+                <a class="po-combo-item"> 
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>Paraná
+                </a>
+              </li>
+              <li value="3">
+                <a class="po-combo-item">
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>Santa Catarina
+                </a>
+              </li>
+              <li value="4">
+                <a class="po-combo-item"> 
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>Sergipe
+                </a>
+              </li>
+              <li value="5">
+                <a class="po-combo-item"> 
+                  <!-- Conteúdo passado através de po-combo-option-template -->
+                  <span class="po-icon po-icon-world po-pr-2"></span>Tocantins
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+    <div class="po-row">
+      <div class="po-sm-6">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Com agrupamentos e opção selecionada</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="São Paulo">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+          <div class="po-combo-container">
+            <ul class="po-combo-container-content">
+              <li>
+                <label class="po-combo-item-title">Sudeste</label>
+              </li>
+              <li value="1" class="po-combo-item-selected">
+                <a class="po-combo-item"><span>São Paulo</span></a>
+              </li>
+              <li value="2">
+                <a class="po-combo-item"><span>Rio de Janeiro</span></a>
+              </li>
+              <li value="2">
+                <a class="po-combo-item"><span>Minas Gerais</span></a>
+              </li>
+              <li>
+                <label class="po-combo-item-title">Nordeste</label>
+              </li>
+              <li value="3">
+                <a class="po-combo-item"><span>Bahia</span></a>
+              </li>
+              <li value="4">
+                <a class="po-combo-item"><span>Paraíba</span></a>
+              </li>
+              <li value="5">
+                <a class="po-combo-item"><span>Maranhão</span></a>
+              </li>
+            </ul>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

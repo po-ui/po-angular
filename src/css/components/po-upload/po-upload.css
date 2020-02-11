@@ -1,0 +1,30 @@
+.po-upload {
+  position: relative;
+}
+
+.po-upload-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  margin-top: 10px;
+  pointer-events: none;
+  opacity: 0.01;
+}
+
+.po-upload-progress-container {
+  padding-top: 16px;
+}
+
+.po-upload-send-button {
+  display: block;
+  padding: 8px 0;
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-upload-send-button {
+    padding-top: 0;
+  }
+
+}

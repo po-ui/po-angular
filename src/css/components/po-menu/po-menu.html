@@ -1,0 +1,1150 @@
+<style>
+  body {
+    background-color: #fbfbfb;
+  }
+
+  .po-menu-sample-title {
+    padding-top: 20px;
+    display: block;
+  }
+
+  .po-menu-mobile-title {
+    padding-top: 20px;
+    display: none;
+  }
+
+  .po-sample-container {
+    display: inline-block;
+    height: 800px;
+    max-width: 280px;
+    padding-top: 20px;
+    padding-right: 50px;
+    vertical-align: top;
+  }
+
+  .po-sample-container .po-menu {
+    position: relative;
+  }
+
+  .po-wrapper {
+    height: 100%;
+  }
+
+  .po-template-align {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 256px;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .po-menu-sample-title {
+      display: none;
+    }
+
+    .po-menu-mobile-title {
+      display: block;
+    }
+  }
+</style>
+
+<div class="po-menu-sample-title"> Menu simples e menu com sub itens</div>
+
+<div class="po-menu-mobile-title"> Menu responsivo</div>
+
+<!-- menu simples sem logo / filtro e com itens -->
+<div class="po-sample-container">
+  <!-- <div class="po-menu-overlay"></div> -->
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+  <div class="po-menu">
+    <div class="po-menu-header"></div>
+
+    <nav class="po-menu-body">
+      <!-- Inner e outer para esconder scroll -->
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+          <div class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">   <!-- classe aplicada no primeiro item do menu para remover borda -->
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item">Início</div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>  <!-- classe que representa uma tag de item de menu -->
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item">Livros</div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item">Celulares</div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-item-selected">Games</div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item">Informática</div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item">Gadgets</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- Sample para os 4 níveis. -->
+<div class="po-sample-container">
+
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+
+  <div class="po-menu">
+    <div>
+      <div class="po-menu-header-container-logo">
+        <a href="/">
+          <img class="po-menu-logo" src="https://portinari.io/assets/graphics/portinari.svg">
+        </a>
+      </div>
+    </div>
+    <nav class="po-menu-body">
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+          <div class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item"> Início </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item po-menu-item-grouper-down po-clickable">
+                <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                Livros
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item">Celulares</div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item-link po-clickable">
+                <div class="po-menu-item po-menu-item-grouper-up">
+                  <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                  Games (1º nível)
+                </div>
+                <!-- max height alterado por meio de javascript para criar animação -->
+                <div class="po-menu-sub-items" style="max-height:704px">
+                  <div>
+                    <div class="po-menu-item po-menu-item-level-two">
+                      GTA
+                    </div>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Aventura Lego - Senhor dos Anéis
+                      </div>
+                    </a>
+                  </div>
+                  <div>
+                    <div class="po-menu-item-link po-clickable">
+                      <div class="po-menu-item po-menu-item-grouper-up po-clickable po-menu-item-level-two">
+                        <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                        Star Wars (2º nível)
+                      </div>
+                      <!-- max height alterado por meio de javascript para criar animação -->
+                      <div class="po-menu-sub-items" style="max-height:192px">
+                        <div>
+                          <div class="po-menu-item po-menu-item-grouper-down po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                            Computador (3º nível)
+                          </div>
+                        </div>
+                        <div>
+                          <div class="po-menu-item po-menu-item-grouper-down po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                            Xbox One (3º nível)
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="po-menu-item-link po-clickable">
+                          <div class="po-menu-item po-menu-item-grouper-up po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                            Playstation 4 (3º nível)
+                          </div>
+                          <!-- max height alterado por meio de javascript para criar animação -->
+                          <div class="po-menu-sub-items" style="max-height:192px">
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-item-level-four">
+                                  A New Hope (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-item-level-four">
+                                  The Clone Wars (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-sub-item-selected po-menu-item-level-four">
+                                  Battlefront (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Fifa 2017
+                      </div>
+                    </a>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Mortal Kombat X
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <a href="#" class="po-menu-item-link">
+              <div class="po-menu-item">Informática </div>
+            </a>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <a href="#" class="po-menu-item-link">
+              <div class="po-menu-item">Gadgets </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- Sample com os ícones -->
+<div class="po-sample-container">
+
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+
+  <div class="po-menu">
+    <div>
+      <div class="po-menu-header-container-logo">
+        <a href="/">
+          <img class="po-menu-logo" src="https://portinari.io/assets/graphics/portinari.svg">
+        </a>
+      </div>
+    </div>
+    <nav class="po-menu-body">
+      <!-- Inner e outer para esconder scroll -->
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+          <div class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-home po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Início </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item po-menu-icon-container po-menu-item-grouper-down po-clickable">
+                <span class="po-icon po-icon-clock po-menu-icon-item"></span>
+                <div class="po-menu-icon-label"> Automação de ponto de hora </div>
+                <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-agro-business po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Informe de rendimentos anuais </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item-link po-clickable">
+                <div class="po-menu-item po-menu-icon-container po-menu-item-grouper-up po-clickable">
+                  <span class="po-icon po-icon-company po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Processos </div>
+                  <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                </div>
+                <!-- max height alterado por meio de javascript para criar animação -->
+                <div class="po-menu-sub-items" style="max-height:256px">
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two"> Agendamento de férias </div>
+                    </a>
+                  </div>
+                  <div>
+                    <a class="po-menu-item-link">
+                    <div class="po-menu-item po-menu-item-level-two po-menu-sub-item-selected"> Comprovantes de pagamento </div>
+                    </a>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two"> Atualização de dados </div>
+                    </a>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two"> Cadastro de solicitação para abono de dias de trabalho </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-user po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Dados Pessoais </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-finance po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Folha de pagamento </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- Sample com filter. -->
+<div class="po-sample-container">
+
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+
+  <div class="po-menu">
+    <div>
+      <div class="po-menu-header-container-logo">
+        <a href="/">
+          <img class="po-menu-logo" src="https://portinari.io/assets/graphics/portinari.svg">
+        </a>
+      </div>
+      <div class="po-menu-filter-container">
+        <input type="text" class="po-menu-filter" placeholder="Pesquisar">
+        <div class="po-menu-filter-search-icon-container">
+          <span class="po-icon po-menu-filter-icon po-icon-search"></span>
+        </div>
+        <div class="po-menu-filter-close-icon-container">
+          <span class="po-icon po-field-icon po-icon-close"></span>
+        </div>
+      </div>
+    </div>
+    <nav class="po-menu-body">
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+          <div class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item"> Início </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item po-menu-item-grouper-down po-clickable">
+                <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                Livros
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item">
+                  <div class="po-menu-badge-align">
+                    <div class="po-badge po-color-07">
+                      <span class="po-badge-value">12</span>
+                    </div>
+                  </div>
+                  Celulares
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item-link po-clickable">
+                <div class="po-menu-item po-menu-item-grouper-up">
+                  <div class="po-menu-badge-alert po-color-07"></div>
+                  <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                  Games (1º nível)
+                </div>
+                <!-- max height alterado por meio de javascript para criar animação -->
+                <div class="po-menu-sub-items" style="max-height:704px">
+                  <div>
+                    <div class="po-menu-item po-menu-item-level-two">
+                      <div class="po-menu-badge-align">
+                        <div class="po-badge po-color-10">
+                          <span class="po-badge-value">45</span>
+                        </div>
+                      </div>
+                      GTA
+                    </div>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Aventura Lego - Senhor dos Anéis
+                      </div>
+                    </a>
+                  </div>
+                  <div>
+                    <div class="po-menu-item-link po-clickable">
+                      <div class="po-menu-item po-menu-item-grouper-up po-clickable po-menu-item-level-two">
+                        <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                        Star Wars (2º nível)
+                      </div>
+                      <!-- max height alterado por meio de javascript para criar animação -->
+                      <div class="po-menu-sub-items" style="max-height:192px">
+                        <div>
+                          <div class="po-menu-item po-menu-item-grouper-down po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                            Computador (3º nível)
+                          </div>
+                        </div>
+                        <div>
+                          <div class="po-menu-item po-menu-item-grouper-down po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                            Xbox One (3º nível)
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="po-menu-item-link po-clickable">
+                          <div class="po-menu-item po-menu-item-grouper-up po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                            Playstation 4 (3º nível)
+                          </div>
+                          <!-- max height alterado por meio de javascript para criar animação -->
+                          <div class="po-menu-sub-items" style="max-height:192px">
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-item-level-four">
+                                  A New Hope (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-item-level-four">
+                                  The Clone Wars (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-sub-item-selected po-menu-item-level-four">
+                                  Battlefront (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Fifa 2017
+                      </div>
+                    </a>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Mortal Kombat X
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <a href="#" class="po-menu-item-link">
+              <div class="po-menu-item">Informática </div>
+            </a>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <a href="#" class="po-menu-item-link">
+              <div class="po-menu-item">Gadgets </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- Sample com filter e noData -->
+<div class="po-sample-container">
+
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+
+  <div class="po-menu">
+    <div>
+      <div class="po-menu-header-container-logo">
+        <a href="/">
+          <img class="po-menu-logo" src="https://portinari.io/assets/graphics/portinari.svg">
+        </a>
+      </div>
+      <div class="po-menu-filter-container">
+        <input type="text" class="po-menu-filter" value="AngularJS">
+        <div class="po-menu-filter-search-icon-container">
+          <span class="po-icon po-menu-filter-icon po-icon-search"></span>
+        </div>
+        <div class="po-menu-filter-close-icon-container">
+          <span class="po-icon po-field-icon po-icon-close"></span>
+        </div>
+      </div>
+    </div>
+    <nav class="po-menu-body">
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+
+          <div class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">
+              <div class="po-menu-icon-container po-menu-item-no-data">
+                <span class="po-icon po-icon-info po-menu-icon-item "></span>
+                <div class="po-menu-icon-label"> Item não encontrado. </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- Sample com o filtro sendo carregado -->
+<div class="po-sample-container">
+
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+
+  <div class="po-menu">
+    <div>
+      <div class="po-menu-header-container-logo">
+        <a href="/">
+          <img class="po-menu-logo" src="https://portinari.io/assets/graphics/portinari.svg">
+        </a>
+      </div>
+      <div class="po-menu-filter-container">
+        <input type="text" class="po-menu-filter" value="Ang">
+        <div class="po-menu-filter-search-icon-container">
+          <div class="po-loading-icon">
+            <span class="po-loading-icon-bar po-loading-icon-bar-1"></span>
+            <span class="po-loading-icon-bar po-loading-icon-bar-2"></span>
+            <span class="po-loading-icon-bar po-loading-icon-bar-3"></span>
+            <span class="po-loading-icon-bar po-loading-icon-bar-4"></span>
+            <span class="po-loading-icon-bar po-loading-icon-bar-5"></span>
+            <span class="po-loading-icon-bar po-loading-icon-bar-6"></span>
+            <span class="po-loading-icon-bar po-loading-icon-bar-7"></span>
+            <span class="po-loading-icon-bar po-loading-icon-bar-8"></span>
+          </div>
+        </div>
+        <div class="po-menu-filter-close-icon-container">
+          <span class="po-icon po-field-icon po-icon-close"></span>
+        </div>
+      </div>
+    </div>
+    <nav class="po-menu-body">
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- sample colapsado -->
+<div class="po-sample-container">
+  <div class="po-wrapper po-collapsed-menu">
+    <div class="po-menu">
+      <div>
+        <div class="po-menu-header-container-logo">
+          <a href="/">
+            <div class="po-menu-panel-logo"></div>
+          </a>
+        </div>
+      </div>
+      <nav class="po-menu-body">
+        <!-- Inner e outer para esconder scroll -->
+        <div class="po-menu-outer">
+          <div class="po-menu-inner">
+            <div class="po-menu-item-wrapper">
+              <div class="po-menu-item-first">
+                <a href="#" class="po-menu-item-link">
+                  <div class="po-menu-item po-menu-icon-container">
+                    <span class="po-icon po-icon-home po-menu-icon-item"></span>
+                    <div class="po-menu-short-label">Início</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="po-menu-item-wrapper">
+              <div>
+                <div class="po-menu-item po-menu-icon-container po-menu-item-grouper-down po-clickable">
+                  <div class="po-menu-badge-align-collapsed">
+                    <div class="po-badge po-color-07">
+                      <span class="po-badge-value">5</span>
+                    </div>
+                  </div>
+                  <span class="po-icon po-icon-clock po-menu-icon-item"></span>
+                  <div class="po-menu-short-label">Automação</div>
+                </div>
+              </div>
+            </div>
+            <div class="po-menu-item-wrapper">
+              <div>
+                <a href="#" class="po-menu-item-link">
+                  <div class="po-menu-item po-menu-icon-container">
+                    <span class="po-icon po-icon-sale po-menu-icon-item"></span>
+                    <div class="po-menu-short-label">Informes</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="po-menu-item-wrapper">
+              <div>
+                <a href="#" class="po-menu-item-link">
+                  <div class="po-menu-item po-menu-icon-container">
+                    <div class="po-menu-badge-align-collapsed">
+                      <div class="po-badge po-color-09">
+                        <span class="po-badge-value">99+</span>
+                      </div>
+                    </div>
+                    <span class="po-icon po-icon-user po-menu-icon-item"></span>
+                    <div class="po-menu-short-label">Dados</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="po-menu-item-wrapper">
+              <div>
+                <a href="#" class="po-menu-item-link">
+                  <div class="po-menu-item po-menu-icon-container">
+                    <div class="po-menu-badge-alert-collapsed po-color-07"></div>
+                    <span class="po-icon po-icon-finance po-menu-icon-item"></span>
+                    <div class="po-menu-short-label">Pagamento</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="po-menu-footer">
+        <a class="po-menu-collapse-button-icon po-clickable">
+          <span class="po-icon po-icon-menu-open"></span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Sample com o ícone de colapsar -->
+<div class="po-sample-container">
+
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+
+  <div class="po-menu">
+    <div>
+      <div class="po-menu-header-container-logo">
+        <a href="/">
+          <img class="po-menu-logo" src="https://portinari.io/assets/graphics/portinari.svg">
+        </a>
+      </div>
+    </div>
+
+    <nav class="po-menu-body">
+      <!-- Inner e outer para esconder scroll -->
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+          <div class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-home po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Início </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item po-menu-icon-container po-menu-item-grouper-down po-clickable">
+                <span class="po-icon po-icon-clock po-menu-icon-item"></span>
+                <div class="po-menu-icon-label"> Automação de ponto de hora </div>
+                <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-agro-business po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Informe de rendimentos anuais </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-user po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Dados Pessoais </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-finance po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Folha de pagamento </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="po-menu-footer">
+      <a class="po-menu-collapse-button-icon po-clickable">
+        <span class="po-icon po-icon-menu-close"></span>
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- sample colapsado com logo customizado -->
+<div class="po-sample-container">
+  <div class="po-wrapper po-collapsed-menu">
+    <div class="po-menu">
+      <div>
+        <div class="po-menu-header-container-logo">
+          <a href="/">
+            <img class="po-menu-short-logo" src="https://po.portinari.com.br/assets/graphics/logo-dgeni.png">
+          </a>
+        </div>
+      </div>
+      <nav class="po-menu-body">
+        <!-- Inner e outer para esconder scroll -->
+        <div class="po-menu-outer">
+          <div class="po-menu-inner">
+            <div class="po-menu-item-wrapper">
+              <div class="po-menu-item-first">
+                <a href="#" class="po-menu-item-link">
+                  <div class="po-menu-item po-menu-icon-container">
+                    <span class="po-icon po-icon-home po-menu-icon-item"></span>
+                    <div class="po-menu-short-label">Início</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="po-menu-item-wrapper">
+              <div>
+                <div class="po-menu-item po-menu-icon-container po-menu-item-grouper-down po-clickable">
+                  <span class="po-icon po-icon-clock po-menu-icon-item"></span>
+                  <div class="po-menu-short-label">Automação</div>
+                </div>
+              </div>
+            </div>
+            <div class="po-menu-item-wrapper">
+              <div>
+                <a href="#" class="po-menu-item-link">
+                  <div class="po-menu-item po-menu-icon-container">
+                    <span class="po-icon po-icon-sale po-menu-icon-item"></span>
+                    <div class="po-menu-short-label">Informes</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="po-menu-item-wrapper">
+              <div>
+                <a href="#" class="po-menu-item-link">
+                  <div class="po-menu-item po-menu-icon-container">
+                    <span class="po-icon po-icon-user po-menu-icon-item"></span>
+                    <div class="po-menu-short-label">Dados</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="po-menu-item-wrapper">
+              <div>
+                <a href="#" class="po-menu-item-link">
+                  <div class="po-menu-item po-menu-icon-container">
+                    <span class="po-icon po-icon-finance po-menu-icon-item"></span>
+                    <div class="po-menu-short-label">Pagamento</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="po-menu-footer">
+        <a class="po-menu-collapse-button-icon po-clickable">
+          <span class="po-icon po-icon-menu-open"></span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Sample com o ícone de colapsar com logo customizado -->
+<div class="po-sample-container">
+
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+
+  <div class="po-menu">
+    <div>
+      <div class="po-menu-header-container-logo">
+        <a href="/">
+          <img class="po-menu-logo" src="https://portinari.io/assets/graphics/portinari.svg">
+        </a>
+      </div>
+    </div>
+
+    <nav class="po-menu-body">
+      <!-- Inner e outer para esconder scroll -->
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+          <div class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-home po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Início </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item po-menu-icon-container po-menu-item-grouper-down po-clickable">
+                <span class="po-icon po-icon-clock po-menu-icon-item"></span>
+                <div class="po-menu-icon-label"> Automação de ponto de hora </div>
+                <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-agro-business po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Informe de rendimentos anuais </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-user po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Dados Pessoais </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item po-menu-icon-container">
+                  <span class="po-icon po-icon-finance po-menu-icon-item"></span>
+                  <div class="po-menu-icon-label"> Folha de pagamento </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="po-menu-footer">
+      <a class="po-menu-collapse-button-icon po-clickable">
+        <span class="po-icon po-icon-menu-close"></span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="po-sample-container">
+  <div class="po-menu-mobile">
+    <span class="po-icon po-icon-menu">
+    </span>
+  </div>
+
+  <div class="po-menu">
+    <div>
+      <div class="po-menu-header-container-logo">
+        <a href="/">
+          <img class="po-menu-logo" src="https://portinari.io/assets/graphics/portinari.svg">
+        </a>
+      </div>
+      <div class="po-menu-header-template">
+        <div class="po-template-align">
+          <div class="po-field-container po-md-11">
+            <div class="po-field-container-title"></div>
+            <div class="po-field-container-content ng-valid">
+              <input type="text" class="po-input">
+            </div>
+            <div class="po-field-container-bottom"></div>
+          </div>
+          <button type="button" class="po-button po-button-primary po-text-ellipsis po-md-6">
+            <span class="po-button-label">Reservar</span>
+          </button>
+        </div>
+      </div>
+      <div class="po-menu-filter-container">
+        <input type="text" class="po-menu-filter" placeholder="Pesquisar">
+        <div class="po-menu-filter-search-icon-container">
+          <span class="po-icon po-menu-filter-icon po-icon-search"></span>
+        </div>
+        <div class="po-menu-filter-close-icon-container">
+          <span class="po-icon po-field-icon po-icon-close"></span>
+        </div>
+      </div>
+    </div>
+    <nav class="po-menu-body">
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+          <div class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item"> Início </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item po-menu-item-grouper-down po-clickable">
+                <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                Livros
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <a href="#" class="po-menu-item-link">
+                <div class="po-menu-item">
+                  <div class="po-menu-badge-align">
+                    <div class="po-badge po-color-07">
+                      <span class="po-badge-value">12</span>
+                    </div>
+                  </div>
+                  Celulares
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <div>
+              <div class="po-menu-item-link po-clickable">
+                <div class="po-menu-item po-menu-item-grouper-up">
+                  <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                  Games (1º nível)
+                </div>
+                <!-- max height alterado por meio de javascript para criar animação -->
+                <div class="po-menu-sub-items" style="max-height:704px">
+                  <div>
+                    <div class="po-menu-item po-menu-item-level-two">
+                      <div class="po-menu-badge-align">
+                        <div class="po-badge po-color-10">
+                          <span class="po-badge-value">45</span>
+                        </div>
+                      </div>
+                      GTA
+                    </div>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Aventura Lego - Senhor dos Anéis
+                      </div>
+                    </a>
+                  </div>
+                  <div>
+                    <div class="po-menu-item-link po-clickable">
+                      <div class="po-menu-item po-menu-item-grouper-up po-clickable po-menu-item-level-two">
+                        <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                        Star Wars (2º nível)
+                      </div>
+                      <!-- max height alterado por meio de javascript para criar animação -->
+                      <div class="po-menu-sub-items" style="max-height:192px">
+                        <div>
+                          <div class="po-menu-item po-menu-item-grouper-down po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                            Computador (3º nível)
+                          </div>
+                        </div>
+                        <div>
+                          <div class="po-menu-item po-menu-item-grouper-down po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-down po-menu-group-icon"></span>
+                            Xbox One (3º nível)
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="po-menu-item-link po-clickable">
+                          <div class="po-menu-item po-menu-item-grouper-up po-clickable po-menu-item-level-three">
+                            <span class="po-icon po-icon-arrow-up po-menu-group-icon"></span>
+                            Playstation 4 (3º nível)
+                          </div>
+                          <!-- max height alterado por meio de javascript para criar animação -->
+                          <div class="po-menu-sub-items" style="max-height:192px">
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-item-level-four">
+                                  A New Hope (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-item-level-four">
+                                  The Clone Wars (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                            <div>
+                              <a href="#" class="po-menu-item-link">
+                                <div class="po-menu-item po-menu-sub-item-selected po-menu-item-level-four">
+                                  Battlefront (4º nível)
+                                </div>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Fifa 2017
+                      </div>
+                    </a>
+                  </div>
+                  <div>
+                    <a href="#" class="po-menu-item-link">
+                      <div class="po-menu-item po-menu-item-level-two">
+                        Mortal Kombat X
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <a href="#" class="po-menu-item-link">
+              <div class="po-menu-item">Informática </div>
+            </a>
+          </div>
+          <div class="po-menu-item-wrapper">
+            <a href="#" class="po-menu-item-link">
+              <div class="po-menu-item">Gadgets </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

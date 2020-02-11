@@ -1,0 +1,42 @@
+:root {
+  --font-chart-gauge-text-value-font: {
+    @apply --font-subtitle;
+  }
+
+  --font-chart-gauge-text-description-font: {
+    @apply --font-text-small-italic;
+  }
+}
+
+.po-chart-gauge-base-path {
+  fill: var(--color-chart-gauge-base-path-color);
+}
+
+.po-chart-gauge-text-value {
+  @apply --font-chart-gauge-text-value-font;
+  margin-bottom: 12px;
+}
+
+.po-chart-gauge-text-description {
+  @apply --font-chart-gauge-text-description-font;
+  color: var(--color-chart-gauge-text-description-color);
+  overflow: hidden;
+  padding: 0 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.po-chart-gauge-text-content {
+  bottom: 0;
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.po-chart-gauge-text-content:focus {
+  outline: 2px dashed var(--color-chart-gauge-text-content-focus);
+}
+

@@ -1,0 +1,63 @@
+:root {
+  --font-dropdown-font {
+    @apply --font-text-large-bold;
+  }
+
+  --font-dropdown-font-sm {
+    @apply --font-text-bold;
+  }
+}
+
+.po-dropdown {
+  @apply --font-dropdown-font;
+  display: inline-block;
+  position: relative;
+  width: inherit;
+}
+
+.po-dropdown-button {
+  background-color: var(--color-dropdown-button-background-color);
+  border: solid 1px var( --color-dropdown-button-border-color);
+  border-radius: 3px;
+  color: var(--color-dropdown-button-color);
+  cursor: pointer;
+  height: 44px;
+  padding: 8px 38px 8px 16px;
+
+  &:hover {
+    border: solid 1px var(--color-dropdown-button-border-color-hover);
+    color: var(--color-dropdown-button-color-hover);
+  }
+}
+
+.po-dropdown-button-disabled {
+  border: solid 1px var(--color-dropdown-button-border-color-disabled);
+  color: var(--color-dropdown-button-color-disabled);
+  pointer-events: none;
+}
+
+.po-dropdown-icon {
+  font-size: 24px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-dropdown {
+    @apply --font-dropdown-font-sm;
+  }
+
+  .po-dropdown-button {
+    height: 32px;
+    padding: 3px 30px 3px 8px;
+  }
+
+  .po-dropdown-icon {
+    font-size: 16px;
+    right: 8px;
+    top: 8px;
+  }
+
+}

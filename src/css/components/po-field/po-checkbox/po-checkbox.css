@@ -1,0 +1,109 @@
+:root {
+  --shadow-checkbox-box-shadow-input: var(--shadow-input);
+
+  --font-checkbox-label-smaller: {
+    @apply --font-text;
+  }
+}
+
+.po-checkbox {
+  min-height: 44px;
+  padding: 10px 8px 10px 0;
+  position: relative;
+}
+
+.po-checkbox-input {
+  border-radius: 2px;
+  box-shadow: var(--shadow-checkbox-box-shadow-input);
+  position: absolute;
+  visibility: hidden;
+}
+
+.po-checkbox-label {
+  display: block;
+  margin-left: 28px;
+}
+
+.po-checkbox .po-checkbox-input {
+  height: 0;
+  width: 0;
+}
+
+.po-checkbox-input+.po-checkbox-label:before {
+  background-color: var(--color-checkbox-background-color);
+  border: solid 1px var(--color-checkbox-border-input);
+  border-radius: 2px;
+  box-shadow: var(--shadow-checkbox-box-shadow-input);
+  content: ' ';
+  display: block;
+  height: 20px;
+  left: 0;
+  margin-right: 8px;
+  margin-top: -2px;
+  position: absolute;
+  top: 12px;
+  width: 20px;
+}
+
+.po-checkbox-input-checked+.po-checkbox-label:before,
+.po-checkbox-input-indeterminate+.po-checkbox-label:before {
+  background-color: var(--color-checkbox-background-color-active);
+  border: solid 1px var(--color-checkbox-border-input-active);
+  box-shadow: none;
+  color: var(--color-checkbox-color-active);
+  font-family: 'PortinariIcon' !important;
+  line-height: 18px;
+  padding-left: 1px;
+}
+
+po-checkbox.ng-invalid.ng-dirty .po-checkbox-input + .po-checkbox-label:before {
+  border: solid 1px var(--color-checkbox-border-input-invalid);
+}
+
+.po-checkbox-input:disabled + .po-checkbox-label:before {
+  background-color: var(--color-checkbox-background-color-disabled);
+  border: solid 1px var(--color-checkbox-border-input-disabled) !important;
+  color: var(--color-checkbox-background-color-icon-disabled);
+}
+
+.po-checkbox-input-checked+.po-checkbox-label:before {
+  content: '\e938';
+}
+
+.po-checkbox-input-indeterminate+.po-checkbox-label:before {
+  content: '\e929';
+}
+
+.po-checkbox-label:focus {
+  outline: none;
+}
+
+.po-checkbox-label:focus::before {
+  box-shadow: inset 0 0 0 1px var(--color-checkbox-box-shadow-color-focusable);
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-checkbox {
+    @apply --font-checkbox-label-smaller;
+    line-height: 20px;
+    min-height: 32px;
+    padding: 8px 8px 4px 0;
+  }
+
+  .po-checkbox-input+.po-checkbox-label:before {
+    height: 18px;
+    top: 10px;
+    width: 18px;
+  }
+
+  .po-checkbox-label {
+    margin-left: 26px;
+  }
+
+  .po-checkbox-input-checked+.po-checkbox-label:before,
+  .po-checkbox-input-indeterminate+.po-checkbox-label:before {
+    line-height: 16px;
+  }
+
+}

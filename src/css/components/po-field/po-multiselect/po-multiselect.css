@@ -1,0 +1,171 @@
+:root {
+  --shadow-multiselect-box-shadow-content: var(--shadow-card);
+  --shadow-multiselect-box-shadow-checkbox-input: var(--shadow-input);
+
+  --font-multiselect-text: {
+    @apply --font-text-large;
+  }
+
+  --font-multiselect-text-small: {
+    @apply --font-text;
+  }
+}
+
+.po-multiselect-container {
+  background-color: var(--color-multiselect-background-color);
+  border-radius: 3px;
+  box-shadow: var(--shadow-multiselect-box-shadow-content);
+  padding: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+}
+
+.po-multiselect-container-loading {
+  height: 80px;
+}
+
+.po-multiselect-container-no-data {
+  @apply --font-table-text-bold;
+  padding: 36px 0px;
+}
+
+.po-multiselect-container-search {
+  padding: 8px;
+}
+
+.po-multiselect-items-container {
+  max-height: 175px;
+  overflow-y: auto;
+}
+
+.po-multiselect-items-container::-webkit-scrollbar {
+  width: 7px;
+}
+
+.po-multiselect-items-container::-webkit-scrollbar-track {
+  display: none;
+}
+
+.po-multiselect-items-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-multiselect-background-color-scrollbar);
+  border-radius: 2px;
+}
+
+.po-multiselect-item {
+  @apply --font-multiselect-text;
+  color: var(--color-multiselect-color-primary);
+  cursor: pointer;
+  display: block;
+  padding: 10px 16px;
+  text-align: left;
+  word-wrap: break-word;
+
+  &:hover {
+    background-color: var(--color-multiselect-background-color-item-hover) !important;
+    color: var(--color-multiselect-color-primary) !important;
+    text-decoration: none;
+  }
+}
+
+.po-multiselect-item-selected > .po-multiselect-item {
+  background-color: var(--color-multiselect-background-color-item-hover);
+}
+
+.po-field-container-content {
+  position: relative;
+  width: 100%;
+
+  &.po-multiselect-show {
+    & > .po-input {
+      border: solid 1px var(--color-multiselect-border-field-focus) !important;
+    }
+
+    & .po-multiselect-container {
+      background-color: var(--color-multiselect-background-color) !important;
+      display: block;
+      z-index: 1000;
+    }
+  }
+
+  &.po-multiselect-loading {
+    & > .po-input {
+      border: solid 1px var(--color-multiselect-border-field-focus) !important;
+    }
+  }
+}
+
+.po-multiselect-field {
+  height: 24px;
+  margin-right: 32px;
+  overflow: hidden;
+  position: absolute;
+  top: calc(50% - 12px);
+
+  &.po-multiselect-field-disabled {
+    .po-disclaimer-label {
+      background-color: var(--color-multiselect-disclaimer-background-color-disabled);
+      color: var(--color-multiselect-color-text-disabled);
+    }
+  }
+}
+
+.po-multiselect-placeholder {
+  line-height: 26px;
+  padding-left: 7px;
+}
+
+.po-multiselect-checkbox-input {
+  border-radius: 2px;
+  box-shadow: var(--shadow-multiselect-box-shadow-checkbox-input);
+  position: absolute;
+  visibility: hidden;
+}
+
+.po-multiselect-checkbox-input + .po-multiselect-checkbox-label:before {
+  background-color: var(--color-multiselect-background-color-checkbox);
+  border: solid 1px var(--color-multiselect-border-checkbox-input);
+  border-radius: 2px;
+  box-shadow: var(--shadow-multiselect-box-shadow-checkbox-input);
+  content: ' ';
+  display: inline-block;
+  height: 20px;
+  margin-right: 8px;
+  margin-top: -2px;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.po-multiselect-checkbox-input-checked + .po-multiselect-checkbox-label:before {
+  background-color: var(--color-multiselect-background-color-checkbox-active);
+  border: solid 1px var(--color-multiselect-border-checkbox-input-active);
+  box-shadow: none;
+  color: var(--color-multiselect-color-checkbox-active);
+  font-family: 'PortinariIcon' !important;
+  line-height: 18px;
+  padding-left: 1px;
+}
+
+.po-multiselect-checkbox-item-disabled .po-multiselect-checkbox-input+.po-multiselect-checkbox-label:before {
+  background-color: var(--color-multiselect-background-color-checkbox-disabled);
+  border: solid 1px var(--color-multiselect-border-checkbox-input-disabled);
+  color: var(--color-multiselect-background-color-checkbox-icon-disabled);
+}
+
+.po-multiselect-checkbox-input-checked + .po-multiselect-checkbox-label:before {
+  content: '\e938';
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-multiselect-item {
+    @apply --font-multiselect-text-small;
+    padding: 7px 8px;
+
+  }
+
+}
+
+.po-multiselect-field .po-disclaimer {
+  margin-left: 8px;
+}

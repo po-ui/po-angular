@@ -1,0 +1,28 @@
+:root {
+  --font-loading-text: {
+    @apply --font-text-small:
+  }
+}
+
+.po-loading {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.po-loading-label {
+  @apply --font-loading-text;
+  color: var(--color-loading-color-label);
+  display: block;
+  margin: 16px 16px 0 16px;
+  text-align: center;
+}
+
+@media screen and (max-width: 479px) {
+
+  .po-loading-label {
+    display: none;
+  }
+
+}

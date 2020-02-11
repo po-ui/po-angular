@@ -1,0 +1,87 @@
+:root {
+  --font-tab-dropdown-button-label-font-md: {
+    @apply --font-text-large;
+  }
+
+  --font-tab-dropdown-button-label-font-sm: {
+    @apply --font-text;
+  }
+}
+
+.po-tab-dropdown .po-popover {
+  min-height: auto;
+  min-width: 125px !important;
+  overflow: hidden;
+}
+
+.po-tab-dropdown .po-popover .po-popover-content {
+  padding: 0;
+}
+
+.po-tab-dropdown-container,
+.po-tab-dropdown-container-sm {
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.po-tab-dropdown-container {
+  max-height: 198px;
+}
+
+.po-tab-dropdown-container-sm {
+  max-height: 144px;
+}
+
+.po-tab-dropdown-button {
+  box-shadow: none;
+  display: table;
+  min-width: 125px;
+  width: 100%;
+}
+
+.po-tab-dropdown-button:hover {
+  background-color: var(--color-tab-dropdown-background-color-tab-dropdown-button-hover);
+}
+
+.po-tab-dropdown-button-active {
+  background-color:var(--color-tab-dropdown-background-color-tab-dropdown-button-active);
+  color: var( --color-tab-dropdown-color-tab-dropdown-button);
+}
+
+.po-tab-dropdown-button .po-tab-button-active:hover {
+  background-color:var(--color-tab-dropdown-background-color-tab-dropdown-button-active);
+}
+
+.po-tab-dropdown-button .po-tab-button-disabled:hover {
+  background-color:var(--color-tab-dropdown-background-color-tab-dropdown-button-disabled);
+}
+
+.po-tab-dropdown-button .po-tab-button-label {
+  padding: 0 24px 0 16px;
+  text-align: left;
+}
+
+.po-tab-dropdown-button .po-tab-button-md {
+  @apply --font-tab-dropdown-button-label-font-md;
+}
+
+.po-tab-dropdown-button .po-tab-button-sm {
+  @apply --font-tab-dropdown-button-label-font-sm;
+}
+
+.po-tab-dropdown-button .po-tab-button-active {
+  box-shadow: none !important;
+}
+
+.po-tab-dropdown-container::-webkit-scrollbar-thumb,
+.po-tab-dropdown-container-sm::-webkit-scrollbar-thumb {
+  background-color: var(--color-popover-background-color-scrollbar);
+}
+
+.po-tab-dropdown-container::-webkit-scrollbar,
+.po-tab-dropdown-container-sm::-webkit-scrollbar {
+  border-radius: 2px;
+  opacity: 0.5;
+  width: 4px;
+}

@@ -1,0 +1,54 @@
+:root {
+  --menu-panel-logo-height: 50px;
+  --menu-panel-collapsed-logo-height: 64px;
+}
+
+.po-menu-panel {
+  background-color: var(--color-menu-panel-background-color-menu);
+  bottom: 0%;
+  display: inline-block;
+  height: auto;
+  position: absolute;
+  vertical-align: top;
+  top: 0;
+}
+
+.po-menu-panel-container {
+  display: inline-block;
+  height: 100px;
+  max-height: calc(100vh - var(--menu-panel-logo-height));
+  min-height: calc(100vh - var(--menu-panel-logo-height));
+  width: 56px;
+}
+
+.po-menu-panel-inner {
+  box-sizing: content-box;
+  height: 100%;
+  width: 100%;
+}
+
+.po-menu-panel-logo {
+  background: url('../images/portinari-logo-menu-panel.svg') no-repeat 50% 50%;
+  height: var(--menu-panel-logo-height);
+}
+
+.po-collapsed-menu .po-menu-panel-logo {
+  height: var(--menu-panel-collapsed-logo-height);
+}
+
+.po-menu-panel-item {
+  border-top: 1px solid var(--color-menu-panel-border-top-logo);
+  color: var(--color-menu-panel-color-menu-item-text);
+  font-size: 24px;
+  padding: 8px 16px 4px 16px;
+}
+
+.po-menu-panel-item:hover {
+  background-color: var(--color-menu-panel-background-color-item-hover);
+}
+
+.po-menu-panel-item-selected,
+.po-menu-panel-item-selected:hover {
+  background-color: var(--color-menu-panel-background-color-item-selected);
+  color: var(--color-menu-panel-color-menu-item-selected);
+}

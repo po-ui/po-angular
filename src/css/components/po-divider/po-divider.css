@@ -1,0 +1,17 @@
+:root {
+  --font-divider-font {
+    @apply --font-text-smaller;
+  }
+}
+
+.po-divider-label {
+  @apply --font-divider-font;
+  color: var(--color-divider-label-color);
+}
+
+.po-divider {
+  border: 0;
+  border-bottom: 1px solid var( --color-divider-line-color);
+  margin-bottom: 16px;
+  padding: 8px 0;
+}

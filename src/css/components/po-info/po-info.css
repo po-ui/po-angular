@@ -1,0 +1,75 @@
+:root {
+  --font-info-font-label: {
+    @apply --font-text-bold;
+  }
+
+  --font-info-font-value: {
+    @apply --font-text-large;
+  }
+
+  --font-info-font-value-smaller: {
+    @apply --font-text;
+  }
+}
+
+.po-info {
+  display: table;
+  text-align: left;
+  word-wrap: break-word;
+
+  &-label {
+    @apply --font-info-font-label;
+    color: var(--color-info-color-text-label);
+
+    &-horizontal {
+      /* Usado por conta do espaçamento do grid system */
+      display: table-cell;
+      padding: 0 8px 0 0;
+    }
+
+  }
+
+  &-value {
+    @apply --font-info-font-value;
+    color: var(--color-info-color-text-value);
+    display: block;
+    min-height: 24px;
+
+    &-horizontal {
+      display: table-cell;
+      margin-top: 0;
+      /* Usado por conta do espaçamento do grid system */
+      padding: 0 !important;
+    }
+
+  }
+
+}
+
+.po-info-container-content {
+  padding: 8px 0;
+  width: 100%;
+}
+
+.po-info-link, .po-info-link:link, .po-info-link:visited {
+  color: var(--color-info-color-link);
+  text-decoration: none;
+}
+
+.po-info-link:hover {
+  color: var(--color-info-color-link-hover);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.po-info-link:active {
+  color: var(--color-info-color-link-pressed);
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-info-value {
+    @apply --font-info-font-value-smaller;
+  }
+
+}

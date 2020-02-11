@@ -1,0 +1,252 @@
+:root {
+  --font-stepper-label: {
+    @apply --font-text-bold;
+  }
+
+  --font-stepper-circle-content: {
+    @apply --font-text-small-bold;
+  }
+
+  --font-stepper-circle-content-md: {
+    @apply --font-text-bold;
+  }
+
+  --font-stepper-circle-content-lg: {
+    @apply --font-text-large-bold;
+  }
+}
+
+.po-stepper {
+  display: table;
+  table-layout: fixed;
+}
+
+.po-stepper-horizontal {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.po-stepper-step {
+  position: relative;
+}
+
+.po-stepper-horizontal .po-stepper-container {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.po-stepper-horizontal .po-stepper-step-position,
+.po-stepper-vertical .po-stepper-container,
+.po-stepper-vertical .po-stepper-content {
+  display: table-cell;
+}
+
+.po-stepper-horizontal .po-stepper-content,
+.po-stepper-vertical .po-stepper-container,
+.po-stepper-vertical .po-stepper-content {
+  padding: 8px;
+}
+
+.po-stepper-vertical .po-stepper-content {
+  height: 100%;
+  vertical-align: top;
+  width: 100%;
+}
+
+.po-stepper-horizontal .po-stepper-step {
+  padding-top: 8px;
+}
+
+.po-stepper-vertical .po-stepper-step {
+  display: table;
+  height: 5.5em;
+  min-height: 5.5em;
+  padding-left: 16px;
+}
+
+.po-stepper-step-position:first-child .po-stepper-step-bar-left ,
+.po-stepper-step-position:last-child .po-stepper-step-bar-right,
+.po-stepper-step-position:first-child .po-stepper-step-bar-top,
+.po-stepper-step-position:last-child .po-stepper-step-bar-bottom {
+  display: none;
+}
+
+.po-stepper-circle {
+  @apply --font-stepper-circle-content;
+  border: 2px solid;
+  border-radius: 50%;
+  height: 24px;
+  width: 24px;
+}
+
+.po-stepper-horizontal .po-stepper-circle {
+  margin: 0 auto;
+}
+
+.po-stepper-vertical .po-stepper-circle {
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  top: 0;
+}
+
+.po-stepper-circle-content {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.po-stepper-step-active .po-stepper-circle,
+.po-stepper-step-active .po-stepper-label {
+  border-color: var(--color-stepper-circle-active);
+  color: var(--color-stepper-circle-active);
+}
+
+.po-stepper-step-default .po-stepper-circle,
+.po-stepper-step-default .po-stepper-label {
+  border-color: var(--color-stepper-circle-default);
+  color: var(--color-stepper-circle-default);
+}
+
+.po-stepper-step-disabled .po-stepper-circle,
+.po-stepper-step-disabled .po-stepper-label {
+  border-color: var(--color-stepper-circle-disabled);
+  color: var(--color-stepper-circle-disabled);
+}
+
+.po-stepper-step-done .po-stepper-circle,
+.po-stepper-step-done .po-stepper-label {
+  border-color: var(--color-stepper-circle-done);
+  color: var(--color-stepper-circle-done);
+}
+
+.po-stepper-step-error .po-stepper-circle,
+.po-stepper-step-error .po-stepper-label {
+  border-color: var(--color-stepper-circle-error);
+  color: var(--color-stepper-circle-error);
+}
+
+.po-stepper-step-active .po-stepper-circle-with-icon {
+  background-color: var(--color-stepper-circle-active);
+}
+
+.po-stepper-step-default .po-stepper-circle-with-icon {
+  background-color: var(--color-stepper-circle-default);
+}
+
+.po-stepper-step-disabled .po-stepper-circle-with-icon {
+  background-color: var(--color-stepper-circle-disabled);
+}
+
+.po-stepper-step-done .po-stepper-circle-with-icon {
+  background-color: var(--color-stepper-circle-done);
+}
+
+.po-stepper-step-error .po-stepper-circle-with-icon {
+  background-color: var(--color-stepper-circle-error);
+}
+
+.po-stepper-step-active,
+.po-stepper-step-default,
+.po-stepper-step-done {
+  cursor: pointer;
+}
+
+.po-stepper-step-disabled {
+  cursor: default;
+}
+
+.po-stepper-label {
+  @apply --font-stepper-label;
+}
+
+.po-stepper-horizontal .po-stepper-label {
+  padding: 8px 8px 0;
+  text-align: center;
+}
+
+.po-stepper-vertical .po-stepper-step-label-position {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.po-stepper-step-bar-left,
+.po-stepper-step-bar-right {
+  border-top: 2px solid var(--color-stepper-bar);
+  position: absolute;
+  top: 50%
+}
+
+.po-stepper-step-bar-top,
+.po-stepper-step-bar-bottom {
+  border-left: 2px solid var(--color-stepper-bar);
+  position: absolute;
+}
+
+.po-stepper-horizontal .po-stepper-step-bar-right {
+  left: 50%;
+  right: 0;
+}
+
+.po-stepper-horizontal .po-stepper-step-bar-left {
+  left: 0;
+  right: 50%;
+}
+
+.po-stepper-step-container {
+  height: 100%;
+  position: relative;
+}
+
+.po-stepper-vertical .po-stepper-step-bar-bottom {
+  bottom: 0;
+  left: 50%;
+  margin-top: 50%;
+  top: 50%;
+}
+
+.po-stepper-vertical .po-stepper-step-bar-top {
+  bottom: 50%;
+  left: 50%;
+  margin-bottom: 50%;
+  top: 0;
+}
+
+.po-stepper-vertical .po-stepper-step-container {
+  display: inherit;
+  margin-right: 16px;
+}
+
+.po-stepper-circle-content-md {
+  @apply --font-stepper-circle-content-md;
+}
+
+.po-stepper-circle-content-lg {
+  @apply --font-stepper-circle-content-lg;
+}
+
+.po-stepper-circle-content.po-icon {
+  font-size: 16px;
+}
+
+.po-stepper-circle-content-md.po-icon {
+  font-size: 24px;
+}
+
+.po-stepper-circle-content-lg.po-icon {
+  font-size: 32px;
+}
+
+.po-stepper-circle .po-stepper-circle-content.po-icon {
+  color: var(--color-stepper-circle-icon);
+}
+
+@media print {
+
+  .po-stepper-step-container {
+    display: block;
+  }
+
+}

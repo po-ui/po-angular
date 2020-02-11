@@ -1,0 +1,5 @@
+.po-upload-file-restrictions {
+  color: var(--color-upload-file-restrictions-color-text);
+  display: block;
+  padding: 16px 0 8px 0
+}

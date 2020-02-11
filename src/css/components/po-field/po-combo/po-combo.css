@@ -1,0 +1,120 @@
+:root {
+  --font-combo-text: {
+    @apply --font-text-large;
+  }
+
+  --font-combo-text-smaller: {
+    @apply --font-text;
+  }
+
+  --font-combo-group-title: {
+    @apply --font-text-small;
+  }
+
+  --font-combo-text-bold: {
+    @apply --font-text-bold;
+  }
+
+  --font-combo-text-sm-bold {
+    @apply --font-text-small-bold;
+  }
+
+  --shadow-combo-box-shadow-content: var(--shadow-card);
+}
+
+po-combo.ng-invalid.ng-dirty .po-input {
+  border: solid 1px var(--color-combo-border-button-error) !important;
+  outline: none;
+}
+
+.po-combo-container {
+  background-color: var(--color-combo-background-color);
+  border-radius: 3px;
+  box-shadow: var(--shadow-combo-box-shadow-content);
+  height: auto;
+  position: fixed;
+  z-index: 1000;
+}
+
+.po-combo-container-content {
+  border-radius: 3px;
+  max-height: 175px;
+  overflow-y: auto;
+}
+
+.po-combo-container-loading,
+.po-combo-container-no-data {
+  height: 96px;
+}
+
+.po-combo-item-title,
+.po-combo-item {
+  display: block;
+  padding: 10px 16px;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.po-combo-item-title {
+  @apply --font-combo-group-title;
+  background: var(--color-combo-background-color-group-title);
+  color: var(--color-combo-color-group-title);
+}
+
+.po-combo-item {
+  @apply --font-combo-text;
+  color: var(--color-combo-color-primary);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-combo-background-color-item-hover) !important;
+    color: var(--color-combo-color-primary) !important;
+    text-decoration: none;
+  }
+}
+
+.po-combo-item-selected > .po-combo-item {
+  background-color: var(--color-combo-background-color-selected-primary);
+  color: var(--color-combo-color-selected);
+}
+
+.po-combo-container-content::-webkit-scrollbar {
+  width: 7px;
+}
+
+.po-combo-container-content::-webkit-scrollbar-track {
+  display: none;
+}
+
+.po-combo-container-content::-webkit-scrollbar-thumb {
+  background-color: var(--color-combo-background-color-scrollbar);
+  border-radius: 2px;
+}
+
+.po-combo-input {
+  padding-right:30px !important;
+  text-overflow: ellipsis;
+}
+
+.po-combo-no-data {
+  @apply --font-combo-text-bold;
+  padding: 36px 0;
+}
+
+@media screen and (max-width: 1366px) {
+ 
+  .po-combo-item {
+    @apply --font-combo-text-smaller;
+  }
+
+  .po-combo-item-title, 
+  .po-combo-item {
+    padding: 7px 8px;
+  }
+
+  .po-combo-no-data {
+    @apply --font-combo-text-sm-bold;
+    padding: 40px 0;
+  }
+
+}

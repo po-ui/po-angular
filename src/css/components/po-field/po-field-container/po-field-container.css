@@ -1,0 +1,51 @@
+:root {
+  --font-field-container-font-opcional: {
+    @apply --font-text-small-italic;
+  }
+
+  --font-field-container-font-help: {
+    @apply --font-text-small;
+  }
+
+  --font-field-container-font-title: {
+    @apply --font-text-bold;
+  }
+}
+
+.po-field-container {
+  position: relative;
+}
+
+/* Classe que possibilita colocar o botão de clean na mesma linha, */
+.po-field-container-content {
+  padding: 8px 0;
+  position: relative;
+  width: 100%;
+}
+
+.po-field-container-title {
+  display: table;
+  width: 100%;
+}
+
+.po-field-title {
+  @apply --font-field-container-font-title;
+  color: var(--color-field-container-color-title);
+  display: table-cell;
+  vertical-align: sub;
+  width: 100%;
+}
+
+.po-field-optional {
+  @apply --font-field-container-font-opcional;
+  color: var(--color-field-container-color-opcional);
+  display: table-cell;
+  line-height: 24px;
+  padding: 0 4px;
+  vertical-align: bottom;
+}
+
+.po-field-help {
+  @apply --font-field-container-font-help;
+  color: var(--color-field-container-color-help);
+}

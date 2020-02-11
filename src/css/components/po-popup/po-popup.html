@@ -1,0 +1,163 @@
+<style>
+  .po-popup {
+    display: inline-block;
+    position: relative;
+    margin: 8px;
+  }
+  section {
+    margin-top: 16px;
+  }
+
+  .sample-popup-header-template {
+    border-bottom: 1px solid #ECEEEE;
+    padding: 16px;
+  }
+
+  .sample-popup-header-template-text {
+    color: #0C9ABE;
+  }
+</style>
+
+<article>
+  <section>
+    <h5>Popup com lista de ações simples:</h5>
+
+    <div class="po-popup">
+      <div class="po-popup-arrow po-arrow-top-right"></div>
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-message po-popup-icon-item"></span>
+        Nova mensagem
+      </div>
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-clock po-popup-icon-item"></span>
+        Lembrete de evento à 5 min
+      </div>
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-lock po-popup-icon-item"></span>
+        Atualize sua senha
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h5>Popup com lista de ações e separador, sendo a última com destaque:</h5>
+
+    <div class="po-popup">
+      <div class="po-popup-arrow po-arrow-top-right"></div>
+
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-user po-popup-icon-item"></span> Dados do usuário
+      </div>
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-company po-popup-icon-item"></span> Dados da empresa
+      </div>
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-settings po-popup-icon-item"></span> Configurações
+      </div>
+      <div class="po-popup-item-danger po-popup-item-separator po-clickable">
+        <span class="po-icon po-icon-exit po-popup-icon-item"></span> Sair
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h5>Itens do popup desabilitados:</h5>
+
+    <div class="po-popup ">
+      <div class="po-popup-arrow po-arrow-top-right"></div>
+
+      <div class="po-popup-item-default po-popup-item-disabled">
+        <span class="po-icon po-icon-user po-popup-icon-item"></span> Dados do usuário
+      </div>
+      <div class="po-popup-item-default po-popup-item-disabled">
+        <span class="po-icon po-icon-company po-popup-icon-item"></span> Dados da empresa
+      </div>
+      <div class="po-popup-item-default po-popup-item-disabled">
+        <span class="po-icon po-icon-settings po-popup-icon-item"></span> Configurações
+      </div>
+      <div class="po-popup-item-danger po-popup-item-separator po-popup-item-disabled">
+        <span class="po-icon po-icon-exit po-popup-icon-item"></span> Sair
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h5>Popup com Header Template:</h5>
+
+    <div class="po-popup">
+      <div class="po-popup-arrow po-arrow-top-right"></div>
+
+      <!-- start: p-popup-header-template - PO Popup Header Template -->
+      <div class="sample-popup-header-template">
+        <div class="sample-popup-header-template-text">
+          Dev Portinari
+        </div>
+        <div class="sample-popup-header-template-text">
+          dev.portinari@portinari.com.br
+        </div>
+      </div>
+      <!-- end -->
+
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-user po-popup-icon-item"></span> Dados do usuário
+      </div>
+
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-company po-popup-icon-item"></span> Dados da empresa
+      </div>
+
+      <div class="po-popup-item-default po-clickable">
+        <span class="po-icon po-icon-settings po-popup-icon-item"></span> Configurações
+      </div>
+
+      <div class="po-popup-item-danger po-popup-item-separator po-clickable">
+        <span class="po-icon po-icon-exit po-popup-icon-item"></span> Sair
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h5>Item selecionado:</h5>
+
+    <div class="po-popup ">
+      <div class="po-popup-arrow po-arrow-top-right"></div>
+
+      <div class="po-popup-item-default">
+        <span class="po-icon po-icon-user po-popup-icon-item"></span> Dados do usuário
+      </div>
+      <div class="po-popup-item-default po-popup-item-selected">
+        <span class="po-icon po-icon-company po-popup-icon-item"></span> Dados da empresa
+      </div>
+      <div class="po-popup-item-default">
+        <span class="po-icon po-icon-settings po-popup-icon-item"></span> Configurações
+      </div>
+      <div class="po-popup-item-danger po-popup-item-separator">
+        <span class="po-icon po-icon-exit po-popup-icon-item"></span> Sair
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h5>Item selecionado e desabilitado:</h5>
+
+    <div class="po-popup">
+      <div class="po-popup-arrow po-arrow-top-right"></div>
+
+      <div class="po-popup-item-default">
+        <span class="po-icon po-icon-user po-popup-icon-item"></span> Dados do usuário
+      </div>
+      <div class="po-popup-item-default po-popup-item-disabled po-popup-item-selected">
+        <span class="po-icon po-icon-company po-popup-icon-item"></span> Dados da empresa
+      </div>
+      <div class="po-popup-item-default">
+        <span class="po-icon po-icon-settings po-popup-icon-item"></span> Configurações
+      </div>
+      <div class="po-popup-item-danger po-popup-item-separator">
+        <span class="po-icon po-icon-exit po-popup-icon-item"></span> Sair
+      </div>
+    </div>
+  </section>
+</article>

@@ -1,0 +1,51 @@
+:root {
+  --font-grid-cell-content-font: {
+    @apply --font-text;
+  }
+
+  --color-grid-cell-content-input-border-color: var(--color-neutral-light-90);
+  --color-grid-cell-content-border-color-focusable: var(--color-primary);
+
+  --color-grid-cell-content-color: var(--color-primary);
+  --color-grid-cell-content-required-color: var(--color-07);
+}
+
+.po-grid-cell-content, .po-grid-cell-input {
+  @apply --font-grid-cell-content-font;
+  border: 0 1px 1px 0 solid var(--color-grid-cell-content-input-border-color);
+  height: 44px;
+  line-height: 1.71;
+  margin: 0;
+  overflow: hidden;
+  padding: 10px 16px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.po-grid-cell-center {
+  text-align: center;
+}
+
+.po-grid-cell-right {
+  text-align: right;
+}
+
+.po-grid-cell-content:focus {
+  border: none;
+  outline: 1px solid var(--color-grid-cell-content-border-color-focusable);
+}
+
+.po-grid-cell-required {
+  border: 1px dashed var(--color-grid-cell-content-required-color);
+}
+
+.po-grid-cell-input {
+  border: 1px solid var(--color-grid-cell-content-color);
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.10);
+  max-width: 100%;
+  min-width: 100%;
+  outline: none;
+  position: relative;
+  width: 100%;
+}

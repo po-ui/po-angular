@@ -1,0 +1,24 @@
+:root {
+  --font-navbar-action-popup-font-size-content: var(--font-navbar-action-font-size-content);
+}
+
+.po-navbar-action-popup {
+  display: none;
+}
+
+.po-navbar-action-popup-content {
+  color: var(--color-navbar-action-popup-color-content);
+  font-size: var(--font-navbar-action-popup-font-size-content);
+  margin: 0 0 0 16px;
+  padding-top: 4px;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+
+  /* Utilizado para ocultar todas as actions quando atingir a responsividade */
+  .po-navbar-action-popup {
+    display: table-cell;
+  }
+
+}

@@ -1,0 +1,235 @@
+:root {
+  --font-page-blocked-user-font-title: {
+    @apply --font-title;
+  }
+
+  --font-page-blocked-user-font-title-responsive: {
+    @apply --font-subtitle;
+  }
+
+  --font-page-blocked-user-font-text: {
+    @apply --font-text
+  }
+
+  --font-page-blocked-user-font-text-bold-responsive: {
+    @apply --font-text-bold
+  }
+}
+
+.po-page-blocked-user-wrapper {
+  background-color: var(--color-page--blocked-user-background-color);
+  height: 100%;
+  max-height: 100vh;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.po-page-blocked-user-text {
+  color: var(--color-page-blocked-user-text-color);
+  padding: 0 24px;
+}
+
+.po-page-blocked-user-link {
+  color: var(--color-page-blocked-user-link-color);
+}
+
+.po-page-blocked-user-link:hover .po-page-blocked-user-contact-text {
+  color: var(--color-page-blocked-user-link-color-hover);
+  text-decoration: underline;
+}
+
+.po-page-blocked-user-header {
+  @apply --font-page-blocked-user-font-title;
+  order: -1;
+  text-align: center;
+}
+
+.po-page-blocked-user-reason-content {
+  display: flex;
+  flex-flow: column;
+}
+
+.po-page-blocked-user-contact-content-inline {
+  display: block;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.po-page-blocked-user-contact-group-item {
+  display: inline-block;
+  position: relative;
+}
+
+.po-page-blocked-user-contact-icon {
+  font-size: 16px;
+  padding-top: 3px;
+  position: absolute;
+}
+
+.po-page-blocked-user-contact-text {
+  padding-left: 24px;
+}
+
+.po-page-blocked-user-image {
+  display: block;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  width: 72px;
+}
+
+.po-page-blocked-user-text-bold {
+  @apply --font-page-blocked-user-font-text-bold-responsive;
+}
+
+.po-page-blocked-user-contact-group {
+  display: table;
+  table-layout: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+.po-page-blocked-user-mobile-bottom-alignment {
+  bottom: 16px;
+  left: 24px;
+  position: fixed;
+  right: 24px;
+}
+
+.po-page-background-wrap .po-page-background-hide-logo {
+  display: none;
+}
+
+.po-page-background-wrap {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.po-page-background-wrap .po-page-login-container {
+  display: block;
+}
+
+.po-page-background-wrap .po-page-login-panel {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.po-page-background-wrap .po-page-login-panel-content {
+  padding: 0;
+}
+
+.po-page-blocked-user-wrapper .po-page-background-footer-mobile-only {
+  display: none;
+}
+
+@media (max-width: 320px) {
+
+  .po-page-blocked-user-image {
+    display: none;
+  }
+
+}
+
+@media (max-width: 539px) {
+
+  .po-page-background-wrap .po-page-login-panel-content {
+    padding: 0;
+  }
+
+  .po-page-blocked-user-link .po-page-blocked-user-contact-text {
+    @apply --font-page-blocked-user-font-text-bold-responsive;
+  }
+
+  .po-page-blocked-user-image {
+    margin-bottom: 8px;
+  }
+
+}
+
+@media (min-width: 540px) {
+
+  .po-page-background-wrap {
+    height: 100%;
+    max-height: 100vh;
+    overflow: auto;
+    position: static;
+  }
+
+  .po-page-background-wrap .po-page-login-container {
+    display: table;
+  }
+
+  .po-page-background-wrap .po-page-login-panel {
+    display: table-cell;
+    height: auto;
+    width: 50%;
+  }
+
+  .po-page-blocked-user-image {
+    @apply --font-page-blocked-user-font-text;
+    width: 100px;
+  }
+
+  .po-page-blocked-user-text-bold {
+    @apply --font-page-blocked-user-font-text;
+  }
+
+  .po-page-blocked-user-contact-item {
+    display: table-cell;
+    text-align: left;
+  }
+
+  .po-page-blocked-user-contact-mail {
+    text-align: right;
+  }
+
+  .po-page-blocked-user-contact-icon {
+    font-size: 24px;
+    padding-top: 0px;
+  }
+
+  .po-page-blocked-user-contact-text {
+    padding-left: 32px;
+  }
+
+  .po-page-blocked-user-contact-content-inline {
+    text-align: left;
+  }
+
+  .po-page-blocked-user-text {
+    margin: 0;
+    padding: 0;
+  }
+
+  .po-page-blocked-user-mobile-bottom-alignment {
+    position: static;
+  }
+
+}
+
+@media (min-width: 768px) {
+
+  .po-page-background-wrap .po-page-login-panel-content {
+    padding: 84px 0;
+  }
+  
+  .po-page-background-wrap .po-page-background-hide-logo {
+    display: block;
+  }
+
+  .po-page-blocked-user-image {
+    width: 248px;
+  }
+    
+  .po-page-blocked-user-reason-content {
+    display: block;
+  }
+
+}

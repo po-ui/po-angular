@@ -1,0 +1,190 @@
+<style>
+  .container {
+    padding: 8px;
+  }
+
+  table {
+    border-radius: 8px;
+    margin: 20px;
+    padding: 10px;
+    table-layout: auto;
+    float: left;
+    text-align: center;
+    font-size: 12px;
+    width: 30%;
+  }
+
+  table thead th {
+    color: #0c9abe;
+    text-align: center;
+  }
+
+  td:first-child {
+    font-family: NunitoSans-Bold;
+    text-align: right;
+    padding-right: 5px;
+    width: 50%;
+  }
+
+  td:last-child {
+    text-align: left;
+    padding-left: 5px;
+    width: 50%;
+  }
+
+</style>
+
+<article>
+
+  <section>
+    <div class="container">
+      <h4>Bordas Externas</h4>
+      <!-- MODAL -->
+      <table class="box po-shadow-modal">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Modal</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.30</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>4px</td></tr>
+        <tr><td>Blur: </td><td>16px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-modal</th></tr>
+        <tr><th colspan="2">var(--shadow-modal)</th></tr>
+      </table>
+
+      <!-- BUTTON -->
+      <table class="box po-shadow-button">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Button</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.15</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>4px</td></tr>
+        <tr><td>Blur: </td><td>8px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-button</th></tr>
+        <tr><th colspan="2">var(--shadow-button)</th></tr>
+      </table>
+
+      <!-- HEADER -->
+      <table class="box po-shadow-header">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Header</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.30</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>1px</td></tr>
+        <tr><td>Blur: </td><td>2px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-header</th></tr>
+        <tr><th colspan="2">var(--shadow-header)</th></tr>
+      </table>
+
+      <!-- CARD -->
+      <table class="box po-shadow-card">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Card</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.30</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>1px</td></tr>
+        <tr><td>Blur: </td><td>4px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-card</th></tr>
+        <tr><th colspan="2">var(--shadow-card)</th></tr>
+      </table>
+
+      <!-- CONTAINER -->
+      <table class="box po-shadow-container">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Container</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.30</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>1px</td></tr>
+        <tr><td>Blur: </td><td>4px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-container</th></tr>
+        <tr><th colspan="2">var(--shadow-container)</th></tr>
+      </table>
+
+      <!-- FEEDBAK -->
+      <table class="box po-shadow-feedback">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Feedback</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.15</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>-4px</td></tr>
+        <tr><td>Blur: </td><td>8px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-feedback</th></tr>
+        <tr><th colspan="2">var(--shadow-feedback)</th></tr>
+      </table>
+
+      <!-- TOOLTIP -->
+      <table class="box po-shadow-tooltip">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Tooltip</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.15</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>4px</td></tr>
+        <tr><td>Blur: </td><td>8px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-tooltip</th></tr>
+        <tr><th colspan="2">var(--shadow-tooltip)</th></tr>
+      </table>
+
+      <!-- POPUP -->
+      <table class="box po-shadow-popup">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Popup</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.3</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>1px</td></tr>
+        <tr><td>Blur: </td><td>4px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-popup</th></tr>
+        <tr><th colspan="2">var(--shadow-popup)</th></tr>
+      </table>
+
+      <!-- POPUP-ARROW -->
+      <table class="box po-shadow-popup-arrow">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Popup-Arrow</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.1</td></tr>
+        <tr><td>X (h-shadow): </td><td>-1px</td></tr>
+        <tr><td>Y (v-shadow): </td><td>-1px</td></tr>
+        <tr><td>Blur: </td><td>1px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-popup-arrow</th></tr>
+        <tr><th colspan="2">var(--shadow-popup-arrow)</th></tr>
+      </table>
+
+      <h4>Bordas Internas</h4>
+
+      <!-- AVATAR -->
+      <table class="box po-shadow-input">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Avatar</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.10</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>1px</td></tr>
+        <tr><td>Blur: </td><td>8px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-avatar</th></tr>
+        <tr><th colspan="2">var(--shadow-avatar)</th></tr>
+      </table>
+
+      <!-- INPUT -->
+      <table class="box po-shadow-input">
+        <thead><tr><th colspan="2" class="po-font-text-uppercase">Input</th></tr></thead>
+        <tr><td>Color: </td><td>#000000</td></tr>
+        <tr><td>Opacity: </td><td>0.10</td></tr>
+        <tr><td>X (h-shadow): </td><td>0</td></tr>
+        <tr><td>Y (v-shadow): </td><td>1px</td></tr>
+        <tr><td>Blur: </td><td>8px</td></tr>
+        <tr><td>Spread: </td><td>0</td></tr>
+        <tr><th colspan="2">.po-shadow-input</th></tr>
+        <tr><th colspan="2">var(--shadow-input)</th></tr>
+      </table>
+
+    </div>
+  </section>
+
+</article>

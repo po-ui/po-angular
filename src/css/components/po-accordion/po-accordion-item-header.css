@@ -1,0 +1,77 @@
+:root {
+
+  --font-accordion-header-font-button: {
+    @apply --font-text-large-bold;
+  }
+
+  --font-accordion-header-font-size-icon: 24px;
+}
+
+.po-accordion-item-header {
+  margin: 0;
+  padding: 8px 0;
+  position: relative;
+}
+
+.po-accordion-item-header-title {
+  margin-right: 24px;
+}
+
+.po-accordion-item:not(:first-child) .po-accordion-item-header {
+  border-top: 1px solid var(--color-accordion-item-border-color);
+}
+
+.po-accordion-item-header-button,
+.po-accordion-item-header-icon {
+  color: var(--color-accordion-header-color-primary);
+}
+
+.po-accordion-item-header:hover .po-accordion-item-header-button,
+.po-accordion-item-header:hover .po-accordion-item-header-icon {
+  color: var(--color-accordion-header-color-hover);
+}
+
+.po-accordion-item-header-button {
+  @apply --font-accordion-header-font-button;
+  background-color: var(--color-accordion-item-header-button-background-color);
+  border: none;
+  max-width: 100vw;
+  outline: 0;
+  padding: 8px 8px 8px 16px;
+  text-align: left;
+  width: 100%;
+}
+
+/* outline para compatibilidade com os demais navegadores */
+.po-accordion-item-header-button:focus:before {
+  border-radius: 1px;
+  border: 2px dashed var(--color-accordion-item-header-button-focus);
+  box-sizing: border-box;
+  content: "";
+  height: calc(100% + 11px);
+  left: -6px;
+  position: absolute;
+  top: -6px;
+  width: calc(100% + 11px);
+}
+
+/* remove a borda interna nativa do botão no firefox */
+.po-accordion-item-header-button::-moz-focus-inner {
+  border: 0;
+}
+
+.po-accordion-item-header-icon {
+  font-size: var(--font-accordion-header-font-size-icon);
+  position: absolute;
+  right: 8px;
+  top: 18px;
+}
+
+.po-accordion-item-header-icon {
+  transform: rotate(0deg);
+  transition: all .3s cubic-bezier(.07,.88,.58,.92);
+}
+
+.po-accordion-item-active .po-accordion-item-header-icon {
+  transform: rotate(180deg);
+}

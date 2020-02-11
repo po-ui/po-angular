@@ -1,0 +1,190 @@
+<style>
+  div.ng-invalid.ng-dirty .po-input {
+    border: solid 1px #c64840 !important;
+    outline: none;
+    color: #c64840;
+  }
+
+  div.ng-invalid.ng-dirty .po-field-icon {
+    color: #c64840 !important;
+  }
+</style>
+
+<article>
+  <section>
+    <div class="po-row">
+      <div class="po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto padrão e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input">
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto preenchido</span>
+          </div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" value="Preenchido">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto numérico</span>
+          </div>
+          <div class="po-field-container-content ng-valid">
+            <input type="number" class="po-input">
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto com apoio</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input" placeholder="Placeholder">
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-4">
+        <div class="po-field-container" >
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto desabilitado</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input" disabled>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="ng-invalid ng-dirty po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto inválido</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content ng-invalid ng-dirty">
+            <input type="text" class="po-input po-input-icon-right" value="Preenchimento inválido">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Mensagem de erro
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto padrão com ícone</span>
+          </div>
+          <div class="po-field-container-content po-input-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-portinari"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left">
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto padrão com ícone e desabilitado</span>
+          </div>
+          <div class="po-field-container-content po-input-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-icon-portinari po-field-icon-disabled"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" disabled>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-4 ng-invalid ng-dirty">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Campo de texto padrão com ícone e inválido</span>
+          </div>
+          <div class="po-field-container-content po-input-content">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-portinari"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left po-input-icon-right" value="Preenchimento inválido">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Mensagem de erro
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input" placeholder="Sem rótulo e ajuda">
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+          <div class="po-field-container-content ng-valid">
+            <div class="po-field-icon-container-left">
+              <span class="po-icon po-field-icon po-icon-portinari"></span>
+            </div>
+            <input type="text" class="po-input po-input-icon-left" placeholder="Sem rótulo e ajuda com ícone">
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

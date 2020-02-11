@@ -1,0 +1,87 @@
+:root {
+  --font-rich-text {
+    @apply --font-text-large;
+  }
+
+  --font-rich-text-bold {
+    @apply --font-text-large-bold;
+  }
+
+  --border-rich-text-body-border: 1px solid var(--color-neutral-light-60);
+  --shadow-rich-text-body-box-shadow: inset 0 1px 8px 0 var(--color-black-alpha-10);
+
+  --rich-text-body-max-height: 262px;
+  --rich-text-body-min-width: 160px;
+  --rich-text-body-min-height: 94px;
+}
+
+.po-rich-text-body {
+  @apply --font-rich-text;
+  background-color: var(--color-rich-text-body-background-color);
+  border: var(--border-rich-text-body-border);
+  border-radius: 3px 3px 0 0;
+  box-shadow: var(--shadow-rich-text-body-box-shadow);
+  max-height: var(--rich-text-body-max-height);
+  min-height: var(--rich-text-body-min-height);
+  min-width: var(--rich-text-body-min-width);
+  overflow-y: auto;
+  padding: 10px 16px;
+  width: 100%;
+}
+
+.po-rich-text-body b {
+  @apply --font-rich-text-bold;
+}
+
+.po-rich-text-body .po-rich-text-link {
+  cursor: text;
+}
+
+.po-rich-text-link {
+  @apply --font-rich-text-bold;
+  color: var(--color-rich-text-body-text-link);
+  text-decoration: underline;
+}
+
+.po-rich-text-link:hover {
+  color: var(--color-rich-text-body-text-link-hover);
+}
+
+/* tratamento necessário para a customização de cores */
+.po-rich-text-body font .po-rich-text-link {
+  color: inherit !important;
+}
+
+.po-rich-text-body::-webkit-scrollbar {
+  height: 7px;
+  width: 7px;
+}
+
+.po-rich-text-body::-webkit-scrollbar-track {
+  display: none;
+}
+
+.po-rich-text-body::-webkit-scrollbar-thumb {
+  background-color: var(--color-rich-text-background-color-scrollbar);
+  border-radius: 2px;
+}
+
+po-rich-text.ng-invalid.ng-dirty .po-rich-text-body {
+  border: solid 1px var(--color-rich-text-body-border-error);
+  color: var(--color-rich-text-body-text-error);
+  outline: none;
+}
+
+/* Necessário para tratamento do placeholder no componente via css, o acesso no ts deve ser feito a partir da propriedade
+'data-placeholder' devido a não funcionar somente como 'placeholder', ao digitar um valor e apagar o conteúdo da tag fica
+com um <br>, será necessário tratar no keyup a remoção desse <br> para que funcione corretamente no firefox */
+div[data-placeholder]:not([data-placeholder=""]):empty::before {
+  color: var(--color-rich-text-placeholder-color);
+  content: attr(data-placeholder);
+  display: block;
+}
+
+/* necessário devido ao reset aplicar padding: 0 aos elementos ::after e ::before */
+.po-rich-text-body ul {
+  padding-left: 16px;
+}

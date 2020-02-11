@@ -1,0 +1,68 @@
+:root {
+  /**
+   * Sombras externas
+   * https://app.zeplin.io/project/57bf4724a09dd68b60e7316f/screen/59692cf47108e9b042301c81
+   */
+  --shadow-modal: 0 4px 16px 0 var(--color-black-alpha-30);
+  --shadow-button: 0 4px 8px 0 var(--color-black-alpha-15);
+  --shadow-header: 0 1px 2px 0 var(--color-black-alpha-30);
+  --shadow-card: 0 1px 4px 0 var(--color-black-alpha-30);
+  --shadow-container: 0 1px 4px 0 var(--color-black-alpha-30);
+  --shadow-feedback: 0 -4px 8px 0 var(--color-black-alpha-15);
+  --shadow-tooltip: 0 4px 8px 0 var(--color-black-alpha-15);
+  --shadow-popover: 0 0 4px 0 var(--color-black-alpha-30);
+  --shadow-popover-arrow: -1px -1px 1px 0 var(--color-black-alpha-10);
+  --shadow-popup: 0 1px 4px 0 var(--color-black-alpha-30);
+  --shadow-popup-arrow: -1px -1px 1px 0 var(--color-black-alpha-10);
+
+  /**
+   * Sombras Internas
+   * https://app.zeplin.io/project/57bf4724a09dd68b60e7316f/screen/59692cf42a5c6cda0bac7aa7
+   */
+  --shadow-avatar: inset 0 1px 8px 0 var(--color-black-alpha-10);
+  --shadow-input: inset 0 1px 8px 0 var(--color-black-alpha-10);
+}
+
+.po-shadow-avatar {
+  box-shadow: var(--shadow-avatar);
+}
+
+.po-shadow-modal {
+  box-shadow: var(--shadow-modal);
+}
+
+.po-shadow-button {
+  box-shadow: var(--shadow-button);
+}
+
+.po-shadow-header {
+  box-shadow: var(--shadow-header);
+}
+
+.po-shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.po-shadow-container {
+  box-shadow: var(--shadow-container);
+}
+
+.po-shadow-feedback {
+  box-shadow: var(--shadow-feedback);
+}
+
+.po-shadow-tooltip {
+  box-shadow: var(--shadow-tooltip);
+}
+
+.po-shadow-input {
+  box-shadow: var(--shadow-input);
+}
+
+.po-shadow-popup {
+  box-shadow: var(--shadow-popup);
+}
+
+.po-shadow-popup-arrow {
+  box-shadow: var(--shadow-popup-arrow);
+}

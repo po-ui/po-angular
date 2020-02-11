@@ -1,0 +1,69 @@
+@media (max-width: 480px) {
+
+  /* Classes para definição de visibilidade */
+
+  .po-visible-sm, [class*='po-visible-sm-'], [class*=' po-visible-sm-'] {
+    display: block;
+  }
+
+  .po-hidden-sm {
+    display: none;
+  }
+
+  /* Classes para definição do tamanho default */
+
+  [class*='po-md-'], [class*='po-lg-'], [class*='po-xl-'] {
+    width: 100%;
+  }
+
+  /* Classes para definição do tamanho */
+
+  .po-sm-1, .po-visible-sm-1 {
+    width: 8.33333333%;
+  }
+
+ .po-sm-2, .po-visible-sm-2 {
+    width: 16.66665%;
+  }
+
+  .po-sm-3, .po-visible-sm-3 {
+    width: 25%;
+  }
+
+  .po-sm-4, .po-visible-sm-4 {
+    width: 33.33333%;
+  }
+
+  .po-sm-5, .po-visible-sm-5 {
+    width: 41.66666%;
+  }
+
+  .po-sm-6, .po-visible-sm-6 {
+    width: 50%;
+  }
+
+  .po-sm-7, .po-visible-sm-7 {
+    width: 58.33333333%;
+  }
+
+  .po-sm-8, .po-visible-sm-8 {
+    width: 66.66666667%;
+  }
+
+  .po-sm-9, .po-visible-sm-9 {
+    width: 75%;
+  }
+
+  .po-sm-10, .po-visible-sm-10 {
+    width: 83.33333333%;
+
+  }
+
+  .po-sm-11, .po-visible-sm-11 {
+    width: 91.66666667%;
+  }
+
+  .po-sm-12, .po-visible-sm-12 {
+    width: 100%;
+  }
+}

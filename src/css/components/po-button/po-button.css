@@ -1,0 +1,187 @@
+:root {
+
+  --font-button-font {
+    @apply --font-text-large-bold;
+  }
+
+  --font-button-font-sm {
+    @apply --font-text-bold;
+  }
+
+  --shadow-button-box-shadow: var(--shadow-button);
+
+}
+
+.po-button {
+  @apply --font-button-font;
+  background-color: var(--color-button-background-color);
+  border: solid 1px var(--color-button-border);
+  border-radius: 3px;
+  color: var(--color-button-color);
+  display: inline-block;
+  height: 44px;
+  padding: 0 16px;
+  text-align: center;
+
+  &:hover {
+    background-color: var(--color-button-background-color-hover);
+    border: solid 1px var(--color-button-border-hover);
+    color: var(--color-button-color-hover);
+  }
+
+  &:active {
+    background-color: var(--color-button-background-color-pressed);
+    border: solid 1px var(--color-button-border-pressed);
+    color: var(--color-button-color-pressed);
+  }
+
+  &:disabled {
+    background-color: var(--color-button-background-color-disabled);
+    border: solid 1px var(--color-button-border-disabled);
+    color: var(--color-button-color-disabled);
+  }
+
+  &-primary {
+    box-shadow: var(--shadow-button-box-shadow);
+    background-color: var(--color-button-background-color-primary);
+    border: solid 1px var(--color-button-border-primary);
+    color: var(--color-button-color-primary);
+
+    &:hover {
+      background-color: var(--color-button-background-color-primary-hover);
+      border: solid 1px var(--color-button-border-primary-hover);
+      color: var(--color-button-color-primary-hover);
+    }
+
+    &:active {
+      background-color: var(--color-button-background-color-primary-pressed);
+      border: solid 1px var(--color-button-border-primary-pressed);
+      color: var(--color-button-color-primary-pressed);
+    }
+
+    &:disabled {
+      background-color: var(--color-button-background-color-primary-disabled);
+      border: solid 1px var(--color-button-border-primary-disabled);
+      color: var(--color-button-color-primary-disabled);
+    }
+  }
+
+  &-danger {
+    background-color: var(--color-button-background-color-danger);
+    border: solid 1px var(--color-button-border-danger);
+    color: var(--color-button-color-danger);
+
+    &:hover {
+      background-color: var(--color-button-background-color-danger-hover);
+      border: solid 1px var(--color-button-border-danger-hover);
+      color: var(--color-button-color-danger-hover);
+    }
+
+    &:active {
+      background-color: var(--color-button-background-color-danger-pressed);
+      border: solid 1px var(--color-button-border-danger-pressed);
+      color: var(--color-button-color-danger-pressed);
+    }
+
+    &:disabled {
+      background-color: var(--color-button-background-color-danger-disabled);
+      border: solid 1px var(--color-button-border-danger-disabled);
+      color: var(--color-button-color-danger-disabled);
+    }
+  }
+
+  &-link {
+    background-color: var(--color-button-background-color-link);
+    border: none;
+    color: var(--color-button-color-link);
+
+    &:hover {
+      background-color: var(--color-button-background-color-link-hover);
+      border: none;
+      color: var(--color-button-color-link-hover);
+    }
+
+    &:active {
+      background-color: var(--color-button-background-color-link-pressed);
+      border: none;
+      color: var(--color-button-color-link-pressed);
+    }
+
+    &:disabled {
+      background-color: var(--color-button-background-color-link-disabled);
+      border: none;
+      color: var(--color-button-color-link-disabled);
+    }
+  }
+
+  &-sm {
+    @apply --font-button-font-sm;
+    height: 36px;
+  }
+}
+
+[class*='po-xl-'], [class*='po-lg-'], [class*='po-md-'], [class*='po-sm-'] {
+  > .po-button {
+    width: 100%;
+  }
+}
+
+.po-button-label {
+  display: inline;
+  vertical-align: middle;
+}
+
+.po-button .po-icon:not(.po-button-loading-icon) ~ .po-button-label {
+  padding-left: 4px;
+}
+
+.po-button-loading-icon {
+  float: left;
+  padding-right: 8px;
+}
+
+.po-button-loading-icon .po-loading-icon {
+  top: 3px;
+}
+
+.po-button .po-icon, .po-button-loading-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-button {
+    @apply --font-button-font-sm;
+    height: 32px;
+    padding: 0 8px;
+  }
+
+  .po-button .po-icon:not(.po-button-loading-icon) ~ .po-button-label {
+    padding-left: 2px;
+  }
+
+  .po-button .po-icon::before {
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  .po-button-loading-icon {
+    padding-top: 4px;
+  }
+
+  .po-button-loading-icon .po-loading-icon {
+    height: 12px;
+    top: 2px;
+    width: 12px;
+  }
+
+}
+
+@media print {
+
+  .po-button {
+    color-adjust: exact;
+  }
+
+}

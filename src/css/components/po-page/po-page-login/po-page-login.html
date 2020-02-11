@@ -1,0 +1,1737 @@
+<style>
+  .po-page-login-highlight-image {
+    background-image: url(./assets/images/portinari-page-login-default.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right;
+    vertical-align: middle;
+    display: table-cell;
+  }
+
+  .po-tooltip {
+    left: 45px;
+    position: absolute;
+    top: -36px;
+    width: 200px;
+  }
+
+  div.ng-invalid.ng-dirty .po-input {
+    border: solid 1px #c64840 !important;
+    color: #c64840;
+    outline: none;
+  }
+
+  div.ng-invalid.ng-dirty .po-field-icon {
+    color: #c64840 !important;
+  }
+
+  .po-select-container {
+    position: relative;
+  }
+
+  .po-select-content {
+    position: absolute;
+    width: 170px;
+    bottom: 54px;
+    left: 0;
+  }
+
+  @media screen and (max-width: 1366px) {
+
+    .po-tooltip {
+      left: 30px;
+      top: -46px;
+    }
+  }
+
+</style>
+
+<div class="article">
+  <div class="section">
+    <h4>Opção de template sem destaque</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template com lista de erros no campo login</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container ng-invalid ng-dirty">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-field-container-bottom po-field-container-error-container po-lg-12">
+                  <div class="po-field-container-bottom-text-error po-field-container-error-item">
+                    <span class="po-icon po-icon-exclamation"></span>
+                    <span class="po-field-container-error-text">Ops! O campo de login é obrigatório.</span>
+                  </div>
+                  <div class="po-field-container-bottom-text-error po-field-container-error-item">
+                    <span class="po-icon po-icon-exclamation"></span>
+                    <span class="po-field-container-error-text">Caracter inválido.</span>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha" value="ABC">
+                      <div class="po-field-icon-container-right">
+                        <span class="po-icon po-field-icon po-icon-close"></span>
+                        <span class="po-icon po-field-icon po-icon-eye-off po-field-icon-disabled"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template com lista de erros no campo password</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container ng-invalid ng-dirty">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha" value="ABC">
+                      <div class="po-field-icon-container-right">
+                        <span class="po-icon po-field-icon po-icon-close"></span>
+                        <span class="po-icon po-field-icon po-icon-eye-off po-field-icon-disabled"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-field-container-bottom po-field-container-error-container po-lg-12">
+                  <div class="po-field-container-bottom-text-error po-field-container-error-item">
+                    <span class="po-icon po-icon-exclamation"></span>
+                    <span class="po-field-container-error-text">Ops! A tecla caps lock está ligada.</span>
+                  </div>
+                  <div class="po-field-container-bottom-text-error po-field-container-error-item">
+                    <span class="po-icon po-icon-exclamation"></span>
+                    <span class="po-field-container-error-text">Usuário ou senha inválidos. Digite novamente ou redefina sua senha.</span>
+                  </div>
+                </div>
+
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template com ambiente de desenvolvimento</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+              <div class="po-tag-container">
+                <div class="po-tag po-tag-warning">
+                  <span class="po-tag-value">Homologação</span>
+                </div>
+              </div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template com labels</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-title">
+                          <span class="po-field-title">Usuário de rede</span>
+                        </div>
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-title">
+                      <span class="po-field-title">Senha</span>
+                    </div>
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template sem destaque com tooltip visível</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container" style="position:relative">
+                      <span class="po-icon po-field-icon po-icon-info">
+                      </span>
+                      <div class="po-tooltip">
+                        <div class="po-tooltip-arrow po-arrow-left"></div>
+                        <div class="po-tooltip-content">
+                          Seu usuário foi entregue a você no seu primeiro dia.
+                          Caso não tenha mais essa informação contacte o suporte
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template sem destaque com botão em estado de carregamento</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail" value="dev.portinari">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                  </div>
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha" value="password">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary" disabled>
+                    <div class="po-button-loading-icon">
+                      <div class="po-loading-icon po-loading-icon-neutral-color">
+                        <span class="po-loading-icon-bar po-loading-icon-bar-1"></span>
+                        <span class="po-loading-icon-bar po-loading-icon-bar-2"></span>
+                        <span class="po-loading-icon-bar po-loading-icon-bar-3"></span>
+                        <span class="po-loading-icon-bar po-loading-icon-bar-4"></span>
+                        <span class="po-loading-icon-bar po-loading-icon-bar-5"></span>
+                        <span class="po-loading-icon-bar po-loading-icon-bar-6"></span>
+                        <span class="po-loading-icon-bar po-loading-icon-bar-7"></span>
+                        <span class="po-loading-icon-bar po-loading-icon-bar-8"></span>
+                      </div>
+                    </div>
+                    Entrando...
+                  </button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template sem destaque com aviso de bloqueio e link para troca de senha</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail" value="dev.portinari">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12">
+                  <div class="po-page-login-password-container">
+                    <div class="po-page-login-field-size po-page-login-password-item">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-lock"></span>
+                          </div>
+                          <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha" value="password">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-password-item po-page-login-password-popover-container">
+                      <div class="po-page-login-popover-container">
+                        <div class="po-page-login-popover">
+                          <div class="po-page-login-popover-arrow po-arrow-left"></div>
+                          <div class="po-page-login-popover-content">
+                            <p class="po-font-text-bold po-page-login-popover-title">
+                              Opa!
+                            </p>
+                            <p class="po-font-text">
+                              Esqueceu sua senha?
+                            </p>
+                            <p class="po-font-text">
+                              Se tentar mais <span class="po-font-text-bold po-page-login-popover-attempts">2 vezes </span>sem sucesso seu usuário será bloqueado e você fica 24 horas sem poder acessar :(
+                            </p>
+                            <br>
+                            <p class="po-font-text">
+                              Melhor criar uma senha nova agora! Você vai poder entrar no sistema logo em seguida.
+                            </p>
+                            <div class="po-font-text-bold po-mt-1 po-page-login-popover-link-container">
+                              <a class="po-page-login-popover-link" href="#" target="_blank">Esqueci minha senha</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template sem destaque, com aviso de bloqueio e sem link para troca de senha</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail" value="dev.portinari">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12">
+                  <div class="po-page-login-password-container">
+                    <div class="po-page-login-field-size po-page-login-password-item">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-lock"></span>
+                          </div>
+                          <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha" value="password">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-password-item po-page-login-password-popover-container">
+                      <div class="po-page-login-popover-container">
+                        <div class="po-page-login-popover">
+                          <div class="po-page-login-popover-arrow po-arrow-left"></div>
+                          <div class="po-page-login-popover-content">
+                            <p class="po-font-text-bold po-page-login-popover-title">
+                              Opa!
+                            </p>
+                            <p class="po-font-text">
+                              Se tentar mais <span class="po-font-text-bold po-page-login-popover-attempts">2 vezes </span>sem sucesso seu usuário será bloqueado e você fica 24 horas sem poder acessar :(
+                            </p>
+                            <br>
+                            <p class="po-font-text">
+                              Melhor criar uma senha nova agora! Você vai poder entrar no sistema logo em seguida.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção com campo customizado - Input</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+                <!-- Campo Customizado -->
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <input type="text" class="po-input" placeholder="Por favor insira um valor">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template com select de seleção de idiomas aberto</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-greeting">Bom dia!</div>
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container po-select-show">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-up"></span>
+                  </div>
+                </div>
+
+                <ul class="po-select-content">
+                  <li value="0" class="po-select-item-selected">
+                    <div class="po-select-item">
+                      <span>Português</span>
+                    </div>
+                  </li>
+                  <li value="0">
+                    <div class="po-select-item">
+                      <span>English</span>
+                    </div>
+                  </li>
+                  <li value="0">
+                    <div class="po-select-item">
+                      <span>Español</span>
+                    </div>
+                  </li>
+                </ul>
+
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção com campo customizado - Combo/Select Fechado</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+                <!-- Campo Customizado -->
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div>
+                      <select name="select1" class="po-select"></select>
+                      <div class="po-select-container">
+                        <div class="po-select-button">
+                          <span> Por favor selecione um valor </span>
+                          <span class="po-select-icon po-icon po-icon-arrow-down"></span>
+                        </div>
+                      </div>
+                      <ul class="po-select-content"></ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção com campo customizado - Combo/Select Aberto</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+                <!-- Campo Customizado -->
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-select-container po-select-show">
+                      <div class="po-select-button">
+                        <span> São Paulo </span>
+                        <span class="po-select-icon po-icon po-icon-arrow-up"></span>
+                      </div>
+                      <div class="po-field-container-bottom"></div>
+
+                      <ul class="po-select-content">
+                        <li value="1" class="po-select-item-selected">
+                          <div class="po-select-item">
+                            <span> São Paulo</span>
+                          </div>
+                        </li>
+                        <li value="2">
+                          <div class="po-select-item">
+                            <span> Paraná</span>
+                          </div>
+                        </li>
+                        <li value="3">
+                          <div class="po-select-item">
+                            <span> Santa Catarina</span>
+                          </div>
+                        </li>
+                        <li value="4">
+                          <div class="po-select-item">
+                            <span> Sergipe </span>
+                          </div>
+                        </li>
+                        <li value="5">
+                          <div class="po-select-item">
+                            <span> Tocantins</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="po-page-login-highlight-image-off"></div>
+    </div>
+
+    <br>
+    <br>
+    <hr>
+
+    <h4>Opção de template com destaque</h4>
+    <div class="po-page-login-container">
+      <div class="po-page-login-panel">
+        <img class="po-page-background-main-logo" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+        <div class="po-page-login-body">
+          <div class="po-page-login-panel-content">
+            <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
+              <div class="po-page-login-header-title po-mb-sm-1">Bem-vindo ao Portal RH</div>
+            </div>
+            <form class="po-page-login-form">
+              <div class="po-row">
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content">
+                          <div class="po-field-icon-container-left">
+                            <span class="po-icon po-field-icon po-icon-user"></span>
+                          </div>
+                          <input type="text" class="po-input po-input-icon-left" placeholder="Insira seu e-mail">
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-page-login-field-size po-lg-12">
+                  <div class="po-field-container">
+                    <div class="po-field-container-content">
+                      <div class="po-field-icon-container-left">
+                        <span class="po-icon po-field-icon po-icon-lock"></span>
+                      </div>
+                      <input type="password" class="po-input po-input-icon-left" placeholder="Insira sua senha">
+                    </div>
+                    <div class="po-field-container-bottom"></div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12">
+                  <div class="po-page-login-hint po-page-login-info-container">
+                    <div class="po-lg-7 po-offset-lg-5 po-offset-xl-5 po-page-login-info-field">
+                      <div class="po-field-container">
+                        <div class="po-field-container-content po-switch-content">
+                          <div class="po-switch-container po-switch-container-on po-switch-container-right po-clickable">
+                            <div class="po-switch-button po-switch-button-on">
+                              <span class="po-icon po-icon-ok"></span>
+                            </div>
+                          </div>
+                          <span class="po-switch-label po-clickable">Logar automaticamente</span>
+                        </div>
+                        <div class="po-field-container-bottom"></div>
+                      </div>
+                    </div>
+                    <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+                      <span class="po-icon po-field-icon po-icon-info"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="po-lg-12 po-page-login-button po-page-login-field-size">
+                  <button type="button" name="button" class="po-button po-button-primary">Entrar</button>
+                </div>
+                <div class="po-page-login-recovery-link">
+                  <a class="po-font-text-large-bold" href="">Esqueceu sua senha?</a>
+                </div>
+                <div class="po-page-login-register-link">
+                  <a class="po-font-text-large-bold" href="">Novo usuário</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="po-page-background-footer po-sm-12">
+
+          <div class="po-page-background-footer-mobile-only">
+            <div class="po-divider"></div>
+          </div>
+
+          <div class="po-page-background-footer-content">
+            <div class="po-page-background-footer-select">
+              <div class="po-select-container">
+                <div class="po-select-button">
+                  <span>Português</span>
+                  <div class="po-field-icon-container-right">
+                    <span class="po-field-icon po-icon po-icon-arrow-down"></span>
+                  </div>
+                </div>
+                <ul class="po-select-content"></ul>
+              </div>
+            </div>
+            <div class="po-page-background-secondary-logo po-page-background-secondary-logo-right">
+              <img class="po-page-background-secondary-logo-image" src="https://portinari.io/assets/graphics/portinari.svg" alt="logo-Portinari">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="po-page-login-highlight-image">
+        <div class="po-page-login-highlight-text">
+          <div class="po-font-display">Opção Desktop com imagem de destaque e font-display</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,193 @@
+
+/* Classes para definição de offset */
+
+@media (max-width: 480px) {
+
+  .po-offset-sm-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .po-offset-sm-2 {
+    margin-left: 16.66665%;
+  }
+
+  .po-offset-sm-3 {
+    margin-left: 25%;
+  }
+
+  .po-offset-sm-4 {
+    margin-left: 33.33333%;
+  }
+
+  .po-offset-sm-5 {
+    margin-left: 41.66666%;
+  }
+
+  .po-offset-sm-6 {
+    margin-left: 50%;
+  }
+
+  .po-offset-sm-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .po-offset-sm-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .po-offset-sm-9 {
+    margin-left: 75%;
+  }
+
+  .po-offset-sm-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .po-offset-sm-11 {
+    margin-left: 91.66666667%;
+  }
+
+}
+
+@media (min-width: 481px) and (max-width: 960px) {
+
+  .po-offset-md-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .po-offset-md-2 {
+    margin-left: 16.66665%;
+  }
+
+  .po-offset-md-3 {
+    margin-left: 25%;
+  }
+
+  .po-offset-md-4 {
+    margin-left: 33.33333%;
+  }
+
+  .po-offset-md-5 {
+    margin-left: 41.66666%;
+  }
+
+  .po-offset-md-6 {
+    margin-left: 50%;
+  }
+
+  .po-offset-md-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .po-offset-md-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .po-offset-md-9 {
+    margin-left: 75%;
+  }
+
+  .po-offset-md-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .po-offset-md-11 {
+    margin-left: 91.66666667%;
+  }
+
+}
+
+@media (min-width: 961px) and (max-width: 1366px) {
+
+  .po-offset-lg-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .po-offset-lg-2 {
+    margin-left: 16.66665%;
+  }
+
+  .po-offset-lg-3 {
+    margin-left: 25%;
+  }
+
+  .po-offset-lg-4 {
+    margin-left: 33.33333%;
+  }
+
+  .po-offset-lg-5 {
+    margin-left: 41.66666%;
+  }
+
+  .po-offset-lg-6 {
+    margin-left: 50%;
+  }
+
+  .po-offset-lg-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .po-offset-lg-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .po-offset-lg-9 {
+    margin-left: 75%;
+  }
+
+  .po-offset-lg-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .po-offset-lg-11 {
+    margin-left: 91.66666667%;
+  }
+
+}
+
+@media (min-width: 1367px) {
+
+  .po-offset-xl-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .po-offset-xl-2 {
+    margin-left: 16.66665%;
+  }
+
+  .po-offset-xl-3 {
+    margin-left: 25%;
+  }
+
+  .po-offset-xl-4 {
+    margin-left: 33.33333%;
+  }
+
+  .po-offset-xl-5 {
+    margin-left: 41.66666%;
+  }
+
+  .po-offset-xl-6 {
+    margin-left: 50%;
+  }
+
+  .po-offset-xl-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .po-offset-xl-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .po-offset-xl-9 {
+    margin-left: 75%;
+  }
+
+  .po-offset-xl-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .po-offset-xl-11 {
+    margin-left: 91.66666667%;
+  }
+}

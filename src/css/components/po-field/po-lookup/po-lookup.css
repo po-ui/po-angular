@@ -1,0 +1,25 @@
+:root {
+  --font-lookup-text: {
+    @apply --font-text-large;
+  }
+
+  --shadow-lookup-box-shadow-input: var(--shadow-input);
+}
+
+.po-lookup-header {
+  line-height: normal;
+  margin-bottom: 16px;
+}
+
+.po-lookup-loading {
+  margin: auto;
+}
+
+.po-lookup-modal .po-table-wrapper {
+  margin-bottom: 4px;
+}
+
+.po-lookup-container-table {
+  max-width: 90vw;
+  overflow: hidden;
+}

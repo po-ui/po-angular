@@ -1,0 +1,16 @@
+:root {
+  --font-accordion-item-body-font: {
+    @apply --font-text-large;
+  }
+}
+
+.po-accordion-item-body {
+  @apply --font-accordion-item-body-font;
+  color: var(--color-accordion-item-body-color);
+  /* necessario para animacao funcionar corretamente no IE/safari */
+  overflow-y: hidden;
+}
+
+.po-accordion-item-body-content {
+  padding: 8px 16px;
+}

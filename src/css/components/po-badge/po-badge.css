@@ -1,0 +1,20 @@
+:root {
+  --font-badge-font {
+    @apply --font-text-smaller;
+  }
+}
+
+.po-badge {
+  border-radius: 3px;
+  color: var(--color-badge-color);
+  display: table;
+  height: 18px;
+  text-align: center;
+  width: 22px;
+}
+
+.po-badge-value {
+  @apply --font-badge-font;
+  display: table-cell;
+  vertical-align: middle;
+}

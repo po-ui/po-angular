@@ -1,0 +1,33 @@
+:root {
+  --font-navbar-item {
+    @apply --font-text-bold;
+  }
+
+  --shadow-navbar-item-box-shadow-selected: 0 -4px 0 0 var(--color-navbar-item-color-shadow-selected) inset;
+}
+
+.po-navbar-item {
+  @apply --font-navbar-item;
+  color: var(--color-navbar-item-color);
+  display: table-cell;
+  padding: 16px 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.po-navbar-item-link,
+.po-navbar-item-link:hover {
+  color: inherit;
+  margin-left: 1px;
+  padding: 17px 8px;
+  text-decoration: none !important;
+}
+
+.po-navbar-item-link {
+  cursor: default;
+}
+
+.po-navbar-item-selected {
+  box-shadow: var(--shadow-navbar-item-box-shadow-selected);
+  color: var(--color-navbar-item-color-selected);
+}

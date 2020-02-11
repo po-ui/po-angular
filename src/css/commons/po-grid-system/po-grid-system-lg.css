@@ -1,0 +1,165 @@
+@media (min-width: 961px) and (max-width: 1366px) {
+
+  /* Classes para definição de visibilidade */
+
+  .po-visible-lg, [class*='po-visible-lg-'], [class*=' po-visible-lg-'] {
+    display: block;
+  }
+
+  .po-hidden-lg {
+    display: none;
+  }
+
+  /* Classes para definição do tamanho default */
+
+  [class*='po-xl-'] {
+    width: 100%;
+  }
+
+  .po-sm-1 {
+    width: 8.33333333%;
+  }
+
+ .po-sm-2 {
+    width: 16.66665%;
+  }
+
+  .po-sm-3 {
+    width: 25%;
+  }
+
+  .po-sm-4 {
+    width: 33.33333%;
+  }
+
+  .po-sm-5 {
+    width: 41.66666%;
+  }
+
+  .po-sm-6 {
+    width: 50%;
+  }
+
+  .po-sm-7 {
+    width: 58.33333333%;
+  }
+
+  .po-sm-8 {
+    width: 66.66666667%;
+  }
+
+  .po-sm-9 {
+    width: 75%;
+  }
+
+  .po-sm-10 {
+    width: 83.33333333%;
+  }
+
+  .po-sm-11 {
+    width: 91.66666667%;
+  }
+
+  .po-sm-12 {
+    width: 100%;
+  }
+
+  .po-md-1 {
+    width: 8.33333333%;
+  }
+
+ .po-md-2 {
+    width: 16.66665%;
+  }
+
+  .po-md-3 {
+    width: 25%;
+  }
+
+  .po-md-4 {
+    width: 33.33333%;
+  }
+
+  .po-md-5 {
+    width: 41.66666%;
+  }
+
+  .po-md-6 {
+    width: 50%;
+  }
+
+  .po-md-7 {
+    width: 58.33333333%;
+  }
+
+  .po-md-8 {
+    width: 66.66666667%;
+  }
+
+  .po-md-9 {
+    width: 75%;
+  }
+
+  .po-md-10 {
+    width: 83.33333333%;
+  }
+
+  .po-md-11 {
+    width: 91.66666667%;
+  }
+
+  .po-md-12 {
+    width: 100%;
+  }
+
+  /* Classes para definição do tamanho */
+
+  .po-lg-1, .po-visible-lg-1 {
+    width: 8.33333333%;
+  }
+
+ .po-lg-2, .po-visible-lg-2 {
+    width: 16.66665%;
+  }
+
+  .po-lg-3, .po-visible-lg-3 {
+    width: 25%
+  }
+
+  .po-lg-4, .po-visible-lg-4 {
+    width: 33.33333%;
+  }
+
+  .po-lg-5, .po-visible-lg-5 {
+    width: 41.66666%;
+  }
+
+  .po-lg-6, .po-visible-lg-6 {
+    width: 50%;
+  }
+
+  .po-lg-7, .po-visible-lg-7 {
+    width: 58.33333333%;
+  }
+
+  .po-lg-8, .po-visible-lg-8 {
+    width: 66.66666667%;
+  }
+
+  .po-lg-9, .po-visible-lg-9 {
+    width: 75%;
+  }
+
+  .po-lg-10, .po-visible-lg-10 {
+    width: 83.33333333%;
+
+  }
+
+  .po-lg-11, .po-visible-lg-11 {
+    width: 91.66666667%;
+  }
+
+  .po-lg-12, .po-visible-lg-12 {
+    width: 100%;
+  }
+}

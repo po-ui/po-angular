@@ -1,0 +1,83 @@
+:root {
+  --font-rich-text-toolbar-button-icon {
+    @apply --font-subtitle;
+  }
+
+  --rich-text-toolbar-button-group-height: 32px;
+  --rich-text-toolbar-button-group-width: 32px;
+
+  --rich-text-toolbar-min-height: 64px;
+
+  /* Valores herdados do componente po-rich-text-body */
+  --rich-text-toolbar-min-width: var(--rich-text-body-min-width);
+  --border-rich-text-toolbar-border: var(--border-rich-text-body-border);
+}
+
+.po-rich-text-toolbar {
+  background-color: var(--color-rich-text-toolbar-background-color);
+  border: var(--border-rich-text-toolbar-border);
+  border-radius: 0 0 3px 3px;
+  border-top: none;
+  min-height: var(--rich-text-toolbar-min-height);
+  min-width: var(--rich-text-toolbar-min-width);
+  padding: 16px 0 0 16px;
+  width: 100%;
+}
+
+/* Necessário para alinhar os grupos dos botões, deverá ser aplicado na tag do componente 'po-button-group' */
+.po-rich-text-toolbar-button-align {
+  display: inline-block;
+  padding: 0 12px 16px 0;
+}
+
+/* Aplica a largura fixa em cada botão do po-button-group */
+.po-rich-text-toolbar .po-button-group {
+  width: var( --rich-text-toolbar-button-group-width);
+}
+
+/* Necessário para fixar a altura do po-button pois o mesmo tem tratamento para responsividade */
+.po-rich-text-toolbar .po-button-group > .po-button {
+  font-size: 16px;
+  height: var(--rich-text-toolbar-button-group-height);
+  padding: 0;
+}
+
+/* Seletor necessário para sobrepor o padding 0 */
+.po-rich-text-toolbar .po-button-group > .po-rich-text-toolbar-color-picker-button {
+  padding: 4px;
+  vertical-align: middle;
+}
+
+.po-rich-text-toolbar-color-picker-button {
+  font-size: 16px;
+  height: 32px;
+  padding: 0;
+  width: 32px;
+}
+
+.po-rich-text-toolbar-color-picker-container {
+  display: flex;
+}
+
+/* Altera o tamanho do ícone dos po-buttons para respeitar o tamanho definido pela UX */
+.po-rich-text-toolbar .po-button-group .po-icon {
+  @apply --font-rich-text-toolbar-button-icon;
+  height: var(--rich-text-toolbar-button-group-height);
+}
+
+.po-rich-text-toolbar-color-picker-input {
+  background-color: transparent;
+  border: none;
+  height: 32px;
+  padding: 8px;
+  vertical-align: middle;
+  width: 30px;
+}
+
+.po-rich-text-toolbar-color-picker-input::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+
+.po-rich-text-toolbar-color-picker-input::-webkit-color-swatch {
+	border: none;
+}

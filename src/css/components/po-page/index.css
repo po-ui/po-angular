@@ -1,0 +1,10 @@
+@import './po-page.css';
+
+@import './po-modal-password-recovery/po-modal-password-recovery.css';
+@import './po-page-background/po-page-background.css';
+@import './po-page-blocked-user/po-page-blocked-user.css';
+@import './po-page-change-password/po-page-change-password.css';
+@import './po-page-content/po-page-content.css';
+@import './po-page-header/po-page-header.css';
+@import './po-page-list/po-page-list.css';
+@import './po-page-login/po-page-login.css';

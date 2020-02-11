@@ -1,0 +1,15 @@
+:root {
+  --font-upload-drag-drop-overlay-label-text: {
+    @apply --font-subtitle;
+  }
+}
+
+.po-upload-drag-drop-area-overlay {
+  background-color: var(--color-upload-drag-drop-area-overlay-background-color);
+  position: fixed;
+  z-index: 1000;
+}
+
+.po-upload-drag-drop-area-overlay .po-upload-drag-drop-area {
+  border-color: var(--color-upload-drag-drop-area-border-primary) !important;
+}

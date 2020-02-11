@@ -1,0 +1,33 @@
+:root {
+  --font-navbar-item {
+    @apply --font-text-bold;
+  }
+
+  --font-navbar-item-navigation-font-size-icon: 24px;
+}
+
+.po-navbar-item-navigation {
+  display: table-cell;
+  padding: 0 12px;
+  vertical-align: middle;
+}
+
+.po-navbar-item-navigation-icon {
+  color: var(--color-navbar-item-navigation-color-icon);
+  display: table-cell;
+  font-size: var(--font-navbar-item-navigation-font-size-icon);
+  padding: 4px 4px 0 4px;
+}
+
+.po-navbar-item-navigation-icon-disabled {
+  color: var(--color-navbar-item-navigation-color-icon-disabled);
+}
+
+@media screen and (max-width: 768px) {
+
+  /* Utilizado para ocultar atingir a responsividade */
+  .po-navbar-item-navigation {
+    display: none!important;
+  }
+
+}

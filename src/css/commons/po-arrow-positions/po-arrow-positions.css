@@ -1,0 +1,82 @@
+:root {
+  --arrow-position-final: calc(100% - 12px);
+  --arrow-position-initial: 12px;
+  --arrow-offset: 4px;
+  --arrow-size: 8px;
+}
+
+.po-arrow-left,
+.po-arrow-left-bottom,
+.po-arrow-left-top,
+.po-arrow-bottom,
+.po-arrow-bottom-left,
+.po-arrow-bottom-right,
+.po-arrow-right,
+.po-arrow-right-bottom,
+.po-arrow-right-top,
+.po-arrow-top,
+.po-arrow-top-left,
+.po-arrow-top-right {
+	height: var(--arrow-size);
+	position: absolute;
+  width: var(--arrow-size);
+}
+
+.po-arrow-right,
+.po-arrow-right-bottom,
+.po-arrow-right-top {
+  left: calc(100% - var(--arrow-offset));
+  transform: translateY(-50%) rotate(135deg);
+}
+
+.po-arrow-left,
+.po-arrow-left-bottom,
+.po-arrow-left-top {
+  left: -3px;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+.po-arrow-right,
+.po-arrow-left{
+  top: 50%;
+}
+
+.po-arrow-right-bottom,
+.po-arrow-left-bottom {
+  top: var(--arrow-position-final)
+}
+
+.po-arrow-right-top,
+.po-arrow-left-top {
+  top: var(--arrow-position-initial)
+}
+
+.po-arrow-bottom,
+.po-arrow-bottom-left,
+.po-arrow-bottom-right {
+  top: calc(100% - var(--arrow-offset));
+  transform: rotate(-135deg);
+}
+
+.po-arrow-top,
+.po-arrow-top-left,
+.po-arrow-top-right {
+  top: -3px;
+  transform: rotate(45deg);
+}
+
+.po-arrow-bottom,
+.po-arrow-top {
+  left: calc(50% - var(--arrow-offset));
+}
+
+
+.po-arrow-top-left,
+.po-arrow-bottom-left {
+  left: var(--arrow-position-initial);
+}
+
+.po-arrow-top-right,
+.po-arrow-bottom-right {
+  left: calc(var(--arrow-position-final) - var(--arrow-size));
+}

@@ -1,0 +1,192 @@
+<style>
+  div.ng-invalid.ng-dirty .po-input {
+    border: solid 1px #c64840 !important;
+    color: #c64840;
+    outline: none;
+  }
+
+  div.ng-invalid.ng-dirty .po-field-icon {
+    color: #c64840 !important;
+  }
+</style>
+
+<article>
+  <section>
+    <div class="po-row">
+
+      <div class="po-md-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker com apoio / opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" placeholder="dd/mm/aaaa">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4">
+        <div class="po-field-container">
+            <div class="po-field-container-title">
+              <span class="po-field-title">Datepicker preenchido / apoio</span>
+            </div>
+            <div class="po-field-help">Texto de ajuda</div>
+
+            <div class="po-field-container-content ng-valid">
+              <input type="text" class="po-input po-input-icon-right" value="08/11/2017">
+              <div class="po-field-icon-container-right">
+                <span class="po-icon po-field-icon-disabled po-field-icon po-icon-calendar"></span>
+              </div>
+            </div>
+
+            <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4 ng-invalid ng-dirty">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker com mensagem de erro</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content ng-invalid ng-dirty">
+            <input type="text" class="po-input po-input-icon-right" value="80/10/2017">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Data inválida
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="po-row">
+
+      <div class="po-md-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker sem apoio</span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right"  placeholder="dd/mm/aaaa">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker preenchido / desabilitado</span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-double-icon-right" disabled value="08/11/2017">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon-disabled po-icon-close"></span>
+              <span class="po-icon po-field-icon-disabled po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4 ng-invalid ng-dirty">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Datepicker com mensagem de erro</span>
+          </div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-double-icon-right" value="80/10/2017">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Data inválida
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="po-row">
+      <div class="po-md-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-icon-right" placeholder="dd/mm/aaaa">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+          <div class="po-field-container-content ng-valid">
+            <input type="text" class="po-input po-input-double-icon-right" value="08/11/2017">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-md-4 ng-invalid ng-dirty">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+
+          <div class="po-field-container-content ng-invalid">
+            <input type="text" class="po-input po-input-double-icon-right" value="80/10/2017">
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-close"></span>
+              <span class="po-icon po-field-icon po-icon-calendar"></span>
+            </div>
+          </div>
+
+          <div class="po-field-container-bottom">
+            <span class="po-field-container-bottom-text-error">
+              <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+              Data inválida
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</article>

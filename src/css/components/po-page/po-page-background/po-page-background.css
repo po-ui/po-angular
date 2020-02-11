@@ -1,0 +1,141 @@
+.po-page-background-wrap {
+  height: 100%;
+}
+
+.po-page-background-main-logo {
+  display: block;
+  height: auto;
+  left: 0;
+  margin: 0 auto;
+  max-height: 64px;
+  max-width: 160px;
+  position: absolute;
+  right: 0;
+  top: 32px;
+}
+
+.po-page-background-footer {
+  bottom: 0;
+  left: 0;
+  margin: 0 auto;
+  max-width: 500px;
+  padding: 0px 42px 0 8px;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}
+
+.po-page-background-footer-content {
+  display: table;
+  width: 100%;
+}
+
+.po-page-background-footer-select {
+  display: table-cell;
+  float: left;
+}
+
+.po-page-background-footer-select .po-select-button,
+.po-page-background-footer-select .po-select:focus+.po-select-container .po-select-button,
+.po-page-background-footer-select .po-select-container.po-select-show>.po-select-button {
+  background-color: transparent;
+  border: transparent;
+  box-shadow: none;
+  padding-left: 0;
+}
+
+.po-page-background-footer-select .po-select-container.po-select-show {
+  position: relative;
+}
+
+/**
+ * necessárias declarações '!important' pois o po-select calcula dinamicamente
+ * a posição do po-select-content e gera impacto quando não há uma largura fixa
+ */
+.po-page-background-footer-select .po-select-content {
+  bottom: 56px;
+  left: 0 !important;
+  margin-bottom: 0;
+  min-width: 200px;
+  position: absolute;
+  top: auto !important;
+}
+
+.po-page-background-footer-select .po-select-content li:not(:last-child) {
+  border-bottom: 1px solid var(--color-page-background-select-item-border-color);
+}
+
+.po-page-background-secondary-logo {
+  display: table-cell;
+  height: 48px;
+  vertical-align: middle;
+}
+
+.po-page-background-secondary-logo-centered {
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.po-page-background-secondary-logo-right {
+  text-align: right;
+}
+
+.po-page-background-secondary-logo .po-page-background-secondary-logo-image {
+  height: 24px;
+  vertical-align: middle;
+}
+
+.po-page-background-footer-mobile-only {
+  display: none;
+}
+
+.po-page-background-footer-mobile-only .po-divider {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1366px) {
+
+  .po-page-background-footer {
+    padding-right: 28px;
+  }
+
+  .po-page-background-footer-select .po-select-content {
+    bottom: 50px;
+  }
+
+}
+
+@media (max-width: 540px) {
+
+  .po-page-background-main-logo {
+    height: auto;
+    max-height: 32px;
+    max-width: 160px;
+    top: 8px;
+  }
+
+  .po-page-background-footer {
+    padding-right: 8px;
+  }
+
+  .po-page-background-footer-mobile-only {
+    display: block;
+  }
+
+}
+
+@media (max-width: 320px) {
+
+  .po-page-background-secondary-logo {
+    max-width: 40px;
+  }
+
+  .po-page-background-main-logo, .po-page-background-secondary-logo {
+    bottom: 8px;
+  }
+
+  .po-page-background-secondary-logo .po-page-background-secondary-logo-image {
+    height: 16px;
+  }
+
+}

@@ -1,0 +1,134 @@
+/**
+ * https://app.zeplin.io/project/57bf4724a09dd68b60e7316f/screen/58dd6ce4a2c82329583e8ce5
+ * https://app.zeplin.io/project/57bf4724a09dd68b60e7316f/screen/597116a81e4029bb675a8061
+ */
+
+:root {
+  
+  --font-family: var(--font-family-theme);
+  --font-family-bold: var(--font-family-theme-bold);
+  --font-family-extra-light: var(--font-family-theme-extra-light);
+
+  --font-display: {
+    font-family: var(--font-family-extra-light), sans-serif;
+    font-size: 50px;
+    line-height: 64px;
+  }
+
+  --font-title: {
+    font-family: var(--font-family-extra-light), sans-serif;
+    font-size: 34px;
+    line-height: 48px;
+  }
+
+  --font-subtitle: {
+    font-family: var(--font-family), sans-serif;
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  --font-text-large: {
+    font-family: var(--font-family), sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  --font-text-large-bold: {
+    font-family: var(--font-family-bold), sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  --font-text: {
+    font-family: var(--font-family), sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  --font-text-bold: {
+    font-family: var(--font-family-bold), sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  --font-text-uppercase: {
+    font-family: var(--font-family-bold), sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+    text-transform: uppercase;
+  }
+
+  --font-text-small: {
+    font-family: var(--font-family), sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  --font-text-small-bold: {
+    font-family: var(--font-family-bold), sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  --font-text-small-italic: {
+    font-family: var(--font-family), sans-serif;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 16px;
+  }
+
+  --font-text-smaller: {
+    font-family: var(--font-family-bold), sans-serif;
+    font-size: 10px;
+    line-height: 16px;
+    text-transform: uppercase;
+  }
+}
+
+.po-font-display {
+  @apply --font-display;
+}
+
+.po-font-title {
+  @apply --font-title;
+}
+
+.po-font-subtitle {
+  @apply --font-subtitle;
+}
+
+.po-font-text-large {
+  @apply --font-text-large;
+}
+
+.po-font-text-large-bold {
+  @apply --font-text-large-bold;
+}
+
+.po-font-text {
+  @apply --font-text;
+}
+
+.po-font-text-bold {
+  @apply --font-text-bold;
+}
+
+.po-font-text-uppercase {
+  @apply --font-text-uppercase;
+}
+
+.po-font-text-small {
+  @apply --font-text-small;
+}
+
+.po-font-text-small-bold {
+  @apply --font-text-small-bold;
+}
+
+.po-font-text-small-italic {
+  @apply --font-text-small-italic;
+}
+
+.po-font-text-smaller {
+  @apply --font-text-smaller;
+}

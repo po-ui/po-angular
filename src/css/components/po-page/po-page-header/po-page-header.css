@@ -1,0 +1,74 @@
+:root {
+  --font-page-header-title: {
+    @apply --font-title;
+  }
+
+  --font-page-header-title-smaller: {
+    @apply --font-subtitle;
+  }
+}
+
+.po-page-header {
+  display: inline-block;
+  padding: 16px;
+  width: 100%;
+}
+
+.po-page-header-title {
+  @apply --font-page-header-title;
+  color: var(--color-page-header-color-title);
+  display: inline;
+  text-align: left;
+}
+
+.po-page-header-actions {
+  display: inline
+}
+
+.po-page-header-breadcrumb {
+  margin-bottom: 16px;
+}
+
+.po-page-header-actions .po-button {
+  margin-left: 16px;
+}
+
+@media (min-width: 480px) {
+  .po-page-header-actions {
+    float: right;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+
+  .po-page-header {
+    padding: 8px;
+  }
+
+}
+
+@media screen and (max-width: 1366px) {
+
+  .po-page-header-title {
+    @apply --font-page-header-title-smaller;
+  }
+
+  .po-page-header-actions .po-button {
+    margin-left: 8px;
+  }
+
+}
+
+@media (max-width: 479px) {
+
+  .po-page-header-actions {
+    margin: 0;
+  }
+
+  .po-page-header-actions .po-button,
+  .po-page-header-actions .po-dropdown {
+    margin: 8px 0 0 0;
+    width: 100%;
+  }
+
+}

@@ -1,0 +1,825 @@
+<style>
+  div.ng-invalid.ng-dirty .po-upload-button {
+    border: solid 1px #c64840 !important;
+    outline: none;
+    color: #c64840;
+  }
+
+  div.ng-invalid.ng-dirty .po-upload-drag-drop-area {
+    border: dashed 2px #c64840 !important;
+    outline: none;
+  }
+
+  .container {
+    padding: 8px;
+  }
+
+</style>
+
+<script>
+  (function(){
+    let timeout;
+
+    init();
+
+    function init() {
+      document.getElementById('dragDropOverlay').classList.add('po-invisible');
+    }
+
+    function getDragDropArea() {
+      return document.getElementById('dragDropArea');
+    }
+
+    function setBoundClientRect() {
+      let boundingClientRect = getDragDropArea().getBoundingClientRect();
+
+      const dragDropAreaOverlay = document.getElementById('dragDropAreaOverlay');
+
+      dragDropAreaOverlay.style.bottom = boundingClientRect.bottom + 'px';
+      dragDropAreaOverlay.style.height = boundingClientRect.height + 'px';
+      dragDropAreaOverlay.style.left = boundingClientRect.left + 'px';
+      dragDropAreaOverlay.style.right = boundingClientRect.right + 'px';
+      dragDropAreaOverlay.style.top = boundingClientRect.top + 'px';
+      dragDropAreaOverlay.style.width = boundingClientRect.width + 'px';
+    };
+
+    document.getElementById('uploadPage').addEventListener('dragover', function(event) {
+      event.preventDefault();
+
+      clearTimeout(timeout);
+
+      setBoundClientRect();
+
+      document.getElementById('dragDropOverlay').classList.remove('po-invisible');
+    }, false);
+
+    document.getElementById('uploadPage').addEventListener('dragleave', function(event) {
+      event.preventDefault();
+
+      timeout = setTimeout(() => {
+        document.getElementById('dragDropOverlay').classList.add('po-invisible');
+      }, 200)
+    }, false);
+
+  }());
+
+</script>
+
+<article id="uploadPage">
+  <section>
+
+    <div class="container">
+      <h4>Botão para seleção de um único arquivo</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivo</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Botão para seleção de múltiplos arquivos</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivos</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Botão para seleção de pastas</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar pasta</span>
+        </button>
+      </div>
+    </div>
+    
+    <div class="container">
+      <h4>Nenhum arquivo selecionado com label, help e opcional</h4>
+      <div class="po-upload">
+        <div class="po-field-container">
+          <div class="po-field-container-title">
+            <span class="po-field-title">Upload Padrão</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+          <div class="po-field-help">Texto de ajuda</div>
+          <div class="po-field-container-content ng-valid">
+            <input type="file" name="name" id="id" class="po-upload-input">
+            <button type="button" class="po-upload-button po-button po-text-ellipsis">
+              <span class="po-button-label">Selecionar arquivo</span>
+            </button>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Campo inválido</h4>
+      <div class="ng-invalid ng-dirty">
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+          <button type="button" class="po-upload-button po-button po-text-ellipsis">
+            <span class="po-button-label">Selecionar arquivo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Menos de cinco arquivos selecionados</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivos</span>
+        </button>
+
+        <!-- PROGRESS -->
+        <div class="po-upload-progress-container">
+          <div class="po-container po-container-no-border po-container-no-padding po-container-no-shadow" style="height: auto;">
+
+            <div class="po-progress po-progress-default">
+
+              <label class="po-progress-description-mobile po-progress-description-text">
+                Planilha_de_colaboradores XMLS - 754KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  Planilha_de_colaboradores XMLS - 754KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text"></span>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
+            </div>
+
+            <div class="po-progress po-progress-default">
+
+              <label class="po-progress-description-mobile po-progress-description-text">
+                logo_portinari - 16KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo_portinari - 16KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text"></span>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="po-upload-send-button">
+          <button type="button" name="button" class="po-button po-button-primary">Iniciar envio</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Mais de cinco arquivos selecionados</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivos</span>
+        </button>
+
+        <!-- PROGRESS -->
+        <div class="po-upload-progress-container">
+          <div class="po-container po-container-no-shadow" style="height: 280px;">
+
+            <div class="po-upload-progress-container-area po-pt-2 po-pl-1">
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  Planilha_de_colaboradores XMLS - 754KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    Planilha_de_colaboradores XMLS - 754KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  logo_portinari - 16KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    logo_portinari - 16KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  image_20191021.jpg - 44KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    image_20191021.jpg - 44KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  image_20191022.jpg - 44KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    image_20191022.jpg - 44KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  image_20191023.jpg - 59KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    image_20191023.jpg - 59KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+
+              <div class="po-progress po-progress-default">
+
+                <label class="po-progress-description-mobile po-progress-description-text">
+                  image_20191024.jpg - 97KB
+                </label>
+
+                <div class="po-progress-bar">
+                  <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+                </div>
+
+                <div class="po-progress-description">
+                  <label class="po-progress-description-text">
+                    image_20191024.jpg - 97KB
+                  </label>
+                </div>
+
+                <div class="po-progress-info">
+                  <span class="po-progress-info-text"></span>
+                  <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="po-upload-send-button po-mt-3">
+          <button type="button" name="button" class="po-button po-button-primary">Iniciar envio</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Arquivos selecionados com restrição de arquivos</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis">
+          <span class="po-button-label">Selecionar arquivos</span>
+        </button>
+
+        <!-- INICIO FILE RESTRICTIONS -->
+        <div class="po-upload-file-restrictions">
+            <p class="po-font-text-small">
+              Quantidade máxima: 2 arquivo(s)
+            </p>
+            <p class="po-font-text-small">
+              Formatos adotados: .PNG e .ZIP.
+            </p>
+            <p class="po-font-text-small">
+              Limite de tamanho por arquivo: de 1 Bytes até 30.72 KB
+            </p>
+        </div>
+        <!-- FIM FILE RESTRICTIONS -->
+
+        <!-- PROGRESS -->
+        <div class="po-upload-progress-container">
+          <div class="po-container po-container-no-border po-container-no-padding po-container-no-shadow" style="height: auto;">
+
+            <div class="po-progress po-progress-default">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                Planilha_de_colaboradores XMLS - 754KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0.6);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  Planilha_de_colaboradores XMLS - 754KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text"></span>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
+            </div>
+
+            <div class="po-progress po-progress-default">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                logo-portinari.png - 80 KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo-portinari.png - 80 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text"></span>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="po-upload-send-button">
+          <button type="button" name="button" class="po-button po-button-primary">Iniciar envio</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4>Carregando arquivos</h4>
+      <div class="po-upload">
+        <input type="file" name="name" id="id" class="po-upload-input">
+        <button type="button" class="po-upload-button po-button po-text-ellipsis" disabled>
+          <span class="po-button-label">Selecionar arquivos</span>
+        </button>
+
+        <!-- PROGRESS -->
+        <div class="po-upload-progress-container">
+          <div class="po-container po-container-no-border po-container-no-padding po-container-no-shadow" style="height: auto;">
+            
+            <div class="po-progress po-progress-default">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                Planilha_de_colaboradores XMLS - 754KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(0.6);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  Planilha_de_colaboradores XMLS - 754 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
+            </div>
+
+            <div class="po-progress po-progress-success">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                logo-portinari.png - 80 KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo-portinari.png - 80 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-icon po-icon po-icon-ok"></span>
+                <span class="po-progress-info-text">Enviado com sucesso</span>
+              </div>
+            </div>
+
+            <div class="po-progress po-progress-error">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                image_20191020.jpg - 44KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                    image_20191020.jpg - 44KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-text">Ocorreu um erro</span>
+                <button class="po-progress-info-icon-action po-icon po-icon-refresh po-clickable"></button>
+                <button class="po-progress-info-icon-action po-icon po-icon-close po-clickable"></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="po-upload-send-button">
+          <button type="button" name="button" class="po-button po-button-primary" disabled>
+            Iniciar envio
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+
+      <div class="container po-md-6">
+        <h4>Drag Drop de arquivos</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP AREA -->
+          <div>
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                <button class="po-upload-drag-drop-area-select-files po-clickable">
+                  ou selecione os arquivos no computador
+                </button>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+
+
+          <!-- PROGRESS -->
+          <div class="po-upload-progress-container">
+            <div class="po-progress po-progress-success">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                logo-portinari.png - 80 KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo-portinari.png - 80 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-icon po-icon po-icon-ok"></span>
+                <span class="po-progress-info-text">Enviado com sucesso</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-upload-send-button">
+            <button type="button" name="button" class="po-button po-button-primary" disabled>
+              Iniciar envio
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="container po-md-6">
+        <h4>Drag Drop de diretórios</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP AREA -->
+          <div>
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste as pastas aqui </div>
+
+                <button class="po-upload-drag-drop-area-select-files po-clickable">
+                  ou selecione as pastas no computador
+                </button>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+
+
+          <!-- PROGRESS -->
+          <div class="po-upload-progress-container">
+            <div class="po-progress po-progress-success">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                logo-portinari.png - 80 KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo-portinari.png - 80 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-icon po-icon po-icon-ok"></span>
+                <span class="po-progress-info-text">Enviado com sucesso</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-upload-send-button">
+            <button type="button" name="button" class="po-button po-button-primary" disabled>
+              Iniciar envio
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container po-md-6">
+        <h4>Drag Drop com restrição de arquivos</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP AREA -->
+          <div>
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                <button class="po-upload-drag-drop-area-select-files po-clickable">
+                  ou selecione os arquivos no computador
+                </button>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+
+          <!-- INICIO FILE RESTRICTIONS -->
+          <div class="po-upload-file-restrictions">
+            <p class="po-font-text-small">
+              Quantidade máxima: 2 arquivo(s)
+            </p>
+            <p class="po-font-text-small">
+              Formatos adotados: .PNG e .ZIP.
+            </p>
+            <p class="po-font-text-small">
+              Limite de tamanho por arquivo: de 1 Bytes até 30.72 KB
+            </p>
+          </div>
+          <!-- FIM FILE RESTRICTIONS -->
+
+          <!-- PROGRESS -->
+          <div class="po-upload-progress-container">
+            <div class="po-progress po-progress-success">
+              <label class="po-progress-description-mobile po-progress-description-text">
+                logo-portinari.png - 80 KB
+              </label>
+
+              <div class="po-progress-bar">
+                <div class="po-progress-bar-element po-progress-bar-primary" style="transform: scaleX(1);"></div>
+                <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+              </div>
+
+              <div class="po-progress-description">
+                <label class="po-progress-description-text">
+                  logo-portinari.png - 80 KB
+                </label>
+              </div>
+
+              <div class="po-progress-info">
+                <span class="po-progress-info-icon po-icon po-icon-ok"></span>
+                <span class="po-progress-info-text">Enviado com sucesso</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-upload-send-button">
+            <button type="button" name="button" class="po-button po-button-primary" disabled>
+              Iniciar envio
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="po-row">
+
+      <div class="container po-md-6">
+        <h4>Drag Drop com Drop habilitado</h4>
+
+        <div class="po-upload">
+          <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP OVERLAY -->
+          <div class="po-overlay-fixed" id="dragDropOverlay">
+
+            <div id="dragDropAreaOverlay" class="po-upload-drag-drop-area-overlay">
+
+              <div class="po-upload-drag-drop-area">
+                <div class="po-upload-drag-drop-area-container">
+
+                  <span class="po-upload-drag-drop-area-overlay-icon po-icon po-icon-upload-cloud"></span>
+
+                  <div class="po-upload-drag-drop-area-overlay-label"> Solte os arquivos aqui </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- FIM DRAG DROP OVERLAY -->
+
+          <!-- DRAG DROP AREA -->
+          <div id="dragDropArea">
+            <div class="po-upload-drag-drop-area" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                <button class="po-upload-drag-drop-area-select-files po-clickable">
+                  ou selecione os arquivos no computador
+                </button>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+        </div>
+      </div>
+
+
+      <div class="container po-md-6">
+        <h4>Drag Drop desabilitado</h4>
+
+          <div class="po-upload">
+            <input type="file" name="name" id="id" class="po-upload-input">
+
+          <!-- DRAG DROP AREA -->
+          <div>
+            <div class="po-upload-drag-drop-area po-upload-drag-drop-area-disabled" style="height: 320px">
+
+              <div class="po-upload-drag-drop-area-container">
+                <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                <button class="po-upload-drag-drop-area-select-files" disabled>
+                  ou selecione os arquivos no computador
+                </button>
+              </div>
+
+            </div>
+          </div>
+          <!-- FIM DRAG DROP AREA -->
+        </div>
+      </div>
+
+    </div>
+
+    <div class="po-row">
+
+      <div class="container po-md-6">
+        <h4>Drag Drop inválido</h4>
+
+        <div class="ng-invalid ng-dirty">
+          <div class="po-upload">
+            <input type="file" name="name" id="id" class="po-upload-input">
+
+            <!-- DRAG DROP AREA -->
+            <div>
+              <div class="po-upload-drag-drop-area" style="height: 320px">
+
+                <div class="po-upload-drag-drop-area-container">
+                  <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
+
+                  <div class="po-upload-drag-drop-area-label"> Arraste os arquivos aqui </div>
+
+                  <button class="po-upload-drag-drop-area-select-files po-clickable">
+                    ou selecione os arquivos no computador
+                  </button>
+                </div>
+
+              </div>
+            </div>
+            <!-- FIM DRAG DROP AREA -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+</article>

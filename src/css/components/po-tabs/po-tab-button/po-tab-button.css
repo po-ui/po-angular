@@ -1,0 +1,63 @@
+:root {
+  --font-tab-button-font-md: {
+    @apply --font-text-large-bold;
+  }
+
+  --font-tab-button-font-sm: {
+    @apply --font-text-bold;
+  }
+}
+
+.po-tab-button {
+  box-shadow: inset 0 -1px 0 0 var(--color-tab-button-box-shadow);
+  color: var(--color-tab-button-color);
+  cursor: pointer;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.po-tab-button-md, .po-tab-button-sm {
+  align-items: center;
+  display: inline-flex;
+  text-align: center;
+  width: 100%;
+}
+
+.po-tab-button-md {
+  @apply --font-tab-button-font-md;
+  height: 44px;
+}
+
+.po-tab-button-sm {
+  @apply --font-tab-button-font-sm;
+  height: 32px;
+}
+
+.po-tab-button-label {
+  padding: 0 16px;
+  width: 100%;
+}
+
+.po-tab-button-disabled {
+  color: var(--color-tab-button-color-disabled);
+  cursor: default;
+}
+
+.po-tab-button-active {
+  box-shadow: inset 0 -3px 0 0 var(--color-tab-button-box-shadow-active);
+}
+
+.po-tab-button-mobile {
+  max-width: 30vw;
+  width: 30vw;
+}
+
+@media screen and (max-width: 480px) {
+
+  .po-tab-button-mobile {
+    max-width: 40vw;
+    width: 40vw;
+  }
+
+}

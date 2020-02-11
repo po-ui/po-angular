@@ -1,0 +1,406 @@
+<style>
+  .po-multiselect-container {
+    position: relative;
+  }
+</style>
+
+<article>
+  <section>
+    <div class="po-row">
+      <div class="po-lg-12">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Multiselect Padrão</span>
+          </div>
+
+          <div class="po-field-container-content">
+            <input type="text" class="po-input po-input-icon-right" readonly value="Selecione um item da lista">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-12">
+        <div class="po-field-container">
+          <div class="po-field-container-title"></div>
+          <div class="po-field-container-content">
+            <input type="text" class="po-input po-input-icon-right" readonly value="Sem label e sem help">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-12">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Multiselect com vários itens selecionados</span>
+          </div>
+
+          <div class="po-field-container-content">
+            <input type="text" class="po-input po-input-icon-right">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+            </div>
+
+            <div class="po-multiselect-field">
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 1</span>
+                <span tabindex="0" class="po-disclaimer-remove po-icon po-icon-close po-clickable"></span>
+              </div>
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 2</span>
+                <span tabindex="0" class="po-disclaimer-remove po-icon po-icon-close po-clickable"></span>
+              </div>
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 3</span>
+                <span tabindex="0" class="po-disclaimer-remove po-icon po-icon-close po-clickable"></span>
+              </div>
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">+2</span>
+              </div>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-lg-6">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Multiselect Desabilitado</span>
+          </div>
+
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content">
+            <input type="text" class="po-input po-input-icon-right" disabled>
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon-disabled po-icon-arrow-down"></span>
+            </div>
+
+            <div class="po-multiselect-field po-multiselect-field-disabled">
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 1</span>
+              </div>
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 2</span>
+              </div>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-6">
+        <po-multiselect class="ng-invalid ng-dirty">
+          <div class="po-field-container">
+
+            <div class="po-field-container-title">
+              <span class="po-field-title">Multiselect Inválido</span>
+            </div>
+
+            <div class="po-field-help">Texto de ajuda</div>
+
+            <div class="po-field-container-content">
+              <input type="text" class="po-input po-input-icon-right" value="Selecione um item da lista">
+
+              <div class="po-field-icon-container-right">
+                <span class="po-icon po-field-icon po-icon-arrow-down"></span>
+              </div>
+            </div>
+            <div class="po-field-container-bottom">
+              <span class="po-field-container-bottom-text-error">
+                <span class="po-icon po-icon-warning po-field-container-icon-error"></span>
+                Mensagem de erro
+              </span>
+            </div>
+          </div>
+        </po-multiselect>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-lg-6">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Ativo, selecionado e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content po-multiselect-show">
+            <input type="text" class="po-input po-input-icon-right">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+
+            <div class="po-multiselect-field">
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 1</span>
+                <span tabindex="0" class="po-disclaimer-remove po-icon po-icon-close po-clickable"></span>
+              </div>
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 2</span>
+                <span tabindex="0" class="po-disclaimer-remove po-icon po-icon-close po-clickable"></span>
+              </div>
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 3</span>
+                <span tabindex="0" class="po-disclaimer-remove po-icon po-icon-close po-clickable"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-multiselect-container">
+            <ul class="po-multiselect-items-container">
+              <li value="1" class="po-multiselect-item-selected">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input po-multiselect-checkbox-input-checked" checked type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 1</label>
+                </a>
+              </li>
+              <li value="2" class="po-multiselect-item-selected">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input po-multiselect-checkbox-input-checked" checked type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 2</label>
+                </a>
+              </li>
+              <li value="3" class="po-multiselect-item-selected">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input po-multiselect-checkbox-input-checked" checked type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 3</label>
+                </a>
+              </li>
+              <li value="4">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input" type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 4</label>
+                </a>
+              </li>
+              <li value="5">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input" type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 5</label>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-6">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Buscando as opções em um serviço</span>
+          </div>
+
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content po-multiselect-loading">
+            <input type="text" class="po-input po-input-icon-right">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+
+            <div class="po-multiselect-field">
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 1</span>
+                <span tabindex="0" class="po-disclaimer-remove po-icon po-icon-close po-clickable"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-multiselect-container">
+            <div class="po-multiselect-container-loading">
+              <div class="po-loading">
+                <div class="po-loading">
+                  <div class="po-loading-icon">
+                    <span class="po-loading-icon-bar po-loading-icon-bar-1"></span>
+                    <span class="po-loading-icon-bar po-loading-icon-bar-2"></span>
+                    <span class="po-loading-icon-bar po-loading-icon-bar-3"></span>
+                    <span class="po-loading-icon-bar po-loading-icon-bar-4"></span>
+                    <span class="po-loading-icon-bar po-loading-icon-bar-5"></span>
+                    <span class="po-loading-icon-bar po-loading-icon-bar-6"></span>
+                    <span class="po-loading-icon-bar po-loading-icon-bar-7"></span>
+                    <span class="po-loading-icon-bar po-loading-icon-bar-8"></span>
+                  </div>
+                <span class="po-loading-label">Carregando</span>
+              </div>
+            </div>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="po-row">
+      <div class="po-lg-6">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Ativo, selecionado e com busca</span>
+          </div>
+
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content po-multiselect-show">
+            <input type="text" class="po-input po-input-icon-right">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+
+            <div class="po-multiselect-field">
+              <div class="po-disclaimer">
+                <span class="po-disclaimer-label">Item 1</span>
+                <span tabindex="0" class="po-disclaimer-remove po-icon po-icon-close po-clickable"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="po-multiselect-container">
+            <div class="po-field-container-content po-multiselect-container-search">
+              <div class="po-field-icon-container-left">
+                <span class="po-icon po-icon-search po-field-icon"></span>
+              </div>
+              <input type="text" class="po-input po-input-icon-left" placeholder="Buscar"/>
+            </div>
+            <ul class="po-multiselect-items-container">
+              <li value="1" class="po-multiselect-item-selected">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input po-multiselect-checkbox-input-checked" checked type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 1</label>
+                </a>
+              </li>
+              <li value="2">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input" type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 2</label>
+                </a>
+              </li>
+              <li value="3">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input" type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 3</label>
+                </a>
+              </li>
+              <li value="4">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input" type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 4</label>
+                </a>
+              </li>
+              <li value="5">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input" type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 5</label>
+                </a>
+              </li>
+              <li value="6">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input" type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 6</label>
+                </a>
+              </li>
+              <li value="7">
+                <a class="po-multiselect-item">
+                  <input class="po-multiselect-checkbox-input" type="checkbox">
+                  <label class="po-multiselect-checkbox-label po-clickable">Item 7</label>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+
+      <div class="po-lg-6">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Nenhum dado encontrado, com busca e opcional</span>
+            <span class="po-field-optional">(Opcional)</span>
+          </div>
+
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content po-multiselect-show">
+            <input type="text" class="po-input po-input-icon-right">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+
+          <div class="po-multiselect-container">
+            <div class="po-field-container-content po-multiselect-container-search">
+              <div class="po-field-icon-container-left">
+                <span class="po-icon po-icon-search po-field-icon"></span>
+              </div>
+              <input type="text" class="po-input po-input-icon-left" placeholder="Buscar"/>
+            </div>
+            <ul class="po-multiselect-items-container">
+              <div class="po-multiselect-container-no-data po-text-center">
+                <span >Nenhum dado encontrado</span>
+              </div>
+            </ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-row">
+      <div class="po-lg-6">
+        <div class="po-field-container">
+
+          <div class="po-field-container-title">
+            <span class="po-field-title">Nenhum dado encontrado e sem Busca</span>
+          </div>
+
+          <div class="po-field-help">Texto de ajuda</div>
+
+          <div class="po-field-container-content po-multiselect-show">
+            <input type="text" class="po-input po-input-icon-right">
+
+            <div class="po-field-icon-container-right">
+              <span class="po-icon po-field-icon po-icon-arrow-up"></span>
+            </div>
+          </div>
+
+          <div class="po-multiselect-container">
+            <ul class="po-multiselect-items-container">
+              <div class="po-multiselect-container-no-data po-text-center">
+                <span >Nenhum dado encontrado</span>
+              </div>
+            </ul>
+          </div>
+
+          <div class="po-field-container-bottom"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

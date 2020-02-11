@@ -1,0 +1,24 @@
+:root {
+  --font-navbar-action-font-size-content: 24px;
+}
+
+.po-navbar-action {
+  display: table-cell;
+}
+
+.po-navbar-action-content {
+  color: var(--color-navbar-action-color-content);
+  font-size: var(--font-navbar-action-font-size-content);
+  margin: 0 0 0 16px;
+  padding-top: 4px;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+
+  /* Utilizado para ocultar todas as actions quando atingir a responsividade */
+  .po-navbar-action {
+    display: none!important;
+  }
+
+}

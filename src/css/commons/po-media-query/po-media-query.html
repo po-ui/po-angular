@@ -1,0 +1,80 @@
+<style>
+  .container {
+    font-weight: bold;
+  }
+
+  .container div {
+    width: 100%;
+    height: 250px;
+    padding-top: 120px;
+    font-size: 22px;
+    color: white;
+    text-align: center;
+    -webkit-transition: background-color 1s ease;
+    -moz-transition: background-color 1s ease;
+    transition: background-color 1s ease;
+  }
+
+  @media screen and (max-width: 480px) {
+    .po-media-small-sample {
+      background-color: #0C9ABE;
+    }
+
+    .po-media-small-sample::after {
+      content: "Media small with (max-width:480px)";
+    }
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 960px) {
+    .po-media-medium-sample {
+      background-color: #EA9B3E;
+    }
+
+    .po-media-medium-sample::after {
+      content: "Media medium with (min-width: 481px) and (max-width: 960px)";
+    }
+  }
+
+  @media screen and (min-width: 961px) and (max-width: 1366px) {
+    .po-media-large-sample {
+      background-color: #075C72;
+    }
+
+    .po-media-large-sample::after {
+      content: "Media large with (min-width: 961px) and (max-width: 1366px)";
+    }
+  }
+
+  @media screen and (min-width: 1367px) {
+    .po-media-x-large-sample {
+      background-color: #4A5C60;
+    }
+
+    .po-media-x-large-sample::after {
+      content: "Media extra large with (min-width: 1367px)";
+    }
+  }
+
+  @media screen and (max-width: 1599px) {
+    .po-media-x-large-sample, .po-media-large-sample, .po-media-medium-sample, .po-media-small-sample {
+      padding: 0 8px;
+    }
+  }
+
+  @media screen and (min-width: 1600px) {
+    .po-media-x-large-sample, .po-media-large-sample, .po-media-medium-sample, .po-media-small-sample {
+      padding: 0 16px;
+    }
+  }
+
+</style>
+
+<article>
+
+  <section class="container">
+    <h4>Redimensione a sua tela para ver as opções de tamanho</h4>
+    <br>
+    <div class="po-media-small-sample po-media-medium-sample po-media-large-sample po-media-x-large-sample"></div>
+  </section>
+
+</article>

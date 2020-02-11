@@ -1,0 +1,58 @@
+:root {
+  --font-disclaimer-font-label: {
+    @apply --font-text-small-bold;
+  }
+
+  --font-disclaimer-font-remove: {
+    @apply --font-text-bold;
+  }
+
+  --disclaimer-height: 24px;
+  --disclaimer-border-radius: 3px;
+}
+
+.po-disclaimer {
+  display: inline-flex;
+}
+
+.po-disclaimer .po-disclaimer-label, .po-disclaimer .po-disclaimer-remove {
+  @apply --font-disclaimer-font-label;
+  color: var(--color-disclaimer-color-text);
+  display: inline-block;
+  height: var(--disclaimer-height);
+  line-height: var(--disclaimer-height);
+  padding: 0 8px;
+}
+
+.po-disclaimer .po-disclaimer-label {
+  background-color: var(--color-disclaimer-background-color-label);
+  border-radius: var(--disclaimer-border-radius);
+  vertical-align: middle;
+
+  &-danger {
+    background-color: var(--color-disclaimer-background-color-label-danger);
+    color: var(--color-disclaimer-color-text-danger);
+  }
+}
+
+.po-disclaimer .po-disclaimer-remove {
+  @apply --font-disclaimer-font-remove;
+  background-color: var(--color-disclaimer-background-color-remove);
+  border-bottom-right-radius: var(--disclaimer-border-radius);
+  border-top-right-radius: var(--disclaimer-border-radius);
+  margin-left: -2px;
+  vertical-align: top;
+
+  &-danger {
+    background-color: var(--color-disclaimer-background-color-danger-remove);
+    color: var(--color-disclaimer-color-text-danger);
+  }
+}
+
+@media print {
+
+  .po-disclaimer-label, .po-disclaimer-remove {
+    color-adjust: exact;
+  }
+
+}
