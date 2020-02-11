@@ -15,7 +15,7 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
   public size: string;
   public align: string;
 
-  public sizeOptions: PoRadioGroupOption[] = [
+  public sizeOptions: Array<PoRadioGroupOption> = [
     { label: 'Small', value: 'sm' },
     { label: 'Medium', value: 'md' },
     { label: 'Large', value: 'lg' },
@@ -23,7 +23,7 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
     { label: 'Automatic', value: 'auto' }
   ];
 
-  public alignOptions: PoRadioGroupOption[] = [
+  public alignOptions: Array<PoRadioGroupOption> = [
     { label: 'Left', value: 'left' },
     { label: 'Right', value: 'right' }
   ];

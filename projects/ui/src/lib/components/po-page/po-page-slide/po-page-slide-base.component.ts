@@ -16,7 +16,7 @@ import { Input } from '@angular/core';
  *
  * É possível definir o alinhamento do componente na página principal à
  * esquerda ou à direita.
- * 
+ *
  * > Não é permitido ativar dois ou mais `po-page-slide` simultâneamente.
  */
 export class PoPageSlideBaseComponent {
@@ -35,7 +35,7 @@ export class PoPageSlideBaseComponent {
 
   /**
    * @optional
-   * 
+   *
    * Define o tamanho da página.
    *
    * Valores válidos:
@@ -46,7 +46,7 @@ export class PoPageSlideBaseComponent {
    *  - `auto` (automático)
    *
    * > Todas as opções de tamanho possuem uma largura máxima de **768px**.
-   * 
+   *
    * @default `md`
    */
   @Input('p-size') set size(value: string) {
@@ -60,22 +60,22 @@ export class PoPageSlideBaseComponent {
 
   /**
    * @optional
-   * 
+   *
    * Oculta o botão de encerramento da página.
-   * 
+   *
    * @default `false`
    */
   @Input('p-hide-close') hideClose = false;
 
   /**
    * @optional
-   * 
+   *
    * Define o alinhamento horizontal da página.
    *
    * Valores válidos:
    *  - `left` (esquerda)
    *  - `right` (direita)
-   * 
+   *
    * @default `right`
    */
   @Input('p-align') set align(value: string) {

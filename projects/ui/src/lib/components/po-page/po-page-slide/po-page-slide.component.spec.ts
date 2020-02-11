@@ -91,7 +91,7 @@ describe('PoPageSlideComponent', () => {
     fixture.detectChanges();
 
     tick(0);
-    
+
     const pageSlideContent = debugElement.query(By.css('.po-page-slide-content'));
     expect(document.activeElement).toEqual(pageSlideContent.nativeElement);
   }));
@@ -104,7 +104,7 @@ describe('PoPageSlideComponent', () => {
     fixtureTest.detectChanges();
 
     tick(0);
-    
+
     const input = fixtureTest.debugElement.query(By.css('input[name="username"]'));
     expect(document.activeElement).toEqual(input.nativeElement);
   }));

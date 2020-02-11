@@ -49,7 +49,9 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     this.poPageSlideService.deactivePage();
     this.removeEventListeners();
 
-    if (this.sourceElement && this.sourceElement.focus) this.sourceElement.focus();
+    if (this.sourceElement && this.sourceElement.focus) {
+      this.sourceElement.focus();
+    }
   }
 
   private handleFocus() {
