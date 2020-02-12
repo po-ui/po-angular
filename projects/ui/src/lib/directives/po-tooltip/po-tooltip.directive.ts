@@ -71,7 +71,11 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   }
 
   @HostListener('mouseleave') onMouseLeave() {
-    this.hideTooltip();
+    // necessita do timeout para conseguir adicionar ".po-invisible", pois quando tem alguns elementos
+    // próximos com tooltips e ficar passando o mouse em cima, os mesmos não estavam ficando invisiveis.
+    setTimeout(() => {
+      this.hideTooltip();
+    });
   }
 
   private addArrow(arrowDirection) {
