@@ -71,4 +71,14 @@ export class SamplePoPageDynamicSearchHiringProcessesService {
     return [...this.getItems()];
   }
 
+  getPageOptions() {
+    return {
+      actions: [
+        { label: 'Find on Google' },
+      ],
+      filters: [
+        { property: 'idCard', gridColumns: 6 }
+      ]
+    };
+  }
 }

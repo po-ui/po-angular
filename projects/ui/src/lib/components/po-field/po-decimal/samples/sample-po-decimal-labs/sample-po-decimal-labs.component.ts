@@ -33,6 +33,14 @@ export class SamplePoDecimalLabsComponent implements OnInit {
     { value: 'required', label: 'Required' }
   ];
 
+  get maxDecimalsLength() {
+    return 16 - this.thousandMaxlength || 15;
+  }
+
+  get maxThousandMaxlength() {
+    return 16 - this.decimalsLength || 13;
+  }
+
   ngOnInit() {
     this.restore();
   }

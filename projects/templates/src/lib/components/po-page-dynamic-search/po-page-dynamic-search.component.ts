@@ -1,8 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 
-import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoPageFilter } from '@portinari/portinari-ui';
+import { Observable, Subscription } from 'rxjs';
+import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoLanguageService, PoPageFilter } from '@portinari/portinari-ui';
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
+import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
+import { UrlOrPoCustomizationFunction, PoPageDynamicOptions } from '../../services/po-page-customization/po-page-dynamic-options.interface';
 
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
 import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.component';
@@ -27,7 +30,9 @@ import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.
   selector: 'po-page-dynamic-search',
   templateUrl: './po-page-dynamic-search.component.html'
 })
-export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent {
+export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit, OnDestroy {
+
+  private loadSubscription: Subscription;
 
   private readonly _disclaimerGroup: PoDisclaimerGroup = {
     change: this.onChangeDisclaimerGroup.bind(this),
@@ -39,7 +44,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     action: 'onAction',
     advancedAction: 'onAdvancedAction',
     ngModel: 'quickFilter',
-    placeholder: this.literals.filterSettingsPlaceholder
+    placeholder: this.literals.searchPlaceholder
   };
 
   // Flag to control when changeDisclaimerGroup should be called
@@ -49,14 +54,31 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
 
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
 
+  constructor(languageService: PoLanguageService, private poPageCustomizationService: PoPageCustomizationService) {
+    super(languageService);
+  }
+
   get disclaimerGroup() {
-    return Object.assign({}, this._disclaimerGroup);
+    return Object.assign({}, this._disclaimerGroup, { title: this.literals.disclaimerGroupTitle });
   }
 
   get filterSettings() {
     this._filterSettings.advancedAction = this.filters.length === 0 ? undefined : 'onAdvancedAction';
 
-    return Object.assign({}, this._filterSettings);
+    return Object.assign({}, this._filterSettings, { placeholder: this.literals.searchPlaceholder });
+  }
+
+  ngOnInit() {
+    this.setAdvancedFilterLiterals(this.literals);
+    if (this.onLoad) {
+      this.loadOptionsOnInitialize(this.onLoad);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.loadSubscription) {
+      this.loadSubscription.unsubscribe();
+    }
   }
 
   onAction() {
@@ -143,4 +165,20 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return disclaimers;
   }
 
+  private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
+
+    this.loadSubscription = this.getPoDynamicPageOptions(onLoad).subscribe(responsePoOption =>
+        this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption));
+  }
+
+  private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicOptions> {
+    const originalOption: PoPageDynamicOptions = {
+      title: this.title,
+      actions: this.actions,
+      breadcrumb: this.breadcrumb,
+      filters: this.filters
+    };
+
+    return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption);
+  }
 }

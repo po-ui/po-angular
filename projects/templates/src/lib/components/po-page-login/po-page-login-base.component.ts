@@ -110,7 +110,7 @@ export const poPageLoginLiteralsDefault = {
     forgotYourPassword: 'Забыли пароль?',
     ifYouTryHarder: 'Если вы безуспешно попытаетесь войти еще ',
     attempts: '{0} раз(а) ',
-    yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
+    yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
     createANewPasswordNow: 'Лучше создайте новый пароль сейчас! Вы сможете сразу войти в систему.',
     iForgotMyPassword: 'Я забыл свой пароль'
   }
@@ -210,7 +210,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *   value: 'jv01',
    *   placeholder: 'Enter your domain',
    *   pattern: '[a-z]',
-   *   errorPattern: 'Invalid value',
+   *   errorPattern: 'Invalid value'
    * }
    * ```
    *
@@ -407,7 +407,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *    forgotPassword: 'Esqueceu sua senha?',
    *    forgotYourPassword: 'Esqueceu sua senha?',
    *    highlightInfo: '',
-   *    iForgotMyPassword: 'Esqueci minha senha'
+   *    iForgotMyPassword: 'Esqueci minha senha',
    *    ifYouTryHarder: 'Se tentar mais ',
    *    title: 'Seja bem-vindo',
    *    loginErrorPattern: 'Login obrigatório',
@@ -416,7 +416,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *    loginPlaceholder: 'Insira seu usuário de acesso',
    *    passwordErrorPattern: 'Senha obrigatória',
    *    passwordLabel: 'Insira sua senha',
-   *    passwordPlaceholder: 'Insira sua senha de acesso'
+   *    passwordPlaceholder: 'Insira sua senha de acesso',
    *    customFieldErrorPattern: 'Campo customizado inválido',
    *    customFieldPlaceholder: 'Por favor insira um valor',
    *    registerUrl: 'Novo registro',
@@ -425,7 +425,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *    submitLabel: 'Acessar sistema',
    *    submittedLabel: 'Carregando...',
    *    titlePopover: 'Opa!',
-   *    yourUserWillBeBlocked: 'sem sucesso seu usuário será bloqueado e você fica 24 horas sem poder acessar :(',
+   *    yourUserWillBeBlocked: 'sem sucesso seu usuário será bloqueado e você fica 24 horas sem poder acessar :('
    *  };
    * ```
    *
@@ -451,8 +451,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *  > É também possível alternar o objeto padrão de literais através do seletor de idiomas localizado na parte inferior do template,
    * nesse caso, há também a opção do idioma russo.
    */
-  // @Input('p-literals') literals? : PoPageLoginLiterals;
-
   @Input('p-literals') set literals(value: PoPageLoginLiterals) {
     this._literals = value;
   }
@@ -486,7 +484,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * @description
    *
    * Valor do modelo do campo de login.
-   *
    */
   @Input('p-login') set login(value: string) {
     this._login = value;
@@ -586,7 +583,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * - **Function**: pode-se customizar a ação. Para esta possilidade basta atribuir:
    * ```
    * <po-page-login>
-   *   [recovery]="this.funcaominha.bind(this)";
+   *   [recovery]="this.myRecovery.bind(this)">
    * </po-page-login>
    * ```
    *
@@ -657,7 +654,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * ```
    * body {
    *  login: login,
-   *  password: base64(password)
+   *  password: base64(password),
    *  rememberUser: rememberUser
    * }
    * ```
@@ -730,7 +727,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *    helpUrl?: helpUrl,
    *    maxAttemptsRemaining?: maxAttemptsRemaining,
    *    loginWarnings?: [loginWarnings],
-   *    passwordWarnings?: [passwordWarnings],
+   *    passwordWarnings?: [passwordWarnings]
    *  }
    * ```
    *

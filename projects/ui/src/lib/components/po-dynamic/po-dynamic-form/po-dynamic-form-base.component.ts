@@ -39,7 +39,7 @@ export class PoDynamicFormBaseComponent {
    * - Caso o *type* informado seja *boolean* o componente criado será o `po-switch`.
    * - Caso o *type* informado seja *currency* e não seja informado um *mask* ou *pattern* o componente criado será o `po-decimal`,
    * caso seja informado um *mask* ou *pattern* o componente criado será o `po-input`.
-   * - Caso o *type* informado seja *number* e não seja informado um *mask* ou *pattern* o componente criado será o `po-decimal`, caso seja
+   * - Caso o *type* informado seja *number* e não seja informado um *mask* ou *pattern* o componente criado será o `po-number`, caso seja
    * informado um *mask* ou *pattern* o componente criado será o `po-input`.
    * - Caso a lista possua a propriedade `options` e a mesma possua até 3 itens o componente criado será o `po-radio-group`
    * ou `po-checkbox-group` se informar a propriedade `optionsMulti`.

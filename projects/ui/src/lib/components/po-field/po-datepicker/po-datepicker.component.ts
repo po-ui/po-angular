@@ -98,9 +98,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   ngAfterViewInit() {
     this.setDialogPickerStyleDisplay('none');
-    // Põe o foco no Input, setado pelo p-focus
-    if (this.autofocus) {
-      this.inputEl.nativeElement.focus();
+    if (this.autoFocus) {
+      this.focus();
     }
   }
 

@@ -88,19 +88,6 @@ describe('PoLookupBaseComponent:', () => {
     expectSettersMethod(component, 'required', undefined, 'required', false);
   });
 
-  it('should set focus', () => {
-    expectSettersMethod(component, 'autofocus', '', '_autofocus', true);
-    expectSettersMethod(component, 'autofocus', 'true', '_autofocus', true);
-    expectSettersMethod(component, 'autofocus', true, '_autofocus', true);
-    expectSettersMethod(component, 'autofocus', 'false', '_autofocus', false);
-    expectSettersMethod(component, 'autofocus', false, '_autofocus', false);
-    expectSettersMethod(component, 'autofocus', 'null', 'autofocus', false);
-    expectSettersMethod(component, 'autofocus', null, 'autofocus', false);
-    expectSettersMethod(component, 'autofocus', NaN, 'autofocus', false);
-    expectSettersMethod(component, 'autofocus', 'undefined', 'autofocus', false);
-    expectSettersMethod(component, 'autofocus', undefined, 'autofocus', false);
-  });
-
   it('should register function OnChangePropagate', () => {
     component['onChangePropagate'] = undefined;
     const func = () => true;

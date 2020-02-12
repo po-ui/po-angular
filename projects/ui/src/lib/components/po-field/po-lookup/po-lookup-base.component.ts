@@ -10,6 +10,7 @@ import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
+import { InputBoolean } from '../../../decorators';
 
 /**
  * @description
@@ -26,7 +27,6 @@ import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
  */
 export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnDestroy, OnInit, Validator {
 
-  private _autofocus?: boolean = false;
   private _disabled?: boolean = false;
   private _filterService: PoLookupFilter | string;
   private _noAutocomplete: boolean;
@@ -43,6 +43,19 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   private validatorChange: any;
 
   service: any;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
    * Label do campo.
@@ -234,18 +247,19 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   /**
    * @optional
    *
+   * @deprecated 2.0.0
    * @description
+   *
+   * **Deprecated**
+   *
+   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
    *
    * Aplica foco no elemento ao ser iniciado.
    *
    * @default `false`
    */
-  @Input('p-focus') set autofocus(focus: boolean) {
-    this._autofocus = convertToBoolean(focus);
-  }
-
-  get autofocus(): boolean {
-    return this._autofocus;
+  @Input('p-focus') set oldfocus(focus: boolean) {
+    this.autoFocus = focus;
   }
 
   /**
