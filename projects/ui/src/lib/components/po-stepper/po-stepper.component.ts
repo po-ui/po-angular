@@ -1,9 +1,11 @@
 import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, QueryList } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 
+import { PoStepperStatus } from './enums/po-stepper-status.enum';
 import { PoStepComponent } from './po-step/po-step.component';
 import { PoStepperBaseComponent } from './po-stepper-base.component';
 import { PoStepperItem } from './po-stepper-item.interface';
-import { PoStepperStatus } from './enums/po-stepper-status.enum';
 
 /**
  * @docsExtends PoStepperBaseComponent
@@ -135,15 +137,17 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
 
   changeStep(stepIndex: number, step?: PoStepComponent): void {
     const isDifferentStep = (!this.currentActiveStep || step.id !== this.currentActiveStep.id);
-
-    if (this.usePoSteps && isDifferentStep && this.allowNextStep(stepIndex)) {
-      this.controlStepsStatus(stepIndex, step);
-
-      this.onChangeStep.emit(step);
-    } else if (!this.usePoSteps && stepIndex !== this.currentStepIndex && this.allowNextStep(stepIndex)) {
-      // if para tratamento do modelo antigo do po-stepper
-      this.onChangeStep.emit(stepIndex + 1);
-    }
+    this.allowNextStep(stepIndex).pipe(take(1)).subscribe(nextStepAllowed => {
+      if (nextStepAllowed) {
+        if (this.usePoSteps && isDifferentStep) {
+          this.controlStepsStatus(stepIndex, step);
+          this.onChangeStep.emit(step);
+        } else if (!this.usePoSteps && stepIndex !== this.currentStepIndex ) {
+          // if para tratamento do modelo antigo do po-stepper
+          this.onChangeStep.emit(stepIndex + 1);
+        }
+      }
+    });
   }
 
   onStepActive(step: PoStepComponent) {
@@ -166,28 +170,44 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
     }
   }
 
-  private allowNextStep(nextStepIndex: number): boolean {
+  private allowNextStep(nextStepIndex: number): Observable<boolean> {
     if (!this.sequential) {
-      return true;
+      return of(true);
     }
 
     if (this.usePoSteps) {
-      return this.isBeforeStep(nextStepIndex) || this.canActiveNextStep(this.currentActiveStep);
+      return of(this.isBeforeStep(nextStepIndex))
+      .pipe(switchMap(result => {
+        if (result) {
+          return of(result);
+        } else {
+          return this.canActiveNextStep(this.currentActiveStep);
+        }
+      }));
     }
 
-    return this.steps.slice(this.step, nextStepIndex).every(step => step.status === PoStepperStatus.Done);
+    return of(this.steps.slice(this.step, nextStepIndex).every(step => step.status === PoStepperStatus.Done));
   }
 
-  private canActiveNextStep(currentActiveStep = <any> {}) {
+  private canActiveNextStep(currentActiveStep = <PoStepComponent>{}): Observable<boolean> {
     if (!currentActiveStep.canActiveNextStep) {
-      return true;
+      return of(true);
     }
 
     const canActiveNextStep = currentActiveStep.canActiveNextStep(currentActiveStep);
 
-    currentActiveStep.status = this.getStepperStatusByCanActive(canActiveNextStep);
+    if (typeof canActiveNextStep === 'boolean') {
+      currentActiveStep.status = this.getStepperStatusByCanActive(canActiveNextStep);
+      return of(canActiveNextStep);
+    } else if (canActiveNextStep instanceof Observable) {
+      return canActiveNextStep.pipe(map(result => {
+        currentActiveStep.status = this.getStepperStatusByCanActive(result);
+        return result;
+      }));
+    } else {
+      throw new Error(`Expected step ${currentActiveStep.label} canActiveNextStep function to return either a boolean or Observable`);
+    }
 
-    return canActiveNextStep;
   }
 
   private controlStepsStatus(stepIndex: number, step: PoStepComponent): void {
@@ -204,11 +224,11 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
     }
   }
 
-  private getStepperStatusByCanActive(canActiveNextStep): PoStepperStatus {
+  private getStepperStatusByCanActive(canActiveNextStep: boolean): PoStepperStatus {
     return canActiveNextStep ? PoStepperStatus.Done : PoStepperStatus.Error;
   }
 
-  private getStepsAndIndex(step: PoStepComponent = <any> {}): { steps: Array<PoStepComponent>, stepIndex: number } {
+  private getStepsAndIndex(step: PoStepComponent = <any>{}): { steps: Array<PoStepComponent>, stepIndex: number } {
     const steps = this.getPoSteps();
     const stepIndex = steps.findIndex(poStep => poStep.id === step.id);
 
@@ -249,5 +269,4 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
       this.previousActiveStep.status = PoStepperStatus.Done;
     }
   }
-
 }

@@ -1,4 +1,5 @@
 import { AfterContentInit, Component, ElementRef, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
 
@@ -59,6 +60,8 @@ export class PoStepComponent implements AfterContentInit {
    *
    * Função chamada quando o próximo *step* for clicado ou quando o método `PoStepperComponent.next()` for chamado.
    * Ao retornar `true` define que esse *step* ficará ativo e o atual como concluído (*done*).
+   * Também aceita funções que retornem `Observable<boolean>`. Ao retornar um `Observable<boolean>`,
+   * garanta que esse `Observable` será completado.
    *
    * Ao ser disparada, a mesma receberá por parâmetro o `PoStepComponent` atual.
    *
@@ -72,7 +75,7 @@ export class PoStepComponent implements AfterContentInit {
    * </po-step>
    * ```
    */
-  @Input('p-can-active-next-step') canActiveNextStep: Function;
+  @Input('p-can-active-next-step') canActiveNextStep: ((currentStep) => boolean) | ((currentStep) => Observable<boolean>);
 
   /** Título que será exibido descrevendo o passo (*step*). */
   @Input('p-label') label: string;
