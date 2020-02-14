@@ -1,6 +1,28 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+## [1.26.0](https://github.com/portinariui/portinari-angular/compare/v1.25.0...v1.26.0) (2020-02-14)
+
+
+### Bug Fixes
+
+* **dynamic-view:** corrige impressão da página ([72f3544](https://github.com/portinariui/portinari-angular/commit/72f3544)), closes [#258](https://github.com/portinariui/portinari-angular/issues/258)
+* **page-login:** ajusta quebra de layout no popover no idioma russo ([827cad4](https://github.com/portinariui/portinari-angular/commit/827cad4))
+* **tooltip:** corrige o compartilhamento do serviço de posição ([cfc2b7a](https://github.com/portinariui/portinari-angular/commit/cfc2b7a))
+* **tooltip:** esconde os múltiplos tooltips quando realizar mouseleave ([7e3d6bd](https://github.com/portinariui/portinari-angular/commit/7e3d6bd))
+
+
+### Features
+
+* **page-dynamic-edit:** adiciona propriedade `serviceMetadataApi` ([246ef13](https://github.com/portinariui/portinari-angular/commit/246ef13))
+* **stepper:** permite próximo passo assíncrono ([095ce4f](https://github.com/portinariui/portinari-angular/commit/095ce4f)), closes [#171](https://github.com/portinariui/portinari-angular/issues/171)
+
+### Documentation
+
+* **readme:** adiciona twitter badge ([78726f3](https://github.com/portinariui/portinari-angular/commit/78726f3))
+* **how-to-document:** adiciona documento de guia para documentação ([19455c5](https://github.com/portinariui/portinari-angular/commit/19455c5))
+* **code-of-conduct:** adiciona documento de código de conduta ([b46d6e1](https://github.com/portinariui/portinari-angular/commit/b46d6e1))
+* **style-guide:** adiciona documento de boas práticas ([4f57588](https://github.com/portinariui/portinari-angular/commit/4f57588))
+* **page-login:** atualiza exemplos da documentação ([4497e83](https://github.com/portinariui/portinari-angular/commit/4497e83))
 
 ## [1.25.0](https://github.com/portinariui/portinari-angular/compare/v1.24.0...v1.25.0) (2020-02-07)
 
