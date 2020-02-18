@@ -9,9 +9,9 @@
             <div class="po-page-slide-title po-text-ellipsis">{{ title }}</div>
             <div class="po-page-slide-subtitle po-text-ellipsis" *ngIf="subtitle">{{ subtitle }}</div>
 
-            <a class="po-page-slide-close-button" tabindex="0" *ngIf="!hideClose" (click)="close()">
+            <button type="button" class="po-page-slide-close-button" *ngIf="!hideClose" (click)="close()">
               <span class="po-icon po-icon-close"></span>
-            </a>
+            </button>
           </header>
 
           <div class="po-page-slide-body">
