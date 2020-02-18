@@ -5,14 +5,14 @@
         
         <div class="po-page-slide-content po-page-slide-{{ size }}" tabindex="-1" #pageContent>
         
-          <div class="po-page-slide-header">
+          <header class="po-page-slide-header">
             <div class="po-page-slide-title po-text-ellipsis">{{ title }}</div>
             <div class="po-page-slide-subtitle po-text-ellipsis" *ngIf="subtitle">{{ subtitle }}</div>
 
             <a class="po-page-slide-close-button" tabindex="0" *ngIf="!hideClose" (click)="close()">
               <span class="po-icon po-icon-close"></span>
             </a>
-          </div>
+          </header>
 
           <div class="po-page-slide-body">
             <ng-content></ng-content>
