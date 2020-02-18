@@ -18,12 +18,12 @@ import { PoPageSlideService } from './po-page-slide.service';
   ]
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {
-  @ViewChild('pageContent', { read: ElementRef, static: false }) pageContent: ElementRef;
-
   private id = uuid();
   private sourceElement: HTMLElement;
   private focusEvent: EventListener;
   private firstElement: HTMLElement;
+
+  @ViewChild('pageContent', { read: ElementRef, static: false }) pageContent: ElementRef;
 
   constructor(private poPageSlideService: PoPageSlideService) {
     super();

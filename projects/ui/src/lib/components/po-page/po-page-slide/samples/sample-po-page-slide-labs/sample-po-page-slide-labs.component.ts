@@ -1,19 +1,24 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PoPageSlideComponent, PoRadioGroupOption } from '@portinari/portinari-ui';
 
+import { PoCheckboxGroupOption } from '../../../../po-field';
+
 @Component({
   selector: 'sample-po-page-slide-labs',
   templateUrl: './sample-po-page-slide-labs.component.html'
 })
 export class SamplePoPageSlideLabsComponent implements OnInit {
-  @ViewChild(PoPageSlideComponent, { static: true }) poPageSlide: PoPageSlideComponent;
-
   public hideClose = false;
   public title: string;
   public subtitle: string;
   public content: string;
   public size: string;
   public align: string;
+  public properties: Array<string>;
+
+  public propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'hide-close', label: 'Hide Close' }
+  ];
 
   public sizeOptions: Array<PoRadioGroupOption> = [
     { label: 'Small', value: 'sm' },
@@ -28,16 +33,27 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
     { label: 'Right', value: 'right' }
   ];
 
+  @ViewChild('poPageSlide', { static: true }) poPageSlide: PoPageSlideComponent;
+
   ngOnInit() {
     this.restore();
   }
 
+  public openPage() {
+    this.poPageSlide.open();
+
+    if (this.properties.includes('hide-close')) {
+      setTimeout(() => this.poPageSlide.close(), 3_000);
+    }
+  }
+
   public restore() {
     this.hideClose = false;
-    this.title = 'Po Page Slide Labs Title!';
-    this.subtitle = 'Po Page Slide Labs Subtitle';
-    this.content = 'This is a content for the page slide component.';
+    this.title = '';
+    this.subtitle = '';
+    this.content = '';
     this.size = 'md';
     this.align = 'right';
+    this.properties = [];
   }
 }

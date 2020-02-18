@@ -1,21 +1,18 @@
 <po-page-slide
-  [p-hide-close]="hideClose"
+  [p-hide-close]="properties.includes('hide-close')"
   [p-title]="title"
   [p-subtitle]="subtitle"
   [p-size]="size"
   [p-align]="align"
-  #pageSlide>
+  #poPageSlide>
   {{ content }}
 </po-page-slide>
 
-<div class="po-row">
-  <po-button
-    class="po-sm-3"
-    p-label="Reveal Page Slide"
-    [p-disabled]="f.form.invalid"
-    (p-click)="pageSlide.open()">
-  </po-button>
-</div>
+<po-button
+  p-label="Open Page Slide"
+  [p-disabled]="f.form.invalid"
+  (p-click)="openPage()">
+</po-button>
 
 <hr>
 
@@ -50,15 +47,13 @@
   </div>
 
   <div class="po-row">
-    <po-switch
-      class="po-sm-4"
-      name="Hide close"
-      [(ngModel)]="hideClose"
-      p-label="Hide close?"
-      p-label-off="Show"
-      p-label-on="Hide"
-      p-optional>
-    </po-switch>
+    <po-checkbox-group
+      class="po-md-4"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions">
+    </po-checkbox-group>
 
     <po-radio-group
       class="po-sm-4"
@@ -83,8 +78,7 @@
     <po-button
       class="po-sm-3"
       p-label="Sample Restore"
-      (p-click)="restore()"
-      p-type="danger">
+      (p-click)="restore()">
     </po-button>
   </div>
 </form>

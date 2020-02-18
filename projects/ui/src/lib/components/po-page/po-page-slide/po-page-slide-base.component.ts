@@ -1,5 +1,7 @@
 import { Input } from '@angular/core';
 
+import { InputBoolean } from '../../../decorators';
+
 // Page Slide: Stay on the Page Pattern:
 // http://designingwebinterfaces.com/page-slide-stay-on-the-page-pattern
 
@@ -65,7 +67,7 @@ export class PoPageSlideBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-hide-close') hideClose = false;
+  @Input('p-hide-close') @InputBoolean() hideClose: boolean = false;
 
   /**
    * @optional
@@ -87,13 +89,26 @@ export class PoPageSlideBaseComponent {
     return this._align;
   }
 
-  /**
-   * Controla se a página está ou não oculta, por padrão é oculto.
-   */
+  // Controla se a página está ou não oculta, por padrão é oculto.
   public hidden = true;
 
   /**
    * Ativa a visualização da página.
+   * 
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo
+   * ser utilizado o `ViewChild` da seguinte forma:
+   * 
+   * ```typescript
+   * import { PoPageSlideComponent } from '@portinari/portinari-ui';
+   * 
+   * ...
+   * 
+   * @ViewChild(PoPageSlideComponent, { static: true }) pageSlide: PoPageSlideComponent;
+   * 
+   * public openPage() {
+   *   this.pageSlide.open();
+   * }
+   * ```
    */
   public open() {
     this.hidden = false;
@@ -101,6 +116,21 @@ export class PoPageSlideBaseComponent {
 
   /**
    * Encerra a visualização da página.
+   * 
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo
+   * ser utilizado o `ViewChild` da seguinte forma:
+   * 
+   * ```typescript
+   * import { PoPageSlideComponent } from '@portinari/portinari-ui';
+   * 
+   * ...
+   * 
+   * @ViewChild(PoPageSlideComponent, { static: true }) pageSlide: PoPageSlideComponent;
+   * 
+   * public closePage() {
+   *   this.pageSlide.close();
+   * }
+   * ```
    */
   public close(): void {
     this.hidden = true;

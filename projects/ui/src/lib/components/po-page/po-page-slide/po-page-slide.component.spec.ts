@@ -19,9 +19,10 @@ import { PoPageSlideService } from './po-page-slide.service';
   `
 })
 class TestComponent {
-  @ViewChild(PoPageSlideComponent, { static: true }) poPage: PoPageSlideComponent;
   public username: string;
   public password: string;
+
+  @ViewChild(PoPageSlideComponent, { static: true }) poPage: PoPageSlideComponent;
 }
 
 describe('PoPageSlideComponent', () => {

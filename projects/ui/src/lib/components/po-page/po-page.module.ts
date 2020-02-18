@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
 import { PoBreadcrumbModule } from '../po-breadcrumb/po-breadcrumb.module';
@@ -25,11 +24,38 @@ import { PoPageComponent } from './po-page.component';
  * @description
  * Módulo dos componentes po-page-default, po-page-detail, po-page-edit,
  * po-page-list, po-page-login e po-page-slide.
+ * 
+ * > Para o correto funcionamento do componente `po-page-slide` deve ser
+ * importado o módulo `BrowserAnimationsModule` no módulo principal da sua
+ * aplicação.
+ *
+ * Módulo da aplicação:
+ * 
+ * ```typescript
+ * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+ * import { PoModule } from '@portinari/portinari-ui';
+ * ...
+ *
+ * @NgModule({
+ *   imports: [
+ *     BrowserModule,
+ *     BrowserAnimationsModule,
+ *     ...
+ *     PoModule
+ *   ],
+ *   declarations: [
+ *     AppComponent,
+ *     ...
+ *   ],
+ *   providers: [],
+ *   bootstrap: [AppComponent]
+ * })
+ * export class AppModule { }
+ * ```
  */
 @NgModule({
   imports: [
     CommonModule,
-    BrowserAnimationsModule,
     FormsModule,
     RouterModule,
     PoBreadcrumbModule,
