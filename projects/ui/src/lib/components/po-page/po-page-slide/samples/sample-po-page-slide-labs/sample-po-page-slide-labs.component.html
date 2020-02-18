@@ -47,29 +47,31 @@
   </div>
 
   <div class="po-row">
+    <po-radio-group
+      class="po-sm-6"
+      name="Align"
+      [(ngModel)]="align"
+      p-label="Align"
+      [p-options]="alignOptions"
+      p-optional>
+    </po-radio-group>
+
     <po-checkbox-group
-      class="po-md-4"
+      class="po-sm-6"
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
       [p-options]="propertiesOptions">
     </po-checkbox-group>
+  </div>
 
+  <div class="po-row">
     <po-radio-group
-      class="po-sm-4"
+      class="po-sm-6"
       name="Size"
       [(ngModel)]="size"
       p-label="Size"
       [p-options]="sizeOptions"
-      p-optional>
-    </po-radio-group>
-
-    <po-radio-group
-      class="po-sm-4"
-      name="Align"
-      [(ngModel)]="align"
-      p-label="Align"
-      [p-options]="alignOptions"
       p-optional>
     </po-radio-group>
   </div>
