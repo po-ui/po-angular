@@ -4,46 +4,52 @@
   p-align="right"
   #pageSlide>
   <div class="po-row po-mb-2">
-    <po-button
+    <po-switch
       class="po-sm-6"
-      (p-click)="bluetooth = !bluetooth"
-      p-icon="po-icon-bluetooth"
-      p-label="Bluetooth {{ bluetooth ? 'On' : 'Off' }}">
-    </po-button>
-    <po-button
+      p-label-off="Bluetooth"
+      p-label-on="Bluetooth"
+      name="bluetooth"
+      [(ngModel)]="bluetooth">
+    </po-switch>
+    <po-switch
       class="po-sm-6"
-      (p-click)="locked = !locked"
-      p-icon="{{ locked ? 'po-icon-lock' : 'po-icon po-icon-lock-off' }}"
-      p-label="{{ locked ? 'Locked' : 'Unlocked' }}">
-    </po-button>
+      p-label-off="Unlocked"
+      p-label-on="Locked"
+      name="locked"
+      [(ngModel)]="locked">
+    </po-switch>
   </div>
   <div class="po-row po-mb-2">
-    <po-button
+    <po-switch
       class="po-sm-6"
-      (p-click)="microphone = !microphone"
-      p-icon="po-icon-microphone"
-      p-label="Microphone {{ microphone ? 'On' : 'Off' }}">
-    </po-button>
-    <po-button
+      p-label-off="Microphone"
+      p-label-on="Microphone"
+      name="microphone"
+      [(ngModel)]="microphone">
+    </po-switch>
+    <po-switch
       class="po-sm-6"
-      (p-click)="notification = !notification"
-      p-icon="po-icon-notification"
-      p-label="Notification {{ notification ? 'On' : 'Off' }}">
-    </po-button>
+      p-label-off="Notification"
+      p-label-on="Notification"
+      name="notification"
+      [(ngModel)]="notification">
+    </po-switch>
   </div>
   <div class="po-row po-mb-2">
-    <po-button
+    <po-switch
       class="po-sm-6"
-      (p-click)="localization = !localization"
-      p-icon="po-icon-pin"
-      p-label="Localization {{ localization ? 'On' : 'Off' }}">
-    </po-button>
-    <po-button
+      p-label-off="Localization"
+      p-label-on="Localization"
+      name="localization"
+      [(ngModel)]="localization">
+    </po-switch>
+    <po-switch
       class="po-sm-6"
-      (p-click)="favorited = !favorited"
-      p-icon="{{ favorited ? 'po-icon po-icon-star-filled' : 'po-icon po-icon-star' }}"
-      p-label="{{ favorited ? 'Favorited' : 'Not favorited' }}">
-    </po-button>
+      p-label-off="Not favorited"
+      p-label-on="Favorited"
+      name="favorited"
+      [(ngModel)]="favorited">
+    </po-switch>
   </div>
   <hr/>
   
