@@ -24,13 +24,13 @@ import { PoPageComponent } from './po-page.component';
  * @description
  * Módulo dos componentes po-page-default, po-page-detail, po-page-edit,
  * po-page-list, po-page-login e po-page-slide.
- * 
+ *
  * > Para o correto funcionamento do componente `po-page-slide` deve ser
  * importado o módulo `BrowserAnimationsModule` no módulo principal da sua
  * aplicação.
  *
  * Módulo da aplicação:
- * 
+ *
  * ```typescript
  * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
  * import { PoModule } from '@portinari/portinari-ui';

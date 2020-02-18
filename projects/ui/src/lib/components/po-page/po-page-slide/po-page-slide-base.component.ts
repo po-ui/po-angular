@@ -94,17 +94,17 @@ export class PoPageSlideBaseComponent {
 
   /**
    * Ativa a visualização da página.
-   * 
+   *
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo
    * ser utilizado o `ViewChild` da seguinte forma:
-   * 
+   *
    * ```typescript
    * import { PoPageSlideComponent } from '@portinari/portinari-ui';
-   * 
+   *
    * ...
-   * 
+   *
    * @ViewChild(PoPageSlideComponent, { static: true }) pageSlide: PoPageSlideComponent;
-   * 
+   *
    * public openPage() {
    *   this.pageSlide.open();
    * }
@@ -116,17 +116,17 @@ export class PoPageSlideBaseComponent {
 
   /**
    * Encerra a visualização da página.
-   * 
+   *
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo
    * ser utilizado o `ViewChild` da seguinte forma:
-   * 
+   *
    * ```typescript
    * import { PoPageSlideComponent } from '@portinari/portinari-ui';
-   * 
+   *
    * ...
-   * 
+   *
    * @ViewChild(PoPageSlideComponent, { static: true }) pageSlide: PoPageSlideComponent;
-   * 
+   *
    * public closePage() {
    *   this.pageSlide.close();
    * }
