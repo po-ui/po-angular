@@ -13,7 +13,7 @@ import {
 } from '@portinari/portinari-ui';
 
 import { PoPageDynamicEditComponent } from './po-page-dynamic-edit.component';
-import { PoPageDynamicModule } from '../../services/po-page-dynamic';
+import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dynamic.module';
 
 /**
  * @description
