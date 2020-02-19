@@ -2,9 +2,6 @@ import { Input } from '@angular/core';
 
 import { InputBoolean } from '../../../decorators';
 
-// Page Slide: Stay on the Page Pattern:
-// http://designingwebinterfaces.com/page-slide-stay-on-the-page-pattern
-
 /**
  * @description
  *
@@ -26,17 +23,23 @@ export class PoPageSlideBaseComponent {
   private _align = 'right';
 
   /**
+   * @description
+   * 
    * Título da página.
    */
   @Input('p-title') title: string;
 
   /**
+   * @description
+   * 
    * Subtítulo da página.
    */
   @Input('p-subtitle') subtitle?: string;
 
   /**
    * @optional
+   * 
+   * @description
    *
    * Define o tamanho da página.
    *
@@ -62,6 +65,8 @@ export class PoPageSlideBaseComponent {
 
   /**
    * @optional
+   * 
+   * @description
    *
    * Oculta o botão de encerramento da página.
    *
@@ -71,6 +76,8 @@ export class PoPageSlideBaseComponent {
 
   /**
    * @optional
+   * 
+   * @description
    *
    * Define o alinhamento horizontal da página.
    *
@@ -93,6 +100,8 @@ export class PoPageSlideBaseComponent {
   public hidden = true;
 
   /**
+   * @description
+   * 
    * Ativa a visualização da página.
    *
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo
@@ -115,6 +124,8 @@ export class PoPageSlideBaseComponent {
   }
 
   /**
+   * @description
+   * 
    * Encerra a visualização da página.
    *
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo

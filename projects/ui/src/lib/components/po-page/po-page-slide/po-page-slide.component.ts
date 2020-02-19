@@ -1,4 +1,4 @@
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, animateChild, group, query, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { v4 as uuid } from 'uuid';
 
@@ -11,9 +11,15 @@ import { PoPageSlideService } from './po-page-slide.service';
   templateUrl: './po-page-slide.component.html',
   providers: [],
   animations: [
-    trigger('fadeInOut', [
-      transition(':enter', [style({ opacity: 0 }), animate('100ms', style({ opacity: 1 }))]),
-      transition(':leave', [animate('100ms', style({ opacity: 0 }))])
+    trigger('fade', [
+      transition(':enter', [style({ opacity: 0 }), group([animate('150ms', style({ opacity: 1 })), query('@shift', animateChild())])]),
+      transition(':leave', group([query('@shift', animateChild()), animate('150ms', style({ opacity: 0 }))]))
+    ]),
+    trigger('shift', [
+      transition('void => left', [style({ transform: 'translateX(-50px)' }), animate('300ms ease-out', style({ transform: 'none' }))]),
+      transition('left => void', [animate('300ms', style({ transform: 'translateX(-50px)' }))]),
+      transition('void => right', [style({ transform: 'translateX(50px)' }), animate('300ms ease-out', style({ transform: 'none' }))]),
+      transition('right => void', [animate('300ms', style({ transform: 'translateX(50px)' }))])
     ])
   ]
 })
@@ -21,7 +27,6 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private id = uuid();
   private sourceElement: HTMLElement;
   private focusEvent: EventListener;
-  private firstElement: HTMLElement;
 
   @ViewChild('pageContent', { read: ElementRef, static: false }) pageContent: ElementRef;
 
@@ -55,18 +60,20 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   private handleFocus() {
+    const elements = getFocusableElements(this.pageContent.nativeElement);
+
     this.focusEvent = (event: Event) => {
       const pageElement = this.pageContent.nativeElement;
 
-      if (!pageElement.contains(event.target) && this.poPageSlideService.getAtivePage() === this.id) {
-        event.stopPropagation();
-        this.firstElement.focus();
+      // O foco não pode sair da página.
+      if (document !== event.target && pageElement !== event.target && !pageElement.contains(event.target) && this.poPageSlideService.getAtivePage() === this.id) {
+        const element = elements[0] || this.pageContent.nativeElement;
+        element.focus();
       }
     };
 
-    const elements = getFocusableElements(this.pageContent.nativeElement);
-    this.firstElement = (this.hideClose ? elements[0] : elements[1]) || this.pageContent.nativeElement;
-    this.firstElement.focus();
+    const element = (this.hideClose ? elements[0] : elements[1]) || this.pageContent.nativeElement;
+    element.focus();
 
     document.addEventListener('focus', this.focusEvent, true);
   }

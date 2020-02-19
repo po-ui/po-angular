@@ -523,6 +523,6 @@ export function validateObjectType(value: any) {
  * @returns Lista dos elementos DOM filhos "focáveis".
  */
 export function getFocusableElements(parentElement: Element): NodeListOf<Element> {
-  const focusableElements = 'input, select, textarea, button:not([disabled]), a';
+  const focusableElements = 'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"]';
   return parentElement.querySelectorAll(focusableElements);
 }
