@@ -66,9 +66,10 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
       const pageElement = this.pageContent.nativeElement;
 
       // O foco não pode sair da página.
-      if (document !== event.target && pageElement !== event.target && !pageElement.contains(event.target) && this.poPageSlideService.getAtivePage() === this.id) {
-        const element = elements[0] || this.pageContent.nativeElement;
-        element.focus();
+      if (document !== event.target && pageElement !== event.target && !pageElement.contains(event.target)
+        && this.poPageSlideService.getAtivePage() === this.id) {
+        const firstElement = elements[0] || this.pageContent.nativeElement;
+        firstElement.focus();
       }
     };
 
