@@ -190,9 +190,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * ```
    * getPageOptions(): PoPageDynamicTableOptions {
    * return {
-   *   actions: [
-   *     { label: 'Find on Google' },
-   *   ],
+   *   actions:
+   *     { new: 'new', edit: 'edit/:id', remove: true },
    *   fields: [
    *     { property: 'idCard', gridColumns: 6 }
    *   ]
@@ -483,9 +482,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private loadDataFromAPI() {
-    const { serviceApi } = this.activatedRoute.snapshot.data;
+    const { serviceApi, serviceMetadataApi } = this.activatedRoute.snapshot.data;
     this.serviceApi = serviceApi || this.serviceApi;
-    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi});
+    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
     const metadata$ = this.getMetadata(serviceApi);
     const data$ = this.loadData();
     const customOption$ = this.loadOptionsOnInitialize(this.onLoad);

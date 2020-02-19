@@ -9,7 +9,7 @@ import { PoPageDynamicSearchModule } from '../po-page-dynamic-search/po-page-dyn
 
 import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
 import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
-import { PoPageDynamicModule } from '../../services/po-page-dynamic';
+import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dynamic.module';
 
 /**
  * @description

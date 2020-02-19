@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { PoDynamicModule, PoModalModule, PoPageModule, PoWidgetModule } from '@portinari/portinari-ui';
 
 import { PoPageDynamicDetailComponent } from './po-page-dynamic-detail.component';
-import { PoPageDynamicModule } from '../../services/po-page-dynamic';
+import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dynamic.module';
 
 /**
  * @description

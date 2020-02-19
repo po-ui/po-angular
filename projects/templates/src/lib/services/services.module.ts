@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { PoPageCustomizationModule } from './po-page-customization/po-page-customization.module';
-import { PoPageDynamicModule } from './po-page-dynamic';
+import { PoPageDynamicModule } from './po-page-dynamic/po-page-dynamic.module';
 
 @NgModule({
   imports: [
