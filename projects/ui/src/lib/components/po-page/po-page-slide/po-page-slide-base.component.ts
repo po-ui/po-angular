@@ -72,7 +72,7 @@ export class PoPageSlideBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-hide-close') @InputBoolean() hideClose: boolean = false;
+  @Input('p-hide-close') @InputBoolean() hideClose?: boolean = false;
 
   /**
    * @optional
@@ -95,6 +95,17 @@ export class PoPageSlideBaseComponent {
   get align(): string {
     return this._align;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se permite o encerramento da página ao clicar fora da mesma.
+   *
+   * @default `false`
+   */
+  @Input('p-click-out') @InputBoolean() clickOut?: boolean = false;
 
   // Controla se a página está ou não oculta, por padrão é oculto.
   public hidden = true;

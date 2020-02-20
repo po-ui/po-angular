@@ -1,5 +1,5 @@
 <div class="po-page-slide" tabindex="0" *ngIf="!hidden" [@fade]>
-  <div class="po-page-slide-overlay">
+  <div class="po-page-slide-overlay" (mousedown)="onClickOut($event)">
     <div class="po-page-slide-container po-page-slide-{{ align }} po-page-slide-{{ size }}" [@shift]="align">
       
       <div class="po-page-slide-content" tabindex="-1" #pageContent>

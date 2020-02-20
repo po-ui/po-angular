@@ -59,6 +59,12 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     }
   }
 
+  public onClickOut(event: MouseEvent) {
+    if (this.clickOut && !this.pageContent.nativeElement.contains(event.target)) {
+      this.close();
+    }
+  }
+
   private handleFocus() {
     const elements = getFocusableElements(this.pageContent.nativeElement);
 
@@ -66,8 +72,8 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
       const pageElement = this.pageContent.nativeElement;
 
       // O foco não pode sair da página.
-      if (document !== event.target && pageElement !== event.target && !pageElement.contains(event.target)
-        && this.poPageSlideService.getAtivePage() === this.id) {
+      if (document !== event.target && pageElement !== event.target && !pageElement.contains(event.target) &&
+        this.poPageSlideService.getAtivePage() === this.id) {
         const firstElement = elements[0] || this.pageContent.nativeElement;
         firstElement.focus();
       }

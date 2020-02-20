@@ -1,9 +1,10 @@
 <po-page-slide
+  [p-align]="align"  
+  [p-click-out]="properties.includes('click-out')"
   [p-hide-close]="properties.includes('hide-close')"
-  [p-title]="title"
-  [p-subtitle]="subtitle"
   [p-size]="size"
-  [p-align]="align"
+  [p-subtitle]="subtitle"
+  [p-title]="title"
   #poPageSlide>
   {{ content }}
 </po-page-slide>

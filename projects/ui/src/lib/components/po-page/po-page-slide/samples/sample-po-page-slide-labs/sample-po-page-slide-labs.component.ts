@@ -17,6 +17,7 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
   public properties: Array<string>;
 
   public propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'click-out', label: 'Click Out' },
     { value: 'hide-close', label: 'Hide Close' }
   ];
 
