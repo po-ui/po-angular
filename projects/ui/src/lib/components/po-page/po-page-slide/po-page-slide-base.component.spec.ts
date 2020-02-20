@@ -1,4 +1,4 @@
-import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import { PoPageSlideBaseComponent } from './po-page-slide-base.component';
 
 describe('PoPageSlideBaseComponent', () => {
@@ -13,24 +13,37 @@ describe('PoPageSlideBaseComponent', () => {
     expect(component.hidden).toBe(true);
   });
 
-  it('should update property `p-size` with valid values', () => {
+  it('should update property size with valid values', () => {
     const sizes = ['sm', 'md', 'lg', 'xl', 'auto'];
     expectPropertiesValues(component, 'size', sizes, sizes);
   });
 
-  it('should update property `p-size` with `md` when invalid values', () => {
+  it('should update property size with md when invalid values', () => {
     const invalidSizes = ['ms', 'dm', 'gl', 'lx', 'otua'];
     expectPropertiesValues(component, 'size', invalidSizes, 'md');
   });
 
-  it('should update property `p-align` with valid values', () => {
-    const aligns = ['left', 'right'];
-    expectPropertiesValues(component, 'align', aligns, aligns);
-  });
+  it('should update property clickOut`', () => {
+    component.clickOut = undefined;
+    expect(component.clickOut).toBe(false);
 
-  it('should update property `p-align` with `right` when invalid values', () => {
-    const invalidAligns = ['tfel', 'thgir'];
-    expectPropertiesValues(component, 'align', invalidAligns, 'right');
+    component.clickOut = 'false' as unknown as boolean;
+    expect(component.clickOut).toBe(false);
+
+    component.clickOut = 0 as unknown as boolean;
+    expect(component.clickOut).toBe(false);
+
+    component.clickOut = false;
+    expect(component.clickOut).toBe(false);
+
+    component.clickOut = 1 as unknown as boolean;
+    expect(component.clickOut).toBe(true);
+
+    component.clickOut = 'true' as unknown as boolean;
+    expect(component.clickOut).toBe(true);
+
+    component.clickOut = true;
+    expect(component.clickOut).toBe(true);
   });
 
   it('should be call open method', () => {

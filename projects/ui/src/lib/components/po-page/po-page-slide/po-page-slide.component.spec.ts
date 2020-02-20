@@ -48,7 +48,7 @@ describe('PoPageSlideComponent', () => {
     expect(component instanceof PoPageSlideComponent).toBeTruthy();
   });
 
-  it('should call open and close methods', () => {
+  it('should call open() and close() methods', () => {
     expect(debugElement.query(By.css('.po-page-slide'))).toBeNull();
 
     component.open();
@@ -60,7 +60,7 @@ describe('PoPageSlideComponent', () => {
     expect(debugElement.query(By.css('.po-page-slide'))).toBeNull();
   });
 
-  it('should hide the close button when hideClose is true', () => {
+  it('should hide the close button when hideClose property is true', () => {
     component.hideClose = true;
     component.open();
     fixture.detectChanges();
@@ -79,6 +79,43 @@ describe('PoPageSlideComponent', () => {
     component.open();
     fixture.detectChanges();
     expect(debugElement.query(By.css('.po-page-slide-subtitle')).nativeElement.textContent).toBe(component.subtitle);
+  });
+
+  it('should call close() method when clicked out the content and clickOut property is true', () => {
+    const mockEvent = { target: 0 };
+    const mockComponent = { pageContent: { nativeElement: { contains: () => false } }, clickOut: true, close: () => {} };
+
+    spyOn(mockComponent, 'close');
+    component.onClickOut.call(mockComponent, mockEvent);
+    fixture.detectChanges();
+
+    expect(mockComponent.close).toHaveBeenCalled();
+  });
+
+  it('should not call close() method when clicked in the content and clickOut property is true', () => {
+    const mockEvent = { target: 0 };
+    const mockComponent = { pageContent: { nativeElement: { contains: () => true } }, clickOut: true, close: () => {} };
+
+    spyOn(mockComponent, 'close');
+    fixture.detectChanges();
+    component.onClickOut.call(mockComponent, mockEvent);
+
+    expect(mockComponent.close).not.toHaveBeenCalled();
+  });
+
+  it('should not call close() method when clickOut property is false', () => {
+    const mockEvent = { target: 0 };
+    const mockComponent = {
+      pageContent: { nativeElement: { contains: () => false } },
+      clickOut: false,
+      close: () => {}
+    };
+
+    spyOn(mockComponent, 'close');
+    fixture.detectChanges();
+    component.onClickOut.call(mockComponent, mockEvent);
+
+    expect(mockComponent.close).not.toHaveBeenCalled();
   });
 
   it('should not be possible to open more than one simultaneously', () => {

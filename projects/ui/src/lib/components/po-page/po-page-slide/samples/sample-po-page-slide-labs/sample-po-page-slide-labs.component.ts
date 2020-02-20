@@ -13,7 +13,6 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
   public subtitle: string;
   public content: string;
   public size: string;
-  public align: string;
   public properties: Array<string>;
 
   public propertiesOptions: Array<PoCheckboxGroupOption> = [
@@ -27,11 +26,6 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
     { label: 'Large', value: 'lg' },
     { label: 'Extra large', value: 'xl' },
     { label: 'Automatic', value: 'auto' }
-  ];
-
-  public alignOptions: Array<PoRadioGroupOption> = [
-    { label: 'Left', value: 'left' },
-    { label: 'Right', value: 'right' }
   ];
 
   @ViewChild('poPageSlide', { static: true }) poPageSlide: PoPageSlideComponent;
@@ -54,7 +48,6 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
     this.subtitle = '';
     this.content = '';
     this.size = 'md';
-    this.align = 'right';
     this.properties = [];
   }
 }

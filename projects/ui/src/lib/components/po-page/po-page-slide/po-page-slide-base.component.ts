@@ -13,14 +13,10 @@ import { InputBoolean } from '../../../decorators';
  * através do botão que encontra-se no cabeçalho do mesmo ou através do método
  * `#close()`.
  *
- * É possível definir o alinhamento do componente na página principal à
- * esquerda ou à direita.
- *
  * > Não é permitido ativar dois ou mais `po-page-slide` simultâneamente.
  */
 export class PoPageSlideBaseComponent {
   private _size = 'md';
-  private _align = 'right';
 
   /**
    * @description
@@ -73,28 +69,6 @@ export class PoPageSlideBaseComponent {
    * @default `false`
    */
   @Input('p-hide-close') @InputBoolean() hideClose?: boolean = false;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o alinhamento horizontal da página.
-   *
-   * Valores válidos:
-   *  - `left` (esquerda)
-   *  - `right` (direita)
-   *
-   * @default `right`
-   */
-  @Input('p-align') set align(value: string) {
-    const aligns = ['left', 'right'];
-    this._align = aligns.indexOf(value) > -1 ? value : 'right';
-  }
-
-  get align(): string {
-    return this._align;
-  }
 
   /**
    * @optional

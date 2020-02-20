@@ -12,14 +12,12 @@ import { PoPageSlideService } from './po-page-slide.service';
   providers: [],
   animations: [
     trigger('fade', [
-      transition(':enter', [style({ opacity: 0 }), group([animate('150ms', style({ opacity: 1 })), query('@shift', animateChild())])]),
-      transition(':leave', group([query('@shift', animateChild()), animate('150ms', style({ opacity: 0 }))]))
+      transition(':enter', [style({ opacity: 0 }), group([animate('150ms', style({ opacity: 1 })), query('@slide', animateChild())])]),
+      transition(':leave', group([query('@slide', animateChild()), animate('150ms', style({ opacity: 0 }))]))
     ]),
     trigger('slide', [
-      transition('void => left', [style({ transform: 'translateX(-50px)' }), animate('300ms ease-out', style({ transform: 'none' }))]),
-      transition('left => void', [animate('300ms', style({ transform: 'translateX(-50px)' }))]),
-      transition('void => right', [style({ transform: 'translateX(50px)' }), animate('300ms ease-out', style({ transform: 'none' }))]),
-      transition('right => void', [animate('300ms', style({ transform: 'translateX(50px)' }))])
+      transition(':enter', [style({ transform: 'translateX(50px)' }), animate('300ms ease-out', style({ transform: 'none' }))]),
+      transition(':leave', [animate('300ms', style({ transform: 'translateX(50px)' }))])
     ])
   ]
 })
