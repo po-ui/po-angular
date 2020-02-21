@@ -1,4 +1,5 @@
 import { PoBreadcrumb } from '@portinari/portinari-ui';
+
 import { PoPageDynamicTableField } from './po-page-dynamic-table-field.interface';
 import { PoPageDynamicTableActions } from './po-page-dynamic-table-actions.interface';
 
@@ -20,7 +21,6 @@ export interface PoPageDynamicTableOptions {
 
   /**
    * Ações que o usuário poderá executar na página através de botões.
-   *
    */
   actions?: PoPageDynamicTableActions;
 
