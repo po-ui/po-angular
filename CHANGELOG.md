@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.27.0](https://github.com/portinariui/portinari-angular/compare/v1.26.0...v1.27.0) (2020-02-21)
+
+
+### Bug Fixes
+
+* **page-dynamic-search:** altera nome de interface `PoPageDynamicOptions` para `PoPageDynamicSearchOptions` ([263fdae](https://github.com/portinariui/portinari-angular/commit/263fdae))
+
+
+### Features
+
+* **page-dynamic-table:** adiciona a propriedade `serviceMetadataApi` ([b27501a](https://github.com/portinariui/portinari-angular/commit/b27501a))
+* **page-dynamic-table:** adiciona a propriedade `p-load` ([1f5cfc4](https://github.com/portinariui/portinari-angular/commit/1f5cfc4))
+
+
+
 ## [1.26.0](https://github.com/portinariui/portinari-angular/compare/v1.25.0...v1.26.0) (2020-02-14)
 
 
