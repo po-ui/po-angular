@@ -1,0 +1,40 @@
+import { PoBreadcrumb } from '@portinari/portinari-ui';
+
+import { PoPageDynamicDetailActions } from './po-page-dynamic-detail-actions.interface';
+import { PoPageDynamicDetailField } from './po-page-dynamic-detail-field.interface';
+
+/**
+ * @usedBy PoPageDynamicDetailComponent
+ *
+ * @description
+ *
+ * Interface para as propriedades de uma página dinâmica.
+ */
+export interface PoPageDynamicDetailOptions {
+
+  /**
+   * Lista dos campos usados na tabela e busca avançada.
+   *
+   * Caso precise alterar um field que já exista deve ser passado o atributo `property` com o mesmo conteúdo do original.
+   */
+  fields?: Array<PoPageDynamicDetailField>;
+
+  /**
+   * Ações que o usuário poderá executar na página através de botões.
+   */
+  actions?: PoPageDynamicDetailActions;
+
+  /**
+   * Objeto com propriedades do breadcrumb.
+   *
+   * Caso esse atributo seja utilizado ele sempre irá substituir o original.
+   */
+  breadcrumb?: PoBreadcrumb;
+
+  /**
+   * Título da página.
+   *
+   * Caso esse atributo seja utilizado ele sempre irá substituir o original.
+   */
+  title?: string;
+}
