@@ -1,5 +1,6 @@
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+
 import { Subscription, Observable, EMPTY, throwError, concat } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -99,7 +100,7 @@ export const poPageDynamicTableLiteralsDefault = {
  * }
  * ```
  *
- * Para carregar com um recurso já existente, deve-se ser incluído um parâmetro na rota chamado `id`:
+ * Para carregar com um recurso já existente, deve ser incluído um parâmetro na rota chamado `id`:
  *
  * ```
  * {

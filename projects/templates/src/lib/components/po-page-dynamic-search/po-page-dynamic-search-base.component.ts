@@ -1,52 +1,47 @@
-import { EventEmitter, Input, Output } from "@angular/core";
+import { EventEmitter, Input, Output } from '@angular/core';
 
-import {
-  PoBreadcrumb,
-  PoDynamicFormField,
-  PoLanguageService,
-  PoPageAction
-} from "@portinari/portinari-ui";
+import { PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } from '@portinari/portinari-ui';
 
-import { poLocaleDefault } from "../../utils/util";
+import { poLocaleDefault } from '../../utils/util';
 
-import { PoPageDynamicSearchLiterals } from "./po-page-dynamic-search-literals.interface";
-import { poAdvancedFiltersLiteralsDefault } from "./po-advanced-filter/po-advanced-filter-base.component";
-import { PoAdvancedFilterLiterals } from "./po-advanced-filter/po-advanced-filter-literals.interface";
-import { PoPageDynamicSearchOptions } from "./po-page-dynamic-search-options.interface";
+import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
+import { poAdvancedFiltersLiteralsDefault } from './po-advanced-filter/po-advanced-filter-base.component';
+import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
+import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
 
 export const poPageDynamicSearchLiteralsDefault = {
-  en: <PoPageDynamicSearchLiterals>{
-    disclaimerGroupTitle: "Displaying results filtered by:",
+  en: <PoPageDynamicSearchLiterals> {
+    disclaimerGroupTitle: 'Displaying results filtered by:',
     filterTitle: poAdvancedFiltersLiteralsDefault.en.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.en.cancelLabel,
     filterConfirmLabel: poAdvancedFiltersLiteralsDefault.en.confirmLabel,
-    quickSearchLabel: "Quick search:",
-    searchPlaceholder: "Search"
+    quickSearchLabel: 'Quick search:',
+    searchPlaceholder: 'Search'
   },
-  es: <PoPageDynamicSearchLiterals>{
-    disclaimerGroupTitle: "Presentando resultados filtrados por:",
+  es: <PoPageDynamicSearchLiterals> {
+    disclaimerGroupTitle: 'Presentando resultados filtrados por:',
     filterTitle: poAdvancedFiltersLiteralsDefault.es.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.es.cancelLabel,
     filterConfirmLabel: poAdvancedFiltersLiteralsDefault.es.confirmLabel,
-    quickSearchLabel: "Búsqueda rápida:",
-    searchPlaceholder: "Buscar"
+    quickSearchLabel: 'Búsqueda rápida:',
+    searchPlaceholder: 'Buscar',
   },
-  pt: <PoPageDynamicSearchLiterals>{
-    disclaimerGroupTitle: "Apresentando resultados filtrados por:",
+  pt: <PoPageDynamicSearchLiterals> {
+    disclaimerGroupTitle: 'Apresentando resultados filtrados por:',
     filterTitle: poAdvancedFiltersLiteralsDefault.pt.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.pt.cancelLabel,
     filterConfirmLabel: poAdvancedFiltersLiteralsDefault.pt.confirmLabel,
-    quickSearchLabel: "Pesquisa rápida:",
-    searchPlaceholder: "Pesquisar"
+    quickSearchLabel: 'Pesquisa rápida:',
+    searchPlaceholder: 'Pesquisar'
   },
-  ru: <PoPageDynamicSearchLiterals>{
-    disclaimerGroupTitle: "Отображение результатов, отфильтрованных по:",
+  ru: <PoPageDynamicSearchLiterals> {
+    disclaimerGroupTitle: 'Отображение результатов, отфильтрованных по:',
     filterTitle: poAdvancedFiltersLiteralsDefault.ru.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.ru.cancelLabel,
     filterConfirmLabel: poAdvancedFiltersLiteralsDefault.ru.confirmLabel,
-    quickSearchLabel: "Быстрый поиск:",
-    searchPlaceholder: "исследование"
-  }
+    quickSearchLabel: 'Быстрый поиск:',
+    searchPlaceholder: 'исследование'
+  },
 };
 
 /**
@@ -56,6 +51,7 @@ export const poPageDynamicSearchLiteralsDefault = {
  * e exiba as informações.
  */
 export class PoPageDynamicSearchBaseComponent {
+
   private _filters: Array<PoDynamicFormField> = [];
   private _literals: PoPageDynamicSearchLiterals;
 
@@ -64,10 +60,10 @@ export class PoPageDynamicSearchBaseComponent {
   private language: string;
 
   /** Nesta propriedade deve ser definido um array de objetos que implementam a interface `PoPageAction`. */
-  @Input("p-actions") actions?: Array<PoPageAction> = [];
+  @Input('p-actions') actions?: Array<PoPageAction> = [];
 
   /** Objeto com propriedades do breadcrumb. */
-  @Input("p-breadcrumb") breadcrumb?: PoBreadcrumb = { items: [] };
+  @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
 
   /**
    * @optional
@@ -107,7 +103,7 @@ export class PoPageDynamicSearchBaseComponent {
    *
    * > O valor padrão será traduzido de acordo com o idioma configurado no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
-  @Input("p-literals") set literals(value: PoPageDynamicSearchLiterals) {
+  @Input('p-literals') set literals(value: PoPageDynamicSearchLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poPageDynamicSearchLiteralsDefault[poLocaleDefault],
@@ -132,7 +128,7 @@ export class PoPageDynamicSearchBaseComponent {
    *
    * Lista dos campos usados na busca avançada. Caso o mesmo não seja passado a busca avançada não será exibida.
    */
-  @Input("p-filters") set filters(filters: Array<PoDynamicFormField>) {
+  @Input('p-filters') set filters(filters: Array<PoDynamicFormField>) {
     this._filters = Array.isArray(filters) ? [...filters] : [];
   }
 
@@ -147,13 +143,13 @@ export class PoPageDynamicSearchBaseComponent {
    * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
    * - `function`: Método que será executado.
    *
-   * O retorno desta função deve ser do tipo `PoPageDynamicOptions`,
+   * O retorno desta função deve ser do tipo `PoPageDynamicSearchOptions`,
    * onde o usuário poderá customizar novos filtros, breadcrumb, title e actions
    *
    * Por exemplo:
    *
    * ```
-   * getPageOptions(): PoPageDynamicOptions {
+   * getPageOptions(): PoPageDynamicSearchOptions {
    * return {
    *   actions: [
    *     { label: 'Find on Google' },
@@ -170,10 +166,10 @@ export class PoPageDynamicSearchBaseComponent {
    *  [p-load]="onLoadOptions.bind(this)"
    * ```
    */
-  @Input("p-load") onLoad: string | (() => PoPageDynamicOptions);
+  @Input('p-load') onLoad: string | (() => PoPageDynamicSearchOptions);
 
   /** Título da página. */
-  @Input("p-title") title: string;
+  @Input('p-title') title: string;
 
   /**
    * @description
@@ -182,19 +178,13 @@ export class PoPageDynamicSearchBaseComponent {
    *
    * > Campos não preenchidos não irão aparecer no objeto passado por parâmetro.
    */
-  @Output("p-advanced-search") advancedSearch?: EventEmitter<
-    any
-  > = new EventEmitter();
+  @Output('p-advanced-search') advancedSearch?: EventEmitter<any> = new EventEmitter();
 
   /** Evento disparado ao remover um ou todos os disclaimers pelo usuário. */
-  @Output("p-change-disclaimers") changeDisclaimers?: EventEmitter<
-    any
-  > = new EventEmitter();
+  @Output('p-change-disclaimers') changeDisclaimers?: EventEmitter<any> = new EventEmitter();
 
   /** Evento disparado ao realizar uma busca pelo campo de pesquisa rápida, o mesmo será chamado repassando o valor digitado. */
-  @Output("p-quick-search") quickSearch?: EventEmitter<
-    string
-  > = new EventEmitter();
+  @Output('p-quick-search') quickSearch?: EventEmitter<string> = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

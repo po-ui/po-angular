@@ -8,11 +8,11 @@ import { of } from 'rxjs';
 
 import { PoDialogModule, PoNotificationModule, PoTableColumnSort, PoTableColumnSortType } from '@portinari/portinari-ui';
 
-import * as utilsFunctions from '../../../utils/util';
-import { configureTestSuite, expectPropertiesValues } from '../../../util-test/util-expect.spec';
-import { PoPageDynamicDetailComponent } from '../../po-page-dynamic-detail/po-page-dynamic-detail.component';
+import * as utilsFunctions from '../../utils/util';
+import { configureTestSuite, expectPropertiesValues } from '../../util-test/util-expect.spec';
+import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
-import { PoPageDynamicTableComponent } from '../po-page-dynamic-table.component';
+import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
 
 describe('PoPageDynamicTableComponent:', () => {
   let component: PoPageDynamicTableComponent;
