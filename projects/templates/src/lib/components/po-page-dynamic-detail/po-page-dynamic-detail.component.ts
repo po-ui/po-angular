@@ -1,13 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Route, Router, ActivatedRoute } from '@angular/router';
 
-import * as util from '../../utils/util';
+import { Subscription, concat, EMPTY, Observable, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 
+import * as util from '../../utils/util';
 import { PoBreadcrumb, PoPageAction, PoDialogService, PoDialogConfirmOptions, PoNotificationService } from '@portinari/portinari-ui';
 
-import { PoPageDynamicDetailActions } from './po-page-dynamic-detail-actions.interface';
-import { PoPageDynamicDetailField } from './po-page-dynamic-detail-field.interface';
+import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
+import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
+import { PoPageDynamicDetailOptions } from './interfaces/po-page-dynamic-detail-options.interface';
+import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
+import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
+import { PoPageDynamicDetailMetaData } from './interfaces/po-page-dynamic-detail-metadata.interface';
+
+type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicDetailOptions);
 
 export const poPageDynamicDetailLiteralsDefault = {
   en: {
@@ -45,6 +53,66 @@ export const poPageDynamicDetailLiteralsDefault = {
  * O `po-page-dynamic-detail` é uma página que serve para exibir registros em detalhes,
  * o mesmo também suporta metadados conforme especificado na documentação.
  *
+ *  *
+ * ### Utilização via rota
+ *
+ * Ao utilizar as rotas para carregar o template, o `page-dynamic-detail` disponibiliza propriedades para
+ * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
+ *
+ * ```
+ * {
+ *   path: 'people',
+ *   component: PoPageDynamicDetailComponent,
+ *   data: {
+ *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados
+ *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados
+ *   }
+ * }
+ * ```
+ *
+ * Para carregar com um recurso já existente, deve ser incluído um parâmetro na rota chamado `id`:
+ *
+ * ```
+ * {
+ *   path: 'people/:id',
+ *   component: PoPageDynamicDetailComponent,
+ *   data: {
+ *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados
+ *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados
+ *   }
+ * }
+ * ```
+ *
+ * A requisição dos metadados é feita na inicialização do template para buscar os metadados da página passando o
+ * tipo do metadado esperado e a versão cacheada pelo browser.
+ *
+ * O formato esperado na resposta da requisição está especificado na interface
+ * [PoPageDynamicDetailMetadata](/documentation/po-page-dynamic-detail#po-page-dynamic-detail-metadata). Por exemplo:
+ *
+ * ```
+ *  {
+ *   version: 1,
+ *   title: 'Person Detail',
+ *   fields: [
+ *     { property: 'id', key: true, disabled: true },
+ *     { property: 'status' },
+ *     { property: 'name' },
+ *     { property: 'nickname' },
+ *     { property: 'birthdate', label: 'Birth date' },
+ *     { property: 'genre' },
+ *     { property: 'city' },
+ *     { property: 'country' }
+ *   ]
+ * }
+ * ```
+ *
+ * > Caso o endpoint dos metadados não seja especificado, será feito uma requisição utilizando o `serviceApi` da seguinte forma:
+ * ```
+ * GET {end-point}/metadata?type=list&version={version}
+ * ```
+ *
  * @example
  *
  * <example name="po-page-dynamic-detail-basic" title="Portinari Page Dynamic Detail Basic">
@@ -55,9 +123,11 @@ export const poPageDynamicDetailLiteralsDefault = {
 @Component({
   selector: 'po-page-dynamic-detail',
   templateUrl: './po-page-dynamic-detail.component.html',
-  providers: [ PoPageDynamicService ]
+  providers: [PoPageDynamicService]
 })
-export class PoPageDynamicDetailComponent implements OnInit {
+export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
+
+  private subscriptions: Array<Subscription> = [];
 
   private _actions: PoPageDynamicDetailActions = {};
   private _autoRouter: boolean = false;
@@ -83,6 +153,10 @@ export class PoPageDynamicDetailComponent implements OnInit {
     this._actions = this.isObject(value) ? value : {};
 
     this._pageActions = this.getPageActions(this._actions);
+  }
+
+  get actions() {
+    return {...this._actions};
   }
 
   /**
@@ -121,6 +195,37 @@ export class PoPageDynamicDetailComponent implements OnInit {
   get fields(): Array<PoPageDynamicDetailField> {
     return this._fields;
   }
+
+  /**
+   * Função ou serviço que será executado na inicialização do componente.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
+   * - `function`: Método que será executado.
+   *
+   * O retorno desta função deve ser do tipo `PoPageDynamicDetailOptions`,
+   * onde o usuário poderá customizar novos campos, breadcrumb, title e actions
+   *
+   * Por exemplo:
+   *
+   * ```
+   * getPageOptions(): PoPageDynamicDetailOptions {
+   * return {
+   *   actions:
+   *     { new: 'new', edit: 'edit/:id', remove: true },
+   *   fields: [
+   *     { property: 'idCard', gridColumns: 6 }
+   *   ]
+   * };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-load]="onLoadOptions.bind(this)"
+   * ```
+   */
+  @Input('p-load') onLoad: string | (() => PoPageDynamicDetailOptions);
 
   /** Título da página. */
   @Input('p-title') title: string;
@@ -166,22 +271,19 @@ export class PoPageDynamicDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private poNotification: PoNotificationService,
     private poDialogService: PoDialogService,
-    private poPageDynamicService: PoPageDynamicService) {
+    private poPageDynamicService: PoPageDynamicService,
+    private poPageCustomizationService: PoPageCustomizationService) {
   }
 
   ngOnInit(): void {
-    const paramId = this.activatedRoute.snapshot.params['id'];
+    this.loadDataFromAPI();
+  }
 
-    if (this.activatedRoute.snapshot.data.serviceApi) {
-      this.serviceApi = this.activatedRoute.snapshot.data.serviceApi;
-
-      this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi });
-
-      this.loadMetadata(paramId);
-    } else {
-      this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi });
-
-      this.loadData(paramId);
+  ngOnDestroy() {
+    if (this.subscriptions) {
+      this.subscriptions.forEach(subscription => {
+        subscription.unsubscribe();
+      });
     }
   }
 
@@ -213,34 +315,35 @@ export class PoPageDynamicDetailComponent implements OnInit {
     return util.valuesFromObject(keys).join('|');
   }
 
-  private goBack(/*path*/) {
+  private goBack() {
     window.history.back();
-    // if (path) {
-    //   this.navigateTo({ path, component: PoPageDynamicEditComponent });
-    // } else {
-    //   window.history.back();
-    // }
   }
 
   private loadData(id) {
-    this.poPageDynamicService.getResource(id).toPromise().then(response => {
-      this.model = response;
-    }).catch(() => {
-      this.model = undefined;
-      this.actions = undefined;
-    });
+    return this.poPageDynamicService.getResource(id).pipe(
+      tap(response => this.model = response),
+      catchError(error => {
+        this.model = undefined;
+        this.actions = undefined;
+        return throwError(error);
+      })
+    );
   }
 
-  private loadMetadata(id) {
-    this.poPageDynamicService.getMetadata<any>('detail').toPromise().then(response => {
-      this.autoRouter = response.autoRouter;
-      this.actions = response.actions || {};
-      this.breadcrumb = response.breadcrumb || { items : [] };
-      this.fields = response.fields || [];
-      this.title = response.title;
+  private getMetadata(serviceApi: string): Observable<PoPageDynamicDetailMetaData> {
+    if (serviceApi) {
+      return this.poPageDynamicService.getMetadata<PoPageDynamicDetailMetaData>('detail').pipe(
+        tap(response => {
+          this.autoRouter = response.autoRouter || this.autoRouter;
+          this.actions = response.actions || this.actions;
+          this.breadcrumb = response.breadcrumb || this.breadcrumb;
+          this.fields = response.fields || this.fields;
+          this.title = response.title || this.title;
+        })
+      );
+    }
 
-      this.loadData(id);
-    });
+    return EMPTY;
   }
 
   // @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
@@ -261,19 +364,15 @@ export class PoPageDynamicDetailComponent implements OnInit {
 
   private openEdit(path) {
     const url = this.resolveUrl(this.model, path);
-
-    // this.navigateTo({ path, url, component: PoPageDynamicEditComponent });
     this.navigateTo({ path, url });
   }
 
   private remove(path) {
     const uniqueKey = this.formatUniqueKey(this.model);
 
-    this.poPageDynamicService.deleteResource(uniqueKey).toPromise().then(() => {
+    this.poPageDynamicService.deleteResource(uniqueKey).subscribe(() => {
       this.poNotification.success(this.literals.removeNotificationSuccess);
-
       this.navigateTo({ path: path });
-      // this.navigateTo({ path: path, component: PoPageDynamicTableComponent });
     });
   }
 
@@ -311,6 +410,59 @@ export class PoPageDynamicDetailComponent implements OnInit {
 
   private isObject(value: any): boolean {
     return !!value && typeof value === 'object' && !Array.isArray(value);
+  }
+
+  private loadDataFromAPI() {
+    const { serviceApi, serviceMetadataApi, serviceLoadApi } = this.activatedRoute.snapshot.data;
+    const { id } = this.activatedRoute.snapshot.params;
+    const onLoad = serviceLoadApi || this.onLoad;
+    this.serviceApi = serviceApi || this.serviceApi;
+    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
+    const metadata$ = this.getMetadata(serviceApi);
+    const data$ = this.loadData(id);
+    const customOption$ = this.loadOptionsOnInitialize(onLoad);
+    this.subscriptions.push(concat(metadata$, data$, customOption$).subscribe());
+  }
+
+  private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
+
+    if (onLoad) {
+      return this.getPoDynamicPageOptions(onLoad).pipe(
+        tap(responsePoOption => this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)));
+    }
+
+    return EMPTY;
+  }
+
+  private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicDetailOptions> {
+    const originalOption: PoPageDynamicDetailOptions = {
+      fields: this.fields,
+      actions: this.actions,
+      breadcrumb: this.breadcrumb,
+      title: this.title
+    };
+
+    const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicDetailOptions> = {
+      schema: [
+        {
+          nameProp: 'fields',
+          merge: true,
+          keyForMerge: 'property'
+        },
+        {
+          nameProp: 'actions',
+          merge: true
+        },
+        {
+          nameProp: 'breadcrumb'
+        },
+        {
+          nameProp: 'title'
+        }
+      ]
+    };
+
+    return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
   }
 
 }
