@@ -1,0 +1,16 @@
+<ul class="timeline {{ timelineSize }}">
+  <li *ngFor="let card of cards" class="{{ card.side }}">
+    <div class="timeline-badge {{ card.color }}">
+      <i class=" {{ card.icon }} "></i>
+    </div>
+    <div class="timeline-panel" (click)="cardSelect(card)"
+      [ngStyle]="{'cursor' : clickable ? 'pointer' : 'default' }">
+      <div class="timeline-heading">
+        <h4 class="po-font-text-large-bold">{{ card.title }}</h4>
+      </div>
+      <div class="timeline-body po-font-text-small">
+        <p>{{ card.description }}</p>
+      </div>
+    </div>
+  </li>
+</ul>

@@ -34,6 +34,7 @@ import { PoTagModule } from './po-tag/po-tag.module';
 import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
 import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
+import { PoTimelineModule } from './po-timeline/po-timeline.module';
 
 @NgModule({
   declarations: [],
@@ -71,7 +72,8 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoTagModule,
     PoToolbarModule,
     PoTreeViewModule,
-    PoWidgetModule
+    PoWidgetModule,
+    PoTimelineModule
   ],
   exports: [
     PoAccordionModule,
@@ -107,7 +109,8 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoTagModule,
     PoToolbarModule,
     PoTreeViewModule,
-    PoWidgetModule
+    PoWidgetModule,
+    PoTimelineModule
   ],
   providers: [],
   bootstrap: []

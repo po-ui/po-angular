@@ -1,0 +1,54 @@
+<div class="po-row po-mt-1">
+    <div class="po-lg-{{col}}">
+        <po-timeline 
+            [p-cards]="timelineList" 
+            [p-size]="size" 
+            [p-clickable]="clickable == 'true'"
+            (p-click)="onClickCard($event)">
+        </po-timeline>
+    </div>
+</div>
+<hr>
+<form #f="ngForm">
+    <div class="po-row">
+        <div class="po-md-12">
+            <po-input
+                p-label="Column size"
+                [(ngModel)]="col"
+                name="string">
+            </po-input>
+        </div>
+        <div class="po-md-4">
+            <div class="po-row">
+                <po-checkbox-group 
+                class="po-md-12" 
+                name="properties" 
+                [(ngModel)]="clickable" 
+                p-label="Properties"
+                [p-options]="propertiesOptions">                
+                </po-checkbox-group>
+            </div>
+        </div>
+        <div class="po-md-8">        
+            <div class="po-row">
+                <po-radio-group 
+                    class="po-md-12" 
+                    name="size"
+                    [(ngModel)]="size" 
+                    p-columns="3"
+                    p-help="Select a size for the timeline, ideal size for the columns respectively (< 6, 6, >10)"
+                    p-label="Size" 
+                    [p-options]="sizeOptions">
+                </po-radio-group>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="po-row">
+        <po-button
+          class="po-md-3"
+          p-label="Sample Restore"
+          (p-click)="restore()">
+        </po-button>
+      </div>
+</form>
