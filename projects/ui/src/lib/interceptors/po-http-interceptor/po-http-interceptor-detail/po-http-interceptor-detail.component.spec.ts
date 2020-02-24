@@ -44,7 +44,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
 
       component.detail = details;
 
-      expect(component.title).toBe('Details (3)');
+      expect(component.title).toBe(component.literals.details + ' (3)');
     });
 
     it('details: shouldn`t add details if it is undefined', () => {
