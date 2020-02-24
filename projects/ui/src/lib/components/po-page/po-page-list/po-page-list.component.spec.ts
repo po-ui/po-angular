@@ -6,6 +6,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { changeBrowserInnerWidth, configureTestSuite } from '../../../util-test/util-expect.spec';
 
+import * as UtilsFunction from '../../../utils/util';
+
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoButtonModule } from '../../po-button/po-button.module';
 import { PoDisclaimerGroupModule } from './../../po-disclaimer-group/po-disclaimer-group.module';
@@ -481,6 +483,16 @@ describe('PoPageListComponent - Desktop:', () => {
   });
 
   describe('Methods:', () => {
+
+    it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {
+      const url = 'http://portinari.io';
+
+      spyOn(UtilsFunction, 'openExternalLink');
+
+      component.callAction({ label: 'Portinari', url });
+
+      expect(UtilsFunction.openExternalLink).toHaveBeenCalledWith(url);
+    });
 
     it('actionIsDisabled: should return boolean value', () => {
       const action = { disabled: true };
