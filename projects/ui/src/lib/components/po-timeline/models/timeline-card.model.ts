@@ -2,7 +2,7 @@
  * @description Cards exibidos na timeline
  */
 export class TimeLineCard {
-    
+
     /**
      * @description Título do Card
      */

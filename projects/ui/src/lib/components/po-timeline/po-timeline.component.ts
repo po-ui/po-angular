@@ -12,11 +12,11 @@ const PO_TIMELINE_SIZE_DEFAULT = 'lg';
 })
 /**
  * @description
- * 
+ *
  * Componente utilizado para criar uma linha do tempo de algum acontencimento especifico.
- * 
+ *
  * O `po-timeline` conta com alguns recursos como controle de tamanho, e seleção dos paineis/acontecimentos.
- * 
+ *
  * @example
  *
  * <example name="po-timeline-basic" title="Portinari Timeline Basic">
@@ -38,34 +38,34 @@ export class PoTimelineComponent {
    * @description
    * Propriedade que receberá os dados dos cards
    */
-  @Input('p-cards') cards: TimeLineCard[] = [];
+  @Input('p-cards') cards: Array<TimeLineCard> = [];
 
   /**
    * @optional
-   * 
-   * @description 
+   *
+   * @description
    * Controla o tamanho do `po-timeline`.
    * #### Tamanhos disponíveis:
    * - `sm`, recomendado para espaços menores que 50% da tela.
    * - `md`, recomendado para utilizar com 50% da tela.
    * - `lg`, recomendado para utilizar com 100% da tela.
-   * 
+   *
    * @default `lg`
    */
   @Input('p-size') set timelineSize(size: string) {
     this._timeLineSize = PO_TIMELINE_SIZES.includes(size) ? size : PO_TIMELINE_SIZE_DEFAULT;
-  };
+  }
   get timelineSize(): string {
     return this._timeLineSize;
   }
 
   /**
    * @optional
-   * 
-   * @description 
+   *
+   * @description
    * Utilizado para controlar se o card pode ser clicado ou não.
    * > Quando a propriedade estiver habilitada, ao clicar em um card, um evento irá ser emitido com seus dados.
-   * 
+   *
    * @default `false`
    */
   @Input('p-clickable') set clickable(value: boolean) {
@@ -76,7 +76,7 @@ export class PoTimelineComponent {
   }
 
   /**
-   * @description 
+   * @description
    * Evento usado para emitir um click no card
    */
   @Output('p-click') onClickCard: EventEmitter<any> = new EventEmitter<any>();

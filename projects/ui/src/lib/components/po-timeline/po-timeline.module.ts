@@ -4,7 +4,7 @@ import { PoTimelineComponent } from './po-timeline.component';
 
 const COMPONENTS = [
     PoTimelineComponent
-]
+];
 
 /**
  * @description
