@@ -2100,6 +2100,18 @@ describe('PoTableComponent:', () => {
       expect(component.columnCountForMasterDetail).toBe(countColumns);
     });
 
+    it('columnCount: should return `1` if haven`t headers', () => {
+      const expectedValue = 1;
+
+      component.items = [];
+      component.columns = [];
+      component.selectable = false;
+      component.hideDetail = false;
+      component.actions = [];
+
+      expect(component.columnCount).toBe(expectedValue);
+    });
+
     it('columnCount: should count the number columns of table', () => {
       component.columns = columnsWithDetail;
       component.selectable = true;

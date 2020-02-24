@@ -123,11 +123,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   get columnCount() {
-    return (this.mainColumns.length +
+    const columnCount = (this.mainColumns.length +
       (this.actions.length > 0 ? 1 : 0) +
       (this.selectable ? 1 : 0) +
       (!this.hideDetail && this.columnMasterDetail !== undefined ? 1 : 0)
     );
+
+    return columnCount || 1;
   }
 
   get columnCountForMasterDetail() {
