@@ -158,6 +158,9 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
       },
       es: {
         advancedSearch: 'Búsqueda avanzada'
+      },
+      ru: {
+        advancedSearch: 'полный поиск'
       }
     };
 

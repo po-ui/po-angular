@@ -550,6 +550,12 @@ describe('PoPageListComponent - Desktop:', () => {
         expect(component['initializeFixedLiterals']()).toBe('Búsqueda avanzada');
       });
 
+      it('should return the advanced filter label by `ru` language.', () => {
+        component['language'] = 'ru';
+
+        expect(component['initializeFixedLiterals']()).toBe('полный поиск');
+      });
+
     });
 
   });
