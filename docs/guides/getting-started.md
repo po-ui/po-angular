@@ -3,21 +3,21 @@
 
 ### Pré-requisitos
 
-Para começar a utilizar o **Po** (Portinari UI) tenha em mãos o `Node.js` instalado (deve-se utilizar a versão 10.x ou acima) e o seu gerenciador de pacote favorito atualizado. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **Po** (Portinari UI) é pré-requisito ter o `Node.js` instalado (versão 10.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
 npm i -g @angular/cli@8.0.0
 ```
 
-Caso prefira o yarn:
+Caso prefira instalar com o yarn:
 ```
 yarn global add @angular/cli@8.0.0
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
 
-> Caso você já tenha um projeto criado e deseja apenas incluir o **Po**, pule esta etapa e vá para o **Passo 1.1**.
+> Caso você já tenha um projeto criado e deseje apenas incluir o **Po**, pule esta etapa e vá para o **Passo 1.1**.
 
 O [Angular CLI](https://cli.angular.io/) se encarrega de construir toda estrutura inicial do projeto. Para isso, execute o seguinte comando:
 
@@ -58,7 +58,7 @@ Instalando com npm:
 npm install
 ```
 
-Caso prefira o yarn:
+Caso prefira instalar com o yarn:
 ```
 yarn install
 ```
@@ -102,7 +102,7 @@ Instalando com npm:
 npm i --save @portinari/portinari-templates
 ```
 
-Caso prefira o yarn:
+Caso prefira instalar com o yarn:
 ```
 yarn add @portinari/portinari-templates
 ```
