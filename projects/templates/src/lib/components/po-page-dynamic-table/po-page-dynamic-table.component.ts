@@ -486,7 +486,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const { serviceApi, serviceMetadataApi } = this.activatedRoute.snapshot.data;
     this.serviceApi = serviceApi || this.serviceApi;
     this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
-    const metadata$ = this.getMetadata(serviceApi);
+    const metadata$ = this.getMetadata(this.serviceApi);
     const data$ = this.loadData();
     const customOption$ = this.loadOptionsOnInitialize(this.onLoad);
     this.subscriptions.push(concat(metadata$, data$, customOption$).subscribe());
