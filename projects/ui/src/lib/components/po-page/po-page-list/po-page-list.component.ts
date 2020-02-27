@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, isTypeof } from '../../../utils/util';
+import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoPageAction } from '../po-page-action.interface';
@@ -85,7 +85,7 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
 
   callAction(item: PoPageAction): void {
     if (item.url) {
-      this.router.navigate([item.url]);
+      isExternalLink(item.url) ? openExternalLink(item.url) : this.router.navigate([item.url]);
     } else if (item.action) {
       callFunction(item.action, this.parentRef);
     }
@@ -158,6 +158,9 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
       },
       es: {
         advancedSearch: 'Búsqueda avanzada'
+      },
+      ru: {
+        advancedSearch: 'полный поиск'
       }
     };
 

@@ -31,7 +31,9 @@ export class SamplePoPageDefaultDashboardComponent {
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Share', action: this.modalOpen, icon: 'po-icon-share' },
-    { label: 'Disable notification', action: this.disableNotification, disabled: () => this.isSubscribed },
+    { label: 'GitHub', url: 'https://github.com/portinariui/portinari-angular' },
+    { label: 'Components', url: '/documentation' },
+    { label: 'Disable notification', action: this.disableNotification, disabled: () => this.isSubscribed }
   ];
 
   public readonly breadcrumb: PoBreadcrumb = {
