@@ -2,7 +2,7 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
 import { Subscription, Observable, EMPTY, throwError, concat } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 
 import {
   PoDialogConfirmOptions,
@@ -89,13 +89,17 @@ export const poPageDynamicTableLiteralsDefault = {
  * Ao utilizar as rotas para carregar o template, o `page-dynamic-table` disponibiliza propriedades para
  * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
  *
+ * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
+ * e depois irá buscar da rota definida na propriedade serviceLoadApi
+ *
  * ```
  * {
  *   path: 'people',
  *   component: PoPageDynamicTableComponent,
  *   data: {
  *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
- *     serviceMetadataApi: 'http://localhost:3000/v1/metadata' // endpoint dos metadados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados utilizando o método HTTP Get
+ *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
  *   }
  * }
  * ```
@@ -108,7 +112,8 @@ export const poPageDynamicTableLiteralsDefault = {
  *   component: PoPageDynamicTableComponent,
  *   data: {
  *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
- *     serviceMetadataApi: 'http://localhost:3000/v1/metadata' // endpoint dos metadados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados
+ *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados
  *   }
  * }
  * ```
@@ -347,20 +352,21 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    );
   }
 
-  private getMetadata(serviceApi: string): Observable<PoPageDynamicTableMetaData> {
-    if (serviceApi) {
+  private getMetadata(serviceApiFromRoute: string, onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicTableMetaData> {
+    if (serviceApiFromRoute) {
       return this.poPageDynamicService.getMetadata<PoPageDynamicTableMetaData>().pipe(
-       tap(response => {
-         this.autoRouter = response.autoRouter || this.autoRouter;
-         this.actions = response.actions || this.actions;
-         this.breadcrumb = response.breadcrumb || this.breadcrumb;
-         this.fields = response.fields || this.fields;
-         this.title = response.title || this.title;
-       })
-     );
+        tap(response => {
+          this.autoRouter = response.autoRouter || this.autoRouter;
+          this.actions = response.actions || this.actions;
+          this.breadcrumb = response.breadcrumb || this.breadcrumb;
+          this.fields = response.fields || this.fields;
+          this.title = response.title || this.title;
+        }),
+        switchMap(() => this.loadOptionsOnInitialize(onLoad) )
+      );
     }
 
-    return EMPTY;
+    return this.loadOptionsOnInitialize(onLoad);
   }
 
   // @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
@@ -483,13 +489,17 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private loadDataFromAPI() {
-    const { serviceApi, serviceMetadataApi } = this.activatedRoute.snapshot.data;
-    this.serviceApi = serviceApi || this.serviceApi;
+    const { serviceApi: serviceApiFromRoute, serviceMetadataApi, serviceLoadApi } = this.activatedRoute.snapshot.data;
+
+    const onLoad = serviceLoadApi || this.onLoad;
+    this.serviceApi = serviceApiFromRoute || this.serviceApi;
+
     this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
-    const metadata$ = this.getMetadata(serviceApi);
+
+    const metadata$ = this.getMetadata(serviceApiFromRoute, onLoad);
     const data$ = this.loadData();
-    const customOption$ = this.loadOptionsOnInitialize(this.onLoad);
-    this.subscriptions.push(concat(metadata$, data$, customOption$).subscribe());
+
+    this.subscriptions.push(concat(metadata$, data$).subscribe());
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {

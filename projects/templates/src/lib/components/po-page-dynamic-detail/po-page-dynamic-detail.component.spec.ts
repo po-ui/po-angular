@@ -275,7 +275,6 @@ describe('PoPageDynamicDetailComponent:', () => {
           };
 
           spyOn(component, <any>'loadData').and.returnValue(of({}));
-          spyOn(component, <any>'getMetadata').and.returnValue(of({}));
 
           component.ngOnInit();
 
@@ -305,6 +304,12 @@ describe('PoPageDynamicDetailComponent:', () => {
 
       it('should configure properties based on the return of onload route', fakeAsync(() => {
 
+        component.autoRouter = false;
+        component.actions = <any>{};
+        component.breadcrumb = <any>{};
+        component.fields = [];
+        component.title = '';
+
         const activatedRoute: any = {
           snapshot: {
             data: {
@@ -316,28 +321,21 @@ describe('PoPageDynamicDetailComponent:', () => {
           }
         };
 
-        component.breadcrumb = {
+        const metadata = {
+          breadcrumb : {
             items: [
               { label: 'Home' },
               { label: 'Hiring processes' }
             ]
-          };
+          },
+          title: 'Original Title'
+        };
 
-        component.title = 'Original Title';
-
-        const custom = {
-              title:  'New Title',
-              breadcrumb: {
-                items: [
-                  { label:  'Test' },
-                  { label:  'Test2' }
-                ]
-              }
-            };
+        const custom = {title: 'New Title'};
 
         spyOn(component, <any>'loadData').and.returnValue(of({}));
-        spyOn(component, <any>'getMetadata').and.returnValue(of({}));
-        spyOn(component['poPageCustomizationService'], 'getCustomOptions').and.returnValue(of(custom));
+        spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(metadata));
+        spyOn(<any>component['poPageCustomizationService'], 'createObservable').and.returnValue(of(custom));
 
         component['activatedRoute'] = activatedRoute;
 
@@ -348,8 +346,8 @@ describe('PoPageDynamicDetailComponent:', () => {
         expect(component.title).toBe('New Title');
         expect(component.breadcrumb).toEqual({
             items: [
-              { label: 'Test' },
-              { label: 'Test2' }
+              { label: 'Home' },
+              { label: 'Hiring processes' }
             ]
           });
         }));
