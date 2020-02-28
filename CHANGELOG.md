@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.27.1](https://github.com/portinariui/portinari-angular/compare/v1.27.0...v1.27.1) (2020-02-28)
+
+
+### Bug Fixes
+
+* **page-default:** corrige abertura de URL externa nos botões de ações ([879877f](https://github.com/portinariui/portinari-angular/commit/879877f))
+* **page-list:** corrige abertura de URL externa nos botões de ações ([d952c38](https://github.com/portinariui/portinari-angular/commit/d952c38))
+* **page-list:** corrige a literal "Busca Avançada" em russo ([9a8e1fb](https://github.com/portinariui/portinari-angular/commit/9a8e1fb))
+* **table:** corrige erro no console do IE/EDGE ([88f8b7a](https://github.com/portinariui/portinari-angular/commit/88f8b7a))
+
+
+### Documentation
+
+* **getting-started:** melhoria na documentação de primeiros passos ([f5c3120](https://github.com/portinariui/portinari-angular/commit/f5c3120))
+* **readme:** melhoria na documentação dos primeiros passos ([1b7746b](https://github.com/portinariui/portinari-angular/commit/1b7746b))
+
+
+
 ## [1.27.0](https://github.com/portinariui/portinari-angular/compare/v1.26.0...v1.27.0) (2020-02-21)
 
 
