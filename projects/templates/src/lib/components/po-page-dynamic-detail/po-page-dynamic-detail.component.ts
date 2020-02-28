@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Route, Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription, concat, EMPTY, Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, switchMap } from 'rxjs/operators';
 
 import * as util from '../../utils/util';
 import { PoBreadcrumb, PoPageAction, PoDialogService, PoDialogConfirmOptions, PoNotificationService } from '@portinari/portinari-ui';
@@ -53,11 +53,14 @@ export const poPageDynamicDetailLiteralsDefault = {
  * O `po-page-dynamic-detail` é uma página que serve para exibir registros em detalhes,
  * o mesmo também suporta metadados conforme especificado na documentação.
  *
- *  *
+ *
  * ### Utilização via rota
  *
  * Ao utilizar as rotas para carregar o template, o `page-dynamic-detail` disponibiliza propriedades para
  * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
+ *
+ * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
+ * e depois irá buscar da rota definida na propriedade serviceLoadApi
  *
  * ```
  * {
@@ -65,8 +68,8 @@ export const poPageDynamicDetailLiteralsDefault = {
  *   component: PoPageDynamicDetailComponent,
  *   data: {
  *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
- *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados
- *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados utilizando o método HTTP Get
+ *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
  *   }
  * }
  * ```
@@ -330,8 +333,8 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getMetadata(serviceApi: string): Observable<PoPageDynamicDetailMetaData> {
-    if (serviceApi) {
+  private getMetadata(serviceApiFromRoute: string, onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicDetailMetaData> {
+    if (serviceApiFromRoute) {
       return this.poPageDynamicService.getMetadata<PoPageDynamicDetailMetaData>('detail').pipe(
         tap(response => {
           this.autoRouter = response.autoRouter || this.autoRouter;
@@ -339,11 +342,12 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
           this.breadcrumb = response.breadcrumb || this.breadcrumb;
           this.fields = response.fields || this.fields;
           this.title = response.title || this.title;
-        })
+        }),
+        switchMap(() => this.loadOptionsOnInitialize(onLoad) )
       );
     }
 
-    return EMPTY;
+    return this.loadOptionsOnInitialize(onLoad);
   }
 
   // @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
@@ -370,10 +374,10 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   private remove(path) {
     const uniqueKey = this.formatUniqueKey(this.model);
 
-    this.poPageDynamicService.deleteResource(uniqueKey).subscribe(() => {
+    this.subscriptions.push(this.poPageDynamicService.deleteResource(uniqueKey).subscribe(() => {
       this.poNotification.success(this.literals.removeNotificationSuccess);
       this.navigateTo({ path: path });
-    });
+    }));
   }
 
   private resolveUrl(item: any, path: string) {
@@ -413,15 +417,18 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   }
 
   private loadDataFromAPI() {
-    const { serviceApi, serviceMetadataApi, serviceLoadApi } = this.activatedRoute.snapshot.data;
+    const { serviceApi: serviceApiFromRoute, serviceLoadApi } = this.activatedRoute.snapshot.data;
     const { id } = this.activatedRoute.snapshot.params;
+
     const onLoad = serviceLoadApi || this.onLoad;
-    this.serviceApi = serviceApi || this.serviceApi;
-    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
-    const metadata$ = this.getMetadata(serviceApi);
+    this.serviceApi = serviceApiFromRoute || this.serviceApi;
+
+    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi });
+
+    const metadata$ = this.getMetadata(serviceApiFromRoute, onLoad);
     const data$ = this.loadData(id);
-    const customOption$ = this.loadOptionsOnInitialize(onLoad);
-    this.subscriptions.push(concat(metadata$, data$, customOption$).subscribe());
+
+    this.subscriptions.push(concat(metadata$, data$).subscribe());
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {

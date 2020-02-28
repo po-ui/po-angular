@@ -13,14 +13,16 @@ import { PoPageDynamicDetailField } from './po-page-dynamic-detail-field.interfa
 export interface PoPageDynamicDetailOptions {
 
   /**
-   * Lista dos campos usados na tabela e busca avançada.
+   * Lista dos campos usados no formulário de detalhe.
    *
-   * Caso precise alterar um field que já exista deve ser passado o atributo `property` com o mesmo conteúdo do original.
+   * Caso precise alterar um campo que já exista deve ser passado o atributo `property` com o mesmo conteúdo do original.
    */
   fields?: Array<PoPageDynamicDetailField>;
 
   /**
    * Ações que o usuário poderá executar na página através de botões.
+   *
+   * Caso precise alterar uma ação informe a propriedade que deve ser alterada segundo a interface `PoPageDynamicDetailActions`
    */
   actions?: PoPageDynamicDetailActions;
 

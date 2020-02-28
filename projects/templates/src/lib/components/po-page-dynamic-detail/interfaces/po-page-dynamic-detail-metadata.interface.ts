@@ -1,6 +1,6 @@
 import { PoPageDynamicDetailOptions } from './po-page-dynamic-detail-options.interface';
 
-/**./po-page-dynamic-detail-options.interface
+/**
  * @docsExtends PoPageDynamicDetailOptions
  *
  * @usedBy PoPageDynamicDetailComponent

@@ -163,7 +163,6 @@ describe('PoPageDynamicTableComponent:', () => {
         };
 
         spyOn(component, <any>'loadData').and.returnValue(of({}));
-        spyOn(component, <any>'getMetadata').and.returnValue(of({}));
 
         component.ngOnInit();
 
@@ -190,6 +189,56 @@ describe('PoPageDynamicTableComponent:', () => {
         component['subscriptions'] = null;
         component.ngOnDestroy();
       }));
+
+      it('should configure properties based on the return of onload route', fakeAsync(() => {
+
+        component.autoRouter = false;
+        component.actions = <any>{};
+        component.breadcrumb = <any>{};
+        component.fields = [];
+        component.title = '';
+
+        const activatedRoute: any = {
+          snapshot: {
+            data: {
+              serviceApi: 'localhost:4300/api/people',
+              serviceMetadataApi: 'localhost:4300/api/people/metadata',
+              serviceLoadApi: 'localhost:4300/api/people/metadata'
+            },
+            params: { id: 1 }
+          }
+        };
+
+        const metadata = {
+          breadcrumb : {
+            items: [
+              { label: 'Home' },
+              { label: 'Hiring processes' }
+            ]
+          },
+          title: 'Original Title'
+        };
+
+        const custom = {title: 'New Title'};
+
+        spyOn(component, <any>'loadData').and.returnValue(of({}));
+        spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(metadata));
+        spyOn(<any>component['poPageCustomizationService'], 'createObservable').and.returnValue(of(custom));
+
+        component['activatedRoute'] = activatedRoute;
+
+        component.ngOnInit();
+
+        tick();
+
+        expect(component.title).toBe('New Title');
+        expect(component.breadcrumb).toEqual({
+            items: [
+              { label: 'Home' },
+              { label: 'Hiring processes' }
+            ]
+          });
+        }));
     });
 
     it('onAdvancedSearch: should call `loadData` with filter parameter and set `params`', () => {
