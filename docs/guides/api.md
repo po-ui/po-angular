@@ -169,11 +169,6 @@ Aos realizar um filtro será enviado um parâmetro no formato `property=value`:
 
 ``` GET http://portinari-example.com.br/api/users?name=john&surname=doe ```
 
-Caso não houver campos a serem filtrados, será enviado o parâmetro `filter`:
-
-``` GET http://portinari-example.com.br/api/users?filter=john```
-
-
 <a id="pagination"></a>
 ### Paginação
 
