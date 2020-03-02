@@ -10,11 +10,11 @@ import { PoContainerModule } from '../po-container/index';
 import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
 import { PoFieldContainerModule } from './po-field-container/po-field-container.module';
 import { PoLoadingModule } from '../po-loading/index';
-import { PoModalModule } from '../po-modal/po-modal.module';
 import { PoProgressModule } from './../po-progress/po-progress.module';
 import { PoServicesModule } from '../../services/services.module';
-import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
+
+import { PoLookupModule } from './po-lookup/po-lookup.module';
 
 import { PoCalendarComponent } from './po-datepicker/po-calendar/po-calendar.component';
 import { PoCleanComponent } from './po-clean/po-clean.component';
@@ -53,6 +53,11 @@ import {
 import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
+import { PoRichTextModule } from './po-rich-text/po-rich-text.module';
+import { PoInputModule } from './po-input/po-input.module';
+import { PoUrlModule } from './po-url/po-url.module';
+import { PoUploadModule } from './po-upload/po-upload.module';
+import { PoCleanModule } from './po-clean/po-clean.module';
 
 /**
  * @description
@@ -76,41 +81,39 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoDisclaimerModule,
     PoFieldContainerModule,
     PoLoadingModule,
-    PoModalModule,
     PoProgressModule,
     PoServicesModule,
-    PoTableModule,
-    PoTooltipModule
+    // PoTooltipModule
+    PoCleanModule
   ],
   exports: [
-    PoCheckboxComponent,
     PoCheckboxGroupModule,
-    PoCleanComponent,
+    PoLookupModule,
+    PoRichTextModule,
+    PoInputModule,
+    PoUrlModule,
+    PoUploadModule,
+    PoCleanModule,
+
+    PoCheckboxComponent,
     PoComboComponent,
     PoComboOptionTemplateDirective,
     PoDecimalComponent,
     PoDatepickerComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
-    PoInputComponent,
     PoLoginComponent,
-    PoLookupComponent,
-    PoLookupModalComponent,
     PoMultiselectComponent,
     PoNumberComponent,
     PoPasswordComponent,
     PoRadioGroupComponent,
-    PoRichTextComponent,
     PoSelectComponent,
     PoSelectOptionTemplateDirective,
     PoSwitchComponent,
     PoTextareaComponent,
-    PoUploadComponent,
-    PoUrlComponent
   ],
   declarations: [
     PoCalendarComponent,
-    PoCleanComponent,
     PoCheckboxComponent,
     PoComboComponent,
     PoComboOptionTemplateDirective,
@@ -118,10 +121,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoDatepickerComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
-    PoInputComponent,
     PoLoginComponent,
-    PoLookupComponent,
-    PoLookupModalComponent,
     PoMultiselectComponent,
     PoMultiselectDropdownComponent,
     PoMultiselectItemComponent,
@@ -129,21 +129,10 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoNumberComponent,
     PoPasswordComponent,
     PoRadioGroupComponent,
-    PoRichTextBodyComponent,
-    PoRichTextComponent,
-    PoRichTextModalComponent,
-    PoRichTextToolbarComponent,
     PoSelectComponent,
     PoSelectOptionTemplateDirective,
     PoSwitchComponent,
-    PoTextareaComponent,
-    PoUploadComponent,
-    PoUploadDragDropComponent,
-    PoUploadDragDropDirective,
-    PoUploadDragDropAreaOverlayComponent,
-    PoUploadDragDropAreaComponent,
-    PoUploadFileRestrictionsComponent,
-    PoUrlComponent
+    PoTextareaComponent
   ],
   providers: [],
   entryComponents: [
