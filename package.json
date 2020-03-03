@@ -69,8 +69,9 @@
     "@angular/cli": "~8.0.1",
     "@angular/compiler-cli": "~8.0.0",
     "@angular/language-service": "~8.0.0",
-    "@commitlint/cli": "^8.0.0",
-    "@commitlint/config-angular": "^8.0.0",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
+    "@commitlint/travis-cli": "^8.3.5",
     "@portinari/tslint": "1.0.0",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
@@ -81,7 +82,7 @@
     "del": "^3.0.0",
     "gulp": "^4.0.2",
     "gulp-run": "^1.7.1",
-    "husky": "^3.0.0",
+    "husky": "^4.2.3",
     "jasmine": "^3.3.1",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -93,17 +94,12 @@
     "ng-packagr": "^5.1.0",
     "protractor": "~5.4.0",
     "sonarqube-scanner": "^2.4.1",
-    "standard-version": "^6.0.1",
+    "standard-version": "^7.1.0",
     "ts-node": "~7.0.0",
     "tsickle": "^0.35.0",
     "tslint": "~5.15.0",
     "typemoq": "^2.1.0",
     "typescript": "~3.4.3"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   },
   "standard-version": {
     "skip": {
