@@ -61,7 +61,8 @@ export class PoStepComponent implements AfterContentInit {
    * Função chamada quando o próximo *step* for clicado ou quando o método `PoStepperComponent.next()` for chamado.
    * Ao retornar `true` define que esse *step* ficará ativo e o atual como concluído (*done*).
    * Também aceita funções que retornem `Observable<boolean>`. Ao retornar um `Observable<boolean>`,
-   * garanta que esse `Observable` será completado.
+   * garanta que esse `Observable` será completado, caso houver algum erro durante o processo não será possível prosseguir
+   * ao próximo *step*.
    *
    * Ao ser disparada, a mesma receberá por parâmetro o `PoStepComponent` atual.
    *

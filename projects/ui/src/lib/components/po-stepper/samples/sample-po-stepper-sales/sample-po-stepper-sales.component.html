@@ -30,239 +30,245 @@
 
 <hr>
 
-<po-stepper #stepper
-  p-orientation="vertical"
-  p-step-icons
-  p-step-size="32">
+<div style="position: relative">
 
-  <po-step p-label="Personal" [p-can-active-next-step]="canActiveNextStep.bind(this, personalForm)">
-    <po-widget
-      class="po-md-12"
-      p-height="380"
-      [p-primary-label]="nextLabelWidget"
-      p-title="Purchase"
-      (p-primary-action)="stepper.next()">
+  <po-loading-overlay *ngIf="isLoadingPayment" p-text="Loading">
+  </po-loading-overlay>
 
-      <form #personalForm="ngForm">
+  <po-stepper #stepper
+    p-orientation="vertical"
+    p-step-icons
+    p-step-size="32">
+
+    <po-step p-label="Personal" [p-can-active-next-step]="canActiveNextStep.bind(this, personalForm)">
+      <po-widget
+        class="po-md-12"
+        p-height="380"
+        [p-primary-label]="nextLabelWidget"
+        p-title="Purchase"
+        (p-primary-action)="stepper.next()">
+
+        <form #personalForm="ngForm">
+          <div class="po-row">
+            <po-input
+              class="po-md-6"
+              name="name"
+              [(ngModel)]="name"
+              p-clean
+              p-label="Name"
+              p-required>
+            </po-input>
+            <po-datepicker
+              class="po-md-3"
+              name="birthday"
+              [(ngModel)]="birthday"
+              p-format="dd/mm/yyyy"
+              p-label="Birthday"
+              p-optional>
+            </po-datepicker>
+            <po-input
+              class="po-md-3"
+              name="document"
+              [(ngModel)]="document"
+              p-label="Document"
+              p-optional>
+            </po-input>
+          </div>
+        </form>
+      </po-widget>
+    </po-step>
+
+    <po-step p-label="Address" [p-can-active-next-step]="canActiveNextStep.bind(this, addressForm)">
+      <po-widget
+        class="po-md-12"
+        p-height="380"
+        p-title="Purchase"
+        [p-primary-label]="previousLabelWidget"
+        [p-secondary-label]="nextLabelWidget"
+        (p-primary-action)="stepper.previous()"
+        (p-secondary-action)="stepper.next()">
+
+        <form #addressForm="ngForm">
+          <div class="po-row">
+            <po-input
+              class="po-md-6"
+              name="address.street"
+              [(ngModel)]="address.street"
+              p-label="Street/House"
+              p-required>
+            </po-input>
+            <po-input
+              class="po-md-3"
+              name="number"
+              [(ngModel)]="address.number"
+              p-label="Number"
+              p-required>
+            </po-input>
+            <po-input
+              class="po-md-3"
+              name="city"
+              [(ngModel)]="address.city"
+              p-label="City"
+              p-required>
+            </po-input>
+          </div>
+          <div class="po-row">
+            <po-input
+              class="po-md-3"
+              name="code"
+              [(ngModel)]="address.code"
+              p-label="Postal Code"
+              p-required>
+            </po-input>
+            <po-input
+              class="po-md-3"
+              name="country"
+              [(ngModel)]="address.country"
+              p-label="Country"
+              p-required>
+            </po-input>
+            <po-input
+              class="po-md-6"
+              name="reference"
+              [(ngModel)]="address.reference"
+              p-label="Reference"
+              p-optional>
+            </po-input>
+          </div>
+        </form>
+      </po-widget>
+    </po-step>
+
+    <po-step p-label="Payment" [p-can-active-next-step]="canActiveFinishStep.bind(this, paymentForm)">
+      <po-widget
+        class="po-md-12"
+        p-height="380"
+        [p-primary-label]="previousLabelWidget"
+        [p-secondary-label]="nextLabelWidget"
+        p-title="Purchase"
+        (p-primary-action)="stepper.previous()"
+        (p-secondary-action)="stepper.next()">
+
+        <form #paymentForm="ngForm">
+          <div class="po-row">
+            <po-input
+              #cardname
+              class="po-lg-6"
+              name="cardName"
+              [(ngModel)]="cardName"
+              p-clean
+              p-label="Name"
+              p-required>
+            </po-input>
+
+            <po-input
+              #cardcode
+              class="po-lg-4 po-md-9"
+              name="cardCode"
+              [(ngModel)]="cardCode"
+              p-clean
+              p-label="Code"
+              p-mask="9999 9999 9999 9999"
+              p-mask-format-model
+              p-pattern="\d{4} \d{4} \d{4} \d{4}"
+              p-required>
+            </po-input>
+
+            <po-input
+              #carddate
+              class="po-lg-2 po-md-3"
+              name="cardValid"
+              [(ngModel)]="cardValid"
+              p-clean
+              p-label="Expiration Date"
+              p-mask="12/99"
+              p-mask-format-model
+              p-pattern="\d{2}\/\d{2}"
+              p-required>
+            </po-input>
+          </div>
+        </form>
+      </po-widget>
+    </po-step>
+
+    <po-step p-label="Finish">
+
+      <po-widget
+        class="po-md-12"
+        p-height="380"
+        [p-primary-label]="previousLabelWidget"
+        [p-secondary-label]="confirmLabelWidget"
+        p-title="Purchase"
+        (p-primary-action)="stepper.previous()"
+        (p-secondary-action)="onConfirmStep(stepper)">
+
         <div class="po-row">
-          <po-input
-            class="po-md-6"
-            name="name"
-            [(ngModel)]="name"
-            p-clean
+          <po-info
+            class="po-md-3"
             p-label="Name"
-            p-required>
-          </po-input>
-          <po-datepicker
+            [p-value]="name">
+          </po-info>
+          <po-info
             class="po-md-3"
-            name="birthday"
-            [(ngModel)]="birthday"
-            p-format="dd/mm/yyyy"
-            p-label="Birthday"
-            p-optional>
-          </po-datepicker>
-          <po-input
-            class="po-md-3"
-            name="document"
-            [(ngModel)]="document"
             p-label="Document"
-            p-optional>
-          </po-input>
+            [p-value]="document">
+          </po-info>
         </div>
-      </form>
-    </po-widget>
-  </po-step>
-
-  <po-step p-label="Address" [p-can-active-next-step]="canActiveNextStep.bind(this, addressForm)">
-    <po-widget
-      class="po-md-12"
-      p-height="380"
-      p-title="Purchase"
-      [p-primary-label]="previousLabelWidget"
-      [p-secondary-label]="nextLabelWidget"
-      (p-primary-action)="stepper.previous()"
-      (p-secondary-action)="stepper.next()">
-
-      <form #addressForm="ngForm">
         <div class="po-row">
-          <po-input
-            class="po-md-6"
-            name="address.street"
-            [(ngModel)]="address.street"
-            p-label="Street/House"
-            p-required>
-          </po-input>
-          <po-input
+          <po-info
             class="po-md-3"
-            name="number"
-            [(ngModel)]="address.number"
+            p-label="Address"
+            [p-value]="address.street">
+          </po-info>
+          <po-info
+            class="po-md-3"
             p-label="Number"
-            p-required>
-          </po-input>
-          <po-input
+            [p-value]="address.number">
+          </po-info>
+          <po-info
             class="po-md-3"
-            name="city"
-            [(ngModel)]="address.city"
             p-label="City"
-            p-required>
-          </po-input>
-        </div>
-        <div class="po-row">
-          <po-input
+            [p-value]="address.city">
+          </po-info>
+          <po-info
             class="po-md-3"
-            name="code"
-            [(ngModel)]="address.code"
-            p-label="Postal Code"
-            p-required>
-          </po-input>
-          <po-input
-            class="po-md-3"
-            name="country"
-            [(ngModel)]="address.country"
             p-label="Country"
-            p-required>
-          </po-input>
-          <po-input
-            class="po-md-6"
-            name="reference"
-            [(ngModel)]="address.reference"
-            p-label="Reference"
-            p-optional>
-          </po-input>
+            [p-value]="address.country">
+          </po-info>
         </div>
-      </form>
-    </po-widget>
-  </po-step>
-
-  <po-step p-label="Payment" [p-can-active-next-step]="canActiveNextStep.bind(this, paymentForm)">
-    <po-widget
-      class="po-md-12"
-      p-height="380"
-      [p-primary-label]="previousLabelWidget"
-      [p-secondary-label]="nextLabelWidget"
-      p-title="Purchase"
-      (p-primary-action)="stepper.previous()"
-      (p-secondary-action)="stepper.next()">
-
-      <form #paymentForm="ngForm">
+        <hr>
         <div class="po-row">
-          <po-input
-            #cardname
-            class="po-lg-6"
-            name="cardName"
-            [(ngModel)]="cardName"
-            p-clean
-            p-label="Name"
-            p-required>
-          </po-input>
-
-          <po-input
-            #cardcode
-            class="po-lg-4 po-md-9"
-            name="cardCode"
-            [(ngModel)]="cardCode"
-            p-clean
-            p-label="Code"
-            p-mask="9999 9999 9999 9999"
-            p-mask-format-model
-            p-pattern="\d{4} \d{4} \d{4} \d{4}"
-            p-required>
-          </po-input>
-
-          <po-input
-            #carddate
-            class="po-lg-2 po-md-3"
-            name="cardValid"
-            [(ngModel)]="cardValid"
-            p-clean
-            p-label="Expiration Date"
-            p-mask="12/99"
-            p-mask-format-model
-            p-pattern="\d{2}\/\d{2}"
-            p-required>
-          </po-input>
+          <po-info
+            class="po-md-4"
+            p-label="Product"
+            p-value="Nike XYZ - Red/Gold Stripes">
+          </po-info>
+          <po-info
+            class="po-md-2"
+            p-label="Price"
+            p-value="$2.500,00">
+          </po-info>
+          <po-info
+            class="po-md-2"
+            p-label="Discount"
+            p-value="$500,00">
+          </po-info>
+          <po-info
+            class="po-md-2"
+            p-label="Tax"
+            p-value="$160,00">
+          </po-info>
+          <po-info
+            class="po-md-2"
+            p-label="Final Price"
+            p-value="$2.160,00">
+          </po-info>
         </div>
-      </form>
-    </po-widget>
-  </po-step>
+      </po-widget>
+    </po-step>
 
-  <po-step p-label="Finish">
-
-    <po-widget
-      class="po-md-12"
-      p-height="380"
-      [p-primary-label]="previousLabelWidget"
-      [p-secondary-label]="confirmLabelWidget"
-      p-title="Purchase"
-      (p-primary-action)="stepper.previous()"
-      (p-secondary-action)="onConfirmStep(stepper)">
-
-      <div class="po-row">
-        <po-info
-          class="po-md-3"
-          p-label="Name"
-          [p-value]="name">
-        </po-info>
-        <po-info
-          class="po-md-3"
-          p-label="Document"
-          [p-value]="document">
-        </po-info>
-      </div>
-      <div class="po-row">
-        <po-info
-          class="po-md-3"
-          p-label="Address"
-          [p-value]="address.street">
-        </po-info>
-        <po-info
-          class="po-md-3"
-          p-label="Number"
-          [p-value]="address.number">
-        </po-info>
-        <po-info
-          class="po-md-3"
-          p-label="City"
-          [p-value]="address.city">
-        </po-info>
-        <po-info
-          class="po-md-3"
-          p-label="Country"
-          [p-value]="address.country">
-        </po-info>
-      </div>
-      <hr>
-      <div class="po-row">
-        <po-info
-          class="po-md-4"
-          p-label="Product"
-          p-value="Nike XYZ - Red/Gold Stripes">
-        </po-info>
-        <po-info
-          class="po-md-2"
-          p-label="Price"
-          p-value="$2.500,00">
-        </po-info>
-        <po-info
-          class="po-md-2"
-          p-label="Discount"
-          p-value="$500,00">
-        </po-info>
-        <po-info
-          class="po-md-2"
-          p-label="Tax"
-          p-value="$160,00">
-        </po-info>
-        <po-info
-          class="po-md-2"
-          p-label="Final Price"
-          p-value="$2.160,00">
-        </po-info>
-      </div>
-    </po-widget>
-  </po-step>
-
-</po-stepper>
+  </po-stepper>
+</div>
 
 <po-modal #successData
   p-title="Informations">
