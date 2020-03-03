@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoModalComponent, PoStepComponent, PoStepperComponent } from '@portinari/portinari-ui';
+import { of } from 'rxjs';
+import { delay, finalize, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'sample-po-stepper-sales',
@@ -17,6 +19,7 @@ export class SamplePoStepperSalesComponent {
   confirmLabelWidget: string = 'Confirm Purchase';
   currentActiveStep: PoStepComponent;
   document: string;
+  isLoadingPayment: boolean = false;
   name: string;
   nextLabelWidget: string = 'Next Step';
   previousLabelWidget: string = 'Previous Step';
@@ -28,6 +31,16 @@ export class SamplePoStepperSalesComponent {
 
   constructor() {
     this.address = this.getAddress();
+  }
+
+  canActiveFinishStep(paymentForm: NgForm) {
+
+    return of(paymentForm.form.valid)
+            .pipe(
+              tap(() => this.isLoadingPayment = true),
+              delay(2000),
+              finalize(() => this.isLoadingPayment = false)
+            );
   }
 
   canActiveNextStep(form: NgForm) {

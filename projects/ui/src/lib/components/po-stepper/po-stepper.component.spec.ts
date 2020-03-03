@@ -1,6 +1,7 @@
 import { QueryList } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+
+import { of, throwError } from 'rxjs';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
@@ -506,15 +507,21 @@ describe('PoStepperComponent:', () => {
       });
     });
 
-    it(`canActiveNextStep: should throw error if return type is not a boolean of function`, () => {
+    it(`canActiveNextStep: should return throw error and set 'currentActiveStep.status'
+      with 'PoStepperStatus.Error' if some problem in observable`, (done: DoneFn) => {
       const currentActiveStep = <PoStepComponent>{
         label: 'po-label',
-        canActiveNextStep: currentStep => 10 as any,
+        canActiveNextStep: currentStep => <any> throwError(new Error('Error')),
         status: PoStepperStatus.Default
       };
 
-      expect(() => component['canActiveNextStep'](currentActiveStep).subscribe(() => expect('Not have been called').toBe('this function')))
-      .toThrowError(`Expected step po-label canActiveNextStep function to return either a boolean or Observable`);
+      component['canActiveNextStep'](currentActiveStep).subscribe(() => {}, error => {
+        expect(error instanceof Error).toBe(true);
+        expect(currentActiveStep.status).toEqual(PoStepperStatus.Error);
+
+        done();
+      });
+
     });
 
     it('canActiveNextStep: should return true if `currentActiveStep` is undefined', (done: DoneFn) => {
