@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild, AfterViewInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
@@ -37,7 +37,7 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
     }
   ]
 })
-export class PoCheckboxComponent extends PoCheckboxBaseComponent {
+export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit {
 
   @ViewChild('checkboxLabel', { static: true }) checkboxLabel: ElementRef;
 
@@ -67,6 +67,12 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent {
   focus(): void {
     if (this.checkboxLabel && !this.disabled) {
       this.checkboxLabel.nativeElement.focus();
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
     }
   }
 

@@ -119,6 +119,26 @@ describe('PoNumberComponent:', () => {
 
   describe('Methods:', () => {
 
+    describe('ngAfterViewInit:', () => {
+      let inputFocus: jasmine.Spy;
+
+      beforeEach(() => {
+        inputFocus = spyOn(component, 'focus');
+      });
+
+      it('should call `focus` if autoFocus is true.', () => {
+        component.autoFocus = true;
+        component.ngAfterViewInit();
+        expect(inputFocus).toHaveBeenCalled();
+      });
+
+      it('should not call `focus` if autoFocus is false.', () => {
+        component.autoFocus = false;
+        component.ngAfterViewInit();
+        expect(inputFocus).not.toHaveBeenCalled();
+      });
+    });
+
     it('showPassword: should update `visiblePassword` with `true`.', () => {
       component.visiblePassword = false;
 

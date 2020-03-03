@@ -5,7 +5,7 @@ import { PoSelectOption } from '../../po-field/po-select/po-select-option.interf
 import { PoDynamicField } from '../po-dynamic-field.interface';
 
 /**
- * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent
+ * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent, PoPageDynamicSearchComponent
  *
  * @docsExtends PoDynamicField
  *
@@ -26,6 +26,15 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /** Define a obrigatoriedade do campo. */
   required?: boolean;
+
+  /**
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > A indicação não será exibida, se:
+   * - O campo for `required`, ou;
+   * - Não possuir `help` e `label`.
+   */
+  optional?: boolean;
 
   /** Lista de opções que serão exibidos em um componente, podendo selecionar uma opção. */
   options?: Array<string> | Array<PoSelectOption> | Array<PoMultiselectOption>;
@@ -122,5 +131,29 @@ export interface PoDynamicFormField extends PoDynamicField {
    * ```
    */
   validate?: string | Function;
+
+  /**
+   * Objeto que será enviado como parâmetro nas requisições de busca usados pelos componentes `po-lookup` e
+   * `po-combo`.
+   *
+   * Por exemplo, para o parâmetro `{ age: 23 }` a URL da requisição ficaria:
+   *
+   * ```
+   * url + ?age=23&filter=Peter
+   * ```
+   */
+  params?: any;
+
+  /**
+   * Mensagem que será apresentada quando o campo ficar inválido.
+   *
+   * O campo fica inválido quando as seguintes propriedades não forem respeitadas:
+   *  - pattern;
+   *  - minValue;
+   *  - maxValue;
+   *
+   * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
+   */
+  errorMessage?: string;
 
 }

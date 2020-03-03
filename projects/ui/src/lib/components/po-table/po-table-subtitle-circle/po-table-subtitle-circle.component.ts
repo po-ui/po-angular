@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { PoColorPaletteService } from './../../../services/po-color-palette/po-color-palette.service';
 import { PoTableSubtitleColumn } from './../po-table-subtitle-footer/po-table-subtitle-column.interface';
@@ -12,7 +12,8 @@ import { PoTableSubtitleColumn } from './../po-table-subtitle-footer/po-table-su
  */
 @Component({
   selector: 'po-table-subtitle-circle',
-  templateUrl: './po-table-subtitle-circle.component.html'
+  templateUrl: './po-table-subtitle-circle.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTableSubtitleCircleComponent {
 

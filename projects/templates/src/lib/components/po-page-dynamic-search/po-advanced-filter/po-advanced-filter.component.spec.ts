@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoDynamicModule, PoFieldModule, PoModalModule } from '@portinari/portinari-ui';
+
+import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.component';
 import { PoAdvancedFilterComponent } from './po-advanced-filter.component';
@@ -40,34 +40,6 @@ describe('PoAdvancedFilterComponent', () => {
   });
 
   describe('Methods:', () => {
-
-    it('primaryAction: should emit `searchEvent` and call `getValuesFromForm` and `poModal.close`', () => {
-      spyOn(component.searchEvent, 'emit');
-      spyOn(component.poModal, 'close');
-      spyOn(component, 'getValuesFromForm');
-
-      component.primaryAction.action();
-
-      expect(component.searchEvent.emit).toHaveBeenCalled();
-      expect(component.poModal.close).toHaveBeenCalled();
-      expect(component.getValuesFromForm).toHaveBeenCalled();
-    });
-
-    it('secondaryAction: should call `poModal.close`', () => {
-      spyOn(component.poModal, 'close');
-
-      component.secondaryAction.action();
-
-      expect(component.poModal.close).toHaveBeenCalled();
-    });
-
-    it('getValuesFromForm: should return all items if no property is undefined or ``', () => {
-      component.filter = { name: 'name', birthdate: 'Birthdate', age: '', Adress: undefined };
-
-      const filteredItems = { name: 'name', birthdate: 'Birthdate' };
-
-      expect(component.getValuesFromForm()).toEqual(filteredItems);
-    });
 
     it('open: should call `poModal.open` and set `filter` with {}', () => {
       component.filter = filters;

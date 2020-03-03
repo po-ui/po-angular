@@ -14,9 +14,9 @@ import {
 
 import * as util from './../../utils/util';
 
-import { PoPageDynamicEditActions } from './po-page-dynamic-edit-actions.interface';
-import { PoPageDynamicEditField } from './po-page-dynamic-edit-field.interface';
-import { PoPageDynamicService } from './po-page-dynamic.service';
+import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
+import { PoPageDynamicEditField } from './interfaces/po-page-dynamic-edit-field.interface';
+import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
 
 export const poPageDynamicEditLiteralsDefault = {
   en: {
@@ -68,6 +68,63 @@ export const poPageDynamicEditLiteralsDefault = {
  *
  * O `po-page-dynamic-edit` é uma página que pode servir para editar ou criar novos registros,
  * o mesmo também suporta metadados conforme especificado na documentação.
+ *
+ * ### Utilização via rota
+ *
+ * Ao utilizar as rotas para carregar o template, o `page-dynamic-edit` disponibiliza propriedades para
+ * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
+ *
+ * ```
+ * {
+ *   path: 'people',
+ *   component: PoPageDynamicEditComponent,
+ *   data: {
+ *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata' // endpoint dos metadados
+ *   }
+ * }
+ * ```
+ *
+ * Para carregar com um recurso já existente, deve-se ser incluído um parâmetro na rota chamado `id`:
+ *
+ * ```
+ * {
+ *   path: 'people/:id',
+ *   component: PoPageDynamicEditComponent,
+ *   data: {
+ *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata' // endpoint dos metadados
+ *   }
+ * }
+ * ```
+ *
+ * A requisição dos metadados é feita na inicialização do template para buscar os metadados da página passando o
+ * tipo do metadado esperado e a versão cacheada pelo browser.
+ *
+ * O formato esperado na resposta da requisição está especificado na interface
+ * [PoPageDynamicEditMetadata](/documentation/po-page-dynamic-edit#po-page-dynamic-edit-metadata). Por exemplo:
+ *
+ * ```
+ *  {
+ *   version: 1,
+ *   title: 'Person edit',
+ *   fields: [
+ *     { property: 'id', key: true, disabled: true },
+ *     { property: 'status' },
+ *     { property: 'name' },
+ *     { property: 'nickname' },
+ *     { property: 'birthdate', label: 'Birth date' },
+ *     { property: 'genre' },
+ *     { property: 'city' },
+ *     { property: 'country' }
+ *   ]
+ * }
+ * ```
+ *
+ * > Caso o endpoint dos metadados não seja especificado, será feito uma requisição utilizando o `serviceApi` da seguinte forma:
+ * ```
+ * GET {end-point}/metadata?type=edit&version={version}
+ * ```
  *
  * @example
  *
@@ -171,7 +228,7 @@ export class PoPageDynamicEditComponent implements OnInit {
   /**
    * @description
    *
-   * Endpoint usado pelo template para requisição do recurso que serão exibido para edição.
+   * Endpoint usado pelo template para requisição do recurso que será exibido para edição.
    *
    * Para as ações de `save` e `saveNew`, será feito uma requisição de criação nesse mesmo endpoint passando os valores
    * preenchidos pelo usuário via payload.
@@ -202,10 +259,6 @@ export class PoPageDynamicEditComponent implements OnInit {
    * ```
    * { "name": "Fulano", "city": "Smallville" }
    * ```
-   * > Caso esteja usando metadados com o template, será disparado uma requisição na inicialização do template para buscar
-   * > os metadados da página passando o tipo do metadado esperado e a versão cacheada pelo browser.
-   * >
-   * > `GET {end-point}/metadata?type=create&version={version}`
    *
    * Caso queira que o template carregue um recurso já existente, deve-se ser incluído um parametro na rota chamado `id`.
    *
@@ -240,11 +293,6 @@ export class PoPageDynamicEditComponent implements OnInit {
    * ```
    * { "name": "Fulano", "city": "Metropolis" }
    * ```
-   *
-   * > Caso esteja usando metadados com o template, será disparado uma requisição na inicialização do template para buscar
-   * > os metadados da página passando o tipo do metadado esperado e a versão cacheada pelo browser.
-   * >
-   * > `GET {end-point}/metadata?type=edit&version={version}`
    */
   @Input('p-service-api') serviceApi: string;
 
@@ -266,15 +314,13 @@ export class PoPageDynamicEditComponent implements OnInit {
     const paramId = this.activatedRoute.snapshot.params['id'];
     const duplicate = this.activatedRoute.snapshot.queryParams['duplicate'];
 
-    if (this.activatedRoute.snapshot.data.serviceApi) {
-      this.serviceApi = this.activatedRoute.snapshot.data.serviceApi;
+    const { serviceApi, serviceMetadataApi } = this.activatedRoute.snapshot.data;
+    this.serviceApi = serviceApi || this.serviceApi;
+    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
 
-      this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi });
-
+    if (serviceApi) {
       this.loadMetadata(paramId, duplicate);
     } else {
-      this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi });
-
       this.loadData(paramId, duplicate);
     }
   }
@@ -352,7 +398,7 @@ export class PoPageDynamicEditComponent implements OnInit {
   private loadMetadata(paramId: string | number, duplicate: string) {
     const typeMetadata = paramId ? 'edit' : 'create';
 
-    this.poPageDynamicService.getMetadata(typeMetadata).toPromise().then(response => {
+    this.poPageDynamicService.getMetadata<any>(typeMetadata).toPromise().then(response => {
       this.autoRouter = response.autoRouter;
       this.actions = response.actions || {};
       this.breadcrumb = response.breadcrumb || { items : [] };

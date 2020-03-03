@@ -28,7 +28,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   afterViewInit() {
-    this.putFocus();
+    this.verifyAutoFocus();
     if (this.type !== 'password') {
       this.setPaddingInput();
     }
@@ -53,8 +53,8 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     });
   }
 
-  putFocus() {
-    if (this.autofocus) {
+  verifyAutoFocus() {
+    if (this.autoFocus) {
       this.focus();
     }
   }
@@ -77,11 +77,16 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   eventOnInput(e: any) {
+    let value = '';
     if (!this.mask) {
-      const value = this.validMaxLength(this.maxlength, e.target.value);
+      value = this.validMaxLength(this.maxlength, e.target.value);
       this.inputEl.nativeElement.value = value;
-      this.callOnChange(value);
+    } else {
+      this.objMask.blur(e);
+      this.inputEl.nativeElement.value = this.objMask.valueToInput;
+      value = this.objMask.valueToModel;
     }
+    this.callOnChange(value);
   }
 
   validMaxLength(maxlength: number, value: string) {

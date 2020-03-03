@@ -3,7 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoDynamicModule, PoModalModule, PoPageModule } from '@portinari/portinari-ui';
+import { PoDynamicModule, PoLanguageModule, PoModalModule, PoPageModule } from '@portinari/portinari-ui';
+
+import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
 
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
 import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component';
@@ -20,8 +22,10 @@ import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component
     RouterModule,
 
     PoDynamicModule,
+    PoLanguageModule,
     PoModalModule,
-    PoPageModule
+    PoPageModule,
+    PoPageCustomizationModule
   ],
   declarations: [
     PoAdvancedFilterComponent,

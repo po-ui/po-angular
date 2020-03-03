@@ -27,7 +27,6 @@ describe('PoTableColumnLinkComponent:', () => {
     fixture = TestBed.createComponent(PoTableColumnLinkComponent);
     component = fixture.componentInstance;
 
-    fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
   });
 

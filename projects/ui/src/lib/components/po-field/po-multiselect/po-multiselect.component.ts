@@ -81,8 +81,8 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   ngAfterViewInit() {
-    if (this.autofocus) {
-      this.inputElement.nativeElement.focus();
+    if (this.autoFocus) {
+      this.focus();
     }
     this.initialized = true;
   }

@@ -2,6 +2,7 @@ import { ControlValueAccessor } from '@angular/forms';
 import { EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
+import { InputBoolean } from '../../../decorators';
 
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 
@@ -27,6 +28,19 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
 
   /** Nome do componente. */
   @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica o foco no elemento ao ser iniciado.
+   *  > Caso mais de um elemento seja configurado com essa propriedade,
+   * o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /** Rótulo exibido pelo componente. */
   @Input('p-label') label?: string;

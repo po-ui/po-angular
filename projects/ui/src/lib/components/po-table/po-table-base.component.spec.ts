@@ -1,11 +1,11 @@
 import * as utilsFunctions from '../../utils/util';
 import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
+import { poLocaleDefault } from '../../utils/util';
 
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
-import { poLocaleDefault } from '../../utils/util';
 
 class PoTableComponent extends PoTableBaseComponent {
   calculateWidthHeaders() { }
@@ -76,13 +76,27 @@ describe('PoTableBaseComponent:', () => {
     expectPropertiesValues(component, 'items', [], []);
   });
 
-  it('should set checkbox selection and call calculateWidthHeaders', () => {
+  it('should set selectable with value of checkbox', () => {
+    component.checkbox = true;
+    const expectedValue = true;
+
+    expect(component.selectable).toEqual(expectedValue);
+  });
+
+  it('should set checkbox with value of selectable', () => {
+    component.selectable = true;
+    const expectedValue = true;
+
+    expect(component.checkbox).toEqual(expectedValue);
+  });
+
+  it('should set selectable and call calculateWidthHeaders', () => {
     spyOn(component, 'calculateWidthHeaders');
     const validValues = ['', true, 1];
     const invalidValues = [undefined, null, false, 0];
 
-    expectPropertiesValues(component, 'checkbox', validValues, true);
-    expectPropertiesValues(component, 'checkbox', invalidValues, false);
+    expectPropertiesValues(component, 'selectable', validValues, true);
+    expectPropertiesValues(component, 'selectable', invalidValues, false);
     expect(component.calculateWidthHeaders).toHaveBeenCalled();
   });
 
@@ -270,7 +284,7 @@ describe('PoTableBaseComponent:', () => {
   });
 
   it('should select single row', () => {
-    component.checkbox = true;
+    component.selectable = true;
     component.singleSelect = true;
 
     const firstRow = component.items[0];
@@ -287,7 +301,7 @@ describe('PoTableBaseComponent:', () => {
   it('should select multiple rows', () => {
     component.items.forEach(item => item.$selected = false);
 
-    component.checkbox = true;
+    component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
 
@@ -304,7 +318,7 @@ describe('PoTableBaseComponent:', () => {
   it('should not select all rows if hide select all is active', () => {
 
     component.items.forEach(item => item.$selected = false);
-    component.checkbox = true;
+    component.selectable = true;
     component.hideSelectAll = true;
     component.singleSelect = false;
     component.ngOnChanges();
@@ -322,7 +336,7 @@ describe('PoTableBaseComponent:', () => {
   it('should select all rows', () => {
     component.items.forEach(item => item.$selected = false);
 
-    component.checkbox = true;
+    component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
     component.selectAllRows();
@@ -335,7 +349,7 @@ describe('PoTableBaseComponent:', () => {
   it('should set checkbox select all to checked', () => {
     component.items.forEach(item => item.$selected = false);
 
-    component.checkbox = true;
+    component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
     component.items.forEach(item =>
@@ -347,7 +361,7 @@ describe('PoTableBaseComponent:', () => {
 
   it('should set checkbox select all to unchecked', () => {
     component.items.forEach(item => item.$selected = false);
-    component.checkbox = true;
+    component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
     const firstRow = component.items[0];
@@ -359,7 +373,7 @@ describe('PoTableBaseComponent:', () => {
 
   it('should set checkbox select all to indeterminate', () => {
     component.items.forEach(item => item.$selected = false);
-    component.checkbox = true;
+    component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
 
@@ -383,19 +397,19 @@ describe('PoTableBaseComponent:', () => {
     component.sort = true;
     const column = component.columns[1];
 
-    spyOn(component, 'sortArray').and.callThrough();
+    spyOn(component, <any>'sortArray').and.callThrough();
     component.sortColumn(column);
-    expect(component.sortArray).toHaveBeenCalledWith(column, true);
+    expect(component['sortArray']).toHaveBeenCalledWith(column, true);
 
     component.sortColumn(column);
-    expect(component.sortArray).toHaveBeenCalledWith(column, false);
+    expect(component['sortArray']).toHaveBeenCalledWith(column, false);
   });
 
   it('should sort values descending', () => {
     const column = component.columns[1];
     const sortedItemsDesc = items.slice().sort((a, b) => b.numberData - a.numberData);
 
-    component.sortArray(column, false);
+    component['sortArray'](column, false);
     expect(component.items).toEqual(sortedItemsDesc);
   });
 
@@ -403,7 +417,8 @@ describe('PoTableBaseComponent:', () => {
     const column = component.columns[1];
     const sortedItemsAsc = items.slice().sort((a, b) => a.numberData - b.numberData);
 
-    component.sortArray(column, true);
+    component['sortArray'](column, true);
+
     expect(component.items).toEqual(sortedItemsAsc);
   });
 
@@ -422,29 +437,19 @@ describe('PoTableBaseComponent:', () => {
     expect(component.items).toContain(newItem);
   });
 
-  it('should return name column detail', () => {
-    expect(component.getNameColumnDetail()).toBe('detail');
-  });
-
   it('should return detail columns and not call sort array using detail column', () => {
     const columnDetail = component.columns[3];
 
-    expect(component.getColumnMasterDetail()).toEqual(component.columns[3]);
-    spyOn(component, 'sortArray');
+    expect(component['getColumnMasterDetail']()).toEqual(component.columns[3]);
+    spyOn(component, <any> 'sortArray');
+
     component.sortColumn(columnDetail);
-    expect(component.sortArray).not.toHaveBeenCalled();
-  });
 
-  it('should return null because not have master-detail', () => {
-    const fakeThis = {
-      getColumnMasterDetail: () => this.columnsTable
-    };
-
-    expect(component.getNameColumnDetail.call(fakeThis)).toBeNull();
+    expect(component['sortArray']).not.toHaveBeenCalled();
   });
 
   it('should not return the columns of type subtitle', () => {
-    expect(component.getSubtitleColumns().length).toBe(0);
+    expect(component['getSubtitleColumns']().length).toBe(0);
   });
 
   it('should return the columns of type subtitle', () => {
@@ -455,19 +460,19 @@ describe('PoTableBaseComponent:', () => {
       { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
     ]
     });
-    expect(component.getSubtitleColumns().length).toBe(1);
+    expect(component['getSubtitleColumns']().length).toBe(1);
   });
 
   it('should return false when items undefined in hasItems method', () => {
     component.items = undefined;
 
-    expect(component.hasItems()).toBeFalsy();
+    expect(component.hasItems).toBeFalsy();
   });
 
   it('should return true when has items in hasItems method', () => {
     component.items = [{ label: 'teste' }];
 
-    expect(component.hasItems()).toBeTruthy();
+    expect(component.hasItems).toBeTruthy();
   });
 
   describe('Methods:', () => {
@@ -714,19 +719,6 @@ describe('PoTableBaseComponent:', () => {
 
     });
 
-    it('getIconColumns: shouldn´t return the columns of type `icon`.', () => {
-      expect(component.getIconColumns().length).toBe(0);
-    });
-
-    it('getIconColumns: should return the columns of type `icon`.', () => {
-      component.columns.push(
-        { property: 'columnIcon', label: 'Like', type: 'icon', color: 'color-08', icons: [
-          { value: 'po-icon-star', action: () => this.notification() }
-        ]}
-      );
-      expect(component.getIconColumns).toBeTruthy();
-    });
-
     it('hasColumns: should return `true` if have columns and columns.length is greater then 0', () => {
       expect(component.hasColumns).toBe(true);
     });
@@ -739,13 +731,13 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('hasItems: should return `true` if have items and items.length is greater then 0', () => {
-      expect(component.hasItems()).toBe(true);
+      expect(component.hasItems).toBe(true);
     });
 
     it('hasItems: should return `false` if not have items', () => {
       component.items = undefined;
 
-      expect(component.hasItems()).toBeFalsy();
+      expect(component.hasItems).toBeFalsy();
     });
 
     it(`sortArray: should call 'sortDate' when column type is 'date'.`, () => {
@@ -753,7 +745,7 @@ describe('PoTableBaseComponent:', () => {
 
       spyOn(component['poDate'], 'sortDate');
 
-      component.sortArray(columnDate, true);
+      component['sortArray'](columnDate, true);
 
       expect(component['poDate'].sortDate).toHaveBeenCalled();
     });
@@ -763,7 +755,7 @@ describe('PoTableBaseComponent:', () => {
 
       spyOn(component['poDate'], 'sortDate');
 
-      component.sortArray(columnDate, true);
+      component['sortArray'](columnDate, true);
 
       expect(component['poDate'].sortDate).toHaveBeenCalled();
     });
@@ -773,7 +765,7 @@ describe('PoTableBaseComponent:', () => {
 
       spyOn(utilsFunctions, 'sortValues');
 
-      component.sortArray(columnDate, true);
+      component['sortArray'](columnDate, true);
 
       expect(utilsFunctions.sortValues).toHaveBeenCalled();
     });
@@ -820,15 +812,15 @@ describe('PoTableBaseComponent:', () => {
       component.sortBy.observers = <any>[{ next: () => { }}];
 
       spyOn(component.sortBy, 'emit').and.callThrough();
-      spyOn(component, 'sortArray').and.callThrough();
+      spyOn(component, <any> 'sortArray').and.callThrough();
 
       component.sortColumn(column);
       expect(component.sortBy.emit).toHaveBeenCalledWith({column, type: 'ascending'});
-      expect(component.sortArray).toHaveBeenCalled();
+      expect(component['sortArray']).toHaveBeenCalled();
 
       component.sortColumn(column);
       expect(component.sortBy.emit).toHaveBeenCalledWith({column, type: 'descending'});
-      expect(component.sortArray).toHaveBeenCalled();
+      expect(component['sortArray']).toHaveBeenCalled();
     });
 
     it(`onShowMore: 'showMore' should emit an object parameter containing 'ascending' as value of property 'type'` , () => {
@@ -863,71 +855,308 @@ describe('PoTableBaseComponent:', () => {
       expect(component.showMore.emit).toHaveBeenCalledWith(undefined);
     });
 
+    it('toggleDetail: should set showDetail to false', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+      component.toggleDetail(currentRow);
+      expect(currentRow.$showDetail).toBe(false);
+    });
+
+    it('toggleDetail: should set showDetail to true', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+      component.toggleDetail(currentRow);
+      expect(currentRow.$showDetail).toBe(true);
+    });
+
+    it('toggleDetail: should emit expanded if detail is opened', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      spyOn(component.expanded, 'emit');
+
+      component.toggleDetail(currentRow);
+      expect(component.expanded.emit).toHaveBeenCalled();
+    });
+
+    it('toggleDetail: should emit collapsed if detail is closed', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      spyOn(component.collapsed, 'emit');
+
+      component.toggleDetail(currentRow);
+      expect(component.collapsed.emit).toHaveBeenCalled();
+    });
+
+    it('expand: should set showDetail to true', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [ currentRow ];
+
+      component.expand(0);
+
+      expect(component.items[0].$showDetail).toBe(true);
+    });
+
+    it('expand: should keep showDetail to true', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [ currentRow ];
+
+      component.expand(0);
+
+      expect(component.items[0].$showDetail).toBe(true);
+    });
+
+    it('expand: shouldn`t emit expanded', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [ currentRow ];
+
+      spyOn(component.expanded, 'emit');
+
+      component.expand(0);
+
+      expect(component.expanded.emit).not.toHaveBeenCalled();
+    });
+
+    it('collapse: should set showDetail to false', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [ currentRow ];
+
+      component.collapse(0);
+
+      expect(component.items[0].$showDetail).toBe(false);
+    });
+
+    it('collapse: should keep showDetail to false', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [ currentRow ];
+
+      component.collapse(0);
+
+      expect(component.items[0].$showDetail).toBe(false);
+    });
+
+    it('collapse: shouldn`t emit collapsed', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [ currentRow ];
+
+      spyOn(component.collapsed, 'emit');
+
+      component.collapse(0);
+
+      expect(component.collapsed.emit).not.toHaveBeenCalled();
+    });
+
+    it('onChangeColumns: should call `setMainColumns`, `setColumnMasterDetail` and `setSubtitleColumns`', () => {
+      const spySetMainColumns = spyOn(component, <any> 'setMainColumns');
+      const spySetColumnMasterDetail = spyOn(component, <any> 'setColumnMasterDetail');
+      const spySetSubtitleColumns = spyOn(component, <any> 'setSubtitleColumns');
+
+      component['onChangeColumns']();
+
+      expect(spySetMainColumns).toHaveBeenCalled();
+      expect(spySetColumnMasterDetail).toHaveBeenCalled();
+      expect(spySetSubtitleColumns).toHaveBeenCalled();
+    });
+
+    it('setColumnMasterDetail: should set `columnMasterDetail` and call `getColumnMasterDetail`', () => {
+      const detailColumn: PoTableColumn = { property: 'detail', type: 'detail' };
+      const expectedValue = { ...detailColumn };
+
+      const spyGetColumnMasterDetail = spyOn(component, <any> 'getColumnMasterDetail').and.callThrough();
+
+      component.columns = [{ ...detailColumn }];
+      component['setColumnMasterDetail']();
+
+      expect(component.columnMasterDetail).toEqual(expectedValue);
+      expect(spyGetColumnMasterDetail).toHaveBeenCalled();
+    });
+
+    it('setMainColumns: should set mainColumns with visibleColumns, hasMainColumns with true and allColumnsWidthPixels with false', () => {
+      const visibleColumns: Array<PoTableColumn> = [
+        { property: 'name' }
+      ];
+
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'age', visible: false },
+        { property: 'address', type: 'auhdsuha' }
+      ];
+
+      component['_columns'] = [...visibleColumns, ...invisibleColumns];
+
+      const expectedValue = [...visibleColumns];
+
+      component['setMainColumns']();
+
+      expect(component.mainColumns).toEqual(expectedValue);
+      expect(component.hasMainColumns).toBe(true);
+      expect(component.allColumnsWidthPixels).toBe(false);
+
+    });
+
+    it('setMainColumns: should set mainColumns with visibleColumns, hasMainColumns with true and allColumnsWidthPixels with true', () => {
+      const visibleColumns: Array<PoTableColumn> = [
+        { property: 'name', width: '50px' },
+        { property: 'age', width: '50px' }
+      ];
+
+      const invisibleColumns: Array<PoTableColumn> = [
+        { property: 'age', visible: false },
+        { property: 'address', type: 'auhdsuha' }
+      ];
+
+      component['_columns'] = [...visibleColumns, ...invisibleColumns];
+
+      const expectedValue = [...visibleColumns];
+
+      component['setMainColumns']();
+
+      expect(component.mainColumns).toEqual(expectedValue);
+      expect(component.allColumnsWidthPixels).toBe(true);
+      expect(component.hasMainColumns).toBe(true);
+
+    });
+
+    it('setSubtitleColumns: should set `subtitleColumns` and call `getSubtitleColumns`', () => {
+      const subTitleColumn: PoTableColumn = { property: 'sub', type: 'subtitle', subtitles: [
+        { value: 'arrived', color: 'color-07', label: 'Arrived', content: 'OK' }
+      ] };
+
+      const expectedValue = [{ ...subTitleColumn }];
+
+      const spyGetSubtitleColumns = spyOn(component, <any> 'getSubtitleColumns').and.callThrough();
+
+      component.columns = [{ property: 'name'}, { ...subTitleColumn }];
+      component['setSubtitleColumns']();
+
+      expect(component.subtitleColumns).toEqual(expectedValue);
+      expect(spyGetSubtitleColumns).toHaveBeenCalled();
+    });
+
   });
 
   describe('Properties:', () => {
     const booleanValidTrueValues = [true, 'true', 1, ''];
     const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
 
-    it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
+    describe('p-literals:', () => {
+      it('should be in portuguese if browser is setted with an unsupported language', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault[poLocaleDefault]);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault[poLocaleDefault]);
+      });
 
-    it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      it('should be in portuguese if browser is setted with `pt`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.pt);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.pt);
+      });
 
-    it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('en');
+      it('should be in english if browser is setted with `en`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('en');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.en);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.en);
+      });
 
-    it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      it('should be in spanish if browser is setted with `es`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('es');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.es);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.es);
+      });
 
-    it('p-literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      it('should be in russian if browser is setted with `ru`', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
 
-      component.literals = {};
+        component.literals = {};
 
-      expect(component.literals).toEqual(poTableLiteralsDefault.ru);
-    });
+        expect(component.literals).toEqual(poTableLiteralsDefault.ru);
+      });
 
-    it('p-literals: should accept custom literals', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      it('should accept custom literals', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
-      const customLiterals = Object.assign({}, poTableLiteralsDefault[poLocaleDefault]);
+        const customLiterals = Object.assign({}, poTableLiteralsDefault[poLocaleDefault]);
 
-      // Custom some literals
-      customLiterals.noData = 'No data custom';
+        // Custom some literals
+        customLiterals.noData = 'No data custom';
 
-      component.literals = customLiterals;
+        component.literals = customLiterals;
 
-      expect(component.literals).toEqual(customLiterals);
-    });
+        expect(component.literals).toEqual(customLiterals);
+      });
 
-    it('p-literals: should update property with default literals if is setted with invalid values', () => {
-      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+      it('should update property with default literals if is setted with invalid values', () => {
+        const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
-      expectPropertiesValues(component, 'literals', invalidValues, poTableLiteralsDefault[poLocaleDefault]);
+        expectPropertiesValues(component, 'literals', invalidValues, poTableLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should get literals directly from poTableLiteralsDefault if it not initialized', () => {
+        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+        expect(component.literals).toEqual(poTableLiteralsDefault['pt']);
+      });
     });
 
     it('p-loading: should update property `p-loading` with valid values.', () => {
@@ -961,7 +1190,7 @@ describe('PoTableBaseComponent:', () => {
     it('p-columns, p-items: should call `getDefaultColumns` with item if doesn`t have columns but has items to set default column', () => {
       const item = { table: 'table' };
 
-      spyOn(component, <any>'getDefaultColumns');
+      spyOn(component, <any>'getDefaultColumns').and.callThrough();
 
       component.items = [item];
       component.columns = [];
@@ -1004,6 +1233,21 @@ describe('PoTableBaseComponent:', () => {
       component.sortedColumn.ascending = false;
 
       expect(component['sortType']).toBe('descending');
+    });
+
+    it('nameColumnDetail: should return name column detail', () => {
+      const nameColumn = 'extras';
+      const detailColumn = { property: nameColumn, type: 'detail' };
+
+      component.columns = [{ property: 'name' }, { ...detailColumn }];
+
+      expect(component.nameColumnDetail).toBe(nameColumn);
+    });
+
+    it('nameColumnDetail: should return null if not have master-detail', () => {
+      component.columns = [ { property: 'name' } ];
+
+      expect(component.nameColumnDetail).toBeNull();
     });
 
   });

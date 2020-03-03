@@ -10,11 +10,13 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
-      [p-focus]="field.focus"
+      [p-error-pattern]="field.errorMessage"
+      [p-auto-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-max-date]="field.maxValue"
       [p-min-date]="field.minValue"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-datepicker>
@@ -25,12 +27,14 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
-      [p-focus]="field.focus"
+      [p-error-pattern]="field.errorMessage"
+      [p-auto-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-mask]="field.mask"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
+      [p-optional]="field.optional"
       [p-pattern]="field.pattern"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -42,13 +46,15 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
-      [p-focus]="field.focus"
+      [p-error-pattern]="field.errorMessage"
+      [p-auto-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-min]="field.minValue"
       [p-max]="field.maxValue"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-number>
@@ -59,9 +65,10 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
-      [p-focus]="field.focus"
+      [p-auto-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-decimal>
@@ -70,9 +77,11 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -83,9 +92,11 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-columns="3"
+      [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -95,6 +106,7 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
@@ -107,10 +119,13 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
+      [p-filter-params]="field.params"
       [p-filter-service]="field.optionsService"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-combo>
@@ -123,10 +138,12 @@
       [ngClass]="field.componentClass"
       [p-columns]="field.columns"
       [p-disabled]="isDisabled(field)"
+      [p-filter-params]="field.params"
       [p-filter-service]="field.searchService"
-      [p-focus]="field.focus"
+      [p-auto-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
     </po-lookup>
@@ -136,9 +153,11 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-columns="3"
+      [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -149,9 +168,10 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       [p-disabled]="isDisabled(field)"
-      [p-focus]="field.focus"
+      [p-auto-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
+      [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
@@ -162,11 +182,12 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       [p-disabled]="isDisabled(field)"
-      [p-focus]="field.focus"
+      [p-auto-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
+      [p-optional]="field.optional"
       [p-required]="field.required"
       [p-rows]="field.rows"
       (p-change)="onChangeField(field)">
@@ -178,14 +199,17 @@
       [ngClass]="field.componentClass"
       p-clean
       [p-disabled]="isDisabled(field)"
-      [p-focus]="field.focus"
+      [p-error-pattern]="field.errorMessage"
+      [p-auto-focus]="field.focus"
       [p-help]="field.help"
       [p-label]="field.label"
       [p-maxlength]="field.maxLength"
       [p-minlength]="field.minLength"
+      [p-optional]="field.optional"
+      [p-pattern]="field.pattern"
       [p-required]="field.required"
       (p-change)="onChangeField(field)">
-  </po-password>
+    </po-password>
 
   </ng-container>
 </div>

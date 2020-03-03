@@ -2,29 +2,31 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormFieldChanged } from './po-dynamic-form-field-changed.interface';
+import { PoDynamicFormOperation } from '../po-dynamic-form-operation/po-dynamic-form-operation';
+import { PoDynamicFormValidation } from './po-dynamic-form-validation.interface';
 
 @Injectable()
-export class PoDynamicFormValidationService {
+export class PoDynamicFormValidationService extends PoDynamicFormOperation {
 
-  constructor(private http: HttpClient) { }
-
-  sendChanges(validate: Function | string, field: PoDynamicFormField, value: any) {
-    const changedValue: PoDynamicFormFieldChanged = { property: field.property, value };
-
-    return typeof validate === 'string' ?
-      this.validateFieldOnServer(validate, changedValue) : of(validate(changedValue));
+  constructor(http: HttpClient) {
+    super(http);
   }
 
   sendFieldChange(field: PoDynamicFormField, value: any) {
-    return this.sendChanges(field.validate, field, value).pipe(map(validateFields => this.setFieldDefaultIfEmpty(validateFields)));
+    const changedValue: PoDynamicFormFieldChanged = { property: field.property, value };
+
+    return this.execute(field.validate, changedValue).pipe(
+      map(validateFields => this.setFieldDefaultIfEmpty(validateFields)));
   }
 
-  sendFormChange(validate: Function | string, field: PoDynamicFormField, value: Array<any>) {
-    return this.sendChanges(validate, field, value).pipe(map(validateFields => this.setFormDefaultIfEmpty(validateFields)));
+  sendFormChange(validate: Function | string, field: PoDynamicFormField, value: any): Observable<PoDynamicFormValidation> {
+    const changedValue: PoDynamicFormFieldChanged = { property: field.property, value };
+
+    return this.execute(validate, changedValue).pipe(map(validateFields => this.setFormDefaultIfEmpty(validateFields)));
   }
 
   updateFieldsForm(validatedFields: Array<PoDynamicFormField> = [], fields: Array<PoDynamicFormField> = []) {
@@ -34,8 +36,6 @@ export class PoDynamicFormValidationService {
 
       if (hasProperty) {
         updatedFields[index] = { ...fields[index], ...validatedField };
-      } else {
-        updatedFields.push(validatedField);
       }
 
       return updatedFields;
@@ -46,18 +46,6 @@ export class PoDynamicFormValidationService {
     return validateFields || {
       field: {}
     };
-  }
-
-  private setFormDefaultIfEmpty(validateFields: any): any {
-    return validateFields || {
-      value: {},
-      fields: [],
-      focus: undefined
-    };
-  }
-
-  private validateFieldOnServer(url: string, changedValue: { value: any; property: string; }) {
-    return this.http.post(url, changedValue);
   }
 
 }

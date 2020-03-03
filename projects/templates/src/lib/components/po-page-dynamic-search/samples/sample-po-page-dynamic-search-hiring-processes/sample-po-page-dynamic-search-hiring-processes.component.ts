@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { PoPageDynamicSearchLiterals } from '@portinari/portinari-templates';
+
 import {
   PoBreadcrumb,
   PoPageAction,
@@ -37,10 +39,16 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
 
   public readonly filters: Array<any> = [
     { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
-    { property: 'name', label: 'Name', gridColumns: 6 },
-    { property: 'city', label: 'City', gridColumns: 6 },
-    { property: 'jobDescription', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 },
+    { property: 'name', gridColumns: 6 },
+    { property: 'city', gridColumns: 6 },
+    { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 },
   ];
+
+  readonly literals: PoPageDynamicSearchLiterals = {
+    filterConfirmLabel: 'Aplicar',
+    filterTitle: 'Filtro avançado',
+    quickSearchLabel: 'Valor pesquisado:'
+  };
 
   constructor(
     private sampleHiringProcessesService: SamplePoPageDynamicSearchHiringProcessesService,
@@ -90,18 +98,22 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   }
 
   private hireCandidate() {
+    const hired = '1';
+    const progress = '2';
+    const canceled = '3';
+
     const selectedCandidate = this.hiringProcesses.find(candidate => candidate['$selected']);
     switch (selectedCandidate['hireStatus']) {
-      case 'progress':
+      case progress:
         selectedCandidate['hireStatus'] = 'hired';
         this.poNotification.success('Hired candidate!');
         break;
 
-      case 'hired':
+      case hired:
         this.poNotification.warning('This candidate has already been hired.');
         break;
 
-      case 'canceled':
+      case canceled:
         this.poNotification.error('This candidate has already been disqualified.');
         break;
     }
@@ -120,4 +132,7 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     this.filters[3].options = this.jobDescriptionOptions;
   }
 
+  onLoadFields() {
+    return this.sampleHiringProcessesService.getPageOptions();
+  }
 }

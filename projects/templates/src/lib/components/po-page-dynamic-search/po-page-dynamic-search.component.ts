@@ -1,11 +1,17 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 
-import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoPageFilter } from '@portinari/portinari-ui';
+import { Observable, Subscription } from 'rxjs';
+import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoLanguageService, PoPageFilter } from '@portinari/portinari-ui';
 
-import { getBrowserLanguage } from '../../utils/util';
+import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
+import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
 
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
 import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.component';
+import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
+import { PoPageDynamicOptionsSchema } from '../../services';
+
+type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions );
 
 /**
  * @docsExtends PoPageDynamicSearchBaseComponent
@@ -27,7 +33,9 @@ import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.
   selector: 'po-page-dynamic-search',
   templateUrl: './po-page-dynamic-search.component.html'
 })
-export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent {
+export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit, OnDestroy {
+
+  private loadSubscription: Subscription;
 
   private readonly _disclaimerGroup: PoDisclaimerGroup = {
     change: this.onChangeDisclaimerGroup.bind(this),
@@ -39,7 +47,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     action: 'onAction',
     advancedAction: 'onAdvancedAction',
     ngModel: 'quickFilter',
-    placeholder: this.literals.filterSettingsPlaceholder
+    placeholder: this.literals.searchPlaceholder
   };
 
   // Flag to control when changeDisclaimerGroup should be called
@@ -49,14 +57,31 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
 
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
 
+  constructor(languageService: PoLanguageService, private poPageCustomizationService: PoPageCustomizationService) {
+    super(languageService);
+  }
+
   get disclaimerGroup() {
-    return Object.assign({}, this._disclaimerGroup);
+    return Object.assign({}, this._disclaimerGroup, { title: this.literals.disclaimerGroupTitle });
   }
 
   get filterSettings() {
     this._filterSettings.advancedAction = this.filters.length === 0 ? undefined : 'onAdvancedAction';
 
-    return Object.assign({}, this._filterSettings);
+    return Object.assign({}, this._filterSettings, { placeholder: this.literals.searchPlaceholder });
+  }
+
+  ngOnInit() {
+    this.setAdvancedFilterLiterals(this.literals);
+    if (this.onLoad) {
+      this.loadOptionsOnInitialize(this.onLoad);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.loadSubscription) {
+      this.loadSubscription.unsubscribe();
+    }
   }
 
   onAction() {
@@ -83,6 +108,18 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.advancedSearch.emit(filters);
   }
 
+  private applyDisclaimerLabelValue(field: any, filterValue: any) {
+    const values = Array.isArray(filterValue) ? filterValue : [ filterValue ];
+
+    const labels = values.map(value => {
+      const filteredField = field.options.find(option => option.value === value);
+
+      return filteredField.label || filteredField.value;
+    });
+
+    return labels.join(', ');
+  }
+
   private formatDate(date: string) {
     const year = parseInt(date.substr(0, 4), 10);
     const month = parseInt(date.substr(5, 2), 10);
@@ -95,26 +132,77 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return fields.find((field: PoDynamicFormField) => field.property === fieldName);
   }
 
+  private getFilterValueToDisclaimer(field: any, value: any) {
+
+    if (field.type === PoDynamicFieldType.Date) {
+      return this.formatDate(value);
+    }
+
+    if (field.options) {
+      return this.applyDisclaimerLabelValue(field, value);
+    }
+
+    return value;
+  }
+
   private onChangeDisclaimerGroup(disclaimers) {
     this.changeDisclaimersEnabled ? this.changeDisclaimers.emit(disclaimers) : this.changeDisclaimersEnabled = true;
   }
 
   private setDisclaimers(filters) {
     const disclaimers = [];
+    const properties = Object.keys(filters);
 
-    Object.keys(filters).forEach(filter => {
-      const field = this.getFieldByProperty(this.filters, filter);
-
-      const value = field.type === PoDynamicFieldType.Date ? this.formatDate(filters[filter]) : filters[filter];
+    properties.forEach(property => {
+      const field = this.getFieldByProperty(this.filters, property);
+      const label = field.label || capitalizeFirstLetter(field.property);
+      const value = filters[property];
 
       disclaimers.push({
-        label: `${field.label}: ${value}`,
-        property: filter,
-        value: filters[filter]
+        label: `${label}: ${this.getFilterValueToDisclaimer(field, value)}`,
+        property,
+        value
       });
     });
 
     return disclaimers;
   }
 
+  private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
+
+    this.loadSubscription = this.getPoDynamicPageOptions(onLoad).subscribe(responsePoOption =>
+        this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption));
+  }
+
+  private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicSearchOptions> {
+    const originalOption: PoPageDynamicSearchOptions = {
+      title: this.title,
+      actions: this.actions,
+      breadcrumb: this.breadcrumb,
+      filters: this.filters
+    };
+
+    const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicSearchOptions> = {
+      schema: [
+        {
+          nameProp: 'filters',
+          merge: true,
+          keyForMerge: 'property'
+        },
+        {
+          nameProp: 'actions',
+          merge: true,
+          keyForMerge: 'label'
+        },
+        {
+          nameProp: 'breadcrumb'
+        },
+        {
+          nameProp: 'title'
+        }
+      ]
+    };
+
+    return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
+  }
 }

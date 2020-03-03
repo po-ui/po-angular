@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoSwitchBaseComponent } from './po-switch-base.component';
@@ -42,7 +42,7 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
     }
   ]
 })
-export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterViewChecked {
+export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterViewChecked, AfterViewInit {
 
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
@@ -52,6 +52,12 @@ export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterVie
 
   ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.focus();
+    }
   }
 
   /**

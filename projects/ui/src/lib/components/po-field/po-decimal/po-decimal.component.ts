@@ -4,8 +4,10 @@ import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/form
 import { convertToInt } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
-const PO_DECIMAL_DEFAULT_DECIMALS_LENGTH = 2;
-const PO_DECIMAL_DEFAULT_THOUSAND_MAXLENGTH = 13;
+const poDecimalDefaultDecimalsLength = 2;
+const poDecimalDefaultThousandMaxlength = 13;
+const poDecimalMaxDecimalsLength = 15;
+const poDecimalTotalLengthLimit = 16;
 
 /**
  *
@@ -13,13 +15,17 @@ const PO_DECIMAL_DEFAULT_THOUSAND_MAXLENGTH = 13;
  *
  * @description
  *
- * po-decimal é um input específico para receber apenas números decimais.
- * Quando utilizado, o componente terá comportamento de um campo de 'text' com algumas características:
+ * <br>
+ * - O `po-decimal` é um *input* específico para receber apenas números decimais, por isso recebe as seguintes características:
+ *  + Aceita apenas números;
+ *  + Utiliza ',' como separador de decimal;
+ *  + Utiliza '.' para separação de milhar;
+ *  + É possível configurar a quantidade de casas decimais e a quantidade de digitos do campo.
  *
- * - Aceita apenas números;
- * - Utiliza ',' como separador de decimal;
- * - Utiliza '.' para separação de milhar;
- * - É possível configurar a quantidade de casas decimais e a quantidade de digitos do campo.
+ * > **Importante:**
+ * Atualmente o JavaScript limita-se a um conjunto de dados de `32 bits`, e para que os valores comportem-se devidamente,
+ * o `po-decimal` contém um tratamento que limita em 16 o número total de casas antes e após a vírgula.
+ * Veja abaixo as demais regras nas documentações de `p-decimals-length` e `p-thousand-maxlength`.
  *
  * @example
  *
@@ -61,8 +67,8 @@ const PO_DECIMAL_DEFAULT_THOUSAND_MAXLENGTH = 13;
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit {
 
-  private _decimalsLength?: number = PO_DECIMAL_DEFAULT_DECIMALS_LENGTH;
-  private _thousandMaxlength?: number = PO_DECIMAL_DEFAULT_THOUSAND_MAXLENGTH;
+  private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
+  private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
 
   private decimalSeparator: string = ',';
   private fireChange: boolean = false;
@@ -90,11 +96,25 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
    *
    * Quantidade máxima de casas decimais.
    *
+   * > **Importante:**
+   * - O valor máximo permitido é 15;
+   * - A soma total de `p-decimals-length` com `p-thousand-maxlength` limita-se à 16;
+   * - Esta propriedade sobrepõe apenas o valor **padrão** de `p-thousand-maxlength`;
+   * - Caso `p-thousand-maxlength` tenha um valor definido, esta propriedade poderá receber apenas o valor restante do limite total (16).
+   *
    * @default `2`
    */
   @Input('p-decimals-length') set decimalsLength(value: number) {
-    this._decimalsLength = convertToInt(value, PO_DECIMAL_DEFAULT_DECIMALS_LENGTH);
+    let decimalsLength = convertToInt(value);
 
+    decimalsLength = this.isValueBetweenAllowed(decimalsLength, poDecimalMaxDecimalsLength) ?
+    decimalsLength : poDecimalDefaultDecimalsLength;
+
+    if (this.isGreaterThanTotalLengthLimit(decimalsLength, this.thousandMaxlength)) {
+      this.thousandMaxlength = poDecimalTotalLengthLimit - decimalsLength;
+    }
+
+    this._decimalsLength = decimalsLength;
   }
 
   get decimalsLength() {
@@ -106,15 +126,30 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
    *
    * @description
    *
-   * Número máximo de dígitos antes do separador de decimal. O valor máximo possível deve ser menor ou igual a 13.
+   * Quantidade máxima de dígitos antes do separador decimal.
+   *
+   * > **Importante:**
+   * - O valor máximo permitido é 13;
+   * - A soma total de `p-decimals-length` com `p-thousand-maxlength` limita-se à 16;
+   * - Esta propriedade sobrepõe o valor definido em `p-decimals-length`.
    *
    * @default `13`
    */
   @Input('p-thousand-maxlength') set thousandMaxlength(value: number) {
-    const thousandMaxlength = convertToInt(value, PO_DECIMAL_DEFAULT_THOUSAND_MAXLENGTH);
+    let thousandMaxlength = convertToInt(value);
 
-    this._thousandMaxlength = thousandMaxlength <= PO_DECIMAL_DEFAULT_THOUSAND_MAXLENGTH ?
-    thousandMaxlength : PO_DECIMAL_DEFAULT_THOUSAND_MAXLENGTH;
+    if (this.decimalsLength > poDecimalDefaultDecimalsLength && !thousandMaxlength) {
+      thousandMaxlength = poDecimalTotalLengthLimit - this.decimalsLength;
+    }
+
+    thousandMaxlength = this.isValueBetweenAllowed(thousandMaxlength, poDecimalDefaultThousandMaxlength) ?
+    thousandMaxlength : poDecimalDefaultThousandMaxlength;
+
+    if (this.isGreaterThanTotalLengthLimit(this.decimalsLength, thousandMaxlength)) {
+      this.decimalsLength = poDecimalTotalLengthLimit - thousandMaxlength;
+    }
+
+    this._thousandMaxlength = thousandMaxlength;
   }
 
   get thousandMaxlength() {
@@ -127,7 +162,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   ngAfterViewInit() {
-    this.putFocus();
+    this.verifyAutoFocus();
     this.setPaddingInput();
   }
 
@@ -414,6 +449,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       this.validateCursorPositionBeforeSeparator(event) || this.verifyDecimalLengthIsZeroAndKeyPressedIsComma(charCode);
   }
 
+  private isGreaterThanTotalLengthLimit(decimalsMaxLength: number, thousandMaxlength: number) {
+    return (decimalsMaxLength + thousandMaxlength) > poDecimalTotalLengthLimit;
+  }
+
   private isKeyDecimalSeparator(event) {
     return event.key === this.decimalSeparator || event.char === this.decimalSeparator;
   }
@@ -449,14 +488,18 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return true;
   }
 
+  private isValueBetweenAllowed(value: number, maxAllowed: number) {
+    return  value >= 0 && value <= maxAllowed;
+  }
+
   // Quando decimalsLength for 0 não deve permitir informar vírgula (decimalSeparator)
   private verifyDecimalLengthIsZeroAndKeyPressedIsComma(charCode: number) {
     return (charCode === 44 && this.decimalsLength === 0);
   }
 
-  private putFocus() {
-    if (this.autofocus) {
-      this.inputEl.nativeElement.focus();
+  private verifyAutoFocus() {
+    if (this.autoFocus) {
+      this.focus();
     }
   }
 

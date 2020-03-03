@@ -4,6 +4,7 @@ import { EventEmitter, Input, Output } from '@angular/core';
 import { browserLanguage, convertToBoolean, poLocaleDefault } from './../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { InputBoolean } from '../../../decorators';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
 import { PoDateService } from './../../../services/po-date/po-date.service';
@@ -92,6 +93,19 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   get isDateRangeInputValid() {
     return this.isDateRangeInputFormatValid && this.isStartDateRangeInputValid;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
    * @optional

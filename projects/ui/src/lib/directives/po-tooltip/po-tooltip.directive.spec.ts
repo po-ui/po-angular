@@ -157,11 +157,15 @@ describe('PoTooltipDirective', () => {
     expect(document.body.querySelectorAll('.po-arrow-test2').length).toBeTruthy();
   });
 
-  it('should call hideTooltip in mouseleave', () => {
+  it('should call hideTooltip in mouseleave', fakeAsync(() => {
     spyOn(directive, 'hideTooltip');
+
     directive.onMouseLeave();
+
+    tick(100);
+
     expect(directive.hideTooltip).toHaveBeenCalled();
-  });
+  }));
 
   it('should call update Text', () => {
     directive.lastTooltipText = 'abc';

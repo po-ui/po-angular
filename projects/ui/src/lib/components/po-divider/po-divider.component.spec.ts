@@ -22,8 +22,6 @@ describe('PoDividerComponent:', () => {
     fixture = TestBed.createComponent(PoDividerComponent);
     component = fixture.componentInstance;
 
-    fixture.detectChanges();
-
     nativeElement = fixture.debugElement.nativeElement;
   });
 

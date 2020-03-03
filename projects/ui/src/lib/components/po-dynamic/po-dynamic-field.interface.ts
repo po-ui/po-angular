@@ -8,7 +8,11 @@ export interface PoDynamicField {
   /** Nome de referência do campo. */
   property: string;
 
-  /** Rótulo do campo exibido. */
+  /**
+   * Rótulo do campo exibido.
+   *
+   * Caso não seja informado, será utilizado como `label` o valor da propriedade `property` com a primeira letra em maiúsculo.
+   */
   label?: string;
 
   /**

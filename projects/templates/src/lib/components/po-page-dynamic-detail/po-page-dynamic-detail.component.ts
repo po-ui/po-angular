@@ -7,7 +7,7 @@ import { PoBreadcrumb, PoPageAction, PoDialogService, PoDialogConfirmOptions, Po
 
 import { PoPageDynamicDetailActions } from './po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailField } from './po-page-dynamic-detail-field.interface';
-import { PoPageDynamicService } from './po-page-dynamic.service';
+import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
 
 export const poPageDynamicDetailLiteralsDefault = {
   en: {
@@ -232,7 +232,7 @@ export class PoPageDynamicDetailComponent implements OnInit {
   }
 
   private loadMetadata(id) {
-    this.poPageDynamicService.getMetadata('detail').toPromise().then(response => {
+    this.poPageDynamicService.getMetadata<any>('detail').toPromise().then(response => {
       this.autoRouter = response.autoRouter;
       this.actions = response.actions || {};
       this.breadcrumb = response.breadcrumb || { items : [] };

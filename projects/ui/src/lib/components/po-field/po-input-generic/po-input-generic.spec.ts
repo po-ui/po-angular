@@ -62,11 +62,11 @@ describe('PoInputGeneric:', () => {
     expect(component.afterViewInit).toHaveBeenCalled();
   });
 
-  it('should call putFocus and setPaddingInput', () => {
-    spyOn(component, 'putFocus');
+  it('should call verifyAutoFocus and setPaddingInput', () => {
+    spyOn(component, 'verifyAutoFocus');
     spyOn(component, 'setPaddingInput');
     component.afterViewInit();
-    expect(component.putFocus).toHaveBeenCalled();
+    expect(component.verifyAutoFocus).toHaveBeenCalled();
     expect(component.setPaddingInput).toHaveBeenCalled();
   });
 
@@ -225,17 +225,25 @@ describe('PoInputGeneric:', () => {
     expect(fakeThis.inputEl.nativeElement.value).toBe('12345');
   });
 
-  it('should not call "callOnChange" on eventInput with mask', () => {
+  it('should call mask.blur on eventInput with mask', () => {
     const fakeThis = {
       mask: true,
-      callOnChange: () => {},
-      validMaxLength: () => {},
-      maxlength: ''
+      callOnChange: (v: any) => {},
+      inputEl: component.inputEl,
+      objMask: {
+        blur: (v: any) => {},
+        valueToInput: '',
+        valueToModel: ''
+      }
     };
 
+    fakeEvent.target.value = '1234567890';
+
+    spyOn(fakeThis.objMask, 'blur');
     spyOn(fakeThis, 'callOnChange');
     component.eventOnInput.call(fakeThis, fakeEvent);
-    expect(fakeThis.callOnChange).not.toHaveBeenCalled();
+    expect(fakeThis.callOnChange).toHaveBeenCalled();
+    expect(fakeThis.objMask.blur).toHaveBeenCalled();
   });
 
   it('should valid maxlength when its defined', () => {
@@ -504,20 +512,20 @@ describe('PoInputGeneric:', () => {
       expect(fakeThis.objMask.keyup).not.toHaveBeenCalled();
     });
 
-    it('putFocus: should call `focus` if autofocus is true', () => {
+    it('verifyAutoFocus: should call `focus` if autofocus is true', () => {
       const fakeThis = {
-        autofocus: true,
+        autoFocus: true,
         focus: () => {}
       };
 
       spyOn(fakeThis, 'focus');
 
-      component.putFocus.call(fakeThis);
+      component.verifyAutoFocus.call(fakeThis);
 
       expect(fakeThis.focus).toHaveBeenCalled();
     });
 
-    it('putFocus: shouldn`t call `focus` if autofocus is false', () => {
+    it('verifyAutoFocus: shouldn`t call `focus` if autofocus is false', () => {
       const fakeThis = {
         autofocus: false,
         focus: () => {}
@@ -525,7 +533,7 @@ describe('PoInputGeneric:', () => {
 
       spyOn(fakeThis, 'focus');
 
-      component.putFocus.call(fakeThis);
+      component.verifyAutoFocus.call(fakeThis);
 
       expect(fakeThis.focus).not.toHaveBeenCalled();
     });

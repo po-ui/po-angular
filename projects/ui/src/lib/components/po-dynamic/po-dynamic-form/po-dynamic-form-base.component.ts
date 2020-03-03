@@ -12,9 +12,6 @@ import { PoDynamicFormField } from './po-dynamic-form-field.interface';
  * Componente para criação de formulários dinâmicos a partir de uma lista de objetos.
  *
  * Também é possível verificar se o formulário está válido e informar valores para a exibição de informações.
- *
- * > Temos uma ferramenta para criação de formulários, onde é possível inicializá-lo através de um JSON.
- * [**Veja aqui**](tools/dynamic-form).
  */
 export class PoDynamicFormBaseComponent {
 
@@ -26,13 +23,6 @@ export class PoDynamicFormBaseComponent {
    * @description
    *
    * Nome da propriedade, atribuída ao `PoDynamicFormField.property`, que iniciará o campo com foco.
-   *
-   * > Não é possivel iniciar os componentes abaixo com foco:
-   *  - `po-checkbox-group`
-   *  - `po-combo`
-   *  - `po-radio-group`
-   *  - `po-select`
-   *  - `po-switch`
    */
   @Input('p-auto-focus') autoFocus?: string;
 
@@ -49,7 +39,7 @@ export class PoDynamicFormBaseComponent {
    * - Caso o *type* informado seja *boolean* o componente criado será o `po-switch`.
    * - Caso o *type* informado seja *currency* e não seja informado um *mask* ou *pattern* o componente criado será o `po-decimal`,
    * caso seja informado um *mask* ou *pattern* o componente criado será o `po-input`.
-   * - Caso o *type* informado seja *number* e não seja informado um *mask* ou *pattern* o componente criado será o `po-decimal`, caso seja
+   * - Caso o *type* informado seja *number* e não seja informado um *mask* ou *pattern* o componente criado será o `po-number`, caso seja
    * informado um *mask* ou *pattern* o componente criado será o `po-input`.
    * - Caso a lista possua a propriedade `options` e a mesma possua até 3 itens o componente criado será o `po-radio-group`
    * ou `po-checkbox-group` se informar a propriedade `optionsMulti`.
@@ -157,11 +147,45 @@ export class PoDynamicFormBaseComponent {
   }
 
   /**
+   * Função ou serviço que será executado na inicialização do componente.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
+   * - `function`: Método que será executado.
+   *
+   * Ao ser executado, irá receber como parâmetro o objeto informado no `p-value`.
+   *
+   * O retorno desta função deve ser do tipo [PoDynamicFormLoad](documentation/po-dynamic-form#po-dynamic-form-load),
+   * onde o usuário poderá determinar as novas atualizações dos campos, valores e determinar o campo a ser focado.
+   *
+   * Por exemplo:
+   *
+   * ```
+   * onLoadFields(): PoDynamicFormLoad {
+   *
+   *   return {
+   *     value: { cpf: undefined },
+   *     fields: [
+   *       { property: 'cpf' }
+   *     ],
+   *     focus: 'cpf'
+   *   };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-load]="onLoadFields.bind(this)"
+   * ```
+   */
+  @Input('p-load') load?: string | Function;
+
+  /**
    * Função ou serviço para validar as **mudanças do formulário**.
    *
    * A propriedade aceita os seguintes tipos:
-   * - **String**: Endpoint usado pelo componente para requisição via `POST`.
-   * - **Function**: Método que será executado.
+   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
+   * - `function`: Método que será executado.
    *
    * Ao ser executado, irá receber como parâmetro um objeto com o nome da propriedade
    * alterada e o novo valor, conforme a interface `PoDynamicFormFieldChanged`:

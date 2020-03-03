@@ -1,69 +1,47 @@
-<form #f="ngForm">
+<h2>Process request with Http Interceptor</h2>
+<p>Edit response object by server with pattern expected by Http Interceptor:</p>
 
+<po-code-editor
+  [(ngModel)]="requestMessage"
+  p-height="330"
+  p-theme="vs-dark">
+</po-code-editor>
+
+<hr>
+
+<form #requestForm="ngForm">
   <div class="po-row">
-    <po-input class="po-lg-5"
-      name="text"
-      [(ngModel)]="text"
-      p-clean
-      p-label="Texto da notificação"
-      p-placeholder="Texto"
-      p-maxlength="50"
-      p-required>
-    </po-input>
-
-    <po-input class="po-md-4 po-lg-2"
-      name="code"
-      [(ngModel)]="code"
-      p-clean
-      p-label="Código"
-      p-maxlength="5"
-      p-placeholder="Código">
-    </po-input>
-
-    <po-url class="po-md-8 po-lg-5"
-      name="help"
-      [(ngModel)]="help"
-      p-clean
-      p-label="Url para Ajuda"
-      p-placeholder="Url">
-    </po-url>
-  </div>
-
-  <div class="po-row">
-    <po-radio-group class="po-md-6"
-      name="type"
-      [(ngModel)]="type"
-      p-label="Tipo de Notificação"
-      p-required
-      [p-options]="typeOptions">
-    </po-radio-group>
-
     <po-radio-group class="po-md-6"
       name="status"
       [(ngModel)]="status"
-      p-label="Status"
-      p-required
-      [p-options]="statusOptions">
+      p-label="Http Status"
+      [p-options]="statusOptions"
+      (p-change)="changeOption()">
     </po-radio-group>
-  </div>
 
-  <div class="po-row">
-    <po-switch class="po-lg-12"
-      name="noErrorHeaderParam"
-      [(ngModel)]="noErrorHeaderParam"
-      p-help="Ativa/desativa o envio do parametro X-Portinari-No-Error no cabeçalho da requisição."
-      p-label="Ativar X-Portinari-No-Error"
-      p-label-off="Não"
-      p-label-on="Sim">
+    <po-switch class="po-md-6"
+      name="noMessageHeaderParam"
+      [(ngModel)]="noMessageHeaderParam"
+      p-help="Enable/disables notification"
+      p-label="X-Portinari-No-Message"
+      p-label-off="Off"
+      p-label-on="On">
     </po-switch>
   </div>
 
-  <div class="po-row">
-    <po-button class="po-md-4"
-      p-label="Gerar Requisição"
-      [p-disabled]="!f.form.valid"
+  <div class="po-row po-mt-1">
+    <po-button
+      class="po-md-3"
+      p-label="Process Request"
       (p-click)="processRequest()">
     </po-button>
   </div>
 
+  <div class="po-row po-mt-1">
+    <po-button
+      class="po-md-3"
+      p-label="Sample Restore"
+      (p-click)="restore()">
+    </po-button>
+  </div>
 </form>

@@ -7,11 +7,20 @@ describe('PoLanguageService:', () => {
   const poLocaleKey = 'PO_USER_LOCALE';
   const poDefaultLanguage = 'PO_DEFAULT_LANGUAGE';
   const languages = { pt: 'pt', ptBr: 'pt-BR', en: 'en', enUs: 'en-US', es: 'es', esEs: 'es-ES' };
+  let currentLanguage: string;
+
+  beforeAll(() => {
+    service = new PoLanguageService();
+    currentLanguage = service.getLanguage();
+  });
 
   beforeEach(() => {
     service = new PoLanguageService();
-
     localStorage.clear();
+  });
+
+  afterAll(() => {
+    service.setLanguage(currentLanguage);
   });
 
   it('should be created', () => {

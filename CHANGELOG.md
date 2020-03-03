@@ -1,6 +1,203 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+## [1.27.1](https://github.com/portinariui/portinari-angular/compare/v1.27.0...v1.27.1) (2020-02-28)
+
+
+### Bug Fixes
+
+* **page-default:** corrige abertura de URL externa nos botões de ações ([879877f](https://github.com/portinariui/portinari-angular/commit/879877f))
+* **page-list:** corrige abertura de URL externa nos botões de ações ([d952c38](https://github.com/portinariui/portinari-angular/commit/d952c38))
+* **page-list:** corrige a literal "Busca Avançada" em russo ([9a8e1fb](https://github.com/portinariui/portinari-angular/commit/9a8e1fb))
+* **table:** corrige erro no console do IE/EDGE ([88f8b7a](https://github.com/portinariui/portinari-angular/commit/88f8b7a))
+
+
+### Documentation
+
+* **getting-started:** melhoria na documentação de primeiros passos ([f5c3120](https://github.com/portinariui/portinari-angular/commit/f5c3120))
+* **readme:** melhoria na documentação dos primeiros passos ([1b7746b](https://github.com/portinariui/portinari-angular/commit/1b7746b))
+
+
+
+## [1.27.0](https://github.com/portinariui/portinari-angular/compare/v1.26.0...v1.27.0) (2020-02-21)
+
+
+### Bug Fixes
+
+* **page-dynamic-search:** altera nome de interface `PoPageDynamicOptions` para `PoPageDynamicSearchOptions` ([263fdae](https://github.com/portinariui/portinari-angular/commit/263fdae))
+
+
+### Features
+
+* **page-dynamic-table:** adiciona a propriedade `serviceMetadataApi` ([b27501a](https://github.com/portinariui/portinari-angular/commit/b27501a))
+* **page-dynamic-table:** adiciona a propriedade `p-load` ([1f5cfc4](https://github.com/portinariui/portinari-angular/commit/1f5cfc4))
+
+
+### Documentation
+
+* **http-interceptor:** melhora a documentação do funcionamento ([5aba713](https://github.com/portinariui/portinari-angular/commit/5aba713))
+* **api:** adiciona documento guia de implementão de API ([a5a9c35](https://github.com/portinariui/portinari-angular/commit/a5a9c35))
+
+
+## [1.26.0](https://github.com/portinariui/portinari-angular/compare/v1.25.0...v1.26.0) (2020-02-14)
+
+
+### Bug Fixes
+
+* **dynamic-view:** corrige impressão da página ([72f3544](https://github.com/portinariui/portinari-angular/commit/72f3544)), closes [#258](https://github.com/portinariui/portinari-angular/issues/258)
+* **page-login:** ajusta quebra de layout no popover no idioma russo ([827cad4](https://github.com/portinariui/portinari-angular/commit/827cad4))
+* **tooltip:** corrige o compartilhamento do serviço de posição ([cfc2b7a](https://github.com/portinariui/portinari-angular/commit/cfc2b7a))
+* **tooltip:** esconde os múltiplos tooltips quando realizar mouseleave ([7e3d6bd](https://github.com/portinariui/portinari-angular/commit/7e3d6bd))
+
+
+### Features
+
+* **page-dynamic-edit:** adiciona propriedade `serviceMetadataApi` ([246ef13](https://github.com/portinariui/portinari-angular/commit/246ef13))
+* **stepper:** permite próximo passo assíncrono ([095ce4f](https://github.com/portinariui/portinari-angular/commit/095ce4f)), closes [#171](https://github.com/portinariui/portinari-angular/issues/171)
+
+### Documentation
+
+* **readme:** adiciona twitter badge ([78726f3](https://github.com/portinariui/portinari-angular/commit/78726f3))
+* **how-to-document:** adiciona documento de guia para documentação ([19455c5](https://github.com/portinariui/portinari-angular/commit/19455c5))
+* **code-of-conduct:** adiciona documento de código de conduta ([b46d6e1](https://github.com/portinariui/portinari-angular/commit/b46d6e1))
+* **style-guide:** adiciona documento de boas práticas ([4f57588](https://github.com/portinariui/portinari-angular/commit/4f57588))
+* **page-login:** atualiza exemplos da documentação ([4497e83](https://github.com/portinariui/portinari-angular/commit/4497e83))
+
+## [1.25.0](https://github.com/portinariui/portinari-angular/compare/v1.24.0...v1.25.0) (2020-02-07)
+
+
+### Bug Fixes
+
+* **decimal:** corrige falha no arredondamento dos decimais ([08f2382](https://github.com/portinariui/portinari-angular/commit/08f2382))
+
+
+### Features
+
+* **page-dynamic-search:** adiciona a propriedade `p-literals` ([ec298f9](https://github.com/portinariui/portinari-angular/commit/ec298f9))
+* **page-dynamic-search:** implementa a propriedade `p-load` ([36160f2](https://github.com/portinariui/portinari-angular/commit/36160f2))
+
+### Documentation
+
+* **sync:** atualização das versões do tutorial ([acf5afb](https://github.com/portinariui/portinari-angular/commit/acf5afb))
+* **loading-overlay:** documenta como utilizar `p-screen-lock="false"` ([65dedd7](https://github.com/portinariui/portinari-angular/commit/65dedd7))
+
+## [1.24.0](https://github.com/portinariui/portinari-angular/compare/v1.23.0...v1.24.0) (2020-01-24)
+
+
+### Documentation
+
+* **multiselect:** corrige mutabilidade no sample labs ([01e6576](https://github.com/portinariui/portinari-angular/commit/01e6576))
+
+
+### Features
+
+* **dynamic-form:** adiciona a propriedade `PoDynamicFormField.optional` ([f54cdc1](https://github.com/portinariui/portinari-angular/commit/f54cdc1))
+* **dynamic-form:** implementa a propriedade `PoDynamicFormField.errorMessage` ([1467cae](https://github.com/portinariui/portinari-angular/commit/1467cae))
+* **field:** cria nova propriedade `p-auto-focus` e deprecia a propriedade `p-focus` ([e9e2eac](https://github.com/portinariui/portinari-angular/commit/e9e2eac))
+
+Componentes atualizados:
+* checkbox
+* datepicker
+* datepicker-range
+* decimal
+* email
+* input
+* lookup
+* login
+* number
+* multiselect
+* password
+* textarea
+* upload
+* url
+* richtext
+
+Antes:
+```
+<po-input
+  name="input"
+  p-focus
+  p-label="Portinari Input">
+</po-input>
+```
+Agora:
+```
+<po-input
+  name="input"
+  p-auto-focus
+  p-label="Portinari Input">
+</po-input>
+```
+
+
+
+
+## [1.23.0](https://github.com/portinariui/portinari-angular/compare/v1.22.2...v1.23.0) (2020-01-17)
+
+
+### Bug Fixes
+
+* **page-dynamic-search:** corrige disclaimer com label undefined ([0cd6f1d](https://github.com/portinariui/portinari-angular/commit/0cd6f1d))
+* **page-dynamic-search:** corrige disclaimers da busca avançada ([f56bfed](https://github.com/portinariui/portinari-angular/commit/f56bfed))
+
+
+### Features
+
+* **combo:** permite utilizar `p-filter-params` nas requisições ([faf2505](https://github.com/portinariui/portinari-angular/commit/faf2505))
+* **dynamic-form:** nova propriedade `params` ([9c0aed5](https://github.com/portinariui/portinari-angular/commit/9c0aed5))
+* **dynamic-form:** inclui novos `fields` na propriedade `p-auto-focus` ([f7fb47c](https://github.com/portinariui/portinari-angular/commit/f7fb47c))
+* **combo:** implementa a propriedade `p-auto-focus` ([72c4f35](https://github.com/portinariui/portinari-angular/commit/72c4f35))
+* **checkbox-group:** implementa a propriedade `p-auto-focus` ([497fee0](https://github.com/portinariui/portinari-angular/commit/497fee0))
+* **radio-group:** implementa a propriedade `p-auto-focus` ([52caaf2](https://github.com/portinariui/portinari-angular/commit/52caaf2))
+* **select:** implementa a propriedade `p-auto-focus` ([83b157b](https://github.com/portinariui/portinari-angular/commit/83b157b))
+* **switch:** implementa a propriedade `p-auto-focus` ([d4c4f8b](https://github.com/portinariui/portinari-angular/commit/d4c4f8b))
+
+
+
+### [1.22.2](https://github.com/portinariui/portinari-angular/compare/v1.22.1...v1.22.2) (2020-01-10)
+
+
+### Code Refactoring
+
+* **table:** propriedade `p-selectable` substitui a propriedade `p-checkbox` ([9cdd3d4](https://github.com/portinariui/portinari-angular/commit/9cdd3d4))
+
+
+### [1.22.1](https://github.com/portinariui/portinari-angular/compare/v1.22.0...v1.22.1) (2020-01-06)
+
+
+### Performance
+
+* **divider:**: adiciona ChangeDetectionStrategy.OnPush ([4b8f3ce](https://github.com/portinariui/portinari-angular/commit/4b8f3ce))
+
+* **table:**  implementa alguns itens de performance ([30ac592](https://github.com/portinariui/portinari-angular/commit/30ac592))
+
+* **tag:** adiciona ChangeDetectionStrategy.OnPush ([2fe04cf](https://github.com/portinariui/portinari-angular/commit/2fe04cf))
+
+
+## [1.22.0](https://github.com/portinariui/portinari-angular/compare/v1.21.0...v1.22.0) (2019-12-27)
+
+
+### Features
+
+* **http-interceptor:** permite a exibição de múltiplas mensagens do backend e depreciado o parâmetro `X-Portinari-No-Error` ([b7505dc](https://github.com/portinariui/portinari-angular/commit/b7505dc))
+
+
+
+## [1.21.0](https://github.com/portinariui/portinari-angular/compare/v1.20.0...v1.21.0) (2019-12-23)
+
+
+### Bug Fixes
+
+* **input:** corrige o *bug* ao colar um texto com o *mouse* no input ([0b48421](https://github.com/portinariui/portinari-angular/commit/0b48421)), closes [#146](https://github.com/portinariui/portinari-angular/issues/146)
+* **lookup:** corrige comportamento focal na tabulação do html ([4e2432b](https://github.com/portinariui/portinari-angular/commit/4e2432b))
+* **multiselect:** corrige disparo do evento de *change* na inicialização ([d1b7124](https://github.com/portinariui/portinari-angular/commit/d1b7124))
+
+
+### Features
+
+* **dynamic-form:** adiciona métodos para inicialização ([d68ecef](https://github.com/portinariui/portinari-angular/commit/d68ecef))
+* **table:** adiciona eventos e métodos para colapsar e expandir ([e632fbc](https://github.com/portinariui/portinari-angular/commit/e632fbc))
+
+
 
 ## [1.20.0](https://github.com/portinariui/portinari-angular/compare/v1.19.0...v1.20.0) (2019-12-13)
 
@@ -116,7 +313,7 @@ All notable changes to this project will be documented in this file. See [standa
 * **page-login:** corrige literais customizadas ao trocar de idioma ([7538c6b](https://github.com/portinariui/portinari-angular/commit/7538c6b))
 
 
-## Code Refactoring
+### Code Refactoring
 
 * **table:** melhoria na componentização do componente interno `po-table-column-icon` ([98009bd](https://github.com/portinariui/portinari-angular/commit/98009bd))
 

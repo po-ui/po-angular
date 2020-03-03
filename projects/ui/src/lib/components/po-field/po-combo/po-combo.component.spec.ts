@@ -1689,6 +1689,24 @@ describe('PoComboComponent - with service:', () => {
       expect(fakeThis.service.getObjectByValue).not.toHaveBeenCalled();
     });
 
+    it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
+      component.autoFocus = true;
+
+      const spyFocus = spyOn(component, 'focus');
+      component.ngAfterViewInit();
+
+      expect(spyFocus).toHaveBeenCalled();
+    });
+
+    it('ngAfterViewInit: shouldn´t call `focus` if `autoFocus` is false.', () => {
+      component.autoFocus = false;
+
+      const spyFocus = spyOn(component, 'focus');
+      component.ngAfterViewInit();
+
+      expect(spyFocus).not.toHaveBeenCalled();
+    });
+
     it('ngOnDestroy: should not unsubscribe if getSubscription is falsy.', () => {
 
       component['getSubscription'] = fakeSubscription;

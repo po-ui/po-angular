@@ -1,14 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { configureTestSuite, expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
+import { PoDynamicFieldType } from '@portinari/portinari-ui';
 
 import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component';
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
+import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
+import { configureTestSuite, expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
 
 export const routes: Routes = [ ];
 
@@ -20,7 +22,8 @@ describe('PoPageDynamicSearchComponent:', () => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
-        RouterTestingModule.withRoutes(routes)
+        RouterTestingModule.withRoutes(routes),
+        PoPageCustomizationModule
       ],
       declarations: [
         PoPageDynamicSearchComponent,
@@ -38,7 +41,6 @@ describe('PoPageDynamicSearchComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicSearchComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
   });
 
@@ -50,7 +52,7 @@ describe('PoPageDynamicSearchComponent:', () => {
 
     it('get filterSettings: should return `filterSettings` with `advancedAction` equal to `undefined` if haven`t filters', () => {
       const result = { action: 'onAction', advancedAction: undefined, ngModel: 'quickFilter',
-        placeholder: component.literals.filterSettingsPlaceholder };
+        placeholder: component.literals.searchPlaceholder };
 
       expect(component.filterSettings).toEqual(result);
     });
@@ -62,7 +64,7 @@ describe('PoPageDynamicSearchComponent:', () => {
 
       component.filters = filters;
       const result = { action: 'onAction', advancedAction: 'onAdvancedAction', ngModel: 'quickFilter',
-        placeholder: component.literals.filterSettingsPlaceholder };
+        placeholder: component.literals.searchPlaceholder };
 
       expect(component.filterSettings).toEqual(result);
     });
@@ -250,6 +252,161 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component['formatDate']).not.toHaveBeenCalled();
     });
 
+    it(`setDisclaimers: should apply 'field.property' with uppercase first letter to label's value
+      if 'field.label' is 'undefined'`, () => {
+
+      component.filters = [
+        { property: 'name' },
+        { property: 'genre' },
+      ];
+
+      const filters = { name: 'Name1', genre: 'male' } ;
+
+      const result = [
+        { label: 'Name: Name1', property: 'name', value: 'Name1' },
+        { label: 'Genre: male', property: 'genre', value: 'male' }
+      ];
+
+      expect(component['setDisclaimers'](filters)).toEqual(result);
+    });
+
+    it('getFilterValueToDisclaimer: should return formated date if field type is PoDynamicFieldType.Date', () => {
+      const field = { type: PoDynamicFieldType.Date, property: '1', label: 'date' };
+      const value = '2020-08-12';
+
+      spyOn(component, <any>'formatDate').and.returnValue('12/08/2020');
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('12/08/2020');
+    });
+
+    it('getFilterValueToDisclaimer: should return label of option if options and label are defined', () => {
+      const field = { property: '1', label: 'field label', options: [
+        { value: '1', label: 'test 1'}, {value: '2', label: 'test 2' }
+      ]};
+
+      const value = '2';
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('test 2');
+    });
+
+    it('getFilterValueToDisclaimer: should return value of option if options is defined and label is undefined', () => {
+      const field = { property: '1', label: 'field label', options: [
+        { value: '1' }, {value: '2' }
+      ]};
+
+      const value = '2';
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('2');
+    });
+
+    it('getFilterValueToDisclaimer: should return option label if options and label are defined and optionsMulti is true', () => {
+      const field = { property: '1', label: 'field label', optionsMulti: true, options: [
+        { value: '1', label: 'test 1'}, {value: '2', label: 'test 2' }, {value: '3', label: 'test 3' }
+      ]};
+
+      const value = ['2', '3'];
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('test 2, test 3');
+    });
+
+    it('getFilterValueToDisclaimer: should return option value if options is defined, label is undefined and optionsMulti is true', () => {
+      const field = { property: '1', label: 'field label', optionsMulti: true, options: [
+        { value: '1' }, { value: '2' }, { value: '3' }
+      ]};
+
+      const value = ['2', '3'];
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('2, 3');
+    });
+
+    it('getFilterValueToDisclaimer: should return value if options is undefined and type isn`t PoDynamicFieldType.Date', () => {
+      const field = { property: '1', label: 'field label'};
+
+      const value = 'test value 1';
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('test value 1');
+    });
+
+    describe('ngOnInit:', () => {
+
+      it('should call setAdvancedFilterLiterals with component.literals', () => {
+        spyOn(component, <any> 'setAdvancedFilterLiterals');
+
+        component.ngOnInit();
+
+        expect(component['setAdvancedFilterLiterals']).toHaveBeenCalledWith(component.literals);
+      });
+
+      it('should configure properties based on the return of onload function', fakeAsync(() => {
+        component.actions = [
+          { label: 'Feature 1', url: '/feature1' },
+          { label: 'Feature 2', url: '/feature2' }
+        ];
+        component.breadcrumb = {
+          items: [
+            { label: 'Home' },
+            { label: 'Hiring processes' }
+          ]
+        };
+        component.filters = [
+          { property: 'filter1' },
+          { property: 'filter2' }
+        ];
+        component.title = 'Original Title';
+
+        component.onLoad = () => {
+          return {
+            title: 'New Title',
+            breadcrumb: {
+              items: [
+                { label: 'Test' },
+                { label: 'Test2' }
+              ]
+            },
+            actions: [
+              { label: 'Feature 1', url: '/new-feature1' },
+              { label: 'Feature 3', url: '/new-feature3' }
+            ],
+            filters: [
+              { property: 'filter1' },
+              { property: 'filter3' }
+            ]
+          };
+        };
+
+        component.ngOnInit();
+        tick();
+        expect(component.title).toBe('New Title');
+        expect(component.actions).toEqual([
+          { label: 'Feature 1', url: '/new-feature1' },
+          { label: 'Feature 2', url: '/feature2' },
+          { label: 'Feature 3', url: '/new-feature3' }
+        ]);
+        expect(component.filters).toEqual([
+          { property: 'filter1' },
+          { property: 'filter2' },
+          { property: 'filter3' }
+        ]);
+        expect(component.breadcrumb).toEqual({
+          items: [
+            { label: 'Test' },
+            { label: 'Test2' }
+          ]
+        });
+      }));
+    });
   });
 
 });

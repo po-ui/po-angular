@@ -35,7 +35,6 @@ describe('PoTableSubtitleCircleComponent:', () => {
       { value: 'content', label: 'Label', color: 'color-03', content: 'Content' },
     ];
 
-    fixture.detectChanges();
   });
 
   it('should be created', () => {

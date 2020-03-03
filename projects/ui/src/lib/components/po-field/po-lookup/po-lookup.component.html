@@ -14,9 +14,13 @@
       (blur)="searchEvent()">
 
     <div class="po-field-icon-container-right">
-      <span tabindex="1" #iconLookup (click)="openLookup()" (focus)="inp.focus()" class="po-icon po-field-icon po-icon-search"
+      <span #iconLookup
+        class="po-icon po-field-icon po-icon-search"
+        tabindex="-1"
+        [class.po-field-icon]="!disabled"
         [class.po-field-icon-disabled]="disabled"
-        [class.po-field-icon]="!disabled">
+        (click)="openLookup()"
+        (focus)="inp.focus()">
       </span>
     </div>
   </div>

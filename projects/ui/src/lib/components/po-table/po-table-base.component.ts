@@ -75,7 +75,6 @@ export const poTableLiteralsDefault = {
 export abstract class PoTableBaseComponent implements OnChanges {
 
   private _actions?: Array<PoTableAction> = [];
-  private _checkbox?: boolean;
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
   private _height?: number;
@@ -84,6 +83,15 @@ export abstract class PoTableBaseComponent implements OnChanges {
   private _items: Array<PoTableColumn>;
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
+  private _selectable?: boolean;
+
+  allColumnsWidthPixels: boolean;
+  columnMasterDetail: PoTableColumn;
+  hasMainColumns: boolean = false;
+  mainColumns: Array<PoTableColumn> = [];
+  selectAll = false;
+  sortedColumn = { property: <PoTableColumn>null, ascending: true };
+  subtitleColumns: Array<PoTableColumn> = [];
 
   /**
    * @description
@@ -95,7 +103,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
     this._items = Array.isArray(items) ? items : [];
 
     // when haven't items, selectAll should be unchecked.
-    if (!this.hasItems()) {
+    if (!this.hasItems) {
       this.selectAll = false;
     } else if (!this.hasColumns) {
       this.columns = this.getDefaultColumns(items[0]);
@@ -123,9 +131,11 @@ export abstract class PoTableBaseComponent implements OnChanges {
     if (this._columns.length) {
       this.setColumnLink();
       this.calculateWidthHeaders();
-    } else if (this.hasItems()) {
+    } else if (this.hasItems) {
       this._columns = this.getDefaultColumns(this.items[0]);
     }
+
+    this.onChangeColumns();
   }
 
   get columns() {
@@ -278,7 +288,12 @@ export abstract class PoTableBaseComponent implements OnChanges {
   /**
    * @optional
    *
+   * @deprecated 2.X.X
    * @description
+   *
+   * **Deprecated**
+   *
+   * > Esta propriedade está depreciada, utilize a propriedade `p-selectable`.
    *
    * Habilita na primeira coluna a opção de selecionar linhas,
    * todos os itens da lista possuem a propriedade dinâmica `$selected` para identificar se a linha está selecionada.
@@ -288,12 +303,11 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * @default `false`
    */
   @Input('p-checkbox') set checkbox(checkbox: boolean) {
-    this._checkbox = <any>checkbox === '' ? true : convertToBoolean(checkbox);
-    this.calculateWidthHeaders();
+    this.selectable = checkbox;
   }
 
   get checkbox() {
-    return this._checkbox;
+    return this.selectable;
   }
 
   /**
@@ -317,6 +331,30 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   get actions() {
     return this._actions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a seleção de linhas na tabela e, caso a propriedade `p-single-select` esteja definida será possível
+   * selecionar apenas uma única linha.
+   *
+   * **Importante:**
+   *  - As linhas de detalhe definidas em `PoTableDetail` possuem comportamento independente da linha mestre;
+   *  - Cada linha possui por padrão a propriedade dinâmica `$selected`, na qual é possível validar se a linha
+   * está selecionada, por exemplo: `item.$selected` ou `item['$selected']`.
+   *
+   * @default `false`
+   */
+  @Input('p-selectable') set selectable(value: boolean) {
+    this._selectable = <any>value === '' ? true : convertToBoolean(value);
+    this.calculateWidthHeaders();
+  }
+
+  get selectable() {
+    return this._selectable;
   }
 
   /**
@@ -398,19 +436,27 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Input('p-max-columns') maxColumns?: number;
 
-  /**
-   * Ação executada quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas.
-   */
+  /** Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();
 
-  /**
-   * Ação executada quando a seleção das linhas é desmarcada por meio do *checkbox* que seleciona todas as linhas.
-   */
+  /** Evento executado quando a seleção das linhas é desmarcada por meio do *checkbox* que seleciona todas as linhas. */
   @Output('p-all-unselected') allUnselected?: EventEmitter<any> = new EventEmitter<any>();
 
   /**
-   * Ação executada ao selecionar uma linha do `po-table`.
+   * Evento executado ao colapsar uma linha do `po-table`.
+   *
+   * > Como parâmetro o componente envia o item colapsado.
    */
+  @Output('p-collapsed') collapsed?: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * Evento executado ao expandir uma linha do `po-table`.
+   *
+   * > Como parâmetro o componente envia o item expandido.
+   */
+  @Output('p-expanded') expanded?: EventEmitter<any> = new EventEmitter<any>();
+
+  /** Evento executado ao selecionar uma linha do `po-table`. */
   @Output('p-selected') selected?: EventEmitter<any> = new EventEmitter<any>();
 
   /**
@@ -425,7 +471,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
   @Output('p-show-more') showMore?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
   /**
-   * Ação executada ao ordenar colunas da tabela.
+   * Evento executado ao ordenar colunas da tabela.
    *
    * Recebe um objeto `{ column, type }` onde:
    *
@@ -434,13 +480,25 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Output('p-sort-by') sortBy?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
-  /**
-   * Ação executada ao desmarcar a seleção de uma linha do `po-table`.
-   */
+  /** Evento executado ao desmarcar a seleção de uma linha do `po-table`. */
   @Output('p-unselected') unselected?: EventEmitter<any> = new EventEmitter<any>();
 
-  selectAll = false;
-  sortedColumn = { property: <PoTableColumn>null, ascending: true };
+  get hasColumns(): boolean {
+    return this.columns && this.columns.length > 0;
+  }
+
+  get hasItems(): boolean {
+    return !!(this.items && this.items.length);
+  }
+
+  get nameColumnDetail() {
+    return this.columnMasterDetail ? this.columnMasterDetail.property : null;
+  }
+
+  get validColumns() {
+    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon'];
+    return this.columns.filter(col => !col.type || typesValid.includes(col.type));
+  }
 
   private get sortType(): PoTableColumnSortType {
     return this.sortedColumn.ascending ? PoTableColumnSortType.Ascending : PoTableColumnSortType.Descending;
@@ -455,14 +513,38 @@ export abstract class PoTableBaseComponent implements OnChanges {
     }
   }
 
-  abstract calculateHeightTableContainer(height);
+  /**
+   * Método que colapsa uma linha com detalhe quando executada.
+   *
+   * @param { number } rowIndex Índice da linha que será colapsada.
+   * > Ao reordenar os dados da tabela, o valor contido neste índice será alterado conforme a ordenação.
+   */
+  collapse(rowIndex: number) {
+    this.setShowDetail(rowIndex, false);
+  }
 
-  abstract calculateWidthHeaders();
+  /**
+   * Método que expande uma linha com detalhe quando executada.
+   *
+   * @param { number } rowIndex Índice da linha que será expandida.
+   * > Ao reordenar os dados da tabela, o valor contido neste índice será alterado conforme a ordenação.
+   */
+  expand(rowIndex: number) {
+    this.setShowDetail(rowIndex, true);
+  }
 
-  protected abstract showContainer(container);
+  /**
+   * Retorna as linhas do `po-table` que estão selecionadas.
+   */
+  getSelectedRows() {
+    return this.items.filter(item => item.$selected);
+  }
 
-  get hasColumns(): boolean {
-    return this.columns && this.columns.length > 0;
+  /**
+   * Retorna as linhas do `po-table` que não estão selecionadas.
+   */
+  getUnselectedRows() {
+    return this.items.filter(item => !item.$selected);
   }
 
   selectAllRows() {
@@ -489,53 +571,13 @@ export abstract class PoTableBaseComponent implements OnChanges {
     this.emitSelectEvents(row);
   }
 
-  // Retorna a coluna da lista de colunas que é do tipo detail
-  getColumnMasterDetail() {
-    return this.columns.find(col => col.type === 'detail');
-  }
-
   getClassColor(row, column) {
     return column.color ? `po-text-${this.getColumnColor(row, column)}` : '';
   }
 
-  getColumnColor(row, column) {
-    const columnColor = column.color;
-
-    return isTypeof(columnColor, 'function') ? columnColor(row, column.property) : columnColor;
-  }
-
-  // Retorna as colunas com status
-  getSubtitleColumns() {
-    return this.columns.filter(col => col.type === 'subtitle');
-  }
-
-  // Retorna as colunas com ícones
-  getIconColumns() {
-    return this.columns.filter(col => col.type === 'icon');
-  }
-
-  // Retorna o nome da coluna do tipo detail
-  getNameColumnDetail() {
-    const detail = this.getColumnMasterDetail();
-    return detail ? detail.property : null;
-  }
-
-  /**
-   * Retorna as linhas do `po-table` que estão selecionadas.
-   */
-  getSelectedRows() {
-    return this.items.filter(item => item.$selected);
-  }
-
-  /**
-   * Retorna as linhas do `po-table` que não estão selecionadas.
-   */
-  getUnselectedRows() {
-    return this.items.filter(item => !item.$selected);
-  }
-
-  hasItems(): boolean {
-    return this.items && this.items.length > 0;
+  toggleDetail(row: any) {
+    this.setShowDetail(row, !row.$showDetail);
+    this.emitExpandEvents(row);
   }
 
   toggleRowAction(row: any) {
@@ -562,25 +604,17 @@ export abstract class PoTableBaseComponent implements OnChanges {
     this.sortedColumn.property = column;
   }
 
-  sortArray(column: PoTableColumn, ascending: boolean) {
-
-    this.items.sort((leftSide, rightSide): number => {
-
-      if (column.type === 'date' || column.type === 'dateTime') {
-        return this.poDate.sortDate(leftSide[column.property], rightSide[column.property], ascending);
-      } else {
-        return sortValues(leftSide[column.property], rightSide[column.property], ascending);
-      }
-
-    });
-
-  }
-
   onShowMore(): void {
     const sort = this.sortedColumn.property ? { column: this.sortedColumn.property, type: this.sortType } : undefined;
 
     this.showMore.emit(sort);
   }
+
+  protected abstract calculateHeightTableContainer(height);
+
+  protected abstract calculateWidthHeaders();
+
+  protected abstract showContainer(container);
 
   protected getDefaultColumns(item: any) {
     const keys = Object.keys(item);
@@ -601,12 +635,37 @@ export abstract class PoTableBaseComponent implements OnChanges {
     }
   }
 
+  private emitExpandEvents(row: any) {
+    row.$showDetail ? this.expanded.emit(row) : this.collapsed.emit(row);
+  }
+
   private emitSelectAllEvents(selectAll: boolean, rows: any) {
     selectAll ? this.allSelected.emit(rows) : this.allUnselected.emit(rows);
   }
 
   private emitSelectEvents(row: any) {
     row.$selected ? this.selected.emit(row) : this.unselected.emit(row);
+  }
+
+  private getColumnColor(row, column) {
+    const columnColor = column.color;
+
+    return isTypeof(columnColor, 'function') ? columnColor(row, column.property) : columnColor;
+  }
+
+  // Retorna a coluna da lista de colunas que é do tipo detail
+  private getColumnMasterDetail() {
+    return this.columns.find(col => col.type === 'detail');
+  }
+
+  // Colunas que são inseridas no <head> da tabela
+  private getMainColumns() {
+    return this.validColumns.filter(col => col.visible !== false);
+  }
+
+  // Retorna as colunas com status
+  private getSubtitleColumns() {
+    return this.columns.filter(col => col.type === 'subtitle');
   }
 
   private isEverySelected(items: Array<any>): boolean {
@@ -624,6 +683,12 @@ export abstract class PoTableBaseComponent implements OnChanges {
     return false;
   }
 
+  private onChangeColumns() {
+    this.setMainColumns();
+    this.setColumnMasterDetail();
+    this.setSubtitleColumns();
+  }
+
   private setColumnLink() {
     this.columns.forEach(column => {
       if (column['type'] === 'link' && !column['link']) {
@@ -632,12 +697,55 @@ export abstract class PoTableBaseComponent implements OnChanges {
     });
   }
 
+  private setColumnMasterDetail() {
+    this.columnMasterDetail = this.getColumnMasterDetail();
+  }
+
+  private setMainColumns() {
+    this.mainColumns = this.getMainColumns();
+
+    this.hasMainColumns = !!this.mainColumns.length;
+
+    this.allColumnsWidthPixels = this.verifyWidthColumnsPixels();
+  }
+
+  private setShowDetail(rowIdentifier: any | number, isShowDetail: boolean) {
+
+    const isRowIndex = typeof rowIdentifier === 'number' && this.items[rowIdentifier];
+
+    const row = isRowIndex ? this.items[rowIdentifier] : rowIdentifier;
+
+    row.$showDetail = isShowDetail;
+  }
+
+  private setSubtitleColumns() {
+    this.subtitleColumns = this.getSubtitleColumns();
+  }
+
+  private sortArray(column: PoTableColumn, ascending: boolean) {
+
+    this.items.sort((leftSide, rightSide): number => {
+
+      if (column.type === 'date' || column.type === 'dateTime') {
+        return this.poDate.sortDate(leftSide[column.property], rightSide[column.property], ascending);
+      } else {
+        return sortValues(leftSide[column.property], rightSide[column.property], ascending);
+      }
+
+    });
+
+  }
+
   private unselectOtherRows(rows: Array<any>, row) {
     rows.forEach(item => {
       if (item !== row) {
         item.$selected = false;
       }
     });
+  }
+
+  private verifyWidthColumnsPixels() {
+    return this.hasMainColumns ? this.mainColumns.every(column => column.width && column.width.includes('px')) : false;
   }
 
 }

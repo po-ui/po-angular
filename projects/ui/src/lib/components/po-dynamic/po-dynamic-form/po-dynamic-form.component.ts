@@ -1,8 +1,12 @@
-import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormField } from './po-dynamic-form-field.interface';
+import { PoDynamicFormLoad } from './po-dynamic-form-load/po-dynamic-form-load.interface';
+import { PoDynamicFormLoadService } from './po-dynamic-form-load/po-dynamic-form-load.service';
 import { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic-form-validation.interface';
 import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-dynamic-form-validation.service';
 
@@ -19,19 +23,22 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-
  * <example name="po-dynamic-form-register" title="Portinari Dynamic Form - Register">
  *  <file name="sample-po-dynamic-form-register/sample-po-dynamic-form-register.component.html"> </file>
  *  <file name="sample-po-dynamic-form-register/sample-po-dynamic-form-register.component.ts"> </file>
+ *  <file name="sample-po-dynamic-form-register/sample-po-dynamic-form-register.service.ts"> </file>
  * </example>
  */
 
 @Component({
   selector: 'po-dynamic-form',
-  templateUrl: './po-dynamic-form.component.html',
-  providers: [ PoDynamicFormValidationService ]
+  templateUrl: './po-dynamic-form.component.html'
 })
-export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
+export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implements OnInit, OnDestroy {
 
   private _form: NgForm;
 
   disabledForm: boolean;
+
+  private onLoadSubscription: Subscription;
+  private sendFormSubscription: Subscription;
 
   @ViewChild('dynamicForm', { static: false }) set form(value: NgForm) {
     // necessario para nao ocorrer o ExpressionChangedAfterItHasBeenCheckedError
@@ -46,11 +53,25 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     return this._form || <any> {};
   }
 
-  @ViewChild('fieldsComponent', { static: false }) fieldsComponent: {focus: (property: string) => void };
+  @ViewChild('fieldsComponent', { static: false }) fieldsComponent: { focus: (property: string) => void };
 
-  constructor(private changes: ChangeDetectorRef, private validationService: PoDynamicFormValidationService) {
+  constructor(
+    private changes: ChangeDetectorRef,
+    private loadService: PoDynamicFormLoadService,
+    private validationService: PoDynamicFormValidationService) {
     super();
   }
+
+  ngOnDestroy() {
+    this.removeListeners();
+  }
+
+  ngOnInit() {
+    if (this.load) {
+      this.loadDataOnInitialize();
+    }
+  }
+
   /**
    * Função que atribui foco ao campo desejado.
    *
@@ -89,16 +110,30 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     this.disableForm(true);
     const errorOnValidation = () => this.disableForm(false);
 
-    this.validationService.sendFormChange(this.validate, field, this.value)
+    this.sendFormSubscription = this.validationService
+      .sendFormChange(this.validate, field, this.value)
       .subscribe(this.applyFormValidation(previousFocusElement), errorOnValidation);
   }
 
-  private applyFormValidation(previousFocusElement: Element): (validatedFields: PoDynamicFormValidation) => void {
-    return validatedFields => {
-      this.updateModelWithValidation(validatedFields);
+  private applyFormUpdatesOnLoad(previousFocusElement: Element): (dynamicFormData: PoDynamicFormLoad) => void {
+    return dynamicFormData => {
+      this.updateModelOnLoad(dynamicFormData);
       this.disableForm(false);
-      this.setFocusOnValidation(validatedFields, previousFocusElement);
+      this.setFocusOnFieldByProperty(dynamicFormData.focus, previousFocusElement);
     };
+  }
+
+  private applyFormValidation(previousFocusElement: Element): (dynamicFormData: PoDynamicFormValidation) => void {
+    return dynamicFormData => {
+      this.updateModelWithValidation(dynamicFormData);
+      this.disableForm(false);
+      this.setFocusOnFieldByProperty(dynamicFormData.focus, previousFocusElement);
+    };
+  }
+
+  private disableForm(value: boolean) {
+    this.disabledForm = value;
+    this.changes.detectChanges();
   }
 
   private emitForm() {
@@ -107,24 +142,45 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent {
     }
   }
 
-  private disableForm(value: boolean) {
-    this.disabledForm = value;
-    this.changes.detectChanges();
+  private loadDataOnInitialize() {
+    const previousFocusElement = document.activeElement;
+
+    this.disabledForm = true;
+    const errorOnLoad = () => this.disabledForm = false;
+
+    this.onLoadSubscription = this.loadService
+      .executeLoad(this.load, this.value)
+      .subscribe(this.applyFormUpdatesOnLoad(previousFocusElement), errorOnLoad);
   }
 
-  private setFocusOnValidation(validatedFields: PoDynamicFormValidation, previousFocusElement: Element) {
-    if (validatedFields.focus) {
+  private removeListeners() {
+    if (this.onLoadSubscription) {
+      this.onLoadSubscription.unsubscribe();
+    }
+
+    if (this.sendFormSubscription) {
+      this.sendFormSubscription.unsubscribe();
+    }
+  }
+
+  private setFocusOnFieldByProperty(property: string, previousFocusElement: Element) {
+    if (property) {
       // precisa do timeout para que o valor seja atribuido no campo antes de setar o focus,
       // para nao disparar a mudança posteriormente. Situação ocorre quando retornar campo com valor e focus atribuido a ele.
-      setTimeout(() => this.focus(validatedFields.focus));
+      setTimeout(() => this.focus(property));
     } else {
       previousFocusElement['focus']();
     }
   }
 
-  private updateModelWithValidation(validatedFields: PoDynamicFormValidation) {
-    Object.assign(this.value, validatedFields.value);
-    this.fields = this.validationService.updateFieldsForm(validatedFields.fields, this.fields);
+  private updateModelOnLoad(loadedFormData: PoDynamicFormLoad) {
+    Object.assign(this.value, loadedFormData.value);
+    this.fields = this.loadService.createAndUpdateFieldsForm(loadedFormData.fields, this.fields);
+  }
+
+  private updateModelWithValidation(formData: PoDynamicFormValidation) {
+    Object.assign(this.value, formData.value);
+    this.fields = this.validationService.updateFieldsForm(formData.fields, this.fields);
   }
 
 }
