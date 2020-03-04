@@ -206,7 +206,7 @@ describe('PoPageDynamicDetailComponent:', () => {
           .toHaveBeenCalledWith({ endpoint: component.serviceApi, metadata: undefined });
       });
 
-      it('should call `loadMetadata` with `id` and set `serviceApi` if `activatedRoute.snapshot.data.serviceApi` is truthy',
+      it('should call `loadDataFromAPI` with `id` and set `serviceApi` if `activatedRoute.snapshot.data.serviceApi` is truthy',
         () => {
           const id = 1;
           const activatedRoute: any = {
@@ -354,7 +354,7 @@ describe('PoPageDynamicDetailComponent:', () => {
     });
 
     describe('loadDataFromAPI', () => {
-      it('should call `getMetadata` and set properties', fakeAsync(() => {
+      it('should load the metadata and keep it if the onload property returns empty', fakeAsync(() => {
 
         const activatedRoute: any = {
           snapshot: {

@@ -102,20 +102,7 @@ export const poPageDynamicTableLiteralsDefault = {
  *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
  *   }
  * }
- * ```
  *
- * Para carregar com um recurso já existente, deve ser incluído um parâmetro na rota chamado `id`:
- *
- * ```
- * {
- *   path: 'people/:id',
- *   component: PoPageDynamicTableComponent,
- *   data: {
- *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
- *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados
- *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados
- *   }
- * }
  * ```
  *
  * A requisição dos metadados é feita na inicialização do template para buscar os metadados da página passando o
