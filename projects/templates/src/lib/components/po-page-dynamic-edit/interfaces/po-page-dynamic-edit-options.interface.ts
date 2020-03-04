@@ -3,6 +3,13 @@ import { PoBreadcrumb } from '@portinari/portinari-ui';
 import { PoPageDynamicEditField } from './po-page-dynamic-edit-field.interface';
 import { PoPageDynamicEditActions } from './po-page-dynamic-edit-actions.interface';
 
+/**
+ * @usedBy PoPageDynamicEditComponent
+ *
+ * @description
+ *
+ * Interface para as propriedades de uma página dinâmica.
+ */
 export interface PoPageDynamicEditOptions {
 
   /**
