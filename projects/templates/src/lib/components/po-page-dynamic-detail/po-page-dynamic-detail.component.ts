@@ -64,20 +64,6 @@ export const poPageDynamicDetailLiteralsDefault = {
  *
  * ```
  * {
- *   path: 'people',
- *   component: PoPageDynamicDetailComponent,
- *   data: {
- *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
- *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados utilizando o método HTTP Get
- *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
- *   }
- * }
- * ```
- *
- * Para carregar com um recurso já existente, deve ser incluído um parâmetro na rota chamado `id`:
- *
- * ```
- * {
  *   path: 'people/:id',
  *   component: PoPageDynamicDetailComponent,
  *   data: {
@@ -113,7 +99,7 @@ export const poPageDynamicDetailLiteralsDefault = {
  *
  * > Caso o endpoint dos metadados não seja especificado, será feito uma requisição utilizando o `serviceApi` da seguinte forma:
  * ```
- * GET {end-point}/metadata?type=list&version={version}
+ * GET {end-point}/metadata?type=detail&version={version}
  * ```
  *
  * @example
@@ -417,13 +403,13 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   }
 
   private loadDataFromAPI() {
-    const { serviceApi: serviceApiFromRoute, serviceLoadApi } = this.activatedRoute.snapshot.data;
+    const { serviceApi: serviceApiFromRoute, serviceMetadataApi, serviceLoadApi } = this.activatedRoute.snapshot.data;
     const { id } = this.activatedRoute.snapshot.params;
 
     const onLoad = serviceLoadApi || this.onLoad;
     this.serviceApi = serviceApiFromRoute || this.serviceApi;
 
-    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi });
+    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
 
     const metadata$ = this.getMetadata(serviceApiFromRoute, onLoad);
     const data$ = this.loadData(id);
