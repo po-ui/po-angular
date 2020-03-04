@@ -9,7 +9,6 @@ import { PoPageDynamicEditOptions } from './po-page-dynamic-edit-options.interfa
  *
  * <a id="po-page-dynamic-edit-metadata"></a>
  *
- * Interface para o metadata de uma página dinâmica.
  */
 export interface PoPageDynamicEditMetadata extends PoPageDynamicEditOptions {
 

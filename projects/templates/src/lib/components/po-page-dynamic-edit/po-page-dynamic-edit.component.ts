@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, concat, Subscription, EMPTY, throwError } from 'rxjs';
+import { tap, catchError, switchMap } from 'rxjs/operators';
 
 import {
   PoBreadcrumb,
@@ -17,6 +18,12 @@ import * as util from './../../utils/util';
 import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
 import { PoPageDynamicEditField } from './interfaces/po-page-dynamic-edit-field.interface';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
+import { PoPageDynamicEditOptions } from './interfaces/po-page-dynamic-edit-options.interface';
+import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
+import { PoPageDynamicEditMetadata } from './interfaces/po-page-dynamic-edit-metadata.interface';
+import { PoPageDynamicOptionsSchema } from '../../services/po-page-customization/po-page-dynamic-options.interface';
+
+type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
 
 export const poPageDynamicEditLiteralsDefault = {
   en: {
@@ -74,15 +81,20 @@ export const poPageDynamicEditLiteralsDefault = {
  * Ao utilizar as rotas para carregar o template, o `page-dynamic-edit` disponibiliza propriedades para
  * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
  *
+ * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
+ * e depois irá buscar da rota definida na propriedade serviceLoadApi
+ *
  * ```
  * {
  *   path: 'people',
  *   component: PoPageDynamicEditComponent,
  *   data: {
  *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
- *     serviceMetadataApi: 'http://localhost:3000/v1/metadata' // endpoint dos metadados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados utilizando o método HTTP Get
+ *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
  *   }
  * }
+ *
  * ```
  *
  * Para carregar com um recurso já existente, deve-se ser incluído um parâmetro na rota chamado `id`:
@@ -93,7 +105,8 @@ export const poPageDynamicEditLiteralsDefault = {
  *   component: PoPageDynamicEditComponent,
  *   data: {
  *     serviceApi: 'http://localhost:3000/v1/people', // endpoint dos dados
- *     serviceMetadataApi: 'http://localhost:3000/v1/metadata' // endpoint dos metadados
+ *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados
+ *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados
  *   }
  * }
  * ```
@@ -148,7 +161,9 @@ export const poPageDynamicEditLiteralsDefault = {
   templateUrl: './po-page-dynamic-edit.component.html',
   providers: [ PoPageDynamicService ]
 })
-export class PoPageDynamicEditComponent implements OnInit {
+export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
+
+  private subscriptions: Array<Subscription> = [];
 
   private _actions: PoPageDynamicEditActions = {};
   private _autoRouter: boolean = false;
@@ -183,6 +198,10 @@ export class PoPageDynamicEditComponent implements OnInit {
     this._actions = this.isObject(value) ? value : {};
 
     this._pageActions = this.getPageActions(this._actions);
+  }
+
+  get actions() {
+    return {...this._actions};
   }
 
   /**
@@ -299,6 +318,37 @@ export class PoPageDynamicEditComponent implements OnInit {
   /** Título da página. */
   @Input('p-title') title: string;
 
+  /**
+   * Função ou serviço que será executado na inicialização do componente.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
+   * - `function`: Método que será executado.
+   *
+   * O retorno desta função deve ser do tipo `PoPageDynamicEditOptions`,
+   * onde o usuário poderá customizar novos campos, breadcrumb, title e actions
+   *
+   * Por exemplo:
+   *
+   * ```
+   * getPageOptions(): PoPageDynamicEditOptions {
+   * return {
+   *   actions:
+   *     { cancel: false, save: 'save/:id', saveNew: 'saveNew' },
+   *   fields: [
+   *     { property: 'idCard', gridColumns: 6 }
+   *   ]
+   * };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-load]="onLoadOptions.bind(this)"
+   * ```
+   */
+  @Input('p-load') onLoad: string | (() => PoPageDynamicEditOptions);
+
   @ViewChild('dynamicForm', { static: false }) dynamicForm: PoDynamicFormComponent;
   @ViewChild('gridDetail', { static: false }) gridDetail: PoGridComponent;
 
@@ -307,22 +357,36 @@ export class PoPageDynamicEditComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private poNotification: PoNotificationService,
     private poDialogService: PoDialogService,
-    private poPageDynamicService: PoPageDynamicService) {
+    private poPageDynamicService: PoPageDynamicService,
+    private poPageCustomizationService: PoPageCustomizationService) {
   }
 
   ngOnInit(): void {
-    const paramId = this.activatedRoute.snapshot.params['id'];
-    const duplicate = this.activatedRoute.snapshot.queryParams['duplicate'];
+    this.loadDataFromAPI();
+  }
 
-    const { serviceApi, serviceMetadataApi } = this.activatedRoute.snapshot.data;
-    this.serviceApi = serviceApi || this.serviceApi;
+  ngOnDestroy() {
+    if (this.subscriptions) {
+      this.subscriptions.forEach(subscription => {
+        subscription.unsubscribe();
+      });
+    }
+  }
+
+  private loadDataFromAPI() {
+    const { serviceApi: serviceApiFromRoute, serviceMetadataApi, serviceLoadApi } = this.activatedRoute.snapshot.data;
+    const { id } = this.activatedRoute.snapshot.params;
+    const { duplicate } = this.activatedRoute.snapshot.queryParams;
+
+    const onLoad = serviceLoadApi || this.onLoad;
+    this.serviceApi = serviceApiFromRoute || this.serviceApi;
+
     this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
 
-    if (serviceApi) {
-      this.loadMetadata(paramId, duplicate);
-    } else {
-      this.loadData(paramId, duplicate);
-    }
+    const metadata$ = this.getMetadata(serviceApiFromRoute, id, onLoad);
+    const data$ = this.loadData(id, duplicate);
+
+    this.subscriptions.push(concat(metadata$, data$).subscribe());
   }
 
   get duplicates() {
@@ -383,30 +447,78 @@ export class PoPageDynamicEditComponent implements OnInit {
         this.model = {};
       }
 
-      return;
+      return EMPTY;
     }
 
-    this.poPageDynamicService.getResource(id).toPromise().then(response => {
-      this.model = response;
-    }).catch(() => {
-      this.model = undefined;
-      this.actions = undefined;
-      this._pageActions = [];
-    });
+    return this.poPageDynamicService.getResource(id).pipe(
+      tap(response => this.model = response),
+      catchError(error => {
+        this.model = undefined;
+        this.actions = undefined;
+        this._pageActions = [];
+        return throwError(error);
+      })
+    );
   }
 
-  private loadMetadata(paramId: string | number, duplicate: string) {
+  private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
+
+    if (onLoad) {
+      return this.getPoDynamicPageOptions(onLoad).pipe(
+        tap(responsePoOption => this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)));
+    }
+
+    return EMPTY;
+  }
+
+  private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicEditOptions> {
+    const originalOption: PoPageDynamicEditOptions = {
+      fields: this.fields,
+      actions: this.actions,
+      breadcrumb: this.breadcrumb,
+      title: this.title
+    };
+
+    const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicEditOptions> = {
+      schema: [
+        {
+          nameProp: 'fields',
+          merge: true,
+          keyForMerge: 'property'
+        },
+        {
+          nameProp: 'actions',
+          merge: true
+        },
+        {
+          nameProp: 'breadcrumb'
+        },
+        {
+          nameProp: 'title'
+        }
+      ]
+    };
+
+    return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
+  }
+
+  private getMetadata(serviceApiFromRoute: string, paramId: string | number, onLoad: UrlOrPoCustomizationFunction) {
     const typeMetadata = paramId ? 'edit' : 'create';
 
-    this.poPageDynamicService.getMetadata<any>(typeMetadata).toPromise().then(response => {
-      this.autoRouter = response.autoRouter;
-      this.actions = response.actions || {};
-      this.breadcrumb = response.breadcrumb || { items : [] };
-      this.fields = response.fields || [];
-      this.title = response.title;
+    if (serviceApiFromRoute) {
+      return this.poPageDynamicService.getMetadata<PoPageDynamicEditMetadata>(typeMetadata).pipe(
+        tap(response => {
+          this.autoRouter = response.autoRouter || this.autoRouter;
+          this.actions = response.actions || this.actions;
+          this.breadcrumb = response.breadcrumb || this.breadcrumb;
+          this.fields = response.fields || this.fields;
+          this.title = response.title || this.title;
+        }),
+        switchMap(() => this.loadOptionsOnInitialize(onLoad) )
+      );
+    }
 
-      this.loadData(paramId, duplicate);
-    });
+    return this.loadOptionsOnInitialize(onLoad);
   }
 
   private navigateTo(path: string) {

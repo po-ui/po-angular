@@ -323,7 +323,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private loadData(params: { page?: number, search?: string } = {}) {
     if (!this.serviceApi) {
       this.poNotification.error(this.literals.loadDataErrorNotification);
-      return throwError(this.literals.loadDataErrorNotification);
+      return EMPTY;
     }
 
     const orderParam = this.getOrderParam(this.sortedColumn);
