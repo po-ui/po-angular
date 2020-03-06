@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.28.0](https://github.com/portinariui/portinari-angular/compare/v1.27.1...v1.28.0) (2020-03-06)
+
+
+### Build System
+
+* configura Travis para validação dos commits com commitlint ([11a374b](https://github.com/portinariui/portinari-angular/commit/11a374b))
+
+
+### Features
+
+* **assets:** cria link press kit no portal ([5acf6dd](https://github.com/portinariui/portinari-angular/commit/5acf6dd))
+* **assets:** criada pasta assets com logos Portinari ([72ec294](https://github.com/portinariui/portinari-angular/commit/72ec294))
+* **page-dynamic-detail:** adiciona propriedade `serviceMetadataApi` ([c0ccb38](https://github.com/portinariui/portinari-angular/commit/c0ccb38))
+* **page-dynamic-detail:** implementa a propriedade `p-load` e `serviceLoadApi` ([43cd0e1](https://github.com/portinariui/portinari-angular/commit/43cd0e1))
+* **page-dynamic-edit:** adiciona propriedade `p-load` e `serviceLoadApi` ([083a728](https://github.com/portinariui/portinari-angular/commit/083a728))
+* **page-dynamic-table:** adiciona propriedade `serviceLoadApi` ([cd1fc89](https://github.com/portinariui/portinari-angular/commit/cd1fc89))
+* **stepper:** implementa tratamento de `catchError` ao `canActiveNextStep` ([132a568](https://github.com/portinariui/portinari-angular/commit/132a568))
+
+
+### Tests
+
+* **http-interceptor-detail:** utiliza literais de tradução em ingles ([d708f7b](https://github.com/portinariui/portinari-angular/commit/d708f7b))
+
+
+### Documentation
+
+* **code-editor-register:** corrige objeto de exemplo customEditor ([50efa36](https://github.com/portinariui/portinari-angular/commit/50efa36))
+
+* **page-job-scheduler:** atualiza a documentação dos endpoints ([2d3fa64](https://github.com/portinariui/portinari-angular/commit/2d3fa64))
+
+* **api:** remove parâmetro `filter` ([79017a9](https://github.com/portinariui/portinari-angular/commit/79017a9))
+
+
+
 ## [1.27.1](https://github.com/portinariui/portinari-angular/compare/v1.27.0...v1.27.1) (2020-02-28)
 
 
