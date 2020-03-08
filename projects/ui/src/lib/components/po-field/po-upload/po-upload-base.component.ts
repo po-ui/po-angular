@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { browserLanguage, convertToBoolean, isEquals, isIE, isMobile, poLocaleDefault } from '../../../utils/util';
 import { requiredFailed } from '../validators';
@@ -149,6 +149,7 @@ const poUploadMinFileSize = 0;
  *  - Função de erro que será disparada quando houver erro no envio dos arquivos.
  *  - Permite habilitar uma área onde os arquivos podem ser arrastados.
  */
+@Directive()
 export abstract class PoUploadBaseComponent implements ControlValueAccessor, Validator {
 
   private _directory?: boolean;

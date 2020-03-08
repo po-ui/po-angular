@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 
@@ -50,6 +50,7 @@ const poStepperOrientationDefault = PoStepperOrientation.Horizontal;
  * - Evite `labels` extensos que quebram o layout do `po-stepper`, use `labels` diretos, curtos e intuitivos.
  * - Utilize apenas um `po-stepper` por página.
  */
+@Directive()
 export class PoStepperBaseComponent {
 
   private _orientation?: PoStepperOrientation = poStepperOrientationDefault;

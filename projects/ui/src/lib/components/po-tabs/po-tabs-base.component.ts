@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 
@@ -22,6 +22,7 @@ import { convertToBoolean } from '../../utils/util';
  * - Evite utilizar uma quantidade excessiva de abas, pois irá gerar um *scroll* muito longo no `dropdown`;
  * - Evite `labels` extensos para as `tabs` pois podem quebrar seu *layout*, use `labels` diretos, curtos e intuitivos.
  */
+@Directive()
 export class PoTabsBaseComponent {
 
   private _small?: boolean = false;

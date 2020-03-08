@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoDateService } from '../../services/po-date';
@@ -38,6 +38,7 @@ const poCalendarLocaleDefault = 'pt';
  * a data desabilitada porém o *model* não será alterado.
  * - Caso seja definida uma data inválida a mesma não será atribuída ao calendário porém o *model* manterá a data inválida.
  */
+@Directive()
 export class PoCalendarBaseComponent {
 
   private _locale: string;

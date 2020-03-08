@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { v4 as uuid } from 'uuid';
 import { browserLanguage, convertToBoolean, convertToInt, isExternalLink, isTypeof, poLocaleDefault, validValue } from '../../utils/util';
@@ -21,6 +21,7 @@ export const poMenuLiteralsDefault = {
  * O componente po-menu recebe uma lista de objetos do tipo `MenuItem` com as informações dos itens de menu como
  * textos, links para redirecionamento, ações, até 4 níveis de menu e ícones para o primeiro nível de menu.
  */
+@Directive()
 export abstract class PoMenuBaseComponent {
 
   private _collapsed = false;

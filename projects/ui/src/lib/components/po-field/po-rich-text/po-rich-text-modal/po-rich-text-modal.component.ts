@@ -82,7 +82,7 @@ export class PoRichTextModalComponent {
 
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
 
-  @ViewChild('modalImageForm', { static: false }) modalImageForm: NgForm;
+  @ViewChild('modalImageForm') modalImageForm: NgForm;
 
   @ViewChild('upload', { static: true }) upload: PoUploadComponent;
 
@@ -90,7 +90,7 @@ export class PoRichTextModalComponent {
 
   @ViewChild('modalLink', { static: true }) modalLink: PoModalComponent;
 
-  @ViewChild('modalLinkForm', { static: false }) modalLinkForm: NgForm;
+  @ViewChild('modalLinkForm') modalLinkForm: NgForm;
 
   @Output('p-command') command = new EventEmitter<string | { command: string, value: string | any }>();
 

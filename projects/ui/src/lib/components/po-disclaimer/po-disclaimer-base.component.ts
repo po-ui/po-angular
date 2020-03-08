@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 
@@ -15,6 +15,7 @@ const PO_DISCLAIMER_DEFAULT_TYPE = 'default';
  * como por exemplo, no po-multi-select.
  *
  */
+@Directive()
 export class PoDisclaimerBaseComponent {
   private _type: string = 'default';
   private _hideClose?: boolean = false;

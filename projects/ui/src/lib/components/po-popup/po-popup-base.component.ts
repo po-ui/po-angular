@@ -1,4 +1,4 @@
-import { ElementRef, Input } from '@angular/core';
+import { ElementRef, Input, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -31,6 +31,7 @@ const poPopupDefaultPosition = 'bottom-left';
  * </po-popup >
  * ```
  */
+@Directive()
 export class PoPopupBaseComponent {
 
   private _actions: Array<PoPopupAction>;

@@ -60,7 +60,7 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
 
   @Output('p-visible-columns-change') visibleColumnsChange = new EventEmitter<Array<PoTableColumn>>();
 
-  @ViewChild(PoPopoverComponent, { static: false }) popover: PoPopoverComponent;
+  @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
 
   constructor(private renderer: Renderer2) {}
 

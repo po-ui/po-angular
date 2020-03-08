@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { browserLanguage, poLocaleDefault, convertToBoolean } from '../../utils/util';
 
@@ -47,6 +47,7 @@ export const poListViewLiteralsDefault = {
  * O componente disponibiliza uma área específica para exibição informações adicionais,
  * através da diretiva **[p-list-view-detail-template](/documentation/po-list-view-detail-template)**.
  */
+@Directive()
 export class PoListViewBaseComponent {
 
   private _actions: Array<PoListViewAction>;

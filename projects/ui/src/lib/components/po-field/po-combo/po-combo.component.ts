@@ -104,8 +104,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;
 
-  @ViewChild('containerElement', { read: ElementRef, static: false }) containerElement: ElementRef;
-  @ViewChild('contentElement', { read: ElementRef, static: false }) contentElement: ElementRef;
+  @ViewChild('containerElement', { read: ElementRef }) containerElement: ElementRef;
+  @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef;
   @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 

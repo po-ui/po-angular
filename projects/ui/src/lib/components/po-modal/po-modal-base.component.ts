@@ -1,4 +1,4 @@
-import { Input, EventEmitter } from '@angular/core';
+import { Input, EventEmitter, Directive } from '@angular/core';
 
 import { convertToBoolean } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
@@ -18,6 +18,7 @@ import { PoModalAction } from './po-modal-action.interface';
  *
  * > É possível fechar a modal através da tecla *ESC*, quando a propriedade `p-hide-close` não estiver habilitada.
  */
+@Directive()
 export class PoModalBaseComponent {
 
   private _hideClose?: boolean = false;

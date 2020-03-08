@@ -32,7 +32,7 @@ import { PoModalService } from './po-modal-service';
 })
 export class PoModalComponent extends PoModalBaseComponent {
 
-  @ViewChild('modalContent', { read: ElementRef, static: false }) modalContent: ElementRef;
+  @ViewChild('modalContent', { read: ElementRef }) modalContent: ElementRef;
 
   private firstElement;
   private focusFunction;

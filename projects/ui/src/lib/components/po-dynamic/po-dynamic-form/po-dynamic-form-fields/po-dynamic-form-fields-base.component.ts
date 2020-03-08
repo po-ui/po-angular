@@ -1,4 +1,4 @@
-import { Input, EventEmitter, Output } from '@angular/core';
+import { Input, EventEmitter, Output, Directive } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 
 import { isTypeof } from '../../../../utils/util';
@@ -8,6 +8,7 @@ import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
 
+@Directive()
 export class PoDynamicFormFieldsBaseComponent {
 
   private _fields: Array<PoDynamicFormField>;

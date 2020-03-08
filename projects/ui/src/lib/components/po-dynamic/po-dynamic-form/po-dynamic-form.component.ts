@@ -40,7 +40,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
   private onLoadSubscription: Subscription;
   private sendFormSubscription: Subscription;
 
-  @ViewChild('dynamicForm', { static: false }) set form(value: NgForm) {
+  @ViewChild('dynamicForm') set form(value: NgForm) {
     // necessario para nao ocorrer o ExpressionChangedAfterItHasBeenCheckedError
     setTimeout(() => {
       this._form = value;
@@ -53,7 +53,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
     return this._form || <any> {};
   }
 
-  @ViewChild('fieldsComponent', { static: false }) fieldsComponent: { focus: (property: string) => void };
+  @ViewChild('fieldsComponent') fieldsComponent: { focus: (property: string) => void };
 
   constructor(
     private changes: ChangeDetectorRef,

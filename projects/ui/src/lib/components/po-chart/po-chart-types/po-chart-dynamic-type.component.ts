@@ -1,4 +1,4 @@
-import { ElementRef, ViewChild } from '@angular/core';
+import { ElementRef, ViewChild, Directive } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
@@ -9,6 +9,7 @@ import { PoPieChartSeries } from './po-chart-pie/po-chart-pie-series.interface';
 
 const Padding: number = 24;
 
+@Directive()
 export abstract class PoChartDynamicTypeComponent {
 
   protected windowResizeListener: () => void;

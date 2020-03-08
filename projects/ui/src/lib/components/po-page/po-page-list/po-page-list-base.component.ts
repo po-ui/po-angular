@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { poLocaleDefault } from './../../../utils/util';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -37,6 +37,7 @@ export const poPageListLiteralsDefault = {
  * Para facilitar a manipulação e visualização dos filtros aplicados, é possível também utilizar o componente
  * [`po-disclaimer-group`](/documentation/po-disclaimer-group).
  */
+@Directive()
 export abstract class PoPageListBaseComponent extends PoPageDefaultBaseComponent {
 
   private _disclaimerGroup?: PoDisclaimerGroup;

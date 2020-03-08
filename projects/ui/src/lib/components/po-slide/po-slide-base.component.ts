@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { convertToInt } from './../../utils/util';
 
@@ -17,6 +17,7 @@ const poSlideIntervalDefault = 4000;
  * - Evitar utilizar apenas um slide isolado, utilize pelo menos dois.
  * - Evitar utilizar mais de 5 slides, pois a ideia do componente é destacar apenas informações importantes.
  */
+@Directive()
 export abstract class PoSlideBaseComponent {
 
   private _interval: number = poSlideIntervalDefault;

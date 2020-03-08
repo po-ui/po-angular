@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
@@ -23,6 +23,7 @@ import { InputBoolean } from '../../../decorators';
  * </po-textarea>
  * ```
  */
+@Directive()
 export abstract class PoTextareaBaseComponent implements ControlValueAccessor, Validator {
 
   private _disabled: boolean = false;

@@ -1,4 +1,4 @@
-import { Input, ViewChild } from '@angular/core';
+import { Input, ViewChild, Directive } from '@angular/core';
 
 import { browserLanguage, poLocaleDefault } from './../../../utils/util';
 
@@ -46,6 +46,7 @@ export const poPageEditLiteralsDefault = {
  * Esta propriedade pode ser utilizada para desabilitar os botões caso exista um formulário inválido na página ou alguma
  * regra de negócio não tenha sido atendida.
  */
+@Directive()
 export class PoPageEditBaseComponent {
 
   private _literals: PoPageEditLiterals;

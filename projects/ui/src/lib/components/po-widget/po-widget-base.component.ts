@@ -1,4 +1,4 @@
-import { Input, Output, EventEmitter } from '@angular/core';
+import { Input, Output, EventEmitter, Directive } from '@angular/core';
 
 import { convertToBoolean, isTypeof } from '../../utils/util';
 
@@ -15,6 +15,7 @@ import { convertToBoolean, isTypeof } from '../../utils/util';
  * Para controlar sua largura, é possível utilizar o [Grid System](/guides/grid-system) para um maior
  * controle de seu redimensionamento, assim possibilitando o tratamento para diferentes resoluções.
  */
+@Directive()
 export abstract class PoWidgetBaseComponent {
 
   private _background?: string;

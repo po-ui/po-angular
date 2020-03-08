@@ -9,7 +9,7 @@ import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface
 })
 export class PoTreeViewItemHeaderComponent {
 
-  @ViewChild('inputCheckbox', { static: false }) inputCheckbox;
+  @ViewChild('inputCheckbox') inputCheckbox;
 
   @Input('p-item') item: PoTreeViewItem;
 

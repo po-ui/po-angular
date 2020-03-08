@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 
 import { convertToBoolean, isTypeof } from '../../../utils/util';
@@ -17,6 +17,7 @@ import { PoDynamicViewService } from './po-dynamic-view.service';
  * > Por padrão esse componente cria `po-info` para exibição, é possível criar `po-tag` passando a propriedade { tag: true }.
  *
  */
+@Directive()
 export class PoDynamicViewBaseComponent {
 
   private _fields: Array<PoDynamicViewField> = [];
