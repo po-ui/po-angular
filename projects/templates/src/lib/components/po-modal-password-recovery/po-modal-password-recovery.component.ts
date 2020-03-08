@@ -59,11 +59,11 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   private smsBodyResponse;
   private smsCodeSubscription: Subscription;
 
-  @ViewChild('emailForm', { static: false }) emailForm: NgForm;
+  @ViewChild('emailForm') emailForm: NgForm;
 
   @ViewChild('recoveryModal', { static: true }) recoveryModalElement: PoModalComponent;
 
-  @ViewChild('smsCodeForm', { static: false }) smsCodeForm: NgForm;
+  @ViewChild('smsCodeForm') smsCodeForm: NgForm;
 
   primaryAction: PoModalAction = { label: undefined, action: () => { } };
 

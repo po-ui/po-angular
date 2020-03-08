@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { EventEmitter, Input, OnDestroy, Output, Directive } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { convertToBoolean, convertToInt, getShortBrowserLanguage, isExternalLink, isTypeof, poLocaleDefault } from './../../utils/util';
@@ -159,6 +159,7 @@ export const poPageLoginLiteralTo = {
  *   ]
  * ```
  */
+@Directive()
 export abstract class PoPageLoginBaseComponent implements OnDestroy {
 
   allLoginErrors: Array<string> = [];
