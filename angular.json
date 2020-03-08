@@ -14,6 +14,11 @@
           "options": {
             "tsConfig": "projects/ui/tsconfig.lib.json",
             "project": "projects/ui/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ui/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -54,7 +59,7 @@
             "main": "projects/app/src/main.ts",
             "polyfills": "projects/app/src/polyfills.ts",
             "tsConfig": "projects/app/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/app/src/favicon.ico",
               "projects/app/src/assets",
@@ -88,7 +93,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -97,10 +101,20 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             },
             "es5": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "tsConfig": "projects/app/tsconfig-es5.app.json"
             }
           }
@@ -147,6 +161,11 @@
           "options": {
             "tsConfig": "projects/storage/tsconfig.lib.json",
             "project": "projects/storage/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/storage/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -181,6 +200,11 @@
           "options": {
             "tsConfig": "projects/sync/tsconfig.lib.json",
             "project": "projects/sync/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/sync/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -216,6 +240,11 @@
           "options": {
             "tsConfig": "projects/templates/tsconfig.lib.json",
             "project": "projects/templates/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/templates/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -251,6 +280,11 @@
           "options": {
             "tsConfig": "projects/code-editor/tsconfig.lib.json",
             "project": "projects/code-editor/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/code-editor/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
