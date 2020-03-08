@@ -1,9 +1,10 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { PoInfoOrientation } from './po-info-orietation.enum';
 
 const poInfoOrientationDefault = PoInfoOrientation.Vertical;
 
+@Directive()
 export class PoInfoBaseComponent {
 
   private _labelSize: number;

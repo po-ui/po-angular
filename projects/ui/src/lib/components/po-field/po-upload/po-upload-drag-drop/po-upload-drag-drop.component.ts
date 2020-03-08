@@ -20,7 +20,7 @@ export class PoUploadDragDropComponent {
   areaElement: HTMLElement;
   isDragOver: boolean = false;
 
-  @ViewChild('dragDropOverlay', { read: ElementRef, static: false }) dragDropOverlayElement: ElementRef;
+  @ViewChild('dragDropOverlay', { read: ElementRef }) dragDropOverlayElement: ElementRef;
   @ViewChild(PoUploadDragDropAreaComponent, { static: true }) dragDropAreaComponent: PoUploadDragDropAreaComponent;
 
   @Input('p-directory-compatible') directoryCompatible: boolean;

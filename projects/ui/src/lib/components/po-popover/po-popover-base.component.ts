@@ -1,4 +1,4 @@
-import { ElementRef, Input } from '@angular/core';
+import { ElementRef, Input, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -26,6 +26,7 @@ const PO_POPOVER_TRIGGERS = ['click', 'hover'];
  * Os eventos permitidos são: `click` e `hover`.
  *
  */
+@Directive()
 export class PoPopoverBaseComponent {
 
   // Controla se o popover fica oculto ou visível, por padrão é oculto.

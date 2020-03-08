@@ -1,8 +1,9 @@
-import { AfterViewInit, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, HostListener, ViewChild, Directive } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
+@Directive()
 export abstract class PoInputGeneric extends PoInputBaseComponent implements AfterViewInit {
 
   @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;

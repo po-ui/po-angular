@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { browserLanguage, convertToBoolean, poLocaleDefault } from '../../utils/util';
 
@@ -28,6 +28,7 @@ export const poNavbarLiteralsDefault = {
  * O componente `po-navbar` é um cabeçalho fixo que permite apresentar uma lista de links para facilitar a navegação pelas
  * páginas da aplicação. Também possui ícones com ações.
  */
+@Directive()
 export abstract class PoNavbarBaseComponent {
 
   private _iconActions: Array<PoNavbarIconAction> = [];

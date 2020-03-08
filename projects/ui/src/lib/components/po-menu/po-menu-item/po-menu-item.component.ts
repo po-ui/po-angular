@@ -109,7 +109,7 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
   // Indica o tipo de item, como 'internalLink' ou 'subItems'.
   @Input('p-type') type: string;
 
-  @ViewChild('menuSubItems', { static: false }) menuSubItems: ElementRef;
+  @ViewChild('menuSubItems') menuSubItems: ElementRef;
 
   get canShowBadge() {
     return this.type !== 'subItems' && (this.badgeValue || this.badgeValue === 0) && this.badgeValue >= 0;

@@ -41,7 +41,7 @@ export class PoChartGaugeTextContentComponent implements AfterViewInit {
     return this._serie;
   }
 
-  @ViewChild('description', { static: false, read: ElementRef }) descriptionElement: ElementRef;
+  @ViewChild('description', { read: ElementRef }) descriptionElement: ElementRef;
 
   constructor(private changeDetection: ChangeDetectorRef) {}
 

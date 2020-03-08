@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { EventEmitter, Input, OnChanges, Output, Directive } from '@angular/core';
 
 import { browserLanguage, capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues, poLocaleDefault } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -72,6 +72,7 @@ export const poTableLiteralsDefault = {
  * Caso a largura de todas as colunas forem definidas e o total ultrapassar o tamanho tabela, será exibido um *scroll* na horizontal para a
  * completa visualização dos dados.
  */
+@Directive()
 export abstract class PoTableBaseComponent implements OnChanges {
 
   private _actions?: Array<PoTableAction> = [];

@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { ElementRef, EventEmitter, Input, Output, Directive } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -8,6 +8,7 @@ import { ElementRef, EventEmitter, Input, Output } from '@angular/core';
  * Por padrão limpa o valor do campo e executa o método onChangePropagate, caso tenha a necessidade de tratar a função de limpar o campo,
  * deve implementar a interface PoClean.
  */
+@Directive()
 export abstract class PoCleanBaseComponent {
 
   /** Nesta propriedade deve-se informar o elementRef do campo de entrada que utilizará o po-clean. */

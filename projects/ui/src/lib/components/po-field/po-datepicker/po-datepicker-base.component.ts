@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertToBoolean, formatYear,
@@ -53,6 +53,7 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  *
  * > Não esqueça de importar o `FormsModule` em seu módulo, tal como para utilizar o `input default`.
  */
+@Directive()
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
   private _format?: string = poDatepickerFormatDefault;

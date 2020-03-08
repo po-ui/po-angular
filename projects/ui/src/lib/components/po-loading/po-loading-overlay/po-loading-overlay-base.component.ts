@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { convertToBoolean } from './../../../utils/util';
 
@@ -28,6 +28,7 @@ export const poLoadingOverlayLiteralsDefault = {
  * Este componente mostra ao usuário uma imagem de _loading_ e bloqueia a página inteira ou o container escolhido,
  * enquanto aguarda a resposta de alguma requisição.
  */
+@Directive()
 export class PoLoadingOverlayBaseComponent {
 
   private _screenLock?: boolean = false;

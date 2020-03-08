@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -21,6 +21,7 @@ import { PoMask } from './po-mask';
  * Então você precisa informar o atributo name ou o atributo [ngModelOptions]="{standalone: true}".
  * Exemplo: [(ngModel)]="pessoa.nome" [ngModelOptions]="{standalone: true}"
  */
+@Directive()
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator {
 
   private _maxlength?: number;

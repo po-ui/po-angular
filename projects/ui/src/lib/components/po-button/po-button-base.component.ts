@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 
@@ -19,6 +19,7 @@ const PO_BUTTON_TYPE_DEFAULT = 'default';
  * - Utilize apenas um `po-button` configurado como `primary` por página.
  * - Para ações irreversíveis use sempre o tipo `danger`.
  */
+@Directive()
 export class PoButtonBaseComponent {
 
   private _disabled?: boolean = false;

@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnDestroy, OnInit, Output, Directive } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -25,6 +25,7 @@ import { InputBoolean } from '../../../decorators';
  * Este componente não é recomendado quando a busca dos dados possuir poucas informações, para isso utilize outros componentes como o
  * `po-select` ou o `po-combo`.
  */
+@Directive()
 export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnDestroy, OnInit, Validator {
 
   private _disabled?: boolean = false;

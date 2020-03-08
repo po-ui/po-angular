@@ -1,4 +1,4 @@
-import { Input, ViewChild } from '@angular/core';
+import { Input, ViewChild, Directive } from '@angular/core';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoPageAction } from '../po-page-action.interface';
@@ -9,6 +9,7 @@ import { PoPageContentComponent } from '../po-page-content/po-page-content.compo
  *
  * O componente `po-page-default` é utilizado como o container principal para as telas sem um template definido.
  */
+@Directive()
 export abstract class PoPageDefaultBaseComponent {
 
   private _actions?: Array<PoPageAction> = [];
@@ -38,7 +39,7 @@ export abstract class PoPageDefaultBaseComponent {
   /** Título da página. */
   @Input('p-title') set title(title: string) {
     this._title = title;
-    this.poPageContent.recalculateHeaderSize();
+    setTimeout(() => this.poPageContent.recalculateHeaderSize());
   }
 
   get title() {

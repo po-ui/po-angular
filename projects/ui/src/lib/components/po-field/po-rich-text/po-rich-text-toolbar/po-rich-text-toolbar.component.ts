@@ -97,7 +97,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     }
   ];
 
-  @ViewChild('colorPickerInput', { read: ElementRef, static: false }) colorPickerInput: ElementRef;
+  @ViewChild('colorPickerInput', { read: ElementRef }) colorPickerInput: ElementRef;
 
   @ViewChild('toolbarElement', { static: true }) toolbarElement: ElementRef;
 

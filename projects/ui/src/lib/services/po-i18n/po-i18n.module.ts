@@ -160,7 +160,7 @@ import { PoLanguageModule } from '../po-language/po-language.module';
 })
 export class PoI18nModule {
 
-  static config(config: PoI18nConfig): ModuleWithProviders {
+  static config(config: PoI18nConfig): ModuleWithProviders<PoI18nModule> {
     return {
       ngModule: PoI18nModule,
       providers: [

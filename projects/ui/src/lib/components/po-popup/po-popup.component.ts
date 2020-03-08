@@ -36,7 +36,7 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
 })
 export class PoPopupComponent extends PoPopupBaseComponent {
 
-  @ViewChild('popupRef', { read: ElementRef, static: false }) popupRef: ElementRef;
+  @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
 
   constructor(
     viewContainerRef: ViewContainerRef,

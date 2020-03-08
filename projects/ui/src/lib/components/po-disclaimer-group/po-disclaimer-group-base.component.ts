@@ -1,4 +1,4 @@
-import { DoCheck, EventEmitter, Input, IterableDiffers, Output } from '@angular/core';
+import { DoCheck, EventEmitter, Input, IterableDiffers, Output, Directive } from '@angular/core';
 
 import { v4 as uuid } from 'uuid';
 
@@ -25,6 +25,7 @@ export const poDisclaimerGroupLiteralsDefault = {
  *
  * > Veja a integração destas funcionalidade no componente [po-page-list](/documentation/po-page-list).
  */
+@Directive()
 export class PoDisclaimerGroupBaseComponent implements DoCheck {
 
   private _disclaimers: Array<PoDisclaimer> = [];

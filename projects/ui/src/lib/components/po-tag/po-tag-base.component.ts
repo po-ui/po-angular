@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
@@ -21,6 +21,7 @@ const poTagOrientationDefault = PoTagOrientation.Vertical;
  *
  * Seu uso é recomendado para informações que necessitem de destaque em forma de marcação.
  */
+@Directive()
 export class PoTagBaseComponent {
 
   private _color?: string;
