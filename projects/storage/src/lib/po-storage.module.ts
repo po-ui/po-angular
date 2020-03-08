@@ -11,7 +11,7 @@ import { PoStorageService, PO_STORAGE_CONFIG_TOKEN } from './services/po-storage
 
 @NgModule()
 export class PoStorageModule {
-  static forRoot(storageConfig?: PoStorageConfig): ModuleWithProviders {
+  static forRoot(storageConfig?: PoStorageConfig): ModuleWithProviders<PoStorageModule> {
     return {
       ngModule: PoStorageModule,
       providers: [
