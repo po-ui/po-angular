@@ -349,8 +349,8 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    */
   @Input('p-load') onLoad: string | (() => PoPageDynamicEditOptions);
 
-  @ViewChild('dynamicForm', { static: false }) dynamicForm: PoDynamicFormComponent;
-  @ViewChild('gridDetail', { static: false }) gridDetail: PoGridComponent;
+  @ViewChild('dynamicForm') dynamicForm: PoDynamicFormComponent;
+  @ViewChild('gridDetail') gridDetail: PoGridComponent;
 
   constructor(
     private router: Router,

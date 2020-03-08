@@ -1,5 +1,5 @@
 import { AbstractControl } from '@angular/forms';
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { PoBreadcrumb } from '@portinari/portinari-ui';
 
@@ -18,6 +18,7 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
  *
  * Veja mais sobre os padrões utilizados nas requisições no [Guia de implementação de APIs](guides/api).
  */
+@Directive()
 export class PoPageJobSchedulerBaseComponent {
 
   /** Objeto com as propriedades do breadcrumb. */

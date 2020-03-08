@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { browserLanguage, poLocaleDefault } from '../../utils/util';
 
@@ -58,6 +58,7 @@ const PoModalPasswordRecoveryTypeDefault: PoModalPasswordRecoveryType = PoModalP
  *   ]
  * ```
  */
+@Directive()
 export abstract class PoModalPasswordRecoveryBaseComponent {
 
   private _contactEmail: string;

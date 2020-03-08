@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } from '@portinari/portinari-ui';
 
@@ -50,6 +50,7 @@ export const poPageDynamicSearchLiteralsDefault = {
  * Componente com as ações de pesquisa já definidas, bastando que o desenvolvedor implemente apenas a chamada para as APIs
  * e exiba as informações.
  */
+@Directive()
 export class PoPageDynamicSearchBaseComponent {
 
   private _filters: Array<PoDynamicFormField> = [];
