@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
@@ -23,9 +24,12 @@ import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
 const EVENT_SOURCING_NAME: string = PoEventSourcingService['event_sourcing_name'];
 
+@Directive()
 class StorageServiceMock extends PoStorageService {
   constructor() { super(); }
 }
+
+@Directive()
 class PoDataTransformMock extends PoDataTransform {
   getDateFieldName(): string { return undefined; }
   getItemsFieldName(): string { return undefined; }
@@ -51,9 +55,9 @@ describe('PoEventSourcingService:', () => {
       ]
     });
 
-    eventSourcingService = TestBed.get(PoEventSourcingService);
-    storageServiceMock = TestBed.get(PoStorageService);
-    poHttpClientMock = TestBed.get(PoHttpClientService);
+    eventSourcingService = TestBed.inject(PoEventSourcingService);
+    storageServiceMock = TestBed.inject(PoStorageService);
+    poHttpClientMock = TestBed.inject(PoHttpClientService);
 
   });
 

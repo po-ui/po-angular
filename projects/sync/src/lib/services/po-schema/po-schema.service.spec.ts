@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { PoStorageService } from '@portinari/portinari-storage';
@@ -7,10 +8,12 @@ import { PoSchemaService } from './po-schema.service';
 import { PoSchemaUtil } from './po-schema-util/po-schema-util.model';
 import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
+@Directive()
 class PoStorageServiceMock extends PoStorageService {
   constructor() { super(); }
 }
 
+@Directive()
 class PoSchemaDefinitionServiceMock extends PoSchemaDefinitionService { }
 
 describe('PoSchemaService:', () => {

@@ -14,7 +14,6 @@
     ]
   },
   "angularCompilerOptions": {
-    "annotateForClosureCompiler": false,
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
     "fullTemplateTypeCheck": true
