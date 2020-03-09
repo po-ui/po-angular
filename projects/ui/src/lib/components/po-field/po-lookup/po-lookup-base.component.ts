@@ -246,24 +246,6 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   }
 
   /**
-   * @optional
-   *
-   * @deprecated 2.0.0
-   * @description
-   *
-   * **Deprecated**
-   *
-   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * @default `false`
-   */
-  @Input('p-focus') set oldfocus(focus: boolean) {
-    this.autoFocus = focus;
-  }
-
-  /**
    * @description
    *
    * Indica que o campo será desabilitado.

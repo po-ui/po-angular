@@ -262,24 +262,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   /**
    * @optional
    *
-   * @deprecated 2.0.0
-   * @description
-   *
-   * **Deprecated**
-   *
-   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * @default `false`
-   */
-  @Input('p-focus') set oldfocus(focus: boolean) {
-    this.autoFocus = focus;
-  }
-
-  /**
-   * @optional
-   *
    * @description
    *
    * Define o modo de pesquisa utilizado no campo de busca, quando habilitado.

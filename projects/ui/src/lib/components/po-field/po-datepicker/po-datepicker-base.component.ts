@@ -157,24 +157,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.validateModel(convertDateToISOExtended(this.date, this.hour));
   }
 
-  /**
-   * @optional
-   *
-   * @deprecated 2.0.0
-   * @description
-   *
-   * **Deprecated**
-   *
-   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * @default `false`
-   */
-  @Input('p-focus') set oldfocus(focus: boolean) {
-    this.autoFocus = focus;
-  }
-
   /** Habilita ação para limpar o campo. */
   clean?: boolean = false;
   @Input('p-clean') set setClean(clean: string) {
