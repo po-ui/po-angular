@@ -28,9 +28,6 @@ import { PoPageLoginService } from './po-page-login.service';
     PoPageLoginComponent,
     PoPageLoginPopoverComponent
   ],
-  entryComponents: [
-    PoModalPasswordRecoveryComponent
-  ],
   exports: [
     PoPageLoginComponent
   ],
