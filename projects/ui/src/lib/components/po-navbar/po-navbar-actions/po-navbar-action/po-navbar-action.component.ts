@@ -22,7 +22,7 @@ export class PoNavbarActionComponent {
   @Input('p-tooltip-text') tooltip?: string;
 
   constructor(viewContainerRef: ViewContainerRef, private router: Router) {
-    this.parentRef = viewContainerRef['_view']['component'];
+    this.parentRef = viewContainerRef['_hostView'][8];
   }
 
   click() {

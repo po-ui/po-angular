@@ -99,7 +99,7 @@ export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements On
     private router: Router) {
 
     super();
-    this.parentRef = viewRef['_view']['component'];
+    this.parentRef = viewRef['_hostView'][8];
   }
 
   ngOnDestroy() {

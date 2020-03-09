@@ -46,7 +46,7 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     private router: Router) {
 
     super();
-    this.parentRef = viewRef['_view']['component'];
+    this.parentRef = viewRef['_hostView'][8];
   }
 
   public ngAfterContentInit(): void {

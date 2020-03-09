@@ -58,7 +58,7 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
     private router: Router) {
 
     super(languageService);
-    this.parentRef = viewRef['_view']['component'];
+    this.parentRef = viewRef['_hostView'][8];
     this.initializeListeners();
   }
 
@@ -92,7 +92,7 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
   }
 
   hasPageHeader(): boolean {
-    return  !!(this.title || (this.actions && this.actions.length) || (this.breadcrumb && this.breadcrumb.items.length));
+    return !!(this.title || (this.actions && this.actions.length) || (this.breadcrumb && this.breadcrumb.items.length));
   }
 
   private onResize(event: Event): void {

@@ -45,7 +45,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     private poControlPosition: PoControlPositionService,
     public changeDetector: ChangeDetectorRef) {
     super();
-    this.parentRef = viewContainerRef['_view']['component'];
+    this.parentRef = viewContainerRef['_hostView'][8];
   }
 
   /**
