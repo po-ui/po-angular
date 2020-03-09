@@ -33,12 +33,12 @@ describe('PoDynamicViewBaseComponent:', () => {
       ]
     });
 
-    titleCase = TestBed.get(TitleCasePipe);
-    decimalPipe = TestBed.get(DecimalPipe);
-    datePipe = TestBed.get(DatePipe);
-    timePipe = TestBed.get(PoTimePipe);
-    currencyPipe = TestBed.get(CurrencyPipe);
-    dynamicViewService = TestBed.get(PoDynamicViewService);
+    titleCase = TestBed.inject(TitleCasePipe);
+    decimalPipe = TestBed.inject(DecimalPipe);
+    datePipe = TestBed.inject(DatePipe);
+    timePipe = TestBed.inject(PoTimePipe);
+    currencyPipe = TestBed.inject(CurrencyPipe);
+    dynamicViewService = TestBed.inject(PoDynamicViewService);
 
     component = new PoDynamicViewBaseComponent(titleCase, decimalPipe, currencyPipe, datePipe, timePipe, dynamicViewService);
   });

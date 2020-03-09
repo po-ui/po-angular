@@ -19,7 +19,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       ]
     });
 
-    titleCase = TestBed.get(TitleCasePipe);
+    titleCase = TestBed.inject(TitleCasePipe);
 
     component = new PoDynamicFormFieldsBaseComponent(titleCase);
   });

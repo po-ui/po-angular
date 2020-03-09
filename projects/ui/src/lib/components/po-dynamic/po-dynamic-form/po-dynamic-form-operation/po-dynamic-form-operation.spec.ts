@@ -21,9 +21,9 @@ describe('PoDynamicFormOperation:', () => {
       ]
     });
 
-    httpMock = TestBed.get(HttpTestingController);
+    httpMock = TestBed.inject(HttpTestingController);
 
-    const http = TestBed.get(HttpClient);
+    const http = TestBed.inject(HttpClient);
 
     dynamicFormOperation = new PoDynamicFormOperation(http);
   });

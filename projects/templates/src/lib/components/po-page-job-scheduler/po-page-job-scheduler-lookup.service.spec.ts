@@ -17,7 +17,7 @@ describe('PoPageJobSchedulerLookupService:', () => {
       ]
     });
 
-    poPageJobSchedulerLookupService = TestBed.get(PoPageJobSchedulerLookupService);
+    poPageJobSchedulerLookupService = TestBed.inject(PoPageJobSchedulerLookupService);
   });
 
   it('should be created', () => {

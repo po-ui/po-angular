@@ -18,7 +18,7 @@ describe('PoMenuItemsService', () => {
       providers: [PoMenuItemsService]
     });
 
-    menuItemsService = TestBed.get(PoMenuItemsService);
+    menuItemsService = TestBed.inject(PoMenuItemsService);
 
   });
 

@@ -14,8 +14,8 @@ describe('PoPageCustomizationService:', () => {
       providers: [PoPageDynamicService]
     });
 
-    poPageDynamicService = TestBed.get(PoPageDynamicService);
-    httpMock = TestBed.get(HttpTestingController);
+    poPageDynamicService = TestBed.inject(PoPageDynamicService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

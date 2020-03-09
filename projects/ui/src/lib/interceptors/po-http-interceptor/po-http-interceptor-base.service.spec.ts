@@ -53,7 +53,7 @@ describe('PoHttpInterceptorBaseService', () => {
     mockSuccessResponse = { status: 200, statusText: 'Success' };
     portinariErrorMessage = { message: 'erro portinari', code: '1', detailedMessage: '', details: [{}], helpUrl: '' };
     messages = { type: 'success', message: 'portinari', code: '2' };
-    service = TestBed.get(PoHttpInterceptorService);
+    service = TestBed.inject(PoHttpInterceptorService);
   });
 
   it('should show success notification',

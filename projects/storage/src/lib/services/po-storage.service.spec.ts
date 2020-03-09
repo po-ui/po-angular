@@ -17,7 +17,7 @@ describe('PoStorageService:', () => {
       ]
     });
 
-    poStorageService = TestBed.get(PoStorageService);
+    poStorageService = TestBed.inject(PoStorageService);
   });
 
   it('should be created', () => {

@@ -25,8 +25,8 @@ describe('PoDynamicFormValidationService:', () => {
       ]
     });
 
-    httpMock = TestBed.get(HttpTestingController);
-    service = TestBed.get(PoDynamicFormValidationService);
+    httpMock = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(PoDynamicFormValidationService);
 
     field = { property: 'test1', required: true, visible: true },
     mockURL = 'http://po.portinari.com.br/api';

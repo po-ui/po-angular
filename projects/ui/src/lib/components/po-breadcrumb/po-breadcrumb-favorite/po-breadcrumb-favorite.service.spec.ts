@@ -25,8 +25,8 @@ describe('PoBreadcrumbFavoriteService:', () => {
       providers: [PoBreadcrumbFavoriteService]
     });
 
-    breadcrumbFavoriteService = TestBed.get(PoBreadcrumbFavoriteService);
-    httpMock = TestBed.get(HttpTestingController);
+    breadcrumbFavoriteService = TestBed.inject(PoBreadcrumbFavoriteService);
+    httpMock = TestBed.inject(HttpTestingController);
 
     breadcrumbFavoriteService.configService(mockURL, params, item);
   });

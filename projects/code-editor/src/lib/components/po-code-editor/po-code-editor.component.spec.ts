@@ -23,7 +23,7 @@ describe('PoCodeEditorComponent', () => {
     fixture = TestBed.createComponent(PoCodeEditorComponent);
     component = fixture.componentInstance;
 
-    testBedConfig = TestBed.get(PoCodeEditorRegister);
+    testBedConfig = TestBed.inject(PoCodeEditorRegister);
 
     fixture.detectChanges();
   });
