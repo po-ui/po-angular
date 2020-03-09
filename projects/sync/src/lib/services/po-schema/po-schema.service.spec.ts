@@ -28,7 +28,7 @@ describe('PoSchemaService:', () => {
       ]
     });
 
-    poSchemaService = TestBed.get(PoSchemaService);
+    poSchemaService = TestBed.inject(PoSchemaService);
   });
 
   it('should be created', () => {

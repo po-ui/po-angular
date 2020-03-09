@@ -99,8 +99,8 @@ describe('PoPageCustomizationService:', () => {
       providers: [PoPageCustomizationService]
     });
 
-    poPageCustomizationService = TestBed.get(PoPageCustomizationService);
-    httpMock = TestBed.get(HttpTestingController);
+    poPageCustomizationService = TestBed.inject(PoPageCustomizationService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

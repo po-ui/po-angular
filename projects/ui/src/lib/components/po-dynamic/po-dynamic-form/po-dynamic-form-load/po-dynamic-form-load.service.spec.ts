@@ -22,7 +22,7 @@ describe('PoDynamicFormLoadService:', () => {
       ]
     });
 
-    service = TestBed.get(PoDynamicFormLoadService);
+    service = TestBed.inject(PoDynamicFormLoadService);
   });
 
   describe('Methods:', () => {

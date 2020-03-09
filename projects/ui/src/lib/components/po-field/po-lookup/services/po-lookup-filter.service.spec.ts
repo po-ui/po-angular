@@ -14,8 +14,8 @@ describe('PoLookupFilterService', () => {
       providers: [PoLookupFilterService]
     });
 
-    service = TestBed.get(PoLookupFilterService);
-    httpMock = TestBed.get(HttpTestingController);
+    service = TestBed.inject(PoLookupFilterService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

@@ -46,7 +46,7 @@ describe('PoMenuPanelComponent: ', () => {
   });
 
   beforeEach(() => {
-    router = TestBed.get(Router);
+    router = TestBed.inject(Router);
 
     fixture = TestBed.createComponent(PoMenuPanelComponent);
     nativeElement = fixture.debugElement.nativeElement;

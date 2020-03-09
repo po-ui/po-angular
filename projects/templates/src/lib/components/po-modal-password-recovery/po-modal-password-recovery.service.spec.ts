@@ -13,8 +13,8 @@ describe('PoModalPasswordRecoveryService:', () => {
       providers: [PoModalPasswordRecoveryService]
     });
 
-    poModalPasswordRecoveryService = TestBed.get(PoModalPasswordRecoveryService);
-    httpMock = TestBed.get(HttpTestingController);
+    poModalPasswordRecoveryService = TestBed.inject(PoModalPasswordRecoveryService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

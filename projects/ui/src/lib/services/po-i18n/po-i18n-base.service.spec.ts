@@ -49,7 +49,7 @@ describe('PoI18nService:', () => {
       ]
     });
 
-    service = TestBed.get(PoI18nService);
+    service = TestBed.inject(PoI18nService);
   });
 
   it('should be created', () => {
@@ -316,8 +316,8 @@ describe('PoI18nService with Service', () => {
       ]
     });
 
-    service = TestBed.get(PoI18nService);
-    httpMock = TestBed.get(HttpTestingController);
+    service = TestBed.inject(PoI18nService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should get all literals from service', done => {

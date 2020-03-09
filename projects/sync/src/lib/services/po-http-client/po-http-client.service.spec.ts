@@ -19,8 +19,8 @@ describe('PoHttpClientService', () => {
       providers: [PoHttpClientService]
     });
 
-    poHttpClientService = TestBed.get(PoHttpClientService);
-    httpMock = TestBed.get(HttpTestingController);
+    poHttpClientService = TestBed.inject(PoHttpClientService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

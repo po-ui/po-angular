@@ -25,8 +25,8 @@ describe('PoHttpInterceptor', () => {
   });
 
   it('should be created', () => {
-    const notification = TestBed.get(PoNotificationService);
-    const componentInjector = TestBed.get(PoComponentInjectorService);
+    const notification = TestBed.inject(PoNotificationService);
+    const componentInjector = TestBed.inject(PoComponentInjectorService);
 
     const service = new PoHttpInterceptorService(notification, componentInjector);
 

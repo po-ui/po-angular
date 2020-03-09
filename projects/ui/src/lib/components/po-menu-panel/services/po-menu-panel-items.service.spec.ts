@@ -20,7 +20,7 @@ describe('PoMenuPanelItemsService', () => {
       providers: [PoMenuPanelItemsService]
     });
 
-    menuItemsService = TestBed.get(PoMenuPanelItemsService);
+    menuItemsService = TestBed.inject(PoMenuPanelItemsService);
   });
 
   describe('Methods:', () => {
