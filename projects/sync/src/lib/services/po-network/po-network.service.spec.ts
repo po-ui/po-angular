@@ -1,4 +1,4 @@
-import { Network } from '@ionic-native/network';
+import { Network } from '@ionic-native/network/ngx';
 
 import { fromEvent, Observable, of, Subject } from 'rxjs';
 import * as TypeMoq from 'typemoq';

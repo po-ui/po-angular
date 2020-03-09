@@ -256,20 +256,19 @@ describe('PoPageDynamicDetailComponent:', () => {
 
           component.onLoad = () => {
             return{
-              title:  'New Title',
+              title: 'New Title',
               breadcrumb: {
                 items: [
-                  { label:  'Test' },
-                  { label:  'Test2' }
+                  { label: 'Test' },
+                  { label: 'Test2' }
                 ]
               },
               actions: {
-                remove:  '/new_datail',
-                new: '/new'
+                remove: '/new_datail'
               },
               fields: [
-                { property:  'filter1' },
-                { property:  'filter3' }
+                { property: 'filter1' },
+                { property: 'filter3' }
               ]
             };
           };
@@ -282,9 +281,8 @@ describe('PoPageDynamicDetailComponent:', () => {
 
           expect(component.title).toBe('New Title');
           expect(component.actions).toEqual({
-            remove:  '/new_datail',
-            edit: '/edit',
-            new: '/new'
+            remove: '/new_datail',
+            edit: '/edit'
           });
           expect(component.fields).toEqual([
             { property: 'filter1' },
