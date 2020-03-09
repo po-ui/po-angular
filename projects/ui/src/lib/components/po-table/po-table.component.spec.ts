@@ -1698,19 +1698,24 @@ describe('PoTableComponent:', () => {
       expect(nativeElement.querySelector('.po-container')).toBeFalsy();
     });
 
-    it('should display `po-container` class if container is `border`.', () => {
+    it('should display `po-container` class if container is `border`.', fakeAsync(() => {
       component.container = 'border';
       fixture.detectChanges();
+
+      tick();
+
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
       expect(nativeElement.querySelector('.po-container-no-shadow')).toBeTruthy();
-    });
+    }));
 
-    it('should display `po-container` and `po-container-no-shadow` class if container is `shadow`.', () => {
+    it('should display `po-container` and `po-container-no-shadow` class if container is `shadow`.', fakeAsync(() => {
       component.container = 'shadow';
       fixture.detectChanges();
+
+      tick();
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
       expect(nativeElement.querySelector('.po-container-no-shadow')).toBeFalsy();
-    });
+    }));
 
     it('should find .po-table-header-column-manager if has columns and actions is undefined', () => {
       component.columns = [...columns];
