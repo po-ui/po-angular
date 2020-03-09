@@ -113,7 +113,7 @@ export class PoPageEditBaseComponent {
   /** Título da página. */
   @Input('p-title') set title(title: string) {
     this._title = title;
-    this.poPageContent.recalculateHeaderSize();
+    setTimeout(() => this.poPageContent.recalculateHeaderSize());
   }
 
   get title() {

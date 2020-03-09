@@ -156,7 +156,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Input('p-container') set container(value: string) {
     this._container = poTableContainer.includes(value) ? value : poTableContainerDefault;
-    this.showContainer(this._container);
+    setTimeout(() => this.showContainer(this._container));
   }
 
   get container(): string {
