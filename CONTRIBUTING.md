@@ -31,9 +31,9 @@ Para seguir o guia é fundamental o conhecimento da [ferramenta Git](https://git
 ## Fluxo
 
 1. A primeira etapa consiste em avaliar se nas [*Pull Requests* do Portinari](https://github.com/portinariui/portinari-angular/pulls) não tem nenhuma outra submissão anterior que resolve o problema, eliminando assim a duplicidade.
-2. Com o repositório atualizado deve-se [gerar a *branch*](#branchs) ou *fork* que conterá as alterações necessárias dependendo do seu tipo de usuários:
-  - Para membros do Core Team do Portinari deve ser gerada uma [*branch*](#branchs)
-  - Para os demais contribuintes do projeto deve ser gerada a branch no seu fork.
+2. Com o repositório atualizado, deve-se [gerar a *branch*](#branchs) ou *fork* que conterá as alterações necessárias dependendo do seu tipo de usuário:
+  - Para membros do Core Team do Portinari deve ser gerada uma [*branch*](#branchs);
+  - Para os demais contribuintes do projeto deve-se optar por *fork*.
 3. Próximo passo é gerar as alterações e ao finalizar deve-se rodar os testes.
   - É muito importante analisar os documentos [**STYLEGUIDE**](https://github.com/portinariui/portinari-angular/blob/master/STYLEGUIDE.md) e [**HOW_TO_DOCUMENT**](https://github.com/portinariui/portinari-angular/blob/master/HOW_TO_DOCUMENT.md) antes de iniciar o desenvolvimento para que a contribuição seja mais rápida e eficiente.
 4. Finalizando a etapa anterior deve-se gerar o *commit* e verificar se foi gerado apenas um [*commit* final](#commits).
