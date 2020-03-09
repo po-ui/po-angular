@@ -22,7 +22,7 @@ export class PoCleanComponent extends PoCleanBaseComponent {
 
   constructor(private viewRef: ViewContainerRef) {
     super();
-    this.parentComponent = this.viewRef['_view']['component'];
+    this.parentComponent = this.viewRef['_hostView'][8];
   }
 
   setInputValue(value?: string) {
