@@ -134,24 +134,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     this.validateModel();
   }
 
-  /**
-   * @optional
-   *
-   * @deprecated 2.0.0
-   * @description
-   *
-   * **Deprecated**
-   *
-   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * @default `false`
-   */
-  @Input('p-focus') set oldfocus(focus: boolean) {
-    this.autoFocus = focus;
-  }
-
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */
   clean?: boolean = false;
   @Input('p-clean') set setClean(clean: string) {
