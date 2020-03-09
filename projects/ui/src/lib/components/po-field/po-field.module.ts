@@ -145,11 +145,6 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoUploadFileRestrictionsComponent,
     PoUrlComponent
   ],
-  providers: [],
-  entryComponents: [
-    PoCalendarComponent,
-    PoLookupModalComponent,
-    PoRichTextModalComponent
-  ]
+  providers: []
 })
 export class PoFieldModule { }

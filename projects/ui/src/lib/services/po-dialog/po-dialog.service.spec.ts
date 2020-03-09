@@ -13,7 +13,6 @@ import { PoModalModule } from '../../components/po-modal';
 @NgModule({
   imports: [CommonModule, PoModalModule],
   declarations: [PoDialogComponent],
-  entryComponents: [PoDialogComponent],
   providers: [
     PoComponentInjectorService, PoDialogService
   ]

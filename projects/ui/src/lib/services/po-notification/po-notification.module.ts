@@ -12,9 +12,6 @@ import { PoToasterComponent } from './po-toaster/po-toaster.component';
   ],
   exports: [
   ],
-  entryComponents: [
-    PoToasterComponent
-  ],
   providers: [],
   bootstrap: []
 })

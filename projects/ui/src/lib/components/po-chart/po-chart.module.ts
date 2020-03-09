@@ -29,12 +29,6 @@ import { PoChartPieComponent } from './po-chart-types/po-chart-pie/po-chart-pie.
     PoChartPieComponent,
     PoChartLegendComponent
   ],
-  entryComponents: [
-    PoChartDonutComponent,
-    PoChartGaugeComponent,
-    PoChartGaugeTextContentComponent,
-    PoChartPieComponent
-  ],
   exports: [
     PoChartComponent,
   ]
