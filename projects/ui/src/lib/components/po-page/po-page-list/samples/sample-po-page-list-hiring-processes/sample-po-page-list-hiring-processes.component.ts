@@ -29,7 +29,7 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   statusOptions: Array<PoCheckboxGroupOption>;
 
   public readonly actions: Array<PoPageAction> = [
-    { label: 'Hire', action: this.hireCandidate, disabled: this.disableHireButton.bind(this) },
+    { label: 'Hire', action: this.hireCandidate.bind(this), disabled: this.disableHireButton.bind(this) },
     { label: 'Legislation', url: 'https://www.usa.gov/labor-laws' }
   ];
 
