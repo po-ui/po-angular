@@ -9,7 +9,6 @@ import { PoTableColumnSortType } from '../enums/po-table-column-sort-type.enum';
  * Interface para ordenação das colunas do componente table.
  */
 export interface PoTableColumnSort {
-
   /** Coluna pela qual a tabela está ordenada. */
   column?: PoTableColumn;
 

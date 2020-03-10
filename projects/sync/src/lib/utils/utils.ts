@@ -11,7 +11,7 @@ export const getObjectEntries = (object: object) => {
   const objectName = Object.keys(object)[0];
   const objectValue = object[objectName];
 
-  return [ objectName, objectValue ];
+  return [objectName, objectValue];
 };
 
 /**
@@ -21,12 +21,11 @@ export const getObjectEntries = (object: object) => {
  * e o seu valor.
  */
 export const validateParameter = (parameter: object) => {
-  const [paramName, paramValue ] = getObjectEntries(parameter);
+  const [paramName, paramValue] = getObjectEntries(parameter);
 
   if (paramValue === undefined || paramValue === null) {
     throw new Error(`The ${paramName} parameter cannot be undefined or null`);
   }
-
 };
 
 /**
@@ -36,10 +35,9 @@ export const validateParameter = (parameter: object) => {
  * @param value Objeto contento o nome da propriedade que está sendo validada e o seu valor.
  */
 export const validateArray = (value: object) => {
-
   validateParameter(value);
 
-  const [paramName, paramValue ] = getObjectEntries(value);
+  const [paramName, paramValue] = getObjectEntries(value);
 
   if (!(paramValue instanceof Array)) {
     throw new Error(`${paramName} is not an Array instance`);
@@ -48,5 +46,4 @@ export const validateArray = (value: object) => {
   if (!paramValue.length) {
     throw new Error(`${paramName} cannot be empty array`);
   }
-
 };

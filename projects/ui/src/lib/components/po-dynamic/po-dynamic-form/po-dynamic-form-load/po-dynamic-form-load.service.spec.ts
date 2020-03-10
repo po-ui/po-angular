@@ -6,7 +6,6 @@ import { of } from 'rxjs';
 import { PoDynamicFormLoadService } from './po-dynamic-form-load.service';
 
 describe('PoDynamicFormLoadService:', () => {
-
   let service: PoDynamicFormLoadService;
 
   const mockURL: string = 'http://po.portinari.com.br/api';
@@ -14,12 +13,8 @@ describe('PoDynamicFormLoadService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        PoDynamicFormLoadService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [PoDynamicFormLoadService]
     });
 
     service = TestBed.inject(PoDynamicFormLoadService);
@@ -29,7 +24,7 @@ describe('PoDynamicFormLoadService:', () => {
     const spyLoadFunction = jasmine.createSpy('validateFunction');
 
     it('executeLoad: should call `execute` with `load` and `value`', () => {
-      const spyExecute = spyOn(service, <any> 'execute').and.returnValue(of());
+      const spyExecute = spyOn(service, <any>'execute').and.returnValue(of());
 
       service.executeLoad(spyLoadFunction, value);
 
@@ -52,7 +47,7 @@ describe('PoDynamicFormLoadService:', () => {
     });
 
     it('executeLoad: should return value if return of server is not null', done => {
-      const loadedFormData = { fields: [{ property: 'name', label: 'Nome' }]};
+      const loadedFormData = { fields: [{ property: 'name', label: 'Nome' }] };
 
       spyOn(service, <any>'execute').and.returnValue(of(loadedFormData));
 
@@ -96,7 +91,5 @@ describe('PoDynamicFormLoadService:', () => {
 
       expect(result).toEqual(expectedField);
     });
-
   });
-
 });

@@ -5,7 +5,13 @@ import { Subscription, concat, EMPTY, Observable, throwError } from 'rxjs';
 import { tap, catchError, switchMap } from 'rxjs/operators';
 
 import * as util from '../../utils/util';
-import { PoBreadcrumb, PoPageAction, PoDialogService, PoDialogConfirmOptions, PoNotificationService } from '@portinari/portinari-ui';
+import {
+  PoBreadcrumb,
+  PoPageAction,
+  PoDialogService,
+  PoDialogConfirmOptions,
+  PoNotificationService
+} from '@portinari/portinari-ui';
 
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';
@@ -115,7 +121,6 @@ export const poPageDynamicDetailLiteralsDefault = {
   providers: [PoPageDynamicService]
 })
 export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
-
   private subscriptions: Array<Subscription> = [];
 
   private _actions: PoPageDynamicDetailActions = {};
@@ -145,7 +150,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   }
 
   get actions() {
-    return {...this._actions};
+    return { ...this._actions };
   }
 
   /**
@@ -261,8 +266,8 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     private poNotification: PoNotificationService,
     private poDialogService: PoDialogService,
     private poPageDynamicService: PoPageDynamicService,
-    private poPageCustomizationService: PoPageCustomizationService) {
-  }
+    private poPageCustomizationService: PoPageCustomizationService
+  ) {}
 
   ngOnInit(): void {
     this.loadDataFromAPI();
@@ -310,7 +315,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
 
   private loadData(id) {
     return this.poPageDynamicService.getResource(id).pipe(
-      tap(response => this.model = response),
+      tap(response => (this.model = response)),
       catchError(error => {
         this.model = undefined;
         this.actions = undefined;
@@ -319,7 +324,10 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getMetadata(serviceApiFromRoute: string, onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicDetailMetaData> {
+  private getMetadata(
+    serviceApiFromRoute: string,
+    onLoad: UrlOrPoCustomizationFunction
+  ): Observable<PoPageDynamicDetailMetaData> {
     if (serviceApiFromRoute) {
       return this.poPageDynamicService.getMetadata<PoPageDynamicDetailMetaData>('detail').pipe(
         tap(response => {
@@ -329,7 +337,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
           this.fields = response.fields || this.fields;
           this.title = response.title || this.title;
         }),
-        switchMap(() => this.loadOptionsOnInitialize(onLoad) )
+        switchMap(() => this.loadOptionsOnInitialize(onLoad))
       );
     }
 
@@ -337,19 +345,23 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   }
 
   // @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
-  private navigateTo(route: { path: string, component?, url?: string, params?: any }, forceStopAutoRouter: boolean = false) {
-    this.router.navigate([route.url || route.path], { queryParams: route.params })
-      .catch(() => {
-        if (forceStopAutoRouter || !this.autoRouter) {
-          return;
-        }
+  private navigateTo(
+    route: { path: string; component?; url?: string; params?: any },
+    forceStopAutoRouter: boolean = false
+  ) {
+    this.router.navigate([route.url || route.path], { queryParams: route.params }).catch(() => {
+      if (forceStopAutoRouter || !this.autoRouter) {
+        return;
+      }
 
-        this.router.config.unshift(<Route>{
-          path: route.path, component: route.component, data: { serviceApi: this.serviceApi, autoRouter: true }
-        });
-
-        this.navigateTo(route, true);
+      this.router.config.unshift(<Route>{
+        path: route.path,
+        component: route.component,
+        data: { serviceApi: this.serviceApi, autoRouter: true }
       });
+
+      this.navigateTo(route, true);
+    });
   }
 
   private openEdit(path) {
@@ -360,10 +372,12 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   private remove(path) {
     const uniqueKey = this.formatUniqueKey(this.model);
 
-    this.subscriptions.push(this.poPageDynamicService.deleteResource(uniqueKey).subscribe(() => {
-      this.poNotification.success(this.literals.removeNotificationSuccess);
-      this.navigateTo({ path: path });
-    }));
+    this.subscriptions.push(
+      this.poPageDynamicService.deleteResource(uniqueKey).subscribe(() => {
+        this.poNotification.success(this.literals.removeNotificationSuccess);
+        this.navigateTo({ path: path });
+      })
+    );
   }
 
   private resolveUrl(item: any, path: string) {
@@ -380,7 +394,10 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     }
 
     if (actions.remove) {
-      pageActions.push({ label: this.literals.pageActionRemove, action: this.confirmRemove.bind(this, actions.remove) });
+      pageActions.push({
+        label: this.literals.pageActionRemove,
+        action: this.confirmRemove.bind(this, actions.remove)
+      });
     }
 
     if (actions.back === undefined || actions.back) {
@@ -418,10 +435,12 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
-
     if (onLoad) {
       return this.getPoDynamicPageOptions(onLoad).pipe(
-        tap(responsePoOption => this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)));
+        tap(responsePoOption =>
+          this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)
+        )
+      );
     }
 
     return EMPTY;
@@ -457,5 +476,4 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
 
     return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
   }
-
 }

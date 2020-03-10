@@ -6,10 +6,9 @@ import { PoPageLogin, PoPageLoginCustomField, PoPageLoginLiterals } from '@porti
 
 @Component({
   selector: 'sample-po-page-login-labs',
-  templateUrl: './sample-po-page-login-labs.component.html',
+  templateUrl: './sample-po-page-login-labs.component.html'
 })
 export class SamplePoPageLoginLabsComponent implements OnInit {
-
   background: string;
   contactEmail: string;
   customField: PoPageLoginCustomField;
@@ -38,14 +37,14 @@ export class SamplePoPageLoginLabsComponent implements OnInit {
     { value: 'loading', label: 'Loading' }
   ];
 
-  constructor(private poDialog: PoDialogService) { }
+  constructor(private poDialog: PoDialogService) {}
 
   ngOnInit() {
     this.restore();
   }
 
   addCustomFieldOption() {
-    this.customFieldOptions.push({label: this.customFieldOption.label, value: this.customFieldOption.value});
+    this.customFieldOptions.push({ label: this.customFieldOption.label, value: this.customFieldOption.value });
     this.customField.options = this.customFieldOptions;
     this.onChangeCustomProperties();
 
@@ -109,5 +108,4 @@ export class SamplePoPageLoginLabsComponent implements OnInit {
     this.recovery = '';
     this.registerUrl = '';
   }
-
 }

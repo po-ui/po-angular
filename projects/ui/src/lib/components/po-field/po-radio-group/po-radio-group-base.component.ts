@@ -24,7 +24,6 @@ const poRadioGroupColumnsTotalLength: number = 12;
  */
 @Directive()
 export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor, Validator {
-
   private _columns: number = poRadioGroupColumnsDefaultLength;
   private _disabled?: boolean = false;
   private _options: Array<PoRadioGroupOption>;
@@ -166,22 +165,20 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     this.onChangePropagate = fn;
   }
 
-  registerOnTouched(fn: any) { }
+  registerOnTouched(fn: any) {}
 
   registerOnValidatorChange(fn: any) {
     this.validatorChange = fn;
   }
 
-  validate(abstractControl: AbstractControl): { [key: string]: any; } {
-
+  validate(abstractControl: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {
-          valid: false,
+          valid: false
         }
       };
     }
-
   }
 
   writeValue(modelValue: any) {
@@ -212,5 +209,4 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
       this.validatorChange();
     }
   }
-
 }

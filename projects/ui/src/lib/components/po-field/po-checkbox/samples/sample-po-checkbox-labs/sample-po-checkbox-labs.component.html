@@ -3,49 +3,28 @@
   [(ngModel)]="checkbox"
   [p-disabled]="disabled"
   [p-label]="label"
-  (p-change)="changeEvent('p-change')">
+  (p-change)="changeEvent('p-change')"
+>
 </po-checkbox>
 
 <po-divider></po-divider>
 
 <div class="po-row">
-  <po-info
-    class="po-md-6"
-    p-label="Model"
-    [p-value]="checkbox | json">
-  </po-info>
+  <po-info class="po-md-6" p-label="Model" [p-value]="checkbox | json"> </po-info>
 
-  <po-info
-    class="po-md-6"
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
 <po-divider></po-divider>
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-sm-6"
-      name="label"
-      [(ngModel)]="label"
-      p-label="Label">
-    </po-input>
+    <po-input class="po-sm-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
 
-    <po-switch
-      class="po-sm-6"
-      name="disabled"
-      [(ngModel)]="disabled"
-      p-label="Disabled">
-    </po-switch>
+    <po-switch class="po-sm-6" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

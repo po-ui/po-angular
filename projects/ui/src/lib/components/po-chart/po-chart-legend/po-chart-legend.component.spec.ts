@@ -3,15 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PoChartLegendComponent } from './po-chart-legend.component';
 
 describe('PoChartLegendComponent:', () => {
-
   let component: PoChartLegendComponent;
   let fixture: ComponentFixture<PoChartLegendComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PoChartLegendComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -24,9 +22,11 @@ describe('PoChartLegendComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should apply valid text and color values', () => {
-      component.series = <any>[{value: 10, category: '1'}, {value: 20, category: '2'}];
+      component.series = <any>[
+        { value: 10, category: '1' },
+        { value: 20, category: '2' }
+      ];
       component.colors = ['red', 'green'];
 
       fixture.detectChanges();
@@ -39,7 +39,5 @@ describe('PoChartLegendComponent:', () => {
       expect(legendSquare[1].getAttribute('style')).toBe('background: green;');
       expect(legendText[1].textContent.trim()).toBe(component.series[1].category);
     });
-
   });
-
 });

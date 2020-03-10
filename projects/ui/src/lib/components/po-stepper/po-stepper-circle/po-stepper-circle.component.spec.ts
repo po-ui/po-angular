@@ -7,7 +7,6 @@ import { PoStepperModule } from '../po-stepper.module';
 import { PoStepperStatus } from '../enums/po-stepper-status.enum';
 
 describe('PoStepperCircleComponent:', () => {
-
   let component: PoStepperCircleComponent;
   let fixture: ComponentFixture<PoStepperCircleComponent>;
   let nativeElement: any;
@@ -32,7 +31,6 @@ describe('PoStepperCircleComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('isActive: should return true only if `status` is `Active`.', () => {
       component.status = PoStepperStatus.Active;
       expect(component.isActive).toBe(true);
@@ -167,11 +165,9 @@ describe('PoStepperCircleComponent:', () => {
 
       expect(component.isMediumStep).toBe(false);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should change `tabindex` to `-1` if component is disabled', () => {
       component.status = PoStepperStatus.Disabled;
       fixture.detectChanges();
@@ -287,7 +283,6 @@ describe('PoStepperCircleComponent:', () => {
       fixture.detectChanges();
       expect(PoIconExclamation()).toBeNull();
     });
-
   });
 
   function PoIconInfo() {
@@ -301,5 +296,4 @@ describe('PoStepperCircleComponent:', () => {
   function PoIconExclamation() {
     return nativeElement.querySelector('.po-icon-exclamation');
   }
-
 });

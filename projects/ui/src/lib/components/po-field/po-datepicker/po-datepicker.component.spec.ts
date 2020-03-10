@@ -20,7 +20,7 @@ import { PoFieldContainerComponent } from '../po-field-container/po-field-contai
 function keyboardEvents(event: string, keyCode: number) {
   const eventKeyBoard = document.createEvent('KeyboardEvent');
   eventKeyBoard.initEvent(event, true, true);
-  Object.defineProperty(eventKeyBoard, 'keyCode', {'value': keyCode});
+  Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': keyCode });
   return eventKeyBoard;
 }
 
@@ -37,7 +37,7 @@ describe('PoDatepickerComponent:', () => {
         PoCalendarComponent,
         PoFieldContainerBottomComponent
       ],
-      providers: [ PoCalendarService, PoCalendarLangService ]
+      providers: [PoCalendarService, PoCalendarLangService]
     });
   });
 
@@ -192,7 +192,7 @@ describe('PoDatepickerComponent:', () => {
     const fakeThis = {
       inputEl: null,
       isMobile: () => false,
-      formatToDate: () => {},
+      formatToDate: () => {}
     };
 
     component.writeValue.call(fakeThis, 10);
@@ -249,23 +249,16 @@ describe('PoDatepickerComponent:', () => {
     component.inputEl.nativeElement.value = 'teste';
     expect(component.hasInvalidClass()).toBe(true);
   });
-
 });
 
 @Component({
   template: `
-  <form>
-    <po-datepicker
-    name="name_teste"
-    [(ngModel)]="value"
-    p-required
-    p-clean>
-    </po-datepicker>
-  </form>
+    <form>
+      <po-datepicker name="name_teste" [(ngModel)]="value" p-required p-clean> </po-datepicker>
+    </form>
   `
 })
 class ContentProjectionComponent {
-
   value = new Date().toISOString();
 }
 
@@ -275,7 +268,7 @@ describe('PoDatepicker mocked with form', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule ],
+      imports: [FormsModule],
       declarations: [
         ContentProjectionComponent,
         PoDatepickerComponent,
@@ -284,7 +277,7 @@ describe('PoDatepicker mocked with form', () => {
         PoCalendarComponent,
         PoFieldContainerBottomComponent
       ],
-      providers: [ PoCalendarService, PoCalendarLangService ]
+      providers: [PoCalendarService, PoCalendarLangService]
     });
   });
 
@@ -317,8 +310,8 @@ describe('PoDatepickerComponent:', () => {
         PoCleanComponent,
         PoCalendarComponent,
         PoFieldContainerBottomComponent
-        ],
-      providers: [ PoCalendarService, PoCalendarLangService ]
+      ],
+      providers: [PoCalendarService, PoCalendarLangService]
     });
   });
 
@@ -337,7 +330,6 @@ describe('PoDatepickerComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;
 
@@ -349,7 +341,6 @@ describe('PoDatepickerComponent:', () => {
 
       expect(component.autocomplete).toBe('on');
     });
-
   });
 
   it('should have american format (dd/mm/yyyy) because of locale is different of "en"', () => {
@@ -489,7 +480,6 @@ describe('PoDatepickerComponent:', () => {
   });
 
   it('Block calendar opening with disable property', () => {
-
     let dialogPickerDiv = component.dialogPicker.nativeElement.querySelector('.po-invisible');
     component.disabled = true;
     expect(dialogPickerDiv).not.toBeNull();
@@ -497,11 +487,9 @@ describe('PoDatepickerComponent:', () => {
 
     dialogPickerDiv = component.dialogPicker.nativeElement.querySelector('.po-invisible');
     expect(dialogPickerDiv).not.toBeNull();
-
   });
 
   it('Block calendar opening with readonly property', () => {
-
     let dialogPickerDiv = component.dialogPicker.nativeElement.querySelector('.po-invisible');
     component.readonly = true;
     expect(dialogPickerDiv).not.toBeNull();
@@ -509,13 +497,12 @@ describe('PoDatepickerComponent:', () => {
 
     dialogPickerDiv = component.dialogPicker.nativeElement.querySelector('.po-invisible');
     expect(dialogPickerDiv).not.toBeNull();
-
   });
 
   it('should get error pattern with no error pattern', () => {
     const fakeThis = {
       errorPattern: '',
-      hasInvalidClass: () => {},
+      hasInvalidClass: () => {}
     };
 
     expect(component.getErrorPattern.call(fakeThis)).toBe('');
@@ -533,13 +520,14 @@ describe('PoDatepickerComponent:', () => {
     component.errorPattern = 'MENSAGEM DE ERRO';
     component.hasInvalidClass = () => true;
     fixture.detectChanges();
-    const content = fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error').innerHTML.toString();
+    const content = fixture.debugElement.nativeElement
+      .querySelector('.po-field-container-bottom-text-error')
+      .innerHTML.toString();
 
     expect(content.indexOf('MENSAGEM DE ERRO') > -1).toBeTruthy();
   });
 
   describe('Methods:', () => {
-
     const poCalendarContentOffset = 8;
 
     const fakeEvent = {
@@ -623,8 +611,8 @@ describe('PoDatepickerComponent:', () => {
       const dateMock = new Date(2018, 0, 1);
       component.date = dateMock;
 
-      spyOn(component, <any> 'controlChangeEmitter');
-      spyOn(component, <any> 'formatToDate').and.returnValue('2018/01/01');
+      spyOn(component, <any>'controlChangeEmitter');
+      spyOn(component, <any>'formatToDate').and.returnValue('2018/01/01');
       spyOn(component, 'controlModel');
 
       component.clear();
@@ -678,14 +666,13 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('eventOnBlur:', () => {
-
       it('should call `controlChangeEmitter`, `objMask.blur` and `onblur.emit`', () => {
         const fakeThis = {
-          objMask: { blur : () => {}, valueToMode: undefined },
+          objMask: { blur: () => {}, valueToMode: undefined },
           onblur: { emit: () => {} },
           controlChangeEmitter: () => {},
           callOnChange: () => {},
-          inputEl: { nativeElement : { value: undefined } }
+          inputEl: { nativeElement: { value: undefined } }
         };
 
         spyOn(fakeThis, <any>'controlChangeEmitter');
@@ -704,7 +691,7 @@ describe('PoDatepickerComponent:', () => {
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
 
-        spyOn(component, <any> 'verifyMobile').and.returnValue(false);
+        spyOn(component, <any>'verifyMobile').and.returnValue(false);
         spyOn(component, 'controlModel');
         spyOn(component, <any>'controlChangeEmitter');
 
@@ -719,7 +706,7 @@ describe('PoDatepickerComponent:', () => {
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
 
-        spyOn(component, <any> 'verifyMobile').and.returnValue(false);
+        spyOn(component, <any>'verifyMobile').and.returnValue(false);
         spyOn(component, 'controlModel');
 
         component.eventOnBlur(fakeEvent);
@@ -728,18 +715,17 @@ describe('PoDatepickerComponent:', () => {
       });
 
       it(`should call 'controlModel' with undefined if 'objMask.valueToModel.length' is less than 10`, () => {
-          fakeEvent.target.value = '05/02/20';
-          component.date = new Date(2017, 5, 2);
-          component.inputEl.nativeElement.value = '06/11/2019';
+        fakeEvent.target.value = '05/02/20';
+        component.date = new Date(2017, 5, 2);
+        component.inputEl.nativeElement.value = '06/11/2019';
 
-          spyOn(component, <any> 'verifyMobile').and.returnValue(false);
-          spyOn(component, 'controlModel');
+        spyOn(component, <any>'verifyMobile').and.returnValue(false);
+        spyOn(component, 'controlModel');
 
-          component.eventOnBlur(fakeEvent);
+        component.eventOnBlur(fakeEvent);
 
-          expect(component.controlModel).toHaveBeenCalledWith(undefined);
+        expect(component.controlModel).toHaveBeenCalledWith(undefined);
       });
-
     });
 
     it('refreshDate: should call formatToDate when have a value', () => {
@@ -759,7 +745,6 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('dateSelected:', () => {
-
       it('should set `calendar.visible` to false', () => {
         component.calendar.visible = true;
 
@@ -781,7 +766,7 @@ describe('PoDatepickerComponent:', () => {
       });
 
       it('should call ´focus´ if ´verifyMobile´ returns ´false´.', () => {
-        spyOn(component, 'verifyMobile').and.returnValue(<any> false);
+        spyOn(component, 'verifyMobile').and.returnValue(<any>false);
         const spyInputFocus = spyOn(component.inputEl.nativeElement, 'focus');
 
         component.dateSelected();
@@ -790,14 +775,13 @@ describe('PoDatepickerComponent:', () => {
       });
 
       it('shouldn´t call ´focus´ if ´verifyMobile´ returns ´true´.', () => {
-        spyOn(component, 'verifyMobile').and.returnValue(<any> true);
+        spyOn(component, 'verifyMobile').and.returnValue(<any>true);
         const spyInputFocus = spyOn(component.inputEl.nativeElement, 'focus');
 
         component.dateSelected();
 
         expect(spyInputFocus).not.toHaveBeenCalled();
       });
-
     });
 
     it('formatToDate: should call `formatYear` with date year', () => {
@@ -839,7 +823,6 @@ describe('PoDatepickerComponent:', () => {
 
     it(`writeValue: should update 'valueBeforeChange' with 'formatToDate' return and call 'formatToDate'
       with 'this.date'`, () => {
-
       const date = '12/03/2018';
       component['valueBeforeChange'] = undefined;
 
@@ -851,7 +834,6 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('wasClickedOnPicker: ', () => {
-
       function getFakeThis(dialogPickerContains, iconDatepickerContains, hasOverlayClass, hasAttrCalendar) {
         return {
           dialogPicker: {
@@ -928,7 +910,7 @@ describe('PoDatepickerComponent:', () => {
       const fakeElement = {
         hasAttribute: () => 'attr-calendar',
         parentElement: {
-          hasAttribute: () => {},
+          hasAttribute: () => {}
         }
       };
 
@@ -939,7 +921,7 @@ describe('PoDatepickerComponent:', () => {
       const fakeElement = {
         hasAttribute: () => {},
         parentElement: {
-          hasAttribute: () => 'attr-calendar',
+          hasAttribute: () => 'attr-calendar'
         }
       };
 
@@ -950,7 +932,7 @@ describe('PoDatepickerComponent:', () => {
       const fakeElement = {
         hasAttribute: () => {},
         parentElement: {
-          hasAttribute: () => {},
+          hasAttribute: () => {}
         }
       };
 
@@ -959,7 +941,7 @@ describe('PoDatepickerComponent:', () => {
 
     it('closeCalendar: should call `calendar.close` and `removeListeners`', () => {
       const close = spyOn(component.calendar, 'close');
-      const removeListeners = spyOn(component, <any> 'removeListeners');
+      const removeListeners = spyOn(component, <any>'removeListeners');
 
       component['closeCalendar']();
 
@@ -969,7 +951,6 @@ describe('PoDatepickerComponent:', () => {
 
     it(`controlChangeEmitter: should update 'valueBeforeChange', call 'formatToDate' and emit value if 'valueBeforeChange'
       is different of date model formatted`, fakeAsync(() => {
-
       const value = '30/08/2018';
 
       const fakeThis = {
@@ -980,7 +961,7 @@ describe('PoDatepickerComponent:', () => {
       };
 
       spyOn(fakeThis.onchange, 'emit');
-      spyOn(fakeThis, <any> 'formatToDate').and.returnValue(value);
+      spyOn(fakeThis, <any>'formatToDate').and.returnValue(value);
 
       component['controlChangeEmitter'].call(fakeThis);
       tick(250);
@@ -991,7 +972,7 @@ describe('PoDatepickerComponent:', () => {
     }));
 
     it('controlChangeEmitter: should not emit value if is same value', () => {
-      const value = '30/08/2018' ;
+      const value = '30/08/2018';
 
       const fakeThis = {
         valueBeforeChange: value,
@@ -999,7 +980,7 @@ describe('PoDatepickerComponent:', () => {
         onchange: { emit: () => {} }
       };
 
-      spyOn(fakeThis, <any> 'formatToDate').and.returnValue(value);
+      spyOn(fakeThis, <any>'formatToDate').and.returnValue(value);
       spyOn(fakeThis.onchange, 'emit');
 
       component['controlChangeEmitter'].call(fakeThis);
@@ -1046,7 +1027,9 @@ describe('PoDatepickerComponent:', () => {
       const wasClickedOnPicker = spyOn(component, 'wasClickedOnPicker');
       const closeCalendar = spyOn(component, <any>'closeCalendar');
       const addEventListener = spyOn(window, 'addEventListener');
-      const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) => callback());
+      const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
+        callback()
+      );
 
       component['initializeListeners']();
 
@@ -1057,7 +1040,7 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it(`setCalendarPosition: should call 'controlPosition.setElements' and 'controlPosition.adjustPosition'.`, () => {
-      const setDialogPickerStyleDisplay = spyOn(component, <any> 'setDialogPickerStyleDisplay');
+      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
       const setElements = spyOn(component['controlPosition'], 'setElements');
       const adjustPosition = spyOn(component['controlPosition'], 'adjustPosition');
 
@@ -1077,8 +1060,8 @@ describe('PoDatepickerComponent:', () => {
 
     it('closeCalendar: should call `close`, `removeListeners` and `setDialogPickerStyleDisplay`.', () => {
       const close = spyOn(component.calendar, 'close');
-      const removeListeners = spyOn(component, <any> 'removeListeners');
-      const setDialogPickerStyleDisplay = spyOn(component, <any> 'setDialogPickerStyleDisplay');
+      const removeListeners = spyOn(component, <any>'removeListeners');
+      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
 
       component['closeCalendar']();
 
@@ -1141,14 +1124,11 @@ describe('PoDatepickerComponent:', () => {
 
       expect(component.hour).toBe('T00:00:01-00:00');
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain the `po-datepicker-popup-calendar` class if `verifyMobile` is false', () => {
-
-      spyOn(component, <any> 'verifyMobile').and.returnValue(false);
+      spyOn(component, <any>'verifyMobile').and.returnValue(false);
 
       fixture.detectChanges();
 
@@ -1158,8 +1138,7 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('should not contain the `po-datepicker-popup-calendar` class if `verifyMobile` is true', () => {
-
-      spyOn(component, <any> 'verifyMobile').and.returnValue(true);
+      spyOn(component, <any>'verifyMobile').and.returnValue(true);
 
       fixture.detectChanges();
 
@@ -1197,7 +1176,5 @@ describe('PoDatepickerComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

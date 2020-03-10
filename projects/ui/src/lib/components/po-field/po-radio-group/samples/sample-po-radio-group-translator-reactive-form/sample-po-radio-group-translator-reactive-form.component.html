@@ -1,5 +1,4 @@
 <form [formGroup]="translatorForm">
-
   <div class="po-row">
     <po-radio-group
       class="po-lg-4"
@@ -8,7 +7,8 @@
       p-label="Select a Language"
       p-required
       [p-options]="languageOptions"
-      (p-change)="changeLanguage()">
+      (p-change)="changeLanguage()"
+    >
     </po-radio-group>
 
     <po-select
@@ -18,7 +18,8 @@
       p-label="Original Text (Portuguese)"
       p-required
       [p-options]="optionsList"
-      (p-change)="changeLanguage()">
+      (p-change)="changeLanguage()"
+    >
     </po-select>
 
     <po-input
@@ -27,8 +28,8 @@
       formControlName="translated"
       p-label="Translated Text"
       p-readonly
-      p-required>
+      p-required
+    >
     </po-input>
   </div>
-
 </form>

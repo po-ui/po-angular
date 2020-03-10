@@ -5,17 +5,9 @@ import { PoDialogComponent } from './po-dialog.component';
 import { PoDialogService } from './po-dialog.service';
 
 @NgModule({
-  declarations: [
-    PoDialogComponent
-  ],
-  imports: [
-    PoModalModule
-  ],
-  exports: [
-    PoDialogComponent
-  ],
-  providers: [
-    PoDialogService
-  ]
+  declarations: [PoDialogComponent],
+  imports: [PoModalModule],
+  exports: [PoDialogComponent],
+  providers: [PoDialogService]
 })
-export class PoDialogModule { }
+export class PoDialogModule {}

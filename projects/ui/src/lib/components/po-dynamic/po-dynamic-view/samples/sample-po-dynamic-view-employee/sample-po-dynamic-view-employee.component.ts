@@ -7,7 +7,6 @@ import { PoDynamicViewField } from '@portinari/portinari-ui';
   templateUrl: './sample-po-dynamic-view-employee.component.html'
 })
 export class SamplePoDynamicViewEmployeeComponent {
-
   fields: Array<PoDynamicViewField> = [
     { property: 'name', divider: 'Personal data', gridColumns: 4 },
     { property: 'age', label: 'Age', gridColumns: 4 },
@@ -18,13 +17,13 @@ export class SamplePoDynamicViewEmployeeComponent {
     { property: 'company', label: 'Company', divider: 'Work Data' },
     { property: 'job', tag: true, inverse: true, color: 'color-03', icon: 'po-icon-copy' },
     { property: 'admissionDate', label: 'Admission date', type: 'date' },
-    { property: 'hoursPerDay', label: 'Hours per day', type: 'time'},
+    { property: 'hoursPerDay', label: 'Hours per day', type: 'time' },
     { property: 'wage', label: 'Wage', type: 'currency' },
     { property: 'availability', tag: true, color: 'color-11', icon: 'po-icon-ok' },
-    { property: 'city', label: 'City' , divider: 'Address' },
+    { property: 'city', label: 'City', divider: 'Address' },
     { property: 'addressStreet', label: 'Street' },
     { property: 'addressNumber', label: 'Number' },
-    { property: 'zipCode', label: 'Zip Code' },
+    { property: 'zipCode', label: 'Zip Code' }
   ];
 
   employee = {
@@ -42,10 +41,9 @@ export class SamplePoDynamicViewEmployeeComponent {
     addressNumber: '1000',
     zipCode: '02511-000',
     city: 'São Paulo',
-    wage: 8000.50,
+    wage: 8000.5,
     availability: 'Available',
     admissionDate: '2014-10-14T13:45:00-00:00',
-    hoursPerDay: '08:30:00',
+    hoursPerDay: '08:30:00'
   };
-
 }

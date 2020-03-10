@@ -20,18 +20,10 @@ describe('PoPageDynamicDetailComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([])
-      ],
-      providers: [
-        PoDialogService
-      ],
-      declarations: [
-        PoPageDynamicDetailComponent
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [PoDialogService],
+      declarations: [PoPageDynamicDetailComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -47,11 +39,10 @@ describe('PoPageDynamicDetailComponent:', () => {
   });
 
   describe('Properties: ', () => {
-
     it('p-actions: should set property with valid value', () => {
       const actions = { edit: 'people/edit/:id' };
 
-      spyOn(component, <any> 'getPageActions');
+      spyOn(component, <any>'getPageActions');
 
       component.actions = actions;
       expect(component['_actions']).toEqual(actions);
@@ -60,7 +51,7 @@ describe('PoPageDynamicDetailComponent:', () => {
     });
 
     it('p-actions: should set property to {} if invalid values', () => {
-      const invalidActions: any = [ [], [{}], null, 'test' ];
+      const invalidActions: any = [[], [{}], null, 'test'];
 
       component.actions = invalidActions[0];
       expect(component['_actions']).toEqual({});
@@ -76,10 +67,10 @@ describe('PoPageDynamicDetailComponent:', () => {
     });
 
     it('p-fields: should call `getKeysByFields` and `getDuplicatesByFields` and set property with valid values', () => {
-      const validValues = [ [{property: 'name'}], [] ];
+      const validValues = [[{ property: 'name' }], []];
 
-      spyOn(component, <any> 'getKeysByFields');
-      spyOn(component, <any> 'getDuplicatesByFields');
+      spyOn(component, <any>'getKeysByFields');
+      spyOn(component, <any>'getDuplicatesByFields');
 
       expectPropertiesValues(component, 'fields', validValues, validValues);
       expect(component['getKeysByFields']).toHaveBeenCalledWith(component.fields);
@@ -87,7 +78,7 @@ describe('PoPageDynamicDetailComponent:', () => {
     });
 
     it('p-fields: should set property to `[]` if invalid values', () => {
-      const invalidValues = [ 'test', {}, null, undefined, NaN, 0 ];
+      const invalidValues = ['test', {}, null, undefined, NaN, 0];
 
       expectPropertiesValues(component, 'fields', invalidValues, []);
     });
@@ -105,7 +96,7 @@ describe('PoPageDynamicDetailComponent:', () => {
     });
 
     it('duplicates: get duplicates', () => {
-      const duplicates = [{property: 'name'}];
+      const duplicates = [{ property: 'name' }];
 
       component['_duplicates'] = duplicates;
 
@@ -114,7 +105,6 @@ describe('PoPageDynamicDetailComponent:', () => {
   });
 
   describe('Methods: ', () => {
-
     it('navigateTo: shouldn`t call `router.config.unshift` and `navigateTo` only one time if `autoRouter` is false', fakeAsync(() => {
       const route = {
         path: '/people/api',
@@ -124,9 +114,9 @@ describe('PoPageDynamicDetailComponent:', () => {
 
       component.autoRouter = false;
 
-      spyOn(component['router'], <any> 'navigate').and.returnValue(Promise.reject('error'));
+      spyOn(component['router'], <any>'navigate').and.returnValue(Promise.reject('error'));
       spyOn(component['router'].config, 'unshift');
-      spyOn(component, <any> 'navigateTo').and.callThrough();
+      spyOn(component, <any>'navigateTo').and.callThrough();
 
       component['navigateTo'](route);
 
@@ -146,16 +136,19 @@ describe('PoPageDynamicDetailComponent:', () => {
 
       component.autoRouter = true;
 
-      spyOn(component['router'], <any> 'navigate').and.returnValue(Promise.reject('error'));
+      spyOn(component['router'], <any>'navigate').and.returnValue(Promise.reject('error'));
       spyOn(component['router'].config, 'unshift');
-      spyOn(component, <any> 'navigateTo').and.callThrough();
+      spyOn(component, <any>'navigateTo').and.callThrough();
 
       component['navigateTo'](route);
 
       tick();
 
       expect(component['navigateTo']).toHaveBeenCalledTimes(2);
-      expect(component['router'].config.unshift).toHaveBeenCalledWith({ ...route, data: { serviceApi: this.serviceApi, autoRouter: true }});
+      expect(component['router'].config.unshift).toHaveBeenCalledWith({
+        ...route,
+        data: { serviceApi: this.serviceApi, autoRouter: true }
+      });
       expect(component['router'].navigate).toHaveBeenCalledWith([route.path], { queryParams: route.params });
     }));
 
@@ -163,11 +156,11 @@ describe('PoPageDynamicDetailComponent:', () => {
       const path = '/people/:id';
       const uniqueKey = '1';
 
-      component.model = { id: 1 , name: 'Angular' };
+      component.model = { id: 1, name: 'Angular' };
 
-      spyOn(component, <any> 'formatUniqueKey').and.returnValue(uniqueKey);
+      spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
       spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
-      spyOn(component, <any> 'navigateTo');
+      spyOn(component, <any>'navigateTo');
       spyOn(component['poNotification'], 'success');
 
       component['remove'](path);
@@ -177,7 +170,7 @@ describe('PoPageDynamicDetailComponent:', () => {
       expect(component['poNotification'].success).toHaveBeenCalled();
       expect(component['formatUniqueKey']).toHaveBeenCalledWith(component.model);
       expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(uniqueKey);
-      expect(component['navigateTo']).toHaveBeenCalledWith({ path/*, component: PoPageDynamicTableComponent*/ });
+      expect(component['navigateTo']).toHaveBeenCalledWith({ path /*, component: PoPageDynamicTableComponent*/ });
     }));
 
     describe('ngOnInit:', () => {
@@ -185,123 +178,105 @@ describe('PoPageDynamicDetailComponent:', () => {
         const id = 1;
         const activatedRoute: any = {
           snapshot: {
-            data: { },
+            data: {},
             params: { id }
           }
         };
 
         component.serviceApi = 'localhost:4300/api/people';
 
-        spyOn(component, <any> 'getMetadata').and.returnValue(of({}));
-        spyOn(component, <any> 'loadData').and.returnValue(of({}));
-        spyOn(component, <any> 'loadOptionsOnInitialize').and.returnValue(of({}));
-        spyOn(component['poPageDynamicService'], <any> 'configServiceApi');
+        spyOn(component, <any>'getMetadata').and.returnValue(of({}));
+        spyOn(component, <any>'loadData').and.returnValue(of({}));
+        spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(of({}));
+        spyOn(component['poPageDynamicService'], <any>'configServiceApi');
 
         component['activatedRoute'] = activatedRoute;
 
         component.ngOnInit();
 
         expect(component['loadData']).toHaveBeenCalledWith(id);
-        expect(component['poPageDynamicService'].configServiceApi)
-          .toHaveBeenCalledWith({ endpoint: component.serviceApi, metadata: undefined });
+        expect(component['poPageDynamicService'].configServiceApi).toHaveBeenCalledWith({
+          endpoint: component.serviceApi,
+          metadata: undefined
+        });
       });
 
-      it('should call `loadDataFromAPI` with `id` and set `serviceApi` if `activatedRoute.snapshot.data.serviceApi` is truthy',
-        () => {
-          const id = 1;
-          const activatedRoute: any = {
-            snapshot: {
-              data: {
-                serviceApi: 'localhost:4300/api/people',
-                serviceMetadataApi: 'localhost:4300/api/people/metadata'
-              },
-              params: { id }
-            }
-          };
+      it('should call `loadDataFromAPI` with `id` and set `serviceApi` if `activatedRoute.snapshot.data.serviceApi` is truthy', () => {
+        const id = 1;
+        const activatedRoute: any = {
+          snapshot: {
+            data: {
+              serviceApi: 'localhost:4300/api/people',
+              serviceMetadataApi: 'localhost:4300/api/people/metadata'
+            },
+            params: { id }
+          }
+        };
 
-          component.serviceApi = undefined;
+        component.serviceApi = undefined;
 
-          spyOn(component, <any> 'getMetadata').and.returnValue(of({}));
-          spyOn(component, <any> 'loadData').and.returnValue(of({}));
-          spyOn(component, <any> 'loadOptionsOnInitialize').and.returnValue(of({}));
-          spyOn(component['poPageDynamicService'], <any> 'configServiceApi');
+        spyOn(component, <any>'getMetadata').and.returnValue(of({}));
+        spyOn(component, <any>'loadData').and.returnValue(of({}));
+        spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(of({}));
+        spyOn(component['poPageDynamicService'], <any>'configServiceApi');
 
-          component['activatedRoute'] = activatedRoute;
+        component['activatedRoute'] = activatedRoute;
 
-          component.ngOnInit();
+        component.ngOnInit();
 
-          expect(component.serviceApi).toEqual(activatedRoute.snapshot.data.serviceApi);
-          expect(component['getMetadata']).toHaveBeenCalled();
-          expect(component['poPageDynamicService'].configServiceApi).toHaveBeenCalledWith({
-            endpoint: component.serviceApi,
-            metadata: 'localhost:4300/api/people/metadata' });
+        expect(component.serviceApi).toEqual(activatedRoute.snapshot.data.serviceApi);
+        expect(component['getMetadata']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].configServiceApi).toHaveBeenCalledWith({
+          endpoint: component.serviceApi,
+          metadata: 'localhost:4300/api/people/metadata'
         });
+      });
 
       it('should configure properties based on the return of onload function', fakeAsync(() => {
-          component.actions = {
-            remove: '/datail',
-            edit: '/edit'
+        component.actions = {
+          remove: '/datail',
+          edit: '/edit'
+        };
+        component.breadcrumb = {
+          items: [{ label: 'Home' }, { label: 'Hiring processes' }]
+        };
+        component.fields = [{ property: 'filter1' }, { property: 'filter2' }];
+        component.title = 'Original Title';
+
+        component.onLoad = () => {
+          return {
+            title: 'New Title',
+            breadcrumb: {
+              items: [{ label: 'Test' }, { label: 'Test2' }]
+            },
+            actions: {
+              remove: '/new_datail'
+            },
+            fields: [{ property: 'filter1' }, { property: 'filter3' }]
           };
-          component.breadcrumb = {
-            items: [
-              { label: 'Home' },
-              { label: 'Hiring processes' }
-            ]
-          };
-          component.fields = [
-            { property: 'filter1' },
-            { property: 'filter2' }
-          ];
-          component.title = 'Original Title';
+        };
 
-          component.onLoad = () => {
-            return{
-              title: 'New Title',
-              breadcrumb: {
-                items: [
-                  { label: 'Test' },
-                  { label: 'Test2' }
-                ]
-              },
-              actions: {
-                remove: '/new_datail'
-              },
-              fields: [
-                { property: 'filter1' },
-                { property: 'filter3' }
-              ]
-            };
-          };
+        spyOn(component, <any>'loadData').and.returnValue(of({}));
 
-          spyOn(component, <any>'loadData').and.returnValue(of({}));
+        component.ngOnInit();
 
-          component.ngOnInit();
+        tick();
 
-          tick();
+        expect(component.title).toBe('New Title');
+        expect(component.actions).toEqual({
+          remove: '/new_datail',
+          edit: '/edit'
+        });
+        expect(component.fields).toEqual([{ property: 'filter1' }, { property: 'filter2' }, { property: 'filter3' }]);
+        expect(component.breadcrumb).toEqual({
+          items: [{ label: 'Test' }, { label: 'Test2' }]
+        });
 
-          expect(component.title).toBe('New Title');
-          expect(component.actions).toEqual({
-            remove: '/new_datail',
-            edit: '/edit'
-          });
-          expect(component.fields).toEqual([
-            { property: 'filter1' },
-            { property: 'filter2' },
-            { property: 'filter3' }
-          ]);
-          expect(component.breadcrumb).toEqual({
-            items: [
-              { label: 'Test' },
-              { label: 'Test2' }
-            ]
-          });
-
-          component['subscriptions'] = null;
-          component.ngOnDestroy();
-        }));
+        component['subscriptions'] = null;
+        component.ngOnDestroy();
+      }));
 
       it('should configure properties based on the return of onload route', fakeAsync(() => {
-
         component.autoRouter = false;
         component.actions = <any>{};
         component.breadcrumb = <any>{};
@@ -320,16 +295,13 @@ describe('PoPageDynamicDetailComponent:', () => {
         };
 
         const metadata = {
-          breadcrumb : {
-            items: [
-              { label: 'Home' },
-              { label: 'Hiring processes' }
-            ]
+          breadcrumb: {
+            items: [{ label: 'Home' }, { label: 'Hiring processes' }]
           },
           title: 'Original Title'
         };
 
-        const custom = {title: 'New Title'};
+        const custom = { title: 'New Title' };
 
         spyOn(component, <any>'loadData').and.returnValue(of({}));
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(metadata));
@@ -343,17 +315,13 @@ describe('PoPageDynamicDetailComponent:', () => {
 
         expect(component.title).toBe('New Title');
         expect(component.breadcrumb).toEqual({
-            items: [
-              { label: 'Home' },
-              { label: 'Hiring processes' }
-            ]
-          });
-        }));
+          items: [{ label: 'Home' }, { label: 'Hiring processes' }]
+        });
+      }));
     });
 
     describe('loadDataFromAPI', () => {
       it('should load the metadata and keep it if the onload property returns empty', fakeAsync(() => {
-
         const activatedRoute: any = {
           snapshot: {
             data: {
@@ -373,8 +341,8 @@ describe('PoPageDynamicDetailComponent:', () => {
         };
 
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
-        spyOn(component, <any> 'loadData').and.returnValue(of({}));
-        spyOn(component, <any> 'loadOptionsOnInitialize').and.returnValue(of({}));
+        spyOn(component, <any>'loadData').and.returnValue(of({}));
+        spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(of({}));
         component['activatedRoute'] = activatedRoute;
         component['loadDataFromAPI']();
 
@@ -383,7 +351,6 @@ describe('PoPageDynamicDetailComponent:', () => {
         expect(component.autoRouter).toEqual(response.autoRouter);
         expect(component.fields).toEqual(response.fields);
         expect(component.title).toEqual(response.title);
-
       }));
 
       it('should call `getMetadata` and mantain properties when response is empty', fakeAsync(() => {
@@ -401,8 +368,8 @@ describe('PoPageDynamicDetailComponent:', () => {
         component.title = 'Test';
 
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of({}));
-        spyOn(component, <any> 'loadData').and.returnValue(of({}));
-        spyOn(component, <any> 'loadOptionsOnInitialize').and.returnValue(of({}));
+        spyOn(component, <any>'loadData').and.returnValue(of({}));
+        spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(of({}));
         component['activatedRoute'] = activatedRoute;
         component['loadDataFromAPI']();
 
@@ -436,13 +403,15 @@ describe('PoPageDynamicDetailComponent:', () => {
         spyOn(component['poPageDynamicService'], 'getResource').and.returnValue(throwError(''));
 
         component.actions = actions;
-        component['loadData'](id).subscribe(() => {}, () => {
-          expect(component.model).toEqual(undefined);
-          expect(component.pageActions.length).toBe(1);
-        });
+        component['loadData'](id).subscribe(
+          () => {},
+          () => {
+            expect(component.model).toEqual(undefined);
+            expect(component.pageActions.length).toBe(1);
+          }
+        );
         tick();
       }));
-
     });
 
     it('formatUniqueKey: should return value with `|` between keys', () => {
@@ -469,7 +438,7 @@ describe('PoPageDynamicDetailComponent:', () => {
     xit('goBack: should call `navigateTo` and not call `history.back` if path is truthy', () => {
       // const path = '/people/:id';
 
-      spyOn(component, <any> 'navigateTo');
+      spyOn(component, <any>'navigateTo');
       spyOn(window.history, 'back');
 
       // component['goBack'](path);
@@ -482,7 +451,7 @@ describe('PoPageDynamicDetailComponent:', () => {
     it('goBack: shouldn`t call `navigateTo` and call `history.back` if path is falsy', () => {
       const path = '';
 
-      spyOn(component, <any> 'navigateTo');
+      spyOn(component, <any>'navigateTo');
       spyOn(window.history, 'back');
 
       // component['goBack'](path);
@@ -496,32 +465,31 @@ describe('PoPageDynamicDetailComponent:', () => {
       const path = '/people/:id';
       const url = '/people/1|2';
 
-      spyOn(component, <any> 'navigateTo');
-      spyOn(component, <any> 'resolveUrl').and.returnValue(url);
+      spyOn(component, <any>'navigateTo');
+      spyOn(component, <any>'resolveUrl').and.returnValue(url);
 
       component['openEdit'](path);
 
-      expect(component['navigateTo']).toHaveBeenCalledWith({ path, url/*, component: PoPageDynamicEditComponent*/ });
-
+      expect(component['navigateTo']).toHaveBeenCalledWith({ path, url /*, component: PoPageDynamicEditComponent*/ });
     });
 
     it('resolveUrl: should call `formatUniqueKey` and replace :id to uniqueKeys and return it', () => {
       const path = '/people/:id';
       const item = {};
 
-      spyOn(component, <any> 'formatUniqueKey').and.returnValue('1|2|3');
+      spyOn(component, <any>'formatUniqueKey').and.returnValue('1|2|3');
 
       expect(component['resolveUrl'](item, path).includes(':id')).toBeFalsy();
       expect(component['formatUniqueKey']).toHaveBeenCalled();
     });
 
     it('getKeysByFields: should return array with only key fields', () => {
-      const keyFields = [{ property: 'name', key: true }, { property: 'id', key: true }];
-      const commonFields = [{ property: 'age' }, { property: 'address' , duplicate: true}];
-      const fields = [
-        ...keyFields,
-        ...commonFields
+      const keyFields = [
+        { property: 'name', key: true },
+        { property: 'id', key: true }
       ];
+      const commonFields = [{ property: 'age' }, { property: 'address', duplicate: true }];
+      const fields = [...keyFields, ...commonFields];
 
       expect(component['getKeysByFields'](fields).length).toBe(keyFields.length);
     });
@@ -533,12 +501,12 @@ describe('PoPageDynamicDetailComponent:', () => {
     });
 
     it('getDuplicatesByFields: should return array with only duplicates fields', () => {
-      const duplicateFields = [{ property: 'name', duplicate: true }, { property: 'id', duplicate: true }];
-      const commonFields = [{ property: 'age' }, { property: 'address' , key: true}];
-      const fields = [
-        ...duplicateFields,
-        ...commonFields
+      const duplicateFields = [
+        { property: 'name', duplicate: true },
+        { property: 'id', duplicate: true }
       ];
+      const commonFields = [{ property: 'age' }, { property: 'address', key: true }];
+      const fields = [...duplicateFields, ...commonFields];
 
       expect(component['getDuplicatesByFields'](fields).length).toBe(duplicateFields.length);
     });
@@ -624,7 +592,5 @@ describe('PoPageDynamicDetailComponent:', () => {
       expect(pageActions.length).toBe(1);
       expect(Array.isArray(pageActions)).toBe(true);
     });
-
   });
-
 });

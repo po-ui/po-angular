@@ -9,14 +9,8 @@ import { PoContainerComponent } from './po-container.component';
  * Módulo do componente `po-container`.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    PoContainerComponent
-  ],
-  declarations: [
-    PoContainerComponent
-  ]
+  imports: [CommonModule],
+  exports: [PoContainerComponent],
+  declarations: [PoContainerComponent]
 })
-export class PoContainerModule { }
+export class PoContainerModule {}

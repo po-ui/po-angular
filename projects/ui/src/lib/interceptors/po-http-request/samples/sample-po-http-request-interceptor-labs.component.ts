@@ -10,7 +10,6 @@ import { PoHttpRequestInterceptorService } from '@portinari/portinari-ui';
   templateUrl: './sample-po-http-request-interceptor-labs.component.html'
 })
 export class SamplePoHttpRequestInterceptorLabsComponent implements OnInit, OnDestroy {
-
   countPendingRequestHeaderParam = false;
   screenLockHeaderParam = false;
 
@@ -20,9 +19,7 @@ export class SamplePoHttpRequestInterceptorLabsComponent implements OnInit, OnDe
   private subscription: Subscription;
   private apiSubscription: Subscription;
 
-  constructor(
-    private http: HttpClient,
-    private httpRequestInterceptor: PoHttpRequestInterceptorService) { }
+  constructor(private http: HttpClient, private httpRequestInterceptor: PoHttpRequestInterceptorService) {}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -46,5 +43,4 @@ export class SamplePoHttpRequestInterceptorLabsComponent implements OnInit, OnDe
 
     this.apiSubscription = this.http.get(this.url, { headers: headers }).subscribe(() => {});
   }
-
 }

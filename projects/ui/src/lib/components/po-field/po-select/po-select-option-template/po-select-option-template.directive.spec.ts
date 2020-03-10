@@ -6,5 +6,4 @@ describe('PoSelectOptionTemplateDirective', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
-
 });

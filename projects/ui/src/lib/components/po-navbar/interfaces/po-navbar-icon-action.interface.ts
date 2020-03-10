@@ -6,7 +6,6 @@
  * Interface para lista de ações dos ícones do componente.
  */
 export interface PoNavbarIconAction {
-
   /**
    * Ação que será executada, deve-se passar a referência da função.
    *
@@ -33,5 +32,4 @@ export interface PoNavbarIconAction {
 
   /** Mensagem exibida ao passar o mouse no ícone quando o mesmo estiver na navbar. */
   tooltip?: string;
-
 }

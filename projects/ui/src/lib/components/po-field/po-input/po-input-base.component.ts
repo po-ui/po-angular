@@ -23,7 +23,6 @@ import { PoMask } from './po-mask';
  */
 @Directive()
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator {
-
   private _maxlength?: number;
   private _minlength?: number;
   private _noAutocomplete?: boolean = false;
@@ -171,8 +170,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * Indica a quantidade máxima de caracteres que o campo aceita.
    */
   @Input('p-maxlength') set maxlength(value: number) {
-    if (!isNaN(parseInt(<any> value, 10))) {
-      this._maxlength = parseInt(<any> value, 10);
+    if (!isNaN(parseInt(<any>value, 10))) {
+      this._maxlength = parseInt(<any>value, 10);
 
       this.validateModel();
     } else if (!value) {
@@ -194,8 +193,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * Indica a quantidade mínima de caracteres que o campo aceita.
    */
   @Input('p-minlength') set minlength(value: number) {
-    if (!isNaN(parseInt(<any> value, 10))) {
-      this._minlength = parseInt(<any> value, 10);
+    if (!isNaN(parseInt(<any>value, 10))) {
+      this._minlength = parseInt(<any>value, 10);
 
       this.validateModel();
     } else if (!value) {
@@ -339,31 +338,38 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
-  validate(c: AbstractControl): { [key: string]: any; } {
-
+  validate(c: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this.required, this.disabled, this.getScreenValue())) {
-      return { required: {
-        valid: false,
-      }};
+      return {
+        required: {
+          valid: false
+        }
+      };
     }
 
     if (maxlengpoailed(this.maxlength, this.getScreenValue())) {
-      return { maxlength: {
-        valid: false,
-      }};
+      return {
+        maxlength: {
+          valid: false
+        }
+      };
     }
 
     if (minlengpoailed(this.minlength, this.getScreenValue())) {
-      return { minlength: {
-        valid: false,
-      }};
+      return {
+        minlength: {
+          valid: false
+        }
+      };
     }
 
     if (patternFailed(this.pattern, c.value)) {
       this.validatePatternOnWriteValue(c.value);
-      return { pattern: {
-        valid: false,
-      }};
+      return {
+        pattern: {
+          valid: false
+        }
+      };
     }
 
     return this.extraValidation(c);
@@ -384,7 +390,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   abstract writeValueModel(value: any): void;
 
   // Validações do campo
-  abstract extraValidation(c: AbstractControl): { [key: string]: any; };
+  abstract extraValidation(c: AbstractControl): { [key: string]: any };
 
   // Deve retornar o valor do campo
   abstract getScreenValue(): string;
@@ -392,7 +398,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   // utilizado para validar o pattern na inicializacao, fazendo dessa forma o campo fica sujo (dirty).
   private validatePatternOnWriteValue(value: string) {
     if (value && this.passedWriteValue) {
-
       setTimeout(() => {
         this.updateModel(value);
       });
@@ -400,5 +405,4 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       this.passedWriteValue = false;
     }
   }
-
 }

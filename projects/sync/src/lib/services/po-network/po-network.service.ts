@@ -15,9 +15,8 @@ import { PoNetworkStatus } from './../../models';
 
 @Injectable()
 export class PoNetworkService {
-
   private networkType: string;
-  private networkTypeNow: Subject<{ status: boolean, type: string }>;
+  private networkTypeNow: Subject<{ status: boolean; type: string }>;
   private poNetworkStatus: PoNetworkStatus;
 
   constructor(network: Network) {
@@ -40,7 +39,7 @@ export class PoNetworkService {
    *
    * @returns {Observable<{ status: boolean, type: string }>} Observable com as propriedades da conexão.
    */
-  onChange(): Observable<{ status: boolean, type: string }> {
+  onChange(): Observable<{ status: boolean; type: string }> {
     return this.networkTypeNow.asObservable();
   }
 
@@ -68,5 +67,4 @@ export class PoNetworkService {
       });
     }
   }
-
 }

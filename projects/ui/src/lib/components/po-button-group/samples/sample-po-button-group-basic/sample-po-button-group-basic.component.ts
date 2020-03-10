@@ -7,7 +7,6 @@ import { PoButtonGroupItem } from '@portinari/portinari-ui';
   templateUrl: './sample-po-button-group-basic.component.html'
 })
 export class SamplePoButtonGroupBasicComponent {
-
   buttons: Array<PoButtonGroupItem> = [
     { label: 'Button 1', action: this.action },
     { label: 'Button 2', action: this.action }
@@ -16,5 +15,4 @@ export class SamplePoButtonGroupBasicComponent {
   action(button) {
     alert(`${button.label}`);
   }
-
 }

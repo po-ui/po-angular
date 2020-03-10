@@ -6,17 +6,14 @@ import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoSlideItemComponent } from './po-slide-item.component';
 
 describe('PoSlideItemComponent:', () => {
-
   let component: PoSlideItemComponent;
   let fixture: ComponentFixture<PoSlideItemComponent>;
   let nativeElement;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([])
-      ],
-      declarations: [ PoSlideItemComponent ]
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [PoSlideItemComponent]
     });
   });
 
@@ -26,7 +23,6 @@ describe('PoSlideItemComponent:', () => {
 
     fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
-
   });
 
   it('should be created', () => {
@@ -34,9 +30,8 @@ describe('PoSlideItemComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('setLinkType: should return `noLink` if `template` is `defined`', () => {
-      component.template = <any>{templateRef: {}};
+      component.template = <any>{ templateRef: {} };
       component.link = 'link';
 
       expect(component.setLinkType()).toBe('noLink');
@@ -62,11 +57,9 @@ describe('PoSlideItemComponent:', () => {
 
       expect(component.setLinkType()).toBe('internalLink');
     });
-
   });
 
   describe('Template:', () => {
-
     it(`should aplly 'po-slide-item-background-image' if 'template' is 'undefined' and 'isIEOrEdge' is 'true'`, () => {
       component.template = undefined;
       component.isIEOrEdge = true;
@@ -98,7 +91,9 @@ describe('PoSlideItemComponent:', () => {
 
       fixture.detectChanges();
 
-      const ngReflectAttribute = nativeElement.querySelector('.po-slide-item-link[ng-reflect-router-link="//internal"]');
+      const ngReflectAttribute = nativeElement.querySelector(
+        '.po-slide-item-link[ng-reflect-router-link="//internal"]'
+      );
 
       expect(ngReflectAttribute).toBeTruthy();
     });
@@ -207,7 +202,5 @@ describe('PoSlideItemComponent:', () => {
 
       expect(slideItemImageSrc).toBeTruthy();
     });
-
   });
-
 });

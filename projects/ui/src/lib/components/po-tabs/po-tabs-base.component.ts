@@ -24,7 +24,6 @@ import { convertToBoolean } from '../../utils/util';
  */
 @Directive()
 export class PoTabsBaseComponent {
-
   private _small?: boolean = false;
 
   /**
@@ -43,5 +42,4 @@ export class PoTabsBaseComponent {
   get small(): boolean {
     return this._small;
   }
-
 }

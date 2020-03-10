@@ -6,9 +6,7 @@ import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
 class PoTextareaComponent extends PoTextareaBaseComponent {
-
   writeValueModel(value: any): void {}
-
 }
 
 describe('PoTextareaBase:', () => {
@@ -96,11 +94,10 @@ describe('PoTextareaBase:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-maxlength: should update property p-maxlength with valid values.', () => {
       const validValues = [105, 1, 7, 0, -5];
 
-      spyOn(component, <any> 'validateModel');
+      spyOn(component, <any>'validateModel');
 
       expectPropertiesValues(component, 'maxlength', validValues, validValues);
       expect(component['validateModel']).toHaveBeenCalled();
@@ -112,8 +109,7 @@ describe('PoTextareaBase:', () => {
     });
 
     it('p-minlength: should update property p-minlength with valid values.', () => {
-
-      spyOn(component, <any> 'validateModel');
+      spyOn(component, <any>'validateModel');
 
       const validValues = [105, 1, 7, 0, -5];
       expectPropertiesValues(component, 'minlength', validValues, validValues);
@@ -122,14 +118,12 @@ describe('PoTextareaBase:', () => {
     });
 
     it('p-minlength: should update property p-minlength with invalid values for undefined.', () => {
-      const invalidValues = [ null, undefined, '', 'string', {}, [], false, true];
+      const invalidValues = [null, undefined, '', 'string', {}, [], false, true];
       expectPropertiesValues(component, 'minlength', invalidValues, undefined);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('controlChangeModelEmitter: should not emit changeModel if previous model value is equal to current model value', () => {
       const newModelValue: number = 1;
       component['modelLastUpdate'] = 1;
@@ -158,11 +152,10 @@ describe('PoTextareaBase:', () => {
     });
 
     describe('validate:', () => {
-
       it('should return required obj if `requiredFailed` is true.', () => {
         const validObj = {
           required: {
-            valid: false,
+            valid: false
           }
         };
 
@@ -184,7 +177,7 @@ describe('PoTextareaBase:', () => {
       it('should return minlenght obj if `minlengpoailed` is true.', () => {
         const invalidMinlenghtError = {
           minlength: {
-            valid: false,
+            valid: false
           }
         };
 
@@ -206,7 +199,7 @@ describe('PoTextareaBase:', () => {
       it('should return maxlenght obj if `maxlengpoailed` is true.', () => {
         const invalidMaxlenghtError = {
           maxlength: {
-            valid: false,
+            valid: false
           }
         };
 
@@ -229,7 +222,7 @@ describe('PoTextareaBase:', () => {
     it('validateModel: should call `validatorChange` when `validateModel` is a function.', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel']();
 
@@ -242,7 +235,5 @@ describe('PoTextareaBase:', () => {
 
       expect(component['validatorChange']).toBeUndefined();
     });
-
   });
-
 });

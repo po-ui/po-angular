@@ -11,7 +11,6 @@ import { PoLookupResponseApi } from './po-lookup-response-api.interface';
  * Define o tipo de busca utilizado no po-lookup.
  */
 export interface PoLookupFilter {
-
   /**
    * **Deprecated**
    *
@@ -51,5 +50,4 @@ export interface PoLookupFilter {
    * @param {any} filterParams Valor informado através da propriedade `p-filter-params`.
    */
   getObjectByValue(value: string, filterParams?: any): Observable<any>;
-
 }

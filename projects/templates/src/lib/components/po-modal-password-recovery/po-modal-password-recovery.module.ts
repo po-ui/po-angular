@@ -5,8 +5,7 @@ import { NgModule } from '@angular/core';
 import { PoFieldModule, PoI18nPipe, PoModalModule } from '@portinari/portinari-ui';
 
 import { PoModalPasswordRecoveryComponent } from './po-modal-password-recovery.component';
-import { PoModalPasswordRecoveryErrorMessageComponent
-} from './po-modal-password-recovery-error-message/po-modal-password-recovery-error-message.component';
+import { PoModalPasswordRecoveryErrorMessageComponent } from './po-modal-password-recovery-error-message/po-modal-password-recovery-error-message.component';
 import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.service';
 
 /**
@@ -15,21 +14,9 @@ import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.ser
  * Módulo do template do po-modal-password-recovery.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-
-    PoFieldModule,
-    PoModalModule
-  ],
-  declarations: [
-    PoModalPasswordRecoveryComponent,
-    PoModalPasswordRecoveryErrorMessageComponent
-  ],
-  exports: [
-    PoModalPasswordRecoveryComponent,
-    PoModalPasswordRecoveryErrorMessageComponent
-  ],
+  imports: [CommonModule, FormsModule, PoFieldModule, PoModalModule],
+  declarations: [PoModalPasswordRecoveryComponent, PoModalPasswordRecoveryErrorMessageComponent],
+  exports: [PoModalPasswordRecoveryComponent, PoModalPasswordRecoveryErrorMessageComponent],
   providers: [PoI18nPipe, PoModalPasswordRecoveryService]
 })
-export class PoModalPasswordRecoveryModule { }
+export class PoModalPasswordRecoveryModule {}

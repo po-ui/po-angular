@@ -17,7 +17,6 @@ import { PoSelectOption } from '@portinari/portinari-ui';
  * de `po-page-login` e demais templates de login.
  */
 export class PoPageBackgroundComponent implements OnInit {
-
   private _logo?: string;
   private _secondaryLogo?: string;
   private _showSelectLanguage?: boolean = false;
@@ -85,5 +84,4 @@ export class PoPageBackgroundComponent implements OnInit {
   onChangeLanguage() {
     this.selectedLanguage.emit(this.selectedLanguageOption);
   }
-
 }

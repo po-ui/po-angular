@@ -8,6 +8,7 @@
 - [Propriedades](#properties)
 - [Samples](#samples)
 - [Testes unitários](#tests)
+- [Formatação](#format)
 
 <a id="introduction"></a>
 ## Introdução
@@ -115,8 +116,8 @@ Onde `prop` é o nome da propriedade e `type` é o tipo da propriedade, sempre d
   - class (CSS)
   - name (nome do componente quando houver necessidade, inputs, buttons, etc…)
   - ngModel (quando existir)
-  - propriedades sem bind 
-  - propriedades com bind 
+  - propriedades sem bind
+  - propriedades com bind
   - eventos
 ```html
 <po-button
@@ -216,3 +217,10 @@ alert('po Button!');
   - Testar as propriedades (getters and setters)
   - Se uma propriedade usar uma interface, validar os tipos dessa interface com typeof (po-button-group)
   - Para os testes use a função expectPropertiesValues (leia documentação no fonte).
+
+<a id="format"></a>
+## Formatação
+
+- O projeto utiliza o formatador [Prettier](https://prettier.io/) para realizar a formatação automática dos arquivos.
+  - A ferramenta já está configurada no projeto e ela será executada no momento do commit dos fontes.
+  - Na criação do Pull Request será verificado automaticamente se a formatação foi respeitada.

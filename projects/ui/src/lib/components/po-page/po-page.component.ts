@@ -11,4 +11,4 @@ import { PoPageBaseComponent } from './po-page-base.component';
   selector: 'po-page',
   templateUrl: './po-page.component.html'
 })
-export class PoPageComponent extends PoPageBaseComponent { }
+export class PoPageComponent extends PoPageBaseComponent {}

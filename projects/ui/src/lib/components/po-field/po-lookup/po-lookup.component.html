@@ -1,30 +1,29 @@
-<po-field-container
-  [p-label]="label"
-  [p-help]="help"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
   <div class="po-field-container-content">
-    <input #inp
+    <input
+      #inp
       class="po-input po-input-icon-right"
       type="text"
       [autocomplete]="autocomplete"
       [disabled]="disabled"
       [placeholder]="placeholder"
       [required]="required"
-      (blur)="searchEvent()">
+      (blur)="searchEvent()"
+    />
 
     <div class="po-field-icon-container-right">
-      <span #iconLookup
+      <span
+        #iconLookup
         class="po-icon po-field-icon po-icon-search"
         tabindex="-1"
         [class.po-field-icon]="!disabled"
         [class.po-field-icon-disabled]="disabled"
         (click)="openLookup()"
-        (focus)="inp.focus()">
+        (focus)="inp.focus()"
+      >
       </span>
     </div>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>
-
 </po-field-container>

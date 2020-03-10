@@ -8,12 +8,7 @@
       "description": "The file extension or preprocessor to use for style files.",
       "type": "string",
       "default": "css",
-      "enum": [
-        "css",
-        "scss",
-        "less",
-        "styl"
-      ]
+      "enum": ["css", "scss", "less", "styl"]
     },
     "project": {
       "type": "string",
@@ -32,6 +27,6 @@
       "type": "boolean",
       "default": false
     }
-   },
-  "required": [ ]
+  },
+  "required": []
 }

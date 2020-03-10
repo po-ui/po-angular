@@ -112,4 +112,4 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
   providers: [],
   bootstrap: []
 })
-export class PoComponentsModule { }
+export class PoComponentsModule {}

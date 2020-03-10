@@ -7,22 +7,22 @@ import { poLocaleDefault } from '../../../utils/util';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
 
 export const poAdvancedFiltersLiteralsDefault = {
-  en: <PoAdvancedFilterLiterals> {
+  en: <PoAdvancedFilterLiterals>{
     title: 'Advanced search',
     cancelLabel: 'Cancel',
     confirmLabel: 'Apply filters'
   },
-  es: <PoAdvancedFilterLiterals> {
+  es: <PoAdvancedFilterLiterals>{
     title: 'Búsqueda avanzada',
     cancelLabel: 'Cancelar',
     confirmLabel: 'Aplicar filtros'
   },
-  pt: <PoAdvancedFilterLiterals> {
+  pt: <PoAdvancedFilterLiterals>{
     title: 'Busca avançada',
     cancelLabel: 'Cancelar',
     confirmLabel: 'Aplicar filtros'
   },
-  ru: <PoAdvancedFilterLiterals> {
+  ru: <PoAdvancedFilterLiterals>{
     title: 'Расширенный поиск',
     cancelLabel: 'отменить',
     confirmLabel: 'Применить фильтры'
@@ -39,7 +39,6 @@ export const poAdvancedFiltersLiteralsDefault = {
  */
 @Directive()
 export class PoAdvancedFilterBaseComponent {
-
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   private _filters: Array<PoDynamicFormField> = [];
@@ -104,7 +103,7 @@ export class PoAdvancedFilterBaseComponent {
     this.language = languageService.getShortLanguage();
   }
 
-    // Retorna os models dos campos preenchidos
+  // Retorna os models dos campos preenchidos
   private getValuesFromForm() {
     Object.keys(this.filter).forEach(property => {
       if (this.filter[property] === undefined || this.filter[property] === '') {
@@ -114,5 +113,4 @@ export class PoAdvancedFilterBaseComponent {
 
     return this.filter;
   }
-
 }

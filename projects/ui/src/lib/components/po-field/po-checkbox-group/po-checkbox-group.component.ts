@@ -1,5 +1,14 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef,
-  forwardRef, QueryList, ViewChildren } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
@@ -33,17 +42,16 @@ import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.int
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoCheckboxGroupComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoCheckboxGroupComponent),
-      multi: true,
+      multi: true
     }
   ]
 })
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
-
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<ElementRef>;
 
   constructor(private changeDetector: ChangeDetectorRef) {
@@ -100,5 +108,4 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
   trackByFn(index) {
     return index;
   }
-
 }

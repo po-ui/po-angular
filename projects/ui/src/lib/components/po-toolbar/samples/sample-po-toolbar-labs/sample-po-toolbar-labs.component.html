@@ -1,4 +1,8 @@
-<style> .sample-container { margin-top: 50px; }</style>
+<style>
+  .sample-container {
+    margin-top: 50px;
+  }
+</style>
 
 <po-toolbar
   [p-actions]="actions"
@@ -8,19 +12,14 @@
   [p-notification-actions]="notificationActions"
   [p-notification-number]="notificationNumber"
   [p-show-notification]="showNotification"
-  [p-title]="title">
+  [p-title]="title"
+>
 </po-toolbar>
 
 <div class="sample-container">
   <form #formAction="ngForm">
     <div class="po-row">
-      <po-input
-        class="po-md-6"
-        name="actionAction"
-        [(ngModel)]="action.action"
-        p-clean
-        p-label="Action">
-      </po-input>
+      <po-input class="po-md-6" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
 
       <po-select
         class="po-md-6"
@@ -28,32 +27,22 @@
         [(ngModel)]="action.icon"
         p-clean
         p-label="Action icon"
-        [p-options]="iconOptions">
+        [p-options]="iconOptions"
+      >
       </po-select>
 
-      <po-input
-        class="po-md-6"
-        name="actionLabel"
-        [(ngModel)]="action.label"
-        p-clean
-        p-label="Action label"
-        p-required>
+      <po-input class="po-md-6" name="actionLabel" [(ngModel)]="action.label" p-clean p-label="Action label" p-required>
       </po-input>
 
-      <po-input
-        class="po-md-6"
-        name="actionUrl"
-        [(ngModel)]="action.url"
-        p-clean
-        p-label="Action url">
-      </po-input>
+      <po-input class="po-md-6" name="actionUrl" [(ngModel)]="action.url" p-clean p-label="Action url"> </po-input>
 
       <po-radio-group
         class="po-md-6"
         name="actionType"
         [(ngModel)]="action.type"
         p-label="Action type"
-        [p-options]="actionTypes">
+        [p-options]="actionTypes"
+      >
       </po-radio-group>
 
       <po-switch
@@ -61,7 +50,8 @@
         name="actionDisabled"
         [(ngModel)]="action.separator"
         p-clean
-        p-label="Action separator">
+        p-label="Action separator"
+      >
       </po-switch>
 
       <po-radio-group
@@ -70,7 +60,8 @@
         [(ngModel)]="toolbarActionType"
         p-columns="3"
         p-label="Toolbar action type"
-        [p-options]="toolbarActionTypes">
+        [p-options]="toolbarActionTypes"
+      >
       </po-radio-group>
     </div>
 
@@ -79,12 +70,13 @@
         class="po-md-3"
         p-label="Add Action"
         [p-disabled]="formAction.invalid"
-        (p-click)="addAction(action, formAction)">
+        (p-click)="addAction(action, formAction)"
+      >
       </po-button>
     </div>
   </form>
 
-  <hr>
+  <hr />
 
   <div class="po-row">
     <po-select
@@ -93,11 +85,12 @@
       [(ngModel)]="actionsIcon"
       p-clean
       p-label="Actions icon"
-      [p-options]="iconOptions">
+      [p-options]="iconOptions"
+    >
     </po-select>
   </div>
 
-  <hr>
+  <hr />
 
   <form #formProfile="ngForm">
     <div class="po-row">
@@ -107,7 +100,8 @@
         [(ngModel)]="profile.title"
         p-clean
         p-label="Profile title"
-        p-required>
+        p-required
+      >
       </po-input>
 
       <po-input
@@ -115,38 +109,28 @@
         name="profileSubtitle"
         [(ngModel)]="profile.subtitle"
         p-clean
-        p-label="Profile subtitle">
+        p-label="Profile subtitle"
+      >
       </po-input>
 
-      <po-input
-        class="po-md-6"
-        name="profileAvatar"
-        [(ngModel)]="profile.avatar"
-        p-clean
-        p-label="Profile avatar">
+      <po-input class="po-md-6" name="profileAvatar" [(ngModel)]="profile.avatar" p-clean p-label="Profile avatar">
       </po-input>
     </div>
   </form>
 
-  <hr>
+  <hr />
 
   <form #formToolbar="ngForm">
     <div class="po-row">
-      <po-input
-        class="po-md-4"
-        name="title"
-        [(ngModel)]="title"
-        p-clean
-        p-label="Title"
-        p-required>
-      </po-input>
+      <po-input class="po-md-4" name="title" [(ngModel)]="title" p-clean p-label="Title" p-required> </po-input>
 
       <po-number
         class="po-md-4"
         name="notificationNumber"
         [(ngModel)]="notificationNumber"
         p-clean
-        p-label="Notification number">
+        p-label="Notification number"
+      >
       </po-number>
 
       <po-switch
@@ -154,7 +138,8 @@
         name="showNotification"
         [(ngModel)]="showNotification"
         p-clean
-        p-label="Show notification">
+        p-label="Show notification"
+      >
       </po-switch>
     </div>
 
@@ -162,9 +147,9 @@
       <po-button
         class="po-md-3"
         p-label="Sample Restore"
-        (p-click)="formToolbar.reset(); formProfile.reset(); formAction.reset(); restore()">
+        (p-click)="formToolbar.reset(); formProfile.reset(); formAction.reset(); restore()"
+      >
       </po-button>
     </div>
-
   </form>
 </div>

@@ -15,7 +15,6 @@ const poRichTextDefaultColor = '#000000';
   templateUrl: './po-rich-text-toolbar.component.html'
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
-
   private _readonly: boolean;
 
   readonly literals = {
@@ -110,7 +109,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return this._readonly;
   }
 
-  @Output('p-command') command = new EventEmitter<string | { command: string, value: string }>();
+  @Output('p-command') command = new EventEmitter<string | { command: string; value: string }>();
 
   @Output('p-modal') modal = new EventEmitter<any>();
 
@@ -118,7 +117,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return isIE();
   }
 
-  constructor(private languageService: PoLanguageService) { }
+  constructor(private languageService: PoLanguageService) {}
 
   ngAfterViewInit() {
     this.removeButtonFocus();
@@ -131,10 +130,10 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.command.emit({ command, value });
   }
 
-  setButtonsStates(obj: {commands: Array<string>, hexColor: string}) {
+  setButtonsStates(obj: { commands: Array<string>; hexColor: string }) {
     if (!this.readonly) {
-      this.alignButtons.forEach(button => button.selected = obj.commands.includes(button.command));
-      this.formatButtons.forEach(button => button.selected = obj.commands.includes(button.command));
+      this.alignButtons.forEach(button => (button.selected = obj.commands.includes(button.command)));
+      this.formatButtons.forEach(button => (button.selected = obj.commands.includes(button.command)));
       this.listButtons[0].selected = obj.commands.includes(this.listButtons[0].command);
       this.linkButtons[0].selected = obj.commands.includes(this.linkButtons[0].command);
       this.setColorInColorPicker(obj.hexColor);
@@ -170,11 +169,10 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   }
 
   private toggleDisableButtons(state: boolean) {
-    this.alignButtons.forEach(button => button.disabled = state);
-    this.formatButtons.forEach(button => button.disabled = state);
+    this.alignButtons.forEach(button => (button.disabled = state));
+    this.formatButtons.forEach(button => (button.disabled = state));
     this.listButtons[0].disabled = state;
     this.linkButtons[0].disabled = state;
     this.mediaButtons[0].disabled = state;
   }
-
 }

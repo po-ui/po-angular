@@ -8,8 +8,6 @@ import { PoControlPositionService } from './po-control-position.service';
  * Módulo do serviço po-control-position.
  */
 @NgModule({
-  providers: [
-    PoControlPositionService
-  ]
+  providers: [PoControlPositionService]
 })
-export class PoControlPositionModule { }
+export class PoControlPositionModule {}

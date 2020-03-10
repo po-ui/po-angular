@@ -10,7 +10,6 @@ import { Observable, Subject } from 'rxjs';
  */
 @Injectable()
 export class PoHttpRequesControltService {
-
   controlHttpRequest: Subject<number> = new Subject<number>();
 
   getControlHttpRequest(): Observable<any> {
@@ -20,5 +19,4 @@ export class PoHttpRequesControltService {
   send(value: number = 0) {
     this.controlHttpRequest.next(value);
   }
-
 }

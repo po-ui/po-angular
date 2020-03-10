@@ -2,7 +2,6 @@ import { PoStorageModule } from './po-storage.module';
 import { PO_STORAGE_CONFIG_TOKEN, PoStorageService } from './services/po-storage.service';
 
 describe('PoStorageModule:', () => {
-
   let moduleDefinition;
 
   beforeEach(() => {
@@ -23,7 +22,6 @@ describe('PoStorageModule:', () => {
   });
 
   describe('Methods:', () => {
-
     it('forRoot: should return a module definition with default config if no set a storageConfig param', () => {
       moduleDefinition.providers[0].useValue = PoStorageService.getDefaultConfig();
 
@@ -40,7 +38,5 @@ describe('PoStorageModule:', () => {
 
       expect(PoStorageModule.forRoot(configParam)).toEqual(moduleDefinition);
     });
-
   });
-
 });

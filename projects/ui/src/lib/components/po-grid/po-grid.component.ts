@@ -34,7 +34,6 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
   templateUrl: './po-grid.component.html'
 })
 export class PoGridComponent implements OnDestroy {
-
   lastCell: string = '0-0';
   lastRow: number = 0;
   lastColumn: number = 0;
@@ -89,11 +88,7 @@ export class PoGridComponent implements OnDestroy {
    */
   @Input('p-data') data: Array<any> = [];
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private elRef: ElementRef,
-    renderer: Renderer2) {
-
+  constructor(private changeDetectorRef: ChangeDetectorRef, private elRef: ElementRef, renderer: Renderer2) {
     this.debounceResize();
 
     this.resizeListener = renderer.listen('window', 'resize', (event: any) => {
@@ -139,7 +134,7 @@ export class PoGridComponent implements OnDestroy {
       return;
     }
 
-    const [x] = (el.id).split('-');
+    const [x] = el.id.split('-');
 
     if (this.isEmptyRow(x)) {
       if (!this.removeRow(event, row)) {
@@ -154,7 +149,6 @@ export class PoGridComponent implements OnDestroy {
   }
 
   removeRow(event: any, row: any): boolean {
-
     if (this.rowActions.beforeRemove && !this.rowActions.beforeRemove(Object.assign({}, row))) {
       return false;
     }
@@ -165,7 +159,7 @@ export class PoGridComponent implements OnDestroy {
 
     this.changeDetectorRef.detectChanges();
 
-    if ((this.data.length === 0) || (index === this.data.length)) {
+    if (this.data.length === 0 || index === this.data.length) {
       this.selectCell(this.currencyRow - 1, this.currencyColumn);
     } else {
       this.selectCell(this.currencyRow, this.currencyColumn);
@@ -203,11 +197,11 @@ export class PoGridComponent implements OnDestroy {
           prow--;
         }
       }
-    } else if ((direction === 'up') && (row > 0)) {
+    } else if (direction === 'up' && row > 0) {
       prow--;
-    } else if ((direction === 'left') && (col > 0)) {
+    } else if (direction === 'left' && col > 0) {
       pcol--;
-    } else if ((direction === 'right') && (col < this._columns.length - 1)) {
+    } else if (direction === 'right' && col < this._columns.length - 1) {
       pcol++;
     } else if (direction === 'next') {
       if (col < this._columns.length - 1) {
@@ -271,7 +265,7 @@ export class PoGridComponent implements OnDestroy {
       return;
     }
 
-    const [row, col] = (el.id).split('-');
+    const [row, col] = el.id.split('-');
     const prow = +row;
     const pcol = +col;
 
@@ -345,7 +339,8 @@ export class PoGridComponent implements OnDestroy {
   isEmptyRow(row: number) {
     const obj = this.data[row - 1];
 
-    if (!obj) { // title
+    if (!obj) {
+      // title
       return false;
     }
 

@@ -16,7 +16,6 @@ import { InputBoolean } from '../../../decorators';
  */
 @Directive()
 export abstract class PoRichTextBaseComponent implements ControlValueAccessor, Validator {
-
   private _height?: number;
   private _placeholder: string;
   private _readonly: boolean;
@@ -178,11 +177,13 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
     this.validatorChange = fn;
   }
 
-  validate(abstractControl: AbstractControl): { [key: string]: any; } {
+  validate(abstractControl: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this.required, false, abstractControl.value)) {
-      return { required: {
-        valid: false,
-      }};
+      return {
+        required: {
+          valid: false
+        }
+      };
     }
   }
 
@@ -203,5 +204,4 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
       this.validatorChange(value);
     }
   }
-
 }

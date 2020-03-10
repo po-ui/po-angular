@@ -10,7 +10,6 @@ describe('PoBadgeBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-color: should update with valid values', () => {
       const validValues = ['color-01', 'color-02', 'color-03', 'color-04', 'color-12', 'color-08'];
 
@@ -40,11 +39,9 @@ describe('PoBadgeBaseComponent:', () => {
       expectPropertiesValues(component, 'value', invalidValues, undefined);
       expect(component['setBadgeValue']).toHaveBeenCalled();
     });
-
   });
 
   describe('Methods:', () => {
-
     it(`setBadgeValue: should set 'badgeValue' with 'undefined' if value is 'undefined'`, () => {
       component['setBadgeValue'](undefined);
 
@@ -74,7 +71,5 @@ describe('PoBadgeBaseComponent:', () => {
 
       expect(component.badgeValue).toBe('99');
     });
-
   });
-
 });

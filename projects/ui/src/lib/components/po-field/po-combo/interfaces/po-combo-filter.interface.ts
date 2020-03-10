@@ -10,7 +10,6 @@ import { PoComboOption } from './po-combo-option.interface';
  * Interface para os serviços que serão utilizados no po-combo.
  */
 export interface PoComboFilter {
-
   /**
    * Método responsável por retornar um Observable que contém uma coleção de objetos que seguem a interface PoComboOption,
    * será informado por parametro o campo, de acordo com o fieldLabel, e o valor a ser pesquisado.
@@ -28,5 +27,4 @@ export interface PoComboFilter {
    * @param {any} filterParams Valor informado através da propriedade `p-filter-params`.
    */
   getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption>;
-
 }

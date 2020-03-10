@@ -92,7 +92,6 @@ import { Directive, Input, TemplateRef } from '@angular/core';
   selector: '[p-table-row-template]'
 })
 export class PoTableRowTemplateDirective {
-
   /**
    * @optional
    *
@@ -109,6 +108,5 @@ export class PoTableRowTemplateDirective {
   @Input('p-table-row-template-show') poTableRowTemplateShow: (row: any, index: number) => boolean;
 
   // Necessário manter templateRef para o funcionamento do row template.
-  constructor(public templateRef: TemplateRef<any>) { }
-
+  constructor(public templateRef: TemplateRef<any>) {}
 }

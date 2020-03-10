@@ -6,7 +6,6 @@
  * Interface para configuração das colunas de labels do `po-table`.
  */
 export interface PoTableColumnLabel {
-
   /**
    * @optional
    *
@@ -43,5 +42,4 @@ export interface PoTableColumnLabel {
 
   /** Valor da legenda. */
   value: string;
-
 }

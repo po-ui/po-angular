@@ -7,11 +7,10 @@ import { Observable, Subscription } from 'rxjs';
 
 @Injectable()
 export class PoUploadBaseService {
-
   formField: string = 'files';
   requests: Array<any> = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Método responsável por enviar os arquivos ao servidor, conforme o parâmetro URL.
@@ -29,8 +28,8 @@ export class PoUploadBaseService {
     tOnUpload: EventEmitter<any>,
     uploadCallback: (file: PoUploadFile, percent: number) => void,
     successCallback: (file: PoUploadFile, event: any) => void,
-    errorCallback: (file: PoUploadFile, event: any) => void) {
-
+    errorCallback: (file: PoUploadFile, event: any) => void
+  ) {
     const filesLength = files.length;
     const uploadEvent: any = {
       data: {},
@@ -62,24 +61,24 @@ export class PoUploadBaseService {
     formData: FormData,
     uploadCallback: (file: PoUploadFile, percent: number) => void,
     successCallback: (file: PoUploadFile, event: any) => void,
-    errorCallback: (file: PoUploadFile, event: any) => void) {
+    errorCallback: (file: PoUploadFile, event: any) => void
+  ) {
+    const request = this.getRequest(url, formData).subscribe(
+      event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.addRequest(file, request);
 
-    const request = this.getRequest(url, formData).subscribe(event => {
-
-      if (event.type === HttpEventType.UploadProgress) {
-        this.addRequest(file, request);
-
-        const percentDone = Math.round(100 * event.loaded / event.total);
-        uploadCallback(file, percentDone);
-
-      } else if (event instanceof HttpResponse) {
-        // Sucesso, arquivos enviados.
-        successCallback(file, event);
+          const percentDone = Math.round((100 * event.loaded) / event.total);
+          uploadCallback(file, percentDone);
+        } else if (event instanceof HttpResponse) {
+          // Sucesso, arquivos enviados.
+          successCallback(file, event);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        errorCallback(file, err);
       }
-    },
-    (err: HttpErrorResponse) => {
-      errorCallback(file, err);
-    });
+    );
   }
 
   public getRequest(url: string, formData: FormData): Observable<any> {
@@ -114,8 +113,7 @@ export class PoUploadBaseService {
     });
 
     if (!hasRequest) {
-      this.requests.push({file, request});
+      this.requests.push({ file, request });
     }
   }
-
 }

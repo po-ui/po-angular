@@ -6,19 +6,14 @@
     p-primary-label="Call"
     p-secondary-label="Send e-mail"
     (p-primary-action)="callContact(contact.phone)"
-    (p-secondary-action)="sendContact(contact.email)">
-
-    <po-avatar
-      class="po-md-4"
-      p-size="lg"
-      p-src="https://portinari.io/assets/graphics/logo-po.png">
-    </po-avatar>
+    (p-secondary-action)="sendContact(contact.email)"
+  >
+    <po-avatar class="po-md-4" p-size="lg" p-src="https://portinari.io/assets/graphics/logo-po.png"> </po-avatar>
 
     <div class="po-md-8">
       <p><strong>Name:</strong> {{ contact.name }}</p>
       <p><strong>Phone:</strong> {{ formatPhoneNumber(contact.phone) }}</p>
       <p><strong>E-mail:</strong> {{ contact.email }}</p>
     </div>
-
   </po-widget>
 </div>

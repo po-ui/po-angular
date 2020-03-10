@@ -16,7 +16,6 @@ import { PoTabComponent } from '../po-tab/po-tab.component';
   templateUrl: './po-tab-dropdown.component.html'
 })
 export class PoTabDropdownComponent {
-
   @ViewChild('popover', { static: true }) popover: PoPopoverComponent;
   @ViewChild('tabDrop', { read: ElementRef, static: true }) tabDropdown: ElementRef;
 
@@ -45,5 +44,4 @@ export class PoTabDropdownComponent {
   togglePopover(): void {
     this.popover.isHidden ? this.popover.open() : this.popover.close();
   }
-
 }

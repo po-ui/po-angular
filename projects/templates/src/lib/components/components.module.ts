@@ -37,4 +37,4 @@ import { PoPageLoginModule } from './po-page-login/po-page-login.module';
     PoPageLoginModule
   ]
 })
-export class PoComponentsModule { }
+export class PoComponentsModule {}

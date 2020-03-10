@@ -57,10 +57,7 @@ import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-ta
     PoTableSubtitleCircleComponent,
     PoTableSubtitleFooterComponent
   ],
-  exports: [
-    PoTableComponent,
-    PoTableRowTemplateDirective
-  ],
+  exports: [PoTableComponent, PoTableRowTemplateDirective],
   providers: [DecimalPipe]
 })
-export class PoTableModule { }
+export class PoTableModule {}

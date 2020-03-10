@@ -13,8 +13,8 @@ describe('PoNavbarActionPopupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoNavbarActionPopupComponent ],
-      imports: [ PoPopupModule, RouterModule.forRoot([]) ]
+      declarations: [PoNavbarActionPopupComponent],
+      imports: [PoPopupModule, RouterModule.forRoot([])]
     });
   });
 
@@ -31,13 +31,12 @@ describe('PoNavbarActionPopupComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('getLastIconAction: should return the last icon', () => {
       component.iconActions = [
-        { label: 'eye', icon: 'po-icon-eye'},
-        { label: 'gas', icon: 'po-icon-gas'},
-        { label: 'mail', icon: 'po-icon-mail'},
-        { label: 'menu', icon: 'po-icon-menu'}
+        { label: 'eye', icon: 'po-icon-eye' },
+        { label: 'gas', icon: 'po-icon-gas' },
+        { label: 'mail', icon: 'po-icon-mail' },
+        { label: 'menu', icon: 'po-icon-menu' }
       ];
 
       expect(component.getLastIconAction()).toEqual('po-icon-menu');
@@ -54,17 +53,15 @@ describe('PoNavbarActionPopupComponent:', () => {
 
       expect(component.getLastIconAction()).toBeUndefined();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain the last icon', () => {
       component.iconActions = [
-        { label: 'eye', icon: 'po-icon-eye'},
-        { label: 'gas', icon: 'po-icon-gas'},
-        { label: 'mail', icon: 'po-icon-mail'},
-        { label: 'menu', icon: 'po-icon-menu'}
+        { label: 'eye', icon: 'po-icon-eye' },
+        { label: 'gas', icon: 'po-icon-gas' },
+        { label: 'mail', icon: 'po-icon-mail' },
+        { label: 'menu', icon: 'po-icon-menu' }
       ];
 
       fixture.detectChanges();
@@ -72,7 +69,5 @@ describe('PoNavbarActionPopupComponent:', () => {
       const icon = nativeElement.querySelector('span.po-icon');
       expect(icon.classList).toContain('po-icon-menu');
     });
-
   });
-
 });

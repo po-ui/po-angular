@@ -25,11 +25,7 @@ import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dyna
     PoWidgetModule,
     PoPageDynamicModule
   ],
-  declarations: [
-    PoPageDynamicDetailComponent
-  ],
-  exports: [
-    PoPageDynamicDetailComponent
-  ]
+  declarations: [PoPageDynamicDetailComponent],
+  exports: [PoPageDynamicDetailComponent]
 })
-export class PoPageDynamicDetailModule { }
+export class PoPageDynamicDetailModule {}

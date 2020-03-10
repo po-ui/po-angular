@@ -4,16 +4,15 @@ import { PoNotificationService, PoSlideItem } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-slide-labs',
-  templateUrl: './sample-po-slide-labs.component.html',
+  templateUrl: './sample-po-slide-labs.component.html'
 })
 export class SamplePoSlideLabsComponent implements OnInit {
-
   height: number;
   interval: number;
   slideItem: PoSlideItem;
   slideItems: Array<PoSlideItem>;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -40,5 +39,4 @@ export class SamplePoSlideLabsComponent implements OnInit {
   private showAction(action: string) {
     this.poNotification.success(`Slide clicked: ${action}`);
   }
-
 }

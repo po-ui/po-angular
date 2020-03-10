@@ -12,14 +12,12 @@ import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interf
 import { PoLookupModalService } from '../../../../components/po-field/po-lookup/services/po-lookup-modal.service';
 
 class LookupFilterService implements PoLookupFilter {
-
   getFilteredData(params: any): Observable<any> {
-    return of({items: [{value: 123, label: 'teste'}]});
+    return of({ items: [{ value: 123, label: 'teste' }] });
   }
   getObjectByValue(id: string): Observable<any> {
     return of({});
   }
-
 }
 
 const closeModalInstance = (modalInstance: ComponentRef<any>) => {
@@ -28,12 +26,9 @@ const closeModalInstance = (modalInstance: ComponentRef<any>) => {
   }
 };
 
-export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
-];
+export const routes: Routes = [{ path: '', redirectTo: 'home', pathMatch: 'full' }];
 
 describe('PoLookupModalService:', () => {
-
   let lookupFilterService: LookupFilterService;
   let poLookupModalService: PoLookupModalService;
   const params = {
@@ -46,17 +41,9 @@ describe('PoLookupModalService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes(routes),
-        PoFieldModule
-      ],
-      providers: [
-        LookupFilterService,
-        PoComponentInjectorService,
-        PoControlPositionService,
-        PoLookupModalService
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService, PoLookupModalService],
+      schemas: [NO_ERRORS_SCHEMA]
     });
 
     poLookupModalService = TestBed.inject(PoLookupModalService);
@@ -67,14 +54,14 @@ describe('PoLookupModalService:', () => {
     closeModalInstance(poLookupModalService['componentRef']);
   });
 
-  it('should be open modal with data', (() => {
+  it('should be open modal with data', () => {
     params.service = lookupFilterService;
 
     poLookupModalService.openModal(params);
 
     const items = poLookupModalService['componentRef'].instance.items;
     expect(items[0].value).toBe(123);
-  }));
+  });
 
   it('should be item destroyed', () => {
     params.service = lookupFilterService;
@@ -107,5 +94,4 @@ describe('PoLookupModalService:', () => {
 
     expect(poLookupModalService.selectValue).toHaveBeenCalled();
   });
-
 });

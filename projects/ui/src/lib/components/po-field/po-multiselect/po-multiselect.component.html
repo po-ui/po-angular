@@ -1,44 +1,42 @@
-<po-field-container
-  [p-label]="label"
-  [p-help]="help"
-  [p-optional]="!required && optional">
-
-  <div class="po-field-container-content"
-    [class.po-multiselect-show]="dropdownOpen">
-
-    <input #inputElement
+<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
+  <div class="po-field-container-content" [class.po-multiselect-show]="dropdownOpen">
+    <input
+      #inputElement
       class="po-input po-input-icon-right po-clickable"
       readonly
       type="text"
       [value]="getPlaceholder()"
       [disabled]="disabled"
       (keydown)="onKeyDown($event)"
-      (click)="toggleDropdownVisibility()">
+      (click)="toggleDropdownVisibility()"
+    />
 
     <div class="po-field-icon-container-right">
-      <span #iconElement
+      <span
+        #iconElement
         class="po-icon po-field-icon {{ dropdownIcon }}"
         [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
-        (click)="toggleDropdownVisibility()">
+        (click)="toggleDropdownVisibility()"
+      >
       </span>
     </div>
 
-    <div #disclaimerContainer
-      class="po-multiselect-field"
-      [class.po-multiselect-field-disabled]="disabled">
-
-      <po-disclaimer *ngFor="let disclaimer of visibleDisclaimers"
+    <div #disclaimerContainer class="po-multiselect-field" [class.po-multiselect-field-disabled]="disabled">
+      <po-disclaimer
+        *ngFor="let disclaimer of visibleDisclaimers"
         [p-label]="disclaimer.label"
         [p-value]="disclaimer.value"
         [p-hide-close]="disclaimer.value === '' || disabled"
         [class.po-clickable]="disclaimer.value === '' && !disabled"
         (click)="openDropdown(disclaimer.value === '')"
-        (p-close-action)="closeDisclaimer(disclaimer.value)">
+        (p-close-action)="closeDisclaimer(disclaimer.value)"
+      >
       </po-disclaimer>
     </div>
   </div>
 
-  <po-multiselect-dropdown #dropdownElement
+  <po-multiselect-dropdown
+    #dropdownElement
     [p-hide-search]="hideSearch"
     [p-literals]="literals"
     [p-options]="visibleOptionsDropdown"
@@ -46,9 +44,9 @@
     [p-placeholder-search]="placeholderSearch"
     (p-change)="changeItems($event)"
     (p-change-search)="changeSearch($event)"
-    (p-close-dropdown)="controlDropdownVisibility(false)">
+    (p-close-dropdown)="controlDropdownVisibility(false)"
+  >
   </po-multiselect-dropdown>
 
   <po-field-container-bottom></po-field-container-bottom>
-
 </po-field-container>

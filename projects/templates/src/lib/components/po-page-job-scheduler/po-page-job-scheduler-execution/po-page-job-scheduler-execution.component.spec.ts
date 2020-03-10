@@ -17,10 +17,7 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        PoPageJobSchedulerModule
-      ]
+      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
     });
   });
 
@@ -38,9 +35,8 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('value: should set property to `{}` if invalid values', () => {
-      const invalidValues = [ 'test', null, undefined, NaN, 0 ];
+      const invalidValues = ['test', null, undefined, NaN, 0];
 
       expectPropertiesValues(component, 'value', invalidValues, {});
     });
@@ -63,13 +59,11 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
       expect(component.startDateFirstExecution instanceof Date).toBe(false);
       expect(component.startDateFirstExecution).toBeUndefined();
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngAfterViewInit: should call `subscribeProcessIdValueChanges`', fakeAsync(() => {
-      spyOn(component, <any> 'subscribeProcessIdValueChanges');
+      spyOn(component, <any>'subscribeProcessIdValueChanges');
 
       component.ngAfterViewInit();
 
@@ -83,9 +77,9 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
       component.periodicityOptions = undefined;
       component.weekDays = undefined;
 
-      spyOn(component, <any> 'checkExistsProcessesAPI');
-      spyOn(component, <any> 'getPeriodicityOptions').and.callThrough();
-      spyOn(component, <any> 'getWeekDays').and.callThrough();
+      spyOn(component, <any>'checkExistsProcessesAPI');
+      spyOn(component, <any>'getPeriodicityOptions').and.callThrough();
+      spyOn(component, <any>'getWeekDays').and.callThrough();
 
       component.ngOnInit();
 
@@ -100,11 +94,11 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
 
     it('checkExistsProcessesAPI: should subscribe `getHeadProcesses` and on error set `existProcessAPI` to false', () => {
       component.existProcessAPI = true;
-      component['poPageJobSchedulerService'] = <any> {
+      component['poPageJobSchedulerService'] = <any>{
         getHeadProcesses: () => {}
       };
 
-      spyOn(component['poPageJobSchedulerService'], <any> 'getHeadProcesses').and.returnValue(throwError(''));
+      spyOn(component['poPageJobSchedulerService'], <any>'getHeadProcesses').and.returnValue(throwError(''));
 
       component['checkExistsProcessesAPI']();
 
@@ -132,7 +126,7 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
 
     it('subscribeProcessIdValueChanges: should call `changeProcess.emit` when subscribe `processID.valueChanges`', () => {
       const processId = 1;
-      component['form'] = <any> {
+      component['form'] = <any>{
         controls: {
           processID: {
             valueChanges: getObservable(processId)
@@ -140,19 +134,17 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
         }
       };
 
-      spyOn(component['form'].controls.processID.valueChanges, <any> 'subscribe').and.callThrough();
+      spyOn(component['form'].controls.processID.valueChanges, <any>'subscribe').and.callThrough();
       spyOn(component.changeProcess, 'emit');
 
       component['subscribeProcessIdValueChanges']();
 
       expect(component['form'].controls.processID.valueChanges.subscribe).toHaveBeenCalled();
-      expect(component.changeProcess.emit).toHaveBeenCalledWith({processId, existAPI: component.existProcessAPI});
+      expect(component.changeProcess.emit).toHaveBeenCalledWith({ processId, existAPI: component.existProcessAPI });
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should find po-input[name="processID"] and shouldn`t find po-lookup[name="processID"] if existProcessAPI is false', () => {
       component.existProcessAPI = false;
 
@@ -208,7 +200,5 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
       expect(poDividers.length).toBe(1);
       expect(poSwitch).toBeFalsy();
     });
-
   });
-
 });

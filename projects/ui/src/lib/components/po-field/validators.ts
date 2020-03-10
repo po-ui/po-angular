@@ -1,8 +1,10 @@
-
 export function requiredFailed(required: boolean, disabled: boolean, value: string | Array<any> | number | boolean) {
-  const valid = ((typeof value === 'string' && value) || (typeof value === 'object' && value && value.length)
-                || (typeof value === 'number' && (value || value === 0)) || (typeof value === 'boolean' && value));
-  return (required && !disabled && !valid);
+  const valid =
+    (typeof value === 'string' && value) ||
+    (typeof value === 'object' && value && value.length) ||
+    (typeof value === 'number' && (value || value === 0)) ||
+    (typeof value === 'boolean' && value);
+  return required && !disabled && !valid;
 }
 
 export function maxlengpoailed(maxlength: number, value: string | number) {
@@ -24,7 +26,7 @@ export function patternFailed(pattern: string, value: string) {
   } catch (e) {
     return true;
   }
-  return (pattern && value && !reg.test(value));
+  return pattern && value && !reg.test(value);
 }
 
 export function minFailed(min: number, value: number) {
@@ -40,5 +42,5 @@ export function maxFailed(max: number, value: number) {
 }
 
 export function dateFailed(value: string) {
-  return (value && isNaN(Date.parse(value)));
+  return value && isNaN(Date.parse(value));
 }

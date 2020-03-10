@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoChartGaugeSerie, PoChartType, PoDonutChartSeries, PoPieChartSeries, PoRadioGroupOption } from '@portinari/portinari-ui';
+import {
+  PoChartGaugeSerie,
+  PoChartType,
+  PoDonutChartSeries,
+  PoPieChartSeries,
+  PoRadioGroupOption
+} from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-chart-labs',
   templateUrl: './sample-po-chart-labs.component.html'
 })
 export class SamplePoChartLabsComponent implements OnInit {
-
   category: string;
   description: string;
   event: string;
@@ -38,7 +43,10 @@ export class SamplePoChartLabsComponent implements OnInit {
     if (this.isSingleSerie) {
       this.singleSerie = { value: this.value, description: this.description };
     } else {
-      this.multipleSeries = [...this.multipleSeries, { category: this.category, value: this.value, tooltip: this.tooltip }];
+      this.multipleSeries = [
+        ...this.multipleSeries,
+        { category: this.category, value: this.value, tooltip: this.tooltip }
+      ];
     }
 
     this.applySeriesData();
@@ -65,5 +73,4 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.description = undefined;
     this.type = undefined;
   }
-
 }

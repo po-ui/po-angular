@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-email-basic',
   templateUrl: './sample-po-email-basic.component.html'
 })
-export class SamplePoEmailBasicComponent { }
+export class SamplePoEmailBasicComponent {}

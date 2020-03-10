@@ -10,7 +10,6 @@ import { PoSyncSchema } from '../../po-sync/interfaces/po-sync-schema.interface'
  * Serviço utilitário para operações no PoSyncSchema.
  */
 export class PoSchemaUtil {
-
   /** Valor `default` para o campo `lastSync`. */
   public static readonly defaultLastSync: string = new Date(-8640000000000000).toISOString();
 
@@ -57,7 +56,7 @@ export class PoSchemaUtil {
   public static getLocalFieldNames(schema: PoSyncSchema): Array<string> {
     if (schema.fields) {
       return schema.fields.reduce((fieldsAccumulator: Array<string>, currentField: string | PoSyncFieldOptions) => {
-        if (typeof (currentField) === 'object' && currentField.local) {
+        if (typeof currentField === 'object' && currentField.local) {
           fieldsAccumulator.push(currentField.name);
         }
         return fieldsAccumulator;
@@ -73,9 +72,8 @@ export class PoSchemaUtil {
   public static getNonLocalFieldNames(schema: PoSyncSchema): Array<string> {
     if (schema.fields) {
       return schema.fields.reduce((fieldsAccumulator: Array<string>, currentField: string | PoSyncFieldOptions) => {
-        if (typeof (currentField) === 'string' || !currentField.local) {
-
-          fieldsAccumulator.push(typeof (currentField) === 'string' ? currentField : currentField.name);
+        if (typeof currentField === 'string' || !currentField.local) {
+          fieldsAccumulator.push(typeof currentField === 'string' ? currentField : currentField.name);
         }
         return fieldsAccumulator;
       }, []);
@@ -122,7 +120,10 @@ export class PoSchemaUtil {
    * @param {PoSyncSchema} schema **Schema* do registro.
    * @param {object} record Registro que será realizada a separação dos campos locais e do servidor.
    */
-  public static separateSchemaFields(schema: PoSyncSchema, record: object): { serverRecord: object, localRecord: object } {
+  public static separateSchemaFields(
+    schema: PoSyncSchema,
+    record: object
+  ): { serverRecord: object; localRecord: object } {
     const localFields = PoSchemaUtil.getLocalFieldNames(schema);
     const localRecord = {};
     const serverRecord = {};
@@ -137,5 +138,4 @@ export class PoSchemaUtil {
 
     return { serverRecord, localRecord };
   }
-
 }

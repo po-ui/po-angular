@@ -12,9 +12,7 @@ import { PoDynamicFormComponent } from '@portinari/portinari-ui';
     }
   ]
 })
-
 export class PoDynamicFormStubComponent {
-
   private _form: NgForm;
 
   get form(): NgForm {

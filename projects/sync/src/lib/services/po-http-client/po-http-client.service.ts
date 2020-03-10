@@ -16,8 +16,7 @@ import { PoHttpRequestType } from './po-http-request-type.enum';
  */
 @Injectable()
 export class PoHttpClientService {
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   /**
    * Constrói uma requisição HTTP personalizada.
@@ -28,8 +27,11 @@ export class PoHttpClientService {
   createRequest(poHttpOperationData: PoHttpRequestData): Observable<HttpResponse<Object>> {
     const httpHeaders = this.createHttpHeaders(poHttpOperationData.headers);
 
-    return this.httpClient.request(poHttpOperationData.method, poHttpOperationData.url,
-      { observe: 'response', headers: httpHeaders, body: poHttpOperationData.body });
+    return this.httpClient.request(poHttpOperationData.method, poHttpOperationData.url, {
+      observe: 'response',
+      headers: httpHeaders,
+      body: poHttpOperationData.body
+    });
   }
 
   /**
@@ -148,11 +150,11 @@ export class PoHttpClientService {
     let httpHeaders = new HttpHeaders();
 
     if (poHttpOperationHeaders && poHttpOperationHeaders.length > 0) {
-      poHttpOperationHeaders.forEach(poHttpHeader =>
-      httpHeaders = httpHeaders.append(poHttpHeader.name, poHttpHeader.value));
+      poHttpOperationHeaders.forEach(
+        poHttpHeader => (httpHeaders = httpHeaders.append(poHttpHeader.name, poHttpHeader.value))
+      );
     }
 
     return httpHeaders;
   }
-
 }

@@ -14,7 +14,6 @@ import {
   templateUrl: './sample-po-toolbar-labs.component.html'
 })
 export class SamplePoToolbarLabsComponent implements OnInit {
-
   action: PoToolbarAction;
   actions: Array<PoToolbarAction>;
   actionsIcon: string;
@@ -46,7 +45,7 @@ export class SamplePoToolbarLabsComponent implements OnInit {
     { label: 'Notification', value: 'notification' }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -69,7 +68,7 @@ export class SamplePoToolbarLabsComponent implements OnInit {
 
   restore() {
     this.action = { label: undefined };
-    this.profile = { avatar: '', subtitle: '', title: ''};
+    this.profile = { avatar: '', subtitle: '', title: '' };
     this.actions = [];
     this.actionsIcon = undefined;
     this.profileActions = [];
@@ -82,5 +81,4 @@ export class SamplePoToolbarLabsComponent implements OnInit {
   showAction(label: string): void {
     this.poNotification.success(`Action clicked: ${label}`);
   }
-
 }

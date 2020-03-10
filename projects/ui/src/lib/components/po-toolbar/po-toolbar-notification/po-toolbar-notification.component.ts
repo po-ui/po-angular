@@ -20,10 +20,9 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
 @Component({
   selector: 'po-toolbar-notification',
   templateUrl: './po-toolbar-notification.component.html',
-  providers: [ PoControlPositionService ]
+  providers: [PoControlPositionService]
 })
 export class PoToolbarNotificationComponent {
-
   private _notificationNumber?: number = 0;
 
   /** Define uma lista de ações. */
@@ -37,5 +36,4 @@ export class PoToolbarNotificationComponent {
   get notificationNumber() {
     return this._notificationNumber;
   }
-
 }

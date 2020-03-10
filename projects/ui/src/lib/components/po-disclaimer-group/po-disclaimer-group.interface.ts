@@ -10,7 +10,6 @@ import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
  * Interface que representa o objeto `po-disclaimer-group`.
  */
 export interface PoDisclaimerGroup {
-
   /**
    * @optional
    *
@@ -66,5 +65,4 @@ export interface PoDisclaimerGroup {
    * Título do grupo de *disclaimers*.
    */
   title: string;
-
 }

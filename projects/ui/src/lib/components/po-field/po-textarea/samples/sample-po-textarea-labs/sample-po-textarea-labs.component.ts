@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-textarea-labs.component.html'
 })
 export class SamplePoTextareaLabsComponent implements OnInit {
-
   event: string;
   help: string;
   label: string;
@@ -44,5 +43,4 @@ export class SamplePoTextareaLabsComponent implements OnInit {
     this.placeholder = '';
     this.properties = [];
   }
-
 }

@@ -26,7 +26,6 @@ import { PoSyncSchema } from './interfaces/po-sync-schema.interface';
  */
 @Injectable()
 export class PoSyncService {
-
   private config: PoSyncConfig;
   private emitter: any;
   private eventSub: Observable<any>;
@@ -44,8 +43,8 @@ export class PoSyncService {
     private poHttpClient: PoHttpClientService,
     private poNetworkService: PoNetworkService,
     private poSchemaDefinitionService: PoSchemaDefinitionService,
-    private poSchemaService: PoSchemaService) {
-  }
+    private poSchemaService: PoSchemaService
+  ) {}
 
   /**
    * Destrói todas as chaves do *storage* referentes ao `po-sync`, ou seja,
@@ -146,8 +145,8 @@ export class PoSyncService {
    * @returns {Observable<Array<{ entity: string, data: Array<any> }>>} Observable que notificará quando a
    * carga inicial for concluída.
    */
-  loadData(): Observable<Array<{ entity: string, data: Array<any> }>> {
-    const loads: Array<Observable<{ entity: string, data: Array<any> }>> = [];
+  loadData(): Observable<Array<{ entity: string; data: Array<any> }>> {
+    const loads: Array<Observable<{ entity: string; data: Array<any> }>> = [];
     this.schemas.forEach(el => loads.push(this.loadEntityData(el)));
     return forkJoin(loads);
   }
@@ -178,7 +177,6 @@ export class PoSyncService {
    * @returns {Promise<any>} Promessa que é resolvida quando a aplicação estiver preparada para a utilização do `po-sync`.
    */
   prepare(schemas: Array<PoSyncSchema>, config?: PoSyncConfig): Promise<any> {
-
     validateArray({ schemas });
 
     const defaultSyncConfig: PoSyncConfig = {
@@ -195,13 +193,12 @@ export class PoSyncService {
     this.reactiveSync();
     this.poEventSourcingService.onSaveData().subscribe(() => this.sync());
 
-    return this.saveSchemas()
-      .then(() => {
-        this.schemas.forEach(schema => {
-          this.models[schema.name] = new PoEntity(this.poEventSourcingService, schema, this.poSchemaService);
-        });
-        return Promise.resolve();
+    return this.saveSchemas().then(() => {
+      this.schemas.forEach(schema => {
+        this.models[schema.name] = new PoEntity(this.poEventSourcingService, schema, this.poSchemaService);
       });
+      return Promise.resolve();
+    });
   }
 
   /**
@@ -257,13 +254,10 @@ export class PoSyncService {
         }
 
         this.finishSync();
-
       } catch (error) {
         this.syncError();
       }
-
     }
-
   }
 
   private canSync(): boolean {
@@ -271,8 +265,9 @@ export class PoSyncService {
       return false;
     } else {
       const currentConnection = this.poNetworkService.getConnectionStatus();
-      const isConfiguredConnection = this.config && (currentConnection.type === this.config.type);
-      const isConfigIncludesType = this.config && (this.config.type instanceof Array) && this.config.type.includes(currentConnection.type);
+      const isConfiguredConnection = this.config && currentConnection.type === this.config.type;
+      const isConfigIncludesType =
+        this.config && this.config.type instanceof Array && this.config.type.includes(currentConnection.type);
 
       return currentConnection.status && (!this.config || isConfiguredConnection || isConfigIncludesType);
     }
@@ -307,22 +302,21 @@ export class PoSyncService {
       map(response => response.body),
       mergeMap(responseBody => {
         const now = new Date().getTime();
-        responseBody[this.config.dataTransform.getItemsFieldName()].map(
-          item => {
-            item.SyncInsertedDateTime = now;
-            item.SyncUpdatedDateTime = null;
-            item.SyncExclusionDateTime = null;
-            item.SyncDeleted = false;
-            item.SyncStatus = 2;
-          }
-        );
-        return this.poSchemaService.updateAll(schema, responseBody[this.config.dataTransform.getItemsFieldName()])
+        responseBody[this.config.dataTransform.getItemsFieldName()].map(item => {
+          item.SyncInsertedDateTime = now;
+          item.SyncUpdatedDateTime = null;
+          item.SyncExclusionDateTime = null;
+          item.SyncDeleted = false;
+          item.SyncStatus = 2;
+        });
+        return this.poSchemaService
+          .updateAll(schema, responseBody[this.config.dataTransform.getItemsFieldName()])
           .then(() => responseBody);
       })
     );
   }
 
-  private loadEntityData(schema: PoSyncSchema): Observable<{ entity: string, data: Array<any> }> {
+  private loadEntityData(schema: PoSyncSchema): Observable<{ entity: string; data: Array<any> }> {
     let page = 1;
     return this.getOnePage(schema, page).pipe(
       expand(data => {
@@ -334,19 +328,21 @@ export class PoSyncService {
           return of();
         }
       }),
-      reduce((acc, obj) => {
-        acc.data = acc.data.concat(obj[this.config.dataTransform.getItemsFieldName()]);
-        return acc;
-      }, {
-        entity: schema.name,
-        data: []
-      })
+      reduce(
+        (acc, obj) => {
+          acc.data = acc.data.concat(obj[this.config.dataTransform.getItemsFieldName()]);
+          return acc;
+        },
+        {
+          entity: schema.name,
+          data: []
+        }
+      )
     );
   }
 
   private reactiveSync(): void {
     this.poNetworkService.onChange().subscribe(networkStatus => {
-
       if (networkStatus.status) {
         this.startTimer(this.config.period);
         return this.sync();
@@ -355,13 +351,12 @@ export class PoSyncService {
       if (this.subscription) {
         this.subscription.unsubscribe();
       }
-
     });
   }
 
   private async saveSchemas(): Promise<any> {
     const storageSchemas: Array<PoSyncSchema> = await this.poSchemaDefinitionService.getAll();
-    this.schemas.forEach(schema => schema.lastSync = PoSchemaUtil.getLastSync(storageSchemas, schema.name));
+    this.schemas.forEach(schema => (schema.lastSync = PoSchemaUtil.getLastSync(storageSchemas, schema.name)));
     return this.poSchemaDefinitionService.saveAll(this.schemas);
   }
 
@@ -379,5 +374,4 @@ export class PoSyncService {
   private syncError(): void {
     this.finishSync();
   }
-
 }

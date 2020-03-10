@@ -8,7 +8,6 @@
  * *Enums* para os status do `po-stepper` quando utilizada a propriedade `p-steps`.
  */
 export enum PoStepperStatus {
-
   /** Define o estado do *step* como ativo. */
   Active = 'active',
 
@@ -23,5 +22,4 @@ export enum PoStepperStatus {
 
   /** Define o estado do *step* com erro. */
   Error = 'error'
-
 }

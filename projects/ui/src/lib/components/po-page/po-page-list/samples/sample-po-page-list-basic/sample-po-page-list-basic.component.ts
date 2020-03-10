@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-page-list-basic',
   templateUrl: './sample-po-page-list-basic.component.html'
 })
-export class SamplePoPageListBasicComponent { }
+export class SamplePoPageListBasicComponent {}

@@ -9,43 +9,42 @@ import { PoUploadBaseService } from './po-upload-base.service';
 import { PoUploadFile } from './po-upload-file';
 
 describe('PoUploadBaseService:', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        PoUploadBaseService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [PoUploadBaseService]
     });
   });
 
   it('should call removeRequest', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
     spyOn(service, 'removeRequest');
     const fakeThis = {
-      requests: [{
-        file: {uid: 10},
-        request: {unsubscribe: function() {}}
-      }],
+      requests: [
+        {
+          file: { uid: 10 },
+          request: { unsubscribe: function() {} }
+        }
+      ],
       removeRequest: service.removeRequest
     };
-    service.stopRequestByFile.call(fakeThis, {uid: 10}, function() {});
+    service.stopRequestByFile.call(fakeThis, { uid: 10 }, function() {});
     expect(service.removeRequest).toHaveBeenCalled();
   }));
 
   it('should not call removeRequest', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
     spyOn(service, 'removeRequest');
     const fakeThis = {
-      requests: [{
-        file: {uid: 1},
-        request: {unsubscribe: function() {}}
-      }],
+      requests: [
+        {
+          file: { uid: 1 },
+          request: { unsubscribe: function() {} }
+        }
+      ],
       removeRequest: service.removeRequest
     };
-    service.stopRequestByFile.call(fakeThis, {uid: 10}, function() {});
+    service.stopRequestByFile.call(fakeThis, { uid: 10 }, function() {});
     expect(service.removeRequest).not.toHaveBeenCalled();
-}));
+  }));
 
   it('should remove request', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
     const fakeThis = {
@@ -61,11 +60,11 @@ describe('PoUploadBaseService:', () => {
       requests: Array()
     };
 
-    service.addRequest.call(fakeThis, {uid: 1}, null);
+    service.addRequest.call(fakeThis, { uid: 1 }, null);
     expect(fakeThis.requests.length).toBe(1);
 
     // Já existia, por isso não deve incluir outro request com o mesmo uid
-    service.addRequest.call(fakeThis, {uid: 1}, null);
+    service.addRequest.call(fakeThis, { uid: 1 }, null);
     expect(fakeThis.requests.length).toBe(1);
   }));
 
@@ -79,9 +78,7 @@ describe('PoUploadBaseService:', () => {
       webkitRelativePath: ''
     };
 
-    const files = [
-      new PoUploadFile(fakeFile)
-    ];
+    const files = [new PoUploadFile(fakeFile)];
 
     const tOnUpload = new EventEmitter<any>();
     const callback = (file: PoUploadFile, event: any) => '';
@@ -99,7 +96,7 @@ describe('PoUploadBaseService:', () => {
     const fakeThis = {
       getRequest: (url: any, formData: any) => {
         return new Observable(observer => {
-          observer.next({type: 1});
+          observer.next({ type: 1 });
           observer.complete();
         });
       },
@@ -108,13 +105,15 @@ describe('PoUploadBaseService:', () => {
     };
 
     spyOn(methods, 'uploadCallback');
-    service.sendFile.call(fakeThis,
-                          '',
-                          null,
-                          new FormData(),
-                          methods.uploadCallback,
-                          methods.successCallback,
-                          methods.errorCallback);
+    service.sendFile.call(
+      fakeThis,
+      '',
+      null,
+      new FormData(),
+      methods.uploadCallback,
+      methods.successCallback,
+      methods.errorCallback
+    );
 
     expect(methods.uploadCallback).toHaveBeenCalled();
   }));
@@ -133,13 +132,15 @@ describe('PoUploadBaseService:', () => {
     };
 
     spyOn(methods, 'successCallback');
-    service.sendFile.call(fakeThis,
-                          '',
-                          null,
-                          new FormData(),
-                          methods.uploadCallback,
-                          methods.successCallback,
-                          methods.errorCallback);
+    service.sendFile.call(
+      fakeThis,
+      '',
+      null,
+      new FormData(),
+      methods.uploadCallback,
+      methods.successCallback,
+      methods.errorCallback
+    );
 
     expect(methods.successCallback).toHaveBeenCalled();
   }));
@@ -158,13 +159,15 @@ describe('PoUploadBaseService:', () => {
     };
 
     spyOn(methods, 'successCallback');
-    service.sendFile.call(fakeThis,
-                          '',
-                          null,
-                          new FormData(),
-                          methods.uploadCallback,
-                          methods.successCallback,
-                          methods.errorCallback);
+    service.sendFile.call(
+      fakeThis,
+      '',
+      null,
+      new FormData(),
+      methods.uploadCallback,
+      methods.successCallback,
+      methods.errorCallback
+    );
 
     expect(methods.successCallback).not.toHaveBeenCalled();
   }));
@@ -182,13 +185,15 @@ describe('PoUploadBaseService:', () => {
     };
 
     spyOn(methods, 'errorCallback');
-    service.sendFile.call(fakeThis,
-                          '',
-                          null,
-                          new FormData(),
-                          methods.uploadCallback,
-                          methods.successCallback,
-                          methods.errorCallback);
+    service.sendFile.call(
+      fakeThis,
+      '',
+      null,
+      new FormData(),
+      methods.uploadCallback,
+      methods.successCallback,
+      methods.errorCallback
+    );
     expect(methods.errorCallback).toHaveBeenCalled();
   }));
 
@@ -196,7 +201,6 @@ describe('PoUploadBaseService:', () => {
     const req = service.getRequest('', new FormData());
     expect(typeof req.subscribe()).toBe('object');
   }));
-
 });
 
 function returnMethodsCallback() {

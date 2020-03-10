@@ -1,7 +1,6 @@
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 
 export class PoPageJobSchedulerInternal implements PoJobSchedulerInternal {
-
   periodicity = 'single';
   firstExecution = new Date();
   firstExecutionHour = this.getCurrentHour(this.firstExecution);

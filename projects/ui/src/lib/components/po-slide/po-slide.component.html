@@ -1,7 +1,7 @@
 <div class="po-slide-wrapper">
   <div class="po-slide-outer">
     <div class="po-slide-inner" #slide>
-      <ng-container *ngFor="let item of slideItems; let index = index;">
+      <ng-container *ngFor="let item of slideItems; let index = index">
         <po-slide-item
           [p-action]="item.action"
           [p-data]="item"
@@ -9,27 +9,24 @@
           [p-image-height]="imageHeight"
           [p-template]="slideContentTemplate"
           [p-alt]="item.alt"
-          [p-link]="item.link">
+          [p-link]="item.link"
+        >
         </po-slide-item>
       </ng-container>
     </div>
 
-    <po-slide-control *ngIf="hasSlides && slides.length > 1" 
-      p-control="previous"
-      (p-click)="previousControl()">
+    <po-slide-control *ngIf="hasSlides && slides.length > 1" p-control="previous" (p-click)="previousControl()">
     </po-slide-control>
 
-    <po-slide-control *ngIf="hasSlides && slides.length > 1"
-      p-control="next"
-      (p-click)="nextControl()">
+    <po-slide-control *ngIf="hasSlides && slides.length > 1" p-control="next" (p-click)="nextControl()">
     </po-slide-control>
-
   </div>
 
   <po-slide-circles
     *ngIf="hasSlides && slides.length > 1"
     [p-current-slide-index]="currentSlideIndex"
     [p-items]="slideItems"
-    (p-click)="goToItem($event)">
+    (p-click)="goToItem($event)"
+  >
   </po-slide-circles>
 </div>

@@ -6,7 +6,6 @@
  * Interface para os itens do `po-button-group`.
  */
 export interface PoButtonGroupItem {
-
   /** Ação executada ao clicar sobre o botão. */
   action: Function;
 

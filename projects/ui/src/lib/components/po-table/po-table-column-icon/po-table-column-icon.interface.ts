@@ -8,7 +8,6 @@
  * Interface que define a coluna com ícone(s) do `po-table`.
  */
 export interface PoTableColumnIcon {
-
   /** Define a ação que será executada ao clicar no ícone. */
   action?: Function;
 
@@ -53,5 +52,4 @@ export interface PoTableColumnIcon {
    * Define o valor do ícone que será exibido.
    */
   value: string;
-
 }

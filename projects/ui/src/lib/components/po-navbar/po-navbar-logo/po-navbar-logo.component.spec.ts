@@ -10,9 +10,7 @@ describe('PoNavbarLogoComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoNavbarLogoComponent
-      ]
+      declarations: [PoNavbarLogoComponent]
     });
   });
 
@@ -28,7 +26,6 @@ describe('PoNavbarLogoComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should create tag img if `logo` has value', () => {
       component.logo = 'http://lorempixel.com/200/200/';
 
@@ -44,7 +41,5 @@ describe('PoNavbarLogoComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-navbar-logo-image')).toBeNull();
     });
-
   });
-
 });

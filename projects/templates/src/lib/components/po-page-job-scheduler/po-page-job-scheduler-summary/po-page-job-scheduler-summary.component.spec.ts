@@ -16,10 +16,7 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        PoPageJobSchedulerModule
-      ]
+      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
     });
   });
 
@@ -42,7 +39,6 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnInit: should call `getPeriodicityLabel`, `getExecutionValue`, `getFirstExecutionLabel` and `getRecurrentValue`', () => {
       component.periodicityValue = undefined;
       component.executionValue = undefined;
@@ -57,10 +53,10 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
         recurrent: false
       };
 
-      spyOn(component, <any> 'getPeriodicityLabel').and.callThrough();
-      spyOn(component, <any> 'getExecutionValue').and.callThrough();
-      spyOn(component, <any> 'getFirstExecutionLabel').and.callThrough();
-      spyOn(component, <any> 'getRecurrentValue').and.callThrough();
+      spyOn(component, <any>'getPeriodicityLabel').and.callThrough();
+      spyOn(component, <any>'getExecutionValue').and.callThrough();
+      spyOn(component, <any>'getFirstExecutionLabel').and.callThrough();
+      spyOn(component, <any>'getRecurrentValue').and.callThrough();
 
       component.ngOnInit();
 
@@ -85,7 +81,7 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       const periodicity = 'daily';
       const hour = '11:20';
 
-      spyOn(component, <any> 'getHourLabel').and.callThrough();
+      spyOn(component, <any>'getHourLabel').and.callThrough();
 
       const executionValue = component['getExecutionValue'](periodicity, hour);
 
@@ -98,7 +94,7 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       const hour = '11:20';
       const dayOfMonth = 20;
 
-      spyOn(component, <any> 'getMonthlyLabelExecution').and.callThrough();
+      spyOn(component, <any>'getMonthlyLabelExecution').and.callThrough();
 
       const executionValue = component['getExecutionValue'](periodicity, hour, undefined, dayOfMonth);
 
@@ -111,7 +107,7 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       const hour = '11:20';
       const daysOfWeek = ['Saturday'];
 
-      spyOn(component, <any> 'getWeeklyLabelExecution').and.callThrough();
+      spyOn(component, <any>'getWeeklyLabelExecution').and.callThrough();
 
       const executionValue = component['getExecutionValue'](periodicity, hour, daysOfWeek);
 
@@ -170,7 +166,7 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
 
       const expectedValue = `${component.literals.day} ${dayOfMonth} ${component['getHourLabel'](hour)}`;
 
-      spyOn(component, <any> 'getHourLabel').and.callThrough();
+      spyOn(component, <any>'getHourLabel').and.callThrough();
 
       const monthlyLabelExecution = component['getMonthlyLabelExecution'](dayOfMonth, hour);
 
@@ -214,8 +210,8 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       const daysOfWeek = ['Saturday'];
       const hour = '10:30';
 
-      spyOn(component, <any> 'getWeekDaysLabel').and.callThrough();
-      spyOn(component, <any> 'getHourLabel').and.callThrough();
+      spyOn(component, <any>'getWeekDaysLabel').and.callThrough();
+      spyOn(component, <any>'getHourLabel').and.callThrough();
 
       const weeklyLabelExecution = component['getWeeklyLabelExecution'](daysOfWeek, hour);
 
@@ -230,8 +226,8 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       const daysOfWeek = undefined;
       const hour = '10:30';
 
-      spyOn(component, <any> 'getWeekDaysLabel').and.callThrough();
-      spyOn(component, <any> 'getHourLabel').and.callThrough();
+      spyOn(component, <any>'getWeekDaysLabel').and.callThrough();
+      spyOn(component, <any>'getHourLabel').and.callThrough();
 
       const weeklyLabelExecution = component['getWeeklyLabelExecution'](daysOfWeek, hour);
 
@@ -293,11 +289,9 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       expect(typeof sorterWeekDays === 'object').toBe(true);
       expect(Object.keys(sorterWeekDays).length).toBe(7);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should find `po-dynamic-view` and `po-widget` if parameters.length > 0', () => {
       component.parameters = [{ property: 'server' }];
 
@@ -321,7 +315,5 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       expect(dynamicView).toBeFalsy();
       expect(widget).toBeFalsy();
     });
-
   });
-
 });

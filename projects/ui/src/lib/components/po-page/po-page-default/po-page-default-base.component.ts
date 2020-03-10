@@ -11,7 +11,6 @@ import { PoPageContentComponent } from '../po-page-content/po-page-content.compo
  */
 @Directive()
 export abstract class PoPageDefaultBaseComponent {
-
   private _actions?: Array<PoPageAction> = [];
   private _title: string;
 
@@ -48,5 +47,4 @@ export abstract class PoPageDefaultBaseComponent {
 
   // Seta a lista de ações no dropdown.
   abstract setDropdownActions();
-
 }

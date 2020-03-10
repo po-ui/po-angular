@@ -12,10 +12,9 @@ describe('PoTreeViewItemHeaderComponent:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule, PoFieldModule ],
-      declarations: [ PoTreeViewItemHeaderComponent ]
-    })
-    .compileComponents();
+      imports: [FormsModule, PoFieldModule],
+      declarations: [PoTreeViewItemHeaderComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -31,7 +30,6 @@ describe('PoTreeViewItemHeaderComponent:', () => {
   });
 
   describe('Templates: ', () => {
-
     it('shouldn`t find .po-tree-view-item-header-button if hasSubItems is false', () => {
       component.item = {
         label: 'Nivel 02',
@@ -48,7 +46,7 @@ describe('PoTreeViewItemHeaderComponent:', () => {
       component.item = {
         label: 'Nivel 02',
         value: '02',
-        subItems: [ { label: 'Nivel 02', value: '02' } ]
+        subItems: [{ label: 'Nivel 02', value: '02' }]
       };
 
       fixture.detectChanges();
@@ -61,7 +59,7 @@ describe('PoTreeViewItemHeaderComponent:', () => {
         label: 'Nivel 02',
         value: '02',
         expanded: false,
-        subItems: [ { label: 'Nivel 02', value: '02' } ]
+        subItems: [{ label: 'Nivel 02', value: '02' }]
       };
 
       fixture.detectChanges();
@@ -74,7 +72,7 @@ describe('PoTreeViewItemHeaderComponent:', () => {
         label: 'Nivel 02',
         value: '02',
         expanded: true,
-        subItems: [ { label: 'Nivel 02', value: '02' } ]
+        subItems: [{ label: 'Nivel 02', value: '02' }]
       };
 
       fixture.detectChanges();
@@ -98,7 +96,7 @@ describe('PoTreeViewItemHeaderComponent:', () => {
       component.item = {
         label: 'Nivel 02',
         value: '02',
-        subItems: [ { label: 'Nivel 02', value: '02' } ]
+        subItems: [{ label: 'Nivel 02', value: '02' }]
       };
 
       fixture.detectChanges();
@@ -111,7 +109,7 @@ describe('PoTreeViewItemHeaderComponent:', () => {
       component.item = {
         label: 'Nivel 02',
         value: '02',
-        subItems: [ { label: 'Nivel 02', value: '02' } ]
+        subItems: [{ label: 'Nivel 02', value: '02' }]
       };
 
       fixture.detectChanges();
@@ -125,7 +123,7 @@ describe('PoTreeViewItemHeaderComponent:', () => {
       component.item = {
         label: 'Nivel 02',
         value: '02',
-        subItems: [ { label: 'Nivel 02', value: '02' } ]
+        subItems: [{ label: 'Nivel 02', value: '02' }]
       };
 
       fixture.detectChanges();
@@ -133,6 +131,5 @@ describe('PoTreeViewItemHeaderComponent:', () => {
       expect(debugNativeElement.querySelector('.po-tree-view-item-header-checkbox')).toBe(null);
       expect(debugNativeElement.querySelector('.po-tree-view-item-header-label')).toBeTruthy();
     });
-
   });
 });

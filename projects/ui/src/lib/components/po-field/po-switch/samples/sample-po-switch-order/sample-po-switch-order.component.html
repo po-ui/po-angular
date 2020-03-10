@@ -1,11 +1,7 @@
 <div class="po-row">
   <po-widget class="po-md-6 po-lg-4" p-title="Order Summary">
     <form #f="ngForm">
-
-      <po-table
-        [p-columns]="columns"
-        [p-items]="items">
-      </po-table>
+      <po-table [p-columns]="columns" [p-items]="items"> </po-table>
 
       <po-switch
         name="serviceFee"
@@ -14,11 +10,12 @@
         p-label-off="No, thank you."
         p-label-on="Yes, please."
         [p-label-position]="labelPosition"
-        (p-change)="addServiceFee()">
+        (p-change)="addServiceFee()"
+      >
       </po-switch>
 
       <div class="po-pull-right">
-        <div class="po-font-text-large-bold"> Total value </div>
+        <div class="po-font-text-large-bold">Total value</div>
         <span class="po-font-text">R$</span>
         <span class="po-pull-right po-font-title">{{ totalAmount }}</span>
       </div>
@@ -29,10 +26,10 @@
           p-icon="po-icon po-icon-ok"
           p-label="Confirm"
           p-type="primary"
-          (p-click)="confirm()">
+          (p-click)="confirm()"
+        >
         </po-button>
       </div>
-
     </form>
   </po-widget>
 </div>

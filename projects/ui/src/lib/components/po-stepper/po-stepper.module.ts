@@ -12,9 +12,7 @@ import { PoStepperStepComponent } from './po-stepper-step/po-stepper-step.compon
  * Módulo do componente po-stepper
  */
 @NgModule({
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
   declarations: [
     PoStepComponent,
     PoStepperCircleComponent,
@@ -22,9 +20,6 @@ import { PoStepperStepComponent } from './po-stepper-step/po-stepper-step.compon
     PoStepperLabelComponent,
     PoStepperStepComponent
   ],
-  exports: [
-    PoStepComponent,
-    PoStepperComponent
-  ]
+  exports: [PoStepComponent, PoStepperComponent]
 })
-export class PoStepperModule { }
+export class PoStepperModule {}

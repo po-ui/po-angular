@@ -15,7 +15,6 @@ import { PoDynamicFormField } from './po-dynamic-form-field.interface';
  */
 @Directive()
 export class PoDynamicFormBaseComponent {
-
   private _groupForm?: boolean = false;
 
   /**
@@ -140,7 +139,7 @@ export class PoDynamicFormBaseComponent {
    * ```
    */
   @Input('p-group-form') set groupForm(value: boolean) {
-    this._groupForm = <any> value === '' ? true : convertToBoolean(value);
+    this._groupForm = <any>value === '' ? true : convertToBoolean(value);
   }
 
   get groupForm(): boolean {
@@ -220,5 +219,4 @@ export class PoDynamicFormBaseComponent {
    * ```
    */
   @Input('p-validate') validate?: string | Function;
-
 }

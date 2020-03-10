@@ -5,11 +5,9 @@ import { Component } from '@angular/core';
   templateUrl: './sample-po-disclaimer.component.html'
 })
 export class SamplePoDisclaimerComponent {
-
   exclude;
 
-  disclaimerClosed({value, label, property}) {
-    this.exclude = {value, label, property};
+  disclaimerClosed({ value, label, property }) {
+    this.exclude = { value, label, property };
   }
-
 }

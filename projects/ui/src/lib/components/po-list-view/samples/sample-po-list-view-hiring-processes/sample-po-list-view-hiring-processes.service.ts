@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class SamplePoListViewHiringProcessesService {
-
   getItems() {
     return [
       {
@@ -88,8 +87,7 @@ export class SamplePoListViewHiringProcessesService {
         email: 'chloe@walker.com',
         telephone: '1-518-222-1212',
         jobDescription: 'Programmer'
-      },
+      }
     ];
   }
-
 }

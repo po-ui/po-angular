@@ -4,10 +4,9 @@ import { PoAccordionItemComponent, PoDynamicFormField } from '@portinari/portina
 
 @Component({
   selector: 'sample-po-accordion-labs',
-  templateUrl: './sample-po-accordion-labs.component.html',
+  templateUrl: './sample-po-accordion-labs.component.html'
 })
 export class SamplePoAccordionLabsComponent implements OnInit {
-
   accordionFieldsForm: Array<PoDynamicFormField> = [
     { property: 'label', divider: 'ACCORDION ITEM', required: true, gridColumns: 6 }
   ];
@@ -22,11 +21,10 @@ export class SamplePoAccordionLabsComponent implements OnInit {
   addAccordionItem(accordionItem: PoAccordionItemComponent) {
     const newAccordionItem = Object.assign({}, accordionItem, { value: this.accordionItems.length });
 
-    this.accordionItems = [ ...this.accordionItems, newAccordionItem ];
+    this.accordionItems = [...this.accordionItems, newAccordionItem];
   }
 
   restore() {
     this.accordionItems = [];
   }
-
 }

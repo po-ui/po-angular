@@ -1,5 +1,5 @@
 export const poHttpInterceptorDetailLiteralsDefault = {
-  en: <any> {
+  en: <any>{
     closeButton: 'Close',
     details: 'Details',
     detail: 'Detail',
@@ -8,7 +8,7 @@ export const poHttpInterceptorDetailLiteralsDefault = {
     info: 'Information',
     success: 'Success'
   },
-  es: <any> {
+  es: <any>{
     closeButton: 'Cerrar',
     details: 'Detalles',
     detail: 'Detalle',
@@ -17,7 +17,7 @@ export const poHttpInterceptorDetailLiteralsDefault = {
     info: 'Informacion',
     success: 'Éxito'
   },
-  pt: <any> {
+  pt: <any>{
     closeButton: 'Fechar',
     details: 'Detalhes',
     detail: 'Detalhe',

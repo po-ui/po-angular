@@ -53,20 +53,19 @@ const poDecimalTotalLengthLimit = 16;
   selector: 'po-decimal',
   templateUrl: './po-decimal.component.html',
   providers: [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoDecimalComponent),
-    multi: true,
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoDecimalComponent),
-    multi: true,
-  }
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoDecimalComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoDecimalComponent),
+      multi: true
+    }
   ]
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit {
-
   private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
   private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
 
@@ -79,11 +78,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private valueBeforeChange: any;
 
   private regex = {
-    thousand: new RegExp('\\' + '.' , 'g'),
-    decimal: new RegExp('\\' + ',' , 'g')
+    thousand: new RegExp('\\' + '.', 'g'),
+    decimal: new RegExp('\\' + ',', 'g')
   };
 
-  @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -107,8 +106,9 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   @Input('p-decimals-length') set decimalsLength(value: number) {
     let decimalsLength = convertToInt(value);
 
-    decimalsLength = this.isValueBetweenAllowed(decimalsLength, poDecimalMaxDecimalsLength) ?
-    decimalsLength : poDecimalDefaultDecimalsLength;
+    decimalsLength = this.isValueBetweenAllowed(decimalsLength, poDecimalMaxDecimalsLength)
+      ? decimalsLength
+      : poDecimalDefaultDecimalsLength;
 
     if (this.isGreaterThanTotalLengthLimit(decimalsLength, this.thousandMaxlength)) {
       this.thousandMaxlength = poDecimalTotalLengthLimit - decimalsLength;
@@ -142,8 +142,9 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       thousandMaxlength = poDecimalTotalLengthLimit - this.decimalsLength;
     }
 
-    thousandMaxlength = this.isValueBetweenAllowed(thousandMaxlength, poDecimalDefaultThousandMaxlength) ?
-    thousandMaxlength : poDecimalDefaultThousandMaxlength;
+    thousandMaxlength = this.isValueBetweenAllowed(thousandMaxlength, poDecimalDefaultThousandMaxlength)
+      ? thousandMaxlength
+      : poDecimalDefaultThousandMaxlength;
 
     if (this.isGreaterThanTotalLengthLimit(this.decimalsLength, thousandMaxlength)) {
       this.decimalsLength = poDecimalTotalLengthLimit - thousandMaxlength;
@@ -171,7 +172,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this.controlChangeEmitter();
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
 
@@ -182,7 +183,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   getScreenValue() {
-    return (this.inputEl) ? this.inputEl.nativeElement.value : '';
+    return this.inputEl ? this.inputEl.nativeElement.value : '';
   }
 
   hasInvalidClass() {
@@ -199,7 +200,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   isValidNumber(event: any): boolean {
     // - event.key não existia em alguns browsers, como Samsung browser e Firefox.
-    const keyValue = <any> String.fromCharCode(event.which);
+    const keyValue = <any>String.fromCharCode(event.which);
     const validKey = event.which !== 8 && event.which !== 0;
 
     return !this.hasLetters(keyValue) && validKey;
@@ -210,7 +211,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const value = event.target.value;
 
     if (value) {
-
       if (this.hasLetters(value) || this.containsMoreThanOneComma(value)) {
         this.setViewValue('');
         this.callOnChange(undefined);
@@ -386,7 +386,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     } else {
       return formatedNumber + this.decimalSeparator + valueAfterDot;
     }
-
   }
 
   private formatValueWithoutThousandSeparator(value: string = '') {
@@ -412,7 +411,9 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       }
     }
 
-    if (!value) { this.oldDotsLength = null; }
+    if (!value) {
+      this.oldDotsLength = null;
+    }
 
     return false;
   }
@@ -423,12 +424,14 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       const dotsLength = dots && dots.length;
 
       if (dotsLength > this.oldDotsLength) {
-          this.oldDotsLength = dotsLength;
-          return true;
+        this.oldDotsLength = dotsLength;
+        return true;
       }
     }
 
-    if (!value) { this.oldDotsLength = null; }
+    if (!value) {
+      this.oldDotsLength = null;
+    }
 
     return false;
   }
@@ -443,14 +446,20 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private isInvalidKey(event: any, charCode: any) {
     const isInvalidNumber = !this.isValidNumber(event);
 
-    return this.verifyInsertComma(event) || this.verifyThousandLength(event) ||
-      this.verifyValueAfterComma(event) || this.verifyInsertMinusSign(event) ||
-      this.hasMinusSignInvalidPosition(event) || isInvalidNumber ||
-      this.validateCursorPositionBeforeSeparator(event) || this.verifyDecimalLengthIsZeroAndKeyPressedIsComma(charCode);
+    return (
+      this.verifyInsertComma(event) ||
+      this.verifyThousandLength(event) ||
+      this.verifyValueAfterComma(event) ||
+      this.verifyInsertMinusSign(event) ||
+      this.hasMinusSignInvalidPosition(event) ||
+      isInvalidNumber ||
+      this.validateCursorPositionBeforeSeparator(event) ||
+      this.verifyDecimalLengthIsZeroAndKeyPressedIsComma(charCode)
+    );
   }
 
   private isGreaterThanTotalLengthLimit(decimalsMaxLength: number, thousandMaxlength: number) {
-    return (decimalsMaxLength + thousandMaxlength) > poDecimalTotalLengthLimit;
+    return decimalsMaxLength + thousandMaxlength > poDecimalTotalLengthLimit;
   }
 
   private isKeyDecimalSeparator(event) {
@@ -489,12 +498,12 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   private isValueBetweenAllowed(value: number, maxAllowed: number) {
-    return  value >= 0 && value <= maxAllowed;
+    return value >= 0 && value <= maxAllowed;
   }
 
   // Quando decimalsLength for 0 não deve permitir informar vírgula (decimalSeparator)
   private verifyDecimalLengthIsZeroAndKeyPressedIsComma(charCode: number) {
-    return (charCode === 44 && this.decimalsLength === 0);
+    return charCode === 44 && this.decimalsLength === 0;
   }
 
   private verifyAutoFocus() {
@@ -523,7 +532,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const viewValue = target.value;
 
     // Caso houver mais . do que anteriormente soma o valor com 1.
-    if (this.hasMoreDot(viewValue) || viewValue === ('0' + this.decimalSeparator)) {
+    if (this.hasMoreDot(viewValue) || viewValue === '0' + this.decimalSeparator) {
       return target.setSelectionRange(selectionStart + 1, selectionEnd + 1);
     }
 
@@ -556,9 +565,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     if (this.isSelectionStartDifferentSelectionEnd(target)) {
       return false;
     }
-    return target.selectionStart <= valueBeforeSeparator.length &&
-    valueBeforeSeparatorOriginal.length === this.thousandMaxlength &&
-    !this.isKeyDecimalSeparator(event);
+    return (
+      target.selectionStart <= valueBeforeSeparator.length &&
+      valueBeforeSeparatorOriginal.length === this.thousandMaxlength &&
+      !this.isKeyDecimalSeparator(event)
+    );
   }
 
   private verifyThousandLength(event: any): boolean {
@@ -569,9 +580,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     if (this.isSelectionStartDifferentSelectionEnd(target)) {
       return false;
     }
-    return valueBeforeSeparatorOriginal.length >= this.thousandMaxlength &&
+    return (
+      valueBeforeSeparatorOriginal.length >= this.thousandMaxlength &&
       !this.isKeyDecimalSeparator(event) &&
-      this.isPositionAfterDecimalSeparator(target.selectionStart - this.decimalsLength, target.value);
+      this.isPositionAfterDecimalSeparator(target.selectionStart - this.decimalsLength, target.value)
+    );
   }
 
   private verifyInsertComma(e: any): boolean {
@@ -582,8 +595,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   private verifyInsertMinusSign(event: any): boolean {
     const value = event.target.value;
-    const indexMinusSign = (value.lastIndexOf(this.minusSign) !== -1);
-    const positionMinusSign = value.lastIndexOf('-') ;
+    const indexMinusSign = value.lastIndexOf(this.minusSign) !== -1;
+    const positionMinusSign = value.lastIndexOf('-');
     const occurancesMinusSign = value.match(new RegExp('-', 'g'));
 
     if (this.isKeyboardAndroid && indexMinusSign && occurancesMinusSign.length > 1) {
@@ -597,7 +610,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const selectionStart = event.target.selectionStart;
     const valueAfterSeparator = this.getValueAfterSeparator(value, this.decimalSeparator);
 
-    return this.isPositionAfterDecimalSeparator(selectionStart, value) && valueAfterSeparator.length >= this.decimalsLength;
+    return (
+      this.isPositionAfterDecimalSeparator(selectionStart, value) && valueAfterSeparator.length >= this.decimalsLength
+    );
   }
-
 }

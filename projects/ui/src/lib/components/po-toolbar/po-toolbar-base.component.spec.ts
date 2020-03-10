@@ -24,16 +24,14 @@ describe('PoToolbarBaseComponent:', () => {
   });
 
   describe('Methods: ', () => {
-
     describe('isShowProfile:', () => {
-
       beforeEach(() => {
         component.profile = undefined;
         component.profileActions = undefined;
       });
 
       it('should return `true` if have a profile.', () => {
-        component.profile = {title: 'Jhony', avatar: 'link'};
+        component.profile = { title: 'Jhony', avatar: 'link' };
 
         expect(component.isShowProfile).toBe(true);
       });
@@ -50,9 +48,6 @@ describe('PoToolbarBaseComponent:', () => {
 
         expect(component.isShowProfile).toBe(false);
       });
-
     });
-
   });
-
 });

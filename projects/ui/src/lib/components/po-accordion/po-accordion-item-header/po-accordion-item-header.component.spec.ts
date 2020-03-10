@@ -12,7 +12,7 @@ describe('PoAccordionItemHeaderComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoAccordionItemHeaderComponent ]
+      declarations: [PoAccordionItemHeaderComponent]
     });
   });
 
@@ -28,7 +28,6 @@ describe('PoAccordionItemHeaderComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('onClick: should toggle `expanded` and call `toggle.emit` with `expanded`', () => {
       const expectedValue = false;
       component.expanded = !expectedValue;
@@ -39,11 +38,9 @@ describe('PoAccordionItemHeaderComponent:', () => {
       expect(component.expanded).toBe(expectedValue);
       expect(component.toggle.emit).toHaveBeenCalledWith(expectedValue);
     });
-
   });
 
   describe('Templates:', () => {
-
     let header;
     let button;
     let span;
@@ -108,14 +105,11 @@ describe('PoAccordionItemHeaderComponent:', () => {
     });
 
     it('should call `onClick` on button click', () => {
-
       spyOn(component, 'onClick');
 
       button.click();
 
       expect(component.onClick).toHaveBeenCalled();
     });
-
   });
-
 });

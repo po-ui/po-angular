@@ -13,18 +13,8 @@ import { PoPageBackgroundComponent } from './po-page-background.component';
  * Módulo do template do po-page-background.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    PoDividerModule,
-    PoFieldModule,
-  ],
-  declarations: [
-    PoPageBackgroundComponent
-  ],
-  exports: [
-    PoPageBackgroundComponent
-  ]
+  imports: [CommonModule, FormsModule, RouterModule, PoDividerModule, PoFieldModule],
+  declarations: [PoPageBackgroundComponent],
+  exports: [PoPageBackgroundComponent]
 })
-export class PoPageBackgroundModule { }
+export class PoPageBackgroundModule {}

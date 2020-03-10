@@ -1,53 +1,29 @@
 <div class="po-row">
-  <po-button-group
-    class="po-md-12"
-    [p-buttons]="buttons"
-    [p-small]="small"
-    [p-toggle]="toggle">
-  </po-button-group>
+  <po-button-group class="po-md-12" [p-buttons]="buttons" [p-small]="small" [p-toggle]="toggle"> </po-button-group>
 </div>
 
-<hr>
+<hr />
 
 <form #fButtons="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-4"
-      name="buttonLabel"
-      [(ngModel)]="button.label"
-      p-label="Button label">
+    <po-input class="po-md-4" name="buttonLabel" [(ngModel)]="button.label" p-label="Button label"> </po-input>
+
+    <po-input class="po-md-4" name="buttonAction" [(ngModel)]="button.action" p-label="Button action" p-required>
     </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="buttonAction"
-      [(ngModel)]="button.action"
-      p-label="Button action"
-      p-required>
-    </po-input>
-
-    <po-switch
-      class="po-md-4"
-      name="buttonDisabled"
-      [(ngModel)]="button.disabled"
-      p-label="Button disabled">
+    <po-switch class="po-md-4" name="buttonDisabled" [(ngModel)]="button.disabled" p-label="Button disabled">
     </po-switch>
 
-    <po-input
-      class="po-md-4"
-      name="buttonTooltip"
-      [(ngModel)]="button.tooltip"
-      p-label="Button tooltip">
-    </po-input>
+    <po-input class="po-md-4" name="buttonTooltip" [(ngModel)]="button.tooltip" p-label="Button tooltip"> </po-input>
 
     <po-radio-group
       class="po-md-8"
       name="buttonIcon"
       [(ngModel)]="button.icon"
       p-label="Button Icon"
-      [p-options]="iconsOptions">
+      [p-options]="iconsOptions"
+    >
     </po-radio-group>
-
   </div>
 
   <div class="po-row">
@@ -55,36 +31,23 @@
       class="po-md-2"
       p-label="Add button"
       [p-disabled]="fButtons.invalid"
-      (p-click)="addButton(); fButtons.reset()">
+      (p-click)="addButton(); fButtons.reset()"
+    >
     </po-button>
   </div>
 </form>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-select
-      class="po-md-3"
-      name="toggle"
-      [(ngModel)]="toggle"
-      p-label="Toggle"
-      [p-options]="toggleOptions">
+    <po-select class="po-md-3" name="toggle" [(ngModel)]="toggle" p-label="Toggle" [p-options]="toggleOptions">
     </po-select>
 
-    <po-switch
-      class="po-md-3"
-      name="small"
-      [(ngModel)]="small"
-      p-label="Small">
-    </po-switch>
+    <po-switch class="po-md-3" name="small" [(ngModel)]="small" p-label="Small"> </po-switch>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="f.reset(); fButtons.reset(); restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="f.reset(); fButtons.reset(); restore()"> </po-button>
   </div>
 </form>

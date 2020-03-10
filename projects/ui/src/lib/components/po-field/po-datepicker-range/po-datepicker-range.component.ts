@@ -42,19 +42,19 @@ const poDatepickerRangeDateLengthDefault = 10;
   selector: 'po-datepicker-range',
   templateUrl: './po-datepicker-range.component.html',
   providers: [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoDatepickerRangeComponent),
-    multi: true,
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoDatepickerRangeComponent),
-    multi: true,
-  }]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoDatepickerRangeComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoDatepickerRangeComponent),
+      multi: true
+    }
+  ]
 })
 export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent implements AfterViewInit, OnInit {
-
   private poDatepickerRangeElement: ElementRef<any>;
   private poMaskObject: PoMask;
 
@@ -79,12 +79,14 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   }
 
   get getErrorMessage(): string {
-    return (this.errorMessage !== '' && this.hasInvalidClass()) ? this.errorMessage : '';
+    return this.errorMessage !== '' && this.hasInvalidClass() ? this.errorMessage : '';
   }
 
   get isDateRangeInputUncompleted(): boolean {
-    return this.endDateInputValue.length < poDatepickerRangeDateLengthDefault
-      && this.startDateInputValue.length < poDatepickerRangeDateLengthDefault;
+    return (
+      this.endDateInputValue.length < poDatepickerRangeDateLengthDefault &&
+      this.startDateInputValue.length < poDatepickerRangeDateLengthDefault
+    );
   }
 
   get isDirtyDateRangeInput(): boolean {
@@ -170,7 +172,6 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   }
 
   onKeydown(event?: any) {
-
     if (this.readonly) {
       return;
     }
@@ -181,7 +182,6 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     } else {
       this.poMaskObject.keydown(event);
     }
-
   }
 
   onKeyup(event: any) {
@@ -234,7 +234,7 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     day = day && day.includes('T') ? day.slice(0, 2) : day;
 
     dateFormatted = dateFormatted.replace('dd', ('0' + day).slice(-2));
-    dateFormatted = dateFormatted.replace('mm', ('0' + (month)).slice(-2));
+    dateFormatted = dateFormatted.replace('mm', ('0' + month).slice(-2));
     dateFormatted = dateFormatted.replace('yyyy', String(year));
 
     return dateFormatted;
@@ -252,33 +252,38 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     return value ? this.formatDate(this.format, day, month, year) : '';
   }
 
-  private getDateRangeFormatValidation(startDate: string, endDate: string, isStartDateTargetEvent: boolean):
-    { isValid: boolean, dateRangeModel: PoDatepickerRange } {
-
+  private getDateRangeFormatValidation(
+    startDate: string,
+    endDate: string,
+    isStartDateTargetEvent: boolean
+  ): { isValid: boolean; dateRangeModel: PoDatepickerRange } {
     this.setDateRangeInputValidation(startDate, endDate);
 
     return {
       isValid: this.isDateRangeInputFormatValid && this.isStartDateRangeInputValid,
       dateRangeModel: this.getValidatedModel(startDate, endDate, isStartDateTargetEvent)
     };
-
   }
 
   private getValidatedModel(startDate: string, endDate: string, isStartDateTargetEvent: boolean): PoDatepickerRange {
     const dateRangeModel = { start: '', end: '' };
 
-    dateRangeModel.end = (isStartDateTargetEvent || this.isStartDateRangeInputValid)
-      && !this.dateFormatFailed(endDate) ? endDate : '' ;
+    dateRangeModel.end =
+      (isStartDateTargetEvent || this.isStartDateRangeInputValid) && !this.dateFormatFailed(endDate) ? endDate : '';
 
-    dateRangeModel.start = (!isStartDateTargetEvent || this.isStartDateRangeInputValid)
-      && !this.dateFormatFailed(startDate) ? startDate : '';
+    dateRangeModel.start =
+      (!isStartDateTargetEvent || this.isStartDateRangeInputValid) && !this.dateFormatFailed(startDate)
+        ? startDate
+        : '';
 
     return dateRangeModel;
   }
 
   private hasInvalidClass(): boolean {
-    return (this.poDatepickerRangeElement.nativeElement.classList.contains('ng-invalid') &&
-      this.poDatepickerRangeElement.nativeElement.classList.contains('ng-dirty'));
+    return (
+      this.poDatepickerRangeElement.nativeElement.classList.contains('ng-invalid') &&
+      this.poDatepickerRangeElement.nativeElement.classList.contains('ng-dirty')
+    );
   }
 
   private isEqualBeforeValue(startDate: string, endDate: string): boolean {
@@ -286,9 +291,12 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   }
 
   private isSetFocusOnBackspace(event: any) {
-    return event.target.name === this.endDateInputName &&
-      this.endDateInput.nativeElement.selectionStart === 0 && this.endDateInput.nativeElement.selectionEnd === 0 &&
-      event.keyCode === backspaceKey;
+    return (
+      event.target.name === this.endDateInputName &&
+      this.endDateInput.nativeElement.selectionStart === 0 &&
+      this.endDateInput.nativeElement.selectionEnd === 0 &&
+      event.keyCode === backspaceKey
+    );
   }
 
   private removeFocusFromDatePickerRangeField() {
@@ -351,7 +359,8 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
 
   private setFocusOnStartDateCompleted(keyCode: number, inputName: string) {
     const isLastKeyPressed = this.startDateInput.nativeElement.selectionStart === poDatepickerRangeDateLengthDefault;
-    const isNewDateCompleted = this.startDateInputValue.length === poDatepickerRangeDateLengthDefault && isLastKeyPressed;
+    const isNewDateCompleted =
+      this.startDateInputValue.length === poDatepickerRangeDateLengthDefault && isLastKeyPressed;
     const isValidKey = PoDatepickerRangeComponent.isValidKey(keyCode);
 
     if (inputName === this.startDateInputName && isNewDateCompleted && isValidKey) {
@@ -374,7 +383,11 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
       return;
     }
 
-    const dateFormatValidation = this.getDateRangeFormatValidation(startDateFormatted, endDateFormatted, isStartDateTargetEvent);
+    const dateFormatValidation = this.getDateRangeFormatValidation(
+      startDateFormatted,
+      endDateFormatted,
+      isStartDateTargetEvent
+    );
 
     if (dateFormatValidation.isValid) {
       this.dateRange = { start: startDateFormatted, end: endDateFormatted };
@@ -386,7 +399,5 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
       this.dateRange = { ...dateFormatValidation.dateRangeModel };
       this.updateModel(dateFormatValidation.dateRangeModel);
     }
-
   }
-
 }

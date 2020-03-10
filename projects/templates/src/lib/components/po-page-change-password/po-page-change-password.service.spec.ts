@@ -22,13 +22,10 @@ describe('PoPageChangePasswordService:', () => {
 
   it('should be created', () => {
     expect(poPageChangePasswordService).toBeTruthy();
-    expect(
-      poPageChangePasswordService instanceof PoPageChangePasswordService
-    ).toBeTruthy();
+    expect(poPageChangePasswordService instanceof PoPageChangePasswordService).toBeTruthy();
   });
 
   describe('Methods', () => {
-
     it('post: should call `POST` method', () => {
       const url = 'url';
       const data = { 'newPassword': 'new' };
@@ -43,5 +40,4 @@ describe('PoPageChangePasswordService:', () => {
       req.flush(expectedResponse);
     });
   });
-
 });

@@ -1,6 +1,14 @@
 import { AbstractControl, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AfterViewChecked, ChangeDetectorRef, Component, ComponentRef, IterableDiffers, OnInit, ViewChild, ViewContainerRef
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  ComponentRef,
+  IterableDiffers,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 
 import { isExternalLink } from '../../utils/util';
@@ -8,7 +16,11 @@ import { PoComponentInjectorService } from '@portinari/portinari-ui';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
-import { PoPageLoginBaseComponent, poPageLoginLiteralIn, poPageLoginLiteralTo, poPageLoginLiteralsDefault
+import {
+  PoPageLoginBaseComponent,
+  poPageLoginLiteralIn,
+  poPageLoginLiteralTo,
+  poPageLoginLiteralsDefault
 } from './po-page-login-base.component';
 import { PoPageLoginRecovery } from './interfaces/po-page-login-recovery.interface';
 import { PoPageLoginService } from './po-page-login.service';
@@ -44,12 +56,10 @@ import { PoPageLoginService } from './po-page-login.service';
   selector: 'po-page-login',
   templateUrl: './po-page-login.component.html'
 })
-
 export class PoPageLoginComponent extends PoPageLoginBaseComponent implements AfterViewChecked, OnInit {
-
   private componentRef: ComponentRef<any> = null;
   private differ: any;
-  private readonly customPasswordError = { custom : false };
+  private readonly customPasswordError = { custom: false };
 
   @ViewChild('loginForm', { read: NgForm, static: true }) loginForm: NgForm;
   @ViewChild('pageLogin', { read: ViewContainerRef, static: true }) pageLogin: ViewContainerRef;
@@ -60,8 +70,8 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     private poComponentInjector: PoComponentInjectorService,
     differs: IterableDiffers,
     loginService: PoPageLoginService,
-    router: Router,
-    ) {
+    router: Router
+  ) {
     super(loginService, router);
     this.differ = differs.find([]).create(null);
   }
@@ -188,9 +198,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   }
 
   private setControlErrors(allErrors: string, control: AbstractControl, errors: Array<string>, patternError: string) {
-
     if (control) {
-
       this[allErrors] = control.hasError('pattern') ? [...errors, ...[patternError]] : [...errors];
 
       if (errors && errors.length && (control.valid || control.pristine)) {
@@ -202,11 +210,10 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   }
 
   private setUrlRedirect(url) {
-    isExternalLink(url) ?  window.open(url, '_blank') : this.router.navigate([url]);
+    isExternalLink(url) ? window.open(url, '_blank') : this.router.navigate([url]);
   }
 
-  private validateArrayChanges(differ: any, array: Array<{ array: Array<any>, callback: any }>) {
-
+  private validateArrayChanges(differ: any, array: Array<{ array: Array<any>; callback: any }>) {
     array.forEach(element => {
       const changes = differ.diff(element.array);
       if (changes) {
@@ -239,5 +246,4 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     const control = this.loginForm.form.controls['password'];
     this.setControlErrors('allPasswordErrors', control, errors, this.pageLoginLiterals.passwordErrorPattern);
   }
-
 }

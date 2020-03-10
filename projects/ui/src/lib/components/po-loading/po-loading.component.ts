@@ -11,4 +11,4 @@ import { PoLoadingBaseComponent } from './po-loading-base.component';
   selector: 'po-loading',
   templateUrl: 'po-loading.component.html'
 })
-export class PoLoadingComponent extends PoLoadingBaseComponent { }
+export class PoLoadingComponent extends PoLoadingBaseComponent {}

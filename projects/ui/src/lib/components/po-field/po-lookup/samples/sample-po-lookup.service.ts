@@ -7,10 +7,9 @@ import { PoLookupFilter, PoLookupFilteredItemsParams } from '@portinari/portinar
 
 @Injectable()
 export class SamplePoLookupService implements PoLookupFilter {
-
   private url = 'https://thf.totvs.com.br/sample/api/new/heroes';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   getFilteredItems(filteredParams: PoLookupFilteredItemsParams): Observable<any> {
     const { page, pageSize } = filteredParams;
@@ -22,5 +21,4 @@ export class SamplePoLookupService implements PoLookupFilter {
   getObjectByValue(value: string): Observable<any> {
     return this.httpClient.get(`${this.url}/${value}`);
   }
-
 }

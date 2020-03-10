@@ -7,17 +7,17 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { PoLoadingOverlayLiterals } from './interfaces/po-loading-overlay-literals.interface';
 
 export const poLoadingOverlayLiteralsDefault = {
-  en: <PoLoadingOverlayLiterals> {
-    loading: 'Loading',
+  en: <PoLoadingOverlayLiterals>{
+    loading: 'Loading'
   },
-  es: <PoLoadingOverlayLiterals> {
-    loading: 'Cargando',
+  es: <PoLoadingOverlayLiterals>{
+    loading: 'Cargando'
   },
-  pt: <PoLoadingOverlayLiterals> {
-    loading: 'Carregando',
+  pt: <PoLoadingOverlayLiterals>{
+    loading: 'Carregando'
   },
-  ru: <PoLoadingOverlayLiterals> {
-    loading: 'погрузка',
+  ru: <PoLoadingOverlayLiterals>{
+    loading: 'погрузка'
   }
 };
 
@@ -30,7 +30,6 @@ export const poLoadingOverlayLiteralsDefault = {
  */
 @Directive()
 export class PoLoadingOverlayBaseComponent {
-
   private _screenLock?: boolean = false;
   private _text?: string;
 
@@ -94,5 +93,4 @@ export class PoLoadingOverlayBaseComponent {
 
     return poLoadingOverlayLiteralsDefault[language].loading;
   }
-
 }

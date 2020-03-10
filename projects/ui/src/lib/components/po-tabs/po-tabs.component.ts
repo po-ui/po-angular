@@ -38,7 +38,6 @@ const poTabsMaxNumberOfTabs = 5;
   templateUrl: './po-tabs.component.html'
 })
 export class PoTabsComponent extends PoTabsBaseComponent {
-
   maxNumberOfTabs = poTabsMaxNumberOfTabs;
 
   private previousActiveTab: PoTabComponent;
@@ -62,7 +61,7 @@ export class PoTabsComponent extends PoTabsBaseComponent {
 
   // tabs que serão apresentadas na aba "Mais"
   get overflowedTabs() {
-    return this.visibleTabs.filter((_tab, index) => index > (this.maxNumberOfTabs - 2));
+    return this.visibleTabs.filter((_tab, index) => index > this.maxNumberOfTabs - 2);
   }
 
   get visibleTabs() {
@@ -84,7 +83,7 @@ export class PoTabsComponent extends PoTabsBaseComponent {
 
     const visibleTabIndex = this.visibleTabs.findIndex(visibleTab => visibleTab.id === tab.id);
 
-    return (this.visibleTabs.length <= this.maxNumberOfTabs) || (visibleTabIndex < (this.maxNumberOfTabs - 1));
+    return this.visibleTabs.length <= this.maxNumberOfTabs || visibleTabIndex < this.maxNumberOfTabs - 1;
   }
 
   // Função disparada quando alguma tab ficar ativa
@@ -147,5 +146,4 @@ export class PoTabsComponent extends PoTabsBaseComponent {
       this.changeDetector.detectChanges();
     }
   }
-
 }

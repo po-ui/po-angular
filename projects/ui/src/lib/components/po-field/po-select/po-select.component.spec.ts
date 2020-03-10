@@ -18,12 +18,8 @@ describe('PoSelectComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule ],
-      declarations: [
-        PoSelectComponent,
-        PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
-      ]
+      imports: [FormsModule],
+      declarations: [PoSelectComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -142,7 +138,6 @@ describe('PoSelectComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
       component.autoFocus = true;
 
@@ -188,11 +183,9 @@ describe('PoSelectComponent:', () => {
 
       expect(component.isInvisibleSelectNative).toBe(false);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('focus: should call `focus` of select', () => {
       component.selectElement = {
         nativeElement: {
@@ -346,7 +339,6 @@ describe('PoSelectComponent:', () => {
 
     it(`onKeydown: should not call disableDefaultEventAndToggleButton when alt+ArrowDown is typed, open is
       true and altKey is false`, () => {
-
       const fakeThis = { open: true, disableDefaultEventAndToggleButton: () => {} };
       const fakeEvent = { altKey: false, keyCode: 40 };
 
@@ -359,7 +351,6 @@ describe('PoSelectComponent:', () => {
 
     it(`onKeydown: should not call disableDefaultEventAndToggleButton when alt+ArrowUp is typed, open is
       true and altKey is false`, () => {
-
       const fakeThis = { open: true, disableDefaultEventAndToggleButton: () => {} };
       const fakeEvent = { altKey: false, keyCode: 38 };
 
@@ -453,9 +444,8 @@ describe('PoSelectComponent:', () => {
 
     it(`disableDefaultEventAndToggleButton: should call toggleButton, disable select display and enable it after
       setTimeout`, fakeAsync(() => {
-
       const fakeThis = {
-        selectElement: { nativeElement: { style : { display: 'block' } } },
+        selectElement: { nativeElement: { style: { display: 'block' } } },
         toggleButton: () => {}
       };
 
@@ -502,7 +492,7 @@ describe('PoSelectComponent:', () => {
         selectedValue: '',
         displayValue: label => {},
         callModelChange: value => {},
-        onChange: value => {},
+        onChange: value => {}
       };
 
       spyOn(fakeThis, 'onChange');
@@ -519,7 +509,7 @@ describe('PoSelectComponent:', () => {
         selectedValue: '1',
         displayValue: label => {},
         callModelChange: value => {},
-        onChange: value => {},
+        onChange: value => {}
       };
 
       spyOn(fakeThis, 'onChange');
@@ -750,13 +740,11 @@ describe('PoSelectComponent:', () => {
 
       expect(component.scrollValue).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('shouldn`t found span tag that show the label of option when `selectOptionTemplate` is truthy', () => {
-      component.selectOptionTemplate = <any> { templateRef: null };
+      component.selectOptionTemplate = <any>{ templateRef: null };
 
       fixture.detectChanges();
 
@@ -899,7 +887,10 @@ describe('PoSelectComponent:', () => {
     });
 
     it(`shouldn't open a list of options if click in button and readonly is true.`, () => {
-      component.options = [{value: 'item1', label: 'item1'}, {value: 'item2', label: 'item2'}];
+      component.options = [
+        { value: 'item1', label: 'item1' },
+        { value: 'item2', label: 'item2' }
+      ];
 
       let optionsElementOpen;
 
@@ -924,7 +915,10 @@ describe('PoSelectComponent:', () => {
     });
 
     it(`should open a list of options if click in button and readonly is false.`, () => {
-      component.options = [{value: 'item1', label: 'item1'}, {value: 'item2', label: 'item2'}];
+      component.options = [
+        { value: 'item1', label: 'item1' },
+        { value: 'item2', label: 'item2' }
+      ];
 
       let optionsElementOpen: any;
 
@@ -947,7 +941,5 @@ describe('PoSelectComponent:', () => {
       optionsElementOpen = nativeElement.querySelector('.po-select-show');
       expect(optionsElementOpen).toBeTruthy();
     });
-
   });
-
 });

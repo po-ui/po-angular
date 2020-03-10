@@ -1,5 +1,15 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, forwardRef, Input, IterableDiffers, QueryList, ViewChild,
-  ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DoCheck,
+  ElementRef,
+  forwardRef,
+  Input,
+  IterableDiffers,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { removeDuplicatedOptions } from '../../../utils/util';
@@ -41,24 +51,23 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoRadioGroupComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoRadioGroupComponent),
-      multi: true,
+      multi: true
     }
   ]
 })
 export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck {
-
   /** Label do campo. */
   @Input('p-label') label?: string;
 
   /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
 
-  @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChildren('inputRadio') radioLabels: QueryList<ElementRef>;
 
   differ: any;
@@ -129,5 +138,4 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   private isArrowKey(key: number) {
     return key >= 37 && key <= 40;
   }
-
 }

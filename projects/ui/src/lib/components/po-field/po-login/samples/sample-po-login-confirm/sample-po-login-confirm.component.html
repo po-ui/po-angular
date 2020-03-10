@@ -3,16 +3,10 @@
     To gain a 25% discount on your purchases, confirm your identity with your username and password!
   </div>
 
-  <po-button p-label="Confirm Identity" (p-click)="openModal()">
-  </po-button>
+  <po-button p-label="Confirm Identity" (p-click)="openModal()"> </po-button>
 </div>
 
-<po-modal
-  p-hide-close="true"
-  p-size="auto"
-  p-title="Confirm your identity"
-  [p-primary-action]="primaryAction">
-
+<po-modal p-hide-close="true" p-size="auto" p-title="Confirm your identity" [p-primary-action]="primaryAction">
   <po-login
     name="userLogin"
     [(ngModel)]="userLogin"
@@ -20,7 +14,8 @@
     p-label="User"
     p-maxlength="40"
     p-placeholder="domain\user"
-    p-required>
+    p-required
+  >
   </po-login>
 
   <po-password
@@ -29,6 +24,7 @@
     p-clean
     p-label="Password"
     p-placeholder="Enter your password"
-    p-required>
+    p-required
+  >
   </po-password>
 </po-modal>

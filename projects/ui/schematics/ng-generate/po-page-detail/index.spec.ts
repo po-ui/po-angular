@@ -12,7 +12,7 @@ describe('po-page-detail:', () => {
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
     newProjectRoot: 'projects',
-    version: '6.0.0',
+    version: '6.0.0'
   };
 
   const componentOptions: any = {
@@ -84,11 +84,13 @@ describe('po-page-detail:', () => {
 
     const files = tree.files;
 
-    expect(files).toContain(`/projects/${componentOptions.name}/src/app/customers/customers.component.${options.style}`);
+    expect(files).toContain(
+      `/projects/${componentOptions.name}/src/app/customers/customers.component.${options.style}`
+    );
   });
 
   it('should generate component with stylesheet `css` if options.style is empty', () => {
-    const options = {...componentOptions, name: 'customers', style: '' };
+    const options = { ...componentOptions, name: 'customers', style: '' };
 
     const tree = runner.runSchematic('po-page-detail', options, appTree);
     const files = tree.files;
@@ -112,7 +114,7 @@ describe('po-page-detail:', () => {
     runner.runSchematic('po-page-detail', options, appTree);
 
     const optionsPath = {
-    ...componentOptions,
+      ...componentOptions,
       name: 'wms',
       path: `/projects/${componentOptions.name}/src/app/customers`
     };
@@ -133,8 +135,10 @@ describe('po-page-detail:', () => {
     const options = { ...componentOptions, name: 'customers', prefix };
     const tree = runner.runSchematic('po-page-detail', options, appTree);
 
-    const componentContent = getFileContent(tree,
-      `/projects/${componentOptions.name}/src/app/customers/customers.component.ts`);
+    const componentContent = getFileContent(
+      tree,
+      `/projects/${componentOptions.name}/src/app/customers/customers.component.ts`
+    );
 
     expect(componentContent).toMatch(new RegExp(`selector: '${prefix}-customers'`));
   });
@@ -145,8 +149,10 @@ describe('po-page-detail:', () => {
     const options = { ...componentOptions, name: 'customers', sample: true, prefix };
     const tree = runner.runSchematic('po-page-detail', options, appTree);
 
-    const componentContent = getFileContent(tree,
-      `/projects/${componentOptions.name}/src/app/customers/customers.component.ts`);
+    const componentContent = getFileContent(
+      tree,
+      `/projects/${componentOptions.name}/src/app/customers/customers.component.ts`
+    );
 
     expect(componentContent).toMatch(new RegExp(`selector: 'app-customers'`));
   });
@@ -157,12 +163,13 @@ describe('po-page-detail:', () => {
     const options = { ...componentOptions, name: 'customers', prefix };
     const tree = runner.runSchematic('po-page-detail', options, appTree);
 
-    const componentContent = getFileContent(tree,
-      `/projects/${componentOptions.name}/src/app/customers/customers.component.ts`);
+    const componentContent = getFileContent(
+      tree,
+      `/projects/${componentOptions.name}/src/app/customers/customers.component.ts`
+    );
 
     expect(componentContent).toMatch(new RegExp(`selector: 'customers'`));
   });
-
 });
 
 /** Gets the content of a specified file from a schematic tree. */

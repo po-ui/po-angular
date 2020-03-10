@@ -30,9 +30,7 @@ import { PoInfoBaseComponent } from './po-info-base.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoInfoComponent extends PoInfoBaseComponent {
-
   get isExternalLink() {
     return isExternalLink(this.url);
   }
-
 }

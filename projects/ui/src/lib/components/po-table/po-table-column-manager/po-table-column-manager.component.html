@@ -1,11 +1,12 @@
 <po-popover #popover *ngIf="target" [p-target]="target" p-position="bottom-left">
-
   <div class="po-table-column-manager-header">
     <div class="po-table-column-manager-header-title">{{ literals.columnsManager }}</div>
 
     <div class="po-table-column-manager-header-close">
-      <button class="po-table-column-manager-header-close-button po-clickable po-icon po-icon-close" (click)="popover.close()">
-      </button>
+      <button
+        class="po-table-column-manager-header-close-button po-clickable po-icon po-icon-close"
+        (click)="popover.close()"
+      ></button>
     </div>
   </div>
 
@@ -15,7 +16,8 @@
       [(ngModel)]="visibleColumns"
       p-columns="1"
       [p-options]="columnsOptions"
-      (p-change)="onChangeVisibleColumns($event)">
+      (p-change)="onChangeVisibleColumns($event)"
+    >
     </po-checkbox-group>
   </div>
 
@@ -25,7 +27,8 @@
       p-small
       p-type="link"
       [p-label]="literals.restoreDefault"
-      (p-click)="restore()">
+      (p-click)="restore()"
+    >
     </po-button>
   </div>
 </po-popover>

@@ -9,7 +9,6 @@ export class PoNavbarComponent extends PoNavbarBaseComponent {
 }
 
 describe('PoNavbarBaseComponent:', () => {
-
   const component = new PoNavbarComponent();
 
   it('should be created', () => {
@@ -17,7 +16,6 @@ describe('PoNavbarBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('iconActions: should update iconActions to `[]` if pass invalid values', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string'];
 
@@ -25,7 +23,7 @@ describe('PoNavbarBaseComponent:', () => {
     });
 
     it('iconActions: should update iconActions` with valid value', () => {
-      const validValue = [[{label: 'action1', action: () => {}}], [{label: 'action2'}]];
+      const validValue = [[{ label: 'action1', action: () => {} }], [{ label: 'action2' }]];
 
       expectPropertiesValues(component, 'iconActions', validValue, validValue);
     });
@@ -37,7 +35,7 @@ describe('PoNavbarBaseComponent:', () => {
     });
 
     it('items: should update items` with valid value', () => {
-      const validValue = [[{label: 'item1'}, {label: 'item2'}]];
+      const validValue = [[{ label: 'item1' }, { label: 'item2' }]];
 
       expectPropertiesValues(component, 'items', validValue, validValue);
     });
@@ -100,7 +98,12 @@ describe('PoNavbarBaseComponent:', () => {
 
       spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(utilsFunctions.poLocaleDefault);
 
-      expectPropertiesValues(component, 'literals', invalidValues, poNavbarLiteralsDefault[utilsFunctions.poLocaleDefault]);
+      expectPropertiesValues(
+        component,
+        'literals',
+        invalidValues,
+        poNavbarLiteralsDefault[utilsFunctions.poLocaleDefault]
+      );
     });
 
     it('shadow: should update property with true if values are valid', () => {
@@ -118,7 +121,7 @@ describe('PoNavbarBaseComponent:', () => {
     it('logo: should call `validateMenuLogo` if has `menu`', () => {
       spyOn(component, 'validateMenuLogo');
 
-      component.menu = <any> { logo: 'logo' };
+      component.menu = <any>{ logo: 'logo' };
       component.logo = 'logo';
 
       expect(component.validateMenuLogo).toHaveBeenCalled();
@@ -139,5 +142,4 @@ describe('PoNavbarBaseComponent:', () => {
       expectPropertiesValues(component, 'logo', validValues, 'any string value');
     });
   });
-
 });

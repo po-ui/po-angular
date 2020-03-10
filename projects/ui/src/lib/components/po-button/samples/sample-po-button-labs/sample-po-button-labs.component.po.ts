@@ -9,17 +9,26 @@ export class SamplePoButtonLabsComponentPO {
 
   private getPoButtonProperties(prop) {
     return element(
-      by.css(`${this.sampleName} ${this.poCheckboxGroupProperties}[value="${prop}"]+${this.poCheckboxGroupPropertiesLabel}`));
+      by.css(
+        `${this.sampleName} ${this.poCheckboxGroupProperties}[value="${prop}"]+${this.poCheckboxGroupPropertiesLabel}`
+      )
+    );
   }
 
   private getPoButtonIcon(icon) {
     return element(
-      by.css(`${this.sampleName} po-radio-group[name="icon"] .po-radio-group-input[value="${icon}"]+${this.poRadioGroupLabel}`));
+      by.css(
+        `${this.sampleName} po-radio-group[name="icon"] .po-radio-group-input[value="${icon}"]+${this.poRadioGroupLabel}`
+      )
+    );
   }
 
   private getPoButtonType(type) {
     return element(
-      by.css(`${this.sampleName} po-radio-group[name="type"] .po-radio-group-input[value="${type}"]+${this.poRadioGroupLabel}`));
+      by.css(
+        `${this.sampleName} po-radio-group[name="type"] .po-radio-group-input[value="${type}"]+${this.poRadioGroupLabel}`
+      )
+    );
   }
 
   navigateTo() {
@@ -88,5 +97,4 @@ export class SamplePoButtonLabsComponentPO {
   get poInputGroup() {
     return element(by.css(`${this.sampleName} po-input`));
   }
-
 }

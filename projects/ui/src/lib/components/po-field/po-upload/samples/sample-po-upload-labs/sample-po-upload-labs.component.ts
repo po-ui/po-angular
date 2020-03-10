@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoUploadFileRestrictions, PoUploadLiterals } fro
   templateUrl: './sample-po-upload-labs.component.html'
 })
 export class SamplePoUploadLabsComponent implements OnInit {
-
   allowedExtensions: string;
   customLiterals: PoUploadLiterals;
   dragDropHeight: number;
@@ -90,5 +89,4 @@ export class SamplePoUploadLabsComponent implements OnInit {
   private getValueInBytes(value: number) {
     return 1048576 * value;
   }
-
 }

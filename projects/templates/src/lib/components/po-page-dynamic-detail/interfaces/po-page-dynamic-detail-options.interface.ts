@@ -11,7 +11,6 @@ import { PoPageDynamicDetailField } from './po-page-dynamic-detail-field.interfa
  * Interface para as propriedades de uma página dinâmica.
  */
 export interface PoPageDynamicDetailOptions {
-
   /**
    * Lista dos campos usados no formulário de detalhe.
    *

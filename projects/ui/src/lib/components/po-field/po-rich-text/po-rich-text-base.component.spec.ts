@@ -5,7 +5,7 @@ import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 
-class PoRichTextComponent extends PoRichTextBaseComponent { }
+class PoRichTextComponent extends PoRichTextBaseComponent {}
 
 describe('PoRichTextBaseComponent:', () => {
   let component: PoRichTextComponent;
@@ -59,23 +59,22 @@ describe('PoRichTextBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('registerOnChange: should register function onChangeModel function', () => {
-      const registerOnChangeModelFn = () => { };
+      const registerOnChangeModelFn = () => {};
 
       component.registerOnChange(registerOnChangeModelFn);
       expect(component.onChangeModel).toBe(registerOnChangeModelFn);
     });
 
     it('registerOnTouched: should register function onTouched function', () => {
-      const registeronTouchedFn = () => { };
+      const registeronTouchedFn = () => {};
 
       component.registerOnTouched(registeronTouchedFn);
       expect(component['onTouched']).toBe(registeronTouchedFn);
     });
 
     it('registerOnValidatorChange: should register function validatorChange function', () => {
-      const registervalidatorChangeFn = () => { };
+      const registervalidatorChangeFn = () => {};
 
       component.registerOnValidatorChange(registervalidatorChangeFn);
       expect(component['validatorChange']).toBe(registervalidatorChangeFn);
@@ -84,7 +83,7 @@ describe('PoRichTextBaseComponent:', () => {
     it('validate: should return required obj when `requiredFailed` is true', () => {
       const validObj = {
         required: {
-          valid: false,
+          valid: false
         }
       };
 

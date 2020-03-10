@@ -1,5 +1,5 @@
 export const poPageChangePasswordLiterals = {
-  en: <any> {
+  en: <any>{
     backButton: 'Back',
     confirmPassword: 'Confirm password',
     createNewPassword: 'Create new password',
@@ -16,9 +16,9 @@ export const poPageChangePasswordLiterals = {
     safetyTipsPhrase: 'Avoid a password that:',
     safetyTipsSecond: 'has personal information like your name, nickname or family names;',
     safetyTipsThird: 'that uses obvious sequences like "123" or obvious words like "password";',
-    saveButton: 'Save',
+    saveButton: 'Save'
   },
-  es: <any> {
+  es: <any>{
     backButton: 'Volver',
     confirmPassword: 'Confirmar seña',
     createNewPassword: 'Crear nueva contraseña',
@@ -35,9 +35,9 @@ export const poPageChangePasswordLiterals = {
     safetyTipsPhrase: 'Evite una contraseña que:',
     safetyTipsSecond: 'utiliza información personal como su nombre, apellido o nombre de familia;',
     safetyTipsThird: 'utilice secuencias muy obvias como "1234" o "abcd" o palabras obvias como "contraseña";',
-    saveButton: 'Guardar',
+    saveButton: 'Guardar'
   },
-  pt: <any> {
+  pt: <any>{
     backButton: 'Voltar',
     confirmPassword: 'Confirmar senha',
     createNewPassword: 'Criar nova senha',
@@ -54,9 +54,9 @@ export const poPageChangePasswordLiterals = {
     safetyTipsPhrase: 'Evite uma senha que:',
     safetyTipsSecond: 'usa informações pessoais como seu nome, apelido ou nome de familiares;',
     safetyTipsThird: 'use sequências muito óbvias como "1234" ou "abcd" ou palavras óbvias como “senha”;',
-    saveButton: 'Salvar',
+    saveButton: 'Salvar'
   },
-  ru: <any> {
+  ru: <any>{
     backButton: 'возвращение',
     confirmPassword: 'Подтвердите пароль',
     createNewPassword: 'Создать новый пароль',
@@ -72,7 +72,8 @@ export const poPageChangePasswordLiterals = {
     safetyTipsFirst: 'использоваться на других счетах;',
     safetyTipsPhrase: 'Избегайте пароля, который:',
     safetyTipsSecond: 'использует личную информацию, такую ​​как ваше имя, фамилию или фамилию;',
-    safetyTipsThird: 'используйте очень очевидные строки, такие как "1234" или "abcd", или такие очевидные слова, как "пароль";',
-    saveButton: 'экономить',
+    safetyTipsThird:
+      'используйте очень очевидные строки, такие как "1234" или "abcd", или такие очевидные слова, как "пароль";',
+    saveButton: 'экономить'
   }
 };

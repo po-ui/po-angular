@@ -10,7 +10,6 @@ import { PoCircularChartSeries } from '../po-chart-circular/po-chart-circular-se
  * @docsExtends PoCircularChartSeries
  */
 export interface PoPieChartSeries extends PoCircularChartSeries {
-
   /**
    * @optional
    *
@@ -21,5 +20,4 @@ export interface PoPieChartSeries extends PoCircularChartSeries {
    * > Caso não seja informado um valor para o *tooltip*, será exibido: `categoria: valor`.
    */
   tooltip?: string;
-
 }

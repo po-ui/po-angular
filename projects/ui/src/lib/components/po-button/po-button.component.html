@@ -5,11 +5,11 @@
   [class.po-button-danger]="type === 'danger'"
   [class.po-button-link]="type === 'link'"
   [class.po-button-primary]="type === 'primary'"
-  [class.po-button-sm] = "small"
+  [class.po-button-sm]="small"
   [class.po-clickable]="type === 'link'"
   [disabled]="disabled || loading"
-  (click)="onClick()">
-
+  (click)="onClick()"
+>
   <div *ngIf="loading" class="po-button-loading-icon">
     <po-loading-icon p-neutral-color></po-loading-icon>
   </div>

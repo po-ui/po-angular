@@ -1,6 +1,6 @@
 import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive } from '@angular/core';
 
-import { Observable , Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { browserLanguage, isTypeof, poLocaleDefault } from '../../../../utils/util';
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
@@ -15,7 +15,7 @@ import { PoLookupLiterals } from '../interfaces/po-lookup-literals.interface';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
 
 export const poLookupLiteralsDefault = {
-  en: <PoLookupLiterals> {
+  en: <PoLookupLiterals>{
     modalPrimaryActionLabel: 'Select',
     modalSecondaryActionLabel: 'Cancel',
     modalPlaceholder: 'Search',
@@ -25,7 +25,7 @@ export const poLookupLiteralsDefault = {
     modalTableLoadingData: poTableLiteralsDefault.en.loadingData,
     modalTableLoadMoreData: poTableLiteralsDefault.en.loadMoreData
   },
-  es: <PoLookupLiterals> {
+  es: <PoLookupLiterals>{
     modalPrimaryActionLabel: 'Seleccionar',
     modalSecondaryActionLabel: 'Cancelar',
     modalPlaceholder: 'Buscar',
@@ -35,7 +35,7 @@ export const poLookupLiteralsDefault = {
     modalTableLoadingData: poTableLiteralsDefault.es.loadingData,
     modalTableLoadMoreData: poTableLiteralsDefault.es.loadMoreData
   },
-  pt: <PoLookupLiterals> {
+  pt: <PoLookupLiterals>{
     modalPrimaryActionLabel: 'Selecionar',
     modalSecondaryActionLabel: 'Cancelar',
     modalPlaceholder: 'Pesquisar',
@@ -64,7 +64,6 @@ export const poLookupLiteralsDefault = {
  */
 @Directive()
 export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
-
   private _literals: any;
   private _title: any;
 
@@ -185,7 +184,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   showMoreEvent() {
-    this.page ++;
+    this.page++;
     this.isLoading = true;
     this.showMoreSubscription = this.getFilteredItems(this.searchValue).subscribe(data => {
       data.items.forEach(item => {
@@ -256,8 +255,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       'noColumns': this.literals.modalTableNoColumns,
       'noData': this.literals.modalTableNoData,
       'loadingData': this.literals.modalTableLoadingData,
-      'loadMoreData': this.literals.modalTableLoadMoreData,
+      'loadMoreData': this.literals.modalTableLoadMoreData
     };
   }
-
 }

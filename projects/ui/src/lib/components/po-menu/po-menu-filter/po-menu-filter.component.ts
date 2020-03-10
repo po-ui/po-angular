@@ -12,7 +12,6 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
   templateUrl: './po-menu-filter.component.html'
 })
 export class PoMenuFilterComponent {
-
   // Variável necessária para o po-clean identificar que deve ser criado.
   readonly clean = true;
 
@@ -26,5 +25,4 @@ export class PoMenuFilterComponent {
   filterItems(search: string) {
     this.filter.emit(search);
   }
-
 }

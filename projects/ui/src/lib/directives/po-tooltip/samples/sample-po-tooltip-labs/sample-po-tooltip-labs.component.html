@@ -1,24 +1,14 @@
 <div class="po-row">
   <div class="po-md-4 po-lg-2 po-offset-md-4 po-offset-lg-5 po-offset-xl-5">
-    <po-button
-      [p-tooltip]="tooltip"
-      [p-tooltip-position]="tooltipPosition"
-      p-label="Po-Tooltip">
-    </po-button>
+    <po-button [p-tooltip]="tooltip" [p-tooltip-position]="tooltipPosition" p-label="Po-Tooltip"> </po-button>
   </div>
 </div>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-lg-12"
-      name="tooltip"
-      [(ngModel)]="tooltip"
-      p-clean
-      p-label="Tooltip"
-      p-maxlength="140">
+    <po-input class="po-lg-12" name="tooltip" [(ngModel)]="tooltip" p-clean p-label="Tooltip" p-maxlength="140">
     </po-input>
   </div>
 
@@ -28,15 +18,12 @@
       name="tooltipPosition"
       [(ngModel)]="tooltipPosition"
       p-label="Position"
-      [p-options]="tooltipPositionOptions">
+      [p-options]="tooltipPositionOptions"
+    >
     </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

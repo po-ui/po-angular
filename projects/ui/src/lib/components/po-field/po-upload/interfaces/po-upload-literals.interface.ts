@@ -6,7 +6,6 @@
  * Interface para definição das literais usadas no `po-upload`.
  */
 export interface PoUploadLiterals {
-
   /**
    * @deprecated 3.X.X
    * @description
@@ -87,5 +86,4 @@ export interface PoUploadLiterals {
 
   /** Texto a ser exibido quando o envio do arquivo for realizado com sucesso. */
   sentWithSuccess?: string;
-
 }

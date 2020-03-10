@@ -6,5 +6,4 @@ describe('PoSlideContentTemplateDirective:', () => {
   it('should be created', () => {
     expect(directive).toBeTruthy();
   });
-
 });

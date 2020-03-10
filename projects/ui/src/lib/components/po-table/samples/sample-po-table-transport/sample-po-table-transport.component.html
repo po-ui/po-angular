@@ -1,11 +1,5 @@
-<po-table
-  [p-columns]="columns"
-  [p-items]="items"
-  p-sort="true"
-  [p-striped]="true">
-
+<po-table [p-columns]="columns" [p-items]="items" p-sort="true" [p-striped]="true">
   <ng-template p-table-row-template let-rowItem let-i="rowIndex" [p-table-row-template-show]="isUndelivered">
-
     <po-widget p-title="Transport detail {{ rowItem.code }}">
       <div class="po-row">
         <po-select
@@ -13,7 +7,8 @@
           name="status"
           [(ngModel)]="rowItem.status"
           p-label="Transport status"
-          [p-options]="statusOptions">
+          [p-options]="statusOptions"
+        >
         </po-select>
       </div>
 
@@ -22,24 +17,15 @@
           class="po-md-4"
           p-label="Batch of product"
           p-orientation="horizontal"
-          [p-value]="rowItem.batch_product">
+          [p-value]="rowItem.batch_product"
+        >
         </po-info>
 
-        <po-info class="po-md-4"
-          p-label="Driver"
-          p-orientation="horizontal"
-          [p-value]="rowItem.driver">
-        </po-info>
+        <po-info class="po-md-4" p-label="Driver" p-orientation="horizontal" [p-value]="rowItem.driver"> </po-info>
 
-        <po-info
-          class="po-md-4"
-          p-label="License plate"
-          p-orientation="horizontal"
-          [p-value]="rowItem.license_plate">
+        <po-info class="po-md-4" p-label="License plate" p-orientation="horizontal" [p-value]="rowItem.license_plate">
         </po-info>
       </div>
     </po-widget>
-
   </ng-template>
-
 </po-table>

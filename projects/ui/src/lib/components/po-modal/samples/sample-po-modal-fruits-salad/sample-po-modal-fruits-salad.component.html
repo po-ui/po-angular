@@ -1,8 +1,4 @@
-<po-modal
-  p-title="Options"
-  [p-primary-action]="confirm"
-  [p-secondary-action]="close">
-
+<po-modal p-title="Options" [p-primary-action]="confirm" [p-secondary-action]="close">
   <form #optionsForm="ngForm">
     <div class="po-row">
       <po-checkbox-group
@@ -11,7 +7,8 @@
         [(ngModel)]="fruits"
         p-label="Fruits:"
         p-required
-        [p-options]="fruitsOptions">
+        [p-options]="fruitsOptions"
+      >
       </po-checkbox-group>
     </div>
 
@@ -22,24 +19,16 @@
         [(ngModel)]="accompaniment"
         p-label="Accompaniment:"
         p-required
-        [p-options]="accompanimentOptions">
+        [p-options]="accompanimentOptions"
+      >
       </po-combo>
     </div>
 
     <div class="po-row">
-      <po-textarea
-        class="po-md-12"
-        name="orderDetail"
-        [(ngModel)]="orderDetail"
-        p-label="Details:"
-        p-rows="8">
+      <po-textarea class="po-md-12" name="orderDetail" [(ngModel)]="orderDetail" p-label="Details:" p-rows="8">
       </po-textarea>
     </div>
   </form>
-
 </po-modal>
 
-<po-button
-  p-label="Buy fruits salad"
-  (p-click)="openQuestionnaire()">
-</po-button>
+<po-button p-label="Buy fruits salad" (p-click)="openQuestionnaire()"> </po-button>

@@ -9,7 +9,6 @@
  */
 
 export abstract class PoDataTransform {
-
   protected data: any;
 
   /**
@@ -59,5 +58,4 @@ export abstract class PoDataTransform {
   transform(data: any): void {
     this.data = data;
   }
-
 }

@@ -11,7 +11,6 @@ import { PoPageDynamicTableActions } from './po-page-dynamic-table-actions.inter
  * Interface para as propriedades de uma página dinâmica.
  */
 export interface PoPageDynamicTableOptions {
-
   /**
    * Lista dos campos usados na tabela e busca avançada.
    *

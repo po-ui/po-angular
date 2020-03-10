@@ -21,14 +21,9 @@ describe('PoMenuPanelItemComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        PoTooltipModule
-      ],
-      declarations: [
-        PoMenuPanelItemComponent
-      ],
-      providers: [ PoMenuPanelItemsService ]
+      imports: [RouterTestingModule.withRoutes([]), PoTooltipModule],
+      declarations: [PoMenuPanelItemComponent],
+      providers: [PoMenuPanelItemsService]
     });
   });
 
@@ -116,21 +111,20 @@ describe('PoMenuPanelItemComponent', () => {
 
       spyOn(component, fnSpy);
 
-      component['menuItemsService'] = <any> fakeMenuService(menuItemInternal);
+      component['menuItemsService'] = <any>fakeMenuService(menuItemInternal);
       component['subscribeMenuClickedFromParent']();
 
       expect(component[fnSpy]).toHaveBeenCalled();
     });
 
     it('activateMenu: should assign true to isSelected of menuItemInternal object', () => {
-      component['activateMenu'](<any> { id: '11' });
+      component['activateMenu'](<any>{ id: '11' });
 
       expect(component.menuItemInternal.isSelected).toBeTruthy();
     });
   });
 
   describe('Templates: ', () => {
-
     it('shouldn`t call `preventDefault` and `menuItemsService` when dispatch event ctrl + click', () => {
       const method = 'sendToParentMenuClicked';
 
@@ -143,9 +137,7 @@ describe('PoMenuPanelItemComponent', () => {
       expect(eventClick.preventDefault).not.toHaveBeenCalled();
       expect(component['menuItemsService'][method]).not.toHaveBeenCalled();
     });
-
   });
-
 });
 
 function fakeMenuService(item) {

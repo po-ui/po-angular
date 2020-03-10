@@ -3,10 +3,10 @@ import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
 
 class PoCodeEditorTestComponent extends PoCodeEditorBaseComponent {
-  writeValue(value: any) { }
-  setLanguage(value: any) { }
-  setReadOnly(value: any) { }
-  setTheme(value: any) { }
+  writeValue(value: any) {}
+  setLanguage(value: any) {}
+  setReadOnly(value: any) {}
+  setTheme(value: any) {}
 }
 
 describe('PoCodeEditorBaseComponent', () => {

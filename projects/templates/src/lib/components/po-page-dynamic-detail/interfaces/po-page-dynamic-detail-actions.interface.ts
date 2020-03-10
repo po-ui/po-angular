@@ -6,7 +6,6 @@
  * Interface para as ações do componente po-page-dynamic-detail.
  */
 export interface PoPageDynamicDetailActions {
-
   /**
    * @description
    *
@@ -49,5 +48,4 @@ export interface PoPageDynamicDetailActions {
    * ```
    */
   remove?: string;
-
 }

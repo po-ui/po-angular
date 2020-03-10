@@ -17,7 +17,6 @@ describe('PoMenuPanelBaseComponent: ', () => {
   });
 
   describe('Properties: ', () => {
-
     it('menus: should set `menus` with valid values', () => {
       const validValue = [{ label: 'Item 1', link: '/item1', icon: 'clock' }];
       expectPropertiesValues(component, 'menus', [validValue], [validValue]);
@@ -26,19 +25,17 @@ describe('PoMenuPanelBaseComponent: ', () => {
     it('menus: should set `menus` with a array empty when invalid values', () => {
       const invalidValues = [undefined, 'menu', 123, true, null, {}, false, NaN];
 
-      spyOn(component, <any> 'setMenuExtraProperties');
-      spyOn(component, <any> 'validateMenus');
+      spyOn(component, <any>'setMenuExtraProperties');
+      spyOn(component, <any>'validateMenus');
 
       expectPropertiesValues(component, 'menus', invalidValues, []);
 
       expect(component['setMenuExtraProperties']).toHaveBeenCalled();
       expect(component['validateMenus']).toHaveBeenCalled();
     });
-
   });
 
   describe('Methods: ', () => {
-
     it('validateMenus: should throw error message when label and icon are falsy', () => {
       const validationItemErrorLabel = () => {
         component['validateMenus']([{ label: '', link: '/test', icon: 'home' }]);
@@ -69,7 +66,6 @@ describe('PoMenuPanelBaseComponent: ', () => {
 
       menuItem = { label: 'Utilidades' };
       expect(component['setMenuType'](menuItem)).toBe('noLink');
-
     });
 
     it('setMenuItemProperties: should not set new id of menu item if it is not null', () => {
@@ -90,7 +86,5 @@ describe('PoMenuPanelBaseComponent: ', () => {
       expect(menuItem.id).toBeTruthy();
       expect(menuItem.type).toBe('internalLink');
     });
-
   });
-
 });

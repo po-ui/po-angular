@@ -32,7 +32,6 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
   templateUrl: './po-page-default.component.html'
 })
 export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implements AfterContentInit, OnChanges {
-
   limitPrimaryActions: number = 3;
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
@@ -40,11 +39,7 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
   private maxWidthMobile: number = 480;
   private parentRef: ViewContainerRef;
 
-  constructor(
-    viewRef: ViewContainerRef,
-    private renderer: Renderer2,
-    private router: Router) {
-
+  constructor(viewRef: ViewContainerRef, private renderer: Renderer2, private router: Router) {
     super();
     this.parentRef = viewRef['_hostView'][8];
   }
@@ -104,5 +99,4 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
       this.dropdownActions = this.actions.slice(this.limitPrimaryActions - 1);
     }
   }
-
 }

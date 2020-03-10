@@ -7,7 +7,6 @@
  */
 
 export enum PoNetworkType {
-
   /** Define o tipo de rede como desconhecido (`unknown`). */
   unknown,
 
@@ -34,5 +33,4 @@ export enum PoNetworkType {
 
   /** Define o tipo de rede como `none`. */
   none
-
 }

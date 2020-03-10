@@ -29,5 +29,4 @@ describe('PO Page Util', () => {
 
     expect(isAction).toBeTruthy();
   });
-
 });

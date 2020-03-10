@@ -40,7 +40,14 @@ describe('PoDynamicViewBaseComponent:', () => {
     currencyPipe = TestBed.inject(CurrencyPipe);
     dynamicViewService = TestBed.inject(PoDynamicViewService);
 
-    component = new PoDynamicViewBaseComponent(titleCase, decimalPipe, currencyPipe, datePipe, timePipe, dynamicViewService);
+    component = new PoDynamicViewBaseComponent(
+      titleCase,
+      decimalPipe,
+      currencyPipe,
+      datePipe,
+      timePipe,
+      dynamicViewService
+    );
   });
 
   it('should be created', () => {
@@ -48,20 +55,19 @@ describe('PoDynamicViewBaseComponent:', () => {
   });
 
   describe('Properties: ', () => {
-
-    it('fields: should set `fields` to `[]` if not Array value' , () => {
+    it('fields: should set `fields` to `[]` if not Array value', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
 
       expectPropertiesValues(component, 'fields', invalidValues, []);
     });
 
     it('fields: should update property `p-fields` with valid values', () => {
-      const validValues = [ [{ property: 'Teste 1' }], [{ property: 'Teste 2' }] ];
+      const validValues = [[{ property: 'Teste 1' }], [{ property: 'Teste 2' }]];
 
       expectPropertiesValues(component, 'fields', validValues, validValues);
     });
 
-    it('value: should set `value` to `{}` if not object value' , () => {
+    it('value: should set `value` to `{}` if not object value', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string'];
 
       expectPropertiesValues(component, 'value', invalidValues, {});
@@ -84,15 +90,13 @@ describe('PoDynamicViewBaseComponent:', () => {
 
       expectPropertiesValues(component, 'showAllValue', invalidValues, false);
     });
-
   });
 
   describe('Methods: ', () => {
-
     it('getConfiguredFields: should call `isVisibleField` and return an configured array', () => {
       component.fields = [{ property: 'name' }, { property: 'age' }];
 
-      spyOn(PoDynamicUtil, <any> 'isVisibleField').and.returnValue(true);
+      spyOn(PoDynamicUtil, <any>'isVisibleField').and.returnValue(true);
 
       const configuredFields = component['getConfiguredFields']();
 
@@ -103,7 +107,7 @@ describe('PoDynamicViewBaseComponent:', () => {
     it('getConfiguredFields: shouldn`t call `createField` if method `isVisibleField` return false and return empty array', () => {
       component.fields = [{ property: 'name', visible: false }];
 
-      spyOn(component, <any> 'createField');
+      spyOn(component, <any>'createField');
 
       const configuredFields = component['getConfiguredFields']();
 
@@ -116,8 +120,8 @@ describe('PoDynamicViewBaseComponent:', () => {
       const configuredFields = [{ property: 'name', value: 'po' }];
       const valueFields = [{ property: 'email' }];
 
-      spyOn(component, <any> 'getConfiguredFields').and.returnValue(configuredFields);
-      spyOn(component, <any> 'getValueFields').and.returnValue(valueFields);
+      spyOn(component, <any>'getConfiguredFields').and.returnValue(configuredFields);
+      spyOn(component, <any>'getValueFields').and.returnValue(valueFields);
 
       const mergedFields = component['getMergedFields']();
 
@@ -130,9 +134,9 @@ describe('PoDynamicViewBaseComponent:', () => {
       const configuredFields = [{ property: 'name', value: 'po' }];
       const valueFields = [{ property: 'name' }];
 
-      spyOn(component, <any> 'getConfiguredFields').and.returnValue(configuredFields);
-      spyOn(component, <any> 'getValueFields').and.returnValue(valueFields);
-      spyOn(component, <any> 'createField');
+      spyOn(component, <any>'getConfiguredFields').and.returnValue(configuredFields);
+      spyOn(component, <any>'getValueFields').and.returnValue(valueFields);
+      spyOn(component, <any>'createField');
 
       const mergedFields = component['getMergedFields']();
 
@@ -147,7 +151,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       const field = { property: 'name', label: 'Nome' };
 
       spyOn(component['titleCasePipe'], 'transform').and.returnValue('Name');
-      spyOn(component, <any> 'transformValue');
+      spyOn(component, <any>'transformValue');
 
       const newField = component['createField'](field);
 
@@ -160,7 +164,7 @@ describe('PoDynamicViewBaseComponent:', () => {
     it('getValueFields: should return an array converting the value object', () => {
       component.value = { name: 'Po' };
 
-      spyOn(component, <any> 'createField');
+      spyOn(component, <any>'createField');
 
       const valueFields = component['getValueFields']();
 
@@ -172,7 +176,7 @@ describe('PoDynamicViewBaseComponent:', () => {
     it('getValueFields: shouldn`t call `createField` and return an empty array if value is an empty object', () => {
       component.value = {};
 
-      spyOn(component, <any> 'createField');
+      spyOn(component, <any>'createField');
 
       const valueFields = component['getValueFields']();
 
@@ -182,7 +186,6 @@ describe('PoDynamicViewBaseComponent:', () => {
     });
 
     describe('transformValue: ', () => {
-
       it('transformValue: should apply `currencyPipe.transform` case `type` is `currency`', () => {
         const type = 'currency';
         const value = 1244.5;
@@ -309,9 +312,6 @@ describe('PoDynamicViewBaseComponent:', () => {
 
         expect(transformedValue).toBe(value);
       });
-
     });
-
   });
-
 });

@@ -17,24 +17,9 @@ import { PoDynamicViewComponent } from './po-dynamic-view/po-dynamic-view.compon
 import { PoDynamicViewService } from './po-dynamic-view/po-dynamic-view.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    PoDividerModule,
-    PoInfoModule,
-    PoFieldModule,
-    PoTagModule,
-    PoTimeModule
-  ],
-  declarations: [
-    PoDynamicFormComponent,
-    PoDynamicFormFieldsComponent,
-    PoDynamicViewComponent
-  ],
-  exports: [
-    PoDynamicFormComponent,
-    PoDynamicViewComponent
-  ],
+  imports: [CommonModule, FormsModule, PoDividerModule, PoInfoModule, PoFieldModule, PoTagModule, PoTimeModule],
+  declarations: [PoDynamicFormComponent, PoDynamicFormFieldsComponent, PoDynamicViewComponent],
+  exports: [PoDynamicFormComponent, PoDynamicViewComponent],
   providers: [
     CurrencyPipe,
     DatePipe,
@@ -46,4 +31,4 @@ import { PoDynamicViewService } from './po-dynamic-view/po-dynamic-view.service'
     PoDynamicViewService
   ]
 })
-export class PoDynamicModule { }
+export class PoDynamicModule {}

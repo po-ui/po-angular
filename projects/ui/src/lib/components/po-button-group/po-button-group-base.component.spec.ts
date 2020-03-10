@@ -4,18 +4,19 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 describe('PoButtonGroupBaseComponent', () => {
-
   let component;
   let fakeButtons: Array<PoButtonGroupItem>;
 
   beforeEach(() => {
     component = new PoButtonGroupBaseComponent();
-    fakeButtons = [{
-      label: 'acao',
-      disabled: false,
-      action: () => {},
-      selected: true
-    }];
+    fakeButtons = [
+      {
+        label: 'acao',
+        disabled: false,
+        action: () => {},
+        selected: true
+      }
+    ];
   });
 
   it('should be created', () => {
@@ -65,36 +66,36 @@ describe('PoButtonGroupBaseComponent', () => {
 
       expectPropertiesValues(component, 'toggle', invalidValues, 'none');
     });
-
   });
 
   describe('Methods: ', () => {
-
-    let  buttons: Array<PoButtonGroupItem>;
+    let buttons: Array<PoButtonGroupItem>;
 
     beforeEach(() => {
-       buttons = [{
-        action: () => {},
-        label: 'button0',
-        selected: false
-      },
-      {
-        action: () => {},
-        label: 'button1',
-        selected: true
-      },
-      {
-        action: () => {},
-        label: 'button2',
-        selected: false
-      },
-      {
-        action: () => {},
-        label: 'button3',
-        selected: true
-      }];
+      buttons = [
+        {
+          action: () => {},
+          label: 'button0',
+          selected: false
+        },
+        {
+          action: () => {},
+          label: 'button1',
+          selected: true
+        },
+        {
+          action: () => {},
+          label: 'button2',
+          selected: false
+        },
+        {
+          action: () => {},
+          label: 'button3',
+          selected: true
+        }
+      ];
 
-       component.buttons = buttons;
+      component.buttons = buttons;
     });
 
     it('onButtonClick: should desselect all buttons and select clicked button when toogle is single.', () => {
@@ -162,7 +163,5 @@ describe('PoButtonGroupBaseComponent', () => {
       expect(component.buttons[2].selected).toBeFalsy();
       expect(component.buttons[3].selected).toBeFalsy();
     });
-
   });
-
 });

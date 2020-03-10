@@ -7,17 +7,13 @@ import { PoTableModule } from '../po-table.module';
 import { PoTooltipModule } from '../../../directives/po-tooltip';
 
 describe('PoTableIconComponent:', () => {
-
   let component: PoTableIconComponent;
   let fixture: ComponentFixture<PoTableIconComponent>;
   let nativeElement;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        PoTableModule,
-        PoTooltipModule
-      ]
+      imports: [PoTableModule, PoTooltipModule]
     });
   });
 
@@ -33,7 +29,6 @@ describe('PoTableIconComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('allowTooltip: should return true if `disabled` is false and `iconTooltip` is true.', () => {
       component.disabled = false;
       component.iconTooltip = 'teste';
@@ -54,11 +49,9 @@ describe('PoTableIconComponent:', () => {
 
       expect(component['allowTooltip']).toBeFalsy();
     });
-
   });
 
   describe('Methods:', () => {
-
     it('onClick: should call `click` and `emit` if `clickable`.', () => {
       component.clickable = true;
 
@@ -81,7 +74,7 @@ describe('PoTableIconComponent:', () => {
 
     it('tooltipMouseEnter: should update value of `tooltip`.', () => {
       component.disabled = false;
-      const expectedValue = component.iconTooltip = 'teste';
+      const expectedValue = (component.iconTooltip = 'teste');
 
       component.tooltipMouseEnter();
 
@@ -90,7 +83,7 @@ describe('PoTableIconComponent:', () => {
 
     it('tooltipMouseEnter: shouldn`t update value of `tooltip`.', () => {
       component.disabled = true;
-      const expectedValue = component.iconTooltip = 'teste';
+      const expectedValue = (component.iconTooltip = 'teste');
 
       component.tooltipMouseEnter();
 
@@ -98,18 +91,15 @@ describe('PoTableIconComponent:', () => {
     });
 
     it('tooltipMouseLeave: should update value of `tooltip`.', () => {
-
       component.tooltipMouseLeave();
 
       expect(component.tooltip).toBeUndefined();
     });
-
   });
 
   describe('Templates:', () => {
-
-    function getNativeElement(elementClass: string) {
-      return nativeElement.querySelector(elementClass);
+    function getNativeElement(elementClass: string) {
+      return nativeElement.querySelector(elementClass);
     }
 
     it('Should have `po-icon`.', () => {
@@ -158,7 +148,5 @@ describe('PoTableIconComponent:', () => {
       fixture.detectChanges();
       expect(getNativeElement('.po-table-icon-disabled')).toBeFalsy();
     });
-
   });
-
 });

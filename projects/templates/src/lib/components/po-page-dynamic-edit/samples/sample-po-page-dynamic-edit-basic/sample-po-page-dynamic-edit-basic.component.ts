@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-page-dynamic-edit-basic',
   templateUrl: './sample-po-page-dynamic-edit-basic.component.html'
 })
-export class SamplePoPageDynamicEditBasicComponent { }
+export class SamplePoPageDynamicEditBasicComponent {}

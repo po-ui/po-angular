@@ -10,13 +10,11 @@ describe('PoCodeEditorComponent', () => {
   let testBedConfig;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
-      declarations: [ PoCodeEditorComponent ],
+      declarations: [PoCodeEditorComponent],
       providers: [PoCodeEditorRegister],
-      schemas: [ NO_ERRORS_SCHEMA ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -32,9 +30,8 @@ describe('PoCodeEditorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should define Code editor register',
-    inject([PoCodeEditorRegister], (injectConfig: PoCodeEditorRegister) => {
-      expect(injectConfig).toBe(testBedConfig);
+  it('should define Code editor register', inject([PoCodeEditorRegister], (injectConfig: PoCodeEditorRegister) => {
+    expect(injectConfig).toBe(testBedConfig);
   }));
 
   it('should set theme', () => {
@@ -84,7 +81,7 @@ describe('PoCodeEditorComponent', () => {
       languages: {
         register: () => {},
         setMonarchTokensProvider: () => {}
-      },
+      }
     };
 
     spyOn((<any>window).monaco.languages, <any>'register');
@@ -132,7 +129,7 @@ describe('PoCodeEditorComponent', () => {
     expect(fakeThis.initMonaco).not.toHaveBeenCalled();
   });
 
-  it('should call setValue in setValueInEditor', fakeAsync (() => {
+  it('should call setValue in setValueInEditor', fakeAsync(() => {
     const fakeThis: any = {
       showDiff: false,
       editor: {
@@ -147,7 +144,7 @@ describe('PoCodeEditorComponent', () => {
     expect(fakeThis.editor.setValue).toHaveBeenCalled();
   }));
 
-  it('should call setModel in setValueInEditor', fakeAsync (() => {
+  it('should call setModel in setValueInEditor', fakeAsync(() => {
     const fakeThis: any = {
       showDiff: true,
       editor: {
@@ -163,7 +160,7 @@ describe('PoCodeEditorComponent', () => {
     expect(fakeThis.monacoCreateModel).toHaveBeenCalled();
   }));
 
-  it('should call setValueInEditor in writeValue', fakeAsync (() => {
+  it('should call setValueInEditor in writeValue', fakeAsync(() => {
     component.value = '';
     component.modifiedValue = '';
 
@@ -174,7 +171,7 @@ describe('PoCodeEditorComponent', () => {
     expect(component.setValueInEditor).toHaveBeenCalled();
   }));
 
-  it('should set value to the editor in writeValue', fakeAsync (() => {
+  it('should set value to the editor in writeValue', fakeAsync(() => {
     component.value = 'a';
     component.modifiedValue = 'b';
 
@@ -193,6 +190,6 @@ describe('PoCodeEditorComponent', () => {
     };
     spyOn(fakeThis.editor, 'updateOptions');
     component.setReadOnly.call(fakeThis, true);
-    expect(fakeThis.editor.updateOptions).toHaveBeenCalledWith({readOnly: true});
+    expect(fakeThis.editor.updateOptions).toHaveBeenCalledWith({ readOnly: true });
   });
 });

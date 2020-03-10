@@ -12,18 +12,15 @@ import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 
 class LookupFilterService implements PoLookupFilter {
-
-    getFilteredData(param: any, quantity: number): Observable<any> {
-      return of({items: [{value: 123, label: 'teste'}]});
-    }
-    getObjectByValue(id: string): Observable<any> {
-      return of({value: 123, label: 'teste'});
-    }
-
+  getFilteredData(param: any, quantity: number): Observable<any> {
+    return of({ items: [{ value: 123, label: 'teste' }] });
   }
+  getObjectByValue(id: string): Observable<any> {
+    return of({ value: 123, label: 'teste' });
+  }
+}
 
 class PoLookupComponent extends PoLookupBaseComponent {
-
   setViewValue(value: any): void {}
 
   getModelValue(): string {
@@ -31,11 +28,9 @@ class PoLookupComponent extends PoLookupBaseComponent {
   }
 
   openLookup(): void {}
-
 }
 
 describe('PoLookupBaseComponent:', () => {
-
   let component: PoLookupComponent;
   let defaultService: PoLookupFilterService;
 
@@ -44,7 +39,7 @@ describe('PoLookupBaseComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      providers: [ LookupFilterService ]
+      providers: [LookupFilterService]
     });
   });
 
@@ -154,7 +149,7 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   it('should be called the onChangePropated event', () => {
-    spyOn(component, <any> 'onChangePropagate');
+    spyOn(component, <any>'onChangePropagate');
 
     component.callOnChange('value');
 
@@ -163,7 +158,7 @@ describe('PoLookupBaseComponent:', () => {
 
   it('should not be called the onChangePropate event', () => {
     const fakeThis = {
-      onChangePropagate: '',
+      onChangePropagate: ''
     };
 
     spyOn<any>(component, 'onChangePropagate');
@@ -180,25 +175,26 @@ describe('PoLookupBaseComponent:', () => {
     ];
     component['keysDescription'] = ['label'];
 
-    expect(component['getFormattedLabel']({value: 123, label: 'test label'})).toBe('test label');
+    expect(component['getFormattedLabel']({ value: 123, label: 'test label' })).toBe('test label');
 
     component['keysDescription'] = ['value', 'label'];
 
-    expect(component['getFormattedLabel']({value: 123, label: 'test label'})).toBe('123 - test label');
+    expect(component['getFormattedLabel']({ value: 123, label: 'test label' })).toBe('123 - test label');
     expect(component['getFormattedLabel'](undefined)).toBe('');
   });
 
   it('call writeValue with object', () => {
     component['keysDescription'] = ['value', 'label'];
     component.fieldValue = 'value';
-    component.writeValue({value: 123, label: 'test label'});
+    component.writeValue({ value: 123, label: 'test label' });
 
     expect(component['valueToModel']).toBe(123);
   });
 
   // TODO Ng V9
-  xit('writeValue: call `setViewValue` with `label-value` and object selected',
-    inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+  xit('writeValue: call `setViewValue` with `label-value` and object selected', inject(
+    [LookupFilterService],
+    (lookupFilterService: LookupFilterService) => {
       const objectSelected = { label: 'teste', value: 123 };
 
       component.service = lookupFilterService;
@@ -209,9 +205,10 @@ describe('PoLookupBaseComponent:', () => {
       component.writeValue(123);
 
       expect(component.setViewValue).toHaveBeenCalledWith('123 - teste', objectSelected);
-  }));
+    }
+  ));
 
-  it('call writeValue with invalid Id', inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+  it('call writeValue with invalid Id', inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
     component.service = lookupFilterService;
 
     spyOn(component, 'setViewValue');
@@ -226,15 +223,18 @@ describe('PoLookupBaseComponent:', () => {
     expect(component['cleanModel']).toHaveBeenCalled();
   }));
 
-  it('call writeValue with undefined value', inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
-    component.service = lookupFilterService;
-    component.writeValue(undefined);
+  it('call writeValue with undefined value', inject(
+    [LookupFilterService],
+    (lookupFilterService: LookupFilterService) => {
+      component.service = lookupFilterService;
+      component.writeValue(undefined);
 
-    expect(component.getModelValue()).toBe('');
-  }));
+      expect(component.getModelValue()).toBe('');
+    }
+  ));
 
   it('call initialize columns in the ngOnInit method', () => {
-    spyOn(component, <any> 'initializeColumn');
+    spyOn(component, <any>'initializeColumn');
 
     component.ngOnInit();
 
@@ -262,7 +262,6 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   it('should be request the search for by Id', () => {
-
     spyOn(component, <any>'selectModel');
 
     component['selectModel'](component.getModelValue());
@@ -285,10 +284,8 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('cleanViewValue: should call `setViewValue` when execute the method `cleanViewValue`.', () => {
-
-      spyOn(component, <any> 'setViewValue');
+      spyOn(component, <any>'setViewValue');
 
       component['cleanViewValue']();
 
@@ -296,9 +293,8 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('cleanModel: should call `cleanViewValue` when execute the method `cleanModel`.', () => {
-
-      spyOn(component, <any> 'cleanViewValue');
-      spyOn(component,  'callOnChange');
+      spyOn(component, <any>'cleanViewValue');
+      spyOn(component, 'callOnChange');
 
       component['cleanModel']();
 
@@ -306,8 +302,9 @@ describe('PoLookupBaseComponent:', () => {
       expect(component.callOnChange).toHaveBeenCalled();
     });
 
-    it('searchById: should call `selectValue` if `getObjectByValue` return value',
-      inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+    it('searchById: should call `selectValue` if `getObjectByValue` return value', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
         const searchValue = 'po';
         const filterParams = { code: '' };
         component.filterParams = filterParams;
@@ -320,11 +317,11 @@ describe('PoLookupBaseComponent:', () => {
 
         expect(component['selectValue']).toHaveBeenCalled();
         expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
-      }));
+      }
+    ));
 
     it('searchById: should call `cleanModel` when execute the method `searchById` with empty param.', () => {
-
-      spyOn(component, <any> 'cleanModel');
+      spyOn(component, <any>'cleanModel');
 
       component.searchById('');
 
@@ -332,32 +329,31 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('searchById: should call `cleanModel` when execute the method `searchById` with `space` param.', () => {
-
-      spyOn(component, <any> 'cleanModel');
+      spyOn(component, <any>'cleanModel');
 
       component.searchById(' ');
 
       expect(component['cleanModel']).toHaveBeenCalled();
     });
 
-    it('searchById: should call `cleanModel` and emit `onError` when return a 404 error.', inject([LookupFilterService],
+    it('searchById: should call `cleanModel` and emit `onError` when return a 404 error.', inject(
+      [LookupFilterService],
       (lookupFilterService: LookupFilterService) => {
+        component.service = lookupFilterService;
 
-      component.service = lookupFilterService;
+        spyOn(component, <any>'cleanModel');
+        spyOn(component.onError, 'emit');
+        spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ status: 404 }));
 
-      spyOn(component, <any> 'cleanModel');
-      spyOn(component.onError, 'emit');
-      spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({status: 404}));
+        component.searchById('aaa');
 
-      component.searchById('aaa');
-
-      expect(component['cleanModel']).toHaveBeenCalled();
-      expect(component.onError['emit']).toHaveBeenCalled();
-    }));
+        expect(component['cleanModel']).toHaveBeenCalled();
+        expect(component.onError['emit']).toHaveBeenCalled();
+      }
+    ));
 
     it('writeValue: should call `cleanViewValue` when execute the method `writeValue` with undefined param.', () => {
-
-      spyOn(component, <any> 'cleanViewValue');
+      spyOn(component, <any>'cleanViewValue');
 
       component.writeValue(undefined);
 
@@ -365,10 +361,9 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('getSubscription: should `unsubscribe` on destroy.', () => {
-
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(component['getSubscription'], <any> 'unsubscribe');
+      spyOn(component['getSubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -376,10 +371,9 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('getSubscription: should not `unsubscribe` if `getSubscription` is falsy.', () => {
-
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['getSubscription'] = undefined;
       component.ngOnDestroy();
@@ -397,7 +391,7 @@ describe('PoLookupBaseComponent:', () => {
     it('validate: should return required obj when `requiredFailed` is true.', () => {
       const validObj = {
         required: {
-          valid: false,
+          valid: false
         }
       };
 
@@ -417,7 +411,7 @@ describe('PoLookupBaseComponent:', () => {
     it('validateModel: should call `validatorChange` when `validateModel` is a function.', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel']([]);
 
@@ -443,7 +437,7 @@ describe('PoLookupBaseComponent:', () => {
       spyOn(component, 'selectValue').and.returnValue(null);
       spyOn(component, 'writeValue').and.returnValue(null);
 
-      component['selectModel']({value: 123, label: 'test label'});
+      component['selectModel']({ value: 123, label: 'test label' });
 
       expect(component.selectValue).toHaveBeenCalled();
     });
@@ -491,11 +485,9 @@ describe('PoLookupBaseComponent:', () => {
       expect(component.service).toEqual(service);
       expect(component['defaultService'].setUrl).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Properties:', () => {
-
     const trueValues = [true, 'true', 1, '', [], {}];
     const falseValues = [false, 'false', 0, null, undefined, NaN];
 
@@ -511,7 +503,5 @@ describe('PoLookupBaseComponent:', () => {
       expectPropertiesValues(component, 'required', trueValues, true);
       expectPropertiesValues(component, 'required', falseValues, false);
     });
-
   });
-
 });

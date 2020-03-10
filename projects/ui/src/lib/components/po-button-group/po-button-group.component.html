@@ -10,6 +10,7 @@
     [p-label]="button.label"
     [p-small]="small"
     [p-tooltip]="!button.disabled ? button.tooltip : undefined"
-    (p-click)="button.action.call(parentRef, button); onButtonClick(button, i)">
+    (p-click)="button.action.call(parentRef, button); onButtonClick(button, i)"
+  >
   </po-button>
 </div>

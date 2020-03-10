@@ -8,7 +8,6 @@ import { PoSyncFieldOptions } from './po-sync-field-options.interface';
  * Interface que irá mapear as informações dos recursos, principalmente sua origem e as informações que serão retornadas.
  */
 export interface PoSyncSchema {
-
   /** Nome da propriedade que informa a data de criação do registro. */
   readonly createdAtField?: string;
 
@@ -50,5 +49,4 @@ export interface PoSyncSchema {
 
   // Data/Hora da última vez que a sincronia aconteceu para esse *schema*.
   lastSync?: string;
-
 }

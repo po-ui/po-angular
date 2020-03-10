@@ -4,14 +4,13 @@ import { PoNotificationService } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-tabs-business-conf',
-  templateUrl: './sample-po-tabs-business-conf.component.html',
+  templateUrl: './sample-po-tabs-business-conf.component.html'
 })
 export class SamplePoTabsBusinessConfComponent implements OnInit {
-
   disableRestoreBtn: boolean = true;
   speakers: Array<any>;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.speakers = this.getSpeakers();
@@ -19,7 +18,7 @@ export class SamplePoTabsBusinessConfComponent implements OnInit {
 
   cancelSubscription() {
     this.disableRestoreBtn = true;
-    this.speakers.forEach(item => item.subscribe = false);
+    this.speakers.forEach(item => (item.subscribe = false));
   }
 
   confirmSubscription(speaker) {
@@ -88,5 +87,4 @@ export class SamplePoTabsBusinessConfComponent implements OnInit {
       }
     ];
   }
-
 }

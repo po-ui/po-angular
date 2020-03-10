@@ -1,26 +1,12 @@
-<po-disclaimer
-  p-label="Disclaimer com 'Close'"
-  p-value="withClose"
-  (p-close-action)="disclaimerClosed($event)">
+<po-disclaimer p-label="Disclaimer com 'Close'" p-value="withClose" (p-close-action)="disclaimerClosed($event)">
 </po-disclaimer>
 
-<span *ngIf="exclude !== undefined">
-  Excluído: {{ exclude | json }}
-</span>
+<span *ngIf="exclude !== undefined"> Excluído: {{ exclude | json }} </span>
 
-<br><br>
+<br /><br />
 
-<po-disclaimer
-  p-label="Disclaimer sem 'Close'"
-  p-value="withoutClose"
-  p-hide-close>
-</po-disclaimer>
+<po-disclaimer p-label="Disclaimer sem 'Close'" p-value="withoutClose" p-hide-close> </po-disclaimer>
 
-<br><br>
+<br /><br />
 
-<po-disclaimer
-  p-type="danger"
-  p-label="Disclaimer type 'danger'"
-  p-value="danger"
-  p-hide-close>
-</po-disclaimer>
+<po-disclaimer p-type="danger" p-label="Disclaimer type 'danger'" p-value="danger" p-hide-close> </po-disclaimer>

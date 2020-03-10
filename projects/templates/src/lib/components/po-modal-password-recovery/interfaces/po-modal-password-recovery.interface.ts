@@ -6,7 +6,6 @@
  * Interface com a definição do objeto gerado pelo formulário do componente `po-modal-password-recovery`.
  */
 export interface PoModalPasswordRecovery {
-
   /** Valor contendo o código enviado por SMS e digitado pelo usuário. */
   code?: string;
 

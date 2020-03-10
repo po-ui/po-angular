@@ -6,10 +6,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './sample-po-decimal-hourly-wage-reactive-form.component.html'
 })
 export class SamplePoDecimalHourlyWageReactiveFormComponent implements OnInit {
-
   formCalculateHourlyWage: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.formCalculateHourlyWage = this.formBuilder.group({
@@ -24,10 +23,9 @@ export class SamplePoDecimalHourlyWageReactiveFormComponent implements OnInit {
   calculate() {
     const { weekHours, workingDaysPerWeek, quantityDaysPerMonth, salary } = this.formCalculateHourlyWage.value;
 
-    const hours = weekHours / workingDaysPerWeek * quantityDaysPerMonth;
+    const hours = (weekHours / workingDaysPerWeek) * quantityDaysPerMonth;
     const hourlyWage = salary / hours;
 
     this.formCalculateHourlyWage.patchValue({ hourlyWage });
   }
-
 }

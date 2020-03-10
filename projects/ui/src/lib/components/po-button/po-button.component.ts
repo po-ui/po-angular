@@ -27,7 +27,6 @@ import { PoButtonBaseComponent } from './po-button-base.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoButtonComponent extends PoButtonBaseComponent {
-
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
 
   /**
@@ -56,5 +55,4 @@ export class PoButtonComponent extends PoButtonBaseComponent {
   onClick() {
     this.click.emit(null);
   }
-
 }

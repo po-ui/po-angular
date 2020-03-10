@@ -4,10 +4,9 @@ import { PoDynamicFormField, PoNotificationService, PoTab } from '@portinari/por
 
 @Component({
   selector: 'sample-po-tabs-labs',
-  templateUrl: './sample-po-tabs-labs.component.html',
+  templateUrl: './sample-po-tabs-labs.component.html'
 })
 export class SamplePoTabsLabsComponent implements OnInit {
-
   tabsFieldsForm: Array<PoDynamicFormField> = [
     { property: 'label', divider: 'TABS', required: true, gridColumns: 6 },
     { property: 'click', gridColumns: 6 },
@@ -16,14 +15,18 @@ export class SamplePoTabsLabsComponent implements OnInit {
     { property: 'hide', type: 'boolean', gridColumns: 4 }
   ];
   propertiesFieldsForm: Array<PoDynamicFormField> = [
-    { property: 'properties', divider: 'PROPERTIES', optionsMulti: true, gridColumns: 4, options: [
-      { label: 'Small', value: 'small' }
-    ]}
+    {
+      property: 'properties',
+      divider: 'PROPERTIES',
+      optionsMulti: true,
+      gridColumns: 4,
+      options: [{ label: 'Small', value: 'small' }]
+    }
   ];
   tabs: Array<PoTab> = [];
   properties: Array<string> = [];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -57,5 +60,4 @@ export class SamplePoTabsLabsComponent implements OnInit {
   private showClick(action: string): any {
     this.poNotification.success(`Action clicked: ${action}`);
   }
-
 }

@@ -8,7 +8,6 @@ import { PoModalPasswordRecoveryType } from '../../po-modal-password-recovery/en
  * Interface para especificação do tipo de recuperação de senha no `po-modal-password-recovery`.
  */
 export interface PoPageChangePasswordRecovery {
-
   /** Definição do e-mail que é exibido na mensagem para contato de suporte. */
   contactMail?: string;
 
@@ -32,5 +31,4 @@ export interface PoPageChangePasswordRecovery {
    * > Saiba mais em [PoModalPasswordRecovery](/documentation/po-modal-password-recovery).
    */
   url: string;
-
 }

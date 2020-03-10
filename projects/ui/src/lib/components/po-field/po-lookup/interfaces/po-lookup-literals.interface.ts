@@ -6,14 +6,13 @@
  * Interface para definição das literais usadas no `po-lookup`.
  */
 export interface PoLookupLiterals {
-
   /** Texto exibido no label do botão de ação primária da modal. */
   modalPrimaryActionLabel?: string;
 
   /** Texto exibido no label do botão de ação secundária da modal. */
   modalSecondaryActionLabel?: string;
 
-   /** Texto exibido no placeholder do input da modal. */
+  /** Texto exibido no placeholder do input da modal. */
   modalPlaceholder?: string;
 
   /** Texto exibido quando não existem colunas definidas para a tabela. */
@@ -30,5 +29,4 @@ export interface PoLookupLiterals {
 
   /** Texto exibido no título da modal. */
   modalTitle?: string;
-
 }

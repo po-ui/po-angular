@@ -8,16 +8,16 @@ import { PoNavbarItem } from './interfaces/po-navbar-item.interface';
 import { PoNavbarLiterals } from './interfaces/po-navbar-literals.interface';
 
 export const poNavbarLiteralsDefault = {
-  en: <PoNavbarLiterals> {
+  en: <PoNavbarLiterals>{
     navbarLinks: 'Navbar links'
   },
-  es: <PoNavbarLiterals> {
+  es: <PoNavbarLiterals>{
     navbarLinks: 'Navbar links'
   },
-  pt: <PoNavbarLiterals> {
+  pt: <PoNavbarLiterals>{
     navbarLinks: 'Navbar links'
   },
-  ru: <PoNavbarLiterals> {
+  ru: <PoNavbarLiterals>{
     navbarLinks: 'Navbar связи'
   }
 };
@@ -30,7 +30,6 @@ export const poNavbarLiteralsDefault = {
  */
 @Directive()
 export abstract class PoNavbarBaseComponent {
-
   private _iconActions: Array<PoNavbarIconAction> = [];
   private _items: Array<PoNavbarItem> = [];
   private _literals: PoNavbarLiterals;
@@ -170,5 +169,4 @@ export abstract class PoNavbarBaseComponent {
   }
 
   protected abstract validateMenuLogo(): void;
-
 }

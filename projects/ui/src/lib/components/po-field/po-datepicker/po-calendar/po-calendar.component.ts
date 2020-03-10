@@ -17,10 +17,9 @@ const poCalendarLocales = ['pt', 'en', 'es'];
 @Component({
   selector: 'po-calendar',
   templateUrl: './po-calendar.component.html',
-  providers: [PoCalendarService, PoCalendarLangService ]
+  providers: [PoCalendarService, PoCalendarLangService]
 })
 export class PoCalendarComponent {
-
   private _dateEnd: Date;
   private _dateStart: Date;
   private _locale: string;
@@ -104,7 +103,7 @@ export class PoCalendarComponent {
    * Data selecionada no calendário.
    */
   @Input('p-selected-date') set selectedDate(selectedDate: Date) {
-    this._selectedDate  = selectedDate && selectedDate instanceof Date ? selectedDate : undefined;
+    this._selectedDate = selectedDate && selectedDate instanceof Date ? selectedDate : undefined;
   }
   get selectedDate(): Date {
     return this._selectedDate;
@@ -138,10 +137,7 @@ export class PoCalendarComponent {
   @Output('p-selected-dateChange') selectedDateChange = new EventEmitter<Date>();
   @Output('p-submit') submit = new EventEmitter<Date>();
 
-  constructor(
-    private poCalendarService: PoCalendarService,
-    private poCalendarLangService: PoCalendarLangService) {
-  }
+  constructor(private poCalendarService: PoCalendarService, private poCalendarLangService: PoCalendarLangService) {}
 
   close() {
     this.overlayInvisible = true;
@@ -161,7 +157,7 @@ export class PoCalendarComponent {
   }
 
   getBackgroundColor(displayValue: number, propertyValue: number) {
-    return (displayValue === propertyValue) ? 'po-calendar-box-background-selected' : 'po-calendar-box-background';
+    return displayValue === propertyValue ? 'po-calendar-box-background-selected' : 'po-calendar-box-background';
   }
 
   getDayBackgroundColor(date: Date) {
@@ -195,7 +191,7 @@ export class PoCalendarComponent {
   }
 
   getForegroundColor(displayValue: number, propertyValue: number) {
-    return (displayValue === propertyValue) ? 'po-calendar-box-foreground-selected' : 'po-calendar-box-foreground';
+    return displayValue === propertyValue ? 'po-calendar-box-foreground-selected' : 'po-calendar-box-foreground';
   }
 
   getWordMonth() {
@@ -303,9 +299,11 @@ export class PoCalendarComponent {
 
   private equalsDate(date1: Date, date2: Date): boolean {
     try {
-      return date1.getFullYear() === date2.getFullYear() &&
+      return (
+        date1.getFullYear() === date2.getFullYear() &&
         date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate();
+        date1.getDate() === date2.getDate()
+      );
     } catch (error) {
       return false;
     }
@@ -331,5 +329,4 @@ export class PoCalendarComponent {
     this.displayYear = year;
     this.getArrayDecade(year);
   }
-
 }

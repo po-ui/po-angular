@@ -9,7 +9,6 @@ import { isExternalLink } from '../../../../utils/util';
   templateUrl: './po-navbar-item.component.html'
 })
 export class PoNavbarItemComponent {
-
   @Input('p-action') action: Function;
 
   @Input('p-clickable') clickable?: boolean;
@@ -25,7 +24,6 @@ export class PoNavbarItemComponent {
   }
 
   itemClick(label?: string, link?: string) {
-
     if (this.action) {
       this.action({ label, link });
     }

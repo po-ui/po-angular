@@ -11,10 +11,7 @@ import { Component, Input } from '@angular/core';
   selector: 'po-stepper-label',
   templateUrl: './po-stepper-label.component.html'
 })
-
 export class PoStepperLabelComponent {
-
   // Conteúdo da label.
   @Input('p-content') content: string;
-
 }

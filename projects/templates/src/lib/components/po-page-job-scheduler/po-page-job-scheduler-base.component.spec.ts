@@ -12,18 +12,13 @@ import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 
 describe('PoPageJobSchedulerBaseComponent:', () => {
-
   let serviceJobScheduler: PoPageJobSchedulerService;
   let component: PoPageJobSchedulerBaseComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        PoPageJobSchedulerService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [PoPageJobSchedulerService]
     });
 
     serviceJobScheduler = TestBed.inject(PoPageJobSchedulerService);
@@ -36,7 +31,6 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('loadData: should set `model` with `new PoPageJobSchedulerInternal()` and exit of method if `id` is invalid.', () => {
       const invalidId = 0;
       component.model = undefined;
@@ -60,7 +54,10 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
       if 'id' and 'response' is valid.`, fakeAsync(() => {
       const id = 1;
       const returnValue: PoJobSchedulerInternal = {
-        periodicity: '', firstExecution: new Date(), firstExecutionHour: '', recurrent: false
+        periodicity: '',
+        firstExecution: new Date(),
+        firstExecutionHour: '',
+        recurrent: false
       };
 
       spyOn(component['poPageJobSchedulerService'], 'getResource').and.returnValue(getObservable(returnValue));
@@ -120,7 +117,5 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
 
       expect(value.login.markAsDirty).toHaveBeenCalled();
     });
-
   });
-
 });

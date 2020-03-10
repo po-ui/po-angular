@@ -40,7 +40,6 @@ const poCalendarLocaleDefault = 'pt';
  */
 @Directive()
 export class PoCalendarBaseComponent {
-
   private _locale: string;
   private _maxDate: Date;
   private _minDate: Date;
@@ -155,10 +154,7 @@ export class PoCalendarBaseComponent {
   /** Evento disparado ao selecionar um dia do calendário. */
   @Output('p-change') change = new EventEmitter<string>();
 
-  constructor(
-    public poDate: PoDateService,
-    public poCalendarLangService: PoCalendarLangService
-  ) { }
+  constructor(public poDate: PoDateService, public poCalendarLangService: PoCalendarLangService) {}
 
   initializeLanguage() {
     this.poCalendarLangService.setLanguage(this.locale);
@@ -166,5 +162,4 @@ export class PoCalendarBaseComponent {
     this.displayMonths = this.poCalendarLangService.getMonthsArray();
     this.displayMonth = this.displayMonths[this.displayMonthNumber];
   }
-
 }

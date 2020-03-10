@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-avatar-labs.component.html'
 })
 export class SamplePoAvatarLabsComponent implements OnInit {
-
   src: string;
   size: string;
 

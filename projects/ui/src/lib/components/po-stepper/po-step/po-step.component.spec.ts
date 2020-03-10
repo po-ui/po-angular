@@ -7,7 +7,6 @@ import { PoStepperModule } from '../po-stepper.module';
 import { PoStepperStatus } from '../enums/po-stepper-status.enum';
 
 describe('PoStepComponent:', () => {
-
   let component: PoStepComponent;
   let fixture: ComponentFixture<PoStepComponent>;
 
@@ -29,7 +28,6 @@ describe('PoStepComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('status: should call `setDisplayOnActiveOrError`', () => {
       spyOn(component, <any>'setDisplayOnActiveOrError');
 
@@ -37,11 +35,9 @@ describe('PoStepComponent:', () => {
 
       expect(component['setDisplayOnActiveOrError']).toHaveBeenCalled();
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngAfterContentInit: should call `setDisplayOnActiveOrError`', () => {
       spyOn(component, <any>'setDisplayOnActiveOrError');
 
@@ -76,7 +72,5 @@ describe('PoStepComponent:', () => {
 
       expect(component['elementRef'].nativeElement.style.display).toBe('');
     });
-
   });
-
 });

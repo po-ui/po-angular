@@ -1,7 +1,6 @@
 import { PoDynamicFormField } from './po-dynamic-form-field.interface';
 
 export interface PoDynamicFormResponse {
-
   fields?: Array<PoDynamicFormField>;
 
   /**
@@ -30,5 +29,4 @@ export interface PoDynamicFormResponse {
    * > Não é necessário colocar os valores de todos os campos, apenas os que foram alterados.
    */
   value?: any;
-
 }

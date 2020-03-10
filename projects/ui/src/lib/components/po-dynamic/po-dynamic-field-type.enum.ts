@@ -6,7 +6,6 @@
  * Enum para definição do tipo de campo que será criado dinamicamente.
  */
 export enum PoDynamicFieldType {
-
   /** Valor booleano. */
   Boolean = 'boolean',
 
@@ -27,5 +26,4 @@ export enum PoDynamicFieldType {
 
   /** Texto. */
   String = 'string'
-
 }

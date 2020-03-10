@@ -5,4 +5,4 @@ import { PoPopupAction } from '../po-popup/po-popup-action.interface';
  *
  * @usedBy PoToolbarComponent
  */
-export interface PoToolbarAction extends PoPopupAction { }
+export interface PoToolbarAction extends PoPopupAction {}

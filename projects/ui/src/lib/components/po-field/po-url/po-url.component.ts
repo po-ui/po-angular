@@ -32,31 +32,32 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   selector: 'po-url',
   templateUrl: '../po-input/po-input.component.html',
   providers: [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoUrlComponent),
-    multi: true
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoUrlComponent),
-    multi: true
-  }]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoUrlComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoUrlComponent),
+      multi: true
+    }
+  ]
 })
 export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
-
   icon = 'po-icon-world';
 
   maxlength: number = 254;
 
   type = 'url';
 
-  pattern = '^((https|http):\\/\\/)?' + // protocol
-  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-  '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-  '(\\:\\d+)?(\\/[-A-Za-z\\d%_.~+]*)*' + // port and path
-  '(\\?[;&A-Za-z\\d%_.~+=-]*)?' + // query string
-  '(\\#[-A-Za-z\\d_]*)?$';
+  pattern =
+    '^((https|http):\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-A-Za-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&A-Za-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-A-Za-z\\d_]*)?$';
 
   mask = '';
 
@@ -82,8 +83,7 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
     }
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
-
 }

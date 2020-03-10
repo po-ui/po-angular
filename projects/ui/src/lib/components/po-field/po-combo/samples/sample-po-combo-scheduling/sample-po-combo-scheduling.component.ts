@@ -7,10 +7,9 @@ import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.ser
 @Component({
   selector: 'sample-po-combo-scheduling',
   templateUrl: './sample-po-combo-scheduling.component.html',
-  providers: [ SamplePoComboSchedulingService ]
+  providers: [SamplePoComboSchedulingService]
 })
 export class SamplePoComboSchedulingComponent implements OnInit {
-
   birthday: string;
   citiesOptions: Array<PoComboOptionGroup>;
   city: string;
@@ -24,12 +23,15 @@ export class SamplePoComboSchedulingComponent implements OnInit {
 
   readonly typeSchedulings: Array<PoSelectOption> = [
     { label: 'Particular', value: 'particular' },
-    { label: 'Health Insurance', value: 'healthInsurance' },
+    { label: 'Health Insurance', value: 'healthInsurance' }
   ];
 
   @ViewChild('schedulingForm', { static: true }) form: NgForm;
 
-  constructor(private poNotification: PoNotificationService, private schedulingService: SamplePoComboSchedulingService) { }
+  constructor(
+    private poNotification: PoNotificationService,
+    private schedulingService: SamplePoComboSchedulingService
+  ) {}
 
   ngOnInit() {
     this.citiesOptions = this.schedulingService.getcities();
@@ -46,10 +48,9 @@ export class SamplePoComboSchedulingComponent implements OnInit {
     const stateByLabel = {
       ['São Paulo']: 'sp',
       ['Santa Catarina']: 'sc',
-      ['Paraná']: 'pr',
+      ['Paraná']: 'pr'
     };
 
     return `https://thf.totvs.com.br/sample/api/static/assets/${stateByLabel[state]}.png`;
   }
-
 }

@@ -20,38 +20,30 @@
   [p-placeholder]="placeholder"
   [p-required]="properties.includes('required')"
   [p-sort]="properties.includes('sort')"
-  (p-change)="changeEvent('p-change')">
+  (p-change)="changeEvent('p-change')"
+>
 </po-combo>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-info
-    class="po-md-6"
-    p-label="Model"
-    [p-value]="combo">
-  </po-info>
+  <po-info class="po-md-6" p-label="Model" [p-value]="combo"> </po-info>
 
-  <po-info
-    class="po-md-6"
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
-<hr>
+<hr />
 
 <form #fOption="ngForm">
-
   <po-divider p-label="Po combo options group"></po-divider>
 
   <div class="po-row">
-
     <po-switch
       class="po-md-2"
       name="comboOptionGroupSwitch"
       [(ngModel)]="comboOptionGroupSwitch"
-      p-label="Combo options group">
+      p-label="Combo options group"
+    >
     </po-switch>
 
     <po-select
@@ -61,77 +53,46 @@
       p-label="Options group list"
       [p-disabled]="!comboOptionGroupSwitch"
       [p-options]="optionsGroupList"
-      (p-change)="optionsGroupSelection()">
+      (p-change)="optionsGroupSelection()"
+    >
     </po-select>
-    
+
     <po-input
       class="po-md-5"
       name="optionsGroup"
       [(ngModel)]="optionsGroup"
       p-label="New Options Group"
       [p-disabled]="!comboOptionGroupSwitch"
-      p-required>
+      p-required
+    >
     </po-input>
-
   </div>
 
   <po-divider p-label="Po combo options"></po-divider>
 
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="optionLabel"
-      [(ngModel)]="option.label"
-      p-label="Option Label"
-      p-required>
+    <po-input class="po-md-6" name="optionLabel" [(ngModel)]="option.label" p-label="Option Label" p-required>
     </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="optionValue"
-      [(ngModel)]="option.value"
-      p-label="Option Value"
-      p-required>
+    <po-input class="po-md-6" name="optionValue" [(ngModel)]="option.value" p-label="Option Value" p-required>
     </po-input>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-6 po-lg-3"
-      p-label="Add Option"
-      [p-disabled]="fOption.form.invalid"
-      (p-click)="addOption()">
+    <po-button class="po-md-6 po-lg-3" p-label="Add Option" [p-disabled]="fOption.form.invalid" (p-click)="addOption()">
     </po-button>
   </div>
 </form>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-4"
-      name="label"
-      [(ngModel)]="label"
-      p-clean
-      p-label="Label">
-    </po-input>
+    <po-input class="po-md-4" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="help"
-      [(ngModel)]="help"
-      p-clean
-      p-label="Help">
-    </po-input>
+    <po-input class="po-md-4" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="placeholder"
-      [(ngModel)]="placeholder"
-      p-clean
-      p-label="Placeholder">
-    </po-input>
+    <po-input class="po-md-4" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
   </div>
 
   <div class="po-row">
@@ -141,7 +102,8 @@
       [(ngModel)]="properties"
       p-columns="2"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
 
     <po-radio-group
@@ -150,7 +112,8 @@
       [(ngModel)]="icon"
       p-columns="1"
       p-label="Icon"
-      [p-options]="iconsOptions">
+      [p-options]="iconsOptions"
+    >
     </po-radio-group>
 
     <po-radio-group
@@ -159,7 +122,8 @@
       [(ngModel)]="filterMode"
       p-columns="1"
       p-label="Filter Mode"
-      [p-options]="filterModeOptions">
+      [p-options]="filterModeOptions"
+    >
     </po-radio-group>
   </div>
 
@@ -170,7 +134,8 @@
       [(ngModel)]="filterService"
       p-clean
       p-help="https://thf.totvs.com.br/sample/api/comboOption/heroes"
-      p-label="Filter Service">
+      p-label="Filter Service"
+    >
     </po-input>
 
     <po-input
@@ -179,52 +144,26 @@
       [(ngModel)]="literals"
       p-help='Ex.: {"noData": "Sem dados a serem exibidos"}'
       p-label="Literals"
-      (p-change)="changeLiterals()">
-    </po-input>
-
-  </div>
-
-  <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="fieldValue"
-      [(ngModel)]="fieldValue"
-      p-clean
-      p-label="Field Value">
-    </po-input>
-
-    <po-input
-      class="po-md-6"
-      name="fieldLabel"
-      [(ngModel)]="fieldLabel"
-      p-clean
-      p-label="Field Label">
+      (p-change)="changeLiterals()"
+    >
     </po-input>
   </div>
 
   <div class="po-row">
-    <po-number
-      class="po-md-6"
-      name="debounceTime"
-      [(ngModel)]="debounceTime"
-      p-clean
-      p-label="Debounce Time">
+    <po-input class="po-md-6" name="fieldValue" [(ngModel)]="fieldValue" p-clean p-label="Field Value"> </po-input>
+
+    <po-input class="po-md-6" name="fieldLabel" [(ngModel)]="fieldLabel" p-clean p-label="Field Label"> </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-number class="po-md-6" name="debounceTime" [(ngModel)]="debounceTime" p-clean p-label="Debounce Time">
     </po-number>
 
-    <po-number
-      class="po-md-6"
-      name="filterMinlength"
-      [(ngModel)]="filterMinlength"
-      p-clean
-      p-label="Filter Min Length">
+    <po-number class="po-md-6" name="filterMinlength" [(ngModel)]="filterMinlength" p-clean p-label="Filter Min Length">
     </po-number>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

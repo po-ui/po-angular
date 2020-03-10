@@ -6,7 +6,6 @@
  * Interface para as ações do componente po-page-dynamic-edit.
  */
 export interface PoPageDynamicEditActions {
-
   /**
    * @description
    *
@@ -50,5 +49,4 @@ export interface PoPageDynamicEditActions {
    * ```
    */
   saveNew?: string;
-
 }

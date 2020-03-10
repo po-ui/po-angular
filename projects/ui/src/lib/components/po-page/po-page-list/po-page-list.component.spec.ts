@@ -43,10 +43,7 @@ eventSubmit.initEvent('submit', true, false);
 
 @Component({
   template: `
-    <po-page-list
-      p-title="Unit Test"
-      [p-actions]="actions">
-    </po-page-list>
+    <po-page-list p-title="Unit Test" [p-actions]="actions"> </po-page-list>
   `
 })
 class MobileComponent {
@@ -90,9 +87,7 @@ describe('PoPageListComponent - Mobile:', () => {
         PoPageHeaderComponent,
         PoPageContentComponent
       ],
-      providers: [
-        { provide: Router, useValue: routerStub }
-      ]
+      providers: [{ provide: Router, useValue: routerStub }]
     });
   });
 
@@ -149,11 +144,7 @@ describe('PoPageListComponent - Mobile:', () => {
 
 @Component({
   template: `
-    <po-page-list
-      p-title="Unit Test"
-      [p-filter]="filter"
-      [p-actions]="actions">
-    </po-page-list>
+    <po-page-list p-title="Unit Test" [p-filter]="filter" [p-actions]="actions"> </po-page-list>
   `
 })
 class DesktopComponent {
@@ -177,7 +168,6 @@ class DesktopComponent {
   action(): boolean {
     return true;
   }
-
 }
 describe('PoPageListComponent - Desktop:', () => {
   let component: PoPageListComponent;
@@ -203,9 +193,7 @@ describe('PoPageListComponent - Desktop:', () => {
         PoPageHeaderComponent,
         PoPageContentComponent
       ],
-      providers: [
-        { provide: Router, useValue: routerStub }
-      ]
+      providers: [{ provide: Router, useValue: routerStub }]
     });
   });
 
@@ -285,7 +273,7 @@ describe('PoPageListComponent - Desktop:', () => {
     };
     const fakeThis = {
       parentRef: context,
-      filter: {'funcao': 'getName'},
+      filter: { 'funcao': 'getName' },
       callFunction: component.callFunction
     };
 
@@ -318,14 +306,11 @@ describe('PoPageListComponent - Desktop:', () => {
 
     component.changeModel.call(fakeThis, 'new filter');
     expect(fakeThis.parentRef.modelFilter).toBe('new filter');
-
   });
 
   it('onChangeDisclaimerGroup: should call recalculateHeaderSize when have disclaimers and isRecalculate is true', () => {
     component['isRecalculate'] = true;
-    const disclaimers: Array<PoDisclaimer> = [
-      { value: 'hotel', label: 'Hotel', property: 'hotel' }
-    ];
+    const disclaimers: Array<PoDisclaimer> = [{ value: 'hotel', label: 'Hotel', property: 'hotel' }];
 
     spyOn(component.poPageContent, 'recalculateHeaderSize');
     component.onChangeDisclaimerGroup(disclaimers);
@@ -371,7 +356,6 @@ describe('PoPageListComponent - Desktop:', () => {
   });
 
   describe('Templates:', () => {
-
     const fakeFilter = {
       advancedAction: 'xxx',
       ngModel: 'model'
@@ -402,7 +386,6 @@ describe('PoPageListComponent - Desktop:', () => {
 
       const buttons = nativeElement.querySelectorAll('.po-button:disabled');
       expect(buttons.length).toBe(2);
-
     });
 
     it('actionIsDisabled: should not disable page buttons with boolean value', () => {
@@ -463,7 +446,6 @@ describe('PoPageListComponent - Desktop:', () => {
       const icons = nativeElement.querySelectorAll('.po-icon-portinari');
 
       expect(icons.length).toBe(1);
-
     });
 
     it('should show `filter.placeholder` value if has `filter.placeholder`.', () => {
@@ -479,11 +461,9 @@ describe('PoPageListComponent - Desktop:', () => {
 
       expect(nativeElement.querySelector('.po-input').placeholder).toBe('');
     });
-
   });
 
   describe('Methods:', () => {
-
     it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {
       const url = 'http://portinari.io';
 
@@ -513,7 +493,7 @@ describe('PoPageListComponent - Desktop:', () => {
     it('hasPageHeader: should return true if has breadcrumb', () => {
       component.actions = [];
       component.title = undefined;
-      component.breadcrumb = { items: [{ label: 'Breadcrumb' }]};
+      component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
 
       expect(component.hasPageHeader()).toBe(true);
     });
@@ -543,7 +523,6 @@ describe('PoPageListComponent - Desktop:', () => {
     });
 
     describe('initializeFixedLiterals:', () => {
-
       it('should return the advanced filter label by `pt` language.', () => {
         component['language'] = 'pt';
 
@@ -567,9 +546,6 @@ describe('PoPageListComponent - Desktop:', () => {
 
         expect(component['initializeFixedLiterals']()).toBe('полный поиск');
       });
-
     });
-
   });
-
 });

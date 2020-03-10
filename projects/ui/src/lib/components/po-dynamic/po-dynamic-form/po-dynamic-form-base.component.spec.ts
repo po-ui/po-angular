@@ -10,9 +10,7 @@ describe('PoDynamicFormBaseComponent:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        TitleCasePipe
-      ]
+      providers: [TitleCasePipe]
     });
 
     component = new PoDynamicFormBaseComponent();
@@ -23,7 +21,7 @@ describe('PoDynamicFormBaseComponent:', () => {
   });
 
   describe('Properties: ', () => {
-    it('p-group-from: should set property to `false` if aren`t valid values' , () => {
+    it('p-group-from: should set property to `false` if aren`t valid values', () => {
       const invalidValues = [undefined, null, false, 0, 'string'];
 
       expectPropertiesValues(component, 'groupForm', invalidValues, false);
@@ -34,7 +32,5 @@ describe('PoDynamicFormBaseComponent:', () => {
 
       expectPropertiesValues(component, 'groupForm', validValues, true);
     });
-
   });
-
 });

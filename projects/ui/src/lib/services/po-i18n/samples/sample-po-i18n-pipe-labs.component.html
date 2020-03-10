@@ -1,4 +1,4 @@
-Resultado: {{ literal | poI18n:parameterArray }}
+Resultado: {{ literal | poI18n: parameterArray }}
 
 <form #f="ngForm">
   <po-input
@@ -9,7 +9,8 @@ Resultado: {{ literal | poI18n:parameterArray }}
     p-placeholder="Literal"
     p-auto-focus
     p-clean
-    (p-change-model)="onChange()">
+    (p-change-model)="onChange()"
+  >
   </po-input>
 
   <po-input
@@ -19,6 +20,7 @@ Resultado: {{ literal | poI18n:parameterArray }}
     p-help="Informe os parâmetros separados por vírgula"
     p-placeholder="Parâmetros"
     p-clean
-    (p-change-model)="onChange()">
+    (p-change-model)="onChange()"
+  >
   </po-input>
 </form>

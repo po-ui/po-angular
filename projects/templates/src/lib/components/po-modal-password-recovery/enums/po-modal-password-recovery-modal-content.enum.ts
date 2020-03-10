@@ -6,7 +6,6 @@
  * Enum para definição do tipo de conteúdo exibido na modal.
  */
 export enum PoModalPasswordRecoveryModalContent {
-
   /** Exibição de modal contendo campo para preenchimento de email ou número de telefone */
   Email = 'email',
 
@@ -15,5 +14,4 @@ export enum PoModalPasswordRecoveryModalContent {
 
   /** Exibição de modal de confirmação de envio */
   Confirmation = 'confirmation'
-
 }

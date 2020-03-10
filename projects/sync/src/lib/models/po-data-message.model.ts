@@ -9,7 +9,6 @@ import { PoDataTransform } from './po-data-transform.model';
  * [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
  */
 export class PoDataMessage extends PoDataTransform {
-
   /**
    * Retorna a propriedade `portinari_sync_date`, responsável por informar a data da última sincronização no guia de
    * [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
@@ -59,5 +58,4 @@ export class PoDataMessage extends PoDataTransform {
   hasNext(): boolean {
     return this.data.hasNext;
   }
-
 }

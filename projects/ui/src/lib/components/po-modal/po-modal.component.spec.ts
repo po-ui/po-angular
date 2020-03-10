@@ -6,9 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { PoButtonModule } from '../po-button';
 
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
-import {
-  PoFieldContainerBottomComponent
-} from './../po-field/po-field-container/po-field-container-bottom/po-field-container-bottom.component';
+import { PoFieldContainerBottomComponent } from './../po-field/po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from './../po-field/po-field-container/po-field-container.component';
 import { PoInputComponent } from './../po-field/po-input/po-input.component';
 
@@ -19,18 +17,16 @@ import { PoModalService } from './po-modal-service';
 
 @Component({
   template: `
-  <po-modal
-    p-title="i'm the title"
-    [p-primary-action]="primaryAction">
-    <form #f="ngForm">
-      <po-input name="teste" [(ngModel)]="teste" p-label="Teste"></po-input>
-      <po-input name="userName" [(ngModel)]="userName" p-label="Nome"></po-input>
-    </form>
-  </po-modal>
+    <po-modal p-title="i'm the title" [p-primary-action]="primaryAction">
+      <form #f="ngForm">
+        <po-input name="teste" [(ngModel)]="teste" p-label="Teste"></po-input>
+        <po-input name="userName" [(ngModel)]="userName" p-label="Nome"></po-input>
+      </form>
+    </po-modal>
   `
 })
 class ContentProjectionComponent {
-  primaryAction: PoModalAction = { label: 'action', action: () => { } };
+  primaryAction: PoModalAction = { label: 'action', action: () => {} };
   @ViewChild(PoModalComponent, { static: true }) poModal;
   teste;
   userName;
@@ -45,24 +41,23 @@ describe('PoModalComponent:', () => {
   let element: DebugElement;
 
   beforeEach(() => {
-    TestBed
-      .configureTestingModule({
-        imports: [FormsModule, PoButtonModule],
-        declarations: [
-          PoModalComponent,
-          PoInputComponent,
-          PoCleanComponent,
-          PoFieldContainerComponent,
-          ContentProjectionComponent,
-          PoFieldContainerBottomComponent
-        ],
-        providers: [PoModalService]
-      });
+    TestBed.configureTestingModule({
+      imports: [FormsModule, PoButtonModule],
+      declarations: [
+        PoModalComponent,
+        PoInputComponent,
+        PoCleanComponent,
+        PoFieldContainerComponent,
+        ContentProjectionComponent,
+        PoFieldContainerBottomComponent
+      ],
+      providers: [PoModalService]
+    });
     fixture = TestBed.createComponent(PoModalComponent);
     component = fixture.componentInstance;
     element = fixture.debugElement;
 
-    component.primaryAction = { label: 'primaryLabel', action: () => { } };
+    component.primaryAction = { label: 'primaryLabel', action: () => {} };
 
     fixture.detectChanges();
   });
@@ -86,7 +81,7 @@ describe('PoModalComponent:', () => {
   });
 
   it('should be loaded with primaryAction and secondaryAction', () => {
-    component.secondaryAction = { label: 'secondaryLabel', action: () => { } };
+    component.secondaryAction = { label: 'secondaryLabel', action: () => {} };
     component.open();
     fixture.detectChanges();
     expect(element.query(By.css('.po-modal-footer')).nativeElement.textContent).toContain('primaryLabel');
@@ -100,7 +95,7 @@ describe('PoModalComponent:', () => {
   });
 
   it('should call secondaryAction() method', () => {
-    component.secondaryAction = { label: 'secondaryLabel', action: () => { } };
+    component.secondaryAction = { label: 'secondaryLabel', action: () => {} };
     spyOn(component.secondaryAction, 'action');
     component.secondaryAction.action();
     expect(component.secondaryAction.action).toHaveBeenCalled();
@@ -133,7 +128,7 @@ describe('PoModalComponent:', () => {
   }));
 
   it('should keep focus on element inside modal', fakeAsync(() => {
-    component.secondaryAction = { label: 'secondaryLabel', action: () => { } };
+    component.secondaryAction = { label: 'secondaryLabel', action: () => {} };
     component.open();
     fixture.detectChanges();
 
@@ -163,7 +158,6 @@ describe('PoModalComponent:', () => {
   }));
 
   it('should focus on first input of modal', fakeAsync(() => {
-
     const fixtureTest = TestBed.createComponent(ContentProjectionComponent);
     const testComponent = fixtureTest.componentInstance;
 
@@ -222,11 +216,13 @@ describe('PoModalComponent:', () => {
   it('should be modal with close button', () => {
     component.open();
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-modal-header-close-button');
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain(
+      'po-modal-header-close-button'
+    );
   });
 
   it('should be one button in modal', () => {
-    component.primaryAction = { label: 'primaryLabel', action: () => { } };
+    component.primaryAction = { label: 'primaryLabel', action: () => {} };
     component.secondaryAction = undefined;
     component.open();
     fixture.detectChanges();
@@ -236,7 +232,6 @@ describe('PoModalComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('onClickOut: shouldn`t call close when clickOut is true and click in modal content.', () => {
       const fakeEvent = {
         target: 10
@@ -326,7 +321,6 @@ describe('PoModalComponent:', () => {
     });
 
     describe('closeModalOnEscapeKey:', () => {
-
       const eventEscapeKey = new KeyboardEvent('keydown', { 'key': 'Esc' });
       const eventEnterKey = new KeyboardEvent('keydown', { 'key': 'Enter' });
 
@@ -367,7 +361,6 @@ describe('PoModalComponent:', () => {
       });
 
       it('should call preventDefault and stopPropagation of event.', () => {
-
         const fakeEvent = {
           preventDefault: () => {},
           stopPropagation: () => {}
@@ -383,7 +376,6 @@ describe('PoModalComponent:', () => {
       });
 
       it('shouldn`t call preventDefault and stopPropagation of event if `hideClose` is true.', () => {
-
         const fakeEvent = {
           preventDefault: () => {},
           stopPropagation: () => {}
@@ -398,7 +390,6 @@ describe('PoModalComponent:', () => {
         expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
         expect(fakeEvent.stopPropagation).not.toHaveBeenCalled();
       });
-
     });
 
     it('getPrimaryActionButtonType: should return `danger` if `primaryAction.danger` is `true`', () => {
@@ -422,7 +413,7 @@ describe('PoModalComponent:', () => {
     it(`getSecondaryActionButtonType: should return 'danger' if 'primaryAction.danger' is 'false'
     and 'secondaryAction.danger' is 'true'`, () => {
       component.primaryAction.danger = false;
-      component.secondaryAction = { action: () => { }, label: 'primaryLabel', danger: true };
+      component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
 
       expect(component.getSecondaryActionButtonType()).toBe('danger');
     });
@@ -430,7 +421,7 @@ describe('PoModalComponent:', () => {
     it(`getSecondaryActionButtonType: should return 'default' if 'primaryAction.danger' is 'true'
     and 'secondaryAction.danger' is 'false'`, () => {
       component.primaryAction.danger = true;
-      component.secondaryAction = { action: () => { }, label: 'primaryLabel', danger: false };
+      component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: false };
 
       expect(component.getSecondaryActionButtonType()).toBe('default');
     });
@@ -438,7 +429,7 @@ describe('PoModalComponent:', () => {
     it(`getSecondaryActionButtonType: should return 'default' if 'primaryAction.danger' is 'true'
     and 'secondaryAction.danger' is 'true'`, () => {
       component.primaryAction.danger = true;
-      component.secondaryAction = { action: () => { }, label: 'primaryLabel', danger: true };
+      component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
 
       expect(component.getSecondaryActionButtonType()).toBe('default');
     });
@@ -462,13 +453,13 @@ describe('PoModalComponent:', () => {
 
       expect(component['firstElement']).toEqual(modal);
     });
-
   });
 
   describe('Templates:', () => {
-
     function getModalActionDisabled() {
-      return element.nativeElement.querySelector('.po-modal .po-modal-footer .po-button-modal-first-action button:disabled');
+      return element.nativeElement.querySelector(
+        '.po-modal .po-modal-footer .po-button-modal-first-action button:disabled'
+      );
     }
 
     function getModalActionIconLoading() {
@@ -481,18 +472,22 @@ describe('PoModalComponent:', () => {
       component.hideClose = true;
       component.open();
       fixture.detectChanges();
-      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).not.toContain('po-modal-header-close-button');
+      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).not.toContain(
+        'po-modal-header-close-button'
+      );
     });
 
     it('iconClose: should display close when `hideClose` is false.', () => {
       component.hideClose = false;
       component.open();
       fixture.detectChanges();
-      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-modal-header-close-button');
+      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain(
+        'po-modal-header-close-button'
+      );
     });
 
     it('action disabled: should disabled primary action if `primaryAction.disabled` is `true`.', () => {
-      component.primaryAction = { action: () => { }, label: 'primaryLabel', disabled: true };
+      component.primaryAction = { action: () => {}, label: 'primaryLabel', disabled: true };
       component.open();
       fixture.detectChanges();
 
@@ -500,7 +495,7 @@ describe('PoModalComponent:', () => {
     });
 
     it('action loading: should disabled primary action if `primaryAction.loading` is `true`.', () => {
-      component.primaryAction = { action: () => { }, label: 'primaryLabel', loading: true };
+      component.primaryAction = { action: () => {}, label: 'primaryLabel', loading: true };
       component.open();
       fixture.detectChanges();
 
@@ -521,5 +516,4 @@ describe('PoModalComponent:', () => {
       expect(component.onClickOut).toHaveBeenCalled();
     });
   });
-
 });

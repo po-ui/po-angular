@@ -8,7 +8,6 @@ import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
   templateUrl: './sample-po-input-reactive-form.component.html'
 })
 export class SamplePoInputReactiveFormComponent {
-
   reactiveForm: FormGroup;
 
   public readonly modalPrimaryAction: PoModalAction = {
@@ -24,15 +23,9 @@ export class SamplePoInputReactiveFormComponent {
 
   createReactiveForm() {
     this.reactiveForm = this.fb.group({
-      name: ['', Validators.compose([
-        Validators.required, Validators.minLength(5), Validators.maxLength(30)
-      ])],
-      address: ['', Validators.compose([
-        Validators.required, Validators.minLength(5), Validators.maxLength(50)
-      ])],
-      number: ['', Validators.compose([
-        Validators.required, Validators.min(1), Validators.max(99999)
-      ])],
+      name: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(30)])],
+      address: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(50)])],
+      number: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(99999)])],
       email: ['', Validators.required],
       website: ['', Validators.required]
     });
@@ -41,5 +34,4 @@ export class SamplePoInputReactiveFormComponent {
   saveForm() {
     this.reactiveFormModal.open();
   }
-
 }

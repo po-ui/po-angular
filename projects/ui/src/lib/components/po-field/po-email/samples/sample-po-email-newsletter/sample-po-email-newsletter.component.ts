@@ -7,10 +7,9 @@ import { PoDialogService } from '@portinari/portinari-ui';
   templateUrl: './sample-po-email-newsletter.component.html'
 })
 export class SamplePoEmailNewsletterComponent {
-
   email: string = '';
 
-  constructor(private poAlert: PoDialogService) { }
+  constructor(private poAlert: PoDialogService) {}
 
   openDialog() {
     this.poAlert.alert({
@@ -24,5 +23,4 @@ export class SamplePoEmailNewsletterComponent {
 
     return this.email.substr(0, index).toLocaleUpperCase();
   }
-
 }

@@ -1,66 +1,35 @@
-<po-popup #popup
+<po-popup
+  #popup
   [p-actions]="actions"
   [p-custom-positions]="customPositions"
   [p-hide-arrow]="properties.includes('hideArrow')"
   [p-position]="position"
-  [p-target]="targetRef">
+  [p-target]="targetRef"
+>
 </po-popup>
 
 <div class="po-row sample-button-container">
   <div class="po-offset-xl-5 po-offset-lg-5 po-md-2 po-lg-2">
-
-    <po-button #target
-      p-label="PopUp"
-      (p-click)="popup.toggle()">
-    </po-button>
-
+    <po-button #target p-label="PopUp" (p-click)="popup.toggle()"> </po-button>
   </div>
 </div>
 
-<hr>
+<hr />
 
 <form #formAction="ngForm">
-
   <div class="po-row">
-    <po-input
-      class="po-md-4"
-      name="actionAction"
-      [(ngModel)]="action.action"
-      p-clean
-      p-label="Action">
-    </po-input>
+    <po-input class="po-md-4" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="actionLabel"
-      [(ngModel)]="action.label"
-      p-label="Label"
-      p-required>
-    </po-input>
+    <po-input class="po-md-4" name="actionLabel" [(ngModel)]="action.label" p-label="Label" p-required> </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="actionURL"
-      [(ngModel)]="action.url"
-      p-label="URL">
-    </po-input>
+    <po-input class="po-md-4" name="actionURL" [(ngModel)]="action.url" p-label="URL"> </po-input>
   </div>
 
   <div class="po-row">
-    <po-select
-      class="po-md-3"
-      name="type"
-      [(ngModel)]="action.type"
-      p-label="Type"
-      [p-options]="typeOptions">
+    <po-select class="po-md-3" name="type" [(ngModel)]="action.type" p-label="Type" [p-options]="typeOptions">
     </po-select>
 
-    <po-select
-      class="po-md-3"
-      name="icon"
-      [(ngModel)]="action.icon"
-      p-label="Icon"
-      [p-options]="iconOptions">
+    <po-select class="po-md-3" name="icon" [(ngModel)]="action.icon" p-label="Icon" [p-options]="iconOptions">
     </po-select>
 
     <po-checkbox-group
@@ -70,7 +39,8 @@
       p-columns="4"
       p-indeterminate
       p-label="Action properties"
-      [p-options]="actionOptions">
+      [p-options]="actionOptions"
+    >
     </po-checkbox-group>
   </div>
 
@@ -79,16 +49,15 @@
       class="po-md-6 po-lg-3"
       p-label="Add Action"
       [p-disabled]="formAction.form.invalid"
-      (p-click)="addAction(action)">
+      (p-click)="addAction(action)"
+    >
     </po-button>
   </div>
-
 </form>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
-
   <div class="po-row">
     <po-input
       class="po-md-6"
@@ -96,15 +65,11 @@
       [(ngModel)]="positions"
       p-help='["top", "left", "right-bottom"]'
       p-label="Custom positions"
-      (p-change)="convertToArray()">
+      (p-change)="convertToArray()"
+    >
     </po-input>
 
-    <po-select
-      class="po-md-3"
-      name="position"
-      [(ngModel)]="position"
-      p-label="Position"
-      [p-options]="positionOptions">
+    <po-select class="po-md-3" name="position" [(ngModel)]="position" p-label="Position" [p-options]="positionOptions">
     </po-select>
 
     <po-checkbox-group
@@ -112,16 +77,13 @@
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="f.reset(); formAction.reset(); restore()">
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="f.reset(); formAction.reset(); restore()">
     </po-button>
   </div>
-
 </form>

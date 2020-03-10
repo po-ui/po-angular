@@ -11,4 +11,4 @@ import { PoPopupAction } from '../po-popup/po-popup-action.interface';
  *
  * @usedBy PoPageDefaultComponent, PoPageListComponent
  */
-export interface PoPageAction extends PoPopupAction { }
+export interface PoPageAction extends PoPopupAction {}

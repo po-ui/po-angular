@@ -38,7 +38,6 @@ import { PoAccordionService } from '../services/po-accordion.service';
   templateUrl: 'po-accordion-item.component.html'
 })
 export class PoAccordionItemComponent {
-
   expanded: boolean;
 
   /** Título do item. */

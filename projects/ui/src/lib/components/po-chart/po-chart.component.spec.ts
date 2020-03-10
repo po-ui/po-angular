@@ -16,9 +16,8 @@ describe('PoChartComponent:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ PoChartModule ]
-    })
-    .compileComponents();
+      imports: [PoChartModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -36,7 +35,6 @@ describe('PoChartComponent:', () => {
   });
 
   describe('Properties', () => {
-
     it('isChartGaugeType: should return `true` if type is equal `PoChartType.Gauge`', () => {
       component.type = PoChartType.Gauge;
 
@@ -51,7 +49,6 @@ describe('PoChartComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnDestroy: should call `removeWindowResizeListener`', () => {
       spyOn(component, <any>'removeWindowResizeListener');
 
@@ -61,13 +58,11 @@ describe('PoChartComponent:', () => {
     });
 
     it('ngOnInit: should call `getSeriesColor`', () => {
-
       spyOn(component, <any>'getSeriesColor');
 
       component.ngOnInit();
 
       expect(component['getSeriesColor']).toHaveBeenCalled();
-
     });
 
     it('ngDoCheck: should call `getSeriesColor` and `dynamicComponentSetting` in first loading and if chartWrapper has width', () => {
@@ -129,19 +124,19 @@ describe('PoChartComponent:', () => {
 
     it(`createComponent: should call 'getComponentType', 'resolveComponentFactory', 'chartContainer.createComponent'
       and 'setChartProperties' `, () => {
-        const componentRef: any = { instance: {} };
+      const componentRef: any = { instance: {} };
 
-        spyOn(component, <any>'getComponentType').and.returnValue(PoChartType.Pie);
-        spyOn(component['componentFactoryResolver'], 'resolveComponentFactory');
-        spyOn(component.chartContainer, 'createComponent').and.returnValue(componentRef);
-        spyOn(component, <any>'setChartProperties');
+      spyOn(component, <any>'getComponentType').and.returnValue(PoChartType.Pie);
+      spyOn(component['componentFactoryResolver'], 'resolveComponentFactory');
+      spyOn(component.chartContainer, 'createComponent').and.returnValue(componentRef);
+      spyOn(component, <any>'setChartProperties');
 
-        component['createComponent']();
+      component['createComponent']();
 
-        expect(component['getComponentType']).toHaveBeenCalled();
-        expect(component['componentFactoryResolver'].resolveComponentFactory).toHaveBeenCalled();
-        expect(component.chartContainer.createComponent).toHaveBeenCalled();
-        expect(component['setChartProperties']).toHaveBeenCalled();
+      expect(component['getComponentType']).toHaveBeenCalled();
+      expect(component['componentFactoryResolver'].resolveComponentFactory).toHaveBeenCalled();
+      expect(component.chartContainer.createComponent).toHaveBeenCalled();
+      expect(component['setChartProperties']).toHaveBeenCalled();
     });
 
     it('rebuildComponent: should call `dynamicComponentSetting`, `getSeriesColor` and destroy method from componentRef', () => {
@@ -157,7 +152,6 @@ describe('PoChartComponent:', () => {
       expect(sourceObject.componentRef.destroy).toHaveBeenCalled();
       expect(component['dynamicComponentSetting']).toHaveBeenCalled();
       expect(component['getSeriesColor']).toHaveBeenCalled();
-
     });
 
     it('checkingForSerieChanges: should call `getSeriesColor` and `rebuildComponent` if has differ and changes', () => {
@@ -165,13 +159,13 @@ describe('PoChartComponent:', () => {
         differ: {
           diff: (opt: any) => true
         },
-        componentRef: { instance: 'instance'},
+        componentRef: { instance: 'instance' },
         getSeriesColor: () => {},
-        rebuildComponent: () => {},
+        rebuildComponent: () => {}
       };
 
-      spyOn(fakeThis, <any> 'getSeriesColor');
-      spyOn(fakeThis, <any> 'rebuildComponent');
+      spyOn(fakeThis, <any>'getSeriesColor');
+      spyOn(fakeThis, <any>'rebuildComponent');
 
       component['checkingForSerieChanges'].call(fakeThis);
 
@@ -182,13 +176,13 @@ describe('PoChartComponent:', () => {
     it('checkingForSerieChanges: shouldn`t call `getSeriesColor` and `rebuildComponent` if doesn`t have differ', () => {
       const fakeThis = {
         differ: undefined,
-        componentRef: { instance: 'instance'},
+        componentRef: { instance: 'instance' },
         getSeriesColor: () => {},
-        rebuildComponent: () => {},
+        rebuildComponent: () => {}
       };
 
-      spyOn(fakeThis, <any> 'getSeriesColor');
-      spyOn(fakeThis, <any> 'rebuildComponent');
+      spyOn(fakeThis, <any>'getSeriesColor');
+      spyOn(fakeThis, <any>'rebuildComponent');
 
       component['checkingForSerieChanges'].call(fakeThis);
 
@@ -201,13 +195,13 @@ describe('PoChartComponent:', () => {
         differ: {
           diff: (opt: any) => false
         },
-        componentRef: { instance: 'instance'},
+        componentRef: { instance: 'instance' },
         getSeriesColor: () => {},
-        rebuildComponent: () => {},
+        rebuildComponent: () => {}
       };
 
-      spyOn(fakeThis, <any> 'getSeriesColor');
-      spyOn(fakeThis, <any> 'rebuildComponent');
+      spyOn(fakeThis, <any>'getSeriesColor');
+      spyOn(fakeThis, <any>'rebuildComponent');
 
       component['checkingForSerieChanges'].call(fakeThis);
 
@@ -217,17 +211,17 @@ describe('PoChartComponent:', () => {
 
     it('setChartProperties: should attribute some PoChartDynamicTypeComponent property values', () => {
       const instance: any = {
-        chartHeader: {nativeElement: {offsetHeight: 200}},
-        chartLegend: {nativeElement: {offsetHeight: 200}},
-        chartWrapper: {nativeElement: {offsetWidth: 200}}
+        chartHeader: { nativeElement: { offsetHeight: 200 } },
+        chartLegend: { nativeElement: { offsetHeight: 200 } },
+        chartWrapper: { nativeElement: { offsetWidth: 200 } }
       };
 
       component.height = 400;
       component['series'] = <any>[
         { category: 'A', value: 10 },
-        { category: 'B', value: 10 },
+        { category: 'B', value: 10 }
       ];
-      component['colors'] = [ 'orange', 'red' ];
+      component['colors'] = ['orange', 'red'];
 
       component['setChartProperties'](instance);
 
@@ -237,16 +231,15 @@ describe('PoChartComponent:', () => {
       expect(instance.chartHeader).toBe(component.chartHeader.nativeElement.offsetHeight);
       expect(instance.chartLegend).toBe(component['chartLegend'].nativeElement.offsetHeight);
       expect(instance.chartWrapper).toBe(component.chartWrapper.nativeElement.offsetWidth);
-
     });
 
     it('setChartProperties: should set `instance.colors` with empty array if `component.colors` is undefined', () => {
       const instance: any = {};
 
       component['colors'] = undefined;
-      component.chartHeader = {nativeElement: {offsetHeight: 200}};
-      component.chartLegend = {nativeElement: {offsetHeight: 200}};
-      component.chartWrapper = {nativeElement: {offsetWidth: 200}};
+      component.chartHeader = { nativeElement: { offsetHeight: 200 } };
+      component.chartLegend = { nativeElement: { offsetHeight: 200 } };
+      component.chartWrapper = { nativeElement: { offsetWidth: 200 } };
 
       component['setChartProperties'](instance);
 
@@ -288,7 +281,7 @@ describe('PoChartComponent:', () => {
       component['chartLegend'] = { nativeElement: { offsetHeight: 200 } };
       component.chartWrapper = { nativeElement: { offsetWidth: 200 } };
 
-      component['windowResizeListener'] = <any> of([]);
+      component['windowResizeListener'] = <any>of([]);
 
       spyOn(component, <any>'windowResizeListener');
       spyOn(component, <any>'chartLegendHeight').and.callThrough();
@@ -303,19 +296,19 @@ describe('PoChartComponent:', () => {
 
     it(`dynamicComponentSetting: should call 'createComponent', 'setResizeListenerSubscribe', 'detectChanges', 'setClickSubscribe'
       and 'setHoverSubscribe' if has type`, () => {
-        spyOn(component, <any>'createComponent');
-        spyOn(component, <any>'setResizeListenerSubscribe');
-        spyOn(component.changeDetector, 'detectChanges');
-        spyOn(component, <any>'setClickSubscribe');
-        spyOn(component, <any>'setHoverSubscribe');
+      spyOn(component, <any>'createComponent');
+      spyOn(component, <any>'setResizeListenerSubscribe');
+      spyOn(component.changeDetector, 'detectChanges');
+      spyOn(component, <any>'setClickSubscribe');
+      spyOn(component, <any>'setHoverSubscribe');
 
-        component['dynamicComponentSetting']();
+      component['dynamicComponentSetting']();
 
-        expect(component['createComponent']).toHaveBeenCalled();
-        expect(component['setResizeListenerSubscribe']).toHaveBeenCalled();
-        expect(component.changeDetector.detectChanges).toHaveBeenCalled();
-        expect(component['setClickSubscribe']).toHaveBeenCalled();
-        expect(component['setHoverSubscribe']).toHaveBeenCalled();
+      expect(component['createComponent']).toHaveBeenCalled();
+      expect(component['setResizeListenerSubscribe']).toHaveBeenCalled();
+      expect(component.changeDetector.detectChanges).toHaveBeenCalled();
+      expect(component['setClickSubscribe']).toHaveBeenCalled();
+      expect(component['setHoverSubscribe']).toHaveBeenCalled();
     });
 
     it('getComponentType: should return component of the mappings by key', () => {
@@ -395,11 +388,9 @@ describe('PoChartComponent:', () => {
 
       expect(expectedResult).toBe(0);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should create four subtitles with the correct colors if the length of the series is four', () => {
       const colors = ['rgb(12, 108, 148)', 'rgb(11, 146, 180)', 'rgb(41, 182, 197)', 'rgb(148, 218, 226)'];
 
@@ -423,7 +414,5 @@ describe('PoChartComponent:', () => {
       expect(getBackgroundColor(subtitles[2])).toBe(colors[2]);
       expect(getBackgroundColor(subtitles[3])).toBe(colors[3]);
     });
-
   });
-
 });

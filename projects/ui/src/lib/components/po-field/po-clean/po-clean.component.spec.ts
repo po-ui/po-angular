@@ -6,13 +6,12 @@ import { PoCleanComponent } from './po-clean.component';
 import { PoCleanBaseComponent } from './po-clean-base.component';
 
 describe('PoCleanComponent', () => {
-
   let component: PoCleanComponent;
   let fixture: ComponentFixture<PoCleanComponent>;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoCleanComponent ]
+      declarations: [PoCleanComponent]
     });
   });
 
@@ -67,5 +66,4 @@ describe('PoCleanComponent', () => {
     component.getInputValue.call(fakeThis);
     expect(component.getInputValue.call(fakeThis)).toBe('123');
   });
-
 });

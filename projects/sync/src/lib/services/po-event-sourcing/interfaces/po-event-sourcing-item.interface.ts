@@ -7,7 +7,6 @@ import { PoHttpRequestData } from '../../po-http-client/interfaces/po-http-reque
  * Classe que irá mapear as informações dos `EventSourcing` gerados pela aplicação.
  */
 export interface PoEventSourcingItem {
-
   /** Valor numérico correspondente ao horário da data em que o registro foi criado de acordo com o horário universal. */
   dateTime: number;
 
@@ -30,5 +29,4 @@ export interface PoEventSourcingItem {
 
   /** Nome do *schema* à qual se refere o `EventSourcing`. */
   schema?: string;
-
 }

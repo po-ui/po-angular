@@ -20,7 +20,11 @@ import { poLocaleDefault } from './../../utils/util';
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
-import { PoPageLoginBaseComponent, poPageLoginLiteralIn, poPageLoginLiteralTo, poPageLoginLiteralsDefault
+import {
+  PoPageLoginBaseComponent,
+  poPageLoginLiteralIn,
+  poPageLoginLiteralTo,
+  poPageLoginLiteralsDefault
 } from './po-page-login-base.component';
 import { PoPageLoginComponent } from './po-page-login.component';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
@@ -35,7 +39,7 @@ describe('PoPageLoginComponent: ', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule, RouterTestingModule.withRoutes([]) ],
+      imports: [FormsModule, RouterTestingModule.withRoutes([])],
       declarations: [
         PoButtonComponent,
         PoComboComponent,
@@ -46,8 +50,8 @@ describe('PoPageLoginComponent: ', () => {
         PoSelectComponent,
         PoSwitchComponent
       ],
-      providers: [ HttpClient, HttpHandler, PoPageLoginService],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      providers: [HttpClient, HttpHandler, PoPageLoginService],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -92,7 +96,9 @@ describe('PoPageLoginComponent: ', () => {
 
     expect(nativeElement.querySelector('po-switch').innerHTML).toContain(component.literals.rememberUser);
 
-    expect(nativeElement.querySelector('po-button[p-type="primary"]').innerHTML).toContain(component.literals.submitLabel);
+    expect(nativeElement.querySelector('po-button[p-type="primary"]').innerHTML).toContain(
+      component.literals.submitLabel
+    );
 
     expect(nativeElement.innerHTML).not.toContain(component.literals.forgotPassword);
   });
@@ -123,7 +129,9 @@ describe('PoPageLoginComponent: ', () => {
 
     expect(nativeElement.querySelector('po-switch').innerHTML).toContain(customLiterals.rememberUser);
     expect(nativeElement.querySelector('po-button[p-type="primary"]').innerHTML).toContain(customLiterals.submitLabel);
-    expect(nativeElement.querySelector('.po-page-login-recovery-link').innerHTML).toContain(customLiterals.forgotPassword);
+    expect(nativeElement.querySelector('.po-page-login-recovery-link').innerHTML).toContain(
+      customLiterals.forgotPassword
+    );
 
     expect(nativeElement.querySelector('po-page-background')).toBeTruthy();
   });
@@ -160,11 +168,10 @@ describe('PoPageLoginComponent: ', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnInit: should call checkingForRouteMetadata', () => {
       const activatedRoute = { snapshot: { data: {} } };
 
-      spyOn(component, <any> 'checkingForRouteMetadata');
+      spyOn(component, <any>'checkingForRouteMetadata');
 
       component.ngOnInit();
 
@@ -192,7 +199,6 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     describe('changePasswordModel:', () => {
-
       it('should call `setPasswordErrors` with `passwordErrors`', () => {
         const errors = ['error'];
         component.passwordErrors = errors;
@@ -220,11 +226,9 @@ describe('PoPageLoginComponent: ', () => {
 
         expect(component.passwordChange.emit).not.toHaveBeenCalled();
       });
-
     });
 
     describe('changeLoginModel:', () => {
-
       it('should call `setLoginErrors` with `loginErrors`', () => {
         const errors = ['error'];
         component.loginErrors = errors;
@@ -251,7 +255,6 @@ describe('PoPageLoginComponent: ', () => {
 
         expect(component.loginChange.emit).not.toHaveBeenCalled();
       });
-
     });
 
     describe('generateLoginError: ', () => {
@@ -264,7 +267,7 @@ describe('PoPageLoginComponent: ', () => {
       });
 
       it('should call `resetControl` if `loginErrors` is empty', () => {
-        component.loginForm = <any> { form: { controls: { login: { hasError: () => {} } } } };
+        component.loginForm = <any>{ form: { controls: { login: { hasError: () => {} } } } };
         component.loginErrors = [];
         spyOn(component, <any>'resetControl');
 
@@ -273,7 +276,7 @@ describe('PoPageLoginComponent: ', () => {
       });
 
       it('should call `resetControl` if `loginErrors` is undefined and `control` is defined', () => {
-        component.loginForm = <any> { form: { controls: { login: { hasError: () => {} } } } };
+        component.loginForm = <any>{ form: { controls: { login: { hasError: () => {} } } } };
 
         component.loginErrors = undefined;
         spyOn(component, <any>'resetControl');
@@ -283,7 +286,7 @@ describe('PoPageLoginComponent: ', () => {
       });
 
       it('should call `resetControl` if `loginErrors` and `control` are undefined', () => {
-        component.loginForm = <any> { form: { controls: { login: undefined } } };
+        component.loginForm = <any>{ form: { controls: { login: undefined } } };
 
         component.loginErrors = undefined;
         spyOn(component, <any>'resetControl');
@@ -303,7 +306,7 @@ describe('PoPageLoginComponent: ', () => {
       });
 
       it('should call `resetControl` if `passwordErrors` is empty', () => {
-        component.loginForm = <any> { form: { controls: { password: { hasError: () => {} } } } };
+        component.loginForm = <any>{ form: { controls: { password: { hasError: () => {} } } } };
         component.passwordErrors = [];
         spyOn(component, <any>'resetControl');
 
@@ -312,7 +315,7 @@ describe('PoPageLoginComponent: ', () => {
       });
 
       it('should call `resetControl` if `passwordErrors` is undefined and `control` is defined', () => {
-        component.loginForm = <any> { form: { controls: { password: { hasError: () => {} } } } };
+        component.loginForm = <any>{ form: { controls: { password: { hasError: () => {} } } } };
 
         component.passwordErrors = undefined;
         spyOn(component, <any>'resetControl');
@@ -322,7 +325,7 @@ describe('PoPageLoginComponent: ', () => {
       });
 
       it('should call `resetControl` if `passwordErrors` and `control` are undefined', () => {
-        component.loginForm = <any> { form: { controls: { password: undefined } } };
+        component.loginForm = <any>{ form: { controls: { password: undefined } } };
 
         component.passwordErrors = undefined;
         spyOn(component, <any>'resetControl');
@@ -336,7 +339,7 @@ describe('PoPageLoginComponent: ', () => {
       const fakeControl = {
         markAsPristine: () => {},
         markAsUntouched: () => {},
-        updateValueAndValidity: () => {},
+        updateValueAndValidity: () => {}
       };
 
       spyOn(fakeControl, 'markAsPristine');
@@ -474,16 +477,17 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     describe('validateArrayChanges', () => {
-
       it('should call `differ.diff` if `differ` has value', () => {
         const fakeDiffer = {
           diff: () => {}
         };
 
-        const array = [{
-          array: ['error'],
-          callback: () => {}
-        }];
+        const array = [
+          {
+            array: ['error'],
+            callback: () => {}
+          }
+        ];
 
         spyOn(fakeDiffer, 'diff');
         component['validateArrayChanges'](fakeDiffer, array);
@@ -504,7 +508,7 @@ describe('PoPageLoginComponent: ', () => {
           {
             array: ['error'],
             callback: () => {}
-          },
+          }
         ];
 
         spyOn(array[0], 'callback');
@@ -536,7 +540,6 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('onSelectedLanguage: should set `selectedLanguage` with `en`', () => {
-
       component.onSelectedLanguage('en');
 
       expect(component.selectedLanguage).toBe('en');
@@ -553,7 +556,7 @@ describe('PoPageLoginComponent: ', () => {
     it('setUrlRedirect: should call `this.router.navigate` with internal url', () => {
       component.recovery = '/recovery';
 
-      spyOn(component['router'], <any> 'navigate');
+      spyOn(component['router'], <any>'navigate');
 
       component['setUrlRedirect']('/recovery');
 
@@ -589,7 +592,7 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('openUrl: should call `createModalPasswordRecoveryComponent` if recovery type is an object', () => {
-      const recovery = {url: 'url'};
+      const recovery = { url: 'url' };
 
       spyOn(component, <any>'setUrlRedirect');
       spyOn(component, <any>'createModalPasswordRecoveryComponent');
@@ -609,7 +612,7 @@ describe('PoPageLoginComponent: ', () => {
           phoneMask: undefined,
           contactEmail: undefined
         },
-        changeDetectorRef: { detectChanges: () => {} },
+        changeDetectorRef: { detectChanges: () => {} }
       };
 
       const componentReference: any = {
@@ -617,11 +620,11 @@ describe('PoPageLoginComponent: ', () => {
         poComponentInjector: {
           destroyComponentInApplication: () => {},
           createComponentInApplication: () => componentRef
-        },
+        }
       };
 
       it('should destroy `componentRef` it`s not null', () => {
-        const poPageLoginRecovery = {url: 'url', type: PoModalPasswordRecoveryType.SMS};
+        const poPageLoginRecovery = { url: 'url', type: PoModalPasswordRecoveryType.SMS };
 
         spyOn(componentReference.poComponentInjector, 'destroyComponentInApplication');
 
@@ -632,7 +635,12 @@ describe('PoPageLoginComponent: ', () => {
 
       it(`should call 'createComponentInApplication', 'changeDetectorRef.detectChanges' and 'instance.open'
       and set instante.type with poPageLoginRecovery.type`, fakeAsync(() => {
-        const poPageLoginRecovery = {url: 'url', type: PoModalPasswordRecoveryType.SMS, contactMail: 'email', phoneMask: 'mask'};
+        const poPageLoginRecovery = {
+          url: 'url',
+          type: PoModalPasswordRecoveryType.SMS,
+          contactMail: 'email',
+          phoneMask: 'mask'
+        };
 
         spyOn(componentReference.poComponentInjector, 'createComponentInApplication').and.callThrough();
         spyOn(componentRef.changeDetectorRef, 'detectChanges');
@@ -645,15 +653,16 @@ describe('PoPageLoginComponent: ', () => {
         expect(componentRef.instance.type).toBe(poPageLoginRecovery.type);
         expect(componentRef.instance.phoneMask).toBe(poPageLoginRecovery.phoneMask);
         expect(componentRef.instance.contactEmail).toBe(poPageLoginRecovery.contactMail);
-        expect(componentReference.poComponentInjector.createComponentInApplication)
-        .toHaveBeenCalledWith(PoModalPasswordRecoveryComponent);
+        expect(componentReference.poComponentInjector.createComponentInApplication).toHaveBeenCalledWith(
+          PoModalPasswordRecoveryComponent
+        );
         expect(componentRef.changeDetectorRef.detectChanges).toHaveBeenCalled();
         expect(componentRef.instance.open).toHaveBeenCalled();
       }));
 
       it(`should set 'instance.type' with PoModalPasswordRecoveryType.Email
       if poPageLoginRecovery doesnt't have a defined 'type' value`, fakeAsync(() => {
-        const poPageLoginRecovery = {url: 'url'};
+        const poPageLoginRecovery = { url: 'url' };
 
         spyOn(componentReference.poComponentInjector, 'createComponentInApplication').and.callThrough();
         spyOn(componentRef.changeDetectorRef, 'detectChanges');
@@ -667,7 +676,7 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('checkingForMetadataProperty: should return value if the object contains the expected property', () => {
-      const object = {property: 'value'};
+      const object = { property: 'value' };
       const property = 'property';
       const expectedResult = component['checkingForMetadataProperty'](object, property);
 
@@ -675,7 +684,7 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('checkingForMetadataProperty: shoudn`t return if object doesn`t contain the expected property', () => {
-      const object = {property: 'value'};
+      const object = { property: 'value' };
       const property = 'absentProperty';
       const expectedResult = component['checkingForMetadataProperty'](object, property);
 
@@ -683,7 +692,7 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('checkingForRouteMetadata: shouldn`t set authenticationUrl nor recovery if activatedRoute.data is empty', () => {
-      const data = { };
+      const data = {};
 
       spyOn(component, <any>'checkingForMetadataProperty');
 
@@ -753,7 +762,12 @@ describe('PoPageLoginComponent: ', () => {
 
       component['concatenateLoginHintWithContactEmail'](email);
 
-      expect(component['concatenateLiteral']).toHaveBeenCalledWith(email, 'loginHint', defaultLoginHintLiteral, prepositionLiteral);
+      expect(component['concatenateLiteral']).toHaveBeenCalledWith(
+        email,
+        'loginHint',
+        defaultLoginHintLiteral,
+        prepositionLiteral
+      );
     });
 
     it(`concatenateTitleWithProductName: should call 'concatenateLiteral'`, () => {
@@ -766,7 +780,12 @@ describe('PoPageLoginComponent: ', () => {
 
       component['concatenateTitleWithProductName'](title);
 
-      expect(component['concatenateLiteral']).toHaveBeenCalledWith(title, 'title', defaultTitleLiteral, prepositionLiteral);
+      expect(component['concatenateLiteral']).toHaveBeenCalledWith(
+        title,
+        'title',
+        defaultTitleLiteral,
+        prepositionLiteral
+      );
     });
 
     it(`concatenateLiteral: should call 'concatenate' and return expected value`, () => {
@@ -792,7 +811,6 @@ describe('PoPageLoginComponent: ', () => {
   });
 
   describe('Templates: ', () => {
-
     let customField: PoPageLoginCustomField;
 
     function switchLoading(value: boolean) {
@@ -835,7 +853,6 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('customField po-input: should have po-input when placeholder is filled and shouldn`t have po-select and po-combo.', () => {
-
       customField = {
         property: 'domain',
         placeholder: 'Enter your domain'
@@ -847,11 +864,9 @@ describe('PoPageLoginComponent: ', () => {
       expect(nativeElement.querySelector('po-input')).toBeTruthy();
       expect(nativeElement.querySelector('po-combo')).toBeFalsy();
       expect(nativeElement.querySelector('po-select')).toBeFalsy();
-
     });
 
     it('customField po-combo: should have po-combo when url is filled and shouldn`t have po-select  and po-input.', () => {
-
       customField = {
         property: 'domain',
         placeholder: 'Enter your domain',
@@ -865,15 +880,16 @@ describe('PoPageLoginComponent: ', () => {
       expect(nativeElement.querySelector('po-combo')).toBeTruthy();
       expect(nativeElement.querySelector('po-select')).toBeFalsy();
       expect(nativeElement.querySelector('po-input')).toBeFalsy();
-
     });
 
     it('customField po-select: should have po-select when options is filled and shouldn`t have po-combo and po-input.', () => {
-
       customField = {
         property: 'domain',
         placeholder: 'Enter your domain',
-        options: [{label: 'Option 1', value: '1'}, {label: 'Option 2', value: '2'}]
+        options: [
+          { label: 'Option 1', value: '1' },
+          { label: 'Option 2', value: '2' }
+        ]
       };
       component.customField = customField;
 
@@ -885,11 +901,13 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('customField po-select: should have po-select when options, url and fieldValue is filled.', () => {
-
       customField = {
         property: 'domain',
         placeholder: 'Enter your domain',
-        options: [{label: 'Option 1', value: '1'}, {label: 'Option 2', value: '2'}],
+        options: [
+          { label: 'Option 1', value: '1' },
+          { label: 'Option 2', value: '2' }
+        ],
         url: 'https://portinari.io/sample/api/comboOption/heroes',
         fieldValue: 'nickname'
       };
@@ -915,7 +933,6 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('should add 2 information icons with tooltip directive', () => {
-
       const infoIcons = nativeElement.querySelectorAll('.po-icon.po-field-icon.po-icon-info');
 
       expect(infoIcons.length).toBe(2);
@@ -935,27 +952,29 @@ describe('PoPageLoginComponent: ', () => {
         expect(div.outerHTML).toContain('po-icon po-icon-exclamation');
         expect(div.outerHTML).toContain('po-field-container-error-text');
       });
-
     });
 
     it('should add 2 errors `div` with specific text updated on property `allLoginErors`', () => {
       component.allLoginErrors = ['Error 1', 'Error 2'];
       fixture.detectChanges();
 
-      const divs = nativeElement.querySelectorAll('.po-field-container-bottom-text-error.po-field-container-error-item');
+      const divs = nativeElement.querySelectorAll(
+        '.po-field-container-bottom-text-error.po-field-container-error-item'
+      );
 
       expect(divs.length).toBe(2);
       divs.forEach((div, index) => {
         expect(div.outerHTML).toContain(component.allLoginErrors[index]);
       });
-
     });
 
     it('shouldn`t add error `div` if `allLoginErors` is empty', () => {
       component.allLoginErrors = [];
       fixture.detectChanges();
 
-      const divs = nativeElement.querySelectorAll('.po-field-container-bottom-text-error.po-field-container-error-item');
+      const divs = nativeElement.querySelectorAll(
+        '.po-field-container-bottom-text-error.po-field-container-error-item'
+      );
 
       expect(divs.length).toBe(0);
     });
@@ -973,13 +992,13 @@ describe('PoPageLoginComponent: ', () => {
       component.recovery = 'url';
 
       fixture.detectChanges();
-      expect(nativeElement.querySelector('.po-page-login-recovery-link').innerHTML).toContain(component.literals.forgotPassword);
+      expect(nativeElement.querySelector('.po-page-login-recovery-link').innerHTML).toContain(
+        component.literals.forgotPassword
+      );
     });
-
   });
 
   describe('environment tag', () => {
-
     it('should show warning tag if has `environment`', () => {
       const environment = 'dev';
       component.environment = environment;
@@ -994,7 +1013,7 @@ describe('PoPageLoginComponent: ', () => {
 
     it('shouldn`t show warning tag if doesn`t have `environment`', () => {
       const environment = '';
-      component.environment = environment ;
+      component.environment = environment;
       fixture.detectChanges();
 
       const tag = nativeElement.querySelector('po-tag');
@@ -1002,5 +1021,4 @@ describe('PoPageLoginComponent: ', () => {
       expect(tag).toBeFalsy();
     });
   });
-
 });

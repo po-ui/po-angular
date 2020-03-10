@@ -17,12 +17,11 @@ import { PoMenuPanelItemsService } from '../services/po-menu-panel-items.service
   templateUrl: './po-menu-panel-item.component.html'
 })
 export class PoMenuPanelItemComponent implements OnDestroy, OnInit {
-
   itemsSubscription: Subscription;
 
   @Input('p-menu-item-internal') menuItemInternal: PoMenuPanelItemInternal;
 
-  constructor(private menuItemsService: PoMenuPanelItemsService) { }
+  constructor(private menuItemsService: PoMenuPanelItemsService) {}
 
   ngOnDestroy() {
     this.itemsSubscription.unsubscribe();
@@ -53,9 +52,8 @@ export class PoMenuPanelItemComponent implements OnDestroy, OnInit {
   }
 
   private subscribeMenuClickedFromParent() {
-   this.itemsSubscription = this.menuItemsService.receiveFromParentMenuClicked().subscribe(menu => {
+    this.itemsSubscription = this.menuItemsService.receiveFromParentMenuClicked().subscribe(menu => {
       this.processMenuItem(menu);
     });
   }
-
 }

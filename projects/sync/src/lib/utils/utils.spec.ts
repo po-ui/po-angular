@@ -1,7 +1,6 @@
 import * as utilsFunctions from './utils';
 
 describe('Utils:', () => {
-
   it('validateParameter: should return throw error if param value is undefined', () => {
     const param = { key: undefined };
 
@@ -56,9 +55,8 @@ describe('Utils:', () => {
 
   it('getObjectEntries: should return name key and object value', () => {
     const object = { key: 'value' };
-    const objectEntries = [ 'key', 'value' ];
+    const objectEntries = ['key', 'value'];
 
     expect(utilsFunctions.getObjectEntries(object)).toEqual(objectEntries);
   });
-
 });

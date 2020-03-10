@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-decimal-basic',
   templateUrl: './sample-po-decimal-basic.component.html'
 })
-export class SamplePoDecimalBasicComponent { }
+export class SamplePoDecimalBasicComponent {}

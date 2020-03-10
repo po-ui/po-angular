@@ -7,7 +7,6 @@ import { PoNotificationService, PoTableColumn } from '@portinari/portinari-ui';
   templateUrl: './sample-po-url-shortener.component.html'
 })
 export class SamplePoUrlShortenerComponent {
-
   baseUrls: Array<any> = [];
   shortenedUrl: string;
   url: string;
@@ -19,7 +18,7 @@ export class SamplePoUrlShortenerComponent {
 
   @ViewChild('boxUrl', { read: ElementRef, static: true }) boxUrlElement;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   copyToClipboard() {
     this.boxUrlElement.nativeElement.querySelector('input').select();
@@ -33,5 +32,4 @@ export class SamplePoUrlShortenerComponent {
     this.shortenedUrl = `po.com/${urlBase64.substr(urlBase64.length - 3)}` + this.baseUrls.length;
     this.baseUrls.push({ url: this.url, short: this.shortenedUrl });
   }
-
 }

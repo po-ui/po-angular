@@ -17,8 +17,8 @@ describe('PoCalendarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoCalendarComponent ],
-      providers: [ PoCalendarService, PoCalendarLangService ]
+      declarations: [PoCalendarComponent],
+      providers: [PoCalendarService, PoCalendarLangService]
     });
   });
 
@@ -34,7 +34,6 @@ describe('PoCalendarComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', [], {}];
 
     it('p-date-end: should update date with hour 23:59:59', () => {
@@ -58,7 +57,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('p-date-start: should call `setYearFrom0To100`', () => {
-      spyOn(UtilsFunctions , 'setYearFrom0To100');
+      spyOn(UtilsFunctions, 'setYearFrom0To100');
 
       component.dateStart = new Date();
       expect(setYearFrom0To100).toHaveBeenCalled();
@@ -74,7 +73,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('p-date-end: should call `setYearFrom0To100`', () => {
-      spyOn(UtilsFunctions , 'setYearFrom0To100');
+      spyOn(UtilsFunctions, 'setYearFrom0To100');
 
       component.dateEnd = new Date();
 
@@ -102,7 +101,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('p-selected-date: should update with valid value', () => {
-      component.selectedDate = new Date (2018, 5, 10);
+      component.selectedDate = new Date(2018, 5, 10);
 
       expect(component.selectedDate instanceof Date).toBeTruthy();
     });
@@ -125,11 +124,9 @@ describe('PoCalendarComponent:', () => {
     it('p-date-start: should update with `undefined` when set invalid values', () => {
       expectPropertiesValues(component, 'dateStart', invalidValues, undefined);
     });
-
   });
 
   describe('Methods:', () => {
-
     it(`close: should set 'overlayInvisible' to true and 'visible' to false`, () => {
       component.overlayInvisible = false;
       component.visible = true;
@@ -178,18 +175,18 @@ describe('PoCalendarComponent:', () => {
 
     it(`getDayBackgroundColor: should return background when date is different to 'today' and
       'selectedDate' and date is between 'dateStart' and 'dateEnd'`, () => {
-        component.dateStart = new Date(2018, 1, 1);
-        component.dateEnd = new Date(2019, 1, 1);
+      component.dateStart = new Date(2018, 1, 1);
+      component.dateEnd = new Date(2019, 1, 1);
 
-        expect(component.getDayBackgroundColor(new Date(2018, 5, 5))).toBe('po-calendar-box-background');
+      expect(component.getDayBackgroundColor(new Date(2018, 5, 5))).toBe('po-calendar-box-background');
     });
 
     it(`getDayBackgroundColor: should return background-disabled when date is different to 'today' and
       'selectedDate' and date is not between 'dateStart' and 'dateEnd'`, () => {
-        component.dateStart = new Date(2019, 1, 1);
-        component.dateEnd = new Date(2020, 1, 1);
+      component.dateStart = new Date(2019, 1, 1);
+      component.dateEnd = new Date(2020, 1, 1);
 
-        expect(component.getDayBackgroundColor(new Date(2018, 5, 5))).toBe('po-calendar-box-background-disabled');
+      expect(component.getDayBackgroundColor(new Date(2018, 5, 5))).toBe('po-calendar-box-background-disabled');
     });
 
     it(`getDayBackgroundColor: should return '' when not have a date`, () => {
@@ -210,18 +207,18 @@ describe('PoCalendarComponent:', () => {
 
     it(`getDayForegroundColor: should return foreground when date is different to 'today' and
       'selectedDate' and date is between 'dateStart' and 'dateEnd'`, () => {
-        component.dateStart = new Date(2018, 1, 1);
-        component.dateEnd = new Date(2019, 1, 1);
+      component.dateStart = new Date(2018, 1, 1);
+      component.dateEnd = new Date(2019, 1, 1);
 
-        expect(component.getDayForegroundColor(new Date(2018, 5, 5))).toBe('po-calendar-box-foreground');
+      expect(component.getDayForegroundColor(new Date(2018, 5, 5))).toBe('po-calendar-box-foreground');
     });
 
     it(`getDayForegroundColor: should return foreground-disabled when date is different to 'today' and
       'selectedDate' and date is not between 'dateStart' and 'dateEnd'`, () => {
-        component.dateStart = new Date(2019, 1, 1);
-        component.dateEnd = new Date(2020, 1, 1);
+      component.dateStart = new Date(2019, 1, 1);
+      component.dateEnd = new Date(2020, 1, 1);
 
-        expect(component.getDayForegroundColor(new Date(2018, 5, 5))).toBe('po-calendar-box-foreground-disabled');
+      expect(component.getDayForegroundColor(new Date(2018, 5, 5))).toBe('po-calendar-box-foreground-disabled');
     });
 
     it('getForegroundColor: should return foreground-selected when displayValue is equal propertyValue', () => {
@@ -287,7 +284,7 @@ describe('PoCalendarComponent:', () => {
 
     it(`init: should call 'updateDate' with today date when not have a 'selectedDate'`, () => {
       component.selectedDate = undefined;
-      component['today'] =  new Date(2018, 5, 6);
+      component['today'] = new Date(2018, 5, 6);
 
       spyOn(component, <any>'updateDate');
       component.init();
@@ -337,13 +334,13 @@ describe('PoCalendarComponent:', () => {
 
     it(`onPrevMonth: should call 'updateDisplay' with 'displayYear' and 'displayMonthNumber -1'
       when displayMonthNumber is greater then 0`, () => {
-        component.displayYear = 1997;
-        component.displayMonthNumber = 10;
+      component.displayYear = 1997;
+      component.displayMonthNumber = 10;
 
-        spyOn(component, <any>'updateDisplay');
-        component.onPrevMonth();
+      spyOn(component, <any>'updateDisplay');
+      component.onPrevMonth();
 
-        expect(component['updateDisplay']).toHaveBeenCalledWith(1997, 9);
+      expect(component['updateDisplay']).toHaveBeenCalledWith(1997, 9);
     });
 
     it(`onPrevMonth: should call 'updateDisplay' with 'displayYear -1' and 11 when displayMonthNumber is equal or less then 0`, () => {
@@ -356,8 +353,7 @@ describe('PoCalendarComponent:', () => {
       expect(component['updateDisplay']).toHaveBeenCalledWith(1996, 11);
     });
 
-    it(`onNextMonth: should call 'updateDisplay' with 'displayYear' and 'displayMonthNumber +1' when displayMonthNumber is less then 11`,
-    () => {
+    it(`onNextMonth: should call 'updateDisplay' with 'displayYear' and 'displayMonthNumber +1' when displayMonthNumber is less then 11`, () => {
       component.displayYear = 1997;
       component.displayMonthNumber = 10;
 
@@ -483,7 +479,6 @@ describe('PoCalendarComponent:', () => {
       component['updateDate'](new Date(2018, 5, 5));
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(2018, 5);
-
     });
 
     it(`updateDecade: should call 'addAllYearsInDecade' and update 'displayStartDecade' and 'displayFinalDecade'`, () => {
@@ -538,10 +533,8 @@ describe('PoCalendarComponent:', () => {
       spyOn(component, <any>'isMobile').and.returnValue(false);
       expect(component.setMobileVisualization()).toBe('po-calendar');
     });
-
   });
   describe('Templates:', () => {
-
     it(`should remove class 'po-invisible' when set 'overlayInvisible' to false`, () => {
       const poCalendarOverlay = nativeElement.querySelector('.po-calendar-overlay');
       component.visible = true;
@@ -571,9 +564,6 @@ describe('PoCalendarComponent:', () => {
       const poCalendarDayVibled = nativeElement.querySelector('.po-calendar-nav');
 
       expect(poCalendarDayVibled.querySelector('div.po-calendar-nav-title > span.po-mr-1')).toBeTruthy();
-
     });
-
   });
-
 });

@@ -5,8 +5,7 @@ import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
 @Directive()
 export abstract class PoInputGeneric extends PoInputBaseComponent implements AfterViewInit {
-
-  @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   type = 'text';
 
@@ -91,7 +90,9 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   validMaxLength(maxlength: number, value: string) {
-    return ((maxlength || maxlength === 0) && value.length > maxlength) ? value.toString().substring(0, maxlength) : value;
+    return (maxlength || maxlength === 0) && value.length > maxlength
+      ? value.toString().substring(0, maxlength)
+      : value;
   }
 
   eventOnFocus(e: any) {
@@ -112,7 +113,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
       this.blur.emit();
       this.controlChangeEmitter();
     }
-
   }
 
   controlChangeEmitter() {
@@ -145,7 +145,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   getErrorPattern() {
-    return (this.errorPattern !== '' && this.hasInvalidClass()) ? this.errorPattern : '';
+    return this.errorPattern !== '' && this.hasInvalidClass() ? this.errorPattern : '';
   }
 
   validateClassesForPattern() {
@@ -179,7 +179,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
           // Se o model for definido como formatado, então precisa atualizá-lo no primeiro acesso
           if (this.objMask.formatModel) {
             this.callUpdateModelWithTimeout(this.objMask.valueToModel);
-
           }
         } else {
           this.inputEl.nativeElement.value = value;
@@ -197,7 +196,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   getScreenValue() {
-    const screenValue = this.inputEl && this.inputEl.nativeElement.value || undefined;
+    const screenValue = (this.inputEl && this.inputEl.nativeElement.value) || undefined;
 
     if (this.type === 'number') {
       const parsedValue = parseFloat(screenValue);
@@ -207,6 +206,5 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     }
   }
 
-  abstract extraValidation(c: AbstractControl): { [key: string]: any; };
-
+  abstract extraValidation(c: AbstractControl): { [key: string]: any };
 }

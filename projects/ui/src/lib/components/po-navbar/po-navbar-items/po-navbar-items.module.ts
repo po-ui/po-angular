@@ -6,16 +6,8 @@ import { PoNavbarItemComponent } from './po-navbar-item/po-navbar-item.component
 import { PoNavbarItemsComponent } from './po-navbar-items.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
-  declarations: [
-    PoNavbarItemComponent,
-    PoNavbarItemsComponent
-  ],
-  exports: [
-    PoNavbarItemsComponent
-  ]
+  imports: [CommonModule, RouterModule],
+  declarations: [PoNavbarItemComponent, PoNavbarItemsComponent],
+  exports: [PoNavbarItemsComponent]
 })
-export class PoNavbarItemsModule { }
+export class PoNavbarItemsModule {}

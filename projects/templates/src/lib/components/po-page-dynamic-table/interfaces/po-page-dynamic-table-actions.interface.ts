@@ -6,7 +6,6 @@
  * Interface para as ações do componente po-page-dynamic-table.
  */
 export interface PoPageDynamicTableActions {
-
   /**
    * @description
    *
@@ -70,5 +69,4 @@ export interface PoPageDynamicTableActions {
 
   /** Habilita a ação de exclusão em lote na página. */
   removeAll?: boolean;
-
 }

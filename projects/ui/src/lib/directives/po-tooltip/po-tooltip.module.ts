@@ -9,11 +9,8 @@ import { PoTooltipDirective } from './po-tooltip.directive';
  * Módulo da diretiva Po-Tooltip.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [PoTooltipDirective],
   exports: [PoTooltipDirective]
 })
-
-export class PoTooltipModule { }
+export class PoTooltipModule {}

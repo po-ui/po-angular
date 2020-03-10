@@ -1,7 +1,14 @@
-import { requiredFailed, maxlengpoailed, minlengpoailed, patternFailed, minFailed, maxFailed, dateFailed } from './validators';
+import {
+  requiredFailed,
+  maxlengpoailed,
+  minlengpoailed,
+  patternFailed,
+  minFailed,
+  maxFailed,
+  dateFailed
+} from './validators';
 
 describe('requiredFailed: ', () => {
-
   it('should be true', () => {
     expect(requiredFailed(true, false, '')).toBeTruthy();
   });
@@ -31,11 +38,9 @@ describe('requiredFailed: ', () => {
 
     expect(requiredFailed(required, disabled, value)).toBeFalsy();
   });
-
 });
 
 describe('Function maxlengpoailed:', () => {
-
   it('should return `true` if value.length is greater than `maxlength`', () => {
     expect(maxlengpoailed(3, '1234')).toBeTruthy();
     expect(maxlengpoailed(3, '1234567')).toBeTruthy();
@@ -56,11 +61,9 @@ describe('Function maxlengpoailed:', () => {
     expect(maxlengpoailed(null, '123')).toBeFalsy();
     expect(maxlengpoailed(NaN, '123')).toBeFalsy();
   });
-
 });
 
 describe('Function minlengpoailed:', () => {
-
   it('should return `true` if value.length is less than `minlength`', () => {
     expect(minlengpoailed(3, 0)).toBeTruthy();
     expect(minlengpoailed(3, '12')).toBeTruthy();
@@ -82,13 +85,11 @@ describe('Function minlengpoailed:', () => {
     expect(minlengpoailed(NaN, '123')).toBeFalsy();
     expect(minlengpoailed(0, '123')).toBeFalsy();
   });
-
 });
 
 describe('Function patternFailed', () => {
-
   it('should be true', () => {
-    expect(patternFailed('\d', 'a')).toBeTruthy();
+    expect(patternFailed('d', 'a')).toBeTruthy();
     expect(patternFailed('[0-3]', '4')).toBeTruthy();
     expect(patternFailed('[(0', '4')).toBeTruthy();
   });
@@ -97,11 +98,9 @@ describe('Function patternFailed', () => {
     expect(patternFailed('[0-3]', '0')).toBeFalsy();
     expect(patternFailed('[0-3]', '3')).toBeFalsy();
   });
-
 });
 
 describe('Function minFailed:', () => {
-
   it('should return `true` if value is less than min', () => {
     expect(minFailed(3, 1)).toBeTruthy();
     expect(minFailed(3, 2)).toBeTruthy();
@@ -131,11 +130,9 @@ describe('Function minFailed:', () => {
     expect(minFailed(999, 1000)).toBeFalsy();
     expect(minFailed(1000, 1000)).toBeFalsy();
   });
-
 });
 
 describe('Function maxFailed:', () => {
-
   it('should return `true` if value is greater than max', () => {
     expect(maxFailed(1, 3)).toBeTruthy();
     expect(maxFailed(2, 3)).toBeTruthy();
@@ -164,11 +161,9 @@ describe('Function maxFailed:', () => {
     expect(maxFailed(1000, 999)).toBeFalsy();
     expect(maxFailed(1000, 1000)).toBeFalsy();
   });
-
 });
 
 describe('Function dateFailed', () => {
-
   it('should be true', () => {
     expect(dateFailed('teste')).toBeTruthy();
   });
@@ -176,5 +171,4 @@ describe('Function dateFailed', () => {
   it('should be false', () => {
     expect(dateFailed(new Date().toString())).toBeFalsy();
   });
-
 });

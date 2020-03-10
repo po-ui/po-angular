@@ -1,5 +1,18 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, HostListener,
-  IterableDiffers, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ComponentRef,
+  DoCheck,
+  ElementRef,
+  HostListener,
+  IterableDiffers,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 
 import { Subject } from 'rxjs';
 
@@ -36,7 +49,6 @@ import { PoChartType } from './enums/po-chart-type.enum';
   templateUrl: './po-chart.component.html'
 })
 export class PoChartComponent extends PoChartBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
-
   private calculatedElement: boolean = false;
   private componentRef: ComponentRef<{}>;
   private differ: any;
@@ -61,15 +73,16 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   @ViewChild('chartWrapper', { static: true }) chartWrapper: ElementRef;
 
   @HostListener('window:resize')
-  onResize = () => this.windowResizeListener.next()
+  onResize = () => this.windowResizeListener.next();
 
   constructor(
     public changeDetector: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private differs: IterableDiffers) {
-      super();
+    private differs: IterableDiffers
+  ) {
+    super();
 
-      this.differ = this.differs.find([]).create(null);
+    this.differ = this.differs.find([]).create(null);
   }
 
   get isChartGaugeType(): boolean {
@@ -154,10 +167,10 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     const colorsLength = PoChartColors.length - 1;
 
     if (!this.chartSeries) {
-      return this.colors = PoChartColors[colorsLength];
+      return (this.colors = PoChartColors[colorsLength]);
     }
     if (this.type === PoChartType.Gauge) {
-      return this.colors = PoChartColors[0];
+      return (this.colors = PoChartColors[0]);
     }
 
     const seriesLength = this.chartSeries.length - 1;
@@ -172,10 +185,10 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
         colors = colors.concat(PoChartColors[colorsLength]);
       }
 
-      return this.colors = colors;
+      return (this.colors = colors);
     }
 
-    return this.colors = PoChartColors[seriesLength];
+    return (this.colors = PoChartColors[seriesLength]);
   }
 
   private removeWindowResizeListener() {
@@ -213,5 +226,4 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
       instance.chartWrapper = this.chartWrapper.nativeElement.offsetWidth;
     });
   }
-
 }

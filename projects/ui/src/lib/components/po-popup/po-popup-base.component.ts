@@ -33,7 +33,6 @@ const poPopupDefaultPosition = 'bottom-left';
  */
 @Directive()
 export class PoPopupBaseComponent {
-
   private _actions: Array<PoPopupAction>;
   private _customPositions?: Array<string>;
   private _hideArrow: boolean = false;
@@ -190,7 +189,7 @@ export class PoPopupBaseComponent {
    * ```
    */
   @Input('p-target') set target(value: any) {
-    this._target = (value instanceof ElementRef) ? value.nativeElement : value;
+    this._target = value instanceof ElementRef ? value.nativeElement : value;
   }
 
   get target() {
@@ -199,5 +198,4 @@ export class PoPopupBaseComponent {
 
   protected clickoutListener: () => void;
   protected resizeListener: () => void;
-
 }

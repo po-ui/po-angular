@@ -6,9 +6,8 @@ import { PoDisclaimer } from '../po-disclaimer//po-disclaimer.interface';
 import { PoDisclaimerGroupBaseComponent } from './po-disclaimer-group-base.component';
 
 describe('PoDisclaimerGroupBaseComponent:', () => {
-
   const differ = {
-    find: () => ({ create: () => {}}),
+    find: () => ({ create: () => {} })
   };
 
   const component = new PoDisclaimerGroupBaseComponent(<any>differ);
@@ -18,7 +17,6 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-hide-remove-all: should set property `p-hide-remove-all`.', () => {
       expectSettersMethod(component, 'hideRemoveAll', '', '_hideRemoveAll', true);
       expectSettersMethod(component, 'hideRemoveAll', 'true', '_hideRemoveAll', true);
@@ -41,11 +39,9 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
       component.disclaimers = null;
       expect(component.disclaimers).toEqual([]);
     });
-
   });
 
   describe('Methods:', () => {
-
     let disclaimers: Array<PoDisclaimer>;
 
     let invalidDisclaimers: Array<PoDisclaimer>;
@@ -53,7 +49,6 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     let validDisclaimers: Array<PoDisclaimer>;
 
     beforeEach(() => {
-
       disclaimers = [
         { value: 'hotel', label: 'Hotel', property: 'hotel', hideClose: false },
         { value: '500', label: 'Price', property: 'Preço', hideClose: false },
@@ -61,9 +56,9 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
       ];
 
       invalidDisclaimers = [
-        { value: '' , label: 'InvalidString', property: 'invalidString' },
-        { value: undefined , label: 'InvalidValue', property: 'invalidValue' },
-        { value: null , label: 'Null', property: 'invalidNull' }
+        { value: '', label: 'InvalidString', property: 'invalidString' },
+        { value: undefined, label: 'InvalidValue', property: 'invalidValue' },
+        { value: null, label: 'Null', property: 'invalidNull' }
       ];
 
       validDisclaimers = [
@@ -78,7 +73,6 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     });
 
     it('ngDoCheck: should call `checkChanges`.', () => {
-
       spyOn(component, <any>'checkChanges');
 
       component.ngDoCheck();
@@ -87,14 +81,11 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     });
 
     it('checkChanges: shouldn`t call `emitChangeDisclaimers` if `diff` return `false`.', () => {
-
       const fakeThis = {
         differ: {
           diff: () => false
         },
-        disclaimers: [
-          { value: 'house', label: 'House', property: 'house' }
-        ],
+        disclaimers: [{ value: 'house', label: 'House', property: 'house' }],
         previousDisclaimers: [{}],
         disclaimersAreChanged: () => true,
         emitChangeDisclaimers: () => {}
@@ -108,14 +99,11 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     });
 
     it('checkChanges: shouldn`t call `emitChangeDisclaimers` if `disclaimersAreChanged` return `false`.', () => {
-
       const fakeThis = {
         differ: {
           diff: () => true
         },
-        disclaimers: [
-          { value: 'house', label: 'House', property: 'house' }
-        ],
+        disclaimers: [{ value: 'house', label: 'House', property: 'house' }],
         previousDisclaimers: [{}],
         disclaimersAreChanged: () => false,
         emitChangeDisclaimers: () => {}
@@ -129,14 +117,11 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     });
 
     it('checkChanges: should call `emitChangeDisclaimers`.', () => {
-
       const fakeThis = {
         differ: {
           diff: () => true
         },
-        disclaimers: [
-          { value: 'house', label: 'House', property: 'house' }
-        ],
+        disclaimers: [{ value: 'house', label: 'House', property: 'house' }],
         previousDisclaimers: [{}],
         disclaimersAreChanged: () => true,
         emitChangeDisclaimers: () => {}
@@ -150,7 +135,6 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     });
 
     it('checkChanges: shouldn`t call `emitChangeDisclaimers` if property `differ` is undefined.', () => {
-
       spyOn(component, <any>'emitChangeDisclaimers');
 
       component['checkChanges']();
@@ -195,23 +179,21 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     it('removeAllItems: should call `emitChangeDisclaimers` only once.', () => {
       component.disclaimers = validDisclaimers;
 
-      spyOn(component, <any> 'emitChangeDisclaimers');
+      spyOn(component, <any>'emitChangeDisclaimers');
       component.removeAllItems();
 
       expect(component['emitChangeDisclaimers']).toHaveBeenCalledTimes(1);
     });
 
     it('closeItem: should call `emitChangeDisclaimers` if `emitChange` is true.', () => {
-
-      spyOn(component, <any> 'emitChangeDisclaimers');
+      spyOn(component, <any>'emitChangeDisclaimers');
       component.closeItem(validDisclaimers[0], true);
 
       expect(component['emitChangeDisclaimers']).toHaveBeenCalled();
     });
 
     it('closeItem: shouldn`t call `emitChangeDisclaimers` if `emitChange` is false.', () => {
-
-      spyOn(component, <any> 'emitChangeDisclaimers');
+      spyOn(component, <any>'emitChangeDisclaimers');
       component.closeItem(validDisclaimers[0], false);
 
       expect(component['emitChangeDisclaimers']).not.toHaveBeenCalled();
@@ -230,12 +212,20 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     });
 
     it('checkDisclaimers: should return only valid `disclaimers` when has invalid values too.', () => {
-      let checkedDisclaimers = component['checkDisclaimers']([...invalidDisclaimers, ...validDisclaimers, ...invalidDisclaimers]);
+      let checkedDisclaimers = component['checkDisclaimers']([
+        ...invalidDisclaimers,
+        ...validDisclaimers,
+        ...invalidDisclaimers
+      ]);
 
       expect(checkedDisclaimers.length).toBe(validDisclaimers.length);
 
       // 2º cenário com os valores inválidos no início da lista
-      checkedDisclaimers = component['checkDisclaimers']([...invalidDisclaimers, ...invalidDisclaimers, ...validDisclaimers]);
+      checkedDisclaimers = component['checkDisclaimers']([
+        ...invalidDisclaimers,
+        ...invalidDisclaimers,
+        ...validDisclaimers
+      ]);
 
       expect(checkedDisclaimers.length).toBe(validDisclaimers.length);
     });
@@ -252,12 +242,13 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
         expect(component['previousDisclaimers']).toEqual(component.disclaimers);
         done();
       });
-
     });
 
     describe('disclaimersAreChanged:', () => {
-
-      const disclaimerItems = [{ value: 'progress', property: 'Progress' }, { value: 'protheus', property: 'Protheus' }];
+      const disclaimerItems = [
+        { value: 'progress', property: 'Progress' },
+        { value: 'protheus', property: 'Protheus' }
+      ];
       const expectedReturnFalse = false;
       const expectedReturnTrue = true;
 
@@ -300,7 +291,10 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
       it(`should return true if 'disclaimers.currentValue.property' is different than 'disclaimers.previousValue.property'.`, () => {
         component['previousDisclaimers'] = disclaimerItems;
 
-        const changes: Array<PoDisclaimer> = [{ value: 'progress', property: 'Protheus' }, { value: 'protheus', property: 'Progress' }];
+        const changes: Array<PoDisclaimer> = [
+          { value: 'progress', property: 'Protheus' },
+          { value: 'protheus', property: 'Progress' }
+        ];
         const disclaimersAreChangedReturn = component['disclaimersAreChanged'](changes);
 
         expect(disclaimersAreChangedReturn).toBe(expectedReturnTrue);
@@ -314,7 +308,6 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
 
         expect(disclaimersAreChangedReturn).toBe(expectedReturnFalse);
       });
-
     });
 
     it(`onKeyPress: should call 'removeAllItems' if enter is typed.`, () => {
@@ -345,7 +338,5 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
       expect(component.removeAllItems).not.toHaveBeenCalled();
       expect(UtilsFunction['isKeyCodeEnter']).toHaveBeenCalled();
     });
-
   });
-
 });

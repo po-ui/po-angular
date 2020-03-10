@@ -34,7 +34,7 @@ describe('PoMultiselectComponent:', () => {
     fixture = TestBed.createComponent(PoMultiselectComponent);
     component = fixture.componentInstance;
 
-    component.options = [{label: 'label', value: 1}];
+    component.options = [{ label: 'label', value: 1 }];
 
     fixture.detectChanges();
   });
@@ -61,16 +61,16 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should get disclaimers width', () => {
-    component.visibleDisclaimers = [{label: 'label', value: 1}];
+    component.visibleDisclaimers = [{ label: 'label', value: 1 }];
     fixture.detectChanges();
     expect(component.getDisclaimersWidth().length).toBeTruthy();
   });
 
   it('should calc visible items with a tiny space', () => {
     const selectedOptions = [
-      {label: 'label', value: 1},
-      {label: 'label', value: 2},
-      {label: 'label', value: 3}
+      { label: 'label', value: 1 },
+      { label: 'label', value: 2 },
+      { label: 'label', value: 3 }
     ];
     const fakeThis = {
       getDisclaimersWidth: () => [100, 100, 100],
@@ -104,7 +104,7 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should call debounceResize and set visibleDisclaimers', () => {
-    component.selectedOptions = [{label: 'label', value: 1}];
+    component.selectedOptions = [{ label: 'label', value: 1 }];
     component.visibleDisclaimers = [];
 
     spyOn(component, 'debounceResize');
@@ -183,9 +183,11 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should call dropdown.scrollTo', () => {
-    component.options = [{label: 'label', value: 1},
-                         {label: 'label2', value: 2}];
-    component.selectedOptions = [{label: 'label2', value: 2}];
+    component.options = [
+      { label: 'label', value: 1 },
+      { label: 'label2', value: 2 }
+    ];
+    component.selectedOptions = [{ label: 'label2', value: 2 }];
 
     spyOn(component.dropdown, 'scrollTo');
     component.scrollToSelectedOptions();
@@ -202,7 +204,7 @@ describe('PoMultiselectComponent:', () => {
 
   it('should set visibleOptionsDropdown', () => {
     component.visibleOptionsDropdown = [];
-    component.setVisibleOptionsDropdown([{label: 'label', value: 1}]);
+    component.setVisibleOptionsDropdown([{ label: 'label', value: 1 }]);
     expect(component.visibleOptionsDropdown.length).toBe(1);
   });
 
@@ -214,13 +216,15 @@ describe('PoMultiselectComponent:', () => {
 
   it('should get "" as placeholder', () => {
     component.placeholder = 'PLACEHOLDER';
-    component.visibleDisclaimers = [{label: 'label', value: 1}];
+    component.visibleDisclaimers = [{ label: 'label', value: 1 }];
     expect(component.getPlaceholder()).toBe('');
   });
 
   it('should remove item, call updateVisibleItems and callOnChange', () => {
-    component.selectedOptions = [{label: 'label', value: 1},
-                                 {label: 'label2', value: 2}];
+    component.selectedOptions = [
+      { label: 'label', value: 1 },
+      { label: 'label2', value: 2 }
+    ];
 
     spyOn(component, 'updateVisibleItems');
     spyOn(component, 'callOnChange');
@@ -255,7 +259,6 @@ describe('PoMultiselectComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -379,9 +382,9 @@ describe('PoMultiselectComponent:', () => {
     it(`calculateVisibleItems: should calc visible items and not set 'isCalculateVisibleItems' to false when
       disclaimers width is 0`, () => {
       const selectedOptions = [
-        {label: 'label', value: 1},
-        {label: 'label', value: 2},
-        {label: 'label', value: 3}
+        { label: 'label', value: 1 },
+        { label: 'label', value: 2 },
+        { label: 'label', value: 3 }
       ];
       const fakeThis = {
         getDisclaimersWidth: () => [0, 0, 0],
@@ -399,9 +402,9 @@ describe('PoMultiselectComponent:', () => {
 
     it('calculateVisibleItems: should calc visible items with lots of space', () => {
       const selectedOptions = [
-        {label: 'label', value: 1},
-        {label: 'label', value: 2},
-        {label: 'label', value: 3}
+        { label: 'label', value: 1 },
+        { label: 'label', value: 2 },
+        { label: 'label', value: 3 }
       ];
       const fakeThis = {
         getDisclaimersWidth: () => [100, 100, 100],
@@ -419,9 +422,9 @@ describe('PoMultiselectComponent:', () => {
 
     it('calculateVisibleItems: should calc visible items with a little space', () => {
       const selectedOptions = [
-        {label: 'label', value: 1},
-        {label: 'label', value: 2},
-        {label: 'label', value: 3}
+        { label: 'label', value: 1 },
+        { label: 'label', value: 2 },
+        { label: 'label', value: 3 }
       ];
       const fakeThis = {
         getDisclaimersWidth: () => [100, 100, 100],
@@ -516,7 +519,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('openDropdown: should call `controlDropdownVisibility` when recive true on call and `disabled` is false.', () => {
-      spyOn(component, <any> 'controlDropdownVisibility');
+      spyOn(component, <any>'controlDropdownVisibility');
 
       component.disabled = false;
       component.openDropdown(true);
@@ -525,7 +528,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('openDropdown: shouldn´t call `controlDropdownVisibility` when recive false on call and `disabled` is false.', () => {
-      spyOn(component, <any> 'controlDropdownVisibility');
+      spyOn(component, <any>'controlDropdownVisibility');
 
       component.disabled = false;
       component.openDropdown(false);
@@ -534,7 +537,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('openDropdown: shouldn´t call `controlDropdownVisibility` when recive true on call but `disabled` is true.', () => {
-      spyOn(component, <any> 'controlDropdownVisibility');
+      spyOn(component, <any>'controlDropdownVisibility');
 
       component.disabled = true;
       component.openDropdown(true);
@@ -603,9 +606,11 @@ describe('PoMultiselectComponent:', () => {
       const updateVisibleItemsSpy = spyOn(component, 'updateVisibleItems');
       const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
       const addEventListenerSpy = spyOn(window, 'addEventListener');
-      const listenSpy = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) => callback());
+      const listenSpy = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
+        callback()
+      );
 
-      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
+      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(true);
 
       component['initializeListeners']();
 
@@ -622,9 +627,11 @@ describe('PoMultiselectComponent:', () => {
       const updateVisibleItemsSpy = spyOn(component, 'updateVisibleItems');
       const closeSpy = spyOn(component, <any>'close');
       const addEventListenerSpy = spyOn(window, 'addEventListener');
-      const listenSpy = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) => callback());
+      const listenSpy = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
+        callback()
+      );
 
-      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(false);
+      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(false);
 
       component['initializeListeners']();
 
@@ -672,8 +679,8 @@ describe('PoMultiselectComponent:', () => {
       component['clickOutListener'] = () => {};
       component['resizeListener'] = () => {};
 
-      spyOn(component, <any> 'clickOutListener');
-      spyOn(component, <any> 'resizeListener');
+      spyOn(component, <any>'clickOutListener');
+      spyOn(component, <any>'resizeListener');
       spyOn(window, 'removeEventListener');
 
       component['removeListeners']();
@@ -689,7 +696,7 @@ describe('PoMultiselectComponent:', () => {
       const poMultiselectContainerOffset = 8;
 
       const setElementsSpy = spyOn(component['controlPosition'], 'setElements');
-      const adjustContainerPositionSpy = spyOn(component, <any> 'adjustContainerPosition');
+      const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
 
       component['setPositionDropdown']();
 
@@ -699,13 +706,12 @@ describe('PoMultiselectComponent:', () => {
         poMultiselectContainerOffset,
         component.inputElement,
         customPositions,
-        isSetElementWidth);
+        isSetElementWidth
+      );
     });
-
   });
 
   describe('Templates:', () => {
-
     it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
       component.required = false;
       component.optional = true;
@@ -735,11 +741,9 @@ describe('PoMultiselectComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
 
   describe('Integration:', () => {
-
     const newEvent = (event: string) => window.dispatchEvent(new Event(event));
     const clickOutEvent = () => {
       const documentBody = document.body;
@@ -815,7 +819,5 @@ describe('PoMultiselectComponent:', () => {
 
       expect(adjustContainerPositionSpy).toHaveBeenCalled();
     });
-
   });
-
 });

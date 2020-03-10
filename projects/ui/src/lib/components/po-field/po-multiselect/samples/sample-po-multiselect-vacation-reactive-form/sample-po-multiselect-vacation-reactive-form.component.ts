@@ -8,7 +8,6 @@ import { PoMultiselectOption, PoRadioGroupOption } from '@portinari/portinari-ui
   templateUrl: './sample-po-multiselect-vacation-reactive-form.component.html'
 })
 export class SamplePoMultiselectVacationReactiveFormComponent implements OnInit {
-
   days: number;
   employeesVacations: Array<string> = [];
   finalPeriod: Date;
@@ -32,7 +31,7 @@ export class SamplePoMultiselectVacationReactiveFormComponent implements OnInit 
     { value: 30, label: '30' }
   ];
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.formCollectiveVacations = this.formBuilder.group({
@@ -61,12 +60,12 @@ export class SamplePoMultiselectVacationReactiveFormComponent implements OnInit 
   updateEmployeesVacations() {
     this.nameEmployeesVacations = this.employees
       .filter((employee: PoMultiselectOption) =>
-        this.formCollectiveVacations.get('employeesVacations').value.includes(<string>employee.value))
+        this.formCollectiveVacations.get('employeesVacations').value.includes(<string>employee.value)
+      )
       .map((employee: PoMultiselectOption) => employee.label)
       .join(', ');
     this.initialPeriod = this.formCollectiveVacations.get('initialPeriod').value;
     this.finalPeriod = this.formCollectiveVacations.get('finalPeriod').value;
     this.days = this.formCollectiveVacations.get('days').value;
   }
-
 }

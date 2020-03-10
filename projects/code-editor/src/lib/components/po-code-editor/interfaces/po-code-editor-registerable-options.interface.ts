@@ -8,7 +8,6 @@ import { PoCodeEditorRegisterableTokens } from './po-code-editor-registerable-to
  * Interface para configuração de Opções de novas sintaxes ao code editor.
  */
 export interface PoCodeEditorRegisterableOptions {
-
   /** Palavras chaves da sintaxe. */
   keywords: Array<string>;
 
@@ -23,5 +22,4 @@ export interface PoCodeEditorRegisterableOptions {
 
   /** Interface para recebimento de token específicos da sintaxe. */
   tokenizer: PoCodeEditorRegisterableTokens;
-
 }

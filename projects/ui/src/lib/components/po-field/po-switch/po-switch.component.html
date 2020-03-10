@@ -1,9 +1,7 @@
-<po-field-container
-  [p-label]="label"
-  [p-help]="help">
-
+<po-field-container [p-label]="label" [p-help]="help">
   <div class="po-field-container-content po-switch-content" [attr.name]="name">
-    <div class="po-switch-container po-clickable"
+    <div
+      class="po-switch-container po-clickable"
       #switchContainer
       [class.po-switch-container-disabled]="disabled"
       [class.po-switch-container-off]="switchValue === false && !disabled"
@@ -11,20 +9,20 @@
       [class.po-switch-container-right]="getSwitchPosition() === 'right'"
       [tabindex]="disabled ? -1 : 0"
       (click)="eventClick()"
-      (keydown)="onKeyDown($event)">
-
-      <div class="po-switch-button"
+      (keydown)="onKeyDown($event)"
+    >
+      <div
+        class="po-switch-button"
         [class.po-switch-button-on]="switchValue === true"
         [class.po-switch-button-off]="switchValue === false"
-        [class.po-switch-button-disabled]="disabled">
-
+        [class.po-switch-button-disabled]="disabled"
+      >
         <span class="po-icon po-icon-{{ switchValue === true ? 'ok' : 'close' }}"></span>
       </div>
     </div>
 
-    <span class="po-switch-label po-clickable po-switch-label-{{ getLabelPosition() }}"
-      (click)="eventClick()">
-        {{ switchValue === true ? labelOn : labelOff }}
+    <span class="po-switch-label po-clickable po-switch-label-{{ getLabelPosition() }}" (click)="eventClick()">
+      {{ switchValue === true ? labelOn : labelOff }}
     </span>
   </div>
 

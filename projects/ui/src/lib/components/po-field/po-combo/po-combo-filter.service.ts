@@ -18,15 +18,16 @@ import { validateObjectType } from '../../../utils/util';
  */
 @Injectable()
 export class PoComboFilterService implements PoComboFilter {
-
   private _url: string;
 
   fieldLabel: string = 'label';
   fieldValue: string = 'value';
 
-  get url(): string { return this._url; }
+  get url(): string {
+    return this._url;
+  }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getFilteredData(param: any, filterParams?: any): Observable<Array<PoComboOption>> {
     const value = param.value;
@@ -34,14 +35,17 @@ export class PoComboFilterService implements PoComboFilter {
 
     const params = { ...filterParamsValidated, filter: value };
 
-    return this.http.get(`${this.url}`, {responseType: 'json', params: params})
+    return this.http
+      .get(`${this.url}`, { responseType: 'json', params: params })
       .pipe(map((response: PoResponse) => this.parseToArrayComboOption(response.items)));
   }
 
   getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
     const filterParamsValidated = validateObjectType(filterParams);
 
-    return this.http.get(`${this.url}/${value}`, { params: filterParamsValidated }).pipe(map(item => this.parseToComboOption(item)));
+    return this.http
+      .get(`${this.url}/${value}`, { params: filterParamsValidated })
+      .pipe(map(item => this.parseToComboOption(item)));
   }
 
   configProperties(url: string, fieldLabel: string, fieldValue: string) {
@@ -52,11 +56,9 @@ export class PoComboFilterService implements PoComboFilter {
 
   private parseToArrayComboOption(items: Array<any>): Array<PoComboOption> {
     if (items && items.length > 0) {
-
       return items.map(item => {
         return this.parseToComboOption(item);
       });
-
     }
 
     return [];
@@ -64,12 +66,10 @@ export class PoComboFilterService implements PoComboFilter {
 
   private parseToComboOption(item: any): PoComboOption {
     if (item && item[this.fieldValue]) {
-
       const label = item[this.fieldLabel];
       const value = item[this.fieldValue];
 
       return { label, value };
     }
   }
-
 }

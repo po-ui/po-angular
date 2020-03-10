@@ -6,7 +6,6 @@
  * *Enum* para os tipos de motivo de bloqueio de usuário. As informações modificam conforme o motivo selecionado pelo desenvolvedor.
  */
 export enum PoPageBlockedUserReason {
-
   /** Sem definição; a tela exibirá conteúdo de bloqueio genérico. */
   None = 'none',
 
@@ -14,6 +13,5 @@ export enum PoPageBlockedUserReason {
   ExceededAttempts = 'exceededAttempts',
 
   /** Definição para senha expirada. */
-  ExpiredPassword = 'expiredPassword',
-
+  ExpiredPassword = 'expiredPassword'
 }

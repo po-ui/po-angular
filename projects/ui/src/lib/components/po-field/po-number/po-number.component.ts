@@ -35,19 +35,19 @@ import { PoNumberBaseComponent } from './po-number-base.component';
   selector: 'po-number',
   templateUrl: './po-number.component.html',
   providers: [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoNumberComponent),
-    multi: true,
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoNumberComponent),
-    multi: true,
-  }]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoNumberComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoNumberComponent),
+      multi: true
+    }
+  ]
 })
 export class PoNumberComponent extends PoNumberBaseComponent {
-
   /** Valor mínimo. */
   min?: number;
   @Input('p-min') set setMin(min: string) {
@@ -79,21 +79,23 @@ export class PoNumberComponent extends PoNumberBaseComponent {
     super(el);
   }
 
-  extraValidation(abstractControl: AbstractControl): { [key: string]: any; } {
-
+  extraValidation(abstractControl: AbstractControl): { [key: string]: any } {
     if (minFailed(this.min, abstractControl.value)) {
-      return { min: {
-        valid: false,
-      }};
+      return {
+        min: {
+          valid: false
+        }
+      };
     }
 
     if (maxFailed(this.max, abstractControl.value)) {
-      return { max: {
-        valid: false,
-      }};
+      return {
+        max: {
+          valid: false
+        }
+      };
     }
 
     return null;
   }
-
 }

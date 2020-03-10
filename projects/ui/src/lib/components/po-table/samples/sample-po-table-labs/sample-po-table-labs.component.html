@@ -21,33 +21,25 @@
   (p-expanded)="changeEvent('p-expanded')"
   (p-selected)="changeEvent('p-selected')"
   (p-show-more)="showMore()"
-  (p-unselected)="changeEvent('p-unselected')">
+  (p-unselected)="changeEvent('p-unselected')"
+>
 </po-table>
 
 <po-divider></po-divider>
 
 <div class="po-row">
-  <po-info
-    class="po-md-12"
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info class="po-md-12" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
 <po-divider></po-divider>
 
 <div class="po-row">
-  <po-button
-    class="po-md-3"
-    p-label="Add Item"
-    (p-click)="addItem()">
-  </po-button>
+  <po-button class="po-md-3" p-label="Add Item" (p-click)="addItem()"> </po-button>
 </div>
 
 <po-divider></po-divider>
 
 <form #f="ngForm">
-
   <div class="po-row">
     <po-checkbox-group
       class="po-md-12"
@@ -56,7 +48,8 @@
       p-label="Columns"
       p-columns="4"
       [p-options]="columnsOptions"
-      (p-change)="updateColumns()">
+      (p-change)="updateColumns()"
+    >
     </po-checkbox-group>
   </div>
 
@@ -66,14 +59,16 @@
       name="typeHeader"
       [(ngModel)]="columnsDefinition.detail.detail.typeHeader"
       p-label="Column detail typeHeader"
-      [p-options]="typeHeaderOptions">
+      [p-options]="typeHeaderOptions"
+    >
     </po-radio-group>
 
     <po-switch
       class="po-lg-6"
       name="hideSelect"
       [(ngModel)]="columnsDefinition.detail.detail.hideSelect"
-      p-label="Column detail hideSelect">
+      p-label="Column detail hideSelect"
+    >
     </po-switch>
   </div>
 
@@ -83,18 +78,13 @@
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-number
-      class="po-md-3"
-      name="height"
-      [(ngModel)]="height"
-      p-clean
-      p-help="Height of table"
-      p-label="Height">
+    <po-number class="po-md-3" name="height" [(ngModel)]="height" p-clean p-help="Height of table" p-label="Height">
     </po-number>
 
     <po-input
@@ -103,7 +93,8 @@
       [(ngModel)]="literals"
       p-help='Ex.: {"noData": "Sem dados a serem exibidos", "noColumns": "Colunas não definidas"}'
       p-label="Literals"
-      (p-change)="changeLiterals()">
+      (p-change)="changeLiterals()"
+    >
     </po-input>
 
     <po-number
@@ -112,7 +103,8 @@
       [(ngModel)]="maxColumns"
       p-clean
       p-help="Max columns to be visible"
-      p-label="Max Columns">
+      p-label="Max Columns"
+    >
     </po-number>
   </div>
 
@@ -125,7 +117,8 @@
       p-indeterminate
       p-label="Actions"
       [p-options]="actionsDefinitionOptions"
-      (p-change)="changeActionOptions()">
+      (p-change)="changeActionOptions()"
+    >
     </po-checkbox-group>
   </div>
 
@@ -137,7 +130,8 @@
       p-help="To enable 'hide select all' and 'single select' check 'selectable'."
       p-label="Selection"
       [p-options]="selectionOptions"
-      (p-change)="changeSelectionOptions()">
+      (p-change)="changeSelectionOptions()"
+    >
     </po-checkbox-group>
 
     <po-radio-group
@@ -145,27 +139,16 @@
       name="container"
       [(ngModel)]="container"
       p-label="Container"
-      [p-options]="containerOptions">
+      [p-options]="containerOptions"
+    >
     </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
-
 </form>
 
-<po-modal
-  p-click-out="true"
-  p-size="sm"
-  p-title="Portinari Table">
-
-  <po-info
-    p-label="Chosen Item:"
-    [p-value]="currentItem">
-  </po-info>
+<po-modal p-click-out="true" p-size="sm" p-title="Portinari Table">
+  <po-info p-label="Chosen Item:" [p-value]="currentItem"> </po-info>
 </po-modal>

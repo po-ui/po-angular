@@ -28,7 +28,6 @@ import { PoProgressStatus } from './enums/po-progress-status.enum';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoProgressComponent extends PoProgressBaseComponent {
-
   get isAllowCancel(): boolean {
     return !!this.cancel.observers.length && this.status !== PoProgressStatus.Success;
   }
@@ -42,7 +41,6 @@ export class PoProgressComponent extends PoProgressBaseComponent {
   }
 
   get statusClass(): string {
-
     if (this.status === PoProgressStatus.Success) {
       return 'po-progress-success';
     }
@@ -61,5 +59,4 @@ export class PoProgressComponent extends PoProgressBaseComponent {
   emitRetry() {
     this.retry.emit();
   }
-
 }

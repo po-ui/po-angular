@@ -13,7 +13,7 @@ describe('PoLoadingOverlayComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-    imports: [ PoLoadingModule ]
+      imports: [PoLoadingModule]
     });
   });
 
@@ -29,7 +29,6 @@ describe('PoLoadingOverlayComponent', () => {
   });
 
   describe('Properties', () => {
-
     it('p-neutral-color: should update property with valid values', () => {
       const validValuesTrue = [true, 'true', 1, ''];
       const validValuesFalse = [false, 'false', 0];
@@ -46,12 +45,10 @@ describe('PoLoadingOverlayComponent', () => {
   });
 
   describe('Templates', () => {
-
     it('should count the amount of `po-loading-icon-bar` elements', () => {
       const iconBars = fixture.debugElement.queryAll(By.css('.po-loading-icon-bar'));
 
       expect(iconBars.length).toBe(8);
     });
   });
-
 });

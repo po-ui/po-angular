@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite, expectBrowserLanguageMethod, expectPropertiesValues } from './../../../util-test/util-expect.spec';
+import {
+  configureTestSuite,
+  expectBrowserLanguageMethod,
+  expectPropertiesValues
+} from './../../../util-test/util-expect.spec';
 
 import { PoFieldContainerComponent } from './po-field-container.component';
 
@@ -38,14 +42,12 @@ describe('PoFieldContainerComponent:', () => {
 
   it('should get not existent optional literal', () => {
     expectBrowserLanguageMethod('al', component, 'getOptionalText', '(Opcional)');
-
   });
   it('should get default optional literal', () => {
     expectBrowserLanguageMethod('', component, 'getOptionalText', '(Opcional)');
   });
 
   describe('Properties: ', () => {
-
     it('p-optional: should update property with `true` if valid values', () => {
       const validValues = ['', true, 'true'];
 
@@ -57,11 +59,9 @@ describe('PoFieldContainerComponent:', () => {
 
       expectPropertiesValues(component, 'optional', invalidValues, false);
     });
-
   });
 
   describe('Templates:', () => {
-
     const fieldHelp = 'div.po-field-help';
 
     it('should have label', () => {
@@ -129,7 +129,5 @@ describe('PoFieldContainerComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

@@ -9,7 +9,6 @@ import { PoNotificationService } from '@portinari/portinari-ui';
   templateUrl: './sample-po-checkbox-group-password-policy.component.html'
 })
 export class SamplePoCheckboxGroupPasswordPolicyComponent {
-
   attempts: number;
   expiration: number;
   maxAttempts: boolean;
@@ -31,10 +30,9 @@ export class SamplePoCheckboxGroupPasswordPolicyComponent {
     { value: '4', label: 'Audit rejection of access to resources' }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   confirm() {
     this.poNotification.success('Settings saved successfully!');
   }
-
 }

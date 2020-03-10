@@ -1,5 +1,5 @@
 <form #f="ngForm">
-  <div class ="po-row">
+  <div class="po-row">
     <po-combo
       class="po-md-4"
       name="product"
@@ -8,7 +8,8 @@
       p-placeholder="Select a Product"
       p-required
       [p-options]="productOptions"
-      (p-change)="checkProduct()">
+      (p-change)="checkProduct()"
+    >
     </po-combo>
 
     <po-number
@@ -20,27 +21,14 @@
       p-placeholder="0"
       p-required
       [p-max]="stock"
-      (p-change)="checkQuantity()">
+      (p-change)="checkQuantity()"
+    >
     </po-number>
 
-    <po-number
-      class="po-md-2"
-      name="price"
-      [(ngModel)]="price"
-      p-disabled
-      p-label="Price"
-      p-placeholder="0"
-      p-required>
+    <po-number class="po-md-2" name="price" [(ngModel)]="price" p-disabled p-label="Price" p-placeholder="0" p-required>
     </po-number>
 
-    <po-number
-      class="po-md-2"
-      name="stock"
-      [(ngModel)]="stock"
-      p-disabled
-      p-label="Stock"
-      p-placeholder="0"
-      p-required>
+    <po-number class="po-md-2" name="stock" [(ngModel)]="stock" p-disabled p-label="Stock" p-placeholder="0" p-required>
     </po-number>
 
     <po-number
@@ -50,27 +38,19 @@
       p-disabled
       p-label="Total Price"
       p-placeholder="0"
-      p-required>
+      p-required
+    >
     </po-number>
-
   </div>
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Add To Cart"
-      [p-disabled]="f.form.invalid || stock === 0"
-      (p-click)="addCart()">
+    <po-button class="po-md-3" p-label="Add To Cart" [p-disabled]="f.form.invalid || stock === 0" (p-click)="addCart()">
     </po-button>
   </div>
 </form>
 
-<hr>
+<hr />
 
-<po-table
-  p-striped="true"
-  [p-columns]="columns"
-  [p-items]="products">
-</po-table>
+<po-table p-striped="true" [p-columns]="columns" [p-items]="products"> </po-table>
 
 <div class="po-row">
   <div class="po-pull-right po-lg-12">

@@ -13,12 +13,7 @@ describe('PoUrlComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoUrlComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoUrlComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -41,7 +36,6 @@ describe('PoUrlComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -188,11 +182,9 @@ describe('PoUrlComponent:', () => {
         expect(regExpUrl.test(url)).toBeFalsy(`URL ${url} is a valid URL.`);
       });
     }));
-
   });
 
   describe('Templates:', () => {
-
     const eventKeyup = new KeyboardEvent('keyup', { 'key': 'a' });
 
     it('should have `world` icon', () => {
@@ -275,7 +267,5 @@ describe('PoUrlComponent:', () => {
       expect(input.value).toContain(fakeURL);
       expect(fixture.debugElement.nativeElement.querySelectorAll('po-url.ng-dirty.ng-invalid')).toBeTruthy();
     }));
-
   });
-
 });

@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-disclaimer-group-basic',
   templateUrl: './sample-po-disclaimer-group-basic.component.html'
 })
-export class SamplePoDisclaimerGroupBasicComponent { }
+export class SamplePoDisclaimerGroupBasicComponent {}

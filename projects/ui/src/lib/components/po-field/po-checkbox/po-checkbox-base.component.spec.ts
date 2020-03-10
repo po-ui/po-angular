@@ -3,41 +3,38 @@ import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
 
 class PoCheckboxComponent extends PoCheckboxBaseComponent {
-  protected changeModelValue(value: boolean | null) { }
+  protected changeModelValue(value: boolean | null) {}
 }
 
 describe('PoCheckboxBaseComponent:', () => {
   let component: PoCheckboxBaseComponent;
 
-  beforeEach((() => {
+  beforeEach(() => {
     component = new PoCheckboxComponent();
-    component.propagateChange = (value: any) => { };
-  }));
+    component.propagateChange = (value: any) => {};
+  });
 
   it('should be created', () => {
-    component.registerOnChange(() => { });
-    component.registerOnTouched(() => { });
+    component.registerOnChange(() => {});
+    component.registerOnTouched(() => {});
     expect(component instanceof PoCheckboxBaseComponent).toBeTruthy();
   });
 
   describe('Properties:', () => {
-
     it('disabled: should update with true value', () => {
-      const booleanValidTrueValues = [ true, 'true', 1, '' ];
+      const booleanValidTrueValues = [true, 'true', 1, ''];
 
       expectPropertiesValues(component, 'disabled', booleanValidTrueValues, true);
     });
 
     it('disabled: should update with false value', () => {
-      const booleanInvalidValues = [ undefined, null, 2, 'string', 0, NaN, false ];
+      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
 
       expectPropertiesValues(component, 'disabled', booleanInvalidValues, false);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('changeValue: should call `propagateChange` if it is defined and call `change.emit` with `checkboxValue`', () => {
       component.checkboxValue = true;
 
@@ -114,7 +111,5 @@ describe('PoCheckboxBaseComponent:', () => {
 
       expect(component['changeModelValue']).not.toHaveBeenCalled();
     });
-
   });
-
 });

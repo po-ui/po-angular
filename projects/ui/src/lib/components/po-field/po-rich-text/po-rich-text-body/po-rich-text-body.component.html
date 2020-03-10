@@ -1,4 +1,5 @@
-<div #bodyElement
+<div
+  #bodyElement
   class="po-rich-text-body"
   tabindex="0"
   [attr.contenteditable]="!readonly"
@@ -10,5 +11,5 @@
   (focus)="onFocus()"
   (keydown)="onKeyDown($event)"
   (keyup)="onKeyUp($event)"
-  (paste)="onPaste()">
-</div>
+  (paste)="onPaste()"
+></div>

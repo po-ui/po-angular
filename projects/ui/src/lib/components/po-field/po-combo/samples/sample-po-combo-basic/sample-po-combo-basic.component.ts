@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-combo-basic',
   templateUrl: './sample-po-combo-basic.component.html'
 })
-export class SamplePoComboBasicComponent { }
+export class SamplePoComboBasicComponent {}

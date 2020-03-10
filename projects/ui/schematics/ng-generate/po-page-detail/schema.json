@@ -62,8 +62,6 @@
         }
       ]
     }
-   },
-  "required": [
-    "name"
-  ]
+  },
+  "required": ["name"]
 }

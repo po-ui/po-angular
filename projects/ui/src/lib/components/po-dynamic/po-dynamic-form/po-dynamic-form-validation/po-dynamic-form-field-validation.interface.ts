@@ -9,7 +9,6 @@ import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
  * Estrutura de retorno da validação de um campo.
  */
 export interface PoDynamicFormFieldValidation {
-
   /**
    * Novas definições das propriedades do campo.
    *
@@ -22,5 +21,4 @@ export interface PoDynamicFormFieldValidation {
 
   /** Novo valor do campo */
   value?: any;
-
 }

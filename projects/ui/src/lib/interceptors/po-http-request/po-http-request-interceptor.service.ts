@@ -99,7 +99,6 @@ const screenLock = 'X-Portinari-Screen-Lock';
   providedIn: 'root'
 })
 export class PoHttpRequestInterceptorService implements HttpInterceptor {
-
   private loadingOverlayComponent: ComponentRef<PoLoadingOverlayComponent> = undefined;
 
   private pendingRequests: number = 0;
@@ -107,10 +106,10 @@ export class PoHttpRequestInterceptorService implements HttpInterceptor {
 
   constructor(
     private controlHttpRequest: PoHttpRequesControltService,
-    private poComponentInjector: PoComponentInjectorService) {  }
+    private poComponentInjector: PoComponentInjectorService
+  ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {
-
     const requestClone = request.clone();
 
     request = this.requestCloneWithoutHeaderParam([noCountPendingRequests, screenLock], request);
@@ -161,24 +160,21 @@ export class PoHttpRequestInterceptorService implements HttpInterceptor {
         request.headers.delete(headerParam);
         isRequestClone = true;
       }
-
     });
 
-    return isRequestClone ? request.clone({headers: request.headers}) : request;
+    return isRequestClone ? request.clone({ headers: request.headers }) : request;
   }
 
   private setCountPendingRequests(isIncrement: boolean, request: HttpRequest<any>) {
-
     const hasCountPendingRequestHeaderParam = request.headers.has(noCountPendingRequests);
     const headerParam = request.headers.get(noCountPendingRequests);
 
-    if (hasCountPendingRequestHeaderParam && (headerParam.toString().toLowerCase() === 'true' ) ) {
+    if (hasCountPendingRequestHeaderParam && headerParam.toString().toLowerCase() === 'true') {
       return;
     }
 
     this.pendingRequests += isIncrement ? 1 : -1;
     this.controlHttpRequest.send(this.pendingRequests);
-
   }
 
   private setCountOverlayRequests(isIncrement: boolean, request: HttpRequest<any>) {
@@ -195,5 +191,4 @@ export class PoHttpRequestInterceptorService implements HttpInterceptor {
       this.overlayRequests > 0 ? this.buildLoading() : this.destroyLoading();
     }
   }
-
 }

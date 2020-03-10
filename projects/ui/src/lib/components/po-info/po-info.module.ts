@@ -9,15 +9,10 @@ import { RouterModule } from '@angular/router';
  * Módulo do componente po-info.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
-  declarations: [
-    PoInfoComponent
-  ],
+  imports: [CommonModule, RouterModule],
+  declarations: [PoInfoComponent],
   exports: [PoInfoComponent],
   providers: [],
   schemas: []
 })
-export class PoInfoModule { }
+export class PoInfoModule {}

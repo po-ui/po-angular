@@ -4,10 +4,9 @@ const poCalendarServiceFirstWeekDayDefault: number = 0;
 
 @Injectable()
 export class PoCalendarService {
-
   monthDates(year: any, month: any, dayFormatter: any = null, weekFormatter: any = null) {
-    if ((typeof month !== 'number') || (month < 0) || (month > 11)) {
-      throw Error(('month must be a number (Jan is 0)'));
+    if (typeof month !== 'number' || month < 0 || month > 11) {
+      throw Error('month must be a number (Jan is 0)');
     }
 
     const weeks: Array<any> = [];
@@ -29,7 +28,7 @@ export class PoCalendarService {
       }
       weeks.push(weekFormatter ? weekFormatter(week) : week);
       week = [];
-    } while ((date.getMonth() <= month) && (date.getFullYear() === year));
+    } while (date.getMonth() <= month && date.getFullYear() === year);
     return weeks;
   }
 
@@ -47,5 +46,4 @@ export class PoCalendarService {
     }
     return startDate;
   }
-
 }

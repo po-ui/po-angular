@@ -41,14 +41,18 @@ function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
 
 /** Adds a theming style entry to the given project target options. */
 function addThemeStyleToTarget(
-  project: WorkspaceProject, targetName: 'test' | 'build', host: Tree, assetPath: string, workspace: WorkspaceSchema) {
-
+  project: WorkspaceProject,
+  targetName: 'test' | 'build',
+  host: Tree,
+  assetPath: string,
+  workspace: WorkspaceSchema
+) {
   const targetOptions = getProjectTargetOptions(project, targetName);
 
   if (!targetOptions.styles) {
     targetOptions.styles = [assetPath];
   } else {
-    const existingStyles = targetOptions.styles.map((s: any) => typeof s === 'string' ? s : s.input);
+    const existingStyles = targetOptions.styles.map((s: any) => (typeof s === 'string' ? s : s.input));
 
     for (const [, stylePath] of existingStyles.entries()) {
       if (stylePath === assetPath) {

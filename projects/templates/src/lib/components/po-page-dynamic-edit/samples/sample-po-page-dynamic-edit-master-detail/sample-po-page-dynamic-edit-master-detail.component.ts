@@ -9,7 +9,6 @@ import { PoPageDynamicEditActions } from '@portinari/portinari-templates';
   templateUrl: './sample-po-page-dynamic-edit-master-detail.component.html'
 })
 export class SamplePoPageDynamicEditMasterDetailComponent {
-
   public readonly serviceApi = 'https://thf.totvs.com.br/sample/api/po-metadata/v1/people';
 
   public readonly actions: PoPageDynamicEditActions = {
@@ -18,11 +17,7 @@ export class SamplePoPageDynamicEditMasterDetailComponent {
   };
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', link: '/' },
-      { label: 'People', link: '/dynamic-table' },
-      { label: 'Edit' }
-    ]
+    items: [{ label: 'Home', link: '/' }, { label: 'People', link: '/dynamic-table' }, { label: 'Edit' }]
   };
 
   public readonly fields: Array<PoDynamicFormField | any> = [
@@ -41,15 +36,19 @@ export class SamplePoPageDynamicEditMasterDetailComponent {
     { property: 'street', divider: 'Address' },
     { property: 'city' },
     { property: 'country' },
-    { property: 'dependents', type: 'detail', divider: 'Dependents', detail: {
-      columns: [
-        { property: 'id', label: 'ID', required: true, align: 'rigth', freeze: true },
-        { property: 'birthdate', label: 'Birthdate', align: 'center', width: 120 },
-        { property: 'name', label: 'Name', required: true, width: 200 },
-        { property: 'age', label: 'Age', required: true, align: 'rigth' },
-        { property: 'related', label: 'Related', required: true }
-      ]}
+    {
+      property: 'dependents',
+      type: 'detail',
+      divider: 'Dependents',
+      detail: {
+        columns: [
+          { property: 'id', label: 'ID', required: true, align: 'rigth', freeze: true },
+          { property: 'birthdate', label: 'Birthdate', align: 'center', width: 120 },
+          { property: 'name', label: 'Name', required: true, width: 200 },
+          { property: 'age', label: 'Age', required: true, align: 'rigth' },
+          { property: 'related', label: 'Related', required: true }
+        ]
+      }
     }
   ];
-
 }

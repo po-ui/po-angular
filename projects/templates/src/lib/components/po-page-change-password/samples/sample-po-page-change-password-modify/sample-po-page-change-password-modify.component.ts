@@ -6,10 +6,9 @@ import { PoBreadcrumb, PoSelectOption } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-page-change-password-modify',
-  templateUrl: './sample-po-page-change-password-modify.component.html',
+  templateUrl: './sample-po-page-change-password-modify.component.html'
 })
 export class SamplePoPageChangePasswordModifyComponent implements OnInit {
-
   birthday: string;
   changePasswordScreen: boolean;
   city: string;
@@ -22,19 +21,12 @@ export class SamplePoPageChangePasswordModifyComponent implements OnInit {
   @ViewChild(PoPageChangePasswordComponent, { static: true }) changePassword: PoPageChangePasswordComponent;
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', link: '/documentation/po-page-change-password' },
-      { label: 'Profile' }
-    ]
+    items: [{ label: 'Home', link: '/documentation/po-page-change-password' }, { label: 'Profile' }]
   };
 
-  public readonly cityOptions: Array<PoSelectOption> = [
-    {label: 'São Paulo', value: 'sp'}
-  ];
+  public readonly cityOptions: Array<PoSelectOption> = [{ label: 'São Paulo', value: 'sp' }];
 
-  public readonly countryOptions: Array<PoSelectOption> = [
-    {label: 'Brazil', value: 'br'}
-  ];
+  public readonly countryOptions: Array<PoSelectOption> = [{ label: 'Brazil', value: 'br' }];
 
   ngOnInit() {
     this.initialize();
@@ -62,5 +54,4 @@ export class SamplePoPageChangePasswordModifyComponent implements OnInit {
   showProfileScreen() {
     this.changePasswordScreen = false;
   }
-
 }

@@ -1,31 +1,38 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoRadioGroupOption, PoSelectOption  } from '@portinari/portinari-ui';
+import {
+  PoButtonGroupItem,
+  PoMenuComponent,
+  PoMenuItem,
+  PoRadioGroupOption,
+  PoSelectOption
+} from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-menu-labs',
   templateUrl: './sample-po-menu-labs.component.html',
-  styles: [`
-    .sample-menu-circle {
-      border-radius: 14px;
-      display: inline-block;
-      height: 20px;
-      width: 20px;
-    }
+  styles: [
+    `
+      .sample-menu-circle {
+        border-radius: 14px;
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+      }
 
-    .sample-menu-vertical-middle {
-      vertical-align: middle;
-    }
-  `]
+      .sample-menu-vertical-middle {
+        vertical-align: middle;
+      }
+    `
+  ]
 })
 export class SamplePoMenuLabsComponent implements OnInit {
-
   badgeColor: string;
   badgeValue: number;
   buttons: Array<PoButtonGroupItem> = [
     { label: 'Collapse', action: this.collapse },
     { label: 'Expand', action: this.expand },
-    { label: 'Toggle', action: this.toggle },
+    { label: 'Toggle', action: this.toggle }
   ];
   filter: boolean;
   icon: string;
@@ -55,7 +62,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
     { label: 'color-09', value: 'color-09' },
     { label: 'color-10', value: 'color-10' },
     { label: 'color-11', value: 'color-11' },
-    { label: 'color-12', value: 'color-12' },
+    { label: 'color-12', value: 'color-12' }
   ];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
@@ -69,7 +76,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
 
   @ViewChild(PoMenuComponent, { static: true }) menu: PoMenuComponent;
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.restore();
@@ -82,7 +89,11 @@ export class SamplePoMenuLabsComponent implements OnInit {
 
     if (!this.parent) {
       this.menuItems.push({
-        action: this.changeMenuSelected, icon: this.icon, label: this.label, link: this.link, shortLabel: this.shortLabel,
+        action: this.changeMenuSelected,
+        icon: this.icon,
+        label: this.label,
+        link: this.link,
+        shortLabel: this.shortLabel,
         badge: { value: this.badgeValue, color: this.badgeColor }
       });
     } else {
@@ -93,7 +104,10 @@ export class SamplePoMenuLabsComponent implements OnInit {
       }
 
       menuParent.subItems.push({
-        action: this.changeMenuSelected, label: this.label, link: this.link, badge: { value: this.badgeValue, color: this.badgeColor }
+        action: this.changeMenuSelected,
+        label: this.label,
+        link: this.link,
+        badge: { value: this.badgeValue, color: this.badgeColor }
       });
     }
 
@@ -193,5 +207,4 @@ export class SamplePoMenuLabsComponent implements OnInit {
       }
     });
   }
-
 }

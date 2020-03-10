@@ -8,26 +8,19 @@
     [p-help]="help"
     (p-primary-action)="showAngular()"
     (p-secondary-action)="showTypescript()"
-    (p-title-action)="showJavascriptTechnologies()">
-
-    <po-info
-      [p-label]="label"
-      [p-value]="value">
-    </po-info>
-
+    (p-title-action)="showJavascriptTechnologies()"
+  >
+    <po-info [p-label]="label" [p-value]="value"> </po-info>
   </po-widget>
 </div>
 
 <po-modal p-title="Javascript Technologies">
-
-  There are several Javascript technologies that help us in the construction of fast and dynamic
-  screens, among them we can mention:
+  There are several Javascript technologies that help us in the construction of fast and dynamic screens, among them we
+  can mention:
 
   <div class="po-ml-3">
     <ul>
-      <li *ngFor="let technology of technologies"> {{ technology }} </li>
+      <li *ngFor="let technology of technologies">{{ technology }}</li>
     </ul>
   </div>
-
 </po-modal>
-

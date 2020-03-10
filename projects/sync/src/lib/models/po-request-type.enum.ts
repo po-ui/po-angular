@@ -7,7 +7,6 @@
  */
 
 export enum PoRequestType {
-
   GET = 'get',
 
   DELETE = 'delete',
@@ -17,5 +16,4 @@ export enum PoRequestType {
   PATCH = 'patch',
 
   POST = 'post'
-
 }

@@ -28,7 +28,6 @@ describe('PoTabButtonComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('active: should call `emitActivated`', () => {
       spyOn(component, <any>'emitActivated');
       component.active = true;
@@ -52,11 +51,9 @@ describe('PoTabButtonComponent:', () => {
       component.hide = true;
       expect(component['setDisplayOnHide']).toHaveBeenCalled();
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngOnChanges: should emit `changeState` if hide currentValue is true', () => {
       spyOn(component.changeState, 'emit');
 
@@ -130,11 +127,9 @@ describe('PoTabButtonComponent:', () => {
 
       expect(component['elementRef'].nativeElement.style.display).toBe('');
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should add disabled class if `disabled` is true', () => {
       component.disabled = true;
       fixture.detectChanges();
@@ -201,7 +196,5 @@ describe('PoTabButtonComponent:', () => {
 
       expect(component['onClick']).toHaveBeenCalled();
     });
-
   });
-
 });

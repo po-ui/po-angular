@@ -74,7 +74,7 @@ export class PoDisclaimerBaseComponent {
 
   close(): void {
     this.showDisclaimer = false;
-    this.closeAction.emit({value: this.value, label: this.label, property: this.property});
+    this.closeAction.emit({ value: this.value, label: this.label, property: this.property });
   }
 
   getLabel() {

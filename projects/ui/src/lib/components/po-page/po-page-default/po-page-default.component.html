@@ -1,44 +1,41 @@
 <po-page>
-
   <!-- HEADER -->
-  <po-page-header
-    *ngIf="hasPageHeader()"
-    [p-breadcrumb]="breadcrumb"
-    [p-title]="title">
-
+  <po-page-header *ngIf="hasPageHeader()" [p-breadcrumb]="breadcrumb" [p-title]="title">
     <!-- OPERATIONS -->
     <div class="po-page-header-actions">
-      <po-dropdown *ngIf="actions.length > limitPrimaryActions"
-        p-label="Outras ações"
-        [p-actions]="dropdownActions">
+      <po-dropdown *ngIf="actions.length > limitPrimaryActions" p-label="Outras ações" [p-actions]="dropdownActions">
       </po-dropdown>
 
-      <po-button *ngIf="actions.length === 3 && actions[2] && !isMobile"
+      <po-button
+        *ngIf="actions.length === 3 && actions[2] && !isMobile"
         [p-disabled]="actionIsDisabled(actions[2])"
         [p-label]="actions[2].label"
-        (p-click)="callAction(actions[2])">
+        (p-click)="callAction(actions[2])"
+      >
       </po-button>
 
-      <po-button *ngIf="actions[1] && (actions.length === 2 || !isMobile)"
+      <po-button
+        *ngIf="actions[1] && (actions.length === 2 || !isMobile)"
         [p-disabled]="actionIsDisabled(actions[1])"
         [p-label]="actions[1].label"
-        (p-click)="callAction(actions[1])">
+        (p-click)="callAction(actions[1])"
+      >
       </po-button>
 
-      <po-button *ngIf="actions[0]"
+      <po-button
+        *ngIf="actions[0]"
         p-type="primary"
         [p-disabled]="actionIsDisabled(actions[0])"
         [p-icon]="actions[0].icon"
         [p-label]="actions[0].label"
-        (p-click)="callAction(actions[0])">
+        (p-click)="callAction(actions[0])"
+      >
       </po-button>
     </div>
-
   </po-page-header>
 
   <!-- CONTENT -->
   <po-page-content>
     <ng-content></ng-content>
   </po-page-content>
-
 </po-page>

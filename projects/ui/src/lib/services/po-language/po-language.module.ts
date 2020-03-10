@@ -8,8 +8,6 @@ import { PoLanguageService } from './po-language.service';
  * Módulo do serviço `po-language`.
  */
 @NgModule({
-  providers: [
-    PoLanguageService
-  ]
+  providers: [PoLanguageService]
 })
-export class PoLanguageModule { }
+export class PoLanguageModule {}

@@ -2,7 +2,6 @@
  * Creates a new generic component definition in the given or default project.
  */
 export interface Schema {
-
   /** The name of application. */
   appName: string;
 
@@ -14,5 +13,4 @@ export interface Schema {
 
   /** When true, does not create \"spec.ts\" test files for the app. */
   skipTests?: boolean;
-
 }

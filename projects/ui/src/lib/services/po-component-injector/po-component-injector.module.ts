@@ -6,9 +6,7 @@ import { PoComponentInjectorService } from './po-component-injector.service';
   declarations: [],
   imports: [],
   exports: [],
-  providers: [
-    PoComponentInjectorService
-  ],
+  providers: [PoComponentInjectorService],
   bootstrap: []
 })
-export class PoComponentInjectorModule { }
+export class PoComponentInjectorModule {}

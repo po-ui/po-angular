@@ -6,7 +6,6 @@
  * Interface que irá mapear as configurações dos campos do `PoSyncSchema`.
  */
 export interface PoSyncFieldOptions {
-
   /** Propriedade que informa o nome do campo. */
   readonly name: string;
 
@@ -14,5 +13,4 @@ export interface PoSyncFieldOptions {
    * ou se deve ser enviado para o servidor.
    */
   readonly local?: boolean;
-
 }

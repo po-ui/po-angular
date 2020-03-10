@@ -15,12 +15,10 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule, RouterTestingModule.withRoutes([]) ],
-      declarations: [
-        PoPageBlockedUserContactsComponent,
-      ],
-      providers: [ HttpClient, HttpHandler],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      imports: [FormsModule, RouterTestingModule.withRoutes([])],
+      declarations: [PoPageBlockedUserContactsComponent],
+      providers: [HttpClient, HttpHandler],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -31,7 +29,6 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
     fixture.detectChanges();
 
     debugElement = fixture.debugElement.nativeElement;
-
   });
 
   it('should be created', () => {
@@ -39,7 +36,6 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
   });
 
   describe('Methods: ', () => {
-
     it('ngAfterViewInit: should call `checkContactItemWidth`', () => {
       spyOn(component, <any>'checkContactItemWidth');
       component.ngAfterViewInit();
@@ -54,7 +50,6 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
     });
 
     xit('ngOnChanges: should call `checkContactItemWidth`', () => {
-
       component.phone = '55-22-98787-8787';
 
       spyOn(component, <any>'checkContactItemWidth');
@@ -64,7 +59,6 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
       });
       fixture.detectChanges();
       expect(component['checkContactItemWidth']).toHaveBeenCalled();
-
     });
 
     it('checkContactItemWidth: should update value of `overflowItem` with valid `true`.', () => {
@@ -85,11 +79,9 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
 
       expect(component.overflowItem).toBe(false);
     });
-
   });
 
   describe('Templates: ', () => {
-
     it('should contain `po-icon-telephone` and `po-icon-mail` classes if phone and mail have values', () => {
       component.email = 'mail@mail.com';
       component.phone = '99999999';
@@ -101,7 +93,6 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
     });
 
     it('shouldn`t contain `po-icon-telephone` and `po-icon-mail` classes if phone and mail are undefined', () => {
-
       fixture.detectChanges();
 
       expect(debugElement.querySelector('.po-icon-mail')).toBeFalsy();
@@ -133,7 +124,5 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
       expect(debugElement.querySelector('.po-page-blocked-user-contact-content-inline')).toBeFalsy();
       expect(debugElement.querySelector('.po-md-12')).toBeFalsy();
     });
-
   });
-
 });

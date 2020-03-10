@@ -31,27 +31,26 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   selector: 'po-login',
   templateUrl: './po-login.component.html',
   providers: [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoLoginComponent),
-    multi: true,
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoLoginComponent),
-    multi: true,
-  }]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoLoginComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoLoginComponent),
+      multi: true
+    }
+  ]
 })
 export class PoLoginComponent extends PoInputGeneric {
-
   type = 'text';
 
   constructor(el: ElementRef) {
     super(el);
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
-
 }

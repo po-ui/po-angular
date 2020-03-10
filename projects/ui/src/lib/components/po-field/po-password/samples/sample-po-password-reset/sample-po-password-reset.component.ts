@@ -8,7 +8,6 @@ import { PoDialogService } from '@portinari/portinari-ui';
   providers: [PoDialogService]
 })
 export class SamplePoPasswordResetComponent {
-
   confirmNewPassword: string;
   currentPassword: string;
   errorPattern: string;
@@ -16,15 +15,14 @@ export class SamplePoPasswordResetComponent {
   newPassword: string;
   password: string = '123456';
 
-  constructor(private poAlert: PoDialogService) { }
+  constructor(private poAlert: PoDialogService) {}
 
   setPassword() {
     if (this.confirmNewPassword === this.newPassword) {
-
       this.password = this.newPassword;
       this.help = `Actual password = ${this.password}`;
       this.currentPassword = undefined;
-      this.newPassword  = undefined;
+      this.newPassword = undefined;
       this.confirmNewPassword = undefined;
 
       this.poAlert.alert({
@@ -42,8 +40,7 @@ export class SamplePoPasswordResetComponent {
   }
 
   reset() {
-    this.newPassword  = undefined;
+    this.newPassword = undefined;
     this.confirmNewPassword = undefined;
   }
-
 }

@@ -15,9 +15,7 @@ import { PoTableColumnIcon } from './po-table-column-icon.interface';
   templateUrl: './po-table-column-icon.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class PoTableColumnIconComponent {
-
   private _icons: Array<PoTableColumnIcon> = [];
 
   /** Definição da coluna que utiliza os icones. */
@@ -43,7 +41,6 @@ export class PoTableColumnIconComponent {
     } else if (this.column.action && isAbleAction) {
       this.column.action(this.row, columnIcon);
     }
-
   }
 
   getColor(column: PoTableColumnIcon): string {
@@ -71,9 +68,8 @@ export class PoTableColumnIconComponent {
   }
 
   private convertToColumnIcon(rowIcons: Array<PoTableColumnIcon> | Array<string> | string): Array<PoTableColumnIcon> {
-
     if (Array.isArray(rowIcons)) {
-      return (<any> rowIcons).map(rowIcon => typeof rowIcon === 'string' ? { value: rowIcon } : rowIcon);
+      return (<any>rowIcons).map(rowIcon => (typeof rowIcon === 'string' ? { value: rowIcon } : rowIcon));
     }
 
     if (typeof rowIcons === 'string') {
@@ -82,5 +78,4 @@ export class PoTableColumnIconComponent {
 
     return [];
   }
-
 }

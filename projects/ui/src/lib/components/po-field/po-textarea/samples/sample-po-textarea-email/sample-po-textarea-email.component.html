@@ -1,103 +1,42 @@
-<po-page-default
-  p-title="Send email"
-  [p-actions]="getPageAction()">
-
+<po-page-default p-title="Send email" [p-actions]="getPageAction()">
   <form #formEmail="ngForm">
-    <po-email
-      class="po-sm-12"
-      name="from"
-      [(ngModel)]="from"
-      p-clean
-      p-label="From"
-      p-required>
-    </po-email>
+    <po-email class="po-sm-12" name="from" [(ngModel)]="from" p-clean p-label="From" p-required> </po-email>
 
-    <po-email
-      class="po-sm-12"
-      name="to"
-      [(ngModel)]="to"
-      p-clean
-      p-label="To"
-      p-required>
-    </po-email>
+    <po-email class="po-sm-12" name="to" [(ngModel)]="to" p-clean p-label="To" p-required> </po-email>
 
-    <po-email
-      class="po-sm-12"
-      name="cc"
-      [(ngModel)]="cc"
-      p-clean
-      p-label="CC">
-    </po-email>
+    <po-email class="po-sm-12" name="cc" [(ngModel)]="cc" p-clean p-label="CC"> </po-email>
 
-    <po-input
-      class="po-sm-12"
-      name="subject"
-      [(ngModel)]="subject"
-      p-clean
-      p-label="Subject"
-      p-required>
-    </po-input>
+    <po-input class="po-sm-12" name="subject" [(ngModel)]="subject" p-clean p-label="Subject" p-required> </po-input>
 
-    <po-textarea
-      class="po-sm-12"
-      name="emailText"
-      [(ngModel)]="emailText"
-      p-label="E-mail"
-      p-required
-      p-rows="8">
+    <po-textarea class="po-sm-12" name="emailText" [(ngModel)]="emailText" p-label="E-mail" p-required p-rows="8">
     </po-textarea>
   </form>
 </po-page-default>
 
-<po-modal
-  p-title="Email successfully sent"
-  [p-primary-action]="primaryAction">
-
+<po-modal p-title="Email successfully sent" [p-primary-action]="primaryAction">
   <div class="po-row">
-    <po-info
-      class="po-md-6"
-      p-label="From:"
-      [p-value]="from">
-    </po-info>
+    <po-info class="po-md-6" p-label="From:" [p-value]="from"> </po-info>
 
-    <po-info
-      class="po-md-6"
-      p-label="To:"
-      [p-value]="to">
-    </po-info>
+    <po-info class="po-md-6" p-label="To:" [p-value]="to"> </po-info>
   </div>
 
-  <hr>
+  <hr />
 
   <div *ngIf="cc !== ''">
     <div class="po-row">
-        <po-info
-          class="po-md-12"
-          p-label="CC:"
-          [p-value]="cc">
-        </po-info>
+      <po-info class="po-md-12" p-label="CC:" [p-value]="cc"> </po-info>
     </div>
-    <hr>
+    <hr />
   </div>
 
   <div class="po-row">
-    <po-info
-      class="po-md-12"
-      p-label="Subject:"
-      [p-value]="subject">
-    </po-info>
+    <po-info class="po-md-12" p-label="Subject:" [p-value]="subject"> </po-info>
   </div>
 
-  <hr>
+  <hr />
 
   <div class="po-row">
-    <po-textarea
-      class="po-md-12"
-      name="text"
-      [(ngModel)]="emailText"
-      p-label="E-mail"
-      p-readonly
-      p-rows="6">
+    <po-textarea class="po-md-12" name="text" [(ngModel)]="emailText" p-label="E-mail" p-readonly p-rows="6">
     </po-textarea>
   </div>
 </po-modal>

@@ -1,13 +1,12 @@
 <div class="po-row">
-
   <po-widget
     class="po-lg-6 po-mt-2"
     p-background="../../../assets/graphics/days-to-payment.png"
     p-height="210"
     p-primary="true"
     p-title="Days to Payment"
-    (p-click)="daysPayment()">
-
+    (p-click)="daysPayment()"
+  >
     <div class="po-font-subtitle po-text-center">17 days left</div>
     <div class="po-text-center">Scheduled to 05/04/2018</div>
   </po-widget>
@@ -18,8 +17,8 @@
     p-primary="true"
     p-primary-label="Details"
     p-title="Total savings"
-    (p-primary-action)="openModal('savings')">
-
+    (p-primary-action)="openModal('savings')"
+  >
     <div class="po-font-subtitle po-text-center">$5.000,00</div>
     <div class="po-text-center">Last updated at 18:34</div>
   </po-widget>
@@ -29,44 +28,30 @@
     p-height="200"
     p-primary-label="Details"
     p-title="Total checking account"
-    (p-primary-action)="openModal('account')">
-
+    (p-primary-action)="openModal('account')"
+  >
     <div class="po-font-subtitle po-text-center">$2.818,29</div>
     <div class="po-text-center">Last updated at 08:20</div>
   </po-widget>
-
 </div>
 
 <div class="po-row">
-
-  <po-widget
-    class="po-md-12 po-lg-4 po-mt-2"
-    p-title="Category with the highest expense">
-
+  <po-widget class="po-md-12 po-lg-4 po-mt-2" p-title="Category with the highest expense">
     <div class="po-font-subtitle po-text-center">$1.500,00</div>
     <div class="po-text-center">Meal</div>
   </po-widget>
 
-  <po-widget
-    class="po-md-12 po-lg-4 po-mt-2"
-    p-title="Most used payment type">
-
+  <po-widget class="po-md-12 po-lg-4 po-mt-2" p-title="Most used payment type">
     <div class="po-font-subtitle po-text-center">Credit card</div>
     <div class="po-text-center">MasterCard - 5500 0000 0000 0004</div>
   </po-widget>
 
-  <po-widget
-    class="po-md-12 po-lg-4 po-mt-2"
-    p-title="Higher revenue in month">
-
+  <po-widget class="po-md-12 po-lg-4 po-mt-2" p-title="Higher revenue in month">
     <div class="po-font-subtitle po-text-center">$2.000,00</div>
     <div class="po-text-center">05/03/2018</div>
   </po-widget>
 </div>
 
 <po-modal #detailsModal [p-title]="titleDetailsModal">
-  <po-table
-    [p-columns]="columnsDetails"
-    [p-items]="itemsDetails">
-  </po-table>
+  <po-table [p-columns]="columnsDetails" [p-items]="itemsDetails"> </po-table>
 </po-modal>

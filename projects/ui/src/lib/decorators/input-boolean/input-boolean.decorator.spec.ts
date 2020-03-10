@@ -18,7 +18,7 @@ describe('InputBoolean:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoMockComponent ]
+      declarations: [PoMockComponent]
     });
   });
 
@@ -28,15 +28,14 @@ describe('InputBoolean:', () => {
   });
 
   it('should update property with `true` if valid values', () => {
-    const validValues = [ true, 'true', 1, '' ];
+    const validValues = [true, 'true', 1, ''];
 
     expectPropertiesValues(component, 'myProperty', validValues, true);
   });
 
   it('should update property with `false` if invalid values', () => {
-    const invalidValues = [ 10, 0.5, 'test', undefined ];
+    const invalidValues = [10, 0.5, 'test', undefined];
 
     expectPropertiesValues(component, 'myProperty', invalidValues, false);
   });
-
 });

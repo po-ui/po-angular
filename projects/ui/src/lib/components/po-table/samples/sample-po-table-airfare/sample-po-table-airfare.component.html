@@ -19,7 +19,8 @@
   (p-collapsed)="onCollapseDetail()"
   (p-expanded)="onExpandDetail()"
   (p-selected)="sumTotal($event)"
-  (p-unselected)="decreaseTotal($event)">
+  (p-unselected)="decreaseTotal($event)"
+>
 </po-table>
 
 <po-divider></po-divider>
@@ -28,56 +29,28 @@
   class="po-md-6 po-mb-sm-2 po-mb-md-2 po-lb-lg-2"
   p-label="Total Value"
   p-orientation="horizontal"
-  p-value="{{total | currency:'USD'}}">
+  p-value="{{ total | currency: 'USD' }}"
+>
 </po-info>
 
 <po-info
   class="po-md-6 po-mb-sm-2 po-mb-md-2 po-lb-lg-2"
   p-label="Expanded Itens"
   p-orientation="horizontal"
-  [p-value]="totalExpanded">
+  [p-value]="totalExpanded"
+>
 </po-info>
 
 <div class="po-row">
-  <po-button
-    class="po-md-3"
-    p-icon="po-icon-cart"
-    p-label="Add items to cart"
-    (p-click)="addToCart()">
-  </po-button>
-  <po-button
-    class="po-md-3"
-    p-label="Expand all detail"
-    (p-click)="expandAll()">
-  </po-button>
-  <po-button
-    class="po-md-3"
-    p-label="Collapse all detail"
-    (p-click)="collapseAll()">
-  </po-button>
+  <po-button class="po-md-3" p-icon="po-icon-cart" p-label="Add items to cart" (p-click)="addToCart()"> </po-button>
+  <po-button class="po-md-3" p-label="Expand all detail" (p-click)="expandAll()"> </po-button>
+  <po-button class="po-md-3" p-label="Collapse all detail" (p-click)="collapseAll()"> </po-button>
 </div>
 
-<po-modal
-  p-click-out="true"
-  p-size="sm"
-  p-title="{{detail?.destination}} - {{detail?.country}}">
+<po-modal p-click-out="true" p-size="sm" p-title="{{ detail?.destination }} - {{ detail?.country }}">
+  <po-info class="po-sm-6" p-label="Airline" [p-value]="detail?.airline"> </po-info>
 
-  <po-info
-    class="po-sm-6"
-    p-label="Airline"
-    [p-value]="detail?.airline">
-  </po-info>
+  <po-info class="po-sm-2" p-label="Initials" [p-value]="detail?.initials"> </po-info>
 
-  <po-info
-    class="po-sm-2"
-    p-label="Initials"
-    [p-value]="detail?.initials">
-  </po-info>
-
-  <po-info
-    class="po-sm-4"
-    p-label="Class"
-    [p-value]="detail?.class">
-  </po-info>
-
+  <po-info class="po-sm-4" p-label="Class" [p-value]="detail?.class"> </po-info>
 </po-modal>

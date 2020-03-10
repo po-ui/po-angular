@@ -1,4 +1,8 @@
-<style> .sample-container { margin-top: 50px } </style>
+<style>
+  .sample-container {
+    margin-top: 50px;
+  }
+</style>
 
 <po-toolbar
   p-actions-icon="po-icon-cart"
@@ -7,14 +11,15 @@
   [p-profile-actions]="profileActions"
   [p-notification-actions]="notificationActions"
   [p-notification-number]="getNotificationNumber()"
-  [p-title]="title">
+  [p-title]="title"
+>
 </po-toolbar>
 
 <div class="po-row">
   <div class="sample-container">
     <po-widget class="po-sm-12">
       <div class="po-font-title">Hello, {{ profile.title }}.</div>
-      <div class="po-font-subtitle"> Let's work hard! </div>
+      <div class="po-font-subtitle">Let's work hard!</div>
     </po-widget>
   </div>
 </div>

@@ -35,13 +35,9 @@ describe('PoTableDetailComponent', () => {
   });
 
   describe('Properties: ', () => {
-
     it('should set property `detail` with valid values', () => {
       const detail = { columns: [{ property: 'tour', label: 'Tour' }] };
-      const validValues = [
-        [{ property: 'tour', label: 'Tour' }],
-        detail
-      ];
+      const validValues = [[{ property: 'tour', label: 'Tour' }], detail];
 
       expectPropertiesValues(component, 'detail', validValues, detail);
     });
@@ -53,42 +49,40 @@ describe('PoTableDetailComponent', () => {
     });
 
     it('should return `true` in `typeHeaderTop` when typeHeader is top', () => {
-      component.detail = { columns: [{property: 'tour', label: 'Tour'}], typeHeader: 'top' };
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }], typeHeader: 'top' };
 
       expect(component.typeHeaderTop).toBeTruthy();
     });
 
     it('should return `false` in `typeHeaderTop` when typeHeader is `inline`, `none` or when not exist typeHeader', () => {
-      component.detail = { columns: [{property: 'tour', label: 'Tour'}], typeHeader: 'inline' };
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }], typeHeader: 'inline' };
       expect(component.typeHeaderTop).toBeFalsy();
 
-      component.detail = { columns: [{property: 'tour', label: 'Tour'}], typeHeader: 'none' };
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }], typeHeader: 'none' };
       expect(component.typeHeaderTop).toBeFalsy();
 
-      component.detail = { columns: [{property: 'tour', label: 'Tour'}] };
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }] };
       expect(component.typeHeaderTop).toBeFalsy();
     });
 
     it('should return `true` in `typeHeaderInline` when typeHeader is inline or when not exist typeHeader', () => {
-      component.detail = { columns: [{property: 'tour', label: 'Tour'}], typeHeader: 'inline' };
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }], typeHeader: 'inline' };
       expect(component.typeHeaderInline).toBeTruthy();
 
-      component.detail = { columns: [{property: 'tour', label: 'Tour'}] };
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }] };
       expect(component.typeHeaderInline).toBeTruthy();
     });
 
     it('should return `false` in `typeHeaderInline` when typeHeader is `top` or `none`', () => {
-      component.detail = { columns: [{property: 'tour', label: 'Tour'}], typeHeader: 'top' };
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }], typeHeader: 'top' };
       expect(component.typeHeaderInline).toBeFalsy();
 
-      component.detail = { columns: [{property: 'tour', label: 'Tour'}], typeHeader: 'none' };
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }], typeHeader: 'none' };
       expect(component.typeHeaderInline).toBeFalsy();
     });
-
   });
 
   describe('Methods: ', () => {
-
     it('getColumnTitleLabel: should return `column.label` value if `column.label` is valid', () => {
       const label = 'Label';
       const column: PoTableDetailColumn = { label: label };
@@ -144,9 +138,7 @@ describe('PoTableDetailComponent', () => {
     });
 
     describe('formatNumberDetail:', () => {
-
       it('should return formatted value.', () => {
-
         const format = '1.2-5';
         const expectedReturn = '10.00';
         const value = '10';
@@ -157,7 +149,6 @@ describe('PoTableDetailComponent', () => {
       });
 
       it('should return the original value.', () => {
-
         const format = undefined;
         const expectedReturn = '10';
         const value = '10';
@@ -166,25 +157,22 @@ describe('PoTableDetailComponent', () => {
 
         expect(returnValue).toEqual(expectedReturn);
       });
-
     });
-
   });
 
   describe('Templates:', () => {
-
     const elementDetail = 'td.po-table-column-master-detail.po-table-master-detail-label > span';
 
     it('should display the time', () => {
       const expectedReturn = '10:10:10';
       const valueTime = '10:10:10';
 
-      component.detail = {columns: [{ property: 'time', label: 'Time', type: 'time' }]};
+      component.detail = { columns: [{ property: 'time', label: 'Time', type: 'time' }] };
       component.items = [{ time: valueTime }];
 
       fixture.detectChanges();
 
-      const time = detailElement.querySelector(elementDetail).textContent;
+      const time = detailElement.querySelector(elementDetail).innerText;
       expect(time).toEqual(expectedReturn);
     });
 
@@ -192,12 +180,12 @@ describe('PoTableDetailComponent', () => {
       const expectedReturn = '10:10';
       const valueTime = '10:10:10';
 
-      component.detail = {columns: [{ property: 'time', label: 'Time', type: 'time', format: 'HH:mm' }]};
+      component.detail = { columns: [{ property: 'time', label: 'Time', type: 'time', format: 'HH:mm' }] };
       component.items = [{ time: valueTime }];
 
       fixture.detectChanges();
 
-      const time = detailElement.querySelector(elementDetail).textContent;
+      const time = detailElement.querySelector(elementDetail).innerText;
       expect(time).toEqual(expectedReturn);
     });
 
@@ -205,25 +193,25 @@ describe('PoTableDetailComponent', () => {
       const expectedReturn = '22';
       const valueTime = '10:22:10';
 
-      component.detail = {columns: [{ property: 'time', label: 'Time', type: 'time', format: 'mm' }]};
+      component.detail = { columns: [{ property: 'time', label: 'Time', type: 'time', format: 'mm' }] };
       component.items = [{ time: valueTime }];
 
       fixture.detectChanges();
 
-      const time = detailElement.querySelector(elementDetail).textContent;
+      const time = detailElement.querySelector(elementDetail).innerText;
       expect(time).toEqual(expectedReturn);
     });
 
     it('should display the date in the format of date `dd/mm/yyyy`', () => {
       const expectedReturn = '05/10/2018';
-      const valueDate = new  Date(2018, 9, 5);
+      const valueDate = new Date(2018, 9, 5);
 
-      component.detail = {columns: [{ property: 'date', label: 'Date', type: 'date' }]};
+      component.detail = { columns: [{ property: 'date', label: 'Date', type: 'date' }] };
       component.items = [{ date: valueDate }];
 
       fixture.detectChanges();
 
-      const date = detailElement.querySelector(elementDetail).textContent;
+      const date = detailElement.querySelector(elementDetail).innerText;
       expect(date).toEqual(expectedReturn);
     });
 
@@ -231,25 +219,25 @@ describe('PoTableDetailComponent', () => {
       const expectedReturn = '05-10-18';
       const valueDate = new Date(2018, 9, 5);
 
-      component.detail = {columns: [{ property: 'date', label: 'Date', type: 'date', format: 'dd-MM-yy' }]};
+      component.detail = { columns: [{ property: 'date', label: 'Date', type: 'date', format: 'dd-MM-yy' }] };
       component.items = [{ date: valueDate }];
 
       fixture.detectChanges();
 
-      const dateTime = detailElement.querySelector(elementDetail).textContent;
+      const dateTime = detailElement.querySelector(elementDetail).innerText;
       expect(dateTime).toEqual(expectedReturn);
     });
 
     it('should display the date in the format of dateTime `dd/mm/aaaa hh:mm:ss`', () => {
       const expectedReturn = '23/11/2018 11:13:10';
-      const valueDateTime = new  Date(2018, 10, 23, 11, 13, 10, 1);
+      const valueDateTime = new Date(2018, 10, 23, 11, 13, 10, 1);
 
-      component.detail = {columns: [{ property: 'dateTime', label: 'DateTime', type: 'dateTime' }]};
+      component.detail = { columns: [{ property: 'dateTime', label: 'DateTime', type: 'dateTime' }] };
       component.items = [{ dateTime: valueDateTime }];
 
       fixture.detectChanges();
 
-      const dateTime = detailElement.querySelector(elementDetail).textContent;
+      const dateTime = detailElement.querySelector(elementDetail).innerText;
       expect(dateTime).toEqual(expectedReturn);
     });
 
@@ -257,12 +245,12 @@ describe('PoTableDetailComponent', () => {
       const expectedReturn = '12:11:55';
       const valueTime = '12:11:55';
 
-      component.detail = {columns: [{ property: 'time', label: 'Time', type: 'time' }]};
+      component.detail = { columns: [{ property: 'time', label: 'Time', type: 'time' }] };
       component.items = [{ time: valueTime }];
 
       fixture.detectChanges();
 
-      const time = detailElement.querySelector(elementDetail).textContent;
+      const time = detailElement.querySelector(elementDetail).innerText;
       expect(time).toEqual(expectedReturn);
     });
 
@@ -270,12 +258,12 @@ describe('PoTableDetailComponent', () => {
       const expectedReturn = 'Hello World';
       const valueText = 'Hello World';
 
-      component.detail = {columns: [{ property: 'helloWorld', label: 'Hello World' }]};
+      component.detail = { columns: [{ property: 'helloWorld', label: 'Hello World' }] };
       component.items = [{ helloWorld: valueText }];
 
       fixture.detectChanges();
 
-      const text = detailElement.querySelector(elementDetail).textContent;
+      const text = detailElement.querySelector(elementDetail).innerText;
       expect(text).toEqual(expectedReturn);
     });
 
@@ -283,11 +271,11 @@ describe('PoTableDetailComponent', () => {
       const expectedReturn = '$6,511.00';
       const valueCurrency = '6511';
 
-      component.detail = {columns: [{ property: 'currency', label: 'Currency', type: 'currency', format: 'USD' }]};
+      component.detail = { columns: [{ property: 'currency', label: 'Currency', type: 'currency', format: 'USD' }] };
       component.items = [{ currency: valueCurrency }];
 
       fixture.detectChanges();
-      const currency = detailElement.querySelector(elementDetail).textContent;
+      const currency = detailElement.querySelector(elementDetail).innerText;
       expect(currency).toEqual(expectedReturn);
     });
 
@@ -295,14 +283,12 @@ describe('PoTableDetailComponent', () => {
       const expectedReturn = '1,000.00';
       const valueNumber = '1000';
 
-      component.detail = {columns: [{ property: 'number', label: 'Number', type: 'number', format: '1.2-5' }]};
+      component.detail = { columns: [{ property: 'number', label: 'Number', type: 'number', format: '1.2-5' }] };
       component.items = [{ number: valueNumber }];
 
       fixture.detectChanges();
-      const number = detailElement.querySelector(elementDetail).textContent;
+      const number = detailElement.querySelector(elementDetail).innerText;
       expect(number).toEqual(expectedReturn);
     });
-
   });
-
 });

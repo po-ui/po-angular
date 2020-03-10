@@ -5,29 +5,19 @@
     p-height="300"
     [p-language]="language"
     [p-readonly]="properties.includes('readonly')"
-    [p-theme]="theme">
+    [p-theme]="theme"
+  >
   </po-code-editor>
 </div>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-select
-      class="po-md-6"
-      name="language"
-      [(ngModel)]="language"
-      p-label="Language"
-      [p-options]="languageOptions">
+    <po-select class="po-md-6" name="language" [(ngModel)]="language" p-label="Language" [p-options]="languageOptions">
     </po-select>
 
-    <po-select
-      class="po-md-6"
-      name="theme"
-      [(ngModel)]="theme"
-      p-label="Theme"
-      [p-options]="themeOptions">
-    </po-select>
+    <po-select class="po-md-6" name="theme" [(ngModel)]="theme" p-label="Theme" [p-options]="themeOptions"> </po-select>
   </div>
 
   <div class="po-row">
@@ -36,15 +26,12 @@
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

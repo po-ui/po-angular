@@ -13,10 +13,10 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
 import { PoTooltipModule } from '../../directives/po-tooltip';
 
 @Component({ template: 'Search' })
-export class SearchComponent { }
+export class SearchComponent {}
 
 @Component({ template: 'Home' })
-export class HomeComponent { }
+export class HomeComponent {}
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -35,13 +35,8 @@ describe('PoMenuPanelComponent: ', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoTooltipModule],
-      declarations: [
-        PoMenuPanelComponent,
-        PoMenuPanelItemComponent,
-        HomeComponent,
-        SearchComponent
-      ],
-      providers: [ PoMenuPanelItemsService ]
+      declarations: [PoMenuPanelComponent, PoMenuPanelItemComponent, HomeComponent, SearchComponent],
+      providers: [PoMenuPanelItemsService]
     });
   });
 
@@ -56,7 +51,7 @@ describe('PoMenuPanelComponent: ', () => {
       { label: 'Home', link: './home', icon: 'po-icon-home' },
       { label: 'PO', link: './po', icon: 'po-icon-clock' },
       { label: 'Google', icon: 'po-icon-star', link: 'http://google.com.br' },
-      { label: 'Commom Function', icon: 'po-icon-share', action: () => { } },
+      { label: 'Commom Function', icon: 'po-icon-share', action: () => {} },
       { label: 'Function as string', icon: 'po-icon-company', action: 'testFunction' }
     ];
 
@@ -72,8 +67,7 @@ describe('PoMenuPanelComponent: ', () => {
   });
 
   describe('Templates: ', () => {
-
-    it('po-menu-panel-item: should create menu items.' , () => {
+    it('po-menu-panel-item: should create menu items.', () => {
       expect(nativeElement.querySelectorAll('po-menu-panel-item').length).toBe(5);
     });
 
@@ -92,16 +86,14 @@ describe('PoMenuPanelComponent: ', () => {
     });
 
     it('po-menu-panel-item-selected: should have a selected item.', () => {
-      component['clickMenuItem'](<any> component.menus[0]);
+      component['clickMenuItem'](<any>component.menus[0]);
 
       fixture.detectChanges();
       expect(nativeElement.querySelectorAll('.po-menu-panel-item-selected').length).toBe(1);
     });
-
   });
 
   describe('Methods: ', () => {
-
     it('subscribeToMenuItem: should receive from child active menu item', () => {
       const menuItem = component.menus[0];
 
@@ -114,16 +106,16 @@ describe('PoMenuPanelComponent: ', () => {
     });
 
     it('clickMenuItem: should call action', () => {
-      spyOn(component.menus[3], <any> 'action');
+      spyOn(component.menus[3], <any>'action');
 
-      component['clickMenuItem'](<any> component.menus[3]);
+      component['clickMenuItem'](<any>component.menus[3]);
 
       expect(component.activeMenuItem).toBe(undefined);
       expect(component.menus[3].action).toHaveBeenCalled();
     });
 
     it('activeMenuItem: should activate menu item', () => {
-      component['clickMenuItem'](<any> component.menus[0]);
+      component['clickMenuItem'](<any>component.menus[0]);
 
       expect(component.activeMenuItem.link).toBe('./home');
     });
@@ -131,13 +123,13 @@ describe('PoMenuPanelComponent: ', () => {
     it('clickMenuItem: should open external link', () => {
       spyOn(window, 'open');
 
-      component['clickMenuItem'](<any> component.menus[2]);
+      component['clickMenuItem'](<any>component.menus[2]);
 
       expect(window.open).toHaveBeenCalledWith('http://google.com.br', '_blank');
     });
 
     it('checkActiveMenuByUrl: should not navigate if has same link', done => {
-      spyOn(component, <any> 'activateMenuByUrl');
+      spyOn(component, <any>'activateMenuByUrl');
 
       component.linkActive = '/search';
 
@@ -152,7 +144,7 @@ describe('PoMenuPanelComponent: ', () => {
 
     it('activateMenuByUrl: shouldn`t call activeMenuItem if menuItem no has same link of param', () => {
       const menuItem = { label: 'Search', link: '/search', icon: 'user' };
-      spyOn(component, <any> 'activateMenuItem');
+      spyOn(component, <any>'activateMenuItem');
 
       component['activateMenuByUrl']('home', [menuItem]);
 
@@ -160,14 +152,13 @@ describe('PoMenuPanelComponent: ', () => {
     });
 
     it('activateMenuByUrl: shouldn`t search by some menuItem that has the same link of param', () => {
-      spyOn(component, <any> 'activateMenuItem');
+      spyOn(component, <any>'activateMenuItem');
 
       component['activateMenuByUrl']('home', null);
 
       expect(component['activateMenuItem']).not.toHaveBeenCalled();
     });
   });
-
 });
 
 function fakeMenuPanelService(item) {

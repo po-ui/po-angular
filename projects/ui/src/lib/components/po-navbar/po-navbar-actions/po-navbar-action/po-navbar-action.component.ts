@@ -8,7 +8,6 @@ import { callFunction, isExternalLink, openExternalLink } from '../../../../util
   templateUrl: './po-navbar-action.component.html'
 })
 export class PoNavbarActionComponent {
-
   private parentRef: any;
 
   @Input('p-action') action?: Function;
@@ -37,7 +36,6 @@ export class PoNavbarActionComponent {
   }
 
   private openUrl(url: string) {
-
     if (isExternalLink(url)) {
       return openExternalLink(url);
     }
@@ -46,5 +44,4 @@ export class PoNavbarActionComponent {
       return this.router.navigate([url]);
     }
   }
-
 }

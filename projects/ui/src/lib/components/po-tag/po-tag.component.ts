@@ -35,7 +35,6 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTagComponent extends PoTagBaseComponent implements OnInit {
-
   isClickable: boolean;
 
   ngOnInit() {
@@ -44,13 +43,17 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
 
   get iconFromType() {
     switch (this.type) {
-      case PoTagType.Danger: return PoTagIcon.Danger;
+      case PoTagType.Danger:
+        return PoTagIcon.Danger;
 
-      case PoTagType.Info: return PoTagIcon.Info;
+      case PoTagType.Info:
+        return PoTagIcon.Info;
 
-      case PoTagType.Success: return PoTagIcon.Success;
+      case PoTagType.Success:
+        return PoTagIcon.Success;
 
-      case PoTagType.Warning: return PoTagIcon.Warning;
+      case PoTagType.Warning:
+        return PoTagIcon.Warning;
     }
   }
 
@@ -90,5 +93,4 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
       this.onClick();
     }
   }
-
 }

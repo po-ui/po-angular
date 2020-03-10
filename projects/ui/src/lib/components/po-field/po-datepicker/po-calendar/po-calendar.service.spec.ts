@@ -11,9 +11,8 @@ describe('PoCalendarService', () => {
   });
 
   describe('Methods:', () => {
-
     it('monthDates: should call `setYearFrom0To100`', () => {
-      spyOn(UtilsFunctions , 'setYearFrom0To100');
+      spyOn(UtilsFunctions, 'setYearFrom0To100');
       service.monthDates(1, 1);
       expect(setYearFrom0To100).toHaveBeenCalled();
     });
@@ -29,9 +28,10 @@ describe('PoCalendarService', () => {
 
     // invalid month
     try {
-      expect(service.monthDates(2017, 20))
-        .toThrow(new Error('month must be a number (Jan is 0)'));
-    } catch (error) { expect(error.message).toBe('month must be a number (Jan is 0)'); }
+      expect(service.monthDates(2017, 20)).toThrow(new Error('month must be a number (Jan is 0)'));
+    } catch (error) {
+      expect(error.message).toBe('month must be a number (Jan is 0)');
+    }
 
     const weekFormatter = function(week?: any) {
       return 0;

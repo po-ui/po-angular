@@ -60,7 +60,6 @@ const PoModalPasswordRecoveryTypeDefault: PoModalPasswordRecoveryType = PoModalP
  */
 @Directive()
 export abstract class PoModalPasswordRecoveryBaseComponent {
-
   private _contactEmail: string;
   private _phoneMask = PoModalPasswordRecoveryDefaultPhone;
   private _type: PoModalPasswordRecoveryType = PoModalPasswordRecoveryTypeDefault;
@@ -73,16 +72,38 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
   smsCode: string;
   smsCodeErrorMessage: string;
 
-  literals: { cancelButton: string, closeButton: string, continueButton: string, email: string, emailErrorMessagePhrase: string,
-    emailSentConfirmationPhrase: string, emailSentTitle: string, forgotPasswordTitle: string,
-    insertCode: string, insertEmail: string, insertPhone: string, phoneErrorMessagePhrase: string,
-    prepositionIn: string, prepositionOr: string, recoveryPasswordPhrase: string, resendEmailButton: string,
-    resendSmsCodePhrase: string, sendAgain: string, sendAgainPhrase: string, sendButton: string, sms: string, smsCode: string,
-    smsCodeErrorMessagePhrase: string, sentSmsCodePhrase: string, supportContact: string, telephone: string, typeCodeTitle: string } =
-    {
-      ...poModalPasswordRecoveryLiterals[poLocaleDefault],
-      ...poModalPasswordRecoveryLiterals[browserLanguage()],
-    };
+  literals: {
+    cancelButton: string;
+    closeButton: string;
+    continueButton: string;
+    email: string;
+    emailErrorMessagePhrase: string;
+    emailSentConfirmationPhrase: string;
+    emailSentTitle: string;
+    forgotPasswordTitle: string;
+    insertCode: string;
+    insertEmail: string;
+    insertPhone: string;
+    phoneErrorMessagePhrase: string;
+    prepositionIn: string;
+    prepositionOr: string;
+    recoveryPasswordPhrase: string;
+    resendEmailButton: string;
+    resendSmsCodePhrase: string;
+    sendAgain: string;
+    sendAgainPhrase: string;
+    sendButton: string;
+    sms: string;
+    smsCode: string;
+    smsCodeErrorMessagePhrase: string;
+    sentSmsCodePhrase: string;
+    supportContact: string;
+    telephone: string;
+    typeCodeTitle: string;
+  } = {
+    ...poModalPasswordRecoveryLiterals[poLocaleDefault],
+    ...poModalPasswordRecoveryLiterals[browserLanguage()]
+  };
 
   /**
    * @optional
@@ -139,7 +160,9 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
    *
    */
   @Input('p-type') set type(value: PoModalPasswordRecoveryType) {
-    this._type = (<any>Object).values(PoModalPasswordRecoveryType).includes(value) ? value : PoModalPasswordRecoveryTypeDefault;
+    this._type = (<any>Object).values(PoModalPasswordRecoveryType).includes(value)
+      ? value
+      : PoModalPasswordRecoveryTypeDefault;
   }
 
   get type() {
@@ -302,7 +325,8 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
   private concatenateSMSErrorMessage(value: string) {
     const literalCodeErrorMessage = this.literals.smsCodeErrorMessagePhrase;
 
-    return value && value !== '' ? `${literalCodeErrorMessage} ${this.literals.prepositionIn} ${value}.` : literalCodeErrorMessage;
+    return value && value !== ''
+      ? `${literalCodeErrorMessage} ${this.literals.prepositionIn} ${value}.`
+      : literalCodeErrorMessage;
   }
-
 }

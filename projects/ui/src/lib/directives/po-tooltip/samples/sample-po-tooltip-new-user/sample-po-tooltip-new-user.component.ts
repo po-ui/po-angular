@@ -8,7 +8,6 @@ import { PoNotificationService } from '@portinari/portinari-ui';
   templateUrl: './sample-po-tooltip-new-user.component.html'
 })
 export class SamplePoTooltipNewUserComponent implements OnInit {
-
   birthDate: Date;
   confirmPassword: string;
   CPF: string;
@@ -24,7 +23,7 @@ export class SamplePoTooltipNewUserComponent implements OnInit {
 
   @ViewChild('formNewUser', { static: true }) formNewUser: FormControl;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.initialize();
@@ -49,5 +48,4 @@ export class SamplePoTooltipNewUserComponent implements OnInit {
     this.passwordTooltip = 'Password must contain at least 8 characters';
     this.registrationTooltip = 'The registration number is on the registration form';
   }
-
 }

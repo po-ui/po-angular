@@ -8,7 +8,6 @@ import { PoComboOption } from './po-combo-option.interface';
  * Interface dos agrupamentos da coleção que será exibida no dropdown do `po-combo`.
  */
 export interface PoComboOptionGroup {
-
   /** Título para cada grupo de opções. */
   label: string;
 

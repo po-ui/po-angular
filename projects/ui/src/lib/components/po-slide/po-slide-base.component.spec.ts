@@ -3,20 +3,18 @@ import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 import { PoSlideBaseComponent } from './po-slide-base.component';
 
 class PoSlideComponent extends PoSlideBaseComponent {
+  cancelInterval() {}
 
-  cancelInterval() { }
+  startSlide() {}
 
-  startSlide() { }
+  setSlideItems() {}
 
-  setSlideItems() { }
+  startInterval() {}
 
-  startInterval() { }
-
-  setSlideHeight(height: number) { }
+  setSlideHeight(height: number) {}
 }
 
 describe('PoSlideBaseComponent:', () => {
-
   const component = new PoSlideComponent();
 
   it('should be created', () => {
@@ -24,7 +22,6 @@ describe('PoSlideBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('height: should update property with valid values and call `setSlideHeight`.', () => {
       const validValues = [0, 1500, 500, 200, 8000];
 
@@ -80,14 +77,16 @@ describe('PoSlideBaseComponent:', () => {
     });
 
     it('slides: should update property with valid values and call `setSlideItems`.', () => {
-      const validValues = [['image-1', 'image-2'], [{ image: 'image-1' }, { image: 'image-2' }], [{ label: '1' }, { label: '2'}]];
+      const validValues = [
+        ['image-1', 'image-2'],
+        [{ image: 'image-1' }, { image: 'image-2' }],
+        [{ label: '1' }, { label: '2' }]
+      ];
 
       spyOn(component, 'setSlideItems');
 
       expectPropertiesValues(component, 'slides', validValues, validValues);
       expect(component.setSlideItems).toHaveBeenCalledTimes(3);
     });
-
   });
-
 });

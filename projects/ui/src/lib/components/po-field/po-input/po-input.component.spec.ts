@@ -14,12 +14,7 @@ describe('PoInputComponent: ', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoInputComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoInputComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -56,7 +51,6 @@ describe('PoInputComponent: ', () => {
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -79,7 +73,6 @@ describe('PoInputComponent: ', () => {
   });
 
   describe('Templates: ', () => {
-
     it('shouldn`t have an icon.', () => {
       expect(nativeElement.querySelector('.po-field-icon-container-left')).toBeFalsy();
     });
@@ -136,7 +129,5 @@ describe('PoInputComponent: ', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

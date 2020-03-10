@@ -8,19 +8,12 @@
     "inlineSources": true,
     "skipLibCheck": true,
     "types": [],
-    "lib": [
-      "dom",
-      "es2018"
-    ]
+    "lib": ["dom", "es2018"]
   },
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
     "fullTemplateTypeCheck": true
   },
-  "exclude": [
-    "node_modules",
-    "src/test.ts",
-    "**/*.spec.ts"
-  ]
+  "exclude": ["node_modules", "src/test.ts", "**/*.spec.ts"]
 }

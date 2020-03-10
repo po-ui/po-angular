@@ -6,9 +6,7 @@ import { PoNotificationService } from '@portinari/portinari-ui';
   selector: 'sample-po-loading-overlay-connection-test',
   templateUrl: 'sample-po-loading-overlay-connection-test.component.html'
 })
-
 export class SamplePoLoadingOverlayConnectionTestComponent {
-
   environment = {
     urlServer: '',
     urlDB: '',
@@ -18,7 +16,7 @@ export class SamplePoLoadingOverlayConnectionTestComponent {
 
   isHideLoading = true;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   connectionTest() {
     const message = 'Connection ok';
@@ -28,9 +26,6 @@ export class SamplePoLoadingOverlayConnectionTestComponent {
     setTimeout(() => {
       this.isHideLoading = true;
       this.poNotification.success(message);
-
     }, 450);
-
   }
-
 }

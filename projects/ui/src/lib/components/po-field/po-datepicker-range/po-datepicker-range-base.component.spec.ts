@@ -8,27 +8,26 @@ import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent, poDatepickerRangeLiteralsDefault } from './po-datepicker-range-base.component';
 
 describe('PoDatepickerRangeBaseComponent:', () => {
-
   class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent {
-    updateScreenByModel(dateRange: PoDatepickerRange) { }
-    resetDateRangeInputValidation() { }
+    updateScreenByModel(dateRange: PoDatepickerRange) {}
+    resetDateRangeInputValidation() {}
   }
 
   const mockedService: any = {
     dateRegex: '',
     isoRegex: '',
-    convertIsoToDate: () => { },
-    convertDateToISO: () => { },
-    formatYear: () => { },
-    getDateFromIso: () => { },
-    getDateForDateRange: () => { },
-    isDateRangeValid: () => { },
-    isValidIso: () => { },
-    setYearFrom0To100: () => { },
-    sortDate: () => { },
-    splitDate: () => { },
-    validateDateRange: () => { },
-    validateDate: () => { }
+    convertIsoToDate: () => {},
+    convertDateToISO: () => {},
+    formatYear: () => {},
+    getDateFromIso: () => {},
+    getDateForDateRange: () => {},
+    isDateRangeValid: () => {},
+    isValidIso: () => {},
+    setYearFrom0To100: () => {},
+    sortDate: () => {},
+    splitDate: () => {},
+    validateDateRange: () => {},
+    validateDate: () => {}
   };
 
   const component = new PoDatepickerRangeComponent(mockedService);
@@ -38,7 +37,6 @@ describe('PoDatepickerRangeBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-no-autocomplete: should update property with valid values with valid values.', () => {
       const invalidValues = [undefined, null, 0, 'false', 'string'];
       expectPropertiesValues(component, 'noAutocomplete', invalidValues, false);
@@ -50,25 +48,25 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('clean: should update with true value.', () => {
-      const booleanValidTrueValues = [ true, 'true', 1, '' ];
+      const booleanValidTrueValues = [true, 'true', 1, ''];
 
       expectPropertiesValues(component, 'clean', booleanValidTrueValues, true);
     });
 
     it('clean: should update with false value.', () => {
-      const booleanInvalidValues = [ undefined, null, 2, 'string', 0, NaN, false ];
+      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
 
       expectPropertiesValues(component, 'clean', booleanInvalidValues, false);
     });
 
     it('disabled: should update with true value.', () => {
-      const booleanValidTrueValues = [ true, 'true', 1, '' ];
+      const booleanValidTrueValues = [true, 'true', 1, ''];
 
       expectPropertiesValues(component, 'disabled', booleanValidTrueValues, true);
     });
 
     it('disabled: should update with false value.', () => {
-      const booleanInvalidValues = [ undefined, null, 2, 'string', 0, NaN, false ];
+      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
 
       expectPropertiesValues(component, 'disabled', booleanInvalidValues, false);
     });
@@ -160,21 +158,26 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should update property with default literals if is setted with invalid values', () => {
-      const invalidValues = [ null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => { } ];
+      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
       spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(UtilsFunctions.poLocaleDefault);
 
-      expectPropertiesValues(component, 'literals', invalidValues, poDatepickerRangeLiteralsDefault[UtilsFunctions.poLocaleDefault]);
+      expectPropertiesValues(
+        component,
+        'literals',
+        invalidValues,
+        poDatepickerRangeLiteralsDefault[UtilsFunctions.poLocaleDefault]
+      );
     });
 
     it('readonly: should update with true value.', () => {
-      const booleanValidTrueValues = [ true, 'true', 1, '' ];
+      const booleanValidTrueValues = [true, 'true', 1, ''];
 
       expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
     });
 
     it('readonly: should update with false value.', () => {
-      const booleanInvalidValues = [ undefined, null, 2, 'string', 0, NaN, false ];
+      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
 
       expectPropertiesValues(component, 'readonly', booleanInvalidValues, false);
     });
@@ -188,13 +191,13 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('required: should update with true value.', () => {
-      const booleanValidTrueValues = [ true, 'true', 1, '' ];
+      const booleanValidTrueValues = [true, 'true', 1, ''];
 
       expectPropertiesValues(component, 'required', booleanValidTrueValues, true);
     });
 
     it('required: should update with false value.', () => {
-      const booleanInvalidValues = [ undefined, null, 2, 'string', 0, NaN, false ];
+      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
 
       expectPropertiesValues(component, 'required', booleanInvalidValues, false);
     });
@@ -224,7 +227,6 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       expect(component.updateScreenByModel).toHaveBeenCalledWith(start);
       expect(component['updateModel']).toHaveBeenCalledWith(start);
     });
-
   });
 
   describe('Methods:', () => {
@@ -253,13 +255,12 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     describe('validate:', () => {
-
       let invalidDateRangeError;
 
       beforeEach(() => {
         invalidDateRangeError = {
           date: {
-            valid: false,
+            valid: false
           }
         };
       });
@@ -280,7 +281,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       it(`should call 'requiredDateRangeFailed', set 'errorMessage' to '' and return 'invalidDateRangeRequiredError'.`, () => {
         const invalidDateRangeRequiredError = {
           required: {
-            valid: false,
+            valid: false
           }
         };
 
@@ -297,7 +298,6 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
       it(`should call 'dateRangeObjectFailed', set 'errorMessage' as 'literals.invalidFormat'
         and return 'invalidDateRangeError'.`, () => {
-
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
         spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(true);
@@ -314,7 +314,6 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
       it(`should call 'dateRangeObjectFailed', set 'errorMessage' as 'literals.invalidFormat'
         and return 'invalidDateRangeError'.`, () => {
-
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
         spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(true);
@@ -360,12 +359,10 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         expect(component['dateRangeFailed']).toHaveBeenCalled();
         expect(validate).toEqual(returnNull);
       });
-
     });
 
     it(`writeValue: should call 'validateModel', updateScreenByModel and set 'dateRange' with empty properties if
       'dateRange' is falsy`, () => {
-
       component['dateRange'] = { start: '2018-05-20', end: '2018-06-23' };
       const dateRangeExpeted = { start: '', end: '' };
 
@@ -384,7 +381,6 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it(`writeValue: should call 'updateModel', updateScreenByModel and set 'dateRange' with empty properties if
       'dateRangeObjectFailed' return is false`, () => {
-
       component['dateRange'] = { start: '2018-05-20', end: '2018-06-23' };
       const dateRangeExpeted = { start: '', end: '' };
 
@@ -403,7 +399,6 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it(`writeValue: should call 'updateModel', updateScreenByModel and set 'dateRange' with value param if
       its is dateRange object`, () => {
-
       component['dateRange'] = { start: '2018-05-20', end: '2018-06-23' };
 
       spyOn(component, <any>'isDateRangeObject').and.returnValue(true);
@@ -422,7 +417,6 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it(`writeValue: should call 'convertPatternDateFormat' to set 'dateRange' if its is date range object`, () => {
-
       component['dateRange'] = { start: '2018-05-20', end: '2018-06-23' };
       const dateRangeExpeted = { start: '2019-05-20', end: '2019-06-23' };
 
@@ -442,8 +436,8 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const value = '2018-10-25';
       const fakeThis = {
         poDateService: {
-          isValidIso: () => { }
-        },
+          isValidIso: () => {}
+        }
       };
 
       spyOn(fakeThis.poDateService, 'isValidIso');
@@ -460,8 +454,8 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const fakeThis: any = {
         isStartDateRangeInputValid: true,
         poDateService: {
-          isDateRangeValid: () => { }
-        },
+          isDateRangeValid: () => {}
+        }
       };
 
       spyOn(fakeThis.poDateService, 'isDateRangeValid').and.returnValue(true);
@@ -478,8 +472,8 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const fakeThis: any = {
         isStartDateRangeInputValid: true,
         poDateService: {
-          isDateRangeValid: () => { }
-        },
+          isDateRangeValid: () => {}
+        }
       };
 
       spyOn(fakeThis.poDateService, 'isDateRangeValid').and.returnValue(false);
@@ -496,8 +490,8 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const fakeThis: any = {
         isStartDateRangeInputValid: false,
         poDateService: {
-          isDateRangeValid: () => { }
-        },
+          isDateRangeValid: () => {}
+        }
       };
 
       spyOn(fakeThis.poDateService, 'isDateRangeValid').and.returnValue(true);
@@ -513,10 +507,10 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const endDate = '2018-10-28';
       const fakeThis = {
         isDateRangeInputFormatValid: true,
-        dateFormatFailed: () => { }
+        dateFormatFailed: () => {}
       };
 
-      spyOn(fakeThis, <any> 'dateFormatFailed').and.returnValue(true);
+      spyOn(fakeThis, <any>'dateFormatFailed').and.returnValue(true);
 
       const dateRangeFormatFailedReturn = component['dateRangeFormatFailed'].call(fakeThis, startDate, endDate);
 
@@ -528,10 +522,10 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const endDate = '2018-10-28';
       const fakeThis = {
         isDateRangeInputFormatValid: false,
-        dateFormatFailed: () => { }
+        dateFormatFailed: () => {}
       };
 
-      spyOn(fakeThis, <any> 'dateFormatFailed').and.returnValue(false);
+      spyOn(fakeThis, <any>'dateFormatFailed').and.returnValue(false);
 
       const dateRangeFormatFailedReturn = component['dateRangeFormatFailed'].call(fakeThis, startDate, endDate);
 
@@ -643,7 +637,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('updateModel: should call `onChangeModel` with `value` if `onChangeModel` is valid.', () => {
       const fakeThis = {
-        onChangeModel: () => { }
+        onChangeModel: () => {}
       };
       const value: any = 'value';
 
@@ -656,7 +650,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('updateModel: should call `onChangeModel` with `value` object if `onChangeModel` is valid.', () => {
       const fakeThis = {
-        onChangeModel: () => { }
+        onChangeModel: () => {}
       };
       const value: any = { key: 'value' };
 
@@ -669,7 +663,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('validateModel: should call `validatorChange` with `value` if `validatorChange` is valid.', () => {
       const fakeThis = {
-        validatorChange: () => { }
+        validatorChange: () => {}
       };
       const value: any = 'value';
 
@@ -683,7 +677,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     it('convertPatternDateFormat: should call `poDateService.convertDateToISO` if `value` is instanceof `Date`.', () => {
       const fakeThis = {
         poDateService: {
-          convertDateToISO: () => { }
+          convertDateToISO: () => {}
         }
       };
       const date = new Date('2018-10-25');
@@ -701,7 +695,5 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
       expect(component['convertPatternDateFormat'](date)).toBe(date);
     });
-
   });
-
 });

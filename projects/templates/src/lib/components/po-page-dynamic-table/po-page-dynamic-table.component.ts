@@ -26,7 +26,7 @@ import { PoPageCustomizationService } from './../../services/po-page-customizati
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
 
-type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions );
+type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
 export const poPageDynamicTableLiteralsDefault = {
   en: {
@@ -69,7 +69,8 @@ export const poPageDynamicTableLiteralsDefault = {
     confirmRemoveTitle: 'Confirmar exclusão',
     confirmRemoveMessage: 'Tem certeza de que deseja excluir esse registro? Você não poderá desfazer essa ação.',
     confirmRemoveAllTitle: 'Confirmar exclusão em lote',
-    confirmRemoveAllMessage: 'Tem certeza de que deseja excluir todos esses registros? Você não poderá desfazer essa ação.',
+    confirmRemoveAllMessage:
+      'Tem certeza de que deseja excluir todos esses registros? Você não poderá desfazer essa ação.',
     loadDataErrorNotification: 'Serviço não informado.',
     removeSuccessNotification: 'Item excluido com sucesso',
     removeAllSuccessNotification: 'Items excluidos com sucesso'
@@ -148,10 +149,9 @@ export const poPageDynamicTableLiteralsDefault = {
 @Component({
   selector: 'po-page-dynamic-table',
   templateUrl: './po-page-dynamic-table.component.html',
-  providers: [ PoPageDynamicService ]
+  providers: [PoPageDynamicService]
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
-
   private _actions: PoPageDynamicTableActions = {};
   private _pageActions: Array<PoPageAction> = [];
   private _tableActions: Array<PoTableAction> = [];
@@ -197,7 +197,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *  [p-load]="onLoadOptions.bind(this)"
    * ```
    */
-  @Input('p-load') onLoad: string | (() => PoPageDynamicTableOptions );
+  @Input('p-load') onLoad: string | (() => PoPageDynamicTableOptions);
 
   /**
    * @optional
@@ -225,7 +225,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     private poNotification: PoNotificationService,
     private poPageDynamicService: PoPageDynamicService,
     private poPageCustomizationService: PoPageCustomizationService
-    ) {
+  ) {
     super();
   }
 
@@ -320,7 +320,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return { order: `${column.property}` };
   }
 
-  private loadData(params: { page?: number, search?: string } = {}) {
+  private loadData(params: { page?: number; search?: string } = {}) {
     if (!this.serviceApi) {
       this.poNotification.error(this.literals.loadDataErrorNotification);
       return EMPTY;
@@ -331,15 +331,18 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const fullParams: any = { ...defaultParams, ...params, ...orderParam };
 
     return this.poPageDynamicService.getResources(fullParams).pipe(
-     tap(response => {
-      this.items = fullParams.page === 1 ? response.items : [...this.items, ...response.items];
-      this.page = fullParams.page;
-      this.hasNext = response.hasNext;
-     })
-   );
+      tap(response => {
+        this.items = fullParams.page === 1 ? response.items : [...this.items, ...response.items];
+        this.page = fullParams.page;
+        this.hasNext = response.hasNext;
+      })
+    );
   }
 
-  private getMetadata(serviceApiFromRoute: string, onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicTableMetaData> {
+  private getMetadata(
+    serviceApiFromRoute: string,
+    onLoad: UrlOrPoCustomizationFunction
+  ): Observable<PoPageDynamicTableMetaData> {
     if (serviceApiFromRoute) {
       return this.poPageDynamicService.getMetadata<PoPageDynamicTableMetaData>().pipe(
         tap(response => {
@@ -349,7 +352,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
           this.fields = response.fields || this.fields;
           this.title = response.title || this.title;
         }),
-        switchMap(() => this.loadOptionsOnInitialize(onLoad) )
+        switchMap(() => this.loadOptionsOnInitialize(onLoad))
       );
     }
 
@@ -357,19 +360,23 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   // @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
-  private navigateTo(route: {path: string, component?, url?: string, params?: any}, forceStopAutoRouter: boolean = false) {
-    this.router.navigate([route.url || route.path], { queryParams: route.params })
-      .catch(() => {
-        if (forceStopAutoRouter || !this.autoRouter) {
-          return;
-        }
+  private navigateTo(
+    route: { path: string; component?; url?: string; params?: any },
+    forceStopAutoRouter: boolean = false
+  ) {
+    this.router.navigate([route.url || route.path], { queryParams: route.params }).catch(() => {
+      if (forceStopAutoRouter || !this.autoRouter) {
+        return;
+      }
 
-        this.router.config.unshift(<Route>{
-          path: route.path, component: route.component,  data: { serviceApi: this.serviceApi, autoRouter: true }
-        });
-
-        this.navigateTo(route, true);
+      this.router.config.unshift(<Route>{
+        path: route.path,
+        component: route.component,
+        data: { serviceApi: this.serviceApi, autoRouter: true }
       });
+
+      this.navigateTo(route, true);
+    });
   }
 
   private openDetail(path: string, item) {
@@ -404,11 +411,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private remove(item) {
     const uniqueKey = this.formatUniqueKey(item);
 
-    this.poPageDynamicService.deleteResource(uniqueKey).toPromise().then(() => {
-      this.removeLocalItems([item]);
+    this.poPageDynamicService
+      .deleteResource(uniqueKey)
+      .toPromise()
+      .then(() => {
+        this.removeLocalItems([item]);
 
-      this.poNotification.success(this.literals.removeSuccessNotification);
-    });
+        this.poNotification.success(this.literals.removeSuccessNotification);
+      });
   }
 
   private removeAll() {
@@ -422,11 +432,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
     const keysSelectedItems = util.mapArrayByProperties(selectedItems, this.keys);
 
-    this.poPageDynamicService.deleteResources(keysSelectedItems).toPromise().then(() => {
-      this.removeLocalItems(selectedItems);
+    this.poPageDynamicService
+      .deleteResources(keysSelectedItems)
+      .toPromise()
+      .then(() => {
+        this.removeLocalItems(selectedItems);
 
-      this.poNotification.success(this.literals.removeAllSuccessNotification);
-    });
+        this.poNotification.success(this.literals.removeAllSuccessNotification);
+      });
   }
 
   private removeLocalItems(items = []) {
@@ -446,7 +459,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private setPageActions(actions: PoPageDynamicTableActions) {
     if (actions) {
       this._pageActions = [
-        { label: this.literals.pageAction, action: this.openNew.bind(this, actions.new), disabled: !this._actions.new },
+        { label: this.literals.pageAction, action: this.openNew.bind(this, actions.new), disabled: !this._actions.new }
       ];
     }
   }
@@ -454,7 +467,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private setRemoveAllAction() {
     if (this._actions.removeAll) {
       this._pageActions.push({
-      label: this.literals.pageActionRemoveAll, action: this.confirmRemoveAll.bind(this),
+        label: this.literals.pageActionRemoveAll,
+        action: this.confirmRemoveAll.bind(this),
         disabled: !this._actions.removeAll
       });
     }
@@ -463,12 +477,26 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private setTableActions(actions: PoPageDynamicTableActions) {
     if (actions) {
       this._tableActions = [
-        { action: this.openDetail.bind(this, actions.detail), label: this.literals.tableActionView, visible: !!this._actions.detail },
-        { action: this.openEdit.bind(this, actions.edit), label: this.literals.tableActionEdit, visible: !!this._actions.edit },
-        { action: this.openDuplicate.bind(this, actions.duplicate), label: this.literals.tableActionDuplicate,
+        {
+          action: this.openDetail.bind(this, actions.detail),
+          label: this.literals.tableActionView,
+          visible: !!this._actions.detail
+        },
+        {
+          action: this.openEdit.bind(this, actions.edit),
+          label: this.literals.tableActionEdit,
+          visible: !!this._actions.edit
+        },
+        {
+          action: this.openDuplicate.bind(this, actions.duplicate),
+          label: this.literals.tableActionDuplicate,
           visible: !!this._actions.duplicate
         },
-        { action: this.confirmRemove.bind(this), label: this.literals.tableActionDelete, separator: true, type: 'danger',
+        {
+          action: this.confirmRemove.bind(this),
+          label: this.literals.tableActionDelete,
+          separator: true,
+          type: 'danger',
           visible: !!this._actions.remove
         }
       ];
@@ -490,10 +518,12 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
-
     if (onLoad) {
       return this.getPoDynamicPageOptions(onLoad).pipe(
-        tap(responsePoOption => this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)));
+        tap(responsePoOption =>
+          this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)
+        )
+      );
     }
 
     return EMPTY;
@@ -529,5 +559,4 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
     return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
   }
-
 }

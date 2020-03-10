@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-chart-basic',
   templateUrl: './sample-po-chart-basic.component.html'
 })
-export class SamplePoChartBasicComponent { }
+export class SamplePoChartBasicComponent {}

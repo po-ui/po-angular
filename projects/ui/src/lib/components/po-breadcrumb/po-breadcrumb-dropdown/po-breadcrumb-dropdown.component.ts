@@ -14,8 +14,6 @@ import { PoBreadcrumbItem } from './../po-breadcrumb-item.interface';
   templateUrl: './po-breadcrumb-dropdown.component.html'
 })
 export class PoBreadcrumbDropdownComponent {
-
   // Itens a serem apresentados na lista do dropdown.
   @Input('p-items') items: Array<PoBreadcrumbItem>;
-
 }

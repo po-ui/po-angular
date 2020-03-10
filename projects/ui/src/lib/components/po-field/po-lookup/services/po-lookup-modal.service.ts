@@ -13,7 +13,6 @@ import { PoLookupModalComponent } from '../po-lookup-modal/po-lookup-modal.compo
  */
 @Injectable()
 export class PoLookupModalService {
-
   private componentRef: ComponentRef<any> = null;
 
   selectValueEvent: EventEmitter<any> = new EventEmitter<any>();
@@ -30,11 +29,11 @@ export class PoLookupModalService {
    * @param literals {PoLookupLiterals} Literais utilizadas no componente.
    */
   openModal(params: {
-    service: PoLookupFilter,
-    columns: Array<PoLookupColumn>,
-    filterParams: any,
-    title: string,
-    literals: PoLookupLiterals
+    service: PoLookupFilter;
+    columns: Array<PoLookupColumn>;
+    filterParams: any;
+    title: string;
+    literals: PoLookupLiterals;
   }): void {
     const { service, columns, filterParams, title, literals } = params;
 
@@ -49,7 +48,6 @@ export class PoLookupModalService {
     });
     this.componentRef.changeDetectorRef.detectChanges();
     this.componentRef.instance.openModal();
-
   }
 
   // Este metodo é chamado quando é selecionado um item na lookup modal.

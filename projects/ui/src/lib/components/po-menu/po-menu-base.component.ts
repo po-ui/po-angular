@@ -1,7 +1,15 @@
 import { Input, Directive } from '@angular/core';
 
 import { v4 as uuid } from 'uuid';
-import { browserLanguage, convertToBoolean, convertToInt, isExternalLink, isTypeof, poLocaleDefault, validValue } from '../../utils/util';
+import {
+  browserLanguage,
+  convertToBoolean,
+  convertToInt,
+  isExternalLink,
+  isTypeof,
+  poLocaleDefault,
+  validValue
+} from '../../utils/util';
 
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 import { PoMenuItem } from './po-menu-item.interface';
@@ -23,7 +31,6 @@ export const poMenuLiteralsDefault = {
  */
 @Directive()
 export abstract class PoMenuBaseComponent {
-
   private _collapsed = false;
   private _filter = false;
   private _level;
@@ -214,14 +221,13 @@ export abstract class PoMenuBaseComponent {
     return this._shortLogo;
   }
 
-  constructor(public menuService: PoMenuService) { }
+  constructor(public menuService: PoMenuService) {}
 
   private configService(service: string | PoMenuFilter) {
     if (typeof service === 'string' && service.trim()) {
       // service url
       this.menuService.configProperties(service);
       this.filterService = this.menuService;
-
     } else if (typeof service === 'object' && service.getFilteredData) {
       // custom service
       this.filterService = service;
@@ -260,7 +266,6 @@ export abstract class PoMenuBaseComponent {
 
   private processSubItems(menu) {
     menu.subItems.forEach((menuItem, index, menuItems) => {
-
       const previousItem = menuItems[index - 1];
       if (previousItem && previousItem.subItems) {
         this._level = previousItem['level'];
@@ -278,14 +283,12 @@ export abstract class PoMenuBaseComponent {
       if (!menu['badgeAlert']) {
         menu = this.setMenuBadgeAlert(menu, menuItem);
       }
-
     });
 
     menu.subItems = Object.assign([], menu.subItems);
   }
 
   private removeBadgeAlert(menuItem: PoMenuItem): void {
-
     if (menuItem['badgeAlert']) {
       delete menuItem['badgeAlert'];
     }
@@ -293,7 +296,6 @@ export abstract class PoMenuBaseComponent {
     if (menuItem.subItems) {
       menuItem.subItems.forEach(subItem => this.removeBadgeAlert(subItem));
     }
-
   }
 
   private setMenuBadgeAlert(parent: PoMenuItem, child: PoMenuItem): PoMenuItem {
@@ -330,5 +332,4 @@ export abstract class PoMenuBaseComponent {
   }
 
   protected abstract validateCollapseClass();
-
 }

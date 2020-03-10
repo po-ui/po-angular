@@ -8,7 +8,6 @@ import { PoModalAction, PoModalComponent, PoStepperComponent, PoUploadComponent 
   templateUrl: 'sample-po-upload-rs.component.html'
 })
 export class SamplePoUploadRsComponent implements OnInit {
-
   confirm: PoModalAction = {
     action: () => {
       this.sucessData.close();
@@ -38,7 +37,6 @@ export class SamplePoUploadRsComponent implements OnInit {
     this.sucessData.open();
     this.newSubmit();
     this.stepper.first();
-
   }
 
   submitProject() {
@@ -51,5 +49,4 @@ export class SamplePoUploadRsComponent implements OnInit {
     this.title = undefined;
     this.description = undefined;
   }
-
 }

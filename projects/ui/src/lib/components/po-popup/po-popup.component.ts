@@ -32,10 +32,9 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
 @Component({
   selector: 'po-popup',
   templateUrl: './po-popup.component.html',
-  providers: [ PoControlPositionService ]
+  providers: [PoControlPositionService]
 })
 export class PoPopupComponent extends PoPopupBaseComponent {
-
   @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
 
   constructor(
@@ -43,7 +42,8 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     private renderer: Renderer2,
     private router: Router,
     private poControlPosition: PoControlPositionService,
-    public changeDetector: ChangeDetectorRef) {
+    public changeDetector: ChangeDetectorRef
+  ) {
     super();
     this.parentRef = viewContainerRef['_hostView'][8];
   }
@@ -87,7 +87,9 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   returnBooleanValue(popupAction: any, property: string) {
-    return isTypeof(popupAction[property], 'function') ? popupAction[property](this.param || popupAction) : popupAction[property];
+    return isTypeof(popupAction[property], 'function')
+      ? popupAction[property](this.param || popupAction)
+      : popupAction[property];
   }
 
   /**
@@ -102,7 +104,8 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   private clickedOutDisabledItem(event) {
-    const containsItemDisabled = this.elementContains(event.target, 'po-popup-item-disabled') ||
+    const containsItemDisabled =
+      this.elementContains(event.target, 'po-popup-item-disabled') ||
       this.elementContains(event.target.parentElement, 'po-popup-item-disabled');
 
     return !containsItemDisabled;
@@ -118,12 +121,9 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   private closePopupOnClickout(event: MouseEvent) {
-
     if (this.clickedOutTarget(event) && this.clickedOutDisabledItem(event) && this.clickedOutHeaderTemplate(event)) {
-
       this.close();
     }
-
   }
 
   private elementContains(element: HTMLElement, className: string) {
@@ -150,7 +150,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     if (this.showPopup) {
       this.close();
     }
-  }
+  };
 
   private openUrl(url: string) {
     if (isExternalLink(url)) {
@@ -175,7 +175,14 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   private setPosition() {
-    this.poControlPosition.setElements(this.popupRef.nativeElement, 8, this.target, this.customPositions, false, this.isCornerAlign);
+    this.poControlPosition.setElements(
+      this.popupRef.nativeElement,
+      8,
+      this.target,
+      this.customPositions,
+      false,
+      this.isCornerAlign
+    );
     this.poControlPosition.adjustPosition(this.position);
     this.arrowDirection = this.poControlPosition.getArrowDirection();
   }
@@ -188,5 +195,4 @@ export class PoPopupComponent extends PoPopupBaseComponent {
       this.close();
     }
   }
-
 }

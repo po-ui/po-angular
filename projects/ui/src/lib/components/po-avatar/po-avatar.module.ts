@@ -9,14 +9,8 @@ import { PoAvatarComponent } from './po-avatar.component';
  * Módulo do componente po-avatar.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    PoAvatarComponent
-  ],
-  exports: [
-    PoAvatarComponent
-  ]
+  imports: [CommonModule],
+  declarations: [PoAvatarComponent],
+  exports: [PoAvatarComponent]
 })
-export class PoAvatarModule { }
+export class PoAvatarModule {}

@@ -26,7 +26,6 @@ import { PipeTransform } from '@angular/core';
  * ```
  */
 export class PoI18nBasePipe implements PipeTransform {
-
   transform(value: string, args: any): string {
     if (!value) {
       return '';
@@ -37,10 +36,9 @@ export class PoI18nBasePipe implements PipeTransform {
     }
 
     for (const arg of args) {
-      value = value.replace(/(\{\w*\})+/,  arg);
+      value = value.replace(/(\{\w*\})+/, arg);
     }
 
     return value;
   }
-
 }

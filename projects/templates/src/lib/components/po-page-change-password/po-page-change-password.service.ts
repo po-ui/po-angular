@@ -6,7 +6,6 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 
 @Injectable()
 export class PoPageChangePasswordService {
-
   constructor(private http: HttpClient) {}
 
   post(url: string, item: any): Observable<HttpResponse<Object>> {

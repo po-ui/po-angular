@@ -13,7 +13,6 @@ import { convertToBoolean, convertToInt } from '../../utils/util';
  */
 @Directive()
 export class PoContainerBaseComponent {
-
   private _height?: number;
   private _noBorder?: boolean = false;
   private _noPadding?: boolean = false;
@@ -86,5 +85,4 @@ export class PoContainerBaseComponent {
   get noShadow(): boolean {
     return this._noShadow;
   }
-
 }

@@ -6,5 +6,4 @@ describe('PoMenuHeaderTemplateDirective:', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
-
 });

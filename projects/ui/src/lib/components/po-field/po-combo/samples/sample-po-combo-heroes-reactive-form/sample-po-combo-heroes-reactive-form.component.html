@@ -1,9 +1,5 @@
 <div class="po-row">
-  <po-widget
-    class="po-lg-6"
-    [p-primary-label]="knowMoreLabel"
-    (p-primary-action)="knowMore()">
-
+  <po-widget class="po-lg-6" [p-primary-label]="knowMoreLabel" (p-primary-action)="knowMore()">
     <div [formGroup]="form">
       <po-combo
         name="heroName"
@@ -13,42 +9,25 @@
         p-filter-service="https://thf.totvs.com.br/sample/api/new/heroes"
         p-label="Search a Hero"
         p-sort
-        (p-change)="onChangeHero($event)">
+        (p-change)="onChangeHero($event)"
+      >
       </po-combo>
     </div>
 
     <ng-container *ngIf="hero$ | async as hero">
-
       <div class="po-row">
-        <po-info
-          class="po-md-6"
-          p-label="Name"
-          [p-value]="hero.name">
-        </po-info>
+        <po-info class="po-md-6" p-label="Name" [p-value]="hero.name"> </po-info>
 
-        <po-info
-          class="po-md-6"
-          p-label="Nickname"
-          [p-value]="hero.nickname">
-        </po-info>
+        <po-info class="po-md-6" p-label="Nickname" [p-value]="hero.nickname"> </po-info>
       </div>
 
       <po-divider></po-divider>
 
       <div class="po-row">
-        <po-info
-          class="po-md-6"
-          p-label="Birthday"
-          p-value="{{ hero.birthday | date }}">
-        </po-info>
+        <po-info class="po-md-6" p-label="Birthday" p-value="{{ hero.birthday | date }}"> </po-info>
 
-        <po-info
-          class="po-md-6"
-          p-label="Email"
-          [p-value]="hero.email">
-        </po-info>
+        <po-info class="po-md-6" p-label="Email" [p-value]="hero.email"> </po-info>
       </div>
     </ng-container>
-
   </po-widget>
 </div>

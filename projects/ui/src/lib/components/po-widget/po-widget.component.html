@@ -5,52 +5,42 @@
   [class.po-widget-primary]="primary"
   [class.po-widget-no-shadow]="noShadow"
   [style.background-image]="background ? 'url(' + background + ')' : undefined"
-  (click)="onClick($event)">
-
+  (click)="onClick($event)"
+>
   <div *ngIf="hasTitleHelpOrSetting()" class="po-widget-header">
-
-    <span
-      *ngIf="showTitleAction; else noTitleAction"
-      class="po-widget-title-action"
-      (click)="runTitleAction($event)">
+    <span *ngIf="showTitleAction; else noTitleAction" class="po-widget-title-action" (click)="runTitleAction($event)">
       {{ title }}
     </span>
     <ng-template #noTitleAction>{{ title }}</ng-template>
 
     <div *ngIf="setting.observers[0] || help" class="po-pull-right">
-      <span id="settingAction"
+      <span
+        id="settingAction"
         *ngIf="setting.observers[0]"
         class="po-clickable po-icon po-icon-settings"
-        (click)="settingOutput($event)">
+        (click)="settingOutput($event)"
+      >
       </span>
-      <span id="helpLink"
-        *ngIf="help"
-        class="po-clickable po-icon po-icon-help"
-        (click)="openHelp($event)">
-      </span>
+      <span id="helpLink" *ngIf="help" class="po-clickable po-icon po-icon-help" (click)="openHelp($event)"> </span>
     </div>
   </div>
 
-  <po-container
-    p-no-border
-    [p-height]="containerHeight">
+  <po-container p-no-border [p-height]="containerHeight">
     <div class="po-widget-body">
       <ng-content></ng-content>
     </div>
   </po-container>
 
   <div *ngIf="primaryLabel" class="po-widget-footer">
-
     <div class="po-widget-xl" *ngIf="!secondaryLabel">
-      <a class="po-widget-action" id='primaryAct' (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
+      <a class="po-widget-action" id="primaryAct" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
     </div>
 
     <div class="po-widget-md" *ngIf="secondaryLabel">
-      <a class="po-widget-action" id='primaryAct' (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
+      <a class="po-widget-action" id="primaryAct" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
     </div>
     <div class="po-widget-md" *ngIf="secondaryLabel">
-      <a class="po-widget-action" id='secondaryAct' (click)="runSecondaryAction($event)">{{ secondaryLabel }}</a>
+      <a class="po-widget-action" id="secondaryAct" (click)="runSecondaryAction($event)">{{ secondaryLabel }}</a>
     </div>
-
   </div>
 </div>

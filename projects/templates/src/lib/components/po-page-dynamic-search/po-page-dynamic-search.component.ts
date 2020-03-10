@@ -1,7 +1,13 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 
 import { Observable, Subscription } from 'rxjs';
-import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoLanguageService, PoPageFilter } from '@portinari/portinari-ui';
+import {
+  PoDisclaimerGroup,
+  PoDynamicFieldType,
+  PoDynamicFormField,
+  PoLanguageService,
+  PoPageFilter
+} from '@portinari/portinari-ui';
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
 import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
@@ -11,7 +17,7 @@ import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.
 import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
 import { PoPageDynamicOptionsSchema } from '../../services';
 
-type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions );
+type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
 
 /**
  * @docsExtends PoPageDynamicSearchBaseComponent
@@ -34,7 +40,6 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions )
   templateUrl: './po-page-dynamic-search.component.html'
 })
 export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit, OnDestroy {
-
   private loadSubscription: Subscription;
 
   private readonly _disclaimerGroup: PoDisclaimerGroup = {
@@ -109,7 +114,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   private applyDisclaimerLabelValue(field: any, filterValue: any) {
-    const values = Array.isArray(filterValue) ? filterValue : [ filterValue ];
+    const values = Array.isArray(filterValue) ? filterValue : [filterValue];
 
     const labels = values.map(value => {
       const filteredField = field.options.find(option => option.value === value);
@@ -133,7 +138,6 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   private getFilterValueToDisclaimer(field: any, value: any) {
-
     if (field.type === PoDynamicFieldType.Date) {
       return this.formatDate(value);
     }
@@ -146,7 +150,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   private onChangeDisclaimerGroup(disclaimers) {
-    this.changeDisclaimersEnabled ? this.changeDisclaimers.emit(disclaimers) : this.changeDisclaimersEnabled = true;
+    this.changeDisclaimersEnabled ? this.changeDisclaimers.emit(disclaimers) : (this.changeDisclaimersEnabled = true);
   }
 
   private setDisclaimers(filters) {
@@ -169,9 +173,9 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
-
     this.loadSubscription = this.getPoDynamicPageOptions(onLoad).subscribe(responsePoOption =>
-        this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption));
+      this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)
+    );
   }
 
   private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicSearchOptions> {

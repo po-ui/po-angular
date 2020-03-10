@@ -7,17 +7,16 @@ import { PoInputBaseComponent } from './po-input-base.component';
 import { PoMask } from './po-mask';
 
 class PoInput extends PoInputBaseComponent {
-
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
 
-  focus(): void { }
+  focus(): void {}
 
   getScreenValue(): string {
     return '';
   }
-  writeValueModel(value: string) { }
+  writeValueModel(value: string) {}
 }
 
 describe('PoInputBase:', () => {
@@ -32,7 +31,7 @@ describe('PoInputBase:', () => {
   });
 
   it('should set disabled', () => {
-    spyOn(component, <any> 'validateModel');
+    spyOn(component, <any>'validateModel');
 
     expectSettersMethod(component, 'setDisabled', '', 'disabled', true);
     expectSettersMethod(component, 'setDisabled', 'true', 'disabled', true);
@@ -48,7 +47,7 @@ describe('PoInputBase:', () => {
   });
 
   it('should set required', () => {
-    spyOn(component, <any> 'validateModel');
+    spyOn(component, <any>'validateModel');
 
     expectSettersMethod(component, 'setRequired', '', 'required', true);
     expectSettersMethod(component, 'setRequired', 'true', 'required', true);
@@ -67,13 +66,13 @@ describe('PoInputBase:', () => {
     spyOn(component, <any>'validateModel');
 
     expectSettersMethod(component, 'setPattern', '', 'pattern', '');
-    expectSettersMethod(component, 'setPattern', '/\d/', 'pattern', '/\d/');
+    expectSettersMethod(component, 'setPattern', '/d/', 'pattern', '/d/');
 
     expect(component['validateModel']).toHaveBeenCalled();
   });
 
   it('should set mask', () => {
-    spyOn(component, <any> 'validateModel');
+    spyOn(component, <any>'validateModel');
 
     expectSettersMethod(component, 'setMask', '', 'mask', '');
     expectSettersMethod(component, 'setMask', '(999)', 'mask', '(999)');
@@ -82,7 +81,7 @@ describe('PoInputBase:', () => {
   });
 
   it('should set maskFormatModel', () => {
-    spyOn(component, <any> 'validateModel');
+    spyOn(component, <any>'validateModel');
 
     expectSettersMethod(component, 'setMaskFormatModel', '', 'maskFormatModel', true);
     expectSettersMethod(component, 'setMaskFormatModel', 'true', 'maskFormatModel', true);
@@ -177,7 +176,6 @@ describe('PoInputBase:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-placeholder: should update property p-placeholder with valid value.', () => {
       component.placeholder = 'teste';
       expect(component.placeholder).toBe('teste');
@@ -191,7 +189,7 @@ describe('PoInputBase:', () => {
     });
 
     it('p-maxlength: should update property p-maxlength with valid values.', () => {
-      spyOn(component, <any> 'validateModel');
+      spyOn(component, <any>'validateModel');
 
       const validValues = [105, 1, 7, 0, -5];
       expectPropertiesValues(component, 'maxlength', validValues, validValues);
@@ -205,7 +203,7 @@ describe('PoInputBase:', () => {
     });
 
     it('p-minlength: should update property p-minlength with valid values.', () => {
-      spyOn(component, <any> 'validateModel');
+      spyOn(component, <any>'validateModel');
 
       const validValues = [105, 1, 7, 0, -5];
       expectPropertiesValues(component, 'minlength', validValues, validValues);
@@ -227,11 +225,9 @@ describe('PoInputBase:', () => {
       const validValues = [true, 'true', 1, ' '];
       expectPropertiesValues(component, 'noAutocomplete', validValues, true);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('controlChangeModelEmitter: should not emit changeModel if previous model value is equal to current model value', () => {
       const newModelValue: number = 1;
       component.modelLastUpdate = 1;
@@ -262,7 +258,7 @@ describe('PoInputBase:', () => {
     it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel']();
 
@@ -280,12 +276,12 @@ describe('PoInputBase:', () => {
       component.pattern = '[a-z]';
       component.getScreenValue = () => '2';
 
-      spyOn(component, <any> 'validatePatternOnWriteValue');
+      spyOn(component, <any>'validatePatternOnWriteValue');
       expect(component.validate(new FormControl('2'))).not.toBeNull();
       expect(component['validatePatternOnWriteValue']).toHaveBeenCalled();
     });
 
-    it('validatePatternOnWriteValue: should call `updateModel` if value isn`t falsy and `passedWriteValue` is true' , fakeAsync(() => {
+    it('validatePatternOnWriteValue: should call `updateModel` if value isn`t falsy and `passedWriteValue` is true', fakeAsync(() => {
       component['passedWriteValue'] = true;
       spyOn(component, 'updateModel');
 
@@ -295,7 +291,7 @@ describe('PoInputBase:', () => {
       expect(component.updateModel).toHaveBeenCalledWith('input');
     }));
 
-    it('validatePatternOnWriteValue: should not call `updateModel` if value is undefined' , fakeAsync(() => {
+    it('validatePatternOnWriteValue: should not call `updateModel` if value is undefined', fakeAsync(() => {
       spyOn(component, 'updateModel');
 
       component['validatePatternOnWriteValue'](undefined);
@@ -304,7 +300,7 @@ describe('PoInputBase:', () => {
       expect(component.updateModel).not.toHaveBeenCalled();
     }));
 
-    it('validatePatternOnWriteValue: should not call `updateModel` if `passedWriteValue` is false' , fakeAsync(() => {
+    it('validatePatternOnWriteValue: should not call `updateModel` if `passedWriteValue` is false', fakeAsync(() => {
       component['passedWriteValue'] = false;
 
       spyOn(component, 'updateModel');
@@ -347,7 +343,5 @@ describe('PoInputBase:', () => {
       expect(component.updateModel).toHaveBeenCalledWith('teste');
       expect(component.controlChangeModelEmitter).toHaveBeenCalledWith('teste');
     });
-
   });
-
 });

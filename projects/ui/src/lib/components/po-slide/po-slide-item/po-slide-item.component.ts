@@ -16,7 +16,6 @@ import { PoSlideContentTemplateDirective } from '../directives/po-slide-content-
   templateUrl: './po-slide-item.component.html'
 })
 export class PoSlideItemComponent {
-
   @ViewChild('slideItem', { static: true }) itemElement: ElementRef;
 
   isIEOrEdge: any = isIEOrEdge();
@@ -49,5 +48,4 @@ export class PoSlideItemComponent {
 
     return 'noLink';
   }
-
 }

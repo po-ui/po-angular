@@ -21,7 +21,6 @@ import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.compone
   templateUrl: './po-advanced-filter.component.html'
 })
 export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent {
-
   @ViewChild(PoDynamicFormComponent, { static: true }) poDynamicForm: PoDynamicFormComponent;
 
   constructor(languageService: PoLanguageService) {
@@ -32,5 +31,4 @@ export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent {
     this.filter = {};
     this.poModal.open();
   }
-
 }

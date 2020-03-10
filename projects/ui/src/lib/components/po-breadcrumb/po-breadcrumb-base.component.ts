@@ -19,7 +19,6 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  */
 @Directive()
 export class PoBreadcrumbBaseComponent {
-
   itemsView: Array<PoBreadcrumbItem> = [];
   private _items: Array<PoBreadcrumbItem> = [];
 
@@ -117,5 +116,4 @@ export class PoBreadcrumbBaseComponent {
   protected clickoutListener: () => void;
 
   protected resizeListener: () => void;
-
 }

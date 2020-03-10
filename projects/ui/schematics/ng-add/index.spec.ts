@@ -16,7 +16,7 @@ describe('Schematic: ng-add', () => {
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
     newProjectRoot: 'projects',
-    version: '6.0.0',
+    version: '6.0.0'
   };
 
   const componentOptions: any = {
@@ -30,12 +30,11 @@ describe('Schematic: ng-add', () => {
   let appTree: UnitTestTree;
 
   beforeEach(() => {
-      appTree = runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
-      appTree = runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
+    appTree = runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
   });
 
   describe('Dependencies:', () => {
-
     it('should update package.json with @portinari/portinari-ui dependency and run nodePackageInstall', () => {
       const tree = runner.runSchematic('ng-add', componentOptions, appTree);
 
@@ -51,7 +50,6 @@ describe('Schematic: ng-add', () => {
   });
 
   describe('Imports:', () => {
-
     it('should add the PoModule to the project module', () => {
       const poModuleName = 'PoModule';
 
@@ -60,7 +58,6 @@ describe('Schematic: ng-add', () => {
 
       expect(fileContent).toContain(poModuleName);
     });
-
   });
 
   describe('Theme configuration:', () => {
@@ -86,15 +83,15 @@ describe('Schematic: ng-add', () => {
 
       expect(styles).toEqual([`projects/${componentOptions.appName}/src/styles.css`, defaultThemePath]);
     });
-
   });
-
 });
 
 /** Expects the given file to be in the styles of the specified workspace project. */
 function expectProjectStyleFile(project: WorkspaceProject, filePath: string) {
-  expect(getProjectTargetOptions(project, 'build').styles).toContain(filePath,
-      `Expected "${filePath}" to be added to the project styles in the workspace.`);
+  expect(getProjectTargetOptions(project, 'build').styles).toContain(
+    filePath,
+    `Expected "${filePath}" to be added to the project styles in the workspace.`
+  );
 }
 
 /** Gets the content of a specified file from a schematic tree. */

@@ -12,12 +12,10 @@ import { PoDynamicFormResponse } from '../po-dynamic-form-response.interface';
  * @docsExtends PoDynamicFormResponse
  */
 export interface PoDynamicFormValidation extends PoDynamicFormResponse {
-
   /**
    * Lista com as novas definições dos campos.
    *
    * > Não é necessário colocar todas as propriedades e campos, apenas as que foram alteradas.
    */
   fields?: Array<PoDynamicFormField>;
-
 }

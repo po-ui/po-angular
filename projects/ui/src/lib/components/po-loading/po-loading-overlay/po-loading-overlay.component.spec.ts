@@ -12,7 +12,7 @@ describe('PoLoadingOverlayComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-    imports: [ PoLoadingModule ]
+      imports: [PoLoadingModule]
     });
   });
 
@@ -28,7 +28,6 @@ describe('PoLoadingOverlayComponent', () => {
   });
 
   describe('Template:', () => {
-
     it('should set class `po-overlay-fixed` when p-screen-locked is true', () => {
       component.screenLock = true;
       fixture.detectChanges();
@@ -49,7 +48,5 @@ describe('PoLoadingOverlayComponent', () => {
       expect(nativeElement.querySelector('.po-overlay-fixed')).toBeFalsy();
       expect(nativeElement.querySelector('.po-overlay-absolute')).toBeTruthy();
     });
-
   });
-
 });

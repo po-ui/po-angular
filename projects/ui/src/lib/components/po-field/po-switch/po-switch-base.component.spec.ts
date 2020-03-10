@@ -1,4 +1,3 @@
-
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
 import { PoSwitchBaseComponent } from './po-switch-base.component';
@@ -48,7 +47,13 @@ describe('PoSwitchBaseComponent:', () => {
 
   it('should be update property p-label-position', () => {
     expectSettersMethod(component, 'setLabelPosition', '', 'labelPosition', PoSwitchLabelPosition.Right);
-    expectSettersMethod(component, 'setLabelPosition', PoSwitchLabelPosition.Left, 'labelPosition', PoSwitchLabelPosition.Left);
+    expectSettersMethod(
+      component,
+      'setLabelPosition',
+      PoSwitchLabelPosition.Left,
+      'labelPosition',
+      PoSwitchLabelPosition.Left
+    );
   });
 
   it('shouldn`t call changeValue on eventClick if disabled = true', () => {
@@ -125,7 +130,6 @@ describe('PoSwitchBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('changeValue: should call `change.emit` when switch value is changed', () => {
       component.switchValue = true;
 
@@ -167,11 +171,9 @@ describe('PoSwitchBaseComponent:', () => {
 
       expect(component.ngModelChange.emit).toHaveBeenCalledWith(false);
     });
-
   });
 
   describe('Properties:', () => {
-
     it('p-disabled: should be update with valid and invalid values.', () => {
       const trueValues = [true, 'true', 1, '', [], {}];
       const falseValues = [false, 'false', 0, null, undefined, NaN];
@@ -179,7 +181,5 @@ describe('PoSwitchBaseComponent:', () => {
       expectPropertiesValues(component, 'disabled', trueValues, true);
       expectPropertiesValues(component, 'disabled', falseValues, false);
     });
-
   });
-
 });

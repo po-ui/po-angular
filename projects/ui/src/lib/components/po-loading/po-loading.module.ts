@@ -14,19 +14,8 @@ import { PoLoadingOverlayComponent } from './po-loading-overlay/po-loading-overl
  * Módulo do componente po-loading-overlay.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoLanguageModule
-  ],
-  declarations: [
-    PoLoadingComponent,
-    PoLoadingIconComponent,
-    PoLoadingOverlayComponent
-  ],
-  exports: [
-    PoLoadingComponent,
-    PoLoadingIconComponent,
-    PoLoadingOverlayComponent
-  ]
+  imports: [CommonModule, PoLanguageModule],
+  declarations: [PoLoadingComponent, PoLoadingIconComponent, PoLoadingOverlayComponent],
+  exports: [PoLoadingComponent, PoLoadingIconComponent, PoLoadingOverlayComponent]
 })
-export class PoLoadingModule { }
+export class PoLoadingModule {}

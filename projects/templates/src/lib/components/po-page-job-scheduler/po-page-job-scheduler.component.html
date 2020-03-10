@@ -1,48 +1,49 @@
-<po-page-default
-  [p-actions]="jobSchedulerActions"
-  [p-breadcrumb]="breadcrumb"
-  [p-title]="title">
-
+<po-page-default [p-actions]="jobSchedulerActions" [p-breadcrumb]="breadcrumb" [p-title]="title">
   <div class="po-row">
-
     <po-stepper
       class="po-lg-3 po-xl-2"
       p-sequential="true"
       [p-orientation]="stepperOrientation"
       [p-step]="step"
       [p-steps]="steps"
-      (p-change-step)="nextStep($event)">
+      (p-change-step)="nextStep($event)"
+    >
     </po-stepper>
 
     <po-container class="po-lg-8 po-xl-6">
       <form #formScheduler="ngForm">
         <div class="po-row">
-          <po-page-job-scheduler-execution [hidden]="step !== 1"
+          <po-page-job-scheduler-execution
+            [hidden]="step !== 1"
             #schedulerExecution
             class="po-md-12"
             [p-is-edit]="isEdit"
             [p-literals]="literals"
             [p-value]="model"
-            (p-change-process)="onChangeProcess($event)">
+            (p-change-process)="onChangeProcess($event)"
+          >
           </po-page-job-scheduler-execution>
 
-          <po-page-job-scheduler-parameters *ngIf="step === 2"
+          <po-page-job-scheduler-parameters
+            *ngIf="step === 2"
             #schedulerParameters
             class="po-md-12"
             [p-literals]="literals"
             [p-parameters]="parameters || []"
-            [(p-value)]="model.executionParameter">
+            [(p-value)]="model.executionParameter"
+          >
           </po-page-job-scheduler-parameters>
 
-          <po-page-job-scheduler-summary *ngIf="step === 3"
+          <po-page-job-scheduler-summary
+            *ngIf="step === 3"
             class="po-md-12"
             [p-literals]="literals"
             [p-parameters]="parameters"
-            [p-value]="model">
+            [p-value]="model"
+          >
           </po-page-job-scheduler-summary>
         </div>
       </form>
     </po-container>
   </div>
-
 </po-page-default>

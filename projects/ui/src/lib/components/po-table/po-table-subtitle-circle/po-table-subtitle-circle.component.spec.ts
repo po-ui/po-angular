@@ -8,7 +8,6 @@ import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle.compo
 import { PoTableSubtitleColumn } from '../po-table-subtitle-footer/po-table-subtitle-column.interface';
 
 describe('PoTableSubtitleCircleComponent:', () => {
-
   let component: PoTableSubtitleCircleComponent;
   let fixture: ComponentFixture<PoTableSubtitleCircleComponent>;
   let subtitles: Array<PoTableSubtitleColumn>;
@@ -32,9 +31,8 @@ describe('PoTableSubtitleCircleComponent:', () => {
       { value: 'warning', label: 'Label', color: 'color-08', content: 'Warning Content' },
       { value: 'danger', label: 'Label', color: 'color-07', content: 'Danger Content' },
       { value: 'primary', label: 'Label', color: 'color-01', content: 'Primary Content' },
-      { value: 'content', label: 'Label', color: 'color-03', content: 'Content' },
+      { value: 'content', label: 'Label', color: 'color-03', content: 'Content' }
     ];
-
   });
 
   it('should be created', () => {
@@ -42,7 +40,6 @@ describe('PoTableSubtitleCircleComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('subtitle: should call `getColor` if subtitle is defined', () => {
       spyOn(component['poColorPaletteService'], 'getColor');
 
@@ -61,7 +58,6 @@ describe('PoTableSubtitleCircleComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should show "Warning Content" text', () => {
       component.subtitle = subtitles[1];
 

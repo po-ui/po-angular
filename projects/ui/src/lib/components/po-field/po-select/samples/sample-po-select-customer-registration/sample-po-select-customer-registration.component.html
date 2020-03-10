@@ -6,7 +6,8 @@
       [(ngModel)]="documentType"
       p-label="Document type"
       [p-options]="options"
-      (p-change)="changeType($event)">
+      (p-change)="changeType($event)"
+    >
     </po-radio-group>
 
     <po-input
@@ -17,25 +18,15 @@
       p-required
       [p-label]="documentLabel"
       [p-mask]="mask"
-      [p-minlength]="minLength">
+      [p-minlength]="minLength"
+    >
     </po-input>
   </div>
 
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="name"
-      [(ngModel)]="name"
-      p-required
-      [p-label]="nameLabel">
-    </po-input>
+    <po-input class="po-md-6" name="name" [(ngModel)]="name" p-required [p-label]="nameLabel"> </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="address"
-      [(ngModel)]="address"
-      p-label="Address">
-    </po-input>
+    <po-input class="po-md-6" name="address" [(ngModel)]="address" p-label="Address"> </po-input>
   </div>
 
   <div class="po-row">
@@ -45,90 +36,50 @@
       [(ngModel)]="state"
       p-label="State"
       [p-options]="stateOptions"
-      (p-change)="onChangeState()">
+      (p-change)="onChangeState()"
+    >
       <ng-template p-select-option-template let-option>
-
         <div class="sample-select-option-template-container">
-          <po-avatar
-            p-size="xs"
-            p-src="https://thf.totvs.com.br/sample/api/static/assets/{{option.value}}.png">
+          <po-avatar p-size="xs" p-src="https://thf.totvs.com.br/sample/api/static/assets/{{ option.value }}.png">
           </po-avatar>
 
           <div class="sample-select-option-template-margin">
-            <div class="sample-select-option-template-label"> {{ option.label }} </div>
-            <div class="sample-select-option-template-value"> {{ option.value }} </div>
+            <div class="sample-select-option-template-label">{{ option.label }}</div>
+            <div class="sample-select-option-template-value">{{ option.value }}</div>
           </div>
-
         </div>
-
       </ng-template>
     </po-select>
 
-    <po-select
-      class="po-md-6"
-      name="city"
-      [(ngModel)]="city"
-      p-label="City"
-      [p-options]="cityOptions">
-    </po-select>
+    <po-select class="po-md-6" name="city" [(ngModel)]="city" p-label="City" [p-options]="cityOptions"> </po-select>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-4"
-      p-label="Send Informations"
-      [p-disabled]="f.invalid"
-      (p-click)="modal.open()">
+    <po-button class="po-md-4" p-label="Send Informations" [p-disabled]="f.invalid" (p-click)="modal.open()">
     </po-button>
   </div>
 </form>
 
-<po-modal #modal
-  p-title="Informations">
-
+<po-modal #modal p-title="Informations">
   <div class="po-row">
-    <po-info
-      class="po-md-6"
-      p-label="Document type"
-      [p-value]="documentType">
-    </po-info>
+    <po-info class="po-md-6" p-label="Document type" [p-value]="documentType"> </po-info>
 
-    <po-info
-      class="po-md-6"
-      [p-label]="documentLabel"
-      [p-value]="document">
-    </po-info>
+    <po-info class="po-md-6" [p-label]="documentLabel" [p-value]="document"> </po-info>
   </div>
 
-  <hr>
+  <hr />
 
   <div class="po-row">
-    <po-info
-      class="po-md-6"
-      [p-label]="nameLabel"
-      [p-value]="name">
-    </po-info>
+    <po-info class="po-md-6" [p-label]="nameLabel" [p-value]="name"> </po-info>
 
-    <po-info
-      class="po-md-6"
-      p-label="Address"
-      [p-value]="address">
-    </po-info>
+    <po-info class="po-md-6" p-label="Address" [p-value]="address"> </po-info>
   </div>
 
-  <hr>
+  <hr />
 
   <div class="po-row">
-    <po-info
-      class="po-md-6"
-      p-label="State"
-      [p-value]="getStateByValue(state)">
-    </po-info>
+    <po-info class="po-md-6" p-label="State" [p-value]="getStateByValue(state)"> </po-info>
 
-    <po-info
-      class="po-md-6"
-      p-label="City"
-      [p-value]="getCityByValue(city)">
-    </po-info>
+    <po-info class="po-md-6" p-label="City" [p-value]="getCityByValue(city)"> </po-info>
   </div>
 </po-modal>

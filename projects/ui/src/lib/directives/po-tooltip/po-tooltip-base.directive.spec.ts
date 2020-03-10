@@ -6,7 +6,6 @@ describe('PoTooltipBaseDirective', () => {
   const component = new PoTooltipBaseDirective();
 
   it('should be created', () => {
-
     expect(component).toBeTruthy();
   });
 
@@ -22,10 +21,20 @@ describe('PoTooltipBaseDirective', () => {
   });
 
   it('should set valid positions', () => {
-    const validValues = ['right', 'right-top', 'right-bottom',
-                         'top', 'top-left', 'top-right',
-                         'left', 'left-top', 'left-bottom',
-                         'bottom', 'bottom-left', 'bottom-right'];
+    const validValues = [
+      'right',
+      'right-top',
+      'right-bottom',
+      'top',
+      'top-left',
+      'top-right',
+      'left',
+      'left-top',
+      'left-bottom',
+      'bottom',
+      'bottom-left',
+      'bottom-right'
+    ];
 
     expectPropertiesValues(component, 'tooltipPosition', validValues, validValues);
   });
@@ -35,5 +44,4 @@ describe('PoTooltipBaseDirective', () => {
 
     expectPropertiesValues(component, 'tooltipPosition', invalidValues, 'bottom');
   });
-
 });

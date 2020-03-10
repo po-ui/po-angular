@@ -6,7 +6,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoProgressBarComponent {
-
   @Input('p-indeterminate') indeterminate: boolean;
 
   @Input('p-value') value: number;
@@ -14,5 +13,4 @@ export class PoProgressBarComponent {
   get valueScale() {
     return `${this.value / 100}`;
   }
-
 }

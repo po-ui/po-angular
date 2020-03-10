@@ -10,7 +10,6 @@ describe('PoTabsBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('small: should update with true value.', () => {
       const booleanValidTrueValues = [true, 'true', 1, ''];
       const expectedReturn = true;
@@ -24,7 +23,5 @@ describe('PoTabsBaseComponent:', () => {
 
       expectPropertiesValues(component, 'small', booleanInvalidValues, expectedReturn);
     });
-
   });
-
 });

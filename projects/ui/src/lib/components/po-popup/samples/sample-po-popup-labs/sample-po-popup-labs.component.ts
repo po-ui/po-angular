@@ -5,15 +5,16 @@ import { PoNotificationService, PoCheckboxGroupOption, PoSelectOption, PoPopupAc
 @Component({
   selector: 'sample-po-popup-labs',
   templateUrl: './sample-po-popup-labs.component.html',
-  styles: [`
-    .sample-button-container {
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-  `]
+  styles: [
+    `
+      .sample-button-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+    `
+  ]
 })
 export class SamplePoPopupLabsComponent implements OnInit {
-
   @ViewChild('target', { read: ElementRef, static: true }) targetRef: ElementRef;
 
   action: PoPopupAction;
@@ -48,19 +49,17 @@ export class SamplePoPopupLabsComponent implements OnInit {
     { label: 'Left-bottom', value: 'left-bottom' },
     { label: 'Top', value: 'top' },
     { label: 'Top-left', value: 'top-left' },
-    { label: 'Top-right', value: 'top-right' },
+    { label: 'Top-right', value: 'top-right' }
   ];
 
-  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { value: 'hideArrow', label: 'Hide arrow' }
-  ];
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'hideArrow', label: 'Hide arrow' }];
 
   public readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Danger', value: 'danger' },
     { label: 'Default', value: 'default' }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -97,5 +96,4 @@ export class SamplePoPopupLabsComponent implements OnInit {
   private showAction(action: string): any {
     this.poNotification.success(`Action clicked: ${action}`);
   }
-
 }

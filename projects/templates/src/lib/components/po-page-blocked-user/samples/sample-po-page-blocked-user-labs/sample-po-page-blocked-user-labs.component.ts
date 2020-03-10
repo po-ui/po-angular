@@ -5,10 +5,9 @@ import { PoRadioGroupOption } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-page-blocked-user-labs',
-  templateUrl: './sample-po-page-blocked-user-labs.component.html',
+  templateUrl: './sample-po-page-blocked-user-labs.component.html'
 })
 export class SamplePoPageBlockedUserLabsComponent implements OnInit {
-
   contactMail: string;
   contactPhone: string;
   customParams: PoPageBlockedUserReasonParams;
@@ -21,7 +20,7 @@ export class SamplePoPageBlockedUserLabsComponent implements OnInit {
   public readonly reasonOptions: Array<PoRadioGroupOption> = [
     { label: 'Default', value: PoPageBlockedUserReason.None },
     { label: 'Expired Password', value: PoPageBlockedUserReason.ExpiredPassword },
-    { label: 'Exceeded Attempts', value: PoPageBlockedUserReason.ExceededAttempts },
+    { label: 'Exceeded Attempts', value: PoPageBlockedUserReason.ExceededAttempts }
   ];
 
   ngOnInit() {
@@ -46,5 +45,4 @@ export class SamplePoPageBlockedUserLabsComponent implements OnInit {
     this.secondaryLogo = '';
     this.url = undefined;
   }
-
 }

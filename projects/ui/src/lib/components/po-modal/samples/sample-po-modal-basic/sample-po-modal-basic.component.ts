@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-modal-basic',
   templateUrl: './sample-po-modal-basic.component.html'
 })
-export class SamplePoModalBasicComponent { }
+export class SamplePoModalBasicComponent {}

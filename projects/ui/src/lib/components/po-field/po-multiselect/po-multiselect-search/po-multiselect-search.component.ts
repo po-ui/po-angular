@@ -13,10 +13,9 @@ import { PoMultiselectLiterals } from '../../index';
  */
 @Component({
   selector: 'po-multiselect-search',
-  templateUrl: './po-multiselect-search.component.html',
+  templateUrl: './po-multiselect-search.component.html'
 })
 export class PoMultiselectSearchComponent {
-
   private _placeholder?: string;
 
   /** Propriedade que recebe as literais definidas no `po-multiselect`. */
@@ -44,10 +43,10 @@ export class PoMultiselectSearchComponent {
   /** Evento que será disparado a cada tecla digitada no campo de busca. */
   @Output('p-change') change = new EventEmitter();
 
-  @ViewChild('inputElement', {read: ElementRef, static: true }) inputElement: ElementRef;
+  @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 
   onChange(event) {
-    this.change.emit({event: event, value: this.inputElement.nativeElement.value});
+    this.change.emit({ event: event, value: this.inputElement.nativeElement.value });
   }
 
   setFocus() {
@@ -57,5 +56,4 @@ export class PoMultiselectSearchComponent {
   clean() {
     this.inputElement.nativeElement.value = '';
   }
-
 }

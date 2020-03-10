@@ -6,7 +6,6 @@
  * Interface para definição das literais usadas no `po-page-edit`.
  */
 export interface PoPageEditLiterals {
-
   /** Label da ação `cancel`. */
   cancel?: string;
 

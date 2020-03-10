@@ -10,7 +10,6 @@ import { PoEventSourcingOperation } from './../services/po-event-sourcing/enums/
  * uma operação de *delete* ou *update* sem o `id` do objeto.
  */
 export class PoEventSourcingErrorResponse {
-
   /** Mensagem de erro. */
   message: string;
 
@@ -22,5 +21,4 @@ export class PoEventSourcingErrorResponse {
     this.message = message;
     this.operation = operation;
   }
-
 }

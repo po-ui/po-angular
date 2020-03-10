@@ -8,11 +8,10 @@ export class SamplePoDatepickerBasicComponentPO {
   }
 
   get poDatepicker() {
-      return element(by.css(`${this.sampleDatepicker} .po-calendar`));
+    return element(by.css(`${this.sampleDatepicker} .po-calendar`));
   }
 
   get poDatepickerIcon() {
     return element(by.css(`${this.sampleDatepicker} po-field-container .po-field-icon, .po-icon-calendar`));
   }
-
 }

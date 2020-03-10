@@ -1,5 +1,17 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit,
-  Output, SimpleChange, SimpleChanges, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChange,
+  SimpleChanges,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 
 import { browserLanguage, capitalizeFirstLetter, convertToInt, poLocaleDefault } from '../../../utils/util';
 import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
@@ -33,7 +45,6 @@ export const poTableColumnManagerLiteralsDefault = {
   templateUrl: './po-table-column-manager.component.html'
 })
 export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestroy {
-
   private _maxColumns: number = PoTableColumnManagerMaxColumnsDefault;
 
   columnsOptions: Array<PoCheckboxGroupOption> = [];
@@ -121,7 +132,6 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
 
     columns.forEach(column => {
       if (column.visible !== false && visibleColumns.length < this.maxColumns && column.type !== 'detail') {
-
         visibleColumns.push(column.property);
       }
     });
@@ -143,7 +153,6 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
         this.popover.close();
       }
     });
-
   }
 
   private isDisableColumn(property: string): boolean {
@@ -161,7 +170,6 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
           disabled: this.isDisableColumn(column.property)
         });
       }
-
     });
 
     return columnsOptions;
@@ -171,7 +179,7 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
     const { firstChange, currentValue = [], previousValue = [] } = columns;
 
     // atualizara o defaultColumns, quando for a primeira vez ou quando o defaultColumns for diferente do currentValue
-    if (firstChange || (this.defaultColumns.length !== currentValue.length)) {
+    if (firstChange || this.defaultColumns.length !== currentValue.length) {
       this.defaultColumns = currentValue;
     }
 
@@ -193,5 +201,4 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
 
     this.onChangeVisibleColumns(this.visibleColumns);
   }
-
 }

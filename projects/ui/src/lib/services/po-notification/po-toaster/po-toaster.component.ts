@@ -17,7 +17,6 @@ import { PoToasterOrientation } from './po-toaster-orientation.enum';
   templateUrl: './po-toaster.component.html'
 })
 export class PoToasterComponent extends PoToasterBaseComponent {
-
   /* Ícone do Toaster */
   private icon: string;
   /* Margem do Toaster referênte à sua orientação e posição*/
@@ -42,14 +41,13 @@ export class PoToasterComponent extends PoToasterBaseComponent {
   changePosition(position: number): void {
     this.elementeRef.nativeElement.style.display = 'table';
 
-    this.margin = 6 + (44 * (position)) + position * 6;
+    this.margin = 6 + 44 * position + position * 6;
 
     if (this.orientation === PoToasterOrientation.Top) {
       this.toaster.nativeElement.style.top = this.margin + 'px';
     } else {
       this.toaster.nativeElement.style.bottom = this.margin + 'px';
     }
-
   }
 
   /* Fecha o componente Toaster */
@@ -65,7 +63,7 @@ export class PoToasterComponent extends PoToasterBaseComponent {
     this.orientation = poToaster.orientation;
     this.position = poToaster.position;
     this.action = poToaster.action;
-    this.actionLabel = (poToaster.actionLabel) ? poToaster.actionLabel : 'Fechar';
+    this.actionLabel = poToaster.actionLabel ? poToaster.actionLabel : 'Fechar';
     this.componentRef = poToaster.componentRef;
 
     /* Muda a orientação do Toaster */
@@ -123,5 +121,4 @@ export class PoToasterComponent extends PoToasterBaseComponent {
   poToasterAction(): void {
     this.action(this);
   }
-
 }

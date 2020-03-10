@@ -12,5 +12,4 @@ export class SamplePoStepperLabsComponentPO {
   get poStepper() {
     return element(by.css(`${this.sampleName} .po-stepper`));
   }
-
 }

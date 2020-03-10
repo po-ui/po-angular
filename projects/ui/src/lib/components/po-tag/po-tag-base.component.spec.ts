@@ -15,7 +15,6 @@ describe('PoTagBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('color: should update to true value.', () => {
       const colorsValidTrueValues = poTagColors;
 
@@ -80,7 +79,5 @@ describe('PoTagBaseComponent:', () => {
 
       expectPropertiesValues(component, 'type', invalidValues, undefined);
     });
-
   });
-
 });

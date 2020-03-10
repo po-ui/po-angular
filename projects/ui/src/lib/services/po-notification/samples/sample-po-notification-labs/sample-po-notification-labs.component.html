@@ -1,20 +1,10 @@
-<po-button
-  (p-click)="showNotification()"
-  p-label="Open Notification">
-</po-button>
+<po-button (p-click)="showNotification()" p-label="Open Notification"> </po-button>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
-
   <div class="po-row">
-
-    <po-radio-group
-      class="po-md-6"
-      name="type"
-      [(ngModel)]="type"
-      p-label="Type"
-      [p-options]="typeOptions">
+    <po-radio-group class="po-md-6" name="type" [(ngModel)]="type" p-label="Type" [p-options]="typeOptions">
     </po-radio-group>
 
     <po-radio-group
@@ -22,53 +12,24 @@
       name="orientation"
       [(ngModel)]="orientation"
       p-label="Orientation"
-      [p-options]="orientationOptions">
+      [p-options]="orientationOptions"
+    >
     </po-radio-group>
   </div>
 
-  <po-input
-    class="po-md-6"
-    name="message"
-    [(ngModel)]="message"
-    p-clean
-    p-label="Message"
-    p-required>
-  </po-input>
+  <po-input class="po-md-6" name="message" [(ngModel)]="message" p-clean p-label="Message" p-required> </po-input>
 
-  <po-number
-    class="po-md-6"
-    name="duration"
-    [(ngModel)]="duration"
-    p-clean
-    p-label="Duration">
-  </po-number>
+  <po-number class="po-md-6" name="duration" [(ngModel)]="duration" p-clean p-label="Duration"> </po-number>
 
-  <po-switch
-    class="po-md-6"
-    name="action"
-    [(ngModel)]="action"
-    p-label="Action">
-  </po-switch>
+  <po-switch class="po-md-6" name="action" [(ngModel)]="action" p-label="Action"> </po-switch>
 
-  <po-input
-    class="po-md-6"
-    name="actionLabel"
-    [(ngModel)]="actionLabel"
-    p-clean
-    p-label="Action Label">
-  </po-input>
+  <po-input class="po-md-6" name="actionLabel" [(ngModel)]="actionLabel" p-clean p-label="Action Label"> </po-input>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
-
 </form>
 
-<po-modal
-  p-title="Portinari Notification">
+<po-modal p-title="Portinari Notification">
   Notification Action
 </po-modal>

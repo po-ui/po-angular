@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSwitchLabelPosition } from
   templateUrl: './sample-po-switch-labs.component.html'
 })
 export class SamplePoSwitchLabsComponent implements OnInit {
-
   event: string;
   help: string;
   label: string;
@@ -22,9 +21,7 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     { label: 'Right', value: PoSwitchLabelPosition.Right }
   ];
 
-  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { value: 'disabled', label: 'Disabled' }
-  ];
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
 
   ngOnInit() {
     this.restore();
@@ -44,5 +41,4 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     this.properties = [];
     this.switch = undefined;
   }
-
 }

@@ -6,7 +6,6 @@
  * Interface para configuração de tokens de novas sintaxes ao code editor.
  */
 export interface PoCodeEditorRegisterableTokens {
-
   /** Principal tokenizer da sintaxe customizada. */
   root: Array<any>;
 
@@ -24,5 +23,4 @@ export interface PoCodeEditorRegisterableTokens {
 
   /** Sequência de interpolação composta. */
   interpolatedCompound?: Array<any>;
-
 }

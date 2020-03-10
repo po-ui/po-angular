@@ -8,7 +8,6 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@portina
   templateUrl: './sample-po-datepicker-airfare-reactive-form.component.html'
 })
 export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
-
   formAirfare: FormGroup;
 
   readonly accompanyNumber: Array<PoSelectOption> = [
@@ -33,7 +32,8 @@ export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private poDialog: PoDialogService,
-    private poNotification: PoNotificationService) { }
+    private poNotification: PoNotificationService
+  ) {}
 
   ngOnInit() {
     this.formAirfare = this.formBuilder.group({
@@ -75,5 +75,4 @@ export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
   private getFormatedDate(date: string) {
     return date && date.slice(0, 10);
   }
-
 }

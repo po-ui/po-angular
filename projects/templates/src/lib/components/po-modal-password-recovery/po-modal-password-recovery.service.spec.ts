@@ -23,13 +23,10 @@ describe('PoModalPasswordRecoveryService:', () => {
 
   it('should be created', () => {
     expect(poModalPasswordRecoveryService).toBeTruthy();
-    expect(
-      poModalPasswordRecoveryService instanceof PoModalPasswordRecoveryService
-    ).toBeTruthy();
+    expect(poModalPasswordRecoveryService instanceof PoModalPasswordRecoveryService).toBeTruthy();
   });
 
   describe('Methods', () => {
-
     it('post: should call `POST` method', () => {
       const urlRecovery = 'url';
       const data = { 'email': 'email@email.com' };
@@ -44,5 +41,4 @@ describe('PoModalPasswordRecoveryService:', () => {
       req.flush(expectedResponse);
     });
   });
-
 });

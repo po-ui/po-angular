@@ -27,7 +27,6 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  */
 @Directive()
 export class PoButtonGroupBaseComponent {
-
   private _small?: boolean = false;
   private _toggle?: string = PO_TOGGLE_TYPE_DEFAULT;
 
@@ -74,8 +73,9 @@ export class PoButtonGroupBaseComponent {
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {
     if (this.toggle === PoButtonGroupToggle.Single) {
-      this.buttons.forEach((button, index) =>
-        button.selected = index === buttonIndex ? !buttonClicked.selected : false);
+      this.buttons.forEach(
+        (button, index) => (button.selected = index === buttonIndex ? !buttonClicked.selected : false)
+      );
     } else if (this.toggle === PoButtonGroupToggle.Multiple) {
       buttonClicked.selected = !buttonClicked.selected;
     }
@@ -93,7 +93,6 @@ export class PoButtonGroupBaseComponent {
   }
 
   private deselectAllButtons() {
-    this.buttons.forEach(button => button.selected = false);
+    this.buttons.forEach(button => (button.selected = false));
   }
-
 }

@@ -11,18 +11,17 @@ import { PoNavbarItemComponent } from './po-navbar-item/po-navbar-item.component
   templateUrl: './po-navbar-items.component.html'
 })
 export class PoNavbarItemsComponent implements OnInit, OnDestroy {
-
   selectedItem: PoNavbarItem;
 
   private routeSubscription: Subscription;
 
   @ViewChild('navbarItemsContainer', { read: ElementRef, static: true }) navbarItemsContainer: ElementRef;
 
-  @ViewChildren(PoNavbarItemComponent, { read: ElementRef }) allNavbarItems:  QueryList<any>;
+  @ViewChildren(PoNavbarItemComponent, { read: ElementRef }) allNavbarItems: QueryList<any>;
 
   @Input('p-items') items: Array<PoNavbarItem>;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
@@ -54,5 +53,4 @@ export class PoNavbarItemsComponent implements OnInit, OnDestroy {
       }
     });
   }
-
 }

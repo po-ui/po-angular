@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-page-dynamic-search-basic',
   templateUrl: './sample-po-page-dynamic-search-basic.component.html'
 })
-export class SamplePoPageDynamicSearchBasicComponent { }
+export class SamplePoPageDynamicSearchBasicComponent {}

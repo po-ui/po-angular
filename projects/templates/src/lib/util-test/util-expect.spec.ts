@@ -23,11 +23,15 @@ export const configureTestSuite = (configureModule?: any) => {
   });
 
   if (configureModule) {
-    beforeAll(done => (async () => {
-      configureModule();
+    beforeAll(done =>
+      (async () => {
+        configureModule();
 
-      await TestBed.compileComponents();
-    })().then(done).catch(done.fail));
+        await TestBed.compileComponents();
+      })()
+        .then(done)
+        .catch(done.fail)
+    );
   }
 
   afterEach(() => {
@@ -52,8 +56,10 @@ export const configureTestSuite = (configureModule?: any) => {
  */
 export const expectSettersMethod = (comp: any, setter: string, value: any, prop: string, expectValue: any) => {
   comp[setter] = value;
-  expect(comp[prop]).toBe(expectValue,
-    `setter called with "${value}" (${typeof value}), returned "${comp[prop]}", but expected "${expectValue}"`);
+  expect(comp[prop]).toBe(
+    expectValue,
+    `setter called with "${value}" (${typeof value}), returned "${comp[prop]}", but expected "${expectValue}"`
+  );
 };
 
 /**
@@ -77,12 +83,15 @@ export const expectPropertiesValues = (comp: any, property: string, testedValues
   }
 
   testedValues.forEach((value, index) => {
-    const expectValue = (expectValues[index] || expectValues[index] === 0) ? expectValues[index] : expectValues[0];
+    const expectValue = expectValues[index] || expectValues[index] === 0 ? expectValues[index] : expectValues[0];
 
     comp[property] = value;
-    const errorMessage = comp[property] === undefined
-      ? `method getter not defined for property "${property}"`
-      : `setter called with "${value}" (${typeof value}), returned "${comp[property]}", but expected "${expectValue}"`;
+    const errorMessage =
+      comp[property] === undefined
+        ? `method getter not defined for property "${property}"`
+        : `setter called with "${value}" (${typeof value}), returned "${
+            comp[property]
+          }", but expected "${expectValue}"`;
 
     if (expectValue instanceof Array || expectValue instanceof Object) {
       expect(comp[property]).toEqual(expectValue, errorMessage);
@@ -100,7 +109,13 @@ export const expectPropertiesValues = (comp: any, property: string, testedValues
  * @param expectValue valor esperado depois de ser tratado pelo método
  * @param params parametros a serem passados para o método
  */
-export const expectBrowserLanguageMethod = (language: string, comp: any, method: any, expectValue: any, params?: any) => {
+export const expectBrowserLanguageMethod = (
+  language: string,
+  comp: any,
+  method: any,
+  expectValue: any,
+  params?: any
+) => {
   if (browserInfo() === 'phantom') {
     // Quando for Phantom zera o navigator
     const originalNavigator = navigator;
@@ -148,7 +163,6 @@ export function changePhantomProperties(pageObject, property, returnValue) {
  * @param returnValue valor da propriedade alterada
  */
 export function changeChromeProperties(pageObject, property, returnValue) {
-
   Object.defineProperty(pageObject, property, {
     get: function() {
       return returnValue;

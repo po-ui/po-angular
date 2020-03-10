@@ -8,11 +8,9 @@ import { poChartStartAngle } from '../po-chart-circular/po-chart-circular.consta
   templateUrl: '../po-chart-dynamic-type.component.html'
 })
 export class PoChartPieComponent extends PoChartCircular {
-
   chartItemStartAngle: number = poChartStartAngle;
 
   constructor(el: ElementRef, ngZone: NgZone, renderer: Renderer2) {
     super(el, ngZone, renderer);
   }
-
 }

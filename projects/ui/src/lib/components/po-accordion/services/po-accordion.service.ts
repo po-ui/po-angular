@@ -12,7 +12,6 @@ import { Subject } from 'rxjs';
  */
 @Injectable()
 export class PoAccordionService {
-
   private subjectChild = new Subject<any>();
 
   // Recebe o accordionItem
@@ -24,5 +23,4 @@ export class PoAccordionService {
   sendToParentAccordionItemClicked(accordionItem: object) {
     this.subjectChild.next(accordionItem);
   }
-
 }

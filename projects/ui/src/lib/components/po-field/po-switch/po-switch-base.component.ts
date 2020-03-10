@@ -21,7 +21,6 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  */
 @Directive()
 export class PoSwitchBaseComponent implements ControlValueAccessor {
-
   private _disabled?: boolean = false;
 
   propagateChange: any;
@@ -80,7 +79,7 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
    */
   labelPosition?: PoSwitchLabelPosition = PoSwitchLabelPosition.Right;
   @Input('p-label-position') set setLabelPosition(position: PoSwitchLabelPosition) {
-    this.labelPosition = (position in PoSwitchLabelPosition) ? parseInt(<any>position, 10) : PoSwitchLabelPosition.Right;
+    this.labelPosition = position in PoSwitchLabelPosition ? parseInt(<any>position, 10) : PoSwitchLabelPosition.Right;
   }
 
   /**
@@ -129,12 +128,11 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
     this.propagateChange = fn;
   }
 
-  registerOnTouched(fn: any): void { }
+  registerOnTouched(fn: any): void {}
 
   writeValue(value: any): void {
     if (value !== this.switchValue) {
       this.switchValue = !!value;
     }
   }
-
 }

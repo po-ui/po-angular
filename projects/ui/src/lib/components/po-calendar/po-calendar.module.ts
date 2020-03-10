@@ -10,14 +10,9 @@ import { PoCalendarService } from './services/po-calendar.service';
  * Módulo do componente `po-calendar`.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [PoCalendarComponent],
   exports: [PoCalendarComponent],
-  providers: [
-    PoCalendarLangService,
-    PoCalendarService
-  ]
+  providers: [PoCalendarLangService, PoCalendarService]
 })
-export class PoCalendarModule { }
+export class PoCalendarModule {}

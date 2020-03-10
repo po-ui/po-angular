@@ -1,20 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoDynamicFormField, PoDynamicFormFieldChanged, PoDynamicFormValidation, PoNotificationService } from '@portinari/portinari-ui';
+import {
+  PoDynamicFormField,
+  PoDynamicFormFieldChanged,
+  PoDynamicFormValidation,
+  PoNotificationService
+} from '@portinari/portinari-ui';
 import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.service';
 
 @Component({
   selector: 'sample-po-dynamic-form-register',
   templateUrl: './sample-po-dynamic-form-register.component.html',
-  providers: [ PoDynamicFormRegisterService ]
+  providers: [PoDynamicFormRegisterService]
 })
 export class SamplePoDynamicFormRegisterComponent implements OnInit {
-
-  person = { };
+  person = {};
 
   fields: Array<PoDynamicFormField> = [
-    { property: 'name', divider: 'PERSONAL DATA', required: true, minLength: 4, maxLength: 50, gridColumns: 6, gridSmColumns: 12 },
-    { property: 'birthday',
+    {
+      property: 'name',
+      divider: 'PERSONAL DATA',
+      required: true,
+      minLength: 4,
+      maxLength: 50,
+      gridColumns: 6,
+      gridSmColumns: 12
+    },
+    {
+      property: 'birthday',
       label: 'Date of birth',
       type: 'date',
       gridColumns: 6,
@@ -26,7 +39,8 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
     { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'genre', gridColumns: 6, gridSmColumns: 12, options: ['Male', 'Female', 'Other'] },
     { property: 'shortDescription', label: 'Short Description', gridColumns: 12, gridSmColumns: 12, rows: 5 },
-    { property: 'secretKey',
+    {
+      property: 'secretKey',
       label: 'Secret Key',
       gridColumns: 6,
       secret: true,
@@ -36,19 +50,24 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
     { property: 'email', divider: 'CONTACTS', gridColumns: 6 },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },
-    { property: 'addressNumber',
+    {
+      property: 'addressNumber',
       label: 'Address number',
       type: 'number',
       gridColumns: 6,
       maxValue: 10000,
       errorMessage: 'Invalid number.'
     },
-    { property: 'state', gridColumns: 6, options: [
-      { label: 'Santa Catarina', value: 1 },
-      { label: 'São Paulo', value: 2 },
-      { label: 'Rio de Janeiro', value: 3 },
-      { label: 'Minas Gerais', value: 4 }
-    ]},
+    {
+      property: 'state',
+      gridColumns: 6,
+      options: [
+        { label: 'Santa Catarina', value: 1 },
+        { label: 'São Paulo', value: 2 },
+        { label: 'Rio de Janeiro', value: 3 },
+        { label: 'Minas Gerais', value: 4 }
+      ]
+    },
     { property: 'city', disabled: true, gridColumns: 6 },
     { property: 'entryTime', label: 'Entry time', type: 'time', divider: 'Work data', gridColumns: 6 },
     { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 6 },
@@ -69,11 +88,14 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       label: 'Favorite hero',
       optional: true,
       searchService: 'https://thf.totvs.com.br/sample/api/comboOption/heroes',
-      columns: [ { property: 'nickname', label: 'Hero' }, { property: 'label', label: 'Name' }]
-    },
+      columns: [
+        { property: 'nickname', label: 'Hero' },
+        { property: 'label', label: 'Name' }
+      ]
+    }
   ];
 
-  constructor(public poNotification: PoNotificationService, private registerService: PoDynamicFormRegisterService) { }
+  constructor(public poNotification: PoNotificationService, private registerService: PoDynamicFormRegisterService) {}
 
   ngOnInit() {
     this.person = {
@@ -84,21 +106,22 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
   }
 
   onChangeFields(changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation {
-
     if (changedValue.property === 'state') {
-
       return {
-        value: { city: undefined},
+        value: { city: undefined },
         fields: [
-          { property: 'city', gridColumns: 6, options: this.registerService.getCity(changedValue.value.state), disabled: false }
+          {
+            property: 'city',
+            gridColumns: 6,
+            options: this.registerService.getCity(changedValue.value.state),
+            disabled: false
+          }
         ]
       };
     }
-
   }
 
   onLoadFields(value: any) {
     return this.registerService.getUserDocument(value);
   }
-
 }

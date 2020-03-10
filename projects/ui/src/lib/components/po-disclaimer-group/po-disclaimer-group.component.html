@@ -1,19 +1,23 @@
-<div class="po-disclaimer-group" *ngIf="disclaimers.length > 0" >
+<div class="po-disclaimer-group" *ngIf="disclaimers.length > 0">
   <div class="po-disclaimer-group-title">{{ title }}</div>
 
-  <po-disclaimer-remove *ngIf="isRemoveAll()"
+  <po-disclaimer-remove
+    *ngIf="isRemoveAll()"
     class="po-disclaimer-group-disclaimer-align"
     [p-label]="literals.removeAll"
     (keydown)="onKeyPress($event)"
-    (p-remove-all-action)="removeAllItems()">
+    (p-remove-all-action)="removeAllItems()"
+  >
   </po-disclaimer-remove>
 
-  <po-disclaimer *ngFor="let disclaimer of disclaimers"
+  <po-disclaimer
+    *ngFor="let disclaimer of disclaimers"
     class="po-disclaimer-group-disclaimer-align"
     [p-hide-close]="disclaimer.hideClose"
     [p-label]="disclaimer.label"
     [p-property]="disclaimer.property"
     [p-value]="disclaimer.value"
-    (p-close-action)="closeItem(disclaimer)">
+    (p-close-action)="closeItem(disclaimer)"
+  >
   </po-disclaimer>
 </div>

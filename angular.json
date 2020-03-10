@@ -32,14 +32,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/ui/tsconfig.lib.json",
-              "projects/ui/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "projects/ui/schematics/**"
-            ]
+            "tsConfig": ["projects/ui/tsconfig.lib.json", "projects/ui/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "projects/ui/schematics/**"]
           }
         }
       }
@@ -74,10 +68,7 @@
                 "output": "/assets/monaco"
               }
             ],
-            "styles": [
-              "./node_modules/@portinari/style/css/po-theme-default.min.css",
-              "projects/app/src/styles.css"
-            ],
+            "styles": ["./node_modules/@portinari/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -179,13 +170,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/storage/tsconfig.lib.json",
-              "projects/storage/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["projects/storage/tsconfig.lib.json", "projects/storage/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -218,13 +204,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/sync/tsconfig.lib.json",
-              "projects/sync/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["projects/sync/tsconfig.lib.json", "projects/sync/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -258,13 +239,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/templates/tsconfig.lib.json",
-              "projects/templates/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["projects/templates/tsconfig.lib.json", "projects/templates/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -298,13 +274,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/code-editor/tsconfig.lib.json",
-              "projects/code-editor/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["projects/code-editor/tsconfig.lib.json", "projects/code-editor/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -312,6 +283,6 @@
   },
   "defaultProject": "ui",
   "cli": {
-    "analytics": "82248456-c902-40d3-990a-ab9bd538847a"
+    "analytics": false
   }
 }

@@ -14,7 +14,6 @@ import { PoDynamicField } from '../po-dynamic-field.interface';
  * Interface para definição das propriedades dos campos de entrada que serão criados dinamicamente.
  */
 export interface PoDynamicFormField extends PoDynamicField {
-
   /**
    * Define as colunas para utilização da busca avançada. Usada somente em conjunto com a propriedade `searchService`,
    * essa propriedade deve receber um array de objetos que implementam a interface [`PoLookupColumn`](/documentation/po-lookup).
@@ -155,5 +154,4 @@ export interface PoDynamicFormField extends PoDynamicField {
    * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
    */
   errorMessage?: string;
-
 }

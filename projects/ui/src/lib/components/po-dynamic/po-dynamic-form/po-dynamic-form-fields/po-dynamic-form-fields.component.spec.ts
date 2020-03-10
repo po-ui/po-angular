@@ -18,10 +18,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule, ReactiveFormsModule, PoDynamicModule ],
-      providers: [
-        { provide: NgForm, useValue: new NgForm(null, null) }
-      ]
+      imports: [FormsModule, ReactiveFormsModule, PoDynamicModule],
+      providers: [{ provide: NgForm, useValue: new NgForm(null, null) }]
     });
   });
 
@@ -40,12 +38,11 @@ describe('PoDynamicFormFieldsComponent: ', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnChanges: should call `getVisibileFields` and set `visibileFields` if `changes.fields` is defined', () => {
-      const fields = [{property: 'name'}];
+      const fields = [{ property: 'name' }];
       component.visibleFields = [];
 
-      spyOn(component, <any> 'getVisibleFields').and.returnValue(fields);
+      spyOn(component, <any>'getVisibleFields').and.returnValue(fields);
 
       component.ngOnChanges(<any>{ fields });
 
@@ -56,7 +53,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     it('ngOnChanges: shouldn`t call `getVisibileFields` if `changes.fields` is undefined', () => {
       component.visibleFields = [];
 
-      spyOn(component, <any> 'getVisibleFields');
+      spyOn(component, <any>'getVisibleFields');
 
       component.ngOnChanges({});
 
@@ -168,11 +165,9 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       });
 
       it('shouldn`t call `validateField` if `changedField.validate` doesn`t have value', async () => {
-        const fakeVisibleField = { property: 'test1'};
+        const fakeVisibleField = { property: 'test1' };
 
-        component.fields = [
-          { property: 'test1'}
-        ];
+        component.fields = [{ property: 'test1' }];
 
         const field = { changedField: fakeVisibleField, changedFieldIndex };
 
@@ -184,7 +179,11 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         await component.onChangeField(fakeVisibleField);
 
-        expect(component['validateField']).not.toHaveBeenCalledWith(fakeVisibleField, changedFieldIndex, fakeVisibleField);
+        expect(component['validateField']).not.toHaveBeenCalledWith(
+          fakeVisibleField,
+          changedFieldIndex,
+          fakeVisibleField
+        );
       });
     });
 
@@ -195,7 +194,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       component.fields = [
         { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: true, visible: false, help: 'test help' },
+        { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
       component['applyFieldValidation'](index, validatedField);
@@ -208,7 +207,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const index = 0;
       const validatedField = { field: { property: 'test2', required: false, visible: true } };
 
-      component.fields = [ { property: 'test1', required: true, visible: true } ];
+      component.fields = [{ property: 'test1', required: true, visible: true }];
 
       const value = { test1: 'value' };
       component.value = value;
@@ -224,7 +223,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       component.fields = [
         { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: true, visible: false, help: 'test help' },
+        { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
       const spyChanges = spyOn(component['changes'], 'detectChanges');
@@ -236,11 +235,15 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it('applyFieldValidation: should call `focus` if `validatedFIeld` has `focus` property', () => {
       const index = 1;
-      const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value', focus: true };
+      const validatedField = {
+        field: { property: 'test2', required: false, visible: true },
+        value: 'expected value',
+        focus: true
+      };
 
       component.fields = [
         { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: true, visible: false, help: 'test help' },
+        { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
       const spyFocus = spyOn(component, 'focus');
@@ -252,11 +255,15 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it('applyFieldValidation: shouldn`t call `focus` if `validatedFIeld` not has `focus` property', () => {
       const index = 1;
-      const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value', focus: false };
+      const validatedField = {
+        field: { property: 'test2', required: false, visible: true },
+        value: 'expected value',
+        focus: false
+      };
 
       component.fields = [
         { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: true, visible: false, help: 'test help' },
+        { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
       const spyFocus = spyOn(component, 'focus');
@@ -268,11 +275,11 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it('applyFieldValidation: should call updateFields', () => {
       const index = 1;
-      const validatedField = { field: { property: 'test2', required: false, visible: true }};
+      const validatedField = { field: { property: 'test2', required: false, visible: true } };
 
       component.fields = [
         { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: true, visible: false, help: 'test help' },
+        { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
       const spyUpdateFields = spyOn(component, <any>'updateFields');
@@ -288,9 +295,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const fakeVisibleField = { property: 'test1', validate: 'teste' };
       const expectedReturn = { changedField: fakeVisibleField, changedFieldIndex };
 
-      component.fields = [
-        { property: 'test1', validate: 'teste' }
-      ];
+      component.fields = [{ property: 'test1', validate: 'teste' }];
 
       const spyGetFields = component['getField'](fakeProperty);
 
@@ -299,7 +304,6 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it(`triggerValidationOnForm: should emit 'formValidate' if 'validate' has value and 'formValidate.observers'
       has length`, () => {
-
       component.formValidate.observers.length = 1;
       component.validate = 'http://test.com';
       component.fields = [{ property: 'test1', validate: 'teste' }];
@@ -386,11 +390,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
   });
 
   describe('Templates: ', () => {
-
     it('should create a `div` with `po-row` class if visibleFields.length greater than 0', () => {
-      component.fields = [
-        { property: 'name' }
-      ];
+      component.fields = [{ property: 'name' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -402,9 +403,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('shouldn`t create a `div` with `po-row` class if `visibleFields.length` is 0', () => {
-      component.fields = [
-        { property: 'name', visible: false }
-      ];
+      component.fields = [{ property: 'name', visible: false }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -428,9 +427,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-input` component if type is `undefined`', () => {
-      component.fields = [
-        { property: 'name' }
-      ];
+      component.fields = [{ property: 'name' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -442,9 +439,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-number` component if type is `number`', () => {
-      component.fields = [
-        { property: 'age', type: 'number' }
-      ];
+      component.fields = [{ property: 'age', type: 'number' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -456,9 +451,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-datepicker` component if type is `date`', () => {
-      component.fields = [
-        { property: 'age', type: 'date' }
-      ];
+      component.fields = [{ property: 'age', type: 'date' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -470,9 +463,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-datepicker` component if type is `datetime`', () => {
-      component.fields = [
-        { property: 'age', type: 'datetime' }
-      ];
+      component.fields = [{ property: 'age', type: 'datetime' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -484,9 +475,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-input` component if type is `time`', () => {
-      component.fields = [
-        { property: 'age', type: 'time' }
-      ];
+      component.fields = [{ property: 'age', type: 'time' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -498,9 +487,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-decimal` component if type is `currency`', () => {
-      component.fields = [
-        { property: 'age', type: 'currency' }
-      ];
+      component.fields = [{ property: 'age', type: 'currency' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -513,7 +500,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it('should create a `po-combo` component if have a `optionsService`', () => {
       component.fields = [
-        { property: 'hero', label: 'Herois', optionsService: 'https://portinari.io/sample/api/comboOption/heroes'}
+        { property: 'hero', label: 'Herois', optionsService: 'https://portinari.io/sample/api/comboOption/heroes' }
       ];
 
       component.ngOnChanges({
@@ -527,12 +514,16 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it('should create a `po-select` component if have more than 3 options', () => {
       component.fields = [
-        { property: 'state', label: 'Estados', options: [
-          { label: 'Santa Catarina', value: 1 },
-          { label: 'São Paulo', value: 2 },
-          { label: 'Rio de Janeiro', value: 3 },
-          { label: 'Minas Gerais', value: 4 }
-        ]}
+        {
+          property: 'state',
+          label: 'Estados',
+          options: [
+            { label: 'Santa Catarina', value: 1 },
+            { label: 'São Paulo', value: 2 },
+            { label: 'Rio de Janeiro', value: 3 },
+            { label: 'Minas Gerais', value: 4 }
+          ]
+        }
       ];
 
       component.ngOnChanges({
@@ -546,10 +537,14 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it('should create a `po-radio-group` component if have less than 4 options', () => {
       component.fields = [
-        { property: 'state', label: 'Estados', options: [
-          { label: 'Santa Catarina', value: 1 },
-          { label: 'São Paulo', value: 2 }
-        ]}
+        {
+          property: 'state',
+          label: 'Estados',
+          options: [
+            { label: 'Santa Catarina', value: 1 },
+            { label: 'São Paulo', value: 2 }
+          ]
+        }
       ];
 
       component.ngOnChanges({
@@ -562,9 +557,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-switch` component if type is `boolean`', () => {
-      component.fields = [
-        { property: 'hired', type: 'boolean', divider: 'Info' }
-      ];
+      component.fields = [{ property: 'hired', type: 'boolean', divider: 'Info' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -577,9 +570,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-textarea` component if rows is 3', () => {
-      component.fields = [
-        { property: 'hired', rows: 3 }
-      ];
+      component.fields = [{ property: 'hired', rows: 3 }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -591,9 +582,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('should create a `po-textarea` component if rows is greater than 3', () => {
-      component.fields = [
-        { property: 'hired', rows: 8 }
-      ];
+      component.fields = [{ property: 'hired', rows: 8 }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -605,9 +594,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     });
 
     it('shouldn`t create a `po-textarea` component if rows is less than 3', () => {
-      component.fields = [
-        { property: 'hired', rows: 2 }
-      ];
+      component.fields = [{ property: 'hired', rows: 2 }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -621,7 +608,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     it('should create a `po-password` component if `secret`', () => {
       component.fields = [{ property: 'pass', secret: true }];
 
-      component.ngOnChanges({fields: new SimpleChange(null, component.fields, true)});
+      component.ngOnChanges({ fields: new SimpleChange(null, component.fields, true) });
 
       fixture.detectChanges();
 
@@ -631,7 +618,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     it('shouldn`t create a `po-password` component if `secret` is false', () => {
       component.fields = [{ property: 'pass', rows: 2 }];
 
-      component.ngOnChanges({fields: new SimpleChange(null, component.fields, true)});
+      component.ngOnChanges({ fields: new SimpleChange(null, component.fields, true) });
 
       fixture.detectChanges();
 
@@ -648,16 +635,26 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         { property: 'wage', label: 'Salario', type: 'currency', divider: 'Outros dados' },
         { property: 'hired', type: 'boolean' },
         { property: 'hour', label: 'Horario', type: 'time' },
-        { property: 'city', label: 'Cidade', options: [
-          { label: 'Joinville', value: 1 }, { label: 'Curitiba', value: 2 }, { label: 'São Paulo', value: 3 }
-        ] },
-        { property: 'state', label: 'Estados', options: [
-          { label: 'Santa Catarina', value: 1 },
-          { label: 'São Paulo', value: 2 },
-          { label: 'Rio de Janeiro', value: 3 },
-          { label: 'Minas Gerais', value: 4 }
-        ]},
-        { property: 'hero', label: 'Herois', optionsService: 'https://portinari.io/sample/api/comboOption/heroes'}
+        {
+          property: 'city',
+          label: 'Cidade',
+          options: [
+            { label: 'Joinville', value: 1 },
+            { label: 'Curitiba', value: 2 },
+            { label: 'São Paulo', value: 3 }
+          ]
+        },
+        {
+          property: 'state',
+          label: 'Estados',
+          options: [
+            { label: 'Santa Catarina', value: 1 },
+            { label: 'São Paulo', value: 2 },
+            { label: 'Rio de Janeiro', value: 3 },
+            { label: 'Minas Gerais', value: 4 }
+          ]
+        },
+        { property: 'hero', label: 'Herois', optionsService: 'https://portinari.io/sample/api/comboOption/heroes' }
       ];
 
       component.ngOnChanges({
@@ -676,15 +673,12 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(nativeElement.querySelectorAll('po-select').length).toBe(1);
       expect(nativeElement.querySelectorAll('po-textarea').length).toBe(1);
     });
-
   });
 
   describe('Integration:', () => {
-
     describe('onChangeField:', () => {
-
       beforeEach(() => {
-        component.fields = [ { property: 'name' } ];
+        component.fields = [{ property: 'name' }];
         component.value['name'] = 'name';
 
         component.ngOnChanges({
@@ -742,9 +736,6 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         expect(component.value.name).toBe(expectedValue);
       });
-
     });
-
   });
-
 });

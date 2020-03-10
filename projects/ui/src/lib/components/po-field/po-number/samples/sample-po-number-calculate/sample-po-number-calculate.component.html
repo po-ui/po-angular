@@ -1,24 +1,12 @@
 <h3>Calculate Tax</h3>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-number
-      class="po-md-6"
-      name="price"
-      [(ngModel)]="price"
-      p-label="Price"
-      p-required>
-    </po-number>
+    <po-number class="po-md-6" name="price" [(ngModel)]="price" p-label="Price" p-required> </po-number>
 
-    <po-number
-      class="po-md-6"
-      name="quantity"
-      [(ngModel)]="quantity"
-      p-label="Quantity"
-      p-required>
-    </po-number>
+    <po-number class="po-md-6" name="quantity" [(ngModel)]="quantity" p-label="Quantity" p-required> </po-number>
   </div>
 
   <div>
@@ -30,47 +18,20 @@
       p-required
       p-sort
       [p-options]="statesOptions"
-      (p-change)="loadICMS()">
+      (p-change)="loadICMS()"
+    >
     </po-select>
 
-    <po-number
-      class="po-md-6 po-lg-3"
-      name="icms"
-      [(ngModel)]="icms"
-      p-label="ICMS %"
-      p-disabled>
-    </po-number>
+    <po-number class="po-md-6 po-lg-3" name="icms" [(ngModel)]="icms" p-label="ICMS %" p-disabled> </po-number>
 
-    <po-number
-      class="po-md-6 po-lg-3"
-      name="liquid"
-      [(ngModel)]="liquid"
-      p-label="Liquid"
-      p-disabled>
-    </po-number>
+    <po-number class="po-md-6 po-lg-3" name="liquid" [(ngModel)]="liquid" p-label="Liquid" p-disabled> </po-number>
 
-    <po-number
-      class="po-md-6 po-lg-3"
-      name="total"
-      [(ngModel)]="total"
-      p-label="Total"
-      p-disabled>
-    </po-number>
+    <po-number class="po-md-6 po-lg-3" name="total" [(ngModel)]="total" p-label="Total" p-disabled> </po-number>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Calculate"
-      [p-disabled]="f.invalid"
-      (p-click)="calculate()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Calculate" [p-disabled]="f.invalid" (p-click)="calculate()"> </po-button>
 
-    <po-button
-      class="po-md-3"
-      p-label="Clean"
-      [p-disabled]="f.invalid"
-      (p-click)="f.reset()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Clean" [p-disabled]="f.invalid" (p-click)="f.reset()"> </po-button>
   </div>
 </form>

@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  ViewChild
+} from '@angular/core';
 
 import { convertNumberToDecimal } from '../../../../../utils/util';
 
@@ -11,7 +19,6 @@ import { poChartGaugeSerieWidth } from '../../po-chart-circular/po-chart-circula
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoChartGaugeTextContentComponent implements AfterViewInit {
-
   serieValueConverted: string;
   tooltip: string;
 
@@ -55,7 +62,7 @@ export class PoChartGaugeTextContentComponent implements AfterViewInit {
 
   get maxDescriptionWidth() {
     // Diferença contemplando a largura do path base e padding interno.
-    const subtractionArea = (this.gaugeWidth * poChartGaugeSerieWidth * 2) * 2;
+    const subtractionArea = this.gaugeWidth * poChartGaugeSerieWidth * 2 * 2;
     const descriptionWidth = this.gaugeWidth - subtractionArea;
 
     return { 'max-width': `${descriptionWidth}px` };
@@ -81,9 +88,9 @@ export class PoChartGaugeTextContentComponent implements AfterViewInit {
   }
 
   private isEllipsisActive() {
-    const isExceededWidth = this.descriptionElement.nativeElement.offsetWidth < this.descriptionElement.nativeElement.scrollWidth;
+    const isExceededWidth =
+      this.descriptionElement.nativeElement.offsetWidth < this.descriptionElement.nativeElement.scrollWidth;
 
     return isExceededWidth ? this.serie.description : undefined;
   }
-
 }

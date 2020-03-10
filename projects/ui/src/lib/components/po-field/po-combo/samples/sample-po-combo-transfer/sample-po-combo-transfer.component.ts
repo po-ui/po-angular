@@ -8,7 +8,6 @@ import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption 
   templateUrl: './sample-po-combo-transfer.component.html'
 })
 export class SamplePoComboTransferComponent {
-
   contact: any;
   dateTransfer: Date = new Date();
   typeAccount: string = 'Checking Account';
@@ -32,7 +31,7 @@ export class SamplePoComboTransferComponent {
   @ViewChild('transferForm', { static: true }) form: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   confirmTransfer() {
     this.poModal.close();
@@ -47,11 +46,9 @@ export class SamplePoComboTransferComponent {
   }
 
   private formReset() {
-
     this.form.reset({
       dateTransfer: new Date(),
       typeAccount: 'Checking Account'
     });
-
   }
 }

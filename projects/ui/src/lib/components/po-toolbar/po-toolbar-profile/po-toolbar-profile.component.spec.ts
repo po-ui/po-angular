@@ -25,9 +25,9 @@ describe('PoToolbarProfileComponent:', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]) ],
-      declarations: [ PoToolbarProfileComponent, PoPopupComponent ],
-      schemas: [ NO_ERRORS_SCHEMA ],
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [PoToolbarProfileComponent, PoPopupComponent],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: ElementRef, useValue: elementRef },
         { provide: Renderer2, useValue: renderer2 },
@@ -47,7 +47,6 @@ describe('PoToolbarProfileComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should display avatar if have profile.', () => {
       component.profile = { title: 'teste', avatar: 'teste2' };
 
@@ -55,15 +54,12 @@ describe('PoToolbarProfileComponent:', () => {
 
       expect(nativeElement.querySelector('po-avatar')).toBeTruthy();
     });
-
   });
 
   describe('Methods:', () => {
-
     describe('isShowProfile: ', () => {
-
       it('should return `true` if have a profile.', () => {
-        component.profile = {title: 'Jhony', avatar: 'link'};
+        component.profile = { title: 'Jhony', avatar: 'link' };
 
         expect(component.profileAvatar).toBeTruthy();
       });
@@ -73,9 +69,6 @@ describe('PoToolbarProfileComponent:', () => {
 
         expect(component.profileAvatar).toBeUndefined();
       });
-
     });
-
   });
-
 });

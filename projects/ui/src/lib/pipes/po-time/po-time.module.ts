@@ -8,14 +8,10 @@ import { PoTimePipe } from './po-time.pipe';
  * Módulo do pipe `po-time`.
  */
 @NgModule({
-  declarations: [
-    PoTimePipe
-  ],
+  declarations: [PoTimePipe],
   imports: [],
-  exports: [
-    PoTimePipe
-  ],
+  exports: [PoTimePipe],
   providers: [],
   bootstrap: []
 })
-export class PoTimeModule { }
+export class PoTimeModule {}

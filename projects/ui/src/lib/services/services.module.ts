@@ -7,12 +7,10 @@ import { PoDateTimeModule } from './po-date/po-date.module';
 import { PoDialogModule } from './po-dialog/po-dialog.module';
 import { PoI18nPipe } from './po-i18n/po-i18n.pipe';
 import { PoLanguageModule } from './po-language/po-language.module';
-import { PoNotificationModule } from './po-notification/po-notification.module' ;
+import { PoNotificationModule } from './po-notification/po-notification.module';
 
 @NgModule({
-  declarations: [
-    PoI18nPipe
-  ],
+  declarations: [PoI18nPipe],
   imports: [
     PoColorPaletteModule,
     PoComponentInjectorModule,
@@ -34,4 +32,4 @@ import { PoNotificationModule } from './po-notification/po-notification.module' 
   providers: [],
   bootstrap: []
 })
-export class PoServicesModule { }
+export class PoServicesModule {}

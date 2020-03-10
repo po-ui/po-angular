@@ -28,7 +28,6 @@ import { PoDialogType } from './po-dialog.enum';
  */
 @Injectable()
 export class PoDialogService extends PoDialogBaseService {
-
   constructor(private poComponentInjector: PoComponentInjectorService) {
     super();
   }

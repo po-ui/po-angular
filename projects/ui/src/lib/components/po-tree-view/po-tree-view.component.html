@@ -1,8 +1,6 @@
 <po-container *ngIf="hasItems" p-no-padding p-no-shadow>
   <ul class="po-tree-view">
-    <po-tree-view-item *ngFor="let item of items; trackBy: trackByFunction"
-      [p-item]="item"
-      [p-selectable]="selectable">
+    <po-tree-view-item *ngFor="let item of items; trackBy: trackByFunction" [p-item]="item" [p-selectable]="selectable">
     </po-tree-view-item>
   </ul>
 </po-container>

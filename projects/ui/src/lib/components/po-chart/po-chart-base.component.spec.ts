@@ -6,13 +6,10 @@ import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartType } from './enums/po-chart-type.enum';
 
 class PoCharComponent extends PoChartBaseComponent {
-
-  rebuildComponent() { }
-
+  rebuildComponent() {}
 }
 
 describe('PoChartBaseComponent:', () => {
-
   let component: PoCharComponent;
 
   beforeEach(() => {
@@ -24,7 +21,6 @@ describe('PoChartBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-height: should update property with 200 if values is lower than 200', () => {
       const validValues = [105, 1, 7, 0, -5];
 
@@ -95,11 +91,9 @@ describe('PoChartBaseComponent:', () => {
 
       expect(component['transformObjectToArrayObject']).toHaveBeenCalledWith(component.series);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('onSeriesClick: should call `seriesClick.emit` with `event`', () => {
       const eventMock = { target: '', name: 'value' };
       component.seriesClick = new EventEmitter();
@@ -139,7 +133,7 @@ describe('PoChartBaseComponent:', () => {
     });
 
     it('transformObjectToArrayObject: should return an array containing the serie`s object', () => {
-      const serie = {value: 1, description: 'description'};
+      const serie = { value: 1, description: 'description' };
       const expectedResult = component['transformObjectToArrayObject'](serie);
 
       expect(expectedResult).toEqual([serie]);
@@ -151,7 +145,5 @@ describe('PoChartBaseComponent:', () => {
 
       expect(expectedResult).toEqual([]);
     });
-
   });
-
 });

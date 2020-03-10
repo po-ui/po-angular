@@ -14,7 +14,6 @@ import {
   templateUrl: './sample-po-combo-labs.component.html'
 })
 export class SamplePoComboLabsComponent implements OnInit {
-
   combo: string;
   comboOptionGroupSwitch: boolean;
   customLiterals: PoComboLiterals;
@@ -104,7 +103,7 @@ export class SamplePoComboLabsComponent implements OnInit {
     this.literals = '';
     this.icon = undefined;
 
-    this.option = {label: undefined, value: undefined};
+    this.option = { label: undefined, value: undefined };
     this.options = [];
     this.optionsGroup = undefined;
     this.optionsGroupList = [];
@@ -115,18 +114,24 @@ export class SamplePoComboLabsComponent implements OnInit {
 
   private insertGroupIntoSelectInput(value: string) {
     this.selectedOptionsGroup = value;
-    this.optionsGroupList = [ ...this.optionsGroupList, { label: value, value } ];
+    this.optionsGroupList = [...this.optionsGroupList, { label: value, value }];
   }
 
-  private verifyOptionObject(options: Array<PoComboOption | PoComboOptionGroup>, option: PoComboOption, optionsGroup?: string) {
+  private verifyOptionObject(
+    options: Array<PoComboOption | PoComboOptionGroup>,
+    option: PoComboOption,
+    optionsGroup?: string
+  ) {
     const { label, value } = option;
 
     if (optionsGroup) {
-      const indexItem = options.findIndex((optionItem: PoComboOptionGroup) => optionItem.label === optionsGroup && 'options' in optionItem);
+      const indexItem = options.findIndex(
+        (optionItem: PoComboOptionGroup) => optionItem.label === optionsGroup && 'options' in optionItem
+      );
 
       if (indexItem === -1) {
         this.insertGroupIntoSelectInput(optionsGroup);
-        return [ ...options, { label: optionsGroup, options: [ { label, value } ] } ];
+        return [...options, { label: optionsGroup, options: [{ label, value }] }];
       }
 
       (options as Array<PoComboOptionGroup>)[indexItem].options.push({ label, value });
@@ -135,5 +140,4 @@ export class SamplePoComboLabsComponent implements OnInit {
 
     return [...options, { label, value }];
   }
-
 }

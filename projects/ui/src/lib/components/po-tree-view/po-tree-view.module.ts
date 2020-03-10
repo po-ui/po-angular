@@ -41,19 +41,8 @@ import { PoTreeViewItemHeaderComponent } from './po-tree-view-item-header/po-tre
  * ```
  */
 @NgModule({
-  declarations: [
-    PoTreeViewComponent,
-    PoTreeViewItemComponent,
-    PoTreeViewItemHeaderComponent
-  ],
-  exports: [
-    PoTreeViewComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    PoContainerModule,
-    PoFieldModule
-  ]
+  declarations: [PoTreeViewComponent, PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
+  exports: [PoTreeViewComponent],
+  imports: [CommonModule, FormsModule, PoContainerModule, PoFieldModule]
 })
-export class PoTreeViewModule { }
+export class PoTreeViewModule {}

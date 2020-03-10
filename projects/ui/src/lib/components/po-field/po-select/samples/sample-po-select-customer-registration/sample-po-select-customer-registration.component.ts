@@ -9,30 +9,31 @@ import { SamplePoSelectCustomerRegistrationService } from './sample-po-select-cu
 @Component({
   selector: 'sample-po-select-customer-registration',
   templateUrl: './sample-po-select-customer-registration.component.html',
-  providers: [ SamplePoSelectCustomerRegistrationService ],
-  styles: [`
-    .sample-select-option-template-container {
-      display: inline-flex;
-      align-items: flex-start;
-      width: 100%;
-    }
+  providers: [SamplePoSelectCustomerRegistrationService],
+  styles: [
+    `
+      .sample-select-option-template-container {
+        display: inline-flex;
+        align-items: flex-start;
+        width: 100%;
+      }
 
-    .sample-select-option-template-margin {
-      margin: 5px;
-    }
+      .sample-select-option-template-margin {
+        margin: 5px;
+      }
 
-    .sample-select-option-template-label {
-      font-size: 16px;
-    }
+      .sample-select-option-template-label {
+        font-size: 16px;
+      }
 
-    .sample-select-option-template-value {
-      font-size: 12px;
-      text-transform: uppercase;
-    }
-  `]
+      .sample-select-option-template-value {
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+    `
+  ]
 })
 export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, OnInit {
-
   address: string;
   city: number;
   cityOptions: Array<PoSelectOption>;
@@ -50,11 +51,11 @@ export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, O
   private statesSubscription: Subscription;
 
   readonly options: Array<PoRadioGroupOption> = [
-    {label: 'CPF', value: 'CPF'},
-    {label: 'CNPJ', value: 'CNPJ'}
+    { label: 'CPF', value: 'CPF' },
+    { label: 'CNPJ', value: 'CNPJ' }
   ];
 
-  constructor(private sampleService: SamplePoSelectCustomerRegistrationService) { }
+  constructor(private sampleService: SamplePoSelectCustomerRegistrationService) {}
 
   ngOnDestroy() {
     this.citiesSubscription.unsubscribe();
@@ -120,5 +121,4 @@ export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, O
       this.getCitiesByState(this.state);
     });
   }
-
 }

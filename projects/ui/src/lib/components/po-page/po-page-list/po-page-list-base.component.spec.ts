@@ -8,9 +8,7 @@ import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
 import { PoPageListBaseComponent, poPageListLiteralsDefault } from './po-page-list-base.component';
 
 class PoPageListComponent extends PoPageListBaseComponent {
-
   setDropdownActions() {}
-
 }
 
 describe('PoPageListBaseComponent:', () => {
@@ -22,9 +20,7 @@ describe('PoPageListBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     describe('p-literals:', () => {
-
       it('should be in portuguese if `getShortLanguage` return an unsupported language.', () => {
         component['language'] = 'zw';
 
@@ -85,7 +81,6 @@ describe('PoPageListBaseComponent:', () => {
 
         expectPropertiesValues(component, 'literals', invalidValues, poPageListLiteralsDefault[poLocaleDefault]);
       });
-
     });
 
     it('should return object when set disclaimerGroup with undefined', () => {
@@ -104,13 +99,11 @@ describe('PoPageListBaseComponent:', () => {
       const disclaimers: Array<PoDisclaimer> = [
         { value: 'hotel', label: 'Hotel', property: 'hotel' },
         { value: '500', label: 'Price', property: 'Preço' },
-        { value: 'north', label: 'Region', property: 'region' },
+        { value: 'north', label: 'Region', property: 'region' }
       ];
-      component.disclaimerGroup = {change: () => {}, disclaimers, title: 'teste'};
+      component.disclaimerGroup = { change: () => {}, disclaimers, title: 'teste' };
 
       expect(component.disclaimerGroup).toBeTruthy();
     });
-
   });
-
 });

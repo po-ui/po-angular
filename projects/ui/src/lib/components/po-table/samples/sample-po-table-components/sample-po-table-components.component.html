@@ -1,6 +1,6 @@
 <div class="po-font-text-large">Portinari Field Commom Components</div>
 
-<hr>
+<hr />
 
 <po-table
   p-container="shadow"
@@ -9,17 +9,13 @@
   [p-show-more-disabled]="showMoreDisabled"
   [p-sort]="true"
   (p-show-more)="showMore($event)"
-  (p-sort-by)="sort($event)">
+  (p-sort-by)="sort($event)"
+>
 </po-table>
 
-<po-modal
-  p-click-out="true"
-  p-size="sm"
-  p-title="{{ title }} - {{ extraInformation?.component }}">
-
+<po-modal p-click-out="true" p-size="sm" p-title="{{ title }} - {{ extraInformation?.component }}">
   <ul *ngFor="let extra of extraInformation?.extras">
     <li class="po-font-text">{{ extra }}</li>
-    <hr>
+    <hr />
   </ul>
-
 </po-modal>

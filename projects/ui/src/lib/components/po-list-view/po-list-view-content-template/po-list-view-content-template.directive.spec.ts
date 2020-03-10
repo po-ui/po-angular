@@ -4,8 +4,6 @@ describe('PoListViewContentTemplateDirective:', () => {
   const directive = new PoListViewContentTemplateDirective(null);
 
   it('should be created', () => {
-
     expect(directive).toBeTruthy();
   });
-
 });

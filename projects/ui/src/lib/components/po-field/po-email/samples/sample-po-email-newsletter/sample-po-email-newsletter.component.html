@@ -12,17 +12,13 @@
       p-error-pattern="Invalid e-mail"
       p-label="Email"
       p-placeholder="Enter your e-mail"
-      p-required>
+      p-required
+    >
     </po-email>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-4"
-      p-label="Send"
-      p-type="primary"
-      [p-disabled]="f.form.invalid"
-      (p-click)="openDialog()">
+    <po-button class="po-md-4" p-label="Send" p-type="primary" [p-disabled]="f.form.invalid" (p-click)="openDialog()">
     </po-button>
   </div>
 </form>

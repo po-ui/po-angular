@@ -8,7 +8,6 @@ import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoUploadDragDropAreaComponent {
-
   @Input('p-directory-compatible') directoryCompatible: boolean;
 
   @Input('p-disabled') disabled: boolean;
@@ -28,5 +27,4 @@ export class PoUploadDragDropAreaComponent {
   focus() {
     this.selectFilesLinkElement.nativeElement.focus();
   }
-
 }

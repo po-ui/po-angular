@@ -7,10 +7,8 @@ import { PoMultiselectOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-multiselect-basic.component.html'
 })
 export class SamplePoMultiselectBasicComponent {
-
   options: Array<PoMultiselectOption> = [
     { value: 'portinariMultiselect1', label: 'Portinari Multiselect 1' },
     { value: 'portinariMultiselect2', label: 'Portinari Multiselect 2' }
   ];
-
 }

@@ -10,16 +10,8 @@ import { PoFieldContainerComponent } from './po-field-container.component';
  * Módulo do componente `po-field-container`.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    PoFieldContainerBottomComponent,
-    PoFieldContainerComponent
-  ],
-  declarations: [
-    PoFieldContainerBottomComponent,
-    PoFieldContainerComponent
-  ]
+  imports: [CommonModule],
+  exports: [PoFieldContainerBottomComponent, PoFieldContainerComponent],
+  declarations: [PoFieldContainerBottomComponent, PoFieldContainerComponent]
 })
-export class PoFieldContainerModule { }
+export class PoFieldContainerModule {}

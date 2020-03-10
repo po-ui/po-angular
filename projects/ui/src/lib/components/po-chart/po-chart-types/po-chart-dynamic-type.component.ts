@@ -11,7 +11,6 @@ const Padding: number = 24;
 
 @Directive()
 export abstract class PoChartDynamicTypeComponent {
-
   protected windowResizeListener: () => void;
   protected windowScrollListener: () => void;
 
@@ -45,14 +44,16 @@ export abstract class PoChartDynamicTypeComponent {
   }
 
   calculateSVGContainerDimensions(chartWrapperElement: number, chartHeaderElement: number, chartLegendElement: number) {
-    const svgContainerHeightCalc = this.height - chartHeaderElement - chartLegendElement - (Padding * 2);
+    const svgContainerHeightCalc = this.height - chartHeaderElement - chartLegendElement - Padding * 2;
 
     this.svgHeight = svgContainerHeightCalc <= 0 ? 0 : svgContainerHeightCalc;
     this.centerX = chartWrapperElement / 2;
   }
 
   calculateTotalValue() {
-    this.totalValue = this.type === PoChartType.Gauge ? 100 : this.series.reduce((previousValue, serie) => previousValue + serie.value, 0);
+    this.totalValue =
+      this.type === PoChartType.Gauge
+        ? 100
+        : this.series.reduce((previousValue, serie) => previousValue + serie.value, 0);
   }
-
 }

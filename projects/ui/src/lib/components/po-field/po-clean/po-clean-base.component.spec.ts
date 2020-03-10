@@ -1,8 +1,7 @@
 import { PoCleanBaseComponent } from './po-clean-base.component';
 
 class PoClean extends PoCleanBaseComponent {
-
-  setInputValue(value: string): void { }
+  setInputValue(value: string): void {}
 
   getInputValue(): string {
     return '';
@@ -10,7 +9,6 @@ class PoClean extends PoCleanBaseComponent {
 }
 
 describe('PoCleanBaseComponent', () => {
-
   const component = new PoClean();
 
   component['parentComponent'] = {
@@ -55,7 +53,7 @@ describe('PoCleanBaseComponent', () => {
       getInputValue: () => 'valor',
       hasCleanAttr: () => true,
       isDisabled: () => false,
-      isReadonly: () => false,
+      isReadonly: () => false
     };
     expect(component.showIcon.call(fakeThis)).toBeTruthy();
   });
@@ -66,7 +64,7 @@ describe('PoCleanBaseComponent', () => {
       getInputValue: () => '',
       hasCleanAttr: () => true,
       isDisabled: () => false,
-      isReadonly: () => false,
+      isReadonly: () => false
     };
     expect(component.showIcon.call(fakeThis)).toBeFalsy();
   });
@@ -77,7 +75,7 @@ describe('PoCleanBaseComponent', () => {
       getInputValue: () => 'valor',
       hasCleanAttr: () => true,
       isDisabled: () => true,
-      isReadonly: () => false,
+      isReadonly: () => false
     };
     expect(component.showIcon.call(fakeThis)).toBeFalsy();
   });
@@ -88,7 +86,7 @@ describe('PoCleanBaseComponent', () => {
       getInputValue: () => 'valor',
       hasCleanAttr: () => true,
       isDisabled: () => false,
-      isReadonly: () => true,
+      isReadonly: () => true
     };
     expect(component.showIcon.call(fakeThis)).toBeFalsy();
   });
@@ -98,9 +96,8 @@ describe('PoCleanBaseComponent', () => {
       defaultValue: '',
       getInputValue: () => 'valor',
       hasCleanAttr: () => false,
-      isDisabled: () => false,
+      isDisabled: () => false
     };
     expect(component.showIcon.call(fakeThis)).toBeFalsy();
   });
-
 });

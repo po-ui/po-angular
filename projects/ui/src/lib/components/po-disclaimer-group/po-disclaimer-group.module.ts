@@ -12,11 +12,8 @@ import { PoDisclaimerRemoveComponent } from './po-disclaimer-remove/po-disclaime
  * Módulo do componente po-disclaimer-group.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoDisclaimerModule
-  ],
+  imports: [CommonModule, PoDisclaimerModule],
   declarations: [PoDisclaimerGroupComponent, PoDisclaimerRemoveComponent],
   exports: [PoDisclaimerGroupComponent]
 })
-export class PoDisclaimerGroupModule { }
+export class PoDisclaimerGroupModule {}

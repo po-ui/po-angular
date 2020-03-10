@@ -18,12 +18,8 @@ describe('PoRadioGroupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoRadioGroupComponent,
-        PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
-      ],
-      providers: [ ]
+      declarations: [PoRadioGroupComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
+      providers: []
     });
   });
 
@@ -32,9 +28,7 @@ describe('PoRadioGroupComponent:', () => {
     component = fixture.componentInstance;
     component.label = 'Label de teste';
     component.help = 'Help de teste';
-    component.options = [
-      {value: '1', label: '1'}
-    ];
+    component.options = [{ value: '1', label: '1' }];
 
     fixture.detectChanges();
 
@@ -112,9 +106,11 @@ describe('PoRadioGroupComponent:', () => {
     });
 
     describe('focus:', () => {
-
       it('should call `focus` of radio', () => {
-        component.options = [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }];
+        component.options = [
+          { label: 'Option 1', value: '1' },
+          { label: 'Option 2', value: '2' }
+        ];
 
         fixture.detectChanges();
 
@@ -144,7 +140,10 @@ describe('PoRadioGroupComponent:', () => {
       });
 
       it('shouldn`t call `focus` of radio if `disabled` property of component is true', () => {
-        component.options = [{ label: 'Option 1', value: '1', disabled: true }, { label: 'Option 2', value: '2' }];
+        component.options = [
+          { label: 'Option 1', value: '1', disabled: true },
+          { label: 'Option 2', value: '2' }
+        ];
         component.disabled = true;
 
         fixture.detectChanges();
@@ -157,7 +156,6 @@ describe('PoRadioGroupComponent:', () => {
         expect(component.radioLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
         expect(component.radioLabels.toArray()[1].nativeElement.focus).not.toHaveBeenCalled();
       });
-
     });
 
     it('onKeyUp: should call `changeValue` when `isArrowKey` is true.', () => {
@@ -172,7 +170,7 @@ describe('PoRadioGroupComponent:', () => {
         which: 30
       };
 
-      spyOn(component, <any> 'isArrowKey').and.returnValue(false);
+      spyOn(component, <any>'isArrowKey').and.returnValue(false);
       spyOn(component, 'changeValue');
 
       component.onKeyUp(fakeEvent, 1);
@@ -192,17 +190,14 @@ describe('PoRadioGroupComponent:', () => {
       expect(component['isArrowKey'](36)).toBeFalsy();
       expect(component['isArrowKey'](41)).toBeFalsy();
     });
-
   });
 
   describe('Templates:', () => {
-
     const eventKeyBoard = document.createEvent('KeyboardEvent');
     eventKeyBoard.initEvent('keyup', true, true);
     Object.defineProperty(eventKeyBoard, 'keyCode', { value: 37 });
 
     it('keyup: should call `onKeyUp` when a arrowKey is pressed.', () => {
-
       spyOn(component, 'onKeyUp');
 
       const input = debugElement.querySelector('input.po-radio-group-input');
@@ -258,7 +253,5 @@ describe('PoRadioGroupComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

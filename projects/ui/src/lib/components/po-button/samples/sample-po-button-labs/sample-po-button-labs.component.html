@@ -8,22 +8,17 @@
     [p-loading]="properties.includes('loading')"
     [p-small]="properties.includes('small')"
     [p-type]="type"
-    (p-click)="buttonClick()">
+    (p-click)="buttonClick()"
+  >
   </po-button>
 </div>
 
-<hr>
+<hr />
 
 <!-- Properties -->
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="label"
-      [(ngModel)]="label"
-      p-clean
-      p-label="Label">
-    </po-input>
+    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
   </div>
 
   <div class="po-row">
@@ -32,33 +27,20 @@
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-radio-group
-      class="po-lg-12"
-      name="icon"
-      [(ngModel)]="icon"
-      p-label="Icon"
-      [p-options]="iconsOptions">
+    <po-radio-group class="po-lg-12" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconsOptions">
     </po-radio-group>
 
-    <po-radio-group
-      class="po-lg-12"
-      name="type"
-      [(ngModel)]="type"
-      p-label="Type"
-      [p-options]="typesOptions">
+    <po-radio-group class="po-lg-12" name="type" [(ngModel)]="type" p-label="Type" [p-options]="typesOptions">
     </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

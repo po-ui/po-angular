@@ -17,16 +17,19 @@ import { PoDynamicFormValidationService } from '../po-dynamic-form-validation/po
 @Component({
   selector: 'po-dynamic-form-fields',
   templateUrl: 'po-dynamic-form-fields.component.html',
-  viewProviders: [ { provide: ControlContainer, useExisting: NgForm } ],
-  providers: [ PoDynamicFormValidationService ]
+  viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
+  providers: [PoDynamicFormValidationService]
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
-
-  @ViewChildren('component') components: QueryList<{ name: string, focus: () => void }>;
+  @ViewChildren('component') components: QueryList<{ name: string; focus: () => void }>;
 
   private previousValue = {};
 
-  constructor(titleCasePipe: TitleCasePipe, private validationService: PoDynamicFormValidationService, private changes: ChangeDetectorRef) {
+  constructor(
+    titleCasePipe: TitleCasePipe,
+    private validationService: PoDynamicFormValidationService,
+    private changes: ChangeDetectorRef
+  ) {
     super(titleCasePipe);
   }
 
@@ -52,7 +55,6 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     const isChangedValueField = this.previousValue[property] !== this.value[property];
 
     if (isChangedValueField) {
-
       const { changedField, changedFieldIndex } = this.getField(property);
 
       if (changedField.validate) {
@@ -84,7 +86,6 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     if (validatedField.focus) {
       this.focus(field.property);
     }
-
   }
 
   private getField(property: string) {
@@ -101,7 +102,6 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       const updatedField = this.fields[changedFieldIndex];
       this.formValidate.emit(updatedField);
     }
-
   }
 
   private updateFields() {
@@ -123,5 +123,4 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       visibleField.disabled = previousDisabled;
     }
   }
-
 }

@@ -7,14 +7,13 @@ import { configureTestSuite } from './../../../../util-test/util-expect.spec';
 import { PoUploadDragDropDirective } from './po-upload-drag-drop.directive';
 
 @Component({
-  template:
-    `<div p-upload-drag-drop></div>`
+  template: `
+    <div p-upload-drag-drop></div>
+  `
 })
-
-export class TestComponent { }
+export class TestComponent {}
 
 describe('PoUploadDragDropDirective:', () => {
-
   let directiveElement;
   let directive;
 
@@ -24,7 +23,7 @@ describe('PoUploadDragDropDirective:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoUploadDragDropDirective, TestComponent ]
+      declarations: [PoUploadDragDropDirective, TestComponent]
     });
   });
 
@@ -45,7 +44,6 @@ describe('PoUploadDragDropDirective:', () => {
   });
 
   describe('Methods:', () => {
-
     it('onDragLeave: should call preventDefault and stopPropagation and call dragLeave.emit after 200ms', fakeAsync(() => {
       const fakeEvent = {
         preventDefault: () => {},
@@ -183,7 +181,7 @@ describe('PoUploadDragDropDirective:', () => {
 
       const fakeEvent = {
         dataTransfer: {
-          items: {name: 'name'}
+          items: { name: 'name' }
         }
       };
 
@@ -256,9 +254,13 @@ describe('PoUploadDragDropDirective:', () => {
     });
 
     it('getOnlyDirectories: should call `webkitGetAsEntry`, increment `invalidFileType` and not to call `getFilesFromEntry`', () => {
-      const dataTransfer = [{ webkitGetAsEntry: () => {
-          return { isFile: true };
-        }}];
+      const dataTransfer = [
+        {
+          webkitGetAsEntry: () => {
+            return { isFile: true };
+          }
+        }
+      ];
       directive['invalidFileType'] = 0;
 
       spyOn(dataTransfer[0], 'webkitGetAsEntry').and.returnValue({ isFile: true });
@@ -272,9 +274,13 @@ describe('PoUploadDragDropDirective:', () => {
     });
 
     it('getOnlyDirectories: should call `webkitGetAsEntry`, not increment `invalidFileType` and call `getFilesFromEntry`', () => {
-      const dataTransfer = [{ webkitGetAsEntry: () => {
-          return { isFile: false };
-        }}];
+      const dataTransfer = [
+        {
+          webkitGetAsEntry: () => {
+            return { isFile: false };
+          }
+        }
+      ];
       directive['invalidFileType'] = 0;
 
       spyOn(dataTransfer[0], 'webkitGetAsEntry').and.returnValue({ isFile: false });
@@ -288,7 +294,7 @@ describe('PoUploadDragDropDirective:', () => {
     });
 
     it('readFile: should call `file` and return expected value', async () => {
-      const file = {name: 'name.jpg', lastModified: 1527109493000};
+      const file = { name: 'name.jpg', lastModified: 1527109493000 };
       const fakeEntry = { file: callback => callback(file) };
 
       spyOn(fakeEntry, 'file').and.callThrough();
@@ -300,7 +306,7 @@ describe('PoUploadDragDropDirective:', () => {
     });
 
     it('readDirectory: should call `createRender`, `readDirectoryEntries` and return expected result', async () => {
-      const file = [{name: 'name.jpg', lastModified: 1527109493000}];
+      const file = [{ name: 'name.jpg', lastModified: 1527109493000 }];
       const fakeEntry = {
         createReader: () => {}
       };
@@ -316,7 +322,7 @@ describe('PoUploadDragDropDirective:', () => {
     });
 
     it('readDirectoryEntries: should call `readEntries`, `getFilesFromEntry` and return expected result', async () => {
-      const file = [{name: 'name.jpg', lastModified: 1527109493000}];
+      const file = [{ name: 'name.jpg', lastModified: 1527109493000 }];
       const directoryReader = {
         readEntries: callback => {
           callback([file]);
@@ -407,7 +413,7 @@ describe('PoUploadDragDropDirective:', () => {
 
       const fakeFiles = [
         { name: 'file1', type: '.txt', size: 300 },
-        { name: 'file2', type: '.pdf', size: 500 },
+        { name: 'file2', type: '.pdf', size: 500 }
       ];
 
       const fakeEvent = {
@@ -598,5 +604,4 @@ describe('PoUploadDragDropDirective:', () => {
       expect(fakeThis.setPipeArguments).toHaveBeenCalledWith('invalidDropArea', fakeThis.literals.files);
     });
   });
-
 });

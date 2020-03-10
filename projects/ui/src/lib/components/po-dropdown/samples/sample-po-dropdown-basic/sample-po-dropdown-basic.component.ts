@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-dropdown-basic',
   templateUrl: './sample-po-dropdown-basic.component.html'
 })
-export class SamplePoDropdownBasicComponent { }
+export class SamplePoDropdownBasicComponent {}

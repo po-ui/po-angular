@@ -6,5 +6,4 @@ describe('PoComboOptionTemplateDirective:', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
-
 });

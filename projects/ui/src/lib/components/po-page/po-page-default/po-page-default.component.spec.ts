@@ -27,10 +27,7 @@ eventResize.initEvent('resize', false, true);
 
 @Component({
   template: `
-    <po-page-default
-      p-title="Unit Test"
-      [p-actions]="actions">
-    </po-page-default>
+    <po-page-default p-title="Unit Test" [p-actions]="actions"> </po-page-default>
   `
 })
 class MobileComponent {
@@ -64,12 +61,7 @@ describe('PoPageDefaultComponent mobile', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        PoBreadcrumbModule,
-        PoButtonModule,
-        PoDropdownModule,
-      ],
+      imports: [RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
       declarations: [
         MobileComponent,
         PoPageDefaultComponent,
@@ -77,9 +69,7 @@ describe('PoPageDefaultComponent mobile', () => {
         PoPageContentComponent,
         PoPageHeaderComponent
       ],
-      providers: [
-        { provide: Router, useValue: routerStub }
-      ]
+      providers: [{ provide: Router, useValue: routerStub }]
     });
   });
 
@@ -137,7 +127,7 @@ describe('PoPageDefaultComponent mobile', () => {
 
   it('should call action', () => {
     const fakeThis = {
-      saveAction: function(val) { },
+      saveAction: function(val) {},
       undefinedAction: undefined
     };
 
@@ -152,10 +142,7 @@ describe('PoPageDefaultComponent mobile', () => {
 
 @Component({
   template: `
-    <po-page-default
-      p-title="Unit Test"
-      [p-actions]="actions">
-    </po-page-default>
+    <po-page-default p-title="Unit Test" [p-actions]="actions"> </po-page-default>
   `
 })
 class DesktopComponent {
@@ -167,7 +154,6 @@ class DesktopComponent {
   save(): boolean {
     return true;
   }
-
 }
 describe('PoPageDefaultComponent desktop', () => {
   let component: PoPageDefaultComponent;
@@ -176,12 +162,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        PoBreadcrumbModule,
-        PoButtonModule,
-        PoDropdownModule
-      ],
+      imports: [RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
       declarations: [
         DesktopComponent,
         PoPageDefaultComponent,
@@ -234,7 +215,6 @@ describe('PoPageDefaultComponent desktop', () => {
   });
 
   describe('Template', () => {
-
     it('actionIsDisabled: should disable page button with boolean value', () => {
       component.actions[0] = { label: 'First Action', disabled: true };
       component.actions[1] = { label: 'Second Action', disabled: true };
@@ -253,7 +233,6 @@ describe('PoPageDefaultComponent desktop', () => {
 
       const buttons = fixture.debugElement.nativeElement.querySelectorAll('.po-button:disabled');
       expect(buttons.length).toBe(2);
-
     });
 
     it('actionIsDisabled: should not disable page buttons with boolean value', () => {
@@ -302,7 +281,6 @@ describe('PoPageDefaultComponent desktop', () => {
   });
 
   describe('Methods', () => {
-
     it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {
       const url = 'http://portinari.io';
 
@@ -322,7 +300,6 @@ describe('PoPageDefaultComponent desktop', () => {
     });
 
     it('actionIsDisabled: should return true in function result', () => {
-
       const action = { disabled: () => true };
 
       const returnValue = component.actionIsDisabled(action);
@@ -333,7 +310,7 @@ describe('PoPageDefaultComponent desktop', () => {
     it('hasPageHeader: should return true if has breadcrumb', () => {
       component.actions = [];
       component.title = undefined;
-      component.breadcrumb = { items: [{ label: 'Breadcrumb' }]};
+      component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
 
       expect(component.hasPageHeader()).toBe(true);
     });
@@ -362,5 +339,4 @@ describe('PoPageDefaultComponent desktop', () => {
       expect(component.hasPageHeader()).toBe(false);
     });
   });
-
 });

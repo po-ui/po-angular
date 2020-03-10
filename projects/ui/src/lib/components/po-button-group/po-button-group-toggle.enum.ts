@@ -6,7 +6,6 @@
  * Define o tipo de seleção dos botões do `po-button-group`.
  */
 export enum PoButtonGroupToggle {
-
   /** Seleção múltipla. */
   Multiple = 'multiple',
 
@@ -15,5 +14,4 @@ export enum PoButtonGroupToggle {
 
   /** Seleção única. */
   Single = 'single'
-
 }

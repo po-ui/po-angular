@@ -99,9 +99,8 @@ describe('PoModalBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
-    const invalidValues = [ 0, 2018, 'string', false, null, undefined];
-    const validValues = [ true, '', 1];
+    const invalidValues = [0, 2018, 'string', false, null, undefined];
+    const validValues = [true, '', 1];
 
     it('p-hide-close: should update when set valid values.', () => {
       expectPropertiesValues(component, 'hideClose', validValues, true);
@@ -110,7 +109,5 @@ describe('PoModalBaseComponent:', () => {
     it('p-hide-close: shouldn´t update when set invalid values.', () => {
       expectPropertiesValues(component, 'hideClose', invalidValues, false);
     });
-
   });
-
 });

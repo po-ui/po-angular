@@ -13,11 +13,7 @@ describe('PoTextareaComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoTextareaComponent,
-        PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoTextareaComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -94,7 +90,6 @@ describe('PoTextareaComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('controlChangeEmitter: shouldn´t call change event if input value is not changed', () => {
       const fakeThis = {
         inputEl: {
@@ -216,7 +211,6 @@ describe('PoTextareaComponent:', () => {
 
       expect(fakeThis.change.emit).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
@@ -249,7 +243,5 @@ describe('PoTextareaComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

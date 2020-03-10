@@ -1,10 +1,9 @@
-import {  ElementRef, Directive } from '@angular/core';
+import { ElementRef, Directive } from '@angular/core';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
 @Directive()
 export abstract class PoNumberBaseComponent extends PoInputGeneric {
-
   type = 'number';
 
   constructor(elementRef: ElementRef) {
@@ -27,7 +26,6 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
   }
 
   validMaxLength(maxlength: number, value: string) {
-
     if (maxlength && value.length > maxlength) {
       const substringValue = value.toString().substring(0, maxlength);
 
@@ -54,7 +52,8 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
         } else {
           this.inputEl.nativeElement.value = value;
         }
-      } else { // Se for o valor for undefined, deve limpar o campo
+      } else {
+        // Se for o valor for undefined, deve limpar o campo
         this.inputEl.nativeElement.value = '';
       }
     }
@@ -62,7 +61,6 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
     // Emite evento quando o model é atualizado, inclusive a primeira vez
 
     this.changeModel.emit(value);
-
   }
 
   private isEndWithDot(value: string) {
@@ -72,5 +70,4 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
   private formatNumber(value) {
     return value ? Number(value) : null;
   }
-
 }

@@ -8,7 +8,6 @@ import { PoTableModule } from '../po-table.module';
 import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer.component';
 
 describe('PoTableSubtitleFooterComponent:', () => {
-
   let component: PoTableSubtitleFooterComponent;
   let fixture: ComponentFixture<PoTableSubtitleFooterComponent>;
 
@@ -24,9 +23,9 @@ describe('PoTableSubtitleFooterComponent:', () => {
 
     component = fixture.componentInstance;
     component.subtitles = [
-      {value: 'Value', label: 'Label', color: 'color-11', content: 'Success Content'},
-      {value: 'Value', label: 'Label', color: 'color-08', content: 'Warning Content'},
-      {value: 'Value', label: 'Label', color: 'color-07', content: 'Danger Content'}
+      { value: 'Value', label: 'Label', color: 'color-11', content: 'Success Content' },
+      { value: 'Value', label: 'Label', color: 'color-08', content: 'Warning Content' },
+      { value: 'Value', label: 'Label', color: 'color-07', content: 'Danger Content' }
     ];
 
     component.literals = poTableLiteralsDefault.pt;
@@ -39,7 +38,6 @@ describe('PoTableSubtitleFooterComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     const eventResize = document.createEvent('Event');
     eventResize.initEvent('resize', false, true);
 
@@ -62,7 +60,6 @@ describe('PoTableSubtitleFooterComponent:', () => {
     });
 
     describe('ngDoCheck', () => {
-
       it(`should call 'toggleShowCompleteSubtitle' and set 'isVisible' to 'true' if 'getContainerSize' returns a value greater than 0
       and 'isVisible' is  'false'`, () => {
         component['isVisible'] = false;
@@ -170,11 +167,9 @@ describe('PoTableSubtitleFooterComponent:', () => {
 
       expect(component['showSubtitle']).toBe(false);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should have three `po-table-subtitle-footer` if have three subtitles ', () => {
       const subtitles = fixture.debugElement.nativeElement.querySelectorAll('.po-table-subtitle-footer');
 
@@ -196,7 +191,5 @@ describe('PoTableSubtitleFooterComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-table-footer-show-subtitle')).toBeNull();
     });
-
   });
-
 });

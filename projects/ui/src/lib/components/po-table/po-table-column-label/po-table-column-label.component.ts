@@ -17,7 +17,6 @@ import { PoTableColumnLabel } from './po-table-column-label.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTableColumnLabelComponent {
-
   private _value: PoTableColumnLabel;
 
   /** Objeto com os dados do label */
@@ -32,6 +31,5 @@ export class PoTableColumnLabelComponent {
     return this._value;
   }
 
-  constructor(private poColorPaletteService: PoColorPaletteService) { }
-
+  constructor(private poColorPaletteService: PoColorPaletteService) {}
 }

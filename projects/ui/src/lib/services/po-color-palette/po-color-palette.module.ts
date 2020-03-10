@@ -8,9 +8,7 @@ import { PoColorPaletteService } from './po-color-palette.service';
  * Módulo do serviço `po-color-palette`.
  */
 @NgModule({
-  providers: [
-    PoColorPaletteService
-  ],
+  providers: [PoColorPaletteService],
   bootstrap: []
 })
-export class PoColorPaletteModule { }
+export class PoColorPaletteModule {}

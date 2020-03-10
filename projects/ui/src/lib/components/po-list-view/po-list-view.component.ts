@@ -1,5 +1,13 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterContentInit, ChangeDetectorRef, Component, ContentChild, DoCheck, IterableDiffers, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  DoCheck,
+  IterableDiffers,
+  ViewChild
+} from '@angular/core';
 
 import { isTypeof } from '../../utils/util';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
@@ -37,21 +45,16 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
     trigger('showHideDetail', [
       state('*', style({ 'overflow-y': 'visible' })),
       state('void', style({ 'overflow-y': 'hidden' })),
-      transition('* => void', [
-        style({ height: '*', 'overflow-y': 'hidden' }),
-        animate(100, style({ height: 0 }))
-      ]),
-      transition('void => *', [
-        style({ height: '0' }),
-        animate(100, style({ height: '*' }))
-      ])
+      transition('* => void', [style({ height: '*', 'overflow-y': 'hidden' }), animate(100, style({ height: 0 }))]),
+      transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
     ])
   ]
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
-
-  @ContentChild(PoListViewContentTemplateDirective, { static: true }) listViewContentTemplate: PoListViewContentTemplateDirective;
-  @ContentChild(PoListViewDetailTemplateDirective, { static: true }) listViewDetailTemplate: PoListViewDetailTemplateDirective;
+  @ContentChild(PoListViewContentTemplateDirective, { static: true })
+  listViewContentTemplate: PoListViewContentTemplateDirective;
+  @ContentChild(PoListViewDetailTemplateDirective, { static: true })
+  listViewDetailTemplate: PoListViewDetailTemplateDirective;
 
   @ViewChild('popup', { static: true }) poPopupComponent: PoPopupComponent;
 
@@ -99,7 +102,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   }
 
   checkTitleType(item: any) {
-    if (this.propertyLink && item[this.propertyLink] ) {
+    if (this.propertyLink && item[this.propertyLink]) {
       return item[this.propertyLink].startsWith('http') ? 'externalLink' : 'internalLink';
     }
 
@@ -107,8 +110,9 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   }
 
   getItemTitle(item) {
-    return this.hasContentTemplate && this.listViewContentTemplate.title ?
-    this.listViewContentTemplate.title(item) : item[this.propertyTitle];
+    return this.hasContentTemplate && this.listViewContentTemplate.title
+      ? this.listViewContentTemplate.title(item)
+      : item[this.propertyTitle];
   }
 
   hasItems(): boolean {
@@ -116,7 +120,9 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   }
 
   returnBooleanValue(listViewAction: PoListViewAction, item: any) {
-    return isTypeof(listViewAction.disabled, 'function') ? (<any>listViewAction).disabled(item) : listViewAction.disabled;
+    return isTypeof(listViewAction.disabled, 'function')
+      ? (<any>listViewAction).disabled(item)
+      : listViewAction.disabled;
   }
 
   trackBy(index) {
@@ -144,8 +150,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   private initShowDetail() {
     if (this.items && this.items.length > 0 && this.hasDetailTemplate && this.listViewDetailTemplate.showDetail) {
-      this.items.forEach(item => item.$showDetail = this.listViewDetailTemplate.showDetail(item));
+      this.items.forEach(item => (item.$showDetail = this.listViewDetailTemplate.showDetail(item)));
     }
   }
-
 }

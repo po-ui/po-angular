@@ -11,7 +11,6 @@ import { Observable, Subject } from 'rxjs';
  */
 @Injectable()
 export class PoMenuPanelItemsService {
-
   private subjectChild = new Subject<any>();
   private subjectParent = new Subject<any>();
 
@@ -34,5 +33,4 @@ export class PoMenuPanelItemsService {
   sendToChildMenuClicked(menu: object) {
     this.subjectParent.next(menu);
   }
-
 }

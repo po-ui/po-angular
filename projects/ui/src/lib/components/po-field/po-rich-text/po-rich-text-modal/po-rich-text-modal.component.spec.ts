@@ -16,12 +16,8 @@ describe('PoRichTextModalComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        PoButtonGroupModule,
-        PoModalModule,
-        PoFieldModule
-      ],
-      declarations: [],
+      imports: [PoButtonGroupModule, PoModalModule, PoFieldModule],
+      declarations: []
     });
   });
 
@@ -37,9 +33,8 @@ describe('PoRichTextModalComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it(`isUploadValid: should return true if uploadModel is not empty`, () => {
-      component.uploadModel = [ 'fileMock' ];
+      component.uploadModel = ['fileMock'];
 
       expect(component['isUploadValid']).toBeTruthy();
     });
@@ -57,7 +52,7 @@ describe('PoRichTextModalComponent:', () => {
     });
 
     it(`isUrlValid: should return true if url is valid`, () => {
-      component.modalImageForm = <any> {
+      component.modalImageForm = <any>{
         valid: true
       };
       component.urlImage = 'http://test.com';
@@ -66,7 +61,7 @@ describe('PoRichTextModalComponent:', () => {
     });
 
     it(`isUrlValid: should return false if url is empty`, () => {
-      component.modalImageForm = <any> {
+      component.modalImageForm = <any>{
         valid: false
       };
       component.urlImage = '';
@@ -75,7 +70,7 @@ describe('PoRichTextModalComponent:', () => {
     });
 
     it(`isUrlValid: should return false if url is invalid`, () => {
-      component.modalImageForm = <any> {
+      component.modalImageForm = <any>{
         invalid: false
       };
       component.urlImage = 'test';
@@ -162,11 +157,9 @@ describe('PoRichTextModalComponent:', () => {
       component['isLinkEditing'] = true;
       expect(component.linkConfirmAction()).toBe(component.literals.editLink);
     });
-
   });
 
   describe('Methods:', () => {
-
     it(`selectedLink: should set 'isSelectedLink' and 'linkElement'.`, () => {
       component['isSelectedLink'] = undefined;
       component['linkElement'] = undefined;
@@ -227,7 +220,7 @@ describe('PoRichTextModalComponent:', () => {
     });
 
     it(`convertToBase64: should call 'convertImageToBase64'.`, async () => {
-      component.uploadModel = <any> [ { rawFile: <any>'new file' }];
+      component.uploadModel = <any>[{ rawFile: <any>'new file' }];
       spyOn(UtilsFunction, 'convertImageToBase64');
 
       await component['convertToBase64']();
@@ -251,7 +244,7 @@ describe('PoRichTextModalComponent:', () => {
 
       component.emitCommand(value);
 
-      expect(component.command.emit).toHaveBeenCalledWith(({command, value}));
+      expect(component.command.emit).toHaveBeenCalledWith({ command, value });
     });
 
     it(`emitCommand: shouldn't call 'command' and 'emit'.`, () => {
@@ -262,7 +255,7 @@ describe('PoRichTextModalComponent:', () => {
 
       component.emitCommand(value);
 
-      expect(component.command.emit).not.toHaveBeenCalledWith(({command, value}));
+      expect(component.command.emit).not.toHaveBeenCalledWith({ command, value });
     });
 
     it(`emitCommand: shouldn't call 'command' and 'emit'.`, () => {
@@ -272,7 +265,7 @@ describe('PoRichTextModalComponent:', () => {
 
       component.emitCommand(value);
 
-      expect(component.command.emit).not.toHaveBeenCalledWith(({command, value}));
+      expect(component.command.emit).not.toHaveBeenCalledWith({ command, value });
     });
 
     it(`insertElementRef: should call 'retrieveCursorPosition' and 'modal.close' before 'emitCommand'`, async () => {
@@ -416,8 +409,10 @@ describe('PoRichTextModalComponent:', () => {
       component['toInsertLink'](urlLink, urlLinkText);
 
       expect(component['checkIfIsEmpty']).toHaveBeenCalled();
-      expect(component.command.emit)
-        .toHaveBeenCalledWith({command: 'InsertHTML', value: { urlLink: urlAsExternalLink, urlLinkText: urlLinkText } });
+      expect(component.command.emit).toHaveBeenCalledWith({
+        command: 'InsertHTML',
+        value: { urlLink: urlAsExternalLink, urlLinkText: urlLinkText }
+      });
     });
 
     it('toInsertLink: should call `command.emit` with `urlAsExternalLink` if `urlLink` not contains `http://`', () => {
@@ -430,8 +425,10 @@ describe('PoRichTextModalComponent:', () => {
 
       component['toInsertLink'](urlLink, urlLinkText);
 
-      expect(component.command.emit)
-        .toHaveBeenCalledWith({command: 'InsertHTML', value: { urlLink: urlAsExternalLink, urlLinkText: urlLinkText } });
+      expect(component.command.emit).toHaveBeenCalledWith({
+        command: 'InsertHTML',
+        value: { urlLink: urlAsExternalLink, urlLinkText: urlLinkText }
+      });
     });
 
     it('toInsertLink: should call `command.emit` with `urlLink` if `urlLink` contains `http://`', () => {
@@ -443,18 +440,20 @@ describe('PoRichTextModalComponent:', () => {
 
       component['toInsertLink'](urlLink, urlLinkText);
 
-      expect(component.command.emit)
-        .toHaveBeenCalledWith({command: 'InsertHTML', value: { urlLink: urlLink, urlLinkText: urlLinkText } });
+      expect(component.command.emit).toHaveBeenCalledWith({
+        command: 'InsertHTML',
+        value: { urlLink: urlLink, urlLinkText: urlLinkText }
+      });
     });
 
     it('formModelValidate: should apply `true` to `modalLinkForm.disabled` if `modalLinkForm.invalid` is `true`', () => {
       const fakeThis = {
-        urlLink : null,
+        urlLink: null,
         modalLinkConfirmAction: {
-          disabled : undefined
+          disabled: undefined
         },
-        modalLinkForm : {
-          invalid : true
+        modalLinkForm: {
+          invalid: true
         }
       };
 
@@ -465,12 +464,12 @@ describe('PoRichTextModalComponent:', () => {
 
     it('formModelValidate: should apply `false` to `modalLinkForm.disabled` if `modalLinkForm.invalid` is `false`', () => {
       const fakeThis = {
-        urlLink : null,
+        urlLink: null,
         modalLinkConfirmAction: {
-          disabled : undefined
+          disabled: undefined
         },
-        modalLinkForm : {
-          invalid : false
+        modalLinkForm: {
+          invalid: false
         }
       };
 
@@ -489,7 +488,7 @@ describe('PoRichTextModalComponent:', () => {
 
     it('restoreSelection: should return `true` if `savedSelection is `true`', () => {
       const fakeThis = {
-        savedSelection: true,
+        savedSelection: true
       };
 
       const expectedResult = component['restoreSelection'].call(fakeThis);
@@ -599,12 +598,12 @@ describe('PoRichTextModalComponent:', () => {
       expect(fakeControl.updateValueAndValidity).toHaveBeenCalled();
     });
 
-    it('prepareModalForLink: should call `saveSelectionText`, `formModelValidate` and `formReset`', fakeAsync( () => {
+    it('prepareModalForLink: should call `saveSelectionText`, `formModelValidate` and `formReset`', fakeAsync(() => {
       spyOn(component, <any>'saveSelectionText');
       spyOn(component, <any>'formReset');
       spyOn(component, <any>'formModelValidate');
 
-      component.savedCursorPosition = [ '<a href="">link</a>' ];
+      component.savedCursorPosition = ['<a href="">link</a>'];
 
       component['prepareModalForLink']();
       tick();
@@ -623,7 +622,7 @@ describe('PoRichTextModalComponent:', () => {
 
       component['isSelectedLink'] = true;
 
-      component.savedCursorPosition = [ '<a href="">link</a>' ];
+      component.savedCursorPosition = ['<a href="">link</a>'];
 
       component['prepareModalForLink']();
 
@@ -642,7 +641,7 @@ describe('PoRichTextModalComponent:', () => {
       component['isSelectedLink'] = false;
 
       component['isLinkEditing'] = false;
-      component.savedCursorPosition = [ '<a href="">link</a>' ];
+      component.savedCursorPosition = ['<a href="">link</a>'];
 
       component['prepareModalForLink']();
 
@@ -666,7 +665,7 @@ describe('PoRichTextModalComponent:', () => {
         getAttribute: () => {}
       };
 
-      spyOn( component['linkElement'], 'getAttribute').and.returnValue('test.com');
+      spyOn(component['linkElement'], 'getAttribute').and.returnValue('test.com');
 
       component['setLinkEditableForModal']();
 
@@ -674,8 +673,7 @@ describe('PoRichTextModalComponent:', () => {
       expect(component.urlLink).toBe('test.com');
     });
 
-    it('toEditLink: should call `parentElement.removeChild`, `toInsertLink` with `urlLink` and `urlLinkText` if `isIE` returns `true`',
-      () => {
+    it('toEditLink: should call `parentElement.removeChild`, `toInsertLink` with `urlLink` and `urlLinkText` if `isIE` returns `true`', () => {
       component['linkElement'] = {
         parentNode: { removeChild: () => {} }
       };
@@ -715,11 +713,9 @@ describe('PoRichTextModalComponent:', () => {
       expect(component['toInsertLink']).toHaveBeenCalledWith(link, linkText);
       expect(component['linkElement'].remove).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it(`should contain 'po-upload-input' if modalType === 'image'`, () => {
       component.modalType = PoRichTextModalType.Image;
 
@@ -766,5 +762,4 @@ describe('PoRichTextModalComponent:', () => {
       expect(nativeElement.querySelector('.po-modal-title').innerHTML).toBe(` ${component.literals.insertLink} `);
     });
   });
-
 });

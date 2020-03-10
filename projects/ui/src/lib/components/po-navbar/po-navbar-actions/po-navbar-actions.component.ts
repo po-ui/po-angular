@@ -7,7 +7,6 @@ import { PoNavbarIconAction } from '../interfaces/po-navbar-icon-action.interfac
   templateUrl: './po-navbar-actions.component.html'
 })
 export class PoNavbarActionsComponent {
-
   private _iconActions: Array<PoNavbarIconAction>;
 
   @Input('p-icon-actions') set iconActions(actions: Array<PoNavbarIconAction>) {
@@ -17,5 +16,4 @@ export class PoNavbarActionsComponent {
   get iconActions() {
     return this._iconActions;
   }
-
 }

@@ -6,7 +6,6 @@
  * Interface que define o objeto da série `PoChartType.Gauge`.
  */
 export interface PoChartGaugeSerie {
-
   color?: string;
 
   /**
@@ -31,5 +30,4 @@ export interface PoChartGaugeSerie {
    * - Valores superiores a 100 serão convertidos para 100.
    */
   value: number;
-
 }

@@ -1,47 +1,39 @@
 <h2>Process request with Http Interceptor</h2>
 <p>Edit response object by server with pattern expected by Http Interceptor:</p>
 
-<po-code-editor
-  [(ngModel)]="requestMessage"
-  p-height="330"
-  p-theme="vs-dark">
-</po-code-editor>
+<po-code-editor [(ngModel)]="requestMessage" p-height="330" p-theme="vs-dark"> </po-code-editor>
 
-<hr>
+<hr />
 
 <form #requestForm="ngForm">
   <div class="po-row">
-    <po-radio-group class="po-md-6"
+    <po-radio-group
+      class="po-md-6"
       name="status"
       [(ngModel)]="status"
       p-label="Http Status"
       [p-options]="statusOptions"
-      (p-change)="changeOption()">
+      (p-change)="changeOption()"
+    >
     </po-radio-group>
 
-    <po-switch class="po-md-6"
+    <po-switch
+      class="po-md-6"
       name="noMessageHeaderParam"
       [(ngModel)]="noMessageHeaderParam"
       p-help="Enable/disables notification"
       p-label="X-Portinari-No-Message"
       p-label-off="Off"
-      p-label-on="On">
+      p-label-on="On"
+    >
     </po-switch>
   </div>
 
   <div class="po-row po-mt-1">
-    <po-button
-      class="po-md-3"
-      p-label="Process Request"
-      (p-click)="processRequest()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Process Request" (p-click)="processRequest()"> </po-button>
   </div>
 
   <div class="po-row po-mt-1">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

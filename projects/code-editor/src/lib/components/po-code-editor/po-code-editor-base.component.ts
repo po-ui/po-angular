@@ -56,7 +56,6 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  */
 @Directive()
 export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor {
-
   private _height: number = 150;
   private _language = 'plainText';
   private _readonly: boolean = false;
@@ -112,7 +111,6 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
     if (this.editor) {
       this.setReadOnly(readonly);
     }
-
   }
 
   get readonly(): boolean {
@@ -194,7 +192,7 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
   onChangePropagate = (value: any) => {};
 
   getOptions() {
-    return {language: this.language, theme: this.theme, readOnly: this.readonly};
+    return { language: this.language, theme: this.theme, readOnly: this.readonly };
   }
 
   registerOnChange(fn: any): void {
@@ -216,7 +214,7 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
   protected convertToBoolean(val: any): boolean {
     if (typeof val === 'string') {
       val = val.toLowerCase().trim();
-      return (val === 'true' || val === 'on' || val === '');
+      return val === 'true' || val === 'on' || val === '';
     }
 
     if (typeof val === 'number') {
@@ -225,5 +223,4 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
 
     return !!val;
   }
-
 }

@@ -6,15 +6,14 @@ import { PoAccordionService } from '../services/po-accordion.service';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 describe('PoAccordionItemComponent:', () => {
-
   let component: PoAccordionItemComponent;
   let fixture: ComponentFixture<PoAccordionItemComponent>;
   let nativeElement: any;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoAccordionItemComponent ],
-      providers: [ PoAccordionService ]
+      declarations: [PoAccordionItemComponent],
+      providers: [PoAccordionService]
     });
   });
 
@@ -30,7 +29,6 @@ describe('PoAccordionItemComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('collapse: should set `expanded` to `false` and call `accordionService.sendToParentAccordionItemClicked`', () => {
       spyOn(component['accordionService'], 'sendToParentAccordionItemClicked');
 
@@ -49,5 +47,4 @@ describe('PoAccordionItemComponent:', () => {
       expect(component['accordionService'].sendToParentAccordionItemClicked).toHaveBeenCalled();
     });
   });
-
 });

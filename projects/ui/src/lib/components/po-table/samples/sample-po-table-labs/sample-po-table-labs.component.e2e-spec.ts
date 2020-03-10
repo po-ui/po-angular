@@ -85,5 +85,4 @@ describe('Po-Table-Labs E2E', () => {
     table.poCheckboxShowActions.click();
     expect(table.poTableActions.isPresent()).toBeTruthy();
   });
-
 });

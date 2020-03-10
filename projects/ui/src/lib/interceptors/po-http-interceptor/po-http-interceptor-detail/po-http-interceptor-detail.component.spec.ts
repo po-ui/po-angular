@@ -11,15 +11,14 @@ import { PoModalModule } from '../../../components/po-modal/po-modal.module';
 import { PoTagModule } from '../../../components/po-tag/po-tag.module';
 
 describe('PoHttpInterceptorDetailComponent:', () => {
-
   let component: PoHttpInterceptorDetailComponent;
   let fixture: ComponentFixture<PoHttpInterceptorDetailComponent>;
   let nativeElement: any;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoHttpInterceptorDetailComponent ],
-      imports: [ PoAccordionModule, PoModalModule, PoTagModule ]
+      declarations: [PoHttpInterceptorDetailComponent],
+      imports: [PoAccordionModule, PoModalModule, PoTagModule]
     });
   });
 
@@ -37,7 +36,6 @@ describe('PoHttpInterceptorDetailComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('details: should update title', () => {
       const details = [
         { code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' },
@@ -76,9 +74,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
         detailedMessage: 'detailed message',
         message: 'my message',
         type: 'success',
-        details: [
-          { code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' }
-        ]
+        details: [{ code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' }]
       };
 
       const expectedDetails = [
@@ -86,12 +82,12 @@ describe('PoHttpInterceptorDetailComponent:', () => {
           code: '200',
           detailedMessage: 'detailed message',
           message: 'my message',
-          type: 'success',
+          type: 'success'
         }
       ];
       component.details = [];
 
-      component.detail = [ detail ];
+      component.detail = [detail];
 
       expect(component.details).toEqual(expectedDetails);
     });
@@ -103,11 +99,9 @@ describe('PoHttpInterceptorDetailComponent:', () => {
 
       expect(component.close).toHaveBeenCalled();
     });
-
   });
 
   describe('Methods', () => {
-
     it('close: should call modal.close and closed.emit', () => {
       spyOn(component.modal, 'close');
       spyOn(component['closed'], 'emit');
@@ -171,9 +165,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     });
 
     it('formatTitle: should return literals.detail if details length is 1', () => {
-      const details = [
-        { code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' }
-      ];
+      const details = [{ code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' }];
 
       component.literals.detail = 'Detail';
 
@@ -221,11 +213,9 @@ describe('PoHttpInterceptorDetailComponent:', () => {
 
       expect(component.typeValue(type)).toBe('test');
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain three details if the length of the details is three', () => {
       const details = [
         { code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' },
@@ -261,9 +251,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     });
 
     it('shouldn`t contain `po-tag` if detail.type is undefined', () => {
-      const details = [
-        { code: '200', detailedMessage: 'test 1', message: 'message 1' }
-      ];
+      const details = [{ code: '200', detailedMessage: 'test 1', message: 'message 1' }];
 
       component.open();
       component.detail = details;
@@ -276,9 +264,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     });
 
     it('should contain `po-tag` if detail.type is defined', () => {
-      const details = [
-        { code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' }
-      ];
+      const details = [{ code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' }];
 
       component.open();
       component.detail = details;
@@ -289,7 +275,5 @@ describe('PoHttpInterceptorDetailComponent:', () => {
 
       expect(tag).toBeDefined();
     });
-
   });
-
 });

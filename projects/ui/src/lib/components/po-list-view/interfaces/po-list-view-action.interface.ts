@@ -6,7 +6,6 @@
  * Interface que define as ações do componente `po-list-view`.
  */
 export interface PoListViewAction {
-
   /** Rótulo da ação. */
   label: string;
 
@@ -69,5 +68,4 @@ export interface PoListViewAction {
    * > Caso o valor não seja especificado a ação será visível.
    */
   visible?: boolean;
-
 }

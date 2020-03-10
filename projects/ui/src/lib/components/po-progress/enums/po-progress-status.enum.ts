@@ -6,7 +6,6 @@
  * *Enum* `PoProgressStatus` para os status de barra de progresso.
  */
 export enum PoProgressStatus {
-
   /** Define o status `default` para a barra de progresso. */
   Default = 'default',
 
@@ -15,5 +14,4 @@ export enum PoProgressStatus {
 
   /** Define o status de `success` para a barra de progresso. */
   Success = 'success'
-
 }

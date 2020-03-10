@@ -25,11 +25,11 @@ describe('PoToolbarNotificationComponent: ', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]) ],
-      declarations: [ PoToolbarNotificationComponent, PoPopupComponent ],
-      schemas: [ NO_ERRORS_SCHEMA ],
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [PoToolbarNotificationComponent, PoPopupComponent],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: ElementRef, useValue: {elementRef} },
+        { provide: ElementRef, useValue: { elementRef } },
         { provide: Renderer2, useValue: renderer2 },
         { provide: PoControlPositionService, useValue: poControlPositionService }
       ]
@@ -49,7 +49,6 @@ describe('PoToolbarNotificationComponent: ', () => {
   });
 
   describe('Properties: ', () => {
-
     it('notificationNumber: should update property `p-notification-number` with `0` when invalid values', () => {
       const invalidValues = [undefined, null, {}, NaN, 'string', 0.1, false, true];
 
@@ -61,11 +60,9 @@ describe('PoToolbarNotificationComponent: ', () => {
 
       expectPropertiesValues(component, 'notificationNumber', validValues, validValues);
     });
-
   });
 
   describe('Templates: ', () => {
-
     it('should not show count badge when notificationNumber is 0', () => {
       component['_notificationNumber'] = 0;
 
@@ -97,7 +94,5 @@ describe('PoToolbarNotificationComponent: ', () => {
 
       expect(nativeElement.querySelector('.po-toolbar-notification-badge')).toBeTruthy();
     });
-
   });
-
 });

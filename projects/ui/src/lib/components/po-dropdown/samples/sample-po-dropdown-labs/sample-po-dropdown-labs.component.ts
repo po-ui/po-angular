@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption, PoDropdownAction, PoNotificationService } from '@portinari/portinari-ui';
+import {
+  PoCheckboxGroupOption,
+  PoSelectOption,
+  PoDropdownAction,
+  PoNotificationService
+} from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-dropdown-labs',
   templateUrl: './sample-po-dropdown-labs.component.html'
 })
 export class SamplePoDropdownLabsComponent implements OnInit {
-
   action: PoDropdownAction;
   actions: Array<PoDropdownAction>;
   label: string;
@@ -26,16 +30,14 @@ export class SamplePoDropdownLabsComponent implements OnInit {
     { value: 'po-icon-world', label: 'po-icon-world' }
   ];
 
-  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { value: 'disabled', label: 'Disabled' }
-  ];
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
 
   public readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Danger', value: 'danger' },
     { label: 'Default', value: 'default' }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -66,5 +68,4 @@ export class SamplePoDropdownLabsComponent implements OnInit {
   showAction(label: string): void {
     this.poNotification.success(`Action clicked: ${label}`);
   }
-
 }

@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoDatepickerRange, PoDatepickerRangeLiterals } f
   templateUrl: './sample-po-datepicker-range-labs.component.html'
 })
 export class SamplePoDatepickerRangeLabsComponent implements OnInit {
-
   clean: boolean;
   customLiterals: PoDatepickerRangeLiterals;
   datepickerRange: PoDatepickerRange;
@@ -58,7 +57,6 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     this.literals = undefined;
     this.properties = [];
     this.startDate = undefined;
-    setTimeout(() => this.datepickerRange = undefined);
+    setTimeout(() => (this.datepickerRange = undefined));
   }
-
 }

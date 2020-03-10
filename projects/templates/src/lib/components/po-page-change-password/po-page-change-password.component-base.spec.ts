@@ -1,11 +1,10 @@
-
 import { PoPageChangePasswordBaseComponent } from './po-page-change-password-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 class PoPageChangePasswordComponent extends PoPageChangePasswordBaseComponent {
   modalAction = { label: 'modal', action: undefined };
-  navigateTo(url: string): void { }
+  navigateTo(url: string): void {}
 }
 
 describe('PoPageChangePasswordBaseComponent:', () => {
@@ -20,7 +19,6 @@ describe('PoPageChangePasswordBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-hide-current-password: should update property with valid values.', () => {
       const validValues = [false, true, '', 'false', 'true'];
       const expectedValues = [false, true, true, false, true];
@@ -75,14 +73,12 @@ describe('PoPageChangePasswordBaseComponent:', () => {
     });
 
     it('p-recovery: shouldn`t set `recoveryUrlType` if value type is different from string`', () => {
-      const url =  {url: 'url'};
+      const url = { url: 'url' };
       component.recovery = url;
       component.recoveryUrlType = undefined;
 
       expect(component.recovery).toBe(url);
       expect(component.recoveryUrlType).toBe(undefined);
     });
-
   });
-
 });

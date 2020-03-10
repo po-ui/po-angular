@@ -14,7 +14,6 @@ import { convertToBoolean } from '../../../utils/util';
   templateUrl: './po-tab-button.component.html'
 })
 export class PoTabButtonComponent implements OnChanges {
-
   private _active: boolean;
   private _hide: boolean;
 
@@ -61,7 +60,7 @@ export class PoTabButtonComponent implements OnChanges {
   // Método recebido do usuário para ser disparado quando clicar na aba
   @Output('p-click') click = new EventEmitter();
 
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ((changes.hide && changes.hide.currentValue) || (changes.disabled && changes.disabled.currentValue)) {
@@ -84,5 +83,4 @@ export class PoTabButtonComponent implements OnChanges {
   private setDisplayOnHide() {
     this.elementRef.nativeElement.style.display = this.hide ? 'none' : '';
   }
-
 }
