@@ -1,3 +1,4 @@
+import { By } from '@angular/platform-browser';
 import { Component, ElementRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DecimalPipe } from '@angular/common';
@@ -608,9 +609,11 @@ describe('PoTableComponent:', () => {
     expect(component['verifyWidthColumnsPixels']()).toBe(false);
   });
 
-  xit('should set table height', () => {
+  it('should set table height', () => {
     component.columns = [...columns];
+    spyOn(component, <any>'getHeightTableFooter').and.returnValue(0);
     component.height = 150;
+
     fixture.detectChanges();
     expect(tableElement.offsetHeight + tableFooterElement.offsetHeight).toBe(150);
   });
@@ -1540,25 +1543,25 @@ describe('PoTableComponent:', () => {
   });
 
   describe('Templates:', () => {
-    // TODO Ng V9
-    xit('should contain `po-tooltip` class if `poTableColumn.tooltip`', fakeAsync(() => {
-      const mouseEnterEvent = new Event('mouseenter', { bubbles: true });
+
+    it('should contain `po-tooltip` class if `poTableColumn.tooltip`', fakeAsync(() => {
       component.columns = [{ property: 'link', label: 'linkTest', type: 'link', tooltip: 'tooltipTest' }];
       component.items = [{ link: 'tooltipTest' }];
       fixture.detectChanges();
 
-      const columnLink = nativeElement.querySelector('.po-table-link');
-      columnLink.dispatchEvent(mouseEnterEvent);
+      const columnLink = fixture.debugElement.query(By.css('.po-table-column-cell'));
+
+      columnLink.triggerEventHandler('mouseenter', null);
       fixture.detectChanges();
+
       tick(100);
 
       const poTooltip = nativeElement.querySelector('.po-tooltip');
-      expect(poTooltip.querySelector('.po-invisible')).toBeNull();
       expect(poTooltip).toBeTruthy();
 
-      const mouseLeaveEvent = new Event('mouseleave', { bubbles: true });
-      columnLink.dispatchEvent(mouseLeaveEvent);
+      columnLink.triggerEventHandler('mouseleave', null);
       fixture.detectChanges();
+
       tick(100);
 
       expect(nativeElement.querySelector('.po-tooltip.po-invisible')).toBeTruthy();

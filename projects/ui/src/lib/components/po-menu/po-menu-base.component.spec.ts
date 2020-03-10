@@ -137,7 +137,7 @@ describe('PoMenuBaseComponent:', () => {
     let menuItem: any = { label: 'Utilidades', link: 'utilities' };
     expect(component['setMenuType'](menuItem)).toBe('internalLink');
 
-    menuItem = { label: 'Utilidades', link: 'http://www.google.com' };
+    menuItem = { label: 'Utilidades', link: 'http://www.fakeUrlPo.com' };
     expect(component['setMenuType'](menuItem)).toBe('externalLink');
 
     menuItem = { label: 'Utilidades' };

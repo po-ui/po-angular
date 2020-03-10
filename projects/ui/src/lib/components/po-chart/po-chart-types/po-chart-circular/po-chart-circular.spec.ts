@@ -169,12 +169,13 @@ describe('PoChartCircular:', () => {
       expect(component['animationSetup']).toHaveBeenCalled();
     });
 
-    // TODO Ng V9
-    xit('changeTooltipPosition: should call `setTooltipPositions` and `renderer.setStyle` to set tooltip position', () => {
+    it('changeTooltipPosition: should call `setTooltipPositions` and `renderer.setStyle` to set tooltip position', () => {
       const tooltipPositions = { left: 10, top: 20 };
       const event = new MouseEvent('leave');
 
-      component.tooltipElement = component.chartBody.nativeElement.lastChild;
+      const tooltipElement = component.chartBody.nativeElement.querySelector('.po-chart-tooltip');
+
+      component.tooltipElement = tooltipElement;
 
       spyOn(component, <any>'showTooltip');
       spyOn(component, <any>'setTooltipPositions').and.returnValue(tooltipPositions);
@@ -197,7 +198,6 @@ describe('PoChartCircular:', () => {
     });
 
     it('createPath: should create a svg path element with some attributes and append it into `svgPathsWrapper`', () => {
-      const index = 0;
       const serie: PoPieChartSeries = { category: 'po', value: 2 };
       const svgPathsWrapper = { appendChild: () => {} };
       component.colors = PoChartColors[0];
@@ -213,7 +213,6 @@ describe('PoChartCircular:', () => {
     });
 
     it(`createPath: should call 'setElementAttributes' with 'svgPath' and 'serie'`, () => {
-      const index = 0;
       const tooltipText = 'tooltipText';
       const serie: PoPieChartSeries = { category: 'po', value: 2, tooltip: tooltipText };
       const svgPath = '<svg></svg>';

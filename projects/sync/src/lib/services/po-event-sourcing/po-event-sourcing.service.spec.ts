@@ -496,7 +496,7 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('buildUrlParams: should return url with the pageSize and page params defined', () => {
-      const base = 'http://test.com';
+      const base = 'http://fakeUrlPo.com';
       const page = 2;
 
       const fakeThis = {
@@ -505,7 +505,7 @@ describe('PoEventSourcingService:', () => {
 
       const result = eventSourcingService['buildUrlParams'].call(fakeThis, schemaCustumerMock, base, page);
 
-      expect(result).toBe('http://test.com?pageSize=20&page=2');
+      expect(result).toBe('http://fakeUrlPo.com?pageSize=20&page=2');
     });
 
     it('checkRecordIdExists: should return throw with a PoEventSourcingErrorResponse if recordId is falsy', () => {
@@ -945,7 +945,7 @@ describe('PoEventSourcingService:', () => {
       });
 
       it('should call the methods correctly to insert new item', async () => {
-        const url = 'http://test.com';
+        const url = 'http://fakeUrlPo.com';
 
         const schemaData = [
           { name: 'Customer name 1', [PoSchemaUtil.syncInternalIdFieldName]: '12345' },

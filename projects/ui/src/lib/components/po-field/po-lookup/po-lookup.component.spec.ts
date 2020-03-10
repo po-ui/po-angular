@@ -1,5 +1,5 @@
 import { ComponentRef } from '@angular/core';
-import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, inject, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -390,17 +390,6 @@ describe('PoLookupComponent:', () => {
   });
 
   describe('Templates:', () => {
-    xit('focus of search span should focus input', fakeAsync(() => {
-      const element = fixture.debugElement.nativeElement;
-      const input = element.querySelector('.po-input');
-
-      spyOn(input, 'focus');
-
-      element.querySelector('.po-icon-search').focus();
-      tick();
-
-      expect(input.focus).toHaveBeenCalled();
-    }));
 
     it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
       component.required = false;

@@ -1,4 +1,4 @@
-import { changePhantomProperties, expectBrowserLanguageMethod } from './../util-test/util-expect.spec';
+import { changeChromeProperties } from '../util-test/util-expect.spec';
 
 import {
   callFunction,
@@ -27,87 +27,135 @@ import {
 
 import * as UtilFunctions from './util';
 
-describe('Function browserLanguage:', () => {
-  xit('should return `pt` as default language', () => {
-    changePhantomProperties(navigator, 'language', '');
-    changePhantomProperties(navigator, 'userLanguage', '');
+describe('Language:', () => {
+  let navigatorLanguageSpy;
 
-    expect(UtilFunctions.browserLanguage()).toBe('pt');
+  beforeEach(() => {
+    navigatorLanguageSpy = spyOnProperty(window.navigator, 'language', 'get');
   });
 
-  it('should return `en` if browser language is `en-US`', () => {
-    changePhantomProperties(navigator, 'language', 'en-US');
-
-    expect(UtilFunctions.browserLanguage()).toBe('en');
+  afterEach(() => {
+    navigatorLanguageSpy.calls.reset();
   });
 
-  it('should return `es` if browser language is `es`', () => {
-    changePhantomProperties(navigator, 'language', 'es');
+  describe('Function browserLanguage:', () => {
+    it('should return `pt` as default language if language is undefined', () => {
+      navigatorLanguageSpy.and.returnValue(undefined);
 
-    expect(UtilFunctions.browserLanguage()).toBe('es');
+      expect(UtilFunctions.browserLanguage()).toBe('pt');
+    });
+
+    it('should return `pt` as default language if language is invalid', () => {
+      navigatorLanguageSpy.and.returnValue('wz');
+
+      expect(UtilFunctions.browserLanguage()).toBe('pt');
+    });
+
+    it('should return `en` if browser language is `en-US`', () => {
+      navigatorLanguageSpy.and.returnValue('en-US');
+
+      expect(UtilFunctions.browserLanguage()).toBe('en');
+    });
+
+    it('should return `es` if browser language is `es`', () => {
+      navigatorLanguageSpy.and.returnValue('es');
+
+      expect(UtilFunctions.browserLanguage()).toBe('es');
+    });
+
+    it('should return `ru` if browser language is `ru`', () => {
+      navigatorLanguageSpy.and.returnValue('ru');
+
+      expect(UtilFunctions.browserLanguage()).toBe('ru');
+    });
   });
 
-  it('should return `ru` if browser language is `ru`', () => {
-    changePhantomProperties(navigator, 'language', 'ru');
+  describe('Function getBrowserLanguage:', () => {
+    it('should return the value of `navigator.language` if it`s defined', () => {
+      navigatorLanguageSpy.and.returnValue('pt');
 
-    expect(UtilFunctions.browserLanguage()).toBe('ru');
-  });
-});
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+    });
 
-describe('Function getBrowserLanguage:', () => {
-  it('should return the value of `navigator.language` if it`s defined', () => {
-    changePhantomProperties(navigator, 'language', 'pt');
-    changePhantomProperties(navigator, 'userLanguage', 'es');
+    it('should return the value of `navigator.userLanguage` if it`s defined and `navigator.language` is undefined', () => {
+      navigatorLanguageSpy.and.returnValue(undefined);
 
-    expect(UtilFunctions.getBrowserLanguage()).toBe('pt');
-  });
+      changeChromeProperties(navigator, 'userLanguage', 'en');
 
-  it('should return the value of `navigator.userLanguage` if it`s defined and `navigator.language` is undefined', () => {
-    changePhantomProperties(navigator, 'language', undefined);
-    changePhantomProperties(navigator, 'userLanguage', 'es');
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
 
-    expect(UtilFunctions.getBrowserLanguage()).toBe('es');
-  });
+      changeChromeProperties(navigator, 'userLanguage', undefined);
+    });
 
-  it('should return undefined if `navigator.language` and `navigator.userLanguage` are undefined', () => {
-    changePhantomProperties(navigator, 'language', undefined);
-    changePhantomProperties(navigator, 'userLanguage', 'es');
+    it('should return undefined if `navigator.language` and `navigator.userLanguage` are undefined', () => {
+      navigatorLanguageSpy.and.returnValue(undefined);
 
-    expect(UtilFunctions.getBrowserLanguage()).toBe('es');
+      changeChromeProperties(navigator, 'userLanguage', undefined);
+
+      expect(UtilFunctions.getBrowserLanguage()).toBe(undefined);
+    });
   });
 
-  it('should return undefined if `navigator.language` and `navigator.userLanguage` are undefined', () => {
-    changePhantomProperties(navigator, 'language', undefined);
-    changePhantomProperties(navigator, 'userLanguage', 'ru');
+  describe('Function getShortBrowserLanguage:', () => {
+    it('should return `pt` as default language if language is undefined', () => {
+      navigatorLanguageSpy.and.returnValue(undefined);
 
-    expect(UtilFunctions.getBrowserLanguage()).toBe('ru');
-  });
-});
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+    });
 
-describe('Function getShortBrowserLanguage:', () => {
-  xit('should return `pt` as default language', () => {
-    expectBrowserLanguageMethod('', UtilFunctions, 'getShortBrowserLanguage', 'pt');
-    expectBrowserLanguageMethod('zw', UtilFunctions, 'getShortBrowserLanguage', 'pt');
-  });
+    it('should return `pt` as default language if language is invalid', () => {
+      navigatorLanguageSpy.and.returnValue('wz');
 
-  it('should return `pt` if browser language is `pt` or `pt-BR`', () => {
-    expectBrowserLanguageMethod('pt', UtilFunctions, 'getShortBrowserLanguage', 'pt');
-    expectBrowserLanguageMethod('pt-BR', UtilFunctions, 'getShortBrowserLanguage', 'pt');
-  });
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+    });
 
-  it('should return `en` if browser language is `en` or `en-US`', () => {
-    expectBrowserLanguageMethod('en', UtilFunctions, 'getShortBrowserLanguage', 'en');
-    expectBrowserLanguageMethod('en-US', UtilFunctions, 'getShortBrowserLanguage', 'en');
-  });
+    it('should return `pt` if browser language is `pt`', () => {
+      navigatorLanguageSpy.and.returnValue('pt');
 
-  it('should return `pt` if browser language is `es` or `es-ES`', () => {
-    expectBrowserLanguageMethod('es', UtilFunctions, 'getShortBrowserLanguage', 'es');
-    expectBrowserLanguageMethod('es-ES', UtilFunctions, 'getShortBrowserLanguage', 'es');
-  });
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+    });
 
-  it('should return `ru` if browser language is `ru` or `ru-RU`', () => {
-    expectBrowserLanguageMethod('ru', UtilFunctions, 'getShortBrowserLanguage', 'ru');
-    expectBrowserLanguageMethod('ru-RU', UtilFunctions, 'getShortBrowserLanguage', 'ru');
+    it('should return `pt` if browser language is `pt-BR`', () => {
+      navigatorLanguageSpy.and.returnValue('pt-BR');
+
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+    });
+
+    it('should return `en` if browser language is `en`', () => {
+      navigatorLanguageSpy.and.returnValue('en');
+
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
+    });
+
+    it('should return `en` if browser language is `en-US`', () => {
+      navigatorLanguageSpy.and.returnValue('en-US');
+
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
+    });
+
+    it('should return `es` if browser language is `es`', () => {
+      navigatorLanguageSpy.and.returnValue('es');
+
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('es');
+    });
+
+    it('should return `es` if browser language is `es-ES`', () => {
+      navigatorLanguageSpy.and.returnValue('es-ES');
+
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('es');
+    });
+
+    it('should return `ru` if browser language is `ru`', () => {
+      navigatorLanguageSpy.and.returnValue('ru');
+
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('ru');
+    });
+
+    it('should return `ru` if browser language is `ru-RU`', () => {
+      navigatorLanguageSpy.and.returnValue('ru-RU');
+
+      expect(UtilFunctions.getShortBrowserLanguage()).toBe('ru');
+    });
   });
 });
 
@@ -356,7 +404,7 @@ describe('Function validValueToOption:', () => {
 
 describe('Function isExternalLink:', () => {
   it('should return true if is external link', () => {
-    expect(isExternalLink('http://google.com.br')).toBe(true);
+    expect(isExternalLink('http://fakeUrlPo.com.br')).toBe(true);
   });
   it('should return false if is internal link', () => {
     expect(isExternalLink('./home')).toBe(false);
@@ -366,8 +414,8 @@ describe('Function isExternalLink:', () => {
 describe('Function openExternalLink:', () => {
   it('should open external link', () => {
     spyOn(window, 'open');
-    openExternalLink('http://google.com.br');
-    expect(window.open).toHaveBeenCalledWith('http://google.com.br', '_blank');
+    openExternalLink('http://fakeUrlPo.com.br');
+    expect(window.open).toHaveBeenCalledWith('http://fakeUrlPo.com.br', '_blank');
   });
 });
 

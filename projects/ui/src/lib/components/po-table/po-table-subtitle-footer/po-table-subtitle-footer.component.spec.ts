@@ -95,10 +95,7 @@ describe('PoTableSubtitleFooterComponent:', () => {
       });
     });
 
-    // Teste com problemas intermitentes
-    // Uncaught Error: macroTask 'setTimeout': can not transition to 'running', expecting state 'scheduled', was 'notScheduled'.
-    // O problema pode estar associada a forma que o componente e está estruturado e o uso do setTimeout.
-    xit('debounceResize: should call `toggleShowCompleteSubtitle`', fakeAsync(() => {
+    it('debounceResize: should call `toggleShowCompleteSubtitle`', fakeAsync(() => {
       spyOn(component, <any>'toggleShowCompleteSubtitle');
 
       component['debounceResize']();

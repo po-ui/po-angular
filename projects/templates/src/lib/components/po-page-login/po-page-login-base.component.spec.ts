@@ -155,7 +155,7 @@ describe('ThPageLoginBaseComponent: ', () => {
     });
 
     it('p-register-url: should update with valid values', () => {
-      const validValuesCustomField = ['/register', 'https://www.google.com'];
+      const validValuesCustomField = ['/register', 'https://www.fakeUrlPo.com'];
 
       expectPropertiesValues(component, 'registerUrl', validValuesCustomField, validValuesCustomField);
     });

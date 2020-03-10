@@ -14,10 +14,6 @@ describe('PoPageDefaultBaseComponent:', () => {
     expect(component instanceof PoPageDefaultBaseComponent).toBeTruthy();
   });
 
-  it('should be array empty', () => {
-    expectPropertiesValues(component, 'actions', [], []);
-  });
-
   it('should get title and call recalculateHeaderSize when set title', fakeAsync(() => {
     component.poPageContent = <any>{
       recalculateHeaderSize: () => {}

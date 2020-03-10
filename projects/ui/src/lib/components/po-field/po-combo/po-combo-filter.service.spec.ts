@@ -3,6 +3,7 @@ import { HttpRequest } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { PoComboFilterService } from './po-combo-filter.service';
+import { PoComboOption } from './interfaces/po-combo-option.interface';
 
 describe('PoComboFilterService ', () => {
   let comboService: PoComboFilterService;
@@ -98,44 +99,66 @@ describe('PoComboFilterService ', () => {
   describe('Methods:', () => {
     it('getFilteredData: should concatenate url with filter params', done => {
       const urlWithParams = 'http://mockurl.com?param1=value1&param2=value2&filter=test';
+      const parsedParams: Array<PoComboOption> = [{ label: 'value1', value: 'value1' }];
 
+      spyOn(comboService, <any>'parseToArrayComboOption').and.returnValue(parsedParams);
       spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
 
-      comboService.getFilteredData({ value: 'test' }, { param1: 'value1', param2: 'value2' }).subscribe(() => done());
+      comboService.getFilteredData({ value: 'test' }, { param1: 'value1', param2: 'value2' }).subscribe(response => {
+        expect(response).toEqual(parsedParams);
+        done();
+      });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
 
     it('getFilteredData: shouldn`t concatenate url with filter params if filter params is not an object', done => {
       const urlWithParams = 'http://mockurl.com?filter=test';
+      const parsedParams: Array<PoComboOption> = [{ label: 'value1', value: 'value1' }];
 
+      spyOn(comboService, <any>'parseToArrayComboOption').and.returnValue(parsedParams);
       spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
 
-      comboService.getFilteredData({ value: 'test' }, [{ param1: 'value1', param2: 'value2' }]).subscribe(() => done());
+      comboService.getFilteredData({ value: 'test' }, [{ param1: 'value1', param2: 'value2' }]).subscribe(response => {
+        expect(response).toEqual(parsedParams);
+        done();
+      });
 
-      httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
+      httpMock
+      .expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams)
+      .flush({});
     });
 
     it('getObjectByValue: should add filter params', done => {
+      const filteredObject: PoComboOption = { label: 'value1', value: 'value1' };
       const param = 'angular';
       const urlWithParams = 'http://mockurl.com/angular?param1=value1&param2=value2';
-
       const filterParams = { param1: 'value1', param2: 'value2' };
+
+      spyOn(comboService, <any>'parseToComboOption').and.returnValue(filteredObject);
       spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
 
-      comboService.getObjectByValue(param, filterParams).subscribe(() => done());
+      comboService.getObjectByValue(param, filterParams).subscribe(response => {
+        expect(response).toEqual(filteredObject);
+        done();
+      });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
 
     it('getObjectByValue: shouldn`t add filter params if filter params is not an object', done => {
+      const filteredObject: PoComboOption = { label: 'value1', value: 'value1' };
       const param = 'angular';
       const urlWithParams = 'http://mockurl.com/angular';
-
       const filterParams = [{ param1: 'value1', param2: 'value2' }];
+
+      spyOn(comboService, <any>'parseToComboOption').and.returnValue(filteredObject);
       spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
 
-      comboService.getObjectByValue(param, filterParams).subscribe(() => done());
+      comboService.getObjectByValue(param, filterParams).subscribe(response => {
+        expect(response).toEqual(filteredObject);
+        done();
+      });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });

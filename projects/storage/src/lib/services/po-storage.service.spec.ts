@@ -82,12 +82,14 @@ describe('PoStorageService:', () => {
       expect(PoStorageService['getConfig']()).toEqual(configDefault);
     });
 
-    xit('constructor: should call setStoragePromise with config', () => {
+    it('constructor: should call setStoragePromise with config', () => {
+      let storageService: PoStorageService;
+
       spyOn(PoStorageService.prototype, <any>'setStoragePromise');
 
-      PoStorageService.prototype.constructor(getConfigMock());
+      storageService = new PoStorageService(getConfigMock());
 
-      expect(PoStorageService.prototype['setStoragePromise']).toHaveBeenCalledWith(getConfigMock());
+      expect(storageService['setStoragePromise']).toHaveBeenCalledWith(getConfigMock());
     });
 
     it('appendArrayToArray: should call poStorageService.set with key and array concatenated', async () => {

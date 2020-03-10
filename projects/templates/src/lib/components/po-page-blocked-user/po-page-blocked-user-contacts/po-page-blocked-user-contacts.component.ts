@@ -32,10 +32,11 @@ export class PoPageBlockedUserContactsComponent implements AfterViewInit, OnChan
 
   @ViewChild('phoneItem', { static: true }) phoneItem: ElementRef;
 
-  constructor(private changeDetector: ChangeDetectorRef) {}
+  constructor(public changeDetector: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     this.checkContactItemWidth();
+    this.changeDetector.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {

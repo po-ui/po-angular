@@ -435,29 +435,11 @@ describe('PoPageDynamicDetailComponent:', () => {
       expect(component['poDialogService'].confirm).toHaveBeenCalled();
     });
 
-    xit('goBack: should call `navigateTo` and not call `history.back` if path is truthy', () => {
-      // const path = '/people/:id';
-
-      spyOn(component, <any>'navigateTo');
+    it('goBack: should call `history.back`', () => {
       spyOn(window.history, 'back');
 
-      // component['goBack'](path);
       component['goBack']();
 
-      expect(component['navigateTo']).toHaveBeenCalled();
-      expect(window.history.back).not.toHaveBeenCalled();
-    });
-
-    it('goBack: shouldn`t call `navigateTo` and call `history.back` if path is falsy', () => {
-      const path = '';
-
-      spyOn(component, <any>'navigateTo');
-      spyOn(window.history, 'back');
-
-      // component['goBack'](path);
-      component['goBack']();
-
-      expect(component['navigateTo']).not.toHaveBeenCalled();
       expect(window.history.back).toHaveBeenCalled();
     });
 

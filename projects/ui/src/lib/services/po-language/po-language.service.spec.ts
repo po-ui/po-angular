@@ -14,6 +14,10 @@ describe('PoLanguageService:', () => {
     localStorage.clear();
   });
 
+  afterEach(() => {
+    localStorage.clear();
+  });
+
   it('should be created', () => {
     expect(service instanceof PoLanguageService).toBeTruthy();
   });
@@ -63,13 +67,13 @@ describe('PoLanguageService:', () => {
     });
 
     it('getLanguage: should return browser language if `localStorage.getItem` and `languageDefault` return undefined.', () => {
-      const expectedBrowserLanguage = utils.getBrowserLanguage().toLowerCase();
+      spyOn(utils, 'getBrowserLanguage').and.returnValue('pt');
 
       service.languageDefault = undefined;
 
       spyOn(localStorage, 'getItem').and.returnValue(undefined);
 
-      expect(service.getLanguage()).toBe(expectedBrowserLanguage);
+      expect(service.getLanguage()).toBe('pt');
     });
 
     it('getLanguageDefault: should return `languageDefault` value.', () => {
@@ -126,12 +130,6 @@ describe('PoLanguageService:', () => {
       service.setLanguageDefault(languages.es);
 
       expect(service.languageDefault).toBe(languages.es);
-    });
-
-    xit(`setDefaultLanguage: shouldn't set languageDefault if language param isn't language.`, () => {
-      service.setLanguageDefault('po');
-
-      expect(service.languageDefault).toBeNull();
     });
 
     it(`setDefaultLanguage: shouldn't set 'languageDefault' if language param is undefined.`, () => {

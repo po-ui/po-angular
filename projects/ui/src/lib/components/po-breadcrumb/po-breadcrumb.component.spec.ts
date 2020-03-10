@@ -220,7 +220,7 @@ describe('PoBreadcrumbComponent:', () => {
             }
           }
         },
-        favoriteService: 'http://test.com'
+        favoriteService: 'http://fakeUrlPo.com'
       };
 
       expect(component['getBreadcrumbFavoriteWidth'].call(fakeThis)).toBe(120);
@@ -452,7 +452,7 @@ function createFakeThis(breadWidth: number) {
     getBreadcrumbFavoriteWidth: () => 100,
     getBreadcrumbWidth: breadcrumbFavorite => breadWidth,
     _breadcrumbItemsLenght: 300,
-    favoriteService: 'http://test.com',
+    favoriteService: 'http://fakeUrlPo.com',
     enableBreadcrumbResponsive: () => {},
     disableBreadcrumbResponsive: () => {}
   };

@@ -14,7 +14,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
   let nativeElement;
 
   const itemActive = { label: 'Active Route', link: 'route/active' };
-  const favoriteService = 'http://test.com.br';
+  const favoriteService = 'http://fakeUrlPo.com.br';
   const paramsService = {};
 
   const eventClick = document.createEvent('MouseEvents');

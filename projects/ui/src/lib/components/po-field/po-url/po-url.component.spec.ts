@@ -170,7 +170,7 @@ describe('PoUrlComponent:', () => {
         `http://foo.com/unicode_(✪)_in_parens`,
         `http://foo.com/(something)?after=parens `,
         `http://☺.damowmow.com/`,
-        `http://code.google.com/events/#&product=browser `,
+        `http://code.fakeUrlPo.com/events/#&product=browser `,
         `ftp://foo.bar/baz `,
         `http://-.~_!$&'()*+,;=:%40:80%2f::::::@example.com`,
         `https://foo_bar.example.com/`

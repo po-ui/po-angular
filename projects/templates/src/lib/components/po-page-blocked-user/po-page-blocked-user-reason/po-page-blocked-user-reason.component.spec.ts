@@ -9,7 +9,7 @@ import { PoI18nPipe } from './../../../../../../ui/src/lib/services/po-i18n/po-i
 import { PoPageBlockedUserReason } from '../enums/po-page-blocked-user-reason.enum';
 import { PoPageBlockedUserReasonComponent } from './po-page-blocked-user-reason.component';
 
-xdescribe('PoPageBlockedUserReasonContactsComponent: ', () => {
+describe('PoPageBlockedUserReasonContactsComponent: ', () => {
   let component: PoPageBlockedUserReasonComponent;
   let fixture: ComponentFixture<PoPageBlockedUserReasonComponent>;
 

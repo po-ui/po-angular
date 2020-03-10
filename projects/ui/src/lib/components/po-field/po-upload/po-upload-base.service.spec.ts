@@ -68,18 +68,13 @@ describe('PoUploadBaseService:', () => {
     expect(fakeThis.requests.length).toBe(1);
   }));
 
-  xit('should call sendFiles', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
-    const fakeFile = {
-      lastModified: 1504558774471,
-      lastModifiedDate: new Date(),
-      name: 'Teste',
-      size: 0,
-      type: '',
-      webkitRelativePath: ''
-    };
-
-    const files = [new PoUploadFile(fakeFile)];
-
+  it('should call sendFiles', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
+    const fakeFile = new Blob([]);
+    fakeFile['lastModified'] = 1504558774471;
+    fakeFile['lastModifiedDate'] = new Date();
+    fakeFile['name'] = 'Teste';
+    fakeFile['webkitRelativePath'] = '';
+    const files = [ new PoUploadFile(<File>fakeFile) ];
     const tOnUpload = new EventEmitter<any>();
     const callback = (file: PoUploadFile, event: any) => '';
 
