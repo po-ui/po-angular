@@ -310,5 +310,8 @@
       }
     }
   },
-  "defaultProject": "ui"
+  "defaultProject": "ui",
+  "cli": {
+    "analytics": "82248456-c902-40d3-990a-ab9bd538847a"
+  }
 }
