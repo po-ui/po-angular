@@ -12,7 +12,7 @@ export class SamplePoCalendarTicketSalesComponent {
   tickets: number;
 
   readonly pageActions: Array<PoPageAction> = [
-    { label: 'Buy tickets', action: this.buyTickets, disabled: this.isdisableBuy.bind(this) }
+    { label: 'Buy tickets', action: this.buyTickets.bind(this), disabled: this.isdisableBuy.bind(this) }
   ];
 
   readonly ticketsOptions: Array<PoSelectOption> = [

@@ -25,7 +25,7 @@ export class SamplePoMenuPanelLabsComponent implements OnInit {
   }
 
   addMenuItem(menuItem: PoMenuPanelItem) {
-    const newMenuItem = Object.assign({}, menuItem, { action: this.onMenuItemSelected });
+    const newMenuItem = Object.assign({}, menuItem, { action: this.onMenuItemSelected.bind(this) });
 
     this.menuItems = [...this.menuItems, newMenuItem];
   }

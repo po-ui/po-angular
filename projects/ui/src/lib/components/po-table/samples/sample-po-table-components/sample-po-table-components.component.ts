@@ -28,7 +28,7 @@ export class SamplePoTableComponentsComponent {
       ]
     },
     { property: 'component', type: 'link' },
-    { property: 'description', color: this.experimentalColor },
+    { property: 'description', color: this.experimentalColor.bind(this) },
     {
       property: 'extra',
       label: 'Extras',

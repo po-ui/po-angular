@@ -36,8 +36,8 @@ export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
   getPageAction() {
     const isDisabled = this.formEmail ? !this.formEmail.valid : true;
     return [
-      { label: 'Send', action: this.send, disabled: isDisabled },
-      { label: 'Clean', action: this.reset }
+      { label: 'Send', action: this.send.bind(this), disabled: isDisabled },
+      { label: 'Clean', action: this.reset.bind(this) }
     ];
   }
 

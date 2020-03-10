@@ -8,8 +8,8 @@ import { PoButtonGroupItem } from '@portinari/portinari-ui';
 })
 export class SamplePoButtonGroupBasicComponent {
   buttons: Array<PoButtonGroupItem> = [
-    { label: 'Button 1', action: this.action },
-    { label: 'Button 2', action: this.action }
+    { label: 'Button 1', action: this.action.bind(this) },
+    { label: 'Button 2', action: this.action.bind(this) }
   ];
 
   action(button) {

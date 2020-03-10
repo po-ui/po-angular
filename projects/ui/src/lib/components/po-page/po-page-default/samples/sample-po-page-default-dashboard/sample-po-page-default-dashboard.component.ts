@@ -31,10 +31,10 @@ export class SamplePoPageDefaultDashboardComponent {
   items: Array<object> = this.sampleDashboardService.getItems();
 
   public readonly actions: Array<PoPageAction> = [
-    { label: 'Share', action: this.modalOpen, icon: 'po-icon-share' },
+    { label: 'Share', action: this.modalOpen.bind(this), icon: 'po-icon-share' },
     { label: 'GitHub', url: 'https://github.com/portinariui/portinari-angular' },
     { label: 'Components', url: '/documentation' },
-    { label: 'Disable notification', action: this.disableNotification, disabled: () => this.isSubscribed }
+    { label: 'Disable notification', action: this.disableNotification.bind(this), disabled: () => this.isSubscribed }
   ];
 
   public readonly breadcrumb: PoBreadcrumb = {

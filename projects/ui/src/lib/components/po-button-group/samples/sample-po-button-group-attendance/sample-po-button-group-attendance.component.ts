@@ -8,9 +8,9 @@ import { PoButtonGroupItem, PoNotificationService } from '@portinari/portinari-u
 })
 export class SamplePoButtonGroupAttendanceComponent {
   attendances: Array<PoButtonGroupItem> = [
-    { label: 'Appointment', icon: 'po-icon-calendar', action: this.getPassword },
-    { label: 'Emergency', icon: 'po-icon-injector', action: this.getPassword },
-    { label: 'Exams', icon: 'po-icon-exam', action: this.getPassword }
+    { label: 'Appointment', icon: 'po-icon-calendar', action: this.getPassword.bind(this) },
+    { label: 'Emergency', icon: 'po-icon-injector', action: this.getPassword.bind(this) },
+    { label: 'Exams', icon: 'po-icon-exam', action: this.getPassword.bind(this) }
   ];
 
   constructor(private poNotification: PoNotificationService) {}
