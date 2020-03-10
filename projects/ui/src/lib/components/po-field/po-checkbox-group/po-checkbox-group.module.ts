@@ -12,16 +12,8 @@ import { PoCheckboxGroupComponent } from './po-checkbox-group.component';
  * Módulo do componente `po-checkbox-group`.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    PoFieldContainerModule
-  ],
-  exports: [
-    PoCheckboxGroupComponent
-  ],
-  declarations: [
-    PoCheckboxGroupComponent
-  ]
+  imports: [CommonModule, FormsModule, PoFieldContainerModule],
+  exports: [PoCheckboxGroupComponent],
+  declarations: [PoCheckboxGroupComponent]
 })
-export class PoCheckboxGroupModule { }
+export class PoCheckboxGroupModule {}

@@ -5,7 +5,8 @@
     [(ngModel)]="name"
     p-help="Contains planet name"
     p-label="Planet Name"
-    (p-change)="addFilter(name, 'name')">
+    (p-change)="addFilter(name, 'name')"
+  >
   </po-input>
 
   <po-combo
@@ -15,7 +16,8 @@
     p-help="Planet climate"
     p-label="Climate"
     [p-options]="climates"
-    (p-change)="addFilter(climate, 'climate')">
+    (p-change)="addFilter(climate, 'climate')"
+  >
   </po-combo>
 
   <po-combo
@@ -25,21 +27,15 @@
     p-help="Planet terrain"
     p-label="Terrain"
     [p-options]="terrains"
-    (p-change)="addFilter(terrain, 'terrain')">
+    (p-change)="addFilter(terrain, 'terrain')"
+  >
   </po-combo>
 
-  <po-disclaimer-group
-    [p-disclaimers]="filters"
-    (p-change)="changeFilters(filters)">
-  </po-disclaimer-group>
+  <po-disclaimer-group [p-disclaimers]="filters" (p-change)="changeFilters(filters)"> </po-disclaimer-group>
 </div>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-table
-    class="po-md-12"
-    [p-columns]="columns"
-    [p-items]="filteredItems">
-  </po-table>
+  <po-table class="po-md-12" [p-columns]="columns" [p-items]="filteredItems"> </po-table>
 </div>

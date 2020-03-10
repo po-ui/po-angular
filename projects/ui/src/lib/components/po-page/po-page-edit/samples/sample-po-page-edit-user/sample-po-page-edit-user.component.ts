@@ -11,7 +11,6 @@ import { PoNotificationService } from '@portinari/portinari-ui';
   templateUrl: './sample-po-page-edit-user.component.html'
 })
 export class SamplePoPageEditUserComponent implements OnInit {
-
   birthDate: Date;
   email: string;
   fathersName: string;
@@ -25,10 +24,7 @@ export class SamplePoPageEditUserComponent implements OnInit {
   userId: number;
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', action: this.beforeRedirect.bind(this) },
-      { label: 'User Edit' }
-    ]
+    items: [{ label: 'Home', action: this.beforeRedirect.bind(this) }, { label: 'User Edit' }]
   };
 
   @ViewChild('formEditUser', { static: true }) formEditUser: NgForm;
@@ -37,7 +33,7 @@ export class SamplePoPageEditUserComponent implements OnInit {
     private route: Router,
     private poDialog: PoDialogService,
     private poNotification: PoNotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.initialize();
@@ -66,19 +62,14 @@ export class SamplePoPageEditUserComponent implements OnInit {
   }
 
   private beforeRedirect(itemBreadcrumbLabel) {
-
     if (this.formEditUser.valid) {
       this.route.navigate(['/']);
     } else {
-
       this.poDialog.confirm({
         title: `Confirm redirect to ${itemBreadcrumbLabel}`,
         message: `There is data that has not been saved yet. Are you sure you want to quit?`,
         confirm: () => this.route.navigate(['/'])
       });
-
     }
-
   }
-
 }

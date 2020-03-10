@@ -1,8 +1,17 @@
 import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertToBoolean, formatYear,
-  getShortBrowserLanguage, isTypeof, setYearFrom0To100, validateDateRange } from '../../../utils/util';
+import {
+  convertDateToISODate,
+  convertDateToISOExtended,
+  convertIsoToDate,
+  convertToBoolean,
+  formatYear,
+  getShortBrowserLanguage,
+  isTypeof,
+  setYearFrom0To100,
+  validateDateRange
+} from '../../../utils/util';
 import { dateFailed, requiredFailed } from './../validators';
 import { InputBoolean } from '../../../decorators';
 import { PoMask } from '../po-input/po-mask';
@@ -55,7 +64,6 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  */
 @Directive()
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, Validator {
-
   private _format?: string = poDatepickerFormatDefault;
   private _isoFormat: PoDatepickerIsoFormat;
   private _maxDate: Date;
@@ -186,7 +194,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
       this._minDate = date;
     } else {
-      this._minDate = convertIsoToDate(value, true , false);
+      this._minDate = convertIsoToDate(value, true, false);
     }
 
     this.validateModel(convertDateToISOExtended(this.date, this.hour));
@@ -212,7 +220,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
       this._maxDate = date;
     } else {
-      this._maxDate = convertIsoToDate(value, false , true);
+      this._maxDate = convertIsoToDate(value, false, true);
     }
 
     this.validateModel(convertDateToISOExtended(this.date, this.hour));
@@ -304,7 +312,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   /** Evento disparado ao alterar valor do campo. */
   @Output('p-change') onchange?: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() { }
+  constructor() {}
 
   abstract writeValue(value: any): void;
 
@@ -325,7 +333,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
     setYearFrom0To100(date, year);
 
-    return (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) ? date : null;
+    return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day ? date : null;
   }
 
   // Formata a data.
@@ -393,33 +401,39 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     return new PoMask(mask, true);
   }
 
-  validate(c: AbstractControl): { [key: string]: any; } {
+  validate(c: AbstractControl): { [key: string]: any } {
     // Verifica se já possui algum error pattern padrão.
-    this.errorPattern = this.errorPattern !== 'Data inválida' && this.errorPattern !== 'Data fora do período' ? this.errorPattern : '';
+    this.errorPattern =
+      this.errorPattern !== 'Data inválida' && this.errorPattern !== 'Data fora do período' ? this.errorPattern : '';
 
     if (dateFailed(c.value)) {
       this.errorPattern = this.errorPattern || 'Data inválida';
 
-      return { date: {
-        valid: false,
-      }};
+      return {
+        date: {
+          valid: false
+        }
+      };
     }
 
     if (requiredFailed(this.required, this.disabled, c.value)) {
-      return { required: {
-        valid: false,
-      }};
+      return {
+        required: {
+          valid: false
+        }
+      };
     }
 
-    if ((this.date && !validateDateRange(this.date, this._minDate, this._maxDate))) {
+    if (this.date && !validateDateRange(this.date, this._minDate, this._maxDate)) {
       this.errorPattern = this.errorPattern || 'Data fora do período';
 
-      return { date: {
-        valid: false,
-      }};
+      return {
+        date: {
+          valid: false
+        }
+      };
     }
 
     return null;
   }
-
 }

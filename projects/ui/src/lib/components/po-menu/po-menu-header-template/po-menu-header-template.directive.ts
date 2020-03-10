@@ -39,7 +39,6 @@ import { Directive, TemplateRef } from '@angular/core';
   selector: '[p-menu-header-template]'
 })
 export class PoMenuHeaderTemplateDirective {
-
   // Necessário manter templateRef para o funcionamento do row template.
-  constructor(public templateRef: TemplateRef<any>) { }
+  constructor(public templateRef: TemplateRef<any>) {}
 }

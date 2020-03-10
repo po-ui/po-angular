@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-rich-text-basic',
   templateUrl: './sample-po-rich-text-basic.component.html'
 })
-export class SamplePoRichTextBasicComponent { }
+export class SamplePoRichTextBasicComponent {}

@@ -10,15 +10,14 @@ import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoCalendarService } from './services/po-calendar.service';
 
 describe('PoCalendarComponent:', () => {
-
   let component: PoCalendarComponent;
   let fixture: ComponentFixture<PoCalendarComponent>;
   let nativeElement;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoCalendarComponent ],
-      providers: [ PoCalendarService, PoCalendarLangService, PoDateService ]
+      declarations: [PoCalendarComponent],
+      providers: [PoCalendarService, PoCalendarLangService, PoDateService]
     });
   });
 
@@ -35,7 +34,6 @@ describe('PoCalendarComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnInit: should call `init`', () => {
       spyOn(component, <any>'init');
 
@@ -96,7 +94,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`onNextMonth: should call 'updateDisplay' with 'displayYear' and 'displayMonthNumber +1' if displayMonthNumber
       is less then 11`, () => {
-
       component.displayYear = 1997;
       component.displayMonthNumber = 10;
 
@@ -108,7 +105,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`onNextMonth: should call 'updateDisplay' with 'displayYear +1' and 0 if displayMonthNumber is greater or equal
       then 11`, () => {
-
       component.displayYear = 1997;
       component.displayMonthNumber = 11;
 
@@ -120,14 +116,13 @@ describe('PoCalendarComponent:', () => {
 
     it(`onPreviousMonth: should call 'updateDisplay' with 'displayYear' and 'displayMonthNumber -1' if displayMonthNumber is
       greater then 0`, () => {
+      component.displayYear = 1997;
+      component.displayMonthNumber = 10;
 
-        component.displayYear = 1997;
-        component.displayMonthNumber = 10;
+      spyOn(component, <any>'updateDisplay');
+      component.onPreviousMonth();
 
-        spyOn(component, <any>'updateDisplay');
-        component.onPreviousMonth();
-
-        expect(component['updateDisplay']).toHaveBeenCalledWith(1997, 9);
+      expect(component['updateDisplay']).toHaveBeenCalledWith(1997, 9);
     });
 
     it(`onPreviousMonth: should call 'updateDisplay' with 'displayYear -1' and 11 if displayMonthNumber is equal or less then 0`, () => {
@@ -251,7 +246,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`selectDay: should set 'dayVisible' to 'true', 'monthVisible' to 'false', 'yearVisible' to 'false' and
       'lastDisplay' to 'day'`, () => {
-
       component.selectDay();
 
       expect(component.dayVisible).toBeTruthy();
@@ -262,7 +256,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`selectMonth: should set 'dayVisible' to 'false', 'monthVisible' to 'true', 'yearVisible' to 'false' and
       'lastDisplay' to 'month'`, () => {
-
       component.selectMonth();
 
       expect(component.dayVisible).toBeFalsy();
@@ -305,7 +298,7 @@ describe('PoCalendarComponent:', () => {
       component['validatorChange'] = () => {};
       const model = ['value'];
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel'](model);
 
@@ -334,7 +327,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`writeValue: should set 'date' to 'undefined', call 'updateDate' with 'today' and not call 'writeDate' if value
       is undefined`, () => {
-
       const value = undefined;
 
       spyOn(component, <any>'writeDate');
@@ -368,7 +360,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getDecadeArray: should set 'displayDecade' to instance of 'Array' and call 'updateDecade' with 'year' if 'year'
       is multiple of 10`, () => {
-
       const year = 2000;
       component['displayDecade'] = undefined;
 
@@ -382,7 +373,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getDecadeArray: should set 'displayDecade' to instance of 'Array' and call 'updateDecade' with 'yearMultipleTen'
       if 'year' not is multiple of 10`, () => {
-
       const year = 1995;
       const yearMultipleTen = 1990;
       component['displayDecade'] = undefined;
@@ -397,7 +387,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getColorForDate: should return 'po-calendar-box-background-selected' if 'poDate.validateDateRange'
       return 'true'`, () => {
-
       spyOn(component.poDate, 'validateDateRange').and.returnValue(true);
 
       const result = component['getColorForDate'](new Date(), 'background');
@@ -407,7 +396,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getColorForDate: should return 'po-calendar-box-background-selected-disabled' if 'poDate.validateDateRange'
       return 'false'`, () => {
-
       spyOn(component.poDate, 'validateDateRange').and.returnValue(false);
 
       const result = component['getColorForDate'](new Date(), 'background');
@@ -416,7 +404,6 @@ describe('PoCalendarComponent:', () => {
     });
 
     it(`getColorForDate: should call 'poDate.validateDateRange' with 'date', 'minDate' and 'maxDate'`, () => {
-
       const date = new Date();
       component.minDate = new Date(2018, 4, 3);
       component.maxDate = new Date(2018, 4, 8);
@@ -430,7 +417,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getColorForDateRange: should return 'po-calendar-box-background' if 'poDate.validateDateRange'
       return 'true'`, () => {
-
       spyOn(component.poDate, 'validateDateRange').and.returnValue(true);
 
       const result = component['getColorForDateRange'](new Date(), 'background');
@@ -440,7 +426,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getColorForDateRange: should return 'po-calendar-box-background-disabled' if 'poDate.validateDateRange'
       return 'false'`, () => {
-
       spyOn(component.poDate, 'validateDateRange').and.returnValue(false);
 
       const result = component['getColorForDateRange'](new Date(), 'background');
@@ -449,7 +434,6 @@ describe('PoCalendarComponent:', () => {
     });
 
     it(`getColorForDateRange: should call 'poDate.validateDateRange' with 'date', 'minDate' and 'maxDate'`, () => {
-
       const date = new Date();
       component.minDate = new Date(2018, 4, 3);
       component.maxDate = new Date(2018, 4, 8);
@@ -463,7 +447,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getColorForToday: should return 'po-calendar-box-background-today' if 'poDate.validateDateRange'
       return 'true'`, () => {
-
       spyOn(component.poDate, 'validateDateRange').and.returnValue(true);
 
       const result = component['getColorForToday'](new Date(), 'background');
@@ -473,7 +456,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getColorForToday: should return 'po-calendar-box-background-today-disabled' if 'poDate.validateDateRange'
       return 'false'`, () => {
-
       spyOn(component.poDate, 'validateDateRange').and.returnValue(false);
 
       const result = component['getColorForToday'](new Date(), 'background');
@@ -482,7 +464,6 @@ describe('PoCalendarComponent:', () => {
     });
 
     it(`getColorForToday: should call 'poDate.validateDateRange' with 'date', 'minDate' and 'maxDate'`, () => {
-
       const date = new Date();
       component.minDate = new Date(2018, 4, 3);
       component.maxDate = new Date(2018, 4, 8);
@@ -495,7 +476,6 @@ describe('PoCalendarComponent:', () => {
     });
 
     it(`getDayColor: should return value of the 'getColorForDate' if 'equalsDate' return 'true'`, () => {
-
       const colorClass = 'po-calendar-box-background-selected';
       const dateParam = new Date(2018, 5, 6);
 
@@ -509,7 +489,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getDayColor: should call 'equalsDate' with 'dateParam' and 'this.date' and return value of the 'getColorForDate'
       if 'equalsDate' return 'true'`, () => {
-
       const colorClass = 'po-calendar-box-background-selected';
       const dateParam = new Date(2018, 5, 6);
 
@@ -524,7 +503,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getDayColor: should call 'equalsDate' with 'dateParam' and 'this.today' and return 'po-calendar-box-background-today'
       if 'equalsDate' return 'true'`, () => {
-
       const colorClass = 'po-calendar-box-background-today';
       const dateParam = new Date(2018, 5, 6);
 
@@ -539,7 +517,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`getDayColor: should call 'equalsDate', 'getColorForDateRange' and return value of the 'getColorForDateRange' if
       'equalsDate' return 'false'`, () => {
-
       const colorClass = 'po-calendar-box-background';
       const dateParam = new Date(2018, 5, 6);
       const local = 'background';
@@ -557,7 +534,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`init: should call 'updateDate' with today date if 'this.date' is undefined and 'poDate.isValidIso'
       return 'false'`, () => {
-
       component['date'] = undefined;
       component['today'] = new Date(2018, 5, 6);
 
@@ -571,7 +547,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`init: should call 'updateDate' with today date if 'this.date' is defined and 'poDate.isValidIso'
       return 'false'`, () => {
-
       component['date'] = new Date(2018, 4, 10);
       component['today'] = new Date(2018, 5, 6);
 
@@ -585,7 +560,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`init: should call 'updateDate' with today date if 'this.date' is undefined and 'poDate.isValidIso'
       return 'true'`, () => {
-
       component['date'] = undefined;
       component['today'] = new Date(2018, 5, 6);
 
@@ -599,7 +573,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`init: should call 'updateDate' with 'this.date' date if 'this.date' is defined and 'poDate.isValidIso'
       return 'true'`, () => {
-
       component['date'] = new Date(2018, 4, 10);
 
       spyOn(component, <any>'updateDate');
@@ -611,7 +584,6 @@ describe('PoCalendarComponent:', () => {
     });
 
     it(`init: should call 'poDate.convertDateToISO' with 'this.date', 'initializeLanguage' and 'selectDay'`, () => {
-
       component['date'] = new Date(2018, 4, 10);
 
       spyOn(component, <any>'updateDate');
@@ -698,7 +670,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`updateDisplay: should set 'displayMonthNumber', 'displayMonth', 'displayYear' and call 'getDecadeArray'
       with 'year'`, () => {
-
       const monthDays = [1, 2, 3, 4];
       const year = 2018;
       const month = 2;
@@ -716,7 +687,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`writeDate: should call 'selectDateFromDate' with 'value' if 'value' is instance of 'Date' and call
       'updateDate' with 'this.date'`, () => {
-
       const value = new Date();
       component['date'] = new Date();
 
@@ -733,7 +703,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`writeDate: should call 'writeDateIso' with 'value' if 'value' not is instance of 'Date' and call
       'updateDate' with 'this.date'`, () => {
-
       const value = '2018-07-05T03:00:00.000';
       component['date'] = new Date();
 
@@ -750,7 +719,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`writeDateIso: should call 'selectDateFromIso' with 'value' if 'poDate.isValidIso'
       return 'true'`, () => {
-
       const value = '2018-07-05T03:00:00.000';
       const date = new Date();
       component['date'] = date;
@@ -767,7 +735,6 @@ describe('PoCalendarComponent:', () => {
 
     it(`writeDateIso: should not call 'selectDateFromIso' with 'value' and set 'this.date' to 'undefined'
       if 'poDate.isValidIso' return 'false'`, () => {
-
       const value = '2018-07-05T03:00:00.000';
       component['date'] = new Date();
 
@@ -783,9 +750,7 @@ describe('PoCalendarComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     describe('Day visible:', () => {
-
       it('should show `po-calendar-content-list-day`', () => {
         component.dayVisible = true;
         fixture.detectChanges();
@@ -823,7 +788,9 @@ describe('PoCalendarComponent:', () => {
 
         fixture.detectChanges();
 
-        const calendarNav = fixture.debugElement.nativeElement.querySelector('.po-calendar-nav-title > .po-clickable:nth-of-type(2)');
+        const calendarNav = fixture.debugElement.nativeElement.querySelector(
+          '.po-calendar-nav-title > .po-clickable:nth-of-type(2)'
+        );
         calendarNav.click();
 
         expect(component.selectYear).toHaveBeenCalled();
@@ -880,7 +847,6 @@ describe('PoCalendarComponent:', () => {
     });
 
     describe('Month visible:', () => {
-
       it('should show `po-calendar-content-list-month`', () => {
         component.dayVisible = false;
         component.monthVisible = true;
@@ -976,7 +942,6 @@ describe('PoCalendarComponent:', () => {
     });
 
     describe('Year visible:', () => {
-
       it('po-calendar-content-list-year`', () => {
         component.dayVisible = false;
         component.monthVisible = false;

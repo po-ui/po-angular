@@ -40,19 +40,8 @@ import { PoNavbarItemNavigationModule } from './po-navbar-item-navigation/po-nav
  * ```
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoNavbarActionsModule,
-    PoNavbarItemsModule,
-    PoNavbarItemNavigationModule,
-    PoMenuModule
-  ],
-  declarations: [
-    PoNavbarComponent,
-    PoNavbarLogoComponent
-  ],
-  exports: [
-    PoNavbarComponent
-  ]
+  imports: [CommonModule, PoNavbarActionsModule, PoNavbarItemsModule, PoNavbarItemNavigationModule, PoMenuModule],
+  declarations: [PoNavbarComponent, PoNavbarLogoComponent],
+  exports: [PoNavbarComponent]
 })
-export class PoNavbarModule { }
+export class PoNavbarModule {}

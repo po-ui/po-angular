@@ -7,17 +7,15 @@ import { PoChartGaugeSerie } from '../po-chart-gauge-series.interface';
 import { PoChartGaugeTextContentComponent } from './po-chart-gauge-text-content.component';
 
 describe('PoChartGaugeTextContentComponent:', () => {
-
   let component: PoChartGaugeTextContentComponent;
   let fixture: ComponentFixture<PoChartGaugeTextContentComponent>;
   let nativeElement: any;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoTooltipModule ],
-      declarations: [ PoChartGaugeTextContentComponent ]
-    })
-    .compileComponents();
+      imports: [PoTooltipModule],
+      declarations: [PoChartGaugeTextContentComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -31,11 +29,10 @@ describe('PoChartGaugeTextContentComponent:', () => {
   });
 
   describe('Properties', () => {
-
     it('maxDescriptionWidth: should return the subtraction between `gaugeWidth` and gauge path width plus padding', () => {
       component['gaugeWidth'] = 200;
 
-      expect(component.maxDescriptionWidth).toEqual({'max-width': `152px`});
+      expect(component.maxDescriptionWidth).toEqual({ 'max-width': `152px` });
     });
 
     it('serie: should set `serieValueConverted` with value serie value converted', () => {
@@ -59,11 +56,9 @@ describe('PoChartGaugeTextContentComponent:', () => {
 
       expect(component.serie).toBe(undefined);
     });
-
   });
 
   describe('Methods:', () => {
-
     it(`hasSerieDescription: should return true if have 'serie.description'`, () => {
       component.serie = { value: 30, description: 'Thirty' };
 
@@ -107,7 +102,7 @@ describe('PoChartGaugeTextContentComponent:', () => {
     });
 
     it(`ngAfterViewInit: should call 'checkTextDescriptionSize'`, () => {
-      const spyOncheckTextDescriptionSize = spyOn(component, <any> 'checkTextDescriptionSize');
+      const spyOncheckTextDescriptionSize = spyOn(component, <any>'checkTextDescriptionSize');
       component.ngAfterViewInit();
 
       expect(spyOncheckTextDescriptionSize).toHaveBeenCalled();
@@ -116,7 +111,7 @@ describe('PoChartGaugeTextContentComponent:', () => {
     it(`ngAfterViewInit: shouldn´t call 'isEllipsisActive' if not have 'descriptionElement'.`, () => {
       component['descriptionElement'] = undefined;
 
-      const spyOnIsEllipsisActive = spyOn(component, <any> 'isEllipsisActive');
+      const spyOnIsEllipsisActive = spyOn(component, <any>'isEllipsisActive');
       component.ngAfterViewInit();
 
       expect(spyOnIsEllipsisActive).not.toHaveBeenCalled();
@@ -125,7 +120,7 @@ describe('PoChartGaugeTextContentComponent:', () => {
     it('convertValueInPercentFormat: should return value with percent format', () => {
       expect(component['convertValueInPercentFormat'](12.56)).toBe('12,6%');
       expect(component['convertValueInPercentFormat'](12)).toBe('12%');
-      expect(component['convertValueInPercentFormat'](12.60)).toBe('12,6%');
+      expect(component['convertValueInPercentFormat'](12.6)).toBe('12,6%');
       expect(component['convertValueInPercentFormat'](0)).toBe('0%');
     });
 
@@ -178,9 +173,9 @@ describe('PoChartGaugeTextContentComponent:', () => {
     });
 
     it(`checkTextDescriptionSize: should set 'tooltip' and 'changeDetector.detectChanges'
-    if 'descriptionElement' has value`, fakeAsync (() => {
+    if 'descriptionElement' has value`, fakeAsync(() => {
       component.serie = { value: 30, description: 'Thirty' };
-      component['descriptionElement'] = { nativeElement: { offsetWidth: 200, scrollWidth: 300} };
+      component['descriptionElement'] = { nativeElement: { offsetWidth: 200, scrollWidth: 300 } };
 
       spyOn(component['changeDetection'], 'detectChanges');
 
@@ -206,11 +201,9 @@ describe('PoChartGaugeTextContentComponent:', () => {
       expect(component['changeDetection'].detectChanges).not.toHaveBeenCalled();
       expect(component.tooltip).toBeUndefined();
     }));
-
   });
 
   describe('Templates:', () => {
-
     it(`should contain 'po-chart-gauge-text-content' and 'po-chart-gauge-text-value' if 'hasSerieValue' is true.`, () => {
       component.serie = { value: 30, description: 'describe' };
 
@@ -250,7 +243,5 @@ describe('PoChartGaugeTextContentComponent:', () => {
 
       expect(gaugeTextDescription).toBeNull();
     });
-
   });
-
 });

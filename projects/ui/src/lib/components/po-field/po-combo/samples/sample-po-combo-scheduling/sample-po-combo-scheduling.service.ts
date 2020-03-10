@@ -4,26 +4,31 @@ import { PoComboOptionGroup } from '@portinari/portinari-ui';
 
 @Injectable()
 export class SamplePoComboSchedulingService {
-
   getcities(): Array<PoComboOptionGroup> {
     return [
-      { label: 'São Paulo', options: [
-        { label: 'São Paulo', value: 'sao paulo' },
-        { label: 'Campinas', value: 'campinas' },
+      {
+        label: 'São Paulo',
+        options: [
+          { label: 'São Paulo', value: 'sao paulo' },
+          { label: 'Campinas', value: 'campinas' }
         ]
       },
-      { label: 'Paraná', options: [
-        { label: 'São José dos Pinhais', value: 'sao jose dos pinhais' },
-        { label: 'Londrina', value: 'londrina' },
-        { label: 'Maringá', value: 'maringa' },
+      {
+        label: 'Paraná',
+        options: [
+          { label: 'São José dos Pinhais', value: 'sao jose dos pinhais' },
+          { label: 'Londrina', value: 'londrina' },
+          { label: 'Maringá', value: 'maringa' }
         ]
       },
-      { label: 'Santa Catarina', options: [
-        { label: 'Joinville', value: 'joinville' },
-        { label: 'Florianópolis', value: 'florianopolis' },
-        { label: 'Itajaí', value: 'itajai' },
+      {
+        label: 'Santa Catarina',
+        options: [
+          { label: 'Joinville', value: 'joinville' },
+          { label: 'Florianópolis', value: 'florianopolis' },
+          { label: 'Itajaí', value: 'itajai' }
         ]
-      },
+      }
     ];
   }
 
@@ -40,5 +45,4 @@ export class SamplePoComboSchedulingService {
       { label: 'Orthopaedist', value: 'orthopaedist' }
     ];
   }
-
 }

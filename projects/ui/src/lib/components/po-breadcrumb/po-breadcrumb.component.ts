@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, IterableDiffers, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DoCheck,
+  ElementRef,
+  IterableDiffers,
+  OnDestroy,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 
 import { PoBreadcrumbBaseComponent } from './po-breadcrumb-base.component';
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
@@ -23,7 +32,6 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
   templateUrl: './po-breadcrumb.component.html'
 })
 export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
-
   showDropdown: boolean = false;
   showDropdownToggle: boolean = false;
   dropdownItems: Array<PoBreadcrumbItem>;
@@ -83,7 +91,7 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
       this.showDropdown = false;
       this.removeClickoutListener();
     }
-  }
+  };
 
   private checkClickOutElement(event, element) {
     return element && !element.nativeElement.contains(event.target);
@@ -111,8 +119,9 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
   }
 
   private getBreadcrumbFavoriteWidth() {
-    return this.favoriteService ? this.element.nativeElement
-      .querySelector('.po-breadcrumb-favorite').offsetWidth + 20 : 0;
+    return this.favoriteService
+      ? this.element.nativeElement.querySelector('.po-breadcrumb-favorite').offsetWidth + 20
+      : 0;
   }
 
   private getBreadcrumbWidth(breadcrumbFavorite) {
@@ -120,8 +129,9 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
   }
 
   private calcBreadcrumbItemsWidth() {
-    const breadcrumbItem = this.element.nativeElement
-      .querySelectorAll('.po-breadcrumb-item, .po-breadcrumb-item-unclickable');
+    const breadcrumbItem = this.element.nativeElement.querySelectorAll(
+      '.po-breadcrumb-item, .po-breadcrumb-item-unclickable'
+    );
 
     this._breadcrumbItemsLenght = Array.from(breadcrumbItem)
       .map(breadcrumb => breadcrumb['offsetWidth'])
@@ -143,13 +153,15 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
   private debounceResize() {
     clearTimeout(this.timeoutResize);
     this.timeoutResize = setTimeout(() => {
-
-      if (this.calculatedElement && !this.hiddenWithoutResize && this.breadcrumbElement.nativeElement.offsetWidth === 0) {
+      if (
+        this.calculatedElement &&
+        !this.hiddenWithoutResize &&
+        this.breadcrumbElement.nativeElement.offsetWidth === 0
+      ) {
         this.hiddenWithoutResize = true;
       } else {
         this.calcBreadcrumb();
       }
-
     }, 50);
   }
 
@@ -178,5 +190,4 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
   private removeResizeListener() {
     this.resizeListener();
   }
-
 }

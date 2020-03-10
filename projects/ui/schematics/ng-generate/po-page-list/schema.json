@@ -69,12 +69,10 @@
         "type": "list",
         "items": [
           { "value": "table", "label": "PO Table     [ https://portinari.io/documentation/po-table     ]" },
-          { "value": "list",  "label": "PO List View [ https://portinari.io/documentation/po-list-view ]" }
+          { "value": "list", "label": "PO List View [ https://portinari.io/documentation/po-list-view ]" }
         ]
       }
     }
-   },
-  "required": [
-    "name"
-  ]
+  },
+  "required": ["name"]
 }

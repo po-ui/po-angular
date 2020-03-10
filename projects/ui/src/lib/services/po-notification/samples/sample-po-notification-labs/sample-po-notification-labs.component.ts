@@ -15,11 +15,10 @@ import {
   providers: [PoNotificationService]
 })
 export class SamplePoNotificationLabsComponent implements OnInit {
-
   action: boolean;
   actionLabel: string;
   message: string;
-  orientation: number ;
+  orientation: number;
   type: number;
   duration: number;
 
@@ -37,7 +36,7 @@ export class SamplePoNotificationLabsComponent implements OnInit {
 
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -88,5 +87,4 @@ export class SamplePoNotificationLabsComponent implements OnInit {
       }
     }
   }
-
 }

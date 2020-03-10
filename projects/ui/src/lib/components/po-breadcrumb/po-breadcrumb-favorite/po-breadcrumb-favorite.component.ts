@@ -18,7 +18,6 @@ import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
   providers: [PoBreadcrumbFavoriteService]
 })
 export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
-
   favorite: boolean = false;
   private getSubscription: Subscription;
   private setSubscription: Subscription;
@@ -32,7 +31,7 @@ export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   // Parâmetro que será enviado junto com o serviço de favoritar.
   @Input('p-params-service') paramsService: object;
 
-  constructor(private service: PoBreadcrumbFavoriteService) { }
+  constructor(private service: PoBreadcrumbFavoriteService) {}
 
   ngOnInit() {
     this.service.configService(this.favoriteService, this.paramsService, this.itemActive);
@@ -40,7 +39,6 @@ export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
     if (this.getSubscription) {
       this.getSubscription.unsubscribe();
     }
@@ -55,11 +53,12 @@ export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   }
 
   private getStatusFavorite() {
-    this.getSubscription = this.service.getFavorite().subscribe(result => this.favorite = result.isFavorite);
+    this.getSubscription = this.service.getFavorite().subscribe(result => (this.favorite = result.isFavorite));
   }
 
   private setStatusFavorite(status) {
-    this.setSubscription = this.service.sendStatusFavorite(status).subscribe(result => this.favorite = result.isFavorite);
+    this.setSubscription = this.service
+      .sendStatusFavorite(status)
+      .subscribe(result => (this.favorite = result.isFavorite));
   }
-
 }

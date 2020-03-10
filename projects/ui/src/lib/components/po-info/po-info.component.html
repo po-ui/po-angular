@@ -1,24 +1,26 @@
 <div class="po-info" [class.po-row]="orientation === poInfoOrientation.Horizontal && labelSize">
-  <div class="po-info-container-title"
+  <div
+    class="po-info-container-title"
     [ngClass]="labelSize && orientation === poInfoOrientation.Horizontal ? 'po-sm-' + labelSize : ''"
     [class.po-info-label-horizontal]="orientation === poInfoOrientation.Horizontal"
-    [class.po-text-nowrap]="orientation === poInfoOrientation.Horizontal && !labelSize">
+    [class.po-text-nowrap]="orientation === poInfoOrientation.Horizontal && !labelSize"
+  >
     <span class="po-info-label">
       {{ orientation === poInfoOrientation.Horizontal ? label + ':' : label }}
     </span>
   </div>
 
-  <div [ngClass]="labelSize && orientation === poInfoOrientation.Horizontal ? 'po-sm-' + (12 - labelSize) : ''"
+  <div
+    [ngClass]="labelSize && orientation === poInfoOrientation.Horizontal ? 'po-sm-' + (12 - labelSize) : ''"
     [class.po-info-container-content]="orientation !== poInfoOrientation.Horizontal"
-    [class.po-info-value-horizontal]="orientation === poInfoOrientation.Horizontal">
-
+    [class.po-info-value-horizontal]="orientation === poInfoOrientation.Horizontal"
+  >
     <ng-container *ngIf="url; then infoLink; else infoValue"></ng-container>
   </div>
 </div>
 
 <ng-template #infoLink>
-  <ng-container *ngIf="isExternalLink; then externalLink; else internalLink">
-  </ng-container>
+  <ng-container *ngIf="isExternalLink; then externalLink; else internalLink"> </ng-container>
 </ng-template>
 
 <ng-template #infoValue>

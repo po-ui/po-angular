@@ -8,4 +8,4 @@ import { PoPopupAction } from '../po-popup/po-popup-action.interface';
  *
  * @usedBy PoDropdownComponent
  */
-export interface PoDropdownAction extends PoPopupAction { }
+export interface PoDropdownAction extends PoPopupAction {}

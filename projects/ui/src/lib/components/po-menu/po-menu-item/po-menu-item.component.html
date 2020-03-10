@@ -12,11 +12,8 @@
 </a>
 <!-- menu com sub itens -->
 <div *ngIf="type === 'subItems'" class="po-menu-item-link po-clickable">
-  <ng-container *ngTemplateOutlet="menuItemTemplate;"></ng-container>
-  <div #menuSubItems
-    class="po-menu-sub-items"
-    [hidden]="collapsedMenu"
-    [style.maxHeight.px]="maxHeight">
+  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+  <div #menuSubItems class="po-menu-sub-items" [hidden]="collapsedMenu" [style.maxHeight.px]="maxHeight">
     <div *ngFor="let subItem of subItems">
       <po-menu-item
         p-is-sub-item
@@ -29,14 +26,16 @@
         [p-level]="subItem.level"
         [p-link]="subItem.link"
         [p-sub-items]="subItem.subItems"
-        [p-type]="subItem.type">
+        [p-type]="subItem.type"
+      >
       </po-menu-item>
     </div>
   </div>
 </div>
 
 <ng-template #menuItemTemplate>
-  <div class="po-menu-item"
+  <div
+    class="po-menu-item"
     [class.po-menu-icon-container]="level === 1 && icon"
     [class.po-menu-item-selected]="isSelected"
     [class.po-menu-item-level-two]="level === 2"
@@ -45,21 +44,27 @@
     [class.po-menu-item-grouper-up]="type === 'subItems' && isOpened"
     [class.po-menu-item-grouper-down]="type === 'subItems' && !isOpened"
     [class.po-menu-sub-item-selected]="isSelectedSubItem"
-    (click)="clickMenuItem($event);">
-    <po-badge *ngIf="canShowBadge"
+    (click)="clickMenuItem($event)"
+  >
+    <po-badge
+      *ngIf="canShowBadge"
       [ngClass]="!collapsedMenu ? 'po-menu-badge-align' : 'po-menu-badge-align-collapsed'"
       [p-color]="badgeColor"
-      [p-value]="badgeValue">
+      [p-value]="badgeValue"
+    >
     </po-badge>
-    <span *ngIf="level === 1 && icon" class="po-icon {{icon}} po-menu-icon-item"></span>
-    <div *ngIf="badgeAlert"
+    <span *ngIf="level === 1 && icon" class="po-icon {{ icon }} po-menu-icon-item"></span>
+    <div
+      *ngIf="badgeAlert"
       class="po-color-07"
-      [ngClass]="!collapsedMenu ? 'po-menu-badge-alert' : 'po-menu-badge-alert-collapsed'">
-    </div>
-    <span *ngIf="type === 'subItems' && !collapsedMenu"
+      [ngClass]="!collapsedMenu ? 'po-menu-badge-alert' : 'po-menu-badge-alert-collapsed'"
+    ></div>
+    <span
+      *ngIf="type === 'subItems' && !collapsedMenu"
       class="po-icon po-menu-group-icon"
       [class.po-icon-arrow-up]="isOpened"
-      [class.po-icon-arrow-down]="!isOpened">
+      [class.po-icon-arrow-down]="!isOpened"
+    >
     </span>
     <div [class.po-menu-icon-label]="level === 1 && icon">
       {{ label }}

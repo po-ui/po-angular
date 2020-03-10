@@ -14,12 +14,16 @@ import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
 @Component({
   selector: 'sample-po-table-airfare',
   templateUrl: './sample-po-table-airfare.component.html',
-  providers: [ SamplePoTableAirfareService, PoDialogService ]
+  providers: [SamplePoTableAirfareService, PoDialogService]
 })
 export class SamplePoTableAirfareComponent {
-
   actions: Array<PoTableAction> = [
-    { action: this.discount.bind(this), icon: 'po-icon-finance', label: 'Apply Discount', disabled: this.validateDiscount.bind(this) },
+    {
+      action: this.discount.bind(this),
+      icon: 'po-icon-finance',
+      label: 'Apply Discount',
+      disabled: this.validateDiscount.bind(this)
+    },
     { action: this.details.bind(this), icon: 'po-icon-info', label: 'Details' }
   ];
   columns: Array<PoTableColumn> = this.sampleAirfare.getColumns();
@@ -34,14 +38,15 @@ export class SamplePoTableAirfareComponent {
   constructor(
     private sampleAirfare: SamplePoTableAirfareService,
     private poNotification: PoNotificationService,
-    private poDialog: PoDialogService) { }
+    private poDialog: PoDialogService
+  ) {}
 
   addToCart() {
     const selectedItems = this.poTable.getSelectedRows();
 
     if (selectedItems.length > 0) {
       this.poDialog.confirm({
-        title: 'Add to cart' ,
+        title: 'Add to cart',
         message: `Would you like to add ${selectedItems.length} items to cart?`,
         confirm: () => this.confirmItems(selectedItems),
         cancel: () => {}
@@ -56,14 +61,16 @@ export class SamplePoTableAirfareComponent {
           this.poNotification.success(`${this.getDescription(item)} added succesfully`);
           break;
         case 'reserved':
-          this.poNotification.warning(`${this.getDescription(item)} added succesfully, verify your e-mail to complete reservation`);
+          this.poNotification.warning(
+            `${this.getDescription(item)} added succesfully, verify your e-mail to complete reservation`
+          );
           break;
         case 'closed':
           this.poNotification.error(`${this.getDescription(item)} is closed and not available anymore`);
           break;
       }
     });
-    this.items.forEach(item => item.$selected = false);
+    this.items.forEach(item => (item.$selected = false));
   }
 
   collapseAll() {
@@ -88,7 +95,7 @@ export class SamplePoTableAirfareComponent {
 
   discount(item) {
     if (!item.disableDiscount) {
-      item.value = item.value - (item.value * 0.2);
+      item.value = item.value - item.value * 0.2;
       item.disableDiscount = true;
     }
   }
@@ -125,5 +132,4 @@ export class SamplePoTableAirfareComponent {
   private validateDiscount(item) {
     return item.disableDiscount;
   }
-
 }

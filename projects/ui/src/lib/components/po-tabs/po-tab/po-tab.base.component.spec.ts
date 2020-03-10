@@ -7,7 +7,6 @@ class PoTabComponent extends PoTabBaseComponent {
 }
 
 describe('PoTabBaseComponent', () => {
-
   const component: PoTabComponent = new PoTabComponent();
 
   it('should be created', () => {
@@ -59,6 +58,5 @@ describe('PoTabBaseComponent', () => {
 
       expectPropertiesValues(component, 'hide', invalidValues, expectedReturnFalse);
     });
-
   });
 });

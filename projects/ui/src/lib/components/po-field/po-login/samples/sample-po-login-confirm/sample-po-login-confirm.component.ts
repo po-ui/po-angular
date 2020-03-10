@@ -8,7 +8,6 @@ import { PoNotificationService } from '@portinari/portinari-ui';
   templateUrl: './sample-po-login-confirm.component.html'
 })
 export class SamplePoLoginConfirmComponent {
-
   userLogin: string;
   userPassword: string;
 
@@ -21,7 +20,7 @@ export class SamplePoLoginConfirmComponent {
 
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   openModal() {
     this.poModal.open();
@@ -40,5 +39,4 @@ export class SamplePoLoginConfirmComponent {
       this.cleanForm();
     }
   }
-
 }

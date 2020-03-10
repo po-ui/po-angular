@@ -9,17 +9,16 @@ import { PoNumberBaseComponent } from './po-number-base.component';
 
 @Component({
   template: `
-    <input type="number" #inp>
+    <input type="number" #inp />
     <span #clean></span>
   `
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {
-
   constructor(el: ElementRef) {
     super(el);
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
 }
@@ -40,7 +39,7 @@ describe('PoNumberBaseComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoFieldModule ],
+      imports: [PoFieldModule],
       declarations: [ContentProjectionComponent]
     });
   });
@@ -213,7 +212,6 @@ describe('PoNumberBaseComponent', () => {
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -316,5 +314,4 @@ describe('PoNumberBaseComponent', () => {
       expect(fakeThis.onChangePropagate).toHaveBeenCalled();
     });
   });
-
 });

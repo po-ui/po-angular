@@ -27,12 +27,7 @@ import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component
     PoPageModule,
     PoPageCustomizationModule
   ],
-  declarations: [
-    PoAdvancedFilterComponent,
-    PoPageDynamicSearchComponent
-  ],
-  exports: [
-    PoPageDynamicSearchComponent
-  ]
+  declarations: [PoAdvancedFilterComponent, PoPageDynamicSearchComponent],
+  exports: [PoPageDynamicSearchComponent]
 })
-export class PoPageDynamicSearchModule { }
+export class PoPageDynamicSearchModule {}

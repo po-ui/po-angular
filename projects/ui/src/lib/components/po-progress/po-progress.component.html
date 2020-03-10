@@ -1,14 +1,9 @@
 <div class="po-progress" [ngClass]="statusClass">
-
   <label *ngIf="text" class="po-progress-description-mobile po-progress-description-text">
     {{ text }}
   </label>
 
-  <po-progress-bar
-    class="po-progress-bar"
-    [p-indeterminate]="indeterminate"
-    [p-value]="value">
-  </po-progress-bar>
+  <po-progress-bar class="po-progress-bar" [p-indeterminate]="indeterminate" [p-value]="value"> </po-progress-bar>
 
   <div *ngIf="text" class="po-progress-description">
     <label class="po-progress-description-text">
@@ -20,16 +15,16 @@
     <span *ngIf="infoIcon" class="po-progress-info-icon po-icon {{ infoIcon }}"></span>
     <span *ngIf="info" class="po-progress-info-text">{{ info }}</span>
 
-    <button *ngIf="isAllowRetry"
+    <button
+      *ngIf="isAllowRetry"
       class="po-progress-info-icon-action po-icon po-icon-refresh po-clickable"
-      (click)="emitRetry()">
-    </button>
+      (click)="emitRetry()"
+    ></button>
 
-    <button *ngIf="isAllowCancel"
+    <button
+      *ngIf="isAllowCancel"
       class="po-progress-info-icon-action po-icon po-icon-close po-clickable"
-      (click)="emitCancellation()">
-    </button>
-
+      (click)="emitCancellation()"
+    ></button>
   </div>
-
 </div>

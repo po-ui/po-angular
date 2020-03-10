@@ -19,7 +19,6 @@ const poSlideIntervalDefault = 4000;
  */
 @Directive()
 export abstract class PoSlideBaseComponent {
-
   private _interval: number = poSlideIntervalDefault;
   private _height?: number;
   private _slides: Array<PoSlideItem | string | any>;
@@ -98,5 +97,4 @@ export abstract class PoSlideBaseComponent {
   protected abstract setSlideItems(value: Array<PoSlideItem | string | any>): void;
   protected abstract startSlide(): void;
   protected abstract startInterval(): void;
-
 }

@@ -16,9 +16,9 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
 
   let fakeInstance;
 
-  beforeEach((() => {
+  beforeEach(() => {
     component = new PoCheckboxGroupBaseComponent();
-    component.propagateChange = (value: any) => { };
+    component.propagateChange = (value: any) => {};
 
     valuesList = ['1'];
     valuesObject = { 1: true, 3: <any>null };
@@ -30,27 +30,26 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
 
     fakeInstance = {
       required: false,
-      changeValue: (value: any) => { },
-      checkOptionModel: (value: any) => { },
+      changeValue: (value: any) => {},
+      checkOptionModel: (value: any) => {},
       changeDetector: {
-        detectChanges: () => { }
+        detectChanges: () => {}
       },
       ngControl: {
         control: {
-          setValidators: ([]) => { }
+          setValidators: ([]) => {}
         }
       }
     };
-  }));
+  });
 
   it('should be created', () => {
-    component.registerOnChange(() => { });
-    component.registerOnTouched(() => { });
+    component.registerOnChange(() => {});
+    component.registerOnTouched(() => {});
     expect(component instanceof PoCheckboxGroupBaseComponent).toBeTruthy();
   });
 
   it('should call checkOptionModel and changeValue', () => {
-
     spyOn(fakeInstance, 'checkOptionModel');
     spyOn(fakeInstance, 'changeValue');
 
@@ -125,9 +124,13 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
 
     component.writeValue(Object.assign({}, valuesObject));
 
-    expect(component.checkedOptions).toEqual(jasmine.objectContaining({
-      1: true, 2: false, 3: null
-    }));
+    expect(component.checkedOptions).toEqual(
+      jasmine.objectContaining({
+        1: true,
+        2: false,
+        3: null
+      })
+    );
   });
 
   it('should updated checked options list on writeValue', () => {
@@ -194,16 +197,18 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
   });
 
   it('should generate options object', () => {
-    component.options = [{ value: '1', label: '1' }, { value: '3', label: '3' }];
+    component.options = [
+      { value: '1', label: '1' },
+      { value: '3', label: '3' }
+    ];
     component['generateCheckOptions'](Object.assign({}, valuesObject));
 
     expect(component.checkedOptions).toEqual(valuesObject);
   });
 
   describe('Methods: ', () => {
-
-    it('checkOption: shouldn´t call the methods checkOptionModel and changeValue when component disabled.' , () => {
-      const option = {label: '1', value: '1'};
+    it('checkOption: shouldn´t call the methods checkOptionModel and changeValue when component disabled.', () => {
+      const option = { label: '1', value: '1' };
       component.disabled = true;
       spyOn(component, <any>'checkOptionModel');
       spyOn(component, <any>'changeValue');
@@ -246,7 +251,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     it('validate: should return required obj when `requiredFailed` is true', () => {
       const validObj = {
         required: {
-          valid: false,
+          valid: false
         }
       };
 
@@ -260,7 +265,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
       const isInvalidIndeterminate: any = 'isInvalidIndeterminate';
       const validObj = {
         required: {
-          valid: false,
+          valid: false
         }
       };
 
@@ -283,7 +288,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel']([]);
 
@@ -350,7 +355,6 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
         expect(checkboxOption.hasOwnProperty('id')).toBeTruthy();
       });
     });
-
   });
 
   describe('Properties: ', () => {
@@ -379,10 +383,10 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     });
 
     it('p-options: should be update with valid values.', () => {
-      const validValues = [[], [{label: '1', value: '2'}]];
+      const validValues = [[], [{ label: '1', value: '2' }]];
 
-      spyOn(component, <any> 'removeDuplicatedOptions');
-      spyOn(component, <any> 'setCheckboxGroupOptionsView');
+      spyOn(component, <any>'removeDuplicatedOptions');
+      spyOn(component, <any>'setCheckboxGroupOptionsView');
 
       expectPropertiesValues(component, 'options', validValues, validValues);
       expect(component['removeDuplicatedOptions']).toHaveBeenCalled();
@@ -404,7 +408,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
       component.mdColumns = undefined;
 
       spyOn(UtilsFunction, 'convertToInt');
-      spyOn(component, <any> 'getGridSystemColumns').and.returnValue(6);
+      spyOn(component, <any>'getGridSystemColumns').and.returnValue(6);
 
       expectPropertiesValues(component, 'columns', 2, 6);
       expect(component.mdColumns).toBe(6);
@@ -412,7 +416,5 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
       expect(UtilsFunction.convertToInt).toHaveBeenCalled();
       expect(component['getGridSystemColumns']).toHaveBeenCalled();
     });
-
   });
-
 });

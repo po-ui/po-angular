@@ -10,18 +10,20 @@ import { PoPageContentComponent } from './po-page-content.component';
     <div class="po-toolbar"></div>
     <div class="po-page-header"></div>
   `,
-  styles: [`
-    .po-page-header {
-      height: 100px;
-      width: 100%;
-    }
-    .po-toolbar {
-      height: 33px;
-      width: 100%;
-    }
-  `]
+  styles: [
+    `
+      .po-page-header {
+        height: 100px;
+        width: 100%;
+      }
+      .po-toolbar {
+        height: 33px;
+        width: 100%;
+      }
+    `
+  ]
 })
-class ContentDivComponent { }
+class ContentDivComponent {}
 
 describe('PoPageContentComponent:', () => {
   let component: PoPageContentComponent;
@@ -34,7 +36,7 @@ describe('PoPageContentComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentDivComponent, PoPageContentComponent ]
+      declarations: [ContentDivComponent, PoPageContentComponent]
     });
   });
 
@@ -62,8 +64,7 @@ describe('PoPageContentComponent:', () => {
   });
 
   describe('Methods:', () => {
-
-    it('recalculateHeaderSize: should call setHeightContent and set `contentOpacity` to equal 1.', fakeAsync (() => {
+    it('recalculateHeaderSize: should call setHeightContent and set `contentOpacity` to equal 1.', fakeAsync(() => {
       spyOn(component, 'setHeightContent');
       component.recalculateHeaderSize();
       tick(100);
@@ -98,7 +99,5 @@ describe('PoPageContentComponent:', () => {
 
       expect(component.height).toBe(`${valueExpected}px`);
     });
-
   });
-
 });

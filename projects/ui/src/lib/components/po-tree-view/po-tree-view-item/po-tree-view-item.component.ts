@@ -10,12 +10,15 @@ import { PoTreeViewService } from '../services/po-tree-view.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('toggleBody', [
-      state('collapsed', style({
-        'overflow-y': 'hidden',
-        visibility: 'hidden',
-        opacity: 0,
-        height: '0'
-      })),
+      state(
+        'collapsed',
+        style({
+          'overflow-y': 'hidden',
+          visibility: 'hidden',
+          opacity: 0,
+          height: '0'
+        })
+      ),
       transition('expanded => collapsed', [
         style({ height: '*' }),
         animate(100, style({ opacity: 0 })),
@@ -30,7 +33,6 @@ import { PoTreeViewService } from '../services/po-tree-view.service';
   ]
 })
 export class PoTreeViewItemComponent {
-
   @Input('p-item') item: PoTreeViewItem;
 
   @Input('p-selectable') selectable: boolean;
@@ -39,7 +41,7 @@ export class PoTreeViewItemComponent {
     return !!(this.item.subItems && this.item.subItems.length);
   }
 
-  constructor(private treeViewService: PoTreeViewService) { }
+  constructor(private treeViewService: PoTreeViewService) {}
 
   onClick(event: MouseEvent) {
     event.preventDefault();

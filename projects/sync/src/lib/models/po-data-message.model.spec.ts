@@ -8,7 +8,6 @@ describe('PoDataMessage: ', () => {
   });
 
   describe('Methods: ', () => {
-
     it('getDateFieldName: should return the word `portinari_sync_date`', () => {
       expect(poDataMessage.getDateFieldName()).toEqual('portinari_sync_date');
     });
@@ -35,7 +34,5 @@ describe('PoDataMessage: ', () => {
 
       expect(resultHasNext).toBe(anyValue);
     });
-
   });
-
 });

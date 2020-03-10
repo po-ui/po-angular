@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-code-editor-terraform',
   templateUrl: './sample-po-code-editor-terraform.component.html'
 })
-export class SamplePoCodeEditorTerraformComponent { }
+export class SamplePoCodeEditorTerraformComponent {}

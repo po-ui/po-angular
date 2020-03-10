@@ -11,7 +11,6 @@ import { PoPageDynamicDetailOptions } from './po-page-dynamic-detail-options.int
  *
  */
 export interface PoPageDynamicDetailMetaData extends PoPageDynamicDetailOptions {
-
   /**
    *
    * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso sejam definidas ações na propriedade `p-actions`

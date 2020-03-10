@@ -1,9 +1,11 @@
 <div class="po-row">
-  <po-stepper #stepper class="po-lg-10 po-offset-lg-2 po-offset-xl-2"
+  <po-stepper
+    #stepper
+    class="po-lg-10 po-offset-lg-2 po-offset-xl-2"
     p-orientation="vertical"
     p-step-icons
-    p-step-size="42">
-
+    p-step-size="42"
+  >
     <po-step p-label="Welcome">
       <po-widget class="po-lg-8 po-mt-2" p-title="Realize & Show">
         <div class="tht-row">
@@ -14,11 +16,7 @@
         </div>
 
         <div class="tht-row">
-          <po-button class="po-sm-12 po-mt-2"
-            p-label="Yes!"
-            p-type="primary"
-            (p-click)="stepper.next()">
-          </po-button>
+          <po-button class="po-sm-12 po-mt-2" p-label="Yes!" p-type="primary" (p-click)="stepper.next()"> </po-button>
         </div>
       </po-widget>
     </po-step>
@@ -43,53 +41,64 @@
 
             <div class="po-font-title po-lg-2">
               <span class="po-icon po-icon-upload-cloud po-clickable" (click)="upload.selectFiles()"></span>
-              <span class="po-icon po-icon-clear-content po-clickable"
-                [ngClass]="{'po-invisible': project.length < 1}"
-                (click)="upload.clear()"></span>
+              <span
+                class="po-icon po-icon-clear-content po-clickable"
+                [ngClass]="{ 'po-invisible': project.length < 1 }"
+                (click)="upload.clear()"
+              ></span>
             </div>
           </div>
 
           <div class="po-row">
             <label class="po-sm-12 po-mt-3 po-font-text-bold" [class.po-invisible]="project.length < 1">Attached</label>
-            <po-upload #upload class="po-sm-12"
+            <po-upload
+              #upload
+              class="po-sm-12"
               name="project"
               [(ngModel)]="project"
               p-hide-select-button
               p-hide-send-button
               p-required
               p-url="https://thf.totvs.com.br/sample/api/uploads/addFile"
-              [p-restrictions]="restrictions">
+              [p-restrictions]="restrictions"
+            >
             </po-upload>
           </div>
 
           <div class="po-row">
-            <po-input class="po-sm-12"
+            <po-input
+              class="po-sm-12"
               name="title"
               [(ngModel)]="title"
               p-label="Title"
               p-placeholder="Be creative"
               p-required
-              [p-disabled]="project.length < 1">
+              [p-disabled]="project.length < 1"
+            >
             </po-input>
           </div>
 
           <div class="po-row">
-            <po-textarea class="po-sm-12"
+            <po-textarea
+              class="po-sm-12"
               name="description"
               [(ngModel)]="description"
               p-label="Description"
               p-maxlength="140"
               p-placeholder="Resume on few words"
               p-required
-              [p-disabled]="project.length < 1">
+              [p-disabled]="project.length < 1"
+            >
             </po-textarea>
           </div>
 
           <div class="tht-row">
-            <po-button class="po-sm-12 po-mt-2"
+            <po-button
+              class="po-sm-12 po-mt-2"
               p-label="Done"
               [p-disabled]="canSubmitProject()"
-              (p-click)="submitProject()">
+              (p-click)="submitProject()"
+            >
             </po-button>
           </div>
         </form>
@@ -103,35 +112,20 @@
             <p class="po-font-text-large">Confirm informations</p>
           </div>
 
-          <po-info class="po-md-4"
-            p-label="File name"
-            [p-value]="project[0].name || 'N/D'">
-          </po-info>
+          <po-info class="po-md-4" p-label="File name" [p-value]="project[0].name || 'N/D'"> </po-info>
 
-          <po-info class="po-md-4"
-            p-label="Title"
-            [p-value]="title || 'N/D'">
-          </po-info>
+          <po-info class="po-md-4" p-label="Title" [p-value]="title || 'N/D'"> </po-info>
 
-          <po-info class="po-md-4"
-            p-label="Description"
-            [p-value]="description || 'N/D'">
-          </po-info>
+          <po-info class="po-md-4" p-label="Description" [p-value]="description || 'N/D'"> </po-info>
 
-          <po-button class="po-sm-12 po-mt-2"
-            p-label="Confirm"
-            (p-click)="confirmSubmit()">
-          </po-button>
+          <po-button class="po-sm-12 po-mt-2" p-label="Confirm" (p-click)="confirmSubmit()"> </po-button>
         </div>
       </po-widget>
     </po-step>
   </po-stepper>
-
 </div>
 
-<po-modal #sucessData
-  p-title="Confirmation"
-  [p-primary-action]="confirm">
+<po-modal #sucessData p-title="Confirmation" [p-primary-action]="confirm">
   <div class="po-row">
     <p class="po-sm-12 po-font-title">
       Project successfully submited!

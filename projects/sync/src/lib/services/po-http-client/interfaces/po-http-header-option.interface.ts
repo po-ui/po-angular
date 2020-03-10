@@ -9,11 +9,9 @@
  */
 
 export interface PoHttpHeaderOption {
-
   /** Nome do cabeçalho. */
   name: string;
 
   /** Valor do cabeçalho. */
   value: string;
-
 }

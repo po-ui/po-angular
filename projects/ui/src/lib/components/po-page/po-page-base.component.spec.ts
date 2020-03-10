@@ -6,5 +6,4 @@ describe('PoPageBaseComponent', () => {
   it('should be created', () => {
     expect(component instanceof PoPageBaseComponent).toBeTruthy();
   });
-
 });

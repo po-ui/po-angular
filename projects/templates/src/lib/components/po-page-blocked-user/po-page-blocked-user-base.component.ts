@@ -68,8 +68,7 @@ const PoPageBlockedUserParamsDefault: PoPageBlockedUserReasonParams = { attempts
  */
 @Directive()
 export class PoPageBlockedUserBaseComponent {
-
-  private _params: PoPageBlockedUserReasonParams = {...PoPageBlockedUserParamsDefault};
+  private _params: PoPageBlockedUserReasonParams = { ...PoPageBlockedUserParamsDefault };
   private _reason: PoPageBlockedUserReason = PoPageBlockedUserReason.None;
   private _urlBack: string = '/';
 
@@ -118,7 +117,7 @@ export class PoPageBlockedUserBaseComponent {
   @Input('p-params') set params(value: PoPageBlockedUserReasonParams) {
     if (value instanceof Object) {
       const keys = Object.keys(value);
-      const newParams = {...PoPageBlockedUserParamsDefault};
+      const newParams = { ...PoPageBlockedUserParamsDefault };
 
       keys.forEach(key => {
         newParams[key] = value[key];
@@ -126,7 +125,7 @@ export class PoPageBlockedUserBaseComponent {
 
       this._params = newParams;
     } else {
-      this._params = {...PoPageBlockedUserParamsDefault};
+      this._params = { ...PoPageBlockedUserParamsDefault };
     }
   }
 
@@ -149,7 +148,9 @@ export class PoPageBlockedUserBaseComponent {
    * @default `PoPageBlockedUserReason.None`
    */
   @Input('p-reason') set reason(value: PoPageBlockedUserReason) {
-    this._reason = (<any>Object).values(PoPageBlockedUserReason).includes(value) ? value : PoPageBlockedUserReasonDefault;
+    this._reason = (<any>Object).values(PoPageBlockedUserReason).includes(value)
+      ? value
+      : PoPageBlockedUserReasonDefault;
   }
 
   get reason() {
@@ -181,5 +182,4 @@ export class PoPageBlockedUserBaseComponent {
   get urlBack() {
     return this._urlBack;
   }
-
 }

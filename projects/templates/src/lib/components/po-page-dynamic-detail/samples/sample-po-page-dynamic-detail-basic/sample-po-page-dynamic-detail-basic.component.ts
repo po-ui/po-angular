@@ -8,7 +8,6 @@ import { PoPageDynamicDetailField } from '@portinari/portinari-templates';
   templateUrl: './sample-po-page-dynamic-detail-basic.component.html'
 })
 export class SamplePoPageDynamicDetailBasicComponent {
-
   public readonly serviceApi = 'https://thf.totvs.com.br/sample/api/po-metadata/v1/people';
 
   public readonly actions = {
@@ -22,11 +21,7 @@ export class SamplePoPageDynamicDetailBasicComponent {
   };
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', link: '/' },
-      { label: 'People', link: '/dynamic-table' },
-      { label: 'Detail' }
-    ]
+    items: [{ label: 'Home', link: '/' }, { label: 'People', link: '/dynamic-table' }, { label: 'Detail' }]
   };
 
   public readonly fields: Array<PoPageDynamicDetailField> = [
@@ -44,7 +39,6 @@ export class SamplePoPageDynamicDetailBasicComponent {
     { property: 'mother', label: 'Mother`s name' },
     { property: 'street', divider: 'Address' },
     { property: 'city' },
-    { property: 'country' },
+    { property: 'country' }
   ];
-
 }

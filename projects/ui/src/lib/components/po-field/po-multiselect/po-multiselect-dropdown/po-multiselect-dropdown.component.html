@@ -1,10 +1,11 @@
 <div #container class="po-multiselect-container" [hidden]="!show">
-
-  <po-multiselect-search #searchElement
+  <po-multiselect-search
+    #searchElement
     *ngIf="!hideSearch && haveOptions"
     [p-literals]="literals"
     [p-placeholder]="placeholderSearch"
-    (p-change)="callChangeSearch($event)">
+    (p-change)="callChangeSearch($event)"
+  >
   </po-multiselect-search>
 
   <ul class="po-multiselect-items-container" [scrollTop]="scrollTop" #ulElement>
@@ -12,10 +13,12 @@
       <span> {{ literals.noData }}</span>
     </div>
 
-    <po-multiselect-item *ngFor="let option of options"
+    <po-multiselect-item
+      *ngFor="let option of options"
       [p-label]="option.label"
       [p-selected]="isSelectedItem(option)"
-      (p-change)="clickItem($event, option)">
+      (p-change)="clickItem($event, option)"
+    >
     </po-multiselect-item>
   </ul>
 </div>

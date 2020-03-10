@@ -27,11 +27,7 @@ import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dyna
     PoPageCustomizationModule,
     PoPageDynamicModule
   ],
-  declarations: [
-    PoPageDynamicTableComponent
-  ],
-  exports: [
-    PoPageDynamicTableComponent
-  ]
+  declarations: [PoPageDynamicTableComponent],
+  exports: [PoPageDynamicTableComponent]
 })
-export class PoPageDynamicTableModule { }
+export class PoPageDynamicTableModule {}

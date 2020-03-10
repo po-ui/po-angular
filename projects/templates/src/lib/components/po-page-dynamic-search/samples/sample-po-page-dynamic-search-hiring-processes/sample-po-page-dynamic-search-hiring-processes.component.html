@@ -8,15 +8,14 @@
   (p-change-disclaimers)="onChangeDisclaimers($event)"
   (p-quick-search)="onQuickSearch($event)"
   (p-advanced-search)="onAdvancedSearch($event)"
-  >
-
+>
   <po-table
     p-checkbox
     p-single-select
     p-sort="true"
     p-striped="true"
     [p-columns]="hiringProcessesColumns"
-    [p-items]="hiringProcesses">
+    [p-items]="hiringProcesses"
+  >
   </po-table>
-
 </po-page-dynamic-search>

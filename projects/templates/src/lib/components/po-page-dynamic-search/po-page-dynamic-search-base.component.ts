@@ -10,7 +10,7 @@ import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filte
 import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
 
 export const poPageDynamicSearchLiteralsDefault = {
-  en: <PoPageDynamicSearchLiterals> {
+  en: <PoPageDynamicSearchLiterals>{
     disclaimerGroupTitle: 'Displaying results filtered by:',
     filterTitle: poAdvancedFiltersLiteralsDefault.en.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.en.cancelLabel,
@@ -18,15 +18,15 @@ export const poPageDynamicSearchLiteralsDefault = {
     quickSearchLabel: 'Quick search:',
     searchPlaceholder: 'Search'
   },
-  es: <PoPageDynamicSearchLiterals> {
+  es: <PoPageDynamicSearchLiterals>{
     disclaimerGroupTitle: 'Presentando resultados filtrados por:',
     filterTitle: poAdvancedFiltersLiteralsDefault.es.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.es.cancelLabel,
     filterConfirmLabel: poAdvancedFiltersLiteralsDefault.es.confirmLabel,
     quickSearchLabel: 'Búsqueda rápida:',
-    searchPlaceholder: 'Buscar',
+    searchPlaceholder: 'Buscar'
   },
-  pt: <PoPageDynamicSearchLiterals> {
+  pt: <PoPageDynamicSearchLiterals>{
     disclaimerGroupTitle: 'Apresentando resultados filtrados por:',
     filterTitle: poAdvancedFiltersLiteralsDefault.pt.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.pt.cancelLabel,
@@ -34,14 +34,14 @@ export const poPageDynamicSearchLiteralsDefault = {
     quickSearchLabel: 'Pesquisa rápida:',
     searchPlaceholder: 'Pesquisar'
   },
-  ru: <PoPageDynamicSearchLiterals> {
+  ru: <PoPageDynamicSearchLiterals>{
     disclaimerGroupTitle: 'Отображение результатов, отфильтрованных по:',
     filterTitle: poAdvancedFiltersLiteralsDefault.ru.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.ru.cancelLabel,
     filterConfirmLabel: poAdvancedFiltersLiteralsDefault.ru.confirmLabel,
     quickSearchLabel: 'Быстрый поиск:',
     searchPlaceholder: 'исследование'
-  },
+  }
 };
 
 /**
@@ -52,7 +52,6 @@ export const poPageDynamicSearchLiteralsDefault = {
  */
 @Directive()
 export class PoPageDynamicSearchBaseComponent {
-
   private _filters: Array<PoDynamicFormField> = [];
   private _literals: PoPageDynamicSearchLiterals;
 

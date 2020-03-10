@@ -8,15 +8,13 @@ import { PoMenuFilter, PoMenuItemFiltered } from '@portinari/portinari-ui';
 
 @Injectable()
 export class SamplePoMenuHumanResourcesService implements PoMenuFilter {
-
   private url: string = 'https://thf.totvs.com.br/sample/api/menus';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getFilteredData(search: string): Observable<Array<PoMenuItemFiltered>> {
     const params = { search };
 
     return this.http.get(this.url, { params }).pipe(map((response: any) => response.items));
   }
-
 }

@@ -4,9 +4,7 @@ import { Component } from '@angular/core';
   selector: 'sample-po-clean-labs',
   templateUrl: './sample-po-clean-labs.component.html'
 })
-
 export class SamplePoCleanLabsComponent {
-
   fieldValue: string;
   website: string;
   email: string;
@@ -22,5 +20,4 @@ export class SamplePoCleanLabsComponent {
     this.date = new Date();
     this.age = 0;
   }
-
 }

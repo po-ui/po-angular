@@ -8,12 +8,14 @@ import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfi
   providers: [PoNotificationService]
 })
 export class SamplePoToolbarLoggedComponent {
-
   notificationActions: Array<PoToolbarAction> = [
-    { icon: 'po-icon-portinari', label: 'PO news, stay tuned!', type: 'danger',
-      action: item => this.onClickNotification(item) },
-    { icon: 'po-icon-message', label: 'New message', type: 'danger',
-      action: item => this.openDialog(item) },
+    {
+      icon: 'po-icon-portinari',
+      label: 'PO news, stay tuned!',
+      type: 'danger',
+      action: item => this.onClickNotification(item)
+    },
+    { icon: 'po-icon-message', label: 'New message', type: 'danger', action: item => this.openDialog(item) }
   ];
 
   profile: PoToolbarProfile = {
@@ -37,7 +39,7 @@ export class SamplePoToolbarLoggedComponent {
 
   title: string = 'Portinari Toolbar Logged';
 
-  constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) { }
+  constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
 
   getNotificationNumber() {
     return this.notificationActions.filter(not => not.type === 'danger').length;
@@ -62,5 +64,4 @@ export class SamplePoToolbarLoggedComponent {
   showAction(item: PoToolbarAction): void {
     this.poNotification.success(`Action clicked: ${item.label}`);
   }
-
 }

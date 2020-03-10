@@ -3,7 +3,6 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoTreeViewBaseComponent } from './po-tree-view-base.component';
 
 describe('PoTreeViewBaseComponent:', () => {
-
   const component = new PoTreeViewBaseComponent();
 
   it('should be created', () => {
@@ -11,7 +10,6 @@ describe('PoTreeViewBaseComponent:', () => {
   });
 
   describe('Properties: ', () => {
-
     it('p-items: shouldn`t call getItemsByMaxLevel if items isn`t array and return empty array', () => {
       const spyGetItemsByMaxLevel = spyOn(component, <any>'getItemsByMaxLevel');
 
@@ -33,21 +31,19 @@ describe('PoTreeViewBaseComponent:', () => {
     });
 
     it('p-selectable: should update property with `true` if valid values', () => {
-      const validValues = [ true, 'true', 1, '' ];
+      const validValues = [true, 'true', 1, ''];
 
       expectPropertiesValues(component, 'selectable', validValues, true);
     });
 
     it('p-selectable: should update property with `false` if invalid values', () => {
-      const invalidValues = [ 10, 0.5, 'test', undefined ];
+      const invalidValues = [10, 0.5, 'test', undefined];
 
       expectPropertiesValues(component, 'selectable', invalidValues, false);
     });
-
   });
 
   describe('Methods: ', () => {
-
     it('emitExpanded: should call collapsed.emit with tree view item if treeViewItem.expanded is false', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, expanded: false };
 
@@ -71,7 +67,7 @@ describe('PoTreeViewBaseComponent:', () => {
     it('emitSelected: should call unselected.emit with tree view item if treeViewItem.selected is false', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, selected: false };
 
-      const spyUpdateItemsOnSelect = spyOn(component, <any> 'updateItemsOnSelect');
+      const spyUpdateItemsOnSelect = spyOn(component, <any>'updateItemsOnSelect');
       const spyUnselectedEmit = spyOn(component['unselected'], 'emit');
 
       component['emitSelected'](treeViewItem);
@@ -83,7 +79,7 @@ describe('PoTreeViewBaseComponent:', () => {
     it('emitSelected: should call selected.emit with tree view item if treeViewItem.selected is true', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, selected: true };
 
-      const spyUpdateItemsOnSelect = spyOn(component, <any> 'updateItemsOnSelect');
+      const spyUpdateItemsOnSelect = spyOn(component, <any>'updateItemsOnSelect');
       const spySelectedEmit = spyOn(component['selected'], 'emit');
 
       component['emitSelected'](treeViewItem);
@@ -95,7 +91,7 @@ describe('PoTreeViewBaseComponent:', () => {
     it('getItemsByMaxLevel: should return and not call addItem if level is 4', () => {
       const items = [];
 
-      const spyAddItem = spyOn(component, <any> 'addItem');
+      const spyAddItem = spyOn(component, <any>'addItem');
 
       const itemsByMaxLavel = component['getItemsByMaxLevel'](items, 4);
 
@@ -119,31 +115,49 @@ describe('PoTreeViewBaseComponent:', () => {
 
     it('getItemsByMaxLevel: should return items up to 4 levels', () => {
       const unlimitedItems = [
-        { label: 'Nivel 01', value: 1, subItems: [
-          { label: 'Nivel 02', value: 2, subItems: [
-            { label: 'Nivel 03', value: 3, subItems: [
-              { label: 'Nivel 04', value: 4, subItems: [
-                { label: 'Nivel 05', value: 5, subItems: [
-                  { label: 'Nivel 06', value: 6 }
-                ] }
-              ] }
-            ] }
-          ] }
-        ] }
+        {
+          label: 'Nivel 01',
+          value: 1,
+          subItems: [
+            {
+              label: 'Nivel 02',
+              value: 2,
+              subItems: [
+                {
+                  label: 'Nivel 03',
+                  value: 3,
+                  subItems: [
+                    {
+                      label: 'Nivel 04',
+                      value: 4,
+                      subItems: [{ label: 'Nivel 05', value: 5, subItems: [{ label: 'Nivel 06', value: 6 }] }]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ];
 
       const expectedValue = [
-        { label: 'Nivel 01', value: 1, selected: false, subItems: [
-          { label: 'Nivel 02', value: 2, selected: false, subItems: [
-            { label: 'Nivel 03', value: 3, selected: false, subItems: [
-              { label: 'Nivel 04', value: 4 }
-            ] }
-          ] }
-        ] }
+        {
+          label: 'Nivel 01',
+          value: 1,
+          selected: false,
+          subItems: [
+            {
+              label: 'Nivel 02',
+              value: 2,
+              selected: false,
+              subItems: [{ label: 'Nivel 03', value: 3, selected: false, subItems: [{ label: 'Nivel 04', value: 4 }] }]
+            }
+          ]
+        }
       ];
 
-      const spyAddItem = spyOn(component, <any> 'addItem').and.callThrough();
-      const spyGetItemsByMaxLevel = spyOn(component, <any> 'getItemsByMaxLevel').and.callThrough();
+      const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
+      const spyGetItemsByMaxLevel = spyOn(component, <any>'getItemsByMaxLevel').and.callThrough();
 
       const itemsByMaxLavel = component['getItemsByMaxLevel'](unlimitedItems);
 
@@ -158,8 +172,8 @@ describe('PoTreeViewBaseComponent:', () => {
 
       const expectedValue = [childItem];
 
-      const spyExpandParentItem = spyOn(component, <any> 'expandParentItem');
-      const spyAddChildItemInParent = spyOn(component, <any> 'addChildItemInParent');
+      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
+      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
 
       component['addItem'](items, childItem);
 
@@ -176,9 +190,9 @@ describe('PoTreeViewBaseComponent:', () => {
 
       const expectedValue = [parentItem];
 
-      const spyExpandParentItem = spyOn(component, <any> 'expandParentItem');
-      const spyAddChildItemInParent = spyOn(component, <any> 'addChildItemInParent');
-      const spySelectItemBySubItems = spyOn(component, <any> 'selectItemBySubItems');
+      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
+      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
+      const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
 
       component['addItem'](items, childItem, parentItem);
 
@@ -201,7 +215,7 @@ describe('PoTreeViewBaseComponent:', () => {
 
     it('addChildItemInParent: should add childItem in parentItem.subItems', () => {
       const childItem = { label: 'Nivel 02', value: 2 };
-      const parentItem = { label: 'Nivel 01', value: 1, subItems: [{ label: 'Nivel 011', value: 111}] };
+      const parentItem = { label: 'Nivel 01', value: 1, subItems: [{ label: 'Nivel 011', value: 111 }] };
 
       component['addChildItemInParent'](childItem, parentItem);
 
@@ -238,11 +252,11 @@ describe('PoTreeViewBaseComponent:', () => {
 
     it('updateItemsOnSelect: shouldn`t call selectAllItems if selectedItem hasn`t subItems', () => {
       const selectedItem = { label: 'Label 01', value: '01' };
-      const items = [ selectedItem ];
+      const items = [selectedItem];
       component.items = items;
 
-      const spyGetItemsWithParentSelected = spyOn(component, <any> 'getItemsWithParentSelected').and.returnValue(items);
-      const spySelect = spyOn(component, <any> 'selectAllItems');
+      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.returnValue(items);
+      const spySelect = spyOn(component, <any>'selectAllItems');
 
       component['updateItemsOnSelect'](selectedItem);
 
@@ -257,11 +271,11 @@ describe('PoTreeViewBaseComponent:', () => {
         selected: true,
         subItems: [{ label: 'Label 01.1', value: '01.1' }]
       };
-      const items = [ selectedItem ];
+      const items = [selectedItem];
       component.items = items;
 
-      const spyGetItemsWithParentSelected = spyOn(component, <any> 'getItemsWithParentSelected').and.returnValue(items);
-      const spySelect = spyOn(component, <any> 'selectAllItems');
+      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.returnValue(items);
+      const spySelect = spyOn(component, <any>'selectAllItems');
 
       component['updateItemsOnSelect'](selectedItem);
 
@@ -271,23 +285,49 @@ describe('PoTreeViewBaseComponent:', () => {
 
     it('selectAllItems: should select all items if isSelected is true', () => {
       const items = [
-        { label: 'Nivel 01', value: 1, selected: false, subItems: [
-          { label: 'Nivel 02', value: 2, selected: true, subItems: [
-            { label: 'Nivel 03', value: 3, selected: false, subItems: [
-              { label: 'Nivel 04', value: 4, selected: false }
-            ]}
-          ] }
-        ] }
+        {
+          label: 'Nivel 01',
+          value: 1,
+          selected: false,
+          subItems: [
+            {
+              label: 'Nivel 02',
+              value: 2,
+              selected: true,
+              subItems: [
+                {
+                  label: 'Nivel 03',
+                  value: 3,
+                  selected: false,
+                  subItems: [{ label: 'Nivel 04', value: 4, selected: false }]
+                }
+              ]
+            }
+          ]
+        }
       ];
 
       const expectedItems = [
-        { label: 'Nivel 01', value: 1, selected: true, subItems: [
-          { label: 'Nivel 02', value: 2, selected: true, subItems: [
-            { label: 'Nivel 03', value: 3, selected: true, subItems: [
-              { label: 'Nivel 04', value: 4, selected: true }
-            ]}
-          ] }
-        ] }
+        {
+          label: 'Nivel 01',
+          value: 1,
+          selected: true,
+          subItems: [
+            {
+              label: 'Nivel 02',
+              value: 2,
+              selected: true,
+              subItems: [
+                {
+                  label: 'Nivel 03',
+                  value: 3,
+                  selected: true,
+                  subItems: [{ label: 'Nivel 04', value: 4, selected: true }]
+                }
+              ]
+            }
+          ]
+        }
       ];
 
       const isSelected = true;
@@ -299,23 +339,49 @@ describe('PoTreeViewBaseComponent:', () => {
 
     it('selectAllItems: should unselect all items if isSelected is false', () => {
       const items = [
-        { label: 'Nivel 01', value: 1, selected: true, subItems: [
-          { label: 'Nivel 02', value: 2, selected: true, subItems: [
-            { label: 'Nivel 03', value: 3, selected: true, subItems: [
-              { label: 'Nivel 04', value: 4, selected: true }
-            ]}
-          ] }
-        ] }
+        {
+          label: 'Nivel 01',
+          value: 1,
+          selected: true,
+          subItems: [
+            {
+              label: 'Nivel 02',
+              value: 2,
+              selected: true,
+              subItems: [
+                {
+                  label: 'Nivel 03',
+                  value: 3,
+                  selected: true,
+                  subItems: [{ label: 'Nivel 04', value: 4, selected: true }]
+                }
+              ]
+            }
+          ]
+        }
       ];
 
       const expectedItems = [
-        { label: 'Nivel 01', value: 1, selected: false, subItems: [
-          { label: 'Nivel 02', value: 2, selected: false, subItems: [
-            { label: 'Nivel 03', value: 3, selected: false, subItems: [
-              { label: 'Nivel 04', value: 4, selected: false }
-            ]}
-          ] }
-        ] }
+        {
+          label: 'Nivel 01',
+          value: 1,
+          selected: false,
+          subItems: [
+            {
+              label: 'Nivel 02',
+              value: 2,
+              selected: false,
+              subItems: [
+                {
+                  label: 'Nivel 03',
+                  value: 3,
+                  selected: false,
+                  subItems: [{ label: 'Nivel 04', value: 4, selected: false }]
+                }
+              ]
+            }
+          ]
+        }
       ];
 
       const isSelected = false;
@@ -326,7 +392,7 @@ describe('PoTreeViewBaseComponent:', () => {
     });
 
     it('selectItemBySubItems: should call everyItemSelected with subitems to set item.selected', () => {
-      const subItems =  [
+      const subItems = [
         { label: 'SubItem 1', selected: true },
         { label: 'SubItem 2', selected: true },
         { label: 'SubItem 3', selected: true },
@@ -409,7 +475,7 @@ describe('PoTreeViewBaseComponent:', () => {
     });
 
     it('getItemsWithParentSelected: should return [] and not call addItem if items is undefined', () => {
-      const spyAddItem = spyOn(component, <any> 'addItem');
+      const spyAddItem = spyOn(component, <any>'addItem');
 
       const items = component['getItemsWithParentSelected']();
 
@@ -418,10 +484,10 @@ describe('PoTreeViewBaseComponent:', () => {
     });
 
     it('getItemsWithParentSelected: should call only 1 time getItemsWithParentSelected if items hasn`t subItems', () => {
-      const items = [ { label: 'Item 1', value: '1' } ];
+      const items = [{ label: 'Item 1', value: '1' }];
 
-      const spyAddItem = spyOn(component, <any> 'addItem').and.callThrough();
-      const spyGetItemsWithParentSelected = spyOn(component, <any> 'getItemsWithParentSelected').and.callThrough();
+      const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
+      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
 
       const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
 
@@ -431,11 +497,13 @@ describe('PoTreeViewBaseComponent:', () => {
     });
 
     it('getItemsWithParentSelected: should call only 2 time getItemsWithParentSelected if items has subItems ', () => {
-      const items = [ { label: 'Item 1', value: '1', subItems: [ { label: 'Item 1.2', value: '1.2' } ] } ];
-      const expectedValue = [ { label: 'Item 1', value: '1', selected: false, subItems: [ { label: 'Item 1.2', value: '1.2' } ] } ];
+      const items = [{ label: 'Item 1', value: '1', subItems: [{ label: 'Item 1.2', value: '1.2' }] }];
+      const expectedValue = [
+        { label: 'Item 1', value: '1', selected: false, subItems: [{ label: 'Item 1.2', value: '1.2' }] }
+      ];
 
-      const spyAddItem = spyOn(component, <any> 'addItem').and.callThrough();
-      const spyGetItemsWithParentSelected = spyOn(component, <any> 'getItemsWithParentSelected').and.callThrough();
+      const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
+      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
 
       const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
 
@@ -449,7 +517,7 @@ describe('PoTreeViewBaseComponent:', () => {
         {
           label: 'Item 1',
           value: '1',
-          subItems: [ { label: 'Item 1.2', value: '1.2', selected: true } ]
+          subItems: [{ label: 'Item 1.2', value: '1.2', selected: true }]
         }
       ];
 
@@ -458,7 +526,7 @@ describe('PoTreeViewBaseComponent:', () => {
           label: 'Item 1',
           value: '1',
           selected: true,
-          subItems: [ { label: 'Item 1.2', value: '1.2', selected: true } ]
+          subItems: [{ label: 'Item 1.2', value: '1.2', selected: true }]
         }
       ];
 
@@ -466,7 +534,5 @@ describe('PoTreeViewBaseComponent:', () => {
 
       expect(itemsWithParentSelected).toEqual(expectedValue);
     });
-
   });
-
 });

@@ -1,18 +1,15 @@
-<po-page-background #pageLogin
+<po-page-background
+  #pageLogin
   p-show-select-language
   [p-background]="background"
   [p-highlight-info]="pageLoginLiterals.highlightInfo"
   [p-logo]="logo"
   [p-secondary-logo]="secondaryLogo"
-  (p-selected-language)="onSelectedLanguage($event)">
-
+  (p-selected-language)="onSelectedLanguage($event)"
+>
   <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
     <div class="po-page-login-header-title po-mb-sm-1">{{ pageLoginLiterals.title }}</div>
-    <po-tag
-      *ngIf="environment"
-      p-type="warning"
-      [p-value]="environment">
-    </po-tag>
+    <po-tag *ngIf="environment" p-type="warning" [p-value]="environment"> </po-tag>
   </div>
 
   <form #loginForm="ngForm" class="po-page-login-form">
@@ -30,22 +27,27 @@
             [p-placeholder]="pageLoginLiterals.loginPlaceholder"
             (click)="closePopover()"
             (keyup.enter)="loginForm.valid && onLoginSubmit()"
-            (p-change-model)="changeLoginModel()">
+            (p-change-model)="changeLoginModel()"
+          >
           </po-login>
 
           <div class="po-page-login-info-icon-container">
             <span
               class="po-icon po-field-icon po-icon-info"
               p-tooltip-position="right"
-              [p-tooltip]="pageLoginLiterals.loginHint">
+              [p-tooltip]="pageLoginLiterals.loginHint"
+            >
             </span>
           </div>
         </div>
 
         <div class="po-field-container-bottom po-field-container-error-container">
-          <div *ngFor="let error of allLoginErrors" class="po-field-container-bottom-text-error po-field-container-error-item">
+          <div
+            *ngFor="let error of allLoginErrors"
+            class="po-field-container-bottom-text-error po-field-container-error-item"
+          >
             <span class="po-icon po-icon-exclamation"></span>
-            <span class="po-field-container-error-text">{{error}}</span>
+            <span class="po-field-container-error-text">{{ error }}</span>
           </div>
         </div>
       </div>
@@ -62,26 +64,33 @@
             [p-placeholder]="pageLoginLiterals.passwordPlaceholder"
             (click)="closePopover()"
             (keyup.enter)="loginForm.valid && onLoginSubmit()"
-            (p-change-model)="changePasswordModel()">
+            (p-change-model)="changePasswordModel()"
+          >
           </po-password>
           <div class="po-page-login-password-item po-page-login-password-popover-container">
-            <po-page-login-popover *ngIf="showExceededAttemptsWarning && exceededAttemptsWarning"
+            <po-page-login-popover
+              *ngIf="showExceededAttemptsWarning && exceededAttemptsWarning"
               [p-literals]="pageLoginLiterals"
               [p-recovery]="recovery"
               [p-remaining-attempts]="exceededAttemptsWarning"
-              (p-forgot-password) = "openUrl($event)">
+              (p-forgot-password)="openUrl($event)"
+            >
             </po-page-login-popover>
           </div>
         </div>
         <div class="po-field-container-bottom po-field-container-error-container">
-          <div *ngFor="let error of allPasswordErrors" class="po-field-container-bottom-text-error po-field-container-error-item">
+          <div
+            *ngFor="let error of allPasswordErrors"
+            class="po-field-container-bottom-text-error po-field-container-error-item"
+          >
             <span class="po-icon po-icon-exclamation"></span>
-            <span class="po-field-container-error-text">{{error}}</span>
+            <span class="po-field-container-error-text">{{ error }}</span>
           </div>
         </div>
       </div>
 
-      <po-input *ngIf="customField && customFieldType === 'input'"
+      <po-input
+        *ngIf="customField && customFieldType === 'input'"
         class="po-page-login-field-size po-lg-12"
         name="customFieldInput"
         [(ngModel)]="customFieldObject.value"
@@ -89,26 +98,31 @@
         [p-error-pattern]="customFieldObject.errorPattern || pageLoginLiterals.customFieldErrorPattern"
         [p-pattern]="customFieldObject.pattern"
         [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
-        (keyup.enter)="loginForm.valid && onLoginSubmit()">
+        (keyup.enter)="loginForm.valid && onLoginSubmit()"
+      >
       </po-input>
 
-      <po-combo *ngIf="customField && customFieldType === 'combo'"
+      <po-combo
+        *ngIf="customField && customFieldType === 'combo'"
         class="po-page-login-field-size po-lg-12"
         name="customFieldCombo"
         [(ngModel)]="customFieldObject.value"
         p-required
         [p-field-value]="customFieldObject.fieldValue"
         [p-filter-service]="customFieldObject.url"
-        [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder">
+        [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
+      >
       </po-combo>
 
-      <po-select *ngIf="customField && customFieldType === 'select'"
+      <po-select
+        *ngIf="customField && customFieldType === 'select'"
         class="po-page-login-field-size po-lg-12"
         name="customFieldSelect"
         [(ngModel)]="customFieldObject.value"
         p-required
         [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
-        [p-options]="customFieldObject.options">
+        [p-options]="customFieldObject.options"
+      >
       </po-select>
 
       <div class="po-lg-12">
@@ -120,19 +134,20 @@
             p-label-position="1"
             [p-label-off]="pageLoginLiterals.rememberUser"
             [p-label-on]="pageLoginLiterals.rememberUser"
-            (keyup.enter)="loginForm.valid && onLoginSubmit()">
+            (keyup.enter)="loginForm.valid && onLoginSubmit()"
+          >
           </po-switch>
 
           <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
             <span
               class="po-icon po-field-icon po-icon-info"
               p-tooltip-position="right"
-              [p-tooltip]="pageLoginLiterals.rememberUserHint">
+              [p-tooltip]="pageLoginLiterals.rememberUserHint"
+            >
             </span>
           </div>
         </div>
       </div>
-
 
       <po-button
         class="po-lg-12 po-page-login-button po-page-login-field-size"
@@ -140,16 +155,15 @@
         [p-disabled]="loginForm.invalid"
         [p-label]="loading ? pageLoginLiterals.submittedLabel : pageLoginLiterals.submitLabel"
         [p-loading]="loading"
-        (p-click)="onLoginSubmit()">
+        (p-click)="onLoginSubmit()"
+      >
       </po-button>
 
-      <div *ngIf="recovery"
-        class="po-page-login-recovery-link">
+      <div *ngIf="recovery" class="po-page-login-recovery-link">
         <a class="po-font-text-large-bold" (click)="openUrl(recovery)">{{ pageLoginLiterals.forgotPassword }}</a>
       </div>
 
-      <div *ngIf="registerUrl"
-        class="po-page-login-register-link">
+      <div *ngIf="registerUrl" class="po-page-login-register-link">
         <a class="po-font-text-large-bold" (click)="openUrl(registerUrl)">{{ pageLoginLiterals.registerUrl }}</a>
       </div>
     </div>

@@ -21,21 +21,42 @@ describe('PoMenuBaseComponent:', () => {
     component = new PoMenuComponent(menuService);
 
     component.menus = [
-      { label: 'Level 1.1', link: '/level-1-1', icon: 'clock', subItems: [ // level 1
-        { label: 'Level 2.1', link: '/level-2-1' }, // level 2
-        { label: 'Level 2.2', link: '/level-2-2' , subItems: [ // level 2
-          { label: 'Level 3.1', link: '/level-3-1', subItems: [ // level 3
-            { label: 'Level 4.1', link: '/level-4-1' }, // level 4
-            { label: 'Level 4.2', link: '/level-4-2' , subItems: [ // level 4
-              { label: 'Level 5.1', link: '/level-5-1' }, // level 5 (não permitido)
-              { label: 'Level 5.2', link: '/level-5-2' } // level 5 (não permitido)
-            ]},
-            { label: 'Level 4.3', link: '/level-4-3' } // level 4
-          ]},
-          { label: 'Level 3.2', link: '/level-3-2' } // level 3
-        ]},
-        { label: 'Level 2.3', link: '/level-2-3'}, // level 2
-      ]},
+      {
+        label: 'Level 1.1',
+        link: '/level-1-1',
+        icon: 'clock',
+        subItems: [
+          // level 1
+          { label: 'Level 2.1', link: '/level-2-1' }, // level 2
+          {
+            label: 'Level 2.2',
+            link: '/level-2-2',
+            subItems: [
+              // level 2
+              {
+                label: 'Level 3.1',
+                link: '/level-3-1',
+                subItems: [
+                  // level 3
+                  { label: 'Level 4.1', link: '/level-4-1' }, // level 4
+                  {
+                    label: 'Level 4.2',
+                    link: '/level-4-2',
+                    subItems: [
+                      // level 4
+                      { label: 'Level 5.1', link: '/level-5-1' }, // level 5 (não permitido)
+                      { label: 'Level 5.2', link: '/level-5-2' } // level 5 (não permitido)
+                    ]
+                  },
+                  { label: 'Level 4.3', link: '/level-4-3' } // level 4
+                ]
+              },
+              { label: 'Level 3.2', link: '/level-3-2' } // level 3
+            ]
+          },
+          { label: 'Level 2.3', link: '/level-2-3' } // level 2
+        ]
+      },
       { label: 'Level 1.2', link: '/level-1-2', icon: 'star' } // level 1
     ];
   });
@@ -73,7 +94,7 @@ describe('PoMenuBaseComponent:', () => {
   });
 
   it('should set menus with values received when valid values', () => {
-    const valueValid = [ { label: 'Level 1.1', link: '/level-1-1', icon: 'clock' } ];
+    const valueValid = [{ label: 'Level 1.1', link: '/level-1-1', icon: 'clock' }];
     expectPropertiesValues(component, 'menus', [valueValid], [valueValid]);
   });
 
@@ -82,7 +103,7 @@ describe('PoMenuBaseComponent:', () => {
     expectPropertiesValues(component, 'menus', valuesInvalid, []);
   });
 
-  it('should set filter' , () => {
+  it('should set filter', () => {
     const trueValues = ['', true, 1];
     const falseValues = [undefined, null, false, 0];
 
@@ -125,7 +146,7 @@ describe('PoMenuBaseComponent:', () => {
     menuItem = { label: 'Utilidades', subItems: [] };
     expect(component['setMenuType'](menuItem)).toBe('noLink');
 
-    menuItem = { label: 'Utilidades', subItems: [ { label: 'Jardim' } ] };
+    menuItem = { label: 'Utilidades', subItems: [{ label: 'Jardim' }] };
     expect(component['setMenuType'](menuItem)).toBe('subItems');
   });
 
@@ -137,7 +158,7 @@ describe('PoMenuBaseComponent:', () => {
     expect(validationItemError).toThrowError();
 
     const validationSubItemError = () => {
-      component['validateMenus']([{ label: 'Teste', subItems: [{ label: '' }]}]);
+      component['validateMenus']([{ label: 'Teste', subItems: [{ label: '' }] }]);
     };
 
     expect(validationSubItemError).toThrowError();
@@ -166,11 +187,10 @@ describe('PoMenuBaseComponent:', () => {
   });
 
   describe('Methods: ', () => {
-
     it('configService: should call `menuService.configProperties` and set `filterService` if service parameter is valid string', () => {
       const service = 'http://po.portinari.com.br';
 
-      const spyConfigPropeties = spyOn(component.menuService, <any> 'configProperties');
+      const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
 
       component['configService'](service);
 
@@ -180,32 +200,30 @@ describe('PoMenuBaseComponent:', () => {
 
     it(`configService: shouldn't call 'menuService.configProperties' and should set 'filterService' if service parameter
       is a custom service`, () => {
-        const service: PoMenuFilter = {
-          getFilteredData: (search, params) => {
-            return of([
-              { label: 'Menu', link: '/' }
-            ]);
-          }
-        };
+      const service: PoMenuFilter = {
+        getFilteredData: (search, params) => {
+          return of([{ label: 'Menu', link: '/' }]);
+        }
+      };
 
-        const spyConfigPropeties = spyOn(component.menuService, <any> 'configProperties');
+      const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
 
-        component['configService'](<any> service);
+      component['configService'](<any>service);
 
-        expect(component.filterService).toEqual(<any> service);
-        expect(spyConfigPropeties).not.toHaveBeenCalled();
-      });
+      expect(component.filterService).toEqual(<any>service);
+      expect(spyConfigPropeties).not.toHaveBeenCalled();
+    });
 
     it(`configService: shouldn't call 'menuService.configProperties' and should set 'filterService' with undefined if
       service parameter is a custom service`, () => {
-        const service: any = {};
+      const service: any = {};
 
-        const spyConfigPropeties = spyOn(component.menuService, <any> 'configProperties');
+      const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
 
-        component['configService'](service);
+      component['configService'](service);
 
-        expect(component.filterService).toEqual(undefined);
-        expect(spyConfigPropeties).not.toHaveBeenCalled();
+      expect(component.filterService).toEqual(undefined);
+      expect(spyConfigPropeties).not.toHaveBeenCalled();
     });
 
     it('setMenuExtraProperties: should set allowCollapseMenu to true if all first level items have icons and shortlabels', () => {
@@ -251,7 +269,7 @@ describe('PoMenuBaseComponent:', () => {
         { label: 'Menu Item', icon: 'clock', shortLabel: 'Menu Item' }
       ];
 
-      spyOn(component, <any> 'removeBadgeAlert');
+      spyOn(component, <any>'removeBadgeAlert');
 
       component['setMenuExtraProperties']();
 
@@ -260,9 +278,7 @@ describe('PoMenuBaseComponent:', () => {
 
     it('processSubItems: should call `setMenuBadgeAlert` one time with `menu` and `menuItem2`', () => {
       const menuItem2 = { label: 'Menu Item 2', subItems: undefined };
-      const menus = { label: 'Menu Item 1', badgeAlert: false, subItems: [
-        menuItem2
-      ]};
+      const menus = { label: 'Menu Item 1', badgeAlert: false, subItems: [menuItem2] };
 
       spyOn(component, <any>'setMenuItemProperties');
       spyOn(component, <any>'setMenuBadgeAlert').and.returnValue(menus);
@@ -275,8 +291,8 @@ describe('PoMenuBaseComponent:', () => {
 
     it('processSubItems: should return a new reference of menu subItem', () => {
       const menuItem2 = { label: 'Menu Item 2' };
-      const menu = { label: 'Menu Item 1', subItems: [ menuItem2 ] };
-      const menuAssigned = { label: 'Menu Item 1', subItems: [ menuItem2 ] };
+      const menu = { label: 'Menu Item 1', subItems: [menuItem2] };
+      const menuAssigned = { label: 'Menu Item 1', subItems: [menuItem2] };
 
       spyOn(Object, 'assign').and.returnValue(menuAssigned);
 
@@ -286,29 +302,24 @@ describe('PoMenuBaseComponent:', () => {
     });
 
     it('removeBadgeAlert: should remove `badgeAlert` property of menu item', () => {
-      const menu = { label: '1', badgeAlert: true, subItems: [
-        { label: '2', badgeAlert: true, subItems: [
-          { label: '3' }
-        ]},
-        { label: '4', badgeAlert: true, subItems: [
-          { label: '5', badgeAlert: true, subItems: [
-            { label: '6' }
-          ] }
-        ]},
-        { label: '4', badgeAlert: true }
-      ]};
+      const menu = {
+        label: '1',
+        badgeAlert: true,
+        subItems: [
+          { label: '2', badgeAlert: true, subItems: [{ label: '3' }] },
+          { label: '4', badgeAlert: true, subItems: [{ label: '5', badgeAlert: true, subItems: [{ label: '6' }] }] },
+          { label: '4', badgeAlert: true }
+        ]
+      };
 
-      const expetedMenu = { label: '1', subItems: [
-        { label: '2', subItems: [
-          { label: '3' }
-        ]},
-        { label: '4', subItems: [
-          { label: '5', subItems: [
-            { label: '6' }
-          ] }
-        ]},
-        { label: '4' }
-      ]};
+      const expetedMenu = {
+        label: '1',
+        subItems: [
+          { label: '2', subItems: [{ label: '3' }] },
+          { label: '4', subItems: [{ label: '5', subItems: [{ label: '6' }] }] },
+          { label: '4' }
+        ]
+      };
 
       component['removeBadgeAlert'](menu);
 
@@ -317,8 +328,8 @@ describe('PoMenuBaseComponent:', () => {
 
     it('setMenuBadgeAlert: should return parent with `badgeAlert` true if `child.badgeAlert` is true', () => {
       const child = { label: 'child', badgeAlert: true, subItems: [] };
-      const parent = { label: 'item', subItems: [ child ] };
-      const parentExpected = { label: 'item', badgeAlert: true, subItems: [ child ] };
+      const parent = { label: 'item', subItems: [child] };
+      const parentExpected = { label: 'item', badgeAlert: true, subItems: [child] };
 
       const result = component['setMenuBadgeAlert'](parent, child);
 
@@ -328,8 +339,8 @@ describe('PoMenuBaseComponent:', () => {
     it(`setMenuBadgeAlert: should return parent with 'badgeAlert' true if 'child' contain badge with value 0 and
       'child' not contain subItems`, () => {
       const child = { label: 'child', badge: { value: 0 }, subItems: [] };
-      const parent = { label: 'item', subItems: [ child ] };
-      const parentExpected = { label: 'item', badgeAlert: true, subItems: [ child ] };
+      const parent = { label: 'item', subItems: [child] };
+      const parentExpected = { label: 'item', badgeAlert: true, subItems: [child] };
 
       const result = component['setMenuBadgeAlert'](parent, child);
 
@@ -338,10 +349,9 @@ describe('PoMenuBaseComponent:', () => {
 
     it(`setMenuBadgeAlert: should return parent with 'badgeAlert' false if 'child' contain badge with
       value less that 0`, () => {
-
       const child = { label: 'child', badge: { value: -1 }, subItems: [] };
-      const parent = { label: 'item', subItems: [ child ] };
-      const parentExpected = { label: 'item', badgeAlert: false, subItems: [ child ] };
+      const parent = { label: 'item', subItems: [child] };
+      const parentExpected = { label: 'item', badgeAlert: false, subItems: [child] };
 
       const result = component['setMenuBadgeAlert'](parent, child);
 
@@ -350,10 +360,9 @@ describe('PoMenuBaseComponent:', () => {
 
     it(`setMenuBadgeAlert: should return parent with 'badgeAlert' false if 'child' contain badge with
       value is undefined`, () => {
-
       const child = { label: 'child', badge: { value: undefined }, subItems: [] };
-      const parent = { label: 'item', subItems: [ child ] };
-      const parentExpected = { label: 'item', badgeAlert: false, subItems: [ child ] };
+      const parent = { label: 'item', subItems: [child] };
+      const parentExpected = { label: 'item', badgeAlert: false, subItems: [child] };
 
       const result = component['setMenuBadgeAlert'](parent, child);
 
@@ -362,10 +371,9 @@ describe('PoMenuBaseComponent:', () => {
 
     it(`setMenuBadgeAlert: should return parent with 'badgeAlert' false if 'child' contain badge with
       value is empty string`, () => {
-
       const child = { label: 'child', badge: { value: <any>' ' }, subItems: [] };
-      const parent = { label: 'item', subItems: [ child ] };
-      const parentExpected = { label: 'item', badgeAlert: false, subItems: [ child ] };
+      const parent = { label: 'item', subItems: [child] };
+      const parentExpected = { label: 'item', badgeAlert: false, subItems: [child] };
 
       const result = component['setMenuBadgeAlert'](parent, child);
 
@@ -374,25 +382,22 @@ describe('PoMenuBaseComponent:', () => {
 
     it(`setMenuBadgeAlert: should return parent with 'badgeAlert' false if 'child.badge' is valid
       but 'child' contain subItems`, () => {
-
       const child = { label: 'child', badge: { value: 1 }, subItems: [{ label: '2' }] };
-      const parent = { label: 'item', subItems: [ child ] };
-      const parentExpected = { label: 'item', badgeAlert: false, subItems: [ child ] };
+      const parent = { label: 'item', subItems: [child] };
+      const parentExpected = { label: 'item', badgeAlert: false, subItems: [child] };
 
       const result = component['setMenuBadgeAlert'](parent, child);
 
       expect(result).toEqual(parentExpected);
     });
-
   });
 
   describe('Properties:', () => {
-
     it('service: should set property with `undefined` if invalid values', () => {
       const invalidValues = ['', 0, null, undefined, false];
       const expectedValue = undefined;
 
-      const spyCofingService = spyOn(component, <any> 'configService');
+      const spyCofingService = spyOn(component, <any>'configService');
 
       expectPropertiesValues(component, 'service', invalidValues, expectedValue);
 
@@ -402,7 +407,7 @@ describe('PoMenuBaseComponent:', () => {
     it('service: should set property with valid values', () => {
       const validValues = ['http://po.portinari.com', { getFilteredData: () => {} }];
 
-      const spyCofingService = spyOn(component, <any> 'configService');
+      const spyCofingService = spyOn(component, <any>'configService');
 
       expectPropertiesValues(component, 'service', validValues, validValues);
 
@@ -468,43 +473,34 @@ describe('PoMenuBaseComponent:', () => {
 
       expectPropertiesValues(component, 'collapsed', invalidValues, false);
     });
-
   });
 
   describe('Integration:', () => {
-
     it('setMenuExtraProperties: should create menu with `badgeAlert` and structure it correctly', () => {
       component.menus = [
-        { label: 'Menu Item 1', subItems: [
-          { label: 'Menu Item 2', badge: { value: 1 } },
-          { label: 'Menu Item 3' }
-        ]},
-        { label: 'Menu Item 4', subItems: [
-          { label: 'Menu Item 5' },
-          { label: 'Menu Item 6' }
-        ]},
-        { label: 'Menu Item 7', subItems: [
-          { label: 'Menu Item 8', subItems: [
-            { label: 'Menu Item 9', badge: { value: 70 } },
-          ] }
-        ]},
+        { label: 'Menu Item 1', subItems: [{ label: 'Menu Item 2', badge: { value: 1 } }, { label: 'Menu Item 3' }] },
+        { label: 'Menu Item 4', subItems: [{ label: 'Menu Item 5' }, { label: 'Menu Item 6' }] },
+        {
+          label: 'Menu Item 7',
+          subItems: [{ label: 'Menu Item 8', subItems: [{ label: 'Menu Item 9', badge: { value: 70 } }] }]
+        },
         { label: 'Menu Item 10' }
       ];
 
       const expetedMenus = [
-        { label: 'Menu Item 1', badgeAlert: true, subItems: [
-          { label: 'Menu Item 2', badge: { value: 1 } },
-          { label: 'Menu Item 3' }
-        ]},
-        { label: 'Menu Item 4', badgeAlert: undefined, subItems: [
-          { label: 'Menu Item 5' },
-          { label: 'Menu Item 6' }
-        ]},
-        { label: 'Menu Item 7', badgeAlert: true, subItems: [
-          { label: 'Menu Item 8', badgeAlert: true, subItems: [
-            { label: 'Menu Item 9', badge: { value: 70 } },
-          ] }
-        ]},
+        {
+          label: 'Menu Item 1',
+          badgeAlert: true,
+          subItems: [{ label: 'Menu Item 2', badge: { value: 1 } }, { label: 'Menu Item 3' }]
+        },
+        { label: 'Menu Item 4', badgeAlert: undefined, subItems: [{ label: 'Menu Item 5' }, { label: 'Menu Item 6' }] },
+        {
+          label: 'Menu Item 7',
+          badgeAlert: true,
+          subItems: [
+            { label: 'Menu Item 8', badgeAlert: true, subItems: [{ label: 'Menu Item 9', badge: { value: 70 } }] }
+          ]
+        },
         { label: 'Menu Item 10' }
       ];
 
@@ -514,7 +510,5 @@ describe('PoMenuBaseComponent:', () => {
 
       expect(<any>component.menus).toEqual(expetedMenus);
     });
-
   });
-
 });

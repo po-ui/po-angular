@@ -14,9 +14,7 @@ import { isExternalLink } from '../../../utils/util';
   templateUrl: './po-table-column-link.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class PoTableColumnLinkComponent {
-
   @Input('p-action') action: Function;
 
   @Input('p-disabled') disabled: boolean;
@@ -28,13 +26,12 @@ export class PoTableColumnLinkComponent {
   @Input('p-value') value: string;
 
   get type() {
-
     if (this.disabled) {
       return 'disabled';
     }
 
     if (this.action) {
-       return 'action';
+      return 'action';
     }
 
     if (isExternalLink(this.link)) {
@@ -42,7 +39,5 @@ export class PoTableColumnLinkComponent {
     }
 
     return 'internalLink';
-
   }
-
 }

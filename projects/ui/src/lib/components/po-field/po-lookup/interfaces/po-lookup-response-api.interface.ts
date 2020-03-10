@@ -5,4 +5,4 @@ import { PoResponseApi } from './../../../../interfaces';
  *
  * @usedBy PoLookupComponent
  */
-export interface PoLookupResponseApi extends PoResponseApi { }
+export interface PoLookupResponseApi extends PoResponseApi {}

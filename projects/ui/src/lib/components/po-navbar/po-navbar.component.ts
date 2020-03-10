@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
 
 import { PoMenuItem } from '../po-menu';
@@ -19,7 +27,6 @@ const poNavbarTiming = '250ms ease';
   templateUrl: './po-navbar.component.html'
 })
 export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterViewInit, OnDestroy {
-
   disableRight: boolean;
   showItemsNavigation: boolean = false;
 
@@ -42,7 +49,11 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
 
   @ViewChild(PoNavbarItemsComponent, { static: true }) navbarItems: PoNavbarItemsComponent;
 
-  constructor(private renderer: Renderer2, private builder: AnimationBuilder, private changeDetector: ChangeDetectorRef) {
+  constructor(
+    private renderer: Renderer2,
+    private builder: AnimationBuilder,
+    private changeDetector: ChangeDetectorRef
+  ) {
     super();
     this.windowResizeListener = this.renderer.listen(window, 'resize', this.displayItemsNavigation.bind(this));
   }
@@ -68,7 +79,10 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   }
 
   private allNavbarItemsWidth() {
-    return this.navbarItems.allNavbarItems.reduce((previous: any, current: any) => previous + current.nativeElement.offsetWidth, 0);
+    return this.navbarItems.allNavbarItems.reduce(
+      (previous: any, current: any) => previous + current.nativeElement.offsetWidth,
+      0
+    );
   }
 
   private animate(offset: number) {
@@ -79,16 +93,15 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   }
 
   private buildTransitionAnimation(offset: number) {
-    return this.builder.build([
-      animate(
-        poNavbarTiming,
-        keyframes([style({ transform: `translateX(${-offset}px)` })])
-      )
-    ]);
+    return this.builder.build([animate(poNavbarTiming, keyframes([style({ transform: `translateX(${-offset}px)` })]))]);
   }
 
-  private changeNavbarMenuItems(isCollapsedMedia: any, menuItems: Array<PoMenuItem>, navbarItems: Array<PoNavbarItem>, label: string) {
-
+  private changeNavbarMenuItems(
+    isCollapsedMedia: any,
+    menuItems: Array<PoMenuItem>,
+    navbarItems: Array<PoNavbarItem>,
+    label: string
+  ) {
     if (isCollapsedMedia) {
       const subItems = [{ label, subItems: navbarItems }];
       this.menu.menus = [...subItems, ...menuItems];
@@ -98,7 +111,6 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   }
 
   private calculateLeftNavigation() {
-
     let calculatedOffset: number;
 
     this.navbarItems.allNavbarItems.some(navbarItem => {
@@ -114,7 +126,6 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   }
 
   private calculateRightNavigation(itemBreakPoint: number) {
-
     let calculatedOffset: number;
 
     this.navbarItems.allNavbarItems.some(navbarItem => {
@@ -125,7 +136,6 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
         calculatedOffset = offsetLeft;
         return true;
       }
-
     });
     return calculatedOffset;
   }
@@ -169,7 +179,6 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   }
 
   private navigateRight() {
-
     const maxAllowedOffset = this.allNavbarItemsWidth() - this.navbarItemsWidth();
     const itemBreakPoint = this.offset + this.navbarItemsWidth();
 
@@ -180,7 +189,7 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
 
   private onMediaQueryChange = changed => {
     this.changeNavbarMenuItems(changed.matches, this.menuItems, this.items, this.literals.navbarLinks);
-  }
+  };
 
   private setOffsetToZero() {
     this.offset = 0;
@@ -199,5 +208,4 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
       this.menu.changeDetector.detectChanges();
     }
   }
-
 }

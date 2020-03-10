@@ -4,8 +4,11 @@ import { Injectable, ComponentRef, ComponentFactoryResolver, ApplicationRef, Inj
   providedIn: 'root'
 })
 export class PoComponentInjectorService {
-
-  constructor(private componentResolver: ComponentFactoryResolver, private applicationRef: ApplicationRef, private injector: Injector) {}
+  constructor(
+    private componentResolver: ComponentFactoryResolver,
+    private applicationRef: ApplicationRef,
+    private injector: Injector
+  ) {}
 
   // Cria um dinamicamente no ApplicationRef
   createComponentInApplication(component: any): ComponentRef<any> {

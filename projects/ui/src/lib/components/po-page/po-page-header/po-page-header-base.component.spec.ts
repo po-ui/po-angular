@@ -6,5 +6,4 @@ describe('PoPageHeaderBaseComponent', () => {
   it('should be created', () => {
     expect(component instanceof PoPageHeaderBaseComponent).toBeTruthy();
   });
-
 });

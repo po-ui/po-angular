@@ -13,12 +13,7 @@ describe('PoEmailComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoEmailComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoEmailComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -30,7 +25,6 @@ describe('PoEmailComponent:', () => {
     component.clean = true;
 
     fixture.detectChanges();
-
   });
 
   it('should be created', () => {
@@ -42,7 +36,6 @@ describe('PoEmailComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -105,11 +98,9 @@ describe('PoEmailComponent:', () => {
 
       expect(component.inputEl.nativeElement.removeEventListener).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     const eventKeyup = new KeyboardEvent('keyup', { 'key': 'a' });
 
     it('should have `mail` icon', () => {
@@ -162,7 +153,5 @@ describe('PoEmailComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

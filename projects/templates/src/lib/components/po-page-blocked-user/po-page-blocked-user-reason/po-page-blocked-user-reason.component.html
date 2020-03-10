@@ -1,12 +1,12 @@
 <div class="po-page-blocked-user-reason-content">
-  <img 
-    class="po-page-blocked-user-image po-mb-3" 
-    [src]="getImageByReasonType()"> 
+  <img class="po-page-blocked-user-image po-mb-3" [src]="getImageByReasonType()" />
   <div class="po-page-blocked-user-header po-mb-md-3 po-row">
     <div class="po-md-12">{{ literals?.title }}</div>
   </div>
   <div class="po-page-blocked-user-text po-font-text po-row">
-    <div class="po-mb-sm-2 po-mb-md-3 po-md-12 po-page-blocked-user-text-bold">{{ literals?.firstPhrase | poI18n:literalParams }}</div>
+    <div class="po-mb-sm-2 po-mb-md-3 po-md-12 po-page-blocked-user-text-bold">
+      {{ literals?.firstPhrase | poI18n: literalParams }}
+    </div>
     <div class="po-mb-sm-2 po-mb-md-3 po-md-12">{{ literals?.secondPhrase }}</div>
     <div class="po-mb-sm-2 po-mb-md-3 po-md-12" *ngIf="literals?.thirdPhrase">{{ literals?.thirdPhrase }}</div>
   </div>

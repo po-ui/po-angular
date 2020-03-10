@@ -17,7 +17,7 @@ describe('PoDynamicViewComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoDynamicModule ],
+      imports: [PoDynamicModule],
       providers: [HttpClient, HttpHandler, PoDynamicViewService]
     });
   });
@@ -34,7 +34,6 @@ describe('PoDynamicViewComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('ngOnChanges:', () => {
       const returnedValue = [{ property: 'name' }];
 
@@ -42,7 +41,7 @@ describe('PoDynamicViewComponent:', () => {
         const changes = {};
         component.visibleFields = [];
 
-        spyOn(component, <any> 'getVisibleFields');
+        spyOn(component, <any>'getVisibleFields');
 
         component.ngOnChanges(changes);
 
@@ -51,10 +50,10 @@ describe('PoDynamicViewComponent:', () => {
       });
 
       it('should call `getVisibleFields` if `changes.fields` is true', () => {
-        const changes = { fields: <any> {} };
+        const changes = { fields: <any>{} };
         component.visibleFields = [];
 
-        spyOn(component, <any> 'getVisibleFields').and.returnValue(returnedValue);
+        spyOn(component, <any>'getVisibleFields').and.returnValue(returnedValue);
 
         component.ngOnChanges(changes);
 
@@ -63,10 +62,10 @@ describe('PoDynamicViewComponent:', () => {
       });
 
       it('should call `getVisibleFields` if `changes.value` is true', () => {
-        const changes = { value: <any> {} };
+        const changes = { value: <any>{} };
         component.visibleFields = [];
 
-        spyOn(component, <any> 'getVisibleFields').and.returnValue(returnedValue);
+        spyOn(component, <any>'getVisibleFields').and.returnValue(returnedValue);
 
         component.ngOnChanges(changes);
 
@@ -75,17 +74,16 @@ describe('PoDynamicViewComponent:', () => {
       });
 
       it('should call `getVisibleFields` if `changes.showAllValue` is true', () => {
-        const changes = { showAllValue: <any> {} };
+        const changes = { showAllValue: <any>{} };
         component.visibleFields = [];
 
-        spyOn(component, <any> 'getVisibleFields').and.returnValue(returnedValue);
+        spyOn(component, <any>'getVisibleFields').and.returnValue(returnedValue);
 
         component.ngOnChanges(changes);
 
         expect(component['getVisibleFields']).toHaveBeenCalled();
         expect(component.visibleFields.length).toBe(returnedValue.length);
       });
-
     });
 
     it('ngOnInit: should call `updateValuesAndFieldsOnLoad` if typeof `load` is truthy', () => {
@@ -99,7 +97,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`getValuesAndFieldsFromLoad: should call 'dynamicViewService.onLoad' if 'component.load' is string`, async () => {
-      const expectedValue = { value: { name: 'teste 2'}, fields: [ { property: 'name', tag: true, inverse: true } ] };
+      const expectedValue = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true, inverse: true }] };
 
       component.load = 'teste';
 
@@ -121,7 +119,7 @@ describe('PoDynamicViewComponent:', () => {
 
     it(`getValuesAndFieldsFromLoad: shouldn't call 'component.load' or 'dynamicService.onLoad' if 'component.load' isn't
       string or function`, async () => {
-      component.load = <any> [];
+      component.load = <any>[];
 
       spyOn(component['dynamicViewService'], 'onLoad').and.returnValue(of({}).toPromise());
 
@@ -132,7 +130,7 @@ describe('PoDynamicViewComponent:', () => {
     it('getVisibleFields: should return `getMergedFields` if `showAllValue` is true', () => {
       component.showAllValue = true;
 
-      spyOn(component, <any> 'getMergedFields');
+      spyOn(component, <any>'getMergedFields');
 
       component['getVisibleFields']();
 
@@ -144,7 +142,7 @@ describe('PoDynamicViewComponent:', () => {
       component.value = { name: 'po', age: 2 };
       component.fields = [{ property: 'name' }];
 
-      spyOn(component, <any> 'getConfiguredFields');
+      spyOn(component, <any>'getConfiguredFields');
 
       component['getVisibleFields']();
 
@@ -157,7 +155,7 @@ describe('PoDynamicViewComponent:', () => {
       component.value = { name: 'po', age: 2 };
       component.fields = [];
 
-      spyOn(component, <any> 'getValueFields');
+      spyOn(component, <any>'getValueFields');
 
       component['getVisibleFields']();
 
@@ -178,7 +176,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`setFieldOnLoad: should update 'fields' with field param if it is a new field`, () => {
-      component.value = { name: 'teste'};
+      component.value = { name: 'teste' };
       component.fields = [{ property: 'name' }];
 
       const fakeFieldOnLoad = {
@@ -196,7 +194,7 @@ describe('PoDynamicViewComponent:', () => {
 
     it(`setFieldsOnLoad: should call 'setFieldOnLoad' if 'fields' is array`, () => {
       const fakeField = { property: 'name', tag: true, inverse: true };
-      const fakeFieldsOnLoad = [ { ...fakeField } ];
+      const fakeFieldsOnLoad = [{ ...fakeField }];
 
       spyOn(component, <any>'setFieldOnLoad');
 
@@ -229,7 +227,7 @@ describe('PoDynamicViewComponent:', () => {
 
     it(`updateValuesAndFieldsOnLoad: should call 'getValuesAndFieldsFromLoad', 'setValueOnLoad', 'setFieldsOnLoad'
     and 'getVisibleFields'`, async () => {
-      const fakeDataOnLoad = { value: { name: 'teste 2'}, fields: [ { property: 'name', tag: true, inverse: true } ] };
+      const fakeDataOnLoad = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true, inverse: true }] };
       spyOn(component, <any>'getValuesAndFieldsFromLoad').and.returnValue(fakeDataOnLoad);
       spyOn(component, <any>'setValueOnLoad');
       spyOn(component, <any>'setFieldsOnLoad');
@@ -242,15 +240,11 @@ describe('PoDynamicViewComponent:', () => {
       expect(component['setFieldsOnLoad']).toHaveBeenCalledWith(fakeDataOnLoad.fields);
       expect(component['getVisibleFields']).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it(`should create 'po-tag' if have a 'tag' property`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -262,9 +256,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-info' if haven't a 'tag' property`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF' },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -281,7 +273,7 @@ describe('PoDynamicViewComponent:', () => {
         { property: 'cpf', label: 'CPF' },
         { property: 'name', label: 'NAME', tag: true },
         { property: 'rg', label: 'RG' },
-        { property: 'address', label: 'ADDRESS', tag: true },
+        { property: 'address', label: 'ADDRESS', tag: true }
       ];
 
       component.ngOnChanges({
@@ -297,7 +289,7 @@ describe('PoDynamicViewComponent:', () => {
     it(`should create 'po-info' and 'po-divider' if haven't tag property and have a 'divider' property`, () => {
       component.fields = [
         { property: 'name', divider: 'Personal data' },
-        { property: 'cpf', label: 'CPF' },
+        { property: 'cpf', label: 'CPF' }
       ];
 
       component.ngOnChanges({
@@ -313,7 +305,7 @@ describe('PoDynamicViewComponent:', () => {
     it(`should create 'po-info' and 'po-divider' if haven't tag property and have a 'divider' property`, () => {
       component.fields = [
         { property: 'name', divider: 'Personal data' },
-        { property: 'cpf', label: 'CPF' },
+        { property: 'cpf', label: 'CPF' }
       ];
 
       component.ngOnChanges({
@@ -331,18 +323,18 @@ describe('PoDynamicViewComponent:', () => {
         { property: 'rg', label: 'RG', tag: true },
         { property: 'title', label: 'TITLE', tag: true },
         { property: 'street', label: 'STREET', tag: true },
-        { property: 'state', label: 'STATE', tag: true },
+        { property: 'state', label: 'STATE', tag: true }
       ];
 
       const fieldsInfo = [
         { property: 'cpf', label: 'CPF' },
         { property: 'name', label: 'NAME', tag: false },
-        { property: 'address', label: 'ADDRESS', tag: false },
+        { property: 'address', label: 'ADDRESS', tag: false }
       ];
 
       const fieldsDivider = [
         { property: 'name', divider: 'Personal data' },
-        { property: 'address', divider: 'Address data' },
+        { property: 'address', divider: 'Address data' }
       ];
 
       component.fields = [...fieldsDivider, ...fieldsTag, ...fieldsInfo];
@@ -363,9 +355,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-tag' with icon if properties 'tag' and 'icon' contain values.`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true, icon: 'po-icon-ok' },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, icon: 'po-icon-ok' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -377,9 +367,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-tag' without icon if 'tag' is true but 'icon' is not defined.`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -392,9 +380,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-tag' with a custom color if 'tag' and 'color' properties contain values.`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true, color: 'color-07' },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, color: 'color-07' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -407,9 +393,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-tag' without a customized color.`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -422,9 +406,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-tag-inverse' with custom and inverse colors if 'color', 'tag' and 'inverse' properties contain values.`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true, color: 'color-07', inverse: true },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, color: 'color-07', inverse: true }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -438,9 +420,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-tag' with a custom color and without 'inverse' if only 'tag' and 'color' contain values.`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true, color: 'color-07', inverse: false },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, color: 'color-07', inverse: false }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -455,9 +435,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-tag-inverse' if 'tag' is 'default' and 'inverse'.`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true, inverse: true },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, inverse: true }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -471,9 +449,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`shouldn't create 'po-tag-inverse' if 'tag' is 'default' and 'inverse' is false.`, () => {
-      component.fields = [
-        { property: 'cpf', label: 'CPF', tag: true, inverse: false },
-      ];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, inverse: false }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -486,7 +462,5 @@ describe('PoDynamicViewComponent:', () => {
       expect(nativeElement.querySelector('.po-tag-info-inverse')).toBeFalsy();
       expect(nativeElement.querySelector('.po-tag-info')).toBeTruthy();
     });
-
   });
-
 });

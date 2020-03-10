@@ -4,17 +4,18 @@
   </div>
 
   <div class="po-tag-sub-container">
-    <div class="po-tag"
+    <div
+      class="po-tag"
       [class.po-clickable]="isClickable"
       [class.po-tag-inverse]="inverse"
       [ngClass]="tagColor"
       tabindex="0"
       (click)="onClick()"
       (keydown)="onKeyPressed($event, 'enter')"
-      (keyup)="onKeyPressed($event, 'space')">
-
+      (keyup)="onKeyPressed($event, 'space')"
+    >
       <span *ngIf="icon" class="po-icon" [ngClass]="!type && iconTypeString ? icon : iconFromType"></span>
-      <span class="po-tag-value">{{value}}</span>
+      <span class="po-tag-value">{{ value }}</span>
     </div>
   </div>
 </div>

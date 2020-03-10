@@ -1,7 +1,6 @@
 import { PoMask } from './po-mask';
 
 describe('PoMask', () => {
-
   let mask: PoMask;
   let fakeEvent;
 
@@ -366,7 +365,6 @@ describe('PoMask', () => {
 
     expect(fakeMask.finalPosition).toBe(7);
     expect(fakeMask.initialPosition).toBe(2);
-
   });
 
   it('should update the input with the formatted value if you press control v', () => {
@@ -488,7 +486,6 @@ describe('PoMask', () => {
 
     expect(fakeEvent.target.selectionStart).toBe(6);
     expect(fakeEvent.target.selectionEnd).toBe(6);
-
   });
 
   it('should not do nothing when keydown with keycode 8 ', () => {
@@ -530,7 +527,6 @@ describe('PoMask', () => {
     fakeThis.checkMaskBefore(fakeEvent, -1);
 
     expect(fakeEvent.target.selectionStart).toBe(3);
-
   });
 
   it('should return when keydown (ctrl+V) ', () => {
@@ -656,7 +652,6 @@ describe('PoMask', () => {
   });
 
   it('should test replaceMask function', () => {
-
     expect(mask.replaceMask('0')).toEqual(/[0]/);
     expect(mask.replaceMask('1')).toEqual(/[0-1]/);
     expect(mask.replaceMask('2')).toEqual(/[0-2]/);
@@ -681,5 +676,4 @@ describe('PoMask', () => {
     expect(mask.getRegexFromMask(null)).toBeNull();
     expect(mask.getRegexFromMask('')).toBeNull();
   });
-
 });

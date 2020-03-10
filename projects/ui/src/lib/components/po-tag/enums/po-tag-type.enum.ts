@@ -6,7 +6,6 @@
  * Define os tipos disponíveis para o `po-tag`.
  */
 export enum PoTagType {
-
   /** Erro, perigo, problema ou aviso crítico. */
   Danger = 'danger',
 

@@ -7,7 +7,6 @@ import { PoRadioGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-calendar-labs.component.html'
 })
 export class SamplePoCalendarLabsComponent implements OnInit {
-
   calendar;
   event;
   locale: string;
@@ -35,5 +34,4 @@ export class SamplePoCalendarLabsComponent implements OnInit {
     this.maxDate = undefined;
     this.minDate = undefined;
   }
-
 }

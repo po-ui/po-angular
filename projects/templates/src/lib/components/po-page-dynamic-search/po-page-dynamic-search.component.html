@@ -3,12 +3,13 @@
   [p-breadcrumb]="breadcrumb"
   [p-disclaimer-group]="disclaimerGroup"
   [p-filter]="filterSettings"
-  [p-title]="title">
-
+  [p-title]="title"
+>
   <po-advanced-filter
     [p-filters]="filters"
     [p-literals]="advancedFilterLiterals"
-    (p-search-event)="onAdvancedSearch($event)">
+    (p-search-event)="onAdvancedSearch($event)"
+  >
   </po-advanced-filter>
 
   <ng-content></ng-content>

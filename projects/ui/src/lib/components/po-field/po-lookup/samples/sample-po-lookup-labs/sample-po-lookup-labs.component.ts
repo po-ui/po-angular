@@ -7,10 +7,9 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
 @Component({
   selector: 'sample-po-lookup-labs',
   templateUrl: './sample-po-lookup-labs.component.html',
-  providers: [ SamplePoLookupService ]
+  providers: [SamplePoLookupService]
 })
 export class SamplePoLookupLabsComponent implements OnInit {
-
   columns: Array<PoLookupColumn>;
   columnsName: Array<string>;
   customLiterals: PoLookupLiterals;
@@ -42,13 +41,13 @@ export class SamplePoLookupLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
-    { value: 'fieldFormat', label: 'Field format'},
+    { value: 'fieldFormat', label: 'Field format' },
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' }
   ];
 
-  constructor(public sampleFilterService: SamplePoLookupService) { }
+  constructor(public sampleFilterService: SamplePoLookupService) {}
 
   ngOnInit(): void {
     this.restore();
@@ -101,5 +100,4 @@ export class SamplePoLookupLabsComponent implements OnInit {
 
     this.columnsName.forEach(column => this.columns.push(this.columnsDefinition[column]));
   }
-
 }

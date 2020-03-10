@@ -26,7 +26,6 @@ export function browserLanguage() {
  * @param decimals {number} Quantidade de casas decimais que terá após a conversão.
  */
 export function formatBytes(bytes: number, decimals = 2): string {
-
   if (!bytes) {
     return undefined;
   }
@@ -75,7 +74,7 @@ export function getShortLanguage(language: string): string {
 }
 
 export function isLanguage(value) {
-  const languageRegex = new RegExp('^[a-z]{2}(\-[a-z]{2})?$', 'i');
+  const languageRegex = new RegExp('^[a-z]{2}(-[a-z]{2})?$', 'i');
 
   return languageRegex.test(value);
 }
@@ -88,7 +87,7 @@ export function reloadCurrentPage() {
 export function convertToBoolean(val: any): boolean {
   if (typeof val === 'string') {
     val = val.toLowerCase().trim();
-    return (val === 'true' || val === 'on' || val === '');
+    return val === 'true' || val === 'on' || val === '';
   }
 
   if (typeof val === 'number') {
@@ -125,7 +124,7 @@ export function callFunction(fn: any, context: any, param?): void {
   }
 }
 
-export function convertIsoToDate(value: string , start: boolean, end: boolean) {
+export function convertIsoToDate(value: string, start: boolean, end: boolean) {
   if (value) {
     const day = parseInt(value.substring(8, 10), 10);
     const month = parseInt(value.substring(5, 7), 10);
@@ -165,20 +164,29 @@ export function convertDateToISODate(date: Date) {
 
 export function convertDateToISOExtended(date: Date, time?: string) {
   if (date) {
+    const getMonth = date.getMonth() + 1;
+    const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+    const month = getMonth < 10 ? '0' + getMonth : getMonth;
+    const year = formatYear(date.getFullYear());
 
-  const getMonth = date.getMonth() + 1;
-  const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
-  const month = getMonth < 10 ? '0' + getMonth : getMonth;
-  const year = formatYear(date.getFullYear());
+    const dateString = date.toString();
 
-  const dateString = date.toString();
-
-  if (time !== null) {
-    return year + '-' + month + '-' + day + time;
-  } else {
-    return year + '-' + month + '-' + day + 'T' + dateString.substring(16, 24) +
-        dateString.substring(28, 31) + ':' + dateString.substring(31, 33);
-  }
+    if (time !== null) {
+      return year + '-' + month + '-' + day + time;
+    } else {
+      return (
+        year +
+        '-' +
+        month +
+        '-' +
+        day +
+        'T' +
+        dateString.substring(16, 24) +
+        dateString.substring(28, 31) +
+        ':' +
+        dateString.substring(31, 33)
+      );
+    }
   } else {
     return null;
   }
@@ -189,7 +197,6 @@ export function convertDateToISOExtended(date: Date, time?: string) {
  * @param year Ano
  */
 export function formatYear(year: number) {
-
   if (year >= 1000) {
     return year.toString();
   }
@@ -205,7 +212,6 @@ export function formatYear(year: number) {
   if (year >= 0 && year < 10) {
     return `000${year}`;
   }
-
 }
 // Verifica se o navegador em que está sendo usado é Internet Explorer ou Edge
 export function isIEOrEdge() {
@@ -249,7 +255,7 @@ export function isKeyCodeEnter(event: any): boolean {
  * @param year Ano original
  */
 export function setYearFrom0To100(date: Date, year: number) {
-  if (year >= 0 && year < 100 ) {
+  if (year >= 0 && year < 100) {
     date.setFullYear(year);
   }
 }
@@ -271,7 +277,9 @@ export function sortOptionsByProperty(options: Array<any>, property: string) {
 
 export function removeDuplicatedOptions(list: Array<any>) {
   for (let i = 0; i < list.length; i++) {
-    if (i === 0) { continue; }
+    if (i === 0) {
+      continue;
+    }
 
     if (list.findIndex(op => op.value === list[i].value) !== i) {
       list.splice(i, 1);
@@ -282,7 +290,7 @@ export function removeDuplicatedOptions(list: Array<any>) {
 
 export function removeUndefinedAndNullOptions(list: Array<any>) {
   for (let i = 0; i < list.length; i++) {
-    if (list[i].value === undefined || list[i].value === null ) {
+    if (list[i].value === undefined || list[i].value === null) {
       list.splice(i, 1);
       i--;
     }
@@ -301,7 +309,7 @@ export function openExternalLink(url): void {
   window.open(url, '_blank');
 }
 
-export function  getFormattedLink(link: string): string {
+export function getFormattedLink(link: string): string {
   let formattedLink = '';
   // Retira todos os pontos no começo da URL.
   if (link) {
@@ -343,11 +351,11 @@ export function sortValues(leftSide: string, rightSide: string, ascending: boole
 
 export function validateDateRange(date: Date, dateStart: Date, dateEnd: Date) {
   if (dateStart && dateEnd) {
-    return (date >= dateStart && date <= dateEnd);
+    return date >= dateStart && date <= dateEnd;
   } else if (dateStart && !dateEnd) {
-    return (date >= dateStart);
+    return date >= dateStart;
   } else if (!dateStart && dateEnd) {
-    return (date <= dateEnd);
+    return date <= dateEnd;
   } else {
     return true;
   }
@@ -360,8 +368,7 @@ export function uuid() {
       .substring(1);
   }
 
-  return hex4() + hex4() + '-' + hex4() + '-' + hex4() + '-' +
-  hex4() + '-' + hex4() + hex4() + hex4();
+  return hex4() + hex4() + '-' + hex4() + '-' + hex4() + '-' + hex4() + '-' + hex4() + hex4() + hex4();
 }
 
 export function capitalizeFirstLetter(text: string): string {
@@ -438,7 +445,10 @@ export function mapArrayByProperties(items: Array<any> = [], properties: Array<s
  * @returns Array<any>
  */
 export function mapObjectByProperties(object: any = {}, properties: Array<string> = []) {
-  const getSelectedProperties = (selectedProperties, property) => ({ ...selectedProperties, [property]: object[property] });
+  const getSelectedProperties = (selectedProperties, property) => ({
+    ...selectedProperties,
+    [property]: object[property]
+  });
 
   return properties.reduce(getSelectedProperties, {});
 }
@@ -461,7 +471,6 @@ export function valuesFromObject(object: any = {}): Array<any> {
  */
 export function convertImageToBase64(file: File): Promise<any> {
   return new Promise((resolve, reject) => {
-
     const reader = new FileReader();
 
     reader.readAsDataURL(file);

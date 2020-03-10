@@ -25,11 +25,8 @@ describe('PoRichTextComponent:', () => {
         PoRichTextComponent,
         PoRichTextToolbarComponent
       ],
-      schemas: [ NO_ERRORS_SCHEMA ],
-      imports: [
-        BrowserAnimationsModule,
-        FormsModule
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [BrowserAnimationsModule, FormsModule]
     });
   });
 
@@ -78,7 +75,6 @@ describe('PoRichTextComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -150,7 +146,6 @@ describe('PoRichTextComponent:', () => {
     });
 
     it('focus: should call input `focus`', () => {
-
       spyOn(component.bodyElement, 'focus');
 
       component.focus();
@@ -179,7 +174,6 @@ describe('PoRichTextComponent:', () => {
 
       expect(nativeElement.classList).toContain('ng-invalid');
       expect(nativeElement.classList).toContain('ng-dirty');
-
     }));
 
     it('validateClassesForRequired: should remove ng-invalid if value has value', fakeAsync(() => {

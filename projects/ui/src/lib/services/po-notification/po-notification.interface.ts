@@ -8,7 +8,6 @@ import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
  * Interface para uso do serviço po-notification.
  */
 export interface PoNotification {
-
   /** Ação para a notificação. */
   action?: Function;
 

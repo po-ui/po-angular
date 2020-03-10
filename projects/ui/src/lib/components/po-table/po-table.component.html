@@ -5,11 +5,12 @@
     </div>
 
     <div class="po-table-main-container">
-      <div #tableWrapper
+      <div
+        #tableWrapper
         class="po-table-wrapper"
         [class.po-table-header-fixed-columns-pixels]="allColumnsWidthPixels"
-        [style.opacity]="tableOpacity">
-
+        [style.opacity]="tableOpacity"
+      >
         <div *ngIf="height" class="po-table-container" [style.height.px]="heightTableContainer">
           <div class="po-table-header-fixed po-table-header"></div>
           <div class="po-table-container-fixed-inner">
@@ -20,15 +21,13 @@
         <div *ngIf="!height">
           <ng-container *ngTemplateOutlet="tableTemplate"></ng-container>
         </div>
-
       </div>
     </div>
   </div>
 
   <div class="po-table-footer" *ngIf="hasFooter">
     <ng-container *ngFor="let column of subtitleColumns; trackBy: trackBy">
-      <po-table-subtitle-footer [p-literals]="literals" [p-subtitles]="column.subtitles">
-      </po-table-subtitle-footer>
+      <po-table-subtitle-footer [p-literals]="literals" [p-subtitles]="column.subtitles"> </po-table-subtitle-footer>
     </ng-container>
   </div>
 </po-container>
@@ -38,64 +37,75 @@
     class="po-offset-xl-4 po-offset-lg-4 po-offset-md-3 po-lg-4 po-md-6"
     [p-disabled]="showMoreDisabled"
     [p-label]="literals.loadMoreData"
-    (p-click)="onShowMore()">
+    (p-click)="onShowMore()"
+  >
   </po-button>
 </div>
 
 <ng-template #tableTemplate>
-  <table class="po-table"
-    [class.po-table-striped]="striped"
-    [class.po-table-layout-fixed]="hideTextOverflow">
+  <table class="po-table" [class.po-table-striped]="striped" [class.po-table-layout-fixed]="hideTextOverflow">
     <thead>
       <tr [class.po-table-header]="!height">
-
         <th *ngIf="hasSelectableColumn" class="po-table-column-selectable">
           <div [class.po-table-header-fixed-inner]="height">
-            <input *ngIf="!hideSelectAll" type="checkbox" class="po-table-checkbox"
-            [class.po-table-checkbox-checked]="selectAll"
-            [class.po-table-checkbox-indeterminate]="selectAll === null">
-            <label *ngIf="!hideSelectAll" class="po-table-checkbox-label po-clickable" (click)="selectAllRows()"></label>
+            <input
+              *ngIf="!hideSelectAll"
+              type="checkbox"
+              class="po-table-checkbox"
+              [class.po-table-checkbox-checked]="selectAll"
+              [class.po-table-checkbox-indeterminate]="selectAll === null"
+            />
+            <label
+              *ngIf="!hideSelectAll"
+              class="po-table-checkbox-label po-clickable"
+              (click)="selectAllRows()"
+            ></label>
           </div>
         </th>
 
-        <th *ngIf="hasMasterDetailColumn"
-          class="po-table-header-column po-table-header-master-detail">
-        </th>
+        <th *ngIf="hasMasterDetailColumn" class="po-table-header-column po-table-header-master-detail"></th>
 
         <th *ngIf="!hasMainColumns" #noColumnsHeader class="po-table-header-column po-text-center">
           <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
         </th>
 
-        <th *ngFor="let column of mainColumns; let i = index; trackBy: trackBy" #headersTable
+        <th
+          *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
+          #headersTable
           class="po-table-header-ellipsis"
-          [style.width]="column.width" [style.max-width]="column.width" [style.min-width]="column.width"
+          [style.width]="column.width"
+          [style.max-width]="column.width"
+          [style.min-width]="column.width"
           [class.po-clickable]="sort"
-          [class.po-table-column-right]= "column.type === 'currency' || column.type === 'number'"
+          [class.po-table-column-right]="column.type === 'currency' || column.type === 'number'"
           [class.po-table-header-subtitle]="column.type === 'subtitle'"
-          (click)="sortColumn(column)">
-
+          (click)="sortColumn(column)"
+        >
           <div [class.po-table-header-fixed-inner]="height">
-            <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }">
-            </ng-container>
+            <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
           </div>
         </th>
 
-        <th #columnManager *ngIf="hasValidColumns"
+        <th
+          #columnManager
+          *ngIf="hasValidColumns"
           [class.po-table-header-column-manager]="!isSingleAction"
           [class.po-table-header-column-manager-border]="!height && container"
-          [class.po-table-header-single-action]="isSingleAction">
+          [class.po-table-header-single-action]="isSingleAction"
+        >
           <div
             [class.po-table-header-column-manager-border]="height && container"
             [class.po-table-header-column-manager-fixed-inner]="height"
-            [style.width.px]="height && visibleActions.length ? columnManager.offsetWidth : undefined">
-            <button #columnManagerTarget
+            [style.width.px]="height && visibleActions.length ? columnManager.offsetWidth : undefined"
+          >
+            <button
+              #columnManagerTarget
               class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"
               p-tooltip-position="left"
-              [p-tooltip]="literals.columnsManager">
-            </button>
+              [p-tooltip]="literals.columnsManager"
+            ></button>
           </div>
         </th>
-
       </tr>
     </thead>
 
@@ -108,57 +118,76 @@
     </tbody>
 
     <ng-container *ngIf="hasMainColumns">
-
-      <tbody class="po-table-group-row" *ngFor="let row of items, let rowIndex = index; trackBy: trackBy">
-        <tr class="po-table-row" [class.po-table-row-active]="row.$selected || row.$selected === null && selectable">
+      <tbody class="po-table-group-row" *ngFor="let row of items; let rowIndex = index; trackBy: trackBy">
+        <tr class="po-table-row" [class.po-table-row-active]="row.$selected || (row.$selected === null && selectable)">
           <td *ngIf="selectable" class="po-table-column po-table-column-selectable">
-            <ng-container
-              *ngTemplateOutlet="singleSelect ? inputRadio : inputCheckbox; context: { $implicit: row }">
+            <ng-container *ngTemplateOutlet="singleSelect ? inputRadio : inputCheckbox; context: { $implicit: row }">
             </ng-container>
           </td>
-          <td *ngIf="columnMasterDetail && !hideDetail || hasRowTemplate"
+          <td
+            *ngIf="(columnMasterDetail && !hideDetail) || hasRowTemplate"
             class="po-table-column-detail-toggle"
-            (click)="toggleDetail(row)">
-            <span *ngIf="(containsMasterDetail(row) && !hasRowTemplate) || isShowRowTemplate(row, rowIndex) && hasRowTemplate"
+            (click)="toggleDetail(row)"
+          >
+            <span
+              *ngIf="
+                (containsMasterDetail(row) && !hasRowTemplate) || (isShowRowTemplate(row, rowIndex) && hasRowTemplate)
+              "
               class="po-icon po-clickable"
               [class.po-icon-arrow-up]="row.$showDetail"
-              [class.po-icon-arrow-down]="!row.$showDetail">
+              [class.po-icon-arrow-down]="!row.$showDetail"
+            >
             </span>
           </td>
 
-          <td *ngFor="let column of mainColumns, let columnIndex = index; trackBy: trackBy"
-            [style.width]="column.width" [style.max-width]="column.width" [style.min-width]="column.width"
+          <td
+            *ngFor="let column of mainColumns; let columnIndex = index; trackBy: trackBy"
+            [style.width]="column.width"
+            [style.max-width]="column.width"
+            [style.min-width]="column.width"
             [class.po-table-column]="column.type !== 'icon'"
             [class.po-table-column-right]="column.type == 'currency' || column.type == 'number'"
             [class.po-table-column-center]="column.type === 'subtitle'"
             [class.po-table-column-icons]="column.type === 'icon'"
             [ngClass]="getClassColor(row, column)"
-            (click)="selectable ? selectRow(row) : 'javascript:;'">
-
-            <div class="po-table-column-cell"
+            (click)="selectable ? selectRow(row) : 'javascript:;'"
+          >
+            <div
+              class="po-table-column-cell"
               [class.po-table-body-ellipsis]="hideTextOverflow"
               [ngSwitch]="column.type"
               [p-tooltip]="tooltipText"
               (mouseenter)="tooltipMouseEnter($event, column, row)"
-              (mouseleave)="tooltipMouseLeave()">
+              (mouseleave)="tooltipMouseLeave()"
+            >
               <span *ngSwitchCase="'boolean'">{{ getBooleanLabel(row[column.property], column) }}</span>
-              <span *ngSwitchCase="'currency'">{{ row[column.property] | currency:column.format:'symbol':'1.2-2' }}</span>
-              <span *ngSwitchCase="'date'" >{{ row[column.property] | date: column.format || 'dd/MM/yyyy' }}</span>
-              <span *ngSwitchCase="'time'" >{{ row[column.property] | po_time: column.format || 'HH:mm:ss.ffffff' }}</span>
-              <span *ngSwitchCase="'dateTime'" >{{ row[column.property] | date: column.format || 'dd/MM/yyyy HH:mm:ss' }}</span>
+              <span *ngSwitchCase="'currency'">{{
+                row[column.property] | currency: column.format:'symbol':'1.2-2'
+              }}</span>
+              <span *ngSwitchCase="'date'">{{ row[column.property] | date: column.format || 'dd/MM/yyyy' }}</span>
+              <span *ngSwitchCase="'time'">{{
+                row[column.property] | po_time: column.format || 'HH:mm:ss.ffffff'
+              }}</span>
+              <span *ngSwitchCase="'dateTime'">{{
+                row[column.property] | date: column.format || 'dd/MM/yyyy HH:mm:ss'
+              }}</span>
               <span *ngSwitchCase="'number'">{{ formatNumber(row[column.property], column.format) }}</span>
-              <po-table-column-link *ngSwitchCase="'link'"
+              <po-table-column-link
+                *ngSwitchCase="'link'"
                 [p-action]="column.action"
                 [p-disabled]="checkDisabled(row, column)"
                 [p-link]="row[column.link]"
                 [p-row]="row"
-                [p-value]="row[column.property]">
+                [p-value]="row[column.property]"
+              >
               </po-table-column-link>
 
-              <po-table-column-icon *ngSwitchCase="'icon'"
+              <po-table-column-icon
+                *ngSwitchCase="'icon'"
                 [p-column]="column"
                 [p-icons]="getColumnIcons(row, column)"
-                [p-row]="row">
+                [p-row]="row"
+              >
               </po-table-column-icon>
 
               <span *ngSwitchCase="'subtitle'">
@@ -171,11 +200,12 @@
             </div>
           </td>
           <td *ngIf="isSingleAction" class="po-table-column po-table-column-single-action">
-            <div *ngIf="firstAction.visible !== false"
+            <div
+              *ngIf="firstAction.visible !== false"
               class="po-table-single-action po-clickable"
-              [class.po-table-action-disabled]= "firstAction.disabled ? validateTableAction(row, firstAction) : false"
-              (click)="executeTableAction(row, firstAction)">
-
+              [class.po-table-action-disabled]="firstAction.disabled ? validateTableAction(row, firstAction) : false"
+              (click)="executeTableAction(row, firstAction)"
+            >
               <span *ngIf="firstAction.icon" class="po-icon {{ firstAction.icon }}"></span>
               {{ firstAction.label }}
             </div>
@@ -192,21 +222,21 @@
           <td class="po-table-row-template-container" [colSpan]="columnCountForMasterDetail">
             <ng-template
               [ngTemplateOutlet]="tableRowTemplate.templateRef"
-              [ngTemplateOutletContext]="{ $implicit: row, rowIndex: rowIndex }">
+              [ngTemplateOutletContext]="{ $implicit: row, rowIndex: rowIndex }"
+            >
             </ng-template>
           </td>
         </tr>
 
         <tr *ngIf="hasMainColumns && isShowMasterDetail(row)">
           <td class="po-table-column-detail" [colSpan]="columnCountForMasterDetail">
-
             <po-table-detail
               [p-selectable]="selectable && !detailHideSelect"
               [p-detail]="columnMasterDetail.detail"
               [p-items]="row[nameColumnDetail]"
-              (p-select-row)="selectDetailRow($event)">
+              (p-select-row)="selectDetailRow($event)"
+            >
             </po-table-detail>
-
           </td>
         </tr>
       </tbody>
@@ -214,32 +244,32 @@
   </table>
 </ng-template>
 
-<po-popup #popup
-  [p-actions]="actions"
-  [p-target]="popupTarget">
-</po-popup>
+<po-popup #popup [p-actions]="actions" [p-target]="popupTarget"> </po-popup>
 
 <ng-template #inputRadio let-row>
-  <input type="radio" class="po-radio-group-input" [class.po-radio-group-input-checked]="row.$selected">
+  <input type="radio" class="po-radio-group-input" [class.po-radio-group-input-checked]="row.$selected" />
   <label class="po-radio-group-label po-clickable" (click)="selectable ? selectRow(row) : 'javascript:;'"></label>
 </ng-template>
 
 <ng-template #inputCheckbox let-row>
-  <input type="checkbox" class="po-table-checkbox" [class.po-table-checkbox-checked]="row.$selected">
+  <input type="checkbox" class="po-table-checkbox" [class.po-table-checkbox-checked]="row.$selected" />
   <label class="po-table-checkbox-label po-clickable" (click)="selectable ? selectRow(row) : 'javascript:;'"></label>
 </ng-template>
 
 <ng-template #contentHeaderTemplate let-column>
-  <span *ngIf="sort"
-    [class.po-table-header-icon-unselected]= "sortedColumn?.property !== column"
-    [class.po-table-header-icon-descending]= "sortedColumn?.property === column && sortedColumn.ascending"
-    [class.po-table-header-icon-ascending]= "sortedColumn?.property === column && !sortedColumn.ascending">
+  <span
+    *ngIf="sort"
+    [class.po-table-header-icon-unselected]="sortedColumn?.property !== column"
+    [class.po-table-header-icon-descending]="sortedColumn?.property === column && sortedColumn.ascending"
+    [class.po-table-header-icon-ascending]="sortedColumn?.property === column && !sortedColumn.ascending"
+  >
   </span>
   <span
     class="po-table-header-ellipsis po-table-header-block"
     [p-tooltip]="tooltipText"
     (mouseenter)="tooltipMouseEnter($event)"
-    (mouseleave)="tooltipMouseLeave()">
+    (mouseleave)="tooltipMouseLeave()"
+  >
     {{ column.label || (column.property | titlecase) }}
   </span>
 </ng-template>
@@ -258,5 +288,6 @@
   [p-columns]="columns"
   [p-max-columns]="maxColumns"
   [p-target]="columnManagerTarget"
-  (p-visible-columns-change)="onVisibleColumnsChange($event)">
+  (p-visible-columns-change)="onVisibleColumnsChange($event)"
+>
 </po-table-column-manager>

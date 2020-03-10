@@ -47,8 +47,6 @@ import { Directive, TemplateRef } from '@angular/core';
   selector: '[p-select-option-template]'
 })
 export class PoSelectOptionTemplateDirective {
-
   // Necessário manter templateRef para o funcionamento do row template.
-  constructor(public templateRef: TemplateRef<any>) { }
-
+  constructor(public templateRef: TemplateRef<any>) {}
 }

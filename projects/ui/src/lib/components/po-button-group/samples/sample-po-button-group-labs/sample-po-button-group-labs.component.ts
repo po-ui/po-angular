@@ -13,7 +13,6 @@ import {
   templateUrl: './sample-po-button-group-labs.component.html'
 })
 export class SamplePoButtonGroupLabsComponent implements OnInit {
-
   button: any;
   buttons: Array<PoButtonGroupItem>;
   small: boolean;
@@ -27,12 +26,12 @@ export class SamplePoButtonGroupLabsComponent implements OnInit {
   ];
 
   readonly toggleOptions: Array<PoSelectOption> = [
-    {label: 'none', value: PoButtonGroupToggle.None },
-    {label: 'single', value: PoButtonGroupToggle.Single },
-    {label: 'multiple', value: PoButtonGroupToggle.Multiple }
+    { label: 'none', value: PoButtonGroupToggle.None },
+    { label: 'single', value: PoButtonGroupToggle.Single },
+    { label: 'multiple', value: PoButtonGroupToggle.Multiple }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -58,5 +57,4 @@ export class SamplePoButtonGroupLabsComponent implements OnInit {
     this.button = {};
     this.buttons = [];
   }
-
 }

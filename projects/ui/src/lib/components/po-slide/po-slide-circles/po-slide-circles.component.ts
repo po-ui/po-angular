@@ -12,7 +12,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './po-slide-circles.component.html'
 })
 export class PoSlideCirclesComponent {
-
   /** Index do slide atual. */
   @Input('p-current-slide-index') currentSlideIndex: number;
 

@@ -10,7 +10,6 @@ import { PoToaster } from './po-toaster.interface';
  * O componente po-toaster foi construído para exibir notificações para o usuário.
  */
 export abstract class PoToasterBaseComponent {
-
   /** Disponibiliza uma ação para a notificação. */
   action: Function;
 
@@ -47,5 +46,4 @@ export abstract class PoToasterBaseComponent {
    * @param ComponentRef comp
    */
   abstract configToaster(poToaster: PoToaster): void;
-
 }

@@ -20,26 +20,19 @@
   [p-url]="url"
   (p-error)="changeEvent('p-error')"
   (p-success)="changeEvent('p-success')"
-  (p-upload)="changeEvent('p-upload')">
+  (p-upload)="changeEvent('p-upload')"
+>
 </po-upload>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-info
-    class="po-md-6"
-    p-label="Model"
-    [p-value]="upload | json">
-  </po-info>
+  <po-info class="po-md-6" p-label="Model" [p-value]="upload | json"> </po-info>
 
-  <po-info
-    class="po-md-6"
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
-<hr>
+<hr />
 
 <form #fRestrictions="ngForm">
   <div class="po-row">
@@ -50,7 +43,8 @@
       p-help="Enter the allowed extensions separated by comma"
       p-label="Allowed Extensions"
       p-placeholder=".png, .jpeg, .jpg"
-      (p-change)="onChangeExtension()">
+      (p-change)="onChangeExtension()"
+    >
     </po-input>
 
     <po-number
@@ -60,9 +54,9 @@
       p-clean
       p-help="Requires that the 'p-multiple' property be enabled"
       p-label="Max Files"
-      (p-change)="onChangeMaxFiles(maxFiles)">
+      (p-change)="onChangeMaxFiles(maxFiles)"
+    >
     </po-number>
-
   </div>
 
   <div class="po-row">
@@ -73,7 +67,8 @@
       p-clean
       p-help="Height of drag drop area"
       p-label="Drag Drop Height"
-      p-min="160">
+      p-min="160"
+    >
     </po-number>
 
     <po-number
@@ -83,7 +78,8 @@
       p-clean
       p-help="In megabytes"
       p-label="Min File Size"
-      (p-change)="onChangeMinSize(minSize)">
+      (p-change)="onChangeMinSize(minSize)"
+    >
     </po-number>
 
     <po-number
@@ -93,49 +89,25 @@
       p-clean
       p-help="In megabytes"
       p-label="Max File Size"
-      (p-change)="onChangeMaxSize(maxSize)">
+      (p-change)="onChangeMaxSize(maxSize)"
+    >
     </po-number>
   </div>
 </form>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="label"
-      [(ngModel)]="label"
-      p-clean
-      p-label="Label">
-    </po-input>
+    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="help"
-      [(ngModel)]="help"
-      p-clean
-      p-label="Help">
-    </po-input>
+    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
   </div>
 
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="formField"
-      [(ngModel)]="formField"
-      p-clean
-      p-label="Form Field">
-    </po-input>
+    <po-input class="po-md-6" name="formField" [(ngModel)]="formField" p-clean p-label="Form Field"> </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="url"
-      [(ngModel)]="url"
-      p-clean
-      p-label="URL"
-      p-required>
-    </po-input>
+    <po-input class="po-md-6" name="url" [(ngModel)]="url" p-clean p-label="URL" p-required> </po-input>
   </div>
 
   <div class="po-row">
@@ -145,7 +117,8 @@
       [(ngModel)]="literals"
       p-help='Ex.: {"selectFile": "Select file", "deleteFile": "Delete file", "cancel": "Cancel sending"}'
       p-label="Literals"
-      (p-change)="changeLiterals()">
+      (p-change)="changeLiterals()"
+    >
     </po-input>
 
     <po-checkbox-group
@@ -155,15 +128,12 @@
       p-columns="4"
       p-help="Select any options"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

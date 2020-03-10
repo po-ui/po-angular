@@ -16,8 +16,8 @@ describe('PoInfoComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterModule.forRoot([]) ],
-      declarations: [ PoInfoComponent ]
+      imports: [RouterModule.forRoot([])],
+      declarations: [PoInfoComponent]
     });
   });
 
@@ -34,7 +34,6 @@ describe('PoInfoComponent', () => {
   });
 
   describe('Properties:', () => {
-
     it('isExternalLink: should return true if `component.url` is truthy', () => {
       component.url = 'http://portinari.io';
 
@@ -52,7 +51,6 @@ describe('PoInfoComponent', () => {
       expect(component.isExternalLink).toBe(false);
       expect(spyIsExternalLink).toHaveBeenCalled();
     });
-
   });
 
   describe('Template:', () => {
@@ -139,7 +137,9 @@ describe('PoInfoComponent', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-info-label-horizontal.po-sm-3')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-info-label-horizontal.po-sm-3').innerHTML).toContain('PoInfoOrientation3:');
+      expect(nativeElement.querySelector('.po-info-label-horizontal.po-sm-3').innerHTML).toContain(
+        'PoInfoOrientation3:'
+      );
 
       expect(nativeElement.querySelector('.po-info-value-horizontal.po-sm-9')).toBeTruthy();
       expect(nativeElement.querySelector('.po-info-value-horizontal.po-sm-9').innerHTML).toContain('Horizontal9');
@@ -154,7 +154,9 @@ describe('PoInfoComponent', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-info-label-horizontal.po-sm-9')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-info-label-horizontal.po-sm-9').innerHTML).toContain('PoInfoOrientation9:');
+      expect(nativeElement.querySelector('.po-info-label-horizontal.po-sm-9').innerHTML).toContain(
+        'PoInfoOrientation9:'
+      );
 
       expect(nativeElement.querySelector('.po-info-value-horizontal.po-sm-3')).toBeTruthy();
       expect(nativeElement.querySelector('.po-info-value-horizontal.po-sm-3').innerHTML).toContain('Horizontal3');
@@ -209,7 +211,5 @@ describe('PoInfoComponent', () => {
       expect(nativeElement.querySelector('a.po-info-link[target=_blank]')).toBeNull();
       expect(nativeElement.querySelector('a.po-info-link')).toBeTruthy();
     });
-
   });
-
 });

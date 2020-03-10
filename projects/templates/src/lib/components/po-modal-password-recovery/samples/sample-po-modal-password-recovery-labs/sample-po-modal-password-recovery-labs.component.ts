@@ -9,10 +9,9 @@ import {
 
 @Component({
   selector: 'sample-po-modal-password-recovery-labs',
-  templateUrl: './sample-po-modal-password-recovery-labs.component.html',
+  templateUrl: './sample-po-modal-password-recovery-labs.component.html'
 })
 export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
-
   codeError: string;
   email: string;
   event: string;
@@ -30,7 +29,7 @@ export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
 
   @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 
-  constructor(private poDialog: PoDialogService) { }
+  constructor(private poDialog: PoDialogService) {}
 
   ngOnInit() {
     this.restore();
@@ -97,5 +96,4 @@ export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
       this.poModalPasswordRecovery.completed();
     }
   }
-
 }

@@ -8,48 +8,63 @@ import { SamplePoTableComponentsService } from './sample-po-table-components.ser
 @Component({
   selector: 'sample-po-table-components',
   templateUrl: './sample-po-table-components.component.html',
-  providers: [ SamplePoTableComponentsService ]
+  providers: [SamplePoTableComponentsService]
 })
 export class SamplePoTableComponentsComponent {
-
   extraInformation: any;
   items: Array<any> = this.sampleComponents.getItems();
   showMoreDisabled: boolean = false;
   title: any;
 
   public readonly columns: Array<PoTableColumn> = [
-    { property: 'status', type: 'label', width: '5%', labels: [
-      { value: 'stable', color: 'color-11', label: 'Stable', tooltip: 'Published component' },
-      { value: 'experimental', color: 'color-08', label: 'Experimental', tooltip: 'Component in homologation' },
-      { value: 'roadmap', color: 'color-07', label: 'Roadmap', tooltip: 'Component in roadmap' }
-    ]},
+    {
+      property: 'status',
+      type: 'label',
+      width: '5%',
+      labels: [
+        { value: 'stable', color: 'color-11', label: 'Stable', tooltip: 'Published component' },
+        { value: 'experimental', color: 'color-08', label: 'Experimental', tooltip: 'Component in homologation' },
+        { value: 'roadmap', color: 'color-07', label: 'Roadmap', tooltip: 'Component in roadmap' }
+      ]
+    },
     { property: 'component', type: 'link' },
     { property: 'description', color: this.experimentalColor },
-    { property: 'extra', label: 'Extras', type: 'link', tooltip: 'Additional details', action: (value, row) => {
-      this.extras(value, row);
-    },
-      disabled: this.canShowExtras.bind(this) },
-    { property: 'favorite', label: 'Actions', type: 'icon', icons: [
-      {
-        action: this.favorite.bind(this),
-        color: this.isFavorite.bind(this),
-        icon: 'po-icon-star',
-        tooltip: 'Favorite',
-        value: 'favorite'
+    {
+      property: 'extra',
+      label: 'Extras',
+      type: 'link',
+      tooltip: 'Additional details',
+      action: (value, row) => {
+        this.extras(value, row);
       },
-      {
-        action: this.goToDocumentation.bind(this),
-        disabled: this.canGoToDocumentation.bind(this),
-        icon: 'po-icon-export',
-        tooltip: 'Click to go to documentation',
-        value: 'documentation'
-      }
-    ]}
+      disabled: this.canShowExtras.bind(this)
+    },
+    {
+      property: 'favorite',
+      label: 'Actions',
+      type: 'icon',
+      icons: [
+        {
+          action: this.favorite.bind(this),
+          color: this.isFavorite.bind(this),
+          icon: 'po-icon-star',
+          tooltip: 'Favorite',
+          value: 'favorite'
+        },
+        {
+          action: this.goToDocumentation.bind(this),
+          disabled: this.canGoToDocumentation.bind(this),
+          icon: 'po-icon-export',
+          tooltip: 'Click to go to documentation',
+          value: 'documentation'
+        }
+      ]
+    }
   ];
 
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor(public sampleComponents: SamplePoTableComponentsService, private router: Router) { }
+  constructor(public sampleComponents: SamplePoTableComponentsService, private router: Router) {}
 
   experimentalColor(row) {
     return row.status === 'experimental' ? 'color-08' : 'color-11';
@@ -96,5 +111,4 @@ export class SamplePoTableComponentsComponent {
   private isFavorite(row) {
     return row.isFavorite ? 'color-08' : 'color-11';
   }
-
 }

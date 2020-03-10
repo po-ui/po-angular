@@ -7,7 +7,6 @@ import { PoModalAction, PoModalComponent, PoRadioGroupOption, PoCheckboxGroupOpt
   templateUrl: './sample-po-modal-labs.component.html'
 })
 export class SamplePoModalLabsComponent implements OnInit {
-
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   content;
@@ -24,9 +23,9 @@ export class SamplePoModalLabsComponent implements OnInit {
   primaryActionLabel: string;
   primaryActionProperties: Array<string>;
   primaryActionOptions: Array<PoCheckboxGroupOption> = [
-    {value: 'danger', label: 'Danger' },
-    {value: 'disabled', label: 'Disabled' },
-    {value: 'loading', label: 'Loading' }
+    { value: 'danger', label: 'Danger' },
+    { value: 'disabled', label: 'Disabled' },
+    { value: 'loading', label: 'Loading' }
   ];
 
   secondaryAction: PoModalAction = {
@@ -39,14 +38,14 @@ export class SamplePoModalLabsComponent implements OnInit {
   secondaryActionLabel: string;
   secondaryActionProperties: Array<string>;
   secondaryActionOptions: Array<PoCheckboxGroupOption> = [
-    {value: 'disabled', label: 'Disabled' },
-    {value: 'loading', label: 'Loading' },
-    {value: 'danger', label: 'Danger' }
+    { value: 'disabled', label: 'Disabled' },
+    { value: 'loading', label: 'Loading' },
+    { value: 'danger', label: 'Danger' }
   ];
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
-    {value: 'click-out', label: 'Click Out' },
-    {value: 'hide-close', label: 'Hide Close' }
+    { value: 'click-out', label: 'Click Out' },
+    { value: 'hide-close', label: 'Hide Close' }
   ];
 
   properties: Array<string>;
@@ -56,7 +55,7 @@ export class SamplePoModalLabsComponent implements OnInit {
     { label: 'Medium', value: 'md' },
     { label: 'Large', value: 'lg' },
     { label: 'Extra large', value: 'xl' },
-    { label: 'Automatic', value: 'auto' },
+    { label: 'Automatic', value: 'auto' }
   ];
 
   openModal() {
@@ -87,5 +86,4 @@ export class SamplePoModalLabsComponent implements OnInit {
     this.secondaryActionLabel = undefined;
     this.secondaryActionProperties = [];
   }
-
 }

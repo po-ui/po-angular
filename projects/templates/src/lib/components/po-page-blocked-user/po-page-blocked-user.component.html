@@ -1,19 +1,10 @@
 <div class="po-page-blocked-user-wrapper">
   <div class="po-page-background-wrap">
-    <po-page-background
-      [p-hide-logo]="true"
-      [p-logo]="logo"
-      [p-secondary-logo]="secondaryLogo">
-
-      <po-page-blocked-user-reason
-        [p-params]="params"
-        [p-reason]="reason">
-      </po-page-blocked-user-reason>
+    <po-page-background [p-hide-logo]="true" [p-logo]="logo" [p-secondary-logo]="secondaryLogo">
+      <po-page-blocked-user-reason [p-params]="params" [p-reason]="reason"> </po-page-blocked-user-reason>
 
       <div class="po-page-blocked-user-mobile-bottom-alignment">
-        <po-page-blocked-user-contacts
-          [p-email]="contactEmail"
-          [p-phone]="contactPhone">
+        <po-page-blocked-user-contacts [p-email]="contactEmail" [p-phone]="contactPhone">
         </po-page-blocked-user-contacts>
 
         <div class="po-row">
@@ -21,7 +12,8 @@
             class="po-lg-12 po-sm-12 po-page-blocked-user-button"
             p-type="primary"
             [p-label]="literals.primaryButton"
-            (p-click)="navigateTo(urlBack)">
+            (p-click)="navigateTo(urlBack)"
+          >
           </po-button>
         </div>
       </div>

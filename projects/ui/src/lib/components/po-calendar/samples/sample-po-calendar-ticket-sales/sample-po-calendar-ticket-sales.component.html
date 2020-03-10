@@ -1,55 +1,37 @@
-<po-page-default
-  p-title="Tickets sales"
-  [p-actions]="pageActions">
-
+<po-page-default p-title="Tickets sales" [p-actions]="pageActions">
   <div class="po-row">
-
     <div class="po-lg-8 po-md-7">
+      <po-divider class="po-md-12" p-label="Prices"></po-divider>
 
-        <po-divider class="po-md-12" p-label="Prices"></po-divider>
+      <po-info class="po-md-6" p-label="Weekends and holidays" p-value="$ 20,00"> </po-info>
 
-        <po-info
-          class="po-md-6"
-          p-label="Weekends and holidays"
-          p-value="$ 20,00">
-        </po-info>
+      <po-info class="po-md-6" p-label="Working days" p-value="$ 10,00"> </po-info>
 
-        <po-info
-          class="po-md-6"
-          p-label="Working days"
-          p-value="$ 10,00">
-        </po-info>
+      <po-divider class="po-md-12" p-label="Quantity"></po-divider>
 
-        <po-divider class="po-md-12" p-label="Quantity"></po-divider>
+      <po-select
+        class="po-lg-6"
+        [(ngModel)]="tickets"
+        p-help="From 12 years"
+        p-label="Adults"
+        [p-options]="ticketsOptions"
+      >
+      </po-select>
 
-        <po-select
-          class="po-lg-6"
-          [(ngModel)]="tickets"
-          p-help="From 12 years"
-          p-label="Adults"
-          [p-options]="ticketsOptions">
-        </po-select>
-
-        <po-select
-          class="po-lg-6"
-          [(ngModel)]="halfPriceTicketQuantity"
-          p-help="04 to 11 years"
-          p-label="Children and older adults"
-          [p-options]="ticketsOptions">
-        </po-select>
-
+      <po-select
+        class="po-lg-6"
+        [(ngModel)]="halfPriceTicketQuantity"
+        p-help="04 to 11 years"
+        p-label="Children and older adults"
+        [p-options]="ticketsOptions"
+      >
+      </po-select>
     </div>
 
     <div class="po-lg-4 po-md-5">
-
       <po-divider class="po-md-12" p-label="Select the date"></po-divider>
 
-      <po-calendar
-        [(ngModel)]="date"
-        p-locale="en">
-      </po-calendar>
-
+      <po-calendar [(ngModel)]="date" p-locale="en"> </po-calendar>
     </div>
-
   </div>
 </po-page-default>

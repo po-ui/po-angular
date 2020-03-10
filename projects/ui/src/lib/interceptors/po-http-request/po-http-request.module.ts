@@ -8,9 +8,7 @@ import { PoHttpRequesControltService } from './po-http-request-control-service';
 import { PoHttpRequestInterceptorService } from './po-http-request-interceptor.service';
 
 @NgModule({
-  imports: [
-    PoLoadingModule
-  ],
+  imports: [PoLoadingModule],
   providers: [
     PoHttpRequesControltService,
     PoHttpRequestInterceptorService,
@@ -22,4 +20,4 @@ import { PoHttpRequestInterceptorService } from './po-http-request-interceptor.s
     }
   ]
 })
-export class PoHttpRequestModule { }
+export class PoHttpRequestModule {}

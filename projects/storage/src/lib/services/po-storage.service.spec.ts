@@ -11,10 +11,7 @@ describe('PoStorageService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        PoStorageService,
-        { provide: PO_STORAGE_CONFIG_TOKEN, useValue: PoStorageService.getDefaultConfig() }
-      ]
+      providers: [PoStorageService, { provide: PO_STORAGE_CONFIG_TOKEN, useValue: PoStorageService.getDefaultConfig() }]
     });
 
     poStorageService = TestBed.inject(PoStorageService);
@@ -25,7 +22,6 @@ describe('PoStorageService:', () => {
   });
 
   describe('Methods: ', () => {
-
     it('getDefaultConfig: should return the PoStorageConfig default ', () => {
       const configDefault = {
         name: '_postorage',
@@ -95,8 +91,8 @@ describe('PoStorageService:', () => {
     });
 
     it('appendArrayToArray: should call poStorageService.set with key and array concatenated', async () => {
-      const valueMock = [ 'value 2' ];
-      const oldArray = [ 'value 1' ];
+      const valueMock = ['value 2'];
+      const oldArray = ['value 1'];
       const keyMock = 'key';
 
       spyOn(poStorageService, <any>'getArrayOfStorage').and.returnValue(Promise.resolve(oldArray));
@@ -121,12 +117,12 @@ describe('PoStorageService:', () => {
       const valueMock = 'value 2';
       const keyMock = 'key';
 
-      spyOn(poStorageService, <any>'getArrayOfStorage').and.returnValue(Promise.resolve([ 'value 1' ]));
+      spyOn(poStorageService, <any>'getArrayOfStorage').and.returnValue(Promise.resolve(['value 1']));
       spyOn(poStorageService, 'set');
 
       await poStorageService.appendItemToArray(keyMock, valueMock);
 
-      expect(poStorageService.set).toHaveBeenCalledWith(keyMock, [ 'value 1', valueMock ]);
+      expect(poStorageService.set).toHaveBeenCalledWith(keyMock, ['value 1', valueMock]);
     });
 
     it('appendItemToArray: should call poStorageService.getArrayOfStorage with key', async () => {
@@ -191,25 +187,25 @@ describe('PoStorageService:', () => {
 
     it(`get: should call getImmutableItem of LocalStorage with keyStorage and not call requestIdlePromise and wrapCall
       if lock is false`, async () => {
-        const keyStorage = 'key';
+      const keyStorage = 'key';
 
-        const fakeThis = {
-          requestIdlePromise: () => {},
-          getImmutableItem: () => {},
-          idleQueue: {
-            wrapCall: () => {}
-          }
-        };
+      const fakeThis = {
+        requestIdlePromise: () => {},
+        getImmutableItem: () => {},
+        idleQueue: {
+          wrapCall: () => {}
+        }
+      };
 
-        spyOn(fakeThis, 'requestIdlePromise');
-        spyOn(fakeThis, 'getImmutableItem');
-        spyOn(fakeThis.idleQueue, 'wrapCall');
+      spyOn(fakeThis, 'requestIdlePromise');
+      spyOn(fakeThis, 'getImmutableItem');
+      spyOn(fakeThis.idleQueue, 'wrapCall');
 
-        await poStorageService.get.apply(fakeThis, [keyStorage]);
+      await poStorageService.get.apply(fakeThis, [keyStorage]);
 
-        expect(fakeThis.requestIdlePromise).not.toHaveBeenCalled();
-        expect(fakeThis.idleQueue.wrapCall).not.toHaveBeenCalled();
-        expect(fakeThis.getImmutableItem).toHaveBeenCalledWith(keyStorage);
+      expect(fakeThis.requestIdlePromise).not.toHaveBeenCalled();
+      expect(fakeThis.idleQueue.wrapCall).not.toHaveBeenCalled();
+      expect(fakeThis.getImmutableItem).toHaveBeenCalledWith(keyStorage);
     });
 
     it('get: should call getImmutableItem with keyStorage, requestIdlePromise and wrapCall if lock is true', async () => {
@@ -243,14 +239,14 @@ describe('PoStorageService:', () => {
 
     it('getDriverOrder: should return driver order with LocalForage driver and replace the other string for undefined', () => {
       const driverOrder = ['websql', 'indexeddb', 'localstorage', 'lokijs'];
-      const driverOrderLocalForage = [ LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE, 'lokijs' ];
+      const driverOrderLocalForage = [LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE, 'lokijs'];
 
       expect(poStorageService['getDriverOrder'](driverOrder)).toEqual(driverOrderLocalForage);
     });
 
     it('getDriverOrder: should return driver order com LocalForage driver', () => {
       const driverOrder = ['websql', 'indexeddb', 'localstorage'];
-      const driverOrderLocalForage = [ LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE ];
+      const driverOrderLocalForage = [LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE];
 
       expect(poStorageService['getDriverOrder'](driverOrder)).toEqual(driverOrderLocalForage);
     });
@@ -294,17 +290,17 @@ describe('PoStorageService:', () => {
     });
 
     it('getItemByField: should return value by field of the storage key', async () => {
-      const array = [ { key: 'value 1'}, { key2: 'value 1'} ];
+      const array = [{ key: 'value 1' }, { key2: 'value 1' }];
 
       spyOn(poStorageService, 'get').and.returnValue(Promise.resolve(array));
 
       const result = await poStorageService.getItemByField('keyStorage', 'key2', 'value 1');
 
-      expect(result).toEqual({ key2: 'value 1'});
+      expect(result).toEqual({ key2: 'value 1' });
     });
 
     it('getItemByField: should return null when value not found', async () => {
-      const array = [ { key: 'value 1'}, { key2: 'value 1'} ];
+      const array = [{ key: 'value 1' }, { key2: 'value 1' }];
 
       spyOn(poStorageService, 'get').and.returnValue(Promise.resolve(array));
 
@@ -342,7 +338,7 @@ describe('PoStorageService:', () => {
       const wrapCallReturn = 'value';
 
       spyOn(poStorageService, 'requestIdlePromise');
-      spyOn(poStorageService['idleQueue'], 'wrapCall').and.returnValue(<any> wrapCallReturn);
+      spyOn(poStorageService['idleQueue'], 'wrapCall').and.returnValue(<any>wrapCallReturn);
 
       const result = await poStorageService.limitedCallWrap(fakefunction);
 
@@ -395,7 +391,7 @@ describe('PoStorageService:', () => {
     });
 
     it('removeItemFromArray: should call "set" with keyStorage and testArray without key2 object', async () => {
-      const testArray = [ { key1: 'value 1'}, { key2: 'value 2'} ];
+      const testArray = [{ key1: 'value 1' }, { key2: 'value 2' }];
 
       spyOn(poStorageService, <any>'getArrayOfStorage').and.returnValue(Promise.resolve(testArray));
       spyOn(poStorageService, 'set');
@@ -421,27 +417,27 @@ describe('PoStorageService:', () => {
 
     it(`set: should call setItem of LocalStorage with key and value and not call requestIdlePromise and wrapCall
       if lock is false`, async () => {
-        const key = 'key';
-        const lock = false;
-        const setItemSpy = jasmine.createSpy('setItem');
-        const value = 'value';
+      const key = 'key';
+      const lock = false;
+      const setItemSpy = jasmine.createSpy('setItem');
+      const value = 'value';
 
-        const fakeThis = {
-          storagePromise: Promise.resolve({ setItem: setItemSpy }),
-          requestIdlePromise: () => {},
-          idleQueue: {
-            wrapCall: () => {}
-          }
-        };
+      const fakeThis = {
+        storagePromise: Promise.resolve({ setItem: setItemSpy }),
+        requestIdlePromise: () => {},
+        idleQueue: {
+          wrapCall: () => {}
+        }
+      };
 
-        spyOn(fakeThis, 'requestIdlePromise');
-        spyOn(fakeThis.idleQueue, 'wrapCall');
+      spyOn(fakeThis, 'requestIdlePromise');
+      spyOn(fakeThis.idleQueue, 'wrapCall');
 
-        await poStorageService.set.apply(fakeThis, [key, value, lock]);
+      await poStorageService.set.apply(fakeThis, [key, value, lock]);
 
-        expect(fakeThis.requestIdlePromise).not.toHaveBeenCalled();
-        expect(fakeThis.idleQueue.wrapCall).not.toHaveBeenCalled();
-        expect(setItemSpy).toHaveBeenCalledWith(key, value);
+      expect(fakeThis.requestIdlePromise).not.toHaveBeenCalled();
+      expect(fakeThis.idleQueue.wrapCall).not.toHaveBeenCalled();
+      expect(setItemSpy).toHaveBeenCalledWith(key, value);
     });
 
     it('set: should call setItem with key and value, requestIdlePromise and wrapCall if lock is true', async () => {
@@ -495,7 +491,7 @@ describe('PoStorageService:', () => {
     });
 
     it('getArrayOfStorage: should return the value of "get"', async () => {
-      spyOn(poStorageService, 'get').and.returnValue(<any> ['value']);
+      spyOn(poStorageService, 'get').and.returnValue(<any>['value']);
 
       expect(await poStorageService['getArrayOfStorage']('keyStorage')).toEqual(['value']);
     });
@@ -507,12 +503,12 @@ describe('PoStorageService:', () => {
     });
 
     it('getImmutableItem: should call getItem with key and return a new reference of items', async () => {
-      const item = {value: 'value'};
+      const item = { value: 'value' };
       const getItemSpy = jasmine.createSpy('getItem').and.returnValue(item);
       const keyStorage = 'key';
 
       const fakeThis = {
-        storagePromise: Promise.resolve({ getItem: getItemSpy }),
+        storagePromise: Promise.resolve({ getItem: getItemSpy })
       };
 
       const getImmutable = await poStorageService['getImmutableItem'].call(fakeThis, keyStorage);
@@ -527,7 +523,7 @@ describe('PoStorageService:', () => {
       const keyStorage = 'key';
 
       const fakeThis = {
-        storagePromise: Promise.resolve({ getItem: getItemSpy }),
+        storagePromise: Promise.resolve({ getItem: getItemSpy })
       };
 
       const getImmutable = await poStorageService['getImmutableItem'].call(fakeThis, keyStorage);
@@ -538,7 +534,7 @@ describe('PoStorageService:', () => {
     it(`defineLocalForageDriver: should call setDriver with localForage and driverOrder and call defineDriver with
     lokijs.getDriver return`, async () => {
       const localForageMock: LocalForage = createLocalForageInstance();
-      const driverOrder = [ 'WEBSQL', 'INDEXEDDB', 'LOCALSTORAGE', 'lokijs' ];
+      const driverOrder = ['WEBSQL', 'INDEXEDDB', 'LOCALSTORAGE', 'lokijs'];
 
       spyOn(localForageMock, 'defineDriver');
       spyOn(poStorageService, <any>'setDriver');
@@ -551,7 +547,7 @@ describe('PoStorageService:', () => {
     });
 
     it('getObjectOfStorage: should return the value of "get"', async () => {
-      spyOn(poStorageService, 'get').and.returnValue(<any> { key: 'value' });
+      spyOn(poStorageService, 'get').and.returnValue(<any>{ key: 'value' });
 
       expect(await poStorageService['getObjectOfStorage']('keyStorage')).toEqual({ key: 'value' });
     });
@@ -563,7 +559,7 @@ describe('PoStorageService:', () => {
     });
 
     it('should call setDriver of LocalStorage with driver order', async () => {
-      const driverOrder = [ LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE ];
+      const driverOrder = [LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE];
       const localForageMock: LocalForage = createLocalForageInstance();
 
       spyOn(poStorageService, <any>'getDriverOrder').and.returnValue(driverOrder);
@@ -575,7 +571,7 @@ describe('PoStorageService:', () => {
     });
 
     it('should call getDriverOrder with driver order parameter', async () => {
-      const driverOrder = [ LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE ];
+      const driverOrder = [LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE];
       const localForageMock: LocalForage = createLocalForageInstance();
 
       const driverOrderParameter = ['WEBSQL', 'INDEXEDDB', 'LOCALSTORAGE'];
@@ -589,7 +585,7 @@ describe('PoStorageService:', () => {
     });
 
     it('should call driver of LocalStorage', async () => {
-      const driverOrder = [ LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE ];
+      const driverOrder = [LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE];
       const localForageMock: LocalForage = createLocalForageInstance();
 
       spyOn(poStorageService, <any>'getDriverOrder').and.returnValue(driverOrder);
@@ -602,7 +598,7 @@ describe('PoStorageService:', () => {
     });
 
     it('should set poStorage.driver with driver of LocalForage', async () => {
-      const driverOrder = [ LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE ];
+      const driverOrder = [LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE];
       const localForageMock: LocalForage = createLocalForageInstance();
 
       const fakeThis = {
@@ -619,7 +615,7 @@ describe('PoStorageService:', () => {
     });
 
     it('setStoragePromise: should call getStorageInstance with configMock', () => {
-      const driverOrder = [ LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE ];
+      const driverOrder = [LocalForage.WEBSQL, LocalForage.INDEXEDDB, LocalForage.LOCALSTORAGE];
 
       const configMock: PoStorageConfig = {
         driverOrder: driverOrder,
@@ -655,15 +651,16 @@ describe('PoStorageService:', () => {
     });
 
     it('getStorageInstance: should return throw Error when setDriver return a exception', async () => {
-      const driverOrder = [ 'WEBSQL', 'INDEXEDDB', 'LOCALSTORAGE', 'lokijs' ];
+      const driverOrder = ['WEBSQL', 'INDEXEDDB', 'LOCALSTORAGE', 'lokijs'];
       const localForageMock: LocalForage = createLocalForageInstance();
 
       spyOn(LocalForage, 'createInstance').and.returnValue(localForageMock);
       spyOn(PoStorageService, 'getDefaultConfig').and.returnValue({});
       spyOn(poStorageService, <any>'defineLocalForageDriver').and.returnValue(Promise.reject(''));
 
-      expect(await handleThrowError(poStorageService['getStorageInstance'](getConfigMock())))
-        .toThrowError(`Cannot use this drivers: ${driverOrder.join(', ')}.`);
+      expect(await handleThrowError(poStorageService['getStorageInstance'](getConfigMock()))).toThrowError(
+        `Cannot use this drivers: ${driverOrder.join(', ')}.`
+      );
     });
 
     it('getStorageInstance: should return localForage instance', async () => {
@@ -675,9 +672,7 @@ describe('PoStorageService:', () => {
 
       expect(await poStorageService['getStorageInstance'](getConfigMock())).toEqual(localForageMock);
     });
-
   });
-
 });
 
 function createLocalForageInstance() {
@@ -686,7 +681,7 @@ function createLocalForageInstance() {
 
 function getConfigMock() {
   return {
-    driverOrder: [ 'WEBSQL', 'INDEXEDDB', 'LOCALSTORAGE', 'lokijs' ],
+    driverOrder: ['WEBSQL', 'INDEXEDDB', 'LOCALSTORAGE', 'lokijs'],
     name: 'baseName',
     storeName: 'storeName'
   };

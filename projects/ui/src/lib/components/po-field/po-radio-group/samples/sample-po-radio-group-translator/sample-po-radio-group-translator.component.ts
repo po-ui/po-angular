@@ -6,8 +6,7 @@ import { PoRadioGroupOption, PoSelectOption } from '@portinari/portinari-ui';
   selector: 'sample-po-radio-group-translator',
   templateUrl: './sample-po-radio-group-translator.component.html'
 })
-export class SamplePoRadioGroupTranslatorComponent  {
-
+export class SamplePoRadioGroupTranslatorComponent {
   language: string = 'es';
   original: string = '';
   translated: string = '';
@@ -42,5 +41,4 @@ export class SamplePoRadioGroupTranslatorComponent  {
       this.translated = word[value || this.language];
     }
   }
-
 }

@@ -7,22 +7,22 @@ import { PoPageContentComponent } from '../po-page-content/po-page-content.compo
 import { PoPageDetailLiterals } from './po-page-detail-literals.interface';
 
 export const poPageDetailLiteralsDefault = {
-  en: <PoPageDetailLiterals> {
+  en: <PoPageDetailLiterals>{
     back: 'Back',
     edit: 'Edit',
     remove: 'Remove'
   },
-  es: <PoPageDetailLiterals> {
+  es: <PoPageDetailLiterals>{
     back: 'Volver',
     edit: 'Editar',
     remove: 'Eliminar'
   },
-  pt: <PoPageDetailLiterals> {
+  pt: <PoPageDetailLiterals>{
     back: 'Voltar',
     edit: 'Editar',
     remove: 'Remover'
   },
-  ru: <PoPageDetailLiterals> {
+  ru: <PoPageDetailLiterals>{
     back: 'возвращение',
     edit: 'редактировать',
     remove: 'удаление'
@@ -43,7 +43,6 @@ export const poPageDetailLiteralsDefault = {
  */
 @Directive()
 export class PoPageDetailBaseComponent {
-
   private _literals: PoPageDetailLiterals;
   private _title: string;
 
@@ -111,5 +110,4 @@ export class PoPageDetailBaseComponent {
   get title() {
     return this._title;
   }
-
 }

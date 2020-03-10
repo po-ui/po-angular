@@ -1,9 +1,11 @@
 <div>
-  <div #contentElement [id]="position"
+  <div
+    #contentElement
+    [id]="position"
     class="po-grid-cell-action-content"
     tabindex="0"
-    (keydown)="onKeyDownContent($event)">
+    (keydown)="onKeyDownContent($event)"
+  >
     <span>{{ value || '&nbsp;' }}</span>
   </div>
 </div>
-

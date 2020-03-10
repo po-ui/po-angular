@@ -7,4 +7,4 @@ import { NgModule } from '@angular/core';
   providers: [],
   bootstrap: []
 })
-export class PoGuardsModule { }
+export class PoGuardsModule {}

@@ -14,10 +14,9 @@ import { SamplePoTableLabsService } from './sample-po-table-labs.service';
 @Component({
   selector: 'sample-po-table-labs',
   templateUrl: './sample-po-table-labs.component.html',
-  providers: [ SamplePoTableLabsService ]
+  providers: [SamplePoTableLabsService]
 })
 export class SamplePoTableLabsComponent implements OnInit {
-
   actions: Array<PoTableAction>;
   actionsDefinition: any;
   actionTableFirst: PoTableAction = {
@@ -68,7 +67,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     { value: 'label', label: 'Label' },
     { value: 'color', label: 'Color' },
     { value: 'icon', label: 'Icon' },
-    { value: 'boolean', label: 'Boolean' },
+    { value: 'boolean', label: 'Boolean' }
   ];
 
   public readonly containerOptions: Array<PoRadioGroupOption> = [
@@ -82,7 +81,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Striped', value: 'striped' },
     { label: 'Show more disabled', value: 'showMoreDisabled' },
     { label: 'Hide detail', value: 'hideDetail' },
-    { label: 'Loading', value: 'loading'}
+    { label: 'Loading', value: 'loading' }
   ];
 
   public readonly typeHeaderOptions: Array<PoRadioGroupOption> = [
@@ -93,7 +92,7 @@ export class SamplePoTableLabsComponent implements OnInit {
 
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor(private samplePoTableLabsService: SamplePoTableLabsService) { }
+  constructor(private samplePoTableLabsService: SamplePoTableLabsService) {}
 
   ngOnInit() {
     this.restore();
@@ -112,8 +111,11 @@ export class SamplePoTableLabsComponent implements OnInit {
 
     this.actionsDefinitionOptions = [].concat(this.actionsDefinitionOptions);
 
-    this.actions = actions ?
-      this.actionsDefinition.singleAction ? [this.actionTableFirst] : [this.actionTableFirst, this.actionTableSecond] : [];
+    this.actions = actions
+      ? this.actionsDefinition.singleAction
+        ? [this.actionTableFirst]
+        : [this.actionTableFirst, this.actionTableSecond]
+      : [];
     this.actionTableFirst.visible = this.actionsDefinition.visibleAction;
   }
 
@@ -174,5 +176,4 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.columns = [];
     this.columnsName.forEach(column => this.columns.push(this.columnsDefinition[column]));
   }
-
 }

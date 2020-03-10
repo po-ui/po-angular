@@ -1,25 +1,14 @@
-<div *ngIf="!isHidden"
-  class="po-modal"
-  tabindex="0"
-  (keydown.esc)="closeModalOnEscapeKey($event)">
-
+<div *ngIf="!isHidden" class="po-modal" tabindex="0" (keydown.esc)="closeModalOnEscapeKey($event)">
   <div class="po-modal-overlay">
     <div class="po-modal-container po-pb-2 po-pt-2" (mousedown)="onClickOut($event)">
-
       <div class="po-modal-vertical-align">
-        <div #modalContent
-          class="po-modal-content po-modal-{{ size }}"
-          tabindex="-1">
-
+        <div #modalContent class="po-modal-content po-modal-{{ size }}" tabindex="-1">
           <div class="po-modal-header">
             <div class="po-modal-title po-text-ellipsis">
               {{ title }}
             </div>
 
-            <a *ngIf="!hideClose"
-              class="po-modal-header-close-button"
-              tabindex="0"
-              (click)="close(true)">
+            <a *ngIf="!hideClose" class="po-modal-header-close-button" tabindex="0" (click)="close(true)">
               <span class="po-icon po-icon-close"></span>
             </a>
           </div>
@@ -29,12 +18,14 @@
           </div>
 
           <div class="po-modal-footer">
-            <po-button *ngIf="secondaryAction"
+            <po-button
+              *ngIf="secondaryAction"
               [p-disabled]="secondaryAction.disabled"
               [p-label]="secondaryAction.label"
               [p-loading]="secondaryAction.loading"
               [p-type]="getSecondaryActionButtonType()"
-              (p-click)="secondaryAction.action()">
+              (p-click)="secondaryAction.action()"
+            >
             </po-button>
 
             <po-button
@@ -43,14 +34,12 @@
               [p-label]="primaryAction.label"
               [p-loading]="primaryAction.loading"
               [p-type]="getPrimaryActionButtonType()"
-              (p-click)="primaryAction.action()">
+              (p-click)="primaryAction.action()"
+            >
             </po-button>
           </div>
-
         </div>
       </div>
-
     </div>
   </div>
 </div>
-

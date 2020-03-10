@@ -86,7 +86,6 @@ import { Directive, Input, TemplateRef } from '@angular/core';
   selector: '[p-list-view-content-template]'
 })
 export class PoListViewContentTemplateDirective {
-
   /**
    * @optional
    *
@@ -99,6 +98,5 @@ export class PoListViewContentTemplateDirective {
   @Input('p-title') title: (item) => string;
 
   // Necessário manter templateRef para o funcionamento do row template.
-  constructor(public templateRef: TemplateRef<any>) { }
-
+  constructor(public templateRef: TemplateRef<any>) {}
 }

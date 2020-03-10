@@ -38,7 +38,6 @@ describe('PoUploadDragDropAreaComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it(`dragDropHeight: should set with 'PoUploadDragDropHeightMin' with value is less than 'PoUploadDragDropHeightMin'`, () => {
       component.dragDropHeight = 120;
 
@@ -56,11 +55,9 @@ describe('PoUploadDragDropAreaComponent:', () => {
 
       expectPropertiesValues(component, 'dragDropHeight', validValues, validValues);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('focus: should call `dragDropAreaComponent.focus`', () => {
       spyOn(component.dragDropAreaComponent, 'focus');
 
@@ -112,11 +109,9 @@ describe('PoUploadDragDropAreaComponent:', () => {
 
       expect(fakeThis.areaElement).toBe(fakeElement);
     });
-
   });
 
   describe('Templates:', () => {
-
     it(`should contain 'po-upload-drag-drop-area' element`, () => {
       expect(nativeElement.querySelector('po-upload-drag-drop-area')).toBeTruthy();
     });
@@ -136,7 +131,5 @@ describe('PoUploadDragDropAreaComponent:', () => {
 
       expect(nativeElement.querySelector('po-upload-drag-drop-area-overlay')).toBeFalsy();
     });
-
   });
-
 });

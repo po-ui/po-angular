@@ -18,7 +18,6 @@ import { PoPageLoginRecovery } from '../interfaces/po-page-login-recovery.interf
  * Componente para definição da mensagem de aviso de bloqueio do `po-page-login`.
  */
 export class PoPageLoginPopoverComponent {
-
   recoveryType: string;
 
   private _recovery: string | Function | PoPageLoginRecovery;
@@ -47,5 +46,4 @@ export class PoPageLoginPopoverComponent {
   onForgotPasswordClick(recovery) {
     this.forgotPassword.emit(recovery);
   }
-
 }

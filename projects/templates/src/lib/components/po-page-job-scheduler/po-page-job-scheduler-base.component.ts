@@ -20,7 +20,6 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
  */
 @Directive()
 export class PoPageJobSchedulerBaseComponent {
-
   /** Objeto com as propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
 
@@ -167,15 +166,18 @@ export class PoPageJobSchedulerBaseComponent {
       return;
     }
 
-    this.poPageJobSchedulerService.getResource(id).toPromise().then((response: PoJobSchedulerInternal) => {
-      this.model = response;
-    }).catch(() => {
-      this.model = new PoPageJobSchedulerInternal();
-    });
-
+    this.poPageJobSchedulerService
+      .getResource(id)
+      .toPromise()
+      .then((response: PoJobSchedulerInternal) => {
+        this.model = response;
+      })
+      .catch(() => {
+        this.model = new PoPageJobSchedulerInternal();
+      });
   }
 
-  protected markAsDirtyInvalidControls(controls: { [key: string]: AbstractControl } ) {
+  protected markAsDirtyInvalidControls(controls: { [key: string]: AbstractControl }) {
     for (const key in controls) {
       if (controls.hasOwnProperty(key)) {
         const control = controls[key];
@@ -186,5 +188,4 @@ export class PoPageJobSchedulerBaseComponent {
       }
     }
   }
-
 }

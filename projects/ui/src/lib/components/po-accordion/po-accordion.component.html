@@ -1,18 +1,18 @@
 <div class="po-accordion po-container po-container-no-padding">
-
-  <section *ngFor="let poAccordionItem of poAccordionItems"
+  <section
+    *ngFor="let poAccordionItem of poAccordionItems"
     class="po-accordion-item"
-    [class.po-accordion-item-active]="poAccordionItem.expanded">
-
+    [class.po-accordion-item-active]="poAccordionItem.expanded"
+  >
     <po-accordion-item-header
       [p-expanded]="poAccordionItem.expanded"
       [p-label]="poAccordionItem.label"
-      (p-toggle)="headerToggle($event, poAccordionItem)">
+      (p-toggle)="headerToggle($event, poAccordionItem)"
+    >
     </po-accordion-item-header>
 
     <po-accordion-item-body [p-expanded]="poAccordionItem.expanded">
       <ng-container *ngTemplateOutlet="poAccordionItem.templateRef"></ng-container>
     </po-accordion-item-body>
   </section>
-
 </div>

@@ -22,13 +22,8 @@ describe('PoListViewComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoListViewComponent ],
-      imports: [
-        BrowserAnimationsModule,
-        RouterTestingModule.withRoutes([]),
-        PoButtonModule,
-        PoPopupModule
-      ]
+      declarations: [PoListViewComponent],
+      imports: [BrowserAnimationsModule, RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule]
     });
   });
 
@@ -43,13 +38,12 @@ describe('PoListViewComponent:', () => {
     fixture.detectChanges();
   });
 
-  it ('should be created', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
     expect(component instanceof PoListViewBaseComponent).toBeTruthy();
   });
 
   describe('Properties:', () => {
-
     it('hasContentTemplate: should return `true` if `listViewContentTemplate` is truthy', () => {
       component.listViewContentTemplate = <any>{ templateRef: '<span></span>' };
 
@@ -91,31 +85,31 @@ describe('PoListViewComponent:', () => {
     });
 
     it('showButtonsActions: should return `true` if `actions.length` is greater than 0 and lower than 2', () => {
-      component.actions = [{label: 'Label 01'}, {label: 'Label 02'}];
+      component.actions = [{ label: 'Label 01' }, { label: 'Label 02' }];
 
       expect(component.showButtonsActions).toBe(true);
     });
 
     it('showButtonsActions: should return `false` if `actions.length` is greater than 2', () => {
-      component.actions = [{label: 'Label 01'}, {label: 'Label 02'}, {label: 'Label 03'}];
+      component.actions = [{ label: 'Label 01' }, { label: 'Label 02' }, { label: 'Label 03' }];
 
       expect(component.showButtonsActions).toBe(false);
     });
 
     it('showButtonsActions: should return `true` if `actions.length` is greater than 2 but one action isn`t visible', () => {
-      component.actions = [{label: 'Label 01', visible: false }, {label: 'Label 02'}, {label: 'Label 03'}];
+      component.actions = [{ label: 'Label 01', visible: false }, { label: 'Label 02' }, { label: 'Label 03' }];
 
       expect(component.showButtonsActions).toBe(true);
     });
 
     it('showPopupActions: should return `true` if `actions.length` is greater than 2', () => {
-      component.actions = [{label: 'Label 01'}, {label: 'Label 02'}, {label: 'Label 03'}];
+      component.actions = [{ label: 'Label 01' }, { label: 'Label 02' }, { label: 'Label 03' }];
 
       expect(component.showPopupActions).toBe(true);
     });
 
     it('showPopupActions: should return `false` if `actions.length` is greater than 2 but one action isn`t visible', () => {
-      component.actions = [{label: 'Label 01', visible: false }, {label: 'Label 02'}, {label: 'Label 03'}];
+      component.actions = [{ label: 'Label 01', visible: false }, { label: 'Label 02' }, { label: 'Label 03' }];
 
       expect(component.showPopupActions).toBe(false);
     });
@@ -137,11 +131,9 @@ describe('PoListViewComponent:', () => {
 
       expect(component.titleHasAction).toBe(true);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngDoCheck: should call `checkItemsChange`.', () => {
       spyOn(component, <any>'checkItemsChange');
 
@@ -186,7 +178,7 @@ describe('PoListViewComponent:', () => {
       spyOn(component.poPopupComponent, 'toggle');
 
       component.popupTarget = undefined;
-      component.togglePopup(item, <any> targetRef);
+      component.togglePopup(item, <any>targetRef);
 
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
       expect(component.poPopupComponent.toggle).toHaveBeenCalledWith(item);
@@ -328,7 +320,6 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should call the formatting function of the title and return its value if 'hasContentTemplate' is true and
       'listViewContentTemplate.title' is defined`, () => {
-
       const title = 'Title value';
 
       component.listViewContentTemplate = { title: () => '', templateRef: undefined };
@@ -344,7 +335,6 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item and not call the formatting function of the title if 'hasContentTemplate' is false and
       'listViewContentTemplate.title' is defined`, () => {
-
       component.propertyTitle = 'name';
       component.listViewContentTemplate = { title: () => '', templateRef: undefined };
 
@@ -359,7 +349,6 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item if 'hasContentTemplate' is true and 'listViewContentTemplate.title'
       is undefined`, () => {
-
       component.propertyTitle = 'name';
       component.listViewContentTemplate = { title: undefined, templateRef: undefined };
 
@@ -372,7 +361,6 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item if 'hasContentTemplate' is false and 'listViewContentTemplate.title'
       is undefined`, () => {
-
       component.propertyTitle = 'name';
       component.listViewContentTemplate = { title: undefined, templateRef: undefined };
 
@@ -416,7 +404,6 @@ describe('PoListViewComponent:', () => {
 
       expect(component.listViewDetailTemplate.showDetail).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
@@ -439,7 +426,7 @@ describe('PoListViewComponent:', () => {
     });
 
     it('should find `po-list-view-more-actions` if `actions.length` is greater than 2', () => {
-      component.actions = [{label: 'Ação 1'}, {label: 'Ação 2'}, {label: 'Ação 3'}];
+      component.actions = [{ label: 'Ação 1' }, { label: 'Ação 2' }, { label: 'Ação 3' }];
 
       fixture.detectChanges();
 
@@ -447,8 +434,8 @@ describe('PoListViewComponent:', () => {
     });
 
     it('should find `po-list-view-detail` if `showDetail` is true.', () => {
-      component.items = [{name: '1', $showDetail: true}];
-      component.listViewDetailTemplate = <any>{showDetail: () => true };
+      component.items = [{ name: '1', $showDetail: true }];
+      component.listViewDetailTemplate = <any>{ showDetail: () => true };
 
       fixture.detectChanges();
 
@@ -456,7 +443,7 @@ describe('PoListViewComponent:', () => {
     });
 
     it('shouldn`t find `po-list-view-detail` if `showDetail` is false.', () => {
-      component.listViewDetailTemplate = <any>{showDetail: () => false };
+      component.listViewDetailTemplate = <any>{ showDetail: () => false };
 
       fixture.detectChanges();
 
@@ -522,7 +509,7 @@ describe('PoListViewComponent:', () => {
     });
 
     it('shouldn`t find `po-list-view-detail` if doesn`t contain listViewDetailTemplate', () => {
-      component.items = [{name: '1'}];
+      component.items = [{ name: '1' }];
       component.listViewDetailTemplate = null;
 
       fixture.detectChanges();
@@ -694,21 +681,18 @@ describe('PoListViewComponent:', () => {
       fixture.detectChanges();
 
       expect(debugElement.querySelector('.po-list-view-title-link')).toBeTruthy();
-
     });
 
     it('shouldn`t apply class `po-list-view-title-no-link` if `titleHasAction` is not true', () => {
       component.titleAction = null;
 
       expect(debugElement.querySelector('.po-list-view-title-link')).toBeFalsy();
-
     });
 
     it(`should call 'runTitleAction' with 'clickableItem' if 'titleAction' is clicked, 'titleHasAction' return
       true and 'checkTitleType' return noLink`, async(() => {
-
       const clickableItem = { label: 'item label' };
-      component.items = [ clickableItem ];
+      component.items = [clickableItem];
 
       spyOn(component, 'runTitleAction');
       spyOnProperty(component, 'titleHasAction').and.returnValue(true);
@@ -726,7 +710,6 @@ describe('PoListViewComponent:', () => {
 
     it(`should not call 'runTitleAction' if 'titleAction' is clicked, 'titleHasAction' return false and 'checkTitleType' return
       noLink`, async(() => {
-
       spyOnProperty(component, 'titleHasAction').and.returnValue(false);
       spyOn(component, 'checkTitleType').and.returnValue('noLink');
       spyOn(component, 'runTitleAction');
@@ -760,7 +743,5 @@ describe('PoListViewComponent:', () => {
 
       expect(noDatacontainer).toBeFalsy();
     }));
-
   });
-
 });

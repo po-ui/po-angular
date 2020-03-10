@@ -24,7 +24,7 @@ describe('PoDatepickerRangeComponent:', () => {
         PoFieldContainerBottomComponent,
         PoFieldContainerComponent
       ],
-      providers: [ PoDateService ]
+      providers: [PoDateService]
     });
   });
 
@@ -43,7 +43,6 @@ describe('PoDatepickerRangeComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;
 
@@ -137,7 +136,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`isDateRangeInputUncompleted: should return true if length of 'endDateInputValue' and 'startDateInputValue' is
       less than  10`, () => {
-
       spyOnProperty(component, 'endDateInputValue').and.returnValue({ length: 5 });
       spyOnProperty(component, 'startDateInputValue').and.returnValue({ length: 2 });
 
@@ -145,7 +143,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it(`isDateRangeInputUncompleted: should return false if length of 'endDateInputValue' is 10`, () => {
-
       spyOnProperty(component, 'endDateInputValue').and.returnValue({ length: 10 });
       spyOnProperty(component, 'startDateInputValue').and.returnValue({ length: 2 });
 
@@ -153,7 +150,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it(`isDateRangeInputUncompleted: should return false if length of 'startDateInputValue' is 10`, () => {
-
       spyOnProperty(component, 'endDateInputValue').and.returnValue({ length: 5 });
       spyOnProperty(component, 'startDateInputValue').and.returnValue({ length: 10 });
 
@@ -161,7 +157,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it(`isDirtyDateRangeInput: should return false if length of 'endDateInputValue' and 'startDateInputValue' are 0`, () => {
-
       spyOnProperty(component, 'endDateInputValue').and.returnValue({ length: 0 });
       spyOnProperty(component, 'startDateInputValue').and.returnValue({ length: 0 });
 
@@ -177,11 +172,9 @@ describe('PoDatepickerRangeComponent:', () => {
 
       expect(component.startDateInputValue).toBe('23/04/2005');
     });
-
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -295,7 +288,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('onKeydown: should call `setFocusOnBackspace` and `preventDefault` if `isSetFocusOnBackspace` returns true.', () => {
       const fakeEvent: any = {
-        preventDefault: () => { }
+        preventDefault: () => {}
       };
       spyOn(component, <any>['isSetFocusOnBackspace']).and.returnValue(true);
       spyOn(component, <any>['setFocusOnBackspace']);
@@ -310,7 +303,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('onKeydown: shouldn`t call `setFocusOnBackspace` if `isSetFocusOnBackspace` returns false.', () => {
-      const fakeEvent: any = { };
+      const fakeEvent: any = {};
       spyOn(component, <any>['isSetFocusOnBackspace']).and.returnValue(false);
       spyOn(component, <any>['setFocusOnBackspace']);
       spyOn(component['poMaskObject'], 'keydown');
@@ -337,7 +330,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('onKeyup: should call `setFocus`, `updateModelByScreen` and `poMaskObject.keyup` if `readonly` is false', () => {
-      const eventMock = { key: '1' , target: { name: component.startDateInputName } };
+      const eventMock = { key: '1', target: { name: component.startDateInputName } };
       const isStartDateTargetEvent = true;
       component.readonly = false;
 
@@ -353,7 +346,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('onKeyup: should call `updateModelByScreen` with `false` if `isStartDateTargetEvent` is false', () => {
-      const eventMock = { key: '1' , target: { name: component.endDateInputName } };
+      const eventMock = { key: '1', target: { name: component.endDateInputName } };
       const isStartDateTargetEvent = false;
       component.readonly = false;
 
@@ -427,17 +420,21 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['dateFormatFailed']).toHaveBeenCalledWith(dateRangeModel.end);
       expect(component['formatModelToScreen']).toHaveBeenCalledWith(dateRangeModel.start);
       expect(component['formatModelToScreen']).toHaveBeenCalledWith(dateRangeModel.end);
-      expect(component['poDateService'].isDateRangeValid).toHaveBeenCalledWith(dateRangeModel.end, dateRangeModel.start);
+      expect(component['poDateService'].isDateRangeValid).toHaveBeenCalledWith(
+        dateRangeModel.end,
+        dateRangeModel.start
+      );
     });
 
     it(`applyFocusOnDatePickerRangeField: should call 'dateRangeField.nativeElement.classList.add' with
       'po-datepicker-range-field-focused'`, () => {
-
       spyOn(component.dateRangeField.nativeElement.classList, 'add');
 
       component['applyFocusOnDatePickerRangeField']();
 
-      expect(component.dateRangeField.nativeElement.classList.add).toHaveBeenCalledWith('po-datepicker-range-field-focused');
+      expect(component.dateRangeField.nativeElement.classList.add).toHaveBeenCalledWith(
+        'po-datepicker-range-field-focused'
+      );
     });
 
     it('buildMask: should return a poMask object', () => {
@@ -450,42 +447,42 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('formatDate: should convert date to `dd/mm/yyyy` format', () => {
       const format = 'dd/mm/yyyy';
-      const date = [ '12', '3', '2018' ];
+      const date = ['12', '3', '2018'];
 
       expect(component['formatDate'](format, ...date)).toBe('12/03/2018');
     });
 
     it('formatDate: should convert date to the `yyyy-mm-dd` format', () => {
       const format = 'yyyy-mm-dd';
-      const date = [ '12', '3', '2018' ];
+      const date = ['12', '3', '2018'];
 
       expect(component['formatDate'](format, ...date)).toBe('2018-03-12');
     });
 
     it('formatDate: should convert iso date to `yyyy-mm-dd` format', () => {
       const format = 'yyyy-mm-dd';
-      const date = [ '12T00:00:00-02:00', '3', '2018' ];
+      const date = ['12T00:00:00-02:00', '3', '2018'];
 
       expect(component['formatDate'](format, ...date)).toBe('2018-03-12');
     });
 
     it('formatDate: should convert date to `-mm-dd` format', () => {
       const format = 'yyyy-mm-dd';
-      const date = [ '12T00:00:00-02:00', '3', undefined ];
+      const date = ['12T00:00:00-02:00', '3', undefined];
 
       expect(component['formatDate'](format, ...date)).toBe('-03-12');
     });
 
     it('formatDate: should convert date to `yyyy--dd` format', () => {
       const format = 'yyyy-mm-dd';
-      const date = [ '12T00:00:00-02:00', undefined, '2018' ];
+      const date = ['12T00:00:00-02:00', undefined, '2018'];
 
       expect(component['formatDate'](format, ...date)).toBe('2018-0-12');
     });
 
     it('formatDate: should convert date to `yyyy-mm-` format', () => {
       const format = 'yyyy-mm-dd';
-      const date = [ undefined, '3', '2018' ];
+      const date = [undefined, '3', '2018'];
 
       expect(component['formatDate'](format, ...date)).toBe('2018-03-0');
     });
@@ -524,7 +521,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`getDateRangeFormatValidation: should return 'isValid' with true and 'dateRangeModel' with
       'getValidatedModel' return if 'isDateRangeInputFormatValid' and 'isStartDateRangeInputValid' are true`, () => {
-
       const startDate = '2018-05-20';
       const endDate = '2018-05-22';
       const valitedModel = { start: startDate, end: endDate };
@@ -544,7 +540,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`getDateRangeFormatValidation: should return 'isValid' with false if 'isDateRangeInputFormatValid' is false and
       'isStartDateRangeInputValid' is true`, () => {
-
       const startDate = '2018-05-20';
       const endDate = '2018-85-22';
       const valitedModel = { start: startDate, end: endDate };
@@ -563,7 +558,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`getDateRangeFormatValidation: should return 'isValid' with false if 'isDateRangeInputFormatValid' is true and
       'isStartDateRangeInputValid' is false`, () => {
-
       const startDate = '2018-05-29';
       const endDate = '2018-05-22';
       const valitedModel = { start: startDate, end: endDate };
@@ -613,7 +607,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`getValidatedModel: should return startDate and empty endDate if start date is greater than end date and
       'isStartDateTargetEvent' is false`, () => {
-
       const startDate = '2018-05-20';
       const endDate = '2018-05-10';
       const isStartDateTargetEvent = false;
@@ -636,7 +629,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`getValidatedModel: should return empty startDate and endDate if start date is greater than end date and
       'isStartDateTargetEvent' is true`, () => {
-
       const startDate = '2018-05-20';
       const endDate = '2018-05-10';
       const isStartDateTargetEvent = true;
@@ -673,7 +665,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`isEqualBeforeValue: should return true if 'isDateRangeInputFormatValid' is true and date range is equal before
       value`, () => {
-
       const startDate = '2018-06-12';
       const endDate = '2018-08-15';
       component['isDateRangeInputFormatValid'] = true;
@@ -684,7 +675,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`isEqualBeforeValue: should return false if 'isDateRangeInputFormatValid' is false and date range is equal before
       value`, () => {
-
       const startDate = '2018-06-12';
       const endDate = '2018-08-15';
       component['isDateRangeInputFormatValid'] = false;
@@ -695,7 +685,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`isEqualBeforeValue: should return false if 'isDateRangeInputFormatValid' is true and date range is diffent before
       value`, () => {
-
       const startDate = '2018-06-12';
       const endDate = '2019-11-15';
       component['isDateRangeInputFormatValid'] = true;
@@ -706,12 +695,13 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`removeFocusFromDatePickerRangeField: should call 'dateRangeField.nativeElement.classList.remove' with
       'po-datepicker-range-field-focused'`, () => {
-
       spyOn(component.dateRangeField.nativeElement.classList, 'remove');
 
       component['removeFocusFromDatePickerRangeField']();
 
-      expect(component.dateRangeField.nativeElement.classList.remove).toHaveBeenCalledWith('po-datepicker-range-field-focused');
+      expect(component.dateRangeField.nativeElement.classList.remove).toHaveBeenCalledWith(
+        'po-datepicker-range-field-focused'
+      );
     });
 
     it('resetDateRangeInputValidation: should set `isStartDateRangeInputValid` and `isDateRangeInputFormatValid` to true', () => {
@@ -805,7 +795,7 @@ describe('PoDatepickerRangeComponent:', () => {
       const keyCode = 1;
       const inputName = component.endDateInputName;
       const inputElement = component.endDateInput.nativeElement;
-      const eventMock = { keyCode , target: inputElement};
+      const eventMock = { keyCode, target: inputElement };
 
       spyOn(component, <any>'setFocusOnArrowLeft');
       spyOn(component, <any>'setFocusOnArrowRight');
@@ -815,7 +805,6 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['setFocusOnArrowLeft']).toHaveBeenCalledWith(keyCode, inputName);
       expect(component['setFocusOnArrowRight']).toHaveBeenCalledWith(keyCode, inputName, inputElement);
       expect(component['setFocusOnStartDateCompleted']).toHaveBeenCalledWith(keyCode, inputName);
-
     });
 
     it('updateModelByScreen: should call `updateModel` and `onChange.emit` with date range if its valid', () => {
@@ -836,7 +825,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`updateModelByScreen: should call 'validateModel' and not call 'getDateRangeFormatValidation' if
       'isDateRangeInputFormatValid' is true and date range is equal before value`, () => {
-
       const isStartDateTargetEvent = false;
       component.startDateInput.nativeElement.value = '12/06/2018';
       component.endDateInput.nativeElement.value = '15/08/2018';
@@ -857,7 +845,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`updateModelByScreen: should call 'updateModel' and not call 'getDateRangeFormatValidation' and 'isEqualBeforeValue'
       if 'isDateRangeInputUncompleted' and 'isDirtyDateRangeInput' are true`, () => {
-
       const isStartDateTargetEvent = false;
       component['dateRange'] = { start: '', end: '' };
 
@@ -878,7 +865,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`updateModelByScreen: shouldn't call 'validateModel' and call 'getDateRangeFormatValidation' if
       'isDateRangeInputFormatValid' is false and date range is equal before value`, () => {
-
       const isStartDateTargetEvent = false;
       component.startDateInput.nativeElement.value = '12/06/2018';
       component.endDateInput.nativeElement.value = '15/08/2018';
@@ -899,7 +885,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`updateModelByScreen: shouldn't call 'validateModel' and call 'getDateRangeFormatValidation' if
       'isDateRangeInputFormatValid' is true and date range is different before value`, () => {
-
       const isStartDateTargetEvent = false;
       component.startDateInput.nativeElement.value = '12/06/2018';
       component.endDateInput.nativeElement.value = '15/08/2018';
@@ -1048,7 +1033,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
       });
-
     });
 
     describe('setFocusOnArrowRight:', () => {
@@ -1097,11 +1081,9 @@ describe('PoDatepickerRangeComponent:', () => {
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
       });
-
     });
 
     describe('setFocusOnStartDateCompleted:', () => {
-
       let inputStartDateName;
       let digit7keyCode;
       let startDateElement;
@@ -1151,11 +1133,9 @@ describe('PoDatepickerRangeComponent:', () => {
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
       });
-
     });
 
     describe('isSetFocusOnBackspace:', () => {
-
       let fakeEvent;
       let endDateElement;
 
@@ -1200,7 +1180,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
         expect(component['isSetFocusOnBackspace'](fakeEvent)).toBe(false);
       });
-
     });
 
     it('setFocusOnBackspace: should call `setFocusAndPosition`.', () => {
@@ -1208,9 +1187,12 @@ describe('PoDatepickerRangeComponent:', () => {
       spyOn(component, <any>'setFocusAndPosition');
       component['setFocusOnBackspace']();
 
-      expect(component['setFocusAndPosition']).toHaveBeenCalledWith(inputPosition, component.startDateInput, inputPosition);
+      expect(component['setFocusAndPosition']).toHaveBeenCalledWith(
+        inputPosition,
+        component.startDateInput,
+        inputPosition
+      );
     });
-
   });
 
   describe('Templates:', () => {
@@ -1367,7 +1349,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`should update model with empty string if the length of the start date and end date input value are
       different from 10`, () => {
-
       component['dateRange'] = { start: '', end: '' };
 
       spyOn(component, <any>'updateModel');
@@ -1558,7 +1539,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`should delete last caracter of start date input if element is end data input, typed key is backspace and cursor
       position is 0`, () => {
-
       // keyCode 8 is backspace
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
       component.startDateInput.nativeElement.value = '24/1';
@@ -1577,7 +1557,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`should delete last caracter of start date input if element is start date input, typed key is backspace and
       end date cursor position is 0`, () => {
-
       // keyCode 8 is backspace
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
         keyCode: 8,
@@ -1597,7 +1576,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`should delete last caracter of start date input if typed key is backspace, end date cursor position is 0 and
       end date input has value`, () => {
-
       // keyCode 8 is backspace
       const keydownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
       // keyCode 37 is arrow left
@@ -1626,7 +1604,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     xit('should delete last caracter of start date input if typed key is backspace and start date input cursor position is 5', () => {
-
       // keyCode 8 is backspace
       const keyupBoardEventBackspace = new KeyboardEvent('keyup', <any>{ keyCode: 8 });
       const keyDownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
@@ -1650,7 +1627,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     xit('should keep end date input active if first caracter is deleted', () => {
-
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
         keyCode: 8, // keyCode 8 is backspace
         target: { name: component.endDateInputName }
@@ -1673,7 +1649,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('shouldn`t set cursor to start date input if element is end data input, typed keys aren`t backspace and arrowLeft', () => {
-
       // keyCode 16 is shift
       const keyupBoardEventSetFocus = new KeyboardEvent('keyup', <any>{ keyCode: 16 });
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
@@ -1696,7 +1671,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('shouldn`t set cursor to end date input if element is start date input, typed keys aren`t backspace and arrowRight', () => {
-
       // keyCode 16 is shift
       const keyupBoardEventSetFocus = new KeyboardEvent('keyup', <any>{ keyCode: 16 });
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
@@ -1718,7 +1692,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`should contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'startDateInput' is
       active element`, () => {
-
       component.startDateInput.nativeElement.focus();
       fixture.detectChanges();
 
@@ -1729,7 +1702,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`should contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'endDateInput' is
       active element`, () => {
-
       component.endDateInput.nativeElement.focus();
       fixture.detectChanges();
 
@@ -1740,7 +1712,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`shouldn't contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'endDateInput' and
       startDateInput aren't active elements`, () => {
-
       component.endDateInput.nativeElement.blur();
       component.startDateInput.nativeElement.blur();
       fixture.detectChanges();
@@ -1752,7 +1723,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`should contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'startDateInput' is
       an active element`, () => {
-
       component.startDateInput.nativeElement.focus();
       fixture.detectChanges();
 
@@ -1763,7 +1733,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`should contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'endDateInput' is
       an active element`, () => {
-
       component.endDateInput.nativeElement.focus();
       fixture.detectChanges();
 
@@ -1774,7 +1743,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     xit(`shouldn't contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'endDateInput' and
       startDateInput aren't active elements`, () => {
-
       component.endDateInput.nativeElement.blur();
       component.startDateInput.nativeElement.blur();
       fixture.detectChanges();
@@ -1783,7 +1751,5 @@ describe('PoDatepickerRangeComponent:', () => {
 
       expect(poDatepickerField.classList).not.toContain('po-datepicker-range-field-focused');
     });
-
   });
-
 });

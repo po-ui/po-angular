@@ -10,7 +10,7 @@ describe('PoTreeViewService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ PoTreeViewService ]
+      providers: [PoTreeViewService]
     });
 
     treeViewService = TestBed.inject(PoTreeViewService);
@@ -53,5 +53,4 @@ describe('PoTreeViewService:', () => {
 
     expect(onSelect instanceof Observable).toBeTruthy();
   });
-
 });

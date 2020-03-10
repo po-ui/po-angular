@@ -1,5 +1,14 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, Renderer2,
-ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 
 import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface';
 
@@ -9,7 +18,6 @@ import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoUploadDragDropAreaOverlayComponent implements AfterViewInit {
-
   @ViewChild('DragDropAreaFixed', { read: ElementRef, static: true }) DragDropAreaFixed: ElementRef;
 
   @Input('p-directory-compatible') directoryCompatible: boolean;
@@ -22,7 +30,7 @@ export class PoUploadDragDropAreaOverlayComponent implements AfterViewInit {
 
   @Output('p-area-element') areaElement: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit() {
     if (this.target) {
@@ -41,5 +49,4 @@ export class PoUploadDragDropAreaOverlayComponent implements AfterViewInit {
       this.renderer.setStyle(this.DragDropAreaFixed.nativeElement, clientRectKey, `${clientRectValue}px`);
     });
   }
-
 }

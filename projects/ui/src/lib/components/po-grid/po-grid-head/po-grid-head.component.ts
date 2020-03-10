@@ -5,8 +5,7 @@ import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@ang
   templateUrl: './po-grid-head.component.html'
 })
 export class PoGridHeadComponent {
-
-  private _width: (string | number);
+  private _width: string | number;
 
   @Input('p-align') align?: string = 'left';
 
@@ -16,15 +15,14 @@ export class PoGridHeadComponent {
 
   @Input('p-tab-index') tabIndex?: number = -1;
 
-  @Input('p-width') set width(value: (string | number)) {
+  @Input('p-width') set width(value: string | number) {
     this._width = value;
   }
-  get width(): (string | number) {
+  get width(): string | number {
     return this._width ? `${this._width}px` : '100%';
   }
 
   @Input('p-title') title?: string;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) { }
-
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 }

@@ -8,7 +8,6 @@ import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTreeViewItemHeaderComponent {
-
   @ViewChild('inputCheckbox') inputCheckbox;
 
   @Input('p-item') item: PoTreeViewItem;
@@ -22,5 +21,4 @@ export class PoTreeViewItemHeaderComponent {
   get hasSubItems() {
     return !!(this.item.subItems && this.item.subItems.length);
   }
-
 }

@@ -14,7 +14,6 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
   templateUrl: './po-table-subtitle-footer.component.html'
 })
 export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, OnDestroy {
-
   showSubtitle: boolean;
 
   private isVisible: boolean;
@@ -27,7 +26,7 @@ export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, O
   /** Propriedade que recebe as legendas definidas no `PoTableSubtitleCircleComponent`. */
   @Input('p-subtitles') subtitles: Array<PoTableSubtitleColumn>;
 
-  constructor(private element: ElementRef, public renderer: Renderer2) { }
+  constructor(private element: ElementRef, public renderer: Renderer2) {}
 
   ngAfterViewInit() {
     this.initializeResizeListener();
@@ -35,12 +34,10 @@ export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, O
   }
 
   ngDoCheck() {
-
     if (!this.isVisible && this.getContainerSize() > 0) {
       this.toggleShowCompleteSubtitle();
       this.isVisible = true;
     }
-
   }
 
   ngOnDestroy() {
@@ -61,7 +58,9 @@ export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, O
   private getItemsSize() {
     const items = this.element.nativeElement.querySelectorAll('.po-table-subtitle-footer');
 
-    return Array.from(items).map(item => item['offsetWidth']).reduce((a, b) => a + b, 16);
+    return Array.from(items)
+      .map(item => item['offsetWidth'])
+      .reduce((a, b) => a + b, 16);
   }
 
   private initializeResizeListener() {
@@ -80,5 +79,4 @@ export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, O
 
     this.showSubtitle = itemsSize > containerSize;
   }
-
 }

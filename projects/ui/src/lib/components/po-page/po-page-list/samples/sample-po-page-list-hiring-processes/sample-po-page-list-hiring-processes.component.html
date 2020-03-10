@@ -3,38 +3,30 @@
   [p-actions]="actions"
   [p-breadcrumb]="breadcrumb"
   [p-disclaimer-group]="disclaimerGroup"
-  [p-filter]="filterSettings">
-
+  [p-filter]="filterSettings"
+>
   <po-table
     p-checkbox
     p-single-select
     p-sort="true"
     p-striped="true"
     [p-columns]="hiringProcessesColumns"
-    [p-items]="hiringProcessesFiltered">
+    [p-items]="hiringProcessesFiltered"
+  >
   </po-table>
-
 </po-page-list>
 
-<po-modal
-  #advancedFilterModal
-  p-title="Advanced filter"
-  [p-primary-action]="advancedFilterPrimaryAction">
-
+<po-modal #advancedFilterModal p-title="Advanced filter" [p-primary-action]="advancedFilterPrimaryAction">
   <form #f="ngForm">
     <po-multiselect
       name="jobDescription"
       [(ngModel)]="jobDescription"
       p-label="Job description"
-      [p-options]="jobDescriptionOptions">
+      [p-options]="jobDescriptionOptions"
+    >
     </po-multiselect>
 
-    <po-checkbox-group
-      name="status"
-      [(ngModel)]="status"
-      p-label="Status"
-      [p-options]="statusOptions">
+    <po-checkbox-group name="status" [(ngModel)]="status" p-label="Status" [p-options]="statusOptions">
     </po-checkbox-group>
   </form>
-
 </po-modal>

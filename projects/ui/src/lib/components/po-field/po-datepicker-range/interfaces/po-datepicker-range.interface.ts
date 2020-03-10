@@ -9,7 +9,6 @@
  * [descrição do componente](/documentation/po-datepicker-range#accepted-formats).
  */
 export interface PoDatepickerRange {
-
   /** Data inicial */
   start: string | Date;
 

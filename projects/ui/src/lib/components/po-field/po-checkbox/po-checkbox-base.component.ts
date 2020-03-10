@@ -17,7 +17,6 @@ import { InputBoolean } from '../../../decorators';
  */
 @Directive()
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
-
   checkboxValue: boolean | null;
   id = uuid();
   propagateChange: any;
@@ -82,7 +81,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     this.propagateChange = fn;
   }
 
-  registerOnTouched(fn: any): void { }
+  registerOnTouched(fn: any): void {}
 
   writeValue(value: any) {
     if (value !== this.checkboxValue) {

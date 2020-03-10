@@ -8,7 +8,6 @@ import { PoDynamicFormField, PoBreadcrumb, PoPageAction } from '@portinari/porti
  * Interface para a customização de uma página dinâmica.
  */
 export interface PoPageDynamicSearchOptions {
-
   /**
    * Lista dos campos usados na busca avançada. Caso não seja passado a busca avançada não será exibida.
    *

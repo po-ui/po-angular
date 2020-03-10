@@ -12,10 +12,10 @@ import { PoMenuItemsService } from '../services/po-menu-items.service';
 import { PoMenuItemComponent } from './po-menu-item.component';
 
 @Component({ template: 'Search' })
-export class SearchComponent { }
+export class SearchComponent {}
 
 @Component({ template: 'Home' })
-export class HomeComponent { }
+export class HomeComponent {}
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -31,13 +31,8 @@ describe('PoMenuItemComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        SearchComponent,
-        HomeComponent,
-        PoMenuItemComponent,
-        PoBadgeComponent
-      ],
-      providers: [ PoMenuItemsService ]
+      declarations: [SearchComponent, HomeComponent, PoMenuItemComponent, PoBadgeComponent],
+      providers: [PoMenuItemsService]
     });
   });
 
@@ -57,15 +52,14 @@ describe('PoMenuItemComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-badge-value: should update property p-badge-value with valid values.', () => {
-      const validValues = [ 105, 1, 98, 0 ];
+      const validValues = [105, 1, 98, 0];
 
       expectPropertiesValues(component, 'badgeValue', validValues, validValues);
     });
 
     it('p-badge-value: should update property p-badge-value with invalid values for undefined.', () => {
-      const invalidValues = [ null, undefined, '', ' ', {}, [], false, true ];
+      const invalidValues = [null, undefined, '', ' ', {}, [], false, true];
 
       expectPropertiesValues(component, 'badgeValue', invalidValues, undefined);
     });
@@ -148,7 +142,16 @@ describe('PoMenuItemComponent:', () => {
     });
 
     it(`subItems: should set with 'subitems' value and call 'calcMenuSubItemsMaxHeight' if 'isOpened' is 'true'`, () => {
-      const result = [{id: '1', label: 'item1', subItems: [{id: '2', label: 'sub1'}, {id: '3', label: 'sub2'}]}];
+      const result = [
+        {
+          id: '1',
+          label: 'item1',
+          subItems: [
+            { id: '2', label: 'sub1' },
+            { id: '3', label: 'sub2' }
+          ]
+        }
+      ];
       component.isOpened = true;
 
       spyOn(component, <any>'calcMenuSubItemsMaxHeight');
@@ -160,7 +163,16 @@ describe('PoMenuItemComponent:', () => {
     });
 
     it(`subItems: should set with 'subitems' value and doesn't call 'calcMenuSubItemsMaxHeight' if 'isOpened' is 'false'`, () => {
-      const result = [{id: '1', label: 'item1', subItems: [{id: '2', label: 'sub1'}, {id: '3', label: 'sub2'}]}];
+      const result = [
+        {
+          id: '1',
+          label: 'item1',
+          subItems: [
+            { id: '2', label: 'sub1' },
+            { id: '3', label: 'sub2' }
+          ]
+        }
+      ];
       component.isOpened = false;
 
       spyOn(component, <any>'calcMenuSubItemsMaxHeight');
@@ -170,14 +182,13 @@ describe('PoMenuItemComponent:', () => {
       expect(component.subItems).toEqual(result);
       expect(component['calcMenuSubItemsMaxHeight']).not.toHaveBeenCalled();
     });
-
   });
 
   it('should call receiveFromParentMenuClicked Observable', () => {
     const menuItem = { label: 'Teste', type: 'subItems' };
     component['menuItemsService'] = fakeMenuService(menuItem) as PoMenuItemsService;
 
-    spyOn(component, <any> 'processMenuItem');
+    spyOn(component, <any>'processMenuItem');
 
     component.ngOnInit();
 
@@ -186,7 +197,7 @@ describe('PoMenuItemComponent:', () => {
 
   it('property isSelected should be truthy', () => {
     component.id = '11';
-    const menuItem = {id: '11'};
+    const menuItem = { id: '11' };
 
     component['activateMenu'](menuItem);
 
@@ -225,7 +236,7 @@ describe('PoMenuItemComponent:', () => {
 
   it('should not call preventDefault and menuItemsService when dispatch event ctrl+click', () => {
     const method = 'sendToParentMenuClicked';
-    const eventClick  = document.createEvent('MouseEvents');
+    const eventClick = document.createEvent('MouseEvents');
     eventClick.initMouseEvent('click', false, true, window, 0, 0, 0, 0, 0, true, false, false, false, 0, null);
 
     spyOn(eventClick, 'preventDefault');
@@ -240,7 +251,7 @@ describe('PoMenuItemComponent:', () => {
 
   it('should not call preventDefault and menuItemsService when dispatch event command+click', () => {
     const method = 'sendToParentMenuClicked';
-    const eventClick  = document.createEvent('MouseEvents');
+    const eventClick = document.createEvent('MouseEvents');
     eventClick.initMouseEvent('click', false, true, window, 0, 0, 0, 0, 0, false, false, false, true, 0, null);
 
     spyOn(eventClick, 'preventDefault');
@@ -261,14 +272,14 @@ describe('PoMenuItemComponent:', () => {
   });
 
   it('hasSubItem should return true when menuItem ID of subItems is the same of parameter Id', () => {
-    const subItems = [{id: '11', label: ''}];
+    const subItems = [{ id: '11', label: '' }];
     const hasSubItemSelected = component['hasSubItem'](subItems, '11');
 
     expect(hasSubItemSelected).toBeTruthy();
   });
 
   it('hasSubItem should return falsy when menuItem have subItems but the id of menuItem is different of parameter Id', () => {
-    const subItems = [{id: '11', label: ''}];
+    const subItems = [{ id: '11', label: '' }];
     const hasSubItemSelected = component['hasSubItem'](subItems, '111');
 
     expect(hasSubItemSelected).toBeFalsy();
@@ -278,7 +289,7 @@ describe('PoMenuItemComponent:', () => {
     const fnSpy = 'activateMenu';
     const menu = { active: false, grouped: false };
 
-    spyOn(component, <any> fnSpy).and.returnValue(null);
+    spyOn(component, <any>fnSpy).and.returnValue(null);
 
     component.type = 'internalLink';
     component['processMenuItem'](menu);
@@ -290,7 +301,7 @@ describe('PoMenuItemComponent:', () => {
     const fnSpy = 'groupedMenu';
     const menu = { active: false, grouped: false };
 
-    spyOn(component, <any> fnSpy).and.returnValue(null);
+    spyOn(component, <any>fnSpy).and.returnValue(null);
 
     component.type = 'subItems';
     component['processMenuItem'](menu);
@@ -303,8 +314,8 @@ describe('PoMenuItemComponent:', () => {
     const activateMenuFn = 'activateMenu';
     const menu = { active: false, grouped: false };
 
-    spyOn(component, <any> groupedMenuFn);
-    spyOn(component, <any> activateMenuFn);
+    spyOn(component, <any>groupedMenuFn);
+    spyOn(component, <any>activateMenuFn);
 
     component.type = '';
     component['processMenuItem'](menu);
@@ -317,10 +328,10 @@ describe('PoMenuItemComponent:', () => {
     component.subItems = [];
     const isMenuOpendFn = 'isMenuOpened';
     const hasSubItemFn = 'hasSubItem';
-    const menu = { active: false, grouped: false, label: ''};
+    const menu = { active: false, grouped: false, label: '' };
 
-    spyOn(component, <any> isMenuOpendFn);
-    spyOn(component, <any> hasSubItemFn);
+    spyOn(component, <any>isMenuOpendFn);
+    spyOn(component, <any>hasSubItemFn);
 
     component.type = 'subItems';
     component['groupedMenu'](menu, menu);
@@ -332,9 +343,9 @@ describe('PoMenuItemComponent:', () => {
   it('should not call hasSubItem', () => {
     component.subItems = [];
     const hasSubItemFn = 'hasSubItem';
-    const menu = { active: false, grouped: false, label: ''};
+    const menu = { active: false, grouped: false, label: '' };
 
-    spyOn(component, <any> hasSubItemFn);
+    spyOn(component, <any>hasSubItemFn);
 
     component['groupedMenu'](undefined, menu);
 
@@ -348,7 +359,7 @@ describe('PoMenuItemComponent:', () => {
   });
 
   it('IsMenuOpened return false when id is different than menuOpened ID parameter ', () => {
-    const menuOpened = { id: '1', subItems: [{id: '2'}] };
+    const menuOpened = { id: '1', subItems: [{ id: '2' }] };
     component.id = '2';
 
     const isOpened = component['isMenuOpened'](<any>menuOpened, false);
@@ -358,7 +369,7 @@ describe('PoMenuItemComponent:', () => {
   it('should set max height to animate po-menu item sub items', () => {
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = [{ label: 'Search'}, { label: 'Register' }];
+    component.subItems = [{ label: 'Search' }, { label: 'Register' }];
 
     const menuOpened = { id: '1', label: 'Actions' };
 
@@ -372,9 +383,14 @@ describe('PoMenuItemComponent:', () => {
   it('should set max height to 196px animate po-menu item sub items with opened menu', () => {
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = [{ label: 'Search'}, { label: 'Register' }];
+    component.subItems = [{ label: 'Search' }, { label: 'Register' }];
 
-    const menuOpened = { id: '1', label: 'Search', isOpened: true, subItems: [{ label: 'Houses'}, { label: 'Boats' }] };
+    const menuOpened = {
+      id: '1',
+      label: 'Search',
+      isOpened: true,
+      subItems: [{ label: 'Houses' }, { label: 'Boats' }]
+    };
 
     component['accordionAnimation'](null, menuOpened, false, false);
     fixture.detectChanges();
@@ -386,9 +402,14 @@ describe('PoMenuItemComponent:', () => {
   it('should set max height to 392px to animate po-menu item sub items with opened menu', () => {
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = [{ label: 'Search'}, { label: 'Register' }];
+    component.subItems = [{ label: 'Search' }, { label: 'Register' }];
 
-    const menuOpened = { id: '1', label: 'Search', isOpened: true, subItems: [{ label: 'Houses'}, { label: 'Boats' }] };
+    const menuOpened = {
+      id: '1',
+      label: 'Search',
+      isOpened: true,
+      subItems: [{ label: 'Houses' }, { label: 'Boats' }]
+    };
 
     component['accordionAnimation'](null, menuOpened, true, false);
     fixture.detectChanges();
@@ -400,9 +421,14 @@ describe('PoMenuItemComponent:', () => {
   it('should set max height to 0px to animate po-menu item sub items with closed menu', () => {
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = [{ label: 'Search'}, { label: 'Register' }];
+    component.subItems = [{ label: 'Search' }, { label: 'Register' }];
 
-    const menuOpened = { id: '1', label: 'Search', isOpened: false, subItems: [{ label: 'Houses'}, { label: 'Boats' }] };
+    const menuOpened = {
+      id: '1',
+      label: 'Search',
+      isOpened: false,
+      subItems: [{ label: 'Houses' }, { label: 'Boats' }]
+    };
 
     component['accordionAnimation'](null, menuOpened, true, false);
     fixture.detectChanges();
@@ -414,7 +440,7 @@ describe('PoMenuItemComponent:', () => {
   it('should not change max height in accordion animation if id is different of menuOpened id', () => {
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = [{ label: 'Search'}, { label: 'Register' }];
+    component.subItems = [{ label: 'Search' }, { label: 'Register' }];
     component.maxHeight = 0;
 
     const menuOpened = { id: '2', label: 'Process' };
@@ -441,7 +467,7 @@ describe('PoMenuItemComponent:', () => {
     component.isOpened = true;
     const accordionAnimation = 'accordionAnimation';
 
-    spyOn(component, <any> accordionAnimation);
+    spyOn(component, <any>accordionAnimation);
 
     component.type = 'subItems';
     component['groupedMenu'](undefined, undefined);
@@ -450,11 +476,11 @@ describe('PoMenuItemComponent:', () => {
   });
 
   it('should call `getMinimumHeight` to set max height to animate po-menu subitem level 3 activated from route', () => {
-
-    const menuItem = { id: '1', label: 'Actions', subItems: [
-      { id: '2', label: 'Search', subItems: [
-        {  id: '3' , label: 'Register'}] }
-    ]};
+    const menuItem = {
+      id: '1',
+      label: 'Actions',
+      subItems: [{ id: '2', label: 'Search', subItems: [{ id: '3', label: 'Register' }] }]
+    };
 
     component.id = '1';
     component.type = 'subItems';
@@ -463,7 +489,7 @@ describe('PoMenuItemComponent:', () => {
     const menuOpened = menuItem;
     const menuActive = { id: '3', label: 'Register' };
 
-    spyOn(component, <any> 'getMinimumHeight').and.callThrough();
+    spyOn(component, <any>'getMinimumHeight').and.callThrough();
 
     component['accordionAnimation'](menuActive, menuOpened, true, true);
     fixture.detectChanges();
@@ -474,8 +500,7 @@ describe('PoMenuItemComponent:', () => {
   });
 
   it('should call `getMinimumHeight` to set max height to animate po-menu item level 2 activated from route', () => {
-
-    const menuItem = { id: '1', label: 'Actions', subItems: [ { id: '2', label: 'Search' }]};
+    const menuItem = { id: '1', label: 'Actions', subItems: [{ id: '2', label: 'Search' }] };
 
     component.id = '1';
     component.type = 'subItems';
@@ -484,7 +509,7 @@ describe('PoMenuItemComponent:', () => {
     const menuOpened = menuItem;
     const menuActive = { id: '2', label: 'Search' };
 
-    spyOn(component, <any> 'getMinimumHeight').and.callThrough();
+    spyOn(component, <any>'getMinimumHeight').and.callThrough();
 
     component['accordionAnimation'](menuActive, menuOpened, true, true);
     fixture.detectChanges();
@@ -495,10 +520,9 @@ describe('PoMenuItemComponent:', () => {
   });
 
   it('itemSubscription: should `unsubscribe` on destroy.', () => {
-
     component['itemSubscription'] = <any>{ unsubscribe: () => {} };
 
-    spyOn(component['itemSubscription'], <any> 'unsubscribe');
+    spyOn(component['itemSubscription'], <any>'unsubscribe');
 
     component.ngOnDestroy();
 
@@ -506,8 +530,7 @@ describe('PoMenuItemComponent:', () => {
   });
 
   describe('Methods:', () => {
-
-    it('calcMenuSubItemsMaxHeight: should calc `maxHeight` with subItens height.', fakeAsync (() => {
+    it('calcMenuSubItemsMaxHeight: should calc `maxHeight` with subItens height.', fakeAsync(() => {
       const fakeThis: any = {
         maxHeight: 0,
         menuSubItems: {
@@ -517,7 +540,10 @@ describe('PoMenuItemComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.menuSubItems.nativeElement, 'querySelectorAll').and.returnValue([{offsetHeight: 10}, {offsetHeight: 30}]);
+      spyOn(fakeThis.menuSubItems.nativeElement, 'querySelectorAll').and.returnValue([
+        { offsetHeight: 10 },
+        { offsetHeight: 30 }
+      ]);
 
       component['calcMenuSubItemsMaxHeight'].call(fakeThis);
 
@@ -525,13 +551,10 @@ describe('PoMenuItemComponent:', () => {
 
       expect(fakeThis.maxHeight).toBe(40);
       expect(fakeThis.menuSubItems.nativeElement.querySelectorAll).toHaveBeenCalledWith('.po-menu-item');
-
     }));
-
   });
 
   describe('Templates:', () => {
-
     it('should not show icon if level is bigger than 1', () => {
       component.icon = 'po-icon-star';
       component.level = 2;
@@ -715,7 +738,6 @@ describe('PoMenuItemComponent:', () => {
       fixture.detectChanges();
       expect(nativeElement.querySelector('.po-menu-sub-item-selected')).toBeNull();
     });
-
   });
 });
 

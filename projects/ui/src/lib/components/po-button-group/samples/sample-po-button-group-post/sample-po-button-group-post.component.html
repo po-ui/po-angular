@@ -2,30 +2,20 @@
 <po-widget>
   <div class="po-row">
     <div class="po-md-3 po-lg-2">
-      <po-button-group
-        p-toggle="multiple"
-        [p-buttons]="fontStyle"> 
-      </po-button-group>
+      <po-button-group p-toggle="multiple" [p-buttons]="fontStyle"> </po-button-group>
     </div>
     <div class="po-md-3 po-lg-2">
-      <po-button-group
-        p-toggle="single"
-        [p-buttons]="textAlign">
-      </po-button-group>
+      <po-button-group p-toggle="single" [p-buttons]="textAlign"> </po-button-group>
     </div>
-    <po-textarea
-      class="po-md-12"
-      name="textArea"
-      [(ngModel)]="textArea"
-      p-maxlength="400">
-    </po-textarea>
-    <hr>
-    <div 
+    <po-textarea class="po-md-12" name="textArea" [(ngModel)]="textArea" p-maxlength="400"> </po-textarea>
+    <hr />
+    <div
       class="po-md-12 po-mt-3 po-font-text-large"
       [style.font-weight]="setBold ? 'bold' : 'normal'"
       [style.font-style]="setItalic ? 'italic' : 'normal'"
       [style.text-decoration]="setUnderline ? 'underline' : 'none'"
-      [style.text-align]="setTextAlignment">
+      [style.text-align]="setTextAlignment"
+    >
       {{ textArea }}
     </div>
   </div>

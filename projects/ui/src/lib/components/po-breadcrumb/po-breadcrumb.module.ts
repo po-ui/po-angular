@@ -14,10 +14,7 @@ import { PoBreadcrumbItemComponent } from './po-breadcrumb-item/po-breadcrumb-it
  *
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
+  imports: [CommonModule, RouterModule],
   declarations: [
     PoBreadcrumbComponent,
     PoBreadcrumbDropdownComponent,
@@ -26,4 +23,4 @@ import { PoBreadcrumbItemComponent } from './po-breadcrumb-item/po-breadcrumb-it
   ],
   exports: [PoBreadcrumbComponent]
 })
-export class PoBreadcrumbModule { }
+export class PoBreadcrumbModule {}

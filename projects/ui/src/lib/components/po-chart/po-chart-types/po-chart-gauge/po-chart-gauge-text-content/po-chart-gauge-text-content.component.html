@@ -1,7 +1,6 @@
 <div *ngIf="hasSerieValue" class="po-chart-gauge-text-content" tabindex="0" [ngStyle]="maxDescriptionWidth">
   <p class="po-chart-gauge-text-value">{{ serieValueConverted }}</p>
-  <p *ngIf="hasSerieDescription"
-    #description
-    class="po-chart-gauge-text-description"
-    [p-tooltip]="tooltip">{{ serie?.description }}</p>
+  <p *ngIf="hasSerieDescription" #description class="po-chart-gauge-text-description" [p-tooltip]="tooltip">
+    {{ serie?.description }}
+  </p>
 </div>

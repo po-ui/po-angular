@@ -11,7 +11,6 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 
 describe('PoPageJobSchedulerService:', () => {
-
   let poPageJobSchedulerService: PoPageJobSchedulerService;
   let httpMock: HttpTestingController;
 
@@ -35,7 +34,6 @@ describe('PoPageJobSchedulerService:', () => {
   });
 
   describe('Methods:', () => {
-
     it('configServiceApi: should set the endpoint', () => {
       const config = { endpoint: '/endpoint' };
 
@@ -53,10 +51,8 @@ describe('PoPageJobSchedulerService:', () => {
     });
 
     it('createResource: should call `convertToJobScheduler` and `POST` methods', () => {
-      const resource: {items: Array<PoDynamicFormField>} = {
-        items: [
-          { property: ''}
-        ]
+      const resource: { items: Array<PoDynamicFormField> } = {
+        items: [{ property: '' }]
       };
 
       spyOn(poPageJobSchedulerService, <any>'convertToJobScheduler').and.returnValue(of({}));
@@ -90,10 +86,8 @@ describe('PoPageJobSchedulerService:', () => {
     it('getParametersByProcess: should return an object with parameters from `GET` method', () => {
       let reqResponse;
       const processId = 10;
-      const resource: {items: Array<PoDynamicFormField>} = {
-        items: [
-          { property: ''}
-        ]
+      const resource: { items: Array<PoDynamicFormField> } = {
+        items: [{ property: '' }]
       };
 
       poPageJobSchedulerService.getParametersByProcess(processId).subscribe(response => {
@@ -155,13 +149,13 @@ describe('PoPageJobSchedulerService:', () => {
     it('getResource: should call `convertToJobSchedulerInternal` passing as parameter the response from `GET` method', () => {
       const id = 10;
       const convertToJobSchedulerInternalReturn = of({});
-      const resource: {items: Array<PoDynamicFormField>} = {
-        items: [
-          { property: ''}
-        ]
+      const resource: { items: Array<PoDynamicFormField> } = {
+        items: [{ property: '' }]
       };
 
-      spyOn(poPageJobSchedulerService, <any>'convertToJobSchedulerInternal').and.returnValue(convertToJobSchedulerInternalReturn);
+      spyOn(poPageJobSchedulerService, <any>'convertToJobSchedulerInternal').and.returnValue(
+        convertToJobSchedulerInternalReturn
+      );
 
       poPageJobSchedulerService.getResource(id).subscribe(response => {
         expect(response).toEqual(convertToJobSchedulerInternalReturn);
@@ -172,15 +166,12 @@ describe('PoPageJobSchedulerService:', () => {
       req.flush(resource);
 
       expect(poPageJobSchedulerService['convertToJobSchedulerInternal']).toHaveBeenCalledWith(resource);
-
     });
 
     it('updateResource: should call `convertToJobScheduler` and `PUT` methods', () => {
       const id = 10;
-      const resource: { items: Array<PoDynamicFormField>} = {
-        items: [
-          { property: ''}
-        ]
+      const resource: { items: Array<PoDynamicFormField> } = {
+        items: [{ property: '' }]
       };
 
       spyOn(poPageJobSchedulerService, <any>'convertToJobScheduler').and.returnValue(of({}));
@@ -201,7 +192,7 @@ describe('PoPageJobSchedulerService:', () => {
         periodicity: 'single',
         recurrent: undefined,
         firstExecution: new Date(),
-        firstExecutionHour: '10:00',
+        firstExecutionHour: '10:00'
       };
 
       spyOn(poPageJobSchedulerService, <any>'convertToPeriodicity');
@@ -214,12 +205,11 @@ describe('PoPageJobSchedulerService:', () => {
 
     it(`convertToJobScheduler: should return the merge between 'jobSchedulerInternal' and 'convertToPeriodicity' value
       if 'jobSchedulerInternal.periodicity' not is 'single'`, () => {
-
       const jobSchedulerInternal = {
         periodicity: 'another value',
         recurrent: undefined,
         firstExecution: undefined,
-        firstExecutionHour: undefined,
+        firstExecutionHour: undefined
       };
 
       const convertToPeriodicityReturn: PoJobScheduler = {
@@ -241,27 +231,29 @@ describe('PoPageJobSchedulerService:', () => {
 
     it(`convertToJobScheduler: should set 'firstExecutionHour' with 'replaceHourFirstExecution' return if 'firstExecutionHour'
       is defined`, () => {
-
       const jobSchedulerInternal = {
         firstExecutionHour: new Date(),
-        firstExecution: new Date(),
+        firstExecution: new Date()
       };
 
       const replaceHourFirstExecutionReturn = '00:09';
 
-      spyOn(poPageJobSchedulerService, <any>'replaceHourFirstExecution').and.returnValue(replaceHourFirstExecutionReturn);
+      spyOn(poPageJobSchedulerService, <any>'replaceHourFirstExecution').and.returnValue(
+        replaceHourFirstExecutionReturn
+      );
       spyOn(poPageJobSchedulerService, <any>'removeInvalidKeys');
 
       const result = poPageJobSchedulerService['convertToJobScheduler'](jobSchedulerInternal);
 
       expect(result.firstExecution).toEqual(replaceHourFirstExecutionReturn);
 
-      expect(poPageJobSchedulerService['replaceHourFirstExecution'])
-        .toHaveBeenCalledWith(jobSchedulerInternal.firstExecution, jobSchedulerInternal.firstExecutionHour);
+      expect(poPageJobSchedulerService['replaceHourFirstExecution']).toHaveBeenCalledWith(
+        jobSchedulerInternal.firstExecution,
+        jobSchedulerInternal.firstExecutionHour
+      );
     });
 
     it(`convertToJobScheduler: should not call 'replaceHourFirstExecution' if 'firstExecutionHour' is undefined`, () => {
-
       const jobSchedulerInternal = {
         firstExecutionHour: undefined
       };
@@ -275,7 +267,6 @@ describe('PoPageJobSchedulerService:', () => {
     });
 
     it(`convertToJobScheduler: should delete 'executionParameter' if 'returnValidExecutionParameter' is empty`, () => {
-
       const jobSchedulerInternal = {
         executionParameter: 'value',
         firstExecution: '2018-02-20',
@@ -294,11 +285,12 @@ describe('PoPageJobSchedulerService:', () => {
 
       expect(result).toEqual(jobSchedulerExpeted);
 
-      expect(poPageJobSchedulerService['returnValidExecutionParameter']).toHaveBeenCalledWith(jobSchedulerInternal.executionParameter);
+      expect(poPageJobSchedulerService['returnValidExecutionParameter']).toHaveBeenCalledWith(
+        jobSchedulerInternal.executionParameter
+      );
     });
 
     it(`convertToJobScheduler: should not delete 'executionParameter' if 'returnValidExecutionParameter' has value`, () => {
-
       const jobSchedulerInternal: PoJobScheduler = {
         executionParameter: {},
         firstExecution: '2018-02-20',
@@ -312,11 +304,12 @@ describe('PoPageJobSchedulerService:', () => {
 
       expect(result).toEqual(jobSchedulerInternal);
 
-      expect(poPageJobSchedulerService['returnValidExecutionParameter']).toHaveBeenCalledWith(jobSchedulerInternal.executionParameter);
+      expect(poPageJobSchedulerService['returnValidExecutionParameter']).toHaveBeenCalledWith(
+        jobSchedulerInternal.executionParameter
+      );
     });
 
     it(`convertToJobScheduler: should call 'removeInvalidKeys' with 'jobSchedulerInternal'`, () => {
-
       const jobSchedulerInternal = {
         executionParameter: 'value',
         firstExecution: '2018-02-20',
@@ -332,9 +325,8 @@ describe('PoPageJobSchedulerService:', () => {
 
     it(`convertToJobSchedulerInternal: should set 'jobSchedulerInternal.firstExecutionHour' with 'getHourFirstExecution'
       return if 'firstExecution' is defined`, () => {
-
       const jobSchedulerInternal = {
-        firstExecution: '2019-02-04',
+        firstExecution: '2019-02-04'
       };
 
       const jobSchedulerInternalExpected = {
@@ -348,18 +340,22 @@ describe('PoPageJobSchedulerService:', () => {
 
       poPageJobSchedulerService['convertToJobSchedulerInternal'](jobSchedulerInternal);
 
-      expect(poPageJobSchedulerService['getHourFirstExecution']).toHaveBeenCalledWith(jobSchedulerInternal.firstExecution);
+      expect(poPageJobSchedulerService['getHourFirstExecution']).toHaveBeenCalledWith(
+        jobSchedulerInternal.firstExecution
+      );
 
-      expect(poPageJobSchedulerService['removeInvalidKeys'])
-        .toHaveBeenCalledWith(jobSchedulerInternalExpected, ['weekly', 'monthly', 'daily']);
+      expect(poPageJobSchedulerService['removeInvalidKeys']).toHaveBeenCalledWith(jobSchedulerInternalExpected, [
+        'weekly',
+        'monthly',
+        'daily'
+      ]);
     });
 
     it(`convertToJobSchedulerInternal: should not set 'jobSchedulerInternal.firstExecutionHour' with 'getHourFirstExecution'
       return if 'firstExecution' is undefined`, () => {
-
       const jobSchedulerInternal = {
         firstExecution: undefined,
-        processID: '20',
+        processID: '20'
       };
 
       spyOn(poPageJobSchedulerService, <any>'removeInvalidKeys');
@@ -367,12 +363,14 @@ describe('PoPageJobSchedulerService:', () => {
 
       poPageJobSchedulerService['convertToJobSchedulerInternal'](jobSchedulerInternal);
 
-      expect(poPageJobSchedulerService['removeInvalidKeys'])
-        .toHaveBeenCalledWith(jobSchedulerInternal, ['weekly', 'monthly', 'daily']);
+      expect(poPageJobSchedulerService['removeInvalidKeys']).toHaveBeenCalledWith(jobSchedulerInternal, [
+        'weekly',
+        'monthly',
+        'daily'
+      ]);
     });
 
     it(`convertToJobSchedulerInternal: should return an empty object if 'jobScheduler' is undefined`, () => {
-
       const jobScheduler = undefined;
 
       spyOn(poPageJobSchedulerService, <any>'removeInvalidKeys');
@@ -386,9 +384,8 @@ describe('PoPageJobSchedulerService:', () => {
 
     it(`convertToJobSchedulerInternal: should return the merge between 'jobSchedulerInternal' and
       the return from 'convertToPeriodicityInternal'`, () => {
-
       const jobSchedulerInternal = {
-        processID: '20',
+        processID: '20'
       };
 
       const jobSchedulerInternalConverted = {
@@ -407,7 +404,9 @@ describe('PoPageJobSchedulerService:', () => {
       };
 
       spyOn(poPageJobSchedulerService, <any>'removeInvalidKeys');
-      spyOn(poPageJobSchedulerService, <any>'convertToPeriodicityInternal').and.returnValue(jobSchedulerInternalConverted);
+      spyOn(poPageJobSchedulerService, <any>'convertToPeriodicityInternal').and.returnValue(
+        jobSchedulerInternalConverted
+      );
       spyOn(poPageJobSchedulerService, <any>'getHourFirstExecution').and.returnValue('06:45');
 
       const result = poPageJobSchedulerService['convertToJobSchedulerInternal'](jobSchedulerInternal);
@@ -416,7 +415,6 @@ describe('PoPageJobSchedulerService:', () => {
     });
 
     describe('convertToPeriodicity: ', () => {
-
       it('should convert object to monthly periodicity', () => {
         const monthly = {
           periodicity: 'monthly',
@@ -434,7 +432,7 @@ describe('PoPageJobSchedulerService:', () => {
       it('should convert object to monthly periodicity with default day 0 if `dayOfMonth` is undefined', () => {
         const monthly = {
           periodicity: 'monthly',
-          dayOfMonth:  undefined,
+          dayOfMonth: undefined,
           hour: '10:05'
         };
 
@@ -488,15 +486,15 @@ describe('PoPageJobSchedulerService:', () => {
       });
 
       it('should return empty object if `periodicity` is undefined', () => {
-        const value = { periodicity : undefined };
+        const value = { periodicity: undefined };
         const result = {};
 
         expect(poPageJobSchedulerService['convertToPeriodicity'](value)).toEqual(result);
       });
 
       it('should return object with periodicity value containing hour and minuts `0`', () => {
-        const value = { periodicity : 'test' };
-        const result = {test: { hour: 0, minute: 0 }};
+        const value = { periodicity: 'test' };
+        const result = { test: { hour: 0, minute: 0 } };
 
         expect(poPageJobSchedulerService['convertToPeriodicity'](value)).toEqual(result);
       });
@@ -514,7 +512,6 @@ describe('PoPageJobSchedulerService:', () => {
         hour: '08:01',
         dayOfMonth: value.monthly.day
       });
-
     });
 
     it('convertToPeriodicityInternal: should return daily object if `value.daily` is defined', () => {
@@ -526,14 +523,13 @@ describe('PoPageJobSchedulerService:', () => {
 
       expect(result).toEqual({
         periodicity: 'daily',
-        hour: '08:01',
+        hour: '08:01'
       });
-
     });
 
     it('convertToPeriodicityInternal: should return weekly object if `value.weekly` is defined', () => {
       const value = {
-        weekly: { hour: '8', minute: '1', daysOfWeek: [ 'mon', 'sat', 'sun' ] }
+        weekly: { hour: '8', minute: '1', daysOfWeek: ['mon', 'sat', 'sun'] }
       };
 
       const result = poPageJobSchedulerService['convertToPeriodicityInternal'](value);
@@ -541,14 +537,12 @@ describe('PoPageJobSchedulerService:', () => {
       expect(result).toEqual({
         periodicity: 'weekly',
         hour: '08:01',
-        daysOfWeek: [ 'mon', 'sat', 'sun' ]
+        daysOfWeek: ['mon', 'sat', 'sun']
       });
-
     });
 
     it(`convertToPeriodicityInternal: should return single object if 'value.weekly', 'value.monthly' and 'value.daily'
       are undefined`, () => {
-
       const value = {};
 
       const result = poPageJobSchedulerService['convertToPeriodicityInternal'](value);
@@ -556,7 +550,6 @@ describe('PoPageJobSchedulerService:', () => {
       expect(result).toEqual({
         periodicity: 'single'
       });
-
     });
 
     it(`convertToPeriodicityInternal: should return single object if value is undefined`, () => {
@@ -567,7 +560,6 @@ describe('PoPageJobSchedulerService:', () => {
       expect(result).toEqual({
         periodicity: 'single'
       });
-
     });
 
     it(`getCurrentHour: should return hour and minuts`, () => {
@@ -632,7 +624,7 @@ describe('PoPageJobSchedulerService:', () => {
         anotherKey: 'value'
       };
 
-      const invalidKeys = [ 'invalidKeyA', 'invalidKeyB' ];
+      const invalidKeys = ['invalidKeyA', 'invalidKeyB'];
 
       poPageJobSchedulerService['removeInvalidKeys'](value, invalidKeys);
 
@@ -654,7 +646,9 @@ describe('PoPageJobSchedulerService:', () => {
 
       poPageJobSchedulerService['replaceHourFirstExecution'](initialDate, timeToReplace);
 
-      expect(poPageJobSchedulerService['replaceHourFirstExecution'](initialDate, timeToReplace).substring(0, 19)).toBe(result);
+      expect(poPageJobSchedulerService['replaceHourFirstExecution'](initialDate, timeToReplace).substring(0, 19)).toBe(
+        result
+      );
     });
 
     it('returnValidExecutionParameter: should remove keys that have undefined value', () => {
@@ -670,7 +664,5 @@ describe('PoPageJobSchedulerService:', () => {
 
       expect(poPageJobSchedulerService['returnValidExecutionParameter'](parameter)).toEqual(result);
     });
-
   });
-
 });

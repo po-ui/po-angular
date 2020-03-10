@@ -12,9 +12,8 @@ describe('PoMultiselectSearchComponent:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoMultiselectSearchComponent ]
-    })
-    .compileComponents();
+      declarations: [PoMultiselectSearchComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -48,9 +47,8 @@ describe('PoMultiselectSearchComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-placeholder: should update property with default placeholder if is setted with invalid values', () => {
-      const invalidValues = [ undefined, 1, {}, [], true, false ];
+      const invalidValues = [undefined, 1, {}, [], true, false];
       const defaultPlaceholderSearch = poMultiselectLiteralsDefault.pt.placeholderSearch;
 
       expectPropertiesValues(component, 'placeholder', invalidValues, defaultPlaceholderSearch);
@@ -81,9 +79,7 @@ describe('PoMultiselectSearchComponent:', () => {
     it('p-placeholder: should return the "placeholderString"', () => {
       const placeholderString = 'placeholder test';
 
-      expectPropertiesValues(component, 'placeholder', placeholderString , placeholderString);
+      expectPropertiesValues(component, 'placeholder', placeholderString, placeholderString);
     });
-
   });
-
 });

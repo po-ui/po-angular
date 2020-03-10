@@ -27,4 +27,4 @@ import { PoContainerBaseComponent } from './po-container-base.component';
   selector: 'po-container',
   templateUrl: './po-container.component.html'
 })
-export class PoContainerComponent extends PoContainerBaseComponent { }
+export class PoContainerComponent extends PoContainerBaseComponent {}

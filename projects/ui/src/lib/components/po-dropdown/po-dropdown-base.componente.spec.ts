@@ -3,7 +3,6 @@ import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 
 describe('PoDropdownBaseComponent:', () => {
-
   const component = new PoDropdownBaseComponent();
 
   it('should be created', () => {
@@ -11,7 +10,6 @@ describe('PoDropdownBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('actions: should set actions to `[]` if pass invalid values', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string'];
 
@@ -19,7 +17,7 @@ describe('PoDropdownBaseComponent:', () => {
     });
 
     it('actions: should update property `p-actions` with valid value', () => {
-      const validValue = [[{label: 'action1', action: () => {}}], [{label: 'action2'}]];
+      const validValue = [[{ label: 'action1', action: () => {} }], [{ label: 'action2' }]];
 
       expectPropertiesValues(component, 'actions', validValue, validValue);
     });
@@ -35,7 +33,5 @@ describe('PoDropdownBaseComponent:', () => {
 
       expectPropertiesValues(component, 'disabled', invalidValues, false);
     });
-
   });
-
 });

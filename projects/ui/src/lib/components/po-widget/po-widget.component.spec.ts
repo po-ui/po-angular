@@ -97,7 +97,6 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   describe('Properties:', () => {
-
     it('showTitleAction: should return false if titleAction.observers[0] is undefined', () => {
       component.titleAction.observers[0] = undefined;
 
@@ -109,11 +108,9 @@ describe('PoWidgetComponent with title and actions', () => {
 
       expect(component.showTitleAction).toBeTruthy();
     });
-
   });
 
   describe('Methods:', () => {
-
     it('runTitleAction: should call event.stopPropagation and titleAction.emit', () => {
       spyOn(eventClick, 'stopPropagation');
       spyOn(component.titleAction, 'emit');
@@ -351,11 +348,9 @@ describe('PoWidgetComponent with title and actions', () => {
 
       expect(component.hasTitleHelpOrSetting()).toBe(false);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should have po-widget-header if have title', () => {
       component.title = 'widgetTitle';
       component.help = undefined;
@@ -502,7 +497,6 @@ describe('PoWidgetComponent with title and actions', () => {
 
       expect(nativeElement.querySelector('.po-widget-primary')).toBeFalsy();
       expect(nativeElement.querySelector('.po-widget')).toBeTruthy();
-
     });
 
     it('should call runTitleAction if po-widget-title-action is clicked', () => {
@@ -604,7 +598,6 @@ describe('PoWidgetComponent with title and actions', () => {
       expect(widgetDisabled).toBe(null);
     });
   });
-
 });
 
 describe('PoWidgetComponent with actions', () => {
@@ -633,7 +626,6 @@ describe('PoWidgetComponent with actions', () => {
     const nativeElement = fixture.nativeElement;
     expect(nativeElement.querySelector('.po-widget-footer') !== null).toBe(true);
   });
-
 });
 
 describe('PoWidgetComponent with background and actions', () => {
@@ -676,5 +668,4 @@ describe('PoWidgetComponent with background and actions', () => {
 
     expect(fixture.nativeElement.querySelector('.po-widget').style.backgroundImage).toEqual(`url("${image}")`);
   });
-
 });

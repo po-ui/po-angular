@@ -11,7 +11,6 @@ import { PoToasterBaseComponent } from './po-toaster/po-toaster-base.component';
 
 @Injectable()
 class PoNotificationService extends PoNotificationBaseService {
-
   createToaster(toaster: PoToaster, viewContainerRef?: ViewContainerRef): void {
     const elementRef: ElementRef = {
       nativeElement: undefined
@@ -36,15 +35,12 @@ class PoNotificationService extends PoNotificationBaseService {
     } else {
       this.stackTop.push(componentReference);
     }
-
   }
 
   destroyToaster(toaster: number | ComponentRef<PoToasterBaseComponent>): void {}
-
 }
 
 describe('PoNotificationService ', () => {
-
   let service: PoNotificationBaseService;
 
   configureTestSuite(() => {
@@ -64,37 +60,37 @@ describe('PoNotificationService ', () => {
 
   it('should be success toaster in stack', () => {
     spyOn(service, 'createToaster');
-    service.success({message: 'teste', orientation: PoToasterOrientation.Top});
+    service.success({ message: 'teste', orientation: PoToasterOrientation.Top });
 
     expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Success, orientation: PoToasterOrientation.Top})
+      mockToaster({ type: PoToasterType.Success, orientation: PoToasterOrientation.Top })
     );
   });
 
   it('should be warning toaster in stack', () => {
     spyOn(service, 'createToaster');
-    service.warning({message: 'teste', orientation: PoToasterOrientation.Top});
+    service.warning({ message: 'teste', orientation: PoToasterOrientation.Top });
 
     expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Warning, orientation: PoToasterOrientation.Top})
+      mockToaster({ type: PoToasterType.Warning, orientation: PoToasterOrientation.Top })
     );
   });
 
   it('should be error toaster in stack', () => {
     spyOn(service, 'createToaster');
-    service.error({message: 'teste', orientation: PoToasterOrientation.Top});
+    service.error({ message: 'teste', orientation: PoToasterOrientation.Top });
 
     expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Error, orientation: PoToasterOrientation.Top})
+      mockToaster({ type: PoToasterType.Error, orientation: PoToasterOrientation.Top })
     );
   });
 
   it('should be information toaster in stack', () => {
     spyOn(service, 'createToaster');
-    service.information({message: 'teste', orientation: PoToasterOrientation.Top});
+    service.information({ message: 'teste', orientation: PoToasterOrientation.Top });
 
     expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Information, orientation: PoToasterOrientation.Top})
+      mockToaster({ type: PoToasterType.Information, orientation: PoToasterOrientation.Top })
     );
   });
 
@@ -102,49 +98,40 @@ describe('PoNotificationService ', () => {
     spyOn(service, 'createToaster');
     service.information('teste');
 
-    expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Information})
-    );
+    expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Information }));
   });
 
   it('call be method error with string', () => {
     spyOn(service, 'createToaster');
     service.error('teste');
 
-    expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Error})
-    );
+    expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Error }));
   });
 
   it('call be method warning with string', () => {
     spyOn(service, 'createToaster');
     service.warning('teste');
 
-    expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Warning})
-    );
+    expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Warning }));
   });
 
   it('call be method success with string', () => {
     spyOn(service, 'createToaster');
     service.success('teste');
 
-    expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Success})
-    );
+    expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success }));
   });
 
   it('should be orientation bottom', () => {
     spyOn(service, 'createToaster');
-    service.success({message: 'teste', orientation: PoToasterOrientation.Bottom});
+    service.success({ message: 'teste', orientation: PoToasterOrientation.Bottom });
 
     expect(service.createToaster).toHaveBeenCalledWith(
-      mockToaster({type: PoToasterType.Success, orientation: PoToasterOrientation.Bottom})
+      mockToaster({ type: PoToasterType.Success, orientation: PoToasterOrientation.Bottom })
     );
   });
 
   it('call action defined by developer with bottom orientation', () => {
-
     const notification = {
       message: 'teste',
       orientation: PoToasterOrientation.Bottom,
@@ -158,7 +145,6 @@ describe('PoNotificationService ', () => {
   });
 
   it('call action defined by developer with top orientation', () => {
-
     const notification = {
       message: 'teste',
       orientation: PoToasterOrientation.Top,
@@ -172,23 +158,18 @@ describe('PoNotificationService ', () => {
   });
 
   describe('Methods: ', () => {
-
     it('should be duration 10000 when not informed', () => {
       spyOn(service, 'createToaster');
-      service.success({message: 'teste'});
+      service.success({ message: 'teste' });
 
-      expect(service.createToaster).toHaveBeenCalledWith(
-        mockToaster({type: PoToasterType.Success, duration: 10000})
-      );
+      expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, duration: 10000 }));
     });
 
     it('should be duration equals 5 seconds', () => {
       spyOn(service, 'createToaster');
-      service.success({message: 'teste', duration: 5000});
+      service.success({ message: 'teste', duration: 5000 });
 
-      expect(service.createToaster).toHaveBeenCalledWith(
-        mockToaster({type: PoToasterType.Success, duration: 5000})
-      );
+      expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, duration: 5000 }));
     });
 
     it('should change default duration to 3 seconds', () => {

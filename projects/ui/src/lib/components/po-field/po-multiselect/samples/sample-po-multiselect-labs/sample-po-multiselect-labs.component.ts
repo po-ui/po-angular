@@ -12,7 +12,6 @@ import {
   templateUrl: './sample-po-multiselect-labs.component.html'
 })
 export class SamplePoMultiselectLabsComponent implements OnInit {
-
   customLiterals: PoMultiselectLiterals;
   event: string;
   filterMode: string;
@@ -37,7 +36,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'hideSearch', label: 'Hide Search' },
-    { value: 'sort', label: 'Sort'}
+    { value: 'sort', label: 'Sort' }
   ];
 
   ngOnInit() {
@@ -45,8 +44,8 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   }
 
   addOption() {
-    this.options = [...this.options, {...this.option}];
-    this.option = {label: undefined, value: undefined};
+    this.options = [...this.options, { ...this.option }];
+    this.option = { label: undefined, value: undefined };
   }
 
   changeEvent(event: string) {
@@ -71,11 +70,10 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     this.placeholderSearch = undefined;
     this.properties = [];
 
-    this.option = {label: undefined, value: undefined};
+    this.option = { label: undefined, value: undefined };
     this.options = [];
 
     this.event = '';
     this.multiselect = [];
   }
-
 }

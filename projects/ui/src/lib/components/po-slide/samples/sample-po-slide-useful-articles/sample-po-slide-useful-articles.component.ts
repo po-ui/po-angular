@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './sample-po-slide-useful-articles.component.html'
 })
 export class SamplePoSlideUsefulArticlesComponent {
-
   sampleItems: Array<any> = [
     {
       title: 'The Iceberg Method',
@@ -30,11 +29,10 @@ export class SamplePoSlideUsefulArticlesComponent {
       author: 'Gustavo Razzetti',
       link: 'https://bit.ly/2Tbc16b',
       imagem: '/assets/graphics/landscape-03.jpeg'
-    },
+    }
   ];
 
   redirectLink(link: string) {
     window.open(link, '_blank');
   }
-
 }

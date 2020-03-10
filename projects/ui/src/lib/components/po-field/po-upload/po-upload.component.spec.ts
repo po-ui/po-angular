@@ -13,9 +13,7 @@ import { PoFieldContainerComponent } from '../po-field-container/po-field-contai
 import { PoNotificationService, PoServicesModule } from '../../../services';
 import { PoUploadComponent } from './po-upload.component';
 import { PoUploadDragDropAreaComponent } from './po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
-import {
-  PoUploadDragDropAreaOverlayComponent
-} from './po-upload-drag-drop/po-upload-drag-drop-area-overlay/po-upload-drag-drop-area-overlay.component';
+import { PoUploadDragDropAreaOverlayComponent } from './po-upload-drag-drop/po-upload-drag-drop-area-overlay/po-upload-drag-drop-area-overlay.component';
 import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-drop.component';
 import { PoUploadDragDropDirective } from './po-upload-drag-drop/po-upload-drag-drop.directive';
 import { PoUploadFile } from './po-upload-file';
@@ -39,7 +37,7 @@ describe('PoUploadComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoButtonModule, PoContainerModule, PoProgressModule, PoServicesModule ],
+      imports: [PoButtonModule, PoContainerModule, PoProgressModule, PoServicesModule],
       declarations: [
         PoUploadComponent,
         PoFieldContainerComponent,
@@ -50,7 +48,7 @@ describe('PoUploadComponent:', () => {
         PoUploadDragDropDirective,
         PoUploadFileRestrictionsComponent
       ],
-      providers: [ HttpClient, HttpHandler, PoNotificationService, PoUploadService],
+      providers: [HttpClient, HttpHandler, PoNotificationService, PoUploadService]
     });
   });
 
@@ -76,7 +74,6 @@ describe('PoUploadComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('displayDragDrop: should return true if `dragDrop` is `true` and `isMobile` is `false`', () => {
       spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
       component.dragDrop = true;
@@ -126,7 +123,6 @@ describe('PoUploadComponent:', () => {
 
     it(`isDisabled: should return false if 'hasAnyFileUploading', 'disabled', 'isExceededFileLimit' are false and 'url'
       is defined`, () => {
-
       spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
       spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
 
@@ -137,7 +133,6 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'hasAnyFileUploading' is true`, () => {
-
       spyOn(component, <any>'hasAnyFileUploading').and.returnValue(true);
       spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
 
@@ -148,7 +143,6 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'isExceededFileLimit' is true`, () => {
-
       spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
       spyOn(component, <any>'isExceededFileLimit').and.returnValue(true);
 
@@ -159,7 +153,6 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'disabled' is true`, () => {
-
       spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
       spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
 
@@ -170,7 +163,6 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'url' is undefined`, () => {
-
       spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
       spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
 
@@ -334,11 +326,9 @@ describe('PoUploadComponent:', () => {
 
       expect(component.hasMultipleFiles).toBe(false);
     });
-
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -361,8 +351,8 @@ describe('PoUploadComponent:', () => {
 
     it('clear: should be clear all current files.', () => {
       component.currentFiles = fileMock;
-      spyOn(component, <any> 'updateModel');
-      spyOn(component, <any> 'cleanInputValue');
+      spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'cleanInputValue');
 
       component.clear();
 
@@ -459,7 +449,7 @@ describe('PoUploadComponent:', () => {
 
     it('sendFiles: should call `uploadFiles` if currentFile is true.', () => {
       component.currentFiles = [fileMock];
-      const uploadFiles = spyOn(component, <any> 'uploadFiles');
+      const uploadFiles = spyOn(component, <any>'uploadFiles');
 
       component.sendFiles();
 
@@ -468,7 +458,7 @@ describe('PoUploadComponent:', () => {
 
     it('sendFiles: shouldn`t call `uploadFiles` if currentFile is false.', () => {
       component.currentFiles = undefined;
-      const uploadFiles = spyOn(component, <any> 'uploadFiles');
+      const uploadFiles = spyOn(component, <any>'uploadFiles');
 
       component.sendFiles();
 
@@ -478,7 +468,7 @@ describe('PoUploadComponent:', () => {
 
     it('sendFiles: shouldn`t call `uploadFiles` if currentFile is null.', () => {
       component.currentFiles = [];
-      const uploadFiles = spyOn(component, <any> 'uploadFiles');
+      const uploadFiles = spyOn(component, <any>'uploadFiles');
 
       component.sendFiles();
 
@@ -549,13 +539,12 @@ describe('PoUploadComponent:', () => {
     });
 
     describe('uploadFiles:', () => {
-
       it('should execute file change with auto upload', () => {
         const files = [file.rawFile];
 
         // Mock da função que é criada ao utilizar ngmodel para atualizar o mesmo.
-        component.onModelChange = param => { };
-        component.uploadFiles = param => { };
+        component.onModelChange = param => {};
+        component.uploadFiles = param => {};
         component.autoUpload = true;
 
         const event = {
@@ -563,7 +552,7 @@ describe('PoUploadComponent:', () => {
             files
           }
         };
-        spyOn(component, <any> 'cleanInputValue');
+        spyOn(component, <any>'cleanInputValue');
 
         component.onFileChange(event);
 
@@ -572,14 +561,13 @@ describe('PoUploadComponent:', () => {
       });
 
       it('should call uploadingHandler function when upload files', () => {
-
         const fakeThis = {
           uploadService: {
             upload: function(url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
               return uploadCallback(file, 100);
             }
           },
-          uploadingHandler: function() { }
+          uploadingHandler: function() {}
         };
         spyOn(fakeThis, 'uploadingHandler');
 
@@ -595,7 +583,7 @@ describe('PoUploadComponent:', () => {
               return successCallback(file, 100);
             }
           },
-          responseHandler: function() { },
+          responseHandler: function() {},
           onSuccess: new EventEmitter<any>()
         };
 
@@ -613,7 +601,7 @@ describe('PoUploadComponent:', () => {
               return errorCallback(file, 100);
             }
           },
-          responseHandler: function() { },
+          responseHandler: function() {},
           onError: new EventEmitter<any>()
         };
         spyOn(fakeThis, 'responseHandler');
@@ -622,7 +610,6 @@ describe('PoUploadComponent:', () => {
 
         expect(fakeThis.responseHandler).toHaveBeenCalled();
       });
-
     });
 
     it(`onFileChange: should execute file change without auto upload and not call 'event.preventDefault' and
@@ -630,7 +617,7 @@ describe('PoUploadComponent:', () => {
       const files = [file.rawFile];
 
       // Mock da função que é criada ao utilizar ngmodel para atualizar o mesmo.
-      component.onModelChange = param => { };
+      component.onModelChange = param => {};
 
       const event = {
         target: {
@@ -640,7 +627,7 @@ describe('PoUploadComponent:', () => {
       };
 
       spyOn(event, 'preventDefault');
-      spyOn(component, <any> 'cleanInputValue');
+      spyOn(component, <any>'cleanInputValue');
       spyOn(component, <any>'updateFiles').and.callThrough();
 
       component.onFileChange(event);
@@ -662,7 +649,7 @@ describe('PoUploadComponent:', () => {
       };
 
       spyOn(event, 'preventDefault');
-      spyOn(component, <any> 'cleanInputValue');
+      spyOn(component, <any>'cleanInputValue');
 
       component.onFileChange(event);
 
@@ -723,7 +710,12 @@ describe('PoUploadComponent:', () => {
 
     it('sendFeedback: should call `setPipeArguments` if `sizeNotAllowed`', () => {
       component['sizeNotAllowed'] = 1;
-      component.fileRestrictions = { minFileSize: 0, maxFiles: 2, maxFileSize: 31457, allowedExtensions: ['.png', '.zip'] };
+      component.fileRestrictions = {
+        minFileSize: 0,
+        maxFiles: 2,
+        maxFileSize: 31457,
+        allowedExtensions: ['.png', '.zip']
+      };
       const expectedValueSizeNotAllowed = 1;
       const expectedValueMinFileSize = '0';
       const expectedValueMaxFileSize = '30.72 KB';
@@ -733,14 +725,21 @@ describe('PoUploadComponent:', () => {
 
       component['sendFeedback']();
 
-      expect(component['setPipeArguments']).toHaveBeenCalledWith(
-        literalAttr, [expectedValueSizeNotAllowed, expectedValueMinFileSize, expectedValueMaxFileSize]
-      );
+      expect(component['setPipeArguments']).toHaveBeenCalledWith(literalAttr, [
+        expectedValueSizeNotAllowed,
+        expectedValueMinFileSize,
+        expectedValueMaxFileSize
+      ]);
     });
 
     it('sendFeedback: should call `setPipeArguments` if `extensionNotAllowed`', () => {
       component['extensionNotAllowed'] = 1;
-      component.fileRestrictions = { minFileSize: 1, maxFiles: 2, maxFileSize: 31457, allowedExtensions: ['.png', '.zip'] };
+      component.fileRestrictions = {
+        minFileSize: 1,
+        maxFiles: 2,
+        maxFileSize: 31457,
+        allowedExtensions: ['.png', '.zip']
+      };
       const expectedValueExtensionNotAllowed = 1;
       const expectedValueAllowedExtensionsFormatted = '.PNG, .ZIP';
       const literalAttr = 'invalidFormat';
@@ -749,14 +748,20 @@ describe('PoUploadComponent:', () => {
 
       component['sendFeedback']();
 
-      expect(component['setPipeArguments']).toHaveBeenCalledWith(
-        literalAttr, [expectedValueExtensionNotAllowed, expectedValueAllowedExtensionsFormatted]
-      );
+      expect(component['setPipeArguments']).toHaveBeenCalledWith(literalAttr, [
+        expectedValueExtensionNotAllowed,
+        expectedValueAllowedExtensionsFormatted
+      ]);
     });
 
     it('sendFeedback: should call `setPipeArguments` if `quantityNotAllowed`', () => {
       component['quantityNotAllowed'] = 1;
-      component.fileRestrictions = { minFileSize: 1, maxFiles: 2, maxFileSize: 31457, allowedExtensions: ['.png', '.zip'] };
+      component.fileRestrictions = {
+        minFileSize: 1,
+        maxFiles: 2,
+        maxFileSize: 31457,
+        allowedExtensions: ['.png', '.zip']
+      };
       const literalAttr = 'invalidAmount';
       const expectedValueQuantityNotAllowed = 1;
 
@@ -811,7 +816,7 @@ describe('PoUploadComponent:', () => {
         displayName: 'filename.jpg - 1kb'
       };
 
-      const currentFiles: any = [ dirtyFile ];
+      const currentFiles: any = [dirtyFile];
 
       const spyOnModelChange = spyOn(component, 'onModelChange');
 
@@ -838,7 +843,7 @@ describe('PoUploadComponent:', () => {
         displayName: 'filename.jpg - 1kb'
       };
 
-      const currentFiles: any = [ dirtyFile ];
+      const currentFiles: any = [dirtyFile];
 
       const spyNgModelChange = spyOn(component.ngModelChange, 'emit');
 
@@ -900,14 +905,15 @@ describe('PoUploadComponent:', () => {
 
       component.setDirectoryAttribute(component.canHandleDirectory);
 
-      expect(component.renderer.removeAttribute).toHaveBeenCalledWith(component['inputFile'].nativeElement, 'webkitdirectory');
+      expect(component.renderer.removeAttribute).toHaveBeenCalledWith(
+        component['inputFile'].nativeElement,
+        'webkitdirectory'
+      );
       expect(component.renderer.removeAttribute).toHaveBeenCalledTimes(1);
     });
-
   });
 
   describe('Templates:', () => {
-
     it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
       component.required = false;
       component.optional = true;
@@ -1039,7 +1045,5 @@ describe('PoUploadComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-container').style.height).toBe('auto');
     });
-
   });
-
 });

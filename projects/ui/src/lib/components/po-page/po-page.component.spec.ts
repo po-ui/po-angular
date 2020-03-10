@@ -10,7 +10,7 @@ describe('PoPageComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoPageComponent ]
+      declarations: [PoPageComponent]
     });
   });
 

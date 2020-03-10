@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class PoCalendarLangService {
-
   months = [
     {
       pt: 'Janeiro',
@@ -118,12 +117,12 @@ export class PoCalendarLangService {
 
   lang = 'pt';
 
-  constructor() { }
+  constructor() {}
 
   setLanguage(lang: string) {
     if (lang && lang.length >= 2) {
       lang = lang.toLowerCase().slice(0, 2);
-      this.lang = (lang === 'pt' || lang === 'en' || lang === 'es') ? lang : 'pt';
+      this.lang = lang === 'pt' || lang === 'en' || lang === 'es' ? lang : 'pt';
     }
   }
 

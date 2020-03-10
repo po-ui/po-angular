@@ -15,21 +15,15 @@ import { PoToolbarProfileComponent } from './po-toolbar-profile/po-toolbar-profi
  *
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoAvatarModule,
-    PoPopupModule
-  ],
+  imports: [CommonModule, PoAvatarModule, PoPopupModule],
   declarations: [
     PoToolbarActionsComponent,
     PoToolbarComponent,
     PoToolbarNotificationComponent,
     PoToolbarProfileComponent
   ],
-  exports: [
-    PoToolbarComponent
-  ],
+  exports: [PoToolbarComponent],
   providers: [],
   schemas: []
 })
-export class PoToolbarModule { }
+export class PoToolbarModule {}

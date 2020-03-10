@@ -12,12 +12,8 @@ describe('PoComboFilterService ', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        PoComboFilterService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [PoComboFilterService]
     });
 
     comboService = TestBed.inject(PoComboFilterService);
@@ -34,7 +30,6 @@ describe('PoComboFilterService ', () => {
     const items: any = 'items';
 
     comboService.getFilteredData({}).subscribe(response => {
-
       expect(response.length).toBe(1);
       expect(response[items]).toBeUndefined();
 
@@ -43,44 +38,39 @@ describe('PoComboFilterService ', () => {
 
     httpMock
       .expectOne((req: HttpRequest<any>) => req.url === mockURL && req.method === 'GET')
-      .flush({items: [{name: 'Angular', id: 'angular'}]});
+      .flush({ items: [{ name: 'Angular', id: 'angular' }] });
   });
 
   it('should not return any filtered data', done => {
     const items: any = 'items';
 
     comboService.getFilteredData({}).subscribe(response => {
-
       expect(response.length).toBe(0);
       expect(response[items]).toBeUndefined();
 
       done();
     });
 
-    httpMock
-      .expectOne((req: HttpRequest<any>) => req.url === mockURL && req.method === 'GET')
-      .flush({items: []});
+    httpMock.expectOne((req: HttpRequest<any>) => req.url === mockURL && req.method === 'GET').flush({ items: [] });
   });
 
   it('should return the object converted to PoComboOption', done => {
     const param = 'angular';
 
     comboService.getObjectByValue(param).subscribe(object => {
-
       expect('label' in object).toBeTruthy();
       expect('value' in object).toBeTruthy();
 
       done();
     });
 
-    httpMock.expectOne(`${mockURL}/${param}`).flush({id: 'angular', name: 'Angular'});
+    httpMock.expectOne(`${mockURL}/${param}`).flush({ id: 'angular', name: 'Angular' });
   });
 
   it('should not return the object', done => {
     const param = 'react';
 
     comboService.getObjectByValue(param).subscribe(object => {
-
       expect(object).toBeUndefined();
 
       done();
@@ -106,7 +96,6 @@ describe('PoComboFilterService ', () => {
   });
 
   describe('Methods:', () => {
-
     it('getFilteredData: should concatenate url with filter params', done => {
       const urlWithParams = 'http://mockurl.com?param1=value1&param2=value2&filter=test';
 
@@ -114,9 +103,7 @@ describe('PoComboFilterService ', () => {
 
       comboService.getFilteredData({ value: 'test' }, { param1: 'value1', param2: 'value2' }).subscribe(() => done());
 
-      httpMock
-        .expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams)
-        .flush({});
+      httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
 
     it('getFilteredData: shouldn`t concatenate url with filter params if filter params is not an object', done => {
@@ -126,9 +113,7 @@ describe('PoComboFilterService ', () => {
 
       comboService.getFilteredData({ value: 'test' }, [{ param1: 'value1', param2: 'value2' }]).subscribe(() => done());
 
-      httpMock
-        .expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams)
-        .flush({});
+      httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
 
     it('getObjectByValue: should add filter params', done => {
@@ -155,5 +140,4 @@ describe('PoComboFilterService ', () => {
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
   });
-
 });

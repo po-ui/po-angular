@@ -1,14 +1,14 @@
 <po-page-default p-title="Check the speaker's list">
-
   <po-tabs>
-    <po-tab *ngFor="let speaker of speakers"
+    <po-tab
+      *ngFor="let speaker of speakers"
       p-label="{{ speaker.createdDate | date: 'MMM d' }}"
       [p-active]="speaker.id === '1'"
-      [p-hide]="speaker.subscribe">
+      [p-hide]="speaker.subscribe"
+    >
       <div class="po-row po-mt-5">
         <div class="po-offset-lg-1 po-offset-xl-1 po-lg-10">
           <div class="po-row">
-
             <div class="po-lg-8 po-mb-2">
               <po-widget>
                 <div class="po-row">
@@ -20,18 +20,10 @@
                       <po-info p-label="Speaker" [p-value]="speaker.name"></po-info>
                     </div>
                     <div class="po-mb-2">
-                      <po-info
-                        class="po-mt-5"
-                        p-label="Email"
-                        [p-value]="speaker.email">
-                      </po-info>
+                      <po-info class="po-mt-5" p-label="Email" [p-value]="speaker.email"> </po-info>
                     </div>
                     <div class="po-mb-2">
-                      <po-info
-                        class="po-mb-5"
-                        p-label="Description"
-                        [p-value]="speaker.description">
-                      </po-info>
+                      <po-info class="po-mb-5" p-label="Description" [p-value]="speaker.description"> </po-info>
                     </div>
                   </div>
                 </div>
@@ -42,7 +34,7 @@
               <po-widget p-title="Subscription">
                 <div class="po-font-subtitle po-mb-2">TFace Conference Week</div>
                 <div class="po-font-text-bold po-mb-5">From 21th September until 26th setember 2018</div>
-                <hr>
+                <hr />
                 <div class="po-row">
                   <div class="po-md-6 po-lg-12">
                     <span class="po-mr-1 po-font-subtitle">
@@ -58,22 +50,18 @@
                   </div>
                 </div>
                 <div class="po-mt-5">
-                  <po-button
-                    class="po-mt-5"
-                    p-label="Subscription"
-                    (p-click)="confirmSubscription(speaker)">
+                  <po-button class="po-mt-5" p-label="Subscription" (p-click)="confirmSubscription(speaker)">
                   </po-button>
                 </div>
               </po-widget>
             </div>
-
           </div>
         </div>
       </div>
     </po-tab>
   </po-tabs>
 
-  <hr class="po-offset-lg-1 po-offset-xl-1 po-lg-10 po-mt-0">
+  <hr class="po-offset-lg-1 po-offset-xl-1 po-lg-10 po-mt-0" />
 
   <div class="po-row">
     <div class="po-offset-lg-1 po-offset-xl-1 po-lg-10">
@@ -82,10 +70,10 @@
           class="po-offset-lg-8 po-offset-xl-8 po-lg-4"
           p-label="Cancel Subscription"
           [p-disabled]="disableRestoreBtn"
-          (p-click)="cancelSubscription()">
+          (p-click)="cancelSubscription()"
+        >
         </po-button>
       </div>
     </div>
   </div>
-
 </po-page-default>

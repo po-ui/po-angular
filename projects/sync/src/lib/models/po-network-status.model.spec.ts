@@ -2,7 +2,6 @@ import { PoNetworkStatus } from './po-network-status.model';
 import { PoNetworkType } from './po-network-type.enum';
 
 describe('PoNetworkStatus', () => {
-
   let poNetworkStatus: PoNetworkStatus;
 
   beforeEach(() => {
@@ -14,7 +13,6 @@ describe('PoNetworkStatus', () => {
   });
 
   describe('Properties:', () => {
-
     it('status: should return true when type is different of PoNetworkType.none', () => {
       poNetworkStatus.type = PoNetworkType.ethernet;
 
@@ -30,13 +28,10 @@ describe('PoNetworkStatus', () => {
 
       expect(result).toBeFalsy();
     });
-
   });
 
   describe('Methods: ', () => {
-
     it('setNetworkConnection: should set type with setDefaultTypeNavigation return', () => {
-
       spyOn(poNetworkStatus, <any>'setDefaultTypeNavigation').and.returnValue(PoNetworkType.ethernet);
 
       poNetworkStatus['setNetworkConnection'](undefined);
@@ -55,7 +50,5 @@ describe('PoNetworkStatus', () => {
 
       expect(poNetworkStatus.type).toBe(PoNetworkType.wifi);
     });
-
   });
-
 });

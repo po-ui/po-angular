@@ -6,7 +6,6 @@ import { PoSchemaDefinitionService, PoSchemaService } from '../../services/po-sc
 import { PoSyncSchema } from '../../services/po-sync/interfaces/po-sync-schema.interface';
 
 describe('PoQueryBuilder:', () => {
-
   let poQueryBuilder: PoQueryBuilder;
 
   const poSyncSchemaMock: PoSyncSchema = {
@@ -32,9 +31,7 @@ describe('PoQueryBuilder:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('exec:', () => {
-
       beforeEach(() => {
         poQueryBuilder['_limit'] = undefined;
         poQueryBuilder['filters'] = {};
@@ -54,7 +51,7 @@ describe('PoQueryBuilder:', () => {
       });
 
       it('should return empty items and hasNext false if poSchemaService.getAll is empty', async () => {
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> []);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>[]);
 
         const data = await poQueryBuilder.exec();
 
@@ -69,7 +66,7 @@ describe('PoQueryBuilder:', () => {
 
         poQueryBuilder['_limit'] = 1;
 
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> storageData);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>storageData);
         spyOn(poQueryBuilder, <any>'paginate');
 
         const data = await poQueryBuilder.exec();
@@ -82,12 +79,12 @@ describe('PoQueryBuilder:', () => {
         const objectA = { id: 1, field: jasmine.anything() };
         const objectB = { id: 2, field: jasmine.anything() };
         const storageData = [objectA, objectB];
-        const expectDataPaginated = { hasNext: false, items: [{ pages: 2, data: storageData }]};
+        const expectDataPaginated = { hasNext: false, items: [{ pages: 2, data: storageData }] };
 
         poQueryBuilder['_limit'] = undefined;
 
         spyOn(poQueryBuilder, <any>'paginate').and.returnValue(expectDataPaginated);
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> storageData);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>storageData);
 
         const result = await poQueryBuilder.exec();
 
@@ -105,7 +102,7 @@ describe('PoQueryBuilder:', () => {
 
         spyOn(poQueryBuilder, <any>'applyFilters');
         spyOn(poQueryBuilder, <any>'paginate');
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> storageData);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>storageData);
 
         await poQueryBuilder.exec();
 
@@ -120,7 +117,7 @@ describe('PoQueryBuilder:', () => {
         poQueryBuilder['filters'] = {};
 
         spyOn(poQueryBuilder, <any>'applyFilters');
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> storageData);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>storageData);
 
         await poQueryBuilder.exec();
 
@@ -136,7 +133,7 @@ describe('PoQueryBuilder:', () => {
 
         spyOn(poQueryBuilder, <any>'applyFields');
         spyOn(poQueryBuilder, <any>'paginate');
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> storageData);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>storageData);
 
         await poQueryBuilder.exec();
 
@@ -151,7 +148,7 @@ describe('PoQueryBuilder:', () => {
         poQueryBuilder['fields'] = undefined;
 
         spyOn(poQueryBuilder, <any>'applyFields');
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> storageData);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>storageData);
 
         await poQueryBuilder.exec();
 
@@ -167,7 +164,7 @@ describe('PoQueryBuilder:', () => {
 
         spyOn(poQueryBuilder, <any>'order');
         spyOn(poQueryBuilder, <any>'paginate');
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> storageData);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>storageData);
 
         await poQueryBuilder.exec();
 
@@ -182,17 +179,16 @@ describe('PoQueryBuilder:', () => {
         poQueryBuilder['_sort'] = undefined;
 
         spyOn(poQueryBuilder, <any>'order');
-        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any> storageData);
+        spyOn(poQueryBuilder['poSchemaService'], 'getAll').and.returnValue(<any>storageData);
 
         await poQueryBuilder.exec();
 
         expect(poQueryBuilder['order']).not.toHaveBeenCalled();
       });
-
     });
 
     it('filter: should set this.filter with o the filter param', () => {
-      const filter = { 1: 'A', 2: 'B'};
+      const filter = { 1: 'A', 2: 'B' };
       poQueryBuilder['filters'] = {};
 
       poQueryBuilder.filter(filter);
@@ -201,8 +197,8 @@ describe('PoQueryBuilder:', () => {
     });
 
     it('filter: should add filter param in this.filter', () => {
-      const filter = { 2: 'B', 3: 'C'};
-      poQueryBuilder['filters'] = { 1: 'A'};
+      const filter = { 2: 'B', 3: 'C' };
+      poQueryBuilder['filters'] = { 1: 'A' };
 
       poQueryBuilder.filter(filter);
 
@@ -222,7 +218,7 @@ describe('PoQueryBuilder:', () => {
     });
 
     it('filter: should add an empty filter and return the starter filter in filters', () => {
-      const starterFilter = { 1 : 'A' };
+      const starterFilter = { 1: 'A' };
       const result = poQueryBuilder.filter(starterFilter).filter({});
 
       expect(result['filters']).toEqual(starterFilter);
@@ -278,7 +274,6 @@ describe('PoQueryBuilder:', () => {
 
     it(`pageSize: should call validateParameter with with 'pageSize' inside an object and set this._pageSize with
       pageSize param`, () => {
-
       const pageSize = 1;
       poQueryBuilder['_pageSize'] = undefined;
 
@@ -300,7 +295,6 @@ describe('PoQueryBuilder:', () => {
 
     it(`select: should call validateParameter with with 'fields' inside an object and set this.fields with
       select param`, () => {
-
       const fields = 'field';
       poQueryBuilder['fields'] = undefined;
 
@@ -330,7 +324,6 @@ describe('PoQueryBuilder:', () => {
 
       expect(poQueryBuilder['_sort']).toBe(field);
       expect(utilsFunctions.validateParameter).toHaveBeenCalledWith({ field });
-
     });
 
     it('sort: should return PoQueryBuilder', () => {
@@ -352,7 +345,7 @@ describe('PoQueryBuilder:', () => {
       const filter = jasmine.any(Object);
       const returnFilter = jasmine.anything();
 
-      spyOn(poQueryBuilder, 'filter').and.returnValue(<any> returnFilter);
+      spyOn(poQueryBuilder, 'filter').and.returnValue(<any>returnFilter);
 
       const result = poQueryBuilder.where(filter);
 
@@ -370,7 +363,6 @@ describe('PoQueryBuilder:', () => {
 
     it(`applyFields: should call removeFieldsData with selectedFields when selectedFields and
       restrictedFields is empty`, () => {
-
       poQueryBuilder['fields'] = 'field1 field2 field3';
 
       spyOn(poQueryBuilder, <any>'groupFields').and.returnValue([[], []]);
@@ -383,7 +375,6 @@ describe('PoQueryBuilder:', () => {
 
     it(`applyFields: should call removeFieldsData with selectedFields when selectedFields is filled and
       restrictedFields is empty`, () => {
-
       const selectedFields = ['field1', 'field2'];
       poQueryBuilder['fields'] = 'field1 field2 field3';
 
@@ -396,7 +387,6 @@ describe('PoQueryBuilder:', () => {
     });
 
     it(`applyFields: should call removeFieldsData with selectedFields when selectedFields and restrictedFields is filled`, () => {
-
       const selectedFields = ['field1', 'field2'];
       const restrictedFields = ['field3', 'field4'];
       poQueryBuilder['fields'] = 'field1 field2 field3';
@@ -411,7 +401,6 @@ describe('PoQueryBuilder:', () => {
 
     it(`applyFields: should call removeFieldsData with schemaFields when selectedFields is empty and
       restrictedFields is filled`, () => {
-
       const schemaFields = ['field1', 'field2'];
       poQueryBuilder['fields'] = 'field1 field2 field3';
 
@@ -425,7 +414,6 @@ describe('PoQueryBuilder:', () => {
 
     it(`applyFields: should call removeRestrictedFields with restrictedFields and selectedFields when restrictedFields
       is filled`, () => {
-
       const selectedFields = ['field1', 'field2'];
       const restrictedFields = ['field3', 'field4'];
       poQueryBuilder['fields'] = 'field1 field2 field3';
@@ -440,7 +428,6 @@ describe('PoQueryBuilder:', () => {
     });
 
     it(`applyFields: should call removeDuplicate with selectedFields`, () => {
-
       const selectedFields = ['field1', 'field2'];
       poQueryBuilder['fields'] = 'field1 field2 field3';
 
@@ -478,15 +465,8 @@ describe('PoQueryBuilder:', () => {
 
     it('applyFilters: should return data with applied filter', () => {
       poQueryBuilder['filters'] = { '1': 'a', '2': 'b' };
-      const filteredData = {'1': 'a', '2': 'b', '3': 'c', '4': 'd'};
-      const data = [
-        filteredData,
-        {'1': 'a'},
-        {'3': 'c'},
-        {'4': 'd'},
-        {'5': 'f'},
-        {},
-      ];
+      const filteredData = { '1': 'a', '2': 'b', '3': 'c', '4': 'd' };
+      const data = [filteredData, { '1': 'a' }, { '3': 'c' }, { '4': 'd' }, { '5': 'f' }, {}];
 
       const result = poQueryBuilder['applyFilters'](data);
 
@@ -500,18 +480,12 @@ describe('PoQueryBuilder:', () => {
 
       const result = poQueryBuilder['groupFields'](fields);
 
-      expect(result).toEqual([ selectedFields, restrictedFields ]);
+      expect(result).toEqual([selectedFields, restrictedFields]);
     });
 
     it('paginate: should return object with page 1 and hasNext true if _page is 1 and _pageSize is 2', () => {
-      const page1 = [ { 1: 1 }, { 2: 2 } ];
-      const data = [
-        { 1: 1 },
-        { 2: 2 },
-        { 3: 3 },
-        { 4: 4 },
-        { 5: 5 }
-      ];
+      const page1 = [{ 1: 1 }, { 2: 2 }];
+      const data = [{ 1: 1 }, { 2: 2 }, { 3: 3 }, { 4: 4 }, { 5: 5 }];
       const expectedResult = { hasNext: true, items: page1 };
 
       poQueryBuilder['_page'] = 1;
@@ -523,13 +497,7 @@ describe('PoQueryBuilder:', () => {
     });
 
     it('paginate: should return object with data and hasNext false if _page is 1 and _pageSize is undefined', () => {
-      const data = [
-        { 1: 1 },
-        { 2: 2 },
-        { 3: 3 },
-        { 4: 4 },
-        { 5: 5 }
-      ];
+      const data = [{ 1: 1 }, { 2: 2 }, { 3: 3 }, { 4: 4 }, { 5: 5 }];
       const expectedResult = { hasNext: false, items: data };
 
       poQueryBuilder['_page'] = 1;
@@ -542,13 +510,7 @@ describe('PoQueryBuilder:', () => {
 
     it('paginate: should return object with page 3 and hasNext false if _page is 3 and _pageSize is 2', () => {
       const page3 = [{ 5: 5 }];
-      const data = [
-        { 1: 1 },
-        { 2: 2 },
-        { 3: 3 },
-        { 4: 4 },
-        { 5: 5 }
-      ];
+      const data = [{ 1: 1 }, { 2: 2 }, { 3: 3 }, { 4: 4 }, { 5: 5 }];
       const expectedResult = { hasNext: false, items: page3 };
 
       poQueryBuilder['_page'] = 3;
@@ -560,13 +522,7 @@ describe('PoQueryBuilder:', () => {
     });
 
     it('paginate: should return object with data empty and hasNext false if _page and _pageSize is undefined', () => {
-      const data = [
-        { 1: 1 },
-        { 2: 2 },
-        { 3: 3 },
-        { 4: 4 },
-        { 5: 5 }
-      ];
+      const data = [{ 1: 1 }, { 2: 2 }, { 3: 3 }, { 4: 4 }, { 5: 5 }];
       const expectedResult = { hasNext: false, items: [] };
 
       poQueryBuilder['_page'] = undefined;
@@ -579,19 +535,19 @@ describe('PoQueryBuilder:', () => {
 
     it('order: should return data ordenate for field (ascending)', () => {
       const data = [
-        { 'sortingField': 'd7'},
-        { 'sortingField': 'a6'},
-        { 'sortingField': 'b1'},
-        { 'sortingField': 'c4'},
-        { 'sortingField': 'b1'},
+        { 'sortingField': 'd7' },
+        { 'sortingField': 'a6' },
+        { 'sortingField': 'b1' },
+        { 'sortingField': 'c4' },
+        { 'sortingField': 'b1' }
       ];
 
       const dataSorted = [
-        { 'sortingField': 'a6'},
-        { 'sortingField': 'b1'},
-        { 'sortingField': 'b1'},
-        { 'sortingField': 'c4'},
-        { 'sortingField': 'd7'},
+        { 'sortingField': 'a6' },
+        { 'sortingField': 'b1' },
+        { 'sortingField': 'b1' },
+        { 'sortingField': 'c4' },
+        { 'sortingField': 'd7' }
       ];
 
       const result = poQueryBuilder['order'](data, 'sortingField');
@@ -601,19 +557,19 @@ describe('PoQueryBuilder:', () => {
 
     it('order: should return data ordenate for field (descending )', () => {
       const data = [
-        { 'sortingField': 'd7'},
-        { 'sortingField': 'a6'},
-        { 'sortingField': 'b1'},
-        { 'sortingField': 'c4'},
-        { 'sortingField': 'b1'},
+        { 'sortingField': 'd7' },
+        { 'sortingField': 'a6' },
+        { 'sortingField': 'b1' },
+        { 'sortingField': 'c4' },
+        { 'sortingField': 'b1' }
       ];
 
       const dataSorted = [
-        { 'sortingField': 'd7'},
-        { 'sortingField': 'c4'},
-        { 'sortingField': 'b1'},
-        { 'sortingField': 'b1'},
-        { 'sortingField': 'a6'},
+        { 'sortingField': 'd7' },
+        { 'sortingField': 'c4' },
+        { 'sortingField': 'b1' },
+        { 'sortingField': 'b1' },
+        { 'sortingField': 'a6' }
       ];
 
       const result = poQueryBuilder['order'](data, '-sortingField');
@@ -631,12 +587,12 @@ describe('PoQueryBuilder:', () => {
     });
 
     it('removeFieldsData: should return data with the chosen fields', () => {
-      const data = [ { '1': 'value 1' }, { '2': 'value 2' }, { '3': 'value 3' } ];
+      const data = [{ '1': 'value 1' }, { '2': 'value 2' }, { '3': 'value 3' }];
       const chosenFields = ['1', '2'];
 
       const result = poQueryBuilder['removeFieldsData'](data, chosenFields);
 
-      expect(result).toEqual( [ { '1': 'value 1' }, { '2': 'value 2' }, {} ]);
+      expect(result).toEqual([{ '1': 'value 1' }, { '2': 'value 2' }, {}]);
     });
 
     it('removeRestrictedFields: should return fields without restrictedFields', () => {
@@ -656,7 +612,5 @@ describe('PoQueryBuilder:', () => {
 
       expect(result).toEqual(fields);
     });
-
   });
-
 });

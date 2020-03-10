@@ -2,12 +2,11 @@ import { PoCodeEditorRegisterable } from '@portinari/portinari-code-editor';
 
 /** Definindo propriedades de uma nova sintaxe. */
 export const customRegister: PoCodeEditorRegisterable = {
-
   language: 'terraform',
   options: {
-    keywords: [ 'resource', 'provider', 'variable', 'output', 'module', 'true', 'false' ],
-    operators: [ '{', '}', '(', ')', '[', ']', '?', ':' ],
-    symbols:  new RegExp('[=><!~?:&|+\\-*\\/\\^%]+'),
+    keywords: ['resource', 'provider', 'variable', 'output', 'module', 'true', 'false'],
+    operators: ['{', '}', '(', ')', '[', ']', '?', ':'],
+    symbols: new RegExp('[=><!~?:&|+\\-*\\/\\^%]+'),
     escapes: new RegExp(`\\\\(?:[abfnrtv\\\\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})`),
     tokenizer: {
       root: [
@@ -17,32 +16,31 @@ export const customRegister: PoCodeEditorRegisterable = {
         [`0[x][0-9a-fA-F]+`, 'number.hex'],
         [`\\d+`, 'number'],
         [`[;,.]`, 'delimiter'],
-        [`\"([^\"\\\\]|\\\\.)*$`, 'string.invalid' ],
-        [`\"`,  { token: 'string.quote', bracket: '@open', next: '@string' } ],
+        [`\"([^\"\\\\]|\\\\.)*$`, 'string.invalid'],
+        [`\"`, { token: 'string.quote', bracket: '@open', next: '@string' }],
         [`'[^\\\\']'`, 'string'],
         [`'`, 'string.invalid']
       ],
       comment: [
-        [`[^\\/*]+`, 'comment' ],
-        [`[\\/*]`, 'comment' ],
+        [`[^\\/*]+`, 'comment'],
+        [`[\\/*]`, 'comment'],
         [`[\\#.*]`, 'comment']
       ],
       string: [
-        [`[^\\\\\"\\$]+`,  'string'],
+        [`[^\\\\\"\\$]+`, 'string'],
         [`\\$`, 'string.interpolated', '@interpolated'],
         [`\\\\.`, 'string.escape.invalid'],
-        [`\"`, { token: 'string.quote', bracket: '@close', next: '@pop' } ]
+        [`\"`, { token: 'string.quote', bracket: '@close', next: '@pop' }]
       ],
       whitespace: [
         [`[ \\t\\r\\n]+`, 'white'],
-        [`\\/\\/.*$`,    'comment'],
-        [`\\#.*$`,    'comment'],
+        [`\\/\\/.*$`, 'comment'],
+        [`\\#.*$`, 'comment']
       ],
       interpolated: [
         [`[{]`, { token: 'string.escape.curly', switchTo: '@interpolated_compound' }],
-        ['', '', '@pop'],
-      ],
-    },
+        ['', '', '@pop']
+      ]
+    }
   }
-
 };

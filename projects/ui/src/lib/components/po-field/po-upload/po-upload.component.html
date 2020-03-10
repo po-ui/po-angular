@@ -1,8 +1,4 @@
-<po-field-container
-  [p-label]="label"
-  [p-help]="help"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
   <div class="po-upload">
     <input
       #inputFile
@@ -13,33 +9,40 @@
       [disabled]="isDisabled"
       [multiple]="isMultiple"
       [required]="required"
-      (change)="onFileChange($event)">
+      (change)="onFileChange($event)"
+    />
 
-    <po-upload-drag-drop *ngIf="displayDragDrop"
+    <po-upload-drag-drop
+      *ngIf="displayDragDrop"
       [p-directory-compatible]="canHandleDirectory"
       [p-disabled]="isDisabled"
       [p-drag-drop-height]="dragDropHeight"
       [p-literals]="literals"
       (p-file-change)="onFileChangeDragDrop($event)"
-      (p-select-files)="selectFiles()">
+      (p-select-files)="selectFiles()"
+    >
     </po-upload-drag-drop>
 
-    <po-button *ngIf="!hideSelectButton && !displayDragDrop"
+    <po-button
+      *ngIf="!hideSelectButton && !displayDragDrop"
       #uploadButton
       class="po-upload-button"
       for="file"
       [p-disabled]="isDisabled"
       [p-label]="selectFileButtonLabel"
-      (p-click)="selectFiles()">
+      (p-click)="selectFiles()"
+    >
     </po-button>
 
-    <po-upload-file-restrictions *ngIf="fileRestrictions && !hideRestrictionsInfo"
+    <po-upload-file-restrictions
+      *ngIf="fileRestrictions && !hideRestrictionsInfo"
       class="po-upload-file-restrictions"
-      [ngClass]="{'po-upload-file-restrictions-drag-drop' : displayDragDrop}"
+      [ngClass]="{ 'po-upload-file-restrictions-drag-drop': displayDragDrop }"
       [p-allowed-extensions]="fileRestrictions?.allowedExtensions"
       [p-max-files]="maxFiles"
       [p-max-file-size]="fileRestrictions?.maxFileSize"
-      [p-min-file-size]="fileRestrictions?.minFileSize">
+      [p-min-file-size]="fileRestrictions?.minFileSize"
+    >
     </po-upload-file-restrictions>
 
     <div *ngIf="currentFiles && currentFiles.length" class="po-upload-progress-container">
@@ -47,8 +50,9 @@
         p-no-shadow
         [p-height]="hasMoreThanFourItems ? 280 : 'auto'"
         [p-no-border]="!hasMoreThanFourItems"
-        [p-no-padding]="!hasMoreThanFourItems">
-        <div [ngClass]="{'po-upload-progress-container-area po-pt-2 po-pl-1': hasMoreThanFourItems}">
+        [p-no-padding]="!hasMoreThanFourItems"
+      >
+        <div [ngClass]="{ 'po-upload-progress-container-area po-pt-2 po-pl-1': hasMoreThanFourItems }">
           <po-progress
             *ngFor="let file of currentFiles; trackBy: trackByFn"
             [p-info]="infoByUploadStatus[file.status]?.text(file.percent)"
@@ -57,7 +61,8 @@
             [p-text]="file.displayName"
             [p-value]="file.percent"
             (p-cancel)="cancel(file)"
-            (p-retry)="uploadFiles([file])">
+            (p-retry)="uploadFiles([file])"
+          >
           </po-progress>
         </div>
       </po-container>
@@ -70,8 +75,8 @@
       p-type="primary"
       [p-disabled]="hasAnyFileUploading(currentFiles)"
       [p-label]="literals.startSending"
-      (p-click)="uploadFiles(currentFiles)">
+      (p-click)="uploadFiles(currentFiles)"
+    >
     </po-button>
   </div>
-
 </po-field-container>

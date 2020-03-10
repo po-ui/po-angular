@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class PoDynamicFormRegisterService {
-
   getCity(state: number) {
     switch (state) {
       case 1: {
@@ -10,7 +9,7 @@ export class PoDynamicFormRegisterService {
           { label: 'Palhoça', value: 5 },
           { label: 'Lages', value: 6 },
           { label: 'Balneário Camboriú', value: 7 },
-          { label: 'Brusque', value: 8 },
+          { label: 'Brusque', value: 8 }
         ];
       }
       case 2: {
@@ -42,13 +41,12 @@ export class PoDynamicFormRegisterService {
   }
 
   getUserDocument(value) {
-    const cpfField =  { property: 'cpf', visible: true };
-    const cnpjField =  { property: 'cnpj', visible: true };
+    const cpfField = { property: 'cpf', visible: true };
+    const cnpjField = { property: 'cnpj', visible: true };
     const document = value.isJuridicPerson ? cnpjField : cpfField;
 
     return {
-      fields: [ document ]
+      fields: [document]
     };
   }
-
 }

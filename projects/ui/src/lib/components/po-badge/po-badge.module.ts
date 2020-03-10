@@ -9,14 +9,8 @@ import { PoBadgeComponent } from './po-badge.component';
  * Módulo do componente po-badge.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    PoBadgeComponent
-  ],
-  exports: [
-    PoBadgeComponent
-  ]
+  imports: [CommonModule],
+  declarations: [PoBadgeComponent],
+  exports: [PoBadgeComponent]
 })
-export class PoBadgeModule { }
+export class PoBadgeModule {}

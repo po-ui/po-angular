@@ -1,12 +1,9 @@
 <div class="po-row">
-  <po-info
-    class="po-lg-6"
-    p-label="New mission found"
-    p-value="Objective: Stop an asteroid collision on Earth" >
+  <po-info class="po-lg-6" p-label="New mission found" p-value="Objective: Stop an asteroid collision on Earth">
   </po-info>
 </div>
 
-<hr>
+<hr />
 
 <form [formGroup]="formMission">
   <div class="po-row">
@@ -22,7 +19,8 @@
       [p-columns]="columns"
       [p-field-format]="fieldFormat"
       [p-filter-service]="service"
-      [p-literals]="{'modalTitle' : 'Heroes available for mission'}">
+      [p-literals]="{ 'modalTitle': 'Heroes available for mission' }"
+    >
     </po-lookup>
 
     <po-select
@@ -32,17 +30,13 @@
       p-help="Select a vehicle for the hero"
       p-label="Vehicle"
       p-placeholder="None"
-      [p-options]="vehicles">
+      [p-options]="vehicles"
+    >
     </po-select>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-6"
-      p-label="Start Mission"
-      [p-disabled]="formMission.invalid"
-      (p-click)="startMission()">
+    <po-button class="po-md-6" p-label="Start Mission" [p-disabled]="formMission.invalid" (p-click)="startMission()">
     </po-button>
   </div>
-
 </form>

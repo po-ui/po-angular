@@ -4,14 +4,13 @@ import { PoBreadcrumbBaseComponent } from './po-breadcrumb-base.component';
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 
 describe('PoDisclaimerBaseComponent:', () => {
-
   const component = new PoBreadcrumbBaseComponent();
 
   const items: Array<PoBreadcrumbItem> = [
     { label: 'Teste nível 1', link: '/test/nivel/1' },
     { label: 'Teste nível 2', link: '/test/nivel/2' },
     { label: 'Teste nível 3', link: '/test/nivel/3' },
-    { label: 'Teste nível 4', link: '/test/nivel/4' },
+    { label: 'Teste nível 4', link: '/test/nivel/4' }
   ];
 
   it('should be created', () => {
@@ -19,7 +18,6 @@ describe('PoDisclaimerBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-items: should set equal `itemsView`.', () => {
       expectSettersMethod(component, 'items', items, '_items', items);
       expect(component.itemsView).toEqual(items);
@@ -31,7 +29,5 @@ describe('PoDisclaimerBaseComponent:', () => {
       expectSettersMethod(component, 'items', itemsEmpty, '_items', itemsEmpty);
       expect(component.itemsView).toEqual(itemsEmpty);
     });
-
   });
-
 });

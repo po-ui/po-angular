@@ -1,26 +1,28 @@
 <div #contactGroup class="po-page-blocked-user-contact-group po-row po-mb-3">
-  <div *ngIf="phone"
-    class="po-page-blocked-user-contact-item"
-    [ngClass]="overflowItem ? 'po-md-12' : 'po-md-6'">
+  <div *ngIf="phone" class="po-page-blocked-user-contact-item" [ngClass]="overflowItem ? 'po-md-12' : 'po-md-6'">
     <a
       class="po-page-blocked-user-link po-clickable"
       [class.po-page-blocked-user-contact-content-inline]="overflowItem"
       href="tel:{{ phone }}"
-      target="_self">
+      target="_self"
+    >
       <div class="po-page-blocked-user-contact-group-item">
         <span class="po-page-blocked-user-contact-icon po-icon po-icon-telephone po-pr-1"></span>
         <span #phoneItem class="po-page-blocked-user-contact-text po-font-text">{{ phone }}</span>
       </div>
     </a>
   </div>
-  <div *ngIf="email"
+  <div
+    *ngIf="email"
     class="po-page-blocked-user-contact-item po-page-blocked-user-contact-mail"
-    [ngClass]="overflowItem ? 'po-md-12' : 'po-md-6'">
+    [ngClass]="overflowItem ? 'po-md-12' : 'po-md-6'"
+  >
     <a
       class="po-page-blocked-user-link po-clickable"
       [class.po-page-blocked-user-contact-content-inline]="overflowItem"
       href="mailto:{{ email }}"
-      target="_self">
+      target="_self"
+    >
       <div class="po-page-blocked-user-contact-group-item">
         <span class="po-page-blocked-user-contact-icon po-icon po-icon-mail po-pr-1 "></span>
         <span #mailItem class="po-page-blocked-user-contact-text po-font-text">{{ email }}</span>

@@ -9,10 +9,9 @@ import { SamplePoTableTransportService } from './sample-po-table-transport.servi
 @Component({
   selector: 'sample-po-table-transport',
   templateUrl: 'sample-po-table-transport.component.html',
-  providers: [ SamplePoTableTransportService ]
+  providers: [SamplePoTableTransportService]
 })
 export class SamplePoTableTransportComponent implements OnInit {
-
   columns: Array<PoTableColumn>;
   items: Array<any>;
 
@@ -22,7 +21,7 @@ export class SamplePoTableTransportComponent implements OnInit {
     { label: 'Production', value: 'production' }
   ];
 
-  constructor(private transportService: SamplePoTableTransportService) { }
+  constructor(private transportService: SamplePoTableTransportService) {}
 
   ngOnInit() {
     this.columns = this.transportService.getColumns();
@@ -32,5 +31,4 @@ export class SamplePoTableTransportComponent implements OnInit {
   isUndelivered(row, index: number) {
     return row.status !== 'delivered';
   }
-
 }

@@ -11,4 +11,4 @@ import { PoBadgeBaseComponent } from './po-badge-base.component';
   selector: 'po-badge',
   templateUrl: './po-badge.component.html'
 })
-export class PoBadgeComponent extends PoBadgeBaseComponent { }
+export class PoBadgeComponent extends PoBadgeBaseComponent {}

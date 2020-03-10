@@ -7,7 +7,6 @@ import { PoMenuPanelItem, PoRadioGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-menu-panel-labs.component.html'
 })
 export class SamplePoMenuPanelLabsComponent implements OnInit {
-
   menuItem: PoMenuPanelItem = { icon: undefined, label: undefined };
   menuItems: Array<PoMenuPanelItem>;
   menuItemSelected: string;
@@ -39,5 +38,4 @@ export class SamplePoMenuPanelLabsComponent implements OnInit {
   private onMenuItemSelected(menu: PoMenuPanelItem) {
     this.menuItemSelected = menu.label;
   }
-
 }

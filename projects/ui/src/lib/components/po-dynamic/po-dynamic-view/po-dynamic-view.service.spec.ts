@@ -23,17 +23,14 @@ describe('PoDynamicViewService:', () => {
 
   it('should be created', () => {
     expect(poDynamicViewService).toBeTruthy();
-    expect(
-      poDynamicViewService instanceof PoDynamicViewService
-    ).toBeTruthy();
+    expect(poDynamicViewService instanceof PoDynamicViewService).toBeTruthy();
   });
 
   describe('Methods', () => {
-
     it('onLoad: should call POST method with `url` and `value`', () => {
       const url = 'url';
       const value = {};
-      const expectedResponse = {value: {}, fields: []};
+      const expectedResponse = { value: {}, fields: [] };
 
       poDynamicViewService.onLoad(url, value).then(response => {
         expect(response).toBeDefined();
@@ -43,7 +40,5 @@ describe('PoDynamicViewService:', () => {
       expect(req.request.method).toBe('POST');
       req.flush(expectedResponse);
     });
-
   });
-
 });

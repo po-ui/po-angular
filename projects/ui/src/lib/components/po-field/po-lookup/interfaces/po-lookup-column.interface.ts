@@ -6,7 +6,6 @@
  * Interface para configuração das colunas do po-lookup.
  */
 export interface PoLookupColumn {
-
   /**
    * Indica que a coluna será utilizada como valor do campo e como filtro dentro da modal.
    *
@@ -47,5 +46,4 @@ export interface PoLookupColumn {
 
   /** A largura da coluna pode ser informada em pixels ou porcentagem. Exemplo: '100px' ou '20%' */
   width?: string;
-
 }

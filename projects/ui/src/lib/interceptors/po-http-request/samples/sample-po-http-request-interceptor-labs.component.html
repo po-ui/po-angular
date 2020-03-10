@@ -1,9 +1,5 @@
 <div class="po-row">
-  <po-info
-    class="po-lg-12"
-    p-label="Pending Requests"
-    [p-value]="pendingRequests">
-  </po-info>
+  <po-info class="po-lg-12" p-label="Pending Requests" [p-value]="pendingRequests"> </po-info>
 </div>
 
 <div class="po-row">
@@ -13,7 +9,8 @@
     [(ngModel)]="url"
     p-help="https://thf.totvs.com.br/sample/api/comboOption/heroes"
     p-label="URL"
-    p-required>
+    p-required
+  >
   </po-input>
 </div>
 
@@ -26,7 +23,8 @@
     p-label="X-Portinari-No-Count-Pending-Requests"
     p-label-off="Disable"
     p-label-on="Enable"
-    ngDefaultControl>
+    ngDefaultControl
+  >
   </po-switch>
 
   <po-switch
@@ -37,15 +35,11 @@
     p-label="X-Portinari-Screen-Lock"
     p-label-off="Disable"
     p-label-on="Enable"
-    ngDefaultControl>
+    ngDefaultControl
+  >
   </po-switch>
 </div>
 
 <div class="po-row">
-  <po-button
-    class="po-md-4"
-    p-label="Get request"
-    [p-disabled]="!url"
-    (p-click)="getRequest()">
-  </po-button>
+  <po-button class="po-md-4" p-label="Get request" [p-disabled]="!url" (p-click)="getRequest()"> </po-button>
 </div>

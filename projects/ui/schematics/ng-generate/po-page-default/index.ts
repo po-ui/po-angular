@@ -5,9 +5,7 @@ import { Schema as ComponentOptions } from './schema';
 
 /** Scaffolds a new <name> component with <po-page-default> */
 export default function(options: ComponentOptions): Rule {
-  return chain([
-    createPageDefaultComponent(options)
-  ]);
+  return chain([createPageDefaultComponent(options)]);
 }
 
 function createPageDefaultComponent(options: ComponentOptions): Rule {

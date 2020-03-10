@@ -7,26 +7,23 @@ import { PoCheckboxGroupOption, PoSelectOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-code-editor-labs.component.html'
 })
 export class SamplePoCodeEditorLabsComponent implements OnInit {
-
   codeEditor: string;
   language: string;
   properties: Array<string>;
   theme: string;
 
   public readonly languageOptions: Array<PoSelectOption> = [
-    { label: 'java', value: 'java'},
-    { label: 'yaml', value: 'yaml'},
-    { label: 'typescript', value: 'typescript'},
+    { label: 'java', value: 'java' },
+    { label: 'yaml', value: 'yaml' },
+    { label: 'typescript', value: 'typescript' }
   ];
 
-  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { value: 'readonly', label: 'Read Only' }
-  ];
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'readonly', label: 'Read Only' }];
 
   public readonly themeOptions: Array<PoSelectOption> = [
-    { label: 'vs', value: 'vs'},
-    { label: 'vs-dark', value: 'vs-dark'},
-    { label: 'hc-black', value: 'hc-black'}
+    { label: 'vs', value: 'vs' },
+    { label: 'vs-dark', value: 'vs-dark' },
+    { label: 'hc-black', value: 'hc-black' }
   ];
 
   ngOnInit() {
@@ -39,5 +36,4 @@ export class SamplePoCodeEditorLabsComponent implements OnInit {
     this.properties = [];
     this.codeEditor = '';
   }
-
 }

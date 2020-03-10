@@ -23,7 +23,6 @@ const poTagOrientationDefault = PoTagOrientation.Vertical;
  */
 @Directive()
 export class PoTagBaseComponent {
-
   private _color?: string;
   private _icon?: boolean | string;
   private _inverse?: boolean;
@@ -83,10 +82,8 @@ export class PoTagBaseComponent {
   @Input('p-icon') set icon(value: boolean | string) {
     if (this.type) {
       this._icon = convertToBoolean(value);
-
     } else {
       this._icon = value;
-
     }
   }
 
@@ -176,5 +173,4 @@ export class PoTagBaseComponent {
    * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
    */
   @Output('p-click') click?: EventEmitter<any> = new EventEmitter<PoTagItem>();
-
 }

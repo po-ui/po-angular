@@ -11,7 +11,6 @@ import { PoPageAction, PoPageFilter, PoPageListLiterals } from '@portinari/porti
   templateUrl: './sample-po-page-list-labs.component.html'
 })
 export class SamplePoPageListLabsComponent implements OnInit {
-
   action: PoPageAction;
   actions: Array<PoPageAction>;
   breadcrumb: PoBreadcrumb;
@@ -54,7 +53,7 @@ export class SamplePoPageListLabsComponent implements OnInit {
     { label: 'Default', value: 'default' }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -74,7 +73,7 @@ export class SamplePoPageListLabsComponent implements OnInit {
   }
 
   addBreadcrumbParam() {
-    const newParam = {[this.breadcrumbParams.property]: this.breadcrumbParams.value};
+    const newParam = { [this.breadcrumbParams.property]: this.breadcrumbParams.value };
 
     if (this.breadcrumb.params) {
       this.breadcrumb.params = Object.assign(this.breadcrumb.params, newParam);
@@ -86,12 +85,15 @@ export class SamplePoPageListLabsComponent implements OnInit {
   }
 
   addDisclaimer() {
-    this.disclaimerGroup.disclaimers = [...this.disclaimerGroup.disclaimers, {
-      label: this.disclaimerLabel,
-      property: this.disclaimerProperty,
-      hideClose: this.disclaimerHideClose,
-      value: this.disclaimerValue
-    }];
+    this.disclaimerGroup.disclaimers = [
+      ...this.disclaimerGroup.disclaimers,
+      {
+        label: this.disclaimerLabel,
+        property: this.disclaimerProperty,
+        hideClose: this.disclaimerHideClose,
+        value: this.disclaimerValue
+      }
+    ];
 
     this.disclaimerGroup = Object.assign({}, this.disclaimerGroup);
 
@@ -156,5 +158,4 @@ export class SamplePoPageListLabsComponent implements OnInit {
   showAction(label) {
     this.poNotification.success(`Action clicked: ${label}`);
   }
-
 }

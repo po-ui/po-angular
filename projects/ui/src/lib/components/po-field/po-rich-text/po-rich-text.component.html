@@ -1,11 +1,7 @@
-<po-field-container
-  [p-help]="help"
-  [p-label]="label"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
   <div class="po-field-container-content">
-
-    <po-rich-text-body #richTextBody
+    <po-rich-text-body
+      #richTextBody
       [p-height]="height"
       [p-model-value]="value"
       [p-placeholder]="placeholder"
@@ -14,22 +10,25 @@
       (p-commands)="richTextToolbar.setButtonsStates($event)"
       (p-selected-link)="richTextModal.selectedLink($event)"
       (p-shortcut-command)="richTextToolbar.shortcutTrigger()"
-      (p-value)="updateValue($event)">
+      (p-value)="updateValue($event)"
+    >
     </po-rich-text-body>
 
-    <po-rich-text-toolbar #richTextToolbar
+    <po-rich-text-toolbar
+      #richTextToolbar
       [p-readonly]="readonly"
       (p-command)="richTextBody.executeCommand($event)"
-      (p-modal)="richTextModal.openModal($event)">
+      (p-modal)="richTextModal.openModal($event)"
+    >
     </po-rich-text-toolbar>
 
-    <po-rich-text-modal #richTextModal
+    <po-rich-text-modal
+      #richTextModal
       (p-command)="richTextBody.executeCommand($event)"
-      (p-link-editing)="richTextBody.linkEditing($event)">
+      (p-link-editing)="richTextBody.linkEditing($event)"
+    >
     </po-rich-text-modal>
-
   </div>
 
   <po-field-container-bottom [p-error-pattern]="errorMsg"></po-field-container-bottom>
-
 </po-field-container>

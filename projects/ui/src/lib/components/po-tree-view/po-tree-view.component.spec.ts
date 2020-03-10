@@ -12,9 +12,8 @@ describe('PoTreeViewComponent:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ PoTreeViewModule ]
-    })
-    .compileComponents();
+      imports: [PoTreeViewModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -28,15 +27,14 @@ describe('PoTreeViewComponent:', () => {
   });
 
   describe('Properties: ', () => {
-
     it('hasItems: should return true if items contains value', () => {
-      component.items = [ { label: 'Nivel 01', value: 11 } ];
+      component.items = [{ label: 'Nivel 01', value: 11 }];
 
       expect(component.hasItems).toBe(true);
     });
 
     it('hasItems: should return false if items is empty or undefined', () => {
-      const invalidValues = [ [], undefined ];
+      const invalidValues = [[], undefined];
 
       invalidValues.forEach(invalidValue => {
         component.items = invalidValue;
@@ -47,12 +45,11 @@ describe('PoTreeViewComponent:', () => {
   });
 
   describe('Methods: ', () => {
-
     it('ngOnInit: should subscribe onExpand and call emitExpanded with treeViewItem', () => {
       const expectedValue: PoTreeViewItem = { label: 'Nivel 01', value: 1 };
 
       const spyReceiveEvent = spyOn(component['treeViewService'], 'onExpand').and.returnValue(of(expectedValue));
-      const spyEmitEvent = spyOn(component, <any> 'emitExpanded');
+      const spyEmitEvent = spyOn(component, <any>'emitExpanded');
 
       component.ngOnInit();
 
@@ -64,7 +61,7 @@ describe('PoTreeViewComponent:', () => {
       const expectedValue: PoTreeViewItem = { label: 'Nivel 01', value: 1 };
 
       const spyOnChecked = spyOn(component['treeViewService'], 'onSelect').and.returnValue(of(expectedValue));
-      const spyEmitChecked = spyOn(component, <any> 'emitSelected');
+      const spyEmitChecked = spyOn(component, <any>'emitSelected');
 
       component.ngOnInit();
 
@@ -75,6 +72,5 @@ describe('PoTreeViewComponent:', () => {
     it('trackByFunction: should return index param', () => {
       expect(component.trackByFunction(1)).toBe(1);
     });
-
   });
 });

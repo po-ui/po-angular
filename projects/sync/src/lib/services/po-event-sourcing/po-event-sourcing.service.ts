@@ -24,7 +24,6 @@ import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
 @Injectable()
 export class PoEventSourcingService {
-
   static readonly event_sourcing_name: string = 'EventSourcing';
 
   private static readonly VALID_HTTP_STATUS_CODES = [
@@ -35,7 +34,7 @@ export class PoEventSourcingService {
     HttpStatus.NO_CONTENT, // 204
     HttpStatus.RESET_CONTENT, // 205
     HttpStatus.PARTIAL_CONTENT, // 206
-    HttpStatus.MULTI_STATUS, // 207
+    HttpStatus.MULTI_STATUS // 207
   ];
 
   config: PoSyncConfig;
@@ -51,19 +50,17 @@ export class PoEventSourcingService {
     const schemaUrl = PoSchemaUtil.getUrl(schema, requestType);
     const schemaId = eventSourcingItem.record[schema.idField];
 
-    if (requestType === PoRequestType.GET) { return schemaUrl; }
+    if (requestType === PoRequestType.GET) {
+      return schemaUrl;
+    }
 
     if ([PoRequestType.DELETE, PoRequestType.PATCH].includes(requestType)) {
-
-      return schemaUrl ?
-        `${schemaUrl}/${schemaId}` :
-        `${PoSchemaUtil.getUrl(schema, PoRequestType.GET)}/${schemaId}`;
+      return schemaUrl ? `${schemaUrl}/${schemaId}` : `${PoSchemaUtil.getUrl(schema, PoRequestType.GET)}/${schemaId}`;
     }
 
     if (requestType === PoRequestType.POST) {
       return schemaUrl ? schemaUrl : PoSchemaUtil.getUrl(schema, PoRequestType.GET);
     }
-
   }
 
   constructor(
@@ -71,10 +68,15 @@ export class PoEventSourcingService {
     private poSchemaService: PoSchemaService,
     private poStorage: PoStorageService,
     private poHttpClient: PoHttpClientService
-  ) { }
+  ) {}
 
   create(schemaName: string, newItem: any, customRequestId?: string): Promise<any> {
-    const eventSourcingItem = this.createEventSourcingItem(PoEventSourcingOperation.Insert, newItem, schemaName, customRequestId);
+    const eventSourcingItem = this.createEventSourcingItem(
+      PoEventSourcingOperation.Insert,
+      newItem,
+      schemaName,
+      customRequestId
+    );
     return this.insertEventSourcingQueue(eventSourcingItem);
   }
 
@@ -97,8 +99,12 @@ export class PoEventSourcingService {
   }
 
   async httpCommand(httpOperationData: PoHttpRequestData, customRequestId?: string): Promise<number> {
-    const eventSourcingItem = this.createEventSourcingItem(PoEventSourcingOperation.Http, httpOperationData,
-      undefined, customRequestId);
+    const eventSourcingItem = this.createEventSourcingItem(
+      PoEventSourcingOperation.Http,
+      httpOperationData,
+      undefined,
+      customRequestId
+    );
 
     await this.insertEventSourcingQueue(eventSourcingItem);
     return eventSourcingItem.id;
@@ -110,7 +116,7 @@ export class PoEventSourcingService {
 
   onSaveData(): Observable<null> {
     if (!this.eventSub) {
-      this.eventSub = Observable.create(subscriber => this.emitter = subscriber);
+      this.eventSub = Observable.create(subscriber => (this.emitter = subscriber));
     }
     return this.eventSub;
   }
@@ -120,7 +126,8 @@ export class PoEventSourcingService {
       PoEventSourcingOperation.Delete,
       itemToDelete,
       schemaName,
-      customRequestId);
+      customRequestId
+    );
     return this.insertEventSourcingQueue(eventSourcingItem);
   }
 
@@ -141,12 +148,12 @@ export class PoEventSourcingService {
   }
 
   async syncSend(): Promise<any> {
-
     const syncSendFunction = async (): Promise<any> => {
-
       const itemOfQueue = await this.poStorage.getFirstItem(PoEventSourcingService.event_sourcing_name);
 
-      if (itemOfQueue) { await this.selectOperation(itemOfQueue); }
+      if (itemOfQueue) {
+        await this.selectOperation(itemOfQueue);
+      }
 
       if (this.stoppedQueueEventSourcing || !itemOfQueue) {
         this.stoppedQueueEventSourcing = false;
@@ -160,8 +167,12 @@ export class PoEventSourcingService {
   }
 
   update(schemaName: string, itemUpdated: any, customRequestId?: string): Promise<any> {
-    const eventSourcingItem = this.createEventSourcingItem(PoEventSourcingOperation.Update, itemUpdated,
-      schemaName, customRequestId);
+    const eventSourcingItem = this.createEventSourcingItem(
+      PoEventSourcingOperation.Update,
+      itemUpdated,
+      schemaName,
+      customRequestId
+    );
     return this.insertEventSourcingQueue(eventSourcingItem);
   }
 
@@ -174,7 +185,6 @@ export class PoEventSourcingService {
 
   private checkRecordIdExists(recordId, operation) {
     if (!recordId) {
-
       const error = {
         message: 'Identifier not defined',
         operation: operation
@@ -184,7 +194,7 @@ export class PoEventSourcingService {
     }
   }
 
-  private concatPageItems(pageAcumulator, requestBody): { entity: string, data: Array<any> } {
+  private concatPageItems(pageAcumulator, requestBody): { entity: string; data: Array<any> } {
     if (requestBody[this.config.dataTransform.getItemsFieldName()]) {
       pageAcumulator.data = [...pageAcumulator.data, ...requestBody[this.config.dataTransform.getItemsFieldName()]];
     }
@@ -196,31 +206,36 @@ export class PoEventSourcingService {
     newItem: any | PoHttpRequestData,
     schemaName?: string,
     customRequestId?: string,
-    id?: number): PoEventSourcingItem {
-
+    id?: number
+  ): PoEventSourcingItem {
     if (!schemaName && operation !== PoEventSourcingOperation.Http) {
       throw new Error('PoSyncSchema is not defined.');
     }
 
     return {
-      id: (id ? id : new Date().getTime()),
+      id: id ? id : new Date().getTime(),
       dateTime: new Date().getTime(),
       schema: schemaName,
       operation: operation,
       record: newItem,
       customRequestId: customRequestId
     };
-
   }
 
   private createEventSourcingList(
     schemaName: string,
-    eventList: Array<PoEventSourcingSummaryItem>): Array<PoEventSourcingItem> {
-
+    eventList: Array<PoEventSourcingSummaryItem>
+  ): Array<PoEventSourcingItem> {
     return eventList.map((eventItem, index) => {
       const id = new Date().getTime() + index;
 
-      return this.createEventSourcingItem(eventItem.operation, eventItem.record, schemaName, eventItem.customRequestId, id);
+      return this.createEventSourcingItem(
+        eventItem.operation,
+        eventItem.record,
+        schemaName,
+        eventItem.customRequestId,
+        id
+      );
     });
   }
 
@@ -233,7 +248,6 @@ export class PoEventSourcingService {
   }
 
   private async deleteOperation(eventSourcingItem: PoEventSourcingItem): Promise<any> {
-
     try {
       const schema = await this.poSchemaDefinition.get(eventSourcingItem.schema);
 
@@ -270,7 +284,10 @@ export class PoEventSourcingService {
       .pipe(
         map(response => this.getBodyAndDate(schema.name, response)),
         expand(data => this.paginateSchemaData(data, schema, baseUrl)),
-        reduce((pageAcumulator, requestBody) => this.concatPageItems(pageAcumulator, requestBody), initialAcumulatorPage)
+        reduce(
+          (pageAcumulator, requestBody) => this.concatPageItems(pageAcumulator, requestBody),
+          initialAcumulatorPage
+        )
       )
       .toPromise();
 
@@ -281,7 +298,10 @@ export class PoEventSourcingService {
     try {
       const response = await this.poHttpClient.createRequest(eventSourcingItem.record).toPromise();
       const poHttpCommandResponse: PoSyncResponse = {
-        id: eventSourcingItem.id, customRequestId: eventSourcingItem.customRequestId, request: eventSourcingItem.record, response: response
+        id: eventSourcingItem.id,
+        customRequestId: eventSourcingItem.customRequestId,
+        request: eventSourcingItem.record,
+        response: response
       };
 
       this.responseSubject.next(poHttpCommandResponse);
@@ -293,8 +313,10 @@ export class PoEventSourcingService {
   }
 
   private async insertEventSourcingQueue(eventSourcingItem): Promise<Array<PoEventSourcingItem>> {
-    const eventSourcingUpdatedQueue = await this.poStorage.appendItemToArray(PoEventSourcingService.event_sourcing_name,
-      eventSourcingItem);
+    const eventSourcingUpdatedQueue = await this.poStorage.appendItemToArray(
+      PoEventSourcingService.event_sourcing_name,
+      eventSourcingItem
+    );
 
     this.notifyEventCreation();
 
@@ -302,9 +324,8 @@ export class PoEventSourcingService {
   }
 
   private async insertOperation(currentEventSourcingItem: PoEventSourcingItem): Promise<any> {
-
     const schema = await this.poSchemaDefinition.get(currentEventSourcingItem.schema);
-    const  url = PoEventSourcingService.getUrl(currentEventSourcingItem, schema, PoRequestType.POST);
+    const url = PoEventSourcingService.getUrl(currentEventSourcingItem, schema, PoRequestType.POST);
 
     try {
       const response = await this.sendServerItem(url, PoHttpRequestType.POST, currentEventSourcingItem.record);
@@ -315,11 +336,17 @@ export class PoEventSourcingService {
       const id = currentEventSourcingItem.record[PoSchemaUtil.syncInternalIdFieldName];
       await this.poSchemaService.update(schema, recordUpdatedByServer, id);
 
-      const eventSourcingItems: Array<PoEventSourcingItem> = await this.poStorage.get(PoEventSourcingService.event_sourcing_name);
-      await this.updatePendingEventSourcing(currentEventSourcingItem, schema.idField, recordUpdatedByServer, eventSourcingItems);
+      const eventSourcingItems: Array<PoEventSourcingItem> = await this.poStorage.get(
+        PoEventSourcingService.event_sourcing_name
+      );
+      await this.updatePendingEventSourcing(
+        currentEventSourcingItem,
+        schema.idField,
+        recordUpdatedByServer,
+        eventSourcingItems
+      );
 
       return this.sendResponseSubject(currentEventSourcingItem, response);
-
     } catch (errorHttpClient) {
       return this.sendResponseSubject(currentEventSourcingItem, errorHttpClient, true);
     }
@@ -345,14 +372,18 @@ export class PoEventSourcingService {
         ++this.schemasSyncConfig[schema.name]['page']
       );
 
-      return this.diffServerItems(this.schemasSyncConfig[schema.name]['currentUrlDiff'])
-        .pipe(map(response => this.getBodyAndDate(schema.name, response)));
+      return this.diffServerItems(this.schemasSyncConfig[schema.name]['currentUrlDiff']).pipe(
+        map(response => this.getBodyAndDate(schema.name, response))
+      );
     }
 
     return of();
   }
 
-  private removeEventSourcingValidItem(status, eventSourcingItem: PoEventSourcingItem): Promise<Array<PoEventSourcingItem>> {
+  private removeEventSourcingValidItem(
+    status,
+    eventSourcingItem: PoEventSourcingItem
+  ): Promise<Array<PoEventSourcingItem>> {
     if (this.isValidStatus(status) || eventSourcingItem.operation === PoEventSourcingOperation.Http) {
       return this.removeEventSourcingItem(eventSourcingItem.id);
     }
@@ -360,7 +391,6 @@ export class PoEventSourcingService {
 
   private selectOperation(eventSourcingItem: PoEventSourcingItem): Promise<any> {
     switch (eventSourcingItem.operation) {
-
       case PoEventSourcingOperation.Insert:
         return this.insertOperation(eventSourcingItem);
 
@@ -378,8 +408,8 @@ export class PoEventSourcingService {
   private sendResponseSubject(
     eventSourcingItem: PoEventSourcingItem,
     response: HttpResponse<Object> | HttpErrorResponse | PoEventSourcingErrorResponse,
-    isSubjectError: boolean = false): Promise<any> {
-
+    isSubjectError: boolean = false
+  ): Promise<any> {
     const poSyncResponse: PoSyncResponse = {
       id: eventSourcingItem.id,
       customRequestId: eventSourcingItem.customRequestId,
@@ -400,7 +430,6 @@ export class PoEventSourcingService {
   }
 
   private async updateOperation(eventSourcingItem: PoEventSourcingItem): Promise<Array<any> | number> {
-
     const schema = await this.poSchemaDefinition.get(eventSourcingItem.schema);
     const url = PoEventSourcingService.getUrl(eventSourcingItem, schema, PoRequestType.PATCH);
 
@@ -421,15 +450,14 @@ export class PoEventSourcingService {
     currentEventSourcingItem: PoEventSourcingItem,
     idFieldSchema: string,
     inserted: object,
-    eventSourcingItems: Array<PoEventSourcingItem>) {
-
+    eventSourcingItems: Array<PoEventSourcingItem>
+  ) {
     if (currentEventSourcingItem.record[PoSchemaUtil.syncInternalIdFieldName]) {
-
       eventSourcingItems.forEach((eventSourcingItem, position) => {
-
-        const isCurrentEventSourcingItem = !eventSourcingItem.record[idFieldSchema] &&
+        const isCurrentEventSourcingItem =
+          !eventSourcingItem.record[idFieldSchema] &&
           eventSourcingItem.record[PoSchemaUtil.syncInternalIdFieldName] ===
-          currentEventSourcingItem.record[PoSchemaUtil.syncInternalIdFieldName];
+            currentEventSourcingItem.record[PoSchemaUtil.syncInternalIdFieldName];
 
         if (isCurrentEventSourcingItem) {
           eventSourcingItems[position].record[idFieldSchema] = inserted[idFieldSchema];
@@ -443,11 +471,9 @@ export class PoEventSourcingService {
   }
 
   private async updateRecords(serverRecords: Array<any>, schema: PoSyncSchema) {
-
     for (const serverRecord of serverRecords) {
       await this.updateRecordByServerRecord(serverRecord, schema);
     }
-
   }
 
   private async updateRecordByServerRecord(serverRecord, schema) {
@@ -490,5 +516,4 @@ export class PoEventSourcingService {
   private updateStorageSchemas(schemas): Array<Promise<Array<any>>> {
     return schemas.map((schema: PoSyncSchema) => this.updateStorageBySchema(schema));
   }
-
 }

@@ -6,7 +6,6 @@ import { PoMenuPanelItem } from '../po-menu-panel-item/po-menu-panel-item.interf
 import { PoMenuPanelItemsService } from './po-menu-panel-items.service';
 
 describe('PoMenuPanelItemsService', () => {
-
   let menuItemsService: PoMenuPanelItemsService;
 
   const menuItem: PoMenuPanelItem = {
@@ -24,7 +23,6 @@ describe('PoMenuPanelItemsService', () => {
   });
 
   describe('Methods:', () => {
-
     it('sendToParentMenuClicked: should call subjectChild.next with menuItem', () => {
       spyOn(menuItemsService['subjectChild'], 'next');
 
@@ -68,7 +66,5 @@ describe('PoMenuPanelItemsService', () => {
 
       expect(result instanceof Observable).toBeTruthy();
     });
-
   });
-
 });

@@ -6,15 +6,13 @@ import { PoModalPasswordRecovery } from './interfaces/po-modal-password-recovery
 
 @Injectable()
 export class PoModalPasswordRecoveryService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   post(
     urlRecovery: string,
     item: PoModalPasswordRecovery,
-    params?: HttpParams | { [param: string]: string | Array<string>; }
-    ): Observable<HttpResponse<Object>> {
+    params?: HttpParams | { [param: string]: string | Array<string> }
+  ): Observable<HttpResponse<Object>> {
     return this.http.post<any>(urlRecovery, item, { observe: 'response', params: params });
   }
-
 }

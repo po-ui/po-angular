@@ -1,11 +1,13 @@
 <po-list-view
   p-property-title="name"
-  [p-items]="[{ name: 'Registro 1', email: 'register@portinari.com' }, { name: 'Registro 2', email: 'register2@portinari.com' }]">
-
+  [p-items]="[
+    { name: 'Registro 1', email: 'register@portinari.com' },
+    { name: 'Registro 2', email: 'register2@portinari.com' }
+  ]"
+>
   <ng-template p-list-view-content-template let-item>
     <div class="po-row">
       <po-info class="po-md-12" p-label="Email" [p-value]="item.email"></po-info>
     </div>
   </ng-template>
-
 </po-list-view>

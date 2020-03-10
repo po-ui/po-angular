@@ -9,17 +9,16 @@ import { PoInputGeneric } from './po-input-generic';
 
 @Component({
   template: `
-    <input type="text" #inp>
+    <input type="text" #inp />
     <span #clean></span>
   `
 })
 class ContentProjectionComponent extends PoInputGeneric {
-
   constructor(el: ElementRef) {
     super(el);
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
 }
@@ -40,7 +39,7 @@ describe('PoInputGeneric:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoFieldModule ],
+      imports: [PoFieldModule],
       declarations: [ContentProjectionComponent]
     });
   });
@@ -384,7 +383,7 @@ describe('PoInputGeneric:', () => {
   it('should get error pattern with no error pattern', () => {
     const fakeThis = {
       errorPattern: '',
-      hasInvalidClass: () => {},
+      hasInvalidClass: () => {}
     };
 
     expect(component.getErrorPattern.call(fakeThis)).toBe('');
@@ -400,7 +399,6 @@ describe('PoInputGeneric:', () => {
   });
 
   describe('Properties:', () => {
-
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;
 
@@ -412,11 +410,9 @@ describe('PoInputGeneric:', () => {
 
       expect(component.autocomplete).toBe('on');
     });
-
   });
 
   describe('Methods:', () => {
-
     function createFakeThis(hasMask: boolean) {
       return {
         mask: hasMask,
@@ -708,13 +704,11 @@ describe('PoInputGeneric:', () => {
         callUpdateModelWithTimeout: component.callUpdateModelWithTimeout,
         passedWriteValue: false
       };
-      const callUpdateModelWithTimeout = spyOn(fakeThis, <any> 'callUpdateModelWithTimeout');
+      const callUpdateModelWithTimeout = spyOn(fakeThis, <any>'callUpdateModelWithTimeout');
       component.writeValueModel.call(fakeThis, 'valor');
       expect(component.inputEl.nativeElement.value).toBe('valor formatted');
       expect(callUpdateModelWithTimeout).toHaveBeenCalled();
       expect(fakeThis.passedWriteValue).toBeTruthy();
     });
-
   });
-
 });

@@ -15,7 +15,6 @@ import { PoSyncSchema } from '../po-sync/interfaces/po-sync-schema.interface';
  */
 @Injectable()
 export class PoSchemaService {
-
   /**
    * Retorna o id a partir de uma chave de um *schema*.
    *
@@ -46,7 +45,7 @@ export class PoSchemaService {
     return data ? data.startsWith(`${schemaName}:`) : false;
   }
 
-  constructor(private poSchemaDefinitionService: PoSchemaDefinitionService , private poStorage: PoStorageService) { }
+  constructor(private poSchemaDefinitionService: PoSchemaDefinitionService, private poStorage: PoStorageService) {}
 
   /**
    * Cria um novo registro para o *schema* informado.
@@ -75,7 +74,6 @@ export class PoSchemaService {
         const id = PoSchemaService.getIdByRecordKey(key);
         await this.remove(schemaKey.name, id);
       }
-
     }
   }
 
@@ -103,12 +101,10 @@ export class PoSchemaService {
     const schemaRecords = [];
 
     for (const key of storageKeys) {
-
       if (PoSchemaService.isSchemaKey(key, schemaName)) {
-        const id =  PoSchemaService.getIdByRecordKey(key);
+        const id = PoSchemaService.getIdByRecordKey(key);
         schemaRecords.push(await this.get(schemaName, id));
       }
-
     }
 
     return schemaRecords;
@@ -162,11 +158,9 @@ export class PoSchemaService {
    * @param {Array<object>} records Lista de registros que serão alterados.
    */
   async updateAll(schema: PoSyncSchema, records: Array<object>): Promise<void> {
-
     for (const record of records) {
       await this.update(schema, record);
     }
-
   }
 
   private async getRecord(schemaName, recordId, isLocalRecord = false): Promise<object> {
@@ -190,7 +184,6 @@ export class PoSchemaService {
       const localRecordKey = PoSchemaService.getRecordKey(schemaName, recordId, true);
       await this.poStorage.set(localRecordKey, localFields);
     }
-
   }
 
   private async updateRecordId(schemaName, record, recordId) {
@@ -201,5 +194,4 @@ export class PoSchemaService {
 
     return Object.assign(record, localRecord);
   }
-
 }

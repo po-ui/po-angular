@@ -17,16 +17,8 @@ describe('PoSlideComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        BrowserAnimationsModule
-      ],
-      declarations: [
-        PoSlideCirclesComponent,
-        PoSlideComponent,
-        PoSlideControlComponent,
-        PoSlideItemComponent
-      ]
+      imports: [RouterTestingModule.withRoutes([]), BrowserAnimationsModule],
+      declarations: [PoSlideCirclesComponent, PoSlideComponent, PoSlideControlComponent, PoSlideItemComponent]
     });
   });
 
@@ -44,7 +36,6 @@ describe('PoSlideComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     const slides = [
       { image: '/image-slide-1.jpg' },
       { image: '/image-slide-2.jpg' },
@@ -53,7 +44,6 @@ describe('PoSlideComponent:', () => {
     ];
 
     describe('onResize:', () => {
-
       it('onResize: should trigger onResize method when window is resized ', () => {
         const spyOnResize = spyOn(component, 'onResize');
 
@@ -89,7 +79,6 @@ describe('PoSlideComponent:', () => {
     });
 
     describe('ngDoCheck:', () => {
-
       it('should call `setSlideItemWidth` and set `isLoaded` to true if isn`t loaded and has elements', () => {
         component['isLoaded'] = false;
         spyOnProperty(component, <any>'hasElements').and.returnValue(true);
@@ -152,7 +141,6 @@ describe('PoSlideComponent:', () => {
         expect(component['startSlide']).not.toHaveBeenCalled();
         expect(component['setSlideItemWidth']).toHaveBeenCalled();
       });
-
     });
 
     it('goToItem: should set `currentSlideIndex` and call `animate` with `offset`', () => {
@@ -339,7 +327,7 @@ describe('PoSlideComponent:', () => {
     });
 
     it(`createArrayForTemplate: should update 'slideItems' with array of any.`, () => {
-      const result = [{label: 'imagem 1'}, {label: 'imagem 2'}, {label: 'imagem 3'}, {label: 'imagem 4'}];
+      const result = [{ label: 'imagem 1' }, { label: 'imagem 2' }, { label: 'imagem 3' }, { label: 'imagem 4' }];
 
       component.slideItems = [];
       component['createArrayForTemplate'](result);
@@ -348,9 +336,8 @@ describe('PoSlideComponent:', () => {
     });
 
     describe('createArrayFromSlides:', () => {
-
       it(`should update 'slideItems' with 'string' values.`, () => {
-        const result = [{image: 'imagem 1'}, {image: 'imagem 2'}, {image: 'imagem 3'}, {image: 'imagem 4'}];
+        const result = [{ image: 'imagem 1' }, { image: 'imagem 2' }, { image: 'imagem 3' }, { image: 'imagem 4' }];
         const slidesArray = ['imagem 1', 'imagem 2', 'imagem 3', 'imagem 4'];
 
         component.slideItems = [];
@@ -361,7 +348,7 @@ describe('PoSlideComponent:', () => {
       });
 
       it(`should update 'slideItems' with array of 'PoSlideItem'.`, () => {
-        const result = [{image: 'imagem 1'}, {image: 'imagem 2'}, {image: 'imagem 3'}, {image: 'imagem 4'}];
+        const result = [{ image: 'imagem 1' }, { image: 'imagem 2' }, { image: 'imagem 3' }, { image: 'imagem 4' }];
 
         component.slideItems = [];
 
@@ -372,7 +359,6 @@ describe('PoSlideComponent:', () => {
     });
 
     describe('setDefaultHeight:', () => {
-
       it('should set `imageHeight` and slide height to default height if height is less than 336px and is image slide', () => {
         const height = 100;
         const defaultHeight = 336;
@@ -412,7 +398,6 @@ describe('PoSlideComponent:', () => {
     });
 
     describe('setHeight:', () => {
-
       it('should set slide height and imageHeight, shouldn`t call `setDefaultHeight` if height is greater than 192px', () => {
         const height = 400;
 
@@ -479,7 +464,6 @@ describe('PoSlideComponent:', () => {
     }));
 
     describe('startSlide:', () => {
-
       it(`should call 'setSlideHeight' and set 'currentSlideIndex' to 0`, () => {
         spyOn(component, 'setSlideHeight');
 
@@ -509,9 +493,8 @@ describe('PoSlideComponent:', () => {
     });
 
     describe('setSlideItems:', () => {
-
       it(`should call 'createArrayFromSlides' if slides are defined and template is undefined.`, () => {
-        const slidesArray = [{alt : '1'}, {alt : '2'}, {alt : '3'}, {alt : '4'}];
+        const slidesArray = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
 
         spyOnProperty(component, 'hasSlides').and.returnValue(true);
 
@@ -523,8 +506,8 @@ describe('PoSlideComponent:', () => {
       });
 
       it(`should call 'createArrayForTemplate' if slides are defined and template is defined.`, () => {
-        const slidesArray = [{alt : '1'}, {alt : '2'}, {alt : '3'}, {alt : '4'}];
-        component.slideContentTemplate = <any>{templateRef: {}};
+        const slidesArray = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
+        component.slideContentTemplate = <any>{ templateRef: {} };
 
         spyOnProperty(component, 'hasSlides').and.returnValue(true);
 
@@ -547,7 +530,6 @@ describe('PoSlideComponent:', () => {
     });
 
     describe('startInterval:', () => {
-
       it(`should call 'cancelInterval' if 'setInterval' is defined.`, () => {
         component['setInterval'] = () => {};
         spyOn(component, <any>'cancelInterval');
@@ -567,7 +549,7 @@ describe('PoSlideComponent:', () => {
       });
 
       it(`should call 'next' after interval of 1 second if has slides and elements`, fakeAsync(() => {
-        component.slides = [{alt : '1'}, {alt : '2'}, {alt : '3'}, {alt : '4'}];
+        component.slides = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
         fixture.detectChanges();
 
         const interval = 1000;
@@ -583,9 +565,8 @@ describe('PoSlideComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it(`hasElements: should return true if has 'slides' to create 'itemsElements'`, () => {
-      component.slides = [{alt : '1'}, {alt : '2'}, {alt : '3'}, {alt : '4'}];
+      component.slides = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
       fixture.detectChanges();
 
       expect(component['hasElements']).toBe(true);
@@ -617,7 +598,7 @@ describe('PoSlideComponent:', () => {
     });
 
     it(`hasSlides: should return true if has 'slides'`, () => {
-      component.slides = [{alt : '1'}, {alt : '2'}, {alt : '3'}, {alt : '4'}];
+      component.slides = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
       fixture.detectChanges();
 
       expect(component['hasSlides']).toBe(true);
@@ -629,11 +610,9 @@ describe('PoSlideComponent:', () => {
 
       expect(component['hasSlides']).toBe(false);
     });
-
   });
 
   describe('Templates:', () => {
-
     const arrowCircleSelector = '.po-slide-arrow-circle';
     const eventClick = document.createEvent('MouseEvents');
     eventClick.initEvent('click', false, true);
@@ -764,7 +743,5 @@ describe('PoSlideComponent:', () => {
 
       expect(nativeElement.querySelectorAll('po-slide-item').length).toBe(0);
     });
-
   });
-
 });

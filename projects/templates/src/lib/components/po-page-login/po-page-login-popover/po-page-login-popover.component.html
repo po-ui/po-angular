@@ -11,28 +11,21 @@
       <p class="po-font-text">
         {{ literals?.ifYouTryHarder }}
         <span class="po-font-text-bold po-page-login-popover-attempts">
-          {{ literals?.attempts | poI18n:remainingAttempts }}
-        </span>{{ literals?.yourUserWillBeBlocked }}
+          {{ literals?.attempts | poI18n: remainingAttempts }} </span
+        >{{ literals?.yourUserWillBeBlocked }}
       </p>
-      <br>
+      <br />
       <p class="po-font-text">
         {{ literals?.createANewPasswordNow }}
       </p>
       <div *ngIf="recovery" class="po-font-text-bold po-mt-1 po-page-login-popover-link-container">
-        <a *ngIf="recoveryType === 'internalLink'"
-          class="po-page-login-popover-link"
-          [routerLink]="recovery">
+        <a *ngIf="recoveryType === 'internalLink'" class="po-page-login-popover-link" [routerLink]="recovery">
           {{ literals?.iForgotMyPassword }}
         </a>
-        <a *ngIf="recoveryType === 'externalLink'"
-          class="po-page-login-popover-link"
-          [href]="recovery"
-          target="_blank">
+        <a *ngIf="recoveryType === 'externalLink'" class="po-page-login-popover-link" [href]="recovery" target="_blank">
           {{ literals?.iForgotMyPassword }}
         </a>
-        <a *ngIf="!recoveryType"
-          class="po-page-login-popover-link"
-          (click)="onForgotPasswordClick(recovery)">
+        <a *ngIf="!recoveryType" class="po-page-login-popover-link" (click)="onForgotPasswordClick(recovery)">
           {{ literals?.iForgotMyPassword }}
         </a>
       </div>

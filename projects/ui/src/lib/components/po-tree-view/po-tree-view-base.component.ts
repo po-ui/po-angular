@@ -21,7 +21,6 @@ const poTreeViewMaxLevel = 4;
  */
 @Directive()
 export class PoTreeViewBaseComponent {
-
   private _items: Array<PoTreeViewItem> = [];
   private _selectable: boolean = false;
 
@@ -138,7 +137,6 @@ export class PoTreeViewBaseComponent {
 
   private selectAllItems(items: Array<PoTreeViewItem>, isSelected: boolean) {
     items.forEach(item => {
-
       if (item.subItems) {
         this.selectAllItems(item.subItems, isSelected);
       }
@@ -180,7 +178,12 @@ export class PoTreeViewBaseComponent {
     }
   }
 
-  private getItemsByMaxLevel(items: Array<PoTreeViewItem> = [], level: number = 0, parentItem?: PoTreeViewItem, newItems = []) {
+  private getItemsByMaxLevel(
+    items: Array<PoTreeViewItem> = [],
+    level: number = 0,
+    parentItem?: PoTreeViewItem,
+    newItems = []
+  ) {
     items.forEach(item => {
       const { subItems, ...currentItem } = item;
 
@@ -189,7 +192,6 @@ export class PoTreeViewBaseComponent {
       }
 
       if (Array.isArray(subItems)) {
-
         // caso um item pai iniciar selecionado, deve selecionar os filhos.
         if (currentItem.selected) {
           this.selectAllItems(subItems, currentItem.selected);
@@ -226,5 +228,4 @@ export class PoTreeViewBaseComponent {
 
     this._items = this.getItemsWithParentSelected(this.items);
   }
-
 }

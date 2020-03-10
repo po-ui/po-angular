@@ -3,7 +3,7 @@ import { PoWidgetBaseComponent } from './po-widget-base.component';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 class PoWidgetComponent extends PoWidgetBaseComponent {
-  setHeight(value: any) { }
+  setHeight(value: any) {}
 }
 
 describe('PoWidgetBaseComponent:', () => {
@@ -14,7 +14,6 @@ describe('PoWidgetBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('height: should update property `p-height` with valid values', () => {
       const validValues = [1200, 1500, 500, 200, 8000];
 
@@ -140,7 +139,5 @@ describe('PoWidgetBaseComponent:', () => {
 
       expect(spyOnDisabled).toHaveBeenCalledWith(false);
     });
-
   });
-
 });

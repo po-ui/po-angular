@@ -10,7 +10,6 @@ import { PoPageEditLiterals } from '@portinari/portinari-ui';
   templateUrl: './sample-po-page-edit-labs.component.html'
 })
 export class SamplePoPageEditLabsComponent implements OnInit {
-
   action: string;
   breadcrumb: PoBreadcrumb;
   breadcrumbItem: PoBreadcrumbItem;
@@ -21,7 +20,9 @@ export class SamplePoPageEditLabsComponent implements OnInit {
   properties: Array<string>;
   title: string;
 
-  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disableSubmit', label: 'Disable Submit' }];
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'disableSubmit', label: 'Disable Submit' }
+  ];
 
   ngOnInit() {
     this.restore();
@@ -33,7 +34,7 @@ export class SamplePoPageEditLabsComponent implements OnInit {
   }
 
   addBreadcrumbParam() {
-    const newParam = {[this.breadcrumbParams.property]: this.breadcrumbParams.value};
+    const newParam = { [this.breadcrumbParams.property]: this.breadcrumbParams.value };
 
     if (this.breadcrumb.params) {
       this.breadcrumb.params = Object.assign(this.breadcrumb.params, newParam);
@@ -74,5 +75,4 @@ export class SamplePoPageEditLabsComponent implements OnInit {
   saveNew() {
     this.action = 'Save and new';
   }
-
 }

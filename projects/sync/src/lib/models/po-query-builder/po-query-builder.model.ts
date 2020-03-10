@@ -31,7 +31,6 @@ import { PoSyncSchema } from '../../services/po-sync/interfaces/po-sync-schema.i
  * ```
  */
 export class PoQueryBuilder {
-
   private fields: string;
   private filters: any;
 
@@ -91,7 +90,7 @@ export class PoQueryBuilder {
    */
   filter(filter?: object): PoQueryBuilder {
     if (filter && typeof filter === 'object') {
-      this.filters = {...this.filters, ...filter };
+      this.filters = { ...this.filters, ...filter };
     } else {
       throw new Error('Filter must be an object');
     }
@@ -194,7 +193,7 @@ export class PoQueryBuilder {
     let restrictedFields = [];
     let selectedFields = [];
 
-    [ selectedFields, restrictedFields ] = this.groupFields(receivedFields);
+    [selectedFields, restrictedFields] = this.groupFields(receivedFields);
 
     if (!selectedFields.length && restrictedFields.length) {
       selectedFields = [...schemaFields];
@@ -228,15 +227,15 @@ export class PoQueryBuilder {
         selectedFields.push(fields);
       }
     });
-    return [ selectedFields, restrictedFields ];
+    return [selectedFields, restrictedFields];
   }
 
-  private paginate(data: Array<any>): { hasNext: boolean, items: Array<any> } {
+  private paginate(data: Array<any>): { hasNext: boolean; items: Array<any> } {
     const dataLength = data.length;
     const pageSize = this._pageSize || dataLength;
 
     const pages = Math.ceil(dataLength / pageSize);
-    const begin = (this._page * pageSize) - (pageSize);
+    const begin = this._page * pageSize - pageSize;
     const end = begin + pageSize;
 
     return { hasNext: this._page < pages, items: data.slice(begin, end) };
@@ -266,11 +265,9 @@ export class PoQueryBuilder {
   private removeFieldsData(data: Array<object>, chosenFields: Array<string>): Array<object> {
     data.forEach(item => {
       Object.keys(item).forEach(keyItem => {
-
         if (!chosenFields.includes(keyItem)) {
           delete item[keyItem];
         }
-
       });
     });
     return data;
@@ -279,5 +276,4 @@ export class PoQueryBuilder {
   private removeRestrictedFields(restrictedFields: Array<any>, fields: Array<any>) {
     return fields.filter(field => !restrictedFields.includes(field));
   }
-
 }

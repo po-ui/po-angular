@@ -1,21 +1,23 @@
-<div #dropdownRef
+<div
+  #dropdownRef
   class="po-dropdown"
   tabindex="{{ disabled ? -1 : 0 }}"
   (click)="toggleDropdown()"
-  (keydown)="onKeyDown($event)">
-
-  <div class="po-dropdown-button" [ngClass]="{'po-dropdown-button-disabled' : disabled}">
+  (keydown)="onKeyDown($event)"
+>
+  <div class="po-dropdown-button" [ngClass]="{ 'po-dropdown-button-disabled': disabled }">
     {{ label }}
-    <div class="po-dropdown-icon po-icon {{icon}}"></div>
+    <div class="po-dropdown-icon po-icon {{ icon }}"></div>
   </div>
 
-  <po-popup #popupRef
+  <po-popup
+    #popupRef
     p-hide-arrow
     p-is-corner-align
     p-position="bottom-left"
     [p-actions]="actions"
     [p-custom-positions]="['bottom-left', 'top-left']"
-    [p-target]="dropdownRef">
+    [p-target]="dropdownRef"
+  >
   </po-popup>
-
 </div>

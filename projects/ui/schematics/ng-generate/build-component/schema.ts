@@ -2,7 +2,6 @@
  * Creates a new generic component definition in the given or default project.
  */
 export interface Schema {
-
   /**
    * When true, the declaring NgModule exports this component.
    */
@@ -41,5 +40,4 @@ export interface Schema {
 
   /** When true, create a component module. */
   createModule?: boolean;
-
 }

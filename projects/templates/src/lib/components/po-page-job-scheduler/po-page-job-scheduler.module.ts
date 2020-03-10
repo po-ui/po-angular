@@ -29,9 +29,7 @@ import { PoPageJobSchedulerSummaryComponent } from './po-page-job-scheduler-summ
     PoPageJobSchedulerParametersComponent,
     PoPageJobSchedulerSummaryComponent
   ],
-  exports: [
-    PoPageJobSchedulerComponent
-  ],
+  exports: [PoPageJobSchedulerComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -46,9 +44,6 @@ import { PoPageJobSchedulerSummaryComponent } from './po-page-job-scheduler-summ
     PoStepperModule,
     PoWidgetModule
   ],
-  providers: [
-    PoPageJobSchedulerService,
-    PoPageJobSchedulerLookupService
-  ]
+  providers: [PoPageJobSchedulerService, PoPageJobSchedulerLookupService]
 })
-export class PoPageJobSchedulerModule { }
+export class PoPageJobSchedulerModule {}

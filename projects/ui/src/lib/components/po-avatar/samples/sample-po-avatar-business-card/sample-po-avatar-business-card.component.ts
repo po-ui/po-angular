@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './sample-po-avatar-business-card.component.html'
 })
 export class SamplePoAvatarBusinessCardComponent {
-
   contact = {
     name: 'Mr. Dev Portinari',
     email: 'dev.portinari@portinari.com',
@@ -23,5 +22,4 @@ export class SamplePoAvatarBusinessCardComponent {
   formatPhoneNumber(phone) {
     return `(${phone.substring(0, 2)}) ${phone.substring(2, 7)}-${phone.substring(7)}`;
   }
-
 }

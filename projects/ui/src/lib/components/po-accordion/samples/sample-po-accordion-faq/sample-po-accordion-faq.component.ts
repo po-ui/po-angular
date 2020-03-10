@@ -4,14 +4,12 @@ import { PoAccordionItemComponent } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-accordion-faq',
-  templateUrl: './sample-po-accordion-faq.component.html',
+  templateUrl: './sample-po-accordion-faq.component.html'
 })
 export class SamplePoAccordionFaqComponent implements AfterContentInit {
-
   @ViewChild(PoAccordionItemComponent, { static: true }) questionOne: PoAccordionItemComponent;
 
   ngAfterContentInit() {
     this.questionOne.expand();
   }
-
 }

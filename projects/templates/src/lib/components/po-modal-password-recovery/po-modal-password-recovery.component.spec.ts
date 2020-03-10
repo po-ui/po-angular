@@ -11,8 +11,7 @@ import * as utilsFunctions from './../../utils/util';
 import { configureTestSuite, getObservable } from './../../util-test/util-expect.spec';
 
 import { PoModalPasswordRecoveryComponent } from './po-modal-password-recovery.component';
-import { PoModalPasswordRecoveryErrorMessageComponent
-} from './po-modal-password-recovery-error-message/po-modal-password-recovery-error-message.component';
+import { PoModalPasswordRecoveryErrorMessageComponent } from './po-modal-password-recovery-error-message/po-modal-password-recovery-error-message.component';
 import { PoModalPasswordRecoveryModalContent } from './enums/po-modal-password-recovery-modal-content.enum';
 import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.service';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
@@ -25,16 +24,8 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        RouterTestingModule.withRoutes([]),
-        PoFieldModule,
-        PoModalModule
-      ],
-      declarations: [
-        PoModalPasswordRecoveryErrorMessageComponent,
-        PoModalPasswordRecoveryComponent
-      ],
+      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoFieldModule, PoModalModule],
+      declarations: [PoModalPasswordRecoveryErrorMessageComponent, PoModalPasswordRecoveryComponent],
       providers: [PoI18nPipe, PoModalPasswordRecoveryService]
     });
   });
@@ -51,7 +42,6 @@ describe('PoModalPasswordRecoveryComponent:', () => {
   });
 
   describe('Methods', () => {
-
     it('primaryAction: should call primaryAction.action ', () => {
       spyOn(component.primaryAction, 'action');
       component.primaryAction.action();
@@ -67,7 +57,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     it('ngOnDestroy: should unsubscribe `passwordRecoverySubscription` on destroy', () => {
       component['passwordRecoverySubscription'] = fakeSubscription;
 
-      spyOn(component['passwordRecoverySubscription'], <any> 'unsubscribe');
+      spyOn(component['passwordRecoverySubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -77,7 +67,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     it('ngOnDestroy: should unsubscribe smsCodeSubscription` on destroy', () => {
       component['smsCodeSubscription'] = fakeSubscription;
 
-      spyOn(component['smsCodeSubscription'], <any> 'unsubscribe');
+      spyOn(component['smsCodeSubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -285,9 +275,9 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         component['cancelAction'],
         component.literals.cancelButton,
         true
-        );
+      );
       expect(component.formModelChangesCheck).toHaveBeenCalledWith(component.smsCodeForm);
-      }));
+    }));
 
     it('resendSmsCode: should call incrementRetryAttempts and emit submit if urlRecovery is undefined', () => {
       component.submittedContactValue = {};
@@ -302,7 +292,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('resendSmsCode: should call incrementRetryAttempts and submitActionRequest if urlRecovery contains value', () => {
-      component.submittedContactValue = {'sms': '999', retry: 1};
+      component.submittedContactValue = { 'sms': '999', retry: 1 };
       component.urlRecovery = 'url';
       component.type = PoModalPasswordRecoveryType.SMS;
 
@@ -319,7 +309,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component.recoveryModalElement = <any>{ close: () => {} };
 
       spyOn(component, <any>'resetFormFields');
-      spyOn(component.recoveryModalElement, 'close' );
+      spyOn(component.recoveryModalElement, 'close');
 
       component['cancelAction']();
 
@@ -329,10 +319,10 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
     it('cancelAction: should set values to chosenTypeFormOption, chosenTypeFormOption and modalType,   ', () => {
       component.recoveryModalElement = <any>{ close: () => {} };
-      component.submittedContactValue = {'email': 'value'};
+      component.submittedContactValue = { 'email': 'value' };
 
       spyOn(component, <any>'resetFormFields');
-      spyOn(component.recoveryModalElement, 'close' );
+      spyOn(component.recoveryModalElement, 'close');
 
       component['cancelAction']();
 
@@ -345,7 +335,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component.type = PoModalPasswordRecoveryType.All;
 
       spyOn(component, <any>'resetFormFields');
-      spyOn(component.recoveryModalElement, 'close' );
+      spyOn(component.recoveryModalElement, 'close');
 
       component['cancelAction']();
 
@@ -356,7 +346,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component.modalPasswordRecoveryTypeAll = true;
 
       spyOn(component, <any>'resetFormFields');
-      spyOn(component.recoveryModalElement, 'close' );
+      spyOn(component.recoveryModalElement, 'close');
 
       component['cancelAction']();
 
@@ -367,7 +357,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component.modalPasswordRecoveryTypeAll = false;
 
       spyOn(component, <any>'resetFormFields');
-      spyOn(component.recoveryModalElement, 'close' );
+      spyOn(component.recoveryModalElement, 'close');
 
       component['cancelAction']();
 
@@ -411,7 +401,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         updateValueAndValidity: () => {}
       };
 
-      component.emailForm = <any> { controls: { email: 'email' } };
+      component.emailForm = <any>{ controls: { email: 'email' } };
       component.emailModal = true;
 
       spyOn(fakeControl, 'markAsPristine');
@@ -444,7 +434,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
     it('pipeModalPhrases: should call setPipeArguments twice if type is `all`', () => {
       component.type = PoModalPasswordRecoveryType.All;
-      component.emailForm = <any> { form: { controls: { login: { hasError: () => {} } } } };
+      component.emailForm = <any>{ form: { controls: { login: { hasError: () => {} } } } };
 
       spyOn(component, <any>'setPipeArguments');
 
@@ -454,7 +444,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('pipeModalPhrases: should call setPipeArguments twice if type is `email`', () => {
-      component.emailForm = <any> { form: { controls: { login: { hasError: () => {} } } } };
+      component.emailForm = <any>{ form: { controls: { login: { hasError: () => {} } } } };
       component.type = PoModalPasswordRecoveryType.Email;
 
       spyOn(component, <any>'setPipeArguments');
@@ -465,7 +455,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('pipeModalPhrases: should call setPipeArguments twice if type is `sms`', () => {
-      component.smsCodeForm = <any> { form: { controls: { login: { hasError: () => {} } } } };
+      component.smsCodeForm = <any>{ form: { controls: { login: { hasError: () => {} } } } };
       component.type = PoModalPasswordRecoveryType.SMS;
 
       spyOn(component, <any>'setPipeArguments');
@@ -498,7 +488,11 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       };
 
       component['setActions'](
-        fakeThis.primaryAction, fakeThis.primarylabel, fakeThis.secondaryAction, fakeThis.secondaryLabel, fakeThis.disabled
+        fakeThis.primaryAction,
+        fakeThis.primarylabel,
+        fakeThis.secondaryAction,
+        fakeThis.secondaryLabel,
+        fakeThis.disabled
       );
 
       expect(component.primaryAction.label).toBe(fakeThis.primarylabel);
@@ -514,14 +508,18 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         primarylabel: '',
         secondaryAction: () => {},
         secondaryLabel: '',
-        disabled: true,
+        disabled: true
       };
 
       spyOn(fakeThis, 'primaryAction');
       spyOn(fakeThis, 'secondaryAction');
 
       component['setActions'](
-        fakeThis.primaryAction, fakeThis.primarylabel, fakeThis.secondaryAction, fakeThis.secondaryLabel, fakeThis.disabled
+        fakeThis.primaryAction,
+        fakeThis.primarylabel,
+        fakeThis.secondaryAction,
+        fakeThis.secondaryLabel,
+        fakeThis.disabled
       );
 
       component.primaryAction.action();
@@ -529,11 +527,10 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
       expect(fakeThis.primaryAction).toHaveBeenCalled();
       expect(fakeThis.secondaryAction).toHaveBeenCalled();
-
     });
 
     it('setEmailModalPhrasesAndActions: should set modalTitle and call pipeModalPhrases and setActions', () => {
-      component.emailForm = <any> { form: { controls: { login: { hasError: () => {} } } } };
+      component.emailForm = <any>{ form: { controls: { login: { hasError: () => {} } } } };
       component.type = PoModalPasswordRecoveryType.Email;
 
       spyOn(component, <any>'pipeModalPhrases');
@@ -547,7 +544,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('setEmailModalPhrasesAndActions: modalPasswordRecoveryTypeAll should be true if type value is equal `all` ', () => {
-      component.emailForm = <any> { form: { controls: { login: { hasError: () => {} } } } };
+      component.emailForm = <any>{ form: { controls: { login: { hasError: () => {} } } } };
       component.type = PoModalPasswordRecoveryType.All;
 
       spyOn(component, <any>'pipeModalPhrases');
@@ -559,7 +556,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('setEmailModalPhrasesAndActions: modalPasswordRecoveryTypeAll should be false if type value is different from `all` ', () => {
-      component.emailForm = <any> { form: { controls: { login: { hasError: () => {} } } } };
+      component.emailForm = <any>{ form: { controls: { login: { hasError: () => {} } } } };
       component.type = PoModalPasswordRecoveryType.Email;
 
       spyOn(component, <any>'pipeModalPhrases');
@@ -582,24 +579,24 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('assignSmsResponse: should assign a `smsBodyResponse` containing the property hash', () => {
-      const responseObj = {hash: 'hash'};
+      const responseObj = { hash: 'hash' };
 
       component['assignSmsResponse'](responseObj);
 
-      expect(component['smsBodyResponse']).toEqual({hash: 'hash'});
+      expect(component['smsBodyResponse']).toEqual({ hash: 'hash' });
     });
 
     it('assignSmsResponse: should assign a `smsBodyResponse` containing the properties hash and urlValidationCode', () => {
-      const responseObj = {hash: 'hash', urlValidationCode: 'urlValidationCode' };
+      const responseObj = { hash: 'hash', urlValidationCode: 'urlValidationCode' };
 
       component['assignSmsResponse'](responseObj);
 
-      expect(component['smsBodyResponse']).toEqual({hash: 'hash', urlValidationCode: 'urlValidationCode'});
+      expect(component['smsBodyResponse']).toEqual({ hash: 'hash', urlValidationCode: 'urlValidationCode' });
     });
 
     it(`redirectToChangePassword: should call 'openExternalLink' passing urlChangePassword and token as parameters if
     the redirectToChangePassword method param contains urlChangePassword property`, () => {
-      const recoveryToken = {token: 'xpto', urlChangePassword: 'http://www.page.com.br/endpoint'};
+      const recoveryToken = { token: 'xpto', urlChangePassword: 'http://www.page.com.br/endpoint' };
 
       spyOn(utilsFunctions, 'isExternalLink').and.returnValue(true);
       spyOn(component, <any>'openExternalLink');
@@ -613,7 +610,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
     it(`redirectToChangePassword: should call 'openInternalLink' passing urlRecovery, urlChangePassword and token as parameters if
     the redirectToChangePassword method param contains urlChangePassword property`, () => {
-      const recoveryToken = {token: 'xpto', urlChangePassword: 'endpoint'};
+      const recoveryToken = { token: 'xpto', urlChangePassword: 'endpoint' };
       component.urlRecovery = 'http://www.page.com.br';
 
       spyOn(utilsFunctions, 'isExternalLink').and.returnValue(false);
@@ -632,7 +629,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
     it(`redirectToChangePassword: should call 'openInternalLink' passing urlRecovery, 'changePassword'
     and token as parameters if the redirectToChangePassword method param does not contain urlChangePassword property`, () => {
-      const recoveryToken = {token: 'xpto'};
+      const recoveryToken = { token: 'xpto' };
       component.urlRecovery = 'http://www.page.com.br';
 
       spyOn(component, <any>'openInternalLink');
@@ -655,7 +652,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('openInternalLink: should call `router.navigate`', () => {
-      spyOn(component['router'], <any> 'navigate');
+      spyOn(component['router'], <any>'navigate');
 
       component['openInternalLink']('http://page.com.br', '/endpoint', 'param');
 
@@ -753,7 +750,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     it(`submitActionRequest: should call poModalPasswordRecoveryService.post passing urlRecovery and data as params`, fakeAsync(() => {
       component.type = PoModalPasswordRecoveryType.Email;
       component.urlRecovery = 'urlRecovery';
-      const data = {'email': 'email@email.com'};
+      const data = { 'email': 'email@email.com' };
       const response = { status: 204 };
       const params = undefined;
 
@@ -762,14 +759,18 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component['submitActionRequest'](data, component.type);
       tick();
 
-      expect(component['poModalPasswordRecoveryService'].post).toHaveBeenCalledWith(component.urlRecovery, data, params);
+      expect(component['poModalPasswordRecoveryService'].post).toHaveBeenCalledWith(
+        component.urlRecovery,
+        data,
+        params
+      );
     }));
 
     it(`submitActionRequest: should call poModalPasswordRecoveryService.post passing
     urlRecovery, data and queryParam 'sms' as parameters`, fakeAsync(() => {
       component.type = PoModalPasswordRecoveryType.SMS;
       component.urlRecovery = 'urlRecovery';
-      const data = {'email': 'email@email.com'};
+      const data = { 'email': 'email@email.com' };
       const response = { status: 204 };
       const params = { type: 'sms' };
 
@@ -778,11 +779,15 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component['submitActionRequest'](data, component.type);
       tick();
 
-      expect(component['poModalPasswordRecoveryService'].post).toHaveBeenCalledWith(component.urlRecovery, data, params);
+      expect(component['poModalPasswordRecoveryService'].post).toHaveBeenCalledWith(
+        component.urlRecovery,
+        data,
+        params
+      );
     }));
 
     it('submitActionRequest: should call `openConfirmation` if response.status is `204` and type is `email`', fakeAsync(() => {
-      const data = {'email': 'email@email.com'};
+      const data = { 'email': 'email@email.com' };
       const response = { status: 204 };
       component.type = PoModalPasswordRecoveryType.Email;
 
@@ -796,7 +801,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     }));
 
     it('submitActionRequest: shouldn`t call `openConfirmation` if response.status is different from `204`', fakeAsync(() => {
-      const data = {'email': 'email@email.com'};
+      const data = { 'email': 'email@email.com' };
       const response = { status: 200 };
       component.type = PoModalPasswordRecoveryType.Email;
 
@@ -810,7 +815,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     }));
 
     it('submitActionRequest: shouldn`t call `openConfirmation` if type is not `email`', fakeAsync(() => {
-      const data = {'email': 'email@email.com'};
+      const data = { 'email': 'email@email.com' };
       const response = { status: 204 };
       component.type = PoModalPasswordRecoveryType.SMS;
 
@@ -825,7 +830,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
     it(`submitActionRequest: should call 'assignSmsResponse' and 'openSmsCode'
     if response.status is '200' and type is 'sms'`, fakeAsync(() => {
-      const data = {'email': 'email@email.com'};
+      const data = { 'email': 'email@email.com' };
       const response = { status: 200, body: {} };
       component.type = PoModalPasswordRecoveryType.SMS;
 
@@ -842,7 +847,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
     it(`submitActionRequest: shouldn't call 'assignSmsResponse' and 'openSmsCode'
     if response.status is different from '200'`, fakeAsync(() => {
-      const data = {'email': 'email@email.com'};
+      const data = { 'email': 'email@email.com' };
       const response = { status: 300, body: {} };
       component.type = PoModalPasswordRecoveryType.SMS;
 
@@ -859,7 +864,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
     it(`submitActionRequest: shouldn't call 'assignSmsResponse' and 'openSmsCode'
     if type is different from 'SMS'`, fakeAsync(() => {
-      const data = {'email': 'email@email.com'};
+      const data = { 'email': 'email@email.com' };
       const response = { status: 200, body: {} };
       component.type = PoModalPasswordRecoveryType.Email;
 
@@ -876,7 +881,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
     it('submitSmsCodeAction: should call `resetFields`', () => {
       component.smsCode = '123456';
-      component['smsBodyResponse'] = { 'hash': 'xpto'};
+      component['smsBodyResponse'] = { 'hash': 'xpto' };
 
       spyOn(component, <any>'resetFormFields');
       spyOn(component.codeSubmit, 'emit');
@@ -889,7 +894,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     it('submitSmsCodeAction: should set submittedCodeValue and call `submitSmsCodeRequest` if urlRecovery contains value', () => {
       component.submittedCodeValue = {};
       component.urlRecovery = 'url';
-      component['smsBodyResponse'] = { 'hash': 'xpto'};
+      component['smsBodyResponse'] = { 'hash': 'xpto' };
       const expectedSubmittedCodeValue = { 'code': component.smsCode, 'hash': component['smsBodyResponse'].hash };
 
       spyOn(component, <any>'resetFormFields');
@@ -906,7 +911,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     it('submitSmsCodeAction: should call `codeSubmit.emit` if urlRecovery does not contain a value', () => {
       component.submittedCodeValue = {};
       component.urlRecovery = undefined;
-      component['smsBodyResponse'] = { 'hash': 'xpto'};
+      component['smsBodyResponse'] = { 'hash': 'xpto' };
 
       spyOn(component, <any>'resetFormFields');
       spyOn(component, <any>'submitSmsCodeRequest');
@@ -919,9 +924,9 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     });
 
     it('submitSmsCodeRequest: should call `completed` and `redirectToChangePassword` if response.status is 200', fakeAsync(() => {
-      const data = {'code': '119812', 'hash': 'xpto:111111'};
+      const data = { 'code': '119812', 'hash': 'xpto:111111' };
       const response = { status: 200, body: {} };
-      component['smsBodyResponse'] = { 'hash': 'xpto', 'urlValidationCode': 'url'};
+      component['smsBodyResponse'] = { 'hash': 'xpto', 'urlValidationCode': 'url' };
 
       spyOn(component, <any>'setRequestEndpoint').and.returnValue('url/route');
       spyOn(component['poModalPasswordRecoveryService'], 'post').and.returnValue(getObservable(response));
@@ -939,9 +944,9 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     }));
 
     it('submitSmsCodeRequest: shouldn`t call `completed` and `redirectToChangePassword` if response.status isn`t 200', fakeAsync(() => {
-      const data = {'code': '119812', 'hash': 'xpto:111111'};
+      const data = { 'code': '119812', 'hash': 'xpto:111111' };
       const response = { status: 400, body: {} };
-      component['smsBodyResponse'] = { 'hash': 'xpto', 'urlValidationCode': 'url'};
+      component['smsBodyResponse'] = { 'hash': 'xpto', 'urlValidationCode': 'url' };
 
       spyOn(component, <any>'setRequestEndpoint').and.returnValue('url/route');
       spyOn(component['poModalPasswordRecoveryService'], 'post').and.returnValue(getObservable(response));
@@ -958,9 +963,9 @@ describe('PoModalPasswordRecoveryComponent:', () => {
     }));
 
     it('submitSmsCodeRequest: should call `openSmsCode and set codeError if response is an error', fakeAsync(() => {
-      const data = {'code': '119812', 'hash': 'xpto:111111'};
-      const error = { 'error': { 'message': 'message'} };
-      component['smsBodyResponse'] = { 'hash': 'xpto', 'urlValidationCode': 'url'};
+      const data = { 'code': '119812', 'hash': 'xpto:111111' };
+      const error = { 'error': { 'message': 'message' } };
+      component['smsBodyResponse'] = { 'hash': 'xpto', 'urlValidationCode': 'url' };
 
       spyOn(component, 'openSmsCode');
       spyOn(component, <any>'setRequestEndpoint').and.returnValue('route/url');
@@ -971,7 +976,6 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       expect(component.codeError).toEqual(error.error.message);
       expect(component.openSmsCode).toHaveBeenCalled();
     }));
-
   });
 
   describe('Templates', () => {
@@ -1084,7 +1088,5 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
       expect(debugElement.querySelector('.po-field-container-error-text')).toBeTruthy();
     });
-
   });
-
 });

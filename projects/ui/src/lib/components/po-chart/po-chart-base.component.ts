@@ -31,7 +31,6 @@ export type PoChartSeries = Array<PoDonutChartSeries | PoPieChartSeries | PoChar
  */
 @Directive()
 export abstract class PoChartBaseComponent {
-
   private _height: number;
   private _series: Array<PoDonutChartSeries | PoPieChartSeries> | PoChartGaugeSerie;
   private _type: PoChartType = poChartTypeDefault;
@@ -88,7 +87,9 @@ export abstract class PoChartBaseComponent {
   @Input('p-series') set series(value: PoChartGaugeSerie | Array<PoDonutChartSeries | PoPieChartSeries>) {
     this._series = value || [];
 
-    this.chartSeries = Array.isArray(this._series) ? [...this._series] : this.transformObjectToArrayObject(this._series);
+    this.chartSeries = Array.isArray(this._series)
+      ? [...this._series]
+      : this.transformObjectToArrayObject(this._series);
   }
 
   get series() {
@@ -156,9 +157,8 @@ export abstract class PoChartBaseComponent {
   }
 
   private transformObjectToArrayObject(serie: PoChartGaugeSerie) {
-    return typeof serie === 'object' && Object.keys(serie).length ? [{...serie}] : [];
+    return typeof serie === 'object' && Object.keys(serie).length ? [{ ...serie }] : [];
   }
 
   abstract rebuildComponent(): void;
-
 }

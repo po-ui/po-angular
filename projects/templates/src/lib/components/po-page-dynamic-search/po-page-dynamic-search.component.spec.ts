@@ -12,7 +12,7 @@ import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filt
 import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
 import { configureTestSuite, expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
 
-export const routes: Routes = [ ];
+export const routes: Routes = [];
 
 describe('PoPageDynamicSearchComponent:', () => {
   let component: PoPageDynamicSearchComponent;
@@ -20,21 +20,10 @@ describe('PoPageDynamicSearchComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        RouterTestingModule.withRoutes(routes),
-        PoPageCustomizationModule
-      ],
-      declarations: [
-        PoPageDynamicSearchComponent,
-        PoAdvancedFilterComponent
-      ],
-      providers: [
-        TitleCasePipe
-      ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      imports: [FormsModule, RouterTestingModule.withRoutes(routes), PoPageCustomizationModule],
+      declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
+      providers: [TitleCasePipe],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -49,22 +38,27 @@ describe('PoPageDynamicSearchComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('get filterSettings: should return `filterSettings` with `advancedAction` equal to `undefined` if haven`t filters', () => {
-      const result = { action: 'onAction', advancedAction: undefined, ngModel: 'quickFilter',
-        placeholder: component.literals.searchPlaceholder };
+      const result = {
+        action: 'onAction',
+        advancedAction: undefined,
+        ngModel: 'quickFilter',
+        placeholder: component.literals.searchPlaceholder
+      };
 
       expect(component.filterSettings).toEqual(result);
     });
 
     it('get filterSettings: should return `filterSettings` with `advancedAction` equal to `onAdvancedAction` if have filters', () => {
-      const filters: Array<any> = [
-        { property: 'name' }, { property: 'birthdate' }, { property: 'genre' }
-      ];
+      const filters: Array<any> = [{ property: 'name' }, { property: 'birthdate' }, { property: 'genre' }];
 
       component.filters = filters;
-      const result = { action: 'onAction', advancedAction: 'onAdvancedAction', ngModel: 'quickFilter',
-        placeholder: component.literals.searchPlaceholder };
+      const result = {
+        action: 'onAction',
+        advancedAction: 'onAdvancedAction',
+        ngModel: 'quickFilter',
+        placeholder: component.literals.searchPlaceholder
+      };
 
       expect(component.filterSettings).toEqual(result);
     });
@@ -80,8 +74,8 @@ describe('PoPageDynamicSearchComponent:', () => {
           },
           quickFilter: 'quickFilter',
           quickSearch: {
-            emit: () => { },
-            observers: [ 1, 2, 3]
+            emit: () => {},
+            observers: [1, 2, 3]
           },
           literals: {
             quickSearchLabel: 'Pesquisa rápida:'
@@ -121,7 +115,6 @@ describe('PoPageDynamicSearchComponent:', () => {
 
         expect(fakethis._disclaimerGroup.disclaimers).toEqual(result);
       });
-
     });
 
     it('onAdvancedAction: should call `poAdvancedFilter.open`', () => {
@@ -130,7 +123,6 @@ describe('PoPageDynamicSearchComponent:', () => {
       component.onAdvancedAction();
 
       expect(component.poAdvancedFilter.open).toHaveBeenCalled();
-
     });
 
     it(`onAdvancedSearch: should set 'changeDisclaimersEnabled' to 'false', call 'setDisclaimers' and call
@@ -138,7 +130,7 @@ describe('PoPageDynamicSearchComponent:', () => {
       const filters = [{ property: 'value1' }];
       component['changeDisclaimersEnabled'] = true;
 
-      spyOn(component, <any> 'setDisclaimers');
+      spyOn(component, <any>'setDisclaimers');
       spyOn(component.advancedSearch, 'emit');
 
       component.onAdvancedSearch(filters);
@@ -160,7 +152,6 @@ describe('PoPageDynamicSearchComponent:', () => {
       const result = { property: 'value1' };
 
       expect(component['getFieldByProperty'](fields, fieldName)).toEqual(result);
-
     });
 
     it(`getFieldByProperty: shouldn't return fields if 'fildName' equal to 'undefined'`, () => {
@@ -211,10 +202,10 @@ describe('PoPageDynamicSearchComponent:', () => {
       component.filters = [
         { property: 'name', label: 'Name' },
         { property: 'birthdate', label: 'Birthdate', type: 'date' },
-        { property: 'genre', label: 'Genre' },
+        { property: 'genre', label: 'Genre' }
       ];
 
-      const filters = { name: 'Roger', birthdate: '2018-12-12T00:00:01-00:00', genre: 'male' } ;
+      const filters = { name: 'Roger', birthdate: '2018-12-12T00:00:01-00:00', genre: 'male' };
 
       const result = [
         { label: 'Name: Roger', property: 'name', value: 'Roger' },
@@ -234,10 +225,10 @@ describe('PoPageDynamicSearchComponent:', () => {
     'formatDate' if haven't property with type 'date'`, () => {
       component.filters = [
         { property: 'name', label: 'Name' },
-        { property: 'genre', label: 'Genre' },
+        { property: 'genre', label: 'Genre' }
       ];
 
-      const filters = { name: 'Name1', genre: 'male' } ;
+      const filters = { name: 'Name1', genre: 'male' };
 
       const result = [
         { label: 'Name: Name1', property: 'name', value: 'Name1' },
@@ -254,13 +245,9 @@ describe('PoPageDynamicSearchComponent:', () => {
 
     it(`setDisclaimers: should apply 'field.property' with uppercase first letter to label's value
       if 'field.label' is 'undefined'`, () => {
+      component.filters = [{ property: 'name' }, { property: 'genre' }];
 
-      component.filters = [
-        { property: 'name' },
-        { property: 'genre' },
-      ];
-
-      const filters = { name: 'Name1', genre: 'male' } ;
+      const filters = { name: 'Name1', genre: 'male' };
 
       const result = [
         { label: 'Name: Name1', property: 'name', value: 'Name1' },
@@ -282,9 +269,14 @@ describe('PoPageDynamicSearchComponent:', () => {
     });
 
     it('getFilterValueToDisclaimer: should return label of option if options and label are defined', () => {
-      const field = { property: '1', label: 'field label', options: [
-        { value: '1', label: 'test 1'}, {value: '2', label: 'test 2' }
-      ]};
+      const field = {
+        property: '1',
+        label: 'field label',
+        options: [
+          { value: '1', label: 'test 1' },
+          { value: '2', label: 'test 2' }
+        ]
+      };
 
       const value = '2';
 
@@ -294,9 +286,7 @@ describe('PoPageDynamicSearchComponent:', () => {
     });
 
     it('getFilterValueToDisclaimer: should return value of option if options is defined and label is undefined', () => {
-      const field = { property: '1', label: 'field label', options: [
-        { value: '1' }, {value: '2' }
-      ]};
+      const field = { property: '1', label: 'field label', options: [{ value: '1' }, { value: '2' }] };
 
       const value = '2';
 
@@ -306,9 +296,16 @@ describe('PoPageDynamicSearchComponent:', () => {
     });
 
     it('getFilterValueToDisclaimer: should return option label if options and label are defined and optionsMulti is true', () => {
-      const field = { property: '1', label: 'field label', optionsMulti: true, options: [
-        { value: '1', label: 'test 1'}, {value: '2', label: 'test 2' }, {value: '3', label: 'test 3' }
-      ]};
+      const field = {
+        property: '1',
+        label: 'field label',
+        optionsMulti: true,
+        options: [
+          { value: '1', label: 'test 1' },
+          { value: '2', label: 'test 2' },
+          { value: '3', label: 'test 3' }
+        ]
+      };
 
       const value = ['2', '3'];
 
@@ -318,9 +315,12 @@ describe('PoPageDynamicSearchComponent:', () => {
     });
 
     it('getFilterValueToDisclaimer: should return option value if options is defined, label is undefined and optionsMulti is true', () => {
-      const field = { property: '1', label: 'field label', optionsMulti: true, options: [
-        { value: '1' }, { value: '2' }, { value: '3' }
-      ]};
+      const field = {
+        property: '1',
+        label: 'field label',
+        optionsMulti: true,
+        options: [{ value: '1' }, { value: '2' }, { value: '3' }]
+      };
 
       const value = ['2', '3'];
 
@@ -330,7 +330,7 @@ describe('PoPageDynamicSearchComponent:', () => {
     });
 
     it('getFilterValueToDisclaimer: should return value if options is undefined and type isn`t PoDynamicFieldType.Date', () => {
-      const field = { property: '1', label: 'field label'};
+      const field = { property: '1', label: 'field label' };
 
       const value = 'test value 1';
 
@@ -340,9 +340,8 @@ describe('PoPageDynamicSearchComponent:', () => {
     });
 
     describe('ngOnInit:', () => {
-
       it('should call setAdvancedFilterLiterals with component.literals', () => {
-        spyOn(component, <any> 'setAdvancedFilterLiterals');
+        spyOn(component, <any>'setAdvancedFilterLiterals');
 
         component.ngOnInit();
 
@@ -355,34 +354,22 @@ describe('PoPageDynamicSearchComponent:', () => {
           { label: 'Feature 2', url: '/feature2' }
         ];
         component.breadcrumb = {
-          items: [
-            { label: 'Home' },
-            { label: 'Hiring processes' }
-          ]
+          items: [{ label: 'Home' }, { label: 'Hiring processes' }]
         };
-        component.filters = [
-          { property: 'filter1' },
-          { property: 'filter2' }
-        ];
+        component.filters = [{ property: 'filter1' }, { property: 'filter2' }];
         component.title = 'Original Title';
 
         component.onLoad = () => {
           return {
             title: 'New Title',
             breadcrumb: {
-              items: [
-                { label: 'Test' },
-                { label: 'Test2' }
-              ]
+              items: [{ label: 'Test' }, { label: 'Test2' }]
             },
             actions: [
               { label: 'Feature 1', url: '/new-feature1' },
               { label: 'Feature 3', url: '/new-feature3' }
             ],
-            filters: [
-              { property: 'filter1' },
-              { property: 'filter3' }
-            ]
+            filters: [{ property: 'filter1' }, { property: 'filter3' }]
           };
         };
 
@@ -394,19 +381,11 @@ describe('PoPageDynamicSearchComponent:', () => {
           { label: 'Feature 2', url: '/feature2' },
           { label: 'Feature 3', url: '/new-feature3' }
         ]);
-        expect(component.filters).toEqual([
-          { property: 'filter1' },
-          { property: 'filter2' },
-          { property: 'filter3' }
-        ]);
+        expect(component.filters).toEqual([{ property: 'filter1' }, { property: 'filter2' }, { property: 'filter3' }]);
         expect(component.breadcrumb).toEqual({
-          items: [
-            { label: 'Test' },
-            { label: 'Test2' }
-          ]
+          items: [{ label: 'Test' }, { label: 'Test2' }]
         });
       }));
     });
   });
-
 });

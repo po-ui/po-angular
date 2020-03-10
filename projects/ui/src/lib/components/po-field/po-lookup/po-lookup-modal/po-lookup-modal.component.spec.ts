@@ -13,14 +13,12 @@ import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interf
 import { PoLookupModalComponent } from '../../../../components/po-field/po-lookup/po-lookup-modal/po-lookup-modal.component';
 
 class LookupFilterService implements PoLookupFilter {
-
   getFilteredItems(params: any): Observable<any> {
-    return of({items: [{value: 123, label: 'teste'}]});
+    return of({ items: [{ value: 123, label: 'teste' }] });
   }
   getObjectByValue(id: string): Observable<any> {
     return of({});
   }
-
 }
 
 describe('PoLookupModalComponent', () => {
@@ -32,10 +30,10 @@ describe('PoLookupModalComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoModalModule ],
-      declarations: [ PoLookupModalComponent ],
-      providers: [ LookupFilterService, PoComponentInjectorService ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      imports: [PoModalModule],
+      declarations: [PoLookupModalComponent],
+      providers: [LookupFilterService, PoComponentInjectorService],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -43,8 +41,15 @@ describe('PoLookupModalComponent', () => {
     fixture = TestBed.createComponent(PoLookupModalComponent);
     component = fixture.componentInstance;
     component.filterService = {
-      getFilteredItems: () => of({ items: [{ value: 123, label: 'teste' }, { value: 456, label: 'teste 2' }], hasNext: false }),
-      getObjectByValue: () => of({ items: [{ value: 123, label: 'teste' }]}),
+      getFilteredItems: () =>
+        of({
+          items: [
+            { value: 123, label: 'teste' },
+            { value: 456, label: 'teste 2' }
+          ],
+          hasNext: false
+        }),
+      getObjectByValue: () => of({ items: [{ value: 123, label: 'teste' }] })
     };
     fixture.detectChanges();
   });
@@ -111,7 +116,6 @@ describe('PoLookupModalComponent', () => {
   });
 
   it('should filter the key pressed', () => {
-
     component.openModal();
     fixture.detectChanges();
 
@@ -119,7 +123,7 @@ describe('PoLookupModalComponent', () => {
 
     const eventKeyBoard = document.createEvent('KeyboardEvent');
     eventKeyBoard.initEvent('keyup', true, true);
-    Object.defineProperty(eventKeyBoard, 'keyCode', {'value': 13});
+    Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': 13 });
     const element = fixture.debugElement.nativeElement.querySelector('input');
     element.dispatchEvent(eventKeyBoard);
 
@@ -128,7 +132,6 @@ describe('PoLookupModalComponent', () => {
 
   // TODO Ng V9
   xit('should call search method', fakeAsync((): void => {
-
     component.openModal();
     fixture.detectChanges();
 
@@ -138,7 +141,7 @@ describe('PoLookupModalComponent', () => {
 
     const eventKeyBoard = document.createEvent('KeyboardEvent');
     eventKeyBoard.initEvent('keyup', true, true);
-    Object.defineProperty(eventKeyBoard, 'keyCode', {'value': 13});
+    Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': 13 });
     const element = fixture.debugElement.nativeElement.querySelector('input');
     element.dispatchEvent(eventKeyBoard);
 
@@ -148,10 +151,10 @@ describe('PoLookupModalComponent', () => {
   }));
 
   it('the typed character must be validated', () => {
-    let isEnterKeyPressed = component['validateEnterPressed'].call(component, {keyCode: 13});
+    let isEnterKeyPressed = component['validateEnterPressed'].call(component, { keyCode: 13 });
     expect(isEnterKeyPressed).toBeTruthy();
 
-    isEnterKeyPressed = component['validateEnterPressed'].call(component, {keyCode: 65});
+    isEnterKeyPressed = component['validateEnterPressed'].call(component, { keyCode: 65 });
     expect(isEnterKeyPressed).toBeFalsy();
   });
 
@@ -180,7 +183,6 @@ describe('PoLookupModalComponent', () => {
   });
 
   describe('Methods: ', () => {
-
     it('sortBy: should set sort property', () => {
       const expectedValue: PoTableColumnSort = { column: { property: 'name' }, type: PoTableColumnSortType.Ascending };
 
@@ -191,5 +193,4 @@ describe('PoLookupModalComponent', () => {
       expect(component['sort']).toEqual(expectedValue);
     });
   });
-
 });

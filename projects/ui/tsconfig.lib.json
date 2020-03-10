@@ -7,10 +7,7 @@
     "declaration": true,
     "inlineSources": true,
     "types": [],
-    "lib": [
-      "dom",
-      "es2018"
-    ]
+    "lib": ["dom", "es2018"]
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,
@@ -19,11 +16,5 @@
     "strictInjectionParameters": true,
     "enableResourceInlining": true
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts",
-    "**/*.e2e-spec.ts",
-    "**/*.po.ts",
-    "./node_modules/"
-  ]
+  "exclude": ["test.ts", "**/*.spec.ts", "**/*.e2e-spec.ts", "**/*.po.ts", "./node_modules/"]
 }

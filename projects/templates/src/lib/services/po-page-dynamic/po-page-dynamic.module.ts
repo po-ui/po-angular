@@ -9,12 +9,7 @@ import { PoPageDynamicService } from './po-page-dynamic.service';
  * Módulo do serviço do po-page-dynamic-service.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    HttpClientModule
-  ],
-  providers: [
-    PoPageDynamicService
-  ]
+  imports: [CommonModule, HttpClientModule],
+  providers: [PoPageDynamicService]
 })
-export class PoPageDynamicModule { }
+export class PoPageDynamicModule {}

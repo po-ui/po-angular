@@ -20,7 +20,6 @@ const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
 
 @Directive()
 export class PoTooltipBaseDirective {
-
   private _tooltip: string = '';
   protected _tooltipPosition?: string = 'bottom';
 
@@ -31,7 +30,7 @@ export class PoTooltipBaseDirective {
    */
   @Input('p-tooltip') set tooltip(tooltip: string) {
     if (tooltip && tooltip.length > CONTENT_MAX_LENGTH) {
-       this._tooltip = tooltip.substring(0, CONTENT_MAX_LENGTH);
+      this._tooltip = tooltip.substring(0, CONTENT_MAX_LENGTH);
     } else {
       this._tooltip = tooltip;
     }
@@ -71,5 +70,4 @@ export class PoTooltipBaseDirective {
   get tooltipPosition(): string {
     return this._tooltipPosition;
   }
-
 }

@@ -5,7 +5,6 @@ import { PoCalendarBaseComponent } from './po-calendar-base.component';
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
 
 describe('PoCalendarBaseComponent:', () => {
-
   let component: PoCalendarBaseComponent;
   let poDate: PoDateService;
   let poCalendarLangService: PoCalendarLangService;
@@ -18,7 +17,6 @@ describe('PoCalendarBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-locale: should update with valid values and call `initializeLanguage`', () => {
       const validValues = ['pt', 'es', 'en'];
 
@@ -59,14 +57,11 @@ describe('PoCalendarBaseComponent:', () => {
       expect(component.poDate.getDateForDateRange).toHaveBeenCalledWith(minDate, true);
       expect(component.minDate).toEqual(dateExpected);
     });
-
   });
 
   describe('Methods:', () => {
-
     it(`initializeLanguage: should call 'setLanguage', 'getWeekDaysArray' and 'getMonthsArray' of
       the 'poCalendarLangService' and set the value of displayWeekDays and displayMonths`, () => {
-
       const weekDays = ['sun', 'mon', 'tue'];
       const months = ['jan', 'feb', 'mar'];
       component.locale = 'en';
@@ -84,7 +79,5 @@ describe('PoCalendarBaseComponent:', () => {
       expect(component.displayWeekDays).toEqual(weekDays);
       expect(component.displayMonths).toEqual(months);
     });
-
   });
-
 });

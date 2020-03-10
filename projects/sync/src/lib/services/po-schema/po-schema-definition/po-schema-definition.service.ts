@@ -14,8 +14,7 @@ import { PoSyncSchema } from './../../po-sync/interfaces/po-sync-schema.interfac
  */
 @Injectable()
 export class PoSchemaDefinitionService {
-
-  constructor(private poStorage: PoStorageService) { }
+  constructor(private poStorage: PoStorageService) {}
 
   /**
    * Destrói a chave do *storage* que contém as definições dos *schemas*.
@@ -77,5 +76,4 @@ export class PoSchemaDefinitionService {
     schemas = schemas.map(replaceUpdatedSchema);
     return this.saveAll(schemas);
   }
-
 }

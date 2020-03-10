@@ -42,7 +42,6 @@ const poCheckboxGroupColumnsTotalLength: number = 12;
  */
 @Directive()
 export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Validator {
-
   checkboxGroupOptionsView: Array<PoCheckboxGroupOptionView>;
   checkedOptions: any = {};
   checkedOptionsList: any = [];
@@ -202,7 +201,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
 
   changeValue() {
-
     const value = this.checkIndeterminate();
 
     if (this.propagateChange) {
@@ -229,7 +227,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     this.propagateChange = fn;
   }
 
-  registerOnTouched(fn: any): void { }
+  registerOnTouched(fn: any): void {}
 
   writeValue(optionsModel: any) {
     if (optionsModel && this.checkedOptions !== optionsModel) {
@@ -244,16 +242,17 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     this.validatorChange = fn;
   }
 
-  validate(abstractControl: AbstractControl): { [key: string]: any; } {
-
-    if ((!this.indeterminate && requiredFailed(this.required, this.disabled, abstractControl.value)) || this.isInvalidIndeterminate()) {
+  validate(abstractControl: AbstractControl): { [key: string]: any } {
+    if (
+      (!this.indeterminate && requiredFailed(this.required, this.disabled, abstractControl.value)) ||
+      this.isInvalidIndeterminate()
+    ) {
       return {
         required: {
-          valid: false,
+          valid: false
         }
       };
     }
-
   }
 
   protected validateModel(model: any) {
@@ -273,14 +272,12 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
 
     if (!this.indeterminate && this.checkedOptionsList.includes(optionChecked.value)) {
       this.checkedOptionsList.splice(this.checkedOptionsList.indexOf(optionChecked.value), 1);
-
     } else if (!this.indeterminate) {
       this.checkedOptionsList.push(optionChecked.value);
     }
   }
 
   private generateCheckOptions(optionsModel: any) {
-
     this.checkedOptions = {};
 
     if (optionsModel instanceof Array) {
@@ -324,5 +321,4 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
       return { ...option, id: uuid() };
     });
   }
-
 }

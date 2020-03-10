@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-textarea-basic',
   templateUrl: './sample-po-textarea-basic.component.html'
 })
-export class SamplePoTextareaBasicComponent { }
+export class SamplePoTextareaBasicComponent {}

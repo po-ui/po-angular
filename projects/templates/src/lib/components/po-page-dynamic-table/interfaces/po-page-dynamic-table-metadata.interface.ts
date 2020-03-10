@@ -11,7 +11,6 @@ import { PoPageDynamicTableOptions } from './po-page-dynamic-table-options.inter
  *
  */
 export interface PoPageDynamicTableMetaData extends PoPageDynamicTableOptions {
-
   /**
    *
    * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso sejam definidas ações na propriedade `p-actions`

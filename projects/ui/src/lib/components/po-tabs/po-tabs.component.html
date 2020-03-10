@@ -1,9 +1,8 @@
-<div class="po-tabs-container"
-  [class.po-tabs-container-mobile]="isMobileDevice">
+<div class="po-tabs-container" [class.po-tabs-container-mobile]="isMobileDevice">
   <div class="po-tabs-header">
-
     <ng-container *ngFor="let tab of tabs; trackBy: trackByFn">
-      <po-tab-button *ngIf="isVisibleTab(tab)"
+      <po-tab-button
+        *ngIf="isVisibleTab(tab)"
         class="po-tab-button"
         [class.po-tab-button-mobile]="isMobileDevice"
         [p-active]="tab.active"
@@ -15,11 +14,13 @@
         (keyup.enter)="closePopover()"
         (p-activated)="onTabActive(tab)"
         (p-change-state)="onTabChangeState(tab)"
-        (p-click)="selectedTab(tab)">
+        (p-click)="selectedTab(tab)"
+      >
       </po-tab-button>
     </ng-container>
 
-    <po-tab-dropdown #tabDropdown
+    <po-tab-dropdown
+      #tabDropdown
       *ngIf="isShowTabDropdown"
       class="po-tab-button po-tab-dropdown"
       p-label="Mais"
@@ -27,7 +28,8 @@
       [p-tabs]="overflowedTabs"
       (p-activated)="onTabActive($event)"
       (p-change-state)="onTabChangeState($event)"
-      (p-click)="selectedTab($event)">
+      (p-click)="selectedTab($event)"
+    >
     </po-tab-dropdown>
   </div>
 </div>
@@ -35,4 +37,3 @@
 <div class="po-tabs-content">
   <ng-content></ng-content>
 </div>
-

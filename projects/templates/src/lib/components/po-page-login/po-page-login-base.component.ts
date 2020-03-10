@@ -2,7 +2,14 @@ import { Subscription } from 'rxjs';
 import { EventEmitter, Input, OnDestroy, Output, Directive } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { convertToBoolean, convertToInt, getShortBrowserLanguage, isExternalLink, isTypeof, poLocaleDefault } from './../../utils/util';
+import {
+  convertToBoolean,
+  convertToInt,
+  getShortBrowserLanguage,
+  isExternalLink,
+  isTypeof,
+  poLocaleDefault
+} from './../../utils/util';
 
 import { PoPageLogin } from './interfaces/po-page-login.interface';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
@@ -14,7 +21,7 @@ import { PoPageLoginService } from './po-page-login.service';
 const poPageLoginContentMaxLength = 40;
 
 export const poPageLoginLiteralsDefault = {
-  en: <PoPageLoginLiterals> {
+  en: <PoPageLoginLiterals>{
     title: 'Welcome',
     loginErrorPattern: 'Invalid Login',
     loginHint: `Your login user was given to you at your first day.
@@ -35,11 +42,12 @@ export const poPageLoginLiteralsDefault = {
     forgotYourPassword: 'Forgot your password?',
     ifYouTryHarder: 'If you try ',
     attempts: '{0} more time(s) ',
-    yourUserWillBeBlocked: 'without success your user will be blocked and you will be left 24 hours without being able to access :(',
+    yourUserWillBeBlocked:
+      'without success your user will be blocked and you will be left 24 hours without being able to access :(',
     createANewPasswordNow: 'Better create a new password now! You will be able to log into the system right away.',
     iForgotMyPassword: 'I forgot my password'
   },
-  es: <PoPageLoginLiterals> {
+  es: <PoPageLoginLiterals>{
     title: 'Bienvenido',
     loginErrorPattern: 'Login inválido',
     loginHint: `Su usuario ha sido entregado para usted en su primer día.
@@ -61,10 +69,11 @@ export const poPageLoginLiteralsDefault = {
     ifYouTryHarder: 'Si intenta más ',
     attempts: '{0} vez/veces ',
     yourUserWillBeBlocked: 'sin éxito su usuario sera bloqueado y usted vás permanecer 24 horas sin poder acceder a :(',
-    createANewPasswordNow: '¡Mejor crear una nueva contraseña ahora! Usted podrá entrar en el sistema inmediatamente después.',
+    createANewPasswordNow:
+      '¡Mejor crear una nueva contraseña ahora! Usted podrá entrar en el sistema inmediatamente después.',
     iForgotMyPassword: 'Olvide mi contraseña'
   },
-  pt: <PoPageLoginLiterals> {
+  pt: <PoPageLoginLiterals>{
     title: 'Bem-vindo',
     loginErrorPattern: 'Login inválido',
     loginHint: `Seu usuário foi entregue a você no seu primeiro dia.
@@ -89,7 +98,7 @@ export const poPageLoginLiteralsDefault = {
     createANewPasswordNow: 'Melhor criar uma senha nova agora! Você vai poder entrar no sistema logo em seguida.',
     iForgotMyPassword: 'Esqueci minha senha'
   },
-  ru: <PoPageLoginLiterals> {
+  ru: <PoPageLoginLiterals>{
     title: 'Добро пожаловать!',
     loginErrorPattern: 'Неверный логин',
     loginHint: `Ваш логин был предоставлен вам в первый день.
@@ -161,7 +170,6 @@ export const poPageLoginLiteralTo = {
  */
 @Directive()
 export abstract class PoPageLoginBaseComponent implements OnDestroy {
-
   allLoginErrors: Array<string> = [];
   allPasswordErrors: Array<string> = [];
   customFieldObject: PoPageLoginCustomField;
@@ -244,7 +252,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    */
   @Input('p-custom-field') set customField(value: string | PoPageLoginCustomField) {
     if (value) {
-
       if (isTypeof(value, 'string')) {
         this.customFieldType = 'input';
         this._customField = value;
@@ -254,7 +261,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
 
       if (isTypeof(value, 'object') && !Array.isArray(value) && value['property']) {
         this._customField = value;
-        this.customFieldObject = <PoPageLoginCustomField> value;
+        this.customFieldObject = <PoPageLoginCustomField>value;
 
         if (!this.customFieldObject.options && !this.customFieldObject.url) {
           this.customFieldType = 'input';
@@ -264,7 +271,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
 
         return;
       }
-
     }
 
     this._customField = undefined;
@@ -663,8 +669,9 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * @default `PoPageLoginAuthenticationType.Basic`
    */
   @Input('p-authentication-type') set authenticationType(value: PoPageLoginAuthenticationType) {
-    this._authenticationType =
-    (<any>Object).values(PoPageLoginAuthenticationType).includes(value) ? value : PoPageLoginAuthenticationType.Basic;
+    this._authenticationType = (<any>Object).values(PoPageLoginAuthenticationType).includes(value)
+      ? value
+      : PoPageLoginAuthenticationType.Basic;
   }
 
   get authenticationType(): PoPageLoginAuthenticationType {
@@ -842,7 +849,9 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   }
 
   get pageLoginLiterals(): PoPageLoginLiterals {
-    const loginHintWithContactEmail = this.contactEmail ? this.concatenateLoginHintWithContactEmail(this.contactEmail) : undefined;
+    const loginHintWithContactEmail = this.contactEmail
+      ? this.concatenateLoginHintWithContactEmail(this.contactEmail)
+      : undefined;
 
     const titleWithProductName = this.productName ? this.concatenateTitleWithProductName(this.productName) : undefined;
 
@@ -855,7 +864,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
     };
   }
 
-  constructor(private loginService: PoPageLoginService, public router: Router) { }
+  constructor(private loginService: PoPageLoginService, public router: Router) {}
 
   ngOnDestroy() {
     if (this.loginSubscription) {
@@ -879,19 +888,21 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
     }
 
     if (this.authenticationUrl) {
-      this.loginSubscription =
-      this.loginService.onLogin(this.authenticationUrl, this.authenticationType, loginForm)
-      .subscribe(data => {
-        this.setValuesToProperties();
-        sessionStorage.setItem('PO_USER_LOGIN', JSON.stringify(data));
-        this.openInternalLink('/');
-      },
-      error => {
-        if (error.error.code === '400' || error.error.code === '401') {
-          this.setValuesToProperties(error);
-          this.redirectBlockedUrl(this.exceededAttemptsWarning, this.blockedUrl);
-        }
-      });
+      this.loginSubscription = this.loginService
+        .onLogin(this.authenticationUrl, this.authenticationType, loginForm)
+        .subscribe(
+          data => {
+            this.setValuesToProperties();
+            sessionStorage.setItem('PO_USER_LOGIN', JSON.stringify(data));
+            this.openInternalLink('/');
+          },
+          error => {
+            if (error.error.code === '400' || error.error.code === '401') {
+              this.setValuesToProperties(error);
+              this.redirectBlockedUrl(this.exceededAttemptsWarning, this.blockedUrl);
+            }
+          }
+        );
     } else {
       this.loginSubmit.emit(loginForm);
       this.showExceededAttemptsWarning = this.exceededAttemptsWarning > 0;

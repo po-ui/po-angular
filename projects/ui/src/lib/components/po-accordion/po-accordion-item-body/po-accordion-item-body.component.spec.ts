@@ -14,8 +14,8 @@ describe('PoAccordionItemBodyComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoAccordionItemBodyComponent ],
-      imports: [ BrowserAnimationsModule ]
+      declarations: [PoAccordionItemBodyComponent],
+      imports: [BrowserAnimationsModule]
     });
   });
 
@@ -32,7 +32,6 @@ describe('PoAccordionItemBodyComponent:', () => {
 
   describe('Templates:', () => {
     it('shouldn`t have `po-accordion-item-body` by default', () => {
-
       fixture.detectChanges();
 
       const body = nativeElement.querySelector('.po-accordion-item-body');
@@ -57,5 +56,4 @@ describe('PoAccordionItemBodyComponent:', () => {
       expect(body).toBeFalsy();
     });
   });
-
 });

@@ -15,20 +15,8 @@ import { PoGridHeadComponent } from './po-grid-head/po-grid-head.component';
  * Módulo do componente po-grid.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-
-    PoFieldModule
-  ],
-  declarations: [
-    PoGridCellActionComponent,
-    PoGridCellComponent,
-    PoGridComponent,
-    PoGridHeadComponent
-  ],
-  exports: [
-    PoGridComponent
-  ]
+  imports: [CommonModule, FormsModule, PoFieldModule],
+  declarations: [PoGridCellActionComponent, PoGridCellComponent, PoGridComponent, PoGridHeadComponent],
+  exports: [PoGridComponent]
 })
-export class PoGridModule { }
+export class PoGridModule {}

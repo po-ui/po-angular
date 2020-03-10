@@ -1,7 +1,6 @@
 import { browser, by, element } from 'protractor';
 
 export class PoRadioTest {
-
   private sampleRadio = 'sample-po-radio-group';
 
   private labelRadio = '.po-radio-group-label';
@@ -10,12 +9,18 @@ export class PoRadioTest {
 
   private getInterestArea(area) {
     return element(
-      by.css(`${this.sampleRadio} po-radio-group[name="interestName"] ${this.inputRadio}[value="${area}"]+${this.labelRadio}`));
+      by.css(
+        `${this.sampleRadio} po-radio-group[name="interestName"] ${this.inputRadio}[value="${area}"]+${this.labelRadio}`
+      )
+    );
   }
 
   private getGenderName(gender) {
     return element(
-      by.css(`${this.sampleRadio} po-radio-group[name="genderName"] ${this.inputRadio}[value="${gender}"]+${this.labelRadio}`));
+      by.css(
+        `${this.sampleRadio} po-radio-group[name="genderName"] ${this.inputRadio}[value="${gender}"]+${this.labelRadio}`
+      )
+    );
   }
 
   navigateTo() {
@@ -53,5 +58,4 @@ export class PoRadioTest {
   get poRadioMale() {
     return this.getGenderName('male');
   }
-
 }

@@ -17,12 +17,13 @@ import { PoMenuFilter } from '../po-menu-filter/po-menu-filter.interface';
  */
 @Injectable()
 export class PoMenuService implements PoMenuFilter {
-
   private _url: string;
 
-  get url(): string { return this._url; }
+  get url(): string {
+    return this._url;
+  }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   configProperties(url: string) {
     this._url = url;
@@ -34,8 +35,8 @@ export class PoMenuService implements PoMenuFilter {
       ...params
     };
 
-    return this.http.get(this.url, { params: filterParams })
+    return this.http
+      .get(this.url, { params: filterParams })
       .pipe(map((response: { items: Array<PoMenuItemFiltered> }) => response && response.items));
   }
-
 }

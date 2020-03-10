@@ -27,7 +27,6 @@ import { InputBoolean } from '../../../decorators';
  */
 @Directive()
 export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnDestroy, OnInit, Validator {
-
   private _disabled?: boolean = false;
   private _filterService: PoLookupFilter | string;
   private _noAutocomplete: boolean;
@@ -276,7 +275,6 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   constructor(private defaultService: PoLookupFilterService) {}
 
   ngOnDestroy() {
-
     if (this.getSubscription) {
       this.getSubscription.unsubscribe();
     }
@@ -292,8 +290,7 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
     } else {
       this.keysDescription = [];
 
-      this.keysDescription = this.columns.filter(element => element.fieldLabel)
-        .map(element => element.property);
+      this.keysDescription = this.columns.filter(element => element.fieldLabel).map(element => element.property);
     }
   }
 
@@ -329,34 +326,36 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   }
 
   searchById(value: string) {
-    if (typeof(value) === 'string') {
+    if (typeof value === 'string') {
       value = value.trim();
     }
 
     if (value !== '') {
-      this.getSubscription = this.service.getObjectByValue(value, this.filterParams).subscribe(element => {
-        if (element) {
-          this.oldValue = element[this.fieldLabel];
-          this.selectValue(element);
-          this.setViewValue(this.getFormattedLabel(element), element);
-        } else {
+      this.getSubscription = this.service.getObjectByValue(value, this.filterParams).subscribe(
+        element => {
+          if (element) {
+            this.oldValue = element[this.fieldLabel];
+            this.selectValue(element);
+            this.setViewValue(this.getFormattedLabel(element), element);
+          } else {
+            this.cleanModel();
+          }
+        },
+        error => {
           this.cleanModel();
+          this.onError.emit(error);
         }
-      }, error => {
-        this.cleanModel();
-        this.onError.emit(error);
-      });
-
+      );
     } else {
       this.cleanModel();
     }
   }
 
-  validate(abstractControl: AbstractControl): { [key: string]: any; } {
+  validate(abstractControl: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {
-          valid: false,
+          valid: false
         }
       };
     }
@@ -413,16 +412,13 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   }
 
   private setService(service: PoLookupFilter | string) {
-
     if (isTypeof(service, 'object')) {
-      this.service = <PoLookupFilterService> service;
+      this.service = <PoLookupFilterService>service;
     }
 
     if (service && isTypeof(service, 'string')) {
       this.service = this.defaultService;
       this.service.setUrl(service);
     }
-
   }
-
 }

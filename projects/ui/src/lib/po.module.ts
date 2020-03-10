@@ -26,7 +26,7 @@ import { PoNotificationService } from './services/po-notification/po-notificatio
     PoPipesModule,
     PoServicesModule
   ],
-  providers: [ PoNotificationService ],
+  providers: [PoNotificationService],
   bootstrap: []
 })
-export class PoModule { }
+export class PoModule {}

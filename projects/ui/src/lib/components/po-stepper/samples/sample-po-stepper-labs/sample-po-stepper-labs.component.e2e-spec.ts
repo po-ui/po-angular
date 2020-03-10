@@ -10,5 +10,4 @@ describe('SamplePoStepperLabs E2E', () => {
   it('Check if the element Stepper is present', () => {
     expect(stepper.poStepper.isPresent()).toBeTruthy();
   });
-
 });

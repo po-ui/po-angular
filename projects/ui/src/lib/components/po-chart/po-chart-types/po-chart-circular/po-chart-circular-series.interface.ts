@@ -1,5 +1,4 @@
 export interface PoCircularChartSeries {
-
   /** Define o valor da categoria do objeto. */
   category: string;
 
@@ -7,5 +6,4 @@ export interface PoCircularChartSeries {
   value: number;
 
   color?: string;
-
 }

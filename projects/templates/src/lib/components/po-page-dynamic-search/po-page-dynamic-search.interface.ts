@@ -8,7 +8,6 @@ import { PoDynamicFormField, PoPageDefault } from '@portinari/portinari-ui';
  * Interface para o atributo `filter` do componente `po-page-dynamic-search`.
  */
 export interface PoPageDynamicSearch extends PoPageDefault {
-
   /**
    * @description
    *
@@ -30,5 +29,4 @@ export interface PoPageDynamicSearch extends PoPageDefault {
    * receberá o valor digitado ao ser invocado.
    */
   quickSearch?: Function;
-
 }

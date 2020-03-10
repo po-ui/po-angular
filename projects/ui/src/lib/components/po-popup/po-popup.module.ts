@@ -9,16 +9,10 @@ import { PoPopupComponent } from './po-popup.component';
  * Módulo do componente po-popup.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-  ],
-  declarations: [
-    PoPopupComponent,
-  ],
-  exports: [
-    PoPopupComponent
-  ],
+  imports: [CommonModule],
+  declarations: [PoPopupComponent],
+  exports: [PoPopupComponent],
   providers: [],
   schemas: []
 })
-export class PoPopupModule { }
+export class PoPopupModule {}

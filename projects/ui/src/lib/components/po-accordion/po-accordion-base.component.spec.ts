@@ -6,5 +6,4 @@ describe('PoAccordionBaseComponent:', () => {
   it('should be created', () => {
     expect(component instanceof PoAccordionBaseComponent).toBeTruthy();
   });
-
 });

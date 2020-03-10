@@ -13,22 +13,20 @@ import { PoToasterType } from './po-toaster/po-toaster-type.enum';
 @NgModule({
   imports: [CommonModule],
   declarations: [PoToasterComponent],
-  providers: [
-    PoNotificationService
-  ]
+  providers: [PoNotificationService]
 })
-class TestModule { }
+class TestModule {}
 
 @Component({
-  template: `test component`
+  template: `
+    test component
+  `
 })
 class TestComponent {
-
-  constructor(service: PoNotificationService) { }
+  constructor(service: PoNotificationService) {}
 }
 
 describe('PoNotificationService ', () => {
-
   let fixture: ComponentFixture<TestComponent>;
 
   configureTestSuite(() => {
@@ -52,96 +50,100 @@ describe('PoNotificationService ', () => {
   });
 
   // TODO NG V9
-  xit('should be a create toaster top', inject([PoNotificationService], (poNotificationService: PoNotificationService) => {
-
-    poNotificationService.createToaster({
-      message: '',
-      type: PoToasterType.Error,
-      orientation: PoToasterOrientation.Top,
-      position: 1,
-      duration: 10000
-    });
-
-    jasmine.clock().tick(10001);
-
-    expect(poNotificationService.stackTop.length === 0).toBeTruthy();
-
-  }));
-
-  it('should be a create toaster bottom', inject([PoNotificationService], (poNotificationService: PoNotificationService) => {
-
-    poNotificationService.createToaster({
-      message: '',
-      type: PoToasterType.Error,
-      orientation: PoToasterOrientation.Bottom,
-      position: 1,
-      duration: 10000
-    });
-
-    jasmine.clock().tick(5001);
-
-    poNotificationService.createToaster({
-      message: '',
-      type: PoToasterType.Error,
-      orientation: PoToasterOrientation.Bottom,
-      position: 1,
-      duration: 10000
-    });
-
-    jasmine.clock().tick(5000);
-
-    expect(poNotificationService.stackBottom.length === 1).toBeTruthy();
-
-  }));
-
-  it('should be a create toaster with action', inject([PoNotificationService], (poNotificationService: PoNotificationService) => {
-    poNotificationService.createToaster({
-      action: () => true,
-      message: '',
-      type: PoToasterType.Error,
-      orientation: PoToasterOrientation.Top,
-      position: 1
-    });
-
-    jasmine.clock().tick(10001);
-
-    expect(poNotificationService.stackTop.length === 0).toBeFalsy();
-  }));
-
-  describe('Methods: ', () => {
-
-    // TODO Ng V9
-    xit('should be a create toaster with 3 seconds duration',
-      inject([PoNotificationService], (poNotificationService: PoNotificationService) => {
-
+  xit('should be a create toaster top', inject(
+    [PoNotificationService],
+    (poNotificationService: PoNotificationService) => {
       poNotificationService.createToaster({
         message: '',
-        type: PoToasterType.Success,
+        type: PoToasterType.Error,
+        orientation: PoToasterOrientation.Top,
         position: 1,
-        duration: 3000
+        duration: 10000
       });
 
-      jasmine.clock().tick(3001);
+      jasmine.clock().tick(10001);
 
       expect(poNotificationService.stackTop.length === 0).toBeTruthy();
+    }
+  ));
 
-    }));
-
-    // TODO Ng V9
-    xit('should be a create toaster with 3 seconds duration as default duration',
-      inject([PoNotificationService], (poNotificationService: PoNotificationService) => {
-
-      poNotificationService.setDefaultDuration(3000);
+  it('should be a create toaster bottom', inject(
+    [PoNotificationService],
+    (poNotificationService: PoNotificationService) => {
       poNotificationService.createToaster({
         message: '',
-        type: PoToasterType.Success,
+        type: PoToasterType.Error,
+        orientation: PoToasterOrientation.Bottom,
+        position: 1,
+        duration: 10000
+      });
+
+      jasmine.clock().tick(5001);
+
+      poNotificationService.createToaster({
+        message: '',
+        type: PoToasterType.Error,
+        orientation: PoToasterOrientation.Bottom,
+        position: 1,
+        duration: 10000
+      });
+
+      jasmine.clock().tick(5000);
+
+      expect(poNotificationService.stackBottom.length === 1).toBeTruthy();
+    }
+  ));
+
+  it('should be a create toaster with action', inject(
+    [PoNotificationService],
+    (poNotificationService: PoNotificationService) => {
+      poNotificationService.createToaster({
+        action: () => true,
+        message: '',
+        type: PoToasterType.Error,
+        orientation: PoToasterOrientation.Top,
         position: 1
       });
 
-      jasmine.clock().tick(3001);
+      jasmine.clock().tick(10001);
 
-      expect(poNotificationService.stackTop.length === 0).toBeTruthy();
+      expect(poNotificationService.stackTop.length === 0).toBeFalsy();
+    }
+  ));
 
-    }));
+  describe('Methods: ', () => {
+    // TODO Ng V9
+    xit('should be a create toaster with 3 seconds duration', inject(
+      [PoNotificationService],
+      (poNotificationService: PoNotificationService) => {
+        poNotificationService.createToaster({
+          message: '',
+          type: PoToasterType.Success,
+          position: 1,
+          duration: 3000
+        });
+
+        jasmine.clock().tick(3001);
+
+        expect(poNotificationService.stackTop.length === 0).toBeTruthy();
+      }
+    ));
+
+    // TODO Ng V9
+    xit('should be a create toaster with 3 seconds duration as default duration', inject(
+      [PoNotificationService],
+      (poNotificationService: PoNotificationService) => {
+        poNotificationService.setDefaultDuration(3000);
+        poNotificationService.createToaster({
+          message: '',
+          type: PoToasterType.Success,
+          position: 1
+        });
+
+        jasmine.clock().tick(3001);
+
+        expect(poNotificationService.stackTop.length === 0).toBeTruthy();
+      }
+    ));
   });
 });

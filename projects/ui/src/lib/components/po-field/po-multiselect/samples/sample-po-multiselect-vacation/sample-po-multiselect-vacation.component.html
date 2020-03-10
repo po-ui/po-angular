@@ -1,15 +1,10 @@
 <form #f="ngForm">
   <h3>Collective vacations</h3>
 
-  <hr>
+  <hr />
 
   <div class="po-row">
-    <po-datepicker
-      class="po-md-6"
-      name="initialPeriod"
-      [(ngModel)]="initialPeriod"
-      p-label="Initial period"
-      p-required>
+    <po-datepicker class="po-md-6" name="initialPeriod" [(ngModel)]="initialPeriod" p-label="Initial period" p-required>
     </po-datepicker>
 
     <po-datepicker
@@ -18,7 +13,8 @@
       [(ngModel)]="finalPeriod"
       p-label="Final period"
       p-required
-      [p-min-date]="initialPeriod">
+      [p-min-date]="initialPeriod"
+    >
     </po-datepicker>
   </div>
 
@@ -30,7 +26,8 @@
       p-help="Maximum of days that employs can choose"
       p-label="How many days of vacation the employees will be able to have?"
       p-required
-      [p-options]="daysOptions">
+      [p-options]="daysOptions"
+    >
     </po-radio-group>
   </div>
 
@@ -41,7 +38,8 @@
       [(ngModel)]="employeesVacations"
       p-label="Select your employees for collective vacations"
       [p-options]="employees"
-      p-required>
+      p-required
+    >
     </po-multiselect>
   </div>
 
@@ -51,46 +49,26 @@
       name="Approve Vacations"
       p-label="Approve Vacations"
       [p-disabled]="f.form.invalid"
-      (p-click)="updateNameEmployeesVacations();modalEmployeesVacation.open()">
+      (p-click)="updateNameEmployeesVacations(); modalEmployeesVacation.open()"
+    >
     </po-button>
 
-    <po-button
-      class="po-md-3"
-      p-label="Clean"
-      (p-click)="clean()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Clean" (p-click)="clean()"> </po-button>
   </div>
 </form>
 
-<po-modal #modalEmployeesVacation
-  p-title="Collective Vacation">
+<po-modal #modalEmployeesVacation p-title="Collective Vacation">
   <div class="po-row">
-    <po-info
-      class="po-md-5"
-      p-label="Initial period"
-      [p-value]="initialPeriod | date:'longDate':'+0000'">
-    </po-info>
+    <po-info class="po-md-5" p-label="Initial period" [p-value]="initialPeriod | date: 'longDate':'+0000'"> </po-info>
 
-    <po-info
-      class="po-md-5"
-      p-label="Final period"
-      [p-value]="finalPeriod | date:'longDate':'+0000'">
-    </po-info>
+    <po-info class="po-md-5" p-label="Final period" [p-value]="finalPeriod | date: 'longDate':'+0000'"> </po-info>
 
-    <po-info
-      class="po-md-2"
-      p-label="Days"
-      [p-value]="days">
-    </po-info>
+    <po-info class="po-md-2" p-label="Days" [p-value]="days"> </po-info>
   </div>
 
-  <hr>
+  <hr />
 
   <div class="po-row">
-    <po-info
-      class="po-lg-12"
-      p-label="Employees"
-      [p-value]="nameEmployeesVacations">
-    </po-info>
+    <po-info class="po-lg-12" p-label="Employees" [p-value]="nameEmployeesVacations"> </po-info>
   </div>
 </po-modal>

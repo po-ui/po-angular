@@ -17,22 +17,8 @@ import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
  * Módulo do componente po-menu.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    PoBadgeModule,
-    PoFieldModule,
-    PoLoadingModule
-  ],
-  declarations: [
-    PoMenuComponent,
-    PoMenuFilterComponent,
-    PoMenuHeaderTemplateDirective,
-    PoMenuItemComponent
-  ],
-  exports: [
-    PoMenuComponent,
-    PoMenuHeaderTemplateDirective
-  ]
+  imports: [CommonModule, RouterModule, PoBadgeModule, PoFieldModule, PoLoadingModule],
+  declarations: [PoMenuComponent, PoMenuFilterComponent, PoMenuHeaderTemplateDirective, PoMenuItemComponent],
+  exports: [PoMenuComponent, PoMenuHeaderTemplateDirective]
 })
-export class PoMenuModule { }
+export class PoMenuModule {}

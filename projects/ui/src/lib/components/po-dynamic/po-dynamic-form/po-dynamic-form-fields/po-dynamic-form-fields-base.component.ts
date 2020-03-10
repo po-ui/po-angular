@@ -10,7 +10,6 @@ import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.int
 
 @Directive()
 export class PoDynamicFormFieldsBaseComponent {
-
   private _fields: Array<PoDynamicFormField>;
   private _value?: any = {};
 
@@ -56,7 +55,9 @@ export class PoDynamicFormFieldsBaseComponent {
 
     this.fields.forEach(field => {
       if (this.existsProperty(visibleFields, field.property)) {
-        this.printError(`"po-dynamic-form" property "${field.property}" está duplicado. Interface: PoDynamicFormField.`);
+        this.printError(
+          `"po-dynamic-form" property "${field.property}" está duplicado. Interface: PoDynamicFormField.`
+        );
         return;
       }
 
@@ -74,11 +75,11 @@ export class PoDynamicFormFieldsBaseComponent {
   }
 
   // converte um array em string para um array de objetos que contem label e value.
-  private convertOptions(options: Array<any>): Array<{ label: string, value: string }> {
+  private convertOptions(options: Array<any>): Array<{ label: string; value: string }> {
     const everyOptionString = options.every(option => typeof option === 'string');
 
     if (everyOptionString) {
-      return options.map(value => ({label: value, value}));
+      return options.map(value => ({ label: value, value }));
     }
 
     return options;
@@ -90,11 +91,13 @@ export class PoDynamicFormFieldsBaseComponent {
     const options = !!field.options ? this.convertOptions(field.options) : undefined;
     const focus = this.hasFocus(field);
 
-    const componentClass = getGridColumnsClasses(field.gridSmColumns,
+    const componentClass = getGridColumnsClasses(
+      field.gridSmColumns,
       field.gridMdColumns,
       field.gridLgColumns,
       field.gridXlColumns,
-      field.gridColumns);
+      field.gridColumns
+    );
 
     return {
       label: this.titleCasePipe.transform(field.property),
@@ -113,7 +116,7 @@ export class PoDynamicFormFieldsBaseComponent {
   }
 
   // recupera o componente de acordo com algumas regras do field.
-  private getComponentControl(field: PoDynamicFormField = <any> {}) {
+  private getComponentControl(field: PoDynamicFormField = <any>{}) {
     const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
 
     if (this.isNumberType(field, type)) {
@@ -168,7 +171,7 @@ export class PoDynamicFormFieldsBaseComponent {
   private isCurrencyType(field: PoDynamicFormField, type: string) {
     const { mask, pattern } = field;
 
-    return this.compareTo(type, PoDynamicFieldType.Currency) && (!mask && !pattern);
+    return this.compareTo(type, PoDynamicFieldType.Currency) && !mask && !pattern;
   }
 
   private isLookup(field: PoDynamicFormField) {
@@ -186,7 +189,7 @@ export class PoDynamicFormFieldsBaseComponent {
   private isNumberType(field: PoDynamicFormField, type: string) {
     const { mask, pattern } = field;
 
-    return this.compareTo(type, PoDynamicFieldType.Number) && (!mask && !pattern);
+    return this.compareTo(type, PoDynamicFieldType.Number) && !mask && !pattern;
   }
 
   private isPassword(field: PoDynamicFormField) {
@@ -216,5 +219,4 @@ export class PoDynamicFormFieldsBaseComponent {
   private printError(error: string) {
     console.error(error);
   }
-
 }

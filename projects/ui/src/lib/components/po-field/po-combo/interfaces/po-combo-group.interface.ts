@@ -8,4 +8,4 @@ import { PoComboOptionGroup } from './po-combo-option-group.interface';
  *
  * Interface que extende as propriedades existentes nas interfaces `PoComboOption` e `PoComboOptionGroup`.
  */
-export interface PoComboGroup extends Partial<PoComboOption>, Partial <PoComboOptionGroup> { }
+export interface PoComboGroup extends Partial<PoComboOption>, Partial<PoComboOptionGroup> {}

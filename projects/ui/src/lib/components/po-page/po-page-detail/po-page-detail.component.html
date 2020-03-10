@@ -1,40 +1,39 @@
 <po-page>
   <!-- HEADER -->
-  <po-page-header
-    *ngIf="hasPageHeader()"
-    [p-breadcrumb]="breadcrumb"
-    [p-title]="title">
-
+  <po-page-header *ngIf="hasPageHeader()" [p-breadcrumb]="breadcrumb" [p-title]="title">
     <!-- OPERATIONS -->
     <div *ngIf="hasAnyAction()" class="po-page-header-actions">
-      <po-button *ngIf="hasActionFn('back', parentContext)"
+      <po-button
+        *ngIf="hasActionFn('back', parentContext)"
         [p-icon]="hasEditOrRemoveFn('icon')"
         [p-label]="literals.back"
         [p-type]="hasEditOrRemoveFn('type')"
-        (p-click)="callActionFn('back', parentContext)">
+        (p-click)="callActionFn('back', parentContext)"
+      >
       </po-button>
 
-      <po-button *ngIf="hasActionFn('remove', parentContext)"
+      <po-button
+        *ngIf="hasActionFn('remove', parentContext)"
         [p-icon]="hasEditFn('icon')"
         [p-label]="literals.remove"
         [p-type]="hasEditFn('type')"
-        (p-click)="callActionFn('remove', parentContext)">
+        (p-click)="callActionFn('remove', parentContext)"
+      >
       </po-button>
 
-      <po-button *ngIf="hasActionFn('edit', parentContext)"
+      <po-button
+        *ngIf="hasActionFn('edit', parentContext)"
         p-icon="po-icon-edit"
         p-type="primary"
         [p-label]="literals.edit"
-        (p-click)="callActionFn('edit', parentContext)">
+        (p-click)="callActionFn('edit', parentContext)"
+      >
       </po-button>
     </div>
-
   </po-page-header>
 
   <!-- CONTENT -->
   <po-page-content>
-    <ng-content>
-    </ng-content>
+    <ng-content> </ng-content>
   </po-page-content>
-
 </po-page>

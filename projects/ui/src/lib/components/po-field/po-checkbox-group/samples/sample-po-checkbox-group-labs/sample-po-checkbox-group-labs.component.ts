@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@portinari/portinari-
   templateUrl: './sample-po-checkbox-group-labs.component.html'
 })
 export class SamplePoCheckboxGroupLabsComponent implements OnInit {
-
   checkboxGroup: object;
   columns: number;
   disabled: boolean;
@@ -28,8 +27,8 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
-    { value: 'indeterminate', label: 'Indeterminate'},
-    { value: 'optional', label: 'Optional'},
+    { value: 'indeterminate', label: 'Indeterminate' },
+    { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' }
   ];
 
@@ -63,5 +62,4 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
   private clearOption() {
     this.option = { label: undefined, value: undefined };
   }
-
 }

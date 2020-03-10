@@ -13,7 +13,7 @@ describe('PoToolbarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]), PoToolbarModule ],
+      imports: [RouterTestingModule.withRoutes([]), PoToolbarModule]
     });
   });
 
@@ -30,11 +30,10 @@ describe('PoToolbarComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnInit: should call `setTitle` on ngOnInit', () => {
       component.title = 'Novo programa';
 
-      spyOn(component, <any> 'setTitle');
+      spyOn(component, <any>'setTitle');
 
       component.ngOnInit();
 
@@ -46,11 +45,9 @@ describe('PoToolbarComponent:', () => {
 
       expect(document.title).toBe('po');
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should show po-toolbar-notification if showNotification is true and have notificationActions', () => {
       component.showNotification = true;
       component.notificationActions = [{ label: 'teste' }];
@@ -87,7 +84,7 @@ describe('PoToolbarComponent:', () => {
     });
 
     it('should show actions with `default` icon if have an action', () => {
-      component.actions = [{label: 'teste'}];
+      component.actions = [{ label: 'teste' }];
 
       fixture.detectChanges();
 
@@ -96,7 +93,7 @@ describe('PoToolbarComponent:', () => {
     });
 
     it('should show actions with `po-icon-cart` if has an action and `actionsIcon` is `po-icon-cart`', () => {
-      component.actions = [{label: 'teste'}];
+      component.actions = [{ label: 'teste' }];
       component.actionsIcon = 'po-icon-cart';
 
       fixture.detectChanges();
@@ -114,7 +111,5 @@ describe('PoToolbarComponent:', () => {
       expect(nativeElement.querySelector('po-toolbar-actions')).toBeNull();
       expect(nativeElement.querySelector('.po-icon-cart')).toBeNull();
     });
-
   });
-
 });

@@ -10,16 +10,16 @@ import { PoPageFilter } from './../po-page-filter.interface';
 import { PoPageListLiterals } from './po-page-list-literals.interface';
 
 export const poPageListLiteralsDefault = {
-  en: <PoPageListLiterals> {
+  en: <PoPageListLiterals>{
     otherActions: 'Other actions'
   },
-  es: <PoPageListLiterals> {
+  es: <PoPageListLiterals>{
     otherActions: 'Otras acciones'
   },
-  pt: <PoPageListLiterals> {
+  pt: <PoPageListLiterals>{
     otherActions: 'Outras ações'
   },
-  ru: <PoPageListLiterals> {
+  ru: <PoPageListLiterals>{
     otherActions: 'Другие действия'
   }
 };
@@ -39,7 +39,6 @@ export const poPageListLiteralsDefault = {
  */
 @Directive()
 export abstract class PoPageListBaseComponent extends PoPageDefaultBaseComponent {
-
   private _disclaimerGroup?: PoDisclaimerGroup;
   private _literals: PoPageListLiterals;
 
@@ -64,7 +63,7 @@ export abstract class PoPageListBaseComponent extends PoPageDefaultBaseComponent
    */
   @Input('p-disclaimer-group') set disclaimerGroup(value: PoDisclaimerGroup) {
     if (!value) {
-      value = <any> {};
+      value = <any>{};
     }
 
     this._disclaimerGroup = value;
@@ -135,5 +134,4 @@ export abstract class PoPageListBaseComponent extends PoPageDefaultBaseComponent
 
     this.language = languageService.getShortLanguage();
   }
-
 }

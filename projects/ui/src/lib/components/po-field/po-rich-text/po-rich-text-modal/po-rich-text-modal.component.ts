@@ -17,7 +17,6 @@ const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.
   templateUrl: './po-rich-text-modal.component.html'
 })
 export class PoRichTextModalComponent {
-
   modalType: PoRichTextModalType;
   savedCursorPosition;
   selection = document.getSelection();
@@ -57,7 +56,7 @@ export class PoRichTextModalComponent {
   modalLinkConfirmAction = {
     label: this.linkConfirmAction(),
     disabled: true,
-    action: () => this.isLinkEditing ? this.toEditLink() : this.toInsertLink(this.urlLink, this.urlLinkText)
+    action: () => (this.isLinkEditing ? this.toEditLink() : this.toInsertLink(this.urlLink, this.urlLinkText))
   };
 
   get modalTitle(): string {
@@ -92,7 +91,7 @@ export class PoRichTextModalComponent {
 
   @ViewChild('modalLinkForm') modalLinkForm: NgForm;
 
-  @Output('p-command') command = new EventEmitter<string | { command: string, value: string | any }>();
+  @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();
 
   @Output('p-link-editing') linkEditing = new EventEmitter<any>();
 
@@ -113,16 +112,15 @@ export class PoRichTextModalComponent {
     let command: string;
     if (value && this.modalType === PoRichTextModalType.Image) {
       command = 'insertImage';
-      this.command.emit(({ command, value }));
+      this.command.emit({ command, value });
     }
   }
 
   formModelValidate() {
-    return this.modalLinkConfirmAction.disabled = this.modalLinkForm && this.modalLinkForm.invalid;
+    return (this.modalLinkConfirmAction.disabled = this.modalLinkForm && this.modalLinkForm.invalid);
   }
 
   async insertElementRef() {
-
     let uploadImage: string;
 
     if (this.modalType === PoRichTextModalType.Image && !this.urlImage) {
@@ -182,7 +180,9 @@ export class PoRichTextModalComponent {
       this.formReset(this.modalLinkForm.control);
     }
 
-    setTimeout(() => { this.formModelValidate(); });
+    setTimeout(() => {
+      this.formModelValidate();
+    });
 
     if (this.isSelectedLink) {
       this.isLinkEditing = true;
@@ -199,7 +199,7 @@ export class PoRichTextModalComponent {
         this.selection.addRange(this.savedSelection);
       }
       return true;
-    }  else {
+    } else {
       return false;
     }
   }
@@ -209,7 +209,7 @@ export class PoRichTextModalComponent {
   }
 
   private saveCursorPosition() {
-    this.savedCursorPosition = [ this.selection.focusNode, this.selection.focusOffset ];
+    this.savedCursorPosition = [this.selection.focusNode, this.selection.focusOffset];
   }
 
   private saveSelectionText() {
@@ -230,7 +230,7 @@ export class PoRichTextModalComponent {
     if (isIE()) {
       this.linkElement.parentNode.removeChild(this.linkElement);
     } else {
-    this.linkElement.remove();
+      this.linkElement.remove();
     }
 
     this.toInsertLink(this.urlLink, this.urlLinkText);
@@ -251,5 +251,4 @@ export class PoRichTextModalComponent {
 
     this.cleanUpFields();
   }
-
 }

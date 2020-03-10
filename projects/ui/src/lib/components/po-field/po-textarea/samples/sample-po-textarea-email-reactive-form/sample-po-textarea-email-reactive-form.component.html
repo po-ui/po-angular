@@ -1,96 +1,40 @@
-<po-page-default
-  p-title="Send email"
-  [p-actions]="getPageAction()">
-
+<po-page-default p-title="Send email" [p-actions]="getPageAction()">
   <form [formGroup]="formEmail">
+    <po-email class="po-sm-12" name="from" formControlName="from" p-clean p-label="From" p-required> </po-email>
 
-    <po-email
-      class="po-sm-12"
-      name="from"
-      formControlName="from"
-      p-clean
-      p-label="From"
-      p-required>
-    </po-email>
+    <po-email class="po-sm-12" name="to" formControlName="to" p-clean p-label="To" p-required> </po-email>
 
-    <po-email
-      class="po-sm-12"
-      name="to"
-      formControlName="to"
-      p-clean
-      p-label="To"
-      p-required>
-    </po-email>
+    <po-email class="po-sm-12" name="cc" formControlName="cc" p-clean p-label="CC"> </po-email>
 
-    <po-email
-      class="po-sm-12"
-      name="cc"
-      formControlName="cc"
-      p-clean
-      p-label="CC">
-    </po-email>
-
-    <po-input
-      class="po-sm-12"
-      name="subject"
-      formControlName="subject"
-      p-clean
-      p-label="Subject"
-      p-required>
+    <po-input class="po-sm-12" name="subject" formControlName="subject" p-clean p-label="Subject" p-required>
     </po-input>
 
-    <po-textarea
-      class="po-sm-12"
-      name="emailText"
-      formControlName="emailText"
-      p-label="E-mail"
-      p-rows="8"
-      p-required>
+    <po-textarea class="po-sm-12" name="emailText" formControlName="emailText" p-label="E-mail" p-rows="8" p-required>
     </po-textarea>
-
   </form>
 </po-page-default>
 
-<po-modal
-  p-title="Email successfully sent"
-  [p-primary-action]="primaryAction">
-
+<po-modal p-title="Email successfully sent" [p-primary-action]="primaryAction">
   <div class="po-row">
-    <po-info
-      class="po-md-6"
-      p-label="From:"
-      [p-value]="formEmail.get('from').value">
-    </po-info>
+    <po-info class="po-md-6" p-label="From:" [p-value]="formEmail.get('from').value"> </po-info>
 
-    <po-info
-      class="po-md-6"
-      p-label="To:"
-      [p-value]="formEmail.get('to').value">
-    </po-info>
+    <po-info class="po-md-6" p-label="To:" [p-value]="formEmail.get('to').value"> </po-info>
   </div>
 
-  <hr>
+  <hr />
 
   <div *ngIf="formEmail.get('cc').value">
     <div class="po-row">
-      <po-info
-        class="po-md-12"
-        p-label="CC:"
-        [p-value]="formEmail.get('cc').value">
-      </po-info>
+      <po-info class="po-md-12" p-label="CC:" [p-value]="formEmail.get('cc').value"> </po-info>
     </div>
-    <hr>
+    <hr />
   </div>
 
   <div class="po-row">
-    <po-info
-      class="po-md-12"
-      p-label="Subject:"
-      [p-value]="formEmail.get('subject').value">
-    </po-info>
+    <po-info class="po-md-12" p-label="Subject:" [p-value]="formEmail.get('subject').value"> </po-info>
   </div>
 
-  <hr>
+  <hr />
 
   <div class="po-row">
     <po-textarea
@@ -100,7 +44,8 @@
       p-label="E-mail"
       p-readonly
       p-required
-      p-rows="6">
+      p-rows="6"
+    >
     </po-textarea>
   </div>
 </po-modal>

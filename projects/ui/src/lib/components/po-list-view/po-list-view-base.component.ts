@@ -6,28 +6,28 @@ import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewLiterals } from './interfaces/po-list-view-literals.interface';
 
 export const poListViewLiteralsDefault = {
-  en: <PoListViewLiterals> {
+  en: <PoListViewLiterals>{
     hideDetails: 'Hide details',
     loadMoreData: 'Load more data',
     noData: 'No data found',
     selectAll: 'Select all',
     showDetails: 'Show details'
   },
-  es: <PoListViewLiterals> {
+  es: <PoListViewLiterals>{
     hideDetails: 'Ocultar detalles',
     loadMoreData: 'Cargar más resultados',
     noData: 'Datos no encontrados',
     selectAll: 'Seleccionar todos',
     showDetails: 'Mostrar detalles'
   },
-  pt: <PoListViewLiterals> {
+  pt: <PoListViewLiterals>{
     hideDetails: 'Ocultar detalhes',
     loadMoreData: 'Carregar mais resultados',
     noData: 'Nenhum dado encontrado',
     selectAll: 'Selecionar todos',
     showDetails: 'Exibir detalhes'
   },
-  ru: <PoListViewLiterals> {
+  ru: <PoListViewLiterals>{
     hideDetails: 'Скрыть детали',
     loadMoreData: 'Загрузить больше результатов',
     noData: 'Данные не найдены',
@@ -49,7 +49,6 @@ export const poListViewLiteralsDefault = {
  */
 @Directive()
 export class PoListViewBaseComponent {
-
   private _actions: Array<PoListViewAction>;
   private _height: number;
   private _hideSelectAll: boolean;
@@ -293,5 +292,4 @@ export class PoListViewBaseComponent {
   private showMainHeader() {
     this.showHeader = !!(this.select && !this.hideSelectAll && this.items && this.items.length);
   }
-
 }

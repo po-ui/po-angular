@@ -32,13 +32,9 @@ describe('PoPopupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([])],
-      declarations: [
-        PoPopupComponent
-      ],
-      providers: [
-        PoControlPositionService
-      ]
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [PoPopupComponent],
+      providers: [PoControlPositionService]
     });
   });
 
@@ -50,7 +46,7 @@ describe('PoPopupComponent:', () => {
       { label: 'teste1' },
       { label: 'teste2', separator: true, type: '' },
       { label: 'teste3', separator: true, type: 'danger' },
-      { label: 'teste4', separator: true, visible: false },
+      { label: 'teste4', separator: true, visible: false }
     ];
 
     component.actions = actions;
@@ -63,7 +59,6 @@ describe('PoPopupComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('actions: should update if values are valid.', () => {
       expectPropertiesValues(component, 'actions', [actions], [actions]);
     });
@@ -73,7 +68,6 @@ describe('PoPopupComponent:', () => {
 
       expectPropertiesValues(component, 'actions', valueInvalid, []);
     });
-
   });
 
   describe('Methods:', () => {
@@ -89,7 +83,7 @@ describe('PoPopupComponent:', () => {
       component.open();
       fixture.detectChanges();
 
-      spyOn(component, <any> 'closePopupOnClickout');
+      spyOn(component, <any>'closePopupOnClickout');
 
       document.dispatchEvent(eventClick);
 
@@ -97,7 +91,7 @@ describe('PoPopupComponent:', () => {
     });
 
     it('resizeListener: should call `close` on resize window', () => {
-      spyOn(component, <any> 'close');
+      spyOn(component, <any>'close');
 
       component.open();
       fixture.detectChanges();
@@ -111,7 +105,7 @@ describe('PoPopupComponent:', () => {
       it('should call `callFunction` if has popupItem and popupItem.action', () => {
         popupItem.action = () => {};
 
-        spyOn(component, <any> 'openUrl');
+        spyOn(component, <any>'openUrl');
         spyOn(UtilsFunctions, 'callFunction');
         spyOn(component, 'close');
 
@@ -124,7 +118,7 @@ describe('PoPopupComponent:', () => {
 
       it('shouldn`t call `callFunction` if doesn`t have a popupItem', () => {
         spyOn(UtilsFunctions, 'callFunction');
-        spyOn(component, <any> 'openUrl');
+        spyOn(component, <any>'openUrl');
         spyOn(component, 'close');
 
         component.onActionClick(undefined);
@@ -136,7 +130,7 @@ describe('PoPopupComponent:', () => {
 
       it('shouldn`t call `callFunction` if has popupItem but doesn`t have popupItem.action and popupItem URL', () => {
         spyOn(UtilsFunctions, 'callFunction');
-        spyOn(component, <any> 'openUrl');
+        spyOn(component, <any>'openUrl');
         spyOn(component, 'close');
 
         component.onActionClick(popupItem);
@@ -149,7 +143,7 @@ describe('PoPopupComponent:', () => {
       it('should call `openUrl` if has a popupItem with URL and without action', () => {
         popupItem.url = 'http://www.google.com';
 
-        spyOn(component, <any> 'openUrl');
+        spyOn(component, <any>'openUrl');
         spyOn(UtilsFunctions, 'callFunction');
         spyOn(component, 'close');
 
@@ -198,8 +192,8 @@ describe('PoPopupComponent:', () => {
     it('removeListeners: should call `resizeListener` and `clickoutListener`', () => {
       component['initializeListeners']();
 
-      spyOn(component, <any> 'resizeListener');
-      spyOn(component, <any> 'clickoutListener');
+      spyOn(component, <any>'resizeListener');
+      spyOn(component, <any>'clickoutListener');
 
       component['removeListeners']();
 
@@ -314,7 +308,7 @@ describe('PoPopupComponent:', () => {
     it('close: should set left style to 0 and showPopup to false', () => {
       component.showPopup = true;
 
-      spyOn(component, <any> 'removeListeners');
+      spyOn(component, <any>'removeListeners');
 
       component.close();
 
@@ -324,11 +318,10 @@ describe('PoPopupComponent:', () => {
 
     it(`closePopupOnClickout: should call 'close' if clickedOutDisabledItem, clickedOutTarget and
       clickedOutHeaderTemplate return true`, () => {
-
-      spyOn(component, <any> 'clickedOutDisabledItem').and.returnValue(true);
-      spyOn(component, <any> 'clickedOutTarget').and.returnValue(true);
-      spyOn(component, <any> 'clickedOutHeaderTemplate').and.returnValue(true);
-      spyOn(component, <any> 'close');
+      spyOn(component, <any>'clickedOutDisabledItem').and.returnValue(true);
+      spyOn(component, <any>'clickedOutTarget').and.returnValue(true);
+      spyOn(component, <any>'clickedOutHeaderTemplate').and.returnValue(true);
+      spyOn(component, <any>'close');
 
       component['closePopupOnClickout'](event);
 
@@ -340,10 +333,9 @@ describe('PoPopupComponent:', () => {
 
     it(`closePopupOnClickout: shouldn't call 'close' if any condition clickedOutDisabledItem, clickedOutTarget and
       clickedOutHeaderTemplate returns false`, () => {
-
-      spyOn(component, <any> 'clickedOutDisabledItem').and.returnValue(true);
-      spyOn(component, <any> 'clickedOutTarget').and.returnValue(true);
-      spyOn(component, <any> 'clickedOutHeaderTemplate').and.returnValue(false);
+      spyOn(component, <any>'clickedOutDisabledItem').and.returnValue(true);
+      spyOn(component, <any>'clickedOutTarget').and.returnValue(true);
+      spyOn(component, <any>'clickedOutHeaderTemplate').and.returnValue(false);
       spyOn(component, 'close');
 
       component['closePopupOnClickout'](event);
@@ -376,13 +368,13 @@ describe('PoPopupComponent:', () => {
     });
 
     it('clickedOutDisabledItem: should return false if element contains `po-popup-item-disabled` className', () => {
-      spyOn(component, <any> 'elementContains').and.returnValue(true);
+      spyOn(component, <any>'elementContains').and.returnValue(true);
 
       expect(component['clickedOutDisabledItem'](event)).toBeFalsy();
     });
 
     it('clickedOutDisabledItem: should return true if element doesn`t contain `po-popup-item-disabled` className', () => {
-      spyOn(component, <any> 'elementContains').and.returnValue(false);
+      spyOn(component, <any>'elementContains').and.returnValue(false);
 
       expect(component['clickedOutDisabledItem'](event)).toBeTruthy();
     });
@@ -410,7 +402,7 @@ describe('PoPopupComponent:', () => {
         }
       };
 
-      expect(component['elementContains'](<any> element, 'po-popup-item-disabled')).toBeTruthy();
+      expect(component['elementContains'](<any>element, 'po-popup-item-disabled')).toBeTruthy();
     });
 
     it('elementContains: should return false if element is null', () => {
@@ -420,7 +412,6 @@ describe('PoPopupComponent:', () => {
     });
 
     describe('checkBooleanValue:', () => {
-
       it('checkBooleanValue: should return `true` if `action.disabled` is `true`.', () => {
         const action = { label: 'PO ', disabled: true };
         spyOn(UtilsFunctions, 'isTypeof').and.returnValue(false);
@@ -441,7 +432,6 @@ describe('PoPopupComponent:', () => {
         expect(action.disabled).toHaveBeenCalled();
         expect(UtilsFunctions.isTypeof).toHaveBeenCalled();
       });
-
     });
 
     it('setPosition: should call setElements, adjustPosition and getArrowdirection.', () => {
@@ -449,7 +439,7 @@ describe('PoPopupComponent:', () => {
         poControlPosition: {
           setElements: () => {},
           adjustPosition: () => {},
-          getArrowDirection: () => {},
+          getArrowDirection: () => {}
         },
         popupRef: {
           nativeElement: undefined
@@ -488,11 +478,9 @@ describe('PoPopupComponent:', () => {
 
       expect(component.close).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should show `po-popup` if `showPopup` is `true`', () => {
       component.showPopup = true;
 
@@ -577,7 +565,5 @@ describe('PoPopupComponent:', () => {
 
       expect(nativeElement.querySelector('.po-popup-item-danger')).toBeNull();
     });
-
   });
-
 });

@@ -19,7 +19,6 @@ import { PoDynamicViewService } from './po-dynamic-view.service';
  */
 @Directive()
 export class PoDynamicViewBaseComponent {
-
   private _fields: Array<PoDynamicViewField> = [];
   private _showAllValue: boolean = false;
   private _value = {};
@@ -130,7 +129,8 @@ export class PoDynamicViewBaseComponent {
     private decimalPipe: DecimalPipe,
     private timePipe: PoTimePipe,
     private titleCasePipe: TitleCasePipe,
-    protected dynamicViewService: PoDynamicViewService) { }
+    protected dynamicViewService: PoDynamicViewService
+  ) {}
 
   // retorna os fields com os valores recuperados do objeto value.
   protected getConfiguredFields() {
@@ -172,11 +172,13 @@ export class PoDynamicViewBaseComponent {
     const property = field.property;
     const value = this.transformValue(field.type, this.value[property], field.format);
 
-    const classesGridColumns = getGridColumnsClasses(field.gridSmColumns,
+    const classesGridColumns = getGridColumnsClasses(
+      field.gridSmColumns,
       field.gridMdColumns,
       field.gridLgColumns,
       field.gridXlColumns,
-      field.gridColumns);
+      field.gridColumns
+    );
 
     return {
       property,
@@ -210,5 +212,4 @@ export class PoDynamicViewBaseComponent {
 
     return transformedValue;
   }
-
 }

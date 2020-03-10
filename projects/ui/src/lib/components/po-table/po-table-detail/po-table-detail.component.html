@@ -9,38 +9,37 @@
     </tr>
   </thead>
   <tbody>
-    <tr class="po-table-detail-row"
-        [class.po-table-row-active]="item.$selected && isSelectable"
-        *ngFor="let item of items">
-
+    <tr
+      class="po-table-detail-row"
+      [class.po-table-row-active]="item.$selected && isSelectable"
+      *ngFor="let item of items"
+    >
       <ng-container *ngIf="isSelectable; else masterDetailSpace">
-
         <td class="po-table-column-master-detail-space-checkbox"></td>
         <td class="po-table-column po-table-column-selectable">
-          <input
-            class="po-table-checkbox"
-            type="checkbox"
-            [class.po-table-checkbox-checked]="item.$selected">
-          <label class="po-table-checkbox-label po-clickable" (click)="onSelectRow(item)">
-          </label>
+          <input class="po-table-checkbox" type="checkbox" [class.po-table-checkbox-checked]="item.$selected" />
+          <label class="po-table-checkbox-label po-clickable" (click)="onSelectRow(item)"> </label>
         </td>
-
       </ng-container>
 
       <ng-template #masterDetailSpace>
         <td class="po-table-column-master-detail-space"></td>
       </ng-template>
 
-      <td class="po-table-column-master-detail po-table-master-detail-label"
+      <td
+        class="po-table-column-master-detail po-table-master-detail-label"
         (click)="isSelectable ? onSelectRow(item) : 'javascript:;'"
-        *ngFor="let detail of detailColumns">
+        *ngFor="let detail of detailColumns"
+      >
         <strong *ngIf="typeHeaderInline"> {{ getColumnTitleLabel(detail) }}: </strong>
 
         <ng-container [ngSwitch]="detail.type">
           <span *ngSwitchCase="'currency'">{{ item[detail.property] | currency: detail.format:'symbol':'1.2-2' }}</span>
           <span *ngSwitchCase="'date'">{{ item[detail.property] | date: detail.format || 'dd/MM/yyyy' }}</span>
           <span *ngSwitchCase="'time'">{{ item[detail.property] | po_time: detail.format || 'HH:mm:ss.ffffff' }}</span>
-          <span *ngSwitchCase="'dateTime'">{{ item[detail.property] | date: detail.format || 'dd/MM/yyyy HH:mm:ss' }}</span>
+          <span *ngSwitchCase="'dateTime'">{{
+            item[detail.property] | date: detail.format || 'dd/MM/yyyy HH:mm:ss'
+          }}</span>
           <span *ngSwitchCase="'number'">{{ formatNumberDetail(item[detail.property], detail.format) }}</span>
           <span *ngSwitchDefault>{{ item[detail.property] }}</span>
         </ng-container>

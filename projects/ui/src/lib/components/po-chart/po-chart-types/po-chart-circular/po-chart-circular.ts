@@ -23,7 +23,6 @@ const poChartBlackColor = '#000000';
 const poChartWhiteColor = '#ffffff';
 
 export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDestroy, OnInit {
-
   chartItemStartAngle = poChartStartAngle;
   windowResizeEmitter: Subject<any> = new Subject();
 
@@ -87,19 +86,63 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     const endInnerY = this.centerX + sinBeta * this.innerRadius;
 
     const halfGaugeCoordinates = [
-      'M', startX, startY,
-      'A', this.centerX, this.centerX, 0, '0,1', endX, endY,
-      'A', 1, 1, 0, '0,1', endInnerX, endInnerY,
-      'A', this.innerRadius, this.innerRadius, 0, '0,0', startInnerX, startInnerY,
-      'A', 1, 1, 0, '0,1', startX, startY,
-      'Z'].join(' ');
+      'M',
+      startX,
+      startY,
+      'A',
+      this.centerX,
+      this.centerX,
+      0,
+      '0,1',
+      endX,
+      endY,
+      'A',
+      1,
+      1,
+      0,
+      '0,1',
+      endInnerX,
+      endInnerY,
+      'A',
+      this.innerRadius,
+      this.innerRadius,
+      0,
+      '0,0',
+      startInnerX,
+      startInnerY,
+      'A',
+      1,
+      1,
+      0,
+      '0,1',
+      startX,
+      startY,
+      'Z'
+    ].join(' ');
 
     const pathCoordinates = [
-      'M', startX, startY,
-      'A', this.centerX, this.centerX, 0, largeArc ? '1,1' : '0,1', endX, endY,
-      'L', endInnerX, endInnerY,
-      'A', this.innerRadius, this.innerRadius, 0, largeArc ? '1,0' : '0,0', startInnerX, startInnerY,
-      'Z'].join(' ');
+      'M',
+      startX,
+      startY,
+      'A',
+      this.centerX,
+      this.centerX,
+      0,
+      largeArc ? '1,1' : '0,1',
+      endX,
+      endY,
+      'L',
+      endInnerX,
+      endInnerY,
+      'A',
+      this.innerRadius,
+      this.innerRadius,
+      0,
+      largeArc ? '1,0' : '0,0',
+      startInnerX,
+      startInnerY,
+      'Z'
+    ].join(' ');
 
     return path.setAttribute('d', this.isChartGaugeType ? halfGaugeCoordinates : pathCoordinates);
   }
@@ -130,25 +173,26 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private calculateAngleRadians() {
-    this.series.forEach((serie, index) =>
-      this.chartItemsEndAngleList[index] = this.calculateEndAngle(serie.value, this.totalValue)
+    this.series.forEach(
+      (serie, index) => (this.chartItemsEndAngleList[index] = this.calculateEndAngle(serie.value, this.totalValue))
     );
   }
 
   private calculateCurrentEndAngle(angleCurrentPosition: number) {
-    const isSerieDrawCompleted = this.chartItemStartAngle + angleCurrentPosition > this.chartItemStartAngle + this.chartItemEndAngle;
+    const isSerieDrawCompleted =
+      this.chartItemStartAngle + angleCurrentPosition > this.chartItemStartAngle + this.chartItemEndAngle;
 
     if (isSerieDrawCompleted) {
-      return (this.chartItemStartAngle + this.chartItemEndAngle) - poChartCompleteCircle;
+      return this.chartItemStartAngle + this.chartItemEndAngle - poChartCompleteCircle;
     } else {
       return this.chartItemStartAngle + angleCurrentPosition;
     }
   }
 
   private calculateEndAngle(value: number, totalValue: number): number {
-    const endAngle = value / totalValue * (Math.PI * 2);
+    const endAngle = (value / totalValue) * (Math.PI * 2);
 
-    return this.isChartGaugeType ? (endAngle / 2) : endAngle;
+    return this.isChartGaugeType ? endAngle / 2 : endAngle;
   }
 
   private calculateSVGDimensions() {
@@ -219,7 +263,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     const fontSize = this.getFontSize();
     const textColor = this.getTextColor(serie.color);
 
-    svgText.textContent = this.getPercentValue(value, this.totalValue) + '%' ;
+    svgText.textContent = this.getPercentValue(value, this.totalValue) + '%';
 
     this.renderer.setAttribute(svgText, 'class', 'po-path-item');
     this.renderer.setAttribute(svgText, 'fill', textColor);
@@ -241,7 +285,9 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private createSVGElements() {
-    const viewBoxHeight = this.isChartGaugeType ? this.centerX + (this.centerX * poChartGaugeSerieWidth) : this.chartWrapper;
+    const viewBoxHeight = this.isChartGaugeType
+      ? this.centerX + this.centerX * poChartGaugeSerieWidth
+      : this.chartWrapper;
     const preserveAspectRatio = this.isChartGaugeType ? 'xMidYMax' : 'xMidYMin';
 
     this.svgElement = this.renderer.createElement('svg:svg', 'svg');
@@ -270,17 +316,15 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     const isFinishedDrawingCurrentSeries = angleCurrentPosition > this.chartItemEndAngle;
     const isFinishedDrawingAllSeries = currentSerieIndex === this.svgPathElementsList.length;
 
-    if ( isFinishedDrawingAllSeries ) {
+    if (isFinishedDrawingAllSeries) {
       return;
     }
 
-    if ( isFinishedDrawingCurrentSeries ) {
-
+    if (isFinishedDrawingCurrentSeries) {
       this.chartItemStartAngle = this.chartItemStartAngle + this.chartItemEndAngle;
       currentSerieIndex++;
       this.chartItemEndAngle = this.chartItemsEndAngleList[currentSerieIndex];
       angleCurrentPosition = 0;
-
     } else {
       angleCurrentPosition += poChartAngleStepInterval;
 
@@ -408,7 +452,11 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     });
 
     this.windowResizeListener = this.renderer.listen(window, 'resize', this.onWindowResize.bind(this));
-    this.windowScrollListener = this.renderer.listen(this.checkingIfScrollsWithPoPage(), 'scroll', this.removeTooltip.bind(this));
+    this.windowScrollListener = this.renderer.listen(
+      this.checkingIfScrollsWithPoPage(),
+      'scroll',
+      this.removeTooltip.bind(this)
+    );
   }
 
   private setInnerRadius(type: PoChartType) {
@@ -429,7 +477,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
       }
     }
 
-    return this.centerX - (this.centerX * serieWidth);
+    return this.centerX - this.centerX * serieWidth;
   }
 
   private setTextProperties(text, startAngle: number, endAngle: number) {
@@ -444,8 +492,8 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
       // radius interno (circulo branco) + a metade da diferença entre tamanho do centro e radius interno
       const radius = this.innerRadius + (this.centerX - this.innerRadius) / 2;
 
-      const xCoordinate = radius * Math.cos(centerAngle) + this.centerX - (halfTextWidth);
-      const yCoordinate = radius * Math.sin(centerAngle) + this.centerX + (halfTextHeight / 2);
+      const xCoordinate = radius * Math.cos(centerAngle) + this.centerX - halfTextWidth;
+      const yCoordinate = radius * Math.sin(centerAngle) + this.centerX + halfTextHeight / 2;
       text.setAttribute('x', xCoordinate);
       text.setAttribute('y', yCoordinate);
       text.setAttribute('fill-opacity', '1');
@@ -474,11 +522,9 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
       this.renderer.setAttribute(svgElement, 'data-tooltip-category', category);
       this.renderer.setAttribute(svgElement, 'data-tooltip-text', tooltip || `${category}: ${tooltipValue}`);
     }
-
   }
 
   private showTooltip() {
     this.renderer.removeClass(this.tooltipElement, 'po-invisible');
   }
-
 }

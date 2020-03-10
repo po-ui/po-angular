@@ -1,16 +1,20 @@
 <ng-container [ngSwitch]="type">
-
-  <a *ngSwitchCase="'externalLink'"
+  <a
+    *ngSwitchCase="'externalLink'"
     class="po-navbar-item-link"
     [class.po-clickable]="clickable"
-    [href]="link" 
+    [href]="link"
     target="_blank"
-    (click)="itemClick()">{{ label }}</a>
+    (click)="itemClick()"
+    >{{ label }}</a
+  >
 
-  <a *ngSwitchCase="'internalLink'"
+  <a
+    *ngSwitchCase="'internalLink'"
     class="po-navbar-item-link"
     [class.po-clickable]="clickable"
     [routerLink]="link"
-    (click)="itemClick(label, link)">{{ label }}</a>
-
+    (click)="itemClick(label, link)"
+    >{{ label }}</a
+  >
 </ng-container>

@@ -6,7 +6,6 @@
  * Interface para definição das literais usadas no `po-page-login`.
  */
 export interface PoPageLoginLiterals {
-
   /** Texto que informa a quantidade de tentativas restantes no popover de aviso de bloqueio. */
   attempts?: string;
 
@@ -78,5 +77,4 @@ export interface PoPageLoginLiterals {
 
   /** Texto que informa ao usuário que o mesmo será bloqueado e por quanto tempo no popover de aviso de bloqueio. */
   yourUserWillBeBlocked?: string;
-
 }

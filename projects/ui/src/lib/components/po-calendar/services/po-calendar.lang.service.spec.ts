@@ -12,7 +12,6 @@ describe('PoCalendarLangService:', () => {
   });
 
   it('should set language', () => {
-
     service.setLanguage('pt');
     expect(service['language']).toBe('pt');
 
@@ -56,11 +55,22 @@ describe('PoCalendarLangService:', () => {
   it('should get array of months', () => {
     service['language'] = 'pt';
 
-    const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const months = [
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro'
+    ];
 
     expect(service.getMonthsArray().toString()).toBe(months.toString());
-
   });
 
   it('should get array of week days', () => {
@@ -69,7 +79,5 @@ describe('PoCalendarLangService:', () => {
     const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
     expect(service.getWeekDaysArray().toString()).toBe(weekDays.toString());
-
   });
-
 });

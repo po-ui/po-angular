@@ -30,26 +30,26 @@ import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.c
   selector: 'po-rich-text',
   templateUrl: './po-rich-text.component.html',
   providers: [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoRichTextComponent),
-    multi: true,
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoRichTextComponent),
-    multi: true,
-  }]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoRichTextComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoRichTextComponent),
+      multi: true
+    }
+  ]
 })
 export class PoRichTextComponent extends PoRichTextBaseComponent implements AfterViewInit, OnDestroy {
-
   private listener = this.validateClassesForRequired.bind(this);
   private modelLastUpdate: any;
 
   @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
 
   get errorMsg() {
-    return (this.errorMessage !== '' && !this.value && this.required && this.invalid) ? this.errorMessage : '';
+    return this.errorMessage !== '' && !this.value && this.required && this.invalid ? this.errorMessage : '';
   }
 
   constructor(private element: ElementRef) {
@@ -138,5 +138,4 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
       }
     });
   }
-
 }

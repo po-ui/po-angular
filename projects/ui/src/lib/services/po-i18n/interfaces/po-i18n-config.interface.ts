@@ -10,7 +10,6 @@ import { PoI18nConfigDefault } from './po-i18n-config-default.interface';
  * @usedBy PoI18nModule
  */
 export interface PoI18nConfig {
-
   /** Configurações padrões. */
   default?: PoI18nConfigDefault;
 

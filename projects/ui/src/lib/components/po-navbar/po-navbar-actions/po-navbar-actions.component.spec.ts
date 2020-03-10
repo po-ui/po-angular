@@ -14,11 +14,7 @@ describe('PoNavbarActionsComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        PoTooltipModule,
-        PoNavbarActionsModule,
-        RouterModule.forRoot([])
-      ]
+      imports: [PoTooltipModule, PoNavbarActionsModule, RouterModule.forRoot([])]
     });
   });
 
@@ -34,25 +30,22 @@ describe('PoNavbarActionsComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('iconActions: should return valid values', () => {
       const icons: Array<PoNavbarIconAction> = [
-        { label: 'eye', icon: 'po-icon-eye', link: 'test/'},
-        { label: 'gas', icon: 'po-icon-gas', link: 'test/'},
-        { label: 'mail', icon: 'po-icon-mail', link: 'test/'},
-        { label: 'menu', icon: 'po-icon-menu', link: 'test/'}
+        { label: 'eye', icon: 'po-icon-eye', link: 'test/' },
+        { label: 'gas', icon: 'po-icon-gas', link: 'test/' },
+        { label: 'mail', icon: 'po-icon-mail', link: 'test/' },
+        { label: 'menu', icon: 'po-icon-menu', link: 'test/' }
       ];
 
       const expectedIcons = [
-        { label: 'eye', icon: 'po-icon-eye', link: 'test/', separator: true, url: 'test/'},
-        { label: 'gas', icon: 'po-icon-gas', link: 'test/', separator: true, url: 'test/'},
-        { label: 'mail', icon: 'po-icon-mail', link: 'test/', separator: true, url: 'test/'},
-        { label: 'menu', icon: 'po-icon-menu', link: 'test/', separator: true, url: 'test/'}
+        { label: 'eye', icon: 'po-icon-eye', link: 'test/', separator: true, url: 'test/' },
+        { label: 'gas', icon: 'po-icon-gas', link: 'test/', separator: true, url: 'test/' },
+        { label: 'mail', icon: 'po-icon-mail', link: 'test/', separator: true, url: 'test/' },
+        { label: 'menu', icon: 'po-icon-menu', link: 'test/', separator: true, url: 'test/' }
       ];
 
       expectPropertiesValues(component, 'iconActions', [icons], [expectedIcons]);
     });
-
   });
-
 });

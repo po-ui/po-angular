@@ -14,7 +14,6 @@ import { convertToBoolean, uuid } from '../../../utils/util';
  */
 @Directive()
 export abstract class PoTabBaseComponent {
-
   private _active?: boolean = false;
   private _disabled?: boolean = false;
   private _hide?: boolean = false;
@@ -83,5 +82,4 @@ export abstract class PoTabBaseComponent {
   @Output('p-click') click = new EventEmitter();
 
   protected abstract setDisplayOnActive();
-
 }

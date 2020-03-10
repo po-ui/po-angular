@@ -13,10 +13,8 @@ describe('PoPageBackgroundComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoPageBackgroundComponent,
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      declarations: [PoPageBackgroundComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -34,7 +32,6 @@ describe('PoPageBackgroundComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-logo: shoud be undefined.', () => {
       expect(component.logo).toBeUndefined();
     });
@@ -76,11 +73,9 @@ describe('PoPageBackgroundComponent:', () => {
       expectPropertiesValues(component, 'showSelectLanguage', trueValues, true);
       expectPropertiesValues(component, 'showSelectLanguage', falseValues, false);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngOnInit: should get the browserLanguage and apply it to `selectedLanguageOption`', () => {
       component.ngOnInit();
 
@@ -93,11 +88,9 @@ describe('PoPageBackgroundComponent:', () => {
 
       expect(component.selectedLanguage.emit).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain `po-page-background-main-logo` class if have `logo`.', () => {
       component.logo = 'logo-path';
 
@@ -211,7 +204,5 @@ describe('PoPageBackgroundComponent:', () => {
       expect(debugElement.querySelector('.po-page-background-secondary-logo-right')).toBeFalsy();
       expect(debugElement.querySelector('.po-page-background-secondary-logo-centered')).toBeTruthy();
     });
-
   });
-
 });

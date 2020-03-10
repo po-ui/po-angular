@@ -11,9 +11,8 @@ import { PoPageBlockedUserReasonParams } from '../interfaces/po-page-blocked-use
   templateUrl: './po-page-blocked-user-reason.component.html'
 })
 export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
-
   literalParams;
-  literals: {title: string, firstPhrase: string, secondPhrase: string, thirdPhrase: string};
+  literals: { title: string; firstPhrase: string; secondPhrase: string; thirdPhrase: string };
 
   @Input('p-params') params: PoPageBlockedUserReasonParams;
 
@@ -53,7 +52,9 @@ export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
 
   getParams() {
     this.literalParams =
-      this.reason === 'expiredPassword' ? [this.params.days, this.params.days] : [this.params.attempts, this.params.hours];
+      this.reason === 'expiredPassword'
+        ? [this.params.days, this.params.days]
+        : [this.params.attempts, this.params.hours];
   }
 
   private getLiterals() {
@@ -61,10 +62,9 @@ export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
 
     this.literals = {
       ...poPageBlockedUserLiterals[this.reason][poLocaleDefault],
-      ...poPageBlockedUserLiterals[this.reason][browserLanguage()],
+      ...poPageBlockedUserLiterals[this.reason][browserLanguage()]
     };
 
     this.changeDetector.detectChanges();
   }
-
 }

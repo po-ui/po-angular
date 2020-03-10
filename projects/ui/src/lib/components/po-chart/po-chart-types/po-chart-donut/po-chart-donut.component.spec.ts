@@ -4,15 +4,13 @@ import { PoChartCircular } from '../po-chart-circular/po-chart-circular';
 import { PoChartDonutComponent } from './po-chart-donut.component';
 
 describe('PoChartDonutComponent:', () => {
-
   let component: PoChartDonutComponent;
   let fixture: ComponentFixture<PoChartDonutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoChartDonutComponent ]
-    })
-    .compileComponents();
+      declarations: [PoChartDonutComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -24,5 +22,4 @@ describe('PoChartDonutComponent:', () => {
     expect(component instanceof PoChartDonutComponent).toBeTruthy();
     expect(component instanceof PoChartCircular).toBeTruthy();
   });
-
 });

@@ -7,7 +7,6 @@ import { PoToasterType } from './po-toaster-type.enum';
  * Interface para os dados do serviço do po-toaster.
  */
 export interface PoToaster extends PoNotification {
-
   /** ID do toaster */
   componentRef?: any;
 

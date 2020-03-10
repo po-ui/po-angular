@@ -10,7 +10,6 @@ import { PoDynamicField } from '../po-dynamic-field.interface';
  * Interface para definição das propriedades dos campos de visualização que serão criados dinamicamente.
  */
 export interface PoDynamicViewField extends PoDynamicField {
-
   /**
    * Indica se o campo será um `po-tag`.
    *
@@ -76,5 +75,4 @@ export interface PoDynamicViewField extends PoDynamicField {
    *  + Exemplo: com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`.
    */
   format?: string;
-
 }

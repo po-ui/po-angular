@@ -19,10 +19,9 @@ const poToolbarActionsIconDefault = 'po-icon-more';
 @Component({
   selector: 'po-toolbar-actions',
   templateUrl: './po-toolbar-actions.component.html',
-  providers: [ PoControlPositionService ]
+  providers: [PoControlPositionService]
 })
 export class PoToolbarActionsComponent {
-
   private _actionsIcon?: string = poToolbarActionsIconDefault;
 
   /** Define uma lista de ações. */
@@ -36,5 +35,4 @@ export class PoToolbarActionsComponent {
   get actionsIcon() {
     return this._actionsIcon;
   }
-
 }

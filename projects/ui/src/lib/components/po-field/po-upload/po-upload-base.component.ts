@@ -151,7 +151,6 @@ const poUploadMinFileSize = 0;
  */
 @Directive()
 export abstract class PoUploadBaseComponent implements ControlValueAccessor, Validator {
-
   private _directory?: boolean;
   private _disabled?: boolean;
   private _dragDrop?: boolean = false;
@@ -509,7 +508,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da *tag* `form`.
   @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(protected uploadService: PoUploadService) { }
+  constructor(protected uploadService: PoUploadService) {}
 
   abstract sendFeedback(): void;
 
@@ -525,35 +524,33 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     this.validatorChange = fn;
   }
 
-  validate(abstractControl: AbstractControl): { [key: string]: any; } {
-
+  validate(abstractControl: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {
-          valid: false,
+          valid: false
         }
       };
     }
-
   }
 
   writeValue(model: any): void {
     if (model) {
       if (!isEquals(this.currentFiles, model)) {
-
         this.currentFiles = this.parseFiles(model);
       }
     } else {
-
       this.currentFiles = undefined;
     }
   }
 
   protected isExceededFileLimit(currentFilesLength: number): boolean {
-    return this.isMultiple &&
+    return (
+      this.isMultiple &&
       this.fileRestrictions &&
       this.fileRestrictions.maxFiles > 0 &&
-      this.fileRestrictions.maxFiles <= currentFilesLength;
+      this.fileRestrictions.maxFiles <= currentFilesLength
+    );
   }
 
   // Faz o parse dos arquivos selecionados para arquivos do formato PoUploadFile e atualiza os arquivos correntes.
@@ -562,7 +559,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     const filesLength = files.length;
 
     for (let i = 0; i < filesLength; i++) {
-
       if (this.isExceededFileLimit(poUploadFiles.length)) {
         this.quantityNotAllowed = filesLength - this.fileRestrictions.maxFiles;
         break;
@@ -572,7 +568,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
       if (this.checkRestrictions(file)) {
         poUploadFiles = this.insertFileInFiles(file, poUploadFiles);
       }
-
     }
     this.sendFeedback();
     return poUploadFiles;
@@ -615,17 +610,13 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   }
 
   private insertFileInFiles(newFile: PoUploadFile, files: Array<PoUploadFile>) {
-
     if (this.existsFileSameName(newFile, files)) {
-
       return this.updateExistsFileInFiles(newFile, files);
     }
 
     if (this.isMultiple) {
-
       files.push(newFile);
     } else {
-
       files.splice(0, files.length, newFile);
     }
 
@@ -647,7 +638,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   }
 
   private initRestrictions(restrictions: PoUploadFileRestrictions): PoUploadFileRestrictions {
-
     if (!restrictions) {
       return;
     }
@@ -660,11 +650,12 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
       maxFileSize: maxFileSize,
       minFileSize: minFileSize
     };
-
   }
 
   private updateExistsFileInFiles(newFile: PoUploadFile, files: Array<PoUploadFile>) {
-    const fileIndex = files.findIndex(currentFile => newFile.name === currentFile.name && currentFile.status !== PoUploadStatus.Uploaded);
+    const fileIndex = files.findIndex(
+      currentFile => newFile.name === currentFile.name && currentFile.status !== PoUploadStatus.Uploaded
+    );
 
     if (fileIndex !== -1) {
       files.splice(fileIndex, 1, newFile);
@@ -674,5 +665,4 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   }
 
   abstract setDirectoryAttribute(value: boolean);
-
 }

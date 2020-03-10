@@ -2,22 +2,16 @@
 </ng-container>
 
 <ng-template #parametersNotFoundTemplate>
-
   <div class="po-text-center">
     <span class="po-icon po-icon-info"></span>
     <span class="po-font-text-large">
       {{ literals.parametersNotFound }}
     </span>
   </div>
-
 </ng-template>
 
 <ng-template #formFieldsTemplate>
   <form #parametersForm="ngForm">
-    <po-dynamic-form
-      p-group-form
-      [p-fields]="parameters"
-      [p-value]="value">
-    </po-dynamic-form>
+    <po-dynamic-form p-group-form [p-fields]="parameters" [p-value]="value"> </po-dynamic-form>
   </form>
 </ng-template>

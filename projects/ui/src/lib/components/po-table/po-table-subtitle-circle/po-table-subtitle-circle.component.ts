@@ -16,7 +16,6 @@ import { PoTableSubtitleColumn } from './../po-table-subtitle-footer/po-table-su
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTableSubtitleCircleComponent {
-
   private _subtitle: PoTableSubtitleColumn;
 
   /** Objeto com os dados da legenda. */
@@ -34,6 +33,5 @@ export class PoTableSubtitleCircleComponent {
   @Input('p-hide-title')
   hideTitle: boolean = false;
 
-  constructor(private poColorPaletteService: PoColorPaletteService) { }
-
+  constructor(private poColorPaletteService: PoColorPaletteService) {}
 }

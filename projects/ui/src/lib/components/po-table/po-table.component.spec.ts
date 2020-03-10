@@ -17,10 +17,10 @@ import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
 
 @Component({ template: 'Search' })
-export class SearchComponent { }
+export class SearchComponent {}
 
 @Component({ template: 'Home' })
-export class TestMenuComponent { }
+export class TestMenuComponent {}
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -29,7 +29,6 @@ export const routes: Routes = [
 ];
 
 describe('PoTableComponent:', () => {
-
   let component: PoTableComponent;
   let fixture: ComponentFixture<PoTableComponent>;
   let nativeElement;
@@ -67,53 +66,68 @@ describe('PoTableComponent:', () => {
       { property: 'atualization', label: 'Atualização', type: 'date' }
     ];
 
-    columnsDetail = [{
-      label: 'Detalhes', property: 'detail', type: 'detail', detail: {
-        columns: [
-          { property: 'tour', label: 'Passeio' },
-          { property: 'package', label: 'Pacote' }
-        ]
-      }}
+    columnsDetail = [
+      {
+        label: 'Detalhes',
+        property: 'detail',
+        type: 'detail',
+        detail: {
+          columns: [
+            { property: 'tour', label: 'Passeio' },
+            { property: 'package', label: 'Pacote' }
+          ]
+        }
+      }
     ];
 
-    columnsDetailInterface = [{
-      label: 'Detalhes', property: 'detail', type: 'detail', detail: {
-        columns: [
-          { property: 'tour', label: 'Passeio' },
-          { property: 'package', label: 'Pacote' }
-        ],
-        typeHeader: 'inline'
+    columnsDetailInterface = [
+      {
+        label: 'Detalhes',
+        property: 'detail',
+        type: 'detail',
+        detail: {
+          columns: [
+            { property: 'tour', label: 'Passeio' },
+            { property: 'package', label: 'Pacote' }
+          ],
+          typeHeader: 'inline'
+        }
       }
-    }];
+    ];
 
-    columnIcons = { property: 'portinari', type: 'icon', icons: [
-      { value: 'favorite' }, { value: 'documentation' }
-    ]};
+    columnIcons = { property: 'portinari', type: 'icon', icons: [{ value: 'favorite' }, { value: 'documentation' }] };
 
     columnsWithDetail = columns.concat(columnsDetail);
 
     columnsWithDetailInterface = columns.concat(columnsDetailInterface);
 
     columnSubtitle = {
-      label: 'Status', property: 'status', type: 'subtitle', subtitles:
-        [
-          { value: 'confirmed', color: 'color-11', label: 'Confirmado', content: '1' },
-          { value: 'delayed', color: 'color-08', label: 'Atrasado', content: '2' },
-          { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
-        ]
+      label: 'Status',
+      property: 'status',
+      type: 'subtitle',
+      subtitles: [
+        { value: 'confirmed', color: 'color-11', label: 'Confirmado', content: '1' },
+        { value: 'delayed', color: 'color-08', label: 'Atrasado', content: '2' },
+        { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
+      ]
     };
 
     labels = {
-      label: 'Status', property: 'status', type: 'label', labels:
-        [
-          { value: 'confirmed', color: 'color-11', label: 'Confirmado' },
-          { value: 'delayed', color: 'color-08', label: 'Atrasado' },
-          { value: 'canceled', color: 'color-07', label: 'Cancelado' }
-        ]
+      label: 'Status',
+      property: 'status',
+      type: 'label',
+      labels: [
+        { value: 'confirmed', color: 'color-11', label: 'Confirmado' },
+        { value: 'delayed', color: 'color-08', label: 'Atrasado' },
+        { value: 'canceled', color: 'color-07', label: 'Cancelado' }
+      ]
     };
 
     iconColumn = {
-      label: 'Icons', property: 'iconsColumn', type: 'icon', icons: [
+      label: 'Icons',
+      property: 'iconsColumn',
+      type: 'icon',
+      icons: [
         { value: 'po-icon-close', color: 'color-07' },
         { value: 'po-icon-ok', color: 'color-11' },
         { value: 'po-icon-star', color: 'color-08' }
@@ -122,31 +136,33 @@ describe('PoTableComponent:', () => {
 
     items = [
       {
-        id: 1, initial: 'BR', name: 'Brasil', total: 100.00, atualization: '2017-10-09',
+        id: 1,
+        initial: 'BR',
+        name: 'Brasil',
+        total: 100.0,
+        atualization: '2017-10-09',
         detail: [{ property: 'teste', label: 'Label teste' }]
       },
-      { id: 2, initial: 'FR', name: 'França', total: 160.00, atualization: '2017-10-13', status: 'confirmed' },
-      { id: 7, initial: 'PT', name: 'Portugal', total: 100.00, atualization: '2017-10-11', status: 'confirmed' },
+      { id: 2, initial: 'FR', name: 'França', total: 160.0, atualization: '2017-10-13', status: 'confirmed' },
+      { id: 7, initial: 'PT', name: 'Portugal', total: 100.0, atualization: '2017-10-11', status: 'confirmed' },
       { id: 4, initial: 'US', name: 'Estados Unidos', total: 3.49, atualization: '2017-10-12', status: 'delayed' },
-      { id: 5, initial: 'AR', name: 'Argentina', total: 100.00, atualization: '2017-10-10', status: 'confirmed' },
-      { id: 10, initial: 'ME', name: 'México', total: 22.00, atualization: '2017-10-03', status: 'confirmed' },
-      { id: 3, initial: 'EN', name: 'Inglaterra', total: 100.00, atualization: '2017-04-10', status: 'delayed' },
-      { id: 8, initial: 'JA', name: 'Japão', total: 100.00, atualization: '2017-10-25', status: 'confirmed' },
-      { id: 8, initial: 'JA', name: 'Japão', total: 300.00, atualization: '2017-10-25', status: 'delayed' },
-      { id: 9, initial: 'CH', name: 'China', total: 250.00, atualization: '2017-10-10', status: 'confirmed' },
-      { id: 6, initial: 'KO', name: 'Coréia do Sul', total: 86.50, atualization: '07/10/2017', status: 'canceled' }
+      { id: 5, initial: 'AR', name: 'Argentina', total: 100.0, atualization: '2017-10-10', status: 'confirmed' },
+      { id: 10, initial: 'ME', name: 'México', total: 22.0, atualization: '2017-10-03', status: 'confirmed' },
+      { id: 3, initial: 'EN', name: 'Inglaterra', total: 100.0, atualization: '2017-04-10', status: 'delayed' },
+      { id: 8, initial: 'JA', name: 'Japão', total: 100.0, atualization: '2017-10-25', status: 'confirmed' },
+      { id: 8, initial: 'JA', name: 'Japão', total: 300.0, atualization: '2017-10-25', status: 'delayed' },
+      { id: 9, initial: 'CH', name: 'China', total: 250.0, atualization: '2017-10-10', status: 'confirmed' },
+      { id: 6, initial: 'KO', name: 'Coréia do Sul', total: 86.5, atualization: '07/10/2017', status: 'canceled' }
     ];
 
     actions = [
       { label: 'addItem', action: () => {} },
-      { label: 'deleteItem', action: () => { }, disabled: false },
-      { label: 'insertItem', action: () => { }, disabled: true },
-      { label: 'editItem', action: () => {}, disabled: () => true },
+      { label: 'deleteItem', action: () => {}, disabled: false },
+      { label: 'insertItem', action: () => {}, disabled: true },
+      { label: 'editItem', action: () => {}, disabled: () => true }
     ];
 
-    singleAction = [
-      { label: 'addItem', action: () => {}, disabled: () => true }
-    ];
+    singleAction = [{ label: 'addItem', action: () => {}, disabled: () => true }];
 
     fakeThisDoCheck = {
       element: {
@@ -161,8 +177,8 @@ describe('PoTableComponent:', () => {
       },
       visibleElement: false,
       initialized: true,
-      verifyCalculateHeightTableContainer: () => { },
-      checkChangesItems: () => { },
+      verifyCalculateHeightTableContainer: () => {},
+      checkChangesItems: () => {},
       debounceResize: () => true
     };
   }
@@ -170,10 +186,7 @@ describe('PoTableComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoTableModule],
-      declarations: [
-        TestMenuComponent,
-        SearchComponent
-      ],
+      declarations: [TestMenuComponent, SearchComponent],
       providers: [PoControlPositionService, PoDateService, DecimalPipe, PoColorPaletteService]
     });
   });
@@ -195,7 +208,7 @@ describe('PoTableComponent:', () => {
     tableElement = nativeElement.querySelector('.po-table-wrapper');
     tableFooterElement = nativeElement.querySelector('.po-table-footer');
 
-    component.items.forEach(item => item.$selected = false);
+    component.items.forEach(item => (item.$selected = false));
   });
 
   it('should be created', () => {
@@ -252,7 +265,7 @@ describe('PoTableComponent:', () => {
     const tableAction = component.actions[2];
     const tableRow = component.items[0];
 
-    spyOn(tableAction, <any> 'disabled');
+    spyOn(tableAction, <any>'disabled');
 
     component.validateTableAction(tableRow, tableAction);
     expect(tableAction.disabled).toHaveBeenCalled();
@@ -489,14 +502,15 @@ describe('PoTableComponent:', () => {
   });
 
   it('should return subtitle column for row', () => {
-
     const column = {
-      label: 'Status', property: 'status', type: 'subtitle', subtitles:
-        [
-          { value: 'confirmed', color: 'color-11', label: 'Confirmado', content: '1' },
-          { value: 'delayed', color: 'color-08', label: 'Atrasado', content: '2' },
-          { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
-        ]
+      label: 'Status',
+      property: 'status',
+      type: 'subtitle',
+      subtitles: [
+        { value: 'confirmed', color: 'color-11', label: 'Confirmado', content: '1' },
+        { value: 'delayed', color: 'color-08', label: 'Atrasado', content: '2' },
+        { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
+      ]
     };
 
     const subtitle = component.getSubtitleColumn(component.items[1], column);
@@ -525,7 +539,7 @@ describe('PoTableComponent:', () => {
 
   it('should show column with link', () => {
     component.columns[2].type = 'link';
-    component.columns[2].action = () => { };
+    component.columns[2].action = () => {};
     fixture.detectChanges();
 
     const links = tableElement.querySelectorAll('.po-table-link');
@@ -602,8 +616,8 @@ describe('PoTableComponent:', () => {
   });
 
   it('should call calculateWidthHeaders and setTableOpacity in debounceResize', fakeAsync(() => {
-    spyOn(component, <any> 'calculateWidthHeaders');
-    spyOn(component, <any> 'setTableOpacity');
+    spyOn(component, <any>'calculateWidthHeaders');
+    spyOn(component, <any>'setTableOpacity');
 
     component['debounceResize']();
     tick(500);
@@ -672,7 +686,7 @@ describe('PoTableComponent:', () => {
 
     spyOn(component, <any>'verifyChangeHeightInFooter').and.returnValue(true);
     spyOn(component, <any>'getHeightTableFooter').and.returnValue(10);
-    spyOn(component, <any> 'calculateHeightTableContainer');
+    spyOn(component, <any>'calculateHeightTableContainer');
 
     component['verifyCalculateHeightTableContainer']();
 
@@ -685,7 +699,7 @@ describe('PoTableComponent:', () => {
     component['footerHeight'] = 100;
 
     spyOn(component, <any>'verifyChangeHeightInFooter').and.returnValue(false);
-    spyOn(component, <any> 'calculateHeightTableContainer');
+    spyOn(component, <any>'calculateHeightTableContainer');
 
     component['verifyCalculateHeightTableContainer']();
 
@@ -786,7 +800,11 @@ describe('PoTableComponent:', () => {
   it('should set selectAll with null when changes items', () => {
     component.selectAll = true;
     component.items.push({
-      id: 345, initial: 'SC', name: 'Santa Catarina', total: 500.00, atualization: '2018-11-09'
+      id: 345,
+      initial: 'SC',
+      name: 'Santa Catarina',
+      total: 500.0,
+      atualization: '2018-11-09'
     });
 
     component.ngDoCheck();
@@ -797,7 +815,11 @@ describe('PoTableComponent:', () => {
   it('should not change the value of selectAll when checkChangesItems was called and selectAll is falsy', () => {
     component.selectAll = false;
     component.items.push({
-      id: 346, initial: 'SC', name: 'Santa Catarina', total: 500.00, atualization: '2018-11-09'
+      id: 346,
+      initial: 'SC',
+      name: 'Santa Catarina',
+      total: 500.0,
+      atualization: '2018-11-09'
     });
 
     component.ngDoCheck();
@@ -836,9 +858,7 @@ describe('PoTableComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('checkDisabled:', () => {
-
       it('should call `disabled` function.', () => {
         const linkColumn = {
           property: 'extra',
@@ -870,7 +890,6 @@ describe('PoTableComponent:', () => {
     });
 
     describe('getBooleanLabel:', () => {
-
       const simpleColumnBoolean: PoTableColumn = { property: 'boolean', label: 'Boolean', type: 'boolean' };
 
       it(`should call 'convertToBoolean' if 'rowValue' is valid value.`, () => {
@@ -921,7 +940,10 @@ describe('PoTableComponent:', () => {
       it(`should return 'Sim_customizado' if 'rowValue' is 'true', 'column.boolean' is valid and
       'column.boolean.trueLabel' is 'Sim_customizado'.`, () => {
         const column: PoTableColumn = {
-          property: 'boolean', label: 'Boolean', type: 'boolean', boolean: { trueLabel: 'Sim_customizado' }
+          property: 'boolean',
+          label: 'Boolean',
+          type: 'boolean',
+          boolean: { trueLabel: 'Sim_customizado' }
         };
         const expectedLabel: string = 'Sim_customizado';
         const rowValue: boolean = true;
@@ -932,7 +954,10 @@ describe('PoTableComponent:', () => {
       it(`should return 'Não_customizado' if 'rowValue' is 'true', 'column.boolean' is valid and
       'column.boolean.falseLabel' is 'Não_customizado'.`, () => {
         const column: PoTableColumn = {
-          property: 'boolean', label: 'Boolean', type: 'boolean', boolean: { falseLabel: 'Não_customizado' }
+          property: 'boolean',
+          label: 'Boolean',
+          type: 'boolean',
+          boolean: { falseLabel: 'Não_customizado' }
         };
         const expectedLabel: string = 'Não_customizado';
         const rowValue: boolean = false;
@@ -943,7 +968,10 @@ describe('PoTableComponent:', () => {
       it(`should return 'Sim' if 'rowValue' is 'true', 'column.boolean' is valid and
       'column.boolean.trueLabel' is not defined.`, () => {
         const column: PoTableColumn = {
-          property: 'boolean', label: 'Boolean', type: 'boolean', boolean: { }
+          property: 'boolean',
+          label: 'Boolean',
+          type: 'boolean',
+          boolean: {}
         };
         const expectedLabel: string = 'Sim';
         const rowValue: boolean = true;
@@ -954,7 +982,10 @@ describe('PoTableComponent:', () => {
       it(`should return 'Não' if 'rowValue' is 'false', 'column.boolean' is valid and
       'column.boolean.falseLabel' is not defined.`, () => {
         const column: PoTableColumn = {
-          property: 'boolean', label: 'Boolean', type: 'boolean', boolean: { }
+          property: 'boolean',
+          label: 'Boolean',
+          type: 'boolean',
+          boolean: {}
         };
         const expectedLabel: string = 'Não';
         const rowValue: boolean = false;
@@ -975,13 +1006,10 @@ describe('PoTableComponent:', () => {
 
         expect(component.getBooleanLabel(rowValue, simpleColumnBoolean)).toEqual(expectedLabel);
       });
-
     });
 
     describe('formatNumber:', () => {
-
       it('should return formatted value.', () => {
-
         const format = '1.2-5';
         const expectedReturn = '10.00';
         const value = '10';
@@ -992,7 +1020,6 @@ describe('PoTableComponent:', () => {
       });
 
       it('should return the original value.', () => {
-
         const format = undefined;
         const expectedReturn = '10';
         const value = '10';
@@ -1001,7 +1028,6 @@ describe('PoTableComponent:', () => {
 
         expect(returnValue).toEqual(expectedReturn);
       });
-
     });
 
     it('constructor: should call debounceResize when resize window.', () => {
@@ -1053,7 +1079,6 @@ describe('PoTableComponent:', () => {
     });
 
     describe('getColumnIcons:', () => {
-
       it('should call `mergeCustomIcons` if has `column.icons` and `rowIcons` is an array.', () => {
         const row: any = { portinari: ['favorite', 'documentation'] };
 
@@ -1099,11 +1124,9 @@ describe('PoTableComponent:', () => {
         expect(spyOFindCustomIcon).not.toHaveBeenCalled();
         expect(expectedReturn).toEqual(row[column.property]);
       });
-
     });
 
     describe('mergeCustomIcons:', () => {
-
       let customCloseIcon;
       let customCopyIcon;
       let columnValues;
@@ -1132,7 +1155,6 @@ describe('PoTableComponent:', () => {
 
         expect(component['mergeCustomIcons'](icons, customIcons)).toEqual([...customIcons, ...columnValues]);
       });
-
     });
 
     it('findCustomIcon: should return an array containing an object with icon value.', () => {
@@ -1160,11 +1182,11 @@ describe('PoTableComponent:', () => {
     offsetWidth is lower than scrollWidth and innerText isn't empty,`, () => {
       component.hideTextOverflow = true;
       const fakeEvent = {
-            target: {
-              offsetWidth: 30,
-              scrollWidth: 43,
-              innerText: 'teste'
-            }
+        target: {
+          offsetWidth: 30,
+          scrollWidth: 43,
+          innerText: 'teste'
+        }
       };
 
       component.tooltipMouseEnter(fakeEvent);
@@ -1194,11 +1216,11 @@ describe('PoTableComponent:', () => {
     and doesn't have 'column' as parameter`, () => {
       component.hideTextOverflow = false;
       const fakeEvent = {
-            target: {
-              offsetWidth: 30,
-              scrollWidth: 43,
-              innerText: 'teste'
-            }
+        target: {
+          offsetWidth: 30,
+          scrollWidth: 43,
+          innerText: 'teste'
+        }
       };
 
       component.tooltipMouseEnter(fakeEvent);
@@ -1210,11 +1232,11 @@ describe('PoTableComponent:', () => {
     and doesn't have 'column' as parameter`, () => {
       component.hideTextOverflow = true;
       const fakeEvent = {
-            target: {
-              offsetWidth: 43,
-              scrollWidth: 43,
-              innerText: 'teste'
-            }
+        target: {
+          offsetWidth: 43,
+          scrollWidth: 43,
+          innerText: 'teste'
+        }
       };
 
       component.tooltipMouseEnter(fakeEvent);
@@ -1237,7 +1259,7 @@ describe('PoTableComponent:', () => {
       const column = { type: 'label', tooltip: 'Label Tooltip Value' };
       const row = {};
 
-      spyOn(component, <any>'getColumnLabel').and.returnValue({tooltip: column.tooltip});
+      spyOn(component, <any>'getColumnLabel').and.returnValue({ tooltip: column.tooltip });
 
       component['checkingIfColumnHasTooltip'](column, row);
 
@@ -1268,11 +1290,9 @@ describe('PoTableComponent:', () => {
       component['calculateHeightTableContainer'].call(fakeThis, 400);
 
       expect(fakeThis.changeDetector.detectChanges).toHaveBeenCalled();
-
     });
 
     describe('isShowRowTemplate:', () => {
-
       beforeEach(() => {
         component.tableRowTemplate = mockTableDetailDiretive;
       });
@@ -1297,7 +1317,6 @@ describe('PoTableComponent:', () => {
 
         expect(isShowRowTemplate).toBeFalsy();
       });
-
     });
 
     it('hasRowTemplate: should be `false` when not contains detail template', () => {
@@ -1324,11 +1343,12 @@ describe('PoTableComponent:', () => {
 
       spyOn(fakeTable.tableContainerElement.nativeElement.firstChild.classList, 'remove');
       component['hideContainer'].call(fakeTable);
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.remove).toHaveBeenCalledWith(containerClass);
+      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.remove).toHaveBeenCalledWith(
+        containerClass
+      );
     });
 
     it('showContainer: shoud call `add` with `po-container` and `po-container-no-shadow` if container is `border`', () => {
-
       const containerClass = 'po-container';
       const noShadowClass = 'po-container-no-shadow';
       const container = 'border';
@@ -1345,12 +1365,15 @@ describe('PoTableComponent:', () => {
 
       component['showContainer'].call(fakeTable, container);
 
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(containerClass);
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(noShadowClass);
+      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(
+        containerClass
+      );
+      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(
+        noShadowClass
+      );
     });
 
     it('showContainer: shoud call `add` with `po-container` and `remove` with `po-container-no-shadow` if container is `shadow`', () => {
-
       const containerClass = 'po-container';
       const noShadowClass = 'po-container-no-shadow';
       const container = 'shadow';
@@ -1368,8 +1391,12 @@ describe('PoTableComponent:', () => {
 
       component['showContainer'].call(fakeTable, container);
 
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(containerClass);
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.remove).toHaveBeenCalledWith(noShadowClass);
+      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(
+        containerClass
+      );
+      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.remove).toHaveBeenCalledWith(
+        noShadowClass
+      );
     });
 
     it('visibleActions: should be `false` if doesn`t have action.', () => {
@@ -1452,7 +1479,14 @@ describe('PoTableComponent:', () => {
     });
 
     it('checkChangesItems: should call `getDefaultColumns` to set columns if doesn`t have columns after items are changed', () => {
-      const item = { id: 2, initial: 'FR', name: 'França', total: 160.00, atualization: '2017-10-13', status: 'confirmed' };
+      const item = {
+        id: 2,
+        initial: 'FR',
+        name: 'França',
+        total: 160.0,
+        atualization: '2017-10-13',
+        status: 'confirmed'
+      };
       const expectedItem = component['getDefaultColumns'](item);
 
       component.items = [];
@@ -1470,7 +1504,14 @@ describe('PoTableComponent:', () => {
     it('checkChangesItems: shouldn`t call `getDefaultColumns` if has columns after items are changed', () => {
       spyOn(component, <any>'getDefaultColumns');
 
-      const item = { id: 2, initial: 'FR', name: 'França', total: 160.00, atualization: '2017-10-13', status: 'confirmed' };
+      const item = {
+        id: 2,
+        initial: 'FR',
+        name: 'França',
+        total: 160.0,
+        atualization: '2017-10-13',
+        status: 'confirmed'
+      };
       component.items = [item];
 
       component['checkChangesItems']();
@@ -1479,7 +1520,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('onVisibleColumnsChange: should set `columns` and call `detectChanges`', () => {
-      const newColumns: Array<PoTableColumn> = [ { property: 'age', visible: false } ];
+      const newColumns: Array<PoTableColumn> = [{ property: 'age', visible: false }];
 
       component.columns = [];
 
@@ -1496,11 +1537,9 @@ describe('PoTableComponent:', () => {
 
       expect(component.trackBy(index)).toBe(expectedValue);
     });
-
   });
 
   describe('Templates:', () => {
-
     // TODO Ng V9
     xit('should contain `po-tooltip` class if `poTableColumn.tooltip`', fakeAsync(() => {
       const mouseEnterEvent = new Event('mouseenter', { bubbles: true });
@@ -1527,7 +1566,9 @@ describe('PoTableComponent:', () => {
 
     it('shouldn`t contain `po-tooltip` class if link is disabled', fakeAsync(() => {
       const mouseEnterEvent = new Event('mouseenter', { bubbles: true });
-      component.columns = [{ property: 'link', label: 'linkTest', type: 'link', tooltip: 'tooltipTest', disabled: () => true }];
+      component.columns = [
+        { property: 'link', label: 'linkTest', type: 'link', tooltip: 'tooltipTest', disabled: () => true }
+      ];
       component.items = [{ link: 'tooltipTest' }];
       fixture.detectChanges();
 
@@ -1768,11 +1809,9 @@ describe('PoTableComponent:', () => {
 
       expect(nativeElement.querySelectorAll(`po-table-column-icon po-table-icon`).length).toBe(2);
     });
-
   });
 
   describe('Properties:', () => {
-
     it('firstAction: should be `false` if not contains actions', () => {
       component.actions = undefined;
 
@@ -1796,7 +1835,6 @@ describe('PoTableComponent:', () => {
     });
 
     describe(`hasSelectableColumn`, () => {
-
       it(`should return true if 'selectable', 'hasItems' and 'hasMainColumns' are true`, () => {
         component.selectable = true;
         component.columns = [...columns];
@@ -1841,7 +1879,6 @@ describe('PoTableComponent:', () => {
 
         expect(component.hasSelectableColumn).toBe(false);
       });
-
     });
 
     it(`hasFooter: should return false if 'hasItems' and 'hasVisibleSubtitleColumns' are false`, () => {
@@ -1873,26 +1910,19 @@ describe('PoTableComponent:', () => {
     });
 
     it('hasMainColumns: should return true if `columns` contains visible columns', () => {
-      const invisibleColumns: Array<PoTableColumn> = [
-        { property: 'name', visible: false }
-      ];
+      const invisibleColumns: Array<PoTableColumn> = [{ property: 'name', visible: false }];
 
-      const visibleColumns: Array<PoTableColumn> = [
-        { property: 'age' },
-        { property: 'email' }
-      ];
+      const visibleColumns: Array<PoTableColumn> = [{ property: 'age' }, { property: 'email' }];
 
-      component.columns = [ ...invisibleColumns, ...visibleColumns];
+      component.columns = [...invisibleColumns, ...visibleColumns];
 
       expect(component.hasMainColumns).toBe(true);
     });
 
     it('hasMainColumns: should return false if `columns` has only invisble columns', () => {
-      const invisibleColumns: Array<PoTableColumn> = [
-        { property: 'name', visible: false }
-      ];
+      const invisibleColumns: Array<PoTableColumn> = [{ property: 'name', visible: false }];
 
-      component.columns = [ ...invisibleColumns ];
+      component.columns = [...invisibleColumns];
 
       expect(component.hasMainColumns).toBe(false);
     });
@@ -1962,38 +1992,33 @@ describe('PoTableComponent:', () => {
     });
 
     it('hasVisibleSubtitleColumns: should return true if subtitleColumn is visible', () => {
-      const columnsSubtitle = [ columnSubtitle ];
+      const columnsSubtitle = [columnSubtitle];
 
-      component.columns = [ ...columnsSubtitle ];
+      component.columns = [...columnsSubtitle];
 
       expect(component.hasVisibleSubtitleColumns).toBe(true);
     });
 
     it('hasVisibleSubtitleColumns: should return false if subtitleColumn is invisible', () => {
-      const columnsSubtitle = [ { ...columnSubtitle, visible: false } ];
+      const columnsSubtitle = [{ ...columnSubtitle, visible: false }];
 
-      component.columns = [ ...columnsSubtitle ];
+      component.columns = [...columnsSubtitle];
 
       expect(component.hasVisibleSubtitleColumns).toBe(false);
     });
 
     it('mainColumns: should return columns with type or without type', () => {
-      component.columns = [ ...columns ];
+      component.columns = [...columns];
 
       expect(component.mainColumns.length).toBe(columns.length);
     });
 
     it('mainColumns: should return only visible columns', () => {
-      const invisibleColumns: Array<PoTableColumn> = [
-        { property: 'name', visible: false }
-      ];
+      const invisibleColumns: Array<PoTableColumn> = [{ property: 'name', visible: false }];
 
-      const visibleColumns: Array<PoTableColumn> = [
-        { property: 'age' },
-        { property: 'email' }
-      ];
+      const visibleColumns: Array<PoTableColumn> = [{ property: 'age' }, { property: 'email' }];
 
-      component.columns = [ ...invisibleColumns, ...visibleColumns ];
+      component.columns = [...invisibleColumns, ...visibleColumns];
 
       const mainColumns = component.mainColumns;
 
@@ -2002,47 +2027,39 @@ describe('PoTableComponent:', () => {
     });
 
     it('hasValidColumns: should return true if `validColumns.length` not is empty', () => {
-      const invalidColumns = [
-        { property: 'email', type: 'email' }
-      ];
+      const invalidColumns = [{ property: 'email', type: 'email' }];
 
-      component.columns = [ ...columns, ...invalidColumns ];
+      component.columns = [...columns, ...invalidColumns];
 
       expect(component.hasValidColumns).toBe(true);
     });
 
     it('hasValidColumns: should return true if `validColumns.length` is empty', () => {
-      const invalidColumns = [
-        { property: 'email', type: 'email' }
-      ];
+      const invalidColumns = [{ property: 'email', type: 'email' }];
 
-      component.columns = [ ...invalidColumns ];
+      component.columns = [...invalidColumns];
 
       expect(component.hasValidColumns).toBe(false);
     });
 
     it('validColumns: should return only valid columns', () => {
-      const invalidColumns = [
-        { property: 'email', type: 'email' }
-      ];
+      const invalidColumns = [{ property: 'email', type: 'email' }];
 
-      component.columns = [ ...columns, ...invalidColumns ];
+      component.columns = [...columns, ...invalidColumns];
 
       expect(component.validColumns).toEqual(columns);
     });
 
     it('validColumns: should return an empty array if all columns are invalid', () => {
-      const invalidColumns = [
-        { property: 'email', type: 'email' }
-      ];
+      const invalidColumns = [{ property: 'email', type: 'email' }];
 
-      component.columns = [ ...invalidColumns ];
+      component.columns = [...invalidColumns];
 
       expect(component.validColumns).toEqual([]);
     });
 
     it('displayColumnManagerCell: should return false if has visible actions', () => {
-      component.actions = [ ...singleAction ];
+      component.actions = [...singleAction];
 
       expect(component.displayColumnManagerCell).toBe(false);
     });
@@ -2054,7 +2071,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('isSingleAction: should return true if has one visible actions', () => {
-      component.actions = [ ...singleAction ];
+      component.actions = [...singleAction];
 
       expect(component.isSingleAction).toBe(true);
     });
@@ -2066,7 +2083,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('isSingleAction: should return false if has more than one visible actions', () => {
-      component.actions = [ ...actions ];
+      component.actions = [...actions];
 
       expect(component.isSingleAction).toBe(false);
     });
@@ -2155,7 +2172,5 @@ describe('PoTableComponent:', () => {
       component.actions.length = 0;
       expect(component.columnCount).toBe(7);
     });
-
   });
-
 });

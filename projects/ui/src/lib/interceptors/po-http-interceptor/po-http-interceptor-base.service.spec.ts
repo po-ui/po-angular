@@ -1,4 +1,11 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HTTP_INTERCEPTORS, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HTTP_INTERCEPTORS,
+  HttpRequest,
+  HttpResponse
+} from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -14,12 +21,11 @@ import { PoHttpInterceptorService } from './po-http-interceptor.service';
 import { PoToasterOrientation } from '../../services/po-notification/po-toaster/po-toaster-orientation.enum';
 
 const mockNotification = {
-  success: (message: string) => { },
-  error: (message: string, orientation: PoToasterOrientation, actionLabel: string, action: Function) => { }
+  success: (message: string) => {},
+  error: (message: string, orientation: PoToasterOrientation, actionLabel: string, action: Function) => {}
 };
 
 describe('PoHttpInterceptorBaseService', () => {
-
   let response: any;
   let errResponse: HttpErrorResponse;
 
@@ -32,10 +38,7 @@ describe('PoHttpInterceptorBaseService', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        PoHttpInterceptorModule
-      ],
+      imports: [HttpClientTestingModule, PoHttpInterceptorModule],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         PoComponentInjectorService,
@@ -43,7 +46,8 @@ describe('PoHttpInterceptorBaseService', () => {
           provide: HTTP_INTERCEPTORS,
           useClass: PoHttpInterceptorService,
           multi: true
-        }],
+        }
+      ]
     });
   });
 
@@ -56,141 +60,185 @@ describe('PoHttpInterceptorBaseService', () => {
     service = TestBed.inject(PoHttpInterceptorService);
   });
 
-  it('should show success notification',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
+  it('should show success notification', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       const actionLabel = undefined;
       const action = undefined;
 
       spyOn(service.notification, 'success');
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
       httpMock.expectOne('/data').flush({ _messages: messages }, mockSuccessResponse);
 
       expect(service.notification.success).toHaveBeenCalledWith({ message: messages.message, actionLabel, action });
-    }));
+    }
+  ));
 
-  it('should show success notifications',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+  it('should show success notifications', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'success');
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush({ _messages: [messages, messages] }, mockSuccessResponse);
 
       expect(service.notification.success).toHaveBeenCalledTimes(4);
-    }));
+    }
+  ));
 
-  it('should not show invalid type notification',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+  it('should not show invalid type notification', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       messages.type = 'invalid type';
 
       spyOn(mockNotification, 'success');
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush({ _messages: messages }, mockSuccessResponse);
 
       expect(mockNotification.success).not.toHaveBeenCalled();
-    }));
+    }
+  ));
 
-  it('should not show notification',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+  it('should not show notification', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(mockNotification, 'success');
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush({ invalid_message_object: messages }, mockSuccessResponse);
 
       expect(mockNotification.success).not.toHaveBeenCalled();
-    }));
+    }
+  ));
 
-  it('should show error notification',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+  it('should show error notification', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'error');
 
       portinariErrorMessage.details = undefined;
       portinariErrorMessage.detailedMessage = undefined;
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
 
-      expect(service.notification.error).toHaveBeenCalledWith(
-        { message: portinariErrorMessage.message, actionLabel: undefined, action: undefined });
-    }));
+      expect(service.notification.error).toHaveBeenCalledWith({
+        message: portinariErrorMessage.message,
+        actionLabel: undefined,
+        action: undefined
+      });
+    }
+  ));
 
-  it('should show error notification with details',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+  it('should show error notification with details', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'error');
 
       portinariErrorMessage.details = [{ code: '1', message: 'detalhe' }];
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
 
       // TODO: Validar notification function
-      expect(service.notification.error).toHaveBeenCalledWith(
-        {
-          message: portinariErrorMessage.message, actionLabel: 'Detalhes', action: jasmine.any(Function)
-        });
-    }));
+      expect(service.notification.error).toHaveBeenCalledWith({
+        message: portinariErrorMessage.message,
+        actionLabel: 'Detalhes',
+        action: jasmine.any(Function)
+      });
+    }
+  ));
 
-  it('should show error notification with help url',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+  it('should show error notification with help url', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'error');
 
       portinariErrorMessage.details = undefined;
       portinariErrorMessage.detailedMessage = undefined;
       portinariErrorMessage.helpUrl = 'http://po.portinari.com.br';
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
 
       // TODO: Validar help Url
-      expect(service.notification.error).toHaveBeenCalledWith(
-        {
-          message: portinariErrorMessage.message, actionLabel: 'Ajuda', action: jasmine.any(Function)
-        });
-    }));
+      expect(service.notification.error).toHaveBeenCalledWith({
+        message: portinariErrorMessage.message,
+        actionLabel: 'Ajuda',
+        action: jasmine.any(Function)
+      });
+    }
+  ));
 
-  it('should show error notification if server not responding',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+  it('should show error notification if server not responding', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'error');
 
       portinariErrorMessage.details = undefined;
       portinariErrorMessage.detailedMessage = undefined;
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorServerNotResponding);
 
-      expect(service.notification.error).toHaveBeenCalledWith(
-        { message: 'Servidor não está respondendo.', actionLabel: 'Detalhes', action: jasmine.any(Function) });
-    }));
+      expect(service.notification.error).toHaveBeenCalledWith({
+        message: 'Servidor não está respondendo.',
+        actionLabel: 'Detalhes',
+        action: jasmine.any(Function)
+      });
+    }
+  ));
 
-  it('should not show error notification',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+  it('should not show error notification', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(mockNotification, 'error');
 
-      http.get('/data').subscribe(res => response = res, err => errResponse = err);
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush(mockErrorResponse, mockErrorResponse);
 
       expect(mockNotification.error).not.toHaveBeenCalled();
-    }));
+    }
+  ));
 
   it('should open external help url', () => {
-
     spyOn(window, 'open');
 
     const helpUrl = 'https://google.com.br';
@@ -200,21 +248,25 @@ describe('PoHttpInterceptorBaseService', () => {
     expect(window.open).toHaveBeenCalledWith(helpUrl, '_blank');
   });
 
-  it('should not show notification when defined noErrorNotification with value true',
-    inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
+  it('should not show notification when defined noErrorNotification with value true', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
       const headers = { 'X-Portinari-No-Error': 'true' };
 
       spyOn(mockNotification, 'error');
 
-      http.get('/data', { headers: headers }).subscribe(res => response = res, err => errResponse = err);
+      http.get('/data', { headers: headers }).subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
 
       httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
 
       expect(mockNotification.error).not.toHaveBeenCalled();
-    }));
+    }
+  ));
 
   it('hasNoErrorParam should return true when the param `X-Portinari-No-Error` value is true in header of request', () => {
-
     const requestWithTrueValue = createHttpRequest('X-Portinari-No-Error', 'true');
     const requestWithUpperCaseValue = createHttpRequest('X-PORTINARI-NO-ERROR', 'TRUE');
 
@@ -223,7 +275,6 @@ describe('PoHttpInterceptorBaseService', () => {
   });
 
   it('hasNoErrorParam should return false when the param `X-Portinari-No-Error` value is false in header of request', () => {
-
     const requestWipoalseValue = createHttpRequest('X-Portinari-No-Error', 'false');
     const requestWithWhitespaceValue = createHttpRequest('X-Portinari-No-Error', '');
 
@@ -232,15 +283,12 @@ describe('PoHttpInterceptorBaseService', () => {
   });
 
   it('hasNoErrorParam should return false when request param is undefined', () => {
-
     const hasNoErrorParam = service['hasNoErrorParam'](undefined);
     expect(hasNoErrorParam).toBeFalsy();
   });
 
   describe('Methods:', () => {
-
     it('hasNoMessageParam should return true if `X-Portinari-No-Error` value is true in request header', () => {
-
       ['true', 'TRUE'].forEach(value => {
         const request = createHttpRequest('X-Portinari-No-Message', value);
         expect(service['hasNoMessageParam'](request)).toBeTruthy(true);
@@ -248,7 +296,6 @@ describe('PoHttpInterceptorBaseService', () => {
     });
 
     it('hasNoMessageParam should return false if `X-Portinari-No-Error` value is falsy in request header', () => {
-
       ['false', 'FALSE', ''].forEach(value => {
         const request = createHttpRequest('X-Portinari-No-Message', value);
         expect(service['hasNoMessageParam'](request)).toBeFalsy(false);
@@ -268,7 +315,7 @@ describe('PoHttpInterceptorBaseService', () => {
           detail: '',
           title: '',
           closed: { subscribe: callback => callback() },
-          open: () => { }
+          open: () => {}
         }
       };
 
@@ -288,7 +335,9 @@ describe('PoHttpInterceptorBaseService', () => {
 
     it('createModal: should create instance of `PoHttpInterceptorDetail` with details array', () => {
       const detail: PoHttpInterceptorDetail = {
-        code: 'code', detailedMessage: 'detailed message', message: 'message',
+        code: 'code',
+        detailedMessage: 'detailed message',
+        message: 'message',
         details: [
           { code: 'detail code', detailedMessage: 'detailed message', message: 'detail message' },
           { code: 'detail code', detailedMessage: 'detailed message', message: 'detail message 2' }
@@ -306,7 +355,7 @@ describe('PoHttpInterceptorBaseService', () => {
           detail: '',
           title: '',
           closed: { subscribe: callback => callback() },
-          open: () => { }
+          open: () => {}
         }
       };
 
@@ -371,8 +420,7 @@ describe('PoHttpInterceptorBaseService', () => {
         .append('X-Portinari-No-Message', 'false')
         .append('other-header', 'test');
 
-      const expectedHeaders = new HttpHeaders()
-        .append('other-header', 'test');
+      const expectedHeaders = new HttpHeaders().append('other-header', 'test');
 
       const request = new HttpRequest('GET', 'http://test.com', { headers });
 
@@ -434,9 +482,7 @@ describe('PoHttpInterceptorBaseService', () => {
 
       expect(service.notification.success).toHaveBeenCalled();
     });
-
   });
-
 });
 
 function createHttpRequest(headerParam: string, value: string) {

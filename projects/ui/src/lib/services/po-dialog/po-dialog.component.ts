@@ -12,17 +12,17 @@ import { PoModalAction } from '../../components/po-modal/po-modal-action.interfa
 import { PoModalComponent } from '../../components/po-modal/po-modal.component';
 
 export const poDialogAlertLiteralsDefault = {
-  en: <PoDialogAlertLiterals> { ok: 'Ok' },
-  es: <PoDialogAlertLiterals> { ok: 'Ok' },
-  pt: <PoDialogAlertLiterals> { ok: 'Ok' },
-  ru: <PoDialogAlertLiterals> { ok: 'Ок' }
+  en: <PoDialogAlertLiterals>{ ok: 'Ok' },
+  es: <PoDialogAlertLiterals>{ ok: 'Ok' },
+  pt: <PoDialogAlertLiterals>{ ok: 'Ok' },
+  ru: <PoDialogAlertLiterals>{ ok: 'Ок' }
 };
 
 export const poDialogConfirmLiteralsDefault = {
-  en: <PoDialogConfirmLiterals> { cancel: 'Cancel', confirm: 'Confirm' },
-  es: <PoDialogConfirmLiterals> { cancel: 'Cancelar', confirm: 'Confirmar' },
-  pt: <PoDialogConfirmLiterals> { cancel: 'Cancelar', confirm: 'Confirmar' },
-  ru: <PoDialogConfirmLiterals> { cancel: 'отменить', confirm: 'подтвердить' }
+  en: <PoDialogConfirmLiterals>{ cancel: 'Cancel', confirm: 'Confirm' },
+  es: <PoDialogConfirmLiterals>{ cancel: 'Cancelar', confirm: 'Confirmar' },
+  pt: <PoDialogConfirmLiterals>{ cancel: 'Cancelar', confirm: 'Confirmar' },
+  ru: <PoDialogConfirmLiterals>{ cancel: 'отменить', confirm: 'подтвердить' }
 };
 
 /**
@@ -47,7 +47,7 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   message: string;
 
   // Objeto primary do poModal
-  primaryAction: PoModalAction = { label: 'ok', action: () => { } };
+  primaryAction: PoModalAction = { label: 'ok', action: () => {} };
 
   // Objeto secondary do poModal
   secondaryAction: PoModalAction;
@@ -70,7 +70,7 @@ export class PoDialogComponent implements OnDestroy, OnInit {
     this.closeSubscription = this.poModal.onXClosed.subscribe(close => this.destroy());
   }
 
-    // Fecha o poModal
+  // Fecha o poModal
   close(): void {
     this.poModal.close();
     this.destroy();
@@ -84,14 +84,13 @@ export class PoDialogComponent implements OnDestroy, OnInit {
 
   // Insere os valores recebidos de this.open para o poModal
   configDialog(primaryLabel?, primaryAction?, secondaryLabel?, secondaryAction?) {
-
     this.primaryAction = {
       label: primaryLabel,
       action: () => {
-          if (primaryAction) {
-            primaryAction();
-          }
-          this.close();
+        if (primaryAction) {
+          primaryAction();
+        }
+        this.close();
       }
     };
 
@@ -109,10 +108,11 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   }
 
   // Insere os valores recebidos de po-dialog.service de acordo com o tipo de diálago solicitado
-  open(dialogOptions: (PoDialogConfirmOptions | PoDialogAlertOptions),
-       dialogType: PoDialogType,
-       componentRef?: ComponentRef<PoDialogComponent>): void {
-
+  open(
+    dialogOptions: PoDialogConfirmOptions | PoDialogAlertOptions,
+    dialogType: PoDialogType,
+    componentRef?: ComponentRef<PoDialogComponent>
+  ): void {
     this.title = dialogOptions.title;
     this.message = dialogOptions.message;
 
@@ -123,8 +123,11 @@ export class PoDialogComponent implements OnDestroy, OnInit {
     switch (dialogType) {
       case PoDialogType.Confirm: {
         this.configDialog(
-          this.literalsConfirm.confirm, (<PoDialogConfirmOptions>dialogOptions).confirm,
-          this.literalsConfirm.cancel, (<PoDialogConfirmOptions>dialogOptions).cancel);
+          this.literalsConfirm.confirm,
+          (<PoDialogConfirmOptions>dialogOptions).confirm,
+          this.literalsConfirm.cancel,
+          (<PoDialogConfirmOptions>dialogOptions).cancel
+        );
         break;
       }
       case PoDialogType.Alert: {
@@ -142,9 +145,13 @@ export class PoDialogComponent implements OnDestroy, OnInit {
     const literals = dialogOptions.literals;
 
     if (dialogType === PoDialogType.Alert) {
-      this.literalsAlert = {...alertLiterals[poLocaleDefault], ...alertLiterals[browserLanguage()], ...literals};
+      this.literalsAlert = { ...alertLiterals[poLocaleDefault], ...alertLiterals[browserLanguage()], ...literals };
     } else {
-      this.literalsConfirm = {...confirmLiterals[poLocaleDefault], ...confirmLiterals[browserLanguage()], ...literals};
+      this.literalsConfirm = {
+        ...confirmLiterals[poLocaleDefault],
+        ...confirmLiterals[browserLanguage()],
+        ...literals
+      };
     }
   }
 }

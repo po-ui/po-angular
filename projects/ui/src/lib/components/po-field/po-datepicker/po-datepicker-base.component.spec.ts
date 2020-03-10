@@ -16,7 +16,6 @@ class PoDatepickerComponent extends PoDatepickerBaseComponent {
 }
 
 describe('PoDatepickerBaseComponent:', () => {
-
   let component: PoDatepickerComponent;
 
   beforeEach(() => {
@@ -29,7 +28,7 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should be update property p-disabled', () => {
-    spyOn(component, <any> 'validateModel');
+    spyOn(component, <any>'validateModel');
     spyOn(UtilsFunctions, 'convertDateToISOExtended');
 
     expectSettersMethod(component, 'setDisabled', '', 'disabled', true);
@@ -41,7 +40,7 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should update property p-required', () => {
-    spyOn(component, <any> 'validateModel');
+    spyOn(component, <any>'validateModel');
     spyOn(UtilsFunctions, 'convertDateToISOExtended');
 
     expectSettersMethod(component, 'setRequired', '', 'required', true);
@@ -65,7 +64,7 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should be update property p-min-date with 0 hours using string', () => {
-    spyOn(component, <any> 'validateModel');
+    spyOn(component, <any>'validateModel');
 
     component.minDate = new Date(2017, 7, 1, 5, 10, 8).toISOString();
 
@@ -91,7 +90,7 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should be update property p-max-date with 23:59:59 hours using string', () => {
-    spyOn(component, <any> 'validateModel');
+    spyOn(component, <any>'validateModel');
 
     component.maxDate = new Date(2017, 7, 1, 5, 10, 8).toISOString();
 
@@ -226,9 +225,7 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('controlModel:', () => {
-
       it('should call `callOnChange` when have a date.', () => {
         spyOn(component, 'callOnChange');
 
@@ -306,7 +303,6 @@ describe('PoDatepickerBaseComponent:', () => {
 
         expect(UtilsFunctions.convertDateToISODate).not.toHaveBeenCalled();
       });
-
     });
 
     it('formatToDate: should call `formatYear` with date year', () => {
@@ -328,13 +324,12 @@ describe('PoDatepickerBaseComponent:', () => {
     });
 
     describe('validate:', () => {
-
       let invalidDateError;
 
       beforeEach(() => {
         invalidDateError = {
           date: {
-            valid: false,
+            valid: false
           }
         };
       });
@@ -349,30 +344,30 @@ describe('PoDatepickerBaseComponent:', () => {
 
       it(`should invalidate form and set errorPattern 'Data inválida' when
         doesn't have an errorPattern value and date is invalid`, () => {
-          component.errorPattern = '';
+        component.errorPattern = '';
 
-          expect(component.validate(new FormControl([]))).toEqual(invalidDateError);
-          expect(component.errorPattern).toBe('Data inválida');
+        expect(component.validate(new FormControl([]))).toEqual(invalidDateError);
+        expect(component.errorPattern).toBe('Data inválida');
       });
 
       it(`should invalidate form and set errorPattern 'Data inválida' when
         errorPattern is equal to 'Data fora do período' and date is invalid`, () => {
-          component.errorPattern = 'Data fora do período';
+        component.errorPattern = 'Data fora do período';
 
-          expect(component.validate(new FormControl([]))).toEqual(invalidDateError);
-          expect(component.errorPattern).toBe('Data inválida');
+        expect(component.validate(new FormControl([]))).toEqual(invalidDateError);
+        expect(component.errorPattern).toBe('Data inválida');
       });
 
       it(`should invalidate form and set errorPattern '' when date is undefined`, () => {
-          const invalidRequiredError = {
-            required: {
-              valid: false,
-            }
-          };
-          spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+        const invalidRequiredError = {
+          required: {
+            valid: false
+          }
+        };
+        spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-          expect(component.validate(new FormControl(undefined))).toEqual(invalidRequiredError);
-          expect(component.errorPattern).toBe('');
+        expect(component.validate(new FormControl(undefined))).toEqual(invalidRequiredError);
+        expect(component.errorPattern).toBe('');
       });
 
       it(`should invalidate form and set errorPattern 'Data fora do período' when has a date out of range`, () => {
@@ -386,13 +381,13 @@ describe('PoDatepickerBaseComponent:', () => {
 
       it(`should invalidate form and set errorPattern 'Data fora do período' when
         has a date out of range and errorPattern is 'Data inválida'`, () => {
-          spyOn(UtilsFunctions, 'validateDateRange').and.returnValue(false);
+        spyOn(UtilsFunctions, 'validateDateRange').and.returnValue(false);
 
-          component.errorPattern = 'Data inválida';
-          component['date'] = new Date(2018, 5, 5);
+        component.errorPattern = 'Data inválida';
+        component['date'] = new Date(2018, 5, 5);
 
-          expect(component.validate(new FormControl('Tue Jun 05 2018 00:00:00'))).toEqual(invalidDateError);
-          expect(component.errorPattern).toBe('Data fora do período');
+        expect(component.validate(new FormControl('Tue Jun 05 2018 00:00:00'))).toEqual(invalidDateError);
+        expect(component.errorPattern).toBe('Data fora do período');
       });
 
       it(`shouldn't invalidate form and set errorPattern '' when set a valid date and errorPattern is 'Data inválida'`, () => {
@@ -408,7 +403,6 @@ describe('PoDatepickerBaseComponent:', () => {
         expect(component.validate(new FormControl('Tue Jun 05 2018 00:00:00'))).toEqual(null);
         expect(component.errorPattern).toBe('');
       });
-
     });
 
     it('ngOnInit: should call buildMask', () => {
@@ -428,7 +422,7 @@ describe('PoDatepickerBaseComponent:', () => {
     it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel']([]);
 
@@ -445,7 +439,7 @@ describe('PoDatepickerBaseComponent:', () => {
     it('callOnChange: should call `onChangeModel` with `value` param if `onChangeModel` is truthy', () => {
       const expectedValue = '2019-04-04';
 
-      const spyOnChangeModel = spyOn(component, <any> 'onChangeModel');
+      const spyOnChangeModel = spyOn(component, <any>'onChangeModel');
 
       component.callOnChange(expectedValue);
 
@@ -481,11 +475,9 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(component['onChangeModel']).toBe(undefined);
       expect(spyCallOnChange).toHaveBeenCalledTimes(1);
     }));
-
   });
 
   describe('Properties:', () => {
-
     it('p-no-autocomplete: should update property with valid values with valid values.', () => {
       const invalidValues = [undefined, null, 0, 'false', 'string'];
       expectPropertiesValues(component, 'noAutocomplete', invalidValues, false);
@@ -518,7 +510,6 @@ describe('PoDatepickerBaseComponent:', () => {
 
       expect(component['buildMask']).toHaveBeenCalled();
       expect(component.refreshValue).toHaveBeenCalled();
-
     });
 
     it('p-format: should call buildMask and set a `dd/mm/yyyy` date format when set a invalid value', () => {
@@ -528,11 +519,10 @@ describe('PoDatepickerBaseComponent:', () => {
 
       expect(component['buildMask']).toHaveBeenCalled();
       expect(component['_format']).toBe('dd/mm/yyyy');
-
     });
 
     it('p-placeholder: should update a empty string when valid values', () => {
-      const invalidValues = [ undefined, 1, {}, [], true, false ];
+      const invalidValues = [undefined, 1, {}, [], true, false];
 
       expectPropertiesValues(component, 'placeholder', invalidValues, '');
     });
@@ -540,7 +530,7 @@ describe('PoDatepickerBaseComponent:', () => {
     it('p-placeholder: should update with valid value', () => {
       const validValue = 'test';
 
-      expectPropertiesValues(component, 'placeholder', validValue , validValue);
+      expectPropertiesValues(component, 'placeholder', validValue, validValue);
     });
 
     it('p-min-date: should set start date with year 1', () => {
@@ -553,7 +543,7 @@ describe('PoDatepickerBaseComponent:', () => {
     });
 
     it('minDate: should call `setYearFrom0To100`', () => {
-      spyOn(UtilsFunctions , 'setYearFrom0To100');
+      spyOn(UtilsFunctions, 'setYearFrom0To100');
 
       component.minDate = new Date();
       expect(setYearFrom0To100).toHaveBeenCalled();
@@ -569,7 +559,7 @@ describe('PoDatepickerBaseComponent:', () => {
     });
 
     it('maxDate: should call `setYearFrom0To100`', () => {
-      spyOn(UtilsFunctions , 'setYearFrom0To100');
+      spyOn(UtilsFunctions, 'setYearFrom0To100');
 
       component.maxDate = new Date();
 
@@ -579,7 +569,7 @@ describe('PoDatepickerBaseComponent:', () => {
     it('p-iso-format: should update with valid value', () => {
       const validValue = [PoDatepickerIsoFormat.Basic, PoDatepickerIsoFormat.Extended, 'basic', 'extended'];
 
-      expectPropertiesValues(component, 'isoFormat', validValue , validValue);
+      expectPropertiesValues(component, 'isoFormat', validValue, validValue);
     });
 
     it('p-iso-format: should set isExtendedISO with `false` if isoFormat value is `PoDatepickerIsoFormat.Basic`', () => {
@@ -595,11 +585,9 @@ describe('PoDatepickerBaseComponent:', () => {
     });
 
     it('p-iso-format: should be set with `undefined` if it receives an invalid value', () => {
-      const invalidValues = [ undefined, 0, 1, 3, 'valor', [], true, false ];
+      const invalidValues = [undefined, 0, 1, 3, 'valor', [], true, false];
 
       expectPropertiesValues(component, 'isoFormat', invalidValues, undefined);
     });
-
   });
-
 });

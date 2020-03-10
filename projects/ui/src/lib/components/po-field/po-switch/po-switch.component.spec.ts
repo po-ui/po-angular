@@ -14,11 +14,7 @@ describe('PoRadioGroupComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoSwitchComponent,
-        PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoSwitchComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -120,7 +116,6 @@ describe('PoRadioGroupComponent', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
       component.autoFocus = true;
 
@@ -171,7 +166,6 @@ describe('PoRadioGroupComponent', () => {
     });
 
     describe('onKeyDown:', () => {
-
       let fakeEvent;
 
       beforeEach(() => {
@@ -214,12 +208,10 @@ describe('PoRadioGroupComponent', () => {
         expect(component.eventClick).not.toHaveBeenCalled();
         expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
       });
-
     });
   });
 
   describe('Template:', () => {
-
     it('should set tabindex to -1 when switch is disabled', () => {
       component.disabled = true;
       fixture.detectChanges();
@@ -233,6 +225,5 @@ describe('PoRadioGroupComponent', () => {
 
       expect(nativeElement.querySelector('div.po-switch-container.po-clickable[tabindex="0"]')).toBeTruthy();
     });
-
   });
 });

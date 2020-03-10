@@ -21,7 +21,6 @@ describe('PoModalPasswordRecoveryBaseComponent:', () => {
   });
 
   describe('Properties', () => {
-
     it('p-type: should update property `p-type` with valid values.', () => {
       const validValues = ['all', 'email', 'sms'];
 
@@ -46,18 +45,17 @@ describe('PoModalPasswordRecoveryBaseComponent:', () => {
       const validValues = ['(99) 9999-9999', '9999', '000000'];
 
       expectPropertiesValues(component, 'phoneMask', validValues, validValues);
-
     });
 
     it('p-phone-mask: should update property `phoneMask` with `(99) 9999-9999` if values are invalid.', () => {
-      const invalidValues = [false, undefined, null , ''];
+      const invalidValues = [false, undefined, null, ''];
 
       expectPropertiesValues(component, 'phoneMask', invalidValues, '(99) 99999-9999');
     });
 
     it('p-phone-mask: should update properties `maxLength` and `minLength` with `phoneMask` length.', () => {
       const phoneMask = '(99) 99999-9999';
-      component.phoneMask = phoneMask ;
+      component.phoneMask = phoneMask;
 
       expect(component.minLength).toBe(phoneMask.length);
       expect(component.maxLength).toBe(phoneMask.length);
@@ -65,7 +63,6 @@ describe('PoModalPasswordRecoveryBaseComponent:', () => {
   });
 
   describe('Methods', () => {
-
     it('concatenateSMSErrorMessage: should concatenate if `contactEmail` has value: ', () => {
       const contactEmail = 'email';
       const expectedResult = `${component.literals.smsCodeErrorMessagePhrase} ${component.literals.prepositionIn} ${contactEmail}.`;
@@ -90,5 +87,4 @@ describe('PoModalPasswordRecoveryBaseComponent:', () => {
       expect(methodReturn).toBe(expectedResult);
     });
   });
-
 });

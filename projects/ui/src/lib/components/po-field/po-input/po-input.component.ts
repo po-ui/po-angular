@@ -27,25 +27,24 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   selector: 'po-input',
   templateUrl: './po-input.component.html',
   providers: [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoInputComponent),
-    multi: true,
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoInputComponent),
-    multi: true,
-  }]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoInputComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoInputComponent),
+      multi: true
+    }
+  ]
 })
 export class PoInputComponent extends PoInputGeneric {
-
   constructor(el: ElementRef) {
     super(el);
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
-
 }

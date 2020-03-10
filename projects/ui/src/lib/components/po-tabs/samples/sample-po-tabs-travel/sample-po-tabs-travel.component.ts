@@ -4,10 +4,9 @@ import { PoNotificationService, PoRadioGroupOption, PoSelectOption } from '@port
 
 @Component({
   selector: 'sample-po-tabs-travel',
-  templateUrl: './sample-po-tabs-travel.component.html',
+  templateUrl: './sample-po-tabs-travel.component.html'
 })
 export class SamplePoTabsTravelComponent {
-
   card: number;
   cardName: string;
   classFlight: number;
@@ -57,15 +56,17 @@ export class SamplePoTabsTravelComponent {
     { label: 'Trains', value: 'train' }
   ];
 
-  constructor(private poNotificationService: PoNotificationService) { }
+  constructor(private poNotificationService: PoNotificationService) {}
 
   bankBillet() {
     this.poNotificationService.warning('Bank billet sent to email');
   }
 
   isPaymentEnable(formTravel, formTrain, formFlight) {
-    return ((formTravel.valid && this.transportation === 'flight' && formFlight.valid) ||
-      (formTravel.valid && this.transportation === 'train' && formTrain.valid));
+    return (
+      (formTravel.valid && this.transportation === 'flight' && formFlight.valid) ||
+      (formTravel.valid && this.transportation === 'train' && formTrain.valid)
+    );
   }
 
   getTotalCost() {
@@ -86,5 +87,4 @@ export class SamplePoTabsTravelComponent {
   payment() {
     this.poNotificationService.success('Order confirmed');
   }
-
 }

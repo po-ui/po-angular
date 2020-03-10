@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class PoCalendarLangService {
-
   private language = 'pt';
 
   private months = [
@@ -153,8 +152,7 @@ export class PoCalendarLangService {
   setLanguage(language: string) {
     if (language && language.length >= 2) {
       language = language.toLowerCase().slice(0, 2);
-      this.language = (language === 'pt' || language === 'en' || language === 'es') ? language : 'pt';
+      this.language = language === 'pt' || language === 'en' || language === 'es' ? language : 'pt';
     }
   }
-
 }

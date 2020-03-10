@@ -6,7 +6,6 @@
  * Define os ícones disponíveis para o `po-tag`.
  */
 export enum PoTagIcon {
-
   /** Ícone fechar. */
   Danger = 'po-icon-close',
 

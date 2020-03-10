@@ -14,7 +14,6 @@ import { PoPageChangePasswordComponent } from './po-page-change-password.compone
 import { PoPageChangePasswordService } from './po-page-change-password.service';
 
 describe('PoPageChangePasswordComponent:', () => {
-
   let component: PoPageChangePasswordComponent;
   let fixture: ComponentFixture<PoPageChangePasswordComponent>;
   let nativeElement: any;
@@ -41,9 +40,7 @@ describe('PoPageChangePasswordComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngAfterViewInit: should call `subscribeToTokenParameter` if `urlNewPassword` has value', () => {
-
       component.urlNewPassword = '/home';
 
       spyOn(component, <any>'subscribeToTokenParameter');
@@ -66,7 +63,7 @@ describe('PoPageChangePasswordComponent:', () => {
     it('ngOnDestroy: should unsubscribe `newPasswordSubscription` on destroy', () => {
       component['newPasswordSubscription'] = fakeSubscription;
 
-      spyOn(component['newPasswordSubscription'], <any> 'unsubscribe');
+      spyOn(component['newPasswordSubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -75,7 +72,7 @@ describe('PoPageChangePasswordComponent:', () => {
 
     it('ngOnInit: should call checkingForRouteMetadata', () => {
       const activatedRoute = { snapshot: { data: {} } };
-      spyOn(component, <any> 'checkingForRouteMetadata');
+      spyOn(component, <any>'checkingForRouteMetadata');
       component.ngOnInit();
       expect(component['checkingForRouteMetadata']).toHaveBeenCalledWith(activatedRoute.snapshot.data);
     });
@@ -84,7 +81,7 @@ describe('PoPageChangePasswordComponent:', () => {
       component.urlBack = '/people';
 
       spyOn(utilsFunctions, 'isExternalLink').and.returnValue(true);
-      spyOn(component['router'], <any> 'navigate');
+      spyOn(component['router'], <any>'navigate');
       spyOn(window, 'open');
 
       component.navigateTo('http://www.portinari.com');
@@ -97,7 +94,7 @@ describe('PoPageChangePasswordComponent:', () => {
       component.urlBack = '/people';
 
       spyOn(utilsFunctions, 'isExternalLink').and.returnValue(false);
-      spyOn(component['router'], <any> 'navigate');
+      spyOn(component['router'], <any>'navigate');
       spyOn(window, 'open');
 
       component.navigateTo('/portinari');
@@ -110,7 +107,7 @@ describe('PoPageChangePasswordComponent:', () => {
       component.urlBack = '';
 
       spyOn(utilsFunctions, 'isExternalLink').and.returnValue(false);
-      spyOn(component['router'], <any> 'navigate');
+      spyOn(component['router'], <any>'navigate');
       spyOn(window, 'open');
 
       component.navigateTo(undefined);
@@ -120,7 +117,6 @@ describe('PoPageChangePasswordComponent:', () => {
     });
 
     describe('onLoginSubmit: ', () => {
-
       it('should call `emitSubmit` if has `submit`', () => {
         component.submit = new EventEmitter();
         component.submit.observers = <any>[{}];
@@ -157,7 +153,6 @@ describe('PoPageChangePasswordComponent:', () => {
 
         expect(component['postUrlNewPassword']).not.toHaveBeenCalled();
       });
-
     });
 
     it('openConfirmation: should call `modal.open`', () => {
@@ -170,7 +165,6 @@ describe('PoPageChangePasswordComponent:', () => {
     });
 
     describe('validatePassword:', () => {
-
       it('should call `setFormErrors` with `requirement` if `requirements.length` and `requirements` are invalid', () => {
         const controlNewPassword = component.passwordForm.controls['newPassword'];
         component.newPassword = 'password';
@@ -181,7 +175,7 @@ describe('PoPageChangePasswordComponent:', () => {
 
         component.validatePassword();
 
-        expect(component['setFormErrors']).toHaveBeenCalledWith({'requirement': true}, [controlNewPassword]);
+        expect(component['setFormErrors']).toHaveBeenCalledWith({ 'requirement': true }, [controlNewPassword]);
       });
 
       it('shouldn`t call `setFormErrors` with `requirement` if `requirements.length` and `requirements` are valid', () => {
@@ -194,7 +188,7 @@ describe('PoPageChangePasswordComponent:', () => {
 
         component.validatePassword();
 
-        expect(component['setFormErrors']).not.toHaveBeenCalledWith({'requirement': true}, [controlNewPassword]);
+        expect(component['setFormErrors']).not.toHaveBeenCalledWith({ 'requirement': true }, [controlNewPassword]);
       });
 
       it('shouldn`t call `setFormErrors` with `requirement` if `requirements.length` is 0', () => {
@@ -206,7 +200,7 @@ describe('PoPageChangePasswordComponent:', () => {
 
         component.validatePassword();
 
-        expect(component['setFormErrors']).not.toHaveBeenCalledWith({'requirement': true}, [controlNewPassword]);
+        expect(component['setFormErrors']).not.toHaveBeenCalledWith({ 'requirement': true }, [controlNewPassword]);
       });
 
       it('should call `setFormErrors` with `required` if `newPassword` is undefined', () => {
@@ -217,7 +211,7 @@ describe('PoPageChangePasswordComponent:', () => {
 
         component.validatePassword();
 
-        expect(component['setFormErrors']).toHaveBeenCalledWith({'required': true}, [controlNewPassword]);
+        expect(component['setFormErrors']).toHaveBeenCalledWith({ 'required': true }, [controlNewPassword]);
       });
 
       it('should call `setFormErrors` with `required` if `newPassword` is defined but `confirmPassword` is undefined', () => {
@@ -229,7 +223,7 @@ describe('PoPageChangePasswordComponent:', () => {
 
         component.validatePassword();
 
-        expect(component['setFormErrors']).toHaveBeenCalledWith({'required': true}, [controlConfirmPassword]);
+        expect(component['setFormErrors']).toHaveBeenCalledWith({ 'required': true }, [controlConfirmPassword]);
       });
 
       it('should call `setFormErrors` with `equalPassword` if `newPassword` is different of `confirmPassword`', () => {
@@ -243,7 +237,10 @@ describe('PoPageChangePasswordComponent:', () => {
 
         component.validatePassword();
 
-        expect(component['setFormErrors']).toHaveBeenCalledWith({'equalPassword': true}, [controlNewPassword, controlConfirmPassword]);
+        expect(component['setFormErrors']).toHaveBeenCalledWith({ 'equalPassword': true }, [
+          controlNewPassword,
+          controlConfirmPassword
+        ]);
       });
 
       it('should call `setFormErrors` with `null` if `newPassword` and `confirmPassword` are equal', () => {
@@ -281,18 +278,17 @@ describe('PoPageChangePasswordComponent:', () => {
       spyOn(component.submit, 'emit');
       component['emitSubmit'](expectedResult);
 
-      expect(component.submit.emit).toHaveBeenCalledWith(
-        {
-          currentPassword: expectedResult.currentPassword,
-          newPassword: expectedResult.newPassword
-        });
+      expect(component.submit.emit).toHaveBeenCalledWith({
+        currentPassword: expectedResult.currentPassword,
+        newPassword: expectedResult.newPassword
+      });
     });
 
     it('postUrlNewPassword: should call `post` if status is 204 should call `openConfirmation`', fakeAsync(() => {
       component.urlNewPassword = '/home';
       component.token = 'token';
 
-      const data = { token: 'token', newPassword: 'new', currentPassword: 'current'};
+      const data = { token: 'token', newPassword: 'new', currentPassword: 'current' };
       const response = { status: 204 };
 
       spyOn(component, 'openConfirmation');
@@ -309,7 +305,7 @@ describe('PoPageChangePasswordComponent:', () => {
       component.urlNewPassword = '/home';
       component.token = 'token';
 
-      const data = { token: 'token', newPassword: 'new', currentPassword: 'current'};
+      const data = { token: 'token', newPassword: 'new', currentPassword: 'current' };
       const response = { status: 400 };
 
       spyOn(component, 'openConfirmation');
@@ -339,14 +335,13 @@ describe('PoPageChangePasswordComponent:', () => {
       spyOn(controlCurrentPassword, 'setErrors');
       spyOn(controlNewPassword, 'setErrors');
 
-      component['setFormErrors']({'required': true}, [controlCurrentPassword, controlNewPassword]);
+      component['setFormErrors']({ 'required': true }, [controlCurrentPassword, controlNewPassword]);
 
       expect(controlCurrentPassword.setErrors).toHaveBeenCalled();
       expect(controlNewPassword.setErrors).toHaveBeenCalled();
     });
 
     describe('subscribeToTokenParameter', () => {
-
       it('should subscribe to route parameters and set `token` if has token parameter', () => {
         const token = 'token';
 
@@ -381,7 +376,7 @@ describe('PoPageChangePasswordComponent:', () => {
     });
 
     it('onForgotPasswordClick: should call `createModalPasswordRecoveryComponent` if recoveryUrl type is an object', () => {
-      const recoveryUrl = {url: 'url'};
+      const recoveryUrl = { url: 'url' };
 
       spyOn(component, <any>'createModalPasswordRecoveryComponent');
 
@@ -399,7 +394,7 @@ describe('PoPageChangePasswordComponent:', () => {
           phoneMask: undefined,
           contactEmail: undefined
         },
-        changeDetectorRef: { detectChanges: () => {} },
+        changeDetectorRef: { detectChanges: () => {} }
       };
 
       const componentReference: any = {
@@ -407,11 +402,11 @@ describe('PoPageChangePasswordComponent:', () => {
         poComponentInjector: {
           destroyComponentInApplication: () => {},
           createComponentInApplication: () => componentRef
-        },
+        }
       };
 
       it('should destroy `componentRef` it`s not null', () => {
-        const recovery = {url: 'url', type: PoModalPasswordRecoveryType.SMS, contactMail: 'email', phoneMask: 'mask'};
+        const recovery = { url: 'url', type: PoModalPasswordRecoveryType.SMS, contactMail: 'email', phoneMask: 'mask' };
 
         spyOn(componentReference.poComponentInjector, 'destroyComponentInApplication');
 
@@ -422,7 +417,7 @@ describe('PoPageChangePasswordComponent:', () => {
 
       it(`should call 'createComponentInApplication', 'changeDetectorRef.detectChanges' and 'instance.open'
       and set instante.type with recovery.type`, fakeAsync(() => {
-        const recovery = {url: 'url', type: PoModalPasswordRecoveryType.SMS, contactMail: 'email', phoneMask: 'mask'};
+        const recovery = { url: 'url', type: PoModalPasswordRecoveryType.SMS, contactMail: 'email', phoneMask: 'mask' };
 
         spyOn(componentReference.poComponentInjector, 'createComponentInApplication').and.callThrough();
         spyOn(componentRef.changeDetectorRef, 'detectChanges');
@@ -433,15 +428,16 @@ describe('PoPageChangePasswordComponent:', () => {
 
         expect(componentRef.instance.recovery).toBe(recovery.url);
         expect(componentRef.instance.type).toBe(recovery.type);
-        expect(componentReference.poComponentInjector.createComponentInApplication)
-        .toHaveBeenCalledWith(PoModalPasswordRecoveryComponent);
+        expect(componentReference.poComponentInjector.createComponentInApplication).toHaveBeenCalledWith(
+          PoModalPasswordRecoveryComponent
+        );
         expect(componentRef.changeDetectorRef.detectChanges).toHaveBeenCalled();
         expect(componentRef.instance.open).toHaveBeenCalled();
       }));
 
       it(`should set 'instance.type' with PoModalPasswordRecoveryType.Email
       if recovery doesnt't have a defined 'type' value`, fakeAsync(() => {
-        const recovery = {url: 'url'};
+        const recovery = { url: 'url' };
 
         spyOn(componentReference.poComponentInjector, 'createComponentInApplication').and.callThrough();
         spyOn(componentRef.changeDetectorRef, 'detectChanges');
@@ -455,21 +451,21 @@ describe('PoPageChangePasswordComponent:', () => {
     });
 
     it('checkingForMetadataProperty: should return value if the object contains the expected property', () => {
-      const object = {property: 'value'};
+      const object = { property: 'value' };
       const property = 'property';
       const expectedResult = component['checkingForMetadataProperty'](object, property);
       expect(expectedResult).toBe('value');
     });
 
     it('checkingForMetadataProperty: shoudn`t return if object doesn`t contain the expected property', () => {
-      const object = {property: 'value'};
+      const object = { property: 'value' };
       const property = 'absentProperty';
       const expectedResult = component['checkingForMetadataProperty'](object, property);
       expect(expectedResult).toBe(undefined);
     });
 
     it('checkingForRouteMetadata: shouldn`t set authenticationUrl nor recovery if activatedRoute.data is empty', () => {
-      const data = { };
+      const data = {};
       spyOn(component, <any>'checkingForMetadataProperty');
       component['checkingForRouteMetadata'](data);
       expect(component['checkingForMetadataProperty']).not.toHaveBeenCalled();
@@ -509,11 +505,9 @@ describe('PoPageChangePasswordComponent:', () => {
       expect(component.recovery['url']).toBe('recoveryUrl');
       expect(component.hideCurrentPassword).toBe(false);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should create header literals', () => {
       const header = nativeElement.querySelector('.po-page-blocked-user-header').innerHTML;
       expect(header).toContain(component.literals.createNewPassword);
@@ -569,7 +563,9 @@ describe('PoPageChangePasswordComponent:', () => {
 
       fixture.detectChanges();
 
-      const recoveryLink = nativeElement.querySelector('.po-page-change-password-forgot-password[ng-reflect-router-link="/portinari"]');
+      const recoveryLink = nativeElement.querySelector(
+        '.po-page-change-password-forgot-password[ng-reflect-router-link="/portinari"]'
+      );
       expect(recoveryLink).toBeTruthy();
     });
 
@@ -580,13 +576,15 @@ describe('PoPageChangePasswordComponent:', () => {
 
       fixture.detectChanges();
 
-      const recoveryLink = nativeElement.querySelector('.po-page-change-password-forgot-password[href="http://po.portinari.com.br"]');
+      const recoveryLink = nativeElement.querySelector(
+        '.po-page-change-password-forgot-password[href="http://po.portinari.com.br"]'
+      );
       expect(recoveryLink).toBeTruthy();
     });
 
     it('should call `onForgotPasswordClick` if `recoveryType` is undefined', () => {
       component.hideCurrentPassword = false;
-      component.recovery = {url: 'url'};
+      component.recovery = { url: 'url' };
       component.recoveryUrlType = undefined;
 
       spyOn(component, 'onForgotPasswordClick');
@@ -663,8 +661,9 @@ describe('PoPageChangePasswordComponent:', () => {
       component.requirements = requirements;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-page-change-password-required-text').innerHTML).toContain(requirements[0].requirement);
+      expect(nativeElement.querySelector('.po-page-change-password-required-text').innerHTML).toContain(
+        requirements[0].requirement
+      );
     });
   });
-
 });

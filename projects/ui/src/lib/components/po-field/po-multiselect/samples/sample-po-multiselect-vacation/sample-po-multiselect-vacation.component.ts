@@ -7,7 +7,6 @@ import { PoMultiselectOption, PoRadioGroupOption } from '@portinari/portinari-ui
   templateUrl: './sample-po-multiselect-vacation.component.html'
 })
 export class SamplePoMultiselectVacationComponent implements OnInit {
-
   days: number;
   employeesVacations: Array<string> = [];
   finalPeriod: Date;
@@ -47,5 +46,4 @@ export class SamplePoMultiselectVacationComponent implements OnInit {
       .map((employee: PoMultiselectOption) => employee.label)
       .join(', ');
   }
-
 }

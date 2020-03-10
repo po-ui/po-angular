@@ -8,7 +8,8 @@
       p-format="dd/mm/yyyy"
       p-label="Date start"
       p-required
-      [p-max-date]="endDate">
+      [p-max-date]="endDate"
+    >
     </po-datepicker>
 
     <po-datepicker
@@ -19,7 +20,8 @@
       p-format="dd/mm/yyyy"
       p-label="Date end"
       p-required
-      [p-min-date]="startDate">
+      [p-min-date]="startDate"
+    >
     </po-datepicker>
   </div>
 
@@ -30,7 +32,8 @@
       [(ngModel)]="origin"
       p-placeholder="Flight origin"
       p-label="Origin"
-      p-required>
+      p-required
+    >
     </po-input>
 
     <po-input
@@ -39,7 +42,8 @@
       [(ngModel)]="destination"
       p-label="Destination"
       p-placeholder="Flight destination"
-      p-required>
+      p-required
+    >
     </po-input>
   </div>
 
@@ -50,7 +54,8 @@
       [(ngModel)]="ticketClass"
       p-label="Class"
       p-required
-      [p-options]="ticketClassOptions">
+      [p-options]="ticketClassOptions"
+    >
     </po-select>
 
     <po-select
@@ -59,7 +64,8 @@
       [(ngModel)]="accompany"
       p-label="Accompany"
       p-required
-      [p-options]="accompanyNumber">
+      [p-options]="accompanyNumber"
+    >
     </po-select>
   </div>
 
@@ -69,7 +75,8 @@
       name="applyButton"
       p-label="Apply"
       [p-disabled]="formAirfare.invalid"
-      (p-click)="apply()">
+      (p-click)="apply()"
+    >
     </po-button>
   </div>
 </form>

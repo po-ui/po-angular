@@ -9,7 +9,6 @@ import { PoPageAction } from '@portinari/portinari-ui';
   templateUrl: './sample-po-textarea-email-reactive-form.component.html'
 })
 export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
-
   formEmail: FormGroup;
   pageActions: Array<PoPageAction>;
   primaryAction: PoModalAction = {
@@ -22,7 +21,7 @@ export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
 
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor( private formBuilder: FormBuilder ) { }
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.formEmail = this.formBuilder.group({
@@ -37,8 +36,8 @@ export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
   getPageAction() {
     const isDisabled = this.formEmail ? !this.formEmail.valid : true;
     return [
-      {label: 'Send', action: this.send, disabled: isDisabled},
-      {label: 'Clean', action: this.reset}
+      { label: 'Send', action: this.send, disabled: isDisabled },
+      { label: 'Clean', action: this.reset }
     ];
   }
 
@@ -49,5 +48,4 @@ export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
   send() {
     this.poModal.open();
   }
-
 }

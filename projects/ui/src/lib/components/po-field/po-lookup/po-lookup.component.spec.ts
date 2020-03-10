@@ -16,14 +16,12 @@ import { PoLookupComponent } from './po-lookup.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 
 class LookupFilterService implements PoLookupFilter {
-
   getFilteredData(params: any): Observable<any> {
-    return of({items: [{value: 123, label: 'teste'}]});
+    return of({ items: [{ value: 123, label: 'teste' }] });
   }
   getObjectByValue(id: string): Observable<any> {
     return of({});
   }
-
 }
 
 const closeModalInstance = (modalInstance: ComponentRef<any>) => {
@@ -32,9 +30,7 @@ const closeModalInstance = (modalInstance: ComponentRef<any>) => {
   }
 };
 
-export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
-];
+export const routes: Routes = [{ path: '', redirectTo: 'home', pathMatch: 'full' }];
 
 describe('PoLookupComponent:', () => {
   let component: PoLookupComponent;
@@ -43,15 +39,8 @@ describe('PoLookupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes(routes),
-        PoFieldModule
-      ],
-      providers: [
-        LookupFilterService,
-        PoComponentInjectorService,
-        PoControlPositionService
-      ]
+      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService]
     });
   });
 
@@ -59,7 +48,7 @@ describe('PoLookupComponent:', () => {
     fixture = TestBed.createComponent(PoLookupComponent);
     component = fixture.componentInstance;
     component.columns = [
-      { property: 'value', label: 'Chave', type: 'number'},
+      { property: 'value', label: 'Chave', type: 'number' },
       { property: 'label', label: 'Nome', type: 'string', fieldLabel: true }
     ];
     component['initializeColumn']();
@@ -75,11 +64,11 @@ describe('PoLookupComponent:', () => {
     expect(component instanceof PoLookupComponent).toBeTruthy();
   });
 
-  it('should call selectModel method', inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+  it('should call selectModel method', inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
     component.disabled = false;
     component.service = lookupFilterService;
 
-    spyOn(component, <any> 'selectModel');
+    spyOn(component, <any>'selectModel');
 
     component.openLookup();
     component['poLookupModalService'].selectValue({});
@@ -93,18 +82,20 @@ describe('PoLookupComponent:', () => {
     expect(component.getViewValue()).toBe('portinari');
   });
 
-  it('method selectModel should not be called', inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
-    component['oldValue'] = 'portinari';
-    component.inputEl.nativeElement.value = 'portinari';
+  it('method selectModel should not be called', inject(
+    [LookupFilterService],
+    (lookupFilterService: LookupFilterService) => {
+      component['oldValue'] = 'portinari';
+      component.inputEl.nativeElement.value = 'portinari';
 
-    spyOn(component, <any> 'selectModel');
+      spyOn(component, <any>'selectModel');
 
-    component.searchEvent();
-    expect(component['selectModel']).not.toHaveBeenCalled();
-  }));
+      component.searchEvent();
+      expect(component['selectModel']).not.toHaveBeenCalled();
+    }
+  ));
 
   describe('Properties:', () => {
-
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;
 
@@ -116,7 +107,6 @@ describe('PoLookupComponent:', () => {
 
       expect(component.autocomplete).toBe('on');
     });
-
   });
 
   describe('Methods:', () => {
@@ -142,37 +132,40 @@ describe('PoLookupComponent:', () => {
       });
     });
 
-    it('searchEvent: should call `searchById` when the current value isn`t equal to the old value.',
-      inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+    it('searchEvent: should call `searchById` when the current value isn`t equal to the old value.', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
         component.inputEl.nativeElement.value = 'portinari JOI';
         component['oldValue'] = 'portinari SP';
 
-        spyOn(component, <any> 'searchById');
+        spyOn(component, <any>'searchById');
 
         component.searchEvent();
 
         expect(component['searchById']).toHaveBeenCalled();
-      }));
+      }
+    ));
 
-    it('searchEvent: shouldn`t call `searchById` when the current value is equal to old value.',
-      inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+    it('searchEvent: shouldn`t call `searchById` when the current value is equal to old value.', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
         component.inputEl.nativeElement.value = 'portinari';
         component['oldValue'] = 'portinari';
 
-        spyOn(component, <any> 'searchById');
+        spyOn(component, <any>'searchById');
 
         component.searchEvent();
 
         expect(component['searchById']).not.toHaveBeenCalled();
-    }));
+      }
+    ));
 
     it('modalSubscription: should `unsubscribe` on destroy.', () => {
-
       component['modalSubscription'] = fakeSubscription;
 
-      spyOn(component['modalSubscription'], <any> 'unsubscribe');
+      spyOn(component['modalSubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -180,10 +173,9 @@ describe('PoLookupComponent:', () => {
     });
 
     it('modalSubscription: should not `unsubscribe` if `modalSubscription` is falsy.', () => {
-
       component['modalSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['modalSubscription'] = undefined;
       component.ngOnDestroy();
@@ -220,35 +212,37 @@ describe('PoLookupComponent:', () => {
       expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
     });
 
-    it('openLookup: should call `openModal` if `isAllowedOpenModal` return true',
-      inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+    it('openLookup: should call `openModal` if `isAllowedOpenModal` return true', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
+        component.service = lookupFilterService;
 
-      component.service = lookupFilterService;
+        spyOn(component['poLookupModalService'], 'openModal');
+        spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
 
-      spyOn(component['poLookupModalService'], 'openModal');
-      spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+        component.openLookup();
 
-      component.openLookup();
+        expect(component['poLookupModalService'].openModal).toHaveBeenCalled();
+      }
+    ));
 
-      expect(component['poLookupModalService'].openModal).toHaveBeenCalled();
-    }));
+    it('openLookup: shouldn`t call `openModal` if `isAllowedOpenModal` return false', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
+        component.service = lookupFilterService;
 
-    it('openLookup: shouldn`t call `openModal` if `isAllowedOpenModal` return false',
-      inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+        spyOn(component['poLookupModalService'], 'openModal');
+        spyOn(component, <any>'isAllowedOpenModal').and.returnValue(false);
 
-      component.service = lookupFilterService;
+        component.openLookup();
 
-      spyOn(component['poLookupModalService'], 'openModal');
-      spyOn(component, <any>'isAllowedOpenModal').and.returnValue(false);
+        expect(component['poLookupModalService'].openModal).not.toHaveBeenCalled();
+      }
+    ));
 
-      component.openLookup();
-
-      expect(component['poLookupModalService'].openModal).not.toHaveBeenCalled();
-    }));
-
-    it(`openLookup: shouldn't call 'poLookupModalService.selectValueEvent.subscribe' if 'modalSubscription' is defined`,
-      inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
-
+    it(`openLookup: shouldn't call 'poLookupModalService.selectValueEvent.subscribe' if 'modalSubscription' is defined`, inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
         component['modalSubscription'] = fakeSubscription;
 
@@ -258,28 +252,28 @@ describe('PoLookupComponent:', () => {
         component.openLookup();
 
         expect(component['poLookupModalService'].selectValueEvent.subscribe).not.toHaveBeenCalled();
-    }));
+      }
+    ));
 
     it(`openLookup: should set 'modalSubscription' and call 'selectModel' if 'isAllowedOpenModal' return true and
-      'modalSubscription' is undefined`, inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+      'modalSubscription' is undefined`, inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+      component.service = lookupFilterService;
+      component['modalSubscription'] = undefined;
+      component['poLookupModalService'].selectValueEvent = <any>of(objectSelected);
 
-        component.service = lookupFilterService;
-        component['modalSubscription'] = undefined;
-        component['poLookupModalService'].selectValueEvent = <any> of(objectSelected);
+      spyOn(component, <any>'selectModel');
+      spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
 
-        spyOn(component, <any> 'selectModel');
-        spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+      component.openLookup();
 
-        component.openLookup();
-
-        expect(component['selectModel']).toHaveBeenCalledWith(objectSelected);
-        expect(component['modalSubscription']).toBeDefined();
+      expect(component['selectModel']).toHaveBeenCalledWith(objectSelected);
+      expect(component['modalSubscription']).toBeDefined();
     }));
 
     it('setViewValue: should call `setInputValueWipoieldFormat` when `fieldFormat` is defined', () => {
-      component.fieldFormat = valueFormated => (`${valueFormated.value} - ${valueFormated.label}`);
+      component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
 
-      spyOn(component, <any> 'setInputValueWipoieldFormat');
+      spyOn(component, <any>'setInputValueWipoieldFormat');
 
       component.setViewValue(123, objectSelected);
 
@@ -290,7 +284,7 @@ describe('PoLookupComponent:', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = 123;
 
-      spyOn(component, <any> 'setInputValueWipoieldFormat');
+      spyOn(component, <any>'setInputValueWipoieldFormat');
 
       component.setViewValue('valueTeste', objectSelected);
 
@@ -311,7 +305,7 @@ describe('PoLookupComponent:', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = undefined;
 
-      spyOn(component, <any> 'setInputValueWipoieldFormat');
+      spyOn(component, <any>'setInputValueWipoieldFormat');
 
       component.setViewValue('valueTeste', objectSelected);
 
@@ -329,7 +323,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('setInputValueWipoieldFormat: should set `oldValue` and `inputValue` to `` ', () => {
-      component.fieldFormat = valueFormated => (`${valueFormated.value} - ${valueFormated.label}`);
+      component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
       component['oldValue'] = '';
       component.inputEl.nativeElement.value = '';
 
@@ -339,7 +333,9 @@ describe('PoLookupComponent:', () => {
       expect(component.inputEl.nativeElement.value).toBe('');
     });
 
-    it('openLookup: should `openModal` with params', inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+    it('openLookup: should `openModal` with params', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
         component.label = 'Estabelecimento';
         component.literals = undefined;
@@ -353,7 +349,8 @@ describe('PoLookupComponent:', () => {
         component.openLookup();
 
         expect(component['poLookupModalService'].openModal).toHaveBeenCalledWith(params);
-    }));
+      }
+    ));
 
     it('isAllowedOpenModal: should return true if `disabled` is false and `service` is defined', () => {
       component.service = new LookupFilterService();
@@ -371,7 +368,6 @@ describe('PoLookupComponent:', () => {
 
     it(`isAllowedOpenModal: should return false and call 'console.warn' if 'disabled' is false and 'service'
       is undefined`, () => {
-
       component.service = undefined;
       component.disabled = false;
 
@@ -383,7 +379,6 @@ describe('PoLookupComponent:', () => {
 
     it(`isAllowedOpenModal: should return false and call 'console.warn' if 'disabled' is true and 'service'
       is undefined`, () => {
-
       component.service = undefined;
       component.disabled = true;
 
@@ -392,11 +387,9 @@ describe('PoLookupComponent:', () => {
       expect(component['isAllowedOpenModal']()).toBe(false);
       expect(console.warn).toHaveBeenCalledWith('No service informed');
     });
-
   });
 
   describe('Templates:', () => {
-
     xit('focus of search span should focus input', fakeAsync(() => {
       const element = fixture.debugElement.nativeElement;
       const input = element.querySelector('.po-input');
@@ -438,7 +431,5 @@ describe('PoLookupComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

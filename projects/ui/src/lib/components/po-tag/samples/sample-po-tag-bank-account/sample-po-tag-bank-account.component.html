@@ -1,5 +1,4 @@
 <po-page-default p-title="Bank Statement">
-
   <div class="po-mt-1 po-lg-7">
     <po-widget class="po-md-12 po-sm-mb-1 po-mb-1 po-lg-mb-1" p-title="User information">
       <div class="po-row">
@@ -8,19 +7,11 @@
         </div>
         <div class="po-md-7 po-lg-8">
           <div class="po-mb-2">
-            <po-info
-              p-label="Name"
-              [p-value]="userData.name">
-            </po-info>
-            <po-tag p-value="Premium Account" (p-click)="openModal()">
-            </po-tag>
+            <po-info p-label="Name" [p-value]="userData.name"> </po-info>
+            <po-tag p-value="Premium Account" (p-click)="openModal()"> </po-tag>
           </div>
           <div class="po-mb-2">
-            <po-info
-              class="po-mt-5"
-              p-label="Email"
-              [p-value]="userData.email">
-            </po-info>
+            <po-info class="po-mt-5" p-label="Email" [p-value]="userData.email"> </po-info>
           </div>
         </div>
       </div>
@@ -28,21 +19,21 @@
 
     <po-widget class="po-md-12 po-sm-mt-1 po-mt-1 po-lg-mt-1" p-title="My Investiments">
       <div class="po-row">
-        <po-tag *ngFor="let investiment of investiments"
+        <po-tag
+          *ngFor="let investiment of investiments"
           class="po-md-6 po-lg-3"
           p-inverse
           [p-label]="investiment.label"
           [p-type]="investiment.type"
-          [p-value]="investiment.value">
+          [p-value]="investiment.value"
+        >
         </po-tag>
       </div>
     </po-widget>
   </div>
   <po-widget p-title="Last three month operations" class="po-mt-1 po-lg-5">
     <po-tabs>
-      <po-tab *ngFor="let item of items"
-        p-active
-        p-label="{{ item.month }}">
+      <po-tab *ngFor="let item of items" p-active p-label="{{ item.month }}">
         <po-widget class="po-lg-12 po-sm-mb-1 po-mb-1 po-lg-mb-1" *ngFor="let item of item.details">
           <div class="po-row">
             <po-info
@@ -50,14 +41,16 @@
               p-label-size="6"
               p-orientation="horizontal"
               [p-label]="item.label"
-              [p-value]="item.value">
+              [p-value]="item.value"
+            >
             </po-info>
             <po-tag
               class="po-lg-3 po-md-4"
               p-icon
               p-orientation="horizontal"
               [p-type]="item.type"
-              [p-value]="item.text">
+              [p-value]="item.text"
+            >
             </po-tag>
           </div>
         </po-widget>
@@ -66,8 +59,7 @@
   </po-widget>
 </po-page-default>
 
-<po-modal #modal
-  p-title="Exclusive Premium features">
+<po-modal #modal p-title="Exclusive Premium features">
   <po-divider p-label="Check your advantages"></po-divider>
   <div class="po-mb-5">
     <p *ngFor="let item of advantages" class="po-font-text po-pb-1">

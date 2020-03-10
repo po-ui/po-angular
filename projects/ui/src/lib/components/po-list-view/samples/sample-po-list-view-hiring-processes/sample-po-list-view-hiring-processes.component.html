@@ -1,8 +1,4 @@
-<po-page-list
-  p-title="Hiring processes"
-  [p-actions]="pageActions"
-  [p-filter]="filterSettings">
-
+<po-page-list p-title="Hiring processes" [p-actions]="pageActions" [p-filter]="filterSettings">
   <po-list-view
     p-hide-select-all
     p-property-link="url"
@@ -10,8 +6,8 @@
     p-select
     [p-actions]="actions"
     [p-items]="hiringProcessesFiltered"
-    (p-title-action)="showDetailModal($event)">
-
+    (p-title-action)="showDetailModal($event)"
+  >
     <ng-template p-list-view-content-template let-item [p-title]="formatTitle">
       <div class="po-row">
         <po-info class="po-lg-4" p-label="Id Card" [p-value]="item.idCard"></po-info>
@@ -29,7 +25,6 @@
         <po-info class="po-md-6" p-label="City" [p-value]="item.city"></po-info>
       </div>
     </ng-template>
-
   </po-list-view>
 
   <po-modal #detailsModal [p-title]="titleDetailsModal">
@@ -41,23 +36,17 @@
         <div class="po-mb-1">
           <po-tag
             [p-value]="selectedActionItem['hireStatus']"
-            [p-type]="selectedActionItem['hireStatus'] === 'hired' ? 'success' : 'info'">
+            [p-type]="selectedActionItem['hireStatus'] === 'hired' ? 'success' : 'info'"
+          >
           </po-tag>
         </div>
         <div class="po-mb-1">
-          <po-info
-            p-label="Email"
-            [p-value]="selectedActionItem['email']">
-          </po-info>
+          <po-info p-label="Email" [p-value]="selectedActionItem['email']"> </po-info>
         </div>
         <div class="po-mb-1">
-          <po-info
-            p-label="Telephone"
-            [p-value]="selectedActionItem['telephone']">
-          </po-info>
+          <po-info p-label="Telephone" [p-value]="selectedActionItem['telephone']"> </po-info>
         </div>
       </div>
     </div>
   </po-modal>
-
 </po-page-list>

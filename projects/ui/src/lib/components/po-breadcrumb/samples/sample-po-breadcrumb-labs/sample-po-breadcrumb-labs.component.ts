@@ -4,16 +4,15 @@ import { PoBreadcrumbItem, PoNotificationService } from '@portinari/portinari-ui
 
 @Component({
   selector: 'sample-po-breadcrumb-labs',
-  templateUrl: './sample-po-breadcrumb-labs.component.html',
+  templateUrl: './sample-po-breadcrumb-labs.component.html'
 })
 export class SamplePoBreadcrumbLabsComponent implements OnInit {
-
   breadcrumbItem: PoBreadcrumbItem;
   breadcrumbItems: Array<PoBreadcrumbItem>;
   favoriteService: string;
   paramsService: object;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -42,5 +41,4 @@ export class SamplePoBreadcrumbLabsComponent implements OnInit {
   private showAction(action: string) {
     this.poNotification.success(`Breadcrumb clicked: ${action}`);
   }
-
 }

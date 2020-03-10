@@ -6,7 +6,6 @@ import { PoDividerBaseComponent } from './po-divider-base.component';
 import { PoDividerComponent } from './po-divider.component';
 
 describe('PoDividerComponent:', () => {
-
   let component: PoDividerComponent;
   let fixture: ComponentFixture<PoDividerComponent>;
 
@@ -14,7 +13,7 @@ describe('PoDividerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoDividerComponent ]
+      declarations: [PoDividerComponent]
     });
   });
 
@@ -31,7 +30,6 @@ describe('PoDividerComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should add `po-divider-label` if `label` contains value.', () => {
       component.label = 'Portinari Divider';
 
@@ -47,7 +45,5 @@ describe('PoDividerComponent:', () => {
 
       expect(nativeElement.querySelector('.po-divider-label')).toBeFalsy();
     });
-
   });
-
 });

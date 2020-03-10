@@ -13,14 +13,13 @@ import { PoPageJobSchedulerService } from '../po-page-job-scheduler.service';
   templateUrl: 'po-page-job-scheduler-execution.component.html'
 })
 export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewInit {
-
   private _value: any = {};
 
   dayPattern = '^(3[0-1]|[0-2][0-9]|[1-9]|0[1-9])$';
   existProcessAPI = true;
   minDateFirstExecution = new Date();
   periodicityOptions: Array<PoRadioGroupOption> = [];
-  periodicityTemplates: { daily: TemplateRef<any>, weekly: TemplateRef<any>, monthly: TemplateRef<any> } ;
+  periodicityTemplates: { daily: TemplateRef<any>; weekly: TemplateRef<any>; monthly: TemplateRef<any> };
   timePattern = '^(2[0-3]|[01][0-9]):?([0-5][0-9])$';
   weekDays: Array<PoCheckboxGroupOption> = [];
 
@@ -33,7 +32,7 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
 
   @Input('p-is-edit') isEdit: boolean = false;
 
-  @Input('p-literals') literals = <any> {};
+  @Input('p-literals') literals = <any>{};
 
   @Input('p-value') set value(value: any) {
     this._value = value && isTypeof(value, 'object') ? value : {};
@@ -47,18 +46,17 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
 
   constructor(
     private poPageJobSchedulerService: PoPageJobSchedulerService,
-    public poPageJobSchedulerLookup: PoPageJobSchedulerLookupService) { }
+    public poPageJobSchedulerLookup: PoPageJobSchedulerLookupService
+  ) {}
 
   get startDateFirstExecution() {
     return this.isEdit ? undefined : this.minDateFirstExecution;
   }
 
   ngAfterViewInit() {
-
     setTimeout(() => {
       this.subscribeProcessIdValueChanges();
     });
-
   }
 
   ngOnInit() {
@@ -106,5 +104,4 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
       this.changeProcess.emit({ processId, existAPI: this.existProcessAPI });
     });
   }
-
 }

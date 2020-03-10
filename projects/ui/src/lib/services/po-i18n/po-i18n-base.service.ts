@@ -145,7 +145,6 @@ import { PoI18nLiterals } from './interfaces/po-i18n-literals.interface';
  */
 
 export class PoI18nBaseService {
-
   private varI18n: any = {};
 
   private contextDefault: string;
@@ -157,8 +156,8 @@ export class PoI18nBaseService {
   constructor(
     @Inject(I18N_CONFIG) private config?: PoI18nConfig,
     @Inject(HttpClient) private http?: HttpClient,
-    private languageService?: PoLanguageService) {
-
+    private languageService?: PoLanguageService
+  ) {
     this.setConfig(config);
   }
 
@@ -215,7 +214,6 @@ export class PoI18nBaseService {
    * buscar novamente as literais no novo idioma configurado.
    */
   setLanguage(language: string, reload?: boolean): void {
-
     if (!isLanguage(language)) {
       return;
     }
@@ -225,17 +223,15 @@ export class PoI18nBaseService {
     if (reload) {
       reloadCurrentPage();
     }
-
   }
 
   private setConfig(config: PoI18nConfig) {
     // Seta as configurações padrões definidas no importação do módulo
     if (config['default']) {
-
       this.languageService.setLanguageDefault(config['default']['language']);
 
-      this.contextDefault = (config['default']['context']) ? config['default']['context'] : '';
-      this.useCache = (config['default']['cache']) ? config['default']['cache'] : false;
+      this.contextDefault = config['default']['context'] ? config['default']['context'] : '';
+      this.useCache = config['default']['cache'] ? config['default']['cache'] : false;
     }
 
     // Carrega a lista dos contextos e as contantes informadas
@@ -257,8 +253,8 @@ export class PoI18nBaseService {
 
   getLiterals(options: PoI18nLiterals = {}): Observable<object> {
     const language = options['language'] ? options['language'].toLowerCase() : this.getLanguage();
-    const context = (options['context']) ? options['context'] : this.contextDefault;
-    const literals: Array<string> = (options['literals']) ? options['literals'] : [];
+    const context = options['context'] ? options['context'] : this.contextDefault;
+    const literals: Array<string> = options['literals'] ? options['literals'] : [];
 
     return new Observable(observer => {
       if (this.servicesContext[context]) {
@@ -276,15 +272,16 @@ export class PoI18nBaseService {
   //    2 - Procura no local storage (Se o cache estiver definido como true na configuração do módulo)
   //    3 - Dispara o serviço, mesmo que já tenha encontrado no local storage, para garantir a atualização
   //    4 - Se nenhuma literal for encontrada, então busca em pt-br
-  private getLiteralsFromContextService(language: string,
-                                        context: string,
-                                        literals: Array<string>,
-                                        observer: any,
-                                        translations: any = {},
-                                        languageAlternative: string = null) {
-
+  private getLiteralsFromContextService(
+    language: string,
+    context: string,
+    literals: Array<string>,
+    observer: any,
+    translations: any = {},
+    languageAlternative: string = null
+  ) {
     // Idioma usado para tentar buscar as literais faltantes
-    const languageSearch = (languageAlternative) ? languageAlternative : language;
+    const languageSearch = languageAlternative ? languageAlternative : language;
 
     translations = this.mergeObject(translations, this.searchInVarI18n(languageSearch, context, literals));
 
@@ -293,19 +290,27 @@ export class PoI18nBaseService {
     }
 
     // realiza a busca no localStorage e em seguida no serviço
-    this.getLiteralsLocalStorageAndCache(languageSearch, context, literals, observer, translations, languageAlternative);
+    this.getLiteralsLocalStorageAndCache(
+      languageSearch,
+      context,
+      literals,
+      observer,
+      translations,
+      languageAlternative
+    );
   }
 
   // Procura no local storage e em seguida no serviço
   // Caso não encontre nem no serviço, recomeça a busca em pt-br
-  private getLiteralsLocalStorageAndCache(language: string,
-                                          context: string,
-                                          literals: Array<string>,
-                                          observer: any,
-                                          translations: any,
-                                          languageAlternative: string = null) {
-
-    const languageSearch = (languageAlternative) ? languageAlternative : language;
+  private getLiteralsLocalStorageAndCache(
+    language: string,
+    context: string,
+    literals: Array<string>,
+    observer: any,
+    translations: any,
+    languageAlternative: string = null
+  ) {
+    const languageSearch = languageAlternative ? languageAlternative : language;
     let translationTemp;
     // Verifica se usa cache
     if (this.useCache) {
@@ -318,41 +323,40 @@ export class PoI18nBaseService {
     }
 
     // Busca do Serviço
-    this.getHttpService(this.servicesContext[context], languageSearch, literals)
-      .subscribe(
-        response => {
-          if (response) {
-            this.updateLocalStorage(language, context, response);
-            this.updateVarI18n(language, context, response);
-            translationTemp = this.searchInVarI18n(language, context, literals);
-            translations = this.mergeObject(translationTemp, translations);
-            observer.next(translations);
-          }
+    this.getHttpService(this.servicesContext[context], languageSearch, literals).subscribe(response => {
+      if (response) {
+        this.updateLocalStorage(language, context, response);
+        this.updateVarI18n(language, context, response);
+        translationTemp = this.searchInVarI18n(language, context, literals);
+        translations = this.mergeObject(translationTemp, translations);
+        observer.next(translations);
+      }
 
-          // Se não encontrou todas as literais pesquisadas no idioma
-          // Então refaz o processo procurando em português
-          if (literals.length > this.countObject(translations)) {
-            if (languageAlternative === 'pt-br') {
-              // Se não encontrou nem em português, então retorna o nome das literais
-              translations = this.completeFaultLiterals(language, context, literals, translations);
-              this.updateLocalStorage(language, context, translations);
-              this.updateVarI18n(language, context, translations);
-              observer.next(translations);
-            } else {
-              this.getLiteralsFromContextService(language, context, literals, observer, translations, 'pt-br');
-            }
-          }
-        });
+      // Se não encontrou todas as literais pesquisadas no idioma
+      // Então refaz o processo procurando em português
+      if (literals.length > this.countObject(translations)) {
+        if (languageAlternative === 'pt-br') {
+          // Se não encontrou nem em português, então retorna o nome das literais
+          translations = this.completeFaultLiterals(language, context, literals, translations);
+          this.updateLocalStorage(language, context, translations);
+          this.updateVarI18n(language, context, translations);
+          observer.next(translations);
+        } else {
+          this.getLiteralsFromContextService(language, context, literals, observer, translations, 'pt-br');
+        }
+      }
+    });
   }
 
   // Procura pela lista de literais
   // Se não encontrar todas, procura em pt-br
-  private getLiteralsFromContextConstant(language: string,
-                                         context: string,
-                                         literals: Array<string>,
-                                         observer: any,
-                                         translations: any = {}) {
-
+  private getLiteralsFromContextConstant(
+    language: string,
+    context: string,
+    literals: Array<string>,
+    observer: any,
+    translations: any = {}
+  ) {
     translations = this.mergeObject(translations, this.searchInVarI18n(language, context, literals));
     if (this.countObject(translations) > 0) {
       observer.next(translations);
@@ -460,7 +464,7 @@ export class PoI18nBaseService {
     language = language.toLowerCase();
 
     if (!this.varI18n[language]) {
-      this.varI18n[language] = {[context]: {}};
+      this.varI18n[language] = { [context]: {} };
     }
     if (!this.varI18n[language][context]) {
       this.varI18n[language][context] = {};
@@ -477,16 +481,13 @@ export class PoI18nBaseService {
     }
 
     // Remove a barra final do endereço
-    url = (url.lastIndexOf('/') === url.length - 1) ? url.substr(0, url.length - 1) : url;
+    url = url.lastIndexOf('/') === url.length - 1 ? url.substr(0, url.length - 1) : url;
 
     return this.http.get(url + param);
   }
 
   // Completa com o nome da literais, as que não foram encontradas
-  private completeFaultLiterals(language: string,
-                                context: string,
-                                literals: Array<string>,
-                                translations: any) {
+  private completeFaultLiterals(language: string, context: string, literals: Array<string>, translations: any) {
     for (let i = 0; i < literals.length; i++) {
       const literal = literals[i];
       if (!translations[literal]) {

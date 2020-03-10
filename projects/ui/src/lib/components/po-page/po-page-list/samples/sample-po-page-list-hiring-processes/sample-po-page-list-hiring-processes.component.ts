@@ -18,7 +18,6 @@ import { SamplePoPageListHiringProcessesService } from './sample-po-page-list-hi
   providers: [SamplePoPageListHiringProcessesService]
 })
 export class SamplePoPageListHiringProcessesComponent implements OnInit {
-
   disclaimerGroup;
   hiringProcesses: Array<object>;
   hiringProcessesColumns: Array<PoTableColumn>;
@@ -35,10 +34,7 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   ];
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', action: this.beforeRedirect.bind(this) },
-      { label: 'Hiring processes' }
-    ]
+    items: [{ label: 'Home', action: this.beforeRedirect.bind(this) }, { label: 'Hiring processes' }]
   };
 
   public readonly advancedFilterPrimaryAction: PoModalAction = {
@@ -65,7 +61,8 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
     private sampleHiringProcessesService: SamplePoPageListHiringProcessesService,
     private poNotification: PoNotificationService,
     private poDialog: PoDialogService,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.disclaimerGroup = {
@@ -120,13 +117,16 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
 
   hiringProcessesFilter(filters) {
     this.hiringProcessesFiltered = this.hiringProcesses.filter(item => {
-      return Object.keys(item)
-      .some(key => (!(item[key] instanceof Object) && this.includeFilter(item[key], filters)));
+      return Object.keys(item).some(key => !(item[key] instanceof Object) && this.includeFilter(item[key], filters));
     });
   }
 
   includeFilter(item, filters) {
-    return filters.some(filter => String(item).toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
+    return filters.some(filter =>
+      String(item)
+        .toLocaleLowerCase()
+        .includes(filter.toLocaleLowerCase())
+    );
   }
 
   onChangeDisclaimer(disclaimers) {
@@ -151,19 +151,14 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   }
 
   private beforeRedirect(itemBreadcrumbLabel) {
-
     if (this.hiringProcesses.some(candidate => candidate['$selected'])) {
-
       this.poDialog.confirm({
         title: `Confirm redirect to ${itemBreadcrumbLabel}`,
         message: `There is data selected. Are you sure you want to quit?`,
         confirm: () => this.router.navigate(['/'])
       });
-
     } else {
       this.router.navigate(['/']);
     }
-
   }
-
 }

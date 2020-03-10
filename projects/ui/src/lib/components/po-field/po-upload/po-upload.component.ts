@@ -47,18 +47,17 @@ import { PoUploadStatus } from './po-upload-status.enum';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoUploadComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoUploadComponent),
-      multi: true,
+      multi: true
     }
   ]
 })
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
-
-  infoByUploadStatus: { [key: string ]: { text: (percent?: number) => string, icon?: string } } = {
+  infoByUploadStatus: { [key: string]: { text: (percent?: number) => string; icon?: string } } = {
     [PoUploadStatus.Uploaded]: {
       text: () => this.literals.sentWithSuccess,
       icon: 'po-icon-ok'
@@ -78,7 +77,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   private calledByCleanInputValue: boolean = false;
 
-  @ViewChild('inputFile', {read: ElementRef, static: true }) private inputFile: ElementRef;
+  @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
   @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
   @ViewChild('uploadButton') private uploadButton: PoButtonComponent;
 
@@ -86,7 +85,8 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     uploadService: PoUploadService,
     public renderer: Renderer2,
     private i18nPipe: PoI18nPipe,
-    private notification: PoNotificationService) {
+    private notification: PoNotificationService
+  ) {
     super(uploadService);
   }
 
@@ -96,7 +96,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   get displaySendButton(): boolean {
     const currentFiles = this.currentFiles || [];
-    return !this.hideSendButton && !this.autoUpload && (currentFiles.length > 0 && this.hasFileNotUploaded);
+    return !this.hideSendButton && !this.autoUpload && currentFiles.length > 0 && this.hasFileNotUploaded;
   }
 
   get selectFileButtonLabel() {
@@ -128,10 +128,12 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   get isDisabled(): boolean {
     const currentFiles = this.currentFiles || [];
 
-    return !!(this.hasAnyFileUploading(currentFiles) ||
-    !this.url ||
-    this.disabled ||
-    this.isExceededFileLimit(currentFiles.length));
+    return !!(
+      this.hasAnyFileUploading(currentFiles) ||
+      !this.url ||
+      this.disabled ||
+      this.isExceededFileLimit(currentFiles.length)
+    );
   }
 
   get maxFiles(): number {
@@ -205,7 +207,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   // Função disparada ao selecionar algum arquivo.
   onFileChange(event): void {
-
     // necessário este tratamento quando para IE, pois nele o change é disparado quando o campo é limpado também
     if (this.calledByCleanInputValue) {
       this.calledByCleanInputValue = false;
@@ -237,34 +238,31 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   sendFeedback(): void {
-
     if (this.sizeNotAllowed > 0) {
       const minFileSize = formatBytes(this.fileRestrictions.minFileSize);
       const maxFileSize = formatBytes(this.fileRestrictions.maxFileSize);
-      const args = [ this.sizeNotAllowed, minFileSize || '0', maxFileSize ];
+      const args = [this.sizeNotAllowed, minFileSize || '0', maxFileSize];
       this.setPipeArguments('invalidSize', args);
       this.sizeNotAllowed = 0;
     }
 
     if (this.extensionNotAllowed > 0) {
       const allowedExtensionsFormatted = this.fileRestrictions.allowedExtensions.join(', ').toUpperCase();
-      const args = [ this.extensionNotAllowed, allowedExtensionsFormatted ];
+      const args = [this.extensionNotAllowed, allowedExtensionsFormatted];
       this.setPipeArguments('invalidFormat', args);
       this.extensionNotAllowed = 0;
     }
 
     if (this.quantityNotAllowed > 0) {
-      const args = [ this.quantityNotAllowed ];
+      const args = [this.quantityNotAllowed];
       this.setPipeArguments('invalidAmount', args);
       this.quantityNotAllowed = 0;
     }
-
   }
 
   /** Método responsável por **enviar** o(s) arquivo(s) selecionado(s). */
   sendFiles(): void {
     if (this.currentFiles && this.currentFiles.length) {
-
       this.uploadFiles(this.currentFiles);
     }
   }
@@ -296,18 +294,25 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   uploadFiles(files: Array<PoUploadFile>) {
     const filesFiltered = files.filter(file => file.status !== PoUploadStatus.Uploaded);
 
-    this.uploadService.upload(this.url, filesFiltered, this.onUpload,
-      (file, percent): any => { // UPLOADING
+    this.uploadService.upload(
+      this.url,
+      filesFiltered,
+      this.onUpload,
+      (file, percent): any => {
+        // UPLOADING
         this.uploadingHandler(file, percent);
-
-      }, (file, eventResponse): any => { // SUCCESS
+      },
+      (file, eventResponse): any => {
+        // SUCCESS
         this.responseHandler(file, PoUploadStatus.Uploaded);
         this.onSuccess.emit(eventResponse);
-
-      }, (file, eventError): any => { // Error
+      },
+      (file, eventError): any => {
+        // Error
         this.responseHandler(file, PoUploadStatus.Error);
         this.onError.emit(eventError);
-    });
+      }
+    );
   }
 
   private cleanInputValue() {

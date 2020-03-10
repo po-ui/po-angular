@@ -19,15 +19,18 @@ import { Observable } from 'rxjs';
  */
 @Injectable()
 export class PoBreadcrumbFavoriteService {
-
   private _url: string;
   private _bodyParams: object;
 
-  get url(): string { return this._url; }
+  get url(): string {
+    return this._url;
+  }
 
-  get bodyParams(): object { return this._bodyParams; }
+  get bodyParams(): object {
+    return this._bodyParams;
+  }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   configService(url, params, item) {
     this._url = url;
@@ -44,6 +47,6 @@ export class PoBreadcrumbFavoriteService {
   }
 
   getFavorite(): Observable<any> {
-    return this.http.get(this.url, { responseType: 'json', params: { url: this.bodyParams['url'] }});
+    return this.http.get(this.url, { responseType: 'json', params: { url: this.bodyParams['url'] } });
   }
 }

@@ -49,7 +49,6 @@ import { Directive, TemplateRef, Input } from '@angular/core';
   selector: '[p-list-view-detail-template]'
 })
 export class PoListViewDetailTemplateDirective {
-
   /**
    * @optional
    *
@@ -62,6 +61,5 @@ export class PoListViewDetailTemplateDirective {
   @Input('p-show-detail') showDetail: (item) => boolean;
 
   // Necessário manter templateRef para o funcionamento do row template.
-  constructor(public templateRef: TemplateRef<any>) { }
-
+  constructor(public templateRef: TemplateRef<any>) {}
 }

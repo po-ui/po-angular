@@ -8,10 +8,9 @@ import { SamplePoComboHotelsService } from './sample-po-combo-hotels.service';
 @Component({
   selector: 'sample-po-combo-hotels',
   templateUrl: './sample-po-combo-hotels.component.html',
-  providers: [ SamplePoComboHotelsService ]
+  providers: [SamplePoComboHotelsService]
 })
 export class SamplePoComboHotelsComponent {
-
   adults: number = 1;
   category: boolean = false;
   checkin: Date;
@@ -42,9 +41,7 @@ export class SamplePoComboHotelsComponent {
   @ViewChild('bookingForm', { static: true }) form: NgForm;
   @ViewChild('datepicker', { static: true }) datepickerComponent: PoDatepickerComponent;
 
-  constructor(
-    public comboService: SamplePoComboHotelsService,
-    private poNotification: PoNotificationService) { }
+  constructor(public comboService: SamplePoComboHotelsService, private poNotification: PoNotificationService) {}
 
   booking() {
     this.poNotification.success('Hotel booked successfully');
@@ -55,7 +52,6 @@ export class SamplePoComboHotelsComponent {
   }
 
   private formReset() {
-
     this.form.reset({
       adults: 1,
       category: false,

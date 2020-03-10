@@ -8,11 +8,10 @@ import { PoLookupFilter, PoLookupResponseApi, PoLookupFilteredItemsParams } from
 
 @Injectable()
 export class SamplePoLookupSwFilmsService implements PoLookupFilter {
-
   private baseUrl = 'https://swapi.co/api';
   private filmsUrl = 'https://swapi.co/api/films/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getFilms() {
     return this.http.get(this.filmsUrl);
@@ -25,18 +24,19 @@ export class SamplePoLookupSwFilmsService implements PoLookupFilter {
       params['search'] = filter;
     }
 
-    return this.http.get(`${this.baseUrl}/${filterParams}`, { params })
-      .pipe(map((response: { results: Array<any>, next: string }) => {
+    return this.http.get(`${this.baseUrl}/${filterParams}`, { params }).pipe(
+      map((response: { results: Array<any>; next: string }) => {
         return {
           items: response.results,
           hasNext: !!response.next
         };
-      }));
+      })
+    );
   }
 
   getObjectByValue(value: string, filterParams: any): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${filterParams}/?search=${value}`)
+    return this.http
+      .get(`${this.baseUrl}/${filterParams}/?search=${value}`)
       .pipe(map((response: { results: Array<any> }) => response.results[0]));
   }
-
 }

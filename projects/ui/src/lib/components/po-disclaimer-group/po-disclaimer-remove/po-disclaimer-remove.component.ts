@@ -12,7 +12,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './po-disclaimer-remove.component.html'
 })
 export class PoDisclaimerRemoveComponent {
-
   /** Texto exibido.  */
   @Input('p-label') label?: string;
 

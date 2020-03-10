@@ -10,11 +10,13 @@ import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
 @Directive()
 class PoStorageServiceMock extends PoStorageService {
-  constructor() { super(); }
+  constructor() {
+    super();
+  }
 }
 
 @Directive()
-class PoSchemaDefinitionServiceMock extends PoSchemaDefinitionService { }
+class PoSchemaDefinitionServiceMock extends PoSchemaDefinitionService {}
 
 describe('PoSchemaService:', () => {
   let poSchemaService: PoSchemaService;
@@ -24,7 +26,7 @@ describe('PoSchemaService:', () => {
       providers: [
         PoSchemaService,
         { provide: PoStorageService, useClass: PoStorageServiceMock },
-        { provide: PoSchemaDefinitionService, useClass: PoSchemaDefinitionServiceMock },
+        { provide: PoSchemaDefinitionService, useClass: PoSchemaDefinitionServiceMock }
       ]
     });
 
@@ -43,7 +45,7 @@ describe('PoSchemaService:', () => {
         getUrlApi: '',
         diffUrlApi: '',
         deletedField: 'deleted',
-        fields: [ 'field1', 'field2', 'field3' ],
+        fields: ['field1', 'field2', 'field3'],
         idField: 'id',
         name: 'schemaName',
         pageSize: 1
@@ -52,7 +54,7 @@ describe('PoSchemaService:', () => {
 
     it('getIdByRecordKey: should return id of schema key', () => {
       const id = '123';
-      const schemaKey = `schemaKey:${id}` ;
+      const schemaKey = `schemaKey:${id}`;
 
       expect(PoSchemaService['getIdByRecordKey'](schemaKey)).toBe(id);
     });
@@ -176,7 +178,6 @@ describe('PoSchemaService:', () => {
         expect(poSchemaService['poSchemaDefinitionService'].getAll).toHaveBeenCalled();
         expect(poSchemaService['poStorage']['keys']).toHaveBeenCalled();
       });
-
     });
 
     describe('get:', () => {
@@ -212,11 +213,10 @@ describe('PoSchemaService:', () => {
 
         expect(result).toEqual(record);
       });
-
     });
 
     it('getAll: should call poStorage.keys', async () => {
-      spyOn(poSchemaService['poStorage'], 'keys').and.returnValue(<any> []);
+      spyOn(poSchemaService['poStorage'], 'keys').and.returnValue(<any>[]);
 
       await poSchemaService.getAll('schemaName');
 
@@ -229,7 +229,7 @@ describe('PoSchemaService:', () => {
       const records: any = [{ record1: 'value' }, { record2: 'value2' }];
       const isSchemaKeyReturn = [false, true, false, true];
 
-      spyOn(poSchemaService['poStorage'], 'keys').and.returnValue(<any> keys);
+      spyOn(poSchemaService['poStorage'], 'keys').and.returnValue(<any>keys);
       spyOn(PoSchemaService, <any>'isSchemaKey').and.returnValues(...isSchemaKeyReturn);
       spyOn(poSchemaService, 'get').and.returnValues(...records);
 
@@ -244,7 +244,7 @@ describe('PoSchemaService:', () => {
     it('getAll: should call isSchemaKey with keys and schema name', async () => {
       const keys = ['key1:id', 'schemaKey:1'];
 
-      spyOn(poSchemaService['poStorage'], 'keys').and.returnValue(<any> keys);
+      spyOn(poSchemaService['poStorage'], 'keys').and.returnValue(<any>keys);
       spyOn(PoSchemaService, <any>'isSchemaKey').and.returnValue(false);
 
       await poSchemaService.getAll('schemaKey');
@@ -257,7 +257,7 @@ describe('PoSchemaService:', () => {
       const limitedCallWrapReturn = 'limitedCallWrap return';
       const limitedResource = jasmine.createSpy('resource');
 
-      spyOn(poSchemaService['poStorage'], 'limitedCallWrap').and.returnValue(<any> limitedCallWrapReturn);
+      spyOn(poSchemaService['poStorage'], 'limitedCallWrap').and.returnValue(<any>limitedCallWrapReturn);
 
       const result = await poSchemaService['limitedCallWrap'](limitedResource);
 
@@ -376,7 +376,7 @@ describe('PoSchemaService:', () => {
       const getReturn = { field: 'get return' };
 
       spyOn(PoSchemaService, <any>'getRecordKey').and.returnValue(localRecordKey);
-      spyOn(poSchemaService['poStorage'], 'get').and.returnValue(<any> getReturn);
+      spyOn(poSchemaService['poStorage'], 'get').and.returnValue(<any>getReturn);
 
       const result = await poSchemaService['getRecord']('schemaName', 'id');
 
@@ -406,7 +406,7 @@ describe('PoSchemaService:', () => {
     it('save: should call getRecordKey with schema name and recordId', async () => {
       const record = { field: 'value' };
 
-      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue({ serverRecord: {}, localRecord: {}});
+      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue({ serverRecord: {}, localRecord: {} });
 
       spyOn(PoSchemaService, <any>'getRecordKey');
 
@@ -492,6 +492,5 @@ describe('PoSchemaService:', () => {
 
       expect(result).toEqual(mergedRecord);
     });
-
   });
 });

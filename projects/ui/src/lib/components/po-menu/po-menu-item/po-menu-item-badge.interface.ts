@@ -6,7 +6,6 @@
  * Interface do *badge* utilizado no `po-menu`.
  */
 export interface PoMenuItemBadge {
-
   /**
    * @optional
    *
@@ -48,5 +47,4 @@ export interface PoMenuItemBadge {
    * Número exibido no *badge*, caso o mesmo seja maior que **99** o mesmo exibe **99+**.
    */
   value: number;
-
 }

@@ -7,7 +7,6 @@
  *
  */
 export interface PoMenuPanelItem {
-
   /** Ação personalizada para clique do item de menu. */
   action?: string | Function;
 
@@ -19,5 +18,4 @@ export interface PoMenuPanelItem {
 
   /** Link para redirecionamento no click do item do menu, podendo ser um link interno ou externo. */
   link?: string;
-
 }

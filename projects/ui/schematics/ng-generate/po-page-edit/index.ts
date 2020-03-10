@@ -5,9 +5,7 @@ import { Schema as ComponentOptions } from './schema';
 
 /** Scaffolds a new <name> component with <po-page-edit> */
 export default function(options: ComponentOptions): Rule {
-  return chain([
-    createPageEditComponent(options)
-  ]);
+  return chain([createPageEditComponent(options)]);
 }
 
 function createPageEditComponent(options: ComponentOptions): Rule {

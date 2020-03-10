@@ -13,12 +13,7 @@ describe('PoLoginComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoLoginComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoLoginComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -143,5 +138,4 @@ describe('PoLoginComponent:', () => {
       });
     });
   });
-
 });

@@ -4,13 +4,12 @@ import { PoDynamicFormField, PoStepperItem } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-stepper-labs',
-  templateUrl: './sample-po-stepper-labs.component.html',
+  templateUrl: './sample-po-stepper-labs.component.html'
 })
 export class SamplePoStepperLabsComponent implements OnInit {
-
   event: any;
-  properties: any = { };
-  stepItem: PoStepperItem = <any> {};
+  properties: any = {};
+  stepItem: PoStepperItem = <any>{};
   steps: Array<PoStepperItem> = [];
 
   readonly propertiesFields: Array<PoDynamicFormField> = [
@@ -50,14 +49,14 @@ export class SamplePoStepperLabsComponent implements OnInit {
     }
   ];
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.restore();
   }
 
   addItem(stepItem: PoStepperItem) {
-    this.steps = [ ...this.steps, { ...stepItem } ];
+    this.steps = [...this.steps, { ...stepItem }];
   }
 
   changeStep(event) {
@@ -67,9 +66,8 @@ export class SamplePoStepperLabsComponent implements OnInit {
   }
 
   restore() {
-    this.properties = { };
+    this.properties = {};
     this.steps = [];
     this.event = undefined;
   }
-
 }

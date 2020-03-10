@@ -1,4 +1,3 @@
-
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import { PoContainerBaseComponent } from './po-container-base.component';
@@ -11,7 +10,6 @@ describe('PoContainerBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-height: should update property with valid values.', () => {
       const validValues = [0, 1500, 500, 200, 8000];
 
@@ -64,7 +62,5 @@ describe('PoContainerBaseComponent:', () => {
 
       expectPropertiesValues(component, 'noShadow', invalidValues, false);
     });
-
   });
-
 });

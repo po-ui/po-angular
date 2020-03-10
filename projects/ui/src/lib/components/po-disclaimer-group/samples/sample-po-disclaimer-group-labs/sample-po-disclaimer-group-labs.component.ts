@@ -7,16 +7,13 @@ import { PoCheckboxGroupOption, PoDisclaimer } from '@portinari/portinari-ui';
   templateUrl: './sample-po-disclaimer-group-labs.component.html'
 })
 export class SamplePoDisclaimerGroupLabsComponent implements OnInit {
-
   disclaimer: PoDisclaimer;
   disclaimers: Array<PoDisclaimer>;
   event: string;
   properties: Array<string> = [];
   title: string;
 
-  readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { value: 'hideRemoveAll', label: 'Hide remove all' }
-  ];
+  readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'hideRemoveAll', label: 'Hide remove all' }];
 
   ngOnInit() {
     this.restore();

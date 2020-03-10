@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoDatepickerIsoFormat, PoRadioGroupOption } from
   templateUrl: './sample-po-datepicker-labs.component.html'
 })
 export class SamplePoDatepickerLabsComponent implements OnInit {
-
   datepicker: string | Date;
   maxDate: string | Date;
   errorPattern: string;
@@ -69,5 +68,4 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
     this.properties = [];
     this.minDate = undefined;
   }
-
 }

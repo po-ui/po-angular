@@ -3,7 +3,6 @@ import * as utilsFunctions from '../../utils/util';
 import { PoDateService } from './po-date.service';
 
 describe('PoDateTimeService:', () => {
-
   const dateService = new PoDateService();
 
   it('should be created', () => {
@@ -11,9 +10,7 @@ describe('PoDateTimeService:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('convertIsoToDate:', () => {
-
       it('should return `undefined` if date is falsy', () => {
         const date = '';
 
@@ -53,11 +50,9 @@ describe('PoDateTimeService:', () => {
 
         expect(result).toEqual('2017-10-30T23:59:59');
       });
-
     });
 
     describe('convertDateToISO:', () => {
-
       it('should return null if date is undefined', () => {
         const date = undefined;
         expect(dateService.convertDateToISO(date)).toBeNull();
@@ -86,11 +81,9 @@ describe('PoDateTimeService:', () => {
         const date = new Date(2017, 5, 5);
         expect(dateService.convertDateToISO(date)).toBe('2017-06-05');
       });
-
     });
 
     describe('formatYear:', () => {
-
       it(`should return 'year.toString' if year is greater than 99`, () => {
         expect(dateService.formatYear(1000)).toBe('1000');
         expect(dateService.formatYear(2018)).toBe('2018');
@@ -118,11 +111,9 @@ describe('PoDateTimeService:', () => {
       it(`should return 'undefined' if year is less than 0`, () => {
         expect(dateService.formatYear(-1)).toBeUndefined();
       });
-
     });
 
     it(`getDateForDateRange: should return date object and '00:00:00' hour if date param is instance of Date and isMinDate is true`, () => {
-
       const dateParam = new Date(2018, 2, 15);
       const isMinDate = true;
       const splitDate = { year: 2018, month: 2, day: 15 };
@@ -137,7 +128,6 @@ describe('PoDateTimeService:', () => {
 
     it(`getDateForDateRange: should return date object and '23:59:59' hour if date param is
       instance of Date and isMinDate is false`, () => {
-
       const dateParam = new Date(2018, 2, 15);
       const isMinDate = false;
       const splitDate = { year: 2018, month: 2, day: 15 };
@@ -152,7 +142,6 @@ describe('PoDateTimeService:', () => {
 
     it(`getDateForDateRange: should call 'convertIsoToDate' and return its value if date param not is
       instance of Date and isValidIso is true`, () => {
-
       const dateParam = '2018-03-15T03:00:00.000Z';
       const date = new Date(2018, 2, 15);
       const isMinDate = false;
@@ -168,7 +157,6 @@ describe('PoDateTimeService:', () => {
     });
 
     it(`getDateForDateRange: should return undefined if date param not is instance of Date and isValidIso is false`, () => {
-
       const dateParam = '2018-03-15T03:00:00.000Z';
 
       spyOn(dateService, 'convertIsoToDate');
@@ -367,11 +355,9 @@ describe('PoDateTimeService:', () => {
       it('should return `true` if doesn`t have `dateStart` and `dateEnd`.', () => {
         expect(dateService.validateDateRange(date, dateStart, dateEnd)).toBeTruthy();
       });
-
     });
 
     describe('validateDate:', () => {
-
       it(`should return valid date if regex is valid and date is type 'Date'.`, () => {
         const date = new Date(2018, 5, 5);
         const validDate = '2018-06-05';
@@ -404,11 +390,8 @@ describe('PoDateTimeService:', () => {
 
         expect(dateService['validateDate'](date)).toBeUndefined();
       });
-
     });
-
   });
-
 });
 
 function dateWithoutTimeZone(date: Date): string {

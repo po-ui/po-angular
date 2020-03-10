@@ -8,9 +8,7 @@ import { Schema as ComponentOptions } from './schema';
  * - The property dataView set which component will be used to display data.
  */
 export default function(options: ComponentOptions): Rule {
-  return chain([
-    createPageListComponent(options)
-  ]);
+  return chain([createPageListComponent(options)]);
 }
 
 function createPageListComponent(options: ComponentOptions): Rule {

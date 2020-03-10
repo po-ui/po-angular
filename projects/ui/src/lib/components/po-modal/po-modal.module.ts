@@ -10,14 +10,9 @@ import { PoModalService } from './po-modal-service';
  * Módulo do componente po-modal
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoButtonModule
-  ],
-  declarations: [
-    PoModalComponent
-  ],
-  exports: [ PoModalComponent ],
+  imports: [CommonModule, PoButtonModule],
+  declarations: [PoModalComponent],
+  exports: [PoModalComponent],
   providers: [PoModalService]
 })
-export class PoModalModule { }
+export class PoModalModule {}

@@ -10,7 +10,7 @@ describe('PoMultiselectItemComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoMultiselectItemComponent ]
+      declarations: [PoMultiselectItemComponent]
     });
   });
 
@@ -37,5 +37,4 @@ describe('PoMultiselectItemComponent', () => {
     const checked = fixture.debugElement.nativeElement.querySelector(':checked');
     expect(checked).not.toBeNull();
   });
-
 });

@@ -6,7 +6,6 @@ import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface
 
 @Injectable()
 export class PoTreeViewService {
-
   private expandedEvent = new Subject<PoTreeViewItem>();
   private selectedEvent = new Subject<PoTreeViewItem>();
 
@@ -25,5 +24,4 @@ export class PoTreeViewService {
   onSelect() {
     return this.selectedEvent.asObservable();
   }
-
 }

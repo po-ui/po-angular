@@ -14,12 +14,7 @@ describe('PoNumberComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoPasswordComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoPasswordComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -84,7 +79,6 @@ describe('PoNumberComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-hide-password-peek: should update property with valid values.', () => {
       const validValues = [false, true, '', 'false', 'true'];
       const expectedValues = [false, true, true, false, true];
@@ -118,7 +112,6 @@ describe('PoNumberComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -172,11 +165,9 @@ describe('PoNumberComponent:', () => {
 
       expect(component.type).toEqual(expetedValue);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should have the class `po-input-double-icon-right` if `hidePasswordPeek` is false, `clean` is true and `input` has value.', () => {
       component.hidePasswordPeek = false;
       component.clean = true;
@@ -314,7 +305,5 @@ describe('PoNumberComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

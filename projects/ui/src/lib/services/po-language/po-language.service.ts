@@ -16,7 +16,6 @@ const poLocaleKey = 'PO_USER_LOCALE';
   providedIn: 'root'
 })
 export class PoLanguageService {
-
   set languageDefault(language: string) {
     if (language && isLanguage(language)) {
       localStorage.setItem(poDefaultLanguage, language);
@@ -118,5 +117,4 @@ export class PoLanguageService {
   setLanguageDefault(language: string): void {
     this.languageDefault = language;
   }
-
 }

@@ -38,4 +38,4 @@ export class SamplePoRichTextLabsComponent implements OnInit {
     this.properties = [];
     this.richText = '';
   }
- }
+}

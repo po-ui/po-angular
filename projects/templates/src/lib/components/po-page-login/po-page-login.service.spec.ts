@@ -24,13 +24,10 @@ describe('PoPageLoginService:', () => {
 
   it('should be created', () => {
     expect(poPageLoginService).toBeTruthy();
-    expect(
-      poPageLoginService instanceof PoPageLoginService
-    ).toBeTruthy();
+    expect(poPageLoginService instanceof PoPageLoginService).toBeTruthy();
   });
 
   describe('Methods', () => {
-
     it('post: should call POST method with url, loginForm and headers if type is Basic', () => {
       const type = PoPageLoginAuthenticationType.Basic;
       const url = 'url';
@@ -39,7 +36,7 @@ describe('PoPageLoginService:', () => {
         password: '123@456',
         rememberUser: false
       };
-      const resource = { headers: { 'Authorization': 'basic (user:password)' }, body: { rememberUser: false }};
+      const resource = { headers: { 'Authorization': 'basic (user:password)' }, body: { rememberUser: false } };
 
       poPageLoginService.onLogin(url, type, loginForm).subscribe(response => {
         expect(response).toEqual(resource);
@@ -58,7 +55,7 @@ describe('PoPageLoginService:', () => {
         password: '123@456',
         rememberUser: false
       };
-      const resource = { body: {}};
+      const resource = { body: {} };
 
       poPageLoginService.onLogin(url, type, loginForm).subscribe(response => {
         expect(response).toEqual(resource);
@@ -68,7 +65,5 @@ describe('PoPageLoginService:', () => {
       expect(req.request.method).toBe('POST');
       req.flush(resource);
     });
-
   });
-
 });

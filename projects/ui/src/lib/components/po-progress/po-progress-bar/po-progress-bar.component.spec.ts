@@ -6,7 +6,6 @@ import { PoProgressBarComponent } from './po-progress-bar.component';
 import { PoProgressModule } from '../po-progress.module';
 
 describe('PoProgressBarComponent:', () => {
-
   let component: PoProgressBarComponent;
   let fixture: ComponentFixture<PoProgressBarComponent>;
 
@@ -14,9 +13,7 @@ describe('PoProgressBarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        PoProgressModule
-      ]
+      imports: [PoProgressModule]
     });
   });
 
@@ -28,7 +25,6 @@ describe('PoProgressBarComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('should return `0` if value is 0', () => {
       component.value = 0;
 
@@ -52,11 +48,9 @@ describe('PoProgressBarComponent:', () => {
 
       expect(component.valueScale).toBe('0.25');
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain the value of 0.25 in style transform scale if value is 25', () => {
       component.value = 25;
 
@@ -76,7 +70,5 @@ describe('PoProgressBarComponent:', () => {
 
       expect(progressBar.style.transform).toBe('scaleX(0)');
     });
-
   });
-
 });

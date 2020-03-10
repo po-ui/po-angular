@@ -5,8 +5,8 @@
   [p-title]="title"
   (p-advanced-search)="onAdvancedSearch($event)"
   (p-change-disclaimers)="onChangeDisclaimers($event)"
-  (p-quick-search)="onQuickSearch($event)">
-
+  (p-quick-search)="onQuickSearch($event)"
+>
   <po-table
     p-sort="true"
     [p-actions]="tableActions"
@@ -15,7 +15,7 @@
     [p-items]="items"
     [p-show-more-disabled]="!hasNext"
     (p-show-more)="showMore()"
-    (p-sort-by)="onSort($event)">
+    (p-sort-by)="onSort($event)"
+  >
   </po-table>
-
 </po-page-dynamic-search>

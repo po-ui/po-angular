@@ -18,7 +18,7 @@ describe('PoButtonComponent: ', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [PoLoadingModule],
-      declarations: [ PoButtonComponent ]
+      declarations: [PoButtonComponent]
     });
   });
 
@@ -101,7 +101,6 @@ describe('PoButtonComponent: ', () => {
   });
 
   describe('Properties: ', () => {
-
     it('p-loading: should attribute the propertie when set valid values.', () => {
       const booleanTrueValues = [true, 'true', 1, ''];
       expectPropertiesValues(component, 'loading', booleanTrueValues, true);
@@ -125,11 +124,9 @@ describe('PoButtonComponent: ', () => {
 
       expect(nativeElement.querySelector('span.po-button-label')).toBeFalsy();
     });
-
   });
 
   describe('Methods:', () => {
-
     it('focus: should call `focus` of button', () => {
       component.buttonElement = {
         nativeElement: {
@@ -158,11 +155,9 @@ describe('PoButtonComponent: ', () => {
 
       expect(component.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates: ', () => {
-
     describe('Loading: ', () => {
       let button;
 
@@ -192,9 +187,6 @@ describe('PoButtonComponent: ', () => {
         component.disabled = false;
         expect(button.getAttribute('disabled')).not.toBeNull();
       });
-
     });
-
   });
-
 });

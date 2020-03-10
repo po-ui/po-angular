@@ -9,17 +9,15 @@ import { PoButtonModule } from '../../components/po-button/po-button.module';
 import { PoTooltipDirective } from './po-tooltip.directive';
 
 @Component({
-  template:
-    `<div #tooltipContainer p-tooltip="Teste" p-tooltip-position="top">
-      <po-button p-label="Passe o mouse">
-      </po-button>
-    </div>`
+  template: `
+    <div #tooltipContainer p-tooltip="Teste" p-tooltip-position="top">
+      <po-button p-label="Passe o mouse"> </po-button>
+    </div>
+  `
 })
-
-export class TestComponent { }
+export class TestComponent {}
 
 describe('PoTooltipDirective', () => {
-
   let directiveElement;
   let directive;
 
@@ -29,8 +27,8 @@ describe('PoTooltipDirective', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoButtonModule ],
-      declarations: [PoTooltipDirective, TestComponent ]
+      imports: [PoButtonModule],
+      declarations: [PoTooltipDirective, TestComponent]
     });
   });
 
@@ -65,7 +63,7 @@ describe('PoTooltipDirective', () => {
     expect(directiveElement.nativeElement.querySelector('.po-tooltip-content')).toBeTruthy();
   });
 
-  it('onMouseEnter: should create tooltip ',  fakeAsync (() => {
+  it('onMouseEnter: should create tooltip ', fakeAsync(() => {
     directive.tooltip = 'TEXT';
     directive.tooltipContent = false;
 
@@ -90,7 +88,7 @@ describe('PoTooltipDirective', () => {
     expect(directive.lastTooltipText).toBe(directive.tooltip);
   }));
 
-  it('onMouseEnter: should not create tooltip when not have tooltip property',  fakeAsync (() => {
+  it('onMouseEnter: should not create tooltip when not have tooltip property', fakeAsync(() => {
     directive.tooltip = undefined;
     directive.tooltipContent = false;
 
@@ -115,7 +113,7 @@ describe('PoTooltipDirective', () => {
     expect(directive.lastTooltipText).toBe(directive.tooltip);
   }));
 
-  it('should show tooltip when it exists in onMouseEnter', fakeAsync (() => {
+  it('should show tooltip when it exists in onMouseEnter', fakeAsync(() => {
     directive.tooltip = 'TEXT';
     directive.tooltipContent = true;
 
@@ -186,7 +184,7 @@ describe('PoTooltipDirective', () => {
   });
 
   it('should hide tooltip when have tooltipContent', () => {
-    spyOn(directive, <any> 'removeScrollEventListener');
+    spyOn(directive, <any>'removeScrollEventListener');
 
     directive.hideTooltip();
 
@@ -222,7 +220,6 @@ describe('PoTooltipDirective', () => {
   });
 
   it('should call adjustPosition through of function of scroll listener', fakeAsync((): void => {
-
     spyOn(directive['poControlPosition'], 'adjustPosition');
 
     directive.addScrollEventListener();
@@ -235,7 +232,6 @@ describe('PoTooltipDirective', () => {
   }));
 
   it('shouldn`t call adjustPosition through of function of scroll listener', fakeAsync(() => {
-
     spyOn(directive['poControlPosition'], 'adjustPosition');
 
     directive.addScrollEventListener();
@@ -247,5 +243,4 @@ describe('PoTooltipDirective', () => {
 
     expect(directive['poControlPosition'].adjustPosition).not.toHaveBeenCalled();
   }));
-
 });

@@ -8,10 +8,8 @@ import { PoPopoverComponent } from './po-popover.component';
  * Módulo do componente po-popover.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [PoPopoverComponent],
   exports: [PoPopoverComponent]
 })
-export class PoPopoverModule { }
+export class PoPopoverModule {}

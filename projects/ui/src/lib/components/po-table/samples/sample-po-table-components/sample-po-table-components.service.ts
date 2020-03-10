@@ -4,7 +4,6 @@ import { PoTableColumnSort, PoTableColumnSortType } from '@portinari/portinari-u
 
 @Injectable()
 export class SamplePoTableComponentsService {
-
   readonly items = [
     {
       favorite: ['favorite', 'documentation'],
@@ -12,7 +11,7 @@ export class SamplePoTableComponentsService {
       description: 'Display a list of items and allows selection',
       link: '/documentation/po-select',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'stable'
     },
     {
@@ -21,7 +20,11 @@ export class SamplePoTableComponentsService {
       description: 'Group of square buttons that allows multiple items to be selected',
       link: '/documentation/po-checkbox-group',
       extra: 'Best Practices',
-      extras: [ 'Short and objective texts for items', 'Use with short lists', 'For big lists use Portinari Multiselect' ],
+      extras: [
+        'Short and objective texts for items',
+        'Use with short lists',
+        'For big lists use Portinari Multiselect'
+      ],
       status: 'stable'
     },
     {
@@ -30,7 +33,7 @@ export class SamplePoTableComponentsService {
       description: 'Input that allows only numbers',
       link: '/documentation/po-number',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'experimental'
     },
     {
@@ -39,7 +42,7 @@ export class SamplePoTableComponentsService {
       description: 'Display a list of items with filter and allows selection',
       link: '/documentation/po-combo',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'stable'
     },
     {
@@ -48,7 +51,7 @@ export class SamplePoTableComponentsService {
       description: 'Display a list of items and allows multiple selection',
       link: '/documentation/po-multiselect',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'experimental'
     },
     {
@@ -57,16 +60,16 @@ export class SamplePoTableComponentsService {
       description: 'Input for general texts',
       link: '/documentation/po-input',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'stable'
     },
     {
       favorite: ['favorite', 'documentation'],
       component: 'Portinari Textarea',
       description: 'Larger input for big texts',
-      link: '/documentation/po-textarea' ,
+      link: '/documentation/po-textarea',
       extra: 'Best Practices',
-      extras: [ 'Recommended to large texts like observations and details', 'For short texts use po-input' ],
+      extras: ['Recommended to large texts like observations and details', 'For short texts use po-input'],
       status: 'experimental'
     },
     {
@@ -75,7 +78,7 @@ export class SamplePoTableComponentsService {
       description: 'Input with calendar for dates',
       link: '/documentation/po-datepicker',
       extra: 'Features',
-      extras: [ 'Multiple idioms ( pt, es , en)', 'Custom date formats', 'Period validation (start date and end date)' ],
+      extras: ['Multiple idioms ( pt, es , en)', 'Custom date formats', 'Period validation (start date and end date)'],
       status: 'experimental'
     },
     {
@@ -84,7 +87,7 @@ export class SamplePoTableComponentsService {
       description: 'Input that allows valid email texts (username@email.com)',
       link: '/documentation/po-email',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'stable'
     },
     {
@@ -93,7 +96,7 @@ export class SamplePoTableComponentsService {
       description: 'Input that expects a valid url as text (http://www.url.com)',
       link: '/documentation/po-url',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'stable'
     },
     {
@@ -102,7 +105,7 @@ export class SamplePoTableComponentsService {
       description: 'Input with bullet text to type passwords',
       link: '/documentation/po-password',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'stable'
     },
     {
@@ -111,7 +114,7 @@ export class SamplePoTableComponentsService {
       description: 'Input with a user icon that represents a login field',
       link: '/documentation/po-login',
       extra: 'Features',
-      extras: [ 'Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys' ],
+      extras: ['Filter options (starts, contains, ends)', 'Custom services', 'Navigation by keys'],
       status: 'stable'
     },
     {
@@ -120,7 +123,7 @@ export class SamplePoTableComponentsService {
       description: 'Upload file(s) with a loading bar',
       link: '/documentation/po-upload',
       extra: 'Features',
-      extras: [ 'Multiple file selection', 'Automatic upload after click', 'File format and size restriction' ],
+      extras: ['Multiple file selection', 'Automatic upload after click', 'File format and size restriction'],
       status: 'experimental'
     },
     {
@@ -129,13 +132,12 @@ export class SamplePoTableComponentsService {
       description: 'Creates a circle with a picture inside',
       link: '/documentation/po-avatar',
       extra: 'Features',
-      extras: [ 'Multiple sizes', 'Default image' ],
+      extras: ['Multiple sizes', 'Default image'],
       status: 'stable'
     }
   ];
 
   getItems(sort?: PoTableColumnSort, loadAll: boolean = false): Array<any> {
-
     const result = [...this.items];
 
     if (sort && sort.column) {
@@ -150,7 +152,6 @@ export class SamplePoTableComponentsService {
   }
 
   private sort(value: any, valueToCompare: any, sort: PoTableColumnSort) {
-
     const property = sort.column.property;
     const type = sort.type;
 

@@ -6,7 +6,6 @@
  * Ações executadas durante a manipulação das linhas do grid.
  */
 export interface PoGridRowActions {
-
   /** Método executado após uma linha do grid ser removida. */
   afterRemove?: () => void;
 
@@ -88,5 +87,4 @@ export interface PoGridRowActions {
    * ```
    */
   beforeSave?: (updatedRow: any, originalRow: any) => boolean;
-
 }

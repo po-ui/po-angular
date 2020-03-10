@@ -36,18 +36,17 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoTextareaComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoTextareaComponent),
-      multi: true,
+      multi: true
     }
   ]
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit {
-
-  @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   valueBeforeChange: any;
   fireChange: boolean = false;
@@ -102,7 +101,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   validMaxLength(maxlength: number, value: string) {
-    return (maxlength && value.length > maxlength) ? value.toString().substring(0, maxlength) : value;
+    return maxlength && value.length > maxlength ? value.toString().substring(0, maxlength) : value;
   }
 
   eventOnInput(event: any) {
@@ -132,5 +131,4 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
       this.change.emit(elementValue);
     }
   }
-
 }

@@ -9,7 +9,6 @@ import { PoHttpRequestType } from './po-http-request-type.enum';
 import { PoHttpRequestData } from './interfaces/po-http-request-data.interface';
 
 describe('PoHttpClientService', () => {
-
   let poHttpClientService: PoHttpClientService;
   let httpMock: HttpTestingController;
 
@@ -32,7 +31,6 @@ describe('PoHttpClientService', () => {
   });
 
   describe('Methods: ', () => {
-
     const headerMock = { name: 'header name', value: 'header value' };
     const bodyMock = { value: 'body value' };
 
@@ -54,13 +52,16 @@ describe('PoHttpClientService', () => {
         done();
       });
 
-      httpMock.expectOne(httpRequest => {
-        return httpRequest.url === poHttpOperationDataMock.url &&
-          httpRequest.method === PoHttpRequestType.GET &&
-          httpRequest.headers.get(headerMock.name) === headerMock.value &&
-          httpRequest.body === poHttpOperationDataMock.body;
-
-        }).flush({});
+      httpMock
+        .expectOne(httpRequest => {
+          return (
+            httpRequest.url === poHttpOperationDataMock.url &&
+            httpRequest.method === PoHttpRequestType.GET &&
+            httpRequest.headers.get(headerMock.name) === headerMock.value &&
+            httpRequest.body === poHttpOperationDataMock.body
+          );
+        })
+        .flush({});
     });
 
     it('delete: should call createRequest with poHttpOperationData without headers', done => {
@@ -76,11 +77,9 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it(`delete: should call createRequest with poHttpOperationData`, done => {
-
       const poHttpOperationDataMock: PoHttpRequestData = {
         url: 'http://url-test.com',
         method: PoHttpRequestType.DELETE,
@@ -93,7 +92,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('get: should call createRequest with poHttpOperationData without header', done => {
@@ -109,7 +107,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('get: should call createRequest with poHttpOperationData', done => {
@@ -125,7 +122,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('head: should call createRequest with poHttpOperationData without header', done => {
@@ -141,7 +137,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('head: should call createRequest with poHttpOperationData', done => {
@@ -157,7 +152,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('options: should call createRequest with poHttpOperationData', done => {
@@ -173,7 +167,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('options: should call createRequest with poHttpOperationData without header', done => {
@@ -189,7 +182,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('patch: should call createRequest with poHttpOperationData', done => {
@@ -203,11 +195,11 @@ describe('PoHttpClientService', () => {
       spyOn(poHttpClientService, <any>'createRequest').and.returnValue(of({}));
 
       poHttpClientService
-        .patch(poHttpOperationDataMock.url, poHttpOperationDataMock.body, poHttpOperationDataMock.headers).subscribe(response => {
+        .patch(poHttpOperationDataMock.url, poHttpOperationDataMock.body, poHttpOperationDataMock.headers)
+        .subscribe(response => {
           expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
           done();
         });
-
     });
 
     it('patch: should call createRequest with poHttpOperationData without body and header', done => {
@@ -224,7 +216,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('post: should call createRequest with poHttpOperationData', done => {
@@ -238,11 +229,11 @@ describe('PoHttpClientService', () => {
       spyOn(poHttpClientService, <any>'createRequest').and.returnValue(of({}));
 
       poHttpClientService
-        .post(poHttpOperationDataMock.url, poHttpOperationDataMock.body, poHttpOperationDataMock.headers).subscribe(response => {
+        .post(poHttpOperationDataMock.url, poHttpOperationDataMock.body, poHttpOperationDataMock.headers)
+        .subscribe(response => {
           expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
           done();
         });
-
     });
 
     it('post: should call createRequest with poHttpOperationData without body and header', done => {
@@ -259,7 +250,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('put: should call createRequest with poHttpOperationData', done => {
@@ -273,11 +263,11 @@ describe('PoHttpClientService', () => {
       spyOn(poHttpClientService, <any>'createRequest').and.returnValue(of({}));
 
       poHttpClientService
-        .put(poHttpOperationDataMock.url, poHttpOperationDataMock.body, poHttpOperationDataMock.headers).subscribe(response => {
+        .put(poHttpOperationDataMock.url, poHttpOperationDataMock.body, poHttpOperationDataMock.headers)
+        .subscribe(response => {
           expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
           done();
         });
-
     });
 
     it('put: should call createRequest with poHttpOperationData without body and header', done => {
@@ -294,7 +284,6 @@ describe('PoHttpClientService', () => {
         expect(poHttpClientService['createRequest']).toHaveBeenCalledWith(poHttpOperationDataMock);
         done();
       });
-
     });
 
     it('createHttpHeaders: should return HttpHeaders equal the headerMock', () => {
@@ -315,7 +304,5 @@ describe('PoHttpClientService', () => {
 
       expect(result.keys()).toEqual([]);
     });
-
   });
-
 });

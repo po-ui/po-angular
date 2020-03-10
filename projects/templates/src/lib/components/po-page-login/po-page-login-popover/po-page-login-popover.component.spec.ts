@@ -1,4 +1,3 @@
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -16,10 +15,7 @@ describe('ThPageLoginPopoverComponent: ', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],
-      declarations: [
-        PoI18nPipe,
-        PoPageLoginPopoverComponent
-      ]
+      declarations: [PoI18nPipe, PoPageLoginPopoverComponent]
     });
   });
 
@@ -35,7 +31,6 @@ describe('ThPageLoginPopoverComponent: ', () => {
   });
 
   describe('Properties: ', () => {
-
     it('p-recovery: should set recoveryType to `externalLink` if value type is string', () => {
       const url = 'http://www.portinari.com';
       component.recovery = url;
@@ -45,7 +40,7 @@ describe('ThPageLoginPopoverComponent: ', () => {
     });
 
     it('p-recovery: should set `recoveryType` to `internalLink if value type is string`', () => {
-      const url =  '/portinari';
+      const url = '/portinari';
       component.recovery = url;
 
       expect(component.recovery).toBe(url);
@@ -53,7 +48,7 @@ describe('ThPageLoginPopoverComponent: ', () => {
     });
 
     it('p-recovery: shouldn`t set `recoveryType` if value type is different from string`', () => {
-      const url =  {url: 'url'};
+      const url = { url: 'url' };
       component.recovery = url;
       component.recoveryType = undefined;
 
@@ -63,9 +58,8 @@ describe('ThPageLoginPopoverComponent: ', () => {
   });
 
   describe('Methods: ', () => {
-
     it('onForgotPasswordClick: should emit forgotPassword with recovery as param', () => {
-      component.recovery = { url: 'url'};
+      component.recovery = { url: 'url' };
 
       spyOn(component.forgotPassword, 'emit');
 
@@ -76,7 +70,6 @@ describe('ThPageLoginPopoverComponent: ', () => {
   });
 
   describe('Template: ', () => {
-
     it('should have the class `po-page-login-popover-link-container` if `recovery` is true and has value.', () => {
       component.recovery = 'fakeUrl';
 
@@ -109,12 +102,14 @@ describe('ThPageLoginPopoverComponent: ', () => {
 
       fixture.detectChanges();
 
-      const recoveryLink = nativeElement.querySelector('.po-page-login-popover-link[href="http://po.portinari.com.br"]');
+      const recoveryLink = nativeElement.querySelector(
+        '.po-page-login-popover-link[href="http://po.portinari.com.br"]'
+      );
       expect(recoveryLink).toBeTruthy();
     });
 
     it('should call `onForgotPasswordClick` if `recoveryType` is undefined', () => {
-      component.recovery = {url: 'url'};
+      component.recovery = { url: 'url' };
       component.recoveryType = undefined;
 
       spyOn(component, 'onForgotPasswordClick');
@@ -126,7 +121,5 @@ describe('ThPageLoginPopoverComponent: ', () => {
 
       expect(component.onForgotPasswordClick).toHaveBeenCalledWith(component.recovery);
     });
-
   });
-
 });

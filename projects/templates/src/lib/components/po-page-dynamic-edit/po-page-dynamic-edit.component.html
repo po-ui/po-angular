@@ -1,28 +1,18 @@
-<po-page-default
-  [p-actions]="pageActions"
-  [p-breadcrumb]="breadcrumb"
-  [p-title]="title">
-
-  <ng-container *ngIf="model; then formFieldsTemplate; else registerNotFoundTemplate">
-  </ng-container>
-
+<po-page-default [p-actions]="pageActions" [p-breadcrumb]="breadcrumb" [p-title]="title">
+  <ng-container *ngIf="model; then formFieldsTemplate; else registerNotFoundTemplate"> </ng-container>
 </po-page-default>
 
 <ng-template #registerNotFoundTemplate>
-
   <po-widget>
     <span class="po-icon po-icon-info"></span>
     <span class="po-font-text-large">
       {{ literals.registerNotFound }}
     </span>
   </po-widget>
-
 </ng-template>
 
 <ng-template #formFieldsTemplate>
-
-  <po-dynamic-form #dynamicForm [p-fields]="controlFields" [p-value]="model">
-  </po-dynamic-form>
+  <po-dynamic-form #dynamicForm [p-fields]="controlFields" [p-value]="model"> </po-dynamic-form>
 
   <div *ngIf="detailFields.length > 0" class="po-sm-12">
     <po-divider [p-label]="detailFields[0].divider"></po-divider>
@@ -31,11 +21,12 @@
       <po-button [p-label]="literals.detailActionNew" (p-click)="detailActionNew()" p-small></po-button>
     </div>
 
-    <po-grid #gridDetail
+    <po-grid
+      #gridDetail
       [p-row-actions]="detailActions"
       [p-columns]="detailFields[0].detail.columns"
-      [p-data]="model[detailFields[0].property]">
+      [p-data]="model[detailFields[0].property]"
+    >
     </po-grid>
   </div>
-
 </ng-template>

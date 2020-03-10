@@ -44,10 +44,7 @@ xdescribe('PoPageBlockedUserReasonContactsComponent: ', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [PoI18nModule.config(config)],
-      declarations: [
-        PoI18nPipe,
-        PoPageBlockedUserReasonComponent
-      ]
+      declarations: [PoI18nPipe, PoPageBlockedUserReasonComponent]
     });
   });
 
@@ -65,7 +62,6 @@ xdescribe('PoPageBlockedUserReasonContactsComponent: ', () => {
   });
 
   describe('Methods: ', () => {
-
     it('ngOnInit: should call `getLiterals` OnInit', () => {
       spyOn(component, <any>'getLiterals');
 
@@ -152,9 +148,6 @@ xdescribe('PoPageBlockedUserReasonContactsComponent: ', () => {
 
       expect(component.getParams).toHaveBeenCalled();
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
-
     });
-
   });
-
 });

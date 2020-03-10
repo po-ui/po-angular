@@ -6,19 +6,11 @@ import { animate, style, transition, trigger } from '@angular/animations';
   templateUrl: 'po-accordion-item-body.component.html',
   animations: [
     trigger('toggleBody', [
-      transition('* => void', [
-        style({ height: '*'}),
-        animate(200, style({ height: 0 }))
-      ]),
-      transition('void => *', [
-        style({ height: '0'}),
-        animate(200, style({ height: '*' }))
-      ])
+      transition('* => void', [style({ height: '*' }), animate(200, style({ height: 0 }))]),
+      transition('void => *', [style({ height: '0' }), animate(200, style({ height: '*' }))])
     ])
   ]
 })
 export class PoAccordionItemBodyComponent {
-
   @Input('p-expanded') expanded: boolean = false;
-
 }

@@ -26,16 +26,28 @@ const EVENT_SOURCING_NAME: string = PoEventSourcingService['event_sourcing_name'
 
 @Directive()
 class StorageServiceMock extends PoStorageService {
-  constructor() { super(); }
+  constructor() {
+    super();
+  }
 }
 
 @Directive()
 class PoDataTransformMock extends PoDataTransform {
-  getDateFieldName(): string { return undefined; }
-  getItemsFieldName(): string { return undefined; }
-  getPageParamName(): string { return undefined; }
-  getPageSizeParamName(): string { return undefined; }
-  hasNext(): boolean { return undefined; }
+  getDateFieldName(): string {
+    return undefined;
+  }
+  getItemsFieldName(): string {
+    return undefined;
+  }
+  getPageParamName(): string {
+    return undefined;
+  }
+  getPageSizeParamName(): string {
+    return undefined;
+  }
+  hasNext(): boolean {
+    return undefined;
+  }
 }
 
 describe('PoEventSourcingService:', () => {
@@ -51,14 +63,13 @@ describe('PoEventSourcingService:', () => {
         { provide: PoStorageService, useClass: StorageServiceMock },
         { provide: PoSchemaService, useClass: PoSchemaService },
         { provide: PoSchemaDefinitionService, useClass: PoSchemaDefinitionService },
-        { provide: PoHttpClientService, useClass: PoHttpClientService },
+        { provide: PoHttpClientService, useClass: PoHttpClientService }
       ]
     });
 
     eventSourcingService = TestBed.inject(PoEventSourcingService);
     storageServiceMock = TestBed.inject(PoStorageService);
     poHttpClientMock = TestBed.inject(PoHttpClientService);
-
   });
 
   it('should be created', () => {
@@ -66,7 +77,6 @@ describe('PoEventSourcingService:', () => {
   });
 
   describe('Methods:', () => {
-
     let schemaCustumerMock: PoSyncSchema;
     let schemaUserMock: PoSyncSchema;
     let eventSourcingItem: PoEventSourcingItem;
@@ -115,8 +125,12 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.create(schemaCustumerMock.name, item);
 
-      expect(eventSourcingService['createEventSourcingItem'])
-        .toHaveBeenCalledWith(PoEventSourcingOperation.Insert, item, schemaCustumerMock.name, undefined);
+      expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
+        PoEventSourcingOperation.Insert,
+        item,
+        schemaCustumerMock.name,
+        undefined
+      );
       expect(eventSourcingService['insertEventSourcingQueue']).toHaveBeenCalledWith(eventSourcingItemMock);
     });
 
@@ -129,8 +143,12 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.create(schemaCustumerMock.name, item, customRequestId);
 
-      expect(eventSourcingService['createEventSourcingItem'])
-        .toHaveBeenCalledWith(PoEventSourcingOperation.Insert, item, schemaCustumerMock.name, customRequestId);
+      expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
+        PoEventSourcingOperation.Insert,
+        item,
+        schemaCustumerMock.name,
+        customRequestId
+      );
     });
 
     it('createBatchEvents: should call `createEventSourcingList` according to received parameters', async () => {
@@ -145,12 +163,14 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.createBatchEvents(schemaCustumerMock.name, summaryEventList);
 
-      expect(eventSourcingService['createEventSourcingList']).toHaveBeenCalledWith(schemaCustumerMock.name, summaryEventList);
+      expect(eventSourcingService['createEventSourcingList']).toHaveBeenCalledWith(
+        schemaCustumerMock.name,
+        summaryEventList
+      );
     });
 
     it(`createBatchEvents: should call 'appendArrayToArray' with 'EVENT_SOURCING_NAME' and with the return of
       'createEventSourcingList'`, async () => {
-
       const eventSourcingList = [
         { record: { value: '1' }, operation: PoEventSourcingOperation.Insert, customRequestId: 'id', date: 'date' },
         { record: { value: '2' }, operation: PoEventSourcingOperation.Update, customRequestId: 'id', date: 'date' }
@@ -166,7 +186,6 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('createBatchEvents: should call `notifyEventCreation`', async () => {
-
       spyOn(eventSourcingService, <any>'createEventSourcingList');
       spyOn(storageServiceMock, 'appendArrayToArray');
       spyOn(eventSourcingService, <any>'notifyEventCreation');
@@ -193,8 +212,12 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.httpCommand(httpOperationDataMock);
 
-      expect(eventSourcingService['createEventSourcingItem'])
-        .toHaveBeenCalledWith(PoEventSourcingOperation.Http, httpOperationDataMock, undefined, undefined);
+      expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
+        PoEventSourcingOperation.Http,
+        httpOperationDataMock,
+        undefined,
+        undefined
+      );
 
       expect(eventSourcingService['insertEventSourcingQueue']).toHaveBeenCalledWith(eventSourcingItemMock);
     });
@@ -209,8 +232,12 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.httpCommand(httpOperationDataMock, customRequestId);
 
-      expect(eventSourcingService['createEventSourcingItem'])
-        .toHaveBeenCalledWith(PoEventSourcingOperation.Http, httpOperationDataMock, undefined, customRequestId);
+      expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
+        PoEventSourcingOperation.Http,
+        httpOperationDataMock,
+        undefined,
+        customRequestId
+      );
     });
 
     it('onSaveData: should return eventSub and do not call Observable.create if eventSub is defined', done => {
@@ -222,13 +249,12 @@ describe('PoEventSourcingService:', () => {
         expect(Observable.create).not.toHaveBeenCalled();
         done();
       });
-
     });
 
     it('onSaveData: emitter should be an instance of Subscriber', () => {
       eventSourcingService['emitter'] = null;
 
-      eventSourcingService.onSaveData().subscribe(() => { });
+      eventSourcingService.onSaveData().subscribe(() => {});
 
       expect(eventSourcingService['emitter'] instanceof Subscriber).toBeTruthy();
     });
@@ -242,8 +268,12 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.remove(schemaCustumerMock.name, item);
 
-      expect(eventSourcingService['createEventSourcingItem'])
-        .toHaveBeenCalledWith(PoEventSourcingOperation.Delete, item, schemaCustumerMock.name, undefined);
+      expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
+        PoEventSourcingOperation.Delete,
+        item,
+        schemaCustumerMock.name,
+        undefined
+      );
 
       expect(eventSourcingService['insertEventSourcingQueue']).toHaveBeenCalledWith(eventSourcingItemMock);
     });
@@ -258,9 +288,12 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.remove(schemaCustumerMock.name, item, customRequestId);
 
-      expect(eventSourcingService['createEventSourcingItem'])
-        .toHaveBeenCalledWith(PoEventSourcingOperation.Delete, item, schemaCustumerMock.name,
-        customRequestId);
+      expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
+        PoEventSourcingOperation.Delete,
+        item,
+        schemaCustumerMock.name,
+        customRequestId
+      );
     });
 
     it('removeEventSourcingItem: should call removeItemFromArray', async () => {
@@ -276,7 +309,7 @@ describe('PoEventSourcingService:', () => {
       spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
 
       spyOn(eventSourcingService, <any>'updateStorageSchemas').and.returnValue([]);
-      spyOn(eventSourcingService['poSchemaDefinition'], 'getAll').and.returnValue(<any> Promise.resolve());
+      spyOn(eventSourcingService['poSchemaDefinition'], 'getAll').and.returnValue(<any>Promise.resolve());
 
       await eventSourcingService.syncGet();
 
@@ -306,7 +339,7 @@ describe('PoEventSourcingService:', () => {
     it('syncGet: should call poSchemaService.limitedCallWrap and return its value', async () => {
       const limitedCallWrapReturn = 'limitedCallWrap return';
 
-      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.returnValue(<any> limitedCallWrapReturn);
+      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.returnValue(<any>limitedCallWrapReturn);
 
       const result = await eventSourcingService.syncGet();
 
@@ -327,7 +360,7 @@ describe('PoEventSourcingService:', () => {
     it('syncSend: should call poSchemaService.limitedCallWrap and return its value', async () => {
       const limitedCallWrapReturn = 'limitedCallWrap return';
 
-      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.returnValue(<any> limitedCallWrapReturn);
+      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.returnValue(<any>limitedCallWrapReturn);
 
       const result = await eventSourcingService.syncSend();
 
@@ -338,8 +371,10 @@ describe('PoEventSourcingService:', () => {
     it('syncSend: should call selectOperation if itemOfQueue is defined', async () => {
       spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
 
-      spyOn(storageServiceMock, 'getFirstItem')
-        .and.returnValues(Promise.resolve({ item: 'test' }), Promise.resolve(undefined));
+      spyOn(storageServiceMock, 'getFirstItem').and.returnValues(
+        Promise.resolve({ item: 'test' }),
+        Promise.resolve(undefined)
+      );
       spyOn(eventSourcingService, <any>'selectOperation');
 
       await eventSourcingService.syncSend();
@@ -350,8 +385,7 @@ describe('PoEventSourcingService:', () => {
     it('syncSend: should not call selectOperation if itemOfQueue is falsy', async () => {
       spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
 
-      spyOn(storageServiceMock, 'getFirstItem')
-        .and.returnValues(Promise.resolve(undefined));
+      spyOn(storageServiceMock, 'getFirstItem').and.returnValues(Promise.resolve(undefined));
 
       spyOn(eventSourcingService, <any>'selectOperation');
 
@@ -361,8 +395,7 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('syncSend: should call getFirstItem 2 times if stoppedQueueEventSourcing is falsy and itemOfQueue is true', async () => {
-
-      spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValues(<any> { item: 'test' });
+      spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValues(<any>{ item: 'test' });
       spyOn(eventSourcingService, <any>'selectOperation');
 
       spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => {
@@ -378,7 +411,6 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('syncSend: should call getFirstItem 1 time if stoppedQueueEventSourcing is true and itemOfQueue is falsy', async () => {
-
       spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValue(undefined);
       spyOn(eventSourcingService, <any>'selectOperation');
 
@@ -395,7 +427,7 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('syncSend: should call getFirstItem 1 time if stoppedQueueEventSourcing and itemOfQueue is true', async () => {
-      spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValues(<any> { item: 'test' });
+      spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValues(<any>{ item: 'test' });
       spyOn(eventSourcingService, <any>'selectOperation');
 
       spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => {
@@ -435,8 +467,12 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.update(schemaCustumerMock.name, item);
 
-      expect(eventSourcingService['createEventSourcingItem'])
-        .toHaveBeenCalledWith(PoEventSourcingOperation.Update, item, schemaCustumerMock.name, undefined);
+      expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
+        PoEventSourcingOperation.Update,
+        item,
+        schemaCustumerMock.name,
+        undefined
+      );
 
       expect(eventSourcingService['insertEventSourcingQueue']).toHaveBeenCalledWith(eventSourcingItemMock);
     });
@@ -451,8 +487,12 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService.update(schemaCustumerMock.name, item, customRequestId);
 
-      expect(eventSourcingService['createEventSourcingItem'])
-        .toHaveBeenCalledWith(PoEventSourcingOperation.Update, item, schemaCustumerMock.name, customRequestId);
+      expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
+        PoEventSourcingOperation.Update,
+        item,
+        schemaCustumerMock.name,
+        customRequestId
+      );
     });
 
     it('buildUrlParams: should return url with the pageSize and page params defined', () => {
@@ -480,7 +520,8 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('checkRecordIdExists: should not return throw if recordId is defined', () => {
-      const result = () => eventSourcingService['checkRecordIdExists'](jasmine.anything(), PoEventSourcingOperation.Delete);
+      const result = () =>
+        eventSourcingService['checkRecordIdExists'](jasmine.anything(), PoEventSourcingOperation.Delete);
 
       expect(result).not.toThrow();
     });
@@ -492,8 +533,16 @@ describe('PoEventSourcingService:', () => {
         dataTransform: new PoDataMessage()
       };
 
-      const requestBody = { items: [{ id: 3, item: 'test 3' }, { id: 4, item: 'test 4' }] };
-      const pageData = [{ id: 1, item: 'test 1' }, { id: 2, item: 'test 2' }];
+      const requestBody = {
+        items: [
+          { id: 3, item: 'test 3' },
+          { id: 4, item: 'test 4' }
+        ]
+      };
+      const pageData = [
+        { id: 1, item: 'test 1' },
+        { id: 2, item: 'test 2' }
+      ];
       const pages = { entity: schemaCustumerMock.name, data: pageData };
 
       const result = eventSourcingService['concatPageItems'](pages, requestBody);
@@ -508,7 +557,10 @@ describe('PoEventSourcingService:', () => {
         dataTransform: new PoDataMessage()
       };
 
-      const pageData = [{ id: 1, item: 'test 1' }, { id: 2, item: 'test 2' }];
+      const pageData = [
+        { id: 1, item: 'test 1' },
+        { id: 2, item: 'test 2' }
+      ];
       const pages = { entity: schemaCustumerMock.name, data: pageData };
 
       const result = eventSourcingService['concatPageItems'](pages, {});
@@ -517,7 +569,6 @@ describe('PoEventSourcingService:', () => {
     });
 
     describe('deleteOperation: ', () => {
-
       beforeEach(() => {
         eventSourcingItem.operation = PoEventSourcingOperation.Delete;
       });
@@ -525,7 +576,7 @@ describe('PoEventSourcingService:', () => {
       it('should call checkRecordIdExists with record id and PoEventSourcingOperation.Delete', async () => {
         const idField = schemaCustumerMock.idField;
 
-        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
+        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
         spyOn(eventSourcingService, <any>'checkRecordIdExists');
 
         spyOn(eventSourcingService, <any>'sendServerItem');
@@ -534,75 +585,83 @@ describe('PoEventSourcingService:', () => {
 
         await eventSourcingService['deleteOperation'](eventSourcingItem);
 
-        expect(eventSourcingService['checkRecordIdExists'])
-          .toHaveBeenCalledWith(eventSourcingItem.record[idField], eventSourcingItem.operation);
+        expect(eventSourcingService['checkRecordIdExists']).toHaveBeenCalledWith(
+          eventSourcingItem.record[idField],
+          eventSourcingItem.operation
+        );
       });
 
       it(`should call sendResponseSubject with Error if checkRecordIdExists return a throw`, async () => {
-
-        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
+        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
         spyOn(eventSourcingService, <any>'checkRecordIdExists').and.throwError('Error');
 
         spyOn(eventSourcingService, <any>'sendResponseSubject');
 
         await eventSourcingService['deleteOperation'](eventSourcingItem);
 
-        expect(eventSourcingService['sendResponseSubject'])
-          .toHaveBeenCalledWith(eventSourcingItem, new Error('Error'), true);
+        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
+          eventSourcingItem,
+          new Error('Error'),
+          true
+        );
       });
 
-      it(`should call sendResponseSubject with new Error if sendServerItem return a error and not call removeEventSourcingValidItem`,
-        async () => {
-          spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
-          spyOn(eventSourcingService, <any>'sendServerItem').and.throwError('error');
-          spyOn(eventSourcingService, <any>'removeEventSourcingValidItem');
-          spyOn(eventSourcingService, <any>'sendResponseSubject').and.returnValue(Promise.resolve());
+      it(`should call sendResponseSubject with new Error if sendServerItem return a error and not call removeEventSourcingValidItem`, async () => {
+        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
+        spyOn(eventSourcingService, <any>'sendServerItem').and.throwError('error');
+        spyOn(eventSourcingService, <any>'removeEventSourcingValidItem');
+        spyOn(eventSourcingService, <any>'sendResponseSubject').and.returnValue(Promise.resolve());
 
-          await eventSourcingService['deleteOperation'](eventSourcingItem);
+        await eventSourcingService['deleteOperation'](eventSourcingItem);
 
-          expect(eventSourcingService['sendResponseSubject'])
-            .toHaveBeenCalledWith(eventSourcingItem, new Error('error'), true);
+        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
+          eventSourcingItem,
+          new Error('error'),
+          true
+        );
 
-          expect(eventSourcingService['removeEventSourcingValidItem']).not.toHaveBeenCalled();
-        }
-      );
+        expect(eventSourcingService['removeEventSourcingValidItem']).not.toHaveBeenCalled();
+      });
 
       it('should call sendResponseSubject without new Error if deleteOperation works correctly', async () => {
         const response = { status: 200 };
 
-        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
+        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
         spyOn(eventSourcingService, <any>'sendServerItem').and.returnValue(response);
         spyOn(eventSourcingService, <any>'sendResponseSubject').and.returnValue(Promise.resolve());
         spyOn(eventSourcingService, <any>'removeEventSourcingValidItem');
 
         await eventSourcingService['deleteOperation'](eventSourcingItem);
 
-        expect(eventSourcingService['sendResponseSubject'])
-          .toHaveBeenCalledWith(eventSourcingItem, response);
+        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItem, response);
       });
 
       it('should call removeEventSourcingValidItem with response.status and item', async () => {
         const response = { status: 200 };
 
-        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
+        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
         spyOn(eventSourcingService, <any>'sendServerItem').and.returnValue(response);
         spyOn(eventSourcingService, <any>'removeEventSourcingValidItem');
 
         await eventSourcingService['deleteOperation'](eventSourcingItem);
 
-        expect(eventSourcingService['removeEventSourcingValidItem']).toHaveBeenCalledWith(response.status, eventSourcingItem);
+        expect(eventSourcingService['removeEventSourcingValidItem']).toHaveBeenCalledWith(
+          response.status,
+          eventSourcingItem
+        );
       });
 
       it('should call sendServerItem in poStorage.getItemByField return ', async () => {
-        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
+        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
         spyOn(eventSourcingService, <any>'sendServerItem').and.returnValue(Promise.resolve({ status: 200 }));
 
         await eventSourcingService['deleteOperation'](eventSourcingItem);
 
-        expect(eventSourcingService['sendServerItem']).toHaveBeenCalledWith(schemaCustumerMock.getUrlApi + '/'
-          + eventSourcingItem.record.id, PoHttpRequestType.DELETE);
+        expect(eventSourcingService['sendServerItem']).toHaveBeenCalledWith(
+          schemaCustumerMock.getUrlApi + '/' + eventSourcingItem.record.id,
+          PoHttpRequestType.DELETE
+        );
       });
-
     });
 
     it('sendServerItem: should call poHttpClient.createRequest with poHttpRequestData', async () => {
@@ -612,11 +671,14 @@ describe('PoEventSourcingService:', () => {
         body: { data: 'value' }
       };
 
-      spyOn(eventSourcingService['poHttpClient'], 'createRequest').and.returnValue(<any> of({}));
-      await eventSourcingService['sendServerItem'](poHttpRequestData.url, poHttpRequestData.method, poHttpRequestData.body);
+      spyOn(eventSourcingService['poHttpClient'], 'createRequest').and.returnValue(<any>of({}));
+      await eventSourcingService['sendServerItem'](
+        poHttpRequestData.url,
+        poHttpRequestData.method,
+        poHttpRequestData.body
+      );
 
       expect(eventSourcingService['poHttpClient']['createRequest']).toHaveBeenCalledWith(poHttpRequestData);
-
     });
 
     it('diffServerItems: should call poHttpClient.get with schemasSyncConfig.schemaName.currentUrlDiff', done => {
@@ -628,7 +690,6 @@ describe('PoEventSourcingService:', () => {
         expect(poHttpClientMock.get).toHaveBeenCalledWith(url);
         done();
       });
-
     });
 
     it('getBodyAndDate: should return response.body and set responseDate with "portinari_sync_date"', () => {
@@ -653,7 +714,6 @@ describe('PoEventSourcingService:', () => {
 
     it(`getServerDiffRecords: should return value of pageReduce.data and call diffServerItems, getBodyAndDate,
     paginateSchemaData and concatPageItems`, async () => {
-
       const baseUrl = 'http://url/api/v1/customers/diff/2018-08-03';
       const responseDiffServer = { body: { id: 1, value: 'value response' } };
       const pageReduce = { entity: schemaCustumerMock.name, data: [responseDiffServer.body] };
@@ -669,18 +729,21 @@ describe('PoEventSourcingService:', () => {
       expect(eventSourcingService['diffServerItems']).toHaveBeenCalled();
       expect(eventSourcingService['getBodyAndDate']).toHaveBeenCalledWith(schemaCustumerMock.name, responseDiffServer);
 
-      expect(eventSourcingService['paginateSchemaData'])
-        .toHaveBeenCalledWith(responseDiffServer, schemaCustumerMock, baseUrl);
+      expect(eventSourcingService['paginateSchemaData']).toHaveBeenCalledWith(
+        responseDiffServer,
+        schemaCustumerMock,
+        baseUrl
+      );
 
-      expect(eventSourcingService['concatPageItems'])
-        .toHaveBeenCalledWith({ entity: schemaCustumerMock.name, data: [] }, responseDiffServer);
+      expect(eventSourcingService['concatPageItems']).toHaveBeenCalledWith(
+        { entity: schemaCustumerMock.name, data: [] },
+        responseDiffServer
+      );
 
       expect(result).toBe(pageReduce.data);
-
     });
 
     describe('getUrl: ', () => {
-
       let defaultUrlApi;
       let paramsPoSyncSchema;
 
@@ -773,7 +836,6 @@ describe('PoEventSourcingService:', () => {
 
         expect(result).toBe(schemaCustumerMockUrl.deleteUrlApi + '/' + eventSourcingItem.record.id);
       });
-
     });
 
     it('httpOperation: should create httpOperation correctly', async () => {
@@ -787,7 +849,10 @@ describe('PoEventSourcingService:', () => {
 
       const response = new HttpResponse({ body: { data: 'value' }, status: 200 });
       const poHttpCommandResponse: PoSyncResponse = {
-        id: 123, customRequestId: undefined, request: itemEvent.record, response: response
+        id: 123,
+        customRequestId: undefined,
+        request: itemEvent.record,
+        response: response
       };
 
       spyOn(poHttpClientMock, 'createRequest').and.returnValue(of(response));
@@ -823,7 +888,6 @@ describe('PoEventSourcingService:', () => {
     });
 
     describe('insertEventSourcingQueue:', () => {
-
       let itemEvent: PoEventSourcingItem;
 
       beforeEach(() => {
@@ -875,7 +939,7 @@ describe('PoEventSourcingService:', () => {
           dateTime: new Date().getTime(),
           id: new Date().getTime(),
           operation: PoEventSourcingOperation.Insert,
-          record: { [ PoSchemaUtil.syncInternalIdFieldName ]: 1, name: 'Client name' },
+          record: { [PoSchemaUtil.syncInternalIdFieldName]: 1, name: 'Client name' },
           schema: schemaCustumerMock.name
         };
       });
@@ -884,20 +948,20 @@ describe('PoEventSourcingService:', () => {
         const url = 'http://test.com';
 
         const schemaData = [
-          { name: 'Customer name 1', [ PoSchemaUtil.syncInternalIdFieldName  ]: '12345' },
-          { name: 'Customer name 2', [ PoSchemaUtil.syncInternalIdFieldName  ]: '6789' },
-          { name: 'Customer name 3', [ PoSchemaUtil.syncInternalIdFieldName  ]: '101112' }
+          { name: 'Customer name 1', [PoSchemaUtil.syncInternalIdFieldName]: '12345' },
+          { name: 'Customer name 2', [PoSchemaUtil.syncInternalIdFieldName]: '6789' },
+          { name: 'Customer name 3', [PoSchemaUtil.syncInternalIdFieldName]: '101112' }
         ];
 
         const eventSourcingItems = [
           { schema: 'Customer', record: schemaData[0] },
           { schema: 'Customer', record: schemaData[1] },
-          { schema: 'Customer', record: schemaData[2] },
+          { schema: 'Customer', record: schemaData[2] }
         ];
 
         const response = { status: 200, body: 'value' };
 
-        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
+        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
         spyOn(PoEventSourcingService, <any>'getUrl').and.returnValue(url);
         spyOn(eventSourcingService['poSchemaService'], 'update');
         spyOn(eventSourcingService, <any>'sendServerItem').and.returnValue(response);
@@ -910,28 +974,43 @@ describe('PoEventSourcingService:', () => {
 
         expect(eventSourcingService['poSchemaDefinition']['get']).toHaveBeenCalledWith(eventSourcingItemMock.schema);
 
-        expect(PoEventSourcingService['getUrl']).toHaveBeenCalledWith(eventSourcingItemMock, schemaCustumerMock, PoRequestType.POST);
+        expect(PoEventSourcingService['getUrl']).toHaveBeenCalledWith(
+          eventSourcingItemMock,
+          schemaCustumerMock,
+          PoRequestType.POST
+        );
 
-        expect(eventSourcingService['poSchemaService']['update'])
-          .toHaveBeenCalledWith(schemaCustumerMock, response.body, eventSourcingItemMock.record[ PoSchemaUtil.syncInternalIdFieldName ]);
+        expect(eventSourcingService['poSchemaService']['update']).toHaveBeenCalledWith(
+          schemaCustumerMock,
+          response.body,
+          eventSourcingItemMock.record[PoSchemaUtil.syncInternalIdFieldName]
+        );
 
-        expect(eventSourcingService['sendServerItem']).toHaveBeenCalledWith(url,
-          PoHttpRequestType.POST, eventSourcingItemMock.record);
+        expect(eventSourcingService['sendServerItem']).toHaveBeenCalledWith(
+          url,
+          PoHttpRequestType.POST,
+          eventSourcingItemMock.record
+        );
 
-        expect(eventSourcingService['removeEventSourcingValidItem']).toHaveBeenCalledWith(response.status, eventSourcingItemMock);
+        expect(eventSourcingService['removeEventSourcingValidItem']).toHaveBeenCalledWith(
+          response.status,
+          eventSourcingItemMock
+        );
         expect(storageServiceMock.get).toHaveBeenCalledWith(EVENT_SOURCING_NAME);
 
-        expect(eventSourcingService['updatePendingEventSourcing'])
-          .toHaveBeenCalledWith(eventSourcingItemMock, schemaCustumerMock.idField, 'value', eventSourcingItems);
+        expect(eventSourcingService['updatePendingEventSourcing']).toHaveBeenCalledWith(
+          eventSourcingItemMock,
+          schemaCustumerMock.idField,
+          'value',
+          eventSourcingItems
+        );
 
-        expect(eventSourcingService['sendResponseSubject'])
-          .toHaveBeenCalledWith(eventSourcingItemMock, response);
+        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItemMock, response);
       });
 
       it(`should call sendResponseSubject if sendServerItem returns an error and does not call
         the methods that come after sendServerItem`, async () => {
-
-        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> '');
+        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>'');
         spyOn(PoEventSourcingService, <any>'getUrl').and.returnValue('');
         spyOn(eventSourcingService, <any>'sendServerItem').and.throwError('error');
 
@@ -947,14 +1026,16 @@ describe('PoEventSourcingService:', () => {
 
         expect(eventSourcingService['updatePendingEventSourcing']).not.toHaveBeenCalled();
 
-        expect(eventSourcingService['sendResponseSubject'])
-        .toHaveBeenCalledWith(eventSourcingItemMock, new Error('error'), true);
+        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
+          eventSourcingItemMock,
+          new Error('error'),
+          true
+        );
       });
-
     });
 
     it('notifyEventCreation: should call `emitter.next` if `emitter` is defined', () => {
-      eventSourcingService['emitter'] = { next: () => { } };
+      eventSourcingService['emitter'] = { next: () => {} };
       spyOn(eventSourcingService['emitter'], 'next');
 
       eventSourcingService['notifyEventCreation']();
@@ -963,7 +1044,6 @@ describe('PoEventSourcingService:', () => {
     });
 
     describe('paginateSchemaData: ', () => {
-
       const baseUrl = 'http://url/api/v1/customers/diff/2018-04-18T20:42:55.081Z';
       const url = `${baseUrl}?pageSize=20&page=2`;
 
@@ -983,12 +1063,17 @@ describe('PoEventSourcingService:', () => {
 
         response = {
           body: 'value',
-          headers: { get: param => { if (param === 'Date') { return date; } } }
+          headers: {
+            get: param => {
+              if (param === 'Date') {
+                return date;
+              }
+            }
+          }
         };
       });
 
       it('should call config.data Transform.transform with correctly param (register)', async () => {
-
         spyOn(eventSourcingService.config.dataTransform, 'transform');
         spyOn(eventSourcingService, <any>'diffServerItems').and.returnValue(of(response));
         spyOn(eventSourcingService, <any>'getBodyAndDate').and.returnValue(response.body);
@@ -1029,7 +1114,6 @@ describe('PoEventSourcingService:', () => {
         expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['currentUrlDiff']).toBeUndefined();
         expect(eventSourcingService['diffServerItems']).not.toHaveBeenCalled();
       });
-
     });
 
     it('removeEventSourcingValidItem: should call removeEventSourcingItem if status is 200 and isValidStatus is true', async () => {
@@ -1043,18 +1127,15 @@ describe('PoEventSourcingService:', () => {
 
     it(`removeEventSourcingValidItem: should call removeEventSourcingItem if status different of 200 and isValidStatus
       is false`, async () => {
+      spyOn(eventSourcingService, 'removeEventSourcingItem');
+      spyOn(eventSourcingService, <any>'isValidStatus').and.returnValue(false);
 
-        spyOn(eventSourcingService, 'removeEventSourcingItem');
-        spyOn(eventSourcingService, <any>'isValidStatus').and.returnValue(false);
+      await eventSourcingService['removeEventSourcingValidItem'](404, eventSourcingItem);
 
-        await eventSourcingService['removeEventSourcingValidItem'](404, eventSourcingItem);
+      expect(eventSourcingService.removeEventSourcingItem).not.toHaveBeenCalled();
+    });
 
-        expect(eventSourcingService.removeEventSourcingItem).not.toHaveBeenCalled();
-      });
-
-    it('removeEventSourcingValidItem: should call removeEventSourcingItem if operation equal HTTP_OPERATION and isValidStatus is false',
-      async () => {
-
+    it('removeEventSourcingValidItem: should call removeEventSourcingItem if operation equal HTTP_OPERATION and isValidStatus is false', async () => {
       const eventSourcingItemMock: PoEventSourcingItem = {
         dateTime: new Date().getTime(),
         id: new Date().getTime(),
@@ -1087,8 +1168,8 @@ describe('PoEventSourcingService:', () => {
         newItem = { id: 1, value: 'New customer item' };
 
         itemEvent = {
-          id: (new Date()).getTime() + 1,
-          dateTime: (new Date()).getTime() + 1,
+          id: new Date().getTime() + 1,
+          dateTime: new Date().getTime() + 1,
           schema: schemaCustumerMock.name,
           operation: PoEventSourcingOperation.Insert,
           record: newItem,
@@ -1097,7 +1178,11 @@ describe('PoEventSourcingService:', () => {
       });
 
       it('should return eventSourcingItem equal the `itemEvent`', () => {
-        const result = eventSourcingService['createEventSourcingItem'](PoEventSourcingOperation.Insert, newItem, schemaCustumerMock.name);
+        const result = eventSourcingService['createEventSourcingItem'](
+          PoEventSourcingOperation.Insert,
+          newItem,
+          schemaCustumerMock.name
+        );
 
         const itemEventResult = Object.assign({}, itemEvent);
         delete itemEventResult.id;
@@ -1108,8 +1193,12 @@ describe('PoEventSourcingService:', () => {
 
       it('should return eventSourcingItem equal the `itemEvent`', () => {
         const customRequestId: string = '123';
-        const result = eventSourcingService['createEventSourcingItem'](PoEventSourcingOperation.Insert, newItem,
-          schemaCustumerMock.name, customRequestId);
+        const result = eventSourcingService['createEventSourcingItem'](
+          PoEventSourcingOperation.Insert,
+          newItem,
+          schemaCustumerMock.name,
+          customRequestId
+        );
 
         expect(result.customRequestId).toEqual(customRequestId);
       });
@@ -1141,12 +1230,10 @@ describe('PoEventSourcingService:', () => {
 
         expect(result).toEqual(jasmine.objectContaining(itemEventResult));
       });
-
     });
 
     it(`createEventSourcingList: should call 'createEventSourcingItem' according to quantity of items
       of summaryEventList`, () => {
-
       const summaryEventList = [
         { record: { customer: '1' }, operation: PoEventSourcingOperation.Insert, customRequestId: 'id' },
         { record: { customer: '2' }, operation: PoEventSourcingOperation.Update, customRequestId: 'id' }
@@ -1168,7 +1255,7 @@ describe('PoEventSourcingService:', () => {
       ];
 
       spyOn(eventSourcingService, <any>'createEventSourcingItem');
-      spyOn(Date.prototype, 'getTime').and.returnValue(<any> dateTime);
+      spyOn(Date.prototype, 'getTime').and.returnValue(<any>dateTime);
 
       eventSourcingService['createEventSourcingList'](schemaCustumerMock.name, summaryEventList);
 
@@ -1185,7 +1272,6 @@ describe('PoEventSourcingService:', () => {
 
     it(`createEventSourcingList: should call 'createEventSourcingItem' according to quantity of items
       and customRequestId is string`, () => {
-
       const summaryEventList = [
         { record: { customer: '1' }, operation: PoEventSourcingOperation.Insert, customRequestId: 'id' },
         { record: { customer: '2' }, operation: PoEventSourcingOperation.Update, customRequestId: 'id' }
@@ -1200,13 +1286,15 @@ describe('PoEventSourcingService:', () => {
 
     it(`createSchemaSyncConfig: should create schemasSyncConfig["schema"] with page, currentUrlDiff and responseDate with
       undefined value`, () => {
-
       eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name] = undefined;
 
       eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
 
-      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name])
-        .toEqual({ page: undefined, currentUrlDiff: undefined, responseDate: undefined });
+      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]).toEqual({
+        page: undefined,
+        currentUrlDiff: undefined,
+        responseDate: undefined
+      });
     });
 
     describe('selectOperation: ', () => {
@@ -1253,18 +1341,19 @@ describe('PoEventSourcingService:', () => {
         await eventSourcingService['selectOperation'](itemQueue);
         expect(eventSourcingService['deleteOperation']).toHaveBeenCalledWith(itemQueue);
       });
-
     });
 
     describe('sendResponseSubject: ', () => {
-
       let response: HttpResponse<any>;
       let responseNext: PoSyncResponse;
 
       beforeEach(() => {
         response = new HttpResponse();
         responseNext = {
-          id: eventSourcingItem.id, customRequestId: undefined, request: eventSourcingItem.record, response: response
+          id: eventSourcingItem.id,
+          customRequestId: undefined,
+          request: eventSourcingItem.record,
+          response: response
         };
       });
 
@@ -1289,13 +1378,12 @@ describe('PoEventSourcingService:', () => {
         expect(eventSourcingService['stoppedQueueEventSourcing']).toBeTruthy();
         expect(eventSourcingService['responseSubject']['next']).toHaveBeenCalledWith(responseNext);
       });
-
     });
 
     it('updateOperation: should call checkRecordIdExists with record id and PoEventSourcingOperation.Update', async () => {
       const idField = schemaCustumerMock.idField;
 
-      spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
+      spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
       spyOn(eventSourcingService, <any>'checkRecordIdExists');
 
       spyOn(eventSourcingService, <any>'sendServerItem');
@@ -1304,14 +1392,15 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService['updateOperation'](eventSourcingItem);
 
-      expect(eventSourcingService['checkRecordIdExists'])
-        .toHaveBeenCalledWith(eventSourcingItem.record[idField], PoEventSourcingOperation.Update);
+      expect(eventSourcingService['checkRecordIdExists']).toHaveBeenCalledWith(
+        eventSourcingItem.record[idField],
+        PoEventSourcingOperation.Update
+      );
     });
 
     it(`updateOperation: should call sendResponseSubject with Error if checkRecordIdExists return a
       throw`, async () => {
-
-      spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> '');
+      spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>'');
       spyOn(PoEventSourcingService, <any>['getUrl']);
       spyOn(eventSourcingService, <any>'checkRecordIdExists').and.throwError('Error');
 
@@ -1319,38 +1408,40 @@ describe('PoEventSourcingService:', () => {
 
       await eventSourcingService['updateOperation'](eventSourcingItem);
 
-      expect(eventSourcingService['sendResponseSubject'])
-        .toHaveBeenCalledWith(eventSourcingItem, new Error('Error'), true);
+      expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
+        eventSourcingItem,
+        new Error('Error'),
+        true
+      );
     });
 
     it(`updateOperation: should call poSchemaDefinition.get, sendServerItem, sendResponseSubject, removeEventSourcingValidItem
       and updateStorage`, async () => {
+      const response = { status: 200 };
 
-        const response = { status: 200 };
+      spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>schemaCustumerMock);
+      spyOn(eventSourcingService, <any>'sendServerItem').and.returnValue(Promise.resolve(response));
+      spyOn(eventSourcingService, <any>'removeEventSourcingValidItem').and.returnValue(Promise.resolve());
+      spyOn(eventSourcingService, <any>'sendResponseSubject').and.returnValue(Promise.resolve([]));
 
-        spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> schemaCustumerMock);
-        spyOn(eventSourcingService, <any>'sendServerItem').and.returnValue(Promise.resolve(response));
-        spyOn(eventSourcingService, <any>'removeEventSourcingValidItem').and.returnValue(Promise.resolve());
-        spyOn(eventSourcingService, <any>'sendResponseSubject').and.returnValue(Promise.resolve([]));
+      await eventSourcingService['updateOperation'](eventSourcingItem);
 
-        await eventSourcingService['updateOperation'](eventSourcingItem);
+      expect(eventSourcingService['poSchemaDefinition']['get']).toHaveBeenCalledWith(eventSourcingItem.schema);
 
-        expect(eventSourcingService['poSchemaDefinition']['get']).toHaveBeenCalledWith(eventSourcingItem.schema);
+      expect(eventSourcingService['sendServerItem']).toHaveBeenCalledWith(
+        schemaCustumerMock.getUrlApi + '/' + eventSourcingItem.record.id,
+        PoHttpRequestType.PUT,
+        eventSourcingItem.record
+      );
 
-        expect(eventSourcingService['sendServerItem'])
-          .toHaveBeenCalledWith(schemaCustumerMock.getUrlApi + '/' + eventSourcingItem.record.id,
-            PoHttpRequestType.PUT, eventSourcingItem.record);
+      expect(eventSourcingService['removeEventSourcingValidItem']).toHaveBeenCalledWith(200, eventSourcingItem);
 
-        expect(eventSourcingService['removeEventSourcingValidItem']).toHaveBeenCalledWith(200, eventSourcingItem);
-
-        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItem, response);
-      }
-    );
+      expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItem, response);
+    });
 
     it(`updateOperation: should call sendResponseSubject with error if sendServerItem return a error
     and does not call removeEventSourcingValidItem`, async () => {
-
-      spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any> '');
+      spyOn(eventSourcingService['poSchemaDefinition'], 'get').and.returnValue(<any>'');
       spyOn(PoEventSourcingService, <any>'getUrl').and.returnValue('');
       spyOn(eventSourcingService, <any>'checkRecordIdExists');
       spyOn(eventSourcingService, <any>'sendServerItem').and.throwError('error');
@@ -1361,8 +1452,11 @@ describe('PoEventSourcingService:', () => {
       await eventSourcingService['updateOperation'](eventSourcingItem);
 
       expect(eventSourcingService['removeEventSourcingValidItem']).not.toHaveBeenCalled();
-      expect(eventSourcingService['sendResponseSubject'])
-        .toHaveBeenCalledWith(eventSourcingItem, new Error('error'), true);
+      expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
+        eventSourcingItem,
+        new Error('error'),
+        true
+      );
     });
 
     it(`updatePendingEventSourcing: should not call storageServiceMock.set if
@@ -1375,7 +1469,12 @@ describe('PoEventSourcingService:', () => {
       };
       spyOn(storageServiceMock, 'set');
 
-      await eventSourcingService['updatePendingEventSourcing'](currentEventSourcingItem, undefined, undefined, undefined);
+      await eventSourcingService['updatePendingEventSourcing'](
+        currentEventSourcingItem,
+        undefined,
+        undefined,
+        undefined
+      );
 
       expect(storageServiceMock.set).not.toHaveBeenCalled();
     });
@@ -1395,12 +1494,17 @@ describe('PoEventSourcingService:', () => {
         { dateTime: 1, id: 1, operation: PoEventSourcingOperation.Update, record: schemaData }
       ];
       const eventSourcingItemsUpdated = [
-        { dateTime: 1, id: 1, operation: PoEventSourcingOperation.Update, record: inserted },
+        { dateTime: 1, id: 1, operation: PoEventSourcingOperation.Update, record: inserted }
       ];
 
       spyOn(storageServiceMock, 'set');
 
-      await eventSourcingService['updatePendingEventSourcing'](currentEventSourcingItem, idFieldSchema, inserted, eventSourcingItems);
+      await eventSourcingService['updatePendingEventSourcing'](
+        currentEventSourcingItem,
+        idFieldSchema,
+        inserted,
+        eventSourcingItems
+      );
 
       expect(storageServiceMock.set).toHaveBeenCalledWith(EVENT_SOURCING_NAME, eventSourcingItemsUpdated);
     });
@@ -1430,14 +1534,34 @@ describe('PoEventSourcingService:', () => {
         { dateTime: 4, id: 4, operation: PoEventSourcingOperation.Update, record: records[3] }
       ];
       const eventSourcingItemsUpdated: Array<PoEventSourcingItem> = [
-        { dateTime: 1, id: 1, operation: PoEventSourcingOperation.Insert, record: Object.assign({ id: idInserted }, records[0]) },
-        { dateTime: 2, id: 2, operation: PoEventSourcingOperation.Update, record: Object.assign({ id: idInserted }, records[1]) },
-        { dateTime: 3, id: 3, operation: PoEventSourcingOperation.Update, record: Object.assign({ id: idInserted }, records[2]) },
+        {
+          dateTime: 1,
+          id: 1,
+          operation: PoEventSourcingOperation.Insert,
+          record: Object.assign({ id: idInserted }, records[0])
+        },
+        {
+          dateTime: 2,
+          id: 2,
+          operation: PoEventSourcingOperation.Update,
+          record: Object.assign({ id: idInserted }, records[1])
+        },
+        {
+          dateTime: 3,
+          id: 3,
+          operation: PoEventSourcingOperation.Update,
+          record: Object.assign({ id: idInserted }, records[2])
+        },
         { dateTime: 4, id: 4, operation: PoEventSourcingOperation.Update, record: records[3] }
       ];
 
       spyOn(storageServiceMock, 'set');
-      await eventSourcingService['updatePendingEventSourcing'](currentEventSourcingItem, idFieldSchema, inserted, eventSourcingItems);
+      await eventSourcingService['updatePendingEventSourcing'](
+        currentEventSourcingItem,
+        idFieldSchema,
+        inserted,
+        eventSourcingItems
+      );
 
       expect(storageServiceMock.set).toHaveBeenCalledWith(EVENT_SOURCING_NAME, eventSourcingItemsUpdated);
     });
@@ -1453,7 +1577,6 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('updateRecords: should update storageRecords with new items and without items deleted', async () => {
-
       const serverRecords = [
         { id: 1, value: 'Value 1', deleted: false },
         { id: 2, value: 'Value 2', deleted: true }
@@ -1465,24 +1588,32 @@ describe('PoEventSourcingService:', () => {
 
       expect(eventSourcingService['updateRecordByServerRecord']).toHaveBeenCalledTimes(serverRecords.length);
 
-      expect(eventSourcingService['updateRecordByServerRecord']).toHaveBeenCalledWith(serverRecords[0], schemaCustumerMock);
-      expect(eventSourcingService['updateRecordByServerRecord']).toHaveBeenCalledWith(serverRecords[1], schemaCustumerMock);
+      expect(eventSourcingService['updateRecordByServerRecord']).toHaveBeenCalledWith(
+        serverRecords[0],
+        schemaCustumerMock
+      );
+      expect(eventSourcingService['updateRecordByServerRecord']).toHaveBeenCalledWith(
+        serverRecords[1],
+        schemaCustumerMock
+      );
     });
 
     it(`updateRecordByServerRecord: should call poSchemaService.remove if record already exists in storage and
       the server record was deleted`, async () => {
-
       const serverRecord = { id: 1, value: 'Value 1', deleted: true };
       const storageRecord = { id: 1, value: 'Value 1', deleted: false };
 
-      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any> storageRecord);
+      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>storageRecord);
       spyOn(eventSourcingService['poSchemaService'], 'remove');
       spyOn(eventSourcingService['poSchemaService'], 'update');
       spyOn(eventSourcingService['poSchemaService'], 'create');
 
       await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
 
-      expect(eventSourcingService['poSchemaService']['remove']).toHaveBeenCalledWith(schemaCustumerMock.name, serverRecord.id);
+      expect(eventSourcingService['poSchemaService']['remove']).toHaveBeenCalledWith(
+        schemaCustumerMock.name,
+        serverRecord.id
+      );
 
       expect(eventSourcingService['poSchemaService']['update']).not.toHaveBeenCalled();
       expect(eventSourcingService['poSchemaService']['create']).not.toHaveBeenCalled();
@@ -1490,10 +1621,9 @@ describe('PoEventSourcingService:', () => {
 
     it(`updateRecordByServerRecord: should call poSchemaService.create if record not exists in storage
       and record.deleted not true`, async () => {
-
       const serverRecord = { id: 1, value: 'Value 1', deleted: false };
 
-      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any> {});
+      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>{});
       spyOn(eventSourcingService['poSchemaService'], 'remove');
       spyOn(eventSourcingService['poSchemaService'], 'update');
       spyOn(eventSourcingService['poSchemaService'], 'create');
@@ -1508,11 +1638,10 @@ describe('PoEventSourcingService:', () => {
 
     it(`updateRecordByServerRecord: should call poSchemaService.update if record exists in storage
       and record.deleted not true`, async () => {
-
       const serverRecord = { id: 1, value: 'Value 2', deleted: false };
       const storageRecord = { id: 1, value: 'Value 1', deleted: false };
 
-      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any> storageRecord);
+      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>storageRecord);
       spyOn(eventSourcingService['poSchemaService'], 'remove');
       spyOn(eventSourcingService['poSchemaService'], 'update');
       spyOn(eventSourcingService['poSchemaService'], 'create');
@@ -1545,15 +1674,11 @@ describe('PoEventSourcingService:', () => {
 
       expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['page']).toBe(1);
 
-      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['currentUrlDiff'])
-        .toBe(currentUrl);
+      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['currentUrlDiff']).toBe(currentUrl);
     });
 
     it('updateStorageBySchema: should call getServerDiffRecords, updateRecords and poSchemaDefinition.update', async () => {
-      const differRecords = [
-        { record: '1'},
-        { record: '2'},
-      ];
+      const differRecords = [{ record: '1' }, { record: '2' }];
 
       const baseUrl = `http://url/api/v1/customers/diff/${schemaCustumerMock.lastSync}`;
 
@@ -1568,7 +1693,6 @@ describe('PoEventSourcingService:', () => {
 
       expect(eventSourcingService['updateRecords']).toHaveBeenCalledWith(differRecords, schemaCustumerMock);
       expect(eventSourcingService['poSchemaDefinition']['update']).toHaveBeenCalledWith(schemaCustumerMock);
-
     });
 
     it('updateStorageSchemas: should call updateStorageBySchema twice', () => {
@@ -1579,16 +1703,16 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('updateStorageSchemas: should return a Array of Promises', () => {
-      spyOn(eventSourcingService, <any>'updateStorageBySchema').and
-        .returnValues(Promise.resolve(['test']), Promise.resolve(['test2']));
+      spyOn(eventSourcingService, <any>'updateStorageBySchema').and.returnValues(
+        Promise.resolve(['test']),
+        Promise.resolve(['test2'])
+      );
       const result = eventSourcingService['updateStorageSchemas'](schemas);
 
       expect(result instanceof Array).toBeTruthy();
       expect(result[0].then instanceof Function);
       expect(result[0].catch instanceof Function);
       expect(result[0]['finally'] instanceof Function);
-
     });
-
   });
 });

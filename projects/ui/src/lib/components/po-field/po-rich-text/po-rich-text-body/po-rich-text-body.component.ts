@@ -4,7 +4,15 @@ import { isFirefox, isIE, isIEOrEdge, openExternalLink } from './../../../../uti
 import { PoKeyCodeEnum } from './../../../../enums/po-key-code.enum';
 
 const poRichTextBodyCommands = [
-  'bold', 'italic', 'underline', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'insertUnorderedList', 'Createlink'
+  'bold',
+  'italic',
+  'underline',
+  'justifyleft',
+  'justifycenter',
+  'justifyright',
+  'justifyfull',
+  'insertUnorderedList',
+  'Createlink'
 ];
 
 @Component({
@@ -12,7 +20,6 @@ const poRichTextBodyCommands = [
   templateUrl: './po-rich-text-body.component.html'
 })
 export class PoRichTextBodyComponent implements OnInit {
-
   private isLinkEditing: boolean;
   private linkElement: any;
   private timeoutChange: any;
@@ -45,13 +52,16 @@ export class PoRichTextBodyComponent implements OnInit {
     setTimeout(() => this.updateValueWithModelValue());
   }
 
-  executeCommand(command: (string | { command: any, value: string | any })) {
+  executeCommand(command: string | { command: any; value: string | any }) {
     this.bodyElement.nativeElement.focus();
 
-    if (typeof (command) === 'object') {
-
+    if (typeof command === 'object') {
       if (command.command === 'InsertHTML') {
-        const { command: linkCommand, value : { urlLink }, value : { urlLinkText} } = command;
+        const {
+          command: linkCommand,
+          value: { urlLink },
+          value: { urlLinkText }
+        } = command;
 
         this.handleCommandLink(linkCommand, urlLink, urlLinkText);
       } else {
@@ -92,7 +102,7 @@ export class PoRichTextBodyComponent implements OnInit {
 
   onKeyDown(event) {
     const keyK = event.keyCode === PoKeyCodeEnum.keyK;
-    const isLinkShortcut = keyK && event.ctrlKey || keyK && event.metaKey;
+    const isLinkShortcut = (keyK && event.ctrlKey) || (keyK && event.metaKey);
 
     if (isLinkShortcut) {
       event.preventDefault();
@@ -127,7 +137,6 @@ export class PoRichTextBodyComponent implements OnInit {
 
   private addClickListenerOnAnchorElements() {
     this.bodyElement.nativeElement.querySelectorAll('a').forEach(element => {
-
       element.addEventListener('click', this.onAnchorClick);
     });
   }
@@ -146,7 +155,7 @@ export class PoRichTextBodyComponent implements OnInit {
     }
 
     this.selectedLink.emit(this.linkElement); // importante ficar fora do if para emitir mesmo undefined.
-    this.commands.emit({commands, hexColor});
+    this.commands.emit({ commands, hexColor });
   }
 
   private getTextSelection() {
@@ -166,18 +175,17 @@ export class PoRichTextBodyComponent implements OnInit {
         tagName
       };
     }
-
   }
 
   private handleCommandLink(linkCommand: string, urlLink: string, urlLinkText: string) {
     if (isIE()) {
       this.insertHtmlLinkElement(urlLink, urlLinkText);
-
     } else {
       // '&nbsp;' necessário para o cursor não ficar preso dentro do link no Firefox.
-      const linkValue = isFirefox() && !this.isLinkEditing ?
-      `&nbsp;${this.makeLinkTag(urlLink, urlLinkText)}&nbsp;` :
-      this.makeLinkTag(urlLink, urlLinkText);
+      const linkValue =
+        isFirefox() && !this.isLinkEditing
+          ? `&nbsp;${this.makeLinkTag(urlLink, urlLinkText)}&nbsp;`
+          : this.makeLinkTag(urlLink, urlLinkText);
 
       document.execCommand(linkCommand, false, linkValue);
     }
@@ -187,7 +195,7 @@ export class PoRichTextBodyComponent implements OnInit {
 
   // tratamento específico para IE pois não suporta o comando 'insertHTML'.
   private insertHtmlLinkElement(urlLink: string, urlLinkText: string) {
-    const selection = document.getSelection();
+    const selection = document.getSelection();
     const selectionRange = selection.getRangeAt(0);
     const elementLink = document.createElement('a');
     const elementlinkText = document.createTextNode(urlLinkText);
@@ -201,40 +209,38 @@ export class PoRichTextBodyComponent implements OnInit {
     selectionRange.insertNode(elementLink);
   }
 
-  private isCursorPositionedInALink(): boolean {
-    const textSelection = this.getTextSelection();
+  private isCursorPositionedInALink(): boolean {
+    const textSelection = this.getTextSelection();
     this.linkElement = undefined;
 
     let isLink = false;
 
-    if (textSelection && textSelection.node && textSelection.tagName === 'A') {
+    if (textSelection && textSelection.node && textSelection.tagName === 'A') {
       this.linkElement = textSelection.node;
       isLink = true;
-
     } else if ((isFirefox() || isIEOrEdge()) && this.verifyCursorPositionInFirefoxIEEdge()) {
       isLink = true;
-
     } else {
       isLink = textSelection ? this.isParentNodeAnchor(textSelection) : false;
     }
     return isLink;
   }
 
-  private isParentNodeAnchor(textSelection): boolean {
+  private isParentNodeAnchor(textSelection): boolean {
     let element = textSelection.node;
     let isLink = false;
 
-    while (element && (element.tagName !== null || element.nodeName !== null)) {
-      if (element.tagName === 'A' || element.nodeName === 'A') {
+    while (element && (element.tagName !== null || element.nodeName !== null)) {
+      if (element.tagName === 'A' || element.nodeName === 'A') {
         this.linkElement = element;
         isLink = true;
-        return isLink;
+        return isLink;
       }
       element = element.parentElement || element.parentNode;
     }
 
     this.linkElement = undefined;
-    return isLink;
+    return isLink;
   }
 
   private makeLinkTag(urlLink: string, urlLinkText: string) {
@@ -261,7 +267,7 @@ export class PoRichTextBodyComponent implements OnInit {
       openExternalLink(url);
       elementLink.classList.remove('po-clickable');
     }
-  }
+  };
 
   // Tratamento necessário para eliminar a tag <br> criada no firefox quando o body for limpo.
   private removeBrElement() {
@@ -275,7 +281,10 @@ export class PoRichTextBodyComponent implements OnInit {
   private rgbToHex(rgb) {
     // Tratamento necessário para converter o código rgb para hexadecimal.
     const sep = rgb.indexOf(',') > -1 ? ',' : ' ';
-    rgb = rgb.substr(4).split(')')[0].split(sep);
+    rgb = rgb
+      .substr(4)
+      .split(')')[0]
+      .split(sep);
 
     let r = (+rgb[0]).toString(16);
     let g = (+rgb[1]).toString(16);
@@ -304,7 +313,6 @@ export class PoRichTextBodyComponent implements OnInit {
     if (element) {
       if (isOnCtrlLink) {
         element['classList'][action]('po-clickable');
-
       } else {
         const isClickable = element['classList'] && element['classList'].contains('po-clickable');
 
@@ -314,7 +322,6 @@ export class PoRichTextBodyComponent implements OnInit {
       }
       this.updateModel();
     }
-
   }
 
   private updateModel() {
@@ -337,17 +344,15 @@ export class PoRichTextBodyComponent implements OnInit {
     if (nodeLink && nodeLink.nodeName === 'A') {
       this.linkElement = nodeLink;
       isLink = true;
-
     } else {
       const range = textSelection.getRangeAt(0);
       const fragmentDocument = range.cloneContents();
       const element = fragmentDocument.childNodes[0] || fragmentDocument.firstElementChild;
 
-      this.linkElement = (element && element.nodeName === 'A') ? element : undefined;
+      this.linkElement = element && element.nodeName === 'A' ? element : undefined;
       isLink = !!this.linkElement;
     }
 
     return isLink;
   }
-
 }

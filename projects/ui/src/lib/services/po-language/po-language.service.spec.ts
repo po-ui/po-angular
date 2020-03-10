@@ -47,7 +47,6 @@ describe('PoLanguageService:', () => {
   });
 
   describe('Methods:', () => {
-
     it('getLanguage: should call `localStorage.getItem` with `poLocaleKey` and return its value.', () => {
       spyOn(localStorage, 'getItem').and.returnValue(languages.pt);
 
@@ -140,7 +139,5 @@ describe('PoLanguageService:', () => {
 
       expect(service.languageDefault).toBeNull();
     });
-
   });
-
 });

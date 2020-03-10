@@ -6,7 +6,6 @@
  * Define o método de requisição HTTP.
  */
 export enum PoHttpRequestType {
-
   /** Método `delete` do protocolo HTTP. */
   DELETE = 'DELETE',
 
@@ -27,5 +26,4 @@ export enum PoHttpRequestType {
 
   /** Método `put` do protocolo HTTP. */
   PUT = 'PUT'
-
 }

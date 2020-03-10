@@ -12,16 +12,8 @@ import { PoHttpInterceptorDetailComponent } from './po-http-interceptor-detail/p
 import { PoHttpInterceptorService } from './po-http-interceptor.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    PoAccordionModule,
-    PoModalModule,
-    PoNotificationModule,
-    PoTagModule
-  ],
-  declarations: [
-    PoHttpInterceptorDetailComponent,
-  ],
+  imports: [CommonModule, PoAccordionModule, PoModalModule, PoNotificationModule, PoTagModule],
+  declarations: [PoHttpInterceptorDetailComponent],
   providers: [
     PoHttpInterceptorService,
     PoNotificationService,
@@ -32,4 +24,4 @@ import { PoHttpInterceptorService } from './po-http-interceptor.service';
     }
   ]
 })
-export class PoHttpInterceptorModule { }
+export class PoHttpInterceptorModule {}

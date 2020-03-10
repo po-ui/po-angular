@@ -10,8 +10,8 @@ import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.co
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 
 class PoTableComponent extends PoTableBaseComponent {
-  calculateWidthHeaders() { }
-  calculateHeightTableContainer(height) { }
+  calculateWidthHeaders() {}
+  calculateHeightTableContainer(height) {}
   protected showContainer() {}
 }
 
@@ -26,22 +26,33 @@ describe('PoTableBaseComponent:', () => {
     dateService = new PoDateService();
     component = new PoTableComponent(dateService);
 
-    actions = [{
-      label: 'acao',
-      disabled: (row: any) => { if (row.numberData === 1) { return true; } },
-      action: () => { },
-    }];
+    actions = [
+      {
+        label: 'acao',
+        disabled: (row: any) => {
+          if (row.numberData === 1) {
+            return true;
+          }
+        },
+        action: () => {}
+      }
+    ];
 
     columns = [
       { label: 'Textos', property: 'textData', type: 'string' },
       { label: 'Números', property: 'numberData', type: 'number' },
       { label: 'Datas', property: 'dateData', type: 'date', format: 'dd/mm/yyyy', width: '100px' },
-      { label: 'Detalhes', property: 'detail', type: 'detail', detail: {
-        columns: [
-          { property: 'tour', label: 'Passeio' },
-          { property: 'package', label: 'Pacote' }
-        ]
-      }},
+      {
+        label: 'Detalhes',
+        property: 'detail',
+        type: 'detail',
+        detail: {
+          columns: [
+            { property: 'tour', label: 'Passeio' },
+            { property: 'package', label: 'Pacote' }
+          ]
+        }
+      },
       { label: 'DateTime', property: 'dateTime', type: 'dateTime', width: '100px' }
     ];
 
@@ -148,7 +159,7 @@ describe('PoTableBaseComponent:', () => {
   });
 
   it('should call setColumnLink when set columns', () => {
-    spyOn(component, <any> 'setColumnLink');
+    spyOn(component, <any>'setColumnLink');
     component.columns = columns;
 
     expect(component['setColumnLink']).toHaveBeenCalled();
@@ -156,8 +167,8 @@ describe('PoTableBaseComponent:', () => {
 
   it('should set value default to columns of type link', () => {
     component.columns = [
-      { property: 'page', label: 'Page', type: 'link'},
-      { property: 'description', label: 'Description',  type: 'link', action: (value, row) => { } },
+      { property: 'page', label: 'Page', type: 'link' },
+      { property: 'description', label: 'Description', type: 'link', action: (value, row) => {} }
     ];
     component['setColumnLink']();
 
@@ -168,8 +179,8 @@ describe('PoTableBaseComponent:', () => {
 
   it('should set value linkItem to columns of type link', () => {
     component.columns = [
-      { property: 'page', label: 'Page', type: 'link', link: 'linkItem'},
-      { property: 'description', label: 'Description', link: 'linkItem', type: 'link', action: (value, row) => { } },
+      { property: 'page', label: 'Page', type: 'link', link: 'linkItem' },
+      { property: 'description', label: 'Description', link: 'linkItem', type: 'link', action: (value, row) => {} }
     ];
     component['setColumnLink']();
 
@@ -257,7 +268,7 @@ describe('PoTableBaseComponent:', () => {
   it('validate if disabled action can be called', () => {
     const tableDisabledAction = component.actions[0];
 
-    spyOn(tableDisabledAction, <any> 'disabled');
+    spyOn(tableDisabledAction, <any>'disabled');
 
     if (typeof tableDisabledAction.disabled === 'function') {
       tableDisabledAction.disabled();
@@ -301,7 +312,7 @@ describe('PoTableBaseComponent:', () => {
   });
 
   it('should select multiple rows', () => {
-    component.items.forEach(item => item.$selected = false);
+    component.items.forEach(item => (item.$selected = false));
 
     component.selectable = true;
     component.hideSelectAll = false;
@@ -318,8 +329,7 @@ describe('PoTableBaseComponent:', () => {
   });
 
   it('should not select all rows if hide select all is active', () => {
-
-    component.items.forEach(item => item.$selected = false);
+    component.items.forEach(item => (item.$selected = false));
     component.selectable = true;
     component.hideSelectAll = true;
     component.singleSelect = false;
@@ -327,42 +337,36 @@ describe('PoTableBaseComponent:', () => {
 
     component.selectAllRows();
 
-    component.items.forEach(item =>
-      expect(item.$selected).toBe(false)
-    );
+    component.items.forEach(item => expect(item.$selected).toBe(false));
 
     component.items.forEach(item => component.selectRow(item));
     expect(component.selectAll).toBe(false);
   });
 
   it('should select all rows', () => {
-    component.items.forEach(item => item.$selected = false);
+    component.items.forEach(item => (item.$selected = false));
 
     component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
     component.selectAllRows();
 
-    component.items.forEach(item =>
-      expect(item.$selected).toBe(true)
-    );
+    component.items.forEach(item => expect(item.$selected).toBe(true));
   });
 
   it('should set checkbox select all to checked', () => {
-    component.items.forEach(item => item.$selected = false);
+    component.items.forEach(item => (item.$selected = false));
 
     component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
-    component.items.forEach(item =>
-      component.selectRow(item)
-    );
+    component.items.forEach(item => component.selectRow(item));
 
     expect(component.selectAll).toBe(true);
   });
 
   it('should set checkbox select all to unchecked', () => {
-    component.items.forEach(item => item.$selected = false);
+    component.items.forEach(item => (item.$selected = false));
     component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
@@ -374,7 +378,7 @@ describe('PoTableBaseComponent:', () => {
   });
 
   it('should set checkbox select all to indeterminate', () => {
-    component.items.forEach(item => item.$selected = false);
+    component.items.forEach(item => (item.$selected = false));
     component.selectable = true;
     component.hideSelectAll = false;
     component.singleSelect = false;
@@ -395,7 +399,6 @@ describe('PoTableBaseComponent:', () => {
   });
 
   it('should toggle sort descending and ascending', () => {
-
     component.sort = true;
     const column = component.columns[1];
 
@@ -425,10 +428,9 @@ describe('PoTableBaseComponent:', () => {
   });
 
   it('should call event emitter', () => {
-
     const newItem = { textDate: 'english text', numberData: 4, dateData: '2020-11-30' };
 
-    spyOn(component.showMore, 'emit').and.callFake(function({ }) {
+    spyOn(component.showMore, 'emit').and.callFake(function({}) {
       component.items.push(newItem);
       component.showMoreDisabled = true;
     });
@@ -443,7 +445,7 @@ describe('PoTableBaseComponent:', () => {
     const columnDetail = component.columns[3];
 
     expect(component['getColumnMasterDetail']()).toEqual(component.columns[3]);
-    spyOn(component, <any> 'sortArray');
+    spyOn(component, <any>'sortArray');
 
     component.sortColumn(columnDetail);
 
@@ -456,11 +458,14 @@ describe('PoTableBaseComponent:', () => {
 
   it('should return the columns of type subtitle', () => {
     component.columns.push({
-    label: 'Status', property: 'status', type: 'subtitle', subtitles: [
-      { value: 'confirmed', color: 'color-11', label: 'Confirmado', content: '1' },
-      { value: 'delayed', color: 'color-08', label: 'Atrasado', content: '2' },
-      { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
-    ]
+      label: 'Status',
+      property: 'status',
+      type: 'subtitle',
+      subtitles: [
+        { value: 'confirmed', color: 'color-11', label: 'Confirmado', content: '1' },
+        { value: 'delayed', color: 'color-08', label: 'Atrasado', content: '2' },
+        { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
+      ]
     });
     expect(component['getSubtitleColumns']().length).toBe(1);
   });
@@ -478,27 +483,26 @@ describe('PoTableBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     const columnsColors = [
-      { label: 'Destination', property: 'destination', type: 'string', color: 'color-07'},
-      { label: 'Country', property: 'country', type: 'string',
-        color: (row, column) => row[column] === 'Franch' ? 'color-11' : 'color-07'},
-      { label: 'City', property: 'city', type: 'string'}
+      { label: 'Destination', property: 'destination', type: 'string', color: 'color-07' },
+      {
+        label: 'Country',
+        property: 'country',
+        type: 'string',
+        color: (row, column) => (row[column] === 'Franch' ? 'color-11' : 'color-07')
+      },
+      { label: 'City', property: 'city', type: 'string' }
     ];
 
-    const itemsColors = [
-      {destination: 'Paris'},
-      {country: 'Franch'},
-      {city: 'Lyon'}
-    ];
+    const itemsColors = [{ destination: 'Paris' }, { country: 'Franch' }, { city: 'Lyon' }];
 
     describe('isEverySelected:', () => {
       let rows;
 
       beforeEach(() => {
         rows = [
-          {id: 1, $selected: true},
-          {id: 2, $selected: true}
+          { id: 1, $selected: true },
+          { id: 2, $selected: true }
         ];
       });
 
@@ -520,24 +524,24 @@ describe('PoTableBaseComponent:', () => {
 
         expect(component['isEverySelected'](rows)).toBeFalsy();
       });
-
     });
 
     describe('configAfterSelectRow: ', () => {
-
-      const rows = [{
-        id: 1,
-        $selected: true,
-        details: [{ id: 4 }]
-      }];
+      const rows = [
+        {
+          id: 1,
+          $selected: true,
+          details: [{ id: 4 }]
+        }
+      ];
 
       it('should call unselectOtherRows and not call isEverySelected when singleSelect is `true`', () => {
         component.singleSelect = true;
 
         const currentRow = rows[0];
 
-        spyOn(component, <any> 'unselectOtherRows');
-        spyOn(component, <any> 'isEverySelected');
+        spyOn(component, <any>'unselectOtherRows');
+        spyOn(component, <any>'isEverySelected');
 
         component['configAfterSelectRow'](rows, currentRow);
 
@@ -551,8 +555,8 @@ describe('PoTableBaseComponent:', () => {
 
         const currentRow = rows[0];
 
-        spyOn(component, <any> 'unselectOtherRows');
-        spyOn(component, <any> 'isEverySelected');
+        spyOn(component, <any>'unselectOtherRows');
+        spyOn(component, <any>'isEverySelected');
 
         component['configAfterSelectRow'](rows, currentRow);
 
@@ -566,27 +570,29 @@ describe('PoTableBaseComponent:', () => {
 
         const currentRow = rows[0];
 
-        spyOn(component, <any> 'unselectOtherRows');
-        spyOn(component, <any> 'isEverySelected');
+        spyOn(component, <any>'unselectOtherRows');
+        spyOn(component, <any>'isEverySelected');
 
         component['configAfterSelectRow'](rows, currentRow);
 
         expect(component['unselectOtherRows']).not.toHaveBeenCalled();
         expect(component['isEverySelected']).not.toHaveBeenCalled();
       });
-
     });
 
     it('unselectOtherRows: should unselect rows that are different from the current row and call selectAllDetails', () => {
-      const rows: any = [{
-        id: 1,
-        $selected: true,
-        details: [{ id: 4 }]
-      }, {
-        id: 2,
-        $selected: true,
-        details: [{ id: 5 }]
-      }];
+      const rows: any = [
+        {
+          id: 1,
+          $selected: true,
+          details: [{ id: 4 }]
+        },
+        {
+          id: 2,
+          $selected: true,
+          details: [{ id: 5 }]
+        }
+      ];
       const currentRow = rows[0];
 
       component['unselectOtherRows'](rows, currentRow);
@@ -599,8 +605,8 @@ describe('PoTableBaseComponent:', () => {
     it('selectRow: should set $selected `true` at row and call `configAfterSelectRow` and `emitSelectEvents`', () => {
       const row = { id: 1, $selected: false };
 
-      spyOn(component, <any> 'configAfterSelectRow');
-      spyOn(component, <any> 'emitSelectEvents');
+      spyOn(component, <any>'configAfterSelectRow');
+      spyOn(component, <any>'emitSelectEvents');
 
       component.selectRow(row);
 
@@ -630,7 +636,7 @@ describe('PoTableBaseComponent:', () => {
     it('selectAllRows: should call `emitSelectEvents`', () => {
       component.hideSelectAll = false;
 
-      spyOn(component, <any> 'emitSelectAllEvents');
+      spyOn(component, <any>'emitSelectAllEvents');
 
       component.selectAllRows();
 
@@ -662,7 +668,7 @@ describe('PoTableBaseComponent:', () => {
     it('selectDetailRow: should call `emitSelectEvents`', () => {
       const row = { id: 1, $selected: false };
 
-      spyOn(component, <any> 'emitSelectEvents');
+      spyOn(component, <any>'emitSelectEvents');
 
       component.selectDetailRow(row);
 
@@ -675,7 +681,7 @@ describe('PoTableBaseComponent:', () => {
         { id: 2, $selected: false },
         { id: 3, $selected: false },
         { id: 4, $selected: true },
-        { id: 5, $selected: false },
+        { id: 5, $selected: false }
       ];
       component.items = rows;
       expect(component.getSelectedRows().length).toBe(2);
@@ -687,14 +693,13 @@ describe('PoTableBaseComponent:', () => {
         { id: 2, $selected: true },
         { id: 3, $selected: false },
         { id: 4, $selected: true },
-        { id: 5, $selected: true },
+        { id: 5, $selected: true }
       ];
       component.items = rows;
       expect(component.getUnselectedRows().length).toBe(2);
     });
 
     describe('getColumnColor:', () => {
-
       it('should return `color-07` when color property receive `color-07`', () => {
         const columnColor = component['getColumnColor'](itemsColors[0], columnsColors[0]);
         expect(columnColor).toEqual('color-07');
@@ -704,11 +709,9 @@ describe('PoTableBaseComponent:', () => {
         const columnColor = component['getColumnColor'](itemsColors[1], columnsColors[1]);
         expect(columnColor).toEqual('color-11');
       });
-
     });
 
     describe('getClassColor:', () => {
-
       it('should return `po-text-color-07` when color property receive `danger`', () => {
         const columnColor = component.getClassColor(itemsColors[0], columnsColors[0]);
         expect(columnColor).toEqual('po-text-color-07');
@@ -718,7 +721,6 @@ describe('PoTableBaseComponent:', () => {
         const columnColor = component.getClassColor(itemsColors[2], columnsColors[2]);
         expect(columnColor).toEqual('');
       });
-
     });
 
     it('hasColumns: should return `true` if have columns and columns.length is greater then 0', () => {
@@ -778,7 +780,7 @@ describe('PoTableBaseComponent:', () => {
         { label: 'First', property: 'first' },
         { label: 'Second', property: 'second' },
         { label: 'Third', property: 'third' },
-        { label: 'Fourth', property: 'fourth' },
+        { label: 'Fourth', property: 'fourth' }
       ];
 
       const column = component['getDefaultColumns'](item);
@@ -792,7 +794,7 @@ describe('PoTableBaseComponent:', () => {
         { label: 'First', property: 'first' },
         { label: 'Second', property: 'second' },
         { label: 'Third', property: 'third' },
-        { label: 'Fourth', property: 'fourth' },
+        { label: 'Fourth', property: 'fourth' }
       ];
 
       const column = component['getDefaultColumns'](item);
@@ -811,31 +813,34 @@ describe('PoTableBaseComponent:', () => {
     'ascending', 'descending'`, () => {
       const column = component.columns[1];
       component.sort = true;
-      component.sortBy.observers = <any>[{ next: () => { }}];
+      component.sortBy.observers = <any>[{ next: () => {} }];
 
       spyOn(component.sortBy, 'emit').and.callThrough();
-      spyOn(component, <any> 'sortArray').and.callThrough();
+      spyOn(component, <any>'sortArray').and.callThrough();
 
       component.sortColumn(column);
-      expect(component.sortBy.emit).toHaveBeenCalledWith({column, type: 'ascending'});
+      expect(component.sortBy.emit).toHaveBeenCalledWith({ column, type: 'ascending' });
       expect(component['sortArray']).toHaveBeenCalled();
 
       component.sortColumn(column);
-      expect(component.sortBy.emit).toHaveBeenCalledWith({column, type: 'descending'});
+      expect(component.sortBy.emit).toHaveBeenCalledWith({ column, type: 'descending' });
       expect(component['sortArray']).toHaveBeenCalled();
     });
 
-    it(`onShowMore: 'showMore' should emit an object parameter containing 'ascending' as value of property 'type'` , () => {
+    it(`onShowMore: 'showMore' should emit an object parameter containing 'ascending' as value of property 'type'`, () => {
       const column = component.columns[1];
       component.sortedColumn.property = column;
       spyOn(component.showMore, 'emit');
 
       component.onShowMore();
 
-      expect(component.showMore.emit).toHaveBeenCalledWith({ column: component.sortedColumn.property, type: 'ascending'});
+      expect(component.showMore.emit).toHaveBeenCalledWith({
+        column: component.sortedColumn.property,
+        type: 'ascending'
+      });
     });
 
-    it(`onShowMore: 'showMore' should emit an object parameter containing 'descending' as value of property 'type'` , () => {
+    it(`onShowMore: 'showMore' should emit an object parameter containing 'descending' as value of property 'type'`, () => {
       const column = component.columns[1];
       component.sortedColumn.property = column;
       component.sortedColumn.ascending = false;
@@ -844,10 +849,13 @@ describe('PoTableBaseComponent:', () => {
 
       component.onShowMore();
 
-      expect(component.showMore.emit).toHaveBeenCalledWith({ column: component.sortedColumn.property, type: 'descending'});
+      expect(component.showMore.emit).toHaveBeenCalledWith({
+        column: component.sortedColumn.property,
+        type: 'descending'
+      });
     });
 
-    it(`onShowMore: 'showMore' should emit an object parameter containing 'undefined' if 'sortedColumn.property' is 'undefined'` , () => {
+    it(`onShowMore: 'showMore' should emit an object parameter containing 'undefined' if 'sortedColumn.property' is 'undefined'`, () => {
       component.sortedColumn.property = undefined;
 
       spyOn(component.showMore, 'emit');
@@ -915,7 +923,7 @@ describe('PoTableBaseComponent:', () => {
         $showDetail: false
       };
 
-      component.items = [ currentRow ];
+      component.items = [currentRow];
 
       component.expand(0);
 
@@ -930,7 +938,7 @@ describe('PoTableBaseComponent:', () => {
         $showDetail: true
       };
 
-      component.items = [ currentRow ];
+      component.items = [currentRow];
 
       component.expand(0);
 
@@ -945,7 +953,7 @@ describe('PoTableBaseComponent:', () => {
         $showDetail: false
       };
 
-      component.items = [ currentRow ];
+      component.items = [currentRow];
 
       spyOn(component.expanded, 'emit');
 
@@ -962,7 +970,7 @@ describe('PoTableBaseComponent:', () => {
         $showDetail: true
       };
 
-      component.items = [ currentRow ];
+      component.items = [currentRow];
 
       component.collapse(0);
 
@@ -977,7 +985,7 @@ describe('PoTableBaseComponent:', () => {
         $showDetail: false
       };
 
-      component.items = [ currentRow ];
+      component.items = [currentRow];
 
       component.collapse(0);
 
@@ -992,7 +1000,7 @@ describe('PoTableBaseComponent:', () => {
         $showDetail: true
       };
 
-      component.items = [ currentRow ];
+      component.items = [currentRow];
 
       spyOn(component.collapsed, 'emit');
 
@@ -1002,9 +1010,9 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('onChangeColumns: should call `setMainColumns`, `setColumnMasterDetail` and `setSubtitleColumns`', () => {
-      const spySetMainColumns = spyOn(component, <any> 'setMainColumns');
-      const spySetColumnMasterDetail = spyOn(component, <any> 'setColumnMasterDetail');
-      const spySetSubtitleColumns = spyOn(component, <any> 'setSubtitleColumns');
+      const spySetMainColumns = spyOn(component, <any>'setMainColumns');
+      const spySetColumnMasterDetail = spyOn(component, <any>'setColumnMasterDetail');
+      const spySetSubtitleColumns = spyOn(component, <any>'setSubtitleColumns');
 
       component['onChangeColumns']();
 
@@ -1017,7 +1025,7 @@ describe('PoTableBaseComponent:', () => {
       const detailColumn: PoTableColumn = { property: 'detail', type: 'detail' };
       const expectedValue = { ...detailColumn };
 
-      const spyGetColumnMasterDetail = spyOn(component, <any> 'getColumnMasterDetail').and.callThrough();
+      const spyGetColumnMasterDetail = spyOn(component, <any>'getColumnMasterDetail').and.callThrough();
 
       component.columns = [{ ...detailColumn }];
       component['setColumnMasterDetail']();
@@ -1027,9 +1035,7 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('setMainColumns: should set mainColumns with visibleColumns, hasMainColumns with true and allColumnsWidthPixels with false', () => {
-      const visibleColumns: Array<PoTableColumn> = [
-        { property: 'name' }
-      ];
+      const visibleColumns: Array<PoTableColumn> = [{ property: 'name' }];
 
       const invisibleColumns: Array<PoTableColumn> = [
         { property: 'age', visible: false },
@@ -1045,7 +1051,6 @@ describe('PoTableBaseComponent:', () => {
       expect(component.mainColumns).toEqual(expectedValue);
       expect(component.hasMainColumns).toBe(true);
       expect(component.allColumnsWidthPixels).toBe(false);
-
     });
 
     it('setMainColumns: should set mainColumns with visibleColumns, hasMainColumns with true and allColumnsWidthPixels with true', () => {
@@ -1068,25 +1073,25 @@ describe('PoTableBaseComponent:', () => {
       expect(component.mainColumns).toEqual(expectedValue);
       expect(component.allColumnsWidthPixels).toBe(true);
       expect(component.hasMainColumns).toBe(true);
-
     });
 
     it('setSubtitleColumns: should set `subtitleColumns` and call `getSubtitleColumns`', () => {
-      const subTitleColumn: PoTableColumn = { property: 'sub', type: 'subtitle', subtitles: [
-        { value: 'arrived', color: 'color-07', label: 'Arrived', content: 'OK' }
-      ] };
+      const subTitleColumn: PoTableColumn = {
+        property: 'sub',
+        type: 'subtitle',
+        subtitles: [{ value: 'arrived', color: 'color-07', label: 'Arrived', content: 'OK' }]
+      };
 
       const expectedValue = [{ ...subTitleColumn }];
 
-      const spyGetSubtitleColumns = spyOn(component, <any> 'getSubtitleColumns').and.callThrough();
+      const spyGetSubtitleColumns = spyOn(component, <any>'getSubtitleColumns').and.callThrough();
 
-      component.columns = [{ property: 'name'}, { ...subTitleColumn }];
+      component.columns = [{ property: 'name' }, { ...subTitleColumn }];
       component['setSubtitleColumns']();
 
       expect(component.subtitleColumns).toEqual(expectedValue);
       expect(spyGetSubtitleColumns).toHaveBeenCalled();
     });
-
   });
 
   describe('Properties:', () => {
@@ -1170,13 +1175,11 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('p-loading: should update property `p-loading` with valid values and call `calculateWidthHeaders`', () => {
-
       spyOn(component, 'calculateWidthHeaders');
 
       expectPropertiesValues(component, 'loading', booleanValidTrueValues, true);
 
       expect(component.calculateWidthHeaders).toHaveBeenCalled();
-
     });
 
     it('p-columns: should call `setColumnLink` and `calculateWidthHeaders` if has values', () => {
@@ -1252,11 +1255,9 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('nameColumnDetail: should return null if not have master-detail', () => {
-      component.columns = [ { property: 'name' } ];
+      component.columns = [{ property: 'name' }];
 
       expect(component.nameColumnDetail).toBeNull();
     });
-
   });
-
 });

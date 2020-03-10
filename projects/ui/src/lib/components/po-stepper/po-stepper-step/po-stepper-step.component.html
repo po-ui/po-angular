@@ -1,33 +1,20 @@
-<div class="po-stepper-step"
-  [ngClass]="getStatusClass(status)"
-  (click)="onClick()"
-  (keydown.enter)="onEnter()">
-
+<div class="po-stepper-step" [ngClass]="getStatusClass(status)" (click)="onClick()" (keydown.enter)="onEnter()">
   <div class="po-stepper-step-container" [style.width.px]="isVerticalOrientation ? stepSize : undefined">
-
     <div
       [class.po-stepper-step-bar-top]="isVerticalOrientation"
       [class.po-stepper-step-bar-left]="!isVerticalOrientation"
-      [style.margin-right.px]="marginHorizontalBar">
-    </div>
+      [style.margin-right.px]="marginHorizontalBar"
+    ></div>
 
-    <po-stepper-circle
-      [p-content]="circleContent"
-      [p-icons]="stepIcons"
-      [p-size]="stepSize"
-      [p-status]="status">
+    <po-stepper-circle [p-content]="circleContent" [p-icons]="stepIcons" [p-size]="stepSize" [p-status]="status">
     </po-stepper-circle>
 
     <div
       [class.po-stepper-step-bar-bottom]="isVerticalOrientation"
       [class.po-stepper-step-bar-right]="!isVerticalOrientation"
-      [style.margin-left.px]="marginHorizontalBar">
-    </div>
-
+      [style.margin-left.px]="marginHorizontalBar"
+    ></div>
   </div>
 
-  <po-stepper-label
-    class="po-stepper-step-label-position"
-    [p-content]="label">
-  </po-stepper-label>
+  <po-stepper-label class="po-stepper-step-label-position" [p-content]="label"> </po-stepper-label>
 </div>

@@ -1,5 +1,15 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, forwardRef,
-  IterableDiffers, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  ElementRef,
+  forwardRef,
+  IterableDiffers,
+  OnDestroy,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -75,17 +85,16 @@ const poComboContainerPositionDefault = 'bottom';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoComboComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoComboComponent),
-      multi: true,
+      multi: true
     }
   ]
 })
 export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnDestroy {
-
   private _isServerSearching: boolean = false;
 
   comboIcon: string = 'po-icon-arrow-down';
@@ -116,8 +125,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     public renderer: Renderer2,
     private changeDetector: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
-    private sanitized: DomSanitizer) {
-
+    private sanitized: DomSanitizer
+  ) {
     super();
 
     this.differ = differs.find([]).create(null);
@@ -213,7 +222,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     // Teclas "tab" ou "esc"
     if (key === PoKeyCodeEnum.tab || key === PoKeyCodeEnum.esc) {
-
       if (key === PoKeyCodeEnum.esc && this.comboOpen) {
         event.preventDefault();
         event.stopPropagation();
@@ -234,7 +242,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     // Tecla "enter"
     if (key === PoKeyCodeEnum.enter && this.selectedView && this.comboOpen) {
-      const isUpdateModel = (this.selectedView.value !== this.selectedValue) || (inputValue !== this.selectedView.label);
+      const isUpdateModel = this.selectedView.value !== this.selectedValue || inputValue !== this.selectedView.label;
 
       this.controlComboVisibility(false);
 
@@ -254,21 +262,20 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     const key = event.keyCode || event.which;
     const inputValue = event.target.value;
 
-    const isValidKey = (key !== PoKeyCodeEnum.arrowUp && key !== PoKeyCodeEnum.arrowDown && key !== PoKeyCodeEnum.enter);
+    const isValidKey = key !== PoKeyCodeEnum.arrowUp && key !== PoKeyCodeEnum.arrowDown && key !== PoKeyCodeEnum.enter;
 
     if (isValidKey) {
-
       if (inputValue) {
         if (!this.service && this.previousSearchValue !== inputValue) {
           this.shouldMarkLetters = true;
           this.isFiltering = true;
           this.searchForLabel(inputValue, this.comboOptionsList, this.filterMode);
         }
-
       } else {
         // quando apagar rapido o campo e conter serviço, valor, não disparava o keyup observable
         // necessario este tratamento para retornar a lista 'default'.
-        const useDefaultOptionsService = this.service && this.selectedValue && this.selectedOption.label === this.previousSearchValue;
+        const useDefaultOptionsService =
+          this.service && this.selectedValue && this.selectedOption.label === this.previousSearchValue;
 
         this.updateSelectedValue(null);
 
@@ -287,7 +294,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
         this.controlComboVisibility(true);
       }
-
     }
 
     this.previousSearchValue = inputValue;
@@ -295,16 +301,15 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   initInputObservable() {
     if (this.service) {
-      const keyupObservable = fromEvent(this.inputElement.nativeElement, 'keyup')
-                                .pipe(
-                                  filter((e: any) => this.isValidCharacterToSearch(e.keyCode)),
-                                  map((e: any) => e.currentTarget.value),
-                                  distinctUntilChanged(),
-                                  tap(() => {
-                                    this.shouldMarkLetters = false;
-                                  }),
-                                  debounceTime(this.debounceTime)
-                                );
+      const keyupObservable = fromEvent(this.inputElement.nativeElement, 'keyup').pipe(
+        filter((e: any) => this.isValidCharacterToSearch(e.keyCode)),
+        map((e: any) => e.currentTarget.value),
+        distinctUntilChanged(),
+        tap(() => {
+          this.shouldMarkLetters = false;
+        }),
+        debounceTime(this.debounceTime)
+      );
 
       this.keyupSubscribe = keyupObservable.subscribe(value => {
         if (value.length >= this.filterMinlength || !value) {
@@ -326,7 +331,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     const param = { property: this.fieldLabel, value };
 
-    this.filterSubscription = this.service.getFilteredData(param, this.filterParams)
+    this.filterSubscription = this.service
+      .getFilteredData(param, this.filterParams)
       .subscribe(items => this.setOptionsByApplyFilter(value, items));
   }
 
@@ -352,7 +358,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (!this.selectedValue) {
       this.isProcessingGetObjectByValue = true;
 
-      this.getSubscription = this.service.getObjectByValue(value, this.filterParams)
+      this.getSubscription = this.service
+        .getObjectByValue(value, this.filterParams)
         .subscribe(item => this.updateOptionByFilteredValue(item));
     }
   }
@@ -365,7 +372,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.updateSelectedValue(null);
     }
 
-    setTimeout(() => { this.isProcessingGetObjectByValue = false; }, this.debounceTime);
+    setTimeout(() => {
+      this.isProcessingGetObjectByValue = false;
+    }, this.debounceTime);
   }
 
   selectPreviousOption() {
@@ -422,7 +431,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   onOptionClick(option: PoComboOption | PoComboGroup, event?: any) {
     const inputValue = this.getInputValue();
-    const isUpdateModel = (option.value !== this.selectedValue) || !!(this.selectedView && inputValue !== this.selectedView.label);
+    const isUpdateModel =
+      option.value !== this.selectedValue || !!(this.selectedView && inputValue !== this.selectedView.label);
 
     if (event) {
       event.stopPropagation();
@@ -437,7 +447,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   scrollTo(index) {
     const selectedItem = this.element.nativeElement.querySelectorAll('.po-combo-item-selected');
-    const scrollTop = !selectedItem.length || (index <= 1) ? 0 : selectedItem[0].offsetTop - 88;
+    const scrollTop = !selectedItem.length || index <= 1 ? 0 : selectedItem[0].offsetTop - 88;
 
     this.setScrollTop(scrollTop);
   }
@@ -451,10 +461,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   wasClickedOnToggle(event: MouseEvent): void {
-    if (this.comboOpen &&
-        !this.inputElement.nativeElement.contains(event.target) &&
-        !this.iconElement.nativeElement.contains(event.target) &&
-        (!this.contentElement || !this.contentElement.nativeElement.contains(event.target))) {
+    if (
+      this.comboOpen &&
+      !this.inputElement.nativeElement.contains(event.target) &&
+      !this.iconElement.nativeElement.contains(event.target) &&
+      (!this.contentElement || !this.contentElement.nativeElement.contains(event.target))
+    ) {
       // Esconde Content do Combo quando for clicado fora
       this.controlComboVisibility(false);
 
@@ -474,10 +486,16 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   getLabelFormatted(label): SafeHtml {
     let format = label;
 
-    if (this.isFiltering ||
-      (this.service && this.getInputValue() && !this.compareObjects(this.cacheOptions, this.visibleOptions) && this.shouldMarkLetters)) {
-
-      const labelInput = this.getInputValue().toString().toLowerCase();
+    if (
+      this.isFiltering ||
+      (this.service &&
+        this.getInputValue() &&
+        !this.compareObjects(this.cacheOptions, this.visibleOptions) &&
+        this.shouldMarkLetters)
+    ) {
+      const labelInput = this.getInputValue()
+        .toString()
+        .toLowerCase();
       const labelLowerCase = label.toLowerCase();
 
       const openTagBold = '<span class="po-font-text-large-bold">';
@@ -491,8 +509,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
         case PoComboFilterMode.startsWith:
         case PoComboFilterMode.contains:
           startString = label.substring(0, labelLowerCase.indexOf(labelInput));
-          middleString = label.substring(labelLowerCase.indexOf(labelInput),
-            labelLowerCase.indexOf(labelInput) + labelInput.length);
+          middleString = label.substring(
+            labelLowerCase.indexOf(labelInput),
+            labelLowerCase.indexOf(labelInput) + labelInput.length
+          );
           endString = label.substring(labelLowerCase.indexOf(labelInput) + labelInput.length);
 
           format = startString + openTagBold + middleString + closeTagBold + endString;
@@ -514,18 +534,20 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   isValidCharacterToSearch(keyCode) {
-    return (keyCode !== 9 && // tab
-            keyCode !== 13 && // entet
-            keyCode !== 16 && // shift
-            keyCode !== 17 && // ctrl
-            keyCode !== 18 && // alt
-            keyCode !== 20 && // capslock
-            keyCode !== 27 && // esc
-            keyCode !== 37 && // seta
-            keyCode !== 38 && // seta
-            keyCode !== 39 && // seta
-            keyCode !== 40 && // seta
-            keyCode !== 93); // windows menu
+    return (
+      keyCode !== 9 && // tab
+      keyCode !== 13 && // entet
+      keyCode !== 16 && // shift
+      keyCode !== 17 && // ctrl
+      keyCode !== 18 && // alt
+      keyCode !== 20 && // capslock
+      keyCode !== 27 && // esc
+      keyCode !== 37 && // seta
+      keyCode !== 38 && // seta
+      keyCode !== 39 && // seta
+      keyCode !== 40 && // seta
+      keyCode !== 93
+    ); // windows menu
   }
 
   searchOnEnter(value: string) {
@@ -567,7 +589,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   private onScroll = (): void => {
     this.adjustContainerPosition();
-  }
+  };
 
   private open() {
     this.comboOpen = true;
@@ -613,5 +635,4 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.contentElement.nativeElement.scrollTop = scrollTop;
     }
   }
-
 }

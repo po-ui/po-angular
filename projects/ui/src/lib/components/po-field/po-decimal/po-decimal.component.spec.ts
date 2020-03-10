@@ -14,12 +14,7 @@ describe('PoDecimalComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoDecimalComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoDecimalComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -44,7 +39,6 @@ describe('PoDecimalComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;
 
@@ -56,7 +50,6 @@ describe('PoDecimalComponent:', () => {
 
       expect(component.autocomplete).toBe('on');
     });
-
   });
 
   it('decimalsLength: should update property with default value if is invalid value.', () => {
@@ -126,7 +119,7 @@ describe('PoDecimalComponent:', () => {
   it('should return true in hasInvalidClass', () => {
     const fakeThis = {
       el: component.inputEl,
-      getScreenValue: () => { }
+      getScreenValue: () => {}
     };
 
     fakeThis.el.nativeElement.classList.add('ng-invalid');
@@ -205,7 +198,7 @@ describe('PoDecimalComponent:', () => {
         selectionStart: 2,
         selectionEnd: 5,
         value: '10425',
-        setSelectionRange: (start, end) => { }
+        setSelectionRange: (start, end) => {}
       }
     };
 
@@ -217,18 +210,17 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should call the onInputKeyboardAndroid method with the false isValidKey method', () => {
-
     const fakeThis = {
-      preventDefault: () => { },
-      hasLetters: () => { },
-      setPositionValue: () => { },
+      preventDefault: () => {},
+      hasLetters: () => {},
+      setPositionValue: () => {},
       isValidKey: () => false
     };
 
     const fakeEvent = {
       target: {
         selectionStart: 1,
-        value: ',10.100,10,02',
+        value: ',10.100,10,02'
       },
       key: ','
     };
@@ -265,10 +257,10 @@ describe('PoDecimalComponent:', () => {
         selectionStart: 2,
         selectionEnd: 5,
         value: '100.000,500,02',
-        setSelectionRange: () => { }
+        setSelectionRange: () => {}
       },
       key: ',',
-      preventDefault: () => { }
+      preventDefault: () => {}
     };
 
     spyOn(component, <any>'setPositionValue');
@@ -284,9 +276,9 @@ describe('PoDecimalComponent:', () => {
         selectionStart: 2,
         selectionEnd: 5,
         value: 'ABCDEFGH',
-        setSelectionRange: () => { }
+        setSelectionRange: () => {}
       },
-      preventDefault: () => { }
+      preventDefault: () => {}
     };
 
     spyOn(fakeEvent, 'preventDefault');
@@ -412,7 +404,7 @@ describe('PoDecimalComponent:', () => {
         value: '12A45',
         selectionStart: 3
       },
-      setPositionValue: () => { },
+      setPositionValue: () => {},
       key: '-'
     };
 
@@ -434,7 +426,7 @@ describe('PoDecimalComponent:', () => {
 
   it('should have a call setViewValue method', () => {
     const fakeThis = {
-      inputEl: component.inputEl,
+      inputEl: component.inputEl
     };
 
     component['setViewValue'].call(fakeThis, '123456.10');
@@ -445,7 +437,7 @@ describe('PoDecimalComponent:', () => {
     const fakeEvent = {
       target: {
         value: '123456789',
-        setSelectionRange: () => { }
+        setSelectionRange: () => {}
       }
     };
 
@@ -454,14 +446,13 @@ describe('PoDecimalComponent:', () => {
     component['setCursorInput'](fakeEvent, 2, 5);
 
     expect(fakeEvent.target.setSelectionRange).toHaveBeenCalled();
-
   });
 
   it('should call event.setSelectionRange() from setCursorInput() with 3 and 3 values', () => {
     const fakeEvent = {
       target: {
         value: '0,',
-        setSelectionRange: () => { }
+        setSelectionRange: () => {}
       }
     };
 
@@ -470,7 +461,6 @@ describe('PoDecimalComponent:', () => {
     component['setCursorInput'](fakeEvent, 2, 2);
 
     expect(fakeEvent.target.setSelectionRange).toHaveBeenCalledWith(3, 3);
-
   });
 
   it('should call event.setSelectionRange() and hasLessDot() from setCursorInput() and subtract value params', () => {
@@ -479,7 +469,7 @@ describe('PoDecimalComponent:', () => {
     const fakeEvent = {
       target: {
         value: '122',
-        setSelectionRange: () => { }
+        setSelectionRange: () => {}
       }
     };
 
@@ -494,7 +484,7 @@ describe('PoDecimalComponent:', () => {
     const fakeEvent = {
       target: {
         value: '12345',
-        setSelectionRange: () => { }
+        setSelectionRange: () => {}
       }
     };
 
@@ -531,7 +521,6 @@ describe('PoDecimalComponent:', () => {
 
     const hasMoreDot = component['hasMoreDot'].call(fakeThis, '12.1');
     expect(hasMoreDot).toBeFalsy();
-
   });
 
   it('should have a call formatMask method', () => {
@@ -575,7 +564,7 @@ describe('PoDecimalComponent:', () => {
       inputEl: component.inputEl,
       valueBeforeChange: undefined,
       change: component.change,
-      getScreenValue: () => { }
+      getScreenValue: () => {}
     };
 
     spyOn(fakeThis.change, 'emit');
@@ -614,10 +603,10 @@ describe('PoDecimalComponent:', () => {
     const fakeEvent = {
       target: {
         value: '10.245,60',
-        selectionStart: 7,
+        selectionStart: 7
       },
       decimalsLength: 2,
-      isValueAfterComma: () => { }
+      isValueAfterComma: () => {}
     };
 
     const returnMethod = component['verifyValueAfterComma'](fakeEvent);
@@ -633,7 +622,6 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should call hasLessDot', () => {
-
     const fakeThis = {
       oldValue: ''
     };
@@ -642,7 +630,6 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should call hasMoreDot', () => {
-
     const fakeThis = {
       oldValue: ''
     };
@@ -693,7 +680,7 @@ describe('PoDecimalComponent:', () => {
     const fakeThis = {
       clean: false,
       inputEl: component.inputEl,
-      el: component.inputEl,
+      el: component.inputEl
     };
 
     component.setPaddingInput.call(fakeThis);
@@ -709,7 +696,6 @@ describe('PoDecimalComponent:', () => {
 
   // testes já utilizando boas práticas.
   describe('Methods:', () => {
-
     it('focus: should call `focus` of decimal', () => {
       component.inputEl = {
         nativeElement: {
@@ -761,7 +747,7 @@ describe('PoDecimalComponent:', () => {
 
     it('setInitialSelectionRange: should set cursor position if selectionStart and selectionEnd is 1', () => {
       const fakeTarget = {
-        setSelectionRange: (start, end) => { }
+        setSelectionRange: (start, end) => {}
       };
 
       spyOn(fakeTarget, 'setSelectionRange');
@@ -771,7 +757,7 @@ describe('PoDecimalComponent:', () => {
 
     it('setInitialSelectionRange: should set cursor position if selectionStart and selectionEnd is different from 1', () => {
       const fakeTarget = {
-        setSelectionRange: (start, end) => { }
+        setSelectionRange: (start, end) => {}
       };
 
       spyOn(fakeTarget, 'setSelectionRange');
@@ -855,7 +841,7 @@ describe('PoDecimalComponent:', () => {
           value: '',
           key: ''
         },
-        preventDefault: () => { }
+        preventDefault: () => {}
       };
 
       spyOn(component, <any>'isInvalidKey').and.returnValue(true);
@@ -872,7 +858,7 @@ describe('PoDecimalComponent:', () => {
         target: {
           value: '123'
         },
-        preventDefault: () => { }
+        preventDefault: () => {}
       };
       component['isKeyboardAndroid'] = true;
 
@@ -891,7 +877,7 @@ describe('PoDecimalComponent:', () => {
           value: ''
         },
         which: 8,
-        preventDefault: () => { }
+        preventDefault: () => {}
       };
       component['isKeyboardAndroid'] = false;
 
@@ -1016,23 +1002,22 @@ describe('PoDecimalComponent:', () => {
       it(`should return false if verifyInsertComma, verifyThousandLength, verifyValueAfterComma,
           verifyInsertMinusSign, hasMinusSignInvalidPosition, isInvalidNumber, validateCursorPositionBeforeSeparator,
           verifyDecimalLengthIsZeroAndKeyPressedIsComma is false`, () => {
-          spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-          spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
-          spyOn(component, <any>'verifyValueAfterComma').and.returnValue(false);
-          spyOn(component, <any>'verifyInsertMinusSign').and.returnValue(false);
-          spyOn(component, <any>'hasMinusSignInvalidPosition').and.returnValue(false);
-          spyOn(component, <any>'isValidNumber').and.returnValue(true);
-          spyOn(component, <any>'validateCursorPositionBeforeSeparator').and.returnValue(false);
-          spyOn(component, <any>'verifyDecimalLengthIsZeroAndKeyPressedIsComma').and.returnValue(false);
+        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
+        spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
+        spyOn(component, <any>'verifyValueAfterComma').and.returnValue(false);
+        spyOn(component, <any>'verifyInsertMinusSign').and.returnValue(false);
+        spyOn(component, <any>'hasMinusSignInvalidPosition').and.returnValue(false);
+        spyOn(component, <any>'isValidNumber').and.returnValue(true);
+        spyOn(component, <any>'validateCursorPositionBeforeSeparator').and.returnValue(false);
+        spyOn(component, <any>'verifyDecimalLengthIsZeroAndKeyPressedIsComma').and.returnValue(false);
 
-          const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
+        const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
-          expect(isInvalidKeyReturn).toBeFalsy();
-        });
+        expect(isInvalidKeyReturn).toBeFalsy();
+      });
     });
 
     describe('validateCursorPositionBeforeSeparator:', () => {
-
       let fakeEvent;
 
       beforeEach(() => {
@@ -1088,7 +1073,6 @@ describe('PoDecimalComponent:', () => {
     });
 
     describe('verifyThousandLength:', () => {
-
       let fakeEvent;
 
       beforeEach(() => {
@@ -1114,21 +1098,18 @@ describe('PoDecimalComponent:', () => {
         spyOn(component, <any>'isPositionAfterDecimalSeparator').and.returnValue(false);
 
         expect(component['verifyThousandLength'](fakeEvent)).toBeFalsy();
-
       });
 
       it('should return false if isKeyDecimalSeparator is true', () => {
         spyOn(component, <any>'isKeyDecimalSeparator').and.returnValue(true);
 
         expect(component['verifyThousandLength'](fakeEvent)).toBeFalsy();
-
       });
 
       it('should return false if have a range selection', () => {
         fakeEvent.target.selectionEnd = 2;
 
         expect(component['verifyThousandLength'](fakeEvent)).toBeFalsy();
-
       });
 
       it('should return false if valuebeforeSeparator is less than thousandMaxlenght', () => {
@@ -1136,24 +1117,23 @@ describe('PoDecimalComponent:', () => {
 
         expect(component['verifyThousandLength'](fakeEvent)).toBeFalsy();
       });
-
     });
 
     it(`onBlur: should call 'setViewValue' with empty string and 'callOnChange' with undefined if 'target.value'
       contains more than one comma`, () => {
-        const fakeEvent = {
-          target: {
-            value: '1,200,50'
-          }
-        };
+      const fakeEvent = {
+        target: {
+          value: '1,200,50'
+        }
+      };
 
-        spyOn(component, <any>'setViewValue');
-        spyOn(component, <any>'callOnChange');
+      spyOn(component, <any>'setViewValue');
+      spyOn(component, <any>'callOnChange');
 
-        component.onBlur(fakeEvent);
+      component.onBlur(fakeEvent);
 
-        expect(component['setViewValue']).toHaveBeenCalledWith('');
-        expect(component['callOnChange']).toHaveBeenCalledWith(undefined);
+      expect(component['setViewValue']).toHaveBeenCalledWith('');
+      expect(component['callOnChange']).toHaveBeenCalledWith(undefined);
     });
 
     it('containsMoreThanOneComma: should return `false` if param contains one comma', () => {
@@ -1208,7 +1188,7 @@ describe('PoDecimalComponent:', () => {
         valueBeforeChange: 1,
         fireChange: false,
         change: component.change,
-        getScreenValue: () => { }
+        getScreenValue: () => {}
       };
 
       spyOn(fakeThis.change, 'emit');
@@ -1297,11 +1277,9 @@ describe('PoDecimalComponent:', () => {
     it('isValueBetweenAllowed: should return `false` if is value below allowed.', () => {
       expect(component['isValueBetweenAllowed'](-1, 9)).toBe(false);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('shouldn`t have an icon.', () => {
       component.icon = undefined;
       fixture.detectChanges();
@@ -1361,7 +1339,5 @@ describe('PoDecimalComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });

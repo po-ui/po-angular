@@ -4,7 +4,6 @@ import { TestBed } from '@angular/core/testing';
 import { PoLookupFilterService } from './po-lookup-filter.service';
 
 describe('PoLookupFilterService', () => {
-
   let service: PoLookupFilterService;
   let httpMock: HttpTestingController;
 
@@ -27,10 +26,8 @@ describe('PoLookupFilterService', () => {
   });
 
   describe('Methods:', () => {
-
     it(`getFilteredItems: should return the request response and create request with url, page, pageSize, filter
       and params correctly`, () => {
-
       service['url'] = 'http://url.com';
       const page = 1;
       const pageSize = 20;
@@ -38,23 +35,25 @@ describe('PoLookupFilterService', () => {
       const filterParams = { name: 'test' };
       const expectedResponse = { user: 'test' };
 
-      service.getFilteredItems({ filter, page, pageSize, filterParams }).subscribe(response =>
-        expect(response).toEqual(expectedResponse)
-      );
+      service
+        .getFilteredItems({ filter, page, pageSize, filterParams })
+        .subscribe(response => expect(response).toEqual(expectedResponse));
 
-      httpMock.expectOne(httpRequest => {
-        return httpRequest.url === service['url'] &&
-          httpRequest.method === 'GET' &&
-          httpRequest.params.get('page') === <any> page &&
-          httpRequest.params.get('pageSize') === <any> pageSize &&
-          httpRequest.params.get('filter') === 'name' &&
-          httpRequest.params.get('name') === 'test';
-      }).flush(expectedResponse);
-
+      httpMock
+        .expectOne(httpRequest => {
+          return (
+            httpRequest.url === service['url'] &&
+            httpRequest.method === 'GET' &&
+            httpRequest.params.get('page') === <any>page &&
+            httpRequest.params.get('pageSize') === <any>pageSize &&
+            httpRequest.params.get('filter') === 'name' &&
+            httpRequest.params.get('name') === 'test'
+          );
+        })
+        .flush(expectedResponse);
     });
 
     it(`getFilteredItems: should call 'validateParams' and set its return as the request parameter`, () => {
-
       service['url'] = 'http://url.com';
       const page = 1;
       const pageSize = 20;
@@ -71,7 +70,6 @@ describe('PoLookupFilterService', () => {
     });
 
     it(`getObjectByValue: should return the request response and create request with url and 'filterParams' correctly`, () => {
-
       service['url'] = 'http://url.com';
       const filterParams = { name: 'test' };
       const value = '1';
@@ -84,15 +82,18 @@ describe('PoLookupFilterService', () => {
         expect(response).toEqual(expectedResponse);
       });
 
-      httpMock.expectOne(httpRequest => {
-        return httpRequest.url === 'http://url.com/1' &&
-          httpRequest.method === 'GET' &&
-          httpRequest.params.get('name') === 'test';
-      }).flush(expectedResponse);
+      httpMock
+        .expectOne(httpRequest => {
+          return (
+            httpRequest.url === 'http://url.com/1' &&
+            httpRequest.method === 'GET' &&
+            httpRequest.params.get('name') === 'test'
+          );
+        })
+        .flush(expectedResponse);
     });
 
     it(`getObjectByValue: should call 'validateParams' and set its return as the request parameter`, () => {
-
       service['url'] = 'http://url.com';
       const filterParams = { name: 'test' };
       const value = '1';
@@ -133,10 +134,8 @@ describe('PoLookupFilterService', () => {
       param = false;
       expect(service['validateParams'](param)).toBe(undefined);
 
-      param = [ 'value' ];
+      param = ['value'];
       expect(service['validateParams'](param)).toBe(undefined);
     });
-
   });
-
 });

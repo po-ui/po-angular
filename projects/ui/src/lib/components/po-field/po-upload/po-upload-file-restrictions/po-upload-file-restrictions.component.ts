@@ -10,10 +10,9 @@ import { poUploadLiteralsDefault } from '../po-upload-base.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoUploadFileRestrictionsComponent implements OnInit {
-
   private _allowedExtensions: string;
   private _maxFileSize: string;
-  private  _minFileSize: string;
+  private _minFileSize: string;
 
   literals: any;
 
@@ -47,7 +46,7 @@ export class PoUploadFileRestrictionsComponent implements OnInit {
     return browserLanguage();
   }
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.setLiterals();
@@ -56,19 +55,20 @@ export class PoUploadFileRestrictionsComponent implements OnInit {
   private formatAllowedExtensions(allowedExtensions: Array<string>): string {
     const conjunction = { 'pt': 'e', 'en': 'and', 'es': 'y' };
 
-    return allowedExtensions ? allowedExtensions
-      .join(', ')
-      .toUpperCase()
-      .replace(/,(?=[^,]*$)/, ` ${conjunction[this.language]}`) : undefined;
+    return allowedExtensions
+      ? allowedExtensions
+          .join(', ')
+          .toUpperCase()
+          .replace(/,(?=[^,]*$)/, ` ${conjunction[this.language]}`)
+      : undefined;
   }
 
   private setLiterals() {
     this.literals = {
       ...poUploadLiteralsDefault[poLocaleDefault],
-      ...poUploadLiteralsDefault[this.language],
+      ...poUploadLiteralsDefault[this.language]
     };
 
     this.changeDetector.detectChanges();
   }
-
 }

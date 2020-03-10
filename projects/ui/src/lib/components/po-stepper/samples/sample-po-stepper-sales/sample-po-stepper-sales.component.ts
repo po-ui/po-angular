@@ -10,7 +10,6 @@ import { delay, finalize, map, tap } from 'rxjs/operators';
   templateUrl: './sample-po-stepper-sales.component.html'
 })
 export class SamplePoStepperSalesComponent {
-
   address: any;
   birthday: string;
   cardCode: string;
@@ -34,13 +33,11 @@ export class SamplePoStepperSalesComponent {
   }
 
   canActiveFinishStep(paymentForm: NgForm) {
-
-    return of(paymentForm.form.valid)
-            .pipe(
-              tap(() => this.isLoadingPayment = true),
-              delay(2000),
-              finalize(() => this.isLoadingPayment = false)
-            );
+    return of(paymentForm.form.valid).pipe(
+      tap(() => (this.isLoadingPayment = true)),
+      delay(2000),
+      finalize(() => (this.isLoadingPayment = false))
+    );
   }
 
   canActiveNextStep(form: NgForm) {
@@ -70,5 +67,4 @@ export class SamplePoStepperSalesComponent {
     this.personalForm.reset();
     this.paymentForm.reset();
   }
-
 }

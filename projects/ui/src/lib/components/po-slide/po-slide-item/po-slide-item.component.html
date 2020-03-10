@@ -1,58 +1,50 @@
-<div #slideItem
+<div
+  #slideItem
   class="po-slide-item"
   [class.po-slide-item-background-image]="!template && isIEOrEdge"
   [style.background-image]="!template && isIEOrEdge ? 'url(' + image + ')' : ''"
-  [ngSwitch]="setLinkType()">
-
+  [ngSwitch]="setLinkType()"
+>
   <!-- slide com link interno -->
-  <a
-    *ngSwitchCase="'internalLink'" 
-    class="po-slide-item-link" 
-    [routerLink]="link">
-    <ng-container 
-      [ngTemplateOutlet]="slideItemImage" 
-      [ngTemplateOutletContext]="{ item: { alt: alt, image: image }}">
+  <a *ngSwitchCase="'internalLink'" class="po-slide-item-link" [routerLink]="link">
+    <ng-container [ngTemplateOutlet]="slideItemImage" [ngTemplateOutletContext]="{ item: { alt: alt, image: image } }">
     </ng-container>
   </a>
   <!-- slide com link externo -->
-  <a 
-    *ngSwitchCase="'externalLink'"
-    class="po-slide-item-link" 
-    [href]="link">
-    <ng-container 
-      [ngTemplateOutlet]="slideItemImage" 
-      [ngTemplateOutletContext]="{ item: { alt: alt, image: image }}">
+  <a *ngSwitchCase="'externalLink'" class="po-slide-item-link" [href]="link">
+    <ng-container [ngTemplateOutlet]="slideItemImage" [ngTemplateOutletContext]="{ item: { alt: alt, image: image } }">
     </ng-container>
   </a>
   <!-- slide sem link -->
-  <a 
+  <a
     *ngSwitchCase="'noLink'"
     [ngClass]="action ? 'po-slide-item-link' : 'po-slide-item-no-link'"
-    (click)="action ? action(data) : undefined">
-    <ng-container 
+    (click)="action ? action(data) : undefined"
+  >
+    <ng-container
       [ngTemplateOutlet]="template ? slideItemTemplate : slideItemImage"
-      [ngTemplateOutletContext]="{ item: { alt: alt, image: image, data: data }}">
+      [ngTemplateOutletContext]="{ item: { alt: alt, image: image, data: data } }"
+    >
     </ng-container>
   </a>
-
 </div>
 
-<ng-template #slideItemTemplate let-item='item'; let-index='index'>
-  <div
-    *ngIf="template"
-    class="po-slide-item-content">
+<ng-template #slideItemTemplate let-item="item" ; let-index="index">
+  <div *ngIf="template" class="po-slide-item-content">
     <ng-template
       [ngTemplateOutlet]="template.templateRef"
-      [ngTemplateOutletContext]="{ $implicit: item.data, index: index }">
+      [ngTemplateOutletContext]="{ $implicit: item.data, index: index }"
+    >
     </ng-template>
   </div>
 </ng-template>
 
-<ng-template #slideItemImage let-item='item'>
+<ng-template #slideItemImage let-item="item">
   <img
     *ngIf="item.image && !isIEOrEdge"
     class="po-slide-image"
     [alt]="item.alt"
     [src]="item.image"
-    [style.height.px]="imageHeight">
+    [style.height.px]="imageHeight"
+  />
 </ng-template>

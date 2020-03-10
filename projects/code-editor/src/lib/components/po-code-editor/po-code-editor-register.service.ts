@@ -44,11 +44,9 @@ import { PoCodeEditorRegisterableOptions } from './interfaces/po-code-editor-reg
  */
 @Injectable()
 export class PoCodeEditorRegister implements PoCodeEditorRegisterable {
-
   /** Sintaxe a ser registrada. */
   language: string;
 
   /** Opções da sintaxe para registro no po-code-editor */
   options: PoCodeEditorRegisterableOptions;
-
 }

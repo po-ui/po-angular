@@ -7,14 +7,13 @@ import { PoButtonGroupItem, PoNotificationService } from '@portinari/portinari-u
   templateUrl: './sample-po-button-group-attendance.component.html'
 })
 export class SamplePoButtonGroupAttendanceComponent {
-
   attendances: Array<PoButtonGroupItem> = [
     { label: 'Appointment', icon: 'po-icon-calendar', action: this.getPassword },
     { label: 'Emergency', icon: 'po-icon-injector', action: this.getPassword },
     { label: 'Exams', icon: 'po-icon-exam', action: this.getPassword }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   getPassword(attendance) {
     const password = this.randomPassword();
@@ -38,7 +37,8 @@ export class SamplePoButtonGroupAttendanceComponent {
   }
 
   randomPassword() {
-    return Math.random().toString().slice(2, 5);
+    return Math.random()
+      .toString()
+      .slice(2, 5);
   }
-
 }

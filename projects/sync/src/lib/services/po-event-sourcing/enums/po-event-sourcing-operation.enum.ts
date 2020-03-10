@@ -5,7 +5,6 @@
  */
 
 export enum PoEventSourcingOperation {
-
   // Operação de exclusão.
   Delete = 'DELETE',
 
@@ -17,5 +16,4 @@ export enum PoEventSourcingOperation {
 
   // Operação de alteração.
   Update = 'UPDATE'
-
 }

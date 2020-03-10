@@ -13,7 +13,7 @@ describe('PoCheckboxComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoCheckboxComponent ]
+      declarations: [PoCheckboxComponent]
     });
   });
 
@@ -31,7 +31,6 @@ describe('PoCheckboxComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('focus: should call `focus` of checkbox.', () => {
       const spyOnFocus = spyOn(component.checkboxLabel.nativeElement, 'focus');
       changeDetector.detectChanges();
@@ -114,7 +113,6 @@ describe('PoCheckboxComponent:', () => {
         expect(spyOnCheckOption).toHaveBeenCalledWith(component.checkboxValue);
         expect(spyOnPreventDefault).toHaveBeenCalled();
       });
-
     });
 
     it('changeModelValue: should update `changeModelValue` with property values', () => {
@@ -122,7 +120,7 @@ describe('PoCheckboxComponent:', () => {
         { value: true, expectedValue: true },
         { value: false, expectedValue: false },
         { value: null, expectedValue: null },
-        { value: 'false', expectedValue: false},
+        { value: 'false', expectedValue: false },
         { value: 'true', expectedValue: false },
         { value: 'anotherValue', expectedValue: false }
       ];
@@ -140,11 +138,9 @@ describe('PoCheckboxComponent:', () => {
 
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should have label.', () => {
       const newLabel = 'Portinari';
       component.label = newLabel;
@@ -213,7 +209,5 @@ describe('PoCheckboxComponent:', () => {
       changeDetector.detectChanges();
       expect(nativeElement.querySelector('.po-checkbox-input-checked')).toBeFalsy();
     });
-
   });
-
 });

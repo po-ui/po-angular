@@ -5,12 +5,11 @@ import { Component, Input } from '@angular/core';
   templateUrl: './po-grid-cell-action.component.html'
 })
 export class PoGridCellActionComponent {
-
   @Input('p-position') position?: string = '';
 
   @Input('p-value') value?: string;
 
-  constructor() { }
+  constructor() {}
 
   onKeyDownContent(event) {
     // console.log('onKeyDownContent: ', event);
@@ -24,5 +23,4 @@ export class PoGridCellActionComponent {
       return;
     }
   }
-
 }

@@ -18,14 +18,15 @@ describe('PoNavbarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoNavbarComponent, PoNavbarLogoComponent ],
+      declarations: [PoNavbarComponent, PoNavbarLogoComponent],
       imports: [
         BrowserAnimationsModule,
         PoNavbarActionsModule,
         PoNavbarItemsModule,
         PoNavbarItemNavigationModule,
         PoMenuModule,
-        RouterModule.forRoot([]) ]
+        RouterModule.forRoot([])
+      ]
     });
   });
 
@@ -41,7 +42,6 @@ describe('PoNavbarComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('navbarItemNavigationDisableLeft: should return true if offset is equal to 0`', () => {
       component['offset'] = 0;
 
@@ -73,13 +73,10 @@ describe('PoNavbarComponent:', () => {
 
       expect(component.navbarItemNavigationDisableRight).toBe(false);
     });
-
   });
 
   describe('Methods:', () => {
-
     describe('ngAfterViewInit', () => {
-
       it('should call `displayItemsNavigation`', () => {
         spyOn(component, <any>'displayItemsNavigation');
 
@@ -108,7 +105,7 @@ describe('PoNavbarComponent:', () => {
     });
 
     it('ngOnDestroy: should call `mediaQuery.removeListener` if has `mediaQuery` listener', () => {
-      component['mediaQuery'] = { removeListener : () => {} };
+      component['mediaQuery'] = { removeListener: () => {} };
 
       spyOn(component['mediaQuery'], 'removeListener');
 
@@ -118,7 +115,6 @@ describe('PoNavbarComponent:', () => {
     });
 
     describe('navigateItems', () => {
-
       it('should call `navigateLeft` if orientation is `left`', () => {
         const orientation = 'left';
 
@@ -158,11 +154,12 @@ describe('PoNavbarComponent:', () => {
               nativeElement: {
                 offsetWidth: 10
               }
-            }, {
+            },
+            {
               nativeElement: {
                 offsetWidth: 25
               }
-            },
+            }
           ]
         }
       };
@@ -191,7 +188,6 @@ describe('PoNavbarComponent:', () => {
     });
 
     describe('changeNavbarMenuItems', () => {
-
       it('should set `menus` with `menuItems` if `isCollapsedMedia` is `false`', () => {
         const isCollapsedMedia = false;
         const menuItems = [{ label: 'menu' }];
@@ -220,16 +216,13 @@ describe('PoNavbarComponent:', () => {
     });
 
     describe('calculateLeftNavigation', () => {
-
       it('should return `undefined` if `offset` is greater than `navbarItemOffset`', () => {
         const expectedResult = undefined;
 
         component['offset'] = 1000;
 
         const fakeNavbarItems = {
-          allNavbarItems: [
-            { nativeElement : { offsetLeft: 10, offsetWidth: 15 }}
-          ]
+          allNavbarItems: [{ nativeElement: { offsetLeft: 10, offsetWidth: 15 } }]
         };
 
         component.navbarItems = <any>fakeNavbarItems;
@@ -245,28 +238,22 @@ describe('PoNavbarComponent:', () => {
         spyOn(component, <any>'navbarItemsWidth').and.returnValue(200);
 
         const fakeNavbarItems = {
-          allNavbarItems: [
-            { nativeElement : { offsetLeft: 10, offsetWidth: 15 }}
-          ]
+          allNavbarItems: [{ nativeElement: { offsetLeft: 10, offsetWidth: 15 } }]
         };
 
         component.navbarItems = <any>fakeNavbarItems;
 
         expect(component['calculateLeftNavigation']()).toBe(expectedResult);
       });
-
     });
 
     describe('calculateRightNavigation', () => {
-
       it('should return `undefined` if `itemBreakpoint` is greater than `finalPosition`', () => {
         const expectedResult = undefined;
         const fakeItemBreakpoint = 500;
 
         const fakeNavbarItems = {
-          allNavbarItems: [
-            { nativeElement : { offsetLeft: 10, offsetWidth: 15 }}
-          ]
+          allNavbarItems: [{ nativeElement: { offsetLeft: 10, offsetWidth: 15 } }]
         };
 
         component.navbarItems = <any>fakeNavbarItems;
@@ -279,20 +266,16 @@ describe('PoNavbarComponent:', () => {
         const fakeItemBreakpoint = 8;
 
         const fakeNavbarItems = {
-          allNavbarItems: [
-            { nativeElement : { offsetLeft: 10, offsetWidth: 15 }}
-          ]
+          allNavbarItems: [{ nativeElement: { offsetLeft: 10, offsetWidth: 15 } }]
         };
 
         component.navbarItems = <any>fakeNavbarItems;
 
         expect(component['calculateRightNavigation'](fakeItemBreakpoint)).toBe(expectedResult);
       });
-
     });
 
     describe('displayItemsNavigation', () => {
-
       it(`should set 'showItemsNavigation' to 'true' if 'navbarItemsWidth' is less than the sum of the 'allNavbarItemsWidth'
       and 'poNavbarNavigationWidth' and call 'detectChanges'`, () => {
         spyOn(component, <any>'navbarItemsWidth').and.returnValue(100);
@@ -341,7 +324,6 @@ describe('PoNavbarComponent:', () => {
         expect(component['setOffsetToZero']).not.toHaveBeenCalled();
         expect(component['animate']).not.toHaveBeenCalled();
       });
-
     });
 
     it(`initNavbarMenu: should call changeNavbarMenuItems if match in listener`, () => {
@@ -350,12 +332,12 @@ describe('PoNavbarComponent:', () => {
           const matches = true;
           cb({ matches });
         },
-        removeListener: () => { }
+        removeListener: () => {}
       };
 
-      component.menu = <any> { menus: [] };
+      component.menu = <any>{ menus: [] };
 
-      spyOn(component, <any> 'changeNavbarMenuItems');
+      spyOn(component, <any>'changeNavbarMenuItems');
       spyOn(window, 'matchMedia').and.returnValue(fakeMediaQuery);
 
       component['initNavbarMenu']();
@@ -364,9 +346,9 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`initNavbarMenu: should call changeNavbarMenuItems if window.innerWidth is less than poNavbarMenuMedia`, () => {
-      component.menu = <any> { menus: [] };
+      component.menu = <any>{ menus: [] };
 
-      spyOn(component, <any> 'changeNavbarMenuItems');
+      spyOn(component, <any>'changeNavbarMenuItems');
 
       changeBrowserInnerWidth(700);
 
@@ -376,9 +358,9 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`initNavbarMenu: shouldn't call changeNavbarMenuItems if window.innerWidth is greater than poNavbarMenuMedia`, () => {
-      component.menu = <any> { menus: [] };
+      component.menu = <any>{ menus: [] };
 
-      spyOn(component, <any> 'changeNavbarMenuItems');
+      spyOn(component, <any>'changeNavbarMenuItems');
 
       changeBrowserInnerWidth(1500);
 
@@ -388,8 +370,8 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`initNavbarMenu: should call 'validateMenuLogo'`, () => {
-      component.menu = <any> { menus: [] };
-      spyOn(component, <any> 'validateMenuLogo');
+      component.menu = <any>{ menus: [] };
+      spyOn(component, <any>'validateMenuLogo');
 
       component['initNavbarMenu']();
 
@@ -410,7 +392,6 @@ describe('PoNavbarComponent:', () => {
     });
 
     describe('navigateLeft', () => {
-
       it(`should set 'disableRight' to 'false' and call 'calculateLeftNavigation'`, () => {
         component.disableRight = true;
         spyOn(component, <any>'calculateLeftNavigation');
@@ -447,11 +428,9 @@ describe('PoNavbarComponent:', () => {
 
         expect(component['setOffsetToZero']).not.toHaveBeenCalled();
       });
-
     });
 
     describe('navigateRight', () => {
-
       it(`should call 'calculateRightNavigation' with 'itemBreakPoint'`, () => {
         const fakeOffset = 100;
         const fakeNavbarItemsWidth = 50;
@@ -479,14 +458,13 @@ describe('PoNavbarComponent:', () => {
 
         expect(component['validateMaxOffset']).toHaveBeenCalledWith(fakeMaxAllowedOffset);
       });
-
     });
 
     it(`onMediaQueryChange: should call 'changeNavbarMenuItems'`, () => {
       component.menu = <any>{ menus: [] };
       spyOn(component, <any>'changeNavbarMenuItems');
 
-      component['onMediaQueryChange']({changed: false});
+      component['onMediaQueryChange']({ changed: false });
 
       expect(component['changeNavbarMenuItems']).toHaveBeenCalled();
     });
@@ -500,7 +478,6 @@ describe('PoNavbarComponent:', () => {
     });
 
     describe('validateMaxOffset', () => {
-
       it(`should set 'offset' with 'maxAllowedOffset' value and set 'disableRight' to 'true' if 'offset' is greater than
       'maxAllowedOffset'`, () => {
         const maxAllowedOffset = 20;
@@ -536,11 +513,9 @@ describe('PoNavbarComponent:', () => {
         expect(component['offset']).toBe(20);
         expect(component.disableRight).toBe(false);
       });
-
     });
 
     describe('validateMenuLogo:', () => {
-
       it(`should set 'menu.logo' as 'undefined' and call 'menu.changeDetector.detectChanges' if has 'logo' and 'menu.logo'`, () => {
         const fakeThis = {
           logo: 'logo',
@@ -552,7 +527,7 @@ describe('PoNavbarComponent:', () => {
           }
         };
 
-        spyOn(fakeThis.menu.changeDetector, <any> 'detectChanges');
+        spyOn(fakeThis.menu.changeDetector, <any>'detectChanges');
         component['validateMenuLogo'].call(fakeThis);
 
         expect(fakeThis.menu.logo).toBeUndefined();
@@ -597,7 +572,6 @@ describe('PoNavbarComponent:', () => {
         expect(fakeThis.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
       });
     });
-
   });
 
   describe('Template:', () => {
@@ -624,7 +598,7 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`should apply class 'po-navbar-logo-menu' if have menu`, () => {
-      component.menu = <any> [{ label: 'Item 1' }];
+      component.menu = <any>[{ label: 'Item 1' }];
 
       fixture.detectChanges();
 
@@ -664,13 +638,11 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`shouldn't create 'po-menu' if has menu`, () => {
-      component.menu = <any> [{ label: 'Item 1' }];
+      component.menu = <any>[{ label: 'Item 1' }];
 
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-menu')).toBeNull();
     });
-
   });
-
 });

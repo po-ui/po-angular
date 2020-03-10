@@ -1,22 +1,20 @@
-<div #tabDrop
+<div
+  #tabDrop
   class="po-tab-dropdown-content po-tab-button-md"
   [attr.tabindex]="0"
   [class.po-tab-button-sm]="small"
-  (keyup.enter)="togglePopover()">
+  (keyup.enter)="togglePopover()"
+>
   <div class="po-tab-button-label">
     {{ label }}
-    <span class="po-icon" [ngClass]="(popover.isHidden ? 'po-icon-arrow-down' : 'po-icon-arrow-up')">
-    </span>
+    <span class="po-icon" [ngClass]="popover.isHidden ? 'po-icon-arrow-down' : 'po-icon-arrow-up'"> </span>
   </div>
 </div>
 
-<po-popover #popover
-  p-hide-arrow
-  p-position="bottom"
-  [p-target]="tabDropdown">
-
+<po-popover #popover p-hide-arrow p-position="bottom" [p-target]="tabDropdown">
   <div [ngClass]="getContainerClass()">
-    <po-tab-button *ngFor="let tab of tabs"
+    <po-tab-button
+      *ngFor="let tab of tabs"
       class="po-tab-dropdown-button"
       [class.po-tab-dropdown-button-active]="tab.active"
       [p-active]="tab.active"
@@ -27,8 +25,8 @@
       [p-small]="small"
       (p-activated)="activated.emit(tab)"
       (p-change-state)="changeState.emit(tab)"
-      (p-click)="popover.close();click.emit(tab);">
+      (p-click)="popover.close(); click.emit(tab)"
+    >
     </po-tab-button>
   </div>
-
 </po-popover>

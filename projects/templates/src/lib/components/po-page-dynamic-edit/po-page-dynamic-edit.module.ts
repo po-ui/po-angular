@@ -34,11 +34,7 @@ import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dyna
     PoWidgetModule,
     PoPageDynamicModule
   ],
-  declarations: [
-    PoPageDynamicEditComponent
-  ],
-  exports: [
-    PoPageDynamicEditComponent
-  ]
+  declarations: [PoPageDynamicEditComponent],
+  exports: [PoPageDynamicEditComponent]
 })
-export class PoPageDynamicEditModule { }
+export class PoPageDynamicEditModule {}

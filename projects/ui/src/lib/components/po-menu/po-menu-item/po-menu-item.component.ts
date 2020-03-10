@@ -22,7 +22,6 @@ const poMenuItemSubItemSize = 98;
   templateUrl: './po-menu-item.component.html'
 })
 export class PoMenuItemComponent implements OnDestroy, OnInit {
-
   private _badgeValue: number;
   private _isSelected: boolean = false;
   private _isSubItem: boolean = false;
@@ -115,14 +114,13 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
     return this.type !== 'subItems' && (this.badgeValue || this.badgeValue === 0) && this.badgeValue >= 0;
   }
 
-  constructor(private menuItemsService: PoMenuItemsService) { }
+  constructor(private menuItemsService: PoMenuItemsService) {}
 
   ngOnDestroy(): void {
     this.itemSubscription.unsubscribe();
   }
 
   ngOnInit(): void {
-
     // subscribe to menu component messages
     this.itemSubscription = this.menuItemsService.receiveFromParentMenuClicked().subscribe(menu => {
       this.processMenuItem(menu);
@@ -150,16 +148,20 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
     }
   }
 
-  private accordionAnimation(menuActive: PoMenuItem, menuOpened: PoMenuItem, hasSubItemOpened: boolean, activatedByRoute: boolean) {
-
+  private accordionAnimation(
+    menuActive: PoMenuItem,
+    menuOpened: PoMenuItem,
+    hasSubItemOpened: boolean,
+    activatedByRoute: boolean
+  ) {
     if (this.id === menuOpened['id']) {
       this.maxHeight = this.subItems.length * poMenuItemSubItemSize;
     }
 
     if (hasSubItemOpened) {
-      this.maxHeight = menuOpened['isOpened'] ?
-        (this.maxHeight + menuOpened.subItems.length * poMenuItemSubItemSize) :
-        (this.maxHeight - menuOpened.subItems.length * poMenuItemSubItemSize);
+      this.maxHeight = menuOpened['isOpened']
+        ? this.maxHeight + menuOpened.subItems.length * poMenuItemSubItemSize
+        : this.maxHeight - menuOpened.subItems.length * poMenuItemSubItemSize;
 
       if (activatedByRoute) {
         this.maxHeight = this.getMinimumHeight(0, this, menuActive);
@@ -174,7 +176,7 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
   private calcMenuSubItemsMaxHeight() {
     setTimeout(() => {
       const subItems = Array.from(this.menuSubItems.nativeElement.querySelectorAll('.po-menu-item'));
-      subItems.forEach((menuItem: any) => this.maxHeight += menuItem.offsetHeight);
+      subItems.forEach((menuItem: any) => (this.maxHeight += menuItem.offsetHeight));
     });
   }
 
@@ -191,12 +193,12 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
   }
 
   private groupedMenu(menuActive: PoMenuItem, menuOpened: PoMenuItem, activatedByRoute: boolean = false): void {
-
-    const hasSubItemOpened = (menuOpened && this.id !== menuOpened['id']) ? this.hasSubItem(this.subItems, menuOpened['id']) : false;
+    const hasSubItemOpened =
+      menuOpened && this.id !== menuOpened['id'] ? this.hasSubItem(this.subItems, menuOpened['id']) : false;
 
     this.isOpened = this.isMenuOpened(menuOpened, hasSubItemOpened);
 
-    this.isSelected = (menuActive && !this.isOpened) ? this.hasSubItem(this.subItems, menuActive['id']) : false;
+    this.isSelected = menuActive && !this.isOpened ? this.hasSubItem(this.subItems, menuActive['id']) : false;
 
     if (!this.isOpened) {
       this.maxHeight = 0;
@@ -215,14 +217,13 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
 
   private isMenuOpened(menuOpened: PoMenuItem, hasSubItemOpened: boolean): boolean {
     if (menuOpened) {
-      return (this.id === menuOpened['id']) ? menuOpened['isOpened'] : hasSubItemOpened;
+      return this.id === menuOpened['id'] ? menuOpened['isOpened'] : hasSubItemOpened;
     }
 
     return false;
   }
 
   private processMenuItem(menu) {
-
     if (this.type === 'internalLink') {
       this.activateMenu(menu.active);
       return;
@@ -233,5 +234,4 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
       return;
     }
   }
-
 }

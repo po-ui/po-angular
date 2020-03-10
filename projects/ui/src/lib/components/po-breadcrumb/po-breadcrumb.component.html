@@ -1,35 +1,28 @@
 <div class="po-breadcrumb" #breadcrumb>
-
   <ul class="po-breadcrumb-items">
-
-    <li #dropdownIcon
-      *ngIf="showDropdownToggle"
-      class="po-breadcrumb-item po-clickable"
-      (click)="toggleDropdown()">
-
+    <li #dropdownIcon *ngIf="showDropdownToggle" class="po-breadcrumb-item po-clickable" (click)="toggleDropdown()">
       <span class="po-breadcrumb-icon-more po-icon po-icon-more"></span>
       <div class="po-breadcrumb-arrow"></div>
     </li>
 
-    <div *ngFor="let item of itemsView, let itemIndex = index;">
+    <div *ngFor="let item of itemsView; let itemIndex = index">
       <po-breadcrumb-item
         [p-action]="item.action"
         [p-label]="item.label"
         [p-link]="item.link"
-        [p-item-active]="itemIndex === (itemsView.length - 1)">
+        [p-item-active]="itemIndex === itemsView.length - 1"
+      >
       </po-breadcrumb-item>
     </div>
-
   </ul>
 
-  <po-breadcrumb-favorite *ngIf="favoriteService"
+  <po-breadcrumb-favorite
+    *ngIf="favoriteService"
     [p-favorite-service]="favoriteService"
     [p-item-active]="items[items.length - 1]"
-    [p-params-service]="paramsService">
+    [p-params-service]="paramsService"
+  >
   </po-breadcrumb-favorite>
 
-  <po-breadcrumb-dropdown *ngIf="showDropdown"
-    [p-items]="dropdownItems">
-  </po-breadcrumb-dropdown>
-
+  <po-breadcrumb-dropdown *ngIf="showDropdown" [p-items]="dropdownItems"> </po-breadcrumb-dropdown>
 </div>

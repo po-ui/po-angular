@@ -1,15 +1,19 @@
-<po-page-login *ngIf="!blocked"
+<po-page-login
+  *ngIf="!blocked"
   p-logo="https://via.placeholder.com/160x64?text=MAIN+LOGO"
   p-secondary-logo="https://via.placeholder.com/80x24?text=SECONDARY+LOGO"
-  (p-login-submit)="checkLogin()">
+  (p-login-submit)="checkLogin()"
+>
 </po-page-login>
 
-<po-page-blocked-user *ngIf="blocked"
+<po-page-blocked-user
+  *ngIf="blocked"
   p-contact-email="user@portinari.com.br"
   p-contact-phone="0800 709 8100"
   p-logo="https://via.placeholder.com/160x64?text=MAIN+LOGO"
   p-reason="exceededAttempts"
   p-secondary-logo="https://via.placeholder.com/80x24?text=SECONDARY+LOGO"
   p-url-back="https://portinari.io/documentation/po-page-blocked-user"
-  [p-params]="params">
+  [p-params]="params"
+>
 </po-page-blocked-user>

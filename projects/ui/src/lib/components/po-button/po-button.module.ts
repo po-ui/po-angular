@@ -11,15 +11,8 @@ import { PoButtonComponent } from './po-button.component';
  * Módulo do componente po-button.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoLoadingModule
-  ],
-  declarations: [
-    PoButtonComponent
-  ],
-  exports: [
-    PoButtonComponent
-  ]
+  imports: [CommonModule, PoLoadingModule],
+  declarations: [PoButtonComponent],
+  exports: [PoButtonComponent]
 })
-export class PoButtonModule { }
+export class PoButtonModule {}

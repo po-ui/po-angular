@@ -17,10 +17,9 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
 @Component({
   selector: 'po-toolbar-profile',
   templateUrl: './po-toolbar-profile.component.html',
-  providers: [ PoControlPositionService ]
+  providers: [PoControlPositionService]
 })
 export class PoToolbarProfileComponent {
-
   /** Objeto que implementa a interface `PoToolbarProfile`. */
   @Input('p-profile') profile: PoToolbarProfile;
 
@@ -30,5 +29,4 @@ export class PoToolbarProfileComponent {
   get profileAvatar() {
     return this.profile ? this.profile.avatar : undefined;
   }
-
 }

@@ -8,11 +8,10 @@ import { Observable } from 'rxjs';
   templateUrl: './sample-po-combo-heroes.component.html'
 })
 export class SamplePoComboHeroesComponent {
-
   hero$: Observable<any>;
   heroName: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   get knowMoreLabel() {
     return this.heroName ? 'Know more' : undefined;
@@ -29,5 +28,4 @@ export class SamplePoComboHeroesComponent {
   private getHero(heroName: string) {
     return this.http.get(`https://thf.totvs.com.br/sample/api/new/heroes/${heroName}`);
   }
-
 }

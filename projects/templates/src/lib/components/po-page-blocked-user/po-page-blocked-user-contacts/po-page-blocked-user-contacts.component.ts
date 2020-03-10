@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 
 const poPageBlockedUserContactItemMargin = 16;
 
@@ -7,7 +16,6 @@ const poPageBlockedUserContactItemMargin = 16;
   templateUrl: './po-page-blocked-user-contacts.component.html'
 })
 export class PoPageBlockedUserContactsComponent implements AfterViewInit, OnChanges {
-
   literals: Object;
   overflowItem: boolean = false;
 
@@ -37,7 +45,7 @@ export class PoPageBlockedUserContactsComponent implements AfterViewInit, OnChan
   }
 
   private checkContactItemWidth() {
-    if ( !this.email || !this.phone ) {
+    if (!this.email || !this.phone) {
       this.overflowItem = true;
       return;
     } else {
@@ -46,10 +54,10 @@ export class PoPageBlockedUserContactsComponent implements AfterViewInit, OnChan
         const mailWidth = this.mailItem.nativeElement.offsetWidth;
         const contactGroupHalfWidth = this.contactGroup.nativeElement.offsetWidth / 2;
 
-        this.overflowItem = phoneWidth > contactGroupHalfWidth || mailWidth > contactGroupHalfWidth - poPageBlockedUserContactItemMargin;
+        this.overflowItem =
+          phoneWidth > contactGroupHalfWidth || mailWidth > contactGroupHalfWidth - poPageBlockedUserContactItemMargin;
       });
     }
     this.changeDetector.detectChanges();
   }
-
 }

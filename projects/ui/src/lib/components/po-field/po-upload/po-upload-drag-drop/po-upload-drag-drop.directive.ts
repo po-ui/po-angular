@@ -6,10 +6,9 @@ import { PoUploadLiterals } from '../interfaces/po-upload-literals.interface';
 
 @Directive({
   selector: '[p-upload-drag-drop]',
-  providers: [ PoI18nPipe ]
+  providers: [PoI18nPipe]
 })
 export class PoUploadDragDropDirective {
-
   timeout: any;
 
   private files: Array<File>;
@@ -29,7 +28,7 @@ export class PoUploadDragDropDirective {
 
   @Output('p-file-change') fileChange: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private i18nPipe: PoI18nPipe, private notification: PoNotificationService) { }
+  constructor(private i18nPipe: PoI18nPipe, private notification: PoNotificationService) {}
 
   @HostListener('document:dragleave', ['$event']) onDragLeave(event) {
     event.preventDefault();
@@ -151,7 +150,6 @@ export class PoUploadDragDropDirective {
 
   private sendFiles(event, files) {
     if (this.areaElement.contains(event.target)) {
-
       if (files.length > 0) {
         this.fileChange.emit(files);
       }
@@ -168,5 +166,4 @@ export class PoUploadDragDropDirective {
     const pipeArguments = this.i18nPipe.transform(this.literals[literalAttributes], args);
     this.notification.information(pipeArguments);
   }
-
 }

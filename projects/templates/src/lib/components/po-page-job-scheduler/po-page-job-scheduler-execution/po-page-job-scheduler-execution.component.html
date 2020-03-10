@@ -14,7 +14,8 @@
       p-required
       [p-disabled]="isEdit"
       [p-label]="literals.day"
-      [p-min-date]="startDateFirstExecution">
+      [p-min-date]="startDateFirstExecution"
+    >
     </po-datepicker>
 
     <po-input
@@ -27,12 +28,12 @@
       p-required
       [p-disabled]="isEdit"
       [p-label]="literals.hour"
-      [p-pattern]="timePattern">
+      [p-pattern]="timePattern"
+    >
     </po-input>
-
   </div>
 
-  <hr>
+  <hr />
 
   <div class="po-row">
     <po-radio-group
@@ -42,16 +43,15 @@
       p-columns="4"
       p-required
       [p-label]="literals.periodicity"
-      [p-options]="periodicityOptions">
+      [p-options]="periodicityOptions"
+    >
     </po-radio-group>
 
     <ng-container *ngIf="value.periodicity !== 'single'">
-      <po-divider class="po-md-12" [p-label]="literals.periodicityData">
-      </po-divider>
+      <po-divider class="po-md-12" [p-label]="literals.periodicityData"> </po-divider>
 
       <div class="po-row">
-        <ng-container *ngTemplateOutlet="periodicityTemplates[value.periodicity]">
-        </ng-container>
+        <ng-container *ngTemplateOutlet="periodicityTemplates[value.periodicity]"> </ng-container>
       </div>
 
       <div class="po-row">
@@ -61,7 +61,8 @@
           [(ngModel)]="value.recurrent"
           [p-label]="literals.recurrent"
           [p-label-off]="literals.no"
-          [p-label-on]="literals.yes">
+          [p-label-on]="literals.yes"
+        >
         </po-switch>
       </div>
     </ng-container>
@@ -78,7 +79,8 @@
       [p-disabled]="isEdit"
       [p-filter-service]="poPageJobSchedulerLookup"
       [p-label]="literals.process"
-      [p-placeholder]="literals.enterProcess">
+      [p-placeholder]="literals.enterProcess"
+    >
     </po-lookup>
   </ng-template>
 
@@ -90,19 +92,18 @@
       p-required
       [p-disabled]="isEdit"
       [p-label]="literals.process"
-      [p-placeholder]="literals.enterProcess">
+      [p-placeholder]="literals.enterProcess"
+    >
     </po-input>
   </ng-template>
 
   <ng-template #dailyTemplate>
-    <ng-container *ngTemplateOutlet="inputHourTemplate">
-    </ng-container>
+    <ng-container *ngTemplateOutlet="inputHourTemplate"> </ng-container>
   </ng-template>
 
   <ng-template #weeklyTemplate>
     <div class="po-row">
-      <ng-container *ngTemplateOutlet="inputHourTemplate">
-      </ng-container>
+      <ng-container *ngTemplateOutlet="inputHourTemplate"> </ng-container>
     </div>
 
     <po-checkbox-group
@@ -112,7 +113,8 @@
       p-columns="4"
       p-required
       [p-label]="literals.weekDays"
-      [p-options]="weekDays">
+      [p-options]="weekDays"
+    >
     </po-checkbox-group>
   </ng-template>
 
@@ -125,11 +127,11 @@
       [p-error-pattern]="'Dia inválido'"
       [p-label]="literals.day"
       [p-max]="31"
-      [p-pattern]="dayPattern">
+      [p-pattern]="dayPattern"
+    >
     </po-number>
 
-    <ng-container *ngTemplateOutlet="inputHourTemplate">
-    </ng-container>
+    <ng-container *ngTemplateOutlet="inputHourTemplate"> </ng-container>
   </ng-template>
 
   <ng-template #inputHourTemplate>
@@ -142,7 +144,8 @@
       p-placeholder="HH:mm"
       p-required
       [p-label]="literals.hour"
-      [p-pattern]="timePattern">
+      [p-pattern]="timePattern"
+    >
     </po-input>
   </ng-template>
 </form>

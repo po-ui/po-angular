@@ -37,7 +37,6 @@ import { PoPageChangePasswordRequirement } from './interfaces/po-page-change-pas
  */
 @Directive()
 export abstract class PoPageChangePasswordBaseComponent {
-
   private _hideCurrentPassword: boolean = false;
   private _recovery: string | PoPageChangePasswordRecovery | Function;
   private _requirements: Array<PoPageChangePasswordRequirement> = [];
@@ -270,5 +269,4 @@ export abstract class PoPageChangePasswordBaseComponent {
   @Output('p-submit') submit: EventEmitter<any> = new EventEmitter();
 
   abstract navigateTo(url: string): void;
-
 }

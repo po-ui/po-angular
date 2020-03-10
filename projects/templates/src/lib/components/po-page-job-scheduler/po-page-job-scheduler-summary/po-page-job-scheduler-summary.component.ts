@@ -10,18 +10,17 @@ import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.
   templateUrl: 'po-page-job-scheduler-summary.component.html'
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {
-
   executionValue = '';
   firstExecutionValue = '';
   infoOrientation = PoInfoOrientation.Horizontal;
   periodicityValue = '';
   recurrentValue = '';
 
-  @Input('p-literals') literals = <any> {};
+  @Input('p-literals') literals = <any>{};
 
   @Input('p-parameters') parameters: Array<PoDynamicViewField> = [];
 
-  @Input('p-value') value: PoJobSchedulerInternal = <any> {};
+  @Input('p-value') value: PoJobSchedulerInternal = <any>{};
 
   constructor(private datePipe: DatePipe) {}
 
@@ -104,7 +103,7 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
       Wednesday: this.literals.wednesday,
       Thursday: this.literals.thursday,
       Friday: this.literals.friday,
-      Saturday: this.literals.saturday,
+      Saturday: this.literals.saturday
     };
 
     return days[day] || '';
@@ -134,5 +133,4 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
       return sorterWeekDays[currDay] > sorterWeekDays[nextDay] ? 1 : -1;
     });
   }
-
 }

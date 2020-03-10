@@ -12,7 +12,6 @@ describe('PoLoadingOverlayBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-screen-lock: should set with valid values', () => {
       const booleanValidTrueValues = [true, 'true', 1, ''];
       const booleanValidFalseValues = [false, 'false', 0];
@@ -43,11 +42,9 @@ describe('PoLoadingOverlayBaseComponent:', () => {
       spyOn(component, <any>'getTextDefault');
       expectPropertiesValues(component, 'text', textValidValues, textValidValues);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('getTextDefault: should return `Carregando` if `getShortLanguage` returns `pt`', () => {
       const fakeThis = {
         languageService: {
@@ -87,7 +84,5 @@ describe('PoLoadingOverlayBaseComponent:', () => {
 
       expect(component['getTextDefault'].call(fakeThis)).toBe('погрузка');
     });
-
   });
-
 });

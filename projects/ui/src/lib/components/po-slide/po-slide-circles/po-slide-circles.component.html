@@ -1,9 +1,9 @@
 <div class="po-slide-circles">
-  <ng-container *ngFor="let item of items; let index = index;">
+  <ng-container *ngFor="let item of items; let index = index">
     <div
       class="po-slide-circle"
       [class.po-slide-active-circle]="index === currentSlideIndex"
-      (click)="click.emit(index)">
-    </div>
+      (click)="click.emit(index)"
+    ></div>
   </ng-container>
 </div>

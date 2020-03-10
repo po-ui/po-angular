@@ -12,8 +12,8 @@ describe('PoNavbarItemComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoNavbarItemComponent ],
-      imports: [ RouterModule.forRoot([]) ]
+      declarations: [PoNavbarItemComponent],
+      imports: [RouterModule.forRoot([])]
     });
   });
 
@@ -31,7 +31,6 @@ describe('PoNavbarItemComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('type: should return `externalLink` if link is external link', () => {
       component.link = 'http://test.com';
 
@@ -43,11 +42,9 @@ describe('PoNavbarItemComponent:', () => {
 
       expect(component.type).toBe('internalLink');
     });
-
   });
 
   describe('Methods:', () => {
-
     it('itemClick: should call `action` with `link` and `label` if `action` is defined', () => {
       component.action = () => {};
 
@@ -62,18 +59,15 @@ describe('PoNavbarItemComponent:', () => {
     });
 
     it('itemClick: should call `click.emit`', () => {
-
       spyOn(component.click, 'emit');
 
       component.itemClick();
 
       expect(component.click.emit).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates: ', () => {
-
     it('should contain `a` element with href if `type` is `externalLink`', () => {
       component.link = 'http://test.com';
 
@@ -126,7 +120,5 @@ describe('PoNavbarItemComponent:', () => {
 
       expect(component.itemClick).toHaveBeenCalledWith(component.label, component.link);
     });
-
   });
-
 });

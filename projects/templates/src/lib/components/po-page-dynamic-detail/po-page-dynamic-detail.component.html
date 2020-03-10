@@ -1,27 +1,16 @@
-<po-page-default
-  [p-actions]="pageActions"
-  [p-breadcrumb]="breadcrumb"
-  [p-title]="title">
-
-  <ng-container *ngIf="model; then viewFieldsTemplate; else registerNotFoundTemplate">
-  </ng-container>
-
+<po-page-default [p-actions]="pageActions" [p-breadcrumb]="breadcrumb" [p-title]="title">
+  <ng-container *ngIf="model; then viewFieldsTemplate; else registerNotFoundTemplate"> </ng-container>
 </po-page-default>
 
 <ng-template #registerNotFoundTemplate>
-
   <po-widget>
     <span class="po-icon po-icon-info"></span>
     <span class="po-font-text-large">
       {{ literals.registerNotFound }}
     </span>
   </po-widget>
-
 </ng-template>
 
 <ng-template #viewFieldsTemplate>
-
-  <po-dynamic-view [p-fields]="fields" [p-value]="model">
-  </po-dynamic-view>
-
+  <po-dynamic-view [p-fields]="fields" [p-value]="model"> </po-dynamic-view>
 </ng-template>

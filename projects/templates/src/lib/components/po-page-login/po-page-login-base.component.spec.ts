@@ -14,21 +14,20 @@ const routerStub = {
 };
 
 export class PoPageLoginComponent extends PoPageLoginBaseComponent {
-  protected concatenateLoginHintWithContactEmail(contactEmail: string): void { }
-  protected concatenateTitleWithProductName(productName: string): void { }
-  protected setLoginErrors(value: Array<string>): void { }
-  protected setPasswordErrors(value: Array<string>): void { }
+  protected concatenateLoginHintWithContactEmail(contactEmail: string): void {}
+  protected concatenateTitleWithProductName(productName: string): void {}
+  protected setLoginErrors(value: Array<string>): void {}
+  protected setPasswordErrors(value: Array<string>): void {}
 }
 
 describe('ThPageLoginBaseComponent: ', () => {
-
   let component: PoPageLoginBaseComponent;
   let servicePageLogin: PoPageLoginService;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      providers: [ PoPageLoginService ]
+      providers: [PoPageLoginService]
     });
   });
 
@@ -71,7 +70,6 @@ describe('ThPageLoginBaseComponent: ', () => {
   });
 
   describe('Properties: ', () => {
-
     it('p-custom-field: should update with string values', () => {
       const validValuesCustomField = ['customField', 'domain'];
 
@@ -91,23 +89,26 @@ describe('ThPageLoginBaseComponent: ', () => {
 
     it(`p-custom-field: should set 'input' value to customFieldType when
       p-custom-field is setted with object with no options and no url`, () => {
-        component.customField = {
-          property: 'domain',
-          value: 'jv01',
-          pattern: '[a-z]',
-          options: undefined,
-          url: undefined,
-          fieldValue: 'nickname'
-        };
-        expect(component.customFieldType).toBe('input');
-      });
+      component.customField = {
+        property: 'domain',
+        value: 'jv01',
+        pattern: '[a-z]',
+        options: undefined,
+        url: undefined,
+        fieldValue: 'nickname'
+      };
+      expect(component.customFieldType).toBe('input');
+    });
 
     it('p-custom-field: should set `select` value to customFieldType when p-custom-field is setted with object with options', () => {
       component.customField = {
         property: 'domain',
         value: 'jv01',
         pattern: '[a-z]',
-        options: [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }],
+        options: [
+          { label: 'Option 1', value: '1' },
+          { label: 'Option 2', value: '2' }
+        ],
         url: 'https://portinari.io/sample/api/comboOption/heroes',
         fieldValue: 'nickname'
       };
@@ -131,7 +132,10 @@ describe('ThPageLoginBaseComponent: ', () => {
         property: 'domain',
         value: 'jv01',
         pattern: '[a-z]',
-        options: [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }],
+        options: [
+          { label: 'Option 1', value: '1' },
+          { label: 'Option 2', value: '2' }
+        ],
         url: 'https://portinari.io/sample/api/comboOption/heroes',
         fieldValue: 'nickname'
       };
@@ -207,7 +211,6 @@ describe('ThPageLoginBaseComponent: ', () => {
     });
 
     it('pageLoginLiterals: should spread an object overlapped by `customLiterals`', () => {
-
       spyOnProperty(component, 'language').and.returnValue('en');
 
       component.literals = {
@@ -232,7 +235,6 @@ describe('ThPageLoginBaseComponent: ', () => {
     });
 
     it('pageLoginLiterals: should spread an object without `contactEmail` and `productName`', () => {
-
       spyOnProperty(component, 'language').and.returnValue('en');
 
       component.literals = {
@@ -289,7 +291,7 @@ describe('ThPageLoginBaseComponent: ', () => {
     });
 
     it('p-literals: should update property with valid values.', () => {
-      const validValues = {'title': 'Custom Title', 'loginHint': 'Custom Login Hint'};
+      const validValues = { 'title': 'Custom Title', 'loginHint': 'Custom Login Hint' };
 
       expectPropertiesValues(component, 'literals', validValues, validValues);
     });
@@ -300,7 +302,7 @@ describe('ThPageLoginBaseComponent: ', () => {
       expectPropertiesValues(component, 'authenticationUrl', validValue, validValue);
     });
 
-    it('p-authentication-url: should set `authenticationUrl` to `undefined` if not a string value' , () => {
+    it('p-authentication-url: should set `authenticationUrl` to `undefined` if not a string value', () => {
       const invalidValues = [undefined, null, true, false, 0, 1, {}, [1, 2]];
 
       expectPropertiesValues(component, 'authenticationUrl', invalidValues, undefined);
@@ -324,7 +326,7 @@ describe('ThPageLoginBaseComponent: ', () => {
       expectPropertiesValues(component, 'blockedUrl', validValue, validValue);
     });
 
-    it('p-blocked-url: should set `p-blocked-url` to `undefined` if not a string value' , () => {
+    it('p-blocked-url: should set `p-blocked-url` to `undefined` if not a string value', () => {
       const invalidValues = [undefined, null, true, false, 0, 1, {}, [1, 2]];
 
       expectPropertiesValues(component, 'blockedUrl', invalidValues, undefined);
@@ -351,14 +353,13 @@ describe('ThPageLoginBaseComponent: ', () => {
     });
 
     it('p-recovery: should update property `p-recovery` with valid value', () => {
-      const validValue = ['value', () => {}, {'url': 'http://url.com'}];
+      const validValue = ['value', () => {}, { 'url': 'http://url.com' }];
 
       expectPropertiesValues(component, 'recovery', validValue, validValue);
     });
   });
 
   describe('passwordErrors', () => {
-
     it('should update property with valid value', () => {
       const validValues = ['error'];
 
@@ -368,7 +369,7 @@ describe('ThPageLoginBaseComponent: ', () => {
     it('should update property with empty array if value is invalid', () => {
       const inValidValues = [undefined, null, '', false];
 
-      expectPropertiesValues(component, 'passwordErrors', inValidValues,  []);
+      expectPropertiesValues(component, 'passwordErrors', inValidValues, []);
     });
 
     it('should call `setPasswordErrors` with value', () => {
@@ -382,7 +383,6 @@ describe('ThPageLoginBaseComponent: ', () => {
   });
 
   describe('passwordErrors', () => {
-
     it('should update property with valid value', () => {
       const validValues = ['error'];
 
@@ -392,7 +392,7 @@ describe('ThPageLoginBaseComponent: ', () => {
     it('should update property with empty array if value is invalid', () => {
       const inValidValues = [undefined, null, '', false];
 
-      expectPropertiesValues(component, 'passwordErrors', inValidValues,  []);
+      expectPropertiesValues(component, 'passwordErrors', inValidValues, []);
     });
 
     it('should call `setPasswordErrors` with value', () => {
@@ -406,7 +406,6 @@ describe('ThPageLoginBaseComponent: ', () => {
   });
 
   describe('Methods: ', () => {
-
     describe('onLoginSubmit', () => {
       it(`should call 'loginService.onLogin', 'sessionStorage.setItem' and 'openInternalLink'
       and define loginSubscription if authenticationUrl has value`, () => {
@@ -425,12 +424,16 @@ describe('ThPageLoginBaseComponent: ', () => {
 
         spyOn(component.loginSubmit, 'emit');
         spyOn(sessionStorage, 'setItem');
-        spyOn(component, <any> 'openInternalLink');
+        spyOn(component, <any>'openInternalLink');
         spyOn(servicePageLogin, <any>'onLogin').and.returnValue(getObservable(response));
 
         component.onLoginSubmit();
 
-        expect(servicePageLogin['onLogin']).toHaveBeenCalledWith(component.authenticationUrl, component.authenticationType, loginForm);
+        expect(servicePageLogin['onLogin']).toHaveBeenCalledWith(
+          component.authenticationUrl,
+          component.authenticationType,
+          loginForm
+        );
         expect(sessionStorage['setItem']).toHaveBeenCalledWith('PO_USER_LOGIN', JSON.stringify(response));
         expect(component['openInternalLink']).toHaveBeenCalledWith('/');
         expect(component.loginSubscription).toBeDefined();
@@ -473,7 +476,10 @@ describe('ThPageLoginBaseComponent: ', () => {
         expect(component.loginErrors).toEqual(error.error.loginWarnings);
         expect(component.passwordErrors).toEqual(error.error.passwordWarnings);
         expect(component.blockedUrl).toBe(error.error.blockedUrl);
-        expect(component['redirectBlockedUrl']).toHaveBeenCalledWith(component.exceededAttemptsWarning, component.blockedUrl);
+        expect(component['redirectBlockedUrl']).toHaveBeenCalledWith(
+          component.exceededAttemptsWarning,
+          component.blockedUrl
+        );
       });
 
       it(`expect to apply property values and call 'redirectBlockedUrl' if error.code is 401`, () => {
@@ -512,7 +518,10 @@ describe('ThPageLoginBaseComponent: ', () => {
         expect(component.loginErrors).toEqual(error.error.loginWarnings);
         expect(component.passwordErrors).toEqual(error.error.passwordWarnings);
         expect(component.blockedUrl).toBe(error.error.blockedUrl);
-        expect(component['redirectBlockedUrl']).toHaveBeenCalledWith(component.exceededAttemptsWarning, component.blockedUrl);
+        expect(component['redirectBlockedUrl']).toHaveBeenCalledWith(
+          component.exceededAttemptsWarning,
+          component.blockedUrl
+        );
       });
 
       it(`expect not be called 'redirectBlockedUrl' if error.code is 404`, () => {
@@ -592,7 +601,6 @@ describe('ThPageLoginBaseComponent: ', () => {
     });
 
     it('closePopover: should update value of `showExceededAttemptsWarning`', () => {
-
       component.closePopover();
 
       expect(component.showExceededAttemptsWarning).toBeFalsy();
@@ -663,7 +671,7 @@ describe('ThPageLoginBaseComponent: ', () => {
       const fakeSubscription = <any>{ unsubscribe: () => {} };
       component['loginSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -674,13 +682,12 @@ describe('ThPageLoginBaseComponent: ', () => {
       const fakeSubscription = <any>{ unsubscribe: () => {} };
       component['loginSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['loginSubscription'] = undefined;
       component.ngOnDestroy();
 
       expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
     });
-
   });
 });

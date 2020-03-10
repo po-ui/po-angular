@@ -4,13 +4,10 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 class PoPageDefaultComponent extends PoPageDefaultBaseComponent {
-
   setDropdownActions() {}
-
 }
 
 describe('PoPageDefaultBaseComponent:', () => {
-
   const component = new PoPageDefaultComponent();
 
   it('should be created', () => {
@@ -22,7 +19,7 @@ describe('PoPageDefaultBaseComponent:', () => {
   });
 
   it('should get title and call recalculateHeaderSize when set title', fakeAsync(() => {
-    component.poPageContent = <any> {
+    component.poPageContent = <any>{
       recalculateHeaderSize: () => {}
     };
 
@@ -37,7 +34,6 @@ describe('PoPageDefaultBaseComponent:', () => {
   }));
 
   describe('Properties:', () => {
-
     it('should update property `p-actions` to empty if is invalid values.', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', [], {}];
 
@@ -45,11 +41,9 @@ describe('PoPageDefaultBaseComponent:', () => {
     });
 
     it('should update property `p-actions` if is valid values.', () => {
-      const validValues = [ [{ label: 'Share', icon: 'po-icon-share' }] ];
+      const validValues = [[{ label: 'Share', icon: 'po-icon-share' }]];
 
       expectPropertiesValues(component, 'actions', validValues, validValues);
     });
-
   });
-
 });

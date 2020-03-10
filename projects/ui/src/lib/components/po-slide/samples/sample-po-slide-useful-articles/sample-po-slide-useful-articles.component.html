@@ -1,18 +1,20 @@
-<po-slide
-  p-height="450"
-  [p-slides]="sampleItems">
+<po-slide p-height="450" [p-slides]="sampleItems">
   <ng-template p-slide-content-template let-item>
-    <div class="sample-background-image"
+    <div
+      class="sample-background-image"
       [style.background-image]="'url(' + item.imagem + ')'"
       [style.backgroundSize]="'cover'"
-      [style.height.%]="100">
+      [style.height.%]="100"
+    >
       <div class="po-row">
-        <div class="po-offset-sm-1 po-offset-md-1 po-offset-lg-1 po-offset-xl-1 po-lg-5 po-sm-10 po-mt-4 po-mb-4 po-p-5"
-          [style.background]="'white'">
-          <div class="po-font-text">{{item.date}} by {{item.author}}</div>
-          <div class="po-font-display">{{item.title}}</div>
+        <div
+          class="po-offset-sm-1 po-offset-md-1 po-offset-lg-1 po-offset-xl-1 po-lg-5 po-sm-10 po-mt-4 po-mb-4 po-p-5"
+          [style.background]="'white'"
+        >
+          <div class="po-font-text">{{ item.date }} by {{ item.author }}</div>
+          <div class="po-font-display">{{ item.title }}</div>
           <po-divider></po-divider>
-          <div class="po-font-text-large-bold po-mb-3">{{item.description}}</div>
+          <div class="po-font-text-large-bold po-mb-3">{{ item.description }}</div>
           <po-button p-label="Read More" (p-click)="redirectLink(item.link)"></po-button>
         </div>
       </div>

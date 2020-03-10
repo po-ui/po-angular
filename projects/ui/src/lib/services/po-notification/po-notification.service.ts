@@ -31,7 +31,6 @@ import { PoToasterComponent } from './po-toaster/po-toaster.component';
   providedIn: 'root'
 })
 export class PoNotificationService extends PoNotificationBaseService {
-
   constructor(private poComponentInjector: PoComponentInjectorService) {
     super();
   }
@@ -83,5 +82,4 @@ export class PoNotificationService extends PoNotificationBaseService {
       this.destroyToaster(componentRef);
     });
   }
-
 }

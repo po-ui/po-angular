@@ -6,7 +6,8 @@
   </div>
 </po-container>
 
-<po-page-login *ngIf="!showPageBlocked"
+<po-page-login
+  *ngIf="!showPageBlocked"
   p-hide-remember-user
   p-login-pattern="^[a-zA-Z]*$"
   p-logo="https://via.placeholder.com/160x64?text=MAIN+LOGO"
@@ -23,14 +24,17 @@
   [p-recovery]="passwordRecovery"
   (p-login-change)="loginChange()"
   (p-login-submit)="checkLogin($event)"
-  (p-password-change)="passwordChange()">
+  (p-password-change)="passwordChange()"
+>
 </po-page-login>
 
-<po-page-blocked-user *ngIf="showPageBlocked"
+<po-page-blocked-user
+  *ngIf="showPageBlocked"
   p-contact-email="user@portinari.com.br"
   p-contact-phone="0800 709 8100"
   p-logo="https://via.placeholder.com/160x64?text=MAIN+LOGO"
   p-reason="exceededAttempts"
   p-url-back="https://portinari.io/documentation/po-page-login"
-  [p-params]="params">
+  [p-params]="params"
+>
 </po-page-blocked-user>

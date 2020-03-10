@@ -8,10 +8,9 @@ import { PoDynamicFormField } from '@portinari/portinari-ui';
   templateUrl: 'po-page-job-scheduler-parameters.component.html'
 })
 export class PoPageJobSchedulerParametersComponent implements AfterViewInit {
-
   @ViewChild('parametersForm', { static: true }) form: NgForm;
 
-  @Input('p-literals') literals = <any> {};
+  @Input('p-literals') literals = <any>{};
 
   @Input('p-parameters') parameters: Array<PoDynamicFormField> = [];
 
@@ -22,13 +21,10 @@ export class PoPageJobSchedulerParametersComponent implements AfterViewInit {
   ngAfterViewInit() {
     if (this.form) {
       setTimeout(() => {
-
         this.form.valueChanges.subscribe(value => {
           this.valueChange.emit(value);
         });
-
       });
     }
   }
-
 }

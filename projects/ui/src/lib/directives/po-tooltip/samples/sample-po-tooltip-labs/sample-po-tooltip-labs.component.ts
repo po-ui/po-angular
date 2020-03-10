@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-tooltip-labs.component.html'
 })
 export class SamplePoTooltipLabsComponent implements OnInit {
-
   tooltip: string;
   tooltipPosition: string;
 
@@ -34,5 +33,4 @@ export class SamplePoTooltipLabsComponent implements OnInit {
     this.tooltip = '';
     this.tooltipPosition = undefined;
   }
-
 }

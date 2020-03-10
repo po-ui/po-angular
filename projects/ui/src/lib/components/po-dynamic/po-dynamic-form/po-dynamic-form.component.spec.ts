@@ -16,7 +16,7 @@ describe('PoDynamicFormComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoDynamicModule ]
+      imports: [PoDynamicModule]
     });
   });
 
@@ -35,9 +35,8 @@ describe('PoDynamicFormComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('form: should call `emitForm` and set property', fakeAsync(() => {
-      spyOn(component, <any> 'emitForm');
+      spyOn(component, <any>'emitForm');
 
       component.form = new NgForm(null, null);
 
@@ -48,13 +47,11 @@ describe('PoDynamicFormComponent:', () => {
     }));
 
     it('form: should return empty object', fakeAsync(() => {
-      expect(component.form).toEqual(<any> {});
+      expect(component.form).toEqual(<any>{});
     }));
-
   });
 
   describe('Methods:', () => {
-
     it('emitForm: should call `formOutput.emit` if contains `formOutput.observers`', () => {
       const fakeThis = { formOutput: { observers: [{}], emit: () => {} } };
 
@@ -88,21 +85,24 @@ describe('PoDynamicFormComponent:', () => {
       component.validate = 'http://test.com';
       component.value = { test: 'new value' };
 
-      component.fields = [ { property: 'test' } ];
+      component.fields = [{ property: 'test' }];
 
       spyOn(component, <any>'disableForm');
       spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
 
       component['validateForm'](updatedField);
 
-      expect(component['validationService'].sendFormChange)
-        .toHaveBeenCalledWith(component.validate, updatedField, component.value);
+      expect(component['validationService'].sendFormChange).toHaveBeenCalledWith(
+        component.validate,
+        updatedField,
+        component.value
+      );
     });
 
     it('validateForm: should call disabledForm with false if observable returns an error', () => {
       const updatedField = { property: 'test', disabled: true };
 
-      component.fields = [ { property: 'test' } ];
+      component.fields = [{ property: 'test' }];
 
       spyOn(component, <any>'disableForm');
 
@@ -119,7 +119,7 @@ describe('PoDynamicFormComponent:', () => {
       const updatedField = { property: 'test', disabled: true };
       const updatedFormField = { fields: [{ property: 'test', disabled: true }] };
 
-      component.fields = [ { property: 'test' } ];
+      component.fields = [{ property: 'test' }];
 
       spyOn(component, <any>'disableForm');
 
@@ -135,7 +135,7 @@ describe('PoDynamicFormComponent:', () => {
     it('validateForm: should call applyFormValidation', () => {
       const updatedField = { property: 'test', disabled: true };
 
-      component.fields = [ { property: 'test' } ];
+      component.fields = [{ property: 'test' }];
 
       spyOn(component, <any>'disableForm');
       spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
@@ -151,9 +151,7 @@ describe('PoDynamicFormComponent:', () => {
 
       const validatedFields = { value: undefined, focus: 'test1' };
 
-      component.fields = [
-        { property: 'test1', required: true, visible: true }
-      ];
+      component.fields = [{ property: 'test1', required: true, visible: true }];
 
       spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelWithValidation');
@@ -169,9 +167,7 @@ describe('PoDynamicFormComponent:', () => {
 
       const validatedFields = { value: undefined, focus: 'test1' };
 
-      component.fields = [
-        { property: 'test1', required: true, visible: true }
-      ];
+      component.fields = [{ property: 'test1', required: true, visible: true }];
 
       spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelWithValidation');
@@ -187,9 +183,7 @@ describe('PoDynamicFormComponent:', () => {
 
       const validatedFields = { value: undefined, focus: 'test1' };
 
-      component.fields = [
-        { property: 'test1', required: true, visible: true }
-      ];
+      component.fields = [{ property: 'test1', required: true, visible: true }];
 
       spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelWithValidation');
@@ -205,7 +199,7 @@ describe('PoDynamicFormComponent:', () => {
 
       const fields = [
         { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: false, visible: true },
+        { property: 'test2', required: false, visible: true }
       ];
 
       component.value = {};
@@ -299,7 +293,7 @@ describe('PoDynamicFormComponent:', () => {
     it('ngOnInit: should call `loadDataOnInitialize` if `load` is truthy', () => {
       component.load = 'http://service/api';
 
-      const spyLoadDataOnInitialize = spyOn(component, <any> `loadDataOnInitialize`);
+      const spyLoadDataOnInitialize = spyOn(component, <any>`loadDataOnInitialize`);
 
       component.ngOnInit();
 
@@ -309,7 +303,7 @@ describe('PoDynamicFormComponent:', () => {
     it('ngOnInit: shouldn`t call `loadDataOnInitialize` if `load` is falsy', () => {
       component.load = undefined;
 
-      const spyLoadDataOnInitialize = spyOn(component, <any> `loadDataOnInitialize`);
+      const spyLoadDataOnInitialize = spyOn(component, <any>`loadDataOnInitialize`);
 
       component.ngOnInit();
 
@@ -317,7 +311,7 @@ describe('PoDynamicFormComponent:', () => {
     });
 
     it('ngOnDestroy: should call `removeListeners`', () => {
-      const spyRemoveListeners = spyOn(component, <any> `removeListeners`);
+      const spyRemoveListeners = spyOn(component, <any>`removeListeners`);
 
       component.ngOnDestroy();
 
@@ -326,11 +320,11 @@ describe('PoDynamicFormComponent:', () => {
 
     it(`removeListeners: should call 'onLoadSubscription.unsubscribe' and 'spySendFormSubscription.unsubscribe' if
       they are truthy`, () => {
-      component['onLoadSubscription'] = <any> { unsubscribe: () => {} };
-      component['sendFormSubscription'] = <any> { unsubscribe: () => {} };
+      component['onLoadSubscription'] = <any>{ unsubscribe: () => {} };
+      component['sendFormSubscription'] = <any>{ unsubscribe: () => {} };
 
-      const spyOnLoadSubscription = spyOn(component['onLoadSubscription'], <any> 'unsubscribe');
-      const spySendFormSubscription = spyOn(component['sendFormSubscription'], <any> 'unsubscribe');
+      const spyOnLoadSubscription = spyOn(component['onLoadSubscription'], <any>'unsubscribe');
+      const spySendFormSubscription = spyOn(component['sendFormSubscription'], <any>'unsubscribe');
 
       component['removeListeners']();
 
@@ -340,11 +334,11 @@ describe('PoDynamicFormComponent:', () => {
 
     it(`removeListeners: shouldn't call 'onLoadSubscription.unsubscribe' and 'spySendFormSubscription.unsubscribe'
       if they are falsy`, () => {
-      component['onLoadSubscription'] = <any> { unsubscribe: () => {} };
-      component['sendFormSubscription'] = <any> { unsubscribe: () => {} };
+      component['onLoadSubscription'] = <any>{ unsubscribe: () => {} };
+      component['sendFormSubscription'] = <any>{ unsubscribe: () => {} };
 
-      const spyOnLoadSubscription = spyOn(component['onLoadSubscription'], <any> 'unsubscribe');
-      const spySendFormSubscription = spyOn(component['sendFormSubscription'], <any> 'unsubscribe');
+      const spyOnLoadSubscription = spyOn(component['onLoadSubscription'], <any>'unsubscribe');
+      const spySendFormSubscription = spyOn(component['sendFormSubscription'], <any>'unsubscribe');
 
       component['onLoadSubscription'] = undefined;
       component['sendFormSubscription'] = undefined;
@@ -362,11 +356,11 @@ describe('PoDynamicFormComponent:', () => {
           { property: 'test1', required: false, visible: false, label: 'TESTE' },
           { property: 'cpf', required: true }
         ]
-    };
+      };
 
       const fields = [
         { property: 'test1', required: true, visible: true },
-        { property: 'test2', required: false, visible: true },
+        { property: 'test2', required: false, visible: true }
       ];
 
       component.value = {};
@@ -378,7 +372,10 @@ describe('PoDynamicFormComponent:', () => {
         { property: 'cpf', required: true }
       ];
 
-      const spyCreateAndUpdateFieldsForm = spyOn(component['loadService'], 'createAndUpdateFieldsForm').and.callThrough();
+      const spyCreateAndUpdateFieldsForm = spyOn(
+        component['loadService'],
+        'createAndUpdateFieldsForm'
+      ).and.callThrough();
 
       component['updateModelOnLoad'](loadedFormData);
 
@@ -416,9 +413,7 @@ describe('PoDynamicFormComponent:', () => {
 
       const validatedFields = { value: undefined, focus: 'test1' };
 
-      component.fields = [
-        { property: 'test1', required: true, visible: true }
-      ];
+      component.fields = [{ property: 'test1', required: true, visible: true }];
 
       spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelOnLoad');
@@ -434,9 +429,7 @@ describe('PoDynamicFormComponent:', () => {
 
       const validatedFields = { value: undefined, focus: 'test1' };
 
-      component.fields = [
-        { property: 'test1', required: true, visible: true }
-      ];
+      component.fields = [{ property: 'test1', required: true, visible: true }];
 
       spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelOnLoad');
@@ -452,9 +445,7 @@ describe('PoDynamicFormComponent:', () => {
 
       const loadedFormData = { value: undefined, focus: 'test1' };
 
-      component.fields = [
-        { property: 'test1', required: true, visible: true }
-      ];
+      component.fields = [{ property: 'test1', required: true, visible: true }];
 
       spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component, <any>'updateModelOnLoad');
@@ -478,7 +469,7 @@ describe('PoDynamicFormComponent:', () => {
     });
 
     it('loadDataOnInitialize: should call disabledForm with false if observable returns an error', () => {
-      component.fields = [ { property: 'test' } ];
+      component.fields = [{ property: 'test' }];
       component.disabledForm = true;
 
       spyOn(component['loadService'], 'executeLoad').and.returnValue(throwError('error'));
@@ -492,7 +483,7 @@ describe('PoDynamicFormComponent:', () => {
     it('loadDataOnInitialize: should call disabledForm with true on subcribe of observable', () => {
       const loadedFormData = { fields: [{ property: 'test', disabled: true }] };
 
-      component.fields = [ { property: 'test' } ];
+      component.fields = [{ property: 'test' }];
 
       spyOn(component['loadService'], 'executeLoad').and.returnValue(of(loadedFormData));
       spyOn(component, <any>'applyFormUpdatesOnLoad');
@@ -503,7 +494,7 @@ describe('PoDynamicFormComponent:', () => {
     });
 
     it('loadDataOnInitialize: should call applyFormUpdatesOnLoad', () => {
-      component.fields = [ { property: 'test' } ];
+      component.fields = [{ property: 'test' }];
 
       spyOn(component['loadService'], 'executeLoad').and.returnValue(of());
       const spyApplyFormUpdatesOnLoad = spyOn(component, <any>'applyFormUpdatesOnLoad');
@@ -512,11 +503,9 @@ describe('PoDynamicFormComponent:', () => {
 
       expect(spyApplyFormUpdatesOnLoad).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should find `form` and `po-dynamic-form-fields` tags if `groupForm` is falsy', () => {
       component.fields = [];
       component.groupForm = false;
@@ -536,7 +525,5 @@ describe('PoDynamicFormComponent:', () => {
       expect(nativeElement.querySelector('form')).toBeFalsy();
       expect(nativeElement.querySelector('po-dynamic-form-fields')).toBeTruthy();
     });
-
   });
-
 });

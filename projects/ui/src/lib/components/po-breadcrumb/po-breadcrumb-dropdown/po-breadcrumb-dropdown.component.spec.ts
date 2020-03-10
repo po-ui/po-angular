@@ -16,17 +16,13 @@ describe('PoBreadcrumbDropdownComponent:', () => {
     { label: 'Teste nível 1', link: '/test/nivel/1' },
     { label: 'Teste nível 2', link: '/test/nivel/2' },
     { label: 'Teste nível 3', link: '/test/nivel/3' },
-    { label: 'Teste nível 4', link: '/test/nivel/4' },
+    { label: 'Teste nível 4', link: '/test/nivel/4' }
   ];
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        PoBreadcrumbDropdownComponent,
-        DocumentationComponent,
-        GuidesComponent
-      ]
+      declarations: [PoBreadcrumbDropdownComponent, DocumentationComponent, GuidesComponent]
     });
   });
 
@@ -45,11 +41,8 @@ describe('PoBreadcrumbDropdownComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should find four items dropdown', () => {
       expect(nativeElement.querySelectorAll('.po-breadcrumb-dropdown-item').length).toBe(4);
     });
-
   });
-
 });

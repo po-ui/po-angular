@@ -11,7 +11,7 @@ describe('PoBadgeComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoBadgeComponent ]
+      declarations: [PoBadgeComponent]
     });
   });
 
@@ -26,7 +26,6 @@ describe('PoBadgeComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     const badgeColorDefaultSelector = '.po-badge.po-color-07';
     const badgeValueSelector = '.po-badge-value';
 
@@ -106,7 +105,5 @@ describe('PoBadgeComponent:', () => {
 
       expect(badge).toBeTruthy();
     });
-
   });
-
 });

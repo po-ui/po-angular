@@ -1,10 +1,7 @@
-<po-field-container
-  [p-help]="help"
-  [p-label]="label"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
   <div class="po-field-container-content">
-    <input #inp
+    <input
+      #inp
       class="po-input"
       type="number"
       [attr.max]="max"
@@ -20,18 +17,13 @@
       [tabindex]="disabled ? -1 : 0"
       (blur)="eventOnBlur($event)"
       (focus)="eventOnFocus($event)"
-      (input)="eventOnInput($event)">
+      (input)="eventOnInput($event)"
+    />
 
     <div class="po-field-icon-container-right">
-      <po-clean [p-default-value]="null"
-        [p-element-ref]="inputEl"
-        (p-change-event)="clear($event)">
-      </po-clean>
+      <po-clean [p-default-value]="null" [p-element-ref]="inputEl" (p-change-event)="clear($event)"> </po-clean>
     </div>
   </div>
 
-  <po-field-container-bottom
-    [p-error-pattern]="getErrorPattern()">
-  </po-field-container-bottom>
-
+  <po-field-container-bottom [p-error-pattern]="getErrorPattern()"> </po-field-container-bottom>
 </po-field-container>

@@ -77,7 +77,7 @@ describe('PoPageEditBaseComponent:', () => {
     });
 
     it('should get title and call recalculateHeaderSize when set title', fakeAsync(() => {
-      component.poPageContent = <any> {
+      component.poPageContent = <any>{
         recalculateHeaderSize: () => {}
       };
 
@@ -90,7 +90,5 @@ describe('PoPageEditBaseComponent:', () => {
       expect(component.title).toBe('teste');
       expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
     }));
-
   });
-
 });

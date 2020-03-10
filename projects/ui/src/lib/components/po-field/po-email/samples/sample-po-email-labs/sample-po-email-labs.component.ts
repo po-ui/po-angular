@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-email-labs.component.html'
 })
 export class SamplePoEmailLabsComponent implements OnInit {
-
   email: string;
   errorPattern: string;
   event: string;
@@ -49,5 +48,4 @@ export class SamplePoEmailLabsComponent implements OnInit {
   changeEvent(event: string) {
     this.event = event;
   }
-
 }

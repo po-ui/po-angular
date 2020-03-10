@@ -17,7 +17,6 @@ const poLargeStepSize = 48;
   templateUrl: './po-stepper-circle.component.html'
 })
 export class PoStepperCircleComponent {
-
   // Conteúdo que irá aparecer no círculo do *step*.
   @Input('p-content') content: any;
 
@@ -57,5 +56,4 @@ export class PoStepperCircleComponent {
   get isMediumStep(): boolean {
     return this.size >= poMediumStepSize && !this.isLargeStep;
   }
-
 }

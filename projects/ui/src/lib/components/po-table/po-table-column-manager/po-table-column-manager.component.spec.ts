@@ -16,10 +16,9 @@ describe('PoTableColumnManagerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ ],
-      imports: [ PoCheckboxGroupModule, PoFieldContainerModule, PoPopoverModule, PoTableModule ]
-    })
-    .compileComponents();
+      declarations: [],
+      imports: [PoCheckboxGroupModule, PoFieldContainerModule, PoPopoverModule, PoTableModule]
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -34,7 +33,6 @@ describe('PoTableColumnManagerComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnInit: should call `updateColumnsOptions` with `columns`', () => {
       component.columns = [
         { property: 'id', label: 'Code', type: 'number' },
@@ -158,7 +156,6 @@ describe('PoTableColumnManagerComponent:', () => {
 
     it(`onChangeVisibleColumns: should call 'getVisibleTableColumns' to set 'visibleColumnsChange'
       and call 'visibleColumnsChange.emit'`, () => {
-
       const checkedColumns = ['initial', 'name'];
 
       const visibleColumnsChange = ['initial'];
@@ -187,7 +184,7 @@ describe('PoTableColumnManagerComponent:', () => {
       component.maxColumns = 2;
       component.columnsOptions = undefined;
 
-      component.visibleColumns = [ 'id', 'initial' ];
+      component.visibleColumns = ['id', 'initial'];
 
       const columns = [
         { value: 'id', label: 'Code' },
@@ -257,7 +254,7 @@ describe('PoTableColumnManagerComponent:', () => {
         { property: 'atualization', label: 'Atualization', visible: true }
       ];
 
-      const visibleColumns = [ 'id', 'initial', 'atualization' ];
+      const visibleColumns = ['id', 'initial', 'atualization'];
 
       component.maxColumns = 3;
 
@@ -275,7 +272,7 @@ describe('PoTableColumnManagerComponent:', () => {
         { property: 'atualization', label: 'Atualization', visible: true }
       ];
 
-      const visibleColumns = [ 'id', 'initial' ];
+      const visibleColumns = ['id', 'initial'];
 
       component.maxColumns = 2;
 
@@ -286,7 +283,6 @@ describe('PoTableColumnManagerComponent:', () => {
 
     it(`getVisibleColumns: should return one visible column if 'maxColumns' is two
       and has only one column with visible equal to true `, () => {
-
       const columns = [
         { property: 'id', label: 'Code', visible: false },
         { property: 'initial', label: 'initial', visible: true },
@@ -295,7 +291,7 @@ describe('PoTableColumnManagerComponent:', () => {
         { property: 'atualization', label: 'Atualization', visible: false }
       ];
 
-      const visibleColumns = [ 'initial' ];
+      const visibleColumns = ['initial'];
 
       component.maxColumns = 2;
 
@@ -321,7 +317,7 @@ describe('PoTableColumnManagerComponent:', () => {
         { property: 'atualization', label: 'Atualization', type: 'date', visible: true }
       ];
 
-      const visibleColumns = [ 'name', 'atualization' ];
+      const visibleColumns = ['name', 'atualization'];
 
       const result = component['getVisibleTableColumns'](visibleColumns);
 
@@ -350,8 +346,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
     it(`isDisableColumn: should return true if 'visibleColumns' equals 'maxColumns' and 'visibleColumns'
       does not contain 'property'`, () => {
-
-      component.visibleColumns = [ 'column 1', 'column 2' ];
+      component.visibleColumns = ['column 1', 'column 2'];
       component.maxColumns = 2;
 
       expect(component['isDisableColumn']('column 3')).toBe(true);
@@ -359,15 +354,14 @@ describe('PoTableColumnManagerComponent:', () => {
 
     it(`isDisableColumn: should return true if 'visibleColumns' is greater than 'maxColumns' and 'visibleColumns'
       does not contain 'property'`, () => {
+      component.visibleColumns = ['column 1', 'column 2', 'column 3'];
+      component.maxColumns = 2;
 
-        component.visibleColumns = [ 'column 1', 'column 2', 'column 3' ];
-        component.maxColumns = 2;
-
-        expect(component['isDisableColumn']('column 4')).toBe(true);
+      expect(component['isDisableColumn']('column 4')).toBe(true);
     });
 
     it(`isDisableColumn: should return false if 'visibleColumns' equals 'maxColumns' and 'visibleColumns' contain 'property'`, () => {
-      component.visibleColumns = [ 'column 1', 'column 2' ];
+      component.visibleColumns = ['column 1', 'column 2'];
       component.maxColumns = 2;
 
       expect(component['isDisableColumn']('column 2')).toBe(false);
@@ -375,16 +369,14 @@ describe('PoTableColumnManagerComponent:', () => {
 
     it(`isDisableColumn: should return false if 'visibleColumns' is greater than 'maxColumns' and 'visibleColumns'
       contain 'property'`, () => {
-
-      component.visibleColumns = [ 'column 1', 'column 2', 'column 3' ];
+      component.visibleColumns = ['column 1', 'column 2', 'column 3'];
       component.maxColumns = 2;
 
       expect(component['isDisableColumn']('column 3')).toBe(false);
     });
 
     it(`isDisableColumn: should return false if 'visibleColumns' is less than 'maxColumns'`, () => {
-
-      component.visibleColumns = [ 'column 1' ];
+      component.visibleColumns = ['column 1'];
       component.maxColumns = 2;
 
       expect(component['isDisableColumn']('column 2')).toBe(false);
@@ -422,7 +414,6 @@ describe('PoTableColumnManagerComponent:', () => {
     });
 
     describe(`onChangeColumns`, () => {
-
       it(`should set 'defaultColumns' with 'columns.currentValue' if 'defaultColumns' and ' currentValue' are different`, () => {
         component['defaultColumns'] = <any>['column 1'];
 
@@ -439,7 +430,6 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it(`should set 'defaultColumns' with 'columns.currentValue' if 'firstChange' is true and 'currentValue' not is empty`, () => {
-
         component['defaultColumns'] = <any>[];
         const columns = {
           firstChange: true,
@@ -454,7 +444,6 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it(`should set 'defaultColumns' with empty array if 'firstChange' is true and 'currentValue' is undefined`, () => {
-
         component['defaultColumns'] = <any>[];
 
         const columns = {
@@ -471,7 +460,6 @@ describe('PoTableColumnManagerComponent:', () => {
 
       it(`shouldn't set 'defaultColumns' with 'columns.currentValue' if 'defaultColumns' and 'currentValue' is equal and 'firstChange'
       is false`, () => {
-
         component['defaultColumns'] = <any>['column 3', 'column 4'];
 
         const columns = {
@@ -490,11 +478,9 @@ describe('PoTableColumnManagerComponent:', () => {
         const columns = {
           previousValue: [
             { property: 'name', label: 'Name' },
-            { property: 'total', label: 'Total' },
+            { property: 'total', label: 'Total' }
           ],
-          currentValue: [
-            { property: 'name', label: 'Name' },
-          ]
+          currentValue: [{ property: 'name', label: 'Name' }]
         };
 
         spyOn(component, <any>'updateColumnsOptions');
@@ -506,12 +492,8 @@ describe('PoTableColumnManagerComponent:', () => {
 
       it(`shouldn't call 'updateColumnsOptions' if 'previousValue' and ' currentValue' are equals`, () => {
         const columns = {
-          previousValue: [
-            { property: 'name', label: 'Name' },
-          ],
-          currentValue: [
-            { property: 'name', label: 'Name' },
-          ]
+          previousValue: [{ property: 'name', label: 'Name' }],
+          currentValue: [{ property: 'name', label: 'Name' }]
         };
 
         spyOn(component, <any>'updateColumnsOptions');
@@ -520,7 +502,6 @@ describe('PoTableColumnManagerComponent:', () => {
 
         expect(component['updateColumnsOptions']).not.toHaveBeenCalled();
       });
-
     });
 
     it('removeListeners: should call `resizeListener` if it`s defined', () => {
@@ -543,7 +524,7 @@ describe('PoTableColumnManagerComponent:', () => {
       ];
 
       it(`should call 'getVisibleColumns' with 'columns' to set 'visibleColumns'`, () => {
-        const visibleColumns = [ 'code', 'name' ];
+        const visibleColumns = ['code', 'name'];
         component.visibleColumns = undefined;
 
         spyOn(component, <any>'getVisibleColumns').and.returnValue(visibleColumns);
@@ -557,7 +538,7 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it(`should call 'onChangeVisibleColumns' with 'visibleColumns'`, () => {
-        const visibleColumns = [ 'code', 'name' ];
+        const visibleColumns = ['code', 'name'];
         component.visibleColumns = undefined;
 
         spyOn(component, <any>'getVisibleColumns').and.returnValue(visibleColumns);
@@ -586,9 +567,6 @@ describe('PoTableColumnManagerComponent:', () => {
         expect(component['mapTableColumnsToCheckboxOptions']).toHaveBeenCalledWith(columns);
         expect(component.columnsOptions).toEqual(columnsOptions);
       });
-
     });
-
   });
-
 });

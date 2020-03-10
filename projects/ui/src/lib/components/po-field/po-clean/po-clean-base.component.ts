@@ -10,7 +10,6 @@ import { ElementRef, EventEmitter, Input, Output, Directive } from '@angular/cor
  */
 @Directive()
 export abstract class PoCleanBaseComponent {
-
   /** Nesta propriedade deve-se informar o elementRef do campo de entrada que utilizará o po-clean. */
   @Input('p-element-ref') inputRef: ElementRef;
 
@@ -32,7 +31,9 @@ export abstract class PoCleanBaseComponent {
   }
 
   showIcon() {
-    return this.defaultValue !== this.getInputValue() && this.hasCleanAttr() && !this.isDisabled() && !this.isReadonly();
+    return (
+      this.defaultValue !== this.getInputValue() && this.hasCleanAttr() && !this.isDisabled() && !this.isReadonly()
+    );
   }
 
   // Este método verifica se o componente pai possui a propriedade clean diferente de vazio,
@@ -54,5 +55,4 @@ export abstract class PoCleanBaseComponent {
   abstract setInputValue(value: string): void;
 
   abstract getInputValue(): string;
-
 }

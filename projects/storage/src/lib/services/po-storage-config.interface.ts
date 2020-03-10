@@ -9,7 +9,6 @@
  */
 
 export interface PoStorageConfig {
-
   /**
    * Ordem de preferência dos *drivers* para gravação dos dados.
    *
@@ -28,5 +27,4 @@ export interface PoStorageConfig {
 
   /** Nome da coleção onde os dados serão armazenados. Deve ser alfanumérico e conter "_"(underscores). */
   storeName?: string;
-
 }

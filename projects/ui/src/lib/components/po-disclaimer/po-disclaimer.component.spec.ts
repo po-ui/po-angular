@@ -12,7 +12,7 @@ describe('PoDisclaimerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoDisclaimerComponent ]
+      declarations: [PoDisclaimerComponent]
     });
   });
 
@@ -65,7 +65,6 @@ describe('PoDisclaimerComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     const eventEnterKey = { keyCode: 13, which: 13 };
     const eventDeleteKey = { keyCode: 46, which: 46 };
 
@@ -93,11 +92,9 @@ describe('PoDisclaimerComponent:', () => {
       expect(component['close']).not.toHaveBeenCalled();
       expect(UtilsFunction['isKeyCodeEnter']).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it(`should set tabindex to 0 if disclaimer 'hideClose' is false.`, () => {
       component.hideClose = false;
 
@@ -112,9 +109,6 @@ describe('PoDisclaimerComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-disclaimer-remove[tabindex="0"]')).toBeNull();
-
     });
-
   });
-
 });

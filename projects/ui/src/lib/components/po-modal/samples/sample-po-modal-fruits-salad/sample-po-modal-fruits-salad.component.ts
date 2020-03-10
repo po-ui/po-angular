@@ -11,7 +11,6 @@ import { PoNotificationService } from '@portinari/portinari-ui';
   templateUrl: './sample-po-modal-fruits-salad.component.html'
 })
 export class SamplePoModalFruitsSaladComponent {
-
   accompaniment: string = '';
   fruits: Array<string>;
   orderDetail: string = '';
@@ -32,23 +31,23 @@ export class SamplePoModalFruitsSaladComponent {
   };
 
   public readonly accompanimentOptions: Array<PoComboOption> = [
-    {value: 'chocolate', label: 'Chocolate'},
-    {value: 'hazeinut', label: 'Hazelnut' },
-    {value: 'milk', label: 'Milk'}
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'hazeinut', label: 'Hazelnut' },
+    { value: 'milk', label: 'Milk' }
   ];
 
   public readonly fruitsOptions: Array<PoCheckboxGroupOption> = [
-    {value: 'orange', label: 'Orange'},
-    {value: 'apple', label: 'Apple' },
-    {value: 'pineapple', label: 'Pineapple'},
-    {value: 'graple', label: 'Grape' },
-    {value: 'strawberry', label: 'Strawberry'}
+    { value: 'orange', label: 'Orange' },
+    { value: 'apple', label: 'Apple' },
+    { value: 'pineapple', label: 'Pineapple' },
+    { value: 'graple', label: 'Grape' },
+    { value: 'strawberry', label: 'Strawberry' }
   ];
 
   @ViewChild('optionsForm', { static: true }) form: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   closeModal() {
     this.form.reset();
@@ -60,11 +59,9 @@ export class SamplePoModalFruitsSaladComponent {
   }
 
   private proccessOrder() {
-
     if (this.form.invalid) {
       const orderInvalidMessage = 'Choose the items to confirm the order.';
       this.poNotification.warning(orderInvalidMessage);
-
     } else {
       this.confirm.loading = true;
 
@@ -72,11 +69,7 @@ export class SamplePoModalFruitsSaladComponent {
         this.poNotification.success(`Your order confirmed: ${this.fruits}, with accompaniment: ${this.accompaniment}.`);
         this.confirm.loading = false;
         this.closeModal();
-
       }, 700);
-
     }
-
   }
-
 }

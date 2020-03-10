@@ -1,15 +1,12 @@
-<po-navbar-action *ngFor="let iconAction of iconActions"
+<po-navbar-action
+  *ngFor="let iconAction of iconActions"
   class="po-navbar-action"
   [p-action]="iconAction.action"
   [p-icon]="iconAction.icon"
   [p-label]="iconAction.label"
   [p-link]="iconAction.link"
-  [p-tooltip-text]="iconAction.tooltip">
+  [p-tooltip-text]="iconAction.tooltip"
+>
 </po-navbar-action>
 
-<po-navbar-action-popup
-  class="po-navbar-action-popup"
-  [p-icon-actions]="iconActions">
-</po-navbar-action-popup>
-
-
+<po-navbar-action-popup class="po-navbar-action-popup" [p-icon-actions]="iconActions"> </po-navbar-action-popup>

@@ -17,10 +17,9 @@ describe('PoUploadFileRestrictionsComponent:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoUploadFileRestrictionsComponent ],
-      imports: [ PoServicesModule ]
-    })
-    .compileComponents();
+      declarations: [PoUploadFileRestrictionsComponent],
+      imports: [PoServicesModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -38,7 +37,6 @@ describe('PoUploadFileRestrictionsComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('allowedExtensions: should set `allowedExtensions` with `png and jpg`', () => {
       const extensions = ['png', 'jpg'];
       const expected = 'PNG and JPG';
@@ -53,11 +51,9 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     it('minFileSize: should set `minFileSize` with `30 MB`', () => {
       expectSettersMethod(component, 'minFileSize', 31457280, 'minFileSize', '30 MB');
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngOnInit: should call `setLiterals`', () => {
       spyOn(component, <any>'setLiterals');
 
@@ -73,7 +69,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     });
 
     it('formatAllowedExtensions: should return `PNG, JPG and SVG` if allowedExtensions is `png,jpg and svg`', () => {
-      const allowedExtensions = [ 'png', 'jpg', 'svg' ];
+      const allowedExtensions = ['png', 'jpg', 'svg'];
 
       spyOnProperty(component, 'language').and.returnValue('en');
 
@@ -81,7 +77,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     });
 
     it('formatAllowedExtensions: should return `PNG and JPG` if allowedExtensions is `png and jpg`', () => {
-      const allowedExtensions = [ 'png', 'jpg' ];
+      const allowedExtensions = ['png', 'jpg'];
 
       spyOnProperty(component, 'language').and.returnValue('en');
 
@@ -89,7 +85,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     });
 
     it('formatAllowedExtensions: should return `PNG e JPG` if allowedExtensions is `png and jpg` and `language` is `pt`', () => {
-      const allowedExtensions = [ 'png', 'jpg' ];
+      const allowedExtensions = ['png', 'jpg'];
 
       spyOnProperty(component, 'language').and.returnValue('pt');
 
@@ -97,7 +93,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     });
 
     it('formatAllowedExtensions: should return `PNG y JPG` if allowedExtensions is `png and jpg` and `language` is `es`', () => {
-      const allowedExtensions = [ 'png', 'jpg' ];
+      const allowedExtensions = ['png', 'jpg'];
 
       spyOnProperty(component, 'language').and.returnValue('es');
 
@@ -105,7 +101,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     });
 
     it('formatAllowedExtensions: should return `PNG` if allowedExtensions is `png`', () => {
-      const allowedExtensions = [ 'png' ];
+      const allowedExtensions = ['png'];
 
       expect(component['formatAllowedExtensions'](allowedExtensions)).toBe('PNG');
     });
@@ -143,11 +139,9 @@ describe('PoUploadFileRestrictionsComponent:', () => {
 
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain `numberOfFilesAllowed` if `maxFiles` is greater than 1', () => {
       component.maxFiles = 2;
       const numberOfFilesAllowed = '2 file(s) allowed';
@@ -175,7 +169,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
 
     it('should contain `allowedFormats` if `allowedExtensions` is defined', () => {
       spyOnProperty(component, 'language').and.returnValue('en');
-      component.allowedExtensions = <any> ['png', 'jpg'];
+      component.allowedExtensions = <any>['png', 'jpg'];
       const allowedExtensions = 'Accepted file formats: PNG and JPG.';
 
       component['setLiterals']();
@@ -240,7 +234,5 @@ describe('PoUploadFileRestrictionsComponent:', () => {
 
       expect(text).toContain(maxFileSizeAllowed);
     });
-
   });
-
 });

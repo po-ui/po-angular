@@ -9,8 +9,6 @@ import { PoDynamicViewField } from '@portinari/portinari-ui';
  */
 
 export interface PoPageDynamicDetailField extends PoDynamicViewField {
-
   /** Indica se o campo será duplicado caso seja executada a ação de duplicação. */
   duplicate?: boolean;
-
 }

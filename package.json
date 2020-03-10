@@ -37,7 +37,10 @@
     "build": "npm run build:ui && npm run build:templates && npm run build:storage && npm run build:sync && npm run build:code-editor",
     "build:lite": "ng build ui && ng build storage && ng build sync && ng build templates && ng build code-editor",
     "release": "standard-version",
-    "sonarqube": "gulp sonarqube"
+    "sonarqube": "gulp sonarqube",
+    "format:fix": "pretty-quick --staged",
+    "format:check": "prettier --check --loglevel error \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
+    "format:all": "prettier --write \"**/*{.ts,.js,.json,.css,.scss,.html}\""
   },
   "private": true,
   "dependencies": {
@@ -92,6 +95,7 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "ng-packagr": "^9.0.0",
     "prettier": "1.19.1",
+    "pretty-quick": "^2.0.1",
     "protractor": "~5.4.0",
     "sonarqube-scanner": "^2.5.0",
     "standard-version": "^7.1.0",

@@ -8,17 +8,13 @@ import { PoTableModule } from '../po-table.module';
 import { PoTooltipModule } from '../../../directives/po-tooltip';
 
 describe('PoTableColumnIconComponent:', () => {
-
   let component: PoTableColumnIconComponent;
   let fixture: ComponentFixture<PoTableColumnIconComponent>;
   let nativeElement;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        PoTableModule,
-        PoTooltipModule
-      ]
+      imports: [PoTableModule, PoTooltipModule]
     });
   });
 
@@ -35,7 +31,6 @@ describe('PoTableColumnIconComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-icons: should update property value.', () => {
       const icon = [{ value: 'po-icon-star', action: () => alert('PO'), color: 'color-11' }];
 
@@ -51,11 +46,9 @@ describe('PoTableColumnIconComponent:', () => {
 
       expect(component.icons).toEqual([]);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('isClickable: should call `isDisabled` function and return value true.', () => {
       const fakeColumn = {
         color: 'color-08',
@@ -108,7 +101,7 @@ describe('PoTableColumnIconComponent:', () => {
     });
 
     it('getColor: should call `color` function and return string color.', () => {
-      const fakeRow = component.row = {};
+      const fakeRow = (component.row = {});
       const fakeColumn = {
         color: () => '',
         value: 'po-icon-copy'
@@ -172,7 +165,7 @@ describe('PoTableColumnIconComponent:', () => {
     });
 
     it('click: shouldn`t call columnIcon.action or column.action if columnIcon.disabled is true', () => {
-      const fakeRow = component.row = {};
+      const fakeRow = (component.row = {});
       const fakeColumnIcon = {
         color: 'color-08',
         value: 'po-icon-copy',
@@ -193,7 +186,7 @@ describe('PoTableColumnIconComponent:', () => {
     });
 
     it('click: should call columnIcon.action if isDisabled is false', () => {
-      const fakeRow = component.row = {};
+      const fakeRow = (component.row = {});
       const fakeColumnIcon = {
         color: 'color-08',
         value: 'po-icon-copy',
@@ -214,7 +207,7 @@ describe('PoTableColumnIconComponent:', () => {
     });
 
     it('click: should call column.action with columnIcon if isDisabled is falsy and columnIcon.action is undefined', () => {
-      const fakeRow = component.row = {};
+      const fakeRow = (component.row = {});
       const fakeColumnIcon = {
         color: 'color-08',
         value: 'po-icon-copy'
@@ -256,7 +249,5 @@ describe('PoTableColumnIconComponent:', () => {
 
       expect(component['convertToColumnIcon'](columnIcons)).toEqual(columnIcons);
     });
-
   });
-
 });

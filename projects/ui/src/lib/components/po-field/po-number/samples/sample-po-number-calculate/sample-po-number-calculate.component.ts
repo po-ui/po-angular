@@ -7,7 +7,6 @@ import { PoSelectOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-number-calculate.component.html'
 })
 export class SamplePoNumberCalculateComponent {
-
   icms: number;
   liquid: number;
   price: number;
@@ -24,11 +23,10 @@ export class SamplePoNumberCalculateComponent {
   calculate() {
     const realPrice = this.price * this.quantity;
     this.liquid = realPrice;
-    this.total = realPrice + (realPrice * (this.state / 100));
+    this.total = realPrice + realPrice * (this.state / 100);
   }
 
   loadICMS() {
     this.icms = this.state;
   }
-
 }

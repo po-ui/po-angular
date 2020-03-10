@@ -1,7 +1,6 @@
 import { PoDialogPage } from './sample-po-dialog-labs.component.po';
 
 describe('Po-Dialog E2E', () => {
-
   const dialog: PoDialogPage = new PoDialogPage();
 
   beforeEach(() => {
@@ -45,5 +44,4 @@ describe('Po-Dialog E2E', () => {
     dialog.cleanInputMensage.click();
     expect(dialog.poButtonDialog.isEnabled()).toBeFalsy();
   });
-
 });

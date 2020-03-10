@@ -25,8 +25,6 @@ import { PoSyncService } from './services/po-sync/po-sync.service';
     PoHttpClientService,
     Network
   ],
-  imports: [
-    HttpClientModule
-  ]
+  imports: [HttpClientModule]
 })
-export class PoSyncModule { }
+export class PoSyncModule {}

@@ -4,11 +4,5 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": [
-    "@portinari/portinari-ui",
-    "monaco-editor",
-    "core-js",
-    "intl",
-    "uuid"
-  ]
+  "whitelistedNonPeerDependencies": ["@portinari/portinari-ui", "monaco-editor", "core-js", "intl", "uuid"]
 }

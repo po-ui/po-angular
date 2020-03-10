@@ -1,31 +1,23 @@
-<header class="po-navbar"
-  [ngClass]="{'po-navbar-shadow' : shadow}">
-
+<header class="po-navbar" [ngClass]="{ 'po-navbar-shadow': shadow }">
   <po-navbar-logo
     class="po-navbar-logo"
-    [ngClass]="{'po-navbar-logo-menu' : !!menu, 'po-navbar-no-logo' : !logo }"
-    [p-logo]="logo">
+    [ngClass]="{ 'po-navbar-logo-menu': !!menu, 'po-navbar-no-logo': !logo }"
+    [p-logo]="logo"
+  >
   </po-navbar-logo>
 
-  <po-navbar-items
-    class="po-navbar-items"
-    [p-items]="items">
-  </po-navbar-items>
+  <po-navbar-items class="po-navbar-items" [p-items]="items"> </po-navbar-items>
 
-  <po-navbar-item-navigation *ngIf="showItemsNavigation"
+  <po-navbar-item-navigation
+    *ngIf="showItemsNavigation"
     class="po-navbar-item-navigation"
     [p-disable-left]="navbarItemNavigationDisableLeft"
     [p-disable-right]="navbarItemNavigationDisableRight"
-    (p-click)="navigateItems($event)">
+    (p-click)="navigateItems($event)"
+  >
   </po-navbar-item-navigation>
 
-  <po-navbar-actions
-    class="po-navbar-actions"
-    [p-icon-actions]="iconActions">
-  </po-navbar-actions>
-
+  <po-navbar-actions class="po-navbar-actions" [p-icon-actions]="iconActions"> </po-navbar-actions>
 </header>
 
-<po-menu *ngIf="!menu"
-  [p-menus]="items">
-</po-menu>
+<po-menu *ngIf="!menu" [p-menus]="items"> </po-menu>

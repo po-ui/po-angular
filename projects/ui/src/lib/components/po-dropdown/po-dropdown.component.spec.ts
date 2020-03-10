@@ -9,7 +9,6 @@ import { PoDropdownComponent } from './po-dropdown.component';
 import { PoPopupComponent } from '../po-popup';
 
 describe('PoDropdownComponent: ', () => {
-
   let component: PoDropdownComponent;
   let fixture: ComponentFixture<PoDropdownComponent>;
   let nativeElement: any;
@@ -19,8 +18,8 @@ describe('PoDropdownComponent: ', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([])],
-      declarations: [ PoDropdownComponent, PoPopupComponent ]
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [PoDropdownComponent, PoPopupComponent]
     });
   });
 
@@ -39,7 +38,6 @@ describe('PoDropdownComponent: ', () => {
   });
 
   describe('Methods:', () => {
-
     it(`onKeyDown: should call 'toggleDropdown' if enter is typed.`, () => {
       const eventEnterKey = { keyCode: 13 };
 
@@ -70,7 +68,7 @@ describe('PoDropdownComponent: ', () => {
     });
 
     it(`toggleDropdown: should call 'showDropdown' and not call 'hideDropdown' if has dropdownRef, is close and enable.`, () => {
-      component.dropdownRef = {nativeElement: 'value'};
+      component.dropdownRef = { nativeElement: 'value' };
       component['open'] = false;
       component.disabled = false;
 
@@ -96,7 +94,7 @@ describe('PoDropdownComponent: ', () => {
     });
 
     it(`toggleDropdown: shouldn't call 'showDropdown' and call 'hideDropdown' if has dropdownRef and is open.`, () => {
-      component.dropdownRef = {nativeElement: 'value'};
+      component.dropdownRef = { nativeElement: 'value' };
       component['open'] = true;
 
       spyOn(component, <any>'showDropdown');
@@ -109,7 +107,7 @@ describe('PoDropdownComponent: ', () => {
     });
 
     it(`toggleDropdown: shouldn't call 'showDropdown' and call 'hideDropdown' if has dropdownRef, is close and disabled.`, () => {
-      component.dropdownRef = {nativeElement: 'value'};
+      component.dropdownRef = { nativeElement: 'value' };
       component['open'] = false;
       component.disabled = true;
 
@@ -148,7 +146,9 @@ describe('PoDropdownComponent: ', () => {
       const wasClickedOnDropdown = spyOn(component, <any>'wasClickedOnDropdown');
       const hideDropdown = spyOn(component, <any>'hideDropdown');
       const addEventListener = spyOn(window, 'addEventListener');
-      const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) => callback());
+      const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
+        callback()
+      );
 
       component['initializeListeners']();
 
@@ -180,8 +180,8 @@ describe('PoDropdownComponent: ', () => {
       component['clickoutListener'] = () => {};
       component['resizeListener'] = () => {};
 
-      spyOn(component, <any> 'clickoutListener');
-      spyOn(component, <any> 'resizeListener');
+      spyOn(component, <any>'clickoutListener');
+      spyOn(component, <any>'resizeListener');
       spyOn(window, 'removeEventListener');
 
       component['removeListeners']();
@@ -238,11 +238,9 @@ describe('PoDropdownComponent: ', () => {
 
       expect(component['hideDropdown']).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it(`should apply -1 to 'tabindex' if 'disabled' is 'true'`, () => {
       component.disabled = true;
 
@@ -301,7 +299,7 @@ describe('PoDropdownComponent: ', () => {
 
       expect(arrowDown).toBeTruthy();
 
-      component.actions = [{label: 'action1', action: () => {}}];
+      component.actions = [{ label: 'action1', action: () => {} }];
 
       fixture.detectChanges();
 
@@ -316,7 +314,7 @@ describe('PoDropdownComponent: ', () => {
 
     it(`should open a popup if have 'actions' and click in 'po-dropdown'`, () => {
       const poDropdown = nativeElement.querySelector('.po-dropdown');
-      component.actions = [{label: 'action1', action: () => {}}];
+      component.actions = [{ label: 'action1', action: () => {} }];
 
       fixture.detectChanges();
 
@@ -337,14 +335,12 @@ describe('PoDropdownComponent: ', () => {
 
       expect(nativeElement.querySelector('.po-popup')).toBeNull();
     });
-
   });
-
 });
 
 function keyboardEvents(event: string, keyCode: number) {
   const eventKeyBoard = document.createEvent('KeyboardEvent');
   eventKeyBoard.initEvent(event, true, true);
-  Object.defineProperty(eventKeyBoard, 'keyCode', {'value': keyCode});
+  Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': keyCode });
   return eventKeyBoard;
 }

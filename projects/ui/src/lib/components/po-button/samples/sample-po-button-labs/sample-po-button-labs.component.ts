@@ -4,10 +4,9 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService } from '@por
 
 @Component({
   selector: 'sample-po-button-labs',
-  templateUrl: './sample-po-button-labs.component.html',
+  templateUrl: './sample-po-button-labs.component.html'
 })
 export class SamplePoButtonLabsComponent implements OnInit {
-
   label: string;
   type: string;
   icon: string;
@@ -33,14 +32,14 @@ export class SamplePoButtonLabsComponent implements OnInit {
     { label: 'link', value: 'link' }
   ];
 
-  constructor(private poDialog: PoDialogService) { }
+  constructor(private poDialog: PoDialogService) {}
 
   ngOnInit() {
     this.restore();
   }
 
   buttonClick() {
-    this.poDialog.alert({title: 'Portinari Button', message: 'Hello PO World!!!'});
+    this.poDialog.alert({ title: 'Portinari Button', message: 'Hello PO World!!!' });
   }
 
   restore() {
@@ -49,5 +48,4 @@ export class SamplePoButtonLabsComponent implements OnInit {
     this.icon = undefined;
     this.properties = [];
   }
-
 }

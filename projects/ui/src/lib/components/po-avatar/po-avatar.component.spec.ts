@@ -12,7 +12,7 @@ describe('PoAvatarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoAvatarComponent ]
+      declarations: [PoAvatarComponent]
     });
   });
 
@@ -50,7 +50,6 @@ describe('PoAvatarComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it(`should display template 'sourceImage' if 'src' is true.`, () => {
       component.src = 'image_path';
 
@@ -68,7 +67,5 @@ describe('PoAvatarComponent:', () => {
       expect(nativeElement.querySelector('.po-avatar-image')).toBeNull();
       expect(nativeElement.querySelector('.po-avatar-default-icon')).toBeTruthy();
     });
-
   });
-
 });

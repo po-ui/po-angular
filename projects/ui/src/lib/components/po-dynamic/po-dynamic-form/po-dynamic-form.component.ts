@@ -32,7 +32,6 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-
   templateUrl: './po-dynamic-form.component.html'
 })
 export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implements OnInit, OnDestroy {
-
   private _form: NgForm;
 
   disabledForm: boolean;
@@ -50,7 +49,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
   }
 
   get form() {
-    return this._form || <any> {};
+    return this._form || <any>{};
   }
 
   @ViewChild('fieldsComponent') fieldsComponent: { focus: (property: string) => void };
@@ -58,7 +57,8 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
   constructor(
     private changes: ChangeDetectorRef,
     private loadService: PoDynamicFormLoadService,
-    private validationService: PoDynamicFormValidationService) {
+    private validationService: PoDynamicFormValidationService
+  ) {
     super();
   }
 
@@ -146,7 +146,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
     const previousFocusElement = document.activeElement;
 
     this.disabledForm = true;
-    const errorOnLoad = () => this.disabledForm = false;
+    const errorOnLoad = () => (this.disabledForm = false);
 
     this.onLoadSubscription = this.loadService
       .executeLoad(this.load, this.value)
@@ -182,5 +182,4 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
     Object.assign(this.value, formData.value);
     this.fields = this.validationService.updateFieldsForm(formData.fields, this.fields);
   }
-
 }

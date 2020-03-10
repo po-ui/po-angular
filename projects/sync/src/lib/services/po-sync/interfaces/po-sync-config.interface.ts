@@ -10,7 +10,6 @@ import { PoNetworkType } from './../../../models/po-network-type.enum';
  */
 
 export interface PoSyncConfig {
-
   /**
    * Classe usada para a trasformação dos dados nas requisições.
    *
@@ -26,5 +25,4 @@ export interface PoSyncConfig {
 
   /** Tipos de conexões permitidas para o sincronismo. */
   type: PoNetworkType | Array<PoNetworkType>;
-
 }

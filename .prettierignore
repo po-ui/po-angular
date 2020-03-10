@@ -1,7 +1,6 @@
-package.json
-package-lock.json
 /dist
 /.github
 /coverage
 /node_modules
 .travis.yml
+*.md

@@ -8,7 +8,6 @@ import { PoNotificationService } from '@portinari/portinari-ui';
   templateUrl: 'sample-po-upload-resume-drag-drop.component.html'
 })
 export class SamplePoUploadResumeDragDropComponent implements OnInit {
-
   biograph: string;
   linkedin: string;
   name: string;
@@ -17,7 +16,7 @@ export class SamplePoUploadResumeDragDropComponent implements OnInit {
 
   @ViewChild('formOpportunity', { static: true }) formOpportunity: FormControl;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.uploadedResume = false;
@@ -37,5 +36,4 @@ export class SamplePoUploadResumeDragDropComponent implements OnInit {
   resumeUploadSuccess() {
     this.uploadedResume = true;
   }
-
 }

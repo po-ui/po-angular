@@ -14,20 +14,16 @@ describe('PoCheckboxGroupComponent:', () => {
   let nativeElement: any;
 
   const fakeInstance = {
-    changeValue: (value: any) => { },
-    checkOptionModel: (value: any) => { },
+    changeValue: (value: any) => {},
+    checkOptionModel: (value: any) => {},
     changeDetector: {
-      detectChanges: () => { }
+      detectChanges: () => {}
     }
   };
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoCheckboxGroupComponent,
-        PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoCheckboxGroupComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -107,7 +103,6 @@ describe('PoCheckboxGroupComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
       component.autoFocus = true;
 
@@ -129,9 +124,11 @@ describe('PoCheckboxGroupComponent:', () => {
     });
 
     describe('focus:', () => {
-
       it('should call `focus` of checkbox.', () => {
-        component.options = [{ label: 'teste1', value: 'teste1' }, { label: 'teste2', value: 'teste2' }];
+        component.options = [
+          { label: 'teste1', value: 'teste1' },
+          { label: 'teste2', value: 'teste2' }
+        ];
 
         changeDetector.detectChanges();
 
@@ -143,7 +140,10 @@ describe('PoCheckboxGroupComponent:', () => {
       });
 
       it('shouldn`t call `focus` of checkbox if option is `disabled`.', () => {
-        component.options = [{ label: 'teste1', value: 'teste1', disabled: true }, { label: 'teste2', value: 'teste2' }];
+        component.options = [
+          { label: 'teste1', value: 'teste1', disabled: true },
+          { label: 'teste2', value: 'teste2' }
+        ];
 
         changeDetector.detectChanges();
 
@@ -157,7 +157,10 @@ describe('PoCheckboxGroupComponent:', () => {
       });
 
       it('shouldn`t call `focus` if component is `disabled`.', () => {
-        component.options = [{ label: 'teste1', value: 'teste1' }, { label: 'teste2', value: 'teste2' }];
+        component.options = [
+          { label: 'teste1', value: 'teste1' },
+          { label: 'teste2', value: 'teste2' }
+        ];
         component.disabled = true;
 
         changeDetector.detectChanges();
@@ -172,7 +175,10 @@ describe('PoCheckboxGroupComponent:', () => {
       });
 
       it('shouldn`t call `focus` if all checkboxes are `disabled`.', () => {
-        component.options = [{ label: 'teste1', value: 'teste1', disabled: true }, { label: 'teste2', value: 'teste2', disabled: true }];
+        component.options = [
+          { label: 'teste1', value: 'teste1', disabled: true },
+          { label: 'teste2', value: 'teste2', disabled: true }
+        ];
 
         changeDetector.detectChanges();
 
@@ -184,7 +190,6 @@ describe('PoCheckboxGroupComponent:', () => {
         expect(component.checkboxLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
         expect(component.checkboxLabels.toArray()[1].nativeElement.focus).not.toHaveBeenCalled();
       });
-
     });
 
     it('trackByFn: should return index', () => {
@@ -243,11 +248,9 @@ describe('PoCheckboxGroupComponent:', () => {
         expect(fakeEvent.preventDefault).toHaveBeenCalled();
         expect(component.checkOption).toHaveBeenCalledWith(option);
       });
-
     });
 
     describe('Templates:', () => {
-
       it('should set tabindex to -1 when checkbox-group is disabled', () => {
         component.disabled = true;
         changeDetector.detectChanges();
@@ -331,9 +334,6 @@ describe('PoCheckboxGroupComponent:', () => {
 
         expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
       });
-
     });
-
   });
-
 });

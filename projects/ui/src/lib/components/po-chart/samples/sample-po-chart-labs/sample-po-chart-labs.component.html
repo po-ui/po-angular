@@ -4,16 +4,14 @@
   [p-title]="title"
   [p-type]="type"
   (p-series-click)="changeEvent('p-series-click', $event)"
-  (p-series-hover)="changeEvent('p-series-hover', $event)">
+  (p-series-hover)="changeEvent('p-series-hover', $event)"
+>
 </po-chart>
 
 <po-divider p-label="Events"></po-divider>
 
 <div class="po-row">
-  <po-info
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info p-label="Event" [p-value]="event"> </po-info>
 </div>
 
 <po-divider p-label="Chart series"></po-divider>
@@ -26,31 +24,22 @@
       [(ngModel)]="category"
       p-label="Category"
       [p-disabled]="isSingleSerie"
-      [p-required]="!isSingleSerie">
+      [p-required]="!isSingleSerie"
+    >
     </po-input>
 
-    <po-number
-      class="po-md-6"
-      name="value"
-      [(ngModel)]="value"
-      p-label="Value"
-      p-required>
-    </po-number>
+    <po-number class="po-md-6" name="value" [(ngModel)]="value" p-label="Value" p-required> </po-number>
 
     <po-input
       class="po-md-6"
       name="description"
       [(ngModel)]="description"
       p-label="Gauge Description"
-      [p-disabled]="!isSingleSerie">
+      [p-disabled]="!isSingleSerie"
+    >
     </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="tooltip"
-      [(ngModel)]="tooltip"
-      p-label="Tooltip Text"
-      [p-disabled]="isSingleSerie">
+    <po-input class="po-md-6" name="tooltip" [(ngModel)]="tooltip" p-label="Tooltip Text" [p-disabled]="isSingleSerie">
     </po-input>
   </div>
 
@@ -59,7 +48,8 @@
       class="po-md-3"
       p-label="Add Data"
       [p-disabled]="chartSeries.invalid"
-      (p-click)="addData(); chartSeries.reset()">
+      (p-click)="addData(); chartSeries.reset()"
+    >
     </po-button>
   </div>
 </form>
@@ -68,19 +58,9 @@
 
 <form>
   <div class="po-row">
-    <po-number
-      class="po-md-4"
-      name="height"
-      [(ngModel)]="height"
-      p-label="Height">
-    </po-number>
+    <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
 
-    <po-input
-      class="po-md-4"
-      name="title"
-      [(ngModel)]="title"
-      p-label="Title">
-    </po-input>
+    <po-input class="po-md-4" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
 
     <po-radio-group
       class="po-md-4"
@@ -89,15 +69,12 @@
       p-columns="3"
       p-label="Type"
       [p-options]="typeOptions"
-      (p-change)="applySeriesData()">
+      (p-change)="applySeriesData()"
+    >
     </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

@@ -21,13 +21,9 @@ import { PoDisclaimerBaseComponent } from './po-disclaimer-base.component';
   templateUrl: './po-disclaimer.component.html'
 })
 export class PoDisclaimerComponent extends PoDisclaimerBaseComponent {
-
   onKeyPress(event: any) {
-
     if (isKeyCodeEnter(event)) {
       this.close();
     }
-
   }
-
 }

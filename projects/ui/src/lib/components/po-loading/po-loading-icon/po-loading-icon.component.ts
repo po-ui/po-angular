@@ -15,7 +15,6 @@ import { convertToBoolean } from '../../../utils/util';
   templateUrl: 'po-loading-icon.component.html'
 })
 export class PoLoadingIconComponent {
-
   private _neutralColor: boolean;
 
   /**
@@ -34,5 +33,4 @@ export class PoLoadingIconComponent {
   get neutralColor(): boolean {
     return this._neutralColor;
   }
-
 }

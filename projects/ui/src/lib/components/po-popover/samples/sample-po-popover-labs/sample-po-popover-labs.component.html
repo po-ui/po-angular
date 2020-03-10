@@ -3,7 +3,8 @@
   [p-hide-arrow]="properties.includes('hideArrow')"
   [p-position]="position"
   [p-target]="buttonClickRef"
-  [p-title]="title">
+  [p-title]="title"
+>
   {{ content }}
 </po-popover>
 
@@ -12,43 +13,28 @@
   [p-hide-arrow]="properties.includes('hideArrow')"
   [p-position]="position"
   [p-target]="buttonHoverRef"
-  [p-title]="title">
+  [p-title]="title"
+>
   {{ content }}
 </po-popover>
 
 <div class="po-row">
   <div class="po-offset-xl-1 po-offset-lg-1 po-md-6 po-lg-3">
-    <po-button #buttonClick
-      p-label="Popover with click">
-    </po-button>
+    <po-button #buttonClick p-label="Popover with click"> </po-button>
   </div>
 
   <div class="po-offset-xl-1 po-offset-lg-1 po-md-6 po-lg-3">
-    <po-button #buttonHover
-      p-label="Popover with hover">
-    </po-button>
+    <po-button #buttonHover p-label="Popover with hover"> </po-button>
   </div>
 </div>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="title"
-      [(ngModel)]="title"
-      p-clean
-      p-label="Title">
-    </po-input>
+    <po-input class="po-md-6" name="title" [(ngModel)]="title" p-clean p-label="Title"> </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="content"
-      [(ngModel)]="content"
-      p-clean
-      p-label="Content">
-    </po-input>
+    <po-input class="po-md-6" name="content" [(ngModel)]="content" p-clean p-label="Content"> </po-input>
   </div>
 
   <div class="po-row">
@@ -57,7 +43,8 @@
       name="position"
       [(ngModel)]="position"
       p-label="Position"
-      [p-options]="positionOptions">
+      [p-options]="positionOptions"
+    >
     </po-radio-group>
 
     <po-checkbox-group
@@ -65,15 +52,12 @@
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

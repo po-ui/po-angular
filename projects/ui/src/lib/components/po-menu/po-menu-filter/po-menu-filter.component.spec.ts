@@ -13,8 +13,8 @@ describe('PoMenuFilterComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoLoadingModule ],
-      declarations: [ PoCleanComponent, PoMenuFilterComponent ]
+      imports: [PoLoadingModule],
+      declarations: [PoCleanComponent, PoMenuFilterComponent]
     });
   });
 
@@ -48,7 +48,6 @@ describe('PoMenuFilterComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('filterItems: should call `filter.emit` with search param', () => {
       const search = 'menu';
 
@@ -58,11 +57,9 @@ describe('PoMenuFilterComponent:', () => {
 
       expect(spyFilter).toHaveBeenCalledWith(search);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain `po-icon-search` and not contain `po-loading-icon` if `loading` is false', () => {
       component.loading = false;
 
@@ -86,7 +83,5 @@ describe('PoMenuFilterComponent:', () => {
       expect(loadingIcon).toBeTruthy();
       expect(searchIcon).toBeFalsy();
     });
-
   });
-
 });

@@ -18,11 +18,11 @@ import { PoSyncSchema } from '../../services/po-sync/interfaces/po-sync-schema.i
  * Esta instância pode ser obtida a partir do retorno do método `PoSyncService.getModel('schema name')`.
  */
 export class PoEntity {
-
   constructor(
     private eventSourcing: PoEventSourcingService,
     private schema: PoSyncSchema,
-    private poSchemaService: PoSchemaService) { }
+    private poSchemaService: PoSchemaService
+  ) {}
 
   /**
    * Busca os registros do *schema*, podendo filtrar o resultado a partir do filtro passado e retornando apenas
@@ -165,7 +165,6 @@ export class PoEntity {
     validateParameter({ records });
 
     const saveAll = async () => {
-
       const batchEvents = [];
 
       for (let index = 0; index < records.length; index++) {
@@ -176,11 +175,10 @@ export class PoEntity {
         const updatedRecord = await this.selectSaveType(record, sendToEventSourcing);
 
         if (isNonLocalRecordChanged) {
-          const customRequestId = (customRequestIds instanceof Array) ? customRequestIds[index] : customRequestIds;
+          const customRequestId = customRequestIds instanceof Array ? customRequestIds[index] : customRequestIds;
           const eventOperation = this.createEventOperation(record, updatedRecord, customRequestId);
           batchEvents.push(eventOperation);
         }
-
       }
 
       await this.eventSourcing.createBatchEvents(this.schema.name, batchEvents);
@@ -214,10 +212,11 @@ export class PoEntity {
   private createEventOperation(
     record: object,
     updatedRecord: object,
-    customRequestId?: string): PoEventSourcingSummaryItem {
-
-    const operation = PoSchemaUtil.getRecordId(record, this.schema) ?
-      PoEventSourcingOperation.Update : PoEventSourcingOperation.Insert;
+    customRequestId?: string
+  ): PoEventSourcingSummaryItem {
+    const operation = PoSchemaUtil.getRecordId(record, this.schema)
+      ? PoEventSourcingOperation.Update
+      : PoEventSourcingOperation.Insert;
 
     const serverRecord = PoSchemaUtil.separateSchemaFields(this.schema, updatedRecord)['serverRecord'];
 
@@ -235,11 +234,16 @@ export class PoEntity {
     return !PoSchemaUtil.isModelsEqual(nonLocalFieldNames, record, updatedRecord);
   }
 
-  private async selectSaveType(record: object, sendToEventSourcing: boolean, customRequestId?: string): Promise<object> {
+  private async selectSaveType(
+    record: object,
+    sendToEventSourcing: boolean,
+    customRequestId?: string
+  ): Promise<object> {
     const hasId = PoSchemaUtil.getRecordId(record, this.schema);
 
-    return hasId ? await this.update(record, sendToEventSourcing, customRequestId) :
-      await this.create(record, sendToEventSourcing, customRequestId);
+    return hasId
+      ? await this.update(record, sendToEventSourcing, customRequestId)
+      : await this.create(record, sendToEventSourcing, customRequestId);
   }
 
   private async update(updatedRecord: any, sendToEventSourcing: boolean, customRequestId?: string): Promise<object> {
@@ -256,5 +260,4 @@ export class PoEntity {
 
     return recordedData;
   }
-
 }

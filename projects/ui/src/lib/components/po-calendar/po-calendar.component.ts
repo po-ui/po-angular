@@ -35,21 +35,21 @@ import { PoDateService } from '../../services/po-date/po-date.service';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoCalendarComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoCalendarComponent),
-      multi: true,
+      multi: true
     }
   ]
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit {
-
   constructor(
     private poCalendarService: PoCalendarService,
     poCalendarLangService: PoCalendarLangService,
-    poDate: PoDateService) {
+    poDate: PoDateService
+  ) {
     super(poDate, poCalendarLangService);
   }
 
@@ -58,7 +58,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   getBackgroundColor(displayValue: number, propertyValue: number) {
-    return (displayValue === propertyValue) ? 'po-calendar-box-background-selected' : 'po-calendar-box-background';
+    return displayValue === propertyValue ? 'po-calendar-box-background-selected' : 'po-calendar-box-background';
   }
 
   getDayBackgroundColor(date: Date) {
@@ -70,7 +70,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   getForegroundColor(displayValue: number, propertyValue: number) {
-    return (displayValue === propertyValue) ? 'po-calendar-box-foreground-selected' : 'po-calendar-box-foreground';
+    return displayValue === propertyValue ? 'po-calendar-box-foreground-selected' : 'po-calendar-box-foreground';
   }
 
   getMonthLabel() {
@@ -82,13 +82,15 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   onNextMonth() {
-    this.displayMonthNumber < 11 ? this.updateDisplay(this.displayYear, this.displayMonthNumber + 1) :
-      this.updateDisplay(this.displayYear + 1, 0);
+    this.displayMonthNumber < 11
+      ? this.updateDisplay(this.displayYear, this.displayMonthNumber + 1)
+      : this.updateDisplay(this.displayYear + 1, 0);
   }
 
   onPreviousMonth() {
-    this.displayMonthNumber > 0 ? this.updateDisplay(this.displayYear, this.displayMonthNumber - 1) :
-      this.updateDisplay(this.displayYear - 1, 11);
+    this.displayMonthNumber > 0
+      ? this.updateDisplay(this.displayYear, this.displayMonthNumber - 1)
+      : this.updateDisplay(this.displayYear - 1, 11);
   }
 
   // Ao selecionar uma data
@@ -158,7 +160,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     }
   }
 
-  validate(c: AbstractControl): { [key: string]: any; } {
+  validate(c: AbstractControl): { [key: string]: any } {
     return null;
   }
 
@@ -180,9 +182,11 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   private equalsDate(date1: Date, date2: Date): boolean {
     try {
-      return date1.getFullYear() === date2.getFullYear() &&
+      return (
+        date1.getFullYear() === date2.getFullYear() &&
         date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate();
+        date1.getDate() === date2.getDate()
+      );
     } catch (error) {
       return false;
     }
@@ -201,18 +205,21 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   private getColorForDate(date: Date, local: string) {
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate) ? `po-calendar-box-${local}-selected` :
-      `po-calendar-box-${local}-selected-disabled`;
+    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
+      ? `po-calendar-box-${local}-selected`
+      : `po-calendar-box-${local}-selected-disabled`;
   }
 
   private getColorForDateRange(date: Date, local: string) {
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate) ? `po-calendar-box-${local}` :
-      `po-calendar-box-${local}-disabled`;
+    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
+      ? `po-calendar-box-${local}`
+      : `po-calendar-box-${local}-disabled`;
   }
 
   private getColorForToday(date: Date, local: string) {
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate) ? `po-calendar-box-${local}-today` :
-      `po-calendar-box-${local}-today-disabled`;
+    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
+      ? `po-calendar-box-${local}-today`
+      : `po-calendar-box-${local}-today-disabled`;
   }
 
   private getDayColor(date: Date, local: string) {
@@ -226,8 +233,9 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   private init() {
-    this.date && this.poDate.isValidIso(this.poDate.convertDateToISO(this.date)) ?
-      this.updateDate(this.date) : this.updateDate(this.today);
+    this.date && this.poDate.isValidIso(this.poDate.convertDateToISO(this.date))
+      ? this.updateDate(this.date)
+      : this.updateDate(this.today);
     this.initializeLanguage();
     this.selectDay();
   }
@@ -274,7 +282,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   private writeDateIso(value: any) {
-    this.poDate.isValidIso(value) ? this.selectDateFromIso(value) : this.date = undefined;
+    this.poDate.isValidIso(value) ? this.selectDateFromIso(value) : (this.date = undefined);
   }
-
 }

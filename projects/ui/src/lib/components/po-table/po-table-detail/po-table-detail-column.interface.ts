@@ -6,7 +6,6 @@
  * Interface para configuração das colunas do `po-table-detail`.
  */
 export interface PoTableDetailColumn {
-
   /**
    * Formato de exibição do valor da coluna:
    * - Formato para moeda (currency). Exemplos: 'BRL', 'USD'.
@@ -62,5 +61,4 @@ export interface PoTableDetailColumn {
    * @default `string`
    */
   type?: string;
-
 }

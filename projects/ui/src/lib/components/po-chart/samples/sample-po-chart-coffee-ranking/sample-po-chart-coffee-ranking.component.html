@@ -5,14 +5,16 @@
       p-title="Brazilian Coffee production"
       [p-height]="300"
       [p-series]="brazilianCoffeeProduction"
-      [p-type]="brazilianCoffeeProductionChartType">
+      [p-type]="brazilianCoffeeProductionChartType"
+    >
     </po-chart>
 
     <po-chart
       class="po-lg-12 po-mt-2"
       p-title="Top 5 coffee producing countries (in tons)"
       [p-series]="coffeeProduction"
-      (p-series-click)="searchMore($event)">
+      (p-series-click)="searchMore($event)"
+    >
     </po-chart>
   </div>
 
@@ -24,7 +26,8 @@
         p-title="Top 5 Coffee Consuming Countries (in kg per capita)"
         [p-series]="coffeeConsumption"
         [p-type]="coffeConsumingChartType"
-        (p-series-click)="showMeTheDates($event)">
+        (p-series-click)="showMeTheDates($event)"
+      >
       </po-chart>
 
       <po-widget class="po-lg-6 po-mt-2" p-height="200">
@@ -44,9 +47,6 @@
   <po-container class="po-lg-12 po-mt-2">
     <div class="po-font-text-bold">Top 10 Largest Coffee Chains in the World</div>
 
-    <po-table
-      p-container="shadow"
-      [p-items]="items">
-    </po-table>
+    <po-table p-container="shadow" [p-items]="items"> </po-table>
   </po-container>
 </div>

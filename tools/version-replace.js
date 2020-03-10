@@ -19,18 +19,17 @@ function _replaceVersionPlaceholders(packageDir) {
 
   // Percorre todos os arquivos que contem placeholders de versão e substitui eles com a versão do package.json da pasta root.
   files.forEach(filePath => {
-    const fileContent = fs.readFileSync(filePath, 'utf-8')
-      .replace(versionPlaceholderRegex, buildVersion);
+    const fileContent = fs.readFileSync(filePath, 'utf-8').replace(versionPlaceholderRegex, buildVersion);
 
-      fs.writeFileSync(filePath, fileContent);
+    fs.writeFileSync(filePath, fileContent);
   });
 }
 
 /** Localiza todos os arquivos no diretório do pacote especificado. */
 function findFilesWithPlaceholders(packageDir) {
   const findCommand = buildPlaceholderFindCommand(packageDir);
-  return spawnSync(findCommand.binary, findCommand.args).stdout
-    .toString()
+  return spawnSync(findCommand.binary, findCommand.args)
+    .stdout.toString()
     .split(/[\n\r]/)
     .filter(String);
 }
