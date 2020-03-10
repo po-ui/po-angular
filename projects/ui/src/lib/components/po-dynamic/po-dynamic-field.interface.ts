@@ -1,7 +1,6 @@
 import { PoDynamicFieldType } from './po-dynamic-field-type.enum';
 
 export interface PoDynamicField {
-
   /** Identificador */
   key?: boolean;
 
@@ -99,5 +98,4 @@ export interface PoDynamicField {
    * @default `string`
    */
   type?: string | PoDynamicFieldType;
-
 }

@@ -38,7 +38,6 @@ import { PoDropdownAction } from './po-dropdown-action.interface';
 
 @Directive()
 export class PoDropdownBaseComponent {
-
   private _actions: Array<PoDropdownAction>;
   private _disabled: boolean = false;
 
@@ -73,5 +72,4 @@ export class PoDropdownBaseComponent {
 
   /** Adiciona um rótulo ao `dropdown`. */
   @Input('p-label') label: string;
-
 }

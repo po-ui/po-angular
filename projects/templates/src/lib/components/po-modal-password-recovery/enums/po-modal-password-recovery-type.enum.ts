@@ -14,5 +14,4 @@ export enum PoModalPasswordRecoveryType {
 
   /** Definição para recuperação apenas por SMS */
   SMS = 'sms'
-
 }

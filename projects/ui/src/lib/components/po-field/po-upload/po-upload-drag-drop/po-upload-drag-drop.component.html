@@ -1,9 +1,12 @@
-<po-upload-drag-drop-area-overlay #dragDropOverlay *ngIf="isDragOver"
+<po-upload-drag-drop-area-overlay
+  #dragDropOverlay
+  *ngIf="isDragOver"
   [p-directory-compatible]="directoryCompatible"
   [p-disabled]="disabled"
   [p-literals]="literals"
   [p-target]="dragDropAreaComponent.elementRef"
-  (p-area-element)="onAreaElement($event)">
+  (p-area-element)="onAreaElement($event)"
+>
 </po-upload-drag-drop-area-overlay>
 
 <po-upload-drag-drop-area
@@ -17,5 +20,6 @@
   (p-drag-leave)="onDragLeave()"
   (p-drag-over)="onDragOver()"
   (p-file-change)="onFileChange($event)"
-  (p-select-files)="selectFiles.emit()">
+  (p-select-files)="selectFiles.emit()"
+>
 </po-upload-drag-drop-area>

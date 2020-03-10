@@ -9,7 +9,6 @@ import { PoPageAction } from '@portinari/portinari-ui';
   templateUrl: './sample-po-textarea-email.component.html'
 })
 export class SamplePoTextareaEmailComponent {
-
   cc: string = '';
   emailText: string = '';
   from: string = '';
@@ -31,8 +30,8 @@ export class SamplePoTextareaEmailComponent {
   getPageAction() {
     const isDisabled = this.formEmail ? !this.formEmail['valid'] : true;
     return [
-      {label: 'Send', action: this.send, disabled: isDisabled},
-      {label: 'Clean', action: this.reset}
+      { label: 'Send', action: this.send, disabled: isDisabled },
+      { label: 'Clean', action: this.reset }
     ];
   }
 
@@ -43,5 +42,4 @@ export class SamplePoTextareaEmailComponent {
   send() {
     this.poModal.open();
   }
-
 }

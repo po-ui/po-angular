@@ -8,7 +8,6 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class PoPageDynamicService {
-
   private endpoint = '/';
   private metadata: string;
 
@@ -16,9 +15,9 @@ export class PoPageDynamicService {
     'X-PORTINARI-SCREEN-LOCK': 'true'
   });
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  configServiceApi(config: { endpoint?: string, metadata?: string } = {}) {
+  configServiceApi(config: { endpoint?: string; metadata?: string } = {}) {
     this.endpoint = config.endpoint;
     this.metadata = config.metadata || this.metadata;
   }
@@ -30,15 +29,17 @@ export class PoPageDynamicService {
 
     const url = `${metadataUrlBase}?type=${type}&version=${cache.version || ''}`;
 
-    return this.http.get<T>(url).pipe(map((response: any) => {
-      if (response.version === cache.version) {
-        return cache;
-      }
+    return this.http.get<T>(url).pipe(
+      map((response: any) => {
+        if (response.version === cache.version) {
+          return cache;
+        }
 
-      localStorage.setItem(key, JSON.stringify(response));
+        localStorage.setItem(key, JSON.stringify(response));
 
-      return  { ...cache, ...response };
-    }));
+        return { ...cache, ...response };
+      })
+    );
   }
 
   // Deleta um único recurso
@@ -48,7 +49,7 @@ export class PoPageDynamicService {
 
   // Deleta recursos em lote
   deleteResources(ids: Array<any>): Observable<any> {
-    return this.http.request('delete', `${this.endpoint}`, { headers: this.headers, body: ids } );
+    return this.http.request('delete', `${this.endpoint}`, { headers: this.headers, body: ids });
   }
 
   // Busca uma lista de recursos

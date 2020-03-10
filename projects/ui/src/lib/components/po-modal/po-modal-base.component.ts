@@ -20,7 +20,6 @@ import { PoModalAction } from './po-modal-action.interface';
  */
 @Directive()
 export class PoModalBaseComponent {
-
   private _hideClose?: boolean = false;
   private _size?: string = 'md';
 
@@ -67,7 +66,7 @@ export class PoModalBaseComponent {
    */
   clickOut?: boolean = false;
   @Input('p-click-out') set setClickOut(value: boolean | string) {
-    this.clickOut = (value === '') ? false : convertToBoolean(value);
+    this.clickOut = value === '' ? false : convertToBoolean(value);
   }
 
   /**
@@ -114,7 +113,7 @@ export class PoModalBaseComponent {
     if (!this.primaryAction) {
       this.primaryAction = {
         action: () => this.close(),
-        label: 'Ok',
+        label: 'Ok'
       };
     }
 
@@ -125,5 +124,4 @@ export class PoModalBaseComponent {
       this.primaryAction['label'] = 'Ok';
     }
   }
-
 }

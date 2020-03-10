@@ -6,7 +6,6 @@
  * Interface para definição das literais usadas no `po-table`.
  */
 export interface PoTableLiterals {
-
   /** Texto do **Gerenciador de colunas** localizado no canto superior direito da tabela. */
   columnsManager?: string;
 
@@ -30,5 +29,4 @@ export interface PoTableLiterals {
 
   /** Texto do botão **Ver legenda completa** que aparece quando o rodapé de legendas é maior que a tabela. */
   seeCompleteSubtitle?: string;
-
 }

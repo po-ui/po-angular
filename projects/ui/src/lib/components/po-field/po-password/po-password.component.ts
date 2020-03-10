@@ -31,19 +31,19 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   selector: 'po-password',
   templateUrl: './po-password.component.html',
   providers: [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoPasswordComponent),
-    multi: true,
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoPasswordComponent),
-    multi: true,
-  }]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoPasswordComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoPasswordComponent),
+      multi: true
+    }
+  ]
 })
 export class PoPasswordComponent extends PoInputGeneric {
-
   private _hidePasswordPeek?: boolean = false;
 
   type = 'password';
@@ -74,7 +74,7 @@ export class PoPasswordComponent extends PoInputGeneric {
     super(el);
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any; } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
 
@@ -82,5 +82,4 @@ export class PoPasswordComponent extends PoInputGeneric {
     this.visiblePassword = !this.visiblePassword;
     this.type = this.type === 'password' ? 'text' : 'password';
   }
-
 }

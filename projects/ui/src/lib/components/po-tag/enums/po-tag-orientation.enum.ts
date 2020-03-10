@@ -6,7 +6,6 @@
  * Define os tipos de orientações disponíveis para o `po-tag`.
  */
 export enum PoTagOrientation {
-
   /** A tag será exibida na horizontal, ao lado direito em relação ao label. */
   Horizontal = 'horizontal',
 

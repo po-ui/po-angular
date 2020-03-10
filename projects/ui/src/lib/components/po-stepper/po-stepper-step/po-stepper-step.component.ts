@@ -25,7 +25,6 @@ const poStepLiteralsDefault = {
   templateUrl: 'po-stepper-step.component.html'
 })
 export class PoStepperStepComponent {
-
   private _label: string;
   private _status: PoStepperStatus;
   private _stepIcons?: boolean = false;
@@ -75,7 +74,8 @@ export class PoStepperStepComponent {
   // Tamanho do `step` em *pixels*, possibilitando um maior destaque.
   // O valor informado deve ser entre `24` e `64`.
   @Input('p-step-size') set stepSize(value: number) {
-    this._stepSize = (value >= poStepperStepSizeDefault && value <= poStepperStepSizeMax) ? value : poStepperStepSizeDefault;
+    this._stepSize =
+      value >= poStepperStepSizeDefault && value <= poStepperStepSizeMax ? value : poStepperStepSizeDefault;
   }
 
   get stepSize(): number {
@@ -129,5 +129,4 @@ export class PoStepperStepComponent {
       this.enter.emit();
     }
   }
-
 }

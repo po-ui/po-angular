@@ -42,23 +42,16 @@ import { PoSlideItemComponent } from './po-slide-item/po-slide-item.component';
  * ```
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    PoContainerModule
-  ],
+  imports: [CommonModule, RouterModule, PoContainerModule],
   declarations: [
     PoSlideCirclesComponent,
     PoSlideComponent,
     PoSlideControlComponent,
     PoSlideContentTemplateDirective,
-    PoSlideItemComponent,
+    PoSlideItemComponent
   ],
-  exports: [
-    PoSlideComponent,
-    PoSlideContentTemplateDirective
-  ],
+  exports: [PoSlideComponent, PoSlideContentTemplateDirective],
   providers: [],
   schemas: []
 })
-export class PoSlideModule { }
+export class PoSlideModule {}

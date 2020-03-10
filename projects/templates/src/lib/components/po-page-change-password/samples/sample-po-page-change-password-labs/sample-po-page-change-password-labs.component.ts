@@ -1,14 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { PoDialogService } from '@portinari/portinari-ui';
-import { PoPageChangePassword, PoPageChangePasswordComponent, PoPageChangePasswordRequirement } from '@portinari/portinari-templates';
+import {
+  PoPageChangePassword,
+  PoPageChangePasswordComponent,
+  PoPageChangePasswordRequirement
+} from '@portinari/portinari-templates';
 
 @Component({
   selector: 'sample-po-page-change-password-labs',
-  templateUrl: './sample-po-page-change-password-labs.component.html',
+  templateUrl: './sample-po-page-change-password-labs.component.html'
 })
 export class SamplePoPageChangePasswordLabsComponent implements OnInit {
-
   @ViewChild(PoPageChangePasswordComponent, { static: true }) changePassword: PoPageChangePasswordComponent;
 
   hideCurrentPassword: boolean;
@@ -20,7 +23,7 @@ export class SamplePoPageChangePasswordLabsComponent implements OnInit {
   urlBack: string;
   urlHome: string;
 
-  constructor(private poDialog: PoDialogService) { }
+  constructor(private poDialog: PoDialogService) {}
 
   ngOnInit() {
     this.restore();
@@ -49,5 +52,4 @@ export class SamplePoPageChangePasswordLabsComponent implements OnInit {
       ok: () => this.changePassword.openConfirmation()
     });
   }
-
 }

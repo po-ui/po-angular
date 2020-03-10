@@ -74,6 +74,5 @@ describe('PoMenuService:', () => {
         .expectOne((req: HttpRequest<any>) => req.url === mockURL && req.method === 'GET')
         .flush(expectedResponse);
     });
-
   });
 });

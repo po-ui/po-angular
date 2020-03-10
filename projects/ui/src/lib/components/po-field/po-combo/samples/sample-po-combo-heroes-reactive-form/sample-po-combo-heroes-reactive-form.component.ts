@@ -9,11 +9,10 @@ import { Observable } from 'rxjs';
   templateUrl: './sample-po-combo-heroes-reactive-form.component.html'
 })
 export class SamplePoComboHeroesReactiveFormComponent implements OnInit {
-
   form: FormGroup;
   hero$: Observable<any>;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder) { }
+  constructor(private http: HttpClient, private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -38,5 +37,4 @@ export class SamplePoComboHeroesReactiveFormComponent implements OnInit {
   private getHero(heroName: string) {
     return this.http.get(`https://thf.totvs.com.br/sample/api/new/heroes/${heroName}`);
   }
-
 }

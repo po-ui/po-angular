@@ -5,7 +5,6 @@ import { TestBed } from '@angular/core/testing';
 import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
 
 describe('PoBreadcrumbFavoriteService:', () => {
-
   let breadcrumbFavoriteService: PoBreadcrumbFavoriteService;
   let httpMock: HttpTestingController;
 
@@ -76,5 +75,4 @@ describe('PoBreadcrumbFavoriteService:', () => {
       .expectOne((req: HttpRequest<any>) => req.body.params === params && req.url === mockURL && req.method === 'POST')
       .flush(statusBreadcrumbItem);
   });
-
 });

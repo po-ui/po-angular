@@ -1,7 +1,6 @@
 import { browser, by, element } from 'protractor';
 
 export class PoTableLabsPage {
-
   private sampleTable = 'sample-po-table-labs';
 
   private checkLabel = '.po-checkbox-group-label';
@@ -10,11 +9,16 @@ export class PoTableLabsPage {
 
   private getPoCheckbox(checkGroup: string, checkValue: string) {
     return element(
-      by.css(`${this.sampleTable} po-checkbox-group[name="${checkGroup}"] ${this.checkInput}[value="${checkValue}"]+${this.checkLabel}`));
+      by.css(
+        `${this.sampleTable} po-checkbox-group[name="${checkGroup}"] ${this.checkInput}[value="${checkValue}"]+${this.checkLabel}`
+      )
+    );
   }
 
   private getPoTableColumn(columnName: string) {
-    return  element.all(by.cssContainingText(`${this.sampleTable} po-table .po-table-header-ellipsis span`, `${columnName}`));
+    return element.all(
+      by.cssContainingText(`${this.sampleTable} po-table .po-table-header-ellipsis span`, `${columnName}`)
+    );
   }
 
   navigateTo() {
@@ -88,5 +92,4 @@ export class PoTableLabsPage {
   get poTableActions() {
     return element.all(by.css(`${this.sampleTable} po-table .po-icon.po-icon-more.po-clickable`));
   }
-
 }

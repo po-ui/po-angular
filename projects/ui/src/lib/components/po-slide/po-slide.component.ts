@@ -1,4 +1,13 @@
-import { Component, ContentChild, DoCheck , ElementRef, HostListener, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  DoCheck,
+  ElementRef,
+  HostListener,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
 
@@ -38,10 +47,9 @@ const poSlideTiming = '250ms ease';
  */
 @Component({
   selector: 'po-slide',
-  templateUrl: './po-slide.component.html',
+  templateUrl: './po-slide.component.html'
 })
 export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
-
   private isLoaded: boolean = false;
   private player: AnimationPlayer;
   private setInterval: any;
@@ -67,7 +75,8 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
   slideItems: Array<PoSlideItem | any> = [];
   slideItemWidth: number;
 
-  @ContentChild(PoSlideContentTemplateDirective, { static: true }) slideContentTemplate: PoSlideContentTemplateDirective;
+  @ContentChild(PoSlideContentTemplateDirective, { static: true })
+  slideContentTemplate: PoSlideContentTemplateDirective;
 
   @ViewChild('slide', { static: true }) private slide: ElementRef;
 
@@ -85,9 +94,7 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
   }
 
   ngDoCheck() {
-
     if (!this.isLoaded && this.hasElements) {
-
       this.setSlideItemWidth();
       this.isLoaded = true;
 
@@ -98,7 +105,6 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
   }
 
   goToItem(index: number) {
-
     if (this.interval > poSlideIntervalMin) {
       this.startInterval();
     }
@@ -108,7 +114,6 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
   }
 
   nextControl() {
-
     if (this.interval > poSlideIntervalMin) {
       this.startInterval();
     }
@@ -132,12 +137,11 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
       this.animate(this.offset);
       return;
     }
-    this.currentSlideIndex = ((this.currentSlideIndex - 1) + this.slideItems.length) % this.slideItems.length;
+    this.currentSlideIndex = (this.currentSlideIndex - 1 + this.slideItems.length) % this.slideItems.length;
     this.animate(this.offset);
   }
 
   previousControl() {
-
     if (this.interval > poSlideIntervalMin) {
       this.startInterval();
     }
@@ -159,12 +163,7 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
   }
 
   private buildTransitionAnimation(offset: number) {
-    return this.builder.build([
-      animate(
-        poSlideTiming,
-        keyframes([style({ transform: `translateX(-${offset}px)` })])
-      )
-    ]);
+    return this.builder.build([animate(poSlideTiming, keyframes([style({ transform: `translateX(-${offset}px)` })]))]);
   }
 
   private createArrayForTemplate(slides: Array<any>) {
@@ -177,12 +176,12 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
     if (isStringArray) {
       slides.forEach(element => this.slideItems.push({ image: `${element}` }));
     } else {
-      this.slideItems = [...<Array<PoSlideItem>>slides];
+      this.slideItems = [...(<Array<PoSlideItem>>slides)];
     }
   }
 
   private setDefaultHeight(height: number) {
-    if (height && height <= poSlideMinHeight || !height && this.isImageSlide) {
+    if ((height && height <= poSlideMinHeight) || (!height && this.isImageSlide)) {
       this.slide.nativeElement.style.height = `${poSlideDefaultHeight}px`;
       this.imageHeight = poSlideDefaultHeight;
     } else {
@@ -210,7 +209,6 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
   }
 
   protected setSlideItems(slides: Array<PoSlideItem | string | any>) {
-
     if (this.hasSlides) {
       this.slideContentTemplate ? this.createArrayForTemplate(slides) : this.createArrayFromSlides(slides);
     } else {
@@ -220,7 +218,6 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
   }
 
   protected startSlide() {
-
     this.setSlideHeight(this.height);
 
     if (this.interval > poSlideIntervalMin) {
@@ -231,12 +228,15 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
   }
 
   protected startInterval() {
-
     if (this.setInterval) {
       this.cancelInterval();
     }
 
-    this.setInterval = this.hasSlides && this.hasElements ? setInterval(() => { this.next(); }, this.interval) : undefined;
+    this.setInterval =
+      this.hasSlides && this.hasElements
+        ? setInterval(() => {
+            this.next();
+          }, this.interval)
+        : undefined;
   }
-
 }

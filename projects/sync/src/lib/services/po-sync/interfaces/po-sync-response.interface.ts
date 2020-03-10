@@ -11,7 +11,6 @@ import { PoHttpRequestData } from '../../po-http-client/interfaces/po-http-reque
  * Define a resposta dos eventos enviados ao servidor.
  */
 export interface PoSyncResponse {
-
   /** Identificador do evento na fila. */
   id: number;
 
@@ -23,5 +22,4 @@ export interface PoSyncResponse {
 
   /** Resposta retornada após a tentativa de envio para o servidor. */
   response: HttpResponse<Object> | HttpErrorResponse | PoEventSourcingErrorResponse;
-
 }

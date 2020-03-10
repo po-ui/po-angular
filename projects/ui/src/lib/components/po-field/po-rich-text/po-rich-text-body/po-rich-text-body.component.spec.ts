@@ -12,9 +12,7 @@ describe('PoRichTextBodyComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoRichTextBodyComponent
-      ]
+      declarations: [PoRichTextBodyComponent]
     });
   });
 
@@ -30,7 +28,6 @@ describe('PoRichTextBodyComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('onInit: should update `bodyElement`', () => {
       const expectedValue = 'on';
       component.ngOnInit();
@@ -48,7 +45,6 @@ describe('PoRichTextBodyComponent:', () => {
     }));
 
     describe('executeCommand:', () => {
-
       it('should call `focus`', () => {
         const spyFocus = spyOn(component.bodyElement.nativeElement, <any>'focus');
         const fakeValue = 'p';
@@ -113,7 +109,6 @@ describe('PoRichTextBodyComponent:', () => {
 
         expect(component.value.emit).toHaveBeenCalledWith(component.modelValue);
       });
-
     });
 
     it('linkEditing: should set value to `isLinkEditing`', () => {
@@ -165,7 +160,6 @@ describe('PoRichTextBodyComponent:', () => {
     }));
 
     it('focus: should call `focus` of rich-text', () => {
-
       spyOn(component.bodyElement.nativeElement, 'focus');
 
       component.focus();
@@ -192,7 +186,7 @@ describe('PoRichTextBodyComponent:', () => {
       const fakeEvent = {
         keyCode: 75,
         ctrlKey: true,
-        preventDefault: () => {},
+        preventDefault: () => {}
       };
 
       spyOn(component.shortcutCommand, 'emit');
@@ -221,7 +215,7 @@ describe('PoRichTextBodyComponent:', () => {
       const fakeEvent = {
         keyCode: 75,
         metaKey: true,
-        preventDefault: () => {},
+        preventDefault: () => {}
       };
 
       spyOn(component.shortcutCommand, 'emit');
@@ -238,7 +232,7 @@ describe('PoRichTextBodyComponent:', () => {
       const fakeEvent = {
         keyCode: 18,
         cmdKey: true,
-        preventDefault: () => {},
+        preventDefault: () => {}
       };
 
       spyOn(component.shortcutCommand, 'emit');
@@ -255,7 +249,7 @@ describe('PoRichTextBodyComponent:', () => {
       const fakeEvent = {
         keyCode: 76,
         ctrlKey: false,
-        preventDefault: () => {},
+        preventDefault: () => {}
       };
 
       spyOn(component.shortcutCommand, 'emit');
@@ -330,13 +324,12 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`addClickListenerOnAnchorElements: should call 'addEventListener' with 'click' and 'onAnchorClick'
       based on the amount of anchor elements`, () => {
-
       const spyListener = jasmine.createSpy('addEventListener');
 
       const anchors = [
         { parentNode: `<a>link1</a>`, addEventListener: spyListener },
         { parentNode: `<a>link2</a>`, addEventListener: spyListener },
-        { parentNode: `<a>link3</a>`, addEventListener: spyListener },
+        { parentNode: `<a>link3</a>`, addEventListener: spyListener }
       ];
 
       spyOn(component.bodyElement.nativeElement, 'querySelectorAll').and.returnValue(<any>anchors);
@@ -356,7 +349,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('emitSelectionCommands: should call `isCursorPositionedInALink`', () => {
-      spyOn(component, <any> 'isCursorPositionedInALink');
+      spyOn(component, <any>'isCursorPositionedInALink');
 
       component['emitSelectionCommands']();
 
@@ -373,7 +366,6 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`emitSelectionCommands: the object property 'commands'
     should contain 'Createlink' if 'isCursorPositionedInALink' returns 'true'`, () => {
-
       spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
       spyOn(document, 'queryCommandState').and.returnValue(false);
       spyOn(document, 'queryCommandValue').and.returnValue('rgb');
@@ -382,12 +374,11 @@ describe('PoRichTextBodyComponent:', () => {
 
       component['emitSelectionCommands']();
 
-      expect(component.commands.emit).toHaveBeenCalledWith({commands: ['Createlink'], hexColor: 'hex'});
+      expect(component.commands.emit).toHaveBeenCalledWith({ commands: ['Createlink'], hexColor: 'hex' });
     });
 
     it(`emitSelectionCommands: the object property 'commands'
     should contain 'Createlink' if 'isCursorPositionedInALink' returns 'true'`, () => {
-
       spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
       spyOn(document, 'queryCommandState').and.returnValue(false);
       spyOn(document, 'queryCommandValue').and.returnValue('rgb');
@@ -397,11 +388,10 @@ describe('PoRichTextBodyComponent:', () => {
 
       component['emitSelectionCommands']();
 
-      expect(component.commands.emit).toHaveBeenCalledWith({commands: ['Createlink'], hexColor: 'hex'});
+      expect(component.commands.emit).toHaveBeenCalledWith({ commands: ['Createlink'], hexColor: 'hex' });
     });
 
     it(`emitSelectionCommands: should call 'commands.emit' with 'hexColor' undefined if browser is IE`, () => {
-
       spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
       spyOn(document, 'queryCommandState').and.returnValue(false);
       spyOn(document, 'queryCommandValue').and.returnValue('rgb');
@@ -410,12 +400,11 @@ describe('PoRichTextBodyComponent:', () => {
 
       component['emitSelectionCommands']();
 
-      expect(component.commands.emit).toHaveBeenCalledWith({commands: ['Createlink'], hexColor: undefined });
+      expect(component.commands.emit).toHaveBeenCalledWith({ commands: ['Createlink'], hexColor: undefined });
     });
 
     it(`emitSelectionCommands: the object property 'commands'
     shouldn't contain 'Createlink' if 'isCursorPositionedInALink' returns 'false'`, () => {
-
       spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(false);
       spyOn(document, 'queryCommandState').and.returnValue(false);
       spyOn(document, 'queryCommandValue').and.returnValue('rgb');
@@ -424,7 +413,7 @@ describe('PoRichTextBodyComponent:', () => {
 
       component['emitSelectionCommands']();
 
-      expect(component.commands.emit).toHaveBeenCalledWith({commands: [], hexColor: 'hex'});
+      expect(component.commands.emit).toHaveBeenCalledWith({ commands: [], hexColor: 'hex' });
     });
 
     it('handleCommandLink: should call `insertHtmlLinkElement` if isIE returns `true`', () => {
@@ -538,7 +527,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('getTextSelection: should call `document.getSelection`', () => {
-      spyOn(document, <any> 'getSelection');
+      spyOn(document, <any>'getSelection');
 
       component['getTextSelection']();
 
@@ -547,9 +536,9 @@ describe('PoRichTextBodyComponent:', () => {
 
     it('getTextSelection: should return `node` and `tagName`', () => {
       const fakeSelection = { anchorNode: { parentNode: { nodeName: 'A' } } };
-      const expectedReturn = { node: { nodeName: 'A' }, tagName: 'A'};
+      const expectedReturn = { node: { nodeName: 'A' }, tagName: 'A' };
 
-      spyOn(document, <any> 'getSelection').and.returnValue(<any>fakeSelection);
+      spyOn(document, <any>'getSelection').and.returnValue(<any>fakeSelection);
 
       const expectedValue = component['getTextSelection']();
 
@@ -560,7 +549,7 @@ describe('PoRichTextBodyComponent:', () => {
       const fakeSelection = {};
       const expectedReturn = undefined;
 
-      spyOn(document, <any> 'getSelection').and.returnValue(<any>fakeSelection);
+      spyOn(document, <any>'getSelection').and.returnValue(<any>fakeSelection);
 
       const expectedValue = component['getTextSelection']();
 
@@ -568,9 +557,9 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('isCursorPositionedInALink: should return true if `focusNode.parentElement` is a link', () => {
-      const fakeSelection = { node: { nodeName: 'A' }, tagName: 'A'};
+      const fakeSelection = { node: { nodeName: 'A' }, tagName: 'A' };
 
-      spyOn(component, <any> 'getTextSelection').and.returnValue(<any>fakeSelection);
+      spyOn(component, <any>'getTextSelection').and.returnValue(<any>fakeSelection);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -639,7 +628,6 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`isCursorPositionedInALink: should return false if browser is firefox and 'verifyCursorPositionInFirefoxIEEdge'
       return false`, () => {
-
       const fakeSelection = { focusNode: { parentElement: { tagName: 'B' } } };
 
       spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
@@ -653,7 +641,6 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`isCursorPositionedInALink: should return false if browser is IE and 'verifyCursorPositionInFirefoxIEEdge'
       return false`, () => {
-
       const fakeSelection = { focusNode: { parentElement: { tagName: 'B' } } };
 
       spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
@@ -666,9 +653,9 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('isParentNodeAnchor: should return true if focusNode.parentElement if anchor element', () => {
-      const textSelection = { node: { nodeName: 'A' }, tagName: 'A'};
+      const textSelection = { node: { nodeName: 'A' }, tagName: 'A' };
 
-      const isParentNodeAnchor = component['isParentNodeAnchor'](<any> textSelection);
+      const isParentNodeAnchor = component['isParentNodeAnchor'](<any>textSelection);
 
       expect(isParentNodeAnchor).toBe(true);
       expect(component['linkElement']).toEqual(textSelection.node);
@@ -676,21 +663,21 @@ describe('PoRichTextBodyComponent:', () => {
 
     it('isParentNodeAnchor: should return true if parentElement of focusNode.parentElement if anchor element', () => {
       const parentElement = {
-        tagName : 'A'
+        tagName: 'A'
       };
 
-      const textSelection = { node: { parentElement: { nodeName: 'DIV', parentElement} }, tagName: 'DIV'};
+      const textSelection = { node: { parentElement: { nodeName: 'DIV', parentElement } }, tagName: 'DIV' };
 
-      const isParentNodeAnchor = component['isParentNodeAnchor'](<any> textSelection);
+      const isParentNodeAnchor = component['isParentNodeAnchor'](<any>textSelection);
 
       expect(isParentNodeAnchor).toBe(true);
       expect(component['linkElement']).toEqual(textSelection.node.parentElement.parentElement);
     });
 
     it('isParentNodeAnchor: should return false and set linkElement with undefined', () => {
-      const textSelection = { node: { parentElement: { nodeName: '' } }, tagName: 'DIV'};
+      const textSelection = { node: { parentElement: { nodeName: '' } }, tagName: 'DIV' };
 
-      const isParentNodeAnchor = component['isParentNodeAnchor'](<any> textSelection);
+      const isParentNodeAnchor = component['isParentNodeAnchor'](<any>textSelection);
 
       expect(isParentNodeAnchor).toBe(false);
       expect(component['linkElement']).toBeUndefined();
@@ -714,7 +701,7 @@ describe('PoRichTextBodyComponent:', () => {
         tagName: 'DIV'
       };
 
-      const isParentNodeAnchor = component['isParentNodeAnchor'](<any> textSelection);
+      const isParentNodeAnchor = component['isParentNodeAnchor'](<any>textSelection);
 
       expect(isParentNodeAnchor).toBe(false);
       expect(component['linkElement']).toBeUndefined();
@@ -798,12 +785,7 @@ describe('PoRichTextBodyComponent:', () => {
 
       const event = {
         ctrlKey: 'true',
-        path: [
-          { nodeName: 'A',
-            href: espectedValue,
-            classList: { remove: () => {} }
-          },
-          { nodeName: 'DIV' }],
+        path: [{ nodeName: 'A', href: espectedValue, classList: { remove: () => {} } }, { nodeName: 'DIV' }],
         target: {
           attributes: { href: { value: url } },
           classList: { remove: () => {} }
@@ -857,7 +839,7 @@ describe('PoRichTextBodyComponent:', () => {
 
       const removeSpy = jasmine.createSpy('remove');
 
-      spyOn(document , 'getSelection').and.returnValue(<any>{
+      spyOn(document, 'getSelection').and.returnValue(<any>{
         focusNode: undefined
       });
 
@@ -872,7 +854,7 @@ describe('PoRichTextBodyComponent:', () => {
       const removeSpy = jasmine.createSpy('remove');
       const containsSpy = jasmine.createSpy('contains').and.returnValue(true);
 
-      spyOn(document , 'getSelection').and.returnValue(<any>{
+      spyOn(document, 'getSelection').and.returnValue(<any>{
         focusNode: {
           parentNode: {
             nodeName: 'A',
@@ -893,10 +875,10 @@ describe('PoRichTextBodyComponent:', () => {
       const event = { key: 'Control' };
 
       const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any> 'isCursorPositionedInALink').and.returnValue(true);
+      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
 
-      spyOn(document , 'getSelection').and.returnValue(<any>{
-        focusNode : {
+      spyOn(document, 'getSelection').and.returnValue(<any>{
+        focusNode: {
           parentNode: {
             nodeName: 'A',
             classList: {
@@ -916,10 +898,10 @@ describe('PoRichTextBodyComponent:', () => {
       const event = { key: 'Meta' };
 
       const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any> 'isCursorPositionedInALink').and.returnValue(true);
+      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
 
-      spyOn(document , 'getSelection').and.returnValue(<any>{
-        focusNode : {
+      spyOn(document, 'getSelection').and.returnValue(<any>{
+        focusNode: {
           parentNode: {
             nodeName: 'A',
             classList: {
@@ -939,10 +921,10 @@ describe('PoRichTextBodyComponent:', () => {
       const event = { key: 'Control' };
 
       const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any> 'isCursorPositionedInALink').and.returnValue(true);
+      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
 
-      spyOn(document , 'getSelection').and.returnValue(<any>{
-        focusNode : {
+      spyOn(document, 'getSelection').and.returnValue(<any>{
+        focusNode: {
           parentNode: {
             nodeName: 'A',
             classList: {
@@ -962,12 +944,12 @@ describe('PoRichTextBodyComponent:', () => {
       const event = { key: 'Control' };
 
       const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any> 'isCursorPositionedInALink').and.returnValue(false);
+      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(false);
       const removeSpy = jasmine.createSpy('remove');
       const containsSpy = jasmine.createSpy('contains').and.returnValue(true);
 
-      spyOn(document , 'getSelection').and.returnValue(<any>{
-        focusNode : {
+      spyOn(document, 'getSelection').and.returnValue(<any>{
+        focusNode: {
           parentNode: {
             nodeName: 'DIV',
             classList: {
@@ -990,12 +972,12 @@ describe('PoRichTextBodyComponent:', () => {
       const event = { key: 'Control' };
 
       const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any> 'isCursorPositionedInALink').and.returnValue(false);
+      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(false);
       const removeSpy = jasmine.createSpy('remove');
       const containsSpy = jasmine.createSpy('contains').and.returnValue(false);
 
-      spyOn(document , 'getSelection').and.returnValue(<any>{
-        focusNode : {
+      spyOn(document, 'getSelection').and.returnValue(<any>{
+        focusNode: {
           parentNode: {
             nodeName: 'DIV',
             classList: {
@@ -1036,7 +1018,10 @@ describe('PoRichTextBodyComponent:', () => {
       spyOn(component.bodyElement.nativeElement, 'insertAdjacentHTML');
       component['updateValueWithModelValue']();
 
-      expect(component.bodyElement.nativeElement.insertAdjacentHTML).toHaveBeenCalledWith('afterbegin', component.modelValue);
+      expect(component.bodyElement.nativeElement.insertAdjacentHTML).toHaveBeenCalledWith(
+        'afterbegin',
+        component.modelValue
+      );
     });
 
     it('verifyCursorPositionInFirefoxIEEdge: should return true if nodeName is an A tag', () => {
@@ -1057,9 +1042,7 @@ describe('PoRichTextBodyComponent:', () => {
         getRangeAt: () => {
           return {
             cloneContents: () => {
-              return { childNodes:
-                [{ element: 'test', nodeName: 'A' }]
-              };
+              return { childNodes: [{ element: 'test', nodeName: 'A' }] };
             }
           };
         }
@@ -1094,7 +1077,6 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`verifyCursorPositionInFirefoxIEEdge: should return false if focusNode and firstElementChild of fragmentDocument
       are not an A tag and childNodes is undefined `, () => {
-
       const textSelection = {
         getRangeAt: () => {
           return {
@@ -1116,7 +1098,6 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`verifyCursorPositionInFirefoxIEEdge: should return false if focusNode and childNodes of fragmentDocument
       are not an A tag and firstElementChild is undefined`, () => {
-
       const textSelection = {
         getRangeAt: () => {
           return {
@@ -1135,16 +1116,11 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component['verifyCursorPositionInFirefoxIEEdge']()).toBe(false);
       expect(component['linkElement']).toBe(undefined);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain `po-rich-text-body`', () => {
-
       expect(nativeElement.querySelector('.po-rich-text-body')).toBeTruthy();
     });
-
   });
-
 });

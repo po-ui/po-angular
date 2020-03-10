@@ -1,9 +1,5 @@
-<po-page-default
-  p-title="Credit Card Cancelation"
-  [p-actions]="action">
-
+<po-page-default p-title="Credit Card Cancelation" [p-actions]="action">
   <form #form="ngForm">
-
     <div class="po-row">
       <po-radio-group
         class="po-md-8"
@@ -11,7 +7,8 @@
         [(ngModel)]="cardType"
         p-label="Card type"
         p-required
-        [p-options]="cardTypeOptions">
+        [p-options]="cardTypeOptions"
+      >
       </po-radio-group>
     </div>
 
@@ -24,7 +21,8 @@
         p-mask="9999 9999 9999 9999"
         p-mask-format-model
         p-minlength="19"
-        p-required>
+        p-required
+      >
       </po-input>
 
       <po-input
@@ -34,47 +32,24 @@
         p-label="Security code"
         p-mask="999"
         p-minlength="3"
-        p-required>
+        p-required
+      >
       </po-input>
     </div>
 
     <div class="po-row">
-      <po-input
-        class="po-md-12"
-        name="name"
-        [(ngModel)]="name"
-        p-label="Name"
-        p-required>
-      </po-input>
+      <po-input class="po-md-12" name="name" [(ngModel)]="name" p-label="Name" p-required> </po-input>
     </div>
 
     <div class="po-row">
-      <po-input
-        class="po-md-6 po-lg-3"
-        name="address"
-        [(ngModel)]="address"
-        p-label="Address">
+      <po-input class="po-md-6 po-lg-3" name="address" [(ngModel)]="address" p-label="Address"> </po-input>
+
+      <po-input class="po-md-6 po-lg-3" name="city" [(ngModel)]="city" p-label="City"> </po-input>
+
+      <po-input class="po-md-6 po-lg-3" name="stateProvince" [(ngModel)]="stateProvince" p-label="State/Province">
       </po-input>
 
-      <po-input
-        class="po-md-6 po-lg-3"
-        name="city"
-        [(ngModel)]="city"
-        p-label="City">
-      </po-input>
-
-      <po-input
-        class="po-md-6 po-lg-3"
-        name="stateProvince"
-        [(ngModel)]="stateProvince"
-        p-label="State/Province">
-      </po-input>
-
-      <po-input
-        class="po-md-6 po-lg-3"
-        name="zipPostalCode"
-        [(ngModel)]="zipPostalCode"
-        p-label="Zip/PostalCode">
+      <po-input class="po-md-6 po-lg-3" name="zipPostalCode" [(ngModel)]="zipPostalCode" p-label="Zip/PostalCode">
       </po-input>
     </div>
 
@@ -85,17 +60,11 @@
         [(ngModel)]="phoneNumber"
         p-label="Phone number"
         p-mask="(99) 9?9999-9999"
-        p-mask-format-model>
+        p-mask-format-model
+      >
       </po-input>
 
-      <po-input
-        class="po-md-6"
-        name="country"
-        [(ngModel)]="country"
-        p-label="Country">
-      </po-input>
+      <po-input class="po-md-6" name="country" [(ngModel)]="country" p-label="Country"> </po-input>
     </div>
-
   </form>
-
 </po-page-default>

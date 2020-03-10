@@ -1,14 +1,11 @@
-<po-field-container
-  [p-label]="label"
-  [p-help]="help"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
   <div class="po-field-container-content">
     <div *ngIf="icon" class="po-field-icon-container-left">
-      <span class="po-icon po-field-icon {{icon}}" [class.po-field-icon-disabled]="disabled"></span>
+      <span class="po-icon po-field-icon {{ icon }}" [class.po-field-icon-disabled]="disabled"></span>
     </div>
 
-    <input #inputElement
+    <input
+      #inputElement
       class="po-input po-combo-input"
       [class.po-input-icon-left]="icon"
       autocomplete="off"
@@ -20,27 +17,26 @@
       (click)="toggleComboVisibility()"
       (keyup)="onKeyUp($event)"
       (keyup.enter)="searchOnEnter($event.target.value)"
-      (keydown)="onKeyDown($event)">
+      (keydown)="onKeyDown($event)"
+    />
 
     <div class="po-field-icon-container-right">
-      <span #iconArrow
+      <span
+        #iconArrow
         class="po-icon po-field-icon {{ comboIcon }}"
         [class.po-field-icon-disabled]="disabled"
         [class.po-field-icon]="!disabled"
-        (click)="toggleComboVisibility()">
+        (click)="toggleComboVisibility()"
+      >
       </span>
     </div>
   </div>
 
   <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
-
-    <ng-container *ngIf="isServerSearching; then loadingTemplate; else optionsTemplate">
-    </ng-container>
-
+    <ng-container *ngIf="isServerSearching; then loadingTemplate; else optionsTemplate"> </ng-container>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>
-
 </po-field-container>
 
 <ng-template #loadingTemplate>
@@ -50,16 +46,16 @@
 </ng-template>
 
 <ng-template #optionsTemplate>
-  <ng-container *ngIf="visibleOptions.length; then visibleOptionsTemplate ; else noDataTemplate">
-  </ng-container>
+  <ng-container *ngIf="visibleOptions.length; then visibleOptionsTemplate; else noDataTemplate"> </ng-container>
 </ng-template>
 
 <ng-template #visibleOptionsTemplate>
   <ul #contentElement class="po-combo-container-content">
-    <li *ngFor="let option of visibleOptions"
+    <li
+      *ngFor="let option of visibleOptions"
       [class.po-combo-item-selected]="compareObjects(selectedView, option)"
-      (click)="option?.options ? undefined : onOptionClick(option, $event)">
-
+      (click)="option?.options ? undefined : onOptionClick(option, $event)"
+    >
       <ng-container *ngIf="comboOptionTemplate; then optionTemplate; else defaultOptionTemplate"></ng-container>
 
       <ng-template #defaultOptionTemplate>
@@ -72,13 +68,13 @@
       </ng-template>
 
       <ng-template #optionTemplate>
-
         <ng-container *ngIf="isOptionGroupList; then optionsGroupTemplate; else defaultOptionsTemplate"></ng-container>
 
         <ng-template #optionsGroupTemplate>
           <ng-template
             [ngTemplateOutlet]="comboOptionTemplate?.templateRef"
-            [ngTemplateOutletContext]="{$implicit: option, selected: compareObjects(selectedView, option)}">
+            [ngTemplateOutletContext]="{ $implicit: option, selected: compareObjects(selectedView, option) }"
+          >
           </ng-template>
         </ng-template>
 
@@ -86,13 +82,12 @@
           <a class="po-combo-item">
             <ng-template
               [ngTemplateOutlet]="comboOptionTemplate?.templateRef"
-              [ngTemplateOutletContext]="{$implicit: option}">
+              [ngTemplateOutletContext]="{ $implicit: option }"
+            >
             </ng-template>
           </a>
         </ng-template>
-
       </ng-template>
-
     </li>
   </ul>
 </ng-template>

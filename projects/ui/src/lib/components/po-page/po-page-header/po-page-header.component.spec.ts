@@ -10,11 +10,9 @@ import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoPageHeaderComponent } from './po-page-header.component';
 
 @Component({ template: 'Guides' })
-export class GuidesComponent { }
+export class GuidesComponent {}
 
-export const routes: Routes = [
-  { path: 'guides', component: GuidesComponent }
-];
+export const routes: Routes = [{ path: 'guides', component: GuidesComponent }];
 
 describe('PoPageHeaderComponent:', () => {
   let component: PoPageHeaderComponent;
@@ -24,10 +22,7 @@ describe('PoPageHeaderComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [PoBreadcrumbModule, RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        PoPageHeaderComponent,
-        GuidesComponent
-      ],
+      declarations: [PoPageHeaderComponent, GuidesComponent],
       providers: [HttpClient, HttpHandler]
     });
   });
@@ -56,7 +51,6 @@ describe('PoPageHeaderComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should set a breadcrumb to page header.', () => {
       component['breadcrumb'] = { items: [{ label: 'Breadcrumb', link: 'breadcrumb' }] };
 
@@ -72,7 +66,5 @@ describe('PoPageHeaderComponent:', () => {
 
       expect(nativeElement.querySelector('.po-page-header-breadcrumb')).toBeFalsy();
     });
-
   });
-
 });

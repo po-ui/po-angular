@@ -1,29 +1,16 @@
-<po-page-detail
-  [p-breadcrumb]="breadcrumb"
-  [p-literals]="customLiterals"
-  [p-title]="title">
-
+<po-page-detail [p-breadcrumb]="breadcrumb" [p-literals]="customLiterals" [p-title]="title">
   <div class="po-row">
-    <po-info
-      class="po-md-12"
-      p-label="Action"
-      [p-value]="action">
-    </po-info>
+    <po-info class="po-md-12" p-label="Action" [p-value]="action"> </po-info>
   </div>
 
-  <hr>
+  <hr />
 
   <form #f="ngForm">
     <div class="po-row">
-      <po-input
-        class="po-md-12"
-        name="title"
-        [(ngModel)]="title"
-        p-label="Title">
-      </po-input>
+      <po-input class="po-md-12" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
     </div>
 
-    <hr>
+    <hr />
 
     <form #formBreadcrumbFavorite="ngForm">
       <div class="po-row">
@@ -33,7 +20,8 @@
           [(ngModel)]="breadcrumb.favorite"
           p-clean
           p-help="https://thf.totvs.com.br/sample/api/favorite"
-          p-label="Breadcrumb favorite">
+          p-label="Breadcrumb favorite"
+        >
         </po-input>
       </div>
     </form>
@@ -46,7 +34,8 @@
           [(ngModel)]="breadcrumbItem.label"
           p-clean
           p-label="Breadcrumb item label"
-          p-required>
+          p-required
+        >
         </po-input>
 
         <po-input
@@ -55,7 +44,8 @@
           [(ngModel)]="breadcrumbItem.link"
           p-clean
           p-label="Breadcrumb item link"
-          p-required>
+          p-required
+        >
         </po-input>
       </div>
 
@@ -64,12 +54,13 @@
           class="po-md-6 po-lg-4"
           p-label="Add breadcrumb item"
           [p-disabled]="formBreadcrumbItems.invalid"
-          (p-click)="addBreadcrumbItem()">
+          (p-click)="addBreadcrumbItem()"
+        >
         </po-button>
       </div>
     </form>
 
-    <hr>
+    <hr />
 
     <form #formBreadcrumbParams="ngForm">
       <div class="po-row">
@@ -79,7 +70,8 @@
           [(ngModel)]="breadcrumbParams.property"
           p-clean
           p-label="Breadcrumb params property"
-          p-required>
+          p-required
+        >
         </po-input>
 
         <po-input
@@ -88,7 +80,8 @@
           [(ngModel)]="breadcrumbParams.value"
           p-clean
           p-label="Breadcrumb params value"
-          p-required>
+          p-required
+        >
         </po-input>
       </div>
 
@@ -97,7 +90,8 @@
           class="po-md-6 po-lg-4"
           p-label="Add breadcrumb params"
           [p-disabled]="formBreadcrumbParams.invalid"
-          (p-click)="addBreadcrumbParam()">
+          (p-click)="addBreadcrumbParam()"
+        >
         </po-button>
       </div>
     </form>
@@ -109,16 +103,13 @@
         [(ngModel)]="literals"
         p-help='Ex.: {"back": "Retornar", "edit": "Edição", "remove": "Excluir registro"}'
         p-label="Literals"
-        (p-change)="changeLiterals()">
+        (p-change)="changeLiterals()"
+      >
       </po-input>
     </div>
 
     <div class="po-row">
-      <po-button
-        class="po-md-3"
-        p-label="Sample Restore"
-        (p-click)="restore()">
-      </po-button>
+      <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
     </div>
   </form>
 </po-page-detail>

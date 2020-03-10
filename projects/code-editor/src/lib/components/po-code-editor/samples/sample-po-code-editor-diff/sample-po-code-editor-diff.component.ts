@@ -5,9 +5,8 @@ import { Component } from '@angular/core';
   templateUrl: './sample-po-code-editor-diff.component.html'
 })
 export class SamplePoCodeEditorDiffComponent {
-
   code = [
-`class Calc {
+    `class Calc {
   sumValues(firstValue: any, secondValue: any): any {
     const result = firstValue + secondValue;
     return result;
@@ -17,7 +16,7 @@ export class SamplePoCodeEditorDiffComponent {
     return result;
   }
 }`,
-`class Calculator {
+    `class Calculator {
 
   sum(firstValue: number, secondValue: number): number {
     return firstValue + secondValue;
@@ -27,6 +26,6 @@ export class SamplePoCodeEditorDiffComponent {
     return firstValue - secondValue;
   }
 }
-`];
-
+`
+  ];
 }

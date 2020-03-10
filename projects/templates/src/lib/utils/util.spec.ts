@@ -1,10 +1,28 @@
 import { changePhantomProperties, expectBrowserLanguageMethod } from './../util-test/util-expect.spec';
 
 import {
-  callFunction, capitalizeFirstLetter, convertDateToISOExtended, convertIsoToDate, convertToBoolean, convertToInt, formatYear,
-  getFormattedLink, isEquals, isExternalLink, isTypeof, mapArrayByProperties, mapObjectByProperties, openExternalLink,
-  removeDuplicatedOptions, removeUndefinedAndNullOptions, setYearFrom0To100, sortOptionsByProperty, sortValues, validateDateRange,
-  validValue, valuesFromObject
+  callFunction,
+  capitalizeFirstLetter,
+  convertDateToISOExtended,
+  convertIsoToDate,
+  convertToBoolean,
+  convertToInt,
+  formatYear,
+  getFormattedLink,
+  isEquals,
+  isExternalLink,
+  isTypeof,
+  mapArrayByProperties,
+  mapObjectByProperties,
+  openExternalLink,
+  removeDuplicatedOptions,
+  removeUndefinedAndNullOptions,
+  setYearFrom0To100,
+  sortOptionsByProperty,
+  sortValues,
+  validateDateRange,
+  validValue,
+  valuesFromObject
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -37,7 +55,6 @@ describe('Function browserLanguage:', () => {
 });
 
 describe('Function getBrowserLanguage:', () => {
-
   it('should return the value of `navigator.language` if it`s defined', () => {
     changePhantomProperties(navigator, 'language', 'pt');
     changePhantomProperties(navigator, 'userLanguage', 'es');
@@ -65,7 +82,6 @@ describe('Function getBrowserLanguage:', () => {
 
     expect(UtilFunctions.getBrowserLanguage()).toBe('ru');
   });
-
 });
 
 describe('Function getShortBrowserLanguage:', () => {
@@ -96,7 +112,6 @@ describe('Function getShortBrowserLanguage:', () => {
 });
 
 describe('Function convertToBoolean:', () => {
-
   it('should be true', () => {
     expect(convertToBoolean('true')).toBe(true);
   });
@@ -112,11 +127,9 @@ describe('Function convertToBoolean:', () => {
   it('should be true because is a boolean', () => {
     expect(convertToBoolean(true)).toBe(true);
   });
-
 });
 
 describe('Function isTypeof:', () => {
-
   it('should be true for this string', () => {
     expect(isTypeof('test', 'string')).toBe(true);
   });
@@ -124,11 +137,9 @@ describe('Function isTypeof:', () => {
   it('should be true for this object', () => {
     expect(isTypeof(new Date(), 'object')).toBe(true);
   });
-
 });
 
 describe('Function convertIsoToDate:', () => {
-
   it('should be a object Date', () => {
     const date = new Date(2017, 1, 1).toISOString();
     expect(typeof convertIsoToDate(date, false, false)).toBe('object');
@@ -187,7 +198,6 @@ describe('Function convertIsoToDate:', () => {
 });
 
 describe('Function callFunction:', () => {
-
   const context = {
     getName: function() {
       return 'PO';
@@ -225,7 +235,6 @@ describe('Function callFunction:', () => {
       { name: 'Edward', value: 21 },
       { name: 'Sharpe', value: 37 }
     ]);
-
   });
 
   it('should sort with B > A', () => {
@@ -240,7 +249,6 @@ describe('Function callFunction:', () => {
       { name: 'Edward', value: 21 },
       { name: 'Sharpe', value: 37 }
     ]);
-
   });
 
   it('should sort to equals', () => {
@@ -255,12 +263,10 @@ describe('Function callFunction:', () => {
       { name: 'Sharpe', value: 37 },
       { name: 'Sharpe', value: 37 }
     ]);
-
   });
 });
 
 describe('Function convertDateToISOExtended:', () => {
-
   it('should null for no value for function', () => {
     const date: Date = null;
     expect(convertDateToISOExtended(date, '12')).toBe(null);
@@ -305,7 +311,6 @@ describe('Function convertDateToISOExtended:', () => {
 });
 
 describe('Function removeDuplicatedOptions:', () => {
-
   it('should return items not duplicated ', () => {
     const options = [
       { value: 1, label: 1 },
@@ -317,11 +322,9 @@ describe('Function removeDuplicatedOptions:', () => {
     removeDuplicatedOptions(options);
     expect(options.length).toBe(3);
   });
-
 });
 
 describe('Function removeUndefinedAndNullOptions:', () => {
-
   it('should return items not undefined and null ', () => {
     const options = [
       { value: 1, label: 1 },
@@ -333,11 +336,9 @@ describe('Function removeUndefinedAndNullOptions:', () => {
     removeUndefinedAndNullOptions(options);
     expect(options.length).toBe(3);
   });
-
 });
 
 describe('Function validValueToOption:', () => {
-
   it('should return false to invalid value', () => {
     expect(validValue('')).toBeFalsy();
     expect(validValue(null)).toBeFalsy();
@@ -351,34 +352,27 @@ describe('Function validValueToOption:', () => {
     expect(validValue(true)).toBeTruthy();
     expect(validValue(false)).toBeTruthy();
   });
-
 });
 
 describe('Function isExternalLink:', () => {
-
   it('should return true if is external link', () => {
     expect(isExternalLink('http://google.com.br')).toBe(true);
   });
   it('should return false if is internal link', () => {
     expect(isExternalLink('./home')).toBe(false);
   });
-
 });
 
 describe('Function openExternalLink:', () => {
-
   it('should open external link', () => {
     spyOn(window, 'open');
     openExternalLink('http://google.com.br');
     expect(window.open).toHaveBeenCalledWith('http://google.com.br', '_blank');
   });
-
 });
 
 describe('Function getFormattedLink:', () => {
-
   it('should format link', () => {
-
     expect(getFormattedLink(null)).toBe('/');
 
     expect(getFormattedLink('../link')).toBe('/link');
@@ -408,7 +402,6 @@ describe('Function getFormattedLink:', () => {
 });
 
 describe('Function convertToInt:', () => {
-
   it('should return a number when have a string number value param.', () => {
     expect(convertToInt('10.50')).toBe(10);
   });
@@ -440,27 +433,22 @@ describe('Function convertToInt:', () => {
   it('should return undefined when have an invalid number and have an invalid default param.', () => {
     expect(convertToInt('invalidNumber', 'tinvalidParam')).toBeUndefined();
   });
-
 });
 
 describe('Function isEquals:', () => {
-
   it('should return true with same value', () => {
     expect(isEquals(1, 1)).toBeTruthy();
-    expect(isEquals({value: '21'}, {value: '21'})).toBeTruthy();
+    expect(isEquals({ value: '21' }, { value: '21' })).toBeTruthy();
   });
 
   it('should return false when different value', () => {
     expect(isEquals(2, 1)).toBeFalsy();
-    expect(isEquals({value: '1'}, {value: '21'})).toBeFalsy();
+    expect(isEquals({ value: '1' }, { value: '21' })).toBeFalsy();
   });
-
 });
 
 describe('Function sortValues:', () => {
-
   describe('Valid values:', () => {
-
     it('should return `-1` if `leftSide` is less than `rightSide` and `ascending` is `undefined`', () => {
       const ascending: boolean = undefined;
       const expectedReturn: number = -1;
@@ -521,7 +509,7 @@ describe('Function sortValues:', () => {
       const leftSide: string = 'ABC';
       const rightSide: string = 'ABC';
 
-      expect(sortValues(leftSide, rightSide , ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it('should return `0` if `leftSide` is equal to `rightSide` and `ascending` is `true`', () => {
@@ -530,7 +518,7 @@ describe('Function sortValues:', () => {
       const leftSide: string = 'ABC';
       const rightSide: string = 'ABC';
 
-      expect(sortValues(leftSide, rightSide , ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it('should return `0` if `leftSide` is equal to `rightSide` and `ascending` is `false`', () => {
@@ -559,12 +547,10 @@ describe('Function sortValues:', () => {
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
-
   });
 
   describe('Invalid values:', () => {
-
-    const invalidValues: Array<any> = [ undefined, null, false, NaN, 0 ];
+    const invalidValues: Array<any> = [undefined, null, false, NaN, 0];
     const validParam: string = 'ABC';
     const expectedReturn: number = 0;
 
@@ -601,213 +587,208 @@ describe('Function sortValues:', () => {
     });
 
     it('should return `0` if `ascending` is invalid value', () => {
-      const ascendingInvalidValues: Array<any> = [ null, NaN, 0 ];
+      const ascendingInvalidValues: Array<any> = [null, NaN, 0];
 
       ascendingInvalidValues.forEach(invalidValue => {
         expect(sortValues(validParam, `${validParam}X`, invalidValue)).toBe(expectedReturn);
       });
     });
-
   });
 
   describe('Date values:', () => {
-
     it(`should return '1' when 'leftSide' is greater than 'rightSide' and 'ascending' is 'true' and
       dates are Javascript Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = 1;
-        const leftSide = new Date(2018, 5, 5).toString();
-        const rightSide = new Date(2018, 3, 5).toString();
+      const ascending: boolean = true;
+      const expectedReturn: number = 1;
+      const leftSide = new Date(2018, 5, 5).toString();
+      const rightSide = new Date(2018, 3, 5).toString();
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '1' when 'leftSide' is greater than 'rightSide' and 'ascending' is 'true' and
       dates are string Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = 1;
-        const leftSide = '2018-05-05';
-        const rightSide = '2018-03-05';
+      const ascending: boolean = true;
+      const expectedReturn: number = 1;
+      const leftSide = '2018-05-05';
+      const rightSide = '2018-03-05';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '1' when 'leftSide' is greater than 'rightSide' and 'ascending' is 'true' and
       dates are string complete Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = 1;
-        const leftSide = '2018-05-05T05:05:13-02:00';
-        const rightSide = '2018-03-05T05:05:13-02:00';
+      const ascending: boolean = true;
+      const expectedReturn: number = 1;
+      const leftSide = '2018-05-05T05:05:13-02:00';
+      const rightSide = '2018-03-05T05:05:13-02:00';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '1' when 'leftSide' hour is greater than 'rightSide' hour and 'ascending' is 'true' and
       dates are string complete Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = 1;
-        const leftSide = '2018-05-05T05:05:13-02:00';
-        const rightSide = '2018-05-05T05:03:13-02:00';
+      const ascending: boolean = true;
+      const expectedReturn: number = 1;
+      const leftSide = '2018-05-05T05:05:13-02:00';
+      const rightSide = '2018-05-05T05:03:13-02:00';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '-1' when 'leftSide' is less than 'rightSide' and 'ascending' is 'true' and
       dates are Javascript Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = -1;
-        const leftSide = new Date(2018, 3, 5).toString();
-        const rightSide = new Date(2018, 5, 5).toString();
+      const ascending: boolean = true;
+      const expectedReturn: number = -1;
+      const leftSide = new Date(2018, 3, 5).toString();
+      const rightSide = new Date(2018, 5, 5).toString();
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '-1' when 'leftSide' is less than 'rightSide' and 'ascending' is 'true' and
       dates are string Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = -1;
-        const leftSide = '2018-03-05';
-        const rightSide = '2018-05-05';
+      const ascending: boolean = true;
+      const expectedReturn: number = -1;
+      const leftSide = '2018-03-05';
+      const rightSide = '2018-05-05';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '-1' when 'leftSide' is less than 'rightSide' and 'ascending' is 'true' and
       dates are string complete Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = -1;
-        const leftSide = '2018-03-05T05:05:13-02:00';
-        const rightSide = '2018-05-05T05:05:13-02:00';
+      const ascending: boolean = true;
+      const expectedReturn: number = -1;
+      const leftSide = '2018-03-05T05:05:13-02:00';
+      const rightSide = '2018-05-05T05:05:13-02:00';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '-1' when 'leftSide' is greater than 'rightSide' and 'ascending' is 'false' and
       dates are Javascript Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = -1;
-        const leftSide = new Date(2018, 5, 5).toString();
-        const rightSide = new Date(2018, 3, 5).toString();
+      const ascending: boolean = false;
+      const expectedReturn: number = -1;
+      const leftSide = new Date(2018, 5, 5).toString();
+      const rightSide = new Date(2018, 3, 5).toString();
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '-1' when 'leftSide' is greater than 'rightSide' and 'ascending' is 'false' and
       dates are string Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = -1;
-        const leftSide = '2018-05-05';
-        const rightSide = '2018-03-05';
+      const ascending: boolean = false;
+      const expectedReturn: number = -1;
+      const leftSide = '2018-05-05';
+      const rightSide = '2018-03-05';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '-1' when 'leftSide' is greater than 'rightSide' and 'ascending' is 'false' and
       dates are string complete Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = -1;
-        const leftSide = '2018-05-05T05:05:13-02:00';
-        const rightSide = '2018-03-05T05:05:13-02:00';
+      const ascending: boolean = false;
+      const expectedReturn: number = -1;
+      const leftSide = '2018-05-05T05:05:13-02:00';
+      const rightSide = '2018-03-05T05:05:13-02:00';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '1' when 'leftSide' is less than 'rightSide' and 'ascending' is 'false' and
       dates are Javascript Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = 1;
-        const leftSide = new Date(2018, 3, 5).toString();
-        const rightSide = new Date(2018, 5, 5).toString();
+      const ascending: boolean = false;
+      const expectedReturn: number = 1;
+      const leftSide = new Date(2018, 3, 5).toString();
+      const rightSide = new Date(2018, 5, 5).toString();
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '1' when 'leftSide' is less than 'rightSide' and 'ascending' is 'false' and
       dates are string Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = 1;
-        const leftSide = '2018-03-05';
-        const rightSide = '2018-05-05';
+      const ascending: boolean = false;
+      const expectedReturn: number = 1;
+      const leftSide = '2018-03-05';
+      const rightSide = '2018-05-05';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '1' when 'leftSide' is less than 'rightSide' and 'ascending' is 'false' and
       dates are string complete Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = 1;
-        const leftSide = '2018-03-05T05:05:13-02:00';
-        const rightSide = '2018-05-05T05:05:13-02:00';
+      const ascending: boolean = false;
+      const expectedReturn: number = 1;
+      const leftSide = '2018-03-05T05:05:13-02:00';
+      const rightSide = '2018-05-05T05:05:13-02:00';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '0' when 'leftSide' is equal to 'rightSide' and 'ascending' is 'true' and
       dates are Javascript Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = 0;
-        const leftSide = new Date(2018, 3, 5).toString();
-        const rightSide = new Date(2018, 3, 5).toString();
+      const ascending: boolean = true;
+      const expectedReturn: number = 0;
+      const leftSide = new Date(2018, 3, 5).toString();
+      const rightSide = new Date(2018, 3, 5).toString();
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '0' when 'leftSide' is equal to 'rightSide' and 'ascending' is 'true' and
       dates are string Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = 0;
-        const leftSide = '2018-03-05';
-        const rightSide = '2018-03-05';
+      const ascending: boolean = true;
+      const expectedReturn: number = 0;
+      const leftSide = '2018-03-05';
+      const rightSide = '2018-03-05';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '0' when 'leftSide' is equal to 'rightSide' and 'ascending' is 'true' and
       dates are string complete Date format`, () => {
-        const ascending: boolean = true;
-        const expectedReturn: number = 0;
-        const leftSide = '2018-03-05T05:05:13-02:00';
-        const rightSide = '2018-03-05T05:05:13-02:00';
+      const ascending: boolean = true;
+      const expectedReturn: number = 0;
+      const leftSide = '2018-03-05T05:05:13-02:00';
+      const rightSide = '2018-03-05T05:05:13-02:00';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '0' when 'leftSide' is equal to 'rightSide' and 'ascending' is 'false' and
       dates are Javascript Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = 0;
-        const leftSide = new Date(2018, 3, 5).toString();
-        const rightSide = new Date(2018, 3, 5).toString();
+      const ascending: boolean = false;
+      const expectedReturn: number = 0;
+      const leftSide = new Date(2018, 3, 5).toString();
+      const rightSide = new Date(2018, 3, 5).toString();
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '0' when 'leftSide' is equal to 'rightSide' and 'ascending' is 'false' and
       dates are string Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = 0;
-        const leftSide = '2018-03-05';
-        const rightSide = '2018-03-05';
+      const ascending: boolean = false;
+      const expectedReturn: number = 0;
+      const leftSide = '2018-03-05';
+      const rightSide = '2018-03-05';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
     it(`should return '0' when 'leftSide' is equal to 'rightSide' and 'ascending' is 'false' and
       dates are string complete Date format`, () => {
-        const ascending: boolean = false;
-        const expectedReturn: number = 0;
-        const leftSide = '2018-03-05T05:05:13-02:00';
-        const rightSide = '2018-03-05T05:05:13-02:00';
+      const ascending: boolean = false;
+      const expectedReturn: number = 0;
+      const leftSide = '2018-03-05T05:05:13-02:00';
+      const rightSide = '2018-03-05T05:05:13-02:00';
 
-        expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
-
   });
-
 });
 
 describe('Function validateDateRange:', () => {
-
   let dateStart;
   let dateEnd;
   let date;
@@ -859,11 +840,9 @@ describe('Function validateDateRange:', () => {
   it('should return `true` when doesn`t have `dateStart` and `dateEnd`.', () => {
     expect(validateDateRange(date, dateStart, dateEnd)).toBeTruthy();
   });
-
 });
 
 describe('Function capitalizeFirstLetter:', () => {
-
   const lowerCaseText = 'text';
   const upperCaseText = 'TEXT';
   const expectedReturn = 'Text';
@@ -878,7 +857,6 @@ describe('Function capitalizeFirstLetter:', () => {
 });
 
 describe('Function formatYear:', () => {
-
   it('should return year as string', () => {
     const year = 2018;
     const stringYear = '2018';
@@ -935,7 +913,6 @@ describe('Function setYearFrom0To100:', () => {
 });
 
 describe('Function mapArrayByProperties:', () => {
-
   it('should return an array with a list of objects with only selected properties', () => {
     const people = [
       { id: 1, name: 'Fulano', birthdate: '1980-11-01', genre: 'Male', city: 'São Paulo', dependents: 2 },
@@ -944,7 +921,11 @@ describe('Function mapArrayByProperties:', () => {
     ];
     const properties = ['id', 'name'];
 
-    const result = [{ id: 1, name: 'Fulano' }, { id: 2, name: 'Beltrano' }, { id: 3, name: 'Siclano' }];
+    const result = [
+      { id: 1, name: 'Fulano' },
+      { id: 2, name: 'Beltrano' },
+      { id: 3, name: 'Siclano' }
+    ];
 
     expect(mapArrayByProperties(people, properties)).toEqual(result);
   });
@@ -973,7 +954,7 @@ describe('Function mapArrayByProperties:', () => {
       { id: 3, name: 'Siclano' }
     ];
 
-    const result = [ { }, { }, { } ];
+    const result = [{}, {}, {}];
 
     expect(mapArrayByProperties(people)).toEqual(result);
   });
@@ -984,7 +965,6 @@ describe('Function mapArrayByProperties:', () => {
 });
 
 describe('Function mapObjectByProperties:', () => {
-
   it('should return a new object with only selected properties', () => {
     const person = { id: 1, name: 'Fulano', birthdate: '1980-11-01', genre: 'Male', city: 'São Paulo', dependents: 2 };
     const properties = ['id', 'name'];
@@ -1006,11 +986,9 @@ describe('Function mapObjectByProperties:', () => {
   it('should return an empty object if params doesn`t exist', () => {
     expect(mapObjectByProperties()).toEqual({});
   });
-
 });
 
 describe('Function valuesFromObject:', () => {
-
   it('should return an array of values of object', () => {
     const person = { id: 1, name: 'Fulano', birthdate: '1980-11-01' };
 
@@ -1022,5 +1000,4 @@ describe('Function valuesFromObject:', () => {
   it('should return an empty array if params doesn`t exist', () => {
     expect(valuesFromObject()).toEqual([]);
   });
-
 });

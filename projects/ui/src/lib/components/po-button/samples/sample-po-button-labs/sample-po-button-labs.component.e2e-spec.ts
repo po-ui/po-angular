@@ -88,5 +88,4 @@ describe('SamplePoButtonLabs E2E', () => {
 
     expect(button.poInputGroup.getAttribute('class')).toContain('ng-invalid');
   });
-
 });

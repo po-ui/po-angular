@@ -12,9 +12,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   templateUrl: './po-table-icon.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class PoTableIconComponent {
-
   tooltip: string;
 
   /** Define se o ícone é clicável. */
@@ -54,5 +52,4 @@ export class PoTableIconComponent {
   tooltipMouseLeave() {
     this.tooltip = undefined;
   }
-
 }

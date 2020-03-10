@@ -113,10 +113,9 @@ const poMenuRootLevel = 1;
 @Component({
   selector: 'po-menu',
   templateUrl: './po-menu.component.html',
-  providers: [ PoMenuItemsService, PoMenuService ]
+  providers: [PoMenuItemsService, PoMenuService]
 })
 export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, OnInit, DoCheck {
-
   @ContentChild(PoMenuHeaderTemplateDirective, { static: true }) menuHeaderTemplate: PoMenuHeaderTemplateDirective;
 
   activeMenuItem: PoMenuItem;
@@ -137,14 +136,15 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   private itemSubscription: Subscription;
   private routeSubscription: Subscription;
 
-  constructor(public changeDetector: ChangeDetectorRef,
-              viewRef: ViewContainerRef,
-              private element: ElementRef,
-              private renderer: Renderer2,
-              private router: Router,
-              private menuItemsService: PoMenuItemsService,
-              menuService: PoMenuService) {
-
+  constructor(
+    public changeDetector: ChangeDetectorRef,
+    viewRef: ViewContainerRef,
+    private element: ElementRef,
+    private renderer: Renderer2,
+    private router: Router,
+    private menuItemsService: PoMenuItemsService,
+    menuService: PoMenuService
+  ) {
     super(menuService);
     this.parentRef = viewRef['_hostView'][8];
   }
@@ -162,7 +162,10 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   }
 
   get hasFooter() {
-    return this.allowCollapseMenu && !this.mobileOpened && this.enableCollapseButton || (this.collapsed && !this.collapsedMobile);
+    return (
+      (this.allowCollapseMenu && !this.mobileOpened && this.enableCollapseButton) ||
+      (this.collapsed && !this.collapsedMobile)
+    );
   }
 
   get isCollapsed() {
@@ -290,7 +293,6 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   }
 
   private activateCollapseSubMenuItem() {
-
     this.clearGroupMenuIfFirstLevel(this.activeMenuItem);
 
     if (!this.collapsed && this.activeMenuItem['level'] > poMenuRootLevel && this.isActiveItemMenuSubMenu) {
@@ -306,7 +308,11 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     } else {
       this.groupedMenuItem = null;
     }
-    this.menuItemsService.sendToChildMenuClicked({ active: this.activeMenuItem, grouped: this.groupedMenuItem, activatedByRoute: true });
+    this.menuItemsService.sendToChildMenuClicked({
+      active: this.activeMenuItem,
+      grouped: this.groupedMenuItem,
+      activatedByRoute: true
+    });
   }
 
   private areSubMenus(menus: Array<PoMenuItem>) {
@@ -332,10 +338,8 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
 
     if (menu['type'] === 'externalLink') {
       openExternalLink(menu.link);
-
     } else if (menu['type'] === 'internalLink') {
       this.activateMenuItem(menu);
-
     } else if (menu['type'] === 'subItems') {
       if (this.filteringItems) {
         this.filteringItems = false;
@@ -379,13 +383,14 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
 
     if (trimFilter) {
       this.filteredItems = [];
-      this.filteredItems = this.filterService ? await this.filterOnService(trimFilter) : this.filterLocalItems(trimFilter);
+      this.filteredItems = this.filterService
+        ? await this.filterOnService(trimFilter)
+        : this.filterLocalItems(trimFilter);
       this.filteringItems = true;
     } else {
       this.filteredItems = [...this.menus];
       this.filteringItems = false;
     }
-
   }
 
   private filterLocalItems(filter: string) {
@@ -399,27 +404,25 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   private filterProcess(filter: string) {
     this.filterLoading = true;
 
-    this.filterItems(filter).then(() => {
+    this.filterItems(filter)
+      .then(() => {
+        this.filterLoading = false;
 
-      this.filterLoading = false;
-
-      this.showNoData();
-      this.changeDetector.detectChanges();
-      this.menuItemsService.sendToChildMenuClicked({ active: this.activeMenuItem, grouped: this.groupedMenuItem });
-
-    }).catch(error => {
-      this.filterLoading = false;
-      Promise.reject(error);
-    });
+        this.showNoData();
+        this.changeDetector.detectChanges();
+        this.menuItemsService.sendToChildMenuClicked({ active: this.activeMenuItem, grouped: this.groupedMenuItem });
+      })
+      .catch(error => {
+        this.filterLoading = false;
+        Promise.reject(error);
+      });
   }
 
   private async filterOnService(search: string = '') {
     if (search.length >= poMenuMinLength) {
-
-      return await this.filterService.getFilteredData(search, this.params)
-        .pipe(
-          map(menuItemsFiltered => menuItemsFiltered.map(menuItem => this.convertToMenuItemFiltered(menuItem)))
-        )
+      return await this.filterService
+        .getFilteredData(search, this.params)
+        .pipe(map(menuItemsFiltered => menuItemsFiltered.map(menuItem => this.convertToMenuItemFiltered(menuItem))))
         .toPromise();
     } else {
       return this.filteredItems;
@@ -428,9 +431,11 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
 
   private findItems(menus: Array<PoMenuItem>, filter: string, filteredItems: Array<any>) {
     menus.forEach(menu => {
-      if ((menu.label.toLowerCase().includes(filter) && !menu.subItems) ||
-          (menu.subItems && this.findItems(menu.subItems, filter, filteredItems))) {
-            filteredItems.push(menu);
+      if (
+        (menu.label.toLowerCase().includes(filter) && !menu.subItems) ||
+        (menu.subItems && this.findItems(menu.subItems, filter, filteredItems))
+      ) {
+        filteredItems.push(menu);
       }
     });
   }
@@ -454,11 +459,9 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   }
 
   private findRootParent(menus: Array<PoMenuItem>, menu: PoMenuItem): PoMenuItem {
-
     const findParent = this.findParent;
 
     const getRootParent = function(menuItems: Array<PoMenuItem>, menuItem): PoMenuItem {
-
       let parent = findParent(menuItems, menuItem);
 
       if (parent['level'] !== poMenuRootLevel) {
@@ -483,16 +486,23 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     menu['isOpened'] = !menu['isOpened'];
     this.groupedMenuItem = menu;
 
-    if (this.activeMenuItem && menu['isOpened']
-      && this.isActiveItemMenuSubMenu
-      && this.isRootMenuEqualGroupedMenu(this.menus, this.activeMenuItem, menu)) {
+    if (
+      this.activeMenuItem &&
+      menu['isOpened'] &&
+      this.isActiveItemMenuSubMenu &&
+      this.isRootMenuEqualGroupedMenu(this.menus, this.activeMenuItem, menu)
+    ) {
       this.activateMenuItem(this.activeMenuItem);
     }
 
     this.menuItemsService.sendToChildMenuClicked({ active: this.activeMenuItem, grouped: this.groupedMenuItem });
   }
 
-  private isRootMenuEqualGroupedMenu(menus: Array<PoMenuItem>, activeMenuItem: PoMenuItem, groupedMenuItem: PoMenuItem) {
+  private isRootMenuEqualGroupedMenu(
+    menus: Array<PoMenuItem>,
+    activeMenuItem: PoMenuItem,
+    groupedMenuItem: PoMenuItem
+  ) {
     const activeMenuRootParent = this.findRootParent(menus, activeMenuItem);
     return activeMenuRootParent['id'] === groupedMenuItem['id'];
   }
@@ -512,17 +522,21 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   }
 
   private toggleMenuCollapse(collapsed: boolean = false) {
-
     this.collapsed = collapsed;
 
     if (this.groupedMenuItem && this.activeMenuItem) {
-      this.groupedMenuItem = this.getActiveMenuParent(this.menus, this.activeMenuItem, this.groupedMenuItem) || this.groupedMenuItem;
+      this.groupedMenuItem =
+        this.getActiveMenuParent(this.menus, this.activeMenuItem, this.groupedMenuItem) || this.groupedMenuItem;
       this.toggleGroupedMenuItem();
     }
 
     if (this.activeMenuItem) {
       this.activateCollapseSubMenuItem();
-      this.menuItemsService.sendToChildMenuClicked({ active: this.activeMenuItem, grouped: this.groupedMenuItem, activatedByRoute: true });
+      this.menuItemsService.sendToChildMenuClicked({
+        active: this.activeMenuItem,
+        grouped: this.groupedMenuItem,
+        activatedByRoute: true
+      });
     }
 
     this.updateMenu();
@@ -537,7 +551,6 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   }
 
   private validateToggleMenu(collapsed: boolean) {
-
     if (!this.allowCollapseMenu) {
       return;
     }
@@ -557,5 +570,4 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     const wrapper = this.element.nativeElement.parentNode;
     this.renderer[this.isCollapsed && !collapsedMobile ? 'addClass' : 'removeClass'](wrapper, 'po-collapsed-menu');
   }
-
 }

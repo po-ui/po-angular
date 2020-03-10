@@ -4,36 +4,20 @@
   [p-primary-action]="primaryAction"
   [p-secondary-action]="secondaryActionLabel ? secondaryAction : null"
   [p-size]="size"
-  [p-title]="title">
-    {{ content }}
+  [p-title]="title"
+>
+  {{ content }}
 </po-modal>
 
-<po-button
-  p-label="Open Modal"
-  [p-disabled]="f.form.invalid"
-  (p-click)="openModal()">
-</po-button>
+<po-button p-label="Open Modal" [p-disabled]="f.form.invalid" (p-click)="openModal()"> </po-button>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="Title"
-      [(ngModel)]="title"
-      p-clean
-      p-label="Title"
-      p-required>
-    </po-input>
+    <po-input class="po-md-6" name="Title" [(ngModel)]="title" p-clean p-label="Title" p-required> </po-input>
 
-    <po-input
-      class="po-sm-12 po-md-6"
-      name="Content"
-      [(ngModel)]="content"
-      p-clean
-      p-label="Content"
-      p-maxlength="200">
+    <po-input class="po-sm-12 po-md-6" name="Content" [(ngModel)]="content" p-clean p-label="Content" p-maxlength="200">
     </po-input>
   </div>
 
@@ -44,7 +28,8 @@
       [(ngModel)]="primaryActionLabel"
       p-clean
       p-label="Primary action label"
-      p-maxlength="30">
+      p-maxlength="30"
+    >
     </po-input>
 
     <po-checkbox-group
@@ -53,7 +38,8 @@
       [(ngModel)]="primaryActionProperties"
       p-columns="3"
       p-label="Primary Action Properties"
-      [p-options]="primaryActionOptions">
+      [p-options]="primaryActionOptions"
+    >
     </po-checkbox-group>
   </div>
 
@@ -64,7 +50,8 @@
       [(ngModel)]="secondaryActionLabel"
       p-clean
       p-label="Secondary action label"
-      p-maxlength="100">
+      p-maxlength="100"
+    >
     </po-input>
 
     <po-checkbox-group
@@ -73,17 +60,13 @@
       [(ngModel)]="secondaryActionProperties"
       p-columns="3"
       p-label="Secondary Action Properties"
-      [p-options]="secondaryActionOptions">
+      [p-options]="secondaryActionOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-radio-group
-      class="po-md-6"
-      name="Size"
-      [(ngModel)]="size"
-      p-label="Size"
-      [p-options]="sizeOptions">
+    <po-radio-group class="po-md-6" name="Size" [(ngModel)]="size" p-label="Size" [p-options]="sizeOptions">
     </po-radio-group>
 
     <po-checkbox-group
@@ -91,15 +74,12 @@
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

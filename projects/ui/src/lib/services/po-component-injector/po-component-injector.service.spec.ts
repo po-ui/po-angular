@@ -7,7 +7,9 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoComponentInjectorService } from './po-component-injector.service';
 
 @Component({
-  template: `<div class="test-component-class">test component</div>`
+  template: `
+    <div class="test-component-class">test component</div>
+  `
 })
 class TestComponent {
   constructor(poComponentInjectorService: PoComponentInjectorService) {}
@@ -16,14 +18,11 @@ class TestComponent {
 @NgModule({
   imports: [CommonModule],
   declarations: [TestComponent],
-  providers: [
-    PoComponentInjectorService
-  ]
+  providers: [PoComponentInjectorService]
 })
-class TestModule { }
+class TestModule {}
 
 describe('PoComponentInjectorService ', () => {
-
   let componentRef;
 
   configureTestSuite(() => {
@@ -33,18 +32,23 @@ describe('PoComponentInjectorService ', () => {
     });
   });
 
-  it('should create TestComponent', inject([PoComponentInjectorService], (poComponentInjectorService: PoComponentInjectorService) => {
-    componentRef = poComponentInjectorService.createComponentInApplication(TestComponent);
-    expect(document.body.querySelectorAll('.test-component-class').length).toBe(1);
+  it('should create TestComponent', inject(
+    [PoComponentInjectorService],
+    (poComponentInjectorService: PoComponentInjectorService) => {
+      componentRef = poComponentInjectorService.createComponentInApplication(TestComponent);
+      expect(document.body.querySelectorAll('.test-component-class').length).toBe(1);
 
-    poComponentInjectorService.destroyComponentInApplication(componentRef);
-  }));
+      poComponentInjectorService.destroyComponentInApplication(componentRef);
+    }
+  ));
 
-  it('should destroy TestComponent', inject([PoComponentInjectorService], (poComponentInjectorService: PoComponentInjectorService) => {
-    componentRef = poComponentInjectorService.createComponentInApplication(TestComponent);
+  it('should destroy TestComponent', inject(
+    [PoComponentInjectorService],
+    (poComponentInjectorService: PoComponentInjectorService) => {
+      componentRef = poComponentInjectorService.createComponentInApplication(TestComponent);
 
-    poComponentInjectorService.destroyComponentInApplication(componentRef);
-    expect(document.body.querySelectorAll('.test-component-class').length).toBe(0);
-  }));
-
- });
+      poComponentInjectorService.destroyComponentInApplication(componentRef);
+      expect(document.body.querySelectorAll('.test-component-class').length).toBe(0);
+    }
+  ));
+});

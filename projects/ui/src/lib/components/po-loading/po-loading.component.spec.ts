@@ -12,7 +12,7 @@ describe('PoLoadingComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoLoadingComponent, PoLoadingIconComponent ]
+      declarations: [PoLoadingComponent, PoLoadingIconComponent]
     });
   });
 
@@ -39,7 +39,6 @@ describe('PoLoadingComponent', () => {
   });
 
   describe('Templates: ', () => {
-
     it('po-loading-label: should not show span.po-loading-label when text is not defined.', () => {
       component.text = '';
 
@@ -55,6 +54,5 @@ describe('PoLoadingComponent', () => {
 
       expect(nativeElement.querySelector('.po-loading-label')).toBeTruthy();
     });
-
   });
 });

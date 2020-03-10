@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoSelectOption, PoTreeViewItem } from '@portinar
   templateUrl: 'sample-po-tree-view-labs.component.html'
 })
 export class SamplePoTreeViewLabsComponent implements OnInit {
-
   event: string;
   items: Array<PoTreeViewItem>;
   itemProperties: Array<string>;
@@ -26,14 +25,13 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
   }
 
   add(treeViewItem: PoTreeViewItem) {
-
     treeViewItem.selected = this.itemProperties.includes('selected');
     treeViewItem.expanded = this.itemProperties.includes('expanded');
 
     const treeViewItemClone = { ...treeViewItem };
 
     if (!this.parent) {
-      this.items = [ ...this.items, treeViewItemClone ];
+      this.items = [...this.items, treeViewItemClone];
     } else {
       const treeViewItemNode = this.getTreeViewItemNode(this.items, this.parent);
 
@@ -41,7 +39,7 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
         treeViewItemNode.subItems = [];
       }
 
-      treeViewItemNode.subItems = [ ...treeViewItemNode.subItems, treeViewItemClone ];
+      treeViewItemNode.subItems = [...treeViewItemNode.subItems, treeViewItemClone];
     }
 
     this.items = [].concat(this.items);
@@ -59,7 +57,7 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
     this.parentList = [];
     this.itemProperties = [];
     this.selectable = undefined;
-    this.treeViewItem = <any> {};
+    this.treeViewItem = <any>{};
   }
 
   private getTreeViewItemNode(items: Array<PoTreeViewItem>, value: string) {
@@ -81,8 +79,12 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
     return treeViewItemNode;
   }
 
-  private updateParentList(items: Array<PoTreeViewItem>, level = 0, parentList = [], parentItem?: PoTreeViewItem): Array<PoSelectOption> {
-
+  private updateParentList(
+    items: Array<PoTreeViewItem>,
+    level = 0,
+    parentList = [],
+    parentItem?: PoTreeViewItem
+  ): Array<PoSelectOption> {
     items.forEach(item => {
       const { label, value } = item;
 
@@ -98,5 +100,4 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
 
     return parentList;
   }
-
 }

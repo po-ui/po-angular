@@ -1,8 +1,10 @@
-<po-table-icon *ngFor="let column of icons trackBy: trackByFunction"
+<po-table-icon
+  *ngFor="let column of icons; trackBy: trackByFunction"
   [p-clickable]="isClickable(column)"
   [p-color]="getColor(column)"
   [p-disabled]="isDisabled(column)"
   [p-icon]="getIcon(column)"
   [p-icon-tooltip]="column.tooltip"
-  (p-click)="click(column)">
+  (p-click)="click(column)"
+>
 </po-table-icon>

@@ -32,13 +32,9 @@ describe('PoComboComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoLoadingModule ],
-      declarations: [
-        PoComboComponent,
-        PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
-      ],
-      providers: [ HttpClient, HttpHandler]
+      imports: [PoLoadingModule],
+      declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
+      providers: [HttpClient, HttpHandler]
     });
   });
 
@@ -135,7 +131,7 @@ describe('PoComboComponent:', () => {
   });
 
   it('should call updateOptionByFilteredValue if not exists selectedValue', () => {
-    const fakeService: any = getFakeService([{label: 'label', value: 1}]);
+    const fakeService: any = getFakeService([{ label: 'label', value: 1 }]);
     component.service = fakeService;
     component.selectedValue = '';
 
@@ -148,9 +144,9 @@ describe('PoComboComponent:', () => {
     component.options = [];
 
     spyOn(component, 'onOptionClick');
-    component.updateOptionByFilteredValue({label: 'label', value: 1});
+    component.updateOptionByFilteredValue({ label: 'label', value: 1 });
     expect(component.options.length).toBe(1);
-    expect(component.onOptionClick).toHaveBeenCalledWith({label: 'label', value: 1});
+    expect(component.onOptionClick).toHaveBeenCalledWith({ label: 'label', value: 1 });
   });
 
   it('should update SelectedValue to null', fakeAsync((): void => {
@@ -169,7 +165,7 @@ describe('PoComboComponent:', () => {
 
   it('selectPreviousOption: should select a previous value when a selected value already exists', () => {
     const previousOption = { value: 1, label: 'Option 1' };
-    component.selectedView = {value: 2, label: 'Option 2'};
+    component.selectedView = { value: 2, label: 'Option 2' };
 
     spyOn(component, 'updateSelectedValue');
     spyOn(component, 'getNextOption').and.returnValue(previousOption);
@@ -182,7 +178,7 @@ describe('PoComboComponent:', () => {
 
   it('should select the last value when not exists a selected value', () => {
     component.selectedValue = '';
-    component.visibleOptions = [{label: '1', value: '1'}];
+    component.visibleOptions = [{ label: '1', value: '1' }];
 
     spyOn(component, 'updateSelectedValue');
     spyOn(component, 'getNextOption');
@@ -202,7 +198,7 @@ describe('PoComboComponent:', () => {
 
   it('selectNextOption: should select a next value when a selected value already exists', () => {
     const nextOption = { value: 2, label: 'Option 2' };
-    component.selectedView = {value: 1, label: 'Option 1'};
+    component.selectedView = { value: 1, label: 'Option 1' };
 
     spyOn(component, 'updateSelectedValue');
     spyOn(component, 'getNextOption').and.returnValue(nextOption);
@@ -215,7 +211,7 @@ describe('PoComboComponent:', () => {
 
   it('should select the first value when not exists a selected value', () => {
     component.selectedValue = '';
-    component.visibleOptions = [{label: '1', value: '1'}];
+    component.visibleOptions = [{ label: '1', value: '1' }];
 
     spyOn(component, 'updateSelectedValue');
     spyOn(component, 'getNextOption');
@@ -259,8 +255,8 @@ describe('PoComboComponent:', () => {
 
   it('should show combo and save the cache', () => {
     component.isFirstFilter = true;
-    component.options = [{label: '1', value: '1'}];
-    component.cacheOptions = [{label: '2', value: '2'}];
+    component.options = [{ label: '1', value: '1' }];
+    component.cacheOptions = [{ label: '2', value: '2' }];
 
     spyOn(component, 'searchForLabel');
     spyOn(component, 'controlComboVisibility');
@@ -272,8 +268,8 @@ describe('PoComboComponent:', () => {
 
   it('should show combo and not save the cache', () => {
     component.isFirstFilter = false;
-    component.options = [{label: '1', value: '1'}];
-    component.cacheOptions = [{label: '2', value: '2'}];
+    component.options = [{ label: '1', value: '1' }];
+    component.cacheOptions = [{ label: '2', value: '2' }];
 
     spyOn(component, 'searchForLabel');
     spyOn(component, 'controlComboVisibility');
@@ -415,7 +411,7 @@ describe('PoComboComponent:', () => {
 
     component['initializeListeners']();
 
-    const spyAdjustContainerPosition = spyOn(component, <any> 'adjustContainerPosition');
+    const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
 
     changeBrowserInnerWidth(450);
     window.dispatchEvent(eventResize);
@@ -426,7 +422,6 @@ describe('PoComboComponent:', () => {
   }));
 
   describe('Methods:', () => {
-
     const fakeEvent = {
       target: {
         value: 'ab'
@@ -465,7 +460,6 @@ describe('PoComboComponent:', () => {
     });
 
     describe('onKeyUp:', () => {
-
       function fakeKeypressEvent(code: number, target: any = 1) {
         return {
           keyCode: code,
@@ -567,80 +561,80 @@ describe('PoComboComponent:', () => {
       });
 
       it(`should update 'shouldMarkLetters' and 'isFiltering' to true and call 'searchForLabel' if isn't a service.`, () => {
-          const keyM = fakeKeypressEvent(77);
-          component.shouldMarkLetters = false;
-          component.isFiltering = false;
+        const keyM = fakeKeypressEvent(77);
+        component.shouldMarkLetters = false;
+        component.isFiltering = false;
 
-          spyOn(component, 'searchForLabel');
-          spyOn(component, 'controlComboVisibility');
-          component.onKeyUp.call(component, keyM);
+        spyOn(component, 'searchForLabel');
+        spyOn(component, 'controlComboVisibility');
+        component.onKeyUp.call(component, keyM);
 
-          expect(component.shouldMarkLetters).toBeTruthy();
-          expect(component.isFiltering).toBeTruthy();
-          expect(component.searchForLabel).toHaveBeenCalled();
+        expect(component.shouldMarkLetters).toBeTruthy();
+        expect(component.isFiltering).toBeTruthy();
+        expect(component.searchForLabel).toHaveBeenCalled();
       });
 
       it(`shouldn't update 'shouldMarkLetters' and 'isFiltering' neither call 'searchForLabel' if is a service`, () => {
-          const keyM = fakeKeypressEvent(77);
-          const fakeService: any = getFakeService(null);
-          component.service = fakeService;
-          component.shouldMarkLetters = false;
-          component.isFiltering = false;
+        const keyM = fakeKeypressEvent(77);
+        const fakeService: any = getFakeService(null);
+        component.service = fakeService;
+        component.shouldMarkLetters = false;
+        component.isFiltering = false;
 
-          spyOn(component, 'searchForLabel');
-          component.onKeyUp.call(component, keyM);
+        spyOn(component, 'searchForLabel');
+        component.onKeyUp.call(component, keyM);
 
-          expect(component.shouldMarkLetters).toBeFalsy();
-          expect(component.isFiltering).toBeFalsy();
-          expect(component.searchForLabel).not.toHaveBeenCalled();
+        expect(component.shouldMarkLetters).toBeFalsy();
+        expect(component.isFiltering).toBeFalsy();
+        expect(component.searchForLabel).not.toHaveBeenCalled();
       });
 
       it(`shouldn't update 'shouldMarkLetters' and 'isFiltering' to true and call 'searchForLabel'
         if 'previousSearchValue' is equal 'inputValue'.`, () => {
-          const keyM = fakeKeypressEvent(77, '1');
-          component['previousSearchValue'] = '1';
-          component.shouldMarkLetters = false;
-          component.isFiltering = false;
+        const keyM = fakeKeypressEvent(77, '1');
+        component['previousSearchValue'] = '1';
+        component.shouldMarkLetters = false;
+        component.isFiltering = false;
 
-          spyOn(component, 'searchForLabel');
-          component.onKeyUp(keyM);
+        spyOn(component, 'searchForLabel');
+        component.onKeyUp(keyM);
 
-          expect(component.shouldMarkLetters).toBeFalsy();
-          expect(component.isFiltering).toBeFalsy();
-          expect(component.searchForLabel).not.toHaveBeenCalled();
+        expect(component.shouldMarkLetters).toBeFalsy();
+        expect(component.isFiltering).toBeFalsy();
+        expect(component.searchForLabel).not.toHaveBeenCalled();
       });
 
       it(`shouldn't update 'shouldMarkLetters' and 'isFiltering' to true and call 'searchForLabel'
         if event key is 'ArrowUp'.`, () => {
-          const ArrowUpKey = fakeKeypressEvent(38);
-          component.shouldMarkLetters = false;
-          component.isFiltering = false;
+        const ArrowUpKey = fakeKeypressEvent(38);
+        component.shouldMarkLetters = false;
+        component.isFiltering = false;
 
-          spyOn(component, 'searchForLabel');
-          component.onKeyUp.call(component, ArrowUpKey);
+        spyOn(component, 'searchForLabel');
+        component.onKeyUp.call(component, ArrowUpKey);
 
-          expect(component.shouldMarkLetters).toBeFalsy();
-          expect(component.isFiltering).toBeFalsy();
-          expect(component.searchForLabel).not.toHaveBeenCalled();
+        expect(component.shouldMarkLetters).toBeFalsy();
+        expect(component.isFiltering).toBeFalsy();
+        expect(component.searchForLabel).not.toHaveBeenCalled();
       });
 
       it(`shouldn't update 'shouldMarkLetters' and 'isFiltering' to true and call 'searchForLabel'
         if event key is 'ArrowDown'.`, () => {
-          const ArrowDownKey = fakeKeypressEvent(40);
-          component.shouldMarkLetters = false;
-          component.isFiltering = false;
+        const ArrowDownKey = fakeKeypressEvent(40);
+        component.shouldMarkLetters = false;
+        component.isFiltering = false;
 
-          spyOn(component, 'searchForLabel');
-          component.onKeyUp.call(component, ArrowDownKey);
+        spyOn(component, 'searchForLabel');
+        component.onKeyUp.call(component, ArrowDownKey);
 
-          expect(component.shouldMarkLetters).toBeFalsy();
-          expect(component.isFiltering).toBeFalsy();
-          expect(component.searchForLabel).not.toHaveBeenCalled();
+        expect(component.shouldMarkLetters).toBeFalsy();
+        expect(component.isFiltering).toBeFalsy();
+        expect(component.searchForLabel).not.toHaveBeenCalled();
       });
 
       it(`should call 'controlComboVisibility' with 'true' if 'inputValue' is valid and visibleOptions greater than 0.`, () => {
         const keyM = fakeKeypressEvent(77);
-        component.visibleOptions = [{label: 'M', value: 'M'}];
+        component.visibleOptions = [{ label: 'M', value: 'M' }];
 
         spyOn(component, 'searchForLabel');
         spyOn(component, 'controlComboVisibility');
@@ -680,7 +674,6 @@ describe('PoComboComponent:', () => {
     });
 
     describe('onKeyDown: ', () => {
-
       it('should call `selectPreviousOption` and not call `selectNextOption`', () => {
         component.comboOpen = true;
 
@@ -847,7 +840,6 @@ describe('PoComboComponent:', () => {
 
         expect(component.controlComboVisibility).toHaveBeenCalledWith(true);
         expect(component.selectNextOption).not.toHaveBeenCalled();
-
       });
 
       it('should call `preventDefault` and `stopPropagation` typed "esc" and combo is opened', () => {
@@ -901,7 +893,6 @@ describe('PoComboComponent:', () => {
 
         expect(spyControlComboVisibility).toHaveBeenCalledWith(true);
       });
-
     });
 
     it('onOptionClick: should call `stopPropagation` if has an event parameter', () => {
@@ -1002,7 +993,10 @@ describe('PoComboComponent:', () => {
 
     it(`selectNextOption: should call 'updateSelectedValue' with first option of visibleOptions and true if
       changeOnEnter is false and selectedValue is undefined`, () => {
-      component.visibleOptions = [ { value: 1, label: '1' }, { value: 2, label: '2' } ];
+      component.visibleOptions = [
+        { value: 1, label: '1' },
+        { value: 2, label: '2' }
+      ];
 
       component.changeOnEnter = false;
       component.selectedValue = undefined;
@@ -1018,7 +1012,10 @@ describe('PoComboComponent:', () => {
 
     it(`selectNextOption: should call 'updateSelectedValue' with second option of visibleOptions and false if
       changeOnEnter is true and selectedValue is undefined`, () => {
-      component.visibleOptions = [ { value: 1, label: '1' }, { value: 2, label: '2' } ];
+      component.visibleOptions = [
+        { value: 1, label: '1' },
+        { value: 2, label: '2' }
+      ];
 
       component.changeOnEnter = true;
       component.selectedValue = undefined;
@@ -1037,7 +1034,7 @@ describe('PoComboComponent:', () => {
       component.selectedValue = undefined;
       component.changeOnEnter = true;
       component.comboOpen = true;
-      component.visibleOptions = [{label: '1', value: '1'}];
+      component.visibleOptions = [{ label: '1', value: '1' }];
 
       const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
       const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
@@ -1053,12 +1050,11 @@ describe('PoComboComponent:', () => {
 
     it(`wasClickedOnToggle: should call 'controlComboVisibility' with 'false', 'verifyValidOption', 'updateComboList'
       and set selectedView with undefined if 'content.element' does not contain 'event.target'`, () => {
-
       component.selectedValue = undefined;
       component.changeOnEnter = true;
       component.comboOpen = true;
 
-      component.options = [ { label: 'Label 1', value: 1 } ];
+      component.options = [{ label: 'Label 1', value: 1 }];
 
       fixture.detectChanges();
 
@@ -1078,7 +1074,7 @@ describe('PoComboComponent:', () => {
 
     it(`wasClickedOnToggle: should call 'applyFilter' with ''.`, () => {
       component.comboOpen = false;
-      component.service = getFakeService([{label: 'label', value: 1}]);
+      component.service = getFakeService([{ label: 'label', value: 1 }]);
       component.isFirstFilter = false;
       spyOn(component, 'getInputValue').and.returnValue(false);
       const SpyApplyFilter = spyOn(component, 'applyFilter');
@@ -1092,13 +1088,13 @@ describe('PoComboComponent:', () => {
       const index = 3;
 
       component.options = [
-        {value: '1', label: '1'},
-        {value: '2', label: '2'},
-        {value: '3', label: '3'},
+        { value: '1', label: '1' },
+        { value: '2', label: '2' },
+        { value: '3', label: '3' }
       ];
-      component.selectedView = {value: '3', label: '3'};
+      component.selectedView = { value: '3', label: '3' };
 
-      const spySetScrollTop = spyOn(component, <any> 'setScrollTop');
+      const spySetScrollTop = spyOn(component, <any>'setScrollTop');
 
       fixture.detectChanges();
 
@@ -1109,7 +1105,7 @@ describe('PoComboComponent:', () => {
     it('scrollTo: should call setScrollTop with 0 if index is equal 1', () => {
       const index = 1;
 
-      const spySetScrollTop = spyOn(component, <any> 'setScrollTop');
+      const spySetScrollTop = spyOn(component, <any>'setScrollTop');
 
       component.scrollTo(index);
 
@@ -1121,7 +1117,7 @@ describe('PoComboComponent:', () => {
 
       component.selectedView = undefined;
 
-      const spySetScrollTop = spyOn(component, <any> 'setScrollTop');
+      const spySetScrollTop = spyOn(component, <any>'setScrollTop');
 
       component.scrollTo(index);
 
@@ -1154,21 +1150,26 @@ describe('PoComboComponent:', () => {
       const isSetElementWidth = true;
 
       const spySetElements = spyOn(component['controlPosition'], 'setElements');
-      const spyAdjustContainerPosition = spyOn(component, <any> 'adjustContainerPosition');
+      const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
 
       component['setContainerPosition']();
 
       expect(spyAdjustContainerPosition).toHaveBeenCalled();
-      expect(spySetElements).toHaveBeenCalledWith(component.containerElement.nativeElement,
-        containerOffset, component.inputElement, customPositions, isSetElementWidth);
+      expect(spySetElements).toHaveBeenCalledWith(
+        component.containerElement.nativeElement,
+        containerOffset,
+        component.inputElement,
+        customPositions,
+        isSetElementWidth
+      );
     });
 
     it('removeListeners: should remove click, resize and scroll listeners', () => {
       component['clickoutListener'] = () => {};
       component['eventResizeListener'] = () => {};
 
-      spyOn(component, <any> 'clickoutListener');
-      spyOn(component, <any> 'eventResizeListener');
+      spyOn(component, <any>'clickoutListener');
+      spyOn(component, <any>'eventResizeListener');
       spyOn(window, 'removeEventListener');
 
       component['removeListeners']();
@@ -1179,7 +1180,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('onScroll: should call `adjustContainerPosition()`', () => {
-      const spyAdjustContainerPosition = spyOn(component, <any> 'adjustContainerPosition');
+      const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
 
       component['onScroll']();
 
@@ -1190,7 +1191,7 @@ describe('PoComboComponent:', () => {
       component['clickoutListener'] = undefined;
       component['eventResizeListener'] = undefined;
 
-      const spyRemoveListeners = spyOn(component, <any> 'removeListeners');
+      const spyRemoveListeners = spyOn(component, <any>'removeListeners');
       const spyAddEventListener = spyOn(window, 'addEventListener');
       const spyRendererListen = spyOn(component.renderer, <any>'listen').and.returnValue(() => {});
 
@@ -1209,15 +1210,13 @@ describe('PoComboComponent:', () => {
       component.comboOpen = false;
       component.comboIcon = 'po-icon-arrow-down';
 
-      component.visibleOptions = [
-        { value: 'po', label: 'PO' }
-      ];
+      component.visibleOptions = [{ value: 'po', label: 'PO' }];
 
-      const spyInitializeListeners = spyOn(component, <any> 'initializeListeners');
-      const spySetContainerPosition = spyOn(component, <any> 'setContainerPosition');
-      const spyScrollTo = spyOn(component, <any> 'scrollTo');
-      const spyDetectChanges = spyOn(component['changeDetector'], <any> 'detectChanges');
-      const spyInputFocus = spyOn(component.inputElement.nativeElement, <any> 'focus');
+      const spyInitializeListeners = spyOn(component, <any>'initializeListeners');
+      const spySetContainerPosition = spyOn(component, <any>'setContainerPosition');
+      const spyScrollTo = spyOn(component, <any>'scrollTo');
+      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
+      const spyInputFocus = spyOn(component.inputElement.nativeElement, <any>'focus');
 
       component['open']();
 
@@ -1236,8 +1235,8 @@ describe('PoComboComponent:', () => {
       component.comboOpen = true;
       component.comboIcon = 'po-icon-arrow-up';
 
-      const spyRemoveListeners = spyOn(component, <any> 'removeListeners');
-      const spyDetectChanges = spyOn(component['changeDetector'], <any> 'detectChanges');
+      const spyRemoveListeners = spyOn(component, <any>'removeListeners');
+      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
 
       component['close']();
 
@@ -1249,9 +1248,9 @@ describe('PoComboComponent:', () => {
     });
 
     it('isServerSearching: should call initializeListeners, detectChanges and setContainerPosition if isServerSearching is true', () => {
-      const spyInitializeListeners = spyOn(component, <any> 'initializeListeners');
-      const spyDetectChanges = spyOn(component['changeDetector'], <any> 'detectChanges');
-      const spySetContainerPosition = spyOn(component, <any> 'setContainerPosition');
+      const spyInitializeListeners = spyOn(component, <any>'initializeListeners');
+      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
+      const spySetContainerPosition = spyOn(component, <any>'setContainerPosition');
 
       component.isServerSearching = true;
 
@@ -1262,7 +1261,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('isServerSearching: should call `removeListeners` if isServerSearching is false', () => {
-      const spyRemoveListeners = spyOn(component, <any> 'removeListeners');
+      const spyRemoveListeners = spyOn(component, <any>'removeListeners');
 
       component.isServerSearching = false;
 
@@ -1273,7 +1272,7 @@ describe('PoComboComponent:', () => {
     it('controlComboVisibility: should call `close` if `toOpen` param is false', () => {
       const toOpen = false;
 
-      const spyClose = spyOn(component, <any> 'close');
+      const spyClose = spyOn(component, <any>'close');
 
       component.controlComboVisibility(toOpen);
 
@@ -1283,7 +1282,7 @@ describe('PoComboComponent:', () => {
     it('controlComboVisibility: should call `open` if `toOpen` param is true', () => {
       const toOpen = true;
 
-      const spyOpen = spyOn(component, <any> 'open');
+      const spyOpen = spyOn(component, <any>'open');
 
       component.controlComboVisibility(toOpen);
 
@@ -1301,17 +1300,15 @@ describe('PoComboComponent:', () => {
     });
 
     it('onScroll: should call `adjustContainerPosition`', () => {
-      const spyAdjustContainerPosition = spyOn(component, <any> 'adjustContainerPosition');
+      const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
 
       component['onScroll']();
 
       expect(spyAdjustContainerPosition).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     beforeEach(() => {
       fixture = TestBed.createComponent(PoComboComponent);
       component = fixture.componentInstance;
@@ -1385,7 +1382,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('shouldn`t have a child span tag inside `po-combo-item` if `comboOptionTemplate` is true', () => {
-      component.comboOptionTemplate = <any> { templateRef: null };
+      component.comboOptionTemplate = <any>{ templateRef: null };
       component.options = [{ label: '1', value: '1' }];
 
       fixture.detectChanges();
@@ -1421,7 +1418,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('shouldn`t call `onOptionClick` if clicked option is an option group title', () => {
-      component.options = [{ label: '1', options: [{ value: 'value'}]}];
+      component.options = [{ label: '1', options: [{ value: 'value' }] }];
 
       const spyOnOptionClick = spyOn(component, 'onOptionClick');
 
@@ -1435,7 +1432,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('should contain `po-combo-item` if `comboOptionTemplate` is true and combo options dont`t have groups', () => {
-      component.comboOptionTemplate = <any> { templateRef: null };
+      component.comboOptionTemplate = <any>{ templateRef: null };
       component.options = [{ label: '1', value: '1' }];
 
       fixture.detectChanges();
@@ -1446,8 +1443,8 @@ describe('PoComboComponent:', () => {
     });
 
     it('shouldn`t contain `po-combo-item` if `comboOptionTemplate` is true but combo options have groups', () => {
-      component.comboOptionTemplate = <any> { templateRef: null };
-      component.options = [{ label: '1', options: [ { value: 'value' } ] }];
+      component.comboOptionTemplate = <any>{ templateRef: null };
+      component.options = [{ label: '1', options: [{ value: 'value' }] }];
 
       fixture.detectChanges();
 
@@ -1457,8 +1454,8 @@ describe('PoComboComponent:', () => {
     });
 
     it('should contain a class `po-combo-item-title` if comboOptionTemplate is false and combo options have groups', () => {
-      component.comboOptionTemplate = <any> undefined;
-      component.options = [{ label: '1', options: [ { value: 'value' } ] }];
+      component.comboOptionTemplate = <any>undefined;
+      component.options = [{ label: '1', options: [{ value: 'value' }] }];
 
       fixture.detectChanges();
 
@@ -1468,8 +1465,11 @@ describe('PoComboComponent:', () => {
     });
 
     it('shouldn`t contain a class `po-combo-item-title` if comboOptionTemplate is false and combo options don`t have groups', () => {
-      component.comboOptionTemplate = <any> undefined;
-      component.options = [{ label: '1', value: '2' }, { label: '2', value: '2' }];
+      component.comboOptionTemplate = <any>undefined;
+      component.options = [
+        { label: '1', value: '2' },
+        { label: '2', value: '2' }
+      ];
 
       fixture.detectChanges();
 
@@ -1477,11 +1477,9 @@ describe('PoComboComponent:', () => {
 
       expect(comboItemLink).toBeFalsy();
     });
-
   });
 
   describe('Integration:', () => {
-
     beforeEach(() => {
       component = fixture.componentInstance;
 
@@ -1521,7 +1519,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('noData: should display `literals.noData` in Spanish if browser language is `es`.', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('es');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
       component.visibleOptions = [];
 
       fixture.detectChanges();
@@ -1536,9 +1534,7 @@ describe('PoComboComponent:', () => {
 
       expect(noDataTemplateText).toEqual(noDataTemplateTextCompare);
     });
-
   });
-
 });
 
 describe('PoComboComponent - with service:', () => {
@@ -1551,15 +1547,9 @@ describe('PoComboComponent - with service:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        PoLoadingModule
-      ],
-      declarations: [ PoComboComponent,
-        PoFieldContainerComponent,
-        PoFieldContainerBottomComponent
-      ],
-      providers: [ HttpClient, HttpHandler, PoComboFilterService]
+      imports: [HttpClientTestingModule, PoLoadingModule],
+      declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
+      providers: [HttpClient, HttpHandler, PoComboFilterService]
     });
   });
 
@@ -1601,7 +1591,7 @@ describe('PoComboComponent - with service:', () => {
   });
 
   it('shouldn`t call updateOptionByFilteredValue if not exists selectedValue', () => {
-    component.service = getFakeService([{label: 'label', value: 1}]);
+    component.service = getFakeService([{ label: 'label', value: 1 }]);
     component.selectedValue = 'po';
 
     spyOn(component, 'updateOptionByFilteredValue');
@@ -1629,7 +1619,6 @@ describe('PoComboComponent - with service:', () => {
   }));
 
   describe('Methods:', () => {
-
     const fakeSubscription = <any>{ unsubscribe: () => {} };
 
     it('applyFilter: should call PoComboFilterService.getFilteredData() with param and filterParams', () => {
@@ -1637,12 +1626,12 @@ describe('PoComboComponent - with service:', () => {
       const applyFilterValue = 'value';
       const param = { property: 'label', value: applyFilterValue };
       const fakeThis: any = {
-        controlComboVisibility: () => { },
-        setOptionsByApplyFilter: () => { },
+        controlComboVisibility: () => {},
+        setOptionsByApplyFilter: () => {},
         fieldLabel: 'label',
         filterParams: filterParams,
         service: {
-          getFilteredData: () => { }
+          getFilteredData: () => {}
         }
       };
 
@@ -1658,10 +1647,10 @@ describe('PoComboComponent - with service:', () => {
       const filterParams = 'filter';
       const param = 'value';
       const fakeThis: any = {
-        updateOptionByFilteredValue: () => { },
+        updateOptionByFilteredValue: () => {},
         filterParams: filterParams,
         service: {
-          getObjectByValue: () => { }
+          getObjectByValue: () => {}
         },
         selectedValue: undefined
       };
@@ -1677,7 +1666,7 @@ describe('PoComboComponent - with service:', () => {
       const param = 'value';
       const fakeThis = {
         service: {
-          getObjectByValue: () => { }
+          getObjectByValue: () => {}
         },
         selectedValue: 'valid'
       };
@@ -1708,10 +1697,9 @@ describe('PoComboComponent - with service:', () => {
     });
 
     it('ngOnDestroy: should not unsubscribe if getSubscription is falsy.', () => {
-
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['getSubscription'] = undefined;
       component.ngOnDestroy();
@@ -1720,10 +1708,9 @@ describe('PoComboComponent - with service:', () => {
     });
 
     it('ngOnDestroy: should not unsubscribe if filterSubscription is falsy.', () => {
-
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['getSubscription'] = undefined;
       component.ngOnDestroy();
@@ -1733,15 +1720,15 @@ describe('PoComboComponent - with service:', () => {
 
     it(`searchOnEnter: should call 'controlApplyFilter' if has a service,
       not has selectedView and value.length is greater than 'filterMinlength'`, () => {
-        const value = 'newValue';
-        component.selectedView = undefined;
-        component.filterMinlength = 2;
+      const value = 'newValue';
+      component.selectedView = undefined;
+      component.filterMinlength = 2;
 
-        spyOn(component, 'controlApplyFilter');
+      spyOn(component, 'controlApplyFilter');
 
-        component.searchOnEnter(value);
+      component.searchOnEnter(value);
 
-        expect(component.controlApplyFilter).toHaveBeenCalledWith(value);
+      expect(component.controlApplyFilter).toHaveBeenCalledWith(value);
     });
 
     it(`searchOnEnter: shouldn't call 'controlApplyFilter' if has a service and has selectedView`, () => {
@@ -1793,7 +1780,10 @@ describe('PoComboComponent - with service:', () => {
 
     it(`onKeyUp: should call 'updateComboList' with 'cacheOptions' if has 'service', 'selectedValue'
       is truthy and 'selectedOption.label' is equal 'previousSearchLabel'`, () => {
-      const options = [ { label: 'Bruce', value: 1 }, { label: 'Willis', value: 2 } ];
+      const options = [
+        { label: 'Bruce', value: 1 },
+        { label: 'Willis', value: 2 }
+      ];
       const event = { keyCode: 43, target: { value: '' } };
 
       component.options = options;
@@ -1810,9 +1800,7 @@ describe('PoComboComponent - with service:', () => {
 
       expect(spyUpdateComboList).toHaveBeenCalledWith([...component.cacheOptions]);
     });
-
   });
-
 });
 
 function getFakeService(item): any {

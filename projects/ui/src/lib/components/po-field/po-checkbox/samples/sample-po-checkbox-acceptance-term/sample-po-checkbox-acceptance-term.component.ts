@@ -7,7 +7,6 @@ import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
   templateUrl: './sample-po-checkbox-acceptance-term.component.html'
 })
 export class SamplePoCheckboxAcceptanceTermComponent {
-
   acceptance: boolean = false;
 
   primaryAction: PoModalAction = {
@@ -19,5 +18,4 @@ export class SamplePoCheckboxAcceptanceTermComponent {
   };
 
   @ViewChild(PoModalComponent, { static: true }) modalTerm: PoModalComponent;
-
 }

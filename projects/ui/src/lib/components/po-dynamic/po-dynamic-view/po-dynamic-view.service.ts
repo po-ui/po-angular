@@ -5,11 +5,9 @@ import { PoDynamicFormField } from '../po-dynamic-form/po-dynamic-form-field.int
 
 @Injectable()
 export class PoDynamicViewService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  onLoad(url: string, value): Promise<{ value?: any, fields?: Array<PoDynamicFormField> }> {
+  onLoad(url: string, value): Promise<{ value?: any; fields?: Array<PoDynamicFormField> }> {
     return this.http.post(url, value).toPromise();
   }
-
 }

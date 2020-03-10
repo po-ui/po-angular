@@ -12,14 +12,13 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
 
 @Injectable()
 export class PoPageJobSchedulerService {
-
   private endpoint = '/';
 
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PORTINARI-SCREEN-LOCK': 'true'
   });
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   configServiceApi(config: { endpoint?: string } = {}) {
     this.endpoint = config.endpoint;
@@ -40,8 +39,9 @@ export class PoPageJobSchedulerService {
 
   // Busca parametros pelo processo id
   getParametersByProcess(processId: string | number): Observable<any> {
-    return this.http.get(`${this.endpoint}/processes/${processId}/parameters`, { headers: this.headers })
-    .pipe(map((resource: { items: Array<PoDynamicFormField> }) => resource.items));
+    return this.http
+      .get(`${this.endpoint}/processes/${processId}/parameters`, { headers: this.headers })
+      .pipe(map((resource: { items: Array<PoDynamicFormField> }) => resource.items));
   }
 
   // Busca um único recurso
@@ -56,7 +56,8 @@ export class PoPageJobSchedulerService {
 
   // Busca um único recurso
   getResource(id: string | number): Observable<any> {
-    return this.http.get(`${this.endpoint}/${id}`, { headers: this.headers })
+    return this.http
+      .get(`${this.endpoint}/${id}`, { headers: this.headers })
       .pipe(map(resource => this.convertToJobSchedulerInternal(resource)));
   }
 
@@ -71,18 +72,18 @@ export class PoPageJobSchedulerService {
     const jobScheduler = { ...jobSchedulerInternal };
 
     if (jobSchedulerInternal.periodicity) {
-
       if (jobSchedulerInternal.periodicity === 'single') {
         jobScheduler.recurrent = false;
       } else {
         Object.assign(jobScheduler, this.convertToPeriodicity(jobSchedulerInternal));
       }
-
     }
 
     if (jobSchedulerInternal.firstExecutionHour) {
-      jobScheduler.firstExecution =
-        this.replaceHourFirstExecution(jobSchedulerInternal.firstExecution, jobSchedulerInternal.firstExecutionHour);
+      jobScheduler.firstExecution = this.replaceHourFirstExecution(
+        jobSchedulerInternal.firstExecution,
+        jobSchedulerInternal.firstExecutionHour
+      );
     }
 
     if (!Object.keys(this.returnValidExecutionParameter(jobScheduler.executionParameter)).length) {
@@ -94,7 +95,7 @@ export class PoPageJobSchedulerService {
     return jobScheduler;
   }
 
-  private convertToJobSchedulerInternal(jobScheduler = <any> {}): PoJobSchedulerInternal {
+  private convertToJobSchedulerInternal(jobScheduler = <any>{}): PoJobSchedulerInternal {
     const jobSchedulerInternal = { ...jobScheduler };
 
     if (jobScheduler.firstExecution) {
@@ -108,7 +109,12 @@ export class PoPageJobSchedulerService {
     return jobSchedulerInternal;
   }
 
-  private convertToPeriodicity(value: { periodicity: string , dayOfMonth?: string, daysOfWeek?: number, hour?: string }) {
+  private convertToPeriodicity(value: {
+    periodicity: string;
+    dayOfMonth?: string;
+    daysOfWeek?: number;
+    hour?: string;
+  }) {
     const newValue = {};
     const valuePeriodicity = value.periodicity;
 
@@ -128,7 +134,7 @@ export class PoPageJobSchedulerService {
     return newValue;
   }
 
-  private convertToPeriodicityInternal(value = <any> {}) {
+  private convertToPeriodicityInternal(value = <any>{}) {
     if (value.monthly) {
       return {
         periodicity: 'monthly',
@@ -165,7 +171,15 @@ export class PoPageJobSchedulerService {
   }
 
   private removeInvalidKeys(value: object, keys?: Array<string>) {
-    const invalidKeys = keys || ['periodicity', 'hour', 'minute', 'day', 'daysOfWeek', 'dayOfMonth', 'firstExecutionHour'];
+    const invalidKeys = keys || [
+      'periodicity',
+      'hour',
+      'minute',
+      'day',
+      'daysOfWeek',
+      'dayOfMonth',
+      'firstExecutionHour'
+    ];
 
     Object.keys(value).forEach(key => {
       if (invalidKeys.includes(key)) {
@@ -198,5 +212,4 @@ export class PoPageJobSchedulerService {
 
     return newParameter;
   }
-
 }

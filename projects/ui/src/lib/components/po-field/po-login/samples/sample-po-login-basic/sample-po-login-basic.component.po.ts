@@ -10,5 +10,4 @@ export class SamplePoLoginBasicComponentPO {
   get poLoginInput() {
     return element(by.css(`${this.sampleName} po-login .po-field-container-content input[type="text"]`));
   }
-
 }

@@ -13,21 +13,14 @@ import { PoHttpRequestInterceptorService } from './po-http-request-interceptor.s
 import { PoHttpRequestModule } from '../../interceptors/po-http-request/po-http-request.module';
 
 describe('PoHttpRequestInterceptorService: ', () => {
-
   const mockErrorResponse = { status: 404, statusText: 'Bad Request' };
-  const mockUsers = [
-    { name: 'Bob' },
-    { name: 'Juliette' }
-  ];
+  const mockUsers = [{ name: 'Bob' }, { name: 'Juliette' }];
 
   let httpRequestInterceptor;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        PoHttpRequestModule
-      ],
+      imports: [HttpClientTestingModule, PoHttpRequestModule],
       providers: [
         PoHttpRequesControltService,
         PoHttpRequestInterceptorService,
@@ -37,7 +30,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
           useClass: PoHttpRequestInterceptorService,
           multi: true
         }
-      ],
+      ]
     });
 
     httpRequestInterceptor = TestBed.inject(PoHttpRequestInterceptorService);
@@ -50,30 +43,32 @@ describe('PoHttpRequestInterceptorService: ', () => {
   });
 
   describe('Methods: ', () => {
-
     it('getCountPendingRequests: should return observable when call `getCountPendingRequests` method.', () => {
       const observable = httpRequestInterceptor.getCountPendingRequests();
 
       expect(observable instanceof Observable).toBeTruthy();
     });
 
-    it('intercept: should return `throwError` when call `catch` method.',
-      inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
+    it('intercept: should return `throwError` when call `catch` method.', inject(
+      [HttpClient, HttpTestingController],
+      (http: HttpClient, httpMock: HttpTestingController) => {
+        spyOn(httpRequestInterceptor, <any>'setCountPendingRequests');
+        spyOn(httpRequestInterceptor, <any>'setCountOverlayRequests');
 
-        spyOn(httpRequestInterceptor, <any> 'setCountPendingRequests');
-        spyOn(httpRequestInterceptor, <any> 'setCountOverlayRequests');
-
-        http.get('/data').subscribe(res => { }, error => {
-          expect(error.statusText).toBe(mockErrorResponse.statusText);
-          expect(error.status).toBe(mockErrorResponse.status);
-        });
+        http.get('/data').subscribe(
+          res => {},
+          error => {
+            expect(error.statusText).toBe(mockErrorResponse.statusText);
+            expect(error.status).toBe(mockErrorResponse.status);
+          }
+        );
 
         httpMock.expectOne('/data').flush({}, mockErrorResponse);
         httpMock.verify();
-    }));
+      }
+    ));
 
     it('setCountPendingRequests: should update property `pendingRequests` when call request with header param false.', () => {
-
       const requestNoHeaderParam = createHttpRequest('X-Portinari-No-Count-Pending-Requests', 'false');
 
       httpRequestInterceptor['pendingRequests'] = 1;
@@ -84,7 +79,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
     });
 
     it('setCountPendingRequests: shouldn`t update property `pendingRequests` when call request with header param true.', () => {
-
       const requestNoHeaderParam = createHttpRequest('X-Portinari-No-Count-Pending-Requests', 'true');
 
       httpRequestInterceptor['pendingRequests'] = 1;
@@ -95,7 +89,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
     });
 
     it('setCountPendingRequests: shouldn`t update property `pendingRequests` when call request without header param.', () => {
-
       const requestNullHeaderParam = createHttpRequest('', '');
 
       httpRequestInterceptor['pendingRequests'] = 5;
@@ -106,7 +99,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
     });
 
     it('setCountOverlayRequests: should update property `overlayRequests` when call request with header param true.', () => {
-
       const requestNoHeaderParam = createHttpRequest('X-Portinari-Screen-Lock', 'true');
 
       httpRequestInterceptor['overlayRequests'] = 1;
@@ -117,7 +109,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
     });
 
     it('setCountOverlayRequests: shouldn`t update property `overlayRequests` when call request with header param false.', () => {
-
       const requestNoHeaderParam = createHttpRequest('X-Portinari-Screen-Lock', 'false');
 
       httpRequestInterceptor['overlayRequests'] = 1;
@@ -128,7 +119,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
     });
 
     it('setCountOverlayRequests: shouldn`t update property `overlayRequests` when call request without header param.', () => {
-
       const requestNullHeaderParam = createHttpRequest('', '');
 
       httpRequestInterceptor['overlayRequests'] = 0;
@@ -140,7 +130,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
 
     it(`setCountOverlayRequests: should update property 'overlayRequests' to '0' when call request with header
       param true and isIncrement is false.`, () => {
-
       const requestNullHeaderParam = createHttpRequest('X-Portinari-Screen-Lock', 'true');
 
       httpRequestInterceptor['overlayRequests'] = 1;
@@ -152,7 +141,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
 
     it(`requestCloneWithoutHeaderParam: should call 'headers.delete' when call
         request with 'X-Portinari-No-Count-Pending-Requests' header param.`, () => {
-
       const requestWithHeaderParam = createHttpRequest('X-Portinari-No-Count-Pending-Requests', 'true');
       const readerParams = ['X-Portinari-No-Count-Pending-Requests', 'true'];
 
@@ -165,7 +153,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
 
     it(`requestCloneWithoutHeaderParam: should call 'headers.delete' when call
         request with 'X-Portinari-Screen-Lock' header param.`, () => {
-
       const requestWithHeaderParam = createHttpRequest('X-Portinari-Screen-Lock', 'true');
       const readerParams = ['X-Portinari-Screen-Lock', 'true'];
 
@@ -177,7 +164,6 @@ describe('PoHttpRequestInterceptorService: ', () => {
     });
 
     it(`requestCloneWithoutHeaderParam: should not call 'headers.delete' when header param is undefiend.`, () => {
-
       const requestWithHeaderParam = createHttpRequest('X-Portinari-Screen-Lock', 'false');
       const readerParams = [];
 
@@ -196,7 +182,9 @@ describe('PoHttpRequestInterceptorService: ', () => {
 
       httpRequestInterceptor['buildLoading']();
 
-      expect(httpRequestInterceptor.poComponentInjector.createComponentInApplication).toHaveBeenCalledWith(PoLoadingOverlayComponent);
+      expect(httpRequestInterceptor.poComponentInjector.createComponentInApplication).toHaveBeenCalledWith(
+        PoLoadingOverlayComponent
+      );
     });
 
     it('buildLoading: shouldn`t create `PoLoadingOverlayComponent` when `loadingOverlayComponent` is defined', () => {
@@ -228,7 +216,9 @@ describe('PoHttpRequestInterceptorService: ', () => {
 
       httpRequestInterceptor['destroyLoading']();
 
-      expect(httpRequestInterceptor.poComponentInjector.destroyComponentInApplication).toHaveBeenCalledWith(PoLoadingOverlayComponent);
+      expect(httpRequestInterceptor.poComponentInjector.destroyComponentInApplication).toHaveBeenCalledWith(
+        PoLoadingOverlayComponent
+      );
       expect(httpRequestInterceptor['loadingOverlayComponent']).toBeUndefined();
     });
 
@@ -241,22 +231,19 @@ describe('PoHttpRequestInterceptorService: ', () => {
 
       expect(httpRequestInterceptor.poComponentInjector.destroyComponentInApplication).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Properties: ', () => {
-
-    it('pendingRequests: should increment `pendingRequests` when receive a request with success.',
-      inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
-
+    it('pendingRequests: should increment `pendingRequests` when receive a request with success.', inject(
+      [HttpClient, HttpTestingController],
+      (http: HttpClient, httpMock: HttpTestingController) => {
         http.get('/data').subscribe();
         httpMock.expectOne('/data').flush(mockUsers);
 
         expect(httpRequestInterceptor['pendingRequests']).toEqual(0);
-    }));
-
+      }
+    ));
   });
-
 });
 
 function createHttpRequest(headerParam: string, value: string) {

@@ -1,15 +1,24 @@
 import { PoDataTransform } from './po-data-transform.model';
 
 class PoDataTransformExtends extends PoDataTransform {
-  getDateFieldName(): string { return ''; }
-  getPageSizeParamName(): string { return ''; }
-  getPageParamName(): string { return ''; }
-  hasNext(): boolean { return true; }
-  getItemsFieldName(): string { return ''; }
+  getDateFieldName(): string {
+    return '';
+  }
+  getPageSizeParamName(): string {
+    return '';
+  }
+  getPageParamName(): string {
+    return '';
+  }
+  hasNext(): boolean {
+    return true;
+  }
+  getItemsFieldName(): string {
+    return '';
+  }
 }
 
 describe('PoDataTransform', () => {
-
   const poDataTransform = new PoDataTransformExtends();
 
   it('should be created', () => {
@@ -17,7 +26,6 @@ describe('PoDataTransform', () => {
   });
 
   describe('Methods: ', () => {
-
     it('getDateFieldName: should be a function', () => {
       expect(poDataTransform.getDateFieldName).toBeTruthy();
     });
@@ -43,7 +51,5 @@ describe('PoDataTransform', () => {
 
       expect(poDataTransform['data']).toEqual(jasmine.anything());
     });
-
   });
-
 });

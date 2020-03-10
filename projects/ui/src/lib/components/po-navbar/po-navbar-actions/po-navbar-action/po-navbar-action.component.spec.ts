@@ -13,8 +13,8 @@ describe('PoNavbarActionComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoNavbarActionComponent ],
-      imports: [ PoTooltipModule, RouterModule.forRoot([]) ]
+      declarations: [PoNavbarActionComponent],
+      imports: [PoTooltipModule, RouterModule.forRoot([])]
     });
   });
 
@@ -30,7 +30,6 @@ describe('PoNavbarActionComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('click: should call `callFunction` with `action` and `this` if `action` is defined and `parentRef` is undefined', () => {
       component.action = () => 'action';
       component['parentRef'] = undefined;
@@ -61,7 +60,7 @@ describe('PoNavbarActionComponent:', () => {
       spyOn(utils, 'callFunction');
       spyOn(component, <any>'openUrl').and.returnValue(linkReturn);
 
-      const result = <any> component.click();
+      const result = <any>component.click();
 
       expect(utils.callFunction).not.toHaveBeenCalled();
       expect(component['openUrl']).toHaveBeenCalledWith(component.link);
@@ -114,6 +113,5 @@ describe('PoNavbarActionComponent:', () => {
       expect(component['router'].navigate).not.toHaveBeenCalled();
       expect(utils.openExternalLink).not.toHaveBeenCalled();
     });
-
   });
 });

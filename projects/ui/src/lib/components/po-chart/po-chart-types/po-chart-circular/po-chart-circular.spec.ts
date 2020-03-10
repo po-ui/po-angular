@@ -15,11 +15,9 @@ import { PoPieChartSeries } from '../po-chart-pie/po-chart-pie-series.interface'
   templateUrl: '../po-chart-dynamic-type.component.html'
 })
 class PoChartCircularComponent extends PoChartCircular {
-
   constructor(el: ElementRef, ngZone: NgZone, renderer: Renderer2) {
     super(el, ngZone, renderer);
   }
-
 }
 
 describe('PoChartCircular:', () => {
@@ -28,9 +26,8 @@ describe('PoChartCircular:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoChartCircularComponent ]
-    })
-    .compileComponents();
+      declarations: [PoChartCircularComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -45,7 +42,6 @@ describe('PoChartCircular:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnDestroy: should call `removeWindowResizeListener`, `removeWindowScrollListener` and set `animationRunning` to false', () => {
       component['animationRunning'] = true;
       spyOn(component, <any>'removeWindowResizeListener');
@@ -95,13 +91,16 @@ describe('PoChartCircular:', () => {
     });
 
     it('calculateAngleRadians: should set `chartItemsEndAngleList` with items end angle', () => {
-      const itemsEndAngle = [ 0.1, 0.2, 0.3, 0.4 ];
+      const itemsEndAngle = [0.1, 0.2, 0.3, 0.4];
 
       spyOn(component, <any>'calculateEndAngle').and.returnValues(...itemsEndAngle);
 
       component.colors = PoChartColors[3];
       component['series'] = [
-        { category: '1', value: 1 }, { category: '2', value: 2 }, { category: '3', value: 3 }, { category: '4', value: 4 }
+        { category: '1', value: 1 },
+        { category: '2', value: 2 },
+        { category: '3', value: 3 },
+        { category: '4', value: 4 }
       ];
 
       component['calculateAngleRadians']();
@@ -115,7 +114,10 @@ describe('PoChartCircular:', () => {
 
       component.colors = PoChartColors[3];
       component['series'] = [
-        { category: '1', value: 1 }, { category: '2', value: 2 }, { category: '3', value: 3 }, { category: '4', value: 4 }
+        { category: '1', value: 1 },
+        { category: '2', value: 2 },
+        { category: '3', value: 3 },
+        { category: '4', value: 4 }
       ];
 
       component['calculateAngleRadians']();
@@ -131,7 +133,7 @@ describe('PoChartCircular:', () => {
 
       component['chartItemStartAngle'] = 10;
       component['chartItemEndAngle'] = 20;
-      const endAngleValue = (component['chartItemStartAngle'] + component['chartItemEndAngle']) - poChartCompleteCircle;
+      const endAngleValue = component['chartItemStartAngle'] + component['chartItemEndAngle'] - poChartCompleteCircle;
 
       const result = component['calculateCurrentEndAngle'](angleCurrentPosition);
 
@@ -152,7 +154,7 @@ describe('PoChartCircular:', () => {
 
     it(`chartInitSetup: should call 'calculateSVGDimensions', 'calculateTotalValue',
       'calculateAngleRadians', 'createSVGElements' and 'animationSetup'`, () => {
-      spyOn(component, <any> 'calculateSVGDimensions');
+      spyOn(component, <any>'calculateSVGDimensions');
       spyOn(component, 'calculateTotalValue');
       spyOn(component, <any>'calculateAngleRadians');
       spyOn(component, <any>'createSVGElements');
@@ -180,9 +182,16 @@ describe('PoChartCircular:', () => {
 
       component['changeTooltipPosition'](event);
 
-      expect(component['renderer'].setStyle)
-      .toHaveBeenCalledWith(component.tooltipElement, 'left', `${tooltipPositions.left}px`);
-      expect(component['renderer'].setStyle).toHaveBeenCalledWith(component.tooltipElement, 'top', `${tooltipPositions.top}px`);
+      expect(component['renderer'].setStyle).toHaveBeenCalledWith(
+        component.tooltipElement,
+        'left',
+        `${tooltipPositions.left}px`
+      );
+      expect(component['renderer'].setStyle).toHaveBeenCalledWith(
+        component.tooltipElement,
+        'top',
+        `${tooltipPositions.top}px`
+      );
       expect(component['setTooltipPositions']).toHaveBeenCalledWith(event);
       expect(component['showTooltip']).toHaveBeenCalled();
     });
@@ -190,7 +199,7 @@ describe('PoChartCircular:', () => {
     it('createPath: should create a svg path element with some attributes and append it into `svgPathsWrapper`', () => {
       const index = 0;
       const serie: PoPieChartSeries = { category: 'po', value: 2 };
-      const svgPathsWrapper = {appendChild: () => {}};
+      const svgPathsWrapper = { appendChild: () => {} };
       component.colors = PoChartColors[0];
 
       spyOn(component['renderer'], 'setAttribute');
@@ -208,13 +217,13 @@ describe('PoChartCircular:', () => {
       const tooltipText = 'tooltipText';
       const serie: PoPieChartSeries = { category: 'po', value: 2, tooltip: tooltipText };
       const svgPath = '<svg></svg>';
-      const svgPathsWrapper = {appendChild: () => {}};
+      const svgPathsWrapper = { appendChild: () => {} };
       component.colors = PoChartColors[0];
 
       spyOn(component['renderer'], 'setAttribute');
       spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
       spyOn(component['renderer'], 'appendChild');
-      spyOn(component, <any> 'setElementAttributes');
+      spyOn(component, <any>'setElementAttributes');
 
       component['createPath'](serie, svgPathsWrapper);
 
@@ -279,7 +288,7 @@ describe('PoChartCircular:', () => {
 
     it('onWindowResize: should call `calculateSVGDimensions` and set `svgElement` attribute values ', () => {
       spyOn(component['renderer'], 'setAttribute');
-      spyOn(component, <any> 'calculateSVGDimensions');
+      spyOn(component, <any>'calculateSVGDimensions');
 
       component['onWindowResize']();
 
@@ -288,8 +297,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('removeWindowResizeListener: should remove resize listener', () => {
-
-      spyOn(component, <any> 'windowResizeListener');
+      spyOn(component, <any>'windowResizeListener');
 
       component['removeWindowResizeListener']();
 
@@ -406,7 +414,7 @@ describe('PoChartCircular:', () => {
     it('emitEventOnEnter: should call `onSerieHover.next`', () => {
       spyOn(component['onSerieHover'], 'next');
 
-      component['emitEventOnEnter']({category: 'Data', value: 1});
+      component['emitEventOnEnter']({ category: 'Data', value: 1 });
 
       expect(component['onSerieHover'].next).toHaveBeenCalled();
     });
@@ -414,7 +422,7 @@ describe('PoChartCircular:', () => {
     it('drawSeries: should return undefined if `isFinishedDrawingCurrentSeries` is true', () => {
       component['svgPathElementsList'].length = 3;
 
-      spyOn(component, <any> 'calculateCurrentEndAngle');
+      spyOn(component, <any>'calculateCurrentEndAngle');
       spyOn(window, 'requestAnimationFrame');
 
       expect(window.requestAnimationFrame).not.toHaveBeenCalled();
@@ -427,10 +435,11 @@ describe('PoChartCircular:', () => {
       component['svgPathElementsList'].length = 3;
       component['chartItemEndAngle'] = 1;
       component['chartItemsEndAngleList'] = [angleCurrentPosition];
-      const expectedChartItemStartAngleValue: number = component['chartItemStartAngle'] + component['chartItemEndAngle'];
+      const expectedChartItemStartAngleValue: number =
+        component['chartItemStartAngle'] + component['chartItemEndAngle'];
 
-      spyOn(component, <any> 'drawPath');
-      spyOn(component, <any> 'calculateCurrentEndAngle');
+      spyOn(component, <any>'drawPath');
+      spyOn(component, <any>'calculateCurrentEndAngle');
       spyOn(window, 'requestAnimationFrame');
 
       component['drawSeries'](currentSerieIndex, angleCurrentPosition);
@@ -450,8 +459,8 @@ describe('PoChartCircular:', () => {
       component['chartItemEndAngle'] = 2;
       component['chartItemsEndAngleList'] = [angleCurrentPosition];
 
-      spyOn(component, <any> 'drawPath');
-      spyOn(component, <any> 'calculateCurrentEndAngle');
+      spyOn(component, <any>'drawPath');
+      spyOn(component, <any>'calculateCurrentEndAngle');
       spyOn(window, 'requestAnimationFrame');
 
       component['drawSeries'](currentSerieIndex, angleCurrentPosition);
@@ -463,11 +472,14 @@ describe('PoChartCircular:', () => {
 
     it('createPaths: should call `renderer.createElement` and call `createPath`', () => {
       component.colors = PoChartColors[2];
-      component['series'] = [{ value: 10, category: 'First'}, { value: 20, category: 'Second' }];
+      component['series'] = [
+        { value: 10, category: 'First' },
+        { value: 20, category: 'Second' }
+      ];
 
       spyOn(component['renderer'], 'createElement');
       spyOn(component['series'], 'forEach').and.callThrough();
-      spyOn(component, <any> 'createPath');
+      spyOn(component, <any>'createPath');
       spyOn(component, <any>'appendGaugeBackgroundPathElement');
 
       component['createPaths']();
@@ -480,7 +492,7 @@ describe('PoChartCircular:', () => {
 
     it('createPaths: should call `appendGaugeBackgroundPathElement` if type is `gauge`', () => {
       component.colors = PoChartColors[0];
-      component['series'] = [{ value: 10, description: 'First'}];
+      component['series'] = [{ value: 10, description: 'First' }];
       component.type = PoChartType.Gauge;
 
       spyOn(component, <any>'appendGaugeBackgroundPathElement');
@@ -493,7 +505,7 @@ describe('PoChartCircular:', () => {
     it('createPaths: shouldn`t call `createPath` if type is gauge and serie`s property value is equal 0', () => {
       const fakeThis = {
         colors: PoChartColors[1],
-        series: [{ value: 0, description: 'First'}],
+        series: [{ value: 0, description: 'First' }],
         type: PoChartType.Gauge,
         isChartGaugeType: true,
         renderer: {
@@ -515,11 +527,11 @@ describe('PoChartCircular:', () => {
       append svgElement in svgContainer and setAttributes`, () => {
       component.colors = PoChartColors[0];
       component.series = [{ category: 'po', value: 1 }];
-      spyOn(component, <any> 'createPaths');
-      spyOn(component, <any> 'createTexts');
-      spyOn(component['renderer'], <any> 'createElement').and.callThrough();
-      spyOn(component['renderer'], <any> 'setAttribute');
-      spyOn(component['svgContainer'].nativeElement, <any> 'appendChild');
+      spyOn(component, <any>'createPaths');
+      spyOn(component, <any>'createTexts');
+      spyOn(component['renderer'], <any>'createElement').and.callThrough();
+      spyOn(component['renderer'], <any>'setAttribute');
+      spyOn(component['svgContainer'].nativeElement, <any>'appendChild');
 
       component['createSVGElements']();
 
@@ -566,7 +578,9 @@ describe('PoChartCircular:', () => {
 
       component['createSVGElements']();
 
-      expect(component['svgElement'].getAttribute('viewBox')).toEqual(`0 0 ${component.chartWrapper} ${component.chartWrapper}`);
+      expect(component['svgElement'].getAttribute('viewBox')).toEqual(
+        `0 0 ${component.chartWrapper} ${component.chartWrapper}`
+      );
     });
 
     it('createSVGElements: should set properly viewBox attribute values if type is `gauge`', () => {
@@ -575,11 +589,13 @@ describe('PoChartCircular:', () => {
       component.series = [{ category: 'po', value: 1 }];
       component.centerX = 500;
       component.chartWrapper = 1000;
-      const expectedGaugeHeight =  (component.centerX + (component.centerX * poChartGaugeSerieWidth)).toString();
+      const expectedGaugeHeight = (component.centerX + component.centerX * poChartGaugeSerieWidth).toString();
 
       component['createSVGElements']();
 
-      expect(component['svgElement'].getAttribute('viewBox')).toEqual(`0 0 ${component.chartWrapper} ${expectedGaugeHeight}`);
+      expect(component['svgElement'].getAttribute('viewBox')).toEqual(
+        `0 0 ${component.chartWrapper} ${expectedGaugeHeight}`
+      );
     });
 
     it('setEventListeners: should call `renderer.listen` ten times and set `windowResizeListener`', () => {
@@ -588,7 +604,7 @@ describe('PoChartCircular:', () => {
         '<svg:path class="po-path-item" fill="#0B92B4" data-tooltip-value="2"></svg:path>'
       ];
 
-      component['el'] = <any> {
+      component['el'] = <any>{
         nativeElement: {
           querySelectorAll: () => {}
         }
@@ -598,7 +614,7 @@ describe('PoChartCircular:', () => {
       component['windowScrollListener'] = undefined;
 
       spyOn(component['el'].nativeElement, 'querySelectorAll').and.returnValue(chartSeries);
-      spyOn(component, <any> 'checkingIfScrollsWithPoPage').and.returnValue(window);
+      spyOn(component, <any>'checkingIfScrollsWithPoPage').and.returnValue(window);
 
       spyOn(component['renderer'], 'listen').and.returnValue(() => {});
 
@@ -614,7 +630,7 @@ describe('PoChartCircular:', () => {
         '<svg:path class="po-path-item" fill="#0B92B4" data-tooltip-value="2"></svg:path>'
       ];
 
-      component['el'] = <any> {
+      component['el'] = <any>{
         nativeElement: {
           querySelectorAll: () => {}
         }
@@ -623,7 +639,7 @@ describe('PoChartCircular:', () => {
       component.type = PoChartType.Gauge;
 
       spyOn(component['el'].nativeElement, 'querySelectorAll').and.returnValue(chartSeries);
-      spyOn(component, <any> 'checkingIfScrollsWithPoPage').and.returnValue(window);
+      spyOn(component, <any>'checkingIfScrollsWithPoPage').and.returnValue(window);
 
       spyOn(component['renderer'], 'listen').and.returnValue(() => {});
 
@@ -633,7 +649,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('setEventListeners: should call `renderer.listen` twice times and set `windowResizeListener` and `windowScrollListener`', () => {
-      component['el'] = <any> {
+      component['el'] = <any>{
         nativeElement: {
           querySelectorAll: () => {}
         }
@@ -643,7 +659,7 @@ describe('PoChartCircular:', () => {
 
       spyOn(component['el'].nativeElement, 'querySelectorAll').and.returnValue([]);
       spyOn(component['renderer'], 'listen').and.returnValue(() => {});
-      spyOn(component, <any> 'checkingIfScrollsWithPoPage').and.returnValue(window);
+      spyOn(component, <any>'checkingIfScrollsWithPoPage').and.returnValue(window);
 
       component['setEventListeners']();
 
@@ -715,14 +731,17 @@ describe('PoChartCircular:', () => {
 
       spyOn(component['renderer'], 'setAttribute');
       spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
-      spyOn(component, <any> 'getTooltipValue').and.callThrough();
+      spyOn(component, <any>'getTooltipValue').and.callThrough();
 
       component['setElementAttributes'](svgPath, serie);
 
       expect(component['getTooltipValue']).toHaveBeenCalledWith(serie.value);
       expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(3);
-      expect(component['renderer'].setAttribute)
-        .toHaveBeenCalledWith(svgPath, 'data-tooltip-text', `${serie.category}: ${serie.value}`);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(
+        svgPath,
+        'data-tooltip-text',
+        `${serie.category}: ${serie.value}`
+      );
     });
 
     it('setElementAttributes: shouldn`t call `getTooltipValue` and call `setAttribute` passing `description` as param`', () => {
@@ -732,12 +751,16 @@ describe('PoChartCircular:', () => {
 
       spyOn(component['renderer'], 'setAttribute');
       spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
-      spyOn(component, <any> 'getTooltipValue').and.callThrough();
+      spyOn(component, <any>'getTooltipValue').and.callThrough();
 
       component['setElementAttributes'](svgPath, serie);
 
       expect(component['getTooltipValue']).not.toHaveBeenCalled();
-      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(svgPath, 'data-tooltip-description', `${serie.description}`);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(
+        svgPath,
+        'data-tooltip-description',
+        `${serie.description}`
+      );
     });
 
     it('getTooltipValue: should return value as string if `type` is pie', () => {
@@ -802,7 +825,7 @@ describe('PoChartCircular:', () => {
 
     it('createTexts: should call `createText` 2 times if `type` is donut', () => {
       const mockSeries = [
-        { value: 10, category: 'First'},
+        { value: 10, category: 'First' },
         { value: 20, category: 'Second' }
       ];
 
@@ -810,7 +833,7 @@ describe('PoChartCircular:', () => {
       component['series'] = mockSeries;
       component.type = PoChartType.Donut;
 
-      spyOn(component, <any> 'createText');
+      spyOn(component, <any>'createText');
 
       component['createTexts']();
 
@@ -819,7 +842,7 @@ describe('PoChartCircular:', () => {
 
     it('createTexts: shouldn`t call `createText` if `type` is pie', () => {
       const mockSeries = [
-        { value: 10, category: 'First'},
+        { value: 10, category: 'First' },
         { value: 20, category: 'Second' }
       ];
 
@@ -827,7 +850,7 @@ describe('PoChartCircular:', () => {
       component['series'] = mockSeries;
       component.type = PoChartType.Donut;
 
-      spyOn(component, <any> 'createText');
+      spyOn(component, <any>'createText');
 
       component['createTexts']();
 
@@ -839,10 +862,10 @@ describe('PoChartCircular:', () => {
 
       component.colors = PoChartColors[0];
 
-      spyOn(component, <any> 'getFontSize');
-      spyOn(component, <any> 'getTextColor');
-      spyOn(component, <any> 'getPercentValue');
-      spyOn(component, <any> 'setElementAttributes');
+      spyOn(component, <any>'getFontSize');
+      spyOn(component, <any>'getTextColor');
+      spyOn(component, <any>'getPercentValue');
+      spyOn(component, <any>'setElementAttributes');
 
       spyOn(component['renderer'], 'createElement').and.callThrough();
       spyOn(component['renderer'], 'setAttribute');
@@ -864,7 +887,7 @@ describe('PoChartCircular:', () => {
 
     it('setTextProperties: shouldn`t call `text.setAttribute` if `type` is pie', () => {
       const text = {
-        getBBox: () => ({ width: 30, height: 10}),
+        getBBox: () => ({ width: 30, height: 10 }),
         setAttribute: (attr, val) => {}
       };
 
@@ -881,7 +904,7 @@ describe('PoChartCircular:', () => {
       const startAngle = 4;
       const endAngle = 6;
       const text = {
-        getBBox: () => ({ width: 30, height: 10}),
+        getBBox: () => ({ width: 30, height: 10 }),
         setAttribute: (attr, val) => {}
       };
 
@@ -902,13 +925,16 @@ describe('PoChartCircular:', () => {
       component.chartLegend = 10;
 
       spyOn(component, 'calculateSVGContainerDimensions');
-      spyOn(component, <any> 'setInnerRadius');
+      spyOn(component, <any>'setInnerRadius');
 
       component['calculateSVGDimensions']();
 
       expect(component['setInnerRadius']).toHaveBeenCalled();
-      expect(component.calculateSVGContainerDimensions)
-        .toHaveBeenCalledWith(component.chartWrapper, component.chartHeader, component.chartLegend);
+      expect(component.calculateSVGContainerDimensions).toHaveBeenCalledWith(
+        component.chartWrapper,
+        component.chartHeader,
+        component.chartLegend
+      );
     });
 
     it('setInnerRadius: should update `innerRadius` with 0 if `type` is pie', () => {
@@ -945,7 +971,10 @@ describe('PoChartCircular:', () => {
 
     it('getSeriesWithValue: should return only series with value and color attr', () => {
       const invalidSeries = [{ category: 'Valor 0', value: 0 }];
-      const series = [{ category: 'Valor 2', value: 2 }, { category: 'Valor 3', value: 3 }];
+      const series = [
+        { category: 'Valor 2', value: 2 },
+        { category: 'Valor 3', value: 3 }
+      ];
       const seriesParam = [...series, ...invalidSeries];
 
       component.colors = PoChartColors[seriesParam.length];
@@ -973,7 +1002,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('appendGaugeBackgroundPathElement: should create a svg path and append it into `svgPathsWrapper`', () => {
-      const svgPathsWrapper = {appendChild: () => {}};
+      const svgPathsWrapper = { appendChild: () => {} };
 
       spyOn(component['renderer'], 'setAttribute');
       spyOn(component['renderer'], 'appendChild');
@@ -987,17 +1016,15 @@ describe('PoChartCircular:', () => {
     });
 
     it('isSerieValueEqualZero: should return true if serie`s value is equal 0', () => {
-      const fakeSerie = {series: [{ value: 0, description: 'Zero'}]};
+      const fakeSerie = { series: [{ value: 0, description: 'Zero' }] };
 
       expect(component['isSerieValueEqualZero'].call(fakeSerie)).toBeTruthy();
     });
 
     it('isSerieValueEqualZero: should return false if serie`s value different from 0', () => {
-      const fakeSerie = {series: [{ value: 1, description: 'One'}]};
+      const fakeSerie = { series: [{ value: 1, description: 'One' }] };
 
       expect(component['isSerieValueEqualZero'].call(fakeSerie)).toBeFalsy();
     });
-
   });
-
 });

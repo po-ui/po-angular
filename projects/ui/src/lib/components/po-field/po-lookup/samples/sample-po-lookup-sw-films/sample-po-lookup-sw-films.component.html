@@ -1,16 +1,15 @@
 <div class="po-row">
-
   <po-radio-group
     class="po-md-12"
     name="filterParams"
     [(ngModel)]="filterParams"
     p-label="Choose the entity of SW to search"
-    [p-options]="entities">
+    [p-options]="entities"
+  >
   </po-radio-group>
-
 </div>
 
-<hr>
+<hr />
 
 <div class="po-row">
   <po-lookup
@@ -24,15 +23,11 @@
     [p-columns]="entityColumns"
     [p-filter-params]="filterParams"
     [p-filter-service]="filterService"
-    (p-selected)="onSelected($event)">
+    (p-selected)="onSelected($event)"
+  >
   </po-lookup>
 </div>
 
 <div class="po-row" *ngIf="filmItemsFiltered && entity">
-  <po-table
-    class="po-sm-12"
-    [p-columns]="filmColumns"
-    [p-items]="filmItemsFiltered"
-    [p-sort]="true">
-  </po-table>
+  <po-table class="po-sm-12" [p-columns]="filmColumns" [p-items]="filmItemsFiltered" [p-sort]="true"> </po-table>
 </div>

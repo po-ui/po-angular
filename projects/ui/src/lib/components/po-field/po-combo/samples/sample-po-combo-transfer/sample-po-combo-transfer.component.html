@@ -1,5 +1,5 @@
 <div class="po-text-center">
-  <div class="po-font-title"> Banking Transfer </div>
+  <div class="po-font-title">Banking Transfer</div>
 </div>
 
 <form #transferForm="ngForm">
@@ -10,7 +10,8 @@
       [(ngModel)]="typeAccount"
       p-label="From"
       p-required
-      [p-options]="typeAccounts">
+      [p-options]="typeAccounts"
+    >
     </po-select>
 
     <po-combo
@@ -21,15 +22,15 @@
       p-icon="po-icon-user"
       p-label="To contact"
       p-placeholder="Select a contact"
-      p-required>
-
+      p-required
+    >
       <ng-template p-combo-option-template let-option>
         <div class="po-row">
           <po-avatar class="po-sm-2 po-md-3 po-lg-1" p-size="sm"></po-avatar>
 
           <div class="po-sm-10 po-md-9 po-lg-11">
-            <div class="po-font-text-large-bold"> {{ option.label }} </div>
-            <div class="po-font-text-smaller"> Account: {{ option.value }} </div>
+            <div class="po-font-text-large-bold">{{ option.label }}</div>
+            <div class="po-font-text-smaller">Account: {{ option.value }}</div>
           </div>
         </div>
       </ng-template>
@@ -44,7 +45,8 @@
       p-clean
       p-label="Value to transfer"
       p-placeholder="R$ 0,00"
-      p-required>
+      p-required
+    >
     </po-decimal>
 
     <po-datepicker
@@ -53,7 +55,8 @@
       [(ngModel)]="dateTransfer"
       p-label="Date to transfer"
       p-placeholder="dd/mm/yyyy"
-      p-required>
+      p-required
+    >
     </po-datepicker>
   </div>
 
@@ -63,44 +66,24 @@
       p-label="Transfer"
       p-type="primary"
       [p-disabled]="transferForm.invalid"
-      (p-click)="transfer()">
+      (p-click)="transfer()"
+    >
     </po-button>
   </div>
 </form>
 
-<po-modal
-  p-title="Do you confirm transfer?"
-  [p-primary-action]="confirmAction"
-  [p-secondary-action]="cancelAction">
-
+<po-modal p-title="Do you confirm transfer?" [p-primary-action]="confirmAction" [p-secondary-action]="cancelAction">
   <div class="po-row">
-    <po-info
-      class="po-md-6"
-      p-label="From"
-      [p-value]="typeAccount">
-    </po-info>
+    <po-info class="po-md-6" p-label="From" [p-value]="typeAccount"> </po-info>
 
-    <po-info
-      class="po-md-6"
-      p-label="To"
-      [p-value]="contact">
-    </po-info>
+    <po-info class="po-md-6" p-label="To" [p-value]="contact"> </po-info>
   </div>
 
   <po-divider></po-divider>
 
   <div class="po-row">
-    <po-info
-      class="po-md-6"
-      p-label="Value"
-      [p-value]="value">
-    </po-info>
+    <po-info class="po-md-6" p-label="Value" [p-value]="value"> </po-info>
 
-    <po-info
-      class="po-md-6"
-      p-label="Date to transfer"
-      p-value="{{dateTransfer | date}}">
-    </po-info>
+    <po-info class="po-md-6" p-label="Date to transfer" p-value="{{ dateTransfer | date }}"> </po-info>
   </div>
-
 </po-modal>

@@ -1,17 +1,10 @@
 <div class="po-text-center">
-  <div class="po-font-title"> Pre-appointment scheduling </div>
+  <div class="po-font-title">Pre-appointment scheduling</div>
 </div>
 
 <form #schedulingForm="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-lg-6"
-      name="name"
-      [(ngModel)]="name"
-      p-clean
-      p-label="Name"
-      p-required>
-    </po-input>
+    <po-input class="po-lg-6" name="name" [(ngModel)]="name" p-clean p-label="Name" p-required> </po-input>
 
     <po-email
       class="po-lg-6"
@@ -20,7 +13,8 @@
       p-clean
       p-label="Email"
       p-placeholder="example@domain.com"
-      p-required>
+      p-required
+    >
     </po-email>
   </div>
 
@@ -32,7 +26,8 @@
       p-clean
       p-label="Birthday"
       p-placeholder="dd/mm/yyyy"
-      p-required>
+      p-required
+    >
     </po-datepicker>
 
     <po-input
@@ -43,7 +38,8 @@
       p-label="Phone number"
       p-mask="(99) 99999-9999"
       p-placeholder="(99) 99999-9999"
-      p-required>
+      p-required
+    >
     </po-input>
   </div>
 
@@ -57,7 +53,8 @@
       p-placeholder="Select a location"
       p-required
       p-sort
-      [p-options]="citiesOptions">
+      [p-options]="citiesOptions"
+    >
       <ng-template p-combo-option-template let-option>
         <ng-container *ngIf="option.options; then OptionsGroupTitle; else optionsGroup"></ng-container>
         <ng-template #OptionsGroupTitle>
@@ -66,7 +63,8 @@
               class="po-sm-2 po-md-3 po-lg-1"
               p-size="xs"
               style="background-color: #fbfbfb"
-              [p-src]="getStateByLabel(option.label)">
+              [p-src]="getStateByLabel(option.label)"
+            >
             </po-avatar>
             <p class="po-combo-item-title po-sm-10 po-md-9 po-lg-11">{{ option.label }}</p>
           </div>
@@ -88,7 +86,8 @@
       p-label="Type scheduling"
       p-required
       p-sort
-      [p-options]="typeSchedulings">
+      [p-options]="typeSchedulings"
+    >
     </po-select>
 
     <po-combo
@@ -99,7 +98,8 @@
       p-label="Medical Specialty/Exam"
       p-required
       p-sort
-      [p-options]="medicalSpecialtyOptions">
+      [p-options]="medicalSpecialtyOptions"
+    >
     </po-combo>
   </div>
 
@@ -109,7 +109,8 @@
       name="informations"
       [(ngModel)]="informations"
       p-help="Additional informations"
-      p-label="Informations">
+      p-label="Informations"
+    >
     </po-textarea>
   </div>
 
@@ -119,7 +120,8 @@
       p-label="Schedule"
       p-type="primary"
       [p-disabled]="schedulingForm.invalid"
-      (p-click)="confirmPreAppointment(name)">
+      (p-click)="confirmPreAppointment(name)"
+    >
     </po-button>
   </div>
 </form>

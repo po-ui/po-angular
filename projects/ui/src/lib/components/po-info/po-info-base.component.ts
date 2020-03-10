@@ -6,7 +6,6 @@ const poInfoOrientationDefault = PoInfoOrientation.Vertical;
 
 @Directive()
 export class PoInfoBaseComponent {
-
   private _labelSize: number;
   private _orientation: PoInfoOrientation = poInfoOrientationDefault;
 
@@ -34,7 +33,7 @@ export class PoInfoBaseComponent {
     } else {
       value = parseInt(<any>value, 10);
 
-      this._labelSize = (value < 1 || value > 11) ? undefined : value;
+      this._labelSize = value < 1 || value > 11 ? undefined : value;
     }
   }
 
@@ -71,5 +70,4 @@ export class PoInfoBaseComponent {
 
   /** Valor do conteúdo a ser exibido. */
   @Input('p-value') value?: string;
-
 }

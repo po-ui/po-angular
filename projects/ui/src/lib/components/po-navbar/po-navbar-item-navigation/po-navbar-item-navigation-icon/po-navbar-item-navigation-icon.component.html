@@ -1,6 +1,7 @@
 <div
-  [ngClass]="{'po-navbar-item-navigation-icon-disabled': disabled , 'po-clickable': !disabled }"
+  [ngClass]="{ 'po-navbar-item-navigation-icon-disabled': disabled, 'po-clickable': !disabled }"
   tabindex="0"
-  (click)="disabled ? undefined : click.emit(icon)" >
-  <span class="po-icon po-icon-arrow-{{icon}}"></span>
+  (click)="disabled ? undefined : click.emit(icon)"
+>
+  <span class="po-icon po-icon-arrow-{{ icon }}"></span>
 </div>

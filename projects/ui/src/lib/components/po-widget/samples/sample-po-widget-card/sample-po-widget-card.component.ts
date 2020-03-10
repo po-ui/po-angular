@@ -4,10 +4,9 @@ import { PoModalComponent } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-widget-card',
-  templateUrl: './sample-po-widget-card.component.html',
+  templateUrl: './sample-po-widget-card.component.html'
 })
 export class SamplePoWidgetCardComponent implements OnInit {
-
   help: string;
   label: string;
   technologies: Array<string> = ['Angular', 'Typescript', 'React', 'Babel', 'Jasmine', 'Vue'];
@@ -38,5 +37,4 @@ export class SamplePoWidgetCardComponent implements OnInit {
     Any host. Any operating system. Open code.`;
     this.help = 'https://www.typescriptlang.org/';
   }
-
 }

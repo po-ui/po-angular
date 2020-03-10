@@ -1,10 +1,7 @@
-<po-field-container
-  [p-help]="help"
-  [p-label]="label"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
   <div class="po-field-container-content">
-    <textarea #inp
+    <textarea
+      #inp
       class="po-textarea"
       (blur)="eventOnBlur()"
       (focus)="eventOnFocus()"
@@ -14,7 +11,8 @@
       [placeholder]="placeholder"
       [readonly]="readonly"
       [required]="required"
-      [rows]="rows">
+      [rows]="rows"
+    >
     </textarea>
   </div>
 

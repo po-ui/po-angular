@@ -15,28 +15,30 @@ describe('PoButtonGroupComponent:', () => {
   let nativeElement: any;
   let containerButtons: any;
 
-  const fakeButtons: Array<PoButtonGroupItem> = [{
-    label: 'enabled',
-    action: () => {},
-    selected: true,
-    tooltip: 'teste 1'
-  }, {
-    label: 'disabled',
-    disabled: true,
-    action: () => {},
-    selected: false,
-    tooltip: 'teste 2'
-  }, {
-    label: 'other',
-    action: () => {}
-  }];
+  const fakeButtons: Array<PoButtonGroupItem> = [
+    {
+      label: 'enabled',
+      action: () => {},
+      selected: true,
+      tooltip: 'teste 1'
+    },
+    {
+      label: 'disabled',
+      disabled: true,
+      action: () => {},
+      selected: false,
+      tooltip: 'teste 2'
+    },
+    {
+      label: 'other',
+      action: () => {}
+    }
+  ];
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoButtonModule, PoTooltipModule ],
-      declarations: [
-        PoButtonGroupComponent
-      ]
+      imports: [PoButtonModule, PoTooltipModule],
+      declarations: [PoButtonGroupComponent]
     });
   });
 
@@ -94,7 +96,6 @@ describe('PoButtonGroupComponent:', () => {
   });
 
   describe('Template:', () => {
-
     const mouseEnter = (button: any) => {
       const event = document.createEvent('MouseEvents');
       event.initEvent('mouseenter', false, true);
@@ -146,7 +147,5 @@ describe('PoButtonGroupComponent:', () => {
 
       expect(poTooltip).toBeNull();
     }));
-
   });
-
 });

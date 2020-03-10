@@ -1,13 +1,13 @@
 <div class="po-field-container-content po-multiselect-container-search">
-
   <div class="po-field-icon-container-left">
     <span class="po-icon po-icon-search po-field-icon"></span>
   </div>
 
-  <input #inputElement
+  <input
+    #inputElement
     class="po-input po-input-icon-left"
     type="text"
     [placeholder]="placeholder"
-    (keyup)="onChange($event)">
-
+    (keyup)="onChange($event)"
+  />
 </div>

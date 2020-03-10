@@ -29,7 +29,6 @@ import { PoAvatarBaseComponent } from './po-avatar-base.component';
   templateUrl: './po-avatar.component.html'
 })
 export class PoAvatarComponent extends PoAvatarBaseComponent implements OnInit {
-
   ngOnInit(): void {
     if (!this.src) {
       this.src = undefined;
@@ -39,5 +38,4 @@ export class PoAvatarComponent extends PoAvatarBaseComponent implements OnInit {
   onError(): void {
     this.src = undefined;
   }
-
 }

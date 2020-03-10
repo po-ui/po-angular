@@ -1,7 +1,8 @@
-<li *ngIf="!itemActive"
+<li
+  *ngIf="!itemActive"
   [class.po-breadcrumb-item]="link || action"
-  [class.po-breadcrumb-item-unclickable]="!link && !action">
-
+  [class.po-breadcrumb-item-unclickable]="!link && !action"
+>
   <a *ngIf="link" [routerLink]="link">
     <label class="po-breadcrumb-label">{{ label }}</label>
     <div class="po-breadcrumb-arrow"></div>

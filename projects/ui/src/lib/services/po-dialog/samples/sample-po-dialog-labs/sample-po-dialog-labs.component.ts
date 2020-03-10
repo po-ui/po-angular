@@ -6,10 +6,9 @@ import { PoDialogAlertLiterals, PoDialogConfirmLiterals, PoDialogService } from 
 
 @Component({
   selector: 'sample-po-dialog-labs',
-  templateUrl: './sample-po-dialog-labs.component.html',
+  templateUrl: './sample-po-dialog-labs.component.html'
 })
 export class SamplePoDialogLabsComponent implements OnInit {
-
   action: string;
   actionOptions: Array<string>;
   dialogMethod: string;
@@ -23,7 +22,7 @@ export class SamplePoDialogLabsComponent implements OnInit {
   public readonly dialogActionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Ok', value: 'ok' },
     { label: 'Cancel', value: 'cancel' },
-    { label: 'Confirm', value: 'confirm' },
+    { label: 'Confirm', value: 'confirm' }
   ];
 
   public readonly dialogMethodOptions: Array<PoRadioGroupOption> = [
@@ -31,7 +30,7 @@ export class SamplePoDialogLabsComponent implements OnInit {
     { label: 'Confirm', value: 'confirm' }
   ];
 
-  constructor(private poAlert: PoDialogService) { }
+  constructor(private poAlert: PoDialogService) {}
 
   ngOnInit() {
     this.restore();
@@ -42,7 +41,7 @@ export class SamplePoDialogLabsComponent implements OnInit {
       literals: this.literalsAlert,
       title: this.title,
       message: this.message,
-      ok: () => this.actionOptions.includes('ok') ? this.action = 'OK' : undefined
+      ok: () => (this.actionOptions.includes('ok') ? (this.action = 'OK') : undefined)
     });
   }
 
@@ -74,8 +73,8 @@ export class SamplePoDialogLabsComponent implements OnInit {
       literals: this.literalsConfirm,
       title: this.title,
       message: this.message,
-      confirm: () => this.actionOptions.includes('confirm') ? this.action = 'Confirm' : undefined,
-      cancel: () => this.actionOptions.includes('cancel') ? this.action = 'Cancel' : undefined
+      confirm: () => (this.actionOptions.includes('confirm') ? (this.action = 'Confirm') : undefined),
+      cancel: () => (this.actionOptions.includes('cancel') ? (this.action = 'Cancel') : undefined)
     });
   }
 
@@ -95,5 +94,4 @@ export class SamplePoDialogLabsComponent implements OnInit {
     this.literalsConfirm = undefined;
     this.help = '';
   }
-
 }

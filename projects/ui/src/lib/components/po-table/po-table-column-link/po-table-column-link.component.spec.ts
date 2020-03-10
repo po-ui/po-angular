@@ -8,18 +8,13 @@ import { PoTableModule } from '../po-table.module';
 import { PoTooltipModule } from '../../../directives/po-tooltip';
 
 describe('PoTableColumnLinkComponent:', () => {
-
   let component: PoTableColumnLinkComponent;
   let fixture: ComponentFixture<PoTableColumnLinkComponent>;
   let nativeElement;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        PoTableModule,
-        PoTooltipModule
-      ]
+      imports: [RouterTestingModule.withRoutes([]), PoTableModule, PoTooltipModule]
     });
   });
 
@@ -35,7 +30,6 @@ describe('PoTableColumnLinkComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should execute the link action', () => {
       component.action = () => {};
       fixture.detectChanges();
@@ -96,11 +90,9 @@ describe('PoTableColumnLinkComponent:', () => {
       const internalLink = nativeElement.querySelector('.po-table-link[ng-reflect-router-link="/home"]');
       expect(internalLink).toBeTruthy();
     });
-
   });
 
   describe('Properties:', () => {
-
     it('should set type with "action"', () => {
       component.action = () => {};
       component.disabled = false;
@@ -151,5 +143,4 @@ describe('PoTableColumnLinkComponent:', () => {
       expect(component.type).toBe('internalLink');
     });
   });
-
 });

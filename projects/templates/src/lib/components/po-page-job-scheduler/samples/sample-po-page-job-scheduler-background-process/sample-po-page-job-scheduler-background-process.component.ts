@@ -7,13 +7,7 @@ import { PoBreadcrumb } from '@portinari/portinari-ui';
   templateUrl: './sample-po-page-job-scheduler-background-process.component.html'
 })
 export class SamplePoPageJobSchedulerBackgroundProcessComponent {
-
   breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', link: '/' },
-      { label: 'Pipelines', link: '/' },
-      { label: 'Background Process Scheduler' }
-    ]
+    items: [{ label: 'Home', link: '/' }, { label: 'Pipelines', link: '/' }, { label: 'Background Process Scheduler' }]
   };
-
 }

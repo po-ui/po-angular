@@ -19,11 +19,10 @@ import { SamplePoPageDynamicSearchHiringProcessesService } from './sample-po-pag
   providers: [SamplePoPageDynamicSearchHiringProcessesService]
 })
 export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit {
-
   hiringProcesses: Array<object>;
   hiringProcessesColumns: Array<PoTableColumn>;
 
-  private jobDescriptionOptions: Array<object> ;
+  private jobDescriptionOptions: Array<object>;
   private statusOptions: Array<object>;
 
   public readonly actions: Array<PoPageAction> = [
@@ -31,17 +30,14 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   ];
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', action: this.beforeRedirect.bind(this) },
-      { label: 'Hiring processes' }
-    ]
+    items: [{ label: 'Home', action: this.beforeRedirect.bind(this) }, { label: 'Hiring processes' }]
   };
 
   public readonly filters: Array<any> = [
     { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
     { property: 'name', gridColumns: 6 },
     { property: 'city', gridColumns: 6 },
-    { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 },
+    { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
   ];
 
   readonly literals: PoPageDynamicSearchLiterals = {
@@ -54,7 +50,8 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     private sampleHiringProcessesService: SamplePoPageDynamicSearchHiringProcessesService,
     private poNotification: PoNotificationService,
     private poDialog: PoDialogService,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.hiringProcesses = this.sampleHiringProcessesService.getItems();

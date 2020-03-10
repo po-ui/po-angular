@@ -2,47 +2,32 @@
   [p-height]="height"
   [p-no-border]="properties.includes('noBorder')"
   [p-no-padding]="properties.includes('noPadding')"
-  [p-no-shadow]="properties.includes('noShadow')">
-  {{content}}
+  [p-no-shadow]="properties.includes('noShadow')"
+>
+  {{ content }}
 </po-container>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
-
   <div class="po-row">
-    <po-number
-      class="po-md-6"
-      name="height"
-      [(ngModel)]="height"
-      p-label="Height">
-    </po-number>
+    <po-number class="po-md-6" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
 
     <po-checkbox-group
       class="po-md-6"
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-
-    <po-textarea
-      class="po-md-12"
-      [(ngModel)]="content"
-      name="content"
-      p-label="Content">
-    </po-textarea>
+    <po-textarea class="po-md-12" [(ngModel)]="content" name="content" p-label="Content"> </po-textarea>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
-
 </form>

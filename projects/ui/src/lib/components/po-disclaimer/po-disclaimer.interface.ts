@@ -6,7 +6,6 @@
  * Interface que representa o objeto `po-disclaimer`.
  */
 export interface PoDisclaimer {
-
   /** Se verdadeiro, oculta o botão para fechar o *disclaimer*. */
   hideClose?: boolean;
 
@@ -18,5 +17,4 @@ export interface PoDisclaimer {
 
   /** Valor do objeto. */
   value: any;
-
 }

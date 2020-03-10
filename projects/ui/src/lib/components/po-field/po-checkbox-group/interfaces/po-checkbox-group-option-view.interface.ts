@@ -11,8 +11,6 @@ import { PoCheckboxGroupOption } from './po-checkbox-group-option.interface';
  *
  */
 export interface PoCheckboxGroupOptionView extends PoCheckboxGroupOption {
-
   // Identificador do item.
   id: string;
-
 }

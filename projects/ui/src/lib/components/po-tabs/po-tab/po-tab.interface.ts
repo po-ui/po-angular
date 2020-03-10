@@ -6,7 +6,6 @@
  * Interface que define o `po-tab`.
  */
 export interface PoTab {
-
   /**
    * @optional
    *
@@ -47,5 +46,4 @@ export interface PoTab {
 
   /** Rótulo da aba. */
   label: string;
-
 }

@@ -1,9 +1,5 @@
 <form #formVacationSuggestion="ngForm">
-
-  <po-divider
-    class="po-md-9"
-    p-label="Vacation suggestion">
-  </po-divider>
+  <po-divider class="po-md-9" p-label="Vacation suggestion"> </po-divider>
 
   <div class="po-row">
     <po-datepicker-range
@@ -13,7 +9,8 @@
       p-clean
       p-label="Select the period"
       p-required
-      (p-change)="calculateQuantityOfVacationDays()">
+      (p-change)="calculateQuantityOfVacationDays()"
+    >
     </po-datepicker-range>
 
     <po-number
@@ -22,70 +19,42 @@
       [(ngModel)]="quantityOfDays"
       p-disabled
       p-label="Quantity of days"
-      p-required>
+      p-required
+    >
     </po-number>
   </div>
 
   <div class="po-row">
-    <po-textarea
-      class="po-md-9"
-      name="textarea"
-      [(ngModel)]="reason"
-      p-label="Reason">
-    </po-textarea>
+    <po-textarea class="po-md-9" name="textarea" [(ngModel)]="reason" p-label="Reason"> </po-textarea>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-2 po-offset-md-5 po-offset-lg-5 po-offset-xl-5"
-      p-label="Clean"
-      (p-click)="clean()">
+    <po-button class="po-md-2 po-offset-md-5 po-offset-lg-5 po-offset-xl-5" p-label="Clean" (p-click)="clean()">
     </po-button>
 
-    <po-button
-      class="po-md-2"
-      p-label="Submit"
-      [p-disabled]="validateForm"
-      (p-click)="modalVacationSuggestion.open()">
+    <po-button class="po-md-2" p-label="Submit" [p-disabled]="validateForm" (p-click)="modalVacationSuggestion.open()">
     </po-button>
   </div>
-
 </form>
 
-<po-modal #modalVacationSuggestion
+<po-modal
+  #modalVacationSuggestion
   p-hide-close
   p-title="Confirm vacation suggestion"
   [p-primary-action]="submit"
-  [p-secondary-action]="cancel">
-
+  [p-secondary-action]="cancel"
+>
   <div class="po-row">
-    <po-info
-      class="po-md-4"
-      p-label="Initial period"
-      [p-value]="datepickerRange?.start | date:'longDate':'+0000'">
+    <po-info class="po-md-4" p-label="Initial period" [p-value]="datepickerRange?.start | date: 'longDate':'+0000'">
     </po-info>
 
-    <po-info
-      class="po-md-4"
-      p-label="Final period"
-      [p-value]="datepickerRange?.end | date:'longDate':'+0000'">
+    <po-info class="po-md-4" p-label="Final period" [p-value]="datepickerRange?.end | date: 'longDate':'+0000'">
     </po-info>
 
-    <po-info
-      class="po-md-4"
-      p-label="Quantity of days"
-      [p-value]="quantityOfDays">
-    </po-info>
+    <po-info class="po-md-4" p-label="Quantity of days" [p-value]="quantityOfDays"> </po-info>
   </div>
 
   <div class="po-row">
-    <po-textarea
-      class="po-md-12"
-      [(ngModel)]="reason"
-      p-disabled
-      p-label="Reason"
-      p-required>
-    </po-textarea>
+    <po-textarea class="po-md-12" [(ngModel)]="reason" p-disabled p-label="Reason" p-required> </po-textarea>
   </div>
-
 </po-modal>

@@ -9,75 +9,42 @@
   [p-select]="properties.includes('select')"
   [p-show-more-disabled]="properties.includes('showMoreDisabled')"
   (p-show-more)="showMore()"
-  (p-title-action)="changeAction('p-title-action')">
-
+  (p-title-action)="changeAction('p-title-action')"
+>
   <ng-template p-list-view-content-template let-item>
     <div class="po-row">
-      <po-info
-        class="po-md-6 po-lg-3"
-        p-label="Name"
-        [p-value]="item.name">
-      </po-info>
+      <po-info class="po-md-6 po-lg-3" p-label="Name" [p-value]="item.name"> </po-info>
 
-      <po-info
-        class="po-md-6 po-lg-3"
-        p-label="Email"
-        [p-value]="item.email">
-      </po-info>
+      <po-info class="po-md-6 po-lg-3" p-label="Email" [p-value]="item.email"> </po-info>
 
-      <po-info
-        class="po-md-6 po-lg-3"
-        p-label="Location"
-        [p-value]="item.location">
-      </po-info>
+      <po-info class="po-md-6 po-lg-3" p-label="Location" [p-value]="item.location"> </po-info>
 
-      <po-info
-        class="po-md-6 po-lg-3"
-        p-label="Phone"
-        [p-value]="item.phone">
-      </po-info>
+      <po-info class="po-md-6 po-lg-3" p-label="Phone" [p-value]="item.phone"> </po-info>
     </div>
   </ng-template>
 
   <ng-template p-list-view-detail-template let-item>
     <div class="po-row">
-      <po-info
-        class="po-md-6 po-lg-3"
-        p-label="Company"
-        [p-value]="item.company">
-      </po-info>
+      <po-info class="po-md-6 po-lg-3" p-label="Company" [p-value]="item.company"> </po-info>
 
-      <po-info
-        class="po-md-6 po-lg-3"
-        p-label="Zip Code"
-        [p-value]="item.zipCode">
-      </po-info>
+      <po-info class="po-md-6 po-lg-3" p-label="Zip Code" [p-value]="item.zipCode"> </po-info>
     </div>
   </ng-template>
-
 </po-list-view>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-button
-    class="po-md-3"
-    p-label="Add Item"
-    (p-click)="addItem()">
-  </po-button>
+  <po-button class="po-md-3" p-label="Add Item" (p-click)="addItem()"> </po-button>
 </div>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-info
-    class="po-md-6"
-    p-label="Action"
-    [p-value]="titleAction">
-  </po-info>
+  <po-info class="po-md-6" p-label="Action" [p-value]="titleAction"> </po-info>
 </div>
 
-<hr>
+<hr />
 
 <form #propertiesForm="ngForm">
   <div class="po-row">
@@ -85,9 +52,10 @@
       class="po-md-6"
       name="propertyTitle"
       [(ngModel)]="propertyTitle"
-      p-help='Ex.: email'
+      p-help="Ex.: email"
       p-label="Property title"
-      [p-options]="propertyTitleOptions">
+      [p-options]="propertyTitleOptions"
+    >
     </po-select>
 
     <po-number
@@ -96,7 +64,8 @@
       [(ngModel)]="height"
       p-help="Ex.: 200"
       p-label="Height"
-      (p-change)="changeLiterals()">
+      (p-change)="changeLiterals()"
+    >
     </po-number>
   </div>
 
@@ -106,7 +75,8 @@
       name="propertyLinkValue"
       [(ngModel)]="propertyLinkValue"
       p-help='Ex.: "http://po.portinari.com.br"'
-      p-label="Title Link">
+      p-label="Title Link"
+    >
     </po-input>
   </div>
 
@@ -117,7 +87,8 @@
       [(ngModel)]="literals"
       p-help='Ex.: { "hideDetails": "Esconder detalhes", "showDetails": "Ver detalhes", "loadMoreData": "Ver mais", "noData": "Sem itens cadastrados" }'
       p-label="Literals"
-      (p-change)="changeLiterals()">
+      (p-change)="changeLiterals()"
+    >
     </po-input>
   </div>
 
@@ -129,54 +100,28 @@
       p-columns="3"
       p-label="Properties"
       [p-options]="propertiesOptions"
-      (p-change)="changeActionOptions()">
+      (p-change)="changeActionOptions()"
+    >
     </po-checkbox-group>
   </div>
 </form>
 
-<hr>
+<hr />
 
 <form #actionForm="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-4"
-      name="actionAction"
-      [(ngModel)]="action.action"
-      p-clean
-      p-label="Action">
-    </po-input>
+    <po-input class="po-md-4" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="actionLabel"
-      [(ngModel)]="action.label"
-      p-label="Label"
-      p-required>
-    </po-input>
+    <po-input class="po-md-4" name="actionLabel" [(ngModel)]="action.label" p-label="Label" p-required> </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="actionURL"
-      [(ngModel)]="action.url"
-      p-label="URL">
-    </po-input>
+    <po-input class="po-md-4" name="actionURL" [(ngModel)]="action.url" p-label="URL"> </po-input>
   </div>
 
   <div class="po-row">
-    <po-select
-      class="po-md-3"
-      name="type"
-      [(ngModel)]="action.type"
-      p-label="Type"
-      [p-options]="typeOptions">
+    <po-select class="po-md-3" name="type" [(ngModel)]="action.type" p-label="Type" [p-options]="typeOptions">
     </po-select>
 
-    <po-select
-      class="po-md-3"
-      name="icon"
-      [(ngModel)]="action.icon"
-      p-label="Icon"
-      [p-options]="iconOptions">
+    <po-select class="po-md-3" name="icon" [(ngModel)]="action.icon" p-label="Icon" [p-options]="iconOptions">
     </po-select>
 
     <po-checkbox-group
@@ -186,9 +131,9 @@
       p-columns="4"
       p-indeterminate
       p-label="Action properties"
-      [p-options]="actionOptions">
+      [p-options]="actionOptions"
+    >
     </po-checkbox-group>
-
   </div>
 
   <div class="po-row">
@@ -196,17 +141,14 @@
       class="po-md-6 po-lg-3"
       p-label="Add Action"
       [p-disabled]="actionForm.invalid"
-      (p-click)="addAction(action)">
+      (p-click)="addAction(action)"
+    >
     </po-button>
   </div>
 </form>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-button
-    class="po-md-3"
-    p-label="Sample Restore"
-    (p-click)="actionForm.reset(); restore()">
-  </po-button>
+  <po-button class="po-md-3" p-label="Sample Restore" (p-click)="actionForm.reset(); restore()"> </po-button>
 </div>

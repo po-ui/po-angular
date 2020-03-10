@@ -8,7 +8,6 @@
  * Interface para as mensagens do `po-http-interceptor`.
  */
 export interface PoHttpInterceptorDetail {
-
   /** Código */
   code: string;
 

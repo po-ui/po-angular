@@ -11,17 +11,18 @@ import { sortValues } from '../../utils/util';
  */
 @Injectable()
 export class PoDateService {
+  private readonly dateRegex = new RegExp(
+    '^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' + '(?:0[1-9]|1[0-2])-' + '(?:0[1-9]|[12]\\d|3[01])$'
+  );
 
-  private readonly dateRegex = new RegExp('^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' +
-  '(?:0[1-9]|1[0-2])-' +
-  '(?:0[1-9]|[12]\\d|3[01])$');
-
-  private readonly isoRegex = new RegExp('^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' +
-  '(?:0[1-9]|1[0-2])-' +
-  '(?:0[1-9]|[12]\\d|3[01])' +
-  'T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|-0[1-9]|-1\\d|-2[0-3]|' +
-  '-00:?(?:0[1-9]|[0-5]\\d)|\\+[01]\\d|\\+2[0-3])' +
-  '(?:|:?[0-5]\\d)$');
+  private readonly isoRegex = new RegExp(
+    '^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' +
+      '(?:0[1-9]|1[0-2])-' +
+      '(?:0[1-9]|[12]\\d|3[01])' +
+      'T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|-0[1-9]|-1\\d|-2[0-3]|' +
+      '-00:?(?:0[1-9]|[0-5]\\d)|\\+[01]\\d|\\+2[0-3])' +
+      '(?:|:?[0-5]\\d)$'
+  );
 
   /**
    * Método responsável por converter datas do formato `yyyy-mm-ddThh:mm:ss+|-hh:mm` para o formato `Date`.
@@ -30,7 +31,7 @@ export class PoDateService {
    * @param minDate Definir `true` caso seja `minDate`.
    * @param maxDate Definir `true` caso seja `maxDate`.
    */
-  convertIsoToDate(dateString: string , minDate: boolean, maxDate: boolean): Date {
+  convertIsoToDate(dateString: string, minDate: boolean, maxDate: boolean): Date {
     if (dateString) {
       const { year, month, day } = this.getDateFromIso(dateString);
 
@@ -74,7 +75,6 @@ export class PoDateService {
    * @param year Ano a ser validado.
    */
   formatYear(year: number) {
-
     if (year > 999) {
       return year.toString();
     }
@@ -97,7 +97,7 @@ export class PoDateService {
    *
    * @param isoDate Ano em formato string.
    */
-  getDateFromIso(isoDate: string): { year: number, month: number, day: number } {
+  getDateFromIso(isoDate: string): { year: number; month: number; day: number } {
     const day = parseInt(isoDate.substring(8, 10), 10);
     const month = parseInt(isoDate.substring(5, 7), 10);
     const year = parseInt(isoDate.substring(0, 4), 10);
@@ -134,13 +134,11 @@ export class PoDateService {
     const dateBSplitted = dateB.split('-').map(item => parseInt(item, 10));
 
     for (let index = 0; index <= dateASplitted.length; index++) {
-
       if (dateASplitted[index] > dateBSplitted[index]) {
         return true;
       } else if (dateASplitted[index] < dateBSplitted[index]) {
         return false;
       }
-
     }
 
     return true;
@@ -162,7 +160,7 @@ export class PoDateService {
    * @param year .
    */
   setYearFrom0To100(date: Date, year: number) {
-    if (year >= 0 && year < 100 ) {
+    if (year >= 0 && year < 100) {
       date.setFullYear(year);
     }
   }
@@ -199,11 +197,11 @@ export class PoDateService {
    */
   validateDateRange(date: Date, minDate: Date, maxDate: Date) {
     if (minDate && maxDate) {
-      return (date >= minDate && date <= maxDate);
+      return date >= minDate && date <= maxDate;
     } else if (minDate && !maxDate) {
-      return (date >= minDate);
+      return date >= minDate;
     } else if (!minDate && maxDate) {
-      return (date <= maxDate);
+      return date <= maxDate;
     } else {
       return true;
     }
@@ -220,5 +218,4 @@ export class PoDateService {
 
     return this.isValidIso(validDate) ? validDate : undefined;
   }
-
 }

@@ -11,5 +11,4 @@ describe('SamplePodatepickerBasic E2E', () => {
     datepicker.poDatepickerIcon.click();
     expect(datepicker.poDatepicker.isDisplayed()).toBeTruthy();
   });
-
 });

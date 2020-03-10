@@ -1,55 +1,67 @@
 <form #f="ngForm">
   <div class="po-row">
-    <po-input class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+    <po-input
+      class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
       name="customField"
       [(ngModel)]="fieldValue"
       p-label="Padrão"
       p-help="Campo de texto do tipo padrão"
-      p-clean>
+      p-clean
+    >
     </po-input>
 
-    <po-datepicker class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+    <po-datepicker
+      class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
       [(ngModel)]="date"
       p-help="Campo de texto do tipo data"
       p-format="dd/mm/yyyy"
       p-label="Data"
       p-clean
-      name="data">
+      name="data"
+    >
     </po-datepicker>
 
-    <po-email class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+    <po-email
+      class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
       p-label="E-mail"
       p-help="Campo de texto do tipo e-mail"
       name="email"
       [(ngModel)]="email"
       p-required
-      p-clean>
+      p-clean
+    >
     </po-email>
   </div>
 
   <div class="po-row">
-    <po-number class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+    <po-number
+      class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
       p-label="Número"
       p-help="Campo de texto do tipo numérico"
       name="idade"
       [(ngModel)]="age"
-      p-clean>
+      p-clean
+    >
     </po-number>
 
-    <po-url class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+    <po-url
+      class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
       p-label="Página"
       p-help="Campo de texto do tipo URL"
       name="pagina"
       [(ngModel)]="website"
-      p-clean>
+      p-clean
+    >
     </po-url>
 
-    <po-password class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+    <po-password
+      class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
       p-label="Senha"
       p-help="Campo de texto do tipo Password"
       name="password"
       [(ngModel)]="password"
-      p-clean>
+      p-clean
+    >
     </po-password>
   </div>
 </form>

@@ -20,7 +20,7 @@ describe('PoLookupModalBaseComponent:', () => {
     component = new PoLookupModalComponent();
 
     component.filterService = {
-      getFilteredItems: ({filter, pageSize}) => of({ items: [], hasNext: false }),
+      getFilteredItems: ({ filter, pageSize }) => of({ items: [], hasNext: false }),
       getObjectByValue: () => of()
     };
 
@@ -36,7 +36,7 @@ describe('PoLookupModalBaseComponent:', () => {
   });
 
   it('should init modal with items', () => {
-    spyOn(component.filterService, 'getFilteredItems').and.returnValue(of({ items: [].concat(items), hasNext : true }));
+    spyOn(component.filterService, 'getFilteredItems').and.returnValue(of({ items: [].concat(items), hasNext: true }));
 
     component.ngOnInit();
 
@@ -46,7 +46,6 @@ describe('PoLookupModalBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('literals: should return literals default if `_literals` is undefined', () => {
       spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
 
@@ -56,7 +55,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should set title with value of `literals.modalTitle`', () => {
-      const literals = {'modalTitle' : 'title'};
+      const literals = { 'modalTitle': 'title' };
 
       spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
 
@@ -66,7 +65,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: shouldn`t define a title if a modalTitle is not defined', () => {
-      const literals = {'modalPrimaryActionLabel' : 'action'};
+      const literals = { 'modalPrimaryActionLabel': 'action' };
       spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
 
       component.literals = literals;
@@ -129,32 +128,35 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should update property with default literals if is setted with invalid values', () => {
-      const invalidValues = [ null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => { } ];
+      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
       spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(UtilsFunctions.poLocaleDefault);
 
-      expectPropertiesValues(component, 'literals', invalidValues, poLookupLiteralsDefault[UtilsFunctions.poLocaleDefault]);
+      expectPropertiesValues(
+        component,
+        'literals',
+        invalidValues,
+        poLookupLiteralsDefault[UtilsFunctions.poLocaleDefault]
+      );
     });
 
     it('title: should update property with valid values', () => {
-      const validValues = [ 'Title', 'modalTitle' ];
+      const validValues = ['Title', 'modalTitle'];
 
       expectPropertiesValues(component, 'title', validValues, validValues);
     });
 
     it('title: should update property with invalid values', () => {
-      const invalidValues = [ null, undefined, true, false, 0, 10, [], [1, 2], () => { } ];
+      const invalidValues = [null, undefined, true, false, 0, 10, [], [1, 2], () => {}];
       const modalTitle = component.literals.modalTitle;
 
       expectPropertiesValues(component, 'title', invalidValues, modalTitle);
     });
-
   });
   describe('Methods:', () => {
-
     it('filterSubscription: should unsubscribe filterSubscription on destroy', () => {
       component['filterSubscription'] = fakeSubscription;
-      spyOn(component['filterSubscription'], <any> 'unsubscribe');
+      spyOn(component['filterSubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -162,10 +164,9 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('filterSubscription: should not unsubscribe if filterSubscription is falsy', () => {
-
       component['filterSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['filterSubscription'] = undefined;
       component.ngOnDestroy();
@@ -175,7 +176,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('searchSubscription: should unsubscribe searchSubscription on destroy', () => {
       component['searchSubscription'] = fakeSubscription;
-      spyOn(component['searchSubscription'], <any> 'unsubscribe');
+      spyOn(component['searchSubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -183,10 +184,9 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('searchSubscription: should not unsubscribe if searchSubscription is falsy', () => {
-
       component['searchSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['searchSubscription'] = undefined;
       component.ngOnDestroy();
@@ -196,7 +196,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('showMoreSubscription: should unsubscribe showMoreSubscription on destroy', () => {
       component['showMoreSubscription'] = fakeSubscription;
-      spyOn(component['showMoreSubscription'], <any> 'unsubscribe');
+      spyOn(component['showMoreSubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -204,10 +204,9 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('showMoreSubscription: should not unsubscribe if showMoreSubscription is falsy', () => {
-
       component['showMoreSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['showMoreSubscription'] = undefined;
       component.ngOnDestroy();
@@ -225,14 +224,14 @@ describe('PoLookupModalBaseComponent:', () => {
       component.pageSize = pageSize;
       component.filterParams = filterParams;
 
-      spyOn(component.filterService, 'getFilteredItems').and.returnValue(of(<any> {items}));
-      spyOn(component, <any> 'getFilteredParams').and.callThrough();
+      spyOn(component.filterService, 'getFilteredItems').and.returnValue(of(<any>{ items }));
+      spyOn(component, <any>'getFilteredParams').and.callThrough();
 
       const filteredDataObservable = component['getFilteredItems'](filter);
 
       expect(component['getFilteredParams']).toHaveBeenCalled();
       expect(filteredDataObservable instanceof Observable);
-      expect(component.filterService.getFilteredItems).toHaveBeenCalledWith({filter, page, pageSize, filterParams});
+      expect(component.filterService.getFilteredItems).toHaveBeenCalledWith({ filter, page, pageSize, filterParams });
     });
 
     it('getFilteredItems: shoud call `getFilteredData` and return a Observable if `getFilteredItems` is falsy', () => {
@@ -248,8 +247,8 @@ describe('PoLookupModalBaseComponent:', () => {
       component.filterService.getFilteredItems = undefined;
       component.filterService.getFilteredData = () => of({ items: [], hasNext: false });
 
-      spyOn(component.filterService, 'getFilteredData').and.returnValue(of(<any> {items}));
-      spyOn(component, <any> 'getFilteredParams');
+      spyOn(component.filterService, 'getFilteredData').and.returnValue(of(<any>{ items }));
+      spyOn(component, <any>'getFilteredParams');
 
       const filteredDataObservable = component['getFilteredItems'](filter);
 
@@ -263,7 +262,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
       const filteredItems = items.filter(f => f.label.includes(component.searchValue));
 
-      spyOn(component, <any> 'getFilteredItems').and.returnValue(of({ items: filteredItems, hasNext: true }));
+      spyOn(component, <any>'getFilteredItems').and.returnValue(of({ items: filteredItems, hasNext: true }));
 
       component.search();
 
@@ -275,7 +274,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('search: should call `initializeData` if `searchValue` is falsy.', () => {
       component.searchValue = undefined;
 
-      spyOn(component, <any> 'initializeData');
+      spyOn(component, <any>'initializeData');
 
       component.search();
 
@@ -289,7 +288,7 @@ describe('PoLookupModalBaseComponent:', () => {
       component.items = [].concat(items);
       component.searchValue = searchValue;
 
-      spyOn(component, <any> 'getFilteredItems').and.returnValue(of({items: returnedItems }));
+      spyOn(component, <any>'getFilteredItems').and.returnValue(of({ items: returnedItems }));
 
       component.showMoreEvent();
 
@@ -302,22 +301,21 @@ describe('PoLookupModalBaseComponent:', () => {
     it('setTableLiterals: should set table literals.', () => {
       component.literals = {
         'modalTableLoadMoreData': 'moreData',
-        'modalTableLoadingData' : 'loadingData',
+        'modalTableLoadingData': 'loadingData',
         'modalTableNoColumns': 'noColumns',
-        'modalTableNoData' : 'noData'
+        'modalTableNoData': 'noData'
       };
 
       const result = {
         'loadMoreData': 'moreData',
-        'loadingData' : 'loadingData',
+        'loadingData': 'loadingData',
         'noColumns': 'noColumns',
-        'noData' : 'noData'
+        'noData': 'noData'
       };
 
       component['setTableLiterals']();
 
       expect(component.tableLiterals).toEqual(result);
-
     });
 
     it('getFilteredParams: should return object with only truthy values', () => {
@@ -361,7 +359,5 @@ describe('PoLookupModalBaseComponent:', () => {
 
       expect(orderParam).toBe(expectedValue);
     });
-
   });
-
 });

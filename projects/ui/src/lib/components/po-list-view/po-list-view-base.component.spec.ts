@@ -12,7 +12,6 @@ describe('PoListViewBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-items: should update property with `[]` if it`s not an array', () => {
       const invalidValues = [undefined, null, 0, '', NaN];
       const expectedValue = [];
@@ -21,7 +20,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-items: should update property with valid values if is an array', () => {
-      const validValues = [[{id: 1, name: 'register'}], []];
+      const validValues = [[{ id: 1, name: 'register' }], []];
 
       expectPropertiesValues(component, 'items', validValues, validValues);
     });
@@ -34,7 +33,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-actions: should update property with valid values if is an array', () => {
-      const validValues = [[{label: 'action', action: () => true}], []];
+      const validValues = [[{ label: 'action', action: () => true }], []];
 
       expectPropertiesValues(component, 'actions', validValues, validValues);
     });
@@ -66,7 +65,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('zw');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('zw');
 
       component.literals = {};
 
@@ -74,7 +73,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('pt');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
 
       component.literals = {};
 
@@ -82,7 +81,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('en');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('en');
 
       component.literals = {};
 
@@ -90,7 +89,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('es');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
 
       component.literals = {};
 
@@ -106,7 +105,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should accept custom literals', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue(poLocaleDefault);
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
       const customLiterals = Object.assign({}, poListViewLiteralsDefault[poLocaleDefault]);
 
@@ -121,7 +120,7 @@ describe('PoListViewBaseComponent:', () => {
     it('p-literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue(poLocaleDefault);
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
       expectPropertiesValues(component, 'literals', invalidValues, poListViewLiteralsDefault[poLocaleDefault]);
     });
@@ -157,16 +156,15 @@ describe('PoListViewBaseComponent:', () => {
 
       expectPropertiesValues(component, 'showMoreDisabled', invalidValues, false);
     });
-
   });
 
   describe('Methods:', () => {
     const item = { id: 1, name: 'Register 1' };
 
     it('onClickAction: should call `listViewAction.action` with item parameter', () => {
-      const listViewAction = { label: 'Action 1', action: () => {}};
+      const listViewAction = { label: 'Action 1', action: () => {} };
 
-      spyOn(component, <any> 'deleteInternalAttrs').and.returnValue(item);
+      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(item);
       spyOn(listViewAction, 'action');
 
       component.onClickAction(listViewAction, item);
@@ -178,7 +176,7 @@ describe('PoListViewBaseComponent:', () => {
     it('onClickAction: should not call `listViewAction.action`', () => {
       const listViewAction = { label: 'Action 1' };
 
-      spyOn(component, <any> 'deleteInternalAttrs').and.returnValue(item);
+      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(item);
 
       component.onClickAction(listViewAction, item);
 
@@ -186,7 +184,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('onShowMore: should call `showMore.emit`', () => {
-      spyOn(component.showMore, <any> 'emit');
+      spyOn(component.showMore, <any>'emit');
 
       component.onShowMore();
 
@@ -194,60 +192,60 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('selectAllListItems: should select all list items', () => {
-      component.items = [{ name: 'Name 1', email: 'email 1' }, { name: 'Name 2', email: 'email 2' }];
-      component.items.forEach(listItem => listItem.$selected = false);
+      component.items = [
+        { name: 'Name 1', email: 'email 1' },
+        { name: 'Name 2', email: 'email 2' }
+      ];
+      component.items.forEach(listItem => (listItem.$selected = false));
 
       component.select = true;
       component.hideSelectAll = false;
 
       component.selectAllListItems();
 
-      component.items.forEach(listItem =>
-        expect(listItem.$selected).toBe(true)
-      );
+      component.items.forEach(listItem => expect(listItem.$selected).toBe(true));
     });
 
     it('selectAllListItems: should not select all list items if hide select all is active', () => {
-      component.items = [{ name: 'Name 1', email: 'email 1' }, { name: 'Name 2', email: 'email 2' }];
-      component.items.forEach(listItem => listItem.$selected = false);
+      component.items = [
+        { name: 'Name 1', email: 'email 1' },
+        { name: 'Name 2', email: 'email 2' }
+      ];
+      component.items.forEach(listItem => (listItem.$selected = false));
       component.select = true;
       component.hideSelectAll = true;
 
       component.selectAllListItems();
 
-      component.items.forEach(listItem =>
-        expect(listItem.$selected).toBe(false)
-      );
+      component.items.forEach(listItem => expect(listItem.$selected).toBe(false));
     });
 
     it('selectListItem: should set all select to true', () => {
-      component.items = [{ name: 'Name 1', email: 'email 1' }, { name: 'Name 2', email: 'email 2' }];
-      component.items.forEach(listItem => listItem.$selected = false);
+      component.items = [
+        { name: 'Name 1', email: 'email 1' },
+        { name: 'Name 2', email: 'email 2' }
+      ];
+      component.items.forEach(listItem => (listItem.$selected = false));
 
       component.select = true;
       component.hideSelectAll = false;
-      component.items.forEach(listItem =>
-        component.selectListItem(listItem)
-      );
+      component.items.forEach(listItem => component.selectListItem(listItem));
 
-      component.items.forEach(listItem =>
-        expect(listItem.$selected).toBe(true)
-      );
+      component.items.forEach(listItem => expect(listItem.$selected).toBe(true));
     });
 
     it('selectListItem: should set all select to false', () => {
-      component.items = [{ name: 'Name 1', email: 'email 1' }, { name: 'Name 2', email: 'email 2' }];
-      component.items.forEach(listItem => listItem.$selected = true);
+      component.items = [
+        { name: 'Name 1', email: 'email 1' },
+        { name: 'Name 2', email: 'email 2' }
+      ];
+      component.items.forEach(listItem => (listItem.$selected = true));
 
       component.select = true;
       component.hideSelectAll = false;
-      component.items.forEach(listItem =>
-        component.selectListItem(listItem)
-      );
+      component.items.forEach(listItem => component.selectListItem(listItem));
 
-      component.items.forEach(listItem =>
-        expect(listItem.$selected).toBe(false)
-      );
+      component.items.forEach(listItem => expect(listItem.$selected).toBe(false));
     });
 
     it('deleteInternalAttrs: should return `object` without property that starts with `$`', () => {
@@ -294,7 +292,6 @@ describe('PoListViewBaseComponent:', () => {
 
         expect(component['checkIfItemsAreSelected'](items)).toBeFalsy();
       });
-
     });
 
     it('showMainHeader: should set showHeader to `true` if `select` is `true`, `hideSelectAll` is `false` and have items', () => {
@@ -339,15 +336,13 @@ describe('PoListViewBaseComponent:', () => {
       const listItem = { label: 'item label', $showDetail: 'test' };
       const expectedItem = { label: 'item label' };
 
-      spyOn(component.titleAction, <any> 'emit');
-      spyOn(component, <any> 'deleteInternalAttrs').and.returnValue(expectedItem);
+      spyOn(component.titleAction, <any>'emit');
+      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(expectedItem);
 
       component.runTitleAction(listItem);
 
       expect(component.titleAction.emit).toHaveBeenCalledWith(expectedItem);
       expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(listItem);
     });
-
   });
-
 });

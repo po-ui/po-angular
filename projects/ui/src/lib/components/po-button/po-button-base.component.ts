@@ -21,7 +21,6 @@ const PO_BUTTON_TYPE_DEFAULT = 'default';
  */
 @Directive()
 export class PoButtonBaseComponent {
-
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
@@ -118,5 +117,4 @@ export class PoButtonBaseComponent {
 
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
-
 }

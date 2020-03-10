@@ -44,11 +44,6 @@ import { PoPageListComponent } from './po-page-list/po-page-list.component';
     PoPageHeaderComponent,
     PoPageListComponent
   ],
-  exports: [
-    PoPageDetailComponent,
-    PoPageDefaultComponent,
-    PoPageEditComponent,
-    PoPageListComponent
-  ]
+  exports: [PoPageDetailComponent, PoPageDefaultComponent, PoPageEditComponent, PoPageListComponent]
 })
-export class PoPageModule { }
+export class PoPageModule {}

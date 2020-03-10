@@ -1,7 +1,6 @@
 import { PoUploadFile } from './po-upload-file';
 
 describe('PoUploadFile', () => {
-
   let poUploadFile: PoUploadFile;
 
   it('should create PoUploadFile', () => {
@@ -40,7 +39,6 @@ describe('PoUploadFile', () => {
   });
 
   describe('Methods:', () => {
-
     it('getFileSize: should return the size in kbytes', () => {
       poUploadFile = new PoUploadFile(null);
 
@@ -52,7 +50,5 @@ describe('PoUploadFile', () => {
 
       expect(kbSize).toEqual('0 KB');
     });
-
   });
-
 });

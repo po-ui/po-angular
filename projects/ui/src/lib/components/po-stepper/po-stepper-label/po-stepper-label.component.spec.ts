@@ -6,7 +6,6 @@ import { PoStepperLabelComponent } from './po-stepper-label.component';
 import { PoStepperModule } from '../po-stepper.module';
 
 describe('PoStepperLabelComponent: ', () => {
-
   let component: PoStepperLabelComponent;
   let fixture: ComponentFixture<PoStepperLabelComponent>;
 
@@ -26,5 +25,4 @@ describe('PoStepperLabelComponent: ', () => {
   it('should be created', () => {
     expect(component instanceof PoStepperLabelComponent).toBeTruthy();
   });
-
 });

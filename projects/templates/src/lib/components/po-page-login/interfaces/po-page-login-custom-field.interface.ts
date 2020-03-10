@@ -8,45 +8,44 @@ import { PoSelectOption } from '@portinari/portinari-ui';
  * Interface com a definição do Custom Field, podendo ser utilizado para informar um campo customizado no componente `po-page-login`.
  */
 export interface PoPageLoginCustomField {
-
   /** Nome da propriedade que será utilizado no campo customizado. */
   property: string;
 
- /**
-  * @optional
-  *
-  * @description
-  *
-  * Valor do campo customizado.
-  */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Valor do campo customizado.
+   */
   value?: string | number;
 
- /**
-  * @optional
-  *
-  * @description
-  *
-  * Mensagem que será exibida enquanto o campo customizado não estiver preenchido.
-  */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Mensagem que será exibida enquanto o campo customizado não estiver preenchido.
+   */
   placeholder?: string;
 
- /**
-  * @optional
-  *
-  * @description
-  *
-  * Expressão regular para validar o campo customizado, caso a expressão não seja atendida a literal informada na
-  * propriedade `errorPattern` será exibida.
-  */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Expressão regular para validar o campo customizado, caso a expressão não seja atendida a literal informada na
+   * propriedade `errorPattern` será exibida.
+   */
   pattern?: string;
 
- /**
-  * @optional
-  *
-  * @description
-  *
-  * Mensagem que será exibida quando a expressão regular informada na propriedade `pattern` não for válida.
-  */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Mensagem que será exibida quando a expressão regular informada na propriedade `pattern` não for válida.
+   */
   errorPattern?: string;
 
   /**
@@ -56,7 +55,7 @@ export interface PoPageLoginCustomField {
    *
    * Lista de opções de um `po-select`.
    */
-   options?: Array<PoSelectOption>;
+  options?: Array<PoSelectOption>;
 
   /**
    * @optional
@@ -66,7 +65,7 @@ export interface PoPageLoginCustomField {
    * Nesta propriedade deve ser informada a URL do serviço em que será realizado o filtro para carregamento da
    * lista de itens do componente `po-combo`.
    */
-   url?: string;
+  url?: string;
 
   /**
    * @optional
@@ -77,5 +76,5 @@ export interface PoPageLoginCustomField {
    * lista do componente `po-combo`, esta propriedade será responsável pelo valor de cada item da lista.
    *
    */
-   fieldValue?: string;
+  fieldValue?: string;
 }

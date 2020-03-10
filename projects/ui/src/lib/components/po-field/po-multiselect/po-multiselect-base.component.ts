@@ -1,8 +1,14 @@
 import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { browserLanguage, convertToBoolean, removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty,
-          poLocaleDefault } from '../../../utils/util';
+import {
+  browserLanguage,
+  convertToBoolean,
+  removeDuplicatedOptions,
+  removeUndefinedAndNullOptions,
+  sortOptionsByProperty,
+  poLocaleDefault
+} from '../../../utils/util';
 import { requiredFailed } from './../validators';
 
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
@@ -11,15 +17,15 @@ import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { InputBoolean } from '../../../decorators';
 
 export const poMultiselectLiteralsDefault = {
-  en: <PoMultiselectLiterals> {
+  en: <PoMultiselectLiterals>{
     noData: 'No data found',
     placeholderSearch: 'Search'
   },
-  es: <PoMultiselectLiterals> {
+  es: <PoMultiselectLiterals>{
     noData: 'Datos no encontrados',
     placeholderSearch: 'Busca'
   },
-  pt: <PoMultiselectLiterals> {
+  pt: <PoMultiselectLiterals>{
     noData: 'Nenhum dado encontrado',
     placeholderSearch: 'Buscar'
   },
@@ -43,7 +49,6 @@ export const poMultiselectLiteralsDefault = {
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
-
   private _disabled?: boolean = false;
   private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
   private _hideSearch?: boolean = false;
@@ -270,7 +275,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @default `startsWith`
    */
   @Input('p-filter-mode') set filterMode(filterMode: PoMultiselectFilterMode) {
-    this._filterMode = (filterMode in PoMultiselectFilterMode) ? filterMode : PoMultiselectFilterMode.startsWith;
+    this._filterMode = filterMode in PoMultiselectFilterMode ? filterMode : PoMultiselectFilterMode.startsWith;
     switch (this._filterMode.toString()) {
       case 'startsWith':
         this._filterMode = PoMultiselectFilterMode.startsWith;
@@ -300,7 +305,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   validAndSortOptions() {
     if (this.options && this.options.length) {
-
       removeUndefinedAndNullOptions(this.options);
       removeDuplicatedOptions(this.options);
       this.setUndefinedLabels(this.options);
@@ -388,11 +392,13 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     return option.label.toLowerCase().endsWith(search.toLowerCase());
   }
 
-  validate(c: AbstractControl): { [key: string]: any; } {
+  validate(c: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this.required, this.disabled, c.value)) {
-      return { required: {
-        valid: false,
-      }};
+      return {
+        required: {
+          valid: false
+        }
+      };
     }
 
     return null;
@@ -442,5 +448,4 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   }
 
   abstract updateVisibleItems(): void;
-
 }

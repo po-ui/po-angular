@@ -1,40 +1,30 @@
 <po-tabs [p-small]="getSmallProperty()">
-
-  <po-tab *ngFor="let tab of tabs; let i = index"
+  <po-tab
+    *ngFor="let tab of tabs; let i = index"
     [p-active]="tab.active"
     [p-disabled]="tab.disabled"
     [p-hide]="tab.hide"
     [p-label]="tab.label"
-    (p-click)="onClick(tab)">
-
-    <div class="po-font-subtitle"> Tab Content {{ i }} </div>
+    (p-click)="onClick(tab)"
+  >
+    <div class="po-font-subtitle">Tab Content {{ i }}</div>
   </po-tab>
-
 </po-tabs>
 
-<po-dynamic-form #tabsForm
-  [p-fields]="tabsFieldsForm"
-  [p-value]="tabs">
-</po-dynamic-form>
+<po-dynamic-form #tabsForm [p-fields]="tabsFieldsForm" [p-value]="tabs"> </po-dynamic-form>
 
 <div class="po-row">
   <po-button
     class="po-md-3"
     p-label="Add Tab"
     [p-disabled]="tabsForm.form.invalid"
-    (p-click)="addTab(tabsForm.form.value); tabsForm.form.reset();">
+    (p-click)="addTab(tabsForm.form.value); tabsForm.form.reset()"
+  >
   </po-button>
 </div>
 
-<po-dynamic-form #propertiesForm
-  [p-fields]="propertiesFieldsForm"
-  [p-value]="properties">
-</po-dynamic-form>
+<po-dynamic-form #propertiesForm [p-fields]="propertiesFieldsForm" [p-value]="properties"> </po-dynamic-form>
 
 <div class="po-row">
-  <po-button
-    class="po-md-3"
-    p-label="Sample Restore"
-    (p-click)="restore()">
-  </po-button>
+  <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
 </div>

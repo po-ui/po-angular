@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 
 import { convertToInt } from '../../../../utils/util';
 
@@ -14,7 +23,6 @@ const PoUploadDragDropHeightMin = 160;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoUploadDragDropComponent {
-
   private _dragDropHeight?: number = PoUploadDragDropHeightDefault;
 
   areaElement: HTMLElement;
@@ -30,7 +38,7 @@ export class PoUploadDragDropComponent {
   @Input('p-drag-drop-height') set dragDropHeight(value: number) {
     const dragDropHeight = convertToInt(value, PoUploadDragDropHeightDefault);
 
-    this._dragDropHeight = (dragDropHeight < PoUploadDragDropHeightMin) ? PoUploadDragDropHeightMin : dragDropHeight;
+    this._dragDropHeight = dragDropHeight < PoUploadDragDropHeightMin ? PoUploadDragDropHeightMin : dragDropHeight;
   }
 
   get dragDropHeight() {
@@ -43,7 +51,7 @@ export class PoUploadDragDropComponent {
 
   @Output('p-select-files') selectFiles: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   focus() {
     this.dragDropAreaComponent.focus();
@@ -69,5 +77,4 @@ export class PoUploadDragDropComponent {
 
     this.fileChange.emit(files);
   }
-
 }

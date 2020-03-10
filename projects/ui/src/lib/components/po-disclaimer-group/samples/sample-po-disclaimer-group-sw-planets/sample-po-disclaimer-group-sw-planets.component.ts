@@ -7,10 +7,9 @@ import { SamplePoDisclaimerGroupSwPlanetsService } from './sample-po-disclaimer-
 @Component({
   selector: 'sample-po-disclaimer-group-sw-planets',
   templateUrl: './sample-po-disclaimer-group-sw-planets.component.html',
-  providers: [ SamplePoDisclaimerGroupSwPlanetsService ]
+  providers: [SamplePoDisclaimerGroupSwPlanetsService]
 })
 export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
-
   climate: string;
   columns: Array<PoTableColumn> = this.disclaimerGroupSwPlanetsService.getColumns();
   filteredItems: Array<any> = [];
@@ -22,7 +21,7 @@ export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
   public readonly climates: Array<PoComboOption> = this.disclaimerGroupSwPlanetsService.getClimates();
   public readonly terrains: Array<PoComboOption> = this.disclaimerGroupSwPlanetsService.getTerrains();
 
-  constructor(public disclaimerGroupSwPlanetsService: SamplePoDisclaimerGroupSwPlanetsService) { }
+  constructor(public disclaimerGroupSwPlanetsService: SamplePoDisclaimerGroupSwPlanetsService) {}
 
   ngOnInit() {
     this.disclaimerGroupSwPlanetsService.getItems().subscribe(items => {
@@ -56,18 +55,18 @@ export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
 
     const fieldsWithoutFilter = fields.filter(field => this[field] && fieldHaveNoFilter(field));
 
-    fieldsWithoutFilter.forEach(field => this[field] = undefined);
+    fieldsWithoutFilter.forEach(field => (this[field] = undefined));
   }
 
   private filter(filters: Array<PoDisclaimer>) {
-    const filterCondition = (filter, item) => item[filter.property].toLocaleLowerCase().includes(filter.value.toLocaleLowerCase());
+    const filterCondition = (filter, item) =>
+      item[filter.property].toLocaleLowerCase().includes(filter.value.toLocaleLowerCase());
     const filterItems = item => filters.every(filter => filterCondition(filter, item));
 
     this.filteredItems = this.items.filter(filterItems);
   }
 
   private resetFilters() {
-    this.filteredItems = [...this.items || []];
+    this.filteredItems = [...(this.items || [])];
   }
-
 }

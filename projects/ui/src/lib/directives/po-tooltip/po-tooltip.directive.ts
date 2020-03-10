@@ -26,10 +26,9 @@ import { PoTooltipControlPositionService } from './po-tooltip-control-position.s
  */
 @Directive({
   selector: '[p-tooltip]',
-  providers: [ PoTooltipControlPositionService ]
+  providers: [PoTooltipControlPositionService]
 })
 export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit {
-
   private arrowDirection: string;
   private divArrow;
   private divContent;
@@ -41,10 +40,11 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
 
   private eventListenerFunction: () => void;
 
-  constructor(private elementRef: ElementRef,
-              private renderer: Renderer2,
-              private poControlPosition: PoTooltipControlPositionService) {
-
+  constructor(
+    private elementRef: ElementRef,
+    private renderer: Renderer2,
+    private poControlPosition: PoTooltipControlPositionService
+  ) {
     super();
   }
 
@@ -67,7 +67,6 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
         this.lastTooltipText = this.tooltip;
       }
     });
-
   }
 
   @HostListener('mouseleave') onMouseLeave() {
@@ -153,5 +152,4 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
       this.renderer.appendChild(this.divContent, this.textContent);
     }
   }
-
 }

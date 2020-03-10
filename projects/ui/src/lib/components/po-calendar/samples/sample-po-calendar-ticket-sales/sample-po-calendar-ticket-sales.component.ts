@@ -7,7 +7,6 @@ import { PoNotificationService, PoPageAction, PoSelectOption } from '@portinari/
   templateUrl: './sample-po-calendar-ticket-sales.component.html'
 })
 export class SamplePoCalendarTicketSalesComponent {
-
   date: string;
   halfPriceTicketQuantity: number;
   tickets: number;
@@ -45,5 +44,4 @@ export class SamplePoCalendarTicketSalesComponent {
   private isdisableBuy(): boolean {
     return !(this.date && (this.tickets > 0 || this.halfPriceTicketQuantity > 0));
   }
-
 }

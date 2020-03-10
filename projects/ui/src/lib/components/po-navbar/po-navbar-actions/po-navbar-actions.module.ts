@@ -8,18 +8,8 @@ import { PoPopupModule } from '../../po-popup/po-popup.module';
 import { PoTooltipModule } from '../../../directives/po-tooltip/po-tooltip.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    PoPopupModule,
-    PoTooltipModule
-  ],
-  declarations: [
-    PoNavbarActionComponent,
-    PoNavbarActionPopupComponent,
-    PoNavbarActionsComponent
-  ],
-  exports: [
-    PoNavbarActionsComponent
-  ]
+  imports: [CommonModule, PoPopupModule, PoTooltipModule],
+  declarations: [PoNavbarActionComponent, PoNavbarActionPopupComponent, PoNavbarActionsComponent],
+  exports: [PoNavbarActionsComponent]
 })
-export class PoNavbarActionsModule { }
+export class PoNavbarActionsModule {}

@@ -6,8 +6,7 @@
  * Interface para definição dos itens do componente `po-tree-view`.
  */
 export interface PoTreeViewItem {
-
-   /** Desabilita a selecão do item. */
+  /** Desabilita a selecão do item. */
   // disabled?: boolean;
 
   /** Texto de exibição do item. */
@@ -28,5 +27,4 @@ export interface PoTreeViewItem {
 
   /** Lista de itens do próximo nível, e assim consecutivamente até que se atinja o quarto nível. */
   subItems?: Array<PoTreeViewItem>;
-
 }

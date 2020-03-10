@@ -6,7 +6,6 @@
  * Interface que define as opções que serão exibidas na lista do `po-combo`.
  */
 export interface PoComboOption {
-
   /**
    * @optional
    *
@@ -20,5 +19,4 @@ export interface PoComboOption {
 
   /** Valor do objeto que será atribuído ao *model*. */
   value: string | number;
-
 }

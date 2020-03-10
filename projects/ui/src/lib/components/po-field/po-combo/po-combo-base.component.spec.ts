@@ -12,17 +12,17 @@ import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 
 class PoComboTest extends PoComboBaseComponent {
+  getInputValue(): string {
+    return '';
+  }
 
-  getInputValue(): string { return ''; }
+  setInputValue(value: string): void {}
 
-  setInputValue(value: string): void { }
+  applyFilter(value: string): void {}
 
-  applyFilter(value: string): void { }
+  getObjectByValue(value: string): void {}
 
-  getObjectByValue(value: string): void { }
-
-  initInputObservable(): void { }
-
+  initInputObservable(): void {}
 }
 
 describe('PoComboBaseComponent:', () => {
@@ -40,7 +40,6 @@ describe('PoComboBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     const trueValues = [true, 'true', 1, '', [], {}];
     const falseValues = [false, 'false', 0, null, undefined, NaN];
 
@@ -63,33 +62,33 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('p-filter-params: should not set filterParams with invalid values and should set default undefined', () => {
-      const invalidValues = [ undefined, null, NaN, '' ];
+      const invalidValues = [undefined, null, NaN, ''];
       const expectedValue = undefined;
 
       expectPropertiesValues(component, 'filterParams', invalidValues, expectedValue);
     });
 
     it('p-filter-params: should set filterParams with valid values', () => {
-      const validValues = [ false, true, 'filter', [], 0, {} ];
+      const validValues = [false, true, 'filter', [], 0, {}];
 
       expectPropertiesValues(component, 'filterParams', validValues, validValues);
     });
 
     it('p-options: should set property with `[]` if invalid values', () => {
-      const invalidValues = [ undefined, null, NaN, '' ];
+      const invalidValues = [undefined, null, NaN, ''];
       const expectedValue = [];
 
       expectPropertiesValues(component, 'options', invalidValues, expectedValue);
     });
 
     it('p-options: should set property with valid values if invalid values', () => {
-      const validValues = [ [{ label: '1', value: '1' }], [] ];
+      const validValues = [[{ label: '1', value: '1' }], []];
 
       expectPropertiesValues(component, 'options', validValues, validValues);
     });
 
     it('p-options: should set options and call `comboListDefinitions`', () => {
-      const options = [{ label: '1', value: '1'}];
+      const options = [{ label: '1', value: '1' }];
 
       const spycomboListDefinitions = spyOn(component, <any>'comboListDefinitions');
 
@@ -100,7 +99,6 @@ describe('PoComboBaseComponent:', () => {
     });
 
     describe('p-literals:', () => {
-
       it('should be set `literals` with browser language if `literals` is `undefined`', () => {
         component.literals = undefined;
 
@@ -108,7 +106,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in portuguese if browser is set with `pt`.', () => {
-        spyOn(Utils, <any> 'browserLanguage').and.returnValue('pt');
+        spyOn(Utils, <any>'browserLanguage').and.returnValue('pt');
 
         component.literals = {};
 
@@ -116,7 +114,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in english if browser is set with `en`.', () => {
-        spyOn(Utils, <any> 'browserLanguage').and.returnValue('en');
+        spyOn(Utils, <any>'browserLanguage').and.returnValue('en');
 
         component.literals = {};
 
@@ -124,7 +122,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in spanish if browser is set with `es`.', () => {
-        spyOn(Utils, <any> 'browserLanguage').and.returnValue('es');
+        spyOn(Utils, <any>'browserLanguage').and.returnValue('es');
 
         component.literals = {};
 
@@ -162,7 +160,7 @@ describe('PoComboBaseComponent:', () => {
         });
 
         it('should call `comboListDefinitions`', () => {
-          const spycomboListDefinitions = spyOn(component, <any> 'comboListDefinitions').and.callThrough();
+          const spycomboListDefinitions = spyOn(component, <any>'comboListDefinitions').and.callThrough();
 
           component.sort = true;
 
@@ -170,7 +168,6 @@ describe('PoComboBaseComponent:', () => {
         });
       });
     });
-
   });
 
   it('should update property p-filter-mode', () => {
@@ -178,7 +175,13 @@ describe('PoComboBaseComponent:', () => {
     expectSettersMethod(component, 'filterMode', 'startsWith', 'filterMode', PoComboFilterMode.startsWith);
     expectSettersMethod(component, 'filterMode', 'contains', 'filterMode', PoComboFilterMode.contains);
     expectSettersMethod(component, 'filterMode', 'endsWith', 'filterMode', PoComboFilterMode.endsWith);
-    expectSettersMethod(component, 'filterMode', PoComboFilterMode.startsWith, 'filterMode', PoComboFilterMode.startsWith);
+    expectSettersMethod(
+      component,
+      'filterMode',
+      PoComboFilterMode.startsWith,
+      'filterMode',
+      PoComboFilterMode.startsWith
+    );
     expectSettersMethod(component, 'filterMode', PoComboFilterMode.contains, 'filterMode', PoComboFilterMode.contains);
     expectSettersMethod(component, 'filterMode', PoComboFilterMode.endsWith, 'filterMode', PoComboFilterMode.endsWith);
   });
@@ -242,31 +245,31 @@ describe('PoComboBaseComponent:', () => {
   });
 
   it('should compare the start of the text', () => {
-    expect(component.startsWith('valor', {value: '1', label: 'valor'})).toBeTruthy();
-    expect(component.startsWith('val', {value: '1', label: 'valor'})).toBeTruthy();
-    expect(component.startsWith('valor', {value: '1', label: 'val'})).toBeFalsy();
+    expect(component.startsWith('valor', { value: '1', label: 'valor' })).toBeTruthy();
+    expect(component.startsWith('val', { value: '1', label: 'valor' })).toBeTruthy();
+    expect(component.startsWith('valor', { value: '1', label: 'val' })).toBeFalsy();
   });
 
   it('should compare the content of the text', () => {
-    expect(component.contains('valor', {value: '1', label: 'valor'})).toBeTruthy();
-    expect(component.contains('val', {value: '1', label: 'valor'})).toBeTruthy();
-    expect(component.contains('al', {value: '1', label: 'valor'})).toBeTruthy();
-    expect(component.contains('or', {value: '1', label: 'valor'})).toBeTruthy();
-    expect(component.contains('lor', {value: '1', label: 'val'})).toBeFalsy();
+    expect(component.contains('valor', { value: '1', label: 'valor' })).toBeTruthy();
+    expect(component.contains('val', { value: '1', label: 'valor' })).toBeTruthy();
+    expect(component.contains('al', { value: '1', label: 'valor' })).toBeTruthy();
+    expect(component.contains('or', { value: '1', label: 'valor' })).toBeTruthy();
+    expect(component.contains('lor', { value: '1', label: 'val' })).toBeFalsy();
   });
 
   it('should compare the end of the text', () => {
-    expect(component.endsWith('valor', {value: '1', label: 'valor'})).toBeTruthy();
-    expect(component.endsWith('or', {value: '1', label: 'valor'})).toBeTruthy();
-    expect(component.endsWith('val', {value: '1', label: 'valor'})).toBeFalsy();
-    expect(component.endsWith('valor', {value: '1', label: 'val'})).toBeFalsy();
+    expect(component.endsWith('valor', { value: '1', label: 'valor' })).toBeTruthy();
+    expect(component.endsWith('or', { value: '1', label: 'valor' })).toBeTruthy();
+    expect(component.endsWith('val', { value: '1', label: 'valor' })).toBeFalsy();
+    expect(component.endsWith('valor', { value: '1', label: 'val' })).toBeFalsy();
   });
 
   it('should find some option from value ', () => {
     const options: Array<PoComboOption> = [
-      {label: '1', value: '1'},
-      {label: 'label 2', value: '2'},
-      {label: '3', value: '3'}
+      { label: '1', value: '1' },
+      { label: 'label 2', value: '2' },
+      { label: '3', value: '3' }
     ];
     expect(component.getOptionFromValue('2', options).label).toBe('label 2');
   });
@@ -277,9 +280,9 @@ describe('PoComboBaseComponent:', () => {
 
   it('should find some option from label ', () => {
     const options: Array<PoComboOption> = [
-      {label: '1', value: '1'},
-      {label: 'label 2', value: '2'},
-      {label: '3', value: '3'}
+      { label: '1', value: '1' },
+      { label: 'label 2', value: '2' },
+      { label: '3', value: '3' }
     ];
     expect(component.getOptionFromLabel('label 2', options).value).toBe('2');
   });
@@ -292,7 +295,7 @@ describe('PoComboBaseComponent:', () => {
     spyOn(component, 'callModelChange');
     spyOn(component, 'setInputValue');
 
-    component.updateSelectedValue({label: 'label', value: 'value'});
+    component.updateSelectedValue({ label: 'label', value: 'value' });
 
     expect(component.selectedView).not.toBeNull();
     expect(component.selectedValue).toBe('value');
@@ -333,9 +336,9 @@ describe('PoComboBaseComponent:', () => {
 
   it('should search for label and update the combo list', () => {
     const options: Array<PoComboOption> = [
-      {label: 'Valor 1', value: '1'},
-      {label: '2', value: '2'},
-      {label: 'Valor 3', value: '3'}
+      { label: 'Valor 1', value: '1' },
+      { label: '2', value: '2' },
+      { label: 'Valor 3', value: '3' }
     ];
 
     component.searchForLabel('valor', options, PoComboFilterMode.startsWith);
@@ -346,9 +349,9 @@ describe('PoComboBaseComponent:', () => {
     const options: Array<PoComboOption> = [];
 
     component.options = [
-      {label: 'Valor 1', value: '1'},
-      {label: '2', value: '2'},
-      {label: 'Valor 3', value: '3'}
+      { label: 'Valor 1', value: '1' },
+      { label: '2', value: '2' },
+      { label: 'Valor 3', value: '3' }
     ];
 
     component.searchForLabel('valor', options, PoComboFilterMode.startsWith);
@@ -357,11 +360,11 @@ describe('PoComboBaseComponent:', () => {
 
   it('should update the visible list', () => {
     const options: Array<PoComboOption> = [
-      {label: 'Valor 1', value: '1'},
-      {label: '2', value: '2'},
-      {label: 'Valor 3', value: '3'}
+      { label: 'Valor 1', value: '1' },
+      { label: '2', value: '2' },
+      { label: 'Valor 3', value: '3' }
     ];
-    component.selectedView = {label: 'Valor 1', value: '1'};
+    component.selectedView = { label: 'Valor 1', value: '1' };
 
     component.updateComboList(options);
     expect(component.visibleOptions.length).toBe(3);
@@ -369,9 +372,9 @@ describe('PoComboBaseComponent:', () => {
 
   it('should select a new item if no one are selected', () => {
     const options: Array<PoComboOption> = [
-      {label: 'Valor 1', value: '1'},
-      {label: '2', value: '2'},
-      {label: 'Valor 3', value: '3'}
+      { label: 'Valor 1', value: '1' },
+      { label: '2', value: '2' },
+      { label: 'Valor 3', value: '3' }
     ];
     component.selectedView = null;
 
@@ -381,9 +384,9 @@ describe('PoComboBaseComponent:', () => {
 
   it('should return the next item in a list', () => {
     const options: Array<PoComboOption> = [
-      {label: '1', value: '1'},
-      {label: '2', value: '2'},
-      {label: '3', value: '3'}
+      { label: '1', value: '1' },
+      { label: '2', value: '2' },
+      { label: '3', value: '3' }
     ];
 
     // Ordem Ascendente
@@ -397,20 +400,20 @@ describe('PoComboBaseComponent:', () => {
 
   it('should get a index of the selected item', () => {
     component.visibleOptions = [
-      {label: 'Valor 1', value: '1'},
-      {label: '2', value: '2'},
-      {label: 'Valor 3', value: '3'}
+      { label: 'Valor 1', value: '1' },
+      { label: '2', value: '2' },
+      { label: 'Valor 3', value: '3' }
     ];
-    component.selectedView = {label: '2', value: '2'};
+    component.selectedView = { label: '2', value: '2' };
     expect(component.getIndexSelectedView()).toBe(1);
 
-    component.selectedView = {label: '4', value: '4'};
+    component.selectedView = { label: '4', value: '4' };
     expect(component.getIndexSelectedView()).toBeNull();
   });
 
   it('should compare objects', () => {
-    const obj1 = { value: 'value', label: 'label'};
-    const obj2 = { value: 'value', label: 'label'};
+    const obj1 = { value: 'value', label: 'label' };
+    const obj2 = { value: 'value', label: 'label' };
     expect(component.compareObjects(obj1, obj2)).toBeTruthy();
   });
 
@@ -440,7 +443,7 @@ describe('PoComboBaseComponent:', () => {
   });
 
   it('writeValue: should call `updateSelectedValue` when contains `options` and param is a `validValue`', () => {
-    component.options = [{label: '1', value: 'valor 1'}];
+    component.options = [{ label: '1', value: 'valor 1' }];
 
     spyOn(component, 'updateSelectedValue');
     spyOn(component, 'getOptionFromValue');
@@ -454,7 +457,7 @@ describe('PoComboBaseComponent:', () => {
   });
 
   it('writeValue: should call `updateSelectedValue` if `changeOnEnter` is `false`', () => {
-    component.options = [{label: '1', value: 'valor 1'}];
+    component.options = [{ label: '1', value: 'valor 1' }];
     component.changeOnEnter = false;
 
     spyOn(component, 'updateSelectedValue');
@@ -465,7 +468,6 @@ describe('PoComboBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('updateModel: should call `callModelChange` and `change.emit` and set `selectedValue` with value param', () => {
       const value = 1;
 
@@ -581,7 +583,7 @@ describe('PoComboBaseComponent:', () => {
       spyOn(component, 'getInputValue').and.returnValue('po');
       spyOn(component, 'getOptionFromLabel').and.returnValue(undefined);
       spyOn(component, 'updateSelectedValue');
-      spyOn(component, <any> 'updateSelectedValueWithOldOption');
+      spyOn(component, <any>'updateSelectedValueWithOldOption');
 
       component.verifyValidOption();
 
@@ -646,7 +648,7 @@ describe('PoComboBaseComponent:', () => {
     it('validate: should return required obj when `requiredFailed` is true.', () => {
       const validObj = {
         required: {
-          valid: false,
+          valid: false
         }
       };
 
@@ -666,7 +668,7 @@ describe('PoComboBaseComponent:', () => {
     it('validateModel: should call `validatorChange` when `validateModel` is a function.', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel']([]);
 
@@ -682,17 +684,15 @@ describe('PoComboBaseComponent:', () => {
 
     it(`configAfterSetFilterService: should call the 'unsubscribeKeyupObservable' and 'onInitService' methods if
       filterService is defined.`, () => {
-
       const filterService = 'https://portinari.io/sample/api/new/heroes';
 
-      spyOn(component, <any> 'unsubscribeKeyupObservable');
+      spyOn(component, <any>'unsubscribeKeyupObservable');
       spyOn(component, 'onInitService');
 
       component['configAfterSetFilterService'](filterService);
 
       expect(component['unsubscribeKeyupObservable']).toHaveBeenCalled();
       expect(component.onInitService).toHaveBeenCalled();
-
     });
 
     it(`configAfterSetFilterService: shouldn't contain objects in the 'comboOptionsList' if filterService is defined.`, () => {
@@ -713,7 +713,7 @@ describe('PoComboBaseComponent:', () => {
 
     it('configAfterSetFilterService: should contain 1 object in comboOptionsList if filterService is undefined.', () => {
       const filterService = undefined;
-      component['cacheStaticOptions'] = [{ label: '1', value: '1'}];
+      component['cacheStaticOptions'] = [{ label: '1', value: '1' }];
 
       component['configAfterSetFilterService'](filterService);
 
@@ -758,8 +758,8 @@ describe('PoComboBaseComponent:', () => {
       component.changeOnEnter = false;
 
       const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any> 'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any> 'updateModel');
+      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
+      const spyUpdateModel = spyOn(component, <any>'updateModel');
 
       component.updateSelectedValue(option);
 
@@ -775,8 +775,8 @@ describe('PoComboBaseComponent:', () => {
       component.changeOnEnter = true;
 
       const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any> 'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any> 'updateModel');
+      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
+      const spyUpdateModel = spyOn(component, <any>'updateModel');
 
       component.updateSelectedValue(option);
 
@@ -792,8 +792,8 @@ describe('PoComboBaseComponent:', () => {
       component.changeOnEnter = false;
 
       const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any> 'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any> 'updateModel');
+      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
+      const spyUpdateModel = spyOn(component, <any>'updateModel');
 
       component.updateSelectedValue(option);
 
@@ -809,8 +809,8 @@ describe('PoComboBaseComponent:', () => {
       component.changeOnEnter = true;
 
       const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any> 'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any> 'updateModel');
+      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
+      const spyUpdateModel = spyOn(component, <any>'updateModel');
 
       component.updateSelectedValue(option, false);
 
@@ -824,8 +824,8 @@ describe('PoComboBaseComponent:', () => {
       const option = { value: 1, label: '1' };
 
       const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any> 'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any> 'updateModel');
+      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
+      const spyUpdateModel = spyOn(component, <any>'updateModel');
 
       component.updateSelectedValue(option, false);
 
@@ -870,7 +870,10 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it(`updateComboList: should set 'selectedView' with first position of visibleOptions if 'selectedView' was undefined`, () => {
-      const options = [{ label: '1', value: '1' }, { label: '2', value: '2' }];
+      const options = [
+        { label: '1', value: '1' },
+        { label: '2', value: '2' }
+      ];
 
       component.options = options;
       component.selectedValue = undefined;
@@ -901,11 +904,11 @@ describe('PoComboBaseComponent:', () => {
     it('sortOptions: return options list param sorted ', () => {
       component.sort = true;
       component.options = [
-        {label: '2', value: 'valor 2'},
-        {label: 'B', value: 'valor B'},
-        {label: 'a', value: 'valor a'},
-        {label: 'c', value: 'valor c'},
-        {label: '1', value: 'valor 1'}
+        { label: '2', value: 'valor 2' },
+        { label: 'B', value: 'valor B' },
+        { label: 'a', value: 'valor a' },
+        { label: 'c', value: 'valor c' },
+        { label: '1', value: 'valor 1' }
       ];
       component['sortOptions'](component.options);
 
@@ -917,56 +920,55 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('compareOptions: should compare received param options', () => {
-      expect(component['compareOptions']({label: 'a'}, {label: 'b'})).toBe(-1);
-      expect(component['compareOptions']({label: 'c'}, {label: 'b'})).toBe(1);
-      expect(component['compareOptions']({label: 'c'}, {label: 'c'})).toBe(0);
-      expect(component['compareOptions']({label: 'A'}, {label: 'b'})).toBe(-1);
-      expect(component['compareOptions']({label: 'a'}, {label: 'C'})).toBe(-1);
+      expect(component['compareOptions']({ label: 'a' }, { label: 'b' })).toBe(-1);
+      expect(component['compareOptions']({ label: 'c' }, { label: 'b' })).toBe(1);
+      expect(component['compareOptions']({ label: 'c' }, { label: 'c' })).toBe(0);
+      expect(component['compareOptions']({ label: 'A' }, { label: 'b' })).toBe(-1);
+      expect(component['compareOptions']({ label: 'a' }, { label: 'C' })).toBe(-1);
     });
 
     describe('ValidateValue', () => {
       it('should return true if `isOptionGroupList`, option label is valid and has options', () => {
-        component.options = [ { label: 'label group A', options: [{ value: 'value A'}]} ];
+        component.options = [{ label: 'label group A', options: [{ value: 'value A' }] }];
 
         expect(component['validateValue'](component.options[0])).toBeTruthy();
       });
 
       it('should return true if `isOptionGroupList`, verifyingOptionsGroup param is true and has valid value', () => {
-        component.options = [ { label: 'label', options: [{ value: 'value'}]} ];
+        component.options = [{ label: 'label', options: [{ value: 'value' }] }];
 
-        expect(component['validateValue']({ value: 'value', label: 'value'}, true)).toBeTruthy();
+        expect(component['validateValue']({ value: 'value', label: 'value' }, true)).toBeTruthy();
       });
 
       it('should return false if `isOptionsGroupList` but has invalid label', () => {
-        component.options = [ { label: '', options: [{ value: 'value A'}]} ];
+        component.options = [{ label: '', options: [{ value: 'value A' }] }];
 
         expect(component['validateValue'](component.options[0])).toBeFalsy();
       });
 
       it('should return false if `isOptionsGroupList`, `verifyingOptionsGroup` is true but has invalid value', () => {
-        component.options = [ { label: 'label', options: [ { value: '', label: '' } ]} ];
+        component.options = [{ label: 'label', options: [{ value: '', label: '' }] }];
 
-        expect(component['validateValue']({ label: '', value: ''}, true)).toBeFalsy();
+        expect(component['validateValue']({ label: '', value: '' }, true)).toBeFalsy();
       });
 
       it('should return true if `isOptionsGroupList` is false, has valid value and doesn`t have options', () => {
-        component.options = [ { label: 'label', value: 'value'} ];
+        component.options = [{ label: 'label', value: 'value' }];
 
         expect(component['validateValue'](component.options[0])).toBeTruthy();
       });
 
       it('should return false if `isOptionsGroupList` is false, but has invalid value', () => {
-        component.options = [ { label: 'label', value: ''} ];
+        component.options = [{ label: 'label', value: '' }];
 
         expect(component['validateValue'](component.options[0])).toBeFalsy();
       });
-
     });
 
     it('hasDuplicatedOption: should return true if contains a duplicated option label', () => {
       const comboOptions = [
         { label: 'labelA', value: 'valueA' },
-        { label: 'labelB', value: 'valueB' },
+        { label: 'labelB', value: 'valueB' }
       ];
 
       const expectedValue = component['hasDuplicatedOption'](comboOptions, 'labelA');
@@ -1009,7 +1011,7 @@ describe('PoComboBaseComponent:', () => {
     and doesn't call 'verifyComboOptionsGroup' if isn´t group list`, () => {
       component.options = [
         { label: 'labelA', value: 'valueA' },
-        { label: 'labelB', value: 'valueB' },
+        { label: 'labelB', value: 'valueB' }
       ];
 
       const spyVerifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
@@ -1024,13 +1026,11 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it(`listingComboOptions: should call 'verifyComboOptions', 'sortOptions' and 'verifyComboOptionsGroup' if is a group list`, () => {
-      component.options = [
-        { label: 'labelA', options: [ { value: 'valueA' } ] },
-      ];
+      component.options = [{ label: 'labelA', options: [{ value: 'valueA' }] }];
 
       const formattedOptions = [
         { label: 'labelA', options: true },
-        { label: 'valueA', value: 'valueA'}
+        { label: 'valueA', value: 'valueA' }
       ];
 
       const spyVerifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
@@ -1047,7 +1047,7 @@ describe('PoComboBaseComponent:', () => {
     it('verifyComboOptions: should call `verifyIfHasLabel`, `hasDuplicatedOption` and `validateValue`', () => {
       component.options = [
         { label: 'labelA', value: 'valueA' },
-        { label: 'labelB', value: 'valueB' },
+        { label: 'labelB', value: 'valueB' }
       ];
 
       const spyVerifyIfHasLabel = spyOn(component, <any>'verifyIfHasLabel').and.callThrough();
@@ -1064,7 +1064,7 @@ describe('PoComboBaseComponent:', () => {
     it('verifyComboOptions: should verify each option and return a properly options list`', () => {
       component.options = [
         { label: 'labelA', value: 'valueA' },
-        { label: 'labelB', value: 'valueB' },
+        { label: 'labelB', value: 'valueB' }
       ];
 
       const expectedValue = component['verifyComboOptions'](component.options);
@@ -1077,12 +1077,12 @@ describe('PoComboBaseComponent:', () => {
         { label: '', value: 'valueA' },
         { label: 'labelB', value: 'valueB' },
         { label: 'labelB', value: 'valueB' },
-        { label: 'labelB', value: '' },
+        { label: 'labelB', value: '' }
       ];
 
       const formattedOptions = [
         { label: 'valueA', value: 'valueA' },
-        { label: 'labelB', value: 'valueB' },
+        { label: 'labelB', value: 'valueB' }
       ];
       const expectedValue = component['verifyComboOptions'](component.options);
 
@@ -1090,7 +1090,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('verifyComboOptionsGroup: should only call `verifyComboOptions` if option group length is 0', () => {
-      component.options = [{ label: 'labelGroup', options: []}];
+      component.options = [{ label: 'labelGroup', options: [] }];
       component['comboOptionsList'] = component.options;
 
       const spyverifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
@@ -1103,10 +1103,13 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('verifyComboOptionsGroup: should call `verifyComboOptions` and `sortOptions` if option group has length', () => {
-      component.options = [{ label: 'labelGroup', options: [{ value: 'value' }]}];
+      component.options = [{ label: 'labelGroup', options: [{ value: 'value' }] }];
       component['comboOptionsList'] = component.options;
 
-      const formattedOptions = [{ label: 'labelGroup', options: true }, { value: 'value', label: 'value'}];
+      const formattedOptions = [
+        { label: 'labelGroup', options: true },
+        { value: 'value', label: 'value' }
+      ];
       const spyverifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
       const spySortOptions = spyOn(component, <any>'sortOptions');
       const expectedResult = component['verifyComboOptionsGroup'](<any>component['comboOptionsList']);
@@ -1117,28 +1120,28 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it(`verifyIfHasLabel: should return false if is option group and doesn't have label'`, () => {
-      component.options = [ { label: 'label', options: [] }];
-      const option = { label: '', options: [ { value: 'value' } ] };
+      component.options = [{ label: 'label', options: [] }];
+      const option = { label: '', options: [{ value: 'value' }] };
 
       expect(component['verifyIfHasLabel'](option)).toBeFalsy();
     });
 
     it(`verifyIfHasLabel: should return false if option doesn't have label neither value'`, () => {
-      component.options = [ { label: 'label', options: [] }];
+      component.options = [{ label: 'label', options: [] }];
       const option = { label: '', value: '' };
 
       expect(component['verifyIfHasLabel'](option)).toBeFalsy();
     });
 
     it(`verifyIfHasLabel: should return false if isn't option group and has option'`, () => {
-      component.options = [ { value: 'value' }];
-      const option = { label: 'label', options: [ { value: 'value' } ] };
+      component.options = [{ value: 'value' }];
+      const option = { label: 'label', options: [{ value: 'value' }] };
 
       expect(component['verifyIfHasLabel'](option)).toBeFalsy();
     });
 
     it(`verifyIfHasLabel: should return true and apply label value if is a valid option`, () => {
-      component.options = [ { value: 'value' }];
+      component.options = [{ value: 'value' }];
       const option = { value: 'value', label: undefined };
 
       expect(component['verifyIfHasLabel'](option)).toBeTruthy();
@@ -1146,7 +1149,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it(`verifyIfHasLabel: should return true if is a valid option`, () => {
-      component.options = [ { value: 'value' }];
+      component.options = [{ value: 'value' }];
       const option = { value: 'value', label: 'label' };
 
       expect(component['verifyIfHasLabel'](option)).toBeTruthy();
@@ -1154,9 +1157,7 @@ describe('PoComboBaseComponent:', () => {
 
     it(`searchForLabel: should search for label and update the combo list including the options group title
     and set selectedView skipping the option group title item`, () => {
-      component.options = [
-        { label: 'Valor 1', options: [ { value: 'value' } ]},
-      ];
+      component.options = [{ label: 'Valor 1', options: [{ value: 'value' }] }];
 
       const options = [
         { label: 'group', options: true },
@@ -1172,9 +1173,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it(`searchForLabel: should add 6 items into visibleItems array list`, () => {
-      component.options = [
-        { label: 'val', options: [ { value: 'value' } ]},
-      ];
+      component.options = [{ label: 'val', options: [{ value: 'value' }] }];
 
       const options = [
         { label: 'group', options: true },
@@ -1182,7 +1181,7 @@ describe('PoComboBaseComponent:', () => {
         { label: 'value 2', value: 'value 2' },
         { label: 'group 2', options: true },
         { label: 'value 3', value: 'value 3' },
-        { label: 'value 4', value: 'value 4' },
+        { label: 'value 4', value: 'value 4' }
       ];
 
       component.searchForLabel('value', <any>options, PoComboFilterMode.startsWith);
@@ -1204,7 +1203,7 @@ describe('PoComboBaseComponent:', () => {
     it('comboListDefinitions: should call `listingComboOptions` if options length is more than 0', () => {
       component.options = [{ label: '1', value: '1' }];
 
-      const spyListingComboOptions = spyOn(component, <any> 'listingComboOptions').and.callThrough();
+      const spyListingComboOptions = spyOn(component, <any>'listingComboOptions').and.callThrough();
 
       component['comboListDefinitions']();
 
@@ -1221,7 +1220,6 @@ describe('PoComboBaseComponent:', () => {
       expect(spyListingComboOptions).not.toHaveBeenCalled();
     });
   });
-
 });
 
 describe('PoComboBaseComponent using Service', () => {
@@ -1297,7 +1295,7 @@ describe('PoComboBaseComponent using Service', () => {
   });
 
   it('should set property `p-filter-service`', () => {
-    spyOn(component, <any> 'configAfterSetFilterService');
+    spyOn(component, <any>'configAfterSetFilterService');
 
     component.filterService = service;
 
@@ -1315,8 +1313,8 @@ describe('PoComboBaseComponent using Service', () => {
   it('should update property `p-debounce-time` with `400` when invalid values', () => {
     const invalidValues = [undefined, null, '', 0, true, false, 'string', [], {}, -50];
 
-    spyOn(component, <any> 'unsubscribeKeyupObservable');
-    spyOn(component, <any> 'initInputObservable');
+    spyOn(component, <any>'unsubscribeKeyupObservable');
+    spyOn(component, <any>'initInputObservable');
 
     expectPropertiesValues(component, 'debounceTime', invalidValues, 400);
 
@@ -1327,8 +1325,8 @@ describe('PoComboBaseComponent using Service', () => {
   it('should update property `p-debounce-time` with valid values', () => {
     const validValues = [400, 100, 1000];
 
-    spyOn(component, <any> 'unsubscribeKeyupObservable');
-    spyOn(component, <any> 'initInputObservable');
+    spyOn(component, <any>'unsubscribeKeyupObservable');
+    spyOn(component, <any>'initInputObservable');
 
     expectPropertiesValues(component, 'debounceTime', validValues, validValues);
 

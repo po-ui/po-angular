@@ -8,7 +8,6 @@ import { PoEventSourcingOperation } from '../enums/po-event-sourcing-operation.e
  * Define as informações de um evento para um determinado registro.
  */
 export interface PoEventSourcingSummaryItem {
-
   /** Identificador customizado do registro. */
   customRequestId: string;
 
@@ -17,5 +16,4 @@ export interface PoEventSourcingSummaryItem {
 
   /** Objeto *json* com os dados do registro. */
   record: object;
-
 }

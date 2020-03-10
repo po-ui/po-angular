@@ -1,5 +1,4 @@
 <form #formConfig="ngForm">
-
   <div>
     <po-loading-overlay [hidden]="isHideLoading"></po-loading-overlay>
   </div>
@@ -11,25 +10,14 @@
       [(ngModel)]="environment.urlServer"
       p-clean
       p-label="URL Server"
-      p-required>
+      p-required
+    >
     </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="urlDB"
-      [(ngModel)]="environment.urlDB"
-      p-clean
-      p-label="URL Database"
-      p-required>
+    <po-input class="po-md-6" name="urlDB" [(ngModel)]="environment.urlDB" p-clean p-label="URL Database" p-required>
     </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="userDB"
-      [(ngModel)]="environment.userDB"
-      p-clean
-      p-label="User Database"
-      p-required>
+    <po-input class="po-md-6" name="userDB" [(ngModel)]="environment.userDB" p-clean p-label="User Database" p-required>
     </po-input>
 
     <po-password
@@ -38,7 +26,8 @@
       [(ngModel)]="environment.passwordDB"
       p-clean
       p-label="Password Database"
-      p-required>
+      p-required
+    >
     </po-password>
   </div>
 
@@ -47,8 +36,8 @@
       class="po-md-4"
       p-label="Connect"
       [p-disabled]="formConfig.invalid"
-      (p-click)="connectionTest(); formConfig.reset();">
+      (p-click)="connectionTest(); formConfig.reset()"
+    >
     </po-button>
   </div>
-
 </form>

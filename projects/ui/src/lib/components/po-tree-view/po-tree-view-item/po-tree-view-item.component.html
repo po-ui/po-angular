@@ -1,20 +1,18 @@
 <li class="po-tree-view-item">
-
   <po-tree-view-item-header
     [p-item]="item"
     [p-selectable]="selectable"
     (p-expanded)="onClick($event)"
-    (p-selected)="onSelect(item)">
+    (p-selected)="onSelect(item)"
+  >
   </po-tree-view-item-header>
 
-  <ul *ngIf="hasSubItems"
-    class="po-tree-view-item-group"
-    [@toggleBody]="item.expanded ? 'expanded' : 'collapsed'">
-
-    <po-tree-view-item *ngFor="let subItem of item.subItems; trackBy: trackByFunction"
+  <ul *ngIf="hasSubItems" class="po-tree-view-item-group" [@toggleBody]="item.expanded ? 'expanded' : 'collapsed'">
+    <po-tree-view-item
+      *ngFor="let subItem of item.subItems; trackBy: trackByFunction"
       [p-item]="subItem"
-      [p-selectable]="selectable">
+      [p-selectable]="selectable"
+    >
     </po-tree-view-item>
   </ul>
-
 </li>

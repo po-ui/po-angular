@@ -10,15 +10,8 @@ import { PoProgressComponent } from './po-progress.component';
  * Módulo do componente `po-progress`.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    PoProgressComponent
-  ],
-  declarations: [
-    PoProgressBarComponent,
-    PoProgressComponent
-  ]
+  imports: [CommonModule],
+  exports: [PoProgressComponent],
+  declarations: [PoProgressBarComponent, PoProgressComponent]
 })
 export class PoProgressModule {}

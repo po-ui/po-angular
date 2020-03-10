@@ -6,17 +6,17 @@ import { browserLanguage, isExternalLink, poLocaleDefault } from '../../utils/ut
 import { PoPageBlockedUserBaseComponent } from './po-page-blocked-user-base.component';
 
 export const poPageBlockedUserButtonLiterals: Object = {
-  en: <any> {
-    primaryButton: 'Back to home screen',
+  en: <any>{
+    primaryButton: 'Back to home screen'
   },
-  es: <any> {
-    primaryButton: 'Volver al inicio',
+  es: <any>{
+    primaryButton: 'Volver al inicio'
   },
-  pt: <any> {
-    primaryButton: 'Voltar para o início',
+  pt: <any>{
+    primaryButton: 'Voltar para o início'
   },
-  ru: <any> {
-    primaryButton: 'Перейти к началу страницы',
+  ru: <any>{
+    primaryButton: 'Перейти к началу страницы'
   }
 };
 
@@ -50,12 +50,10 @@ export const poPageBlockedUserButtonLiterals: Object = {
   selector: 'po-page-blocked-user',
   templateUrl: './po-page-blocked-user.component.html'
 })
-
 export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent implements OnInit {
-
   literals = {
     ...poPageBlockedUserButtonLiterals[poLocaleDefault],
-    ...poPageBlockedUserButtonLiterals[browserLanguage()],
+    ...poPageBlockedUserButtonLiterals[browserLanguage()]
   };
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {
@@ -67,7 +65,7 @@ export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent i
   }
 
   navigateTo(url: string) {
-    isExternalLink(url) ?  window.open(url) : this.router.navigate([url || '/']);
+    isExternalLink(url) ? window.open(url) : this.router.navigate([url || '/']);
   }
 
   private checkingForMetadataProperty(object, property) {
@@ -84,5 +82,4 @@ export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent i
       this.urlBack = this.checkingForMetadataProperty(data, 'urlBack') || this.urlBack;
     }
   }
-
 }

@@ -8,7 +8,6 @@ import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationServi
   templateUrl: './sample-po-datepicker-range-vacations.component.html'
 })
 export class SamplePoDatepickerRangeVacationsComponent {
-
   datepickerRange: PoDatepickerRange;
   quantityOfDays: number = undefined;
   reason: string;
@@ -30,20 +29,28 @@ export class SamplePoDatepickerRangeVacationsComponent {
   };
 
   get validateForm() {
-    return !(this.formVacationSuggestion.valid && this.datepickerRange && this.datepickerRange.start && this.datepickerRange.end);
+    return !(
+      this.formVacationSuggestion.valid &&
+      this.datepickerRange &&
+      this.datepickerRange.start &&
+      this.datepickerRange.end
+    );
   }
 
   @ViewChild('formVacationSuggestion', { static: true }) formVacationSuggestion: FormControl;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   calculateQuantityOfVacationDays() {
     const start = new Date(this.datepickerRange.start);
     const end = new Date(this.datepickerRange.end);
 
-    this.quantityOfDays = Math.floor((Date.UTC(end.getFullYear(), end.getMonth(), end.getDate()) -
-      Date.UTC(start.getFullYear(), start.getMonth(), start.getDate()) ) / (1000 * 60 * 60 * 24));
+    this.quantityOfDays = Math.floor(
+      (Date.UTC(end.getFullYear(), end.getMonth(), end.getDate()) -
+        Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())) /
+        (1000 * 60 * 60 * 24)
+    );
   }
 
   clean() {
@@ -51,5 +58,4 @@ export class SamplePoDatepickerRangeVacationsComponent {
     this.quantityOfDays = undefined;
     this.reason = undefined;
   }
-
 }

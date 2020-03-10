@@ -37,9 +37,7 @@ import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-
   selector: 'po-modal-password-recovery',
   templateUrl: './po-modal-password-recovery.component.html'
 })
-
 export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseComponent implements OnDestroy {
-
   chosenTypeFormOption: string = PoModalPasswordRecoveryType.Email;
   codeMask: string = '9 9 9 9 9 9';
   control: AbstractControl;
@@ -65,9 +63,9 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
 
   @ViewChild('smsCodeForm') smsCodeForm: NgForm;
 
-  primaryAction: PoModalAction = { label: undefined, action: () => { } };
+  primaryAction: PoModalAction = { label: undefined, action: () => {} };
 
-  secondaryAction: PoModalAction = { label: undefined, action: () => { } };
+  secondaryAction: PoModalAction = { label: undefined, action: () => {} };
 
   typeFormOptions: Array<PoRadioGroupOption> = [
     { label: 'e-mail', value: PoModalPasswordRecoveryType.Email },
@@ -78,7 +76,7 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
     private router: Router,
     private poI18nPipe: PoI18nPipe,
     private poModalPasswordRecoveryService: PoModalPasswordRecoveryService
-    ) {
+  ) {
     super();
   }
 
@@ -128,13 +126,25 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   openConfirmation() {
     this.modalTitle = this.literals.emailSentTitle;
     this.modalType = PoModalPasswordRecoveryModalContent.Confirmation;
-    this.setActions(this.cancelAction, this.literals.closeButton, this.submitAction, this.literals.resendEmailButton, false);
+    this.setActions(
+      this.cancelAction,
+      this.literals.closeButton,
+      this.submitAction,
+      this.literals.resendEmailButton,
+      false
+    );
   }
 
   openSmsCode() {
     this.modalTitle = this.literals.typeCodeTitle;
     this.modalType = PoModalPasswordRecoveryModalContent.SMSCode;
-    this.setActions(this.submitSmsCodeAction, this.literals.continueButton, this.cancelAction, this.literals.cancelButton, true);
+    this.setActions(
+      this.submitSmsCodeAction,
+      this.literals.continueButton,
+      this.cancelAction,
+      this.literals.cancelButton,
+      true
+    );
 
     setTimeout(() => {
       this.control = this.smsCodeForm.controls['sms'];
@@ -152,9 +162,9 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   }
 
   private assignSmsResponse(responseObj) {
-    this.smsBodyResponse = Object.assign({}, {hash: responseObj.hash});
+    this.smsBodyResponse = Object.assign({}, { hash: responseObj.hash });
     if (responseObj.urlValidationCode) {
-      this.smsBodyResponse = Object.assign(this.smsBodyResponse, {urlValidationCode: responseObj.urlValidationCode});
+      this.smsBodyResponse = Object.assign(this.smsBodyResponse, { urlValidationCode: responseObj.urlValidationCode });
     }
   }
 
@@ -183,7 +193,7 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   }
 
   private incrementRetryAttempts() {
-    this.submittedContactValue.retry = (this.submittedContactValue.retry + 1 || 1);
+    this.submittedContactValue.retry = this.submittedContactValue.retry + 1 || 1;
   }
 
   private openExternalLink(url, queryParam) {
@@ -196,10 +206,19 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
 
   private pipeModalPhrases() {
     if (this.type === PoModalPasswordRecoveryType.SMS) {
-      this.emailModalPhrases.firstPhrase = this.setPipeArguments(this.literals.recoveryPasswordPhrase, this.literals.sms);
-      this.emailModalPhrases.secondPhrase = this.setPipeArguments(this.literals.supportContact, this.literals.telephone);
+      this.emailModalPhrases.firstPhrase = this.setPipeArguments(
+        this.literals.recoveryPasswordPhrase,
+        this.literals.sms
+      );
+      this.emailModalPhrases.secondPhrase = this.setPipeArguments(
+        this.literals.supportContact,
+        this.literals.telephone
+      );
     } else {
-      this.emailModalPhrases.firstPhrase = this.setPipeArguments(this.literals.recoveryPasswordPhrase, this.literals.email);
+      this.emailModalPhrases.firstPhrase = this.setPipeArguments(
+        this.literals.recoveryPasswordPhrase,
+        this.literals.email
+      );
       this.emailModalPhrases.secondPhrase = this.setPipeArguments(this.literals.supportContact, this.literals.email);
     }
   }
@@ -207,9 +226,9 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   private redirectToChangePassword(recoveryToken: PoModalPasswordRecovery) {
     const urlChangePassword = recoveryToken.urlChangePassword;
     if (urlChangePassword) {
-      isExternalLink(urlChangePassword) ?
-      this.openExternalLink(urlChangePassword, recoveryToken.token) :
-      this.openInternalLink(this.urlRecovery, urlChangePassword, recoveryToken.token);
+      isExternalLink(urlChangePassword)
+        ? this.openExternalLink(urlChangePassword, recoveryToken.token)
+        : this.openInternalLink(this.urlRecovery, urlChangePassword, recoveryToken.token);
     } else {
       const changePasswordEndpoint = 'changePassword';
       this.openInternalLink(this.urlRecovery, changePasswordEndpoint, recoveryToken.token);
@@ -249,7 +268,9 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   }
 
   private submitAction() {
-    this.modalType === PoModalPasswordRecoveryModalContent.Confirmation ? this.incrementRetryAttempts() : this.formReset(this.control);
+    this.modalType === PoModalPasswordRecoveryModalContent.Confirmation
+      ? this.incrementRetryAttempts()
+      : this.formReset(this.control);
     this.submittedContactValue[this.checkFormType(this.type)] = this.getEmitValue(this.type);
     if (this.urlRecovery) {
       this.submitActionRequest(this.submittedContactValue, this.type);
@@ -261,25 +282,27 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   private submitActionRequest(data: PoModalPasswordRecovery, modalType: PoModalPasswordRecoveryType) {
     const params = modalType === PoModalPasswordRecoveryType.SMS ? { type: 'sms' } : undefined;
 
-    this.passwordRecoverySubscription =
-    this.poModalPasswordRecoveryService.post(this.urlRecovery, data, params)
-    .subscribe(response => {
-      if ((modalType === PoModalPasswordRecoveryType.Email || modalType === PoModalPasswordRecoveryType.All) && response.status === 204) {
-        this.openConfirmation();
-      } else if (modalType === PoModalPasswordRecoveryType.SMS && response.status === 200) {
-        this.assignSmsResponse(response.body);
-        this.openSmsCode();
-      }
-    });
+    this.passwordRecoverySubscription = this.poModalPasswordRecoveryService
+      .post(this.urlRecovery, data, params)
+      .subscribe(response => {
+        if (
+          (modalType === PoModalPasswordRecoveryType.Email || modalType === PoModalPasswordRecoveryType.All) &&
+          response.status === 204
+        ) {
+          this.openConfirmation();
+        } else if (modalType === PoModalPasswordRecoveryType.SMS && response.status === 200) {
+          this.assignSmsResponse(response.body);
+          this.openSmsCode();
+        }
+      });
   }
 
   private submitSmsCodeAction() {
     this.submittedCodeValue.code = this.smsCode;
 
     if (this.urlRecovery) {
-      this.submittedCodeValue = Object.assign(this.submittedCodeValue, {hash: this.smsBodyResponse.hash});
+      this.submittedCodeValue = Object.assign(this.submittedCodeValue, { hash: this.smsBodyResponse.hash });
       this.submitSmsCodeRequest(this.submittedCodeValue);
-
     } else {
       this.codeSubmit.emit(this.submittedCodeValue);
     }
@@ -288,20 +311,19 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
 
   private submitSmsCodeRequest(data: PoModalPasswordRecovery) {
     this.smsCodeSubscription = this.poModalPasswordRecoveryService
-    .post(this.setRequestEndpoint(this.smsBodyResponse.urlValidationCode), data)
-    .subscribe(
-      response => {
-        const successStatus = response.status === 200;
-        if (successStatus) {
-          this.completed();
-          this.redirectToChangePassword(response.body);
+      .post(this.setRequestEndpoint(this.smsBodyResponse.urlValidationCode), data)
+      .subscribe(
+        response => {
+          const successStatus = response.status === 200;
+          if (successStatus) {
+            this.completed();
+            this.redirectToChangePassword(response.body);
+          }
+        },
+        error => {
+          this.codeError = error.error.message;
+          this.openSmsCode();
         }
-      },
-      error => {
-        this.codeError = error.error.message;
-        this.openSmsCode();
-      }
-    );
+      );
   }
-
 }

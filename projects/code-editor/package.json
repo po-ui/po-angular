@@ -24,6 +24,5 @@
     "@portinari/portinari-ui": "0.0.0-PLACEHOLDER",
     "monaco-editor": "0.15.6",
     "zone.js": "~0.10.2"
-
   }
 }

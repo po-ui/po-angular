@@ -19,9 +19,7 @@ describe('PoTabsComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        PoTabsModule
-      ]
+      imports: [PoTabsModule]
     });
   });
 
@@ -44,45 +42,44 @@ describe('PoTabsComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('overflowedTabs: should return `overflowedTabs` that position greater than `maxNumberOfTabs - 2`', () => {
       const tabs = [defaultTab, defaultTab, defaultTab, defaultTab];
       const overflowedTabs = [defaultTab, defaultTab, defaultTab];
-      component.tabs = <any> [...tabs, ...overflowedTabs];
+      component.tabs = <any>[...tabs, ...overflowedTabs];
 
       expect(component.overflowedTabs).toEqual(overflowedTabs);
     });
 
     it('isShowTabDropdown: should return `true` if `visibleTabs` is greater than `maxNumberOfTabs` and isn`t a mobile device.', () => {
-      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(false);
-      component.tabs = <any> [defaultTab, defaultTab, defaultTab, defaultTab, defaultTab, defaultTab];
+      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(false);
+      component.tabs = <any>[defaultTab, defaultTab, defaultTab, defaultTab, defaultTab, defaultTab];
 
       expect(component.isShowTabDropdown).toBe(true);
     });
 
     it('isShowTabDropdown: should return `false` if `visibleTabs` is lower than `maxNumberOfTabs` and is a mobile device.', () => {
-      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
-      component.tabs = <any> [defaultTab, defaultTab, defaultTab, defaultTab];
+      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(true);
+      component.tabs = <any>[defaultTab, defaultTab, defaultTab, defaultTab];
 
       expect(component.isShowTabDropdown).toBe(false);
     });
 
     it('visibleTabs: should return `tabs` that aren`t hide', () => {
-      component.tabs = <any> [defaultTab, activeTab, hiddenTab];
+      component.tabs = <any>[defaultTab, activeTab, hiddenTab];
 
       expect(component.visibleTabs.length).toBe(2);
       expect(component.visibleTabs.some(visibleTab => visibleTab.hide)).toBeFalsy();
     });
 
     it('isVisibleTab: should return `true` if `visibleTabs` is lower than `maxNumberOfTabs`', () => {
-      component.tabs = <any> [defaultTab, activeTab, hiddenTab];
+      component.tabs = <any>[defaultTab, activeTab, hiddenTab];
       const tab = component.tabs[0];
 
       expect(component.isVisibleTab(tab)).toBe(true);
     });
 
     it('isVisibleTab: should return `false` if `visibleTabs` is greater than `maxNumberOfTabs`', () => {
-      component.tabs = <any> [{id: '0'}, {id: '1'}, {id: '2'}, {id: '3'}, {id: '4'}, {id: '5'}];
+      component.tabs = <any>[{ id: '0' }, { id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }, { id: '5' }];
       const tab = component.tabs[component.tabs.length - 1];
 
       expect(component.isVisibleTab(tab)).toBe(false);
@@ -91,7 +88,7 @@ describe('PoTabsComponent:', () => {
     it('onTabChangeState: shouldn`t call `activeDistinctTab`, `detectChanges` if `tab.active` is false', () => {
       const tab = defaultTab;
 
-      spyOn(component, <any> 'activeDistinctTab');
+      spyOn(component, <any>'activeDistinctTab');
       spyOn(component['changeDetector'], 'detectChanges');
 
       component.onTabChangeState(tab);
@@ -103,7 +100,7 @@ describe('PoTabsComponent:', () => {
     it('onTabChangeState: should set `tab.active` with false and call `activeDistinctTab`, `detectChanges` if `tab.active` is true', () => {
       const tab = activeTab;
 
-      spyOn(component, <any> 'activeDistinctTab');
+      spyOn(component, <any>'activeDistinctTab');
       spyOn(component['changeDetector'], 'detectChanges');
 
       component.onTabChangeState(tab);
@@ -115,10 +112,10 @@ describe('PoTabsComponent:', () => {
 
     it('onTabActive: should set `previousActiveTab` and call `deactivateTab`', () => {
       component['previousActiveTab'] = undefined;
-      component.tabs = <any> [defaultTab, activeTab];
+      component.tabs = <any>[defaultTab, activeTab];
       const tab = component.tabs[0];
 
-      spyOn(component, <any> 'deactivateTab');
+      spyOn(component, <any>'deactivateTab');
 
       component.onTabActive(tab);
 
@@ -159,7 +156,7 @@ describe('PoTabsComponent:', () => {
 
     it('activeFirstTab: should `active` first tab if it isn`t disabled or hide', () => {
       let tab;
-      component.tabs = <any> [defaultTab];
+      component.tabs = <any>[defaultTab];
 
       component['activeFirstTab']();
       tab = component.tabs[0];
@@ -169,7 +166,7 @@ describe('PoTabsComponent:', () => {
 
     it('activeFirstTab: shouldn`t `active` first tab if them are disabled or hide', () => {
       let tab;
-      component.tabs = <any> [disabledTab, hiddenTab];
+      component.tabs = <any>[disabledTab, hiddenTab];
 
       component['activeFirstTab']();
       tab = component.tabs[0];
@@ -232,7 +229,7 @@ describe('PoTabsComponent:', () => {
     it('activeDistinctTab: shouldn`t call `activeFirstTab` when `previousActiveTab` is true', () => {
       component['previousActiveTab'] = defaultTab;
 
-      spyOn(component, <any> 'activeFirstTab');
+      spyOn(component, <any>'activeFirstTab');
 
       component['activeDistinctTab']();
 
@@ -243,29 +240,27 @@ describe('PoTabsComponent:', () => {
     it('activeDistinctTab: should call `activeFirstTab` when `previousActiveTab` is false', () => {
       component['previousActiveTab'] = undefined;
 
-      spyOn(component, <any> 'activeFirstTab');
+      spyOn(component, <any>'activeFirstTab');
 
       component['activeDistinctTab']();
 
       expect(component['activeFirstTab']).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
-    const sixTabs = <any> [
-      {id: '0', label: '0'},
-      {id: '1', label: '1'},
-      {id: '2', label: '2'},
-      {id: '3', label: '3'},
-      {id: '4', label: '4'},
-      {id: '5', label: '5'},
-      {id: '6', label: '6'}
+    const sixTabs = <any>[
+      { id: '0', label: '0' },
+      { id: '1', label: '1' },
+      { id: '2', label: '2' },
+      { id: '3', label: '3' },
+      { id: '4', label: '4' },
+      { id: '5', label: '5' },
+      { id: '6', label: '6' }
     ];
 
     it('should call `closePopover` if `enter` is pressed in `po-tab-button`.', () => {
-      component.tabs = <any> [{id: '0', label: '0'}];
+      component.tabs = <any>[{ id: '0', label: '0' }];
       fixture.detectChanges();
 
       const eventEnterKey = new KeyboardEvent('keyup', { 'key': 'Enter' });
@@ -279,7 +274,7 @@ describe('PoTabsComponent:', () => {
 
     it('should display `po-tab-dropdown` if has six tabs or more and is not a mobile devide.', () => {
       component.tabs = sixTabs;
-      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(false);
+      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(false);
 
       fixture.detectChanges();
       const poTabDropdown = nativeElement.querySelector('.po-tab-button.po-tab-dropdown');
@@ -289,7 +284,7 @@ describe('PoTabsComponent:', () => {
 
     it('shouldn`t display `po-tab-dropdown` if has six tabs or more but is a mobile devide.', () => {
       component.tabs = sixTabs;
-      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
+      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(true);
 
       fixture.detectChanges();
       const poTabDropdown = nativeElement.querySelector('.po-tab-button.po-tab-dropdown');
@@ -299,7 +294,7 @@ describe('PoTabsComponent:', () => {
 
     it('should find `po-tabs-container-mobile` if mobile device', () => {
       component.tabs = sixTabs;
-      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
+      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(true);
 
       fixture.detectChanges();
       const poTabContainerMobile = nativeElement.querySelector('.po-tabs-container-mobile');
@@ -309,14 +304,12 @@ describe('PoTabsComponent:', () => {
 
     it('should find `po-tab-button-mobile` if mobile device', () => {
       component.tabs = sixTabs;
-      spyOn(UtilsFunction, <any> 'isMobile').and.returnValue(true);
+      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(true);
 
       fixture.detectChanges();
       const poTabButtonMobile = nativeElement.querySelector('.po-tab-button-mobile');
 
       expect(poTabButtonMobile).toBeTruthy();
     });
-
   });
-
 });

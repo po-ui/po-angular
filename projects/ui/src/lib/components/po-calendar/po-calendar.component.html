@@ -11,14 +11,16 @@
     <div class="po-calendar-content">
       <div class="po-calendar-labels">
         <div class="po-calendar-label" *ngFor="let day of displayWeekDays">
-            {{ day.toLowerCase() }}
+          {{ day.toLowerCase() }}
         </div>
       </div>
       <div class="po-calendar-content-list-day">
-        <div *ngFor="let day of displayDays"
+        <div
+          *ngFor="let day of displayDays"
           class="po-calendar-day"
           [ngClass]="getDayBackgroundColor(day)"
-          (click)="onSelectDate(day)">
+          (click)="onSelectDate(day)"
+        >
           <span *ngIf="day != 0" [ngClass]="getDayForegroundColor(day)">
             {{ day.getDate() }}
           </span>
@@ -41,9 +43,13 @@
         </div>
       </div>
       <div class="po-calendar-content-list-month">
-        <div *ngFor="let month of displayMonths; let i = index;" class="po-calendar-month"
+        <div
+          *ngFor="let month of displayMonths; let i = index"
+          class="po-calendar-month"
           [ngClass]="getBackgroundColor(i, displayMonthNumber)"
-          (click)="onSelectMonth(displayYear, i)" attr-calendar>
+          (click)="onSelectMonth(displayYear, i)"
+          attr-calendar
+        >
           <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
             {{ month }}
           </span>
@@ -54,9 +60,7 @@
   <div *ngIf="yearVisible">
     <div class="po-calendar-nav">
       <span class="po-calendar-nav-left po-icon po-icon-arrow-left" (click)="updateYear(-10)"></span>
-      <div class="po-calendar-nav-title">
-        {{ displayStartDecade }} - {{ displayFinalDecade }}
-      </div>
+      <div class="po-calendar-nav-title">{{ displayStartDecade }} - {{ displayFinalDecade }}</div>
       <span class="po-calendar-nav-right po-icon po-icon-arrow-right" (click)="updateYear(10)"></span>
     </div>
     <div class="po-calendar-content">
@@ -66,9 +70,13 @@
         </div>
       </div>
       <div class="po-calendar-content-list-year">
-        <div *ngFor="let year of displayDecade; let i = index;" class="po-calendar-year"
+        <div
+          *ngFor="let year of displayDecade; let i = index"
+          class="po-calendar-year"
           [ngClass]="getBackgroundColor(year, currentYear)"
-          (click)="onSelectYear(year, displayMonthNumber)"attr-calendar>
+          (click)="onSelectYear(year, displayMonthNumber)"
+          attr-calendar
+        >
           <span [ngClass]="getForegroundColor(year, currentYear)">
             {{ year }}
           </span>
@@ -77,4 +85,3 @@
     </div>
   </div>
 </div>
-

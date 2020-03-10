@@ -14,10 +14,7 @@ describe('PoUploadDragDropAreaOverlayComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoUploadDragDropAreaComponent,
-        PoUploadDragDropAreaOverlayComponent
-      ]
+      declarations: [PoUploadDragDropAreaComponent, PoUploadDragDropAreaOverlayComponent]
     });
   });
 
@@ -36,7 +33,6 @@ describe('PoUploadDragDropAreaOverlayComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it(`ngAfterViewInit: should call 'setPosition' with target if have target.`, () => {
       const fakeTarget = {
         nativeElement: '<div></div>'
@@ -101,16 +97,12 @@ describe('PoUploadDragDropAreaOverlayComponent:', () => {
       expect(DragDropAreaFixedStyle.top).toBe('30px');
       expect(DragDropAreaFixedStyle.width).toBe('35px');
     });
-
   });
 
   describe('Templates:', () => {
-
     it(`should contain 'po-overlay-fixed' and 'po-upload-drag-drop-area-overlay' classes.`, () => {
       expect(nativeElement.querySelector('.po-overlay-fixed')).toBeTruthy();
       expect(nativeElement.querySelector('.po-upload-drag-drop-area-overlay')).toBeTruthy();
     });
-
   });
-
 });

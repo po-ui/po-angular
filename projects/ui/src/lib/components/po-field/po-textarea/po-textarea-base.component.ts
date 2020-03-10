@@ -25,7 +25,6 @@ import { InputBoolean } from '../../../decorators';
  */
 @Directive()
 export abstract class PoTextareaBaseComponent implements ControlValueAccessor, Validator {
-
   private _disabled: boolean = false;
   private _maxlength: number;
   private _minlength: number;
@@ -224,26 +223,30 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
     this.validatorChange = func;
   }
 
-  validate(abstractControl: AbstractControl): { [key: string]: any; } {
-
+  validate(abstractControl: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
-      return { required: {
-        valid: false,
-      }};
+      return {
+        required: {
+          valid: false
+        }
+      };
     }
 
     if (minlengpoailed(this.minlength, abstractControl.value)) {
-      return { minlength: {
-        valid: false,
-      }};
+      return {
+        minlength: {
+          valid: false
+        }
+      };
     }
 
     if (maxlengpoailed(this.maxlength, abstractControl.value)) {
-      return { maxlength: {
-        valid: false,
-      }};
+      return {
+        maxlength: {
+          valid: false
+        }
+      };
     }
-
   }
 
   // Função implementada do ControlValueAccessor
@@ -258,5 +261,4 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   }
 
   abstract writeValueModel(value: any): void;
-
 }

@@ -84,7 +84,6 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
   templateUrl: './po-menu-panel.component.html'
 })
 export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements OnDestroy, OnInit {
-
   activeMenuItem: PoMenuPanelItem;
   linkActive: string;
   parentRef: any;
@@ -96,8 +95,8 @@ export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements On
     viewRef: ViewContainerRef,
     private location: Location,
     private menuItemsService: PoMenuPanelItemsService,
-    private router: Router) {
-
+    private router: Router
+  ) {
     super();
     this.parentRef = viewRef['_hostView'][8];
   }
@@ -108,8 +107,8 @@ export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements On
   }
 
   ngOnInit() {
-   this.subscribeToMenuItem();
-   this.subscribeToRoute();
+    this.subscribeToMenuItem();
+    this.subscribeToRoute();
   }
 
   private activateMenuByUrl(urlPath: string, menus: Array<PoMenuPanelItem>) {
@@ -141,17 +140,14 @@ export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements On
     }
 
     if (menu.type === 'externalLink') {
-
       openExternalLink(menu.link);
-
     } else if (menu.type === 'internalLink') {
-
       this.activateMenuItem(menu);
     }
   }
 
   private subscribeToRoute() {
-     this.routeSubscription = this.router.events.subscribe(rounterEvent => {
+    this.routeSubscription = this.router.events.subscribe(rounterEvent => {
       if (rounterEvent instanceof NavigationEnd) {
         this.checkActiveMenuByUrl(this.location.path());
       }
@@ -159,8 +155,8 @@ export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements On
   }
 
   private subscribeToMenuItem() {
-    this.itemSubscription =
-      this.menuItemsService.receiveFromChildMenuClicked().subscribe((menu: PoMenuPanelItemInternal) => this.clickMenuItem(menu));
+    this.itemSubscription = this.menuItemsService
+      .receiveFromChildMenuClicked()
+      .subscribe((menu: PoMenuPanelItemInternal) => this.clickMenuItem(menu));
   }
-
 }

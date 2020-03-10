@@ -6,7 +6,6 @@
  * Interface do objeto enviado como parâmetro na função `getFilteredItems`.
  */
 export interface PoLookupFilteredItemsParams {
-
   /**
    * Conteúdo utilizado para filtrar a lista de itens.
    */
@@ -34,5 +33,4 @@ export interface PoLookupFilteredItemsParams {
    * - Coluna ascendente será informada da seguinte forma: `<colunaOrdenada>`, por exemplo `name`.
    */
   order?: string;
-
 }

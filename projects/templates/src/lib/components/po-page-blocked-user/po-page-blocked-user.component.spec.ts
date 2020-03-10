@@ -1,4 +1,3 @@
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -11,7 +10,6 @@ import { PoPageBlockedUserComponent } from './po-page-blocked-user.component';
 import { PoPageBlockedUserReason } from './enums/po-page-blocked-user-reason.enum';
 
 describe('PoPageBlockedUserComponent:', () => {
-
   let component: PoPageBlockedUserComponent;
   let fixture: ComponentFixture<PoPageBlockedUserComponent>;
   let nativeElement: any;
@@ -19,9 +17,7 @@ describe('PoPageBlockedUserComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],
-      declarations: [
-        PoPageBlockedUserComponent,
-      ],
+      declarations: [PoPageBlockedUserComponent],
       schemas: [NO_ERRORS_SCHEMA]
     });
   });
@@ -39,11 +35,10 @@ describe('PoPageBlockedUserComponent:', () => {
   });
 
   describe('Methods: ', () => {
-
     it('ngOnInit: should call checkingForRouteMetadata', () => {
       const activatedRoute = { snapshot: { data: {} } };
 
-      spyOn(component, <any> 'checkingForRouteMetadata');
+      spyOn(component, <any>'checkingForRouteMetadata');
 
       component.ngOnInit();
 
@@ -61,14 +56,13 @@ describe('PoPageBlockedUserComponent:', () => {
 
       expect(component['router'].navigate).toHaveBeenCalledWith([component.urlBack]);
       expect(window.open).not.toHaveBeenCalled();
-
     });
 
     it('navigateTo: should call `window.open` if `urlBack` is an external url', () => {
       component.urlBack = 'http://po.portinari.com.br';
 
       spyOn(utilsFunctions, 'isExternalLink').and.returnValue(true);
-      spyOn(component['router'], <any> 'navigate');
+      spyOn(component['router'], <any>'navigate');
       spyOn(window, 'open');
 
       component.navigateTo(component.urlBack);
@@ -81,7 +75,7 @@ describe('PoPageBlockedUserComponent:', () => {
       component.urlBack = '';
 
       spyOn(utilsFunctions, 'isExternalLink').and.returnValue(false);
-      spyOn(component['router'], <any> 'navigate');
+      spyOn(component['router'], <any>'navigate');
       spyOn(window, 'open');
 
       component.navigateTo(undefined);
@@ -91,7 +85,7 @@ describe('PoPageBlockedUserComponent:', () => {
     });
 
     it('checkingForMetadataProperty: should return value if the object contains the expected property', () => {
-      const object = {property: 'value'};
+      const object = { property: 'value' };
       const property = 'property';
       const expectedResult = component['checkingForMetadataProperty'](object, property);
 
@@ -99,7 +93,7 @@ describe('PoPageBlockedUserComponent:', () => {
     });
 
     it('checkingForMetadataProperty: shoudn`t return anything if object doesn`t contain the expected property', () => {
-      const object = {property: 'value'};
+      const object = { property: 'value' };
       const property = 'absentProperty';
       const expectedResult = component['checkingForMetadataProperty'](object, property);
 
@@ -107,7 +101,7 @@ describe('PoPageBlockedUserComponent:', () => {
     });
 
     it('checkingForRouteMetadata: shouldn`t set authenticationUrl nor recovery if activatedRoute.data is empty', () => {
-      const data = { };
+      const data = {};
 
       spyOn(component, <any>'checkingForMetadataProperty');
 
@@ -121,7 +115,7 @@ describe('PoPageBlockedUserComponent:', () => {
         contactEmail: 'email',
         contactPhone: '99999999999',
         reason: 'none',
-        urlBack: 'urlBack',
+        urlBack: 'urlBack'
       };
 
       spyOn(component, <any>'checkingForMetadataProperty');
@@ -136,7 +130,7 @@ describe('PoPageBlockedUserComponent:', () => {
         contactEmail: 'email',
         contactPhone: '99999999999',
         reason: 'none',
-        urlBack: 'urlBack',
+        urlBack: 'urlBack'
       };
 
       component['checkingForRouteMetadata'](data);
@@ -161,7 +155,5 @@ describe('PoPageBlockedUserComponent:', () => {
       expect(component.reason).toBe(PoPageBlockedUserReason.ExceededAttempts);
       expect(component.urlBack).toBe('urlBack');
     });
-
   });
-
 });

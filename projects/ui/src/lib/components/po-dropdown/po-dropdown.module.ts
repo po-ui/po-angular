@@ -9,11 +9,8 @@ import { PoDropdownComponent } from './po-dropdown.component';
  * Módulo do componente po-dropdown.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoPopupModule
-  ],
+  imports: [CommonModule, PoPopupModule],
   declarations: [PoDropdownComponent],
   exports: [PoDropdownComponent]
 })
-export class PoDropdownModule { }
+export class PoDropdownModule {}

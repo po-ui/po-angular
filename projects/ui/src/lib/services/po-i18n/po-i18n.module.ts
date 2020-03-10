@@ -153,13 +153,9 @@ import { PoLanguageModule } from '../po-language/po-language.module';
  */
 
 @NgModule({
-  imports: [
-    HttpClientModule,
-    PoLanguageModule
-  ]
+  imports: [HttpClientModule, PoLanguageModule]
 })
 export class PoI18nModule {
-
   static config(config: PoI18nConfig): ModuleWithProviders<PoI18nModule> {
     return {
       ngModule: PoI18nModule,
@@ -182,7 +178,6 @@ export class PoI18nModule {
       ]
     };
   }
-
 }
 
 export function initializeLanguageDefault(config: PoI18nConfig, languageService: PoLanguageService) {

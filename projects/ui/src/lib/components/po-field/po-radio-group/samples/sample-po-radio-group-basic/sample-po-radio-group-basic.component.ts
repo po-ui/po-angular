@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-radio-group-basic',
   templateUrl: './sample-po-radio-group-basic.component.html'
 })
-export class SamplePoRadioGroupBasicComponent { }
+export class SamplePoRadioGroupBasicComponent {}

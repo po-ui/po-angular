@@ -1,13 +1,5 @@
-<po-field-container
-  [p-help]="help"
-  [p-label]="label"
-  [p-optional]="!required && optional">
-
-  <div
-    #dateRangeField
-    class="po-datepicker-range-field po-input"
-    [class.po-datepicker-range-field-disabled]="disabled">
-
+<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
+  <div #dateRangeField class="po-datepicker-range-field po-input" [class.po-datepicker-range-field-disabled]="disabled">
     <div class="po-datepicker-range-start-date">
       <input
         #startDateInput
@@ -21,7 +13,8 @@
         (blur)="onBlur()"
         (focus)="onFocus()"
         (keydown)="onKeydown($event)"
-        (keyup)="onKeyup($event)">
+        (keyup)="onKeyup($event)"
+      />
     </div>
 
     <div class="po-datepicker-range-separator">-</div>
@@ -39,7 +32,8 @@
         (blur)="onBlur()"
         (focus)="onFocus()"
         (keydown)="onKeydown($event)"
-        (keyup)="onKeyup($event)">
+        (keyup)="onKeyup($event)"
+      />
     </div>
 
     <div class="po-datepicker-range-icon">
@@ -47,12 +41,9 @@
     </div>
 
     <div class="po-datepicker-range-icon">
-      <span
-        class="po-icon po-field-icon po-icon-calendar"
-        [class.po-field-icon-disabled]="disabled || readonly">
+      <span class="po-icon po-field-icon po-icon-calendar" [class.po-field-icon-disabled]="disabled || readonly">
       </span>
     </div>
-
   </div>
 
   <po-field-container-bottom [p-error-pattern]="getErrorMessage"></po-field-container-bottom>

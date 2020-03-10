@@ -10,7 +10,6 @@ import { PoTabBaseComponent } from './po-tab-base.component';
   templateUrl: './po-tab.component.html'
 })
 export class PoTabComponent extends PoTabBaseComponent implements AfterContentInit {
-
   constructor(private elementRef: ElementRef) {
     super();
   }
@@ -22,5 +21,4 @@ export class PoTabComponent extends PoTabBaseComponent implements AfterContentIn
   protected setDisplayOnActive() {
     this.elementRef.nativeElement.style.display = this.active ? '' : 'none';
   }
-
 }

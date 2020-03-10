@@ -27,16 +27,15 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
 @Component({
   selector: 'po-popover',
   templateUrl: './po-popover.component.html',
-  providers: [ PoControlPositionService ]
+  providers: [PoControlPositionService]
 })
 export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterViewInit, OnDestroy {
-
   arrowDirection = 'left';
   timeoutResize;
 
   eventListenerFunction: () => void;
 
-  @ViewChild('popoverElement', {read: ElementRef, static: true }) popoverElement: ElementRef;
+  @ViewChild('popoverElement', { read: ElementRef, static: true }) popoverElement: ElementRef;
 
   constructor(private renderer: Renderer2, private poControlPosition: PoControlPositionService) {
     super();
@@ -88,7 +87,6 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   }
 
   setRendererListenInit() {
-
     this.resizeListener = this.renderer.listen('window', 'resize', (event: Event) => {
       if (!this.isHidden) {
         this.debounceResize();
@@ -111,12 +109,13 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   }
 
   togglePopup(event): void {
-    if (!this.isHidden && !this.popoverElement.nativeElement.contains(event.target) &&
-    !this.target.nativeElement.contains(event.target)) {
-
+    if (
+      !this.isHidden &&
+      !this.popoverElement.nativeElement.contains(event.target) &&
+      !this.target.nativeElement.contains(event.target)
+    ) {
       this.close();
     } else if (this.target.nativeElement.contains(event.target)) {
-
       this.popoverElement.nativeElement.hidden ? this.open() : this.close();
     }
   }
@@ -127,12 +126,11 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
   private initEventListenerFunction() {
     this.eventListenerFunction = () => {
-        this.setPopoverPosition();
+      this.setPopoverPosition();
     };
   }
 
   private removeListeners() {
-
     if (this.clickoutListener) {
       this.clickoutListener();
     }
@@ -152,5 +150,4 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     const popoverOffset = 8;
     this.poControlPosition.setElements(this.popoverElement.nativeElement, popoverOffset, this.target);
   }
-
 }

@@ -1,14 +1,11 @@
-<po-field-container
-  [p-label]="label"
-  [p-help]="help"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
   <div class="po-field-container-content">
     <div class="po-field-icon-container-left">
       <span class="po-icon po-field-icon po-icon-user" [class.po-field-icon-disabled]="disabled"></span>
     </div>
 
-    <input #inp
+    <input
+      #inp
       class="po-input po-input-icon-left"
       [attr.name]="name"
       [autocomplete]="autocomplete"
@@ -21,15 +18,13 @@
       (blur)="eventOnBlur($event)"
       (click)="eventOnClick($event)"
       (focus)="eventOnFocus($event)"
-      (input)="eventOnInput($event)">
+      (input)="eventOnInput($event)"
+    />
 
     <div class="po-field-icon-container-right">
       <po-clean [p-element-ref]="inputEl" (p-change-event)="clear($event)"></po-clean>
     </div>
   </div>
 
-  <po-field-container-bottom
-    [p-error-pattern]="getErrorPattern()">
-  </po-field-container-bottom>
-
+  <po-field-container-bottom [p-error-pattern]="getErrorPattern()"> </po-field-container-bottom>
 </po-field-container>

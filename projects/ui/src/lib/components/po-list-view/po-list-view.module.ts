@@ -41,23 +41,10 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  * ```
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    PoButtonModule,
-    PoPopupModule
-  ],
-  declarations: [
-    PoListViewComponent,
-    PoListViewContentTemplateDirective,
-    PoListViewDetailTemplateDirective
-  ],
-  exports: [
-    PoListViewComponent,
-    PoListViewContentTemplateDirective,
-    PoListViewDetailTemplateDirective
-  ],
+  imports: [CommonModule, RouterModule, PoButtonModule, PoPopupModule],
+  declarations: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],
+  exports: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],
   providers: [],
   schemas: []
 })
-export class PoListViewModule { }
+export class PoListViewModule {}

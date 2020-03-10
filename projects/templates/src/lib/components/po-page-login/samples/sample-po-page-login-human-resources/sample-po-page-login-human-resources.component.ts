@@ -13,10 +13,9 @@ import {
 
 @Component({
   selector: 'sample-po-page-login-human-resources',
-  templateUrl: './sample-po-page-login-human-resources.component.html',
+  templateUrl: './sample-po-page-login-human-resources.component.html'
 })
 export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnInit {
-
   customField: PoPageLoginCustomField = {
     property: 'domain',
     placeholder: 'Enter your domain'
@@ -38,9 +37,7 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
 
   private i18nSubscription: Subscription;
 
-  constructor(
-    private poI18nService: PoI18nService,
-    private poDialog: PoDialogService) { }
+  constructor(private poI18nService: PoI18nService, private poDialog: PoDialogService) {}
 
   ngOnDestroy() {
     this.i18nSubscription.unsubscribe();
@@ -63,7 +60,7 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
 
       setTimeout(() => {
         this.poDialog.alert({
-          ok: () => this.loading = false,
+          ok: () => (this.loading = false),
           title: 'Access released',
           message: 'You are on vacation, take time to rest.'
         });
@@ -74,7 +71,6 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
       this.passwordErrors = ['Senha e/ou usuário inválido, verifique e tente novamente.'];
       this.loginErrors = ['Senha e/ou usuário inválido, verifique e tente novamente.'];
     }
-
   }
 
   passwordChange() {
@@ -91,7 +87,7 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
 
   private generateAttempts() {
     if (this.attempts >= 1) {
-      this.attempts --;
+      this.attempts--;
       this.exceededAttempts = this.attempts;
     }
     if (this.attempts === 0) {

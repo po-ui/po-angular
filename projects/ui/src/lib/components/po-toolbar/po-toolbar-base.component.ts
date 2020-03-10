@@ -12,7 +12,6 @@ import { PoToolbarProfile } from './po-toolbar-profile/po-toolbar-profile.interf
  */
 @Directive()
 export class PoToolbarBaseComponent {
-
   private _notificationNumber?: number;
 
   /**
@@ -37,10 +36,10 @@ export class PoToolbarBaseComponent {
    */
   @Input('p-actions-icon') actionsIcon?: string;
 
- /** Define o objeto que será o cabeçalho da lista de ações com as informações do perfil. */
+  /** Define o objeto que será o cabeçalho da lista de ações com as informações do perfil. */
   @Input('p-profile') profile?: PoToolbarProfile;
 
- /** Define uma lista de ações que serão exibidas ao clicar no ícone do perfil. */
+  /** Define uma lista de ações que serão exibidas ao clicar no ícone do perfil. */
   @Input('p-profile-actions') profileActions?: Array<PoToolbarAction>;
 
   /** Se falso, oculta o ícone de notificações. */

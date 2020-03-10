@@ -1,87 +1,93 @@
 <po-page>
-
   <!-- HEADER -->
   <po-page-header
     *ngIf="hasPageHeader()"
     [class.po-page-list-header-padding]="filter && !actions.length"
     [p-breadcrumb]="breadcrumb"
-    [p-title]="title">
-
+    [p-title]="title"
+  >
     <!-- OPERATIONS -->
     <div class="po-page-list-operations">
-      <div class="po-page-list-actions"
-        [class.po-page-list-actions-padding]="filter">
-        <po-button *ngIf="actions[0]"
+      <div class="po-page-list-actions" [class.po-page-list-actions-padding]="filter">
+        <po-button
+          *ngIf="actions[0]"
           p-type="primary"
           [p-disabled]="actionIsDisabled(actions[0])"
           [p-icon]="actions[0].icon"
           [p-label]="actions[0].label"
-          (p-click)="callAction(actions[0])">
+          (p-click)="callAction(actions[0])"
+        >
         </po-button>
 
-        <po-button *ngIf="actions[1] && (actions.length === 2 || !isMobile)"
+        <po-button
+          *ngIf="actions[1] && (actions.length === 2 || !isMobile)"
           [p-disabled]="actionIsDisabled(actions[1])"
           [p-label]="actions[1].label"
-          (p-click)="callAction(actions[1])">
+          (p-click)="callAction(actions[1])"
+        >
         </po-button>
 
-        <po-button *ngIf="actions.length == 3 && actions[2] && !isMobile"
+        <po-button
+          *ngIf="actions.length == 3 && actions[2] && !isMobile"
           [p-disabled]="actionIsDisabled(actions[2])"
           [p-label]="actions[2].label"
-          (p-click)="callAction(actions[2])">
+          (p-click)="callAction(actions[2])"
+        >
         </po-button>
 
-        <po-dropdown *ngIf="actions.length > limitPrimaryActions"
+        <po-dropdown
+          *ngIf="actions.length > limitPrimaryActions"
           [p-actions]="dropdownActions"
-          [p-label]="literals.otherActions">
+          [p-label]="literals.otherActions"
+        >
         </po-dropdown>
       </div>
 
       <!-- FILTER -->
       <div class="po-page-list-filter-wrapper" *ngIf="filter">
-
         <div class="po-field-container-content po-page-filter-content">
           <div class="po-field-icon-container-right">
-            <span class="po-icon po-icon-search po-field-icon"
-              (click)="callActionFilter('action')">
-            </span>
+            <span class="po-icon po-icon-search po-field-icon" (click)="callActionFilter('action')"> </span>
           </div>
 
-          <input class="po-input po-input-icon-right"
+          <input
+            class="po-input po-input-icon-right"
             name="model"
             type="text"
             [ngModel]="parentRef[filter.ngModel]"
             [placeholder]="filter.placeholder || ''"
             (keypress)="onkeypress($event.keyCode)"
-            (ngModelChange)="changeModel($event)">
+            (ngModelChange)="changeModel($event)"
+          />
         </div>
 
         <div class="po-page-list-filter-search" *ngIf="filter.advancedAction">
-          <span class="po-page-list-filter-search-link"
+          <span
+            class="po-page-list-filter-search-link"
             tabindex="0"
             (click)="callActionFilter('advancedAction')"
-            (keydown.enter)="callActionFilter('advancedAction')">
-              {{advancedSearch}}
+            (keydown.enter)="callActionFilter('advancedAction')"
+          >
+            {{ advancedSearch }}
           </span>
         </div>
-
       </div>
     </div>
 
     <!-- DISCLAIMER -->
-    <po-disclaimer-group *ngIf="!!disclaimerGroup"
+    <po-disclaimer-group
+      *ngIf="!!disclaimerGroup"
       [class.po-page-list-disclaimer-group]="!!disclaimerGroup?.disclaimers?.length"
       [p-disclaimers]="disclaimerGroup?.disclaimers"
       [p-hide-remove-all]="disclaimerGroup?.hideRemoveAll"
       [p-title]="disclaimerGroup?.title"
-      (p-change)="onChangeDisclaimerGroup($event)">
+      (p-change)="onChangeDisclaimerGroup($event)"
+    >
     </po-disclaimer-group>
-
   </po-page-header>
 
   <!-- CONTENT -->
   <po-page-content>
     <ng-content></ng-content>
   </po-page-content>
-
 </po-page>

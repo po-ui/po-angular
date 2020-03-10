@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-password-labs.component.html'
 })
 export class SamplePoPasswordLabsComponent implements OnInit {
-
   errorPattern: string;
   event: string;
   help: string;
@@ -50,5 +49,4 @@ export class SamplePoPasswordLabsComponent implements OnInit {
     this.placeholder = '';
     this.properties = [];
   }
-
 }

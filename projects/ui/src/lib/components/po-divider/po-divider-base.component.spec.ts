@@ -6,5 +6,4 @@ describe('PoDividerComponent:', () => {
   it('should be created', () => {
     expect(component instanceof PoDividerBaseComponent).toBeTruthy();
   });
-
 });

@@ -8,12 +8,11 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@portina
   templateUrl: './sample-po-datepicker-airfare.component.html'
 })
 export class SamplePoDatepickerAirfareComponent {
-
   accompany: number = 0;
   destination: string;
-  endDate: string = <any> new Date();
+  endDate: string = <any>new Date();
   origin: string;
-  startDate: string = <any> new Date();
+  startDate: string = <any>new Date();
   ticketClass: string = 'Economy';
 
   public readonly accompanyNumber: Array<PoSelectOption> = [
@@ -37,13 +36,15 @@ export class SamplePoDatepickerAirfareComponent {
 
   @ViewChild('formAirfare', { static: true }) formAirfare: FormControl;
 
-  constructor(
-    private poDialog: PoDialogService,
-    private poNotification: PoNotificationService) { }
+  constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
 
   apply() {
-    const message = `Would you like to confirm the ticket from ${this.origin} to ${this.destination} with departure date at
-    ${this.getFormatedDate(this.startDate)} and return at ${this.getFormatedDate(this.endDate)} with ${this.accompany} companions in
+    const message = `Would you like to confirm the ticket from ${this.origin} to ${
+      this.destination
+    } with departure date at
+    ${this.getFormatedDate(this.startDate)} and return at ${this.getFormatedDate(this.endDate)} with ${
+      this.accompany
+    } companions in
     ${this.ticketClass} class?`;
 
     this.poDialog.confirm({
@@ -68,5 +69,4 @@ export class SamplePoDatepickerAirfareComponent {
   private getFormatedDate(date: string) {
     return date && date.slice(0, 10);
   }
-
 }

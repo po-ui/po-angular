@@ -8,7 +8,6 @@ import { PoRadioGroupOption, PoSelectOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-radio-group-translator-reactive-form.component.html'
 })
 export class SamplePoRadioGroupTranslatorReactiveFormComponent implements OnInit {
-
   translatorForm: FormGroup;
 
   readonly languageOptions: Array<PoRadioGroupOption> = [
@@ -34,13 +33,13 @@ export class SamplePoRadioGroupTranslatorReactiveFormComponent implements OnInit
     { id: '6', en: 'Book', es: 'Libro' }
   ];
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.translatorForm = this.formBuilder.group({
-      language: [ 'es', Validators.required ],
-      original: [ undefined, Validators.required ],
-      translated: [ undefined, Validators.required ]
+      language: ['es', Validators.required],
+      original: [undefined, Validators.required],
+      translated: [undefined, Validators.required]
     });
   }
 
@@ -56,5 +55,4 @@ export class SamplePoRadioGroupTranslatorReactiveFormComponent implements OnInit
       });
     }
   }
-
 }

@@ -9,7 +9,6 @@ import { PoHttpInterceptorBaseService } from './po-http-interceptor-base.service
 import { PoHttpInterceptorService } from './po-http-interceptor.service';
 
 describe('PoHttpInterceptor', () => {
-
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       providers: [

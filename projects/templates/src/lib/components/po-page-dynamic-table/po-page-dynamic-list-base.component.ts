@@ -8,7 +8,6 @@ import { PoPageDynamicTableField } from './interfaces/po-page-dynamic-table-fiel
 
 @Directive()
 export class PoPageDynamicListBaseComponent {
-
   private _autoRouter: boolean = false;
   private _columns: Array<any> = [];
   private _duplicates: Array<any> = [];
@@ -163,5 +162,4 @@ export class PoPageDynamicListBaseComponent {
     this._keys = fields.filter(field => field.key === true).map(field => field.property);
     this._duplicates = fields.filter(field => field.duplicate === true).map(field => field.property);
   }
-
 }

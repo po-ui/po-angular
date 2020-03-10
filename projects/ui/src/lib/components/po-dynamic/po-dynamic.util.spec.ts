@@ -1,7 +1,6 @@
 import { isVisibleField, getGridColumnsClasses } from './po-dynamic.util';
 
 describe('isVisibleField:', () => {
-
   it('should return `true` if not contain visible property', () => {
     const field = { property: 'name' };
 
@@ -19,11 +18,9 @@ describe('isVisibleField:', () => {
 
     expect(isVisibleField(field)).toBe(false);
   });
-
 });
 
 describe('getGridColumnsClasses:', () => {
-
   it('should return classes of grid columns according to the specifics parameters', () => {
     const smColumns = 4;
     const mdColumns = 3;
@@ -71,5 +68,4 @@ describe('getGridColumnsClasses:', () => {
     expect(classesGridColumns.includes(`po-lg-${gridColumns}`)).toBe(true);
     expect(classesGridColumns.includes(`po-xl-${xlColumns}`)).toBe(true);
   });
-
 });

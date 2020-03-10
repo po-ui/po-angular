@@ -119,8 +119,13 @@ export class PoMask {
 
       // Não faz nada quando for digitado CTRL ou COMMAND e V
       // Já está sendo tratado no evento keyup
-      if ($event.ctrlKey || $event.metaKey && ($event.keyCode !== 86) ||
-        ($event.keyCode >= 37 && $event.keyCode <= 40) || $event.keyCode === 16 || $event.keyCode === 9 ) {
+      if (
+        $event.ctrlKey ||
+        ($event.metaKey && $event.keyCode !== 86) ||
+        ($event.keyCode >= 37 && $event.keyCode <= 40) ||
+        $event.keyCode === 16 ||
+        $event.keyCode === 9
+      ) {
         return;
       }
 
@@ -144,7 +149,7 @@ export class PoMask {
                 value = value.slice(0, this.initialPosition - 1) + value.slice(this.finalPosition);
                 value = this.controlFormatting(value);
                 $event.target.value = value;
-                this.changePosition($event , -1);
+                this.changePosition($event, -1);
                 this.checkMaskBefore($event, -1);
                 this.setPositions($event);
                 this.resetPositions($event);
@@ -170,7 +175,8 @@ export class PoMask {
             this.setPositions($event);
             break;
 
-          default: // qualquer outra tecla válida
+          default:
+            // qualquer outra tecla válida
             value = value.slice(0, this.initialPosition) + $event.key + value.slice(this.finalPosition);
             value = this.controlFormatting(value);
             $event.target.value = value;
@@ -297,7 +303,6 @@ export class PoMask {
 
   // Função que formata a máscara com o valor passado
   formatValue(value: string, mask: string) {
-
     // Remove as marcas de valor opciona (?)
     mask = mask.replace(/\?/g, '');
 
@@ -404,8 +409,9 @@ export class PoMask {
       (keyCode >= 48 && keyCode <= 57) ||
       (keyCode >= 65 && keyCode <= 90) ||
       (keyCode >= 96 && keyCode <= 105) ||
-      (keyCode === 8) || keyCode === 9 ||
-      (keyCode === 46)
+      keyCode === 8 ||
+      keyCode === 9 ||
+      keyCode === 46
     );
   }
 
@@ -434,32 +440,45 @@ export class PoMask {
   replaceMask(char: string) {
     let regex = /./;
     switch (char) {
-      case '0': regex = /[0]/;
-                break;
-      case '1': regex = /[0-1]/;
-                break;
-      case '2': regex = /[0-2]/;
-                break;
-      case '3': regex = /[0-3]/;
-                break;
-      case '4': regex = /[0-4]/;
-                break;
-      case '5': regex = /[0-5]/;
-                break;
-      case '6': regex = /[0-6]/;
-                break;
-      case '7': regex = /[0-7]/;
-                break;
-      case '8': regex = /[0-8]/;
-                break;
-      case '9': regex = /[0-9]/;
-                break;
-      case ' ': regex = /\s/;
-                break;
-      case '@': regex = /[a-zA-Z]/;
-                break;
-      case 'w': regex = /[a-zA-Z0-9]/;
-                break;
+      case '0':
+        regex = /[0]/;
+        break;
+      case '1':
+        regex = /[0-1]/;
+        break;
+      case '2':
+        regex = /[0-2]/;
+        break;
+      case '3':
+        regex = /[0-3]/;
+        break;
+      case '4':
+        regex = /[0-4]/;
+        break;
+      case '5':
+        regex = /[0-5]/;
+        break;
+      case '6':
+        regex = /[0-6]/;
+        break;
+      case '7':
+        regex = /[0-7]/;
+        break;
+      case '8':
+        regex = /[0-8]/;
+        break;
+      case '9':
+        regex = /[0-9]/;
+        break;
+      case ' ':
+        regex = /\s/;
+        break;
+      case '@':
+        regex = /[a-zA-Z]/;
+        break;
+      case 'w':
+        regex = /[a-zA-Z0-9]/;
+        break;
     }
     return regex;
   }
@@ -497,5 +516,4 @@ export class PoMask {
       return null;
     }
   }
-
 }

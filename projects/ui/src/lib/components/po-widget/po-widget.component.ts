@@ -33,7 +33,6 @@ import { PoWidgetBaseComponent } from './po-widget-base.component';
   templateUrl: './po-widget.component.html'
 })
 export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
-
   get showTitleAction(): boolean {
     return !!this.titleAction.observers[0];
   }
@@ -122,5 +121,4 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
       this.setting.emit();
     }
   }
-
 }

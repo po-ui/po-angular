@@ -18,10 +18,9 @@ export const colors = { success: 'color-11', error: 'color-07', warning: 'color-
  */
 @Component({
   selector: 'po-http-interceptor-detail',
-  templateUrl: './po-http-interceptor-detail.component.html',
+  templateUrl: './po-http-interceptor-detail.component.html'
 })
 export class PoHttpInterceptorDetailComponent {
-
   @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;
 
   closed = new EventEmitter<any>();
@@ -37,7 +36,6 @@ export class PoHttpInterceptorDetailComponent {
   title: string;
 
   set detail(details: Array<PoHttpInterceptorDetail>) {
-
     if (details && details.length) {
       this.details = this.filterByValidDetails(details);
     }
@@ -51,7 +49,7 @@ export class PoHttpInterceptorDetailComponent {
   }
 
   formatDetailItemTitle(detail) {
-    return detail.code ? `${ detail.code } - ${ detail.message }` : detail.message;
+    return detail.code ? `${detail.code} - ${detail.message}` : detail.message;
   }
 
   open() {
@@ -81,5 +79,4 @@ export class PoHttpInterceptorDetailComponent {
   private formatTitle(details: Array<PoHttpInterceptorDetail>) {
     return details.length > 1 ? `${this.literals.details} (${details.length})` : this.literals.detail;
   }
-
 }

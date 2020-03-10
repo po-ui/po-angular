@@ -4,25 +4,18 @@
   (p-collapsed)="changeEvent('p-collapsed', $event)"
   (p-expanded)="changeEvent('p-expanded', $event)"
   (p-selected)="changeEvent('p-selected', $event)"
-  (p-unselected)="changeEvent('p-unselected', $event)">
+  (p-unselected)="changeEvent('p-unselected', $event)"
+>
 </po-tree-view>
 
 <po-divider p-label="Events"></po-divider>
 
 <div class="po-row">
-  <po-info
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info p-label="Event" [p-value]="event"> </po-info>
 </div>
 
 <div class="po-row">
-  <po-switch
-    class="po-md-2"
-    name="selectable"
-    [(ngModel)]="selectable"
-    p-label="Selectable">
-  </po-switch>
+  <po-switch class="po-md-2" name="selectable" [(ngModel)]="selectable" p-label="Selectable"> </po-switch>
 </div>
 
 <po-divider p-label="Po Tree View Item"></po-divider>
@@ -35,24 +28,13 @@
       [(ngModel)]="parent"
       p-label="Parent Item"
       p-placeholder="Add tree view item"
-      [p-options]="parentList">
+      [p-options]="parentList"
+    >
     </po-select>
 
-    <po-input
-      class="po-md-4"
-      name="label"
-      [(ngModel)]="treeViewItem.label"
-      p-label="Label"
-      p-required>
-    </po-input>
+    <po-input class="po-md-4" name="label" [(ngModel)]="treeViewItem.label" p-label="Label" p-required> </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="value"
-      [(ngModel)]="treeViewItem.value"
-      p-label="Value"
-      p-required>
-    </po-input>
+    <po-input class="po-md-4" name="value" [(ngModel)]="treeViewItem.value" p-label="Value" p-required> </po-input>
   </div>
 
   <div class="po-row">
@@ -62,7 +44,8 @@
       [(ngModel)]="itemProperties"
       p-columns="3"
       p-label="Item Properties"
-      [p-options]="itemPropertiesOptions">
+      [p-options]="itemPropertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
@@ -71,17 +54,14 @@
       class="po-md-3"
       p-label="Add"
       [p-disabled]="treeViewItemForm.invalid"
-      (p-click)="add(treeViewItem); treeViewItemForm.reset(); this.itemProperties = [];">
+      (p-click)="add(treeViewItem); treeViewItemForm.reset(); this.itemProperties = []"
+    >
     </po-button>
   </div>
 </form>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-button
-    class="po-md-3"
-    p-label="Sample Restore"
-    (p-click)="restore()">
-  </po-button>
+  <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
 </div>

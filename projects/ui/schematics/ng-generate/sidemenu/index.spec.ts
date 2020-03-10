@@ -12,7 +12,7 @@ describe('sidemenu:', () => {
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
     newProjectRoot: 'projects',
-    version: '6.0.0',
+    version: '6.0.0'
   };
 
   const componentOptions: any = {
@@ -31,7 +31,6 @@ describe('sidemenu:', () => {
   });
 
   describe('Imports:', () => {
-
     it('should add the RouterModule to the project module', () => {
       const routerModuleName = 'RouterModule';
 
@@ -40,11 +39,9 @@ describe('sidemenu:', () => {
 
       expect(fileContent).toContain(routerModuleName);
     });
-
   });
 
   describe('Component: ', () => {
-
     it('should create app.component.ts|html|css', () => {
       const tree = runner.runSchematic('sidemenu', componentOptions, appTree);
 
@@ -70,9 +67,7 @@ describe('sidemenu:', () => {
       expect(fileContent).toContain(poToolbar);
       expect(fileContent).toContain(poMenu);
     });
-
   });
-
 });
 
 /** Gets the content of a specified file from a schematic tree. */

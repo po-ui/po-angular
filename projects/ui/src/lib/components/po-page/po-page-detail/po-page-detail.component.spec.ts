@@ -15,13 +15,10 @@ import { PoPageHeaderComponent } from '../po-page-header/po-page-header.componen
 
 @Component({
   template: `
-    <po-page-detail
-      p-title="Unit Test">
-    </po-page-detail>
+    <po-page-detail p-title="Unit Test"> </po-page-detail>
   `
 })
 class ContainerComponent {
-
   back(): boolean {
     return true;
   }
@@ -36,7 +33,6 @@ class ContainerComponent {
 }
 
 describe('PoPageDetailComponent:', () => {
-
   let component: PoPageDetailComponent;
   let containerFixture: ComponentFixture<ContainerComponent>;
   let debugElement;
@@ -88,7 +84,6 @@ describe('PoPageDetailComponent:', () => {
   }));
 
   describe('Methods:', () => {
-
     it(`hasEditFn: should call 'hasActionFn' and return '' if have a edit action and property is 'icon'`, () => {
       spyOn(component, 'hasActionFn').and.returnValue(true);
 
@@ -201,9 +196,9 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
-      component['parentContext'] = <any> {};
+      component['parentContext'] = <any>{};
       component.title = undefined;
-      component.breadcrumb = { items: [{ label: 'Breadcrumb' }]};
+      component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
 
       expect(component.hasPageHeader()).toBe(true);
     });
@@ -212,7 +207,7 @@ describe('PoPageDetailComponent:', () => {
       component.breadcrumb = undefined;
       component.title = undefined;
 
-      component['parentContext'] = <any> {
+      component['parentContext'] = <any>{
         back: function() {},
         remove: function() {},
         edit: function() {}
@@ -222,7 +217,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return true if has title', () => {
-      component['parentContext'] = <any> {};
+      component['parentContext'] = <any>{};
       component.breadcrumb = undefined;
       component.title = 'Title';
 
@@ -230,7 +225,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return false if doesn`t have actions, breadcrumb and title', () => {
-      component['parentContext'] = <any> {};
+      component['parentContext'] = <any>{};
       component.breadcrumb = undefined;
       component.title = undefined;
 
@@ -239,13 +234,12 @@ describe('PoPageDetailComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should have only one primary action and `Edit` button with `primary` applyed.', () => {
       const editLabel = poPageDetailLiteralsDefault[poLocaleDefault].edit;
 
       component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any> {
+      component['parentContext'] = <any>{
         back: () => {},
         remove: () => {},
         edit: () => {}
@@ -266,7 +260,7 @@ describe('PoPageDetailComponent:', () => {
 
       component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any> {
+      component['parentContext'] = <any>{
         back: () => {},
         remove: () => {}
       };
@@ -286,7 +280,7 @@ describe('PoPageDetailComponent:', () => {
 
       component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any> {
+      component['parentContext'] = <any>{
         back: () => {}
       };
 
@@ -313,7 +307,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('should apply only `po-icon-edit` if have a back, remove and edit functions.', () => {
-      component['parentContext'] = <any> {
+      component['parentContext'] = <any>{
         back: () => {},
         remove: () => {},
         edit: () => {}
@@ -331,7 +325,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('should apply only `po-icon-delete` if have back and remove functions and doesn`t have a edit function.', () => {
-      component['parentContext'] = <any> {
+      component['parentContext'] = <any>{
         back: () => {},
         remove: () => {}
       };
@@ -348,7 +342,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('should apply only `po-icon-arrow-left` if have only back function and doesn`t have a edit and remove functions.', () => {
-      component['parentContext'] = <any> {
+      component['parentContext'] = <any>{
         back: () => {}
       };
 
@@ -362,7 +356,5 @@ describe('PoPageDetailComponent:', () => {
       expect(removeIcon).toBeNull();
       expect(backIcon).toBeTruthy();
     });
-
   });
-
 });

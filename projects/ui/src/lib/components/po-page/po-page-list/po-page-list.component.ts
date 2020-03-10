@@ -1,5 +1,13 @@
 import {
-  AfterContentInit, Component, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChange, ViewChild, ViewContainerRef
+  AfterContentInit,
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  SimpleChange,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -36,8 +44,8 @@ import { PoPageListBaseComponent } from './po-page-list-base.component';
   selector: 'po-page-list',
   templateUrl: './po-page-list.component.html'
 })
-export class PoPageListComponent extends PoPageListBaseComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
-
+export class PoPageListComponent extends PoPageListBaseComponent
+  implements AfterContentInit, OnChanges, OnDestroy, OnInit {
   advancedSearch: string;
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
@@ -55,8 +63,8 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
     viewRef: ViewContainerRef,
     languageService: PoLanguageService,
     public renderer: Renderer2,
-    private router: Router) {
-
+    private router: Router
+  ) {
     super(languageService);
     this.parentRef = viewRef['_hostView'][8];
     this.initializeListeners();
@@ -71,7 +79,7 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
     this.setDropdownActions();
   }
 
-  ngOnChanges(changes: {[propName: string]: SimpleChange}) {
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
     this.setDropdownActions();
   }
 
@@ -138,7 +146,10 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
 
   // Recebe evento change do disclaimer e recalcula tela
   onChangeDisclaimerGroup(disclaimers) {
-    if ((disclaimers && disclaimers.length && this.isRecalculate) || (disclaimers.length === 0 && !this.isRecalculate)) {
+    if (
+      (disclaimers && disclaimers.length && this.isRecalculate) ||
+      (disclaimers.length === 0 && !this.isRecalculate)
+    ) {
       this.poPageContent.recalculateHeaderSize();
       this.isRecalculate = !this.isRecalculate;
     }
@@ -176,5 +187,4 @@ export class PoPageListComponent extends PoPageListBaseComponent implements Afte
   private removeListeners() {
     this.resizeListener();
   }
-
 }

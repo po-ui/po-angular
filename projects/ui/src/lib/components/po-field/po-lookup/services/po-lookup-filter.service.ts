@@ -17,7 +17,6 @@ import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-it
  */
 @Injectable()
 export class PoLookupFilterService implements PoLookupFilter {
-
   private url: string;
 
   constructor(private httpClient: HttpClient) {}
@@ -45,5 +44,4 @@ export class PoLookupFilterService implements PoLookupFilter {
   private validateParams(params: any) {
     return isTypeof(params, 'object') && !Array.isArray(params) ? params : undefined;
   }
-
 }

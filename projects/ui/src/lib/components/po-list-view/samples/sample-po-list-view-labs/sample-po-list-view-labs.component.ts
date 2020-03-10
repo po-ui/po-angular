@@ -13,7 +13,6 @@ import {
   templateUrl: './sample-po-list-view-labs.component.html'
 })
 export class SamplePoListViewLabsComponent implements OnInit {
-
   action: PoListViewAction;
   actions: Array<PoListViewAction>;
   customLiterals: PoListViewLiterals;
@@ -57,7 +56,7 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { label: 'Danger', value: 'danger' }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -130,5 +129,4 @@ export class SamplePoListViewLabsComponent implements OnInit {
   private showAction(action: string): any {
     this.poNotification.success(`Action clicked: ${action}`);
   }
-
 }

@@ -9,16 +9,10 @@ import { PoTagComponent } from './po-tag.component';
  * Módulo do componente `po-tag`.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    PoTagComponent
-  ],
-  exports: [
-    PoTagComponent
-  ],
+  imports: [CommonModule],
+  declarations: [PoTagComponent],
+  exports: [PoTagComponent],
   providers: [],
   schemas: []
 })
-export class PoTagModule { }
+export class PoTagModule {}

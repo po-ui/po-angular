@@ -15,22 +15,8 @@ import { PoPageBlockedUserReasonComponent } from './po-page-blocked-user-reason/
  * Módulo do template do po-page-blocked-user.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-
-    PoModule,
-    PoPageBackgroundModule,
-  ],
-  declarations: [
-    PoPageBlockedUserComponent,
-    PoPageBlockedUserContactsComponent,
-    PoPageBlockedUserReasonComponent,
-  ],
-  exports: [
-    PoPageBlockedUserComponent,
-    PoPageBlockedUserContactsComponent,
-    PoPageBlockedUserReasonComponent,
-  ]
+  imports: [CommonModule, RouterModule, PoModule, PoPageBackgroundModule],
+  declarations: [PoPageBlockedUserComponent, PoPageBlockedUserContactsComponent, PoPageBlockedUserReasonComponent],
+  exports: [PoPageBlockedUserComponent, PoPageBlockedUserContactsComponent, PoPageBlockedUserReasonComponent]
 })
-export class PoPageBlockedUserModule { }
+export class PoPageBlockedUserModule {}

@@ -7,7 +7,6 @@ import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 
 class PoRadioGroup extends PoRadioGroupBaseComponent {
-
   inputEl = {
     checked: false,
     value: ''
@@ -43,7 +42,7 @@ describe('PoRadioGroupBase: ', () => {
     component['onChangePropagate'] = (v: any) => {};
 
     spyOn(component.change, 'emit');
-    spyOn(component, <any> 'onChangePropagate');
+    spyOn(component, <any>'onChangePropagate');
     component.changeValue('1');
     expect(component.change.emit).toHaveBeenCalled();
     expect(component['onChangePropagate']).toHaveBeenCalled();
@@ -54,7 +53,7 @@ describe('PoRadioGroupBase: ', () => {
     component['onChangePropagate'] = (v: any) => {};
 
     spyOn(component.change, 'emit');
-    spyOn(component, <any> 'onChangePropagate');
+    spyOn(component, <any>'onChangePropagate');
     component.changeValue('1');
     expect(component.change.emit).not.toHaveBeenCalled();
     expect(component['onChangePropagate']).toHaveBeenCalled();
@@ -105,7 +104,7 @@ describe('PoRadioGroupBase: ', () => {
     it('validateModel: should call `validatorChange` if `validatorChange` is defined', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel']();
 
@@ -124,7 +123,7 @@ describe('PoRadioGroupBase: ', () => {
       const formControl = new FormControl(undefined);
       const validObj = {
         required: {
-          valid: false,
+          valid: false
         }
       };
 
@@ -170,13 +169,11 @@ describe('PoRadioGroupBase: ', () => {
 
       expect(component['getGridSystemColumns'](columns, maxColumns)).toBe(6);
     });
-
   });
 
   describe('Properties:', () => {
-
-    const validValues = [ true, 'true', 1, '' ];
-    const invalidValues = [ false, 'false', 0, null, undefined, NaN ];
+    const validValues = [true, 'true', 1, ''];
+    const invalidValues = [false, 'false', 0, null, undefined, NaN];
     const validateModel: any = 'validateModel';
 
     it('p-disabled: should be update with valid and invalid values.', () => {
@@ -210,7 +207,7 @@ describe('PoRadioGroupBase: ', () => {
       component.mdColumns = undefined;
 
       spyOn(UtilsFunction, 'convertToInt');
-      spyOn(component, <any> 'getGridSystemColumns').and.returnValue(6);
+      spyOn(component, <any>'getGridSystemColumns').and.returnValue(6);
 
       expectPropertiesValues(component, 'columns', 2, 6);
       expect(component.mdColumns).toBe(6);
@@ -218,7 +215,5 @@ describe('PoRadioGroupBase: ', () => {
       expect(UtilsFunction.convertToInt).toHaveBeenCalled();
       expect(component['getGridSystemColumns']).toHaveBeenCalled();
     });
-
   });
-
 });

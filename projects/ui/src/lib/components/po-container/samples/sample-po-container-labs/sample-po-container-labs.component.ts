@@ -4,10 +4,9 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-container-labs',
-  templateUrl: './sample-po-container-labs.component.html',
+  templateUrl: './sample-po-container-labs.component.html'
 })
 export class SamplePoContainerLabsComponent implements OnInit {
-
   content: string;
   height: number;
   properties: Array<string>;
@@ -27,5 +26,4 @@ export class SamplePoContainerLabsComponent implements OnInit {
     this.height = undefined;
     this.properties = [];
   }
-
 }

@@ -49,8 +49,7 @@ export class PoUploadFile {
         .substring(1);
     }
 
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-      s4() + '-' + s4() + s4() + s4();
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
   }
 
   // Retorna o tamanho do arquivo em KBytes.
@@ -58,10 +57,9 @@ export class PoUploadFile {
     let kbSize = 0;
 
     if (size) {
-        kbSize = Math.ceil(size / 1024);
+      kbSize = Math.ceil(size / 1024);
     }
 
     return `${kbSize} KB`;
   }
-
 }

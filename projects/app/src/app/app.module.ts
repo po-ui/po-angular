@@ -8,15 +8,8 @@ import { PoModule } from '@portinari/portinari-ui';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    RouterModule.forRoot([]),
-    PoModule
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, FormsModule, RouterModule.forRoot([]), PoModule],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

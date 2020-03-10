@@ -8,9 +8,7 @@ import { PoDateService } from './po-date.service';
  * Módulo do serviço `po-date`.
  */
 @NgModule({
-  providers: [
-    PoDateService
-  ],
+  providers: [PoDateService],
   bootstrap: []
 })
-export class PoDateTimeModule { }
+export class PoDateTimeModule {}

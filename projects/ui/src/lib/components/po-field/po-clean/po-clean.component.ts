@@ -19,7 +19,6 @@ import { PoCleanBaseComponent } from './po-clean-base.component';
   templateUrl: './po-clean.component.html'
 })
 export class PoCleanComponent extends PoCleanBaseComponent {
-
   constructor(private viewRef: ViewContainerRef) {
     super();
     this.parentComponent = this.viewRef['_hostView'][8];
@@ -36,5 +35,4 @@ export class PoCleanComponent extends PoCleanBaseComponent {
       return this.inputRef.nativeElement.value;
     }
   }
-
 }

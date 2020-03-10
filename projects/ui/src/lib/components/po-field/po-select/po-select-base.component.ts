@@ -22,7 +22,6 @@ import { PoSelectOption } from './po-select-option.interface';
  */
 @Directive()
 export abstract class PoSelectBaseComponent implements ControlValueAccessor, Validator {
-
   private _disabled?: boolean = false;
   private _options: Array<PoSelectOption>;
   private _readonly: boolean = false;
@@ -159,19 +158,18 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
 
   callModelChange(value: any) {
     // Caso o componente estiver dentro de um form, terá acesso ao método onModelChange.
-    return (this.onModelChange) ? this.onModelChange(value) : this.ngModelChange.emit(value);
+    return this.onModelChange ? this.onModelChange(value) : this.ngModelChange.emit(value);
   }
 
   onChange(value) {
     this.change.emit(value);
   }
 
-  validate(abstractControl: AbstractControl): { [key: string]: any; } {
-
+  validate(abstractControl: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this._required, this._disabled, abstractControl.value)) {
       return {
         required: {
-          valid: false,
+          valid: false
         }
       };
     }
@@ -202,5 +200,4 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
   abstract updateModel(selectOption: PoSelectOption): void;
 
   abstract writeValue(value: any): void;
-
 }

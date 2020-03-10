@@ -1,5 +1,5 @@
 import { Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { NG_VALIDATORS , NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
@@ -67,19 +67,19 @@ import { PoLookupModalService } from './services/po-lookup-modal.service';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoLookupComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoLookupComponent),
-      multi: true,
-    }]
+      multi: true
+    }
+  ]
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit {
-
   private modalSubscription: Subscription;
 
-  @ViewChild('inp', {read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -163,7 +163,6 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   private isAllowedOpenModal(): boolean {
-
     if (!this.service) {
       console.warn('No service informed');
     }
@@ -178,5 +177,4 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     this.oldValue = isEmpty ? '' : fieldFormated;
     this.inputEl.nativeElement.value = isEmpty ? '' : fieldFormated;
   }
-
 }

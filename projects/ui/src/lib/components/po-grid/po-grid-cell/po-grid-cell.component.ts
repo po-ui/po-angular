@@ -5,8 +5,7 @@ import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef, Output, Eve
   templateUrl: './po-grid-cell.component.html'
 })
 export class PoGridCellComponent {
-
-  private _width: (string | number);
+  private _width: string | number;
 
   _value: any = '';
   edit: boolean = false;
@@ -20,14 +19,14 @@ export class PoGridCellComponent {
 
   @Input('p-position') position?: string = '';
 
-  @Input('p-width') set width(value: (string | number)) {
+  @Input('p-width') set width(value: string | number) {
     this._width = value;
 
     if (this.freeze && !this._width) {
       this._width = 100;
     }
   }
-  get width(): (string | number) {
+  get width(): string | number {
     return this._width ? `${this._width}px` : '100%';
   }
 
@@ -48,14 +47,13 @@ export class PoGridCellComponent {
   @ViewChild('inputElement', { static: true }) inputElement: ElementRef;
   @ViewChild('contentElement', { static: true }) contentElement: ElementRef;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 
   onKeyDownContent(event: any) {
     // console.log('onKeyDownContent: ', event);
 
     // BACKSPACE / DELETE
-    if ((!event.ctrlKey) && ((event.keyCode === 8) || (event.keyCode === 46))) {
-
+    if (!event.ctrlKey && (event.keyCode === 8 || event.keyCode === 46)) {
       if (this.readonly) {
         return;
       }
@@ -73,7 +71,7 @@ export class PoGridCellComponent {
     }
 
     // A..Z - 0..9
-    if ((event.keyCode >= 65) && (event.keyCode <= 90) || (event.keyCode >= 48) && (event.keyCode <= 57)) {
+    if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 48 && event.keyCode <= 57)) {
       event.preventDefault();
       this.onEditCell(event.key);
       return;
@@ -128,5 +126,4 @@ export class PoGridCellComponent {
     this.changeDetectorRef.detectChanges();
     this.inputElement.nativeElement.focus();
   }
-
 }

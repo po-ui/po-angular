@@ -11,21 +11,12 @@ import { PoCodeEditorRegisterable } from './interfaces/po-code-editor-registerab
  * Módulo do componente po-code-editor.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    PoCodeEditorComponent
-  ],
-  exports: [
-    PoCodeEditorComponent
-  ],
-  providers: [
-    PoCodeEditorRegister
-  ]
+  imports: [CommonModule],
+  declarations: [PoCodeEditorComponent],
+  exports: [PoCodeEditorComponent],
+  providers: [PoCodeEditorRegister]
 })
 export class PoCodeEditorModule {
-
   static forRegister(props: PoCodeEditorRegisterable): ModuleWithProviders<PoCodeEditorModule> {
     return {
       ngModule: PoCodeEditorModule,
@@ -37,5 +28,4 @@ export class PoCodeEditorModule {
       ]
     };
   }
-
 }

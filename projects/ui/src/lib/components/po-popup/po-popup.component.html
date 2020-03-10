@@ -1,22 +1,20 @@
 <div #popupRef class="po-popup" *ngIf="showPopup">
-
   <div *ngIf="!hideArrow" class="po-popup-arrow po-arrow-{{ arrowDirection }}"></div>
 
   <ng-content select="[p-popup-header-template]"></ng-content>
 
   <ng-container *ngFor="let action of actions; let actionIndex = index">
-    <div *ngIf="action.visible !== false"
+    <div
+      *ngIf="action.visible !== false"
       [class.po-popup-item-default]="action.type !== 'danger'"
       [class.po-popup-item-danger]="action.type === 'danger'"
       [class.po-popup-item-disabled]="returnBooleanValue(action, 'disabled')"
       [class.po-popup-item-separator]="action.separator && actionIndex !== 0"
       [class.po-popup-item-selected]="action.selected"
-      (click)="onActionClick(action)">
-
+      (click)="onActionClick(action)"
+    >
       <span *ngIf="action.icon" class="po-icon {{ action.icon }} po-popup-icon-item"></span>
       {{ action.label }}
-
     </div>
   </ng-container>
-
 </div>

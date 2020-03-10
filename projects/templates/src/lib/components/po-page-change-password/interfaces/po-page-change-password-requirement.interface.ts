@@ -6,7 +6,6 @@
  * Interface com a definição dos objetos aceitos pela propriedade `p-password-requirements`.
  */
 export interface PoPageChangePasswordRequirement {
-
   /** Requisito. */
   requirement: string;
 
@@ -16,5 +15,4 @@ export interface PoPageChangePasswordRequirement {
    * Também é possível informar diretamente um valor booleano que representa esta validação.
    */
   status: boolean | Function;
-
 }

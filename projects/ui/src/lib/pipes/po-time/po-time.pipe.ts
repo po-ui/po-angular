@@ -13,13 +13,10 @@ import { isTypeof } from '../../utils/util';
   name: 'po_time'
 })
 export class PoTimePipe implements PipeTransform {
-
   transform(time: string, format?: string): string {
-
     const hourRegex = /^(([0-1][0-9])|(2[0-3])):[0-5][0-9]:[0-5][0-9][\.]?([0-9]{1,6})?$/g;
 
     if (isTypeof(time, 'string') && hourRegex.test(time)) {
-
       const amountOfF = format ? format.lastIndexOf('f') - format.indexOf('f') + 1 : 0;
 
       const miliseconds = this.addDotMiliseconds(time.substring(9, 9 + amountOfF), amountOfF);
@@ -63,5 +60,4 @@ export class PoTimePipe implements PipeTransform {
 
     return formatMiliseconds;
   }
-
 }

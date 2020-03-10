@@ -6,7 +6,6 @@ import image from './sample-po-rich-text-recipe-image-base-64';
   templateUrl: './sample-po-rich-text-recipe.component.html'
 })
 export class SamplePoRichTextRecipeComponent {
-
   recipe = `
     <div style="text-align: center;"><b>Quick Hummus Recipe</b></div>
     <div><br></div>

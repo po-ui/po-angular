@@ -5,7 +5,6 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './sample-po-checkbox-labs.component.html'
 })
 export class SamplePoCheckboxLabsComponent implements OnInit {
-
   checkbox: boolean | null;
   disabled: boolean;
   event: string;
@@ -25,5 +24,4 @@ export class SamplePoCheckboxLabsComponent implements OnInit {
     this.event = undefined;
     this.label = undefined;
   }
-
 }

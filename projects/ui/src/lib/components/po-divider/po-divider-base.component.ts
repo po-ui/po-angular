@@ -8,8 +8,6 @@ import { Input, Directive } from '@angular/core';
  */
 @Directive()
 export class PoDividerBaseComponent {
-
   /** Valor do rótulo a ser exibido. */
   @Input('p-label') label?: string;
-
 }

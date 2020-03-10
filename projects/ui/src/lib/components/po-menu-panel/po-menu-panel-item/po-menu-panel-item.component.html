@@ -14,11 +14,13 @@
 </a>
 
 <ng-template #menuItemTemplate>
-  <div class="po-menu-panel-item"
+  <div
+    class="po-menu-panel-item"
     p-tooltip-position="right"
     [class.po-menu-panel-item-selected]="menuItemInternal.isSelected"
     [p-tooltip]="menuItemInternal.label"
-    (click)="clickMenuItem($event);">
-    <span class="po-icon {{menuItemInternal.icon}}"></span>
+    (click)="clickMenuItem($event)"
+  >
+    <span class="po-icon {{ menuItemInternal.icon }}"></span>
   </div>
 </ng-template>

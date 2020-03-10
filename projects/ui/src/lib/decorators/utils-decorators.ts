@@ -11,10 +11,10 @@ import { PropertyDecoratorInterface } from './property-decorator.interface';
 export function validatePropertyOnLifeCycle(
   decoratorProperties: PropertyDecoratorInterface,
   lifecycleName: string,
-  callback: Function) {
-
+  callback: Function
+) {
   const { target, property } = decoratorProperties;
-  const emptyFunction = () => { };
+  const emptyFunction = () => {};
   const lifecycleFunctionClone: Function | null = target[lifecycleName] || emptyFunction;
 
   Object.defineProperty(target, lifecycleName, {
@@ -23,7 +23,6 @@ export function validatePropertyOnLifeCycle(
       lifecycleFunctionClone.call(this);
     }
   });
-
 }
 
 /**
@@ -38,7 +37,11 @@ export function validatePropertyOnLifeCycle(
  * @param decoratorName nome do decorator
  * @param callback função que será executada para alterar o valor da propriedade
  */
-export function changeValueByCallback(decoratorProperties: PropertyDecoratorInterface, decoratorName: string, callback: Function) {
+export function changeValueByCallback(
+  decoratorProperties: PropertyDecoratorInterface,
+  decoratorName: string,
+  callback: Function
+) {
   const { target, property, originalDescriptor } = decoratorProperties;
   const privatePropertyName = createPrivateProperty(target, property, decoratorName);
 
@@ -46,11 +49,9 @@ export function changeValueByCallback(decoratorProperties: PropertyDecoratorInte
     get: getter(originalDescriptor, privatePropertyName),
     set: setter(originalDescriptor, callback, privatePropertyName)
   };
-
 }
 function setter(originalDescriptor, callback: Function, privatePropertyName: string) {
   return function(value): void {
-
     if (originalDescriptor && originalDescriptor.set) {
       originalDescriptor.set.bind(this)(callback(value));
     }

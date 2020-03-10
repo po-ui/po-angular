@@ -2,11 +2,7 @@
   p-hide-close
   [p-primary-action]="primaryAction"
   [p-secondary-action]="secondaryAction"
-  [p-title]="literals.title">
-
-  <po-dynamic-form
-    [p-fields]="filters"
-    [p-value]="filter">
-  </po-dynamic-form>
-
+  [p-title]="literals.title"
+>
+  <po-dynamic-form [p-fields]="filters" [p-value]="filter"> </po-dynamic-form>
 </po-modal>

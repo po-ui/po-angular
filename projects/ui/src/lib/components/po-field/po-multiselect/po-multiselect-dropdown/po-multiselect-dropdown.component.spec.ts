@@ -13,11 +13,7 @@ describe('PoMultiselectDropdownComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoMultiselectDropdownComponent,
-        PoMultiselectItemComponent,
-        PoMultiselectSearchComponent
-      ]
+      declarations: [PoMultiselectDropdownComponent, PoMultiselectItemComponent, PoMultiselectSearchComponent]
     });
   });
 
@@ -27,7 +23,10 @@ describe('PoMultiselectDropdownComponent:', () => {
 
     component.literals = poMultiselectLiteralsDefault.pt;
 
-    component.options = [{label: 'label1', value: 'value1'}, {label: 'label2', value: 'value2'}];
+    component.options = [
+      { label: 'label1', value: 'value1' },
+      { label: 'label2', value: 'value2' }
+    ];
     component.haveOptions = true;
 
     fixture.detectChanges();
@@ -51,13 +50,13 @@ describe('PoMultiselectDropdownComponent:', () => {
 
   it('should return true in isSelectedItem', () => {
     component.selectedValues = [1, 2];
-    const selected = component.isSelectedItem({label: 'label1', value: 1});
+    const selected = component.isSelectedItem({ label: 'label1', value: 1 });
     expect(selected).toBeTruthy();
   });
 
   it('should return false in isSelectedItem', () => {
     component.selectedValues = [1, 2];
-    const selected = component.isSelectedItem({label: 'label3', value: 3});
+    const selected = component.isSelectedItem({ label: 'label3', value: 3 });
     expect(selected).toBeFalsy();
   });
 
@@ -83,7 +82,7 @@ describe('PoMultiselectDropdownComponent:', () => {
     component['selectedValues'] = [];
 
     spyOn(component.change, 'emit');
-    component.updateSelectedValues(true, {label: 'label1', value: 1});
+    component.updateSelectedValues(true, { label: 'label1', value: 1 });
     expect(component['selectedValues'].length).toBe(1);
     expect(component.change.emit).toHaveBeenCalled();
   });
@@ -92,7 +91,7 @@ describe('PoMultiselectDropdownComponent:', () => {
     component['selectedValues'] = [1];
 
     spyOn(component.change, 'emit');
-    component.updateSelectedValues(false, {label: 'label1', value: 1});
+    component.updateSelectedValues(false, { label: 'label1', value: 1 });
     expect(component['selectedValues'].length).toBe(0);
     expect(component.change.emit).toHaveBeenCalled();
   });
@@ -105,13 +104,13 @@ describe('PoMultiselectDropdownComponent:', () => {
 
   it('should emit closeDropdown', () => {
     spyOn(component.closeDropdown, 'emit');
-    component.onKeydown({keyCode: 9});
+    component.onKeydown({ keyCode: 9 });
     expect(component.closeDropdown.emit).toHaveBeenCalled();
   });
 
   it('shouldn`t emit closeDropdown', () => {
     spyOn(component.closeDropdown, 'emit');
-    component.onKeydown({keyCode: 1});
+    component.onKeydown({ keyCode: 1 });
     expect(component.closeDropdown.emit).not.toHaveBeenCalled();
   });
 
@@ -162,7 +161,6 @@ describe('PoMultiselectDropdownComponent:', () => {
   }));
 
   describe('Methods:', () => {
-
     it('checkInitialOptions: should set haveOptions to true if have options', () => {
       component.haveOptions = false;
 
@@ -179,11 +177,9 @@ describe('PoMultiselectDropdownComponent:', () => {
 
       expect(component.haveOptions).toBe(false);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should show `Nenhum dado encontrado` if no have options', () => {
       component.options = [];
       component.show = true;
@@ -200,7 +196,5 @@ describe('PoMultiselectDropdownComponent:', () => {
 
       expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeNull();
     });
-
   });
-
 });

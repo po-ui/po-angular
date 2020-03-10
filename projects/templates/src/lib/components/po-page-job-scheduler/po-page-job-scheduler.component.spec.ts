@@ -16,10 +16,7 @@ describe('PoPageJobSchedulerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        PoPageJobSchedulerModule
-      ]
+      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
     });
   });
 
@@ -34,7 +31,6 @@ describe('PoPageJobSchedulerComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it(`stepperOrientation: should return 'horizontal' if 'window.innerWidth' is greater than '481' and less than '960'`, () => {
       changeBrowserInnerWidth(620);
 
@@ -58,18 +54,16 @@ describe('PoPageJobSchedulerComponent:', () => {
 
       expect(component.stepperOrientation).toBe('vertical');
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngOnInit: should call `loadData` with id', () => {
       component.serviceApi = 'localhost:4000/jobschedulers';
 
       const endpoint = { endpoint: component.serviceApi };
       const id = 1;
 
-      component['activatedRoute'] = <any> {
+      component['activatedRoute'] = <any>{
         snapshot: {
           params: {
             id
@@ -77,8 +71,8 @@ describe('PoPageJobSchedulerComponent:', () => {
         }
       };
 
-      spyOn(component['poPageJobSchedulerService'], <any> 'configServiceApi');
-      spyOn(component, <any> 'loadData');
+      spyOn(component['poPageJobSchedulerService'], <any>'configServiceApi');
+      spyOn(component, <any>'loadData');
 
       component.ngOnInit();
 
@@ -93,7 +87,7 @@ describe('PoPageJobSchedulerComponent:', () => {
       const endpoint = { endpoint: component.serviceApi };
       const id = undefined;
 
-      component['activatedRoute'] = <any> {
+      component['activatedRoute'] = <any>{
         snapshot: {
           params: {
             id
@@ -101,8 +95,8 @@ describe('PoPageJobSchedulerComponent:', () => {
         }
       };
 
-      spyOn(component['poPageJobSchedulerService'], <any> 'configServiceApi');
-      spyOn(component, <any> 'loadData');
+      spyOn(component['poPageJobSchedulerService'], <any>'configServiceApi');
+      spyOn(component, <any>'loadData');
 
       component.ngOnInit();
 
@@ -140,7 +134,6 @@ describe('PoPageJobSchedulerComponent:', () => {
     });
 
     describe('nextStep:', () => {
-
       let fakeThis;
 
       beforeEach(() => {
@@ -161,7 +154,7 @@ describe('PoPageJobSchedulerComponent:', () => {
               }
             }
           },
-          steps: [{label: 'step1'}, {label: 'step2'}, {label: 'step3'}, {label: 'step4'}],
+          steps: [{ label: 'step1' }, { label: 'step2' }, { label: 'step3' }, { label: 'step4' }],
           step: 1,
           markAsDirtyInvalidControls: () => {},
           changePageActionsBySteps: () => {}
@@ -175,7 +168,7 @@ describe('PoPageJobSchedulerComponent:', () => {
 
         component.nextStep.call(fakeThis, 2);
 
-        expect(fakeThis.markAsDirtyInvalidControls).toHaveBeenCalledWith({x: 'schedulerExecutionFormItem'});
+        expect(fakeThis.markAsDirtyInvalidControls).toHaveBeenCalledWith({ x: 'schedulerExecutionFormItem' });
         expect(fakeThis.changePageActionsBySteps).not.toHaveBeenCalled();
       });
 
@@ -188,7 +181,7 @@ describe('PoPageJobSchedulerComponent:', () => {
 
         component.nextStep.call(fakeThis, 3);
 
-        expect(fakeThis.markAsDirtyInvalidControls).toHaveBeenCalledWith({x: 'schedulerParametersFormItem'});
+        expect(fakeThis.markAsDirtyInvalidControls).toHaveBeenCalledWith({ x: 'schedulerParametersFormItem' });
         expect(fakeThis.changePageActionsBySteps).not.toHaveBeenCalled();
       });
 
@@ -215,14 +208,13 @@ describe('PoPageJobSchedulerComponent:', () => {
 
         expect(fakeThis.steps).toBe(fakeThis.steps);
       });
-
     });
 
     it(`onChangeProcess: should call 'getParametersByProcess' with 'processIs' if have 'process.processId' and
     'process.existAPI' is 'true'`, () => {
       spyOn(component, <any>'getParametersByProcess');
 
-      component.onChangeProcess({processId: '123', existAPI: true});
+      component.onChangeProcess({ processId: '123', existAPI: true });
 
       expect(component['getParametersByProcess']).toHaveBeenCalledWith('123');
     });
@@ -230,7 +222,7 @@ describe('PoPageJobSchedulerComponent:', () => {
     it(`onChangeProcess: shouldn't call 'getParametersByProcess' if doesn't have 'process.processId'`, () => {
       spyOn(component, <any>'getParametersByProcess');
 
-      component.onChangeProcess({processId: undefined, existAPI: true});
+      component.onChangeProcess({ processId: undefined, existAPI: true });
 
       expect(component['getParametersByProcess']).not.toHaveBeenCalled();
     });
@@ -238,7 +230,7 @@ describe('PoPageJobSchedulerComponent:', () => {
     it(`onChangeProcess: shouldn't call 'getParametersByProcess' if 'process.existAPI' is 'false'`, () => {
       spyOn(component, <any>'getParametersByProcess');
 
-      component.onChangeProcess({processId: '123', existAPI: false});
+      component.onChangeProcess({ processId: '123', existAPI: false });
 
       expect(component['getParametersByProcess']).not.toHaveBeenCalled();
     });
@@ -248,20 +240,20 @@ describe('PoPageJobSchedulerComponent:', () => {
 
       spyOn(component, <any>'getParametersByProcess');
 
-      component.onChangeProcess({processId: '123', existAPI: true});
+      component.onChangeProcess({ processId: '123', existAPI: true });
 
       expect(component.model.executionParameter).toEqual({});
     });
 
     it(`onChangeProcess: shouldn't set 'model.executionParameter' to '{}' if 'isEdit' is 'true'`, () => {
       component.isEdit = true;
-      component.model.executionParameter = {x: 'test'};
+      component.model.executionParameter = { x: 'test' };
 
       spyOn(component, <any>'getParametersByProcess');
 
-      component.onChangeProcess({processId: '123', existAPI: true});
+      component.onChangeProcess({ processId: '123', existAPI: true });
 
-      expect(component.model.executionParameter).toEqual({x: 'test'});
+      expect(component.model.executionParameter).toEqual({ x: 'test' });
     });
 
     it(`confirmJobScheduler: should call 'poDialogservice.confirm'`, () => {
@@ -275,7 +267,7 @@ describe('PoPageJobSchedulerComponent:', () => {
     // TODO NG V9
     xit(`confirmJobScheduler: should call 'poDialogservice.confirm' with 'literals.confirmSaveMessage'`, () => {
       let paramConfirm;
-      spyOn(component['poDialogService'], 'confirm').and.callFake(param => paramConfirm = param);
+      spyOn(component['poDialogService'], 'confirm').and.callFake(param => (paramConfirm = param));
 
       spyOn(component, <any>'save');
 
@@ -291,7 +283,7 @@ describe('PoPageJobSchedulerComponent:', () => {
       component['activatedRoute'].snapshot.params['id'] = 'param';
       let paramConfirm;
 
-      spyOn(component['poDialogService'], 'confirm').and.callFake(param => paramConfirm = param);
+      spyOn(component['poDialogService'], 'confirm').and.callFake(param => (paramConfirm = param));
 
       spyOn(component, <any>'save');
 
@@ -320,7 +312,9 @@ describe('PoPageJobSchedulerComponent:', () => {
       const process = 'abd404c';
       const parameters = [{ property: 'server' }];
 
-      spyOn(component['poPageJobSchedulerService'], 'getParametersByProcess').and.returnValue(getObservable(parameters));
+      spyOn(component['poPageJobSchedulerService'], 'getParametersByProcess').and.returnValue(
+        getObservable(parameters)
+      );
 
       component['getParametersByProcess'](process);
 
@@ -400,14 +394,14 @@ describe('PoPageJobSchedulerComponent:', () => {
     });
 
     it(`resetJobSchedulerForm: should call 'schedulerExecution.form.reset'`, () => {
-      spyOn(component.schedulerExecution.form , 'reset');
+      spyOn(component.schedulerExecution.form, 'reset');
 
       component['resetJobSchedulerForm']();
 
       expect(component.schedulerExecution.form.reset).toHaveBeenCalled();
     });
 
-    it(`resetJobSchedulerForm: should set 'step' to '1'`, fakeAsync (() => {
+    it(`resetJobSchedulerForm: should set 'step' to '1'`, fakeAsync(() => {
       component.step = 4;
 
       component['resetJobSchedulerForm']();
@@ -417,7 +411,7 @@ describe('PoPageJobSchedulerComponent:', () => {
       expect(component.step).toBe(1);
     }));
 
-    it(`resetJobSchedulerForm: should set jobSchedulerAction next and jobSchedulerAction back`, fakeAsync (() => {
+    it(`resetJobSchedulerForm: should set jobSchedulerAction next and jobSchedulerAction back`, fakeAsync(() => {
       component['resetJobSchedulerForm']();
 
       tick(300);
@@ -426,7 +420,7 @@ describe('PoPageJobSchedulerComponent:', () => {
       expect(component.jobSchedulerActions[1].label).toBe(component.literals.back);
     }));
 
-    it(`resetJobSchedulerForm: should set 'model periodicity' with 'single'`, fakeAsync (() => {
+    it(`resetJobSchedulerForm: should set 'model periodicity' with 'single'`, fakeAsync(() => {
       component['resetJobSchedulerForm']();
 
       tick(300);
@@ -435,7 +429,6 @@ describe('PoPageJobSchedulerComponent:', () => {
     }));
 
     describe('save:', () => {
-
       const model: PoJobSchedulerInternal = {
         periodicity: 'always',
         firstExecution: new Date(),
@@ -489,13 +482,10 @@ describe('PoPageJobSchedulerComponent:', () => {
 
         expect(component['emitSuccessMessage']).toHaveBeenCalledWith(saveNotificationSuccessSave, saveOperation);
       });
-
     });
-
   });
 
   describe('Templates:', () => {
-
     let executionElement: any;
     let executionElementHiddenAttribute: any;
     let parametersElement: any;
@@ -549,7 +539,5 @@ describe('PoPageJobSchedulerComponent:', () => {
       expect(summaryElement).toBeTruthy();
       expect(executionElementHiddenAttribute).toBeTruthy();
     });
-
   });
-
 });

@@ -17,20 +17,9 @@ import { PoPageLoginService } from './po-page-login.service';
  * Módulo do template do po-page-login.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    PoPageBackgroundModule,
-    PoModule
-  ],
-  declarations: [
-    PoPageLoginComponent,
-    PoPageLoginPopoverComponent
-  ],
-  exports: [
-    PoPageLoginComponent
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, PoPageBackgroundModule, PoModule],
+  declarations: [PoPageLoginComponent, PoPageLoginPopoverComponent],
+  exports: [PoPageLoginComponent],
   providers: [PoPageLoginService]
 })
-export class PoPageLoginModule { }
+export class PoPageLoginModule {}

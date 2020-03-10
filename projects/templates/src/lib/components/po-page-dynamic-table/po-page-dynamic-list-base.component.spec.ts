@@ -10,7 +10,6 @@ describe('PoPageDynamicListBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('autoRouter: should update property with valid values', () => {
       const validValuesTrue = [true, 'true', 1, ''];
       const validValuesFalse = [false, 'false', 0];
@@ -25,7 +24,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
       expectPropertiesValues(component, 'autoRouter', invalidValues, false);
     });
 
-    it('fields: should set `fields` to `[]` if not Array value' , () => {
+    it('fields: should set `fields` to `[]` if not Array value', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
 
       spyOn(component, <any>'setFieldsProperties');
@@ -35,20 +34,17 @@ describe('PoPageDynamicListBaseComponent:', () => {
     });
 
     it('fields: should update property `p-fields` with valid values and call `setFieldsProperties`', () => {
-      const validValues = [ [{ property: 'Teste 1' }], [{ property: 'Teste 2' }] ];
+      const validValues = [[{ property: 'Teste 1' }], [{ property: 'Teste 2' }]];
 
       spyOn(component, <any>'setFieldsProperties');
 
       expectPropertiesValues(component, 'fields', validValues, validValues);
       expect(component['setFieldsProperties']).toHaveBeenCalled();
     });
-
   });
 
   describe('Methods:', () => {
-
     describe('setFieldsProperties:', () => {
-
       let fields: Array<any>;
 
       beforeEach(() => {
@@ -76,7 +72,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
       it('should set `_filters` with [] if no item has the `filter` property', () => {
         const fieldsWithoutFilter = [
           { property: 'id', key: true },
-          { property: 'birthdate', label: 'Birthdate', type: 'date', gridColumns: 6 },
+          { property: 'birthdate', label: 'Birthdate', type: 'date', gridColumns: 6 }
         ];
         const filtersResult = [];
 
@@ -138,9 +134,6 @@ describe('PoPageDynamicListBaseComponent:', () => {
 
         expect(component.duplicates).toEqual(duplicatesResult);
       });
-
     });
-
   });
-
 });

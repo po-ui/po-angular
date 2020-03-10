@@ -1,9 +1,9 @@
 <div class="po-stepper po-stepper-{{ orientation }}">
-
   <div class="po-stepper-container">
-    <po-stepper-step *ngFor="let step of stepList; let index = index; trackBy: trackByFn"
+    <po-stepper-step
+      *ngFor="let step of stepList; let index = index; trackBy: trackByFn"
       class="po-stepper-step-position"
-      [p-circle-content]="index+1"
+      [p-circle-content]="index + 1"
       [p-label]="step.label"
       [p-orientation]="orientation"
       [p-status]="step.status"
@@ -11,12 +11,12 @@
       [p-step-size]="stepSize"
       (p-activated)="onStepActive(step)"
       (p-click)="changeStep(index, step)"
-      (p-enter)="changeStep(index, step)">
+      (p-enter)="changeStep(index, step)"
+    >
     </po-stepper-step>
   </div>
 
   <div *ngIf="usePoSteps" class="po-stepper-content">
     <ng-content></ng-content>
   </div>
-
 </div>

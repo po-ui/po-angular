@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-dynamic-form-basic',
   templateUrl: './sample-po-dynamic-form-basic.component.html'
 })
-export class SamplePoDynamicFormBasicComponent { }
+export class SamplePoDynamicFormBasicComponent {}

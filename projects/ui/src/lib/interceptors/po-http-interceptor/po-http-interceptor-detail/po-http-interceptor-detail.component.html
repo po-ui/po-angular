@@ -1,22 +1,15 @@
-<po-modal
-  p-hide-close p-size="lg"
-  [p-primary-action]="primaryAction"
-  [p-title]="title">
-
+<po-modal p-hide-close p-size="lg" [p-primary-action]="primaryAction" [p-title]="title">
   <div class="po-row">
     <po-accordion class="po-md-12 po-mt-1 po-mb-1">
       <po-accordion-item *ngFor="let detail of details" [p-label]="formatDetailItemTitle(detail)">
-
         <div *ngIf="detail.type" class="po-row po-mb-1">
           <po-tag [p-color]="typeColor(detail.type)" [p-value]="typeValue(detail.type)"></po-tag>
         </div>
 
         <div class="po-row">
-          <p>{{detail.detailedMessage}}</p>
+          <p>{{ detail.detailedMessage }}</p>
         </div>
-
       </po-accordion-item>
     </po-accordion>
   </div>
-
 </po-modal>

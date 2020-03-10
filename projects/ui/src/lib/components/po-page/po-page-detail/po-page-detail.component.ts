@@ -28,7 +28,6 @@ import { callAction, hasAction } from '../po-page-util/po-page-util';
   templateUrl: './po-page-detail.component.html'
 })
 export class PoPageDetailComponent extends PoPageDetailBaseComponent {
-
   callActionFn = callAction;
   hasActionFn = hasAction;
   parentContext: ViewContainerRef;
@@ -39,9 +38,11 @@ export class PoPageDetailComponent extends PoPageDetailBaseComponent {
   }
 
   hasAnyAction(): boolean {
-    return this.hasActionFn('back', this.parentContext) ||
+    return (
+      this.hasActionFn('back', this.parentContext) ||
       this.hasActionFn('edit', this.parentContext) ||
-      this.hasActionFn('remove', this.parentContext);
+      this.hasActionFn('remove', this.parentContext)
+    );
   }
 
   hasEditFn(property: string): string {
@@ -56,9 +57,13 @@ export class PoPageDetailComponent extends PoPageDetailBaseComponent {
 
   hasEditOrRemoveFn(property: string): string {
     if (property === 'icon') {
-      return this.hasActionFn('edit', this.parentContext) || this.hasActionFn('remove', this.parentContext) ? '' : 'po-icon-arrow-left';
+      return this.hasActionFn('edit', this.parentContext) || this.hasActionFn('remove', this.parentContext)
+        ? ''
+        : 'po-icon-arrow-left';
     } else if (property === 'type') {
-      return this.hasActionFn('edit', this.parentContext) || this.hasActionFn('remove', this.parentContext) ? 'default' : 'primary';
+      return this.hasActionFn('edit', this.parentContext) || this.hasActionFn('remove', this.parentContext)
+        ? 'default'
+        : 'primary';
     } else {
       return '';
     }
@@ -67,5 +72,4 @@ export class PoPageDetailComponent extends PoPageDetailBaseComponent {
   hasPageHeader(): boolean {
     return !!(this.title || this.hasAnyAction() || (this.breadcrumb && this.breadcrumb.items.length));
   }
-
 }

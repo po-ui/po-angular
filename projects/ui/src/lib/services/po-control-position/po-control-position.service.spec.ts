@@ -29,7 +29,7 @@ describe('PoControlPositionService:', () => {
   });
 
   it('overflowAllSides: should call getOverflows()', () => {
-    spyOn(component, <any> 'getOverflows');
+    spyOn(component, <any>'getOverflows');
 
     component['overflowAllSides']('');
 
@@ -156,7 +156,6 @@ describe('PoControlPositionService:', () => {
       targetElement: {
         getBoundingClientRect: () => {}
       }
-
     };
     const sizesAndPositions = component['getSizesAndPositions'].call(fakeThis);
 
@@ -200,15 +199,14 @@ describe('PoControlPositionService:', () => {
     component['verifySubPositions'].call(fakeThis, 'top');
     expect(fakeThis['elementPosition']).toHaveBeenCalled();
 
-    spyOn (fakeThis, 'overflowAllSides').and.returnValue(true);
-    spyOn (fakeThis, 'nextPosition');
+    spyOn(fakeThis, 'overflowAllSides').and.returnValue(true);
+    spyOn(fakeThis, 'nextPosition');
     component['verifySubPositions'].call(fakeThis, 'top');
     expect(fakeThis['overflowAllSides']).toHaveBeenCalledTimes(3);
     expect(fakeThis['nextPosition']).toHaveBeenCalled();
   });
 
   describe('Methods:', () => {
-
     const fakePositions = getFakeSizesAndPositions(10, 0, 0, 10);
     const fakeThis = {
       elementOffset: 5,
@@ -301,9 +299,9 @@ describe('PoControlPositionService:', () => {
 
       component.setElements(element, offset, targetElement, customPositions, isSetElementWidth);
 
-      expect(component['element']).toBe(<any> element.nativeElement);
+      expect(component['element']).toBe(<any>element.nativeElement);
       expect(component['elementOffset']).toBe(offset);
-      expect(component['targetElement']).toBe(<any> targetElement.nativeElement);
+      expect(component['targetElement']).toBe(<any>targetElement.nativeElement);
       expect(component['customPositions']).toBe(customPositions);
       expect(component['isSetElementWidth']).toBe(isSetElementWidth);
     });
@@ -333,7 +331,7 @@ describe('PoControlPositionService:', () => {
       const expectedValue = ['top', 'right'];
       component['customPositions'] = ['top', 'top-right', 'right'];
 
-      spyOn(component, <any> 'getMainPositionsByCustomPositions').and.callThrough();
+      spyOn(component, <any>'getMainPositionsByCustomPositions').and.callThrough();
 
       const mainPositions = component['getMainPositions']();
 
@@ -372,7 +370,6 @@ describe('PoControlPositionService:', () => {
     });
 
     describe('adjustPosition:', () => {
-
       it('should call `elementPosition` with value if has value', () => {
         const position = 'left';
         spyOn(component, <any>'elementPosition');
@@ -405,10 +402,10 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setElementPosition`, and `nextPosition` if `overflowMain` return true', () => {
-        spyOn(component, <any> 'overflowMain').and.returnValue(true);
-        spyOn(component, <any> 'setElementPosition');
-        spyOn(component, <any> 'getMainPosition');
-        spyOn(component, <any> 'nextPosition');
+        spyOn(component, <any>'overflowMain').and.returnValue(true);
+        spyOn(component, <any>'setElementPosition');
+        spyOn(component, <any>'getMainPosition');
+        spyOn(component, <any>'nextPosition');
 
         component.adjustPosition('top-left');
 
@@ -420,11 +417,11 @@ describe('PoControlPositionService:', () => {
 
       it(`should call 'verifySubPositions' if 'overflowAllSides' return true and not call 'nextPosition' if 'overflowMain'
         return false`, () => {
-        spyOn(component, <any> 'overflowMain').and.returnValue(false);
-        spyOn(component, <any> 'overflowAllSides').and.returnValue(true);
-        spyOn(component, <any> 'verifySubPositions');
-        spyOn(component, <any> 'setElementPosition');
-        spyOn(component, <any> 'nextPosition');
+        spyOn(component, <any>'overflowMain').and.returnValue(false);
+        spyOn(component, <any>'overflowAllSides').and.returnValue(true);
+        spyOn(component, <any>'verifySubPositions');
+        spyOn(component, <any>'setElementPosition');
+        spyOn(component, <any>'nextPosition');
 
         component.adjustPosition('top-left');
 
@@ -437,12 +434,12 @@ describe('PoControlPositionService:', () => {
 
       it(`should call 'setElementPosition' and not call 'nextPosition', 'verifySubPositions' if 'overflowMain'
       return false`, () => {
-        spyOn(component, <any> 'overflowMain').and.returnValue(false);
-        spyOn(component, <any> 'overflowAllSides').and.returnValue(false);
-        spyOn(component, <any> 'setElementPosition');
+        spyOn(component, <any>'overflowMain').and.returnValue(false);
+        spyOn(component, <any>'overflowAllSides').and.returnValue(false);
+        spyOn(component, <any>'setElementPosition');
 
-        spyOn(component, <any> 'verifySubPositions');
-        spyOn(component, <any> 'nextPosition');
+        spyOn(component, <any>'verifySubPositions');
+        spyOn(component, <any>'nextPosition');
 
         component.adjustPosition('top');
 
@@ -453,11 +450,9 @@ describe('PoControlPositionService:', () => {
         expect(component['overflowAllSides']).toHaveBeenCalledTimes(1);
         expect(component['overflowMain']).toHaveBeenCalledTimes(1);
       });
-
     });
 
     describe('Set sides positions', () => {
-
       it('should set top and left position in setTopPositions()', () => {
         component['setTopPositions'].call(fakeThis, 10, fakePositions['getSizesAndPositions']());
         expect(fakeThis.element.style.top).toBe('5px');
@@ -485,15 +480,14 @@ describe('PoControlPositionService:', () => {
         component['setLeftPositions'].call(fakeThis, 10, fakePositions['getSizesAndPositions']());
         expect(fakeThis.element.style.left).toBe('5px');
       });
-
     });
 
     it('adjustCustomPosition: should call `overflowAllSides` twice if `customPosition.length` is 2', () => {
       component['customPositions'] = ['top', 'bottom'];
 
-      const overflowAllSides = spyOn(component, <any> 'overflowAllSides').and.returnValue(true);
-      const nextPosition = spyOn(component, <any> 'nextPosition');
-      const elementPosition = spyOn(component, <any> 'elementPosition');
+      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(true);
+      const nextPosition = spyOn(component, <any>'nextPosition');
+      const elementPosition = spyOn(component, <any>'elementPosition');
 
       component['adjustCustomPosition']('top');
 
@@ -504,9 +498,9 @@ describe('PoControlPositionService:', () => {
 
     it('adjustCustomPosition: should call `nextPosition` and `elementPosition` if `overflowAllSides` return true.', () => {
       component['customPositions'] = ['top', 'bottom'];
-      const overflowAllSides = spyOn(component, <any> 'overflowAllSides').and.returnValue(true);
-      const nextPosition = spyOn(component, <any> 'nextPosition');
-      const elementPosition = spyOn(component, <any> 'elementPosition');
+      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(true);
+      const nextPosition = spyOn(component, <any>'nextPosition');
+      const elementPosition = spyOn(component, <any>'elementPosition');
 
       component['adjustCustomPosition']('top');
 
@@ -517,9 +511,9 @@ describe('PoControlPositionService:', () => {
 
     it('adjustCustomPosition: should not call `nextPosition` and `elementPosition` if `overflowAllSides` return false.', () => {
       component['customPositions'] = ['top', 'bottom'];
-      const overflowAllSides = spyOn(component, <any> 'overflowAllSides').and.returnValue(false);
-      const nextPosition = spyOn(component, <any> 'nextPosition');
-      const elementPosition = spyOn(component, <any> 'elementPosition');
+      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(false);
+      const nextPosition = spyOn(component, <any>'nextPosition');
+      const elementPosition = spyOn(component, <any>'elementPosition');
 
       component['adjustCustomPosition']('top');
 
@@ -530,10 +524,10 @@ describe('PoControlPositionService:', () => {
 
     it(`adjustDefaultPosition: should call 'getMainPosition' and 'verifySubPositions' if 'overflowMain' return false and 'overflowAllSides'
       return true.`, () => {
-      const getMainPositions = spyOn(component, <any> 'getMainPositions').and.returnValue('bottom');
-      const overflowMain = spyOn(component, <any> 'overflowMain').and.returnValue(false);
-      const overflowAllSides = spyOn(component, <any> 'overflowAllSides').and.returnValue(true);
-      const verifySubPositions = spyOn(component, <any> 'verifySubPositions');
+      const getMainPositions = spyOn(component, <any>'getMainPositions').and.returnValue('bottom');
+      const overflowMain = spyOn(component, <any>'overflowMain').and.returnValue(false);
+      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(true);
+      const verifySubPositions = spyOn(component, <any>'verifySubPositions');
       spyOn(component, <any>'elementPosition');
 
       component['adjustDefaultPosition']('bottom');
@@ -545,11 +539,11 @@ describe('PoControlPositionService:', () => {
     });
 
     it(`adjustDefaultPosition: should return undefined if 'overflowMain' and 'overflowAllSides' return false.`, () => {
-      const getMainPositions = spyOn(component, <any> 'getMainPositions').and.returnValue('left');
-      const overflowMain = spyOn(component, <any> 'overflowMain').and.returnValue(false);
-      const overflowAllSides = spyOn(component, <any> 'overflowAllSides').and.returnValue(false);
-      const nextPosition = spyOn(component, <any> 'nextPosition');
-      const verifySubPositions = spyOn(component, <any> 'verifySubPositions');
+      const getMainPositions = spyOn(component, <any>'getMainPositions').and.returnValue('left');
+      const overflowMain = spyOn(component, <any>'overflowMain').and.returnValue(false);
+      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(false);
+      const nextPosition = spyOn(component, <any>'nextPosition');
+      const verifySubPositions = spyOn(component, <any>'verifySubPositions');
       spyOn(component, <any>'elementPosition');
 
       component['adjustDefaultPosition']('left');
@@ -563,20 +557,19 @@ describe('PoControlPositionService:', () => {
 
     it('elementPosition: should call `setAlignedElementPosition` if `isCornerAligned` is true.', () => {
       component['isCornerAligned'] = true;
-      const setAlignedElementPosition = spyOn(component, <any> 'setAlignedElementPosition');
+      const setAlignedElementPosition = spyOn(component, <any>'setAlignedElementPosition');
       component['elementPosition']('bottom');
       expect(setAlignedElementPosition).toHaveBeenCalled();
     });
 
     it('elementPosition: should call `setElementPosition` if `isCornerAligned` is false.', () => {
       component['isCornerAligned'] = false;
-      const setElementPosition = spyOn(component, <any> 'setElementPosition');
+      const setElementPosition = spyOn(component, <any>'setElementPosition');
       component['elementPosition']('bottom');
       expect(setElementPosition).toHaveBeenCalled();
     });
 
     describe('setAlignedArrowDirection:', () => {
-
       it('should return `bottom-left` when parameter is `top-left`.', () => {
         expect(component['setAlignedArrowDirection']('top-left')).toBe('bottom-left');
       });
@@ -592,7 +585,6 @@ describe('PoControlPositionService:', () => {
       it('should return `top-left` when parameter is `bottom-left`.', () => {
         expect(component['setAlignedArrowDirection']('bottom-left')).toBe('top-left');
       });
-
     });
 
     it('setAlignedBottomPositions: should set style top and left of element.', () => {
@@ -603,11 +595,10 @@ describe('PoControlPositionService:', () => {
     });
 
     describe('setAlignedElementPosition:', () => {
-
       it('should always call `setElementWidth` and `setAlignedArrowDirection`.', () => {
-        const setElementWidth = spyOn(component, <any> 'setElementWidth');
-        const setAlignedArrowDirection = spyOn(component, <any> 'setAlignedArrowDirection');
-        const getSizesAndPositions = spyOn(component, <any> 'getSizesAndPositions');
+        const setElementWidth = spyOn(component, <any>'setElementWidth');
+        const setAlignedArrowDirection = spyOn(component, <any>'setAlignedArrowDirection');
+        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions');
 
         component['setAlignedElementPosition']('bottom');
 
@@ -617,8 +608,8 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setAlignedBottomPositions` if position is `bottom-left`.', () => {
-        const setAlignedBottomPositions = spyOn(component, <any> 'setAlignedBottomPositions');
-        const getSizesAndPositions = spyOn(component, <any> 'getSizesAndPositions');
+        const setAlignedBottomPositions = spyOn(component, <any>'setAlignedBottomPositions');
+        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions');
 
         component['setAlignedElementPosition']('bottom-left');
 
@@ -627,9 +618,10 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setAlignedBottomPositions` if position is `bottom-right`.', () => {
-        const setAlignedBottomPositions = spyOn(component, <any> 'setAlignedBottomPositions');
-        const getSizesAndPositions = spyOn(component, <any> 'getSizesAndPositions').and.returnValue(
-          getFakeSizesAndPositions(0, 0, 0, 0).getSizesAndPositions());
+        const setAlignedBottomPositions = spyOn(component, <any>'setAlignedBottomPositions');
+        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions').and.returnValue(
+          getFakeSizesAndPositions(0, 0, 0, 0).getSizesAndPositions()
+        );
 
         component['setAlignedElementPosition']('bottom-right');
 
@@ -638,8 +630,8 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setAlignedTopPositions` if position is `top-left`.', () => {
-        const setAlignedTopPositions = spyOn(component, <any> 'setAlignedTopPositions');
-        const getSizesAndPositions = spyOn(component, <any> 'getSizesAndPositions');
+        const setAlignedTopPositions = spyOn(component, <any>'setAlignedTopPositions');
+        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions');
 
         component['setAlignedElementPosition']('top-left');
 
@@ -648,16 +640,16 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setAlignedTopPositions` if position is `top-right`.', () => {
-        const setAlignedTopPositions = spyOn(component, <any> 'setAlignedTopPositions');
-        const getSizesAndPositions = spyOn(component, <any> 'getSizesAndPositions').and.returnValue(
-          getFakeSizesAndPositions(0, 0, 0, 0).getSizesAndPositions());
+        const setAlignedTopPositions = spyOn(component, <any>'setAlignedTopPositions');
+        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions').and.returnValue(
+          getFakeSizesAndPositions(0, 0, 0, 0).getSizesAndPositions()
+        );
 
         component['setAlignedElementPosition']('top-right');
 
         expect(setAlignedTopPositions).toHaveBeenCalled();
         expect(getSizesAndPositions).toHaveBeenCalled();
       });
-
     });
 
     it('setAlignedTopPositions: should set style top and left.', () => {
@@ -666,9 +658,7 @@ describe('PoControlPositionService:', () => {
       component['setAlignedTopPositions'].call(fakeThis, 10, fakePositions['getSizesAndPositions']());
       expect(fakeThis.element.style.left).toBe('0px');
     });
-
   });
-
 });
 
 function getFakeOverflows(positionTrue) {

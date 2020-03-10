@@ -12,7 +12,6 @@ import { Component, Input } from '@angular/core';
   templateUrl: './po-breadcrumb-item.component.html'
 })
 export class PoBreadcrumbItemComponent {
-
   // Ação que será executada ao clicar sobre o item.
   @Input('p-action') action: Function;
 

@@ -52,7 +52,6 @@ const poStepperOrientationDefault = PoStepperOrientation.Horizontal;
  */
 @Directive()
 export class PoStepperBaseComponent {
-
   private _orientation?: PoStepperOrientation = poStepperOrientationDefault;
   private _sequential?: boolean = true;
   private _step: number = 1;
@@ -70,7 +69,9 @@ export class PoStepperBaseComponent {
    * @default `PoStepperOrientation.Horizontal`
    */
   @Input('p-orientation') set orientation(value: PoStepperOrientation) {
-    this._orientation = (<any>Object).values(PoStepperOrientation).includes(value) ? value : poStepperOrientationDefault;
+    this._orientation = (<any>Object).values(PoStepperOrientation).includes(value)
+      ? value
+      : poStepperOrientationDefault;
   }
 
   get orientation(): PoStepperOrientation {
@@ -112,7 +113,7 @@ export class PoStepperBaseComponent {
    */
   @Input('p-steps') set steps(steps: Array<PoStepperItem>) {
     this._steps = Array.isArray(steps) ? steps : [];
-    this._steps.forEach(step => step.status = PoStepperStatus.Default);
+    this._steps.forEach(step => (step.status = PoStepperStatus.Default));
     this.step = 1;
   }
 
@@ -170,5 +171,4 @@ export class PoStepperBaseComponent {
 
   /** Ação que será executada quando o usuário mudar o passo do `po-stepper`. */
   @Output('p-change-step') onChangeStep = new EventEmitter<number | PoStepComponent>();
-
 }

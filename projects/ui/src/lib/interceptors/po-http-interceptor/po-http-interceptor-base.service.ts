@@ -1,5 +1,12 @@
 import { ComponentRef } from '@angular/core';
-import { HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpInterceptor,
+  HttpHandler,
+  HttpRequest,
+  HttpResponse,
+  HttpEvent,
+  HttpErrorResponse
+} from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -138,37 +145,35 @@ const NO_MESSAGE_HEADER_PARAM = 'X-Portinari-No-Message';
  *
  */
 export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
-
   notificationTypes = ['success', 'warning', 'error', 'information'];
 
   private httpInterceptorDetailComponent: ComponentRef<PoHttpInterceptorDetailComponent> = undefined;
 
-  constructor(private componentInjector: PoComponentInjectorService, private notification: any) { }
+  constructor(private componentInjector: PoComponentInjectorService, private notification: any) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const cloneRequest = request.clone();
 
     request = request && this.hasParameters(request) ? this.cloneRequestWithoutParameters(request) : request;
 
-    return next.handle(request).pipe(tap((response: HttpEvent<any>) => {
-
-      if (response instanceof HttpResponse) {
-
-        this.processResponse(response, cloneRequest);
-
-      }
-    }, (error: HttpErrorResponse) => {
-
-      this.processErrorResponse(error, cloneRequest);
-
-    }));
+    return next.handle(request).pipe(
+      tap(
+        (response: HttpEvent<any>) => {
+          if (response instanceof HttpResponse) {
+            this.processResponse(response, cloneRequest);
+          }
+        },
+        (error: HttpErrorResponse) => {
+          this.processErrorResponse(error, cloneRequest);
+        }
+      )
+    );
   }
 
   processResponse(response: HttpResponse<any>, request: HttpRequest<any>) {
     const hasNoMessageParam = this.hasNoMessageParam(request);
 
     if (!hasNoMessageParam && response.body && response.body._messages) {
-
       const messages = response.body._messages;
 
       if (messages instanceof Array) {
@@ -182,9 +187,10 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
   }
 
   processErrorResponse(response: HttpErrorResponse, request: HttpRequest<any>) {
-    const errorResponse = response.status !== 0
-      ? response.error
-      : { code: 0, message: 'Servidor não está respondendo.', detailedMessage: response.message };
+    const errorResponse =
+      response.status !== 0
+        ? response.error
+        : { code: 0, message: 'Servidor não está respondendo.', detailedMessage: response.message };
 
     const hasNoErrorParam = this.hasNoErrorParam(request);
     const hasNoMessageParam = this.hasNoMessageParam(request);
@@ -195,17 +201,17 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
   }
 
   private cloneRequestWithoutParameters(request: HttpRequest<any>): HttpRequest<any> {
-    const headers = request.headers
-      .delete(NO_ERROR_HEADER_PARAM)
-      .delete(NO_MESSAGE_HEADER_PARAM);
+    const headers = request.headers.delete(NO_ERROR_HEADER_PARAM).delete(NO_MESSAGE_HEADER_PARAM);
 
     return request.clone({ headers });
   }
 
   private createModal(responseMessage: PoHttpInterceptorDetail) {
-    const details = responseMessage.details ? [ responseMessage, ...responseMessage.details ] : [ responseMessage ];
+    const details = responseMessage.details ? [responseMessage, ...responseMessage.details] : [responseMessage];
 
-    this.httpInterceptorDetailComponent = this.componentInjector.createComponentInApplication(PoHttpInterceptorDetailComponent);
+    this.httpInterceptorDetailComponent = this.componentInjector.createComponentInApplication(
+      PoHttpInterceptorDetailComponent
+    );
     this.httpInterceptorDetailComponent.instance.detail = details;
     this.httpInterceptorDetailComponent.instance.closed.subscribe(() => this.destroyModal());
     this.httpInterceptorDetailComponent.instance.open();
@@ -241,7 +247,6 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
   }
 
   private showNotification(response: any) {
-
     if (!this.hasMessage(response)) {
       return;
     }
@@ -266,14 +271,12 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
   }
 
   private generateNotificationAction(responseMessage: any) {
-
     let notificationAction;
     let notificationLabel;
 
     if (responseMessage.helpUrl && !(responseMessage.detailedMessage || responseMessage.details)) {
       notificationLabel = 'Ajuda';
       notificationAction = this.generateUrlHelpFunction(responseMessage.helpUrl);
-
     } else if (responseMessage.detailedMessage || responseMessage.details) {
       notificationLabel = 'Detalhes';
       notificationAction = this.generateDetailModal(responseMessage);
@@ -282,7 +285,8 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
   }
 
   private generateUrlHelpFunction(helpUrl: string) {
-    return () => { window.open(helpUrl, '_blank'); };
+    return () => {
+      window.open(helpUrl, '_blank');
+    };
   }
-
 }

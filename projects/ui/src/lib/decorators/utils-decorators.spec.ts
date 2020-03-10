@@ -58,7 +58,6 @@ describe('validatePropertyOnLifeCycle:', () => {
 });
 
 describe('changeValueByCallback:', () => {
-
   it('should set value of validation return', () => {
     const validation = () => 'validation return';
 
@@ -81,7 +80,7 @@ describe('changeValueByCallback:', () => {
     const validation = () => 'validation return';
 
     const target = {
-      myProperty: undefined,
+      myProperty: undefined
     };
 
     const originalSetSpy = jasmine.createSpy('set');
@@ -101,7 +100,7 @@ describe('changeValueByCallback:', () => {
     const originalGetValue = 'original';
 
     const target = {
-      myProperty: undefined,
+      myProperty: undefined
     };
 
     const decoratorProperties = { target, originalDescriptor: { get: () => originalGetValue } };
@@ -111,11 +110,9 @@ describe('changeValueByCallback:', () => {
 
     expect(target.myProperty).toBe(originalGetValue);
   });
-
 });
 
 describe('createPrivateProperty:', () => {
-
   it('should return private property name with undescore', () => {
     const privatePropertyName = '$$__property';
     const propertyName = 'property';
@@ -156,5 +153,4 @@ describe('createPrivateProperty:', () => {
 
     expect(console.warn).toHaveBeenCalled();
   });
-
 });

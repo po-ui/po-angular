@@ -18,15 +18,14 @@ describe('PoAdvancedFilterBaseComponent', () => {
   });
 
   describe('Properties:', () => {
-
-    it('filters: should set `filters` to `[]` if not Array value' , () => {
+    it('filters: should set `filters` to `[]` if not Array value', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
 
       expectPropertiesValues(component, 'filters', invalidValues, []);
     });
 
     it('filters: should update property `p-filters` with valid values', () => {
-      const validValues = [ [{ property: 'Teste 1' }], [{ property: 'Teste 2' }] ];
+      const validValues = [[{ property: 'Teste 1' }], [{ property: 'Teste 2' }]];
 
       expectPropertiesValues(component, 'filters', validValues, validValues);
     });
@@ -102,11 +101,9 @@ describe('PoAdvancedFilterBaseComponent', () => {
         expect(component.literals).toEqual(poAdvancedFiltersLiteralsDefault['pt']);
       });
     });
-
   });
 
   describe('Methods:', () => {
-
     it('getValuesFromForm: should return all items that property isn´t undefined or ``.', () => {
       component.filter = { name: 'name', birthdate: 'Birthdate', age: '', Adress: undefined };
 
@@ -116,11 +113,11 @@ describe('PoAdvancedFilterBaseComponent', () => {
     });
 
     it('primaryAction: should emit `searchEvent` and call `getValuesFromForm` and `poModal.close`', () => {
-      component.poModal = <any> { close: () => {} };
+      component.poModal = <any>{ close: () => {} };
 
       spyOn(component.searchEvent, 'emit');
       spyOn(component.poModal, 'close');
-      spyOn(component, <any> 'getValuesFromForm');
+      spyOn(component, <any>'getValuesFromForm');
 
       component.primaryAction.action();
 
@@ -130,7 +127,7 @@ describe('PoAdvancedFilterBaseComponent', () => {
     });
 
     it('secondaryAction: should call `poModal.close`', () => {
-      component.poModal = <any> { close: () => {} };
+      component.poModal = <any>{ close: () => {} };
 
       spyOn(component.poModal, 'close');
 
@@ -138,7 +135,5 @@ describe('PoAdvancedFilterBaseComponent', () => {
 
       expect(component.poModal.close).toHaveBeenCalled();
     });
-
   });
-
 });

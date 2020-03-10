@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoSelectOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-input-labs.component.html'
 })
 export class SamplePoInputLabsComponent implements OnInit {
-
   input: string;
   errorPattern: string;
   event: string;
@@ -48,5 +47,4 @@ export class SamplePoInputLabsComponent implements OnInit {
   restore() {
     this.input = undefined;
   }
-
 }

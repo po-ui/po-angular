@@ -11,7 +11,6 @@ import { PoMenuPanelItem } from './po-menu-panel-item.interface';
  *
  */
 export interface PoMenuPanelItemInternal extends PoMenuPanelItem {
-
   // Identificador do item.
   id: string;
 
@@ -20,5 +19,4 @@ export interface PoMenuPanelItemInternal extends PoMenuPanelItem {
 
   // Indica se o item está selecionado.
   isSelected?: boolean;
-
 }

@@ -10,5 +10,4 @@ describe('SamplePoLoginBasic E2E', () => {
   it('check if the element Po Login is present', () => {
     expect(loginPO.poLoginInput.isPresent()).toBeTruthy();
   });
-
 });

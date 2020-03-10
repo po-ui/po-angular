@@ -20,5 +20,4 @@ describe('SamplePoDropdownBasic E2E', () => {
     dropdown.poDropdown.click();
     expect(dropdown.poDropdownContent.count()).toBe(5);
   });
-
 });

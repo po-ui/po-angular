@@ -1,5 +1,4 @@
 <div class="po-checkbox">
-
   <input
     class="po-input po-checkbox-input"
     type="checkbox"
@@ -8,15 +7,18 @@
     [checked]="checkboxValue"
     [disabled]="disabled"
     [id]="id"
-    [value]="checkboxValue">
+    [value]="checkboxValue"
+  />
 
-  <label #checkboxLabel
+  <label
+    #checkboxLabel
     class="po-checkbox-label"
     [class.po-clickable]="!disabled"
     [for]="id"
     [tabindex]="disabled ? -1 : 0"
     (click)="checkOption(checkboxValue)"
-    (keydown)="onKeyDown($event, checkboxValue)">
-      {{ label }}
+    (keydown)="onKeyDown($event, checkboxValue)"
+  >
+    {{ label }}
   </label>
 </div>

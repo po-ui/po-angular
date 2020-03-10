@@ -7,10 +7,9 @@ import { PoDialogService, PoNotificationService, PoPageAction, PoRadioGroupOptio
 
 @Component({
   selector: 'sample-po-dialog-cancel-credit-card',
-  templateUrl: './sample-po-dialog-cancel-credit-card.component.html',
+  templateUrl: './sample-po-dialog-cancel-credit-card.component.html'
 })
 export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnInit {
-
   action: Array<PoPageAction>;
   address: string;
   cardNumber: string;
@@ -26,27 +25,29 @@ export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnIni
   private statusSubscription: Subscription;
 
   public readonly cardTypeOptions: Array<PoRadioGroupOption> = [
-    { label: 'Master Card', value: 'Master'},
-    { label: 'Visa', value: 'visa'},
-    { label: 'Diners', value: 'diners'},
-    { label: 'Hipercard', value: 'hipercard'}
+    { label: 'Master Card', value: 'Master' },
+    { label: 'Visa', value: 'visa' },
+    { label: 'Diners', value: 'diners' },
+    { label: 'Hipercard', value: 'hipercard' }
   ];
 
   @ViewChild('form', { static: true }) form: FormControl;
 
-  constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) { }
+  constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
 
   ngOnDestroy() {
     this.statusSubscription.unsubscribe();
   }
 
   ngOnInit() {
-    this.action = [{
-      label: 'Cancel',
-      icon: 'po-icon po-icon-delete',
-      action: this.openConfirmDialog.bind(this),
-      disabled: true
-    }];
+    this.action = [
+      {
+        label: 'Cancel',
+        icon: 'po-icon po-icon-delete',
+        action: this.openConfirmDialog.bind(this),
+        disabled: true
+      }
+    ];
     this.statusSubscription = this.form.statusChanges.subscribe(status => this.actionDisabledCheck(status));
   }
 
@@ -66,5 +67,4 @@ export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnIni
       confirm: () => this.confirmCancelation()
     });
   }
-
 }

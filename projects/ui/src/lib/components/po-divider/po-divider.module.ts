@@ -9,14 +9,8 @@ import { PoDividerComponent } from './po-divider.component';
  * Módulo do componente po-divider.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    PoDividerComponent
-  ],
-  exports: [
-    PoDividerComponent
-  ]
+  imports: [CommonModule],
+  declarations: [PoDividerComponent],
+  exports: [PoDividerComponent]
 })
-export class PoDividerModule { }
+export class PoDividerModule {}

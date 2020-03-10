@@ -1,10 +1,5 @@
-<div tabindex="0" #target
-  class="po-navbar-action-popup-content po-clickable"
-  (click)="popup.toggle()">
+<div tabindex="0" #target class="po-navbar-action-popup-content po-clickable" (click)="popup.toggle()">
   <span class="po-icon {{ getLastIconAction() }}"></span>
 </div>
 
-<po-popup #popup
-  [p-actions]="iconActions"
-  [p-target]="target">
-</po-popup>
+<po-popup #popup [p-actions]="iconActions" [p-target]="target"> </po-popup>

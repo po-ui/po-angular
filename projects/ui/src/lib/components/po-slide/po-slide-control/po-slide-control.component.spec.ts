@@ -5,14 +5,13 @@ import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoSlideControlComponent } from './po-slide-control.component';
 
 describe('PoSlideControlComponent:', () => {
-
   let component: PoSlideControlComponent;
   let fixture: ComponentFixture<PoSlideControlComponent>;
   let nativeElement;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoSlideControlComponent ]
+      declarations: [PoSlideControlComponent]
     });
   });
 
@@ -22,7 +21,6 @@ describe('PoSlideControlComponent:', () => {
 
     fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
-
   });
 
   it('should be created', () => {
@@ -30,7 +28,6 @@ describe('PoSlideControlComponent:', () => {
   });
 
   describe('Template:', () => {
-
     it('should apply `po-slide-control-previous` and `po-slide-arrow-previous` if `control` is `previous`', () => {
       component.control = 'previous';
 
@@ -67,7 +64,5 @@ describe('PoSlideControlComponent:', () => {
 
       expect(component.click.emit).toHaveBeenCalled();
     });
-
   });
-
 });

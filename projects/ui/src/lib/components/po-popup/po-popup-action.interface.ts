@@ -6,7 +6,6 @@
  * Interface para lista de ações do componente.
  */
 export interface PoPopupAction {
-
   /** Rótulo da ação. */
   label: string;
 
@@ -63,5 +62,4 @@ export interface PoPopupAction {
    * > Caso o valor não seja especificado a ação será visível.
    */
   visible?: boolean;
-
 }

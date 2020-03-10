@@ -4,7 +4,6 @@ import LokiIndexedAdapter from 'lokijs/src/loki-indexed-adapter';
 const keyField = 'key';
 
 export class PoLokiDriver {
-
   private collection;
   private db: any;
   private driver: any;
@@ -235,5 +234,4 @@ export class PoLokiDriver {
   private getNumberItensInCollection(): number {
     return this.collection.count();
   }
-
 }

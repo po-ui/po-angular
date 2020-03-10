@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@portinari/portinari-
   templateUrl: './sample-po-radio-group-labs.component.html'
 })
 export class SamplePoRadioGroupLabsComponent implements OnInit {
-
   columns: number;
   event: string;
   help: string;
@@ -58,5 +57,4 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
       value: undefined
     };
   }
-
 }

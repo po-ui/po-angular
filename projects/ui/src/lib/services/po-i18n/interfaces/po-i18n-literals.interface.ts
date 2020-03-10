@@ -6,14 +6,12 @@
  * @usedBy PoI18nService
  */
 export interface PoI18nLiterals {
-
   /** Contexto utilizado na busca das literais. */
   context?: string;
 
   /** Idioma a ser buscado. */
   language?: string;
 
-   /** Lista das literais. */
+  /** Lista das literais. */
   literals?: Array<string>;
-
 }

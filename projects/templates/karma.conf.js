@@ -1,7 +1,7 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 
-module.exports = function (config) {
+module.exports = function(config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -26,7 +26,8 @@ module.exports = function (config) {
           branches: 91,
           functions: 92,
           lines: 96
-        }, each: {
+        },
+        each: {
           statements: 80,
           branches: 80,
           lines: 80,
@@ -75,12 +76,7 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',
-        flags: [
-          '--no-sandbox',
-          '--headless',
-          '--disable-gpu',
-          '--remote-debugging-port=9222',
-        ]
+        flags: ['--no-sandbox', '--headless', '--disable-gpu', '--remote-debugging-port=9222']
       }
     },
     singleRun: false,

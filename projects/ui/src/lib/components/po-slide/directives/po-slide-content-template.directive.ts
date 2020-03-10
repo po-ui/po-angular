@@ -47,7 +47,6 @@ import { Directive, TemplateRef } from '@angular/core';
   selector: '[p-slide-content-template]'
 })
 export class PoSlideContentTemplateDirective {
-
   // Necessário manter templateRef para o funcionamento do row template.
-  constructor(public templateRef: TemplateRef<any>) { }
+  constructor(public templateRef: TemplateRef<any>) {}
 }

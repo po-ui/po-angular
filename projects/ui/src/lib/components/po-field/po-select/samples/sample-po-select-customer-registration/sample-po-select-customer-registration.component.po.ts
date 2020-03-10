@@ -1,7 +1,6 @@
 import { browser, by, element } from 'protractor';
 
 export class PoSelectPage {
-
   private sample = 'sample-po-select';
 
   private getPoSelect(selectName: string) {
@@ -71,5 +70,4 @@ export class PoSelectPage {
   get cityRioNegro() {
     return this.getPoSelectItem('city', 9);
   }
-
 }

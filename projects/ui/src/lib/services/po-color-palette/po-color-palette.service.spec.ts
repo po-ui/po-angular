@@ -2,7 +2,6 @@ import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 import { PoColorPaletteService } from './po-color-palette.service';
 
 describe('PoColorPaletteService:', () => {
-
   const service = new PoColorPaletteService();
 
   it('should be created', () => {
@@ -11,7 +10,6 @@ describe('PoColorPaletteService:', () => {
   });
 
   describe('Methods:', () => {
-
     it('getColorFromType: should return `color-01` as default color.', () => {
       expect(service['getColorFromType']('')).toBe(PoColorPaletteEnum.Color01);
     });
@@ -69,7 +67,5 @@ describe('PoColorPaletteService:', () => {
       expect(service['getColor'](value)).toBe(PoColorPaletteEnum.Color07);
       expect(service['getColorFromType']).toHaveBeenCalledWith('danger');
     });
-
   });
-
 });

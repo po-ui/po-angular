@@ -5,11 +5,10 @@ import { Observable } from 'rxjs';
 import { PoAccordionService } from './po-accordion.service';
 
 describe('PoAccordionService:', () => {
-
   let accordionService: PoAccordionService;
 
   const accordionItem = {
-    label: 'Accordion 1',
+    label: 'Accordion 1'
   };
 
   beforeEach(() => {
@@ -18,11 +17,9 @@ describe('PoAccordionService:', () => {
     });
 
     accordionService = TestBed.inject(PoAccordionService);
-
   });
 
   describe('Methods:', () => {
-
     it('should call subjectChild.next with accordionItem in sendToParentAccordionItemClicked', () => {
       spyOn(accordionService['subjectChild'], 'next');
       accordionService.sendToParentAccordionItemClicked(accordionItem);
@@ -42,7 +39,5 @@ describe('PoAccordionService:', () => {
 
       expect(result instanceof Observable).toBeTruthy();
     });
-
   });
-
 });

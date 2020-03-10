@@ -32,15 +32,14 @@ import { PoDynamicViewService } from './po-dynamic-view.service';
   templateUrl: './po-dynamic-view.component.html'
 })
 export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implements OnChanges, OnInit {
-
   constructor(
     currencyPipe: CurrencyPipe,
     datePipe: DatePipe,
     decimalPipe: DecimalPipe,
     timePipe: PoTimePipe,
     titleCasePipe: TitleCasePipe,
-    dynamicViewService: PoDynamicViewService) {
-
+    dynamicViewService: PoDynamicViewService
+  ) {
     super(currencyPipe, datePipe, decimalPipe, timePipe, titleCasePipe, dynamicViewService);
   }
 
@@ -56,7 +55,7 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     }
   }
 
-  private async getValuesAndFieldsFromLoad(): Promise<{ value?: any, fields?: Array<PoDynamicFormField> }> {
+  private async getValuesAndFieldsFromLoad(): Promise<{ value?: any; fields?: Array<PoDynamicFormField> }> {
     let valueAndFieldsFromLoad;
 
     if (typeof this.load === 'string') {

@@ -15,8 +15,8 @@ describe('PoAdvancedFilterComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule, PoDynamicModule, PoFieldModule, PoModalModule ],
-      declarations: [ PoAdvancedFilterComponent ]
+      imports: [FormsModule, PoDynamicModule, PoFieldModule, PoModalModule],
+      declarations: [PoAdvancedFilterComponent]
     });
   });
 
@@ -40,7 +40,6 @@ describe('PoAdvancedFilterComponent', () => {
   });
 
   describe('Methods:', () => {
-
     it('open: should call `poModal.open` and set `filter` with {}', () => {
       component.filter = filters;
 
@@ -51,7 +50,5 @@ describe('PoAdvancedFilterComponent', () => {
       expect(component.poModal.open).toHaveBeenCalled();
       expect(component.filter).toEqual({});
     });
-
   });
-
 });

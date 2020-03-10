@@ -1,4 +1,3 @@
-
 import { PoPageBlockedUserBaseComponent } from './po-page-blocked-user-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
@@ -17,13 +16,12 @@ describe('PoPageBlockedUserBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-params: should update property `p-params` with invalid values.', () => {
       component.params = { attempts: 5, days: 90, hours: 24 };
 
       const invalidParams = [false, true, {}, 'invalid', []];
 
-      expectPropertiesValues(component, 'params', invalidParams, { attempts: 5, days: 90, hours: 24 } );
+      expectPropertiesValues(component, 'params', invalidParams, { attempts: 5, days: 90, hours: 24 });
     });
 
     it('p-params: should update property `p-params` with valid values.', () => {
@@ -49,7 +47,5 @@ describe('PoPageBlockedUserBaseComponent:', () => {
 
       expectPropertiesValues(component, 'urlBack', value, value);
     });
-
   });
-
 });

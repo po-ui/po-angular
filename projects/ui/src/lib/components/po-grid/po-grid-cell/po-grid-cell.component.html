@@ -2,12 +2,14 @@
   <ng-container *ngIf="edit; then input; else content"></ng-container>
 
   <ng-template #content>
-    <div #contentElement
+    <div
+      #contentElement
       [id]="position"
       class="po-grid-cell-content po-grid-cell-{{ align }} {{ !value && required ? 'po-grid-cell-required' : '' }}"
       (keydown)="onKeyDownContent($event)"
       tabindex="{{ readonly ? -1 : 0 }}"
-      (dblclick)=dblclick($event)>
+      (dblclick)="dblclick($event)"
+    >
       <span>{{ value || '&nbsp;' }}</span>
     </div>
   </ng-template>
@@ -15,14 +17,16 @@
   <ng-template #input>
     <input
       [id]="position"
-      #inputElement class="po-grid-cell-input"
+      #inputElement
+      class="po-grid-cell-input"
       [(ngModel)]="editValue"
       (keydown.arrowup)="$event.stopPropagation()"
       (keydown.arrowdown)="$event.stopPropagation()"
       (keydown.arrowleft)="$event.stopPropagation()"
       (keydown.arrowright)="$event.stopPropagation()"
       (keydown)="onKeyDownInput($event)"
-      (blur)="onBlurInput($event)">
+      (blur)="onBlurInput($event)"
+    />
 
     <!-- <po-input
       #inputElement class="po-grid-cell-input"
@@ -32,4 +36,3 @@
     </po-input> -->
   </ng-template>
 </div>
-

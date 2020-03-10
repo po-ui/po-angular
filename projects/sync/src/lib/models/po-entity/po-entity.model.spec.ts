@@ -9,7 +9,6 @@ import { PoSchemaDefinitionService, PoSchemaService, PoSchemaUtil } from '../../
 import { PoSyncSchema } from '../../services/po-sync/interfaces/po-sync-schema.interface';
 
 describe('PoEntity:', () => {
-
   let poEntity: PoEntity;
   let poSyncSchemaMock: PoSyncSchema;
 
@@ -29,7 +28,12 @@ describe('PoEntity:', () => {
     const poSchemaMock = new PoSchemaService(poSchemaDefinitionMock, poStorageMock);
     const httpClientMock = new PoHttpClientService(null);
 
-    const poEventSourcingMock = new PoEventSourcingService(poSchemaDefinitionMock, poSchemaMock, poStorageMock, httpClientMock);
+    const poEventSourcingMock = new PoEventSourcingService(
+      poSchemaDefinitionMock,
+      poSchemaMock,
+      poStorageMock,
+      httpClientMock
+    );
 
     poEntity = new PoEntity(poEventSourcingMock, poSyncSchemaMock, poSchemaMock);
   });
@@ -39,7 +43,6 @@ describe('PoEntity:', () => {
   });
 
   describe('Methods:', () => {
-
     it('find: should call select of PoQueryBuilder and return PoQueryBuilder object', () => {
       const fields = 'fields';
       spyOn(PoQueryBuilder.prototype, 'select');
@@ -80,7 +83,7 @@ describe('PoEntity:', () => {
       const idMock = jasmine.anything();
       const returnFindOne = jasmine.any(Object);
 
-      spyOn(poEntity, 'findOne').and.returnValue(<any> returnFindOne);
+      spyOn(poEntity, 'findOne').and.returnValue(<any>returnFindOne);
 
       const result = poEntity.findById(idMock, fields);
 
@@ -102,7 +105,7 @@ describe('PoEntity:', () => {
       const filter = jasmine.anything();
       const fields = 'fields';
 
-      spyOn(poEntity, 'find').and.returnValue(<any> queryBuilderMock);
+      spyOn(poEntity, 'find').and.returnValue(<any>queryBuilderMock);
       spyOn(queryBuilderMock, 'limit');
 
       poEntity.findOne(filter, fields);
@@ -114,7 +117,7 @@ describe('PoEntity:', () => {
     it('findOne: should call find with filter and fields undefineds', () => {
       const queryBuilderMock = { limit: param => {} };
 
-      spyOn(poEntity, 'find').and.returnValue(<any> queryBuilderMock);
+      spyOn(poEntity, 'find').and.returnValue(<any>queryBuilderMock);
       spyOn(queryBuilderMock, 'limit');
 
       poEntity.findOne();
@@ -129,13 +132,18 @@ describe('PoEntity:', () => {
       const sendToEventSourcing = true;
       const limitedCallWrapReturn = 'limitedCallWrap return';
 
-      spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.returnValue(<any> limitedCallWrapReturn);
+      spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.returnValue(<any>limitedCallWrapReturn);
       spyOn(poEntity['selectSaveType'], <never>'bind');
 
       const result = await poEntity.save(modelMock, customRequestId);
 
       expect(poEntity['poSchemaService']['limitedCallWrap']).toHaveBeenCalled();
-      expect(poEntity['selectSaveType'].bind).toHaveBeenCalledWith(poEntity, modelMock, sendToEventSourcing, customRequestId);
+      expect(poEntity['selectSaveType'].bind).toHaveBeenCalledWith(
+        poEntity,
+        modelMock,
+        sendToEventSourcing,
+        customRequestId
+      );
       expect(result).toBe(limitedCallWrapReturn);
     });
 
@@ -153,7 +161,7 @@ describe('PoEntity:', () => {
     it('saveAll: should call poSchemaService.limitedCallWrap and return its value', async () => {
       const limitedCallWrapReturn = 'limitedCallWrap return';
 
-      spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.returnValue(<any> limitedCallWrapReturn);
+      spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.returnValue(<any>limitedCallWrapReturn);
 
       const result = await poEntity.saveAll([]);
 
@@ -162,7 +170,7 @@ describe('PoEntity:', () => {
     });
 
     it('saveAll: should call validateParameter with `record` inside an object', async () => {
-      const modelMock = [ jasmine.anything() ];
+      const modelMock = [jasmine.anything()];
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap');
       spyOn(utilsFunctions, 'validateParameter');
@@ -175,10 +183,7 @@ describe('PoEntity:', () => {
     it(`saveAll: should call isNonLocalRecordChanged and selectSaveType with correct parameters and
       call them records.length times`, async () => {
       const sendToEventSourcing = false;
-      const records = [
-        { value: 1 },
-        { value: 2 }
-      ];
+      const records = [{ value: 1 }, { value: 2 }];
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
       spyOn(poEntity['eventSourcing'], 'createBatchEvents');
@@ -201,10 +206,7 @@ describe('PoEntity:', () => {
       const batchEvents = [];
       const isNonLocalRecordChanged = false;
 
-      const records = [
-        { value: 1 },
-        { value: 2 }
-      ];
+      const records = [{ value: 1 }, { value: 2 }];
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
       spyOn(poEntity['eventSourcing'], 'createBatchEvents');
@@ -231,22 +233,13 @@ describe('PoEntity:', () => {
 
     it(`saveAll: should call createEventOperation with record, updatedRecord and customRequestId
       if isNonLocalRecordChanged is true and call createBatchEvents with batchEvents`, async () => {
+      const batchEvents = [{ event: '1' }, { event2: '2' }];
+      const isNonLocalRecordChanged = [true, false, true];
+      const customRequestIds = ['id1', 'id2'];
 
-      const batchEvents = [ { event: '1'} , { event2: '2' } ];
-      const isNonLocalRecordChanged = [ true, false, true ];
-      const customRequestIds = [ 'id1', 'id2' ];
+      const records = [{ value1: 1 }, { value2: 2 }, { value3: 3 }];
 
-      const records = [
-        { value1: 1 },
-        { value2: 2 },
-        { value3: 3 }
-      ];
-
-      const updatedRecords = [
-        { updatedValue1: 1 },
-        { updatedValue2: 2 },
-        { updatedValue3: 3 },
-      ];
+      const updatedRecords = [{ updatedValue1: 1 }, { updatedValue2: 2 }, { updatedValue3: 3 }];
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
       spyOn(poEntity['eventSourcing'], 'createBatchEvents');
@@ -264,15 +257,9 @@ describe('PoEntity:', () => {
     it(`saveAll: should call createEventOperation with record, updatedRecord and unique customRequestId`, async () => {
       const customRequestId = 'id';
       const isNonLocalRecordChanged = true;
-      const records = [
-        { value: 1 },
-        { value: 2 }
-      ];
+      const records = [{ value: 1 }, { value: 2 }];
 
-      const updatedRecords = [
-        { value: 1 },
-        { value: 2 }
-      ];
+      const updatedRecords = [{ value: 1 }, { value: 2 }];
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
       spyOn(poEntity['eventSourcing'], 'createBatchEvents');
@@ -291,20 +278,24 @@ describe('PoEntity:', () => {
       const customRequestId: string = '123';
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
-      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any> { 'serverRecord': modelMock });
+      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any>{ 'serverRecord': modelMock });
 
       spyOn(poEntity['eventSourcing'], 'remove');
 
       await poEntity.remove(modelMock, customRequestId);
 
-      expect(poEntity['eventSourcing']['remove']).toHaveBeenCalledWith(poSyncSchemaMock.name, modelMock, customRequestId);
+      expect(poEntity['eventSourcing']['remove']).toHaveBeenCalledWith(
+        poSyncSchemaMock.name,
+        modelMock,
+        customRequestId
+      );
     });
 
     it(`remove: should call separateSchemaFields with schema and record`, async () => {
       const record = {};
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
-      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any> { serverRecord: '' });
+      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any>{ serverRecord: '' });
 
       spyOn(poEntity['eventSourcing'], 'remove');
 
@@ -318,7 +309,7 @@ describe('PoEntity:', () => {
       const record = { [poSyncSchemaMock.idField]: id };
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
-      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any> { serverRecord: '' });
+      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any>{ serverRecord: '' });
       spyOn(poEntity['eventSourcing'], 'remove');
 
       spyOn(poEntity['poSchemaService'], 'remove');
@@ -333,7 +324,7 @@ describe('PoEntity:', () => {
       const record = { [PoSchemaUtil.syncInternalIdFieldName]: id };
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
-      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any> { serverRecord: '' });
+      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any>{ serverRecord: '' });
       spyOn(poEntity['eventSourcing'], 'remove');
 
       spyOn(poEntity['poSchemaService'], 'remove');
@@ -347,7 +338,7 @@ describe('PoEntity:', () => {
       const modelMock = jasmine.anything();
       const limitedCallWrapReturn = 'limitedCallWrap return';
 
-      spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.returnValue(<any> limitedCallWrapReturn);
+      spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.returnValue(<any>limitedCallWrapReturn);
 
       const result = await poEntity.remove(modelMock);
 
@@ -368,7 +359,6 @@ describe('PoEntity:', () => {
 
     it(`create: should call eventSourcing.create with schema name, new record and customRequestId
       if sendToEventSourcing is true`, async () => {
-
       const customRequestId: string = '123';
       const newRecord = { id: jasmine.anything() };
       const sendToEventSourcing = true;
@@ -426,7 +416,7 @@ describe('PoEntity:', () => {
         SyncStatus: 0
       };
 
-      spyOn(poEntity['poSchemaService'], 'create').and.returnValue(<any> createReturn);
+      spyOn(poEntity['poSchemaService'], 'create').and.returnValue(<any>createReturn);
 
       const result = await poEntity['create'](newRecord, sendToEventSourcing);
 
@@ -441,7 +431,7 @@ describe('PoEntity:', () => {
       const serverRecord = { field: 'server' };
 
       spyOn(PoSchemaUtil, 'getRecordId');
-      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any> { serverRecord });
+      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any>{ serverRecord });
 
       poEntity['createEventOperation'](record, updatedRecord, customRequestId);
 
@@ -451,7 +441,6 @@ describe('PoEntity:', () => {
 
     it(`createEventOperation: should return poEventSourcingSummaryItem with PoEventSourcingOperation.Insert
       if the record does not have id`, () => {
-
       const record = { value: '1' };
       const updatedRecord = { value: '1 updated' };
       const customRequestId = 'id';
@@ -464,7 +453,7 @@ describe('PoEntity:', () => {
       };
 
       spyOn(PoSchemaUtil, 'getRecordId');
-      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any> { serverRecord });
+      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any>{ serverRecord });
 
       const result = poEntity['createEventOperation'](record, updatedRecord, customRequestId);
 
@@ -473,7 +462,6 @@ describe('PoEntity:', () => {
 
     it(`createEventOperation: should call PoSchemaUtil.getRecordId and PoSchemaUtil.separateSchemaFields
       if the record does not have id`, () => {
-
       const record = { value: '1' };
       const updatedRecord = { value: '1 updated' };
       const customRequestId = 'id';
@@ -486,31 +474,29 @@ describe('PoEntity:', () => {
       };
 
       spyOn(PoSchemaUtil, 'getRecordId').and.returnValue('recordId');
-      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any> { serverRecord });
+      spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any>{ serverRecord });
 
       const result = poEntity['createEventOperation'](record, updatedRecord, customRequestId);
 
       expect(result).toEqual(poEventSourcingSummaryItem);
     });
 
-    it(`isNonLocalRecordChanged: should call PoSchemaUtil.getNonLocalFieldNames, poSchemaService.get and PoSchemaUtil.isModelsEqual`,
-      async () => {
-
+    it(`isNonLocalRecordChanged: should call PoSchemaUtil.getNonLocalFieldNames, poSchemaService.get and PoSchemaUtil.isModelsEqual`, async () => {
       const record = {
         field1: 'value 1',
         field2: 'value 2'
       };
 
       const updatedRecord = {
-        [ poSyncSchemaMock.idField ]: '123',
+        [poSyncSchemaMock.idField]: '123',
         field1: 'value 1',
         field2: 'value 2 updated'
       };
 
-      const nonLocalFieldNames = [ 'field1', 'field2' ];
+      const nonLocalFieldNames = ['field1', 'field2'];
 
       spyOn(PoSchemaUtil, 'getNonLocalFieldNames').and.returnValue(nonLocalFieldNames);
-      spyOn(poEntity['poSchemaService'], 'get').and.returnValue(<any> record);
+      spyOn(poEntity['poSchemaService'], 'get').and.returnValue(<any>record);
       spyOn(PoSchemaUtil, 'isModelsEqual');
 
       await poEntity['isNonLocalRecordChanged'](updatedRecord);
@@ -527,7 +513,7 @@ describe('PoEntity:', () => {
 
     it('isNonLocalRecordChanged: should return true if PoSchemaUtil.isModelsEqual return false', async () => {
       const updatedRecord = {
-        [ poSyncSchemaMock.idField ]: '123'
+        [poSyncSchemaMock.idField]: '123'
       };
 
       const isModelsEqual = false;
@@ -543,7 +529,7 @@ describe('PoEntity:', () => {
 
     it('isNonLocalRecordChanged: should return false if PoSchemaUtil.isModelsEqual return true', async () => {
       const updatedRecord = {
-        [ poSyncSchemaMock.idField ]: '123'
+        [poSyncSchemaMock.idField]: '123'
       };
 
       const isModelsEqual = true;
@@ -604,7 +590,7 @@ describe('PoEntity:', () => {
       beforeEach(() => {
         time = '12345';
         updatedRecord = {
-          [ poSyncSchemaMock.idField ]: '123',
+          [poSyncSchemaMock.idField]: '123',
           field1: 'value 1',
           field2: 'value 2 updated'
         };
@@ -623,7 +609,7 @@ describe('PoEntity:', () => {
         const sendToEventSourcing = false;
 
         spyOn(poEntity, <any>'isNonLocalRecordChanged');
-        spyOn(poEntity['poSchemaService'], 'update').and.returnValue(<any> updateReturn);
+        spyOn(poEntity['poSchemaService'], 'update').and.returnValue(<any>updateReturn);
 
         const result = await poEntity['update']({ ...updatedRecord }, sendToEventSourcing);
 
@@ -635,7 +621,6 @@ describe('PoEntity:', () => {
 
       it(`should not call separateSchemaFields and eventSourcing.update if isNonLocalRecordChanged and
         sendToEventSourcing is false`, async () => {
-
         const sendToEventSourcing = false;
 
         spyOn(poEntity, <any>'isNonLocalRecordChanged').and.returnValue(false);
@@ -652,7 +637,6 @@ describe('PoEntity:', () => {
 
       it(`should not call separateSchemaFields and eventSourcing.update if isNonLocalRecordChanged is true and
         sendToEventSourcing is false`, async () => {
-
         const sendToEventSourcing = false;
 
         spyOn(poEntity, <any>'isNonLocalRecordChanged').and.returnValue(true);
@@ -669,7 +653,6 @@ describe('PoEntity:', () => {
 
       it(`should not call separateSchemaFields and eventSourcing.update if isNonLocalRecordChanged is false and
         sendToEventSourcing is true`, async () => {
-
         const sendToEventSourcing = true;
 
         spyOn(poEntity, <any>'isNonLocalRecordChanged').and.returnValue(false);
@@ -686,7 +669,6 @@ describe('PoEntity:', () => {
 
       it(`should call separateSchemaFields and eventSourcing.update if isNonLocalRecordChanged and sendToEventSourcing
         is true`, async () => {
-
         const sendToEventSourcing = true;
         const fields = { serverRecord: {} };
         const customRequestId = '123';
@@ -695,7 +677,7 @@ describe('PoEntity:', () => {
         spyOn(poEntity['poSchemaService'], 'update');
 
         spyOn(poEntity['eventSourcing'], 'update');
-        spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any> fields);
+        spyOn(PoSchemaUtil, 'separateSchemaFields').and.returnValue(<any>fields);
 
         await poEntity['update']({ ...updatedRecord }, sendToEventSourcing, customRequestId);
 
@@ -703,11 +685,9 @@ describe('PoEntity:', () => {
         expect(poEntity['eventSourcing']['update']).toHaveBeenCalledWith(
           poSyncSchemaMock.name,
           fields['serverRecord'],
-          customRequestId);
+          customRequestId
+        );
       });
-
     });
-
   });
-
 });

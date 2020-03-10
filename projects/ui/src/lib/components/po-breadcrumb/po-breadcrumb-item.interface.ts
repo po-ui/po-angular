@@ -9,7 +9,6 @@
  * Interface que define cada item do componente **po-breadcrumb**.
  */
 export interface PoBreadcrumbItem {
-
   /**
    * Ação executada ao clicar no item.
    *
@@ -31,5 +30,4 @@ export interface PoBreadcrumbItem {
    * > Esta propriedade é necessária para que a propriedade `p-favorite-service` consiga favoritar ou desfavoritar.
    */
   link?: string;
-
 }

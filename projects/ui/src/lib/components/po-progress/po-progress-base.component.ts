@@ -16,7 +16,6 @@ const poProgressMinValue = 0;
  */
 @Directive()
 export class PoProgressBaseComponent {
-
   private _indeterminate?: boolean;
   private _value?: number = 0;
 
@@ -133,5 +132,4 @@ export class PoProgressBaseComponent {
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;
   }
-
 }

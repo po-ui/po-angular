@@ -10,10 +10,8 @@ import { Input, Directive } from '@angular/core';
  */
 @Directive()
 export class PoLoadingBaseComponent {
-
   /**
    * Texto a ser exibido no componente.
    */
   @Input('p-text') text?: string = 'Carregando';
-
 }

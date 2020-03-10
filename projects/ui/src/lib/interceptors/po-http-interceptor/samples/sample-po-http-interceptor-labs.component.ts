@@ -9,7 +9,6 @@ import { PoRadioGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-http-interceptor-labs.component.html'
 })
 export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
-
   noMessageHeaderParam: boolean;
   requestMessage: string;
   status: string;
@@ -28,7 +27,7 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     }]
 }`;
 
-    successMessage = `{
+  successMessage = `{
     "_messages": [
         {
             "code": "200",
@@ -48,12 +47,12 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
 
   readonly statusOptions: Array<PoRadioGroupOption> = [
     { label: '200 - Success', value: '200' },
-    { label: '401 - Error', value: '401' },
+    { label: '401 - Error', value: '401' }
   ];
 
   private apiSubscription: Subscription;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   ngOnDestroy() {
     if (this.apiSubscription) {
@@ -74,7 +73,9 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     const body = JSON.parse(this.requestMessage);
     const params = { status: this.status || '' };
 
-    this.apiSubscription = this.http.post(`https://thf.totvs.com.br/sample/api/message`, body, { headers, params }).subscribe();
+    this.apiSubscription = this.http
+      .post(`https://thf.totvs.com.br/sample/api/message`, body, { headers, params })
+      .subscribe();
   }
 
   restore() {
@@ -82,5 +83,4 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     this.requestMessage = this.successMessage;
     this.status = '200';
   }
-
 }

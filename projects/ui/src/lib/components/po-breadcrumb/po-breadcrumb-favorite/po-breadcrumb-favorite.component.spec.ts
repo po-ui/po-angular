@@ -13,7 +13,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
   let fixture: ComponentFixture<PoBreadcrumbFavoriteComponent>;
   let nativeElement;
 
-  const itemActive = { label: 'Active Route', link: 'route/active'};
+  const itemActive = { label: 'Active Route', link: 'route/active' };
   const favoriteService = 'http://test.com.br';
   const paramsService = {};
 
@@ -23,7 +23,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      declarations: [PoBreadcrumbFavoriteComponent ]
+      declarations: [PoBreadcrumbFavoriteComponent]
     });
   });
 
@@ -39,7 +39,6 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     fixture.detectChanges();
 
     component['service'] = fakeService({ isFavorite: true, url: 'test/123' }) as PoBreadcrumbFavoriteService;
-
   });
 
   it('should be created', () => {
@@ -50,13 +49,12 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     const getStatus = 'getStatusFavorite';
 
     spyOn(component['service'], 'configService');
-    spyOn(component, <any> getStatus);
+    spyOn(component, <any>getStatus);
 
     component.ngOnInit();
 
     expect(component['service'].configService).toHaveBeenCalledWith(favoriteService, paramsService, itemActive);
     expect(component[getStatus]).toHaveBeenCalled();
-
   });
 
   it('should get the status favorite', () => {
@@ -84,7 +82,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     component.favorite = true;
     const setStatus = 'setStatusFavorite';
 
-    spyOn(component, <any> setStatus);
+    spyOn(component, <any>setStatus);
     component.toggleFavoriteAction();
 
     expect(component[setStatus]).toHaveBeenCalledWith(false);
@@ -94,7 +92,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     component.favorite = false;
     const setStatus = 'setStatusFavorite';
 
-    spyOn(component, <any> setStatus);
+    spyOn(component, <any>setStatus);
     component.toggleFavoriteAction();
 
     expect(component[setStatus]).toHaveBeenCalledWith(true);
@@ -124,13 +122,12 @@ describe('PoBreadcrumbFavoriteComponent', () => {
   });
 
   describe('Methods: ', () => {
-
     const fakeSubscription = <any>{ unsubscribe: () => {} };
 
     it('ngOnDestroy: should unsubscribe getSubscription.', () => {
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -140,7 +137,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     it('ngOnDestroy: should not unsubscribe if getSubscription is falsy.', () => {
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['getSubscription'] = undefined;
       component.ngOnDestroy();
@@ -151,7 +148,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     it('ngOnDestroy: should unsubscribe setSubscription.', () => {
       component['setSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -161,16 +158,14 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     it('ngOnDestroy: should not unsubscribe if setSubscription is falsy.', () => {
       component['setSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any> 'unsubscribe');
+      spyOn(fakeSubscription, <any>'unsubscribe');
 
       component['setSubscription'] = undefined;
       component.ngOnDestroy();
 
       expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
     });
-
   });
-
 });
 
 function fakeService(item) {

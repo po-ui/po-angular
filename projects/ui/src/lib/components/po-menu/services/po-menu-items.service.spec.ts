@@ -19,7 +19,6 @@ describe('PoMenuItemsService', () => {
     });
 
     menuItemsService = TestBed.inject(PoMenuItemsService);
-
   });
 
   it('should call subjectChild.next with menuItem in sendToParentMenuClicked', () => {
@@ -61,5 +60,4 @@ describe('PoMenuItemsService', () => {
 
     expect(result instanceof Observable).toBeTruthy();
   });
-
 });

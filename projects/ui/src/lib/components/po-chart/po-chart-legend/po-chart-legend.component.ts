@@ -8,9 +8,7 @@ import { PoCircularChartSeries } from '../po-chart-types/po-chart-circular/po-ch
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoChartLegendComponent {
-
   @Input('p-colors') colors: Array<string>;
 
   @Input('p-series') series: PoCircularChartSeries;
-
 }

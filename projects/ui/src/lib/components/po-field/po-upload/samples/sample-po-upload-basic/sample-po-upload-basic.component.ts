@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-upload-basic',
   templateUrl: 'sample-po-upload-basic.component.html'
 })
-export class SamplePoUploadBasicComponent { }
+export class SamplePoUploadBasicComponent {}

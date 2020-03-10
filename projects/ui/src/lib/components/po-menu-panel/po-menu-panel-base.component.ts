@@ -17,7 +17,6 @@ import { PoMenuPanelItemInternal } from './po-menu-panel-item/po-menu-panel-item
  */
 @Directive()
 export class PoMenuPanelBaseComponent {
-
   private _menus;
 
   /** Lista dos itens do `po-menu-panel`. Se o valor estiver indefinido ou inválido, será inicializado como um array vazio. */
@@ -33,7 +32,7 @@ export class PoMenuPanelBaseComponent {
   }
 
   private setMenuExtraProperties(menus: Array<PoMenuPanelItem>) {
-    menus.forEach(menuItem => this.setMenuItemProperties(<PoMenuPanelItemInternal> menuItem));
+    menus.forEach(menuItem => this.setMenuItemProperties(<PoMenuPanelItemInternal>menuItem));
   }
 
   private setMenuItemProperties(menuItem: PoMenuPanelItemInternal) {
@@ -66,5 +65,4 @@ export class PoMenuPanelBaseComponent {
   private validateMenus(menus): void {
     menus.forEach(menu => this.validateMenu(menu));
   }
-
 }

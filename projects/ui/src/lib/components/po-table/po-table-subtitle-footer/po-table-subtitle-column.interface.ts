@@ -6,7 +6,6 @@
  * Interface para configuração das colunas de legenda do Po-Table.
  */
 export interface PoTableSubtitleColumn {
-
   /** Valor da legenda. */
   value: string;
 

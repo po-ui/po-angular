@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-checkbox-group-basic',
   templateUrl: './sample-po-checkbox-group-basic.component.html'
 })
-export class SamplePoCheckboxGroupBasicComponent { }
+export class SamplePoCheckboxGroupBasicComponent {}

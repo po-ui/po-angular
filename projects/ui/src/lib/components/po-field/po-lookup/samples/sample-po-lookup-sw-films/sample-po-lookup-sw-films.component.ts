@@ -10,7 +10,6 @@ import { SamplePoLookupSwFilmsService } from './sample-po-lookup-sw-films.servic
   providers: [SamplePoLookupSwFilmsService]
 })
 export class SamplePoLookupSwFilmsComponent implements OnInit {
-
   entity;
   filmItemsFiltered;
   filterParams = 'people';
@@ -21,7 +20,7 @@ export class SamplePoLookupSwFilmsComponent implements OnInit {
     { property: 'name', label: 'Name' },
     { property: 'gender', label: 'Gender' },
     { property: 'height', label: 'Height' },
-    { property: 'mass', label: 'Mass' },
+    { property: 'mass', label: 'Mass' }
   ];
 
   readonly entities: Array<PoRadioGroupOption> = [
@@ -35,24 +34,24 @@ export class SamplePoLookupSwFilmsComponent implements OnInit {
     { property: 'title', label: 'Title' },
     { property: 'director', label: 'Director' },
     { property: 'producer', label: 'Producer' },
-    { property: 'release_date', label: 'Release date', type: 'date' },
+    { property: 'release_date', label: 'Release date', type: 'date' }
   ];
 
   readonly planetsColumns = [
     { property: 'name', label: 'Name' },
     { property: 'diameter', label: 'Diameter' },
     { property: 'population', label: 'Population' },
-    { property: 'climate', label: 'Climate' },
+    { property: 'climate', label: 'Climate' }
   ];
 
   readonly starshipsColumns = [
     { property: 'name', label: 'Name' },
     { property: 'passengers', label: 'Passengers' },
     { property: 'max_atmosphering_speed', label: 'Max Speed' },
-    { property: 'consumables', label: 'Consumables' },
+    { property: 'consumables', label: 'Consumables' }
   ];
 
-  constructor(public filterService: SamplePoLookupSwFilmsService) { }
+  constructor(public filterService: SamplePoLookupSwFilmsService) {}
 
   get entityColumns() {
     return this.getEntityColumns(this.filterParams);
@@ -93,5 +92,4 @@ export class SamplePoLookupSwFilmsComponent implements OnInit {
         return 'starship';
     }
   }
-
 }

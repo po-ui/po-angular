@@ -1,15 +1,15 @@
 <div *ngIf="showDisclaimer === true" class="po-disclaimer">
-
-  <span class="po-disclaimer-label"
-    [class.po-disclaimer-label-danger]="type === 'danger'">
-    {{getLabel()}}
+  <span class="po-disclaimer-label" [class.po-disclaimer-label-danger]="type === 'danger'">
+    {{ getLabel() }}
   </span>
 
-  <span *ngIf="hideClose === false"
+  <span
+    *ngIf="hideClose === false"
     class="po-disclaimer-remove po-icon po-icon-close po-clickable"
     tabindex="0"
     [class.po-disclaimer-remove-danger]="type === 'danger'"
     (click)="close()"
-    (keydown)="onKeyPress($event)">
+    (keydown)="onKeyPress($event)"
+  >
   </span>
 </div>

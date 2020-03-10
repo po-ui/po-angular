@@ -4,7 +4,10 @@ import { PoLanguageService } from './../../../../../ui/src/lib/services/po-langu
 
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
 import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
-import { PoPageDynamicSearchBaseComponent, poPageDynamicSearchLiteralsDefault } from './po-page-dynamic-search-base.component';
+import {
+  PoPageDynamicSearchBaseComponent,
+  poPageDynamicSearchLiteralsDefault
+} from './po-page-dynamic-search-base.component';
 
 describe('PoPageDynamicSearchBaseComponent:', () => {
   let component;
@@ -20,15 +23,14 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
-    it('filters: should set `filters` to `[]` if not Array value' , () => {
+    it('filters: should set `filters` to `[]` if not Array value', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
 
       expectPropertiesValues(component, 'filters', invalidValues, []);
     });
 
     it('filters: should update property `p-filters` with valid values', () => {
-      const validValues = [ [{ property: 'Teste 1' }], [{ property: 'Teste 2' }] ];
+      const validValues = [[{ property: 'Teste 1' }], [{ property: 'Teste 2' }]];
 
       expectPropertiesValues(component, 'filters', validValues, validValues);
     });
@@ -94,7 +96,12 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
 
         component['language'] = poLocaleDefault;
 
-        expectPropertiesValues(component, 'literals', invalidValues, poPageDynamicSearchLiteralsDefault[poLocaleDefault]);
+        expectPropertiesValues(
+          component,
+          'literals',
+          invalidValues,
+          poPageDynamicSearchLiteralsDefault[poLocaleDefault]
+        );
       });
 
       it('should get literals directly from poPageDynamicSearchLiteralsDefault if it not initialized', () => {
@@ -102,13 +109,10 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
 
         expect(component.literals).toEqual(poPageDynamicSearchLiteralsDefault['pt']);
       });
-
     });
-
   });
 
   describe('Methods:', () => {
-
     it('setAdvancedFilterLiterals: should set `advancedFilterLiterals` with `pageDynamicSearchLiterals`.', () => {
       const title = 'Filtro avançado';
       const cancelLabel = 'Fechar';
@@ -126,7 +130,5 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
 
       expect(component.advancedFilterLiterals).toEqual(expectedValue);
     });
-
   });
-
 });

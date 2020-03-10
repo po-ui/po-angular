@@ -14,11 +14,10 @@ describe('PoTreeviewItemComponent:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ BrowserAnimationsModule, FormsModule, PoFieldModule ],
-      declarations: [ PoTreeViewItemComponent, PoTreeViewItemHeaderComponent ],
-      providers: [ PoTreeViewService ]
-    })
-    .compileComponents();
+      imports: [BrowserAnimationsModule, FormsModule, PoFieldModule],
+      declarations: [PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
+      providers: [PoTreeViewService]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -36,7 +35,7 @@ describe('PoTreeviewItemComponent:', () => {
       component.item = {
         label: 'Nivel 0',
         value: '220',
-        subItems: [ { label: 'Nivel 01', value: 11 } ]
+        subItems: [{ label: 'Nivel 01', value: 11 }]
       };
 
       expect(component.hasSubItems).toBe(true);
@@ -54,12 +53,11 @@ describe('PoTreeviewItemComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('onClick: should call event.preventDefault, event.stopPropagation and treeViewService.emitExpandedEvent with item', () => {
       component.item = { label: 'Label 01', value: 12 };
 
       const fakeEvent = {
-        preventDefault: () => { },
+        preventDefault: () => {},
         stopPropagation: () => {}
       };
 
@@ -67,7 +65,7 @@ describe('PoTreeviewItemComponent:', () => {
       const spyStopPropagation = spyOn(fakeEvent, 'stopPropagation');
       const spyEmitEvent = spyOn(component['treeViewService'], 'emitExpandedEvent');
 
-      component.onClick(<any> fakeEvent);
+      component.onClick(<any>fakeEvent);
 
       expect(component.item.expanded).toBe(true);
       expect(spyPreventDefault).toHaveBeenCalled();
@@ -84,15 +82,13 @@ describe('PoTreeviewItemComponent:', () => {
 
       expect(spyEmitEvent).toHaveBeenCalledWith(component.item);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should find .po-tree-view-item-group if has subItems', () => {
       component.item = {
         label: 'Nivel 01',
-        subItems: [ { label: 'Nivel 02', value: 12 } ],
+        subItems: [{ label: 'Nivel 02', value: 12 }],
         value: '110'
       };
 
@@ -118,7 +114,5 @@ describe('PoTreeviewItemComponent:', () => {
     it('trackByFunction: should return index param', () => {
       expect(component.trackByFunction(1)).toBe(1);
     });
-
   });
-
 });

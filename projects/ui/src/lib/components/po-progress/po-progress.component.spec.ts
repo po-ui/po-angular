@@ -8,7 +8,6 @@ import { PoProgressModule } from './po-progress.module';
 import { PoProgressStatus } from './enums/po-progress-status.enum';
 
 describe('PoProgressComponent:', () => {
-
   let component: PoProgressComponent;
   let fixture: ComponentFixture<PoProgressComponent>;
 
@@ -16,9 +15,7 @@ describe('PoProgressComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        PoProgressModule
-      ]
+      imports: [PoProgressModule]
     });
   });
 
@@ -34,7 +31,6 @@ describe('PoProgressComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it(`emitCancellation: should call 'emit' with 'status'`, () => {
       component.status = PoProgressStatus.Success;
 
@@ -54,11 +50,9 @@ describe('PoProgressComponent:', () => {
 
       expect(component.retry.emit).toHaveBeenCalled();
     });
-
   });
 
   describe('Properties:', () => {
-
     it('statusClass: should return `po-progress-success` if `status` is `PoProgressStatus.Success`', () => {
       component.status = PoProgressStatus.Success;
 
@@ -134,11 +128,9 @@ describe('PoProgressComponent:', () => {
 
       expect(component.isAllowRetry).toBe(false);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain the value of text property', () => {
       component.text = 'files';
 
@@ -146,8 +138,7 @@ describe('PoProgressComponent:', () => {
 
       const text = nativeElement
         .querySelector('.po-progress-description .po-progress-description-text')
-        .textContent
-        .trim();
+        .textContent.trim();
 
       expect(text).toBe(component.text);
     });
@@ -217,7 +208,7 @@ describe('PoProgressComponent:', () => {
     });
 
     it('should contain `po-progress-default` if `status` does not exist', () => {
-      component.status = <any> 'test';
+      component.status = <any>'test';
 
       fixture.detectChanges();
 
@@ -250,7 +241,6 @@ describe('PoProgressComponent:', () => {
     });
 
     it('shouldn`t contain `po-icon-close` if `cancel` is undefined', () => {
-
       component.cancel.observers.length = 0;
 
       fixture.detectChanges();
@@ -259,7 +249,6 @@ describe('PoProgressComponent:', () => {
     });
 
     it('should emit cancellation with status if `cancel` is clicked', () => {
-
       const cancelFunction = () => {};
       component.cancel.observers.push(<any>[new Observable(cancelFunction)]);
 
@@ -321,7 +310,5 @@ describe('PoProgressComponent:', () => {
 
       expect(progressInfo).toBe(null);
     });
-
   });
-
 });

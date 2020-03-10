@@ -9,10 +9,9 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
 @Component({
   selector: 'sample-po-lookup-hero',
   templateUrl: './sample-po-lookup-hero.component.html',
-  providers: [ SamplePoLookupService ]
+  providers: [SamplePoLookupService]
 })
 export class SamplePoLookupHeroComponent {
-
   hero: string;
   vehicle: string;
 
@@ -33,7 +32,7 @@ export class SamplePoLookupHeroComponent {
     { label: 'Truck', value: 'truck' }
   ];
 
-  constructor(public service: SamplePoLookupService, public notification: PoNotificationService) { }
+  constructor(public service: SamplePoLookupService, public notification: PoNotificationService) {}
 
   fieldFormat(value) {
     return `${value.nickname} - ${value.label}`;
@@ -41,7 +40,9 @@ export class SamplePoLookupHeroComponent {
 
   startMission() {
     if (this.hero.length % 2 === 0) {
-      this.notification.success(`Mission started with hero ${this.hero} ${this.vehicle ? 'with vehicle: ' + this.vehicle : ''}.`);
+      this.notification.success(
+        `Mission started with hero ${this.hero} ${this.vehicle ? 'with vehicle: ' + this.vehicle : ''}.`
+      );
     } else {
       this.notification.error(`Choose another hero because ${this.hero} is in other mission.`);
     }
@@ -49,5 +50,4 @@ export class SamplePoLookupHeroComponent {
     this.hero = undefined;
     this.vehicle = undefined;
   }
-
 }

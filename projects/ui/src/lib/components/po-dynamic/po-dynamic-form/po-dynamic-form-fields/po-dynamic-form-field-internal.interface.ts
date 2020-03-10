@@ -8,7 +8,6 @@ import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
  * Interface utilizada para os *fields* tratados internamente.
  */
 export interface PoDynamicFormFieldInternal extends PoDynamicFormField {
-
   // classes que são repassadas ao camponente.
   componentClass?: string;
 
@@ -17,5 +16,4 @@ export interface PoDynamicFormFieldInternal extends PoDynamicFormField {
 
   /** Aplica foco no campo quando o componente for iniciado. */
   focus?: boolean;
-
 }

@@ -1,22 +1,12 @@
 <div class="sample-container">
-
-  <po-loading-overlay
-    [p-screen-lock]="properties?.includes('screenLock')"
-    [p-text]="text">
-  </po-loading-overlay>
-
+  <po-loading-overlay [p-screen-lock]="properties?.includes('screenLock')" [p-text]="text"> </po-loading-overlay>
 </div>
 
-<hr>
+<hr />
 
 <form #formProperties="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="text"
-      [(ngModel)]="text"
-      p-label="Text">
-    </po-input>
+    <po-input class="po-md-6" name="text" [(ngModel)]="text" p-label="Text"> </po-input>
 
     <po-checkbox-group
       class="po-md-6"
@@ -24,19 +14,14 @@
       [(ngModel)]="properties"
       p-label="Properties"
       [p-options]="propertiesOptions"
-      (p-change)="onChangeCheckbox($event)">
+      (p-change)="onChangeCheckbox($event)"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
     <div class="po-md-3">
-
-      <po-button
-        p-label="Sample Restore"
-        (p-click)="formProperties.reset();">
-      </po-button>
-
+      <po-button p-label="Sample Restore" (p-click)="formProperties.reset()"> </po-button>
     </div>
   </div>
-
 </form>

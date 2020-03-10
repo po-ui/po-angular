@@ -57,7 +57,11 @@ export class PoPageEditComponent extends PoPageEditBaseComponent {
   }
 
   hasAnyAction(): boolean {
-    return hasAction('cancel', this.parentContext) || hasAction('saveNew', this.parentContext) || hasAction('save', this.parentContext);
+    return (
+      hasAction('cancel', this.parentContext) ||
+      hasAction('saveNew', this.parentContext) ||
+      hasAction('save', this.parentContext)
+    );
   }
 
   hasPageHeader(): boolean {
@@ -77,5 +81,4 @@ export class PoPageEditComponent extends PoPageEditBaseComponent {
 
     return false;
   }
-
 }

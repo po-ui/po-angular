@@ -12,7 +12,9 @@ import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
 
 @Component({
-  template: `<po-tag p-label="Mock" (p-click)="onClick()"></po-tag>`
+  template: `
+    <po-tag p-label="Mock" (p-click)="onClick()"></po-tag>
+  `
 })
 class PoTagClickableComponent {
   onClick() {}
@@ -28,7 +30,7 @@ describe('PoTagComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoTagComponent, PoTagClickableComponent ]
+      declarations: [PoTagComponent, PoTagClickableComponent]
     });
   });
 
@@ -141,7 +143,7 @@ describe('PoTagComponent:', () => {
       component.value = 'value';
       component.type = PoTagType.Danger;
 
-      spyOn(component.click, <any> 'emit');
+      spyOn(component.click, <any>'emit');
 
       component.onClick();
 
@@ -174,11 +176,9 @@ describe('PoTagComponent:', () => {
 
       expect(spyOnClick).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should only start with default classes, shouldn`t have variations.', () => {
       const value = 'Po Tag';
       component.value = value;
@@ -340,7 +340,5 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
       expect(nativeElement.querySelector('.po-tag-inverse')).toBeFalsy();
     });
-
   });
-
 });

@@ -31,7 +31,6 @@ import { PoModalService } from './po-modal-service';
   templateUrl: './po-modal.component.html'
 })
 export class PoModalComponent extends PoModalBaseComponent {
-
   @ViewChild('modalContent', { read: ElementRef }) modalContent: ElementRef;
 
   private firstElement;
@@ -42,7 +41,11 @@ export class PoModalComponent extends PoModalBaseComponent {
 
   onResizeListener: () => void;
 
-  constructor(private poModalService: PoModalService, private renderer: Renderer2, private changeDetector: ChangeDetectorRef) {
+  constructor(
+    private poModalService: PoModalService,
+    private renderer: Renderer2,
+    private changeDetector: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -116,8 +119,7 @@ export class PoModalComponent extends PoModalBaseComponent {
       this.firstElement.focus();
     } else {
       const firstFieldElement =
-        this.modalContent.nativeElement.querySelectorAll(this.focusableElements)[1] ||
-        this.modalContent.nativeElement;
+        this.modalContent.nativeElement.querySelectorAll(this.focusableElements)[1] || this.modalContent.nativeElement;
       firstFieldElement.focus();
     }
   }
@@ -127,7 +129,7 @@ export class PoModalComponent extends PoModalBaseComponent {
   }
 
   private setFirstElement() {
-    this.firstElement = this.modalContent.nativeElement.querySelector(this.focusableElements) || this.modalContent.nativeElement;
+    this.firstElement =
+      this.modalContent.nativeElement.querySelector(this.focusableElements) || this.modalContent.nativeElement;
   }
-
 }

@@ -5,7 +5,8 @@
   [p-params]="customParams"
   [p-reason]="reason"
   [p-secondary-logo]="secondaryLogo"
-  [p-url-back]="url">
+  [p-url-back]="url"
+>
 </po-page-blocked-user>
 
 <po-divider p-label="Properties"></po-divider>
@@ -17,16 +18,18 @@
       name="contactPhone"
       [(ngModel)]="contactPhone"
       p-clean
-      p-help='Ex.: 11 99999 9999'
-      p-label="Contact Phone">
+      p-help="Ex.: 11 99999 9999"
+      p-label="Contact Phone"
+    >
     </po-input>
 
     <po-input
       class="po-md-6"
       name="contactMail"
       [(ngModel)]="contactMail"
-      p-help='Ex.: user@portinari.com.br'
-      p-label="Contact Mail">
+      p-help="Ex.: user@portinari.com.br"
+      p-label="Contact Mail"
+    >
     </po-input>
 
     <po-radio-group
@@ -35,7 +38,8 @@
       [(ngModel)]="reason"
       p-columns="3"
       p-label="Reason Screen Type"
-      [p-options]="reasonOptions">
+      [p-options]="reasonOptions"
+    >
     </po-radio-group>
 
     <po-input
@@ -45,7 +49,8 @@
       p-clean
       p-help='Ex.: {"attempts": 20, "days": 20, "hours": 20}'
       p-label="Custom Params"
-      (p-change)="changeLiterals()">
+      (p-change)="changeLiterals()"
+    >
     </po-input>
 
     <po-input
@@ -53,32 +58,18 @@
       name="url"
       [(ngModel)]="url"
       p-clean
-      p-help='Ex.: https://portinari.io/home'
-      p-label="URL Link">
+      p-help="Ex.: https://portinari.io/home"
+      p-label="URL Link"
+    >
     </po-input>
 
-    <po-input
-      class="po-lg-6"
-      name="logo"
-      [(ngModel)]="logo"
-      p-clean
-      p-label="Logo">
-    </po-input>
+    <po-input class="po-lg-6" name="logo" [(ngModel)]="logo" p-clean p-label="Logo"> </po-input>
 
-    <po-input
-      class="po-lg-6"
-      name="secondaryLogo"
-      [(ngModel)]="secondaryLogo"
-      p-clean
-      p-label="Secondary logo">
+    <po-input class="po-lg-6" name="secondaryLogo" [(ngModel)]="secondaryLogo" p-clean p-label="Secondary logo">
     </po-input>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

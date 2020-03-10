@@ -19,12 +19,15 @@ export const expectPropertiesValues = (comp: any, property: string, testedValues
   }
 
   testedValues.forEach((value, index) => {
-    const expectValue = (expectValues[index] || expectValues[index] === 0) ? expectValues[index] : expectValues[0];
+    const expectValue = expectValues[index] || expectValues[index] === 0 ? expectValues[index] : expectValues[0];
 
     comp[property] = value;
-    const errorMessage = comp[property] === undefined
-      ? `method getter not defined for property "${property}"`
-      : `setter called with "${value}" (${typeof value}), returned "${comp[property]}", but expected "${expectValue}"`;
+    const errorMessage =
+      comp[property] === undefined
+        ? `method getter not defined for property "${property}"`
+        : `setter called with "${value}" (${typeof value}), returned "${
+            comp[property]
+          }", but expected "${expectValue}"`;
 
     if (expectValue instanceof Array || expectValue instanceof Object) {
       expect(comp[property]).toEqual(expectValue, errorMessage);

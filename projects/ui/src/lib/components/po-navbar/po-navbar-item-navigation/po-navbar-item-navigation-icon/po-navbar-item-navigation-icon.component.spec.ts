@@ -11,7 +11,7 @@ describe('PoNavbarItemNavigationIconComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoNavbarItemNavigationIconComponent ]
+      declarations: [PoNavbarItemNavigationIconComponent]
     });
   });
 
@@ -29,7 +29,6 @@ describe('PoNavbarItemNavigationIconComponent:', () => {
   });
 
   describe('Templates: ', () => {
-
     it('should contain `po-navbar-item-navigation-icon-disabled` if disabled is true', () => {
       component.disabled = true;
 
@@ -89,7 +88,5 @@ describe('PoNavbarItemNavigationIconComponent:', () => {
 
       expect(component.click.emit).not.toHaveBeenCalled();
     });
-
   });
-
 });

@@ -4,10 +4,9 @@ import { PoCheckboxGroupOption, PoProgressStatus, PoRadioGroupOption } from '@po
 
 @Component({
   selector: 'sample-po-progress-labs',
-  templateUrl: './sample-po-progress-labs.component.html',
+  templateUrl: './sample-po-progress-labs.component.html'
 })
 export class SamplePoProgressLabsComponent implements OnInit {
-
   event: any;
   info: string;
   infoIcon: string;
@@ -23,9 +22,7 @@ export class SamplePoProgressLabsComponent implements OnInit {
     { label: 'po-icon-no-signal', value: 'po-icon-no-signal' }
   ];
 
-  propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { label: 'Indeterminate', value: 'indeterminate' }
-  ];
+  propertiesOptions: Array<PoCheckboxGroupOption> = [{ label: 'Indeterminate', value: 'indeterminate' }];
 
   statusOptions: Array<PoRadioGroupOption> = [
     { label: 'Default', value: PoProgressStatus.Default },
@@ -50,5 +47,4 @@ export class SamplePoProgressLabsComponent implements OnInit {
     this.text = undefined;
     this.value = undefined;
   }
-
 }

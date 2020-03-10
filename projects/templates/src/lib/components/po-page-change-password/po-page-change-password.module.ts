@@ -16,22 +16,9 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
  * Módulo do template do po-page-change-password.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-
-    PoModule,
-    PoPageBackgroundModule
-  ],
-  declarations: [
-    PoPageChangePasswordComponent
-  ],
-  providers: [
-    PoPageChangePasswordService
-  ],
-  exports: [
-    PoPageChangePasswordComponent
-  ]
+  imports: [CommonModule, FormsModule, RouterModule, PoModule, PoPageBackgroundModule],
+  declarations: [PoPageChangePasswordComponent],
+  providers: [PoPageChangePasswordService],
+  exports: [PoPageChangePasswordComponent]
 })
-export class PoPageChangePasswordModule { }
+export class PoPageChangePasswordModule {}

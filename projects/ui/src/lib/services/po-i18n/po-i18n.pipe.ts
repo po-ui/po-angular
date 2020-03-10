@@ -16,4 +16,4 @@ import { PoI18nBasePipe } from './po-i18n-base.pipe';
 @Pipe({
   name: 'poI18n'
 })
-export class PoI18nPipe extends PoI18nBasePipe implements PipeTransform { }
+export class PoI18nPipe extends PoI18nBasePipe implements PipeTransform {}

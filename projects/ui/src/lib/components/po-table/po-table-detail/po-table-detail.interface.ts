@@ -8,7 +8,6 @@ import { PoTableDetailColumn } from './po-table-detail-column.interface';
  * Interface para configuração do _detail_ do componente `po-table`.
  */
 export interface PoTableDetail {
-
   /**
    * Define uma lista do tipo `PoTableDetailColumn` para as colunas do objet *detail*. Por exemplo:
    *
@@ -37,5 +36,4 @@ export interface PoTableDetail {
    * - `none`: Remove o cabeçalho do _detail_.
    */
   typeHeader?: string;
-
 }

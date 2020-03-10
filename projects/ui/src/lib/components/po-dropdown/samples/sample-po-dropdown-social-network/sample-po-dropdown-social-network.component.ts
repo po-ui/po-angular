@@ -7,7 +7,6 @@ import { PoNotificationService } from '@portinari/portinari-ui';
   templateUrl: './sample-po-dropdown-social-network.component.html'
 })
 export class SamplePoDropdownSocialNetworkComponent implements OnInit {
-
   currentFriend: object;
   userAvatar: string = 'https://lorempixel.com/144/144/';
 
@@ -25,7 +24,7 @@ export class SamplePoDropdownSocialNetworkComponent implements OnInit {
 
   private indexFriend: number = 0;
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.setCurrentFriend(0);
@@ -41,5 +40,4 @@ export class SamplePoDropdownSocialNetworkComponent implements OnInit {
   private setCurrentFriend(index: number) {
     this.currentFriend = this.newFriends[index];
   }
-
 }

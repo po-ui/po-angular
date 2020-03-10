@@ -38,18 +38,13 @@ import { PoAccordionItemHeaderComponent } from './po-accordion-item-header/po-ac
  * ```
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [
     PoAccordionComponent,
     PoAccordionItemBodyComponent,
     PoAccordionItemComponent,
     PoAccordionItemHeaderComponent
   ],
-  exports: [
-    PoAccordionComponent,
-    PoAccordionItemComponent
-  ]
+  exports: [PoAccordionComponent, PoAccordionItemComponent]
 })
-export class PoAccordionModule { }
+export class PoAccordionModule {}

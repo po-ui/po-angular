@@ -8,30 +8,31 @@ import { PoDialogBaseService } from './po-dialog-base.service';
 import { PoDialogType } from './po-dialog.enum';
 
 class PoDialogService extends PoDialogBaseService {
-  openDialog(dialogType: PoDialogType,
-             dialogOptions: PoDialogAlertOptions | PoDialogConfirmOptions,
-             viewContainerRef?: ViewContainerRef): void { }
+  openDialog(
+    dialogType: PoDialogType,
+    dialogOptions: PoDialogAlertOptions | PoDialogConfirmOptions,
+    viewContainerRef?: ViewContainerRef
+  ): void {}
 }
 
 describe('PoDialogBaseService ', () => {
-
   const alertOptions: PoDialogAlertOptions = {
     title: 'Title',
     message: 'Message',
-    ok: () => { }
+    ok: () => {}
   };
 
   const confirmOptionsWithCancel: PoDialogConfirmOptions = {
     title: 'Title',
     message: 'Message',
-    confirm: () => { },
-    cancel: () => { }
+    confirm: () => {},
+    cancel: () => {}
   };
 
   const confirmOptionsWithoutCancel: PoDialogConfirmOptions = {
     title: 'Title',
     message: 'Message',
-    confirm: () => { }
+    confirm: () => {}
   };
 
   let service: PoDialogBaseService;

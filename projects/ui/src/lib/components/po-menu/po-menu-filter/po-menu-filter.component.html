@@ -1,17 +1,17 @@
 <div class="po-menu-filter-container">
-
-  <input #inputFilter
+  <input
+    #inputFilter
     type="text"
     class="po-menu-filter"
     placeholder="Pesquisar"
-    (keyup)="filterItems(inputFilter.value)">
+    (keyup)="filterItems(inputFilter.value)"
+  />
 
   <div class="po-menu-filter-search-icon-container">
     <span *ngIf="!loading" class="po-icon po-menu-filter-icon po-icon-search"></span>
-    <po-loading-icon *ngIf="loading" ></po-loading-icon>
+    <po-loading-icon *ngIf="loading"></po-loading-icon>
   </div>
   <div class="po-menu-filter-close-icon-container">
     <po-clean [p-element-ref]="inputFilterElement" (p-change-event)="filterItems(inputFilter.value)"></po-clean>
   </div>
-
 </div>

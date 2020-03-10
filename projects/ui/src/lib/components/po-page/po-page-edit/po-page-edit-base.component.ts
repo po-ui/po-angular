@@ -7,22 +7,22 @@ import { PoPageContentComponent } from '../po-page-content/po-page-content.compo
 import { PoPageEditLiterals } from './po-page-edit-literals.interface';
 
 export const poPageEditLiteralsDefault = {
-  en: <PoPageEditLiterals> {
+  en: <PoPageEditLiterals>{
     cancel: 'Cancel',
     save: 'Save',
     saveNew: 'Save and New'
   },
-  es: <PoPageEditLiterals> {
+  es: <PoPageEditLiterals>{
     cancel: 'Cancelar',
     save: 'Guardar',
     saveNew: 'Guardar y Nuevo'
   },
-  pt: <PoPageEditLiterals> {
+  pt: <PoPageEditLiterals>{
     cancel: 'Cancelar',
     save: 'Salvar',
     saveNew: 'Salvar e Novo'
   },
-  ru: <PoPageEditLiterals> {
+  ru: <PoPageEditLiterals>{
     cancel: 'отменить',
     save: 'экономить',
     saveNew: 'Сохранить и новый'
@@ -48,7 +48,6 @@ export const poPageEditLiteralsDefault = {
  */
 @Directive()
 export class PoPageEditBaseComponent {
-
   private _literals: PoPageEditLiterals;
   private _title: string;
 
@@ -119,5 +118,4 @@ export class PoPageEditBaseComponent {
   get title() {
     return this._title;
   }
-
 }

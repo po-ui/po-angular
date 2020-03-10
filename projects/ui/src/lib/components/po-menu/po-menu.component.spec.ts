@@ -22,10 +22,10 @@ import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
 
 @Component({ template: 'Search' })
-export class SearchComponent { }
+export class SearchComponent {}
 
 @Component({ template: 'Home' })
-export class HomeComponent { }
+export class HomeComponent {}
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -35,7 +35,6 @@ export const routes: Routes = [
 ];
 
 describe('PoMenuComponent:', () => {
-
   let component: PoMenuComponent;
 
   let fixture: ComponentFixture<PoMenuComponent>;
@@ -45,11 +44,7 @@ describe('PoMenuComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes(routes),
-        PoLoadingModule
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes), PoLoadingModule],
       declarations: [
         PoCleanComponent,
         PoMenuComponent,
@@ -59,7 +54,7 @@ describe('PoMenuComponent:', () => {
         SearchComponent,
         PoBadgeComponent
       ],
-      providers: [ PoMenuItemsService, PoMenuService ]
+      providers: [PoMenuItemsService, PoMenuService]
     });
   });
 
@@ -74,33 +69,41 @@ describe('PoMenuComponent:', () => {
     component.menus = [
       { label: 'Home', link: './home', icon: 'home' },
       {
-        label: 'sub PO', icon: 'clock', subItems: [
+        label: 'sub PO',
+        icon: 'clock',
+        subItems: [
           { label: 'Search', link: '/search' },
           { label: 'Google', link: 'http://google.com.br' },
-          { label: 'Just Action', action: 'testFunction' },
+          { label: 'Just Action', action: 'testFunction' }
         ]
       },
       { label: 'Google', icon: 'star', link: 'http://google.com.br' },
-      { label: 'Commom Function', icon: 'share', action: () => { } },
+      { label: 'Commom Function', icon: 'share', action: () => {} },
       { label: 'Function as string', icon: 'company', action: 'testFunction' },
-      { label: 'Level 1.1', icon: 'chat', subItems: [
-        { label: 'Level 2.1', subItems: [
-          { label: 'Level 3.1', subItems: [
-            { label: 'Level 4.1', subItems: [
-              { label: 'Level 5.1', subItems: [
-                { label: 'Level 6.1' }
-              ]}
-            ]},
-            { label: 'Level 4.2' },
-            { label: 'Level 4.2', subItems: [
-              { label: 'Level 5.1 (não permitido)' },
-              { label: 'Level 5.2 (não permitido)' }
-            ] },
-          ]},
-          { label: 'Level 3.2' }
-        ]},
-        { label: 'Level 2.2' },
-        { label: 'Level 2.3' }]
+      {
+        label: 'Level 1.1',
+        icon: 'chat',
+        subItems: [
+          {
+            label: 'Level 2.1',
+            subItems: [
+              {
+                label: 'Level 3.1',
+                subItems: [
+                  { label: 'Level 4.1', subItems: [{ label: 'Level 5.1', subItems: [{ label: 'Level 6.1' }] }] },
+                  { label: 'Level 4.2' },
+                  {
+                    label: 'Level 4.2',
+                    subItems: [{ label: 'Level 5.1 (não permitido)' }, { label: 'Level 5.2 (não permitido)' }]
+                  }
+                ]
+              },
+              { label: 'Level 3.2' }
+            ]
+          },
+          { label: 'Level 2.2' },
+          { label: 'Level 2.3' }
+        ]
       },
       { label: 'Level 1.2', icon: 'copy' }
     ];
@@ -116,7 +119,7 @@ describe('PoMenuComponent:', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create menu items' , () => {
+  it('should create menu items', () => {
     expect(nativeElement.querySelectorAll('po-menu-item').length).toBe(18); // All itens that are until level 4
   });
 
@@ -172,7 +175,6 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should open external link', () => {
-
     spyOn(window, 'open');
 
     component['clickMenuItem'](component.menus[2]);
@@ -183,8 +185,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should call action', () => {
-
-    spyOn(component.menus[3], <any> 'action');
+    spyOn(component.menus[3], <any>'action');
 
     component['clickMenuItem'](component.menus[3]);
     expect(component.activeMenuItem).toBe(undefined);
@@ -193,8 +194,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should call parent action', () => {
-
-    component['testFunction'] = function(menuItem: PoMenuItem) { };
+    component['testFunction'] = function(menuItem: PoMenuItem) {};
     component.parentRef = component;
     spyOn(component.parentRef, 'testFunction');
     component['clickMenuItem'](component.menus[4]);
@@ -215,11 +215,9 @@ describe('PoMenuComponent:', () => {
     fixture.detectChanges();
     expect(nativeElement.querySelectorAll('.po-menu-item-grouper-up').length).toBe(1);
     expect(nativeElement.querySelector('.po-menu-sub-items').style.maxHeight).toBe('294px');
-
   });
 
   it('should close menu group', () => {
-
     component['clickMenuItem'](component.menus[1]); // opened
     expect(component.groupedMenuItem['isOpened']).toBe(true);
 
@@ -266,18 +264,27 @@ describe('PoMenuComponent:', () => {
   it('should filter items after 300 milliseconds in debounceFilter()', fakeAsync(() => {
     component['filteringItems'] = false;
     component.menus = [
-      {label: 'teste', link: 'a'},
-      {label: 'item teste', link: 'b'},
-      {label: 'item', subItems: [
-        {label: 'subitem nível 2 teste', link: 'd'},
-        {label: 'subitem nível 2', subItems: [
-          {label: 'subitem nivel 3 teste', link: 'd'},
-          {label: 'subitem nivel 3 ', subItems: [
-            {label: 'subitem nivel 4 teste', link: 'd'},
-            {label: 'subitem nivel 4', link: 'e'}
-          ]}
-        ]}
-      ]}
+      { label: 'teste', link: 'a' },
+      { label: 'item teste', link: 'b' },
+      {
+        label: 'item',
+        subItems: [
+          { label: 'subitem nível 2 teste', link: 'd' },
+          {
+            label: 'subitem nível 2',
+            subItems: [
+              { label: 'subitem nivel 3 teste', link: 'd' },
+              {
+                label: 'subitem nivel 3 ',
+                subItems: [
+                  { label: 'subitem nivel 4 teste', link: 'd' },
+                  { label: 'subitem nivel 4', link: 'e' }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     ];
 
     component.debounceFilter('teste');
@@ -288,9 +295,9 @@ describe('PoMenuComponent:', () => {
 
   it('shouldn`t filter items because parameter is empty in debounceFilter()', fakeAsync(() => {
     component.menus = [
-      {label: 'teste', link: 'a'},
-      {label: 'item teste', link: 'b'},
-      {label: 'item', link: 'c'},
+      { label: 'teste', link: 'a' },
+      { label: 'item teste', link: 'b' },
+      { label: 'item', link: 'c' }
     ];
 
     component.debounceFilter('');
@@ -300,9 +307,7 @@ describe('PoMenuComponent:', () => {
   }));
 
   it('should set filteringItems to false when the item clicked is subItems', () => {
-    const menuItem = {label: 'Menu item', type: 'subItems', subItems: [
-      {label: 'Menu subItem', link: 'test'}
-    ]};
+    const menuItem = { label: 'Menu item', type: 'subItems', subItems: [{ label: 'Menu subItem', link: 'test' }] };
 
     component['filteringItems'] = true;
     component['clickMenuItem'](menuItem);
@@ -310,7 +315,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should not set filteringItems to false when the clicked item is not subitems', () => {
-    const menuItem = {label: 'Menu item', type: 'externalLink', link: 'http://test.com'};
+    const menuItem = { label: 'Menu item', type: 'externalLink', link: 'http://test.com' };
 
     component['filteringItems'] = true;
     component['clickMenuItem'](menuItem);
@@ -318,7 +323,6 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should receive from child active menu item', () => {
-
     const menuItem = { label: 'Teste', type: 'internalLink' };
 
     component['menuItemsService'] = fakeMenuService(menuItem) as PoMenuItemsService;
@@ -327,7 +331,6 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should receive from child grouped menu item', () => {
-
     const menuItem = { label: 'Teste', type: 'subItems' };
 
     component['menuItemsService'] = fakeMenuService(menuItem) as PoMenuItemsService;
@@ -363,7 +366,7 @@ describe('PoMenuComponent:', () => {
   // TODO Ng V9
   xit('should not navigate if has same link', done => {
     spyOn(component, 'activateMenuByUrl');
-    spyOn(component, <any> 'checkingRouterChildrenFragments').and.returnValue('/search');
+    spyOn(component, <any>'checkingRouterChildrenFragments').and.returnValue('/search');
 
     component.linkActive = '/search';
 
@@ -509,10 +512,9 @@ describe('PoMenuComponent:', () => {
   });
 
   it('itemSubscription: should `unsubscribe` `itemSubscription` on destroy.', () => {
-
     component['itemSubscription'] = <any>{ unsubscribe: () => {} };
 
-    spyOn(component['itemSubscription'], <any> 'unsubscribe');
+    spyOn(component['itemSubscription'], <any>'unsubscribe');
 
     component.ngOnDestroy();
 
@@ -520,10 +522,9 @@ describe('PoMenuComponent:', () => {
   });
 
   it('routeSubscription: should `unsubscribe` `routeSubscription` on destroy.', () => {
-
     component['routeSubscription'] = <any>{ unsubscribe: () => {} };
 
-    spyOn(component['routeSubscription'], <any> 'unsubscribe');
+    spyOn(component['routeSubscription'], <any>'unsubscribe');
 
     component.ngOnDestroy();
 
@@ -535,12 +536,12 @@ describe('PoMenuComponent:', () => {
 
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('.po-menu-item-no-data .po-menu-icon-label').innerHTML.trim())
-      .toBe(component.literals.itemNotFound);
+    expect(nativeElement.querySelector('.po-menu-item-no-data .po-menu-icon-label').innerHTML.trim()).toBe(
+      component.literals.itemNotFound
+    );
   });
 
   describe('Templates:', () => {
-
     it('should show collapse button if `enableCollapseButton` is enabled', () => {
       component.allowCollapseMenu = true;
       component.collapsed = false;
@@ -731,7 +732,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('should contain `po-menu-header-template` if `enableCollapse` is false and `menuHeaderTemplate` is defined', () => {
-      component.menuHeaderTemplate = <any> { templateRef: null };
+      component.menuHeaderTemplate = <any>{ templateRef: null };
 
       spyOnProperty(component, 'enableCollapse').and.returnValue(false);
 
@@ -741,7 +742,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('shouldn`t contain `po-menu-header-template` if `enableCollapse` is true and `menuHeaderTemplate` is defined', () => {
-      component.menuHeaderTemplate = <any> { templateRef: null };
+      component.menuHeaderTemplate = <any>{ templateRef: null };
 
       spyOnProperty(component, 'enableCollapse').and.returnValue(true);
 
@@ -759,16 +760,14 @@ describe('PoMenuComponent:', () => {
 
       expect(nativeElement.querySelector('.po-menu-header-template')).toBeFalsy();
     });
-
   });
 
   describe('Methods:', () => {
-
     it(`ngOnInit: should call 'subscribeToMenuItem', 'subscribeToRoute',
       'checkingRouterChildrenFragments' and 'checkActiveMenuByUrl'`, fakeAsync(() => {
       spyOn(component, 'subscribeToMenuItem');
       spyOn(component, 'subscribeToRoute');
-      spyOn(component, <any> 'checkingRouterChildrenFragments');
+      spyOn(component, <any>'checkingRouterChildrenFragments');
       spyOn(component, 'checkActiveMenuByUrl');
 
       component.ngOnInit();
@@ -784,7 +783,7 @@ describe('PoMenuComponent:', () => {
     it(`ngOnDestroy: should call 'resizeListener' if has 'resizeListener`, () => {
       component['createResizeListener']();
 
-      spyOn(component, <any> 'resizeListener');
+      spyOn(component, <any>'resizeListener');
 
       component.ngOnDestroy();
 
@@ -817,7 +816,6 @@ describe('PoMenuComponent:', () => {
     });
 
     describe('validateToggleMenu', () => {
-
       it(`shouldn't call 'toggleMenuCollapse' if 'allowCollapseMenu' is 'false'`, () => {
         const collapsed = true;
         component.allowCollapseMenu = false;
@@ -884,7 +882,6 @@ describe('PoMenuComponent:', () => {
 
     it(`toggleMenuCollapse: should call 'toggleGroupedMenuItem' and 'getActiveMenuParent' if 'groupedMenuItem'
       and 'activeMenuItem' are defined`, () => {
-
       const fakeThis = {
         collapsed: true,
         validateCollapseClass: () => {},
@@ -910,7 +907,6 @@ describe('PoMenuComponent:', () => {
 
     it(`toggleMenuCollapse: shouldn't call 'toggleGroupedMenuItem' and 'getActiveMenuParent' if 'groupedMenuItem'
       is undefined`, () => {
-
       const fakeThis = {
         collapsed: true,
         validateCollapseClass: () => {},
@@ -936,7 +932,6 @@ describe('PoMenuComponent:', () => {
 
     it(`toggleMenuCollapse: shouldn't call 'toggleGroupedMenuItem' and 'getActiveMenuParent' if 'activeMenuItem'
       is undefined`, () => {
-
       const fakeThis = {
         collapsed: true,
         validateCollapseClass: () => {},
@@ -958,7 +953,6 @@ describe('PoMenuComponent:', () => {
 
     it(`toggleMenuCollapse: shouldn't call 'toggleGroupedMenuItem' and 'getActiveMenuParent' if 'activeMenuItem'
       and 'groupedMenuItem' are undefined`, () => {
-
       const fakeThis = {
         collapsed: true,
         validateCollapseClass: () => {},
@@ -998,13 +992,14 @@ describe('PoMenuComponent:', () => {
 
       expect(fakeThis.activateCollapseSubMenuItem).toHaveBeenCalled();
       expect(fakeThis.menuItemsService.sendToChildMenuClicked).toHaveBeenCalledWith({
-        active: fakeThis.activeMenuItem, grouped: fakeThis.groupedMenuItem, activatedByRoute: true
+        active: fakeThis.activeMenuItem,
+        grouped: fakeThis.groupedMenuItem,
+        activatedByRoute: true
       });
     });
 
     it(`toggleMenuCollapse: shouldn't call 'activateCollapseSubMenuItem' and 'sendToChildMenuClicked' if
       'activeMenuItem' is undefined`, () => {
-
       const fakeThis = {
         collapsed: true,
         validateCollapseClass: () => {},
@@ -1066,7 +1061,7 @@ describe('PoMenuComponent:', () => {
 
     it(`toggleMenuMobile: should set 'menuMobileOpened' to true and call 'createResizeListener' if 'isMobile' is 'false'`, () => {
       spyOn(component, <any>'createResizeListener');
-      spyOn(utilsFunctions, <any> 'isMobile').and.returnValue(false);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
 
       component.toggleMenuMobile();
 
@@ -1076,7 +1071,7 @@ describe('PoMenuComponent:', () => {
 
     it(`toggleMenuMobile: should set 'menuMobileOpened' to true and doesn't call 'createResizeListener' if 'isMobile' is 'true'`, () => {
       spyOn(component, <any>'createResizeListener');
-      spyOn(utilsFunctions, <any> 'isMobile').and.returnValue(true);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
 
       component.toggleMenuMobile();
 
@@ -1087,7 +1082,7 @@ describe('PoMenuComponent:', () => {
     it(`toggleMenuMobile: should set 'menuMobileOpened' to false and doesn't call 'createResizeListener'`, () => {
       component.mobileOpened = true;
 
-      spyOn(utilsFunctions, <any> 'isMobile').and.returnValue(false);
+      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
       spyOn(component, <any>'createResizeListener');
 
       component.toggleMenuMobile();
@@ -1219,20 +1214,19 @@ describe('PoMenuComponent:', () => {
       component.activeMenuItem = activeMenuItem;
       fixture.detectChanges();
 
-      spyOn(component, <any> 'clearGroupMenuIfFirstLevel');
+      spyOn(component, <any>'clearGroupMenuIfFirstLevel');
 
       component['activateCollapseSubMenuItem']();
 
       expect(component['clearGroupMenuIfFirstLevel']).toHaveBeenCalled();
     });
 
-    it('activateCollapseSubMenuItem: should call `openParentMenu` with `activeMenuItem` if menu isn`t collapsed and has a subitem active',
-    () => {
+    it('activateCollapseSubMenuItem: should call `openParentMenu` with `activeMenuItem` if menu isn`t collapsed and has a subitem active', () => {
       component.collapsed = false;
       component.activeMenuItem = <any>{ label: 'test', level: 2 };
       component.groupedMenuItem = <any>{ label: 'test', level: 1 };
 
-      spyOn(component, <any> 'openParentMenu');
+      spyOn(component, <any>'openParentMenu');
 
       component['activateCollapseSubMenuItem']();
 
@@ -1302,7 +1296,7 @@ describe('PoMenuComponent:', () => {
       component.activeMenuItem = activeMenu;
       component.groupedMenuItem = groupedMenu;
 
-      spyOn(component, <any> 'activateMenuItem');
+      spyOn(component, <any>'activateMenuItem');
       spyOn(component, <any>'isRootMenuEqualGroupedMenu').and.returnValue(true);
 
       component['groupMenuItem'](groupedMenu);
@@ -1317,7 +1311,7 @@ describe('PoMenuComponent:', () => {
       component.activeMenuItem = activeMenu;
       component.groupedMenuItem = groupedMenu;
 
-      spyOn(component, <any> 'activateMenuItem');
+      spyOn(component, <any>'activateMenuItem');
       spyOn(component, <any>'isRootMenuEqualGroupedMenu').and.returnValue(false);
 
       component['groupMenuItem'](groupedMenu);
@@ -1327,23 +1321,23 @@ describe('PoMenuComponent:', () => {
 
     it('isRootMenuEqualGroupedMenu: should return true if `activeMenuItem` root parent is `groupedMenuItem`', () => {
       const activeMenuItem = { label: 'active menu', id: '1', level: 2 };
-      const groupedMenuItem = { label: 'grouped menu', id: '2', level: 1, subItems: [ activeMenuItem ] };
+      const groupedMenuItem = { label: 'grouped menu', id: '2', level: 1, subItems: [activeMenuItem] };
 
       expect(component['isRootMenuEqualGroupedMenu']([groupedMenuItem], activeMenuItem, groupedMenuItem)).toBe(true);
     });
 
     it('isRootMenuEqualGroupedMenu: should return false if `activeMenuItem` root parent isn`t `groupedMenuItem`', () => {
       const activeMenuItem = { label: 'active menu', id: '1', level: 3 };
-      const groupedMenuItem = { label: 'grouped menu', id: '2', level: 2, subItems: [ activeMenuItem ] };
-      const rootMenuItem = { label: 'root menu', id: '3', level: 1 , subItems: [ groupedMenuItem ]};
+      const groupedMenuItem = { label: 'grouped menu', id: '2', level: 2, subItems: [activeMenuItem] };
+      const rootMenuItem = { label: 'root menu', id: '3', level: 1, subItems: [groupedMenuItem] };
 
       expect(component['isRootMenuEqualGroupedMenu']([rootMenuItem], activeMenuItem, groupedMenuItem)).toBe(false);
     });
 
     it('getActiveMenuParent: should return active menu root parent if it`s a subMenu', () => {
       const activeMenuItem = { label: 'active menu', id: '1', level: 3 };
-      const groupedMenuItem = { label: 'grouped menu', id: '2', level: 2, subItems: [ activeMenuItem ] };
-      const rootMenuItem = { label: 'root menu', id: '3', level: 1 , subItems: [ groupedMenuItem ]};
+      const groupedMenuItem = { label: 'grouped menu', id: '2', level: 2, subItems: [activeMenuItem] };
+      const rootMenuItem = { label: 'root menu', id: '3', level: 1, subItems: [groupedMenuItem] };
 
       const rootParent = component['getActiveMenuParent']([rootMenuItem], activeMenuItem, groupedMenuItem);
       expect(rootParent).toBe(rootMenuItem);
@@ -1359,13 +1353,11 @@ describe('PoMenuComponent:', () => {
 
     // TODO Ng V9
     xit('subscribeToRoute: should call `checkActiveMenuByUrl` if router emits an event', done => {
-
       spyOn(component, 'checkActiveMenuByUrl');
       spyOn(component, <any>'checkingRouterChildrenFragments');
 
       fixture.ngZone.run(() => {
         router.navigate(['/search']).then(() => {
-
           component.subscribeToRoute();
 
           expect(component.checkActiveMenuByUrl).toHaveBeenCalled();
@@ -1411,7 +1403,7 @@ describe('PoMenuComponent:', () => {
       const expectedValue = { label: 'Menu 1', link: 'menu1' };
       const menuItem = { icon: 'copy', label: 'Menu 1', link: 'menu1' };
 
-      const spySetMenuItemProperties = spyOn(component, <any> 'setMenuItemProperties');
+      const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
 
       const menuItemFiltered = component['convertToMenuItemFiltered'](menuItem);
 
@@ -1422,11 +1414,11 @@ describe('PoMenuComponent:', () => {
     it('convertToMenuItemFiltered: should return { link: ``, label: `` } if `menuItem` is undefined', () => {
       const menuItem = undefined;
 
-      const spySetMenuItemProperties = spyOn(component, <any> 'setMenuItemProperties');
+      const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
 
       const menuItemFiltered = component['convertToMenuItemFiltered'](menuItem);
 
-      expect(menuItemFiltered).toEqual(<any> { label: '', link: '' });
+      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '' });
       expect(spySetMenuItemProperties).toHaveBeenCalled();
     });
 
@@ -1436,16 +1428,14 @@ describe('PoMenuComponent:', () => {
         { label: 'Company Account', link: '/companyAccount' }
       ];
 
-      const notFoundMenus = [
-        { label: 'Test', link: '/test' }
-      ];
+      const notFoundMenus = [{ label: 'Test', link: '/test' }];
 
-      const menus = [ ...foundMenus, ...notFoundMenus ];
+      const menus = [...foundMenus, ...notFoundMenus];
       const filter = 'acc';
 
       component.menus = menus;
 
-      spyOn(component, <any> 'findItems').and.callThrough();
+      spyOn(component, <any>'findItems').and.callThrough();
 
       const filteredItems = component['filterLocalItems'](filter);
 
@@ -1510,8 +1500,8 @@ describe('PoMenuComponent:', () => {
       component.menus = menus;
       component.filterService = undefined;
 
-      const spyFilterLocalItems = spyOn(component, <any> 'filterLocalItems').and.returnValue(foundMenus);
-      const spyFilterOnService = spyOn(component, <any> 'filterOnService');
+      const spyFilterLocalItems = spyOn(component, <any>'filterLocalItems').and.returnValue(foundMenus);
+      const spyFilterOnService = spyOn(component, <any>'filterOnService');
 
       component['filterItems'](filter);
 
@@ -1531,8 +1521,8 @@ describe('PoMenuComponent:', () => {
       component.menus = menus;
       component.service = 'http://po.portinari.com.br';
 
-      const spyFilterOnService = spyOn(component, <any> 'filterOnService').and.returnValue(Promise.resolve(foundMenus));
-      const spyFilterLocalItems = spyOn(component, <any> 'filterLocalItems');
+      const spyFilterOnService = spyOn(component, <any>'filterOnService').and.returnValue(Promise.resolve(foundMenus));
+      const spyFilterLocalItems = spyOn(component, <any>'filterLocalItems');
 
       await component['filterItems'](filter);
 
@@ -1545,7 +1535,6 @@ describe('PoMenuComponent:', () => {
 
     it(`filterProcess: should set 'filterLoading' to false call 'showNoData', 'changeDetector.detectChanges' and
       'sendToChildMenuClicked' when the return of 'filterItems' promise is resolved`, fakeAsync(() => {
-
       spyOn(component, <any>'showNoData');
       spyOn(component['changeDetector'], 'detectChanges');
       spyOn(component['menuItemsService'], 'sendToChildMenuClicked');
@@ -1562,11 +1551,10 @@ describe('PoMenuComponent:', () => {
     }));
 
     it(`filterProcess: should set 'filterLoading' to false when the return of 'filterItems' promise is rejected`, () => {
-
       const error = 'error value';
 
       const fakeThis = {
-        filterItems: () => ({ then: () => ({ catch: callback => callback(error) })})
+        filterItems: () => ({ then: () => ({ catch: callback => callback(error) }) })
       };
 
       spyOn(Promise, 'reject');
@@ -1578,7 +1566,6 @@ describe('PoMenuComponent:', () => {
     });
 
     it(`filterProcess: should set 'filterLoading' to true when 'filterProcess' is called`, () => {
-
       component.filterLoading = false;
 
       spyOn(component, <any>'filterItems').and.callFake(() => {
@@ -1599,17 +1586,15 @@ describe('PoMenuComponent:', () => {
     });
 
     it(`showNoData: should set 'noData' to false if has menu items`, () => {
-      component.filteredItems = [ { link: '/', label: 'home'} ];
+      component.filteredItems = [{ link: '/', label: 'home' }];
 
       component['showNoData']();
 
       expect(component.noData).toBe(false);
     });
-
   });
 
   describe('Properties:', () => {
-
     it('enableCollapseButton: should be true if `allowCollapseMenu` is true and `collapsed` and `mobileOpened` are false', () => {
       component.allowCollapseMenu = true;
       component.collapsed = false;
@@ -1676,7 +1661,6 @@ describe('PoMenuComponent:', () => {
       expect(component.isCollapsed).toBe(false);
     });
   });
-
 });
 
 function fakeMenuService(item) {

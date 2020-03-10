@@ -1,5 +1,4 @@
 export interface PoJobSchedulerInternal {
-
   dayOfMonth?: number;
 
   daysOfWeek?: Array<string>;
@@ -17,5 +16,4 @@ export interface PoJobSchedulerInternal {
   processID?: string;
 
   recurrent: boolean;
-
 }

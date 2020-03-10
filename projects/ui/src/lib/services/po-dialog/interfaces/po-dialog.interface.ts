@@ -11,13 +11,11 @@ import { PoDialogConfirmLiterals } from './po-dialog-confirm-literals.interface'
  * Interface para o título e a mensagem do serviço po-dialog.
  */
 interface PoDialogOptions {
-
   /** Título da caixa de diálogo. */
   title: string;
 
   /** Mensagem da caixa de diálogo. */
   message: string;
-
 }
 
 /**
@@ -30,7 +28,6 @@ interface PoDialogOptions {
  * Interface com as propriedades da caixa de diálogo de alerta do serviço po-dialog.
  */
 export interface PoDialogAlertOptions extends PoDialogOptions {
-
   /** Ação executada ao fechar o alerta pelo botão "Ok". */
   ok?: Function;
 
@@ -50,7 +47,6 @@ export interface PoDialogAlertOptions extends PoDialogOptions {
    * > O objeto padrão de literais será traduzido de acordo com o idioma do *browser* (pt, en, es).
    */
   literals?: PoDialogAlertLiterals;
-
 }
 
 /**
@@ -63,7 +59,6 @@ export interface PoDialogAlertOptions extends PoDialogOptions {
  * Interface com as propriedades da caixa de diálogo de confirmação do serviço po-dialog.
  */
 export interface PoDialogConfirmOptions extends PoDialogOptions {
-
   /** Ação de confirmação da caixa de diálogo. */
   confirm: Function;
 
@@ -87,5 +82,4 @@ export interface PoDialogConfirmOptions extends PoDialogOptions {
    * > O objeto padrão de literais será traduzido de acordo com o idioma do *browser* (pt, en, es).
    */
   literals?: PoDialogConfirmLiterals;
-
 }

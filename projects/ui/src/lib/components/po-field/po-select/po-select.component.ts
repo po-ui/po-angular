@@ -1,5 +1,17 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ContentChild, Component, DoCheck, ElementRef, forwardRef, HostListener,
-  IterableDiffers, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  ContentChild,
+  Component,
+  DoCheck,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  IterableDiffers,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
 import { isMobile, removeDuplicatedOptions, removeUndefinedAndNullOptions, validValue } from '../../../utils/util';
@@ -44,18 +56,17 @@ const poSelectContentPositionDefault = 'bottom';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoSelectComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoSelectComponent),
-      multi: true,
+      multi: true
     },
     PoControlPositionService
   ]
 })
 export class PoSelectComponent extends PoSelectBaseComponent implements AfterViewInit, DoCheck {
-
   displayValue;
   isMobile: any = isMobile();
   modelValue: any;
@@ -69,20 +80,21 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
 
-  @ContentChild(PoSelectOptionTemplateDirective, { static: true }) selectOptionTemplate: PoSelectOptionTemplateDirective;
+  @ContentChild(PoSelectOptionTemplateDirective, { static: true })
+  selectOptionTemplate: PoSelectOptionTemplateDirective;
 
-  @ViewChild('contentList', {read: ElementRef, static: true}) contentList: ElementRef;
-  @ViewChild('icon', {read: ElementRef, static: true}) iconElement: ElementRef;
-  @ViewChild('select', {read: ElementRef, static: true}) selectElement: ElementRef;
-  @ViewChild('selectButton', {read: ElementRef, static: true}) selectButtonElement: ElementRef;
+  @ViewChild('contentList', { read: ElementRef, static: true }) contentList: ElementRef;
+  @ViewChild('icon', { read: ElementRef, static: true }) iconElement: ElementRef;
+  @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
+  @ViewChild('selectButton', { read: ElementRef, static: true }) selectButtonElement: ElementRef;
 
   constructor(
     element: ElementRef,
     changeDetector: ChangeDetectorRef,
     differs: IterableDiffers,
     public renderer: Renderer2,
-    private controlPosition: PoControlPositionService) {
-
+    private controlPosition: PoControlPositionService
+  ) {
     super(element, changeDetector);
 
     this.differ = differs.find([]).create(null);
@@ -93,7 +105,6 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   }
 
   @HostListener('keydown', ['$event']) onKeydown($event?: any) {
-
     const charCode = $event.which || $event.keyCode;
 
     // Tratamentos para quando o readonly for ativado.
@@ -176,8 +187,7 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
       return value.toString() === inputValue.toString();
     }
 
-    if ((value === null && inputValue !== null) ||
-        (value === undefined && inputValue !== undefined)) {
+    if ((value === null && inputValue !== null) || (value === undefined && inputValue !== undefined)) {
       value = `${value}`; // Transformando em string
     }
 
@@ -208,9 +218,9 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   }
 
   scrollValue(index, clientHeight) {
-    const heightScrollValue: number = (index) * this.getSelectItemHeight();
+    const heightScrollValue: number = index * this.getSelectItemHeight();
 
-    return this.scrollPosition = heightScrollValue > clientHeight ? heightScrollValue :  0;
+    return (this.scrollPosition = heightScrollValue > clientHeight ? heightScrollValue : 0);
   }
 
   selector(query: string): Element {
@@ -234,8 +244,10 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
 
   // Esconde Content do Select quando for clicado fora
   wasClickedOnToggle(event: MouseEvent): void {
-    if (!this.selectButtonElement.nativeElement.contains(event.target) &&
-        !this.iconElement.nativeElement.contains(event.target)) {
+    if (
+      !this.selectButtonElement.nativeElement.contains(event.target) &&
+      !this.iconElement.nativeElement.contains(event.target)
+    ) {
       this.hideDropDown();
     }
   }
@@ -247,9 +259,8 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
     if (optionFound) {
       this.selectElement.nativeElement.value = optionFound.value;
       this.selectedValue = optionFound.value;
-      this.displayValue = (optionFound.label);
+      this.displayValue = optionFound.label;
       this.setScrollPosition(optionFound.value);
-
     } else if (validValue(this.selectedValue)) {
       this.selectElement.nativeElement.value = undefined;
       this.callModelChange(undefined);
@@ -283,7 +294,6 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   }
 
   private initializeListeners() {
-
     this.clickoutListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
       this.wasClickedOnToggle(event);
     });
@@ -297,7 +307,7 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
 
   private onScroll = (): void => {
     this.controlPosition.adjustPosition(poSelectContentPositionDefault);
-  }
+  };
 
   private removeListeners() {
     if (this.clickoutListener) {
@@ -309,7 +319,6 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   }
 
   private setPositionDropdown() {
-
     this.controlPosition.setElements(
       this.contentList.nativeElement,
       poSelectContentOffset,
@@ -329,7 +338,7 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
 
       if (optionFound) {
         const index = this.options.indexOf(optionFound);
-        ulDropdpwn.scrollTop =  this.scrollValue(index, ulDropdpwn.clientHeight);
+        ulDropdpwn.scrollTop = this.scrollValue(index, ulDropdpwn.clientHeight);
       }
     }
   }
@@ -349,5 +358,4 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
       }
     }
   }
-
 }

@@ -6,7 +6,6 @@
  * Interface para o atributo `filter` do componente `po-page-list`.
  */
 export interface PoPageFilter {
-
   /** Nome da ação ou a referência da mesma a ser executada. */
   action?: string | Function;
 
@@ -23,5 +22,4 @@ export interface PoPageFilter {
 
   /** Texto de instrução exibido dentro do campo de filtro. */
   placeholder?: string;
-
 }

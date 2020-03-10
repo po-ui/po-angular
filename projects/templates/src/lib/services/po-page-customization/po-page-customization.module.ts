@@ -10,12 +10,7 @@ import { PoPageCustomizationService } from './po-page-customization.service';
  * Módulo do serviço do po-page-customization-service.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    HttpClientModule
-  ],
-  providers: [
-    PoPageCustomizationService
-  ]
+  imports: [CommonModule, HttpClientModule],
+  providers: [PoPageCustomizationService]
 })
-export class PoPageCustomizationModule { }
+export class PoPageCustomizationModule {}

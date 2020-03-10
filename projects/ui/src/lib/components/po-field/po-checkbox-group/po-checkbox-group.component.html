@@ -1,15 +1,11 @@
-<po-field-container
-  [p-help]="help"
-  [p-label]="label"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
   <div class="po-field-container-content po-checkbox-group-content">
     <div class="po-row po-pt-1 po-pb-1">
-
-      <div *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
+      <div
+        *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
         class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
-        [class.po-checkbox-group-item-disabled]="option.disabled || disabled">
-
+        [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
+      >
         <input
           class="po-input po-checkbox-group-input"
           type="checkbox"
@@ -19,22 +15,23 @@
           [disabled]="option.disabled || disabled"
           [id]="option.id"
           [required]="required"
-          [value]="option.value">
+          [value]="option.value"
+        />
 
-        <label #checkboxLabel
+        <label
+          #checkboxLabel
           class="po-checkbox-group-label"
           [class.po-clickable]="!option.disabled && !disabled"
           [for]="option.id"
           [tabindex]="option.disabled || disabled ? -1 : 0"
           (click)="checkOption(option)"
-          (keydown)="onKeyDown($event, option)">
-            {{option.label}}
+          (keydown)="onKeyDown($event, option)"
+        >
+          {{ option.label }}
         </label>
       </div>
-
     </div>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>
-
 </po-field-container>

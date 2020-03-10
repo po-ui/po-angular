@@ -9,7 +9,6 @@ import { PoTableColumnLabelComponent } from './po-table-column-label.component';
 import { PoTableModule } from '../po-table.module';
 
 describe('PoTableColumnLabelComponent:', () => {
-
   let labels: Array<PoTableColumnLabel>;
   let component: PoTableColumnLabelComponent;
   let fixture: ComponentFixture<PoTableColumnLabelComponent>;
@@ -28,9 +27,8 @@ describe('PoTableColumnLabelComponent:', () => {
     labels = [
       { value: 'success', label: 'Success', color: 'color-11' },
       { value: 'warning', label: 'Warning', color: 'color-08' },
-      { value: 'danger', label: 'Danger', color: 'color-07' },
+      { value: 'danger', label: 'Danger', color: 'color-07' }
     ];
-
   });
 
   it('should be created', () => {
@@ -38,7 +36,6 @@ describe('PoTableColumnLabelComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('value: should call `poColorPaletteService.getColor` with value if value is defined', () => {
       const value = { color: 'danger', label: 'Danger', value: '1' };
 
@@ -56,11 +53,9 @@ describe('PoTableColumnLabelComponent:', () => {
 
       expect(component['poColorPaletteService'].getColor).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should show "Warning" text', () => {
       component.value = labels[1];
       fixture.detectChanges();
@@ -86,7 +81,5 @@ describe('PoTableColumnLabelComponent:', () => {
       fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector(`.po-${PoColorPaletteEnum.Color07}`)).toBeTruthy();
     });
-
   });
-
 });

@@ -5,14 +5,13 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoContainerComponent } from './po-container.component';
 
 describe('PoContainerComponent:', () => {
-
   let component: PoContainerComponent;
   let fixture: ComponentFixture<PoContainerComponent>;
   let nativeElement: any;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoContainerComponent ]
+      declarations: [PoContainerComponent]
     });
   });
 
@@ -28,7 +27,6 @@ describe('PoContainerComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('shouldn`t have `.po-container-no-border` if `noBorder` is `true`.', () => {
       component.noBorder = true;
 
@@ -82,7 +80,5 @@ describe('PoContainerComponent:', () => {
 
       expect(nativeElement.querySelector('.po-container').style.height).toBe('auto');
     });
-
   });
-
 });

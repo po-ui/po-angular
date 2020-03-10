@@ -9,7 +9,6 @@ import { PoDialogType } from './po-dialog.enum';
  */
 
 export abstract class PoDialogBaseService {
-
   /** Exibe um diálogo de confirmação, é possível definir ações para as opções de confirmação e cancelamento. */
   confirm(confirmOptions: PoDialogConfirmOptions): void {
     this.openDialog(PoDialogType.Confirm, confirmOptions);
@@ -21,5 +20,5 @@ export abstract class PoDialogBaseService {
   }
 
   // Usado para chamar um diálogo
-  abstract openDialog(dialogType: PoDialogType, dialogOptions: (PoDialogAlertOptions | PoDialogConfirmOptions)): void;
+  abstract openDialog(dialogType: PoDialogType, dialogOptions: PoDialogAlertOptions | PoDialogConfirmOptions): void;
 }

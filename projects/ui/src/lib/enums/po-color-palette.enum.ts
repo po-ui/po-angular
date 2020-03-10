@@ -6,9 +6,8 @@
  * Enum que contém paleta de 12 cores.
  */
 export enum PoColorPaletteEnum {
-
   /** #0c9abe */
-  Color01 = 'color-01' ,
+  Color01 = 'color-01',
 
   /** #2c85c8 */
   Color02 = 'color-02',

@@ -6,15 +6,13 @@ import { PoChartGaugeComponent } from './po-chart-gauge.component';
 import { PoChartType } from '../../enums/po-chart-type.enum';
 
 describe('PoChartGaugeComponent:', () => {
-
   let component: PoChartGaugeComponent;
   let fixture: ComponentFixture<PoChartGaugeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PoChartGaugeComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -28,9 +26,7 @@ describe('PoChartGaugeComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngAfterViewInit: should call `createComponent` and `drawBasePath`', () => {
-
       spyOn(component, <any>'createComponent');
       spyOn(component, <any>'drawBasePath');
 
@@ -72,7 +68,7 @@ describe('PoChartGaugeComponent:', () => {
     if windowResizeEmitter emits`, () => {
       const instance: any = {};
 
-      component['windowResizeEmitter'] = <any> of([]);
+      component['windowResizeEmitter'] = <any>of([]);
 
       spyOn(component, <any>'getGaugeBaseWidth');
       spyOn(component['changeDetection'], 'detectChanges');
@@ -100,7 +96,7 @@ describe('PoChartGaugeComponent:', () => {
     });
 
     it('getGaugeSerie: should spread `series` with `color`', () => {
-      const expectedValue = [{ value: 2, description: 'description', color: '#29B6C5'}];
+      const expectedValue = [{ value: 2, description: 'description', color: '#29B6C5' }];
       component.colors = ['#29B6C5'];
       component.series = [{ value: 2, description: 'description' }];
 
@@ -128,12 +124,17 @@ describe('PoChartGaugeComponent:', () => {
     it('getGaugeBaseWidth: should return the `po-chart-gauge-base-path` element width', () => {
       component.type = PoChartType.Gauge;
       component.colors = ['#29B6C5', '#29B6C5'];
-      component['series'] = [{value: 20, description: 'desc'}, {value: 30, description: 'desc'}];
+      component['series'] = [
+        { value: 20, description: 'desc' },
+        { value: 30, description: 'desc' }
+      ];
 
       spyOn(component['el'].nativeElement, 'querySelector').and.callFake(() => {
-        return { getBoundingClientRect: () => {
-          return { width: 200 };
-        }};
+        return {
+          getBoundingClientRect: () => {
+            return { width: 200 };
+          }
+        };
       });
 
       const expectedResult = component['getGaugeBaseWidth']();
@@ -144,7 +145,10 @@ describe('PoChartGaugeComponent:', () => {
     it('getGaugeBaseWidth: shouldn`t return the `po-chart-gauge-base-path` element width', () => {
       component.type = PoChartType.Gauge;
       component.colors = ['#29B6C5', '#29B6C5'];
-      component['series'] = [{value: 20, description: 'desc'}, {value: 30, description: 'desc'}];
+      component['series'] = [
+        { value: 20, description: 'desc' },
+        { value: 30, description: 'desc' }
+      ];
 
       spyOn(component['el'].nativeElement, 'querySelector').and.callFake(() => undefined);
 
@@ -152,7 +156,5 @@ describe('PoChartGaugeComponent:', () => {
 
       expect(expectedResult).toBe(undefined);
     });
-
   });
-
 });

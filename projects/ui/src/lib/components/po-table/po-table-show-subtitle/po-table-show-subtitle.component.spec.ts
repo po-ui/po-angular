@@ -29,7 +29,7 @@ describe('PoTableShowSubtitleComponent:', () => {
     component.subtitles = [
       { value: 'success', label: 'Label', color: 'color-11', content: 'Success Content' },
       { value: 'warning', label: 'Label', color: 'color-08', content: 'Warning Content' },
-      { value: 'danger', label: 'Label', color: 'color-07', content: 'Danger Content' },
+      { value: 'danger', label: 'Label', color: 'color-07', content: 'Danger Content' }
     ];
 
     fixture.detectChanges();
@@ -42,7 +42,6 @@ describe('PoTableShowSubtitleComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should create subtitles inside modal if `po-table-footer-show-subtitle` is clicked', () => {
       const event = document.createEvent('MouseEvents');
       event.initEvent('click', false, true);
@@ -57,7 +56,5 @@ describe('PoTableShowSubtitleComponent:', () => {
 
       expect(modal.length).toBe(component.subtitles.length);
     });
-
   });
-
 });

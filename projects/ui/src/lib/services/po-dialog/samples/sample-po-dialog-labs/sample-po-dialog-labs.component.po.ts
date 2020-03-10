@@ -1,7 +1,6 @@
 import { browser, by, element } from 'protractor';
 
 export class PoDialogPage {
-
   private sampleDialog = 'sample-po-dialog-labs';
 
   private poClean = 'po-clean span';
@@ -18,7 +17,10 @@ export class PoDialogPage {
 
   private getPoRadio(radioName: string) {
     return element(
-      by.css(`${this.sampleDialog} po-radio-group[name="dialogOptions"] input[value="${radioName}"]+.po-radio-group-label`));
+      by.css(
+        `${this.sampleDialog} po-radio-group[name="dialogOptions"] input[value="${radioName}"]+.po-radio-group-label`
+      )
+    );
   }
 
   private getModalButton(buttonLabel: string) {
@@ -76,5 +78,4 @@ export class PoDialogPage {
   get modalButtonConfirm() {
     return this.getModalButton('Confirmar');
   }
-
 }

@@ -14,12 +14,12 @@ describe('PoSchemaUtil:', () => {
       'name',
       {
         name: 'status1',
-        local: true,
+        local: true
       },
       {
         name: 'status2',
-        local: false,
-      },
+        local: false
+      }
     ],
     pageSize: 20,
     deletedField: 'deleted',
@@ -29,36 +29,60 @@ describe('PoSchemaUtil:', () => {
   const currentDate = new Date();
 
   schemas = [
-    { getUrlApi: 'url', diffUrlApi: 'urldiff', fields: [], idField: 'id', name: 'Users', pageSize: 20,
-      deletedField: 'deleted', lastSync: currentDate.toISOString() },
-    { getUrlApi: 'url', diffUrlApi: 'urldiff', fields: [], idField: 'id', name: 'Products', pageSize: 20, deletedField: 'deleted' }
+    {
+      getUrlApi: 'url',
+      diffUrlApi: 'urldiff',
+      fields: [],
+      idField: 'id',
+      name: 'Users',
+      pageSize: 20,
+      deletedField: 'deleted',
+      lastSync: currentDate.toISOString()
+    },
+    {
+      getUrlApi: 'url',
+      diffUrlApi: 'urldiff',
+      fields: [],
+      idField: 'id',
+      name: 'Products',
+      pageSize: 20,
+      deletedField: 'deleted'
+    }
   ];
 
   describe('Methods:', () => {
-
     it('containsLocalFields: should return true if schema contains local fields', () => {
-      const schema = {...schemas[0]};
+      const schema = { ...schemas[0] };
 
       schema.fields = ['field1', { name: 'field2', local: true }];
 
       expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
 
-      schema.fields = [{ name: 'field1', local: true }, { name: 'field2', local: true }];
+      schema.fields = [
+        { name: 'field1', local: true },
+        { name: 'field2', local: true }
+      ];
 
       expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
 
-      schema.fields = [{ name: 'field1', local: true }, { name: 'field2', local: false }];
+      schema.fields = [
+        { name: 'field1', local: true },
+        { name: 'field2', local: false }
+      ];
 
       expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
     });
 
     it('containsLocalFields: should return false if schema not contains local fields', () => {
-      const schema = {...schemas[0]};
+      const schema = { ...schemas[0] };
       schema.fields = ['field1', 'field2'];
 
       expect(PoSchemaUtil.containsLocalFields(schema)).toBeFalsy();
 
-      schema.fields = [{ name: 'field1', local: false }, { name: 'field2', local: false }];
+      schema.fields = [
+        { name: 'field1', local: false },
+        { name: 'field2', local: false }
+      ];
 
       expect(PoSchemaUtil.containsLocalFields(schema)).toBeFalsy();
     });
@@ -73,11 +97,11 @@ describe('PoSchemaUtil:', () => {
 
     it(`getRecordId: should return record Id with syncInternalIdFieldName value if record not have a field name equal to
       idField value`, () => {
-        const record = { [PoSchemaUtil.syncInternalIdFieldName]: 'id2' };
-        const getRecordId = PoSchemaUtil.getRecordId(record, mySchema);
-        const result = 'id2';
+      const record = { [PoSchemaUtil.syncInternalIdFieldName]: 'id2' };
+      const getRecordId = PoSchemaUtil.getRecordId(record, mySchema);
+      const result = 'id2';
 
-        expect(getRecordId).toBe(result);
+      expect(getRecordId).toBe(result);
     });
 
     it('getUrl: should returns getUrlApi property value when called with PoRequestType.GET', () => {
@@ -126,7 +150,7 @@ describe('PoSchemaUtil:', () => {
 
     it('isModelsEqual: should returns true if objects are equal', () => {
       const obj1 = { id: 1, name: 'Nome' };
-      const obj2 = { id: 1, name: 'Nome'};
+      const obj2 = { id: 1, name: 'Nome' };
 
       const isEqual: boolean = PoSchemaUtil.isModelsEqual(['id', 'name'], obj1, obj2);
 
@@ -143,8 +167,8 @@ describe('PoSchemaUtil:', () => {
     });
 
     it('separateSchemaFields: should separate local fields to server fields.', () => {
-      const schema = {...schemas[0]};
-      const localFields = [ 'field2' ];
+      const schema = { ...schemas[0] };
+      const localFields = ['field2'];
       const record = { field1: 'value1', field2: 'value2', field3: 'value3' };
       const result = {
         'serverRecord': { field1: 'value1', field3: 'value3' },
@@ -157,7 +181,5 @@ describe('PoSchemaUtil:', () => {
 
       expect(separate).toEqual(result);
     });
-
   });
-
 });

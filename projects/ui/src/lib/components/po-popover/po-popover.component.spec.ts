@@ -6,7 +6,6 @@ import { PoControlPositionService } from './../../services/po-control-position/p
 import { PoPopoverComponent } from './po-popover.component';
 
 describe('PoPopoverComponent:', () => {
-
   let component: PoPopoverComponent;
   let fixture: ComponentFixture<PoPopoverComponent>;
   let nativeElement;
@@ -15,8 +14,8 @@ describe('PoPopoverComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoPopoverComponent ],
-      providers: [ PoControlPositionService ]
+      declarations: [PoPopoverComponent],
+      providers: [PoControlPositionService]
     });
   });
 
@@ -28,7 +27,6 @@ describe('PoPopoverComponent:', () => {
     nativeElement = fixture.debugElement.nativeElement;
 
     component.target = component.popoverElement;
-
   });
 
   it('should be created', () => {
@@ -227,7 +225,6 @@ describe('PoPopoverComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it(`ngAfterViewInit: should call 'setElementsControlPosition'`, () => {
       spyOn(component, <any>'setElementsControlPosition');
 
@@ -237,8 +234,7 @@ describe('PoPopoverComponent:', () => {
     });
 
     it('ngOnDestroy: should call removeListeners.', () => {
-
-      spyOn(component, <any> 'removeListeners');
+      spyOn(component, <any>'removeListeners');
 
       component.ngOnDestroy();
 
@@ -246,9 +242,8 @@ describe('PoPopoverComponent:', () => {
     });
 
     it('removeListeners: should remove click and resize listeners.', () => {
-
-      spyOn(component, <any> 'clickoutListener');
-      spyOn(component, <any> 'resizeListener');
+      spyOn(component, <any>'clickoutListener');
+      spyOn(component, <any>'resizeListener');
 
       component['removeListeners']();
 
@@ -257,12 +252,11 @@ describe('PoPopoverComponent:', () => {
     });
 
     it('removeListeners: should remove mouse enter and mouse leave listeners.', () => {
-
-      component.trigger =  'hover';
+      component.trigger = 'hover';
       component.setRendererListenInit();
 
-      spyOn(component, <any> 'mouseEnterListener');
-      spyOn(component, <any> 'mouseLeaveListener');
+      spyOn(component, <any>'mouseEnterListener');
+      spyOn(component, <any>'mouseLeaveListener');
 
       component['removeListeners']();
 
@@ -271,7 +265,6 @@ describe('PoPopoverComponent:', () => {
     });
 
     it('togglePopup: should call `close` method.', () => {
-
       const fakeThis = {
         close: () => {},
         popoverElement: {
@@ -324,7 +317,6 @@ describe('PoPopoverComponent:', () => {
 
     it(`setElementsControlPosition: should call 'poControlPosition.setElements' with 'popoverElement.nativeElement',
      target and popoverOffset equals to 8`, () => {
-
       const popoverOffset = 8;
       component.popoverElement.nativeElement = '<po-popover></po-popover>';
       component.target = <any>'<div></div>';
@@ -339,11 +331,9 @@ describe('PoPopoverComponent:', () => {
         component.target
       );
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should display arrow.', () => {
       component.hideArrow = false;
       component.isHidden = false;
@@ -361,9 +351,7 @@ describe('PoPopoverComponent:', () => {
 
       expect(nativeElement.querySelector('.po-popover-arrow')).toBeFalsy();
     });
-
   });
-
 });
 
 function getFakeToSetRendererListenInit(trigger, component) {

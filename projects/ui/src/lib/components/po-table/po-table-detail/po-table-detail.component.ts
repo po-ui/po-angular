@@ -18,7 +18,6 @@ import { PoTableDetailColumn } from './po-table-detail-column.interface';
   templateUrl: './po-table-detail.component.html'
 })
 export class PoTableDetailComponent {
-
   private _detail: PoTableDetail;
 
   /**
@@ -50,11 +49,11 @@ export class PoTableDetailComponent {
   constructor(private decimalPipe: DecimalPipe) {}
 
   get detailColumns(): Array<PoTableDetailColumn> {
-    return this.detail && this.detail.columns || [];
+    return (this.detail && this.detail.columns) || [];
   }
 
   get typeHeaderInline(): boolean {
-    return this.detail && !this.detail['typeHeader'] || this.detail['typeHeader'] === 'inline';
+    return (this.detail && !this.detail['typeHeader']) || this.detail['typeHeader'] === 'inline';
   }
 
   get typeHeaderTop(): boolean {
@@ -80,9 +79,8 @@ export class PoTableDetailComponent {
 
   private returnPoTableDetailObject(value: any) {
     if (value && isTypeof(value, 'object')) {
-
       if (value.columns) {
-        value.columns.forEach(column => column.property = column.property || column.column);
+        value.columns.forEach(column => (column.property = column.property || column.column));
       }
 
       if (Array.isArray(value)) {
@@ -94,5 +92,4 @@ export class PoTableDetailComponent {
       }
     }
   }
-
 }

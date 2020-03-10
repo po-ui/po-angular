@@ -12,7 +12,6 @@ import { convertToBoolean, getShortBrowserLanguage } from '../../../utils/util';
   templateUrl: './po-field-container.component.html'
 })
 export class PoFieldContainerComponent {
-
   private _optional: boolean = false;
 
   /** Label do campo. */
@@ -41,5 +40,4 @@ export class PoFieldContainerComponent {
 
     return optional[browserLanguage];
   }
-
 }

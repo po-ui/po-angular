@@ -10,5 +10,4 @@ export class SamplePoEmailBasicComponentPO {
   get poEmailInput() {
     return element(by.css(`${this.sampleName} po-email .po-field-container-content input[type="email"]`));
   }
-
 }

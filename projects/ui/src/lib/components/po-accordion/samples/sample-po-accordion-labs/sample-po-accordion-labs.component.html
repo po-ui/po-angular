@@ -1,28 +1,21 @@
 <po-accordion>
-  <po-accordion-item *ngFor="let accordionItem of accordionItems; let i = index"
-    [p-label]="accordionItem.label">
+  <po-accordion-item *ngFor="let accordionItem of accordionItems; let i = index" [p-label]="accordionItem.label">
     Accordion Item Content {{ i }}
   </po-accordion-item>
 </po-accordion>
 
-<po-dynamic-form #accordionForm
-  [p-fields]="accordionFieldsForm"
-  [p-value]="accordionItems">
-</po-dynamic-form>
+<po-dynamic-form #accordionForm [p-fields]="accordionFieldsForm" [p-value]="accordionItems"> </po-dynamic-form>
 
 <div class="po-row po-mt-1">
   <po-button
     class="po-md-3"
     p-label="Add Accordion"
     [p-disabled]="accordionForm.form.invalid"
-    (p-click)="addAccordionItem(accordionForm.form.value); accordionForm.form.reset();">
+    (p-click)="addAccordionItem(accordionForm.form.value); accordionForm.form.reset()"
+  >
   </po-button>
 </div>
 
 <div class="po-row po-mt-1">
-  <po-button
-    class="po-md-3"
-    p-label="Sample Restore"
-    (p-click)="restore()">
-  </po-button>
+  <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
 </div>

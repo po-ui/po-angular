@@ -1,33 +1,14 @@
 <form #formOpportunity="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-12"
-      name="name"
-      [(ngModel)]="name"
-      p-clean
-      p-label="Full Name"
-      p-required>
-    </po-input>
+    <po-input class="po-md-12" name="name" [(ngModel)]="name" p-clean p-label="Full Name" p-required> </po-input>
   </div>
 
   <div class="po-row">
-    <po-textarea
-      class="po-md-12"
-      name="biograph"
-      [(ngModel)]="biograph"
-      p-label="Biograph"
-      p-required>
-    </po-textarea>
+    <po-textarea class="po-md-12" name="biograph" [(ngModel)]="biograph" p-label="Biograph" p-required> </po-textarea>
   </div>
 
   <div class="po-row">
-    <po-url
-      class="po-md-12"
-      name="linkedin"
-      [(ngModel)]="linkedin"
-      p-clean
-      p-label="LinkedIn URL">
-    </po-url>
+    <po-url class="po-md-12" name="linkedin" [(ngModel)]="linkedin" p-clean p-label="LinkedIn URL"> </po-url>
   </div>
 
   <div class="po-row">
@@ -38,9 +19,10 @@
       p-label="Resume"
       p-required
       p-url="https://thf.totvs.com.br/sample/api/uploads/addFile"
-      [p-restrictions]="{maxFileSize: '204800'}"
+      [p-restrictions]="{ maxFileSize: '204800' }"
       (p-error)="resumeUploadError()"
-      (p-success)="resumeUploadSuccess()">
+      (p-success)="resumeUploadSuccess()"
+    >
     </po-upload>
   </div>
 
@@ -49,7 +31,8 @@
       class="po-md-4"
       p-label="Apply"
       [p-disabled]="formOpportunity.invalid || !uploadedResume"
-      (p-click)="apply()">
+      (p-click)="apply()"
+    >
     </po-button>
   </div>
 </form>

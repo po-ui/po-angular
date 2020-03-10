@@ -13,7 +13,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoMultiselectItemComponent {
-
   /** Rótulo do item. */
   @Input('p-label') label: string;
 

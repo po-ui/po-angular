@@ -19,7 +19,7 @@ describe('InputRequired:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoMockComponent ]
+      declarations: [PoMockComponent]
     });
   });
 

@@ -17,7 +17,6 @@ import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-b
   templateUrl: './po-lookup-modal.component.html'
 })
 export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit {
-
   @ViewChild('inpsearch', { static: true }) inputSearchEl: ElementRef;
 
   keyUpObservable: Observable<any> = null;
@@ -33,11 +32,10 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   initializeEventInput(): void {
-    this.keyUpObservable = fromEvent(this.inputSearchEl.nativeElement, 'keyup')
-      .pipe(
-        filter((e: any) => this.validateEnterPressed(e)),
-        debounceTime(400)
-      );
+    this.keyUpObservable = fromEvent(this.inputSearchEl.nativeElement, 'keyup').pipe(
+      filter((e: any) => this.validateEnterPressed(e)),
+      debounceTime(400)
+    );
 
     this.keyUpObservable.subscribe(() => {
       this.search();
@@ -62,5 +60,4 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   private validateEnterPressed(e: any) {
     return e.keyCode === 13;
   }
-
 }

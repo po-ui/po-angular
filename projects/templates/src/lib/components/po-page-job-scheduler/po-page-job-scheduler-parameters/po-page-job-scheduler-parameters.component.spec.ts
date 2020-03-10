@@ -15,10 +15,7 @@ describe('PoPageJobSchedulerParametersComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        PoPageJobSchedulerModule
-      ]
+      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
     });
   });
 
@@ -36,7 +33,6 @@ describe('PoPageJobSchedulerParametersComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngAfterViewInit: shouldn`t call `valueChange.emit` if `form` is falsy', () => {
       component.form = undefined;
 
@@ -50,12 +46,12 @@ describe('PoPageJobSchedulerParametersComponent:', () => {
     it('ngAfterViewInit: should call `valueChange.emit` on valueChanges subscribe', fakeAsync(() => {
       const jobscheduler = { processID: 1 };
 
-      component.form = <any> {
+      component.form = <any>{
         valueChanges: getObservable(jobscheduler)
       };
 
-      spyOn(component.form.valueChanges, <any> 'subscribe').and.callThrough();
-      spyOn(component.valueChange, <any> 'emit');
+      spyOn(component.form.valueChanges, <any>'subscribe').and.callThrough();
+      spyOn(component.valueChange, <any>'emit');
 
       component.ngAfterViewInit();
 
@@ -64,11 +60,9 @@ describe('PoPageJobSchedulerParametersComponent:', () => {
       expect(component.valueChange.emit).toHaveBeenCalledWith(jobscheduler);
       expect(component.form.valueChanges.subscribe).toHaveBeenCalled();
     }));
-
   });
 
   describe('Templates:', () => {
-
     it('should find `div.po-text-center` and not find `po-dynamic-form`', () => {
       component.parameters = [];
 
@@ -82,9 +76,7 @@ describe('PoPageJobSchedulerParametersComponent:', () => {
     });
 
     it('should find `po-dynamic-form` and not find `div.po-text-center`', () => {
-      component.parameters = [
-        { property: 'server' }
-      ];
+      component.parameters = [{ property: 'server' }];
 
       fixture.detectChanges();
 
@@ -94,7 +86,5 @@ describe('PoPageJobSchedulerParametersComponent:', () => {
       expect(notFoundDiv).toBeFalsy();
       expect(dynamicForm).toBeTruthy();
     });
-
   });
-
 });

@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, HostListener, Input, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  Input,
+  OnDestroy,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { formatYear, isMobile, setYearFrom0To100 } from '../../../utils/util';
@@ -44,32 +54,33 @@ const poCalendarPositionDefault = 'bottom-left';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoDatepickerComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoDatepickerComponent),
-      multi: true,
+      multi: true
     },
     PoControlPositionService
   ]
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
-
   date;
   el: ElementRef;
   hour: string;
 
   private clickListener;
-  private readonly dateRegex = new RegExp('^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' +
-  '(?:0[1-9]|1[0-2])-' +
-  '(?:0[1-9]|[12]\\d|3[01])$');
-  private readonly isoRegex = new RegExp('^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' +
-  '(?:0[1-9]|1[0-2])-' +
-  '(?:0[1-9]|[12]\\d|3[01])' +
-  'T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|-0[1-9]|-1\\d|-2[0-3]|' +
-  '-00:?(?:0[1-9]|[0-5]\\d)|\\+[01]\\d|\\+2[0-3])' +
-  '(?:|:?[0-5]\\d)$');
+  private readonly dateRegex = new RegExp(
+    '^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' + '(?:0[1-9]|1[0-2])-' + '(?:0[1-9]|[12]\\d|3[01])$'
+  );
+  private readonly isoRegex = new RegExp(
+    '^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' +
+      '(?:0[1-9]|1[0-2])-' +
+      '(?:0[1-9]|[12]\\d|3[01])' +
+      'T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|-0[1-9]|-1\\d|-2[0-3]|' +
+      '-00:?(?:0[1-9]|[0-5]\\d)|\\+[01]\\d|\\+2[0-3])' +
+      '(?:|:?[0-5]\\d)$'
+  );
   private timeoutChange: any;
   private valueBeforeChange: string;
 
@@ -139,7 +150,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.calendar.init();
       this.setCalendarPosition();
       this.initializeListeners();
-
     } else {
       this.inputEl.nativeElement.disabled = false;
       this.closeCalendar();
@@ -163,9 +173,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
 
-    if ((!this.dialogPicker.nativeElement.contains(event.target) || this.hasOverlayClass(event.target)) &&
-      !this.iconDatepicker.nativeElement.contains(event.target) && !this.hasAttrCalendar(event.target)) {
-        this.closeCalendar();
+    if (
+      (!this.dialogPicker.nativeElement.contains(event.target) || this.hasOverlayClass(event.target)) &&
+      !this.iconDatepicker.nativeElement.contains(event.target) &&
+      !this.hasAttrCalendar(event.target)
+    ) {
+      this.closeCalendar();
     }
   }
 
@@ -200,13 +213,15 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   hasInvalidClass() {
-    return (this.el.nativeElement.classList.contains('ng-invalid') &&
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') &&
       this.el.nativeElement.classList.contains('ng-dirty') &&
-      this.inputEl.nativeElement.value !== '');
+      this.inputEl.nativeElement.value !== ''
+    );
   }
 
   getErrorPattern() {
-    return (this.errorPattern !== '' && this.hasInvalidClass()) ? this.errorPattern : '';
+    return this.errorPattern !== '' && this.hasInvalidClass() ? this.errorPattern : '';
   }
 
   clear() {
@@ -218,7 +233,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   eventOnBlur($event: any) {
-
     const date = this.inputEl.nativeElement.value;
     const newDate = date ? this.getDateFromString(date) : undefined;
     this.objMask.blur($event);
@@ -232,14 +246,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
         this.date = undefined;
         this.controlModel(this.date);
       }
-
     } else {
       this.date = undefined;
       this.callOnChange(this.date);
     }
 
     this.controlChangeEmitter();
-
   }
 
   eventOnClick($event) {
@@ -279,12 +291,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (this.inputEl && value) {
       if (value instanceof Date) {
         const dateString = value.toString();
-        this.hour = 'T' + dateString.substring(16, 24) + dateString.substring(28, 31) + ':' + dateString.substring(31, 33);
+        this.hour =
+          'T' + dateString.substring(16, 24) + dateString.substring(28, 31) + ':' + dateString.substring(31, 33);
         this.date = value;
         this.inputEl.nativeElement.value = this.formatToDate(value);
-
       } else if (this.isValidDateIso(value) || this.isValidExtendedIso(value)) {
-
         if (this.isValidExtendedIso(value)) {
           this.hour = value.substring(10, 25);
         }
@@ -355,7 +366,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   private hasAttrCalendar(element: any) {
     const attrCalendar = 'attr-calendar';
 
-    return (element && element.hasAttribute(attrCalendar)) || (element.parentElement && element.parentElement.hasAttribute(attrCalendar));
+    return (
+      (element && element.hasAttribute(attrCalendar)) ||
+      (element.parentElement && element.parentElement.hasAttribute(attrCalendar))
+    );
   }
 
   private initializeListeners() {
@@ -372,7 +386,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   private onScroll = (): void => {
     this.controlPosition.adjustPosition(poCalendarPositionDefault);
-  }
+  };
 
   private removeListeners() {
     if (this.clickListener) {
@@ -404,5 +418,4 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     this.controlPosition.adjustPosition(poCalendarPositionDefault);
   }
-
 }

@@ -1,16 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoListViewAction, PoModalComponent, PoNotificationService, PoPageAction, PoPageFilter } from '@portinari/portinari-ui';
+import {
+  PoListViewAction,
+  PoModalComponent,
+  PoNotificationService,
+  PoPageAction,
+  PoPageFilter
+} from '@portinari/portinari-ui';
 
 import { SamplePoListViewHiringProcessesService } from './sample-po-list-view-hiring-processes.service';
 
 @Component({
   selector: 'sample-po-list-view-hiring-processes',
   templateUrl: 'sample-po-list-view-hiring-processes.component.html',
-  providers: [ SamplePoListViewHiringProcessesService ]
+  providers: [SamplePoListViewHiringProcessesService]
 })
 export class SamplePoListViewHiringProcessesComponent implements OnInit {
-
   hiringProcesses: Array<any>;
   hiringProcessesFiltered: Array<object>;
   labelFilter: string = '';
@@ -59,7 +64,8 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
 
   constructor(
     private poNotification: PoNotificationService,
-    private hiringProcessesService: SamplePoListViewHiringProcessesService) { }
+    private hiringProcessesService: SamplePoListViewHiringProcessesService
+  ) {}
 
   ngOnInit() {
     this.hiringProcesses = this.hiringProcessesService.getItems();
@@ -95,13 +101,16 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
 
   private hiringProcessesFilter(filters = [this.labelFilter]) {
     this.hiringProcessesFiltered = this.hiringProcesses.filter(item => {
-      return Object.keys(item)
-      .some(key => (!(item[key] instanceof Object) && this.includeFilter(item[key], filters)));
+      return Object.keys(item).some(key => !(item[key] instanceof Object) && this.includeFilter(item[key], filters));
     });
   }
 
   private includeFilter(item, filters) {
-    return filters.some(filter => String(item).toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
+    return filters.some(filter =>
+      String(item)
+        .toLocaleLowerCase()
+        .includes(filter.toLocaleLowerCase())
+    );
   }
 
   private isHiredOrCanceled(candidate): boolean {
@@ -115,11 +124,8 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
 
   private updateCandidates(action: Function) {
     this.hiringProcesses.forEach(candidate => {
-
       if (candidate['$selected']) {
-
         switch (candidate['hireStatus']) {
-
           case 'progress':
             action.call(this, candidate);
             break;
@@ -135,8 +141,6 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
 
         candidate['$selected'] = false;
       }
-
     });
   }
-
 }

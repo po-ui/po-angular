@@ -14,7 +14,6 @@ import { PoTableSubtitleColumn } from '../po-table-subtitle-footer/po-table-subt
  * As definições das colunas serão aplicadas linha a linha.
  */
 export interface PoTableColumn {
-
   /**
    * Define uma ação na coluna quando o tipo da coluna for `link` ou `icon`.
    *
@@ -241,5 +240,4 @@ export interface PoTableColumn {
    * > Exemplo: '100px' ou '20%'.
    */
   width?: string;
-
 }

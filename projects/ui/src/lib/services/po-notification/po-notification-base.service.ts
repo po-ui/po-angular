@@ -23,8 +23,7 @@ import { PoToasterType } from './po-toaster/po-toaster-type.enum';
  *
  */
 export abstract class PoNotificationBaseService {
-
-   // Array responsável por guardar a instância de po-toaster's superiores.
+  // Array responsável por guardar a instância de po-toaster's superiores.
   stackTop: Array<ComponentRef<any>> = [];
 
   // Array responsável por guardar a instância de po-toaster's inferiores.
@@ -91,8 +90,10 @@ export abstract class PoNotificationBaseService {
     let index = 0;
     let orientation;
 
-    if ((<PoNotification>notification).orientation === undefined ||
-        (<PoNotification>notification).orientation === PoToasterOrientation.Bottom) {
+    if (
+      (<PoNotification>notification).orientation === undefined ||
+      (<PoNotification>notification).orientation === PoToasterOrientation.Bottom
+    ) {
       index = this.stackBottom.length;
       orientation = PoToasterOrientation.Bottom;
     } else {
@@ -139,5 +140,4 @@ export abstract class PoNotificationBaseService {
    * @param {PoToasterOrientation} orientation Orientação do PoToaster: Top ou Bottom
    */
   abstract destroyToaster(toaster: ComponentRef<any>): void;
-
 }

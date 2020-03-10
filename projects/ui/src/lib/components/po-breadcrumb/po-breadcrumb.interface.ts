@@ -10,7 +10,6 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  * Interface que define o `po-breadcrumb`.
  */
 export interface PoBreadcrumb {
-
   /**
    * @optional
    *
@@ -43,5 +42,4 @@ export interface PoBreadcrumb {
    * Objeto que possibilita o envio de parâmetros adicionais à requisição.
    */
   params?: object;
-
 }

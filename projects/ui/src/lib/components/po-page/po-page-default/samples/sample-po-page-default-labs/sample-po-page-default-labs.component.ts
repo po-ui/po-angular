@@ -11,7 +11,6 @@ import { PoPageAction } from '@portinari/portinari-ui';
   templateUrl: './sample-po-page-default-labs.component.html'
 })
 export class SamplePoPageDefaultLabsComponent implements OnInit {
-
   action: PoPageAction;
   actions: Array<PoPageAction>;
   breadcrumb: PoBreadcrumb;
@@ -37,7 +36,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     { label: 'Default', value: 'default' }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();
@@ -57,7 +56,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   }
 
   addBreadcrumbParam() {
-    const newParam = {[this.breadcrumbParams.property]: this.breadcrumbParams.value};
+    const newParam = { [this.breadcrumbParams.property]: this.breadcrumbParams.value };
 
     if (this.breadcrumb.params) {
       this.breadcrumb.params = Object.assign(this.breadcrumb.params, newParam);
@@ -87,5 +86,4 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   showAction(label: string): void {
     this.poNotification.success(`Action clicked: ${label}`);
   }
-
 }

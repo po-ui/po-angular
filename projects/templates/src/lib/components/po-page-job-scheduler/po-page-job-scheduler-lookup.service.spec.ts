@@ -5,16 +5,12 @@ import { PoPageJobSchedulerLookupService } from './po-page-job-scheduler-lookup.
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 
 describe('PoPageJobSchedulerLookupService:', () => {
-
   let poPageJobSchedulerLookupService: PoPageJobSchedulerLookupService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        PoPageJobSchedulerLookupService,
-        PoPageJobSchedulerService
-      ]
+      providers: [PoPageJobSchedulerLookupService, PoPageJobSchedulerService]
     });
 
     poPageJobSchedulerLookupService = TestBed.inject(PoPageJobSchedulerLookupService);
@@ -26,7 +22,6 @@ describe('PoPageJobSchedulerLookupService:', () => {
   });
 
   describe('Methods:', () => {
-
     it('getFilteredData: should call `getProcesses()` with object `{ page, pageSize, search }`.', () => {
       const search = 'brasil';
       const page = 2;
@@ -36,7 +31,11 @@ describe('PoPageJobSchedulerLookupService:', () => {
 
       poPageJobSchedulerLookupService.getFilteredData(search, page, pageSize);
 
-      expect(poPageJobSchedulerLookupService['poPageJobSchedulerService'].getProcesses).toHaveBeenCalledWith({ page, pageSize, search });
+      expect(poPageJobSchedulerLookupService['poPageJobSchedulerService'].getProcesses).toHaveBeenCalledWith({
+        page,
+        pageSize,
+        search
+      });
     });
 
     it('getObjectByValue: should call `getProcess()` with `processId`.', () => {
@@ -48,7 +47,5 @@ describe('PoPageJobSchedulerLookupService:', () => {
 
       expect(poPageJobSchedulerLookupService['poPageJobSchedulerService'].getProcess).toHaveBeenCalledWith(processId);
     });
-
   });
-
 });

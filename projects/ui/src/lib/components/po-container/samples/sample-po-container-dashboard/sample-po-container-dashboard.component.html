@@ -1,73 +1,42 @@
-<po-page-default
-  p-title="Dashboard"
-  [p-actions]="actions"
-  [p-breadcrumb]="breadcrumb">
-
+<po-page-default p-title="Dashboard" [p-actions]="actions" [p-breadcrumb]="breadcrumb">
   <po-container class="po-lg-6">
-    <po-widget
-      class="po-lg-6 po-mb-1"
-      p-title="Daily visitors">
-
+    <po-widget class="po-lg-6 po-mb-1" p-title="Daily visitors">
       <div class="po-font-subtitle po-text-center">540</div>
       <div class="po-text-center sample-container-dashboard">www.po.portinari.com.br</div>
     </po-widget>
 
-    <po-widget
-      class="po-lg-6 po-mb-1"
-      p-title="Most viewed page">
-
+    <po-widget class="po-lg-6 po-mb-1" p-title="Most viewed page">
       <div class="po-font-subtitle po-text-center">300 views</div>
       <div class="po-text-center sample-container-dashboard">https://portinari.io</div>
     </po-widget>
 
-    <po-widget
-      class="po-lg-6 po-mb-1"
-      p-title="Website status">
+    <po-widget class="po-lg-6 po-mb-1" p-title="Website status">
+      <div class="po-font-subtitle po-text-center">Online</div>
+      <div class="po-text-center sample-container-dashboard">21 days</div>
+    </po-widget>
 
-    <div class="po-font-subtitle po-text-center">Online</div>
-    <div class="po-text-center sample-container-dashboard">21 days</div>
-  </po-widget>
-
-    <po-widget
-      class="po-lg-6 po-mb-1"
-      p-title="NPM downloads">
-
+    <po-widget class="po-lg-6 po-mb-1" p-title="NPM downloads">
       <div class="po-font-subtitle po-text-center">266</div>
       <div class="po-text-center sample-container-dashboard">@portinari/portinari-ui - 2.0.0</div>
     </po-widget>
 
-    <po-widget
-      class="po-lg-6 po-mb-1"
-      p-title="Devforum PO questions">
-
+    <po-widget class="po-lg-6 po-mb-1" p-title="Devforum PO questions">
       <div class="po-font-subtitle po-text-center">800 questions</div>
       <div class="po-text-center sample-container-dashboard">https://devforum.portinari.com.br</div>
     </po-widget>
 
-    <po-widget
-      class="po-lg-6 po-mb-1"
-      p-title="Angular versions supported">
-
+    <po-widget class="po-lg-6 po-mb-1" p-title="Angular versions supported">
       <div class="po-font-subtitle po-text-center">AngularJS - Angular 7</div>
       <div class="po-text-center sample-container-dashboard">Angular 7 most downloaded</div>
     </po-widget>
   </po-container>
 
   <po-container class="po-lg-6">
-    <po-table
-      [p-columns]="columns"
-      [p-items]="items"
-      p-striped="true">
-    </po-table>
+    <po-table [p-columns]="columns" [p-items]="items" p-striped="true"> </po-table>
   </po-container>
-
 </po-page-default>
 
-<po-modal
-  p-title="Share webpage"
-  [p-primary-action]="shareAction"
-  [p-secondary-action]="cancelAction">
-
+<po-modal p-title="Share webpage" [p-primary-action]="shareAction" [p-secondary-action]="cancelAction">
   <form #formShare="ngForm">
     <po-email
       class="po-lg-12"
@@ -75,8 +44,8 @@
       [(ngModel)]="email"
       p-clean
       p-label="Type an e-mail for sharing webpage: http://www.po.portinari.com.br"
-      p-required>
+      p-required
+    >
     </po-email>
   </form>
-
 </po-modal>

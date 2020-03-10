@@ -1,13 +1,8 @@
-<po-field-container
-  [p-help]="help"
-  [p-label]="label"
-  [p-optional]="!required && optional">
-
+<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
   <div class="po-row po-pt-1 po-pb-1" #inp>
-    <div *ngFor="let option of options"
-      class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
-
-      <input #inputRadio
+    <div *ngFor="let option of options" class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
+      <input
+        #inputRadio
         class="po-radio-group-input"
         type="radio"
         [attr.name]="name"
@@ -16,12 +11,14 @@
         [disabled]="option.disabled === true || disabled"
         [required]="required"
         [value]="option.value"
-        (keyup)="onKeyUp($event, option.value)">
-        <label
-          class="po-radio-group-label"
-          [class.po-clickable]="!inputRadio.disabled"
-          [for]="name"
-          (click)="eventClick(option.value, option.disabled === true || disabled)">
+        (keyup)="onKeyUp($event, option.value)"
+      />
+      <label
+        class="po-radio-group-label"
+        [class.po-clickable]="!inputRadio.disabled"
+        [for]="name"
+        (click)="eventClick(option.value, option.disabled === true || disabled)"
+      >
         {{ option.label }}
       </label>
     </div>

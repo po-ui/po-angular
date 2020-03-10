@@ -1,43 +1,22 @@
 <div class="po-md-12">
-  <po-info
-    [p-label]="literals.process"
-    [p-orientation]="infoOrientation"
-    [p-value]="value.processID">
-  </po-info>
+  <po-info [p-label]="literals.process" [p-orientation]="infoOrientation" [p-value]="value.processID"> </po-info>
+
+  <po-info [p-label]="literals.periodicity" [p-orientation]="infoOrientation" [p-value]="periodicityValue"> </po-info>
 
   <po-info
-    [p-label]="literals.periodicity"
-    [p-orientation]="infoOrientation"
-    [p-value]="periodicityValue">
-  </po-info>
-
-  <po-info *ngIf="value.periodicity !== 'single'"
+    *ngIf="value.periodicity !== 'single'"
     [p-label]="literals.execution"
     [p-orientation]="infoOrientation"
-    [p-value]="executionValue">
+    [p-value]="executionValue"
+  >
   </po-info>
 
-  <po-info
-    [p-label]="literals.recurrent"
-    [p-orientation]="infoOrientation"
-    [p-value]="recurrentValue">
-  </po-info>
+  <po-info [p-label]="literals.recurrent" [p-orientation]="infoOrientation" [p-value]="recurrentValue"> </po-info>
 
-  <po-info
-    [p-label]="literals.firstExecution"
-    [p-orientation]="infoOrientation"
-    [p-value]="firstExecutionValue">
+  <po-info [p-label]="literals.firstExecution" [p-orientation]="infoOrientation" [p-value]="firstExecutionValue">
   </po-info>
 </div>
 
-<po-widget *ngIf="parameters && parameters.length"
-  class="po-pt-1 po-pb-1 po-md-12"
-  [p-title]="literals.parameters">
-
-  <po-dynamic-view
-    [p-fields]="parameters"
-    [p-value]="value.executionParameter">
-  </po-dynamic-view>
-
+<po-widget *ngIf="parameters && parameters.length" class="po-pt-1 po-pb-1 po-md-12" [p-title]="literals.parameters">
+  <po-dynamic-view [p-fields]="parameters" [p-value]="value.executionParameter"> </po-dynamic-view>
 </po-widget>
-

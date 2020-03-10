@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './sample-po-decimal-hourly-wage.component.html'
 })
 export class SamplePoDecimalHourlyWageComponent {
-
   hourlyWage: number;
   quantityDaysPerMonth: number;
   salary: number;
@@ -13,9 +12,8 @@ export class SamplePoDecimalHourlyWageComponent {
   workingDaysPerWeek: number;
 
   calculate() {
-    const hours = this.weekHours / this.workingDaysPerWeek * this.quantityDaysPerMonth;
+    const hours = (this.weekHours / this.workingDaysPerWeek) * this.quantityDaysPerMonth;
     const salary = this.salary / hours;
     this.hourlyWage = salary;
   }
-
 }

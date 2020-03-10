@@ -7,7 +7,6 @@ import { PoMenuPanelItem } from '@portinari/portinari-ui';
   templateUrl: './sample-po-menu-panel-customer.component.html'
 })
 export class SamplePoMenuPanelCustomerComponent {
-
   title: string = 'Customers';
 
   public readonly menuItems: Array<PoMenuPanelItem> = [
@@ -21,5 +20,4 @@ export class SamplePoMenuPanelCustomerComponent {
   changeTitle(menu: PoMenuPanelItem) {
     this.title = menu.label;
   }
-
 }

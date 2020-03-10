@@ -1,10 +1,12 @@
 <div class="po-page-login-container">
   <div class="po-page-login-panel">
-    <img *ngIf="logo"
+    <img
+      *ngIf="logo"
       class="po-page-background-main-logo"
       [class.po-page-background-hide-logo]="hideLogo"
       alt="main-logo"
-      [src]="logo">
+      [src]="logo"
+    />
 
     <div class="po-page-login-body">
       <div class="po-page-login-panel-content">
@@ -12,7 +14,6 @@
       </div>
     </div>
     <div class="po-page-background-footer po-sm-12">
-
       <po-divider class="po-page-background-footer-mobile-only"></po-divider>
 
       <div class="po-page-background-footer-content">
@@ -21,25 +22,35 @@
             name="selectedLanguageOption"
             [(ngModel)]="selectedLanguageOption"
             [p-options]="selectLanguageOptions"
-            (p-change) = "onChangeLanguage()">
+            (p-change)="onChangeLanguage()"
+          >
           </po-select>
         </div>
 
-        <div class="po-page-background-secondary-logo"
-          [ngClass]="showSelectLanguage ? 'po-page-background-secondary-logo-right' : 'po-page-background-secondary-logo-centered'">
-
-          <img *ngIf="secondaryLogo"
+        <div
+          class="po-page-background-secondary-logo"
+          [ngClass]="
+            showSelectLanguage
+              ? 'po-page-background-secondary-logo-right'
+              : 'po-page-background-secondary-logo-centered'
+          "
+        >
+          <img
+            *ngIf="secondaryLogo"
             class="po-page-background-secondary-logo-image"
             alt="secondary-logo"
-            [src]="secondaryLogo">
+            [src]="secondaryLogo"
+          />
         </div>
       </div>
     </div>
   </div>
 
-  <div *ngIf="background"
+  <div
+    *ngIf="background"
     [ngClass]="background ? 'po-page-login-highlight-image' : 'po-page-login-highlight-image-off'"
-    [style.background-image]="'url(' + background + ')'">
+    [style.background-image]="'url(' + background + ')'"
+  >
     <div class="po-page-login-highlight-text">
       <div class="po-font-display">{{ highlightInfo }}</div>
     </div>

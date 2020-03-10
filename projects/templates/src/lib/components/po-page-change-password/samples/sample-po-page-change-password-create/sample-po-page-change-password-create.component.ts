@@ -3,10 +3,9 @@ import { PoPageChangePasswordComponent, PoPageChangePasswordRequirement } from '
 
 @Component({
   selector: 'sample-po-page-change-password-create',
-  templateUrl: './sample-po-page-change-password-create.component.html',
+  templateUrl: './sample-po-page-change-password-create.component.html'
 })
 export class SamplePoPageChangePasswordCreateComponent {
-
   login: boolean = false;
   requirements: Array<PoPageChangePasswordRequirement> = [
     { requirement: 'Use at least one symbol (ex. !, @, #).', status: this.validateSymbols.bind(this) },
@@ -28,11 +27,15 @@ export class SamplePoPageChangePasswordCreateComponent {
     if (newPassword) {
       let result = newPassword.match(/[a-z]/g);
 
-      if (!result || result.length < 1) { return false; }
+      if (!result || result.length < 1) {
+        return false;
+      }
 
       result = newPassword.match(/[A-Z]/g);
 
-      if (!result || result.length < 1) { return false; }
+      if (!result || result.length < 1) {
+        return false;
+      }
       return true;
     }
   }
@@ -45,9 +48,10 @@ export class SamplePoPageChangePasswordCreateComponent {
     if (newPassword) {
       const result = newPassword.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g);
 
-      if (!result || result.length < 1) { return false; }
+      if (!result || result.length < 1) {
+        return false;
+      }
       return true;
     }
   }
-
 }

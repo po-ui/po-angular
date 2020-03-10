@@ -8,8 +8,7 @@ import { PoComboOption, PoTableColumn } from '@portinari/portinari-ui';
 
 @Injectable()
 export class SamplePoDisclaimerGroupSwPlanetsService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getClimates(): Array<PoComboOption> {
     return [
@@ -57,5 +56,4 @@ export class SamplePoDisclaimerGroupSwPlanetsService {
       { value: 'tundra', label: 'Tundra' }
     ];
   }
-
 }

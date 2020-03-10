@@ -14,8 +14,8 @@ describe('PoNavbarItemsComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoNavbarItemsComponent, PoNavbarItemComponent ],
-      imports: [ RouterModule.forRoot([]) ]
+      declarations: [PoNavbarItemsComponent, PoNavbarItemComponent],
+      imports: [RouterModule.forRoot([])]
     });
   });
 
@@ -33,7 +33,6 @@ describe('PoNavbarItemsComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnDestroy: should call `unsubscribe` of the `routeSubscription`', () => {
       spyOn(component['routeSubscription'], 'unsubscribe');
 
@@ -154,7 +153,6 @@ describe('PoNavbarItemsComponent:', () => {
 
     it(`subscribeToRoute: shouldn't call checkActiveItemByUrl with url router if router events not return an instance of
       NavigationCancel or NavigationEnd`, () => {
-
       spyOn(component, <any>'checkRouterChildrenFragments').and.returnValue('test');
       spyOn(component, <any>'checkActiveItemByUrl');
 
@@ -168,11 +166,9 @@ describe('PoNavbarItemsComponent:', () => {
 
       expect(component['checkActiveItemByUrl']).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should set `po-navbar-item-selected` class in active item', () => {
       component.selectedItem = { label: 'test 3', link: 'http://test3.com' };
 
@@ -226,5 +222,4 @@ describe('PoNavbarItemsComponent:', () => {
       expect(selectedItem.getAttribute('ng-reflect-clickable')).toBe('true');
     });
   });
-
 });

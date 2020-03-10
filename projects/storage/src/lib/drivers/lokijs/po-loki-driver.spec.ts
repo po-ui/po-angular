@@ -4,7 +4,6 @@ import * as LocalForage from 'localforage';
 import { handleThrowError } from '../../util-test/util';
 
 describe('PoLokiDriver', () => {
-
   const items = [
     { id: 'item1', value: 'value1' },
     { id: 'item2', value: 'value2' },
@@ -14,7 +13,6 @@ describe('PoLokiDriver', () => {
   ];
 
   describe('Iteration methods:', () => {
-
     const poLokiDriver = new PoLokiDriver();
 
     it('should be created', () => {
@@ -22,9 +20,8 @@ describe('PoLokiDriver', () => {
     });
 
     describe('constructor:', () => {
-
       it('should call initStorage', () => {
-        spyOn(poLokiDriver, <any> 'initStorage');
+        spyOn(poLokiDriver, <any>'initStorage');
 
         poLokiDriver['driver']._initStorage(null);
 
@@ -32,7 +29,7 @@ describe('PoLokiDriver', () => {
       });
 
       it('should call clear', () => {
-        spyOn(poLokiDriver, <any> 'clear');
+        spyOn(poLokiDriver, <any>'clear');
 
         poLokiDriver['driver'].clear(null);
 
@@ -40,7 +37,7 @@ describe('PoLokiDriver', () => {
       });
 
       it('should call getItem', () => {
-        spyOn(poLokiDriver, <any> 'getItem');
+        spyOn(poLokiDriver, <any>'getItem');
 
         poLokiDriver['driver'].getItem(null);
 
@@ -48,7 +45,7 @@ describe('PoLokiDriver', () => {
       });
 
       it('should call iterate', () => {
-        spyOn(poLokiDriver, <any> 'iterate');
+        spyOn(poLokiDriver, <any>'iterate');
 
         poLokiDriver['driver'].iterate(null);
 
@@ -56,7 +53,7 @@ describe('PoLokiDriver', () => {
       });
 
       it('should call key', () => {
-        spyOn(poLokiDriver, <any> 'key');
+        spyOn(poLokiDriver, <any>'key');
 
         poLokiDriver['driver'].key(null);
 
@@ -64,7 +61,7 @@ describe('PoLokiDriver', () => {
       });
 
       it('should call keys', () => {
-        spyOn(poLokiDriver, <any> 'keys');
+        spyOn(poLokiDriver, <any>'keys');
 
         poLokiDriver['driver'].keys(null);
 
@@ -72,7 +69,7 @@ describe('PoLokiDriver', () => {
       });
 
       it('should call length', () => {
-        spyOn(poLokiDriver, <any> 'length');
+        spyOn(poLokiDriver, <any>'length');
 
         poLokiDriver['driver'].length(null);
 
@@ -80,7 +77,7 @@ describe('PoLokiDriver', () => {
       });
 
       it('should call removeItem', () => {
-        spyOn(poLokiDriver, <any> 'removeItem');
+        spyOn(poLokiDriver, <any>'removeItem');
 
         poLokiDriver['driver'].removeItem(null);
 
@@ -88,13 +85,12 @@ describe('PoLokiDriver', () => {
       });
 
       it('should call setItem', () => {
-        spyOn(poLokiDriver, <any> 'setItem');
+        spyOn(poLokiDriver, <any>'setItem');
 
         poLokiDriver['driver'].setItem(null);
 
         expect(poLokiDriver['setItem']).toHaveBeenCalled();
       });
-
     });
 
     it(`clear: should call 'clearCollection' if 'hasCollectionAndDataInCollection' return 'true'`, async () => {
@@ -148,7 +144,7 @@ describe('PoLokiDriver', () => {
       const key = 'key1';
 
       spyOn(poLokiDriver, <any>'hasCollectionAndDataInCollection').and.returnValue(true);
-      spyOn(poLokiDriver, <any>'getItemInCollectionBy').and.returnValue({value: 'value1'});
+      spyOn(poLokiDriver, <any>'getItemInCollectionBy').and.returnValue({ value: 'value1' });
 
       expect(await poLokiDriver['getItem'](localForage, key)).toBe('value1');
     });
@@ -185,8 +181,9 @@ describe('PoLokiDriver', () => {
     it('initStorage: should return a error if configureLokiStorage return an error', async () => {
       spyOn(poLokiDriver, <any>'configureLokiStorage').and.throwError('');
 
-      expect(await handleThrowError(poLokiDriver['initStorage'](getConfigMock())))
-      .toThrowError(`Cannot configure Loki Storage`);
+      expect(await handleThrowError(poLokiDriver['initStorage'](getConfigMock()))).toThrowError(
+        `Cannot configure Loki Storage`
+      );
     });
 
     it(`iterate: should call 'iterateWithDataItem' with 'iteratorcallback' if 'hasCollectionAndDataInCollection'
@@ -240,7 +237,7 @@ describe('PoLokiDriver', () => {
 
     it(`keys: should call 'getLokiMap' and return an array of keys if 'hasCollection' return true`, async () => {
       const localForage = createLocalForageInstance();
-      const getAllLokiMapItems = {1: 'key1', 2: 'key2', key: 'key3'};
+      const getAllLokiMapItems = { 1: 'key1', 2: 'key2', key: 'key3' };
       const result = ['key1', 'key2', 'key3'];
 
       spyOn(poLokiDriver, <any>'hasCollection').and.returnValue(true);
@@ -339,7 +336,7 @@ describe('PoLokiDriver', () => {
       const localForage = createLocalForageInstance();
       const keyParameter = 'key1';
       const valueParameter = 'value1';
-      const getItemInCollectionByReturn = {id: 'value'};
+      const getItemInCollectionByReturn = { id: 'value' };
 
       spyOn(poLokiDriver, <any>'hasCollection').and.returnValue(true);
       spyOn(poLokiDriver, <any>'hasDataInCollection').and.returnValue(true);
@@ -348,7 +345,11 @@ describe('PoLokiDriver', () => {
 
       await poLokiDriver['setItem'](localForage, keyParameter, valueParameter);
 
-      expect(poLokiDriver['insertOrUpdate']).toHaveBeenCalledWith(getItemInCollectionByReturn, valueParameter, keyParameter);
+      expect(poLokiDriver['insertOrUpdate']).toHaveBeenCalledWith(
+        getItemInCollectionByReturn,
+        valueParameter,
+        keyParameter
+      );
     });
 
     it(`setItem: should resolve with valueParameter value`, async () => {
@@ -396,11 +397,9 @@ describe('PoLokiDriver', () => {
 
       expect(poLokiDriver['getItemInCollectionBy']).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Access storage methods :', () => {
-
     const poLokiDriver = new PoLokiDriver();
 
     it(`getDriver: should return driver`, () => {
@@ -585,7 +584,7 @@ describe('PoLokiDriver', () => {
 
       fakeThis.collection = undefined;
 
-      expect( poLokiDriver['hasCollection'].call(fakeThis)).toBeUndefined();
+      expect(poLokiDriver['hasCollection'].call(fakeThis)).toBeUndefined();
 
       fakeThis.collection = null;
 
@@ -609,7 +608,7 @@ describe('PoLokiDriver', () => {
         }
       };
 
-      expect( poLokiDriver['hasDataInCollection'].call(fakeThis)).toBeFalsy();
+      expect(poLokiDriver['hasDataInCollection'].call(fakeThis)).toBeFalsy();
     });
 
     it(`hasCollectionAndDataInCollection: should return true if 'hasCollection' and 'hasDataInCollection' return true`, () => {
@@ -640,7 +639,7 @@ describe('PoLokiDriver', () => {
           insert: () => {}
         }
       };
-      const itemParameter = { value : 'value1' };
+      const itemParameter = { value: 'value1' };
       const valueParameter = 'value2';
       const keyParameter = 'key';
 
@@ -649,7 +648,7 @@ describe('PoLokiDriver', () => {
 
       poLokiDriver['insertOrUpdate'].call(fakeThis, itemParameter, valueParameter, keyParameter);
 
-      expect(fakeThis.collection.update).toHaveBeenCalledWith({value: valueParameter});
+      expect(fakeThis.collection.update).toHaveBeenCalledWith({ value: valueParameter });
       expect(fakeThis.collection.insert).not.toHaveBeenCalled();
     });
 
@@ -671,7 +670,7 @@ describe('PoLokiDriver', () => {
       poLokiDriver['insertOrUpdate'].call(fakeThis, itemParameter, valueParameter, keyParameter);
 
       expect(fakeThis.collection.update).not.toHaveBeenCalled();
-      expect(fakeThis.collection.insert).toHaveBeenCalledWith({key: keyParameter, value: valueParameter});
+      expect(fakeThis.collection.insert).toHaveBeenCalledWith({ key: keyParameter, value: valueParameter });
     });
 
     it(`iterateWithDataItem: should call 'forEach'`, () => {
@@ -705,9 +704,7 @@ describe('PoLokiDriver', () => {
 
       expect(fakeThis.collection.count).toHaveBeenCalled();
     });
-
   });
-
 });
 
 function createLocalForageInstance() {

@@ -24,5 +24,4 @@ describe('PoLoadingBaseComponent', () => {
 
     expect(component.text).toBe(defaultText);
   });
-
 });

@@ -1,30 +1,23 @@
 <div class="po-dynamic-view po-row" *ngIf="visibleFields.length">
-
   <ng-template ngFor let-field [ngForOf]="visibleFields">
+    <po-divider *ngIf="field?.divider?.trim()" class="po-sm-12" [p-label]="field.divider"> </po-divider>
 
-    <po-divider *ngIf="field?.divider?.trim()" class="po-sm-12" [p-label]="field.divider">
-    </po-divider>
-
-    <ng-container *ngTemplateOutlet="!field.tag ? poInfo : poTag; context: { $implicit: field }">
-    </ng-container>
-
+    <ng-container *ngTemplateOutlet="!field.tag ? poInfo : poTag; context: { $implicit: field }"> </ng-container>
   </ng-template>
-
 </div>
 
 <ng-template #poInfo let-field>
-  <po-info [ngClass]="field.cssClass"
-    [p-label]="field.label"
-    [p-value]="field.value">
-  </po-info>
+  <po-info [ngClass]="field.cssClass" [p-label]="field.label" [p-value]="field.value"> </po-info>
 </ng-template>
 
 <ng-template #poTag let-field>
-  <po-tag [ngClass]="field.cssClass"
+  <po-tag
+    [ngClass]="field.cssClass"
     [p-color]="field.color"
     [p-icon]="field.icon"
     [p-inverse]="field.inverse"
     [p-label]="field.label"
-    [p-value]="field.value">
+    [p-value]="field.value"
+  >
   </po-tag>
 </ng-template>

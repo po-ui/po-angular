@@ -14,7 +14,7 @@ const PO_BADGE_COLORS = [
   'color-09',
   'color-10',
   'color-11',
-  'color-12',
+  'color-12'
 ];
 const PO_BADGE_COLOR_DEFAULT = 'color-07';
 
@@ -27,7 +27,6 @@ const PO_BADGE_COLOR_DEFAULT = 'color-07';
  */
 @Directive()
 export class PoBadgeBaseComponent {
-
   private _color: string;
   private _value: number;
 
@@ -89,8 +88,7 @@ export class PoBadgeBaseComponent {
   }
 
   private setBadgeValue(value: number) {
-    const validRangeValue = (value || value === 0) && (value >= 0 && value < 100);
+    const validRangeValue = (value || value === 0) && value >= 0 && value < 100;
     this.badgeValue = validRangeValue ? value.toString() : value > 99 ? '99+' : undefined;
   }
-
 }

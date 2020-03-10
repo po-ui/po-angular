@@ -10,11 +10,10 @@ import { addPackageToPackageJson } from '../utils/package-config';
  *  - Configure theme style in project workspace;
  */
 export default function(options: any): Rule {
-
   return chain([
     addPoPackageAndInstall(),
     schematic('ng-add-setup-project', {
-      ...options,
+      ...options
     })
   ]);
 }

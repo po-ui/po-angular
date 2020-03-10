@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-datepicker-basic',
   templateUrl: './sample-po-datepicker-basic.component.html'
 })
-export class SamplePoDatepickerBasicComponent { }
+export class SamplePoDatepickerBasicComponent {}

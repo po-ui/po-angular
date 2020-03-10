@@ -10,13 +10,8 @@ import { PoWidgetComponent } from './po-widget.component';
  * Módulo do componente po-widget
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoContainerModule
-  ],
-  exports: [
-    PoWidgetComponent
-  ],
+  imports: [CommonModule, PoContainerModule],
+  exports: [PoWidgetComponent],
   declarations: [PoWidgetComponent]
 })
-export class PoWidgetModule { }
+export class PoWidgetModule {}

@@ -6,52 +6,32 @@
   [p-text]="text"
   [p-value]="value"
   (p-cancel)="onEvent('p-cancel')"
-  (p-retry)="onEvent('p-retry')">
+  (p-retry)="onEvent('p-retry')"
+>
 </po-progress>
 
 <po-divider></po-divider>
 
-<po-info
-  p-label="Event"
-  [p-value]="event">
-</po-info>
+<po-info p-label="Event" [p-value]="event"> </po-info>
 
 <po-divider></po-divider>
 
 <form #progressBarPropertiesForm="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="text"
-      [(ngModel)]="text"
-      p-clean
-      p-label="Text">
-    </po-input>
+    <po-input class="po-md-6" name="text" [(ngModel)]="text" p-clean p-label="Text"> </po-input>
 
-    <po-number
-      class="po-md-6"
-      name="value"
-      [(ngModel)]="value"
-      p-clean
-      p-label="Value"
-      p-max="100"
-      p-min="0">
+    <po-number class="po-md-6" name="value" [(ngModel)]="value" p-clean p-label="Value" p-max="100" p-min="0">
     </po-number>
 
-    <po-input
-      class="po-md-6"
-      name="info"
-      [(ngModel)]="info"
-      p-clean
-      p-label="Info">
-    </po-input>
+    <po-input class="po-md-6" name="info" [(ngModel)]="info" p-clean p-label="Info"> </po-input>
 
     <po-checkbox-group
       class="po-md-6"
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
 
     <po-radio-group
@@ -59,23 +39,15 @@
       name="infoIcon"
       [(ngModel)]="infoIcon"
       p-label="Info icon"
-      [p-options]="infoIconsOptions">
+      [p-options]="infoIconsOptions"
+    >
     </po-radio-group>
 
-    <po-radio-group
-      class="po-md-6"
-      name="status"
-      [(ngModel)]="status"
-      p-label="Status"
-      [p-options]="statusOptions">
+    <po-radio-group class="po-md-6" name="status" [(ngModel)]="status" p-label="Status" [p-options]="statusOptions">
     </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

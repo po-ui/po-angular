@@ -12,7 +12,7 @@ describe('PoNavbarItemNavigationComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoNavbarItemNavigationComponent, PoNavbarItemNavigationIconComponent ]
+      declarations: [PoNavbarItemNavigationComponent, PoNavbarItemNavigationIconComponent]
     });
   });
 
@@ -30,7 +30,6 @@ describe('PoNavbarItemNavigationComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should contain two `po-navbar-item-navigation-icon` elements', () => {
       const elements = nativeElement.querySelectorAll('po-navbar-item-navigation-icon');
 
@@ -39,7 +38,5 @@ describe('PoNavbarItemNavigationComponent:', () => {
       expect(elements[0].classList).toContain('po-navbar-item-navigation-icon');
       expect(elements[1].classList).toContain('po-navbar-item-navigation-icon');
     });
-
   });
-
 });

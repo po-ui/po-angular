@@ -1,5 +1,13 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, DoCheck, ElementRef, forwardRef, OnDestroy, Renderer2, ViewChild
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  DoCheck,
+  ElementRef,
+  forwardRef,
+  OnDestroy,
+  Renderer2,
+  ViewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -45,22 +53,21 @@ const poMultiselectContainerPositionDefault = 'bottom';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoMultiselectComponent),
-      multi: true,
+      multi: true
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoMultiselectComponent),
-      multi: true,
+      multi: true
     }
   ]
 })
 export class PoMultiselectComponent extends PoMultiselectBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
-
   @ViewChild('dropdownElement', { read: ElementRef, static: true }) dropdownElement: ElementRef;
   @ViewChild('dropdownElement', { static: true }) dropdown;
   @ViewChild('disclaimerContainer', { read: ElementRef, static: true }) disclaimerContainerElement: ElementRef;
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;
-  @ViewChild('inputElement', {read: ElementRef, static: true }) inputElement: ElementRef;
+  @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 
   disclaimerOffset = 0;
   dropdownIcon: string = 'po-icon-arrow-down';
@@ -76,7 +83,8 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     public renderer: Renderer2,
     private changeDetector: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
-    private el: ElementRef) {
+    private el: ElementRef
+  ) {
     super();
   }
 
@@ -157,7 +165,6 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
       }
 
       if (disclaimersVisible || !this.selectedOptions.length) {
-
         if (i === this.selectedOptions.length) {
           this.isCalculateVisibleItems = false;
           return;
@@ -166,13 +173,12 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
         if (sum + extraDisclaimerSize > inputWidth) {
           this.visibleDisclaimers.splice(-2, 2);
           const label = '+' + (this.selectedOptions.length + 1 - i).toString();
-          this.visibleDisclaimers.push({value: '', label: label});
+          this.visibleDisclaimers.push({ value: '', label: label });
         } else {
           this.visibleDisclaimers.splice(-1, 1);
           const label = '+' + (this.selectedOptions.length - i).toString();
-          this.visibleDisclaimers.push({value: '', label: label});
+          this.visibleDisclaimers.push({ value: '', label: label });
         }
-
       }
     }
   }
@@ -217,11 +223,9 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   openDropdown(toOpen) {
-
     if (toOpen && !this.disabled) {
       this.controlDropdownVisibility(true);
     }
-
   }
 
   controlDropdownVisibility(toOpen: boolean) {
@@ -229,7 +233,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   scrollToSelectedOptions() {
-  if (this.selectedOptions && this.selectedOptions.length) {
+    if (this.selectedOptions && this.selectedOptions.length) {
       const index = this.options.findIndex(option => option.value === this.selectedOptions[0].value);
       this.dropdown.scrollTo(index);
     }
@@ -240,14 +244,16 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   changeSearch(event) {
-    (event && event.value) ? this.searchByLabel(event.value, this.options, this.filterMode) : this.setVisibleOptionsDropdown(this.options);
+    event && event.value
+      ? this.searchByLabel(event.value, this.options, this.filterMode)
+      : this.setVisibleOptionsDropdown(this.options);
 
     // timeout necessário para reposicionar corretamente quando dropdown estiver pra cima do input e realizar busca no input
     setTimeout(() => this.adjustContainerPosition());
   }
 
   getPlaceholder() {
-    return (this.placeholder && !this.visibleDisclaimers.length) ? this.placeholder : '';
+    return this.placeholder && !this.visibleDisclaimers.length ? this.placeholder : '';
   }
 
   closeDisclaimer(value) {
@@ -259,12 +265,13 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   wasClickedOnToggle(event: MouseEvent): void {
-    if (!this.inputElement.nativeElement.contains(event.target) &&
+    if (
+      !this.inputElement.nativeElement.contains(event.target) &&
       !this.iconElement.nativeElement.contains(event.target) &&
       !this.dropdownElement.nativeElement.contains(event.target) &&
       !this.disclaimerContainerElement.nativeElement.contains(event.target) &&
-      this.dropdownOpen) {
-
+      this.dropdownOpen
+    ) {
       this.controlDropdownVisibility(false);
     }
   }
@@ -299,7 +306,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
   private onScroll = (): void => {
     this.adjustContainerPosition();
-  }
+  };
 
   private open(): void {
     this.dropdownIcon = 'po-icon-arrow-up';
@@ -337,5 +344,4 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
     this.adjustContainerPosition();
   }
-
 }

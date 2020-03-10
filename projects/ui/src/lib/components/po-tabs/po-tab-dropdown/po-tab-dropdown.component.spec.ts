@@ -14,10 +14,10 @@ describe('PoTabDropdownComponent:', () => {
   let nativeElement: any;
 
   const tabs: Array<any> = [
-    { label: 'Tab 1' , overflow: true, click: () => {}},
-    { label: 'Tab 2' , overflow: true, click: () => {} },
-    { label: 'Tab 3' , overflow: true, click: () => {} },
-    { label: 'Tab 4' , overflow: true, click: () => {} }
+    { label: 'Tab 1', overflow: true, click: () => {} },
+    { label: 'Tab 2', overflow: true, click: () => {} },
+    { label: 'Tab 3', overflow: true, click: () => {} },
+    { label: 'Tab 4', overflow: true, click: () => {} }
   ];
 
   configureTestSuite(() => {
@@ -42,7 +42,6 @@ describe('PoTabDropdownComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it(`togglePopover: should call 'popover.open' if 'popover.isHidden' is 'true'.`, () => {
       const fakeThis = {
         popover: {
@@ -82,11 +81,9 @@ describe('PoTabDropdownComponent:', () => {
 
       expect(component.getContainerClass()).toBe('po-tab-dropdown-container');
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should have label', () => {
       const label = 'Mais';
 
@@ -137,7 +134,5 @@ describe('PoTabDropdownComponent:', () => {
 
       expect(component.togglePopover).toHaveBeenCalled();
     });
-
   });
-
 });

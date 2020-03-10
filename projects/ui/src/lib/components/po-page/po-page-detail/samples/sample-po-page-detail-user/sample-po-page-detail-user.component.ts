@@ -8,7 +8,6 @@ import { PoBreadcrumb } from '@portinari/portinari-ui';
   templateUrl: './sample-po-page-detail-user.component.html'
 })
 export class SamplePoPageDetailUserComponent {
-
   birthDate: string = '26/12/1978';
   email: string = 'john.doe@portinari.com.br';
   fathersName: string = 'Mike Doe';
@@ -22,16 +21,12 @@ export class SamplePoPageDetailUserComponent {
   userId: number = 122635;
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', link: '/' },
-      { label: 'User Detail' }
-    ]
+    items: [{ label: 'Home', link: '/' }, { label: 'User Detail' }]
   };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   edit() {
     this.router.navigate(['/documentation/po-page-edit'], { queryParams: { view: 'web' } });
   }
-
 }

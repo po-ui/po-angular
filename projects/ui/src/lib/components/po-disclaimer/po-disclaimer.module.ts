@@ -8,10 +8,8 @@ import { PoDisclaimerComponent } from './po-disclaimer.component';
  * Módulo do componente po-disclaimer.
  */
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [PoDisclaimerComponent],
   exports: [PoDisclaimerComponent]
 })
-export class PoDisclaimerModule { }
+export class PoDisclaimerModule {}

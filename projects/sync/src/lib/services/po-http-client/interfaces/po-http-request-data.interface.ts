@@ -9,7 +9,6 @@ import { PoHttpRequestType } from './../po-http-request-type.enum';
  * Interface para definição de uma requisição HTTP.
  */
 export interface PoHttpRequestData {
-
   /** URL que será utilizada na requisição. */
   url: string;
 
@@ -21,5 +20,4 @@ export interface PoHttpRequestData {
 
   /** Corpo da requisição. */
   body?: any;
-
 }

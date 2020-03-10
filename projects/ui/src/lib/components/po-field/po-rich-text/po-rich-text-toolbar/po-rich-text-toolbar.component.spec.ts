@@ -17,14 +17,8 @@ describe('PoRichTextToolbarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        PoButtonGroupModule,
-        PoModalModule,
-        PoTooltipModule,
-        PoFieldModule
-      ],
-      declarations: [],
+      imports: [FormsModule, PoButtonGroupModule, PoModalModule, PoTooltipModule, PoFieldModule],
+      declarations: []
     });
   });
 
@@ -40,7 +34,6 @@ describe('PoRichTextToolbarComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('readonly: should call toggleDisableButtons', () => {
       spyOn(component, <any>'toggleDisableButtons');
 
@@ -71,11 +64,9 @@ describe('PoRichTextToolbarComponent:', () => {
 
       expect(component.modal.emit).toHaveBeenCalled();
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngAfterViewInit: should call removeButtonFocus and setColorInColorPicker', () => {
       const spyOnRemoveButtonFocus = spyOn(component, <any>'removeButtonFocus');
       const spyOnSetColorInColorPicker = spyOn(component, <any>'setColorInColorPicker');
@@ -87,7 +78,7 @@ describe('PoRichTextToolbarComponent:', () => {
     });
 
     describe('setButtonsStates:', () => {
-      const commands = [ 'bold', 'italic', 'justifycenter' ];
+      const commands = ['bold', 'italic', 'justifycenter'];
       const hexColor = '#000000';
 
       it('should map alignButtons and apply `selected` true only for `justifycenter` option', () => {
@@ -140,13 +131,12 @@ describe('PoRichTextToolbarComponent:', () => {
 
       it(`should call 'setColorInColorPicker' if 'readonly' is 'false'.`, () => {
         component.readonly = false;
-        const spyOnSetColorInColorPicker = spyOn(component, <any> 'setColorInColorPicker');
+        const spyOnSetColorInColorPicker = spyOn(component, <any>'setColorInColorPicker');
 
         component.setButtonsStates({ commands, hexColor });
 
         expect(spyOnSetColorInColorPicker).toHaveBeenCalled();
       });
-
     });
 
     it('emitAlignCommand: should emit command', () => {
@@ -246,11 +236,9 @@ describe('PoRichTextToolbarComponent:', () => {
 
       expect(component.modal.emit).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should change color picker to disabled if readonly is true.', () => {
       component.readonly = true;
 
@@ -268,7 +256,5 @@ describe('PoRichTextToolbarComponent:', () => {
 
       expect(colorPickerInput).toBeTruthy();
     });
-
   });
-
 });

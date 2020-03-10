@@ -27,7 +27,6 @@ export const poDisclaimerGroupLiteralsDefault = {
  */
 @Directive()
 export class PoDisclaimerGroupBaseComponent implements DoCheck {
-
   private _disclaimers: Array<PoDisclaimer> = [];
   private _hideRemoveAll: boolean = false;
 
@@ -35,8 +34,8 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
   private previousDisclaimers: Array<PoDisclaimer> = [];
 
   readonly literals = {
-      ...poDisclaimerGroupLiteralsDefault[poLocaleDefault],
-      ...poDisclaimerGroupLiteralsDefault[browserLanguage()]
+    ...poDisclaimerGroupLiteralsDefault[poLocaleDefault],
+    ...poDisclaimerGroupLiteralsDefault[browserLanguage()]
   };
 
   /** Lista de *disclaimers*. */
@@ -61,10 +60,8 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
    * ```
    */
   @Input('p-disclaimers') set disclaimers(value: Array<PoDisclaimer>) {
-
     this.previousDisclaimers = [...this.disclaimers];
     this._disclaimers = this.checkDisclaimers(value);
-
   }
 
   get disclaimers() {
@@ -119,11 +116,9 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
   }
 
   onKeyPress(event: any) {
-
     if (isKeyCodeEnter(event)) {
       this.removeAllItems();
     }
-
   }
 
   removeAllItems() {
@@ -141,30 +136,23 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
   }
 
   private checkChanges() {
-
     if (this.differ) {
       const changes = this.differ.diff(this.disclaimers);
 
       if (changes && this.disclaimersAreChanged(this.disclaimers)) {
         this.emitChangeDisclaimers();
       }
-
     }
-
   }
 
   private checkDisclaimers(disclaimers: Array<PoDisclaimer>) {
     if (Array.isArray(disclaimers)) {
-
       for (let i = 0; i < disclaimers.length; i++) {
         const disclaimer = disclaimers[i];
 
         if (disclaimer.value || disclaimer.value === 0 || disclaimer.value === false) {
-
           disclaimer['$id'] = uuid();
-
         } else {
-
           disclaimers.splice(i, 1);
           i--;
         }
@@ -183,8 +171,11 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
       return true;
     }
 
-    return currentValues.some((disclaimer, index) => disclaimer.value !== this.previousDisclaimers[index].value
-      || disclaimer.property !== this.previousDisclaimers[index].property);
+    return currentValues.some(
+      (disclaimer, index) =>
+        disclaimer.value !== this.previousDisclaimers[index].value ||
+        disclaimer.property !== this.previousDisclaimers[index].property
+    );
   }
 
   private emitChangeDisclaimers() {
@@ -193,5 +184,4 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
     });
     this.previousDisclaimers = [...this._disclaimers];
   }
-
 }

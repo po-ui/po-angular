@@ -31,10 +31,9 @@ import { PoAccordionService } from './services/po-accordion.service';
 @Component({
   selector: 'po-accordion',
   templateUrl: 'po-accordion.component.html',
-  providers: [ PoAccordionService ]
+  providers: [PoAccordionService]
 })
 export class PoAccordionComponent extends PoAccordionBaseComponent implements OnDestroy {
-
   private accordionServiceSubscription: Subscription;
   private expandedActiveAccordionItem: PoAccordionItemComponent;
 
@@ -56,7 +55,8 @@ export class PoAccordionComponent extends PoAccordionBaseComponent implements On
   }
 
   private receiveFromChildAccordionSubscription() {
-    this.accordionServiceSubscription = this.accordionService.receiveFromChildAccordionClicked()
+    this.accordionServiceSubscription = this.accordionService
+      .receiveFromChildAccordionClicked()
       .subscribe(poAccordionItem => this.toggle(poAccordionItem));
   }
 
@@ -74,5 +74,4 @@ export class PoAccordionComponent extends PoAccordionBaseComponent implements On
 
     this.expandedActiveAccordionItem = poAccordionItem;
   }
-
 }

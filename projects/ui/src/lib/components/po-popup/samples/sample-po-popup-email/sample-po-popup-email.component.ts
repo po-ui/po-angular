@@ -6,25 +6,26 @@ import { PoModalAction, PoModalComponent, PoPopupAction } from '@portinari/porti
 @Component({
   selector: 'sample-po-popup-email',
   templateUrl: './sample-po-popup-email.component.html',
-  styles : [`
-    .sample-logo-portinari {
-      height: 15%;
-      padding-top: 2.5%;
-    }
+  styles: [
+    `
+      .sample-logo-portinari {
+        height: 15%;
+        padding-top: 2.5%;
+      }
 
-    .sample-popup-header-template {
-      background-color: #0c9abe;
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px;
-      color: #ffffff;
-      padding-bottom: 5%;
-      padding-left: 25%;
-      padding-top: 5%;
-    }
-  `]
+      .sample-popup-header-template {
+        background-color: #0c9abe;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        color: #ffffff;
+        padding-bottom: 5%;
+        padding-left: 25%;
+        padding-top: 5%;
+      }
+    `
+  ]
 })
 export class SamplePoPopupEmailComponent implements OnInit {
-
   @ViewChild('formEmail', { static: true }) formEmail: FormControl;
 
   @ViewChild('target', { read: ElementRef, static: true }) targetRef: ElementRef;
@@ -43,7 +44,7 @@ export class SamplePoPopupEmailComponent implements OnInit {
     this.popupActions = [
       { icon: 'po-icon-plus', label: 'Upper Text', type: 'default', action: this.upper },
       { icon: 'po-icon-minus', label: 'Lower Text', type: 'default', action: this.lower },
-      { icon: 'po-icon-close', label: 'Clear', type: 'danger' , action: this.clear, separator: true},
+      { icon: 'po-icon-close', label: 'Clear', type: 'danger', action: this.clear, separator: true }
     ];
 
     this.primaryAction = {
@@ -53,7 +54,6 @@ export class SamplePoPopupEmailComponent implements OnInit {
         this.reset();
       }
     };
-
   }
 
   send() {
@@ -75,5 +75,4 @@ export class SamplePoPopupEmailComponent implements OnInit {
   private upper() {
     this.emailText = this.emailText && this.emailText.toUpperCase();
   }
-
 }

@@ -6,7 +6,6 @@
  * Interface para definição das literais usadas no `po-list-view`.
  */
 export interface PoListViewLiterals {
-
   /** Rótulo do botão que oculta os detalhes do item. */
   hideDetails?: string;
 
@@ -21,5 +20,4 @@ export interface PoListViewLiterals {
 
   /** Rótulo do botão que exibe os detalhes do item. */
   showDetails?: string;
-
 }

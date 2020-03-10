@@ -14,21 +14,9 @@ import { PoTooltipModule } from '../../directives/po-tooltip/index';
  * Módulo do componente po-menu-panel.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    PoFieldModule,
-    PoTooltipModule
-  ],
-  declarations: [
-    PoMenuPanelComponent,
-    PoMenuPanelItemComponent
-  ],
-  exports: [
-    PoMenuPanelComponent
-  ],
-  providers: [
-    PoMenuPanelItemsService
-  ]
+  imports: [CommonModule, RouterModule, PoFieldModule, PoTooltipModule],
+  declarations: [PoMenuPanelComponent, PoMenuPanelItemComponent],
+  exports: [PoMenuPanelComponent],
+  providers: [PoMenuPanelItemsService]
 })
-export class PoMenuPanelModule { }
+export class PoMenuPanelModule {}

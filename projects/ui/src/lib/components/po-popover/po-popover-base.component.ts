@@ -28,7 +28,6 @@ const PO_POPOVER_TRIGGERS = ['click', 'hover'];
  */
 @Directive()
 export class PoPopoverBaseComponent {
-
   // Controla se o popover fica oculto ou visível, por padrão é oculto.
   isHidden: boolean = true;
 
@@ -141,5 +140,4 @@ export class PoPopoverBaseComponent {
   protected mouseEnterListener: () => void;
   protected mouseLeaveListener: () => void;
   protected resizeListener: () => void;
-
 }

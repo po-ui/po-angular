@@ -46,7 +46,6 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   ]
 })
 export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
-
   icon = 'po-icon-mail';
 
   maxlength: number = 254;
@@ -65,7 +64,7 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
 
   ngAfterViewInit() {
     setTimeout(() => {
-    // Se não tem ngModel ou reactive form adiciona validação com classes css
+      // Se não tem ngModel ou reactive form adiciona validação com classes css
       if (!this.onChangePropagate) {
         this.inputEl.nativeElement.addEventListener('keyup', this.listener);
       }
@@ -79,7 +78,7 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
     }
   }
 
-    extraValidation(c: AbstractControl): { [key: string]: any } {
+  extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
 }

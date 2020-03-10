@@ -8,7 +8,6 @@ import { PoPageDetailLiterals } from '@portinari/portinari-ui';
   templateUrl: './sample-po-page-detail-labs.component.html'
 })
 export class SamplePoPageDetailLabsComponent implements OnInit {
-
   action: string;
   breadcrumb: PoBreadcrumb;
   breadcrumbItem: PoBreadcrumbItem;
@@ -28,7 +27,7 @@ export class SamplePoPageDetailLabsComponent implements OnInit {
   }
 
   addBreadcrumbParam() {
-    const newParam = {[this.breadcrumbParams.property]: this.breadcrumbParams.value};
+    const newParam = { [this.breadcrumbParams.property]: this.breadcrumbParams.value };
 
     if (this.breadcrumb.params) {
       this.breadcrumb.params = Object.assign(this.breadcrumb.params, newParam);
@@ -68,5 +67,4 @@ export class SamplePoPageDetailLabsComponent implements OnInit {
     this.literals = '';
     this.title = 'Portinari Page Detail';
   }
-
- }
+}

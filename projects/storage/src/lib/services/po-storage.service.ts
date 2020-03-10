@@ -75,7 +75,6 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  */
 @Injectable()
 export class PoStorageService {
-
   private driver: string = null;
   private idleQueue = new IdleQueue();
   private storagePromise: Promise<LocalForage>;
@@ -519,7 +518,7 @@ export class PoStorageService {
         case 'localstorage':
           return LocalForage.LOCALSTORAGE;
         default:
-        return driver;
+          return driver;
       }
     });
   }
@@ -549,7 +548,5 @@ export class PoStorageService {
     } catch {
       throw new Error(`Cannot use this drivers: ${actualConfig.driverOrder.join(', ')}.`);
     }
-
   }
-
 }

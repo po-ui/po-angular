@@ -32,10 +32,7 @@ const routerModulePath = '@angular/router';
  * - Imports RouterModule in app root module;
  */
 export default function(options: ComponentOptions): Rule {
-  return chain([
-    createAppComponent(options),
-    addModuleImportToRootModule(options, routerModule, routerModulePath)
-  ]);
+  return chain([createAppComponent(options), addModuleImportToRootModule(options, routerModule, routerModulePath)]);
 }
 
 function createAppComponent(options: ComponentOptions): Rule {
@@ -48,22 +45,17 @@ function createAppComponent(options: ComponentOptions): Rule {
       options.style = 'css';
     }
 
-    const templateSource = applyWithOverwrite(
-      url('./files'),
-      [
-        options.skipTests ? filter(path => !path.endsWith('.spec.ts.template')) : noop(),
-        pathTemplate({ ...options }),
-        applyTemplates({
-          ...strings,
-          ...options
-        }),
-        move(normalize(sourceDir)),
-      ]
-    );
-
-    return chain([
-      templateSource
+    const templateSource = applyWithOverwrite(url('./files'), [
+      options.skipTests ? filter(path => !path.endsWith('.spec.ts.template')) : noop(),
+      pathTemplate({ ...options }),
+      applyTemplates({
+        ...strings,
+        ...options
+      }),
+      move(normalize(sourceDir))
     ]);
+
+    return chain([templateSource]);
   };
 }
 
@@ -74,13 +66,11 @@ function applyWithOverwrite(source: Source, rules: Array<Rule>): Rule {
         ...rules,
         forEach(fileEntry => {
           if (tree.exists(fileEntry.path)) {
-
             tree.overwrite(fileEntry.path, fileEntry.content);
             return null;
           }
           return fileEntry;
-        }),
-
+        })
       ]),
       MergeStrategy.Overwrite
     );

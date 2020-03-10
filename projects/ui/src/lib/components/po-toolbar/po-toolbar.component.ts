@@ -28,7 +28,6 @@ import { PoToolbarBaseComponent } from './po-toolbar-base.component';
   templateUrl: './po-toolbar.component.html'
 })
 export class PoToolbarComponent extends PoToolbarBaseComponent implements OnInit {
-
   parentRef: any;
 
   constructor(private titleService: Title, viewRef: ViewContainerRef) {
@@ -43,5 +42,4 @@ export class PoToolbarComponent extends PoToolbarBaseComponent implements OnInit
   private setTitle(newTitle: string) {
     this.titleService.setTitle(newTitle);
   }
-
 }

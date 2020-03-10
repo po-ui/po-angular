@@ -1,9 +1,10 @@
-<po-modal #modal
+<po-modal
+  #modal
   p-hide-close
   [p-primary-action]="modalPrimaryAction"
   [p-secondary-action]="modalCancelAction"
-  [p-title]="modalTitle">
-
+  [p-title]="modalTitle"
+>
   <ng-container *ngTemplateOutlet="modalType === 'image' ? modalImage : modalLink"></ng-container>
 </po-modal>
 
@@ -11,7 +12,8 @@
   <form #modalImageForm="ngForm">
     <div class="po-row">
       <!-- po-upload desabilita o drag drop caso não tenha valor atribuido para a propriedade p-url -->
-      <po-upload #upload
+      <po-upload
+        #upload
         class="po-md-12"
         name="upload"
         [(ngModel)]="uploadModel"
@@ -21,7 +23,8 @@
         p-url="x"
         [p-drag-drop]="!modal.isHidden"
         [p-disabled]="isUrlValid"
-        [p-restrictions]="uploadRestrictions">
+        [p-restrictions]="uploadRestrictions"
+      >
       </po-upload>
     </div>
 
@@ -31,7 +34,8 @@
         name="url"
         [(ngModel)]="urlImage"
         [p-label]="literals.urlImage"
-        [p-disabled]="isUploadValid">
+        [p-disabled]="isUploadValid"
+      >
       </po-url>
     </div>
   </form>
@@ -40,22 +44,26 @@
 <ng-template #modalLink>
   <form #modalLinkForm="ngForm">
     <div class="po-row">
-      <po-input class="po-md-12 po-mb-2"
+      <po-input
+        class="po-md-12 po-mb-2"
         name="urlLinkText"
         [(ngModel)]="urlLinkText"
         p-optional
         [p-label]="literals.linkTextLabel"
-        [p-placeholder]="literals.linkTextLabel">
+        [p-placeholder]="literals.linkTextLabel"
+      >
       </po-input>
 
-      <po-url class="po-md-12"
+      <po-url
+        class="po-md-12"
         name="urlLink"
         [(ngModel)]="urlLink"
         p-label="Link"
         p-required
         [p-help]="literals.linkUrlTextHelper"
         [p-placeholder]="literals.linkUrlTextPlaceholder"
-        (p-change-model)="formModelValidate()">
+        (p-change-model)="formModelValidate()"
+      >
       </po-url>
     </div>
   </form>

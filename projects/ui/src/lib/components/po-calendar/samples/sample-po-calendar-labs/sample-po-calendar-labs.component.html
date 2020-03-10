@@ -3,28 +3,20 @@
   [p-locale]="locale"
   [p-min-date]="minDate"
   [p-max-date]="maxDate"
-  (p-change)="changeEvent('p-change')">
+  (p-change)="changeEvent('p-change')"
+>
 </po-calendar>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-info
-    class="po-md-6"
-    p-label="Model"
-    [p-value]="calendar">
-  </po-info>
-  <po-info
-    class="po-md-6"
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info class="po-md-6" p-label="Model" [p-value]="calendar"> </po-info>
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
-
   <div class="po-row">
     <po-datepicker
       class="po-md-6"
@@ -32,7 +24,8 @@
       [(ngModel)]="minDate"
       p-clean
       p-label="Min Date"
-      [p-max-date]="maxDate">
+      [p-max-date]="maxDate"
+    >
     </po-datepicker>
 
     <po-datepicker
@@ -41,7 +34,8 @@
       [(ngModel)]="maxDate"
       p-clean
       p-label="Max Date"
-      [p-min-date]="minDate">
+      [p-min-date]="minDate"
+    >
     </po-datepicker>
   </div>
 
@@ -53,15 +47,12 @@
       p-columns="3"
       p-help="Select a locale for the calendar"
       p-label="Locale"
-      [p-options]="localeOptions">
+      [p-options]="localeOptions"
+    >
     </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

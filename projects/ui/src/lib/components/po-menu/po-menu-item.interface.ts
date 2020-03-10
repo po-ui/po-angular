@@ -9,7 +9,6 @@ import { PoMenuItemBadge } from './po-menu-item/po-menu-item-badge.interface';
  *
  */
 export interface PoMenuItem {
-
   /**
    * @optional
    *

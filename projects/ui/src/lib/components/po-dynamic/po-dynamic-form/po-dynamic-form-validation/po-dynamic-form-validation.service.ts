@@ -11,7 +11,6 @@ import { PoDynamicFormValidation } from './po-dynamic-form-validation.interface'
 
 @Injectable()
 export class PoDynamicFormValidationService extends PoDynamicFormOperation {
-
   constructor(http: HttpClient) {
     super(http);
   }
@@ -20,32 +19,41 @@ export class PoDynamicFormValidationService extends PoDynamicFormOperation {
     const changedValue: PoDynamicFormFieldChanged = { property: field.property, value };
 
     return this.execute(field.validate, changedValue).pipe(
-      map(validateFields => this.setFieldDefaultIfEmpty(validateFields)));
+      map(validateFields => this.setFieldDefaultIfEmpty(validateFields))
+    );
   }
 
-  sendFormChange(validate: Function | string, field: PoDynamicFormField, value: any): Observable<PoDynamicFormValidation> {
+  sendFormChange(
+    validate: Function | string,
+    field: PoDynamicFormField,
+    value: any
+  ): Observable<PoDynamicFormValidation> {
     const changedValue: PoDynamicFormFieldChanged = { property: field.property, value };
 
     return this.execute(validate, changedValue).pipe(map(validateFields => this.setFormDefaultIfEmpty(validateFields)));
   }
 
   updateFieldsForm(validatedFields: Array<PoDynamicFormField> = [], fields: Array<PoDynamicFormField> = []) {
-    return [ ...validatedFields ].reduce((updatedFields, validatedField) => {
-      const index = updatedFields.findIndex(field => field.property === validatedField.property);
-      const hasProperty = index >= 0;
+    return [...validatedFields].reduce(
+      (updatedFields, validatedField) => {
+        const index = updatedFields.findIndex(field => field.property === validatedField.property);
+        const hasProperty = index >= 0;
 
-      if (hasProperty) {
-        updatedFields[index] = { ...fields[index], ...validatedField };
-      }
+        if (hasProperty) {
+          updatedFields[index] = { ...fields[index], ...validatedField };
+        }
 
-      return updatedFields;
-    }, [ ...fields ]);
+        return updatedFields;
+      },
+      [...fields]
+    );
   }
 
   private setFieldDefaultIfEmpty(validateFields: any): any {
-    return validateFields || {
-      field: {}
-    };
+    return (
+      validateFields || {
+        field: {}
+      }
+    );
   }
-
 }

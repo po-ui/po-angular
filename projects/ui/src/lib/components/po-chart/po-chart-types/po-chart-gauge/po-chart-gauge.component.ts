@@ -1,5 +1,13 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, NgZone, Renderer2, ViewChild, ViewContainerRef
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  NgZone,
+  Renderer2,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 
 import { PoChartCircular } from '../po-chart-circular/po-chart-circular';
@@ -12,7 +20,6 @@ import { PoChartGaugeTextContentComponent } from './po-chart-gauge-text-content/
   templateUrl: '../po-chart-dynamic-type.component.html'
 })
 export class PoChartGaugeComponent extends PoChartCircular implements AfterViewInit {
-
   chartItemStartAngle: number = poChartGaugeStartAngle;
 
   protected _series: Array<PoChartGaugeSerie> = [];
@@ -32,8 +39,9 @@ export class PoChartGaugeComponent extends PoChartCircular implements AfterViewI
     private componentFactoryResolver: ComponentFactoryResolver,
     el: ElementRef,
     ngZone: NgZone,
-    renderer: Renderer2) {
-      super(el, ngZone, renderer);
+    renderer: Renderer2
+  ) {
+    super(el, ngZone, renderer);
   }
 
   ngAfterViewInit() {
@@ -78,14 +86,16 @@ export class PoChartGaugeComponent extends PoChartCircular implements AfterViewI
   }
 
   private getGaugeSerie(series: Array<PoChartGaugeSerie> = []) {
-    const [ serie ] = series;
+    const [serie] = series;
 
     if (serie && typeof serie === 'object') {
-      return [{
-        ...serie,
-        color: this.colors[0],
-        value: this.checkGaugeValueLimits(serie.value)
-      }];
+      return [
+        {
+          ...serie,
+          color: this.colors[0],
+          value: this.checkGaugeValueLimits(serie.value)
+        }
+      ];
     }
 
     return [];
@@ -95,8 +105,6 @@ export class PoChartGaugeComponent extends PoChartCircular implements AfterViewI
     this.windowResizeEmitter.subscribe(() => {
       instance.gaugeWidth = this.getGaugeBaseWidth();
       this.changeDetection.detectChanges();
-
     });
   }
-
 }

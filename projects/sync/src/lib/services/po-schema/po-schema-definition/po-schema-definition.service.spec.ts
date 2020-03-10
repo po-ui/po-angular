@@ -9,7 +9,9 @@ import { PoSyncSchema } from './../../po-sync/interfaces/po-sync-schema.interfac
 
 @Directive()
 class PoStorageServiceMock extends PoStorageService {
-  constructor() { super(); }
+  constructor() {
+    super();
+  }
 }
 
 describe('PoSchemaDefinitionService:', () => {
@@ -17,10 +19,7 @@ describe('PoSchemaDefinitionService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        PoSchemaDefinitionService,
-        { provide: PoStorageService, useClass: PoStorageServiceMock },
-      ]
+      providers: [PoSchemaDefinitionService, { provide: PoStorageService, useClass: PoStorageServiceMock }]
     });
 
     poSchemaDefinitionService = TestBed.inject(PoSchemaDefinitionService);
@@ -32,7 +31,6 @@ describe('PoSchemaDefinitionService:', () => {
 
   describe('Methods:', () => {
     it(`destroy: should call poStorage.remove with PoSchemaUtil.syncSchemasName`, async () => {
-
       spyOn(poSchemaDefinitionService['poStorage'], 'remove');
 
       await poSchemaDefinitionService.destroy();
@@ -47,12 +45,14 @@ describe('PoSchemaDefinitionService:', () => {
 
       await poSchemaDefinitionService.get(schemaName);
 
-      expect(poSchemaDefinitionService['poStorage'].getItemByField)
-        .toHaveBeenCalledWith(PoSchemaUtil.syncSchemasName, 'name', schemaName);
+      expect(poSchemaDefinitionService['poStorage'].getItemByField).toHaveBeenCalledWith(
+        PoSchemaUtil.syncSchemasName,
+        'name',
+        schemaName
+      );
     });
 
     it(`getAll: should call poStorage.get with PoSchemaUtil.syncSchemasName`, async () => {
-
       spyOn(poSchemaDefinitionService['poStorage'], 'get');
 
       await poSchemaDefinitionService.getAll();
@@ -61,12 +61,11 @@ describe('PoSchemaDefinitionService:', () => {
     });
 
     it(`saveAll: should call poStorage.set with PoSchemaUtil.syncSchemasName and schemas`, async () => {
-
       const schema: PoSyncSchema = {
         getUrlApi: '',
         diffUrlApi: '',
         deletedField: 'deleted',
-        fields: [ 'field1', 'field2', 'field3' ],
+        fields: ['field1', 'field2', 'field3'],
         idField: 'id',
         name: 'schemaName',
         pageSize: 1
@@ -77,10 +76,7 @@ describe('PoSchemaDefinitionService:', () => {
 
       await poSchemaDefinitionService.saveAll(schemas);
 
-      expect(poSchemaDefinitionService['poStorage'].set).toHaveBeenCalledWith(
-        PoSchemaUtil.syncSchemasName,
-        schemas
-      );
+      expect(poSchemaDefinitionService['poStorage'].set).toHaveBeenCalledWith(PoSchemaUtil.syncSchemasName, schemas);
     });
 
     it('update: should call getAll and saveAll with updated schemas', async () => {
@@ -95,7 +91,7 @@ describe('PoSchemaDefinitionService:', () => {
       };
 
       const schemas = [
-        {...schema1},
+        { ...schema1 },
         {
           idField: 'id',
           getUrlApi: 'http://url/api/v1/user',
@@ -121,7 +117,7 @@ describe('PoSchemaDefinitionService:', () => {
 
       const schemasUpdated = [schema1, schemaUpdated];
 
-      spyOn(poSchemaDefinitionService, 'getAll').and.returnValue(<any> schemas);
+      spyOn(poSchemaDefinitionService, 'getAll').and.returnValue(<any>schemas);
       spyOn(poSchemaDefinitionService, 'saveAll');
 
       await poSchemaDefinitionService.update(schemaUpdated);
@@ -129,6 +125,5 @@ describe('PoSchemaDefinitionService:', () => {
       expect(poSchemaDefinitionService.getAll).toHaveBeenCalled();
       expect(poSchemaDefinitionService.saveAll).toHaveBeenCalledWith(schemasUpdated);
     });
-
   });
 });

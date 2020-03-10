@@ -10,74 +10,36 @@
   [p-readonly]="properties.includes('readonly')"
   [p-required]="properties.includes('required')"
   (p-change)="changeEvent('p-change')"
-  (p-change-model)="changeEvent('p-change-model')">
+  (p-change-model)="changeEvent('p-change-model')"
+>
 </po-rich-text>
 
 <po-divider></po-divider>
 
 <div class="po-row">
-  <po-textarea
-    class="po-md-6"
-    name="model"
-    [(ngModel)]="richText"
-    p-label="Model"
-    p-readonly
-    p-rows="8">
-  </po-textarea>
+  <po-textarea class="po-md-6" name="model" [(ngModel)]="richText" p-label="Model" p-readonly p-rows="8"> </po-textarea>
 
-  <po-info
-    class="po-md-6"
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
 <po-divider p-label="Properties"></po-divider>
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="label"
-      [(ngModel)]="label"
-      p-clean
-      p-label="Label">
-    </po-input>
+    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="help"
-      [(ngModel)]="help"
-      p-clean
-      p-label="Help">
+    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+
+    <po-input class="po-md-6" name="errorMessage" [(ngModel)]="errorMessage" p-clean p-label="Error Message">
     </po-input>
   </div>
 
   <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="placeholder"
-      [(ngModel)]="placeholder"
-      p-clean
-      p-label="Placeholder">
-    </po-input>
-
-    <po-input
-      class="po-md-6"
-      name="errorMessage"
-      [(ngModel)]="errorMessage"
-      p-clean
-      p-label="Error Message">
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-number
-      class="po-md-6"
-      name="height"
-      [(ngModel)]="height"
-      p-label="Height">
-    </po-number>
+    <po-number class="po-md-6" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
 
     <po-checkbox-group
       class="po-md-6"
@@ -85,15 +47,12 @@
       [(ngModel)]="properties"
       p-columns="4"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

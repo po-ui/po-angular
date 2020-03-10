@@ -16,7 +16,7 @@ describe('PoToasterComponent', () => {
     position: 1,
     type: PoToasterType.Error,
     message: 'toasterErrorWithAction',
-    action: () => { }
+    action: () => {}
   };
 
   const toasterErrorWithoutAction: PoToaster = {
@@ -29,7 +29,7 @@ describe('PoToasterComponent', () => {
     position: 1,
     type: PoToasterType.Information,
     message: 'toasterInfoWithAction',
-    action: () => { },
+    action: () => {},
     actionLabel: 'Texto Botão'
   };
 
@@ -43,7 +43,7 @@ describe('PoToasterComponent', () => {
     position: 1,
     type: PoToasterType.Success,
     message: 'toasterSuccessWithAction',
-    action: () => { }
+    action: () => {}
   };
 
   const toasterSuccessWithoutAction: PoToaster = {
@@ -56,7 +56,7 @@ describe('PoToasterComponent', () => {
     position: 1,
     type: PoToasterType.Warning,
     message: 'toasterWarning',
-    action: () => { }
+    action: () => {}
   };
 
   const toasterWarningWithoutAction: PoToaster = {
@@ -80,7 +80,7 @@ describe('PoToasterComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoToasterComponent ]
+      declarations: [PoToasterComponent]
     });
   });
 
@@ -187,7 +187,6 @@ describe('PoToasterComponent', () => {
   });
 
   describe('Properties', () => {
-
     it('icon: should get icon', () => {
       component['icon'] = 'icone';
 
@@ -205,7 +204,5 @@ describe('PoToasterComponent', () => {
 
       expect(component.getToasterType()).toBe('toasterType');
     });
-
   });
-
 });

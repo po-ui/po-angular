@@ -14,7 +14,6 @@ describe('PoToolbarActionsComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('actionsIcon: should update property `p-actions-icon` with `po-icon-more` if invalid values', () => {
       const invalidValues = [undefined, null, NaN, {}, 0.1, false, true];
 
@@ -26,7 +25,5 @@ describe('PoToolbarActionsComponent:', () => {
 
       expectPropertiesValues(component, 'actionsIcon', validValues, validValues);
     });
-
   });
-
 });

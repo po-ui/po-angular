@@ -1,6 +1,13 @@
 import { EventEmitter, Input, OnChanges, Output, Directive } from '@angular/core';
 
-import { browserLanguage, capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues, poLocaleDefault } from '../../utils/util';
+import {
+  browserLanguage,
+  capitalizeFirstLetter,
+  convertToBoolean,
+  isTypeof,
+  sortValues,
+  poLocaleDefault
+} from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
 
 import { PoTableAction } from './interfaces/po-table-action.interface';
@@ -74,7 +81,6 @@ export const poTableLiteralsDefault = {
  */
 @Directive()
 export abstract class PoTableBaseComponent implements OnChanges {
-
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
@@ -126,7 +132,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
    *
    */
   @Input('p-columns') set columns(columns: Array<PoTableColumn>) {
-
     this._columns = columns || [];
 
     if (this._columns.length) {
@@ -497,7 +502,19 @@ export abstract class PoTableBaseComponent implements OnChanges {
   }
 
   get validColumns() {
-    const typesValid = ['string', 'number', 'boolean', 'date', 'time', 'dateTime', 'currency', 'subtitle', 'link', 'label', 'icon'];
+    const typesValid = [
+      'string',
+      'number',
+      'boolean',
+      'date',
+      'time',
+      'dateTime',
+      'currency',
+      'subtitle',
+      'link',
+      'label',
+      'icon'
+    ];
     return this.columns.filter(col => !col.type || typesValid.includes(col.type));
   }
 
@@ -505,7 +522,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
     return this.sortedColumn.ascending ? PoTableColumnSortType.Ascending : PoTableColumnSortType.Descending;
   }
 
-  constructor(private poDate: PoDateService) { }
+  constructor(private poDate: PoDateService) {}
 
   ngOnChanges(): void {
     if (this.singleSelect || this.hideSelectAll) {
@@ -600,7 +617,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
     this.sortedColumn.ascending = this.sortedColumn.property === column ? !this.sortedColumn.ascending : true;
 
     this.sortArray(column, this.sortedColumn.ascending);
-    this.sortBy.emit({ column, type: this.sortType});
+    this.sortBy.emit({ column, type: this.sortType });
 
     this.sortedColumn.property = column;
   }
@@ -620,18 +637,17 @@ export abstract class PoTableBaseComponent implements OnChanges {
   protected getDefaultColumns(item: any) {
     const keys = Object.keys(item);
 
-    return keys.filter(key => (typeof item[key] !== 'object')).map(key => {
-      return { label: capitalizeFirstLetter(key), property: key };
-    });
+    return keys
+      .filter(key => typeof item[key] !== 'object')
+      .map(key => {
+        return { label: capitalizeFirstLetter(key), property: key };
+      });
   }
 
   private configAfterSelectRow(rows: Array<any>, row) {
     if (this.singleSelect) {
-
       this.unselectOtherRows(rows, row);
-
     } else if (!this.hideSelectAll) {
-
       this.selectAll = this.isEverySelected(rows);
     }
   }
@@ -711,7 +727,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
   }
 
   private setShowDetail(rowIdentifier: any | number, isShowDetail: boolean) {
-
     const isRowIndex = typeof rowIdentifier === 'number' && this.items[rowIdentifier];
 
     const row = isRowIndex ? this.items[rowIdentifier] : rowIdentifier;
@@ -724,17 +739,13 @@ export abstract class PoTableBaseComponent implements OnChanges {
   }
 
   private sortArray(column: PoTableColumn, ascending: boolean) {
-
     this.items.sort((leftSide, rightSide): number => {
-
       if (column.type === 'date' || column.type === 'dateTime') {
         return this.poDate.sortDate(leftSide[column.property], rightSide[column.property], ascending);
       } else {
         return sortValues(leftSide[column.property], rightSide[column.property], ascending);
       }
-
     });
-
   }
 
   private unselectOtherRows(rows: Array<any>, row) {
@@ -748,5 +759,4 @@ export abstract class PoTableBaseComponent implements OnChanges {
   private verifyWidthColumnsPixels() {
     return this.hasMainColumns ? this.mainColumns.every(column => column.width && column.width.includes('px')) : false;
   }
-
 }

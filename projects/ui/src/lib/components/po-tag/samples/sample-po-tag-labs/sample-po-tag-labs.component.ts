@@ -5,19 +5,20 @@ import { PoRadioGroupOption, PoSelectOption, PoTagOrientation, PoTagType } from 
 @Component({
   selector: 'sample-po-tag-labs',
   templateUrl: './sample-po-tag-labs.component.html',
-  styles: [`
-    .sample-tag-color-circle {
-      border-radius: 10px;
-      display: inline-block;
-      height: 16px;
-      margin-right: 4px;
-      vertical-align: middle;
-      width: 16px;
-    }
-  `]
+  styles: [
+    `
+      .sample-tag-color-circle {
+        border-radius: 10px;
+        display: inline-block;
+        height: 16px;
+        margin-right: 4px;
+        vertical-align: middle;
+        width: 16px;
+      }
+    `
+  ]
 })
 export class SamplePoTagLabsComponent implements OnInit {
-
   color: string;
   event: string;
   icon: boolean | string;
@@ -39,7 +40,7 @@ export class SamplePoTagLabsComponent implements OnInit {
     { label: 'color-09', value: 'color-09' },
     { label: 'color-10', value: 'color-10' },
     { label: 'color-11', value: 'color-11' },
-    { label: 'color-12', value: 'color-12' },
+    { label: 'color-12', value: 'color-12' }
   ];
 
   public readonly iconList: Array<PoSelectOption> = [
@@ -82,5 +83,4 @@ export class SamplePoTagLabsComponent implements OnInit {
     this.event = '';
     this.inverse = false;
   }
-
 }

@@ -16,14 +16,14 @@ describe('PoDialogComponent:', () => {
   const alertOptions: PoDialogAlertOptions = {
     title: 'Title',
     message: 'Message',
-    ok: () => { }
+    ok: () => {}
   };
 
   const confirmOptions: PoDialogConfirmOptions = {
     title: 'Title',
     message: 'Message',
-    confirm: () => { },
-    cancel: () => { }
+    confirm: () => {},
+    cancel: () => {}
   };
 
   configureTestSuite(() => {
@@ -45,7 +45,7 @@ describe('PoDialogComponent:', () => {
   it('should call primaryAction and close', () => {
     component.primaryAction = {
       label: 'teste',
-      action: () => { }
+      action: () => {}
     };
 
     spyOn(component.primaryAction, 'action');
@@ -61,7 +61,7 @@ describe('PoDialogComponent:', () => {
       'teste',
       () => {},
       'teste',
-      () => {},
+      () => {}
     );
 
     spyOn(component, 'close');
@@ -73,11 +73,7 @@ describe('PoDialogComponent:', () => {
   });
 
   it('should call primaryAction and secondaryAction with undefined functions', () => {
-    component.configDialog(
-      'teste',
-      undefined,
-      'teste'
-    );
+    component.configDialog('teste', undefined, 'teste');
 
     spyOn(component, 'close');
     component.primaryAction.action();
@@ -90,9 +86,9 @@ describe('PoDialogComponent:', () => {
   it('should close poModal and destroy', () => {
     const fakeThis = {
       poModal: {
-        close: () => { }
+        close: () => {}
       },
-      destroy: () => { }
+      destroy: () => {}
     };
 
     spyOn(fakeThis.poModal, 'close');
@@ -105,9 +101,8 @@ describe('PoDialogComponent:', () => {
   });
 
   it('Should call destroy if was closed with X', async(() => {
-
     spyOn(component, 'destroy');
-    spyOn(component.poModal, <any> 'onXClosed').and.returnValue(true);
+    spyOn(component.poModal, <any>'onXClosed').and.returnValue(true);
 
     component.poModal.close(true);
     fixture.detectChanges();
@@ -124,7 +119,7 @@ describe('PoDialogComponent:', () => {
       secondaryAction: {
         label: 'secondaryLabel',
         action: () => {}
-      },
+      }
     };
     component.configDialog.call(fakeThis, 'primaryLabel', 'primaryAction', 'secondaryLabel', 'secondaryAction');
     expect(fakeThis.primaryAction.label).toBe('primaryLabel');
@@ -146,11 +141,10 @@ describe('PoDialogComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('closeSubscription: should unsubscribe closeSubscription on destroy.', () => {
       component['closeSubscription'] = <any>{ unsubscribe: () => {} };
 
-      spyOn(component['closeSubscription'], <any> 'unsubscribe');
+      spyOn(component['closeSubscription'], <any>'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -210,7 +204,8 @@ describe('PoDialogComponent:', () => {
         component.literalsConfirm.confirm,
         confirmOptions.confirm,
         component.literalsConfirm.cancel,
-        confirmOptions.cancel);
+        confirmOptions.cancel
+      );
     });
 
     it('open: should call `PoModal.open()`.', () => {
@@ -226,7 +221,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it('setDialogLiterals: should set `literalsAlert` in portuguese if browser is setted with an unsupported language.', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('xx');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('xx');
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -234,7 +229,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it('setDialogLiterals: should set `literalsConfirm` in portuguese if browser is setted with an unsupported language.', () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('xx');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('xx');
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -242,7 +237,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in english.`, () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('en');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('en');
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -250,7 +245,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in spanish.`, () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('es');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -258,7 +253,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in portuguese.`, () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('pt');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -266,7 +261,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in english.`, () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('en');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('en');
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -274,7 +269,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in spanish.`, () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('es');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -290,7 +285,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in portuguese.`, () => {
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('pt');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -303,10 +298,10 @@ describe('PoDialogComponent:', () => {
         literals: { ok: 'Finish' },
         title: 'Title',
         message: 'Message',
-        ok: () => { }
+        ok: () => {}
       };
 
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('pt');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
 
       component['setDialogLiterals'](alertOptionsCustom, PoDialogType.Alert);
 
@@ -319,17 +314,15 @@ describe('PoDialogComponent:', () => {
         literals: { cancel: 'No', confirm: 'Yes' },
         title: 'Title',
         message: 'Message',
-        confirm: () => { },
-        cancel: () => { }
+        confirm: () => {},
+        cancel: () => {}
       };
 
-      spyOn(UtilsFunctions, <any> 'browserLanguage').and.returnValue('pt');
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
 
       component['setDialogLiterals'](confirmOptionsCustom, PoDialogType.Confirm);
 
       expect(component.literalsConfirm).toEqual(confirmOptionsCustom.literals);
     });
-
   });
-
 });

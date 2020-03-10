@@ -6,7 +6,6 @@
  * Interface para definição das literais usadas no `po-page-dynamic-search`.
  */
 export interface PoPageDynamicSearchLiterals {
-
   /** Título do grupo de *disclaimers* que será exibido após realizar alguma busca. */
   disclaimerGroupTitle?: string;
 
@@ -24,5 +23,4 @@ export interface PoPageDynamicSearchLiterals {
 
   /** Mensagem que aparecerá enquanto o campo de busca rápida não estiver preenchido. */
   searchPlaceholder?: string;
-
 }

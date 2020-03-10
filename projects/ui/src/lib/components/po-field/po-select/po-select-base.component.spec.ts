@@ -8,13 +8,11 @@ import { PoSelectBaseComponent } from './po-select-base.component';
 import { PoSelectOption } from './po-select-option.interface';
 
 class PoSelect extends PoSelectBaseComponent {
+  onUpdateOptions(): void {}
 
-  onUpdateOptions(): void { }
+  updateModel(selectOption: PoSelectOption): void {}
 
-  updateModel(selectOption: PoSelectOption): void { }
-
-  writeValue(value: any): void { }
-
+  writeValue(value: any): void {}
 }
 
 describe('PoSelectBaseComponent:', () => {
@@ -96,7 +94,6 @@ describe('PoSelectBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     const booleanValidFalseValues = [false, 'false'];
     const booleanValidTrueValues = [true, 'true', ''];
     const booleanInvalidValues = [undefined, null, 2, 'string'];
@@ -147,11 +144,9 @@ describe('PoSelectBaseComponent:', () => {
       expect(removeDuplicatedOptions).toHaveBeenCalledWith(options);
       expect(component.onUpdateOptions).toHaveBeenCalled();
     });
-
   });
 
   describe('Methods:', () => {
-
     it('registerOnValidatorChange: should register validatorChange function.', () => {
       const registerOnValidatorChangeFn = () => {};
 
@@ -184,5 +179,4 @@ describe('PoSelectBaseComponent:', () => {
       expect(component.change.emit).toHaveBeenCalledWith(value);
     });
   });
-
 });

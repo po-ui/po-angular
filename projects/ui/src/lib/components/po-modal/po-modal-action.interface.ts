@@ -6,7 +6,6 @@
  * Interface que define os botões de ação do componente `po-modal`.
  */
 export interface PoModalAction {
-
   /** Função que será executada ao clicar sobre o botão. */
   action: Function;
 
@@ -25,5 +24,4 @@ export interface PoModalAction {
 
   /** Habilita um estado de carregamento ao botão, desabilitando-o e exibindo um ícone de carregamento à esquerda de seu rótulo. */
   loading?: boolean;
-
 }

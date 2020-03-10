@@ -11,7 +11,6 @@ import { PoPageDynamicEditActions } from './po-page-dynamic-edit-actions.interfa
  * Interface para as propriedades de uma página dinâmica.
  */
 export interface PoPageDynamicEditOptions {
-
   /**
    * Lista dos campos usados.
    */

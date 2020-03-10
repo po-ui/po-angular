@@ -8,11 +8,9 @@ import { PoPageLoginAuthenticationType } from './enums/po-page-login-authenticat
 
 @Injectable()
 export class PoPageLoginService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   onLogin(url: string, type: PoPageLoginAuthenticationType, loginForm: PoPageLogin): Observable<Object> {
-
     if (type === PoPageLoginAuthenticationType.Bearer) {
       loginForm.password = btoa(loginForm.password);
       return this.http.post(url, loginForm);
@@ -25,7 +23,5 @@ export class PoPageLoginService {
       delete loginForm.password;
       return this.http.post(url, loginForm, { headers });
     }
-
   }
-
 }

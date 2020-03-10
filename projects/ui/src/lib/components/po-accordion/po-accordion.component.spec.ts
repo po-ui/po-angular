@@ -10,20 +10,19 @@ import { PoAccordionService } from './services/po-accordion.service';
 
 @Component({
   template: `
-  <po-accordion>
-    <po-accordion-item p-label="Portinari Accordion 1">
-      Item 1
-    </po-accordion-item>
-    <po-accordion-item p-label="Portinari Accordion 2">
-      Item 2
-    </po-accordion-item>
-  </po-accordion>
+    <po-accordion>
+      <po-accordion-item p-label="Portinari Accordion 1">
+        Item 1
+      </po-accordion-item>
+      <po-accordion-item p-label="Portinari Accordion 2">
+        Item 2
+      </po-accordion-item>
+    </po-accordion>
   `
 })
 class PoAccordionMockComponent {}
 
 describe('PoAccordionComponent:', () => {
-
   let component: PoAccordionComponent;
   let fixture: ComponentFixture<PoAccordionComponent>;
   let componentMock: PoAccordionMockComponent;
@@ -33,9 +32,9 @@ describe('PoAccordionComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoAccordionMockComponent ],
-      providers: [ PoAccordionService ],
-      imports: [ PoAccordionModule, BrowserAnimationsModule ]
+      declarations: [PoAccordionMockComponent],
+      providers: [PoAccordionService],
+      imports: [PoAccordionModule, BrowserAnimationsModule]
     });
   });
 
@@ -56,7 +55,6 @@ describe('PoAccordionComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngOnDestroy: should call `accordionServiceSubscription.unsubscribe`', () => {
       spyOn(component['accordionServiceSubscription'], 'unsubscribe');
 
@@ -86,7 +84,6 @@ describe('PoAccordionComponent:', () => {
     });
 
     it('receiveFromChildAccordionSubscription: should call `toggle` if `receiveFromChildAccordionClicked` emit for a subscription', () => {
-
       const poAccordionItem = {
         expanded: false,
         label: 'Test Label'
@@ -154,11 +151,9 @@ describe('PoAccordionComponent:', () => {
 
       expect(<any>component['expandedActiveAccordionItem']).toEqual(currentAccordionItem);
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should contain `po-accordion-item-active` if any item is active', () => {
       const header = nativeElementMock.querySelector('.po-accordion-item-header-button');
 
@@ -176,7 +171,5 @@ describe('PoAccordionComponent:', () => {
 
       expect(activeItem).toBeFalsy();
     });
-
   });
-
 });

@@ -43,5 +43,4 @@ describe('Po-Switch E2E', () => {
     page.poCheckboxRequired.click();
     expect(page.poFieldOptional.isPresent()).toBeFalsy();
   });
-
 });

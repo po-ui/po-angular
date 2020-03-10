@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  ViewChild,
+  AfterViewInit
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
@@ -38,7 +46,6 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
   ]
 })
 export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit {
-
   @ViewChild('checkboxLabel', { static: true }) checkboxLabel: ElementRef;
 
   constructor(private changeDetector: ChangeDetectorRef) {
@@ -85,8 +92,7 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   }
 
   protected changeModelValue(value: boolean | null) {
-    this.checkboxValue = (typeof value === 'boolean' || value === null) ? value : false;
+    this.checkboxValue = typeof value === 'boolean' || value === null ? value : false;
     this.changeDetector.detectChanges();
   }
-
 }

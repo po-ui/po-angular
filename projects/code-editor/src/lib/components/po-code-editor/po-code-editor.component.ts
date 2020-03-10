@@ -40,29 +40,27 @@ declare const require: any;
 @Component({
   selector: 'po-code-editor',
   templateUrl: './po-code-editor.component.html',
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoCodeEditorComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoCodeEditorComponent),
+      multi: true
+    }
+  ]
 })
 export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements AfterViewInit, DoCheck {
-
   canLoad = false;
 
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef;
 
-  constructor(
-    private zone: NgZone,
-    private el: ElementRef,
-    private codeEditorRegister?: PoCodeEditorRegister) {
+  constructor(private zone: NgZone, private el: ElementRef, private codeEditorRegister?: PoCodeEditorRegister) {
     super();
   }
 
   ngAfterViewInit(): void {
     if (loadedMonaco) {
       loadPromise.then(() => {
-        setTimeout( () => {
+        setTimeout(() => {
           if (this.el.nativeElement.offsetWidth) {
             this.registerCustomLanguage();
             this.initMonaco(this.getOptions());
@@ -74,11 +72,10 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
     } else {
       loadedMonaco = true;
       loadPromise = new Promise<void>((resolve: any) => {
-
         const onGotAmdLoader: any = () => {
           (<any>window).require.config({ paths: { 'vs': './assets/monaco/vs' } });
           (<any>window).require(['vs/editor/editor.main'], () => {
-            setTimeout( () => {
+            setTimeout(() => {
               if (this.el.nativeElement.offsetWidth) {
                 this.registerCustomLanguage();
                 this.initMonaco(this.getOptions());
@@ -148,7 +145,7 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
   }
 
   setReadOnly(readOnly: boolean) {
-    this.editor.updateOptions({readOnly: readOnly});
+    this.editor.updateOptions({ readOnly: readOnly });
   }
 
   writeValue(value) {
@@ -172,16 +169,14 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
         const modified = this.editor.getModel().modified.getValue();
         this.onChangePropagate([original, modified]);
       });
-
     } else {
       this.editor = monaco.editor.create(this.editorContainer.nativeElement, options);
       this.editor.setValue(this.value);
       this.editor.onDidChangeModelContent((e: any) => {
         const value = this.editor.getValue();
         this.onChangePropagate(value);
-        this.zone.run(() => this.value = value);
+        this.zone.run(() => (this.value = value));
       });
-
     }
     setTimeout(() => {
       this.setLanguage(this.language);
@@ -196,8 +191,7 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
   private registerCustomLanguage() {
     if (this.codeEditorRegister.language) {
       monaco.languages.register({ id: this.codeEditorRegister.language });
-      monaco.languages.setMonarchTokensProvider(this.codeEditorRegister.language,
-                                                this.codeEditorRegister.options);
+      monaco.languages.setMonarchTokensProvider(this.codeEditorRegister.language, this.codeEditorRegister.options);
     }
   }
 }

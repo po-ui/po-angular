@@ -37,14 +37,15 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
   selector: 'po-page-job-scheduler',
   templateUrl: './po-page-job-scheduler.component.html',
   encapsulation: ViewEncapsulation.None,
-  styles: [`
-    po-container .po-container {
-      overflow-y: unset;
-    }
-  `]
+  styles: [
+    `
+      po-container .po-container {
+        overflow-y: unset;
+      }
+    `
+  ]
 })
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit {
-
   isEdit = false;
   literals = {
     ...poPageJobSchedulerLiteralsDefault[util.poLocaleDefault],
@@ -77,9 +78,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     { ...this.backPageAction }
   ];
 
-  jobSchedulerActions: Array<PoPageAction> = [
-    ...this.nextPageActions
-  ];
+  jobSchedulerActions: Array<PoPageAction> = [...this.nextPageActions];
 
   readonly steps: Array<PoStepperItem> = [
     { label: this.literals.scheduling },
@@ -96,9 +95,10 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     private poDialogService: PoDialogService,
     private poNotification: PoNotificationService,
     private router: Router,
-    poPageJobSchedulerService: PoPageJobSchedulerService) {
-      super(poPageJobSchedulerService);
-    }
+    poPageJobSchedulerService: PoPageJobSchedulerService
+  ) {
+    super(poPageJobSchedulerService);
+  }
 
   get stepperOrientation(): 'horizontal' | 'vertical' {
     return window.innerWidth > 481 && window.innerWidth < 960 ? 'horizontal' : 'vertical';
@@ -118,22 +118,24 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     const stepsLength = this.steps.length;
 
     if (nextStep === stepsLength) {
-    this.jobSchedulerActions = [ ...this.concludePageActions ];
-
+      this.jobSchedulerActions = [...this.concludePageActions];
     } else if (currentStep === stepsLength && nextStep < currentStep) {
-
-    this.jobSchedulerActions = [ ...this.nextPageActions ];
+      this.jobSchedulerActions = [...this.nextPageActions];
     }
   }
 
   nextStep(stepNumber: number) {
-
     if (stepNumber > 1 && this.schedulerExecution.form.invalid) {
       this.markAsDirtyInvalidControls(this.schedulerExecution.form.controls);
       return;
     }
 
-    if (stepNumber > 2 && (this.schedulerParameters && this.schedulerParameters.form && this.schedulerParameters.form.invalid)) {
+    if (
+      stepNumber > 2 &&
+      this.schedulerParameters &&
+      this.schedulerParameters.form &&
+      this.schedulerParameters.form.invalid
+    ) {
       this.markAsDirtyInvalidControls(this.schedulerParameters.form.controls);
       return;
     }
@@ -148,7 +150,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     }
   }
 
-  onChangeProcess(process: { processId: string, existAPI: boolean }) {
+  onChangeProcess(process: { processId: string; existAPI: boolean }) {
     if (process.existAPI && process.processId) {
       this.getParametersByProcess(process.processId);
 
@@ -158,7 +160,6 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
 
       return;
     }
-
   }
 
   private confirmJobScheduler() {
@@ -175,7 +176,6 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
         this.save(model, paramId);
       }
     });
-
   }
 
   private async emitSuccessMessage(msgSuccess: any, saveOperation: Observable<any>) {
@@ -185,11 +185,9 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   }
 
   private getParametersByProcess(process: any) {
-
     this.poPageJobSchedulerService.getParametersByProcess(process).subscribe(parameters => {
       this.parameters = parameters;
     });
-
   }
 
   private isDisabledAdvance(): boolean {
@@ -220,7 +218,6 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
 
       this.jobSchedulerActions = [...this.nextPageActions];
     });
-
   }
 
   private save(model: PoJobSchedulerInternal, paramId) {
@@ -228,9 +225,10 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
       ? this.poPageJobSchedulerService.updateResource(paramId, model)
       : this.poPageJobSchedulerService.createResource(model);
 
-    const msgSuccess = paramId ? this.literals.saveNotificationSuccessUpdate : this.literals.saveNotificationSuccessSave;
+    const msgSuccess = paramId
+      ? this.literals.saveNotificationSuccessUpdate
+      : this.literals.saveNotificationSuccessSave;
 
     this.emitSuccessMessage(msgSuccess, saveOperation);
   }
-
 }

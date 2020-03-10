@@ -1,14 +1,13 @@
 <nav>
   <ul class="po-navbar-items-container" #navbarItemsContainer>
-    <li *ngFor="let item of items"
-      class="po-navbar-item"
-      [class.po-navbar-item-selected]="selectedItem === item">
+    <li *ngFor="let item of items" class="po-navbar-item" [class.po-navbar-item-selected]="selectedItem === item">
       <po-navbar-item
         [p-action]="item.action"
         [p-clickable]="selectedItem !== item"
         [p-label]="item.label"
         [p-link]="item.link"
-        (p-click)="selectItem(item)">
+        (p-click)="selectItem(item)"
+      >
       </po-navbar-item>
     </li>
   </ul>

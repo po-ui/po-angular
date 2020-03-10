@@ -29,9 +29,7 @@ import { PoDisclaimerGroupBaseComponent } from './po-disclaimer-group-base.compo
   templateUrl: './po-disclaimer-group.component.html'
 })
 export class PoDisclaimerGroupComponent extends PoDisclaimerGroupBaseComponent {
-
   constructor(differs: IterableDiffers) {
     super(differs);
   }
-
 }

@@ -8,47 +8,32 @@ import { PoPageDynamicSearchOptions } from '../../components/po-page-dynamic-sea
 const originalPageOptions: PoPageDynamicSearchOptions = {
   title: 'Original Title',
   breadcrumb: {
-    items: [
-      { label: 'Home' },
-      { label: 'Hiring processes' }
-    ]
+    items: [{ label: 'Home' }, { label: 'Hiring processes' }]
   },
   actions: [
     { label: 'Feature 1', url: '/feature1' },
     { label: 'Feature 2', url: '/feature2' }
   ],
-  filters: [
-    { property: 'filter1' },
-    { property: 'filter2' }
-  ]
+  filters: [{ property: 'filter1' }, { property: 'filter2' }]
 };
 
 const newPageOptions: PoPageDynamicSearchOptions = {
   title: 'New Title',
   breadcrumb: {
-    items: [
-      { label: 'Test' },
-      { label: 'Test2' }
-    ],
+    items: [{ label: 'Test' }, { label: 'Test2' }],
     favorite: 'teste/teste'
   },
   actions: [
     { label: 'Feature 1', url: '/new-feature1' },
     { label: 'Feature 3', url: '/new-feature3' }
   ],
-  filters: [
-    { property: 'filter1' },
-    { property: 'filter3' }
-  ]
+  filters: [{ property: 'filter1' }, { property: 'filter3' }]
 };
 
 const mergedPageOptions: PoPageDynamicSearchOptions = {
   title: 'New Title',
   breadcrumb: {
-    items: [
-      { label: 'Test' },
-      { label: 'Test2' }
-    ],
+    items: [{ label: 'Test' }, { label: 'Test2' }],
     favorite: 'teste/teste'
   },
   actions: [
@@ -56,11 +41,7 @@ const mergedPageOptions: PoPageDynamicSearchOptions = {
     { label: 'Feature 2', url: '/feature2' },
     { label: 'Feature 3', url: '/new-feature3' }
   ],
-  filters: [
-    { property: 'filter1' },
-    { property: 'filter2' },
-    { property: 'filter3' }
-  ]
+  filters: [{ property: 'filter1' }, { property: 'filter2' }, { property: 'filter3' }]
 };
 
 const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicSearchOptions> = {
@@ -116,7 +97,7 @@ describe('PoPageCustomizationService:', () => {
       const objectToChange = {
         stringTest: 'Original Title',
         numberTest: 2,
-        objectTest: {prop3: 'Test'},
+        objectTest: { prop3: 'Test' },
         arrayTest: [1, 2, 3],
         noChangeTest: 'No Change!',
         nullObj: 'test'
@@ -125,7 +106,7 @@ describe('PoPageCustomizationService:', () => {
       const newOption = {
         stringTest: 'New Title',
         numberTest: 5,
-        objectTest: {prop3: 'new'},
+        objectTest: { prop3: 'new' },
         arrayTest: [7, 8, 9],
         noDiference: 'it will not go to original object!',
         nullObj: undefined
@@ -134,7 +115,7 @@ describe('PoPageCustomizationService:', () => {
       const result = {
         stringTest: 'New Title',
         numberTest: 5,
-        objectTest: {prop3: 'new'},
+        objectTest: { prop3: 'new' },
         arrayTest: [7, 8, 9],
         noChangeTest: 'No Change!',
         nullObj: 'test'
@@ -161,34 +142,21 @@ describe('PoPageCustomizationService:', () => {
         const originalOption: PoPageDynamicSearchOptions = {
           title: 'Original Title',
           breadcrumb: {
-            items: [
-              { label: 'Home' },
-              { label: 'Hiring processes' }
-            ]
+            items: [{ label: 'Home' }, { label: 'Hiring processes' }]
           }
         };
         const newOption: PoPageDynamicSearchOptions = {
-          filters: [
-            { property: 'filter1' },
-            { property: 'filter3' }
-          ]
+          filters: [{ property: 'filter1' }, { property: 'filter3' }]
         };
         const mergedOptions: PoPageDynamicSearchOptions = {
           title: 'Original Title',
           breadcrumb: {
-            items: [
-              { label: 'Home' },
-              { label: 'Hiring processes' }
-            ]
+            items: [{ label: 'Home' }, { label: 'Hiring processes' }]
           },
-          filters: [
-            { property: 'filter1' },
-            { property: 'filter3' }
-          ]
+          filters: [{ property: 'filter1' }, { property: 'filter3' }]
         };
 
         testUrl(originalOption, newOption, mergedOptions);
-
       }));
 
       it('should keep the original action if url do not return it', fakeAsync(() => {
@@ -211,17 +179,11 @@ describe('PoPageCustomizationService:', () => {
 
       it('should keep the original filter if url do not return it', fakeAsync(() => {
         const originalOption: PoPageDynamicSearchOptions = {
-          filters: [
-            { property: 'filter1' },
-            { property: 'filter3' }
-          ]
+          filters: [{ property: 'filter1' }, { property: 'filter3' }]
         };
         const newOption: PoPageDynamicSearchOptions = {};
         const mergedOptions: PoPageDynamicSearchOptions = {
-          filters: [
-            { property: 'filter1' },
-            { property: 'filter3' }
-          ]
+          filters: [{ property: 'filter1' }, { property: 'filter3' }]
         };
 
         testUrl(originalOption, newOption, mergedOptions);
@@ -230,41 +192,38 @@ describe('PoPageCustomizationService:', () => {
       it('should deep merge the objects inside arrays.', fakeAsync(() => {
         const originalOption: PoPageDynamicSearchOptions = {
           filters: [
-            { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
-            { property: 'name', gridColumns: 6 },
-            { property: 'city', gridColumns: 6 },
-            { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
+            { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
+            { property: 'name', gridColumns: 6 },
+            { property: 'city', gridColumns: 6 },
+            { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
           ]
         };
         const newOption: PoPageDynamicSearchOptions = {
-          filters: [
-            { property: 'hireStatus', gridColumns: 12 }
-          ]
+          filters: [{ property: 'hireStatus', gridColumns: 12 }]
         };
         const mergedOptions: PoPageDynamicSearchOptions = {
           filters: [
-            { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 12 },
-            { property: 'name', gridColumns: 6 },
-            { property: 'city', gridColumns: 6 },
-            { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
+            { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 12 },
+            { property: 'name', gridColumns: 6 },
+            { property: 'city', gridColumns: 6 },
+            { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
           ]
         };
 
         testUrl(originalOption, newOption, mergedOptions);
       }));
 
-      function testUrl(originalOption: PoPageDynamicSearchOptions,
-                       newOption: PoPageDynamicSearchOptions, mergedOptions: PoPageDynamicSearchOptions) {
+      function testUrl(
+        originalOption: PoPageDynamicSearchOptions,
+        newOption: PoPageDynamicSearchOptions,
+        mergedOptions: PoPageDynamicSearchOptions
+      ) {
         const url = '/test/api';
-        poPageCustomizationService
-          .getCustomOptions(url, originalOption, pageOptionSchema)
-          .subscribe(optionResult => {
-            expect(optionResult).toEqual(mergedOptions);
-          });
+        poPageCustomizationService.getCustomOptions(url, originalOption, pageOptionSchema).subscribe(optionResult => {
+          expect(optionResult).toEqual(mergedOptions);
+        });
 
-        const req = httpMock.expectOne(request =>
-          request.method === 'POST' && request.url === url
-        );
+        const req = httpMock.expectOne(request => request.method === 'POST' && request.url === url);
         expect(req.request.method).toBe('POST');
 
         req.flush(newOption);

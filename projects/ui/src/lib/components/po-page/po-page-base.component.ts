@@ -18,4 +18,4 @@
  * }
  * ```
  */
-export class PoPageBaseComponent { }
+export class PoPageBaseComponent {}

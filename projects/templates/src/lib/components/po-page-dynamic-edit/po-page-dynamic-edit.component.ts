@@ -11,7 +11,8 @@ import {
   PoGridComponent,
   PoGridRowActions,
   PoNotificationService,
-  PoPageAction } from '@portinari/portinari-ui';
+  PoPageAction
+} from '@portinari/portinari-ui';
 
 import * as util from './../../utils/util';
 
@@ -38,7 +39,7 @@ export const poPageDynamicEditLiteralsDefault = {
     saveNewNotificationWarning: 'Form must be filled out correctly.',
     saveNotificationSuccessSave: 'Resource successfully saved.',
     saveNotificationSuccessUpdate: 'Resource successfully updated.',
-    saveNotificationWarning: 'Form must be filled out correctly.',
+    saveNotificationWarning: 'Form must be filled out correctly.'
   },
   es: {
     cancelConfirmMessage: 'Está seguro de que desea cancelar esta operación?',
@@ -52,7 +53,7 @@ export const poPageDynamicEditLiteralsDefault = {
     saveNewNotificationWarning: 'El formulario debe llenarse correctamente.',
     saveNotificationSuccessSave: 'Recurso salvo con éxito.',
     saveNotificationSuccessUpdate: 'Recurso actualizado con éxito.',
-    saveNotificationWarning: 'El formulario debe llenarse correctamente.',
+    saveNotificationWarning: 'El formulario debe llenarse correctamente.'
   },
   pt: {
     cancelConfirmMessage: 'Tem certeza que deseja cancelar esta operação?',
@@ -66,7 +67,7 @@ export const poPageDynamicEditLiteralsDefault = {
     saveNewNotificationWarning: 'Formulário precisa ser preenchido corretamente.',
     saveNotificationSuccessSave: 'Recurso salvo com sucesso.',
     saveNotificationSuccessUpdate: 'Recurso atualizado com sucesso.',
-    saveNotificationWarning: 'Formulário precisa ser preenchido corretamente.',
+    saveNotificationWarning: 'Formulário precisa ser preenchido corretamente.'
   }
 };
 
@@ -159,10 +160,9 @@ export const poPageDynamicEditLiteralsDefault = {
 @Component({
   selector: 'po-page-dynamic-edit',
   templateUrl: './po-page-dynamic-edit.component.html',
-  providers: [ PoPageDynamicService ]
+  providers: [PoPageDynamicService]
 })
 export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
-
   private subscriptions: Array<Subscription> = [];
 
   private _actions: PoPageDynamicEditActions = {};
@@ -185,7 +185,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   // beforeRemove: return boolean
   // afterRemove
   // beforeInsert: : return boolean
-  readonly detailActions: PoGridRowActions = { };
+  readonly detailActions: PoGridRowActions = {};
 
   /**
    * @optional
@@ -201,7 +201,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   get actions() {
-    return {...this._actions};
+    return { ...this._actions };
   }
 
   /**
@@ -358,8 +358,8 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     private poNotification: PoNotificationService,
     private poDialogService: PoDialogService,
     private poPageDynamicService: PoPageDynamicService,
-    private poPageCustomizationService: PoPageCustomizationService) {
-  }
+    private poPageCustomizationService: PoPageCustomizationService
+  ) {}
 
   ngOnInit(): void {
     this.loadDataFromAPI();
@@ -451,7 +451,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     }
 
     return this.poPageDynamicService.getResource(id).pipe(
-      tap(response => this.model = response),
+      tap(response => (this.model = response)),
       catchError(error => {
         this.model = undefined;
         this.actions = undefined;
@@ -462,10 +462,12 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
-
     if (onLoad) {
       return this.getPoDynamicPageOptions(onLoad).pipe(
-        tap(responsePoOption => this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)));
+        tap(responsePoOption =>
+          this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption)
+        )
+      );
     }
 
     return EMPTY;
@@ -514,7 +516,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
           this.fields = response.fields || this.fields;
           this.title = response.title || this.title;
         }),
-        switchMap(() => this.loadOptionsOnInitialize(onLoad) )
+        switchMap(() => this.loadOptionsOnInitialize(onLoad))
       );
     }
 
@@ -567,15 +569,19 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     const paramId = this.activatedRoute.snapshot.params['id'];
 
     if (paramId) {
-      this.poPageDynamicService.updateResource(paramId, this.model)
-        .toPromise().then(() => {
+      this.poPageDynamicService
+        .updateResource(paramId, this.model)
+        .toPromise()
+        .then(() => {
           this.poNotification.success(this.literals.saveNewNotificationSuccessUpdate);
 
           this.navigateTo(path);
         });
     } else {
-      this.poPageDynamicService.createResource(this.model)
-        .toPromise().then(() => {
+      this.poPageDynamicService
+        .createResource(this.model)
+        .toPromise()
+        .then(() => {
           this.poNotification.success(this.literals.saveNewNotificationSuccessSave);
 
           this.model = {};
@@ -617,5 +623,4 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private isObject(value: any): boolean {
     return !!value && typeof value === 'object' && !Array.isArray(value);
   }
-
 }

@@ -1,35 +1,18 @@
 <div class="po-wrapper-menu-panel">
-
-  <po-menu-panel [p-menus]="menuItems">
-  </po-menu-panel>
+  <po-menu-panel [p-menus]="menuItems"> </po-menu-panel>
 
   <po-page-default p-title="Portinari Menu Panel">
-
     <div class="po-row">
-      <po-info
-        p-label="Menu Item Selected"
-        [p-value]="menuItemSelected">
-      </po-info>
+      <po-info p-label="Menu Item Selected" [p-value]="menuItemSelected"> </po-info>
     </div>
 
-    <hr>
+    <hr />
 
     <form #fMenuPanel="ngForm">
       <div class="po-row">
-        <po-input
-          class="po-md-6"
-          name="label"
-          [(ngModel)]="menuItem.label"
-          p-label="Label"
-          p-required>
-        </po-input>
+        <po-input class="po-md-6" name="label" [(ngModel)]="menuItem.label" p-label="Label" p-required> </po-input>
 
-        <po-url
-          class="po-md-6"
-          name="link"
-          [(ngModel)]="menuItem.link"
-          p-label="External link"
-          p-placeholder="http://">
+        <po-url class="po-md-6" name="link" [(ngModel)]="menuItem.link" p-label="External link" p-placeholder="http://">
         </po-url>
       </div>
 
@@ -40,26 +23,23 @@
           [(ngModel)]="menuItem.icon"
           p-label="Icon"
           p-required
-          [p-options]="iconsOptions">
+          [p-options]="iconsOptions"
+        >
         </po-radio-group>
-     </div>
+      </div>
 
       <div class="po-row">
         <po-button
           class="po-xl-2 po-md-4"
           [p-disabled]="fMenuPanel.invalid"
           p-label="Add"
-          (p-click)="addMenuItem(menuItem); fMenuPanel.reset()">
+          (p-click)="addMenuItem(menuItem); fMenuPanel.reset()"
+        >
         </po-button>
 
-        <po-button
-          class="po-xl-3 po-md-5"
-          p-label="Sample Restore"
-          (p-click)="restore(); fMenuPanel.reset()">
+        <po-button class="po-xl-3 po-md-5" p-label="Sample Restore" (p-click)="restore(); fMenuPanel.reset()">
         </po-button>
       </div>
     </form>
-
   </po-page-default>
-
 </div>

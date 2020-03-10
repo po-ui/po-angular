@@ -8,7 +8,9 @@ export class PoSwitchPage {
   private _poSwitch;
 
   private getPoCheckBox(checkbox: string) {
-    return element(by.css(`${this.sampleSwitch} [name="properties"] .po-checkbox-group-input[value="${checkbox}"]+${this.boxLabel}`));
+    return element(
+      by.css(`${this.sampleSwitch} [name="properties"] .po-checkbox-group-input[value="${checkbox}"]+${this.boxLabel}`)
+    );
   }
 
   private getPoInputLabel(labelName) {
@@ -53,5 +55,4 @@ export class PoSwitchPage {
   get poFieldOptional() {
     return element(by.css(`${this.sampleSwitch} po-switch .po-field-optional`));
   }
-
 }

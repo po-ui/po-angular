@@ -4,13 +4,16 @@ import { PoModalComponent, PoSlideItem } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'sample-po-slide-landscapes',
-  templateUrl: './sample-po-slide-landscapes.component.html',
+  templateUrl: './sample-po-slide-landscapes.component.html'
 })
 export class SamplePoSlideLandscapesComponent {
-
   landscapes: Array<PoSlideItem> = [
     { image: '/assets/graphics/landscape-01.jpeg', alt: 'On the road', action: this.aboutLandscape.bind(this) },
-    { image: '/assets/graphics/landscape-02.jpeg', alt: 'Birds flying over trees', action: this.aboutLandscape.bind(this) },
+    {
+      image: '/assets/graphics/landscape-02.jpeg',
+      alt: 'Birds flying over trees',
+      action: this.aboutLandscape.bind(this)
+    },
     { image: '/assets/graphics/landscape-03.jpeg', alt: 'That`s a great sea', action: this.aboutLandscape.bind(this) }
   ];
 
@@ -22,5 +25,4 @@ export class SamplePoSlideLandscapesComponent {
     this.modalText = item.alt;
     this.modal.open();
   }
-
 }

@@ -51,19 +51,32 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
   selector: 'po-page-change-password',
   templateUrl: './po-page-change-password.component.html'
 })
-
-export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseComponent implements AfterViewInit, OnDestroy, OnInit {
-
+export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseComponent
+  implements AfterViewInit, OnDestroy, OnInit {
   private newPasswordSubscription: Subscription;
 
-  readonly literals: { backButton: string, confirmPassword: string, createNewPassword: string, createNewPasswordPhrase: string,
-    currentPassword: string, enterSystemButton: string, forgotPassword: string, newPassword: string, passwordSuccessfullyCreated: string,
-    passwordSuccessfullyUpdated: string, requirements: string, safetyTips: string, safetyTipsPhrase: string, safetyTipsFirst: string,
-    safetyTipsSecond: string, safetyTipsThird: string, saveButton: string } =
-    {
-      ...poPageChangePasswordLiterals[poLocaleDefault],
-      ...poPageChangePasswordLiterals[browserLanguage()],
-    };
+  readonly literals: {
+    backButton: string;
+    confirmPassword: string;
+    createNewPassword: string;
+    createNewPasswordPhrase: string;
+    currentPassword: string;
+    enterSystemButton: string;
+    forgotPassword: string;
+    newPassword: string;
+    passwordSuccessfullyCreated: string;
+    passwordSuccessfullyUpdated: string;
+    requirements: string;
+    safetyTips: string;
+    safetyTipsPhrase: string;
+    safetyTipsFirst: string;
+    safetyTipsSecond: string;
+    safetyTipsThird: string;
+    saveButton: string;
+  } = {
+    ...poPageChangePasswordLiterals[poLocaleDefault],
+    ...poPageChangePasswordLiterals[browserLanguage()]
+  };
 
   private componentRef: ComponentRef<any> = null;
 
@@ -84,9 +97,10 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
     private router: Router,
     private service: PoPageChangePasswordService,
     private poComponentInjector: PoComponentInjectorService,
-    viewRef: ViewContainerRef) {
-      super();
-      this.parentRef = viewRef['_hostView'][8];
+    viewRef: ViewContainerRef
+  ) {
+    super();
+    this.parentRef = viewRef['_hostView'][8];
   }
 
   ngAfterViewInit() {
@@ -106,7 +120,7 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
   }
 
   navigateTo(url: string) {
-    isExternalLink(url) ?  window.open(url) : this.router.navigate([url || '/']);
+    isExternalLink(url) ? window.open(url) : this.router.navigate([url || '/']);
   }
 
   onForgotPasswordClick(recovery): void {
@@ -118,7 +132,6 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
   }
 
   onLoginSubmit(): void {
-
     const form = this.getLoginForm();
 
     if (this.urlNewPassword) {
@@ -136,27 +149,32 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
   }
 
   validatePassword() {
-    const controls =  this.passwordForm.form.controls;
+    const controls = this.passwordForm.form.controls;
     const controlConfirmPassword = controls['confirmPassword'];
     const controlNewPassword = controls['newPassword'];
 
     if (!this.newPassword) {
-      this.setFormErrors({'required': true}, [controlNewPassword]);
+      this.setFormErrors({ 'required': true }, [controlNewPassword]);
     } else if (!this.confirmPassword) {
-      this.setFormErrors({'required': true}, [controlConfirmPassword]);
+      this.setFormErrors({ 'required': true }, [controlConfirmPassword]);
     } else if (this.newPassword && this.confirmPassword && this.newPassword !== this.confirmPassword) {
-      this.setFormErrors({'equalPassword': true}, [controlNewPassword, controlConfirmPassword]);
-    }  else {
+      this.setFormErrors({ 'equalPassword': true }, [controlNewPassword, controlConfirmPassword]);
+    } else {
       this.setFormErrors(null, [controlConfirmPassword, controlNewPassword]);
     }
 
-    if (this.requirements.length && this.requirements.find(requirement =>  this.validateRequirement(requirement) === false)) {
-      this.setFormErrors({'requirement': true}, [controlNewPassword]);
+    if (
+      this.requirements.length &&
+      this.requirements.find(requirement => this.validateRequirement(requirement) === false)
+    ) {
+      this.setFormErrors({ 'requirement': true }, [controlNewPassword]);
     }
   }
 
   validateRequirement(requirement: PoPageChangePasswordRequirement) {
-    return typeof requirement.status === 'function' ? requirement.status.call(this.parentRef, this.newPassword) : requirement.status;
+    return typeof requirement.status === 'function'
+      ? requirement.status.call(this.parentRef, this.newPassword)
+      : requirement.status;
   }
 
   private checkingForMetadataProperty(object, property) {
@@ -169,7 +187,8 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
     if (Object.keys(data).length !== 0) {
       this.urlNewPassword = this.checkingForMetadataProperty(data, 'serviceApi') || this.urlNewPassword;
       this.recovery = this.checkingForMetadataProperty(data, 'recovery') || this.recovery;
-      this.hideCurrentPassword = this.checkingForMetadataProperty(data, 'hideCurrentPassword') || this.hideCurrentPassword;
+      this.hideCurrentPassword =
+        this.checkingForMetadataProperty(data, 'hideCurrentPassword') || this.hideCurrentPassword;
     }
   }
 
@@ -201,7 +220,6 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
   }
 
   private postUrlNewPassword(form: PoPageChangePassword) {
-
     form['token'] = this.token;
 
     this.service.post(this.urlNewPassword, form).subscribe(response => {
@@ -226,5 +244,4 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
       }
     });
   }
-
 }

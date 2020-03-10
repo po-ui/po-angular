@@ -11,7 +11,6 @@ import { PoPageDynamicEditOptions } from './po-page-dynamic-edit-options.interfa
  *
  */
 export interface PoPageDynamicEditMetadata extends PoPageDynamicEditOptions {
-
   /**
    * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso sejam definidas ações na propriedade `p-actions`
    *
@@ -25,5 +24,4 @@ export interface PoPageDynamicEditMetadata extends PoPageDynamicEditOptions {
 
   /** Versão do metadado devolvido pelo backend. */
   version: number;
-
 }

@@ -8,7 +8,6 @@
  * @usedBy PoI18nModule
  */
 export interface PoI18nConfigDefault {
-
   /**
    * Idioma que será buscado por padrão pelo serviço.
    *

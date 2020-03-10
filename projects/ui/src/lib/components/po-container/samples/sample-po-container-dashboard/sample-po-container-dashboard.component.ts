@@ -15,17 +15,18 @@ import {
 @Component({
   selector: 'sample-po-container-dashboard',
   templateUrl: './sample-po-container-dashboard.component.html',
-  styles: [`
-    .sample-container-dashboard {
-      color: #9da7a9;
-      font-family: NunitoSans;
-      font-size: 14px;
-    }
-  `],
+  styles: [
+    `
+      .sample-container-dashboard {
+        color: #9da7a9;
+        font-family: NunitoSans;
+        font-size: 14px;
+      }
+    `
+  ],
   providers: [SampleDashboardService]
 })
 export class SamplePoContainerDashboardComponent implements AfterContentChecked {
-
   columns: Array<PoTableColumn> = this.sampleDashboardService.getColumns();
   email: string = undefined;
   isSubscribed: boolean = false;
@@ -33,14 +34,16 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked 
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Share', action: this.modalOpen, icon: 'po-icon-share' },
-    { label: 'Disable notification', icon: 'po-icon-notification', action: this.disableNotification, disabled: () => this.isSubscribed },
+    {
+      label: 'Disable notification',
+      icon: 'po-icon-notification',
+      action: this.disableNotification,
+      disabled: () => this.isSubscribed
+    }
   ];
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [
-      { label: 'Home', link: '/' },
-      { label: 'Dashboard' }
-    ]
+    items: [{ label: 'Home', link: '/' }, { label: 'Dashboard' }]
   };
 
   public readonly cancelAction: PoModalAction = {
@@ -60,8 +63,7 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked 
   @ViewChild('formShare', { static: true }) formShare: NgForm;
   @ViewChild(PoModalComponent) poModal: PoModalComponent;
 
-  constructor(private poNotification: PoNotificationService,
-              private sampleDashboardService: SampleDashboardService) { }
+  constructor(private poNotification: PoNotificationService, private sampleDashboardService: SampleDashboardService) {}
 
   ngAfterContentChecked() {
     this.shareAction.danger = this.formShare.invalid;
@@ -88,5 +90,4 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked 
   private disableNotification() {
     this.isSubscribed = true;
   }
-
 }

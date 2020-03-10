@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-url-labs.component.html'
 })
 export class SamplePoUrlLabsComponent implements OnInit {
-
   errorPattern: string;
   event: string;
   help: string;
@@ -49,5 +48,4 @@ export class SamplePoUrlLabsComponent implements OnInit {
     this.url = '';
     this.event = '';
   }
-
 }

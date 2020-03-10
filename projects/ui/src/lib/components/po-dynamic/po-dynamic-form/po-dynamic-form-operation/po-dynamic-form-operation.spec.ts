@@ -16,9 +16,7 @@ describe('PoDynamicFormOperation:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule]
     });
 
     httpMock = TestBed.inject(HttpTestingController);
@@ -29,7 +27,6 @@ describe('PoDynamicFormOperation:', () => {
   });
 
   describe('Methods:', () => {
-
     it('execute: should call `post` if `load` param is a string', () => {
       const spyPost = spyOn(dynamicFormOperation, 'post');
 
@@ -73,7 +70,5 @@ describe('PoDynamicFormOperation:', () => {
 
       expect(dynamicFormOperation['setFormDefaultIfEmpty'](undefined)).toEqual(defaultForm);
     });
-
   });
-
 });

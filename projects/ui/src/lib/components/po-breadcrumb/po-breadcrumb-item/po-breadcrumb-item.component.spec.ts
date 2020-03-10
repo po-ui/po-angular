@@ -7,7 +7,6 @@ import { DocumentationComponent, GuidesComponent, routes } from './../po-breadcr
 import { PoBreadcrumbItemComponent } from './po-breadcrumb-item.component';
 
 describe('PoBreadcrumbItemComponent:', () => {
-
   let component: PoBreadcrumbItemComponent;
   let fixture: ComponentFixture<PoBreadcrumbItemComponent>;
   let nativeElement;
@@ -17,11 +16,7 @@ describe('PoBreadcrumbItemComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        PoBreadcrumbItemComponent,
-        DocumentationComponent,
-        GuidesComponent
-      ]
+      declarations: [PoBreadcrumbItemComponent, DocumentationComponent, GuidesComponent]
     });
   });
 
@@ -39,13 +34,12 @@ describe('PoBreadcrumbItemComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should create a breadcrumb item with link', () => {
       component.link = 'test/';
 
       fixture.detectChanges();
 
-      expect((nativeElement.querySelector('[href]'))).toBeTruthy();
+      expect(nativeElement.querySelector('[href]')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-item')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-arrow')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-label')).toBeTruthy();
@@ -57,7 +51,7 @@ describe('PoBreadcrumbItemComponent:', () => {
 
       fixture.detectChanges();
 
-      expect((nativeElement.querySelector('[href]'))).toBeTruthy();
+      expect(nativeElement.querySelector('[href]')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-item')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-arrow')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-label')).toBeTruthy();
@@ -69,7 +63,7 @@ describe('PoBreadcrumbItemComponent:', () => {
 
       fixture.detectChanges();
 
-      expect((nativeElement.querySelector('[href]'))).toBeFalsy();
+      expect(nativeElement.querySelector('[href]')).toBeFalsy();
       expect(nativeElement.querySelector('.po-breadcrumb-item')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-arrow')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-label')).toBeTruthy();
@@ -82,7 +76,7 @@ describe('PoBreadcrumbItemComponent:', () => {
 
       fixture.detectChanges();
 
-      expect((nativeElement.querySelector('[href]'))).toBeFalsy();
+      expect(nativeElement.querySelector('[href]')).toBeFalsy();
       expect(nativeElement.querySelector('.po-breadcrumb-item')).toBeFalsy();
       expect(nativeElement.querySelector('.po-breadcrumb-item-unclickable')).toBeTruthy();
       expect(nativeElement.querySelector('.po-breadcrumb-arrow')).toBeTruthy();
@@ -99,7 +93,5 @@ describe('PoBreadcrumbItemComponent:', () => {
       expect(nativeElement.querySelector('.po-breadcrumb-arrow')).toBeFalsy();
       expect(nativeElement.querySelector('.po-breadcrumb-label')).toBeTruthy();
     });
-
   });
-
 });

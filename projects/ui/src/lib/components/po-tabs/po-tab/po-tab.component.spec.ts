@@ -26,7 +26,6 @@ describe('PoTabComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('ngAfterContentInit: shoud call `setDisplayOnActive`', () => {
       spyOn(component, <any>'setDisplayOnActive');
       component.ngAfterContentInit();
@@ -46,6 +45,5 @@ describe('PoTabComponent:', () => {
 
       expect(component['elementRef'].nativeElement.style.display).toBe('');
     });
-
   });
 });

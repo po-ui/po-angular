@@ -8,31 +8,29 @@ import { PoDynamicFormOperation } from '../po-dynamic-form-operation/po-dynamic-
 
 @Injectable()
 export class PoDynamicFormLoadService extends PoDynamicFormOperation {
-
   constructor(http: HttpClient) {
     super(http);
   }
 
   createAndUpdateFieldsForm(loadedFields: Array<PoDynamicFormField> = [], fields: Array<PoDynamicFormField> = []) {
-    return [ ...loadedFields ].reduce((updatedFields, field) => {
-      const index = updatedFields.findIndex(updatedField => updatedField.property === field.property);
-      const hasProperty = index >= 0;
+    return [...loadedFields].reduce(
+      (updatedFields, field) => {
+        const index = updatedFields.findIndex(updatedField => updatedField.property === field.property);
+        const hasProperty = index >= 0;
 
-      if (hasProperty) {
-        updatedFields[index] = { ...fields[index], ...field };
-      } else {
-        updatedFields.push(field);
-      }
+        if (hasProperty) {
+          updatedFields[index] = { ...fields[index], ...field };
+        } else {
+          updatedFields.push(field);
+        }
 
-      return updatedFields;
-    }, [ ...fields ]);
+        return updatedFields;
+      },
+      [...fields]
+    );
   }
 
   executeLoad(load: Function | string, value: any) {
-    return this.execute(load, value)
-      .pipe(
-        map(loadedFormdData => this.setFormDefaultIfEmpty(loadedFormdData)
-      ));
+    return this.execute(load, value).pipe(map(loadedFormdData => this.setFormDefaultIfEmpty(loadedFormdData)));
   }
-
 }

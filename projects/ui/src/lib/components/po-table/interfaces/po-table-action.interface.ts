@@ -5,4 +5,4 @@ import { PoPopupAction } from '../../po-popup';
  *
  * @docsExtends PoPopupAction
  */
-export interface PoTableAction extends PoPopupAction { }
+export interface PoTableAction extends PoPopupAction {}

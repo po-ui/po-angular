@@ -17,7 +17,6 @@ import { convertToBoolean, isTypeof } from '../../utils/util';
  */
 @Directive()
 export abstract class PoWidgetBaseComponent {
-
   private _background?: string;
   private _disabled?: boolean = false;
   private _height?: number;
@@ -40,7 +39,7 @@ export abstract class PoWidgetBaseComponent {
    *
    */
   @Input('p-background') set background(value: string) {
-    this._background = (value && typeof value === 'string') ? value : undefined;
+    this._background = value && typeof value === 'string' ? value : undefined;
   }
 
   get background() {
@@ -77,7 +76,7 @@ export abstract class PoWidgetBaseComponent {
    * > Caso não seja informado valor, a propriedade irá assumir o tamanho do conteúdo.
    */
   @Input('p-height') set height(value: number) {
-    this._height = parseInt(<any> value, 10);
+    this._height = parseInt(<any>value, 10);
     this.setHeight(this.height);
   }
 
@@ -194,5 +193,4 @@ export abstract class PoWidgetBaseComponent {
   @Output('p-title-action') titleAction?: EventEmitter<any> = new EventEmitter<any>();
 
   abstract setHeight(height: number);
-
 }

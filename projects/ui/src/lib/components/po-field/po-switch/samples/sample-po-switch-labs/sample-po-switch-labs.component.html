@@ -7,42 +7,25 @@
   [p-label-off]="labelOff"
   [p-label-on]="labelOn"
   [p-label-position]="labelPosition"
-  (p-change)="changeEvent('p-change')">
+  (p-change)="changeEvent('p-change')"
+>
 </po-switch>
 
-<hr>
+<hr />
 
 <div class="po-row">
-  <po-info
-    class="po-lg-6"
-    p-label="Model"
-    [p-value]="switch">
-  </po-info>
+  <po-info class="po-lg-6" p-label="Model" [p-value]="switch"> </po-info>
 
-  <po-info
-    class="po-lg-6"
-    p-label="Event"
-    [p-value]="event">
-  </po-info>
+  <po-info class="po-lg-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
-<hr>
+<hr />
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input
-      class="po-lg-6"
-      name="label"
-      [(ngModel)]="label"
-      p-label="Label">
-    </po-input>
+    <po-input class="po-lg-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
 
-    <po-input
-      class="po-lg-6"
-      name="help"
-      [(ngModel)]="help"
-      p-label="Help">
-    </po-input>
+    <po-input class="po-lg-6" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
   </div>
 
   <div class="po-row">
@@ -51,7 +34,8 @@
       name="labelOff"
       [(ngModel)]="labelOff"
       p-help="Text displayed when Portinari Switch is set to 'false'"
-      p-label="Label Off">
+      p-label="Label Off"
+    >
     </po-input>
 
     <po-input
@@ -59,7 +43,8 @@
       name="labelOn"
       [(ngModel)]="labelOn"
       p-help="Text displayed when Portinari Switch is set to 'true'"
-      p-label="Label On">
+      p-label="Label On"
+    >
     </po-input>
   </div>
 
@@ -69,7 +54,8 @@
       name="labelPosition"
       [(ngModel)]="labelPosition"
       p-label="Label Position"
-      [p-options]="labelPositionOptions">
+      [p-options]="labelPositionOptions"
+    >
     </po-radio-group>
 
     <po-checkbox-group
@@ -77,15 +63,12 @@
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
-      [p-options]="propertiesOptions">
+      [p-options]="propertiesOptions"
+    >
     </po-checkbox-group>
   </div>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore()">
-    </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

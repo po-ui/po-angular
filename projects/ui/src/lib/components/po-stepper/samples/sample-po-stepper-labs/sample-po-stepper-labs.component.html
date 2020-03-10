@@ -2,53 +2,36 @@
   [p-orientation]="properties.orientation"
   [p-step-icons]="properties.stepIcons"
   [p-step-size]="properties.stepSize"
-  (p-change-step)="changeStep('change')">
-
+  (p-change-step)="changeStep('change')"
+>
   <po-step *ngFor="let step of steps" [p-label]="step.label">
-    <h2> Step Content {{ step.label }} </h2>
+    <h2>Step Content {{ step.label }}</h2>
   </po-step>
-
 </po-stepper>
 
-<hr>
+<hr />
 
-<po-info
-  p-label="Event"
-  [p-value]="event">
-</po-info>
+<po-info p-label="Event" [p-value]="event"> </po-info>
 
 <form #stepForm="ngForm">
-
-  <po-dynamic-form
-    p-group-form
-    [p-fields]="stepItemFields"
-    [p-value]="stepItem">
-  </po-dynamic-form>
+  <po-dynamic-form p-group-form [p-fields]="stepItemFields" [p-value]="stepItem"> </po-dynamic-form>
 
   <div class="po-row">
     <po-button
       class="po-md-3"
       p-label="Add Step"
       [p-disabled]="stepForm.invalid"
-      (p-click)="addItem(stepItem); stepForm.reset();">
+      (p-click)="addItem(stepItem); stepForm.reset()"
+    >
     </po-button>
   </div>
 </form>
 
 <form #propertiesForm="ngForm">
-
-  <po-dynamic-form
-    p-group-form
-    [p-fields]="propertiesFields"
-    [p-value]="properties">
-  </po-dynamic-form>
+  <po-dynamic-form p-group-form [p-fields]="propertiesFields" [p-value]="properties"> </po-dynamic-form>
 
   <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Sample Restore"
-      (p-click)="restore(); propertiesForm.reset(); stepForm.reset()">
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore(); propertiesForm.reset(); stepForm.reset()">
     </po-button>
   </div>
-
 </form>

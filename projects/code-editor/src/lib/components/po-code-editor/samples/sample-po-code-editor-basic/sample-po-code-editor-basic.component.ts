@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-code-editor-basic',
   templateUrl: './sample-po-code-editor-basic.component.html'
 })
-export class SamplePoCodeEditorBasicComponent { }
+export class SamplePoCodeEditorBasicComponent {}

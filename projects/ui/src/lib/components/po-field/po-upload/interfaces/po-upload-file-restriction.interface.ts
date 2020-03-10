@@ -7,7 +7,6 @@
  * para o seu tamanho, extensão e quantidade.
  */
 export interface PoUploadFileRestrictions {
-
   /**
    * Extensões permitidas de arquivos que serão enviados ao servidor, devendo ser informada uma coleção de extensões, por exemplo:
    * ```
@@ -38,5 +37,4 @@ export interface PoUploadFileRestrictions {
    * > Por padrão o valor é `0`.
    */
   minFileSize?: number;
-
 }

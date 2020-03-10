@@ -5,7 +5,6 @@
  * @usedBy PoCheckboxGroupComponent
  */
 export interface PoCheckboxGroupOption {
-
   /** Texto exibido para o usuário ao lado do checkbox. */
   label: string;
 

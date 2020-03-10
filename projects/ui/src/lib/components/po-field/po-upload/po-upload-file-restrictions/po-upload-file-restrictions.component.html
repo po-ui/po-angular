@@ -1,23 +1,23 @@
 <p class="po-font-text-small" *ngIf="maxFiles > 1">
-  {{ literals?.numberOfFilesAllowed | poI18n:maxFiles }}
+  {{ literals?.numberOfFilesAllowed | poI18n: maxFiles }}
 </p>
 
 <p class="po-font-text-small" *ngIf="allowedExtensions">
-  {{ literals?.allowedFormats | poI18n:allowedExtensions }}
+  {{ literals?.allowedFormats | poI18n: allowedExtensions }}
 </p>
 
 <p class="po-font-text-small" *ngIf="minFileSize || maxFileSize">
   <span>{{ literals?.allowedSizes }}</span>
 
   <span *ngIf="minFileSize && maxFileSize">
-    {{ literals?.allowedFileSizeRange | poI18n:[minFileSize, maxFileSize] }}
+    {{ literals?.allowedFileSizeRange | poI18n: [minFileSize, maxFileSize] }}
   </span>
 
   <span *ngIf="minFileSize && !maxFileSize">
-    {{ literals?.minFileSizeAllowed | poI18n:minFileSize }}
+    {{ literals?.minFileSizeAllowed | poI18n: minFileSize }}
   </span>
 
   <span *ngIf="maxFileSize && !minFileSize">
-    {{ literals?.maxFileSizeAllowed | poI18n:maxFileSize }}
+    {{ literals?.maxFileSizeAllowed | poI18n: maxFileSize }}
   </span>
 </p>

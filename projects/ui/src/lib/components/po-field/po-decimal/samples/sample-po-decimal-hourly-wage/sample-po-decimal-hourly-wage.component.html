@@ -1,75 +1,70 @@
 <form #f="ngForm">
-    <div class="po-font-title">Calculate hourly wage</div>
+  <div class="po-font-title">Calculate hourly wage</div>
 
-    <hr >
+  <hr />
 
-    <div class="po-row">
-      <po-number
-        class="po-md-6"
-        name="weekHours"
-        [(ngModel)]="weekHours"
-        p-label="Week Hours"
-        p-required>
-      </po-number>
+  <div class="po-row">
+    <po-number class="po-md-6" name="weekHours" [(ngModel)]="weekHours" p-label="Week Hours" p-required> </po-number>
 
-      <po-number
-        class="po-md-6"
-        name="workingDaysPerWeek"
-        [(ngModel)]="workingDaysPerWeek"
-        p-label="Working days per week"
-        p-required>
-      </po-number>
-    </div>
+    <po-number
+      class="po-md-6"
+      name="workingDaysPerWeek"
+      [(ngModel)]="workingDaysPerWeek"
+      p-label="Working days per week"
+      p-required
+    >
+    </po-number>
+  </div>
 
-    <div class="po-row">
-      <po-number
-        class="po-md-6"
-        name="quantityDaysPerMonth"
-        [(ngModel)]="quantityDaysPerMonth"
-        p-label="Quantity days per month"
-        p-required>
-      </po-number>
+  <div class="po-row">
+    <po-number
+      class="po-md-6"
+      name="quantityDaysPerMonth"
+      [(ngModel)]="quantityDaysPerMonth"
+      p-label="Quantity days per month"
+      p-required
+    >
+    </po-number>
 
-      <po-decimal
-        class="po-md-6"
-        name="salary"
-        [(ngModel)]="salary"
-        p-decimals-length="2"
-        p-icon="po-icon-finance"
-        p-label="Salary"
-        p-required
-        p-thousand-maxlength="13"
-        (p-change)="calculate()">
-      </po-decimal>
-    </div>
+    <po-decimal
+      class="po-md-6"
+      name="salary"
+      [(ngModel)]="salary"
+      p-decimals-length="2"
+      p-icon="po-icon-finance"
+      p-label="Salary"
+      p-required
+      p-thousand-maxlength="13"
+      (p-change)="calculate()"
+    >
+    </po-decimal>
+  </div>
 
-    <div class="po-row">
-      <po-decimal
-        class="po-md-6"
-        name="hourlyWage"
-        [(ngModel)]="hourlyWage"
-        p-decimals-length="2"
-        p-disabled
-        p-icon="po-icon-finance-secure"
-        p-label="Hourly Wage"
-        p-required
-        p-thousand-maxlength="13">
-      </po-decimal>
-    </div>
+  <div class="po-row">
+    <po-decimal
+      class="po-md-6"
+      name="hourlyWage"
+      [(ngModel)]="hourlyWage"
+      p-decimals-length="2"
+      p-disabled
+      p-icon="po-icon-finance-secure"
+      p-label="Hourly Wage"
+      p-required
+      p-thousand-maxlength="13"
+    >
+    </po-decimal>
+  </div>
 
-    <div class="po-row">
-      <po-button
-        class="po-md-3"
-        p-label="Clean"
-        (p-click)="f.reset()">
-      </po-button>
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Clean" (p-click)="f.reset()"> </po-button>
 
-      <po-button
-        class="po-md-3"
-        p-label="Recalculate"
-        p-type="primary"
-        [p-disabled]="!hourlyWage"
-        (p-click)="calculate()">
-      </po-button>
-    </div>
-  </form>
+    <po-button
+      class="po-md-3"
+      p-label="Recalculate"
+      p-type="primary"
+      [p-disabled]="!hourlyWage"
+      (p-click)="calculate()"
+    >
+    </po-button>
+  </div>
+</form>

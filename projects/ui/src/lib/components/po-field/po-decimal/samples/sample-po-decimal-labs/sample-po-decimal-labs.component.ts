@@ -7,7 +7,6 @@ import { PoCheckboxGroupOption, PoSelectOption } from '@portinari/portinari-ui';
   templateUrl: './sample-po-decimal-labs.component.html'
 })
 export class SamplePoDecimalLabsComponent implements OnInit {
-
   decimal: number;
   decimalsLength: number;
   event: string;
@@ -61,5 +60,4 @@ export class SamplePoDecimalLabsComponent implements OnInit {
 
     this.properties = [];
   }
-
 }

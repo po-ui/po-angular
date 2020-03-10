@@ -9,8 +9,6 @@ import { PoPageAction } from '../po-page-action.interface';
  * Interface para o atributo `filter` do componente `po-page`.
  */
 export interface PoPageDefault extends PoPage {
-
   /** Array de objetos que implementam a interface `PoPageAction`. */
   actions?: Array<PoPageAction>;
-
 }

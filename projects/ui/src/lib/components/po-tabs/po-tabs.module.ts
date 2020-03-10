@@ -13,19 +13,8 @@ import { PoTabsComponent } from './po-tabs.component';
  * Módulo do componente po-tabs
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoPopoverModule
-  ],
-  declarations: [
-    PoTabButtonComponent,
-    PoTabComponent,
-    PoTabDropdownComponent,
-    PoTabsComponent
-  ],
-  exports: [
-    PoTabComponent,
-    PoTabsComponent
-  ]
+  imports: [CommonModule, PoPopoverModule],
+  declarations: [PoTabButtonComponent, PoTabComponent, PoTabDropdownComponent, PoTabsComponent],
+  exports: [PoTabComponent, PoTabsComponent]
 })
-export class PoTabsModule { }
+export class PoTabsModule {}

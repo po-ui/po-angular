@@ -15,14 +15,10 @@ import { PoUploadService } from './po-upload.service';
 @Component({
   selector: 'po-upload',
   template: `
-    <input
-      type="file"
-      class="po-upload"
-      name="upload">
+    <input type="file" class="po-upload" name="upload" />
   `
 })
 class PoUploadComponent extends PoUploadBaseComponent {
-
   constructor(uploadService: PoUploadService) {
     super(uploadService);
   }
@@ -32,7 +28,6 @@ class PoUploadComponent extends PoUploadBaseComponent {
 }
 
 describe('PoUploadBaseComponent:', () => {
-
   let component: PoUploadComponent;
   let fixture: ComponentFixture<PoUploadComponent>;
 
@@ -47,9 +42,9 @@ describe('PoUploadBaseComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoUploadComponent ],
-      providers: [ HttpClient, HttpHandler, PoUploadService ],
-      imports: [ FormsModule ],
+      declarations: [PoUploadComponent],
+      providers: [HttpClient, HttpHandler, PoUploadService],
+      imports: [FormsModule]
     });
   });
 
@@ -94,7 +89,6 @@ describe('PoUploadBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     let file: PoUploadFile;
 
     beforeEach(() => {
@@ -125,7 +119,7 @@ describe('PoUploadBaseComponent:', () => {
     it('validate: should return required obj when `requiredFailed` is true', () => {
       const validObj = {
         required: {
-          valid: false,
+          valid: false
         }
       };
 
@@ -145,7 +139,7 @@ describe('PoUploadBaseComponent:', () => {
     it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any> 'validatorChange');
+      spyOn(component, <any>'validatorChange');
 
       component['validateModel']([]);
 
@@ -163,10 +157,10 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('writeValue: shouldn`t update `currentFiles` when files param is the same `currentFiles`', () => {
-      const files: any = [{name: 'file'}];
+      const files: any = [{ name: 'file' }];
       component.currentFiles = [...files];
 
-      const parseFiles = spyOn(component, <any> 'parseFiles');
+      const parseFiles = spyOn(component, <any>'parseFiles');
 
       component.writeValue(files);
 
@@ -174,10 +168,10 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('writeValue: should update `currentFiles` when files param is different than `currentFiles`', () => {
-      const files: any = [{name: 'file'}];
+      const files: any = [{ name: 'file' }];
       component.currentFiles = [];
 
-      const parseFiles = spyOn(component, <any> 'parseFiles');
+      const parseFiles = spyOn(component, <any>'parseFiles');
 
       component.writeValue(files);
 
@@ -185,7 +179,6 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     describe('isExceededFileLimit:', () => {
-
       beforeEach(() => {
         component.isMultiple = true;
       });
@@ -219,18 +212,14 @@ describe('PoUploadBaseComponent:', () => {
 
         expect(component['isExceededFileLimit'](5)).toBe(true);
       });
-
     });
 
     describe('parseFiles:', () => {
-
       it('should call `insertFileInFiles` and return array of PoUploadFile', () => {
-        const files = [
-          new PoUploadFile({})
-        ];
+        const files = [new PoUploadFile({})];
 
-        const checkRestritions = spyOn(component, <any> 'checkRestrictions').and.returnValue(true);
-        spyOn(component, <any> 'insertFileInFiles').and.returnValue(files);
+        const checkRestritions = spyOn(component, <any>'checkRestrictions').and.returnValue(true);
+        spyOn(component, <any>'insertFileInFiles').and.returnValue(files);
 
         expect(component['parseFiles']([fileMock])).toEqual(files);
 
@@ -239,8 +228,8 @@ describe('PoUploadBaseComponent:', () => {
       });
 
       it('should not call `insertFileInFiles`', () => {
-        const checkRestritions = spyOn(component, <any> 'checkRestrictions').and.returnValue(false);
-        spyOn(component, <any> 'insertFileInFiles');
+        const checkRestritions = spyOn(component, <any>'checkRestrictions').and.returnValue(false);
+        spyOn(component, <any>'insertFileInFiles');
 
         expect(component['parseFiles']([fileMock])).toBeTruthy();
         expect(checkRestritions).toHaveBeenCalled();
@@ -249,58 +238,49 @@ describe('PoUploadBaseComponent:', () => {
 
       it('should return three files if upload limit is three', () => {
         const files = [
-          { name: 'file1', lastModified: '2019-02-12'},
-          { name: 'file2', lastModified: '2019-02-12'},
-          { name: 'file3', lastModified: '2019-02-12'},
-          { name: 'file4', lastModified: '2019-02-12'}
+          { name: 'file1', lastModified: '2019-02-12' },
+          { name: 'file2', lastModified: '2019-02-12' },
+          { name: 'file3', lastModified: '2019-02-12' },
+          { name: 'file4', lastModified: '2019-02-12' }
         ];
 
         const expectedFiles = [
-          { name: 'file1', lastModified: '2019-02-12'},
-          { name: 'file2', lastModified: '2019-02-12'},
-          { name: 'file3', lastModified: '2019-02-12'}
+          { name: 'file1', lastModified: '2019-02-12' },
+          { name: 'file2', lastModified: '2019-02-12' },
+          { name: 'file3', lastModified: '2019-02-12' }
         ];
 
         component.isMultiple = true;
         component.fileRestrictions = { maxFiles: 3 };
         component.currentFiles = undefined;
 
-        spyOn(component, <any> 'checkRestrictions').and.returnValue(true);
+        spyOn(component, <any>'checkRestrictions').and.returnValue(true);
         spyOn(component, <any>'insertFileInFiles').and.returnValues(expectedFiles, expectedFiles, expectedFiles, files);
 
         expect(component['parseFiles'](<any>files)).toEqual(<any>expectedFiles);
       });
 
       it('should return all files if upload limit is undefined', () => {
-        const files = [
-          { name: 'file1' },
-          { name: 'file2' },
-          { name: 'file3' },
-          { name: 'file4' }
-        ];
+        const files = [{ name: 'file1' }, { name: 'file2' }, { name: 'file3' }, { name: 'file4' }];
 
-        const incompletedFiles = [
-          { name: 'file1' },
-          { name: 'file2' },
-          { name: 'file3' }
-        ];
+        const incompletedFiles = [{ name: 'file1' }, { name: 'file2' }, { name: 'file3' }];
 
         component.fileRestrictions = { maxFiles: undefined };
         component.currentFiles = undefined;
 
-        spyOn(component, <any> 'checkRestrictions').and.returnValue(true);
-        spyOn(component, <any>'insertFileInFiles').and.returnValues(incompletedFiles, incompletedFiles, incompletedFiles, files);
+        spyOn(component, <any>'checkRestrictions').and.returnValue(true);
+        spyOn(component, <any>'insertFileInFiles').and.returnValues(
+          incompletedFiles,
+          incompletedFiles,
+          incompletedFiles,
+          files
+        );
 
         expect(component['parseFiles'](<any>files)).toEqual(<any>files);
       });
 
       it('should set `quantityNotAllowed` with `filesLength - fileRestrictions.maxFiles` if `isExceededFileLimit` returns `true`', () => {
-
-        const files = [
-          { name: 'file1' },
-          { name: 'file2' },
-          { name: 'file3' }
-        ];
+        const files = [{ name: 'file1' }, { name: 'file2' }, { name: 'file3' }];
 
         component.fileRestrictions = { maxFiles: 2 };
 
@@ -312,14 +292,12 @@ describe('PoUploadBaseComponent:', () => {
       });
 
       it('should call `sendFeedback`', () => {
-
         spyOn(component, 'sendFeedback');
 
         component['parseFiles'](<any>[{ name: 'file1' }]);
 
         expect(component.sendFeedback).toHaveBeenCalled();
       });
-
     });
 
     it('checkRestrictions: should be check restrictions', () => {
@@ -353,7 +331,6 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('checkRestrictions: should sum `sizeNotAllowed` if `file.size` is less than `minFileSize`', () => {
-
       const mockFile = {
         size: 2
       };
@@ -367,7 +344,6 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('checkRestrictions: should sum `sizeNotAllowed` if `file.size` is greater than `maxFileSize`', () => {
-
       const mockFile = {
         size: 3
       };
@@ -381,7 +357,6 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('checkRestrictions: shouldn`t sum `sizeNotAllowed` if `isAcceptSize` is `true`', () => {
-
       const mockFile = {
         size: 2
       };
@@ -409,7 +384,7 @@ describe('PoUploadBaseComponent:', () => {
       component.isMultiple = false;
 
       spyOn(files, 'splice');
-      spyOn(component, <any> 'existsFileSameName');
+      spyOn(component, <any>'existsFileSameName');
 
       component['insertFileInFiles'](file, files);
 
@@ -422,8 +397,8 @@ describe('PoUploadBaseComponent:', () => {
       component.isMultiple = true;
 
       spyOn(files, 'push');
-      spyOn(component, <any> 'existsFileSameName').and.returnValue(false);
-      spyOn(component, <any> 'updateExistsFileInFiles');
+      spyOn(component, <any>'existsFileSameName').and.returnValue(false);
+      spyOn(component, <any>'updateExistsFileInFiles');
 
       component['insertFileInFiles'](file, files);
 
@@ -438,8 +413,8 @@ describe('PoUploadBaseComponent:', () => {
       component.isMultiple = true;
 
       spyOn(files, 'push');
-      spyOn(component, <any> 'existsFileSameName').and.returnValue(false);
-      spyOn(component, <any> 'updateExistsFileInFiles');
+      spyOn(component, <any>'existsFileSameName').and.returnValue(false);
+      spyOn(component, <any>'updateExistsFileInFiles');
 
       component['insertFileInFiles'](file, files);
 
@@ -451,8 +426,8 @@ describe('PoUploadBaseComponent:', () => {
     it('insertFileInFiles: should call `updateExistsFileInFiles` when `existsFileSameName` is true', () => {
       const files = [];
 
-      spyOn(component, <any> 'updateExistsFileInFiles');
-      spyOn(component, <any> 'existsFileSameName').and.returnValue(true);
+      spyOn(component, <any>'updateExistsFileInFiles');
+      spyOn(component, <any>'existsFileSameName').and.returnValue(true);
       spyOn(files, 'push');
       spyOn(files, 'splice');
 
@@ -465,7 +440,6 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     describe('initRestrictions:', () => {
-
       it('should return falsy if restrictions is undefined', () => {
         const restrictions = undefined;
 
@@ -481,7 +455,7 @@ describe('PoUploadBaseComponent:', () => {
 
       it('should return default `maxFileSize`', () => {
         const restrictions = { minFileSize: 2 };
-        const expectedResult =  { minFileSize: 2, maxFileSize: 31457280 };
+        const expectedResult = { minFileSize: 2, maxFileSize: 31457280 };
 
         expect(component['initRestrictions'](restrictions)).toEqual(expectedResult);
       });
@@ -524,11 +498,9 @@ describe('PoUploadBaseComponent:', () => {
 
       expect(files.splice).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Properties:', () => {
-
     it('p-drag-drop: should set `dragDrop` with valid values', () => {
       const validValues = ['', true, 1, [], {}, 'true'];
 
@@ -566,9 +538,8 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('fileRestrictions: should set `fileRestrictions` calling `initRestrictions` and call `setAllowedExtensions`', () => {
-
       const restrictions = { minFileSize: 2 };
-      const expectedResult =  { minFileSize: 2, maxFileSize: 31457280 };
+      const expectedResult = { minFileSize: 2, maxFileSize: 31457280 };
 
       spyOn(component, <any>'initRestrictions').and.callThrough();
       spyOn(component, <any>'setAllowedExtensions');
@@ -650,13 +621,18 @@ describe('PoUploadBaseComponent:', () => {
 
       spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(utilsFunctions.poLocaleDefault);
 
-      expectPropertiesValues(component, 'literals', invalidValues, poUploadLiteralsDefault[utilsFunctions.poLocaleDefault]);
+      expectPropertiesValues(
+        component,
+        'literals',
+        invalidValues,
+        poUploadLiteralsDefault[utilsFunctions.poLocaleDefault]
+      );
     });
 
     it('required: should set `required` with valid values', () => {
       const validValues = ['', true, 1, [], {}, 'true'];
 
-      spyOn(component, <any> 'validateModel');
+      spyOn(component, <any>'validateModel');
 
       expectPropertiesValues(component, 'required', validValues, true);
       expect(component['validateModel']).toHaveBeenCalled();
@@ -665,7 +641,7 @@ describe('PoUploadBaseComponent:', () => {
     it('required: should set `required` to false with invalid values', () => {
       const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
 
-      spyOn(component, <any> 'validateModel');
+      spyOn(component, <any>'validateModel');
 
       expectPropertiesValues(component, 'required', invalidValues, false);
       expect(component['validateModel']).toHaveBeenCalled();
@@ -784,7 +760,5 @@ describe('PoUploadBaseComponent:', () => {
 
       expect(component.isMultiple).toBe(true);
     });
-
   });
-
 });

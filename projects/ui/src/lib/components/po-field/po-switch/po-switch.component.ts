@@ -1,4 +1,12 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  ViewChild
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoSwitchBaseComponent } from './po-switch-base.component';
@@ -38,12 +46,11 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoSwitchComponent),
-      multi: true,
+      multi: true
     }
   ]
 })
 export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterViewChecked, AfterViewInit {
-
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
   constructor(private changeDetector: ChangeDetectorRef) {
@@ -85,25 +92,30 @@ export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterVie
 
   getLabelPosition() {
     switch (this.labelPosition) {
-      case PoSwitchLabelPosition.Left: return 'left';
-      case PoSwitchLabelPosition.Right: return 'right';
-      default: return 'right';
+      case PoSwitchLabelPosition.Left:
+        return 'left';
+      case PoSwitchLabelPosition.Right:
+        return 'right';
+      default:
+        return 'right';
     }
   }
 
   getSwitchPosition() {
     switch (this.labelPosition) {
-      case PoSwitchLabelPosition.Left: return 'right';
-      case PoSwitchLabelPosition.Right: return 'left';
-      default: return 'left';
+      case PoSwitchLabelPosition.Left:
+        return 'right';
+      case PoSwitchLabelPosition.Right:
+        return 'left';
+      default:
+        return 'left';
     }
   }
 
   onKeyDown(event) {
-    if (event.which === 32 || event.keyCode === 32)  {
+    if (event.which === 32 || event.keyCode === 32) {
       event.preventDefault();
       this.eventClick();
     }
   }
-
 }

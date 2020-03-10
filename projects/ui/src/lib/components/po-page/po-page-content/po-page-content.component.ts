@@ -12,7 +12,6 @@ import { PoPageContentBaseComponent } from './po-page-content-base.component';
   templateUrl: './po-page-content.component.html'
 })
 export class PoPageContentComponent extends PoPageContentBaseComponent implements AfterViewInit, OnDestroy {
-
   contentOpacity: number = 0;
   height: string = '90%';
   overflowY: string = 'none';
@@ -56,5 +55,4 @@ export class PoPageContentComponent extends PoPageContentBaseComponent implement
   private removeListeners() {
     this.resizeListener();
   }
-
 }

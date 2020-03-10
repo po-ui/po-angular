@@ -6,7 +6,6 @@ import { PoSlideCirclesComponent } from './po-slide-circles.component';
 import { PoSlideModule } from './../po-slide.module';
 
 describe('PoSlideCirclesComponent:', () => {
-
   let component: PoSlideCirclesComponent;
   let fixture: ComponentFixture<PoSlideCirclesComponent>;
   let nativeElement;
@@ -33,7 +32,6 @@ describe('PoSlideCirclesComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('shouldn`t find circles if `items` is undefined.', () => {
       component.items = undefined;
       fixture.detectChanges();
@@ -73,7 +71,5 @@ describe('PoSlideCirclesComponent:', () => {
 
       expect(component.click.emit).toHaveBeenCalled();
     });
-
   });
-
 });

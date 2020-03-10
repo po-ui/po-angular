@@ -12,7 +12,7 @@ describe('PoDisclaimerRemoveComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoDisclaimerComponent, PoDisclaimerRemoveComponent ]
+      declarations: [PoDisclaimerComponent, PoDisclaimerRemoveComponent]
     });
   });
 

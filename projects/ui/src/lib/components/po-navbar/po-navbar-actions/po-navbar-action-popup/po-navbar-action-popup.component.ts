@@ -7,7 +7,6 @@ import { PoNavbarIconAction } from '../../interfaces/po-navbar-icon-action.inter
   templateUrl: './po-navbar-action-popup.component.html'
 })
 export class PoNavbarActionPopupComponent {
-
   @Input('p-icon-actions') iconActions: Array<PoNavbarIconAction>;
 
   getLastIconAction() {
@@ -15,5 +14,4 @@ export class PoNavbarActionPopupComponent {
       return this.iconActions[this.iconActions.length - 1].icon;
     }
   }
-
 }

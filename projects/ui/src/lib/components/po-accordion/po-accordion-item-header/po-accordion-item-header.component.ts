@@ -6,7 +6,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoAccordionItemHeaderComponent {
-
   @Input('p-expanded') expanded: boolean = false;
 
   @Input('p-label') label: string;
@@ -18,5 +17,4 @@ export class PoAccordionItemHeaderComponent {
 
     this.toggle.emit(this.expanded);
   }
-
 }

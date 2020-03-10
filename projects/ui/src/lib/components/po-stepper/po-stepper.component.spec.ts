@@ -22,7 +22,7 @@ describe('PoStepperComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ PoStepperModule ]
+      imports: [PoStepperModule]
     });
   });
 
@@ -49,7 +49,6 @@ describe('PoStepperComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('currentStepIndex: should return `step` - 1.', () => {
       component.steps = [{ label: 'Step 1' }, { label: 'Step 2' }];
       component.step = 1;
@@ -59,23 +58,21 @@ describe('PoStepperComponent:', () => {
 
     it('stepList: should return `poSteps` if `usePoSteps` is true.', () => {
       Object.assign(component.usePoSteps, true);
-      component.poSteps = <any> [{ label: 'Step 1' }];
+      component.poSteps = <any>[{ label: 'Step 1' }];
 
       expect(component.stepList).toEqual([{ label: 'Step 1' }]);
     });
 
     it('stepList: should return `steps` if `usePoSteps` is false.', () => {
       Object.assign(component.usePoSteps, false);
-      component.poSteps = <any> [{ label: 'Step 1' }];
-      component.steps =  [{ label: 'Step 1' }];
+      component.poSteps = <any>[{ label: 'Step 1' }];
+      component.steps = [{ label: 'Step 1' }];
 
       expect(component.stepList).toEqual([{ label: 'Step 1' }]);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('ngAfterContentInit: should call `activeFirstStep`', () => {
       const spyOnActiveFirstStep = spyOn(component, <any>'activeFirstStep');
 
@@ -211,7 +208,6 @@ describe('PoStepperComponent:', () => {
 
     it(`previous: should call 'getStepsAndIndex' with 'currentActiveStep' and 'changeStep' with previous step if
       'usePoSteps' is true`, () => {
-
       const previousStepIndex = 1;
       const previousStep = poSteps[1];
       const currentStepIndex = 2;
@@ -231,7 +227,6 @@ describe('PoStepperComponent:', () => {
 
     it(`changeStep: should call 'controlStepsStatus' and 'onChangeStep.emit' with 'step' if usePoSteps and
       allowNextStep are true and 'step' is different of 'currentActiveStep'`, () => {
-
       const poStepMock = { id: 'A1BC' };
       const poStepCurrentMock = { id: 'B2jk' };
       const stepIndex = 1;
@@ -252,7 +247,6 @@ describe('PoStepperComponent:', () => {
 
     it(`changeStep: should call 'controlStepsStatus' and 'onChangeStep.emit' with 'step' if usePoSteps and
       allowNextStep are true and 'currentActiveStep' is undefined`, () => {
-
       const poStepMock = { id: 'A1BC' };
       const stepIndex = 1;
 
@@ -275,7 +269,7 @@ describe('PoStepperComponent:', () => {
 
       component.step = 1;
 
-      const spyAllowNextStep = spyOn(component, <any> 'allowNextStep').and.returnValue(of(false));
+      const spyAllowNextStep = spyOn(component, <any>'allowNextStep').and.returnValue(of(false));
       const spyOnChangeStep = spyOn(component.onChangeStep, 'emit');
 
       component.changeStep(stepNumber);
@@ -296,23 +290,21 @@ describe('PoStepperComponent:', () => {
       expect(spyOnChangeStep).not.toHaveBeenCalled();
     });
 
-    it('changeStep: should call `onChangeStep.emit` if `stepIndex` param is diff than `step` and `allowNextStep` return true',
-      fakeAsync(() => {
-        const stepIndex = 3;
-        const stepNumber = 4;
+    it('changeStep: should call `onChangeStep.emit` if `stepIndex` param is diff than `step` and `allowNextStep` return true', fakeAsync(() => {
+      const stepIndex = 3;
+      const stepNumber = 4;
 
-        spyOnProperty(component, 'currentStepIndex').and.returnValue(1);
+      spyOnProperty(component, 'currentStepIndex').and.returnValue(1);
 
-        const spyAllowNextStep = spyOn(component, <any> 'allowNextStep').and.returnValue(of(true));
-        const spyOnChangeStep = spyOn(component.onChangeStep, 'emit');
+      const spyAllowNextStep = spyOn(component, <any>'allowNextStep').and.returnValue(of(true));
+      const spyOnChangeStep = spyOn(component.onChangeStep, 'emit');
 
-        component.changeStep(stepIndex);
-        flush();
+      component.changeStep(stepIndex);
+      flush();
 
-        expect(spyAllowNextStep).toHaveBeenCalledWith(stepIndex);
-        expect(spyOnChangeStep).toHaveBeenCalledWith(stepNumber);
-      })
-    );
+      expect(spyAllowNextStep).toHaveBeenCalledWith(stepIndex);
+      expect(spyOnChangeStep).toHaveBeenCalledWith(stepNumber);
+    }));
 
     it('onStepActive: should set `currentActiveStep` to `currentActiveStep`', () => {
       component['currentActiveStep'] = undefined;
@@ -360,7 +352,6 @@ describe('PoStepperComponent:', () => {
     });
 
     it('activeFirstStep: shouldn`t call `changeStep` with first step if `usePoSteps` is true and has step activated', () => {
-
       spyOnProperty(component, 'usePoSteps').and.returnValue(true);
 
       const poStepsMock = new QueryList<PoStepComponent>();
@@ -377,7 +368,6 @@ describe('PoStepperComponent:', () => {
     });
 
     it('activeFirstStep: shouldn`t call `changeStep` with first step if `usePoSteps` is false', () => {
-
       spyOnProperty(component, 'usePoSteps').and.returnValue(false);
       spyOn(component, 'changeStep');
 
@@ -403,7 +393,7 @@ describe('PoStepperComponent:', () => {
       component.sequential = true;
 
       component.steps = poSteps;
-      component.steps.forEach(step => step.status = PoStepperStatus.Default);
+      component.steps.forEach(step => (step.status = PoStepperStatus.Default));
       component.step = 1;
 
       component['allowNextStep'](stepNumber).subscribe(value => {
@@ -479,7 +469,10 @@ describe('PoStepperComponent:', () => {
     });
 
     it('canActiveNextStep: should return false if `currentActiveStep.canActiveNextStep` function return false', (done: DoneFn) => {
-      const currentActiveStep = <PoStepComponent>{ canActiveNextStep: currentStep => false, status: PoStepperStatus.Default };
+      const currentActiveStep = <PoStepComponent>{
+        canActiveNextStep: currentStep => false,
+        status: PoStepperStatus.Default
+      };
 
       component['canActiveNextStep'](currentActiveStep).subscribe(result => {
         expect(result).toBe(false);
@@ -499,7 +492,10 @@ describe('PoStepperComponent:', () => {
 
     it(`canActiveNextStep: should return false if 'currentActiveStep.canActiveNextStep' function
       return an observable with false value`, (done: DoneFn) => {
-      const currentActiveStep = <PoStepComponent>{ canActiveNextStep: currentStep => of(false), status: PoStepperStatus.Default };
+      const currentActiveStep = <PoStepComponent>{
+        canActiveNextStep: currentStep => of(false),
+        status: PoStepperStatus.Default
+      };
 
       component['canActiveNextStep'](currentActiveStep).subscribe(result => {
         expect(result).toBe(false);
@@ -511,17 +507,19 @@ describe('PoStepperComponent:', () => {
       with 'PoStepperStatus.Error' if some problem in observable`, (done: DoneFn) => {
       const currentActiveStep = <PoStepComponent>{
         label: 'po-label',
-        canActiveNextStep: currentStep => <any> throwError(new Error('Error')),
+        canActiveNextStep: currentStep => <any>throwError(new Error('Error')),
         status: PoStepperStatus.Default
       };
 
-      component['canActiveNextStep'](currentActiveStep).subscribe(() => {}, error => {
-        expect(error instanceof Error).toBe(true);
-        expect(currentActiveStep.status).toEqual(PoStepperStatus.Error);
+      component['canActiveNextStep'](currentActiveStep).subscribe(
+        () => {},
+        error => {
+          expect(error instanceof Error).toBe(true);
+          expect(currentActiveStep.status).toEqual(PoStepperStatus.Error);
 
-        done();
-      });
-
+          done();
+        }
+      );
     });
 
     it('canActiveNextStep: should return true if `currentActiveStep` is undefined', (done: DoneFn) => {
@@ -535,7 +533,6 @@ describe('PoStepperComponent:', () => {
 
     it(`controlStepsStatus: shouldn't call 'isBeforeStep', 'setStepAsActive', 'setNextStepAsDefault' and
       'changeDetector.detectChanges' if 'usePoSteps' is false`, () => {
-
       spyOnProperty(component, 'usePoSteps').and.returnValue(false);
 
       const spyOnIsBeforeStep = spyOn(component, <any>'isBeforeStep');
@@ -553,7 +550,6 @@ describe('PoStepperComponent:', () => {
 
     it(`controlStepsStatus: should call 'isBeforeStep', 'setStepAsActive', 'setNextStepAsDefault' and
       'changeDetector.detectChanges' if 'usePoSteps' is true`, () => {
-
       const stepIndex = 2;
       const step = poSteps[0];
 
@@ -620,7 +616,6 @@ describe('PoStepperComponent:', () => {
 
     it(`isBeforeStep: should return true if 'currentActiveStep' is defined and 'currentActiveStepIndex' is
       greater than 'stepIndex'`, () => {
-
       const stepIndex = 2;
       component['currentActiveStep'] = poSteps[3];
 
@@ -784,11 +779,9 @@ describe('PoStepperComponent:', () => {
     it('getStepperStatusByCanActive: should return status `error` if canActiveNextStep is true.', () => {
       expect(component['getStepperStatusByCanActive'](false)).toBe(PoStepperStatus.Error);
     });
-
   });
 
   describe('Templates:', () => {
-
     const elementByClass = (className: string) => nativeElement.querySelector(`.${className}`);
 
     it('should add the class `po-stepper-vertical` if `p-orientation` is `vertical` and remove `po-stepper-horizontal`.', () => {
@@ -801,7 +794,7 @@ describe('PoStepperComponent:', () => {
     });
 
     it('should set `p-orientation` to `horizontal` if assigned value not included in PoStepperOrientation.', () => {
-      component.orientation = <any> 'diagonal';
+      component.orientation = <any>'diagonal';
 
       fixture.detectChanges();
 
@@ -844,11 +837,9 @@ describe('PoStepperComponent:', () => {
 
       expect(elementByClass('po-stepper-content')).toBeFalsy();
     });
-
   });
 
   describe('Integration:', () => {
-
     it('changeStep: shouldn`t call `onChangeStep.emit` if steps aren`t done status and sequential is true', () => {
       const stepNumber = 3;
 
@@ -856,7 +847,7 @@ describe('PoStepperComponent:', () => {
       component.steps = poSteps;
       component.sequential = true;
 
-      const spyAllowNextStep = spyOn(component, <any> 'allowNextStep').and.callThrough();
+      const spyAllowNextStep = spyOn(component, <any>'allowNextStep').and.callThrough();
       const spyOnChangeStep = spyOn(component.onChangeStep, 'emit');
 
       component.changeStep(stepNumber);
@@ -870,11 +861,11 @@ describe('PoStepperComponent:', () => {
       const stepIndex = 3;
 
       component.steps = poSteps;
-      component.steps.forEach(step => step.status = PoStepperStatus.Done);
+      component.steps.forEach(step => (step.status = PoStepperStatus.Done));
       component.sequential = true;
 
       spyOnProperty(component, 'currentStepIndex').and.returnValue(1);
-      const spyAllowNextStep = spyOn(component, <any> 'allowNextStep').and.callThrough();
+      const spyAllowNextStep = spyOn(component, <any>'allowNextStep').and.callThrough();
       const spyOnChangeStep = spyOn(component.onChangeStep, 'emit');
 
       component.changeStep(stepIndex);
@@ -970,7 +961,5 @@ describe('PoStepperComponent:', () => {
       expect(steps[3].classList.contains('po-stepper-step-disabled')).toBeTruthy();
       expect(steps[4].classList.contains('po-stepper-step-disabled')).toBeTruthy();
     }));
-
   });
-
 });

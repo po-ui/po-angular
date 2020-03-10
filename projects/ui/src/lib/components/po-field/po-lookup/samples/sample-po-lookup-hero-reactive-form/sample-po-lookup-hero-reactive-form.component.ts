@@ -10,10 +10,9 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
 @Component({
   selector: 'sample-po-lookup-hero-reactive-form',
   templateUrl: './sample-po-lookup-hero-reactive-form.component.html',
-  providers: [ SamplePoLookupService ]
+  providers: [SamplePoLookupService]
 })
 export class SamplePoLookupHeroReactiveFormComponent implements OnInit {
-
   formMission: FormGroup;
 
   public readonly columns: Array<PoLookupColumn> = [
@@ -37,7 +36,7 @@ export class SamplePoLookupHeroReactiveFormComponent implements OnInit {
     public service: SamplePoLookupService,
     public notification: PoNotificationService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.formMission = this.formBuilder.group({
@@ -55,13 +54,13 @@ export class SamplePoLookupHeroReactiveFormComponent implements OnInit {
     const heroVehicle = this.formMission.get('vehicle').value;
 
     if (heroName.length % 2 === 0) {
-      this.notification.success(`Mission started with hero ${heroName} ${heroVehicle ? 'with vehicle: ' + heroVehicle : ''}.`);
-
+      this.notification.success(
+        `Mission started with hero ${heroName} ${heroVehicle ? 'with vehicle: ' + heroVehicle : ''}.`
+      );
     } else {
       this.notification.error(`Choose another hero because ${heroName} is in other mission.`);
     }
 
     this.formMission.reset();
   }
-
 }

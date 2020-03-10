@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'sample-po-calendar-basic',
   templateUrl: './sample-po-calendar-basic.component.html'
 })
-export class SamplePoCalendarBasicComponent { }
+export class SamplePoCalendarBasicComponent {}

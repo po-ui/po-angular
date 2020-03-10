@@ -8,7 +8,6 @@ import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po
   templateUrl: './sample-po-switch-order-reactive-form.component.html'
 })
 export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
-
   formOrderSummary: FormGroup;
   labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Left;
   totalAmount: number = 43;
@@ -22,8 +21,8 @@ export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
       property: 'value',
       label: 'Value (R$)',
       type: 'currency',
-      format: 'BRL',
-    },
+      format: 'BRL'
+    }
   ];
 
   public readonly items: Array<any> = [
@@ -32,10 +31,7 @@ export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
     { page: 'French Fries', value: '17' }
   ];
 
-  constructor(
-    private poNotification: PoNotificationService,
-    private formBuilder: FormBuilder
-  ) { }
+  constructor(private poNotification: PoNotificationService, private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.formOrderSummary = this.formBuilder.group({ serviceFee: [false] });
@@ -50,5 +46,4 @@ export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
   confirm() {
     this.poNotification.success('Purchase done Successful!');
   }
-
 }

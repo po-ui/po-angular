@@ -13,10 +13,10 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 import { PoBreadcrumbItemComponent } from './po-breadcrumb-item/po-breadcrumb-item.component';
 
 @Component({ template: 'Documentation' })
-export class DocumentationComponent { }
+export class DocumentationComponent {}
 
 @Component({ template: 'Guides' })
-export class GuidesComponent { }
+export class GuidesComponent {}
 
 export const routes: Routes = [
   { path: 'guides', component: GuidesComponent },
@@ -24,7 +24,6 @@ export const routes: Routes = [
 ];
 
 describe('PoBreadcrumbComponent:', () => {
-
   let component: PoBreadcrumbComponent;
   let fixture: ComponentFixture<PoBreadcrumbComponent>;
   let nativeElement;
@@ -33,7 +32,7 @@ describe('PoBreadcrumbComponent:', () => {
     { label: 'Teste nível 1', link: '/test/nivel/1' },
     { label: 'Teste nível 2', link: '/test/nivel/2' },
     { label: 'Teste nível 3', link: '/test/nivel/3' },
-    { label: 'Teste nível 4', link: '/test/nivel/4' },
+    { label: 'Teste nível 4', link: '/test/nivel/4' }
   ];
 
   const eventResize = document.createEvent('Event');
@@ -78,7 +77,6 @@ describe('PoBreadcrumbComponent:', () => {
   });
 
   describe('Methods:', () => {
-
     it('calcBreadcrumbItemsWidth: should sum the legths of breadcrumbs items and set on `breadcrumbItemsLenght`.', () => {
       const calcBreadcrumbItemsWidth = 'calcBreadcrumbItemsWidth';
       const fakeThis = {
@@ -90,7 +88,7 @@ describe('PoBreadcrumbComponent:', () => {
         _breadcrumbItemsLenght: 0
       };
 
-      spyOn(fakeThis, <any> '_breadcrumbItemsLenght');
+      spyOn(fakeThis, <any>'_breadcrumbItemsLenght');
 
       component[calcBreadcrumbItemsWidth].call(fakeThis);
 
@@ -122,81 +120,72 @@ describe('PoBreadcrumbComponent:', () => {
     });
 
     describe('debounceResize:', () => {
+      it(`should call 'clearTimeout' and set 'hiddenWithoutResize' to true
+        when calculatedElement is true, hiddenWithoutResize is false and breadcrumb width is equal 0.`, fakeAsync(() => {
+        component['calculatedElement'] = true;
+        component['hiddenWithoutResize'] = false;
+        Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
+          writable: true,
+          value: 0
+        });
+
+        component['debounceResize']();
+        tick(70);
+
+        expect(component['hiddenWithoutResize']).toBeTruthy();
+      }));
 
       it(`should call 'clearTimeout' and set 'hiddenWithoutResize' to true
-        when calculatedElement is true, hiddenWithoutResize is false and breadcrumb width is equal 0.`,
-        fakeAsync (() => {
-          component['calculatedElement'] = true;
-          component['hiddenWithoutResize'] = false;
-          Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
-            writable: true,
-            value: 0
-          });
+        when calculatedElement is false, hiddenWithoutResize is false and breadcrumb width is equal 0.`, fakeAsync(() => {
+        component['calculatedElement'] = false;
+        component['hiddenWithoutResize'] = false;
+        Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
+          writable: true,
+          value: 0
+        });
 
-          component['debounceResize']();
-          tick(70);
+        spyOn(component, <any>'calcBreadcrumb');
+        component['debounceResize']();
 
-          expect(component['hiddenWithoutResize']).toBeTruthy();
-        })
-      );
+        tick(70);
 
-      it(`should call 'clearTimeout' and set 'hiddenWithoutResize' to true
-        when calculatedElement is false, hiddenWithoutResize is false and breadcrumb width is equal 0.`,
-        fakeAsync (() => {
-          component['calculatedElement'] = false;
-          component['hiddenWithoutResize'] = false;
-          Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
-            writable: true,
-            value: 0
-          });
-
-          spyOn(component, <any>'calcBreadcrumb');
-          component['debounceResize']();
-
-          tick(70);
-
-          expect(component['calcBreadcrumb']).toHaveBeenCalled();
-        })
-      );
+        expect(component['calcBreadcrumb']).toHaveBeenCalled();
+      }));
 
       it(`should call 'clearTimeout' and set 'hiddenWithoutResize' to true
-        when calculatedElement is true, hiddenWithoutResize is true and breadcrumb width is equal 0.`,
-        fakeAsync (() => {
-          component['calculatedElement'] = true;
-          component['hiddenWithoutResize'] = true;
-          Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
-            writable: true,
-            value: 0
-          });
+        when calculatedElement is true, hiddenWithoutResize is true and breadcrumb width is equal 0.`, fakeAsync(() => {
+        component['calculatedElement'] = true;
+        component['hiddenWithoutResize'] = true;
+        Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
+          writable: true,
+          value: 0
+        });
 
-          spyOn(component, <any>'calcBreadcrumb');
-          component['debounceResize']();
+        spyOn(component, <any>'calcBreadcrumb');
+        component['debounceResize']();
 
-          tick(70);
+        tick(70);
 
-          expect(component['calcBreadcrumb']).toHaveBeenCalled();
-        })
-      );
+        expect(component['calcBreadcrumb']).toHaveBeenCalled();
+      }));
 
       it(`should call 'clearTimeout' and set 'hiddenWithoutResize' to true
-        when calculatedElement is true, hiddenWithoutResize is false and breadcrumb width is diff 0.`,
-        fakeAsync (() => {
-          component['calculatedElement'] = true;
-          component['hiddenWithoutResize'] = false;
-          Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
-            writable: true,
-            value: 1
-          });
+        when calculatedElement is true, hiddenWithoutResize is false and breadcrumb width is diff 0.`, fakeAsync(() => {
+        component['calculatedElement'] = true;
+        component['hiddenWithoutResize'] = false;
+        Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
+          writable: true,
+          value: 1
+        });
 
-          spyOn(component, <any>'calcBreadcrumb');
+        spyOn(component, <any>'calcBreadcrumb');
 
-          component['debounceResize']();
+        component['debounceResize']();
 
-          tick(70);
+        tick(70);
 
-          expect(component['calcBreadcrumb']).toHaveBeenCalled();
-        })
-      );
+        expect(component['calcBreadcrumb']).toHaveBeenCalled();
+      }));
 
       it('should called when window resize.', () => {
         spyOn(component, <any>'debounceResize');
@@ -205,7 +194,6 @@ describe('PoBreadcrumbComponent:', () => {
 
         expect(component[debounceResize]).toHaveBeenCalled();
       });
-
     });
 
     it('getBreadcrumbWidth: should return 0 when don`t have breadcrumb.', () => {
@@ -217,7 +205,7 @@ describe('PoBreadcrumbComponent:', () => {
             }
           }
         },
-        favoriteService: undefined,
+        favoriteService: undefined
       };
 
       expect(component['getBreadcrumbFavoriteWidth'].call(fakeThis)).toBe(0);
@@ -232,7 +220,7 @@ describe('PoBreadcrumbComponent:', () => {
             }
           }
         },
-        favoriteService: 'http://test.com',
+        favoriteService: 'http://test.com'
       };
 
       expect(component['getBreadcrumbFavoriteWidth'].call(fakeThis)).toBe(120);
@@ -266,8 +254,8 @@ describe('PoBreadcrumbComponent:', () => {
         target: ''
       };
 
-      spyOn(component, <any> 'removeClickoutListener');
-      spyOn(component, <any> 'checkClickOutElement').and.returnValue(true);
+      spyOn(component, <any>'removeClickoutListener');
+      spyOn(component, <any>'checkClickOutElement').and.returnValue(true);
 
       component[wasClickedonDropdown](event);
 
@@ -277,7 +265,6 @@ describe('PoBreadcrumbComponent:', () => {
     });
 
     describe('ngDoCheck:', () => {
-
       it('ngDoCheck: should call `initBreadcrumbSize` in first loading and if breadcrumb has width', () => {
         Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {
           writable: true,
@@ -343,11 +330,9 @@ describe('PoBreadcrumbComponent:', () => {
 
         expect(component['checkChangeOnItems']).toHaveBeenCalled();
       });
-
     });
 
     it('checkChangeOnItems: should call `calcBreadcrumbItemsWidth` and set `calculatedElement` to true if has differ and changes', () => {
-
       const fakeThis = {
         differ: {
           diff: (opt: any) => true
@@ -356,7 +341,7 @@ describe('PoBreadcrumbComponent:', () => {
         calculatedElement: true
       };
 
-      spyOn(fakeThis, <any> 'calcBreadcrumbItemsWidth');
+      spyOn(fakeThis, <any>'calcBreadcrumbItemsWidth');
 
       component['checkChangeOnItems'].call(fakeThis);
 
@@ -365,13 +350,12 @@ describe('PoBreadcrumbComponent:', () => {
     });
 
     it('checkChangeOnItems: shouldn`t call `calcBreadcrumbItemsWidth` if doesn`t have differ', () => {
-
       const fakeThis = {
         differ: undefined,
         calcBreadcrumbItemsWidth: () => {}
       };
 
-      spyOn(fakeThis, <any> 'calcBreadcrumbItemsWidth');
+      spyOn(fakeThis, <any>'calcBreadcrumbItemsWidth');
 
       component['checkChangeOnItems'].call(fakeThis);
 
@@ -379,7 +363,6 @@ describe('PoBreadcrumbComponent:', () => {
     });
 
     it('checkChangeOnItems: shouldn`t call `calcBreadcrumbItemsWidth` if `differ` returns false', () => {
-
       const fakeThis = {
         differ: {
           diff: (opt: any) => false
@@ -387,17 +370,15 @@ describe('PoBreadcrumbComponent:', () => {
         calcBreadcrumbItemsWidth: () => {}
       };
 
-      spyOn(fakeThis, <any> 'calcBreadcrumbItemsWidth');
+      spyOn(fakeThis, <any>'calcBreadcrumbItemsWidth');
 
       component['checkChangeOnItems'].call(fakeThis);
 
       expect(fakeThis['calcBreadcrumbItemsWidth']).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Properties:', () => {
-
     it('showDropdown: should set to `false` when click in breadcrumb item.', () => {
       const breadcrumbitem = nativeElement.querySelector('po-breadcrumb-item');
       component[enableBreadcrumbResponsive]();
@@ -413,7 +394,7 @@ describe('PoBreadcrumbComponent:', () => {
     });
 
     it('showDropdown: should set to `false` when click in dropdown.', () => {
-      spyOn(component, <any> 'getBreadcrumbWidth').and.returnValue(300);
+      spyOn(component, <any>'getBreadcrumbWidth').and.returnValue(300);
 
       component['calcBreadcrumb']();
 
@@ -427,11 +408,9 @@ describe('PoBreadcrumbComponent:', () => {
       expect(component.showDropdown).toBe(false);
       expect(component['getBreadcrumbWidth']).toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     it('should enable breadcrumb responsive', () => {
       const itemsView = [
         { label: 'Teste nível 3', link: '/test/nivel/3' },
@@ -443,7 +422,7 @@ describe('PoBreadcrumbComponent:', () => {
         { label: 'Teste nível 1', link: '/test/nivel/1' }
       ];
 
-      spyOn(component, <any> 'getBreadcrumbWidth').and.returnValue(300);
+      spyOn(component, <any>'getBreadcrumbWidth').and.returnValue(300);
 
       component['calcBreadcrumb']();
 
@@ -465,9 +444,7 @@ describe('PoBreadcrumbComponent:', () => {
       expect(nativeElement.querySelector('po-breadcrumb-dropdown')).toBeFalsy();
       expect(nativeElement.querySelector('.po-breadcrumb-icon-more')).toBeFalsy();
     });
-
   });
-
 });
 
 function createFakeThis(breadWidth: number) {
@@ -476,7 +453,7 @@ function createFakeThis(breadWidth: number) {
     getBreadcrumbWidth: breadcrumbFavorite => breadWidth,
     _breadcrumbItemsLenght: 300,
     favoriteService: 'http://test.com',
-    enableBreadcrumbResponsive: () => { },
-    disableBreadcrumbResponsive: () => { }
+    enableBreadcrumbResponsive: () => {},
+    disableBreadcrumbResponsive: () => {}
   };
 }

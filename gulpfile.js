@@ -14,41 +14,40 @@ const schematicsFolder = path.resolve(uiFolder, './schematics');
 const distSchematicsFolder = path.resolve(rootFolder, './dist/portinari-ui/schematics');
 
 /** REPLACE VERSION: replace version of dist package.json to repo version */
-const replaceVersion = () => src([`${rootFolder}/package.json`]).on('end', () => replaceVersionPlaceholders(distFolder));
+const replaceVersion = () =>
+  src([`${rootFolder}/package.json`]).on('end', () => replaceVersionPlaceholders(distFolder));
 
 /** SCHEMATICS */
 const buildSchematics = () => run('npm run build:schematics').exec();
 
-const copySchemas = () =>
-  src([`${schematicsFolder}/**/*/schema.json`])
-    .pipe(dest(distSchematicsFolder));
+const copySchemas = () => src([`${schematicsFolder}/**/*/schema.json`]).pipe(dest(distSchematicsFolder));
 
 const copyFiles = () =>
-  src([`${schematicsFolder}/ng-generate/*/files/**`])
-    .pipe(dest(`${distSchematicsFolder}/ng-generate`));
+  src([`${schematicsFolder}/ng-generate/*/files/**`]).pipe(dest(`${distSchematicsFolder}/ng-generate`));
 
-
-const copyCollection = () =>
-  src([`${schematicsFolder}/collection.json`])
-  .pipe(dest(distSchematicsFolder));
+const copyCollection = () => src([`${schematicsFolder}/collection.json`]).pipe(dest(distSchematicsFolder));
 
 /** SONAR */
-const sonarqube = task('sonarqube', function (callback) {
+const sonarqube = task('sonarqube', function(callback) {
   const token = argv.token || '';
 
-  sonarqubeScanner({
-    serverUrl: "http://sonarqube.po.portinari.com.br",
-    token: token,
-    options: { // Documentation: https://docs.sonarqube.org/display/SONAR/Analysis+Parameters
-      "sonar.projectKey": "portinari-ui",
-      "sonar.projectName": "portinari-ui",
-      "sonar.projectVersion": "1.0",
-      "sonar.test.inclusions": `projects/kendo/**/*.spec.ts`,
-      "sonar.test.exclusions": `projects/kendo/**/*.spec.ts`,
-      "sonar.exclusions": `projects/kendo/**/samples/**,index.ts,projects/kendo/**/*.js,projects/kendo/**/*.json,.*,projects/kendo/node_modules`,
-      "sonar.typescript.lcov.reportPaths": `projects/kendo/coverage/lcov.info`
-    }
-  }, callback);
+  sonarqubeScanner(
+    {
+      serverUrl: 'http://sonarqube.po.portinari.com.br',
+      token: token,
+      options: {
+        // Documentation: https://docs.sonarqube.org/display/SONAR/Analysis+Parameters
+        'sonar.projectKey': 'portinari-ui',
+        'sonar.projectName': 'portinari-ui',
+        'sonar.projectVersion': '1.0',
+        'sonar.test.inclusions': `projects/kendo/**/*.spec.ts`,
+        'sonar.test.exclusions': `projects/kendo/**/*.spec.ts`,
+        'sonar.exclusions': `projects/kendo/**/samples/**,index.ts,projects/kendo/**/*.js,projects/kendo/**/*.json,.*,projects/kendo/node_modules`,
+        'sonar.typescript.lcov.reportPaths': `projects/kendo/coverage/lcov.info`
+      }
+    },
+    callback
+  );
 });
 
 /** Exported Functions */

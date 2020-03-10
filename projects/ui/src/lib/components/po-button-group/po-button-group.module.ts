@@ -12,16 +12,8 @@ import { PoButtonGroupComponent } from './po-button-group.component';
  * Módulo do componente po-button-group.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    PoButtonModule,
-    PoTooltipModule
-  ],
-  declarations: [
-    PoButtonGroupComponent
-  ],
-  exports: [
-    PoButtonGroupComponent
-  ]
+  imports: [CommonModule, PoButtonModule, PoTooltipModule],
+  declarations: [PoButtonGroupComponent],
+  exports: [PoButtonGroupComponent]
 })
-export class PoButtonGroupModule { }
+export class PoButtonGroupModule {}

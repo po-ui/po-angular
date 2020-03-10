@@ -15,12 +15,12 @@ describe('PoDisclaimerGroupComponent:', () => {
   const disclaimers: Array<PoDisclaimer> = [
     { value: 'hotel', label: 'Hotel', property: 'hotel' },
     { value: '500', label: 'Price', property: 'Preço' },
-    { value: 'north', label: 'Region', property: 'region' },
+    { value: 'north', label: 'Region', property: 'region' }
   ];
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PoDisclaimerComponent, PoDisclaimerRemoveComponent, PoDisclaimerGroupComponent ]
+      declarations: [PoDisclaimerComponent, PoDisclaimerRemoveComponent, PoDisclaimerGroupComponent]
     });
   });
 
@@ -85,7 +85,6 @@ describe('PoDisclaimerGroupComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it(`should set tabindex to 0 if have a disclaimer with 'hideClose'.`, () => {
       component.disclaimers = [{ value: 'po', hideClose: false }];
 
@@ -115,9 +114,9 @@ describe('PoDisclaimerGroupComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-disclaimer-label-danger').innerHTML.trim()).toBe(component.literals.removeAll);
+      expect(nativeElement.querySelector('.po-disclaimer-label-danger').innerHTML.trim()).toBe(
+        component.literals.removeAll
+      );
     });
-
   });
-
 });

@@ -16,7 +16,6 @@ import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-mult
   templateUrl: './po-multiselect-dropdown.component.html'
 })
 export class PoMultiselectDropdownComponent {
-
   scrollTop = 0;
   show: boolean = false;
   haveOptions: boolean = false;
@@ -50,11 +49,11 @@ export class PoMultiselectDropdownComponent {
   @Output('p-close-dropdown') closeDropdown = new EventEmitter();
 
   @ViewChild('container', { read: ElementRef, static: true }) container: ElementRef;
-  @ViewChild('ulElement', {read: ElementRef, static: true }) ulElement: ElementRef;
+  @ViewChild('ulElement', { read: ElementRef, static: true }) ulElement: ElementRef;
   @ViewChild('searchElement') searchElement: PoMultiselectSearchComponent;
 
   scrollTo(index) {
-    this.scrollTop = (index <= 2) ? 0 : (index * 44) - 88;
+    this.scrollTop = index <= 2 ? 0 : index * 44 - 88;
   }
 
   isSelectedItem(option: PoMultiselectOption) {
@@ -108,5 +107,4 @@ export class PoMultiselectDropdownComponent {
       this.haveOptions = true;
     }
   }
-
 }

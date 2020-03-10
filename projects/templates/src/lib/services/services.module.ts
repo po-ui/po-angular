@@ -4,13 +4,7 @@ import { PoPageCustomizationModule } from './po-page-customization/po-page-custo
 import { PoPageDynamicModule } from './po-page-dynamic/po-page-dynamic.module';
 
 @NgModule({
-  imports: [
-    PoPageCustomizationModule,
-    PoPageDynamicModule
-  ],
-  exports: [
-    PoPageCustomizationModule,
-    PoPageDynamicModule
-  ]
+  imports: [PoPageCustomizationModule, PoPageDynamicModule],
+  exports: [PoPageCustomizationModule, PoPageDynamicModule]
 })
-export class PoServicesModule { }
+export class PoServicesModule {}

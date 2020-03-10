@@ -8,7 +8,6 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
 import { PoStepperStepComponent } from './po-stepper-step.component';
 
 describe('PoStepperStepComponent:', () => {
-
   let component: PoStepperStepComponent;
   let fixture: ComponentFixture<PoStepperStepComponent>;
 
@@ -34,15 +33,14 @@ describe('PoStepperStepComponent:', () => {
   });
 
   describe('Properties:', () => {
-
     it('p-label: should update label with valid values if valid values.', () => {
-      const validValues = [ 'step', 'passo', '0', 'done' ];
+      const validValues = ['step', 'passo', '0', 'done'];
 
       expectPropertiesValues(component, 'label', validValues, validValues);
     });
 
     it('p-label: should update label with `literals.label circleContent` if invalid values.', () => {
-      const invalidValues = [ undefined, null, [], {}, 0, 10 ];
+      const invalidValues = [undefined, null, [], {}, 0, 10];
       component.circleContent = 1;
 
       component.literals.label = 'Step';
@@ -51,7 +49,7 @@ describe('PoStepperStepComponent:', () => {
     });
 
     it('p-status: should update property with `undefined` if invalid values.', () => {
-      const invalidValues = [ false, 0, undefined, null ];
+      const invalidValues = [false, 0, undefined, null];
 
       expectPropertiesValues(component, 'status', invalidValues, undefined);
     });
@@ -136,11 +134,9 @@ describe('PoStepperStepComponent:', () => {
 
       expectPropertiesValues(component, 'stepIcons', booleanInvalidValues, false);
     });
-
   });
 
   describe('Methods:', () => {
-
     it('getStatusClass: should return `po-stepper-step-active` if status is `active`.', () => {
       const result = component.getStatusClass(PoStepperStatus.Active);
 
@@ -218,11 +214,9 @@ describe('PoStepperStepComponent:', () => {
 
       expect(component.enter.emit).not.toHaveBeenCalled();
     });
-
   });
 
   describe('Templates:', () => {
-
     const elementByClass = (className: string) => nativeElement.querySelector(`.${className}`);
 
     it(`should find 'po-stepper-step-container' and style.width is stepSize value if 'isVerticalOrientation' is 'true'.`, () => {
@@ -359,7 +353,5 @@ describe('PoStepperStepComponent:', () => {
 
       expect(elementByClass('po-stepper-step-default')).toBeTruthy();
     });
-
   });
-
 });

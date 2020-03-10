@@ -7,9 +7,7 @@ import { PoComboOption, PoNotificationService, PoTableColumn } from '@portinari/
   templateUrl: './sample-po-notification-sales.component.html',
   providers: [PoNotificationService]
 })
-
 export class SamplePoNotificationSalesComponent {
-
   name: string;
   price: number;
   product: string;
@@ -20,15 +18,13 @@ export class SamplePoNotificationSalesComponent {
 
   readonly columns: Array<PoTableColumn> = [
     { property: 'productID', label: 'Id' },
-    { property: 'productName', label: 'Product'},
+    { property: 'productName', label: 'Product' },
     { property: 'quantity', label: 'Quantity' },
     { property: 'price', label: 'Price', type: 'currency', format: 'BRL' },
     { property: 'total', label: 'Total Price', type: 'currency', format: 'BRL' }
   ];
 
-  products: Array<any> = [
-    { productID: '004', productName: 'Notebook', quantity: 2, price: 1250, total: 2500 }
-  ];
+  products: Array<any> = [{ productID: '004', productName: 'Notebook', quantity: 2, price: 1250, total: 2500 }];
 
   productDetailsList: Array<any> = [
     { id: '001', price: 50, stock: 10 },
@@ -44,7 +40,7 @@ export class SamplePoNotificationSalesComponent {
     { value: '004', label: 'Notebook' }
   ];
 
-  constructor(private poNotification: PoNotificationService) { }
+  constructor(private poNotification: PoNotificationService) {}
 
   addCart() {
     this.checkQuantity();
@@ -52,7 +48,7 @@ export class SamplePoNotificationSalesComponent {
     if (this.productOptions && this.quantity > 0) {
       const itemIndex = this.products.findIndex(item => item.productID === this.product);
 
-      if (itemIndex >= 0 ) {
+      if (itemIndex >= 0) {
         this.products[itemIndex].quantity += this.quantity;
         this.products[itemIndex].total += this.totalPrice;
       } else {
@@ -67,7 +63,7 @@ export class SamplePoNotificationSalesComponent {
 
       this.totalPriceSum += this.totalPrice;
       this.poNotification.success('Order included successfully!');
-      this.stockUpdate(this.product, this.quantity );
+      this.stockUpdate(this.product, this.quantity);
       this.clearFields();
     }
   }
@@ -81,7 +77,7 @@ export class SamplePoNotificationSalesComponent {
   }
 
   checkQuantity() {
-    if (this.quantity > this.stock ) {
+    if (this.quantity > this.stock) {
       this.poNotification.error('Quantity not available in stock');
     } else {
       this.totalValue();
@@ -91,9 +87,9 @@ export class SamplePoNotificationSalesComponent {
   clearFields() {
     this.product = '';
     this.price = 0;
-    this.quantity  = 0;
-    this.stock  = 0;
-    this.totalPrice  = 0;
+    this.quantity = 0;
+    this.stock = 0;
+    this.totalPrice = 0;
   }
 
   stockUpdate(selectedProduct: string, qtd: number) {
@@ -102,7 +98,6 @@ export class SamplePoNotificationSalesComponent {
   }
 
   totalValue() {
-    this.totalPrice = (this.quantity * this.price);
+    this.totalPrice = this.quantity * this.price;
   }
-
 }

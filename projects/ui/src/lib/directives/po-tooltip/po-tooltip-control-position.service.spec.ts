@@ -6,9 +6,7 @@ describe('PoTooltipControlPositionService:', () => {
   const service = new PoTooltipControlPositionService();
 
   it('should be created', () => {
-
     expect(service).toBeTruthy();
     expect(PoTooltipControlPositionService instanceof PoControlPositionService);
   });
-
 });

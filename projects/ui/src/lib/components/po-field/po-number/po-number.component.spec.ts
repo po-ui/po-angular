@@ -15,12 +15,7 @@ describe('PoNumberComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoNumberComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoFieldContainerBottomComponent
-      ]
+      declarations: [PoNumberComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });
 
@@ -80,7 +75,6 @@ describe('PoNumberComponent:', () => {
   });
 
   describe('Templates: ', () => {
-
     it('tabindex: should set tabindex to -1 when `po-number` is disabled.', () => {
       component.disabled = true;
       fixture.detectChanges();
@@ -124,7 +118,5 @@ describe('PoNumberComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
-
   });
-
 });
