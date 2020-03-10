@@ -264,11 +264,18 @@ describe('PoPageJobSchedulerComponent:', () => {
       expect(component['poDialogService'].confirm).toHaveBeenCalled();
     });
 
-    // TODO NG V9
-    xit(`confirmJobScheduler: should call 'poDialogservice.confirm' with 'literals.confirmSaveMessage'`, () => {
+    it(`confirmJobScheduler: should call 'poDialogservice.confirm' with 'literals.confirmSaveMessage'`, () => {
       let paramConfirm;
-      spyOn(component['poDialogService'], 'confirm').and.callFake(param => (paramConfirm = param));
 
+      component['activatedRoute'] = <any> {
+        snapshot: {
+          params: {
+            id: undefined
+          }
+        }
+      };
+
+      spyOn(component['poDialogService'], 'confirm').and.callFake(param => paramConfirm = param);
       spyOn(component, <any>'save');
 
       component['confirmJobScheduler']();

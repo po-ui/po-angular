@@ -82,7 +82,7 @@ describe('PoDynamicFormComponent:', () => {
 
     it('validateForm: should call sendFormChange with validate, field and value', () => {
       const updatedField = { property: 'test', disabled: true };
-      component.validate = 'http://test.com';
+      component.validate = 'http://fakeUrlPo.com';
       component.value = { test: 'new value' };
 
       component.fields = [{ property: 'test' }];
@@ -457,7 +457,7 @@ describe('PoDynamicFormComponent:', () => {
     });
 
     it('loadDataOnInitialize: should call executeLoad with load and value', () => {
-      component.load = 'http://test.com';
+      component.load = 'http://fakeUrlPo.com';
       component.value = { test: 'new value' };
 
       spyOn(component, <any>'disableForm');

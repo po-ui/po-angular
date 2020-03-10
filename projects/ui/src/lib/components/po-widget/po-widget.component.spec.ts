@@ -59,7 +59,7 @@ describe('PoWidgetComponent with title and actions', () => {
   let component: PoWidgetComponent;
   let fixture: ComponentFixture<PoWidgetComponent>;
   let nativeElement;
-  const page = 'http://www.google.com.br';
+  const page = 'http://www.fakeUrlPo.com.br';
 
   // Evento compatível com todos os navegadores, inclusive com o IE
   const eventClick = document.createEvent('MouseEvent');

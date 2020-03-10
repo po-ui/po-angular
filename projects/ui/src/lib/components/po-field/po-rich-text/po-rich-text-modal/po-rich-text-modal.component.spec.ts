@@ -759,7 +759,7 @@ describe('PoRichTextModalComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-input')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-modal-title').innerHTML).toBe(` ${component.literals.insertLink} `);
+      expect(nativeElement.querySelector('.po-modal-title').innerText).toBe(`${component.literals.insertLink}`);
     });
   });
 });

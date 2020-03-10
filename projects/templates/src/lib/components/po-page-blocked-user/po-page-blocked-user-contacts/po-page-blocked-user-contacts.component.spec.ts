@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { NO_ERRORS_SCHEMA, SimpleChange } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { PoPageBlockedUserContactsComponent } from './po-page-blocked-user-contacts.component';
 
 import { configureTestSuite } from '../../../util-test/util-expect.spec';
 
-xdescribe('PoPageBlockedUserContactsComponent: ', () => {
+describe('PoPageBlockedUserContactsComponent: ', () => {
   let component: PoPageBlockedUserContactsComponent;
   let fixture: ComponentFixture<PoPageBlockedUserContactsComponent>;
   let debugElement;
@@ -36,10 +36,14 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
   });
 
   describe('Methods: ', () => {
-    it('ngAfterViewInit: should call `checkContactItemWidth`', () => {
+
+    it('ngAfterViewInit: should call `checkContactItemWidth` and `ChangeDetector.detectChanges`', () => {
       spyOn(component, <any>'checkContactItemWidth');
+      spyOn(component.changeDetector, 'detectChanges');
+
       component.ngAfterViewInit();
       expect(component['checkContactItemWidth']).toHaveBeenCalled();
+      expect(component.changeDetector.detectChanges).toHaveBeenCalled();
     });
 
     it('ngOnChanges: shouldn`t call `checkContactItemWidth`', () => {
@@ -49,15 +53,15 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
       expect(component['checkContactItemWidth']).not.toHaveBeenCalled();
     });
 
-    xit('ngOnChanges: should call `checkContactItemWidth`', () => {
+    it('ngOnChanges: should call `checkContactItemWidth`', () => {
       component.phone = '55-22-98787-8787';
+
+      const changes = { phone: { firstChange: true } };
 
       spyOn(component, <any>'checkContactItemWidth');
 
-      component.ngOnChanges({
-        phone: new SimpleChange(null, component.phone, true)
-      });
-      fixture.detectChanges();
+      component.ngOnChanges(<any>changes);
+
       expect(component['checkContactItemWidth']).toHaveBeenCalled();
     });
 
@@ -82,21 +86,20 @@ xdescribe('PoPageBlockedUserContactsComponent: ', () => {
   });
 
   describe('Templates: ', () => {
-    it('should contain `po-icon-telephone` and `po-icon-mail` classes if phone and mail have values', () => {
+
+    it('shouldn`t contain `po-invisible` classs if phone and mail have values', () => {
       component.email = 'mail@mail.com';
       component.phone = '99999999';
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-icon-mail')).toBeTruthy();
-      expect(debugElement.querySelector('.po-icon-telephone')).toBeTruthy();
+      expect(debugElement.querySelector('.po-invisible')).toBeFalsy();
     });
 
-    it('shouldn`t contain `po-icon-telephone` and `po-icon-mail` classes if phone and mail are undefined', () => {
+    it('should contain `po-invisible` classs if phone and mail are undefined', () => {
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-icon-mail')).toBeFalsy();
-      expect(debugElement.querySelector('.po-icon-telephone')).toBeFalsy();
+      expect(debugElement.querySelector('.po-invisible')).toBeTruthy();
     });
 
     it('should have classes `po-md-12` and `content-inline` if value of `overflowItem` is true', () => {

@@ -116,19 +116,6 @@ describe('PoPageListComponent - Mobile:', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be call method of parent passsing string', () => {
-    const poButton = mobileFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[0];
-
-    spyOn(poButton, 'dispatchEvent');
-
-    poButton.click();
-    poButton.dispatchEvent(new Event('click'));
-
-    mobileFixture.detectChanges();
-
-    expect(poButton.dispatchEvent).toHaveBeenCalled();
-  });
-
   it('should be call method of parent passsing url', () => {
     component.callAction({ label: 'Somewhere', url: '/somewhere' });
 

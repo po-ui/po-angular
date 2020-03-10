@@ -50,7 +50,7 @@ describe('PoMenuPanelComponent: ', () => {
     component.menus = [
       { label: 'Home', link: './home', icon: 'po-icon-home' },
       { label: 'PO', link: './po', icon: 'po-icon-clock' },
-      { label: 'Google', icon: 'po-icon-star', link: 'http://google.com.br' },
+      { label: 'Fake Url', icon: 'po-icon-star', link: 'http://fakeUrlPo.com.br' },
       { label: 'Commom Function', icon: 'po-icon-share', action: () => {} },
       { label: 'Function as string', icon: 'po-icon-company', action: 'testFunction' }
     ];
@@ -125,7 +125,7 @@ describe('PoMenuPanelComponent: ', () => {
 
       component['clickMenuItem'](<any>component.menus[2]);
 
-      expect(window.open).toHaveBeenCalledWith('http://google.com.br', '_blank');
+      expect(window.open).toHaveBeenCalledWith('http://fakeUrlPo.com.br', '_blank');
     });
 
     it('checkActiveMenuByUrl: should not navigate if has same link', done => {

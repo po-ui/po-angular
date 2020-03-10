@@ -241,7 +241,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should open external help url', () => {
     spyOn(window, 'open');
 
-    const helpUrl = 'https://google.com.br';
+    const helpUrl = 'https://fakeUrlPo.com.br';
 
     service['generateUrlHelpFunction'](helpUrl)();
 
@@ -422,9 +422,9 @@ describe('PoHttpInterceptorBaseService', () => {
 
       const expectedHeaders = new HttpHeaders().append('other-header', 'test');
 
-      const request = new HttpRequest('GET', 'http://test.com', { headers });
+      const request = new HttpRequest('GET', 'http://fakeUrlPo.com', { headers });
 
-      const expectedRequest = new HttpRequest('GET', 'http://test.com', {
+      const expectedRequest = new HttpRequest('GET', 'http://fakeUrlPo.com', {
         headers: expectedHeaders
       });
 
@@ -437,7 +437,7 @@ describe('PoHttpInterceptorBaseService', () => {
       spyOn(service, 'hasNoMessageParam').and.returnValue(true);
       spyOn(service, <any>'showNotification');
 
-      const request = new HttpRequest('GET', 'http://test.com', { headers: new HttpHeaders() });
+      const request = new HttpRequest('GET', 'http://fakeUrlPo.com', { headers: new HttpHeaders() });
       response = new HttpResponse({
         body: { items: [], _messages: 'test' },
         headers: new HttpHeaders().append('X-Portinari-No-Message', 'true')
@@ -452,7 +452,7 @@ describe('PoHttpInterceptorBaseService', () => {
       spyOn(service, 'hasNoMessageParam').and.returnValue(false);
       spyOn(service, <any>'showNotification');
 
-      const request = new HttpRequest('GET', 'http://test.com', { headers: new HttpHeaders() });
+      const request = new HttpRequest('GET', 'http://fakeUrlPo.com', { headers: new HttpHeaders() });
       response = new HttpResponse({
         body: { items: [], _messages: 'test' },
         headers: new HttpHeaders()

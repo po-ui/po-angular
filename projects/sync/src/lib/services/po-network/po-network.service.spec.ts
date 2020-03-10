@@ -1,6 +1,7 @@
 import { Network } from '@ionic-native/network/ngx';
 
 import { fromEvent, Observable, of, Subject } from 'rxjs';
+import * as rxjs from 'rxjs';
 import * as TypeMoq from 'typemoq';
 
 import { PoNetworkService } from './po-network.service';
@@ -30,19 +31,19 @@ describe('PoNetworkService:', () => {
       expect(poNetworkStatus.type).toEqual(PoNetworkType.ethernet);
     });
 
-    // TODO NG V9
-    // xit('getNavigatorStatus: should returns Observable', done => {
+    it('getNavigatorStatus: should returns Observable', done => {
+      const fromEventSpy = jasmine.createSpy('fromEvent').and.returnValue(of());
 
-    //   spyOn(window, <any> 'fromEvent').and.returnValue(of({}));
-    //   spyOn(Observable, 'create').and.returnValue(of({}));
+      spyOnProperty(rxjs, 'fromEvent', 'get').and.returnValue(fromEventSpy);
+      spyOn(Observable, 'create').and.returnValue(of({}));
 
-    //   poNetworkService['getNavigatorStatus']().subscribe(() => {
-    //     expect(fromEvent).toHaveBeenCalledWith(window, 'offline');
-    //     expect(fromEvent).toHaveBeenCalledWith(window, 'online');
-    //     expect(Observable.create).toHaveBeenCalled();
-    //     done();
-    //   });
-    // });
+      poNetworkService['getNavigatorStatus']().subscribe(() => {
+        expect(fromEvent).toHaveBeenCalledWith(window, 'offline');
+        expect(fromEvent).toHaveBeenCalledWith(window, 'online');
+        expect(Observable.create).toHaveBeenCalled();
+        done();
+      });
+    });
 
     it('initNetwork: should init networkTypeNow and call initSubscriber', () => {
       const networkService = new PoNetworkService(network.object);

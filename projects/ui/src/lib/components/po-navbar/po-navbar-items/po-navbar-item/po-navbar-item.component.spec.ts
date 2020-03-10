@@ -32,7 +32,7 @@ describe('PoNavbarItemComponent:', () => {
 
   describe('Properties:', () => {
     it('type: should return `externalLink` if link is external link', () => {
-      component.link = 'http://test.com';
+      component.link = 'http://fakeUrlPo.com';
 
       expect(component.type).toBe('externalLink');
     });
@@ -69,7 +69,7 @@ describe('PoNavbarItemComponent:', () => {
 
   describe('Templates: ', () => {
     it('should contain `a` element with href if `type` is `externalLink`', () => {
-      component.link = 'http://test.com';
+      component.link = 'http://fakeUrlPo.com';
 
       fixture.detectChanges();
 
@@ -79,7 +79,7 @@ describe('PoNavbarItemComponent:', () => {
     });
 
     it('should call `itemClick` without parameters if `type` is `externalLink`', () => {
-      component.link = 'http://test.com';
+      component.link = 'http://fakeUrlPo.com';
 
       fixture.detectChanges();
 

@@ -87,6 +87,8 @@ describe('PoPopupComponent:', () => {
 
       document.dispatchEvent(eventClick);
 
+      fixture.detectChanges();
+
       expect(component['closePopupOnClickout']).toHaveBeenCalled();
     });
 
@@ -141,7 +143,7 @@ describe('PoPopupComponent:', () => {
       });
 
       it('should call `openUrl` if has a popupItem with URL and without action', () => {
-        popupItem.url = 'http://www.google.com';
+        popupItem.url = 'http://www.fakeUrlPo.com';
 
         spyOn(component, <any>'openUrl');
         spyOn(UtilsFunctions, 'callFunction');
@@ -156,7 +158,7 @@ describe('PoPopupComponent:', () => {
     });
 
     it('openUrl: should call `openExternalLink` but shouldn`t call `router.navigate`', () => {
-      const url = 'http://www.google.com';
+      const url = 'http://www.fakeUrlPo.com';
 
       spyOn(UtilsFunctions, 'openExternalLink');
       spyOn(component['router'], 'navigate');

@@ -305,7 +305,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     it(`triggerValidationOnForm: should emit 'formValidate' if 'validate' has value and 'formValidate.observers'
       has length`, () => {
       component.formValidate.observers.length = 1;
-      component.validate = 'http://test.com';
+      component.validate = 'http://fakeUrlPo.com';
       component.fields = [{ property: 'test1', validate: 'teste' }];
 
       const spyEmit = spyOn(component.formValidate, 'emit');

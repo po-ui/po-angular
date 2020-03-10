@@ -708,7 +708,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('onAnchorClick: should `openExternalLink` with url if key is `ctrlKey`', () => {
-      const url = 'http://test.com';
+      const url = 'http://fakeUrlPo.com';
 
       const event = {
         ctrlKey: 'true',
@@ -726,7 +726,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('onAnchorClick: should remove `po-clickable` if key is `ctrlKey`', () => {
-      const url = 'http://test.com';
+      const url = 'http://fakeUrlPo.com';
 
       const event = {
         ctrlKey: 'true',
@@ -745,7 +745,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('onAnchorClick: should `openExternalLink` with url if key is `metaKey`', () => {
-      const url = 'http://test.com';
+      const url = 'http://fakeUrlPo.com';
 
       const event = {
         metaKey: 'true',
@@ -763,7 +763,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('onAnchorClick: shouldn`t `openExternalLink` if key not is ctrlKey or metaKey', () => {
-      const url = 'http://test.com';
+      const url = 'http://fakeUrlPo.com';
 
       const event = {
         enter: 'true',
@@ -781,7 +781,7 @@ describe('PoRichTextBodyComponent:', () => {
 
     it('onAnchorClick: should get `href` of `event.path`', () => {
       const url = 'http://test2.com';
-      const espectedValue = 'http://test.com';
+      const espectedValue = 'http://fakeUrlPo.com';
 
       const event = {
         ctrlKey: 'true',

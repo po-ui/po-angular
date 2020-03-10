@@ -73,11 +73,11 @@ describe('PoMenuComponent:', () => {
         icon: 'clock',
         subItems: [
           { label: 'Search', link: '/search' },
-          { label: 'Google', link: 'http://google.com.br' },
+          { label: 'Fake Url', link: 'http://fakeUrlPo.com.br' },
           { label: 'Just Action', action: 'testFunction' }
         ]
       },
-      { label: 'Google', icon: 'star', link: 'http://google.com.br' },
+      { label: 'Fake Url', icon: 'star', link: 'http://fakeUrlPo.com.br' },
       { label: 'Commom Function', icon: 'share', action: () => {} },
       { label: 'Function as string', icon: 'company', action: 'testFunction' },
       {
@@ -181,7 +181,7 @@ describe('PoMenuComponent:', () => {
     expect(component.mobileOpened).toBeFalsy();
     expect(component.groupedMenuItem).toBeFalsy();
 
-    expect(window.open).toHaveBeenCalledWith('http://google.com.br', '_blank');
+    expect(window.open).toHaveBeenCalledWith('http://fakeUrlPo.com.br', '_blank');
   });
 
   it('should call action', () => {
@@ -315,7 +315,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should not set filteringItems to false when the clicked item is not subitems', () => {
-    const menuItem = { label: 'Menu item', type: 'externalLink', link: 'http://test.com' };
+    const menuItem = { label: 'Menu item', type: 'externalLink', link: 'http://fakeUrlPo.com' };
 
     component['filteringItems'] = true;
     component['clickMenuItem'](menuItem);

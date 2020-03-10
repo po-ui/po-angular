@@ -54,7 +54,7 @@ describe('PoNavbarActionComponent:', () => {
 
     it('click: should call and return `openUrl` with `link` if `action` is undefined and `link` is defined', () => {
       component.action = undefined;
-      component.link = 'http://test.com';
+      component.link = 'http://fakeUrlPo.com';
       const linkReturn = 'test';
 
       spyOn(utils, 'callFunction');
@@ -81,7 +81,7 @@ describe('PoNavbarActionComponent:', () => {
     });
 
     it('openUrl: should call `openExternalLink` if url is external link', () => {
-      const url = 'http://www.google.com';
+      const url = 'http://www.fakeUrlPo.com';
 
       spyOn(utils, 'openExternalLink');
       spyOn(component['router'], 'navigate');

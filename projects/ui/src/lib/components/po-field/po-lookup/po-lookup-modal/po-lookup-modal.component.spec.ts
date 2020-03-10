@@ -130,25 +130,18 @@ describe('PoLookupModalComponent', () => {
     expect(component['validateEnterPressed']).toHaveBeenCalledWith(eventKeyBoard);
   });
 
-  // TODO Ng V9
-  xit('should call search method', fakeAsync((): void => {
+  it('should call search method', (): void => {
     component.openModal();
     fixture.detectChanges();
 
     spyOn(component, 'search');
+    spyOn(component, <any>'validateEnterPressed').and.returnValue(true);
 
-    component['validateEnterPressed'] = () => true;
-
-    const eventKeyBoard = document.createEvent('KeyboardEvent');
-    eventKeyBoard.initEvent('keyup', true, true);
-    Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': 13 });
-    const element = fixture.debugElement.nativeElement.querySelector('input');
-    element.dispatchEvent(eventKeyBoard);
-
-    tick(500);
+    const element = fixture.debugElement.nativeElement.querySelector('.po-icon-search');
+    element.click();
 
     expect(component.search).toHaveBeenCalled();
-  }));
+  });
 
   it('the typed character must be validated', () => {
     let isEnterKeyPressed = component['validateEnterPressed'].call(component, { keyCode: 13 });

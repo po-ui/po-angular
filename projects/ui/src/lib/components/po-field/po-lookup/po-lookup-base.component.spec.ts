@@ -191,18 +191,18 @@ describe('PoLookupBaseComponent:', () => {
     expect(component['valueToModel']).toBe(123);
   });
 
-  // TODO Ng V9
-  xit('writeValue: call `setViewValue` with `label-value` and object selected', inject(
-    [LookupFilterService],
-    (lookupFilterService: LookupFilterService) => {
+  it('writeValue: call `setViewValue` with `label-value` and object selected',
+    inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
       const objectSelected = { label: 'teste', value: 123 };
 
+      component.fieldLabel = 'label';
+      component.fieldValue = 'value';
       component.service = lookupFilterService;
       component['keysDescription'] = ['value', 'label'];
 
-      spyOn(component, 'setViewValue');
+      spyOn(component, 'setViewValue').and.callThrough();
 
-      component.writeValue(123);
+      component.writeValue(objectSelected);
 
       expect(component.setViewValue).toHaveBeenCalledWith('123 - teste', objectSelected);
     }
