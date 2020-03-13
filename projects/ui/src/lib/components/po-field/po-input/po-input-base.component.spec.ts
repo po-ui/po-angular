@@ -7,7 +7,6 @@ import { PoInputBaseComponent } from './po-input-base.component';
 import { PoMask } from './po-mask';
 
 class PoInput extends PoInputBaseComponent {
-
   extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
   }
