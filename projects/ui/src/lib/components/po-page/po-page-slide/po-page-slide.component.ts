@@ -16,8 +16,8 @@ import { PoPageSlideService } from './po-page-slide.service';
       transition(':leave', group([query('@slide', animateChild()), animate('150ms', style({ opacity: 0 }))]))
     ]),
     trigger('slide', [
-      transition(':enter', [style({ transform: 'translateX(50px)' }), animate('300ms ease-out', style({ transform: 'none' }))]),
-      transition(':leave', [animate('300ms', style({ transform: 'translateX(50px)' }))])
+      transition(':enter', [style({ transform: 'translateX(50px)' }), animate('691ms ease-in-out', style({ transform: 'none' }))]),
+      transition(':leave', [animate('150ms', style({ transform: 'translateX(50px)' }))])
     ])
   ]
 })
@@ -33,11 +33,6 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   public open() {
-    // Nao permitir a abertura de dois "po-page-slide" simultâneas.
-    if (this.poPageSlideService.isAnyPageActive()) {
-      throw new TypeError('It\'s not possible to have two "po-page-slide" simultaneously activated.');
-    }
-
     super.open();
 
     this.poPageSlideService.activePage(this.id);
