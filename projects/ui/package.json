@@ -15,16 +15,16 @@
     "@portinari/style": "0.0.0-PLACEHOLDER"
   },
   "peerDependencies": {
-    "@angular/animations": "~8.0.0",
-    "@angular/common": "~8.0.0",
-    "@angular/compiler": "~8.0.0",
-    "@angular/core": "~8.0.0",
-    "@angular/forms": "~8.0.0",
-    "@angular/platform-browser": "~8.0.0",
-    "@angular/platform-browser-dynamic": "~8.0.0",
-    "@angular/router": "~8.0.0",
+    "@angular/animations": "~9.0.4",
+    "@angular/common": "~9.0.4",
+    "@angular/compiler": "~9.0.4",
+    "@angular/core": "~9.0.4",
+    "@angular/forms": "~9.0.4",
+    "@angular/platform-browser": "~9.0.4",
+    "@angular/platform-browser-dynamic": "~9.0.4",
+    "@angular/router": "~9.0.4",
     "@portinari/style": "0.0.0-PLACEHOLDER",
-    "rxjs": "~6.4.0",
-    "zone.js": "~0.9.1"
+    "rxjs": "~6.5.4",
+    "zone.js": "~0.10.2"
   }
 }

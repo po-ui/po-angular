@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
 import { InputBoolean } from '../../../decorators';
@@ -40,6 +40,7 @@ const poCheckboxGroupColumnsTotalLength: number = 12;
  * };
  * ```
  */
+@Directive()
 export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Validator {
 
   checkboxGroupOptionsView: Array<PoCheckboxGroupOptionView>;

@@ -1,3 +1,5 @@
+import { tick, fakeAsync } from '@angular/core/testing';
+
 import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../utils/util';
 import * as UtilFunctions from './../../../utils/util';
@@ -74,7 +76,7 @@ describe('PoPageEditBaseComponent:', () => {
       expectPropertiesValues(component, 'literals', invalidValues, poPageEditLiteralsDefault[poLocaleDefault]);
     });
 
-    it('should get title and call recalculateHeaderSize when set title', () => {
+    it('should get title and call recalculateHeaderSize when set title', fakeAsync(() => {
       component.poPageContent = <any> {
         recalculateHeaderSize: () => {}
       };
@@ -83,9 +85,11 @@ describe('PoPageEditBaseComponent:', () => {
 
       component.title = 'teste';
 
+      tick();
+
       expect(component.title).toBe('teste');
       expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
-    });
+    }));
 
   });
 

@@ -58,7 +58,7 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked 
   };
 
   @ViewChild('formShare', { static: true }) formShare: NgForm;
-  @ViewChild(PoModalComponent, { static: false }) poModal: PoModalComponent;
+  @ViewChild(PoModalComponent) poModal: PoModalComponent;
 
   constructor(private poNotification: PoNotificationService,
               private sampleDashboardService: SampleDashboardService) { }

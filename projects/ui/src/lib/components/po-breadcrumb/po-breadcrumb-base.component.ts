@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 
@@ -17,6 +17,7 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  * Havendo necessidade de incluir parâmetros na requisição do serviço,
  * o componente dispõe da propriedade `p-params-service` que recebe um objeto contendo as informações.
  */
+@Directive()
 export class PoBreadcrumbBaseComponent {
 
   itemsView: Array<PoBreadcrumbItem> = [];

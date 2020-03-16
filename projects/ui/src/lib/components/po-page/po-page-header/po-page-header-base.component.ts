@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 
@@ -10,6 +10,7 @@ import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
  * O componente **po-page-header** é responsável pelo título da página e container dos botões de ações dos componentes
  * po-page-list e po-page-base.
  */
+@Directive()
 export class PoPageHeaderBaseComponent {
 
   private _breadcrumb: PoBreadcrumb;

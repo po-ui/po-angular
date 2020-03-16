@@ -1,5 +1,5 @@
 import { ControlValueAccessor } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, uuid } from './../../../utils/util';
 import { InputBoolean } from '../../../decorators';
@@ -15,6 +15,7 @@ import { InputBoolean } from '../../../decorators';
  *
  * > O *model* deste componente aceitará valores igual à `true`, `false` ou `null` para quando for indeterminado.
  */
+@Directive()
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
 
   checkboxValue: boolean | null;

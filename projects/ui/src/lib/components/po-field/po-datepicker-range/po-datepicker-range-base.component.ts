@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { browserLanguage, convertToBoolean, poLocaleDefault } from './../../../utils/util';
 import { requiredFailed } from '../validators';
@@ -69,6 +69,7 @@ export const poDatepickerRangeLiteralsDefault = {
  * `[(ngModel)]`, no entanto sem a validação do formulário;
  * - Para a validação do formulário, utilize o `[(ngModel)]`.
  */
+@Directive()
 export abstract class PoDatepickerRangeBaseComponent implements ControlValueAccessor, Validator {
 
   errorMessage: string = '';

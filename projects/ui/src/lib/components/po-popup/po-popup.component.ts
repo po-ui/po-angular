@@ -36,7 +36,7 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
 })
 export class PoPopupComponent extends PoPopupBaseComponent {
 
-  @ViewChild('popupRef', { read: ElementRef, static: false }) popupRef: ElementRef;
+  @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
 
   constructor(
     viewContainerRef: ViewContainerRef,
@@ -45,7 +45,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     private poControlPosition: PoControlPositionService,
     public changeDetector: ChangeDetectorRef) {
     super();
-    this.parentRef = viewContainerRef['_view']['component'];
+    this.parentRef = viewContainerRef['_hostView'][8];
   }
 
   /**

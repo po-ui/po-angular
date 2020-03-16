@@ -5,10 +5,13 @@ import { PoDisclaimerGroup, PoDynamicFieldType, PoDynamicFormField, PoLanguageSe
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
 import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
-import { UrlOrPoCustomizationFunction, PoPageDynamicOptions } from '../../services/po-page-customization/po-page-dynamic-options.interface';
 
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
 import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.component';
+import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
+import { PoPageDynamicOptionsSchema } from '../../services';
+
+type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions );
 
 /**
  * @docsExtends PoPageDynamicSearchBaseComponent
@@ -171,14 +174,35 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
         this.poPageCustomizationService.changeOriginalOptionsToNewOptions(this, responsePoOption));
   }
 
-  private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicOptions> {
-    const originalOption: PoPageDynamicOptions = {
+  private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicSearchOptions> {
+    const originalOption: PoPageDynamicSearchOptions = {
       title: this.title,
       actions: this.actions,
       breadcrumb: this.breadcrumb,
       filters: this.filters
     };
 
-    return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption);
+    const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicSearchOptions> = {
+      schema: [
+        {
+          nameProp: 'filters',
+          merge: true,
+          keyForMerge: 'property'
+        },
+        {
+          nameProp: 'actions',
+          merge: true,
+          keyForMerge: 'label'
+        },
+        {
+          nameProp: 'breadcrumb'
+        },
+        {
+          nameProp: 'title'
+        }
+      ]
+    };
+
+    return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
   }
 }

@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 const PO_CODE_EDITOR_THEMES = ['vs-dark', 'vs', 'hc-black'];
@@ -54,6 +54,7 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  * > </pre>
  *
  */
+@Directive()
 export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor {
 
   private _height: number = 150;

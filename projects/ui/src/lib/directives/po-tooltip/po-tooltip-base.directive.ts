@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
@@ -18,6 +18,7 @@ const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
  * conteúdo deve-se utilizar o [**po-popover**](https://portinari.io/documentation/po-popover?view=doc).
  */
 
+@Directive()
 export class PoTooltipBaseDirective {
 
   private _tooltip: string = '';

@@ -79,8 +79,8 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   private calledByCleanInputValue: boolean = false;
 
   @ViewChild('inputFile', {read: ElementRef, static: true }) private inputFile: ElementRef;
-  @ViewChild(PoUploadDragDropComponent, { static: false }) private poUploadDragDropComponent: PoUploadDragDropComponent;
-  @ViewChild('uploadButton', { static: false }) private uploadButton: PoButtonComponent;
+  @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
+  @ViewChild('uploadButton') private uploadButton: PoButtonComponent;
 
   constructor(
     uploadService: PoUploadService,

@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, uuid } from '../../../utils/util';
 
@@ -12,6 +12,7 @@ import { convertToBoolean, uuid } from '../../../utils/util';
  *
  * > Para controlar a navegação entre diversas abas, utilizar o componente [`po-tabs`](/documentation/po-tabs).
  */
+@Directive()
 export abstract class PoTabBaseComponent {
 
   private _active?: boolean = false;

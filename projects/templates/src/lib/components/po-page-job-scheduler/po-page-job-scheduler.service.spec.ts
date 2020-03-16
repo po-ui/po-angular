@@ -21,8 +21,8 @@ describe('PoPageJobSchedulerService:', () => {
       providers: [PoPageJobSchedulerService]
     });
 
-    poPageJobSchedulerService = TestBed.get(PoPageJobSchedulerService);
-    httpMock = TestBed.get(HttpTestingController);
+    poPageJobSchedulerService = TestBed.inject(PoPageJobSchedulerService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

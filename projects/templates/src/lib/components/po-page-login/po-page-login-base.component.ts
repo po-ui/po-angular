@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { EventEmitter, Input, OnDestroy, Output, Directive } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { convertToBoolean, convertToInt, getShortBrowserLanguage, isExternalLink, isTypeof, poLocaleDefault } from './../../utils/util';
@@ -110,7 +110,7 @@ export const poPageLoginLiteralsDefault = {
     forgotYourPassword: 'Забыли пароль?',
     ifYouTryHarder: 'Если вы безуспешно попытаетесь войти еще ',
     attempts: '{0} раз(а) ',
-    yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
+    yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
     createANewPasswordNow: 'Лучше создайте новый пароль сейчас! Вы сможете сразу войти в систему.',
     iForgotMyPassword: 'Я забыл свой пароль'
   }
@@ -159,6 +159,7 @@ export const poPageLoginLiteralTo = {
  *   ]
  * ```
  */
+@Directive()
 export abstract class PoPageLoginBaseComponent implements OnDestroy {
 
   allLoginErrors: Array<string> = [];

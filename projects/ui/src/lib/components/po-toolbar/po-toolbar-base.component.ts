@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { convertToInt } from '../../utils/util';
 
@@ -10,6 +10,7 @@ import { PoToolbarProfile } from './po-toolbar-profile/po-toolbar-profile.interf
  *
  * O componente `po-toolbar` é um cabeçalho para o título da aplicação e informações de usuário e notificações quando houver necessidade.
  */
+@Directive()
 export class PoToolbarBaseComponent {
 
   private _notificationNumber?: number;

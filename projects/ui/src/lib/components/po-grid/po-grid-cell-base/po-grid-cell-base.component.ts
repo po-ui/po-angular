@@ -1,5 +1,6 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
+@Directive()
 export class PoGridCellBaseComponent {
 
   private _width: (number | string) = 0;

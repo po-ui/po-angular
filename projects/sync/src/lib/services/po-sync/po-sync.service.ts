@@ -147,7 +147,7 @@ export class PoSyncService {
    * carga inicial for concluída.
    */
   loadData(): Observable<Array<{ entity: string, data: Array<any> }>> {
-    const loads = [];
+    const loads: Array<Observable<{ entity: string, data: Array<any> }>> = [];
     this.schemas.forEach(el => loads.push(this.loadEntityData(el)));
     return forkJoin(loads);
   }

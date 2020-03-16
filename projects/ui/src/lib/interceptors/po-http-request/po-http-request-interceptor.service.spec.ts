@@ -26,8 +26,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        PoHttpRequestModule,
-        PoLoadingModule
+        PoHttpRequestModule
       ],
       providers: [
         PoHttpRequesControltService,
@@ -41,7 +40,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
       ],
     });
 
-    httpRequestInterceptor = TestBed.get(PoHttpRequestInterceptorService);
+    httpRequestInterceptor = TestBed.inject(PoHttpRequestInterceptorService);
 
     httpRequestInterceptor['pendingRequests'] = 0;
   });

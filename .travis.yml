@@ -1,6 +1,6 @@
 language: node_js
 node_js:
- - "10.9.0"
+ - "10.16.3"
 dist: trusty
 sudo: required
 
@@ -20,6 +20,7 @@ cache:
     - node_modules
 
 script:
+  - commitlint-travis
   - npm run lint
   - npm run build:lite
   - npm run test

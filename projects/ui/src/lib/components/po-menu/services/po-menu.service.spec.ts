@@ -16,8 +16,8 @@ describe('PoMenuService:', () => {
       providers: [PoMenuService]
     });
 
-    menuService = TestBed.get(PoMenuService);
-    httpMock = TestBed.get(HttpTestingController);
+    menuService = TestBed.inject(PoMenuService);
+    httpMock = TestBed.inject(HttpTestingController);
 
     menuService['_url'] = 'https://portinari.io/sample/api/menus';
   });

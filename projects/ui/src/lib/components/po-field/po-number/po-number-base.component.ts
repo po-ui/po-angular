@@ -1,7 +1,8 @@
-import {  ElementRef } from '@angular/core';
+import {  ElementRef, Directive } from '@angular/core';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
+@Directive()
 export abstract class PoNumberBaseComponent extends PoInputGeneric {
 
   type = 'number';

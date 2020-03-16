@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../utils/util';
 
@@ -11,6 +11,7 @@ import { convertToBoolean, convertToInt } from '../../utils/util';
  * quantidade do conteúdo, porém pode ser fixada. Para controlar sua largura, utilize o [Grid System](/guides/grid-system),
  * assim possibilitando o tratamento para diferentes resoluções.
  */
+@Directive()
 export class PoContainerBaseComponent {
 
   private _height?: number;

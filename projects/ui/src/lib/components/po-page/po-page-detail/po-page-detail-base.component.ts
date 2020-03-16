@@ -1,4 +1,4 @@
-import { Input, ViewChild } from '@angular/core';
+import { Input, ViewChild, Directive } from '@angular/core';
 
 import { browserLanguage, poLocaleDefault } from './../../../utils/util';
 
@@ -41,6 +41,7 @@ export const poPageDetailLiteralsDefault = {
  *
  * Caso não estiver implementado alguma função, listado anteriormente, o mesmo não será apresentado.
  */
+@Directive()
 export class PoPageDetailBaseComponent {
 
   private _literals: PoPageDetailLiterals;
@@ -104,7 +105,7 @@ export class PoPageDetailBaseComponent {
   /** Título da página. */
   @Input('p-title') set title(title: string) {
     this._title = title;
-    this.poPageContent.recalculateHeaderSize();
+    setTimeout(() => this.poPageContent.recalculateHeaderSize());
   }
 
   get title() {

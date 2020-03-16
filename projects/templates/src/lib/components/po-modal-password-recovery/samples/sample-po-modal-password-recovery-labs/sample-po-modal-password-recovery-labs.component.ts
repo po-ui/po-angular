@@ -28,7 +28,7 @@ export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
     { label: 'SMS', value: PoModalPasswordRecoveryType.SMS }
   ];
 
-  @ViewChild(PoModalPasswordRecoveryComponent, { static: false }) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
+  @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 
   constructor(private poDialog: PoDialogService) { }
 

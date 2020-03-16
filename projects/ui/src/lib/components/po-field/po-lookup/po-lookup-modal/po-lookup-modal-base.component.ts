@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive } from '@angular/core';
 
 import { Observable , Subscription } from 'rxjs';
 import { browserLanguage, isTypeof, poLocaleDefault } from '../../../../utils/util';
@@ -62,6 +62,7 @@ export const poLookupLiteralsDefault = {
  *
  * Classe base do componente Po Lookup Modal.
  */
+@Directive()
 export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   private _literals: any;

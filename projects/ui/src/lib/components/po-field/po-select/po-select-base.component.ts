@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { ChangeDetectorRef, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, removeDuplicatedOptions, removeUndefinedAndNullOptions } from '../../../utils/util';
 import { InputBoolean } from '../../../decorators';
@@ -20,6 +20,7 @@ import { PoSelectOption } from './po-select-option.interface';
  * Também existe a possibilidade de utilizar um _template_ para a exibição dos itens da lista,
  * veja mais em **[p-select-option-template](/documentation/po-select-option-template)**.
  */
+@Directive()
 export abstract class PoSelectBaseComponent implements ControlValueAccessor, Validator {
 
   private _disabled?: boolean = false;

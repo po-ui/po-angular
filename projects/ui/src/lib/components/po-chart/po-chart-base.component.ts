@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToInt, isTypeof } from '../../utils/util';
 
@@ -29,6 +29,7 @@ export type PoChartSeries = Array<PoDonutChartSeries | PoPieChartSeries | PoChar
  * - Para que o gráfico não fique ilegível e incompreensível, evite uma quantia excessiva de séries.
  * - Para exibir a intensidade de um único dado dê preferência ao tipo `gauge`.
  */
+@Directive()
 export abstract class PoChartBaseComponent {
 
   private _height: number;

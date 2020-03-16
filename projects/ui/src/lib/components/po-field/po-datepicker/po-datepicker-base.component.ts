@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertDateToISODate, convertDateToISOExtended, convertIsoToDate, convertToBoolean, formatYear,
@@ -53,6 +53,7 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  *
  * > Não esqueça de importar o `FormsModule` em seu módulo, tal como para utilizar o `input default`.
  */
+@Directive()
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
   private _format?: string = poDatepickerFormatDefault;
@@ -154,24 +155,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.required = required === '' ? true : convertToBoolean(required);
 
     this.validateModel(convertDateToISOExtended(this.date, this.hour));
-  }
-
-  /**
-   * @optional
-   *
-   * @deprecated 2.0.0
-   * @description
-   *
-   * **Deprecated**
-   *
-   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * @default `false`
-   */
-  @Input('p-focus') set oldfocus(focus: boolean) {
-    this.autoFocus = focus;
   }
 
   /** Habilita ação para limpar o campo. */

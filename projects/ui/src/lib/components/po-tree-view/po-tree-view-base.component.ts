@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 
@@ -19,6 +19,7 @@ const poTreeViewMaxLevel = 4;
  *
  * O componente também possui eventos disparados ao marcar/desmarcar e expandir/colapsar os itens.
  */
+@Directive()
 export class PoTreeViewBaseComponent {
 
   private _items: Array<PoTreeViewItem> = [];

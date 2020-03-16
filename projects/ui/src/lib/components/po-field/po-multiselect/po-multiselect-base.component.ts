@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { browserLanguage, convertToBoolean, removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty,
@@ -41,6 +41,7 @@ export const poMultiselectLiteralsDefault = {
  * Este componente também não deve ser utilizado em casos onde a seleção seja única. Nesses casos, deve-se utilizar o
  * po-select, po-combo ou po-radio-group.
  */
+@Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
   private _disabled?: boolean = false;
@@ -256,24 +257,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   get sort() {
     return this._sort;
-  }
-
-  /**
-   * @optional
-   *
-   * @deprecated 2.0.0
-   * @description
-   *
-   * **Deprecated**
-   *
-   * > Esta propriedade está depreciada e será excluída na versão 2.0.0, utilize a propriedade `p-auto-focus`.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * @default `false`
-   */
-  @Input('p-focus') set oldfocus(focus: boolean) {
-    this.autoFocus = focus;
   }
 
   /**

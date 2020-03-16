@@ -48,13 +48,17 @@ module.exports = function (config) {
               branches: 75
             },
             'src/lib/components/po-field/po-login/po-login.component.ts': {
-              branches: 50
+              branches: 50,
+              functions: 60
             },
             'src/lib/components/po-field/po-input/po-input.component.ts': {
               branches: 50
             },
+            'src/lib/components/po-field/po-email/po-email.component.ts': {
+              functions: 75
+            },
             'src/lib/components/po-field/po-upload/po-upload-base.service.ts': {
-              statements: 76,
+              statements: 75,
               lines: 75
             }
           }

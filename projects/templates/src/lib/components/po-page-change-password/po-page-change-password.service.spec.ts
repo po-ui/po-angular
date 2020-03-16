@@ -12,8 +12,8 @@ describe('PoPageChangePasswordService:', () => {
       providers: [PoPageChangePasswordService]
     });
 
-    poPageChangePasswordService = TestBed.get(PoPageChangePasswordService);
-    httpMock = TestBed.get(HttpTestingController);
+    poPageChangePasswordService = TestBed.inject(PoPageChangePasswordService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

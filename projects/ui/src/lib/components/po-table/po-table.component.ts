@@ -77,7 +77,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
 
-  @ViewChild('columnManagerTarget', { static: false }) set columnManagerTarget(value: ElementRef) {
+  @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
 
     this.changeDetector.detectChanges();
@@ -87,8 +87,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this._columnManagerTarget;
   }
 
-  @ViewChild('noColumnsHeader', { read: ElementRef, static: false }) noColumnsHeader;
-  @ViewChild('popup', { static: false }) poPopupComponent: PoPopupComponent;
+  @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
+  @ViewChild('popup') poPopupComponent: PoPopupComponent;
 
   @ViewChild('tableContainer', { read: ElementRef, static: true }) tableContainerElement;
   @ViewChild('tableFooter', { read: ElementRef, static: true }) tableFooterElement;
@@ -109,7 +109,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     super(poDate);
 
-    this.parentRef = viewRef['_view']['component'];
+    this.parentRef = viewRef['_hostView'][8];
     this.differ = differs.find([]).create(null);
 
     // TODO: #5550 ao remover este listener, no portal, quando as colunas forem fixas não sofrem
@@ -123,11 +123,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   get columnCount() {
-    return (this.mainColumns.length +
+    const columnCount = (this.mainColumns.length +
       (this.actions.length > 0 ? 1 : 0) +
       (this.selectable ? 1 : 0) +
       (!this.hideDetail && this.columnMasterDetail !== undefined ? 1 : 0)
     );
+
+    return columnCount || 1;
   }
 
   get columnCountForMasterDetail() {

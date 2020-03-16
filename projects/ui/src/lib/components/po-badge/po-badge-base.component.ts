@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { convertToInt } from '../../utils/util';
 
@@ -25,6 +25,7 @@ const PO_BADGE_COLOR_DEFAULT = 'color-07';
  *
  * Componente utilizado no `po-menu` para exibir por exemplo a quantidade de tarefas pendentes.
  */
+@Directive()
 export class PoBadgeBaseComponent {
 
   private _color: string;

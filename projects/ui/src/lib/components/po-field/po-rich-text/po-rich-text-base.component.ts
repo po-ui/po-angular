@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
 import { requiredFailed } from '../validators';
@@ -14,6 +14,7 @@ import { InputBoolean } from '../../../decorators';
  *
  * > No navegador Internet Explorer não é possível alterar a cor do texto.
  */
+@Directive()
 export abstract class PoRichTextBaseComponent implements ControlValueAccessor, Validator {
 
   private _height?: number;

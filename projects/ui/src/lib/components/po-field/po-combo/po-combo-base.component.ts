@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 
 import { browserLanguage, convertToBoolean, isTypeof, removeDuplicatedOptions, poLocaleDefault, validValue } from '../../../utils/util';
 import { InputBoolean } from '../../../decorators';
@@ -49,6 +49,7 @@ export const poComboLiteralsDefault = {
  * O `po-combo` guarda o último valor caso o usuário desista de uma busca, deixando o campo ou pressionando *Esc*. Caso seja digitado no
  * campo de busca a descrição completa de um item, então a seleção será automaticamente efetuada ao deixar o campo ou pressionando *Enter*.
  */
+@Directive()
 export abstract class PoComboBaseComponent implements ControlValueAccessor, OnInit, Validator {
 
   private _changeOnEnter?: boolean = false;

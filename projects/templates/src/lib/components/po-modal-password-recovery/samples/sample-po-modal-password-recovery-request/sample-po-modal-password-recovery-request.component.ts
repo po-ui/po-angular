@@ -14,7 +14,7 @@ export class SamplePoModalPasswordRecoveryRequestComponent {
   type: PoModalPasswordRecoveryType = PoModalPasswordRecoveryType.All;
   urlRecovery: string = 'https://thf.totvs.com.br/sample/api/users';
 
-  @ViewChild(PoModalPasswordRecoveryComponent, { static: false }) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
+  @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 
   openPasswordRecoveryModal() {
     this.poModalPasswordRecovery.open();

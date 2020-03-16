@@ -56,7 +56,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
   @ViewChild('chartHeader', { static: true }) chartHeader: ElementRef;
 
-  @ViewChild('chartLegend', { static: false, read: ElementRef }) chartLegend: ElementRef;
+  @ViewChild('chartLegend', { read: ElementRef }) chartLegend: ElementRef;
 
   @ViewChild('chartWrapper', { static: true }) chartWrapper: ElementRef;
 

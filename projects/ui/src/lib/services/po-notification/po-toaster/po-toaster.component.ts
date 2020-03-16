@@ -32,7 +32,7 @@ export class PoToasterComponent extends PoToasterBaseComponent {
   private toasterType: string;
 
   /* Componente toaster */
-  @ViewChild('toaster', { static: false }) toaster: ElementRef;
+  @ViewChild('toaster') toaster: ElementRef;
 
   constructor(public changeDetector: ChangeDetectorRef, private elementeRef?: ElementRef) {
     super();

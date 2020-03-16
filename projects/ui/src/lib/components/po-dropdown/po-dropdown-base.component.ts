@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 
 import { convertToBoolean } from './../../utils/util';
 
@@ -36,6 +36,7 @@ import { PoDropdownAction } from './po-dropdown-action.interface';
  * [/Configurando as rotas do po-menu](/guides/getting-started).
  */
 
+@Directive()
 export class PoDropdownBaseComponent {
 
   private _actions: Array<PoDropdownAction>;
