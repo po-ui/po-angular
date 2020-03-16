@@ -512,3 +512,17 @@ export function clearObject(dirtyObject: object): any {
 export function validateObjectType(value: any) {
   return isTypeof(value, 'object') && !Array.isArray(value) ? value : undefined;
 }
+
+/**
+ * Retorna os elementos DOM capazes de receber foco.
+ *
+ * > Atualmente são considerados "focáveis" os elementos DOM `input`, `select`,
+ * `textarea`, `button` e `a`.
+ *
+ * @param parentElement Elemento DOM pai.
+ * @returns Lista dos elementos DOM filhos "focáveis".
+ */
+export function getFocusableElements(parentElement: Element): NodeListOf<Element> {
+  const focusableElements = 'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"]';
+  return parentElement.querySelectorAll(focusableElements);
+}
