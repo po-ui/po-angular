@@ -33,6 +33,11 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   public open() {
+    // Nao permitir a abertura de dois "po-page-slide" simultâneas.
+    if (this.poPageSlideService.isAnyPageActive()) {
+      throw new TypeError('It\'s not possible to have two "po-page-slide" simultaneously activated.');
+    }
+
     super.open();
 
     this.poPageSlideService.activePage(this.id);
@@ -65,8 +70,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
       const pageElement = this.pageContent.nativeElement;
 
       // O foco não pode sair da página.
-      if (document !== event.target && pageElement !== event.target && !pageElement.contains(event.target) &&
-        this.poPageSlideService.getAtivePage() === this.id) {
+      if (pageElement !== event.target && !pageElement.contains(event.target) && this.poPageSlideService.getAtivePage() === this.id) {
         const firstElement = elements[0] || this.pageContent.nativeElement;
         firstElement.focus();
       }
