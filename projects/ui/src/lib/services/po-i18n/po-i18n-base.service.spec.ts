@@ -1,13 +1,33 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpRequest } from '@angular/common/http';
-
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { NgModule } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import * as utils from '../../utils/util';
-
 import { PoI18nModule, PoI18nService } from '../po-i18n';
 import { PoLanguageModule } from '../po-language';
+import { PoI18nConfigWithoutDefault } from './interfaces/po-i18n-config-without-default.interface';
+
+const lazyConfig: PoI18nConfigWithoutDefault = {
+  contexts: {
+    general: {
+      'pt-br': {
+        insert: 'insert'
+      }
+    },
+    special: {
+      'pt-br': {
+        delete: 'delete'
+      }
+    }
+  }
+};
+
+@NgModule({
+  imports: [PoI18nModule.forChild(lazyConfig)]
+})
+class LazyModule {}
 
 describe('PoI18nService:', () => {
   let service: PoI18nService;
@@ -44,6 +64,7 @@ describe('PoI18nService:', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        LazyModule,
         PoLanguageModule,
         PoI18nModule.config(config)
       ]
@@ -130,6 +151,26 @@ describe('PoI18nService:', () => {
 
         done();
       });
+
+  });
+
+  it('should return literal merged from context added in a "lazy module"', done => {
+
+    service.getLiterals({ context: 'general', language: 'pt-br' }).subscribe(literals => {
+      expect(literals['insert']).toBeTruthy();
+      expect(literals['insert']).toBe(lazyConfig.contexts['general']['pt-br']['insert']);
+      done();
+    });
+
+  });
+
+  it('should return literal from context added in a "lazy module"', done => {
+
+    service.getLiterals({ context: 'special', language: 'pt-br' }).subscribe(literals => {
+      expect(literals['delete']).toBeTruthy();
+      expect(literals['delete']).toBe(lazyConfig.contexts['special']['pt-br']['delete']);
+      done();
+    });
 
   });
 

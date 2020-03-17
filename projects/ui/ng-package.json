@@ -4,10 +4,13 @@
   "lib": {
     "entryFile": "./src/public-api.ts",
     "umdModuleIds": {
+      "deepmerge": "deepmerge",
       "uuid": "uuid"
     }
   },
   "whitelistedNonPeerDependencies": [
-    "@portinari/style"
+    "@portinari/style",
+    "deepmerge",
+    "uuid"
   ]
 }
