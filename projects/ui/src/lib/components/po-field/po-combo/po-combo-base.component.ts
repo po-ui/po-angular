@@ -454,6 +454,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return this._literals || poComboLiteralsDefault[browserLanguage()];
   }
 
+  /** Se verdadeiro, o campo receberá um botão para ser limpo. */
+  @Input('p-clean') @InputBoolean() clean?: boolean;
+
   /** Deve ser informada uma função que será disparada quando houver alterações no ngModel. */
   @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
 
@@ -710,6 +713,12 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
         }
       };
     }
+  }
+
+  clear(value) {
+    this.callModelChange(value);
+    this.updateSelectedValue(null, true, true);
+    this.updateComboList();
   }
 
   protected validateModel(model: any) {
