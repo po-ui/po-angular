@@ -1,4 +1,4 @@
-[comment]: # (@label Migração do THF para o Portinari)
+[comment]: # (@label Migração do THF para o Portinari v1.x)
 [comment]: # (@link guides/migration-thf-to-portinari)
 
 Para facilitar a migração do seu projeto com o THF para o Portinari, disponibilizamos um pacote para fazer esta conversão. 
@@ -8,8 +8,9 @@ Este pacote, irá passar pelos arquivos do seu projeto alterando as palavras-cha
 ### Antes de iniciar a migração
 
 Antes de iniciar a migração certifique-se que:
-- Todos os arquivos estão salvos.
+- Este pacote de migração é apenas para a migração do **THF versão 4 ou superior para o Portinari versão 1.x** que é compatível com a versão 8 do Angular. 
 - As dependências do THF encontram-se na versão 4 ou superior.
+- Todos os arquivos estão salvos.
 - Se as pastas e os arquivos possuem permissão para terceiros alterá-los.
 
 ### Instalação do pacote de migração
