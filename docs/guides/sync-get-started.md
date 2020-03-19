@@ -9,13 +9,13 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~8.0.1):
+- [Angular CLI](https://cli.angular.io/) (9.0.5):
   - ```shell
-    npm install -g @angular/cli@8.0.1
+    npm install -g @angular/cli@9.0.5
     ```
-- [Ionic](https://ionicframework.com/docs/cli/) (4.7.0):
+- [Ionic](https://ionicframework.com/docs/cli/) (5.4.16):
   - ```shell
-    npm install -g ionic@4.7.0
+    npm install -g ionic@5.4.16
     ```
 - [Cordova](https://cordova.apache.org/docs/en/latest/) (9.0.0):
   - ```shell
@@ -35,46 +35,44 @@ ionic start po-sync-getting-started blank --skip-deps
 
 > `--skip-deps`: pula a instalação das dependências do `package.json`.
 
-Caso apareçam as seguintes questões abaixo durante a instalação, digite:
-
-- Try Ionic 4? (y/N): y
-- Install the free Ionic Pro SDK and connect your app? (Y/n): n
+Caso surja a questão relacionada ao framework desejado, opte por `Angular`.
 
 ### Passo 2 - Instalando as dependências
 
-É necessário realizar alguns ajustes de compatibilidade do Portinari para o projeto criado.
+É necessário realizar alguns ajustes de compatibilidade do PO para o projeto criado.
 
 Navegue até a pasta do aplicativo:
 ```shell
 cd po-sync-getting-started
 ```
 
-Antes de executar a instalação, é necessário que todas as dependências do projeto estejam declaradas de acordo com a versão do Portinari no arquivo `package.json`, localizado na raiz da aplicação:
+Antes de executar a instalação, é necessário que todas as dependências do projeto estejam declaradas de acordo com a versão do PO no arquivo `package.json`, localizado na raiz da aplicação:
 
 ```typescript
   ...
   "dependencies": {
-    "@angular/common": "~8.0.0",
-    "@angular/core": "~8.0.0",
-    "@angular/forms": "~8.0.0",
-    "@angular/platform-browser": "~8.0.0",
-    "@angular/platform-browser-dynamic": "~8.0.0",
-    "@angular/router": "~8.0.0",
-    "@ionic-native/core": "4.20.0",
-    "@ionic-native/splash-screen": "4.20.0",
-    "@ionic-native/status-bar": "4.20.0",
-    "@ionic/angular": "4.7.0",
-    "rxjs": "6.3.3",
+    "@angular/common": "~9.0.5",
+    "@angular/core": "~9.0.5",
+    "@angular/forms": "~9.0.5",
+    "@angular/platform-browser": "~9.0.5",
+    "@angular/platform-browser-dynamic": "~9.0.5",
+    "@angular/router": "~9.0.5",
+    "@ionic-native/network": "5.21.5",
+    "@ionic-native/core": "5.21.5",
+    "@ionic-native/splash-screen": "5.21.5",
+    "@ionic-native/status-bar": "5.21.5",
+    "@ionic/angular": "5.0.5",
+    "rxjs": "6.5.4",
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.803.25",
-    "@angular-devkit/core": "~8.0.0",
-    "@angular-devkit/schematics": "~8.0.0",
-    "@angular/cli": "~8.0.0",
-    "@angular/compiler": "~8.0.0",
-    "@angular/compiler-cli": "~8.0.0",
-    "typescript": "~3.4.3"
+    "@angular-devkit/build-angular": "0.900.4",
+    "@angular-devkit/core": "~9.0.5",
+    "@angular-devkit/schematics": "~9.0.5",
+    "@angular/cli": "~9.0.5",
+    "@angular/compiler": "~9.0.5",
+    "@angular/compiler-cli": "~9.0.5",
+    "typescript": "~3.7.5"
   },
   ...
 ```
@@ -91,7 +89,7 @@ npm install
 
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 ```shell
-npm install @portinari/portinari-sync --save
+npm install @po/po-sync --save
 ```
 
 Após a instalação do `po-sync`, é necessário instalar o plugin
@@ -120,12 +118,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 /* Imports adicionados */
-import { PoStorageModule } from '@portinari/portinari-storage';
-import { PoSyncModule } from '@portinari/portinari-sync';
+import { PoStorageModule } from '@po/po-storage';
+import { PoSyncModule } from '@po/po-sync';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -151,22 +149,22 @@ export class AppModule {}
 
 Caso apareça algum erro de importação em `SplashScreen` e `StatusBar`, altere a importação colocada por:
 ```
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 ```
 
 #### Passo 4.2 - Mapeando seu primeiro *schema*
 
 O `po-sync` utiliza a definição de `schemas`, onde cada `schema` representa um modelo de dados armazenado no dispositivo.
 
-Crie o arquivo `src/home/conference-schema.constants.ts` e adicione o conteúdo abaixo:
+Crie o arquivo `src/app/home/conference-schema.constants.ts` e adicione o conteúdo abaixo:
 
 ```typescript
-import { PoSyncSchema } from '@portinari/portinari-sync';
+import { PoSyncSchema } from '@po/po-sync';
 
 export const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences',
-  diffUrlApi: 'http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences/diff',
+  getUrlApi: 'https://po-sample-api.herokuapp.com/conference/conference-api/api/v1/conferences',
+  diffUrlApi: 'https://po-sample-api.herokuapp.com/conference/conference-api/api/v1/conferences/diff',
   deletedField: 'deleted',
   fields: [ 'id', 'title', 'location', 'description' ],
   idField: 'id',
@@ -187,10 +185,10 @@ Substitua o conteúdo do arquivo pelo conteúdo abaixo:
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { PoSyncConfig, PoNetworkType, PoSyncService } from '@portinari/portinari-sync';
+import { PoSyncConfig, PoNetworkType, PoSyncService } from '@po/po-sync';
 
 import { conferenceSchema } from './home/conference-schema.constants';
 import { HomePage } from './home/home.page';
@@ -228,22 +226,22 @@ export class AppComponent {
 
 Caso apareça algum erro de importação em `SplashScreen` e `StatusBar`, altere a importação colocada por:
 ```
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 ```
 
 Após utilizar o método `PoSyncService.prepare()`, a aplicação estará pronta para sincronizar os dados através do método `PoSyncService.sync()`.
 
 ### Passo 6 - Acessando os dados
 
-Localize o arquivo `src/home/home.page.ts` e faça as seguintes alterações:
+Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
 ```typescript
 import { Component } from '@angular/core';
 
 import { NavController } from '@ionic/angular';
 
-import { PoSyncService } from '@portinari/portinari-sync';
+import { PoSyncService } from '@po/po-sync';
 
 @Component({
   selector: 'app-home',
@@ -273,7 +271,7 @@ No construtor, foi realizado uma inscrição no método `PoSyncService.onSync()`
 
 ### Passo 7 - Exibindo os dados em tela
 
-No arquivo `src/home/home.page.html` crie a seguinte estrutura:
+No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 ```html
 <ion-content padding>
   <ion-button full (click)="loadHomePage()">Buscar informações</ion-button>
