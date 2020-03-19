@@ -124,9 +124,7 @@ describe('PoComboFilterService ', () => {
         done();
       });
 
-      httpMock
-      .expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams)
-      .flush({});
+      httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
 
     it('getObjectByValue: should add filter params', done => {

@@ -36,14 +36,13 @@ describe('PoPageBlockedUserContactsComponent: ', () => {
   });
 
   describe('Methods: ', () => {
-
     it('ngAfterViewInit: should call `checkContactItemWidth` and `ChangeDetector.detectChanges`', () => {
       spyOn(component, <any>'checkContactItemWidth');
-      spyOn(component.changeDetector, 'detectChanges');
+      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
 
       component.ngAfterViewInit();
       expect(component['checkContactItemWidth']).toHaveBeenCalled();
-      expect(component.changeDetector.detectChanges).toHaveBeenCalled();
+      expect(spyDetectChanges).toHaveBeenCalled();
     });
 
     it('ngOnChanges: shouldn`t call `checkContactItemWidth`', () => {
@@ -86,7 +85,6 @@ describe('PoPageBlockedUserContactsComponent: ', () => {
   });
 
   describe('Templates: ', () => {
-
     it('shouldn`t contain `po-invisible` classs if phone and mail have values', () => {
       component.email = 'mail@mail.com';
       component.phone = '99999999';

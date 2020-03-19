@@ -27,7 +27,6 @@ describe('PoNotificationService:', () => {
   });
 
   it('should be a create toaster top', fakeAsync(() => {
-
     notificationService.success({
       message: '',
       orientation: PoToasterOrientation.Top,
@@ -42,7 +41,6 @@ describe('PoNotificationService:', () => {
   }));
 
   it('should be a create toaster bottom', fakeAsync(() => {
-
     notificationService.success({
       message: '',
       orientation: PoToasterOrientation.Bottom,
@@ -57,7 +55,6 @@ describe('PoNotificationService:', () => {
   }));
 
   describe('Methods: ', () => {
-
     it('should be a create toaster with 3 seconds duration', fakeAsync(() => {
       notificationService.success({
         message: '',
@@ -73,7 +70,6 @@ describe('PoNotificationService:', () => {
     }));
 
     it('should be a create toaster with 3 seconds duration as default duration', fakeAsync(() => {
-
       notificationService.setDefaultDuration(3000);
 
       notificationService.success({
@@ -86,7 +82,6 @@ describe('PoNotificationService:', () => {
       tick(3001);
 
       expect(notificationService.stackTop.length === 0).toBeTruthy();
-
     }));
   });
 });

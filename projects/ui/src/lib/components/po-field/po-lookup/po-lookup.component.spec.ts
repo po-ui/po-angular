@@ -1,5 +1,5 @@
 import { ComponentRef } from '@angular/core';
-import { ComponentFixture, fakeAsync, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -390,7 +390,6 @@ describe('PoLookupComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
       component.required = false;
       component.optional = true;

@@ -1543,7 +1543,6 @@ describe('PoTableComponent:', () => {
   });
 
   describe('Templates:', () => {
-
     it('should contain `po-tooltip` class if `poTableColumn.tooltip`', fakeAsync(() => {
       component.columns = [{ property: 'link', label: 'linkTest', type: 'link', tooltip: 'tooltipTest' }];
       component.items = [{ link: 'tooltipTest' }];

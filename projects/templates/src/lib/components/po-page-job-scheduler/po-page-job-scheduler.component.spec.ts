@@ -267,7 +267,7 @@ describe('PoPageJobSchedulerComponent:', () => {
     it(`confirmJobScheduler: should call 'poDialogservice.confirm' with 'literals.confirmSaveMessage'`, () => {
       let paramConfirm;
 
-      component['activatedRoute'] = <any> {
+      component['activatedRoute'] = <any>{
         snapshot: {
           params: {
             id: undefined
@@ -275,7 +275,7 @@ describe('PoPageJobSchedulerComponent:', () => {
         }
       };
 
-      spyOn(component['poDialogService'], 'confirm').and.callFake(param => paramConfirm = param);
+      spyOn(component['poDialogService'], 'confirm').and.callFake(param => (paramConfirm = param));
       spyOn(component, <any>'save');
 
       component['confirmJobScheduler']();

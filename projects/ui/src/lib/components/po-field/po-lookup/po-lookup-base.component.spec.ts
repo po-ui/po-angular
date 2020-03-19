@@ -191,8 +191,9 @@ describe('PoLookupBaseComponent:', () => {
     expect(component['valueToModel']).toBe(123);
   });
 
-  it('writeValue: call `setViewValue` with `label-value` and object selected',
-    inject([LookupFilterService], ( lookupFilterService: LookupFilterService) => {
+  it('writeValue: call `setViewValue` with `label-value` and object selected', inject(
+    [LookupFilterService],
+    (lookupFilterService: LookupFilterService) => {
       const objectSelected = { label: 'teste', value: 123 };
 
       component.fieldLabel = 'label';
