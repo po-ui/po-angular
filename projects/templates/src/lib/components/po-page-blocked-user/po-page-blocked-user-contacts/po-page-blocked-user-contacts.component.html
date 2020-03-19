@@ -1,7 +1,9 @@
 <div #contactGroup class="po-page-blocked-user-contact-group po-row po-mb-3">
-  <div class="po-page-blocked-user-contact-item"
+  <div
+    class="po-page-blocked-user-contact-item"
     [class.po-invisible]="!phone"
-    [ngClass]="overflowItem ? 'po-md-12' : 'po-md-6'">
+    [ngClass]="overflowItem ? 'po-md-12' : 'po-md-6'"
+  >
     <a
       class="po-page-blocked-user-link po-clickable"
       [class.po-page-blocked-user-contact-content-inline]="overflowItem"
@@ -17,7 +19,8 @@
   <div
     class="po-page-blocked-user-contact-item po-page-blocked-user-contact-mail"
     [class.po-invisible]="!email"
-    [ngClass]="overflowItem ? 'po-md-12' : 'po-md-6'">
+    [ngClass]="overflowItem ? 'po-md-12' : 'po-md-6'"
+  >
     <a
       class="po-page-blocked-user-link po-clickable"
       [class.po-page-blocked-user-contact-content-inline]="overflowItem"

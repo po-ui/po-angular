@@ -1605,7 +1605,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should delete last caracter of start date input if typed key is backspace and start date input cursor position is 5', () => {
-
       // keyCode 8 is backspace
       const keyupBoardEventBackspace = new KeyboardEvent('keyup', <any>{ keyCode: 8 });
       const keyDownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
@@ -1629,7 +1628,6 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should keep end date input active if first caracter is deleted', () => {
-
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
         keyCode: 8, // keyCode 8 is backspace
         target: { name: component.endDateInputName }
@@ -1695,7 +1693,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`should contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'startDateInput' is
       active element`, () => {
-
       const startDateInputName = `input[name="${component.startDateInputName}"]`;
 
       const startDateInput = fixture.debugElement.query(By.css(startDateInputName));
@@ -1710,7 +1707,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`should contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'endDateInput' is
       active element`, () => {
-
       const endDateInputName = `input[name="${component.endDateInputName}"]`;
 
       const endDateInput = fixture.debugElement.query(By.css(endDateInputName));
@@ -1725,7 +1721,6 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`shouldn't contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'endDateInput' and
       startDateInput aren't active elements`, () => {
-
       const endDateInputName = `input[name="${component.endDateInputName}"]`;
       const startDateInputName = `input[name="${component.startDateInputName}"]`;
 

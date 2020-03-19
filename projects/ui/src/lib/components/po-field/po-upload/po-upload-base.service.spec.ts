@@ -74,7 +74,7 @@ describe('PoUploadBaseService:', () => {
     fakeFile['lastModifiedDate'] = new Date();
     fakeFile['name'] = 'Teste';
     fakeFile['webkitRelativePath'] = '';
-    const files = [ new PoUploadFile(<File>fakeFile) ];
+    const files = [new PoUploadFile(<File>fakeFile)];
     const tOnUpload = new EventEmitter<any>();
     const callback = (file: PoUploadFile, event: any) => '';
 
