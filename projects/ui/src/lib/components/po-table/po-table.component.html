@@ -1,4 +1,8 @@
-<po-container #tableContainer p-no-padding>
+<po-container *ngIf="container; else tableContainerTemplate" p-no-padding [p-no-shadow]="container === 'border'">
+  <ng-container *ngTemplateOutlet="tableContainerTemplate"></ng-container>
+</po-container>
+
+<ng-template #tableContainerTemplate>
   <div [class.po-table-container-relative]="loading">
     <div *ngIf="loading" class="po-table-overlay">
       <po-loading class="po-table-overlay-content" [p-text]="literals.loadingData"></po-loading>
@@ -30,7 +34,7 @@
       <po-table-subtitle-footer [p-literals]="literals" [p-subtitles]="column.subtitles"> </po-table-subtitle-footer>
     </ng-container>
   </div>
-</po-container>
+</ng-template>
 
 <div class="po-row po-table-footer-show-more" [class.po-invisible]="showMore.observers.length === 0" #tableFooter>
   <po-button

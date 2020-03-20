@@ -161,7 +161,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Input('p-container') set container(value: string) {
     this._container = poTableContainer.includes(value) ? value : poTableContainerDefault;
-    setTimeout(() => this.showContainer(this._container));
   }
 
   get container(): string {
@@ -631,8 +630,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
   protected abstract calculateHeightTableContainer(height);
 
   protected abstract calculateWidthHeaders();
-
-  protected abstract showContainer(container);
 
   protected getDefaultColumns(item: any) {
     const keys = Object.keys(item);

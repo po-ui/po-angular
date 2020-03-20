@@ -101,9 +101,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
 
-  @ViewChild('tableContainer', { read: ElementRef, static: true }) tableContainerElement;
-  @ViewChild('tableFooter', { read: ElementRef, static: true }) tableFooterElement;
-  @ViewChild('tableWrapper', { read: ElementRef, static: true }) tableWrapperElement;
+  @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
+  @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
@@ -198,10 +197,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   ngAfterViewInit() {
     this.initialized = true;
-
-    if (!this.container) {
-      this.hideContainer();
-    }
   }
 
   ngDoCheck() {
@@ -209,7 +204,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.verifyCalculateHeightTableContainer();
     // Permite que os cabeçalhos sejam calculados na primeira vez que o componente torna-se visível,
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
-    if (this.tableWrapperElement.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
+    if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
       this.debounceResize();
       this.visibleElement = true;
     }
@@ -357,16 +352,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     });
   }
 
-  protected showContainer(container: string) {
-    const containerClassList = this.tableContainerElement.nativeElement.firstChild.classList;
-
-    containerClassList.add('po-container');
-
-    container === 'border'
-      ? containerClassList.add('po-container-no-shadow')
-      : containerClassList.remove('po-container-no-shadow');
-  }
-
   private checkChangesItems() {
     const changesItems = this.differ.diff(this.items);
 
@@ -407,11 +392,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private getHeightTableFooter() {
     return this.tableFooterElement ? this.tableFooterElement.nativeElement.offsetHeight : 0;
-  }
-
-  private hideContainer() {
-    const containerClassList = this.tableContainerElement.nativeElement.firstChild.classList;
-    containerClassList.remove('po-container');
   }
 
   private mergeCustomIcons(rowIcons: Array<string>, customIcons: Array<any>) {
