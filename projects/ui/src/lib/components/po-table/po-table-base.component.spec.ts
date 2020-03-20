@@ -1,5 +1,3 @@
-import { fakeAsync, tick } from '@angular/core/testing';
-
 import * as utilsFunctions from '../../utils/util';
 import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -12,7 +10,6 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 class PoTableComponent extends PoTableBaseComponent {
   calculateWidthHeaders() {}
   calculateHeightTableContainer(height) {}
-  protected showContainer() {}
 }
 
 describe('PoTableBaseComponent:', () => {
@@ -1212,26 +1209,17 @@ describe('PoTableBaseComponent:', () => {
       expect(component['getDefaultColumns']).not.toHaveBeenCalled();
     });
 
-    it('p-container: should update property with valid values and call `showContainer`.', fakeAsync(() => {
+    it('p-container: should update property with valid values', () => {
       const validValues = ['border', 'shadow'];
-      spyOn(component, <any>'showContainer');
 
       expectPropertiesValues(component, 'container', validValues, validValues);
-      tick();
+    });
 
-      expect(component['showContainer']).toHaveBeenCalled();
-    }));
-
-    it('p-container: should update property with `border` if values are invalid and call `showContainer`.', fakeAsync(() => {
+    it('p-container: should update property with `border` if values are invalid', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
-      spyOn(component, <any>'showContainer');
 
       expectPropertiesValues(component, 'container', invalidValues, 'border');
-
-      tick();
-
-      expect(component['showContainer']).toHaveBeenCalled();
-    }));
+    });
 
     it('sortType: should return `ascending` if `sortedColumn.ascending` is `true`.', () => {
       component.sortedColumn.ascending = true;

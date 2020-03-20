@@ -765,6 +765,19 @@ describe('PoTableComponent:', () => {
     expect(fakeThisDoCheck.visibleElement).toBeFalsy();
   });
 
+  it('shouldn`t call `debounceResize` if `tableWrapper` is null', () => {
+    fakeThisDoCheck.initialized = true;
+    fakeThisDoCheck.visibleElement = false;
+    fakeThisDoCheck.tableWrapperElement = null;
+
+    spyOn(fakeThisDoCheck, 'debounceResize');
+
+    component.ngDoCheck.call(fakeThisDoCheck);
+
+    expect(fakeThisDoCheck.debounceResize).not.toHaveBeenCalled();
+    expect(fakeThisDoCheck.visibleElement).toBeFalsy();
+  });
+
   it('should call debounceResize in ngDoCheck when initialized is true, visibleElement is true and have offsetWidth', () => {
     fakeThisDoCheck.initialized = true;
     fakeThisDoCheck.visibleElement = false;
@@ -1051,24 +1064,6 @@ describe('PoTableComponent:', () => {
       expect(component['initialized']).toBe(true);
     });
 
-    it('ngAfterViewInit: should call `hideContainer` if container is not defined', () => {
-      spyOn(component, <any>'hideContainer');
-
-      component.ngAfterViewInit();
-
-      expect(component['hideContainer']).toHaveBeenCalled();
-    });
-
-    it('ngAfterViewInit: shouldn`t call `hideContainer` if container is defined', () => {
-      component.container = 'border';
-
-      spyOn(component, <any>'hideContainer');
-
-      component.ngAfterViewInit();
-
-      expect(component['hideContainer']).not.toHaveBeenCalled();
-    });
-
     it('ngDoCheck: should call checkChangesItems and verifyCalculateHeightTableContainer', () => {
       fakeThisDoCheck.visibleElement = true;
 
@@ -1332,74 +1327,6 @@ describe('PoTableComponent:', () => {
       component.tableRowTemplate = mockTableDetailDiretive;
 
       expect(component.hasRowTemplate).toBeTruthy();
-    });
-
-    it('hideContainer: should remove `po-container` class of table container', () => {
-      const containerClass = 'po-container';
-      const fakeTable = {
-        tableContainerElement: {
-          nativeElement: {
-            firstChild: { classList: { remove: () => {} } }
-          }
-        }
-      };
-
-      spyOn(fakeTable.tableContainerElement.nativeElement.firstChild.classList, 'remove');
-      component['hideContainer'].call(fakeTable);
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.remove).toHaveBeenCalledWith(
-        containerClass
-      );
-    });
-
-    it('showContainer: shoud call `add` with `po-container` and `po-container-no-shadow` if container is `border`', () => {
-      const containerClass = 'po-container';
-      const noShadowClass = 'po-container-no-shadow';
-      const container = 'border';
-
-      const fakeTable = {
-        tableContainerElement: {
-          nativeElement: {
-            firstChild: { classList: { add: () => {} } }
-          }
-        }
-      };
-
-      spyOn(fakeTable.tableContainerElement.nativeElement.firstChild.classList, 'add');
-
-      component['showContainer'].call(fakeTable, container);
-
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(
-        containerClass
-      );
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(
-        noShadowClass
-      );
-    });
-
-    it('showContainer: shoud call `add` with `po-container` and `remove` with `po-container-no-shadow` if container is `shadow`', () => {
-      const containerClass = 'po-container';
-      const noShadowClass = 'po-container-no-shadow';
-      const container = 'shadow';
-
-      const fakeTable = {
-        tableContainerElement: {
-          nativeElement: {
-            firstChild: { classList: { add: () => {}, remove: () => {} } }
-          }
-        }
-      };
-
-      spyOn(fakeTable.tableContainerElement.nativeElement.firstChild.classList, 'add');
-      spyOn(fakeTable.tableContainerElement.nativeElement.firstChild.classList, 'remove');
-
-      component['showContainer'].call(fakeTable, container);
-
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.add).toHaveBeenCalledWith(
-        containerClass
-      );
-      expect(fakeTable.tableContainerElement.nativeElement.firstChild.classList.remove).toHaveBeenCalledWith(
-        noShadowClass
-      );
     });
 
     it('visibleActions: should be `false` if doesn`t have action.', () => {
