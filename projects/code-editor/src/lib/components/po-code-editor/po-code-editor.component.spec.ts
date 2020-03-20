@@ -92,6 +92,28 @@ describe('PoCodeEditorComponent', () => {
     expect((<any>window).monaco.languages.setMonarchTokensProvider).toHaveBeenCalled();
   });
 
+  it('should not call monaco register sintax when language is invalid', () => {
+    const fakeThis = {
+      codeEditorRegister: {
+        language: null
+      }
+    };
+
+    (<any>window).monaco = {
+      languages: {
+        register: () => {},
+        setMonarchTokensProvider: () => {}
+      }
+    };
+
+    spyOn((<any>window).monaco.languages, <any>'register');
+    spyOn((<any>window).monaco.languages, <any>'setMonarchTokensProvider');
+
+    component['registerCustomLanguage'].call(fakeThis);
+    expect((<any>window).monaco.languages.register).not.toHaveBeenCalled();
+    expect((<any>window).monaco.languages.setMonarchTokensProvider).not.toHaveBeenCalled();
+  });
+
   it('should init monaco in ngDoCheck', () => {
     const fakeThis = {
       canLoad: true,
@@ -158,6 +180,20 @@ describe('PoCodeEditorComponent', () => {
     tick(100);
 
     expect(fakeThis.monacoCreateModel).toHaveBeenCalled();
+  }));
+
+  it('should not call setModel in setValueInEditor if editor have not been setted.', fakeAsync(() => {
+    const fakeThis: any = {
+      showDiff: true,
+      editor: null,
+      monacoCreateModel: () => {}
+    };
+
+    spyOn(fakeThis, 'monacoCreateModel').and.returnValue('');
+    component.setValueInEditor.call(fakeThis);
+    tick(100);
+
+    expect(fakeThis.monacoCreateModel).not.toHaveBeenCalled();
   }));
 
   it('should call setValueInEditor in writeValue', fakeAsync(() => {
