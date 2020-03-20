@@ -27,6 +27,7 @@
     "test:templates": "ng test templates --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:templates:browse": "ng test templates --code-coverage --browsers=Chrome --source-map",
     "test:code-editor": "ng test code-editor --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
+    "test:code-editor:browse": "ng test code-editor --code-coverage --browsers=Chrome --source-map",
     "test:dev": "ng test --browsers=ChromeHeadless",
     "build:schematics": "npm run tsc -- -p ./projects/ui/tsconfig.schematics.json",
     "build:ui": "ng build ui --prod && gulp schematics && gulp replaceVersion && cd dist/portinari-ui && npm pack",

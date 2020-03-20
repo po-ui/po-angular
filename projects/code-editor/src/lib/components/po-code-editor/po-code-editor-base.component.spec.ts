@@ -10,7 +10,10 @@ class PoCodeEditorTestComponent extends PoCodeEditorBaseComponent {
 }
 
 describe('PoCodeEditorBaseComponent', () => {
-  const component = new PoCodeEditorTestComponent();
+  let component: PoCodeEditorTestComponent;
+  beforeEach(() => {
+    component = new PoCodeEditorTestComponent();
+  });
 
   it('should be created', () => {
     expect(component instanceof PoCodeEditorBaseComponent).toBeTruthy();
@@ -56,9 +59,21 @@ describe('PoCodeEditorBaseComponent', () => {
   it('should set readonly', () => {
     const booleanValidTrueValues = [true, 'true', 1, ''];
     const booleanValidFalseValues = [false, 'false', 0];
+    const spy = spyOn(component, 'setReadOnly');
+    component.editor = {};
+    expectPropertiesValues(component, 'readonly', booleanValidFalseValues, false);
+    expect(spy).toHaveBeenCalledWith(false);
+    expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
+  });
 
+  it('should not set readonly if there is no editor', () => {
+    const booleanValidTrueValues = [true, 'true', 1, ''];
+    const booleanValidFalseValues = [false, 'false', 0];
+    const spy = spyOn(component, 'setReadOnly');
+    component.editor = null;
     expectPropertiesValues(component, 'readonly', booleanValidFalseValues, false);
     expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('should set height', () => {
@@ -83,6 +98,7 @@ describe('PoCodeEditorBaseComponent', () => {
   });
 
   it('should register function OnChangePropagate', () => {
+    expect(component.onChangePropagate(1)).toBeUndefined();
     component.onChangePropagate = undefined;
     const func = () => true;
 
@@ -91,6 +107,7 @@ describe('PoCodeEditorBaseComponent', () => {
   });
 
   it('should register function registerOnTouched', () => {
+    expect(component.onTouched(1)).toBeUndefined();
     component.onTouched = undefined;
     const func = () => true;
 
