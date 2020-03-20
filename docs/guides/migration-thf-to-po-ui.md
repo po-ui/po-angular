@@ -1,14 +1,14 @@
-[comment]: # (@label Migração do THF para o Portinari v1.x)
-[comment]: # (@link guides/migration-thf-to-portinari)
+[comment]: # (@label Migração do THF para o PO UI v1.x)
+[comment]: # (@link guides/migration-thf-to-po-ui)
 
-Para facilitar a migração do seu projeto com o THF para o Portinari, disponibilizamos um pacote para fazer esta conversão. 
+Para facilitar a migração do seu projeto com o THF para o PO UI, disponibilizamos um pacote para fazer esta conversão. 
 
-Este pacote, irá passar pelos arquivos do seu projeto alterando as palavras-chaves do THF para a nova nomenclatura do Portinari.
+Este pacote, irá passar pelos arquivos do seu projeto alterando as palavras-chaves do THF para a nova nomenclatura do PO UI.
 
 ### Antes de iniciar a migração
 
 Antes de iniciar a migração certifique-se que:
-- Este pacote de migração é apenas para a migração do **THF versão 4 ou superior para o Portinari versão 1.x** que é compatível com a versão 8 do Angular. 
+- Este pacote de migração é apenas para a migração do **THF versão 4 ou superior para o PO UI versão 1.x** que é compatível com a versão 8 do Angular. 
 - As dependências do THF encontram-se na versão 4 ou superior.
 - Todos os arquivos estão salvos.
 - Se as pastas e os arquivos possuem permissão para terceiros alterá-los.
@@ -23,7 +23,7 @@ npm install -g po-migration
 
 ### Migrando o seu projeto
 
-Após a instalação, navegue até a pasta do projeto que você deseja migrar para o Portinari.
+Após a instalação, navegue até a pasta do projeto que você deseja migrar para o PO UI.
 
 Para iniciar a migração, execute o comando:
 

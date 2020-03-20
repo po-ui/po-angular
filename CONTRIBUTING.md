@@ -1,4 +1,4 @@
-# Contribuindo com o Portinari
+# Contribuindo com o PO UI
 
 ## Conteúdo
 
@@ -24,24 +24,24 @@
 <a id="introduction"></a>
 ## Introdução
 
-Este guia tem por objetivo definir as regras para criação de *Branchs*, *Pull Requests* e *Commits* no projeto Portinari.
+Este guia tem por objetivo definir as regras para criação de *Branchs*, *Pull Requests* e *Commits* no projeto PO UI.
 Para seguir o guia é fundamental o conhecimento da [ferramenta Git](https://git-scm.com/book/en/v2).
 
 <a id="flow"></a>
 ## Fluxo
 
-1. A primeira etapa consiste em avaliar se nas [*Pull Requests* do Portinari](https://github.com/portinariui/portinari-angular/pulls) não tem nenhuma outra submissão anterior que resolve o problema, eliminando assim a duplicidade.
+1. A primeira etapa consiste em avaliar se nas [*Pull Requests* do PO UI](https://github.com/po-ui/po-angular/pulls) não tem nenhuma outra submissão anterior que resolve o problema, eliminando assim a duplicidade.
 2. Com o repositório atualizado, deve-se [gerar a *branch*](#branchs) ou *fork* que conterá as alterações necessárias dependendo do seu tipo de usuário:
-  - Para membros do Core Team do Portinari deve ser gerada uma [*branch*](#branchs);
+  - Para membros do Core Team do PO UI deve ser gerada uma [*branch*](#branchs);
   - Para os demais contribuintes do projeto deve-se optar por *fork*.
 3. Próximo passo é gerar as alterações e ao finalizar deve-se rodar os testes.
-  - É muito importante analisar os documentos [**STYLEGUIDE**](https://github.com/portinariui/portinari-angular/blob/master/STYLEGUIDE.md) e [**HOW_TO_DOCUMENT**](https://github.com/portinariui/portinari-angular/blob/master/HOW_TO_DOCUMENT.md) antes de iniciar o desenvolvimento para que a contribuição seja mais rápida e eficiente.
+  - É muito importante analisar os documentos [**STYLEGUIDE**](https://github.com/po-ui/po-angular/blob/master/STYLEGUIDE.md) e [**HOW_TO_DOCUMENT**](https://github.com/po-ui/po-angular/blob/master/HOW_TO_DOCUMENT.md) antes de iniciar o desenvolvimento para que a contribuição seja mais rápida e eficiente.
 4. Finalizando a etapa anterior deve-se gerar o *commit* e verificar se foi gerado apenas um [*commit* final](#commits).
 5. Próximo passo é gerar a [*Pull Request*](#pull-requests) preenchendo os campos necessários.
 6. Depois é só aguardar aprovação.
 7. Caso tiver alguma sugestão deve-se fazer as atualizações necessárias e rodar os testes novamente.
 8. Faça um *rebase* e em seguida faça um *push* com as alterações e aguarde a aprovação.
-9. Caso seja aprovado, parabéns, sua alteração já estará na *branch master* do Portinari.
+9. Caso seja aprovado, parabéns, sua alteração já estará na *branch master* do PO UI.
 
 <a id="branchs"></a>
 ## Regras para criação da *Branch*
@@ -53,7 +53,7 @@ Caso já esteja na *master* rode o comando:
 git pull
 ```
 
-Se não retornar nenhum erro ela estará atualizada e é hora de criar a *branch* no projeto Portinari. Para isso rode o comando:
+Se não retornar nenhum erro ela estará atualizada e é hora de criar a *branch* no projeto PO UI. Para isso rode o comando:
 
 ```
 git checkout -b <COMPONENTE>/<ISSUE>
@@ -206,11 +206,8 @@ Sem *Breaking Changes*:
 ```
 feat(button): adiciona a propriedade p-size
 
-O componente po-button apenas aceita o uso das classes de grid do
-Portinari para definir sua largura, não permitindo assim fazer um ajuste 
-fino.
-Adiciona a propriedade size para que o componente possa receber um valor
-em pixels fixo para sua largura.
+O componente po-button apenas aceita o uso das classes de grid do PO UI para definir sua largura, não permitindo assim fazer um ajuste fino.
+Adiciona a propriedade size para que o componente possa receber um valor em pixels fixo para sua largura.
 
 Fixes DTHFUI-221
 ```
@@ -226,7 +223,7 @@ Fixes DTHFUI-225
 BREAKING CHANGES: removida propriedade p-size
 
 Foi removida a propriedade p-size do po-button pois o mesmo deve ser
-definido através do uso das classes de grid do Portinari.
+definido através do uso das classes de grid do PO UI.
 
 Antes: 
 <po-button p-size="md"></po-button>
@@ -240,7 +237,7 @@ Depois:
 
 Antes de criar a *Pull Request* é importante verificar se algumas perguntas foram respondidas:
 
-- Verifique nas [*Pull Requests* do Portinari](https://github.com/portinariui/portinari-angular/pulls) se nenhuma submissão anterior já resolveu o problema.
+- Verifique nas [*Pull Requests* do PO UI](https://github.com/po-ui/po-angular/pulls) se nenhuma submissão anterior já resolveu o problema.
 - A *Pull Request* resolveu o problema solicitado na ISSUE?
 - Foi gerado apenas um *commit* para solução do problema? Caso tenha mais de um *commit* ou o padrão não esteja de acordo deve seguir este [Guia de *commits*](#commits).
 - Foram rodados todos os testes unitários da aplicação?
@@ -325,4 +322,4 @@ Esta correção pode ser validada utilizando o sample labs no portal
 
 Após gerar a *Pull Request* é só aguardar aprovação. Caso tiver alguma sugestão deve-se fazer as atualizações necessárias e rodar os testes novamente.
 Faça um *rebase* e em seguida faça um *push* com as alterações e aguarde a aprovação.
-Caso seja aprovado, parabéns, sua alteração já estará na *branch master* do Portinari.
+Caso seja aprovado, parabéns, sua alteração já estará na *branch master* do PO UI.

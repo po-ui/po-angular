@@ -3,7 +3,7 @@
 A documentação é gerada automaticamente com base nos códigos fontes utilizando o processador de documentação 
 [Dgeni](https://github.com/angular/dgeni) e o [JSDoc](http://usejsdoc.org/).
 
-Este guia descreve como documentar os códigos-fonte, bem como os padrões de documentação do projeto Portinari UI. 
+Este guia descreve como documentar os códigos-fonte, bem como os padrões de documentação do projeto PO UI. 
 A seguir, serão apresentados exemplos e padrões para a criação da documentação.
 
 ## Documentação básica
@@ -164,7 +164,7 @@ Para a criação ou referência de cada arquivo, utiliza-se a tag `<file> </file
  *  <file name='sample-po-button-click.component.css'> </file>
  * </example>
  *
- * <example name='po-button-labs' title='Portinari Button Labs'>
+ * <example name='po-button-labs' title='PO Button Labs'>
  *  <file name='sample-po-button-labs.component.html'> </file>
  *  <file name='sample-po-button-labs.component.ts'> </file>
  * </example>
@@ -187,7 +187,7 @@ de nome para os arquivos, como:
 ``` 
 
 Os arquivos referenciados devem ficar na pasta ```/samples``` do componente, conforme 
-[exemplo do po-button](https://github.com/portinariui/portinari-angular/tree/master/projects/ui/src/lib/components/po-button/samples).
+[exemplo do po-button](https://github.com/po-ui/po-angular/tree/master/projects/ui/src/lib/components/po-button/samples).
  
 O padrão de nomenclatura dos samples deve ser `sample-po-<nome>.<type>.<extensao>`, por exemplo:
 
@@ -230,8 +230,8 @@ stylesUrls: ['./sample-po-button.component.css'],
 código utilize ferramentas de LINT.
 
 > Exemplo de fonte completo:
-- [sample-po-button-basic.component.html](https://github.com/portinariui/portinari-angular/blob/master/projects/ui/src/lib/components/po-button/samples/sample-po-button-basic/sample-po-button-basic.component.html)
-- [sample-po-button-basic.component.ts](https://github.com/portinariui/portinari-angular/blob/master/projects/ui/src/lib/components/po-button/samples/sample-po-button-basic/sample-po-button-basic.component.ts)
+- [sample-po-button-basic.component.html](https://github.com/po-ui/po-angular/blob/master/projects/ui/src/lib/components/po-button/samples/sample-po-button-basic/sample-po-button-basic.component.html)
+- [sample-po-button-basic.component.ts](https://github.com/po-ui/po-angular/blob/master/projects/ui/src/lib/components/po-button/samples/sample-po-button-basic/sample-po-button-basic.component.ts)
 
 ## Interfaces e Enums
 
@@ -279,7 +279,7 @@ export interface PoModalAction {
 }
 ```
 
-> Fonte completo: [po-modal-action.interface.ts](https://github.com/portinariui/portinari-angular/blob/master/projects/ui/src/lib/components/po-modal/po-modal-action.interface.ts)
+> Fonte completo: [po-modal-action.interface.ts](https://github.com/po-ui/po-angular/blob/master/projects/ui/src/lib/components/po-modal/po-modal-action.interface.ts)
 
 ## Services
 
@@ -300,7 +300,7 @@ do tipo e da descrição, conforme o exemplo abaixo:
 
 ## Boas práticas
 
-Nesta seção, serão apresentadas as boas práticas para a documentação no projeto do Portinari UI.
+Nesta seção, serão apresentadas as boas práticas para a documentação no projeto do PO UI.
 
  - Coloque o comentário de documentação logo abaixo dos imports.
  

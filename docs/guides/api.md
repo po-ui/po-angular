@@ -17,7 +17,7 @@
 <a id="introduction"></a>
 ## Introdução
 
-Este guia tem a finalidade de exibir os modelos de requisições e respostas HTTP que o Portinari UI utiliza em seus componentes e *interceptors*.
+Este guia tem a finalidade de exibir os modelos de requisições e respostas HTTP que o PO UI utiliza em seus componentes e *interceptors*.
 
 
 <a id="responseMessage"></a>
@@ -76,7 +76,7 @@ Opcionalmente pode-se retornar os campos:
 Mensagens de sucesso (código HTTP 2xx) devem retornar diretamente a entidade que representa o objeto resultante da operação do *endpoint*. Exemplo:
 
 ```
-GET http://portinari-example.com.br/api/users/10
+GET https://example.com.br/api/users/10
 
 {
     id: 10,
@@ -92,7 +92,7 @@ Opcionalmente, o atributo `_messages` pode ser incluído no objeto retornado par
 O formato do objeto de mensagem segue o padrão anteriormente descrito, para mensagens de erro.
 
 ```
-GET http://portinari-example.com.br/api/users/10
+GET https://example.com.br/api/users/10
  
 {
     id: 10,
@@ -159,7 +159,7 @@ Quando algum componente, como `po-lookup`, realizar alguma ordenação será env
 Por exemplo, a seguinte requisição deve retornar a lista de usuários ordenados pelo nome de forma crescente e então pela idade de forma decrescente e pelo sobrenome de forma crescente:
 
 ```
-GET http://portinari-example.com.br/api/users?order=name,-age,surname
+GET https://example.com.br/api/users?order=name,-age,surname
 ```
 
 <a id="filters"></a>
@@ -167,7 +167,7 @@ GET http://portinari-example.com.br/api/users?order=name,-age,surname
 
 Aos realizar um filtro será enviado um parâmetro no formato `property=value`:
 
-``` GET http://portinari-example.com.br/api/users?name=john&surname=doe ```
+``` GET https://example.com.br/api/users?name=john&surname=doe ```
 
 <a id="pagination"></a>
 ### Paginação
@@ -181,4 +181,4 @@ A paginação é definida pelos parâmetros `page` e `pageSize`, respeitando as 
 
 Por exemplo, a seguinte requisição deve retornar a quarta página de registros (dos registros 31 a 40 inclusive) de usuários:
 
-``` GET http://portinari-example.com.br/api/users/?page=4&pageSize=10 ```
+``` GET https://example.com.br/api/users/?page=4&pageSize=10 ```
