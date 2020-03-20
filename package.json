@@ -1,12 +1,12 @@
 {
-  "name": "portinari-sources",
+  "name": "po-ui-sources",
   "version": "1.28.0",
-  "description": "Portinari",
-  "homepage": "https://portinari.io",
+  "description": "PO UI",
+  "homepage": "https://po-ui.io",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/portinariui/portinari-angular"
+    "url": "https://github.com/po-ui/po-angular"
   },
   "scripts": {
     "ng": "ng",

@@ -3,7 +3,7 @@
 
 ### Pré-requisitos
 
-Para começar a utilizar o **Po** (Portinari UI) é pré-requisito ter o `Node.js` instalado (versão 10.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 10.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
@@ -63,14 +63,14 @@ Caso prefira instalar com o yarn:
 yarn install
 ```
 
-### Passo 2 - Adiconando o pacote @portinari/portinari-ui
+### Passo 2 - Adiconando o pacote @po-ui/ng-components
 
 Utilizando o comando `ng add` do [Angular CLI](https://cli.angular.io/), vamos adicionar o **Po** em seu projeto e o mesmo se encarregará de configurar o tema, instalar o pacote e importar o módulo do **Po**.
 
 Execute o comando abaixo na pasta raiz do seu projeto:
 
 ```
-ng add @portinari/portinari-ui
+ng add @po-ui/ng-components
 ```
 
 > Ao executar o comando acima, será perguntado se deseja incluir uma estrutura inicial em seu projeto com menu lateral, página e toolbar, utilizando componentes do **Po**, **caso desejar, apenas informe: `Y`**.
@@ -95,16 +95,16 @@ Abra o *browser* e acesse a url http://localhost:4200. Pronto! Se você escolheu
 
 Agora é só abrir seu **editor / IDE** favorito e começar a trabalhar no seu projeto.
 
-Caso você queira utilizar nossos componentes de templates, como o **[po-page-login](/documentation/po-page-login)**, **[po-modal-password-recovery](/documentation/po-modal-password-recovery)**, **[po-page-blocked-user](/documentation/po-page-blocked-user)**, **[po-page-dynamic-table](/documentation/po-page-dynamic-table)** entre outros, basta instalar o pacote `@portinari/portinari-templates` e incluí-lo nas dependências do seu projeto rodando o comando abaixo:
+Caso você queira utilizar nossos componentes de templates, como o **[po-page-login](/documentation/po-page-login)**, **[po-modal-password-recovery](/documentation/po-modal-password-recovery)**, **[po-page-blocked-user](/documentation/po-page-blocked-user)**, **[po-page-dynamic-table](/documentation/po-page-dynamic-table)** entre outros, basta instalar o pacote `@po-ui/ng-templates` e incluí-lo nas dependências do seu projeto rodando o comando abaixo:
 
 Instalando com npm:
 ```
-npm i @portinari/portinari-templates
+npm i @po-ui/ng-templates
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn add @portinari/portinari-templates
+yarn add @po-ui/ng-templates
 ```
 
 E depois adicionar o `PoTemplatesModule` no módulo principal da sua aplicação :).

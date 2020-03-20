@@ -33,17 +33,14 @@ const sonarqube = task('sonarqube', function(callback) {
 
   sonarqubeScanner(
     {
-      serverUrl: 'http://sonarqube.po.portinari.com.br',
+      serverUrl: 'http://sonarqube.po-ui.com.br',
       token: token,
       options: {
         // Documentation: https://docs.sonarqube.org/display/SONAR/Analysis+Parameters
-        'sonar.projectKey': 'portinari-ui',
-        'sonar.projectName': 'portinari-ui',
+        'sonar.projectKey': 'po-ui',
+        'sonar.projectName': 'po-ui',
         'sonar.projectVersion': '1.0',
-        'sonar.test.inclusions': `projects/kendo/**/*.spec.ts`,
-        'sonar.test.exclusions': `projects/kendo/**/*.spec.ts`,
-        'sonar.exclusions': `projects/kendo/**/samples/**,index.ts,projects/kendo/**/*.js,projects/kendo/**/*.json,.*,projects/kendo/node_modules`,
-        'sonar.typescript.lcov.reportPaths': `projects/kendo/coverage/lcov.info`
+        'sonar.exclusions': `index.ts,.*`
       }
     },
     callback

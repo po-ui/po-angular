@@ -19,7 +19,7 @@
 - [Sincronização manual](guides/sync-fundamentals#sync)
 - [Técnicas avançadas](guides/sync-fundamentals#advanced-techniques)
   - [Notificação pós-sincronização](guides/sync-fundamentals#on-sync)
-  - [Adaptando a resposta da API para o padrão da Portinari](guides/sync-fundamentals#po-data-transform)
+  - [Adaptando a resposta da API para o padrão do PO UI](guides/sync-fundamentals#po-data-transform)
   - [Capturando respostas da sincronização](guides/sync-fundamentals#get-responses)
   - [Inserindo requisições HTTP na fila de eventos](guides/sync-fundamentals#insert-http-command)
   - [Criação de identificador customizado para eventos da fila](guides/sync-fundamentals#custom-request-id)
@@ -101,12 +101,12 @@ Cada *schema* deve implementar a interface [PoSyncSchema](/documentation/po-sync
 podemos fazer:
 
 ``` typescript
-import { PoSyncSchema } from '@portinari/portinari-sync';
+import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
   // Endpoint para o método GET
-  getUrlApi: 'http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences',
-  diffUrlApi: 'http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences/diff',
+  getUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences',
+  diffUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences/diff',
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
   idField: 'id',
@@ -156,11 +156,11 @@ Esta informação do campo deverá ser fornecida ao PO Sync dentro da declaraç�
 propriedade `deletedField` na interface [PoSyncSchema](/documentation/po-sync), por exemplo:
 
 ``` typescript
-import { PoSyncSchema } from '@portinari/portinari-sync';
+import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences',
-  diffUrlApi: 'http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences/diff',
+  getUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences',
+  diffUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences/diff',
   // Definição do nome do campo
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
@@ -187,7 +187,7 @@ tiveram a última atualização maior ou igual a data que foi recebida como par�
 sincronizados serão retornados. Para cada um dos *schemas* é necessário ter um *endpoint* de sincronização.
 
 Abra o seu navegador e acesse a URL
-http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences/diff/2018-10-08T13:23:31.893Z.
+https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences/diff/2018-10-08T13:23:31.893Z.
 
 O *endpoint* de sincronização deve retornar uma resposta com a estrutura como a da URL acima, por exemplo:
 
@@ -207,7 +207,7 @@ sincronização, então esta data deve ser a data em que o servidor está devolv
 não enviar esta data, não será possível fazer a próxima sincronização, pois esta data será utilizada
 para a próxima URL de sincronização.
 
-> Esta estrutura de resposta é padronizada pelo [Guia de implementação de API da Portinari](http://tdn.portinari.com/display/public/INT/Guia+de+implementacao+das+APIs+PORTINARI).
+> Esta estrutura de resposta é padronizada pelo [Guia de implementação de APIs](https://po-ui.io/guides/api).
 
 > **Primeira sincronização:** 
 como na primeira sincronização o PO Sync ainda não recebeu nenhuma data dos *endpoints*, a URL é montada com uma data muito
@@ -217,12 +217,12 @@ A definição deste *endpoint* deve ser feita na propriedade `diffUrlApi` da sua
 abaixo:
 
 ``` typescript
-import { PoSyncSchema } from '@portinari/portinari-sync';
+import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences',
+  getUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences',
   // Definição da URL de sincronização
-  diffUrlApi: 'http://api.po.portinari.com.br/conference/conference-api/api/v1/conferences/diff',
+  diffUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences/diff',
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
   idField: 'id',
@@ -449,9 +449,9 @@ async loadHomePage() {
 > Para saber mais sobre este método acesse [PoSyncService.onSync()](/documentation/po-sync).
 
 <a id="po-data-transform"></a>
-### Adaptando a resposta da API para o padrão da Portinari
+### Adaptando a resposta da API para o padrão do PO
 
-O PO Sync necessita que as APIs utilizem o padrão de respostas que está no [Guia de implementação de API da Portinari](http://tdn.portinari.com/display/public/INT/Guia+de+implementacao+das+APIs+PORTINARI) que segue a seguinte estrutura:
+O PO Sync necessita que as APIs utilizem o padrão de respostas que está no [Guia de implementação de APIs](https://po-ui.io/guides/api) que segue a seguinte estrutura:
 
 ``` javascript
 {
@@ -493,7 +493,7 @@ Para fazer a adaptação desta estrutura de resposta:
 **1)** Crie uma nova classe e a faça herdar a classe [PoDataTransform](/documentation/po-data-transform):
 
 ``` typescript
-import { PoDataTransform } from '@portinari/portinari-sync';
+import { PoDataTransform } from '@po-ui/ng-sync';
 
 class MyDataTransform extends PoDataTransform {
   ...
@@ -503,7 +503,7 @@ class MyDataTransform extends PoDataTransform {
 **2)** Implemente os métodos da classe [PoDataTransform](/documentation/po-data-transform):
 
 ``` typescript
-import { PoDataTransform } from '@portinari/portinari-sync';
+import { PoDataTransform } from '@po-ui/ng-sync';
 
 class MyDataTransform extends PoDataTransform {
 
@@ -531,7 +531,7 @@ class MyDataTransform extends PoDataTransform {
 ```
 
 Os primeiros quatro métodos representam os nomes que irão corresponder a cada parâmetro. No nosso exemplo, a coleção de
-registros não está em uma propriedade `items` conforme o padrão Portinari, mas sim em `data`, então no método
+registros não está em uma propriedade `items` conforme o padrão PO UI, mas sim em `data`, então no método
 `MyDataTransform.getItemsFieldName()` será retornado o valor `data`.
 
 O método `MyDataTransform.hasNext()` deve retornar um valor *booleano* que determina se existe mais páginas para serem
@@ -562,7 +562,7 @@ this.poSync.prepare(schemas, config).then(() => {
 });
 ```
 
-Com isto, todas as respostas dos *endpoints* dos schemas serão adaptados para seguir o padrão de API da Portinari esperado pelo
+Com isto, todas as respostas dos *endpoints* dos schemas serão adaptados para seguir o padrão de API do PO UI esperado pelo
 PO Sync.
 
 <a id="get-responses"></a>
@@ -771,4 +771,4 @@ o método `PoSyncService.prepare()` logo após o método `PoSynceService.destroy
 
 PO Conference Application é um aplicativo de demonstração do PO Sync baseado no [Ionic Conference Application](https://github.com/ionic-team/ionic-conference-app). Tendo como objetivo, demonstrar as funcionalidades do PO Sync de forma didática.
 
-> Acesse o repositório do aplicativo [neste link](https://github.com/portinari/po-conference-sample/tree/master/po-sample-app-conference).
+> Acesse o repositório do aplicativo [neste link](https://github.com/po-ui/po-conference-sample).

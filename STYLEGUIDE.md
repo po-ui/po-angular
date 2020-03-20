@@ -106,7 +106,7 @@ Onde `prop` é o nome da propriedade e `type` é o tipo da propriedade, sempre d
 - Separar os samples por pastas.
 
 - Propriedades do tipo “label” devem usar o nome do componente
-  - “Portinari Button”
+  - PO Button”
 - Propriedades do tipo boolean devem ser usadas sem valor sempre que possível
   - ``` p-required // BOM ```
   - ``` p-required=“true” // RUIM ```
@@ -144,10 +144,10 @@ p-required
 - Pular uma linha após tag @example
 - Pular linha entre os samples
 - incluir um espaço entre pois o dgeni não processa tags “vazias”
-- Sempre incluir o título do sample iniciando com o nome do componente “Portinari Componente …”
-  - Portinari Avatar Basic
-  - Portinari Avatar Labs
-  - Portinari Avatar - Caso de Uso
+- Sempre incluir o título do sample iniciando com o nome do componente “PO Componente …”
+  - PO Avatar Basic
+  - PO Avatar Labs
+  - PO Avatar - Caso de Uso
 - **CUIDADO**: Não incentive práticas ruins, lembre-se nossos exemplos serão base para muitos desenvolvedores.
 
 **Tipos que deve ser implementados**

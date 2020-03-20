@@ -5,13 +5,13 @@ O PO contém *schematics* do [Angular CLI](https://angular.io/cli) em seu pacote
 
 ## Instalando Schematics
 
-Um vez que for instalado o pacote `@portinari/portinari-ui`, teremos disponível os *schematics* através do Angular CLI.
+Um vez que for instalado o pacote `@po-ui/ng-components`, teremos disponível os *schematics* através do Angular CLI.
 
 Caso esteja iniciando uma aplicação com PO, indica-se utilizar o comando abaixo,
-no qual será instalado o pacote `@portinari/portinari-ui` e realizadas algumas configurações, que serão descritas em seguida:
+no qual será instalado o pacote `@po-ui/ng-components` e realizadas algumas configurações, que serão descritas em seguida:
 
 ```
-ng add @portinari/portinari-ui
+ng add @po-ui/ng-components
 ```
 
 - Substitui o `AppComponent` com uma estrutura incial de um projeto, utilizando os components `po-page-default`, `po-toolbar`, e `po-menu`;
@@ -25,7 +25,7 @@ O `PO` vem com vários `schematics` que podem ser usados ​​para gerar compon
 Para gerar o componente, execute o comando abaixo, onde ```schematic-name``` é o componente que deseja:
 
 ```
-ng generate @portinari/portinari-ui:<schematic-name>
+ng generate @po-ui/ng-components:<schematic-name>
 ```
 
 <div class="po-row">
@@ -39,7 +39,7 @@ ng generate @portinari/portinari-ui:<schematic-name>
       </thead>
       <tbody>
         <tr class="po-table-row">
-          <td class="po-table-column"> [**po-page-list**](https://portinari.io/documentation/po-page-list)
+          <td class="po-table-column"> [**po-page-list**](https://po-ui.io/documentation/po-page-list)
           </td>
           <td class="po-table-column">
             Componente que deve ser utilizado como o container principal para as telas de listagem de dados, podendo ser apresentado como lista ou tabela.
@@ -47,16 +47,16 @@ ng generate @portinari/portinari-ui:<schematic-name>
         </tr>
         <tr class="po-table-row">
           <td class="po-table-column">
-          [**po-page-default**](https://portinari.io/documentation/po-page-default)
+          [**po-page-default**](https://po-ui.io/documentation/po-page-default)
           </td>
           <td class="po-table-column">Componente que deve ser utilizado como o container principal para as telas sem um template definido.</td>
         </tr>
         <tr class="po-table-row">
-          <td class="po-table-column">[**po-page-edit**](https://portinari.io/documentation/po-page-edit)</td>
+          <td class="po-table-column">[**po-page-edit**](https://po-ui.io/documentation/po-page-edit)</td>
           <td class="po-table-column">Componente que deve ser utilizado como container principal para tela de edição ou adição de um registro.</td>
         </tr>
         <tr class="po-table-row">
-          <td class="po-table-column">[**po-page-detail**](https://portinari.io/documentation/po-page-detail)</td>
+          <td class="po-table-column">[**po-page-detail**](https://po-ui.io/documentation/po-page-detail)</td>
           <td class="po-table-column">Componente que deve ser utilizado como container principal para a tela de detalhamento de um registro.</td>
         </tr>
       </tbody>
