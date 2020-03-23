@@ -1718,6 +1718,50 @@ describe('PoComboComponent - with service:', () => {
       expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
     });
 
+    it('ngOnChanges: should call `configAfterSetFilterService` if `filterService` has a value', () => {
+      const changes = { filterService: 'filterServiceURL' };
+
+      spyOn(component, <any>'configAfterSetFilterService');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['configAfterSetFilterService']).toHaveBeenCalledWith(component.filterService);
+    });
+
+    it('ngOnChanges: shouldn`t call `configAfterSetFilterService` if `filterService` doesn`t have a value', () => {
+      const changes = {};
+
+      spyOn(component, <any>'configAfterSetFilterService');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['configAfterSetFilterService']).not.toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should call `unsubscribeKeyupObservable` and `initInputObservable` if `debounceTime` changes value', () => {
+      const changes = { debounceTime: 200 };
+
+      spyOn(component, <any>'unsubscribeKeyupObservable');
+      spyOn(component, <any>'initInputObservable');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['unsubscribeKeyupObservable']).toHaveBeenCalled();
+      expect(component['initInputObservable']).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: shouldn`t call `unsubscribeKeyupObservable` and `initInputObservable` if `debounceTime` doesn`t have changes', () => {
+      const changes = {};
+
+      spyOn(component, <any>'unsubscribeKeyupObservable');
+      spyOn(component, <any>'initInputObservable');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['unsubscribeKeyupObservable']).not.toHaveBeenCalled();
+      expect(component['initInputObservable']).not.toHaveBeenCalled();
+    });
+
     it(`searchOnEnter: should call 'controlApplyFilter' if has a service,
       not has selectedView and value.length is greater than 'filterMinlength'`, () => {
       const value = 'newValue';

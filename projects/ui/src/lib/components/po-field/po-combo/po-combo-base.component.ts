@@ -67,7 +67,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _filterMinlength?: number = 0;
   private _filterMode?: PoComboFilterMode = PoComboFilterMode.startsWith;
   private _filterParams?: any;
-  private _filterService?: PoComboFilter | string;
   private _literals?: PoComboLiterals;
   private _options: Array<PoComboOption | PoComboOptionGroup> = [];
   private _required?: boolean = false;
@@ -141,15 +140,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * url + ?page=1&pageSize=20&age=23&filter=Peter
    * ```
    */
-  @Input('p-filter-service') set filterService(service: PoComboFilter | string) {
-    this._filterService = service;
-
-    this.configAfterSetFilterService(service);
-  }
-
-  get filterService(): PoComboFilter | string {
-    return this._filterService;
-  }
+  @Input('p-filter-service') filterService: PoComboFilter | string;
 
   /**
    * @optional
@@ -164,9 +155,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     const parsedValue = parseInt(<any>value, 10);
 
     this._debounceTime = !isNaN(parsedValue) && parsedValue > 0 ? parsedValue : PO_COMBO_DEBOUNCE_TIME_DEFAULT;
-
-    this.unsubscribeKeyupObservable();
-    this.initInputObservable();
   }
 
   get debounceTime(): number {
@@ -712,6 +700,26 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
+  protected configAfterSetFilterService(service: PoComboFilter | string) {
+    if (service) {
+      this.comboOptionsList = [];
+      this.unsubscribeKeyupObservable();
+      this.onInitService();
+    } else {
+      this.service = undefined;
+      this.comboOptionsList = this.cacheStaticOptions;
+    }
+
+    this.visibleOptions = [];
+    this.isFirstFilter = true;
+  }
+
+  protected unsubscribeKeyupObservable() {
+    if (this.keyupSubscribe) {
+      this.keyupSubscribe.unsubscribe();
+    }
+  }
+
   protected validateModel(model: any) {
     if (this.validatorChange) {
       this.validatorChange(model);
@@ -730,20 +738,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     const labelB = optionB.label.toString().toLowerCase();
 
     return labelA < labelB ? -1 : labelA > labelB ? 1 : 0;
-  }
-
-  private configAfterSetFilterService(service: PoComboFilter | string) {
-    if (service) {
-      this.comboOptionsList = [];
-      this.unsubscribeKeyupObservable();
-      this.onInitService();
-    } else {
-      this.service = undefined;
-      this.comboOptionsList = this.cacheStaticOptions;
-    }
-
-    this.visibleOptions = [];
-    this.isFirstFilter = true;
   }
 
   private hasDuplicatedOption(
@@ -835,12 +829,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
 
     return true;
-  }
-
-  private unsubscribeKeyupObservable() {
-    if (this.keyupSubscribe) {
-      this.keyupSubscribe.unsubscribe();
-    }
   }
 
   private updateInternalVariables(option: PoComboOption | PoComboGroup) {
