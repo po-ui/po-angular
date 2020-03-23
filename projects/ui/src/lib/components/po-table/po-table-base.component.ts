@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnChanges, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, OnChanges, Output, Directive, SimpleChanges } from '@angular/core';
 
 import {
   browserLanguage,
@@ -193,7 +193,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Input('p-height') set height(height: number) {
     this._height = height;
-    this.calculateHeightTableContainer(height);
     this.calculateWidthHeaders();
   }
 
@@ -523,10 +522,14 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   constructor(private poDate: PoDateService) {}
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.singleSelect || this.hideSelectAll) {
       this.selectAll = false;
       this.hideSelectAll = true;
+    }
+
+    if (changes.height) {
+      this.calculateHeightTableContainer(this.height);
     }
   }
 
