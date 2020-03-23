@@ -33,7 +33,6 @@ export abstract class PoSlideBaseComponent {
    */
   @Input('p-height') set height(value: number) {
     this._height = convertToInt(value);
-    this.setSlideHeight(this.height);
   }
 
   get height(): number {

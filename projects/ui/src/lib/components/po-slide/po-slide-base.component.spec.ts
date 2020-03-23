@@ -22,18 +22,13 @@ describe('PoSlideBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-    it('height: should update property with valid values and call `setSlideHeight`.', () => {
+    it('height: should update property with valid values.', () => {
       const validValues = [0, 1500, 500, 200, 8000];
 
-      spyOn(component, 'setSlideHeight');
-
       expectPropertiesValues(component, 'height', validValues, validValues);
-      expect(component.setSlideHeight).toHaveBeenCalledTimes(5);
     });
 
-    it('height: should update property if values are invalid and call `setSlideHeight`.', () => {
-      spyOn(component, 'setSlideHeight');
-
+    it('height: should update property if values are invalid.', () => {
       component.height = <any>'one';
       expect(component.height).toBeUndefined();
 
@@ -45,8 +40,6 @@ describe('PoSlideBaseComponent:', () => {
 
       component.height = null;
       expect(component.height).toBeUndefined();
-
-      expect(component.setSlideHeight).toHaveBeenCalledTimes(4);
     });
 
     it('interval: should update property with values greater or equal than 1000 and call `startInterval`.', () => {

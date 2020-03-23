@@ -1,3 +1,4 @@
+import { SimpleChange } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -141,6 +142,25 @@ describe('PoSlideComponent:', () => {
         expect(component['startSlide']).not.toHaveBeenCalled();
         expect(component['setSlideItemWidth']).toHaveBeenCalled();
       });
+    });
+
+    it('ngOnChanges: should call `setSlideHeight` with `this.height` if `changes.height` is defined', () => {
+      component.height = 400;
+      const height = 400;
+
+      spyOn(component, 'setSlideHeight');
+
+      component.ngOnChanges(<any>{ height });
+
+      expect(component['setSlideHeight']).toHaveBeenCalledWith(height);
+    });
+
+    it('ngOnChanges: should`t call `setSlideHeight` if `changes.height` is not defined', () => {
+      spyOn(component, 'setSlideHeight');
+
+      component.ngOnChanges({});
+
+      expect(component['setSlideHeight']).not.toHaveBeenCalled();
     });
 
     it('goToItem: should set `currentSlideIndex` and call `animate` with `offset`', () => {
@@ -620,7 +640,9 @@ describe('PoSlideComponent:', () => {
     it(`should have style height default if component height is undefined.`, () => {
       const poSlideDefaultHeight = 336;
       component.height = undefined;
+      const simpleChangeHeight = new SimpleChange(undefined, component.height, true);
 
+      component.ngOnChanges({ height: simpleChangeHeight });
       fixture.detectChanges();
 
       const slideInnerHeight = nativeElement.querySelector('.po-slide-inner').style.height;
@@ -628,13 +650,14 @@ describe('PoSlideComponent:', () => {
     });
 
     it(`should set style height of slide to 700px.`, () => {
-      const newHeight = 700;
-      component.height = newHeight;
+      const height = 700;
+      component.height = height;
 
+      component.ngOnChanges(<any>{ height });
       fixture.detectChanges();
 
       const slideInnerHeight = nativeElement.querySelector('.po-slide-inner').style.height;
-      expect(slideInnerHeight).toBe(newHeight + `px`);
+      expect(slideInnerHeight).toBe(height + `px`);
     });
 
     it(`should have arrow left and arrow right if has more than 1 slide.`, () => {
