@@ -6,8 +6,10 @@ import {
   ElementRef,
   forwardRef,
   IterableDiffers,
+  OnChanges,
   OnDestroy,
   Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -94,7 +96,7 @@ const poComboContainerPositionDefault = 'bottom';
     }
   ]
 })
-export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnDestroy {
+export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   private _isServerSearching: boolean = false;
 
   comboIcon: string = 'po-icon-arrow-down';
@@ -154,6 +156,17 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   ngAfterViewInit() {
     if (this.autoFocus) {
       this.focus();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.debounceTime) {
+      this.unsubscribeKeyupObservable();
+      this.initInputObservable();
+    }
+
+    if (changes.filterService) {
+      this.configAfterSetFilterService(this.filterService);
     }
   }
 

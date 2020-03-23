@@ -1249,6 +1249,7 @@ describe('PoComboBaseComponent using Service', () => {
   it('should update property `p-field-label` with valid values and update `fieldLabel` property of service', () => {
     component.filterService = 'http://exemple.com';
     const validValues = ['name'];
+    component.setService(component.filterService);
 
     expectPropertiesValues(component, 'fieldLabel', validValues, validValues);
     expect(component.service.fieldLabel).toEqual('name');
@@ -1258,6 +1259,7 @@ describe('PoComboBaseComponent using Service', () => {
     component.filterService = 'http://exemple.com';
     const validValues = [undefined];
     const defaultValue = 'label';
+    component.setService(component.filterService);
 
     expectPropertiesValues(component, 'fieldLabel', validValues, defaultValue);
     expect(component.service.fieldLabel).toEqual(defaultValue);
@@ -1266,6 +1268,7 @@ describe('PoComboBaseComponent using Service', () => {
   it('shouldn`t update property `fieldLabel` in service when it is custom service or not exists', () => {
     component.filterService = service;
     component.fieldLabel = 'nickname';
+    component.setService(component.filterService);
 
     expect(component.service.fieldLabel).toBeUndefined();
   });
@@ -1273,6 +1276,7 @@ describe('PoComboBaseComponent using Service', () => {
   it('should update property `p-field-value` with valid values and update `fieldValue` property of service', () => {
     component.filterService = 'http://exemple.com';
     const validValues = ['name'];
+    component.setService(component.filterService);
 
     expectPropertiesValues(component, 'fieldValue', validValues, validValues);
     expect(component.service.fieldValue).toEqual('name');
@@ -1282,6 +1286,7 @@ describe('PoComboBaseComponent using Service', () => {
     component.filterService = 'http://exemple.com';
     const validValues = [undefined];
     const defaultValue = 'value';
+    component.setService(component.filterService);
 
     expectPropertiesValues(component, 'fieldValue', validValues, defaultValue);
     expect(component.service.fieldValue).toEqual(defaultValue);
@@ -1290,16 +1295,9 @@ describe('PoComboBaseComponent using Service', () => {
   it('shouldn`t update property `fieldValue` in service when it is custom service or not exists', () => {
     component.filterService = service;
     component.fieldValue = 'nickname';
+    component.setService(component.filterService);
 
     expect(component.service.fieldValue).toBeUndefined();
-  });
-
-  it('should set property `p-filter-service`', () => {
-    spyOn(component, <any>'configAfterSetFilterService');
-
-    component.filterService = service;
-
-    expect(component['configAfterSetFilterService']).toHaveBeenCalled();
   });
 
   it('should call the `updateComboList` if the` ngOnInit` is called.', () => {
@@ -1313,25 +1311,13 @@ describe('PoComboBaseComponent using Service', () => {
   it('should update property `p-debounce-time` with `400` when invalid values', () => {
     const invalidValues = [undefined, null, '', 0, true, false, 'string', [], {}, -50];
 
-    spyOn(component, <any>'unsubscribeKeyupObservable');
-    spyOn(component, <any>'initInputObservable');
-
     expectPropertiesValues(component, 'debounceTime', invalidValues, 400);
-
-    expect(component['unsubscribeKeyupObservable']).toHaveBeenCalled();
-    expect(component['initInputObservable']).toHaveBeenCalled();
   });
 
   it('should update property `p-debounce-time` with valid values', () => {
     const validValues = [400, 100, 1000];
 
-    spyOn(component, <any>'unsubscribeKeyupObservable');
-    spyOn(component, <any>'initInputObservable');
-
     expectPropertiesValues(component, 'debounceTime', validValues, validValues);
-
-    expect(component['unsubscribeKeyupObservable']).toHaveBeenCalled();
-    expect(component['initInputObservable']).toHaveBeenCalled();
   });
 
   it('should not set service', () => {
@@ -1380,6 +1366,9 @@ describe('PoComboBaseComponent using Service', () => {
   });
 
   it('should call getObjectByValue through writeValue', () => {
+    const urlService = 'https://portinari.io/sample/api/new/heros';
+    component.setService(urlService);
+
     spyOn(component, 'getObjectByValue');
 
     component.writeValue('angular');
