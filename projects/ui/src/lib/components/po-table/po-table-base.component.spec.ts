@@ -197,11 +197,9 @@ describe('PoTableBaseComponent:', () => {
 
   it('should set height and call calculateWidthHeaders', () => {
     spyOn(component, 'calculateWidthHeaders');
-    spyOn(component, 'calculateHeightTableContainer');
 
     expectSettersMethod(component, 'height', 100, 'height', 100);
     expect(component.calculateWidthHeaders).toHaveBeenCalled();
-    expect(component.calculateHeightTableContainer).toHaveBeenCalled();
   });
 
   it('should set columns and call calculateWidthHeaders', () => {
@@ -216,7 +214,7 @@ describe('PoTableBaseComponent:', () => {
     component.hideSelectAll = false;
     component.singleSelect = true;
 
-    component.ngOnChanges();
+    component.ngOnChanges({});
 
     expect(component.hideSelectAll).toBe(true);
   });
@@ -225,7 +223,7 @@ describe('PoTableBaseComponent:', () => {
     component.hideSelectAll = false;
     component.singleSelect = false;
 
-    component.ngOnChanges();
+    component.ngOnChanges({});
 
     expect(component.hideSelectAll).toBe(false);
   });
@@ -330,7 +328,7 @@ describe('PoTableBaseComponent:', () => {
     component.selectable = true;
     component.hideSelectAll = true;
     component.singleSelect = false;
-    component.ngOnChanges();
+    component.ngOnChanges({});
 
     component.selectAllRows();
 
@@ -492,6 +490,27 @@ describe('PoTableBaseComponent:', () => {
     ];
 
     const itemsColors = [{ destination: 'Paris' }, { country: 'Franch' }, { city: 'Lyon' }];
+
+    it('ngOnChanges: should call `calculateHeightTableContainer` if height is changed', () => {
+      spyOn(component, 'calculateHeightTableContainer');
+      const height = 400;
+      const changes = <any>{ height };
+      component.height = height;
+
+      component.ngOnChanges(changes);
+
+      expect(component.calculateHeightTableContainer).toHaveBeenCalledWith(height);
+    });
+
+    it('ngOnChanges: shouldn`t call `calculateHeightTableContainer` if height is not changed', () => {
+      spyOn(component, 'calculateHeightTableContainer');
+
+      const changes = <any>{};
+
+      component.ngOnChanges(changes);
+
+      expect(component.calculateHeightTableContainer).not.toHaveBeenCalled();
+    });
 
     describe('isEverySelected:', () => {
       let rows;
