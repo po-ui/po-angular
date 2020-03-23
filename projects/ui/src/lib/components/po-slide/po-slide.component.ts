@@ -6,7 +6,9 @@ import {
   HostListener,
   QueryList,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
@@ -49,7 +51,7 @@ const poSlideTiming = '250ms ease';
   selector: 'po-slide',
   templateUrl: './po-slide.component.html'
 })
-export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
+export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, OnChanges {
   private isLoaded: boolean = false;
   private player: AnimationPlayer;
   private setInterval: any;
@@ -101,6 +103,12 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck {
       if (this.hasSlides) {
         this.startSlide();
       }
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.height) {
+      this.setSlideHeight(this.height);
     }
   }
 
