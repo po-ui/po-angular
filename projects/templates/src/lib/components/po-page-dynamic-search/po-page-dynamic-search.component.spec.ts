@@ -69,6 +69,9 @@ describe('PoPageDynamicSearchComponent:', () => {
       beforeEach(() => {
         fakethis = {
           changeDisclaimersEnabled: true,
+          changeDetector: {
+            detectChanges: () => {}
+          },
           _disclaimerGroup: {
             disclaimers: []
           },
@@ -114,6 +117,14 @@ describe('PoPageDynamicSearchComponent:', () => {
         component.onAction.call(fakethis);
 
         expect(fakethis._disclaimerGroup.disclaimers).toEqual(result);
+      });
+
+      it('should call `ChangeDetectorRef.detectChanges`', () => {
+        spyOn(component['changeDetector'], 'detectChanges');
+
+        component.onAction();
+
+        expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
       });
     });
 

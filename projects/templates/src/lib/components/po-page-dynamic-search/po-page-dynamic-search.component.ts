@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
 import { Observable, Subscription } from 'rxjs';
 import {
@@ -62,7 +62,11 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
 
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
 
-  constructor(languageService: PoLanguageService, private poPageCustomizationService: PoPageCustomizationService) {
+  constructor(
+    languageService: PoLanguageService,
+    private poPageCustomizationService: PoPageCustomizationService,
+    private changeDetector: ChangeDetectorRef
+  ) {
     super(languageService);
   }
 
@@ -100,6 +104,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     }
 
     this.quickFilter = undefined;
+
+    this.changeDetector.detectChanges();
   }
 
   onAdvancedAction() {
