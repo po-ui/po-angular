@@ -7,7 +7,8 @@ import {
   Renderer2,
   SimpleChange,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -63,7 +64,8 @@ export class PoPageListComponent extends PoPageListBaseComponent
     viewRef: ViewContainerRef,
     languageService: PoLanguageService,
     public renderer: Renderer2,
-    private router: Router
+    private router: Router,
+    private changeDetector: ChangeDetectorRef
   ) {
     super(languageService);
     this.parentRef = viewRef['_hostView'][8];
@@ -132,6 +134,7 @@ export class PoPageListComponent extends PoPageListBaseComponent
 
   callActionFilter(field: string): void {
     this.callFunction(this.filter[field], this.parentRef);
+    this.changeDetector.detectChanges();
   }
 
   onkeypress(key) {
