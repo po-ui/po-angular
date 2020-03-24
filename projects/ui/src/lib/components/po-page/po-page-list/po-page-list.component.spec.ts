@@ -261,7 +261,10 @@ describe('PoPageListComponent - Desktop:', () => {
     const fakeThis = {
       parentRef: context,
       filter: { 'funcao': 'getName' },
-      callFunction: component.callFunction
+      callFunction: component.callFunction,
+      changeDetector: {
+        detectChanges: () => {}
+      }
     };
 
     spyOn(context, 'getName');
@@ -451,6 +454,16 @@ describe('PoPageListComponent - Desktop:', () => {
   });
 
   describe('Methods:', () => {
+    it('callActionFilter: should call `ChangeDetectorRef.detectChanges` after `callFunction`', () => {
+      const changeDetectorSpy = spyOn(component['changeDetector'], 'detectChanges');
+      const callFunctionSpy = spyOn(component, 'callFunction');
+      component.filter = { action: 'test' };
+
+      component.callActionFilter('sction');
+
+      expect(callFunctionSpy).toHaveBeenCalledBefore(changeDetectorSpy);
+    });
+
     it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {
       const url = 'http://portinari.io';
 
