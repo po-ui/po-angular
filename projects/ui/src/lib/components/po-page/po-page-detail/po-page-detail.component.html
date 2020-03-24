@@ -4,29 +4,29 @@
     <!-- OPERATIONS -->
     <div *ngIf="hasAnyAction()" class="po-page-header-actions">
       <po-button
-        *ngIf="hasActionFn('back', parentContext)"
+        *ngIf="hasEvent('back')"
         [p-icon]="hasEditOrRemoveFn('icon')"
         [p-label]="literals.back"
         [p-type]="hasEditOrRemoveFn('type')"
-        (p-click)="callActionFn('back', parentContext)"
+        (p-click)="back.emit()"
       >
       </po-button>
 
       <po-button
-        *ngIf="hasActionFn('remove', parentContext)"
+        *ngIf="hasEvent('remove')"
         [p-icon]="hasEditFn('icon')"
         [p-label]="literals.remove"
         [p-type]="hasEditFn('type')"
-        (p-click)="callActionFn('remove', parentContext)"
+        (p-click)="remove.emit()"
       >
       </po-button>
 
       <po-button
-        *ngIf="hasActionFn('edit', parentContext)"
+        *ngIf="hasEvent('edit')"
         p-icon="po-icon-edit"
         p-type="primary"
         [p-label]="literals.edit"
-        (p-click)="callActionFn('edit', parentContext)"
+        (p-click)="edit.emit()"
       >
       </po-button>
     </div>

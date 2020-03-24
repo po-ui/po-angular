@@ -1,4 +1,4 @@
-import { Input, ViewChild, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import { browserLanguage, poLocaleDefault } from './../../../utils/util';
 
@@ -32,14 +32,8 @@ export const poPageDetailLiteralsDefault = {
 /**
  * @description
  *
- * O componente **po-page-detail** é utilizado como container principal para a tela de detalhamento de um registro.
- * Por padrão possui 3 ações, cada ação na tela executa uma função no componente que está utilizando o po-page-detail,
- * são elas:
- *  - Voltar (função: back);
- *  - Editar (função: edit);
- *  - Remover (função: remove);
- *
- * Caso não estiver implementado alguma função, listado anteriormente, o mesmo não será apresentado.
+ * O componente **po-page-detail** é utilizado como container principal para a tela de
+ * detalhamento de um registro, tendo a possibilidade de usar as ações de "Voltar", "Editar" e "Remover".
  */
 @Directive()
 export class PoPageDetailBaseComponent {
@@ -110,4 +104,40 @@ export class PoPageDetailBaseComponent {
   get title() {
     return this._title;
   }
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Voltar".
+   *
+   * ```
+   * <po-page-detail (p-back)="myBackFunction()">
+   * </po-page-detail>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Voltar" não será exibido.
+   */
+  @Output('p-back') back? = new EventEmitter();
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Editar".
+   *
+   * ```
+   * <po-page-detail (p-edit)="myEditFunction()">
+   * </po-page-detail>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Editar" não será exibido.
+   */
+  @Output('p-edit') edit? = new EventEmitter();
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Remover".
+   *
+   * ```
+   * <po-page-detail (p-remove)="myRemoveFunction()">
+   * </po-page-detail>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Remover" não será exibido.
+   */
+  @Output('p-remove') remove? = new EventEmitter();
 }

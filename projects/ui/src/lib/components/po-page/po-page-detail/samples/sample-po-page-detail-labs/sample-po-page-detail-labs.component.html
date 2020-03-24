@@ -1,4 +1,11 @@
-<po-page-detail [p-breadcrumb]="breadcrumb" [p-literals]="customLiterals" [p-title]="title">
+<po-page-detail
+  [p-breadcrumb]="breadcrumb"
+  [p-literals]="customLiterals"
+  [p-title]="title"
+  (p-back)="back()"
+  (p-edit)="edit()"
+  (p-remove)="remove()"
+>
   <div class="po-row">
     <po-info class="po-md-12" p-label="Action" [p-value]="action"> </po-info>
   </div>
