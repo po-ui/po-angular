@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { of } from 'rxjs';
+
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
@@ -15,7 +17,7 @@ import { PoPageHeaderComponent } from '../po-page-header/po-page-header.componen
 
 @Component({
   template: `
-    <po-page-edit p-title="Unit Test"> </po-page-edit>
+    <po-page-edit p-title="Unit Test" (p-cancel)="cancel()" (p-save)="save()" (p-save-new)="saveNew()"> </po-page-edit>
   `
 })
 class ContainerComponent {
@@ -37,7 +39,6 @@ describe('PoPageEditComponent', () => {
 
   let containerFixture: ComponentFixture<ContainerComponent>;
   let debugElement;
-
   const event = document.createEvent('Event');
   event.initEvent('p-click', false, true);
 
@@ -77,16 +78,10 @@ describe('PoPageEditComponent', () => {
     expect(poButton.dispatchEvent).toHaveBeenCalled();
   });
 
-  it('should return true if has the save function', () => {
-    const parentContext = {
-      save: function() {}
-    };
-    const fakeThis = {
-      parentContext: parentContext
-    };
+  it('should return true if has the any function', () => {
+    component.save.observers.push(<any>of({}));
 
-    const result = component.hasAnyAction.call(fakeThis);
-    expect(result).toBe(parentContext.save);
+    expect(component.hasAnyAction()).toBe(true);
   });
 
   describe('Methods:', () => {
@@ -135,7 +130,8 @@ describe('PoPageEditComponent', () => {
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
-      component.parentContext = <any>{};
+      spyOn(component, 'hasAnyAction').and.returnValue(false);
+
       component.title = undefined;
       component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
 
@@ -146,17 +142,14 @@ describe('PoPageEditComponent', () => {
       component.breadcrumb = undefined;
       component.title = undefined;
 
-      component.parentContext = <any>{
-        cancel: function() {},
-        saveNew: function() {},
-        save: function() {}
-      };
+      spyOn(component, 'hasAnyAction').and.returnValue(true);
 
       expect(component.hasPageHeader()).toBe(true);
     });
 
     it('hasPageHeader: should return true if has title', () => {
-      component.parentContext = <any>{};
+      spyOn(component, 'hasAnyAction').and.returnValue(false);
+
       component.breadcrumb = undefined;
       component.title = 'Title';
 
@@ -164,7 +157,8 @@ describe('PoPageEditComponent', () => {
     });
 
     it('hasPageHeader: should return false if doesn`t have actions, breadcrumb and title', () => {
-      component.parentContext = <any>{};
+      spyOn(component, 'hasAnyAction').and.returnValue(false);
+
       component.breadcrumb = undefined;
       component.title = undefined;
 
@@ -172,55 +166,44 @@ describe('PoPageEditComponent', () => {
     });
 
     it('isPrimaryAction: should return true if action is "saveNew" and save function is undefined', () => {
-      component.parentContext = <any>{
-        cancel: () => {},
-        saveNew: () => {}
-      };
+      const hasSaveEvent = false;
+      const hasSaveNewEvent = false;
+
+      spyOn(component, 'hasEvent').and.returnValues(hasSaveEvent, hasSaveNewEvent);
 
       expect(component['isPrimaryAction']('saveNew')).toBeTruthy();
     });
 
     it('isPrimaryAction: should return false if action is "saveNew" and save funtion is defined', () => {
-      component.parentContext = <any>{
-        cancel: () => {},
-        saveNew: () => {},
-        save: () => {}
-      };
+      const hasSaveEvent = true;
+      const hasSaveNewEvent = true;
+
+      spyOn(component, 'hasEvent').and.returnValues(hasSaveEvent, hasSaveNewEvent);
 
       expect(component['isPrimaryAction']('saveNew')).toBeFalsy();
     });
 
     it('isPrimaryAction: should return true if action is "cancel", saveNew and save function are undefined', () => {
-      component.parentContext = <any>{
-        cancel: () => {}
-      };
-
       expect(component['isPrimaryAction']('cancel')).toBeTruthy();
     });
 
     it('isPrimaryAction: should return false if action is "cancel" and saveNew funtion is defined', () => {
-      component.parentContext = <any>{
-        cancel: () => {},
-        saveNew: () => {}
-      };
+      component.cancel.observers.push(<any>of({}));
+      component.saveNew.observers.push(<any>of({}));
 
       expect(component['isPrimaryAction']('cancel')).toBeFalsy();
     });
 
     it('isPrimaryAction: should return false if action is "cancel" and save funtion is defined', () => {
-      component.parentContext = <any>{
-        cancel: () => {},
-        save: () => {}
-      };
+      component.save.observers.push(<any>of({}));
+      component.cancel.observers.push(<any>of({}));
 
       expect(component['isPrimaryAction']('cancel')).toBeFalsy();
     });
 
     it('isPrimaryAction: should return false if action isn`t "cancel" or "saveNew"', () => {
-      component.parentContext = <any>{
-        cancel: () => {},
-        save: () => {}
-      };
+      component.save.observers.push(<any>of({}));
+      component.cancel.observers.push(<any>of({}));
 
       expect(component['isPrimaryAction']('test')).toBeFalsy();
     });
@@ -232,11 +215,9 @@ describe('PoPageEditComponent', () => {
 
       component.literals = poPageEditLiteralsDefault[poLocaleDefault];
 
-      component.parentContext = <any>{
-        cancel: function() {},
-        saveNew: function() {},
-        save: function() {}
-      };
+      component.save.observers.push(<any>of({}));
+      component.saveNew.observers.push(<any>of({}));
+      component.cancel.observers.push(<any>of({}));
 
       fixture.detectChanges();
 
@@ -253,10 +234,8 @@ describe('PoPageEditComponent', () => {
 
       component.literals = poPageEditLiteralsDefault[poLocaleDefault];
 
-      component.parentContext = <any>{
-        cancel: function() {},
-        saveNew: function() {}
-      };
+      component.cancel.observers.push(<any>of({}));
+      component.saveNew.observers.push(<any>of({}));
 
       fixture.detectChanges();
 
@@ -273,9 +252,7 @@ describe('PoPageEditComponent', () => {
 
       component.literals = poPageEditLiteralsDefault[poLocaleDefault];
 
-      component.parentContext = <any>{
-        cancel: function() {}
-      };
+      component.cancel.observers.push(<any>of({}));
 
       fixture.detectChanges();
 
@@ -300,11 +277,9 @@ describe('PoPageEditComponent', () => {
     });
 
     it('should only contain icon in "save" primary action if "save" function is defined.', () => {
-      component.parentContext = <any>{
-        save: () => {},
-        cancel: () => {},
-        saveNew: () => {}
-      };
+      component.cancel.observers.push(<any>of({}));
+      component.saveNew.observers.push(<any>of({}));
+      component.save.observers.push(<any>of({}));
 
       fixture.detectChanges();
 
@@ -316,10 +291,8 @@ describe('PoPageEditComponent', () => {
     });
 
     it('should only contain icon in "saveNew" primary action if "save" function is undefined.', () => {
-      component.parentContext = <any>{
-        cancel: () => {},
-        saveNew: () => {}
-      };
+      component.saveNew.observers.push(<any>of({}));
+      component.save.observers.push(<any>of({}));
 
       fixture.detectChanges();
 
@@ -331,9 +304,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('should only contain icon in "cancel" primary action if "saveNew" and "save" function is undefined.', () => {
-      component.parentContext = <any>{
-        cancel: () => {}
-      };
+      component.cancel.observers.push(<any>of({}));
 
       fixture.detectChanges();
 

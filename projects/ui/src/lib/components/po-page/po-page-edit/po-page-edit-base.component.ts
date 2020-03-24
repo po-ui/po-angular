@@ -1,4 +1,4 @@
-import { Input, ViewChild, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import { browserLanguage, poLocaleDefault } from './../../../utils/util';
 
@@ -33,16 +33,9 @@ export const poPageEditLiteralsDefault = {
  * @description
  *
  * O componente **po-page-edit** é utilizado como container principal para tela de edição ou adição de um
- * registro.
- * Por padrão possui 3 ações, cada ação na tela executa uma função no componente que está utilizando o po-page-edit,
- * são elas:
- *  - Cancelar (função: cancel);
- *  - Salvar e Novo (função: saveNew);
- *  - Salvar (função: save);
+ * registro, tendo a possibilidade de usar as ações de "Salvar", "Salvar e Novo" e "Cancelar".
  *
- * Caso não estiver implementado alguma função, listado anteriormente, o mesmo não será apresentado.
- *
- * Os botões "Salvar" e "Salvar e Novo" podem ser habilitados/desabilitados utilizando a propriedade p-disable-submit.
+ * Os botões "Salvar" e "Salvar e Novo" podem ser habilitados/desabilitados utilizando a propriedade `p-disable-submit`.
  * Esta propriedade pode ser utilizada para desabilitar os botões caso exista um formulário inválido na página ou alguma
  * regra de negócio não tenha sido atendida.
  */
@@ -118,4 +111,40 @@ export class PoPageEditBaseComponent {
   get title() {
     return this._title;
   }
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Cancelar".
+   *
+   * ```
+   * <po-page-edit (p-cancel)="myCancelFunction()">
+   * </po-page-edit>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Cancelar" não será exibido.
+   */
+  @Output('p-cancel') cancel? = new EventEmitter();
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Salvar".
+   *
+   * ```
+   * <po-page-edit (p-save)="mySaveFunction()">
+   * </po-page-edit>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Salvar" não será exibido.
+   */
+  @Output('p-save') save? = new EventEmitter();
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Salvar e Novo".
+   *
+   * ```
+   * <po-page-edit (p-save-new)="mySaveNewFunction()">
+   * </po-page-edit>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Salvar e Novo" não será exibido.
+   */
+  @Output('p-save-new') saveNew? = new EventEmitter();
 }
