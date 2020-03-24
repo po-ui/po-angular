@@ -231,7 +231,7 @@ describe('PoChartCircular:', () => {
 
     it('onMouseEnter: should call `showTooltip`, `changeTooltipPosition` and `emitEventOnEnter`', () => {
       const eventMock = { target: { getAttributeNS: a => a } };
-      const tooltipElement = component.chartBody.nativeElement.lastChild;
+      const tooltipElement = component.chartBody.nativeElement.querySelector('.po-chart-tooltip');
       component.chartElementCategory = eventMock.target.getAttributeNS('category');
       component.chartElementValue = eventMock.target.getAttributeNS('value');
 

@@ -401,7 +401,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     let serieOnEnter: PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie;
 
     if (!this.isChartGaugeType) {
-      this.tooltipElement = this.chartBody.nativeElement.lastChild;
+      this.tooltipElement = this.chartBody.nativeElement.querySelector('.po-chart-tooltip');
       this.chartElementCategory = event.target.getAttributeNS(null, 'data-tooltip-category');
       this.chartElementValue = event.target.getAttributeNS(null, 'data-tooltip-value');
       this.tooltipText = event.target.getAttributeNS(null, 'data-tooltip-text');
