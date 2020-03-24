@@ -3,6 +3,9 @@
   [p-disable-submit]="properties.includes('disableSubmit')"
   [p-literals]="customLiterals"
   [p-title]="title"
+  (p-cancel)="cancel()"
+  (p-save)="save()"
+  (p-save-new)="saveNew()"
 >
   <div class="po-row">
     <po-info class="po-md-12" p-label="Action" [p-value]="action"> </po-info>

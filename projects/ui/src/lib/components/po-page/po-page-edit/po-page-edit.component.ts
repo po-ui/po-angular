@@ -1,7 +1,6 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { PoPageEditBaseComponent } from './po-page-edit-base.component';
-import { callAction, hasAction } from '../po-page-util/po-page-util';
 
 /**
  * @docsExtends PoPageEditBaseComponent
@@ -28,15 +27,6 @@ import { callAction, hasAction } from '../po-page-util/po-page-util';
   templateUrl: './po-page-edit.component.html'
 })
 export class PoPageEditComponent extends PoPageEditBaseComponent {
-  hasAction: Function = hasAction;
-  callAction: Function = callAction;
-  parentContext: ViewContainerRef;
-
-  constructor(viewRef: ViewContainerRef) {
-    super();
-    this.parentContext = viewRef['_hostView'][8];
-  }
-
   getIcon(icon: string): string {
     if (icon === 'cancel') {
       return this.isPrimaryAction('cancel') ? 'po-icon-close' : '';
@@ -57,26 +47,28 @@ export class PoPageEditComponent extends PoPageEditBaseComponent {
   }
 
   hasAnyAction(): boolean {
-    return (
-      hasAction('cancel', this.parentContext) ||
-      hasAction('saveNew', this.parentContext) ||
-      hasAction('save', this.parentContext)
-    );
+    return this.hasEvent('cancel') || this.hasEvent('saveNew') || this.hasEvent('save');
   }
 
   hasPageHeader(): boolean {
     return !!(this.title || this.hasAnyAction() || (this.breadcrumb && this.breadcrumb.items.length));
   }
 
+  hasEvent(event: string) {
+    return !!this[event].observers.length;
+  }
+
   private isPrimaryAction(action: string): boolean {
-    const hasSaveAction = !hasAction('save', this.parentContext);
+    const hasSaveAction = this.hasEvent('save');
 
     if (action === 'saveNew') {
-      return hasSaveAction;
+      return !hasSaveAction;
     }
 
     if (action === 'cancel') {
-      return !hasAction('saveNew', this.parentContext) && hasSaveAction;
+      const hasSaveNewAction = this.hasEvent('saveNew');
+
+      return !hasSaveNewAction && !hasSaveAction;
     }
 
     return false;
