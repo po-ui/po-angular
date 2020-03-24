@@ -408,10 +408,11 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.endDateInputValue).toBe('');
     });
 
-    it('updateScreenByModel: should call `poDateService.isDateRangeValid`, `formatModelToScreen` and `this.dateFormatFailed`', () => {
+    it('updateScreenByModel: should call `poDateService.isDateRangeValid`, `formatModelToScreen`, `this.dateFormatFailed` and `detectChanges`', () => {
       spyOn(component, <any>'dateFormatFailed').and.returnValue(false);
       spyOn(component['poDateService'], 'isDateRangeValid').and.returnValue(true);
       spyOn(component, <any>'formatModelToScreen');
+      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
 
       const dateRangeModel = { start: '2018-04-12', end: '2018-08-15' };
 
@@ -425,6 +426,7 @@ describe('PoDatepickerRangeComponent:', () => {
         dateRangeModel.end,
         dateRangeModel.start
       );
+      expect(spyDetectChanges).toHaveBeenCalled();
     });
 
     it(`applyFocusOnDatePickerRangeField: should call 'dateRangeField.nativeElement.classList.add' with
