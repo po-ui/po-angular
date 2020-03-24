@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, forwardRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
@@ -116,7 +116,11 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     return isNumericKey || isNumericNumpadKey;
   }
 
-  constructor(poDateService: PoDateService, poDatepickerRangeElement: ElementRef) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    poDateService: PoDateService,
+    poDatepickerRangeElement: ElementRef
+  ) {
     super(poDateService);
     this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
@@ -211,6 +215,7 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
 
     this.endDateInput.nativeElement.value = endDateFormated;
     this.startDateInput.nativeElement.value = startDateFormated;
+    this.changeDetector.detectChanges();
   }
 
   private applyFocusOnDatePickerRangeField() {
