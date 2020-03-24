@@ -15,7 +15,13 @@ import { PoPageHeaderComponent } from '../po-page-header/po-page-header.componen
 
 @Component({
   template: `
-    <po-page-detail p-title="Unit Test"> </po-page-detail>
+    <po-page-detail
+      p-title="Unit Test"
+      [p-back]="back.bind(this)"
+      [p-edit]="edit.bind(this)"
+      [p-remove]="remove.bind(this)"
+    >
+    </po-page-detail>
   `
 })
 class ContainerComponent {
@@ -84,39 +90,34 @@ describe('PoPageDetailComponent:', () => {
   }));
 
   describe('Methods:', () => {
-    it(`hasEditFn: should call 'hasActionFn' and return '' if have a edit action and property is 'icon'`, () => {
-      spyOn(component, 'hasActionFn').and.returnValue(true);
+    it(`hasEditFn: should return '' if have a edit action and property is 'icon'`, () => {
+      component.edit = () => {};
 
       expect(component.hasEditFn('icon')).toBe('');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditFn: should call 'hasActionFn' and return 'po-icon-delete' if does't have a edit action and property is 'icon'`, () => {
-      spyOn(component, 'hasActionFn').and.returnValue(false);
+    it(`hasEditFn: should return 'po-icon-delete' if does't have a edit action and property is 'icon'`, () => {
+      component.edit = undefined;
 
       expect(component.hasEditFn('icon')).toBe('po-icon-delete');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditFn: should call 'hasActionFn' and return 'default' if have a edit action and property is 'type'`, () => {
-      spyOn(component, 'hasActionFn').and.returnValue(true);
+    it(`hasEditFn: should return 'default' if have a edit action and property is 'type'`, () => {
+      component.edit = () => {};
 
       expect(component.hasEditFn('type')).toBe('default');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditFn: should call 'hasActionFn' and return 'primary' if does't have a edit action and property is 'type'`, () => {
-      spyOn(component, 'hasActionFn').and.returnValue(false);
+    it(`hasEditFn: should return 'primary' if does't have a edit action and property is 'type'`, () => {
+      component.edit = undefined;
 
       expect(component.hasEditFn('type')).toBe('primary');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditFn: should call 'hasActionFn' and return '' if have a edit action and property is 'icon'`, () => {
-      spyOn(component, 'hasActionFn').and.returnValue(true);
+    it(`hasEditFn: should return '' if have a edit action and property is 'icon'`, () => {
+      component.edit = () => {};
 
       expect(component.hasEditFn('icon')).toBe('');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
     it(`hasEditFn: should return '' if property doesn't 'icon' or 'type'`, () => {
@@ -129,64 +130,52 @@ describe('PoPageDetailComponent:', () => {
       expect(component.hasEditFn(null)).toBe('');
     });
 
-    it(`hasEditOrRemoveFn: should call 'hasActionFn' and return '' if have a edit action, doesn't have remove action
+    it(`hasEditOrRemoveFn: should return '' if have a edit action, doesn't have remove action
     and property is 'icon'`, () => {
-      const editReturn = true;
-      const removeReturn = false;
-      spyOn(component, 'hasActionFn').and.returnValues(editReturn, removeReturn);
+      component.edit = () => {};
+      component.remove = undefined;
 
       expect(component.hasEditOrRemoveFn('icon')).toBe('');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditOrRemoveFn: should call 'hasActionFn' and return '' if doesn't have a edit action, have remove action
+    it(`hasEditOrRemoveFn: should return '' if doesn't have a edit action, have remove action
     and property is 'icon'`, () => {
-      const editReturn = false;
-      const removeReturn = true;
-      spyOn(component, 'hasActionFn').and.returnValues(editReturn, removeReturn);
+      component.edit = undefined;
+      component.remove = () => {};
 
       expect(component.hasEditOrRemoveFn('icon')).toBe('');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditOrRemoveFn: should call 'hasActionFn' and return 'po-icon-arrow-left' if doesn't have a edit action and remove action
+    it(`hasEditOrRemoveFn: should return 'po-icon-arrow-left' if doesn't have a edit action and remove action
     and property is 'icon'`, () => {
-      const editReturn = false;
-      const removeReturn = false;
-      spyOn(component, 'hasActionFn').and.returnValues(editReturn, removeReturn);
+      component.remove = undefined;
+      component.edit = undefined;
 
       expect(component.hasEditOrRemoveFn('icon')).toBe('po-icon-arrow-left');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditOrRemoveFn: should call 'hasActionFn' and return 'default' if have a edit action, doesn't have remove action
+    it(`hasEditOrRemoveFn: should return 'default' if have a edit action, doesn't have remove action
     and property is 'type'`, () => {
-      const editReturn = true;
-      const removeReturn = false;
-      spyOn(component, 'hasActionFn').and.returnValues(editReturn, removeReturn);
+      component.edit = () => {};
+      component.remove = undefined;
 
       expect(component.hasEditOrRemoveFn('type')).toBe('default');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditOrRemoveFn: should call 'hasActionFn' and return 'default' if doesn't have a edit action, have remove action
+    it(`hasEditOrRemoveFn: should return 'default' if doesn't have a edit action, have remove action
     and property is 'type'`, () => {
-      const editReturn = false;
-      const removeReturn = true;
-      spyOn(component, 'hasActionFn').and.returnValues(editReturn, removeReturn);
+      component.remove = () => {};
+      component.edit = undefined;
 
       expect(component.hasEditOrRemoveFn('type')).toBe('default');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
-    it(`hasEditOrRemoveFn: should call 'hasActionFn' and return 'primary' if doesn't have a edit action and remove action
+    it(`hasEditOrRemoveFn: should return 'primary' if doesn't have a edit action and remove action
     and property is 'type'`, () => {
-      const editReturn = false;
-      const removeReturn = false;
-      spyOn(component, 'hasActionFn').and.returnValues(editReturn, removeReturn);
+      component.remove = undefined;
+      component.edit = undefined;
 
       expect(component.hasEditOrRemoveFn('type')).toBe('primary');
-      expect(component.hasActionFn).toHaveBeenCalled();
     });
 
     it(`hasEditOrRemoveFn: should return '' if property doesn't 'icon' or 'type'`, () => {
@@ -196,7 +185,9 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
-      component['parentContext'] = <any>{};
+      component.back = undefined;
+      component.remove = undefined;
+      component.edit = undefined;
       component.title = undefined;
       component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
 
@@ -207,17 +198,15 @@ describe('PoPageDetailComponent:', () => {
       component.breadcrumb = undefined;
       component.title = undefined;
 
-      component['parentContext'] = <any>{
-        back: function() {},
-        remove: function() {},
-        edit: function() {}
-      };
+      component.back = () => {};
+      component.remove = () => {};
+      component.edit = () => {};
 
       expect(component.hasPageHeader()).toBe(true);
     });
 
     it('hasPageHeader: should return true if has title', () => {
-      component['parentContext'] = <any>{};
+      spyOn(component, 'hasAnyAction').and.returnValue(false);
       component.breadcrumb = undefined;
       component.title = 'Title';
 
@@ -225,7 +214,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return false if doesn`t have actions, breadcrumb and title', () => {
-      component['parentContext'] = <any>{};
+      spyOn(component, 'hasAnyAction').and.returnValue(false);
       component.breadcrumb = undefined;
       component.title = undefined;
 
@@ -239,11 +228,9 @@ describe('PoPageDetailComponent:', () => {
 
       component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any>{
-        back: () => {},
-        remove: () => {},
-        edit: () => {}
-      };
+      component.back = () => {};
+      component.remove = () => {};
+      component.edit = () => {};
 
       fixture.detectChanges();
 
@@ -260,10 +247,8 @@ describe('PoPageDetailComponent:', () => {
 
       component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any>{
-        back: () => {},
-        remove: () => {}
-      };
+      component.back = () => {};
+      component.remove = () => {};
 
       fixture.detectChanges();
 
@@ -280,9 +265,7 @@ describe('PoPageDetailComponent:', () => {
 
       component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
 
-      component['parentContext'] = <any>{
-        back: () => {}
-      };
+      component.back = () => {};
 
       fixture.detectChanges();
 
@@ -307,11 +290,9 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('should apply only `po-icon-edit` if have a back, remove and edit functions.', () => {
-      component['parentContext'] = <any>{
-        back: () => {},
-        remove: () => {},
-        edit: () => {}
-      };
+      component.back = () => {};
+      component.remove = () => {};
+      component.edit = () => {};
 
       fixture.detectChanges();
 
@@ -325,10 +306,8 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('should apply only `po-icon-delete` if have back and remove functions and doesn`t have a edit function.', () => {
-      component['parentContext'] = <any>{
-        back: () => {},
-        remove: () => {}
-      };
+      component.back = () => {};
+      component.remove = () => {};
 
       fixture.detectChanges();
 
@@ -342,9 +321,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('should apply only `po-icon-arrow-left` if have only back function and doesn`t have a edit and remove functions.', () => {
-      component['parentContext'] = <any>{
-        back: () => {}
-      };
+      component.back = () => {};
 
       fixture.detectChanges();
 

@@ -1,7 +1,6 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { PoPageDetailBaseComponent } from './po-page-detail-base.component';
-import { callAction, hasAction } from '../po-page-util/po-page-util';
 
 /**
  * @docsExtends PoPageDetailBaseComponent
@@ -28,28 +27,15 @@ import { callAction, hasAction } from '../po-page-util/po-page-util';
   templateUrl: './po-page-detail.component.html'
 })
 export class PoPageDetailComponent extends PoPageDetailBaseComponent {
-  callActionFn = callAction;
-  hasActionFn = hasAction;
-  parentContext: ViewContainerRef;
-
-  constructor(viewRef: ViewContainerRef) {
-    super();
-    this.parentContext = viewRef['_hostView'][8];
-  }
-
   hasAnyAction(): boolean {
-    return (
-      this.hasActionFn('back', this.parentContext) ||
-      this.hasActionFn('edit', this.parentContext) ||
-      this.hasActionFn('remove', this.parentContext)
-    );
+    return !!(this.back || this.edit || this.remove);
   }
 
   hasEditFn(property: string): string {
     if (property === 'icon') {
-      return this.hasActionFn('edit', this.parentContext) ? '' : 'po-icon-delete';
+      return !!this.edit ? '' : 'po-icon-delete';
     } else if (property === 'type') {
-      return this.hasActionFn('edit', this.parentContext) ? 'default' : 'primary';
+      return !!this.edit ? 'default' : 'primary';
     } else {
       return '';
     }
@@ -57,13 +43,9 @@ export class PoPageDetailComponent extends PoPageDetailBaseComponent {
 
   hasEditOrRemoveFn(property: string): string {
     if (property === 'icon') {
-      return this.hasActionFn('edit', this.parentContext) || this.hasActionFn('remove', this.parentContext)
-        ? ''
-        : 'po-icon-arrow-left';
+      return !!(this.edit || this.remove) ? '' : 'po-icon-arrow-left';
     } else if (property === 'type') {
-      return this.hasActionFn('edit', this.parentContext) || this.hasActionFn('remove', this.parentContext)
-        ? 'default'
-        : 'primary';
+      return !!(this.edit || this.remove) ? 'default' : 'primary';
     } else {
       return '';
     }
