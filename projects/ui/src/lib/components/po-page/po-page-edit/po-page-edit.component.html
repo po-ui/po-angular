@@ -4,31 +4,31 @@
     <!-- OPERATIONS -->
     <div *ngIf="hasAnyAction()" class="po-page-header-actions">
       <po-button
-        *ngIf="hasAction('cancel', parentContext)"
+        *ngIf="!!cancel"
         [p-icon]="getIcon('cancel')"
         [p-label]="literals.cancel"
         [p-type]="getType('cancel')"
-        (p-click)="callAction('cancel', parentContext)"
+        (p-click)="cancel()"
       >
       </po-button>
 
       <po-button
-        *ngIf="hasAction('saveNew', parentContext)"
+        *ngIf="!!saveNew"
         [p-disabled]="disableSubmit"
         [p-icon]="getIcon('saveNew')"
         [p-label]="literals.saveNew"
         [p-type]="getType('saveNew')"
-        (p-click)="callAction('saveNew', parentContext)"
+        (p-click)="saveNew()"
       >
       </po-button>
 
       <po-button
-        *ngIf="hasAction('save', parentContext)"
+        *ngIf="!!save"
         p-icon="po-icon-ok"
         p-type="primary"
         [p-disabled]="disableSubmit"
         [p-label]="literals.save"
-        (p-click)="callAction('save', parentContext)"
+        (p-click)="save()"
       >
       </po-button>
     </div>

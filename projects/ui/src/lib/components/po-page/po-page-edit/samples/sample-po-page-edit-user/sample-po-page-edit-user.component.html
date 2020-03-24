@@ -1,4 +1,10 @@
-<po-page-edit [p-breadcrumb]="breadcrumb" [p-disable-submit]="formEditUser.invalid" p-title="User Edit">
+<po-page-edit
+  [p-breadcrumb]="breadcrumb"
+  [p-cancel]="cancel.bind(this)"
+  [p-disable-submit]="formEditUser.invalid"
+  [p-save]="save.bind(this)"
+  p-title="User Edit"
+>
   <form #formEditUser="ngForm">
     <div class="po-row">
       <po-number class="po-md-4" name="userId" [(ngModel)]="userId" p-clean p-label="User ID" p-required> </po-number>
