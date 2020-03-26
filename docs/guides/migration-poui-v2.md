@@ -22,9 +22,11 @@ Para poder utilizar o comando e realizar a migração, execute os comandos abaix
 
 ``` ng update @po-ui/ng-components --from 1 --migrate-only ```
 
-O `ng update` fará as alterações necessárias para seu projeto seguir atualizado, que são elas:
-  - Alterar todo conteúdo relacionado ao **BREAKING CHANGES** no seu projeto;
+O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
+  - Alterar maioria dos conteúdos relacionado ao **BREAKING CHANGES** no seu projeto;
   - Atualizar as versões dos pacotes `@po-ui`.
+
+Mas é importante conhecer os **BREAKING CHANGES** e **Depreciações** para realizar as alterações manualmente caso necessaário.
 
 ### Breaking Changes
 
@@ -37,12 +39,12 @@ Nesta nova versão o nome dos pacotes foram alterados, de acordo com a tabela ab
 | `@portinari/portinari-code-editor`                      | `@po-ui/ng-code-editor`              |
 | `@portinari/portinari-sync`                             | `@po-ui/ng-sync`                     |
 | `@portinari/portinari-storage`                          | `@po-ui/ng-storage`                  |
-| `@portinari/tslint`                                     | `@po-ui/ng-tslint`                      |
+| `@portinari/tslint`                                     | `@po-ui/ng-tslint`                   |
 | `@portinari/style`                                      | `@po-ui/style`                       |
 
 Também foi realizado remoções das propriedades, onde passam a valer as novas definições, veja a tabela abaixo:
 
-| Componentes                                             | Anteriormente                            | Subistituido por             |
+| Componentes                                             | Anteriormente                            | Subistituído por             |
 | --------------------------------------------------------| -----------------------------------------| -----------------------------|
 | `PoFieldModule`                                         | `[p-focus]`                              | `[p-auto-focus]`             |
 | `PoHttpResquestInterceptor`                             | `X-Portinari-Screen-Lock`                | `X-PO-Screen-Lock`           |
