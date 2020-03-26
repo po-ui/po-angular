@@ -442,7 +442,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private loadData(id, duplicate?) {
     if (!id) {
       try {
-        this.model = JSON.parse(duplicate) || {};
+        this.model = duplicate ? JSON.parse(duplicate) : {};
       } catch {
         this.model = {};
       }

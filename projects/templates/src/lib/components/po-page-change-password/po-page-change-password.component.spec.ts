@@ -415,6 +415,21 @@ describe('PoPageChangePasswordComponent:', () => {
         expect(componentReference.poComponentInjector.destroyComponentInApplication).toHaveBeenCalled();
       });
 
+      it('should not destroy `componentRef` if it`s null', () => {
+        const recovery = {
+          url: 'url',
+          type: PoModalPasswordRecoveryType.SMS,
+          contactMail: 'email',
+          phoneMask: 'mask'
+        };
+        componentReference.componentRef = null;
+        const spy = spyOn(componentReference.poComponentInjector, 'destroyComponentInApplication');
+
+        component['createModalPasswordRecoveryComponent'].call(componentReference, recovery);
+
+        expect(spy).not.toHaveBeenCalled();
+      });
+
       it(`should call 'createComponentInApplication', 'changeDetectorRef.detectChanges' and 'instance.open'
       and set instante.type with recovery.type`, fakeAsync(() => {
         const recovery = { url: 'url', type: PoModalPasswordRecoveryType.SMS, contactMail: 'email', phoneMask: 'mask' };

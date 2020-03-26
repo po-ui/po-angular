@@ -189,6 +189,14 @@ describe('PoPageDynamicEditComponent: ', () => {
       expect(util.mapObjectByProperties).toHaveBeenCalled();
     });
 
+    it('getControlFields: should return a empty array if nothing is passed', () => {
+      expect(component['getControlFields']()).toEqual([]);
+    });
+
+    it('getDetailFields: should return a empty array if nothing is passed', () => {
+      expect(component['getDetailFields']()).toEqual([]);
+    });
+
     it('goBack: should call `router.navigate` and not call `history.back` if path is truthy', () => {
       const path = '/people/:id';
 
@@ -239,6 +247,17 @@ describe('PoPageDynamicEditComponent: ', () => {
 
       expect(component['router'].navigate).not.toHaveBeenCalled();
       expect(window.history.back).toHaveBeenCalled();
+    });
+
+    it('detailActionNew: shoud insert a new row in the grid', () => {
+      const gridDetail: any = {
+        insertRow: () => {}
+      };
+
+      component.gridDetail = gridDetail;
+      const spy = spyOn(component.gridDetail, 'insertRow');
+      component.detailActionNew();
+      expect(spy).toHaveBeenCalled();
     });
 
     describe('ngOnInit:', () => {
@@ -477,6 +496,19 @@ describe('PoPageDynamicEditComponent: ', () => {
       it('should set model with `{}` when parse throw catch error and not call `getResource` if `id` is falsy', () => {
         const id = undefined;
         const duplicate = '{"name": "angular",}';
+
+        spyOn(component['poPageDynamicService'], 'getResource');
+
+        component.model = undefined;
+        component['loadData'](id, duplicate);
+
+        expect(component.model).toEqual({});
+        expect(component['poPageDynamicService'].getResource).not.toHaveBeenCalled();
+      });
+
+      it('should set model with `{}` when parse a empty storage', () => {
+        const id = undefined;
+        const duplicate = '';
 
         spyOn(component['poPageDynamicService'], 'getResource');
 
