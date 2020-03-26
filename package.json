@@ -42,7 +42,12 @@
     "format:fix": "pretty-quick --staged",
     "format:check": "prettier --check --loglevel error \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
     "format:all": "prettier --write \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
-    "publish:ui:local": "npm publish dist/ng-components --registry http://localhost:4873"
+    "publish:ui:local": "npm publish dist/ng-components --registry http://localhost:4873",
+    "publish:templates:local": "npm publish dist/ng-templates --registry http://localhost:4873",
+    "publish:sync:local": "npm publish dist/ng-sync --registry http://localhost:4873",
+    "publish:storage:local": "npm publish dist/ng-storage --registry http://localhost:4873",
+    "publish:code-editor:local": "npm publish dist/ng-code-editor --registry http://localhost:4873",
+    "publish:local": "npm run publish:ui:local && npm run publish:templates:local && npm run publish:code-editor:local && npm run publish:sync:local && npm run publish:storage:local"
   },
   "private": true,
   "dependencies": {
