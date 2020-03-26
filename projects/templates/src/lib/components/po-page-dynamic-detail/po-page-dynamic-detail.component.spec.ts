@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { throwError, of } from 'rxjs';
 
-import { PoDialogService } from '@portinari/portinari-ui';
+import { PoDialogService } from '@po-ui/ng-components';
 
 import * as util from '../../utils/util';
 import { configureTestSuite, expectPropertiesValues } from '../../util-test/util-expect.spec';

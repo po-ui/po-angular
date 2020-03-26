@@ -1,8 +1,8 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/portinari-templates",
+  "dest": "../../dist/ng-templates",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@portinari/portinari-ui"]
+  "whitelistedNonPeerDependencies": ["@po-ui/ng-components"]
 }

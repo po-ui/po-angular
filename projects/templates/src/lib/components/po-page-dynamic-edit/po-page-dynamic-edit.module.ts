@@ -10,7 +10,7 @@ import {
   PoGridModule,
   PoPageModule,
   PoWidgetModule
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import { PoPageDynamicEditComponent } from './po-page-dynamic-edit.component';
 import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dynamic.module';

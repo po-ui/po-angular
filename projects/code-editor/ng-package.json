@@ -1,8 +1,8 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/portinari-code-editor",
+  "dest": "../../dist/ng-code-editor",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@portinari/portinari-ui", "monaco-editor", "core-js", "intl", "uuid"]
+  "whitelistedNonPeerDependencies": ["@po-ui/ng-components", "monaco-editor", "core-js", "intl", "uuid"]
 }

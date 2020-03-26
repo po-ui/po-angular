@@ -1,7 +1,7 @@
 import { AbstractControl } from '@angular/forms';
 import { Input, Directive } from '@angular/core';
 
-import { PoBreadcrumb } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
 
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';

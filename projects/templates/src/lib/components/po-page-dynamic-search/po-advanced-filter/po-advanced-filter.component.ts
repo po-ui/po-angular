@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { PoDynamicFormComponent, PoLanguageService } from '@portinari/portinari-ui';
+import { PoDynamicFormComponent, PoLanguageService } from '@po-ui/ng-components';
 
 import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.component';
 

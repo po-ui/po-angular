@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes';
 import { Observable, of, Subject } from 'rxjs';
 import { expand, map, reduce } from 'rxjs/operators';
 
-import { PoStorageService } from '@portinari/portinari-storage';
+import { PoStorageService } from '@po-ui/ng-storage';
 
 import { PoEventSourcingErrorResponse } from '../../models/po-event-sourcing-error-response.model';
 import { PoEventSourcingItem } from './interfaces/po-event-sourcing-item.interface';

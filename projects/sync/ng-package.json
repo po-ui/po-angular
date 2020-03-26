@@ -1,11 +1,11 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/portinari-sync",
+  "dest": "../../dist/ng-sync",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
   "whitelistedNonPeerDependencies": [
-    "@portinari/portinari-storage",
+    "@po-ui/ng-storage",
     "@ionic-native/core",
     "@ionic-native/network",
     "http-status-codes"

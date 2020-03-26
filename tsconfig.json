@@ -14,16 +14,16 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
-      "@portinari/portinari-ui": ["./dist/portinari-ui"],
-      "@portinari/portinari-ui/*": ["./dist/portinari-ui/*"],
-      "@portinari/portinari-storage": ["./dist/portinari-storage"],
-      "@portinari/portinari-storage/*": ["./dist/portinari-storage/*"],
-      "@portinari/portinari-sync": ["./dist/portinari-sync"],
-      "@portinari/portinari-sync/*": ["./dist/portinari-sync/*"],
-      "@portinari/portinari-templates": ["./dist/portinari-templates"],
-      "@portinari/portinari-templates/*": ["./dist/portinari-templates/*"],
-      "@portinari/portinari-code-editor": ["dist/portinari-code-editor"],
-      "@portinari/portinari-code-editor/*": ["dist/portinari-code-editor/*"]
+      "@po-ui/ng-components": ["./dist/ng-components"],
+      "@po-ui/ng-components/*": ["./dist/ng-components/*"],
+      "@po-ui/ng-storage": ["./dist/ng-storage"],
+      "@po-ui/ng-storage/*": ["./dist/ng-storage/*"],
+      "@po-ui/ng-sync": ["./dist/ng-sync"],
+      "@po-ui/ng-sync/*": ["./dist/ng-sync/*"],
+      "@po-ui/ng-templates": ["./dist/ng-templates"],
+      "@po-ui/ng-templates/*": ["./dist/ng-templates/*"],
+      "@po-ui/ng-code-editor": ["dist/ng-code-editor"],
+      "@po-ui/ng-code-editor/*": ["dist/ng-code-editor/*"]
     }
   }
 }

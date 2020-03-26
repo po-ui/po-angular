@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
-import { PoDynamicModule, PoFieldModule, PoModalModule } from '@portinari/portinari-ui';
+import { PoDynamicModule, PoFieldModule, PoModalModule } from '@po-ui/ng-components';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 

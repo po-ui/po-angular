@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoDynamicModule, PoLanguageModule, PoModalModule, PoPageModule } from '@portinari/portinari-ui';
+import { PoDynamicModule, PoLanguageModule, PoModalModule, PoPageModule } from '@po-ui/ng-components';
 
 import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
 

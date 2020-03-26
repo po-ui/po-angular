@@ -1,4 +1,4 @@
-import { PoStorageService } from '@portinari/portinari-storage';
+import { PoStorageService } from '@po-ui/ng-storage';
 import * as utilsFunctions from '../../utils/utils';
 
 import { PoQueryBuilder } from './po-query-builder.model';

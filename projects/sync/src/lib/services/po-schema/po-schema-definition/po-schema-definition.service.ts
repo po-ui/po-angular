@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { PoStorageService } from '@portinari/portinari-storage';
+import { PoStorageService } from '@po-ui/ng-storage';
 
 import { PoSchemaUtil } from './../po-schema-util/po-schema-util.model';
 import { PoSyncSchema } from './../../po-sync/interfaces/po-sync-schema.interface';

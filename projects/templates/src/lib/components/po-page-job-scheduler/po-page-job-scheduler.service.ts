@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { addZero, convertDateToISOExtended } from '../../utils/util';
-import { PoDynamicFormField } from '@portinari/portinari-ui';
+import { PoDynamicFormField } from '@po-ui/ng-components';
 
 import { PoJobScheduler } from './interfaces/po-job-scheduler.interface';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';

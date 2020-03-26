@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { PoDynamicFormComponent } from '@portinari/portinari-ui';
+import { PoDynamicFormComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'po-dynamic-form',

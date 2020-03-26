@@ -15,7 +15,7 @@ import { PoCodeEditorRegisterableOptions } from './interfaces/po-code-editor-reg
  *
  * Exemplo de configuração:
  * ```
- * import { PoCodeEditorModule, PoCodeEditorRegisterable } from '@portinari/portinari-code-editor';
+ * import { PoCodeEditorModule, PoCodeEditorRegisterable } from '@po-ui/ng-code-editor';
  *
  * const customEditor: PoCodeEditorRegisterable = {
  *   language: 'terraform',

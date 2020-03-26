@@ -1,26 +1,26 @@
 {
-  "name": "@portinari/portinari-sync",
+  "name": "@po-ui/ng-sync",
   "version": "0.0.0-PLACEHOLDER",
   "tag": "dev",
-  "description": "PORTINARI HTML Framework - Sync",
-  "author": "Portinari",
+  "description": "PO UI - Sync",
+  "author": "PO",
   "license": "MIT",
-  "homepage": "https://portinari.io",
+  "homepage": "https://po-ui.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/portinariui/portinari-angular"
+    "url": "https://github.com/po-ui/po-angular"
   },
   "dependencies": {
     "@ionic-native/core": "5.21.5",
     "@ionic-native/network": "5.21.5",
-    "@portinari/portinari-storage": "0.0.0-PLACEHOLDER",
+    "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^1.4.0"
   },
   "peerDependencies": {
     "@angular/core": "~9.0.4",
     "@ionic-native/core": "5.21.5",
     "@ionic-native/network": "5.21.5",
-    "@portinari/portinari-storage": "0.0.0-PLACEHOLDER",
+    "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^1.4.0",
     "rxjs": "~6.5.4",
     "rxjs-compat": "~6.5.4",

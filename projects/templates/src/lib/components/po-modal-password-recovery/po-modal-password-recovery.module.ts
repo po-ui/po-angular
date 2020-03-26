@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
-import { PoFieldModule, PoI18nPipe, PoModalModule } from '@portinari/portinari-ui';
+import { PoFieldModule, PoI18nPipe, PoModalModule } from '@po-ui/ng-components';
 
 import { PoModalPasswordRecoveryComponent } from './po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryErrorMessageComponent } from './po-modal-password-recovery-error-message/po-modal-password-recovery-error-message.component';

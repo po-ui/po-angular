@@ -1,6 +1,6 @@
 import { Input, Directive } from '@angular/core';
 
-import { PoBreadcrumb } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
 
 import { convertToBoolean } from '../../utils/util';
 

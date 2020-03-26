@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { PoComponentInjectorService, PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
+import { PoComponentInjectorService, PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 
 import { browserLanguage, isExternalLink, isTypeof, poLocaleDefault } from '../../utils/util';
 

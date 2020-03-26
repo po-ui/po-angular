@@ -1,4 +1,4 @@
-import { PoBreadcrumb } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
 
 import { PoPageDynamicEditField } from './po-page-dynamic-edit-field.interface';
 import { PoPageDynamicEditActions } from './po-page-dynamic-edit-actions.interface';

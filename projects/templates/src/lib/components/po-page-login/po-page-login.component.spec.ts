@@ -12,7 +12,7 @@ import {
   PoPasswordComponent,
   PoSelectComponent,
   PoSwitchComponent
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../utils/util';
