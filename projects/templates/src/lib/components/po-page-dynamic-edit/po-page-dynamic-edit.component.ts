@@ -151,11 +151,6 @@ export const poPageDynamicEditLiteralsDefault = {
  *  <file name="sample-po-page-dynamic-edit-user/sample-po-page-dynamic-edit-user.component.html"> </file>
  *  <file name="sample-po-page-dynamic-edit-user/sample-po-page-dynamic-edit-user.component.ts"> </file>
  * </example>
- *
- * <example name="po-page-dynamic-edit-master-detail" title="Portinari Page Dynamic Edit - Master Detail">
- *  <file name="sample-po-page-dynamic-edit-master-detail/sample-po-page-dynamic-edit-master-detail.component.html"> </file>
- *  <file name="sample-po-page-dynamic-edit-master-detail/sample-po-page-dynamic-edit-master-detail.component.ts"> </file>
- * </example>
  */
 @Component({
   selector: 'po-page-dynamic-edit',

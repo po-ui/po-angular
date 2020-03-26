@@ -8,7 +8,7 @@ import { PoPageDynamicTableActions } from '@portinari/portinari-templates';
   templateUrl: './sample-po-page-dynamic-table-users.component.html'
 })
 export class SamplePoPageDynamicTableUsersComponent {
-  public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/peoples';
+  public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
 
   public readonly actions: PoPageDynamicTableActions = {
     new: '/documentation/po-page-dynamic-edit',
