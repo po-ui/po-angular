@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoDynamicFormField } from '@portinari/portinari-ui';
+import { PoDynamicFormField } from '@po-ui/ng-components';
 
 @Component({
   selector: 'po-page-job-scheduler-parameters',

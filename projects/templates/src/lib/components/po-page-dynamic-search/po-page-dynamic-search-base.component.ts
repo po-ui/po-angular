@@ -1,6 +1,6 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } from '@portinari/portinari-ui';
+import { PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } from '@po-ui/ng-components';
 
 import { poLocaleDefault } from '../../utils/util';
 

@@ -5,7 +5,7 @@ import { Routes } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { PoDynamicFieldType } from '@portinari/portinari-ui';
+import { PoDynamicFieldType } from '@po-ui/ng-components';
 
 import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component';
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';

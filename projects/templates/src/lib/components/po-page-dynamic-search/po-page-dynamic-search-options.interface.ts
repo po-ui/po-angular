@@ -1,4 +1,4 @@
-import { PoDynamicFormField, PoBreadcrumb, PoPageAction } from '@portinari/portinari-ui';
+import { PoDynamicFormField, PoBreadcrumb, PoPageAction } from '@po-ui/ng-components';
 
 /**
  * @usedBy PoPageDynamicSearchComponent

@@ -12,7 +12,7 @@ import {
   PoTableAction,
   PoTableColumnSort,
   PoTableColumnSortType
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import * as util from '../../utils/util';
 

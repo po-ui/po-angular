@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 
 import { isExternalLink } from '../../utils/util';
-import { PoComponentInjectorService } from '@portinari/portinari-ui';
+import { PoComponentInjectorService } from '@po-ui/ng-components';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';

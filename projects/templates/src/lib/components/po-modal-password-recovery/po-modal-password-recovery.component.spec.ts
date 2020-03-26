@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { throwError } from 'rxjs';
 
-import { PoFieldModule, PoI18nPipe, PoModalModule } from '@portinari/portinari-ui';
+import { PoFieldModule, PoI18nPipe, PoModalModule } from '@po-ui/ng-components';
 
 import * as utilsFunctions from './../../utils/util';
 import { configureTestSuite, getObservable } from './../../util-test/util-expect.spec';

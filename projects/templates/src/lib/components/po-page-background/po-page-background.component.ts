@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { browserLanguage, convertToBoolean, isTypeof } from './../../utils/util';
-import { PoSelectOption } from '@portinari/portinari-ui';
+import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'po-page-background',

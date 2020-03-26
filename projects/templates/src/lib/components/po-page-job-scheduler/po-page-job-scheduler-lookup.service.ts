@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { PoLookupFilter } from '@portinari/portinari-ui';
+import { PoLookupFilter } from '@po-ui/ng-components';
 
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 

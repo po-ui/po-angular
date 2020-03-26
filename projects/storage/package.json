@@ -1,14 +1,14 @@
 {
-  "name": "@portinari/portinari-storage",
+  "name": "@po-ui/ng-storage",
   "version": "0.0.0-PLACEHOLDER",
   "tag": "dev",
-  "description": "PORTINARI HTML Framework - Storage",
-  "author": "Portinari",
+  "description": "PO UI - Storage",
+  "author": "PO",
   "license": "MIT",
-  "homepage": "https://portinari.io",
+  "homepage": "https://po-ui.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/portinariui/portinari-angular"
+    "url": "https://github.com/po-ui/po-angular"
   },
   "dependencies": {
     "custom-idle-queue": "2.1.2",

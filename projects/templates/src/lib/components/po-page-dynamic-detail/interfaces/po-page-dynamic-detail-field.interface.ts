@@ -1,4 +1,4 @@
-import { PoDynamicViewField } from '@portinari/portinari-ui';
+import { PoDynamicViewField } from '@po-ui/ng-components';
 
 /**
  * @usedBy PoPageDynamicDetailComponent

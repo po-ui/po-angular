@@ -7,7 +7,7 @@ import {
   PoDynamicFormField,
   PoLanguageService,
   PoPageFilter
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
 import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';

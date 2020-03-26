@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { PoStorageService } from '@portinari/portinari-storage';
+import { PoStorageService } from '@po-ui/ng-storage';
 
 import { PoSchemaDefinitionService } from './po-schema-definition/po-schema-definition.service';
 import { PoSchemaService } from './po-schema.service';

@@ -1,4 +1,4 @@
-import { PoDynamicFormField } from '@portinari/portinari-ui';
+import { PoDynamicFormField } from '@po-ui/ng-components';
 
 /**
  * @usedBy PoPageDynamicTableComponent

@@ -1,6 +1,6 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { PoModalAction } from '@portinari/portinari-ui';
+import { PoModalAction } from '@po-ui/ng-components';
 
 import { convertToBoolean, isExternalLink, isTypeof } from '../../utils/util';
 

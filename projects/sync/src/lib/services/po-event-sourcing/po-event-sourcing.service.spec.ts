@@ -4,7 +4,7 @@ import { HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { Observable, of, Subscriber } from 'rxjs';
-import { PoStorageService } from '@portinari/portinari-storage';
+import { PoStorageService } from '@po-ui/ng-storage';
 
 import { PoDataMessage, PoDataTransform } from '../../models';
 import { PoEventSourcingErrorResponse } from '../../models/po-event-sourcing-error-response.model';

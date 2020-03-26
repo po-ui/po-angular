@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { PoDynamicViewField, PoInfoOrientation } from '@portinari/portinari-ui';
+import { PoDynamicViewField, PoInfoOrientation } from '@po-ui/ng-components';
 
 import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.interface';
 

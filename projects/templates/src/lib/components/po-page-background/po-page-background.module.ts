@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoDividerModule, PoFieldModule } from '@portinari/portinari-ui';
+import { PoDividerModule, PoFieldModule } from '@po-ui/ng-components';
 
 import { PoPageBackgroundComponent } from './po-page-background.component';
 

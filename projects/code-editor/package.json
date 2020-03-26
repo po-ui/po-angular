@@ -1,17 +1,17 @@
 {
-  "name": "@portinari/portinari-code-editor",
+  "name": "@po-ui/ng-code-editor",
   "version": "0.0.0-PLACEHOLDER",
   "tag": "dev",
-  "description": "PORTINARI HTML Framework - Code Editor",
+  "description": "PO UI - Code Editor",
   "author": "Portinari",
   "license": "MIT",
-  "homepage": "https://portinari.io",
+  "homepage": "https://po-ui.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/portinariui/portinari-angular"
+    "url": "https://github.com/po-ui/po-angular"
   },
   "dependencies": {
-    "@portinari/portinari-ui": "0.0.0-PLACEHOLDER",
+    "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "monaco-editor": "0.15.6",
     "core-js": "^3.6.4",
     "intl": "^1.2.5",
@@ -21,7 +21,7 @@
     "@angular/common": "~9.0.4",
     "@angular/core": "~9.0.4",
     "@angular/forms": "~9.0.4",
-    "@portinari/portinari-ui": "0.0.0-PLACEHOLDER",
+    "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "monaco-editor": "0.15.6",
     "zone.js": "~0.10.2"
   }

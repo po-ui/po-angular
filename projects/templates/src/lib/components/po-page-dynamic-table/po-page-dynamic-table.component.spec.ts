@@ -6,12 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of, EMPTY } from 'rxjs';
 
-import {
-  PoDialogModule,
-  PoNotificationModule,
-  PoTableColumnSort,
-  PoTableColumnSortType
-} from '@portinari/portinari-ui';
+import { PoDialogModule, PoNotificationModule, PoTableColumnSort, PoTableColumnSortType } from '@po-ui/ng-components';
 
 import * as utilsFunctions from '../../utils/util';
 import { configureTestSuite, expectPropertiesValues } from '../../util-test/util-expect.spec';

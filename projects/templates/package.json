@@ -1,17 +1,17 @@
 {
-  "name": "@portinari/portinari-templates",
+  "name": "@po-ui/ng-templates",
   "version": "0.0.0-PLACEHOLDER",
   "tag": "dev",
-  "description": "PORTINARI HTML Framework - Templates",
-  "author": "Portinari",
+  "description": "PO UI - Templates",
+  "author": "PO",
   "license": "MIT",
-  "homepage": "https://portinari.io",
+  "homepage": "https://po-ui.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/portinariui/portinari-angular"
+    "url": "https://github.com/po-ui/po-angular"
   },
   "dependencies": {
-    "@portinari/portinari-ui": "0.0.0-PLACEHOLDER"
+    "@po-ui/ng-components": "0.0.0-PLACEHOLDER"
   },
   "peerDependencies": {
     "@angular/animations": "~9.0.4",
@@ -22,7 +22,7 @@
     "@angular/platform-browser": "~9.0.4",
     "@angular/platform-browser-dynamic": "~9.0.4",
     "@angular/router": "~9.0.4",
-    "@portinari/portinari-ui": "0.0.0-PLACEHOLDER",
+    "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "rxjs": "~6.5.4",
     "zone.js": "~0.10.2"
   }

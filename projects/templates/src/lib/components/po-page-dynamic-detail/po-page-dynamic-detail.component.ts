@@ -11,7 +11,7 @@ import {
   PoDialogService,
   PoDialogConfirmOptions,
   PoNotificationService
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';

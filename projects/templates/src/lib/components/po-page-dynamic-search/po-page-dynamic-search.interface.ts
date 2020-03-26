@@ -1,4 +1,4 @@
-import { PoDynamicFormField, PoPageDefault } from '@portinari/portinari-ui';
+import { PoDynamicFormField, PoPageDefault } from '@po-ui/ng-components';
 
 /**
  * @docsPrivate

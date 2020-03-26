@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { isExternalLink } from '../../utils/util';
-import { PoI18nPipe, PoModalAction, PoModalComponent, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoI18nPipe, PoModalAction, PoModalComponent, PoRadioGroupOption } from '@po-ui/ng-components';
 
 import { PoModalPasswordRecovery } from './interfaces/po-modal-password-recovery.interface';
 import { PoModalPasswordRecoveryBaseComponent } from './po-modal-password-recovery-base.component';

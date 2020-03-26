@@ -1,6 +1,6 @@
 {
   "name": "po-ui-sources",
-  "version": "1.28.0",
+  "version": "2.0.0-beta.1",
   "description": "PO UI",
   "homepage": "https://po-ui.io",
   "license": "MIT",
@@ -30,18 +30,19 @@
     "test:code-editor:browse": "ng test code-editor --code-coverage --browsers=Chrome --source-map",
     "test:dev": "ng test --browsers=ChromeHeadless",
     "build:schematics": "npm run tsc -- -p ./projects/ui/tsconfig.schematics.json",
-    "build:ui": "ng build ui --prod && gulp schematics && gulp replaceVersion && cd dist/portinari-ui && npm pack",
-    "build:code-editor": "ng build code-editor --prod && gulp replaceVersion && cd dist/portinari-code-editor && npm pack",
-    "build:templates": "ng build templates --prod && gulp replaceVersion && cd dist/portinari-templates && npm pack",
-    "build:storage": "ng build storage --prod && gulp replaceVersion && cd dist/portinari-storage && npm pack",
-    "build:sync": "ng build sync --prod && gulp replaceVersion && cd dist/portinari-sync && npm pack",
+    "build:ui": "ng build ui --prod && gulp schematics && gulp replaceVersion && cd dist/ng-components && npm pack",
+    "build:code-editor": "ng build code-editor --prod && gulp replaceVersion && cd dist/ng-code-editor && npm pack",
+    "build:templates": "ng build templates --prod && gulp replaceVersion && cd dist/ng-templates && npm pack",
+    "build:storage": "ng build storage --prod && gulp replaceVersion && cd dist/ng-storage && npm pack",
+    "build:sync": "ng build sync --prod && gulp replaceVersion && cd dist/ng-sync && npm pack",
     "build": "npm run build:ui && npm run build:templates && npm run build:storage && npm run build:sync && npm run build:code-editor",
     "build:lite": "ng build ui && ng build storage && ng build sync && ng build templates && ng build code-editor",
     "release": "standard-version",
     "sonarqube": "gulp sonarqube",
     "format:fix": "pretty-quick --staged",
     "format:check": "prettier --check --loglevel error \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
-    "format:all": "prettier --write \"**/*{.ts,.js,.json,.css,.scss,.html}\""
+    "format:all": "prettier --write \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
+    "publish:ui:local": "npm publish dist/ng-components --registry http://localhost:4873"
   },
   "private": true,
   "dependencies": {

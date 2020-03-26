@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoModule } from '@portinari/portinari-ui';
+import { PoModule } from '@po-ui/ng-components';
 
 import { PoPageBackgroundModule } from '../po-page-background/index';
 import { PoPageBlockedUserComponent } from './po-page-blocked-user.component';

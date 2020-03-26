@@ -1,4 +1,4 @@
-import { PoSelectOption } from '@portinari/portinari-ui';
+import { PoSelectOption } from '@po-ui/ng-components';
 
 /**
  * @usedBy PoPageLoginComponent

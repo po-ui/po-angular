@@ -11,7 +11,7 @@ import {
   PoPageAction,
   PoStepperItem,
   PoStepperStatus
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import * as util from './../../utils/util';
 

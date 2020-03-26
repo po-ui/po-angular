@@ -20,10 +20,10 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  * O [(ngModel)] deve ser usado para manipular o conteúdo do po-code-editor, ou seja, tanto para incluir um conteúdo quanto
  * para recuperar o conteúdo do po-code-editor, utiliza-se uma variável passada por [(ngModel)].
  *
- * > Não esqueça de fazer a instalação do pacote `@portinari/portinari-code-editor` em sua aplicação.
+ * > Não esqueça de fazer a instalação do pacote `@po-ui/ng-code-editor` em sua aplicação.
  * >
  * > ```
- * > npm i --save @portinari/portinari-code-editor
+ * > npm i --save @po-ui/ng-code-editor
  * > ```
  * >
  * > Adicionar o módulo `PoCodeEditorModule` em seu projeto:
@@ -32,7 +32,7 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  * > // app.module.ts
  * > ...
  * > import { PoModule } from '@portinari/portinari-ui';
- * > import { PoCodeEditorModule } from '@portinari/portinari-code-editor';
+ * > import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
  * > ...
  * > @NgModule({
  * >   imports: [

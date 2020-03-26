@@ -1,4 +1,4 @@
-import { PoBreadcrumb } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
 
 import { PoPageDynamicDetailActions } from './po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailField } from './po-page-dynamic-detail-field.interface';
