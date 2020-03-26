@@ -2,7 +2,7 @@ import { getWorkspace } from '@schematics/angular/utility/config';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
 import { Tree } from '@angular-devkit/schematics';
-import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
+import { WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 
 import * as path from 'path';
 
@@ -35,7 +35,7 @@ describe('Schematic: ng-add', () => {
   });
 
   describe('Dependencies:', () => {
-    it('should update package.json with @portinari/portinari-ui dependency and run nodePackageInstall', () => {
+    it('should update package.json with @po-ui/ng-components dependency and run nodePackageInstall', () => {
       const tree = runner.runSchematic('ng-add', componentOptions, appTree);
 
       const packageJson = JSON.parse(getFileContent(tree, '/package.json'));
@@ -43,7 +43,7 @@ describe('Schematic: ng-add', () => {
       // const angularCoreVersion = dependencies['@angular/core'];
 
       // expect(dependencies['@angular/core']).toBe(angularCoreVersion);
-      expect(dependencies['@portinari/portinari-ui']).toBeDefined();
+      expect(dependencies['@po-ui/ng-components']).toBeDefined();
       expect(Object.keys(dependencies)).toEqual(Object.keys(dependencies).sort());
       expect(runner.tasks.some(task => task.name === 'node-package')).toBe(true);
     });
@@ -61,7 +61,7 @@ describe('Schematic: ng-add', () => {
   });
 
   describe('Theme configuration:', () => {
-    const defaultThemePath = './node_modules/@portinari/style/css/po-theme-default.min.css';
+    const defaultThemePath = './node_modules/@po-ui/style/css/po-theme-default.min.css';
 
     it('should add default theme in styles of build project', () => {
       const tree = runner.runSchematic('ng-add-setup-project', componentOptions, appTree);

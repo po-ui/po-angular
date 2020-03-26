@@ -12,7 +12,7 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "rootDir": "schematics",
-    "outDir": "../../dist/portinari-ui/schematics",
+    "outDir": "../../dist/ng-components/schematics",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,

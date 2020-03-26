@@ -1,13 +1,13 @@
 import { chain, Rule, schematic, Tree, noop } from '@angular-devkit/schematics';
 import { getWorkspace } from '@schematics/angular/utility/config';
-import { WorkspaceSchema, WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
+import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 import { addModuleImportToRootModule } from '../utils/module';
 import { getProjectFromWorkspace, getProjectTargetOptions } from '../utils/project';
 
 /** PO Module name that will insert in app root module */
 const poModuleName = 'PoModule';
-const poModuleSourcePath = '@portinari/portinari-ui';
+const poModuleSourcePath = '@po-ui/ng-components';
 
 /**
  * Scaffolds the basics of a Angular Material application, this includes:
@@ -30,7 +30,7 @@ function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
     const project = getProjectFromWorkspace(workspace, options.project);
 
     // Path needs to be always relative to the `package.json` or workspace root.
-    const themePath = './node_modules/@portinari/style/css/po-theme-default.min.css';
+    const themePath = './node_modules/@po-ui/style/css/po-theme-default.min.css';
 
     addThemeStyleToTarget(project, 'build', tree, themePath, workspace);
     addThemeStyleToTarget(project, 'test', tree, themePath, workspace);

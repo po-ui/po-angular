@@ -20,7 +20,7 @@ export default function(options: any): Rule {
 
 function addPoPackageAndInstall(): Rule {
   return (tree: Tree, context: SchematicContext) => {
-    addPackageToPackageJson(tree, '@portinari/portinari-ui', '0.0.0-PLACEHOLDER');
+    addPackageToPackageJson(tree, '@po-ui/ng-components', '0.0.0-PLACEHOLDER');
 
     // install packages
     context.addTask(new NodePackageInstallTask());

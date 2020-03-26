@@ -11,7 +11,7 @@ const distFolder = path.resolve(rootFolder, './dist');
 const uiFolder = path.resolve(rootFolder, './projects/ui');
 
 const schematicsFolder = path.resolve(uiFolder, './schematics');
-const distSchematicsFolder = path.resolve(rootFolder, './dist/portinari-ui/schematics');
+const distSchematicsFolder = path.resolve(rootFolder, './dist/ng-components/schematics');
 
 /** REPLACE VERSION: replace version of dist package.json to repo version */
 const replaceVersion = () =>
@@ -26,6 +26,8 @@ const copyFiles = () =>
   src([`${schematicsFolder}/ng-generate/*/files/**`]).pipe(dest(`${distSchematicsFolder}/ng-generate`));
 
 const copyCollection = () => src([`${schematicsFolder}/collection.json`]).pipe(dest(distSchematicsFolder));
+
+const copyMigrations = () => src([`${schematicsFolder}/migrations.json`]).pipe(dest(distSchematicsFolder));
 
 /** SONAR */
 const sonarqube = task('sonarqube', function(callback) {
@@ -50,4 +52,4 @@ const sonarqube = task('sonarqube', function(callback) {
 /** Exported Functions */
 exports.sonarqube = sonarqube;
 exports.replaceVersion = replaceVersion;
-exports.schematics = series(buildSchematics, parallel(copyCollection, copySchemas, copyFiles));
+exports.schematics = series(buildSchematics, parallel(copyCollection, copyMigrations, copySchemas, copyFiles));

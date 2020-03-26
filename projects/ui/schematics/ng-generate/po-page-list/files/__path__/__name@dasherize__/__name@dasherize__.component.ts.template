@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoPageAction<% if(dataView === 'table') { %>, PoTableColumn<%} %> } from '@portinari/portinari-ui';
+import { PoPageAction<% if(dataView === 'table') { %>, PoTableColumn<%} %> } from '@po-ui/ng-components';
 
 @Component({
   selector: '<%= selector %>',

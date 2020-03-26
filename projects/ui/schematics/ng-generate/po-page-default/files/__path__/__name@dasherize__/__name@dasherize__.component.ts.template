@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoPageAction } from '@portinari/portinari-ui';
+import { PoPageAction } from '@po-ui/ng-components';
 
 @Component({
   selector: '<%= selector %>',
