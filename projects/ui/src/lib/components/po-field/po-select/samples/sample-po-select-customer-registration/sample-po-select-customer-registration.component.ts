@@ -107,15 +107,17 @@ export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, O
   }
 
   private getCitiesByState(state: string) {
-    this.citiesSubscription = this.sampleService.getCitiesByState(state).subscribe((cities: Array<PoSelectOption>) => {
-      this.cityOptions = cities;
-      this.city = this.cityOptions[0].value as number;
-    });
+    this.citiesSubscription = this.sampleService
+      .getCitiesByState(state)
+      .subscribe((cities: { items: Array<PoSelectOption> }) => {
+        this.cityOptions = cities.items;
+        this.city = this.cityOptions[0].value as number;
+      });
   }
 
   private getStates() {
-    this.statesSubscription = this.sampleService.getStates().subscribe((states: Array<PoSelectOption>) => {
-      this.stateOptions = states;
+    this.statesSubscription = this.sampleService.getStates().subscribe((states: { items: Array<PoSelectOption> }) => {
+      this.stateOptions = states.items;
       this.state = 'sp';
 
       this.getCitiesByState(this.state);
