@@ -43,12 +43,14 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
   describe('Methods', () => {
     it('primaryAction: should call primaryAction.action ', () => {
+      expect(component.primaryAction.action()).toBeUndefined();
       spyOn(component.primaryAction, 'action');
       component.primaryAction.action();
       expect(component.primaryAction.action).toHaveBeenCalled();
     });
 
     it('secondaryAction: should call secondaryAction.action ', () => {
+      expect(component.secondaryAction.action()).toBeUndefined();
       spyOn(component.secondaryAction, 'action');
       component.secondaryAction.action();
       expect(component.secondaryAction.action).toHaveBeenCalled();

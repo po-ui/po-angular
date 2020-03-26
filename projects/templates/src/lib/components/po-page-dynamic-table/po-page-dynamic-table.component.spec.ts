@@ -407,8 +407,10 @@ describe('PoPageDynamicTableComponent:', () => {
           actions: undefined,
           breadcrumb: undefined,
           fields: [],
-          title: 'Title'
+          title: undefined
         };
+
+        component.title = 'Titulo Original';
 
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
         spyOn(component, <any>'loadData').and.returnValue(EMPTY);
@@ -420,7 +422,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
         expect(component.autoRouter).toEqual(response.autoRouter);
         expect(component.fields).toEqual(response.fields);
-        expect(component.title).toEqual(response.title);
+        expect(component.title).toEqual('Titulo Original');
       }));
 
       it('should call `getMetadata` and mantain properties when response is empty', fakeAsync(() => {

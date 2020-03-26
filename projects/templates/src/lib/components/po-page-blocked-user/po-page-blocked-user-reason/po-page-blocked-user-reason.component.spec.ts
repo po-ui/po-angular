@@ -70,30 +70,36 @@ describe('PoPageBlockedUserReasonContactsComponent: ', () => {
       expect(component['getLiterals']).toHaveBeenCalled();
     });
 
-    it('ngOnChanges: should call `getLiterals` if `reasons` changes', () => {
-      component.reason = PoPageBlockedUserReason.ExceededAttempts;
+    describe('ngOnChanges:', () => {
+      it('should call `getLiterals` if `reason` changes', () => {
+        component.reason = PoPageBlockedUserReason.ExceededAttempts;
 
-      spyOn(component, <any>'getLiterals');
+        const spy = spyOn(component, <any>'getLiterals');
 
-      component.ngOnChanges({
-        reason: new SimpleChange(null, component.reason, true)
+        component.ngOnChanges({
+          reason: new SimpleChange(null, component.reason, true)
+        });
+
+        expect(spy).toHaveBeenCalled();
       });
 
-      fixture.detectChanges();
-      expect(component['getLiterals']).toHaveBeenCalled();
-    });
+      it('should call `getLiterals` if `params` changes', () => {
+        component.params = { attempts: 5, days: 5, hours: 5 };
 
-    it('ngOnChanges: should call `getLiterals` if `params` changes', () => {
-      component.params = { attempts: 5, days: 5, hours: 5 };
+        const spy = spyOn(component, <any>'getLiterals');
 
-      spyOn(component, <any>'getLiterals');
+        component.ngOnChanges({
+          params: new SimpleChange(null, component.params, true)
+        });
 
-      component.ngOnChanges({
-        params: new SimpleChange(null, component.params, true)
+        expect(spy).toHaveBeenCalled();
       });
 
-      fixture.detectChanges();
-      expect(component['getLiterals']).toHaveBeenCalled();
+      it('should not call `getLiterals` if neither `params` or `reasons` changes', () => {
+        const spy = spyOn(component, <any>'getLiterals');
+        component.ngOnChanges({});
+        expect(spy).not.toHaveBeenCalled();
+      });
     });
 
     it('getImageByReasonType: should return `big-lock` if `reason` is `none`', () => {
