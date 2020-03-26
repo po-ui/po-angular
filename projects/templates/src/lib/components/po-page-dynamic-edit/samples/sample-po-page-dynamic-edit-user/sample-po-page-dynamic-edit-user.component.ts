@@ -9,15 +9,19 @@ import { PoPageDynamicEditActions } from '@portinari/portinari-templates';
   templateUrl: './sample-po-page-dynamic-edit-user.component.html'
 })
 export class SamplePoPageDynamicEditUserComponent {
-  public readonly serviceApi = 'https://thf.totvs.com.br/sample/api/po-metadata/v1/people';
+  public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
 
   public readonly actions: PoPageDynamicEditActions = {
-    save: 'dynamic-detail/:id',
-    saveNew: 'dynamic-new'
+    save: '/documentation/po-page-dynamic-detail',
+    saveNew: '/documentation/po-page-dynamic-edit'
   };
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [{ label: 'Home', link: '/' }, { label: 'People', link: '/dynamic-table' }, { label: 'Edit' }]
+    items: [
+      { label: 'Home', link: '/' },
+      { label: 'People', link: '/documentation/po-page-dynamic-table' },
+      { label: 'Edit' }
+    ]
   };
 
   public readonly fields: Array<PoDynamicFormField> = [
@@ -34,7 +38,6 @@ export class SamplePoPageDynamicEditUserComponent {
     { property: 'father', label: 'Father`s name', divider: 'Relationship' },
     { property: 'mother', label: 'Mother`s name' },
     { property: 'street', divider: 'Address' },
-    { property: 'city' },
-    { property: 'country' }
+    { property: 'city', optionsService: 'https://po-sample-api.herokuapp.com/v1/cities?transform=true' }
   ];
 }
