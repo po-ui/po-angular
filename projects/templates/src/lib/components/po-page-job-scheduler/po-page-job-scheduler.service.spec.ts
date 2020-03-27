@@ -70,7 +70,7 @@ describe('PoPageJobSchedulerService:', () => {
 
     it('getHeadProcesses: should return the response from `HEAD` method', () => {
       let headResponse;
-      const headers = { 'X-Portinari-No-Error': 'true' };
+      const headers = { 'X-PO-No-Error': 'true' };
       poPageJobSchedulerService['endpoint'] = '/endpoint';
 
       poPageJobSchedulerService.getHeadProcesses().subscribe(response => {

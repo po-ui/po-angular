@@ -37,8 +37,8 @@ export class SamplePoHttpRequestInterceptorLabsComponent implements OnInit, OnDe
 
   getRequest() {
     const headers = {
-      'X-Portinari-No-Count-Pending-Requests': this.countPendingRequestHeaderParam.toString(),
-      'X-Portinari-Screen-Lock': this.screenLockHeaderParam.toString()
+      'X-PO-No-Count-Pending-Requests': this.countPendingRequestHeaderParam.toString(),
+      'X-PO-Screen-Lock': this.screenLockHeaderParam.toString()
     };
 
     this.apiSubscription = this.http.get(this.url, { headers: headers }).subscribe(() => {});

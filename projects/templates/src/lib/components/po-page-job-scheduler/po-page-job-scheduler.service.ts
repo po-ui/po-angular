@@ -32,7 +32,7 @@ export class PoPageJobSchedulerService {
   }
 
   getHeadProcesses() {
-    const headers = { 'X-Portinari-No-Error': 'true' };
+    const headers = { 'X-PO-No-Error': 'true' };
 
     return this.http.head(`${this.endpoint}/processes`, { headers });
   }
