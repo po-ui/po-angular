@@ -591,7 +591,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
     const newOptions = !options && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
 
-    if (newOptions) {
+    if (newOptions.length) {
       this.visibleOptions = newOptions;
 
       if (!this.selectedView && this.visibleOptions.length) {
@@ -670,9 +670,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     // Se houver serviço busca pelo model.
     if (value && this.service) {
       return this.getObjectByValue(value);
-    }
-
-    if (!validValue(value)) {
+    } else {
       this.updateSelectedValue(null, true, true);
       this.updateComboList();
     }

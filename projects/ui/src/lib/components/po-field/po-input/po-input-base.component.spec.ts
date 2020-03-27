@@ -134,7 +134,7 @@ describe('PoInputBase:', () => {
   });
 
   it('should call return minlengpoailed', () => {
-    component.maxlength = 0;
+    component.maxlength = 12;
     component.minlength = 10;
     component.getScreenValue = () => 'teste';
 
@@ -279,6 +279,17 @@ describe('PoInputBase:', () => {
       spyOn(component, <any>'validatePatternOnWriteValue');
       expect(component.validate(new FormControl('2'))).not.toBeNull();
       expect(component['validatePatternOnWriteValue']).toHaveBeenCalled();
+    });
+
+    it('validate: should return minlength false', () => {
+      component.minlength = 10;
+      component.getScreenValue = () => '2';
+
+      expect(component.validate(new FormControl('2'))).toEqual({
+        minlength: {
+          valid: false
+        }
+      });
     });
 
     it('validatePatternOnWriteValue: should call `updateModel` if value isn`t falsy and `passedWriteValue` is true', fakeAsync(() => {

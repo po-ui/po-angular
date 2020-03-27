@@ -428,32 +428,24 @@ export class PoI18nBaseService {
   // Atualiza o local storage
   private updateLocalStorage(language: string, context: string, data: any) {
     if (this.useCache) {
-      for (const literal in data) {
-        if (data.hasOwnProperty(literal)) {
-          localStorage.setItem(language + '-' + context + '-' + literal, data[literal]);
-        }
+      for (const literal of Object.keys(data)) {
+        localStorage.setItem(language + '-' + context + '-' + literal, data[literal]);
       }
     }
   }
 
   // Atualiza a variável local com as literais com os objetos passados na configuração
-  private setVarI18n(contexts: any) {
+  private setVarI18n(contexts: Object) {
     // Percorre os contextos
-    for (const context in contexts) {
-      if (contexts.hasOwnProperty(context)) {
-        const contextContent = contexts[context];
-
-        // Percorre os idiomas dentro do contexto
-        for (const language in contextContent) {
-          if (contextContent.hasOwnProperty(language)) {
-            const languageContent = contextContent[language];
-
-            if (language === 'url') {
-              this.servicesContext[context] = languageContent;
-            } else {
-              this.updateVarI18n(language, context, languageContent);
-            }
-          }
+    for (const context of Object.keys(contexts)) {
+      const contextContent = contexts[context];
+      // Percorre os idiomas dentro do contexto
+      for (const language of Object.keys(contextContent)) {
+        const languageContent = contextContent[language];
+        if (language === 'url') {
+          this.servicesContext[context] = languageContent;
+        } else {
+          this.updateVarI18n(language, context, languageContent);
         }
       }
     }
@@ -474,16 +466,16 @@ export class PoI18nBaseService {
     this.varI18n[language][context] = this.mergeObject(data, this.varI18n[language][context]);
   }
 
-  private getHttpService(url: string, language: string, literals: Array<string>): Observable<object> {
+  private getHttpService(url: string, language: string, literals: Array<string>) {
     let param = '?language=' + language;
     if (literals.length > 0) {
       param += '&literals=' + literals.join();
     }
 
     // Remove a barra final do endereço
-    url = url.lastIndexOf('/') === url.length - 1 ? url.substr(0, url.length - 1) : url;
+    url = url.replace(/\/$/, '');
 
-    return this.http.get(url + param);
+    return this.http.get(`${url}${param}`);
   }
 
   // Completa com o nome da literais, as que não foram encontradas

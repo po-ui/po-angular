@@ -70,6 +70,7 @@ export class PoPasswordComponent extends PoInputGeneric {
     return this._hidePasswordPeek;
   }
 
+  /* istanbul ignore next */
   constructor(el: ElementRef) {
     super(el);
   }

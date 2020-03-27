@@ -176,19 +176,32 @@ describe('PoDropdownComponent: ', () => {
       expect(component['hideDropdown']).not.toHaveBeenCalled();
     });
 
-    it('removeListeners: should remove click, resize and scroll listeners.', () => {
-      component['clickoutListener'] = () => {};
-      component['resizeListener'] = () => {};
+    describe('removeListeners:', () => {
+      it('should remove click, resize and scroll listeners.', () => {
+        component['clickoutListener'] = () => {};
+        component['resizeListener'] = () => {};
 
-      spyOn(component, <any>'clickoutListener');
-      spyOn(component, <any>'resizeListener');
-      spyOn(window, 'removeEventListener');
+        spyOn(component, <any>'clickoutListener');
+        spyOn(component, <any>'resizeListener');
+        spyOn(window, 'removeEventListener');
 
-      component['removeListeners']();
+        component['removeListeners']();
 
-      expect(component['clickoutListener']).toHaveBeenCalled();
-      expect(component['resizeListener']).toHaveBeenCalled();
-      expect(window.removeEventListener).toHaveBeenCalled();
+        expect(component['clickoutListener']).toHaveBeenCalled();
+        expect(component['resizeListener']).toHaveBeenCalled();
+        expect(window.removeEventListener).toHaveBeenCalled();
+      });
+
+      it('should not remove click, if resize and scroll listeners are undefined', () => {
+        component['clickoutListener'] = undefined;
+        component['resizeListener'] = undefined;
+
+        spyOn(window, 'removeEventListener');
+
+        component['removeListeners']();
+
+        expect(window.removeEventListener).toHaveBeenCalled();
+      });
     });
 
     it(`showDropdown: should set icon with 'po-icon-arrow-up', call 'initializeListeners' set 'open' to 'false'
@@ -218,7 +231,13 @@ describe('PoDropdownComponent: ', () => {
         target: ''
       };
 
-      spyOn(component, <any>'checkClickArea').and.returnValue(false);
+      const dropdownRef = {
+        nativeElement: {
+          contains: () => false
+        }
+      };
+      component.dropdownRef = dropdownRef;
+
       spyOn(component, <any>'hideDropdown');
 
       component['wasClickedOnDropdown'](fakeEvent);
@@ -230,6 +249,12 @@ describe('PoDropdownComponent: ', () => {
       const fakeEvent: any = {
         target: ''
       };
+      const dropdownRef = {
+        nativeElement: {
+          contains: () => true
+        }
+      };
+      component.dropdownRef = dropdownRef;
 
       spyOn(component, <any>'checkClickArea').and.returnValue(true);
       spyOn(component, <any>'hideDropdown');

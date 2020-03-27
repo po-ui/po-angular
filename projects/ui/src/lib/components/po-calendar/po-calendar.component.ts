@@ -6,6 +6,24 @@ import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoCalendarService } from './services/po-calendar.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
 
+/* istanbul ignore next */
+const providers = [
+  PoCalendarService,
+  PoCalendarLangService,
+  {
+    provide: NG_VALUE_ACCESSOR,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoCalendarComponent),
+    multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoCalendarComponent),
+    multi: true
+  }
+];
+
 /**
  * @docsExtends PoCalendarBaseComponent
  *
@@ -29,20 +47,7 @@ import { PoDateService } from '../../services/po-date/po-date.service';
 @Component({
   selector: 'po-calendar',
   templateUrl: './po-calendar.component.html',
-  providers: [
-    PoCalendarService,
-    PoCalendarLangService,
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoCalendarComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoCalendarComponent),
-      multi: true
-    }
-  ]
+  providers
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit {
   constructor(

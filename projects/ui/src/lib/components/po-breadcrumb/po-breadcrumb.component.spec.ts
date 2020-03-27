@@ -264,6 +264,21 @@ describe('PoBreadcrumbComponent:', () => {
       expect(component['removeClickoutListener']).toHaveBeenCalled();
     });
 
+    it('wasClickedonDropdown: should not call `removeClickoutListener` if `checkClickOutElement` returned false', () => {
+      component.showDropdown = true;
+      const event: any = {
+        target: ''
+      };
+
+      spyOn(component, <any>'removeClickoutListener');
+      spyOn(component, <any>'checkClickOutElement').and.returnValue(false);
+
+      component[wasClickedonDropdown](event);
+
+      expect(component.showDropdown).toBe(true);
+      expect(component['removeClickoutListener']).not.toHaveBeenCalled();
+    });
+
     describe('ngDoCheck:', () => {
       it('ngDoCheck: should call `initBreadcrumbSize` in first loading and if breadcrumb has width', () => {
         Object.defineProperty(component.breadcrumbElement.nativeElement, 'offsetWidth', {

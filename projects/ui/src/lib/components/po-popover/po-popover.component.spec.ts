@@ -110,6 +110,18 @@ describe('PoPopoverComponent:', () => {
     expect(fakeEvent.togglePopup).toHaveBeenCalled();
   });
 
+  it('should listen resize in setRendererListenInit()', () => {
+    const fakeEvent = getFakeToSetRendererListenInit('resize', component);
+    const fakeThis = { ...fakeEvent, isHidden: false };
+    spyOn(fakeThis, 'debounceResize');
+
+    component.setRendererListenInit.call(fakeThis);
+
+    window.dispatchEvent(new Event('resize'));
+
+    expect(fakeThis.debounceResize).toHaveBeenCalled();
+  });
+
   it('should open popover in togglePopup when click on target', () => {
     component.popoverElement.nativeElement.hidden = true;
     component.target = component.popoverElement;
@@ -241,27 +253,29 @@ describe('PoPopoverComponent:', () => {
       expect(component['removeListeners']).toHaveBeenCalled();
     });
 
-    it('removeListeners: should remove click and resize listeners.', () => {
-      spyOn(component, <any>'clickoutListener');
-      spyOn(component, <any>'resizeListener');
+    describe('removeListeners:', () => {
+      it('should remove click and resize listeners.', () => {
+        spyOn(component, <any>'clickoutListener');
+        spyOn(component, <any>'resizeListener');
 
-      component['removeListeners']();
+        component['removeListeners']();
 
-      expect(component['clickoutListener']).toHaveBeenCalled();
-      expect(component['resizeListener']).toHaveBeenCalled();
-    });
+        expect(component['clickoutListener']).toHaveBeenCalled();
+        expect(component['resizeListener']).toHaveBeenCalled();
+      });
 
-    it('removeListeners: should remove mouse enter and mouse leave listeners.', () => {
-      component.trigger = 'hover';
-      component.setRendererListenInit();
+      it('should remove mouse enter and mouse leave listeners.', () => {
+        component.trigger = 'hover';
+        component.setRendererListenInit();
+        component['clickoutListener'] = undefined;
+        spyOn(component, <any>'mouseEnterListener');
+        spyOn(component, <any>'mouseLeaveListener');
 
-      spyOn(component, <any>'mouseEnterListener');
-      spyOn(component, <any>'mouseLeaveListener');
+        component['removeListeners']();
 
-      component['removeListeners']();
-
-      expect(component['mouseEnterListener']).toHaveBeenCalled();
-      expect(component['mouseLeaveListener']).toHaveBeenCalled();
+        expect(component['mouseEnterListener']).toHaveBeenCalled();
+        expect(component['mouseLeaveListener']).toHaveBeenCalled();
+      });
     });
 
     it('togglePopup: should call `close` method.', () => {
