@@ -49,7 +49,7 @@ export class PoTableDetailComponent {
   constructor(private decimalPipe: DecimalPipe) {}
 
   get detailColumns(): Array<PoTableDetailColumn> {
-    return (this.detail && this.detail.columns) || [];
+    return this.detail?.columns || [];
   }
 
   get typeHeaderInline(): boolean {

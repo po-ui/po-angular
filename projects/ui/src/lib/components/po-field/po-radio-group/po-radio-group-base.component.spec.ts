@@ -59,6 +59,18 @@ describe('PoRadioGroupBase: ', () => {
     expect(component['onChangePropagate']).toHaveBeenCalled();
   });
 
+  it('shouldn`t call onChangePropagate if it is undefined', () => {
+    component.value = '1';
+    component['onChangePropagate'] = (v: any) => {};
+
+    spyOn(component.change, 'emit');
+    const spy = spyOn(component, <any>'onChangePropagate');
+    component['onChangePropagate'] = undefined;
+    component.changeValue('1');
+    expect(component.change.emit).not.toHaveBeenCalled();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   describe('Methods: ', () => {
     const onChangePropagate: any = 'onChangePropagate';
 

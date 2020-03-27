@@ -475,6 +475,7 @@ export function convertImageToBase64(file: File): Promise<any> {
 
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
+    /* istanbul ignore next */
     reader.onerror = error => reject(error);
   });
 }

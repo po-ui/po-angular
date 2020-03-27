@@ -1152,19 +1152,28 @@ describe('PoDecimalComponent:', () => {
       expect(component['containsMoreThanOneComma'](undefined)).toBeFalsy();
     });
 
-    it('writeValueModel: should call change.emit', () => {
-      const value = '123456';
-      spyOn(component.change, 'emit');
+    describe('writeValueModel', () => {
+      it('should call change.emit', () => {
+        const value = '123456';
+        spyOn(component.change, 'emit');
 
-      component.writeValueModel(value);
-      expect(component.change.emit).toHaveBeenCalledWith(value);
-    });
+        component.writeValueModel(value);
+        expect(component.change.emit).toHaveBeenCalledWith(value);
+      });
 
-    it('writeValueModel: shouldn`t call change.emit if param is undefined', () => {
-      spyOn(component.change, 'emit');
+      it('shouldn`t call change.emit if param is undefined', () => {
+        spyOn(component.change, 'emit');
 
-      component.writeValueModel(undefined);
-      expect(component.change.emit).not.toHaveBeenCalled();
+        component.writeValueModel(undefined);
+        expect(component.change.emit).not.toHaveBeenCalled();
+      });
+
+      it('shouldn`t call setViewValue if inputEl is undefined', () => {
+        const spy = spyOn(component, <any>'setViewValue');
+        component.inputEl = undefined;
+        component.writeValueModel('5555');
+        expect(spy).not.toHaveBeenCalled();
+      });
     });
 
     it('controlChangeEmitter: should emit change', fakeAsync((): void => {
