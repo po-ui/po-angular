@@ -9,8 +9,8 @@ import { PoLoadingOverlayComponent } from '../../components/po-loading/po-loadin
 
 import { PoHttpRequesControltService } from './po-http-request-control-service';
 
-const noCountPendingRequests = 'X-Portinari-No-Count-Pending-Requests';
-const screenLock = 'X-Portinari-Screen-Lock';
+const noCountPendingRequests = 'X-PO-No-Count-Pending-Requests';
+const screenLock = 'X-PO-Screen-Lock';
 
 /**
  * @description
@@ -18,12 +18,12 @@ const screenLock = 'X-Portinari-Screen-Lock';
  * O serviço PO Http Request Interceptor realiza a contabilização de requisições pendentes na aplicação.
  *
  * Existe a possibilidade de não efetuar a contabilização das requisições pendentes, utilizando o parâmetro
- * `X-Portinari-No-Count-Pending-Requests`. Para isso deve ser informado no cabeçalho da requisição com o valor `'true'`,
+ * `X-PO-No-Count-Pending-Requests`. Para isso deve ser informado no cabeçalho da requisição com o valor `'true'`,
  * por exemplo:
  *
  * ```
  * ...
- *  const headers = { 'X-Portinari-No-Count-Pending-Requests': 'true' };
+ *  const headers = { 'X-PO-No-Count-Pending-Requests': 'true' };
  *
  *  this.http.get(`/customers/1`, { headers: headers });
  * ...
@@ -34,13 +34,13 @@ const screenLock = 'X-Portinari-Screen-Lock';
  * será retornado a quantidade de requisições pendentes.
  *
  * Também existe a possibildade de travar a tela e mostrar uma imagem de _loading_ durante o processamento de uma requisição
- * deve-se passar o parâmetro `X-Portinari-Screen-Lock` no cabeçalho da requisição com valor `'true'`.
+ * deve-se passar o parâmetro `X-PO-Screen-Lock` no cabeçalho da requisição com valor `'true'`.
  *
  * por exemplo:
  *
  * ```
  * ...
- *  const headers = { 'X-Portinari-Screen-Lock': 'true' };
+ *  const headers = { 'X-PO-Screen-Lock': 'true' };
  *
  *  this.http.get(`/customers/1`, { headers: headers });
  * ...
@@ -62,7 +62,7 @@ const screenLock = 'X-Portinari-Screen-Lock';
  * @Injectable()
  * export class CustomersService {
  *
- *  headers = { 'X-Portinari-No-Count-Pending-Requests': true, 'X-Portinari-Screen-Lock': 'true' }
+ *  headers = { 'X-PO-No-Count-Pending-Requests': true, 'X-PO-Screen-Lock': 'true' }
  *  pendingRequests: number = 0;
  *  subscription: Subscription;
  *

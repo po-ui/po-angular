@@ -251,7 +251,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should not show notification when defined noErrorNotification with value true', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      const headers = { 'X-Portinari-No-Error': 'true' };
+      const headers = { 'X-PO-No-Error': 'true' };
 
       spyOn(mockNotification, 'error');
 
@@ -274,9 +274,9 @@ describe('PoHttpInterceptorBaseService', () => {
     expect(service['hasNoErrorParam'](requestWithUpperCaseValue)).toBeTruthy();
   });
 
-  it('hasNoErrorParam should return false when the param `X-Portinari-No-Error` value is false in header of request', () => {
-    const requestWipoalseValue = createHttpRequest('X-Portinari-No-Error', 'false');
-    const requestWithWhitespaceValue = createHttpRequest('X-Portinari-No-Error', '');
+  it('hasNoErrorParam should return false when the param `X-PO-No-Error` value is false in header of request', () => {
+    const requestWipoalseValue = createHttpRequest('X-PO-No-Error', 'false');
+    const requestWithWhitespaceValue = createHttpRequest('X-PO-No-Error', '');
 
     expect(service['hasNoErrorParam'](requestWipoalseValue)).toBeFalsy();
     expect(service['hasNoErrorParam'](requestWithWhitespaceValue)).toBeFalsy();
@@ -288,16 +288,16 @@ describe('PoHttpInterceptorBaseService', () => {
   });
 
   describe('Methods:', () => {
-    it('hasNoMessageParam should return true if `X-Portinari-No-Error` value is true in request header', () => {
+    it('hasNoMessageParam should return true if `X-PO-No-Error` value is true in request header', () => {
       ['true', 'TRUE'].forEach(value => {
-        const request = createHttpRequest('X-Portinari-No-Message', value);
+        const request = createHttpRequest('X-PO-No-Message', value);
         expect(service['hasNoMessageParam'](request)).toBeTruthy(true);
       });
     });
 
-    it('hasNoMessageParam should return false if `X-Portinari-No-Error` value is falsy in request header', () => {
+    it('hasNoMessageParam should return false if `X-PO-No-Error` value is falsy in request header', () => {
       ['false', 'FALSE', ''].forEach(value => {
-        const request = createHttpRequest('X-Portinari-No-Message', value);
+        const request = createHttpRequest('X-PO-No-Message', value);
         expect(service['hasNoMessageParam'](request)).toBeFalsy(false);
       });
     });
@@ -414,10 +414,10 @@ describe('PoHttpInterceptorBaseService', () => {
       expect(service['createModal']).not.toHaveBeenCalled();
     });
 
-    it('cloneRequestWithoutParameters: should return request without `X-Portinari-No-Error` and `X-Portinari-No-Message`', () => {
+    it('cloneRequestWithoutParameters: should return request without `X-PO-No-Error` and `X-PO-No-Message`', () => {
       const headers = new HttpHeaders()
-        .append('X-Portinari-No-Error', 'true')
-        .append('X-Portinari-No-Message', 'false')
+        .append('X-PO-No-Error', 'true')
+        .append('X-PO-No-Message', 'false')
         .append('other-header', 'test');
 
       const expectedHeaders = new HttpHeaders().append('other-header', 'test');
@@ -440,7 +440,7 @@ describe('PoHttpInterceptorBaseService', () => {
       const request = new HttpRequest('GET', 'http://fakeUrlPo.com', { headers: new HttpHeaders() });
       response = new HttpResponse({
         body: { items: [], _messages: 'test' },
-        headers: new HttpHeaders().append('X-Portinari-No-Message', 'true')
+        headers: new HttpHeaders().append('X-PO-No-Message', 'true')
       });
 
       service.processResponse(response, request);

@@ -16,8 +16,8 @@ import { PoHttpInterceptorDetail } from './po-http-interceptor-detail/po-http-in
 import { PoHttpInterceptorDetailComponent } from './po-http-interceptor-detail/po-http-interceptor-detail.component';
 
 // DEPRECATED 4.x.x
-const NO_ERROR_HEADER_PARAM = 'X-Portinari-No-Error';
-const NO_MESSAGE_HEADER_PARAM = 'X-Portinari-No-Message';
+const NO_ERROR_HEADER_PARAM = 'X-PO-No-Error';
+const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
 
 /**
  * @description
@@ -128,13 +128,13 @@ const NO_MESSAGE_HEADER_PARAM = 'X-Portinari-No-Message';
  * É possível dispensar a notificação para o usuário utilizando no cabeçalho da requisição os parâmetros listados abaixo com o valor
  * igual a `true`:
  *
- * - `X-Portinari-No-Message`: Não exibe notificações de erro e/ou sucesso.
+ * - `X-PO-No-Message`: Não exibe notificações de erro e/ou sucesso.
  *
- * - **Depreciado** `X-Portinari-No-Error`: não mostra notificações de erro com códigos `4xx` e `5xx`.
+ * - **Depreciado** `X-PO-No-Error`: não mostra notificações de erro com códigos `4xx` e `5xx`.
  *
  * ```
  * ...
- *  const headers = { 'X-Portinari-No-Message': 'true' };
+ *  const headers = { 'X-PO-No-Message': 'true' };
  *
  *  this.http.get(`/customers/1`, { headers: headers });
  * ...

@@ -69,7 +69,7 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
   }
 
   processRequest() {
-    const headers = { 'X-Portinari-No-Message': (!!this.noMessageHeaderParam).toString() };
+    const headers = { 'X-PO-No-Message': (!!this.noMessageHeaderParam).toString() };
     const body = JSON.parse(this.requestMessage);
     const params = { status: this.status || '' };
 
