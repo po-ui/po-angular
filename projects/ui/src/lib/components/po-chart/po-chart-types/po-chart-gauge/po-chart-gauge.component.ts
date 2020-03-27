@@ -34,6 +34,7 @@ export class PoChartGaugeComponent extends PoChartCircular implements AfterViewI
 
   @ViewChild('svgContainer', { static: true, read: ViewContainerRef }) svgContainerRef: ViewContainerRef;
 
+  /* istanbul ignore next */
   constructor(
     private changeDetection: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,

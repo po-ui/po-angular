@@ -5,6 +5,22 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
 
+/* istanbul ignore next */
+const providers = [
+  {
+    provide: NG_VALUE_ACCESSOR,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoRichTextComponent),
+    multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoRichTextComponent),
+    multi: true
+  }
+];
+
 /**
  * @docsExtends PoRichTextBaseComponent
  *
@@ -29,18 +45,7 @@ import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.c
 @Component({
   selector: 'po-rich-text',
   templateUrl: './po-rich-text.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoRichTextComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoRichTextComponent),
-      multi: true
-    }
-  ]
+  providers
 })
 export class PoRichTextComponent extends PoRichTextBaseComponent implements AfterViewInit, OnDestroy {
   private listener = this.validateClassesForRequired.bind(this);

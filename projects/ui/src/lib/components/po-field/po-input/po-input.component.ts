@@ -40,6 +40,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   ]
 })
 export class PoInputComponent extends PoInputGeneric {
+  /* istanbul ignore next */
   constructor(el: ElementRef) {
     super(el);
   }

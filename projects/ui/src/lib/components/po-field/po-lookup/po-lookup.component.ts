@@ -7,6 +7,24 @@ import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
 
+/* istanbul ignore next */
+const providers = [
+  PoLookupFilterService,
+  PoLookupModalService,
+  {
+    provide: NG_VALUE_ACCESSOR,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoLookupComponent),
+    multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoLookupComponent),
+    multi: true
+  }
+];
+
 /**
  * @docsExtends PoLookupBaseComponent
  *
@@ -61,20 +79,7 @@ import { PoLookupModalService } from './services/po-lookup-modal.service';
 @Component({
   selector: 'po-lookup',
   templateUrl: './po-lookup.component.html',
-  providers: [
-    PoLookupFilterService,
-    PoLookupModalService,
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoLookupComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoLookupComponent),
-      multi: true
-    }
-  ]
+  providers
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit {
   private modalSubscription: Subscription;

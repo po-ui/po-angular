@@ -25,42 +25,70 @@ describe('PoChartDynamicTypeComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it(`calculateSVGContainerDimensions: should set 'svgHeight' and 'centerX'`, () => {
-      component.height = 200;
-      const padding = 24;
-      const chartWrapperElement = 20;
-      const chartHeaderElement = 30;
-      const chartLegendElement = 10;
-      const svgHeightResult = component.height - chartHeaderElement - chartLegendElement - padding * 2;
-      const centerXResult = chartWrapperElement / 2;
+    describe('calculateSVGContainerDimensions:', () => {
+      it(`should set 'svgHeight' and 'centerX'`, () => {
+        component.height = 200;
+        const padding = 24;
+        const chartWrapperElement = 20;
+        const chartHeaderElement = 30;
+        const chartLegendElement = 10;
+        const svgHeightResult = component.height - chartHeaderElement - chartLegendElement - padding * 2;
+        const centerXResult = chartWrapperElement / 2;
 
-      component['calculateSVGContainerDimensions'](chartWrapperElement, chartHeaderElement, chartLegendElement);
+        component['calculateSVGContainerDimensions'](chartWrapperElement, chartHeaderElement, chartLegendElement);
 
-      expect(component.svgHeight).toBe(svgHeightResult);
-      expect(component.centerX).toBe(centerXResult);
+        expect(component.svgHeight).toBe(svgHeightResult);
+        expect(component.centerX).toBe(centerXResult);
+      });
+
+      it(`should set 'svgHeight' with 292 if 'height' is 400,
+        'chartHeaderElement' is 20 and 'chartLegendElement' is 40`, () => {
+        component.height = 400;
+        const chartWrapperElement = 20;
+        const chartHeaderElement = 20;
+        const chartLegendElement = 40;
+        const svgHeightResult = 292;
+
+        component['calculateSVGContainerDimensions'](chartWrapperElement, chartHeaderElement, chartLegendElement);
+
+        expect(component.svgHeight).toBe(svgHeightResult);
+      });
+
+      it(`should set 'svgHeight' with 0 if 'height' is 0,
+        'chartHeaderElement' is 20 and 'chartLegendElement' is 40`, () => {
+        component.height = 0;
+        const chartWrapperElement = 20;
+        const chartHeaderElement = 20;
+        const chartLegendElement = 40;
+        const svgHeightResult = 0;
+
+        component['calculateSVGContainerDimensions'](chartWrapperElement, chartHeaderElement, chartLegendElement);
+
+        expect(component.svgHeight).toBe(svgHeightResult);
+      });
     });
 
-    it(`calculateSVGContainerDimensions: should set 'svgHeight' with 292 if 'height' is 400,
-      'chartHeaderElement' is 20 and 'chartLegendElement' is 40`, () => {
-      component.height = 400;
-      const chartWrapperElement = 20;
-      const chartHeaderElement = 20;
-      const chartLegendElement = 40;
-      const svgHeightResult = 292;
+    describe('calculateTotalValue:', () => {
+      it('should return sum of value series', () => {
+        component['series'] = [{ value: 1 }, { value: 4 }, { value: 7 }];
 
-      component['calculateSVGContainerDimensions'](chartWrapperElement, chartHeaderElement, chartLegendElement);
+        const totalSum = 12;
 
-      expect(component.svgHeight).toBe(svgHeightResult);
-    });
+        component['calculateTotalValue']();
 
-    it('calculateTotalValue: should return sum of value series', () => {
-      component['series'] = [{ value: 1 }, { value: 4 }, { value: 7 }];
+        expect(component['totalValue']).toBe(totalSum);
+      });
 
-      const totalSum = 12;
+      it('should be 100 if PoChartType is Gauge', () => {
+        component['series'] = [{ value: 1 }, { value: 4 }, { value: 7 }];
+        component.type = PoChartType.Gauge;
 
-      component['calculateTotalValue']();
+        const totalSum = 100;
 
-      expect(component['totalValue']).toBe(totalSum);
+        component['calculateTotalValue']();
+
+        expect(component['totalValue']).toBe(totalSum);
+      });
     });
   });
 });

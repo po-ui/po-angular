@@ -128,35 +128,62 @@ describe('PoMenuPanelComponent: ', () => {
       expect(window.open).toHaveBeenCalledWith('http://fakeUrlPo.com.br', '_blank');
     });
 
-    it('checkActiveMenuByUrl: should not navigate if has same link', done => {
-      spyOn(component, <any>'activateMenuByUrl');
+    describe('checkActiveMenuByUrl', () => {
+      it('should navigate if there is no linkActive', () => {
+        spyOn(component, <any>'activateMenuByUrl');
+        component.linkActive = undefined;
+        component['checkActiveMenuByUrl']('search');
+        expect(component['activateMenuByUrl']).toHaveBeenCalled();
+      });
 
-      component.linkActive = '/search';
+      it('should navigate if has not same link', () => {
+        spyOn(component, <any>'activateMenuByUrl');
+        component.linkActive = '/home';
+        component['checkActiveMenuByUrl']('search');
+        expect(component['activateMenuByUrl']).toHaveBeenCalled();
+      });
 
-      fixture.ngZone.run(() => {
-        router.navigate(['search']).then(() => {
-          expect(component['activateMenuByUrl']).not.toHaveBeenCalled();
+      it('should not navigate if has same link', done => {
+        spyOn(component, <any>'activateMenuByUrl');
 
-          done();
+        component.linkActive = '/search';
+
+        fixture.ngZone.run(() => {
+          router.navigate(['search']).then(() => {
+            expect(component['activateMenuByUrl']).not.toHaveBeenCalled();
+
+            done();
+          });
         });
       });
     });
 
-    it('activateMenuByUrl: shouldn`t call activeMenuItem if menuItem no has same link of param', () => {
-      const menuItem = { label: 'Search', link: '/search', icon: 'user' };
-      spyOn(component, <any>'activateMenuItem');
+    describe('activateMenuByUrl:', () => {
+      it('shouldn`t call activeMenuItem if menuItem no has same link of param', () => {
+        const menuItem = { label: 'Search', link: '/search', icon: 'user' };
+        spyOn(component, <any>'activateMenuItem');
 
-      component['activateMenuByUrl']('home', [menuItem]);
+        component['activateMenuByUrl']('home', [menuItem]);
 
-      expect(component['activateMenuItem']).not.toHaveBeenCalled();
-    });
+        expect(component['activateMenuItem']).not.toHaveBeenCalled();
+      });
 
-    it('activateMenuByUrl: shouldn`t search by some menuItem that has the same link of param', () => {
-      spyOn(component, <any>'activateMenuItem');
+      it('shouldn`t search by some menuItem that has the same link of param', () => {
+        spyOn(component, <any>'activateMenuItem');
 
-      component['activateMenuByUrl']('home', null);
+        component['activateMenuByUrl']('home', null);
 
-      expect(component['activateMenuItem']).not.toHaveBeenCalled();
+        expect(component['activateMenuItem']).not.toHaveBeenCalled();
+      });
+
+      it('shouldn call activeMenuItem if menuItem no has same link of param', () => {
+        const menuItem = { label: 'Search', link: '/home', icon: 'user' };
+        spyOn(component, <any>'activateMenuItem');
+
+        component['activateMenuByUrl']('/home', [menuItem]);
+
+        expect(component['activateMenuItem']).toHaveBeenCalled();
+      });
     });
   });
 });
