@@ -231,6 +231,36 @@ describe('PoModalComponent:', () => {
     expect(element.nativeElement.querySelectorAll('.po-button').length).toBe(1);
   });
 
+  it(`focusFunction: should call 'stopPropagation' if 'modalActive' is equal to id`, () => {
+    const fakeEvent = {
+      target: 'click',
+      stopPropagation: () => {}
+    };
+
+    component['firstElement'] = <any>{
+      focus: () => {}
+    };
+    component['id'] = '1';
+    component['poModalService'] = { modalActive: undefined };
+    component['modalContent'] = {
+      nativeElement: {
+        contains: () => 0
+      }
+    };
+    component['setFirstElement'] = () => {};
+
+    const spyEvent = spyOn(fakeEvent, 'stopPropagation');
+
+    component.hideClose = true;
+    component['initFocus']();
+
+    fixture.detectChanges();
+
+    component['focusFunction'](fakeEvent);
+
+    expect(spyEvent).toHaveBeenCalled();
+  });
+
   describe('Methods:', () => {
     it('onClickOut: shouldn`t call close when clickOut is true and click in modal content.', () => {
       const fakeEvent = {

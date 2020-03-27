@@ -893,6 +893,16 @@ describe('PoComboComponent:', () => {
 
         expect(spyControlComboVisibility).toHaveBeenCalledWith(true);
       });
+
+      it('should not call `controlComboVisibility` if typed "a"', () => {
+        const event = { ...fakeEvent, keyCode: 65 };
+
+        const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
+
+        component.onKeyDown(event);
+
+        expect(spyControlComboVisibility).not.toHaveBeenCalled();
+      });
     });
 
     it('onOptionClick: should call `stopPropagation` if has an event parameter', () => {

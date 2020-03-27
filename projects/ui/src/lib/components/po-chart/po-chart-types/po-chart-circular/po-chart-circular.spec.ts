@@ -169,32 +169,49 @@ describe('PoChartCircular:', () => {
       expect(component['animationSetup']).toHaveBeenCalled();
     });
 
-    it('changeTooltipPosition: should call `setTooltipPositions` and `renderer.setStyle` to set tooltip position', () => {
-      const tooltipPositions = { left: 10, top: 20 };
-      const event = new MouseEvent('leave');
+    describe('changeTooltipPosition:', () => {
+      it('should call `setTooltipPositions` and `renderer.setStyle` to set tooltip position', () => {
+        const tooltipPositions = { left: 10, top: 20 };
+        const event = new MouseEvent('leave');
 
-      const tooltipElement = component.chartBody.nativeElement.querySelector('.po-chart-tooltip');
+        const tooltipElement = component.chartBody.nativeElement.querySelector('.po-chart-tooltip');
 
-      component.tooltipElement = tooltipElement;
+        component.tooltipElement = tooltipElement;
 
-      spyOn(component, <any>'showTooltip');
-      spyOn(component, <any>'setTooltipPositions').and.returnValue(tooltipPositions);
-      spyOn(component['renderer'], 'setStyle');
+        spyOn(component, <any>'showTooltip');
+        spyOn(component, <any>'setTooltipPositions').and.returnValue(tooltipPositions);
+        spyOn(component['renderer'], 'setStyle');
 
-      component['changeTooltipPosition'](event);
+        component['changeTooltipPosition'](event);
 
-      expect(component['renderer'].setStyle).toHaveBeenCalledWith(
-        component.tooltipElement,
-        'left',
-        `${tooltipPositions.left}px`
-      );
-      expect(component['renderer'].setStyle).toHaveBeenCalledWith(
-        component.tooltipElement,
-        'top',
-        `${tooltipPositions.top}px`
-      );
-      expect(component['setTooltipPositions']).toHaveBeenCalledWith(event);
-      expect(component['showTooltip']).toHaveBeenCalled();
+        expect(component['renderer'].setStyle).toHaveBeenCalledWith(
+          component.tooltipElement,
+          'left',
+          `${tooltipPositions.left}px`
+        );
+        expect(component['renderer'].setStyle).toHaveBeenCalledWith(
+          component.tooltipElement,
+          'top',
+          `${tooltipPositions.top}px`
+        );
+        expect(component['setTooltipPositions']).toHaveBeenCalledWith(event);
+        expect(component['showTooltip']).toHaveBeenCalled();
+      });
+
+      it('should not call `showTooltip` if tooltipElement is not declared', () => {
+        const tooltipPositions = { left: 10, top: 20 };
+        const event = new MouseEvent('leave');
+
+        component.tooltipElement = undefined;
+
+        spyOn(component, <any>'showTooltip');
+        spyOn(component, <any>'setTooltipPositions').and.returnValue(tooltipPositions);
+        spyOn(component['renderer'], 'setStyle');
+
+        component['changeTooltipPosition'](event);
+
+        expect(component['showTooltip']).not.toHaveBeenCalled();
+      });
     });
 
     it('createPath: should create a svg path element with some attributes and append it into `svgPathsWrapper`', () => {
@@ -265,14 +282,26 @@ describe('PoChartCircular:', () => {
       expect(component['emitEventOnEnter']).toHaveBeenCalledWith(serie);
     });
 
-    it('removeTooltip: expect that `tooltipElement` has the class `po-invisible` being added', () => {
-      component.tooltipElement = component.chartBody.nativeElement.lastChild;
+    describe('removeTooltip:', () => {
+      it('expect that `tooltipElement` has the class `po-invisible` being added', () => {
+        component.tooltipElement = component.chartBody.nativeElement.lastChild;
 
-      spyOn(component['renderer'], 'addClass');
+        spyOn(component['renderer'], 'addClass');
 
-      component['removeTooltip']();
+        component['removeTooltip']();
 
-      expect(component['renderer'].addClass).toHaveBeenCalledWith(component.tooltipElement, 'po-invisible');
+        expect(component['renderer'].addClass).toHaveBeenCalledWith(component.tooltipElement, 'po-invisible');
+      });
+
+      it('should not call `renderer` if tooltipElement is not declared', () => {
+        component.tooltipElement = undefined;
+
+        spyOn(component['renderer'], 'addClass');
+
+        component['removeTooltip']();
+
+        expect(component['renderer'].addClass).not.toHaveBeenCalled();
+      });
     });
 
     it('showTooltip: should remove `po-invisible` class', () => {

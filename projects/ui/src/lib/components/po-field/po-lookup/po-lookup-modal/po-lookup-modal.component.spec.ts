@@ -116,10 +116,11 @@ describe('PoLookupModalComponent', () => {
   });
 
   it('should filter the key pressed', () => {
+    component.ngOnInit();
     component.openModal();
     fixture.detectChanges();
 
-    spyOn(component, <any>'validateEnterPressed');
+    spyOn(component, <any>'validateEnterPressed').and.returnValue(of(true));
 
     const eventKeyBoard = document.createEvent('KeyboardEvent');
     eventKeyBoard.initEvent('keyup', true, true);

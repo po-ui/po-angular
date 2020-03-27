@@ -43,16 +43,10 @@ describe('PoDialogComponent:', () => {
   });
 
   it('should call primaryAction and close', () => {
-    component.primaryAction = {
-      label: 'teste',
-      action: () => {}
-    };
-
-    spyOn(component.primaryAction, 'action');
     spyOn(component, 'close');
     component.primaryAction.action();
     component.close();
-    expect(component.primaryAction.action).toHaveBeenCalled();
+    expect(component.primaryAction.label).toBe('ok');
     expect(component.close).toHaveBeenCalled();
   });
 

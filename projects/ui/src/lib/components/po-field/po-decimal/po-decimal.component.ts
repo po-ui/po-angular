@@ -338,9 +338,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     if (elementValue !== this.valueBeforeChange) {
       this.fireChange = true;
       setTimeout(() => {
-        if (this.fireChange) {
-          this.change.emit(elementValue);
-        }
+        this.change.emit(elementValue);
       }, 200);
     }
   }

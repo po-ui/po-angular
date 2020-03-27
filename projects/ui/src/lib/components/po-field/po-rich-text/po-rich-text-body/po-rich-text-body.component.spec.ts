@@ -826,12 +826,22 @@ describe('PoRichTextBodyComponent:', () => {
       expect(nativeElement.querySelector('.teste-div')).toBeTruthy();
     });
 
-    it('rgbToHex: should return the hexadecimal value`', () => {
-      const rbg = 'rgb(0, 128, 255)';
-      const hex = '#0080ff';
-      const result = component['rgbToHex'](rbg);
+    describe('rgbToHex:', () => {
+      it('should return the hexadecimal value`', () => {
+        const rbg = 'rgb(0, 128, 255)';
+        const hex = '#0080ff';
+        const result = component['rgbToHex'](rbg);
 
-      expect(result).toBe(hex);
+        expect(result).toBe(hex);
+      });
+
+      it('should return the hexadecimal value if not separeted by comma`', () => {
+        const rbg = 'rgb(110 1 2)';
+        const hex = '#6e0102';
+        const result = component['rgbToHex'](rbg);
+
+        expect(result).toBe(hex);
+      });
     });
 
     it('toggleCursorOnLink: shouldn`t call remove if focusNode is undefined', () => {

@@ -6,6 +6,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 export abstract class PoNumberBaseComponent extends PoInputGeneric {
   type = 'number';
 
+  /* istanbul ignore next */
   constructor(elementRef: ElementRef) {
     super(elementRef);
   }

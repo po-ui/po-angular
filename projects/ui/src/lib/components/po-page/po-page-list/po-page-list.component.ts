@@ -60,6 +60,7 @@ export class PoPageListComponent extends PoPageListBaseComponent
 
   @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
 
+  /* istanbul ignore next */
   constructor(
     viewRef: ViewContainerRef,
     languageService: PoLanguageService,

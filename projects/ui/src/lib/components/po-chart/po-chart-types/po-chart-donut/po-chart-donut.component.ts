@@ -10,6 +10,7 @@ import { poChartStartAngle } from '../po-chart-circular/po-chart-circular.consta
 export class PoChartDonutComponent extends PoChartCircular {
   chartItemStartAngle: number = poChartStartAngle;
 
+  /* istanbul ignore next */
   constructor(el: ElementRef, ngZone: NgZone, renderer: Renderer2) {
     super(el, ngZone, renderer);
   }
