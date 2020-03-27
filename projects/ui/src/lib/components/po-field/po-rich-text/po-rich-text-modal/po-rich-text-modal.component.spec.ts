@@ -165,7 +165,7 @@ describe('PoRichTextModalComponent:', () => {
       component['linkElement'] = undefined;
       const fakeEvent = {
         isSelectedLink: true,
-        linkElement: 'portinari'
+        linkElement: 'po'
       };
 
       component.selectedLink(fakeEvent);

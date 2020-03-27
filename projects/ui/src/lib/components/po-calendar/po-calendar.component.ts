@@ -11,17 +11,17 @@ import { PoDateService } from '../../services/po-date/po-date.service';
  *
  * @example
  *
- * <example name="po-calendar-basic" title="Portinari Calendar Basic" >
+ * <example name="po-calendar-basic" title="PO Calendar Basic" >
  *  <file name="sample-po-calendar-basic/sample-po-calendar-basic.component.html"> </file>
  *  <file name="sample-po-calendar-basic/sample-po-calendar-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-calendar-labs" title="Portinari Calendar Labs" >
+ * <example name="po-calendar-labs" title="PO Calendar Labs" >
  *  <file name="sample-po-calendar-labs/sample-po-calendar-labs.component.html"> </file>
  *  <file name="sample-po-calendar-labs/sample-po-calendar-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-calendar-ticket-sales" title="Portinari Calendar - Ticket Sales" >
+ * <example name="po-calendar-ticket-sales" title="PO Calendar - Ticket Sales" >
  *  <file name="sample-po-calendar-ticket-sales/sample-po-calendar-ticket-sales.component.html"> </file>
  *  <file name="sample-po-calendar-ticket-sales/sample-po-calendar-ticket-sales.component.ts"> </file>
  * </example>

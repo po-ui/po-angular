@@ -15,7 +15,7 @@ export class PoPageJobSchedulerService {
   private endpoint = '/';
 
   readonly headers: HttpHeaders = new HttpHeaders({
-    'X-PORTINARI-SCREEN-LOCK': 'true'
+    'X-PO-SCREEN-LOCK': 'true'
   });
 
   constructor(private http: HttpClient) {}

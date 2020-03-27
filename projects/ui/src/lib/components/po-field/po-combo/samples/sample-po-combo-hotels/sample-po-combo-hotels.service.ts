@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { PoComboFilter, PoComboOption } from '@portinari/portinari-ui';
+import { PoComboFilter, PoComboOption } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoComboHotelsService implements PoComboFilter {

@@ -146,7 +146,7 @@ describe('PoPageLoginComponent: ', () => {
   });
 
   it('should show a link when `p-recovery` set a value', () => {
-    component.recovery = 'http://po.portinari.com.br';
+    component.recovery = 'http://po.com.br';
 
     fixture.detectChanges();
 
@@ -157,7 +157,7 @@ describe('PoPageLoginComponent: ', () => {
   });
 
   it('should show a new user when `p-register` set a value', () => {
-    component.registerUrl = 'http://po.portinari.com.br';
+    component.registerUrl = 'http://po.com.br';
 
     fixture.detectChanges();
 
@@ -548,7 +548,7 @@ describe('PoPageLoginComponent: ', () => {
     it('setUrlRedirect: should call `window.open` with external url', () => {
       spyOn(window, 'open');
 
-      component['setUrlRedirect']('http://po.portinari.com.br');
+      component['setUrlRedirect']('http://po.com.br');
 
       expect(window.open).toHaveBeenCalled();
     });
@@ -880,7 +880,7 @@ describe('PoPageLoginComponent: ', () => {
       customField = {
         property: 'domain',
         placeholder: 'Enter your domain',
-        url: 'https://portinari.io/sample/api/comboOption/heroes',
+        url: 'https://po-ui.io/sample/api/comboOption/heroes',
         fieldValue: 'nickname'
       };
       component.customField = customField;
@@ -918,7 +918,7 @@ describe('PoPageLoginComponent: ', () => {
           { label: 'Option 1', value: '1' },
           { label: 'Option 2', value: '2' }
         ],
-        url: 'https://portinari.io/sample/api/comboOption/heroes',
+        url: 'https://po-ui.io/sample/api/comboOption/heroes',
         fieldValue: 'nickname'
       };
       component.customField = customField;

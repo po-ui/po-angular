@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoDatepickerRange, PoDatepickerRangeLiterals } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoDatepickerRange, PoDatepickerRangeLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-datepicker-range-labs',

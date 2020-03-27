@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { PoStepperComponent, PoTableColumn, PoTreeViewItem } from '@portinari/portinari-ui';
+import { PoStepperComponent, PoTableColumn, PoTreeViewItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tree-view-supermarket',

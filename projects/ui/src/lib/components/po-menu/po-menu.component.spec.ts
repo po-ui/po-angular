@@ -662,7 +662,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('should display `po-menu-logo` if have `logo`.', () => {
-      component.logo = 'https://portinari.io/assets/graphics/portinari-logo-grey.svg';
+      component.logo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
 
       fixture.detectChanges();
 
@@ -671,7 +671,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('should display `po-menu-short-logo` if have `shortLogo` and `enableCollapse` is true.', () => {
-      component.shortLogo = 'https://portinari.io/assets/graphics/portinari-logo-grey.svg';
+      component.shortLogo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
       spyOnProperty(component, 'enableCollapse').and.returnValue(true);
 
       fixture.detectChanges();
@@ -681,7 +681,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('shouldn`t display `po-menu-short-logo` if have `shortLogo` but `enableCollapse` is false.', () => {
-      component.shortLogo = 'https://portinari.io/assets/graphics/portinari-logo-grey.svg';
+      component.shortLogo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
       spyOnProperty(component, 'enableCollapse').and.returnValue(false);
 
       fixture.detectChanges();
@@ -1447,7 +1447,7 @@ describe('PoMenuComponent:', () => {
       const menuItems = [{ label: 'Menu', link: '/menu' }];
       const search = 'menu';
 
-      component.service = 'http://po.portinari.com.br/api';
+      component.service = 'http://po.com.br/api';
 
       const spyGetFilteredData = spyOn(component.filterService, 'getFilteredData').and.returnValue(of(menuItems));
 
@@ -1463,7 +1463,7 @@ describe('PoMenuComponent:', () => {
 
       component.filteredItems = [...menuItems];
 
-      component.service = 'http://po.portinari.com.br/api';
+      component.service = 'http://po.com.br/api';
 
       const spyGetFilteredData = spyOn(component.filterService, 'getFilteredData');
 
@@ -1519,7 +1519,7 @@ describe('PoMenuComponent:', () => {
       const menus = [...foundMenus, ...notFoundMenus];
 
       component.menus = menus;
-      component.service = 'http://po.portinari.com.br';
+      component.service = 'http://po.com.br';
 
       const spyFilterOnService = spyOn(component, <any>'filterOnService').and.returnValue(Promise.resolve(foundMenus));
       const spyFilterLocalItems = spyOn(component, <any>'filterLocalItems');

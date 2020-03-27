@@ -71,14 +71,14 @@ describe('PoMenuPanelComponent: ', () => {
       expect(nativeElement.querySelectorAll('po-menu-panel-item').length).toBe(5);
     });
 
-    it('should not appear if it is incorrect the icon class portinari, `po-icon-star`.', () => {
+    it('should not appear if it is incorrect the icon class po, `po-icon-star`.', () => {
       component.menus = [{ label: 'Home', link: './home', icon: 'star' }];
 
       fixture.detectChanges();
       expect(nativeElement.querySelectorAll('.po-icon-star').length).toBe(0);
     });
 
-    it('should appear if it is correct the icon class portinari, `po-icon-star`.', () => {
+    it('should appear if it is correct the icon class po, `po-icon-star`.', () => {
       component.menus = [{ label: 'Home', link: './home', icon: 'po-icon-star' }];
 
       fixture.detectChanges();

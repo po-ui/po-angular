@@ -109,7 +109,7 @@ describe('PoPageCustomizationService:', () => {
       const req = httpMock.expectOne(request => request.url === '/test/1');
 
       expect(req.request.method).toBe('DELETE');
-      expect(req.request.headers.get('X-PORTINARI-SCREEN-LOCK')).toBe('true');
+      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
 
       req.flush({});
       tick();
@@ -123,7 +123,7 @@ describe('PoPageCustomizationService:', () => {
       const req = httpMock.expectOne(request => request.url === '/test');
 
       expect(req.request.method).toBe('DELETE');
-      expect(req.request.headers.get('X-PORTINARI-SCREEN-LOCK')).toBe('true');
+      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
       expect(req.request.body).toEqual([1, 2, 3]);
 
       req.flush({});
@@ -138,7 +138,7 @@ describe('PoPageCustomizationService:', () => {
         const req = httpMock.expectOne(request => request.url === '/test');
 
         expect(req.request.method).toBe('GET');
-        expect(req.request.headers.get('X-PORTINARI-SCREEN-LOCK')).toBe('true');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
         expect(req.request.params.get('name')).toBe('mario');
 
         req.flush({});
@@ -152,7 +152,7 @@ describe('PoPageCustomizationService:', () => {
         const req = httpMock.expectOne(request => request.url === '/test');
 
         expect(req.request.method).toBe('GET');
-        expect(req.request.headers.get('X-PORTINARI-SCREEN-LOCK')).toBe('true');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
         expect(req.request.params.toString()).toBeFalsy();
         req.flush({});
         tick();
@@ -167,7 +167,7 @@ describe('PoPageCustomizationService:', () => {
       const req = httpMock.expectOne(request => request.url === '/test/3');
 
       expect(req.request.method).toBe('GET');
-      expect(req.request.headers.get('X-PORTINARI-SCREEN-LOCK')).toBe('true');
+      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
 
       req.flush({});
       tick();
@@ -181,7 +181,7 @@ describe('PoPageCustomizationService:', () => {
       const req = httpMock.expectOne(request => request.url === '/test');
 
       expect(req.request.method).toBe('POST');
-      expect(req.request.headers.get('X-PORTINARI-SCREEN-LOCK')).toBe('true');
+      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
       expect(req.request.body).toEqual({ 'name': 'mario' });
 
       req.flush({});
@@ -196,7 +196,7 @@ describe('PoPageCustomizationService:', () => {
       const req = httpMock.expectOne(request => request.url === '/test/1');
 
       expect(req.request.method).toBe('PUT');
-      expect(req.request.headers.get('X-PORTINARI-SCREEN-LOCK')).toBe('true');
+      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
       expect(req.request.body).toEqual({ 'name': 'mario' });
 
       req.flush({});

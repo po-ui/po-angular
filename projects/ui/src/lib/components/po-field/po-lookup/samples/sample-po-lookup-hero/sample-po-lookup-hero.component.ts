@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
-import { PoLookupColumn, PoSelectOption } from '@portinari/portinari-ui';
+import { PoLookupColumn, PoSelectOption } from '@po-ui/ng-components';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 import { SamplePoLookupService } from '../sample-po-lookup.service';
 

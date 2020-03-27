@@ -1351,14 +1351,14 @@ describe('PoComboComponent:', () => {
     });
 
     it('should includes an icon.', () => {
-      component.icon = 'po-icon-portinari';
+      component.icon = 'po-icon-news';
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-portinari')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-icon-news')).toBeTruthy();
     });
 
     it('should attribute `po-field-icon-disabled` class when input is disabled.', () => {
-      component.icon = 'po-icon-portinari';
+      component.icon = 'po-icon-news';
       component.disabled = true;
       fixture.detectChanges();
 
@@ -1366,7 +1366,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('shouldn`t attribute `po-field-icon-disabled` class when input is not disabled.', () => {
-      component.icon = 'po-icon-portinari';
+      component.icon = 'po-icon-news';
       component.disabled = false;
       fixture.detectChanges();
 

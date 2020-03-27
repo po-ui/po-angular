@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
-import { PoBreadcrumb, PoDynamicFormField } from '@portinari/portinari-ui';
+import { PoBreadcrumb, PoDynamicFormField } from '@po-ui/ng-components';
 
-import { PoPageDynamicEditActions } from '@portinari/portinari-templates';
+import { PoPageDynamicEditActions } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-dynamic-edit-user',

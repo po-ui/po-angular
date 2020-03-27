@@ -41,38 +41,38 @@ const poComboContainerPositionDefault = 'bottom';
  *
  * @example
  *
- * <example name="po-combo-basic" title="Portinari Combo Basic">
+ * <example name="po-combo-basic" title="PO Combo Basic">
  *   <file name="sample-po-combo-basic/sample-po-combo-basic.component.html"> </file>
  *   <file name="sample-po-combo-basic/sample-po-combo-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-combo-labs" title="Portinari Combo Labs">
+ * <example name="po-combo-labs" title="PO Combo Labs">
  *   <file name="sample-po-combo-labs/sample-po-combo-labs.component.html"> </file>
  *   <file name="sample-po-combo-labs/sample-po-combo-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-combo-scheduling" title="Portinari Combo - Scheduling">
+ * <example name="po-combo-scheduling" title="PO Combo - Scheduling">
  *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.component.html"> </file>
  *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.component.ts"> </file>
  *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.service.ts"> </file>
  * </example>
  *
- * <example name="po-combo-transfer" title="Portinari Combo - Banking Transfer">
+ * <example name="po-combo-transfer" title="PO Combo - Banking Transfer">
  *   <file name="sample-po-combo-transfer/sample-po-combo-transfer.component.html"> </file>
  *   <file name="sample-po-combo-transfer/sample-po-combo-transfer.component.ts"> </file>
  * </example>
  *
- * <example name="po-combo-heroes" title="Portinari Combo - Heroes">
+ * <example name="po-combo-heroes" title="PO Combo - Heroes">
  *   <file name="sample-po-combo-heroes/sample-po-combo-heroes.component.html"> </file>
  *   <file name="sample-po-combo-heroes/sample-po-combo-heroes.component.ts"> </file>
  * </example>
  *
- * <example name="po-combo-heroes-reactive-form" title="Portinari Combo - Heroes Reactive Form">
+ * <example name="po-combo-heroes-reactive-form" title="PO Combo - Heroes Reactive Form">
  *   <file name="sample-po-combo-heroes-reactive-form/sample-po-combo-heroes-reactive-form.component.html"> </file>
  *   <file name="sample-po-combo-heroes-reactive-form/sample-po-combo-heroes-reactive-form.component.ts"> </file>
  * </example>
  *
- * <example name="po-combo-hotels" title="Portinari Combo - Booking Hotel">
+ * <example name="po-combo-hotels" title="PO Combo - Booking Hotel">
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.component.html"> </file>
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.component.ts"> </file>
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.service.ts"> </file>
@@ -188,7 +188,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoComboComponent } from '@portinari/portinari-ui';
+   * import { PoComboComponent } from '@po-ui/ng-components';
    *
    * ...
    *

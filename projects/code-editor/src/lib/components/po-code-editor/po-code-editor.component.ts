@@ -23,22 +23,22 @@ const providers: Array<Provider> = [
  *
  * @example
  *
- * <example name="po-code-editor-basic" title="Portinari Code Editor Basic">
+ * <example name="po-code-editor-basic" title="PO Code Editor Basic">
  *  <file name="sample-po-code-editor-basic/sample-po-code-editor-basic.component.html"> </file>
  *  <file name="sample-po-code-editor-basic/sample-po-code-editor-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-code-editor-labs" title="Portinari Code Editor Labs">
+ * <example name="po-code-editor-labs" title="PO Code Editor Labs">
  *  <file name="sample-po-code-editor-labs/sample-po-code-editor-labs.component.html"> </file>
  *  <file name="sample-po-code-editor-labs/sample-po-code-editor-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-code-editor-diff" title="Portinari Code Editor - Diff">
+ * <example name="po-code-editor-diff" title="PO Code Editor - Diff">
  *  <file name="sample-po-code-editor-diff/sample-po-code-editor-diff.component.html"> </file>
  *  <file name="sample-po-code-editor-diff/sample-po-code-editor-diff.component.ts"> </file>
  * </example>
  *
- * <example name="po-code-editor-terraform" title="Portinari Code Editor - Terraform">
+ * <example name="po-code-editor-terraform" title="PO Code Editor - Terraform">
  *  <file name="sample-po-code-editor-terraform/sample-po-code-editor-terraform.component.html"> </file>
  *  <file name="sample-po-code-editor-terraform/sample-po-code-editor-terraform.component.ts"> </file>
  *  <file name="sample-po-code-editor-terraform/sample-po-code-editor-terraform.constant.ts"> </file>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoChartGaugeSerie, PoChartType, PoDialogService, PoPieChartSeries } from '@portinari/portinari-ui';
+import { PoChartGaugeSerie, PoChartType, PoDialogService, PoPieChartSeries } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-coffee-ranking',

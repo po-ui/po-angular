@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoModalAction, PoModalComponent, PoRadioGroupOption, PoCheckboxGroupOption } from '@portinari/portinari-ui';
+import { PoModalAction, PoModalComponent, PoRadioGroupOption, PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-modal-labs',
@@ -79,7 +79,7 @@ export class SamplePoModalLabsComponent implements OnInit {
   restore() {
     this.size = undefined;
     this.content = undefined;
-    this.title = 'Portinari Modal';
+    this.title = 'PO Modal';
     this.properties = [];
     this.primaryActionLabel = undefined;
     this.primaryActionProperties = [];

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
-import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-checkbox-group-password-policy',

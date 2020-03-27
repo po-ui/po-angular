@@ -7,19 +7,19 @@ import { PoAvatarBaseComponent } from './po-avatar-base.component';
  *
  * @example
  *
- * <example name="po-avatar-basic" title="Portinari Avatar Basic" >
+ * <example name="po-avatar-basic" title="PO Avatar Basic" >
  *  <file name="sample-po-avatar-basic/sample-po-avatar-basic.component.html"> </file>
  *  <file name="sample-po-avatar-basic/sample-po-avatar-basic.component.ts"> </file>
  *  <file name="sample-po-avatar-basic/sample-po-avatar-basic.component.e2e-spec.ts"> </file>
  *  <file name="sample-po-avatar-basic/sample-po-avatar-basic.component.po.ts"> </file>
  * </example>
  *
- * <example name="po-avatar-labs" title="Portinari Avatar Labs" >
+ * <example name="po-avatar-labs" title="PO Avatar Labs" >
  *  <file name="sample-po-avatar-labs/sample-po-avatar-labs.component.html"> </file>
  *  <file name="sample-po-avatar-labs/sample-po-avatar-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-avatar-business-card" title="Portinari Avatar - Business Card" >
+ * <example name="po-avatar-business-card" title="PO Avatar - Business Card" >
  *  <file name="sample-po-avatar-business-card/sample-po-avatar-business-card.component.html"> </file>
  *  <file name="sample-po-avatar-business-card/sample-po-avatar-business-card.component.ts"> </file>
  * </example>

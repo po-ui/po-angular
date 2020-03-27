@@ -7,17 +7,17 @@ import { PoProgressStatus } from './enums/po-progress-status.enum';
  * @docsExtends PoProgressBaseComponent
  *
  * @example
- * <example name="po-progress-basic" title="Portinari Progress Basic">
+ * <example name="po-progress-basic" title="PO Progress Basic">
  *   <file name="sample-po-progress-basic/sample-po-progress-basic.component.html"> </file>
  *   <file name="sample-po-progress-basic/sample-po-progress-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-progress-labs" title="Portinari Progress Labs">
+ * <example name="po-progress-labs" title="PO Progress Labs">
  *   <file name="sample-po-progress-labs/sample-po-progress-labs.component.html"> </file>
  *   <file name="sample-po-progress-labs/sample-po-progress-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-progress-publication" title="Portinari Progress - Publication">
+ * <example name="po-progress-publication" title="PO Progress - Publication">
  *   <file name="sample-po-progress-publication/sample-po-progress-publication.component.html"> </file>
  *   <file name="sample-po-progress-publication/sample-po-progress-publication.component.ts"> </file>
  * </example>

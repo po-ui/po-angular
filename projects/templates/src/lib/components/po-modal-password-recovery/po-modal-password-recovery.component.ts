@@ -17,17 +17,17 @@ import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-
  *
  * @example
  *
- * <example name="po-modal-password-recovery-basic" title="Portinari Modal Password Recovery Basic">
+ * <example name="po-modal-password-recovery-basic" title="PO Modal Password Recovery Basic">
  *  <file name="sample-po-modal-password-recovery-basic/sample-po-modal-password-recovery-basic.component.html"> </file>
  *  <file name="sample-po-modal-password-recovery-basic/sample-po-modal-password-recovery-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-modal-password-recovery-labs" title="Portinari Modal Password Recovery Labs">
+ * <example name="po-modal-password-recovery-labs" title="PO Modal Password Recovery Labs">
  *  <file name="sample-po-modal-password-recovery-labs/sample-po-modal-password-recovery-labs.component.html"> </file>
  *  <file name="sample-po-modal-password-recovery-labs/sample-po-modal-password-recovery-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-modal-password-recovery-request" title="Portinari Modal Password Recovery Request">
+ * <example name="po-modal-password-recovery-request" title="PO Modal Password Recovery Request">
  *  <file name="sample-po-modal-password-recovery-request/sample-po-modal-password-recovery-request.component.html"> </file>
  *  <file name="sample-po-modal-password-recovery-request/sample-po-modal-password-recovery-request.component.ts"> </file>
  * </example>

@@ -20,7 +20,7 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  * Módulo da aplicação:
  * ```
  * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
- * import { PoModule } from '@portinari/portinari-ui';
+ * import { PoModule } from '@po-ui/ng-components';
  * ...
  *
  * @NgModule({

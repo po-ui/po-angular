@@ -29,7 +29,7 @@ import { PoPageChangePasswordRequirement } from './interfaces/po-page-change-pas
  *     "src/favicon.ico",
  *     {
  *       "glob": "**\/*",
- *       "input": "node_modules/@portinari/style/images",
+ *       "input": "node_modules/@po-ui/style/images",
  *       "output": "assets/images"
  *     }
  *   ]
@@ -194,17 +194,17 @@ export abstract class PoPageChangePasswordBaseComponent {
    *
    *
    * ```
-   *   import { PoModalPasswordRecoveryType, PoPageChangePasswordComponent } from '@portinari/portinari-templates';
+   *   import { PoModalPasswordRecoveryType, PoPageChangePasswordComponent } from '@po-ui/ng-templates';
    *
    *   ...
    *   const routes: Routes = [
    *     {
    *       path: 'change-password', component: PoPageChangePasswordComponent, data: {
-   *         serviceApi: 'https://portinari.io/sample/api/new-password',
+   *         serviceApi: 'https://po-ui.io/sample/api/new-password',
    *         recovery: {
-   *           url: 'https://portinari.io/sample/api/users',
+   *           url: 'https://po-ui.io/sample/api/users',
    *           type: PoModalPasswordRecoveryType.All,
-   *           contactMail: 'dev.portinari@portinari.com',
+   *           contactMail: 'dev.po@po-ui.com',
    *           phoneMask: '9-999-999-9999'
    *         }
    *       }

@@ -25,22 +25,22 @@ const poMultiselectContainerPositionDefault = 'bottom';
  *
  * @example
  *
- * <example name="po-multiselect-basic" title="Portinari Multiselect Basic">
+ * <example name="po-multiselect-basic" title="PO Multiselect Basic">
  *   <file name="sample-po-multiselect-basic/sample-po-multiselect-basic.component.html"> </file>
  *   <file name="sample-po-multiselect-basic/sample-po-multiselect-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-multiselect-labs" title="Portinari Multiselect Labs">
+ * <example name="po-multiselect-labs" title="PO Multiselect Labs">
  *   <file name="sample-po-multiselect-labs/sample-po-multiselect-labs.component.html"> </file>
  *   <file name="sample-po-multiselect-labs/sample-po-multiselect-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-multiselect-vacation" title="Portinari Multiselect - Vacation">
+ * <example name="po-multiselect-vacation" title="PO Multiselect - Vacation">
  *   <file name="sample-po-multiselect-vacation/sample-po-multiselect-vacation.component.html"> </file>
  *   <file name="sample-po-multiselect-vacation/sample-po-multiselect-vacation.component.ts"> </file>
  * </example>
  *
- * <example name="po-multiselect-vacation-reactive-form" title="Portinari Multiselect - Vacation Reactive Form">
+ * <example name="po-multiselect-vacation-reactive-form" title="PO Multiselect - Vacation Reactive Form">
  *   <file name="sample-po-multiselect-vacation-reactive-form/sample-po-multiselect-vacation-reactive-form.component.html"> </file>
  *   <file name="sample-po-multiselect-vacation-reactive-form/sample-po-multiselect-vacation-reactive-form.component.ts"> </file>
  * </example>
@@ -116,7 +116,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoMultiselectComponent } from '@portinari/portinari-ui';
+   * import { PoMultiselectComponent } from '@po-ui/ng-components';
    *
    * ...
    *

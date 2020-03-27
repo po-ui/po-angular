@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoMultiselectOption, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoMultiselectOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-multiselect-vacation',

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
-import { PoRadioGroupOption, PoSelectOption } from '@portinari/portinari-ui';
+import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 import { SamplePoSelectCustomerRegistrationService } from './sample-po-select-customer-registration.service';
 

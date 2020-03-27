@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoPageDynamicSearchLiterals } from '@portinari/portinari-templates';
+import { PoPageDynamicSearchLiterals } from '@po-ui/ng-templates';
 
 import {
   PoBreadcrumb,
@@ -9,7 +9,7 @@ import {
   PoDialogService,
   PoNotificationService,
   PoTableColumn
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import { SamplePoPageDynamicSearchHiringProcessesService } from './sample-po-page-dynamic-search-hiring-processes.service';
 

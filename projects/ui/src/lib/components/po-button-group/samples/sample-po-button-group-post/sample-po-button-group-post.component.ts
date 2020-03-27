@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoButtonGroupItem } from '@portinari/portinari-ui';
+import { PoButtonGroupItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-group-post',

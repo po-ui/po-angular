@@ -22,17 +22,17 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  *
  * @example
  *
- * <example name="po-list-view-basic" title="Portinari List View Basic">
+ * <example name="po-list-view-basic" title="PO List View Basic">
  *  <file name="sample-po-list-view-basic/sample-po-list-view-basic.component.html"> </file>
  *  <file name="sample-po-list-view-basic/sample-po-list-view-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-list-view-labs" title="Portinari List View Labs">
+ * <example name="po-list-view-labs" title="PO List View Labs">
  *  <file name="sample-po-list-view-labs/sample-po-list-view-labs.component.html"> </file>
  *  <file name="sample-po-list-view-labs/sample-po-list-view-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-list-view-hiring-processes" title="Portinari List View - Hiring Processes">
+ * <example name="po-list-view-hiring-processes" title="PO List View - Hiring Processes">
  *  <file name="sample-po-list-view-hiring-processes/sample-po-list-view-hiring-processes.component.html"> </file>
  *  <file name="sample-po-list-view-hiring-processes/sample-po-list-view-hiring-processes.component.ts"> </file>
  *  <file name="sample-po-list-view-hiring-processes/sample-po-list-view-hiring-processes.service.ts"> </file>

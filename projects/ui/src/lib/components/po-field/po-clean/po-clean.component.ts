@@ -9,7 +9,7 @@ import { PoCleanBaseComponent } from './po-clean-base.component';
  *
  * @examplePrivate
  *
- * <example-private name="po-clean-labs" title="Portinari Clean Labs">
+ * <example-private name="po-clean-labs" title="PO Clean Labs">
  *   <file name="sample-po-clean-labs.component.html"> </file>
  *   <file name="sample-po-clean-labs.component.ts"> </file>
  * </example-private>

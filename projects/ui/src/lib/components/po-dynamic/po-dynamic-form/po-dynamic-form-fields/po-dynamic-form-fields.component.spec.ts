@@ -500,7 +500,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it('should create a `po-combo` component if have a `optionsService`', () => {
       component.fields = [
-        { property: 'hero', label: 'Herois', optionsService: 'https://portinari.io/sample/api/comboOption/heroes' }
+        { property: 'hero', label: 'Herois', optionsService: 'https://po-ui.io/sample/api/comboOption/heroes' }
       ];
 
       component.ngOnChanges({
@@ -654,7 +654,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
             { label: 'Minas Gerais', value: 4 }
           ]
         },
-        { property: 'hero', label: 'Herois', optionsService: 'https://portinari.io/sample/api/comboOption/heroes' }
+        { property: 'hero', label: 'Herois', optionsService: 'https://po-ui.io/sample/api/comboOption/heroes' }
       ];
 
       component.ngOnChanges({

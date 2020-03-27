@@ -7,14 +7,14 @@ import { PoButtonBaseComponent } from './po-button-base.component';
  *
  * @example
  *
- * <example name="po-button-basic" title="Portinari Button Basic">
+ * <example name="po-button-basic" title="PO Button Basic">
  *  <file name="sample-po-button-basic/sample-po-button-basic.component.html"> </file>
  *  <file name="sample-po-button-basic/sample-po-button-basic.component.ts"> </file>
  *  <file name="sample-po-button-basic/sample-po-button-basic.component.e2e-spec.ts"> </file>
  *  <file name="sample-po-button-basic/sample-po-button-basic.component.po.ts"> </file>
  * </example>
  *
- * <example name="po-button-labs" title="Portinari Button Labs">
+ * <example name="po-button-labs" title="PO Button Labs">
  *  <file name="sample-po-button-labs/sample-po-button-labs.component.html"> </file>
  *  <file name="sample-po-button-labs/sample-po-button-labs.component.ts"> </file>
  *  <file name="sample-po-button-labs/sample-po-button-labs.component.e2e-spec.ts"> </file>
@@ -35,7 +35,7 @@ export class PoButtonComponent extends PoButtonBaseComponent {
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoButtonComponent } from '@portinari/portinari-ui';
+   * import { PoButtonComponent } from '@po-ui/ng-components';
    *
    * ...
    *

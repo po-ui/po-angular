@@ -7,22 +7,22 @@ import { PoWidgetBaseComponent } from './po-widget-base.component';
  *
  * @example
  *
- * <example name="po-widget-basic" title="Portinari Widget Basic">
+ * <example name="po-widget-basic" title="PO Widget Basic">
  *  <file name="sample-po-widget-basic/sample-po-widget-basic.component.html"> </file>
  *  <file name="sample-po-widget-basic/sample-po-widget-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-widget-labs" title="Portinari Widget Labs">
+ * <example name="po-widget-labs" title="PO Widget Labs">
  *  <file name="sample-po-widget-labs/sample-po-widget-labs.component.html"> </file>
  *  <file name="sample-po-widget-labs/sample-po-widget-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-widget-finance-dashboard" title="Portinari Widget - Finance dashboard">
+ * <example name="po-widget-finance-dashboard" title="PO Widget - Finance dashboard">
  *  <file name="sample-po-widget-finance-dashboard/sample-po-widget-finance-dashboard.component.html"> </file>
  *  <file name="sample-po-widget-finance-dashboard/sample-po-widget-finance-dashboard.component.ts"> </file>
  * </example>
  *
- * <example name="po-widget-card" title="Portinari Widget - Card">
+ * <example name="po-widget-card" title="PO Widget - Card">
  *  <file name="sample-po-widget-card/sample-po-widget-card.component.html"> </file>
  *  <file name="sample-po-widget-card/sample-po-widget-card.component.ts"> </file>
  * </example>

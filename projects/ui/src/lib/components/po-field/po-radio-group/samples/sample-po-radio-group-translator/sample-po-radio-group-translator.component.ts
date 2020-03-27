@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoRadioGroupOption, PoSelectOption } from '@portinari/portinari-ui';
+import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-radio-group-translator',

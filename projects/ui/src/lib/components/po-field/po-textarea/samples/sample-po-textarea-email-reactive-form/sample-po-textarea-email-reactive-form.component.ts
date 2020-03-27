@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
-import { PoPageAction } from '@portinari/portinari-ui';
+import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoPageAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-textarea-email-reactive-form',

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { PoDialogService, PoNotificationService, PoSelectOption } from '@portinari/portinari-ui';
+import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-datepicker-airfare-reactive-form',

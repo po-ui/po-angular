@@ -11,7 +11,7 @@ import { PoDisclaimerBaseComponent } from './po-disclaimer-base.component';
  *
  * @examplePrivate
  *
- * <example-private name="po-disclaimer" title="Portinari Disclaimer">
+ * <example-private name="po-disclaimer" title="PO Disclaimer">
  *   <file name="sample-po-disclaimer.component.html"> </file>
  *   <file name="sample-po-disclaimer.component.ts"> </file>
  * </example-private>

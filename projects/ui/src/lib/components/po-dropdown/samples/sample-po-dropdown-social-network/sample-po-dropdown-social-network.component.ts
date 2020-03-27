@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dropdown-social-network',
@@ -17,9 +17,9 @@ export class SamplePoDropdownSocialNetworkComponent implements OnInit {
   ];
 
   public readonly newFriends: Array<object> = [
-    { name: 'Mr. Dev Portinari', mutualFriends: '7', reside: 'Mountain View, CA' },
-    { name: 'Mr. AI Portinari', mutualFriends: '99+', reside: 'New York City, NY' },
-    { name: 'Mr. UX Portinari', mutualFriends: '14', reside: 'Los Angeles, CA' }
+    { name: 'Mr. Dev PO', mutualFriends: '7', reside: 'Mountain View, CA' },
+    { name: 'Mr. AI PO', mutualFriends: '99+', reside: 'New York City, NY' },
+    { name: 'Mr. UX PO', mutualFriends: '14', reside: 'Los Angeles, CA' }
   ];
 
   private indexFriend: number = 0;

@@ -13,17 +13,17 @@ import { PoStepperItem } from './po-stepper-item.interface';
  *
  * @example
  *
- * <example name="po-stepper-basic" title="Portinari Stepper Basic">
+ * <example name="po-stepper-basic" title="PO Stepper Basic">
  *  <file name="sample-po-stepper-basic/sample-po-stepper-basic.component.html"> </file>
  *  <file name="sample-po-stepper-basic/sample-po-stepper-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-stepper-labs" title="Portinari Stepper Labs">
+ * <example name="po-stepper-labs" title="PO Stepper Labs">
  *  <file name="sample-po-stepper-labs/sample-po-stepper-labs.component.html"> </file>
  *  <file name="sample-po-stepper-labs/sample-po-stepper-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-stepper-sales" title="Portinari Stepper - Sales">
+ * <example name="po-stepper-sales" title="PO Stepper - Sales">
  *  <file name="sample-po-stepper-sales/sample-po-stepper-sales.component.html"> </file>
  *  <file name="sample-po-stepper-sales/sample-po-stepper-sales.component.ts"> </file>
  * </example>

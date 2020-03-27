@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { PoTableColumnSort, PoTableColumnSortType } from '@portinari/portinari-ui';
+import { PoTableColumnSort, PoTableColumnSortType } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoTableComponentsService {
   readonly items = [
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Select',
+      component: 'PO Select',
       description: 'Display a list of items and allows selection',
       link: '/documentation/po-select',
       extra: 'Features',
@@ -16,20 +16,16 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Checkbox',
+      component: 'PO Checkbox',
       description: 'Group of square buttons that allows multiple items to be selected',
       link: '/documentation/po-checkbox-group',
       extra: 'Best Practices',
-      extras: [
-        'Short and objective texts for items',
-        'Use with short lists',
-        'For big lists use Portinari Multiselect'
-      ],
+      extras: ['Short and objective texts for items', 'Use with short lists', 'For big lists use PO Multiselect'],
       status: 'stable'
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Number',
+      component: 'PO Number',
       description: 'Input that allows only numbers',
       link: '/documentation/po-number',
       extra: 'Features',
@@ -38,7 +34,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Combo',
+      component: 'PO Combo',
       description: 'Display a list of items with filter and allows selection',
       link: '/documentation/po-combo',
       extra: 'Features',
@@ -47,7 +43,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari MultiSelect',
+      component: 'PO MultiSelect',
       description: 'Display a list of items and allows multiple selection',
       link: '/documentation/po-multiselect',
       extra: 'Features',
@@ -56,7 +52,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Input',
+      component: 'PO Input',
       description: 'Input for general texts',
       link: '/documentation/po-input',
       extra: 'Features',
@@ -65,7 +61,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Textarea',
+      component: 'PO Textarea',
       description: 'Larger input for big texts',
       link: '/documentation/po-textarea',
       extra: 'Best Practices',
@@ -74,7 +70,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Datepicker',
+      component: 'PO Datepicker',
       description: 'Input with calendar for dates',
       link: '/documentation/po-datepicker',
       extra: 'Features',
@@ -83,7 +79,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Email',
+      component: 'PO Email',
       description: 'Input that allows valid email texts (username@email.com)',
       link: '/documentation/po-email',
       extra: 'Features',
@@ -92,7 +88,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Url',
+      component: 'PO Url',
       description: 'Input that expects a valid url as text (http://www.url.com)',
       link: '/documentation/po-url',
       extra: 'Features',
@@ -101,7 +97,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Password',
+      component: 'PO Password',
       description: 'Input with bullet text to type passwords',
       link: '/documentation/po-password',
       extra: 'Features',
@@ -110,7 +106,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Login',
+      component: 'PO Login',
       description: 'Input with a user icon that represents a login field',
       link: '/documentation/po-login',
       extra: 'Features',
@@ -119,7 +115,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Upload',
+      component: 'PO Upload',
       description: 'Upload file(s) with a loading bar',
       link: '/documentation/po-upload',
       extra: 'Features',
@@ -128,7 +124,7 @@ export class SamplePoTableComponentsService {
     },
     {
       favorite: ['favorite', 'documentation'],
-      component: 'Portinari Avatar',
+      component: 'PO Avatar',
       description: 'Creates a circle with a picture inside',
       link: '/documentation/po-avatar',
       extra: 'Features',

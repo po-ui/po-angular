@@ -11,17 +11,17 @@ import { PoToasterComponent } from './po-toaster/po-toaster.component';
  *
  * @example
  *
- * <example name="po-notification-basic" title="Portinari Notification Basic">
+ * <example name="po-notification-basic" title="PO Notification Basic">
  *  <file name="sample-po-notification-basic/sample-po-notification-basic.component.html"> </file>
  *  <file name="sample-po-notification-basic/sample-po-notification-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-notification-labs" title="Portinari Notification Labs">
+ * <example name="po-notification-labs" title="PO Notification Labs">
  *  <file name="sample-po-notification-labs/sample-po-notification-labs.component.html"> </file>
  *  <file name="sample-po-notification-labs/sample-po-notification-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-notification-sales" title="Portinari Notification - Sales">
+ * <example name="po-notification-sales" title="PO Notification - Sales">
  *  <file name="sample-po-notification-sales/sample-po-notification-sales.component.html"> </file>
  *  <file name="sample-po-notification-sales/sample-po-notification-sales.component.ts"> </file>
  * </example>

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { PoModalComponent } from '@portinari/portinari-ui';
+import { PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tag-bank-account',
@@ -63,7 +63,7 @@ export class SamplePoTagBankAccountComponent {
 
   userData = {
     'name': 'Natasha Romanova',
-    'email': 'natasha.romanova@portinari.com.br',
+    'email': 'natasha.romanova@po-ui.com.br',
     'photo': 'avatar2.png'
   };
 

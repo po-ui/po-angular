@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoPageChangePasswordComponent } from '@portinari/portinari-templates';
+import { PoPageChangePasswordComponent } from '@po-ui/ng-templates';
 
-import { PoBreadcrumb, PoSelectOption } from '@portinari/portinari-ui';
+import { PoBreadcrumb, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-change-password-modify',

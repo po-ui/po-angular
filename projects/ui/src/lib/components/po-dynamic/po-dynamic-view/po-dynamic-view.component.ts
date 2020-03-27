@@ -12,17 +12,17 @@ import { PoDynamicViewService } from './po-dynamic-view.service';
  *
  * @example
  *
- * <example name="po-dynamic-view-basic" title="Portinari Dynamic View Basic">
+ * <example name="po-dynamic-view-basic" title="PO Dynamic View Basic">
  *  <file name="sample-po-dynamic-view-basic/sample-po-dynamic-view-basic.component.html"> </file>
  *  <file name="sample-po-dynamic-view-basic/sample-po-dynamic-view-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-dynamic-view-employee" title="Portinari Dynamic View - Employee">
+ * <example name="po-dynamic-view-employee" title="PO Dynamic View - Employee">
  *  <file name="sample-po-dynamic-view-employee/sample-po-dynamic-view-employee.component.html"> </file>
  *  <file name="sample-po-dynamic-view-employee/sample-po-dynamic-view-employee.component.ts"> </file>
  * </example>
  *
- * <example name="po-dynamic-view-employee-on-load" title="Portinari Dynamic View - Employee on load">
+ * <example name="po-dynamic-view-employee-on-load" title="PO Dynamic View - Employee on load">
  *  <file name="sample-po-dynamic-view-employee-on-load/sample-po-dynamic-view-employee-on-load.component.html"> </file>
  *  <file name="sample-po-dynamic-view-employee-on-load/sample-po-dynamic-view-employee-on-load.component.ts"> </file>
  * </example>

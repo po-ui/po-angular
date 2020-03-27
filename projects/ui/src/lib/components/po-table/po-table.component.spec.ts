@@ -96,7 +96,7 @@ describe('PoTableComponent:', () => {
       }
     ];
 
-    columnIcons = { property: 'portinari', type: 'icon', icons: [{ value: 'favorite' }, { value: 'documentation' }] };
+    columnIcons = { property: 'po', type: 'icon', icons: [{ value: 'favorite' }, { value: 'documentation' }] };
 
     columnsWithDetail = columns.concat(columnsDetail);
 
@@ -559,13 +559,13 @@ describe('PoTableComponent:', () => {
 
   it('should contain the attributes href and target when the item is external link', () => {
     component.columns = [{ property: 'framework', label: 'Framework', type: 'link', link: 'link' }];
-    component.items = [{ name: 'PO', link: 'http://po.portinari.com.br' }];
+    component.items = [{ name: 'PO', link: 'http://po.com.br' }];
     fixture.detectChanges();
 
     let link = tableElement.querySelector('.po-table-link[ng-reflect-router-link="home"]');
     expect(link).toBeFalsy();
 
-    link = tableElement.querySelector('.po-table-link[href="http://po.portinari.com.br"][target="_blank"]');
+    link = tableElement.querySelector('.po-table-link[href="http://po.com.br"][target="_blank"]');
     expect(link).toBeTruthy();
   });
 
@@ -1078,7 +1078,7 @@ describe('PoTableComponent:', () => {
 
     describe('getColumnIcons:', () => {
       it('should call `mergeCustomIcons` if has `column.icons` and `rowIcons` is an array.', () => {
-        const row: any = { portinari: ['favorite', 'documentation'] };
+        const row: any = { po: ['favorite', 'documentation'] };
 
         const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons').and.callThrough();
         const expectedReturn = component.getColumnIcons(row, columnIcons);
@@ -1088,7 +1088,7 @@ describe('PoTableComponent:', () => {
       });
 
       it('should call `findCustomIcon` if has `column.icons` and `rowIcons` isn´t an array.', () => {
-        const row: any = { portinari: 'favorite' };
+        const row: any = { po: 'favorite' };
 
         const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon').and.callThrough();
         const expectedReturn = component.getColumnIcons(row, columnIcons);
@@ -1098,8 +1098,8 @@ describe('PoTableComponent:', () => {
       });
 
       it(`shouldn't call 'mergeCustomIcons' neither 'findCustomIcon' if doesn't have column.icons and return row[column.property].`, () => {
-        const row: any = { portinari: 'favorite' };
-        const column: any = { property: 'portinari', type: 'icon' };
+        const row: any = { po: 'favorite' };
+        const column: any = { property: 'po', type: 'icon' };
 
         const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons');
         const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon');
@@ -1111,7 +1111,7 @@ describe('PoTableComponent:', () => {
       });
 
       it(`shouldn't call 'mergeCustomIcons' or 'findCustomIcon' if doesn't have column.icons and return undefined.`, () => {
-        const row: any = { portinari: 'favorite' };
+        const row: any = { po: 'favorite' };
         const column: any = { type: 'icon' };
 
         const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons');
@@ -1629,7 +1629,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('should have only one action with icon', () => {
-      singleAction[0].icon = 'po-icon-portinari';
+      singleAction[0].icon = 'po-icon-news';
       component.actions = singleAction;
 
       fixture.detectChanges();
@@ -1722,7 +1722,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('should display one icon.', () => {
-      component.items = [{ portinari: 'favorite' }];
+      component.items = [{ po: 'favorite' }];
       component.columns = [columnIcons];
 
       fixture.detectChanges();
@@ -1731,7 +1731,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('should display two icons.', () => {
-      component.items = [{ portinari: ['favorite', 'documentation'] }];
+      component.items = [{ po: ['favorite', 'documentation'] }];
       component.columns = [columnIcons];
 
       fixture.detectChanges();

@@ -16,17 +16,17 @@ import { PoNumberBaseComponent } from './po-number-base.component';
  *
  * @example
  *
- * <example name="po-number-basic" title="Portinari Number Basic">
+ * <example name="po-number-basic" title="PO Number Basic">
  *  <file name="sample-po-number-basic/sample-po-number-basic.component.html"> </file>
  *  <file name="sample-po-number-basic/sample-po-number-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-number-labs" title="Portinari Number Labs">
+ * <example name="po-number-labs" title="PO Number Labs">
  *  <file name="sample-po-number-labs/sample-po-number-labs.component.html"> </file>
  *  <file name="sample-po-number-labs/sample-po-number-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-number-calculate" title="Portinari Number - Calculate">
+ * <example name="po-number-calculate" title="PO Number - Calculate">
  *  <file name="sample-po-number-calculate/sample-po-number-calculate.component.html"> </file>
  *  <file name="sample-po-number-calculate/sample-po-number-calculate.component.ts"> </file>
  * </example>

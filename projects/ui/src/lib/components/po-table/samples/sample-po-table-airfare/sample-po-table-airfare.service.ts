@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { PoTableColumn, PoTableDetail } from '@portinari/portinari-ui';
+import { PoTableColumn, PoTableDetail } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoTableAirfareService {

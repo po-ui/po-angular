@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { PoLookupFilter, PoLookupFilteredItemsParams } from '@portinari/portinari-ui';
+import { PoLookupFilter, PoLookupFilteredItemsParams } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoLookupService implements PoLookupFilter {

@@ -32,12 +32,12 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
  *
  * @example
  *
- * <example name="po-table-basic" title="Portinari Table Basic">
+ * <example name="po-table-basic" title="PO Table Basic">
  *  <file name="sample-po-table-basic/sample-po-table-basic.component.ts"> </file>
  *  <file name="sample-po-table-basic/sample-po-table-basic.component.html"> </file>
  * </example>
  *
- * <example name="po-table-labs" title="Portinari Table Labs">
+ * <example name="po-table-labs" title="PO Table Labs">
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.ts"> </file>
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.html"> </file>
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.e2e-spec.ts"> </file>
@@ -45,19 +45,19 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
  *  <file name="sample-po-table-labs/sample-po-table-labs.service.ts"> </file>
  * </example>
  *
- * <example name="po-table-transport" title="Portinari Table - Transport">
+ * <example name="po-table-transport" title="PO Table - Transport">
  *  <file name="sample-po-table-transport/sample-po-table-transport.component.ts"> </file>
  *  <file name="sample-po-table-transport/sample-po-table-transport.component.html"> </file>
  *  <file name="sample-po-table-transport/sample-po-table-transport.service.ts"> </file>
  * </example>
  *
- * <example name="po-table-airfare" title="Portinari Table - Airfare">
+ * <example name="po-table-airfare" title="PO Table - Airfare">
  *  <file name="sample-po-table-airfare/sample-po-table-airfare.component.ts"> </file>
  *  <file name="sample-po-table-airfare/sample-po-table-airfare.component.html"> </file>
  *  <file name="sample-po-table-airfare/sample-po-table-airfare.service.ts"> </file>
  * </example>
  *
- * <example name="po-table-components" title="Portinari Table - Po Field Components">
+ * <example name="po-table-components" title="PO Table - Po Field Components">
  *  <file name="sample-po-table-components/sample-po-table-components.component.ts"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.component.html"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.service.ts"> </file>

@@ -6,7 +6,7 @@ import {
   PoNotificationService,
   PoPageAction,
   PoPageFilter
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import { SamplePoListViewHiringProcessesService } from './sample-po-list-view-hiring-processes.service';
 

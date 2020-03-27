@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-login-confirm',

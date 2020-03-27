@@ -10,7 +10,7 @@ export interface PoMenuPanelItem {
   /** Ação personalizada para clique do item de menu. */
   action?: string | Function;
 
-  /**  Ícone para o item de menu, os [ícones aceitos](/guides/icons) são os definidos no guia de estilo da Portinari. */
+  /**  Ícone para o item de menu, os [ícones aceitos](/guides/icons) são os definidos no guia de estilo da PO. */
   icon: string;
 
   /** Texto do item de menu. */

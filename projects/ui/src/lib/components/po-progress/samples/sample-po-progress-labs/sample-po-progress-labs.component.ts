@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoProgressStatus, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoProgressStatus, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-progress-labs',

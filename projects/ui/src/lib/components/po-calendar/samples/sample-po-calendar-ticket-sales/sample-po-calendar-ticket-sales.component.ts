@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoNotificationService, PoPageAction, PoSelectOption } from '@portinari/portinari-ui';
+import { PoNotificationService, PoPageAction, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-calendar-ticket-sales',

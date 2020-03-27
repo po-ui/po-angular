@@ -7,7 +7,7 @@ import {
   PoToasterOrientation,
   PoToasterType,
   PoRadioGroupOption
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-notification-labs',
@@ -43,7 +43,7 @@ export class SamplePoNotificationLabsComponent implements OnInit {
   }
 
   restore() {
-    this.message = 'Portinari Notification';
+    this.message = 'PO Notification';
     this.type = undefined;
     this.orientation = undefined;
     this.action = false;

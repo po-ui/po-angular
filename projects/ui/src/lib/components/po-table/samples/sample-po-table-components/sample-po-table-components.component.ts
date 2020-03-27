@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoModalComponent, PoTableColumn, PoTableColumnSort } from '@portinari/portinari-ui';
+import { PoModalComponent, PoTableColumn, PoTableColumnSort } from '@po-ui/ng-components';
 
 import { SamplePoTableComponentsService } from './sample-po-table-components.service';
 

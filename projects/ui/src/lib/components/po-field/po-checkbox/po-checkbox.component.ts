@@ -18,17 +18,17 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
  *
  * @example
  *
- * <example name="po-checkbox-basic" title="Portinari Checkbox Basic">
+ * <example name="po-checkbox-basic" title="PO Checkbox Basic">
  *   <file name="sample-po-checkbox-basic/sample-po-checkbox-basic.component.html"> </file>
  *   <file name="sample-po-checkbox-basic/sample-po-checkbox-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-checkbox-labs" title="Portinari Checkbox Labs">
+ * <example name="po-checkbox-labs" title="PO Checkbox Labs">
  *   <file name="sample-po-checkbox-labs/sample-po-checkbox-labs.component.html"> </file>
  *   <file name="sample-po-checkbox-labs/sample-po-checkbox-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-checkbox-acceptance-term" title="Portinari Checkbox - Acceptance Term">
+ * <example name="po-checkbox-acceptance-term" title="PO Checkbox - Acceptance Term">
  *   <file name="sample-po-checkbox-acceptance-term/sample-po-checkbox-acceptance-term.component.html"> </file>
  *   <file name="sample-po-checkbox-acceptance-term/sample-po-checkbox-acceptance-term.component.ts"> </file>
  * </example>
@@ -60,7 +60,7 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
    * ```
    * ...
    * import { ViewChild } from '@angular/core';
-   * import { PoCheckboxComponent } from '@portinari/portinari-ui';
+   * import { PoCheckboxComponent } from '@po-ui/ng-components';
    *
    * ...
    *

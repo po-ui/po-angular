@@ -18,7 +18,7 @@ export class PoAvatarBaseComponent {
 
   /**
    * Fonte da imagem que pode ser um caminho local (`./assets/images/logo-black-small.png`)
-   * ou um servidor externo (`https://portinari.io/assets/images/logo-black-small.png`).
+   * ou um servidor externo (`https://po-ui.io/assets/images/logo-black-small.png`).
    */
   @Input('p-src') src: string;
 

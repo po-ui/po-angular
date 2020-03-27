@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Subscription } from 'rxjs';
-import { PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-http-interceptor-labs',

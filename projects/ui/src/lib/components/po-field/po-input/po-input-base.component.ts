@@ -302,7 +302,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoNomeDoComponenteComponent } from '@portinari/portinari-ui';
+   * import { PoNomeDoComponenteComponent } from '@po-ui/ng-components';
    *
    * ...
    *

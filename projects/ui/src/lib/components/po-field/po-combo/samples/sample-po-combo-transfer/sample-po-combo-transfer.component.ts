@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption } from '@portinari/portinari-ui';
+import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-combo-transfer',

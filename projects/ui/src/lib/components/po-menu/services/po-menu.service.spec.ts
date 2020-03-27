@@ -8,7 +8,7 @@ describe('PoMenuService:', () => {
   let menuService: PoMenuService;
   let httpMock: HttpTestingController;
 
-  const mockURL = 'https://portinari.io/sample/api/menus';
+  const mockURL = 'https://po-ui.io/sample/api/menus';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -19,7 +19,7 @@ describe('PoMenuService:', () => {
     menuService = TestBed.inject(PoMenuService);
     httpMock = TestBed.inject(HttpTestingController);
 
-    menuService['_url'] = 'https://portinari.io/sample/api/menus';
+    menuService['_url'] = 'https://po-ui.io/sample/api/menus';
   });
 
   afterEach(() => {
@@ -34,7 +34,7 @@ describe('PoMenuService:', () => {
     const search = 'menu';
 
     it('configProperties: should set url', () => {
-      const url = 'http://po.portinari.com.br';
+      const url = 'http://po.com.br';
 
       menuService.configProperties(url);
 
@@ -42,7 +42,7 @@ describe('PoMenuService:', () => {
     });
 
     it('getFilteredData: should call `http.get` and return items filtered', done => {
-      menuService['_url'] = 'https://portinari.io/sample/api/menus';
+      menuService['_url'] = 'https://po-ui.io/sample/api/menus';
 
       menuService.getFilteredData(search).subscribe(response => {
         expect(response).toEqual(itemsFiltered);

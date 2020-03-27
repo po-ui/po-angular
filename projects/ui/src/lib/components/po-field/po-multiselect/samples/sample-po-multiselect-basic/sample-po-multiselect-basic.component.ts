@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoMultiselectOption } from '@portinari/portinari-ui';
+import { PoMultiselectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-multiselect-basic',
@@ -8,7 +8,7 @@ import { PoMultiselectOption } from '@portinari/portinari-ui';
 })
 export class SamplePoMultiselectBasicComponent {
   options: Array<PoMultiselectOption> = [
-    { value: 'portinariMultiselect1', label: 'Portinari Multiselect 1' },
-    { value: 'portinariMultiselect2', label: 'Portinari Multiselect 2' }
+    { value: 'poMultiselect1', label: 'PO Multiselect 1' },
+    { value: 'poMultiselect2', label: 'PO Multiselect 2' }
   ];
 }

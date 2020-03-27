@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { PoComboOptionGroup } from '@portinari/portinari-ui';
+import { PoComboOptionGroup } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoComboSchedulingService {

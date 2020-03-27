@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoBreadcrumb } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-job-scheduler-background-process',

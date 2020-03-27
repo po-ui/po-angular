@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@portinari/portinari-ui';
+import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-switch-order-reactive-form',

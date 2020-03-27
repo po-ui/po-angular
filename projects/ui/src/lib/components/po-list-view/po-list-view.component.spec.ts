@@ -614,7 +614,7 @@ describe('PoListViewComponent:', () => {
       spyOn(component, 'getItemTitle');
       spyOn(component, 'checkTitleType').and.returnValue('externalLink');
 
-      const listItem = { id: 1, name: 'register', url: 'http://po.portinari.com.br' };
+      const listItem = { id: 1, name: 'register', url: 'http://po.com.br' };
       component.propertyLink = 'url';
       component.items = [listItem];
 
@@ -626,7 +626,7 @@ describe('PoListViewComponent:', () => {
       link = debugElement.querySelector('.po-list-view-title-no-link');
       expect(link).toBeFalsy();
 
-      link = debugElement.querySelector('.po-list-view-title-link[href="http://po.portinari.com.br"][target="_blank"]');
+      link = debugElement.querySelector('.po-list-view-title-link[href="http://po.com.br"][target="_blank"]');
       expect(link).toBeTruthy();
 
       expect(component.getItemTitle).toHaveBeenCalledWith(listItem);
@@ -658,7 +658,7 @@ describe('PoListViewComponent:', () => {
       spyOn(component, 'getItemTitle');
       spyOn(component, 'checkTitleType').and.returnValue('noLink');
 
-      const listItem = { id: 1, name: 'register', url: 'http://po.portinari.com.br' };
+      const listItem = { id: 1, name: 'register', url: 'http://po.com.br' };
       component.items = [listItem];
 
       fixture.detectChanges();

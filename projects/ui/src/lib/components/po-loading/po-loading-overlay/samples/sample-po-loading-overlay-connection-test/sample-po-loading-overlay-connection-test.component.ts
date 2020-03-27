@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-loading-overlay-connection-test',

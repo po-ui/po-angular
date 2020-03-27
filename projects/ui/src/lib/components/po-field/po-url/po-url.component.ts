@@ -12,17 +12,17 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  *
  * @example
  *
- * <example name="po-url-basic" title="Portinari Url Basic">
+ * <example name="po-url-basic" title="PO Url Basic">
  *   <file name="sample-po-url-basic/sample-po-url-basic.component.html"> </file>
  *   <file name="sample-po-url-basic/sample-po-url-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-url-labs" title="Portinari Url Labs">
+ * <example name="po-url-labs" title="PO Url Labs">
  *   <file name="sample-po-url-labs/sample-po-url-labs.component.html"> </file>
  *   <file name="sample-po-url-labs/sample-po-url-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-url-shortener" title="Portinari Url - Shortener">
+ * <example name="po-url-shortener" title="PO Url - Shortener">
  *   <file name="sample-po-url-shortener/sample-po-url-shortener.component.html"> </file>
  *   <file name="sample-po-url-shortener/sample-po-url-shortener.component.ts"> </file>
  * </example>

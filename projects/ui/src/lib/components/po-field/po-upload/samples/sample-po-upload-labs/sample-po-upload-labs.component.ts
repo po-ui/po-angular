@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoUploadFileRestrictions, PoUploadLiterals } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoUploadFileRestrictions, PoUploadLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-upload-labs',

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationService } from '@portinari/portinari-ui';
+import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-datepicker-range-vacations',

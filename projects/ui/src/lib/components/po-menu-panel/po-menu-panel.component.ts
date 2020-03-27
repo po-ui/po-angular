@@ -63,17 +63,17 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
  *
  * @example
  *
- * <example name="po-menu-panel-basic" title="Portinari Menu Panel Basic">
+ * <example name="po-menu-panel-basic" title="PO Menu Panel Basic">
  *   <file name="sample-po-menu-panel-basic/sample-po-menu-panel-basic.component.html"> </file>
  *   <file name="sample-po-menu-panel-basic/sample-po-menu-panel-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-menu-panel-labs" title="Portinari Menu Panel Labs">
+ * <example name="po-menu-panel-labs" title="PO Menu Panel Labs">
  *   <file name="sample-po-menu-panel-labs/sample-po-menu-panel-labs.component.html"> </file>
  *   <file name="sample-po-menu-panel-labs/sample-po-menu-panel-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-menu-panel-customer" title="Portinari Menu Panel - Customers">
+ * <example name="po-menu-panel-customer" title="PO Menu Panel - Customers">
  *   <file name="sample-po-menu-panel-customer/sample-po-menu-panel-customer.component.html"> </file>
  *   <file name="sample-po-menu-panel-customer/sample-po-menu-panel-customer.component.ts"> </file>
  * </example>

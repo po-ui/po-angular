@@ -43,7 +43,7 @@ describe('PoTagBaseComponent:', () => {
 
     it('icon: should update to true if `type` is undefined.', () => {
       component.type = undefined;
-      const validValues = ['po-icon-ok', 'po-icon-company', 'po-icon-portinari'];
+      const validValues = ['po-icon-ok', 'po-icon-company', 'po-icon-news'];
 
       expectPropertiesValues(component, 'icon', validValues, validValues);
     });

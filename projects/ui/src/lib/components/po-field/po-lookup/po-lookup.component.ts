@@ -29,30 +29,30 @@ import { PoLookupModalService } from './services/po-lookup-modal.service';
  *
  * @example
  *
- * <example name="po-lookup-basic" title="Portinari Lookup Basic">
+ * <example name="po-lookup-basic" title="PO Lookup Basic">
  *  <file name="sample-po-lookup-basic/sample-po-lookup-basic.component.html"> </file>
  *  <file name="sample-po-lookup-basic/sample-po-lookup-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-lookup-labs" title="Portinari Lookup Labs">
+ * <example name="po-lookup-labs" title="PO Lookup Labs">
  *  <file name="sample-po-lookup-labs/sample-po-lookup-labs.component.html"> </file>
  *  <file name="sample-po-lookup-labs/sample-po-lookup-labs.component.ts"> </file>
  *  <file name="sample-po-lookup.service.ts"> </file>
  * </example>
  *
- * <example name="po-lookup-hero" title="Portinari Lookup - Hero">
+ * <example name="po-lookup-hero" title="PO Lookup - Hero">
  *  <file name="sample-po-lookup-hero/sample-po-lookup-hero.component.html"> </file>
  *  <file name="sample-po-lookup-hero/sample-po-lookup-hero.component.ts"> </file>
  *  <file name="sample-po-lookup.service.ts"> </file>
  * </example>
  *
- * <example name="po-lookup-hero-reactive-form" title="Portinari Lookup - Hero Reactive Form">
+ * <example name="po-lookup-hero-reactive-form" title="PO Lookup - Hero Reactive Form">
  *  <file name="sample-po-lookup-hero-reactive-form/sample-po-lookup-hero-reactive-form.component.html"> </file>
  *  <file name="sample-po-lookup-hero-reactive-form/sample-po-lookup-hero-reactive-form.component.ts"> </file>
  *  <file name="sample-po-lookup.service.ts"> </file>
  * </example>
  *
- * <example name="po-lookup-sw-films" title="Portinari Lookup - Star Wars films">
+ * <example name="po-lookup-sw-films" title="PO Lookup - Star Wars films">
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.component.html"> </file>
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.component.ts"> </file>
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.service.ts"> </file>
@@ -111,7 +111,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoLookupComponent } from '@portinari/portinari-ui';
+   * import { PoLookupComponent } from '@po-ui/ng-components';
    *
    * ...
    *

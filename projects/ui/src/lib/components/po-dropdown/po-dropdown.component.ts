@@ -9,19 +9,19 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
  *
  * @example
  *
- * <example name="po-dropdown-basic" title="Portinari Dropdown Basic" >
+ * <example name="po-dropdown-basic" title="PO Dropdown Basic" >
  *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.html"> </file>
  *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.ts"> </file>
  *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.e2e-spec.ts"> </file>
  *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.po.ts"> </file>
  * </example>
  *
- * <example name="po-dropdown-labs" title="Portinari Dropdown Labs" >
+ * <example name="po-dropdown-labs" title="PO Dropdown Labs" >
  *  <file name="sample-po-dropdown-labs/sample-po-dropdown-labs.component.html"> </file>
  *  <file name="sample-po-dropdown-labs/sample-po-dropdown-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-dropdown-social-network" title="Portinari Dropdown - Social Network" >
+ * <example name="po-dropdown-social-network" title="PO Dropdown - Social Network" >
  *  <file name="sample-po-dropdown-social-network/sample-po-dropdown-social-network.component.html"> </file>
  *  <file name="sample-po-dropdown-social-network/sample-po-dropdown-social-network.component.ts"> </file>
  * </example>

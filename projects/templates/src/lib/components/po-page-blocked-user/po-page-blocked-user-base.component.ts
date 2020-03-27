@@ -26,7 +26,7 @@ const PoPageBlockedUserParamsDefault: PoPageBlockedUserReasonParams = { attempts
  *     "src/favicon.ico",
  *     {
  *       "glob": "**\/*",
- *       "input": "node_modules/@portinari/style/images",
+ *       "input": "node_modules/@po-ui/style/images",
  *       "output": "assets/images"
  *     }
  *   ]
@@ -41,13 +41,13 @@ const PoPageBlockedUserParamsDefault: PoPageBlockedUserReasonParams = { attempts
  *
  *
  * ```
- *   import { PoPageBlockedUserComponent, PoPageBlockedUserReason } from '@portinari/portinari-templates';
+ *   import { PoPageBlockedUserComponent, PoPageBlockedUserReason } from '@po-ui/ng-templates';
  *
  *   ...
  *   const routes: Routes = [
  *     {
  *       path: 'access-denied', component: PoPageBlockedUserComponent, data: {
- *         contactEmail: 'dev.portinari@portinari.com',
+ *         contactEmail: 'dev.po@po-ui.com',
  *         contactPhone: '0800 1234 000',
  *         reason: PoPageBlockedUserReason.ExpiredPassword,
  *         urlBack: '/home'
@@ -133,7 +133,7 @@ export class PoPageBlockedUserBaseComponent {
     return this._params;
   }
 
-  /** Caminho para a logomarca localizada na parte superior, caso não seja definida ou seja inválida assume a logo padrão da PORTINARI. */
+  /** Caminho para a logomarca localizada na parte superior, caso não seja definida ou seja inválida assume a logo padrão da PO. */
   @Input('p-logo') logo?: string;
 
   /**

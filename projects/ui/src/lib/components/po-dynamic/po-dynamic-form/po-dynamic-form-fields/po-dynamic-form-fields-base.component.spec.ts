@@ -597,7 +597,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         property: 'products',
         options,
         optionsMulti: true,
-        optionsService: 'http://www.po.portinari.com.br/api/customers'
+        optionsService: 'http://www.po.com.br/api/customers'
       };
 
       expect(component['isCheckboxGroup'](field)).toBe(false);
@@ -638,7 +638,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         property: 'products',
         options,
         optionsMulti: true,
-        optionsService: 'http://www.po.portinari.com.br/api/customers'
+        optionsService: 'http://www.po.com.br/api/customers'
       };
 
       expect(component['isMultiselect'](field)).toBe(false);

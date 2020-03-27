@@ -32,7 +32,7 @@ describe('PoHttpInterceptorBaseService', () => {
   let mockErrorResponse;
   let mockErrorServerNotResponding;
   let mockSuccessResponse;
-  let portinariErrorMessage;
+  let poErrorMessage;
   let messages;
   let service;
 
@@ -55,8 +55,8 @@ describe('PoHttpInterceptorBaseService', () => {
     mockErrorResponse = { status: 404, statusText: 'Bad Request' };
     mockErrorServerNotResponding = { status: 0, statusText: 'Server not responding' };
     mockSuccessResponse = { status: 200, statusText: 'Success' };
-    portinariErrorMessage = { message: 'erro portinari', code: '1', detailedMessage: '', details: [{}], helpUrl: '' };
-    messages = { type: 'success', message: 'portinari', code: '2' };
+    poErrorMessage = { message: 'erro po', code: '1', detailedMessage: '', details: [{}], helpUrl: '' };
+    messages = { type: 'success', message: 'po', code: '2' };
     service = TestBed.inject(PoHttpInterceptorService);
   });
 
@@ -133,18 +133,18 @@ describe('PoHttpInterceptorBaseService', () => {
     (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'error');
 
-      portinariErrorMessage.details = undefined;
-      portinariErrorMessage.detailedMessage = undefined;
+      poErrorMessage.details = undefined;
+      poErrorMessage.detailedMessage = undefined;
 
       http.get('/data').subscribe(
         res => (response = res),
         err => (errResponse = err)
       );
 
-      httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
+      httpMock.expectOne('/data').flush(poErrorMessage, mockErrorResponse);
 
       expect(service.notification.error).toHaveBeenCalledWith({
-        message: portinariErrorMessage.message,
+        message: poErrorMessage.message,
         actionLabel: undefined,
         action: undefined
       });
@@ -156,18 +156,18 @@ describe('PoHttpInterceptorBaseService', () => {
     (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'error');
 
-      portinariErrorMessage.details = [{ code: '1', message: 'detalhe' }];
+      poErrorMessage.details = [{ code: '1', message: 'detalhe' }];
 
       http.get('/data').subscribe(
         res => (response = res),
         err => (errResponse = err)
       );
 
-      httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
+      httpMock.expectOne('/data').flush(poErrorMessage, mockErrorResponse);
 
       // TODO: Validar notification function
       expect(service.notification.error).toHaveBeenCalledWith({
-        message: portinariErrorMessage.message,
+        message: poErrorMessage.message,
         actionLabel: 'Detalhes',
         action: jasmine.any(Function)
       });
@@ -179,20 +179,20 @@ describe('PoHttpInterceptorBaseService', () => {
     (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'error');
 
-      portinariErrorMessage.details = undefined;
-      portinariErrorMessage.detailedMessage = undefined;
-      portinariErrorMessage.helpUrl = 'http://po.portinari.com.br';
+      poErrorMessage.details = undefined;
+      poErrorMessage.detailedMessage = undefined;
+      poErrorMessage.helpUrl = 'http://po.com.br';
 
       http.get('/data').subscribe(
         res => (response = res),
         err => (errResponse = err)
       );
 
-      httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
+      httpMock.expectOne('/data').flush(poErrorMessage, mockErrorResponse);
 
       // TODO: Validar help Url
       expect(service.notification.error).toHaveBeenCalledWith({
-        message: portinariErrorMessage.message,
+        message: poErrorMessage.message,
         actionLabel: 'Ajuda',
         action: jasmine.any(Function)
       });
@@ -204,15 +204,15 @@ describe('PoHttpInterceptorBaseService', () => {
     (http: HttpClient, httpMock: HttpTestingController) => {
       spyOn(service.notification, 'error');
 
-      portinariErrorMessage.details = undefined;
-      portinariErrorMessage.detailedMessage = undefined;
+      poErrorMessage.details = undefined;
+      poErrorMessage.detailedMessage = undefined;
 
       http.get('/data').subscribe(
         res => (response = res),
         err => (errResponse = err)
       );
 
-      httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorServerNotResponding);
+      httpMock.expectOne('/data').flush(poErrorMessage, mockErrorServerNotResponding);
 
       expect(service.notification.error).toHaveBeenCalledWith({
         message: 'Servidor não está respondendo.',
@@ -260,15 +260,15 @@ describe('PoHttpInterceptorBaseService', () => {
         err => (errResponse = err)
       );
 
-      httpMock.expectOne('/data').flush(portinariErrorMessage, mockErrorResponse);
+      httpMock.expectOne('/data').flush(poErrorMessage, mockErrorResponse);
 
       expect(mockNotification.error).not.toHaveBeenCalled();
     }
   ));
 
-  it('hasNoErrorParam should return true when the param `X-Portinari-No-Error` value is true in header of request', () => {
-    const requestWithTrueValue = createHttpRequest('X-Portinari-No-Error', 'true');
-    const requestWithUpperCaseValue = createHttpRequest('X-PORTINARI-NO-ERROR', 'TRUE');
+  it('hasNoErrorParam should return true when the param `X-PO-No-Error` value is true in header of request', () => {
+    const requestWithTrueValue = createHttpRequest('X-PO-No-Error', 'true');
+    const requestWithUpperCaseValue = createHttpRequest('X-PO-NO-ERROR', 'TRUE');
 
     expect(service['hasNoErrorParam'](requestWithTrueValue)).toBeTruthy();
     expect(service['hasNoErrorParam'](requestWithUpperCaseValue)).toBeTruthy();

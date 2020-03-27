@@ -10,7 +10,7 @@ import {
   PoNotificationService,
   PoPageAction,
   PoTableColumn
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-container-dashboard',

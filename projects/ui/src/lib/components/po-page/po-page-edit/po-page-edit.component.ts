@@ -7,17 +7,17 @@ import { PoPageEditBaseComponent } from './po-page-edit-base.component';
  *
  * @example
  *
- * <example name="po-page-edit-basic" title="Portinari Page Edit Basic">
+ * <example name="po-page-edit-basic" title="PO Page Edit Basic">
  *  <file name="sample-po-page-edit-basic/sample-po-page-edit-basic.component.html"> </file>
  *  <file name="sample-po-page-edit-basic/sample-po-page-edit-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-edit-labs" title="Portinari Page Edit Labs">
+ * <example name="po-page-edit-labs" title="PO Page Edit Labs">
  *  <file name="sample-po-page-edit-labs/sample-po-page-edit-labs.component.html"> </file>
  *  <file name="sample-po-page-edit-labs/sample-po-page-edit-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-edit-user" title="Portinari Page Edit - User">
+ * <example name="po-page-edit-user" title="PO Page Edit - User">
  *  <file name="sample-po-page-edit-user/sample-po-page-edit-user.component.html"> </file>
  *  <file name="sample-po-page-edit-user/sample-po-page-edit-user.component.ts"> </file>
  * </example>

@@ -6,9 +6,9 @@
 
 // import { HttpClientModule } from '@angular/common/http';
 
-// import { PoModule } from '@portinari/portinari-ui';
+// import { PoModule } from '@po-ui/ng-components';
 //
-// import { PoCodeEditorModule, PoCodeEditorRegisterable } from '@portinari/portinari-code-editor';
+// import { PoCodeEditorModule, PoCodeEditorRegisterable } from '@po-ui/ng-code-editor';
 
 // const customRegister: PoCodeEditorRegisterable = {
 //   language: 'terraform'

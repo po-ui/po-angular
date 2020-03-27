@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoMenuPanelItem, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoMenuPanelItem, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-menu-panel-labs',
@@ -12,7 +12,7 @@ export class SamplePoMenuPanelLabsComponent implements OnInit {
   menuItemSelected: string;
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'po-icon-portinari', value: 'po-icon-portinari' },
+    { label: 'po-icon-news', value: 'po-icon-news' },
     { label: 'po-icon-camera', value: 'po-icon-camera' },
     { label: 'po-icon-calendar', value: 'po-icon-calendar' },
     { label: 'po-icon-user', value: 'po-icon-user' },

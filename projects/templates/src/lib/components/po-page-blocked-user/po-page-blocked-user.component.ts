@@ -25,22 +25,22 @@ export const poPageBlockedUserButtonLiterals: Object = {
  *
  * @example
  *
- * <example name="po-page-blocked-user-basic" title="Portinari Page Blocked User Basic">
+ * <example name="po-page-blocked-user-basic" title="PO Page Blocked User Basic">
  *  <file name="sample-po-page-blocked-user-basic/sample-po-page-blocked-user-basic.component.html"> </file>
  *  <file name="sample-po-page-blocked-user-basic/sample-po-page-blocked-user-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-blocked-user-labs" title="Portinari Page Blocked User Labs">
+ * <example name="po-page-blocked-user-labs" title="PO Page Blocked User Labs">
  *  <file name="sample-po-page-blocked-user-labs/sample-po-page-blocked-user-labs.component.html"> </file>
  *  <file name="sample-po-page-blocked-user-labs/sample-po-page-blocked-user-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-blocked-user-exceeded-attempts" title="Portinari Page Blocked User Exceeded Attempts">
+ * <example name="po-page-blocked-user-exceeded-attempts" title="PO Page Blocked User Exceeded Attempts">
  *  <file name="sample-po-page-blocked-user-exceeded-attempts/sample-po-page-blocked-user-exceeded-attempts.component.html"> </file>
  *  <file name="sample-po-page-blocked-user-exceeded-attempts/sample-po-page-blocked-user-exceeded-attempts.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-blocked-user-expired-password" title="Portinari Page Blocked User Expired Password">
+ * <example name="po-page-blocked-user-expired-password" title="PO Page Blocked User Expired Password">
  *  <file name="sample-po-page-blocked-user-expired-password/sample-po-page-blocked-user-expired-password.component.html"> </file>
  *  <file name="sample-po-page-blocked-user-expired-password/sample-po-page-blocked-user-expired-password.component.ts"> </file>
  * </example>

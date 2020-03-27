@@ -22,27 +22,27 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
  *
  * @example
  *
- * <example name="po-page-change-password-basic" title="Portinari Page Change Password Basic">
+ * <example name="po-page-change-password-basic" title="PO Page Change Password Basic">
  *  <file name="sample-po-page-change-password-basic/sample-po-page-change-password-basic.component.html"> </file>
  *  <file name="sample-po-page-change-password-basic/sample-po-page-change-password-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-change-password-labs" title="Portinari Page Change Password Labs">
+ * <example name="po-page-change-password-labs" title="PO Page Change Password Labs">
  *  <file name="sample-po-page-change-password-labs/sample-po-page-change-password-labs.component.html"> </file>
  *  <file name="sample-po-page-change-password-labs/sample-po-page-change-password-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-change-password-modify" title="Portinari Page Change Password Modify">
+ * <example name="po-page-change-password-modify" title="PO Page Change Password Modify">
  *  <file name="sample-po-page-change-password-modify/sample-po-page-change-password-modify.component.html"> </file>
  *  <file name="sample-po-page-change-password-modify/sample-po-page-change-password-modify.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-change-password-create" title="Portinari Page Change Password Create">
+ * <example name="po-page-change-password-create" title="PO Page Change Password Create">
  *  <file name="sample-po-page-change-password-create/sample-po-page-change-password-create.component.html"> </file>
  *  <file name="sample-po-page-change-password-create/sample-po-page-change-password-create.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-change-password-request" title="Portinari Page Change Password Request">
+ * <example name="po-page-change-password-request" title="PO Page Change Password Request">
  *  <file name="sample-po-page-change-password-request/sample-po-page-change-password-request.component.html"> </file>
  *  <file name="sample-po-page-change-password-request/sample-po-page-change-password-request.component.ts"> </file>
  * </example>

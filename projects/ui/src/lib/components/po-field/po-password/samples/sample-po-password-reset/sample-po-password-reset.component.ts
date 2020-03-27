@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoDialogService } from '@portinari/portinari-ui';
+import { PoDialogService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-password-reset',

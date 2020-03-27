@@ -2,14 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
-import { PoDialogService, PoI18nService } from '@portinari/portinari-ui';
+import { PoDialogService, PoI18nService } from '@po-ui/ng-components';
 import {
   PoModalPasswordRecoveryType,
   PoPageBlockedUserReasonParams,
   PoPageLoginCustomField,
   PoPageLoginLiterals,
   PoPageLoginRecovery
-} from '@portinari/portinari-templates';
+} from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-login-human-resources',
@@ -53,7 +53,7 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
   checkLogin(formData) {
     this.loading = true;
 
-    if (formData.login === 'devportinari' && formData.password === '1986') {
+    if (formData.login === 'devpo' && formData.password === '1986') {
       this.passwordErrors = [];
       this.exceededAttempts = 0;
       this.loginErrors = [];

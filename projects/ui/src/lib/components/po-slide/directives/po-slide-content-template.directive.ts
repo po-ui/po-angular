@@ -16,7 +16,7 @@ import { Directive, TemplateRef } from '@angular/core';
  * ```
  * ...
  * <po-slide
- *   [p-slides]="[{ id: 1, name: 'Register', email: 'register@portinari.com' }]">
+ *   [p-slides]="[{ id: 1, name: 'Register', email: 'register@po-ui.com' }]">
  *
  *   <ng-template p-slide-content-template let-item let-code="index">
  *     <div class="po-row">
@@ -33,7 +33,7 @@ import { Directive, TemplateRef } from '@angular/core';
  * ```
  * ...
  * <po-slide
- *    [p-slides]="[{ id: 1, name: 'Register', email: 'register@portinari.com' }]">
+ *    [p-slides]="[{ id: 1, name: 'Register', email: 'register@po-ui.com' }]">
  *
  *    <div *p-slide-content-template="let item, let i=index" class="po-row">
  *      <po-info class="po-md-12" p-label="Email" [p-value]="item.email"></po-info>

@@ -80,7 +80,7 @@ describe('PoTagComponent:', () => {
     });
 
     it('iconTypeString: should return `true` if is string value.', () => {
-      component.icon = 'po-icon-portinari';
+      component.icon = 'po-icon-news';
       expect(component.iconTypeString).toBe(true);
     });
 

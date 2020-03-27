@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoPageBlockedUserReason, PoPageBlockedUserReasonParams } from '@portinari/portinari-templates';
-import { PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoPageBlockedUserReason, PoPageBlockedUserReasonParams } from '@po-ui/ng-templates';
+import { PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-blocked-user-labs',

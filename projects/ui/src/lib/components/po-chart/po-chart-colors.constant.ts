@@ -1,4 +1,4 @@
-// Array de cores para gráficos definido pela equipe de UX Portinari.
+// Array de cores para gráficos definido pela equipe de UX PO.
 export const PoChartColors = [
   ['#29B6C5'],
   ['#0C6C94', '#29B6C5'],

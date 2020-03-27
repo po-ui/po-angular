@@ -6,7 +6,7 @@ import {
   PoNotificationService,
   PoRadioGroupOption,
   PoSelectOption
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-group-labs',
@@ -19,7 +19,7 @@ export class SamplePoButtonGroupLabsComponent implements OnInit {
   toggle: PoButtonGroupToggle;
 
   iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'po-icon-portinari', value: 'po-icon-portinari' },
+    { label: 'po-icon-news', value: 'po-icon-news' },
     { label: 'po-icon-calendar', value: 'po-icon-calendar' },
     { label: 'po-icon-user', value: 'po-icon-user' },
     { label: 'po-icon-telephone', value: 'po-icon-telephone' }

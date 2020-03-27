@@ -1,5 +1,5 @@
 {
-  "extends": ["@portinari/tslint", "@portinari/tslint", "tslint-plugin-prettier", "tslint-config-prettier"],
+  "extends": ["@po-ui/ng-tslint", "tslint-plugin-prettier", "tslint-config-prettier"],
   "rules": {
     "no-identical-functions": false,
     "object-literal-key-quotes": false,

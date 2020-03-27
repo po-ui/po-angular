@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoRadioGroupOption, PoSwitchLabelPosition } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSwitchLabelPosition } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-switch-labs',

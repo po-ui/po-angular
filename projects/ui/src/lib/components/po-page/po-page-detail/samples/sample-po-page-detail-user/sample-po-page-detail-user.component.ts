@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoBreadcrumb } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-detail-user',
@@ -9,7 +9,7 @@ import { PoBreadcrumb } from '@portinari/portinari-ui';
 })
 export class SamplePoPageDetailUserComponent {
   birthDate: string = '26/12/1978';
-  email: string = 'john.doe@portinari.com.br';
+  email: string = 'john.doe@po-ui.com.br';
   fathersName: string = 'Mike Doe';
   genre: string = 'male';
   graduation: string = 'College Degree';

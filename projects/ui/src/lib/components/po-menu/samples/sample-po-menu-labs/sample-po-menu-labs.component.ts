@@ -6,7 +6,7 @@ import {
   PoMenuItem,
   PoRadioGroupOption,
   PoSelectOption
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-menu-labs',
@@ -66,7 +66,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
   ];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'po-icon-portinari', value: 'po-icon-portinari' },
+    { label: 'po-icon-news', value: 'po-icon-news' },
     { label: 'po-icon-camera', value: 'po-icon-camera' },
     { label: 'po-icon-calendar', value: 'po-icon-calendar' },
     { label: 'po-icon-user', value: 'po-icon-user' },
@@ -157,7 +157,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
     this.badgeColor = undefined;
     this.badgeValue = undefined;
     this.icon = undefined;
-    this.label = 'Portinari Menu';
+    this.label = 'PO Menu';
     this.link = undefined;
     this.parent = undefined;
     this.shortLabel = 'Menu';

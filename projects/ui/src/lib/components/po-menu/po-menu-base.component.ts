@@ -125,7 +125,7 @@ export abstract class PoMenuBaseComponent {
    * serviço implementando a interface `PoMenuFilter`.
    *
    * Caso utilizada uma URL, o serviço deve retornar os dados conforme o
-   * [Guia de implementação de API da Portinari](http://tdn.portinari.com/display/public/INT/Guia+de+implementacao+das+APIs+PORTINARI).
+   * [Guia de implementação de API da PO](http://tdn.po.com/display/public/INT/Guia+de+implementacao+das+APIs+PO).
    *
    * Quando utilizada uma URL de serviço, será realizado um *GET* na URL informada, passando o valor digitado
    * no parâmetro `search`, veja exemplo:

@@ -7,7 +7,7 @@ import {
   PoTableAction,
   PoTableColumn,
   PoTableLiterals
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import { SamplePoTableLabsService } from './sample-po-table-labs.service';
 

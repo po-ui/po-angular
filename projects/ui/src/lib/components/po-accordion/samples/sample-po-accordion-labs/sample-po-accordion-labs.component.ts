@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoAccordionItemComponent, PoDynamicFormField } from '@portinari/portinari-ui';
+import { PoAccordionItemComponent, PoDynamicFormField } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-accordion-labs',

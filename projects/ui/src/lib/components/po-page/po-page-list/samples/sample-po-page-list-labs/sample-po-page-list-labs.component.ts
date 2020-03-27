@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumb, PoBreadcrumbItem } from '@portinari/portinari-ui';
-import { PoCheckboxGroupOption, PoSelectOption } from '@portinari/portinari-ui';
+import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
-import { PoPageAction, PoPageFilter, PoPageListLiterals } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
+import { PoPageAction, PoPageFilter, PoPageListLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-list-labs',
@@ -43,7 +43,7 @@ export class SamplePoPageListLabsComponent implements OnInit {
   };
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-portinari', label: 'po-icon-portinari' },
+    { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
     { value: 'po-icon-world', label: 'po-icon-world' }
   ];
@@ -135,7 +135,7 @@ export class SamplePoPageListLabsComponent implements OnInit {
     this.filterModel = undefined;
     this.filter.placeholder = undefined;
     this.literals = '';
-    this.title = 'Portinari Page List';
+    this.title = 'PO Page List';
 
     this.restoreDisclaimerModel();
     this.restoreActionForm();

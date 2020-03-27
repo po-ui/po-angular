@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoDynamicFormField, PoNotificationService, PoTab } from '@portinari/portinari-ui';
+import { PoDynamicFormField, PoNotificationService, PoTab } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tabs-labs',

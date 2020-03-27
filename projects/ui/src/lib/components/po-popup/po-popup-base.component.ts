@@ -22,10 +22,10 @@ const poPopupDefaultPosition = 'bottom-left';
  * <po-popup [p-target]="target">
  *   <div p-popup-header-template>
  *     <div>
- *       Dev Portinari
+ *       Dev PO
  *     </div>
  *     <div>
- *       dev.portinari@portinari.com.br
+ *       dev.po@po-ui.com.br
  *     </div>
  *   </div>
  * </po-popup >

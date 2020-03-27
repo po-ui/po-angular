@@ -427,13 +427,13 @@ describe('PoPageListComponent - Desktop:', () => {
     });
 
     it('should show only one icon in button actions.', () => {
-      component.actions[0].icon = 'po-icon-portinari';
-      component.actions[1].icon = 'po-icon-portinari';
-      component.actions[2].icon = 'po-icon-portinari';
+      component.actions[0].icon = 'po-icon-news';
+      component.actions[1].icon = 'po-icon-news';
+      component.actions[2].icon = 'po-icon-news';
 
       fixture.detectChanges();
 
-      const icons = nativeElement.querySelectorAll('.po-icon-portinari');
+      const icons = nativeElement.querySelectorAll('.po-icon-news');
 
       expect(icons.length).toBe(1);
     });
@@ -465,11 +465,11 @@ describe('PoPageListComponent - Desktop:', () => {
     });
 
     it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {
-      const url = 'http://portinari.io';
+      const url = 'http://po-ui.io';
 
       spyOn(UtilsFunction, 'openExternalLink');
 
-      component.callAction({ label: 'Portinari', url });
+      component.callAction({ label: 'PO', url });
 
       expect(UtilsFunction.openExternalLink).toHaveBeenCalledWith(url);
     });

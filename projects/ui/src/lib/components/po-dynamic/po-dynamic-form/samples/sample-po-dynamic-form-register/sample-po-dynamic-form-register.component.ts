@@ -5,7 +5,7 @@ import {
   PoDynamicFormFieldChanged,
   PoDynamicFormValidation,
   PoNotificationService
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.service';
 
 @Component({

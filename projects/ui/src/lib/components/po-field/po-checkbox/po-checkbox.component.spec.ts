@@ -142,7 +142,7 @@ describe('PoCheckboxComponent:', () => {
 
   describe('Templates:', () => {
     it('should have label.', () => {
-      const newLabel = 'Portinari';
+      const newLabel = 'PO';
       component.label = newLabel;
 
       changeDetector.detectChanges();

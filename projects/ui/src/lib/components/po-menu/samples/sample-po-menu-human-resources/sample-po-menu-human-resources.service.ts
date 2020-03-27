@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { PoMenuFilter, PoMenuItemFiltered } from '@portinari/portinari-ui';
+import { PoMenuFilter, PoMenuItemFiltered } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoMenuHumanResourcesService implements PoMenuFilter {

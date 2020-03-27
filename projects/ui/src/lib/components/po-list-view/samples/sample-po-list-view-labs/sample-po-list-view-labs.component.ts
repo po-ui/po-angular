@@ -6,7 +6,7 @@ import {
   PoListViewAction,
   PoListViewLiterals,
   PoNotificationService
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-list-view-labs',
@@ -33,7 +33,7 @@ export class SamplePoListViewLabsComponent implements OnInit {
   ];
 
   readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-portinari', label: 'po-icon-portinari' },
+    { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
     { value: 'po-icon-world', label: 'po-icon-world' }
   ];
@@ -110,7 +110,7 @@ export class SamplePoListViewLabsComponent implements OnInit {
   private generateNewItem(index) {
     return {
       name: `Register ${index}`,
-      email: `register${index}@portinari.com`,
+      email: `register${index}@po-ui.com`,
       phone: `(55) ${index}234567`,
       location: 'Brazil',
       company: `Company ${index}`,

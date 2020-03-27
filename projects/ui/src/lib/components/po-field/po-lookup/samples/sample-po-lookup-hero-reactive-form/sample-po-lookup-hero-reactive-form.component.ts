@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { PoLookupColumn, PoSelectOption } from '@portinari/portinari-ui';
+import { PoLookupColumn, PoSelectOption } from '@po-ui/ng-components';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 import { SamplePoLookupService } from '../sample-po-lookup.service';
 

@@ -17,24 +17,24 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  *
  * @example
  *
- * <example name="po-switch-basic" title="Portinari Switch Basic">
+ * <example name="po-switch-basic" title="PO Switch Basic">
  *   <file name="sample-po-switch-basic/sample-po-switch-basic.component.html"> </file>
  *   <file name="sample-po-switch-basic/sample-po-switch-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-switch-labs" title="Portinari Switch Labs">
+ * <example name="po-switch-labs" title="PO Switch Labs">
  *   <file name="sample-po-switch-labs/sample-po-switch-labs.component.html"> </file>
  *   <file name="sample-po-switch-labs/sample-po-switch-labs.component.ts"> </file>
  *   <file name="sample-po-switch-labs/sample-po-switch-labs.component.e2e-spec.ts"> </file>
  *   <file name="sample-po-switch-labs/sample-po-switch-labs.component.po.ts"> </file>
  * </example>
  *
- * <example name="po-switch-order" title="Portinari Switch - Order Summary">
+ * <example name="po-switch-order" title="PO Switch - Order Summary">
  *   <file name="sample-po-switch-order/sample-po-switch-order.component.html"> </file>
  *   <file name="sample-po-switch-order/sample-po-switch-order.component.ts"> </file>
  * </example>
  *
- * <example name="po-switch-order-reactive-form" title="Portinari Switch - Order Summary Reactive Form">
+ * <example name="po-switch-order-reactive-form" title="PO Switch - Order Summary Reactive Form">
  *   <file name="sample-po-switch-order-reactive-form/sample-po-switch-order-reactive-form.component.html"> </file>
  *   <file name="sample-po-switch-order-reactive-form/sample-po-switch-order-reactive-form.component.ts"> </file>
  * </example>
@@ -73,7 +73,7 @@ export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterVie
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoSwitchComponent } from '@portinari/portinari-ui';
+   * import { PoSwitchComponent } from '@po-ui/ng-components';
    *
    * ...
    *

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { PoLookupFilter, PoLookupResponseApi, PoLookupFilteredItemsParams } from '@portinari/portinari-ui';
+import { PoLookupFilter, PoLookupResponseApi, PoLookupFilteredItemsParams } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoLookupSwFilmsService implements PoLookupFilter {

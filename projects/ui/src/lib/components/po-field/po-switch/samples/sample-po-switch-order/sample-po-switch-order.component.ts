@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@portinari/portinari-ui';
+import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-switch-order',

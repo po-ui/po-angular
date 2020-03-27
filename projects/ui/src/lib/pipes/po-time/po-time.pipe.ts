@@ -7,7 +7,7 @@ import { isTypeof } from '../../utils/util';
  *
  * @description
  *
- * Pipe responsável por apresentar um horário baseado no formato de entrada definido na API da Portinari.
+ * Pipe responsável por apresentar um horário baseado no formato de entrada definido na API da PO.
  */
 @Pipe({
   name: 'po_time'

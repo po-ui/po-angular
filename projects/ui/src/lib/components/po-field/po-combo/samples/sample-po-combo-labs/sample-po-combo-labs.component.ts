@@ -7,7 +7,7 @@ import {
   PoComboOptionGroup,
   PoRadioGroupOption,
   PoSelectOption
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-combo-labs',

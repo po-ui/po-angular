@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoBreadcrumb } from '@portinari/portinari-ui';
-import { PoCheckboxGroupOption, PoMultiselectOption } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoMultiselectOption } from '@po-ui/ng-components';
 
-import { PoDialogService } from '@portinari/portinari-ui';
-import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
-import { PoNotificationService } from '@portinari/portinari-ui';
-import { PoPageAction, PoPageFilter } from '@portinari/portinari-ui';
-import { PoTableColumn } from '@portinari/portinari-ui';
+import { PoDialogService } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoNotificationService } from '@po-ui/ng-components';
+import { PoPageAction, PoPageFilter } from '@po-ui/ng-components';
+import { PoTableColumn } from '@po-ui/ng-components';
 
 import { SamplePoPageListHiringProcessesService } from './sample-po-page-list-hiring-processes.service';
 

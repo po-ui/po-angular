@@ -110,7 +110,7 @@ export const poPageDynamicDetailLiteralsDefault = {
  *
  * @example
  *
- * <example name="po-page-dynamic-detail-basic" title="Portinari Page Dynamic Detail Basic">
+ * <example name="po-page-dynamic-detail-basic" title="PO Page Dynamic Detail Basic">
  *  <file name="sample-po-page-dynamic-detail-basic/sample-po-page-dynamic-detail-basic.component.html"> </file>
  *  <file name="sample-po-page-dynamic-detail-basic/sample-po-page-dynamic-detail-basic.component.ts"> </file>
  * </example>

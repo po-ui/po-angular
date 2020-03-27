@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoSelectOption } from '@portinari/portinari-ui';
+import { PoSelectOption } from '@po-ui/ng-components';
 
-import { PoTableColumn } from '@portinari/portinari-ui';
+import { PoTableColumn } from '@po-ui/ng-components';
 
 import { SamplePoTableTransportService } from './sample-po-table-transport.service';
 

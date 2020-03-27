@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoModalComponent, PoStepComponent, PoStepperComponent } from '@portinari/portinari-ui';
+import { PoModalComponent, PoStepComponent, PoStepperComponent } from '@po-ui/ng-components';
 import { of } from 'rxjs';
 import { delay, finalize, map, tap } from 'rxjs/operators';
 

@@ -29,17 +29,17 @@ import { PoChartType } from './enums/po-chart-type.enum';
  *
  * @example
  *
- * <example name="po-chart-basic" title="Portinari Chart Basic">
+ * <example name="po-chart-basic" title="PO Chart Basic">
  *  <file name="sample-po-chart-basic/sample-po-chart-basic.component.html"> </file>
  *  <file name="sample-po-chart-basic/sample-po-chart-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-chart-labs" title="Portinari Chart Labs">
+ * <example name="po-chart-labs" title="PO Chart Labs">
  *  <file name="sample-po-chart-labs/sample-po-chart-labs.component.html"> </file>
  *  <file name="sample-po-chart-labs/sample-po-chart-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-chart-coffee-ranking" title="Portinari Chart - Coffee Ranking">
+ * <example name="po-chart-coffee-ranking" title="PO Chart - Coffee Ranking">
  *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.html"> </file>
  *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.ts"> </file>
  * </example>

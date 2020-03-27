@@ -32,7 +32,7 @@ export interface PoMenuItem {
   action?: string | Function;
 
   /**
-   * Ícone para o item de menu, os [ícones aceitos](/guides/icons) são os definidos no guia de estilo da Portinari.
+   * Ícone para o item de menu, os [ícones aceitos](/guides/icons) são os definidos no guia de estilo da PO.
    * São exibidos apenas no primeiro nível de menu e serão visíveis apenas se todos os itens de primeiro nível possuírem ícones.
    * O menu colapsado também aparecerá somente se todos os itens de primeiro nível de menu possuírem ícones e textos curtos.
    */

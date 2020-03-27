@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { PoBreadcrumb } from '@portinari/portinari-ui';
-import { PoDialogService } from '@portinari/portinari-ui';
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
+import { PoDialogService } from '@po-ui/ng-components';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-edit-user',
@@ -45,7 +45,7 @@ export class SamplePoPageEditUserComponent implements OnInit {
 
   initialize() {
     this.birthDate = new Date(1978, 11, 26);
-    this.email = 'john.doe@portinari.com.br';
+    this.email = 'john.doe@po-ui.com.br';
     this.fathersName = 'Mike Doe';
     this.genre = 'male';
     this.graduation = 'College Degree';

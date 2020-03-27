@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumbItem, PoNotificationService } from '@portinari/portinari-ui';
+import { PoBreadcrumbItem, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-breadcrumb-labs',

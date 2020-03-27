@@ -6,8 +6,8 @@ import { Component } from '@angular/core';
 })
 export class SamplePoAvatarBusinessCardComponent {
   contact = {
-    name: 'Mr. Dev Portinari',
-    email: 'dev.portinari@portinari.com',
+    name: 'Mr. Dev PO',
+    email: 'dev.po@po-ui.com',
     phone: '47912012015'
   };
 

@@ -10,17 +10,17 @@ import { PoModalService } from './po-modal-service';
  *
  * @example
  *
- * <example name="po-modal-basic" title="Portinari Modal Basic">
+ * <example name="po-modal-basic" title="PO Modal Basic">
  *  <file name="sample-po-modal-basic/sample-po-modal-basic.component.html"> </file>
  *  <file name="sample-po-modal-basic/sample-po-modal-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-modal-labs" title="Portinari Modal Labs">
+ * <example name="po-modal-labs" title="PO Modal Labs">
  *  <file name="sample-po-modal-labs/sample-po-modal-labs.component.html"> </file>
  *  <file name="sample-po-modal-labs/sample-po-modal-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-modal-fruits-salad" title="Portinari Modal - Fruits Salad">
+ * <example name="po-modal-fruits-salad" title="PO Modal - Fruits Salad">
  *  <file name="sample-po-modal-fruits-salad/sample-po-modal-fruits-salad.component.html"> </file>
  *  <file name="sample-po-modal-fruits-salad/sample-po-modal-fruits-salad.component.ts"> </file>
  * </example>

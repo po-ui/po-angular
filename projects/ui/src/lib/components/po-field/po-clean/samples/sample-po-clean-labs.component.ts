@@ -14,8 +14,8 @@ export class SamplePoCleanLabsComponent {
 
   constructor() {
     this.fieldValue = 'Texto Padrão';
-    this.website = 'www.portinari.com.br';
-    this.email = 'contato@portinari.com.br';
+    this.website = 'www.po-ui.com.br';
+    this.email = 'contato@po-ui.com.br';
     this.password = '12345';
     this.date = new Date();
     this.age = 0;

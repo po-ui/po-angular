@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumb, PoBreadcrumbItem } from '@portinari/portinari-ui';
-import { PoCheckboxGroupOption } from '@portinari/portinari-ui';
+import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
-import { PoPageEditLiterals } from '@portinari/portinari-ui';
+import { PoPageEditLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-edit-labs',
@@ -65,7 +65,7 @@ export class SamplePoPageEditLabsComponent implements OnInit {
     this.customLiterals = undefined;
     this.literals = '';
     this.properties = [];
-    this.title = 'Portinari Page Edit';
+    this.title = 'PO Page Edit';
   }
 
   save() {

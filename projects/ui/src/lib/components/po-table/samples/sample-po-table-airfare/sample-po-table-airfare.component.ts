@@ -7,7 +7,7 @@ import {
   PoTableColumn,
   PoTableComponent,
   PoNotificationService
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
 
