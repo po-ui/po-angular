@@ -14,9 +14,9 @@ const PO_POPOVER_TRIGGERS = ['click', 'hover'];
  * gráficos, textos, imagens e inputs. Ele abre sobreposto aos outros componentes.
  *
  * Para mostrar apenas pequenos textos recomenda-se o uso da diretiva
- * [**po-tooltip**](https://portinari.io/documentation/po-tooltip?view=doc).
+ * [**po-tooltip**](https://po-ui.io/documentation/po-tooltip?view=doc).
  *
- * Para conteúdos maiores recomenda-se o uso do [**po-modal**](https://portinari.io/documentation/po-modal?view=doc).
+ * Para conteúdos maiores recomenda-se o uso do [**po-modal**](https://po-ui.io/documentation/po-modal?view=doc).
  *
  * Ele contém um título e também é possível escolher as posições do popover em relação ao componente pai,
  * as posições permitidas são: `right`, `right-top`, `right-bottom`, `top`, `top-left`, `top-right`,
@@ -100,7 +100,7 @@ export class PoPopoverBaseComponent {
    *
    * <po-popover
    *   [p-origin]="poButton"
-   *   [p-title]="Portinari Popover">
+   *   [p-title]="PO Popover">
    * </po-popover>
    * ```
    *

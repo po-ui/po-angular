@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoDialogService } from '@portinari/portinari-ui';
+import { PoDialogService } from '@po-ui/ng-components';
 import {
   PoPageChangePassword,
   PoPageChangePasswordComponent,
   PoPageChangePasswordRequirement
-} from '@portinari/portinari-templates';
+} from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-change-password-labs',

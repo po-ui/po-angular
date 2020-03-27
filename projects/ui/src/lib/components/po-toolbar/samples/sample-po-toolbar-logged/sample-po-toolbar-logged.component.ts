@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfile } from '@portinari/portinari-ui';
+import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfile } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-toolbar-logged',
@@ -10,7 +10,7 @@ import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfi
 export class SamplePoToolbarLoggedComponent {
   notificationActions: Array<PoToolbarAction> = [
     {
-      icon: 'po-icon-portinari',
+      icon: 'po-icon-news',
       label: 'PO news, stay tuned!',
       type: 'danger',
       action: item => this.onClickNotification(item)
@@ -20,8 +20,8 @@ export class SamplePoToolbarLoggedComponent {
 
   profile: PoToolbarProfile = {
     avatar: 'https://via.placeholder.com/48x48?text=AVATAR',
-    subtitle: 'dev@portinari.com.br',
-    title: 'Mr. Dev Portinari'
+    subtitle: 'dev@po-ui.com.br',
+    title: 'Mr. Dev PO'
   };
 
   profileActions: Array<PoToolbarAction> = [
@@ -37,7 +37,7 @@ export class SamplePoToolbarLoggedComponent {
     { label: 'Cash register options', action: item => this.showAction(item) }
   ];
 
-  title: string = 'Portinari Toolbar Logged';
+  title: string = 'PO Toolbar Logged';
 
   constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
 
@@ -46,7 +46,7 @@ export class SamplePoToolbarLoggedComponent {
   }
 
   onClickNotification(item: PoToolbarAction) {
-    window.open('https://github.com/portinariui/portinari-angular/blob/master/CHANGELOG.md', '_blank');
+    window.open('https://github.com/po-ui/po-angular/blob/master/CHANGELOG.md', '_blank');
 
     item.type = 'default';
   }

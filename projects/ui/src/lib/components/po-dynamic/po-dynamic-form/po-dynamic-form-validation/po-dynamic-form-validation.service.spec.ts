@@ -23,7 +23,7 @@ describe('PoDynamicFormValidationService:', () => {
     httpMock = TestBed.inject(HttpTestingController);
     service = TestBed.inject(PoDynamicFormValidationService);
 
-    (field = { property: 'test1', required: true, visible: true }), (mockURL = 'http://po.portinari.com.br/api');
+    (field = { property: 'test1', required: true, visible: true }), (mockURL = 'http://po.com.br/api');
     value = { name: 'username' };
   });
 

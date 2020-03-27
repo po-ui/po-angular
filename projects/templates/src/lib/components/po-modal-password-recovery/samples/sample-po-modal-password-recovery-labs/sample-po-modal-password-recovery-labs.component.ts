@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoDialogService, PoSelectOption } from '@portinari/portinari-ui';
+import { PoDialogService, PoSelectOption } from '@po-ui/ng-components';
 import {
   PoModalPasswordRecovery,
   PoModalPasswordRecoveryComponent,
   PoModalPasswordRecoveryType
-} from '@portinari/portinari-templates';
+} from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-modal-password-recovery-labs',

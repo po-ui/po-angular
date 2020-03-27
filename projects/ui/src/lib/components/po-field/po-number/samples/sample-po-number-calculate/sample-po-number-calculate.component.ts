@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoSelectOption } from '@portinari/portinari-ui';
+import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-number-calculate',

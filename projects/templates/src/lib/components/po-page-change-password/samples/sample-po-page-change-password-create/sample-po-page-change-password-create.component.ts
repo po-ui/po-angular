@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoPageChangePasswordComponent, PoPageChangePasswordRequirement } from '@portinari/portinari-templates';
+import { PoPageChangePasswordComponent, PoPageChangePasswordRequirement } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-change-password-create',

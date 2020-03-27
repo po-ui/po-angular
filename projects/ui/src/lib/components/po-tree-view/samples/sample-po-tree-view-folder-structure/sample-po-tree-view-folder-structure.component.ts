@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoTreeViewItem } from '@portinari/portinari-ui';
+import { PoTreeViewItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tree-view-folder-structure',

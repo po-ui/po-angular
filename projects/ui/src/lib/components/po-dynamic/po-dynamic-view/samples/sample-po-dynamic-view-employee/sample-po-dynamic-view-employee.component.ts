@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoDynamicViewField } from '@portinari/portinari-ui';
+import { PoDynamicViewField } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dynamic-view-employee',
@@ -30,12 +30,12 @@ export class SamplePoDynamicViewEmployeeComponent {
     name: 'Jhon Doe',
     age: '20',
     rg: '9999999',
-    email: 'jhon.doe@portinari.com',
+    email: 'jhon.doe@po-ui.com',
     cpf: '999.999.999-99',
     birthday: '1998-03-14T00:00:01-00:00',
     graduation: 'College Degree',
     genre: 'male',
-    company: 'PORTINARI',
+    company: 'PO',
     job: 'Software Engineer',
     addressStreet: 'Avenida Braz Leme',
     addressNumber: '1000',

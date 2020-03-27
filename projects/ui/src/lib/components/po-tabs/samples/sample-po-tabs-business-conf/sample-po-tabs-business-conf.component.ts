@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tabs-business-conf',
@@ -34,7 +34,7 @@ export class SamplePoTabsBusinessConfComponent implements OnInit {
       {
         'id': '1',
         'name': 'Peter Benjamin Parker',
-        'email': 'peter.parker@portinari.com.br',
+        'email': 'peter.parker@po-ui.com.br',
         'photo': 'avatar1.png',
         'description': 'Nodejs developer with 4 years experience',
         'createdDate': '2018-09-21T20:21:06.990Z',
@@ -43,7 +43,7 @@ export class SamplePoTabsBusinessConfComponent implements OnInit {
       {
         'id': '2',
         'name': 'Natasha Romanova',
-        'email': 'natasha.romanova@portinari.com.br',
+        'email': 'natasha.romanova@po-ui.com.br',
         'photo': 'avatar2.png',
         'description': 'Angular developer with 2 years experience',
         'createdDate': '2018-09-22T20:21:06.990Z',
@@ -52,7 +52,7 @@ export class SamplePoTabsBusinessConfComponent implements OnInit {
       {
         'id': '3',
         'name': 'Anthony Stark',
-        'email': 'anthony.stark@portinari.com.br',
+        'email': 'anthony.stark@po-ui.com.br',
         'photo': 'avatar3.png',
         'description': 'Javascript developer with 8 years experience',
         'createdDate': '2018-09-23T20:21:06.990Z',
@@ -61,7 +61,7 @@ export class SamplePoTabsBusinessConfComponent implements OnInit {
       {
         'id': '4',
         'name': 'Carol Danvers',
-        'email': 'carol.danvers@portinari.com.br',
+        'email': 'carol.danvers@po-ui.com.br',
         'photo': 'avatar4.png',
         'description': 'Full stack developer with 2 years experience',
         'createdDate': '2018-09-24T20:21:06.990Z',
@@ -70,7 +70,7 @@ export class SamplePoTabsBusinessConfComponent implements OnInit {
       {
         'id': '5',
         'name': 'Wagner Dantas',
-        'email': 'wagner.dantas@portinari.com.br',
+        'email': 'wagner.dantas@po-ui.com.br',
         'photo': 'avatar5.png',
         'description': 'Front-end Engineer developer with 8 years experience',
         'createdDate': '2018-09-25T20:21:06.990Z',
@@ -79,7 +79,7 @@ export class SamplePoTabsBusinessConfComponent implements OnInit {
       {
         'id': '6',
         'name': 'Kaiam Alexandre',
-        'email': 'kaiam.alexandre@portinari.com.br',
+        'email': 'kaiam.alexandre@po-ui.com.br',
         'photo': 'avatar6.png',
         'description': 'Javascript developer with 12 years experience',
         'createdDate': '2018-09-26T20:21:06.990Z',

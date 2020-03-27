@@ -24,7 +24,7 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
  *
  * @example
  *
- * <example name="po-grid-basic" title="Portinari Grid Basic">
+ * <example name="po-grid-basic" title="PO Grid Basic">
  *  <file name="sample-po-grid-basic/sample-po-grid-basic.component.html"> </file>
  *  <file name="sample-po-grid-basic/sample-po-grid-basic.component.ts"> </file>
  * </example>

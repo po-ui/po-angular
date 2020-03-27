@@ -94,17 +94,17 @@ const poMenuRootLevel = 1;
  *
  * @example
  *
- * <example name="po-menu-basic" title="Portinari Menu Basic">
+ * <example name="po-menu-basic" title="PO Menu Basic">
  *   <file name="sample-po-menu-basic/sample-po-menu-basic.component.html"> </file>
  *   <file name="sample-po-menu-basic/sample-po-menu-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-menu-labs" title="Portinari Menu Labs">
+ * <example name="po-menu-labs" title="PO Menu Labs">
  *   <file name="sample-po-menu-labs/sample-po-menu-labs.component.html"> </file>
  *   <file name="sample-po-menu-labs/sample-po-menu-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-menu-human-resources" title="Portinari Menu - Human Resources">
+ * <example name="po-menu-human-resources" title="PO Menu - Human Resources">
  *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.component.html"> </file>
  *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.component.ts"> </file>
  *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.service.ts"> </file>

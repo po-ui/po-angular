@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { PoBreadcrumb } from '@portinari/portinari-ui';
-import { PoPageDynamicTableActions } from '@portinari/portinari-templates';
+import { PoBreadcrumb } from '@po-ui/ng-components';
+import { PoPageDynamicTableActions } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-dynamic-table-users',

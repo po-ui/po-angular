@@ -32,7 +32,7 @@ describe('ThPageLoginPopoverComponent: ', () => {
 
   describe('Properties: ', () => {
     it('p-recovery: should set recoveryType to `externalLink` if value type is string', () => {
-      const url = 'http://www.portinari.com';
+      const url = 'http://www.po-ui.com';
       component.recovery = url;
 
       expect(component.recovery).toBe(url);
@@ -40,7 +40,7 @@ describe('ThPageLoginPopoverComponent: ', () => {
     });
 
     it('p-recovery: should set `recoveryType` to `internalLink if value type is string`', () => {
-      const url = '/portinari';
+      const url = '/po';
       component.recovery = url;
 
       expect(component.recovery).toBe(url);
@@ -97,14 +97,12 @@ describe('ThPageLoginPopoverComponent: ', () => {
     });
 
     it('should create `.po-page-login-popover-link` with `href` if `recoveryType` is `externalLink`', () => {
-      component.recovery = 'http://po.portinari.com.br';
+      component.recovery = 'http://po.com.br';
       component.recoveryType = 'externalLink';
 
       fixture.detectChanges();
 
-      const recoveryLink = nativeElement.querySelector(
-        '.po-page-login-popover-link[href="http://po.portinari.com.br"]'
-      );
+      const recoveryLink = nativeElement.querySelector('.po-page-login-popover-link[href="http://po.com.br"]');
       expect(recoveryLink).toBeTruthy();
     });
 

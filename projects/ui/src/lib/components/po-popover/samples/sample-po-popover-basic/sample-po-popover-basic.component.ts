@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
-import { PoButtonComponent } from '@portinari/portinari-ui';
+import { PoButtonComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-popover-basic',

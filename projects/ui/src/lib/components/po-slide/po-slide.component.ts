@@ -27,22 +27,22 @@ const poSlideTiming = '250ms ease';
  * @docsExtends PoSlideBaseComponent
  *
  * @example
- * <example name="po-slide-basic" title="Portinari Slide Basic">
+ * <example name="po-slide-basic" title="PO Slide Basic">
  *   <file name="sample-po-slide-basic/sample-po-slide-basic.component.html"> </file>
  *   <file name="sample-po-slide-basic/sample-po-slide-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-slide-labs" title="Portinari Slide Labs">
+ * <example name="po-slide-labs" title="PO Slide Labs">
  *   <file name="sample-po-slide-labs/sample-po-slide-labs.component.html"> </file>
  *   <file name="sample-po-slide-labs/sample-po-slide-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-slide-useful-articles" title="Portinari Slide - Useful articles">
+ * <example name="po-slide-useful-articles" title="PO Slide - Useful articles">
  *   <file name="sample-po-slide-useful-articles/sample-po-slide-useful-articles.component.html"> </file>
  *   <file name="sample-po-slide-useful-articles/sample-po-slide-useful-articles.component.ts"> </file>
  * </example>
  *
- * <example name="po-slide-landscapes" title="Portinari Slide - Landscapes">
+ * <example name="po-slide-landscapes" title="PO Slide - Landscapes">
  *   <file name="sample-po-slide-landscapes/sample-po-slide-landscapes.component.html"> </file>
  *   <file name="sample-po-slide-landscapes/sample-po-slide-landscapes.component.ts"> </file>
  * </example>

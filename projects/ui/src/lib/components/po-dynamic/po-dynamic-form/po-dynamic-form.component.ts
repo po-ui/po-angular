@@ -15,12 +15,12 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-
  *
  * @example
  *
- * <example name="po-dynamic-form-basic" title="Portinari Dynamic Form Basic">
+ * <example name="po-dynamic-form-basic" title="PO Dynamic Form Basic">
  *  <file name="sample-po-dynamic-form-basic/sample-po-dynamic-form-basic.component.html"> </file>
  *  <file name="sample-po-dynamic-form-basic/sample-po-dynamic-form-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-dynamic-form-register" title="Portinari Dynamic Form - Register">
+ * <example name="po-dynamic-form-register" title="PO Dynamic Form - Register">
  *  <file name="sample-po-dynamic-form-register/sample-po-dynamic-form-register.component.html"> </file>
  *  <file name="sample-po-dynamic-form-register/sample-po-dynamic-form-register.component.ts"> </file>
  *  <file name="sample-po-dynamic-form-register/sample-po-dynamic-form-register.service.ts"> </file>
@@ -82,7 +82,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
    * ```
    *
    * ``` javascript
-   * import { PoDynamicFormComponent, PoDynamicFormField } from '@portinari/portinari-ui';
+   * import { PoDynamicFormComponent, PoDynamicFormField } from '@po-ui/ng-components';
    *
    * ...
    *

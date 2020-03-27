@@ -7,17 +7,17 @@ import { PoPageDetailBaseComponent } from './po-page-detail-base.component';
  *
  * @example
  *
- * <example name="po-page-detail-basic" title="Portinari Page Detail Basic">
+ * <example name="po-page-detail-basic" title="PO Page Detail Basic">
  *  <file name="sample-po-page-detail-basic/sample-po-page-detail-basic.component.html"> </file>
  *  <file name="sample-po-page-detail-basic/sample-po-page-detail-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-detail-labs" title="Portinari Page Detail Labs">
+ * <example name="po-page-detail-labs" title="PO Page Detail Labs">
  *  <file name="sample-po-page-detail-labs/sample-po-page-detail-labs.component.html"> </file>
  *  <file name="sample-po-page-detail-labs/sample-po-page-detail-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-detail-user" title="Portinari Page Detail - User">
+ * <example name="po-page-detail-user" title="PO Page Detail - User">
  *  <file name="sample-po-page-detail-user/sample-po-page-detail-user.component.html"> </file>
  *  <file name="sample-po-page-detail-user/sample-po-page-detail-user.component.ts"> </file>
  * </example>

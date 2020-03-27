@@ -29,10 +29,10 @@ describe('SamplePoButtonLabs E2E', () => {
     expect(button.poButton.isEnabled()).toBeFalsy();
   });
 
-  it('Check `po-button` show icon `po-icon-portinari` after select icon `po-icon-portinari`', () => {
-    button.poRadioLogoPortinari.click();
+  it('Check `po-button` show icon `po-icon-news` after select icon `po-icon-news`', () => {
+    button.poRadioLogoPO.click();
 
-    expect(button.poButtonIcon.getAttribute('class')).toContain('po-icon-portinari');
+    expect(button.poButtonIcon.getAttribute('class')).toContain('po-icon-news');
   });
 
   it('Check `po-button` show icon `po-icon-user` after select icon `po-icon-user`', () => {

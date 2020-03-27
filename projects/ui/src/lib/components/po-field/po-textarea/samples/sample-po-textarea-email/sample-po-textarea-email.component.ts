@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
-import { PoPageAction } from '@portinari/portinari-ui';
+import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoPageAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-textarea-email',

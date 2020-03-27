@@ -15,7 +15,7 @@ const screenLock = 'X-Portinari-Screen-Lock';
 /**
  * @description
  *
- * O serviço Portinari Http Request Interceptor realiza a contabilização de requisições pendentes na aplicação.
+ * O serviço PO Http Request Interceptor realiza a contabilização de requisições pendentes na aplicação.
  *
  * Existe a possibilidade de não efetuar a contabilização das requisições pendentes, utilizando o parâmetro
  * `X-Portinari-No-Count-Pending-Requests`. Para isso deve ser informado no cabeçalho da requisição com o valor `'true'`,
@@ -90,7 +90,7 @@ const screenLock = 'X-Portinari-Screen-Lock';
  * ```
  *
  * @example
- * <example name='po-http-request-interceptor-labs' title='Portinari Http Request Interceptor Labs'>
+ * <example name='po-http-request-interceptor-labs' title='PO Http Request Interceptor Labs'>
  *  <file name='sample-po-http-request-interceptor-labs.component.ts'> </file>
  *  <file name='sample-po-http-request-interceptor-labs.component.html'> </file>
  * </example>

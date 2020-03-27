@@ -32,7 +32,7 @@ describe('PoPageLoginService:', () => {
       const type = PoPageLoginAuthenticationType.Basic;
       const url = 'url';
       const loginForm = {
-        login: 'po@portinari.com',
+        login: 'po@po-ui.com',
         password: '123@456',
         rememberUser: false
       };
@@ -51,7 +51,7 @@ describe('PoPageLoginService:', () => {
       const type = PoPageLoginAuthenticationType.Bearer;
       const url = 'url';
       const loginForm = {
-        login: 'po@portinari.com',
+        login: 'po@po-ui.com',
         password: '123@456',
         rememberUser: false
       };

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-calendar-labs',

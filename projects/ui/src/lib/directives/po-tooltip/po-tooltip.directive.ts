@@ -8,17 +8,17 @@ import { PoTooltipControlPositionService } from './po-tooltip-control-position.s
  *
  * @example
  *
- * <example name="po-tooltip-basic" title="Portinari Tooltip Basic" >
+ * <example name="po-tooltip-basic" title="PO Tooltip Basic" >
  *  <file name="sample-po-tooltip-basic/sample-po-tooltip-basic.component.html"> </file>
  *  <file name="sample-po-tooltip-basic/sample-po-tooltip-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-tooltip-labs" title="Portinari Tooltip Labs" >
+ * <example name="po-tooltip-labs" title="PO Tooltip Labs" >
  *  <file name="sample-po-tooltip-labs/sample-po-tooltip-labs.component.html"> </file>
  *  <file name="sample-po-tooltip-labs/sample-po-tooltip-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-tooltip-new-user" title="Portinari Tooltip - New User" >
+ * <example name="po-tooltip-new-user" title="PO Tooltip - New User" >
  *  <file name="sample-po-tooltip-new-user/sample-po-tooltip-new-user.component.html"> </file>
  *  <file name="sample-po-tooltip-new-user/sample-po-tooltip-new-user.component.ts"> </file>
  * </example>

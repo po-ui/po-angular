@@ -17,12 +17,12 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  *
  * @example
  *
- * <example name="po-breadcrumb-basic" title="Portinari Breadcrumb Basic">
+ * <example name="po-breadcrumb-basic" title="PO Breadcrumb Basic">
  *  <file name="sample-po-breadcrumb-basic/sample-po-breadcrumb-basic.component.html"> </file>
  *  <file name="sample-po-breadcrumb-basic/sample-po-breadcrumb-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-breadcrumb-labs" title="Portinari Breadcrumb Labs">
+ * <example name="po-breadcrumb-labs" title="PO Breadcrumb Labs">
  *  <file name="sample-po-breadcrumb-labs/sample-po-breadcrumb-labs.component.html"> </file>
  *  <file name="sample-po-breadcrumb-labs/sample-po-breadcrumb-labs.component.ts"> </file>
  * </example>

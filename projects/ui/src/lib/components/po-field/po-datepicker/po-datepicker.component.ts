@@ -25,24 +25,24 @@ const poCalendarPositionDefault = 'bottom-left';
  *
  * @example
  *
- * <example name="po-datepicker-basic" title="Portinari Datepicker Basic">
+ * <example name="po-datepicker-basic" title="PO Datepicker Basic">
  *  <file name="sample-po-datepicker-basic/sample-po-datepicker-basic.component.html"> </file>
  *  <file name="sample-po-datepicker-basic/sample-po-datepicker-basic.component.ts"> </file>
  *  <file name="sample-po-datepicker-basic/sample-po-datepicker-basic.component.po.ts"> </file>
  *  <file name="sample-po-datepicker-basic/sample-po-datepicker-basic.component.e2e-spec.ts"> </file>
  * </example>
  *
- * <example name="po-datepicker-labs" title="Portinari Datepicker Labs">
+ * <example name="po-datepicker-labs" title="PO Datepicker Labs">
  *  <file name="sample-po-datepicker-labs/sample-po-datepicker-labs.component.html"> </file>
  *  <file name="sample-po-datepicker-labs/sample-po-datepicker-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-datepicker-airfare" title="Portinari Datepicker - Airfare">
+ * <example name="po-datepicker-airfare" title="PO Datepicker - Airfare">
  *  <file name="sample-po-datepicker-airfare/sample-po-datepicker-airfare.component.html"> </file>
  *  <file name="sample-po-datepicker-airfare/sample-po-datepicker-airfare.component.ts"> </file>
  * </example>
  *
- * <example name="po-datepicker-airfare-reactive-form" title="Portinari Datepicker - Airfare Reactive Form">
+ * <example name="po-datepicker-airfare-reactive-form" title="PO Datepicker - Airfare Reactive Form">
  *  <file name="sample-po-datepicker-airfare-reactive-form/sample-po-datepicker-airfare-reactive-form.component.html"> </file>
  *  <file name="sample-po-datepicker-airfare-reactive-form/sample-po-datepicker-airfare-reactive-form.component.ts"> </file>
  * </example>
@@ -124,7 +124,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoDatepickerComponent } from '@portinari/portinari-ui';
+   * import { PoDatepickerComponent } from '@po-ui/ng-components';
    *
    * ...
    *

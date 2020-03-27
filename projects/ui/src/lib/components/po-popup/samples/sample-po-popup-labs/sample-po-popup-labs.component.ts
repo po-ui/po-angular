@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
-import { PoNotificationService, PoCheckboxGroupOption, PoSelectOption, PoPopupAction } from '@portinari/portinari-ui';
+import { PoNotificationService, PoCheckboxGroupOption, PoSelectOption, PoPopupAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-popup-labs',
@@ -32,7 +32,7 @@ export class SamplePoPopupLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-portinari', label: 'po-icon-portinari' },
+    { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
     { value: 'po-icon-world', label: 'po-icon-world' }
   ];

@@ -86,10 +86,10 @@ describe('PoButtonComponent: ', () => {
   });
 
   it('should add span with an icon when `p-icon` is defined', () => {
-    component.icon = 'po-icon-portinari';
+    component.icon = 'po-icon-news';
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('span.po-icon.po-icon-portinari')).toBeTruthy();
+    expect(nativeElement.querySelector('span.po-icon.po-icon-news')).toBeTruthy();
   });
 
   it('should simulate button click.', () => {

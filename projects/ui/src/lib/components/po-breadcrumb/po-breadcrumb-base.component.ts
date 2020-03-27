@@ -44,7 +44,7 @@ export class PoBreadcrumbBaseComponent {
    * Exemplo de URL contendo o serviço de favoritar ou desfavoritar:
    *
    * ```
-   * https://portinari.io/sample/api/favorite
+   * https://po-ui.io/sample/api/favorite
    * ```
    *
    * Ao fazer o GET o `po-breadcrumb` concatena o link com a URL de serviço. Exemplo:
@@ -54,7 +54,7 @@ export class PoBreadcrumbBaseComponent {
    * ```
    *
    * ```
-   * GET http://po.portinari.com.br/sample/api/favorite?url=/example
+   * GET http://po.com.br/sample/api/favorite?url=/example
    * ```
    *
    * ```
@@ -66,7 +66,7 @@ export class PoBreadcrumbBaseComponent {
    *
    * ```
    * POST
-   * payload: { isFavorite: true, url: "/example", params: "{ id: 14, user: 'dev.portinari' }" }
+   * payload: { isFavorite: true, url: "/example", params: "{ id: 14, user: 'dev.po' }" }
    * ```
    *
    * Exemplos de retorno:
@@ -80,7 +80,7 @@ export class PoBreadcrumbBaseComponent {
    * ```
    *
    * ```
-   * { isFavorite: false, url: "/example", params: "{ id: 14, user: 'dev.portinari' }" }
+   * { isFavorite: false, url: "/example", params: "{ id: 14, user: 'dev.po' }" }
    * ```
    */
   @Input('p-favorite-service') favoriteService?: string;

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
-import { PoNotificationService, PoTableColumn } from '@portinari/portinari-ui';
+import { PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-url-shortener',

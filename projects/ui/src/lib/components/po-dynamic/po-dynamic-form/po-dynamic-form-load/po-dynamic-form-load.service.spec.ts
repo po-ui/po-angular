@@ -8,7 +8,7 @@ import { PoDynamicFormLoadService } from './po-dynamic-form-load.service';
 describe('PoDynamicFormLoadService:', () => {
   let service: PoDynamicFormLoadService;
 
-  const mockURL: string = 'http://po.portinari.com.br/api';
+  const mockURL: string = 'http://po.com.br/api';
   const value = { name: 'username' };
 
   beforeEach(() => {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoMenuPanelItem } from '@portinari/portinari-ui';
+import { PoMenuPanelItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-menu-panel-customer',

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoComboOption, PoComboOptionGroup, PoNotificationService, PoSelectOption } from '@portinari/portinari-ui';
+import { PoComboOption, PoComboOptionGroup, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.service';
 
 @Component({

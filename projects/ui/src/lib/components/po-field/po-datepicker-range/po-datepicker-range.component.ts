@@ -16,22 +16,22 @@ const poDatepickerRangeDateLengthDefault = 10;
  *
  * @example
  *
- * <example name="po-datepicker-range-basic" title="Portinari Datepicker Range Basic">
+ * <example name="po-datepicker-range-basic" title="PO Datepicker Range Basic">
  *  <file name="sample-po-datepicker-range-basic/sample-po-datepicker-range-basic.component.html"> </file>
  *  <file name="sample-po-datepicker-range-basic/sample-po-datepicker-range-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-datepicker-range-labs" title="Portinari Datepicker Range Labs">
+ * <example name="po-datepicker-range-labs" title="PO Datepicker Range Labs">
  *  <file name="sample-po-datepicker-range-labs/sample-po-datepicker-range-labs.component.html"> </file>
  *  <file name="sample-po-datepicker-range-labs/sample-po-datepicker-range-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-datepicker-range-vacations" title="Portinari Datepicker Range - Vacations Suggestion">
+ * <example name="po-datepicker-range-vacations" title="PO Datepicker Range - Vacations Suggestion">
  *  <file name="sample-po-datepicker-range-vacations/sample-po-datepicker-range-vacations.component.html"> </file>
  *  <file name="sample-po-datepicker-range-vacations/sample-po-datepicker-range-vacations.component.ts"> </file>
  * </example>
  *
- * <example name="po-datepicker-range-vacations-reactive-form" title="Portinari Datepicker Range - Vacations Reactive Form">
+ * <example name="po-datepicker-range-vacations-reactive-form" title="PO Datepicker Range - Vacations Reactive Form">
  *  <file name="sample-po-datepicker-range-vacations-reactive-form/sample-po-datepicker-range-vacations-reactive-form.component.html">
  *  </file>
  *  <file name="sample-po-datepicker-range-vacations-reactive-form/sample-po-datepicker-range-vacations-reactive-form.component.ts">
@@ -150,7 +150,7 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoDatepickerRangeComponent } from '@portinari/portinari-ui';
+   * import { PoDatepickerRangeComponent } from '@po-ui/ng-components';
    *
    * ...
    *

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@portinari/portinari-ui';
+import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
 import { SamplePoComboHotelsService } from './sample-po-combo-hotels.service';
 

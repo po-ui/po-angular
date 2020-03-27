@@ -9,17 +9,17 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
  *
  * @example
  *
- * <example name="po-popover-basic" title="Portinari Popover Basic">
+ * <example name="po-popover-basic" title="PO Popover Basic">
  *   <file name="sample-po-popover-basic/sample-po-popover-basic.component.html"> </file>
  *   <file name="sample-po-popover-basic/sample-po-popover-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-popover-labs" title="Portinari Popover Labs">
+ * <example name="po-popover-labs" title="PO Popover Labs">
  *   <file name="sample-po-popover-labs/sample-po-popover-labs.component.html"> </file>
  *   <file name="sample-po-popover-labs/sample-po-popover-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-popover-credit-card" title="Portinari Popover - Credit Card">
+ * <example name="po-popover-credit-card" title="PO Popover - Credit Card">
  *   <file name="sample-po-popover-credit-card/sample-po-popover-credit-card.component.html"> </file>
  *   <file name="sample-po-popover-credit-card/sample-po-popover-credit-card.component.ts"> </file>
  * </example>

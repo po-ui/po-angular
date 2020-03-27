@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoComboOption, PoDisclaimer, PoTableColumn } from '@portinari/portinari-ui';
+import { PoComboOption, PoDisclaimer, PoTableColumn } from '@po-ui/ng-components';
 
 import { SamplePoDisclaimerGroupSwPlanetsService } from './sample-po-disclaimer-group-sw-planets.service';
 

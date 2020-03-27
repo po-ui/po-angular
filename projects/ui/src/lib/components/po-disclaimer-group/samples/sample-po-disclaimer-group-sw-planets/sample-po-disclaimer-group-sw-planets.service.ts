@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { PoComboOption, PoTableColumn } from '@portinari/portinari-ui';
+import { PoComboOption, PoTableColumn } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoDisclaimerGroupSwPlanetsService {

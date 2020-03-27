@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tooltip-new-user',
@@ -43,7 +43,7 @@ export class SamplePoTooltipNewUserComponent implements OnInit {
   }
 
   initialize() {
-    this.emailTooltip = 'Portinari email provided on the registration form';
+    this.emailTooltip = 'PO email provided on the registration form';
     this.nameTooltip = 'Enter full name';
     this.passwordTooltip = 'Password must contain at least 8 characters';
     this.registrationTooltip = 'The registration number is on the registration form';

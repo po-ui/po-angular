@@ -24,12 +24,12 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
  *
  * @example
  *
- * <example name="po-page-dynamic-search-basic" title="Portinari Page Dynamic Search Basic">
+ * <example name="po-page-dynamic-search-basic" title="PO Page Dynamic Search Basic">
  *  <file name="sample-po-page-dynamic-search-basic/sample-po-page-dynamic-search-basic.component.html"> </file>
  *  <file name="sample-po-page-dynamic-search-basic/sample-po-page-dynamic-search-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-dynamic-search-hiring-processes" title="Portinari Page Dynamic Search - Hiring processes">
+ * <example name="po-page-dynamic-search-hiring-processes" title="PO Page Dynamic Search - Hiring processes">
  *  <file name="sample-po-page-dynamic-search-hiring-processes/sample-po-page-dynamic-search-hiring-processes.component.html"> </file>
  *  <file name="sample-po-page-dynamic-search-hiring-processes/sample-po-page-dynamic-search-hiring-processes.component.ts"> </file>
  *  <file name="sample-po-page-dynamic-search-hiring-processes/sample-po-page-dynamic-search-hiring-processes.service.ts"> </file>

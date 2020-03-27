@@ -30,17 +30,17 @@ const poSelectContentPositionDefault = 'bottom';
  *
  * @example
  *
- * <example name="po-select-basic" title="Portinari Select Basic">
+ * <example name="po-select-basic" title="PO Select Basic">
  *   <file name="sample-po-select-basic/sample-po-select-basic.component.html"> </file>
  *   <file name="sample-po-select-basic/sample-po-select-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-select-labs" title="Portinari Select Labs">
+ * <example name="po-select-labs" title="PO Select Labs">
  *   <file name="sample-po-select-labs/sample-po-select-labs.component.html"> </file>
  *   <file name="sample-po-select-labs/sample-po-select-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-select-customer-registration" title="Portinari Select - Customer registration">
+ * <example name="po-select-customer-registration" title="PO Select - Customer registration">
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.component.html"> </file>
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.component.ts"> </file>
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.service.ts"> </file>
@@ -154,7 +154,7 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoSelectComponent } from '@portinari/portinari-ui';
+   * import { PoSelectComponent } from '@po-ui/ng-components';
    *
    * ...
    *

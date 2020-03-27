@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-popover-labs',

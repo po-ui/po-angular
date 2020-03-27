@@ -12,17 +12,17 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  *
  * @example
  *
- * <example name="po-password-basic" title="Portinari Password Basic">
+ * <example name="po-password-basic" title="PO Password Basic">
  *   <file name="sample-po-password-basic/sample-po-password-basic.component.html"> </file>
  *   <file name="sample-po-password-basic/sample-po-password-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-password-labs" title="Portinari Password Labs">
+ * <example name="po-password-labs" title="PO Password Labs">
  *   <file name="sample-po-password-labs/sample-po-password-labs.component.html"> </file>
  *   <file name="sample-po-password-labs/sample-po-password-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-password-reset" title="Portinari Password - Reset">
+ * <example name="po-password-reset" title="PO Password - Reset">
  *   <file name="sample-po-password-reset/sample-po-password-reset.component.html"> </file>
  *   <file name="sample-po-password-reset/sample-po-password-reset.component.ts"> </file>
  * </example>

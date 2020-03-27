@@ -19,17 +19,17 @@ import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.int
  *
  * @example
  *
- * <example name="po-checkbox-group-basic" title="Portinari Checkbox Group Basic">
+ * <example name="po-checkbox-group-basic" title="PO Checkbox Group Basic">
  *  <file name="sample-po-checkbox-group-basic/sample-po-checkbox-group-basic.component.html"> </file>
  *  <file name="sample-po-checkbox-group-basic/sample-po-checkbox-group-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-checkbox-group-labs" title="Portinari Checkbox Group Labs">
+ * <example name="po-checkbox-group-labs" title="PO Checkbox Group Labs">
  *  <file name="sample-po-checkbox-group-labs/sample-po-checkbox-group-labs.component.html"> </file>
  *  <file name="sample-po-checkbox-group-labs/sample-po-checkbox-group-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-checkbox-group-password-policy" title="Portinari Checkbox Group – Security policy">
+ * <example name="po-checkbox-group-password-policy" title="PO Checkbox Group – Security policy">
  *  <file name="sample-po-checkbox-group-password-policy/sample-po-checkbox-group-password-policy.component.html"> </file>
  *  <file name="sample-po-checkbox-group-password-policy/sample-po-checkbox-group-password-policy.component.ts"> </file>
  * </example>
@@ -74,7 +74,7 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoCheckboxGroupComponent } from '@portinari/portinari-ui';
+   * import { PoCheckboxGroupComponent } from '@po-ui/ng-components';
    *
    * ...
    *

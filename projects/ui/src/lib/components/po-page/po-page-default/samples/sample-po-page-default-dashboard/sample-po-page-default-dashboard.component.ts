@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoBreadcrumb } from '@portinari/portinari-ui';
-import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
-import { PoNotificationService } from '@portinari/portinari-ui';
-import { PoPageAction } from '@portinari/portinari-ui';
-import { PoTableColumn } from '@portinari/portinari-ui';
+import { PoBreadcrumb } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoNotificationService } from '@po-ui/ng-components';
+import { PoPageAction } from '@po-ui/ng-components';
+import { PoTableColumn } from '@po-ui/ng-components';
 
 import { SampleDashboardService } from './sample-po-page-default-dashboard.service';
 
@@ -32,7 +32,7 @@ export class SamplePoPageDefaultDashboardComponent {
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Share', action: this.modalOpen.bind(this), icon: 'po-icon-share' },
-    { label: 'GitHub', url: 'https://github.com/portinariui/portinari-angular' },
+    { label: 'GitHub', url: 'https://github.com/po-ui/po-angular' },
     { label: 'Components', url: '/documentation' },
     { label: 'Disable notification', action: this.disableNotification.bind(this), disabled: () => this.isSubscribed }
   ];

@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {
-  PoCheckboxGroupOption,
-  PoSelectOption,
-  PoDropdownAction,
-  PoNotificationService
-} from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoSelectOption, PoDropdownAction, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dropdown-labs',
@@ -25,7 +20,7 @@ export class SamplePoDropdownLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-portinari', label: 'po-icon-portinari' },
+    { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
     { value: 'po-icon-world', label: 'po-icon-world' }
   ];
@@ -53,7 +48,7 @@ export class SamplePoDropdownLabsComponent implements OnInit {
 
   restore() {
     this.actions = [];
-    this.label = 'Portinari Dropdown';
+    this.label = 'PO Dropdown';
     this.properties = [];
     this.restoreActionForm();
   }

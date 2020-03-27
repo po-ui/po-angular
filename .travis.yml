@@ -22,6 +22,5 @@ cache:
 script:
   - commitlint-travis
   - npm run format:check
-  - npm run lint
   - npm run build:lite
   - npm run test

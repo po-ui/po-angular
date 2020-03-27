@@ -12,7 +12,7 @@ export class PoPageDynamicService {
   private metadata: string;
 
   readonly headers: HttpHeaders = new HttpHeaders({
-    'X-PORTINARI-SCREEN-LOCK': 'true'
+    'X-PO-SCREEN-LOCK': 'true'
   });
 
   constructor(private http: HttpClient) {}

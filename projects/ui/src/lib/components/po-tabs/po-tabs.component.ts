@@ -13,22 +13,22 @@ const poTabsMaxNumberOfTabs = 5;
  *
  * @example
  *
- * <example name="po-tabs-basic" title="Portinari Tabs Basic">
+ * <example name="po-tabs-basic" title="PO Tabs Basic">
  *  <file name="sample-po-tabs-basic/sample-po-tabs-basic.component.html"> </file>
  *  <file name="sample-po-tabs-basic/sample-po-tabs-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-tabs-labs" title="Portinari Tabs Labs">
+ * <example name="po-tabs-labs" title="PO Tabs Labs">
  *  <file name="sample-po-tabs-labs/sample-po-tabs-labs.component.html"> </file>
  *  <file name="sample-po-tabs-labs/sample-po-tabs-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-tabs-travel" title="Portinari Tabs - Travel">
+ * <example name="po-tabs-travel" title="PO Tabs - Travel">
  *  <file name="sample-po-tabs-travel/sample-po-tabs-travel.component.html"> </file>
  *  <file name="sample-po-tabs-travel/sample-po-tabs-travel.component.ts"> </file>
  * </example>
  *
- * <example name="po-tabs-business-conf" title="Portinari Tabs - Business Conference">
+ * <example name="po-tabs-business-conf" title="PO Tabs - Business Conference">
  *  <file name="sample-po-tabs-business-conf/sample-po-tabs-business-conf.component.html"> </file>
  *  <file name="sample-po-tabs-business-conf/sample-po-tabs-business-conf.component.ts"> </file>
  * </example>

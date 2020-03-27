@@ -20,7 +20,7 @@ import { PoLanguageModule } from '../po-language/po-language.module';
  * <a id="i18n-config"></a>
  * **Exemplo de configuração do módulo do i18n:**
  * ```
- * import { PoI18nConfig } from '@portinari/portinari-ui';
+ * import { PoI18nConfig } from '@po-ui/ng-components';
  *
  * import { generalEn } from './i18n/general-en';
  * import { generalPt } from './i18n/general-pt';
@@ -77,7 +77,7 @@ import { PoLanguageModule } from '../po-language/po-language.module';
  *
  * **Exemplo de configuração de contextos usando constantes externas:**
  * ```
- * import { PoI18nConfig } from '@portinari/portinari-ui';
+ * import { PoI18nConfig } from '@po-ui/ng-components';
  *
  * import { generalEn } from './i18n/general-en';
  * import { generalPt } from './i18n/general-pt';

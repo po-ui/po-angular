@@ -30,23 +30,23 @@ import { PoPageLoginService } from './po-page-login.service';
  *
  * @example
  *
- * <example name="po-page-login-basic" title="Portinari Page Login Basic">
+ * <example name="po-page-login-basic" title="PO Page Login Basic">
  *  <file name="sample-po-page-login-basic/sample-po-page-login-basic.component.html"> </file>
  *  <file name="sample-po-page-login-basic/sample-po-page-login-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-login-labs" title="Portinari Page Login Labs">
+ * <example name="po-page-login-labs" title="PO Page Login Labs">
  *  <file name="sample-po-page-login-labs/sample-po-page-login-labs.component.html"> </file>
  *  <file name="sample-po-page-login-labs/sample-po-page-login-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-login-human-resources" title="Portinari Page Login - Human Resources">
+ * <example name="po-page-login-human-resources" title="PO Page Login - Human Resources">
  *  <file name="sample-po-page-login-human-resources/sample-po-page-login-human-resources.component.html"> </file>
  *  <file name="sample-po-page-login-human-resources/sample-po-page-login-human-resources.component.ts"> </file>
  *  <file name="sample-po-page-login-human-resources/sample-po-page-login-human-resources.module.ts"> </file>
  * </example>
  *
- * <example name="po-page-login-automatic-service" title="Portinari Page Login - Automatic Service">
+ * <example name="po-page-login-automatic-service" title="PO Page Login - Automatic Service">
  *  <file name="sample-po-page-login-automatic-service/sample-po-page-login-automatic-service.component.html"> </file>
  *  <file name="sample-po-page-login-automatic-service/sample-po-page-login-automatic-service.component.ts"> </file>
  * </example>

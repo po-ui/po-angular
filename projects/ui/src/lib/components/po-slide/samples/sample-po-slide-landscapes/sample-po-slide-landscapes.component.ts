@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { PoModalComponent, PoSlideItem } from '@portinari/portinari-ui';
+import { PoModalComponent, PoSlideItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-slide-landscapes',

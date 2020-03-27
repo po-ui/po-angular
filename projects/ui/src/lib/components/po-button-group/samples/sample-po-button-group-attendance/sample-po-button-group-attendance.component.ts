@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoButtonGroupItem, PoNotificationService } from '@portinari/portinari-ui';
+import { PoButtonGroupItem, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-group-attendance',

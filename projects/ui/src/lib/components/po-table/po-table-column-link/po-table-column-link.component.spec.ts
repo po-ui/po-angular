@@ -71,12 +71,12 @@ describe('PoTableColumnLinkComponent:', () => {
 
     it('should contain `href` if `type` is `externalLink`', () => {
       component.disabled = false;
-      component.link = 'http://po.portinari.com.br';
+      component.link = 'http://po.com.br';
       component.value = 'link';
 
       fixture.detectChanges();
 
-      const externalLink = nativeElement.querySelector('.po-table-link[href="http://po.portinari.com.br"]');
+      const externalLink = nativeElement.querySelector('.po-table-link[href="http://po.com.br"]');
       expect(externalLink).toBeTruthy();
     });
 
@@ -104,7 +104,7 @@ describe('PoTableColumnLinkComponent:', () => {
 
     it('should set type with "externalLink"', () => {
       component.disabled = false;
-      component.link = 'https://portinari.io';
+      component.link = 'https://po-ui.io';
       component.value = 'link';
 
       expect(component.type).toBe('externalLink');
@@ -129,7 +129,7 @@ describe('PoTableColumnLinkComponent:', () => {
 
     it('should set type with "disabled"', () => {
       component.disabled = true;
-      component.link = 'https://portinari.io';
+      component.link = 'https://po-ui.io';
       component.value = 'link';
 
       expect(component.type).toBe('disabled');

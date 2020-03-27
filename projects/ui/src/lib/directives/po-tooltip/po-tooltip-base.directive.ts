@@ -15,7 +15,7 @@ const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
  * orientação do usuário. A ativação dele pode estar em qualquer componente ou tag HTML.
  *
  * Para textos maiores ou no caso de haver a necessidade de utilizar algum outro elemento como
- * conteúdo deve-se utilizar o [**po-popover**](https://portinari.io/documentation/po-popover?view=doc).
+ * conteúdo deve-se utilizar o [**po-popover**](https://po-ui.io/documentation/po-popover?view=doc).
  */
 
 @Directive()

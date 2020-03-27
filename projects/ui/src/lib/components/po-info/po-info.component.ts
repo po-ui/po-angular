@@ -10,16 +10,16 @@ import { PoInfoBaseComponent } from './po-info-base.component';
  * @description
  *
  * Este componente tem como objetivo renderizar valores na tela no estilo label na parte superior e
- * valor na parte inferior. Facilita a exibição de dados pois vem com layout padrão Portinari.
+ * valor na parte inferior. Facilita a exibição de dados pois vem com layout padrão PO.
  *
  * @example
  *
- * <example name="po-info-basic" title="Portinari Info Basic">
+ * <example name="po-info-basic" title="PO Info Basic">
  *  <file name="sample-po-info-basic/sample-po-info-basic.component.html"> </file>
  *  <file name="sample-po-info-basic/sample-po-info-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-info-labs" title="Portinari Info Labs">
+ * <example name="po-info-labs" title="PO Info Labs">
  *  <file name="sample-po-info-labs/sample-po-info-labs.component.html"> </file>
  *  <file name="sample-po-info-labs/sample-po-info-labs.component.ts"> </file>
  * </example>

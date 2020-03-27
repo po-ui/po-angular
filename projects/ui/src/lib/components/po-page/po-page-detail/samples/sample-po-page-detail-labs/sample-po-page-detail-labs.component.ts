@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumb, PoBreadcrumbItem } from '@portinari/portinari-ui';
-import { PoPageDetailLiterals } from '@portinari/portinari-ui';
+import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
+import { PoPageDetailLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-detail-labs',
@@ -65,6 +65,6 @@ export class SamplePoPageDetailLabsComponent implements OnInit {
     this.breadcrumbParams = {};
     this.customLiterals = undefined;
     this.literals = '';
-    this.title = 'Portinari Page Detail';
+    this.title = 'PO Page Detail';
   }
 }

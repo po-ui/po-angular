@@ -14,17 +14,17 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
  *
  * @example
  *
- * <example name="po-tag-basic" title="Portinari Tag Basic">
+ * <example name="po-tag-basic" title="PO Tag Basic">
  *  <file name="sample-po-tag-basic/sample-po-tag-basic.component.html"> </file>
  *  <file name="sample-po-tag-basic/sample-po-tag-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-tag-labs" title="Portinari Tag Labs">
+ * <example name="po-tag-labs" title="PO Tag Labs">
  *  <file name="sample-po-tag-labs/sample-po-tag-labs.component.html"> </file>
  *  <file name="sample-po-tag-labs/sample-po-tag-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-tag-bank-account" title="Portinari Tag - Bank Account">
+ * <example name="po-tag-bank-account" title="PO Tag - Bank Account">
  *  <file name="sample-po-tag-bank-account/sample-po-tag-bank-account.component.html"> </file>
  *  <file name="sample-po-tag-bank-account/sample-po-tag-bank-account.component.ts"> </file>
  * </example>

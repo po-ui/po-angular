@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoNotificationService, PoRadioGroupOption, PoSelectOption } from '@portinari/portinari-ui';
+import { PoNotificationService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tabs-travel',

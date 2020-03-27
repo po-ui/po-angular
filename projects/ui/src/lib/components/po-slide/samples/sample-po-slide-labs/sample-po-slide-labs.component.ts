@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoNotificationService, PoSlideItem } from '@portinari/portinari-ui';
+import { PoNotificationService, PoSlideItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-slide-labs',

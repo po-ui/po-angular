@@ -33,7 +33,7 @@ describe('PoPageChangePasswordBaseComponent:', () => {
     });
 
     it('p-url-home: should set action for `modalAction`', () => {
-      const url = '/portinari';
+      const url = '/po';
       component.urlHome = url;
 
       expect(typeof component.modalAction.action).toBe('function');
@@ -57,7 +57,7 @@ describe('PoPageChangePasswordBaseComponent:', () => {
     });
 
     it('p-recovery: should set recoveryUrlType to `externalLink` if value type is string', () => {
-      const url = 'http://www.portinari.com';
+      const url = 'http://www.po-ui.com';
       component.recovery = url;
 
       expect(component.recovery).toBe(url);
@@ -65,7 +65,7 @@ describe('PoPageChangePasswordBaseComponent:', () => {
     });
 
     it('p-recovery: should set `recoveryUrlType` to `internalLink if value type is string`', () => {
-      const url = '/portinari';
+      const url = '/po';
       component.recovery = url;
 
       expect(component.recovery).toBe(url);

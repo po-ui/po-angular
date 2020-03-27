@@ -1,4 +1,4 @@
-import { PoCodeEditorRegisterable } from '@portinari/portinari-code-editor';
+import { PoCodeEditorRegisterable } from '@po-ui/ng-code-editor';
 
 /** Definindo propriedades de uma nova sintaxe. */
 export const customRegister: PoCodeEditorRegisterable = {

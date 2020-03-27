@@ -17,7 +17,7 @@ const poCheckboxGroupColumnsTotalLength: number = 12;
  * O componente `po-checkbox-group` exibe uma lista de múltipla escolha onde o usuário pode marcar e desmarcar,
  * utilizando a tecla de espaço ou o clique do mouse, várias opções.
  *
- * > Para seleção única, utilize o [**Portinari Radio Group**](/documentation/po-radio-group).
+ * > Para seleção única, utilize o [**PO Radio Group**](/documentation/po-radio-group).
  *
  * Por padrão, o po-checkbox-group retorna um array com os valores dos itens selecionados para o model.
  *

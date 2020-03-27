@@ -35,7 +35,7 @@ describe('PoInfoComponent', () => {
 
   describe('Properties:', () => {
     it('isExternalLink: should return true if `component.url` is truthy', () => {
-      component.url = 'http://portinari.io';
+      component.url = 'http://po-ui.io';
 
       const spyIsExternalLink = spyOn(UtilsFunctions, 'isExternalLink').and.callThrough();
 
@@ -186,7 +186,7 @@ describe('PoInfoComponent', () => {
 
     it('should find `a.po-info-link` if `component.url` is truthy', () => {
       component.value = 'John Doe';
-      component.url = 'http://portinari.io';
+      component.url = 'http://po-ui.io';
 
       fixture.detectChanges();
 

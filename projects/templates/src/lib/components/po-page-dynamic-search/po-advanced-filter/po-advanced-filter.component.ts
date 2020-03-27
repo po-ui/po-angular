@@ -11,7 +11,7 @@ import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.compone
  *
  * @examplePrivate
  *
- * <example-private name="po-advanced-filter" title="Portinari Busca Avançada">
+ * <example-private name="po-advanced-filter" title="PO Busca Avançada">
  *   <file name="sample-po-advanced-filter.component.html"> </file>
  *   <file name="sample-po-advanced-filter.component.ts"> </file>
  * </example-private>

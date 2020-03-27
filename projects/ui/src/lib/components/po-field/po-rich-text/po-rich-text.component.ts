@@ -10,17 +10,17 @@ import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.c
  *
  * @example
  *
- * <example name="po-rich-text-basic" title="Portinari Rich Text Basic">
+ * <example name="po-rich-text-basic" title="PO Rich Text Basic">
  *   <file name="sample-po-rich-text-basic/sample-po-rich-text-basic.component.html"> </file>
  *   <file name="sample-po-rich-text-basic/sample-po-rich-text-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-rich-text-labs" title="Portinari Rich Text Labs">
+ * <example name="po-rich-text-labs" title="PO Rich Text Labs">
  *   <file name="sample-po-rich-text-labs/sample-po-rich-text-labs.component.html"> </file>
  *   <file name="sample-po-rich-text-labs/sample-po-rich-text-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-rich-text-recipe" title="Portinari Rich Text Recipe">
+ * <example name="po-rich-text-recipe" title="PO Rich Text Recipe">
  *   <file name="sample-po-rich-text-recipe/sample-po-rich-text-recipe-image-base-64.ts"> </file>
  *   <file name="sample-po-rich-text-recipe/sample-po-rich-text-recipe.component.html"> </file>
  *   <file name="sample-po-rich-text-recipe/sample-po-rich-text-recipe.component.ts"> </file>
@@ -77,7 +77,7 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoRichTextComponent } from '@portinari/portinari-ui';
+   * import { PoRichTextComponent } from '@po-ui/ng-components';
    *
    * ...
    *

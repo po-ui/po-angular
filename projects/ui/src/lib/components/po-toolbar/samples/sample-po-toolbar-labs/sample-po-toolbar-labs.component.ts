@@ -7,7 +7,7 @@ import {
   PoSelectOption,
   PoToolbarAction,
   PoToolbarProfile
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-toolbar-labs',
@@ -75,7 +75,7 @@ export class SamplePoToolbarLabsComponent implements OnInit {
     this.notificationActions = [];
     this.notificationNumber = undefined;
     this.showNotification = true;
-    this.title = 'Portinari Toolbar';
+    this.title = 'PO Toolbar';
   }
 
   showAction(label: string): void {

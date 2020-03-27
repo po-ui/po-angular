@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoPageBlockedUserReasonParams } from '@portinari/portinari-templates';
+import { PoPageBlockedUserReasonParams } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-blocked-user-exceeded-attempts',

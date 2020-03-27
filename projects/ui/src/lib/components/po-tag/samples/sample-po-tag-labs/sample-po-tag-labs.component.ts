@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoRadioGroupOption, PoSelectOption, PoTagOrientation, PoTagType } from '@portinari/portinari-ui';
+import { PoRadioGroupOption, PoSelectOption, PoTagOrientation, PoTagType } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tag-labs',
@@ -78,7 +78,7 @@ export class SamplePoTagLabsComponent implements OnInit {
     this.icon = undefined;
     this.label = undefined;
     this.orientation = undefined;
-    this.value = 'Portinari Tag';
+    this.value = 'PO Tag';
     this.type = undefined;
     this.event = '';
     this.inverse = false;

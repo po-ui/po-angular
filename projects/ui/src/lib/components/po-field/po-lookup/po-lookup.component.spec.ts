@@ -75,18 +75,18 @@ describe('PoLookupComponent:', () => {
     expect(component['selectModel']).toHaveBeenCalled();
   }));
 
-  it('should get value portinari by getViewValue method', () => {
+  it('should get value po by getViewValue method', () => {
     component['valueToModel'] = '123';
-    component.setViewValue('portinari', {});
+    component.setViewValue('po', {});
 
-    expect(component.getViewValue()).toBe('portinari');
+    expect(component.getViewValue()).toBe('po');
   });
 
   it('method selectModel should not be called', inject(
     [LookupFilterService],
     (lookupFilterService: LookupFilterService) => {
-      component['oldValue'] = 'portinari';
-      component.inputEl.nativeElement.value = 'portinari';
+      component['oldValue'] = 'po';
+      component.inputEl.nativeElement.value = 'po';
 
       spyOn(component, <any>'selectModel');
 
@@ -136,8 +136,8 @@ describe('PoLookupComponent:', () => {
       [LookupFilterService],
       (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
-        component.inputEl.nativeElement.value = 'portinari JOI';
-        component['oldValue'] = 'portinari SP';
+        component.inputEl.nativeElement.value = 'po JOI';
+        component['oldValue'] = 'po SP';
 
         spyOn(component, <any>'searchById');
 
@@ -151,8 +151,8 @@ describe('PoLookupComponent:', () => {
       [LookupFilterService],
       (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
-        component.inputEl.nativeElement.value = 'portinari';
-        component['oldValue'] = 'portinari';
+        component.inputEl.nativeElement.value = 'po';
+        component['oldValue'] = 'po';
 
         spyOn(component, <any>'searchById');
 

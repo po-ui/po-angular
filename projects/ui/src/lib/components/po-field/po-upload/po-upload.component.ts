@@ -18,22 +18,22 @@ import { PoUploadStatus } from './po-upload-status.enum';
  *
  * @example
  *
- * <example name="po-upload-basic" title="Portinari Upload Basic">
+ * <example name="po-upload-basic" title="PO Upload Basic">
  *   <file name="sample-po-upload-basic/sample-po-upload-basic.component.html"> </file>
  *   <file name="sample-po-upload-basic/sample-po-upload-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-upload-labs" title="Portinari Upload Labs">
+ * <example name="po-upload-labs" title="PO Upload Labs">
  *   <file name="sample-po-upload-labs/sample-po-upload-labs.component.html"> </file>
  *   <file name="sample-po-upload-labs/sample-po-upload-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-upload-resume" title="Portinari Upload - Resume">
+ * <example name="po-upload-resume" title="PO Upload - Resume">
  *   <file name="sample-po-upload-resume/sample-po-upload-resume.component.html"> </file>
  *   <file name="sample-po-upload-resume/sample-po-upload-resume.component.ts"> </file>
  * </example>
  *
- * <example name="po-upload-rs" title="Portinari Upload - Realize & Show">
+ * <example name="po-upload-rs" title="PO Upload - Realize & Show">
  *   <file name="sample-po-upload-rs/sample-po-upload-rs.component.html"> </file>
  *   <file name="sample-po-upload-rs/sample-po-upload-rs.component.ts"> </file>
  * </example>
@@ -167,7 +167,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
    *
    * ```
-   * import { PoUploadComponent } from '@portinari/portinari-ui';
+   * import { PoUploadComponent } from '@po-ui/ng-components';
    *
    * ...
    *

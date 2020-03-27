@@ -9,7 +9,7 @@ describe('PoDynamicFormOperation:', () => {
 
   let httpMock: HttpTestingController;
 
-  const mockURL: string = 'http://po.portinari.com.br/api';
+  const mockURL: string = 'http://po.com.br/api';
   const value = { name: 'username' };
 
   const spyLoadFunction = jasmine.createSpy('loadFunction');

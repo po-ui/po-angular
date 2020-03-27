@@ -6,7 +6,7 @@ import {
   PoDonutChartSeries,
   PoPieChartSeries,
   PoRadioGroupOption
-} from '@portinari/portinari-ui';
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-labs',

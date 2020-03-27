@@ -162,7 +162,7 @@ export const poPageLoginLiteralTo = {
  *     "src/favicon.ico",
  *     {
  *       "glob": "**\/*",
- *       "input": "node_modules/@portinari/style/images",
+ *       "input": "node_modules/@po-ui/style/images",
  *       "output": "assets/images"
  *     }
  *   ]
@@ -230,7 +230,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *   property: 'domain',
    *   value: 'jv01',
    *   placeholder: 'Enter your domain',
-   *   url: 'https://portinari.io/sample/api/comboOption/domains',
+   *   url: 'https://po-ui.io/sample/api/comboOption/domains',
    *   fieldValue: 'nickname'
    * }
    * ```
@@ -294,7 +294,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * Exemplos de valores válidos:
    * - **local**: `./assets/images/login-background.png`
-   * - **url externa**: `https://portinari.io/assets/images/login-background.png`
+   * - **url externa**: `https://po-ui.io/assets/images/login-background.png`
    *
    * > Essa propriedade é ignorada para aplicações mobile.
    */
@@ -616,7 +616,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * Exemplos de valores válidos:
    * - **local**: `/home`
-   * - **url externa**: `https://portinari.io`
+   * - **url externa**: `https://po-ui.io`
    *
    * > Veja a propriedade `p-literals` para customizar a literal `registerUrl`.
    */
@@ -755,18 +755,18 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    *
    * ```
-   *   import { PoPageLoginComponent, PoPageLoginAthenticationType } from '@portinari/portinari-templates';
+   *   import { PoPageLoginComponent, PoPageLoginAthenticationType } from '@po-ui/ng-templates';
    *
    *   ...
    *   const routes: Routes = [
    *     {
    *       path: 'login', component: PoPageLoginComponent, data: {
-   *         serviceApi: 'https://portinari.io/sample/api/users/authentication',
+   *         serviceApi: 'https://po-ui.io/sample/api/users/authentication',
    *         environment: 'development',
    *         recovery: {
-   *           url: 'https://portinari.io/sample/api/users',
+   *           url: 'https://po-ui.io/sample/api/users',
    *           type: PoModalPasswordRecoveryType.All,
-   *           contactMail: 'dev.portinari@portinari.com',
+   *           contactMail: 'dev.po@po-ui.com',
    *           phoneMask: '9-999-999-9999'
    *         },
    *         registerUrl: '/new-password',

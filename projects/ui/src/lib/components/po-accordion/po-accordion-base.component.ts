@@ -9,11 +9,11 @@
  *
  * ```
  * <po-accordion>
- *   <po-accordion-item p-label="Portinari Accordion 1">
+ *   <po-accordion-item p-label="PO Accordion 1">
  *      Accordion 1
  *   </po-accordion-item>
  *
- *   <po-accordion-item p-label="Portinari Accordion 2">
+ *   <po-accordion-item p-label="PO Accordion 2">
  *      Accordion 2
  *   </po-accordion-item>
  * </po-accordion>

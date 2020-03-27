@@ -11,17 +11,17 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
  *
  * @example
  *
- * <example name="po-page-default-basic" title="Portinari Page Default Basic">
+ * <example name="po-page-default-basic" title="PO Page Default Basic">
  *  <file name="sample-po-page-default-basic/sample-po-page-default-basic.component.html"> </file>
  *  <file name="sample-po-page-default-basic/sample-po-page-default-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-default-labs" title="Portinari Page Default Labs">
+ * <example name="po-page-default-labs" title="PO Page Default Labs">
  *  <file name="sample-po-page-default-labs/sample-po-page-default-labs.component.html"> </file>
  *  <file name="sample-po-page-default-labs/sample-po-page-default-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-default-dashboard" title="Portinari Page Default - Dashboard">
+ * <example name="po-page-default-dashboard" title="PO Page Default - Dashboard">
  *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.component.html"> </file>
  *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.component.ts"> </file>
  *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.service.ts"> </file>

@@ -7,17 +7,17 @@ import { PoContainerBaseComponent } from './po-container-base.component';
  *
  * @example
  *
- * <example name="po-container-basic" title="Portinari Container Basic">
+ * <example name="po-container-basic" title="PO Container Basic">
  *  <file name="sample-po-container-basic/sample-po-container-basic.component.html"> </file>
  *  <file name="sample-po-container-basic/sample-po-container-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-container-labs" title="Portinari Container Labs">
+ * <example name="po-container-labs" title="PO Container Labs">
  *  <file name="sample-po-container-labs/sample-po-container-labs.component.html"> </file>
  *  <file name="sample-po-container-labs/sample-po-container-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-container-dashboard" title="Portinari Container - Dashboard">
+ * <example name="po-container-dashboard" title="PO Container - Dashboard">
  *  <file name="sample-po-container-dashboard/sample-po-container-dashboard.component.html"> </file>
  *  <file name="sample-po-container-dashboard/sample-po-container-dashboard.component.ts"> </file>
  *  <file name="sample-po-container-dashboard/sample-po-container-dashboard.service.ts"> </file>

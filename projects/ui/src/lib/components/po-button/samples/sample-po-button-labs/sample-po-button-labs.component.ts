@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-labs',
@@ -19,7 +19,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
   ];
 
   iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'po-icon-portinari', value: 'po-icon-portinari' },
+    { label: 'po-icon-news', value: 'po-icon-news' },
     { label: 'po-icon-calendar', value: 'po-icon-calendar' },
     { label: 'po-icon-user', value: 'po-icon-user' },
     { label: 'po-icon-telephone', value: 'po-icon-telephone' }
@@ -39,7 +39,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
   }
 
   buttonClick() {
-    this.poDialog.alert({ title: 'Portinari Button', message: 'Hello PO World!!!' });
+    this.poDialog.alert({ title: 'PO Button', message: 'Hello PO World!!!' });
   }
 
   restore() {

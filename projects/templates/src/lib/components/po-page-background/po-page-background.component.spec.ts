@@ -44,7 +44,7 @@ describe('PoPageBackgroundComponent:', () => {
     });
 
     it('p-logo: should set property with valid values.', () => {
-      const validValues = ['https://portinari.io/logo', 'https://other.com/images/logo'];
+      const validValues = ['https://po-ui.io/logo', 'https://other.com/images/logo'];
 
       expectPropertiesValues(component, 'logo', validValues, validValues);
     });
@@ -61,7 +61,7 @@ describe('PoPageBackgroundComponent:', () => {
     });
 
     it('p-secondary-logo: should set property with valid values.', () => {
-      const validValues = ['https://portinari.io/logo', 'https://other.com/images/logo'];
+      const validValues = ['https://po-ui.io/logo', 'https://other.com/images/logo'];
 
       expectPropertiesValues(component, 'secondaryLogo', validValues, validValues);
     });

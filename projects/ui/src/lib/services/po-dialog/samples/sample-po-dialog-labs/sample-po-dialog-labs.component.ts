@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
-import { PoDialogAlertLiterals, PoDialogConfirmLiterals, PoDialogService } from '@portinari/portinari-ui';
+import { PoDialogAlertLiterals, PoDialogConfirmLiterals, PoDialogService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dialog-labs',
@@ -86,8 +86,8 @@ export class SamplePoDialogLabsComponent implements OnInit {
   restore() {
     this.action = undefined;
     this.actionOptions = [];
-    this.title = 'Portinari Dialog';
-    this.message = 'Portinari Dialog';
+    this.title = 'PO Dialog';
+    this.message = 'PO Dialog';
     this.dialogMethod = undefined;
     this.literals = undefined;
     this.literalsAlert = undefined;

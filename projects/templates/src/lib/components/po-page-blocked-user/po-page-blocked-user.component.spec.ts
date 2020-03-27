@@ -59,7 +59,7 @@ describe('PoPageBlockedUserComponent:', () => {
     });
 
     it('navigateTo: should call `window.open` if `urlBack` is an external url', () => {
-      component.urlBack = 'http://po.portinari.com.br';
+      component.urlBack = 'http://po.com.br';
 
       spyOn(utilsFunctions, 'isExternalLink').and.returnValue(true);
       spyOn(component['router'], <any>'navigate');

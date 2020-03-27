@@ -59,8 +59,8 @@ export class SamplePoButtonLabsComponentPO {
     return this.getPoButtonProperties('disabled');
   }
 
-  get poRadioLogoPortinari() {
-    return this.getPoButtonIcon('po-icon-portinari');
+  get poRadioLogoPO() {
+    return this.getPoButtonIcon('po-icon-news');
   }
 
   get poRadioCalendar() {

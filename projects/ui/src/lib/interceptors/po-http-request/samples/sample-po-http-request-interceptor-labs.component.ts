@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Subscription } from 'rxjs';
 
-import { PoHttpRequestInterceptorService } from '@portinari/portinari-ui';
+import { PoHttpRequestInterceptorService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-http-request-interceptor-labs',

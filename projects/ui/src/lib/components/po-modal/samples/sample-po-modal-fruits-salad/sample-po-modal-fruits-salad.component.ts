@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoCheckboxGroupOption, PoComboOption } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoComboOption } from '@po-ui/ng-components';
 
-import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
-import { PoNotificationService } from '@portinari/portinari-ui';
+import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-modal-fruits-salad',

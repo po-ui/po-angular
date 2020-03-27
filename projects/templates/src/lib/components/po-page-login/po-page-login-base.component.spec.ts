@@ -109,7 +109,7 @@ describe('ThPageLoginBaseComponent: ', () => {
           { label: 'Option 1', value: '1' },
           { label: 'Option 2', value: '2' }
         ],
-        url: 'https://portinari.io/sample/api/comboOption/heroes',
+        url: 'https://po-ui.io/sample/api/comboOption/heroes',
         fieldValue: 'nickname'
       };
       expect(component.customFieldType).toBe('select');
@@ -121,7 +121,7 @@ describe('ThPageLoginBaseComponent: ', () => {
         value: 'jv01',
         pattern: '[a-z]',
         options: undefined,
-        url: 'https://portinari.io/sample/api/comboOption/heroes',
+        url: 'https://po-ui.io/sample/api/comboOption/heroes',
         fieldValue: 'nickname'
       };
       expect(component.customFieldType).toBe('combo');
@@ -136,7 +136,7 @@ describe('ThPageLoginBaseComponent: ', () => {
           { label: 'Option 1', value: '1' },
           { label: 'Option 2', value: '2' }
         ],
-        url: 'https://portinari.io/sample/api/comboOption/heroes',
+        url: 'https://po-ui.io/sample/api/comboOption/heroes',
         fieldValue: 'nickname'
       };
       const validValuesCustomField = [customField];
@@ -411,7 +411,7 @@ describe('ThPageLoginBaseComponent: ', () => {
       and define loginSubscription if authenticationUrl has value`, () => {
         const response = { status: 204, user: 'admin', name: 'Administrator' };
         const loginForm = {
-          login: 'po@portinari.com',
+          login: 'po@po-ui.com',
           password: '123@456',
           rememberUser: false
         };
@@ -442,7 +442,7 @@ describe('ThPageLoginBaseComponent: ', () => {
 
       it(`expect to apply property values and call 'redirectBlockedUrl' if error.code is 400`, () => {
         const loginForm = {
-          login: 'po@portinari.com',
+          login: 'po@po-ui.com',
           password: '123@456',
           rememberUser: false
         };
@@ -455,7 +455,7 @@ describe('ThPageLoginBaseComponent: ', () => {
             maxAttemptsRemaining: 2,
             loginWarnings: ['Usuário e/ou senha inválidos'],
             passwordWarnings: ['Usuário e/ou senha inválidos'],
-            blockedUrl: 'https://portinari.io/documentation/po-page-blocked-user'
+            blockedUrl: 'https://po-ui.io/documentation/po-page-blocked-user'
           }
         };
 
@@ -484,7 +484,7 @@ describe('ThPageLoginBaseComponent: ', () => {
 
       it(`expect to apply property values and call 'redirectBlockedUrl' if error.code is 401`, () => {
         const loginForm = {
-          login: 'po@portinari.com',
+          login: 'po@po-ui.com',
           password: '123@456',
           rememberUser: false
         };
@@ -497,7 +497,7 @@ describe('ThPageLoginBaseComponent: ', () => {
             maxAttemptsRemaining: 2,
             loginWarnings: ['Usuário e/ou senha inválidos'],
             passwordWarnings: ['Usuário e/ou senha inválidos'],
-            blockedUrl: 'https://portinari.io/documentation/po-page-blocked-user'
+            blockedUrl: 'https://po-ui.io/documentation/po-page-blocked-user'
           }
         };
 
@@ -526,7 +526,7 @@ describe('ThPageLoginBaseComponent: ', () => {
 
       it(`expect not be called 'redirectBlockedUrl' if error.code is 404`, () => {
         const loginForm = {
-          login: 'po@portinari.com',
+          login: 'po@po-ui.com',
           password: '123@456',
           rememberUser: false
         };
@@ -556,7 +556,7 @@ describe('ThPageLoginBaseComponent: ', () => {
 
       it('should call `loginSubmit.emit` in `onLoginSubmit` with login values if doesn`t have authenticationUrl', () => {
         const loginForm = {
-          login: 'po@portinari.com',
+          login: 'po@po-ui.com',
           password: '123@456',
           rememberUser: false
         };
@@ -575,7 +575,7 @@ describe('ThPageLoginBaseComponent: ', () => {
 
       it('should call `loginSubmit.emit` in `onLoginSubmit` with customField property value', () => {
         const loginForm = {
-          login: 'po@portinari.com',
+          login: 'po@po-ui.com',
           password: '123@456',
           rememberUser: false
         };

@@ -28,7 +28,7 @@ export class SamplePoGridBasicComponent {
       id: 629131,
       name: 'Jhony Senem',
       occupation: 'Developer',
-      email: 'jhony.senem@portinari.com.br',
+      email: 'jhony.senem@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-12-12',
       actions: '...'
@@ -37,7 +37,7 @@ export class SamplePoGridBasicComponent {
       id: 78492341,
       name: 'Rafaelly Gruber',
       occupation: 'Engineer',
-      email: 'rafaelly.gruber@portinari.com.br',
+      email: 'rafaelly.gruber@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-12-10',
       actions: '...'
@@ -46,7 +46,7 @@ export class SamplePoGridBasicComponent {
       id: 986434,
       name: 'Nicole Oliveira',
       occupation: 'Developer',
-      email: 'nicole.oliveira@portinari.com.br',
+      email: 'nicole.oliveira@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-12-12',
       actions: '...'
@@ -55,7 +55,7 @@ export class SamplePoGridBasicComponent {
       id: 4235652,
       name: 'Mateus José',
       occupation: 'Developer',
-      email: 'mateus.jose@portinari.com.br',
+      email: 'mateus.jose@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-11-23',
       actions: '...'
@@ -64,7 +64,7 @@ export class SamplePoGridBasicComponent {
       id: 629131,
       name: 'Leonardo Leal',
       occupation: 'Engineer',
-      email: 'leonardo.leal@portinari.com.br',
+      email: 'leonardo.leal@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-11-30',
       actions: '...'

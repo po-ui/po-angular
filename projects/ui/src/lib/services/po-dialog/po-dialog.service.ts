@@ -11,17 +11,17 @@ import { PoDialogType } from './po-dialog.enum';
  *
  * @example
  *
- * <example name="po-dialog-basic" title="Portinari Dialog Basic">
+ * <example name="po-dialog-basic" title="PO Dialog Basic">
  *  <file name="sample-po-dialog-basic/sample-po-dialog-basic.component.html"> </file>
  *  <file name="sample-po-dialog-basic/sample-po-dialog-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-dialog-labs" title="Portinari Dialog Labs">
+ * <example name="po-dialog-labs" title="PO Dialog Labs">
  *  <file name="sample-po-dialog-labs/sample-po-dialog-labs.component.html"> </file>
  *  <file name="sample-po-dialog-labs/sample-po-dialog-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-dialog-cancel-credit-card" title="Portinari Dialog - Cancel Credit Card">
+ * <example name="po-dialog-cancel-credit-card" title="PO Dialog - Cancel Credit Card">
  *  <file name="sample-po-dialog-cancel-credit-card/sample-po-dialog-cancel-credit-card.component.html"> </file>
  *  <file name="sample-po-dialog-cancel-credit-card/sample-po-dialog-cancel-credit-card.component.ts"> </file>
  * </example>

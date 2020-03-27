@@ -31,7 +31,7 @@ describe('PoDividerComponent:', () => {
 
   describe('Templates:', () => {
     it('should add `po-divider-label` if `label` contains value.', () => {
-      component.label = 'Portinari Divider';
+      component.label = 'PO Divider';
 
       fixture.detectChanges();
 

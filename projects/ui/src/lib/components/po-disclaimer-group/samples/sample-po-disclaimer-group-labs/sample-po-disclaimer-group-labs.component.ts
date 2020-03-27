@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoDisclaimer } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoDisclaimer } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-disclaimer-group-labs',

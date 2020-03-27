@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { PoTableColumn } from '@portinari/portinari-ui';
+import { PoTableColumn } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoTableLabsService {
@@ -23,7 +23,7 @@ export class SamplePoTableLabsService {
     return {
       text: `Text ${index}`,
       page: `Link ${index}`,
-      link: 'http://www.portinari.com.br',
+      link: 'http://www.po-ui.com.br',
       number: index,
       date: this.generateRandomDate(),
       time: this.generateRandomTime(),
@@ -130,7 +130,7 @@ export class SamplePoTableLabsService {
 
   private generateRandomIcon(index: number) {
     const iconsOne = ['po-icon-copy', 'po-icon-ok', 'po-icon-camera', 'po-icon-agro-business', 'po-icon-company'];
-    const iconsTwo = ['po-icon-delete', 'po-icon-portinari', 'po-icon-gas', 'po-icon-chat', 'po-icon-bluetooth'];
+    const iconsTwo = ['po-icon-delete', 'po-icon-news', 'po-icon-gas', 'po-icon-chat', 'po-icon-bluetooth'];
 
     const randomIcon = Math.floor(Math.random() * 5);
 

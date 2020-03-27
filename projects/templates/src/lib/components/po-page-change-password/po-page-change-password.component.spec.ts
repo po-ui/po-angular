@@ -84,10 +84,10 @@ describe('PoPageChangePasswordComponent:', () => {
       spyOn(component['router'], <any>'navigate');
       spyOn(window, 'open');
 
-      component.navigateTo('http://www.portinari.com');
+      component.navigateTo('http://www.po-ui.com');
 
       expect(component['router'].navigate).not.toHaveBeenCalled();
-      expect(window.open).toHaveBeenCalledWith('http://www.portinari.com');
+      expect(window.open).toHaveBeenCalledWith('http://www.po-ui.com');
     });
 
     it('navigateTo: should call `router.navigate` if is `internalLink`', () => {
@@ -97,9 +97,9 @@ describe('PoPageChangePasswordComponent:', () => {
       spyOn(component['router'], <any>'navigate');
       spyOn(window, 'open');
 
-      component.navigateTo('/portinari');
+      component.navigateTo('/po');
 
-      expect(component['router'].navigate).toHaveBeenCalledWith(['/portinari']);
+      expect(component['router'].navigate).toHaveBeenCalledWith(['/po']);
       expect(window.open).not.toHaveBeenCalled();
     });
 
@@ -545,7 +545,7 @@ describe('PoPageChangePasswordComponent:', () => {
 
     it('should create `.po-page-change-password-forgot-password` if `hideCurrentPassword` is false and `recovery` has value', () => {
       component.hideCurrentPassword = false;
-      component.recovery = '/portinari';
+      component.recovery = '/po';
 
       fixture.detectChanges();
 
@@ -573,26 +573,26 @@ describe('PoPageChangePasswordComponent:', () => {
 
     it('should create `.po-page-change-password-forgot-password` with `routerLink` if `recoveryUrlType` is `internalLink`', () => {
       component.hideCurrentPassword = false;
-      component.recovery = '/portinari';
+      component.recovery = '/po';
       component.recoveryUrlType = 'internalLink';
 
       fixture.detectChanges();
 
       const recoveryLink = nativeElement.querySelector(
-        '.po-page-change-password-forgot-password[ng-reflect-router-link="/portinari"]'
+        '.po-page-change-password-forgot-password[ng-reflect-router-link="/po"]'
       );
       expect(recoveryLink).toBeTruthy();
     });
 
     it('should create `.po-page-change-password-forgot-password` with `href` if `recoveryUrlType` is `externalLink`', () => {
       component.hideCurrentPassword = false;
-      component.recovery = 'http://po.portinari.com.br';
+      component.recovery = 'http://po.com.br';
       component.recoveryUrlType = 'externalLink';
 
       fixture.detectChanges();
 
       const recoveryLink = nativeElement.querySelector(
-        '.po-page-change-password-forgot-password[href="http://po.portinari.com.br"]'
+        '.po-page-change-password-forgot-password[href="http://po.com.br"]'
       );
       expect(recoveryLink).toBeTruthy();
     });

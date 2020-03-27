@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoModalComponent } from '@portinari/portinari-ui';
+import { PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-widget-card',

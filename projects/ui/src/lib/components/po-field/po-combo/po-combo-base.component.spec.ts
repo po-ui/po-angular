@@ -684,7 +684,7 @@ describe('PoComboBaseComponent:', () => {
 
     it(`configAfterSetFilterService: should call the 'unsubscribeKeyupObservable' and 'onInitService' methods if
       filterService is defined.`, () => {
-      const filterService = 'https://portinari.io/sample/api/new/heroes';
+      const filterService = 'https://po-ui.io/sample/api/new/heroes';
 
       spyOn(component, <any>'unsubscribeKeyupObservable');
       spyOn(component, 'onInitService');
@@ -696,7 +696,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it(`configAfterSetFilterService: shouldn't contain objects in the 'comboOptionsList' if filterService is defined.`, () => {
-      const filterService = 'https://portinari.io/sample/api/new/heroes';
+      const filterService = 'https://po-ui.io/sample/api/new/heroes';
 
       component['configAfterSetFilterService'](filterService);
 
@@ -729,7 +729,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('configAfterSetFilterService: shouldn`t contain objects in the `visibleOptions` if it has `filterService.', () => {
-      const filterService = 'https://portinari.io/sample/api/new/heroes';
+      const filterService = 'https://po-ui.io/sample/api/new/heroes';
 
       component['configAfterSetFilterService'](filterService);
 
@@ -745,7 +745,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('configAfterSetFilterService: should set the `isFirstFilter` property as true if it has `filterService`.', () => {
-      const filterService = 'https://portinari.io/sample/api/new/heroes';
+      const filterService = 'https://po-ui.io/sample/api/new/heroes';
 
       component['configAfterSetFilterService'](filterService);
 
@@ -1335,7 +1335,7 @@ describe('PoComboBaseComponent using Service', () => {
   });
 
   it('should set service with URL Service and others configurations', () => {
-    const urlService = 'https://portinari.io/sample/api/new/heros';
+    const urlService = 'https://po-ui.io/sample/api/new/heros';
 
     component.setService(urlService);
 
@@ -1366,7 +1366,7 @@ describe('PoComboBaseComponent using Service', () => {
   });
 
   it('should call getObjectByValue through writeValue', () => {
-    const urlService = 'https://portinari.io/sample/api/new/heros';
+    const urlService = 'https://po-ui.io/sample/api/new/heros';
     component.setService(urlService);
 
     spyOn(component, 'getObjectByValue');

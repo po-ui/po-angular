@@ -13,17 +13,17 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
  *
  * @example
  *
- * <example name="po-popup-basic" title="Portinari Popup - Basic">
+ * <example name="po-popup-basic" title="PO Popup - Basic">
  *   <file name="sample-po-popup-basic/sample-po-popup-basic.component.html"> </file>
  *   <file name="sample-po-popup-basic/sample-po-popup-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-popup-labs" title="Portinari Popup - Labs">
+ * <example name="po-popup-labs" title="PO Popup - Labs">
  *   <file name="sample-po-popup-labs/sample-po-popup-labs.component.html"> </file>
  *   <file name="sample-po-popup-labs/sample-po-popup-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-popup-email" title="Portinari Popup Email">
+ * <example name="po-popup-email" title="PO Popup Email">
  *   <file name="sample-po-popup-email/sample-po-popup-email.component.html"> </file>
  *   <file name="sample-po-popup-email/sample-po-popup-email.component.ts"> </file>
  * </example>

@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
-import { PoDialogService, PoNotificationService, PoPageAction, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoDialogService, PoNotificationService, PoPageAction, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dialog-cancel-credit-card',

@@ -188,7 +188,7 @@ describe('PoMenuBaseComponent:', () => {
 
   describe('Methods: ', () => {
     it('configService: should call `menuService.configProperties` and set `filterService` if service parameter is valid string', () => {
-      const service = 'http://po.portinari.com.br';
+      const service = 'http://po.com.br';
 
       const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
 
@@ -405,7 +405,7 @@ describe('PoMenuBaseComponent:', () => {
     });
 
     it('service: should set property with valid values', () => {
-      const validValues = ['http://po.portinari.com', { getFilteredData: () => {} }];
+      const validValues = ['http://po.com', { getFilteredData: () => {} }];
 
       const spyCofingService = spyOn(component, <any>'configService');
 
@@ -435,7 +435,7 @@ describe('PoMenuBaseComponent:', () => {
     });
 
     it('logo: should set property with valid values', () => {
-      const validValues = ['https://portinari.io/logo', 'https://other.com/images/logo'];
+      const validValues = ['https://po-ui.io/logo', 'https://other.com/images/logo'];
 
       expectPropertiesValues(component, 'logo', validValues, validValues);
     });
@@ -448,7 +448,7 @@ describe('PoMenuBaseComponent:', () => {
     });
 
     it('shortLogo: should set property with valid values', () => {
-      const validValues = ['https://portinari.io/logo', 'https://other.com/images/logo'];
+      const validValues = ['https://po-ui.io/logo', 'https://other.com/images/logo'];
 
       expectPropertiesValues(component, 'shortLogo', validValues, validValues);
     });

@@ -27,7 +27,7 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
  *
  * @example
  *
- * <example name="po-page-job-scheduler-background-process" title="Portinari Page Job Scheduler - Background Process">
+ * <example name="po-page-job-scheduler-background-process" title="PO Page Job Scheduler - Background Process">
  *  <file name="sample-po-page-job-scheduler-background-process/sample-po-page-job-scheduler-background-process.component.html"> </file>
  *  <file name="sample-po-page-job-scheduler-background-process/sample-po-page-job-scheduler-background-process.component.ts"> </file>
  * </example>

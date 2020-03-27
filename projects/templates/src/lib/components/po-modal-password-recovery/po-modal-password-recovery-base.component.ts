@@ -52,7 +52,7 @@ const PoModalPasswordRecoveryTypeDefault: PoModalPasswordRecoveryType = PoModalP
  *     "src/favicon.ico",
  *     {
  *       "glob": "**\/*",
- *       "input": "node_modules/@portinari/style/images",
+ *       "input": "node_modules/@po-ui/style/images",
  *       "output": "assets/images"
  *     }
  *   ]

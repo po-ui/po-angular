@@ -9,7 +9,7 @@ import { PoHttpInterceptorBaseService } from './po-http-interceptor-base.service
  * @docsExtends PoHttpInterceptorBaseService
  *
  * @example
- * <example name='po-http-interceptor-labs' title='Portinari Http Interceptor Labs'>
+ * <example name='po-http-interceptor-labs' title='PO Http Interceptor Labs'>
  *  <file name='sample-po-http-interceptor-labs.component.ts'> </file>
  *  <file name='sample-po-http-interceptor-labs.component.html'> </file>
  * </example>

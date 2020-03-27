@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { PoModalPasswordRecoveryComponent, PoModalPasswordRecoveryType } from '@portinari/portinari-templates';
+import { PoModalPasswordRecoveryComponent, PoModalPasswordRecoveryType } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-modal-password-recovery-request',

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { PoDialogService, PoNotificationService, PoSelectOption } from '@portinari/portinari-ui';
+import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-datepicker-airfare',

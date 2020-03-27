@@ -136,12 +136,12 @@ export const poPageDynamicTableLiteralsDefault = {
  *
  * @example
  *
- * <example name="po-page-dynamic-table-basic" title="Portinari Page Dynamic Table Basic">
+ * <example name="po-page-dynamic-table-basic" title="PO Page Dynamic Table Basic">
  *  <file name="sample-po-page-dynamic-table-basic/sample-po-page-dynamic-table-basic.component.html"> </file>
  *  <file name="sample-po-page-dynamic-table-basic/sample-po-page-dynamic-table-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-page-dynamic-table-users" title="Portinari Page Dynamic Table - Users">
+ * <example name="po-page-dynamic-table-users" title="PO Page Dynamic Table - Users">
  *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.component.html"> </file>
  *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.component.ts"> </file>
  * </example>
@@ -404,9 +404,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   /**
    * Caso exista mais de um identificador, será concatenado com '|'.
    *
-   * Ex: { id: 1, company: 'portinari' }
+   * Ex: { id: 1, company: 'po' }
    *
-   * Para o endpoint /resources/:id será executada a url /resources/1|portinari
+   * Para o endpoint /resources/:id será executada a url /resources/1|po
    */
   private remove(item) {
     const uniqueKey = this.formatUniqueKey(item);

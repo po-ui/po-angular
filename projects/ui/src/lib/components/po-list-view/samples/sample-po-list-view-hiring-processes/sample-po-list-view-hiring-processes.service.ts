@@ -13,7 +13,7 @@ export class SamplePoListViewHiringProcessesService {
         email: 'james@johnson.com',
         telephone: '1-541-754-3010',
         jobDescription: 'Systems Analyst',
-        url: 'https://www.portinari.com/trabalhe-conosco/'
+        url: 'https://www.po-ui.com/trabalhe-conosco/'
       },
       {
         hireStatus: 'progress',
@@ -24,7 +24,7 @@ export class SamplePoListViewHiringProcessesService {
         email: 'brian@brown.com',
         telephone: '1-543-456-9876',
         jobDescription: 'Trainee',
-        url: 'https://www.portinari.com/trabalhe-conosco/'
+        url: 'https://www.po-ui.com/trabalhe-conosco/'
       },
       {
         hireStatus: 'canceled',
@@ -45,7 +45,7 @@ export class SamplePoListViewHiringProcessesService {
         email: 'margaret@garcia.com',
         telephone: '1-541-344-2211',
         jobDescription: 'Web developer',
-        url: 'https://www.portinari.com/trabalhe-conosco/'
+        url: 'https://www.po-ui.com/trabalhe-conosco/'
       },
       {
         hireStatus: 'hired',
@@ -56,7 +56,7 @@ export class SamplePoListViewHiringProcessesService {
         email: 'emma@hall.com',
         telephone: '1-555-321-3234',
         jobDescription: 'Recruiter',
-        url: 'https://www.portinari.com/trabalhe-conosco/'
+        url: 'https://www.po-ui.com/trabalhe-conosco/'
       },
       {
         hireStatus: 'progress',

@@ -23,7 +23,7 @@ import { PoI18nLiterals } from './interfaces/po-i18n-literals.interface';
  * Para utilizar o serviço basta importá-lo nos componentes que necessitarem de literais e fazer a injeção de
  * dependência no construtor:
  * ```
- *  import { PoI18nService } from '@portinari/portinari-ui';
+ *  import { PoI18nService } from '@po-ui/ng-components';
  *  ...
  *  constructor(private poI18nService: PoI18nService) { }
  *  ...
@@ -88,7 +88,7 @@ import { PoI18nLiterals } from './interfaces/po-i18n-literals.interface';
  * import { async, TestBed } from '@angular/core/testing';
  * import { HttpClientTestingModule } from '@angular/common/http/testing';
  *
- * import { PoI18nModule } from '@portinari/portinari-ui';
+ * import { PoI18nModule } from '@po-ui/ng-components';
  *
  * import { AppComponent } from './app.component';
  *

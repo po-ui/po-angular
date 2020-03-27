@@ -182,7 +182,7 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    * ```
    *
    * > Esta URL deve retornar e receber os dados no padrão de
-   * [API da PORTINARI](http://tdn.portinari.com/display/public/INT/Guia+de+implementacao+das+APIs+PORTINARI) e utiliza os valores
+   * [API da PO](http://tdn.po.com/display/public/INT/Guia+de+implementacao+das+APIs+PO) e utiliza os valores
    * definidos nas propriedades `p-field-label` e `p-field-value` para a construção do `po-lookup`.
    */
   @Input('p-filter-service') set filterService(filterService: PoLookupFilter | string) {

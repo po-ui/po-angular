@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumb, PoBreadcrumbItem } from '@portinari/portinari-ui';
-import { PoCheckboxGroupOption, PoSelectOption } from '@portinari/portinari-ui';
+import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
-import { PoNotificationService } from '@portinari/portinari-ui';
-import { PoPageAction } from '@portinari/portinari-ui';
+import { PoNotificationService } from '@po-ui/ng-components';
+import { PoPageAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-default-labs',
@@ -26,7 +26,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-portinari', label: 'po-icon-portinari' },
+    { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
     { value: 'po-icon-world', label: 'po-icon-world' }
   ];
@@ -72,7 +72,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     this.breadcrumb = { items: [] };
     this.breadcrumbItem = { label: undefined, link: undefined };
     this.breadcrumbParams = {};
-    this.title = 'Portinari Page Default';
+    this.title = 'PO Page Default';
     this.restoreActionForm();
   }
 

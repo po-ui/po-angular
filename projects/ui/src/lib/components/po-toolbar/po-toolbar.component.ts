@@ -8,17 +8,17 @@ import { PoToolbarBaseComponent } from './po-toolbar-base.component';
  *
  * @example
  *
- * <example name="po-toolbar-basic" title="Portinari Toolbar Basic">
+ * <example name="po-toolbar-basic" title="PO Toolbar Basic">
  *  <file name="sample-po-toolbar-basic/sample-po-toolbar-basic.component.html"> </file>
  *  <file name="sample-po-toolbar-basic/sample-po-toolbar-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-toolbar-labs" title="Portinari Toolbar Labs">
+ * <example name="po-toolbar-labs" title="PO Toolbar Labs">
  *  <file name="sample-po-toolbar-labs/sample-po-toolbar-labs.component.html"> </file>
  *  <file name="sample-po-toolbar-labs/sample-po-toolbar-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-toolbar-logged" title="Portinari Toolbar - Logged">
+ * <example name="po-toolbar-logged" title="PO Toolbar - Logged">
  *  <file name="sample-po-toolbar-logged/sample-po-toolbar-logged.component.html"> </file>
  *  <file name="sample-po-toolbar-logged/sample-po-toolbar-logged.component.ts"> </file>
  * </example>

@@ -26,7 +26,7 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  * Para utilizar é necessário importar o módulo `PoStorageModule` no módulo da sua aplicação, por exemplo:
  *
  * ```typescript
- * import { PoStorageModule } from '@portinari/portinari-storage';
+ * import { PoStorageModule } from '@po-ui/ng-storage';
  *
  * @NgModule({
  *  declarations: [...],
@@ -55,7 +55,7 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  * Abaixo segue um exemplo de configuração onde o storage preferencial passa a ser o `lokijs`:
  *
  * ```typescript
- * import { PoStorageModule } from '@portinari/portinari-storage';
+ * import { PoStorageModule } from '@po-ui/ng-storage';
  *
  * @NgModule({
  *  declarations: [...],

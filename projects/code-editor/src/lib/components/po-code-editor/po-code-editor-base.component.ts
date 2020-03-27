@@ -31,7 +31,7 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  * > ```
  * > // app.module.ts
  * > ...
- * > import { PoModule } from '@portinari/portinari-ui';
+ * > import { PoModule } from '@po-ui/ng-components';
  * > import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
  * > ...
  * > @NgModule({
@@ -76,7 +76,7 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
    * [**Monaco Editor**](https://microsoft.github.io/monaco-editor/).
    *
    * Também é possível adicionar uma nova linguagem personalizada utilizando o serviço:
-   * [**po-code-editor-register**](https://portinari.io/documentation/po-code-editor-register?view=doc).
+   * [**po-code-editor-register**](https://po-ui.io/documentation/po-code-editor-register?view=doc).
    *
    * @default `plainText`
    */

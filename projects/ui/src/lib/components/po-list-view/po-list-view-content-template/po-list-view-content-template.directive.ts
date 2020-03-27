@@ -17,7 +17,7 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  * ...
  * <po-list-view
  *   p-property-title="name"
- *   [p-items]="[{id: 1, name: "Register", email: register@portinari.com}]">
+ *   [p-items]="[{id: 1, name: "Register", email: register@po-ui.com}]">
  *
  *   <ng-template p-list-view-content-template let-item let-code="index">
  *     <div class="po-row">
@@ -35,7 +35,7 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  * ...
  * <po-list-view
  *    p-property-title="name"
- *    [p-items]="[{id: 1, name: "Register", email: register@portinari.com}]">
+ *    [p-items]="[{id: 1, name: "Register", email: register@po-ui.com}]">
  *
  *    <div *p-list-view-content-template="let item, let i=index" class="po-row">
  *      <po-info class="po-md-12" p-label="Email" [p-value]="item.email"></po-info>

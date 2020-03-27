@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, ViewChild } from '@angular/core';
 
-import { PoAccordionItemComponent } from '@portinari/portinari-ui';
+import { PoAccordionItemComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-accordion-faq',

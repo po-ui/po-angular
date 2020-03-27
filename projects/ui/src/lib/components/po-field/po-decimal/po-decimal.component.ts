@@ -29,22 +29,22 @@ const poDecimalTotalLengthLimit = 16;
  *
  * @example
  *
- * <example name="po-decimal-basic" title="Portinari Decimal Basic">
+ * <example name="po-decimal-basic" title="PO Decimal Basic">
  *  <file name="sample-po-decimal-basic/sample-po-decimal-basic.component.html"> </file>
  *  <file name="sample-po-decimal-basic/sample-po-decimal-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-decimal-labs" title="Portinari Decimal Labs">
+ * <example name="po-decimal-labs" title="PO Decimal Labs">
  *  <file name="sample-po-decimal-labs/sample-po-decimal-labs.component.html"> </file>
  *  <file name="sample-po-decimal-labs/sample-po-decimal-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-decimal-hourly-wage" title="Portinari Decimal - Hourly Wage">
+ * <example name="po-decimal-hourly-wage" title="PO Decimal - Hourly Wage">
  *  <file name="sample-po-decimal-hourly-wage/sample-po-decimal-hourly-wage.component.html"> </file>
  *  <file name="sample-po-decimal-hourly-wage/sample-po-decimal-hourly-wage.component.ts"> </file>
  * </example>
  *
- * <example name="po-decimal-hourly-wage-reactive-form" title="Portinari Decimal - Hourly Wage Reactive Form">
+ * <example name="po-decimal-hourly-wage-reactive-form" title="PO Decimal - Hourly Wage Reactive Form">
  *  <file name="sample-po-decimal-hourly-wage-reactive-form/sample-po-decimal-hourly-wage-reactive-form.component.html"> </file>
  *  <file name="sample-po-decimal-hourly-wage-reactive-form/sample-po-decimal-hourly-wage-reactive-form.component.ts"> </file>
  * </example>

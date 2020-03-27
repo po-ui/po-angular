@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
-import { PoDynamicFormField, PoStepperItem } from '@portinari/portinari-ui';
+import { PoDynamicFormField, PoStepperItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-stepper-labs',

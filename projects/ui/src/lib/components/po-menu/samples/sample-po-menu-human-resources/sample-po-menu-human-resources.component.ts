@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoMenuItem } from '@portinari/portinari-ui';
+import { PoMenuItem } from '@po-ui/ng-components';
 
 import { SamplePoMenuHumanResourcesService } from './sample-po-menu-human-resources.service';
 

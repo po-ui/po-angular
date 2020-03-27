@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoLookupColumn, PoLookupFilter, PoLookupLiterals } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoLookupColumn, PoLookupFilter, PoLookupLiterals } from '@po-ui/ng-components';
 
 import { SamplePoLookupService } from '../sample-po-lookup.service';
 

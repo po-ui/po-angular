@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption, PoTreeViewItem } from '@portinari/portinari-ui';
+import { PoCheckboxGroupOption, PoSelectOption, PoTreeViewItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tree-view-labs',

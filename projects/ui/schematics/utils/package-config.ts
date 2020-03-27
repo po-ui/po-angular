@@ -71,7 +71,7 @@ export function updatePackageJson(version: string) {
       });
 
       if (json.devDependencies[tsLint.replace]) {
-        json.devDependencies[tsLint.replaceWith] = '2.0.0';
+        json.devDependencies[tsLint.replaceWith] = '0.0.0-PLACEHOLDER';
 
         delete json.devDependencies[tsLint.replace];
       }

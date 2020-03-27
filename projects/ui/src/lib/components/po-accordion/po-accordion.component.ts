@@ -11,19 +11,19 @@ import { PoAccordionService } from './services/po-accordion.service';
  *
  * @example
  *
- * <example name="po-accordion-basic" title="Portinari Accordion Basic" >
+ * <example name="po-accordion-basic" title="PO Accordion Basic" >
  *  <file name="sample-po-accordion-basic/sample-po-accordion-basic.component.html"> </file>
  *  <file name="sample-po-accordion-basic/sample-po-accordion-basic.component.ts"> </file>
  *  <file name="sample-po-accordion-basic/sample-po-accordion-basic.component.e2e-spec.ts"> </file>
  *  <file name="sample-po-accordion-basic/sample-po-accordion-basic.component.po.ts"> </file>
  * </example>
  *
- * <example name="po-accordion-labs" title="Portinari Accordion Labs" >
+ * <example name="po-accordion-labs" title="PO Accordion Labs" >
  *  <file name="sample-po-accordion-labs/sample-po-accordion-labs.component.html"> </file>
  *  <file name="sample-po-accordion-labs/sample-po-accordion-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-accordion-faq" title="Portinari Accordion - FAQs" >
+ * <example name="po-accordion-faq" title="PO Accordion - FAQs" >
  *  <file name="sample-po-accordion-faq/sample-po-accordion-faq.component.html"> </file>
  *  <file name="sample-po-accordion-faq/sample-po-accordion-faq.component.ts"> </file>
  * </example>

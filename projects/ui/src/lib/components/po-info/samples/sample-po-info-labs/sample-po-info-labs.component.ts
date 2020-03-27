@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoInfoOrientation, PoRadioGroupOption } from '@portinari/portinari-ui';
+import { PoInfoOrientation, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-info-labs',
@@ -23,7 +23,7 @@ export class SamplePoInfoLabsComponent implements OnInit {
   }
 
   restore() {
-    this.label = 'Portinari Info';
+    this.label = 'PO Info';
     this.labelSize = undefined;
     this.orientation = undefined;
     this.url = undefined;
