@@ -7,7 +7,7 @@ import { isTypeof } from '../../utils/util';
  *
  * @description
  *
- * Pipe responsável por apresentar um horário baseado no formato de entrada definido na API da PO.
+ * Pipe responsável por apresentar um horário baseado no formato de entrada definido na API do PO UI.
  */
 @Pipe({
   name: 'po_time'

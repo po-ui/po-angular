@@ -133,7 +133,7 @@ export class PoPageBlockedUserBaseComponent {
     return this._params;
   }
 
-  /** Caminho para a logomarca localizada na parte superior, caso não seja definida ou seja inválida assume a logo padrão da PO. */
+  /** Caminho para a logomarca localizada na parte superior, caso não seja definida ou seja inválida assume a logo padrão do PO UI. */
   @Input('p-logo') logo?: string;
 
   /**

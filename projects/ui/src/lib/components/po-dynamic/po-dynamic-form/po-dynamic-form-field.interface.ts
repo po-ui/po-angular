@@ -54,7 +54,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Importante:**
    * > Caso utilizar a propriedade `optionsService` esta propriedade será ignorada.
    * > Para que funcione corretamente, é importante que o serviço siga o
-   * [guia de API da PO](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+   * [guia de API do PO UI](https://po-ui.io/guides/api).
    */
   searchService?: string;
 

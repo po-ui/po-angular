@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Relate um bug encontrado Portinari UI.
+about: Relate um bug encontrado no PO UI.
 title: ''
 labels: bug
 assignees: ''
@@ -23,7 +23,7 @@ Passos para reproduzir:
 
 #### Ambiente
 
-- Portinari:
+- PO UI:
 - Angular:
 - Browser(s):
 - Operating System (e.g. Windows, macOS, Ubuntu):

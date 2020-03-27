@@ -13,7 +13,7 @@ export interface PoSyncConfig {
   /**
    * Classe usada para a trasformação dos dados nas requisições.
    *
-   * > Veja mais detalhes em [Fundamentos do PO Sync - Adaptando a resposta da API para o padrão da PO](/guides/sync-fundamentals).
+   * > Veja mais detalhes em [Fundamentos do PO Sync - Adaptando a resposta da API para o padrão do PO UI](/guides/sync-fundamentals).
    */
   dataTransform?: PoDataTransform;
 

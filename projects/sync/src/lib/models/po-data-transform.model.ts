@@ -2,7 +2,7 @@
  * @description
  *
  * Classe responsável por adaptar dados de APIs que não seguem
- * o padrão de [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+ * o padrão de [API do PO UI](https://po-ui.io/guides/api).
  *
  * Essa classe deve ser estendida por uma classe que implemente cada um de seus métodos, adaptando os parâmetros de
  * acordo com a API do *backend* existente que se deseja comunicar.
