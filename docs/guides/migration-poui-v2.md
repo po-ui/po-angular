@@ -32,7 +32,7 @@ Mas é importante conhecer os **BREAKING CHANGES** e **Depreciações** para rea
 
 Nesta nova versão o nome dos pacotes foram alterados, de acordo com a tabela abaixo:
 
-| Pacotes                                                 | Subistituído por                     |
+| Pacotes                                                 | Substituído por                     |
 | --------------------------------------------------------| ------------------------------------ |
 | `@portinari/portinari-ui`                               | `@po-ui/ng-components`               |
 | `@portinari/portinari-templates`                        | `@po-ui/ng-templates`                |
@@ -44,7 +44,7 @@ Nesta nova versão o nome dos pacotes foram alterados, de acordo com a tabela ab
 
 Também foi realizado remoções das propriedades, onde passam a valer as novas definições, veja a tabela abaixo:
 
-| Componentes                                             | Anteriormente                            | Subistituído por             |
+| Componentes                                             | Anteriormente                            | Substituído por             |
 | --------------------------------------------------------| -----------------------------------------| -----------------------------|
 | `PoFieldModule`                                         | `[p-focus]`                              | `[p-auto-focus]`             |
 | `PoHttpResquestInterceptor`                             | `X-Portinari-Screen-Lock`                | `X-PO-Screen-Lock`           |

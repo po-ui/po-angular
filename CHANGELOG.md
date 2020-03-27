@@ -1,5 +1,170 @@
 # Changelog
 
+## [2.0.0-beta.1](https://github.com/po-ui/po-angular/compare/v1.28.0...v2.0.0-beta.1) (2020-03-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **angular:** atualiza para a versão 9
+
+Atualize seu projeto para utilizar a versão 9 do Angular, acesse a documentação [**Guia de Atualização do Angular**](https://update.angular.io/) para fazer a migração completa.
+
+Veja nossa [**documentação para fazer a migração**](https://github.com/po-ui/po-angular/blob/master/docs/guides/migration-poui-v2.md) para a versão 2.
+
+* **fields:** removida a propriedade `p-focus`
+
+Foi removida a propriedade `p-focus`, deve-se utilizar a propriedade `p-auto-focus`.
+Os componentes afetados são:
+- datepicker;
+- decimal;
+- email,
+- input;
+- login;
+- lookup;
+- multiselect
+- number;
+- password;
+- textarea;
+- url;
+
+Antes: ``` <po-component p-focus></po-component> ```
+
+Depois: ``` <po-component p-auto-focus></po-component> ```
+
+* **packages:** altera nome dos pacotes
+
+Os nomes dos pacotes foram alterados para a seguinte nomenclatura:
+
+`@portinari/portinari-ui` ==> `@po-ui/ng-components`
+`@portinari/portinari-templates` ==> `@po-ui/ng-templates`
+`@portinari/portinari-code-editor` ==> `@po-ui/ng-code-editor`
+`@portinari/portinari-storage` ==> `@po-ui/ng-storage`
+`@portinari/portinari-sync` ==> `@po-ui/ng-sync`
+
+* **interceptors:** altera inicial das chaves dos headers nos interceptors
+
+Antes:
+```
+const headers = { 'X-Portinari-No-Message': 'true' };
+...
+const headers = { 'X-Portinari-SCREEN-LOCK': 'true' };
+...
+const headers = { 'X-Portinari-No-Count-Pending-Requests': 'true' }
+```
+
+Depois:
+```
+const headers = { 'X-PO-No-Message': 'true' };
+...
+const headers = { 'X-PO-SCREEN-LOCK': 'true' };
+...
+const headers = { 'X-PO-No-Count-Pending-Requests': 'true' }
+```
+
+* **page-detail:** remove o reconhecimento das ações via funções no typescript
+
+O reconhecimento das ações via funções no typescript foi removido,
+com isso para utilizar os botões "Voltar", "Editar" e "Remover"
+deve-se utilizar as novas propriedades.
+
+Antes:
+
+HTML
+```<po-page-detail p-title="Titulo"> </po-page-detail> ```
+
+TS
+```
+export class ExampleDetail {
+  back() { }
+}
+```
+
+Depois:
+
+HTML
+```
+<po-page-detail p-title="Titulo" (p-back)="back()">
+</po-page-detail>
+```
+
+TS
+```
+export class ExampleDetail {
+  back() { }
+}
+```
+
+* **page-edit:** remove o reconhecimento das ações via funções no typescript
+
+O reconhecimento das ações via funções no typescript foi removido,
+com isso para utilizar os botões "Cancelar", "Salvar" e "Salvar e Novo"
+deve-se utilizar as novas propriedades.
+
+Antes:
+
+HTML
+```<po-page-edit p-title="Titulo"> </po-page-edit > ```
+
+TS
+```
+export class ExampleEdit {
+     save() { }
+}
+```
+
+Depois:
+
+HTML
+```
+<po-page-edit p-title="Titulo" (p-save)="save()">
+</po-page-edit>
+```
+
+TS
+```
+export class ExampleEdit {
+  save() { }
+}
+```
+
+### Features
+
+* **angular:** atualiza para a versão 9 ([89dd968](https://github.com/po-ui/po-angular/commit/89dd968790c71f64f22adbee31b969cb7a61c2a7))
+* **page-detail:** adiciona propriedades para informar as ações ([7fd1050](https://github.com/po-ui/po-angular/commit/7fd10505504a7b1065942882d5317e7cbe0969c2))
+* **page-edit:** adiciona propriedades para informar as ações ([49fb1c3](https://github.com/po-ui/po-angular/commit/49fb1c3ac3eeb59576f96f0e12e66f3d3c214d98))
+* **schematics:** implementa `ng update` para versão 2 ([ba496d3](https://github.com/po-ui/po-angular/commit/ba496d3bb3265285c57db363331c80b0b3139e8d))
+* **prettier:** inclusão do formatador prettier ([dff1281](https://github.com/po-ui/po-angular/commit/dff1281151d9cec5de6863f6edb9117bd1fab179))
+
+
+### Bug Fixes
+
+* **chart:** corrige erros no console ([a9440b5](https://github.com/po-ui/po-angular/commit/a9440b5c64c7ee13326359e20611ab0ee5572ad6))
+* **combo:** passa métodos para OnChanges ([47e7ae1](https://github.com/po-ui/po-angular/commit/47e7ae1b01013713d68435d698dc0b21212e957a))
+* **datepicker-range:** corrige erro ao mudar valor ([641b8b6](https://github.com/po-ui/po-angular/commit/641b8b691838aca769c133ebef93e520f0fda308))
+* **page-dynamic-search:** corrige erro ao utilizar o filtro ([b2d9bf9](https://github.com/po-ui/po-angular/commit/b2d9bf92e6c0b916845e8e65318c652ca8d44819))
+* **page-list:** corrige erro ao utilizar o filtro ([3051b27](https://github.com/po-ui/po-angular/commit/3051b2723f632bb9eae1aad24da619b18ee7704c))
+* **slide:** passa métodos para OnChanges ([7684812](https://github.com/po-ui/po-angular/commit/76848123a725d748e4f4527dae1be94048058411))
+* **table:** corrige erro ao renderizar a tabela com container ([7e57e14](https://github.com/po-ui/po-angular/commit/7e57e14ca2457ca4829a6868e02df2defc4afaf5))
+* **table:** corrige erro ao utilizar o `p-height` ([3263df3](https://github.com/po-ui/po-angular/commit/3263df3d6a441b383e4a7eee721ef68a68bb4e53))
+
+### Code Refactoring
+
+* **fields:** remove propriedade `p-focus` ([d3ba2d5](https://github.com/po-ui/po-angular/commit/d3ba2d599d9029504a21bccb8e94a7477f78515b))
+* **packages:** altera nome dos pacotes ([3fd3255](https://github.com/po-ui/po-angular/commit/3fd3255a5de510e057330973df4da38fc0d79ec4))
+* **interceptors:** altera inicial das chaves dos headers ([c64e3d4](https://github.com/po-ui/po-angular/commit/c64e3d49b4d5fba024a988e7de31fa52692a0296))
+
+### Documentation
+
+* **getting-started:** atualiza para a nova versão ([dfe0c91](https://github.com/po-ui/po-angular/commit/dfe0c91f890d2f27439979225cf18720a6cc89a4))
+* **migration-thf:** atualiza para a nova versão ([4a4ec0b](https://github.com/po-ui/po-angular/commit/4a4ec0b1830220260265c04ede3ce74efee9b0d3))
+* **sync-getting-started:** atualiza para a nova versão ([7705327](https://github.com/po-ui/po-angular/commit/7705327d57aac7f976cfcfd56c8b2ec519ab5342))
+* **migration:** adiciona guia de migração para versão 2 ([bbdbb9b](https://github.com/po-ui/po-angular/commit/bbdbb9b943c7c79d4fbcc7605a2d694711aca350))
+* **contributing:** remove menção a branch em fork ([4b82313](https://github.com/po-ui/po-angular/commit/4b82313c8c4f4a470265567e5fc1d315b1962470))
+* **page-dynamic-edit:** atualização serviço do sample ([ebb1a8a](https://github.com/po-ui/po-angular/commit/ebb1a8ad859ca272812bd5854e37d385b4903d75))
+* **page-dynamic-table:** atualização serviço do sample ([b682c2f](https://github.com/po-ui/po-angular/commit/b682c2f675f36379bd11d6920b3b1986812248bc))
+* **select:** atualização serviço do sample ([df3cbc6](https://github.com/po-ui/po-angular/commit/df3cbc6d604c15092b8aef54c5ea1b7e1c36ed62))
+
+
 ## [1.28.0](https://github.com/po-ui/po-angular/compare/v1.27.1...v1.28.0) (2020-03-06)
 
 
