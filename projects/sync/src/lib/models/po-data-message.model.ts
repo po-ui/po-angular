@@ -6,12 +6,12 @@ import { PoDataTransform } from './po-data-transform.model';
  * @description
  *
  * Classe responsável por implementar a classe `PoDataTransform` com os campos referentes ao padrão de
- * [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+ * [API do PO UI](https://po-ui.io/guides/api).
  */
 export class PoDataMessage extends PoDataTransform {
   /**
    * Retorna a propriedade `portinari_sync_date`, responsável por informar a data da última sincronização no guia de
-   * [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+   * [API do PO UI](https://po-ui.io/guides/api).
    *
    * @returns {string} Nome do campo que contém a data da última sincronização.
    */
@@ -21,7 +21,7 @@ export class PoDataMessage extends PoDataTransform {
 
   /**
    * Retorna a propriedade `items`, responsável por informar a lista de registros vindos da API no guia de
-   * [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+   * [API do PO UI](https://po-ui.io/guides/api).
    *
    * @returns {string} Nome da propriedade que contém a lista de registros.
    */
@@ -31,7 +31,7 @@ export class PoDataMessage extends PoDataTransform {
 
   /**
    * Retorna a propriedade `page`, responsável por informar o número da página de registros que a API retorna no guia de
-   * [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+   * [API do PO UI](https://po-ui.io/guides/api).
    *
    * @returns {string} Nome da propriedade responsável por informar o número da página de registros.
    */
@@ -41,7 +41,7 @@ export class PoDataMessage extends PoDataTransform {
 
   /**
    * Retorna a propriedade `pageSize`, responsável pela quantidade de registros que serão exibidos por página no guia de
-   * [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+   * [API do PO UI](https://po-ui.io/guides/api).
    *
    * @returns {string} Nome do parâmetro responsável pela quantidade de registros por página.
    */
@@ -51,7 +51,7 @@ export class PoDataMessage extends PoDataTransform {
 
   /**
    * Retorna um valor `boolean`, de acordo com a propriedade `hasNext` que é responsável por informar se há uma nova
-   * página de registros disponível no guia de [API da PORTINARI](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+   * página de registros disponível no guia de [API do PO UI](https://po-ui.io/guides/api).
    *
    * @returns {boolean} Informa se tem próxima página de registros.
    */

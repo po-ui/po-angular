@@ -181,8 +181,7 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    * url + ?page=1&pageSize=20&age=23&filter=Peter
    * ```
    *
-   * > Esta URL deve retornar e receber os dados no padrão de
-   * [API da PO](http://tdn.po.com/display/public/INT/Guia+de+implementacao+das+APIs+PO) e utiliza os valores
+   * > Esta URL deve retornar e receber os dados no padrão de [API do PO UI](https://po-ui.io/guides/api) e utiliza os valores
    * definidos nas propriedades `p-field-label` e `p-field-value` para a construção do `po-lookup`.
    */
   @Input('p-filter-service') set filterService(filterService: PoLookupFilter | string) {

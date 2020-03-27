@@ -6,8 +6,8 @@ describe('PoSchemaUtil:', () => {
   let schemas: Array<PoSyncSchema>;
 
   const mySchema: PoSyncSchema = {
-    getUrlApi: 'http://poservices.portinari.com.br/customer-api/api/v1/customers',
-    diffUrlApi: 'http://poservices.portinari.com.br/customer-api/api/v1/customers/diff',
+    getUrlApi: 'http://poservices.po-ui.com.br/customer-api/api/v1/customers',
+    diffUrlApi: 'http://poservices.po-ui.com.br/customer-api/api/v1/customers/diff',
     name: 'Customers',
     fields: [
       'id',

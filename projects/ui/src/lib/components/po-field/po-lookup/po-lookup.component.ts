@@ -14,7 +14,7 @@ import { PoLookupModalService } from './services/po-lookup-modal.service';
  *
  * Quando existe muitos dados o po-lookup por padrão traz apenas 10 itens na tabela e os demais são carregados por demanda através do
  * botão 'Carregar mais resultados'. Para que funcione corretamente, é importante que o serviço siga o
- * [Guia de implementação das APIs TOTVS](http://tdn.totvs.com/pages/releaseview.action?pageId=271660444).
+ * [Guia de implementação das APIs TOTVS](https://po-ui.io/guides/api).
  *
  * Importante:
  *

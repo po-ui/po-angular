@@ -1,6 +1,6 @@
 ---
 name: Feature
-about: 'Sugira uma melhoria para o Portinari UI. '
+about: 'Sugira uma melhoria para o PO UI. '
 title: ''
 labels: enhancement
 assignees: ''

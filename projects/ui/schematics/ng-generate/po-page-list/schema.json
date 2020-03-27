@@ -68,8 +68,8 @@
         "message": "Which component would you like to use to display data?",
         "type": "list",
         "items": [
-          { "value": "table", "label": "PO Table     [ https://portinari.io/documentation/po-table     ]" },
-          { "value": "list", "label": "PO List View [ https://portinari.io/documentation/po-list-view ]" }
+          { "value": "table", "label": "PO Table     [ https://po-ui.io/documentation/po-table     ]" },
+          { "value": "list", "label": "PO List View [ https://po-ui.io/documentation/po-list-view ]" }
         ]
       }
     }

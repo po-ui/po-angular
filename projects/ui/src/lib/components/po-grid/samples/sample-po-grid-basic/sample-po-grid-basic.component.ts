@@ -26,45 +26,45 @@ export class SamplePoGridBasicComponent {
   data = [
     {
       id: 629131,
-      name: 'Jhony Senem',
+      name: 'Jhonatas Silvano',
       occupation: 'Developer',
-      email: 'jhony.senem@po-ui.com.br',
+      email: 'jhonatas.silvano@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-12-12',
       actions: '...'
     },
     {
       id: 78492341,
-      name: 'Rafaelly Gruber',
+      name: 'Rafael Gonçalvez',
       occupation: 'Engineer',
-      email: 'rafaelly.gruber@po-ui.com.br',
+      email: 'rafael.goncalvez@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-12-10',
       actions: '...'
     },
     {
       id: 986434,
-      name: 'Nicole Oliveira',
+      name: 'Nicoli Pereira',
       occupation: 'Developer',
-      email: 'nicole.oliveira@po-ui.com.br',
+      email: 'nicoli.pereira@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-12-12',
       actions: '...'
     },
     {
       id: 4235652,
-      name: 'Mateus José',
+      name: 'Mauricio João Mendez',
       occupation: 'Developer',
-      email: 'mateus.jose@po-ui.com.br',
+      email: 'mauricio.joao@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-11-23',
       actions: '...'
     },
     {
       id: 629131,
-      name: 'Leonardo Leal',
+      name: 'Leandro Oliveira',
       occupation: 'Engineer',
-      email: 'leonardo.leal@po-ui.com.br',
+      email: 'leandro.oliveira@po-ui.com.br',
       status: 'Active',
       lastActivity: '2018-11-30',
       actions: '...'
