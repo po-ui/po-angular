@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { PoStorageService } from '@po-ui/ng-storage';
@@ -8,14 +8,14 @@ import { PoSchemaService } from './po-schema.service';
 import { PoSchemaUtil } from './po-schema-util/po-schema-util.model';
 import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
-@Directive()
+@Injectable()
 class PoStorageServiceMock extends PoStorageService {
   constructor() {
     super();
   }
 }
 
-@Directive()
+@Injectable()
 class PoSchemaDefinitionServiceMock extends PoSchemaDefinitionService {}
 
 describe('PoSchemaService:', () => {

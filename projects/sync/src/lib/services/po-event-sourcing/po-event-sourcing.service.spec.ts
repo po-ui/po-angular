@@ -1,6 +1,6 @@
-import { Directive } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { Observable, of, Subscriber } from 'rxjs';
@@ -24,14 +24,14 @@ import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
 const EVENT_SOURCING_NAME: string = PoEventSourcingService['event_sourcing_name'];
 
-@Directive()
+@Injectable()
 class StorageServiceMock extends PoStorageService {
   constructor() {
     super();
   }
 }
 
-@Directive()
+@Injectable()
 class PoDataTransformMock extends PoDataTransform {
   getDateFieldName(): string {
     return undefined;

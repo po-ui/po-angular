@@ -9,6 +9,7 @@ import { PoPieChartSeries } from './po-chart-pie/po-chart-pie-series.interface';
 
 const Padding: number = 24;
 
+/* tslint:disable:directive-class-suffix */
 @Directive()
 export abstract class PoChartDynamicTypeComponent {
   protected windowResizeListener: () => void;
