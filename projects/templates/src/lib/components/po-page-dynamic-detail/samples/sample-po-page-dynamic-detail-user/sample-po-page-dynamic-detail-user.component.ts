@@ -1,27 +1,25 @@
 import { Component } from '@angular/core';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
-import { PoPageDynamicDetailField } from '@po-ui/ng-templates';
+import { PoPageDynamicDetailActions, PoPageDynamicDetailField } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-page-dynamic-detail-basic',
-  templateUrl: './sample-po-page-dynamic-detail-basic.component.html'
+  selector: 'sample-po-page-dynamic-detail-user',
+  templateUrl: './sample-po-page-dynamic-detail-user.component.html'
 })
-export class SamplePoPageDynamicDetailBasicComponent {
-  public readonly serviceApi = 'https://thf.totvs.com.br/sample/api/po-metadata/v1/people';
+export class SamplePoPageDynamicDetailUserComponent {
+  public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
 
-  public readonly actions = {
-    // back: '/', // false ou url
-    // back: false, // false ou url
-    back: 'dynamic-table', // url de redirecionamento
-    // edit: ':id/edit', // obrigatório ter um :id para incluir o key
-    edit: 'dynamic-edit/:id', // obrigatório ter um :id para incluir o key
-    // remove: '/' // url de redirecionamento
-    remove: 'dynamic-table' // url de redirecionamento
+  public readonly actions: PoPageDynamicDetailActions = {
+    back: true
   };
 
   public readonly breadcrumb: PoBreadcrumb = {
-    items: [{ label: 'Home', link: '/' }, { label: 'People', link: '/dynamic-table' }, { label: 'Detail' }]
+    items: [
+      { label: 'Home', link: '/' },
+      { label: 'People', link: '/documentation/po-page-dynamic-table' },
+      { label: 'Detail' }
+    ]
   };
 
   public readonly fields: Array<PoPageDynamicDetailField> = [
