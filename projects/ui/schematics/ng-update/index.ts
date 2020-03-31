@@ -167,7 +167,8 @@ function addFunctionsOnPage(file, filePath, tree, content) {
 
 function replaceWithChanges(replaces: Array<ReplaceChanges>, content: string = '') {
   replaces.forEach(({ replace, replaceWith }) => {
-    content = content.replace(replace, replaceWith);
+    const regex = new RegExp(replace, 'gi');
+    content = content.replace(regex, replaceWith);
   });
 
   return content;
