@@ -12,6 +12,10 @@ o Angular 9, executando o comando abaixo:
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
 
+O nosso pacote anterior possuía dependências que eram compatíveis com a versão 8 do Angular, portanto
+pode ser preciso utilizar a *flag* `--force` para que o Angular realize a migração do seu projeto, ignorando a versão das dependências.
+Para avaliar as *flags* disponíveis veja a [**documentação do ng update**](https://angular.io/cli/update).
+
 ## Atualizando o PO UI
 
 Para facilitar a migração do seu projeto para o PO UI v2, implementamos o `ng update`.
@@ -23,10 +27,10 @@ Para poder utilizar o comando e realizar a migração, execute os comandos abaix
 ``` ng update @po-ui/ng-components --from 1 --migrate-only ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
-  - Alterar maioria dos conteúdos relacionado ao **BREAKING CHANGES** no seu projeto;
+  - Alterar maioria dos conteúdos relacionados ao **BREAKING CHANGES** no seu projeto.
   - Atualizar as versões dos pacotes `@po-ui`.
 
-Mas é importante conhecer os **BREAKING CHANGES** e **Depreciações** para realizar as alterações manualmente caso necessaário.
+Mas é importante conhecer os **BREAKING CHANGES** para realizar as alterações manualmente caso necessário.
 
 ### Breaking Changes
 
@@ -44,18 +48,18 @@ Nesta nova versão o nome dos pacotes foram alterados, de acordo com a tabela ab
 
 Também foi realizado remoções das propriedades, onde passam a valer as novas definições, veja a tabela abaixo:
 
-| Componentes                                             | Anteriormente                            | Substituído por             |
-| --------------------------------------------------------| -----------------------------------------| -----------------------------|
-| `PoFieldModule`                                         | `[p-focus]`                              | `[p-auto-focus]`             |
-| `PoHttpResquestInterceptor`                             | `X-Portinari-Screen-Lock`                | `X-PO-Screen-Lock`           |
-| `PoHttpResquestInterceptor`                             | `X-Portinari-No-Count-Pending-Requests`  | `X-PO-No-Message`            |
-| `PoHttpInterceptor`                                     | `X-Portinari-No-Message`                 | `X-PO-No-Message`            |
-| `PoPageEdit`                                            | Possuir a ação `cancel() {}` no TS       | `(p-cancel)`                 |
-| `PoPageEdit`                                            | Possuir a ação `save() {}` no TS         | `(p-save)`                   |
-| `PoPageEdit`                                            | Possuir a ação `saveNew() {}` no TS      | `(p-save-new)`               |
-| `PoPageDetail`                                          | Possuir a ação `back() {}` no TS         | `(p-back)`                   |
-| `PoPageDetail`                                          | Possuir a ação `edit() {}` no TS         | `(p-edit)`                   |
-| `PoPageDetail`                                          | Possuir a ação `remove() {}` no TS       | `(p-remove)`                 |
+| Componentes                                             | Anteriormente                            | Substituído por                 |
+| --------------------------------------------------------| -----------------------------------------| --------------------------------|
+| `PoFieldModule`                                         | `[p-focus]`                              | `[p-auto-focus]`                |
+| `PoHttpResquestInterceptor`                             | `X-Portinari-Screen-Lock`                | `X-PO-Screen-Lock`              |
+| `PoHttpResquestInterceptor`                             | `X-Portinari-No-Count-Pending-Requests`  | `X-PO-No-Count-Pending-Requests`|
+| `PoHttpInterceptor`                                     | `X-Portinari-No-Message`                 | `X-PO-No-Message`               |
+| `PoPageEdit`                                            | Possuir a ação `cancel() {}` no TS       | `(p-cancel)`                    |
+| `PoPageEdit`                                            | Possuir a ação `save() {}` no TS         | `(p-save)`                      |
+| `PoPageEdit`                                            | Possuir a ação `saveNew() {}` no TS      | `(p-save-new)`                  |
+| `PoPageDetail`                                          | Possuir a ação `back() {}` no TS         | `(p-back)`                      |
+| `PoPageDetail`                                          | Possuir a ação `edit() {}` no TS         | `(p-edit)`                      |
+| `PoPageDetail`                                          | Possuir a ação `remove() {}` no TS       | `(p-remove)`                    |
 
 
 ### Depreciação

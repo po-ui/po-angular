@@ -26,7 +26,7 @@ Quando os schematics forem analisados, ele tentará determinar se algum script d
 Para poder testar localmente é necessário instalar [verdaccio](https://github.com/verdaccio/verdaccio), para termos um *npm registry* local,
 onde publicaremos os pacotes para realizar o teste.
 
-Após a instalação, devemos apontar o npm registry para o que inciaremos localmente.
+Após a instalação, devemos apontar o npm registry para o que iniciaremos localmente.
 
 O comando abaixo subirá o npm local, no endereço http://localhost:4873.
 
@@ -46,13 +46,15 @@ Antes de testarmos o pacotes, devemos fazer duas configurações, são elas:
 - Adicionar dentro do arquivo ```verdacio/config.yaml``` a configuração: `max_body_size: 200mb`;
 - Executar o comando: ``` npm adduser --registry http://localhost:4873 ```
 
-Para testarmos o pacote, devemos incrementar a versão do mesmo, ter o npm registry local em execução, confirmando essas situações, podemos rodar o script abaixo:
+Para testarmos o pacote, devemos incrementar a versão do mesmo,
+caso for uma versão beta devemos alterar a versão também no arquivo `migrations.json`,
+ter o npm registry local em execução, confirmando essas situações, podemos rodar o script abaixo:
 
 `> npm run build:ui && npm run publish:ui:local`
 
 Por fim, execute os comandos abaixo no seu projeto Angular:
 
-`> npm i --save @po-ui/ng-components`.
+`> npm i --save @po-ui/ng-components`
 
 `> ng update @po-ui/ng-components --next --from 1 --migrate-only`
 
