@@ -436,7 +436,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const value = '2018-10-25';
       const fakeThis = {
         poDateService: {
-          isValidIso: () => {}
+          isValidIso: arg => {}
         }
       };
 
@@ -637,7 +637,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('updateModel: should call `onChangeModel` with `value` if `onChangeModel` is valid.', () => {
       const fakeThis = {
-        onChangeModel: () => {}
+        onChangeModel: arg => {}
       };
       const value: any = 'value';
 
@@ -650,7 +650,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('updateModel: should call `onChangeModel` with `value` object if `onChangeModel` is valid.', () => {
       const fakeThis = {
-        onChangeModel: () => {}
+        onChangeModel: arg => {}
       };
       const value: any = { key: 'value' };
 
@@ -663,7 +663,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('validateModel: should call `validatorChange` with `value` if `validatorChange` is valid.', () => {
       const fakeThis = {
-        validatorChange: () => {}
+        validatorChange: arg => {}
       };
       const value: any = 'value';
 
@@ -677,7 +677,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     it('convertPatternDateFormat: should call `poDateService.convertDateToISO` if `value` is instanceof `Date`.', () => {
       const fakeThis = {
         poDateService: {
-          convertDateToISO: () => {}
+          convertDateToISO: arg => {}
         }
       };
       const date = new Date('2018-10-25');

@@ -162,7 +162,7 @@ describe('PoListViewBaseComponent:', () => {
     const item = { id: 1, name: 'Register 1' };
 
     it('onClickAction: should call `listViewAction.action` with item parameter', () => {
-      const listViewAction = { label: 'Action 1', action: () => {} };
+      const listViewAction = { label: 'Action 1', action: arg => {} };
 
       spyOn(component, <any>'deleteInternalAttrs').and.returnValue(item);
       spyOn(listViewAction, 'action');

@@ -22,7 +22,7 @@ class PoUploadComponent extends PoUploadBaseComponent {
   }
 
   sendFeedback() {}
-  setDirectoryAttribute() {}
+  setDirectoryAttribute(arg) {}
 }
 
 describe('PoUploadBaseComponent:', () => {

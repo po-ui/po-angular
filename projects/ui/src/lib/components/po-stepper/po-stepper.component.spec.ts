@@ -228,7 +228,7 @@ describe('PoStepperComponent:', () => {
     it(`changeStep: should call 'controlStepsStatus' and 'onChangeStep.emit' with 'step' if usePoSteps and
       allowNextStep are true and 'step' is different of 'currentActiveStep'`, () => {
       const poStepMock = { id: 'A1BC' };
-      const poStepCurrentMock = { id: 'B2jk' };
+      const poStepCurrentMock = { id: 2 };
       const stepIndex = 1;
 
       component['currentActiveStep'] = <any>poStepCurrentMock;
@@ -242,7 +242,7 @@ describe('PoStepperComponent:', () => {
       component.changeStep(stepIndex, <any>poStepMock);
 
       expect(spyOncontrolStepsStatus).toHaveBeenCalledWith(stepIndex, poStepMock);
-      expect(spyOnChangeStep).toHaveBeenCalledWith(poStepMock);
+      expect(spyOnChangeStep).toHaveBeenCalledWith(<any>poStepMock);
     });
 
     it(`changeStep: should call 'controlStepsStatus' and 'onChangeStep.emit' with 'step' if usePoSteps and
@@ -261,7 +261,7 @@ describe('PoStepperComponent:', () => {
       component.changeStep(stepIndex, <any>poStepMock);
 
       expect(spyOncontrolStepsStatus).toHaveBeenCalledWith(stepIndex, poStepMock);
-      expect(spyOnChangeStep).toHaveBeenCalledWith(poStepMock);
+      expect(spyOnChangeStep).toHaveBeenCalledWith(<any>poStepMock);
     });
 
     it('changeStep: shouldn`t call `onChangeStep.emit` if `allowNextStep` return false', () => {

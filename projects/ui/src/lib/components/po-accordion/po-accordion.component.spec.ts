@@ -80,7 +80,7 @@ describe('PoAccordionComponent:', () => {
 
       component.headerToggle(event, <any>poAccordionItem);
 
-      expect(component['toggle']).toHaveBeenCalledWith(poAccordionItemExpected);
+      expect(component['toggle']).toHaveBeenCalledWith(<any>poAccordionItemExpected);
     });
 
     it('receiveFromChildAccordionSubscription: should call `toggle` if `receiveFromChildAccordionClicked` emit for a subscription', () => {
@@ -90,7 +90,7 @@ describe('PoAccordionComponent:', () => {
       };
 
       const fakeThis = {
-        toggle: () => {},
+        toggle: arg => {},
         accordionServiceSubscription: undefined,
         accordionService: {
           receiveFromChildAccordionClicked: () => {
