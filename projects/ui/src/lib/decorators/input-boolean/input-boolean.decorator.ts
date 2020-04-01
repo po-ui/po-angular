@@ -13,7 +13,7 @@ import { PropertyDecoratorInterface } from '../property-decorator.interface';
  */
 
 export function InputBoolean(): any {
-  return function(target: any, property: string, originalDescriptor?) {
+  return function (target: any, property: string, originalDescriptor?) {
     const decoratorProperties: PropertyDecoratorInterface = { target, property, originalDescriptor };
 
     return changeValueByCallback(decoratorProperties, 'InputBoolean', convertToBoolean);

@@ -194,7 +194,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should call parent action', () => {
-    component['testFunction'] = function(menuItem: PoMenuItem) {};
+    component['testFunction'] = function (menuItem: PoMenuItem) {};
     component.parentRef = component;
     spyOn(component.parentRef, 'testFunction');
     component['clickMenuItem'](component.menus[4]);

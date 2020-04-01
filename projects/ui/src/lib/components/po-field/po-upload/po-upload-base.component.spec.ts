@@ -14,9 +14,7 @@ import { PoUploadService } from './po-upload.service';
 
 @Component({
   selector: 'po-upload',
-  template: `
-    <input type="file" class="po-upload" name="upload" />
-  `
+  template: ` <input type="file" class="po-upload" name="upload" /> `
 })
 class PoUploadComponent extends PoUploadBaseComponent {
   constructor(uploadService: PoUploadService) {
