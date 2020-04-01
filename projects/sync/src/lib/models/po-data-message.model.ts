@@ -10,13 +10,13 @@ import { PoDataTransform } from './po-data-transform.model';
  */
 export class PoDataMessage extends PoDataTransform {
   /**
-   * Retorna a propriedade `portinari_sync_date`, responsável por informar a data da última sincronização no guia de
+   * Retorna a propriedade `po_sync_date`, responsável por informar a data da última sincronização no guia de
    * [API do PO UI](https://po-ui.io/guides/api).
    *
    * @returns {string} Nome do campo que contém a data da última sincronização.
    */
   getDateFieldName(): string {
-    return 'portinari_sync_date';
+    return 'po_sync_date';
   }
 
   /**

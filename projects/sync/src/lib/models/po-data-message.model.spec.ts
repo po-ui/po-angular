@@ -8,8 +8,8 @@ describe('PoDataMessage: ', () => {
   });
 
   describe('Methods: ', () => {
-    it('getDateFieldName: should return the word `portinari_sync_date`', () => {
-      expect(poDataMessage.getDateFieldName()).toEqual('portinari_sync_date');
+    it('getDateFieldName: should return the word `po_sync_date`', () => {
+      expect(poDataMessage.getDateFieldName()).toEqual('po_sync_date');
     });
 
     it('getItemsFieldName: should return the word `items`', () => {
