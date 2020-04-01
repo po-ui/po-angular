@@ -22,7 +22,7 @@ describe('PoCalendarService:', () => {
       expect(error.message).toBe('month must be a number (Jan is 0)');
     }
 
-    const weekFormatter = function(week?: any) {
+    const weekFormatter = function (week?: any) {
       return 0;
     };
     expect(service.monthDates(2017, 7, null, weekFormatter).length).toBe(5);

@@ -215,7 +215,7 @@ describe('PoLookupBaseComponent:', () => {
     spyOn(component, 'setViewValue');
     spyOn(component, <any>'cleanModel');
 
-    component.service.getObjectByValue = function(value: any) {
+    component.service.getObjectByValue = function (value: any) {
       return of(null);
     };
     component['keysDescription'] = ['value', 'label'];

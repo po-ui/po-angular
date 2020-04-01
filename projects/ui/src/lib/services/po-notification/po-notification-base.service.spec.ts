@@ -20,15 +20,15 @@ class PoNotificationService extends PoNotificationBaseService {
       injector: undefined,
       instance: {
         action: toaster.action,
-        poToasterAction: function() {
+        poToasterAction: function () {
           this.action(this);
         }
       },
       hostView: undefined,
       changeDetectorRef: undefined,
       componentType: undefined,
-      destroy: function() {},
-      onDestroy: function() {}
+      destroy: function () {},
+      onDestroy: function () {}
     };
     if (toaster.orientation === PoToasterOrientation.Bottom) {
       this.stackBottom.push(componentReference);
@@ -135,7 +135,7 @@ describe('PoNotificationService ', () => {
     const notification = {
       message: 'teste',
       orientation: PoToasterOrientation.Bottom,
-      action: function() {}
+      action: function () {}
     };
     service.success(notification);
 
@@ -148,7 +148,7 @@ describe('PoNotificationService ', () => {
     const notification = {
       message: 'teste',
       orientation: PoToasterOrientation.Top,
-      action: function() {}
+      action: function () {}
     };
     service.success(notification);
 

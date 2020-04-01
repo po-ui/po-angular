@@ -24,7 +24,7 @@ import { validatePropertyOnLifeCycle } from '../utils-decorators';
  */
 
 export function InputRequired() {
-  return function(target: any, property: string) {
+  return function (target: any, property: string) {
     const decoratorProperties: PropertyDecoratorInterface = { target, property };
     validatePropertyOnLifeCycle(decoratorProperties, 'ngOnInit', validateProperty);
   };

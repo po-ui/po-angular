@@ -30,7 +30,7 @@ const copyCollection = () => src([`${schematicsFolder}/collection.json`]).pipe(d
 const copyMigrations = () => src([`${schematicsFolder}/migrations.json`]).pipe(dest(distSchematicsFolder));
 
 /** SONAR */
-const sonarqube = task('sonarqube', function(callback) {
+const sonarqube = task('sonarqube', function (callback) {
   const token = argv.token || '';
 
   sonarqubeScanner(

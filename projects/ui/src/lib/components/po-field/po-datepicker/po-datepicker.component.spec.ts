@@ -439,7 +439,7 @@ describe('PoDatepickerComponent:', () => {
     const fakeEvent = {
       keyCode: 10,
       target: {
-        blur: function(e: any) {},
+        blur: function (e: any) {},
         selectionStart: 0
       }
     };

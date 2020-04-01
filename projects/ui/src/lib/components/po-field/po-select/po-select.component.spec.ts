@@ -80,8 +80,8 @@ describe('PoSelectComponent:', () => {
 
   it('should update model from onOptionClick Function', () => {
     const fakeThis = {
-      toggleButton: function() {},
-      updateModel: function(value, label) {}
+      toggleButton: function () {},
+      updateModel: function (value, label) {}
     };
 
     spyOn(fakeThis, 'updateModel');
@@ -113,8 +113,8 @@ describe('PoSelectComponent:', () => {
 
   it('should execute onModelChange Function', () => {
     const fakeThis = {
-      onModelChange: function() {},
-      ngModelChange: function() {}
+      onModelChange: function () {},
+      ngModelChange: function () {}
     };
 
     spyOn(fakeThis, 'onModelChange');
@@ -418,7 +418,7 @@ describe('PoSelectComponent:', () => {
 
     it('onKeydown: should call toggleButton and preventDefault when tab is typed and open is true', () => {
       const fakeThis = { open: true, toggleButton: () => {} };
-      const fakeEvent = { keyCode: 9, preventDefault: function() {} };
+      const fakeEvent = { keyCode: 9, preventDefault: function () {} };
 
       spyOn(fakeThis, 'toggleButton');
       spyOn(fakeEvent, 'preventDefault');
@@ -431,7 +431,7 @@ describe('PoSelectComponent:', () => {
 
     it('onKeydown: should not call toggleButton and preventDefault when tab is typed and open is false', () => {
       const fakeThis = { open: false, toggleButton: () => {} };
-      const fakeEvent = { keyCode: 9, preventDefault: function() {} };
+      const fakeEvent = { keyCode: 9, preventDefault: function () {} };
 
       spyOn(fakeThis, 'toggleButton');
       spyOn(fakeEvent, 'preventDefault');

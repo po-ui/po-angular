@@ -122,11 +122,7 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   }
 
   includeFilter(item, filters) {
-    return filters.some(filter =>
-      String(item)
-        .toLocaleLowerCase()
-        .includes(filter.toLocaleLowerCase())
-    );
+    return filters.some(filter => String(item).toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
   }
 
   onChangeDisclaimer(disclaimers) {

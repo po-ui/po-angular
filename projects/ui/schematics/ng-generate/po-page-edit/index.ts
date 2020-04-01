@@ -4,7 +4,7 @@ import { buildComponent } from '../build-component/build-component';
 import { Schema as ComponentOptions } from './schema';
 
 /** Scaffolds a new <name> component with <po-page-edit> */
-export default function(options: ComponentOptions): Rule {
+export default function (options: ComponentOptions): Rule {
   return chain([createPageEditComponent(options)]);
 }
 
