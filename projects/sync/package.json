@@ -11,19 +11,19 @@
     "url": "https://github.com/po-ui/po-angular"
   },
   "dependencies": {
-    "@ionic-native/core": "5.21.5",
-    "@ionic-native/network": "5.21.5",
+    "@ionic-native/core": "5.23.0",
+    "@ionic-native/network": "5.23.0",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^1.4.0"
   },
   "peerDependencies": {
-    "@angular/core": "~9.0.4",
-    "@ionic-native/core": "5.21.5",
-    "@ionic-native/network": "5.21.5",
+    "@angular/core": "~9.1.0",
+    "@ionic-native/core": "5.23.0",
+    "@ionic-native/network": "5.23.0",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^1.4.0",
     "rxjs": "~6.5.4",
     "rxjs-compat": "~6.5.4",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.3"
   }
 }

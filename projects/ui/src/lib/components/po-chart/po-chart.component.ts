@@ -72,9 +72,6 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
   @ViewChild('chartWrapper', { static: true }) chartWrapper: ElementRef;
 
-  @HostListener('window:resize')
-  onResize = () => this.windowResizeListener.next();
-
   constructor(
     public changeDetector: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -88,6 +85,9 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   get isChartGaugeType(): boolean {
     return this.type === PoChartType.Gauge;
   }
+
+  @HostListener('window:resize')
+  onResize = () => this.windowResizeListener.next();
 
   ngAfterViewInit() {
     this.initialized = true;

@@ -232,8 +232,8 @@ describe('PoPageJobSchedulerService:', () => {
     it(`convertToJobScheduler: should set 'firstExecutionHour' with 'replaceHourFirstExecution' return if 'firstExecutionHour'
       is defined`, () => {
       const jobSchedulerInternal = {
-        firstExecutionHour: new Date(),
-        firstExecution: new Date()
+        firstExecutionHour: new Date().toString(),
+        firstExecution: new Date().toString()
       };
 
       const replaceHourFirstExecutionReturn = '00:09';
@@ -268,7 +268,7 @@ describe('PoPageJobSchedulerService:', () => {
 
     it(`convertToJobScheduler: should delete 'executionParameter' if 'returnValidExecutionParameter' is empty`, () => {
       const jobSchedulerInternal = {
-        executionParameter: 'value',
+        executionParameter: {},
         firstExecution: '2018-02-20',
         processID: '1'
       };

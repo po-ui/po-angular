@@ -235,7 +235,10 @@ describe('PoI18nService:', () => {
 
       service.getLiterals().subscribe(() => {
         expect(service.getLanguage).toHaveBeenCalled();
-        expect(service['getLiteralsFromContextConstant']).toHaveBeenCalledWith(storageLanguage, ...params);
+        expect(service['getLiteralsFromContextConstant']).toHaveBeenCalledWith(
+          storageLanguage,
+          ...(params as [string, Array<string>, any])
+        );
         done();
       });
     });
@@ -253,7 +256,10 @@ describe('PoI18nService:', () => {
 
       service.getLiterals(options).subscribe(() => {
         expect(service.getLanguage).not.toHaveBeenCalled();
-        expect(service['getLiteralsFromContextConstant']).toHaveBeenCalledWith(options.language, ...params);
+        expect(service['getLiteralsFromContextConstant']).toHaveBeenCalledWith(
+          options.language,
+          ...(params as [string, Array<string>, any])
+        );
         done();
       });
     });

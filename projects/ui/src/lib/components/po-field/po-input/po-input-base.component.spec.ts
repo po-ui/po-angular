@@ -171,8 +171,8 @@ describe('PoInputBase:', () => {
 
   it('should call writeValueModel', () => {
     spyOn(component, 'writeValueModel');
-    component.writeValue(1);
-    expect(component.writeValueModel).toHaveBeenCalledWith(1);
+    component.writeValue('1');
+    expect(component.writeValueModel).toHaveBeenCalledWith('1');
   });
 
   describe('Properties:', () => {

@@ -170,10 +170,10 @@ describe('PoUploadDragDropDirective:', () => {
         disabled: false,
         directoryCompatible: true,
         invalidFileType: 0,
-        getOnlyDirectories: () => {
+        getOnlyDirectories: arg => {
           return { then: callback => callback() };
         },
-        sendFiles: () => {},
+        sendFiles: (arg1, arg2) => {},
         getOnlyFiles: () => {}
       };
 
@@ -399,13 +399,13 @@ describe('PoUploadDragDropDirective:', () => {
           }
         },
         fileChange: {
-          emit: () => {}
+          emit: arg => {}
         },
         literals: {
           invalidDropArea: 'invalid area'
         },
         setPipeArguments: () => {},
-        sendFeedback: () => {},
+        sendFeedback: arg => {},
         invalidFileType: true
       };
 
@@ -546,7 +546,7 @@ describe('PoUploadDragDropDirective:', () => {
           folders: 'folder',
           files: 'files'
         },
-        setPipeArguments: () => {}
+        setPipeArguments: (arg1, arg2) => {}
       };
 
       const fakeFiles = [
@@ -583,7 +583,7 @@ describe('PoUploadDragDropDirective:', () => {
           folders: 'folder',
           files: 'files'
         },
-        setPipeArguments: () => {}
+        setPipeArguments: (arg1, arg2) => {}
       };
 
       const fakeFiles = [

@@ -272,7 +272,7 @@ describe('PoDynamicViewBaseComponent:', () => {
 
       it('should apply `timePipe.transform` with default format case `type` is time', () => {
         const type = 'time';
-        const value = 150;
+        const value = '150';
         const defaultFormat = 'HH:mm:ss.ffffff';
 
         spyOn(component['timePipe'], 'transform');
@@ -284,7 +284,7 @@ describe('PoDynamicViewBaseComponent:', () => {
 
       it('should apply `timePipe.transform` with format case `type` is time', () => {
         const type = 'time';
-        const value = 150;
+        const value = '150';
         const format = 'HH:mm:ss';
 
         spyOn(component['timePipe'], 'transform');

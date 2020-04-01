@@ -103,7 +103,7 @@ describe('PoTableColumnIconComponent:', () => {
     it('getColor: should call `color` function and return string color.', () => {
       const fakeRow = (component.row = {});
       const fakeColumn = {
-        color: () => '',
+        color: (arg1, arg2) => '',
         value: 'po-icon-copy'
       };
       const expectedColor = 'po-text-color-08';
@@ -169,7 +169,7 @@ describe('PoTableColumnIconComponent:', () => {
       const fakeColumnIcon = {
         color: 'color-08',
         value: 'po-icon-copy',
-        action: () => true,
+        action: (arg1, arg2) => true,
         disabled: () => true
       };
       component.column = { property: 'columnIcon', type: 'icon', action: () => true };
@@ -190,7 +190,7 @@ describe('PoTableColumnIconComponent:', () => {
       const fakeColumnIcon = {
         color: 'color-08',
         value: 'po-icon-copy',
-        action: () => true,
+        action: (arg1, arg2) => true,
         disabled: () => false
       };
       component.column = { property: 'columnIcon', type: 'icon', action: () => {} };

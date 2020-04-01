@@ -501,7 +501,7 @@ describe('PoRichTextModalComponent:', () => {
         savedSelection: true,
         selection: {
           removeAllRanges: () => {},
-          addRange: () => {}
+          addRange: arg => {}
         }
       };
 

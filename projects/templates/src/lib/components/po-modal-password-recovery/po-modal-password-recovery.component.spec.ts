@@ -477,7 +477,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
       component['resetFormFields'](control);
 
-      expect(component['formReset']).toHaveBeenCalledWith(control);
+      expect(component['formReset']).toHaveBeenCalledWith(<any>control);
     });
 
     it('setActions: should set the modal buttons actions and labels', () => {

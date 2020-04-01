@@ -452,7 +452,7 @@ describe('PoDecimalComponent:', () => {
     const fakeEvent = {
       target: {
         value: '0,',
-        setSelectionRange: () => {}
+        setSelectionRange: (arg1, arg2) => {}
       }
     };
 
@@ -469,7 +469,7 @@ describe('PoDecimalComponent:', () => {
     const fakeEvent = {
       target: {
         value: '122',
-        setSelectionRange: () => {}
+        setSelectionRange: (arg1, arg2) => {}
       }
     };
 
@@ -484,7 +484,7 @@ describe('PoDecimalComponent:', () => {
     const fakeEvent = {
       target: {
         value: '12345',
-        setSelectionRange: () => {}
+        setSelectionRange: (arg1, arg2) => {}
       }
     };
 
