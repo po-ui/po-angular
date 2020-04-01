@@ -332,7 +332,7 @@ describe('PoSchemaService:', () => {
     it(`update: should call updateRecordId if recordId is defined and call save with record equal the
       value returned`, async () => {
       const record = {};
-      const updateRecordIdReturn = 'updateRecordIdReturn';
+      const updateRecordIdReturn = { value: 'updateRecordIdReturn' };
       const recordId = 'id';
 
       spyOn(PoSchemaUtil, 'getRecordId');

@@ -732,7 +732,7 @@ describe('PoRichTextBodyComponent:', () => {
         ctrlKey: 'true',
         target: {
           attributes: { href: { value: url } },
-          classList: { remove: () => {} }
+          classList: { remove: arg => {} }
         }
       };
 

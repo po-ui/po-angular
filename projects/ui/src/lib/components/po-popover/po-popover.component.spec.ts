@@ -173,7 +173,7 @@ describe('PoPopoverComponent:', () => {
       position: 'top',
       setPopoverPosition: () => {},
       setElementsControlPosition: () => {},
-      setOpacity: () => {}
+      setOpacity: arg => {}
     };
 
     spyOn(fakeThis, 'addScrollEventListener');

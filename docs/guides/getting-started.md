@@ -7,12 +7,12 @@ Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@9.0.5
+npm i -g @angular/cli@9.1.0
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@9.0.5
+yarn global add @angular/cli@9.1.0
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -36,17 +36,17 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "~9.0.5",
-    "@angular/common": "~9.0.5",
-    "@angular/compiler": "~9.0.5",
-    "@angular/core": "~9.0.5",
-    "@angular/forms": "~9.0.5",
-    "@angular/platform-browser": "~9.0.5",
-    "@angular/platform-browser-dynamic": "~9.0.5",
-    "@angular/router": "~9.0.5",
+    "@angular/animations": "~9.1.0",
+    "@angular/common": "~9.1.0",
+    "@angular/compiler": "~9.1.0",
+    "@angular/core": "~9.1.0",
+    "@angular/forms": "~9.1.0",
+    "@angular/platform-browser": "~9.1.0",
+    "@angular/platform-browser-dynamic": "~9.1.0",
+    "@angular/router": "~9.1.0",
     "rxjs": "~6.5.4",
-    "tslib": "^1.10.0",
-    "zone.js": "~0.10.2"
+    "tslib": "^1.11.1",
+    "zone.js": "~0.10.3"
     ...
   }
 ```

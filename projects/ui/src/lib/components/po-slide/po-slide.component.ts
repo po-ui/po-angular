@@ -84,15 +84,15 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, O
 
   @ViewChildren(PoSlideItemComponent) private itemsElements: QueryList<PoSlideItemComponent>;
 
+  constructor(private builder: AnimationBuilder) {
+    super();
+  }
+
   @HostListener('window:resize') onResize() {
     if (this.slide) {
       this.setSlideItemWidth();
       this.goToItem(this.currentSlideIndex);
     }
-  }
-
-  constructor(private builder: AnimationBuilder) {
-    super();
   }
 
   ngDoCheck() {

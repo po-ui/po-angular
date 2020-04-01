@@ -413,7 +413,7 @@ describe('PoLokiDriver', () => {
     it(`addCollection: should call 'db.addCollection' with 'options.storeName' and '{ unique: ['key'] }`, () => {
       const fakeThis = {
         db: {
-          addCollection: () => {}
+          addCollection: (arg1, arg2) => {}
         }
       };
       const fakeOptions = { storeName: 'store' };
@@ -428,7 +428,7 @@ describe('PoLokiDriver', () => {
     it(`clearCollection: should call 'collection.clear' with '{ removeIndices: false }'`, () => {
       const fakeThis = {
         collection: {
-          clear: () => {}
+          clear: arg => {}
         }
       };
       spyOn(fakeThis.collection, 'clear');
@@ -458,7 +458,7 @@ describe('PoLokiDriver', () => {
     it(`findAndRemoveItem: should call 'collection.findAndRemove' with '{ key: <keyParameter> }'`, () => {
       const fakeThis = {
         collection: {
-          findAndRemove: () => {}
+          findAndRemove: arg => {}
         }
       };
       const keyParameter = 'key1';
@@ -473,7 +473,7 @@ describe('PoLokiDriver', () => {
     it(`getCollection: should call 'db.getCollection' with 'options.storeName'`, () => {
       const fakeThis = {
         db: {
-          getCollection: () => {}
+          getCollection: arg => {}
         }
       };
       const fakeOptions = { storeName: 'store' };
@@ -488,7 +488,7 @@ describe('PoLokiDriver', () => {
     it(`databaseInitialize: should call 'getCollection' with 'options' and call 'hasCollection'`, () => {
       const fakeThis = {
         collection: undefined,
-        getCollection: () => {},
+        getCollection: arg => {},
         hasCollection: () => {},
         addCollection: () => {}
       };
@@ -510,7 +510,7 @@ describe('PoLokiDriver', () => {
         collection: undefined,
         getCollection: () => {},
         hasCollection: () => false,
-        addCollection: () => {}
+        addCollection: arg => {}
       };
       const fakeOptions = { storeName: 'store' };
       const fakeResolve = () => {};
@@ -546,7 +546,7 @@ describe('PoLokiDriver', () => {
     it(`getItemInCollectionBy: should call 'collection.by' with 'fieldKey' and 'key' parameters`, () => {
       const fakeThis = {
         collection: {
-          by: () => {}
+          by: (arg1, arg2) => {}
         }
       };
       const fakeFieldKey = 'fieldKey';
@@ -635,7 +635,7 @@ describe('PoLokiDriver', () => {
     it(`insertOrUpdate: should call 'update' with item with value and doesn't call 'insert' if has item parameter`, () => {
       const fakeThis = {
         collection: {
-          update: () => {},
+          update: arg => {},
           insert: () => {}
         }
       };
@@ -657,7 +657,7 @@ describe('PoLokiDriver', () => {
       const fakeThis = {
         collection: {
           update: () => {},
-          insert: () => {}
+          insert: arg => {}
         }
       };
       const itemParameter = undefined;
