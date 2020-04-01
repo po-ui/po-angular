@@ -676,8 +676,8 @@ describe('PoUploadComponent:', () => {
 
       component['updateFiles'](files);
 
-      expect(component['parseFiles']).toHaveBeenCalledWith(files);
-      expect(component['updateModel']).toHaveBeenCalledWith(files);
+      expect(component['parseFiles']).toHaveBeenCalledWith(<any>files);
+      expect(component['updateModel']).toHaveBeenCalledWith(<any>files);
     });
 
     it('updateFiles: should call `uploadFiles` with files if `autoUpload` is `true`', () => {
@@ -690,7 +690,7 @@ describe('PoUploadComponent:', () => {
 
       component['updateFiles'](files);
 
-      expect(component['uploadFiles']).toHaveBeenCalledWith(files);
+      expect(component['uploadFiles']).toHaveBeenCalledWith(<any>files);
       expect(component['updateModel']).toHaveBeenCalled();
     });
 

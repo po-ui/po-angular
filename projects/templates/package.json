@@ -14,16 +14,16 @@
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER"
   },
   "peerDependencies": {
-    "@angular/animations": "~9.0.4",
-    "@angular/common": "~9.0.4",
-    "@angular/compiler": "~9.0.4",
-    "@angular/core": "~9.0.4",
-    "@angular/forms": "~9.0.4",
-    "@angular/platform-browser": "~9.0.4",
-    "@angular/platform-browser-dynamic": "~9.0.4",
-    "@angular/router": "~9.0.4",
+    "@angular/animations": "~9.1.0",
+    "@angular/common": "~9.1.0",
+    "@angular/compiler": "~9.1.0",
+    "@angular/core": "~9.1.0",
+    "@angular/forms": "~9.1.0",
+    "@angular/platform-browser": "~9.1.0",
+    "@angular/platform-browser-dynamic": "~9.1.0",
+    "@angular/router": "~9.1.0",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "rxjs": "~6.5.4",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.3"
   }
 }

@@ -6,6 +6,7 @@ import { poLocaleDefault } from '../../utils/util';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 
 class PoTableComponent extends PoTableBaseComponent {
   calculateWidthHeaders() {}
@@ -835,11 +836,11 @@ describe('PoTableBaseComponent:', () => {
       spyOn(component, <any>'sortArray').and.callThrough();
 
       component.sortColumn(column);
-      expect(component.sortBy.emit).toHaveBeenCalledWith({ column, type: 'ascending' });
+      expect(component.sortBy.emit).toHaveBeenCalledWith({ column, type: PoTableColumnSortType.Ascending });
       expect(component['sortArray']).toHaveBeenCalled();
 
       component.sortColumn(column);
-      expect(component.sortBy.emit).toHaveBeenCalledWith({ column, type: 'descending' });
+      expect(component.sortBy.emit).toHaveBeenCalledWith({ column, type: PoTableColumnSortType.Descending });
       expect(component['sortArray']).toHaveBeenCalled();
     });
 
@@ -852,7 +853,7 @@ describe('PoTableBaseComponent:', () => {
 
       expect(component.showMore.emit).toHaveBeenCalledWith({
         column: component.sortedColumn.property,
-        type: 'ascending'
+        type: PoTableColumnSortType.Ascending
       });
     });
 
@@ -867,7 +868,7 @@ describe('PoTableBaseComponent:', () => {
 
       expect(component.showMore.emit).toHaveBeenCalledWith({
         column: component.sortedColumn.property,
-        type: 'descending'
+        type: PoTableColumnSortType.Descending
       });
     });
 

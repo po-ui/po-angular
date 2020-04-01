@@ -35,11 +35,11 @@ describe('PoNetworkService:', () => {
       const fromEventSpy = jasmine.createSpy('fromEvent').and.returnValue(of());
 
       spyOnProperty(rxjs, 'fromEvent', 'get').and.returnValue(fromEventSpy);
-      spyOn(Observable, 'create').and.returnValue(of({}));
+      spyOn(Observable, 'create').and.callThrough();
 
       poNetworkService['getNavigatorStatus']().subscribe(() => {
-        expect(fromEvent).toHaveBeenCalledWith(window, 'offline');
-        expect(fromEvent).toHaveBeenCalledWith(window, 'online');
+        expect(<any>fromEvent).toHaveBeenCalledWith(window, 'offline');
+        expect(<any>fromEvent).toHaveBeenCalledWith(window, 'online');
         expect(Observable.create).toHaveBeenCalled();
         done();
       });

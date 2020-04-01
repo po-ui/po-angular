@@ -156,9 +156,9 @@ describe('PoTableColumnManagerComponent:', () => {
 
     it(`onChangeVisibleColumns: should call 'getVisibleTableColumns' to set 'visibleColumnsChange'
       and call 'visibleColumnsChange.emit'`, () => {
-      const checkedColumns = ['initial', 'name'];
+      const checkedColumns = ['initial'];
 
-      const visibleColumnsChange = ['initial'];
+      const visibleColumnsChange = [{ label: 'initial' }];
 
       spyOn(component, <any>'getVisibleTableColumns').and.returnValue(visibleColumnsChange);
       spyOn(component.visibleColumnsChange, 'emit');
