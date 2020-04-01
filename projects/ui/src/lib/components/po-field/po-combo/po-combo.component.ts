@@ -506,9 +506,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
         !this.compareObjects(this.cacheOptions, this.visibleOptions) &&
         this.shouldMarkLetters)
     ) {
-      const labelInput = this.getInputValue()
-        .toString()
-        .toLowerCase();
+      const labelInput = this.getInputValue().toString().toLowerCase();
       const labelLowerCase = label.toLowerCase();
 
       const openTagBold = '<span class="po-font-text-large-bold">';

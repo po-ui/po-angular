@@ -5,5 +5,7 @@
   "tabWidth": 2,
   "semi": true,
   "bracketSpacing": true,
-  "quoteProps": "preserve"
+  "quoteProps": "preserve",
+  "arrowParens": "avoid",
+  "trailingComma": "none"
 }

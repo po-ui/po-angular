@@ -281,10 +281,7 @@ export class PoRichTextBodyComponent implements OnInit {
   private rgbToHex(rgb) {
     // Tratamento necessário para converter o código rgb para hexadecimal.
     const sep = rgb.indexOf(',') > -1 ? ',' : ' ';
-    rgb = rgb
-      .substr(4)
-      .split(')')[0]
-      .split(sep);
+    rgb = rgb.substr(4).split(')')[0].split(sep);
 
     let r = (+rgb[0]).toString(16);
     let g = (+rgb[1]).toString(16);

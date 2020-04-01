@@ -200,7 +200,7 @@ describe('PoBreadcrumbComponent:', () => {
       const fakeThis = {
         element: {
           nativeElement: {
-            querySelector: function(selector) {
+            querySelector: function (selector) {
               return { offsetWidth: 100 };
             }
           }
@@ -215,7 +215,7 @@ describe('PoBreadcrumbComponent:', () => {
       const fakeThis = {
         element: {
           nativeElement: {
-            querySelector: function(selector) {
+            querySelector: function (selector) {
               return { offsetWidth: 100 };
             }
           }
@@ -230,7 +230,7 @@ describe('PoBreadcrumbComponent:', () => {
       const fakeThis = {
         element: {
           nativeElement: {
-            querySelector: function(selector) {
+            querySelector: function (selector) {
               return { offsetWidth: 200 };
             }
           }

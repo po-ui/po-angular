@@ -441,7 +441,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   }
 
   private findParent(menus: Array<PoMenuItem>, menuItem: PoMenuItem): PoMenuItem {
-    const getParent = function(menuItems: Array<PoMenuItem>, id) {
+    const getParent = function (menuItems: Array<PoMenuItem>, id) {
       if (menuItems) {
         for (let index = 0; index < menuItems.length; index++) {
           const menu = menuItems[index];
@@ -461,7 +461,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   private findRootParent(menus: Array<PoMenuItem>, menu: PoMenuItem): PoMenuItem {
     const findParent = this.findParent;
 
-    const getRootParent = function(menuItems: Array<PoMenuItem>, menuItem): PoMenuItem {
+    const getRootParent = function (menuItems: Array<PoMenuItem>, menuItem): PoMenuItem {
       let parent = findParent(menuItems, menuItem);
 
       if (parent['level'] !== poMenuRootLevel) {

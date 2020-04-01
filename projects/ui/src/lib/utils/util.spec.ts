@@ -343,10 +343,10 @@ describe('Function convertIsoToDate:', () => {
 
 describe('Function callFunction:', () => {
   const context = {
-    getName: function() {
+    getName: function () {
       return 'PO';
     },
-    'getAge': function() {
+    'getAge': function () {
       return '2';
     }
   };

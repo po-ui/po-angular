@@ -127,7 +127,7 @@ describe('PoDialogComponent:', () => {
   });
 
   it('should be call destroy method from componentRef', () => {
-    const sourceObject = { componentRef: { destroy: function() {} } };
+    const sourceObject = { componentRef: { destroy: function () {} } };
     Object.assign(component, sourceObject);
 
     spyOn(sourceObject.componentRef, 'destroy');

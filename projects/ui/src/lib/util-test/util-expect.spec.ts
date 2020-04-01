@@ -155,7 +155,7 @@ export function changePhantomProperties(pageObject, property, returnValue) {
  */
 export function changeChromeProperties(pageObject, property, returnValue) {
   Object.defineProperty(pageObject, property, {
-    get: function() {
+    get: function () {
       return returnValue;
     }
   });

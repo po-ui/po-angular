@@ -12,7 +12,7 @@ describe('PoCleanBaseComponent', () => {
   const component = new PoClean();
 
   component['parentComponent'] = {
-    onChangePropagate: function() {}
+    onChangePropagate: function () {}
   };
 
   it('should be created', () => {
