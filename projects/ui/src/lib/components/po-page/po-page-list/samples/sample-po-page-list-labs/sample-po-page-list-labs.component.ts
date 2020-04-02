@@ -134,6 +134,7 @@ export class SamplePoPageListLabsComponent implements OnInit {
     this.disclaimerGroupTitle = undefined;
     this.filterModel = undefined;
     this.filter.placeholder = undefined;
+    this.filter.width = undefined;
     this.literals = '';
     this.title = 'PO Page List';
 
