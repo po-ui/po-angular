@@ -6,6 +6,7 @@ import { poLocaleDefault } from '../../utils/util';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoLanguageService } from '../../services';
 
 class PoTableComponent extends PoTableBaseComponent {
   calculateWidthHeaders() {}
@@ -14,6 +15,7 @@ class PoTableComponent extends PoTableBaseComponent {
 
 describe('PoTableBaseComponent:', () => {
   let dateService: PoDateService;
+  let languageService: PoLanguageService;
   let component: PoTableComponent;
   let actions: Array<PoTableAction>;
   let columns: Array<PoTableColumn>;
@@ -21,7 +23,8 @@ describe('PoTableBaseComponent:', () => {
 
   beforeEach(() => {
     dateService = new PoDateService();
-    component = new PoTableComponent(dateService);
+    languageService = new PoLanguageService();
+    component = new PoTableComponent(dateService, languageService);
 
     actions = [
       {
@@ -1115,40 +1118,40 @@ describe('PoTableBaseComponent:', () => {
     const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
 
     describe('p-literals:', () => {
-      it('should be in portuguese if browser is setted with an unsupported language', () => {
-        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
+      it('should be in portuguese if `getShortLanguage` return an unsupported language.', () => {
+        component['language'] = 'zw';
 
         component.literals = {};
 
         expect(component.literals).toEqual(poTableLiteralsDefault[poLocaleDefault]);
       });
 
-      it('should be in portuguese if browser is setted with `pt`', () => {
-        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      it('should be in portuguese if `getShortLanguage` return `pt`.', () => {
+        component['language'] = 'pt';
 
         component.literals = {};
 
         expect(component.literals).toEqual(poTableLiteralsDefault.pt);
       });
 
-      it('should be in english if browser is setted with `en`', () => {
-        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('en');
+      it('should be in english if `getShortLanguage` return `en`.', () => {
+        component['language'] = 'en';
 
         component.literals = {};
 
         expect(component.literals).toEqual(poTableLiteralsDefault.en);
       });
 
-      it('should be in spanish if browser is setted with `es`', () => {
-        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      it('should be in spanish if `getShortLanguage` return `es`.', () => {
+        component['language'] = 'es';
 
         component.literals = {};
 
         expect(component.literals).toEqual(poTableLiteralsDefault.es);
       });
 
-      it('should be in russian if browser is setted with `ru`', () => {
-        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      it('should be in russian if `getShortLanguage` return `ru`.', () => {
+        component['language'] = 'ru';
 
         component.literals = {};
 
@@ -1171,13 +1174,13 @@ describe('PoTableBaseComponent:', () => {
       it('should update property with default literals if is setted with invalid values', () => {
         const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+        component['language'] = poLocaleDefault;
 
         expectPropertiesValues(component, 'literals', invalidValues, poTableLiteralsDefault[poLocaleDefault]);
       });
 
       it('should get literals directly from poTableLiteralsDefault if it not initialized', () => {
-        spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+        component['language'] = 'pt';
         expect(component.literals).toEqual(poTableLiteralsDefault['pt']);
       });
     });
