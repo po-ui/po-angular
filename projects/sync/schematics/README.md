@@ -1,24 +1,24 @@
 # PO UI Schematics
 
-## ng update @po-ui/ng-components
+## ng update @po-ui/ng-sync
 
 Esse *schematic* é executado através do Angular CLI para oferecer suporte à atualização automática do PO UI em um projeto Angular.
 
 
 ### Como funciona
 
-No arquivo ```npm/@po-ui/ng-components/package.json ```, é declarado a chave `ng-update`. Isso indica ao Angular CLI que este projeto possui um conjunto de *schematics* de migração.
+No arquivo ```npm/@po-ui/ng-sync/package.json ```, é declarado a chave `ng-update`. Isso indica ao Angular CLI que este projeto possui um conjunto de *schematics* de migração.
 
 ```
   "ng-update": {
     "migrations": "./schematics/migrations.json",
     "packageGroup": [
-      "@po-ui/ng-components"
+      "@po-ui/ng-sync"
     ]
   }
 ```
 
-Quando os schematics forem analisados, ele tentará determinar se algum script de migração deve ser executado com base nas definições. As definições de migração podem ser encontradas em nosso arquivo `projects/ui/schematics/src/migration.json`. A execução `ng update` procurará scripts com base nesta coleção. Veja documentação do Angular sobre [ng-update](https://github.com/angular/angular-cli/blob/master/docs/specifications/update.md).
+Quando os schematics forem analisados, ele tentará determinar se algum script de migração deve ser executado com base nas definições. As definições de migração podem ser encontradas em nosso arquivo `projects/sync/schematics/src/migration.json`. A execução `ng update` procurará scripts com base nesta coleção. Veja documentação do Angular sobre [ng-update](https://github.com/angular/angular-cli/blob/master/docs/specifications/update.md).
 
 
 ### Como testar
@@ -50,14 +50,16 @@ Para testarmos o pacote, devemos incrementar a versão do mesmo,
 caso for uma versão beta devemos alterar a versão também no arquivo `migrations.json`,
 ter o npm registry local em execução, confirmando essas situações, podemos rodar o script abaixo:
 
-`> npm run build:ui && npm run publish:ui:local`
+`> npm run build:storage && npm run build:storage`
+
+`> npm run publish:storage:local && npm run publish:sync:local`
 
 Por fim, execute os comandos abaixo no seu projeto Angular:
 
-`> npm i --save @po-ui/ng-components`
+`> npm i --save @po-ui/ng-sync`
 
-`> ng update @po-ui/ng-components --next --from 1 --migrate-only`
+`> ng update @po-ui/ng-sync --next --from 1 --migrate-only`
 
-Pode ser utilizado o verdaccio para publicar os pacotes locais, como `@po-ui/style`, assim não precisamos instalar local e o fluxo fica mais próximo do oficial.
+Pode ser utilizado o verdaccio para publicar os pacotes locais, como `@po-ui/ng-storage`, assim não precisamos instalar local e o fluxo fica mais próximo do oficial.
 
 Se você precisar executar isso várias vezes, desfaça as alterações feitas pelo `ng update` para que o `package.json` volte ao número da versão original e execute `npm install` novamente antes de tentar outra atualização.
