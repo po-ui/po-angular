@@ -6,6 +6,7 @@ import { poLocaleDefault } from '../../utils/util';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoLanguageService } from '../../services';
 
 class PoTableComponent extends PoTableBaseComponent {
   calculateWidthHeaders() {}
@@ -14,6 +15,7 @@ class PoTableComponent extends PoTableBaseComponent {
 
 describe('PoTableBaseComponent:', () => {
   let dateService: PoDateService;
+  let languageService: PoLanguageService;
   let component: PoTableComponent;
   let actions: Array<PoTableAction>;
   let columns: Array<PoTableColumn>;
@@ -21,7 +23,8 @@ describe('PoTableBaseComponent:', () => {
 
   beforeEach(() => {
     dateService = new PoDateService();
-    component = new PoTableComponent(dateService);
+    languageService = new PoLanguageService();
+    component = new PoTableComponent(dateService, languageService);
 
     actions = [
       {

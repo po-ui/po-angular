@@ -26,6 +26,7 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
+import { PoLanguageService } from './../../services/po-language/po-language.service';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -115,9 +116,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     renderer: Renderer2,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
-    private router: Router
+    private router: Router,
+    languageService: PoLanguageService
   ) {
-    super(poDate);
+    super(poDate, languageService);
 
     this.parentRef = viewRef['_hostView'][8];
     this.differ = differs.find([]).create(null);
