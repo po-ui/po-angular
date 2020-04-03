@@ -15,6 +15,7 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
+import { PoLanguageService } from './../../services/po-language/po-language.service';
 
 export const poTableContainer = ['border', 'shadow'];
 export const poTableContainerDefault = 'border';
@@ -91,6 +92,8 @@ export abstract class PoTableBaseComponent implements OnChanges {
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
   private _selectable?: boolean;
+
+  protected language: string;
 
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
@@ -254,21 +257,21 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * </po-table>
    * ```
    *
-   *  > O objeto padrão de literais será traduzido de acordo com o idioma do *browser* (pt, en, es).
+   *  > O objeto padrão de literais será traduzido de acordo com o idioma no [`PoI18nService`](/documentation/po-i18n) ou no browser.
    */
   @Input('p-literals') set literals(value: PoTableLiterals) {
+    this._literals = {
+      ...poTableLiteralsDefault[poLocaleDefault],
+      ...poTableLiteralsDefault[browserLanguage()],
+      ...poTableLiteralsDefault[this.language]
+    };
     if (value instanceof Object && !(value instanceof Array)) {
-      this._literals = {
-        ...poTableLiteralsDefault[poLocaleDefault],
-        ...poTableLiteralsDefault[browserLanguage()],
-        ...value
-      };
-    } else {
-      this._literals = poTableLiteralsDefault[browserLanguage()];
+      this._literals = { ...this.literals, ...value };
     }
   }
+
   get literals() {
-    return this._literals || poTableLiteralsDefault[browserLanguage()];
+    return this._literals || poTableLiteralsDefault[this.language];
   }
 
   /**
@@ -520,7 +523,9 @@ export abstract class PoTableBaseComponent implements OnChanges {
     return this.sortedColumn.ascending ? PoTableColumnSortType.Ascending : PoTableColumnSortType.Descending;
   }
 
-  constructor(private poDate: PoDateService) {}
+  constructor(private poDate: PoDateService, languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.singleSelect || this.hideSelectAll) {

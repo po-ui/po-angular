@@ -18,6 +18,7 @@ import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfac
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
+import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 const PoTableColumnManagerMaxColumnsDefault = 99999;
 
@@ -46,6 +47,7 @@ export const poTableColumnManagerLiteralsDefault = {
 })
 export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestroy {
   private _maxColumns: number = PoTableColumnManagerMaxColumnsDefault;
+  protected language: string;
 
   columnsOptions: Array<PoCheckboxGroupOption> = [];
   literals = {
@@ -73,7 +75,10 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
 
   @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2, languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+    this.literals = { ...this.literals, ...poTableColumnManagerLiteralsDefault[this.language] };
+  }
 
   ngOnInit() {
     this.updateColumnsOptions(this.columns);
