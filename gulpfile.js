@@ -17,13 +17,18 @@ const templatesFolder = path.resolve(rootFolder, './projects/templates');
 const templatesSchematicsFolder = path.resolve(templatesFolder, './schematics');
 const distTemplatesSchematicsFolder = path.resolve(rootFolder, './dist/ng-templates/schematics');
 
-/** REPLACE VERSION: replace version of dist package.json to repo version */
+const syncFolder = path.resolve(rootFolder, './projects/sync');
+const syncSchematicsFolder = path.resolve(syncFolder, './schematics');
+const distSyncSchematicsFolder = path.resolve(rootFolder, './dist/ng-sync/schematics');
+
+/** REPLACE VERSION: replace version of dist/package.json to repo version */
 const replaceVersion = () =>
   src([`${rootFolder}/package.json`]).on('end', () => replaceVersionPlaceholders(distFolder));
 
 /** SCHEMATICS */
 const buildUiSchematics = () => run('npm run build:ui:schematics').exec();
 const buildTemplatesSchematics = () => run('npm run build:templates:schematics').exec();
+const buildSyncSchematics = () => run('npm run build:sync:schematics').exec();
 
 /** UI SCHEMATICS */
 const copyUiSchemas = () => src([`${uiSchematicsFolder}/**/*/schema.json`]).pipe(dest(distUiSchematicsFolder));
@@ -41,6 +46,9 @@ const copyTemplatesFiles = () =>
   );
 const copyTemplatesCollection = () =>
   src([`${templatesSchematicsFolder}/collection.json`]).pipe(dest(distTemplatesSchematicsFolder));
+
+/** SYNC SCHEMATICS */
+const copySyncMigrations = () => src([`${syncSchematicsFolder}/migrations.json`]).pipe(dest(distSyncSchematicsFolder));
 
 /** SONAR */
 const sonarqube = task('sonarqube', function (callback) {
@@ -75,3 +83,5 @@ exports.uiSchematics = series(
   buildUiSchematics,
   parallel(copyUiCollection, copyUiMigrations, copyUiSchemas, copyUiFiles)
 );
+
+exports.syncSchematics = series(buildSyncSchematics, parallel(copySyncMigrations));

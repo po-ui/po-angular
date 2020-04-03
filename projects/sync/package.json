@@ -10,6 +10,13 @@
     "type": "git",
     "url": "https://github.com/po-ui/po-angular"
   },
+  "ng-update": {
+    "migrations": "./schematics/migrations.json",
+    "packageGroup": [
+      "@po-ui/ng-sync",
+      "@po-ui/ng-storage"
+    ]
+  },
   "dependencies": {
     "@ionic-native/core": "5.23.0",
     "@ionic-native/network": "5.23.0",
