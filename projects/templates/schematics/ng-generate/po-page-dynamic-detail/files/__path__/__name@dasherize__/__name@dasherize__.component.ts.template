@@ -1,0 +1,23 @@
+import { Component, OnInit } from '@angular/core';
+
+import { PoPageDynamicDetailField } from '@po-ui/ng-templates';
+
+@Component({
+  selector: '<%= selector %>',
+  templateUrl: './<%= dasherize(name) %>.component.html',
+  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>']
+})
+export class <%= classify(name) %>Component implements OnInit {
+
+  // PLEASE ADD THE API URL SERVICE HERE
+  readonly apiService = 'http://localhost:8080/api';
+
+  readonly fields: Array<PoPageDynamicDetailField> = [
+    { property: 'id', label: 'User ID', key: true },
+  ];
+
+  constructor() { }
+
+  ngOnInit() { }
+
+}
