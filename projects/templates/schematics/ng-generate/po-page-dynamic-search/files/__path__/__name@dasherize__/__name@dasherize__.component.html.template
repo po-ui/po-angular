@@ -1,0 +1,7 @@
+<po-page-dynamic-search
+  p-title="<%= classify(name) %>"
+  [p-actions]="actions"
+  [p-filters]="filter">
+
+  <!-- BUILD YOUR CONTENT PAGE HERE -->
+</po-page-dynamic-search>
