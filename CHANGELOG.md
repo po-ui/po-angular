@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0-beta.2](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.1...2.0.0-beta.2) (2020-04-06)
+
+### Features
+
+* **packages:** atualiza pacotes do projeto com Angular@9.1.X ([9ac1ea8](https://github.com/po-ui/po-angular/commit/9ac1ea8d052b7e083a540f711f038bb685738092))
+* **packages:** atualização do prettier para versão 2.0.2 ([b3a204b](https://github.com/po-ui/po-angular/commit/b3a204b8e2a6fc146e31ab36a83c843371022acf))
+
+### Bug Fixes
+
+* **schematics:** altera todas ocorrencias encontradas no update ([e0dcf22](https://github.com/po-ui/po-angular/commit/e0dcf22b2437627b653e9170f0d2ea6ae595e73f))
+
+### Documentation
+
+* **packages:** adiciona README.md na distribuição dos pacotes ([98036ae](https://github.com/po-ui/po-angular/commit/98036aed783c42c92fd2485ebb56cab3ea6a2e6b))
+* **page-dynamic-detail:** atualização serviço do sample ([419f5b4](https://github.com/po-ui/po-angular/commit/419f5b499cc7934602d65c9a39d68354da5ba7fe))
+
 ## [2.0.0-beta.1](https://github.com/po-ui/po-angular/compare/v1.28.0...v2.0.0-beta.1) (2020-03-27)
 
 
