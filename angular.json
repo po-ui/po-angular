@@ -240,7 +240,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["projects/templates/tsconfig.lib.json", "projects/templates/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "projects/templates/schematics/**"]
           }
         }
       }
