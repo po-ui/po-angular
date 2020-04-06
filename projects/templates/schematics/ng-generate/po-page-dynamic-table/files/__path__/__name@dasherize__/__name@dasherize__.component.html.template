@@ -1,0 +1,7 @@
+<po-page-dynamic-table
+  p-title="<%= classify(name) %>"
+  [p-actions]="actions"
+  [p-service-api]="apiService">
+
+  <!-- BUILD YOUR CONTENT PAGE HERE -->
+</po-page-dynamic-table>
