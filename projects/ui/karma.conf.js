@@ -28,8 +28,8 @@ module.exports = function (config) {
           lines: 99
         },
         each: {
-          statements: 99,
           branches: 99,
+          statements: 99,
           lines: 99,
           functions: 99
         }
