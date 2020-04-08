@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.0-beta.3](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.2...2.0.0-beta.3) (2020-04-08)
+
+### Features
+
+* **templates:** cria schematics ngAdd e ngGenerate ([86252de](https://github.com/po-ui/po-angular/commit/86252debeaa983af3384f990f92e21068b5e52c2))
+
 ## [2.0.0-beta.2](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.1...2.0.0-beta.2) (2020-04-06)
 
 ### Features
