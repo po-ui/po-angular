@@ -435,12 +435,24 @@ describe('PoPageDynamicDetailComponent:', () => {
       expect(component['poDialogService'].confirm).toHaveBeenCalled();
     });
 
-    it('goBack: should call `history.back`', () => {
+    it('goBack: should call `history.back` if the received param is a boolean type', () => {
       spyOn(window.history, 'back');
+      spyOn(component['router'], <any>'navigate');
 
-      component['goBack']();
+      component['goBack'](true);
 
       expect(window.history.back).toHaveBeenCalled();
+      expect(component['router'].navigate).not.toHaveBeenCalled();
+    });
+
+    it('goBack: should call `router.navigate` if the received param is a string type', () => {
+      spyOn(component['router'], <any>'navigate');
+      spyOn(window.history, 'back');
+
+      component['goBack']('/home');
+
+      expect(component['router'].navigate).toHaveBeenCalled();
+      expect(window.history.back).not.toHaveBeenCalled();
     });
 
     it('openEdit: should call `navigateTo` with object that contains path, url and component properties. ', () => {
