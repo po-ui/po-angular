@@ -338,53 +338,6 @@ describe('PoComboComponent:', () => {
     expect(component.controlComboVisibility).not.toHaveBeenCalled();
   });
 
-  it('should get formatted label with startWith', () => {
-    component.isFiltering = true;
-    component.filterMode = PoComboFilterMode.startsWith;
-    component.safeHtml = (value: any) => value;
-    component.inputElement.nativeElement.value = 'val';
-
-    expect(component.getLabelFormatted('values')).toBe('<span class="po-font-text-large-bold">val</span>ues');
-  });
-
-  it('should get formatted label with contains', () => {
-    component.isFiltering = true;
-    component.filterMode = PoComboFilterMode.contains;
-    component.safeHtml = (value: any) => value;
-    component.inputElement.nativeElement.value = 'lue';
-
-    expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-large-bold">lue</span>s');
-  });
-
-  it('should get formatted label with endsWith', () => {
-    component.isFiltering = true;
-    component.filterMode = PoComboFilterMode.endsWith;
-    component.safeHtml = (value: any) => value;
-    component.inputElement.nativeElement.value = 'lues';
-
-    expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-large-bold">lues</span>');
-  });
-
-  it('should not get formatted label', () => {
-    component.isFiltering = false;
-    component.safeHtml = (value: any) => value;
-    component.inputElement.nativeElement.value = 'lues';
-
-    expect(component.getLabelFormatted('values')).toBe('values');
-  });
-
-  it('should not get formatted label when shouldMarkLetters is false', () => {
-    component.isFiltering = false;
-    component.service = component.defaultService;
-    component.shouldMarkLetters = false;
-    component.getInputValue = () => true;
-    component.compareObjects = (a, b) => false;
-    component.safeHtml = (value: any) => value;
-    component.inputElement.nativeElement.value = 'lues';
-
-    expect(component.getLabelFormatted('values')).toBe('values');
-  });
-
   it('should return a sanitized code', () => {
     const html = component.safeHtml('<b>values</b>');
     expect(html['changingThisBreaksApplicationSecurity']).toBe('<b>values</b>');
@@ -1315,6 +1268,98 @@ describe('PoComboComponent:', () => {
       component['onScroll']();
 
       expect(spyAdjustContainerPosition).toHaveBeenCalled();
+    });
+
+    it('sanitizeTagHTML: should replace < and > with &lt; and &gt; respectively', () => {
+      const expectedValue = '&lt;input&gt; Testando';
+      const value = '<input> Testando';
+
+      expect(component['sanitizeTagHTML'](value)).toBe(expectedValue);
+    });
+
+    it('sanitizeTagHTML: should return param value if it doesn`t contain < and >', () => {
+      const expectedValue = 'Testando';
+      const value = 'Testando';
+
+      expect(component['sanitizeTagHTML'](value)).toBe(expectedValue);
+    });
+
+    it('sanitizeTagHTML: should return empty value if param value is undefined', () => {
+      const expectedValue = '';
+      const value = undefined;
+
+      expect(component['sanitizeTagHTML'](value)).toBe(expectedValue);
+    });
+
+    it('getLabelFormatted: shouldn`t get formatted label with `endsWith` if inputValue isn`t found in label', () => {
+      const label = 'values';
+      const expectedValue = `<span class="po-font-text-large-bold">${label}</span>`;
+
+      component.isFiltering = true;
+      component.filterMode = PoComboFilterMode.endsWith;
+      component.safeHtml = (value: any) => value;
+      component.inputElement.nativeElement.value = 'othervalue';
+
+      expect(component.getLabelFormatted(label)).not.toBe(expectedValue);
+    });
+
+    it('getLabelFormatted: shouldn`t get formatted label with `contains` if inputValue isn`t found in label', () => {
+      const label = 'values';
+      const expectedValue = `<span class="po-font-text-large-bold">${label}</span>`;
+
+      component.isFiltering = true;
+      component.filterMode = PoComboFilterMode.contains;
+      component.safeHtml = (value: any) => value;
+      component.inputElement.nativeElement.value = 'othervalue';
+
+      expect(component.getLabelFormatted(label)).not.toBe(expectedValue);
+    });
+
+    it('getLabelFormatted: should get formatted label with startWith', () => {
+      component.isFiltering = true;
+      component.filterMode = PoComboFilterMode.startsWith;
+      component.safeHtml = (value: any) => value;
+      component.inputElement.nativeElement.value = 'val';
+
+      expect(component.getLabelFormatted('values')).toBe('<span class="po-font-text-large-bold">val</span>ues');
+    });
+
+    it('getLabelFormatted: should get formatted label with contains', () => {
+      component.isFiltering = true;
+      component.filterMode = PoComboFilterMode.contains;
+      component.safeHtml = (value: any) => value;
+      component.inputElement.nativeElement.value = 'lue';
+
+      expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-large-bold">lue</span>s');
+    });
+
+    it('getLabelFormatted: should get formatted label with endsWith', () => {
+      component.isFiltering = true;
+      component.filterMode = PoComboFilterMode.endsWith;
+      component.safeHtml = (value: any) => value;
+      component.inputElement.nativeElement.value = 'lues';
+
+      expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-large-bold">lues</span>');
+    });
+
+    it('getLabelFormatted: should not get formatted label', () => {
+      component.isFiltering = false;
+      component.safeHtml = (value: any) => value;
+      component.inputElement.nativeElement.value = 'lues';
+
+      expect(component.getLabelFormatted('values')).toBe('values');
+    });
+
+    it('getLabelFormatted: should not get formatted label when shouldMarkLetters is false', () => {
+      component.isFiltering = false;
+      component.service = component.defaultService;
+      component.shouldMarkLetters = false;
+      component.getInputValue = () => true;
+      component.compareObjects = (a, b) => false;
+      component.safeHtml = (value: any) => value;
+      component.inputElement.nativeElement.value = 'lues';
+
+      expect(component.getLabelFormatted('values')).toBe('values');
     });
   });
 
