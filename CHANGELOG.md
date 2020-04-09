@@ -1,6 +1,27 @@
 # Changelog
 
-## [2.0.0-beta.3](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.2...2.0.0-beta.3) (2020-04-08)
+## [2.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.3...v2.0.0-rc.1) (2020-04-09)
+
+### Features
+
+* **sync:** implementa ng update para v2 ([a62ac37](https://github.com/po-ui/po-angular/commit/a62ac372bec4b42ecbbcde8364b1ad70c0c9d8b2))
+* **templates:** cria schematics `ng add` e `ng generate` ([86252de](https://github.com/po-ui/po-angular/commit/86252debeaa983af3384f990f92e21068b5e52c2))
+
+
+### Code Refactoring
+
+* **sync:** deprecia a propriedade `portinari_sync_date` ([83f5d85](https://github.com/po-ui/po-angular/commit/83f5d851e0b8756e684dbee3d7ed153b31fc437a))
+
+### Bug Fixes
+
+* **combo:** corrige HTML Injection no `option.label` ([7f19f1b](https://github.com/po-ui/po-angular/commit/7f19f1bd763464f2b1b58e5372833bd8d95296a3))
+* **page-dynamic-detail:** corrige ação `back` com string ([5411472](https://github.com/po-ui/po-angular/commit/54114729e6b6b0dff75941e378b3e0557d2935eb))
+
+### Documentation
+
+* **migration:** atualiza documento com @po-ui/ng-sync ([889a4b5](https://github.com/po-ui/po-angular/commit/889a4b5fe5d3e511e853ed3419bb466674a3bc46))
+
+## [2.0.0-beta.3](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-04-08)
 
 ### Features
 
@@ -57,11 +78,11 @@ Depois: ``` <po-component p-auto-focus></po-component> ```
 
 Os nomes dos pacotes foram alterados para a seguinte nomenclatura:
 
-`@portinari/portinari-ui` ==> `@po-ui/ng-components`
-`@portinari/portinari-templates` ==> `@po-ui/ng-templates`
-`@portinari/portinari-code-editor` ==> `@po-ui/ng-code-editor`
-`@portinari/portinari-storage` ==> `@po-ui/ng-storage`
-`@portinari/portinari-sync` ==> `@po-ui/ng-sync`
+- `@portinari/portinari-ui` ==> `@po-ui/ng-components`
+- `@portinari/portinari-templates` ==> `@po-ui/ng-templates`
+- `@portinari/portinari-code-editor` ==> `@po-ui/ng-code-editor`
+- `@portinari/portinari-storage` ==> `@po-ui/ng-storage`
+- `@portinari/portinari-sync` ==> `@po-ui/ng-sync`
 
 * **interceptors:** altera inicial das chaves dos headers nos interceptors
 
