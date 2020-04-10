@@ -95,7 +95,7 @@ describe('PoChartBaseComponent:', () => {
 
   describe('Methods:', () => {
     it('onSeriesClick: should call `seriesClick.emit` with `event`', () => {
-      const eventMock = { target: '', name: 'value' };
+      const eventMock = { target: '', name: 'value', value: 1, category: 'value' };
       component.seriesClick = new EventEmitter();
 
       spyOn(component.seriesClick, 'emit');
@@ -106,7 +106,7 @@ describe('PoChartBaseComponent:', () => {
     });
 
     it('onSeriesHover: should call `seriesClick.emit` with `event`', () => {
-      const eventMock = { target: '', name: 'value' };
+      const eventMock = { target: '', name: 'value', value: 1, category: 'value' };
       component.seriesHover = new EventEmitter();
 
       spyOn(component.seriesHover, 'emit');

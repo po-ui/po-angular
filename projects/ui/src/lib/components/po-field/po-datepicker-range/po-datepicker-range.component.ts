@@ -11,6 +11,21 @@ const arrowRightKey = 39;
 const backspaceKey = 8;
 const poDatepickerRangeDateLengthDefault = 10;
 
+/* istanbul ignore next */
+const providers = [
+  {
+    provide: NG_VALUE_ACCESSOR,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoDatepickerRangeComponent),
+    multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoDatepickerRangeComponent),
+    multi: true
+  }
+];
 /**
  * @docsExtends PoDatepickerRangeBaseComponent
  *
@@ -41,18 +56,7 @@ const poDatepickerRangeDateLengthDefault = 10;
 @Component({
   selector: 'po-datepicker-range',
   templateUrl: './po-datepicker-range.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoDatepickerRangeComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoDatepickerRangeComponent),
-      multi: true
-    }
-  ]
+  providers
 })
 export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent implements AfterViewInit, OnInit {
   private poDatepickerRangeElement: ElementRef<any>;

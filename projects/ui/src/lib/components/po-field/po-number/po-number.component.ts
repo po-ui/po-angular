@@ -75,6 +75,7 @@ export class PoNumberComponent extends PoNumberBaseComponent {
    */
   @Input('p-step') step?: string = '1';
 
+  /* istanbul ignore next */
   constructor(el: ElementRef) {
     super(el);
   }

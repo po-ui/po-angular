@@ -22,48 +22,16 @@ module.exports = function (config) {
       thresholds: {
         emitWarning: false, // set to 'true' to not fail the test command when thresholds are not met
         global: {
-          statements: 96,
-          branches: 91,
-          functions: 92,
-          lines: 96
+          statements: 99,
+          branches: 99,
+          functions: 99,
+          lines: 99
         },
         each: {
-          statements: 80,
-          branches: 80,
-          lines: 80,
-          functions: 80,
-          overrides: {
-            'src/lib/components/po-page-blocked-user/po-page-blocked-user-reason/po-page-blocked-user-reason.component.ts': {
-              statements: 48,
-              lines: 44,
-              branches: 0,
-              functions: 14
-            },
-            'src/lib/components/po-page-blocked-user/po-page-blocked-user-contacts/po-page-blocked-user-contacts.component.ts': {
-              statements: 48,
-              lines: 46,
-              branches: 0,
-              functions: 16
-            },
-            'src/lib/components/po-page-dynamic-detail/po-page-dynamic.service.ts': {
-              statements: 58,
-              lines: 58,
-              branches: 8,
-              functions: 36
-            },
-            'src/lib/components/po-page-dynamic-edit/po-page-dynamic.service.ts': {
-              statements: 55,
-              lines: 54,
-              branches: 8,
-              functions: 27
-            },
-            'src/lib/components/po-page-dynamic-table/po-page-dynamic.service.ts': {
-              statements: 55,
-              lines: 54,
-              branches: 8,
-              functions: 27
-            }
-          }
+          statements: 99,
+          branches: 99,
+          lines: 99,
+          functions: 99
         }
       }
     },

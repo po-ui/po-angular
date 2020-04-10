@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (9.0.5):
+- [Angular CLI](https://cli.angular.io/) (9.1.0):
   - ```shell
-    npm install -g @angular/cli@9.0.5
+    npm install -g @angular/cli@9.1.0
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (5.4.16):
   - ```shell
@@ -51,28 +51,28 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/common": "~9.0.5",
-    "@angular/core": "~9.0.5",
-    "@angular/forms": "~9.0.5",
-    "@angular/platform-browser": "~9.0.5",
-    "@angular/platform-browser-dynamic": "~9.0.5",
-    "@angular/router": "~9.0.5",
+    "@angular/common": "~9.1.0",
+    "@angular/core": "~9.1.0",
+    "@angular/forms": "~9.1.0",
+    "@angular/platform-browser": "~9.1.0",
+    "@angular/platform-browser-dynamic": "~9.1.0",
+    "@angular/router": "~9.1.0",
     "@ionic-native/network": "5.21.5",
     "@ionic-native/core": "5.21.5",
     "@ionic-native/splash-screen": "5.21.5",
     "@ionic-native/status-bar": "5.21.5",
-    "@ionic/angular": "5.0.5",
+    "@ionic/angular": "5.1.0",
     "rxjs": "6.5.4",
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.900.4",
-    "@angular-devkit/core": "~9.0.5",
-    "@angular-devkit/schematics": "~9.0.5",
-    "@angular/cli": "~9.0.5",
-    "@angular/compiler": "~9.0.5",
-    "@angular/compiler-cli": "~9.0.5",
-    "typescript": "~3.7.5"
+    "@angular-devkit/build-angular": "^0.901.0",
+    "@angular-devkit/core": "~9.1.0",
+    "@angular-devkit/schematics": "~9.1.0",
+    "@angular/cli": "~9.1.0",
+    "@angular/compiler": "~9.1.0",
+    "@angular/compiler-cli": "~9.1.0",
+    "typescript": "~3.8.3"
   },
   ...
 ```

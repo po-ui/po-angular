@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Add my library to the project.",
+      "factory": "./ng-add/index",
+      "schema": "./ng-add/schema.json"
+    },
+    "po-page-dynamic-table": {
+      "description": "Create a component with po-page-dynamic-table",
+      "factory": "./ng-generate/po-page-dynamic-table/index",
+      "schema": "./ng-generate/po-page-dynamic-table/schema.json"
+    },
+    "po-page-dynamic-edit": {
+      "description": "Create a component with po-page-dynamic-edit",
+      "factory": "./ng-generate/po-page-dynamic-edit/index",
+      "schema": "./ng-generate/po-page-dynamic-edit/schema.json"
+    },
+    "po-page-dynamic-detail": {
+      "description": "Create a component with po-page-dynamic-detail",
+      "factory": "./ng-generate/po-page-dynamic-detail/index",
+      "schema": "./ng-generate/po-page-dynamic-detail/schema.json"
+    },
+    "po-page-dynamic-search": {
+      "description": "Create a component with po-page-dynamic-search",
+      "factory": "./ng-generate/po-page-dynamic-search/index",
+      "schema": "./ng-generate/po-page-dynamic-search/schema.json"
+    }
+  }
+}

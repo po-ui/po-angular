@@ -980,7 +980,7 @@ describe('PoMenuComponent:', () => {
         activeMenuItem: { label: 'active menu' },
         activateCollapseSubMenuItem: () => {},
         menuItemsService: {
-          sendToChildMenuClicked: () => {}
+          sendToChildMenuClicked: arg => {}
         },
         updateMenu: () => {}
       };

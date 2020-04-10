@@ -83,9 +83,7 @@ export class PoLoadingOverlayBaseComponent {
   }
 
   constructor(private languageService: PoLanguageService) {
-    if (!this.text) {
-      this.text = this.getTextDefault();
-    }
+    this.text = this.getTextDefault();
   }
 
   private getTextDefault(): string {

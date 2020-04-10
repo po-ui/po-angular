@@ -77,11 +77,27 @@ describe('PoNotificationService:', () => {
         orientation: PoToasterOrientation.Top
       });
 
-      expect(notificationService.stackTop.length === 1).toBeTruthy();
+      notificationService.success({
+        message: '',
+        orientation: PoToasterOrientation.Top
+      });
 
-      tick(3001);
+      expect(notificationService.stackTop.length === 2).toBeTruthy();
+
+      tick(3100);
 
       expect(notificationService.stackTop.length === 0).toBeTruthy();
     }));
+
+    it('should be a destroy toaster on close', () => {
+      const spy = spyOn(notificationService, 'destroyToaster');
+      const fakeRef = <any>{
+        instance: {
+          observableOnClose: { subscribe: callback => callback(fakeRef) }
+        }
+      };
+      notificationService['observableOnClose'](fakeRef);
+      expect(spy).toHaveBeenCalled();
+    });
   });
 });

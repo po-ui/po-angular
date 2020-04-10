@@ -264,7 +264,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
       component.showMore();
 
-      expect(component['loadData']).toHaveBeenCalledWith({ 0: 'paramValue', page: 2 });
+      expect(component['loadData']).toHaveBeenCalledWith(<any>{ 0: 'paramValue', page: 2 });
     });
 
     it('confirmRemove: should call `poDialogService.confirm`', () => {
@@ -347,7 +347,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
         tick();
 
-        expect(component['poPageDynamicService'].getResources).toHaveBeenCalledWith(fullParams);
+        expect(component['poPageDynamicService'].getResources).toHaveBeenCalledWith(<any>fullParams);
         expect(component.items).toEqual([...initialItems, ...response.items]);
         expect(component.hasNext).toEqual(response.hasNext);
         expect(component['page']).toEqual(response.page);

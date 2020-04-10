@@ -957,7 +957,7 @@ describe('PoDatepickerComponent:', () => {
         valueBeforeChange: '',
         timeOutChange: () => {},
         formatToDate: () => {},
-        onchange: { emit: () => {} }
+        onchange: { emit: arg => {} }
       };
 
       spyOn(fakeThis.onchange, 'emit');

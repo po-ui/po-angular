@@ -22,21 +22,16 @@ module.exports = function (config) {
       thresholds: {
         emitWarning: false, // set to 'true' to not fail the test command when thresholds are not met
         global: {
-          statements: 85,
-          branches: 84,
-          functions: 76,
-          lines: 85
+          statements: 99,
+          branches: 99,
+          functions: 99,
+          lines: 99
         },
         each: {
-          statements: 70,
-          branches: 70,
-          lines: 70,
-          functions: 70,
-          overrides: {
-            'src/lib/components/po-code-editor/po-code-editor.component.ts': {
-              functions: 64
-            }
-          }
+          statements: 99,
+          branches: 99,
+          lines: 99,
+          functions: 99
         }
       }
     },

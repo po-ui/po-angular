@@ -11,7 +11,7 @@ export class SamplePoPageDynamicDetailUserComponent {
   public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
 
   public readonly actions: PoPageDynamicDetailActions = {
-    back: true
+    back: '/documentation/po-page-dynamic-table'
   };
 
   public readonly breadcrumb: PoBreadcrumb = {

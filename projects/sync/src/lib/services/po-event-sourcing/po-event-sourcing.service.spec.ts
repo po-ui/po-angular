@@ -369,17 +369,16 @@ describe('PoEventSourcingService:', () => {
     });
 
     it('syncSend: should call selectOperation if itemOfQueue is defined', async () => {
+      const fakeItem = { dateTime: 12, id: 1, operation: PoEventSourcingOperation.Delete, record: {} };
+
       spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
 
-      spyOn(storageServiceMock, 'getFirstItem').and.returnValues(
-        Promise.resolve({ item: 'test' }),
-        Promise.resolve(undefined)
-      );
+      spyOn(storageServiceMock, 'getFirstItem').and.returnValues(Promise.resolve(fakeItem), Promise.resolve(undefined));
       spyOn(eventSourcingService, <any>'selectOperation');
 
       await eventSourcingService.syncSend();
 
-      expect(eventSourcingService['selectOperation']).toHaveBeenCalledWith({ item: 'test' });
+      expect(eventSourcingService['selectOperation']).toHaveBeenCalledWith(fakeItem);
     });
 
     it('syncSend: should not call selectOperation if itemOfQueue is falsy', async () => {
@@ -601,7 +600,7 @@ describe('PoEventSourcingService:', () => {
 
         expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
           eventSourcingItem,
-          new Error('Error'),
+          <any>new Error('Error'),
           true
         );
       });
@@ -616,7 +615,7 @@ describe('PoEventSourcingService:', () => {
 
         expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
           eventSourcingItem,
-          new Error('error'),
+          <any>new Error('error'),
           true
         );
 
@@ -633,7 +632,7 @@ describe('PoEventSourcingService:', () => {
 
         await eventSourcingService['deleteOperation'](eventSourcingItem);
 
-        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItem, response);
+        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItem, <any>response);
       });
 
       it('should call removeEventSourcingValidItem with response.status and item', async () => {
@@ -692,7 +691,8 @@ describe('PoEventSourcingService:', () => {
       });
     });
 
-    it('getBodyAndDate: should return response.body and set responseDate with "portinari_sync_date"', () => {
+    it(`getBodyAndDate: should return response.body and set responseDate with deprecated "portinari_sync_date" if
+      hasn't "po_sync_date"`, () => {
       const date = jasmine.any(Date);
 
       eventSourcingService.config = {
@@ -706,6 +706,48 @@ describe('PoEventSourcingService:', () => {
 
       const response = {
         body: { 'portinari_sync_date': date }
+      };
+
+      expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
+      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
+    });
+
+    it('getBodyAndDate: should return response.body and set responseDate with "po_sync_date"', () => {
+      const date = jasmine.any(Date);
+
+      eventSourcingService.config = {
+        type: PoNetworkType.none,
+        period: 0,
+        dataTransform: new PoDataTransformMock()
+      };
+
+      eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
+      eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
+
+      const response = {
+        body: { 'po_sync_date': date }
+      };
+
+      expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
+      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
+    });
+
+    it(`'getBodyAndDate: should return response.body and set responseDate with "po_sync_date" if
+      has "po_sync_date" and "portinari_sync_date"`, () => {
+      const syncDate = new Date(2013, 9, 23).getTime();
+      const date = new Date().getTime();
+
+      eventSourcingService.config = {
+        type: PoNetworkType.none,
+        period: 0,
+        dataTransform: new PoDataTransformMock()
+      };
+
+      eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
+      eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
+
+      const response = {
+        body: { 'po_sync_date': date, 'portinari_sync_date': syncDate }
       };
 
       expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
@@ -884,7 +926,11 @@ describe('PoEventSourcingService:', () => {
 
       expect(eventSourcingService['responseSubject']['next']).not.toHaveBeenCalled();
       expect(eventSourcingService['removeEventSourcingValidItem']).not.toHaveBeenCalled();
-      expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(itemEvent, new Error('error'), true);
+      expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
+        itemEvent,
+        <any>new Error('error'),
+        true
+      );
     });
 
     describe('insertEventSourcingQueue:', () => {
@@ -982,7 +1028,7 @@ describe('PoEventSourcingService:', () => {
 
         expect(eventSourcingService['poSchemaService']['update']).toHaveBeenCalledWith(
           schemaCustumerMock,
-          response.body,
+          <any>response.body,
           eventSourcingItemMock.record[PoSchemaUtil.syncInternalIdFieldName]
         );
 
@@ -1001,11 +1047,11 @@ describe('PoEventSourcingService:', () => {
         expect(eventSourcingService['updatePendingEventSourcing']).toHaveBeenCalledWith(
           eventSourcingItemMock,
           schemaCustumerMock.idField,
-          'value',
-          eventSourcingItems
+          <any>'value',
+          <any>eventSourcingItems
         );
 
-        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItemMock, response);
+        expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItemMock, <any>response);
       });
 
       it(`should call sendResponseSubject if sendServerItem returns an error and does not call
@@ -1028,7 +1074,7 @@ describe('PoEventSourcingService:', () => {
 
         expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
           eventSourcingItemMock,
-          new Error('error'),
+          <any>new Error('error'),
           true
         );
       });
@@ -1247,7 +1293,7 @@ describe('PoEventSourcingService:', () => {
     });
 
     it(`createEventSourcingList: should call 'createEventSourcingItem' with the corrects ids`, () => {
-      const dateTime = '123456';
+      const dateTime = 12;
 
       const summaryEventList = [
         { record: { customer: '1' }, operation: PoEventSourcingOperation.Insert, customRequestId: 'id' },
@@ -1410,7 +1456,7 @@ describe('PoEventSourcingService:', () => {
 
       expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
         eventSourcingItem,
-        new Error('Error'),
+        <any>new Error('Error'),
         true
       );
     });
@@ -1436,7 +1482,7 @@ describe('PoEventSourcingService:', () => {
 
       expect(eventSourcingService['removeEventSourcingValidItem']).toHaveBeenCalledWith(200, eventSourcingItem);
 
-      expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItem, response);
+      expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(eventSourcingItem, <any>response);
     });
 
     it(`updateOperation: should call sendResponseSubject with error if sendServerItem return a error
@@ -1454,7 +1500,7 @@ describe('PoEventSourcingService:', () => {
       expect(eventSourcingService['removeEventSourcingValidItem']).not.toHaveBeenCalled();
       expect(eventSourcingService['sendResponseSubject']).toHaveBeenCalledWith(
         eventSourcingItem,
-        new Error('error'),
+        <any>new Error('error'),
         true
       );
     });

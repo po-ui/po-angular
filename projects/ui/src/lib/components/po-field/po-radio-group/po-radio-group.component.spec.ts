@@ -156,27 +156,56 @@ describe('PoRadioGroupComponent:', () => {
         expect(component.radioLabels.toArray()[0].nativeElement.focus).not.toHaveBeenCalled();
         expect(component.radioLabels.toArray()[1].nativeElement.focus).not.toHaveBeenCalled();
       });
+
+      it('shouldn`t call `focus` of radio if `undefined` property of component is true', () => {
+        component.options = [{ label: 'Option 1', value: '1', disabled: true }];
+        component.disabled = false;
+
+        fixture.detectChanges();
+
+        const spy = spyOn(component.radioLabels.toArray()[0].nativeElement, 'focus');
+
+        component.focus();
+
+        expect(spy).not.toHaveBeenCalled();
+      });
     });
 
-    it('onKeyUp: should call `changeValue` when `isArrowKey` is true.', () => {
-      spyOn(component, 'changeValue');
-      component.onKeyUp(fakeEventArrowKey, 1);
-      expect(component.changeValue).toHaveBeenCalled();
-    });
+    describe('onKeyUp:', () => {
+      it('should call `changeValue` when `isArrowKey` is true.', () => {
+        spyOn(component, 'changeValue');
+        component.onKeyUp(fakeEventArrowKey, 1);
+        expect(component.changeValue).toHaveBeenCalled();
+      });
 
-    it('onKeyUp: should`nt call `changeValue` when `isArrowKey` is false.', () => {
-      const fakeEvent: any = {
-        keyCode: 30,
-        which: 30
-      };
+      it('should`nt call `changeValue` when `isArrowKey` is false.', () => {
+        const fakeEvent: any = {
+          keyCode: 30,
+          which: 20
+        };
 
-      spyOn(component, <any>'isArrowKey').and.returnValue(false);
-      spyOn(component, 'changeValue');
+        spyOn(component, <any>'isArrowKey').and.returnValue(false);
+        spyOn(component, 'changeValue');
 
-      component.onKeyUp(fakeEvent, 1);
+        component.onKeyUp(fakeEvent, 1);
 
-      expect(component['isArrowKey']).toHaveBeenCalledWith(30);
-      expect(component.changeValue).not.toHaveBeenCalled();
+        expect(component['isArrowKey']).toHaveBeenCalledWith(30);
+        expect(component.changeValue).not.toHaveBeenCalled();
+      });
+
+      it('should`nt call `changeValue` when `isArrowKey` is false.', () => {
+        const fakeEvent: any = {
+          which: 20
+        };
+
+        spyOn(component, <any>'isArrowKey').and.returnValue(false);
+        spyOn(component, 'changeValue');
+
+        component.onKeyUp(fakeEvent, 1);
+
+        expect(component['isArrowKey']).toHaveBeenCalledWith(20);
+        expect(component.changeValue).not.toHaveBeenCalled();
+      });
     });
 
     it('isArrowKey: should return true when key is between 37 and 40.', () => {

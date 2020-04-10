@@ -474,65 +474,67 @@ describe('PoTreeViewBaseComponent:', () => {
       expect(component['everyItemSelected'](<any>items)).toBe(false);
     });
 
-    it('getItemsWithParentSelected: should return [] and not call addItem if items is undefined', () => {
-      const spyAddItem = spyOn(component, <any>'addItem');
+    describe('getItemsWithParentSelected:', () => {
+      it('should return [] and not call addItem if items is undefined', () => {
+        const spyAddItem = spyOn(component, <any>'addItem');
 
-      const items = component['getItemsWithParentSelected']();
+        const items = component['getItemsWithParentSelected'](undefined, undefined, [1]);
 
-      expect(items).toEqual([]);
-      expect(spyAddItem).not.toHaveBeenCalled();
-    });
+        expect(items).toEqual([1]);
+        expect(spyAddItem).not.toHaveBeenCalled();
+      });
 
-    it('getItemsWithParentSelected: should call only 1 time getItemsWithParentSelected if items hasn`t subItems', () => {
-      const items = [{ label: 'Item 1', value: '1' }];
+      it('should call only 1 time getItemsWithParentSelected if items hasn`t subItems', () => {
+        const items = [{ label: 'Item 1', value: '1' }];
 
-      const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
-      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
+        const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
+        const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
 
-      const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
+        const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
 
-      expect(itemsWithParentSelected).toEqual(items);
-      expect(spyGetItemsWithParentSelected).toHaveBeenCalledTimes(1);
-      expect(spyAddItem).toHaveBeenCalled();
-    });
+        expect(itemsWithParentSelected).toEqual(items);
+        expect(spyGetItemsWithParentSelected).toHaveBeenCalledTimes(1);
+        expect(spyAddItem).toHaveBeenCalled();
+      });
 
-    it('getItemsWithParentSelected: should call only 2 time getItemsWithParentSelected if items has subItems ', () => {
-      const items = [{ label: 'Item 1', value: '1', subItems: [{ label: 'Item 1.2', value: '1.2' }] }];
-      const expectedValue = [
-        { label: 'Item 1', value: '1', selected: false, subItems: [{ label: 'Item 1.2', value: '1.2' }] }
-      ];
+      it('should call only 2 time getItemsWithParentSelected if items has subItems ', () => {
+        const items = [{ label: 'Item 1', value: '1', subItems: [{ label: 'Item 1.2', value: '1.2' }] }];
+        const expectedValue = [
+          { label: 'Item 1', value: '1', selected: false, subItems: [{ label: 'Item 1.2', value: '1.2' }] }
+        ];
 
-      const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
-      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
+        const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
+        const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
 
-      const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
+        const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
 
-      expect(itemsWithParentSelected).toEqual(expectedValue);
-      expect(spyGetItemsWithParentSelected).toHaveBeenCalledTimes(2);
-      expect(spyAddItem).toHaveBeenCalled();
-    });
+        expect(itemsWithParentSelected).toEqual(expectedValue);
+        expect(spyGetItemsWithParentSelected).toHaveBeenCalledTimes(2);
+        expect(spyAddItem).toHaveBeenCalled();
+      });
 
-    it('getItemsWithParentSelected: should return items with parent selected if child is selected', () => {
-      const items = [
-        {
-          label: 'Item 1',
-          value: '1',
-          subItems: [{ label: 'Item 1.2', value: '1.2', selected: true }]
-        }
-      ];
+      it('should return items with parent selected if child is selected', () => {
+        const items = [
+          {
+            label: 'Item 1',
+            value: '1',
+            subItems: [{ label: 'Item 1.2', value: '1.2', selected: true }]
+          }
+        ];
 
-      const expectedValue = [
-        {
-          label: 'Item 1',
-          value: '1',
-          selected: true,
-          subItems: [{ label: 'Item 1.2', value: '1.2', selected: true }]
-        }
-      ];
+        const expectedValue = [
+          {
+            label: 'Item 1',
+            value: '1',
+            selected: true,
+            subItems: [{ label: 'Item 1.2', value: '1.2', selected: true }]
+          }
+        ];
 
-      const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
+        const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
 
-      expect(itemsWithParentSelected).toEqual(expectedValue);
+        expect(itemsWithParentSelected).toEqual(expectedValue);
+      });
     });
   });
 });
