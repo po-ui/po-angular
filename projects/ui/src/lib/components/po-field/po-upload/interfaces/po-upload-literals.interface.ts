@@ -7,20 +7,22 @@
  */
 export interface PoUploadLiterals {
   /**
-   * @deprecated 3.X.X
+   * @deprecated 3.x.x
+   *
    * @description
    *
-   * **Deprecated**
+   * ***Deprecated 3.x.x***
    *
    * Texto exibido no label para cancelar o envio.
    */
   cancel?: string;
 
   /**
-   * @deprecated 3.X.X
+   * @deprecated 3.x.x
+   *
    * @description
    *
-   * **Deprecated**
+   * ***Deprecated 3.x.x***
    *
    * Texto exibido no label para excluir o arquivo.
    */
@@ -72,10 +74,11 @@ export interface PoUploadLiterals {
   startSending?: string;
 
   /**
-   * @deprecated 3.X.X
+   * @deprecated 3.x.x
+   *
    * @description
    *
-   * **Deprecated**
+   * ***Deprecated 3.x.x***
    *
    * Texto exibido no label para tentar novamente.
    */

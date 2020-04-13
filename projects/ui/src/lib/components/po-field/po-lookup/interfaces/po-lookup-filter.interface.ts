@@ -12,7 +12,9 @@ import { PoLookupResponseApi } from './po-lookup-response-api.interface';
  */
 export interface PoLookupFilter {
   /**
-   * **Deprecated**
+   * ***Deprecated 3.x.x***
+   *
+   * > Este método está depreciado, deve-se utilizar a método `getFilteredItems`.
    *
    * Método responsável por enviar um filtro para o serviço e receber os dados.
    *
@@ -21,14 +23,12 @@ export interface PoLookupFilter {
    *
    * Este método deve retornar um *Observable* com a resposta da API no formato da interface `PoLookupResponseApi`.
    *
-   * > Este método está depreciado, deve-se utilizar a método `getFilteredItems`.
-   *
    * @param {any} filter Utilizado pelo serviço para filtrar os dados.
    * @param {number} page Controla a paginação dos dados e recebe valor automaticamente a cada clique no botão 'Carregar mais resultados'.
    * @param {number} pageSize Quantidade de itens retornados cada vez que o serviço é chamado, por padrão é 10.
    * @param {any} filterParams Valor informado através da propriedade `p-filter-params`.
    *
-   * @deprecated 4.x.x
+   * @deprecated 3.x.x
    *
    */
   getFilteredData?(filter: any, page: number, pageSize?: number, filterParams?: any): Observable<PoLookupResponseApi>;
