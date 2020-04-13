@@ -292,10 +292,11 @@ export abstract class PoTableBaseComponent implements OnChanges {
   /**
    * @optional
    *
-   * @deprecated 2.X.X
+   * @deprecated 3.x.x
+   *
    * @description
    *
-   * **Deprecated**
+   * ***Deprecated 3.x.x***
    *
    * > Esta propriedade está depreciada, utilize a propriedade `p-selectable`.
    *
