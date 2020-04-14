@@ -4,6 +4,10 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
 import { PoCodeEditorRegister } from './po-code-editor-register.service';
 
+// variáveis relacionadas ao Monaco
+let loadedMonaco: boolean = false;
+let loadPromise: Promise<void>;
+
 declare const monaco: any;
 // tslint:disable-next-line
 declare const require: any;
@@ -52,8 +56,6 @@ const providers: Array<Provider> = [
 })
 export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements AfterViewInit, DoCheck {
   canLoad = false;
-  loadedMonaco = false;
-  loadPromise: Promise<void>;
 
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef;
 
@@ -63,8 +65,8 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
 
   /* istanbul ignore next */
   ngAfterViewInit(): void {
-    if (this.loadedMonaco) {
-      this.loadPromise.then(() => {
+    if (loadedMonaco) {
+      loadPromise.then(() => {
         setTimeout(() => {
           if (this.el.nativeElement.offsetWidth) {
             this.registerCustomLanguage();
@@ -75,8 +77,8 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
         });
       });
     } else {
-      this.loadedMonaco = true;
-      this.loadPromise = new Promise<void>((resolve: any) => {
+      loadedMonaco = true;
+      loadPromise = new Promise<void>((resolve: any) => {
         const onGotAmdLoader: any = () => {
           (<any>window).require.config({ paths: { 'vs': './assets/monaco/vs' } });
           (<any>window).require(['vs/editor/editor.main'], () => {
