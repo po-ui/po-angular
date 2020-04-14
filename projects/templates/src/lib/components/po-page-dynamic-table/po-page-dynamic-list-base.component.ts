@@ -140,8 +140,12 @@ export class PoPageDynamicListBaseComponent {
   /** Título da página. */
   @Input('p-title') title: string;
 
+  set columns(value) {
+    this._columns = [...value];
+  }
+
   get columns() {
-    return [...this._columns];
+    return this._columns;
   }
 
   get duplicates() {
@@ -158,7 +162,7 @@ export class PoPageDynamicListBaseComponent {
 
   private setFieldsProperties(fields: Array<any>) {
     this._filters = fields.filter(field => field.filter === true);
-    this._columns = fields.filter(field => field.visible === undefined || field.visible === true);
+    this.columns = fields.filter(field => field.visible === undefined || field.visible === true);
     this._keys = fields.filter(field => field.key === true).map(field => field.property);
     this._duplicates = fields.filter(field => field.duplicate === true).map(field => field.property);
   }

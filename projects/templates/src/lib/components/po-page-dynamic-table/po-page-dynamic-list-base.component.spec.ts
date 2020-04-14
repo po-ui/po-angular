@@ -41,6 +41,18 @@ describe('PoPageDynamicListBaseComponent:', () => {
       expectPropertiesValues(component, 'fields', validValues, validValues);
       expect(component['setFieldsProperties']).toHaveBeenCalled();
     });
+
+    it('columns: should return a new reference', () => {
+      const columns = [
+        { property: 'id', key: true },
+        { property: 'name', label: 'Name', filter: true, visible: true, gridColumns: 6 }
+      ];
+
+      component.columns = columns;
+
+      expect(component.columns).toEqual(columns);
+      expect(component.columns).not.toBe(columns);
+    });
   });
 
   describe('Methods:', () => {
@@ -81,13 +93,13 @@ describe('PoPageDynamicListBaseComponent:', () => {
         expect(component.filters).toEqual(filtersResult);
       });
 
-      it('should set `_columns` with all fields properties', () => {
+      it('should set `columns` with all fields properties', () => {
         component['setFieldsProperties'](fields);
 
         expect(component.columns).toEqual(fields);
       });
 
-      it('should set `_columns` with [] if fields is []', () => {
+      it('should set `columns` with [] if fields is []', () => {
         const fieldsEmpty = [];
 
         component['setFieldsProperties'](fieldsEmpty);
