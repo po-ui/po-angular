@@ -69,7 +69,7 @@
     "http-status-codes": "^1.4.0",
     "localforage": "1.7.3",
     "lokijs": "1.5.8",
-    "monaco-editor": "0.15.6",
+    "monaco-editor": "0.20.0",
     "rxjs": "~6.5.4",
     "rxjs-compat": "~6.5.4",
     "tslib": "^1.11.1",
