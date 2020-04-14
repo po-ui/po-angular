@@ -49,7 +49,7 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  * >
  * > <pre ngNonBindable>
  * > "assets": [
- * >    { "glob": "&#8727;&#8727;/&#8727;", "input": "node_modules/monaco-editor/min", "output": "/assets/monaco/" }
+ * >    { "glob": "&#42;&#42;/&#42;", "input": "node_modules/monaco-editor/min", "output": "/assets/monaco/" }
  * >  ]
  * > </pre>
  *
