@@ -110,9 +110,11 @@ export class PoPageListComponent extends PoPageListBaseComponent
   }
 
   filterSizeClass(width: number): string {
-    let smWidth = Math.max(this.filter.advancedAction ? 6 : 2, width);
-    let mdWidth = Math.max(this.filter.advancedAction ? 4 : 1, width);
-    if (this.filter.advancedAction) width = Math.max(width, 2);
+    const smWidth = Math.max(this.filter.advancedAction ? 6 : 2, width);
+    const mdWidth = Math.max(this.filter.advancedAction ? 4 : 1, width);
+    if (this.filter.advancedAction) {
+      width = Math.max(width, 2);
+    }
     return `po-sm-${smWidth} po-md-${mdWidth} po-lg-${width} po-xl-${width}`;
   }
 
