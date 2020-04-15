@@ -260,8 +260,8 @@
 <po-popup #popup [p-actions]="actions" [p-target]="popupTarget"> </po-popup>
 
 <ng-template #inputRadio let-row>
-  <input type="radio" class="po-radio-group-input" [class.po-radio-group-input-checked]="row.$selected" />
-  <label class="po-radio-group-label po-clickable" (click)="selectable ? selectRow(row) : 'javascript:;'"></label>
+  <input type="radio" class="po-table-radio" [class.po-table-radio-checked]="row.$selected" />
+  <label class="po-table-radio-label po-clickable" (click)="selectable ? selectRow(row) : 'javascript:;'"></label>
 </ng-template>
 
 <ng-template #inputCheckbox let-row>
