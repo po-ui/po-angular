@@ -301,7 +301,7 @@ describe('PoTableComponent:', () => {
 
     fixture.detectChanges();
 
-    const checkedColumns = tableElement.querySelectorAll('.po-radio-group-input-checked');
+    const checkedColumns = tableElement.querySelectorAll('.po-table-radio-checked');
     expect(checkedColumns.length).toBe(1);
 
     const selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
