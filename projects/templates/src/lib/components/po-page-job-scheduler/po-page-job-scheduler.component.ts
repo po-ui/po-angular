@@ -94,8 +94,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     private activatedRoute: ActivatedRoute,
     private poDialogService: PoDialogService,
     private poNotification: PoNotificationService,
-    private router: Router,
-    poPageJobSchedulerService: PoPageJobSchedulerService
+    protected poPageJobSchedulerService: PoPageJobSchedulerService
   ) {
     super(poPageJobSchedulerService);
   }
@@ -139,6 +138,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
       this.markAsDirtyInvalidControls(this.schedulerParameters.form.controls);
       return;
     }
+    this.setModelRecurrent();
 
     this.changePageActionsBySteps(this.step, stepNumber);
 
@@ -171,7 +171,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
       title: this.literals.confirmation,
       message: confirmMessage,
       confirm: () => {
-        const model = Object.assign({}, this.model);
+        const model = { ...this.model };
 
         this.save(model, paramId);
       }
@@ -230,5 +230,9 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
       : this.literals.saveNotificationSuccessSave;
 
     this.emitSuccessMessage(msgSuccess, saveOperation);
+  }
+
+  private setModelRecurrent() {
+    this.model.recurrent = this.model.periodicity === 'single' ? false : this.model.recurrent;
   }
 }

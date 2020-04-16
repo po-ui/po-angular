@@ -1,11 +1,12 @@
 import { AbstractControl } from '@angular/forms';
-import { Input, Directive } from '@angular/core';
+import { Input, Directive, OnDestroy } from '@angular/core';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
 
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
+import { Subscription } from 'rxjs';
 
 /**
  * @description
@@ -19,7 +20,9 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
  * Veja mais sobre os padrões utilizados nas requisições no [Guia de implementação de APIs](guides/api).
  */
 @Directive()
-export class PoPageJobSchedulerBaseComponent {
+export class PoPageJobSchedulerBaseComponent implements OnDestroy {
+  private _subscription = new Subscription();
+
   /** Objeto com as propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
 
@@ -160,21 +163,26 @@ export class PoPageJobSchedulerBaseComponent {
 
   constructor(protected poPageJobSchedulerService: PoPageJobSchedulerService) {}
 
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
+
   protected loadData(id: string | number) {
     if (!id) {
       this.model = new PoPageJobSchedulerInternal();
       return;
     }
 
-    this.poPageJobSchedulerService
-      .getResource(id)
-      .toPromise()
-      .then((response: PoJobSchedulerInternal) => {
-        this.model = response;
-      })
-      .catch(() => {
-        this.model = new PoPageJobSchedulerInternal();
-      });
+    this._subscription.add(
+      this.poPageJobSchedulerService.getResource(id).subscribe(
+        (response: PoJobSchedulerInternal) => {
+          this.model = response;
+        },
+        () => {
+          this.model = new PoPageJobSchedulerInternal();
+        }
+      )
+    );
   }
 
   protected markAsDirtyInvalidControls(controls: { [key: string]: AbstractControl }) {
