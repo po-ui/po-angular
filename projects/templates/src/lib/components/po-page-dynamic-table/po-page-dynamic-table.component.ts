@@ -1,7 +1,7 @@
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
-import { Subscription, Observable, EMPTY, throwError, concat } from 'rxjs';
+import { Subscription, Observable, EMPTY, concat } from 'rxjs';
 import { tap, switchMap } from 'rxjs/operators';
 
 import {
@@ -92,6 +92,9 @@ export const poPageDynamicTableLiteralsDefault = {
  *
  * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
  * e depois irá buscar da rota definida na propriedade serviceLoadApi
+ *
+ * > Caso o servidor retornar um erro ao recuperar o metadados, será repassado o metadados salvo em cache,
+ * se o cache não existe será disparado uma notificação.
  *
  * ```
  * {

@@ -66,7 +66,10 @@ export const poPageDynamicDetailLiteralsDefault = {
  * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
  *
  * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
- * e depois irá buscar da rota definida na propriedade serviceLoadApi
+ * e depois irá buscar da rota definida na propriedade serviceLoadApi.
+ *
+ * > Caso o servidor retornar um erro ao recuperar o metadados, será repassado o metadados salvo em cache,
+ * se o cache não existe será disparado uma notificação.
  *
  * ```
  * {

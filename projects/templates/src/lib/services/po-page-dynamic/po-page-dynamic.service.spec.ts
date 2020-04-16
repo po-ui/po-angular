@@ -1,10 +1,11 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { PoPageDynamicService } from './po-page-dynamic.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { PoPageDynamicTableMetaData } from '../../components';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams, HttpErrorResponse } from '@angular/common/http';
 
-describe('PoPageCustomizationService:', () => {
+import { PoPageDynamicService, poPageDynamicLiterals } from './po-page-dynamic.service';
+import { PoPageDynamicTableMetaData } from '../../components';
+
+describe('PoPageDynamicService:', () => {
   let poPageDynamicService: PoPageDynamicService;
   let httpMock: HttpTestingController;
 
@@ -16,6 +17,8 @@ describe('PoPageCustomizationService:', () => {
 
     poPageDynamicService = TestBed.inject(PoPageDynamicService);
     httpMock = TestBed.inject(HttpTestingController);
+
+    poPageDynamicService['language'] = 'en';
   });
 
   afterEach(() => {
@@ -98,6 +101,64 @@ describe('PoPageCustomizationService:', () => {
         });
 
         tick();
+      }));
+
+      it(`should call notification.warning, get metadata title and throw error if
+        catch error from api and haven't cache`, () => {
+        const mockErrorResponse = { status: 400, statusText: 'Bad Request' };
+
+        let errorResponse;
+        let successResponse;
+
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        const { errorRenderPage, notPossibleLoadMetadataPage } = poPageDynamicLiterals[
+          poPageDynamicService['language']
+        ];
+
+        const spyNotificationWarning = spyOn(poPageDynamicService['notification'], 'warning');
+
+        poPageDynamicService.getMetadata<PoPageDynamicTableMetaData>().subscribe(
+          response => (successResponse = response),
+          error => (errorResponse = error)
+        );
+
+        const req = httpMock.expectOne(request => request.url === '/test/metadata?type=list&version=');
+        req.flush('Invalid request parameters', mockErrorResponse);
+
+        expect(successResponse.title).toBe(errorRenderPage);
+        expect(spyNotificationWarning).toHaveBeenCalledWith(notPossibleLoadMetadataPage);
+        expect(errorResponse instanceof HttpErrorResponse).toBe(true);
+      });
+
+      it(`should get metadata cache if catch error from api`, fakeAsync(() => {
+        const mockCache = { version: '1', title: 'Custom Title' };
+        const mockErrorResponse = { status: 400, statusText: 'Bad Request' };
+
+        let errorResponse;
+        let successResponse;
+
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        poPageDynamicService.getMetadata<PoPageDynamicTableMetaData>('custom').subscribe();
+
+        httpMock.expectOne(request => request.url === '/test/metadata?type=custom&version=').flush(mockCache);
+
+        tick();
+
+        httpMock.verify();
+
+        poPageDynamicService.getMetadata<PoPageDynamicTableMetaData>('custom').subscribe(
+          response => (successResponse = response),
+          error => (errorResponse = error)
+        );
+
+        httpMock
+          .expectOne(request => request.url === '/test/metadata?type=custom&version=1')
+          .flush('Invalid request parameters', mockErrorResponse);
+
+        expect(successResponse.title).toBe(mockCache.title);
+        expect(errorResponse).toBe(undefined);
       }));
     });
 
