@@ -1,30 +1,37 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 const poPageBlockedUserContactItemMargin = 16;
 
 @Component({
   selector: 'po-page-blocked-user-contacts',
-  templateUrl: './po-page-blocked-user-contacts.component.html'
+  templateUrl: './po-page-blocked-user-contacts.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoPageBlockedUserContactsComponent implements AfterViewInit, OnChanges {
-  literals: Object;
-  overflowItem: boolean = false;
+export class PoPageBlockedUserContactsComponent {
+  private _email: string;
+  private _phone: string;
 
-  private mailText: string;
-  private phoneText: string;
+  overflowItem: boolean = true;
 
-  @Input('p-email') email: string;
+  @Input('p-email') set email(value: string) {
+    this._email = value;
 
-  @Input('p-phone') phone: string;
+    this.checkContactItemWidth();
+  }
+
+  get email() {
+    return this._email;
+  }
+
+  @Input('p-phone') set phone(value: string) {
+    this._phone = value;
+
+    this.checkContactItemWidth();
+  }
+
+  get phone() {
+    return this._phone;
+  }
 
   @ViewChild('contactGroup', { static: true }) contactGroup: ElementRef;
 
@@ -34,31 +41,19 @@ export class PoPageBlockedUserContactsComponent implements AfterViewInit, OnChan
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
-  ngAfterViewInit() {
-    this.checkContactItemWidth();
-    this.changeDetector.detectChanges();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.email || changes.phone) {
-      this.checkContactItemWidth();
-    }
-  }
-
   private checkContactItemWidth() {
-    if (!this.email || !this.phone) {
-      this.overflowItem = true;
-      return;
-    } else {
-      setTimeout(() => {
-        const phoneWidth = this.phoneItem.nativeElement.offsetWidth;
-        const mailWidth = this.mailItem.nativeElement.offsetWidth;
-        const contactGroupHalfWidth = this.contactGroup.nativeElement.offsetWidth / 2;
+    this.overflowItem = true;
 
-        this.overflowItem =
-          phoneWidth > contactGroupHalfWidth || mailWidth > contactGroupHalfWidth - poPageBlockedUserContactItemMargin;
-      });
+    if (this.phone && this.email) {
+      this.changeDetector.detectChanges();
+
+      const phoneWidth = this.phoneItem.nativeElement.offsetWidth;
+      const mailWidth = this.mailItem.nativeElement.offsetWidth;
+      const contactGroupHalfWidth =
+        this.contactGroup.nativeElement.offsetWidth / 2 - poPageBlockedUserContactItemMargin;
+
+      this.overflowItem =
+        phoneWidth > contactGroupHalfWidth || mailWidth > contactGroupHalfWidth - poPageBlockedUserContactItemMargin;
     }
-    this.changeDetector.detectChanges();
   }
 }
