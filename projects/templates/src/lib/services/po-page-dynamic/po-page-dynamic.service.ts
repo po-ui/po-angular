@@ -1,21 +1,51 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { merge, Observable, of, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+
+import { PoLanguageService, PoNotificationService } from '@po-ui/ng-components';
+
+import { PoPageDynamicLiterals } from './po-page-dynamic-literals.interface';
+
+export const poPageDynamicLiterals: { [key: string]: PoPageDynamicLiterals } = {
+  en: {
+    errorRenderPage: 'Error loading page',
+    notPossibleLoadMetadataPage: 'The page metadata could not be loaded'
+  },
+  es: {
+    errorRenderPage: 'Error al cargar la página',
+    notPossibleLoadMetadataPage: 'No se pudieron cargar los metadatos de la página.'
+  },
+  pt: {
+    errorRenderPage: 'Erro ao carregar a página',
+    notPossibleLoadMetadataPage: 'Não foi possível carregar os metadados da página'
+  },
+  ru: {
+    errorRenderPage: 'Ошибка загрузки страницы',
+    notPossibleLoadMetadataPage: 'Не удалось загрузить метаданные страницы'
+  }
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class PoPageDynamicService {
   private endpoint = '/';
+  private language: string;
   private metadata: string;
 
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notification: PoNotificationService,
+    languageService: PoLanguageService
+  ) {
+    this.language = languageService.getShortLanguage();
+  }
 
   configServiceApi(config: { endpoint?: string; metadata?: string } = {}) {
     this.endpoint = config.endpoint;
@@ -31,13 +61,24 @@ export class PoPageDynamicService {
 
     return this.http.get<T>(url).pipe(
       map((response: any) => {
-        if (response.version === cache.version) {
+        if (response.version !== undefined && response.version === cache.version) {
           return cache;
         }
 
         localStorage.setItem(key, JSON.stringify(response));
 
         return { ...cache, ...response };
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (Object.keys(cache).length) {
+          return of(cache);
+        }
+
+        const { errorRenderPage, notPossibleLoadMetadataPage } = poPageDynamicLiterals[this.language];
+
+        this.notification.warning(notPossibleLoadMetadataPage);
+
+        return merge(of({ title: errorRenderPage }), throwError(error));
       })
     );
   }
