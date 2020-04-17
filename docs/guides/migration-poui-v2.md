@@ -52,18 +52,18 @@ Nesta nova versão o nome dos pacotes foram alterados, de acordo com a tabela ab
 
 Também foi realizado remoções das propriedades, onde passam a valer as novas definições, veja a tabela abaixo:
 
-| Componentes                            | Anteriormente                            | Substituído por       |
-| ---------------------------------------| -----------------------------------------| ----------------------|
-| `PoFieldModule`                        | `[p-focus]`                              | `[p-auto-focus]`      |
-| `PoHttpResquestInterceptor`            | `X-Portinari-Screen-Lock`                | `X-PO-Screen-Lock`    |
-| `PoHttpResquestInterceptor`            | `X-Portinari-No-Count-Pending-Requests`  | `X-PO-No-Message`     |
-| `PoHttpInterceptor`                    | `X-Portinari-No-Message`                 | `X-PO-No-Message`     |
-| `PoPageEdit`                           | Possuir a ação `cancel() {}` no TS       | `(p-cancel)`          |
-| `PoPageEdit`                           | Possuir a ação `save() {}` no TS         | `(p-save)`            |
-| `PoPageEdit`                           | Possuir a ação `saveNew() {}` no TS      | `(p-save-new)`        |
-| `PoPageDetail`                         | Possuir a ação `back() {}` no TS         | `(p-back)`            |
-| `PoPageDetail`                         | Possuir a ação `edit() {}` no TS         | `(p-edit)`            |
-| `PoPageDetail`                         | Possuir a ação `remove() {}` no TS       | `(p-remove)`          |
+| Componentes                            | Anteriormente                            | Substituído por                   |
+| ---------------------------------------| -----------------------------------------| ----------------------------------|
+| `PoFieldModule`                        | `[p-focus]`                              | `[p-auto-focus]`                  |
+| `PoHttpResquestInterceptor`            | `X-Portinari-Screen-Lock`                | `X-PO-Screen-Lock`                |
+| `PoHttpResquestInterceptor`            | `X-Portinari-No-Count-Pending-Requests`  | `X-PO-No-Count-Pending-Requests`  |
+| `PoHttpInterceptor`                    | `X-Portinari-No-Message`                 | `X-PO-No-Message`                 |
+| `PoPageEdit`                           | Possuir a ação `cancel() {}` no TS       | `(p-cancel)`                      |
+| `PoPageEdit`                           | Possuir a ação `save() {}` no TS         | `(p-save)`                        |
+| `PoPageEdit`                           | Possuir a ação `saveNew() {}` no TS      | `(p-save-new)`                    |
+| `PoPageDetail`                         | Possuir a ação `back() {}` no TS         | `(p-back)`                        |
+| `PoPageDetail`                         | Possuir a ação `edit() {}` no TS         | `(p-edit)`                        |
+| `PoPageDetail`                         | Possuir a ação `remove() {}` no TS       | `(p-remove)`                      |
 
 
 #### Depreciação
