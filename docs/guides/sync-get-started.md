@@ -61,7 +61,7 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     "@ionic-native/core": "5.21.5",
     "@ionic-native/splash-screen": "5.21.5",
     "@ionic-native/status-bar": "5.21.5",
-    "@ionic/angular": "5.1.0",
+    "@ionic/angular": "5.0.7",
     "rxjs": "6.5.4",
     ...
   },
@@ -89,7 +89,7 @@ npm install
 
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 ```shell
-npm install @po/po-sync --save
+npm install @po-ui/ng-sync
 ```
 
 Após a instalação do `po-sync`, é necessário instalar o plugin
@@ -100,11 +100,6 @@ Para realizar essa instalação, execute o seguinte comando:
 
 ```shell
 ionic cordova plugin add cordova-plugin-network-information
-```
-
-Também será necessário adicionar o `rxjs-compat`:
-```shell
-npm install rxjs-compat --save
 ```
 
 ### Passo 4 - Utilizando o po-sync
@@ -122,8 +117,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 /* Imports adicionados */
-import { PoStorageModule } from '@po/po-storage';
-import { PoSyncModule } from '@po/po-sync';
+import { PoStorageModule } from '@po-ui/ng-storage';
+import { PoSyncModule } from '@po-ui/ng-sync';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -147,12 +142,6 @@ import { AppRoutingModule } from './app-routing.module';
 export class AppModule {}
 ```
 
-Caso apareça algum erro de importação em `SplashScreen` e `StatusBar`, altere a importação colocada por:
-```
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-```
-
 #### Passo 4.2 - Mapeando seu primeiro *schema*
 
 O `po-sync` utiliza a definição de `schemas`, onde cada `schema` representa um modelo de dados armazenado no dispositivo.
@@ -160,7 +149,7 @@ O `po-sync` utiliza a definição de `schemas`, onde cada `schema` representa um
 Crie o arquivo `src/app/home/conference-schema.constants.ts` e adicione o conteúdo abaixo:
 
 ```typescript
-import { PoSyncSchema } from '@po/po-sync';
+import { PoSyncSchema } from '@po-ui/ng-sync';
 
 export const conferenceSchema: PoSyncSchema = {
   getUrlApi: 'https://po-sample-api.herokuapp.com/conference/conference-api/api/v1/conferences',
@@ -187,11 +176,9 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
-import { PoSyncConfig, PoNetworkType, PoSyncService } from '@po/po-sync';
+import { PoSyncConfig, PoNetworkType, PoSyncService } from '@po-ui/ng-sync';
 
 import { conferenceSchema } from './home/conference-schema.constants';
-import { HomePage } from './home/home.page';
 
 @Component({
   selector: 'app-root',
@@ -199,14 +186,22 @@ import { HomePage } from './home/home.page';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  rootPage;
+  constructor(
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar,
+    private poSync: PoSyncService
+  ) {
+    this.initializeApp();
+  }
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private poSync: PoSyncService) {
-    platform.ready().then(() => {
-      statusBar.styleDefault();
-      splashScreen.hide();
+  initializeApp() {
+    this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
 
       this.initSync();
+
     });
   }
 
@@ -218,16 +213,9 @@ export class AppComponent {
 
     this.poSync.prepare(schemas, config).then(() => {
       this.poSync.sync();
-      this.rootPage = HomePage;
     });
   }
 }
-```
-
-Caso apareça algum erro de importação em `SplashScreen` e `StatusBar`, altere a importação colocada por:
-```
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 ```
 
 Após utilizar o método `PoSyncService.prepare()`, a aplicação estará pronta para sincronizar os dados através do método `PoSyncService.sync()`.
@@ -239,9 +227,7 @@ Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações
 ```typescript
 import { Component } from '@angular/core';
 
-import { NavController } from '@ionic/angular';
-
-import { PoSyncService } from '@po/po-sync';
+import { PoSyncService } from '@po-ui/ng-sync';
 
 @Component({
   selector: 'app-home',
@@ -252,7 +238,7 @@ export class HomePage {
 
   conference;
 
-  constructor(public navCtrl: NavController, private poSync: PoSyncService) {
+  constructor(private poSync: PoSyncService) {
     this.poSync.onSync().subscribe(() => this.loadHomePage());
   }
 
@@ -273,9 +259,9 @@ No construtor, foi realizado uma inscrição no método `PoSyncService.onSync()`
 
 No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 ```html
-<ion-content padding>
-  <ion-button full (click)="loadHomePage()">Buscar informações</ion-button>
-  <ion-button full color="danger" (click)="clear()">Apagar informações</ion-button>
+<ion-content class="ion-padding">
+  <ion-button expand="full" (click)="loadHomePage()">Buscar informações</ion-button>
+  <ion-button expand="full" color="danger" (click)="clear()">Apagar informações</ion-button>
 
   <ion-card *ngIf="conference">
     <ion-card-content>
