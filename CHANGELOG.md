@@ -1,49 +1,7 @@
 # Changelog
 
-## [2.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.3...v2.0.0-rc.1) (2020-04-09)
 
-### Features
-
-* **sync:** implementa ng update para v2 ([a62ac37](https://github.com/po-ui/po-angular/commit/a62ac372bec4b42ecbbcde8364b1ad70c0c9d8b2))
-* **templates:** cria schematics `ng add` e `ng generate` ([86252de](https://github.com/po-ui/po-angular/commit/86252debeaa983af3384f990f92e21068b5e52c2))
-
-
-### Code Refactoring
-
-* **sync:** deprecia a propriedade `portinari_sync_date` ([83f5d85](https://github.com/po-ui/po-angular/commit/83f5d851e0b8756e684dbee3d7ed153b31fc437a))
-
-### Bug Fixes
-
-* **combo:** corrige HTML Injection no `option.label` ([7f19f1b](https://github.com/po-ui/po-angular/commit/7f19f1bd763464f2b1b58e5372833bd8d95296a3))
-* **page-dynamic-detail:** corrige ação `back` com string ([5411472](https://github.com/po-ui/po-angular/commit/54114729e6b6b0dff75941e378b3e0557d2935eb))
-
-### Documentation
-
-* **migration:** atualiza documento com @po-ui/ng-sync ([889a4b5](https://github.com/po-ui/po-angular/commit/889a4b5fe5d3e511e853ed3419bb466674a3bc46))
-
-## [2.0.0-beta.3](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-04-08)
-
-### Features
-
-* **templates:** cria schematics ngAdd e ngGenerate ([86252de](https://github.com/po-ui/po-angular/commit/86252debeaa983af3384f990f92e21068b5e52c2))
-
-## [2.0.0-beta.2](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.1...2.0.0-beta.2) (2020-04-06)
-
-### Features
-
-* **packages:** atualiza pacotes do projeto com Angular@9.1.X ([9ac1ea8](https://github.com/po-ui/po-angular/commit/9ac1ea8d052b7e083a540f711f038bb685738092))
-* **packages:** atualização do prettier para versão 2.0.2 ([b3a204b](https://github.com/po-ui/po-angular/commit/b3a204b8e2a6fc146e31ab36a83c843371022acf))
-
-### Bug Fixes
-
-* **schematics:** altera todas ocorrencias encontradas no update ([e0dcf22](https://github.com/po-ui/po-angular/commit/e0dcf22b2437627b653e9170f0d2ea6ae595e73f))
-
-### Documentation
-
-* **packages:** adiciona README.md na distribuição dos pacotes ([98036ae](https://github.com/po-ui/po-angular/commit/98036aed783c42c92fd2485ebb56cab3ea6a2e6b))
-* **page-dynamic-detail:** atualização serviço do sample ([419f5b4](https://github.com/po-ui/po-angular/commit/419f5b499cc7934602d65c9a39d68354da5ba7fe))
-
-## [2.0.0-beta.1](https://github.com/po-ui/po-angular/compare/v1.28.0...v2.0.0-beta.1) (2020-03-27)
+## [2.0.0](https://github.com/po-ui/po-angular/compare/v1.28.0...v2.0.0) (2020-04-17)
 
 
 ### ⚠ BREAKING CHANGES
@@ -172,41 +130,58 @@ export class ExampleEdit {
 
 ### Features
 
-* **angular:** atualiza para a versão 9 ([89dd968](https://github.com/po-ui/po-angular/commit/89dd968790c71f64f22adbee31b969cb7a61c2a7))
+* **packages:** atualiza pacotes do projeto com `Angular@9.1.X `([9ac1ea8](https://github.com/po-ui/po-angular/commit/9ac1ea8d052b7e083a540f711f038bb685738092))
+* **packages:** atualização do prettier para versão `2.0.2` ([b3a204b](https://github.com/po-ui/po-angular/commit/b3a204b8e2a6fc146e31ab36a83c843371022acf))
 * **page-detail:** adiciona propriedades para informar as ações ([7fd1050](https://github.com/po-ui/po-angular/commit/7fd10505504a7b1065942882d5317e7cbe0969c2))
 * **page-edit:** adiciona propriedades para informar as ações ([49fb1c3](https://github.com/po-ui/po-angular/commit/49fb1c3ac3eeb59576f96f0e12e66f3d3c214d98))
-* **schematics:** implementa `ng update` para versão 2 ([ba496d3](https://github.com/po-ui/po-angular/commit/ba496d3bb3265285c57db363331c80b0b3139e8d))
 * **prettier:** inclusão do formatador prettier ([dff1281](https://github.com/po-ui/po-angular/commit/dff1281151d9cec5de6863f6edb9117bd1fab179))
+* **schematics:** implementa `ng update` para versão 2 ([ba496d3](https://github.com/po-ui/po-angular/commit/ba496d3bb3265285c57db363331c80b0b3139e8d))
+* **sync:** implementa ng update para v2 ([a62ac37](https://github.com/po-ui/po-angular/commit/a62ac372bec4b42ecbbcde8364b1ad70c0c9d8b2))
+* **templates:** cria schematics `ng add` e `ng generate` ([86252de](https://github.com/po-ui/po-angular/commit/86252debeaa983af3384f990f92e21068b5e52c2))
+
+### Code Refactoring
+
+* **fields:** remove propriedade `p-focus` ([d3ba2d5](https://github.com/po-ui/po-angular/commit/d3ba2d599d9029504a21bccb8e94a7477f78515b))
+* **interceptors:** altera inicial das chaves dos headers ([c64e3d4](https://github.com/po-ui/po-angular/commit/c64e3d49b4d5fba024a988e7de31fa52692a0296))
+* **packages:** altera nome dos pacotes ([3fd3255](https://github.com/po-ui/po-angular/commit/3fd3255a5de510e057330973df4da38fc0d79ec4))
+* **sync:** deprecia a propriedade `portinari_sync_date` ([83f5d85](https://github.com/po-ui/po-angular/commit/83f5d851e0b8756e684dbee3d7ed153b31fc437a))
 
 
 ### Bug Fixes
 
 * **chart:** corrige erros no console ([a9440b5](https://github.com/po-ui/po-angular/commit/a9440b5c64c7ee13326359e20611ab0ee5572ad6))
+* **code-editor:** corrige exibição do editor ([e470b4c](https://github.com/po-ui/po-angular/commit/e470b4c1e897c8769a117fae226b2b9500286186))
 * **combo:** passa métodos para OnChanges ([47e7ae1](https://github.com/po-ui/po-angular/commit/47e7ae1b01013713d68435d698dc0b21212e957a))
+* **combo:** corrige HTML Injection no `option.label` ([7f19f1b](https://github.com/po-ui/po-angular/commit/7f19f1bd763464f2b1b58e5372833bd8d95296a3))
 * **datepicker-range:** corrige erro ao mudar valor ([641b8b6](https://github.com/po-ui/po-angular/commit/641b8b691838aca769c133ebef93e520f0fda308))
+* **page-blocked-user:** corrige colunas de contatos ([a1516fd](https://github.com/po-ui/po-angular/commit/a1516fd609790b8957260d96e871e22efa964d11))
+* **page-dynamic-table:** corrige lentidão ([55201c3](https://github.com/po-ui/po-angular/commit/55201c3fb419414666870bdfe758bc2464ad5a20)), closes [#260](https://github.com/po-ui/po-angular/issues/260)
+* **page-dynamic-detail:** corrige ação `back` com string ([5411472](https://github.com/po-ui/po-angular/commit/54114729e6b6b0dff75941e378b3e0557d2935eb))
 * **page-dynamic-search:** corrige erro ao utilizar o filtro ([b2d9bf9](https://github.com/po-ui/po-angular/commit/b2d9bf92e6c0b916845e8e65318c652ca8d44819))
+* **page-job-scheduler:** corrige manipulação incorreta da recorrência ([73021dd](https://github.com/po-ui/po-angular/commit/73021dd08c5cd1b5ffc7ad4eee2d5bc13e76cb4b))
 * **page-list:** corrige erro ao utilizar o filtro ([3051b27](https://github.com/po-ui/po-angular/commit/3051b2723f632bb9eae1aad24da619b18ee7704c))
+* **schematics:** altera todas ocorrencias encontradas no update ([e0dcf22](https://github.com/po-ui/po-angular/commit/e0dcf22b2437627b653e9170f0d2ea6ae595e73f))
 * **slide:** passa métodos para OnChanges ([7684812](https://github.com/po-ui/po-angular/commit/76848123a725d748e4f4527dae1be94048058411))
 * **table:** corrige erro ao renderizar a tabela com container ([7e57e14](https://github.com/po-ui/po-angular/commit/7e57e14ca2457ca4829a6868e02df2defc4afaf5))
 * **table:** corrige erro ao utilizar o `p-height` ([3263df3](https://github.com/po-ui/po-angular/commit/3263df3d6a441b383e4a7eee721ef68a68bb4e53))
-
-### Code Refactoring
-
-* **fields:** remove propriedade `p-focus` ([d3ba2d5](https://github.com/po-ui/po-angular/commit/d3ba2d599d9029504a21bccb8e94a7477f78515b))
-* **packages:** altera nome dos pacotes ([3fd3255](https://github.com/po-ui/po-angular/commit/3fd3255a5de510e057330973df4da38fc0d79ec4))
-* **interceptors:** altera inicial das chaves dos headers ([c64e3d4](https://github.com/po-ui/po-angular/commit/c64e3d49b4d5fba024a988e7de31fa52692a0296))
+* **table:** corrige exibição das seleções únicas ([12fa03e](https://github.com/po-ui/po-angular/commit/12fa03ed3eda76fc4a62437e89236f1a80fb5966))
 
 ### Documentation
 
-* **getting-started:** atualiza para a nova versão ([dfe0c91](https://github.com/po-ui/po-angular/commit/dfe0c91f890d2f27439979225cf18720a6cc89a4))
-* **migration-thf:** atualiza para a nova versão ([4a4ec0b](https://github.com/po-ui/po-angular/commit/4a4ec0b1830220260265c04ede3ce74efee9b0d3))
-* **sync-getting-started:** atualiza para a nova versão ([7705327](https://github.com/po-ui/po-angular/commit/7705327d57aac7f976cfcfd56c8b2ec519ab5342))
-* **migration:** adiciona guia de migração para versão 2 ([bbdbb9b](https://github.com/po-ui/po-angular/commit/bbdbb9b943c7c79d4fbcc7605a2d694711aca350))
+* **code-editor:** correção caminho assets ([86f6117](https://github.com/po-ui/po-angular/commit/86f6117593db773cd148e2b2c251d3c703ec4c30))
 * **contributing:** remove menção a branch em fork ([4b82313](https://github.com/po-ui/po-angular/commit/4b82313c8c4f4a470265567e5fc1d315b1962470))
+* **docs:** informa a versão que as propriedades serão depreciadas no futuro ([9204b1c](https://github.com/po-ui/po-angular/commit/9204b1cf6998ae03260ce4cf2a4063f706cbaa75))
+* **getting-started:** atualiza para a nova versão ([dfe0c91](https://github.com/po-ui/po-angular/commit/dfe0c91f890d2f27439979225cf18720a6cc89a4))
+* **migration:** atualiza documento com @po-ui/ng-sync ([889a4b5](https://github.com/po-ui/po-angular/commit/889a4b5fe5d3e511e853ed3419bb466674a3bc46))
+* **migration:** adiciona guia de migração para versão 2 ([bbdbb9b](https://github.com/po-ui/po-angular/commit/bbdbb9b943c7c79d4fbcc7605a2d694711aca350))
+* **migration-thf:** atualiza para a nova versão ([4a4ec0b](https://github.com/po-ui/po-angular/commit/4a4ec0b1830220260265c04ede3ce74efee9b0d3))
+* **packages:** adiciona README.md na distribuição dos pacotes ([98036ae](https://github.com/po-ui/po-angular/commit/98036aed783c42c92fd2485ebb56cab3ea6a2e6b))
+* **page-dynamic-detail:** atualização serviço do sample ([419f5b4](https://github.com/po-ui/po-angular/commit/419f5b499cc7934602d65c9a39d68354da5ba7fe))
 * **page-dynamic-edit:** atualização serviço do sample ([ebb1a8a](https://github.com/po-ui/po-angular/commit/ebb1a8ad859ca272812bd5854e37d385b4903d75))
 * **page-dynamic-table:** atualização serviço do sample ([b682c2f](https://github.com/po-ui/po-angular/commit/b682c2f675f36379bd11d6920b3b1986812248bc))
 * **select:** atualização serviço do sample ([df3cbc6](https://github.com/po-ui/po-angular/commit/df3cbc6d604c15092b8aef54c5ea1b7e1c36ed62))
-
+* **sync-getting-started:** atualiza para a nova versão ([7705327](https://github.com/po-ui/po-angular/commit/7705327d57aac7f976cfcfd56c8b2ec519ab5342))
+* **sync-getting-started:** atualiza versão @ionic/angular ([efcb8fa](https://github.com/po-ui/po-angular/commit/efcb8fa8c95d2b3a90974e313160ed9cb33a701e))
 
 ## [1.28.0](https://github.com/po-ui/po-angular/compare/v1.27.1...v1.28.0) (2020-03-06)
 
