@@ -87,7 +87,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   ];
 
   @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
-  @ViewChild('schedulerParameters', { static: true }) schedulerParameters: { form: NgForm };
+  @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
 
   constructor(
     public poPageDynamicLookupService: PoPageJobSchedulerLookupService,
@@ -191,7 +191,12 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   }
 
   private isDisabledAdvance(): boolean {
-    return this.schedulerExecution ? this.schedulerExecution.form.invalid : false;
+    const componentByStep = {
+      1: this.schedulerExecution,
+      2: this.schedulerParameters
+    };
+
+    return componentByStep[this.step]?.form?.invalid || false;
   }
 
   private isDisabledBack(): boolean {

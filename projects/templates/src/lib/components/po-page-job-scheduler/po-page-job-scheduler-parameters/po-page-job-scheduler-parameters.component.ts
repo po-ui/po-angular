@@ -8,7 +8,7 @@ import { PoDynamicFormField } from '@po-ui/ng-components';
   templateUrl: 'po-page-job-scheduler-parameters.component.html'
 })
 export class PoPageJobSchedulerParametersComponent implements AfterViewInit {
-  @ViewChild('parametersForm', { static: true }) form: NgForm;
+  @ViewChild('parametersForm') form: NgForm;
 
   @Input('p-literals') literals = <any>{};
 
