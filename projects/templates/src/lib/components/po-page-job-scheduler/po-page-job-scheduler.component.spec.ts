@@ -367,8 +367,31 @@ describe('PoPageJobSchedulerComponent:', () => {
     }));
 
     describe('isDisabledAdvance', () => {
-      it(`should return 'true' if have 'schedulerExecution'`, () => {
+      it(`should return 'true' if 'step' is 2 and 'schedulerParameters.form.invalid' is true`, () => {
         const fakeThis = {
+          step: 2,
+          schedulerParameters: {
+            form: {
+              invalid: true
+            }
+          }
+        };
+
+        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
+      });
+
+      it(`should return 'false' if 'step' is 2 and 'schedulerParameters' is undefined`, () => {
+        const fakeThis = {
+          step: 2,
+          schedulerParameters: undefined
+        };
+
+        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
+      });
+
+      it(`should return 'true' if 'step' is 1 and 'schedulerExecution.form.invalid' is true`, () => {
+        const fakeThis = {
+          step: 1,
           schedulerExecution: {
             form: {
               invalid: true
@@ -376,19 +399,26 @@ describe('PoPageJobSchedulerComponent:', () => {
           }
         };
 
-        const functionTest = component['isDisabledAdvance'].call(fakeThis);
-
-        expect(functionTest).toBe(true);
+        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
       });
 
-      it(`should return 'false' if have 'schedulerExecution'`, () => {
+      it(`should return 'false' if 'step' is 1 and 'schedulerExecution' is undefined`, () => {
         const fakeThis = {
+          step: 1,
           schedulerExecution: undefined
         };
 
-        const functionTest = component['isDisabledAdvance'].call(fakeThis);
+        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
+      });
 
-        expect(functionTest).toBe(false);
+      it(`should return 'false' if 'step' is undefined`, () => {
+        const fakeThis = {
+          step: undefined,
+          schedulerExecution: undefined,
+          schedulerParameters: undefined
+        };
+
+        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
       });
     });
 
