@@ -193,7 +193,7 @@ describe('PoStorageService:', () => {
 
       const fakeThis = {
         requestIdlePromise: () => {},
-        getImmutableItem: () => {},
+        getImmutableItem: arg => {},
         idleQueue: {
           wrapCall: () => {}
         }
@@ -544,7 +544,7 @@ describe('PoStorageService:', () => {
 
       await poStorageService['defineLocalForageDriver'](localForageMock, driverOrder);
 
-      expect(localForageMock.defineDriver).toHaveBeenCalledWith('lokijs');
+      expect(localForageMock.defineDriver).toHaveBeenCalledWith(<any>'lokijs');
       expect(poStorageService['setDriver']).toHaveBeenCalledWith(localForageMock, driverOrder);
     });
 

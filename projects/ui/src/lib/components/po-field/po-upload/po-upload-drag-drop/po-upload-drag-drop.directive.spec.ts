@@ -170,10 +170,10 @@ describe('PoUploadDragDropDirective:', () => {
         disabled: false,
         directoryCompatible: true,
         invalidFileType: 0,
-        getOnlyDirectories: () => {
+        getOnlyDirectories: arg => {
           return { then: callback => callback() };
         },
-        sendFiles: () => {},
+        sendFiles: (arg1, arg2) => {},
         getOnlyFiles: () => {}
       };
 
@@ -215,7 +215,9 @@ describe('PoUploadDragDropDirective:', () => {
       expect(directive['getOnlyDirectories']).not.toHaveBeenCalled();
     });
 
-    it('getFilesFromEntry: should call `readFile` if `entry.isFile`', () => {
+    describe('getFilesFromEntry:', () => {});
+
+    it('should call `readFile` if `entry.isFile`', () => {
       const entry = {
         isFile: true,
         isDirectory: false,
@@ -233,7 +235,7 @@ describe('PoUploadDragDropDirective:', () => {
       expect(directive['readDirectory']).not.toHaveBeenCalled();
     });
 
-    it('getFilesFromEntry: should call `readDirectory` if entry.isDirectory', () => {
+    it('should call `readDirectory` if entry.isDirectory', () => {
       const entry = {
         isFile: false,
         isDirectory: true,
@@ -251,7 +253,25 @@ describe('PoUploadDragDropDirective:', () => {
       expect(directive['readFile']).not.toHaveBeenCalled();
     });
 
-    it('getOnlyDirectories: should call `webkitGetAsEntry`, increment `invalidFileType` and not to call `getFilesFromEntry`', () => {
+    it('should not call `readDirectory` if entry.isDirectory is false', () => {
+      const entry = {
+        isFile: false,
+        isDirectory: false,
+        file: callback => {
+          callback(callback);
+        }
+      };
+
+      spyOn(directive, <any>'readDirectory');
+      spyOn(directive, <any>'readFile');
+
+      directive['getFilesFromEntry'](entry);
+
+      expect(directive['readDirectory']).not.toHaveBeenCalled();
+      expect(directive['readFile']).not.toHaveBeenCalled();
+    });
+
+    it('should call `webkitGetAsEntry`, increment `invalidFileType` and not to call `getFilesFromEntry`', () => {
       const dataTransfer = [
         {
           webkitGetAsEntry: () => {
@@ -399,13 +419,13 @@ describe('PoUploadDragDropDirective:', () => {
           }
         },
         fileChange: {
-          emit: () => {}
+          emit: arg => {}
         },
         literals: {
           invalidDropArea: 'invalid area'
         },
         setPipeArguments: () => {},
-        sendFeedback: () => {},
+        sendFeedback: arg => {},
         invalidFileType: true
       };
 
@@ -546,7 +566,7 @@ describe('PoUploadDragDropDirective:', () => {
           folders: 'folder',
           files: 'files'
         },
-        setPipeArguments: () => {}
+        setPipeArguments: (arg1, arg2) => {}
       };
 
       const fakeFiles = [
@@ -583,7 +603,7 @@ describe('PoUploadDragDropDirective:', () => {
           folders: 'folder',
           files: 'files'
         },
-        setPipeArguments: () => {}
+        setPipeArguments: (arg1, arg2) => {}
       };
 
       const fakeFiles = [

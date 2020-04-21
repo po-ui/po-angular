@@ -249,7 +249,10 @@ describe('PoEntity:', () => {
 
       await poEntity['saveAll'](records, customRequestIds);
 
-      expect(poEntity['eventSourcing']['createBatchEvents']).toHaveBeenCalledWith(poEntity['schema'].name, batchEvents);
+      expect(poEntity['eventSourcing']['createBatchEvents']).toHaveBeenCalledWith(
+        poEntity['schema'].name,
+        <any>batchEvents
+      );
       expect(poEntity['createEventOperation']).toHaveBeenCalledWith(records[0], updatedRecords[0], customRequestIds[0]);
       expect(poEntity['createEventOperation']).toHaveBeenCalledWith(records[2], updatedRecords[2], customRequestIds[2]);
     });

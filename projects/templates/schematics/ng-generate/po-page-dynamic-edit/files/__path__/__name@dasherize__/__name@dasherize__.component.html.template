@@ -1,0 +1,7 @@
+<po-page-dynamic-edit
+  p-title="<%= classify(name) %>"
+  [p-service-api]="apiService"
+  [p-fields]="fields">
+
+  <!-- BUILD YOUR CONTENT PAGE HERE -->
+</po-page-dynamic-edit>

@@ -156,9 +156,9 @@ describe('PoTableColumnManagerComponent:', () => {
 
     it(`onChangeVisibleColumns: should call 'getVisibleTableColumns' to set 'visibleColumnsChange'
       and call 'visibleColumnsChange.emit'`, () => {
-      const checkedColumns = ['initial', 'name'];
+      const checkedColumns = ['initial'];
 
-      const visibleColumnsChange = ['initial'];
+      const visibleColumnsChange = [{ label: 'initial' }];
 
       spyOn(component, <any>'getVisibleTableColumns').and.returnValue(visibleColumnsChange);
       spyOn(component.visibleColumnsChange, 'emit');
@@ -324,24 +324,37 @@ describe('PoTableColumnManagerComponent:', () => {
       expect(result).toEqual(columnsExpected);
     });
 
-    it(`initializeListeners: should call 'renderer.listen' to set 'resizeListener'`, () => {
-      const resizeListenerFunction = () => {};
+    describe('initializeListeners:', () => {
+      it(`should call 'renderer.listen' to set 'resizeListener'`, () => {
+        const resizeListenerFunction = () => {};
 
-      spyOn(component['renderer'], 'listen').and.returnValue(resizeListenerFunction);
+        spyOn(component['renderer'], 'listen').and.returnValue(resizeListenerFunction);
 
-      component['initializeListeners']();
+        component['initializeListeners']();
 
-      expect(component['resizeListener']).toBe(resizeListenerFunction);
-    });
+        expect(component['resizeListener']).toBe(resizeListenerFunction);
+      });
 
-    it(`initializeListeners: should call 'popover.close' into callback of renderer.listen`, () => {
-      component.popover = <any>{ close: () => {} };
-      spyOn(component.popover, 'close');
-      spyOn(component['renderer'], 'listen').and.callFake((window, resize, callback: any) => callback());
+      it(`should call 'popover.close' into callback of renderer.listen`, () => {
+        component.popover = <any>{ close: () => {} };
+        spyOn(component.popover, 'close');
+        spyOn(component['renderer'], 'listen').and.callFake((window, resize, callback: any) => callback());
 
-      component['initializeListeners']();
+        component['initializeListeners']();
 
-      expect(component.popover.close).toHaveBeenCalled();
+        expect(component.popover.close).toHaveBeenCalled();
+      });
+
+      it(`should not call 'popover.close' into callback of renderer.listen if it is undefined`, () => {
+        component.popover = <any>{ close: () => {} };
+        const spy = spyOn(component.popover, 'close');
+        component.popover = undefined;
+        spyOn(component['renderer'], 'listen').and.callFake((window, resize, callback: any) => callback());
+
+        component['initializeListeners']();
+
+        expect(spy).not.toHaveBeenCalled();
+      });
     });
 
     it(`isDisableColumn: should return true if 'visibleColumns' equals 'maxColumns' and 'visibleColumns'

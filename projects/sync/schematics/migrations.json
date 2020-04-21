@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "migration-v2": {
+      "version": "2.0.0-rc.1",
+      "description": "Atualiza @po-ui/ng-sync para v2",
+      "factory": "./ng-update/index#updateToV2"
+    }
+  }
+}

@@ -20,6 +20,23 @@ import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
 
+/* istanbul ignore next */
+const providers = [
+  PoControlPositionService,
+  {
+    provide: NG_VALUE_ACCESSOR,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoMultiselectComponent),
+    multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoMultiselectComponent),
+    multi: true
+  }
+];
+
 /**
  * @docsExtends PoMultiselectBaseComponent
  *
@@ -48,19 +65,7 @@ const poMultiselectContainerPositionDefault = 'bottom';
 @Component({
   selector: 'po-multiselect',
   templateUrl: './po-multiselect.component.html',
-  providers: [
-    PoControlPositionService,
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoMultiselectComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoMultiselectComponent),
-      multi: true
-    }
-  ]
+  providers
 })
 export class PoMultiselectComponent extends PoMultiselectBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
   @ViewChild('dropdownElement', { read: ElementRef, static: true }) dropdownElement: ElementRef;

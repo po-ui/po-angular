@@ -80,6 +80,19 @@ describe('PoTableDetailComponent', () => {
       component.detail = { columns: [{ property: 'tour', label: 'Tour' }], typeHeader: 'none' };
       expect(component.typeHeaderInline).toBeFalsy();
     });
+
+    it('should return `true` in `detailColumns` when detail has columns', () => {
+      component.detail = { columns: [{ property: 'tour', label: 'Tour' }], typeHeader: 'inline' };
+      expect(component.detailColumns).toEqual([{ property: 'tour', label: 'Tour' }]);
+    });
+
+    it('should return `false` in `detailColumns` when detail has no columns', () => {
+      component.detail = undefined;
+      expect(component.detailColumns).toEqual([]);
+
+      component.detail = <any>{ typeHeader: 'none' };
+      expect(component.detailColumns).toEqual([]);
+    });
   });
 
   describe('Methods: ', () => {
@@ -116,9 +129,18 @@ describe('PoTableDetailComponent', () => {
       it('should return `poTableDetail` columns as an instance of array', () => {
         const columns = [{ property: 'tour', label: 'Tour' }];
         const poTableDetail = component['returnPoTableDetailObject'](<any>columns);
+        expect(poTableDetail).toEqual({ columns: [{ property: 'tour', label: 'Tour' }] });
+      });
 
-        expect(typeof poTableDetail === 'object').toBeTruthy();
-        expect(poTableDetail.columns instanceof Array).toBeTruthy();
+      it('should return `poTableDetail` nested columns', () => {
+        const columns = [{ columns: [{ property: 'tour', label: 'Tour' }] }, { property: 'Plain', label: 'Plain' }];
+        const poTableDetail = component['returnPoTableDetailObject']({ columns });
+        expect(poTableDetail).toEqual({
+          columns: [
+            { columns: [{ property: 'tour', label: 'Tour' }], property: undefined },
+            { property: 'Plain', label: 'Plain' }
+          ]
+        });
       });
 
       it('should return `undefined` if parameter is an empty object', () => {

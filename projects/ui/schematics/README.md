@@ -11,7 +11,7 @@ No arquivo ```npm/@po-ui/ng-components/package.json ```, é declarado a chave `n
 
 ```
   "ng-update": {
-    "migrations": "./schematics/migration.json",
+    "migrations": "./schematics/migrations.json",
     "packageGroup": [
       "@po-ui/ng-components"
     ]
@@ -57,8 +57,6 @@ Por fim, execute os comandos abaixo no seu projeto Angular:
 `> npm i --save @po-ui/ng-components`
 
 `> ng update @po-ui/ng-components --next --from 1 --migrate-only`
-
-> Caso testar versão beta, a versão no arquivo `migrations.json` tem que ser a mesma da publicada.
 
 Pode ser utilizado o verdaccio para publicar os pacotes locais, como `@po-ui/style`, assim não precisamos instalar local e o fluxo fica mais próximo do oficial.
 

@@ -365,12 +365,21 @@ describe('PoChartComponent:', () => {
       expect(component['windowResizeListener'].next).toHaveBeenCalled();
     });
 
-    it('removeWindowResizeListener: shouldn`t set onResize with function if onResize is undefined', () => {
-      component['onResize'] = undefined;
+    describe('removeWindowResizeListener:', () => {
+      it('should set onResize with function if onResize is defined', () => {
+        component['onResize'] = () => true;
+        component['removeWindowResizeListener']();
+        // tslint:disable-next-line
+        expect(component['onResize']()).toBeUndefined();
+      });
 
-      component['removeWindowResizeListener']();
+      it('shouldn`t set onResize with function if onResize is undefined', () => {
+        component['onResize'] = undefined;
 
-      expect(component['onResize']).toBeUndefined();
+        component['removeWindowResizeListener']();
+
+        expect(component['onResize']).toBeUndefined();
+      });
     });
 
     it('chartLegendHeight: should return `chartLegend.nativeElement.offsetHeight` if `chartLegend` has value', () => {

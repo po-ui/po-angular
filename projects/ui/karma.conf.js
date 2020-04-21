@@ -22,47 +22,16 @@ module.exports = function (config) {
       thresholds: {
         emitWarning: false, // set to 'true' to not fail the test command when thresholds are not met
         global: {
-          statements: 98,
-          branches: 98,
-          functions: 98,
-          lines: 98
+          statements: 99,
+          branches: 99,
+          functions: 99,
+          lines: 99
         },
         each: {
-          statements: 80,
-          branches: 80,
-          lines: 80,
-          functions: 80,
-          overrides: {
-            'src/lib/components/po-chart/po-chart-types/po-chart-donut/po-chart-donut.component.ts': {
-              branches: 50
-            },
-            'src/lib/components/po-chart/po-chart-types/po-chart-pie/po-chart-pie.component.ts': {
-              branches: 50
-            },
-            'src/lib/components/po-chart/po-chart-types/po-chart-dynamic-type.component.ts': {
-              branches: 50
-            },
-            'src/lib/components/po-dropdown/po-dropdown.component.ts': {
-              branches: 78
-            },
-            'src/lib/components/po-loading/po-loading-overlay/po-loading-overlay-base.component.ts': {
-              branches: 75
-            },
-            'src/lib/components/po-field/po-login/po-login.component.ts': {
-              branches: 50,
-              functions: 60
-            },
-            'src/lib/components/po-field/po-input/po-input.component.ts': {
-              branches: 50
-            },
-            'src/lib/components/po-field/po-email/po-email.component.ts': {
-              functions: 75
-            },
-            'src/lib/components/po-field/po-upload/po-upload-base.service.ts': {
-              statements: 75,
-              lines: 75
-            }
-          }
+          branches: 99,
+          statements: 99,
+          lines: 99,
+          functions: 99
         }
       }
     },

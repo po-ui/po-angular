@@ -1,5 +1,48 @@
 # Changelog
 
+## [2.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.3...v2.0.0-rc.1) (2020-04-09)
+
+### Features
+
+* **sync:** implementa ng update para v2 ([a62ac37](https://github.com/po-ui/po-angular/commit/a62ac372bec4b42ecbbcde8364b1ad70c0c9d8b2))
+* **templates:** cria schematics `ng add` e `ng generate` ([86252de](https://github.com/po-ui/po-angular/commit/86252debeaa983af3384f990f92e21068b5e52c2))
+
+
+### Code Refactoring
+
+* **sync:** deprecia a propriedade `portinari_sync_date` ([83f5d85](https://github.com/po-ui/po-angular/commit/83f5d851e0b8756e684dbee3d7ed153b31fc437a))
+
+### Bug Fixes
+
+* **combo:** corrige HTML Injection no `option.label` ([7f19f1b](https://github.com/po-ui/po-angular/commit/7f19f1bd763464f2b1b58e5372833bd8d95296a3))
+* **page-dynamic-detail:** corrige ação `back` com string ([5411472](https://github.com/po-ui/po-angular/commit/54114729e6b6b0dff75941e378b3e0557d2935eb))
+
+### Documentation
+
+* **migration:** atualiza documento com @po-ui/ng-sync ([889a4b5](https://github.com/po-ui/po-angular/commit/889a4b5fe5d3e511e853ed3419bb466674a3bc46))
+
+## [2.0.0-beta.3](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-04-08)
+
+### Features
+
+* **templates:** cria schematics ngAdd e ngGenerate ([86252de](https://github.com/po-ui/po-angular/commit/86252debeaa983af3384f990f92e21068b5e52c2))
+
+## [2.0.0-beta.2](https://github.com/po-ui/po-angular/compare/v2.0.0-beta.1...2.0.0-beta.2) (2020-04-06)
+
+### Features
+
+* **packages:** atualiza pacotes do projeto com Angular@9.1.X ([9ac1ea8](https://github.com/po-ui/po-angular/commit/9ac1ea8d052b7e083a540f711f038bb685738092))
+* **packages:** atualização do prettier para versão 2.0.2 ([b3a204b](https://github.com/po-ui/po-angular/commit/b3a204b8e2a6fc146e31ab36a83c843371022acf))
+
+### Bug Fixes
+
+* **schematics:** altera todas ocorrencias encontradas no update ([e0dcf22](https://github.com/po-ui/po-angular/commit/e0dcf22b2437627b653e9170f0d2ea6ae595e73f))
+
+### Documentation
+
+* **packages:** adiciona README.md na distribuição dos pacotes ([98036ae](https://github.com/po-ui/po-angular/commit/98036aed783c42c92fd2485ebb56cab3ea6a2e6b))
+* **page-dynamic-detail:** atualização serviço do sample ([419f5b4](https://github.com/po-ui/po-angular/commit/419f5b499cc7934602d65c9a39d68354da5ba7fe))
+
 ## [2.0.0-beta.1](https://github.com/po-ui/po-angular/compare/v1.28.0...v2.0.0-beta.1) (2020-03-27)
 
 
@@ -35,11 +78,11 @@ Depois: ``` <po-component p-auto-focus></po-component> ```
 
 Os nomes dos pacotes foram alterados para a seguinte nomenclatura:
 
-`@portinari/portinari-ui` ==> `@po-ui/ng-components`
-`@portinari/portinari-templates` ==> `@po-ui/ng-templates`
-`@portinari/portinari-code-editor` ==> `@po-ui/ng-code-editor`
-`@portinari/portinari-storage` ==> `@po-ui/ng-storage`
-`@portinari/portinari-sync` ==> `@po-ui/ng-sync`
+- `@portinari/portinari-ui` ==> `@po-ui/ng-components`
+- `@portinari/portinari-templates` ==> `@po-ui/ng-templates`
+- `@portinari/portinari-code-editor` ==> `@po-ui/ng-code-editor`
+- `@portinari/portinari-storage` ==> `@po-ui/ng-storage`
+- `@portinari/portinari-sync` ==> `@po-ui/ng-sync`
 
 * **interceptors:** altera inicial das chaves dos headers nos interceptors
 

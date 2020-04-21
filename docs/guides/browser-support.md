@@ -57,7 +57,7 @@ disponibilizados pelo Angular no arquivo `/src/polyfills.ts`.
 O exemplo abaixo contém os *polyfills* utilizados no PO Portal e que também deve ser habilitado no seu projeto para a utilização do PO em alguns navegadores:
 
 ```
-npm i core-js@3.1.4
+npm i core-js@3.6.4
 ```
 
 ``` javascript

@@ -309,8 +309,8 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     return util.valuesFromObject(keys).join('|');
   }
 
-  private goBack() {
-    window.history.back();
+  private goBack(backAction: string | boolean) {
+    typeof backAction === 'string' ? this.router.navigate([backAction]) : window.history.back();
   }
 
   private loadData(id) {
