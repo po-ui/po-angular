@@ -3,6 +3,22 @@ import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/form
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
+/* istanbul ignore next */
+const providers = [
+  {
+    provide: NG_VALUE_ACCESSOR,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoEmailComponent),
+    multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
+    // tslint:disable-next-line
+    useExisting: forwardRef(() => PoEmailComponent),
+    multi: true
+  }
+];
+
 /**
  * @docsExtends PoInputBaseComponent
  *
@@ -32,18 +48,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 @Component({
   selector: 'po-email',
   templateUrl: '../po-input/po-input.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoEmailComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoEmailComponent),
-      multi: true
-    }
-  ]
+  providers
 })
 export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
   icon = 'po-icon-mail';
@@ -58,6 +63,7 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
 
   private listener = this.validateClassesForPattern.bind(this);
 
+  /* istanbul ignore next */
   constructor(el: ElementRef) {
     super(el);
   }

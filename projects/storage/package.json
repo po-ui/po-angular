@@ -12,15 +12,15 @@
   },
   "dependencies": {
     "custom-idle-queue": "2.1.2",
-    "localforage": "1.4.0",
-    "lokijs": "1.5.7"
+    "localforage": "1.7.3",
+    "lokijs": "1.5.8"
   },
   "peerDependencies": {
-    "@angular/core": "~9.0.4",
+    "@angular/core": "~9.1.0",
     "custom-idle-queue": "2.1.2",
-    "localforage": "1.4.0",
-    "lokijs": "1.5.7",
+    "localforage": "1.7.3",
+    "lokijs": "1.5.8",
     "rxjs": "~6.5.4",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.3"
   }
 }

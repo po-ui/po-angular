@@ -547,7 +547,7 @@ describe('PoMultiselectComponent:', () => {
 
     it(`changeSearch: should call 'searchByLabel' with 'event.value', 'options' and 'filterMode' if 'event.value' is 'valid'
       and call 'adjustContainerPosition'.`, fakeAsync(() => {
-      const event = { value: 1 };
+      const event = { value: '1' };
       const searchByLabelSpy = spyOn(component, 'searchByLabel');
       const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
 

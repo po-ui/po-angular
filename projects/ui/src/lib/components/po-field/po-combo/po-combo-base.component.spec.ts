@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import * as Utils from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
@@ -418,7 +418,7 @@ describe('PoComboBaseComponent:', () => {
   });
 
   it('should unsubscribe keyupObservable', () => {
-    component.keyupSubscribe = getFakeService('').subscribe();
+    component.keyupSubscribe = of('').subscribe();
 
     spyOn(component.keyupSubscribe, 'unsubscribe');
 
@@ -427,44 +427,46 @@ describe('PoComboBaseComponent:', () => {
     expect(component.keyupSubscribe.unsubscribe).toHaveBeenCalled();
   });
 
-  it(`writeValue: should call 'updateSelectedValue' with null and 'updateComboList'
-    and not call 'getOptionFromValue' and 'getObjectByValue'`, () => {
-    spyOn(component, 'getOptionFromValue');
-    spyOn(component, 'getObjectByValue');
-    spyOn(component, 'updateSelectedValue');
-    spyOn(component, 'updateComboList');
+  describe('writeValue:', () => {
+    it(`should call 'updateSelectedValue' with null and 'updateComboList'
+      and not call 'getOptionFromValue' and 'getObjectByValue'`, () => {
+      spyOn(component, 'getOptionFromValue');
+      spyOn(component, 'getObjectByValue');
+      spyOn(component, 'updateSelectedValue');
+      spyOn(component, 'updateComboList');
 
-    component.writeValue(null);
+      component.writeValue(null);
 
-    expect(component.getOptionFromValue).not.toHaveBeenCalled();
-    expect(component.getObjectByValue).not.toHaveBeenCalled();
-    expect(component.updateSelectedValue).toHaveBeenCalledWith(null, true, true);
-    expect(component.updateComboList).toHaveBeenCalled();
-  });
+      expect(component.getOptionFromValue).not.toHaveBeenCalled();
+      expect(component.getObjectByValue).not.toHaveBeenCalled();
+      expect(component.updateSelectedValue).toHaveBeenCalledWith(null, true, true);
+      expect(component.updateComboList).toHaveBeenCalled();
+    });
 
-  it('writeValue: should call `updateSelectedValue` when contains `options` and param is a `validValue`', () => {
-    component.options = [{ label: '1', value: 'valor 1' }];
+    it('should call `updateSelectedValue` when contains `options` and param is a `validValue`', () => {
+      component.options = [{ label: '1', value: 'valor 1' }];
 
-    spyOn(component, 'updateSelectedValue');
-    spyOn(component, 'getOptionFromValue');
-    spyOn(component, 'getObjectByValue');
+      spyOn(component, 'updateSelectedValue');
+      spyOn(component, 'getOptionFromValue');
+      spyOn(component, 'getObjectByValue');
 
-    component.writeValue('1');
+      component.writeValue('1');
 
-    expect(component.updateSelectedValue).toHaveBeenCalled();
-    expect(component.getOptionFromValue).toHaveBeenCalled();
-    expect(component.getObjectByValue).not.toHaveBeenCalled();
-  });
+      expect(component.updateSelectedValue).toHaveBeenCalled();
+      expect(component.getOptionFromValue).toHaveBeenCalled();
+      expect(component.getObjectByValue).not.toHaveBeenCalled();
+    });
 
-  it('writeValue: should call `updateSelectedValue` if `changeOnEnter` is `false`', () => {
-    component.options = [{ label: '1', value: 'valor 1' }];
-    component.changeOnEnter = false;
+    it('should call `updateSelectedValue` if `changeOnEnter` is `false`', () => {
+      component.options = [{ label: '1', value: 'valor 1' }];
+      component.changeOnEnter = false;
 
-    spyOn(component, 'updateSelectedValue');
+      spyOn(component, 'updateSelectedValue');
 
-    component.writeValue('1');
+      component.writeValue('1');
 
-    expect(component.updateSelectedValue).toHaveBeenCalled();
+      expect(component.updateSelectedValue).toHaveBeenCalled();
+    });
   });
 
   describe('Methods:', () => {
@@ -835,54 +837,67 @@ describe('PoComboBaseComponent:', () => {
       expect(spyUpdateModel).not.toHaveBeenCalled();
     });
 
-    it(`updateComboList: should set 'visibleOptions' with 'component.comboOptionsList'
-    if 'options param' and 'selectedValue' are falsy`, () => {
-      component.options = [{ label: '1', value: '1' }];
-      component.selectedValue = undefined;
+    describe('updateComboList:', () => {
+      it(`should set 'visibleOptions' with 'component.comboOptionsList' if 'options param' and 'selectedValue' are falsy`, () => {
+        component.options = [{ label: '1', value: '1' }];
+        component.selectedValue = undefined;
 
-      component.updateComboList();
+        component.updateComboList();
 
-      expect(component.visibleOptions).toEqual(component.options);
-    });
+        expect(component.visibleOptions).toEqual(component.options);
+      });
 
-    it('updateComboList: should set `visibleOptions` with `options param` if `options param` is true and `selectedValue` is false', () => {
-      const options = [{ label: '1', value: '1' }];
+      it(`should not set 'visibleOptions' with 'component.comboOptionsList' if 'newOptions' are falsy`, () => {
+        component.options = undefined;
+        component.selectedValue = undefined;
+        component['comboOptionsList'] = [];
+        component['selectedOption'] = {};
+        component.visibleOptions = undefined;
 
-      component.selectedValue = undefined;
+        component.updateComboList();
 
-      component.updateComboList(options);
+        expect(component.visibleOptions).toBeUndefined();
+      });
 
-      expect(component.visibleOptions).toEqual(options);
-    });
+      it('should set `visibleOptions` with `options param` if `options param` is true and `selectedValue` is false', () => {
+        const options = [{ label: '1', value: '1' }];
 
-    it(`updateComboList: should set 'visibleOptions' with 'selectedOption' if 'options param' is false
-      and 'selectedValue' is truthy`, () => {
-      const option = { label: '1', value: '1' };
+        component.selectedValue = undefined;
 
-      component.selectedOption = option;
-      component.selectedView = option;
+        component.updateComboList(options);
 
-      component.selectedValue = '1';
+        expect(component.visibleOptions).toEqual(options);
+      });
 
-      component.updateComboList();
+      it(`should set 'visibleOptions' with 'selectedOption' if 'options param' is false
+        and 'selectedValue' is truthy`, () => {
+        const option = { label: '1', value: '1' };
 
-      expect(component.visibleOptions).toEqual([option]);
-    });
+        component.selectedOption = option;
+        component.selectedView = option;
 
-    it(`updateComboList: should set 'selectedView' with first position of visibleOptions if 'selectedView' was undefined`, () => {
-      const options = [
-        { label: '1', value: '1' },
-        { label: '2', value: '2' }
-      ];
+        component.selectedValue = '1';
 
-      component.options = options;
-      component.selectedValue = undefined;
-      component.selectedView = undefined;
+        component.updateComboList();
 
-      component.updateComboList();
+        expect(component.visibleOptions).toEqual([option]);
+      });
 
-      expect(component.visibleOptions).toEqual(options);
-      expect(component.selectedView).toEqual(options[0]);
+      it(`should set 'selectedView' with first position of visibleOptions if 'selectedView' was undefined`, () => {
+        const options = [
+          { label: '1', value: '1' },
+          { label: '2', value: '2' }
+        ];
+
+        component.options = options;
+        component.selectedValue = undefined;
+        component.selectedView = undefined;
+
+        component.updateComboList();
+
+        expect(component.visibleOptions).toEqual(options);
+        expect(component.selectedView).toEqual(options[0]);
+      });
     });
 
     it('updateInternalVariables: should set `selectedView` and `selectedOption` with option param if it is truthy', () => {
@@ -1376,10 +1391,3 @@ describe('PoComboBaseComponent using Service', () => {
     expect(component.getObjectByValue).toHaveBeenCalled();
   });
 });
-
-function getFakeService(item): any {
-  return new Observable(obs => {
-    obs.next(item);
-    obs.complete();
-  });
-}

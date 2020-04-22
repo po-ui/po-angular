@@ -270,9 +270,13 @@ export class PoEventSourcingService {
   }
 
   private getBodyAndDate(schemaName, response): any {
+    // DEPRECATED 3.X.X
+    const deprecatedDateFieldName = 'portinari_sync_date';
     const getDateFieldName = this.config.dataTransform.getDateFieldName();
 
-    this.schemasSyncConfig[schemaName]['responseDate'] = response.body[getDateFieldName];
+    const responseSyncDate = response.body[getDateFieldName] || response.body[deprecatedDateFieldName];
+
+    this.schemasSyncConfig[schemaName]['responseDate'] = responseSyncDate;
     return response.body;
   }
 

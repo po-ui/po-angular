@@ -195,14 +195,14 @@ O *endpoint* de sincronização deve retornar uma resposta com a estrutura como 
 {
   "hasNext": false,
   "items": [],
-  "portinari_sync_date": "2018-10-08T13:57:55.008Z"
+  "po_sync_date": "2018-10-08T13:57:55.008Z"
 }
 ```
 
 Onde:
 - `hasNext`: Indica se existe uma próxima página com mais registros para aquela coleção de itens.
 - `items`: Lista de itens retornados.
-- `portinari_sync_date`: Data da última sincronização. Ao realizar esta requisição estamos solicitando uma
+- `po_sync_date`: Data da última sincronização. Ao realizar esta requisição estamos solicitando uma
 sincronização, então esta data deve ser a data em que o servidor está devolvendo a resposta. Se na requisição o *endpoint*
 não enviar esta data, não será possível fazer a próxima sincronização, pois esta data será utilizada
 para a próxima URL de sincronização.
@@ -457,7 +457,7 @@ O PO Sync necessita que as APIs utilizem o padrão de respostas que está no [Gu
 {
   "hasNext": boolean,
   "items": [],
-  "portinari_sync_date": date
+  "po_sync_date": date
 }
 ```
 

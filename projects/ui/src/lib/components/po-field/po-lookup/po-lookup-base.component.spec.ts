@@ -21,7 +21,7 @@ class LookupFilterService implements PoLookupFilter {
 }
 
 class PoLookupComponent extends PoLookupBaseComponent {
-  setViewValue(value: any): void {}
+  setViewValue(value: any, value2: any): void {}
 
   getModelValue(): string {
     return '';

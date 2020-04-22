@@ -496,8 +496,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
-  getLabelFormatted(label): SafeHtml {
-    let format = label;
+  getLabelFormatted(label: string): SafeHtml {
+    const sanitizedLabel = this.sanitizeTagHTML(label);
+    let format: string = sanitizedLabel;
 
     if (
       this.isFiltering ||
@@ -506,8 +507,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
         !this.compareObjects(this.cacheOptions, this.visibleOptions) &&
         this.shouldMarkLetters)
     ) {
-      const labelInput = this.getInputValue().toString().toLowerCase();
-      const labelLowerCase = label.toLowerCase();
+      const labelInput = this.sanitizeTagHTML(this.getInputValue().toString().toLowerCase());
+      const labelLowerCase = sanitizedLabel.toLowerCase();
 
       const openTagBold = '<span class="po-font-text-large-bold">';
       const closeTagBold = '</span>';
@@ -519,20 +520,27 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       switch (this.filterMode) {
         case PoComboFilterMode.startsWith:
         case PoComboFilterMode.contains:
-          startString = label.substring(0, labelLowerCase.indexOf(labelInput));
-          middleString = label.substring(
-            labelLowerCase.indexOf(labelInput),
-            labelLowerCase.indexOf(labelInput) + labelInput.length
-          );
-          endString = label.substring(labelLowerCase.indexOf(labelInput) + labelInput.length);
+          const indexOfLabelInput = labelLowerCase.indexOf(labelInput);
 
-          format = startString + openTagBold + middleString + closeTagBold + endString;
+          if (indexOfLabelInput > -1) {
+            startString = sanitizedLabel.substring(0, indexOfLabelInput);
+
+            middleString = sanitizedLabel.substring(indexOfLabelInput, indexOfLabelInput + labelInput.length);
+            endString = sanitizedLabel.substring(indexOfLabelInput + labelInput.length);
+
+            format = startString + openTagBold + middleString + closeTagBold + endString;
+          }
+
           break;
         case PoComboFilterMode.endsWith:
-          startString = label.substring(0, labelLowerCase.lastIndexOf(labelInput));
-          middleString = label.substring(labelLowerCase.lastIndexOf(labelInput));
+          const lastIndexOfLabelInput = labelLowerCase.lastIndexOf(labelInput);
 
-          format = startString + openTagBold + middleString + closeTagBold;
+          if (lastIndexOfLabelInput > -1) {
+            startString = sanitizedLabel.substring(0, lastIndexOfLabelInput);
+            middleString = sanitizedLabel.substring(lastIndexOfLabelInput);
+
+            format = startString + openTagBold + middleString + closeTagBold;
+          }
           break;
       }
     }
@@ -627,6 +635,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     window.removeEventListener('scroll', this.onScroll, true);
+  }
+
+  private sanitizeTagHTML(value: string = '') {
+    return value.replace(/\</gm, '&lt;').replace(/\>/g, '&gt;');
   }
 
   private setContainerPosition() {

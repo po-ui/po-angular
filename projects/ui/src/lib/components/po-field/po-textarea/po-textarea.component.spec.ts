@@ -117,7 +117,7 @@ describe('PoTextareaComponent:', () => {
         },
         valueBeforeChange: 'TOTVERS',
         change: {
-          emit: () => {}
+          emit: arg => {}
         }
       };
       spyOn(fakeThis.change, 'emit');
@@ -184,7 +184,7 @@ describe('PoTextareaComponent:', () => {
           }
         },
         change: {
-          emit: () => {}
+          emit: arg => {}
         }
       };
 

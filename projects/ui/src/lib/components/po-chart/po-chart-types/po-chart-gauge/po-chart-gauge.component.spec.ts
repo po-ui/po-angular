@@ -95,30 +95,31 @@ describe('PoChartGaugeComponent:', () => {
       });
     });
 
-    it('getGaugeSerie: should spread `series` with `color`', () => {
-      const expectedValue = [{ value: 2, description: 'description', color: '#29B6C5' }];
-      component.colors = ['#29B6C5'];
-      component.series = [{ value: 2, description: 'description' }];
+    describe('getGaugeSerie:', () => {
+      it('should spread `series` with `color`', () => {
+        const expectedValue = [{ value: 2, description: 'description', color: '#29B6C5' }];
+        component.colors = ['#29B6C5'];
+        component.series = [{ value: 2, description: 'description' }];
 
-      spyOn(component, <any>'checkGaugeValueLimits').and.callThrough();
+        spyOn(component, <any>'checkGaugeValueLimits').and.callThrough();
 
-      const expectedResult = component['getGaugeSerie'](component.series);
+        const expectedResult = component['getGaugeSerie'](component.series);
 
-      expect(component['checkGaugeValueLimits']).toHaveBeenCalled();
-      expect(expectedResult).toEqual(expectedValue);
-    });
+        expect(component['checkGaugeValueLimits']).toHaveBeenCalled();
+        expect(expectedResult).toEqual(expectedValue);
+      });
 
-    it('getGaugeSerie: should return an empty array if series is also an empty array', () => {
-      const expectedValue = [];
-      component.colors = ['#29B6C5'];
-      component.series = [];
+      it('should return an empty array if series is also an empty array', () => {
+        const expectedValue = [];
+        component.colors = ['#29B6C5'];
 
-      spyOn(component, <any>'checkGaugeValueLimits');
+        spyOn(component, <any>'checkGaugeValueLimits');
 
-      const expectedResult = component['getGaugeSerie'](component.series);
+        const expectedResult = component['getGaugeSerie']();
 
-      expect(component['checkGaugeValueLimits']).not.toHaveBeenCalled();
-      expect(expectedResult).toEqual(expectedValue);
+        expect(component['checkGaugeValueLimits']).not.toHaveBeenCalled();
+        expect(expectedResult).toEqual(expectedValue);
+      });
     });
 
     it('getGaugeBaseWidth: should return the `po-chart-gauge-base-path` element width', () => {
