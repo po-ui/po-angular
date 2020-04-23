@@ -8,7 +8,7 @@ import { PoModalPasswordRecoveryComponent, PoModalPasswordRecoveryType } from '@
 })
 export class SamplePoModalPasswordRecoveryRequestComponent {
   type: PoModalPasswordRecoveryType = PoModalPasswordRecoveryType.All;
-  urlRecovery: string = 'https://thf.totvs.com.br/sample/api/users';
+  urlRecovery: string = 'https://po-sample-api.herokuapp.com/v1/users';
 
   @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 
