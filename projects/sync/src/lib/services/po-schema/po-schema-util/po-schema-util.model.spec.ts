@@ -51,40 +51,46 @@ describe('PoSchemaUtil:', () => {
   ];
 
   describe('Methods:', () => {
-    it('containsLocalFields: should return true if schema contains local fields', () => {
-      const schema = { ...schemas[0] };
+    describe('containsLocalFields:', () => {
+      it('should return true if schema contains local fields', () => {
+        const schema = { ...schemas[0] };
 
-      schema.fields = ['field1', { name: 'field2', local: true }];
+        schema.fields = ['field1', { name: 'field2', local: true }];
 
-      expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
+        expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
 
-      schema.fields = [
-        { name: 'field1', local: true },
-        { name: 'field2', local: true }
-      ];
+        schema.fields = [
+          { name: 'field1', local: true },
+          { name: 'field2', local: true }
+        ];
 
-      expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
+        expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
 
-      schema.fields = [
-        { name: 'field1', local: true },
-        { name: 'field2', local: false }
-      ];
+        schema.fields = [
+          { name: 'field1', local: true },
+          { name: 'field2', local: false }
+        ];
 
-      expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
-    });
+        expect(PoSchemaUtil.containsLocalFields(schema)).toBeTruthy();
+      });
 
-    it('containsLocalFields: should return false if schema not contains local fields', () => {
-      const schema = { ...schemas[0] };
-      schema.fields = ['field1', 'field2'];
+      it('should return false if schema not contains local fields', () => {
+        const schema = { ...schemas[0] };
+        schema.fields = ['field1', 'field2'];
 
-      expect(PoSchemaUtil.containsLocalFields(schema)).toBeFalsy();
+        expect(PoSchemaUtil.containsLocalFields(schema)).toBeFalsy();
 
-      schema.fields = [
-        { name: 'field1', local: false },
-        { name: 'field2', local: false }
-      ];
+        schema.fields = [
+          { name: 'field1', local: false },
+          { name: 'field2', local: false }
+        ];
 
-      expect(PoSchemaUtil.containsLocalFields(schema)).toBeFalsy();
+        expect(PoSchemaUtil.containsLocalFields(schema)).toBeFalsy();
+
+        schema.fields = undefined;
+
+        expect(PoSchemaUtil.containsLocalFields(schema)).toBeFalsy();
+      });
     });
 
     it('getRecordId: should return record id with record id value if record have a field name equal to idField value', () => {
@@ -134,36 +140,58 @@ describe('PoSchemaUtil:', () => {
       expect(lastSync).toEqual(PoSchemaUtil.defaultLastSync);
     });
 
-    it('getLocalFieldNames: should returns just local fields', () => {
-      const localFields: Array<string> = PoSchemaUtil.getLocalFieldNames(mySchema);
+    describe('getLocalFieldNames:', () => {
+      it('should returns just local fields', () => {
+        const localFields: Array<string> = PoSchemaUtil.getLocalFieldNames(mySchema);
 
-      expect(localFields.length).toEqual(1);
-      expect(localFields).toEqual(['status1']);
+        expect(localFields.length).toEqual(1);
+        expect(localFields).toEqual(['status1']);
+      });
+
+      it('should not returns just local fields is schema is undefined', () => {
+        const mySchemaTest = <any>{ fields: undefined };
+        const localFields: Array<string> = PoSchemaUtil.getLocalFieldNames(mySchemaTest);
+
+        expect(localFields).toBeFalsy();
+      });
     });
 
-    it('getNonLocalFieldNames: should returns just fields that are not local', () => {
-      const nonLocalFields: Array<string> = PoSchemaUtil.getNonLocalFieldNames(mySchema);
+    describe('getLocalFieldNames:', () => {
+      it('should returns just fields that are not local', () => {
+        const nonLocalFields: Array<string> = PoSchemaUtil.getNonLocalFieldNames(mySchema);
 
-      expect(nonLocalFields.length).toEqual(3);
-      expect(nonLocalFields).toEqual(['id', 'name', 'status2']);
+        expect(nonLocalFields.length).toEqual(3);
+        expect(nonLocalFields).toEqual(['id', 'name', 'status2']);
+      });
+      it('should not returns just fields if schema is undefined', () => {
+        const mySchemaTest = <any>{ fields: undefined };
+        const nonLocalFields: Array<string> = PoSchemaUtil.getNonLocalFieldNames(mySchemaTest);
+
+        expect(nonLocalFields).toBeFalsy();
+      });
     });
 
-    it('isModelsEqual: should returns true if objects are equal', () => {
-      const obj1 = { id: 1, name: 'Nome' };
-      const obj2 = { id: 1, name: 'Nome' };
+    describe('isModelsEqual:', () => {
+      it('should returns true if objects are equal', () => {
+        const obj1 = { id: 1, name: 'Nome' };
+        const obj2 = { id: 1, name: 'Nome' };
 
-      const isEqual: boolean = PoSchemaUtil.isModelsEqual(['id', 'name'], obj1, obj2);
+        const isEqual: boolean = PoSchemaUtil.isModelsEqual(['id', 'name'], obj1, obj2);
 
-      expect(isEqual).toBeTruthy();
-    });
+        expect(isEqual).toBeTruthy();
+      });
 
-    it('isModelsEqual: should returns false if objects are not equal', () => {
-      const obj1 = { id: 2, name: 'Nomes' };
-      const obj2 = { id: 1, name: 'Nome' };
+      it('should returns false if objects are not equal', () => {
+        const obj1 = { id: 2, name: 'Nomes' };
+        const obj2 = { id: 1, name: 'Nome' };
 
-      const isEqual: boolean = PoSchemaUtil.isModelsEqual(['id', 'name'], obj1, obj2);
+        const isEqual: boolean = PoSchemaUtil.isModelsEqual(['id', 'name'], obj1, obj2);
 
-      expect(isEqual).toBeFalsy();
+        expect(isEqual).toBeFalsy();
+
+        const isNotEqual: boolean = PoSchemaUtil.isModelsEqual(null, obj1, obj2);
+        expect(isNotEqual).toBeFalsy();
+      });
     });
 
     it('separateSchemaFields: should separate local fields to server fields.', () => {

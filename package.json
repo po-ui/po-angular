@@ -22,6 +22,7 @@
     "test": "ng test --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:storage": "ng test storage --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:sync": "ng test sync --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
+    "test:sync:browse": "ng test sync --code-coverage --browsers=Chrome --source-map",
     "test:ui": "ng test ui --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:ui:browse": "ng test ui --code-coverage --browsers=Chrome --source-map",
     "test:templates": "ng test templates --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
