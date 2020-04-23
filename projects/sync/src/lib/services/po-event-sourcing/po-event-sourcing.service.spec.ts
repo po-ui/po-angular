@@ -691,67 +691,69 @@ describe('PoEventSourcingService:', () => {
       });
     });
 
-    it(`getBodyAndDate: should return response.body and set responseDate with deprecated "portinari_sync_date" if
-      hasn't "po_sync_date"`, () => {
-      const date = jasmine.any(Date);
+    describe('getBodyAndDate:', () => {
+      it(`should return response.body and set responseDate with deprecated "portinari_sync_date" if
+        hasn't "po_sync_date"`, () => {
+        const date = jasmine.any(Date);
 
-      eventSourcingService.config = {
-        type: PoNetworkType.none,
-        period: 0,
-        dataTransform: new PoDataTransformMock()
-      };
+        eventSourcingService.config = {
+          type: PoNetworkType.none,
+          period: 0,
+          dataTransform: new PoDataTransformMock()
+        };
 
-      eventSourcingService.config.dataTransform.getDateFieldName = () => 'portinari_sync_date';
-      eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
+        eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
+        eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
 
-      const response = {
-        body: { 'portinari_sync_date': date }
-      };
+        const response = {
+          body: { 'portinari_sync_date': date }
+        };
 
-      expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
-      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
-    });
+        expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
+        expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
+      });
 
-    it('getBodyAndDate: should return response.body and set responseDate with "po_sync_date"', () => {
-      const date = jasmine.any(Date);
+      it('should return response.body and set responseDate with "po_sync_date"', () => {
+        const date = jasmine.any(Date);
 
-      eventSourcingService.config = {
-        type: PoNetworkType.none,
-        period: 0,
-        dataTransform: new PoDataTransformMock()
-      };
+        eventSourcingService.config = {
+          type: PoNetworkType.none,
+          period: 0,
+          dataTransform: new PoDataTransformMock()
+        };
 
-      eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
-      eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
+        eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
+        eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
 
-      const response = {
-        body: { 'po_sync_date': date }
-      };
+        const response = {
+          body: { 'po_sync_date': date }
+        };
 
-      expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
-      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
-    });
+        expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
+        expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
+      });
 
-    it(`'getBodyAndDate: should return response.body and set responseDate with "po_sync_date" if
-      has "po_sync_date" and "portinari_sync_date"`, () => {
-      const syncDate = new Date(2013, 9, 23).getTime();
-      const date = new Date().getTime();
+      it(`should return response.body and set responseDate with "po_sync_date" if
+        has "po_sync_date" and "portinari_sync_date"`, () => {
+        const syncDate = new Date(2013, 9, 23).getTime();
+        const date = new Date().getTime();
 
-      eventSourcingService.config = {
-        type: PoNetworkType.none,
-        period: 0,
-        dataTransform: new PoDataTransformMock()
-      };
+        eventSourcingService.config = {
+          type: PoNetworkType.none,
+          period: 0,
+          dataTransform: new PoDataTransformMock()
+        };
 
-      eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
-      eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
+        eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
+        eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
 
-      const response = {
-        body: { 'po_sync_date': date, 'portinari_sync_date': syncDate }
-      };
+        const response = {
+          body: { 'po_sync_date': date, 'portinari_sync_date': syncDate }
+        };
 
-      expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
-      expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
+        expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
+        expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
+      });
     });
 
     it(`getServerDiffRecords: should return value of pageReduce.data and call diffServerItems, getBodyAndDate,
@@ -1644,60 +1646,108 @@ describe('PoEventSourcingService:', () => {
       );
     });
 
-    it(`updateRecordByServerRecord: should call poSchemaService.remove if record already exists in storage and
-      the server record was deleted`, async () => {
-      const serverRecord = { id: 1, value: 'Value 1', deleted: true };
-      const storageRecord = { id: 1, value: 'Value 1', deleted: false };
+    describe('updateRecordByServerRecord:', () => {
+      it(`should call poSchemaService.remove if record already exists in storage and
+        the server record was deleted`, async () => {
+        const serverRecord = { id: 1, value: 'Value 1', deleted: true };
+        const storageRecord = { id: 1, value: 'Value 1', deleted: false };
 
-      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>storageRecord);
-      spyOn(eventSourcingService['poSchemaService'], 'remove');
-      spyOn(eventSourcingService['poSchemaService'], 'update');
-      spyOn(eventSourcingService['poSchemaService'], 'create');
+        spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>storageRecord);
+        spyOn(eventSourcingService['poSchemaService'], 'remove');
+        spyOn(eventSourcingService['poSchemaService'], 'update');
+        spyOn(eventSourcingService['poSchemaService'], 'create');
 
-      await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
+        await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
 
-      expect(eventSourcingService['poSchemaService']['remove']).toHaveBeenCalledWith(
-        schemaCustumerMock.name,
-        serverRecord.id
-      );
+        expect(eventSourcingService['poSchemaService']['remove']).toHaveBeenCalledWith(
+          schemaCustumerMock.name,
+          serverRecord.id
+        );
 
-      expect(eventSourcingService['poSchemaService']['update']).not.toHaveBeenCalled();
-      expect(eventSourcingService['poSchemaService']['create']).not.toHaveBeenCalled();
-    });
+        expect(eventSourcingService['poSchemaService']['update']).not.toHaveBeenCalled();
+        expect(eventSourcingService['poSchemaService']['create']).not.toHaveBeenCalled();
+      });
 
-    it(`updateRecordByServerRecord: should call poSchemaService.create if record not exists in storage
-      and record.deleted not true`, async () => {
-      const serverRecord = { id: 1, value: 'Value 1', deleted: false };
+      it(`should call poSchemaService.create if record not exists in storage
+        and record.deleted not true`, async () => {
+        const serverRecord = { id: 1, value: 'Value 1', deleted: false };
 
-      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>{});
-      spyOn(eventSourcingService['poSchemaService'], 'remove');
-      spyOn(eventSourcingService['poSchemaService'], 'update');
-      spyOn(eventSourcingService['poSchemaService'], 'create');
+        spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>{});
+        spyOn(eventSourcingService['poSchemaService'], 'remove');
+        spyOn(eventSourcingService['poSchemaService'], 'update');
+        spyOn(eventSourcingService['poSchemaService'], 'create');
 
-      await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
+        await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
 
-      expect(eventSourcingService['poSchemaService']['create']).toHaveBeenCalledWith(schemaCustumerMock, serverRecord);
+        expect(eventSourcingService['poSchemaService']['create']).toHaveBeenCalledWith(
+          schemaCustumerMock,
+          serverRecord
+        );
 
-      expect(eventSourcingService['poSchemaService']['update']).not.toHaveBeenCalled();
-      expect(eventSourcingService['poSchemaService']['remove']).not.toHaveBeenCalled();
-    });
+        expect(eventSourcingService['poSchemaService']['update']).not.toHaveBeenCalled();
+        expect(eventSourcingService['poSchemaService']['remove']).not.toHaveBeenCalled();
+      });
 
-    it(`updateRecordByServerRecord: should call poSchemaService.update if record exists in storage
-      and record.deleted not true`, async () => {
-      const serverRecord = { id: 1, value: 'Value 2', deleted: false };
-      const storageRecord = { id: 1, value: 'Value 1', deleted: false };
+      it(`should not call poSchemaService if record not exists in storage
+        and record.deleted true`, async () => {
+        const serverRecord = { id: 1, value: 'Value 1', deleted: true };
 
-      spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>storageRecord);
-      spyOn(eventSourcingService['poSchemaService'], 'remove');
-      spyOn(eventSourcingService['poSchemaService'], 'update');
-      spyOn(eventSourcingService['poSchemaService'], 'create');
+        spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>{});
+        spyOn(eventSourcingService['poSchemaService'], 'remove');
+        spyOn(eventSourcingService['poSchemaService'], 'update');
+        spyOn(eventSourcingService['poSchemaService'], 'create');
 
-      await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
+        await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
 
-      expect(eventSourcingService['poSchemaService']['update']).toHaveBeenCalledWith(schemaCustumerMock, serverRecord);
+        expect(eventSourcingService['poSchemaService']['create']).not.toHaveBeenCalledWith(
+          schemaCustumerMock,
+          serverRecord
+        );
 
-      expect(eventSourcingService['poSchemaService']['create']).not.toHaveBeenCalled();
-      expect(eventSourcingService['poSchemaService']['remove']).not.toHaveBeenCalled();
+        expect(eventSourcingService['poSchemaService']['update']).not.toHaveBeenCalled();
+        expect(eventSourcingService['poSchemaService']['remove']).not.toHaveBeenCalled();
+      });
+
+      it(`should call poSchemaService.create if record not exists in storage
+        and record.deleted not true`, async () => {
+        const serverRecord = { id: 1, value: 'Value 1', deleted: false };
+
+        spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>{});
+        spyOn(eventSourcingService['poSchemaService'], 'remove');
+        spyOn(eventSourcingService['poSchemaService'], 'update');
+        spyOn(eventSourcingService['poSchemaService'], 'create');
+
+        await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
+
+        expect(eventSourcingService['poSchemaService']['create']).toHaveBeenCalledWith(
+          schemaCustumerMock,
+          serverRecord
+        );
+
+        expect(eventSourcingService['poSchemaService']['update']).not.toHaveBeenCalled();
+        expect(eventSourcingService['poSchemaService']['remove']).not.toHaveBeenCalled();
+      });
+
+      it(`should call poSchemaService.update if record exists in storage
+        and record.deleted not true`, async () => {
+        const serverRecord = { id: 1, value: 'Value 2', deleted: false };
+        const storageRecord = { id: 1, value: 'Value 1', deleted: false };
+
+        spyOn(eventSourcingService['poSchemaService'], 'get').and.returnValue(<any>storageRecord);
+        spyOn(eventSourcingService['poSchemaService'], 'remove');
+        spyOn(eventSourcingService['poSchemaService'], 'update');
+        spyOn(eventSourcingService['poSchemaService'], 'create');
+
+        await eventSourcingService['updateRecordByServerRecord'](serverRecord, schemaCustumerMock);
+
+        expect(eventSourcingService['poSchemaService']['update']).toHaveBeenCalledWith(
+          schemaCustumerMock,
+          serverRecord
+        );
+
+        expect(eventSourcingService['poSchemaService']['create']).not.toHaveBeenCalled();
+        expect(eventSourcingService['poSchemaService']['remove']).not.toHaveBeenCalled();
+      });
     });
 
     it('updateStorageBySchema: should call buildUrlParams and set its value in currentUrlDiff and set page to be 1', async () => {

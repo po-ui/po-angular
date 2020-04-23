@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { fromEvent, merge, Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { mapTo } from 'rxjs/operators';
 
 import { Network } from '@ionic-native/network/ngx';
 
@@ -45,8 +45,8 @@ export class PoNetworkService {
 
   private getNavigatorStatus(): Observable<any> {
     return merge(
-      fromEvent(window, 'offline').pipe(map(() => false)),
-      fromEvent(window, 'online').pipe(map(() => true)),
+      fromEvent(window, 'offline').pipe(mapTo(false)),
+      fromEvent(window, 'online').pipe(mapTo(true)),
       Observable.create(sub => {
         sub.next(navigator.onLine);
         sub.complete();
