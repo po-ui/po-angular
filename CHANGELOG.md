@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.1.0](https://github.com/po-ui/po-angular/compare/v2.0.0...v2.1.0) (2020-04-24)
+
+
+### Features
+
+* **page-dynamic:** utiliza cache do metadados se servidor não responder nos componentes: ([27099a9](https://github.com/po-ui/po-angular/commit/27099a922098d52c2f5b2b805ec4d7238e1957ce))
+- PoPageDynamicTable
+- PoPageDynamicEdit
+- PoPageDynamicDetail
+
+
+### Bug Fixes
+
+* **page-job-scheduler:** corrige validação dos parametros ([3615048](https://github.com/po-ui/po-angular/commit/36150481207eb3cd3c19cf9abc7fdbdbdba6af8b))
 
 ## [2.0.0](https://github.com/po-ui/po-angular/compare/v1.28.0...v2.0.0) (2020-04-17)
 
