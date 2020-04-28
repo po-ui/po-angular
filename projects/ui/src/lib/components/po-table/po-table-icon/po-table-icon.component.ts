@@ -37,9 +37,9 @@ export class PoTableIconComponent {
     return !this.disabled && this.iconTooltip;
   }
 
-  onClick() {
+  onClick(event) {
     if (this.clickable) {
-      this.click.emit();
+      this.click.emit(event);
     }
   }
 

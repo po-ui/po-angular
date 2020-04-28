@@ -291,6 +291,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return true;
   }
 
+  onClickLink(event, row, column: PoTableColumn) {
+    if (!this.checkDisabled(row, column)) {
+      event.stopPropagation();
+    }
+  }
+
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
 

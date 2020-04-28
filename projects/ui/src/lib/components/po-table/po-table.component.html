@@ -192,6 +192,7 @@
                 [p-link]="row[column.link]"
                 [p-row]="row"
                 [p-value]="row[column.property]"
+                (click)="onClickLink($event, row, column)"
               >
               </po-table-column-link>
 

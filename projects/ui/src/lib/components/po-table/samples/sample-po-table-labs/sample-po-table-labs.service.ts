@@ -23,7 +23,7 @@ export class SamplePoTableLabsService {
     return {
       text: `Text ${index}`,
       page: `Link ${index}`,
-      link: 'http://www.po-ui.com.br',
+      link: 'https://po-ui.io/',
       number: index,
       date: this.generateRandomDate(),
       time: this.generateRandomTime(),
