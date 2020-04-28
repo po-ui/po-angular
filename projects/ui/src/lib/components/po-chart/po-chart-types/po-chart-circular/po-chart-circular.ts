@@ -481,7 +481,8 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private setTextProperties(text, startAngle: number, endAngle: number) {
-    if (this.type === PoChartType.Donut) {
+    // necessário text.getClientRects().length para contornar erro de console causado no Firefox
+    if (this.type === PoChartType.Donut && text.getClientRects().length) {
       // utilizado para recuperar o angulo do meio, entre o inicio e fim para centralizar o texto
       const centerAngle = (startAngle + endAngle) / 2;
       const textBox = text.getBBox();
