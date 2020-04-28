@@ -5,6 +5,6 @@
   [p-disabled]="isDisabled(column)"
   [p-icon]="getIcon(column)"
   [p-icon-tooltip]="column.tooltip"
-  (p-click)="click(column)"
+  (p-click)="click(column, $event)"
 >
 </po-table-icon>

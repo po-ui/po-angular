@@ -53,21 +53,23 @@ describe('PoTableIconComponent:', () => {
 
   describe('Methods:', () => {
     it('onClick: should call `click` and `emit` if `clickable`.', () => {
+      const event = {};
       component.clickable = true;
 
       spyOn(component.click, 'emit');
 
-      component.onClick();
+      component.onClick(event);
 
-      expect(component.click.emit).toHaveBeenCalled();
+      expect(component.click.emit).toHaveBeenCalledWith(event);
     });
 
     it('onClick: shouldn`t call `click` and `emit`.', () => {
+      const event = {};
       component.clickable = false;
 
       spyOn(component.click, 'emit');
 
-      component.onClick();
+      component.onClick(event);
 
       expect(component.click.emit).not.toHaveBeenCalled();
     });

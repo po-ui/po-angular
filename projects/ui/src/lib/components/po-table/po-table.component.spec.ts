@@ -1467,6 +1467,46 @@ describe('PoTableComponent:', () => {
 
       expect(component.trackBy(index)).toBe(expectedValue);
     });
+
+    it('onClickLink: should call `stopPropagation` if link isn`t disabled', () => {
+      const fakeEvent = {
+        stopPropagation: () => {}
+      };
+      const tableRow = component.items[0];
+      const columnLink = {
+        property: 'extra',
+        label: 'Extras',
+        type: 'link',
+        action: () => {},
+        disabled: () => false
+      };
+
+      const spyStopPropagation = spyOn(fakeEvent, 'stopPropagation');
+
+      component.onClickLink(fakeEvent, tableRow, columnLink);
+
+      expect(spyStopPropagation).toHaveBeenCalled();
+    });
+
+    it('onClickLink: shouldn`t call `stopPropagation` if link is disabled', () => {
+      const fakeEvent = {
+        stopPropagation: () => {}
+      };
+      const tableRow = component.items[0];
+      const columnLink = {
+        property: 'extra',
+        label: 'Extras',
+        type: 'link',
+        action: () => {},
+        disabled: () => true
+      };
+
+      const spyStopPropagation = spyOn(fakeEvent, 'stopPropagation');
+
+      component.onClickLink(fakeEvent, tableRow, columnLink);
+
+      expect(spyStopPropagation).not.toHaveBeenCalled();
+    });
   });
 
   describe('Templates:', () => {

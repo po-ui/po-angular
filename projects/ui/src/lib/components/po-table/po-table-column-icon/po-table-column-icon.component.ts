@@ -33,13 +33,16 @@ export class PoTableColumnIconComponent {
   /** Dados da linha da tabela. */
   @Input('p-row') row: any;
 
-  click(columnIcon: PoTableColumnIcon): void {
+  click(columnIcon: PoTableColumnIcon, event): void {
     const isAbleAction = !this.isDisabled(columnIcon);
 
-    if (columnIcon.action && isAbleAction) {
-      columnIcon.action(this.row, columnIcon);
-    } else if (this.column.action && isAbleAction) {
-      this.column.action(this.row, columnIcon);
+    if (isAbleAction) {
+      if (columnIcon.action) {
+        columnIcon.action(this.row, columnIcon);
+      } else if (this.column.action) {
+        this.column.action(this.row, columnIcon);
+      }
+      event.stopPropagation();
     }
   }
 
