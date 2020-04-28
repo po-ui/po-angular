@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 
-import { PoChartGaugeSerie, PoChartType, PoDialogService, PoPieChartSeries } from '@po-ui/ng-components';
+import {
+  PoChartGaugeSerie,
+  PoChartType,
+  PoDialogService,
+  PoDonutChartSeries,
+  PoPieChartSeries
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-coffee-ranking',
@@ -16,7 +22,7 @@ export class SamplePoChartCoffeeRankingComponent {
 
   coffeConsumingChartType: PoChartType = PoChartType.Donut;
 
-  coffeeConsumption: Array<PoPieChartSeries> = [
+  coffeeConsumption: Array<PoDonutChartSeries> = [
     { category: 'Finland', value: 9.6, tooltip: 'Finland (Europe)' },
     { category: 'Norway', value: 7.2, tooltip: 'Norway (Europe)' },
     { category: 'Netherlands', value: 6.7, tooltip: 'Netherlands (Europe)' },
