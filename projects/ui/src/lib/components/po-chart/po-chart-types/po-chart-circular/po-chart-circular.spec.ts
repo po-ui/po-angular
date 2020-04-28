@@ -928,10 +928,27 @@ describe('PoChartCircular:', () => {
       expect(text.setAttribute).not.toHaveBeenCalled();
     });
 
-    it('setTextProperties: should call `text.setAttribute` if `type` is donut', () => {
+    it('setTextProperties: shouldn`t call `text.setAttribute` if `getClientRects.length` is zero', () => {
+      const text = {
+        getClientRects: () => ({ length: 0 }),
+        getBBox: () => ({ width: 30, height: 10 }),
+        setAttribute: (attr, val) => {}
+      };
+
+      component.type = PoChartType.Donut;
+
+      spyOn(text, 'setAttribute');
+
+      component['setTextProperties'](text, 1, 2);
+
+      expect(text.setAttribute).not.toHaveBeenCalled();
+    });
+
+    it('setTextProperties: should call `text.setAttribute` if `type` is donut and `getClientRects` has length', () => {
       const startAngle = 4;
       const endAngle = 6;
       const text = {
+        getClientRects: () => ({ length: 1 }),
         getBBox: () => ({ width: 30, height: 10 }),
         setAttribute: (attr, val) => {}
       };
