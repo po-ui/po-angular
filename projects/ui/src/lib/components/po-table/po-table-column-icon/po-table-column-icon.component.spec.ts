@@ -164,7 +164,10 @@ describe('PoTableColumnIconComponent:', () => {
       expect(expectedValue).toBe(expectedIcon);
     });
 
-    it('click: shouldn`t call columnIcon.action or column.action if columnIcon.disabled is true', () => {
+    it('click: shouldn`t call columnIcon.action or column.action neither `stopPropagation` if columnIcon.disabled is true', () => {
+      const fakeEvent = {
+        stopPropagation: () => {}
+      };
       const fakeRow = (component.row = {});
       const fakeColumnIcon = {
         color: 'color-08',
@@ -177,15 +180,20 @@ describe('PoTableColumnIconComponent:', () => {
       spyOn(component, 'isDisabled').and.callThrough();
       spyOn(fakeColumnIcon, 'action');
       spyOn(component.column, 'action');
+      spyOn(fakeEvent, 'stopPropagation');
 
-      component.click(fakeColumnIcon);
+      component.click(fakeColumnIcon, fakeEvent);
 
       expect(component.column.action).not.toHaveBeenCalledWith(fakeColumnIcon);
       expect(fakeColumnIcon.action).not.toHaveBeenCalledWith(fakeRow, fakeColumnIcon);
       expect(component['isDisabled']).toHaveBeenCalledWith(fakeColumnIcon);
+      expect(fakeEvent.stopPropagation).not.toHaveBeenCalled();
     });
 
-    it('click: should call columnIcon.action if isDisabled is false', () => {
+    it('click: should call `columnIcon.action` and `stopPropagation` if isDisabled is false', () => {
+      const fakeEvent = {
+        stopPropagation: () => {}
+      };
       const fakeRow = (component.row = {});
       const fakeColumnIcon = {
         color: 'color-08',
@@ -198,29 +206,60 @@ describe('PoTableColumnIconComponent:', () => {
       spyOn(component, 'isDisabled').and.callThrough();
       spyOn(component.column, 'action');
       spyOn(fakeColumnIcon, 'action');
+      spyOn(fakeEvent, 'stopPropagation');
 
-      component.click(fakeColumnIcon);
+      component.click(fakeColumnIcon, fakeEvent);
 
       expect(fakeColumnIcon.action).toHaveBeenCalledWith(fakeRow, fakeColumnIcon);
       expect(component.column.action).not.toHaveBeenCalledWith(fakeColumnIcon);
       expect(component['isDisabled']).toHaveBeenCalledWith(fakeColumnIcon);
+      expect(fakeEvent.stopPropagation).toHaveBeenCalled();
     });
 
-    it('click: should call column.action with columnIcon if isDisabled is falsy and columnIcon.action is undefined', () => {
+    it('click: should call column.action with columnIcon  and `stopPropagation` if isDisabled is falsy and columnIcon.action is undefined', () => {
+      const fakeEvent = {
+        stopPropagation: () => {}
+      };
       const fakeRow = (component.row = {});
       const fakeColumnIcon = {
         color: 'color-08',
-        value: 'po-icon-copy'
+        value: 'po-icon-copy',
+        disabled: () => false
       };
       component.column = { property: 'columnIcon', type: 'icon', action: () => {} };
 
       spyOn(component, 'isDisabled').and.callThrough();
       spyOn(component.column, 'action');
+      spyOn(fakeEvent, 'stopPropagation');
 
-      component.click(fakeColumnIcon);
+      component.click(fakeColumnIcon, fakeEvent);
 
       expect(component.column.action).toHaveBeenCalledWith(fakeRow, fakeColumnIcon);
       expect(component['isDisabled']).toHaveBeenCalledWith(fakeColumnIcon);
+      expect(fakeEvent.stopPropagation).toHaveBeenCalled();
+    });
+
+    it('click: should call only `stopPropagation` if `columnIcon.action` and `column.action` are undefined', () => {
+      const fakeEvent = {
+        stopPropagation: () => {}
+      };
+      const fakeColumnIcon = {
+        color: 'color-08',
+        value: 'po-icon-copy',
+        action: undefined,
+        disabled: () => false
+      };
+      component.column = { property: 'columnIcon', type: 'icon' };
+
+      spyOn(component, 'isDisabled').and.callThrough();
+      spyOn(fakeEvent, 'stopPropagation');
+
+      component.click(fakeColumnIcon, fakeEvent);
+
+      expect(component['isDisabled']).toHaveBeenCalledWith(fakeColumnIcon);
+      expect(fakeEvent.stopPropagation).toHaveBeenCalled();
+      expect(component.column.action).toBeUndefined();
+      expect(fakeColumnIcon.action).toBeUndefined();
     });
 
     it('trackByFunction: should return index', () => {

@@ -2,7 +2,7 @@
   class="po-icon {{ icon }} {{ disabled ? '' : color }}"
   [ngClass]="{ 'po-clickable': clickable, 'po-table-icon-disabled': disabled }"
   [p-tooltip]="tooltip"
-  (click)="onClick()"
+  (click)="onClick($event)"
   (mouseenter)="tooltipMouseEnter()"
   (mouseleave)="tooltipMouseLeave()"
 >
