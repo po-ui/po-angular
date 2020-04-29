@@ -54,7 +54,7 @@ export interface PoPageDynamicTableActions {
   /**
    * @description
    *
-   * Rota criar um novo recurso, caso seja preenchida sera exibido uma ação no topo da página.
+   * Rota ou função para criar um novo recurso, caso seja preenchida sera exibido uma ação no topo da página.
    *
    * ```
    * actions = {
@@ -62,11 +62,57 @@ export interface PoPageDynamicTableActions {
    * };
    * ```
    */
-  new?: string;
+  new?: string | Function;
 
   /** Habilita a ação de exclusão na tabela. */
   remove?: boolean;
 
   /** Habilita a ação de exclusão em lote na página. */
   removeAll?: boolean;
+
+  /**
+   * @description
+   *
+   *  Método/URL que deve ser chamado antes da ação de inclusão
+   *  A URL será chamada via POST.
+   *
+   * Tanto a função como a API devem retornar um objeto com a seguinte definição:
+   *
+   * ```
+   *  newUrl: string com nova rota para inserção, deve substituir a função ou rota definida anteriormente,
+   *  allowAction: boolean que define se deve ou não executar a ação de inserção (new)
+   * ```
+   *
+   * ```
+   * // exemplo de retorno
+   * {
+   *  newUrl: '/other-new-route',
+   *  allowAction: true
+   * }
+   * ```
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeNew**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   *
+   */
+  beforeNew?: string | (() => PoPageDynamicTableBeforeNew);
+}
+
+/**
+ * @usedBy PoPageDynamicTableActions
+ *
+ * @description
+ *
+ * Interface para o retorno da função beforeNew
+ */
+export interface PoPageDynamicTableBeforeNew {
+  /**
+   * Nova rota para inserção, deve substituir a função ou rota definida anteriormente
+   */
+  newUrl?: string;
+
+  /**
+   * Define se deve ou não executar a ação de inserção (new)
+   */
+  allowAction?: boolean;
 }

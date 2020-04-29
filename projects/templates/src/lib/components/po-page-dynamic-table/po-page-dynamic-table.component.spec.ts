@@ -164,9 +164,6 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.breadcrumb).toEqual({
           items: [{ label: 'Test' }, { label: 'Test2' }]
         });
-
-        component['subscriptions'] = null;
-        component.ngOnDestroy();
       }));
 
       it('should configure properties based on the return of onload route', fakeAsync(() => {
@@ -537,15 +534,123 @@ describe('PoPageDynamicTableComponent:', () => {
       // expect(component['navigateTo']).toHaveBeenCalledWith({ path, url, component: PoPageDynamicEditComponent });
     });
 
-    it('openNew: should call `navigateTo` with object that contains path and component properties. ', () => {
-      const path = '/people/:id';
+    describe('openNew:', () => {
+      it('should call `navigateTo` with object that contains path and component properties. ', () => {
+        const path = '/people/:id';
 
-      spyOn(component, <any>'navigateTo');
+        const spyNavigate = spyOn(component, <any>'navigateTo');
 
-      component['openNew'](path);
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of({}));
+        component['openNew'](path);
 
-      expect(component['navigateTo']).toHaveBeenCalledWith({ path });
-      // expect(component['navigateTo']).toHaveBeenCalledWith({ path, component: PoPageDynamicEditComponent });
+        expect(spyNavigate).toHaveBeenCalledWith({ path });
+      });
+
+      it('should call the function in the actions.new property ', () => {
+        const testObj = {
+          fn: () => {}
+        };
+
+        const spy = spyOn(testObj, 'fn');
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of({}));
+        component['openNew'](testObj.fn);
+
+        expect(spy).toHaveBeenCalled();
+      });
+
+      it('should call `navigateTo` with a new url if actions.beforeNew is valid', () => {
+        const path = '/people/:id';
+        const newUrl = '/newUrl';
+
+        component.actions.beforeNew = '/test';
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of({ newUrl }));
+        const spyNavigate = spyOn(component, <any>'navigateTo');
+
+        component['openNew'](path);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
+      });
+
+      it('should not call `navigateTo` with a new url if allowAction is false', () => {
+        const path = '/people/:id';
+        const newUrl = '/newUrl';
+        const allowAction = false;
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of({ allowAction, newUrl }));
+        const spyNavigate = spyOn(component, <any>'navigateTo');
+
+        component.actions.beforeNew = '/test';
+        component['openNew'](path);
+
+        expect(spyNavigate).not.toHaveBeenCalled();
+      });
+
+      it('should call `navigateTo` with a new url if allowAction is null', () => {
+        const path = '/people/:id';
+        const newUrl = '/newUrl';
+        const allowAction = null;
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of({ allowAction, newUrl }));
+        const spyNavigate = spyOn(component, <any>'navigateTo');
+
+        component.actions.beforeNew = '/test';
+        component['openNew'](path);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
+      });
+
+      it('should call `navigateTo` with a new url if allowAction is undefined', () => {
+        const path = '/people/:id';
+        const newUrl = '/newUrl';
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of({ newUrl }));
+        const spyNavigate = spyOn(component, <any>'navigateTo');
+
+        component.actions.beforeNew = '/test';
+        component['openNew'](path);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
+      });
+
+      it('should call `navigateTo` with a new url if beforeNew is null', () => {
+        const path = '/people/:id';
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of(null));
+        const spyNavigate = spyOn(component, <any>'navigateTo');
+
+        component.actions.beforeNew = '/test';
+        component['openNew'](path);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path });
+      });
+
+      it('should call `navigateTo` with a new url if beforeNew is invalid', () => {
+        const path = '/people/:id';
+        const obj: any = { teste: 'test' };
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of(obj));
+        const spyNavigate = spyOn(component, <any>'navigateTo');
+
+        component.actions.beforeNew = '/test';
+        component['openNew'](path);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path });
+      });
+
+      it('should call `navigateTo` with a new url if allowAction is number', () => {
+        const path = '/people/:id';
+        const newUrl = '/newUrl';
+        const allowAction: any = 0;
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeNew').and.returnValue(of({ allowAction, newUrl }));
+        const spyNavigate = spyOn(component, <any>'navigateTo');
+
+        component.actions.beforeNew = '/test';
+        component['openNew'](path);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
+      });
     });
 
     it('remove: should call `poNotification.success` on `deleteResource` passing `uniqueKey`', fakeAsync(() => {
