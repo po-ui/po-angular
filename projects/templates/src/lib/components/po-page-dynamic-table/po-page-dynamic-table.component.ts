@@ -20,11 +20,15 @@ import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-
 
 import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
+import {
+  PoPageDynamicTableActions,
+  PoPageDynamicTableBeforeNew
+} from './interfaces/po-page-dynamic-table-actions.interface';
 import { PoPageDynamicTableOptions } from './interfaces/po-page-dynamic-table-options.interface';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
+import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -162,7 +166,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private page: number = 1;
   private params = {};
   private sortedColumn: PoTableColumnSort;
-  private subscriptions: Array<Subscription> = [];
+  private subscriptions = new Subscription();
 
   hasNext = false;
   items = [];
@@ -227,7 +231,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     private poDialogService: PoDialogService,
     private poNotification: PoNotificationService,
     private poPageDynamicService: PoPageDynamicService,
-    private poPageCustomizationService: PoPageCustomizationService
+    private poPageCustomizationService: PoPageCustomizationService,
+    private poPageDynamicTableActionsService: PoPageDynamicTableActionsService
   ) {
     super();
   }
@@ -237,14 +242,10 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   ngOnDestroy() {
-    if (this.subscriptions) {
-      this.subscriptions.forEach(subscription => {
-        subscription.unsubscribe();
-      });
-    }
+    this.subscriptions.unsubscribe();
   }
   onAdvancedSearch(filter) {
-    this.subscriptions.push(this.loadData({ page: 1, ...filter }).subscribe());
+    this.subscriptions.add(this.loadData({ page: 1, ...filter }).subscribe());
     this.params = filter;
   }
 
@@ -259,7 +260,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   onQuickSearch(filter) {
-    this.subscriptions.push(this.loadData(filter ? { page: 1, search: filter } : undefined).subscribe());
+    this.subscriptions.add(this.loadData(filter ? { page: 1, search: filter } : undefined).subscribe());
     this.params = filter ? { search: filter } : {};
   }
 
@@ -268,7 +269,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   showMore() {
-    this.subscriptions.push(this.loadData({ page: ++this.page, ...this.params }).subscribe());
+    this.subscriptions.add(this.loadData({ page: ++this.page, ...this.params }).subscribe());
   }
 
   get hasActionRemoveAll() {
@@ -400,8 +401,30 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.navigateTo({ path, url });
   }
 
-  private openNew(path: string) {
-    this.navigateTo({ path });
+  private openNew(actionNew: PoPageDynamicTableActions['new']) {
+    this.subscriptions.add(
+      this.poPageDynamicTableActionsService
+        .beforeNew(this.actions.beforeNew)
+        .subscribe((beforeNewResult: PoPageDynamicTableBeforeNew) => this.executeNew(actionNew, beforeNewResult))
+    );
+  }
+
+  private executeNew(actionNew: PoPageDynamicTableActions['new'], beforeNewResult?: PoPageDynamicTableBeforeNew) {
+    const before = beforeNewResult ?? {};
+    const allowAction = typeof before.allowAction === 'boolean' ? before.allowAction : true;
+    const { newUrl } = before;
+
+    if (allowAction && actionNew) {
+      if (newUrl) {
+        return this.navigateTo({ path: newUrl });
+      }
+
+      if (typeof actionNew === 'string') {
+        return this.navigateTo({ path: actionNew });
+      }
+
+      return actionNew();
+    }
   }
 
   /**
@@ -517,7 +540,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const metadata$ = this.getMetadata(serviceApiFromRoute, onLoad);
     const data$ = this.loadData();
 
-    this.subscriptions.push(concat(metadata$, data$).subscribe());
+    this.subscriptions.add(concat(metadata$, data$).subscribe());
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {

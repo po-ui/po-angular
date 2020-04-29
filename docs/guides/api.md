@@ -102,7 +102,7 @@ GET https://example.com.br/api/users/10
     country: "US",
     _messages: [{
       code: "INFO",
-      type: "information"
+      type: "information",
       message: "Esta é uma mensagem informativa",
       detailedMessage: "Mais detalhes sobre esta mensagem podem ser vistos aqui."
     }]
