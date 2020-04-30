@@ -23,6 +23,8 @@ import { PoPageDynamicEditOptions } from './interfaces/po-page-dynamic-edit-opti
 import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicEditMetadata } from './interfaces/po-page-dynamic-edit-metadata.interface';
 import { PoPageDynamicOptionsSchema } from '../../services/po-page-customization/po-page-dynamic-options.interface';
+import { PoPageDynamicEditActionsService } from './po-page-dynamic-edit-actions.service';
+import { PoPageDynamicEditBeforeSave } from './interfaces/po-page-dynamic-edit-before-save.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
 
@@ -356,7 +358,8 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     private poNotification: PoNotificationService,
     private poDialogService: PoDialogService,
     private poPageDynamicService: PoPageDynamicService,
-    private poPageCustomizationService: PoPageCustomizationService
+    private poPageCustomizationService: PoPageCustomizationService,
+    private poPageDynamicEditActionsService: PoPageDynamicEditActionsService
   ) {}
 
   ngOnInit(): void {
@@ -537,7 +540,28 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return path.replace(/:id/g, uniqueKey);
   }
 
-  private save(path) {
+  private save(saveAction: PoPageDynamicEditActions['save']) {
+    this.poPageDynamicEditActionsService
+      .beforeSave(this.actions.beforeSave, { ...this.model })
+      .subscribe((returnBeforeSave: PoPageDynamicEditBeforeSave) => {
+        const newAction = returnBeforeSave?.newUrl ?? saveAction;
+        const allowAction = returnBeforeSave?.allowAction ?? true;
+
+        this.updateModel(returnBeforeSave?.resource);
+
+        if (!allowAction) {
+          return;
+        }
+
+        if (typeof newAction === 'string') {
+          this.executeSave(newAction);
+        } else {
+          newAction({ ...this.model });
+        }
+      });
+  }
+
+  private executeSave(saveAction: string) {
     if (this.dynamicForm.form.invalid) {
       this.poNotification.warning(this.literals.saveNotificationWarning);
       return;
@@ -553,9 +577,16 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
 
     saveOperation.toPromise().then(() => {
       this.poNotification.success(msgSucess);
-
-      this.navigateTo(path);
+      this.navigateTo(saveAction);
     });
+  }
+
+  private updateModel(newResource: any) {
+    const dynamicNgForm = this.dynamicForm.form;
+
+    this.model = { ...this.model, ...newResource };
+
+    dynamicNgForm.form.patchValue(this.model);
   }
 
   private saveNew(path) {

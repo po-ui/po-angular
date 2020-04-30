@@ -3,5 +3,6 @@ export * from './interfaces/po-page-dynamic-edit-actions.interface';
 export * from './interfaces/po-page-dynamic-edit-field.interface';
 export * from './interfaces/po-page-dynamic-edit-metadata.interface';
 export * from './interfaces/po-page-dynamic-edit-options.interface';
+export * from './interfaces/po-page-dynamic-edit-before-save.interface';
 
 export * from './po-page-dynamic-edit.module';
