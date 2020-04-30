@@ -1,5 +1,15 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [2.1.1](https://github.com/po-ui/po-angular/compare/v2.1.0...v2.1.1) (2020-04-30)
+
+
+### Bug Fixes
+
+* **chart:** corrige erro no Firefox ([7c18319](https://github.com/po-ui/po-angular/commit/7c183199865ce1bf08afbec2534dbc8ee635bc3c))
+* **table:** previne selecionar linha ao clicar em ação ([1650c35](https://github.com/po-ui/po-angular/commit/1650c35bf06fd3004edf07348d6dd8b62f61cc89))
+
 ## [2.1.0](https://github.com/po-ui/po-angular/compare/v2.0.0...v2.1.0) (2020-04-24)
 
 
