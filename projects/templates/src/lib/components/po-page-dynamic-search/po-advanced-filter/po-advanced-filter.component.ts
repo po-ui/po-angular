@@ -3,6 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { PoDynamicFormComponent, PoLanguageService } from '@po-ui/ng-components';
 
 import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.component';
+import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search-filters.interface';
 
 /**
  * @docsPrivate
@@ -28,7 +29,12 @@ export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent {
   }
 
   open() {
-    this.filter = {};
+    this.filter = this.keepFilters ? this.getInitialValuesFromFilter(this.filters) : {};
+
     this.poModal.open();
+  }
+
+  private getInitialValuesFromFilter(filters: Array<PoPageDynamicSearchFilters>) {
+    return filters.reduce((result, item) => Object.assign(result, { [item.property]: item.initValue }), {});
   }
 }

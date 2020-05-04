@@ -1,10 +1,17 @@
 import { EventEmitter, Input, Output, ViewChild, Directive } from '@angular/core';
 
-import { PoDynamicFormField, PoLanguageService, PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import {
+  InputBoolean,
+  PoDynamicFormField,
+  PoLanguageService,
+  PoModalAction,
+  PoModalComponent
+} from '@po-ui/ng-components';
 
 import { poLocaleDefault } from '../../../utils/util';
 
 import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
+import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search-filters.interface';
 
 export const poAdvancedFiltersLiteralsDefault = {
   en: <PoAdvancedFilterLiterals>{
@@ -65,16 +72,23 @@ export class PoAdvancedFilterBaseComponent {
   };
 
   /**
-   * Coleção de objetos que implementam a interface PoDynamicFormField, para definição dos campos que serão criados
+   * Coleção de objetos que implementam a interface PoPageDynamicSearchFilters, para definição dos campos que serão criados
    * dinamicamente.
    */
-  @Input('p-filters') set filters(filters: Array<PoDynamicFormField>) {
+  @Input('p-filters') set filters(filters: Array<PoPageDynamicSearchFilters>) {
     this._filters = Array.isArray(filters) ? [...filters] : [];
   }
 
-  get filters() {
+  get filters(): Array<PoPageDynamicSearchFilters> {
     return this._filters;
   }
+
+  /**
+   * Mantém na modal de busca avançada os valores preenchidos do último filtro realizado pelo usuário.
+   */
+  @InputBoolean()
+  @Input('p-keep-filters')
+  keepFilters: boolean = false;
 
   /** Objeto com as literais usadas no `po-advanced-filter`. */
   @Input('p-literals') set literals(value: PoAdvancedFilterLiterals) {

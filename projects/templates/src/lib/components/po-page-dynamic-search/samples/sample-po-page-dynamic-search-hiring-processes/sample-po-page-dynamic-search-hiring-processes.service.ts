@@ -140,7 +140,11 @@ export class SamplePoPageDynamicSearchHiringProcessesService {
   getPageOptions() {
     return {
       actions: [{ label: 'Find on Google' }],
-      filters: [{ property: 'idCard', gridColumns: 6 }]
+      filters: [
+        { property: 'idCard', gridColumns: 6 },
+        { property: 'city', initValue: 'Ontario' }
+      ],
+      keepFilters: true
     };
   }
 }
