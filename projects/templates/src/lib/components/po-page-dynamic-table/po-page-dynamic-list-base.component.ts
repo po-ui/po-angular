@@ -4,7 +4,7 @@ import { PoBreadcrumb } from '@po-ui/ng-components';
 
 import { convertToBoolean } from '../../utils/util';
 
-import { PoPageDynamicTableField } from './interfaces/po-page-dynamic-table-field.interface';
+import { PoPageDynamicTableFilters } from './interfaces/po-page-dynamic-table-filters.interface';
 
 @Directive()
 export class PoPageDynamicListBaseComponent {
@@ -49,13 +49,13 @@ export class PoPageDynamicListBaseComponent {
    *
    * > Caso não seja definido fields a tabela assumirá o comportamento padrão.
    */
-  @Input('p-fields') set fields(fields: Array<PoPageDynamicTableField>) {
+  @Input('p-fields') set fields(fields: Array<PoPageDynamicTableFilters>) {
     this._fields = Array.isArray(fields) ? [...fields] : [];
 
     this.setFieldsProperties(this.fields);
   }
 
-  get fields(): Array<PoPageDynamicTableField> {
+  get fields(): Array<PoPageDynamicTableFilters> {
     return this._fields;
   }
 

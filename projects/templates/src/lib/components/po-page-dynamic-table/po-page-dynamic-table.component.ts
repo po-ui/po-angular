@@ -5,6 +5,7 @@ import { Subscription, Observable, EMPTY, concat, of } from 'rxjs';
 import { tap, switchMap, map } from 'rxjs/operators';
 
 import {
+  InputBoolean,
   PoDialogConfirmOptions,
   PoDialogService,
   PoNotificationService,
@@ -29,6 +30,7 @@ import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-action
 import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
+import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search/po-page-dynamic-search-filters.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -132,7 +134,8 @@ export const poPageDynamicTableLiteralsDefault = {
  *     { property: 'genre' },
  *     { property: 'city' },
  *     { property: 'country' }
- *   ]
+ *   ],
+ *   keepFilters: true
  * }
  * ```
  *
@@ -225,6 +228,19 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return this._actions;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Mantém na modal de `Busca Avançada` os valores preenchidos do último filtro realizado pelo usuário.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-keep-filters')
+  keepFilters: boolean = false;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -244,9 +260,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
+
   onAdvancedSearch(filter) {
     this.subscriptions.add(this.loadData({ page: 1, ...filter }).subscribe());
     this.params = filter;
+
+    if (this.keepFilters) {
+      this.updateFilterValue(filter);
+    }
   }
 
   onChangeDisclaimers(disclaimers) {
@@ -618,7 +639,28 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const metadata$ = this.getMetadata(serviceApiFromRoute, onLoad);
     const data$ = this.loadData();
 
-    this.subscriptions.add(concat(metadata$, data$).subscribe());
+    const initialFilters = this.getInitialValuesFromFilter();
+
+    if (Object.keys(initialFilters).length) {
+      this.subscriptions.add(metadata$.subscribe());
+    } else {
+      this.subscriptions.add(concat(metadata$, data$).subscribe());
+    }
+  }
+
+  private getInitialValuesFromFilter() {
+    const initialFilters = this.filters.reduce(
+      (result, item) => Object.assign(result, { [item.property]: item.initValue }),
+      {}
+    );
+
+    Object.keys(initialFilters).forEach(key => {
+      if (!initialFilters[key]) {
+        delete initialFilters[key];
+      }
+    });
+
+    return initialFilters;
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {
@@ -638,7 +680,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       fields: this.fields,
       actions: this.actions,
       breadcrumb: this.breadcrumb,
-      title: this.title
+      title: this.title,
+      keepFilters: this.keepFilters
     };
 
     const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicTableOptions> = {
@@ -657,6 +700,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         },
         {
           nameProp: 'title'
+        },
+        {
+          nameProp: 'keepFilters'
         }
       ]
     };
@@ -670,5 +716,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       return action;
     }
     return true;
+  }
+
+  private updateFilterValue(filter) {
+    return this.fields.map(item => {
+      if (filter.hasOwnProperty(item.property)) {
+        item.initValue = filter[item.property];
+      }
+    });
   }
 }
