@@ -435,24 +435,131 @@ describe('PoPageDynamicDetailComponent:', () => {
       expect(component['poDialogService'].confirm).toHaveBeenCalled();
     });
 
-    it('goBack: should call `history.back` if the received param is a boolean type', () => {
-      spyOn(window.history, 'back');
-      spyOn(component['router'], <any>'navigate');
+    it('goBack: should call `executeBackAtion` passing `backPath` as param if beforeBack returns null', () => {
+      const backPath = '/list';
 
-      component['goBack'](true);
+      const spybeforeBack = spyOn(component['poPageDynamicDetailActionsService'], 'beforeBack').and.returnValue(
+        of(null)
+      );
+      const spyExecuteBackAction = spyOn(component, <any>'executeBackAction');
 
-      expect(window.history.back).toHaveBeenCalled();
-      expect(component['router'].navigate).not.toHaveBeenCalled();
+      component['goBack'](backPath);
+
+      expect(spybeforeBack).toHaveBeenCalled();
+      expect(spyExecuteBackAction).toHaveBeenCalledWith(backPath, undefined, undefined);
     });
 
-    it('goBack: should call `router.navigate` if the received param is a string type', () => {
-      spyOn(component['router'], <any>'navigate');
-      spyOn(window.history, 'back');
+    it('goBack: should call `executeBackAction` passing backPath, newUrl and allowAction values', () => {
+      const backPath = '/list';
+      const newUrl = '/newUrl';
+      const allowAction = false;
 
-      component['goBack']('/home');
+      const spybeforeBack = spyOn(component['poPageDynamicDetailActionsService'], 'beforeBack').and.returnValue(
+        of({ allowAction, newUrl })
+      );
+      const spyExecuteBackAction = spyOn(component, <any>'executeBackAction');
 
-      expect(component['router'].navigate).toHaveBeenCalled();
-      expect(window.history.back).not.toHaveBeenCalled();
+      component['goBack'](backPath);
+
+      expect(spybeforeBack).toHaveBeenCalled();
+      expect(spyExecuteBackAction).toHaveBeenCalledWith(backPath, allowAction, newUrl);
+    });
+
+    describe('executeBackAction', () => {
+      it('should call `history.back` if action.back is a boolean type', () => {
+        const backPath = true;
+
+        const spyHistoryBack = spyOn(window.history, 'back');
+
+        component['executeBackAction'](backPath);
+
+        expect(spyHistoryBack).toHaveBeenCalled();
+      });
+
+      it('should call `history.back` if action.back is undefined', () => {
+        const backPath = undefined;
+
+        const spyHistoryBack = spyOn(window.history, 'back');
+
+        component['executeBackAction'](backPath);
+
+        expect(spyHistoryBack).toHaveBeenCalled();
+      });
+
+      it('should call `router.navigate` if action.back is a string type', () => {
+        const backPath = '/list';
+
+        const spyNavigate = spyOn(component['router'], <any>'navigate');
+
+        component['executeBackAction'](backPath);
+
+        expect(spyNavigate).toHaveBeenCalledWith([backPath]);
+      });
+
+      it('should call the function of actions.new property', () => {
+        const backFn = {
+          fn: () => {}
+        };
+
+        const spyBackFn = spyOn(backFn, 'fn');
+
+        component['executeBackAction'](backFn.fn);
+
+        expect(spyBackFn).toHaveBeenCalled();
+      });
+
+      it('should call `router.navigate` passing `newUrl` value if allowAction is true', () => {
+        const backPath = '/list';
+        const newUrl = '/new-list';
+        const allowAction = true;
+
+        const spyNavigate = spyOn(component['router'], <any>'navigate');
+
+        component['executeBackAction'](backPath, allowAction, newUrl);
+
+        expect(spyNavigate).toHaveBeenCalledWith([newUrl]);
+      });
+
+      it('should call `router.navigate` passing `newUrl` value if allowAction is null', () => {
+        const backPath = '/list';
+        const newUrl = '/new-list';
+        const allowAction = null;
+
+        const spyNavigate = spyOn(component['router'], <any>'navigate');
+
+        component['executeBackAction'](backPath, allowAction, newUrl);
+
+        expect(spyNavigate).toHaveBeenCalledWith([newUrl]);
+      });
+
+      it('should call `router.navigate` passing `newUrl` value if allowAction is undefined', () => {
+        const backPath = '/list';
+        const newUrl = '/new-list';
+        const allowAction = undefined;
+
+        const spyNavigate = spyOn(component['router'], <any>'navigate');
+
+        component['executeBackAction'](backPath, allowAction, newUrl);
+
+        expect(spyNavigate).toHaveBeenCalledWith([newUrl]);
+      });
+
+      it('shouldn`t call any function if `allowAction` is false', () => {
+        const backFn = {
+          fn: () => {}
+        };
+        const allowAction = false;
+
+        const spyNavigate = spyOn(component['router'], <any>'navigate');
+        const spyHistoryBack = spyOn(window.history, 'back');
+        const spyBackFn = spyOn(backFn, 'fn');
+
+        component['executeBackAction'](backFn.fn, allowAction);
+
+        expect(spyNavigate).not.toHaveBeenCalled();
+        expect(spyHistoryBack).not.toHaveBeenCalled();
+        expect(spyBackFn).not.toHaveBeenCalled();
+      });
     });
 
     it('openEdit: should call `navigateTo` with object that contains path, url and component properties. ', () => {
