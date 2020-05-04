@@ -13,9 +13,13 @@ import {
   PoNotificationService
 } from '@po-ui/ng-components';
 
-import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
+import {
+  PoPageDynamicDetailActions,
+  PoPageDynamicDetailBeforeBack
+} from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
+import { PoPageDynamicDetailActionsService } from './po-page-dynamic-detail-actions.service';
 import { PoPageDynamicDetailOptions } from './interfaces/po-page-dynamic-detail-options.interface';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
@@ -121,7 +125,7 @@ export const poPageDynamicDetailLiteralsDefault = {
 @Component({
   selector: 'po-page-dynamic-detail',
   templateUrl: './po-page-dynamic-detail.component.html',
-  providers: [PoPageDynamicService]
+  providers: [PoPageDynamicService, PoPageDynamicDetailActionsService]
 })
 export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Array<Subscription> = [];
@@ -269,6 +273,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     private poNotification: PoNotificationService,
     private poDialogService: PoDialogService,
     private poPageDynamicService: PoPageDynamicService,
+    private poPageDynamicDetailActionsService: PoPageDynamicDetailActionsService,
     private poPageCustomizationService: PoPageCustomizationService
   ) {}
 
@@ -312,8 +317,30 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     return util.valuesFromObject(keys).join('|');
   }
 
-  private goBack(backAction: string | boolean) {
-    typeof backAction === 'string' ? this.router.navigate([backAction]) : window.history.back();
+  private goBack(actionBack: PoPageDynamicDetailActions['back']) {
+    this.subscriptions.push(
+      this.poPageDynamicDetailActionsService
+        .beforeBack(this.actions.beforeBack)
+        .subscribe((beforeBackResult: PoPageDynamicDetailBeforeBack) =>
+          this.executeBackAction(actionBack, beforeBackResult?.allowAction, beforeBackResult?.newUrl)
+        )
+    );
+  }
+
+  private executeBackAction(actionBack: PoPageDynamicDetailActions['back'], allowAction?, newUrl?: string) {
+    const isAllowedAction = typeof allowAction === 'boolean' ? allowAction : true;
+
+    if (isAllowedAction) {
+      if (actionBack === undefined || typeof actionBack === 'boolean') {
+        return window.history.back();
+      }
+
+      if (typeof actionBack === 'string' || newUrl) {
+        return this.router.navigate([newUrl || actionBack]);
+      }
+
+      return actionBack();
+    }
   }
 
   private loadData(id) {
