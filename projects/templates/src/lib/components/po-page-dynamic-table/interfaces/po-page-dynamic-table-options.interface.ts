@@ -1,7 +1,7 @@
 import { PoBreadcrumb } from '@po-ui/ng-components';
 
-import { PoPageDynamicTableField } from './po-page-dynamic-table-field.interface';
 import { PoPageDynamicTableActions } from './po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableFilters } from './po-page-dynamic-table-filters.interface';
 
 /**
  * @usedBy PoPageDynamicTableComponent
@@ -16,7 +16,7 @@ export interface PoPageDynamicTableOptions {
    *
    * Caso precise alterar um field que já exista deve ser passado o atributo `property` com o mesmo conteúdo do original.
    */
-  fields?: Array<PoPageDynamicTableField>;
+  fields?: Array<PoPageDynamicTableFilters>;
 
   /**
    * Ações que o usuário poderá executar na página através de botões.
@@ -36,4 +36,11 @@ export interface PoPageDynamicTableOptions {
    * Caso esse atributo seja utilizado ele sempre irá substituir o original.
    */
   title?: string;
+
+  /**
+   * Mantém na modal de Busca Avançada os valores preenchidos do último filtro realizado pelo usuário.
+   *
+   * Caso esse atributo seja utilizado ele sempre irá substituir o original.
+   */
+  keepFilters?: boolean;
 }

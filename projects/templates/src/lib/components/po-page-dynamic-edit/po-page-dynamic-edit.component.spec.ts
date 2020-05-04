@@ -762,29 +762,15 @@ describe('PoPageDynamicEditComponent: ', () => {
     describe('save:', () => {
       let executeSaveSpy;
       let updateModelSpy;
-
       beforeEach(() => {
         executeSaveSpy = spyOn(component, <any>'executeSave').and.returnValue(of({}));
         updateModelSpy = spyOn(component, <any>'updateModel');
       });
-
-      it('save: should call `resolveUniqueKey`', () => {
-        const resolveUniqueKeySpy = spyOn(component, <any>'resolveUniqueKey');
-        component.model = { name: 'Angular' };
-        component['save']('testSave/');
-        expect(resolveUniqueKeySpy).toHaveBeenCalledWith(component.model);
-      });
-
       it('shouldn`t call executeSave if allowAction is false', () => {
-        const newAction = jasmine.createSpy('newAction');
         const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: false };
-
-        component.model = { name: 'Angular' };
-        spyOn(component, <any>'resolveUniqueKey').and.returnValue('1');
         spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-        component['save'](newAction);
+        component['save']('testSave/');
         expect(executeSaveSpy).not.toHaveBeenCalled();
-        expect(newAction).not.toHaveBeenCalledWith(component.model, '1');
       });
 
       it('shouldn`t call executeSave if newAction is a Function', () => {
