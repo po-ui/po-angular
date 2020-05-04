@@ -40,8 +40,9 @@ describe('PoAdvancedFilterComponent', () => {
   });
 
   describe('Methods:', () => {
-    it('open: should call `poModal.open` and set `filter` with {}', () => {
+    it('open: should call `poModal.open` and set `filter` with {} if `this.keepFilters` is false', () => {
       component.filter = filters;
+      component.keepFilters = false;
 
       spyOn(component.poModal, 'open');
 
@@ -49,6 +50,37 @@ describe('PoAdvancedFilterComponent', () => {
 
       expect(component.poModal.open).toHaveBeenCalled();
       expect(component.filter).toEqual({});
+    });
+
+    it(`open: should call 'poModal.open', call 'getInitialValuesFromFilters' and set 'filter' with
+    initial values if 'this.keepFilters' is true`, () => {
+      const expectedFilters = [{ property: 'city', initValue: 'Ontario' }];
+      const expectedFilter = { city: 'Ontario' };
+
+      spyOn(component.poModal, 'open');
+      spyOn(component, <any>'getInitialValuesFromFilter').and.returnValue(expectedFilter);
+
+      component.filter = filters;
+      component.filters = expectedFilters;
+      component.keepFilters = true;
+
+      component.open();
+
+      expect(component.poModal.open).toHaveBeenCalled();
+      expect(component['getInitialValuesFromFilter']).toHaveBeenCalledWith(expectedFilters);
+      expect(component.filter).toEqual(expectedFilter);
+    });
+
+    it(`getInitialValuesFromFilters: should return initial values from filter`, () => {
+      const expectedFilters = [{ property: 'city', initValue: 'Ontario' }];
+      const expectedFilter = { city: 'Ontario' };
+
+      component.filters = expectedFilters;
+      component.keepFilters = true;
+
+      const getInitialValues = component['getInitialValuesFromFilter'](component.filters);
+
+      expect(getInitialValues).toEqual(expectedFilter);
     });
   });
 });

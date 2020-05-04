@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoPageDynamicSearchLiterals } from '@po-ui/ng-templates';
+import { PoPageDynamicSearchLiterals, PoPageDynamicSearchFilters } from '@po-ui/ng-templates';
 
 import {
   PoBreadcrumb,
   PoPageAction,
   PoDialogService,
   PoNotificationService,
-  PoTableColumn
+  PoTableColumn,
+  PoSelectOption
 } from '@po-ui/ng-components';
 
 import { SamplePoPageDynamicSearchHiringProcessesService } from './sample-po-page-dynamic-search-hiring-processes.service';
@@ -22,8 +23,8 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   hiringProcesses: Array<object>;
   hiringProcessesColumns: Array<PoTableColumn>;
 
-  private jobDescriptionOptions: Array<object>;
-  private statusOptions: Array<object>;
+  private jobDescriptionOptions: Array<PoSelectOption>;
+  private statusOptions: Array<PoSelectOption>;
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Hire', action: this.hireCandidate.bind(this), disabled: this.disableHireButton.bind(this) }
@@ -33,7 +34,7 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     items: [{ label: 'Home', action: this.beforeRedirect.bind(this) }, { label: 'Hiring processes' }]
   };
 
-  public readonly filters: Array<any> = [
+  public readonly filters: Array<PoPageDynamicSearchFilters> = [
     { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
     { property: 'name', gridColumns: 6 },
     { property: 'city', gridColumns: 6 },

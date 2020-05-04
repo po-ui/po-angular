@@ -1,4 +1,5 @@
-import { PoDynamicFormField, PoBreadcrumb, PoPageAction } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoPageAction } from '@po-ui/ng-components';
+import { PoPageDynamicSearchFilters } from './po-page-dynamic-search-filters.interface';
 
 /**
  * @usedBy PoPageDynamicSearchComponent
@@ -13,7 +14,7 @@ export interface PoPageDynamicSearchOptions {
    *
    * Caso precise alterar um filtro que já exista deve ser passado o atributo `property` com o mesmo conteúdo do original.
    */
-  filters?: Array<PoDynamicFormField>;
+  filters?: Array<PoPageDynamicSearchFilters>;
 
   /**
    * Lista de ações que o usuário poderá executar na página através de botões.
@@ -35,4 +36,11 @@ export interface PoPageDynamicSearchOptions {
    * Caso esse atributo seja utilizado ele sempre irá substituir o original.
    */
   title?: string;
+
+  /**
+   * Mantém na modal de busca avançada os valores preenchidos do último filtro realizado pelo usuário.
+   *
+   * Caso esse atributo seja utilizado ele sempre irá substituir o original.
+   */
+  keepFilters?: boolean;
 }

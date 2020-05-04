@@ -1,6 +1,6 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } from '@po-ui/ng-components';
+import { InputBoolean, PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } from '@po-ui/ng-components';
 
 import { poLocaleDefault } from '../../utils/util';
 
@@ -8,6 +8,7 @@ import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.i
 import { poAdvancedFiltersLiteralsDefault } from './po-advanced-filter/po-advanced-filter-base.component';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
 import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
+import { PoPageDynamicSearchFilters } from './po-page-dynamic-search-filters.interface';
 
 export const poPageDynamicSearchLiteralsDefault = {
   en: <PoPageDynamicSearchLiterals>{
@@ -51,12 +52,13 @@ export const poPageDynamicSearchLiteralsDefault = {
  * e exiba as informações.
  */
 @Directive()
-export class PoPageDynamicSearchBaseComponent {
+export abstract class PoPageDynamicSearchBaseComponent {
   private _filters: Array<PoDynamicFormField> = [];
   private _literals: PoPageDynamicSearchLiterals;
 
   advancedFilterLiterals: PoAdvancedFilterLiterals;
 
+  private previousFilters: Array<PoDynamicFormField>;
   private language: string;
 
   /** Nesta propriedade deve ser definido um array de objetos que implementam a interface `PoPageAction`. */
@@ -128,13 +130,32 @@ export class PoPageDynamicSearchBaseComponent {
    *
    * Lista dos campos usados na busca avançada. Caso o mesmo não seja passado a busca avançada não será exibida.
    */
-  @Input('p-filters') set filters(filters: Array<PoDynamicFormField>) {
+  @Input('p-filters') set filters(filters: Array<PoPageDynamicSearchFilters>) {
     this._filters = Array.isArray(filters) ? [...filters] : [];
+
+    if (JSON.stringify(this._filters) !== JSON.stringify(this.previousFilters)) {
+      this.onChangeFilters(this.filters);
+
+      this.previousFilters = [...this._filters];
+    }
   }
 
-  get filters(): Array<PoDynamicFormField> {
+  get filters(): Array<PoPageDynamicSearchFilters> {
     return this._filters;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Mantém na busca avançada os valores preenchidos do último filtro realizado pelo usuário.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-keep-filters')
+  keepFilters: boolean = false;
 
   /**
    * Função ou serviço que será executado na inicialização do componente.
@@ -189,6 +210,8 @@ export class PoPageDynamicSearchBaseComponent {
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
+
+  abstract onChangeFilters(filters: Array<PoPageDynamicSearchFilters>);
 
   protected setAdvancedFilterLiterals(literals: PoPageDynamicSearchLiterals) {
     this.advancedFilterLiterals = {

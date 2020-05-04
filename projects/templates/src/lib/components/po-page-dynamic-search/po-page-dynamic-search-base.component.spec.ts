@@ -8,6 +8,17 @@ import {
   PoPageDynamicSearchBaseComponent,
   poPageDynamicSearchLiteralsDefault
 } from './po-page-dynamic-search-base.component';
+import { PoPageDynamicSearchFilters } from './po-page-dynamic-search-filters.interface';
+import { PoPageAction, PoBreadcrumb } from '@po-ui/ng-components/lib';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'mock-component',
+  template: ''
+})
+class MockComponent extends PoPageDynamicSearchBaseComponent {
+  onChangeFilters(filters: Array<PoPageDynamicSearchFilters>) {}
+}
 
 describe('PoPageDynamicSearchBaseComponent:', () => {
   let component;
@@ -15,7 +26,7 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
   const languageService = new PoLanguageService();
 
   beforeEach(() => {
-    component = new PoPageDynamicSearchBaseComponent(languageService);
+    component = new MockComponent(languageService);
   });
 
   it('should be created', () => {

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 import { PoPageDynamicOptionsSchema, PoPageDynamicOptionsProp } from './po-page-dynamic-options.interface';
 
 type urlOrFunction = string | Function;
@@ -26,16 +27,16 @@ export class PoPageCustomizationService {
   changeOriginalOptionsToNewOptions<T, K>(objectToChange: T, newOptions: K) {
     Object.keys(newOptions).forEach(key => {
       const value = newOptions[key];
-      if (objectToChange[key]) {
+      if (objectToChange[key] !== undefined) {
         if (Array.isArray(value)) {
           objectToChange[key] = [...value];
           return;
         }
-        if (typeof value === 'number' || typeof value === 'string') {
+        if (typeof value === 'number' || typeof value === 'string' || typeof value === 'boolean') {
           objectToChange[key] = value;
           return;
         }
-        if (typeof value === 'object') {
+        if (value !== null && typeof value === 'object') {
           objectToChange[key] = { ...value };
         }
       }
@@ -58,7 +59,7 @@ export class PoPageCustomizationService {
       {} as T
     );
 
-    Object.keys(mergePageOptions).forEach(key => !mergePageOptions[key] && delete mergePageOptions[key]);
+    Object.keys(mergePageOptions).forEach(key => mergePageOptions[key] === undefined && delete mergePageOptions[key]);
 
     return mergePageOptions;
   }
@@ -67,7 +68,7 @@ export class PoPageCustomizationService {
     if (prop.merge) {
       return this.mergeOptions(originalOption[prop.nameProp], newPageOptions[prop.nameProp], prop.keyForMerge);
     } else {
-      return newPageOptions[prop.nameProp] || originalOption[prop.nameProp];
+      return newPageOptions[prop.nameProp] ?? originalOption[prop.nameProp];
     }
   }
 
