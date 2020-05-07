@@ -522,6 +522,21 @@ describe('PoPageListComponent - Desktop:', () => {
       expect(component.hasPageHeader()).toBe(false);
     });
 
+    it('filterSizeClass: should return `po-sm-6 po-md-6 po-lg-6 po-xl-6` when width is 6', () => {
+      component.filter = { width: 6 };
+      expect(component.filterSizeClass(6)).toBe('po-sm-6 po-md-6 po-lg-6 po-xl-6');
+    });
+
+    it('filterSizeClass: should return `po-sm-2 po-md-1 po-lg-1 po-xl-1` when width is 1', () => {
+      component.filter = { width: 1 };
+      expect(component.filterSizeClass(1)).toBe('po-sm-2 po-md-1 po-lg-1 po-xl-1');
+    });
+
+    it('filterSizeClass: should return `po-sm-6 po-md-4 po-lg-2 po-xl-2` when width is 1 and has advancedAction', () => {
+      component.filter = { width: 1, advancedAction: () => {} };
+      expect(component.filterSizeClass(1)).toBe('po-sm-6 po-md-4 po-lg-2 po-xl-2');
+    });
+
     describe('initializeFixedLiterals:', () => {
       it('should return the advanced filter label by `pt` language.', () => {
         component['language'] = 'pt';
