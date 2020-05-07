@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
 
@@ -19,6 +20,8 @@ class PoTagClickableComponent {
 }
 
 describe('PoTagComponent:', () => {
+  const fakeEvent = { preventDefault: () => {}, stopPropagation: () => {} };
+
   let component: PoTagComponent;
   let fixture: ComponentFixture<PoTagComponent>;
 
@@ -148,29 +151,46 @@ describe('PoTagComponent:', () => {
       expect(component.click.emit).toHaveBeenCalledWith({ 'value': component.value, 'type': component.type });
     });
 
-    it('onKeyPressed: should call `onClick` if is key enter.', () => {
-      const eventEscKey = new KeyboardEvent('keydown', <any>{ keyCode: 13 });
+    it('onKeyPressed: should call `onClick` if the event `keydown` is used with `enter` key.', () => {
+      fixture.detectChanges();
+
+      const tagElement = fixture.debugElement.query(By.css('.po-tag'));
       const spyOnClick = spyOn(component, 'onClick');
 
-      component.onKeyPressed(eventEscKey, 'enter');
+      tagElement.triggerEventHandler('keydown.enter', fakeEvent);
 
       expect(spyOnClick).toHaveBeenCalled();
     });
 
-    it('onKeyPressed: should call `onClick` if is key space.', () => {
-      const eventSpaceKey = new KeyboardEvent('keydown', <any>{ keyCode: 32 });
+    it('onKeyPressed: shouldn`t call `onClick` if the event `keyup` is used with other key than `enter`.', () => {
+      fixture.detectChanges();
+
+      const tagElement = fixture.debugElement.query(By.css('.po-tag'));
       const spyOnClick = spyOn(component, 'onClick');
 
-      component.onKeyPressed(eventSpaceKey, 'space');
+      tagElement.triggerEventHandler('keydown.space', fakeEvent);
+
+      expect(spyOnClick).not.toHaveBeenCalled();
+    });
+
+    it('onKeyPressed: should call `onClick` if the event `keyup` is used with `space` key.', () => {
+      fixture.detectChanges();
+
+      const tagElement = fixture.debugElement.query(By.css('.po-tag'));
+      const spyOnClick = spyOn(component, 'onClick');
+
+      tagElement.triggerEventHandler('keyup.space', fakeEvent);
 
       expect(spyOnClick).toHaveBeenCalled();
     });
 
-    it('onKeyPressed: shouldn`t call `onClick` if isn`t key space or enter.', () => {
-      const eventCapsLockKey = new KeyboardEvent('keypress', <any>{ keyCode: 20 });
+    it('onKeyPressed: shouldn`t call `onClick` if the event `keyup` is used with other key than `space`.', () => {
+      fixture.detectChanges();
+
+      const tagElement = fixture.debugElement.query(By.css('.po-tag'));
       const spyOnClick = spyOn(component, 'onClick');
 
-      component.onKeyPressed(eventCapsLockKey, 'CapsLock');
+      tagElement.triggerEventHandler('keyup.enter', fakeEvent);
 
       expect(spyOnClick).not.toHaveBeenCalled();
     });

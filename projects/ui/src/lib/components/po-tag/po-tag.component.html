@@ -11,8 +11,9 @@
       [ngClass]="tagColor"
       tabindex="0"
       (click)="onClick()"
-      (keydown)="onKeyPressed($event, 'enter')"
-      (keyup)="onKeyPressed($event, 'space')"
+      (keydown.enter)="onKeyPressed($event)"
+      (keydown.space)="$event.preventDefault()"
+      (keyup.space)="onKeyPressed($event)"
     >
       <span *ngIf="icon" class="po-icon" [ngClass]="!type && iconTypeString ? icon : iconFromType"></span>
       <span class="po-tag-value">{{ value }}</span>

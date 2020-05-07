@@ -101,7 +101,7 @@ describe('PoAccordionItemHeaderComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(button.innerText).toBe(expectedValue);
+      expect(button.innerText.trim()).toBe(expectedValue);
     });
 
     it('should call `onClick` on button click', () => {

@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
-import { PoKeyCodeEnum } from '../../enums/po-key-code.enum';
-
 import { PoTagBaseComponent } from './po-tag-base.component';
 import { PoTagIcon } from './enums/po-tag-icon.enum';
 import { PoTagItem } from './interfaces/po-tag-item.interface';
@@ -82,13 +80,9 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
     this.click.emit(submittedTagItem);
   }
 
-  onKeyPressed(event: any, keyCode: string) {
-    const isValidKey = event.keyCode === PoKeyCodeEnum[keyCode];
-
-    if (isValidKey) {
-      event.preventDefault();
-      event.stopPropagation();
-      this.onClick();
-    }
+  onKeyPressed(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.onClick();
   }
 }
