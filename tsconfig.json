@@ -22,8 +22,8 @@
       "@po-ui/ng-sync/*": ["./dist/ng-sync/*"],
       "@po-ui/ng-templates": ["./dist/ng-templates"],
       "@po-ui/ng-templates/*": ["./dist/ng-templates/*"],
-      "@po-ui/ng-code-editor": ["dist/ng-code-editor"],
-      "@po-ui/ng-code-editor/*": ["dist/ng-code-editor/*"]
+      "@po-ui/ng-code-editor": ["./dist/ng-code-editor"],
+      "@po-ui/ng-schematics/*": ["./dist/ng-schematics/*"]
     }
   }
 }

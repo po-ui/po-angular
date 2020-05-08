@@ -8,6 +8,7 @@
     "@po-ui/ng-storage",
     "@ionic-native/core",
     "@ionic-native/network",
-    "http-status-codes"
+    "http-status-codes",
+    "@po-ui/ng-schematics"
   ]
 }

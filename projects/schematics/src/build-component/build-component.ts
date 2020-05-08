@@ -17,14 +17,10 @@ import { normalize, strings } from '@angular-devkit/core';
 import { parseName } from '@schematics/angular/utility/parse-name';
 import { validateHtmlSelector, validateName } from '@schematics/angular/utility/validation';
 
-import {
-  addDeclarationComponentToModule,
-  addExportComponentToModule,
-  addModuleImportToModule
-} from '../../utils/module';
-import { getProjectFromWorkspace } from '../../utils/project';
+import { supportedCssExtensions } from '../utils/supported-css-extensions';
+import { getProjectFromWorkspace } from '../project';
+import { addModuleImportToModule, addDeclarationComponentToModule, addExportComponentToModule } from '../module';
 import { Schema as ComponentOptions } from './schema';
-import { supportedCssExtensions } from '../../utils/supported-css-extensions';
 
 export function buildComponent(options: ComponentOptions): Rule {
   return (host: Tree) => {

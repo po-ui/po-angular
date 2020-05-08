@@ -2,8 +2,8 @@ import { chain, Rule, schematic, Tree, noop } from '@angular-devkit/schematics';
 import { getWorkspace } from '@schematics/angular/utility/config';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
-import { addModuleImportToRootModule } from '../utils/module';
-import { getProjectFromWorkspace, getProjectTargetOptions } from '../utils/project';
+import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
+import { getProjectFromWorkspace, getProjectTargetOptions } from '@po-ui/ng-schematics/project';
 
 /** PO Module name that will insert in app root module */
 const poModuleName = 'PoModule';

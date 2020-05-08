@@ -6,7 +6,7 @@ import { WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 
 import * as path from 'path';
 
-import { getProjectFromWorkspace, getProjectTargetOptions } from '../utils/project';
+import { getProjectFromWorkspace, getProjectTargetOptions } from '@po-ui/ng-schematics/project';
 
 const collectionPath = path.join(__dirname, '../collection.json');
 

@@ -30,6 +30,7 @@
     "test:code-editor": "ng test code-editor --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:code-editor:browse": "ng test code-editor --code-coverage --browsers=Chrome --source-map",
     "test:dev": "ng test --browsers=ChromeHeadless",
+    "build:schematics": "cd ./projects/schematics && npm run build",
     "build:ui:schematics": "npm run tsc -- -p ./projects/ui/tsconfig.schematics.json",
     "build:templates:schematics": "npm run tsc -- -p ./projects/templates/tsconfig.schematics.json",
     "build:sync:schematics": "npm run tsc -- -p ./projects/sync/tsconfig.schematics.json",
@@ -38,7 +39,7 @@
     "build:templates": "ng build templates --prod && gulp templatesSchematics && gulp replaceVersion && cd dist/ng-templates && npm pack",
     "build:storage": "ng build storage --prod && gulp replaceVersion && cd dist/ng-storage && npm pack",
     "build:sync": "ng build sync --prod && gulp syncSchematics && gulp replaceVersion && cd dist/ng-sync && npm pack",
-    "build": "npm run build:ui && npm run build:templates && npm run build:storage && npm run build:sync && npm run build:code-editor",
+    "build": "npm run build:schematics && npm run build:ui && npm run build:templates && npm run build:storage && npm run build:sync && npm run build:code-editor",
     "build:lite": "ng build ui && ng build storage && ng build sync && ng build templates && ng build code-editor",
     "release": "standard-version",
     "sonarqube": "gulp sonarqube",
@@ -50,7 +51,8 @@
     "publish:sync:local": "npm publish dist/ng-sync --registry http://localhost:4873",
     "publish:storage:local": "npm publish dist/ng-storage --registry http://localhost:4873",
     "publish:code-editor:local": "npm publish dist/ng-code-editor --registry http://localhost:4873",
-    "publish:local": "npm run publish:ui:local && npm run publish:templates:local && npm run publish:code-editor:local && npm run publish:sync:local && npm run publish:storage:local"
+    "publish:schematics:local": "npm publish dist/ng-schematics --registry http://localhost:4873",
+    "publish:local": "npm run publish:schematics:local && npm run publish:ui:local && npm run publish:templates:local && npm run publish:code-editor:local && npm run publish:sync:local && npm run publish:storage:local"
   },
   "private": true,
   "dependencies": {
@@ -88,7 +90,7 @@
     "@po-ui/ng-tslint": "2.0.0",
     "@types/jasmine": "~3.5.10",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "^13.9.8",
+    "@types/node": "^13.13.4",
     "@types/systemjs": "^6.1.0",
     "codelyzer": "^5.2.2",
     "del": "^5.1.0",

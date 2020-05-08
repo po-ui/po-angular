@@ -1,4 +1,4 @@
-import { Schema as ComponentSchema } from '../build-component/schema';
+import { Schema as ComponentSchema } from '@po-ui/ng-schematics/build-component';
 
 export interface Schema extends ComponentSchema {
   /** Which component will be used to display the data. */
