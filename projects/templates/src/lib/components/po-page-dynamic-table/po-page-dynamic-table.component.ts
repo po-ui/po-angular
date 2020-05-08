@@ -20,15 +20,13 @@ import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-
 
 import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import {
-  PoPageDynamicTableActions,
-  PoPageDynamicTableBeforeNew
-} from './interfaces/po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
 import { PoPageDynamicTableOptions } from './interfaces/po-page-dynamic-table-options.interface';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
 import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
+import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 

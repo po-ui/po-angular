@@ -13,10 +13,7 @@ import {
   PoNotificationService
 } from '@po-ui/ng-components';
 
-import {
-  PoPageDynamicDetailActions,
-  PoPageDynamicDetailBeforeBack
-} from './interfaces/po-page-dynamic-detail-actions.interface';
+import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
 import { PoPageDynamicDetailActionsService } from './po-page-dynamic-detail-actions.service';
@@ -24,6 +21,7 @@ import { PoPageDynamicDetailOptions } from './interfaces/po-page-dynamic-detail-
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicDetailMetaData } from './interfaces/po-page-dynamic-detail-metadata.interface';
+import { PoPageDynamicDetailBeforeBack } from './interfaces/po-page-dynamic-detail-before-back.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicDetailOptions);
 

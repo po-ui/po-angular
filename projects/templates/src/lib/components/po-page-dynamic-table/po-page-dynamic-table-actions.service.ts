@@ -1,10 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import {
-  PoPageDynamicTableActions,
-  PoPageDynamicTableBeforeNew
-} from './interfaces/po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 
 @Injectable({
   providedIn: 'root'
