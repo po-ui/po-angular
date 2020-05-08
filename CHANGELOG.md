@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/po-ui/po-angular/compare/v2.1.1...v2.2.0) (2020-05-08)
+
+
+### Features
+
+* **page-dynamic-detail:** implementa a propriedade `PoPageDynamicDetailActions.beforeBack` ([07a177b](https://github.com/po-ui/po-angular/commit/07a177bb5deab1cc3ee4e13fec7834527b82aa28))
+* **page-dynamic-edit:** implementa propriedade `PoPageDynamicEditActions.beforeSave` ([7c6f98d](https://github.com/po-ui/po-angular/commit/7c6f98d959d3597ba7b38e69021bd16c55c52ca3))
+* **page-dynamic-table:** implementa propriedade `PoPageDynamicTableActions.beforeNew` ([b535537](https://github.com/po-ui/po-angular/commit/b5355375e51519472a157cb4cf55d95e838aeb4e))
+
 ### [2.1.1](https://github.com/po-ui/po-angular/compare/v2.1.0...v2.1.1) (2020-04-30)
 
 
