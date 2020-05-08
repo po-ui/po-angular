@@ -9,16 +9,16 @@ const sonarqubeScanner = require('sonarqube-scanner');
 const rootFolder = path.join(__dirname, './');
 const distFolder = path.resolve(rootFolder, './dist');
 
-const uiFolder = path.resolve(rootFolder, './projects/ui');
-const uiSchematicsFolder = path.resolve(uiFolder, './schematics');
+const schematicsFolder = path.resolve(rootFolder, './projects/schematics');
+const distSchematicsFolder = path.resolve(rootFolder, './dist/ng-schematics');
+
+const uiSchematicsFolder = path.resolve(rootFolder, './projects/ui/schematics');
 const distUiSchematicsFolder = path.resolve(rootFolder, './dist/ng-components/schematics');
 
-const templatesFolder = path.resolve(rootFolder, './projects/templates');
-const templatesSchematicsFolder = path.resolve(templatesFolder, './schematics');
+const templatesSchematicsFolder = path.resolve(rootFolder, './projects/templates/schematics');
 const distTemplatesSchematicsFolder = path.resolve(rootFolder, './dist/ng-templates/schematics');
 
-const syncFolder = path.resolve(rootFolder, './projects/sync');
-const syncSchematicsFolder = path.resolve(syncFolder, './schematics');
+const syncSchematicsFolder = path.resolve(rootFolder, './projects/sync/schematics');
 const distSyncSchematicsFolder = path.resolve(rootFolder, './dist/ng-sync/schematics');
 
 /** REPLACE VERSION: replace version of dist/package.json to repo version */
@@ -49,6 +49,10 @@ const copyTemplatesCollection = () =>
 
 /** SYNC SCHEMATICS */
 const copySyncMigrations = () => src([`${syncSchematicsFolder}/migrations.json`]).pipe(dest(distSyncSchematicsFolder));
+
+/** SCHEMATICS */
+const copySchematicsPackage = () => src([`${schematicsFolder}/package.json`]).pipe(dest(distSchematicsFolder));
+const copySchematicsReadme = () => src([`${schematicsFolder}/README.md`]).pipe(dest(distSchematicsFolder));
 
 /** SONAR */
 const sonarqube = task('sonarqube', function (callback) {
@@ -85,3 +89,5 @@ exports.uiSchematics = series(
 );
 
 exports.syncSchematics = series(buildSyncSchematics, parallel(copySyncMigrations));
+
+exports.copyFilesSchematics = series(copySchematicsPackage, copySchematicsReadme);

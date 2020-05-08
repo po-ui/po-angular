@@ -12,7 +12,8 @@
   },
   "schematics": "./schematics/collection.json",
   "dependencies": {
-    "@po-ui/ng-components": "0.0.0-PLACEHOLDER"
+    "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
+    "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER"
   },
   "peerDependencies": {
     "@angular/animations": "~9.1.0",

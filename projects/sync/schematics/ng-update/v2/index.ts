@@ -1,38 +1,24 @@
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
-import { getWorkspaceConfigGracefully } from '../utils/project';
-import { updatePackageJson } from '../utils/package-config';
+import { getWorkspaceConfigGracefully } from '@po-ui/ng-schematics/project';
+import { replaceInFile, ReplaceChanges } from '@po-ui/ng-schematics/replace';
+import { sortObjectByKeys } from '@po-ui/ng-schematics/package-config';
 
-import { replaceChanges, ReplaceChanges, tsLint, regexPackages } from './changes';
+import { dependeciesChanges, replaceChanges, tsLintChanges, regexPackages } from './changes';
 
 export function updateToV2() {
-  return chain([updatePackageJson('0.0.0-PLACEHOLDER'), replaceTsLint(), createUpgradeRule(), postUpdate()]);
+  return chain([
+    updatePackageJson('0.0.0-PLACEHOLDER', dependeciesChanges),
+    replaceInFile('tslint.json', tsLintChanges),
+    createUpgradeRule(),
+    postUpdate()
+  ]);
 }
 
 function postUpdate() {
   return (_: Tree, context: SchematicContext) => {
     context.addTask(new NodePackageInstallTask());
-  };
-}
-
-function replaceTsLint() {
-  return (tree: Tree) => {
-    const file = 'tslint.json';
-
-    if (tree.exists(file)) {
-      const sourceText = tree.read(file)!.toString('utf-8');
-      let updated = sourceText;
-
-      if (updated) {
-        updated = updated.replace(tsLint.replace, tsLint.replaceWith);
-      }
-
-      if (updated !== sourceText) {
-        tree.overwrite(file, updated);
-      }
-    }
-    return tree;
   };
 }
 
@@ -91,8 +77,45 @@ function applyUpdateInContent(tree: Tree, path: string) {
 function replaceWithChanges(replaces: Array<ReplaceChanges>, content: string = '') {
   replaces.forEach(({ replace, replaceWith }) => {
     const regex = new RegExp(replace, 'gi');
-    content = content.replace(regex, replaceWith);
+    content = content.replace(regex, <string>replaceWith);
   });
 
   return content;
+}
+
+export function updatePackageJson(version: string, dependenciesMap: { [key: string]: string }) {
+  return (tree: Tree): Tree => {
+    if (tree.exists('package.json')) {
+      const sourceText = tree.read('package.json')!.toString('utf-8');
+      const json = JSON.parse(sourceText);
+
+      if (!json.dependencies) {
+        json.dependencies = {};
+      }
+
+      Object.keys(dependenciesMap).forEach(pkg => {
+        const previousPackage = pkg;
+        const newPackage = dependenciesMap[pkg];
+
+        if (json.dependencies[previousPackage]) {
+          json.dependencies[newPackage] = version;
+
+          delete json.dependencies[previousPackage];
+        }
+      });
+
+      if (json.devDependencies['@portinari/tslint']) {
+        json.devDependencies['@po-ui/ng-tslint'] = '2.0.0';
+
+        delete json.devDependencies['@portinari/tslint'];
+      }
+
+      json.dependencies = sortObjectByKeys(json.dependencies);
+      json.devDependencies = sortObjectByKeys(json.devDependencies);
+
+      tree.overwrite('package.json', JSON.stringify(json, null, 2));
+    }
+
+    return tree;
+  };
 }

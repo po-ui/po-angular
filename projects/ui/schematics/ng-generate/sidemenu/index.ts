@@ -18,10 +18,11 @@ import {
 import { getWorkspace } from '@schematics/angular/utility/config';
 import { normalize, strings } from '@angular-devkit/core';
 
-import { addModuleImportToRootModule } from '../../utils/module';
-import { getProjectFromWorkspace } from '../../utils/project';
+import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
+import { getProjectFromWorkspace } from '@po-ui/ng-schematics/project';
+import { supportedCssExtensions } from '@po-ui/ng-schematics/utils';
+
 import { Schema as ComponentOptions } from './schema';
-import { supportedCssExtensions } from '../../utils/supported-css-extensions';
 
 const routerModule = 'RouterModule.forRoot([])';
 const routerModulePath = '@angular/router';

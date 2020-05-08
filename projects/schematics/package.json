@@ -1,0 +1,24 @@
+{
+  "name": "@po-ui/ng-schematics",
+  "version": "0.0.0-PLACEHOLDER",
+  "tag": "dev",
+  "description": "PO UI - Schematics",
+  "author": "PO UI",
+  "license": "MIT",
+  "homepage": "https://po-ui.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/po-ui/po-angular"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "build": "npm run tsc -- -p ./tsconfig.json",
+    "pack": "gulp replaceVersion && cd ../../dist/ng-schematics && npm pack",
+    "postbuild": "gulp copyFilesSchematics && npm run pack"
+  },
+  "peerDependencies": {
+    "@angular-devkit/core": "~9.1.0",
+    "@angular-devkit/schematics": "~9.1.0",
+    "@schematics/angular": "~9.1.0"
+  }
+}

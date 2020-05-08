@@ -1,8 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "../..",
-    "lib": ["es2018", "dom"],
+    "baseUrl": ".",
+    "lib": ["es2017", "dom"],
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -12,14 +11,15 @@
     "noImplicitThis": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "rootDir": "schematics",
-    "outDir": "../../dist/ng-sync/schematics",
+    "rootDir": "src/",
+    "outDir": "../../dist/ng-schematics",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "es6",
+    "target": "es2015",
     "types": ["jasmine", "node"]
   },
-  "include": ["schematics/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.spec.ts"]
 }

@@ -6,7 +6,7 @@ import { SchematicsException, Tree } from '@angular-devkit/schematics';
 
 import * as ts from 'typescript';
 
-import { getProjectMainFile, getProjectFromWorkspace } from './project';
+import { getProjectMainFile, getProjectFromWorkspace } from '../project';
 
 export function addModuleImportToRootModule(options: any, moduleName: string, modulePath: string) {
   return (host: Tree) => {
