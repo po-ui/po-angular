@@ -1,3 +1,5 @@
+import { PoPageDynamicDetailBeforeBack } from './po-page-dynamic-detail-before-back.interface';
+
 /**
  * @usedBy PoPageDynamicDetailComponent
  *
@@ -27,26 +29,15 @@ export interface PoPageDynamicDetailActions {
    * @description
    *
    * Ação que é executada antes da ação `back` e que serve para realização de validações prévias.
-   * - **String**: será feita uma chamada via POST para requisição do recurso.
-   * - **Function**: função que deve ser executada;
    *
-   * Tanto a função como a API devem retornar um objeto com a seguinte definição:
+   * Tanto o método como a API devem retornar um objeto com a definição de `PoPageDynamicDetailBeforeBack`.
    *
-   * ```
-   * - newUrl: string com a nova rota para navegação. Esta rota substituirá a função ou rota definida anteriormente na ação *back*,
-   * - allowAction: boolean que define se deve ou não executar a ação de voltar (*back*)
-   * ```
+   * > A url será chamada via POST
    *
-   * Caso o desenvolvedor queira exibir alguma mensagem nessa ação, ele pode criá-la na função chamada pela beforeBack,
-   * ou então definir a mensagem na resposta da api através do atributo _message conforme definido em https://po-ui.io/guides/api#successMessages
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeBack**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
    *
-   * Exemplo de retorno
-   * ```
-   * {
-   *   newUrl: '/',
-   *   allowAction: true
-   * };
-   * ```
    */
   beforeBack?: string | (() => PoPageDynamicDetailBeforeBack);
 
@@ -77,23 +68,4 @@ export interface PoPageDynamicDetailActions {
    * ```
    */
   remove?: string;
-}
-
-/**
- * @usedBy PoPageDynamicDetailComponent
- *
- * @description
- *
- * Interface para o retorno da função beforeBack.
- */
-export interface PoPageDynamicDetailBeforeBack {
-  /**
-   * Nova rota para navegação. Esta rota substitui a função ou rota definida anteriormente.
-   */
-  newUrl?: string;
-
-  /**
-   * Define se deve ou não executar a ação de voltar (*back*)
-   */
-  allowAction?: boolean;
 }

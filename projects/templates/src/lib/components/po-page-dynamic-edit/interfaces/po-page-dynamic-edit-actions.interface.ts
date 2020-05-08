@@ -16,6 +16,11 @@ export interface PoPageDynamicEditActions {
    * Tanto o método como a API receberão o recurso e devem retornar um objeto com a definição de `PoPageDynamicEditBeforeSave`.
    *
    * > A url será chamada via POST
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeSave**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   *
    */
   beforeSave?: string | ((resource: any) => PoPageDynamicEditBeforeSave);
 

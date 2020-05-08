@@ -2,10 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import {
-  PoPageDynamicDetailActions,
-  PoPageDynamicDetailBeforeBack
-} from './interfaces/po-page-dynamic-detail-actions.interface';
+import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
+import { PoPageDynamicDetailBeforeBack } from './interfaces/po-page-dynamic-detail-before-back.interface';
 
 @Injectable({
   providedIn: 'root'
