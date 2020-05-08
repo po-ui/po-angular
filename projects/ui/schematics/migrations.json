@@ -4,7 +4,7 @@
     "migration-v2": {
       "version": "2",
       "description": "Atualiza @po-ui/ng-components para v2",
-      "factory": "./ng-update/index#updateToV2"
+      "factory": "./ng-update/v2/index#updateToV2"
     }
   }
 }

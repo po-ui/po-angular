@@ -2,16 +2,25 @@ import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { strings } from '@angular-devkit/core';
 
-import { getWorkspaceConfigGracefully } from '../utils/project';
-import { updatePackageJson } from '../utils/package-config';
+import { ReplaceChanges, replaceInFile } from '@po-ui/ng-schematics/replace';
+import { getWorkspaceConfigGracefully } from '@po-ui/ng-schematics/project';
+import { sortObjectByKeys } from '@po-ui/ng-schematics/package-config';
 
-import { replaceChanges, ReplaceChanges, tsLint, regexPackages, changesComponents } from './changes';
+import {
+  angularJsonReplaces,
+  replaceChanges,
+  tsLintReplaces,
+  regexPackages,
+  changesComponents,
+  dependeciesChanges,
+  replacePackages
+} from './changes';
 
 export function updateToV2() {
   return chain([
-    updatePackageJson('0.0.0-PLACEHOLDER'),
-    replaceTsLint(),
-    replaceAgularJson(),
+    updatePackageJson('0.0.0-PLACEHOLDER', dependeciesChanges),
+    replaceInFile('tslint.json', tsLintReplaces),
+    replaceInFile('angular.json', angularJsonReplaces),
     createUpgradeRule(),
     postUpdate()
   ]);
@@ -20,46 +29,6 @@ export function updateToV2() {
 function postUpdate() {
   return (_: Tree, context: SchematicContext) => {
     context.addTask(new NodePackageInstallTask());
-  };
-}
-
-function replaceTsLint() {
-  return (tree: Tree) => {
-    const file = 'tslint.json';
-
-    if (tree.exists(file)) {
-      const sourceText = tree.read(file)!.toString('utf-8');
-      let updated = sourceText;
-
-      if (updated) {
-        updated = updated.replace(tsLint.replace, tsLint.replaceWith);
-      }
-
-      if (updated !== sourceText) {
-        tree.overwrite(file, updated);
-      }
-    }
-    return tree;
-  };
-}
-
-function replaceAgularJson() {
-  return (tree: Tree) => {
-    const file = 'angular.json';
-
-    if (tree.exists(file)) {
-      const sourceText = tree.read(file)!.toString('utf-8');
-      let updated = sourceText;
-
-      if (updated) {
-        updated = updated.replace(regexPackages, replacePackages).replace(/portinari\-theme/g, 'po-theme');
-      }
-
-      if (updated !== sourceText) {
-        tree.overwrite(file, updated);
-      }
-    }
-    return tree;
   };
 }
 
@@ -168,22 +137,50 @@ function addFunctionsOnPage(file, filePath, tree, content) {
 function replaceWithChanges(replaces: Array<ReplaceChanges>, content: string = '') {
   replaces.forEach(({ replace, replaceWith }) => {
     const regex = new RegExp(replace, 'gi');
-    content = content.replace(regex, replaceWith);
+    content = content.replace(regex, <string>replaceWith);
   });
 
   return content;
 }
 
-function replacePackages(foundString: string, _, pkg: string) {
-  const org = '@po-ui';
+function updatePackageJson(version: string, dependenciesChanges: { [key: string]: string }) {
+  return (tree: Tree): Tree => {
+    if (tree.exists('package.json')) {
+      const sourceText = tree.read('package.json')!.toString('utf-8');
+      const json = JSON.parse(sourceText);
 
-  if (pkg === 'ui') {
-    return `${org}/ng-components`;
-  } else if (pkg === 'style') {
-    return `${org}/style`;
-  } else if (pkg) {
-    return `${org}/ng-${pkg}`;
-  }
+      if (!json.dependencies) {
+        json.dependencies = {};
+      }
 
-  return foundString;
+      // necessario apenas quando migrar para @po-ui/ng-components
+      if (json.dependencies['@po-ui/ng-components']) {
+        delete json.dependencies['@po-ui/ng-components'];
+      }
+
+      Object.keys(dependenciesChanges).forEach(pkg => {
+        const previousPackage = pkg;
+        const newPackage = dependenciesChanges[pkg];
+
+        if (json.dependencies[previousPackage]) {
+          json.dependencies[newPackage] = version;
+
+          delete json.dependencies[previousPackage];
+        }
+      });
+
+      if (json.devDependencies['@portinari/tslint']) {
+        json.devDependencies['@po-ui/ng-tslint'] = '2.0.0';
+
+        delete json.devDependencies['@portinari/tslint'];
+      }
+
+      json.dependencies = sortObjectByKeys(json.dependencies);
+      json.devDependencies = sortObjectByKeys(json.devDependencies);
+
+      tree.overwrite('package.json', JSON.stringify(json, null, 2));
+    }
+
+    return tree;
+  };
 }

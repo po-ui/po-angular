@@ -1,7 +1,6 @@
 import { chain, Rule } from '@angular-devkit/schematics';
 
-import { buildComponent } from '../build-component/build-component';
-import { Schema as ComponentOptions } from './schema';
+import { buildComponent, Schema as ComponentOptions } from '@po-ui/ng-schematics/build-component';
 
 /**
  * Scaffolds a new <name> component with <po-page-list>

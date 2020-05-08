@@ -21,7 +21,8 @@
     ]
   },
   "dependencies": {
-    "@po-ui/style": "0.0.0-PLACEHOLDER"
+    "@po-ui/style": "0.0.0-PLACEHOLDER",
+    "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER"
   },
   "peerDependencies": {
     "@angular/animations": "~9.1.0",

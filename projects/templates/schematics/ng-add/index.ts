@@ -3,9 +3,9 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { getWorkspace } from '@schematics/angular/utility/config';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
-import { addPackageToPackageJson } from '../utils/package-config';
-import { addModuleImportToRootModule } from '../utils/module';
-import { getProjectTargetOptions, getProjectFromWorkspace } from '../utils/project';
+import { getProjectTargetOptions, getProjectFromWorkspace } from '@po-ui/ng-schematics/project';
+import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
+import { addPackageToPackageJson } from '@po-ui/ng-schematics/package-config';
 
 const poTemplateModuleName = 'PoTemplatesModule';
 const poTemplateModuleSourcePath = '@po-ui/ng-templates';
