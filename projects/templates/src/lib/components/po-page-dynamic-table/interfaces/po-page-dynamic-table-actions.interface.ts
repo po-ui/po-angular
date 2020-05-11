@@ -1,4 +1,5 @@
 import { PoPageDynamicTableBeforeNew } from './po-page-dynamic-table-before-new.interface';
+import { PoPageDynamicTableBeforeRemove } from './po-page-dynamic-table-before-remove.interface';
 
 /**
  * @usedBy PoPageDynamicTableComponent
@@ -67,7 +68,7 @@ export interface PoPageDynamicTableActions {
   new?: string | Function;
 
   /** Habilita a ação de exclusão na tabela. */
-  remove?: boolean;
+  remove?: boolean | ((id: string, resource: any) => boolean);
 
   /** Habilita a ação de exclusão em lote na página. */
   removeAll?: boolean;
@@ -87,4 +88,20 @@ export interface PoPageDynamicTableActions {
    *
    */
   beforeNew?: string | (() => PoPageDynamicTableBeforeNew);
+
+  /**
+   * @description
+   *
+   *  Método/URL que deve ser chamado antes da ação de exclusão
+   *
+   * Tanto o método como a API devem retornar um objeto com a definição de `PoPageDynamicTableBeforeRemove`.
+   *
+   * > A url será chamada via POST
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeRemove**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   *
+   */
+  beforeRemove?: string | ((id?: string, resource?: any) => PoPageDynamicTableBeforeRemove);
 }

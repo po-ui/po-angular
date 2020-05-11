@@ -84,32 +84,40 @@ export class PoPageDynamicService {
   }
 
   // Deleta um único recurso
-  deleteResource(id): Observable<any> {
-    return this.http.delete(`${this.endpoint}/${id}`, { headers: this.headers });
+  deleteResource(id, endpoint?: string): Observable<any> {
+    return this.http.delete(`${this.getLocalEndPoint(endpoint, true)}/${id}`, { headers: this.headers });
   }
 
   // Deleta recursos em lote
-  deleteResources(ids: Array<any>): Observable<any> {
-    return this.http.request('delete', `${this.endpoint}`, { headers: this.headers, body: ids });
+  deleteResources(ids: Array<any>, endpoint?: string): Observable<any> {
+    return this.http.request('delete', `${this.getLocalEndPoint(endpoint)}`, { headers: this.headers, body: ids });
   }
 
   // Busca uma lista de recursos
-  getResources(params?: HttpParams): Observable<any> {
-    return this.http.get(this.endpoint, { headers: this.headers, params });
+  getResources(params?: HttpParams, endpoint?: string): Observable<any> {
+    return this.http.get(this.getLocalEndPoint(endpoint), { headers: this.headers, params });
   }
 
   // Busca um único recurso
-  getResource(id): Observable<any> {
-    return this.http.get(`${this.endpoint}/${id}`, { headers: this.headers });
+  getResource(id, endpoint?: string): Observable<any> {
+    return this.http.get(`${this.getLocalEndPoint(endpoint, true)}/${id}`, { headers: this.headers });
   }
 
   // Cria um recurso
-  createResource(resource): Observable<any> {
-    return this.http.post(`${this.endpoint}`, resource, { headers: this.headers });
+  createResource(resource, endpoint?: string): Observable<any> {
+    return this.http.post(`${this.getLocalEndPoint(endpoint)}`, resource, { headers: this.headers });
   }
 
   // Atualiza um recurso
-  updateResource(id, resource): Observable<any> {
-    return this.http.put(`${this.endpoint}/${id}`, resource, { headers: this.headers });
+  updateResource(id, resource, endpoint?: string): Observable<any> {
+    return this.http.put(`${this.getLocalEndPoint(endpoint, true)}/${id}`, resource, { headers: this.headers });
+  }
+
+  private getLocalEndPoint(endpoint?: string, checkSingleBar = false) {
+    endpoint = endpoint ?? this.endpoint;
+    if (checkSingleBar) {
+      endpoint = endpoint === '/' ? '' : endpoint;
+    }
+    return endpoint;
   }
 }
