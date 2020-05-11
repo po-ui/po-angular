@@ -1,8 +1,8 @@
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
-import { Subscription, Observable, EMPTY, concat } from 'rxjs';
-import { tap, switchMap } from 'rxjs/operators';
+import { Subscription, Observable, EMPTY, concat, of } from 'rxjs';
+import { tap, switchMap, map } from 'rxjs/operators';
 
 import {
   PoDialogConfirmOptions,
@@ -27,6 +27,7 @@ import { PoPageDynamicOptionsSchema } from './../../services/po-page-customizati
 import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
 import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
 import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
+import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -282,11 +283,15 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return this._tableActions;
   }
 
-  private confirmRemove(item) {
+  private confirmRemove(
+    actionRemove: PoPageDynamicTableActions['remove'],
+    actionBeforeRemove: PoPageDynamicTableActions['beforeRemove'],
+    item
+  ) {
     const confirmOptions: PoDialogConfirmOptions = {
       title: this.literals.confirmRemoveTitle,
       message: this.literals.confirmRemoveMessage,
-      confirm: this.remove.bind(this, item)
+      confirm: this.remove.bind(this, item, actionRemove, actionBeforeRemove)
     };
 
     this.poDialogService.confirm(confirmOptions);
@@ -432,17 +437,53 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * Para o endpoint /resources/:id será executada a url /resources/1|po
    */
-  private remove(item) {
+  private remove(
+    item,
+    actionRemove: PoPageDynamicTableActions['remove'],
+    actionBeforeRemove: PoPageDynamicTableActions['beforeRemove']
+  ) {
     const uniqueKey = this.formatUniqueKey(item);
 
-    this.poPageDynamicService
-      .deleteResource(uniqueKey)
-      .toPromise()
-      .then(() => {
-        this.removeLocalItems([item]);
+    this.subscriptions.add(
+      this.poPageDynamicTableActionsService
+        .beforeRemove(actionBeforeRemove, uniqueKey, item)
+        .pipe(
+          switchMap(beforeRemove => {
+            return this.deleteAction(item, actionRemove, beforeRemove);
+          })
+        )
+        .subscribe()
+    );
+  }
 
-        this.poNotification.success(this.literals.removeSuccessNotification);
-      });
+  private deleteAction(
+    item,
+    actionRemove: PoPageDynamicTableActions['remove'],
+    beforeRemove: PoPageDynamicTableBeforeRemove
+  ): Observable<any> {
+    const { allowAction, newUrl } = beforeRemove || {};
+    const allow = allowAction ?? true;
+
+    if (allow) {
+      const uniqueKey = this.formatUniqueKey(item);
+
+      if (typeof actionRemove === 'boolean' || newUrl) {
+        const isRemoveFromUI = true;
+        return this.poPageDynamicService
+          .deleteResource(uniqueKey, newUrl)
+          .pipe(map(() => this.removeFromUI(item, isRemoveFromUI)));
+      }
+      return of(actionRemove(uniqueKey, item)).pipe(map(remove => this.removeFromUI(item, remove)));
+    }
+
+    return of({});
+  }
+
+  private removeFromUI(item, remove) {
+    if (remove === true) {
+      this.removeLocalItems([item]);
+      this.poNotification.success(this.literals.removeSuccessNotification);
+    }
   }
 
   private removeAll() {
@@ -500,6 +541,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   private setTableActions(actions: PoPageDynamicTableActions) {
     if (actions) {
+      const visibleRemove = this.showRemove(actions.remove);
       this._tableActions = [
         {
           action: this.openDetail.bind(this, actions.detail),
@@ -517,11 +559,11 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
           visible: !!this._actions.duplicate
         },
         {
-          action: this.confirmRemove.bind(this),
+          action: this.confirmRemove.bind(this, actions.remove, actions.beforeRemove),
           label: this.literals.tableActionDelete,
           separator: true,
           type: 'danger',
-          visible: !!this._actions.remove
+          visible: visibleRemove
         }
       ];
     }
@@ -582,5 +624,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     };
 
     return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
+  }
+
+  private showRemove(actionRemove: PoPageDynamicTableActions['remove']): boolean {
+    const action = actionRemove ?? false;
+    if (typeof action === 'boolean') {
+      return action;
+    }
+    return true;
   }
 }

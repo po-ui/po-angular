@@ -13,6 +13,7 @@ import { configureTestSuite, expectPropertiesValues } from '../../util-test/util
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
 import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
+import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 
 describe('PoPageDynamicTableComponent:', () => {
   let component: PoPageDynamicTableComponent;
@@ -269,7 +270,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
       spyOn(component['poDialogService'], 'confirm');
 
-      component['confirmRemove'](path);
+      component['confirmRemove'](null, null, path);
 
       expect(component['poDialogService'].confirm).toHaveBeenCalled();
     });
@@ -653,47 +654,226 @@ describe('PoPageDynamicTableComponent:', () => {
       });
     });
 
-    it('remove: should call `poNotification.success` on `deleteResource` passing `uniqueKey`', fakeAsync(() => {
-      const path = '/people/:id';
-      const uniqueKey = '1';
+    describe('remove:', () => {
+      it(`should call 'poNotification.success' on 'deleteResource' passing 'uniqueKey'
+      if action is a boolean and do not have beforeRemove setted`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const action = true;
+        const beforeRemove: any = undefined;
 
-      spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
-      spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(EMPTY);
-      spyOn(component['poNotification'], 'success');
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of({}));
+        spyOn(component['poNotification'], 'success');
 
-      component['remove'](path);
+        component['remove'](path, action, beforeRemove);
 
-      tick();
+        tick();
 
-      expect(component['poNotification'].success).toHaveBeenCalled();
-      expect(component['formatUniqueKey']).toHaveBeenCalled();
-      expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(uniqueKey);
-    }));
+        expect(component['poNotification'].success).toHaveBeenCalled();
+        expect(component['formatUniqueKey']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(uniqueKey, undefined);
+      }));
 
-    it('removeAll: shouldn`t call mapArrayByProperties if haven`t items', () => {
-      component.items = [];
+      it(`should not call 'poNotification.success' if beforeRemove return allowAction as false`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const action = true;
+        const beforeRemove: PoPageDynamicTableBeforeRemove = {
+          allowAction: false
+        };
 
-      spyOn(utilsFunctions, 'mapArrayByProperties');
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of(beforeRemove));
+        spyOn(component['poNotification'], 'success');
 
-      component['removeAll']();
+        component['remove'](path, action, 'teste');
 
-      expect(utilsFunctions.mapArrayByProperties).not.toHaveBeenCalled();
+        tick();
+
+        expect(component['poNotification'].success).not.toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).not.toHaveBeenCalled();
+      }));
+
+      it(`should call 'poNotification.success' if beforeRemove returns an undefined value`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const action = true;
+
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of(undefined));
+        spyOn(component['poNotification'], 'success');
+
+        component['remove'](path, action, 'teste');
+
+        tick();
+
+        expect(component['poNotification'].success).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalled();
+      }));
+
+      it(`should call 'deleteResource' with other url if beforeRemove return newUrl`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const action = true;
+        const beforeRemove: PoPageDynamicTableBeforeRemove = {
+          newUrl: '/teste'
+        };
+
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of(beforeRemove));
+        spyOn(component['poNotification'], 'success');
+
+        component['remove'](path, action, 'teste');
+
+        tick();
+
+        expect(component['poNotification'].success).toHaveBeenCalled();
+        expect(component['formatUniqueKey']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(uniqueKey, '/teste');
+      }));
+
+      it(`should call 'deleteResource' with other url if beforeRemove return newUrl and remove is a function`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const action = (id, resource) => true;
+        const beforeRemove: PoPageDynamicTableBeforeRemove = {
+          newUrl: '/teste'
+        };
+
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of(beforeRemove));
+        spyOn(component['poNotification'], 'success');
+
+        component['remove'](path, action, 'teste');
+
+        tick();
+
+        expect(component['poNotification'].success).toHaveBeenCalled();
+        expect(component['formatUniqueKey']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(uniqueKey, '/teste');
+      }));
+
+      it(`should call 'poNotification.success' if remove is a function and return true`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const action = (id, resource) => true;
+        const beforeRemove: PoPageDynamicTableBeforeRemove = {
+          allowAction: true
+        };
+
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of(beforeRemove));
+        spyOn(component['poNotification'], 'success');
+
+        component['remove'](path, action, 'teste');
+
+        tick();
+
+        expect(component['poNotification'].success).toHaveBeenCalled();
+        expect(component['formatUniqueKey']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).not.toHaveBeenCalled();
+      }));
+
+      it(`should not call 'poNotification.success' if remove is a function and return true`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const action = (id, resource) => false;
+        const beforeRemove: PoPageDynamicTableBeforeRemove = {
+          allowAction: true
+        };
+
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of(beforeRemove));
+        spyOn(component['poNotification'], 'success');
+
+        component['remove'](path, action, 'teste');
+
+        tick();
+
+        expect(component['poNotification'].success).not.toHaveBeenCalled();
+        expect(component['formatUniqueKey']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).not.toHaveBeenCalled();
+      }));
+
+      it(`should not call 'poNotification.success' if remove is a function and return undefined`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const removeAction = (id, resource) => undefined;
+        const beforeRemove: PoPageDynamicTableBeforeRemove = {
+          allowAction: true
+        };
+
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of(beforeRemove));
+        spyOn(component['poNotification'], 'success');
+
+        component['remove'](path, removeAction, 'teste');
+
+        tick();
+
+        expect(component['poNotification'].success).not.toHaveBeenCalled();
+        expect(component['formatUniqueKey']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).not.toHaveBeenCalled();
+      }));
+
+      it(`should not call 'poNotification.success' if remove is a function and return 'test'`, fakeAsync(() => {
+        const path = '/people/:id';
+        const uniqueKey = '1';
+        const removeAction = (id, resource) => 'test';
+        const beforeRemove: PoPageDynamicTableBeforeRemove = {
+          allowAction: true
+        };
+
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
+        spyOn(component['poPageDynamicService'], 'deleteResource').and.returnValue(of({}));
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeRemove').and.returnValue(of(beforeRemove));
+        spyOn(component['poNotification'], 'success');
+
+        component['remove'](path, <any>removeAction, 'test');
+
+        tick();
+
+        expect(component['poNotification'].success).not.toHaveBeenCalled();
+        expect(component['formatUniqueKey']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResource).not.toHaveBeenCalled();
+      }));
     });
 
-    it(`removeAll: should call 'poPageDynamicService.deleteResources', 'removeLocalItems' and
-      'poNotification.success' if contains selectedItems`, fakeAsync(() => {
-      component.items = [{ name: 'angular', $selected: true }];
-      spyOn(utilsFunctions, 'mapArrayByProperties');
-      spyOn(component, <any>'removeLocalItems');
-      spyOn(component['poNotification'], 'success');
-      spyOn(component['poPageDynamicService'], 'deleteResources').and.returnValue(EMPTY);
-      component['removeAll']();
-      tick();
-      expect(utilsFunctions.mapArrayByProperties).toHaveBeenCalled();
-      expect(component['removeLocalItems']).toHaveBeenCalled();
-      expect(component['poPageDynamicService'].deleteResources).toHaveBeenCalled();
-      expect(component['poNotification'].success).toHaveBeenCalled();
-    }));
+    describe('removeAll', () => {
+      it('shouldn`t call mapArrayByProperties if haven`t items', () => {
+        component.items = [];
+
+        spyOn(utilsFunctions, 'mapArrayByProperties');
+
+        component['removeAll']();
+
+        expect(utilsFunctions.mapArrayByProperties).not.toHaveBeenCalled();
+      });
+
+      it(`should call 'poPageDynamicService.deleteResources', 'removeLocalItems' and
+        'poNotification.success' if contains selectedItems`, fakeAsync(() => {
+        component.items = [{ name: 'angular', $selected: true }];
+        spyOn(utilsFunctions, 'mapArrayByProperties');
+        spyOn(component, <any>'removeLocalItems');
+        spyOn(component['poNotification'], 'success');
+        spyOn(component['poPageDynamicService'], 'deleteResources').and.returnValue(EMPTY);
+        component['removeAll']();
+        tick();
+        expect(utilsFunctions.mapArrayByProperties).toHaveBeenCalled();
+        expect(component['removeLocalItems']).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].deleteResources).toHaveBeenCalled();
+        expect(component['poNotification'].success).toHaveBeenCalled();
+      }));
+    });
 
     it('removeLocalItems: shouldn`t remove local items if not set param', () => {
       component.items = ['item1', 'item2', 'item3'];
@@ -802,50 +982,93 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component.pageActions).toEqual(pageAction);
     });
 
-    it('setTableActions: shouldn`t set table actions if haven`t `actions`', () => {
-      component['_tableActions'] = [];
+    describe('setTableActions:', () => {
+      it('shouldn`t set table actions if haven`t `actions`', () => {
+        component['_tableActions'] = [];
 
-      const actions = undefined;
-      component['setTableActions'](actions);
+        const actions = undefined;
+        component['setTableActions'](actions);
 
-      expect(component.tableActions).toEqual([]);
-    });
+        expect(component.tableActions).toEqual([]);
+      });
 
-    it('setTableActions: should set table actions if have `actions`', () => {
-      const actions = {
-        new: 'newValue',
-        remove: true,
-        removeAll: true
-      };
+      it('should set table actions if have `actions`', () => {
+        const actions = {
+          new: 'newValue',
+          remove: true,
+          removeAll: true
+        };
 
-      const tableActions = [
-        {
-          action: jasmine.any(Function),
-          label: component.literals.tableActionView,
-          visible: false
-        },
-        {
-          action: jasmine.any(Function),
-          label: component.literals.tableActionEdit,
-          visible: false
-        },
-        {
-          action: jasmine.any(Function),
-          label: component.literals.tableActionDuplicate,
-          visible: false
-        },
-        {
-          action: jasmine.any(Function),
-          label: component.literals.tableActionDelete,
-          separator: true,
-          type: 'danger',
-          visible: false
-        }
-      ];
+        const tableActions = [
+          {
+            action: jasmine.any(Function),
+            label: component.literals.tableActionView,
+            visible: false
+          },
+          {
+            action: jasmine.any(Function),
+            label: component.literals.tableActionEdit,
+            visible: false
+          },
+          {
+            action: jasmine.any(Function),
+            label: component.literals.tableActionDuplicate,
+            visible: false
+          },
+          {
+            action: jasmine.any(Function),
+            label: component.literals.tableActionDelete,
+            separator: true,
+            type: 'danger',
+            visible: true
+          }
+        ];
 
-      component['setTableActions'](actions);
+        component['setTableActions'](actions);
 
-      expect(component.tableActions).toEqual(tableActions);
+        expect(component.tableActions).toEqual(tableActions);
+      });
+
+      it('should set table action remove if the property is a boolean', () => {
+        const actions = {
+          new: 'newValue',
+          remove: false,
+          removeAll: true
+        };
+
+        component['setTableActions'](actions);
+
+        expect(component.tableActions[3].visible).toBeFalse();
+      });
+
+      it('should set table action remove to true if the property is a functon', () => {
+        const actions = {
+          new: 'newValue',
+          remove: (id: string, resource: any) => false,
+          removeAll: true
+        };
+
+        component['setTableActions'](actions);
+
+        expect(component.tableActions[3].visible).toBeTrue();
+      });
+
+      it('should set table action remove to false if the property is null or undefined', () => {
+        const actions = {
+          new: 'newValue',
+          remove: undefined,
+          removeAll: true
+        };
+
+        component['setTableActions'](actions);
+
+        expect(component.tableActions[3].visible).toBeFalse();
+
+        actions.remove = null;
+
+        component['setTableActions'](actions);
+        expect(component.tableActions[3].visible).toBeFalse();
+      });
     });
 
     it('getOrderParam: should return { order: `column.property` } of PoTableColumnSort object if sort type is Ascending', () => {
