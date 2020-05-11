@@ -162,39 +162,139 @@ describe('PoPageDynamicService:', () => {
       }));
     });
 
-    it('deleteResource:should delete a resource.', fakeAsync(() => {
-      poPageDynamicService.configServiceApi({ endpoint: '/test' });
+    describe('deleteResource', () => {
+      it('should delete a resource.', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
 
-      poPageDynamicService.deleteResource(1).subscribe();
+        poPageDynamicService.deleteResource(1).subscribe();
 
-      const req = httpMock.expectOne(request => request.url === '/test/1');
+        const req = httpMock.expectOne(request => request.url === '/test/1');
 
-      expect(req.request.method).toBe('DELETE');
-      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
 
-      req.flush({});
-      tick();
-    }));
+        req.flush({});
+        tick();
+      }));
 
-    it('deleteResources:should delete a array of resources.', fakeAsync(() => {
-      poPageDynamicService.configServiceApi({ endpoint: '/test' });
+      it('should delete a resource with endpoint as null', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
 
-      poPageDynamicService.deleteResources([1, 2, 3]).subscribe();
+        poPageDynamicService.deleteResource(1, null).subscribe();
 
-      const req = httpMock.expectOne(request => request.url === '/test');
+        const req = httpMock.expectOne(request => request.url === '/test/1');
 
-      expect(req.request.method).toBe('DELETE');
-      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
-      expect(req.request.body).toEqual([1, 2, 3]);
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
 
-      req.flush({});
-      tick();
-    }));
+        req.flush({});
+        tick();
+      }));
+
+      it('should delete a resource with endpoint as /', fakeAsync(() => {
+        poPageDynamicService.deleteResource(1, '/').subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/1');
+
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should delete a resource passing endpoint as parameter.', fakeAsync(() => {
+        poPageDynamicService.deleteResource(1, '/test').subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test/1');
+
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+
+        req.flush({});
+        tick();
+      }));
+    });
+
+    describe('deleteResource', () => {
+      it('should delete a array of resources.', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        poPageDynamicService.deleteResources([1, 2, 3]).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual([1, 2, 3]);
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should delete a array of resources with endpoin as null', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        poPageDynamicService.deleteResources([1, 2, 3], null).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual([1, 2, 3]);
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should delete a array of resources passing endpoint as parameter.', fakeAsync(() => {
+        poPageDynamicService.deleteResources([1, 2, 3], '/test').subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual([1, 2, 3]);
+
+        req.flush({});
+        tick();
+      }));
+    });
+
     describe('getResources', () => {
       it('should get a array of resources with params.', fakeAsync(() => {
         const params = new HttpParams().set('name', 'mario');
         poPageDynamicService.configServiceApi({ endpoint: '/test' });
         poPageDynamicService.getResources(params).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('GET');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.params.get('name')).toBe('mario');
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should get a array of resources with params and endpoint as null.', fakeAsync(() => {
+        const params = new HttpParams().set('name', 'mario');
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+        poPageDynamicService.getResources(params, null).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('GET');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.params.get('name')).toBe('mario');
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should get a array of resources with params passing endpoint as parameter.', fakeAsync(() => {
+        const params = new HttpParams().set('name', 'mario');
+        poPageDynamicService.getResources(params, '/test').subscribe();
 
         const req = httpMock.expectOne(request => request.url === '/test');
 
@@ -220,48 +320,164 @@ describe('PoPageDynamicService:', () => {
       }));
     });
 
-    it('getResource:should get a resources.', fakeAsync(() => {
-      poPageDynamicService.configServiceApi({ endpoint: '/test' });
+    describe('getResource', () => {
+      it('should get a resources.', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
 
-      poPageDynamicService.getResource(3).subscribe();
+        poPageDynamicService.getResource(3).subscribe();
 
-      const req = httpMock.expectOne(request => request.url === '/test/3');
+        const req = httpMock.expectOne(request => request.url === '/test/3');
 
-      expect(req.request.method).toBe('GET');
-      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.method).toBe('GET');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
 
-      req.flush({});
-      tick();
-    }));
+        req.flush({});
+        tick();
+      }));
 
-    it('createResource:should create a resources.', fakeAsync(() => {
-      poPageDynamicService.configServiceApi({ endpoint: '/test' });
+      it('should get a resources with endpoint as null', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
 
-      poPageDynamicService.createResource({ 'name': 'mario' }).subscribe();
+        poPageDynamicService.getResource(3, null).subscribe();
 
-      const req = httpMock.expectOne(request => request.url === '/test');
+        const req = httpMock.expectOne(request => request.url === '/test/3');
 
-      expect(req.request.method).toBe('POST');
-      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
-      expect(req.request.body).toEqual({ 'name': 'mario' });
+        expect(req.request.method).toBe('GET');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
 
-      req.flush({});
-      tick();
-    }));
+        req.flush({});
+        tick();
+      }));
 
-    it('updateResource:should update a resources.', fakeAsync(() => {
-      poPageDynamicService.configServiceApi({ endpoint: '/test' });
+      it('should get a resources with endpoint as /', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
 
-      poPageDynamicService.updateResource(1, { 'name': 'mario' }).subscribe();
+        poPageDynamicService.getResource(3, '/').subscribe();
 
-      const req = httpMock.expectOne(request => request.url === '/test/1');
+        const req = httpMock.expectOne(request => request.url === '/3');
 
-      expect(req.request.method).toBe('PUT');
-      expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
-      expect(req.request.body).toEqual({ 'name': 'mario' });
+        expect(req.request.method).toBe('GET');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
 
-      req.flush({});
-      tick();
-    }));
+        req.flush({});
+        tick();
+      }));
+
+      it('should get a resources passing endpoint as parameter.', fakeAsync(() => {
+        poPageDynamicService.getResource(3, '/test').subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test/3');
+
+        expect(req.request.method).toBe('GET');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+
+        req.flush({});
+        tick();
+      }));
+    });
+
+    describe('createResource', () => {
+      it('should create a resources.', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        poPageDynamicService.createResource({ 'name': 'mario' }).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('POST');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual({ 'name': 'mario' });
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should create a resources with endpoint as null.', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        poPageDynamicService.createResource({ 'name': 'mario' }, null).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('POST');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual({ 'name': 'mario' });
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should create a resources passing endpoint as parameter.', fakeAsync(() => {
+        poPageDynamicService.createResource({ 'name': 'mario' }, '/test').subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('POST');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual({ 'name': 'mario' });
+
+        req.flush({});
+        tick();
+      }));
+    });
+    describe('updateResource', () => {
+      it('should update a resources.', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        poPageDynamicService.updateResource(1, { 'name': 'mario' }).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test/1');
+
+        expect(req.request.method).toBe('PUT');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual({ 'name': 'mario' });
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should update a resources with endpoint as null.', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        poPageDynamicService.updateResource(1, { 'name': 'mario' }, null).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test/1');
+
+        expect(req.request.method).toBe('PUT');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual({ 'name': 'mario' });
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should update a resources with endpoint as /.', fakeAsync(() => {
+        poPageDynamicService.configServiceApi({ endpoint: '/test' });
+
+        poPageDynamicService.updateResource(1, { 'name': 'mario' }, '/').subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/1');
+
+        expect(req.request.method).toBe('PUT');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual({ 'name': 'mario' });
+
+        req.flush({});
+        tick();
+      }));
+
+      it('should update a resources passing endpoint as parameter.', fakeAsync(() => {
+        poPageDynamicService.updateResource(1, { 'name': 'mario' }, '/test').subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test/1');
+
+        expect(req.request.method).toBe('PUT');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+        expect(req.request.body).toEqual({ 'name': 'mario' });
+
+        req.flush({});
+        tick();
+      }));
+    });
   });
 });
