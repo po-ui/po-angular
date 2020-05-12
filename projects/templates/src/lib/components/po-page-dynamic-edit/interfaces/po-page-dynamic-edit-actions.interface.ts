@@ -1,3 +1,4 @@
+import { PoPageDynamicEditBeforeCancel } from './po-page-dynamic-edit-before-cancel.interface';
 import { PoPageDynamicEditBeforeSave } from './po-page-dynamic-edit-before-save.interface';
 
 /**
@@ -8,6 +9,22 @@ import { PoPageDynamicEditBeforeSave } from './po-page-dynamic-edit-before-save.
  * Interface para as ações do componente po-page-dynamic-edit.
  */
 export interface PoPageDynamicEditActions {
+  /**
+   * @description
+   *
+   * Rota ou método que será chamado antes de executar a ação de cancelamento (cancel).
+   *
+   * Tanto o método como a API receberão o recurso e devem retornar um objeto com a definição de `PoPageDynamicEditBeforeCancel`.
+   *
+   * > A url será chamada via POST
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeCancel**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   *
+   */
+  beforeCancel?: string | (() => PoPageDynamicEditBeforeCancel);
+
   /**
    * @description
    *
@@ -29,6 +46,8 @@ export interface PoPageDynamicEditActions {
    *
    * Rota de redirecionamento para ação de cancelar, caso não seja especificada será usado o comando `navigator.back()`.
    *
+   * > Se passada uma função, é responsabilidade do desenvolvedor implementar a navegação ou outro comportamento desejado.
+   *
    * > Caso queira esconder a ação deve ser passado o valor `false`;
    *
    * ```
@@ -37,7 +56,7 @@ export interface PoPageDynamicEditActions {
    * };
    * ```
    */
-  cancel?: string | boolean;
+  cancel?: string | boolean | Function;
 
   /**
    * @description
