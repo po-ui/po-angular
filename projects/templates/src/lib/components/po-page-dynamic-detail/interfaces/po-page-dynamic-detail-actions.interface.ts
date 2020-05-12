@@ -1,4 +1,5 @@
 import { PoPageDynamicDetailBeforeBack } from './po-page-dynamic-detail-before-back.interface';
+import { PoPageDynamicDetailBeforeRemove } from './po-page-dynamic-detail-before-remove.interface';
 
 /**
  * @usedBy PoPageDynamicDetailComponent
@@ -44,6 +45,21 @@ export interface PoPageDynamicDetailActions {
   /**
    * @description
    *
+   * Rota ou método que será chamado antes de excluir um recurso (remove).
+   *
+   * Tanto o método como a API devem retornar um objeto com a definição de `PoPageDynamicDetailBeforeRemove`.
+   *
+   * > A url será chamada via POST
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeRemove**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   */
+  beforeRemove?: string | ((id: any, resource: any) => PoPageDynamicDetailBeforeRemove);
+
+  /**
+   * @description
+   *
    * Rota para edição do recurso, caso seja preenchida irá habilitar a ação de edição na tabela.
    *
    * > A rota deve conter um parâmetro chamando id.
@@ -61,11 +77,7 @@ export interface PoPageDynamicDetailActions {
    *
    * Rota de redirecionamento que será executada após a confirmação da exclusão do registro.
    *
-   * ```
-   * actions = {
-   *   remove: 'new'
-   * };
-   * ```
+   * > Se passada uma função, é responsabilidade do desenvolvedor implementar a navegação ou outro comportamento desejado.
    */
-  remove?: string;
+  remove?: string | ((id: any, resource: any) => void);
 }
