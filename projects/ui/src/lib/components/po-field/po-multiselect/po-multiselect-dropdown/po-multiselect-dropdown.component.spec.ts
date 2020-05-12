@@ -1,3 +1,4 @@
+import { By } from '@angular/platform-browser';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../../util-test/util-expect.spec';
@@ -27,7 +28,6 @@ describe('PoMultiselectDropdownComponent:', () => {
       { label: 'label1', value: 'value1' },
       { label: 'label2', value: 'value2' }
     ];
-    component.haveOptions = true;
 
     fixture.detectChanges();
   });
@@ -160,22 +160,29 @@ describe('PoMultiselectDropdownComponent:', () => {
     expect(component.show).toBeFalsy();
   }));
 
-  describe('Methods:', () => {
-    it('checkInitialOptions: should set haveOptions to true if have options', () => {
-      component.haveOptions = false;
+  describe('Properties: ', () => {
+    it('hasOptions: should return true if have options', () => {
+      const expectedValue = true;
 
-      component['checkInitialOptions']();
+      component.options = [{ value: 'Value', label: 'Value' }];
 
-      expect(component.haveOptions).toBe(true);
+      expect(component['hasOptions']).toBe(expectedValue);
     });
 
-    it('checkInitialOptions: shouldn`t set haveOptions to true if options is empty', () => {
-      component.haveOptions = false;
+    it('hasOptions: should return false if haven`t options', () => {
+      const expectedValue = false;
+
+      component.options = undefined;
+
+      expect(component['hasOptions']).toBe(expectedValue);
+    });
+
+    it('hasOptions: should return true if options is empty', () => {
+      const expectedValue = false;
+
       component.options = [];
 
-      component['checkInitialOptions']();
-
-      expect(component.haveOptions).toBe(false);
+      expect(component['hasOptions']).toBe(expectedValue);
     });
   });
 
@@ -195,6 +202,24 @@ describe('PoMultiselectDropdownComponent:', () => {
       fixture.detectChanges();
 
       expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeNull();
+    });
+
+    it('should show `po-multiselect-search` if have options and hideSearch is false', () => {
+      component.options = [{ value: '1', label: 'Option 1' }];
+      component.hideSearch = false;
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toBeTruthy();
+    });
+
+    it('shouldn`t show `po-multiselect-search` if haven`t options', () => {
+      component.options = [];
+      component.hideSearch = false;
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toBe(null);
     });
   });
 });
