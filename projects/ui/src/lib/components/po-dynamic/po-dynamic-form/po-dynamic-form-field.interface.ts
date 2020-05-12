@@ -154,4 +154,17 @@ export interface PoDynamicFormField extends PoDynamicField {
    * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
    */
   errorMessage?: string;
+
+  /**
+   * Formato de exibição da data.
+   *
+   * Valores válidos:
+   *
+   * - dd/mm/yyyy
+   * - mm/dd/yyyy
+   * - yyyy/mm/dd
+   *
+   * > Esta propriedade pode ser utilizada quando o `type` for *PoDynamicFieldType.Date* ou *PoDynamicFieldType.DateTime*.
+   */
+  format?: string;
 }

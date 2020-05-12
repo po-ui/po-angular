@@ -30,6 +30,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       property: 'birthday',
       label: 'Date of birth',
       type: 'date',
+      format: 'mm/dd/yyyy',
       gridColumns: 6,
       gridSmColumns: 12,
       maxValue: '2010-01-01',
