@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Route, Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription, concat, EMPTY, Observable, throwError } from 'rxjs';
-import { tap, catchError, switchMap } from 'rxjs/operators';
+import { Subscription, concat, EMPTY, Observable, throwError, of } from 'rxjs';
+import { tap, catchError, map, switchMap } from 'rxjs/operators';
 
 import * as util from '../../utils/util';
 import {
@@ -22,6 +22,7 @@ import { PoPageCustomizationService } from './../../services/po-page-customizati
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicDetailMetaData } from './interfaces/po-page-dynamic-detail-metadata.interface';
 import { PoPageDynamicDetailBeforeBack } from './interfaces/po-page-dynamic-detail-before-back.interface';
+import { PoPageDynamicDetailBeforeRemove } from './interfaces/po-page-dynamic-detail-before-remove.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicDetailOptions);
 
@@ -299,14 +300,56 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     return [...this._pageActions];
   }
 
-  private confirmRemove(path) {
+  private remove(
+    actionRemove: PoPageDynamicDetailActions['remove'],
+    actionBeforeRemove?: PoPageDynamicDetailActions['beforeRemove']
+  ) {
+    const uniqueKey = this.formatUniqueKey(this.model);
+
+    this.subscriptions.push(
+      this.poPageDynamicDetailActionsService
+        .beforeRemove(actionBeforeRemove, uniqueKey, { ...this.model })
+        .pipe(
+          switchMap((beforeRemoveResult: PoPageDynamicDetailBeforeRemove) => {
+            const newRemoveAction = beforeRemoveResult?.newUrl ?? actionRemove;
+            const allowAction = beforeRemoveResult?.allowAction ?? true;
+
+            if (!allowAction) {
+              return of({});
+            }
+
+            if (typeof newRemoveAction === 'string') {
+              return this.executeRemove(newRemoveAction, uniqueKey);
+            } else {
+              newRemoveAction(uniqueKey, { ...this.model });
+              return EMPTY;
+            }
+          })
+        )
+        .subscribe()
+    );
+  }
+
+  private confirmRemove(
+    actionRemove: PoPageDynamicDetailActions['remove'],
+    actionBeforeRemove: PoPageDynamicDetailActions['beforeRemove']
+  ) {
     const confirmOptions: PoDialogConfirmOptions = {
       title: this.literals.confirmRemoveTitle,
       message: this.literals.confirmRemoveMessage,
-      confirm: this.remove.bind(this, path)
+      confirm: this.remove.bind(this, actionRemove, actionBeforeRemove)
     };
 
     this.poDialogService.confirm(confirmOptions);
+  }
+
+  private executeRemove(path, uniqueKey: any) {
+    return this.poPageDynamicService.deleteResource(uniqueKey).pipe(
+      map(() => {
+        this.poNotification.success(this.literals.removeNotificationSuccess);
+        this.navigateTo({ path: path });
+      })
+    );
   }
 
   private formatUniqueKey(item) {
@@ -343,13 +386,23 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
 
   private loadData(id) {
     return this.poPageDynamicService.getResource(id).pipe(
-      tap(response => (this.model = response)),
+      tap(response => {
+        if (!response) {
+          this.setUndefinedToModelAndActions();
+        } else {
+          this.model = response;
+        }
+      }),
       catchError(error => {
-        this.model = undefined;
-        this.actions = undefined;
+        this.setUndefinedToModelAndActions();
         return throwError(error);
       })
     );
+  }
+
+  private setUndefinedToModelAndActions() {
+    this.model = undefined;
+    this.actions = undefined;
   }
 
   private getMetadata(
@@ -397,17 +450,6 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     this.navigateTo({ path, url });
   }
 
-  private remove(path) {
-    const uniqueKey = this.formatUniqueKey(this.model);
-
-    this.subscriptions.push(
-      this.poPageDynamicService.deleteResource(uniqueKey).subscribe(() => {
-        this.poNotification.success(this.literals.removeNotificationSuccess);
-        this.navigateTo({ path: path });
-      })
-    );
-  }
-
   private resolveUrl(item: any, path: string) {
     const uniqueKey = this.formatUniqueKey(item);
 
@@ -424,7 +466,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     if (actions.remove) {
       pageActions.push({
         label: this.literals.pageActionRemove,
-        action: this.confirmRemove.bind(this, actions.remove)
+        action: this.confirmRemove.bind(this, actions.remove, this.actions.beforeRemove)
       });
     }
 

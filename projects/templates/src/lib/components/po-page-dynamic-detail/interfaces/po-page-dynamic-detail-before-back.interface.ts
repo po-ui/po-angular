@@ -8,12 +8,12 @@
  */
 export interface PoPageDynamicDetailBeforeBack {
   /**
-   * Nova rota para salvar o recurso, que substituirá a rota definida anteriormente em `back`.
+   * Nova rota para retorno que substituirá a definida anteriormente em `back`.
    */
   newUrl?: string;
 
   /**
-   * Define se deve ou não executar a ação de inserção (*back*)
+   * Define se deve ou não executar a ação de retorno (*back*)
    */
   allowAction?: boolean;
 }
