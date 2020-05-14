@@ -61,7 +61,7 @@ ng generate @po-ui/ng-components:<schematic-name>
       </thead>
       <tbody>
         <tr class="po-table-row">
-          <td class="po-table-column"> [**po-page-list**](https://po-ui.io/documentation/po-page-list)
+          <td class="po-table-column"><a href="/documentation/po-page-list"><strong>po-page-list</strong></a>
           </td>
           <td class="po-table-column">
             Componente que deve ser utilizado como o container principal para as telas de listagem de dados, podendo ser apresentado como lista ou tabela.
@@ -69,16 +69,18 @@ ng generate @po-ui/ng-components:<schematic-name>
         </tr>
         <tr class="po-table-row">
           <td class="po-table-column">
-          [**po-page-default**](https://po-ui.io/documentation/po-page-default)
+          <a href="/documentation/po-page-default"><strong>po-page-default</strong></a>
           </td>
           <td class="po-table-column">Componente que deve ser utilizado como o container principal para as telas sem um template definido.</td>
         </tr>
         <tr class="po-table-row">
-          <td class="po-table-column">[**po-page-edit**](https://po-ui.io/documentation/po-page-edit)</td>
+          <td class="po-table-column"><a href="/documentation/po-page-edit"><strong>po-page-edit</strong></a>
+          </td>
           <td class="po-table-column">Componente que deve ser utilizado como container principal para tela de edição ou adição de um registro.</td>
         </tr>
         <tr class="po-table-row">
-          <td class="po-table-column">[**po-page-detail**](https://po-ui.io/documentation/po-page-detail)</td>
+          <td class="po-table-column"><a href="/documentation/po-page-detail"><strong>po-page-detail</strong></a>
+          </td>
           <td class="po-table-column">Componente que deve ser utilizado como container principal para a tela de detalhamento de um registro.</td>
         </tr>
       </tbody>
@@ -102,25 +104,25 @@ ng generate @po-ui/ng-templates:<schematic-name>
       </thead>
       <tbody>
         <tr class="po-table-row">
-          <td class="po-table-column"> [**po-page-dynamic-table**](https://po-ui.io/documentation/po-page-dynamic-table)
+          <td class="po-table-column"><a href="/documentation/po-page-dynamic-table"><strong>po-page-dynamic-table</strong></a>
           </td>
           <td class="po-table-column">Página que exibe uma lista de registros em uma tabela baseado em uma lista de fields, o mesmo também suporta metadados conforme especificado na documentação.
           </td>
         </tr>
         <tr class="po-table-row">
           <td class="po-table-column">
-          [**po-page-dynamic-detail**](https://po-ui.io/documentation/po-page-dynamic-detail)
+          <a href="/documentation/po-page-dynamic-detail"><strong>po-page-dynamic-detail</strong></a>
           </td>
           <td class="po-table-column">Página que serve para exibir registros em detalhes, o mesmo também suporta metadados conforme especificado na documentação.
           </td>
         </tr>
         <tr class="po-table-row">
-          <td class="po-table-column">[**po-page-dynamic-edit**](https://po-ui.io/documentation/po-page-dynamic-edit)</td>
+          <td class="po-table-column"><a href="/documentation/po-page-dynamic-edit"><strong>po-page-dynamic-edit</strong></a></td>
           <td class="po-table-column">Página que pode servir para editar ou criar novos registros, o mesmo também suporta metadados conforme especificado na documentação.
           </td>
         </tr>
         <tr class="po-table-row">
-          <td class="po-table-column">[**po-page-dynamic-search**](https://po-ui.io/documentation/po-page-dynamic-search)</td>
+          <td class="po-table-column"><a href="/documentation/po-page-dynamic-search"><strong>po-page-dynamic-search</strong></a></td>
           <td class="po-table-column">Componente com as ações de pesquisa já definidas, bastando que o desenvolvedor implemente apenas a chamada para as APIs e exiba as informações.
           </td>
         </tr>
