@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/po-ui/po-angular/compare/v2.2.0...v2.3.0) (2020-05-15)
+
+
+### Features
+
+* **dynamic-form:** implementa a propriedade `PoDynamicFormField.Format` ([0919ea0](https://github.com/po-ui/po-angular/commit/0919ea0a95eb0ff860798032bedf7d09c30d2219))
+* **schematics:** cria biblioteca @po-ui/ng-schematics ([9c85a76](https://github.com/po-ui/po-angular/commit/9c85a768f347704532129e7c986f53db49a99549))
+
+
+### Bug Fixes
+
+* **multiselect:** corrige exibição do campo de pesquisa ([896d3d7](https://github.com/po-ui/po-angular/commit/896d3d7e76553307d6f2df6c80bce0de7fe7a60e))
+
+
+### Documentation
+
+* **schematics:** melhora exibição dos links dos schematics disponíveis ([15421db](https://github.com/po-ui/po-angular/commit/15421db76a67dc33d0fff222abfcf1ae0b67ff7d))
+
 ## [2.2.0](https://github.com/po-ui/po-angular/compare/v2.1.1...v2.2.0) (2020-05-08)
 
 
