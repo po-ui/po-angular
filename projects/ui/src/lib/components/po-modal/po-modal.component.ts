@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 import { v4 as uuid } from 'uuid';
 
@@ -39,13 +39,7 @@ export class PoModalComponent extends PoModalBaseComponent {
   private id: string = uuid();
   private sourceElement;
 
-  onResizeListener: () => void;
-
-  constructor(
-    private poModalService: PoModalService,
-    private renderer: Renderer2,
-    private changeDetector: ChangeDetectorRef
-  ) {
+  constructor(private poModalService: PoModalService) {
     super();
   }
 
