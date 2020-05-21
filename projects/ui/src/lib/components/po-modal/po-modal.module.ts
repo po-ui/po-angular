@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { PoButtonModule } from './../po-button/po-button.module';
 import { PoModalComponent } from './po-modal.component';
-import { PoModalService } from './po-modal-service';
 
 /**
  * @description
@@ -12,7 +11,6 @@ import { PoModalService } from './po-modal-service';
 @NgModule({
   imports: [CommonModule, PoButtonModule],
   declarations: [PoModalComponent],
-  exports: [PoModalComponent],
-  providers: [PoModalService]
+  exports: [PoModalComponent]
 })
 export class PoModalModule {}
