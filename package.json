@@ -69,6 +69,7 @@
     "@po-ui/style": "2.3.0",
     "core-js": "3.6.4",
     "custom-idle-queue": "2.1.2",
+    "deepmerge": "^4.2.2",
     "http-status-codes": "^1.4.0",
     "localforage": "1.4.0",
     "lokijs": "1.5.8",
