@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/po-ui/po-angular/compare/v2.3.0...v2.4.0) (2020-05-22)
+
+
+### Features
+
+* **modal:** transforma serviço da modal em um singleton ([23270c5](https://github.com/po-ui/po-angular/commit/23270c57af3d35036a63ca678598462ffc5ab4df))
+* **page-dynamic-detail:** adiciona propriedade beforeRemove na actions ([2673e59](https://github.com/po-ui/po-angular/commit/2673e599efeaf8454582f4e5c2c9ff53c9c11663))
+* **page-dynamic-edit:** adiciona propriedade beforeCancel na actions ([28e7562](https://github.com/po-ui/po-angular/commit/28e75622ba1d3f126d011333530a3e7b5993feb0))
+* **page-dynamic-table:** adiciona propriedade beforeRemove na actions ([4395423](https://github.com/po-ui/po-angular/commit/439542313cf314cb4b8663e04115fa89bf567efd))
+
 ## [2.3.0](https://github.com/po-ui/po-angular/compare/v2.2.0...v2.3.0) (2020-05-15)
 
 
