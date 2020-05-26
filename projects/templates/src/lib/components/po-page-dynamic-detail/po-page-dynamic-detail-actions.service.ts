@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailBeforeBack } from './interfaces/po-page-dynamic-detail-before-back.interface';
 import { PoPageDynamicDetailBeforeRemove } from './interfaces/po-page-dynamic-detail-before-remove.interface';
+import { PoPageDynamicDetailBeforeEdit } from './interfaces/po-page-dynamic-detail-before-edit.interface';
 
 interface ExecuteActionParameter {
   action: string | Function;
@@ -24,6 +25,16 @@ export class PoPageDynamicDetailActionsService {
 
   beforeBack(action?: PoPageDynamicDetailActions['beforeBack']): Observable<PoPageDynamicDetailBeforeBack> {
     return this.executeAction({ action });
+  }
+
+  beforeEdit(
+    action: PoPageDynamicDetailActions['beforeEdit'],
+    id: any,
+    body: any
+  ): Observable<PoPageDynamicDetailBeforeEdit> {
+    const resource = body ?? {};
+
+    return this.executeAction({ action, resource, id });
   }
 
   beforeRemove(
