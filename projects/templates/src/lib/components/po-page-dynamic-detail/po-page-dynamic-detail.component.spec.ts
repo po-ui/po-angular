@@ -589,14 +589,149 @@ describe('PoPageDynamicDetailComponent:', () => {
       });
     });
 
-    it('openEdit: should call `navigateTo` with object that contains path, url and component properties. ', () => {
+    describe('openEdit:', () => {
+      let openEditUrlSpy: jasmine.Spy;
+      const id = 'key';
+
+      beforeEach(() => {
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(id);
+        openEditUrlSpy = spyOn(component, <any>'openEditUrl');
+      });
+
+      it('should call openEditUrl if action is url and allowAction is true', fakeAsync(() => {
+        const beforeEditResult = {
+          allowAction: true
+        };
+
+        const action = 'test/edit/:id';
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action);
+
+        tick();
+
+        expect(openEditUrlSpy).toHaveBeenCalled();
+      }));
+
+      it('should call openEditUrl if action is url and allowAction is undefined', fakeAsync(() => {
+        const beforeEditResult = {
+          allowAction: undefined
+        };
+
+        const action = 'test/edit/:id';
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action);
+
+        tick();
+
+        expect(openEditUrlSpy).toHaveBeenCalledWith(action);
+      }));
+
+      it('should call openEditUrl if action is url and allowAction is a string', fakeAsync(() => {
+        const beforeEditResult = <any>{
+          allowAction: 'test'
+        };
+
+        const action = 'test/edit/:id';
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action);
+
+        tick();
+
+        expect(openEditUrlSpy).toHaveBeenCalledWith(action);
+      }));
+
+      it('should call openEditUrl if action is url and beforeEditResult is undefined', fakeAsync(() => {
+        const beforeEditResult = undefined;
+
+        const action = 'test/edit/:id';
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action);
+
+        tick();
+
+        expect(openEditUrlSpy).toHaveBeenCalledWith(action);
+      }));
+
+      it('should call openEditUrl if newUrl is defined', fakeAsync(() => {
+        const newUrl = 'new-url/edit';
+        const beforeEditResult = {
+          newUrl
+        };
+
+        const action = 'test/edit/:id';
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action);
+
+        tick();
+
+        expect(openEditUrlSpy).toHaveBeenCalledWith(newUrl);
+      }));
+
+      it('should call action if action is a function, newUrl is undefined', fakeAsync(() => {
+        const beforeEditResult = {
+          newUrl: undefined
+        };
+
+        component.model = {
+          name: 'user name'
+        };
+
+        const action = jasmine.createSpy();
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action);
+
+        tick();
+
+        expect(openEditUrlSpy).not.toHaveBeenCalled();
+        expect(action).toHaveBeenCalledWith(id, component.model);
+      }));
+
+      it('shouldn`t call action if action is a function and allowAction is false', fakeAsync(() => {
+        const beforeEditResult = {
+          allowAction: false
+        };
+
+        const action = jasmine.createSpy();
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action);
+
+        tick();
+
+        expect(openEditUrlSpy).not.toHaveBeenCalled();
+        expect(action).not.toHaveBeenCalled();
+      }));
+
+      it('shouldn`t call openEditUrl if action is url and allowAction is false', fakeAsync(() => {
+        const beforeEditResult = {
+          allowAction: false
+        };
+
+        const action = 'test/edit/:id';
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action);
+
+        tick();
+
+        expect(openEditUrlSpy).not.toHaveBeenCalled();
+      }));
+    });
+
+    it('openEditUrl: should call `navigateTo` with object that contains path, url and component properties. ', () => {
       const path = '/people/:id';
       const url = '/people/1|2';
 
       spyOn(component, <any>'navigateTo');
       spyOn(component, <any>'resolveUrl').and.returnValue(url);
 
-      component['openEdit'](path);
+      component['openEditUrl'](path);
 
       expect(component['navigateTo']).toHaveBeenCalledWith({ path, url /*, component: PoPageDynamicEditComponent*/ });
     });

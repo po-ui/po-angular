@@ -1,5 +1,6 @@
 import { PoPageDynamicDetailBeforeBack } from './po-page-dynamic-detail-before-back.interface';
 import { PoPageDynamicDetailBeforeRemove } from './po-page-dynamic-detail-before-remove.interface';
+import { PoPageDynamicDetailBeforeEdit } from './po-page-dynamic-detail-before-edit.interface';
 
 /**
  * @usedBy PoPageDynamicDetailComponent
@@ -60,6 +61,21 @@ export interface PoPageDynamicDetailActions {
   /**
    * @description
    *
+   * Rota ou método que será chamado antes de editar um recurso (edit).
+   *
+   * Tanto o método como a API devem retornar um objeto com a definição de `PoPageDynamicDetailBeforeEdit`.
+   *
+   * > A url será chamada via POST
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeEdit**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   */
+  beforeEdit?: string | ((id: any, resource: any) => PoPageDynamicDetailBeforeEdit);
+
+  /**
+   * @description
+   *
    * Rota para edição do recurso, caso seja preenchida irá habilitar a ação de edição na tabela.
    *
    * > A rota deve conter um parâmetro chamando id.
@@ -69,8 +85,10 @@ export interface PoPageDynamicDetailActions {
    *  edit: 'edit/:id'
    * };
    * ```
+   *
+   * > Se passada uma função, é responsabilidade do desenvolvedor implementar a navegação, edição ou outro comportamento desejado.
    */
-  edit?: string;
+  edit?: string | ((id: any, resource: any) => void);
 
   /**
    * @description

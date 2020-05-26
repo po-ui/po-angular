@@ -23,6 +23,7 @@ import { PoPageDynamicOptionsSchema } from './../../services/po-page-customizati
 import { PoPageDynamicDetailMetaData } from './interfaces/po-page-dynamic-detail-metadata.interface';
 import { PoPageDynamicDetailBeforeBack } from './interfaces/po-page-dynamic-detail-before-back.interface';
 import { PoPageDynamicDetailBeforeRemove } from './interfaces/po-page-dynamic-detail-before-remove.interface';
+import { PoPageDynamicDetailBeforeEdit } from './interfaces/po-page-dynamic-detail-before-edit.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicDetailOptions);
 
@@ -445,7 +446,43 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  private openEdit(path) {
+  private openEdit(action: PoPageDynamicDetailActions['edit']) {
+    const id = this.formatUniqueKey(this.model);
+
+    this.subscriptions.push(
+      this.poPageDynamicDetailActionsService
+        .beforeEdit(this.actions.beforeEdit, id, this.model)
+        .pipe(
+          switchMap((beforeEditResult: PoPageDynamicDetailBeforeEdit) =>
+            this.executeEditAction(action, beforeEditResult, id)
+          )
+        )
+        .subscribe()
+    );
+  }
+
+  private executeEditAction(
+    action: PoPageDynamicDetailActions['edit'],
+    beforeEditResult: PoPageDynamicDetailBeforeEdit,
+    id: any
+  ) {
+    const newEditAction = beforeEditResult?.newUrl ?? action;
+    const allowAction = beforeEditResult?.allowAction ?? true;
+
+    if (!allowAction) {
+      return of({});
+    }
+
+    if (typeof newEditAction === 'string') {
+      this.openEditUrl(newEditAction);
+    } else {
+      newEditAction(id, { ...this.model });
+    }
+
+    return EMPTY;
+  }
+
+  private openEditUrl(path: string) {
     const url = this.resolveUrl(this.model, path);
     this.navigateTo({ path, url });
   }
