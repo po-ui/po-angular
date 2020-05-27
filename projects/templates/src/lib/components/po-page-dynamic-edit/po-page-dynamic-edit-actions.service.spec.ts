@@ -79,14 +79,15 @@ describe('PoPageDynamicEditActions:', () => {
 
     describe('beforeSave:', () => {
       const resource = { name: 'Mario' };
+      const id = '1';
 
       it('should get data from a api', fakeAsync(() => {
-        service.beforeSave('/newSave', resource).subscribe(response => {
+        service.beforeSave('/newSave', id, resource).subscribe(response => {
           expect(response.newUrl).toBe('/newurl');
           expect(response.allowAction).toBeTrue();
         });
 
-        const req = httpMock.expectOne(request => request.url === '/newSave');
+        const req = httpMock.expectOne(request => request.url === '/newSave/1');
         expect(req.request.method).toBe('POST');
         expect(req.request.body).toEqual(resource);
         expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
@@ -100,7 +101,7 @@ describe('PoPageDynamicEditActions:', () => {
       }));
 
       it('should get data from a function', fakeAsync(() => {
-        const testFn = resourceTest => ({
+        const testFn = (userResource, userId) => ({
           newUrl: '/newurlfromfunction',
           allowAction: true
         });
@@ -110,17 +111,17 @@ describe('PoPageDynamicEditActions:', () => {
 
         const spy = spyOn(spyObj, 'testFn').and.callThrough();
 
-        service.beforeSave(spyObj.testFn, resource).subscribe(response => {
+        service.beforeSave(spyObj.testFn, id, resource).subscribe(response => {
           expect(response.newUrl).toBe('/newurlfromfunction');
           expect(response.allowAction).toBeTrue();
-          expect(spy).toHaveBeenCalledWith(resource);
+          expect(spy).toHaveBeenCalledWith(resource, id);
         });
 
         tick();
       }));
 
       it('should get data from a function if resource is null', fakeAsync(() => {
-        const testFn = resourceTest => ({
+        const testFn = (userResource, userId) => ({
           newUrl: '/newurlfromfunction',
           allowAction: true
         });
@@ -130,10 +131,10 @@ describe('PoPageDynamicEditActions:', () => {
 
         const spy = spyOn(spyObj, 'testFn').and.callThrough();
 
-        service.beforeSave(spyObj.testFn, null).subscribe(response => {
+        service.beforeSave(spyObj.testFn, id, null).subscribe(response => {
           expect(response.newUrl).toBe('/newurlfromfunction');
           expect(response.allowAction).toBeTrue();
-          expect(spy).toHaveBeenCalledWith({});
+          expect(spy).toHaveBeenCalledWith({}, id);
         });
 
         tick();
@@ -141,7 +142,7 @@ describe('PoPageDynamicEditActions:', () => {
 
       it('shouldn`t get data from undefined', fakeAsync(() => {
         const testFn = undefined;
-        service.beforeSave(testFn, resource).subscribe(response => {
+        service.beforeSave(testFn, id, resource).subscribe(response => {
           expect(response).toEqual({});
         });
 

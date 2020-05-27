@@ -563,6 +563,10 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  private resolveUniqueKey(item: any) {
+    return this.activatedRoute.snapshot.params['id'] ? this.formatUniqueKey(item) : undefined;
+  }
+
   private resolveUrl(item: any, path: string) {
     const uniqueKey = this.formatUniqueKey(item);
 
@@ -570,9 +574,11 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   private save(saveAction: PoPageDynamicEditActions['save']) {
+    const uniqueKey = this.resolveUniqueKey(this.model);
+
     this.subscriptions.push(
       this.poPageDynamicEditActionsService
-        .beforeSave(this.actions.beforeSave, { ...this.model })
+        .beforeSave(this.actions.beforeSave, uniqueKey, { ...this.model })
         .pipe(
           switchMap(returnBeforeSave => {
             const newAction = returnBeforeSave?.newUrl ?? saveAction;
@@ -587,7 +593,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
             if (typeof newAction === 'string') {
               return this.executeSave(newAction);
             } else {
-              newAction({ ...this.model });
+              newAction({ ...this.model }, uniqueKey);
               return EMPTY;
             }
           })
