@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
 import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
+import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
 
 interface ExecuteActionParameter {
   action: string | Function;
@@ -30,6 +31,14 @@ export class PoPageDynamicTableActionsService {
     id: string,
     resource: any
   ): Observable<PoPageDynamicTableBeforeRemove> {
+    return this.executeAction({ action, id, resource });
+  }
+
+  beforeDetail(
+    action: PoPageDynamicTableActions['beforeDetail'],
+    id: string,
+    resource: any
+  ): Observable<PoPageDynamicTableBeforeDetail> {
     return this.executeAction({ action, id, resource });
   }
 

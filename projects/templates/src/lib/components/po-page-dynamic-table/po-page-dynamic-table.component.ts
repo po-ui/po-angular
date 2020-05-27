@@ -28,6 +28,7 @@ import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-m
 import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
 import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
+import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -386,10 +387,39 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     });
   }
 
-  private openDetail(path: string, item) {
-    const url = this.resolveUrl(item, path);
+  private openDetail(action: PoPageDynamicTableActions['detail'], item) {
+    const id = this.formatUniqueKey(item);
+    this.subscriptions.add(
+      this.poPageDynamicTableActionsService
+        .beforeDetail(this.actions.beforeDetail, id, item)
+        .subscribe((beforeDetailResult: PoPageDynamicTableBeforeDetail) =>
+          this.executeDetail(action, beforeDetailResult, id, item)
+        )
+    );
+  }
 
-    this.navigateTo({ path, url, component: PoPageDynamicDetailComponent });
+  private executeDetail(
+    action: PoPageDynamicTableActions['detail'],
+    beforeDetailResult?: PoPageDynamicTableBeforeNew,
+    id?: string,
+    item?: any
+  ) {
+    const before = beforeDetailResult ?? {};
+    const allowAction = typeof before.allowAction === 'boolean' ? before.allowAction : true;
+    const { newUrl } = before;
+
+    if (allowAction && action) {
+      if (newUrl) {
+        return this.navigateTo({ path: newUrl });
+      }
+
+      if (typeof action === 'string') {
+        const url = this.resolveUrl(item, action);
+        this.navigateTo({ path: action, url, component: PoPageDynamicDetailComponent });
+      } else {
+        action(id, item);
+      }
+    }
   }
 
   private openDuplicate(path: string, item) {
