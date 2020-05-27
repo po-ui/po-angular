@@ -762,15 +762,29 @@ describe('PoPageDynamicEditComponent: ', () => {
     describe('save:', () => {
       let executeSaveSpy;
       let updateModelSpy;
+
       beforeEach(() => {
         executeSaveSpy = spyOn(component, <any>'executeSave').and.returnValue(of({}));
         updateModelSpy = spyOn(component, <any>'updateModel');
       });
-      it('shouldn`t call executeSave if allowAction is false', () => {
-        const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: false };
-        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
+
+      it('save: should call `resolveUniqueKey`', () => {
+        const resolveUniqueKeySpy = spyOn(component, <any>'resolveUniqueKey');
+        component.model = { name: 'Angular' };
         component['save']('testSave/');
+        expect(resolveUniqueKeySpy).toHaveBeenCalledWith(component.model);
+      });
+
+      it('shouldn`t call executeSave if allowAction is false', () => {
+        const newAction = jasmine.createSpy('newAction');
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: false };
+
+        component.model = { name: 'Angular' };
+        spyOn(component, <any>'resolveUniqueKey').and.returnValue('1');
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
+        component['save'](newAction);
         expect(executeSaveSpy).not.toHaveBeenCalled();
+        expect(newAction).not.toHaveBeenCalledWith(component.model, '1');
       });
 
       it('shouldn`t call executeSave if newAction is a Function', () => {
@@ -779,7 +793,7 @@ describe('PoPageDynamicEditComponent: ', () => {
         spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
         component['save'](newAction);
         expect(executeSaveSpy).not.toHaveBeenCalled();
-        expect(newAction).toHaveBeenCalledWith(component.model);
+        expect(newAction).toHaveBeenCalledWith(component.model, undefined);
       });
 
       it('should call executeSave if allowAction is true', () => {
@@ -1102,6 +1116,46 @@ describe('PoPageDynamicEditComponent: ', () => {
 
       expect(pageActions.length).toBe(2);
       expect(Array.isArray(pageActions)).toBe(true);
+    });
+
+    describe('resolveUniqueKey:', () => {
+      it('should return `formatUniqueKey` value if `params.id` is truthy', () => {
+        const model = { name: 'name' };
+        const id = '1';
+        const activatedRoute: any = {
+          snapshot: {
+            params: { id }
+          }
+        };
+
+        component['activatedRoute'] = activatedRoute;
+
+        spyOn(component, <any>'formatUniqueKey').and.returnValue('1');
+
+        const expectedResult = component['resolveUniqueKey'](model);
+
+        expect(component['formatUniqueKey']).toHaveBeenCalledWith(model);
+        expect(expectedResult).toBe('1');
+      });
+
+      it('should return undefined if `params.id` is undefined', () => {
+        const model = { name: 'name' };
+        const id = undefined;
+        const activatedRoute: any = {
+          snapshot: {
+            params: { id }
+          }
+        };
+
+        component['activatedRoute'] = activatedRoute;
+
+        spyOn(component, <any>'formatUniqueKey');
+
+        const expectedResult = component['resolveUniqueKey'](model);
+
+        expect(component['formatUniqueKey']).not.toHaveBeenCalled();
+        expect(expectedResult).toBe(undefined);
+      });
     });
   });
 });

@@ -8,6 +8,7 @@ import { PoPageDynamicEditBeforeSave } from './interfaces/po-page-dynamic-edit-b
 
 interface ExecuteActionParameter {
   action: string | Function;
+  id?: string | number;
   resource?: any;
 }
 
@@ -25,21 +26,26 @@ export class PoPageDynamicEditActionsService {
     return this.executeAction({ action });
   }
 
-  beforeSave(action: PoPageDynamicEditActions['beforeSave'], body: any): Observable<PoPageDynamicEditBeforeSave> {
+  beforeSave(
+    action: PoPageDynamicEditActions['beforeSave'],
+    id: string,
+    body: any
+  ): Observable<PoPageDynamicEditBeforeSave> {
     const resource = body ?? {};
-
-    return this.executeAction({ action, resource });
+    return this.executeAction({ action, resource, id });
   }
 
-  private executeAction<T>({ action, resource = {} }: ExecuteActionParameter): Observable<T> {
+  private executeAction<T>({ action, resource = {}, id }: ExecuteActionParameter): Observable<T> {
     if (!action) {
       return of(<T>{});
     }
 
     if (typeof action === 'string') {
-      return this.http.post<T>(action, resource, { headers: this.headers });
+      const url = id ? `${action}/${id}` : action;
+
+      return this.http.post<T>(url, resource, { headers: this.headers });
     }
 
-    return of(action(resource));
+    return of(action(resource, id));
   }
 }
