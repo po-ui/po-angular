@@ -1,5 +1,5 @@
 import { QueryList } from '@angular/core';
-import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, async } from '@angular/core/testing';
 
 import { of, throwError } from 'rxjs';
 
@@ -20,11 +20,11 @@ describe('PoStepperComponent:', () => {
 
   let poSteps = [];
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PoStepperModule]
     });
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoStepperComponent);

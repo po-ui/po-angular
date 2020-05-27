@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunctions from '../../../../utils/util';
 import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
@@ -6,6 +6,7 @@ import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 
 import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
+import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
 
 class PoLookupModalComponent extends PoLookupModalBaseComponent {
   openModal(): void {}
@@ -271,6 +272,32 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.hasNext).toBeTruthy();
     });
 
+    it('search: should call `setLookupResponseProperties` passing response data as param', () => {
+      const data: PoLookupResponseApi = {
+        items: [{ value: 1, label: 'Suco' }],
+        hasNext: false
+      };
+      component.searchValue = 'Suco';
+
+      spyOn(component, <any>'getFilteredItems').and.returnValue(of(data));
+      const spySetLookupResponseProperties = spyOn(component, <any>'setLookupResponseProperties');
+
+      component.search();
+
+      expect(spySetLookupResponseProperties).toHaveBeenCalledWith(data);
+    });
+
+    it('search: should call `setLookupResponseProperties` without param if the service returns with an error', () => {
+      component.searchValue = 'Suco';
+
+      spyOn(component, <any>'getFilteredItems').and.returnValue(throwError(''));
+      const spySetLookupResponseProperties = spyOn(component, <any>'setLookupResponseProperties');
+
+      component.search();
+
+      expect(spySetLookupResponseProperties).toHaveBeenCalled();
+    });
+
     it('search: should call `initializeData` if `searchValue` is falsy.', () => {
       component.searchValue = undefined;
 
@@ -279,6 +306,19 @@ describe('PoLookupModalBaseComponent:', () => {
       component.search();
 
       expect(component['initializeData']).toHaveBeenCalled();
+    });
+
+    it('showMoreEvent: should apply false to `hasNext` and `isLoading` if the service returns with an error', () => {
+      component.searchValue = 'Suco';
+      component.hasNext = true;
+      component.isLoading = true;
+
+      spyOn(component, <any>'getFilteredItems').and.returnValue(throwError(''));
+
+      component.showMoreEvent();
+
+      expect(component.hasNext).toBeFalsy();
+      expect(component.isLoading).toBeFalsy();
     });
 
     it('showMoreEvent: should call `getFilteredItems`, increment `page` and assign returned items to `items`.', () => {
@@ -358,6 +398,36 @@ describe('PoLookupModalBaseComponent:', () => {
       const orderParam = component['getOrderParam']();
 
       expect(orderParam).toBe(expectedValue);
+    });
+
+    it('setLookupResponseProperties: should apply false to `hasNext` and empty array to `items` if it doesn`t receive a param value', () => {
+      component.isLoading = true;
+      component.hasNext = true;
+
+      component['setLookupResponseProperties']();
+
+      expect(component.items.length).toBe(0);
+      expect(component.hasNext).toBeFalsy();
+      expect(component.isLoading).toBeFalsy();
+    });
+
+    it('setLookupResponseProperties: should apply values to `hasNext` and `items` according with the received param value', () => {
+      component.isLoading = true;
+      component.hasNext = true;
+
+      const data: PoLookupResponseApi = {
+        items: [
+          { value: 1, label: 'Água' },
+          { value: 2, label: 'Café' }
+        ],
+        hasNext: false
+      };
+
+      component['setLookupResponseProperties'](data);
+
+      expect(component.items.length).toBe(2);
+      expect(component.hasNext).toBeFalsy();
+      expect(component.isLoading).toBeFalsy();
     });
   });
 });
