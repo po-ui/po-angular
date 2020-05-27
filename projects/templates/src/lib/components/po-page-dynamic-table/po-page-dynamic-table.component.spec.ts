@@ -490,18 +490,115 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['router'].navigate).toHaveBeenCalledWith([route.path], { queryParams: route.params });
     }));
 
-    it('openDetail: should call `navigateTo` with object that contains path, url and component properties. ', () => {
+    describe('openDetail:', () => {
+      const item = 'itemValue';
       const path = '/people/:id';
       const url = '/people/1|2';
-      const item = 'itemValue';
+      const newUrl = '/newUrl';
+      let spyNavigate: jasmine.Spy;
+      let spyResolveUrl: jasmine.Spy;
 
-      spyOn(component, <any>'navigateTo');
-      spyOn(component, <any>'resolveUrl').and.returnValue(url);
+      beforeEach(() => {
+        spyNavigate = spyOn(component, <any>'navigateTo');
+        spyResolveUrl = spyOn(component, <any>'resolveUrl').and.returnValue(url);
+      });
 
-      component['openDetail'](path, item);
+      it('should call `navigateTo` with object that contains path, url and component properties. ', () => {
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(of({}));
+        component['openDetail'](path, item);
 
-      // expect(component['navigateTo']).toHaveBeenCalledWith({ path, url });
-      expect(component['navigateTo']).toHaveBeenCalledWith({ path, url, component: PoPageDynamicDetailComponent });
+        expect(spyNavigate).toHaveBeenCalledWith({ path, url, component: PoPageDynamicDetailComponent });
+      });
+
+      it('should call the function in the actions.detail property ', () => {
+        const testObj = {
+          fn: (id, resource) => {}
+        };
+
+        const spy = spyOn(testObj, 'fn');
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(of({}));
+        component['openDetail'](testObj.fn, item);
+
+        expect(spy).toHaveBeenCalledWith('', item);
+      });
+
+      it('should call `navigateTo` with a new url if actions.beforeDetail is valid', () => {
+        component.actions.beforeDetail = '/test';
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(of({ newUrl }));
+
+        component['openDetail'](path, item);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
+      });
+
+      it('should not call `navigateTo` with a new url if allowAction is false', () => {
+        const allowAction = false;
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(
+          of({ allowAction, newUrl })
+        );
+
+        component.actions.beforeDetail = '/test';
+        component['openDetail'](path, item);
+
+        expect(spyNavigate).not.toHaveBeenCalled();
+      });
+
+      it('should call `navigateTo` with a new url if allowAction is null', () => {
+        const allowAction = null;
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(
+          of({ allowAction, newUrl })
+        );
+
+        component.actions.beforeDetail = '/test';
+        component['openDetail'](path, item);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
+      });
+
+      it('should call `navigateTo` with a new url if allowAction is undefined', () => {
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(of({ newUrl }));
+
+        component.actions.beforeDetail = '/test';
+        component['openDetail'](path, item);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
+      });
+
+      it('should call `navigateTo` with a new url if beforeDetail is null', () => {
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(of(null));
+
+        component.actions.beforeDetail = '/test';
+        component['openDetail'](path, item);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path, url, component: PoPageDynamicDetailComponent });
+      });
+
+      it('should call `navigateTo` with a new url if beforeDetail is invalid', () => {
+        const obj: any = { teste: 'test' };
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(of(obj));
+
+        component.actions.beforeDetail = '/test';
+        component['openDetail'](path, item);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path, url, component: PoPageDynamicDetailComponent });
+      });
+
+      it('should call `navigateTo` with a new url if allowAction is number', () => {
+        const allowAction: any = 0;
+
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(
+          of({ allowAction, newUrl })
+        );
+
+        component.actions.beforeDetail = '/test';
+        component['openDetail'](path, item);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
+      });
     });
 
     it('openDuplicate: should call `navigateTo` with object that contains path, url and component properties. ', () => {

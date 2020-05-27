@@ -1,5 +1,6 @@
 import { PoPageDynamicTableBeforeNew } from './po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './po-page-dynamic-table-before-remove.interface';
+import { PoPageDynamicTableBeforeDetail } from './po-page-dynamic-table-before-detail.interface';
 
 /**
  * @usedBy PoPageDynamicTableComponent
@@ -12,7 +13,7 @@ export interface PoPageDynamicTableActions {
   /**
    * @description
    *
-   * Rota para exibição do recurso em detalhe, caso seja preenchida irá habilitar a ação de visualização na tabela.
+   * Rota ou função para exibição do recurso em detalhe, caso seja preenchida irá habilitar a ação de visualização na tabela.
    *
    * > A rota deve conter um parâmetro chamando id.
    *
@@ -22,7 +23,7 @@ export interface PoPageDynamicTableActions {
    * };
    * ```
    */
-  detail?: string;
+  detail?: string | ((id: string, resource: any) => void);
 
   /**
    * @description
@@ -104,4 +105,20 @@ export interface PoPageDynamicTableActions {
    *
    */
   beforeRemove?: string | ((id?: string, resource?: any) => PoPageDynamicTableBeforeRemove);
+
+  /**
+   * @description
+   *
+   *  Método/URL que deve ser chamado antes da ação de ir para o detalhe
+   *
+   * Tanto o método como a API devem retornar um objeto com a definição de `PoPageDynamicTableBeforeDetail`.
+   *
+   * > A url será chamada via POST
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeDetail**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   *
+   */
+  beforeDetail?: string | ((id?: string, resource?: any) => PoPageDynamicTableBeforeDetail);
 }
