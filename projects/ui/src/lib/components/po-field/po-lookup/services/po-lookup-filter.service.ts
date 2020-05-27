@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -19,6 +19,10 @@ import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-it
 export class PoLookupFilterService implements PoLookupFilter {
   private url: string;
 
+  readonly headers: HttpHeaders = new HttpHeaders({
+    'X-PO-No-Message': 'true'
+  });
+
   constructor(private httpClient: HttpClient) {}
 
   getFilteredItems(filteredItemsParams: PoLookupFilteredItemsParams): Observable<any> {
@@ -28,13 +32,13 @@ export class PoLookupFilterService implements PoLookupFilter {
 
     const params = { ...restFilteredItemsParams, ...validatedFilterParams };
 
-    return this.httpClient.get(this.url, { params });
+    return this.httpClient.get(this.url, { headers: this.headers, params });
   }
 
   getObjectByValue(value: string, filterParams?: any): Observable<any> {
     const validatedFilterParams = this.validateParams(filterParams);
 
-    return this.httpClient.get(`${this.url}/${value}`, { params: validatedFilterParams });
+    return this.httpClient.get(`${this.url}/${value}`, { headers: this.headers, params: validatedFilterParams });
   }
 
   setUrl(url: string) {

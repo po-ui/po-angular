@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -20,14 +20,14 @@ describe('PoPageDynamicEditComponent: ', () => {
   let component: PoPageDynamicEditComponent;
   let fixture: ComponentFixture<PoPageDynamicEditComponent>;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([]), PoDialogModule],
       providers: [],
       declarations: [PoPageDynamicEditComponent, PoDynamicFormStubComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicEditComponent);

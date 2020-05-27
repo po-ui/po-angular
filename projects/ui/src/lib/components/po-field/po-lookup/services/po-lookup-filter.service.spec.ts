@@ -1,5 +1,5 @@
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { PoLookupFilterService } from './po-lookup-filter.service';
 
@@ -26,8 +26,8 @@ describe('PoLookupFilterService', () => {
   });
 
   describe('Methods:', () => {
-    it(`getFilteredItems: should return the request response and create request with url, page, pageSize, filter
-      and params correctly`, () => {
+    it(`getFilteredItems: should return the request response and create request with url, page, pageSize, filter, 
+    headers and params correctly`, fakeAsync(() => {
       service['url'] = 'http://url.com';
       const page = 1;
       const pageSize = 20;
@@ -39,19 +39,22 @@ describe('PoLookupFilterService', () => {
         .getFilteredItems({ filter, page, pageSize, filterParams })
         .subscribe(response => expect(response).toEqual(expectedResponse));
 
-      httpMock
-        .expectOne(httpRequest => {
-          return (
-            httpRequest.url === service['url'] &&
-            httpRequest.method === 'GET' &&
-            httpRequest.params.get('page') === <any>page &&
-            httpRequest.params.get('pageSize') === <any>pageSize &&
-            httpRequest.params.get('filter') === 'name' &&
-            httpRequest.params.get('name') === 'test'
-          );
-        })
-        .flush(expectedResponse);
-    });
+      const req = httpMock.expectOne(httpRequest => {
+        return (
+          httpRequest.url === service['url'] &&
+          httpRequest.method === 'GET' &&
+          httpRequest.params.get('page') === <any>page &&
+          httpRequest.params.get('pageSize') === <any>pageSize &&
+          httpRequest.params.get('filter') === 'name' &&
+          httpRequest.params.get('name') === 'test'
+        );
+      });
+
+      expect(req.request.headers.get('X-PO-No-Message')).toBe('true');
+
+      req.flush(expectedResponse);
+      tick();
+    }));
 
     it(`getFilteredItems: should call 'validateParams' and set its return as the request parameter`, () => {
       service['url'] = 'http://url.com';
@@ -69,7 +72,7 @@ describe('PoLookupFilterService', () => {
       httpMock.expectOne(httpRequest => httpRequest.params.get('name') === 'test').flush({});
     });
 
-    it(`getObjectByValue: should return the request response and create request with url and 'filterParams' correctly`, () => {
+    it(`getObjectByValue: should return the request response and create request with url, headers and 'filterParams' correctly`, fakeAsync(() => {
       service['url'] = 'http://url.com';
       const filterParams = { name: 'test' };
       const value = '1';
@@ -82,16 +85,19 @@ describe('PoLookupFilterService', () => {
         expect(response).toEqual(expectedResponse);
       });
 
-      httpMock
-        .expectOne(httpRequest => {
-          return (
-            httpRequest.url === 'http://url.com/1' &&
-            httpRequest.method === 'GET' &&
-            httpRequest.params.get('name') === 'test'
-          );
-        })
-        .flush(expectedResponse);
-    });
+      const req = httpMock.expectOne(httpRequest => {
+        return (
+          httpRequest.url === 'http://url.com/1' &&
+          httpRequest.method === 'GET' &&
+          httpRequest.params.get('name') === 'test'
+        );
+      });
+
+      expect(req.request.headers.get('X-PO-No-Message')).toBe('true');
+
+      req.flush(expectedResponse);
+      tick();
+    }));
 
     it(`getObjectByValue: should call 'validateParams' and set its return as the request parameter`, () => {
       service['url'] = 'http://url.com';
