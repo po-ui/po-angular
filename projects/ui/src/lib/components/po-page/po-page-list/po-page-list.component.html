@@ -44,8 +44,21 @@
       </div>
 
       <!-- FILTER -->
-      <div class="po-page-list-filter-wrapper" *ngIf="filter">
-        <div class="po-field-container-content po-page-filter-content">
+      <div
+        class="po-page-list-filter-wrapper"
+        *ngIf="filter"
+        [ngClass]="hasCustomFilterSize() ? filterSizeClass(filter.width) : ''"
+      >
+        <div
+          class="po-field-container-content po-page-filter-content"
+          [ngClass]="
+            hasCustomFilterSize()
+              ? filter.advancedAction
+                ? 'po-page-filter-input-variable-size'
+                : 'po-page-filter-input-variable-size-wo-adv-search'
+              : ''
+          "
+        >
           <div class="po-field-icon-container-right">
             <span class="po-icon po-icon-search po-field-icon" (click)="callActionFilter('action')"> </span>
           </div>
