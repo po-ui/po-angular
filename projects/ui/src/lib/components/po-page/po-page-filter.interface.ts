@@ -22,4 +22,11 @@ export interface PoPageFilter {
 
   /** Texto de instrução exibido dentro do campo de filtro. */
   placeholder?: string;
+
+  /**
+   * Tamanho do filtro em tela, utilizando o *Grid System*,
+   * e limitado ao máximo de 6 colunas. O tamanho mínimo é controlado
+   * conforme resolução de tela para manter a consistência do layout.
+   */
+  width?: number;
 }
