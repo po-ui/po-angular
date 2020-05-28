@@ -523,6 +523,11 @@ describe('PoPageListComponent - Desktop:', () => {
       expect(component.filterSizeClass(6)).toBe('po-sm-6 po-md-6 po-lg-6 po-xl-6');
     });
 
+    it('filterSizeClass: should return `po-sm-6 po-md-6 po-lg-6 po-xl-6` when width is 6 and has advancedAction', () => {
+      component.filter = { width: 6, advancedAction: () => {} };
+      expect(component.filterSizeClass(6)).toBe('po-sm-6 po-md-6 po-lg-6 po-xl-6');
+    });
+
     it('filterSizeClass: should return `po-sm-2 po-md-1 po-lg-1 po-xl-1` when width is 1', () => {
       component.filter = { width: 1 };
       expect(component.filterSizeClass(1)).toBe('po-sm-2 po-md-1 po-lg-1 po-xl-1');
@@ -531,6 +536,56 @@ describe('PoPageListComponent - Desktop:', () => {
     it('filterSizeClass: should return `po-sm-6 po-md-4 po-lg-2 po-xl-2` when width is 1 and has advancedAction', () => {
       component.filter = { width: 1, advancedAction: () => {} };
       expect(component.filterSizeClass(1)).toBe('po-sm-6 po-md-4 po-lg-2 po-xl-2');
+    });
+
+    it('filterSizeClass: should return `po-sm-3 po-md-3 po-lg-3 po-xl-3` when width is 3', () => {
+      component.filter = { width: 3 };
+      expect(component.filterSizeClass(3)).toBe('po-sm-3 po-md-3 po-lg-3 po-xl-3');
+    });
+
+    it('filterSizeClass: should return `po-sm-6 po-md-4 po-lg-3 po-xl-3` when width is 3 and has advancedAction', () => {
+      component.filter = { width: 3, advancedAction: () => {} };
+      expect(component.filterSizeClass(3)).toBe('po-sm-6 po-md-4 po-lg-3 po-xl-3');
+    });
+
+    it('filterSizeClass: should return `po-sm-6 po-md-6 po-lg-6 po-xl-6` when doesn`t have filter', () => {
+      component.filter = {};
+      expect(component.filterSizeClass(6)).toBe('po-sm-6 po-md-6 po-lg-6 po-xl-6');
+    });
+
+    it('filterSizeClass: should return `po-sm-6 po-md-6 po-lg-6 po-xl-6` when doesn`t have filter', () => {
+      component.filter = undefined;
+      expect(component.filterSizeClass(6)).toBe('po-sm-6 po-md-6 po-lg-6 po-xl-6');
+    });
+
+    it('filterSizeClass: should return `po-sm-2 po-md-1 po-lg-1 po-xl-1` when doesn`t have filter', () => {
+      component.filter = undefined;
+      expect(component.filterSizeClass(1)).toBe('po-sm-2 po-md-1 po-lg-1 po-xl-1');
+    });
+
+    it('hasCustomFilterSize: should return `true` when has filter.width', () => {
+      component.filter = { width: 3 };
+      expect(component.hasCustomFilterSize()).toBe(true);
+    });
+
+    it('hasCustomFilterSize: should return `false` when filter.width is out of range', () => {
+      component.filter = { width: 0 };
+      expect(component.hasCustomFilterSize()).toBe(false);
+    });
+
+    it('hasCustomFilterSize: should return `false` when filter.width is out of range', () => {
+      component.filter = { width: 99 };
+      expect(component.hasCustomFilterSize()).toBe(false);
+    });
+
+    it('hasCustomFilterSize: should return `false` when doesn`t have filter.width', () => {
+      component.filter = {};
+      expect(component.hasCustomFilterSize()).toBe(false);
+    });
+
+    it('hasCustomFilterSize: should return `false` when doesn`t have filter.width', () => {
+      component.filter = undefined;
+      expect(component.hasCustomFilterSize()).toBe(false);
     });
 
     describe('initializeFixedLiterals:', () => {

@@ -107,13 +107,14 @@ export class PoPageListComponent extends PoPageListBaseComponent
   }
 
   hasCustomFilterSize(): boolean {
-    return this.filter?.width >= 1 && this.filter?.width <= 6;
+    if (!this.filter) return false;
+    return this.filter.width >= 1 && this.filter.width <= 6;
   }
 
   filterSizeClass(width: number): string {
-    const smWidth = Math.max(this.filter.advancedAction ? 6 : 2, width);
-    const mdWidth = Math.max(this.filter.advancedAction ? 4 : 1, width);
-    if (this.filter.advancedAction) {
+    const smWidth = Math.max(this.filter?.advancedAction ? 6 : 2, width);
+    const mdWidth = Math.max(this.filter?.advancedAction ? 4 : 1, width);
+    if (this.filter?.advancedAction) {
       width = Math.max(width, 2);
     }
     return `po-sm-${smWidth} po-md-${mdWidth} po-lg-${width} po-xl-${width}`;
