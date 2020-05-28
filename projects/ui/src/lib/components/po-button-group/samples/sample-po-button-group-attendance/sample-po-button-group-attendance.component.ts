@@ -37,6 +37,8 @@ export class SamplePoButtonGroupAttendanceComponent {
   }
 
   randomPassword() {
-    return Math.random().toString().slice(2, 5);
+    return Math.random()
+      .toString()
+      .slice(2, 5);
   }
 }

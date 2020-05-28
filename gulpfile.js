@@ -55,7 +55,7 @@ const copySchematicsPackage = () => src([`${schematicsFolder}/package.json`]).pi
 const copySchematicsReadme = () => src([`${schematicsFolder}/README.md`]).pipe(dest(distSchematicsFolder));
 
 /** SONAR */
-const sonarqube = task('sonarqube', function (callback) {
+const sonarqube = task('sonarqube', function(callback) {
   const token = argv.token || '';
 
   sonarqubeScanner(

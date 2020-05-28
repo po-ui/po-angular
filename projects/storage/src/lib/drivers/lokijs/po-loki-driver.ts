@@ -12,31 +12,31 @@ export class PoLokiDriver {
     const self = this;
     this.driver = {
       _driver: 'lokijs',
-      _initStorage: function (options: any) {
+      _initStorage: function(options: any) {
         return self.initStorage(options);
       },
-      clear: function () {
+      clear: function() {
         return self.clear(this);
       },
-      getItem: function (key: any) {
+      getItem: function(key: any) {
         return self.getItem(this, key);
       },
-      iterate: function (iteratorCallback: any) {
+      iterate: function(iteratorCallback: any) {
         return self.iterate(this, iteratorCallback);
       },
-      key: function (n: any) {
+      key: function(n: any) {
         return self.key(this, n);
       },
-      keys: function () {
+      keys: function() {
         return self.keys(this);
       },
-      length: function () {
+      length: function() {
         return self.length(this);
       },
-      removeItem: function (key: any) {
+      removeItem: function(key: any) {
         return self.removeItem(this, key);
       },
-      setItem: function (key: any, value: any) {
+      setItem: function(key: any, value: any) {
         return self.setItem(this, key, value);
       }
     };

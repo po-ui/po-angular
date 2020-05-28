@@ -106,7 +106,11 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
   }
 
   private includeFilter(item, filters) {
-    return filters.some(filter => String(item).toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
+    return filters.some(filter =>
+      String(item)
+        .toLocaleLowerCase()
+        .includes(filter.toLocaleLowerCase())
+    );
   }
 
   private isHiredOrCanceled(candidate): boolean {

@@ -109,7 +109,7 @@ describe('PoTableSubtitleFooterComponent:', () => {
       const fakeThis = {
         element: {
           nativeElement: {
-            querySelector: function (selector) {
+            querySelector: function(selector) {
               return { offsetWidth: 100 };
             }
           }

@@ -22,12 +22,12 @@ describe('PoUploadBaseService:', () => {
       requests: [
         {
           file: { uid: 10 },
-          request: { unsubscribe: function () {} }
+          request: { unsubscribe: function() {} }
         }
       ],
       removeRequest: service.removeRequest
     };
-    service.stopRequestByFile.call(fakeThis, { uid: 10 }, function () {});
+    service.stopRequestByFile.call(fakeThis, { uid: 10 }, function() {});
     expect(service.removeRequest).toHaveBeenCalled();
   }));
 
@@ -37,12 +37,12 @@ describe('PoUploadBaseService:', () => {
       requests: [
         {
           file: { uid: 1 },
-          request: { unsubscribe: function () {} }
+          request: { unsubscribe: function() {} }
         }
       ],
       removeRequest: service.removeRequest
     };
-    service.stopRequestByFile.call(fakeThis, { uid: 10 }, function () {});
+    service.stopRequestByFile.call(fakeThis, { uid: 10 }, function() {});
     expect(service.removeRequest).not.toHaveBeenCalled();
   }));
 

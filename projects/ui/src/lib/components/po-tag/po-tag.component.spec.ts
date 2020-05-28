@@ -13,7 +13,9 @@ import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
 
 @Component({
-  template: ` <po-tag p-label="Mock" (p-click)="onClick()"></po-tag> `
+  template: `
+    <po-tag p-label="Mock" (p-click)="onClick()"></po-tag>
+  `
 })
 class PoTagClickableComponent {
   onClick() {}

@@ -33,7 +33,7 @@ export class PoCalendarService {
   }
 
   monthDays(year: any, month: any) {
-    const getDayOrZero = function (date: any) {
+    const getDayOrZero = function(date: any) {
       return date.getMonth() === month ? date : 0;
     };
     return this.monthDates(year, month, getDayOrZero);

@@ -7,7 +7,9 @@ import { configureTestSuite } from './../../../../util-test/util-expect.spec';
 import { PoUploadDragDropDirective } from './po-upload-drag-drop.directive';
 
 @Component({
-  template: ` <div p-upload-drag-drop></div> `
+  template: `
+    <div p-upload-drag-drop></div>
+  `
 })
 export class TestComponent {}
 

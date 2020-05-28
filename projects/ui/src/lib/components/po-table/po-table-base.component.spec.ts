@@ -426,7 +426,7 @@ describe('PoTableBaseComponent:', () => {
   it('should call event emitter', () => {
     const newItem = { textDate: 'english text', numberData: 4, dateData: '2020-11-30' };
 
-    spyOn(component.showMore, 'emit').and.callFake(function ({}) {
+    spyOn(component.showMore, 'emit').and.callFake(function({}) {
       component.items.push(newItem);
       component.showMoreDisabled = true;
     });

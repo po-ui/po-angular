@@ -39,7 +39,7 @@ describe('validatePropertyOnLifeCycle:', () => {
   it('should keep implementation of ngOnInit', () => {
     const target = {
       myProperty: undefined,
-      ngOnInit: function () {
+      ngOnInit: function() {
         this.myProperty = true;
       }
     };

@@ -15,7 +15,7 @@ const poModuleSourcePath = '@po-ui/ng-components';
  *  - Adds themes to styles
  *  - Run sidemenu schematic
  */
-export default function (options: any): Rule {
+export default function(options: any): Rule {
   return chain([
     addModuleImportToRootModule(options, poModuleName, poModuleSourcePath),
     addThemeToAppStyles(options),
@@ -25,7 +25,7 @@ export default function (options: any): Rule {
 
 /** Add PO theme to project styles */
 function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
-  return function (tree: Tree): Tree {
+  return function(tree: Tree): Tree {
     const workspace = getWorkspace(tree);
     const project = getProjectFromWorkspace(workspace, options.project);
 

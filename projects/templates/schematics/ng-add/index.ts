@@ -16,7 +16,7 @@ const poTemplateModuleSourcePath = '@po-ui/ng-templates';
  *  - Install dependencies;
  *  - Configure theme style in project workspace;
  */
-export default function (options: any): Rule {
+export default function(options: any): Rule {
   return chain([
     addModuleImportToRootModule(options, poTemplateModuleName, poTemplateModuleSourcePath),
     addPoPackageAndInstall(),
@@ -35,7 +35,7 @@ function addPoPackageAndInstall(): Rule {
 
 /** Add PO theme to project styles */
 function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
-  return function (tree: Tree): Tree {
+  return function(tree: Tree): Tree {
     const workspace = getWorkspace(tree);
     const project = getProjectFromWorkspace(workspace, options.project);
 

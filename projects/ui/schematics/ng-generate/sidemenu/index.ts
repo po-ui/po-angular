@@ -32,7 +32,7 @@ const routerModulePath = '@angular/router';
  * - Create a app.component with components to do sidemenu layout;
  * - Imports RouterModule in app root module;
  */
-export default function (options: ComponentOptions): Rule {
+export default function(options: ComponentOptions): Rule {
   return chain([createAppComponent(options), addModuleImportToRootModule(options, routerModule, routerModulePath)]);
 }
 

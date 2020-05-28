@@ -11,10 +11,10 @@ describe('PoMask', () => {
       keyCode: 8,
       ctrlKey: false,
       metaKey: false,
-      preventDefault: function () {},
+      preventDefault: function() {},
       target: {
         value: '',
-        setSelectionRange: function (start: number, end: number) {
+        setSelectionRange: function(start: number, end: number) {
           this.selectionStart = start;
           this.selectionEnd = end;
         },
@@ -580,7 +580,7 @@ describe('PoMask', () => {
   it('should call controlFormatting on blur', () => {
     const fakeThis = {
       mask: '(99)99',
-      controlFormatting: function (val: any) {}
+      controlFormatting: function(val: any) {}
     };
 
     spyOn(fakeThis, 'controlFormatting');

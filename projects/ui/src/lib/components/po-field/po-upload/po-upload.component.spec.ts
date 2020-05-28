@@ -504,12 +504,12 @@ describe('PoUploadComponent:', () => {
       const fakeThis = {
         autoUpload: true,
         uploadService: {
-          stopRequestByFile: function (fileParam, callBack) {
+          stopRequestByFile: function(fileParam, callBack) {
             callBack();
           }
         },
-        removeFile: function () {},
-        stopUploadHandler: function () {}
+        removeFile: function() {},
+        stopUploadHandler: function() {}
       };
 
       spyOn(fakeThis, 'removeFile');
@@ -523,12 +523,12 @@ describe('PoUploadComponent:', () => {
       const fakeThis = {
         autoUpload: false,
         uploadService: {
-          stopRequestByFile: function (fileParam, callBack) {
+          stopRequestByFile: function(fileParam, callBack) {
             callBack();
           }
         },
-        removeFile: function () {},
-        stopUploadHandler: function () {}
+        removeFile: function() {},
+        stopUploadHandler: function() {}
       };
 
       spyOn(fakeThis, 'stopUploadHandler');
@@ -580,11 +580,11 @@ describe('PoUploadComponent:', () => {
       it('should call uploadingHandler function when upload files', () => {
         const fakeThis = {
           uploadService: {
-            upload: function (url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
+            upload: function(url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
               return uploadCallback(file, 100);
             }
           },
-          uploadingHandler: function () {}
+          uploadingHandler: function() {}
         };
         spyOn(fakeThis, 'uploadingHandler');
 
@@ -596,11 +596,11 @@ describe('PoUploadComponent:', () => {
       it('should call responseHandler function when upload files', () => {
         const fakeThis = {
           uploadService: {
-            upload: function (url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
+            upload: function(url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
               return successCallback(file, 100);
             }
           },
-          responseHandler: function () {},
+          responseHandler: function() {},
           onSuccess: new EventEmitter<any>()
         };
 
@@ -614,11 +614,11 @@ describe('PoUploadComponent:', () => {
       it('should call responseHandler function when upload files', () => {
         const fakeThis = {
           uploadService: {
-            upload: function (url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
+            upload: function(url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
               return errorCallback(file, 100);
             }
           },
-          responseHandler: function () {},
+          responseHandler: function() {},
           onError: new EventEmitter<any>()
         };
         spyOn(fakeThis, 'responseHandler');

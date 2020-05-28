@@ -18,7 +18,7 @@ export function validatePropertyOnLifeCycle(
   const lifecycleFunctionClone: Function | null = target[lifecycleName] || emptyFunction;
 
   Object.defineProperty(target, lifecycleName, {
-    value: function () {
+    value: function() {
       callback.call(this, property, target);
       lifecycleFunctionClone.call(this);
     }
@@ -51,7 +51,7 @@ export function changeValueByCallback(
   };
 }
 function setter(originalDescriptor, callback: Function, privatePropertyName: string) {
-  return function (value): void {
+  return function(value): void {
     if (originalDescriptor && originalDescriptor.set) {
       originalDescriptor.set.bind(this)(callback(value));
     }
@@ -61,7 +61,7 @@ function setter(originalDescriptor, callback: Function, privatePropertyName: str
 }
 
 function getter(originalDescriptor: TypedPropertyDescriptor<any>, privatePropName: string) {
-  return function () {
+  return function() {
     return originalDescriptor && originalDescriptor.get ? originalDescriptor.get.bind(this)() : this[privatePropName];
   };
 }
