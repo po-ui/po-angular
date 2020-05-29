@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.1](https://github.com/po-ui/po-angular/compare/v2.4.0...v2.4.1) (2020-05-29)
+
+
+### Bug Fixes
+
+* **lookup:** adiciona tratamento para status 404 ([cd59dda](https://github.com/po-ui/po-angular/commit/cd59dda38a1335e891936d4e881a9bb5ebf93ae2))
+
 ## [2.4.0](https://github.com/po-ui/po-angular/compare/v2.3.0...v2.4.0) (2020-05-22)
 
 
