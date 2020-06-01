@@ -532,6 +532,16 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(spyNavigate).toHaveBeenCalledWith({ path: newUrl });
       });
 
+      it('should call `navigateTo` with a new url, replacing :id with id', () => {
+        component.actions.beforeDetail = '/test';
+        const testUrl = '/newdetail/:id/hello';
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDetail').and.returnValue(of({ newUrl: testUrl }));
+        spyOn(component, <any>'formatUniqueKey').and.returnValue('teste');
+        component['openDetail'](path, item);
+
+        expect(spyNavigate).toHaveBeenCalledWith({ path: '/newdetail/teste/hello' });
+      });
+
       it('should not call `navigateTo` with a new url if allowAction is false', () => {
         const allowAction = false;
 
