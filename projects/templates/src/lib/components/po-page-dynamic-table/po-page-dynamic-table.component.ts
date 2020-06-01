@@ -410,7 +410,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
     if (allowAction && action) {
       if (newUrl) {
-        return this.navigateTo({ path: newUrl });
+        const path = this.getPathFromNewUrl(newUrl, id);
+        return this.navigateTo({ path });
       }
 
       if (typeof action === 'string') {
@@ -420,6 +421,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         action(id, item);
       }
     }
+  }
+
+  private getPathFromNewUrl(newUrl: string, id: string): string {
+    if (newUrl.includes(':id')) {
+      return newUrl.replace(/:id/g, id);
+    }
+    return newUrl;
   }
 
   private openDuplicate(path: string, item) {

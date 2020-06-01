@@ -675,216 +675,194 @@ describe('PoPageDynamicEditComponent: ', () => {
       }));
     });
 
-    it('saveNew: should call `poNotification.warning` and not call updateResource and createResource if `form.invalid` is true', () => {
-      const path = '';
+    describe('saveNew:', () => {
+      beforeEach(() => {
+        spyOn(component['poPageDynamicService'], 'updateResource').and.returnValue(EMPTY);
+        spyOn(component['poPageDynamicService'], 'createResource').and.returnValue(EMPTY);
+      });
+      it('should call `poNotification.warning` and not call updateResource and createResource if `form.invalid` is true', () => {
+        const path = '';
 
-      component.dynamicForm = dynamicFormInvalid;
+        component.dynamicForm = dynamicFormInvalid;
 
-      spyOn(component['poNotification'], 'warning');
-      spyOn(component['poPageDynamicService'], 'updateResource');
-      spyOn(component['poPageDynamicService'], 'createResource');
+        spyOn(component['poNotification'], 'warning');
 
-      component['saveNew'](path);
+        component['saveNew'](path);
 
-      expect(component['poNotification'].warning).toHaveBeenCalled();
-      expect(component['poPageDynamicService'].updateResource).not.toHaveBeenCalled();
-      expect(component['poPageDynamicService'].createResource).not.toHaveBeenCalled();
+        expect(component['poNotification'].warning).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].updateResource).not.toHaveBeenCalled();
+        expect(component['poPageDynamicService'].createResource).not.toHaveBeenCalled();
+      });
+
+      it('should call `createResource`, `poNotification.success` and `form.reset` if `params.id` is truthy', fakeAsync(() => {
+        const path = 'people/id';
+        const id = undefined;
+        const model = { name: 'angular' };
+
+        const activatedRoute: any = {
+          snapshot: {
+            params: { id }
+          }
+        };
+
+        component.dynamicForm = dynamicFormValid;
+        component['activatedRoute'] = activatedRoute;
+        component.model = Object.assign({}, model);
+
+        spyOn(component['poNotification'], 'success');
+        spyOn(component.dynamicForm.form, 'reset');
+        spyOn(component['poNotification'], 'warning');
+
+        component['saveNew'](path);
+
+        tick();
+
+        expect(component['poNotification'].warning).not.toHaveBeenCalled();
+        expect(component['poPageDynamicService'].updateResource).not.toHaveBeenCalled();
+
+        expect(component.dynamicForm.form.reset).toHaveBeenCalled();
+        expect(component['poNotification'].success).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].createResource).toHaveBeenCalledWith(model);
+
+        expect(component.model).toEqual({});
+      }));
+
+      it('should call `updateResource`, `poNotification.success` and `navigateTo` if `params.id` is truthy', fakeAsync(() => {
+        const path = 'people/id';
+        const id = '1';
+        const model = { name: 'angular' };
+
+        const activatedRoute: any = {
+          snapshot: {
+            params: { id: id }
+          }
+        };
+
+        component.model = model;
+        component.dynamicForm = dynamicFormValid;
+        component['activatedRoute'] = activatedRoute;
+
+        spyOn(component['poNotification'], 'success');
+        spyOn(component, <any>'navigateTo');
+        spyOn(component['poNotification'], 'warning');
+
+        component['saveNew'](path);
+
+        tick();
+
+        expect(component['poNotification'].warning).not.toHaveBeenCalled();
+        expect(component['poPageDynamicService'].createResource).not.toHaveBeenCalled();
+
+        expect(component['navigateTo']).toHaveBeenCalledWith(path);
+        expect(component['poNotification'].success).toHaveBeenCalled();
+        expect(component['poPageDynamicService'].updateResource).toHaveBeenCalledWith(id, model);
+      }));
     });
 
-    it('saveNew: should call `createResource`, `poNotification.success` and `form.reset` if `params.id` is truthy', fakeAsync(() => {
-      const path = 'people/id';
-      const id = undefined;
-      const model = { name: 'angular' };
+    describe('save:', () => {
+      let executeSaveSpy;
+      let updateModelSpy;
+      beforeEach(() => {
+        executeSaveSpy = spyOn(component, <any>'executeSave').and.returnValue(of({}));
+        updateModelSpy = spyOn(component, <any>'updateModel');
+      });
+      it('shouldn`t call executeSave if allowAction is false', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: false };
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
+        component['save']('testSave/');
+        expect(executeSaveSpy).not.toHaveBeenCalled();
+      });
 
-      const activatedRoute: any = {
-        snapshot: {
-          params: { id }
-        }
-      };
+      it('shouldn`t call executeSave if newAction is a Function', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: true };
+        const newAction = jasmine.createSpy('newAction');
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
+        component['save'](newAction);
+        expect(executeSaveSpy).not.toHaveBeenCalled();
+        expect(newAction).toHaveBeenCalledWith(component.model);
+      });
 
-      component.dynamicForm = dynamicFormValid;
-      component['activatedRoute'] = activatedRoute;
-      component.model = Object.assign({}, model);
+      it('should call executeSave if allowAction is true', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: true };
 
-      spyOn(component['poPageDynamicService'], 'createResource').and.returnValue(EMPTY);
-      spyOn(component['poNotification'], 'success');
-      spyOn(component.dynamicForm.form, 'reset');
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
 
-      spyOn(component['poPageDynamicService'], 'updateResource');
-      spyOn(component['poNotification'], 'warning');
+        component['save']('testSave/');
 
-      component['saveNew'](path);
+        expect(executeSaveSpy).toHaveBeenCalled();
+      });
 
-      tick();
+      it('should call executeSave if allowAction is undefined', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: undefined };
 
-      expect(component['poNotification'].warning).not.toHaveBeenCalled();
-      expect(component['poPageDynamicService'].updateResource).not.toHaveBeenCalled();
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
+        component['save']('testSave/');
 
-      expect(component.dynamicForm.form.reset).toHaveBeenCalled();
-      expect(component['poNotification'].success).toHaveBeenCalled();
-      expect(component['poPageDynamicService'].createResource).toHaveBeenCalledWith(model);
+        expect(executeSaveSpy).toHaveBeenCalled();
+      });
 
-      expect(component.model).toEqual({});
-    }));
+      it('should call executeSave if allowAction is null', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: null };
 
-    it('saveNew: should call `updateResource`, `poNotification.success` and `navigateTo` if `params.id` is truthy', fakeAsync(() => {
-      const path = 'people/id';
-      const id = '1';
-      const model = { name: 'angular' };
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
 
-      const activatedRoute: any = {
-        snapshot: {
-          params: { id: id }
-        }
-      };
+        component['save']('testSave/');
 
-      component.model = model;
-      component.dynamicForm = dynamicFormValid;
-      component['activatedRoute'] = activatedRoute;
+        expect(executeSaveSpy).toHaveBeenCalled();
+      });
 
-      spyOn(component['poPageDynamicService'], 'updateResource').and.returnValue(EMPTY);
-      spyOn(component['poNotification'], 'success');
-      spyOn(component, <any>'navigateTo');
+      it('should call executeSave with newUrl if it is defined', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { newUrl: 'newUrl' };
 
-      spyOn(component['poPageDynamicService'], 'createResource');
-      spyOn(component['poNotification'], 'warning');
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
 
-      component['saveNew'](path);
+        component['save']('testSave/');
 
-      tick();
+        expect(executeSaveSpy).toHaveBeenCalledWith('newUrl');
+      });
 
-      expect(component['poNotification'].warning).not.toHaveBeenCalled();
-      expect(component['poPageDynamicService'].createResource).not.toHaveBeenCalled();
+      it('should call executeSave with saveAction if newUrl is undefined', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { newUrl: undefined };
+        const saveAction = 'testSave/';
 
-      expect(component['navigateTo']).toHaveBeenCalledWith(path);
-      expect(component['poNotification'].success).toHaveBeenCalled();
-      expect(component['poPageDynamicService'].updateResource).toHaveBeenCalledWith(id, model);
-    }));
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
 
-    it('save: shouldn`t call executeSave if allowAction is false', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: false };
+        component['save'](saveAction);
 
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave');
-      spyOn(component, <any>'updateModel');
+        expect(executeSaveSpy).toHaveBeenCalledWith(saveAction);
+      });
 
-      component['save']('testSave/');
+      it('should call executeSave with saveAction if newUrl is null', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = { newUrl: null };
+        const saveAction = 'testSave/';
 
-      expect(component['executeSave']).not.toHaveBeenCalled();
-    });
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
 
-    it('save: shouldn`t call executeSave if newAction is a Function', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: true };
-      const newAction = jasmine.createSpy('newAction');
+        component['save'](saveAction);
 
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave');
-      spyOn(component, <any>'updateModel');
+        expect(executeSaveSpy).toHaveBeenCalledWith(saveAction);
+      });
 
-      component['save'](newAction);
+      it('should call executeSave with saveAction if returnBeforeSave is undefined', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = undefined;
+        const saveAction = 'testSave/';
 
-      expect(component['executeSave']).not.toHaveBeenCalled();
-      expect(newAction).toHaveBeenCalledWith(component.model);
-    });
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
 
-    it('save: should call executeSave if allowAction is true', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: true };
+        component['save'](saveAction);
 
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave').and.returnValue(of({}));
-      spyOn(component, <any>'updateModel');
+        expect(executeSaveSpy).toHaveBeenCalledWith(saveAction);
+      });
 
-      component['save']('testSave/');
+      it('should call updateModel before executeSave', () => {
+        const returnBeforeSave: PoPageDynamicEditBeforeSave = undefined;
+        const saveAction = 'testSave/';
 
-      expect(component['executeSave']).toHaveBeenCalled();
-    });
+        spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
+        component['save'](saveAction);
 
-    it('save: should call executeSave if allowAction is undefined', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: undefined };
-
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave').and.returnValue(of({}));
-      spyOn(component, <any>'updateModel');
-
-      component['save']('testSave/');
-
-      expect(component['executeSave']).toHaveBeenCalled();
-    });
-
-    it('save: should call executeSave if allowAction is null', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = { allowAction: null };
-
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave').and.returnValue(of({}));
-      spyOn(component, <any>'updateModel');
-
-      component['save']('testSave/');
-
-      expect(component['executeSave']).toHaveBeenCalled();
-    });
-
-    it('save: should call executeSave with newUrl if it is defined', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = { newUrl: 'newUrl' };
-
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave').and.returnValue(of({}));
-      spyOn(component, <any>'updateModel');
-
-      component['save']('testSave/');
-
-      expect(component['executeSave']).toHaveBeenCalledWith('newUrl');
-    });
-
-    it('save: should call executeSave with saveAction if newUrl is undefined', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = { newUrl: undefined };
-      const saveAction = 'testSave/';
-
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave').and.returnValue(of({}));
-      spyOn(component, <any>'updateModel');
-
-      component['save'](saveAction);
-
-      expect(component['executeSave']).toHaveBeenCalledWith(saveAction);
-    });
-
-    it('save: should call executeSave with saveAction if newUrl is null', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = { newUrl: null };
-      const saveAction = 'testSave/';
-
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave').and.returnValue(of({}));
-      spyOn(component, <any>'updateModel');
-
-      component['save'](saveAction);
-
-      expect(component['executeSave']).toHaveBeenCalledWith(saveAction);
-    });
-
-    it('save: should call executeSave with saveAction if returnBeforeSave is undefined', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = undefined;
-      const saveAction = 'testSave/';
-
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      spyOn(component, <any>'executeSave').and.returnValue(of({}));
-      spyOn(component, <any>'updateModel');
-
-      component['save'](saveAction);
-
-      expect(component['executeSave']).toHaveBeenCalledWith(saveAction);
-    });
-
-    it('save: should call updateModel before executeSave', () => {
-      const returnBeforeSave: PoPageDynamicEditBeforeSave = undefined;
-      const saveAction = 'testSave/';
-
-      spyOn(component['poPageDynamicEditActionsService'], 'beforeSave').and.returnValue(of(returnBeforeSave));
-      const executeSaveSpy = spyOn(component, <any>'executeSave');
-      const updateModelSpy = spyOn(component, <any>'updateModel');
-
-      component['save'](saveAction);
-
-      expect(updateModelSpy).toHaveBeenCalledBefore(executeSaveSpy);
+        expect(updateModelSpy).toHaveBeenCalledBefore(executeSaveSpy);
+      });
     });
 
     it('executeSave: should call `poNotification.warning` and not call `updateResource` and `createResource` if `form.invalid` is true', () => {
