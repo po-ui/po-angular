@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table-before-edit.interface';
 import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
@@ -21,6 +22,16 @@ export class PoPageDynamicTableActionsService {
   });
 
   constructor(private http: HttpClient) {}
+
+  beforeEdit(
+    action: PoPageDynamicTableActions['beforeEdit'],
+    id: any,
+    body: any
+  ): Observable<PoPageDynamicTableBeforeEdit> {
+    const resource = body ?? {};
+
+    return this.executeAction({ action, resource, id });
+  }
 
   beforeNew(action?: PoPageDynamicTableActions['beforeNew']): Observable<PoPageDynamicTableBeforeNew> {
     return this.executeAction({ action });
