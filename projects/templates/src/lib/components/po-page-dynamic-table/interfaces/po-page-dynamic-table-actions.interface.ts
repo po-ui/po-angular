@@ -1,3 +1,4 @@
+import { PoPageDynamicTableBeforeEdit } from './po-page-dynamic-table-before-edit.interface';
 import { PoPageDynamicTableBeforeNew } from './po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './po-page-dynamic-table-before-detail.interface';
@@ -43,7 +44,22 @@ export interface PoPageDynamicTableActions {
   /**
    * @description
    *
-   * Rota para edição do recurso, caso seja preenchida irá habilitar a ação de edição na tabela.
+   * Rota ou método que será chamado antes de editar um recurso (edit).
+   *
+   * Tanto o método como a API devem retornar um objeto com a definição de `PoPageDynamicTableBeforeEdit`.
+   *
+   * > A url será chamada via POST junto com a key especificada no metadata, por exemplo: `POST {beforeEdit}/{key}`.
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeEdit**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   */
+  beforeEdit?: string | ((id: any, resource: any) => PoPageDynamicTableBeforeEdit);
+
+  /**
+   * @description
+   *
+   * Rota ou função para edição do recurso, caso seja preenchida irá habilitar a ação de edição na tabela.
    *
    * > A rota deve conter um parâmetro chamando id.
    *
@@ -52,8 +68,13 @@ export interface PoPageDynamicTableActions {
    *   edit: 'edit/:id'
    * };
    * ```
+   *
+   * Na função pode ser retornado um objeto representando o recurso modificado.
+   * Dessa forma será atualizada a linha da tabela que está sendo editada. Essa opção não abrange campos configurados com `key: true`.
+   *
+   * > Se passada uma função, é responsabilidade do desenvolvedor implementar a navegação, edição ou outro comportamento desejado.
    */
-  edit?: string;
+  edit?: string | ((id: string, resource: any) => { [key: string]: any });
 
   /**
    * @description

@@ -27,6 +27,7 @@ import { PoPageCustomizationService } from './../../services/po-page-customizati
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
 import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
+import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table-before-edit.interface';
 import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
@@ -457,10 +458,57 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.navigateTo({ path, params: { duplicate: JSON.stringify(duplicates) } });
   }
 
-  private openEdit(path: string, item) {
+  private openEdit(actionEdit: PoPageDynamicTableActions['edit'], item) {
+    const id = this.formatUniqueKey(item);
+
+    this.subscriptions.add(
+      this.poPageDynamicTableActionsService
+        .beforeEdit(this.actions.beforeEdit, id, item)
+        .pipe(
+          switchMap((beforeEditResult: PoPageDynamicTableBeforeEdit) =>
+            this.executeEditAction(actionEdit, beforeEditResult, item, id)
+          )
+        )
+        .subscribe()
+    );
+  }
+
+  private executeEditAction(
+    action: PoPageDynamicTableActions['edit'],
+    beforeEditResult: PoPageDynamicTableBeforeEdit,
+    item: any,
+    id: string
+  ) {
+    const newEditAction = beforeEditResult?.newUrl ?? action;
+    const allowAction = beforeEditResult?.allowAction ?? true;
+
+    if (!allowAction) {
+      return EMPTY;
+    }
+
+    if (typeof newEditAction === 'string') {
+      this.openEditUrl(newEditAction, item);
+    } else {
+      const updatedItem = newEditAction(id, item);
+      this.modifyUITableItem(item, updatedItem);
+    }
+
+    return EMPTY;
+  }
+
+  private openEditUrl(path: string, item) {
     const url = this.resolveUrl(item, path);
 
     this.navigateTo({ path, url });
+  }
+
+  private modifyUITableItem(currentItem, newItemValue) {
+    if (typeof newItemValue === 'object' && newItemValue !== null) {
+      this.keys.forEach(key => delete newItemValue[key]);
+
+      const tableItem = this.items.findIndex(item => item === currentItem);
+      this.items[tableItem] = { ...currentItem, ...newItemValue };
+    }
   }
 
   private openNew(actionNew: PoPageDynamicTableActions['new']) {
