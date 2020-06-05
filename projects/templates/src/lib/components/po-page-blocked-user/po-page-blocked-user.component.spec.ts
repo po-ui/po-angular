@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { configureTestSuite } from '../../util-test/util-expect.spec';
 import * as utilsFunctions from './../../utils/util';
 
 import { PoPageBlockedUserBaseComponent } from './po-page-blocked-user-base.component';
@@ -14,13 +13,13 @@ describe('PoPageBlockedUserComponent:', () => {
   let fixture: ComponentFixture<PoPageBlockedUserComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],
       declarations: [PoPageBlockedUserComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageBlockedUserComponent);

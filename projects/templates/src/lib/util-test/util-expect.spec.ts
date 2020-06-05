@@ -3,49 +3,6 @@ import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
 /**
- * Reconfigura a suíte de testes atuais para impedir a recompilação de componentes angular após cada teste.
- * Força o TestBed a recriar o ngZone e todos os serviços injetáveis, configurando diretamente a variável _instantiated para
- * `false` após cada teste.
- * Limpa todas as alterações e reverte a configuração do TestBed após o término da suíte.
- *
- * Referência : https://blog.angularindepth.com/angular-unit-testing-performance-34363b7345ba
- *
- * @param configureModule parâmetro opcional que pode ser usado para configurar o TestBed para o conjunto de testes atual
- * diretamente na chamada configureTestSuite (não é necessário o BeforeAll extra neste caso).
- */
-export const configureTestSuite = (configureModule?: any) => {
-  const testBedApi: any = getTestBed();
-  const originReset = TestBed.resetTestingModule;
-
-  beforeAll(() => {
-    TestBed.resetTestingModule();
-    TestBed.resetTestingModule = () => TestBed;
-  });
-
-  if (configureModule) {
-    beforeAll(done =>
-      (async () => {
-        configureModule();
-
-        await TestBed.compileComponents();
-      })()
-        .then(done)
-        .catch(done.fail)
-    );
-  }
-
-  afterEach(() => {
-    testBedApi._activeFixtures.forEach((fixture: ComponentFixture<any>) => fixture.destroy());
-    testBedApi._instantiated = false;
-  });
-
-  afterAll(() => {
-    TestBed.resetTestingModule = originReset;
-    TestBed.resetTestingModule();
-  });
-};
-
-/**
  * Expect dinamico para validar metódos setters.
  *
  * @param comp componente a ser testado

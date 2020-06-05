@@ -9,7 +9,7 @@ import { throwError, of } from 'rxjs';
 import { PoDialogService } from '@po-ui/ng-components';
 
 import * as util from '../../utils/util';
-import { configureTestSuite, expectPropertiesValues } from '../../util-test/util-expect.spec';
+import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import { PoPageDynamicDetailComponent } from './po-page-dynamic-detail.component';
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';

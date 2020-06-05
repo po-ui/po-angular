@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -8,7 +8,7 @@ import { throwError } from 'rxjs';
 import { PoFieldModule, PoI18nPipe, PoModalModule } from '@po-ui/ng-components';
 
 import * as utilsFunctions from './../../utils/util';
-import { configureTestSuite, getObservable } from './../../util-test/util-expect.spec';
+import { getObservable } from './../../util-test/util-expect.spec';
 
 import { PoModalPasswordRecoveryComponent } from './po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryErrorMessageComponent } from './po-modal-password-recovery-error-message/po-modal-password-recovery-error-message.component';
@@ -22,13 +22,13 @@ describe('PoModalPasswordRecoveryComponent:', () => {
   let debugElement;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, RouterTestingModule.withRoutes([]), PoFieldModule, PoModalModule],
       declarations: [PoModalPasswordRecoveryErrorMessageComponent, PoModalPasswordRecoveryComponent],
       providers: [PoI18nPipe, PoModalPasswordRecoveryService]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoModalPasswordRecoveryComponent);

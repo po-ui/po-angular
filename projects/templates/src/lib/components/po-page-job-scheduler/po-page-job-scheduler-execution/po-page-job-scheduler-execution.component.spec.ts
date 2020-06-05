@@ -1,9 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { throwError } from 'rxjs';
 
-import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
+import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 import { getObservable } from '../../../util-test/util-expect.spec';
 
 import { PoPageJobSchedulerExecutionComponent } from './po-page-job-scheduler-execution.component';
@@ -15,11 +15,11 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
 
   let debugElement;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageJobSchedulerExecutionComponent);

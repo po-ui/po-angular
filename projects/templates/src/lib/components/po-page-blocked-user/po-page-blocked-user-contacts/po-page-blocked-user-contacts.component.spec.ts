@@ -1,30 +1,28 @@
 import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { PoPageBlockedUserContactsComponent } from './po-page-blocked-user-contacts.component';
 
-import { configureTestSuite } from '../../../util-test/util-expect.spec';
-
 describe('PoPageBlockedUserContactsComponent: ', () => {
   let component: PoPageBlockedUserContactsComponent;
   let fixture: ComponentFixture<PoPageBlockedUserContactsComponent>;
   let debugElement;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, RouterTestingModule.withRoutes([])],
       declarations: [PoPageBlockedUserContactsComponent],
       providers: [HttpClient, HttpHandler],
       schemas: [NO_ERRORS_SCHEMA]
-    });
+    }).compileComponents();
 
     TestBed.overrideComponent(PoPageBlockedUserContactsComponent, {
       set: { changeDetection: ChangeDetectionStrategy.Default }
     }).createComponent(PoPageBlockedUserContactsComponent);
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageBlockedUserContactsComponent);

@@ -1,11 +1,11 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import * as utilsFunctions from './../../utils/util';
-import { configureTestSuite, getObservable } from './../../util-test/util-expect.spec';
+import { getObservable } from './../../util-test/util-expect.spec';
 import { of } from 'rxjs';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
@@ -19,14 +19,14 @@ describe('PoPageChangePasswordComponent:', () => {
   let nativeElement: any;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, RouterTestingModule.withRoutes([])],
       declarations: [PoPageChangePasswordComponent],
       providers: [HttpClient, HttpHandler, PoPageChangePasswordService],
       schemas: [NO_ERRORS_SCHEMA]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageChangePasswordComponent);

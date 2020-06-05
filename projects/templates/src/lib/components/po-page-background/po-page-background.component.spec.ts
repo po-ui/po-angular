@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import * as utilFunctions from './../../utils/util';
-import { configureTestSuite, expectPropertiesValues } from './../../util-test/util-expect.spec';
+import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoPageBackgroundComponent } from './po-page-background.component';
 
@@ -11,12 +11,12 @@ describe('PoPageBackgroundComponent:', () => {
   let fixture: ComponentFixture<PoPageBackgroundComponent>;
   let debugElement;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PoPageBackgroundComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageBackgroundComponent);
