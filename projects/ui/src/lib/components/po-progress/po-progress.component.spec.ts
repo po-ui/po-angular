@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
-import { configureTestSuite } from 'projects/templates/src/lib/util-test/util-expect.spec';
 import { Observable } from 'rxjs';
 
 import { PoProgressComponent } from './po-progress.component';
@@ -13,11 +12,11 @@ describe('PoProgressComponent:', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PoProgressModule]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoProgressComponent);
