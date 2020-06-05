@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -14,7 +14,6 @@ import {
   PoSwitchComponent
 } from '@po-ui/ng-components';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../utils/util';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
@@ -37,7 +36,7 @@ describe('PoPageLoginComponent: ', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, RouterTestingModule.withRoutes([])],
       declarations: [
@@ -52,8 +51,8 @@ describe('PoPageLoginComponent: ', () => {
       ],
       providers: [HttpClient, HttpHandler, PoPageLoginService],
       schemas: [NO_ERRORS_SCHEMA]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageLoginComponent);

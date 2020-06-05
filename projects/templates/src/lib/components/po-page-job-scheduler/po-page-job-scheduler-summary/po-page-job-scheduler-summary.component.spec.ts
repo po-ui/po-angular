@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import * as util from '../../../utils/util';
-import { configureTestSuite } from '../../../util-test/util-expect.spec';
 
 import { poPageJobSchedulerLiteralsDefault } from '../po-page-job-scheduler-literals';
 import { PoPageJobSchedulerModule } from '../po-page-job-scheduler.module';
@@ -14,11 +13,11 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
 
   let debugElement;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageJobSchedulerSummaryComponent);

@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -9,7 +9,7 @@ import { of, EMPTY } from 'rxjs';
 import { PoDialogModule, PoNotificationModule, PoTableColumnSort, PoTableColumnSortType } from '@po-ui/ng-components';
 
 import * as utilsFunctions from '../../utils/util';
-import { configureTestSuite, expectPropertiesValues } from '../../util-test/util-expect.spec';
+import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
 import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
@@ -19,7 +19,7 @@ describe('PoPageDynamicTableComponent:', () => {
   let component: PoPageDynamicTableComponent;
   let fixture: ComponentFixture<PoPageDynamicTableComponent>;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
@@ -32,8 +32,8 @@ describe('PoPageDynamicTableComponent:', () => {
       declarations: [PoPageDynamicTableComponent],
       providers: [],
       schemas: [NO_ERRORS_SCHEMA]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicTableComponent);

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
@@ -10,7 +10,7 @@ import { PoDynamicFieldType } from '@po-ui/ng-components';
 import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component';
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
 import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
-import { configureTestSuite, expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
+import { expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
 
 export const routes: Routes = [];
 
@@ -18,14 +18,14 @@ describe('PoPageDynamicSearchComponent:', () => {
   let component: PoPageDynamicSearchComponent;
   let fixture: ComponentFixture<PoPageDynamicSearchComponent>;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, RouterTestingModule.withRoutes(routes), PoPageCustomizationModule],
       declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
       providers: [TitleCasePipe],
       schemas: [NO_ERRORS_SCHEMA]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicSearchComponent);

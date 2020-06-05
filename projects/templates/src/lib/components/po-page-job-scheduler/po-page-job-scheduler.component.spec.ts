@@ -1,9 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
 
-import { changeBrowserInnerWidth, configureTestSuite } from './../../util-test/util-expect.spec';
+import { changeBrowserInnerWidth } from './../../util-test/util-expect.spec';
 import { getObservable } from '../../util-test/util-expect.spec';
 
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
@@ -14,11 +14,11 @@ describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
   let fixture: ComponentFixture<PoPageJobSchedulerComponent>;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageJobSchedulerComponent);

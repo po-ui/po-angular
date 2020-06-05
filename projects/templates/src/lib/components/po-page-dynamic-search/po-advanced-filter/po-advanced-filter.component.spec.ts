@@ -1,9 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { PoDynamicModule, PoFieldModule, PoModalModule } from '@po-ui/ng-components';
-
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.component';
 import { PoAdvancedFilterComponent } from './po-advanced-filter.component';
@@ -13,12 +11,12 @@ describe('PoAdvancedFilterComponent', () => {
   let fixture: ComponentFixture<PoAdvancedFilterComponent>;
   let filters: Array<any>;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, PoDynamicModule, PoFieldModule, PoModalModule],
       declarations: [PoAdvancedFilterComponent]
-    });
-  });
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoAdvancedFilterComponent);

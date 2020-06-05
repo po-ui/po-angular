@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 
-import { configureTestSuite, expectPropertiesValues, getObservable } from '../../util-test/util-expect.spec';
+import { expectPropertiesValues, getObservable } from '../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../utils/util';
 import * as UtilFunctions from './../../utils/util';
 
@@ -24,12 +24,12 @@ describe('ThPageLoginBaseComponent: ', () => {
   let component: PoPageLoginBaseComponent;
   let servicePageLogin: PoPageLoginService;
 
-  configureTestSuite(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [],
       providers: [PoPageLoginService]
-    });
-  });
+    }).compileComponents();
+  }));
 
   const booleanValidTrueValues = [true, 'true', 1, ''];
   const booleanValidFalseValues = [false, 'false', 0];
