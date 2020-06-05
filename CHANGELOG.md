@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/po-ui/po-angular/compare/v2.4.1...v2.5.0) (2020-06-05)
+
+
+### Features
+
+* **dynamic-search:** permite iniciar os filtros com valores preenchidos ([7e9c1f7](https://github.com/po-ui/po-angular/commit/7e9c1f71850a72e5dfa38add55da859368170068))
+* **dynamic-table:** permite iniciar os filtros com valores preenchidos ([df3c7ad](https://github.com/po-ui/po-angular/commit/df3c7ad520d3f03a3448d1ec3d9364d9e249d378))
+* **page-dynamic-detail:** adiciona propriedade `beforeEdit` na actions ([35058d1](https://github.com/po-ui/po-angular/commit/35058d13461167b12ea68c2d1726a54250d3b672))
+* **page-dynamic-edit:** adiciona o parâmetro id no `beforeSave` e `save`([a64a82e](https://github.com/po-ui/po-angular/commit/a64a82eee2bc9745eb52f363ccd4d17bf49a2a06))
+* **page-dynamic-table:** adiciona propriedade `beforeEdit` na actions ([dfb6605](https://github.com/po-ui/po-angular/commit/dfb660569ab59eb4332ad338f65b9d3e32561924))
+* **page-dynamic-table:** adiciona propriedade `beforeDetail` na actions ([a588475](https://github.com/po-ui/po-angular/commit/a5884750b716ad1ecf6c07df274b61ecf940f9f1))
+* **page-list:** adiciona tamanho no filtro ([5392ba9](https://github.com/po-ui/po-angular/commit/5392ba91f5169df9d8f1008d327744a0cd8bc5be))
+
+
+### Tests
+
+* **page-dynamic:** corrige testes falhos ([fea7b06](https://github.com/po-ui/po-angular/commit/fea7b06e8cd36500ee0cda43442dfd258d6d3942))
+
 ### [2.4.1](https://github.com/po-ui/po-angular/compare/v2.4.0...v2.4.1) (2020-05-29)
 
 
