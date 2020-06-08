@@ -31,7 +31,7 @@ import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table
 import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
-import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search/po-page-dynamic-search-filters.interface';
+import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -452,10 +452,40 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return newUrl;
   }
 
-  private openDuplicate(path: string, item) {
-    const duplicates = util.mapObjectByProperties(item, this.duplicates);
+  private openDuplicate(actionDuplicate: PoPageDynamicTableActions['duplicate'], item: any) {
+    const id = this.formatUniqueKey(item);
+    const duplicates = util.removeKeysProperties(this.keys, util.mapObjectByProperties(item, this.duplicates));
 
-    this.navigateTo({ path, params: { duplicate: JSON.stringify(duplicates) } });
+    this.subscriptions.add(
+      this.poPageDynamicTableActionsService
+        .beforeDuplicate(this.actions.beforeDuplicate, id, duplicates)
+        .subscribe((beforeDuplicateResult: PoPageDynamicTableBeforeDuplicate) =>
+          this.executeDuplicate(actionDuplicate, beforeDuplicateResult, duplicates)
+        )
+    );
+  }
+
+  private executeDuplicate(
+    actionDuplicate: PoPageDynamicTableActions['duplicate'],
+    beforeDuplicateResult: PoPageDynamicTableBeforeDuplicate,
+    duplicates: any
+  ) {
+    const before = beforeDuplicateResult ?? {};
+    const allowAction = typeof before.allowAction === 'boolean' ? before.allowAction : true;
+    const beforeDuplicateResource = before.resource;
+    const newAction = before.newUrl ?? actionDuplicate;
+
+    if (allowAction && actionDuplicate) {
+      if (typeof beforeDuplicateResource === 'object' && beforeDuplicateResource !== null) {
+        duplicates = util.removeKeysProperties(this.keys, beforeDuplicateResource);
+      }
+
+      if (typeof newAction === 'string') {
+        return this.navigateTo({ path: newAction, params: { duplicate: JSON.stringify(duplicates) } });
+      }
+
+      return newAction(duplicates);
+    }
   }
 
   private openEdit(actionEdit: PoPageDynamicTableActions['edit'], item) {
@@ -490,7 +520,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       this.openEditUrl(newEditAction, item);
     } else {
       const updatedItem = newEditAction(id, item);
-      this.modifyUITableItem(item, updatedItem);
+      if (typeof updatedItem === 'object' && updatedItem !== null) {
+        this.modifyUITableItem(item, util.removeKeysProperties(this.keys, updatedItem));
+      }
     }
 
     return EMPTY;
@@ -503,12 +535,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private modifyUITableItem(currentItem, newItemValue) {
-    if (typeof newItemValue === 'object' && newItemValue !== null) {
-      this.keys.forEach(key => delete newItemValue[key]);
-
-      const tableItem = this.items.findIndex(item => item === currentItem);
-      this.items[tableItem] = { ...currentItem, ...newItemValue };
-    }
+    const tableItem = this.items.findIndex(item => item === currentItem);
+    this.items[tableItem] = { ...currentItem, ...newItemValue };
   }
 
   private openNew(actionNew: PoPageDynamicTableActions['new']) {
