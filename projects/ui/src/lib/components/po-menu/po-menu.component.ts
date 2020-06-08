@@ -15,7 +15,7 @@ import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
-import { getFormattedLink, isMobile, openExternalLink } from '../../utils/util';
+import { getFormattedLink, getParentRef, isMobile, openExternalLink } from '../../utils/util';
 
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';
@@ -146,7 +146,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     menuService: PoMenuService
   ) {
     super(menuService);
-    this.parentRef = viewRef['_hostView'][8];
+    this.parentRef = getParentRef(viewRef);
   }
 
   private get isActiveItemMenuSubMenu() {

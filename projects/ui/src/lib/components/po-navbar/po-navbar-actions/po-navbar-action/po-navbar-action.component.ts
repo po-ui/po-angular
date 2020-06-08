@@ -1,7 +1,7 @@
 import { Component, Input, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, isExternalLink, openExternalLink } from '../../../../utils/util';
+import { callFunction, getParentRef, isExternalLink, openExternalLink } from '../../../../utils/util';
 
 @Component({
   selector: 'po-navbar-action',
@@ -21,7 +21,7 @@ export class PoNavbarActionComponent {
   @Input('p-tooltip-text') tooltip?: string;
 
   constructor(viewContainerRef: ViewContainerRef, private router: Router) {
-    this.parentRef = viewContainerRef['_hostView'][8];
+    this.parentRef = getParentRef(viewContainerRef);
   }
 
   click() {

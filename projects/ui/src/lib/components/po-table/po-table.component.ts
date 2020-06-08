@@ -16,7 +16,7 @@ import {
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, getParentRef } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
@@ -119,7 +119,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   ) {
     super(poDate);
 
-    this.parentRef = viewRef['_hostView'][8];
+    this.parentRef = getParentRef(viewRef);
     this.differ = differs.find([]).create(null);
 
     // TODO: #5550 ao remover este listener, no portal, quando as colunas forem fixas não sofrem

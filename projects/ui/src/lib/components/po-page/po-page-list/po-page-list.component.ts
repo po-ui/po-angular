@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
+import { callFunction, getParentRef, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoPageAction } from '../po-page-action.interface';
@@ -69,7 +69,7 @@ export class PoPageListComponent extends PoPageListBaseComponent
     private changeDetector: ChangeDetectorRef
   ) {
     super(languageService);
-    this.parentRef = viewRef['_hostView'][8];
+    this.parentRef = getParentRef(viewRef);
     this.initializeListeners();
   }
 

@@ -1,3 +1,5 @@
+import { ViewContainerRef } from '@angular/core';
+
 // Idiomas suportados pelas páginas
 export const poLocales = ['pt', 'en', 'es', 'ru'];
 // Idioma padrão
@@ -521,4 +523,16 @@ export function clearObject(dirtyObject: object): any {
 
 export function validateObjectType(value: any) {
   return isTypeof(value, 'object') && !Array.isArray(value) ? value : undefined;
+}
+
+/**
+ * @deprecated
+ * Retorna um ViewContainerRef compatível para projetos com Ivy habilitado ou não.
+ *
+ * @param viewRef ViewContainerRef
+ *
+ * @returns ViewContainerRef
+ */
+export function getParentRef(viewRef: ViewContainerRef): ViewContainerRef {
+  return viewRef['_hostView'] ? viewRef['_hostView'][8] : viewRef['_view']['component'];
 }
