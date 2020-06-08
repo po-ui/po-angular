@@ -377,7 +377,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     if (column.type === 'label') {
       const columnLabel = this.getColumnLabel(row, column);
-      return (this.tooltipText = columnLabel.tooltip);
+      return (this.tooltipText = columnLabel?.tooltip);
     }
   }
 

@@ -1265,6 +1265,18 @@ describe('PoTableComponent:', () => {
       expect(component.tooltipText).toBe('Label Tooltip Value');
     });
 
+    it(`checkingIfColumnHasTooltip: should apply undefined to tooltipText if 'getColumnLabel' returns undefined`, () => {
+      const column = { type: 'label', tooltip: 'Label Tooltip Value' };
+      const row = {};
+
+      spyOn(component, <any>'getColumnLabel').and.returnValue(undefined);
+
+      component['checkingIfColumnHasTooltip'](column, row);
+
+      expect(component.getColumnLabel).toHaveBeenCalledWith(row, column);
+      expect(component.tooltipText).toBeUndefined();
+    });
+
     it(`calculateHeightTableContainer: should call 'setTableOpacity' with 1`, () => {
       spyOn(component, <any>'setTableOpacity');
 
