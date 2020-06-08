@@ -1,3 +1,5 @@
+import { ViewContainerRef } from '@angular/core';
+
 // Idiomas suportados pelas páginas
 export const poLocales = ['pt', 'en', 'es', 'ru'];
 // Idioma padrão
@@ -376,4 +378,16 @@ export function addZero(time: number) {
   }
 
   return time;
+}
+
+/**
+ * @deprecated
+ * Retorna um ViewContainerRef compatível para projetos com Ivy habilitado ou não.
+ *
+ * @param viewRef ViewContainerRef
+ *
+ * @returns ViewContainerRef
+ */
+export function getParentRef(viewRef: ViewContainerRef): ViewContainerRef {
+  return viewRef['_hostView'] ? viewRef['_hostView'][8] : viewRef['_view']['component'];
 }
