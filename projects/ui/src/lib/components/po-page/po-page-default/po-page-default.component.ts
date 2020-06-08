@@ -1,7 +1,7 @@
 import { AfterContentInit, Component, OnChanges, Renderer2, SimpleChange, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
+import { callFunction, getParentRef, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoPageAction } from '../po-page-action.interface';
 
 import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
@@ -41,7 +41,7 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
 
   constructor(viewRef: ViewContainerRef, private renderer: Renderer2, private router: Router) {
     super();
-    this.parentRef = viewRef['_hostView'][8];
+    this.parentRef = getParentRef(viewRef);
   }
 
   public ngAfterContentInit(): void {

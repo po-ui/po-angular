@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
+import { getParentRef } from '../../utils/util';
+
 import { PoToolbarBaseComponent } from './po-toolbar-base.component';
 
 /**
@@ -32,7 +34,7 @@ export class PoToolbarComponent extends PoToolbarBaseComponent implements OnInit
 
   constructor(private titleService: Title, viewRef: ViewContainerRef) {
     super();
-    this.parentRef = viewRef['_hostView'][8];
+    this.parentRef = getParentRef(viewRef);
   }
 
   ngOnInit(): void {
