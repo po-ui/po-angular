@@ -24,7 +24,8 @@ import {
   sortValues,
   validateDateRange,
   validValue,
-  valuesFromObject
+  valuesFromObject,
+  removeKeysProperties
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -1049,6 +1050,16 @@ describe('Function valuesFromObject:', () => {
 
   it('should return an empty array if params doesn`t exist', () => {
     expect(valuesFromObject()).toEqual([]);
+  });
+});
+
+describe('Function removeKeysProperties:', () => {
+  it('should return an object without any key property', () => {
+    const newItemValue = { name: 'angular', id: 3 };
+    const expectedResult = { name: 'angular' };
+    const keys = ['id'];
+
+    expect(removeKeysProperties(keys, newItemValue)).toEqual(expectedResult);
   });
 });
 

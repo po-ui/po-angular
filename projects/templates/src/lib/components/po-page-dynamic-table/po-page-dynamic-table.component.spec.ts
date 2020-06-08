@@ -667,21 +667,158 @@ describe('PoPageDynamicTableComponent:', () => {
       });
     });
 
-    it('openDuplicate: should call `navigateTo` with object that contains path, url and component properties. ', () => {
-      const path = '/people/:id';
+    describe('openDuplicate:', () => {
+      let navigateToSpy: jasmine.Spy;
+      const id = 'key';
       const item = 'itemValue';
-
       const duplicates = { name: 'angular' };
-
       const params = { duplicate: JSON.stringify(duplicates) };
 
-      spyOn(component, <any>'navigateTo');
-      spyOn(utilsFunctions, <any>'mapObjectByProperties').and.returnValue(duplicates);
+      beforeEach(() => {
+        spyOn(component, <any>'formatUniqueKey').and.returnValue(id);
+        spyOn(utilsFunctions, <any>'removeKeysProperties').and.returnValue(duplicates);
+        navigateToSpy = spyOn(component, <any>'navigateTo');
+      });
 
-      component['openDuplicate'](path, item);
+      it('should call `navigateTo` with duplicate url if `beforeDuplicate` returns only allowAction with true', fakeAsync(() => {
+        const beforeDuplicateResult = {
+          allowAction: true
+        };
 
-      expect(component['navigateTo']).toHaveBeenCalledWith({ path, params });
-      // expect(component['navigateTo']).toHaveBeenCalledWith({ path, params, component: PoPageDynamicEditComponent });
+        const action = 'test/duplicate';
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDuplicate').and.returnValue(
+          of(beforeDuplicateResult)
+        );
+
+        component['openDuplicate'](action, item);
+
+        tick();
+
+        expect(navigateToSpy).toHaveBeenCalledWith({ path: action, params });
+      }));
+
+      it('should call `navigateTo` with duplicate url if `beforeDuplicate` returns only allowAction with undefined', fakeAsync(() => {
+        const beforeDuplicateResult = {
+          allowAction: undefined
+        };
+
+        const action = 'test/duplicate';
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDuplicate').and.returnValue(
+          of(beforeDuplicateResult)
+        );
+
+        component['openDuplicate'](action, item);
+
+        tick();
+
+        expect(navigateToSpy).toHaveBeenCalledWith({ path: action, params });
+      }));
+
+      it('should call `navigateTo` with duplicate url if `beforeDuplicate` returns only allowAction with a string type', fakeAsync(() => {
+        const beforeDuplicateResult = <any>{
+          allowAction: 'test'
+        };
+
+        const action = 'test/duplicate';
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDuplicate').and.returnValue(
+          of(beforeDuplicateResult)
+        );
+
+        component['openDuplicate'](action, item);
+
+        tick();
+
+        expect(navigateToSpy).toHaveBeenCalledWith({ path: action, params });
+      }));
+
+      it('should call `navigateTo` with duplicate url if `beforeDuplicate` is undefined', fakeAsync(() => {
+        const beforeDuplicateResult = undefined;
+
+        const action = 'test/duplicate';
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDuplicate').and.returnValue(
+          of(beforeDuplicateResult)
+        );
+
+        component['openDuplicate'](action, item);
+
+        tick();
+
+        expect(navigateToSpy).toHaveBeenCalledWith({ path: action, params });
+      }));
+
+      it('should call `navigateTo` with newUrl', fakeAsync(() => {
+        const newUrl = 'new-user-url';
+        const beforeDuplicateResult = {
+          newUrl
+        };
+
+        const action = 'test/duplicate';
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDuplicate').and.returnValue(
+          of(beforeDuplicateResult)
+        );
+
+        component['openDuplicate'](action, item);
+
+        tick();
+
+        expect(navigateToSpy).toHaveBeenCalledWith({ path: newUrl, params });
+      }));
+
+      it('should call `searchAndRemoveKeyProperties` and `navigateTo` with newUrl and updated query string value', fakeAsync(() => {
+        const newUrl = 'new-user-url';
+        const resource = { name: 'angular' };
+        const updatedParam = { duplicate: JSON.stringify(resource) };
+        const beforeDuplicateResult = {
+          newUrl,
+          resource
+        };
+
+        const action = 'test/duplicate';
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDuplicate').and.returnValue(
+          of(beforeDuplicateResult)
+        );
+
+        component['openDuplicate'](action, item);
+
+        tick();
+
+        expect(utilsFunctions.removeKeysProperties).toHaveBeenCalled();
+        expect(navigateToSpy).toHaveBeenCalledWith({ path: newUrl, params: updatedParam });
+      }));
+
+      it('should call `action` if it is a function', fakeAsync(() => {
+        const beforeDuplicateResult = undefined;
+
+        const action = jasmine.createSpy();
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDuplicate').and.returnValue(
+          of(beforeDuplicateResult)
+        );
+
+        component['openDuplicate'](action, item);
+
+        tick();
+
+        expect(navigateToSpy).not.toHaveBeenCalled();
+        expect(action).toHaveBeenCalledWith(duplicates);
+      }));
+
+      it('shouldn`t call `action` if action is a function but allowAction is false', fakeAsync(() => {
+        const beforeDuplicateResult = {
+          allowAction: false
+        };
+
+        const action = jasmine.createSpy();
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeDuplicate').and.returnValue(
+          of(beforeDuplicateResult)
+        );
+
+        component['openDuplicate'](action, item);
+
+        tick();
+
+        expect(navigateToSpy).not.toHaveBeenCalled();
+        expect(action).not.toHaveBeenCalled();
+      }));
     });
 
     describe('openEdit', () => {
@@ -768,12 +905,66 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(openEditUrlSpy).toHaveBeenCalledWith(newUrl, item);
       }));
 
-      it('should call `action` and `modifyUITableItem` if action is a function and newUrl is undefined', fakeAsync(() => {
+      it('should call `action` and `modifyUITableItem` if action is a function with a returned object and newUrl is undefined', fakeAsync(() => {
+        const beforeEditResult = {
+          newUrl: undefined
+        };
+
+        const action = jasmine.createSpy().and.returnValue({ name: 'Lina' });
+        const spyModifyUITableItem = spyOn(component, <any>'modifyUITableItem');
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action, item);
+
+        tick();
+
+        expect(openEditUrlSpy).not.toHaveBeenCalled();
+        expect(action).toHaveBeenCalledWith(id, item);
+        expect(spyModifyUITableItem).toHaveBeenCalled();
+      }));
+
+      it('shouldn`t call `modifyUITableItem` if action returns null', fakeAsync(() => {
+        const beforeEditResult = {
+          newUrl: undefined
+        };
+
+        const action = jasmine.createSpy().and.returnValue(null);
+        const spyModifyUITableItem = spyOn(component, <any>'modifyUITableItem');
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action, item);
+
+        tick();
+
+        expect(openEditUrlSpy).not.toHaveBeenCalled();
+        expect(action).toHaveBeenCalledWith(id, item);
+        expect(spyModifyUITableItem).not.toHaveBeenCalled();
+      }));
+
+      it('shouldn`t call `modifyUITableItem` if action returns nothing', fakeAsync(() => {
         const beforeEditResult = {
           newUrl: undefined
         };
 
         const action = jasmine.createSpy();
+        const spyModifyUITableItem = spyOn(component, <any>'modifyUITableItem');
+        spyOn(component['poPageDynamicTableActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
+
+        component['openEdit'](action, item);
+
+        tick();
+
+        expect(openEditUrlSpy).not.toHaveBeenCalled();
+        expect(action).toHaveBeenCalledWith(id, item);
+        expect(spyModifyUITableItem).not.toHaveBeenCalled();
+      }));
+
+      it('shouldn`t call `modifyUITableItem` if action returns an empty object', fakeAsync(() => {
+        const beforeEditResult = {
+          newUrl: undefined
+        };
+
+        const action = jasmine.createSpy().and.returnValue({});
         const spyModifyUITableItem = spyOn(component, <any>'modifyUITableItem');
         spyOn(component['poPageDynamicTableActionsService'], 'beforeEdit').and.returnValue(of(beforeEditResult));
 
@@ -816,40 +1007,13 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['navigateTo']).toHaveBeenCalledWith({ path, url });
     });
 
-    describe('modifyUITableItem:', () => {
-      const items = [{ name: 'react', id: 2 }];
+    it('modifyUITableItem: should merge `newItemValue` with `item`', () => {
+      component.items = [{ name: 'Lina' }];
+      const newItemValue = { name: 'Maya', genre: 'female' };
 
-      it('shouldn`t modify item if newItemValue is undefined', () => {
-        component.items = items;
-        const newItemValue = undefined;
-        const expectedValue = items;
+      component['modifyUITableItem'](component.items[0], newItemValue);
 
-        component['modifyUITableItem'](component.items[0], newItemValue);
-
-        expect(component.items).toEqual(expectedValue);
-      });
-
-      it('shouldn`t modify item if newItemValue is null', () => {
-        component.items = items;
-        const newItemValue = null;
-        const expectedValue = items;
-
-        component['modifyUITableItem'](component.items[0], newItemValue);
-
-        expect(component.items).toEqual(expectedValue);
-      });
-
-      it('shouldn`t modify item property value wich is a key element', () => {
-        component.items = items;
-        const newItemValue = { name: 'angular', id: 3 };
-        const expectedValue = { name: 'angular', id: 2 };
-
-        spyOnProperty(component, <any>'keys', 'get').and.returnValue(['id']);
-
-        component['modifyUITableItem'](component.items[0], newItemValue);
-
-        expect(component.items).toEqual([expectedValue]);
-      });
+      expect(component.items).toEqual([newItemValue]);
     });
 
     describe('openNew:', () => {

@@ -2,6 +2,7 @@ import { PoPageDynamicTableBeforeEdit } from './po-page-dynamic-table-before-edi
 import { PoPageDynamicTableBeforeNew } from './po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './po-page-dynamic-table-before-detail.interface';
+import { PoPageDynamicTableBeforeDuplicate } from './po-page-dynamic-table-before-duplicate.interface';
 
 /**
  * @usedBy PoPageDynamicTableComponent
@@ -29,17 +30,37 @@ export interface PoPageDynamicTableActions {
   /**
    * @description
    *
-   * Rota para duplicação do recurso, caso seja preenchida irá habilitar a ação de duplicação na tabela.
+   * Rota ou método que será chamado antes de duplicar um recurso (duplicate). O método recebe os parâmetros `key` e também um objeto com as propriedades marcadas com `duplicate: true`.
    *
-   * > Os valores a serem duplicados serão enviados via query string.
+   * Tanto o método como a API devem retornar um objeto com a definição de `PoPageDynamicTableBeforeDuplicate`.
+   *
+   * > A url será chamada via POST junto com a key especificada no metadata, por exemplo: `POST {beforeDuplicate}/{key}`.
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeDuplicate**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   */
+  beforeDuplicate?: string | ((key: string, resource: any) => PoPageDynamicTableBeforeDuplicate);
+
+  /**
+   * @description
+   *
+   * Rota ou função para duplicação do recurso, caso seja preenchida irá habilitar a ação de duplicação na tabela.
+   *
+   * > Os valores a serem duplicados serão enviados via query string, exceto para aqueles definidos como `key: true` no metadata.
    *
    * ```
    * actions = {
    *   duplicate: 'duplicate'
    * };
    * ```
+   *
+   * Se for passado um método:
+   *  - receberá como parâmetro na chamada do método um objeto com as propriedades marcadas com `duplicate: true`, exceto para aquelas definidas como `key: true` no metadata.
+   *  - é responsabilidade do desenvolvedor implementar a navegação e/ou envio dos dados
+   * para o servidor ou outro comportamento desejado.
    */
-  duplicate?: string;
+  duplicate?: string | ((resource: any) => void);
 
   /**
    * @description
