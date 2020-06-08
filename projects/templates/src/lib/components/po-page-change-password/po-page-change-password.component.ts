@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { PoComponentInjectorService, PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 
-import { browserLanguage, isExternalLink, isTypeof, poLocaleDefault } from '../../utils/util';
+import { browserLanguage, getParentRef, isExternalLink, isTypeof, poLocaleDefault } from '../../utils/util';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
@@ -100,7 +100,7 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
     viewRef: ViewContainerRef
   ) {
     super();
-    this.parentRef = viewRef['_hostView'][8];
+    this.parentRef = getParentRef(viewRef);
   }
 
   ngAfterViewInit() {
