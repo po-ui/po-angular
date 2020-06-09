@@ -122,6 +122,24 @@ export const expectBrowserLanguageMethod = (language: string, comp: any, method:
 };
 
 /**
+ * Expect dinâmico para validar se dois arrays de objetos possuem a mesma ordenação,
+ * baseado no valor do `property`.
+ *
+ * @param fieldsA Array para comparação
+ * @param fieldsB Array para comparação
+ */
+export const expectArraysSameOrdering = (fieldsA: Array<any>, fieldsB: Array<any>) => {
+  const isEqualOrder = !fieldsA.some(
+    (fieldA: { property: any }, index: number) => fieldA.property !== fieldsB[index]?.property
+  );
+
+  const failMessage = `Expected the arrays to be in the same order`;
+
+  expect(isEqualOrder).toBe(true, failMessage);
+  expect(fieldsA.length === fieldsB.length).toBe(true);
+};
+
+/**
  * Muda a propriedade de inner width da página
  * @param expectedWidth valor esperado para inner width
  */

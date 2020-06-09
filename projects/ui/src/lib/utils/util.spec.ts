@@ -1364,3 +1364,147 @@ describe('Function getParentRef:', () => {
     expect(getParentRef((viewRef as unknown) as ViewContainerRef)).toEqual(expectedValue);
   });
 });
+
+describe('sortFields:', () => {
+  it('should return the ordered fields', () => {
+    const fields = [
+      { property: 'test 1', order: 2 },
+      { property: 'test 2', order: 1 },
+      { property: 'test 3', order: 4 },
+      { property: 'test 4', order: 3 }
+    ];
+
+    const expectedFields = [
+      { property: 'test 2', order: 1 },
+      { property: 'test 1', order: 2 },
+      { property: 'test 4', order: 3 },
+      { property: 'test 3', order: 4 }
+    ];
+
+    const result = UtilFunctions.sortFields(fields, -1);
+
+    expect(result).toEqual(expectedFields);
+  });
+
+  it('should return ordering fields with value default', () => {
+    const fields = [
+      { property: 'test 1', order: 2 },
+      { property: 'test 2', order: -1 },
+      { property: 'test 3', order: 4 },
+      { property: 'test 4', order: 3 }
+    ];
+
+    const expectedFields = [
+      { property: 'test 1', order: 2 },
+      { property: 'test 4', order: 3 },
+      { property: 'test 3', order: 4 },
+      { property: 'test 2', order: -1 }
+    ];
+
+    const result = UtilFunctions.sortFields(fields, -1);
+
+    expect(result).toEqual(expectedFields);
+  });
+
+  it('should return ordering fields with default values', () => {
+    const fields = [
+      { property: 'test 1', order: 2 },
+      { property: 'test 2', order: -1 },
+      { property: 'test 3' },
+      { property: 'test 4', order: -2 },
+      { property: 'test 5', order: 0 },
+      { property: 'test 6' },
+      { property: 'test 7', order: 4 },
+      { property: 'test 8', order: 2 }
+    ];
+
+    const expectedFields = [
+      { property: 'test 1', order: 2 },
+      { property: 'test 8', order: 2 },
+      { property: 'test 7', order: 4 },
+      { property: 'test 2', order: -1 },
+      { property: 'test 3' },
+      { property: 'test 4', order: -2 },
+      { property: 'test 5', order: 0 },
+      { property: 'test 6' }
+    ];
+
+    const result = UtilFunctions.sortFields(fields);
+
+    expect(result).toEqual(expectedFields);
+  });
+
+  it('should return ordering fields with invalid values', () => {
+    const fields = [
+      { property: 'test 1', order: 2 },
+      { property: 'test 2', order: true },
+      { property: 'test 3' },
+      { property: 'test 4', order: -2 },
+      { property: 'test 5', order: 0 },
+      { property: 'test 6' },
+      { property: 'test 7', order: 4 },
+      { property: 'test 8', order: 'A' }
+    ];
+
+    const expectedFields = [
+      { property: 'test 1', order: 2 },
+      { property: 'test 7', order: 4 },
+      { property: 'test 2', order: true },
+      { property: 'test 3' },
+      { property: 'test 4', order: -2 },
+      { property: 'test 5', order: 0 },
+      { property: 'test 6' },
+      { property: 'test 8', order: 'A' }
+    ];
+
+    const result = UtilFunctions.sortFields(fields);
+
+    expect(result).toEqual(expectedFields);
+  });
+
+  it('should keep the array in the same order if order is undefined', () => {
+    const fields = [
+      { property: 'test 1' },
+      { property: 'test 2' },
+      { property: 'test 3' },
+      { property: 'test 4' },
+      { property: 'test 5' },
+      { property: 'test 6' },
+      { property: 'test 7' }
+    ];
+
+    const expectedFields = [
+      { property: 'test 1' },
+      { property: 'test 2' },
+      { property: 'test 3' },
+      { property: 'test 4' },
+      { property: 'test 5' },
+      { property: 'test 6' },
+      { property: 'test 7' }
+    ];
+
+    const result = UtilFunctions.sortFields(fields, -1);
+
+    expect(result).toEqual(expectedFields);
+  });
+
+  it('should return an empty array if fields is an empty array', () => {
+    const fields = [];
+
+    const expectedFields = [];
+
+    const result = UtilFunctions.sortFields(fields, -1);
+
+    expect(result).toEqual(expectedFields);
+  });
+
+  it('should return an empty array if fields is undefined', () => {
+    const fields = undefined;
+
+    const expectedFields = [];
+
+    const result = UtilFunctions.sortFields(fields);
+
+    expect(result).toEqual(expectedFields);
+  });
+});

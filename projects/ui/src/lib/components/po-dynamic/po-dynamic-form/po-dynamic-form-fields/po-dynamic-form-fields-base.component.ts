@@ -1,7 +1,7 @@
 import { Input, EventEmitter, Output, Directive } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 
-import { isTypeof } from '../../../../utils/util';
+import { isTypeof, sortFields } from '../../../../utils/util';
 
 import { getGridColumnsClasses, isVisibleField } from '../../po-dynamic.util';
 import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
@@ -71,7 +71,7 @@ export class PoDynamicFormFieldsBaseComponent {
       }
     });
 
-    return visibleFields;
+    return sortFields(visibleFields);
   }
 
   // converte um array em string para um array de objetos que contem label e value.

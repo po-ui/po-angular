@@ -24,7 +24,8 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       minLength: 4,
       maxLength: 50,
       gridColumns: 6,
-      gridSmColumns: 12
+      gridSmColumns: 12,
+      order: 1
     },
     {
       property: 'birthday',
@@ -34,11 +35,12 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridColumns: 6,
       gridSmColumns: 12,
       maxValue: '2010-01-01',
-      errorMessage: 'The date must be before the year 2010.'
+      errorMessage: 'The date must be before the year 2010.',
+      order: -1
     },
     { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
-    { property: 'genre', gridColumns: 6, gridSmColumns: 12, options: ['Male', 'Female', 'Other'] },
+    { property: 'genre', gridColumns: 6, gridSmColumns: 12, options: ['Male', 'Female', 'Other'], order: 2 },
     { property: 'shortDescription', label: 'Short Description', gridColumns: 12, gridSmColumns: 12, rows: 5 },
     {
       property: 'secretKey',
