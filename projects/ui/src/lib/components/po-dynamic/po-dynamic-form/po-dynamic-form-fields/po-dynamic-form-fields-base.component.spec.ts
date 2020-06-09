@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
 
-import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectArraysSameOrdering } from '../../../../util-test/util-expect.spec';
 
 import * as PoDynamicUtil from '../../po-dynamic.util';
 import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
+import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 
 describe('PoDynamicFormFieldsBaseComponent:', () => {
   let component: PoDynamicFormFieldsBaseComponent;
@@ -85,27 +86,107 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       expect(visibleFields.length).toBe(fields.length);
     });
 
-    it('getVisibleFields: shouldn`t call `isVisibleField` if not exists `field.property`', () => {
-      const fields = [{ label: 'name' }];
-      component.fields = <any>fields;
+    describe('getVisibleFields:', () => {
+      it('should return the ordered fields', () => {
+        const fields: Array<PoDynamicFormField> = [
+          { property: 'test 1', order: 2 },
+          { property: 'test 2', order: 1 },
+          { property: 'test 3', order: 4 },
+          { property: 'test 4', order: 3 }
+        ];
 
-      spyOn(PoDynamicUtil, 'isVisibleField');
-      spyOn(component, <any>'printError');
+        const expectedFields = [
+          { property: 'test 2' },
+          { property: 'test 1' },
+          { property: 'test 4' },
+          { property: 'test 3' }
+        ];
 
-      const visibleFields = component['getVisibleFields']();
+        component.fields = [...fields];
 
-      expect(visibleFields.length).toBe(0);
-      expect(PoDynamicUtil.isVisibleField).not.toHaveBeenCalled();
-    });
+        spyOn(component, <any>'printError');
 
-    it('getVisibleFields: should return only visible fields', () => {
-      const fields = [{ property: 'name' }];
-      const invisibleFields = [{ property: 'age', visible: false }];
-      component.fields = [...fields, ...invisibleFields];
+        const visibleFields = component['getVisibleFields']();
 
-      const visibleFields = component['getVisibleFields']();
+        expectArraysSameOrdering(visibleFields, expectedFields);
+      });
 
-      expect(visibleFields.length).toBe(fields.length);
+      it('should return ordering fields with value default', () => {
+        const fields: Array<PoDynamicFormField> = [
+          { property: 'test 1' },
+          { property: 'test 2', order: 2 },
+          { property: 'test 3', order: 1 },
+          { property: 'test 4', order: -1 },
+          { property: 'test 5', order: 3 }
+        ];
+
+        const expectedFields = [
+          { property: 'test 3' },
+          { property: 'test 2' },
+          { property: 'test 5' },
+          { property: 'test 1' },
+          { property: 'test 4' }
+        ];
+
+        component.fields = [...fields];
+
+        spyOn(component, <any>'printError');
+
+        const visibleFields = component['getVisibleFields']();
+
+        expectArraysSameOrdering(visibleFields, expectedFields);
+      });
+
+      it('should return ordering fields with zero as default value', () => {
+        const fields: Array<PoDynamicFormField> = [
+          { property: 'test 1' },
+          { property: 'test 0', order: 0 },
+          { property: 'test 2', order: 2 },
+          { property: 'test 3', order: 1 },
+          { property: 'test 4', order: -1 },
+          { property: 'test 5', order: 3 }
+        ];
+
+        const expectedFields = [
+          { property: 'test 3' },
+          { property: 'test 2' },
+          { property: 'test 5' },
+          { property: 'test 1' },
+          { property: 'test 0' },
+          { property: 'test 4' }
+        ];
+
+        component.fields = [...fields];
+
+        spyOn(component, <any>'printError');
+
+        const visibleFields = component['getVisibleFields']();
+
+        expectArraysSameOrdering(visibleFields, expectedFields);
+      });
+
+      it('shouldn`t call `isVisibleField` if not exists `field.property`', () => {
+        const fields = [{ label: 'name' }];
+        component.fields = <any>fields;
+
+        spyOn(PoDynamicUtil, 'isVisibleField');
+        spyOn(component, <any>'printError');
+
+        const visibleFields = component['getVisibleFields']();
+
+        expect(visibleFields.length).toBe(0);
+        expect(PoDynamicUtil.isVisibleField).not.toHaveBeenCalled();
+      });
+
+      it('should return only visible fields', () => {
+        const fields = [{ property: 'name' }];
+        const invisibleFields = [{ property: 'age', visible: false }];
+        component.fields = [...fields, ...invisibleFields];
+
+        const visibleFields = component['getVisibleFields']();
+
+        expect(visibleFields.length).toBe(fields.length);
+      });
     });
 
     it('convertOptions: should convert options to object if the options is an array of string', () => {

@@ -167,4 +167,36 @@ export interface PoDynamicFormField extends PoDynamicField {
    * > Esta propriedade pode ser utilizada quando o `type` for *PoDynamicFieldType.Date* ou *PoDynamicFieldType.DateTime*.
    */
   format?: string;
+
+  /**
+   * Informa a ordem de exibição do campo.
+   *
+   * Exemplo de utilização:
+   *
+   * ```
+   * [
+   *   { property: 'test 1', order: 2 },
+   *   { property: 'test 2', order: 1 },
+   *   { property: 'test 3' },
+   *   { property: 'test 4', order: 3 }
+   * ];
+   * ```
+   *
+   * Na exibição a ordem ficará dessa forma:
+   * ```
+   * [
+   *   { property: 'test 2', order: 1 },
+   *   { property: 'test 1', order: 2 },
+   *   { property: 'test 4', order: 3 },
+   *   { property: 'test 3' }
+   * ];
+   * ```
+   *
+   * Só serão aceitos valores com números inteiros maiores do que zero.
+   *
+   * Campos sem `order` ou com valores negativos, zerados ou inválidos
+   * serão os últimos a serem renderizados e seguirão o posicionamento dentro do
+   * array.
+   */
+  order?: number;
 }

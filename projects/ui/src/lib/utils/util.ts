@@ -277,6 +277,44 @@ export function sortOptionsByProperty(options: Array<any>, property: string) {
   });
 }
 
+/**
+ * Ordena o campos baseado no valor da propriedade `order`.
+ *
+ * Só serão aceitos valores com números inteiros maiores do que zero para a ordenação.
+ *
+ * Campos sem `order` ou com valores negativos, zerados ou inválidos
+ * receberão o valor default e seguirão o posicionamento dentro do
+ * array.
+ *
+ * @param fields campo que se deseja ordenar.
+ * @param defaultOrdering valor que será utilizado para manter na posição do array.
+ */
+export function sortFields(fields = [], defaultOrdering = -1) {
+  const resultClassification = { fieldAComesFirst: -1, fieldAComesAfter: 1, keepPositions: 0 };
+
+  const isOrderValid = (order: number) => isTypeof(order, 'number') && order > 0;
+  const applyDefaultOrdering = (order: number) => (isOrderValid(order) ? order : defaultOrdering);
+
+  return fields.sort((fieldA, fieldB) => {
+    const orderA = applyDefaultOrdering(fieldA.order);
+    const orderB = applyDefaultOrdering(fieldB.order);
+
+    if (orderA === orderB) {
+      return resultClassification.keepPositions;
+    }
+
+    if (orderA === defaultOrdering) {
+      return resultClassification.fieldAComesAfter;
+    }
+
+    if (orderB === defaultOrdering) {
+      return resultClassification.fieldAComesFirst;
+    }
+
+    return orderA - orderB;
+  });
+}
+
 export function removeDuplicatedOptions(list: Array<any>) {
   for (let i = 0; i < list.length; i++) {
     if (i === 0) {
