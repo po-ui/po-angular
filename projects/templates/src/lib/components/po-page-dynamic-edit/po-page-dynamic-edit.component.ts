@@ -25,9 +25,9 @@ import { PoPageDynamicEditMetadata } from './interfaces/po-page-dynamic-edit-met
 import { PoPageDynamicOptionsSchema } from '../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicEditActionsService } from './po-page-dynamic-edit-actions.service';
 import { PoPageDynamicEditBeforeCancel } from './interfaces/po-page-dynamic-edit-before-cancel.interface';
-import { PoPageDynamicEditBeforeSave } from './interfaces/po-page-dynamic-edit-before-save.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
+type SaveAction = PoPageDynamicEditActions['save'] | PoPageDynamicEditActions['saveNew'];
 
 export const poPageDynamicEditLiteralsDefault = {
   en: {
@@ -37,9 +37,6 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Save',
     pageActionSaveNew: 'Save and new',
     registerNotFound: 'Register not found.',
-    saveNewNotificationSuccessSave: 'Resource successfully saved.',
-    saveNewNotificationSuccessUpdate: 'Resource successfully updated.',
-    saveNewNotificationWarning: 'Form must be filled out correctly.',
     saveNotificationSuccessSave: 'Resource successfully saved.',
     saveNotificationSuccessUpdate: 'Resource successfully updated.',
     saveNotificationWarning: 'Form must be filled out correctly.'
@@ -51,9 +48,6 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Guardar',
     pageActionSaveNew: 'Guardar y nuevo',
     registerNotFound: 'Registro no encontrado.',
-    saveNewNotificationSuccessSave: 'Recurso salvo con éxito.',
-    saveNewNotificationSuccessUpdate: 'Recurso actualizado con éxito.',
-    saveNewNotificationWarning: 'El formulario debe llenarse correctamente.',
     saveNotificationSuccessSave: 'Recurso salvo con éxito.',
     saveNotificationSuccessUpdate: 'Recurso actualizado con éxito.',
     saveNotificationWarning: 'El formulario debe llenarse correctamente.'
@@ -65,9 +59,6 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Salvar',
     pageActionSaveNew: 'Salvar e novo',
     registerNotFound: 'Registro não encontrado.',
-    saveNewNotificationSuccessSave: 'Recurso salvo com sucesso.',
-    saveNewNotificationSuccessUpdate: 'Recurso atualizado com sucesso.',
-    saveNewNotificationWarning: 'Formulário precisa ser preenchido corretamente.',
     saveNotificationSuccessSave: 'Recurso salvo com sucesso.',
     saveNotificationSuccessUpdate: 'Recurso atualizado com sucesso.',
     saveNotificationWarning: 'Formulário precisa ser preenchido corretamente.'
@@ -573,25 +564,68 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return path.replace(/:id/g, uniqueKey);
   }
 
-  private save(saveAction: PoPageDynamicEditActions['save']) {
+  private executeSave(saveRedirectPath: string) {
+    const saveOperation$ = this.saveOperation();
+
+    return saveOperation$.pipe(
+      tap(message => {
+        this.poNotification.success(message);
+        this.navigateTo(saveRedirectPath);
+      })
+    );
+  }
+
+  private updateModel(newResource: any = {}) {
+    const dynamicNgForm = this.dynamicForm.form;
+
+    util.removeKeysProperties(this.keys, newResource);
+
+    this.model = { ...this.model, ...newResource };
+
+    dynamicNgForm.form.patchValue(this.model);
+  }
+
+  private saveOperation() {
+    if (this.dynamicForm.form.invalid) {
+      this.poNotification.warning(this.literals.saveNotificationWarning);
+      return EMPTY;
+    }
+
+    const paramId = this.activatedRoute.snapshot.params['id'];
+    const successMsg = paramId
+      ? this.literals.saveNotificationSuccessUpdate
+      : this.literals.saveNotificationSuccessSave;
+
+    const saveOperation$ = paramId
+      ? this.poPageDynamicService.updateResource(paramId, this.model)
+      : this.poPageDynamicService.createResource(this.model);
+
+    return saveOperation$.pipe(map(() => successMsg));
+  }
+
+  private save(action: SaveAction, before: 'beforeSave' | 'beforeSaveNew' = 'beforeSave') {
+    const executeOperation = {
+      beforeSave: this.executeSave.bind(this),
+      beforeSaveNew: this.executeSaveNew.bind(this)
+    };
+
     const uniqueKey = this.resolveUniqueKey(this.model);
 
     this.subscriptions.push(
-      this.poPageDynamicEditActionsService
-        .beforeSave(this.actions.beforeSave, uniqueKey, { ...this.model })
+      this.poPageDynamicEditActionsService[before](this.actions[before], uniqueKey, { ...this.model })
         .pipe(
-          switchMap(returnBeforeSave => {
-            const newAction = returnBeforeSave?.newUrl ?? saveAction;
-            const allowAction = returnBeforeSave?.allowAction ?? true;
+          switchMap(returnBefore => {
+            const newAction = returnBefore?.newUrl ?? action;
+            const allowAction = returnBefore?.allowAction ?? true;
 
-            this.updateModel(returnBeforeSave?.resource);
+            this.updateModel(returnBefore?.resource);
 
             if (!allowAction) {
               return of({});
             }
 
             if (typeof newAction === 'string') {
-              return this.executeSave(newAction);
+              return executeOperation[before](newAction);
             } else {
               newAction({ ...this.model }, uniqueKey);
               return EMPTY;
@@ -602,64 +636,24 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  private executeSave(saveAction: string) {
-    if (this.dynamicForm.form.invalid) {
-      this.poNotification.warning(this.literals.saveNotificationWarning);
-      return EMPTY;
-    }
-
+  private executeSaveNew(path: string) {
     const paramId = this.activatedRoute.snapshot.params['id'];
+    const saveOperation$ = this.saveOperation();
 
-    const saveOperation: Observable<any> = paramId
-      ? this.poPageDynamicService.updateResource(paramId, this.model)
-      : this.poPageDynamicService.createResource(this.model);
-
-    const msgSucess = paramId ? this.literals.saveNotificationSuccessUpdate : this.literals.saveNotificationSuccessSave;
-
-    return saveOperation.pipe(
-      map(() => {
-        this.poNotification.success(msgSucess);
-        this.navigateTo(saveAction);
-      })
-    );
-  }
-
-  private updateModel(newResource: any) {
-    const dynamicNgForm = this.dynamicForm.form;
-
-    this.model = { ...this.model, ...newResource };
-
-    dynamicNgForm.form.patchValue(this.model);
-  }
-
-  private saveNew(path) {
-    if (this.dynamicForm.form.invalid) {
-      this.poNotification.warning(this.literals.saveNewNotificationWarning);
-      return;
-    }
-
-    const paramId = this.activatedRoute.snapshot.params['id'];
-
-    if (paramId) {
-      this.poPageDynamicService
-        .updateResource(paramId, this.model)
-        .toPromise()
-        .then(() => {
-          this.poNotification.success(this.literals.saveNewNotificationSuccessUpdate);
+    return saveOperation$.pipe(
+      tap(message => {
+        if (paramId) {
+          this.poNotification.success(message);
 
           this.navigateTo(path);
-        });
-    } else {
-      this.poPageDynamicService
-        .createResource(this.model)
-        .toPromise()
-        .then(() => {
-          this.poNotification.success(this.literals.saveNewNotificationSuccessSave);
+        } else {
+          this.poNotification.success(message);
 
           this.model = {};
           this.dynamicForm.form.reset();
-        });
-    }
+        }
+      })
+    );
   }
 
   private getKeysByFields(fields: Array<any> = []) {
@@ -682,7 +676,10 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     const pageActions = [{ label: this.literals.pageActionSave, action: this.save.bind(this, actions.save) }];
 
     if (actions.saveNew) {
-      pageActions.push({ label: this.literals.pageActionSaveNew, action: this.saveNew.bind(this, actions.saveNew) });
+      pageActions.push({
+        label: this.literals.pageActionSaveNew,
+        action: this.save.bind(this, actions.saveNew, 'beforeSaveNew')
+      });
     }
 
     if (actions.cancel === undefined || actions.cancel) {
