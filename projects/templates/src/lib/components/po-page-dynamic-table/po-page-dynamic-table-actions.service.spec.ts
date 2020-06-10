@@ -172,6 +172,63 @@ describe('PoPageDynamicTableActionsService:', () => {
       }));
     });
 
+    describe('beforeRemoveAll:', () => {
+      const resources = [
+        {
+          name: 'Gabriel',
+          age: 3
+        },
+        {
+          name: 'Mario',
+          age: 5
+        }
+      ];
+
+      it('should get data from a api', fakeAsync(() => {
+        service.beforeRemoveAll('/teste/remove', resources).subscribe(response => {
+          expect(response.newUrl).toBe('/newurl');
+          expect(response.allowAction).toBeTrue();
+        });
+
+        const req = httpMock.expectOne(request => request.url === `/teste/remove`);
+        expect(req.request.method).toBe('POST');
+        expect(req.request.body).toEqual(resources);
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+
+        req.flush({
+          newUrl: '/newurl',
+          allowAction: true
+        });
+
+        tick();
+      }));
+
+      it('should get data from a function', fakeAsync(() => {
+        const testFn = () => ({
+          newUrl: '/newurlfromfunction',
+          allowAction: true,
+          resources
+        });
+
+        service.beforeRemoveAll(testFn, resources).subscribe(response => {
+          expect(response.newUrl).toBe('/newurlfromfunction');
+          expect(response.allowAction).toBeTrue();
+          expect(response.resources).toEqual(resources);
+        });
+
+        tick();
+      }));
+
+      it('should not get data from undefined', fakeAsync(() => {
+        const testFn = undefined;
+        service.beforeRemoveAll(testFn, [{}]).subscribe(response => {
+          expect(response).toEqual({});
+        });
+
+        tick();
+      }));
+    });
+
     describe('executeAction', () => {
       const resource = { name: 'Name' };
       const id = '1';

@@ -4,6 +4,7 @@ export * from './interfaces/po-page-dynamic-table-before-duplicate.interface';
 export * from './interfaces/po-page-dynamic-table-before-edit.interface';
 export * from './interfaces/po-page-dynamic-table-before-new.interface';
 export * from './interfaces/po-page-dynamic-table-before-remove.interface';
+export * from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 export * from './interfaces/po-page-dynamic-table-before-detail.interface';
 export * from './interfaces/po-page-dynamic-table-field.interface';
 export * from './interfaces/po-page-dynamic-table-options.interface';
