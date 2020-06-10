@@ -32,6 +32,7 @@ import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
 import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
+import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -320,11 +321,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.poDialogService.confirm(confirmOptions);
   }
 
-  private confirmRemoveAll() {
+  private confirmRemoveAll(
+    actionRemoveAll: PoPageDynamicTableActions['remove'],
+    actionBeforeRemoveAll: PoPageDynamicTableActions['beforeRemove']
+  ) {
     const confirmOptions: PoDialogConfirmOptions = {
       title: this.literals.confirmRemoveAllTitle,
       message: this.literals.confirmRemoveAllMessage,
-      confirm: this.removeAll.bind(this)
+      confirm: this.removeAll.bind(this, actionRemoveAll, actionBeforeRemoveAll)
     };
 
     this.poDialogService.confirm(confirmOptions);
@@ -601,53 +605,94 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
     if (allow) {
       const uniqueKey = this.formatUniqueKey(item);
+      const resourceToRemoveKey = this.returnResourcesKeys([item]);
 
       if (typeof actionRemove === 'boolean' || newUrl) {
-        const isRemoveFromUI = true;
         return this.poPageDynamicService
           .deleteResource(uniqueKey, newUrl)
-          .pipe(map(() => this.removeFromUI(item, isRemoveFromUI)));
+          .pipe(map(() => this.removeFromUI(resourceToRemoveKey, this.literals.removeSuccessNotification)));
       }
-      return of(actionRemove(uniqueKey, item)).pipe(map(remove => this.removeFromUI(item, remove)));
+
+      return of(actionRemove(uniqueKey, item)).pipe(
+        tap(remove => {
+          const removeItem = remove ?? false;
+          this.removeFromUI(resourceToRemoveKey, this.literals.removeSuccessNotification, removeItem);
+        })
+      );
     }
 
     return of({});
   }
 
-  private removeFromUI(item, remove) {
-    if (remove === true) {
-      this.removeLocalItems([item]);
-      this.poNotification.success(this.literals.removeSuccessNotification);
+  private removeFromUI(items: Array<any>, message: string, remove = true) {
+    if (remove === true && items?.length) {
+      this.removeLocalItems(items);
+      this.poNotification.success(message);
     }
   }
 
-  private removeAll() {
-    // TODO: usar propriedade nova pra validar os itens selecionados
-    const selectedItems = this.items.filter(item => item.$selected);
+  private removeAll(
+    actionRemoveAll: PoPageDynamicTableActions['removeAll'],
+    actionBeforeRemoveAll: PoPageDynamicTableActions['beforeRemoveAll']
+  ) {
+    const originalResourcesKeys = this.getSelectedItemsKeysToRemove();
+    this.subscriptions.add(
+      this.poPageDynamicTableActionsService
+        .beforeRemoveAll(actionBeforeRemoveAll, originalResourcesKeys)
+        .pipe(
+          switchMap(beforeRemove => {
+            return this.deleteAllAction(actionRemoveAll, beforeRemove, originalResourcesKeys);
+          })
+        )
+        .subscribe()
+    );
+  }
 
-    if (selectedItems.length === 0) {
-      // TODO: usar propriedade nova pra validar os itens selecionados
+  private getSelectedItemsKeysToRemove() {
+    const resources = this.items.filter(item => item.$selected);
+
+    if (resources.length === 0) {
       return;
     }
-
-    const keysSelectedItems = util.mapArrayByProperties(selectedItems, this.keys);
-
-    this.poPageDynamicService
-      .deleteResources(keysSelectedItems)
-      .toPromise()
-      .then(() => {
-        this.removeLocalItems(selectedItems);
-
-        this.poNotification.success(this.literals.removeAllSuccessNotification);
-      });
+    return this.returnResourcesKeys(resources);
   }
 
-  private removeLocalItems(items = []) {
-    items.forEach(itemRemoved => {
-      const indexItemRemoved = this.items.indexOf(itemRemoved);
+  private returnResourcesKeys(resources) {
+    return util.mapArrayByProperties(resources, this.keys);
+  }
 
-      this.items.splice(indexItemRemoved, 1);
-    });
+  private deleteAllAction(
+    actionRemoveAll: PoPageDynamicTableActions['removeAll'],
+    beforeRemoveAll: PoPageDynamicTableBeforeRemoveAll,
+    originalResources: Array<any>
+  ) {
+    const { allowAction, newUrl, resources } = beforeRemoveAll ?? {};
+    const allow = allowAction ?? true;
+    const resourcestoDelete = resources ?? originalResources;
+
+    if (allow && resourcestoDelete?.length) {
+      if (typeof actionRemoveAll === 'boolean' || newUrl) {
+        return this.poPageDynamicService.deleteResources(resourcestoDelete, newUrl).pipe(
+          tap(() => {
+            this.removeFromUI(resourcestoDelete, this.literals.removeAllSuccessNotification);
+          })
+        );
+      }
+      return of(actionRemoveAll(resourcestoDelete)).pipe(
+        tap(removeItems => this.removeFromUI(removeItems, this.literals.removeSuccessNotification))
+      );
+    }
+
+    return of({});
+  }
+
+  private removeLocalItems(itemsKeysToRemove = []) {
+    if (itemsKeysToRemove.length) {
+      this.items = this.items.filter(item => {
+        const itemKey = this.formatUniqueKey(item);
+        return !itemsKeysToRemove.find(itemKeyToRemove => util.valuesFromObject(itemKeyToRemove).join('|') === itemKey);
+      });
+    }
   }
 
   private resolveUrl(item: any, path: string) {
@@ -665,11 +710,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private setRemoveAllAction() {
-    if (this._actions.removeAll) {
+    const action = this._actions;
+    if (action.removeAll) {
+      const visibleRemove = !this.showRemove(action.removeAll);
       this._pageActions.push({
         label: this.literals.pageActionRemoveAll,
-        action: this.confirmRemoveAll.bind(this),
-        disabled: !this._actions.removeAll
+        action: this.confirmRemoveAll.bind(this, action.removeAll, action.beforeRemoveAll),
+        disabled: visibleRemove
       });
     }
   }
@@ -786,7 +833,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
   }
 
-  private showRemove(actionRemove: PoPageDynamicTableActions['remove']): boolean {
+  private showRemove<T>(actionRemove: T): boolean {
     const action = actionRemove ?? false;
     if (typeof action === 'boolean') {
       return action;
