@@ -75,4 +75,36 @@ export interface PoDynamicViewField extends PoDynamicField {
    *  + Exemplo: com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`.
    */
   format?: string;
+
+  /**
+   * Informa a ordem de exibição do campo.
+   *
+   * Exemplo de utilização:
+   *
+   * ```
+   * [
+   *   { property: 'test 1', order: 2 },
+   *   { property: 'test 2', order: 1 },
+   *   { property: 'test 3' },
+   *   { property: 'test 4', order: 3 }
+   * ];
+   * ```
+   *
+   * Na exibição a ordem ficará dessa forma:
+   * ```
+   * [
+   *   { property: 'test 2', order: 1 },
+   *   { property: 'test 1', order: 2 },
+   *   { property: 'test 4', order: 3 },
+   *   { property: 'test 3' }
+   * ];
+   * ```
+   *
+   * Só serão aceitos valores com números inteiros maiores do que zero.
+   *
+   * Campos sem `order` ou com valores negativos, zerados ou inválidos
+   * serão os últimos a serem renderizados e seguirão o posicionamento dentro do
+   * array.
+   */
+  order?: number;
 }

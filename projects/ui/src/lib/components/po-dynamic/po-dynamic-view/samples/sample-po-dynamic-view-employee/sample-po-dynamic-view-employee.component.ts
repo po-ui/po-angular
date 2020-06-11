@@ -8,11 +8,11 @@ import { PoDynamicViewField } from '@po-ui/ng-components';
 })
 export class SamplePoDynamicViewEmployeeComponent {
   fields: Array<PoDynamicViewField> = [
-    { property: 'name', divider: 'Personal data', gridColumns: 4 },
+    { property: 'name', divider: 'Personal data', gridColumns: 4, order: 1 },
     { property: 'age', label: 'Age', gridColumns: 4 },
     { property: 'genre', gridColumns: 4 },
-    { property: 'cpf', label: 'CPF', gridColumns: 4 },
-    { property: 'rg', label: 'RG', gridColumns: 4 },
+    { property: 'cpf', label: 'CPF', gridColumns: 4, order: 2 },
+    { property: 'rg', label: 'RG', gridColumns: 4, order: 3 },
     { property: 'graduation', label: 'Graduation', gridColumns: 4 },
     { property: 'company', label: 'Company', divider: 'Work Data' },
     { property: 'job', tag: true, inverse: true, color: 'color-03', icon: 'po-icon-copy' },

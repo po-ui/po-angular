@@ -56,9 +56,9 @@ export class SamplePoDynamicViewEmployeeOnLoadComponent {
         wage: this.checkProfile()
       },
       fields: [
-        { property: 'name', divider: 'Personal data by load customization' },
-        { property: 'cpf', tag: true, inverse: true, color: 'color-07' },
-        { property: 'rg', tag: true, inverse: true, color: 'color-07' },
+        { property: 'name', divider: 'Personal data by load customization', order: 1 },
+        { property: 'cpf', tag: true, inverse: true, color: 'color-07', order: 2 },
+        { property: 'rg', tag: true, inverse: true, color: 'color-07', order: 3 },
         { property: 'wage', type: 'string', tag: true, inverse: true, color: 'color-07' },
         { property: 'genre', visible: false },
         { property: 'job', tag: false }

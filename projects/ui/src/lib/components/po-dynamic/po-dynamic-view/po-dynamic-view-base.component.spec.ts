@@ -2,12 +2,13 @@ import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/com
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectArraysSameOrdering } from '../../../util-test/util-expect.spec';
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 
 import * as PoDynamicUtil from '../po-dynamic.util';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
 import { PoDynamicViewService } from './po-dynamic-view.service';
+import { PoDynamicViewField } from './po-dynamic-view-field.interface';
 
 describe('PoDynamicViewBaseComponent:', () => {
   let component: PoDynamicViewBaseComponent;
@@ -93,27 +94,101 @@ describe('PoDynamicViewBaseComponent:', () => {
   });
 
   describe('Methods: ', () => {
-    it('getConfiguredFields: should call `isVisibleField` and return an configured array', () => {
-      component.fields = [{ property: 'name' }, { property: 'age' }];
+    describe('getConfiguredFields: ', () => {
+      it('should call `isVisibleField` and return an configured array', () => {
+        component.fields = [{ property: 'name' }, { property: 'age' }];
 
-      spyOn(PoDynamicUtil, <any>'isVisibleField').and.returnValue(true);
+        spyOn(PoDynamicUtil, <any>'isVisibleField').and.returnValue(true);
 
-      const configuredFields = component['getConfiguredFields']();
+        const configuredFields = component['getConfiguredFields']();
 
-      expect(PoDynamicUtil.isVisibleField).toHaveBeenCalled();
-      expect(configuredFields.length === component.fields.length).toBe(true);
-    });
+        expect(PoDynamicUtil.isVisibleField).toHaveBeenCalled();
+        expect(configuredFields.length === component.fields.length).toBe(true);
+      });
 
-    it('getConfiguredFields: shouldn`t call `createField` if method `isVisibleField` return false and return empty array', () => {
-      component.fields = [{ property: 'name', visible: false }];
+      it('shouldn`t call `createField` if method `isVisibleField` return false and return empty array', () => {
+        component.fields = [{ property: 'name', visible: false }];
 
-      spyOn(component, <any>'createField');
+        spyOn(component, <any>'createField');
 
-      const configuredFields = component['getConfiguredFields']();
+        const configuredFields = component['getConfiguredFields']();
 
-      expect(component['createField']).not.toHaveBeenCalled();
-      expect(configuredFields.length !== component.fields.length).toBe(true);
-      expect(configuredFields.length).toBe(0);
+        expect(component['createField']).not.toHaveBeenCalled();
+        expect(configuredFields.length !== component.fields.length).toBe(true);
+        expect(configuredFields.length).toBe(0);
+      });
+
+      it('should return the ordered fields', () => {
+        const fields: Array<PoDynamicViewField> = [
+          { property: 'test 1', order: 2 },
+          { property: 'test 2', order: 1 },
+          { property: 'test 3', order: 4 },
+          { property: 'test 4', order: 3 }
+        ];
+
+        const expectedFields = [
+          { property: 'test 2' },
+          { property: 'test 1' },
+          { property: 'test 4' },
+          { property: 'test 3' }
+        ];
+
+        component.fields = [...fields];
+
+        const newFields = component['getConfiguredFields']();
+
+        expectArraysSameOrdering(newFields, expectedFields);
+      });
+
+      it('should return ordering fields with value default', () => {
+        const fields: Array<PoDynamicViewField> = [
+          { property: 'test 1' },
+          { property: 'test 2', order: 2 },
+          { property: 'test 3', order: 1 },
+          { property: 'test 4', order: -1 },
+          { property: 'test 5', order: 3 }
+        ];
+
+        const expectedFields = [
+          { property: 'test 3' },
+          { property: 'test 2' },
+          { property: 'test 5' },
+          { property: 'test 1' },
+          { property: 'test 4' }
+        ];
+
+        component.fields = [...fields];
+
+        const newFields = component['getConfiguredFields']();
+
+        expectArraysSameOrdering(newFields, expectedFields);
+      });
+
+      it('should return ordering fields with zero as default value', () => {
+        const fields: Array<PoDynamicViewField> = [
+          { property: 'test 1' },
+          { property: 'test 0', order: 0 },
+          { property: 'test 2', order: 2 },
+          { property: 'test 3', order: 1 },
+          { property: 'test 4', order: -1 },
+          { property: 'test 5', order: 3 }
+        ];
+
+        const expectedFields = [
+          { property: 'test 3' },
+          { property: 'test 2' },
+          { property: 'test 5' },
+          { property: 'test 1' },
+          { property: 'test 0' },
+          { property: 'test 4' }
+        ];
+
+        component.fields = [...fields];
+
+        const newFields = component['getConfiguredFields']();
+
+        expectArraysSameOrdering(newFields, expectedFields);
+      });
     });
 
     it('getMergedFields: should return a merged array between configuredFields and valueFields', () => {

@@ -1,7 +1,7 @@
 import { Input, Directive } from '@angular/core';
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 
-import { convertToBoolean, isTypeof } from '../../../utils/util';
+import { convertToBoolean, isTypeof, sortFields } from '../../../utils/util';
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 
 import { getGridColumnsClasses, isVisibleField } from '../po-dynamic.util';
@@ -142,7 +142,7 @@ export class PoDynamicViewBaseComponent {
       }
     });
 
-    return newFields;
+    return sortFields(newFields);
   }
 
   // retorna fields ligado ao value mais os atributos do value que não possuiam fields.
