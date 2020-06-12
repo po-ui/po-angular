@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/po-ui/po-angular/compare/v2.5.0...v2.6.0) (2020-06-12)
+
+
+### Features
+
+* **dynamic-form:** adiciona a propriedade `order` nos campos ([220414d](https://github.com/po-ui/po-angular/commit/220414da76ababb261ab5145181e71802fbc9e76))
+* **dynamic-view:** adiciona a propriedade `order` nos campos ([41f5843](https://github.com/po-ui/po-angular/commit/41f58439bd9d41ab6912ad4927803ce95116cab1))
+
+
+### Bug Fixes
+
+* **components:** corrige erro ao subir aplicação com Ivy desabilitado ([18688d4](https://github.com/po-ui/po-angular/commit/18688d459eac346046294038099077c493153c87))
+* **table:** corrige tooltip em colunas do tipo `label` ([098743f](https://github.com/po-ui/po-angular/commit/098743fa243bb9611d23872c6bbba921a874c514))
+* **templates:** corrige erro ao subir aplicação com Ivy desabilitado ([787d6d4](https://github.com/po-ui/po-angular/commit/787d6d42a815ae11fb3f1ac7a65396ffe8e10718))
+
 ## [2.5.0](https://github.com/po-ui/po-angular/compare/v2.4.1...v2.5.0) (2020-06-05)
 
 
