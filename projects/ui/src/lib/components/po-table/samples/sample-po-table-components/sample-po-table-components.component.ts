@@ -8,6 +8,7 @@ import { SamplePoTableComponentsService } from './sample-po-table-components.ser
 @Component({
   selector: 'sample-po-table-components',
   templateUrl: './sample-po-table-components.component.html',
+  styleUrls: ['./sample-po-table-components.component.css'],
   providers: [SamplePoTableComponentsService]
 })
 export class SamplePoTableComponentsComponent {
@@ -17,16 +18,7 @@ export class SamplePoTableComponentsComponent {
   title: any;
 
   public readonly columns: Array<PoTableColumn> = [
-    {
-      property: 'status',
-      type: 'label',
-      width: '5%',
-      labels: [
-        { value: 'stable', color: 'color-11', label: 'Stable', tooltip: 'Published component' },
-        { value: 'experimental', color: 'color-08', label: 'Experimental', tooltip: 'Component in homologation' },
-        { value: 'roadmap', color: 'color-07', label: 'Roadmap', tooltip: 'Component in roadmap' }
-      ]
-    },
+    { property: 'status', label: 'Status', type: 'columnTemplate' },
     { property: 'component', type: 'link' },
     { property: 'description', color: this.experimentalColor.bind(this) },
     {
@@ -110,5 +102,9 @@ export class SamplePoTableComponentsComponent {
 
   private isFavorite(row) {
     return row.isFavorite ? 'color-08' : 'color-11';
+  }
+
+  public showAlert(status: string): void {
+    alert(status + ' has clicked!');
   }
 }

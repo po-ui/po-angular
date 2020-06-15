@@ -2,10 +2,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
 import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table-before-edit.interface';
 import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
+import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 
 interface ExecuteActionParameter {
   action: string | Function;
@@ -22,6 +24,16 @@ export class PoPageDynamicTableActionsService {
   });
 
   constructor(private http: HttpClient) {}
+
+  beforeDuplicate(
+    action: PoPageDynamicTableActions['beforeDuplicate'],
+    id: any,
+    body: any
+  ): Observable<PoPageDynamicTableBeforeDuplicate> {
+    const resource = body ?? {};
+
+    return this.executeAction({ action, resource, id });
+  }
 
   beforeEdit(
     action: PoPageDynamicTableActions['beforeEdit'],
@@ -45,6 +57,13 @@ export class PoPageDynamicTableActionsService {
     return this.executeAction({ action, id, resource });
   }
 
+  beforeRemoveAll(
+    action: PoPageDynamicTableActions['beforeRemoveAll'],
+    resources: Array<any>
+  ): Observable<PoPageDynamicTableBeforeRemoveAll> {
+    return this.executeAction({ action, resource: resources });
+  }
+
   beforeDetail(
     action: PoPageDynamicTableActions['beforeDetail'],
     id: string,
@@ -63,7 +82,9 @@ export class PoPageDynamicTableActionsService {
 
       return this.http.post<T>(url, resource, { headers: this.headers });
     }
-
-    return of(action(id, resource));
+    if (id) {
+      return of(action(id, resource));
+    }
+    return of(action(resource));
   }
 }

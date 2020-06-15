@@ -11,6 +11,10 @@
   (p-show-more)="showMore($event)"
   (p-sort-by)="sort($event)"
 >
+  <ng-template p-table-column-template [p-property]="'status'" let-value>
+    <div *ngIf="value === 'stable'" class="badge stable" (click)="showAlert(value)">{{ value }}</div>
+    <div *ngIf="value === 'experimental'" class="badge experimental" (click)="showAlert(value)">{{ value }}</div>
+  </ng-template>
 </po-table>
 
 <po-modal p-click-out="true" p-size="sm" p-title="{{ title }} - {{ extraInformation?.component }}">

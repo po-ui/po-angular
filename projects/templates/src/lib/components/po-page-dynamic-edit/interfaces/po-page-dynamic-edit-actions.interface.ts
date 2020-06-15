@@ -1,5 +1,6 @@
 import { PoPageDynamicEditBeforeCancel } from './po-page-dynamic-edit-before-cancel.interface';
 import { PoPageDynamicEditBeforeSave } from './po-page-dynamic-edit-before-save.interface';
+import { PoPageDynamicEditBeforeSaveNew } from './po-page-dynamic-edit-before-save-new.interface';
 
 /**
  * @usedBy PoPageDynamicEditComponent
@@ -45,6 +46,23 @@ export interface PoPageDynamicEditActions {
   /**
    * @description
    *
+   * Rota ou método que será chamado antes de executar o evento salvar e abrir novo registro (saveNew).
+   *
+   * Tanto o método como a API receberão o recurso e devem retornar um objeto com a definição de `PoPageDynamicEditBeforeSaveNew`.
+   *
+   * > A URL será chamada via POST. Caso seja a edição de um recurso, a URL será concatenada
+   * com a key especificada no metadata, por exemplo:  `POST {beforeSave}/{key}`.
+   *
+   * Caso o desenvolvedor queira que apareça alguma mensagem nessa ação ele pode criá-la na função chamada pela **beforeSaveNew**
+   * ou definir a mensagem no atributo `_messages` na resposta da API conforme definido
+   * em [Guia de implementação de APIs](https://po-ui.io/guides/api#successMessages)
+   *
+   */
+  beforeSaveNew?: string | ((resource: any, id: string) => PoPageDynamicEditBeforeSaveNew);
+
+  /**
+   * @description
+   *
    * Rota de redirecionamento para ação de cancelar, caso não seja especificada será usado o comando `navigator.back()`.
    *
    * > Se passada uma função, é responsabilidade do desenvolvedor implementar a navegação ou outro comportamento desejado.
@@ -84,14 +102,28 @@ export interface PoPageDynamicEditActions {
   /**
    * @description
    *
-   * Rota de redirecionamento que será executada após a confirmação da gravação do registro caso o mesmo esteja editando
-   * um registro.
+   * Rota de redirecionamento ou método para executar o envio dos dados ao servidor.
+   *
+   * A rota de redirecionamento será executada após a confirmação de gravação do registro.
+   *
+   * > Caso tratar-se de um novo registro, será resetado o formulário para um novo registro.
+   * Se estiver editando um registro a rota de redirecionamento será utilizada.
    *
    * ```
    * actions = {
    *   saveNew: 'new'
    * };
    * ```
+   * A rota pode conter um parâmetro id.
+   *
+   * ```
+   * actions = {
+   *   saveNew: 'edit/:id'
+   * };
+   * ```
+   *
+   * Ao informar um método é responsabilidade do desenvolvedor implementar a navegação e/ou envio dos dados
+   * para o servidor ou outro comportamento desejado.
    */
-  saveNew?: string;
+  saveNew?: string | ((resource: any, id?: string) => void);
 }

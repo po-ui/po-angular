@@ -19,7 +19,7 @@ describe('PoAvatarComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoAvatarComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+
     nativeElement = fixture.debugElement.nativeElement;
   });
 

@@ -381,6 +381,26 @@ export function addZero(time: number) {
 }
 
 /**
+ * Remove do objeto as propriedades especificadas.
+ *
+ * Exemplo:
+ *
+ * ```
+ * key: ['id', 'cpf']
+ * newItemValue: { id: '123', cpf: '456', name: 'Test' }
+ * Resultado: { name: 'Test' }
+ * ```
+ *
+ * @param keys lista de propriedades para ser removida do objeto.
+ * @param newItemValue objeto que se deseja remover as propriedades.
+ * @returns objeto sem as propriedades especificadas.
+ */
+export function removeKeysProperties(keys: Array<any>, newItemValue: any) {
+  keys.forEach(key => delete newItemValue[key]);
+  return newItemValue;
+}
+
+/**
  * @deprecated
  * Retorna um ViewContainerRef compatível para projetos com Ivy habilitado ou não.
  *
