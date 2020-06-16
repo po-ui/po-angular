@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { PoAvatarBaseComponent } from './po-avatar-base.component';
 
@@ -26,7 +26,8 @@ import { PoAvatarBaseComponent } from './po-avatar-base.component';
  */
 @Component({
   selector: 'po-avatar',
-  templateUrl: './po-avatar.component.html'
+  templateUrl: './po-avatar.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoAvatarComponent extends PoAvatarBaseComponent implements OnInit {
   ngOnInit(): void {
