@@ -6,10 +6,10 @@
  * Interface para configuração das colunas de legenda do Po-Table.
  */
 export interface PoTableSubtitleColumn {
-  /** Valor da legenda. */
-  value: string;
+  /** Valor que será usado como referência para exibição do conteúdo na coluna. */
+  value: string | number;
 
-  /** Texto de exibição. */
+  /** Texto que será exibido no rodapé da tabela como legenda. */
   label: string;
 
   /**
@@ -37,6 +37,6 @@ export interface PoTableSubtitleColumn {
    */
   color?: string;
 
-  /** Conteúdo do status. */
+  /** Conteúdo que será exibido na coluna da tabela. */
   content: string;
 }
