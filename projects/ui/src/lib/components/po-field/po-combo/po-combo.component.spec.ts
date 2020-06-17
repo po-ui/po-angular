@@ -1,3 +1,4 @@
+import { By } from '@angular/platform-browser';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -1532,18 +1533,8 @@ describe('PoComboComponent:', () => {
 
       expect(comboItemLink).toBeFalsy();
     });
-  });
 
-  describe('Integration:', () => {
-    beforeEach(() => {
-      component = fixture.componentInstance;
-
-      fixture.detectChanges();
-
-      nativeElement = fixture.debugElement.nativeElement;
-    });
-
-    it('noData: should display `noDataTemplate` if don´t have `visibleOptions` and visibleOptions.length.', () => {
+    it('should display `noDataTemplate` if don´t have `visibleOptions` and visibleOptions.length.', () => {
       component.visibleOptions = [];
 
       fixture.detectChanges();
@@ -1558,7 +1549,7 @@ describe('PoComboComponent:', () => {
       expect(noDataTemplate).toBeTruthy();
     });
 
-    it('noData: shouldn´t display `noDataTemplate` if have `visibleOptions` and visibleOptions.length.', () => {
+    it('shouldn´t display `noDataTemplate` if have `visibleOptions` and visibleOptions.length.', () => {
       component.visibleOptions = [{ label: '1', value: '1' }];
 
       fixture.detectChanges();
@@ -1573,7 +1564,7 @@ describe('PoComboComponent:', () => {
       expect(noDataTemplate).toBeNull();
     });
 
-    it('noData: should display `literals.noData` in Spanish if browser language is `es`.', () => {
+    it('should display `literals.noData` in Spanish if browser language is `es`.', () => {
       spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
       component.visibleOptions = [];
 
@@ -1588,6 +1579,37 @@ describe('PoComboComponent:', () => {
       const noDataTemplateTextCompare = 'Datos no encontrados';
 
       expect(noDataTemplateText).toEqual(noDataTemplateTextCompare);
+    });
+  });
+
+  describe('Integration:', () => {
+    it('should return empty array and display `po-combo-container-no-data` if not found searched option', () => {
+      const searchTerm = 'Acre';
+      const keyUpEvent = { target: { value: searchTerm } };
+      component.options = [
+        { label: 'Santa Catarina', value: 'sc' },
+        { label: 'São Paulo', value: 'sp' },
+        { label: 'Rio Janeiro', value: 'rj' }
+      ];
+
+      fixture.debugElement.query(By.css('input')).triggerEventHandler('keyup', keyUpEvent);
+      fixture.detectChanges();
+
+      expect(component.visibleOptions).toEqual([]);
+      expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeTruthy();
+    });
+
+    it('should return found option and not display `po-combo-container-no-data` if found searched option', () => {
+      const searchTerm = 'Santa';
+      const keyUpEvent = { target: { value: searchTerm } };
+      const optionFound = [{ label: 'Santa Catarina', value: 'sc' }];
+      component.options = [...optionFound, { label: 'São Paulo', value: 'sp' }, { label: 'Rio Janeiro', value: 'rj' }];
+
+      fixture.debugElement.query(By.css('input')).triggerEventHandler('keyup', keyUpEvent);
+      fixture.detectChanges();
+
+      expect(component.visibleOptions).toEqual(optionFound);
+      expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeNull();
     });
   });
 });

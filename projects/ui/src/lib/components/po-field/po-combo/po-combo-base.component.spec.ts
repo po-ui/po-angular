@@ -847,7 +847,7 @@ describe('PoComboBaseComponent:', () => {
         expect(component.visibleOptions).toEqual(component.options);
       });
 
-      it(`should not set 'visibleOptions' with 'component.comboOptionsList' if 'newOptions' are falsy`, () => {
+      it(`should set 'visibleOptions' with empty array if selectedValue and options are falsy`, () => {
         component.options = undefined;
         component.selectedValue = undefined;
         component['comboOptionsList'] = [];
@@ -856,7 +856,7 @@ describe('PoComboBaseComponent:', () => {
 
         component.updateComboList();
 
-        expect(component.visibleOptions).toBeUndefined();
+        expect(component.visibleOptions).toEqual(component['comboOptionsList']);
       });
 
       it('should set `visibleOptions` with `options param` if `options param` is true and `selectedValue` is false', () => {
