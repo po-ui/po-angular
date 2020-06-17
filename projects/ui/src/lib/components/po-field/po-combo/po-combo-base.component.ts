@@ -591,12 +591,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
     const newOptions = !options && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
 
-    if (newOptions.length) {
-      this.visibleOptions = newOptions;
+    this.visibleOptions = newOptions;
 
-      if (!this.selectedView && this.visibleOptions.length) {
-        this.selectedView = copyOptions.find(option => option.value !== undefined);
-      }
+    if (!this.selectedView && this.visibleOptions.length) {
+      this.selectedView = copyOptions.find(option => option.value !== undefined);
     }
   }
 
