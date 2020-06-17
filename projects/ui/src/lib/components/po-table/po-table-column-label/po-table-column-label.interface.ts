@@ -29,7 +29,7 @@ export interface PoTableColumnLabel {
    */
   color?: string;
 
-  /** Texto de exibição. */
+  /** Texto que será exibido na coluna. */
   label: string;
 
   /**
@@ -40,6 +40,6 @@ export interface PoTableColumnLabel {
    */
   tooltip?: string;
 
-  /** Valor da legenda. */
-  value: string;
+  /** Valor que será usado como referência para exibição do conteúdo na coluna. */
+  value: string | number;
 }

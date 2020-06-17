@@ -27,7 +27,7 @@ describe('PoTableColumnLabelComponent:', () => {
     labels = [
       { value: 'success', label: 'Success', color: 'color-11' },
       { value: 'warning', label: 'Warning', color: 'color-08' },
-      { value: 'danger', label: 'Danger', color: 'color-07' }
+      { value: 1, label: 'Danger', color: 'color-07' }
     ];
   });
 
@@ -37,7 +37,7 @@ describe('PoTableColumnLabelComponent:', () => {
 
   describe('Properties:', () => {
     it('value: should call `poColorPaletteService.getColor` with value if value is defined', () => {
-      const value = { color: 'danger', label: 'Danger', value: '1' };
+      const value = { color: 'danger', label: 'Danger', value: 1 };
 
       spyOn(component['poColorPaletteService'], 'getColor');
 

@@ -1,9 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoModalComponent, PoTableColumn, PoTableColumnSort } from '@po-ui/ng-components';
+import { PoModalComponent, PoTableColumn, PoTableColumnSort, PoTableColumnLabel } from '@po-ui/ng-components';
 
 import { SamplePoTableComponentsService } from './sample-po-table-components.service';
+import { SamplePoTableComponentStatus } from './sample-po-table-components.enum';
 
 @Component({
   selector: 'sample-po-table-components',
@@ -21,10 +22,25 @@ export class SamplePoTableComponentsComponent {
       property: 'status',
       type: 'label',
       width: '5%',
-      labels: [
-        { value: 'stable', color: 'color-11', label: 'Stable', tooltip: 'Published component' },
-        { value: 'experimental', color: 'color-08', label: 'Experimental', tooltip: 'Component in homologation' },
-        { value: 'roadmap', color: 'color-07', label: 'Roadmap', tooltip: 'Component in roadmap' }
+      labels: <Array<PoTableColumnLabel>>[
+        {
+          value: SamplePoTableComponentStatus.Stable,
+          color: 'color-11',
+          label: 'Stable',
+          tooltip: 'Published component'
+        },
+        {
+          value: SamplePoTableComponentStatus.Experimental,
+          color: 'color-08',
+          label: 'Experimental',
+          tooltip: 'Component in homologation'
+        },
+        {
+          value: SamplePoTableComponentStatus.RoadMap,
+          color: 'color-07',
+          label: 'Roadmap',
+          tooltip: 'Component in roadmap'
+        }
       ]
     },
     { property: 'component', type: 'link' },
