@@ -512,7 +512,9 @@ export abstract class PoTableBaseComponent implements OnChanges {
       'subtitle',
       'link',
       'label',
-      'icon'
+      'icon',
+      'cellTemplate',
+      'columnTemplate'
     ];
     return this.columns.filter(col => !col.type || typesValid.includes(col.type));
   }

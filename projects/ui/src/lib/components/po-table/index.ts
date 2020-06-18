@@ -10,6 +10,8 @@ export * from './po-table-detail/po-table-detail-column.interface';
 export * from './po-table-detail/po-table-detail.interface';
 export * from './po-table-row-template/po-table-row-template.directive';
 export * from './po-table-subtitle-footer/po-table-subtitle-column.interface';
+export * from './po-table-cell-template/po-table-cell-template.directive';
+export * from './po-table-column-template/po-table-column-template.directive';
 export * from './po-table.component';
 
 export * from './po-table.module';

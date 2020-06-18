@@ -1,4 +1,4 @@
-<div class="po-font-text-large">PO Field Commom Components</div>
+<div class="po-font-text-large">PO UI Library</div>
 
 <hr />
 
@@ -11,6 +11,9 @@
   (p-show-more)="showMore($event)"
   (p-sort-by)="sort($event)"
 >
+  <ng-template p-table-column-template [p-property]="'type'" let-value>
+    <div class="badge {{ value }}">{{ value | uppercase }}</div>
+  </ng-template>
 </po-table>
 
 <po-modal p-click-out="true" p-size="sm" p-title="{{ title }} - {{ extraInformation?.component }}">

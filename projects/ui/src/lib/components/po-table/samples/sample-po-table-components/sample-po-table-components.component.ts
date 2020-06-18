@@ -9,6 +9,7 @@ import { SamplePoTableComponentStatus } from './sample-po-table-components.enum'
 @Component({
   selector: 'sample-po-table-components',
   templateUrl: './sample-po-table-components.component.html',
+  styleUrls: ['./sample-po-table-components.component.css'],
   providers: [SamplePoTableComponentsService]
 })
 export class SamplePoTableComponentsComponent {
@@ -44,6 +45,7 @@ export class SamplePoTableComponentsComponent {
       ]
     },
     { property: 'component', type: 'link' },
+    { property: 'type', label: 'Type', type: 'columnTemplate', width: '10%' },
     { property: 'description', color: this.experimentalColor.bind(this) },
     {
       property: 'extra',
@@ -83,7 +85,7 @@ export class SamplePoTableComponentsComponent {
   constructor(public sampleComponents: SamplePoTableComponentsService, private router: Router) {}
 
   experimentalColor(row) {
-    return row.status === 'experimental' ? 'color-08' : 'color-11';
+    return row.status === SamplePoTableComponentStatus.Experimental ? 'color-08' : 'color-11';
   }
 
   extras(value, row) {
@@ -107,13 +109,11 @@ export class SamplePoTableComponentsComponent {
   }
 
   private canGoToDocumentation(row) {
-    return row.status !== 'stable';
+    return row.status !== SamplePoTableComponentStatus.Stable;
   }
 
   private canShowExtras(row: any) {
-    if (row.status) {
-      return row.status !== 'stable';
-    }
+    return row.status !== SamplePoTableComponentStatus.Stable || row.extras.length === 0;
   }
 
   private favorite(row) {
@@ -126,5 +126,9 @@ export class SamplePoTableComponentsComponent {
 
   private isFavorite(row) {
     return row.isFavorite ? 'color-08' : 'color-11';
+  }
+
+  public showAlert(msg): void {
+    alert(msg);
   }
 }

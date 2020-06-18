@@ -11,7 +11,9 @@ import {
   Renderer2,
   ViewChild,
   ViewChildren,
-  ViewContainerRef
+  ViewContainerRef,
+  ContentChildren,
+  TemplateRef
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -26,6 +28,8 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
+import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
+import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -62,6 +66,7 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
  *  <file name="sample-po-table-components/sample-po-table-components.enum.ts"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.component.html"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.service.ts"> </file>
+ *  <file name="sample-po-table-components/sample-po-table-components.component.css"> </file>
  * </example>
  */
 @Component({
@@ -88,6 +93,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private resizeListener: () => void;
 
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
+  @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
+  @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
@@ -437,5 +444,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.footerHeight = this.getHeightTableFooter();
       this.calculateHeightTableContainer(this.height);
     }
+  }
+
+  public getTemplate(column: PoTableColumn): TemplateRef<any> {
+    const template: PoTableColumnTemplateDirective = this.tableColumnTemplates.find(tableColumnTemplate => {
+      return tableColumnTemplate.targetProperty === column.property;
+    });
+    if (!template) {
+      console.warn(
+        `Não foi possível encontrar o template para a coluna: ${column.property}, por gentileza informe a propriedade [p-property]`
+      );
+      return null;
+    }
+    return template.templateRef;
   }
 }
