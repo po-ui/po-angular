@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, TemplateRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DecimalPipe } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,6 +16,7 @@ import { PoTableBaseComponent } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
+import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -2152,6 +2153,53 @@ describe('PoTableComponent:', () => {
       component.selectable = true;
       component.actions.length = 0;
       expect(component.columnCount).toBe(7);
+    });
+
+    it('getTemplate: should be return null by column property', () => {
+      const column: PoTableColumn = {};
+      column.property = 'status3';
+
+      const tableColumnTemplate: PoTableColumnTemplateDirective = {
+        targetProperty: 'status',
+        templateRef: {
+          elementRef: new ElementRef(document.createElement('div'))
+        } as TemplateRef<any>
+      };
+
+      const tableColumnTemplate2: PoTableColumnTemplateDirective = {
+        targetProperty: 'id',
+        templateRef: {
+          elementRef: new ElementRef(document.createElement('span'))
+        } as TemplateRef<any>
+      };
+
+      component.tableColumnTemplates.reset([tableColumnTemplate, tableColumnTemplate2]);
+      const res = component.getTemplate(column);
+      expect(res).toBeNull();
+    });
+
+    it('getTemplate: should be return TemplateRef by column property', () => {
+      const column: PoTableColumn = {};
+      column.property = 'status';
+
+      const tableColumnTemplate: PoTableColumnTemplateDirective = {
+        targetProperty: 'status',
+        templateRef: {
+          elementRef: new ElementRef(document.createElement('div'))
+        } as TemplateRef<any>
+      };
+
+      const tableColumnTemplate2: PoTableColumnTemplateDirective = {
+        targetProperty: 'id',
+        templateRef: {
+          elementRef: new ElementRef(document.createElement('span'))
+        } as TemplateRef<any>
+      };
+
+      component.tableColumnTemplates.reset([tableColumnTemplate, tableColumnTemplate2]);
+      const res = component.getTemplate(column);
+
+      expect(res).toEqual(tableColumnTemplate.templateRef);
     });
   });
 });

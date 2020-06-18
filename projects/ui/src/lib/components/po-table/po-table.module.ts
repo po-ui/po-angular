@@ -24,6 +24,8 @@ import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-ro
 import { PoTableShowSubtitleComponent } from './po-table-show-subtitle/po-table-show-subtitle.component';
 import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle/po-table-subtitle-circle.component';
 import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-table-subtitle-footer.component';
+import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
+import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 
 /**
  * @description
@@ -55,9 +57,16 @@ import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-ta
     PoTableRowTemplateDirective,
     PoTableShowSubtitleComponent,
     PoTableSubtitleCircleComponent,
-    PoTableSubtitleFooterComponent
+    PoTableSubtitleFooterComponent,
+    PoTableCellTemplateDirective,
+    PoTableColumnTemplateDirective
   ],
-  exports: [PoTableComponent, PoTableRowTemplateDirective],
+  exports: [
+    PoTableComponent,
+    PoTableRowTemplateDirective,
+    PoTableCellTemplateDirective,
+    PoTableColumnTemplateDirective
+  ],
   providers: [DecimalPipe]
 })
 export class PoTableModule {}

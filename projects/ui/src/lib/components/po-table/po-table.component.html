@@ -161,6 +161,16 @@
               (mouseenter)="tooltipMouseEnter($event, column, row)"
               (mouseleave)="tooltipMouseLeave()"
             >
+              <span *ngSwitchCase="'columnTemplate'">
+                <ng-container *ngTemplateOutlet="getTemplate(column); context: { $implicit: row[column.property] }">
+                </ng-container>
+              </span>
+
+              <span *ngSwitchCase="'cellTemplate'">
+                <ng-container *ngTemplateOutlet="tableCellTemplate?.templateRef; context: { row: row, column: column }">
+                </ng-container>
+              </span>
+
               <span *ngSwitchCase="'boolean'">
                 {{ getBooleanLabel(row[column.property], column) }}
               </span>
