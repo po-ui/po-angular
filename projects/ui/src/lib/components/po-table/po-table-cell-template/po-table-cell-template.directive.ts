@@ -63,7 +63,7 @@ import { Directive, TemplateRef } from '@angular/core';
  * }
  * ...
  * ```
- * > OBS: Sempre adicionar o **type** da property que deseja manipular com a directiva como `cell-template`
+ * > OBS: Sempre adicionar o **type** da property que deseja manipular com a directiva como `cellTemplate`
  */
 @Directive({
   selector: '[p-table-cell-template]'

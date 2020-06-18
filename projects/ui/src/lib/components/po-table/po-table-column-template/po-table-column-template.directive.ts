@@ -65,7 +65,7 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  * }
  * ...
  * ```
- * > OBS: Sempre adicionar o **type** da property que deseja manipular com a directiva como `column-template`
+ * > OBS: Sempre adicionar o **type** da property que deseja manipular com a directiva como `columnTemplate`
  */
 
 @Directive({

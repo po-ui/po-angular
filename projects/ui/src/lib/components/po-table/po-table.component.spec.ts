@@ -110,7 +110,7 @@ describe('PoTableComponent:', () => {
       subtitles: [
         { value: 'confirmed', color: 'color-11', label: 'Confirmado', content: '1' },
         { value: 'delayed', color: 'color-08', label: 'Atrasado', content: '2' },
-        { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
+        { value: 0, color: 'color-07', label: 'Cancelado', content: '3' }
       ]
     };
 
@@ -121,7 +121,7 @@ describe('PoTableComponent:', () => {
       labels: [
         { value: 'confirmed', color: 'color-11', label: 'Confirmado' },
         { value: 'delayed', color: 'color-08', label: 'Atrasado' },
-        { value: 'canceled', color: 'color-07', label: 'Cancelado' }
+        { value: 0, color: 'color-07', label: 'Cancelado' }
       ]
     };
 
@@ -154,7 +154,7 @@ describe('PoTableComponent:', () => {
       { id: 8, initial: 'JA', name: 'Japão', total: 100.0, atualization: '2017-10-25', status: 'confirmed' },
       { id: 8, initial: 'JA', name: 'Japão', total: 300.0, atualization: '2017-10-25', status: 'delayed' },
       { id: 9, initial: 'CH', name: 'China', total: 250.0, atualization: '2017-10-10', status: 'confirmed' },
-      { id: 6, initial: 'KO', name: 'Coréia do Sul', total: 86.5, atualization: '07/10/2017', status: 'canceled' }
+      { id: 6, initial: 'KO', name: 'Coréia do Sul', total: 86.5, atualization: '07/10/2017', status: 0 }
     ];
 
     actions = [
@@ -511,7 +511,7 @@ describe('PoTableComponent:', () => {
       subtitles: [
         { value: 'confirmed', color: 'color-11', label: 'Confirmado', content: '1' },
         { value: 'delayed', color: 'color-08', label: 'Atrasado', content: '2' },
-        { value: 'canceled', color: 'color-07', label: 'Cancelado', content: '3' }
+        { value: 0, color: 'color-07', label: 'Cancelado', content: '3' }
       ]
     };
 

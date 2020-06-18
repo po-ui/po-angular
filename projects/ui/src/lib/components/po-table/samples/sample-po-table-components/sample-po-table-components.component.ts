@@ -1,9 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoModalComponent, PoTableColumn, PoTableColumnSort } from '@po-ui/ng-components';
+import { PoModalComponent, PoTableColumn, PoTableColumnSort, PoTableColumnLabel } from '@po-ui/ng-components';
 
 import { SamplePoTableComponentsService } from './sample-po-table-components.service';
+import { SamplePoTableComponentStatus } from './sample-po-table-components.enum';
 
 @Component({
   selector: 'sample-po-table-components',

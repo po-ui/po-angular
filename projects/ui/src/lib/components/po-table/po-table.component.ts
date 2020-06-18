@@ -64,6 +64,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
  *
  * <example name="po-table-components" title="PO Table - Po Field Components">
  *  <file name="sample-po-table-components/sample-po-table-components.component.ts"> </file>
+ *  <file name="sample-po-table-components/sample-po-table-components.enum.ts"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.component.html"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.service.ts"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.component.css"> </file>
