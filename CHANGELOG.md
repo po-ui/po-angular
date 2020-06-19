@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/po-ui/po-angular/compare/v2.6.0...v2.7.0) (2020-06-19)
+
+
+### Features
+
+* **page-dynamic-edit:** adiciona a propriedade beforeSaveNew ([4c9a88b](https://github.com/po-ui/po-angular/commit/4c9a88be3a6a85d9ef67ad998158b94c37f61106))
+* **page-dynamic-table:** adiciona a propriedade beforeDuplicate ([b85c11e](https://github.com/po-ui/po-angular/commit/b85c11e99102935d20e22bfac8aaa8aa88a9f5c3))
+* **page-dynamic-table:** adiciona propriedade beforeRemoveAll ([08d05cd](https://github.com/po-ui/po-angular/commit/08d05cd4b1d82f9b58e46f2388f35ef720b55429))
+* **table:** permite PoTableColumnLabel.value aceitar números ([463996f](https://github.com/po-ui/po-angular/commit/463996f86360114d410c35f7b8aac43a66009bac))
+* **table:** permite PoTableSubtitleColumn.value aceitar números ([8641358](https://github.com/po-ui/po-angular/commit/86413586fae4060fb451b87eed7fd73dde971063))
+
+
+### Bug Fixes
+
+* **combo:** corrige filtragem dos itens ([8ffa2ff](https://github.com/po-ui/po-angular/commit/8ffa2ffd71557e83a300fa803cc31aeee10c8a02))
+
+
+### Performance
+
+* **avatar**  adiciona ChangeDetectionStrategy.OnPush ([9383a7a](https://github.com/po-ui/po-angular/commit/9383a7a0f62a62cde29cbb4cc0dc4a0fed8acf6d))
+
+
 ## [2.6.0](https://github.com/po-ui/po-angular/compare/v2.5.0...v2.6.0) (2020-06-12)
 
 
