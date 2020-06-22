@@ -194,7 +194,7 @@ describe('PoDynamicFormComponent:', () => {
       expect(component['updateModelWithValidation']).toHaveBeenCalledWith(validatedFields);
     });
 
-    it('updateModelWithValidation: should call updateFieldsForm to set fields', () => {
+    it('updateModelWithValidation: should call updateFieldsForm to set fields and updatePreviousValue', () => {
       const validatedFields = { value: {}, fields: undefined };
 
       const fields = [
@@ -213,10 +213,12 @@ describe('PoDynamicFormComponent:', () => {
 
       spyOn(component, <any>'setFocusOnFieldByProperty');
       spyOn(component['validationService'], 'updateFieldsForm').and.returnValue(expectedFields);
+      spyOn(component.fieldsComponent, 'updatePreviousValue').and.returnValue();
 
       component['updateModelWithValidation'](validatedFields);
 
       expect(component.fields).toEqual(expectedFields);
+      expect(component.fieldsComponent.updatePreviousValue).toHaveBeenCalled();
       expect(component['validationService'].updateFieldsForm).toHaveBeenCalledWith(validatedFields.fields, fields);
     });
 

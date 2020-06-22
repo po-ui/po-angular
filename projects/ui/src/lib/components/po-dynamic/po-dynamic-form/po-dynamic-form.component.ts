@@ -52,7 +52,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
     return this._form || <any>{};
   }
 
-  @ViewChild('fieldsComponent') fieldsComponent: { focus: (property: string) => void };
+  @ViewChild('fieldsComponent') fieldsComponent: { focus: (property: string) => void; updatePreviousValue: () => void };
 
   constructor(
     private changes: ChangeDetectorRef,
@@ -180,6 +180,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
 
   private updateModelWithValidation(formData: PoDynamicFormValidation) {
     Object.assign(this.value, formData.value);
+    this.fieldsComponent.updatePreviousValue();
     this.fields = this.validationService.updateFieldsForm(formData.fields, this.fields);
   }
 }
