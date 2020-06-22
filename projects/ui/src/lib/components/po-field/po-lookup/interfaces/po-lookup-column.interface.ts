@@ -13,7 +13,7 @@ export interface PoLookupColumn {
    * por um traço("-"). Por exemplo: "Joinville - SC".
    *
    * Importante
-   * Esta configuração se torna obsoleta caso o atributo "p-lookup-description" for configurado no componente.
+   * Esta configuração se torna obsoleta caso o atributo `p-field-format` for configurado no componente.
    */
   fieldLabel?: boolean;
 

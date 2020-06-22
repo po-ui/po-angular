@@ -169,6 +169,24 @@ export interface PoDynamicFormField extends PoDynamicField {
   format?: string;
 
   /**
+   * Nome da propriedade do objeto retornado que será utilizado como descrição do campo.
+   *
+   * O valor padrão é: `label`.
+   *
+   * > Esta propriedade pode ser utilizada em conjunto com: `optionsService` e `searchService`.
+   */
+  fieldLabel?: string;
+
+  /**
+   * Nome da propriedade do objeto retornado que será utilizado como valor do campo.
+   *
+   * O valor padrão é: `value`.
+   *
+   * > Esta propriedade pode ser utilizada em conjunto com: `optionsService` e `searchService`.
+   */
+  fieldValue?: string;
+
+  /**
    * Informa a ordem de exibição do campo.
    *
    * Exemplo de utilização:
