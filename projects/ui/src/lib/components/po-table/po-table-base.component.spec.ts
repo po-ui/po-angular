@@ -1267,5 +1267,13 @@ describe('PoTableBaseComponent:', () => {
 
       expect(component.nameColumnDetail).toBeNull();
     });
+
+    it('p-hide-columns-manager: should update property `p-hide-columns-manager` with valid values.', () => {
+      expectPropertiesValues(component, 'hideColumnsManager', booleanValidTrueValues, true);
+    });
+
+    it('p-hide-columns-manager: should update property `p-hide-columns-manager` with invalid values.', () => {
+      expectPropertiesValues(component, 'hideColumnsManager', booleanInvalidValues, false);
+    });
   });
 });

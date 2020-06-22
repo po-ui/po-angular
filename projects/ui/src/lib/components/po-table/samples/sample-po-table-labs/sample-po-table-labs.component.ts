@@ -81,7 +81,8 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Striped', value: 'striped' },
     { label: 'Show more disabled', value: 'showMoreDisabled' },
     { label: 'Hide detail', value: 'hideDetail' },
-    { label: 'Loading', value: 'loading' }
+    { label: 'Loading', value: 'loading' },
+    { label: 'Hide columns manager', value: 'hideColumnsManager' }
   ];
 
   public readonly typeHeaderOptions: Array<PoRadioGroupOption> = [

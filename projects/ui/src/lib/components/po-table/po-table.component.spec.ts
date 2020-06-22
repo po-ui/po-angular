@@ -1791,6 +1791,20 @@ describe('PoTableComponent:', () => {
 
       expect(nativeElement.querySelectorAll(`po-table-column-icon po-table-icon`).length).toBe(2);
     });
+
+    it('should not display po-table-column-manager', () => {
+      component.hideColumnsManager = true;
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(`po-table-column-manager`)).toBe(null);
+    });
+
+    it('should display po-table-column-manager', () => {
+      component.hideColumnsManager = false;
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(`po-table-column-manager`)).toBeTruthy();
+    });
   });
 
   describe('Properties:', () => {

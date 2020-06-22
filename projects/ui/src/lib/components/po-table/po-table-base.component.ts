@@ -15,6 +15,7 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
+import { InputBoolean } from '../../decorators';
 
 export const poTableContainer = ['border', 'shadow'];
 export const poTableContainerDefault = 'border';
@@ -91,6 +92,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
   private _selectable?: boolean;
+  private _columnManager?: boolean = true;
 
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
@@ -361,6 +363,17 @@ export abstract class PoTableBaseComponent implements OnChanges {
   get selectable() {
     return this._selectable;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite que o gerenciador de colunas, responsável pela definição de quais colunas serão exibidas, seja escondido.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-columns-manager') @InputBoolean() hideColumnsManager?: boolean = false;
 
   /**
    * @optional
