@@ -64,7 +64,11 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       this.triggerValidationOnForm(changedFieldIndex);
     }
 
-    this.previousValue[property] = this.value[property];
+    this.updatePreviousValue();
+  }
+
+  updatePreviousValue() {
+    this.previousValue = JSON.parse(JSON.stringify(this.value));
   }
 
   trackBy(index) {

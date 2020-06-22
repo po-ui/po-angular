@@ -150,18 +150,22 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         expect(component['getField']).not.toHaveBeenCalled();
       });
 
-      it('should update previous value', async () => {
+      it('should update all previous value with new value', async () => {
         const fakeVisibleField = { property: 'test1' };
+        const previousValue = { test1: 'value1' };
+        const newValue = { test1: 'new value1', test2: 'value2' };
 
-        component['previousValue']['test1'] = 'value';
-        component['value']['test1'] = 'new value';
+        component['previousValue'] = previousValue;
+        component['value'] = newValue;
 
         spyOn(component, <any>'triggerValidationOnForm');
         spyOn(component, <any>'getField').and.returnValue({ changedField: {} });
+        spyOn(component, 'updatePreviousValue').and.callThrough();
 
         await component.onChangeField(fakeVisibleField);
 
-        expect(component['previousValue']['test1']).toBe('new value');
+        expect(component.updatePreviousValue).toHaveBeenCalled();
+        expect(component['previousValue']).toEqual(newValue);
       });
 
       it('shouldn`t call `validateField` if `changedField.validate` doesn`t have value', async () => {
