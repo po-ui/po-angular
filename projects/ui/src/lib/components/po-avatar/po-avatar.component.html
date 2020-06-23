@@ -1,4 +1,4 @@
-<div class="po-avatar po-avatar-{{ size }}">
+<div class="po-avatar po-avatar-{{ size }}" [class.po-clickable]="hasClickEvent" (click)="click.emit()">
   <ng-container *ngIf="src; then sourceImage; else defaultIcon"></ng-container>
 </div>
 
