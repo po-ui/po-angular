@@ -1,4 +1,4 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 const PO_AVATAR_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'];
 const PO_AVATAR_SIZE_DEFAULT = 'md';
@@ -43,5 +43,12 @@ export class PoAvatarBaseComponent {
   }
   get size(): string {
     return this._size;
+  }
+
+  /** Evento disparado ao clicar na imagem do *avatar*. */
+  @Output('p-click') click? = new EventEmitter<any>();
+
+  get hasClickEvent() {
+    return !!this.click.observers.length;
   }
 }

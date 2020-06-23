@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { of } from 'rxjs';
+
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoAvatarBaseComponent } from './po-avatar-base.component';
@@ -66,6 +68,22 @@ describe('PoAvatarComponent:', () => {
 
       expect(nativeElement.querySelector('.po-avatar-image')).toBeNull();
       expect(nativeElement.querySelector('.po-avatar-default-icon')).toBeTruthy();
+    });
+
+    it(`should add 'po-clickable' class if hasEventClick is true`, () => {
+      component.click.observers = [<any>of()];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-avatar.po-clickable')).toBeTruthy();
+    });
+
+    it(`shouldn't add 'po-clickable' class if hasEventClick is false`, () => {
+      component.click.observers = [];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-avatar.po-clickable')).toBeNull();
     });
   });
 });
