@@ -52,6 +52,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     ...poPageJobSchedulerLiteralsDefault[util.browserLanguage()]
   };
   parameters: Array<PoDynamicFormField> = [];
+  publicValues: PoJobSchedulerInternal;
   saveOperation: Observable<any>;
   step: number = 1;
 
@@ -140,6 +141,12 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     }
     this.setModelRecurrent();
 
+    const model = JSON.parse(JSON.stringify(this.model));
+
+    if (stepNumber === this.steps.length) {
+      this.publicValues = this.hidesSecretValues(model);
+    }
+
     this.changePageActionsBySteps(this.step, stepNumber);
 
     const steps = this.steps[this.step - 1];
@@ -190,6 +197,16 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     });
   }
 
+  private hidesSecretValues(model: PoJobSchedulerInternal): PoJobSchedulerInternal {
+    const hiddenSecretValue = '**********';
+    this.parameters.forEach(parameter => {
+      if (this.isSecretParameter(model, parameter)) {
+        model.executionParameter[parameter.property] = hiddenSecretValue;
+      }
+    });
+    return model;
+  }
+
   private isDisabledAdvance(): boolean {
     const componentByStep = {
       1: this.schedulerExecution,
@@ -201,6 +218,15 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
 
   private isDisabledBack(): boolean {
     return this.step === 1;
+  }
+
+  private isSecretParameter(model: PoJobSchedulerInternal, parameter: PoDynamicFormField): boolean {
+    return (
+      model.executionParameter &&
+      parameter.hasOwnProperty('secret') &&
+      parameter['secret'] === true &&
+      model.executionParameter.hasOwnProperty(parameter.property)
+    );
   }
 
   private nextStepOperation(operation?: 'back' | 'next') {
