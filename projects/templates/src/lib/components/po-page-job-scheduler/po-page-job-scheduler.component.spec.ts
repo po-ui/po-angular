@@ -185,9 +185,19 @@ describe('PoPageJobSchedulerComponent:', () => {
           },
           steps: [{ label: 'step1' }, { label: 'step2' }, { label: 'step3' }, { label: 'step4' }],
           step: 1,
+          model: {
+            executionParameter: { password: '123' },
+            periodicity: 'always',
+            firstExecution: new Date(),
+            firstExecutionHour: '23:55:00',
+            recurrent: true
+          },
+          parameters: [{ property: 'password', secret: true }],
+          publicValues: {},
           markAsDirtyInvalidControls: () => {},
           changePageActionsBySteps: () => {},
-          setModelRecurrent: () => {}
+          setModelRecurrent: () => {},
+          hidesSecretValues: () => {}
         };
       });
 
@@ -238,6 +248,44 @@ describe('PoPageJobSchedulerComponent:', () => {
         component.nextStep.call(fakeThis, 3);
 
         expect(fakeThis.steps).toBe(fakeThis.steps);
+      });
+
+      it(`should call 'hidesSecretValues' if the step is the last`, () => {
+        component.steps.length = 3;
+        component.model = {
+          executionParameter: { password: '123' },
+          periodicity: 'always',
+          firstExecution: new Date(),
+          firstExecutionHour: '23:55:00',
+          recurrent: true
+        };
+
+        const model = JSON.parse(JSON.stringify(component.model));
+
+        spyOn(component, <any>'hidesSecretValues');
+
+        component.nextStep(3);
+
+        expect(component['hidesSecretValues']).toHaveBeenCalledWith(model);
+      });
+
+      it(`shouldn't call 'hidesSecretValues' if the step isn't the last`, () => {
+        component.steps.length = 3;
+        component.model = {
+          executionParameter: { password: '123' },
+          periodicity: 'always',
+          firstExecution: new Date(),
+          firstExecutionHour: '23:55:00',
+          recurrent: true
+        };
+
+        const model = JSON.parse(JSON.stringify(component.model));
+
+        spyOn(component, <any>'hidesSecretValues');
+
+        component.nextStep(2);
+
+        expect(component['hidesSecretValues']).not.toHaveBeenCalledWith(model);
       });
     });
 
@@ -366,6 +414,48 @@ describe('PoPageJobSchedulerComponent:', () => {
       expect(component.parameters).toEqual(parameters);
     }));
 
+    it(`hidesSecretValues: should return the hidden sensitive values`, () => {
+      component.model = {
+        executionParameter: { password: '123' },
+        periodicity: 'always',
+        firstExecution: new Date(),
+        firstExecutionHour: '23:55:00',
+        recurrent: true
+      };
+
+      component.parameters = [{ property: 'password', secret: true }];
+
+      const model = JSON.parse(JSON.stringify(component.model));
+      const expectedPublicValues = { password: '**********' };
+
+      spyOn(component, <any>'isSecretParameter').and.returnValue(true);
+
+      const publicValues = component['hidesSecretValues'](model);
+
+      expect(publicValues.executionParameter).toEqual(expectedPublicValues);
+    });
+
+    it(`hidesSecretValues: should return the hidden sensitive values`, () => {
+      component.model = {
+        executionParameter: { password: '123' },
+        periodicity: 'always',
+        firstExecution: new Date(),
+        firstExecutionHour: '23:55:00',
+        recurrent: true
+      };
+
+      component.parameters = [{ property: 'password', secret: true }];
+
+      const model = JSON.parse(JSON.stringify(component.model));
+      const expectedPublicValues = { password: '123' };
+
+      spyOn(component, <any>'isSecretParameter').and.returnValue(false);
+
+      const publicValues = component['hidesSecretValues'](model);
+
+      expect(publicValues.executionParameter).toEqual(expectedPublicValues);
+    });
+
     describe('isDisabledAdvance', () => {
       it(`should return 'true' if 'step' is 2 and 'schedulerParameters.form.invalid' is true`, () => {
         const fakeThis = {
@@ -433,6 +523,39 @@ describe('PoPageJobSchedulerComponent:', () => {
         component.step = 3;
 
         expect(component['isDisabledBack']()).toBe(false);
+      });
+    });
+
+    describe('isSecretParameter', () => {
+      it(`should return 'true' if 'model.executionParameter' have an equal property in the parameters
+      and the parameter have a property 'secret: true'`, () => {
+        const model = {
+          executionParameter: { password: '123' },
+          periodicity: 'always',
+          firstExecution: new Date(),
+          firstExecutionHour: '23:55:00',
+          recurrent: true
+        };
+        const parameter = { property: 'password', secret: true };
+
+        const isSecret = component['isSecretParameter'](model, parameter);
+
+        expect(isSecret).toEqual(true);
+      });
+
+      it(`should return 'false' if the parameter have a property 'secret: false'`, () => {
+        const model = {
+          executionParameter: { password: '123' },
+          periodicity: 'always',
+          firstExecution: new Date(),
+          firstExecutionHour: '23:55:00',
+          recurrent: true
+        };
+        const parameter = { property: 'password', secret: false };
+
+        const isSecret = component['isSecretParameter'](model, parameter);
+
+        expect(isSecret).toEqual(false);
       });
     });
 
