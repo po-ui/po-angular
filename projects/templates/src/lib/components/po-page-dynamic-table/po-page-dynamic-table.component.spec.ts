@@ -1462,7 +1462,7 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.items).toEqual([{ id: '2', name: 'react', $selected: true }]);
       }));
 
-      it(`should not call 'poNotification.success' if beforeRemoveAll returns an empty resource`, fakeAsync(() => {
+      it(`should call 'poNotification.success' if beforeRemoveAll returns an empty resource`, fakeAsync(() => {
         const action = true;
         const beforeRemoveAll: PoPageDynamicTableBeforeRemoveAll = {
           resources: []
@@ -1474,8 +1474,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
         tick();
 
-        expect(successSpy).not.toHaveBeenCalled();
-        expect(deleteSpy).not.toHaveBeenCalled();
+        expect(deleteSpy).toHaveBeenCalled();
       }));
 
       it(`should not call 'poNotification.success' if beforeRemoveAll returns an undefined resource`, fakeAsync(() => {
@@ -1579,50 +1578,80 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component.pageActions).toEqual(pageAction);
     });
 
-    it('setRemoveAllAction: shouldn`t set page action remove all if `_actions.removeAll` is false', () => {
-      const actions = {
-        new: 'newValue',
-        remove: true,
-        removeAll: false
-      };
+    describe('setRemoveAllAction:', () => {
+      it('shouldn`t set page action remove all if `_actions.removeAll` is false', () => {
+        const actions = {
+          new: 'newValue',
+          remove: true,
+          removeAll: false
+        };
 
-      const pageAction = [
-        {
-          label: component.literals.pageAction,
-          action: jasmine.any(Function),
-          disabled: !component.actions.new
+        const pageAction = [
+          {
+            label: component.literals.pageAction,
+            action: jasmine.any(Function),
+            disabled: !component.actions.new
+          }
+        ];
+
+        component['setPageActions'](actions);
+
+        component['setRemoveAllAction']();
+
+        expect(component.pageActions).toEqual(pageAction);
+      });
+
+      it('should set page action remove all if `_actions.removeAll` is true', () => {
+        const actions = {
+          new: 'newValue',
+          remove: true,
+          removeAll: true
+        };
+
+        const pageAction = [
+          {
+            label: component.literals.pageAction,
+            action: jasmine.any(Function),
+            disabled: false
+          },
+          {
+            label: component.literals.pageActionRemoveAll,
+            action: jasmine.any(Function),
+            disabled: jasmine.any(Function)
+          }
+        ];
+        component.actions = actions;
+
+        expect(component.pageActions).toEqual(pageAction);
+      });
+
+      it('should set disable to true if there is no selectable items', () => {
+        const actions = {
+          new: 'newValue',
+          remove: true,
+          removeAll: true
+        };
+
+        component.actions = actions;
+        component.items = [];
+        if (typeof component.pageActions[1].disabled === 'function') {
+          expect(component.pageActions[1].disabled()).toBeTrue();
         }
-      ];
+      });
 
-      component['setPageActions'](actions);
+      it('should set disable to false if there is selectable items', () => {
+        const actions = {
+          new: 'newValue',
+          remove: true,
+          removeAll: true
+        };
 
-      component['setRemoveAllAction']();
-
-      expect(component.pageActions).toEqual(pageAction);
-    });
-
-    it('setRemoveAllAction: should set page action remove all if `_actions.removeAll` is true', () => {
-      const actions = {
-        new: 'newValue',
-        remove: true,
-        removeAll: true
-      };
-
-      const pageAction = [
-        {
-          label: component.literals.pageAction,
-          action: jasmine.any(Function),
-          disabled: false
-        },
-        {
-          label: component.literals.pageActionRemoveAll,
-          action: jasmine.any(Function),
-          disabled: false
+        component.actions = actions;
+        component.items = [{ name: 'Mario', $selected: true }];
+        if (typeof component.pageActions[1].disabled === 'function') {
+          expect(component.pageActions[1].disabled()).toBeFalse();
         }
-      ];
-      component.actions = actions;
-
-      expect(component.pageActions).toEqual(pageAction);
+      });
     });
 
     describe('setTableActions:', () => {

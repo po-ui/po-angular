@@ -34,6 +34,8 @@ export interface PoPageDynamicTableBeforeRemoveAll {
    * ```
    * [{ id: 1, name: 'Mario' },{ id: 2, name: 'Gabriel' }]
    * ```
+   *
+   * Esse recurso será passado para a ação `removeAll` também se for um array vazio `[]`
    */
   resources?: Array<any>;
 }

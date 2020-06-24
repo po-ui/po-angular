@@ -670,7 +670,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const allow = allowAction ?? true;
     const resourcestoDelete = resources ?? originalResources;
 
-    if (allow && resourcestoDelete?.length) {
+    if (allow && Array.isArray(resourcestoDelete)) {
       if (typeof actionRemoveAll === 'boolean' || newUrl) {
         return this.poPageDynamicService.deleteResources(resourcestoDelete, newUrl).pipe(
           tap(() => {
@@ -711,14 +711,17 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   private setRemoveAllAction() {
     const action = this._actions;
-    if (action.removeAll) {
-      const visibleRemove = !this.showRemove(action.removeAll);
+    if (this.showRemove(action.removeAll)) {
       this._pageActions.push({
         label: this.literals.pageActionRemoveAll,
         action: this.confirmRemoveAll.bind(this, action.removeAll, action.beforeRemoveAll),
-        disabled: visibleRemove
+        disabled: this.disableRemoveAll.bind(this)
       });
     }
+  }
+
+  private disableRemoveAll(): boolean {
+    return !this.getSelectedItemsKeysToRemove();
   }
 
   private setTableActions(actions: PoPageDynamicTableActions) {
