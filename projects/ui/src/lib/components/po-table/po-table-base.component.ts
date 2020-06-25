@@ -278,7 +278,8 @@ export abstract class PoTableBaseComponent implements OnChanges {
    *
    * @description
    *
-   * Bloqueia interação do usuário com os dados da _table_, apresentando um _loading_ ao centro da mesma.
+   * Bloqueia a interação do usuário com os dados da _table_ assim como no botão 'Carregar mais resultados',
+   * apresentando um _spinning loading_ em ambos.
    *
    * @default `false`
    */
