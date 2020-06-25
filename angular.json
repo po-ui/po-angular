@@ -171,7 +171,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["projects/storage/tsconfig.lib.json", "projects/storage/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "projects/storage/schematics/**"]
           }
         }
       }
