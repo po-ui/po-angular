@@ -17,6 +17,7 @@ export class SamplePoTableComponentsComponent {
   items: Array<any> = this.sampleComponents.getItems();
   showMoreDisabled: boolean = false;
   title: any;
+  isLoading: boolean = false;
 
   public readonly columns: Array<PoTableColumn> = [
     {
@@ -100,8 +101,12 @@ export class SamplePoTableComponentsComponent {
   }
 
   showMore(sort: PoTableColumnSort) {
+    this.isLoading = true;
     this.showMoreDisabled = true;
-    this.items = this.getItems(sort);
+    setTimeout(() => {
+      this.items = this.getItems(sort);
+      this.isLoading = false;
+    }, 4000);
   }
 
   sort(sort: PoTableColumnSort) {
