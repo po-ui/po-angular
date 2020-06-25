@@ -6,7 +6,8 @@ import {
   PoDynamicFieldType,
   PoDynamicFormField,
   PoLanguageService,
-  PoPageFilter
+  PoPageFilter,
+  PoDisclaimerGroupRemoveAction
 } from '@po-ui/ng-components';
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
@@ -44,7 +45,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   private loadSubscription: Subscription;
 
   private readonly _disclaimerGroup: PoDisclaimerGroup = {
-    change: this.onChangeDisclaimerGroup.bind(this),
+    remove: this.onRemoveDisclaimer.bind(this),
+    removeAll: this.onRemoveAllDisclaimers.bind(this),
     disclaimers: [],
     title: this.literals.disclaimerGroupTitle
   };
@@ -101,15 +103,26 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   onAction(quickFilter: string) {
-    this._disclaimerGroup.disclaimers = [
-      { property: 'search', label: `${this.literals.quickSearchLabel} ${quickFilter}`, value: quickFilter }
+    const disclaimerQuickSearchUpdated = {
+      property: 'search',
+      label: `${this.literals.quickSearchLabel} ${quickFilter}`,
+      value: quickFilter
+    };
+
+    const getDisclaimersWithConcatFilters = () => [
+      ...this.getDisclaimersWithoutQuickSearch(),
+      disclaimerQuickSearchUpdated
     ];
+
+    this._disclaimerGroup.disclaimers = this.concatFilters
+      ? getDisclaimersWithConcatFilters()
+      : [disclaimerQuickSearchUpdated];
 
     if (this.quickSearch.observers && this.quickSearch.observers.length > 0) {
       this.quickSearch.emit(quickFilter);
     }
 
-    if (this.keepFilters) {
+    if (this.keepFilters && !this.concatFilters) {
       this.filters.forEach(element => delete element.initValue);
     }
 
@@ -126,6 +139,11 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.setFilters(filters);
 
     this.advancedSearch.emit(filters);
+  }
+
+  private getDisclaimersWithoutQuickSearch() {
+    const quickSearchProperty = 'search';
+    return this._disclaimerGroup.disclaimers.filter(item => item.property !== quickSearchProperty);
   }
 
   private setFilters(filters) {
@@ -168,19 +186,21 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return new Date(year, month - 1, day).toLocaleDateString(getBrowserLanguage());
   }
 
-  private formatsFilterValuesToUpdateDisclaimers(filters) {
-    const formattedFilters = filters.reduce(
+  private formatArrayToObjectKeyValue(
+    filters: Array<{ property: string; value?: any; initValue?: any }>
+  ): { [key: string]: any } {
+    const formattedObject = filters.reduce(
       (result, item) => Object.assign(result, { [item.property]: item.value || item.initValue }),
       {}
     );
 
-    Object.keys(formattedFilters).forEach(key => {
-      if (!formattedFilters[key]) {
-        delete formattedFilters[key];
+    Object.keys(formattedObject).forEach(key => {
+      if (!formattedObject[key]) {
+        delete formattedObject[key];
       }
     });
 
-    return formattedFilters;
+    return formattedObject;
   }
 
   private getFieldByProperty(fields: Array<PoDynamicFormField>, fieldName: string) {
@@ -199,22 +219,19 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return value;
   }
 
-  private onChangeDisclaimerGroup(disclaimers) {
-    if ((!this.disclaimersEqualsFilters(disclaimers) && !this.isQuickSearch(disclaimers)) || disclaimers.length === 0) {
-      this.changeDisclaimers.emit(disclaimers);
-      this.setFilters(this.formatsFilterValuesToUpdateDisclaimers(disclaimers));
-    }
+  private onRemoveDisclaimer(removeData: PoDisclaimerGroupRemoveAction) {
+    const { currentDisclaimers } = removeData;
+
+    this.emitChangesDisclaimers(currentDisclaimers);
   }
 
-  private disclaimersEqualsFilters(disclaimers) {
-    const formattedDisclaimers = this.formatsFilterValuesToUpdateDisclaimers(disclaimers);
-    const formattedFilters = this.formatsFilterValuesToUpdateDisclaimers(this.filters);
-
-    return JSON.stringify(formattedDisclaimers) === JSON.stringify(formattedFilters);
+  private emitChangesDisclaimers(currentDisclaimers: any) {
+    this.changeDisclaimers.emit(currentDisclaimers);
+    this.setFilters(this.formatArrayToObjectKeyValue(currentDisclaimers));
   }
 
-  private isQuickSearch(disclaimers) {
-    return disclaimers.length > 0 && disclaimers.find(element => element.property === 'search');
+  private onRemoveAllDisclaimers() {
+    this.emitChangesDisclaimers([]);
   }
 
   private setDisclaimers(filters) {
@@ -252,7 +269,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
       actions: this.actions,
       breadcrumb: this.breadcrumb,
       filters: this.filters,
-      keepFilters: this.keepFilters
+      keepFilters: this.keepFilters,
+      concatFilters: this.concatFilters
     };
 
     const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicSearchOptions> = {
@@ -275,6 +293,9 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
         },
         {
           nameProp: 'keepFilters'
+        },
+        {
+          nameProp: 'concatFilters'
         }
       ]
     };
