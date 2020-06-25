@@ -158,6 +158,27 @@ export abstract class PoPageDynamicSearchBaseComponent {
   keepFilters: boolean = false;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a utilização da pesquisa rápida junto com a pesquisa avançada.
+   *
+   * Desta forma, ao ter uma pesquisa avançada estabelecida e ser
+   * preenchido a pesquisa rápida, o filtro será concatenado adicionando a pesquisa
+   * rápida também na lista de `disclaimers`.
+   *
+   * > Os valores que são emitidos no `p-quick-search` e no `p-advanced-search`
+   * permanecem separados durante a emissão dos valores alterados. A concatenação
+   * é apenas nos `disclaimers`.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-concat-filters')
+  concatFilters: boolean = false;
+
+  /**
    * Função ou serviço que será executado na inicialização do componente.
    *
    * A propriedade aceita os seguintes tipos:

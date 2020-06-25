@@ -43,4 +43,17 @@ export interface PoPageDynamicSearchOptions {
    * Caso esse atributo seja utilizado ele sempre irá substituir o original.
    */
   keepFilters?: boolean;
+
+  /**
+   * Permite a utilização da pesquisa rápida junto com a pesquisa avançada.
+   *
+   * Desta forma, ao ter uma pesquisa avançada estabelecida e ser
+   * preenchido a pesquisa rápida, o filtro será concatenado adicionando a pesquisa
+   * rápida também na lista de disclaimers.
+   *
+   * > Os valores que são emitidos no `p-quick-search` e no `p-advanced-search`
+   * permanecem separados durante a emissão dos valores alterados. A concatenação
+   * é apenas nos `disclaimers`.
+   */
+  concatFilters?: boolean;
 }
