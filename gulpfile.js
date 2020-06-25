@@ -21,6 +21,9 @@ const distTemplatesSchematicsFolder = path.resolve(rootFolder, './dist/ng-templa
 const syncSchematicsFolder = path.resolve(rootFolder, './projects/sync/schematics');
 const distSyncSchematicsFolder = path.resolve(rootFolder, './dist/ng-sync/schematics');
 
+const storageSchematicsFolder = path.resolve(rootFolder, './projects/storage/schematics');
+const distStorageSchematicsFolder = path.resolve(rootFolder, './dist/ng-storage/schematics');
+
 /** REPLACE VERSION: replace version of dist/package.json to repo version */
 const replaceVersion = () =>
   src([`${rootFolder}/package.json`]).on('end', () => replaceVersionPlaceholders(distFolder));
@@ -29,6 +32,7 @@ const replaceVersion = () =>
 const buildUiSchematics = () => run('npm run build:ui:schematics').exec();
 const buildTemplatesSchematics = () => run('npm run build:templates:schematics').exec();
 const buildSyncSchematics = () => run('npm run build:sync:schematics').exec();
+const buildStorageSchematics = () => run('npm run build:storage:schematics').exec();
 
 /** UI SCHEMATICS */
 const copyUiSchemas = () => src([`${uiSchematicsFolder}/**/*/schema.json`]).pipe(dest(distUiSchematicsFolder));
@@ -49,6 +53,12 @@ const copyTemplatesCollection = () =>
 
 /** SYNC SCHEMATICS */
 const copySyncMigrations = () => src([`${syncSchematicsFolder}/migrations.json`]).pipe(dest(distSyncSchematicsFolder));
+
+/** STORAGE SCHEMATICS */
+const copyStorageSchemas = () =>
+  src([`${storageSchematicsFolder}/**/*/schema.json`]).pipe(dest(distStorageSchematicsFolder));
+const copyStorageCollection = () =>
+  src([`${storageSchematicsFolder}/collection.json`]).pipe(dest(distStorageSchematicsFolder));
 
 /** SCHEMATICS */
 const copySchematicsPackage = () => src([`${schematicsFolder}/package.json`]).pipe(dest(distSchematicsFolder));
@@ -89,5 +99,7 @@ exports.uiSchematics = series(
 );
 
 exports.syncSchematics = series(buildSyncSchematics, parallel(copySyncMigrations));
+
+exports.storageSchematics = series(buildStorageSchematics, parallel(copyStorageCollection, copyStorageSchemas));
 
 exports.copyFilesSchematics = series(copySchematicsPackage, copySchematicsReadme);

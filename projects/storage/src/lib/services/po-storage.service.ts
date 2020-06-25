@@ -23,7 +23,14 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  *
  * A estrutura utilizada para armazenar os dados é a de chave/valor, onde uma chave funciona como um identificador exclusivo.
  *
- * Para utilizar é necessário importar o módulo `PoStorageModule` no módulo da sua aplicação, por exemplo:
+ * #### Instalando o PO Storage
+ *
+ * Para instalar o `po-storage` em sua aplicação execute o seguinte comando:
+ *
+ * ```shell
+ * ng add @po-ui/ng-storage
+ * ```
+ * Será instalado o pacote `@po-ui/ng-storage` e também já importará `PoStorageModule` no módulo principal da sua aplicação, conforme abaixo:
  *
  * ```typescript
  * import { PoStorageModule } from '@po-ui/ng-storage';
@@ -40,7 +47,7 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  * export class AppModule {}
  * ```
  *
- * Após a declaração de módulo, é criada uma base de dados no armazenamento local e o serviço `PoStorageService` estará
+ * Com a declaração do módulo, é criada uma base de dados no armazenamento local e o serviço `PoStorageService` estará
  * pronto para ser utilizada na sua aplicação.
  *
  * #### Configurando as opções de armazenamento

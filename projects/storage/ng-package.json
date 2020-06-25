@@ -4,5 +4,5 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["custom-idle-queue", "localforage", "lokijs"]
+  "whitelistedNonPeerDependencies": ["custom-idle-queue", "localforage", "lokijs", "@po-ui/ng-schematics"]
 }
