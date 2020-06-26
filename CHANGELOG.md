@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/po-ui/po-angular/compare/v2.7.0...v2.8.0) (2020-06-26)
+
+
+### Features
+
+* **avatar:** adiciona evento de clique ([10ce7a6](https://github.com/po-ui/po-angular/commit/10ce7a6d52be85e6c4574cc23e310ee0479a9a60))
+* **dynamic-form:** adiciona as propriedades fieldValue e fieldLabel ([abe7a5d](https://github.com/po-ui/po-angular/commit/abe7a5d5b2793e95b3340c18e4de2ab185dff159))
+* **table:** adiciona propriedade para remover o gerenciador ([13ff91a](https://github.com/po-ui/po-angular/commit/13ff91a6e18980f5179d4e4947c5881b5dd231b8))
+* **table:** adiciona templates para colunas(`PoTableColumnTemplateDirective`) e células (`PoTableCellTemplateDirective`)  ([2e40610](https://github.com/po-ui/po-angular/commit/2e406100bbbcc90a3f5e7cad5ec8ce08fac0cf85)), closes [#97](https://github.com/po-ui/po-angular/issues/97) [#141](https://github.com/po-ui/po-angular/issues/141)
+
+
+### Bug Fixes
+
+* **dynamic-form:** corrige problema ao atualizar valores no validate ([9300361](https://github.com/po-ui/po-angular/commit/930036146718aebf46f68fc3023464c9e16d5929))
+* **page-dynamic-table:** correção no tratamento da ação removeAll ([f62c3ad](https://github.com/po-ui/po-angular/commit/f62c3ad0c5c50f550a1185d6fbda1629ac0b3f54))
+
 ## [2.7.0](https://github.com/po-ui/po-angular/compare/v2.6.0...v2.7.0) (2020-06-19)
 
 
