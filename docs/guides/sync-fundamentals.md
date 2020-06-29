@@ -7,6 +7,7 @@
 - [Conhecimentos necessários](guides/sync-fundamentals#knowledge)
 - [*Schemas*](guides/sync-fundamentals#schemas)
   - [Como criar um *schema*](guides/sync-fundamentals#create-schema)
+  - [Schematic](guides/sync-fundamentals#schematic)
 - [Preparando a API para a sincronização](guides/sync-fundamentals#prepare-api)
   - [Exclusão lógica](guides/sync-fundamentals#logical-deletion)
   - [*Endpoint* de sincronização](guides/sync-fundamentals#sync-url)
@@ -25,6 +26,7 @@
   - [Criação de identificador customizado para eventos da fila](guides/sync-fundamentals#custom-request-id)
   - [Alterando as definições dos *schemas*](guides/sync-fundamentals#schemas-definition)
 - [Aplicativo de demonstração do PO Sync](guides/sync-fundamentals#po-conference)
+
 
 <a id="introduction"></a>
 ## Introdução
@@ -124,6 +126,30 @@ Por exemplo, para um *schema* do tipo Pessoa, poderíamos ter os campos: nome, i
 
 Não necessariamente precisam ser representados todos os campos retornados pela API, somente os necessários para as
 manipulações através do PO Sync.
+
+<a id="schematic"></a>
+### Schematic
+
+Você pode utilizar um schematic para criar o arquivo com a estrutura básica do schema.
+
+Para isso utilize o comando
+
+```shell
+ng generate @po-ui/ng-sync:sync-schema
+```
+
+Você também pode informar um caminho completo.
+
+```shell
+ng generate @po-ui/ng-sync:sync-schema --name=conference/schema/conference
+```
+
+Ou apenas o nome do schema que ele criará o arquivo na pasta que o comando for executado.
+
+```shell
+ng generate @po-ui/ng-sync:sync-schema --name=conference
+```
+
 
 <a id="prepare-api"></a>
 ## Preparando a API para a sincronização

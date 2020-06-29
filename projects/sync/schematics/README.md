@@ -1,4 +1,4 @@
-# PO UI Schematics
+# PO UI Sync
 
 ## Modo desenvolvimento
 
@@ -13,7 +13,7 @@ Para desenvolver novos schematics ou alterá-los é necessário executar o coman
 Após executar o comando será criado a pasta `dist/ng-schematics` e você estará apto a utilizar a biblioteca
 em modo de desenvolvimento para implementar novas melhorias/correções e etc.
 
-## ng update @po-ui/ng-sync
+# ng update @po-ui/ng-sync
 
 Esse *schematic* é executado através do Angular CLI para oferecer suporte à atualização automática do PO UI em um projeto Angular.
 
@@ -63,9 +63,9 @@ Para testarmos o pacote, devemos incrementar a versão do mesmo,
 caso for uma versão beta devemos alterar a versão também no arquivo `migrations.json`,
 ter o npm registry local em execução, confirmando essas situações, podemos rodar o script abaixo:
 
-`> npm run build:storage && npm run build:storage`
+`> npm run build:sync`
 
-`> npm run publish:storage:local && npm run publish:sync:local`
+`> npm run publish:sync:local`
 
 Por fim, execute os comandos abaixo no seu projeto Angular:
 
@@ -73,6 +73,88 @@ Por fim, execute os comandos abaixo no seu projeto Angular:
 
 `> ng update @po-ui/ng-sync --next --from 1 --migrate-only`
 
-Pode ser utilizado o verdaccio para publicar os pacotes locais, como `@po-ui/ng-storage`, assim não precisamos instalar local e o fluxo fica mais próximo do oficial.
+Pode ser utilizado o verdaccio para publicar os pacotes locais, como `@po-ui/ng-sync`, assim não precisamos instalar local e o fluxo fica mais próximo do oficial.
 
 Se você precisar executar isso várias vezes, desfaça as alterações feitas pelo `ng update` para que o `package.json` volte ao número da versão original e execute `npm install` novamente antes de tentar outra atualização.
+
+# ng add @po-ui/ng-sync
+
+Esse *schematic* é executado através do Angular CLI para adicionar o sync em projetos Ionic.
+
+## Como testar
+
+Há duas possibilidades para execução de testes para os novos *schematics*:
+
+### 1 - npm link
+
+O comando **npm link** criará um link simbólico do pacote que deseja testar dentro do `node_modules` da aplicação. Desta forma, é possível executar *schematics* do `po-sync` diretamente em `./projects/app/src/app`. 
+
+Primeiramente, é necessária a alteração em `angular.json`:
+
+```
+...
+  "defaultProject": "app"
+...
+```
+
+Executar o build do projeto `po-schematic` e `po-sync`:
+
+``` 
+> npm run build:schematic 
+> npm run build:sync 
+```
+
+Agora executaremos o comando de link:
+
+``` 
+> npm link dist/ng-sync 
+```
+
+Por fim, executando o comando abaixo, o pacote  `po-sync` será instalados e também serão adicionados os módulos `PoStorageModule` e `PoSyncModule` em `app.module.ts`:
+
+``` 
+> ng generate @po-ui/ng-sync:ng-add 
+```
+
+> Pra remover posteriormente o pacote `po-sync` do `node_modules` execute `npm uninstall @po-ui/ng-sync`.
+
+### 2 - verdaccio
+
+Para poder testar localmente é necessário instalar [verdaccio](https://github.com/verdaccio/verdaccio), para termos um *npm registry* local,
+onde publicaremos os pacotes para realizar o teste.
+
+Após a instalação, devemos apontar o npm registry para o que iniciaremos localmente.
+
+O comando abaixo subirá o npm local, no endereço http://localhost:4873.
+
+``` 
+> verdaccio 
+```
+
+Em seguida, definiremos o *npm registry*, conforme o comando abaixo:
+
+``` 
+> npm set registry http://localhost:4873 
+```
+
+A partir de agora, os pacotes que publicaremos serão enviados ao nosso registry local.
+
+> Para utilizar *npm registry* global novamente, execute o comando: `npm set registry https://registry.npmjs.org/`.
+
+
+Antes de testarmos o pacotes, devemos fazer duas configurações, são elas:
+
+- Adicionar dentro do arquivo ```verdacio/config.yaml``` a configuração: `max_body_size: 200mb`;
+- Executar o comando: ``` npm adduser --registry http://localhost:4873 ```
+
+Para testarmos o pacote, devemos incrementar a versão do mesmo e ter o npm registry local em execução. confirmando essas situações, podemos rodar o script abaixo:
+
+```
+> npm run build:sync && npm run publish:sync:local
+```
+
+Por fim, execute os comando abaixo no seu projeto Angular:
+
+```
+> ng add @po-ui/ng-sync
+```

@@ -88,8 +88,9 @@ npm install
 ### Passo 3 - Instalando o po-sync
 
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
+
 ```shell
-npm install @po-ui/ng-sync
+ng add @po-ui/ng-sync
 ```
 
 Após a instalação do `po-sync`, é necessário instalar o plugin
@@ -105,7 +106,9 @@ ionic cordova plugin add cordova-plugin-network-information
 ### Passo 4 - Utilizando o po-sync
 
 #### Passo 4.1 - Importando o `po-sync` e o `po-storage`
-No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`:
+No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`: 
+
+> Caso você utilize o comando `ng add`, esse passo será feito automaticamente.
 
 ```typescript
 import { NgModule } from '@angular/core';

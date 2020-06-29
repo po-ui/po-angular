@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Add my library to the project.",
+      "factory": "./ng-add/index",
+      "schema": "./ng-add/schema.json"
+    },
+    "sync-schema": {
+      "description": "Create a schema to sync a entity ",
+      "factory": "./ng-generate/sync-schema/index",
+      "schema": "./ng-generate/sync-schema/schema.json"
+    }
+  }
+}
