@@ -56,6 +56,10 @@ const copyTemplatesCollection = () =>
 
 /** SYNC SCHEMATICS */
 const copySyncMigrations = () => src([`${syncSchematicsFolder}/migrations.json`]).pipe(dest(distSyncSchematicsFolder));
+const copySyncSchemas = () => src([`${syncSchematicsFolder}/**/*/schema.json`]).pipe(dest(distSyncSchematicsFolder));
+const copySyncFiles = () =>
+  src([`${syncSchematicsFolder}/ng-generate/*/files/**`]).pipe(dest(`${distSyncSchematicsFolder}/ng-generate`));
+const copySyncCollection = () => src([`${syncSchematicsFolder}/collection.json`]).pipe(dest(distSyncSchematicsFolder));
 
 /** STORAGE SCHEMATICS */
 const copyStorageSchemas = () =>
@@ -107,7 +111,10 @@ exports.uiSchematics = series(
   parallel(copyUiCollection, copyUiMigrations, copyUiSchemas, copyUiFiles)
 );
 
-exports.syncSchematics = series(buildSyncSchematics, parallel(copySyncMigrations));
+exports.syncSchematics = series(
+  buildSyncSchematics,
+  parallel(copySyncCollection, copySyncMigrations, copySyncSchemas, copySyncFiles)
+);
 
 exports.storageSchematics = series(buildStorageSchematics, parallel(copyStorageCollection, copyStorageSchemas));
 
