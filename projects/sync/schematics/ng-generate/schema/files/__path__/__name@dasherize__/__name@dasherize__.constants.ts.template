@@ -1,0 +1,13 @@
+import { PoSyncSchema } from '@po-ui/ng-sync';
+
+export const <%= name %>Schema: PoSyncSchema = {
+  getUrlApi:
+    'http://localhost:8080/<%= name %>',
+  diffUrlApi:
+    'http://localhost:8080/<%= name %>/diff',
+  deletedField: 'deleted',
+  fields: ['id', 'title', 'location', 'description'],
+  idField: 'id',
+  name: '<%= name %>',
+  pageSize: 1,
+};
