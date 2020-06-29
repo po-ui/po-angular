@@ -147,7 +147,8 @@ describe('PoPageDynamicTableComponent:', () => {
               new: '/new'
             },
             fields: [{ property: 'filter1' }, { property: 'filter3' }],
-            keepFilters: true
+            keepFilters: true,
+            concatFilters: true
           };
         };
 
@@ -168,6 +169,7 @@ describe('PoPageDynamicTableComponent:', () => {
           items: [{ label: 'Test' }, { label: 'Test2' }]
         });
         expect(component.keepFilters).toBeTrue();
+        expect(component.concatFilters).toBeTrue();
 
         component.ngOnDestroy();
         expect(component['subscriptions']['_subscriptions']).toBeNull();
@@ -261,6 +263,56 @@ describe('PoPageDynamicTableComponent:', () => {
 
       expect(component['loadData']).toHaveBeenCalledWith({ page: 1, search: filter });
       expect(component['params']).toEqual({ search: filter });
+    });
+
+    it('onQuickSearch: should call `loadData` with merged filter and quickSearch if concatFilters is true', () => {
+      component.concatFilters = true;
+      const termTypedInQuickSearch = 'filterValue';
+
+      const advancedFiltersParams = {
+        city: 'Ontario',
+        name: 'Test'
+      };
+
+      const expectedParams = {
+        ...advancedFiltersParams,
+        search: termTypedInQuickSearch
+      };
+      spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+
+      component.onAdvancedSearch(advancedFiltersParams);
+
+      expect(component['loadData']).toHaveBeenCalledWith({ page: 1, ...advancedFiltersParams });
+      expect(component['params']).toEqual(advancedFiltersParams);
+
+      component.onQuickSearch(termTypedInQuickSearch);
+
+      expect(component['loadData']).toHaveBeenCalledWith({ page: 1, ...expectedParams });
+      expect(component['params']).toEqual(expectedParams);
+    });
+
+    it('onQuickSearch: should call `loadData` only with quickSearch if concatFilters is false', () => {
+      component.concatFilters = false;
+      const termTypedInQuickSearch = 'filterValue';
+
+      const advancedFiltersParams = {
+        city: 'Ontario',
+        name: 'Test'
+      };
+
+      const quickSearchParams = { search: termTypedInQuickSearch };
+
+      spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+
+      component.onAdvancedSearch(advancedFiltersParams);
+
+      expect(component['loadData']).toHaveBeenCalledWith({ page: 1, ...advancedFiltersParams });
+      expect(component['params']).toEqual(advancedFiltersParams);
+
+      component.onQuickSearch(termTypedInQuickSearch);
+
+      expect(component['loadData']).toHaveBeenCalledWith({ page: 1, ...quickSearchParams });
+      expect(component['params']).toEqual(quickSearchParams);
     });
 
     it('onQuickSearch: should call `loadData` with `undefined` and set `params` with `{}` if haven`t `filter`', () => {
