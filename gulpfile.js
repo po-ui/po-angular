@@ -23,6 +23,8 @@ const distSyncSchematicsFolder = path.resolve(rootFolder, './dist/ng-sync/schema
 
 const storageSchematicsFolder = path.resolve(rootFolder, './projects/storage/schematics');
 const distStorageSchematicsFolder = path.resolve(rootFolder, './dist/ng-storage/schematics');
+const codeEditorSchematicsFolder = path.resolve(rootFolder, './projects/code-editor/schematics');
+const distCodeEditorSchematicsFolder = path.resolve(rootFolder, './dist/ng-code-editor/schematics');
 
 /** REPLACE VERSION: replace version of dist/package.json to repo version */
 const replaceVersion = () =>
@@ -33,6 +35,7 @@ const buildUiSchematics = () => run('npm run build:ui:schematics').exec();
 const buildTemplatesSchematics = () => run('npm run build:templates:schematics').exec();
 const buildSyncSchematics = () => run('npm run build:sync:schematics').exec();
 const buildStorageSchematics = () => run('npm run build:storage:schematics').exec();
+const buildCodeEditorSchematics = () => run('npm run build:code-editor:schematics').exec();
 
 /** UI SCHEMATICS */
 const copyUiSchemas = () => src([`${uiSchematicsFolder}/**/*/schema.json`]).pipe(dest(distUiSchematicsFolder));
@@ -59,6 +62,12 @@ const copyStorageSchemas = () =>
   src([`${storageSchematicsFolder}/**/*/schema.json`]).pipe(dest(distStorageSchematicsFolder));
 const copyStorageCollection = () =>
   src([`${storageSchematicsFolder}/collection.json`]).pipe(dest(distStorageSchematicsFolder));
+
+/** CODE EDITOR SCHEMATICS */
+const copyCodeEditorSchemas = () =>
+  src([`${codeEditorSchematicsFolder}/**/*/schema.json`]).pipe(dest(distCodeEditorSchematicsFolder));
+const copyCodeEditorCollection = () =>
+  src([`${codeEditorSchematicsFolder}/collection.json`]).pipe(dest(distCodeEditorSchematicsFolder));
 
 /** SCHEMATICS */
 const copySchematicsPackage = () => src([`${schematicsFolder}/package.json`]).pipe(dest(distSchematicsFolder));
@@ -101,5 +110,10 @@ exports.uiSchematics = series(
 exports.syncSchematics = series(buildSyncSchematics, parallel(copySyncMigrations));
 
 exports.storageSchematics = series(buildStorageSchematics, parallel(copyStorageCollection, copyStorageSchemas));
+
+exports.codeEditorSchematics = series(
+  buildCodeEditorSchematics,
+  parallel(copyCodeEditorCollection, copyCodeEditorSchemas)
+);
 
 exports.copyFilesSchematics = series(copySchematicsPackage, copySchematicsReadme);

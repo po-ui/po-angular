@@ -10,8 +10,10 @@
     "type": "git",
     "url": "https://github.com/po-ui/po-angular"
   },
+  "schematics": "./schematics/collection.json",
   "dependencies": {
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
+    "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
     "monaco-editor": "0.20.0",
     "core-js": "^3.6.4",
     "intl": "^1.2.5",

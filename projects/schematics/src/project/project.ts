@@ -45,7 +45,7 @@ export function getProjectTargetOptions(project: WorkspaceProject, buildTarget: 
     return project.architect[buildTarget].options;
   }
 
-  throw new SchematicsException(`Cannot determine project target configuration for: ${buildTarget}.`);
+  return console.warn(`Cannot determine project target configuration for: ${buildTarget}.`);
 }
 
 /** Looks for the main TypeScript file in the given project and returns its path. */

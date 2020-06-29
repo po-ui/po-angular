@@ -20,39 +20,47 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  * O [(ngModel)] deve ser usado para manipular o conteúdo do po-code-editor, ou seja, tanto para incluir um conteúdo quanto
  * para recuperar o conteúdo do po-code-editor, utiliza-se uma variável passada por [(ngModel)].
  *
- * > Não esqueça de fazer a instalação do pacote `@po-ui/ng-code-editor` em sua aplicação.
- * >
- * > ```
- * > npm i --save @po-ui/ng-code-editor
- * > ```
- * >
- * > Adicionar o módulo `PoCodeEditorModule` em seu projeto:
- * >
- * > ```
- * > // app.module.ts
- * > ...
- * > import { PoModule } from '@po-ui/ng-components';
- * > import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
- * > ...
- * > @NgModule({
- * >   imports: [
- * >     ...
- * >     PoModule,
- * >     PoCodeEditorModule
- * >   ],
- * >   ...
- * > })
- * > export class AppModule { }
- * > ```
- * >
- * > E adicionar um *asset* ao arquivo `angular.json`, conforme exemplo abaixo:
- * >
- * > <pre ngNonBindable>
- * > "assets": [
- * >    { "glob": "&#42;&#42;/&#42;", "input": "node_modules/monaco-editor/min", "output": "/assets/monaco/" }
- * >  ]
- * > </pre>
+ * #### Adicionando o pacote @po-ui/ng-code-editor
  *
+ * Para instalar o pacote `po-code-editor` em sua aplicação execute:
+ *
+ * ```shell
+ * ng add @po-ui/ng-code-editor
+ * ```
+ *
+ * O comando `ng add` do `Angular CLI`:
+ * - inclui o `po-code-editor` no seu projeto;
+ * - adiciona o módulo `PoCodeEditorModule`:;
+ *
+ * ```
+ * // app.module.ts
+ * ...
+ * import { PoModule } from '@po-ui/ng-components';
+ * import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
+ * ...
+ * @NgModule({
+ *   imports: [
+ *     ...
+ *     PoModule,
+ *     PoCodeEditorModule
+ *   ],
+ *   ...
+ * })
+ * export class AppModule { }
+ * ```
+ *
+ * - adiciona o tema PO UI e também o *asset* do Monaco no arquivo `angular.json`, conforme abaixo:
+ *
+ * <pre ngNonBindable>
+ * ...
+ * "assets": [
+ *    { "glob": "&#42;&#42;/&#42;", "input": "node_modules/monaco-editor/min", "output": "/assets/monaco/" }
+ *  ],
+ * "styles": [
+ *    "./node_modules/@po-ui/style/css/po-theme-default.min.css"
+ * ]
+ * ...
+ * </pre>
  */
 @Directive()
 export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor {

@@ -275,7 +275,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["projects/code-editor/tsconfig.lib.json", "projects/code-editor/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "projects/code-editor/schematics/**"]
           }
         }
       }
