@@ -1,4 +1,5 @@
 import { Directive, Input, TemplateRef } from '@angular/core';
+import { PoTableRowTemplateArrowDirection } from '../enums/po-table-row-template-arrow-direction.enum';
 
 /**
  * @usedBy PoTableComponent
@@ -92,6 +93,8 @@ import { Directive, Input, TemplateRef } from '@angular/core';
   selector: '[p-table-row-template]'
 })
 export class PoTableRowTemplateDirective {
+  private _tableRowTemplateArrowDirection: PoTableRowTemplateArrowDirection = PoTableRowTemplateArrowDirection.Left;
+
   /**
    * @optional
    *
@@ -106,6 +109,28 @@ export class PoTableRowTemplateDirective {
    * @default `true`
    */
   @Input('p-table-row-template-show') poTableRowTemplateShow: (row: any, index: number) => boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Propriedade responsável por informar a posição do colapse que abrirá os detalhes da linha.
+   *
+   * @default `'LEFT'`
+   */
+  @Input('p-table-row-template-arrow-direction') set tableRowTemplateArrowDirection(
+    value: PoTableRowTemplateArrowDirection
+  ) {
+    value = value?.toUpperCase() as PoTableRowTemplateArrowDirection;
+    this._tableRowTemplateArrowDirection = (<any>Object).values(PoTableRowTemplateArrowDirection).includes(value)
+      ? value
+      : PoTableRowTemplateArrowDirection.Left;
+  }
+
+  get tableRowTemplateArrowDirection() {
+    return this._tableRowTemplateArrowDirection;
+  }
 
   // Necessário manter templateRef para o funcionamento do row template.
   constructor(public templateRef: TemplateRef<any>) {}

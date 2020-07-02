@@ -30,6 +30,7 @@ import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-ro
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
+import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -139,6 +140,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     });
   }
 
+  get hasRowTemplateWithArrowDirectionRight() {
+    return this.tableRowTemplate?.tableRowTemplateArrowDirection === PoTableRowTemplateArrowDirection.Right;
+  }
+
   get columnCount() {
     const columnCount =
       this.mainColumns.length +
@@ -161,8 +166,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return masterDetail && masterDetail.detail ? masterDetail.detail.hideSelect : false;
   }
 
-  get displayColumnManagerCell() {
-    return !this.visibleActions.length;
+  get hasVisibleActions() {
+    return !!this.visibleActions.length;
   }
 
   get firstAction(): PoTableAction {

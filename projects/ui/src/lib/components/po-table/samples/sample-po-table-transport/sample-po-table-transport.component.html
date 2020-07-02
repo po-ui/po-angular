@@ -1,5 +1,11 @@
 <po-table p-hide-columns-manager p-sort="true" [p-columns]="columns" [p-items]="items" [p-striped]="true">
-  <ng-template p-table-row-template let-rowItem let-i="rowIndex" [p-table-row-template-show]="isUndelivered">
+  <ng-template
+    p-table-row-template
+    let-rowItem
+    let-i="rowIndex"
+    [p-table-row-template-arrow-direction]="'right'"
+    [p-table-row-template-show]="isUndelivered"
+  >
     <po-widget p-title="Transport detail {{ rowItem.code }}">
       <div class="po-row">
         <po-select

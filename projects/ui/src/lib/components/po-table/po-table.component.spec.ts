@@ -17,6 +17,7 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
+import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -57,7 +58,8 @@ describe('PoTableComponent:', () => {
     mockTableDetailDiretive = {
       templateRef: null,
       poTableRowTemplate: {},
-      poTableRowTemplateShow: undefined
+      poTableRowTemplateShow: undefined,
+      tableRowTemplateArrowDirection: PoTableRowTemplateArrowDirection.Left
     };
 
     columns = [
@@ -1569,7 +1571,6 @@ describe('PoTableComponent:', () => {
       component.tableRowTemplate = mockTableDetailDiretive;
 
       fixture.detectChanges();
-
       const poTableColumnDetailToggle = nativeElement.querySelector('.po-table-column-detail-toggle');
 
       expect(poTableColumnDetailToggle).toBeTruthy();
@@ -1804,6 +1805,73 @@ describe('PoTableComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector(`po-table-column-manager`)).toBeTruthy();
+    });
+
+    it('should display .po-table-header-master-detail if columns contains detail and rowTemplate is undefined', () => {
+      component.items = [...items];
+      component.columns = [...columnsWithDetail];
+
+      component.tableRowTemplate = undefined;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(`th.po-table-header-master-detail`)).toBeTruthy();
+    });
+
+    it(`shouldn't display .po-table-header-master-detail if columns contains detail
+      and rowTemplate but hideColumnsManager is false`, () => {
+      component.items = [...items];
+      component.columns = [...columnsWithDetail];
+      component.actions = [];
+      component.hideColumnsManager = false;
+
+      component.tableRowTemplate = {
+        ...mockTableDetailDiretive,
+        tableRowTemplateArrowDirection: PoTableRowTemplateArrowDirection.Right
+      };
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(`th.po-table-header-master-detail`)).toBe(null);
+    });
+
+    it(`should contains 3 td if has 2 columns, column manager and haven't actions`, () => {
+      component.items = [{ name: 'John', age: 24 }];
+      component.columns = [{ property: 'name' }, { property: 'age' }];
+      component.actions = [];
+      component.hideColumnsManager = false;
+
+      component.tableRowTemplate = {
+        ...mockTableDetailDiretive,
+        tableRowTemplateArrowDirection: PoTableRowTemplateArrowDirection.Right
+      };
+
+      fixture.detectChanges();
+
+      const columnsManagerTd = 1;
+      const expectedValue = component.columns.length + columnsManagerTd;
+
+      expect(nativeElement.querySelectorAll('td').length).toBe(expectedValue);
+    });
+
+    it(`should contains 4 td if has 2 columns, column manager and actions`, () => {
+      component.items = [{ name: 'John', age: 24 }];
+      component.columns = [{ property: 'name' }, { property: 'age' }];
+      component.actions = [{ label: 'First Action', action: () => {} }];
+      component.hideColumnsManager = false;
+
+      component.tableRowTemplate = {
+        ...mockTableDetailDiretive,
+        tableRowTemplateArrowDirection: PoTableRowTemplateArrowDirection.Right
+      };
+
+      fixture.detectChanges();
+
+      const columnsManagerTd = 1;
+      const masterDetailTd = 1;
+      const expectedValue = component.columns.length + columnsManagerTd + masterDetailTd;
+
+      expect(nativeElement.querySelectorAll('td').length).toBe(expectedValue);
     });
   });
 
@@ -2054,16 +2122,16 @@ describe('PoTableComponent:', () => {
       expect(component.validColumns).toEqual([]);
     });
 
-    it('displayColumnManagerCell: should return false if has visible actions', () => {
+    it('visibleActions: should return true if has visible actions', () => {
       component.actions = [...singleAction];
 
-      expect(component.displayColumnManagerCell).toBe(false);
+      expect(component.hasVisibleActions).toBe(true);
     });
 
-    it('displayColumnManagerCell: should return true if visible actions is empty', () => {
+    it('visibleActions: should return false if visible actions is empty', () => {
       component.actions = [];
 
-      expect(component.displayColumnManagerCell).toBe(true);
+      expect(component.hasVisibleActions).toBe(false);
     });
 
     it('isSingleAction: should return true if has one visible actions', () => {
@@ -2215,5 +2283,19 @@ describe('PoTableComponent:', () => {
 
       expect(res).toEqual(tableColumnTemplate.templateRef);
     });
+  });
+
+  it('hasRowTemplateWithArrowDirectionRight: should be false if tableRowTemplateArrowDirection is left', () => {
+    component.tableRowTemplate = mockTableDetailDiretive;
+    expect(component.hasRowTemplateWithArrowDirectionRight).toBe(false);
+  });
+
+  it('hasRowTemplateWithArrowDirectionRight: should be true if tableRowTemplateArrowDirection is right', () => {
+    component.tableRowTemplate = {
+      ...mockTableDetailDiretive,
+      tableRowTemplateArrowDirection: PoTableRowTemplateArrowDirection.Right
+    };
+
+    expect(component.hasRowTemplateWithArrowDirectionRight).toBe(true);
   });
 });
