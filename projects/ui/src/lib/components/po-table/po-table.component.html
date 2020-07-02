@@ -65,7 +65,10 @@
           </div>
         </th>
 
-        <th *ngIf="hasMasterDetailColumn" class="po-table-header-column po-table-header-master-detail"></th>
+        <th
+          *ngIf="(hasMasterDetailColumn || hasRowTemplate) && !hasRowTemplateWithArrowDirectionRight"
+          class="po-table-header-column po-table-header-master-detail"
+        ></th>
 
         <th *ngIf="!hasMainColumns" #noColumnsHeader class="po-table-header-column po-text-center">
           <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
@@ -89,10 +92,16 @@
         </th>
 
         <th
-          *ngIf="!displayColumnManagerCell && hideColumnsManager"
+          *ngIf="hasRowTemplateWithArrowDirectionRight && (hasVisibleActions || hideColumnsManager)"
+          class="po-table-header-column po-table-header-master-detail"
+        ></th>
+
+        <th
+          *ngIf="hasVisibleActions && hideColumnsManager"
           [class.po-table-header-single-action]="isSingleAction"
           [class.po-table-header-actions]="!isSingleAction"
         ></th>
+
         <th
           #columnManager
           *ngIf="hasValidColumns && !hideColumnsManager"
@@ -131,20 +140,31 @@
             <ng-container *ngTemplateOutlet="singleSelect ? inputRadio : inputCheckbox; context: { $implicit: row }">
             </ng-container>
           </td>
+
+          <!-- Valida se a origem do detail é pelo input do po-table -->
           <td
-            *ngIf="(columnMasterDetail && !hideDetail) || hasRowTemplate"
+            *ngIf="columnMasterDetail && !hideDetail && !hasRowTemplate"
             class="po-table-column-detail-toggle"
             (click)="toggleDetail(row)"
           >
-            <span
-              *ngIf="
-                (containsMasterDetail(row) && !hasRowTemplate) || (isShowRowTemplate(row, rowIndex) && hasRowTemplate)
-              "
-              class="po-icon po-clickable"
-              [class.po-icon-arrow-up]="row.$showDetail"
-              [class.po-icon-arrow-down]="!row.$showDetail"
+            <ng-template
+              [ngTemplateOutlet]="poTableColumnDetail"
+              [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
             >
-            </span>
+            </ng-template>
+          </td>
+
+          <!-- Valida se a origem do detail é pela diretiva -->
+          <td
+            *ngIf="hasRowTemplate && !hasRowTemplateWithArrowDirectionRight"
+            class="po-table-column-detail-toggle"
+            (click)="toggleDetail(row)"
+          >
+            <ng-template
+              [ngTemplateOutlet]="poTableColumnDetail"
+              [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
+            >
+            </ng-template>
           </td>
 
           <td
@@ -229,6 +249,19 @@
               <span *ngSwitchDefault>{{ row[column.property] }}</span>
             </div>
           </td>
+
+          <td
+            *ngIf="hasRowTemplateWithArrowDirectionRight"
+            class="po-table-column-detail-toggle"
+            (click)="toggleDetail(row)"
+          >
+            <ng-template
+              [ngTemplateOutlet]="poTableColumnDetail"
+              [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
+            >
+            </ng-template>
+          </td>
+
           <td *ngIf="isSingleAction" class="po-table-column po-table-column-single-action">
             <div
               *ngIf="firstAction.visible !== false"
@@ -240,12 +273,16 @@
               {{ firstAction.label }}
             </div>
           </td>
+
           <td *ngIf="visibleActions.length > 1" class="po-table-column-actions">
             <span #popupTarget class="po-icon po-icon-more po-clickable" (click)="togglePopup(row, popupTarget)">
             </span>
           </td>
           <!-- Column Manager -->
-          <td *ngIf="displayColumnManagerCell && !hideColumnsManager" class="po-table-column"></td>
+          <td
+            *ngIf="!hasVisibleActions && !hideColumnsManager && !hasRowTemplateWithArrowDirectionRight"
+            class="po-table-column"
+          ></td>
         </tr>
 
         <tr *ngIf="hasMainColumns && hasRowTemplate && row.$showDetail && isShowRowTemplate(row, rowIndex)">
@@ -275,6 +312,16 @@
 </ng-template>
 
 <po-popup #popup [p-actions]="actions" [p-target]="popupTarget"> </po-popup>
+
+<ng-template #poTableColumnDetail let-row="row" let-rowIndex="rowIndex">
+  <span
+    *ngIf="(containsMasterDetail(row) && !hasRowTemplate) || (isShowRowTemplate(row, rowIndex) && hasRowTemplate)"
+    class="po-icon po-clickable"
+    [class.po-icon-arrow-up]="row.$showDetail"
+    [class.po-icon-arrow-down]="!row.$showDetail"
+  >
+  </span>
+</ng-template>
 
 <ng-template #inputRadio let-row>
   <input type="radio" class="po-table-radio" [class.po-table-radio-checked]="row.$selected" />
