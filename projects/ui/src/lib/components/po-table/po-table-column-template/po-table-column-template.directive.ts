@@ -1,4 +1,5 @@
 import { Directive, Input, TemplateRef } from '@angular/core';
+
 /**
  * @usedBy PoTableComponent
  *
@@ -49,7 +50,8 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  * export class AppComponent {
  *
  *    targetProperty= 'status';
- *    public items = [{
+ *
+ *    items = [{
  *      code: 1200,
  *      product: 'Rice',
  *      status: 'CANCELED'
@@ -57,17 +59,17 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  *      code: 1355,
  *      product: 'Bean',
  *      status: 'FINISHED'
- *      }];
+ *    }];
  *
- *    public columns = [
- *       { property: 'code', label: 'ID', type: 'string' },
- *       { property: 'product', label: 'PRODUTO', type: 'string' },
- *       { property: 'status', label: 'STATUS', type: 'column-template' }
- *      ];
+ *    columns = [
+ *      { property: 'code', label: 'ID' },
+ *      { property: 'product', label: 'PRODUTO' },
+ *      { property: 'status', label: 'STATUS', type: 'columnTemplate' }
+ *    ];
  * }
  * ...
  * ```
- * > OBS: Sempre adicionar o **type** da property que deseja manipular com a directiva como `columnTemplate`
+ * > Observação: Sempre adicionar o **type** da coluna que deseja manipular com a directiva como `columnTemplate`
  */
 
 @Directive({
@@ -82,10 +84,8 @@ export class PoTableColumnTemplateDirective {
    * Variável responsável por armazenar a property da coluna da tabela que será adicionado o template.
    *
    * Caso não seja informada esta propriedade, serão apresentados normalmente os dados da coluna.
-   *
-   * @default `true`
    */
-  @Input('p-property') targetProperty;
+  @Input('p-property') targetProperty: string;
 
   // Necessário manter templateRef para o funcionamento do column template.
   constructor(public templateRef: TemplateRef<any>) {}

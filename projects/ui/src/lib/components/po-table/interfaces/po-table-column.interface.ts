@@ -216,6 +216,10 @@ export interface PoTableColumn {
    *
    * - `time`: valor de horário.
    *  + Aceita o tipo _string_ nos formatos **'HH:mm:ss'** ou **'HH:mm:ss.ffffff'**, por exemplo: `'23:12:45'`.
+   * - `cellTemplate`: Indica que a coluna será utilizada como template, em conjunto com o
+   * [PoTableCellTemplate](/documentation/po-table-cell-template).
+   * - `columnTemplate`: Indica que a coluna será utilizada como template, em conjunto com o
+   * [PoTableColumnTemplate](/documentation/po-table-column-template).
    *
    * @default `string`
    */
