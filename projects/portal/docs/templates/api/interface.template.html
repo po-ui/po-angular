@@ -1,0 +1,25 @@
+<h4 class="docs-api-h4 docs-api-class-name">
+  <code class="doc-code">{$ interface.name $}</code>
+</h4>
+<div class="docs-api-class-description">
+  {$ interface.description | marked | replace('{', '&#123;') | replace('}', '&#125;') $}
+</div>
+{%- if interface.directiveSelectors -%}
+<div class="docs-api-directive-selectors">
+  <h4 class="docs-api-class-selector-label">Seletor</h4>
+  {% for selector in interface.directiveSelectors %}
+  <pre #code>
+    &lt;{$ selector $} {% for property in interface.properties %} {% if (property.returnType) and (property.description)  %}
+        {$ directiveProp(property, '="', '"') | replace('{', '&#123;') | replace('}', '&#125;') $}{%- endif %}{% endfor %}&gt;
+    &lt;/{$ selector $}&gt;
+</pre
+  >
+  {% endfor %}
+</div>
+{%- endif -%} {%- if interface.directiveExportAs -%}
+<span class="docs-api-h4 docs-api-class-export-label">Exported as:</span>
+<span class="docs-api-class-export-name">{$ interface.directiveExportAs $}</span> {%- endif -%} {%- if
+interface.isDeprecated -%}
+
+<div class="docs-api-class-deprecated-marker">Deprecated</div>
+{%- endif -%} {$ propertyList(interface.properties, 'interface') $} {$ methodList(interface.methods, 'interface') $}

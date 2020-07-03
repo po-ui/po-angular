@@ -1,0 +1,93 @@
+<table class="docs-api-method-table">
+  <tr class="docs-api-properties-row">
+    <th colspan="2" class="docs-api-properties-name-cell">
+      {%- if method.isDeprecated -%}
+      <div class="docs-api-deprecated-marker">Deprecated</div>
+      {%- endif -%}
+      <div class="docs-api-input-marker">
+        <h4>
+          <span class="docs-api-input-alias">
+            {$ method.name $}
+          </span>
+        </h4>
+      </div>
+    </th>
+  </tr>
+  <tr class="docs-api-property-description">
+    <td class="docs-api-property-description">
+      {$ method.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace('|','&#124;') $}
+    </td>
+  </tr>
+</table>
+
+{%- if method.params.length -%}
+
+<h5><b>Parâmetros</b></h5>
+
+<table class="docs-api-properties-table">
+  <tr class="docs-api-properties-header-row">
+    <th class="docs-api-properties-th">Nome</th>
+    <th class="docs-api-properties-th">Tipo</th>
+    <th class="docs-api-properties-th">Descrição</th>
+  </tr>
+  {% for parameter in method.params %}
+  <tr class="docs-api-properties-row">
+    <td class="docs-api-properties-name-cell">
+      {$ parameter.name $} {%- if parameter.isOptional -%}
+      <span class="docs-api-method-parameter-optional-marker">?</span> {%- endif -%}
+    </td>
+    <td class="docs-api-properties-type-cell">
+      {%- if parameter.type.name -%}
+      <code pan class="docs-api-property-type {$ type $}">
+        {$ parameter.type.name | escape | replace('{', '&#123;') | replace('}', '&#125;') $}
+      </code>
+      {%- else -%} {%- if parameter.typeExpression -%} {% for type in parameter.typeExpression.split('|') %}
+      <code pan class="docs-api-property-type {$ type $}">
+        {$ type.trim() | escape | replace('{', '&#123;') | replace('}', '&#125;') $}
+      </code>
+      {% endfor %} {%- endif -%} {%- endif -%}
+    </td>
+    <td class="docs-api-property-description">
+      {$ parameter.description | marked | safe | replace("{", "{{ '{' }}") $}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{%- endif -%} {% if method.returns %}
+<h5><b>Retorno</b></h5>
+
+<table class="docs-api-properties-table">
+  <tr class="docs-api-properties-header-row">
+    <th class="docs-api-properties-th">Tipo</th>
+    <th class="docs-api-properties-th">Descrição</th>
+  </tr>
+  <tr class="docs-api-properties-row">
+    <td class="docs-api-properties-type-cell">
+      <code pan class="docs-api-property-type {$ type $}"
+        >{$ method.returns.typeExpression | replace('<', '&#60;') | replace('>', '&#62;') | replace('{', '&#123;') |
+        replace('}', '&#125;') $}</code
+      >
+    </td>
+    <td class="docs-api-property-description">
+      {$ method.returns.description | marked | safe $}
+    </td>
+  </tr>
+</table>
+{%- endif -%} {%- if method.showReturns -%}
+<table>
+  <tr class="docs-api-method-returns-header-row">
+    <th colspan="2" class="docs-api-method-returns-header-cell">Returns</th>
+  </tr>
+  <tr>
+    <td class="docs-api-method-returns-type-cell">
+      <code class="docs-api-method-returns-type">{$ method.returnType $}</code>
+    </td>
+    <td class="docs-api-method-returns-description-cell">
+      <div class="docs-api-method-returns-description">
+        {$ method.returns.description | marked | safe $}
+      </div>
+    </td>
+  </tr>
+</table>
+{%- endif -%}
+<br />

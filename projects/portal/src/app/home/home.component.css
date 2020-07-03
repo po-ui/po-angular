@@ -1,0 +1,171 @@
+.app-home-widget-components {
+  text-align: center;
+}
+
+.home-widget-components-container {
+  position: relative;
+  height: 124px;
+}
+
+.home-widget-components-content {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.box-widget {
+  height: 200px;
+}
+
+.section-open-source-icon {
+  height: 64px;
+  position: relative;
+  width: 64px;
+}
+
+.section-title-icon {
+  font-size: 56px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+.color-ball {
+  background-color: #bdffd98f;
+  border-radius: 50%;
+  bottom: 0;
+  height: 40px;
+  position: absolute;
+  right: 0;
+  width: 40px;
+}
+
+.section-open-source-title {
+  display: inline-block;
+  padding-left: 18px;
+}
+
+.font-code {
+  background-color: #bdffd9;
+  font-family: var(--font-family-po-ui-bold);
+}
+
+.home-link {
+  font-family: roboto-bold;
+}
+
+.section-open-source {
+  margin-top: 48px;
+  padding-left: 13.43%;
+  height: 54px;
+}
+
+.section-quem-utiliza {
+  margin: 3.5rem 0;
+}
+
+.ux-friendly {
+  margin-top: 48px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-family: var(--font-family-po-ui);
+  margin-top: 0px;
+}
+
+.section-title-primary {
+  color: #c9357d;
+  font-size: 24px;
+  font-family: var(--font-family-po-ui);
+  margin-top: 0px;
+}
+
+.ux-friendly-header {
+  position: relative;
+}
+
+.quem-utiliza-header {
+  position: relative;
+}
+
+.quem-utiliza-header .section-title {
+  width: 100%;
+}
+
+.quem-utiliza-item {
+  display: block;
+  margin: 0 auto;
+}
+
+.see-all-components {
+  position: absolute;
+  right: 0px;
+}
+
+.see-examples {
+  position: absolute;
+  right: 0px;
+}
+
+.home-widget-components-left {
+  padding-left: 0px;
+}
+
+.home-widget-components-right {
+  padding-right: 0px;
+}
+
+@media (max-width: 320px) {
+  .see-all-components {
+    left: 0px;
+    bottom: -24px;
+  }
+
+  .see-examples {
+    bottom: -24px;
+    left: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 19px;
+  }
+
+  .home-widget-components-left {
+    padding-left: 8px;
+    margin-bottom: 8px;
+  }
+
+  .home-widget-components-medium {
+    margin-bottom: 8px;
+  }
+
+  .home-widget-components-right {
+    padding-right: 8px;
+  }
+
+  .color-ball {
+    bottom: 9px;
+    left: 42px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .section-title-primary {
+    font-size: 19px;
+  }
+
+  .section-title-icon {
+    width: 60px;
+    padding-left: 25px;
+    padding-top: 10px;
+  }
+
+  .section-open-source {
+    padding-left: 0;
+  }
+}

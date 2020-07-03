@@ -1,0 +1,44 @@
+{%- if property.content -%}
+<tr class="docs-api-properties-row">
+  <td class="docs-api-properties-name-cell">
+    {%- if property.isDirectiveInput -%}
+    <div class="docs-api-input-marker">
+      <span class="docs-api-input-alias"> {$ property.directiveInputAlias | replace("'","") $}<br /> </span>
+    </div>
+    {%- elif property.isDirectiveOutput -%}
+    <div class="docs-api-output-marker">
+      <span class="docs-api-output-alias"> ({$ property.directiveOutputAlias | replace("'","") $})<br /> </span>
+    </div>
+    {%- else -%}
+    <div class="docs-api-input-marker">
+      <span class="docs-api-input-alias">
+        {%- if property.name == 'name' -%} {$ property.name | dashCase $}<br />
+        {%- else -%} p-{$ property.name | dashCase $}<br />
+        {%- endif -%}
+      </span>
+    </div>
+    {%- endif -%} {%- if property.isDeprecated -%}
+    <div class="docs-api-deprecated-marker">Deprecated</div>
+    {%- endif -%}
+  </td>
+  {%- if type != 'enum' -%}
+  <td class="docs-api-properties-type-cell">
+    {% for type in property.type.split('|') %}
+    <code pan class="docs-api-property-type {$ type $}"
+      >{$ type | escape | replace('{', '&#123;') | replace('}', '&#125;') $}</code
+    >
+    {% endfor %}
+  </td>
+  {%- endif -%} {%- if type != 'enum' and type != 'interface' -%}
+  <td class="docs-api-property-default">
+    {%- if property.default -%} {$ property.default | marked | replace("< ", "&lt; ") | replace('{', '&#123;') |
+    replace('}', '&#125;') $} {%- else -%} - {%- endif -%}
+  </td>
+  {%- endif -%}
+  <td class="docs-api-property-description">
+    {% if property.isOptional %}<em><strong>(opcional)</strong></em
+    >{% endif %} {$ property.description | marked | replace("< ", "&lt; ") | replace('{', '&#123;') | replace('}',
+    '&#125;') $}
+  </td>
+</tr>
+{%- endif -%}
