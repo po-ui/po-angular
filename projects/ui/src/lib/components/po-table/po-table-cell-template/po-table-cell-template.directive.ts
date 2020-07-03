@@ -39,7 +39,7 @@ import { Directive, TemplateRef } from '@angular/core';
  * ...
  * export class AppComponent {
  *
- *    public items = [{
+ *    items = [{
  *      code: 1200,
  *      product: 'Rice',
  *      status: 'CANCELED',
@@ -53,17 +53,17 @@ import { Directive, TemplateRef } from '@angular/core';
  *      status3: ''
  *      }];
  *
- *    public columns = [
- *       { property: 'code', label: 'ID', type: 'string' },
- *       { property: 'product', label: 'PRODUTO', type: 'string' },
- *       { property: 'status', label: 'STATUS', type: 'cell-template' },
- *       { property: 'status2', label: 'STATUS 2', type: 'cell-template' },
- *       { property: 'status3', label: 'STATUS 3', type: 'cell-template' }
- *      ];
+ *    columns = [
+ *       { property: 'code', label: 'ID' },
+ *       { property: 'product', label: 'PRODUTO' },
+ *       { property: 'status', label: 'STATUS', type: 'cellTemplate' },
+ *       { property: 'status2', label: 'STATUS 2', type: 'cellTemplate' },
+ *       { property: 'status3', label: 'STATUS 3', type: 'cellTemplate' }
+ *    ];
  * }
  * ...
  * ```
- * > OBS: Sempre adicionar o **type** da property que deseja manipular com a directiva como `cellTemplate`
+ * > Observação: Sempre adicionar o **type** da coluna que deseja manipular com a directiva como `cellTemplate`
  */
 @Directive({
   selector: '[p-table-cell-template]'
