@@ -21,6 +21,7 @@
   - [Qual o novo comportamento?](#new-behavior)
   - [Simulação](#simulation)
 
+
 <a id="introduction"></a>
 ## Introdução
 
@@ -41,13 +42,14 @@ Para seguir o guia é fundamental o conhecimento da [ferramenta Git](https://git
 6. Depois é só aguardar aprovação.
 7. Caso tiver alguma sugestão deve-se fazer as atualizações necessárias e rodar os testes novamente.
 8. Faça um *rebase* e em seguida faça um *push* com as alterações e aguarde a aprovação.
-9. Caso seja aprovado, parabéns, sua alteração já estará na *branch master* do PO UI.
+9. Caso seja aprovado, parabéns, sua alteração já estará na *branch dev* do PO UI.
+10. No próximo ciclo de release ela será incorporada a master e o pacote publicado no npm
 
 <a id="branchs"></a>
 ## Regras para criação da *Branch*
 
-Antes de criar uma nova *branch* deve-se assegurar de estar na *branch master* do projeto.
-Caso já esteja na *master* rode o comando:
+Antes de criar uma nova *branch* deve-se assegurar de estar na *branch dev* do projeto.
+Caso já esteja na *dev* rode o comando:
 
 ```
 git pull
@@ -322,4 +324,4 @@ Esta correção pode ser validada utilizando o sample labs no portal
 
 Após gerar a *Pull Request* é só aguardar aprovação. Caso tiver alguma sugestão deve-se fazer as atualizações necessárias e rodar os testes novamente.
 Faça um *rebase* e em seguida faça um *push* com as alterações e aguarde a aprovação.
-Caso seja aprovado, parabéns, sua alteração já estará na *branch master* do PO UI.
+Caso seja aprovado, parabéns, sua alteração já estará na *branch dev* do PO UI e na próxima janela ela será incorporado a master.
