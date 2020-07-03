@@ -6,6 +6,7 @@ sudo: required
 branches:
   only:
     - master
+    - dev
 
 addons:
   chrome: stable
