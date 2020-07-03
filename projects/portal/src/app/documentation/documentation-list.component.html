@@ -1,0 +1,12 @@
+<po-page-list p-title="API Reference" [p-filter]="filter">
+  <po-list-view
+    p-property-title="title"
+    [p-actions]="listActions"
+    [p-items]="filteredItems"
+    (p-title-action)="viewDocumentation($event)"
+  >
+    <ng-template p-list-view-content-template let-item>
+      <div class="list-item-preview" [innerHtml]="item.preview | markdown"></div>
+    </ng-template>
+  </po-list-view>
+</po-page-list>

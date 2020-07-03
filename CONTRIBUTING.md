@@ -37,6 +37,13 @@ Para seguir o guia é fundamental o conhecimento da [ferramenta Git](https://git
   - Para os demais contribuintes do projeto deve-se optar por *fork*.
 3. Próximo passo é gerar as alterações e ao finalizar deve-se rodar os testes.
   - É muito importante analisar os documentos [**STYLEGUIDE**](https://github.com/po-ui/po-angular/blob/master/STYLEGUIDE.md) e [**HOW_TO_DOCUMENT**](https://github.com/po-ui/po-angular/blob/master/HOW_TO_DOCUMENT.md) antes de iniciar o desenvolvimento para que a contribuição seja mais rápida e eficiente.
+  - Para executar o Portal e poder analisar a sua alteração, como documentação e *sample*, você deve executar os comandos abaixo:
+    ```
+      npm run build
+
+      npm run build:portal
+      ng serve portal
+    ```
 4. Finalizando a etapa anterior deve-se gerar o *commit* e verificar se foi gerado apenas um [*commit* final](#commits).
 5. Próximo passo é gerar a [*Pull Request*](#pull-requests) preenchendo os campos necessários.
 6. Depois é só aguardar aprovação.

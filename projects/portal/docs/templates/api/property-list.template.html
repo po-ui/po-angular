@@ -1,0 +1,17 @@
+{%- if propertyList.length -%}
+<h4 class="docs-api-h5 docs-api-method-header">Propriedades</h4>
+<table class="docs-api-properties-table">
+  <tr class="docs-api-properties-header-row">
+    <th class="docs-api-properties-th">Nome</th>
+    {%- if type != 'enum' -%}
+    <th class="docs-api-properties-th">Tipo</th>
+    {%- endif -%} {%- if type != 'enum' and type != 'interface' -%}
+    <th class="docs-api-properties-th">Padrão</th>
+    {%- endif -%}
+    <th class="docs-api-properties-th">Descrição</th>
+  </tr>
+  {%- if type == 'interface' -%} {% for p in propertyList %} {$ propertyInterface(p) $} {% endfor %} {%- elif type ==
+  'enum' -%} {% for p in propertyList %} {$ propertyEnum(p) $} {% endfor %} {%- else -%} {% for p in propertyList %} {$
+  property(p) $} {% endfor %} {%- endif -%}
+</table>
+{%- endif -%}

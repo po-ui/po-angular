@@ -1,0 +1,25 @@
+<h4 class="docs-api-class-name">
+  <code class="doc-code">{$ class.name $}</code>
+</h4>
+<div class="docs-api-class-description">
+  {$ class.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace('|','&#124;') $}
+</div>
+{%- if class.directiveSelectors -%}
+<div class="docs-api-directive-selectors">
+  <h4 class="docs-api-class-selector-label">Seletor</h4>
+  {% for selector in class.directiveSelectors %}
+  <pre appCodeHighlight>
+&lt;{$ selector $}{% for property in class.properties %}{% if (property.type) and (property.description) %}
+    {$ directiveProp(property, '="', '"') $}{%- endif %}{% endfor %} &gt;
+&lt;/{$ selector $}&gt;
+</pre
+  >
+  {% endfor %}
+</div>
+{%- endif -%} {%- if class.directiveExportAs -%}
+<span class="docs-api-class-export-label">Exported as:</span>
+<span class="docs-api-class-export-name">{$ class.directiveExportAs $}</span> {%- endif -%} {%- if class.isDeprecated
+-%}
+
+<div class="docs-api-class-deprecated-marker">Deprecated</div>
+{%- endif -%} {$ propertyList(class.properties) $} {$ methodList(class.methods) $}

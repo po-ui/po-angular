@@ -1,0 +1,123 @@
+<po-page-default class="app-portal app-portal-home" p-title="Dynamic View" [p-actions]="pageActions">
+  <div class="po-m-2">
+    <po-tabs>
+      <po-tab p-label="Configuração" p-active>
+        <form #generatorForm="ngForm" (ngSubmit)="addField(quickField)" autocomplete="off">
+          <div class="po-row">
+            <po-divider class="po-md-12" p-label="Novo campo"></po-divider>
+            <po-input
+              class="po-sm-8 po-md-6"
+              name="property"
+              [(ngModel)]="quickField.property"
+              p-label="Property"
+              p-clean
+              p-required
+            >
+            </po-input>
+
+            <button
+              class="po-button po-button-primary po-sm-4 po-md-2 po-mt-4"
+              type="submit"
+              [disabled]="generatorForm.invalid"
+            >
+              Adicionar
+            </button>
+          </div>
+
+          <div class="po-row">
+            <po-button
+              class="po-m-1"
+              p-icon="po-icon-parameters"
+              p-label="Campos avançados"
+              (p-click)="advancedFields()"
+            >
+            </po-button>
+          </div>
+        </form>
+
+        <po-divider p-label="Campos cadastrados"> </po-divider>
+
+        <div class="po-row">
+          <po-widget class="po-sm-12 po-lg-7" p-height="350">
+            <po-table
+              p-height="290"
+              p-hide-text-overflow
+              p-sort="true"
+              [p-actions]="actions"
+              [p-columns]="columns"
+              [p-items]="fields"
+            >
+            </po-table>
+          </po-widget>
+
+          <po-widget class="po-sm-12 po-lg-5 po-mt-lg-0 po-mt-xl-0 po-mt-sm-1 po-mt-md-1" p-height="350">
+            <po-textarea
+              name="value"
+              [(ngModel)]="value"
+              p-label="Valores"
+              p-help='Ex.: {"property": "value"}'
+              p-rows="10"
+              (p-change)="onChangeValueField()"
+            >
+            </po-textarea>
+
+            <div *ngIf="displayMessageError" class="msg-danger">
+              <span class="po-icon po-icon-info"></span> Formato inválido, informe no seguinte padrão:
+              {{ '{"property": "value"}' }}.
+            </div>
+          </po-widget>
+        </div>
+      </po-tab>
+
+      <po-tab p-label="Visualização" [p-disabled]="!fields.length">
+        <po-dynamic-view [p-fields]="fields" [p-value]="model"></po-dynamic-view>
+      </po-tab>
+    </po-tabs>
+  </div>
+</po-page-default>
+
+<po-modal #importJsonModal p-title="JSON" [p-primary-action]="importJsonModalAction">
+  <form #jsonImportForm="ngForm">
+    <po-code-editor p-height="300" p-theme="vs-dark" [ngModelOptions]="{ standalone: true }" [(ngModel)]="jsonImport">
+    </po-code-editor>
+  </form>
+</po-modal>
+
+<po-modal #viewJsonModal p-title="JSON">
+  <div class="po-row">
+    <po-button
+      class="po-sm-4 po-pr-0 po-pl-0 po-mb-1"
+      p-icon="po-icon-copy"
+      p-label="Copy"
+      (p-click)="copyToClipboard()"
+    >
+    </po-button>
+  </div>
+
+  <div class="tools-jumbotron">
+    <pre id="fieldsJson">{{ fields | json }}</pre>
+  </div>
+</po-modal>
+
+<po-modal
+  #formFieldModal
+  p-title="Propriedades"
+  [p-primary-action]="primaryAction"
+  [p-secondary-action]="secondaryAction"
+  p-hide-close
+>
+  <po-dynamic-form #defaultDynamicForm [p-fields]="defaultFields" [p-value]="field" (p-form)="getForm($event)">
+  </po-dynamic-form>
+
+  <div class="po-p-1">
+    <po-accordion class="po-p-1">
+      <po-accordion-item p-label="Booleanos">
+        <po-dynamic-form #booleansForm [p-fields]="booleansFields" [p-value]="field"> </po-dynamic-form>
+      </po-accordion-item>
+
+      <po-accordion-item p-label="Grid System">
+        <po-dynamic-form #gridSystemForm [p-fields]="columnsFields" [p-value]="field"> </po-dynamic-form>
+      </po-accordion-item>
+    </po-accordion>
+  </div>
+</po-modal>

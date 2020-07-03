@@ -1,0 +1,13 @@
+.tools-jumbotron {
+  max-height: calc(100vh - 270px);
+  overflow-y: auto;
+}
+
+.tools-jumbotron pre {
+  background-color: #060402c7;
+  color: #f7f6f5;
+}
+
+.msg-danger {
+  color: #c64840;
+}

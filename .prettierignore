@@ -3,4 +3,7 @@
 /coverage
 /node_modules
 .travis.yml
+/projects/portal/docs
+/projects/portal/src/app/documentation/samples
+/projects/portal/src/assets/js
 *.md

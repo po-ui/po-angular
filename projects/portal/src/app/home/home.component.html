@@ -1,0 +1,151 @@
+<po-page-default class="app-portal app-portal-home">
+  <app-home-colorful></app-home-colorful>
+  <div class="po-row">
+    <main class="po-offset-lg-1 po-offset-xl-2 po-lg-10 po-xl-8">
+      <section>
+        <po-widget
+          p-no-shadow
+          p-primary-label="Começar a usar"
+          (p-primary-action)="openInternalLink('guides/getting-started')"
+          p-secondary-label="Ver no Github"
+          (p-secondary-action)="openExternalLink('https://github.com/po-ui')"
+        >
+          <h4 class="section-title">Prazer, somos o PO UI 😃</h4>
+          <p>
+            Somos um projeto <span class="font-code">open source</span> que utiliza tecnologias atuais como
+            <a class="home-link" href="https://angular.io/">Angular</a> e
+            <a class="home-link" href="https://www.typescriptlang.org">Typescript.</a>
+          </p>
+          <p>
+            Nascemos na TOTVS, empresa líder em softwares corporativos na América Latina, presente em mais de 40 países.
+            Temos a intenção de retornar a comunidade toda contribuição que ela tem nos dados.
+          </p>
+        </po-widget>
+      </section>
+
+      <section class="ux-friendly">
+        <div class="po-row ux-friendly-header">
+          <h4 class="section-title">UX Friendly</h4>
+          <po-button
+            class="see-all-components"
+            p-label="Ver todos os componentes"
+            (p-click)="openInternalLink('documentation')"
+          >
+          </po-button>
+        </div>
+        <p class="po-mt-1 po-mt-sm-4">Últimos componentes homologados.</p>
+        <div class="box-widget">
+          <po-widget
+            class="app-home-widget-components po-md-4 home-widget-components-left"
+            p-no-shadow
+            p-height="200"
+            p-primary-label="Inputs"
+            (p-primary-action)="openInternalLink('/documentation/po-input')"
+          >
+            <div class="home-widget-components-container">
+              <div class="home-widget-components-content">
+                <po-input p-placeholder="Placeholder"></po-input>
+                <po-input></po-input>
+              </div>
+            </div>
+          </po-widget>
+
+          <po-widget
+            class="app-home-widget-components po-md-4 po-md-4 home-widget-components-medium"
+            p-no-shadow
+            p-height="200"
+            p-primary-label="Tabelas"
+            (p-primary-action)="openInternalLink('/documentation/po-table')"
+          >
+            <div class="home-widget-components-container">
+              <div class="home-widget-components-content">
+                <po-table p-checkbox p-container p-no-shadow [p-items]="[{ Content: 'content', content: 'content' }]">
+                </po-table>
+              </div>
+            </div>
+          </po-widget>
+
+          <po-widget
+            class="app-home-widget-components po-md-4 home-widget-components-right po-mb-sm-3"
+            p-no-shadow
+            p-height="200"
+            p-primary-label="Botões"
+            (p-primary-action)="openInternalLink('/documentation/po-button')"
+          >
+            <div class="home-widget-components-container">
+              <div class="home-widget-components-content">
+                <p class="po-mb-2">
+                  <po-button p-type="primary" p-label="Primário"></po-button>
+                </p>
+                <p><po-button p-label="Default" p-small></po-button></p>
+              </div>
+            </div>
+          </po-widget>
+        </div>
+      </section>
+
+      <section class="section-open-source po-mb-5">
+        <div class="section-open-source-icon po-md-2 po-sm-3">
+          <img src="./assets/graphics/home-icon-heart.svg" alt="Open source icon" class="section-title-icon" />
+          <div class="color-ball"></div>
+        </div>
+        <div class="section-open-source-title po-md-10 po-sm-9">
+          <h4 class="section-title-primary po-pt-1">PO UI é open source</h4>
+          <p>
+            Resumindo… Você pode contribuir e ajudar o desenvolvimento do framework PO UI.
+          </p>
+        </div>
+      </section>
+
+      <section class="section-quem-utiliza">
+        <div class="po-row quem-utiliza-header po-pt-sm-2 po-mb-4">
+          <h4 class="section-title">Quem utiliza PO UI</h4>
+          <po-button
+            class="see-examples"
+            p-label="Made with PO UI"
+            (p-click)="openExternalLink('https://github.com/po-ui/po-angular/issues/374')"
+          >
+          </po-button>
+        </div>
+        <div class="po-row">
+          <div class="po-md-6">
+            <img class="quem-utiliza-item" src="./assets/graphics/idexo.jpg" alt="Logo Idexo" />
+          </div>
+          <div class="po-md-6">
+            <img class="quem-utiliza-item" src="./assets/graphics/totvs.jpg" alt="Logo Totvs" />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <po-widget
+          class="po-md-6 home-widget-components-left"
+          p-no-shadow
+          p-primary-label="Leia mais"
+          (p-primary-action)="openExternalLink('https://github.com/po-ui/po-angular/blob/master/LICENSE')"
+        >
+          <div class="po-m-1">
+            <h4 class="section-title">Licença MIT</h4>
+            <p>
+              Licença permissiva utilizada tanto em software livre quanto em software proprietário.
+            </p>
+          </div>
+        </po-widget>
+
+        <po-widget
+          class="po-md-6 home-widget-components-right"
+          p-no-shadow
+          p-primary-label="Leia mais"
+          (p-primary-action)="openExternalLink('https://github.com/po-ui/po-angular/blob/master/CODE_OF_CONDUCT.md')"
+        >
+          <div class="po-m-1">
+            <h4 class="section-title">Código de conduta</h4>
+            <p>
+              O código de conduta é a premissa ética que conduz o framework PO UI.
+            </p>
+          </div>
+        </po-widget>
+      </section>
+    </main>
+  </div>
+</po-page-default>

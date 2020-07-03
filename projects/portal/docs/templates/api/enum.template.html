@@ -1,0 +1,9 @@
+<h4 class="docs-api-class-name">
+  <code class="doc-code">{$ enum.name $}</code>
+</h4>
+<div class="docs-api-class-description">
+  {$ enum.description | marked | replace('{', '&#123;') | replace('}', '&#125;') $}
+</div>
+{%- if enum.isDeprecated -%}
+<div class="docs-api-class-deprecated-marker">Deprecated</div>
+{%- endif -%} {$ propertyList(enum.enums, 'enum') $}

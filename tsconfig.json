@@ -38,6 +38,9 @@
     },
     {
       "path": "./projects/code-editor/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/portal/tsconfig.app.json"
     }
   ]
 }

@@ -1,0 +1,50 @@
+<br> {% for file in doc.files %}
+<blockquote class="sample-blockquote">
+  <label class="sample-title po-font-text-large-bold" >{$ doc.title or doc.id | replace('example-','') $}</label>
+  <a (click)="toggleSampleCodeTabs()" class="show-me-the-code"><span [class]="'po-icon ' + sampleCodeButtonIcon"></span> {{ sampleCodeButtonLabel }}</a>
+</blockquote>
+
+<div [ngClass]="{ 'docs-sample-code-tabs': hideSampleCodeTabs }">
+  <po-tabs p-size="2">
+    <po-tab p-label="HTML" p-active>
+      <div>
+        {% for file in doc.files %}
+        <label class="doc-label-path">{$ file.path $}</label>
+        <pre appCodeHighlight class="html">{$ file.fileContents | escape | replace("{", "{{ '{' }}") $}</pre> {% endfor %}
+      </div>
+    </po-tab>
+    <po-tab p-label="TS">
+      <div>
+        {% for script in doc.scripts %}
+        <label class="doc-label-path">{$ script.path $}</label>
+        <pre appCodeHighlight class="typescript">{$ script.fileContents | escape | replace("{", "{{ '{' }}") $}</pre> {% endfor %}
+      </div>
+    </po-tab>
+    {%- if doc.stylesheets.length > 0 -%}
+    <po-tab p-label="CSS">
+      <div>
+        {% for stylesheet in doc.stylesheets %}
+        <label class="doc-label-path">{$ stylesheet.path $}</label>
+        <pre appCodeHighlight class="css">{$ stylesheet.fileContents | escape | replace("{", "{{ '{' }}")$}</pre> {% endfor %}
+      </div>
+    </po-tab>
+    {%- endif -%}
+    {%- if doc.tests.length > 0 -%}
+    <po-tab p-label="E2E">
+      <div>
+        {% for test in doc.tests %}
+        <label class="doc-label-path">{$ test.path $}</label>
+        <pre appCodeHighlight class="test">{$ test.fileContents | escape | replace("{", "{{ '{' }}")$}</pre> {% endfor %}
+      </div>
+    </po-tab>
+    {%- endif -%}
+  </po-tabs>
+</div>
+
+<div class="docs-sample-container">
+  <{$ doc.id | replace( 'example-', '') $}>
+  </{$ doc.id | replace( 'example-', '')$}>
+</div>
+{% endfor %}
+
+<hr>

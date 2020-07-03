@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>PO UI</title>
+    <base href="/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-163592264-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-163592264-1');
+    </script>
+
+    <!-- HOTJAR -->
+
+    <!-- CSS SPLASH -->
+    <style type="text/css">
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .home-loading {
+        width: 100%;
+        height: 100%;
+        background-color: #2c3739;
+        color: white;
+      }
+      .home-loading > div {
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+      .loading .ellipsis-loader {
+        -webkit-animation: 1.7s infinite ellipsis-loader;
+        animation: 1.7s infinite ellipsis-loader;
+        display: inline-block;
+        height: 8px;
+        overflow: hidden;
+        position: relative;
+        width: 300px;
+      }
+      .loading .ellipsis-loader--lighter .ellipsis-loader__dot {
+        background: #fff;
+      }
+      .loading .ellipsis-loader__dot {
+        -webkit-animation: 1.7s infinite ellipsis-loader__dot;
+        animation: 1.7s infinite ellipsis-loader__dot;
+        background: #4a4a4a;
+        border-radius: 50%;
+        float: left;
+        height: 8px;
+        position: absolute;
+        width: 8px;
+      }
+      .loading .ellipsis-loader__dot:nth-child(1) {
+        -webkit-animation-delay: 0.11333s;
+        animation-delay: 0.11333s;
+        left: -13px;
+      }
+      .loading .ellipsis-loader__dot:nth-child(2) {
+        -webkit-animation-delay: 0.22667s;
+        animation-delay: 0.22667s;
+        left: -26px;
+      }
+      .loading .ellipsis-loader__dot:nth-child(3) {
+        -webkit-animation-delay: 0.34s;
+        animation-delay: 0.34s;
+        left: -39px;
+      }
+      .loading .ellipsis-loader__dot:nth-child(4) {
+        -webkit-animation-delay: 0.45333s;
+        animation-delay: 0.45333s;
+        left: -52px;
+      }
+      .loading .ellipsis-loader__dot:nth-child(5) {
+        -webkit-animation-delay: 0.56667s;
+        animation-delay: 0.56667s;
+        left: -65px;
+      }
+      @-webkit-keyframes ellipsis-loader {
+        0%,
+        25% {
+          -webkit-transform: translateX(0);
+          transform: translateX(0);
+        }
+        100% {
+          -webkit-transform: translate(25px);
+          transform: translate(25px);
+        }
+      }
+      @keyframes ellipsis-loader {
+        0%,
+        25% {
+          -webkit-transform: translateX(0);
+          transform: translateX(0);
+        }
+        100% {
+          -webkit-transform: translate(25px);
+          transform: translate(25px);
+        }
+      }
+      @-webkit-keyframes ellipsis-loader__dot {
+        0% {
+          -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+          animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+          -webkit-transform: translateX(0);
+          transform: translateX(0);
+        }
+        55% {
+          -webkit-animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+          animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+          opacity: 1;
+          -webkit-transform: translateX(165px);
+          transform: translateX(165px);
+        }
+        100%,
+        75% {
+          -webkit-transform: translateX(390px);
+          transform: translateX(390px);
+        }
+        90% {
+          opacity: 0.2;
+        }
+      }
+      @keyframes ellipsis-loader__dot {
+        0% {
+          -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+          animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+          -webkit-transform: translateX(0);
+          transform: translateX(0);
+        }
+        55% {
+          -webkit-animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+          animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+          opacity: 1;
+          -webkit-transform: translateX(165px);
+          transform: translateX(165px);
+        }
+        100%,
+        75% {
+          -webkit-transform: translateX(390px);
+          transform: translateX(390px);
+        }
+        90% {
+          opacity: 0.2;
+        }
+      }
+    </style>
+
+    <script src="./assets/js/highlight.min.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </head>
+  <body>
+    <app-root>
+      <div class="home-loading">
+        <div class="loading">
+          <span>Carregando ...</span>
+          <br /><br />
+          <h4>
+            <div class="ellipsis-loader ellipsis-loader--lighter">
+              <div class="ellipsis-loader__dot"></div>
+              <div class="ellipsis-loader__dot"></div>
+              <div class="ellipsis-loader__dot"></div>
+              <div class="ellipsis-loader__dot"></div>
+              <div class="ellipsis-loader__dot"></div>
+            </div>
+          </h4>
+        </div>
+      </div>
+    </app-root>
+
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+  </body>
+</html>

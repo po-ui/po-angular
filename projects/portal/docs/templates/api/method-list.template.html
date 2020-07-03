@@ -1,0 +1,6 @@
+{%- if methodList.length -%} {%- if type == 'interface' -%}
+<h4 class="docs-api-h5 docs-api-method-header">Métodos</h4>
+{%- else -%}
+<h3 class="docs-api-h5 docs-api-method-header">Métodos</h3>
+{%- endif -%} {% for m in methodList %} {%- if m.description -%} {$ method(m) $} {%- endif -%} {% endfor %} {%- endif
+-%}

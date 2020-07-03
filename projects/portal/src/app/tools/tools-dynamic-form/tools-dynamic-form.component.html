@@ -1,0 +1,116 @@
+<po-page-default class="app-portal app-portal-home" p-title="Dynamic Form" [p-actions]="pageActions">
+  <div class="po-m-2">
+    <po-tabs>
+      <po-tab p-label="Configuração" p-active>
+        <form #generatorForm="ngForm" (ngSubmit)="addField(quickField)" autocomplete="off">
+          <div class="po-row">
+            <po-divider class="po-md-12" p-label="Novo campo"></po-divider>
+            <po-input
+              class="po-sm-8 po-md-6"
+              name="property"
+              [(ngModel)]="quickField.property"
+              p-label="Property"
+              p-clean
+              p-required
+            >
+            </po-input>
+
+            <button
+              class="po-button po-button-primary po-sm-4 po-md-2 po-mt-4"
+              type="submit"
+              [disabled]="generatorForm.invalid"
+            >
+              Adicionar
+            </button>
+          </div>
+
+          <div class="po-row">
+            <po-button
+              class="po-m-1"
+              p-icon="po-icon-parameters"
+              p-label="Campos avançados"
+              (p-click)="advancedFields()"
+            >
+            </po-button>
+          </div>
+        </form>
+
+        <po-divider p-label="Campos cadastrados"> </po-divider>
+
+        <div class="po-p-1">
+          <po-widget>
+            <po-table
+              p-height="250"
+              p-hide-text-overflow
+              p-sort="true"
+              [p-actions]="actions"
+              [p-columns]="columns"
+              [p-items]="fields"
+            >
+            </po-table>
+          </po-widget>
+        </div>
+      </po-tab>
+
+      <po-tab p-label="Visualização" [p-disabled]="!fields.length">
+        <po-dynamic-form [p-fields]="fields"></po-dynamic-form>
+      </po-tab>
+    </po-tabs>
+  </div>
+</po-page-default>
+
+<po-modal #importJsonModal p-title="JSON" [p-primary-action]="importJsonModalAction">
+  <form #jsonImportForm="ngForm">
+    <po-code-editor p-height="300" p-theme="vs-dark" [ngModelOptions]="{ standalone: true }" [(ngModel)]="jsonImport">
+    </po-code-editor>
+  </form>
+</po-modal>
+
+<po-modal #viewJsonModal p-title="JSON">
+  <div class="po-row">
+    <po-button
+      class="po-sm-4 po-pr-0 po-pl-0 po-mb-1"
+      p-icon="po-icon-copy"
+      p-label="Copy"
+      (p-click)="copyToClipboard()"
+    >
+    </po-button>
+  </div>
+
+  <div class="tools-jumbotron">
+    <pre id="fieldsJson">{{ fields | json }}</pre>
+  </div>
+</po-modal>
+
+<po-modal
+  #formFieldModal
+  p-size="lg"
+  p-title="Propriedades"
+  [p-primary-action]="primaryAction"
+  [p-secondary-action]="secondaryAction"
+  p-hide-close
+>
+  <po-dynamic-form [p-fields]="defaultFields" [p-value]="field" (p-form)="getForm($event)"> </po-dynamic-form>
+
+  <div class="po-p-1">
+    <po-accordion>
+      <po-accordion-item p-label="Serviços">
+        <po-dynamic-form [p-fields]="serviceFields" [p-value]="field"> </po-dynamic-form>
+      </po-accordion-item>
+
+      <po-accordion-item p-label="Validações">
+        <po-dynamic-form [p-fields]="validationFields" [p-value]="field" (p-form)="validationForm = $event">
+        </po-dynamic-form>
+      </po-accordion-item>
+
+      <po-accordion-item p-label="Booleanos">
+        <po-dynamic-form [p-fields]="booleanFields" [p-value]="field"> </po-dynamic-form>
+      </po-accordion-item>
+
+      <po-accordion-item p-label="Grid System">
+        <po-dynamic-form [p-fields]="columnsFields" [p-value]="field" (p-form)="gridSystemForm = $event">
+        </po-dynamic-form>
+      </po-accordion-item>
+    </po-accordion>
+  </div>
+</po-modal>

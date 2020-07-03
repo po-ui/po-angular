@@ -1,0 +1,21 @@
+{%- if property.content -%}
+<tr class="docs-api-properties-row">
+  <td class="docs-api-properties-name-cell">
+    <div class="docs-api-input-marker">
+      <span class="docs-api-input-alias"> {$ property.name $}<br /> </span>
+    </div>
+  </td>
+  <td class="docs-api-properties-type-cell">
+    {% for type in property.type.split('|') %}
+    <code pan class="docs-api-property-type {$ type $}"
+      >{$ type | escape | replace('{', '&#123;') | replace('}', '&#125;') $}</code
+    >
+    {% endfor %}
+  </td>
+  <td class="docs-api-property-description">
+    {% if property.isOptional %}<em><strong>(opcional)</strong></em
+    >{% endif %} {$ property.description | marked | replace('< ', '&lt; ') | replace('{', '&#123;') | replace('}',
+    '&#125;') $}
+  </td>
+</tr>
+{%- endif -%}
