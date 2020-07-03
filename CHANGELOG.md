@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/po-ui/po-angular/compare/v2.8.0...v2.9.0) (2020-07-03)
+
+
+### Features
+
+* **code-editor:** cria schematics ngAdd ([1b6cf59](https://github.com/po-ui/po-angular/commit/1b6cf599bde8e565e613b3c08ffd2051cd248fb7))
+* **page-job-scheduler:** esconde informações sensíveis na confirmação ([a584101](https://github.com/po-ui/po-angular/commit/a584101e888927d7b17224201e3a420fdeeaeb83))
+* **storage:** cria schematics ngAdd ([01ca432](https://github.com/po-ui/po-angular/commit/01ca432008431dc4cf212240a18a546b6538d6ad))
+* **table:** adiciona loading ao botão carregar mais ([8956850](https://github.com/po-ui/po-angular/commit/8956850fcd1788123b7e1c276d96ea8873ccdc03))
+
 ## [2.8.0](https://github.com/po-ui/po-angular/compare/v2.7.0...v2.8.0) (2020-06-26)
 
 
