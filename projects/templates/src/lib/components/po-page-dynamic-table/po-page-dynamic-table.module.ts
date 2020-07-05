@@ -14,7 +14,7 @@ import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dyna
 /**
  * @description
  *
- * Módulo do template do po-page-dynamic-search.
+ * Módulo do template do po-page-dynamic-table.
  */
 @NgModule({
   imports: [
