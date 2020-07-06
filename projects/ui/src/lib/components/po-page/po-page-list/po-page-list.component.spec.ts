@@ -260,7 +260,8 @@ describe('PoPageListComponent - Desktop:', () => {
       callFunction: component.callFunction,
       changeDetector: {
         detectChanges: () => {}
-      }
+      },
+      filterInput: { nativeElement: { value: 'teste' } }
     };
 
     spyOn(context, 'getName');
@@ -454,6 +455,7 @@ describe('PoPageListComponent - Desktop:', () => {
       const changeDetectorSpy = spyOn(component['changeDetector'], 'detectChanges');
       const callFunctionSpy = spyOn(component, 'callFunction');
       component.filter = { action: 'test' };
+      component.filterInput = <any>{ nativeElement: { value: 'test' } };
 
       component.callActionFilter('sction');
 

@@ -47,9 +47,8 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   };
 
   public readonly filterSettings: PoPageFilter = {
-    action: 'filterAction',
-    advancedAction: 'advancedFilterActionModal',
-    ngModel: 'labelFilter',
+    action: this.filterAction.bind(this),
+    advancedAction: this.advancedFilterActionModal.bind(this),
     placeholder: 'Search'
   };
 
@@ -92,7 +91,8 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
     filters.length ? this.hiringProcessesFilter(filters) : this.resetFilterHiringProcess();
   }
 
-  filterAction(filter = [this.labelFilter]) {
+  filterAction(labelFilter: string | Array<string>) {
+    const filter = typeof labelFilter === 'string' ? [labelFilter] : [...labelFilter];
     this.populateDisclaimers(filter);
     this.filter();
   }

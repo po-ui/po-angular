@@ -39,28 +39,13 @@ describe('PoPageDynamicSearchComponent:', () => {
 
   describe('Methods:', () => {
     it('get filterSettings: should return `filterSettings` with `advancedAction` equal to `undefined` if haven`t filters', () => {
-      const result = {
-        action: 'onAction',
-        advancedAction: undefined,
-        ngModel: 'quickFilter',
-        placeholder: component.literals.searchPlaceholder
-      };
-
-      expect(component.filterSettings).toEqual(result);
+      expect(component.filterSettings.advancedAction).toBeUndefined();
     });
 
     it('get filterSettings: should return `filterSettings` with `advancedAction` equal to `onAdvancedAction` if have filters', () => {
       const filters: Array<any> = [{ property: 'name' }, { property: 'birthdate' }, { property: 'genre' }];
-
       component.filters = filters;
-      const result = {
-        action: 'onAction',
-        advancedAction: 'onAdvancedAction',
-        ngModel: 'quickFilter',
-        placeholder: component.literals.searchPlaceholder
-      };
-
-      expect(component.filterSettings).toEqual(result);
+      expect(typeof component.filterSettings.advancedAction).toBe('function');
     });
 
     describe('onAction:', () => {
@@ -74,7 +59,6 @@ describe('PoPageDynamicSearchComponent:', () => {
           _disclaimerGroup: {
             disclaimers: []
           },
-          quickFilter: 'quickFilter',
           quickSearch: {
             emit: () => {},
             observers: [1, 2, 3]
@@ -85,16 +69,10 @@ describe('PoPageDynamicSearchComponent:', () => {
         };
       });
 
-      it('should set `quickFilter` to `undefined`', () => {
-        component.onAction.call(fakethis);
-
-        expect(fakethis['quickFilter']).toBeUndefined();
-      });
-
       it('should call `quickSearch.emit` with `quickFilter` if `quickSearch.observers.length` is greather than 0', () => {
         spyOn(fakethis.quickSearch, 'emit');
 
-        component.onAction.call(fakethis);
+        component.onAction.call(fakethis, 'quickFilter');
 
         expect(fakethis.quickSearch.emit).toHaveBeenCalledWith('quickFilter');
       });
@@ -104,7 +82,7 @@ describe('PoPageDynamicSearchComponent:', () => {
 
         spyOn(fakethis.quickSearch, 'emit');
 
-        component.onAction.call(fakethis);
+        component.onAction.call(fakethis, 'quickFilter');
 
         expect(fakethis.quickSearch.emit).not.toHaveBeenCalled();
       });
@@ -112,7 +90,7 @@ describe('PoPageDynamicSearchComponent:', () => {
       it('should set `_dislaimerGroup.disclaimers` with property, label and value', () => {
         const result = [{ property: 'search', label: 'Pesquisa rápida: quickFilter', value: 'quickFilter' }];
 
-        component.onAction.call(fakethis);
+        component.onAction.call(fakethis, 'quickFilter');
 
         expect(fakethis._disclaimerGroup.disclaimers).toEqual(result);
       });
@@ -120,7 +98,7 @@ describe('PoPageDynamicSearchComponent:', () => {
       it('should call `ChangeDetectorRef.detectChanges`', () => {
         spyOn(component['changeDetector'], 'detectChanges');
 
-        component.onAction();
+        component.onAction('quickFilter');
 
         expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
       });
@@ -131,7 +109,7 @@ describe('PoPageDynamicSearchComponent:', () => {
 
         const expectedValue = [{ property: 'city' }];
 
-        component.onAction();
+        component.onAction('quickFilter');
 
         expect(component.filters).toEqual(expectedValue);
       });
