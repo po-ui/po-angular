@@ -50,12 +50,10 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   };
 
   private readonly _filterSettings: PoPageFilter = {
-    action: 'onAction',
-    advancedAction: 'onAdvancedAction',
-    ngModel: 'quickFilter',
+    action: this.onAction.bind(this),
+    advancedAction: this.onAdvancedAction.bind(this),
     placeholder: this.literals.searchPlaceholder
   };
-  private quickFilter;
 
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
 
@@ -72,7 +70,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   get filterSettings() {
-    this._filterSettings.advancedAction = this.filters.length === 0 ? undefined : 'onAdvancedAction';
+    this._filterSettings.advancedAction = this.filters.length === 0 ? undefined : this.onAdvancedAction.bind(this);
 
     return Object.assign({}, this._filterSettings, { placeholder: this.literals.searchPlaceholder });
   }
@@ -102,20 +100,18 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     }
   }
 
-  onAction() {
+  onAction(quickFilter: string) {
     this._disclaimerGroup.disclaimers = [
-      { property: 'search', label: `${this.literals.quickSearchLabel} ${this.quickFilter}`, value: this.quickFilter }
+      { property: 'search', label: `${this.literals.quickSearchLabel} ${quickFilter}`, value: quickFilter }
     ];
 
     if (this.quickSearch.observers && this.quickSearch.observers.length > 0) {
-      this.quickSearch.emit(this.quickFilter);
+      this.quickSearch.emit(quickFilter);
     }
 
     if (this.keepFilters) {
       this.filters.forEach(element => delete element.initValue);
     }
-
-    this.quickFilter = undefined;
 
     this.changeDetector.detectChanges();
   }
