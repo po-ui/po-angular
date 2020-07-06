@@ -8,7 +8,8 @@ import {
   SimpleChange,
   ViewChild,
   ViewContainerRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ElementRef
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -52,6 +53,7 @@ export class PoPageListComponent extends PoPageListBaseComponent
   isMobile: boolean;
   limitPrimaryActions: number = 3;
   parentRef: ViewContainerRef;
+  @ViewChild('filterInput') filterInput: ElementRef;
 
   private isRecalculate = true;
   private maxWidthMobile: number = 480;
@@ -150,7 +152,7 @@ export class PoPageListComponent extends PoPageListBaseComponent
   }
 
   callActionFilter(field: string): void {
-    this.callFunction(this.filter[field], this.parentRef);
+    this.callFunction(this.filter[field], this.parentRef, this.filterInput.nativeElement.value);
     this.changeDetector.detectChanges();
   }
 

@@ -55,8 +55,7 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
   ];
 
   readonly filterSettings: PoPageFilter = {
-    action: 'hiringProcessesFilter',
-    ngModel: 'labelFilter',
+    action: this.hiringProcessesFilter.bind(this),
     placeholder: 'Search'
   };
 
@@ -99,7 +98,9 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
     this.poNotification.success('Hired candidate!');
   }
 
-  private hiringProcessesFilter(filters = [this.labelFilter]) {
+  private hiringProcessesFilter(labelFilter: string | Array<string>) {
+    const filters = typeof labelFilter === 'string' ? [labelFilter] : [...labelFilter];
+
     this.hiringProcessesFiltered = this.hiringProcesses.filter(item => {
       return Object.keys(item).some(key => !(item[key] instanceof Object) && this.includeFilter(item[key], filters));
     });

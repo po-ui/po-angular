@@ -37,9 +37,8 @@ export class SamplePoPageListLabsComponent implements OnInit {
   ];
 
   public readonly filter: PoPageFilter = {
-    action: this.showAction.bind(this, 'Filter'),
-    advancedAction: this.showAction.bind(this, 'Advanced filter'),
-    ngModel: 'filterModel'
+    action: this.showAction.bind(this),
+    advancedAction: this.showAdvanceAction.bind(this)
   };
 
   public readonly iconOptions: Array<PoSelectOption> = [
@@ -156,7 +155,11 @@ export class SamplePoPageListLabsComponent implements OnInit {
     this.disclaimerValue = undefined;
   }
 
-  showAction(label) {
-    this.poNotification.success(`Action clicked: ${label}`);
+  showAction(filter) {
+    this.poNotification.success(`Action clicked: ${filter}`);
+  }
+
+  showAdvanceAction(filter) {
+    this.poNotification.success(`Advance Action clicked: ${filter}`);
   }
 }
