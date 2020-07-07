@@ -6,12 +6,18 @@ import * as Utils from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+
 import { PoComboBaseComponent, poComboLiteralsDefault } from './po-combo-base.component';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 
 class PoComboTest extends PoComboBaseComponent {
+  constructor() {
+    super(new PoLanguageService());
+  }
+
   getInputValue(): string {
     return '';
   }
@@ -100,13 +106,14 @@ describe('PoComboBaseComponent:', () => {
 
     describe('p-literals:', () => {
       it('should be set `literals` with browser language if `literals` is `undefined`', () => {
+        component['language'] = Utils.browserLanguage();
         component.literals = undefined;
 
         expect(component.literals).toEqual(poComboLiteralsDefault[Utils.browserLanguage()]);
       });
 
       it('should be in portuguese if browser is set with `pt`.', () => {
-        spyOn(Utils, <any>'browserLanguage').and.returnValue('pt');
+        component['language'] = 'pt';
 
         component.literals = {};
 
@@ -114,7 +121,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in english if browser is set with `en`.', () => {
-        spyOn(Utils, <any>'browserLanguage').and.returnValue('en');
+        component['language'] = 'en';
 
         component.literals = {};
 
@@ -122,7 +129,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in spanish if browser is set with `es`.', () => {
-        spyOn(Utils, <any>'browserLanguage').and.returnValue('es');
+        component['language'] = 'es';
 
         component.literals = {};
 
@@ -130,7 +137,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in russian if browser is set with `ru`.', () => {
-        spyOn(Utils, <any>'browserLanguage').and.returnValue('ru');
+        component['language'] = 'ru';
 
         component.literals = {};
 
@@ -138,7 +145,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should accept custom literals.', () => {
-        spyOn(Utils, <any>'browserLanguage').and.returnValue(Utils.poLocaleDefault);
+        component['language'] = Utils.poLocaleDefault;
 
         const customLiterals = Object.assign({}, poComboLiteralsDefault[Utils.poLocaleDefault]);
         customLiterals.noData = 'Sem dados';
