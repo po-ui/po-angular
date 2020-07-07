@@ -1,7 +1,10 @@
+import { Directive } from '@angular/core';
+
 import { PoModalPasswordRecoveryBaseComponent } from './po-modal-password-recovery-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
+@Directive()
 class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseComponent {
   completed(): void {}
   open(): void {}

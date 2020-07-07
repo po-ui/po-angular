@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -7,6 +8,7 @@ import * as UtilsFunctions from '../../../utils/util';
 import { PoSelectBaseComponent } from './po-select-base.component';
 import { PoSelectOption } from './po-select-option.interface';
 
+@Directive()
 class PoSelect extends PoSelectBaseComponent {
   onUpdateOptions(): void {}
 

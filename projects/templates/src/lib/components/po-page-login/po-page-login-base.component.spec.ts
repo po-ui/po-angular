@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { TestBed, async } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 
@@ -13,6 +14,7 @@ const routerStub = {
   navigate: jasmine.createSpy('navigate')
 };
 
+@Directive()
 export class PoPageLoginComponent extends PoPageLoginBaseComponent {
   protected concatenateLoginHintWithContactEmail(contactEmail: string): void {}
   protected concatenateTitleWithProductName(productName: string): void {}

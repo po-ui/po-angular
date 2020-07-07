@@ -1,29 +1,43 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2018", "dom"],
-    "paths": {
-      "@po-ui/ng-components": ["./dist/ng-components"],
-      "@po-ui/ng-components/*": ["./dist/ng-components/*"],
-      "@po-ui/ng-storage": ["./dist/ng-storage"],
-      "@po-ui/ng-storage/*": ["./dist/ng-storage/*"],
-      "@po-ui/ng-sync": ["./dist/ng-sync"],
-      "@po-ui/ng-sync/*": ["./dist/ng-sync/*"],
-      "@po-ui/ng-templates": ["./dist/ng-templates"],
-      "@po-ui/ng-templates/*": ["./dist/ng-templates/*"],
-      "@po-ui/ng-code-editor": ["./dist/ng-code-editor"],
-      "@po-ui/ng-schematics/*": ["./dist/ng-schematics/*"]
+  "references": [
+    {
+      "path": "./projects/ui/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ui/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/app/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/storage/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/storage/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/sync/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/sync/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/templates/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/templates/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/code-editor/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/code-editor/tsconfig.spec.json"
     }
-  }
+  ]
 }

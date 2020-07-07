@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -8,6 +9,7 @@ import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent, poDatepickerRangeLiteralsDefault } from './po-datepicker-range-base.component';
 
 describe('PoDatepickerRangeBaseComponent:', () => {
+  @Directive()
   class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent {
     updateScreenByModel(dateRange: PoDatepickerRange) {}
     resetDateRangeInputValidation() {}

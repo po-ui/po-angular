@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunctions from '../../../../utils/util';
@@ -9,6 +10,7 @@ import { PoLanguageService } from '../../../../services/po-language/po-language.
 import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
 
+@Directive()
 class PoLookupModalComponent extends PoLookupModalBaseComponent {
   openModal(): void {}
 }

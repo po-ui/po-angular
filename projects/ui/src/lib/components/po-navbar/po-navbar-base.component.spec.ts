@@ -1,9 +1,12 @@
+import { Directive } from '@angular/core';
+
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import * as utilsFunctions from '../../utils/util';
 
 import { PoNavbarBaseComponent, poNavbarLiteralsDefault } from './po-navbar-base.component';
 
+@Directive()
 export class PoNavbarComponent extends PoNavbarBaseComponent {
   validateMenuLogo() {}
 }

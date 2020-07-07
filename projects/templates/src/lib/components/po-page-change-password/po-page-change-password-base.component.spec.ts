@@ -1,7 +1,10 @@
+import { Directive } from '@angular/core';
+
 import { PoPageChangePasswordBaseComponent } from './po-page-change-password-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
+@Directive()
 class PoPageChangePasswordComponent extends PoPageChangePasswordBaseComponent {
   modalAction = { label: 'modal', action: undefined };
   navigateTo(url: string): void {}

@@ -1,0 +1,29 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@po-ui/ng-components": ["./dist/ng-components"],
+      "@po-ui/ng-components/*": ["./dist/ng-components/*"],
+      "@po-ui/ng-storage": ["./dist/ng-storage"],
+      "@po-ui/ng-storage/*": ["./dist/ng-storage/*"],
+      "@po-ui/ng-sync": ["./dist/ng-sync"],
+      "@po-ui/ng-sync/*": ["./dist/ng-sync/*"],
+      "@po-ui/ng-templates": ["./dist/ng-templates"],
+      "@po-ui/ng-templates/*": ["./dist/ng-templates/*"],
+      "@po-ui/ng-code-editor": ["./dist/ng-code-editor"],
+      "@po-ui/ng-schematics/*": ["./dist/ng-schematics/*"]
+    }
+  }
+}

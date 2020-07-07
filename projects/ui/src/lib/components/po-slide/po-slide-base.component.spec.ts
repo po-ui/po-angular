@@ -1,7 +1,10 @@
+import { Directive } from '@angular/core';
+
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoSlideBaseComponent } from './po-slide-base.component';
 
+@Directive()
 class PoSlideComponent extends PoSlideBaseComponent {
   cancelInterval() {}
 

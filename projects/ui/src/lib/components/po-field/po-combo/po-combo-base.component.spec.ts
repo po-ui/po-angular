@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
@@ -13,6 +14,7 @@ import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 
+@Directive()
 class PoComboTest extends PoComboBaseComponent {
   constructor() {
     super(new PoLanguageService());

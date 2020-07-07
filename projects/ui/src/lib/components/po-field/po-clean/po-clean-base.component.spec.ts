@@ -1,5 +1,8 @@
+import { Directive } from '@angular/core';
+
 import { PoCleanBaseComponent } from './po-clean-base.component';
 
+@Directive()
 class PoClean extends PoCleanBaseComponent {
   setInputValue(value: string): void {}
 
