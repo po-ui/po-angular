@@ -8,8 +8,8 @@ import { PoLookupFilter, PoLookupResponseApi, PoLookupFilteredItemsParams } from
 
 @Injectable()
 export class SamplePoLookupSwFilmsService implements PoLookupFilter {
-  private baseUrl = 'https://swapi.co/api';
-  private filmsUrl = 'https://swapi.co/api/films/';
+  private baseUrl = 'https://swapi.dev/api';
+  private filmsUrl = 'https://swapi.dev/api/films/';
 
   constructor(private http: HttpClient) {}
 
