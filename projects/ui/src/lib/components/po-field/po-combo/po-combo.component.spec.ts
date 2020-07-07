@@ -7,8 +7,6 @@ import { Observable } from 'rxjs';
 
 import { changeBrowserInnerWidth, configureTestSuite } from './../../../util-test/util-expect.spec';
 
-import * as UtilsFunctions from '../../../utils/util';
-
 import { PoLoadingModule } from '../../po-loading/po-loading.module';
 
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
@@ -1565,7 +1563,8 @@ describe('PoComboComponent:', () => {
     });
 
     it('should display `literals.noData` in Spanish if browser language is `es`.', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
+
       component.visibleOptions = [];
 
       fixture.detectChanges();

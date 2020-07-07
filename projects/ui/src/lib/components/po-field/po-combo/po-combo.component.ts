@@ -20,6 +20,7 @@ import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/opera
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
@@ -127,9 +128,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     public renderer: Renderer2,
     private changeDetector: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
-    private sanitized: DomSanitizer
+    private sanitized: DomSanitizer,
+    languageService: PoLanguageService
   ) {
-    super();
+    super(languageService);
 
     this.differ = differs.find([]).create(null);
   }
