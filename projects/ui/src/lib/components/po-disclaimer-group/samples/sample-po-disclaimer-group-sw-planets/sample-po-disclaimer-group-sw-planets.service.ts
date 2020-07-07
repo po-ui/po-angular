@@ -32,7 +32,7 @@ export class SamplePoDisclaimerGroupSwPlanetsService {
   }
 
   getItems(): Observable<Array<any>> {
-    return this.http.get('https://swapi.co/api/planets/').pipe(map((response: any) => response.results));
+    return this.http.get('https://swapi.dev/api/planets/').pipe(map((response: any) => response.results));
   }
 
   getTerrains(): Array<PoComboOption> {
