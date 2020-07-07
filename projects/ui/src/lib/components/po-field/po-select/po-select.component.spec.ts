@@ -557,6 +557,17 @@ describe('PoSelectComponent:', () => {
       expect(window.removeEventListener).toHaveBeenCalled();
     });
 
+    it('removeListeners: shouldn`t call `clickoutListener` if it is undefined', () => {
+      component['clickoutListener'] = () => {};
+      component.eventResizeListener = () => {};
+
+      spyOn(component, <any>'clickoutListener');
+
+      component['removeListeners']();
+
+      expect(component['clickoutListener']).toHaveBeenCalled();
+    });
+
     it(`setPositionDropdown: should call 'controlPosition.setElements' with 'contentList', 'contentOffset',
       'selectButtonElement' and true`, () => {
       const contentOffset = 8;

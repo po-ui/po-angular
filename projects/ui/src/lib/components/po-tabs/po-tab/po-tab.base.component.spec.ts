@@ -1,7 +1,10 @@
+import { Directive } from '@angular/core';
+
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoTabBaseComponent } from './po-tab-base.component';
 
+@Directive()
 class PoTabComponent extends PoTabBaseComponent {
   setDisplayOnActive() {}
 }

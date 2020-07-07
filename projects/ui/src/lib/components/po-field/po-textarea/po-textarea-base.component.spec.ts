@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import * as ValidatorsFunctions from '../validators';
@@ -5,6 +6,7 @@ import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
+@Directive()
 class PoTextareaComponent extends PoTextareaBaseComponent {
   writeValueModel(value: any): void {}
 }

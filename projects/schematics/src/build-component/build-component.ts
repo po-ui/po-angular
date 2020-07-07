@@ -10,7 +10,7 @@ import {
   filter,
   noop
 } from '@angular-devkit/schematics';
-import { buildDefaultPath } from '@schematics/angular/utility/project';
+import { buildDefaultPath } from '@schematics/angular/utility/workspace';
 import { buildRelativePath, findModuleFromOptions } from '@schematics/angular/utility/find-module';
 import { getWorkspace } from '@schematics/angular/utility/config';
 import { normalize, strings } from '@angular-devkit/core';

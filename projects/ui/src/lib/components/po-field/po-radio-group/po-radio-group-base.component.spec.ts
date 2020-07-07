@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import * as UtilsFunction from '../../../utils/util';
@@ -6,6 +7,7 @@ import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 
+@Directive()
 class PoRadioGroup extends PoRadioGroupBaseComponent {
   inputEl = {
     checked: false,

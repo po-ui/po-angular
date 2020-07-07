@@ -1,6 +1,6 @@
 import { apply, applyTemplates, chain, mergeWith, move, Rule, url, Tree } from '@angular-devkit/schematics';
 
-import { buildDefaultPath } from '@schematics/angular/utility/project';
+import { buildDefaultPath } from '@schematics/angular/utility/workspace';
 import { getWorkspace } from '@schematics/angular/utility/config';
 import { strings } from '@angular-devkit/core';
 import { parseName } from '@schematics/angular/utility/parse-name';

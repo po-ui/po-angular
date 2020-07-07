@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import * as ValidatorsFunctions from '../validators';
@@ -5,6 +6,7 @@ import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 
+@Directive()
 class PoRichTextComponent extends PoRichTextBaseComponent {}
 
 describe('PoRichTextBaseComponent:', () => {

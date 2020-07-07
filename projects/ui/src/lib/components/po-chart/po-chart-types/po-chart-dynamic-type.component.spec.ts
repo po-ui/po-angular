@@ -1,6 +1,9 @@
+import { Directive } from '@angular/core';
+
 import { PoChartDynamicTypeComponent } from './po-chart-dynamic-type.component';
 import { PoChartType } from '../enums/po-chart-type.enum';
 
+@Directive()
 class PoChartDynamicTypeComponentMock extends PoChartDynamicTypeComponent {}
 
 describe('PoChartDynamicTypeComponent:', () => {

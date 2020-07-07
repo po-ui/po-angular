@@ -1,7 +1,10 @@
+import { Directive } from '@angular/core';
+
 import { PoWidgetBaseComponent } from './po-widget-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
+@Directive()
 class PoWidgetComponent extends PoWidgetBaseComponent {
   setHeight(value: any) {}
 }
