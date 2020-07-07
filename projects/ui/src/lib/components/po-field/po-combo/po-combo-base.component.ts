@@ -1,14 +1,9 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 
-import {
-  browserLanguage,
-  convertToBoolean,
-  isTypeof,
-  removeDuplicatedOptions,
-  poLocaleDefault,
-  validValue
-} from '../../../utils/util';
+import { convertToBoolean, isTypeof, poLocaleDefault, validValue } from '../../../utils/util';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+
 import { InputBoolean } from '../../../decorators';
 import { requiredFailed } from '../validators';
 
@@ -71,6 +66,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _options: Array<PoComboOption | PoComboOptionGroup> = [];
   private _required?: boolean = false;
   private _sort?: boolean = false;
+  private language: string;
 
   protected cacheStaticOptions: Array<PoComboOption | PoComboGroup> = [];
   protected comboOptionsList: Array<PoComboOption | PoComboGroup> = [];
@@ -424,22 +420,23 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * </po-combo>
    * ```
    *
-   * > O objeto padrão de literais será traduzido de acordo com o idioma do *browser* (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
   @Input('p-literals') set literals(value: PoComboLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poComboLiteralsDefault[poLocaleDefault],
-        ...poComboLiteralsDefault[browserLanguage()],
+        ...poComboLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poComboLiteralsDefault[browserLanguage()];
+      this._literals = poComboLiteralsDefault[this.language];
     }
   }
 
   get literals() {
-    return this._literals || poComboLiteralsDefault[browserLanguage()];
+    return this._literals || poComboLiteralsDefault[this.language];
   }
 
   /** Deve ser informada uma função que será disparada quando houver alterações no ngModel. */
@@ -447,6 +444,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
   @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   abstract setInputValue(value: any): void;
 
