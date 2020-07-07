@@ -1,7 +1,10 @@
+import { Directive } from '@angular/core';
+
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
 
+@Directive()
 class PoCodeEditorTestComponent extends PoCodeEditorBaseComponent {
   writeValue(value: any) {}
   setLanguage(value: any) {}

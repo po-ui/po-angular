@@ -17,8 +17,8 @@
     "postbuild": "gulp copyFilesSchematics && npm run pack"
   },
   "peerDependencies": {
-    "@angular-devkit/core": "~9.1.0",
-    "@angular-devkit/schematics": "~9.1.0",
-    "@schematics/angular": "~9.1.0"
+    "@angular-devkit/core": "^10.0.2",
+    "@angular-devkit/schematics": "^10.0.2",
+    "@schematics/angular": "^10.0.2"
   }
 }

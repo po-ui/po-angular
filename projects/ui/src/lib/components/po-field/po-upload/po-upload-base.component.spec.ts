@@ -608,7 +608,7 @@ describe('PoUploadBaseComponent:', () => {
       const customLiterals = Object.assign({}, poUploadLiteralsDefault[utilsFunctions.poLocaleDefault]);
 
       // Custom some literals
-      customLiterals.deleteFile = 'Delete';
+      customLiterals.invalidDropArea = 'Área inválida';
 
       component.literals = customLiterals;
 

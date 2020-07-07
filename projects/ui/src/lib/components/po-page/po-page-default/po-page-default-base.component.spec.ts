@@ -1,8 +1,10 @@
+import { Directive } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 
 import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
+@Directive()
 class PoPageDefaultComponent extends PoPageDefaultBaseComponent {
   setDropdownActions() {}
 }

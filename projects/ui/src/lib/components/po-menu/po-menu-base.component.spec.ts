@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { of } from 'rxjs';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
@@ -5,6 +6,7 @@ import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 
+@Directive()
 export class PoMenuComponent extends PoMenuBaseComponent {
   protected validateCollapseClass() {}
 }

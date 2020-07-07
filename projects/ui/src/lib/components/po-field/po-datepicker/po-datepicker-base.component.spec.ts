@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 
@@ -10,6 +11,7 @@ import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoMask } from '../po-input/po-mask';
 
+@Directive()
 class PoDatepickerComponent extends PoDatepickerBaseComponent {
   writeValue(value: any): void {}
   refreshValue(value: Date): void {}

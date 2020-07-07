@@ -96,7 +96,6 @@ describe('PoDialogComponent:', () => {
 
   it('Should call destroy if was closed with X', async(() => {
     spyOn(component, 'destroy');
-    spyOn(component.poModal, <any>'onXClosed').and.returnValue(true);
 
     component.poModal.close(true);
     fixture.detectChanges();

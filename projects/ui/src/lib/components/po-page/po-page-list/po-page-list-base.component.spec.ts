@@ -1,3 +1,5 @@
+import { Directive } from '@angular/core';
+
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../utils/util';
 import * as UtilFunctions from './../../../utils/util';
@@ -7,6 +9,7 @@ import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
 
 import { PoPageListBaseComponent, poPageListLiteralsDefault } from './po-page-list-base.component';
 
+@Directive()
 class PoPageListComponent extends PoPageListBaseComponent {
   setDropdownActions() {}
 }

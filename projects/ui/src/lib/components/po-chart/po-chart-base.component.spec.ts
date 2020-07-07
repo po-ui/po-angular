@@ -1,10 +1,11 @@
-import { EventEmitter } from '@angular/core';
+import { Directive, EventEmitter } from '@angular/core';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartType } from './enums/po-chart-type.enum';
 
+@Directive()
 class PoCharComponent extends PoChartBaseComponent {
   rebuildComponent() {}
 }

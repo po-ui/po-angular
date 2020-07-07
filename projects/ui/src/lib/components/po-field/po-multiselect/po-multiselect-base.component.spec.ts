@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
@@ -13,6 +14,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
 
+@Directive()
 class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   constructor() {
     super(new PoLanguageService());
