@@ -1,7 +1,10 @@
+import { Directive } from '@angular/core';
+
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
 
+@Directive()
 class PoCheckboxComponent extends PoCheckboxBaseComponent {
   protected changeModelValue(value: boolean | null) {}
 }

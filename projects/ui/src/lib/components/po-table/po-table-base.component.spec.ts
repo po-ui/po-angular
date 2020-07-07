@@ -1,3 +1,5 @@
+import { Directive } from '@angular/core';
+
 import * as utilsFunctions from '../../utils/util';
 import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -8,6 +10,7 @@ import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.co
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 
+@Directive()
 class PoTableComponent extends PoTableBaseComponent {
   calculateWidthHeaders() {}
   calculateHeightTableContainer(height) {}

@@ -283,7 +283,6 @@ describe('PoChartComponent:', () => {
 
       component['windowResizeListener'] = <any>of([]);
 
-      spyOn(component, <any>'windowResizeListener');
       spyOn(component, <any>'chartLegendHeight').and.callThrough();
 
       component['setResizeListenerSubscribe'](instance);

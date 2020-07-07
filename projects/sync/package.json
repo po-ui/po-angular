@@ -23,16 +23,17 @@
     "@ionic-native/network": "5.23.0",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^1.4.0",
-    "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER"
+    "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
+    "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/core": "~9.1.0",
+    "@angular/core": "^10.0.3",
     "@ionic-native/core": "5.23.0",
     "@ionic-native/network": "5.23.0",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^1.4.0",
-    "rxjs": "~6.5.4",
-    "rxjs-compat": "~6.5.4",
+    "rxjs": "~6.5.5",
+    "rxjs-compat": "~6.5.5",
     "zone.js": "~0.10.3"
   }
 }

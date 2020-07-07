@@ -1,4 +1,4 @@
-import { ElementRef, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { convertNumberToDecimal } from '../../../../utils/util';
@@ -22,6 +22,7 @@ import { PoSeriesTextBlack } from '../../po-chart-colors.constant';
 const poChartBlackColor = '#000000';
 const poChartWhiteColor = '#ffffff';
 
+@Directive()
 export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDestroy, OnInit {
   chartItemStartAngle = poChartStartAngle;
   windowResizeEmitter: Subject<any> = new Subject();

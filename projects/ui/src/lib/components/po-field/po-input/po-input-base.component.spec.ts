@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { AbstractControl, FormControl } from '@angular/forms';
 
@@ -6,6 +7,7 @@ import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/
 import { PoInputBaseComponent } from './po-input-base.component';
 import { PoMask } from './po-mask';
 
+@Directive()
 class PoInput extends PoInputBaseComponent {
   extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;

@@ -13,19 +13,20 @@
   "schematics": "./schematics/collection.json",
   "dependencies": {
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
-    "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER"
+    "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
+    "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/animations": "~9.1.0",
-    "@angular/common": "~9.1.0",
-    "@angular/compiler": "~9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/forms": "~9.1.0",
-    "@angular/platform-browser": "~9.1.0",
-    "@angular/platform-browser-dynamic": "~9.1.0",
-    "@angular/router": "~9.1.0",
+    "@angular/animations": "^10.0.3",
+    "@angular/common": "^10.0.3",
+    "@angular/compiler": "^10.0.3",
+    "@angular/core": "^10.0.3",
+    "@angular/forms": "^10.0.3",
+    "@angular/platform-browser": "^10.0.3",
+    "@angular/platform-browser-dynamic": "^10.0.3",
+    "@angular/router": "^10.0.3",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
-    "rxjs": "~6.5.4",
+    "rxjs": "~6.5.5",
     "zone.js": "~0.10.3"
   }
 }

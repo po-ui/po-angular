@@ -31,7 +31,12 @@ module.exports = function (config) {
           statements: 99,
           branches: 99,
           lines: 99,
-          functions: 99
+          functions: 99,
+          overrides: {
+            'src/lib/models/index.ts': {
+              functions: 80
+            }
+          }
         }
       }
     },

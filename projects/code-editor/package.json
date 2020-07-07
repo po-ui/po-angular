@@ -17,12 +17,13 @@
     "monaco-editor": "0.20.0",
     "core-js": "^3.6.4",
     "intl": "^1.2.5",
+    "tslib": "^2.0.0",
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
-    "@angular/common": "~9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/forms": "~9.1.0",
+    "@angular/common": "^10.0.3",
+    "@angular/core": "^10.0.3",
+    "@angular/forms": "^10.0.3",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "monaco-editor": "0.20.0",
     "zone.js": "~0.10.3"

@@ -15,6 +15,6 @@
     "no-commented-code": false,
     "no-duplicated-branches": false,
     "max-union-size": false,
-    "directive-class-suffix": [true, "Directive", "BaseComponent"]
+    "directive-class-suffix": false
   }
 }

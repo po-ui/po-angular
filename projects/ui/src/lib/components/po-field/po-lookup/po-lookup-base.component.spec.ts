@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 
@@ -20,6 +21,7 @@ class LookupFilterService implements PoLookupFilter {
   }
 }
 
+@Directive()
 class PoLookupComponent extends PoLookupBaseComponent {
   setViewValue(value: any, value2: any): void {}
 
