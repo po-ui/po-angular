@@ -813,7 +813,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }, []);
   }
 
-  private verifyIfHasLabel(currentOption: PoComboGroup) {
+  private verifyIfHasLabel(currentOption: PoComboGroup = {}) {
     const { label, options, value } = currentOption;
 
     if ((this.isOptionGroupList && options && !label) || (!label && !value) || (!this.isOptionGroupList && options)) {

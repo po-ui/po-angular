@@ -68,11 +68,11 @@ describe('PoComboFilterService ', () => {
     httpMock.expectOne(`${mockURL}/${param}`).flush({ id: 'angular', name: 'Angular' });
   });
 
-  it('should not return the object', done => {
+  it('should return empty object', done => {
     const param = 'react';
 
     comboService.getObjectByValue(param).subscribe(object => {
-      expect(object).toBeUndefined();
+      expect(object).toEqual({ value: '' });
 
       done();
     });
@@ -92,8 +92,8 @@ describe('PoComboFilterService ', () => {
     expect(resultStringfy).toBe(JSON.stringify(valueExpected));
   });
 
-  it('shouldn`t return when parseToComboOption get null', () => {
-    expect(comboService['parseToComboOption'](null)).toBeUndefined();
+  it('should return { value: "" } when parseToComboOption get null', () => {
+    expect(comboService['parseToComboOption'](null)).toEqual({ value: '' });
   });
 
   describe('Methods:', () => {
@@ -125,6 +125,62 @@ describe('PoComboFilterService ', () => {
       });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
+    });
+
+    it(`getFilteredData: should return array of object[value=""] if
+      fieldValue property not exists in items and display messages`, done => {
+      const items = [
+        { email: 'john@email.com', name: 'john' },
+        { email: 'jane@email.com', name: 'jane' }
+      ];
+      const filterParam = { value: '' };
+      const expectItems = [{ value: '' }, { value: '' }];
+
+      comboService.fieldValue = 'cpf';
+
+      spyOn(comboService, <any>'addMessage').and.callThrough();
+      spyOn(console, 'error').and.callThrough();
+      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+
+      comboService.getFilteredData(filterParam).subscribe(response => {
+        expect(response).toEqual(expectItems);
+        expect(console.error).toHaveBeenCalledTimes(items.length);
+        expect(comboService['addMessage']).toHaveBeenCalled();
+        expect(comboService['messages']).toEqual([]);
+
+        done();
+      });
+
+      httpMock.expectOne(`http://mockurl.com?filter=`).flush({ items });
+    });
+
+    it(`getFilteredData: shouldn't call console.error if returned items contains fieldValue property`, done => {
+      comboService.fieldValue = 'name';
+
+      const items = [
+        { email: 'john@email.com', name: 'john' },
+        { email: 'jane@email.com', name: 'jane' }
+      ];
+      const filterParam = { value: '' };
+      const expectItems = items.map(item => ({
+        value: item[comboService.fieldValue],
+        label: item[comboService.fieldValue]
+      }));
+
+      spyOn(comboService, <any>'addMessage').and.callThrough();
+      spyOn(console, 'error').and.callThrough();
+      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+
+      comboService.getFilteredData(filterParam).subscribe(response => {
+        expect(response).toEqual(expectItems);
+        expect(console.error).not.toHaveBeenCalled();
+        expect(comboService['addMessage']).not.toHaveBeenCalled();
+        expect(comboService['messages']).toEqual([]);
+
+        done();
+      });
+
+      httpMock.expectOne(`http://mockurl.com?filter=`).flush({ items });
     });
 
     it('getObjectByValue: should add filter params', done => {

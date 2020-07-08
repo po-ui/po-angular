@@ -1177,6 +1177,10 @@ describe('PoComboBaseComponent:', () => {
       expect(component['verifyIfHasLabel'](option)).toBeTruthy();
     });
 
+    it(`verifyIfHasLabel: should return false if currentOption is undefined`, () => {
+      expect(component['verifyIfHasLabel']()).toBe(false);
+    });
+
     it(`searchForLabel: should search for label and update the combo list including the options group title
     and set selectedView skipping the option group title item`, () => {
       component.options = [{ label: 'Valor 1', options: [{ value: 'value' }] }];

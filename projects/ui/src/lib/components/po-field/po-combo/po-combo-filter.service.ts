@@ -23,6 +23,8 @@ export class PoComboFilterService implements PoComboFilter {
   fieldLabel: string = 'label';
   fieldValue: string = 'value';
 
+  private messages = [];
+
   get url(): string {
     return this._url;
   }
@@ -56,20 +58,39 @@ export class PoComboFilterService implements PoComboFilter {
 
   private parseToArrayComboOption(items: Array<any>): Array<PoComboOption> {
     if (items && items.length > 0) {
-      return items.map(item => {
-        return this.parseToComboOption(item);
-      });
+      const parsedOptions = items.map(item => this.parseToComboOption(item));
+
+      this.displayMessages();
+
+      return parsedOptions;
     }
 
     return [];
   }
 
   private parseToComboOption(item: any): PoComboOption {
-    if (item && item[this.fieldValue]) {
-      const label = item[this.fieldLabel];
-      const value = item[this.fieldValue];
+    if (!item?.[this.fieldValue]) {
+      this.addMessage(item, this.fieldValue);
 
-      return { label, value };
+      return { value: '' };
+    }
+
+    const label = item[this.fieldLabel];
+    const value = item[this.fieldValue];
+
+    return { label, value };
+  }
+
+  private addMessage(item, property: string) {
+    this.messages.push(`Cannot read property "${property}" of ${JSON.stringify(item)},
+      see [p-field-value] property at https://po-ui.io/documentation/po-combo`);
+  }
+
+  private displayMessages() {
+    if (this.messages.length) {
+      this.messages.forEach(message => console.error(message));
+
+      this.messages = [];
     }
   }
 }
