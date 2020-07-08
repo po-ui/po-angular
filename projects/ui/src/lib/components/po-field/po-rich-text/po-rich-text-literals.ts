@@ -58,5 +58,25 @@ export const poRichTextLiteralsDefault = {
     insert: 'Inserir',
     insertImage: 'Inserir imagem',
     urlImage: 'Imagem em URL'
+  },
+  ru: {
+    bold: 'Жирный',
+    italic: 'Италик',
+    underline: 'Подчеркивание',
+    left: 'Влево',
+    center: 'Центр',
+    right: 'Вправо',
+    justify: 'Растянуть',
+    textColor: 'Цвет текста',
+    unorderedList: 'Список',
+    insertLink: 'Вставьте ссылку',
+    linkTextLabel: 'Текст со ссылкой',
+    linkUrlTextHelper: 'Вставьте в текстовое поле ниже скопированную ссылку',
+    linkUrlTextPlaceholder: 'Вставьте ссылку для привязки к тексту',
+    cancel: 'Отмена',
+    editLink: 'Редактировать ссылку',
+    insert: 'Вставить',
+    insertImage: 'Вставить изображение',
+    urlImage: 'Ссылка на изображение'
   }
 };
