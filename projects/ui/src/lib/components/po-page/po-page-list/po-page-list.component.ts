@@ -17,6 +17,8 @@ import { callFunction, getParentRef, isExternalLink, isTypeof, openExternalLink 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoPageAction } from '../po-page-action.interface';
+import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
+import { PoDisclaimerGroupRemoveAction } from '../../po-disclaimer-group/po-disclaimer-group-remove-action.interface';
 
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageListBaseComponent } from './po-page-list-base.component';
@@ -178,6 +180,18 @@ export class PoPageListComponent extends PoPageListBaseComponent
 
     if (this.disclaimerGroup && this.disclaimerGroup.change) {
       this.disclaimerGroup.change(disclaimers);
+    }
+  }
+
+  onRemoveDisclaimer(removeData: PoDisclaimerGroupRemoveAction) {
+    if (this.disclaimerGroup.remove) {
+      this.disclaimerGroup.remove(removeData);
+    }
+  }
+
+  onRemoveAllDisclaimers(removedDisclaimers: Array<PoDisclaimer>) {
+    if (this.disclaimerGroup.removeAll) {
+      this.disclaimerGroup.removeAll(removedDisclaimers);
     }
   }
 

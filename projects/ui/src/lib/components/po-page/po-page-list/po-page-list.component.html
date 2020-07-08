@@ -96,6 +96,8 @@
       [p-hide-remove-all]="disclaimerGroup?.hideRemoveAll"
       [p-title]="disclaimerGroup?.title"
       (p-change)="onChangeDisclaimerGroup($event)"
+      (p-remove)="onRemoveDisclaimer($event)"
+      (p-remove-all)="onRemoveAllDisclaimers($event)"
     >
     </po-disclaimer-group>
   </po-page-header>

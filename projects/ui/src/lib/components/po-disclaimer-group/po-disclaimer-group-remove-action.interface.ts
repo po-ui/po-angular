@@ -1,7 +1,7 @@
 import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 
 /**
- * @usedBy PoDisclaimerGroupComponent
+ * @usedBy PoDisclaimerGroupComponent, PoPageListComponent
  *
  * @description
  *
