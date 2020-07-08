@@ -11,6 +11,9 @@ import {
   poLocaleDefault
 } from './../../utils/util';
 
+//import { PoLanguageService } from '../../../../../ui/src/lib/services/po-language/po-language.service';
+import { PoLanguageService } from '@po-ui/ng-components';
+
 import { PoPageLogin } from './interfaces/po-page-login.interface';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
@@ -864,7 +867,9 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
     };
   }
 
-  constructor(private loginService: PoPageLoginService, public router: Router) {}
+  constructor(private loginService: PoPageLoginService, public router: Router, poLanguageService: PoLanguageService) {
+    this.selectedLanguage = poLanguageService.getLanguage();
+  }
 
   ngOnDestroy() {
     if (this.loginSubscription) {

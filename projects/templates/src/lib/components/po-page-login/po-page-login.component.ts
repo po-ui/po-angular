@@ -11,6 +11,9 @@ import {
   ViewContainerRef
 } from '@angular/core';
 
+//import { PoLanguageService } from '../../../../../ui/src/lib/services/po-language/po-language.service';
+import { PoLanguageService } from '@po-ui/ng-components';
+
 import { isExternalLink } from '../../utils/util';
 import { PoComponentInjectorService } from '@po-ui/ng-components';
 
@@ -70,9 +73,10 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     private poComponentInjector: PoComponentInjectorService,
     differs: IterableDiffers,
     loginService: PoPageLoginService,
-    router: Router
+    router: Router,
+    poLanguageService: PoLanguageService
   ) {
-    super(loginService, router);
+    super(loginService, router, poLanguageService);
     this.differ = differs.find([]).create(null);
   }
 
