@@ -5,8 +5,8 @@
         name="heroName"
         formControlName="hero"
         p-field-label="nickname"
-        p-field-value="name"
-        p-filter-service="https://thf.totvs.com.br/sample/api/new/heroes"
+        p-field-value="value"
+        p-filter-service="https://po-sample-api.herokuapp.com/v1/heroes"
         p-label="Search a Hero"
         p-sort
         (p-change)="onChangeHero($event)"
@@ -16,17 +16,11 @@
 
     <ng-container *ngIf="hero$ | async as hero">
       <div class="po-row">
-        <po-info class="po-md-6" p-label="Name" [p-value]="hero.name"> </po-info>
+        <po-info class="po-md-4" p-label="Name" [p-value]="hero.name"> </po-info>
 
-        <po-info class="po-md-6" p-label="Nickname" [p-value]="hero.nickname"> </po-info>
-      </div>
+        <po-info class="po-md-4" p-label="Nickname" [p-value]="hero.nickname"> </po-info>
 
-      <po-divider></po-divider>
-
-      <div class="po-row">
-        <po-info class="po-md-6" p-label="Birthday" p-value="{{ hero.birthday | date }}"> </po-info>
-
-        <po-info class="po-md-6" p-label="Email" [p-value]="hero.email"> </po-info>
+        <po-info class="po-md-4" p-label="Email" [p-value]="hero.email"> </po-info>
       </div>
     </ng-container>
   </po-widget>
