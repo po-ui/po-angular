@@ -94,6 +94,21 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
   /** Função que será disparada quando a lista de *disclaimers* for modificada. */
   @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * Função que será disparada quando um *disclaimer* for removido da lista de *disclaimers* pelo usuário.
+   *
+   * Recebe como parâmetro um objeto conforme a interface `PoDisclaimerGroupRemoveAction`.
+   */
+  @Output('p-remove') remove?: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * Função que será disparada quando todos os *disclaimers* forem removidos da lista de *disclaimers* pelo usuário,
+   * utilizando o botão "remover todos".
+   *
+   * Recebe como parâmetro uma lista contendo todos os `disclaimers` removidos.
+   */
+  @Output('p-remove-all') removeAll?: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(differs: IterableDiffers) {
     this.differ = differs.find([]).create(null);
   }
@@ -102,13 +117,14 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
     this.checkChanges();
   }
 
-  closeItem(disclaimer: any, emitChange: boolean = true) {
-    const itemIndex = this.disclaimers.findIndex(d => d['$id'] === disclaimer['$id']);
-    this.disclaimers.splice(itemIndex, 1);
+  onCloseAction(disclaimer) {
+    this.removeDisclaimer(disclaimer);
 
-    if (emitChange) {
-      this.emitChangeDisclaimers();
-    }
+    this.emitChangeDisclaimers();
+    this.remove.emit({
+      removedDisclaimer: { ...disclaimer },
+      currentDisclaimers: [...this.disclaimers]
+    });
   }
 
   isRemoveAll() {
@@ -130,9 +146,15 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
       }
     });
 
-    removeItems.forEach(disclaimer => this.closeItem(disclaimer, false));
+    removeItems.forEach(disclaimer => this.removeDisclaimer(disclaimer));
 
     this.emitChangeDisclaimers();
+    this.removeAll.emit([...removeItems]);
+  }
+
+  private removeDisclaimer(disclaimer: any) {
+    const itemIndex = this.disclaimers.findIndex(d => d['$id'] === disclaimer['$id']);
+    this.disclaimers.splice(itemIndex, 1);
   }
 
   private checkChanges() {
