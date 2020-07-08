@@ -71,7 +71,7 @@ describe('PoDisclaimerGroupComponent:', () => {
   it('should remove/close one disclaimers', () => {
     component.hideRemoveAll = true;
 
-    component.closeItem(disclaimers[0]);
+    component.onCloseAction(disclaimers[0]);
     fixture.detectChanges();
 
     expect(nativeElement.querySelectorAll('po-disclaimer').length).toBe(2);
