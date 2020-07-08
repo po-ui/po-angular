@@ -342,6 +342,66 @@ describe('PoPageListComponent - Desktop:', () => {
     expect(component.disclaimerGroup.change).toHaveBeenCalled();
   });
 
+  it('onRemoveDisclaimer: should call disclaimerGroup.remove if it`s defined', () => {
+    const currentDisclaimers: Array<PoDisclaimer> = [{ value: 'test2' }, { value: 'test3' }];
+
+    const removedDisclaimer = { value: 'hotel' };
+
+    component.disclaimerGroup = {
+      remove: () => {},
+      disclaimers: currentDisclaimers,
+      title: 'test'
+    };
+
+    const removeData = { removedDisclaimer, currentDisclaimers };
+
+    spyOn(component.disclaimerGroup, 'remove');
+
+    component.onRemoveDisclaimer(removeData);
+
+    expect(component.disclaimerGroup.remove).toHaveBeenCalledWith(removeData);
+  });
+
+  it('onRemoveDisclaimer: shouldn`t return an error if disclaimerGroup.remove is undefined', () => {
+    component.disclaimerGroup = {
+      remove: undefined,
+      disclaimers: [],
+      title: 'test'
+    };
+
+    const result = () => component.onRemoveDisclaimer(undefined);
+
+    expect(result).not.toThrowError();
+  });
+
+  it('onRemoveAllDisclaimers: shouldn`t return an error disclaimerGroup.removeAll is undefined', () => {
+    component.disclaimerGroup = {
+      removeAll: undefined,
+      disclaimers: [],
+      title: 'test'
+    };
+
+    const result = () => component.onRemoveAllDisclaimers(undefined);
+
+    expect(result).not.toThrowError();
+  });
+
+  it('onRemoveAllDisclaimers: should call disclaimerGroup.removeAll if it`s defined', () => {
+    const removedDisclaimers: Array<PoDisclaimer> = [{ value: 'test2' }, { value: 'test3' }];
+
+    component.disclaimerGroup = {
+      removeAll: () => {},
+      disclaimers: removedDisclaimers,
+      title: 'test'
+    };
+
+    spyOn(component.disclaimerGroup, 'removeAll');
+
+    component.onRemoveAllDisclaimers(removedDisclaimers);
+
+    expect(component.disclaimerGroup.removeAll).toHaveBeenCalledWith(removedDisclaimers);
+  });
+
   describe('Templates:', () => {
     const fakeFilter = {
       advancedAction: 'xxx',

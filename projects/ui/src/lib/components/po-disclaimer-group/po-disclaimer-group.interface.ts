@@ -65,4 +65,20 @@ export interface PoDisclaimerGroup {
    * Título do grupo de *disclaimers*.
    */
   title: string;
+
+  /**
+   * Função que será disparada quando um *disclaimer* for removido da lista de
+   * *disclaimers* pelo usuário.
+   *
+   * Recebe como parâmetro um objeto conforme a interface `PoDisclaimerGroupRemoveAction`.
+   */
+  remove?: Function;
+
+  /**
+   * Função que será disparada quando todos os *disclaimers* forem removidos da lista de *disclaimers* pelo usuário,
+   * utilizando o botão "remover todos".
+   *
+   * Recebe como parâmetro uma lista contendo todos os `disclaimers` removidos.
+   */
+  removeAll?: Function;
 }
