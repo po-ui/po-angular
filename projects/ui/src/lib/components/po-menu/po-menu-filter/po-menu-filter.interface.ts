@@ -19,3 +19,15 @@ export interface PoMenuFilter {
    */
   getFilteredData(search: string, params?: any): Observable<Array<PoMenuItemFiltered>>;
 }
+
+export interface poMenuFilterLiterals {
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Strings do poMenuFilter
+   *
+   */
+  search?: string;
+}
