@@ -5,6 +5,7 @@ import * as utilFunctions from './../../utils/util';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoPageBackgroundComponent } from './po-page-background.component';
+import { PoLanguageService } from '@po-ui/ng-components';
 
 describe('PoPageBackgroundComponent:', () => {
   let component: PoPageBackgroundComponent;
@@ -76,10 +77,10 @@ describe('PoPageBackgroundComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('ngOnInit: should get the browserLanguage and apply it to `selectedLanguageOption`', () => {
+    it('ngOnInit: should get the stored language on localstorage (or browserLanguage by default if en, pt, es or ru) and apply it to `selectedLanguageOption`', () => {
       component.ngOnInit();
-
-      expect(component.selectedLanguageOption).toBe(utilFunctions.browserLanguage());
+      const languageService = new PoLanguageService();
+      expect(component.selectedLanguageOption).toBe(languageService.getShortLanguage());
     });
 
     it('onChangeLanguage: should emit `selectedLanguage`', () => {

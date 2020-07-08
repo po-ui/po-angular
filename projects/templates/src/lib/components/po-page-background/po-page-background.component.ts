@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { browserLanguage, convertToBoolean, isTypeof } from './../../utils/util';
 import { PoSelectOption } from '@po-ui/ng-components';
+import { PoLanguageService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'po-page-background',
@@ -77,8 +78,10 @@ export class PoPageBackgroundComponent implements OnInit {
    */
   @Output('p-selected-language') selectedLanguage?: EventEmitter<any> = new EventEmitter<any>();
 
+  constructor(public poLanguageService: PoLanguageService) {}
+
   ngOnInit() {
-    this.selectedLanguageOption = browserLanguage();
+    this.selectedLanguageOption = this.poLanguageService.getShortLanguage();
   }
 
   onChangeLanguage() {

@@ -9,12 +9,11 @@ import * as UtilFunctions from './../../utils/util';
 import { PoPageLoginBaseComponent, poPageLoginLiteralsDefault } from './po-page-login-base.component';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
 import { PoPageLoginService } from './po-page-login.service';
+import { PoLanguageService } from '@po-ui/ng-components';
 
 const routerStub = {
   navigate: jasmine.createSpy('navigate')
 };
-
-@Directive()
 export class PoPageLoginComponent extends PoPageLoginBaseComponent {
   protected concatenateLoginHintWithContactEmail(contactEmail: string): void {}
   protected concatenateTitleWithProductName(productName: string): void {}
@@ -25,11 +24,12 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent {
 describe('PoPageLoginBaseComponent: ', () => {
   let component: PoPageLoginBaseComponent;
   let servicePageLogin: PoPageLoginService;
+  let languageService: PoLanguageService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      providers: [PoPageLoginService]
+      providers: [PoPageLoginService, PoLanguageService]
     }).compileComponents();
   }));
 
@@ -39,7 +39,9 @@ describe('PoPageLoginBaseComponent: ', () => {
 
   beforeEach(() => {
     servicePageLogin = new PoPageLoginService(undefined);
-    component = new PoPageLoginComponent(servicePageLogin, <any>routerStub);
+    languageService = new PoLanguageService();
+
+    component = new PoPageLoginComponent(servicePageLogin, <any>routerStub, languageService);
   });
 
   it('should be created', () => {
