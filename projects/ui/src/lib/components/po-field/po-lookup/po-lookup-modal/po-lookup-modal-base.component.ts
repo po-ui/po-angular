@@ -223,15 +223,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   abstract openModal(): void;
 
   private getFilteredItems(filter: string): Observable<PoLookupResponseApi> {
-    const { page, pageSize, filterParams } = this;
+    const filteredParams: PoLookupFilteredItemsParams = this.getFilteredParams(filter);
 
-    if (this.filterService.getFilteredItems) {
-      const filteredParams: PoLookupFilteredItemsParams = this.getFilteredParams(filter);
-
-      return this.filterService.getFilteredItems(filteredParams);
-    }
-
-    return this.filterService.getFilteredData(filter, page, pageSize, filterParams);
+    return this.filterService.getFilteredItems(filteredParams);
   }
 
   private getFilteredParams(filter: string) {
