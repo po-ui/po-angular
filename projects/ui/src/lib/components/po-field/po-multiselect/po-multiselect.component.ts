@@ -14,6 +14,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isMobile } from './../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 
@@ -85,12 +86,13 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   private isCalculateVisibleItems: boolean = true;
 
   constructor(
-    public renderer: Renderer2,
+    private renderer: Renderer2,
     private changeDetector: ChangeDetectorRef,
+    private el: ElementRef,
     private controlPosition: PoControlPositionService,
-    private el: ElementRef
+    languageService: PoLanguageService
   ) {
-    super();
+    super(languageService);
   }
 
   ngAfterViewInit() {
