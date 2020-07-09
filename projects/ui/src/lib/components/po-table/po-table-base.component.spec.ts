@@ -90,20 +90,6 @@ describe('PoTableBaseComponent:', () => {
     expectPropertiesValues(component, 'items', [], []);
   });
 
-  it('should set selectable with value of checkbox', () => {
-    component.checkbox = true;
-    const expectedValue = true;
-
-    expect(component.selectable).toEqual(expectedValue);
-  });
-
-  it('should set checkbox with value of selectable', () => {
-    component.selectable = true;
-    const expectedValue = true;
-
-    expect(component.checkbox).toEqual(expectedValue);
-  });
-
   it('should set selectable and call calculateWidthHeaders', () => {
     spyOn(component, 'calculateWidthHeaders');
     const validValues = ['', true, 1];
