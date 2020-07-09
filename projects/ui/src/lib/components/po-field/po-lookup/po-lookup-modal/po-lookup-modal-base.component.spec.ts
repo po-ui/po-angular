@@ -219,7 +219,7 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
     });
 
-    it('getFilteredItems: shoud call `getFilteredItems` and return a Observable if `getFilteredItems` is truthy', () => {
+    it('getFilteredItems: shoud call `getFilteredItems` and return an Observable', () => {
       const page = 1;
       const pageSize = 1;
       const filterParams = { code: 1 };
@@ -237,29 +237,6 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component['getFilteredParams']).toHaveBeenCalled();
       expect(filteredDataObservable instanceof Observable);
       expect(component.filterService.getFilteredItems).toHaveBeenCalledWith({ filter, page, pageSize, filterParams });
-    });
-
-    it('getFilteredItems: shoud call `getFilteredData` and return a Observable if `getFilteredItems` is falsy', () => {
-      const page = 1;
-      const pageSize = 1;
-      const filterParams = { code: 1 };
-      const filter = 'po';
-
-      component.page = page;
-      component.pageSize = pageSize;
-      component.filterParams = filterParams;
-
-      component.filterService.getFilteredItems = undefined;
-      component.filterService.getFilteredData = () => of({ items: [], hasNext: false });
-
-      spyOn(component.filterService, 'getFilteredData').and.returnValue(of(<any>{ items }));
-      spyOn(component, <any>'getFilteredParams');
-
-      const filteredDataObservable = component['getFilteredItems'](filter);
-
-      expect(component['getFilteredParams']).not.toHaveBeenCalled();
-      expect(filteredDataObservable instanceof Observable);
-      expect(component.filterService.getFilteredData).toHaveBeenCalledWith(filter, page, pageSize, filterParams);
     });
 
     it('search: should call `getFilteredItems` if `searchValue` it`s truthy.', () => {
