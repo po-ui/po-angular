@@ -13,9 +13,6 @@ import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 
 class LookupFilterService implements PoLookupFilter {
-  getFilteredData(param: any, quantity: number): Observable<any> {
-    return of({ items: [{ value: 123, label: 'teste' }] });
-  }
   getObjectByValue(id: string): Observable<any> {
     return of({ value: 123, label: 'teste' });
   }
