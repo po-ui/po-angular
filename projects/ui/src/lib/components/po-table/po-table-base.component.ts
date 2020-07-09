@@ -298,32 +298,6 @@ export abstract class PoTableBaseComponent implements OnChanges {
   /**
    * @optional
    *
-   * @deprecated 3.x.x
-   *
-   * @description
-   *
-   * ***Deprecated 3.x.x***
-   *
-   * > Esta propriedade está depreciada, utilize a propriedade `p-selectable`.
-   *
-   * Habilita na primeira coluna a opção de selecionar linhas,
-   * todos os itens da lista possuem a propriedade dinâmica `$selected` para identificar se a linha está selecionada.
-   * > Exemplo: `item.$selected` ou `item['$selected']`.
-   * > Os itens filhos possuem comportamento independente do item pai.
-   *
-   * @default `false`
-   */
-  @Input('p-checkbox') set checkbox(checkbox: boolean) {
-    this.selectable = checkbox;
-  }
-
-  get checkbox() {
-    return this.selectable;
-  }
-
-  /**
-   * @optional
-   *
    * @description
    *
    * Define uma lista de ações.
