@@ -2,7 +2,6 @@ import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import {
-  browserLanguage,
   convertToBoolean,
   removeDuplicatedOptions,
   removeUndefinedAndNullOptions,
@@ -10,6 +9,7 @@ import {
   poLocaleDefault
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
 import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
@@ -56,6 +56,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _options: Array<PoMultiselectOption>;
   private _required?: boolean = false;
   private _sort?: boolean = false;
+  private language: string;
 
   private lastLengthModel;
   private onModelChange: any;
@@ -118,21 +119,22 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * </po-po-multiselect>
    * ```
    *
-   *  > O objeto padrão de literais será traduzido de acordo com o idioma do *browser* (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
   @Input('p-literals') set literals(value: PoMultiselectLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poMultiselectLiteralsDefault[poLocaleDefault],
-        ...poMultiselectLiteralsDefault[browserLanguage()],
+        ...poMultiselectLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poMultiselectLiteralsDefault[browserLanguage()];
+      this._literals = poMultiselectLiteralsDefault[this.language];
     }
   }
   get literals() {
-    return this._literals || poMultiselectLiteralsDefault[browserLanguage()];
+    return this._literals || poMultiselectLiteralsDefault[this.language];
   }
 
   /**
@@ -298,6 +300,10 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   protected clickOutListener: () => void;
   protected resizeListener: () => void;
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   ngOnInit() {
     this.updateList(this.options);

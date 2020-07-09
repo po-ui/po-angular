@@ -1,4 +1,3 @@
-import { fakeAsync, tick } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
@@ -9,11 +8,16 @@ import {
   poLocaleDefault
 } from '../../../utils/util';
 import * as UtilsFunctions from '../../../utils/util';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
 
 class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
+  constructor() {
+    super(new PoLanguageService());
+  }
+
   updateVisibleItems() {}
 }
 
@@ -428,7 +432,7 @@ describe('PoMultiselectBaseComponent:', () => {
 
   describe('Properties:', () => {
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('zw');
+      component['language'] = 'zw';
 
       component.literals = {};
 
@@ -436,7 +440,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component.literals = {};
 
@@ -444,7 +448,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('en');
+      component['language'] = 'en';
 
       component.literals = {};
 
@@ -452,7 +456,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
 
       component.literals = {};
 
@@ -460,7 +464,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('p-literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('ru');
+      component['language'] = 'ru';
 
       component.literals = {};
 
@@ -468,7 +472,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('p-literals: should accept custom literals', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue(poLocaleDefault);
+      component['language'] = poLocaleDefault;
 
       const customLiterals = Object.assign({}, poMultiselectLiteralsDefault[poLocaleDefault]);
 
@@ -483,7 +487,7 @@ describe('PoMultiselectBaseComponent:', () => {
     it('p-literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      component['language'] = poLocaleDefault;
 
       expectPropertiesValues(component, 'literals', invalidValues, poMultiselectLiteralsDefault[poLocaleDefault]);
     });
