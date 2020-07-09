@@ -101,7 +101,8 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    * </po-lookup>
    * ```
    *
-   * > O objeto padrão de literais será traduzido de acordo com o idioma do browser (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
   @Input('p-literals') literals?: PoLookupLiterals;
 

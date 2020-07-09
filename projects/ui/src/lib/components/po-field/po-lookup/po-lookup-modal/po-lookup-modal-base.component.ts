@@ -3,12 +3,13 @@ import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive } 
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { browserLanguage, isTypeof, poLocaleDefault } from '../../../../utils/util';
+import { isTypeof, poLocaleDefault } from '../../../../utils/util';
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from '../../../po-table';
 import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
+import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 
 import { PoLookupColumn } from '../interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
@@ -66,8 +67,9 @@ export const poLookupLiteralsDefault = {
  */
 @Directive()
 export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
-  private _literals: any;
-  private _title: any;
+  private _literals: PoLookupLiterals;
+  private _title: string;
+  private language: string = poLocaleDefault;
 
   hasNext = true;
   isLoading = false;
@@ -116,14 +118,14 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poLookupLiteralsDefault[poLocaleDefault],
-        ...poLookupLiteralsDefault[browserLanguage()],
+        ...poLookupLiteralsDefault[this.language],
         ...value
       };
       if (value.modalTitle) {
         this.title = this.literals.modalTitle;
       }
     } else {
-      this._literals = poLookupLiteralsDefault[browserLanguage()];
+      this._literals = poLookupLiteralsDefault[this.language];
     }
     this.primaryAction.label = this.literals.modalPrimaryActionLabel;
     this.secondaryAction.label = this.literals.modalSecondaryActionLabel;
@@ -131,7 +133,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   get literals() {
-    return this._literals || poLookupLiteralsDefault[browserLanguage()];
+    return this._literals || poLookupLiteralsDefault[this.language];
   }
 
   /** Título da modal. */
@@ -151,6 +153,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   /** Evento utilizado ao selecionar um registro da tabela. */
   @Output('p-change-model') model: EventEmitter<any> = new EventEmitter<any>();
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   ngOnDestroy() {
     if (this.filterSubscription) {

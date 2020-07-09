@@ -4,6 +4,7 @@ import * as UtilsFunctions from '../../../../utils/util';
 import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
+import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 
 import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
@@ -18,7 +19,7 @@ describe('PoLookupModalBaseComponent:', () => {
   let items;
 
   beforeEach(() => {
-    component = new PoLookupModalComponent();
+    component = new PoLookupModalComponent(new PoLanguageService());
 
     component.filterService = {
       getFilteredItems: ({ filter, pageSize }) => of({ items: [], hasNext: false }),
@@ -48,7 +49,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
   describe('Properties:', () => {
     it('literals: should return literals default if `_literals` is undefined', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component['_literals'] = undefined;
 
@@ -58,7 +59,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('literals: should set title with value of `literals.modalTitle`', () => {
       const literals = { 'modalTitle': 'title' };
 
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component.literals = literals;
 
@@ -67,7 +68,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('literals: shouldn`t define a title if a modalTitle is not defined', () => {
       const literals = { 'modalPrimaryActionLabel': 'action' };
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component.literals = literals;
 
@@ -75,7 +76,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('zw');
+      component['language'] = 'zw';
 
       component.literals = {};
 
@@ -83,7 +84,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component.literals = {};
 
@@ -91,7 +92,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in english if browser is setted with `en`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('en');
+      component['language'] = 'en';
 
       component.literals = {};
 
@@ -99,7 +100,8 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should accept custom literals and call `setTableLiterals`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue(UtilsFunctions.poLocaleDefault);
+      component['language'] = UtilsFunctions.poLocaleDefault;
+
       spyOn(component, <any>'setTableLiterals');
 
       const customLiterals = Object.assign({}, poLookupLiteralsDefault[UtilsFunctions.poLocaleDefault]);
@@ -113,7 +115,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
 
       component.literals = {};
 
@@ -121,7 +123,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('ru');
+      component['language'] = 'ru';
 
       component.literals = {};
 
@@ -131,7 +133,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(UtilsFunctions.poLocaleDefault);
+      component['language'] = UtilsFunctions.poLocaleDefault;
 
       expectPropertiesValues(
         component,
