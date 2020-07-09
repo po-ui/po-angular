@@ -12,11 +12,12 @@ import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interf
 import { PoLookupModalService } from '../../../../components/po-field/po-lookup/services/po-lookup-modal.service';
 
 class LookupFilterService implements PoLookupFilter {
-  getFilteredData(params: any): Observable<any> {
-    return of({ items: [{ value: 123, label: 'teste' }] });
-  }
   getObjectByValue(id: string): Observable<any> {
     return of({});
+  }
+
+  getFilteredItems(params: any): Observable<any> {
+    return of({ items: [{ value: 123, label: 'teste' }] });
   }
 }
 
