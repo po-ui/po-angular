@@ -1,6 +1,7 @@
 import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { browserLanguage, poLocaleDefault } from './../../../utils/util';
+import { poLocaleDefault } from './../../../utils/util';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
@@ -43,6 +44,7 @@ export const poPageEditLiteralsDefault = {
 export class PoPageEditBaseComponent {
   private _literals: PoPageEditLiterals;
   private _title: string;
+  private language: string;
 
   @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
 
@@ -85,21 +87,22 @@ export class PoPageEditBaseComponent {
    * </po-page-edit>
    * ```
    *
-   *  > O objeto padrão de literais será traduzido de acordo com o idioma do browser (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
   @Input('p-literals') set literals(value: PoPageEditLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poPageEditLiteralsDefault[poLocaleDefault],
-        ...poPageEditLiteralsDefault[browserLanguage()],
+        ...poPageEditLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poPageEditLiteralsDefault[browserLanguage()];
+      this._literals = poPageEditLiteralsDefault[this.language];
     }
   }
   get literals() {
-    return this._literals || poPageEditLiteralsDefault[browserLanguage()];
+    return this._literals || poPageEditLiteralsDefault[this.language];
   }
 
   /** Título da página. */
@@ -147,4 +150,8 @@ export class PoPageEditBaseComponent {
    * > Caso não utilizar esta propriedade, o botão de "Salvar e Novo" não será exibido.
    */
   @Output('p-save-new') saveNew? = new EventEmitter();
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 }
