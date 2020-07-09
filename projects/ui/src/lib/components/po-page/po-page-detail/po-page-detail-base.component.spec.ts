@@ -2,12 +2,12 @@ import { fakeAsync, tick } from '@angular/core/testing';
 
 import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../utils/util';
-import * as UtilFunctions from './../../../utils/util';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoPageDetailBaseComponent, poPageDetailLiteralsDefault } from './po-page-detail-base.component';
 
 describe('PoPageDefaultBaseComponent:', () => {
-  const component = new PoPageDetailBaseComponent();
+  const component = new PoPageDetailBaseComponent(new PoLanguageService());
 
   it('should be created', () => {
     expect(component instanceof PoPageDetailBaseComponent).toBeTruthy();
@@ -15,7 +15,7 @@ describe('PoPageDefaultBaseComponent:', () => {
 
   describe('Properties: ', () => {
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('zw');
+      component['language'] = 'zw';
 
       component.literals = {};
 
@@ -23,7 +23,7 @@ describe('PoPageDefaultBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component.literals = {};
 
@@ -31,7 +31,7 @@ describe('PoPageDefaultBaseComponent:', () => {
     });
 
     it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('en');
+      component['language'] = 'en';
 
       component.literals = {};
 
@@ -39,7 +39,7 @@ describe('PoPageDefaultBaseComponent:', () => {
     });
 
     it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
 
       component.literals = {};
 
@@ -47,7 +47,7 @@ describe('PoPageDefaultBaseComponent:', () => {
     });
 
     it('p-literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue('ru');
+      component['language'] = 'ru';
 
       component.literals = {};
 
@@ -55,7 +55,7 @@ describe('PoPageDefaultBaseComponent:', () => {
     });
 
     it('p-literals: should accept custom literals', () => {
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      component['language'] = poLocaleDefault;
 
       const customLiterals = poPageDetailLiteralsDefault[poLocaleDefault];
 
@@ -71,7 +71,7 @@ describe('PoPageDefaultBaseComponent:', () => {
     it('p-literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      component['language'] = poLocaleDefault;
 
       expectPropertiesValues(component, 'literals', invalidValues, poPageDetailLiteralsDefault[poLocaleDefault]);
     });
