@@ -106,7 +106,7 @@ import { PoLanguageModule } from '../po-language/po-language.module';
  *
  * Os idiomas e literais serão automaticamente buscados com parâmetros na própria URL:
  * - **language**: o idioma será sempre passado por parâmetro e é recomendado utilizar uma das linguagens
- * suportadas pelo PO (`pt-br`, `en-us` ou `es-es`).
+ * suportadas pelo PO (`pt-br`, `en-us`, `es-es` ou `ru`).
  * - **literals**: as literais serão separadas por vírgula. Caso esse parâmetro não seja informado, o
  * serviço deve retornar todas as literais do idioma.
  *
