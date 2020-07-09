@@ -1,6 +1,7 @@
 import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { browserLanguage, poLocaleDefault } from './../../../utils/util';
+import { poLocaleDefault } from './../../../utils/util';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
@@ -39,6 +40,7 @@ export const poPageDetailLiteralsDefault = {
 export class PoPageDetailBaseComponent {
   private _literals: PoPageDetailLiterals;
   private _title: string;
+  private language: string;
 
   @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
 
@@ -78,21 +80,22 @@ export class PoPageDetailBaseComponent {
    * </po-page-detail>
    * ```
    *
-   *  > O objeto padrão de literais será traduzido de acordo com o idioma do browser (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
   @Input('p-literals') set literals(value: PoPageDetailLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poPageDetailLiteralsDefault[poLocaleDefault],
-        ...poPageDetailLiteralsDefault[browserLanguage()],
+        ...poPageDetailLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poPageDetailLiteralsDefault[browserLanguage()];
+      this._literals = poPageDetailLiteralsDefault[this.language];
     }
   }
   get literals() {
-    return this._literals || poPageDetailLiteralsDefault[browserLanguage()];
+    return this._literals || poPageDetailLiteralsDefault[this.language];
   }
 
   /** Título da página. */
@@ -140,4 +143,8 @@ export class PoPageDetailBaseComponent {
    * > Caso não utilizar esta propriedade, o botão de "Remover" não será exibido.
    */
   @Output('p-remove') remove? = new EventEmitter();
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 }
