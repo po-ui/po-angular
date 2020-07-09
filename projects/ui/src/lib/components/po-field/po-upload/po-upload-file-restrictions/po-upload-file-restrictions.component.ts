@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 
-import { browserLanguage, formatBytes, poLocaleDefault } from '../../../../utils/util';
+import { formatBytes, poLocaleDefault } from '../../../../utils/util';
+import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 
 import { poUploadLiteralsDefault } from '../po-upload-base.component';
 
@@ -13,6 +14,7 @@ export class PoUploadFileRestrictionsComponent implements OnInit {
   private _allowedExtensions: string;
   private _maxFileSize: string;
   private _minFileSize: string;
+  private language: string;
 
   literals: any;
 
@@ -42,18 +44,16 @@ export class PoUploadFileRestrictionsComponent implements OnInit {
     return this._minFileSize;
   }
 
-  get language(): string {
-    return browserLanguage();
+  constructor(private changeDetector: ChangeDetectorRef, languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
   }
-
-  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.setLiterals();
   }
 
   private formatAllowedExtensions(allowedExtensions: Array<string>): string {
-    const conjunction = { 'pt': 'e', 'en': 'and', 'es': 'y' };
+    const conjunction = { 'pt': 'e', 'en': 'and', 'es': 'y', 'ru': 'и' };
 
     return allowedExtensions
       ? allowedExtensions

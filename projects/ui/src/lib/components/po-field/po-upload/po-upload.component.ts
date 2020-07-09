@@ -6,6 +6,7 @@ import { PoButtonComponent } from './../../po-button/po-button.component';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoUploadBaseComponent } from './po-upload-base.component';
 import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-drop.component';
@@ -85,9 +86,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     uploadService: PoUploadService,
     public renderer: Renderer2,
     private i18nPipe: PoI18nPipe,
-    private notification: PoNotificationService
+    private notification: PoNotificationService,
+    languageService: PoLanguageService
   ) {
-    super(uploadService);
+    super(uploadService, languageService);
   }
 
   get displayDragDrop(): boolean {
