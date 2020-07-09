@@ -19,9 +19,6 @@ export const poUploadLiteralsDefault = {
     selectFile: 'Select file',
     selectFiles: 'Select files',
     selectFolder: 'Select folder',
-    deleteFile: 'Delete',
-    cancel: 'Cancel',
-    tryAgain: 'Try again',
     startSending: 'Start sending',
     dragFilesHere: 'Drag files here',
     dragFoldersHere: 'Drag folders here',
@@ -48,9 +45,6 @@ export const poUploadLiteralsDefault = {
     selectFile: 'Seleccionar archivo',
     selectFiles: 'Seleccionar archivos',
     selectFolder: 'Seleccionar carpeta',
-    deleteFile: 'Borrar',
-    cancel: 'Cancelar',
-    tryAgain: 'Intentar de nuevo',
     startSending: 'Iniciar carga',
     dragFilesHere: 'Arrastra los archivos aquí',
     dragFoldersHere: 'Arrastra las carpetas aquí',
@@ -77,9 +71,6 @@ export const poUploadLiteralsDefault = {
     selectFile: 'Selecionar arquivo',
     selectFiles: 'Selecionar arquivos',
     selectFolder: 'Selecionar pasta',
-    deleteFile: 'Excluir',
-    cancel: 'Cancelar',
-    tryAgain: 'Tentar Novamente',
     startSending: 'Iniciar envio',
     dragFilesHere: 'Arraste os arquivos aqui',
     dragFoldersHere: 'Arraste as pastas aqui',
@@ -106,9 +97,6 @@ export const poUploadLiteralsDefault = {
     selectFile: 'Выберите файл',
     selectFiles: 'Выберите файлы',
     selectFolder: 'Выберите папку с файлами',
-    deleteFile: 'удалять',
-    cancel: 'отменить',
-    tryAgain: 'попробуйте еще раз',
     startSending: 'Начать загрузку',
     dragFilesHere: 'Перетащите файлы сюда',
     dragFoldersHere: 'Перетащите сюда папки',
@@ -313,23 +301,15 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * Objeto com as literais usadas no `po-upload`.
    *
-   * Existem duas maneiras de customizar o componente, passando um objeto com todas as literais disponíveis:
+   * Existem duas maneiras de customizar o componente:
    *
+   * - passando um objeto implementando a interface `PoUploadLiterals` com todas as literais disponíveis;
+   * - passando apenas as literais que deseja customizar:
    * ```
    *  const customLiterals: PoUploadLiterals = {
-   *    cancel: 'Desistir',
-   *    deleteFile: 'Deletar',
-   *  };
-   *
-   * Ou passando apenas as literais que deseja customizar:,
+   *    folders: 'Pastas',
    *    selectFile: 'Buscar arquivo',
-   * ```
    *    startSending: 'Enviar'
-   *   tryAgain: 'Recomeçar',
-   *
-   * ```
-   *  const customLiterals: PoUploadLiterals = {
-   *    deleteFile: 'Deletar'
    *  };
    * ```
    *
@@ -341,7 +321,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * </po-upload>
    * ```
    *
-   * > O objeto padrão de literais será traduzido de acordo com o idioma do *browser* (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do *browser* (pt, en, es, ru).
    */
   @Input('p-literals') set literals(value: PoUploadLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
