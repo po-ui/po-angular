@@ -7,6 +7,7 @@ import { expectPropertiesValues, configureTestSuite } from '../../../util-test/u
 
 import * as utilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoUploadBaseComponent, poUploadLiteralsDefault } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
@@ -18,7 +19,7 @@ import { PoUploadService } from './po-upload.service';
 })
 class PoUploadComponent extends PoUploadBaseComponent {
   constructor(uploadService: PoUploadService) {
-    super(uploadService);
+    super(uploadService, new PoLanguageService());
   }
 
   sendFeedback() {}
@@ -41,7 +42,7 @@ describe('PoUploadBaseComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [PoUploadComponent],
-      providers: [HttpClient, HttpHandler, PoUploadService],
+      providers: [HttpClient, HttpHandler, PoUploadService, PoLanguageService],
       imports: [FormsModule]
     });
   });
@@ -562,7 +563,7 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('zw');
+      component['language'] = 'zw';
 
       component.literals = {};
 
@@ -570,7 +571,7 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component.literals = {};
 
@@ -578,7 +579,7 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('en');
+      component['language'] = 'en';
 
       component.literals = {};
 
@@ -586,7 +587,7 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
 
       component.literals = {};
 
@@ -594,7 +595,7 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('p-literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      component['language'] = 'ru';
 
       component.literals = {};
 
@@ -602,7 +603,7 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('p-literals: should accept custom literals', () => {
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(utilsFunctions.poLocaleDefault);
+      component['language'] = utilsFunctions.poLocaleDefault;
 
       const customLiterals = Object.assign({}, poUploadLiteralsDefault[utilsFunctions.poLocaleDefault]);
 
@@ -617,7 +618,7 @@ describe('PoUploadBaseComponent:', () => {
     it('p-literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(utilsFunctions, <any>'browserLanguage').and.returnValue(utilsFunctions.poLocaleDefault);
+      component['language'] = utilsFunctions.poLocaleDefault;
 
       expectPropertiesValues(
         component,

@@ -1,7 +1,7 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { browserLanguage, convertToBoolean, isEquals, isIE, isMobile, poLocaleDefault } from '../../../utils/util';
+import { convertToBoolean, isEquals, isIE, isMobile, poLocaleDefault } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoUploadFile } from './po-upload-file';
@@ -10,6 +10,7 @@ import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
 import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { InputBoolean } from '../../../decorators';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals>{
@@ -162,6 +163,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _isMultiple?: boolean;
   private _literals?: any;
   private _required?: boolean;
+  private language: string;
 
   allowedExtensions: string;
   currentFiles: Array<PoUploadFile>;
@@ -345,15 +347,15 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poUploadLiteralsDefault[poLocaleDefault],
-        ...poUploadLiteralsDefault[browserLanguage()],
+        ...poUploadLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poUploadLiteralsDefault[browserLanguage()];
+      this._literals = poUploadLiteralsDefault[this.language];
     }
   }
   get literals() {
-    return this._literals || poUploadLiteralsDefault[browserLanguage()];
+    return this._literals || poUploadLiteralsDefault[this.language];
   }
 
   /** Texto de apoio para o campo. */
@@ -508,7 +510,9 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da *tag* `form`.
   @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(protected uploadService: PoUploadService) {}
+  constructor(protected uploadService: PoUploadService, languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   abstract sendFeedback(): void;
 

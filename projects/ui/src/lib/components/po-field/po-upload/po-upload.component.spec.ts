@@ -7,6 +7,7 @@ import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoButtonModule } from '../../po-button/po-button.module';
 import { PoContainerModule } from '../../po-container/po-container.module';
 import { PoProgressModule } from '../../po-progress/po-progress.module';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
@@ -48,7 +49,7 @@ describe('PoUploadComponent:', () => {
         PoUploadDragDropDirective,
         PoUploadFileRestrictionsComponent
       ],
-      providers: [HttpClient, HttpHandler, PoNotificationService, PoUploadService]
+      providers: [HttpClient, HttpHandler, PoNotificationService, PoUploadService, PoLanguageService]
     });
   });
 
