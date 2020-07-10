@@ -14,6 +14,11 @@ export const poPageBlockedUserLiterals = {
       title: 'Opa!',
       firstPhrase: 'Tuvimos que bloquear esta pantalla temporalmente.',
       secondPhrase: '¡Pero no se preocupe! Sólo tienes que iniciar sesión de nuevo.'
+    },
+    ru: {
+      title: 'Ой!',
+      firstPhrase: 'Нам пришлось временно заблокировать этот раздел.',
+      secondPhrase: 'Но не волнуйтесь! Просто войдите в систему еще раз.'
     }
   },
   exceededAttempts: {
@@ -39,6 +44,14 @@ export const poPageBlockedUserLiterals = {
       secondPhrase: 'Esto es para evitar que los hackers invadan su cuenta.',
       thirdPhrase: `¡Pero no se preocupe! Si usted es el dueño de la cuenta
         y acaba de olvidar su contraseña, simplemente póngase en contacto con el soporte.`
+    },
+    ru: {
+      title: 'Ой!',
+      firstPhrase:
+        'Для вашей безопасности, после {0} попыток ввода пароля\r\nваш пользователь блокируется и не сможет авторизоваться в течение {1} часа(ов) :(',
+      secondPhrase: 'Это делается для того, чтобы хакеры не могли взломать ваш аккаунт.',
+      thirdPhrase:
+        'Но не волнуйтесь! Если вы являетесь владельцем учетной записи и просто забыли свой пароль, обратитесь в службу поддержки.'
     }
   },
   expiredPassword: {
@@ -58,6 +71,12 @@ export const poPageBlockedUserLiterals = {
       firstPhrase: `Cada {0} día(s) es necesario crear una nueva contraseña por razones de seguridad.
         Después de estos {0} día(s) su acceso está bloqueado :(`,
       secondPhrase: '¡Pero no se preocupe! Sólo tienes que ponerse en contacto con el administrador del sistema.'
+    },
+    ru: {
+      title: 'Ой! Срок действия вашего пароля истек',
+      firstPhrase:
+        'Каждые {0} дней вам необходимо создавать новый пароль в целях безопасности.\r\nПосле {0} дней ваш доступ будет заблокирован :(',
+      secondPhrase: 'Но не волнуйтесь! Просто обратитесь к своему системному администратору.'
     }
   }
 };
