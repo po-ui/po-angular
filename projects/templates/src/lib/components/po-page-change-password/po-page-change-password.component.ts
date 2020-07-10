@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { PoComponentInjectorService, PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoComponentInjectorService, PoLanguageService, PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 
-import { browserLanguage, getParentRef, isExternalLink, isTypeof, poLocaleDefault } from '../../utils/util';
+import { getParentRef, isExternalLink, isTypeof, poLocaleDefault } from '../../utils/util';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
@@ -53,9 +53,7 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
 })
 export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseComponent
   implements AfterViewInit, OnDestroy, OnInit {
-  private newPasswordSubscription: Subscription;
-
-  readonly literals: {
+  literals: {
     backButton: string;
     confirmPassword: string;
     createNewPassword: string;
@@ -73,11 +71,9 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
     safetyTipsSecond: string;
     safetyTipsThird: string;
     saveButton: string;
-  } = {
-    ...poPageChangePasswordLiterals[poLocaleDefault],
-    ...poPageChangePasswordLiterals[browserLanguage()]
-  };
+  } = poPageChangePasswordLiterals[poLocaleDefault];
 
+  private newPasswordSubscription: Subscription;
   private componentRef: ComponentRef<any> = null;
 
   modalAction: PoModalAction = {
@@ -97,10 +93,19 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
     private router: Router,
     private service: PoPageChangePasswordService,
     private poComponentInjector: PoComponentInjectorService,
+    languageService: PoLanguageService,
     viewRef: ViewContainerRef
   ) {
     super();
+
     this.parentRef = getParentRef(viewRef);
+
+    const language = languageService.getShortLanguage();
+
+    this.literals = {
+      ...poPageChangePasswordLiterals[poLocaleDefault],
+      ...poPageChangePasswordLiterals[language]
+    };
   }
 
   ngAfterViewInit() {
