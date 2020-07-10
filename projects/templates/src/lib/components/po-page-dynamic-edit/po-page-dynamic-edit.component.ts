@@ -10,6 +10,7 @@ import {
   PoDynamicFormComponent,
   PoGridComponent,
   PoGridRowActions,
+  PoLanguageService,
   PoNotificationService,
   PoPageAction
 } from '@po-ui/ng-components';
@@ -177,10 +178,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private _keys: Array<any> = [];
   private _pageActions: Array<PoPageAction> = [];
 
-  literals = {
-    ...poPageDynamicEditLiteralsDefault[util.poLocaleDefault],
-    ...poPageDynamicEditLiteralsDefault[util.browserLanguage()]
-  };
+  literals;
   model: any = {};
 
   // beforeSave: return boolean
@@ -362,8 +360,16 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     private poDialogService: PoDialogService,
     private poPageDynamicService: PoPageDynamicService,
     private poPageCustomizationService: PoPageCustomizationService,
-    private poPageDynamicEditActionsService: PoPageDynamicEditActionsService
-  ) {}
+    private poPageDynamicEditActionsService: PoPageDynamicEditActionsService,
+    languageService: PoLanguageService
+  ) {
+    const language = languageService.getShortLanguage();
+
+    this.literals = {
+      ...poPageDynamicEditLiteralsDefault[util.poLocaleDefault],
+      ...poPageDynamicEditLiteralsDefault[language]
+    };
+  }
 
   ngOnInit(): void {
     this.loadDataFromAPI();
