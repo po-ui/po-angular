@@ -236,7 +236,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     const params = { filter, page, pageSize, order, filterParams };
 
     for (const key in params) {
-      if (params.hasOwnProperty(key) && params[key]) {
+      if (params.hasOwnProperty(key) && params[key] !== undefined) {
         filteredParams[key] = params[key];
       }
     }

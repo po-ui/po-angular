@@ -339,11 +339,27 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.tableLiterals).toEqual(result);
     });
 
-    it('getFilteredParams: should return object with only truthy values', () => {
+    it('getFilteredParams: should return object without undefined values', () => {
+      const page = 1;
+      const pageSize = 10;
+      const filter = undefined;
+      const expectedValue = { page, pageSize };
+
+      component.page = page;
+      component.pageSize = pageSize;
+      component.filterParams = undefined;
+      component['sort'] = undefined;
+
+      const filteredParams = component['getFilteredParams'](filter);
+
+      expect(filteredParams).toEqual(expectedValue);
+    });
+
+    it('getFilteredParams: should return object with empty filter', () => {
       const page = 1;
       const pageSize = 10;
       const filter = '';
-      const expectedValue = { page, pageSize };
+      const expectedValue = { filter, page, pageSize };
 
       component.page = page;
       component.pageSize = pageSize;

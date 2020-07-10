@@ -22,19 +22,19 @@ describe('PoPageJobSchedulerLookupService:', () => {
   });
 
   describe('Methods:', () => {
-    it('getFilteredData: should call `getProcesses()` with object `{ page, pageSize, search }`.', () => {
-      const search = 'brasil';
+    it('getFilteredItems: should call `getProcesses()` with object `{ page, pageSize, search }`.', () => {
+      const filter = 'brasil';
       const page = 2;
       const pageSize = 5;
 
       spyOn(poPageJobSchedulerLookupService['poPageJobSchedulerService'], 'getProcesses');
 
-      poPageJobSchedulerLookupService.getFilteredData(search, page, pageSize);
+      poPageJobSchedulerLookupService.getFilteredItems({ filter, page, pageSize });
 
       expect(poPageJobSchedulerLookupService['poPageJobSchedulerService'].getProcesses).toHaveBeenCalledWith({
         page,
         pageSize,
-        search
+        search: filter
       });
     });
 
