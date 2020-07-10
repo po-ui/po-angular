@@ -62,6 +62,17 @@ export const poPageDynamicEditLiteralsDefault = {
     saveNotificationSuccessSave: 'Recurso salvo com sucesso.',
     saveNotificationSuccessUpdate: 'Recurso atualizado com sucesso.',
     saveNotificationWarning: 'Formulário precisa ser preenchido corretamente.'
+  },
+  ru: {
+    cancelConfirmMessage: 'Вы уверены, что хотите отменить эту операцию?',
+    detailActionNew: 'Новый',
+    pageActionCancel: 'Отменить',
+    pageActionSave: 'Сохранить',
+    pageActionSaveNew: 'Сохранить и создать',
+    registerNotFound: 'Запись не найдена.',
+    saveNotificationSuccessSave: 'Ресурс успешно сохранен.',
+    saveNotificationSuccessUpdate: 'Ресурс успешно обновлен.',
+    saveNotificationWarning: 'Форма должна быть заполнена правильно.'
   }
 };
 
