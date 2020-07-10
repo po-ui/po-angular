@@ -45,7 +45,6 @@ export class PoPopupBaseComponent {
 
   protected oldTarget;
   protected param;
-  protected parentRef;
 
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoPopupAction>) {

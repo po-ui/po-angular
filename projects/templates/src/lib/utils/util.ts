@@ -399,15 +399,3 @@ export function removeKeysProperties(keys: Array<any>, newItemValue: any) {
   keys.forEach(key => delete newItemValue[key]);
   return newItemValue;
 }
-
-/**
- * @deprecated
- * Retorna um ViewContainerRef compatível para projetos com Ivy habilitado ou não.
- *
- * @param viewRef ViewContainerRef
- *
- * @returns ViewContainerRef
- */
-export function getParentRef(viewRef: ViewContainerRef): ViewContainerRef {
-  return viewRef['_hostView'] ? viewRef['_hostView'][8] : viewRef['_view']['component'];
-}
