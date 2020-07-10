@@ -8,6 +8,7 @@ import {
   InputBoolean,
   PoDialogConfirmOptions,
   PoDialogService,
+  PoLanguageService,
   PoNotificationService,
   PoPageAction,
   PoTableAction,
@@ -190,10 +191,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   hasNext = false;
   items = [];
-  literals = {
-    ...poPageDynamicTableLiteralsDefault[util.poLocaleDefault],
-    ...poPageDynamicTableLiteralsDefault[util.browserLanguage()]
-  };
+  literals;
 
   /**
    * Função ou serviço que será executado na inicialização do componente.
@@ -291,9 +289,17 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     private poNotification: PoNotificationService,
     private poPageDynamicService: PoPageDynamicService,
     private poPageCustomizationService: PoPageCustomizationService,
-    private poPageDynamicTableActionsService: PoPageDynamicTableActionsService
+    private poPageDynamicTableActionsService: PoPageDynamicTableActionsService,
+    languageService: PoLanguageService
   ) {
     super();
+
+    const language = languageService.getShortLanguage();
+
+    this.literals = {
+      ...poPageDynamicTableLiteralsDefault[util.poLocaleDefault],
+      ...poPageDynamicTableLiteralsDefault[language]
+    };
   }
 
   ngOnInit(): void {
