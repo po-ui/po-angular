@@ -54,6 +54,15 @@ export const poPageDynamicDetailLiteralsDefault = {
     confirmRemoveMessage: 'Tem certeza de que deseja excluir esse registro? Você não poderá desfazer essa ação.',
     removeNotificationSuccess: 'Item excluído com sucesso.',
     registerNotFound: 'Registro não encontrado.'
+  },
+  ru: {
+    pageActionEdit: 'Редактировать',
+    pageActionRemove: 'Удалить',
+    pageActionBack: 'Назад',
+    confirmRemoveTitle: 'Подтверждение удаления',
+    confirmRemoveMessage: 'Вы уверены, что хотите удалить эту запись?  Вы не можете отменить это действие.',
+    removeNotificationSuccess: 'Элемент успешно удален.',
+    registerNotFound: 'Запись не найдена.'
   }
 };
 
