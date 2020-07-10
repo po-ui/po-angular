@@ -1,15 +1,13 @@
 import { Component, Input, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, getParentRef, isExternalLink, openExternalLink } from '../../../../utils/util';
+import { callFunction, isExternalLink, openExternalLink } from '../../../../utils/util';
 
 @Component({
   selector: 'po-navbar-action',
   templateUrl: './po-navbar-action.component.html'
 })
 export class PoNavbarActionComponent {
-  private parentRef: any;
-
   @Input('p-action') action?: Function;
 
   @Input('p-icon') icon: string;
@@ -20,13 +18,11 @@ export class PoNavbarActionComponent {
 
   @Input('p-tooltip-text') tooltip?: string;
 
-  constructor(viewContainerRef: ViewContainerRef, private router: Router) {
-    this.parentRef = getParentRef(viewContainerRef);
-  }
+  constructor(viewContainerRef: ViewContainerRef, private router: Router) {}
 
   click() {
     if (this.action) {
-      callFunction(this.action, this.parentRef || this);
+      this.action();
       return;
     }
 

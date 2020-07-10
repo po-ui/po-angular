@@ -248,27 +248,6 @@ describe('PoPageListComponent - Desktop:', () => {
     expect(component.callActionFilter).toHaveBeenCalled();
   });
 
-  it('should call parent function', () => {
-    const context = {
-      getName: function () {
-        return 'PO';
-      }
-    };
-    const fakeThis = {
-      parentRef: context,
-      filter: { 'funcao': 'getName' },
-      callFunction: component.callFunction,
-      changeDetector: {
-        detectChanges: () => {}
-      },
-      filterInput: { nativeElement: { value: 'teste' } }
-    };
-
-    spyOn(context, 'getName');
-    component.callActionFilter.call(fakeThis, 'funcao');
-    expect(context.getName).toHaveBeenCalled();
-  });
-
   it('should be change model', done => {
     const input = desktopFixture.nativeElement.querySelector('input');
     desktopFixture.whenStable().then(() => {
@@ -511,15 +490,18 @@ describe('PoPageListComponent - Desktop:', () => {
   });
 
   describe('Methods:', () => {
-    it('callActionFilter: should call `ChangeDetectorRef.detectChanges` after `callFunction`', () => {
+    it('callActionFilter: should call `filter.action` and `ChangeDetectorRef.detectChanges`', () => {
+      component.filter = { action: () => {} };
+      const fieldProperty = 'action';
+
       const changeDetectorSpy = spyOn(component['changeDetector'], 'detectChanges');
-      const callFunctionSpy = spyOn(component, 'callFunction');
-      component.filter = { action: 'test' };
-      component.filterInput = <any>{ nativeElement: { value: 'test' } };
+      const filterActionSpy = spyOn(component.filter, <any>fieldProperty);
 
-      component.callActionFilter('sction');
+      component.callActionFilter(fieldProperty);
 
-      expect(callFunctionSpy).toHaveBeenCalledBefore(changeDetectorSpy);
+      expect(filterActionSpy).toHaveBeenCalledBefore(changeDetectorSpy);
+      expect(filterActionSpy).toHaveBeenCalled();
+      expect(changeDetectorSpy).toHaveBeenCalled();
     });
 
     it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {

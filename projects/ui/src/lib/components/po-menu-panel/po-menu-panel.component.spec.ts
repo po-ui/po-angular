@@ -52,7 +52,7 @@ describe('PoMenuPanelComponent: ', () => {
       { label: 'PO', link: './po', icon: 'po-icon-clock' },
       { label: 'Fake Url', icon: 'po-icon-star', link: 'http://fakeUrlPo.com.br' },
       { label: 'Commom Function', icon: 'po-icon-share', action: () => {} },
-      { label: 'Function as string', icon: 'po-icon-company', action: 'testFunction' }
+      { label: 'Function as string', icon: 'po-icon-company', action: () => {} }
     ];
 
     fixture.detectChanges();

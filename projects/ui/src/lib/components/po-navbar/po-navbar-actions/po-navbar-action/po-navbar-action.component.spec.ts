@@ -30,26 +30,14 @@ describe('PoNavbarActionComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('click: should call `callFunction` with `action` and `this` if `action` is defined and `parentRef` is undefined', () => {
+    it('click: should call `action` if `action` is defined', () => {
       component.action = () => 'action';
-      component['parentRef'] = undefined;
 
-      spyOn(utils, 'callFunction');
+      const actionSpy = spyOn(component, 'action');
 
       component.click();
 
-      expect(utils.callFunction).toHaveBeenCalledWith(component.action, component);
-    });
-
-    it('click: should call `callFunction` with `action` and `parentRef` if `action` and `parentRef` are defined', () => {
-      component.action = () => 'action';
-      component['parentRef'] = '<po-navbar></po-navbar>';
-
-      spyOn(utils, 'callFunction');
-
-      component.click();
-
-      expect(utils.callFunction).toHaveBeenCalledWith(component.action, component['parentRef']);
+      expect(actionSpy).toHaveBeenCalled();
     });
 
     it('click: should call and return `openUrl` with `link` if `action` is undefined and `link` is defined', () => {
@@ -57,26 +45,21 @@ describe('PoNavbarActionComponent:', () => {
       component.link = 'http://fakeUrlPo.com';
       const linkReturn = 'test';
 
-      spyOn(utils, 'callFunction');
       spyOn(component, <any>'openUrl').and.returnValue(linkReturn);
 
       const result = <any>component.click();
 
-      expect(utils.callFunction).not.toHaveBeenCalled();
       expect(component['openUrl']).toHaveBeenCalledWith(component.link);
       expect(result).toBe(linkReturn);
     });
 
-    it('click: shouldn`t call `callFunction` and `openUrl` if `action` and `link` is undefined', () => {
+    it('click: shouldn`t call `action` and `openUrl` if `action` and `link` is undefined', () => {
       component.action = undefined;
       component.link = undefined;
 
-      spyOn(utils, 'callFunction');
       spyOn(component, <any>'openUrl');
 
-      component.click();
-
-      expect(utils.callFunction).not.toHaveBeenCalled();
+      expect(component.click.bind(this)).not.toThrowError();
       expect(component['openUrl']).not.toHaveBeenCalled();
     });
 

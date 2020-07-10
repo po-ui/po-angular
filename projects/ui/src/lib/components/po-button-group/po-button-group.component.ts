@@ -1,7 +1,5 @@
 import { Component, ViewContainerRef } from '@angular/core';
 
-import { getParentRef } from '../../utils/util';
-
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 
 /**
@@ -35,12 +33,7 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
   templateUrl: './po-button-group.component.html'
 })
 export class PoButtonGroupComponent extends PoButtonGroupBaseComponent {
-  parentRef: any;
-
   constructor(viewRef: ViewContainerRef) {
     super();
-
-    // Get instance of parent to execute the actions
-    this.parentRef = getParentRef(viewRef);
   }
 }

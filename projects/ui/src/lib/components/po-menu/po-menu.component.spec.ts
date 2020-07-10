@@ -74,12 +74,12 @@ describe('PoMenuComponent:', () => {
         subItems: [
           { label: 'Search', link: '/search' },
           { label: 'Fake Url', link: 'http://fakeUrlPo.com.br' },
-          { label: 'Just Action', action: 'testFunction' }
+          { label: 'Just Action', action: () => {} }
         ]
       },
       { label: 'Fake Url', icon: 'star', link: 'http://fakeUrlPo.com.br' },
       { label: 'Commom Function', icon: 'share', action: () => {} },
-      { label: 'Function as string', icon: 'company', action: 'testFunction' },
+      { label: 'Function as string', icon: 'company', action: () => {} },
       {
         label: 'Level 1.1',
         icon: 'chat',
@@ -191,17 +191,6 @@ describe('PoMenuComponent:', () => {
     expect(component.activeMenuItem).toBe(undefined);
     expect(component.mobileOpened).toBeFalsy();
     expect(component.menus[3].action).toHaveBeenCalled();
-  });
-
-  it('should call parent action', () => {
-    component['testFunction'] = function (menuItem: PoMenuItem) {};
-    component.parentRef = component;
-    spyOn(component.parentRef, 'testFunction');
-    component['clickMenuItem'](component.menus[4]);
-
-    expect(component.parentRef.testFunction).toHaveBeenCalledWith(component.menus[4]);
-    expect(component.activeMenuItem).toBe(undefined);
-    expect(component.mobileOpened).toBeFalsy();
   });
 
   it('should open menu group', () => {

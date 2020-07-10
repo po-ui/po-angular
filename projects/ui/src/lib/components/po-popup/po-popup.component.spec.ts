@@ -104,41 +104,42 @@ describe('PoPopupComponent:', () => {
     });
 
     describe('onActionClick:', () => {
-      it('should call `callFunction` if has popupItem and popupItem.action', () => {
+      it('should call `popupItem.action` if has popupItem and popupItem.action', () => {
         popupItem.action = () => {};
 
+        const popupItemActionSpy = spyOn(popupItem, 'action');
         spyOn(component, <any>'openUrl');
-        spyOn(UtilsFunctions, 'callFunction');
         spyOn(component, 'close');
 
         component.onActionClick(popupItem);
 
         expect(component.close).toHaveBeenCalled();
-        expect(UtilsFunctions.callFunction).toHaveBeenCalled();
+        expect(popupItemActionSpy).toHaveBeenCalled();
         expect(component['openUrl']).not.toHaveBeenCalled();
       });
 
-      it('shouldn`t call `callFunction` if doesn`t have a popupItem', () => {
-        spyOn(UtilsFunctions, 'callFunction');
+      it('shouldn`t call `popupItem.action` if receives undefined as param', () => {
+        popupItem.action = () => {};
+
+        const popupItemActionSpy = spyOn(popupItem, 'action');
         spyOn(component, <any>'openUrl');
         spyOn(component, 'close');
 
         component.onActionClick(undefined);
 
         expect(component.close).not.toHaveBeenCalled();
-        expect(UtilsFunctions.callFunction).not.toHaveBeenCalled();
+        expect(popupItemActionSpy).not.toHaveBeenCalled();
         expect(component['openUrl']).not.toHaveBeenCalled();
       });
 
-      it('shouldn`t call `callFunction` if has popupItem but doesn`t have popupItem.action and popupItem URL', () => {
-        spyOn(UtilsFunctions, 'callFunction');
+      it('shouldn`t call `popupItem.action` if has popupItem but doesn`t have popupItem.action and popupItem URL', () => {
         spyOn(component, <any>'openUrl');
         spyOn(component, 'close');
 
-        component.onActionClick(popupItem);
+        const result = () => component.onActionClick(popupItem);
 
+        expect(result).not.toThrowError();
         expect(component.close).not.toHaveBeenCalled();
-        expect(UtilsFunctions.callFunction).not.toHaveBeenCalled();
         expect(component['openUrl']).not.toHaveBeenCalled();
       });
 
@@ -146,14 +147,12 @@ describe('PoPopupComponent:', () => {
         popupItem.url = 'http://www.fakeUrlPo.com';
 
         spyOn(component, <any>'openUrl');
-        spyOn(UtilsFunctions, 'callFunction');
         spyOn(component, 'close');
 
         component.onActionClick(popupItem);
 
         expect(component.close).toHaveBeenCalled();
         expect(component['openUrl']).toHaveBeenCalled();
-        expect(UtilsFunctions.callFunction).not.toHaveBeenCalled();
       });
     });
 
