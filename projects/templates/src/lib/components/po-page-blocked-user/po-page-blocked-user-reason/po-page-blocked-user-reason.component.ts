@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
-import { browserLanguage, poLocaleDefault } from '../../../utils/util';
+import { PoLanguageService } from '@po-ui/ng-components';
+
+import { poLocaleDefault } from '../../../utils/util';
 
 import { poPageBlockedUserLiterals } from './../literals/i18n/po-page-blocked-user-literals';
 import { PoPageBlockedUserReason } from '../enums/po-page-blocked-user-reason.enum';
@@ -14,11 +16,15 @@ export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
   literalParams;
   literals: { title: string; firstPhrase: string; secondPhrase: string; thirdPhrase: string };
 
+  private language: string;
+
   @Input('p-params') params: PoPageBlockedUserReasonParams;
 
   @Input('p-reason') reason: PoPageBlockedUserReason;
 
-  constructor(private changeDetector: ChangeDetectorRef) {}
+  constructor(private changeDetector: ChangeDetectorRef, languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.reason || changes.params) {
@@ -62,7 +68,7 @@ export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
 
     this.literals = {
       ...poPageBlockedUserLiterals[this.reason][poLocaleDefault],
-      ...poPageBlockedUserLiterals[this.reason][browserLanguage()]
+      ...poPageBlockedUserLiterals[this.reason][this.language]
     };
 
     this.changeDetector.detectChanges();
