@@ -154,7 +154,7 @@ export class PoPageListComponent extends PoPageListBaseComponent
   }
 
   callActionFilter(field: string) {
-    this.filter[field]();
+    this.filter[field](this.filterInput.nativeElement.value);
     this.changeDetector.detectChanges();
   }
 
