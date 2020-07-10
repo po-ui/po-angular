@@ -82,6 +82,21 @@ export const poPageDynamicTableLiteralsDefault = {
     loadDataErrorNotification: 'Serviço não informado.',
     removeSuccessNotification: 'Item excluido com sucesso',
     removeAllSuccessNotification: 'Items excluidos com sucesso'
+  },
+  ru: {
+    pageAction: 'Новый',
+    pageActionRemoveAll: 'Удалить',
+    tableActionView: 'Просмотр',
+    tableActionEdit: 'Редактировать',
+    tableActionDuplicate: 'Дублировать',
+    tableActionDelete: 'Удалить',
+    confirmRemoveTitle: 'Подтверждение удаления',
+    confirmRemoveMessage: 'Вы уверены, что хотите удалить эту запись?  Вы не можете отменить это действие.',
+    confirmRemoveAllTitle: 'Подтвердите удаление пакета',
+    confirmRemoveAllMessage: 'Вы уверены, что хотите удалить все эти записи? Вы не можете отменить это действие.',
+    loadDataErrorNotification: 'Сервис не найден',
+    removeSuccessNotification: 'Элемент успешно удален',
+    removeAllSuccessNotification: 'Элементы успешно удалены'
   }
 };
 
