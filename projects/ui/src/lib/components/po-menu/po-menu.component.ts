@@ -15,7 +15,7 @@ import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
-import { getFormattedLink, getParentRef, isMobile, openExternalLink } from '../../utils/util';
+import { getFormattedLink, isMobile, openExternalLink } from '../../utils/util';
 
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';
@@ -125,7 +125,6 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   linkActive: string;
   mobileOpened: boolean = false;
   noData: boolean = false;
-  parentRef: any;
   timeoutFilter: any;
 
   private filteringItems: boolean = false;
@@ -146,7 +145,6 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     menuService: PoMenuService
   ) {
     super(menuService);
-    this.parentRef = getParentRef(viewRef);
   }
 
   private get isActiveItemMenuSubMenu() {
@@ -371,11 +369,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   }
 
   private executeMenuAction(menu: PoMenuItem): void {
-    if (typeof menu.action === 'string') {
-      this.parentRef[menu.action](menu);
-    } else {
-      menu.action.call(this.parentRef, menu);
-    }
+    menu.action(menu);
   }
 
   private async filterItems(filter: string) {

@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { PoComponentInjectorService, PoLanguageService, PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 
-import { getParentRef, isExternalLink, isTypeof, poLocaleDefault } from '../../utils/util';
+import { isExternalLink, isTypeof, poLocaleDefault } from '../../utils/util';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
@@ -81,8 +81,6 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
     label: this.literals.enterSystemButton
   };
 
-  parentRef: any;
-
   @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;
   @ViewChild('pageChangePassword', { read: ViewContainerRef, static: true }) pageChangePassword: ViewContainerRef;
   @ViewChild('passwordForm', { read: NgForm, static: true }) passwordForm: NgForm;
@@ -97,8 +95,6 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
     viewRef: ViewContainerRef
   ) {
     super();
-
-    this.parentRef = getParentRef(viewRef);
 
     const language = languageService.getShortLanguage();
 
@@ -177,9 +173,7 @@ export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseCompo
   }
 
   validateRequirement(requirement: PoPageChangePasswordRequirement) {
-    return typeof requirement.status === 'function'
-      ? requirement.status.call(this.parentRef, this.newPassword)
-      : requirement.status;
+    return typeof requirement.status === 'function' ? requirement.status(this.newPassword) : requirement.status;
   }
 
   private checkingForMetadataProperty(object, property) {

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, getParentRef, isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
+import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 
 import { PoPopupAction } from './po-popup-action.interface';
@@ -45,7 +45,6 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     public changeDetector: ChangeDetectorRef
   ) {
     super();
-    this.parentRef = getParentRef(viewContainerRef);
   }
 
   /**
@@ -64,7 +63,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
 
     if (popupAction && popupAction.action && actionNoDisabled) {
       this.close();
-      return callFunction(popupAction.action, this.parentRef, this.param || popupAction);
+      popupAction.action(this.param || popupAction);
     }
 
     if (popupAction && popupAction.url && actionNoDisabled) {
