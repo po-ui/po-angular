@@ -33,7 +33,7 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
   private itemSubscription: Subscription;
 
   // Ação que será chamada ao clicar no item.
-  @Input('p-action') action: string | Function;
+  @Input('p-action') action: Function;
 
   // Indica se contém algum item filho com o badge.
   @Input('p-badge-alert') badgeAlert: boolean;

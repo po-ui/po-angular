@@ -4,7 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { callFunction, getFormattedLink, getParentRef, openExternalLink } from '../../utils/util';
+import { callFunction, getFormattedLink, openExternalLink } from '../../utils/util';
 
 import { PoMenuPanelBaseComponent } from './po-menu-panel-base.component';
 import { PoMenuPanelItem } from './po-menu-panel-item/po-menu-panel-item.interface';
@@ -86,7 +86,6 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
 export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements OnDestroy, OnInit {
   activeMenuItem: PoMenuPanelItem;
   linkActive: string;
-  parentRef: any;
 
   private routeSubscription: Subscription;
   private itemSubscription: Subscription;
@@ -98,7 +97,6 @@ export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements On
     private router: Router
   ) {
     super();
-    this.parentRef = getParentRef(viewRef);
   }
 
   ngOnDestroy() {
@@ -136,7 +134,7 @@ export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements On
 
   private clickMenuItem(menu: PoMenuPanelItemInternal) {
     if (menu.action) {
-      callFunction(menu.action, this.parentRef, menu);
+      menu.action(menu);
     }
 
     if (menu.type === 'externalLink') {

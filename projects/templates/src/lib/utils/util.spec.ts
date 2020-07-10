@@ -10,7 +10,6 @@ import {
   convertToInt,
   formatYear,
   getFormattedLink,
-  getParentRef,
   isEquals,
   isExternalLink,
   isTypeof,
@@ -1060,21 +1059,5 @@ describe('Function removeKeysProperties:', () => {
     const keys = ['id'];
 
     expect(removeKeysProperties(keys, newItemValue)).toEqual(expectedResult);
-  });
-});
-
-describe('Function getParentRef:', () => {
-  it(`should return 'viewRef['_hostView'][8]' if 'viewRef['_hostView']' is truthy`, () => {
-    const viewRef = { _hostView: [null, null, null, null, null, null, null, null, 'teste'] };
-    const expectedValue = ('teste' as unknown) as ViewContainerRef;
-
-    expect(getParentRef((viewRef as unknown) as ViewContainerRef)).toEqual(expectedValue);
-  });
-
-  it(`should return 'viewRef['_view']['component']' if 'viewRef['_hostView']' is falsy`, () => {
-    const viewRef = { _view: { component: 'teste2' } };
-    const expectedValue = ('teste2' as unknown) as ViewContainerRef;
-
-    expect(getParentRef((viewRef as unknown) as ViewContainerRef)).toEqual(expectedValue);
   });
 });

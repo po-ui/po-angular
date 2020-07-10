@@ -29,7 +29,7 @@ export interface PoMenuItem {
   link?: string;
 
   /** Ação personalizada para clique do item de menu. */
-  action?: string | Function;
+  action?: Function;
 
   /**
    * Ícone para o item de menu, os [ícones aceitos](/guides/icons) são os definidos no guia de estilo da PO.

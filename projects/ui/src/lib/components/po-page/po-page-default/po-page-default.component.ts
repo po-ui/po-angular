@@ -1,7 +1,7 @@
 import { AfterContentInit, Component, OnChanges, Renderer2, SimpleChange, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, getParentRef, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
+import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoPageAction } from '../po-page-action.interface';
 
 import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
@@ -37,11 +37,9 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
   isMobile: boolean;
 
   private maxWidthMobile: number = 480;
-  private parentRef: ViewContainerRef;
 
   constructor(viewRef: ViewContainerRef, private renderer: Renderer2, private router: Router) {
     super();
-    this.parentRef = getParentRef(viewRef);
   }
 
   public ngAfterContentInit(): void {
@@ -65,7 +63,7 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     if (item.url) {
       isExternalLink(item.url) ? openExternalLink(item.url) : this.router.navigate([item.url]);
     } else if (item.action) {
-      callFunction(item.action, this.parentRef);
+      item.action();
     }
   }
 
