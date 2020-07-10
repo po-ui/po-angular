@@ -1,7 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
-import { browserLanguage, isExternalLink, poLocaleDefault } from '../../utils/util';
+import { PoLanguageService } from '@po-ui/ng-components';
+
+import { isExternalLink, poLocaleDefault } from '../../utils/util';
 
 import { PoPageBlockedUserBaseComponent } from './po-page-blocked-user-base.component';
 
@@ -51,13 +53,17 @@ export const poPageBlockedUserButtonLiterals: Object = {
   templateUrl: './po-page-blocked-user.component.html'
 })
 export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent implements OnInit {
-  literals = {
-    ...poPageBlockedUserButtonLiterals[poLocaleDefault],
-    ...poPageBlockedUserButtonLiterals[browserLanguage()]
-  };
+  literals;
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, languageService: PoLanguageService) {
     super();
+
+    const language = languageService.getShortLanguage();
+
+    this.literals = {
+      ...poPageBlockedUserButtonLiterals[poLocaleDefault],
+      ...poPageBlockedUserButtonLiterals[language]
+    };
   }
 
   ngOnInit() {
