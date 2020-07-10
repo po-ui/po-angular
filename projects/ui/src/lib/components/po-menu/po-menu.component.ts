@@ -23,6 +23,7 @@ import { PoMenuItem } from './po-menu-item.interface';
 import { PoMenuItemFiltered } from './po-menu-item/po-menu-item-filtered.interface';
 import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 const poMenuDebounceTime = 400;
 const poMenuMinLength = 3;
@@ -142,9 +143,10 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     private renderer: Renderer2,
     private router: Router,
     private menuItemsService: PoMenuItemsService,
-    menuService: PoMenuService
+    menuService: PoMenuService,
+    languageService: PoLanguageService
   ) {
-    super(menuService);
+    super(menuService, languageService);
   }
 
   private get isActiveItemMenuSubMenu() {

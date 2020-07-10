@@ -1,24 +1,18 @@
 import { Input, Directive } from '@angular/core';
 
 import { v4 as uuid } from 'uuid';
-import {
-  browserLanguage,
-  convertToBoolean,
-  convertToInt,
-  isExternalLink,
-  isTypeof,
-  poLocaleDefault,
-  validValue
-} from '../../utils/util';
+import { convertToBoolean, convertToInt, isExternalLink, isTypeof, validValue } from '../../utils/util';
 
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 import { PoMenuItem } from './po-menu-item.interface';
 import { PoMenuService } from './services/po-menu.service';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 export const poMenuLiteralsDefault = {
-  en: { itemNotFound: 'Item not found.' },
-  es: { itemNotFound: 'Elemento no encontrado.' },
-  pt: { itemNotFound: 'Item não encontrado.' }
+  en: { itemNotFound: 'Item not found.', emptyLabelError: 'Attribute PoMenuItem.label can not be empty.' },
+  es: { itemNotFound: 'Elemento no encontrado.', emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío.' },
+  pt: { itemNotFound: 'Item não encontrado.', emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio.' },
+  ru: { itemNotFound: 'Предмет не найден.', emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым.' }
 };
 
 /**
@@ -48,8 +42,8 @@ export abstract class PoMenuBaseComponent {
   filterService: PoMenuFilter;
 
   readonly literals = {
-    ...poMenuLiteralsDefault[poLocaleDefault],
-    ...poMenuLiteralsDefault[browserLanguage()]
+    ...poMenuLiteralsDefault[this.languageService.getLanguageDefault()],
+    ...poMenuLiteralsDefault[this.languageService.getShortLanguage()]
   };
 
   /**
@@ -221,8 +215,7 @@ export abstract class PoMenuBaseComponent {
     return this._shortLogo;
   }
 
-  constructor(public menuService: PoMenuService) {}
-
+  constructor(public menuService: PoMenuService, public languageService: PoLanguageService) {}
   private configService(service: string | PoMenuFilter) {
     if (typeof service === 'string' && service.trim()) {
       // service url
@@ -323,7 +316,7 @@ export abstract class PoMenuBaseComponent {
 
   private validateMenu(menuItem: PoMenuItem): void {
     if (!menuItem.label || menuItem.label.trim() === '') {
-      throw new Error('O atributo PoMenuItem.label não pode ser vazio.');
+      throw new Error(this.literals.emptyLabelError);
     } else if (menuItem.subItems) {
       menuItem.subItems.forEach(subItem => {
         this.validateMenu(subItem);
