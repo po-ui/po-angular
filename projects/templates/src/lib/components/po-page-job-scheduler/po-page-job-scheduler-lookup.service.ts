@@ -10,8 +10,8 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 export class PoPageJobSchedulerLookupService implements PoLookupFilter {
   constructor(private poPageJobSchedulerService: PoPageJobSchedulerService) {}
 
-  getFilteredData(search: string, page: number, pageSize: number): Observable<any> {
-    const params = { page, pageSize, search };
+  getFilteredItems({ filter, page, pageSize }): Observable<any> {
+    const params = { page, pageSize, search: filter };
 
     return this.poPageJobSchedulerService.getProcesses(params);
   }

@@ -1,7 +1,7 @@
 [comment]: # (@label Começando com o PO Sync)
 [comment]: # (@link guides/sync-get-started)
 
-Esse guia servirá para criar e configurar uma aplicação em [Ionic 4](https://beta.ionicframework.com/docs/) com o uso do PO Sync.
+Esse guia servirá para criar e configurar uma aplicação em [Ionic 5](https://beta.ionicframework.com/docs/) com o uso do PO Sync.
 
 Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, consulte a documentação de
 [Fundamentos do PO Sync](/guides/sync-fundamentals) e a documentação de referência de [API do PO Sync](/documentation/po-sync).
@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (9.1.0):
+- [Angular CLI](https://cli.angular.io/) (^10.0.2):
   - ```shell
-    npm install -g @angular/cli@9.1.0
+    npm install -g @angular/cli@^10.0.2
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (5.4.16):
   - ```shell
@@ -51,28 +51,29 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/common": "~9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/forms": "~9.1.0",
-    "@angular/platform-browser": "~9.1.0",
-    "@angular/platform-browser-dynamic": "~9.1.0",
-    "@angular/router": "~9.1.0",
+    "@angular/common": "^10.0.3",
+    "@angular/core": "^10.0.3",
+    "@angular/forms": "^10.0.3",
+    "@angular/platform-browser": "^10.0.3",
+    "@angular/platform-browser-dynamic": "^10.0.3",
+    "@angular/router": "^10.0.3",
     "@ionic-native/network": "5.21.5",
     "@ionic-native/core": "5.21.5",
     "@ionic-native/splash-screen": "5.21.5",
     "@ionic-native/status-bar": "5.21.5",
     "@ionic/angular": "5.0.7",
-    "rxjs": "6.5.4",
+    "tslib": "^2.0.0",
+    "rxjs": "~6.5.5",
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.901.0",
-    "@angular-devkit/core": "~9.1.0",
-    "@angular-devkit/schematics": "~9.1.0",
-    "@angular/cli": "~9.1.0",
-    "@angular/compiler": "~9.1.0",
-    "@angular/compiler-cli": "~9.1.0",
-    "typescript": "~3.8.3"
+    "@angular-devkit/build-angular": "~0.1000.2",
+    "@angular-devkit/core": "^10.0.2",
+    "@angular-devkit/schematics": "^10.0.2",
+    "@angular/cli": "^10.0.2",
+    "@angular/compiler": "^10.0.3",
+    "@angular/compiler-cli": "^10.0.3",
+    "typescript": "~3.9.6"
   },
   ...
 ```
