@@ -27,7 +27,7 @@ Atualmente o PO está homologado para os seguintes navegadores:
       </tr>
       <tr class="po-table-row">
         <th class="po-table-column">IE</th>
-        <td class="po-table-column">9 (em homologação), 10 e 11</td>
+        <td class="po-table-column">9*, 10* e 11. *Deprecated</td>
       </tr>
       <tr class="po-table-row">
         <th class="po-table-column">Safari</th>
