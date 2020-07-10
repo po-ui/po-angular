@@ -4,14 +4,16 @@ import { Route, Router, ActivatedRoute } from '@angular/router';
 import { Subscription, concat, EMPTY, Observable, throwError, of } from 'rxjs';
 import { tap, catchError, map, switchMap } from 'rxjs/operators';
 
-import * as util from '../../utils/util';
 import {
   PoBreadcrumb,
-  PoPageAction,
-  PoDialogService,
   PoDialogConfirmOptions,
-  PoNotificationService
+  PoDialogService,
+  PoLanguageService,
+  PoNotificationService,
+  PoPageAction
 } from '@po-ui/ng-components';
+
+import * as util from '../../utils/util';
 
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';
@@ -146,10 +148,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   private _keys: Array<any> = [];
   private _pageActions: Array<PoPageAction> = [];
 
-  literals = {
-    ...poPageDynamicDetailLiteralsDefault[util.poLocaleDefault],
-    ...poPageDynamicDetailLiteralsDefault[util.browserLanguage()]
-  };
+  literals;
   model: any = {};
 
   /**
@@ -283,8 +282,16 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     private poDialogService: PoDialogService,
     private poPageDynamicService: PoPageDynamicService,
     private poPageDynamicDetailActionsService: PoPageDynamicDetailActionsService,
-    private poPageCustomizationService: PoPageCustomizationService
-  ) {}
+    private poPageCustomizationService: PoPageCustomizationService,
+    languageService: PoLanguageService
+  ) {
+    const language = languageService.getShortLanguage();
+
+    this.literals = {
+      ...poPageDynamicDetailLiteralsDefault[util.poLocaleDefault],
+      ...poPageDynamicDetailLiteralsDefault[language]
+    };
+  }
 
   ngOnInit(): void {
     this.loadDataFromAPI();
