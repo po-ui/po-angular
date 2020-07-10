@@ -14,14 +14,20 @@ export class PoMenuComponent extends PoMenuBaseComponent {
 describe('PoMenuBaseComponent:', () => {
   let component: PoMenuBaseComponent;
 
+  const languageService: any = {
+    getShortLanguage: () => {
+      return 'pt';
+    },
+    getLanguageDefault: () => {
+      return 'pt';
+    }
+  };
   const menuService: any = {
     configProperties: () => {},
     getFilteredData: () => {}
   };
-
   beforeEach(() => {
-    component = new PoMenuComponent(menuService);
-
+    component = new PoMenuComponent(menuService, languageService);
     component.menus = [
       {
         label: 'Level 1.1',

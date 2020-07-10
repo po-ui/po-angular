@@ -1,4 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoMenuFilterLiterals } from './po-menu-filter-literals.interface';
+
+export const poMenuFilterLiteralsDefault = {
+  en: <PoMenuFilterLiterals>{ search: 'Search' },
+  es: <PoMenuFilterLiterals>{ search: 'Buscar' },
+  pt: <PoMenuFilterLiterals>{ search: 'Pesquisar' },
+  ru: <PoMenuFilterLiterals>{ search: 'Поиск' }
+};
 
 /**
  * @docsPrivate
@@ -14,6 +23,10 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 export class PoMenuFilterComponent {
   // Variável necessária para o po-clean identificar que deve ser criado.
   readonly clean = true;
+  public literals = {
+    ...poMenuFilterLiteralsDefault[this.languageService.getLanguageDefault()],
+    ...poMenuFilterLiteralsDefault[this.languageService.getShortLanguage()]
+  };
 
   @Input('p-loading') loading: boolean;
 
@@ -21,7 +34,7 @@ export class PoMenuFilterComponent {
   @ViewChild('inputFilter', { read: ElementRef, static: true }) inputFilterElement: ElementRef;
 
   @Output('p-filter') filter = new EventEmitter();
-
+  constructor(public languageService: PoLanguageService) {}
   filterItems(search: string) {
     this.filter.emit(search);
   }
