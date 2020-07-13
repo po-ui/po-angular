@@ -22,7 +22,6 @@ import { PoPageLoginAuthenticationType } from './enums/po-page-login-authenticat
 import {
   PoPageLoginBaseComponent,
   poPageLoginLiteralIn,
-  poPageLoginLiteralTo,
   poPageLoginLiteralsDefault
 } from './po-page-login-base.component';
 import { PoPageLoginComponent } from './po-page-login.component';
@@ -779,24 +778,6 @@ describe('PoPageLoginComponent: ', () => {
       );
     });
 
-    it(`concatenateTitleWithProductName: should call 'concatenateLiteral'`, () => {
-      const title = 'email@mail.com';
-      const defaultTitleLiteral = poPageLoginLiteralsDefault[poLocaleDefault].title;
-      const prepositionLiteral = poPageLoginLiteralTo[poLocaleDefault];
-
-      spyOn(component, <any>'concatenateLiteral');
-      spyOnProperty(component, 'language').and.returnValue(poLocaleDefault);
-
-      component['concatenateTitleWithProductName'](title);
-
-      expect(component['concatenateLiteral']).toHaveBeenCalledWith(
-        title,
-        'title',
-        defaultTitleLiteral,
-        prepositionLiteral
-      );
-    });
-
     it(`concatenateLiteral: should call 'concatenate' and return expected value`, () => {
       const value = 'Portal RH';
       const currentLiteral = 'title';
@@ -853,12 +834,46 @@ describe('PoPageLoginComponent: ', () => {
       expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submittedLabel);
     });
 
-    it('should contain a `div` header with two `div` with the classes of messages.', () => {
-      const header = fixture.debugElement.nativeElement.querySelector('div.po-page-login-header');
-      const messages = fixture.debugElement.nativeElement.querySelectorAll('div.po-page-login-header > div');
+    it('should contain productName and welcome if productName and welcome are defined', () => {
+      const productName = 'custom product name';
+      const welcome = 'custom welcome';
 
-      expect(messages.length).toEqual(1);
-      expect(header.getElementsByClassName('po-page-login-header-title').length).toBeTruthy();
+      component.literals = { welcome };
+      component.productName = productName;
+
+      fixture.detectChanges();
+
+      const productNameElement = fixture.debugElement.nativeElement.querySelector('.po-page-login-header-product-name');
+      const welcomeElement = fixture.debugElement.nativeElement.querySelector('.po-page-login-header-welcome');
+
+      expect(productNameElement.innerText).toBe(productName);
+      expect(welcomeElement.innerText).toBe(welcome);
+    });
+
+    it('should contain value of title if productName is undefined', () => {
+      const title = 'custom title';
+      component.literals = { title };
+
+      component.productName = undefined;
+
+      fixture.detectChanges();
+
+      const productNameElement = fixture.debugElement.nativeElement.querySelector('.po-page-login-header-product-name');
+
+      expect(productNameElement.innerText).toBe(title);
+    });
+
+    it('should use value of productName if title and productName are defined', () => {
+      const productName = 'custom product name';
+      component.literals = { title: 'custom title' };
+
+      component.productName = productName;
+
+      fixture.detectChanges();
+
+      const productNameElement = fixture.debugElement.nativeElement.querySelector('.po-page-login-header-product-name');
+
+      expect(productNameElement.innerText).toBe(productName);
     });
 
     it('customField po-input: should have po-input when placeholder is filled and shouldn`t have po-select and po-combo.', () => {
