@@ -20,7 +20,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent {
   protected setPasswordErrors(value: Array<string>): void {}
 }
 
-describe('ThPageLoginBaseComponent: ', () => {
+describe('PoPageLoginBaseComponent: ', () => {
   let component: PoPageLoginBaseComponent;
   let servicePageLogin: PoPageLoginService;
 
@@ -214,7 +214,7 @@ describe('ThPageLoginBaseComponent: ', () => {
       spyOnProperty(component, 'language').and.returnValue('en');
 
       component.literals = {
-        'title': 'Custom Title',
+        'welcome': 'Custom welcome',
         'loginHint': 'Custom Login Hint'
       };
 
@@ -222,12 +222,11 @@ describe('ThPageLoginBaseComponent: ', () => {
       component.contactEmail = 'user@mail.com';
 
       const concatedLoginHint = { 'loginHint': 'Custom Login Hint user@mail.com' };
-      const concatedTitle = { 'title': 'Custom Title on Produto' };
+
       const expectedResult = {
         ...poPageLoginLiteralsDefault[poLocaleDefault],
         ...poPageLoginLiteralsDefault[component.language],
         ...concatedLoginHint,
-        ...concatedTitle,
         ...component.literals
       };
 
@@ -238,7 +237,7 @@ describe('ThPageLoginBaseComponent: ', () => {
       spyOnProperty(component, 'language').and.returnValue('en');
 
       component.literals = {
-        'title': 'Custom Title',
+        'welcome': 'Custom welcome',
         'loginHint': 'Custom Login Hint'
       };
 
