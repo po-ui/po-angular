@@ -45,7 +45,8 @@ export const poPageLoginLiteralsDefault = {
     yourUserWillBeBlocked:
       'without success your user will be blocked and you will be left 24 hours without being able to access :(',
     createANewPasswordNow: 'Better create a new password now! You will be able to log into the system right away.',
-    iForgotMyPassword: 'I forgot my password'
+    iForgotMyPassword: 'I forgot my password',
+    welcome: 'Welcome'
   },
   es: <PoPageLoginLiterals>{
     title: 'Bienvenido',
@@ -71,7 +72,8 @@ export const poPageLoginLiteralsDefault = {
     yourUserWillBeBlocked: 'sin éxito su usuario sera bloqueado y usted vás permanecer 24 horas sin poder acceder a :(',
     createANewPasswordNow:
       '¡Mejor crear una nueva contraseña ahora! Usted podrá entrar en el sistema inmediatamente después.',
-    iForgotMyPassword: 'Olvide mi contraseña'
+    iForgotMyPassword: 'Olvide mi contraseña',
+    welcome: 'Bienvenido'
   },
   pt: <PoPageLoginLiterals>{
     title: 'Bem-vindo',
@@ -96,7 +98,8 @@ export const poPageLoginLiteralsDefault = {
     attempts: '{0} vez(es) ',
     yourUserWillBeBlocked: 'sem sucesso seu usuário será bloqueado e você fica 24 horas sem poder acessar :(',
     createANewPasswordNow: 'Melhor criar uma senha nova agora! Você vai poder entrar no sistema logo em seguida.',
-    iForgotMyPassword: 'Esqueci minha senha'
+    iForgotMyPassword: 'Esqueci minha senha',
+    welcome: 'Boas-vindas'
   },
   ru: <PoPageLoginLiterals>{
     title: 'Добро пожаловать!',
@@ -121,7 +124,8 @@ export const poPageLoginLiteralsDefault = {
     attempts: '{0} раз(а) ',
     yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
     createANewPasswordNow: 'Лучше создайте новый пароль сейчас! Вы сможете сразу войти в систему.',
-    iForgotMyPassword: 'Я забыл свой пароль'
+    iForgotMyPassword: 'Я забыл свой пароль',
+    welcome: 'добро пожаловать'
   }
 };
 
@@ -130,13 +134,6 @@ export const poPageLoginLiteralIn = {
   es: 'en',
   pt: 'em',
   ru: 'в'
-};
-
-export const poPageLoginLiteralTo = {
-  en: 'to',
-  es: 'al',
-  pt: 'ao',
-  ru: 'к'
 };
 
 /**
@@ -319,12 +316,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * @description
    *
-   * Valor customizado que sucede o título de boas-vindas.
-   *
-   * > Esta propriedade é sobreposta se `p-literals` contiver uma definição customizada para a literal `title`.
-   *
-   * > Veja mais sobre as literais na propriedade `p-literals`.
-   *
+   * Texto customizado que fica entre a logo e a mensagem de boas-vindas.
    */
   @Input('p-product-name') set productName(value: string) {
     this._productName = value;
@@ -416,7 +408,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *    highlightInfo: '',
    *    iForgotMyPassword: 'Esqueci minha senha',
    *    ifYouTryHarder: 'Se tentar mais ',
-   *    title: 'Seja bem-vindo',
+   *    welcome: 'Boas-vindas',
    *    loginErrorPattern: 'Login obrigatório',
    *    loginHint: 'Caso não possua usuário entre em contato com o suporte',
    *    loginLabel: 'Insira seu usuário',
@@ -853,13 +845,10 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
       ? this.concatenateLoginHintWithContactEmail(this.contactEmail)
       : undefined;
 
-    const titleWithProductName = this.productName ? this.concatenateTitleWithProductName(this.productName) : undefined;
-
     return {
       ...poPageLoginLiteralsDefault[poLocaleDefault],
       ...poPageLoginLiteralsDefault[this.language],
       ...loginHintWithContactEmail,
-      ...titleWithProductName,
       ...this.literals
     };
   }
@@ -943,8 +932,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   }
 
   protected abstract concatenateLoginHintWithContactEmail(contactEmail: string);
-
-  protected abstract concatenateTitleWithProductName(productName: string);
 
   protected abstract setLoginErrors(value: Array<string>): void;
 
