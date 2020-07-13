@@ -21,7 +21,21 @@ export interface PoPageLoginLiterals {
   /** Texto que questiona o esquecimento da senha no popover de aviso de bloqueio. */
   forgotYourPassword?: string;
 
-  /** Título exibido no topo da página. */
+  /**
+   * @deprecated 4.x.x
+   *
+   * @description
+   *
+   * **Deprecated 4.x.x**.
+   *
+   * > Removido o tratamento para concatenar o nome do produto com a palavra "Bem-vindo".
+   * Sobre a utilização:
+   * - Essa propriedade será usada apenas na ausência do texto da propriedade `p-product-name`.
+   * - Para alterar a mensagem de boas-vindas, utilize a propriedade `welcome`.
+   *
+   *
+   * Título exibido no topo da página.
+   */
   title?: string;
 
   /** Texto do link de 'esqueci minha senha' exibido no popover de aviso de bloqueio. */
@@ -77,4 +91,7 @@ export interface PoPageLoginLiterals {
 
   /** Texto que informa ao usuário que o mesmo será bloqueado e por quanto tempo no popover de aviso de bloqueio. */
   yourUserWillBeBlocked?: string;
+
+  /** Mensagem de "Boas-vindas" para o usuário que aparece acima dos campos de entrada. */
+  welcome?: string;
 }

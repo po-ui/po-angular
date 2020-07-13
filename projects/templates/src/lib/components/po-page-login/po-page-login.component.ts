@@ -19,7 +19,6 @@ import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums
 import {
   PoPageLoginBaseComponent,
   poPageLoginLiteralIn,
-  poPageLoginLiteralTo,
   poPageLoginLiteralsDefault
 } from './po-page-login-base.component';
 import { PoPageLoginRecovery } from './interfaces/po-page-login-recovery.interface';
@@ -228,13 +227,6 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     const prepositionLiteral = poPageLoginLiteralIn[this.language];
 
     return this.concatenateLiteral(contactEmail, 'loginHint', defaultLoginHintLiteral, prepositionLiteral);
-  }
-
-  protected concatenateTitleWithProductName(productName: string) {
-    const defaultTitleLiteral = poPageLoginLiteralsDefault[this.language].title;
-    const prepositionLiteral = poPageLoginLiteralTo[this.language];
-
-    return this.concatenateLiteral(productName, 'title', defaultTitleLiteral, prepositionLiteral);
   }
 
   protected setLoginErrors(errors: Array<string>) {

@@ -7,10 +7,13 @@
   [p-secondary-logo]="secondaryLogo"
   (p-selected-language)="onSelectedLanguage($event)"
 >
-  <div class="po-page-login-header po-mb-2 po-mb-sm-1 po-pt-sm-1">
-    <div class="po-page-login-header-title po-mb-sm-1">{{ pageLoginLiterals.title }}</div>
-    <po-tag *ngIf="environment" p-type="warning" [p-value]="environment"> </po-tag>
-  </div>
+  <header class="po-page-login-header">
+    <h1 class="po-mb-md-4 po-mb-sm-1">
+      <div class="po-page-login-header-product-name">{{ productName || literals?.title }}</div>
+      <po-tag *ngIf="environment" p-type="warning" [p-value]="environment"> </po-tag>
+    </h1>
+    <div class="po-page-login-header-welcome po-mb-md-4 po-mb-sm-2">{{ pageLoginLiterals.welcome }}</div>
+  </header>
 
   <form #loginForm="ngForm" class="po-page-login-form">
     <div class="po-row">
