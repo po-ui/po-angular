@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.10.0](https://github.com/po-ui/po-angular/compare/v2.9.0...v2.10.0) (2020-07-13)
+
+
+### Features
+
+* **combo:** permite traduzir as literais usando o serviço do i18n ([e3dcbbe](https://github.com/po-ui/po-angular/commit/e3dcbbe3f6a75708ef90a771b8697d2a0617f8e2))
+* **disclaimer-group:** cria p-remove e p-remove-all ([3814deb](https://github.com/po-ui/po-angular/commit/3814debbd836532edc68d07b0946f7e850a8babb))
+* **lookup:** permite traduzir as literais usando o serviço do i18n ([a6a7539](https://github.com/po-ui/po-angular/commit/a6a7539a51a537122c4761b82cb48efd0d366166))
+* **multiselect:** permite traduzir as literais usando o serviço do i18n ([399ba06](https://github.com/po-ui/po-angular/commit/399ba06cf8f430bedc1b0881f30e632e60faff89))
+* **page-detail:** permite traduzir as literais usando o serviço do i18n ([24d3590](https://github.com/po-ui/po-angular/commit/24d35908aa1e42343faa01201b83113e7292ee4e))
+* **page-dynamic-search:** implementa `p-concat-filters` ([1f8aab3](https://github.com/po-ui/po-angular/commit/1f8aab30100af6e30768cf5e8b66b1feeda02992))
+* **page-dynamic-table:** implementa `p-concat-filters` ([3100ca3](https://github.com/po-ui/po-angular/commit/3100ca34ec1ee4bc9876ef494b6814fed24705a0))
+* **page-edit:** permite traduzir as literais usando o serviço do i18n ([00764a6](https://github.com/po-ui/po-angular/commit/00764a6fab7ff76eec2371b6e61ea9ca595ae25b))
+* **page-list:** cria ações remove e removeAll ([451986e](https://github.com/po-ui/po-angular/commit/451986eac09761fb24b0ff353753e8188f0a0bd1))
+* **page-list:** depreciação do atributo ngModel do PageFilter ([4b85e51](https://github.com/po-ui/po-angular/commit/4b85e515fa7c9813f0b463544d843d7385b549ea))
+* **rich-text:** adiciona literais em russo ([ec2fa3e](https://github.com/po-ui/po-angular/commit/ec2fa3ec982703e72111591a6cd4c9bda564670c))
+* **sync:** cria schematics ngAdd e ng generate ([ce4428f](https://github.com/po-ui/po-angular/commit/ce4428fa8151c833ef130155253d1e007e92a24e))
+* **upload:** permite traduzir as literais usando o serviço do i18n ([01c6229](https://github.com/po-ui/po-angular/commit/01c6229c58a424776a70996438aa775916c24609))
+
+
+### Bug Fixes
+
+* **combo:** corrige erro ao não possuir p-field-value no item retornado ([1f09991](https://github.com/po-ui/po-angular/commit/1f099919e98874a86499b51ed83ee655d23e2528))
+
 ## [2.9.0](https://github.com/po-ui/po-angular/compare/v2.8.0...v2.9.0) (2020-07-03)
 
 
