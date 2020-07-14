@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Relate um bug encontrado no PO UI.
-title: ''
+title: '<componente>: <resumo do erro>'
 labels: bug
 assignees: ''
 
@@ -9,10 +9,10 @@ assignees: ''
 
 #### Reprodução
 
-Utilize StackBlitz para reproduzir a sua issue: https://stackblitz.com/fork/portinariui
+Utilize [StackBlitz](https://stackblitz.com/edit/po-ui) para reproduzir o bug relatado na issue.
 
 Passos para reproduzir:
-1. 
+1. <!-- descrição do passo a passo -->
 2. 
 
 #### Qual o comportamento atual?
@@ -23,7 +23,16 @@ Passos para reproduzir:
 
 #### Ambiente
 
-- PO UI:
-- Angular:
+- PO UI: <!-- versão do PO UI -->
+- Angular: <!-- versão do Angular -->
 - Browser(s):
-- Operating System (e.g. Windows, macOS, Ubuntu):
+  [ ] Chrome
+  [ ] Firefox
+  [ ] Edge
+  [ ] Safari
+  [ ] IE 11
+  [ ] Outros
+- Operating System:
+  [ ] Windows
+  [ ] macOS
+  [ ] Ubuntu
