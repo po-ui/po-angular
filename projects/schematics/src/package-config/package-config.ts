@@ -1,5 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 
+import { UpdateDependencies } from './update-dependencies.interface';
+
 /** Adds a package to the package.json in the given host tree. */
 export function addPackageToPackageJson(host: Tree, pkg: string, version: string): Tree {
   if (host.exists('package.json')) {
@@ -19,6 +21,39 @@ export function addPackageToPackageJson(host: Tree, pkg: string, version: string
   }
 
   return host;
+}
+
+// Atualiza os pacotes pela versão
+export function updatePackageJson(version: string, { dependencies, devDependencies }: UpdateDependencies) {
+  return (tree: Tree): Tree => {
+    if (tree.exists('package.json')) {
+      const sourceText = tree.read('package.json')!.toString('utf-8');
+      const json = JSON.parse(sourceText);
+
+      if (!json.dependencies) {
+        json.dependencies = {};
+      }
+
+      dependencies?.forEach(pkg => {
+        if (json.dependencies[pkg]) {
+          json.dependencies[pkg] = version;
+        }
+      });
+
+      devDependencies?.forEach(pkg => {
+        if (json.devDependencies[pkg]) {
+          json.devDependencies[pkg] = version;
+        }
+      });
+
+      json.dependencies = sortObjectByKeys(json.dependencies);
+      json.devDependencies = sortObjectByKeys(json.devDependencies);
+
+      tree.overwrite('package.json', JSON.stringify(json, null, 2));
+    }
+
+    return tree;
+  };
 }
 
 /** Gets the version of the specified package by looking at the package.json in the given tree. */
