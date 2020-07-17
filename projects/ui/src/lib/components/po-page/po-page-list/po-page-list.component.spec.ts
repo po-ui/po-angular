@@ -492,6 +492,9 @@ describe('PoPageListComponent - Desktop:', () => {
   describe('Methods:', () => {
     it('callActionFilter: should call `filter.action` and `ChangeDetectorRef.detectChanges`', () => {
       component.filter = { action: () => {} };
+      component.filterInput = <any>{
+        nativeElement: { value: 'test filter' }
+      };
       const fieldProperty = 'action';
 
       const changeDetectorSpy = spyOn(component['changeDetector'], 'detectChanges');
@@ -500,7 +503,7 @@ describe('PoPageListComponent - Desktop:', () => {
       component.callActionFilter(fieldProperty);
 
       expect(filterActionSpy).toHaveBeenCalledBefore(changeDetectorSpy);
-      expect(filterActionSpy).toHaveBeenCalled();
+      expect(filterActionSpy).toHaveBeenCalledWith('test filter');
       expect(changeDetectorSpy).toHaveBeenCalled();
     });
 
