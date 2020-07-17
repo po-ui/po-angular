@@ -73,6 +73,7 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     "@angular/cli": "^10.0.2",
     "@angular/compiler": "^10.0.3",
     "@angular/compiler-cli": "^10.0.3",
+    "@angular/language-service": "^10.0.3",
     "typescript": "~3.9.6"
   },
   ...
