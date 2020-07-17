@@ -692,27 +692,6 @@ describe('PoEventSourcingService:', () => {
     });
 
     describe('getBodyAndDate:', () => {
-      it(`should return response.body and set responseDate with deprecated "portinari_sync_date" if
-        hasn't "po_sync_date"`, () => {
-        const date = jasmine.any(Date);
-
-        eventSourcingService.config = {
-          type: PoNetworkType.none,
-          period: 0,
-          dataTransform: new PoDataTransformMock()
-        };
-
-        eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
-        eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
-
-        const response = {
-          body: { 'portinari_sync_date': date }
-        };
-
-        expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
-        expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
-      });
-
       it('should return response.body and set responseDate with "po_sync_date"', () => {
         const date = jasmine.any(Date);
 
@@ -727,28 +706,6 @@ describe('PoEventSourcingService:', () => {
 
         const response = {
           body: { 'po_sync_date': date }
-        };
-
-        expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
-        expect(eventSourcingService['schemasSyncConfig'][schemaCustumerMock.name]['responseDate']).toBe(date);
-      });
-
-      it(`should return response.body and set responseDate with "po_sync_date" if
-        has "po_sync_date" and "portinari_sync_date"`, () => {
-        const syncDate = new Date(2013, 9, 23).getTime();
-        const date = new Date().getTime();
-
-        eventSourcingService.config = {
-          type: PoNetworkType.none,
-          period: 0,
-          dataTransform: new PoDataTransformMock()
-        };
-
-        eventSourcingService.config.dataTransform.getDateFieldName = () => 'po_sync_date';
-        eventSourcingService['createSchemaSyncConfig'](schemaCustumerMock.name);
-
-        const response = {
-          body: { 'po_sync_date': date, 'portinari_sync_date': syncDate }
         };
 
         expect(eventSourcingService['getBodyAndDate'](schemaCustumerMock.name, response)).toEqual(response.body);
