@@ -8,7 +8,7 @@ Este guia contém informações sobre a migração do seu projeto para a versão
 Antes de atualizar a versão do PO UI, é importante que você tenha atualizado o seu projeto para
 o Angular 9, executando o comando abaixo:
 
-``` ng update @angular/cli @angular/core ```
+``` ng update @angular/cli@9 @angular/core@9 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
 
@@ -34,7 +34,7 @@ Mas é importante conhecer os **BREAKING CHANGES** e **Depreciações** para rea
 
 Para poder utilizar o comando e realizar a migração, execute os comandos abaixo:
 
-``` npm i --save @po-ui/ng-components ```
+``` npm i --save @po-ui/ng-components@2 ```
 
 ``` ng update @po-ui/ng-components --from 1 --migrate-only ```
 
@@ -153,7 +153,7 @@ Exemplo funções via *property bind*
 
 Para poder utilizar o comando e realizar a migração, execute os comandos abaixo:
 
-``` npm i --save @po-ui/ng-sync ```
+``` npm i --save @po-ui/ng-sync@2 ```
 
 ``` ng update @po-ui/ng-sync --from 1 --migrate-only ```
 
