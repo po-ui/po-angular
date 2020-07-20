@@ -222,7 +222,7 @@ Foi removida a propriedade p-size do componente.
 
 Fixes DTHFUI-225
 
-BREAKING CHANGES: removida propriedade p-size
+BREAKING CHANGE: removida propriedade p-size
 
 Foi removida a propriedade p-size do po-button pois o mesmo deve ser
 definido através do uso das classes de grid do PO UI.
