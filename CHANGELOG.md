@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### ⚠ BREAKING CHANGES
 
+* **angular:** atualiza para a versão 10
+
+Atualize seu projeto para utilizar a versão 10 do Angular, acesse a documentação [**Guia de Atualização do Angular**](https://update.angular.io/) para fazer a migração completa.
+
+Veja nossa [**documentação para fazer a migração**](https://github.com/po-ui/po-angular/blob/master/docs/guides/migration-poui-v3.md) para a versão 3.
+
 * **sync:** remove suporte portinari_sync_date
 
 Antes:
