@@ -2,6 +2,90 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-beta.1](https://github.com/po-ui/po-angular/compare/v2.10.0...v3.0.0-beta.1) (2020-07-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **sync:** remove suporte portinari_sync_date
+
+Antes:
+```
+{
+  "hasNext": false,
+  "items": [],
+  "portinari_sync_date": "2018-10-08T13:57:55.008Z"
+}
+```
+Depois:
+```
+{
+  "hasNext": false,
+  "items": [],
+  "po_sync_date": "2018-10-08T13:57:55.008Z"
+}
+```
+* **upload:** removidas literais cancel, deleteFile e tryAgain
+
+Foram removidas as literais `cancel`, `deleteFile` e `tryAgain` da interface `PoUploadLiterals`.
+
+Essa remoção foi realizada pois não havia mais a necessidade, pois o componente havia sofrido alterações
+onde essas literais passaram a não ser utilizadas.
+
+* **lookup:** removido o método getFilteredData
+
+Foi removido o método `getFilteredData` do `PoLookupFilter`.
+Agora o usuário deve optar pelo método `getFilteredItems`.
+
+Antes:
+```
+getFilteredData(search, pageSize, page) {}
+```
+
+Depois:
+```
+getFilteredItems(params: PoLookupFilteredItemsParams) {}
+```
+* **table:** remove a propriedade p-checkbox
+
+Foi removida a propriedade `p-checkbox` do componente.
+Agora o usuário deve optar pela propriedade `p-selectable`.
+
+Antes:
+```
+<po-table p-checkbox></po-table>
+```
+
+Depois:
+```
+<po-table p-selectable></po-table>
+```
+
+### Features
+
+* **components:** implementa ng update para versão 3 ([08958fd](https://github.com/po-ui/po-angular/commit/08958fd0b1ae95395a0b7264e51d0c7bf7995bb7))
+* **page-blocked-user:** adiciona literais em russo ([58d47d3](https://github.com/po-ui/po-angular/commit/58d47d31b26351030cf12265b7ae08991795bd1a))
+* **page-blocked-user:** permite traduzir literais usando serviço i18n ([0134d11](https://github.com/po-ui/po-angular/commit/0134d1141c3579be3d30c9ad86bb3946d8fabe22))
+* **page-change-password:** permite traduzir literais usando i18n ([58dba8b](https://github.com/po-ui/po-angular/commit/58dba8b5ebb6c621a47f7bf12e37add48d8071d7))
+* **page-dynamic-detail:** adiciona literais em russo ([2e199c2](https://github.com/po-ui/po-angular/commit/2e199c2a25b0f82baae5e86e0d5576fd6d968564))
+* **page-dynamic-detail:** adiciona literais em russo ([9590552](https://github.com/po-ui/po-angular/commit/959055233bebd3b5f5e33bd63182984367e58ff9))
+* **page-dynamic-detail:** permite traduzir literais usando serviço i18n ([55562e9](https://github.com/po-ui/po-angular/commit/55562e9670748191f9c68f9a9a1173db451edbd3))
+* **page-dynamic-edit:** adiciona literais em russo ([add3a3c](https://github.com/po-ui/po-angular/commit/add3a3cf3d486f08c53fde49cc35124d1c380b7d))
+* **page-dynamic-edit:** permite traduzir literais usando serviço i18n ([2ce09c3](https://github.com/po-ui/po-angular/commit/2ce09c31f5b0aeef5fc3e8918d2f30deb469faa1))
+* **page-dynamic-table:** permite traduzir literais usando serviço i18n ([900fc52](https://github.com/po-ui/po-angular/commit/900fc52574315427c9f7a0e41553ee200ce418a6))
+* **page-job-scheduler:** adiciona literais em russo ([e18308b](https://github.com/po-ui/po-angular/commit/e18308b00d9cc7f30f913728319bf16ca43ce965))
+* **page-login:** adiciona a propriedade `welcome` nas literais ([d7c7791](https://github.com/po-ui/po-angular/commit/d7c779194fa6cd8154f2e3a3a5d159c59715b163))
+* **sync:** implementa ng update para versão 3 ([3e2a16d](https://github.com/po-ui/po-angular/commit/3e2a16d7280b99a40e32a9f392eae4eb920a2db8))
+* **table:** implementa opção para mudar a posição do detail ([f997c21](https://github.com/po-ui/po-angular/commit/f997c21c5199fbe29cc0f84d114116d2d334b8c2))
+
+
+### Code Refactoring
+
+* **lookup:** remove a método getFilteredData ([32f5d82](https://github.com/po-ui/po-angular/commit/32f5d828498d226d41ee1bfe8f9325a019a3f4c7))
+* **sync:** remove suporte portinari_sync_date ([d298119](https://github.com/po-ui/po-angular/commit/d29811916b5874f3f7cdf9c3e39313c3dd3cb311))
+* **table:** remove a propriedade p-checkbox ([802f7bf](https://github.com/po-ui/po-angular/commit/802f7bf6a43dd2ba15f5870bb2848e88ca1a9be5))
+* **upload:** remove literais ([6c172cb](https://github.com/po-ui/po-angular/commit/6c172cbe52834ba9e4e1e61e2e3d3774466bbe6f))
+
 ## [2.10.0](https://github.com/po-ui/po-angular/compare/v2.9.0...v2.10.0) (2020-07-13)
 
 
