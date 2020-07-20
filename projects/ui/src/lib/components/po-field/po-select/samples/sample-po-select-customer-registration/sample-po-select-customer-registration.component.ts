@@ -58,8 +58,8 @@ export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, O
   constructor(private sampleService: SamplePoSelectCustomerRegistrationService) {}
 
   ngOnDestroy() {
-    this.citiesSubscription.unsubscribe();
-    this.statesSubscription.unsubscribe();
+    this.citiesSubscription?.unsubscribe();
+    this.statesSubscription?.unsubscribe();
   }
 
   ngOnInit() {
