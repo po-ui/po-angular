@@ -10,7 +10,6 @@ import {
   filter,
   noop
 } from '@angular-devkit/schematics';
-import { buildDefaultPath } from '@schematics/angular/utility/workspace';
 import { buildRelativePath, findModuleFromOptions } from '@schematics/angular/utility/find-module';
 import { getWorkspace } from '@schematics/angular/utility/config';
 import { normalize, strings } from '@angular-devkit/core';
@@ -18,7 +17,7 @@ import { parseName } from '@schematics/angular/utility/parse-name';
 import { validateHtmlSelector, validateName } from '@schematics/angular/utility/validation';
 
 import { supportedCssExtensions } from '../utils/supported-css-extensions';
-import { getProjectFromWorkspace } from '../project';
+import { getProjectFromWorkspace, getDefaultPath } from '../project';
 import { addModuleImportToModule, addDeclarationComponentToModule, addExportComponentToModule } from '../module';
 import { Schema as ComponentOptions } from './schema';
 
@@ -28,7 +27,7 @@ export function buildComponent(options: ComponentOptions): Rule {
     const project: any = getProjectFromWorkspace(workspace, options.project);
 
     if (options.path === undefined && project) {
-      options.path = buildDefaultPath(project);
+      options.path = getDefaultPath(project);
     }
 
     options.module = findModuleFromOptions(host, options);
