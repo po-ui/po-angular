@@ -82,11 +82,15 @@
           [style.max-width]="column.width"
           [style.min-width]="column.width"
           [class.po-clickable]="sort"
-          [class.po-table-column-right]="column.type === 'currency' || column.type === 'number'"
           [class.po-table-header-subtitle]="column.type === 'subtitle'"
           (click)="sortColumn(column)"
         >
-          <div [class.po-table-header-fixed-inner]="height">
+          <div
+            class="po-table-header-flex"
+            [class.po-table-header-fixed-inner]="height"
+            [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
+            [class.po-table-header-flex-center]="column.type === 'subtitle'"
+          >
             <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
           </div>
         </th>
@@ -335,19 +339,20 @@
 
 <ng-template #contentHeaderTemplate let-column>
   <span
-    *ngIf="sort"
-    [class.po-table-header-icon-unselected]="sortedColumn?.property !== column"
-    [class.po-table-header-icon-descending]="sortedColumn?.property === column && sortedColumn.ascending"
-    [class.po-table-header-icon-ascending]="sortedColumn?.property === column && !sortedColumn.ascending"
-  >
-  </span>
-  <span
-    class="po-table-header-ellipsis po-table-header-block"
+    #columnHeader
+    class="po-table-header-ellipsis"
     [p-tooltip]="tooltipText"
     (mouseenter)="tooltipMouseEnter($event)"
     (mouseleave)="tooltipMouseLeave()"
   >
     {{ column.label || (column.property | titlecase) }}
+  </span>
+  <span
+    *ngIf="sort"
+    [class.po-table-header-icon-unselected]="sortedColumn?.property !== column"
+    [class.po-table-header-icon-descending]="sortedColumn?.property === column && sortedColumn.ascending"
+    [class.po-table-header-icon-ascending]="sortedColumn?.property === column && !sortedColumn.ascending"
+  >
   </span>
 </ng-template>
 

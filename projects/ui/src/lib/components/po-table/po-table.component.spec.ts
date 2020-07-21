@@ -461,21 +461,20 @@ describe('PoTableComponent:', () => {
 
     fixture.detectChanges();
 
-    let columnSorted = tableElement.querySelector('.po-table-header-icon-unselected + span.po-table-header-block');
+    let columnSorted = tableElement.querySelector('.po-table-header-icon-unselected');
     expect(columnSorted).toBeTruthy();
 
     component.sortColumn(itemSorted);
     fixture.detectChanges();
 
-    columnSorted = tableElement.querySelector('.po-table-header-icon-descending + span.po-table-header-block');
-
-    expect(columnSorted.innerHTML).toContain(itemSorted.label);
+    columnSorted = tableElement.querySelector('.po-table-header-icon-descending');
+    expect(columnSorted).toBeTruthy();
 
     component.sortColumn(itemSorted);
     fixture.detectChanges();
 
-    columnSorted = tableElement.querySelector('.po-table-header-icon-ascending + span.po-table-header-block');
-    expect(columnSorted.innerHTML).toContain(itemSorted.label);
+    columnSorted = tableElement.querySelector('.po-table-header-icon-ascending');
+    expect(columnSorted).toBeTruthy();
   });
 
   it('should not find subtitles columns', () => {
@@ -1872,6 +1871,67 @@ describe('PoTableComponent:', () => {
       const expectedValue = component.columns.length + columnsManagerTd + masterDetailTd;
 
       expect(nativeElement.querySelectorAll('td').length).toBe(expectedValue);
+    });
+
+    it('should find .po-table-header-flex-right if columns has currency type', () => {
+      const selectorCss = '.po-table-header-flex.po-table-header-flex-right';
+
+      component.columns = [{ property: 'name' }, { property: 'wage', type: 'currency' }];
+      component.items = [{ name: 'John', wage: 3000.5 }];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css(selectorCss))).toBeTruthy();
+    });
+
+    it('should find .po-table-header-flex-right if columns has number type', () => {
+      const selectorCss = '.po-table-header-flex.po-table-header-flex-right';
+
+      component.columns = [{ property: 'product' }, { property: 'quantity', type: 'number' }];
+      component.items = [{ name: 'T-Shirt', quantity: 12 }];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css(selectorCss))).toBeTruthy();
+    });
+
+    it('should find .po-table-header-flex-center if columns has subtitle type', () => {
+      const selectorCss = '.po-table-header-flex.po-table-header-flex-center';
+
+      component.columns = [
+        { property: 'product' },
+        {
+          property: 'size',
+          type: 'subtitle',
+          subtitles: [
+            { value: 'small', color: 'color-01', label: 'P', content: 'P' },
+            { value: 'medium', color: 'color-02', label: 'M', content: 'M' },
+            { value: 'large', color: 'color-03', label: 'G', content: 'G' },
+            { value: 'extra large', color: 'color-04', label: 'GG', content: 'GG' }
+          ]
+        }
+      ];
+      component.items = [{ product: 'T-Shirt', size: 'small' }];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css(selectorCss))).toBeTruthy();
+    });
+
+    it('should find only .po-table-header-flex', () => {
+      const selectorCss = '.po-table-header-flex';
+      const rightFlexSelectorCss = '.po-table-header-flex.po-table-header-flex-right';
+      const centerFlexSelectorCss = '.po-table-header-flex.po-table-header-flex-center';
+
+      component.columns = [{ property: 'name' }, { property: 'email' }];
+      component.items = [{ name: 'John', email: 'john@email.com' }];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css(selectorCss))).toBeTruthy();
+
+      expect(fixture.debugElement.query(By.css(rightFlexSelectorCss))).toBe(null);
+      expect(fixture.debugElement.query(By.css(centerFlexSelectorCss))).toBe(null);
     });
   });
 
