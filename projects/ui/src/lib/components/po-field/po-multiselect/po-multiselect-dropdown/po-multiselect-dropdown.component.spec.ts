@@ -196,9 +196,18 @@ describe('PoMultiselectDropdownComponent:', () => {
       expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeTruthy();
     });
 
-    it('shouldn`t show `Nenhum dado encontrado` if have options', () => {
+    it('should show `Nenhum dado encontrado` if no have visibleOptions', () => {
+      component.visibleOptions = [];
       component.show = true;
 
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeTruthy();
+    });
+
+    it('shouldn`t show `Nenhum dado encontrado` if have visibleOptions', () => {
+      component.show = true;
+      component.visibleOptions = [{ value: '1', label: 'Option 1' }];
       fixture.detectChanges();
 
       expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeNull();
@@ -207,10 +216,23 @@ describe('PoMultiselectDropdownComponent:', () => {
     it('should show `po-multiselect-search` if have options and hideSearch is false', () => {
       component.options = [{ value: '1', label: 'Option 1' }];
       component.hideSearch = false;
+      component.visibleOptions = [{ value: '1', label: 'Option 1' }];
 
       fixture.detectChanges();
 
       expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toBeTruthy();
+      expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeNull();
+    });
+
+    it('should show `po-multiselect-search` and `Nenhum dado encontrado` if have options, hideSearch is false and visibleOptions is empty', () => {
+      component.options = [{ value: '1', label: 'Option 1' }];
+      component.hideSearch = false;
+      component.visibleOptions = [];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toBeTruthy();
+      expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeTruthy();
     });
 
     it('shouldn`t show `po-multiselect-search` if haven`t options', () => {
