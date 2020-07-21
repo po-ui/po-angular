@@ -60,3 +60,11 @@ export function getProjectMainFile(project: WorkspaceProject): string {
 
   return buildOptions.main;
 }
+
+// Return default path of application or library
+export function getDefaultPath(project: WorkspaceProject) {
+  const root = project.sourceRoot ? `/${project.sourceRoot}/` : `/${project.root}/src/`;
+  const projectDirName = project.projectType === 'application' ? 'app' : 'lib';
+
+  return `${root}${projectDirName}`;
+}
