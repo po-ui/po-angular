@@ -10,7 +10,9 @@ Este guia contém informações sobre a migração do seu projeto para a versão
 Antes de atualizar a versão do PO UI, é importante que você tenha atualizado o seu projeto para
 o Angular 10, executando o comando abaixo:
 
-``` ng update @angular/cli @angular/core ```
+```
+ng update @angular/cli @angular/core
+```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
 
@@ -34,7 +36,7 @@ Para realizar a migração, execute o comando abaixo:
 ``` ng update @po-ui/ng-components --next```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
-  - Altera o uso do `[p-checkbox]` para `[p-selectable`] utilizado no `PoTable`
+  - Altera o uso do `[p-checkbox]` para `[p-selectable]` utilizado no `PoTable`
   - Atualizar as versões dos pacotes:
     - `@po-ui/ng-componentes`;
     - `@po-ui/ng-templates`;
@@ -87,7 +89,7 @@ Remoção das propriedades, onde passam a valer as novas definições, veja a ta
           </td>
           <td class="po-table-column"> cancel, deleteFile e tryAgain
           </td>
-          <td>
+          <td class="po-table-column">
             Não se aplica.
           </td>
         </tr>
@@ -96,14 +98,16 @@ Remoção das propriedades, onde passam a valer as novas definições, veja a ta
   </div>
 </div>
 
-<b> Passar referencia das funções sem .bind ou via string </b>
+<br>
+
+<b> Passar referência das funções sem .bind ou via string </b>
 
 Até a versão `2.x.x` era possível passar funções para nossas propriedades sem informar o `.bind(this)`,
 pois capturávamos o componente pai e conseguíamos acessar o contexto corrente. Porém depreciamos este comportamento,
 agora necessita passar a referência da função utilizando o `.bind(this)` para que o mesmo execute
 a função no contexto invocado, tanto em funções dentro de *arrays* quanto em funções via *property bind*.
 
-Os componentes que sofrerão este *breaking change*, são:
+Os componentes que sofreram este *breaking change*, são:
 - [**PageChangePassword**](http://po-ui.io/documentation/po-page-change-password)
 - [**ButtonGroup**](http://po-ui.io/documentation/po-button-group)
 - [**Menu**](http://po-ui.io/documentation/po-menu)
@@ -161,7 +165,7 @@ export class ExampleFunction () {
 }
 ```
 
-Exemplo funções via *property bind*
+Exemplo funções via *property bind*:
 - Antes:
 ```
 <po-stepper>
@@ -180,25 +184,27 @@ Exemplo funções via *property bind*
 
 #### Depreciação
 
-Depreciado a propriedade `PoPageFilter.ngModel` no componente [**PoPageList**](/documentation/po-page-list), onde o valor pesquisado será possível recuperar através do parametro a ser recebido no evento `PoPageFilter.onAction`.
+Depreciado a propriedade `PoPageFilter.ngModel` no componente [**PoPageList**](/documentation/po-page-list), onde o valor pesquisado será possível recuperar através do parâmetro a ser recebido no evento `PoPageFilter.onAction`.
 
 <a id="sync"></a>
 ### ng update @po-ui/ng-sync
 
-> Caso você também utilize `@po-ui/ng-components` não há necessidade de executar o *ng update* do `@po-ui/ng-sync`.
-
 Para realizar a migração, execute o comando abaixo:
 
-``` ng update @po-ui/ng-sync --next```
+```
+ng update @po-ui/ng-sync --next
+```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:
   - `@po-ui/ng-sync`;
   - `@po-ui/ng-storage`;
   - `@po-ui/ng-tslint`;
 
+> Caso você também utilize `@po-ui/ng-components` não há necessidade de executar o *ng update* do `@po-ui/ng-sync`.
+
 #### Breaking Change
 
-A remoção ocorreu no retorno do `Endpoint de sincronização`, onde anteriomente deveria retornar a data da última sincronização
+A remoção ocorreu no retorno do `Endpoint de sincronização`, onde anteriormente deveria retornar a data da última sincronização
 na propriedade `portinari_sync_date`, que agora passa a ser exclusivamente `po_sync_date`, veja o antes e depois:
 
 ```
