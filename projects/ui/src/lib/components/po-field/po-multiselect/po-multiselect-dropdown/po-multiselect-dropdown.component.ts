@@ -31,8 +31,11 @@ export class PoMultiselectDropdownComponent {
   /** Propriedade que recebe a lista de opções selecionadas. */
   @Input('p-selected-values') selectedValues: Array<any> = [];
 
-  /** Propriedade que recebe a lista de opções que deverão ser criadas no dropdown. */
+  /** Propriedade que recebe a lista com todas as opções. */
   @Input('p-options') options: Array<PoMultiselectOption> = [];
+
+  /** Propriedade que recebe a lista de opções que deverão ser criadas no dropdown. */
+  @Input('p-visible-options') visibleOptions: Array<PoMultiselectOption> = [];
 
   /** Evento disparado a cada tecla digitada na pesquisa. */
   @Output('p-change-search') changeSearch = new EventEmitter();
