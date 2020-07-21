@@ -9,12 +9,12 @@
   </po-multiselect-search>
 
   <ul class="po-multiselect-items-container" [scrollTop]="scrollTop" #ulElement>
-    <div *ngIf="!options.length" class="po-multiselect-container-no-data po-text-center">
+    <div *ngIf="!visibleOptions.length" class="po-multiselect-container-no-data po-text-center">
       <span> {{ literals.noData }}</span>
     </div>
 
     <po-multiselect-item
-      *ngFor="let option of options"
+      *ngFor="let option of visibleOptions"
       [p-label]="option.label"
       [p-selected]="isSelectedItem(option)"
       (p-change)="clickItem($event, option)"
