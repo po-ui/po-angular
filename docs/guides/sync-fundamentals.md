@@ -141,7 +141,7 @@ Você pode utilizar um schematic para criar o arquivo com a estrutura básica do
 Para isso utilize o comando
 
 ```shell
-ng generate @po-ui/ng-sync:sync
+ng generate @po-ui/ng-sync:schema
 ```
 
 Você também pode informar um caminho completo.
