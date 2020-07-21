@@ -39,7 +39,8 @@
     #dropdownElement
     [p-hide-search]="hideSearch"
     [p-literals]="literals"
-    [p-options]="visibleOptionsDropdown"
+    [p-options]="options"
+    [p-visible-options]="visibleOptionsDropdown"
     [p-selected-values]="getValuesFromOptions(selectedOptions)"
     [p-placeholder-search]="placeholderSearch"
     (p-change)="changeItems($event)"
