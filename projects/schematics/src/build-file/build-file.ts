@@ -1,12 +1,11 @@
 import { apply, applyTemplates, chain, mergeWith, move, Rule, url, Tree } from '@angular-devkit/schematics';
 
-import { buildDefaultPath } from '@schematics/angular/utility/workspace';
 import { getWorkspace } from '@schematics/angular/utility/config';
 import { strings } from '@angular-devkit/core';
 import { parseName } from '@schematics/angular/utility/parse-name';
 import { validateName } from '@schematics/angular/utility/validation';
 
-import { getProjectFromWorkspace } from '../project';
+import { getProjectFromWorkspace, getDefaultPath } from '../project';
 import { FileOptions } from './file-options.interface';
 
 export function buildFile(options: FileOptions): Rule {
@@ -15,7 +14,7 @@ export function buildFile(options: FileOptions): Rule {
     const project: any = getProjectFromWorkspace(workspace, options.project);
 
     if (options.path === undefined && project) {
-      options.path = buildDefaultPath(project);
+      options.path = getDefaultPath(project);
     }
 
     const parsedPath = parseName(options.path as string, options.name);
