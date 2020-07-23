@@ -80,17 +80,21 @@ const copySchematicsReadme = () => src([`${schematicsFolder}/README.md`]).pipe(d
 /** SONAR */
 const sonarqube = task('sonarqube', function (callback) {
   const token = argv.token || '';
+  const url = argv.url || '';
+  const projectKey = argv.projectKey || '';
 
   sonarqubeScanner(
     {
-      serverUrl: 'http://sonarqube.po-ui.com.br',
+      serverUrl: url,
       token: token,
       options: {
-        // Documentation: https://docs.sonarqube.org/display/SONAR/Analysis+Parameters
-        'sonar.projectKey': 'po-ui',
-        'sonar.projectName': 'po-ui',
-        'sonar.projectVersion': '1.0',
-        'sonar.exclusions': `index.ts,.*`
+        'sonar.projectKey': projectKey,
+        'sonar.projectName': 'PO UI',
+        'sonar.sources': 'projects',
+        'sonar.exclusions':
+          '**/node_modules/**,**/*.spec.ts,projects/app/**,**/samples/**,**/karma.conf.js,**/*-literals.ts,**/schematics/**',
+        'sonar.typescript.lcov.reportPaths':
+          'coverage/code-editor/lcov.info,coverage/storage/lcov.info,coverage/sync/lcov.info,coverage/templates/lcov.info,coverage/ui/lcov.info'
       }
     },
     callback
