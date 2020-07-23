@@ -229,6 +229,44 @@ describe('PoPageDynamicTableActionsService:', () => {
       }));
     });
 
+    describe('customAction:', () => {
+      const resource = {
+        name: 'User',
+        age: 40
+      };
+
+      it('should send resource to api', fakeAsync(() => {
+        service.customAction('/customAction', resource).subscribe();
+
+        const req = httpMock.expectOne(request => request.url === `/customAction`);
+        expect(req.request.method).toBe('POST');
+        expect(req.request.body).toEqual(resource);
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+
+        req.flush({});
+
+        tick();
+      }));
+
+      it('should send resource to function', done => {
+        const testFn = jasmine.createSpy('customAction');
+
+        service.customAction(testFn, resource).subscribe(() => {
+          expect(testFn).toHaveBeenCalledWith(resource);
+          done();
+        });
+      });
+
+      it('should send empty array to function if resource is undefined', done => {
+        const testFn = jasmine.createSpy('customAction');
+
+        service.customAction(testFn).subscribe(() => {
+          expect(testFn).toHaveBeenCalledWith([]);
+          done();
+        });
+      });
+    });
+
     describe('executeAction', () => {
       const resource = { name: 'Name' };
       const id = '1';

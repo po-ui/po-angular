@@ -2,6 +2,7 @@ import { PoBreadcrumb } from '@po-ui/ng-components';
 
 import { PoPageDynamicTableActions } from './po-page-dynamic-table-actions.interface';
 import { PoPageDynamicTableFilters } from './po-page-dynamic-table-filters.interface';
+import { PoPageDynamicTableCustomAction } from './po-page-dynamic-table-custom-action.interface';
 
 /**
  * @usedBy PoPageDynamicTableComponent
@@ -61,4 +62,19 @@ export interface PoPageDynamicTableOptions {
    * ```
    */
   concatFilters?: boolean;
+
+  /**
+   * Lista de ações customizadas na página.
+   *
+   * Essas ações ficam localizadas na parte superior da página em botões com ações.
+   *
+   * Exemplo de utilização:
+   * ```
+   * [
+   *  { label: 'Export', action: this.export.bind(this) },
+   *  { label: 'Print', action: this.print.bind(this) }
+   * ];
+   * ```
+   */
+  pageCustomActions?: Array<PoPageDynamicTableCustomAction>;
 }
