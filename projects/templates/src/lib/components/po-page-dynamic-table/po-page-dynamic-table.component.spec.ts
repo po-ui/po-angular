@@ -142,6 +142,7 @@ describe('PoPageDynamicTableComponent:', () => {
             breadcrumb: {
               items: [{ label: 'Test' }, { label: 'Test2' }]
             },
+            pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }],
             actions: {
               detail: '/new_datail',
               new: '/new'
@@ -170,6 +171,7 @@ describe('PoPageDynamicTableComponent:', () => {
         });
         expect(component.keepFilters).toBeTrue();
         expect(component.concatFilters).toBeTrue();
+        expect(component.pageCustomActions).toEqual([{ label: 'Custom Action', action: 'endpoint/' }]);
 
         component.ngOnDestroy();
         expect(component['subscriptions']['_subscriptions']).toBeNull();
@@ -197,7 +199,8 @@ describe('PoPageDynamicTableComponent:', () => {
           breadcrumb: {
             items: [{ label: 'Home' }, { label: 'Hiring processes' }]
           },
-          title: 'Original Title'
+          title: 'Original Title',
+          pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }]
         };
 
         const custom = { title: 'New Title' };
@@ -216,6 +219,8 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.breadcrumb).toEqual({
           items: [{ label: 'Home' }, { label: 'Hiring processes' }]
         });
+
+        expect(component.pageCustomActions).toEqual([{ label: 'Custom Action', action: 'endpoint/' }]);
       }));
     });
 
@@ -1862,6 +1867,197 @@ describe('PoPageDynamicTableComponent:', () => {
       component['updateFilterValue'](filter);
 
       expect(component.fields).toEqual(expectedFields);
+    });
+  });
+
+  describe('Integration', () => {
+    it('should merge default action with custom actions', () => {
+      component.actions = {
+        new: 'dynamic-new',
+        removeAll: true
+      };
+
+      expect(component.pageActions.length).toBe(2);
+
+      component.pageCustomActions = [
+        { label: 'Custom Action 1', action: 'endpoint/' },
+        { label: 'Custom Action 2', action: 'endpoint/' }
+      ];
+
+      expect(component.pageActions.length).toBe(4);
+      expect(component.pageActions[2].label).toBe('Custom Action 1');
+      expect(component.pageActions[3].label).toBe('Custom Action 2');
+    });
+
+    it('should enable selectable in table if selectable in custom action is true', () => {
+      component.pageCustomActions = [
+        { label: 'Custom Action 1', action: 'endpoint/', selectable: true },
+        { label: 'Custom Action 2', action: 'endpoint/' }
+      ];
+
+      expect(component.enableSelectionTable).toBe(true);
+    });
+
+    it('should enable selectable in table if selectable is true in all custom actions', () => {
+      component.pageCustomActions = [
+        { label: 'Custom Action 1', action: 'endpoint/', selectable: true },
+        { label: 'Custom Action 2', action: 'endpoint/', selectable: true }
+      ];
+
+      expect(component.enableSelectionTable).toBe(true);
+    });
+
+    it('should disable selectable in table if selectable is false in all custom actions and removeAll is false', () => {
+      component.pageCustomActions = [
+        { label: 'Custom Action 1', action: 'endpoint/', selectable: false },
+        { label: 'Custom Action 2', action: 'endpoint/', selectable: false }
+      ];
+
+      component.actions = {
+        removeAll: false
+      };
+
+      expect(component.enableSelectionTable).toBe(false);
+    });
+
+    it('should enable selectable in table if selectable is true in custom action and removeAll is false', () => {
+      component.pageCustomActions = [
+        { label: 'Custom Action 1', action: 'endpoint/', selectable: true },
+        { label: 'Custom Action 2', action: 'endpoint/', selectable: false }
+      ];
+
+      component.actions = {
+        removeAll: false
+      };
+
+      expect(component.enableSelectionTable).toBe(true);
+    });
+
+    it('should disable custom action if selectable is true and no items in the table have been selected', () => {
+      component.pageCustomActions = [
+        { label: 'Custom Action 1', action: 'endpoint/', selectable: true },
+        { label: 'Custom Action 2', action: 'endpoint/' }
+      ];
+
+      component.actions = {
+        new: 'dynamic-new',
+        removeAll: true
+      };
+
+      component.items = [
+        { id: '1', name: 'angular', $selected: false },
+        { id: '2', name: 'react', $selected: false },
+        { id: '3', name: 'vue', $selected: false }
+      ];
+
+      expect(component.pageActions[2].disabled()).toBe(true);
+    });
+
+    it('should enable a custom action if selectable is true and the table has some item selected', () => {
+      component.pageCustomActions = [
+        { label: 'Custom Action 1', action: 'endpoint/', selectable: true },
+        { label: 'Custom Action 2', action: 'endpoint/' }
+      ];
+
+      component.actions = {
+        new: 'dynamic-new',
+        removeAll: true
+      };
+
+      component.items = [
+        { id: '1', name: 'angular', $selected: true },
+        { id: '2', name: 'react' },
+        { id: '3', name: 'vue' }
+      ];
+
+      expect(component.pageActions[2].disabled()).toBe(false);
+    });
+
+    it('should navigate to `test/` if action of pageCustomAction is undefined and url is defined', () => {
+      component.actions = {
+        new: 'dynamic-new',
+        removeAll: true
+      };
+
+      const customAction = { label: 'Custom Action 1', url: 'test/', selectable: true };
+
+      component.pageCustomActions = [customAction];
+
+      spyOn(component['router'], 'navigate').and.callThrough();
+
+      component.pageActions[2].action(customAction);
+
+      expect(component['router'].navigate).toHaveBeenCalledWith(['test/'], { queryParams: undefined });
+    });
+
+    it('shouldn`t navigate and call action if action and url are undefined', () => {
+      component.actions = {
+        new: 'dynamic-new',
+        removeAll: true
+      };
+
+      const customAction = { label: 'Custom Action 1', selectable: true };
+
+      component.pageCustomActions = [customAction];
+
+      spyOn(component['router'], 'navigate');
+      const customActionServiceSpy = spyOn(component['poPageDynamicTableActionsService'], 'customAction');
+
+      component.pageActions[2].action(customAction);
+
+      expect(component['router'].navigate).not.toHaveBeenCalled();
+      expect(customActionServiceSpy).not.toHaveBeenCalled();
+    });
+
+    it('should call customAction of the service with action and without resource if action is defined and selectable is false', () => {
+      component.actions = {
+        new: 'dynamic-new',
+        removeAll: true
+      };
+      const action = jasmine.createSpy('action');
+      const resource = undefined;
+
+      const customAction = { label: 'Custom Action 1', action, selectable: false };
+
+      component.pageCustomActions = [customAction];
+
+      const customActionServiceSpy = spyOn(
+        component['poPageDynamicTableActionsService'],
+        'customAction'
+      ).and.returnValue(EMPTY);
+
+      component.pageActions[2].action(customAction);
+
+      expect(customActionServiceSpy).toHaveBeenCalledWith(action, resource);
+    });
+
+    it('should call customAction of the service with action and selected resource if action is defined and selectable is true', () => {
+      component.actions = {
+        new: 'dynamic-new',
+        removeAll: true
+      };
+
+      const action = () => {};
+      const customAction = { label: 'Custom Action 1', action, selectable: true };
+      const selectedItemKey = { id: '1' };
+
+      component.items = [
+        { id: '1', name: 'angular', $selected: true },
+        { id: '2', name: 'react' },
+        { id: '3', name: 'vue' }
+      ];
+
+      component.pageCustomActions = [customAction];
+      component.fields = [{ property: 'id', key: true }];
+
+      const customActionServiceSpy = spyOn(
+        component['poPageDynamicTableActionsService'],
+        'customAction'
+      ).and.returnValue(EMPTY);
+
+      component.pageActions[2].action(customAction);
+
+      expect(customActionServiceSpy).toHaveBeenCalledWith(action, [selectedItemKey]);
     });
   });
 });

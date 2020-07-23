@@ -1,5 +1,6 @@
 export * from './po-page-dynamic-table.component';
 export * from './interfaces/po-page-dynamic-table-actions.interface';
+export * from './interfaces/po-page-dynamic-table-custom-action.interface';
 export * from './interfaces/po-page-dynamic-table-before-duplicate.interface';
 export * from './interfaces/po-page-dynamic-table-before-edit.interface';
 export * from './interfaces/po-page-dynamic-table-before-new.interface';
