@@ -20,6 +20,7 @@ import * as util from '../../utils/util';
 
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
+import { poPageDynamicTableLiteralsDefault } from './po-page-dynamic-table-literals';
 import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
 import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
@@ -34,72 +35,9 @@ import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-tab
 import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
 import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
+import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
-
-export const poPageDynamicTableLiteralsDefault = {
-  en: {
-    pageAction: 'New',
-    pageActionRemoveAll: 'Delete',
-    tableActionView: 'View',
-    tableActionEdit: 'Edit',
-    tableActionDuplicate: 'Duplicate',
-    tableActionDelete: 'Delete',
-    confirmRemoveTitle: 'Confirm delete',
-    confirmRemoveMessage: 'Are you sure you want to delete this record? You can not undo this action.',
-    confirmRemoveAllTitle: 'Confirm batch deletion',
-    confirmRemoveAllMessage: 'Are you sure you want to delete all these records? You can not undo this action.',
-    loadDataErrorNotification: 'Service not found',
-    removeSuccessNotification: 'Item deleted successfully',
-    removeAllSuccessNotification: 'Items deleted successfully'
-  },
-  es: {
-    pageAction: 'Nuevo',
-    pageActionRemoveAll: 'Borrar',
-    tableActionView: 'Visualizar',
-    tableActionEdit: 'Editar',
-    tableActionDuplicate: 'Duplicar',
-    tableActionDelete: 'Borrar',
-    confirmRemoveTitle: 'Confirmar la exclusión',
-    confirmRemoveMessage: '¿Está seguro de que desea eliminar este registro? No puede deshacer esta acción.',
-    confirmRemoveAllTitle: 'Confirmar la exclusión por lotes',
-    confirmRemoveAllMessage: '¿Está seguro de que desea eliminar todos estos registros? No puede deshacer esta acción.',
-    loadDataErrorNotification: 'Servicio no informado.',
-    removeSuccessNotification: 'Elemento eliminado con éxito',
-    removeAllSuccessNotification: 'Elementos eliminados con éxito'
-  },
-  pt: {
-    pageAction: 'Novo',
-    pageActionRemoveAll: 'Excluir',
-    tableActionView: 'Visualizar',
-    tableActionEdit: 'Editar',
-    tableActionDuplicate: 'Duplicar',
-    tableActionDelete: 'Excluir',
-    confirmRemoveTitle: 'Confirmar exclusão',
-    confirmRemoveMessage: 'Tem certeza de que deseja excluir esse registro? Você não poderá desfazer essa ação.',
-    confirmRemoveAllTitle: 'Confirmar exclusão em lote',
-    confirmRemoveAllMessage:
-      'Tem certeza de que deseja excluir todos esses registros? Você não poderá desfazer essa ação.',
-    loadDataErrorNotification: 'Serviço não informado.',
-    removeSuccessNotification: 'Item excluido com sucesso',
-    removeAllSuccessNotification: 'Items excluidos com sucesso'
-  },
-  ru: {
-    pageAction: 'Новый',
-    pageActionRemoveAll: 'Удалить',
-    tableActionView: 'Просмотр',
-    tableActionEdit: 'Редактировать',
-    tableActionDuplicate: 'Дублировать',
-    tableActionDelete: 'Удалить',
-    confirmRemoveTitle: 'Подтверждение удаления',
-    confirmRemoveMessage: 'Вы уверены, что хотите удалить эту запись?  Вы не можете отменить это действие.',
-    confirmRemoveAllTitle: 'Подтвердите удаление пакета',
-    confirmRemoveAllMessage: 'Вы уверены, что хотите удалить все эти записи? Вы не можете отменить это действие.',
-    loadDataErrorNotification: 'Сервис не найден',
-    removeSuccessNotification: 'Элемент успешно удален',
-    removeAllSuccessNotification: 'Элементы успешно удалены'
-  }
-};
 
 /**
  * @docsExtends PoPageDynamicListBaseComponent
@@ -172,6 +110,7 @@ export const poPageDynamicTableLiteralsDefault = {
  * <example name="po-page-dynamic-table-users" title="PO Page Dynamic Table - Users">
  *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.component.html"> </file>
  *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.component.ts"> </file>
+ *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.service.ts"> </file>
  * </example>
  */
 @Component({
@@ -183,11 +122,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _actions: PoPageDynamicTableActions = {};
   private _pageActions: Array<PoPageAction> = [];
   private _tableActions: Array<PoTableAction> = [];
+  private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
 
   private page: number = 1;
   private params = {};
   private sortedColumn: PoTableColumnSort;
   private subscriptions = new Subscription();
+  private hasCustomActionWithSelectable = false;
+  private customPageListActions = [];
 
   hasNext = false;
   items = [];
@@ -241,6 +183,34 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   get actions(): PoPageDynamicTableActions {
     return this._actions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de ações customizadas na página.
+   *
+   * Essas ações ficam localizadas na parte superior da página em botões com ações.
+   *
+   * Exemplo de utilização:
+   * ```
+   * [
+   *  { label: 'Export', action: this.export.bind(this) },
+   *  { label: 'Print', action: this.print.bind(this) }
+   * ];
+   * ```
+   */
+  @Input('p-page-custom-actions') set pageCustomActions(value: Array<PoPageDynamicTableCustomAction>) {
+    this._pageCustomActions = value;
+
+    this.customPageListActions = this.transformCustomActionsToPageListAction(this.pageCustomActions);
+    this.hasCustomActionWithSelectable = this.pageCustomActions.some(customAction => customAction.selectable);
+  }
+
+  get pageCustomActions(): Array<PoPageDynamicTableCustomAction> {
+    return this._pageCustomActions;
   }
 
   /**
@@ -344,12 +314,16 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.subscriptions.add(this.loadData({ page: ++this.page, ...this.params }).subscribe());
   }
 
+  get enableSelectionTable() {
+    return this.hasActionRemoveAll || this.hasCustomActionWithSelectable;
+  }
+
   get hasActionRemoveAll() {
     return !!this.actions.removeAll;
   }
 
   get pageActions() {
-    return [...this._pageActions];
+    return [...this._pageActions, ...this.customPageListActions];
   }
 
   get tableActions() {
@@ -434,6 +408,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
           this.breadcrumb = response.breadcrumb || this.breadcrumb;
           this.fields = response.fields || this.fields;
           this.title = response.title || this.title;
+          this.pageCustomActions = response.pageCustomActions || this.pageCustomActions;
         }),
         switchMap(() => this.loadOptionsOnInitialize(onLoad))
       );
@@ -684,7 +659,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     actionRemoveAll: PoPageDynamicTableActions['removeAll'],
     actionBeforeRemoveAll: PoPageDynamicTableActions['beforeRemoveAll']
   ) {
-    const originalResourcesKeys = this.getSelectedItemsKeysToRemove();
+    const originalResourcesKeys = this.getSelectedItemsKeys();
     this.subscriptions.add(
       this.poPageDynamicTableActionsService
         .beforeRemoveAll(actionBeforeRemoveAll, originalResourcesKeys)
@@ -697,7 +672,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     );
   }
 
-  private getSelectedItemsKeysToRemove() {
+  private getSelectedItemsKeys() {
     const resources = this.items.filter(item => item.$selected);
 
     if (resources.length === 0) {
@@ -758,6 +733,36 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     }
   }
 
+  private transformCustomActionsToPageListAction(
+    customActions: Array<PoPageDynamicTableCustomAction>
+  ): Array<PoPageAction> {
+    return customActions.map(customAction => {
+      return {
+        label: customAction.label,
+        action: this.callCustomAction.bind(this, customAction),
+        disabled: this.isDisablePageCustomAction.bind(this, customAction)
+      };
+    });
+  }
+
+  private isDisablePageCustomAction(customAction): boolean {
+    return customAction.selectable && !this.getSelectedItemsKeys();
+  }
+
+  private callCustomAction(customAction: PoPageDynamicTableCustomAction) {
+    if (customAction.action) {
+      const selectedItems = customAction.selectable ? this.getSelectedItemsKeys() : undefined;
+
+      const sendCustomActionSubscription = this.poPageDynamicTableActionsService
+        .customAction(customAction.action, selectedItems)
+        .subscribe();
+
+      this.subscriptions.add(sendCustomActionSubscription);
+    } else if (customAction.url) {
+      this.navigateTo({ path: customAction.url });
+    }
+  }
+
   private setRemoveAllAction() {
     const action = this._actions;
     if (this.showRemove(action.removeAll)) {
@@ -770,7 +775,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private disableRemoveAll(): boolean {
-    return !this.getSelectedItemsKeysToRemove();
+    return !this.getSelectedItemsKeys();
   }
 
   private setTableActions(actions: PoPageDynamicTableActions) {
@@ -857,7 +862,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       breadcrumb: this.breadcrumb,
       title: this.title,
       keepFilters: this.keepFilters,
-      concatFilters: this.concatFilters
+      concatFilters: this.concatFilters,
+      pageCustomActions: this.pageCustomActions
     };
 
     const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicTableOptions> = {
@@ -882,6 +888,11 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         },
         {
           nameProp: 'concatFilters'
+        },
+        {
+          nameProp: 'pageCustomActions',
+          merge: true,
+          keyForMerge: 'label'
         }
       ]
     };
