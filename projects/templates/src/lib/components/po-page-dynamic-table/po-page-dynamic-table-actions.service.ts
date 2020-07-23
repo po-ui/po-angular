@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
+
 import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
 import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
 import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table-before-edit.interface';
@@ -8,6 +10,7 @@ import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
+import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
 
 interface ExecuteActionParameter {
   action: string | Function;
@@ -70,6 +73,10 @@ export class PoPageDynamicTableActionsService {
     resource: any
   ): Observable<PoPageDynamicTableBeforeDetail> {
     return this.executeAction({ action, id, resource });
+  }
+
+  customAction(action: PoPageDynamicTableCustomAction['action'], resource: any = []) {
+    return this.executeAction({ action, resource });
   }
 
   private executeAction<T>({ action, resource = {}, id }: ExecuteActionParameter): Observable<T> {
