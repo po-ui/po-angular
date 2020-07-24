@@ -1,3 +1,8 @@
+<button class="po-page-login-support" (click)="activateSupport()" [hidden]="!support">
+  <span class="po-icon po-icon-help"></span>
+  {{ pageLoginLiterals?.support }}
+</button>
+
 <po-page-background
   #pageLogin
   p-show-select-language

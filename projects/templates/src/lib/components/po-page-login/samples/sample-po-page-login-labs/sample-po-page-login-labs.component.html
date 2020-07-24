@@ -17,6 +17,7 @@
   [p-recovery]="recovery"
   [p-register-url]="registerUrl"
   [p-secondary-logo]="secondaryLogo"
+  [p-support]="support"
   (p-login-submit)="loginSubmit($event)"
 >
 </po-page-login>
@@ -96,11 +97,15 @@
   </div>
 
   <div class="po-row">
-    <po-input class="po-lg-4" name="background" [(ngModel)]="background" p-clean p-label="Background"> </po-input>
+    <po-input class="po-lg-6" name="background" [(ngModel)]="background" p-clean p-label="Background"> </po-input>
 
-    <po-input class="po-lg-4" name="recovery" [(ngModel)]="recovery" p-clean p-label="Recovery"> </po-input>
+    <po-input class="po-lg-6" name="support" [(ngModel)]="support" p-clean p-label="Support"> </po-input>
+  </div>
 
-    <po-input class="po-lg-4" name="registerUrl" [(ngModel)]="registerUrl" p-clean p-label="Register URL"> </po-input>
+  <div class="po-row">
+    <po-input class="po-lg-6" name="recovery" [(ngModel)]="recovery" p-clean p-label="Recovery"> </po-input>
+
+    <po-input class="po-lg-6" name="registerUrl" [(ngModel)]="registerUrl" p-clean p-label="Register URL"> </po-input>
   </div>
 
   <div class="po-row">
