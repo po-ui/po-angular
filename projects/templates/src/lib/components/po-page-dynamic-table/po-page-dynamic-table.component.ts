@@ -409,6 +409,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
           this.fields = response.fields || this.fields;
           this.title = response.title || this.title;
           this.pageCustomActions = response.pageCustomActions || this.pageCustomActions;
+          this.keepFilters = response.keepFilters || this.keepFilters;
+          this.concatFilters = response.concatFilters || this.concatFilters;
         }),
         switchMap(() => this.loadOptionsOnInitialize(onLoad))
       );
