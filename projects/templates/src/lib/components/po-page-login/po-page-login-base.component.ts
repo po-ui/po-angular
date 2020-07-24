@@ -46,7 +46,8 @@ export const poPageLoginLiteralsDefault = {
       'without success your user will be blocked and you will be left 24 hours without being able to access :(',
     createANewPasswordNow: 'Better create a new password now! You will be able to log into the system right away.',
     iForgotMyPassword: 'I forgot my password',
-    welcome: 'Welcome'
+    welcome: 'Welcome',
+    support: 'Support'
   },
   es: <PoPageLoginLiterals>{
     title: 'Bienvenido',
@@ -73,7 +74,8 @@ export const poPageLoginLiteralsDefault = {
     createANewPasswordNow:
       '¡Mejor crear una nueva contraseña ahora! Usted podrá entrar en el sistema inmediatamente después.',
     iForgotMyPassword: 'Olvide mi contraseña',
-    welcome: 'Bienvenido'
+    welcome: 'Bienvenido',
+    support: 'Soporte'
   },
   pt: <PoPageLoginLiterals>{
     title: 'Bem-vindo',
@@ -99,7 +101,8 @@ export const poPageLoginLiteralsDefault = {
     yourUserWillBeBlocked: 'sem sucesso seu usuário será bloqueado e você fica 24 horas sem poder acessar :(',
     createANewPasswordNow: 'Melhor criar uma senha nova agora! Você vai poder entrar no sistema logo em seguida.',
     iForgotMyPassword: 'Esqueci minha senha',
-    welcome: 'Boas-vindas'
+    welcome: 'Boas-vindas',
+    support: 'Suporte'
   },
   ru: <PoPageLoginLiterals>{
     title: 'Добро пожаловать!',
@@ -125,7 +128,8 @@ export const poPageLoginLiteralsDefault = {
     yourUserWillBeBlocked: 'Ваш пользователь будет заблокирован, и Вы останетесь на 24 часа без возможности доступа :(',
     createANewPasswordNow: 'Лучше создайте новый пароль сейчас! Вы сможете сразу войти в систему.',
     iForgotMyPassword: 'Я забыл свой пароль',
-    welcome: 'добро пожаловать'
+    welcome: 'добро пожаловать',
+    support: 'Поддержка'
   }
 };
 
@@ -193,6 +197,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   private _productName: string;
   private _recovery: string | PoPageLoginRecovery | Function;
   private _registerUrl: string;
+  private _support: string | Function;
 
   /**
    * @optional
@@ -805,6 +810,32 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
 
   get blockedUrl(): string {
     return this._blockedUrl;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe um botão para suporte.
+   *
+   * A propriedade aceita os seguintes tipos:
+   *
+   * - **String**: URL externa ou uma rota válida;
+   * - **Function**: Função a ser disparada ao clicar no botão de suporte;
+   * ```
+   * <po-page-login>
+   *   [p-support]="this.mySupport.bind(this)">
+   * </po-page-login>
+   * ```
+   *
+   */
+  @Input('p-support') set support(value: string | Function) {
+    this._support = value;
+  }
+
+  get support() {
+    return this._support;
   }
 
   /**
