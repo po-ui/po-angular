@@ -196,6 +196,28 @@ describe('PoPageLoginComponent: ', () => {
       expect(component['validateArrayChanges']).not.toHaveBeenCalled();
     });
 
+    it('activateSupport: should call setUrlRedirect if support is a string', () => {
+      const expectedValue = '/string';
+      component.support = expectedValue;
+      spyOn(component, <any>'setUrlRedirect');
+
+      component.activateSupport();
+
+      expect(component['setUrlRedirect']).toHaveBeenCalledWith(expectedValue);
+    });
+
+    it('activateSupport: should call support if it is a function', () => {
+      component.support = () => {};
+
+      spyOn(component, <any>'setUrlRedirect');
+      spyOn(component, <any>'support');
+
+      component.activateSupport();
+
+      expect(component.support).toHaveBeenCalled();
+      expect(component['setUrlRedirect']).not.toHaveBeenCalled();
+    });
+
     describe('changePasswordModel:', () => {
       it('should call `setPasswordErrors` with `passwordErrors`', () => {
         const errors = ['error'];
@@ -815,21 +837,21 @@ describe('PoPageLoginComponent: ', () => {
 
     it('Loading: should disabled button when property is `true`.', () => {
       switchLoading(true);
-      const button = fixture.debugElement.nativeElement.querySelector('button');
+      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
 
       expect(button.getAttribute('disabled')).not.toBeNull();
     });
 
     it('Label: should have label equal Enter on loading when `p-loading` is `false`.', () => {
       switchLoading(false);
-      const button = fixture.debugElement.nativeElement.querySelector('button');
+      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
 
       expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submitLabel);
     });
 
     it('Label: should set alternative label on loading when `p-loading` is `true`.', () => {
       switchLoading(true);
-      const button = fixture.debugElement.nativeElement.querySelector('button');
+      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
 
       expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submittedLabel);
     });
@@ -1043,6 +1065,37 @@ describe('PoPageLoginComponent: ', () => {
       const tag = nativeElement.querySelector('po-tag');
 
       expect(tag).toBeFalsy();
+    });
+  });
+
+  describe('support button', () => {
+    it('should show support button if support is a string', () => {
+      component.support = '/teste';
+
+      fixture.detectChanges();
+
+      const support = nativeElement.querySelector('.po-page-login-support');
+
+      expect(support).toBeTruthy();
+    });
+
+    it('should show support button if support is a function', () => {
+      component.support = () => {};
+
+      fixture.detectChanges();
+
+      const support = nativeElement.querySelector('.po-page-login-support');
+
+      expect(support).toBeTruthy();
+    });
+
+    it('shouldn`t show button if doesn`t have `support`', () => {
+      component.support = undefined;
+      fixture.detectChanges();
+
+      const support = nativeElement.querySelector('.po-page-login-support');
+
+      expect(support.hidden).toBeTruthy();
     });
   });
 });

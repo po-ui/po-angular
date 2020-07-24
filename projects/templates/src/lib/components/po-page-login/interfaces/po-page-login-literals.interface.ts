@@ -94,4 +94,7 @@ export interface PoPageLoginLiterals {
 
   /** Mensagem de "Boas-vindas" para o usuário que aparece acima dos campos de entrada. */
   welcome?: string;
+
+  /** Label do botão de suporte. */
+  support?: string;
 }
