@@ -200,7 +200,9 @@ describe('PoPageDynamicTableComponent:', () => {
             items: [{ label: 'Home' }, { label: 'Hiring processes' }]
           },
           title: 'Original Title',
-          pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }]
+          pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }],
+          keepFilters: true,
+          concatFilters: true
         };
 
         const custom = { title: 'New Title' };
@@ -221,6 +223,8 @@ describe('PoPageDynamicTableComponent:', () => {
         });
 
         expect(component.pageCustomActions).toEqual([{ label: 'Custom Action', action: 'endpoint/' }]);
+        expect(component.keepFilters).toBe(true);
+        expect(component.concatFilters).toBe(true);
       }));
     });
 
