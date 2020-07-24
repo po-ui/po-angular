@@ -31,6 +31,7 @@ export class SamplePoPageLoginLabsComponent implements OnInit {
   properties: Array<string>;
   recovery: string;
   registerUrl: string;
+  support: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'hideRememberUser', label: 'Hide remember user' },
@@ -107,5 +108,6 @@ export class SamplePoPageLoginLabsComponent implements OnInit {
     this.productName = '';
     this.recovery = '';
     this.registerUrl = '';
+    this.support = '';
   }
 }

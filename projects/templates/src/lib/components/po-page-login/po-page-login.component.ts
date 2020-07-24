@@ -88,6 +88,19 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     this.checkingForRouteMetadata(this.activatedRoute.snapshot.data);
   }
 
+  activateSupport() {
+    switch (typeof this.support) {
+      case 'string': {
+        this.setUrlRedirect(this.support);
+        break;
+      }
+      case 'function': {
+        this.support();
+        break;
+      }
+    }
+  }
+
   changeLoginModel() {
     if (this.authenticationUrl) {
       this.loginErrors = [];
