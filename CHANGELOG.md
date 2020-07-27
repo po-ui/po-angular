@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v3.0.0-beta.1...v3.0.0-rc.1) (2020-07-27)
+
+### Bug Fixes
+
+* **multiselect:** corrige desaparecimento do campo de pesquisa ([cdf7879](https://github.com/po-ui/po-angular/commit/cdf7879f966697dd9a480d2ebce84acc9bd92625))
+* **schematics:** corrige erro ao executar o ng generate ([eae14ed](https://github.com/po-ui/po-angular/commit/eae14ed1a1e01a419f6b8d9b0677e9a4203d69dc))
+
+### Documentation
+
+* **select:** corrige erro no SampleCustomerRegistration ([53a888d](https://github.com/po-ui/po-angular/commit/53a888d41d80cd3eddd99050a8048911618f087d))
+* **table:** corrige no sample o uso da propriedade `p-show-more-disabled` ([f54b210](https://github.com/po-ui/po-angular/commit/f54b210d70cf6965bdf83c533e1a929369456bf5))
+* **contributing:** corrige descrição do commit com breaking change ([82d6a10](https://github.com/po-ui/po-angular/commit/82d6a10c528bb219a2d85c7cb9ddfe736cfd6bdc))
+
 ## [3.0.0-beta.1](https://github.com/po-ui/po-angular/compare/v2.10.0...v3.0.0-beta.1) (2020-07-20)
 
 
