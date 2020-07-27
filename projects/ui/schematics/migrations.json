@@ -7,7 +7,7 @@
       "factory": "./ng-update/v2/index#updateToV2"
     },
     "migration-v3": {
-      "version": "3.0.0-beta.1",
+      "version": "3.0.0-rc.1",
       "description": "Atualiza @po-ui/ng-components para v3",
       "factory": "./ng-update/v3/index#updateToV3"
     }
