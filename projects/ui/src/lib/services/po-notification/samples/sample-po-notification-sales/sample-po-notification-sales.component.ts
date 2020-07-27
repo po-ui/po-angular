@@ -70,10 +70,13 @@ export class SamplePoNotificationSalesComponent {
 
   checkProduct() {
     const selectedProductIndex = this.productDetailsList.findIndex(product => product.id === this.product);
-    const productDetails = this.productDetailsList[selectedProductIndex];
-    this.price = productDetails.price;
-    this.stock = productDetails.stock;
-    this.name = this.productOptions[selectedProductIndex].label;
+
+    if (selectedProductIndex >= 0) {
+      const productDetails = this.productDetailsList[selectedProductIndex];
+      this.price = productDetails.price;
+      this.stock = productDetails.stock;
+      this.name = this.productOptions[selectedProductIndex].label;
+    }
   }
 
   checkQuantity() {
