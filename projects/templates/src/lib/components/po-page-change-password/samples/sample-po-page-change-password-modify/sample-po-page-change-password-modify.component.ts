@@ -18,7 +18,7 @@ export class SamplePoPageChangePasswordModifyComponent implements OnInit {
   phoneNumber: string;
   url: string;
 
-  @ViewChild(PoPageChangePasswordComponent, { static: true }) changePassword: PoPageChangePasswordComponent;
+  @ViewChild(PoPageChangePasswordComponent) changePassword: PoPageChangePasswordComponent;
 
   public readonly breadcrumb: PoBreadcrumb = {
     items: [{ label: 'Home', link: '/documentation/po-page-change-password' }, { label: 'Profile' }]
