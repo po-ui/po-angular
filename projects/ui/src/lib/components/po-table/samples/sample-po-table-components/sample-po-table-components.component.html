@@ -1,14 +1,13 @@
 <div class="po-font-text-large">PO UI Library</div>
 
 <hr />
-
 <po-table
   p-container="shadow"
+  [p-loading-show-more]="isLoading"
   [p-columns]="columns"
   [p-items]="items"
   [p-show-more-disabled]="showMoreDisabled"
   [p-sort]="true"
-  [p-loading]="isLoading"
   (p-show-more)="showMore($event)"
   (p-sort-by)="sort($event)"
 >

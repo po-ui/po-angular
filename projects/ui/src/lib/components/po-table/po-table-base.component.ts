@@ -281,8 +281,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
    *
    * @description
    *
-   * Bloqueia a interação do usuário com os dados da _table_ assim como no botão 'Carregar mais resultados',
-   * apresentando um _spinning loading_ em ambos.
+   * Bloqueia a interação do usuário com os dados contidos na _table_.
    *
    * @default `false`
    */
@@ -352,6 +351,17 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * @default `false`
    */
   @Input('p-hide-columns-manager') @InputBoolean() hideColumnsManager?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite que seja adicionado um spinner loading no botão "Mostra mais".
+   *
+   * @default `false`
+   */
+  @Input('p-loading-show-more') @InputBoolean() loadingShowMore?: boolean = false;
 
   /**
    * @optional

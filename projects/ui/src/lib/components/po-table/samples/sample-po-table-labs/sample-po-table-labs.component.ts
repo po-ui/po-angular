@@ -80,6 +80,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Sort', value: 'sort' },
     { label: 'Striped', value: 'striped' },
     { label: 'Show more disabled', value: 'showMoreDisabled' },
+    { label: 'Loading show more', value: 'loadingShowMore' },
     { label: 'Hide detail', value: 'hideDetail' },
     { label: 'Loading', value: 'loading' },
     { label: 'Hide columns manager', value: 'hideColumnsManager' }
