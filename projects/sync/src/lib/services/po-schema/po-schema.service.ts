@@ -31,7 +31,7 @@ export class PoSchemaService {
    * @param {any} recordId Id do registro.
    * @param {boolean} isLocalKey Indica se é uma chave local.
    */
-  private static getRecordKey(schemaName: string, recordId: any, isLocalKey?: boolean): string {
+  private static getRecordKey(schemaName: string, recordId: any, isLocalKey: boolean = false): string {
     return isLocalKey ? `${schemaName}_local:${recordId}` : `${schemaName}:${recordId}`;
   }
 
