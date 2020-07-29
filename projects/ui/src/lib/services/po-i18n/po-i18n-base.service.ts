@@ -213,7 +213,7 @@ export class PoI18nBaseService {
    * Este recurso pode ser útil para os usuários que utilizam o método `getLiterals()` do serviço do i18n para poder
    * buscar novamente as literais no novo idioma configurado.
    */
-  setLanguage(language: string, reload?: boolean): void {
+  setLanguage(language: string, reload: boolean = false): void {
     if (!isLanguage(language)) {
       return;
     }
