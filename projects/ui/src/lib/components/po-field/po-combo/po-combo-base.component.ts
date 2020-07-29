@@ -767,7 +767,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  private validateValue(currentOption: PoComboGroup, verifyingOptionsGroup?: boolean) {
+  private validateValue(currentOption: PoComboGroup, verifyingOptionsGroup: boolean = false) {
     const { label, options, value } = currentOption;
 
     if (this.isOptionGroupList) {
@@ -781,7 +781,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   private verifyComboOptions(
     comboOptions: Array<PoComboOption | PoComboOptionGroup>,
-    verifyingOptionsGroup?: boolean,
+    verifyingOptionsGroup: boolean = false,
     accumulatedGroupOptions?: Array<PoComboGroup>
   ) {
     return comboOptions.reduce((accumulatedOptions, currentOption) => {

@@ -562,7 +562,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     this.validateMenus(this.menus);
   }
 
-  protected validateCollapseClass(collapsedMobile?: boolean) {
+  protected validateCollapseClass(collapsedMobile: boolean = false) {
     const wrapper = this.element.nativeElement.parentNode;
     this.renderer[this.isCollapsed && !collapsedMobile ? 'addClass' : 'removeClass'](wrapper, 'po-collapsed-menu');
   }
