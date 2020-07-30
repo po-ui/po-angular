@@ -1264,5 +1264,13 @@ describe('PoTableBaseComponent:', () => {
     it('p-hide-columns-manager: should update property `p-hide-columns-manager` with invalid values.', () => {
       expectPropertiesValues(component, 'hideColumnsManager', booleanInvalidValues, false);
     });
+
+    it('p-loading-show-more: should update property `p-loading-show-more` with valid values.', () => {
+      expectPropertiesValues(component, 'loadingShowMore', booleanValidTrueValues, true);
+    });
+
+    it('p-loading-show-more: should update property `p-loading-show-more` with invalid values.', () => {
+      expectPropertiesValues(component, 'loadingShowMore', booleanInvalidValues, false);
+    });
   });
 });
