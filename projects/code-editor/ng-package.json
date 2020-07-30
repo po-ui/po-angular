@@ -4,12 +4,5 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": [
-    "@po-ui/ng-components",
-    "@po-ui/ng-schematics",
-    "monaco-editor",
-    "core-js",
-    "intl",
-    "uuid"
-  ]
+  "whitelistedNonPeerDependencies": ["@po-ui/ng-components", "@po-ui/ng-schematics", "monaco-editor", "core-js", "intl"]
 }

@@ -1,8 +1,6 @@
 import { DoCheck, EventEmitter, Input, IterableDiffers, Output, Directive } from '@angular/core';
 
-import { v4 as uuid } from 'uuid';
-
-import { browserLanguage, convertToBoolean, isKeyCodeEnter, poLocaleDefault } from '../../utils/util';
+import { browserLanguage, convertToBoolean, isKeyCodeEnter, poLocaleDefault, uuid } from '../../utils/util';
 
 import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 

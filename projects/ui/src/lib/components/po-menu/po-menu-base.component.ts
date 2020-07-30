@@ -1,6 +1,5 @@
 import { Input, Directive } from '@angular/core';
 
-import { v4 as uuid } from 'uuid';
 import {
   browserLanguage,
   convertToBoolean,
@@ -8,7 +7,8 @@ import {
   isExternalLink,
   isTypeof,
   poLocaleDefault,
-  validValue
+  validValue,
+  uuid
 } from '../../utils/util';
 
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
