@@ -1,9 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
-import { v4 as uuid } from 'uuid';
-
 import { PoModalBaseComponent } from './po-modal-base.component';
 import { PoModalService } from './po-modal-service';
+import { uuid } from '../../utils/util';
 
 /**
  * @docsExtends PoModalBaseComponent

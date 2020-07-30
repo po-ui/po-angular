@@ -1,7 +1,6 @@
 import { Input, Directive } from '@angular/core';
 
-import { v4 as uuid } from 'uuid';
-import { isExternalLink } from '../../utils/util';
+import { isExternalLink, uuid } from '../../utils/util';
 
 import { PoMenuPanelItem } from './po-menu-panel-item/po-menu-panel-item.interface';
 import { PoMenuPanelItemInternal } from './po-menu-panel-item/po-menu-panel-item-internal.interface';
