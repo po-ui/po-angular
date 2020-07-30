@@ -12,7 +12,10 @@
           [class.po-checkbox-group-input-checked]="selectAll"
           [class.po-checkbox-group-input-indeterminate]="selectAll === null"
         />
-        <label class="po-checkbox-group-label po-clickable" (click)="selectAllListItems()">
+        <label
+          class="po-checkbox-group-label po-list-view-selectable-label po-clickable"
+          (click)="selectAllListItems()"
+        >
           {{ literals.selectAll }}
         </label>
       </div>
@@ -37,7 +40,10 @@
                   type="checkbox"
                   [class.po-checkbox-group-input-checked]="item.$selected"
                 />
-                <label class="po-checkbox-group-label po-clickable" (click)="selectListItem(item)"></label>
+                <label
+                  class="po-checkbox-group-label po-list-view-selectable-label po-clickable"
+                  (click)="selectListItem(item)"
+                ></label>
               </div>
               <a
                 *ngSwitchCase="'externalLink'"

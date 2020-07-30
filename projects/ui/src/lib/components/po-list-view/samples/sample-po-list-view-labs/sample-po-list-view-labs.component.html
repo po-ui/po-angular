@@ -99,6 +99,7 @@
       [(ngModel)]="properties"
       p-columns="3"
       p-label="Properties"
+      p-help='To enable the "Hide Select All" option, you must select the "Select" option first.'
       [p-options]="propertiesOptions"
       (p-change)="changeActionOptions()"
     >
