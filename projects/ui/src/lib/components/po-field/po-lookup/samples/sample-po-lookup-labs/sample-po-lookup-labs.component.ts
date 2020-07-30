@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoLookupColumn, PoLookupFilter, PoLookupLiterals } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoLookupColumn,
+  PoLookupFilter,
+  PoLookupLiterals,
+  PoSelectOption
+} from '@po-ui/ng-components';
 
 import { SamplePoLookupService } from '../sample-po-lookup.service';
 
@@ -26,17 +32,25 @@ export class SamplePoLookupLabsComponent implements OnInit {
   properties: Array<string>;
 
   private readonly columnsDefinition = {
-    value: <PoLookupColumn>{ property: 'id', label: 'Id' },
-    label: <PoLookupColumn>{ property: 'name', label: 'Name' },
-    phone: <PoLookupColumn>{ property: 'phone', label: 'Phone' },
+    id: <PoLookupColumn>{ property: 'id', label: 'Id' },
+    name: <PoLookupColumn>{ property: 'name', label: 'Name' },
     email: <PoLookupColumn>{ property: 'email', label: 'Email' }
   };
 
   public readonly columnsOptions: Array<PoCheckboxGroupOption> = [
-    { value: 'value', label: 'Id' },
-    { value: 'label', label: 'Name' },
-    { value: 'phone', label: 'Phone' },
+    { value: 'id', label: 'Id' },
+    { value: 'name', label: 'Name' },
     { value: 'email', label: 'Email' }
+  ];
+
+  public readonly fieldLabelOptions: Array<PoSelectOption> = [
+    { value: 'label', label: 'Label' },
+    ...this.columnsOptions
+  ];
+
+  public readonly fieldValueOptions: Array<PoSelectOption> = [
+    { value: 'value', label: 'Value' },
+    ...this.columnsOptions
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
@@ -78,12 +92,12 @@ export class SamplePoLookupLabsComponent implements OnInit {
   }
 
   restore() {
-    this.columnsName = ['value', 'label'];
+    this.columnsName = ['id', 'name'];
     this.customLiterals = undefined;
     this.updateColumns();
 
-    this.fieldLabel = 'label';
-    this.fieldValue = 'value';
+    this.fieldLabel = 'name';
+    this.fieldValue = 'id';
 
     this.event = undefined;
     this.filterService = undefined;
