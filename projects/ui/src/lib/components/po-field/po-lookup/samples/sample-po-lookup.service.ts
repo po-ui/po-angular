@@ -7,7 +7,7 @@ import { PoLookupFilter, PoLookupFilteredItemsParams } from '@po-ui/ng-component
 
 @Injectable()
 export class SamplePoLookupService implements PoLookupFilter {
-  private url = 'https://thf.totvs.com.br/sample/api/new/heroes';
+  private url = 'https://po-sample-api.herokuapp.com/v1/heroes';
 
   constructor(private httpClient: HttpClient) {}
 

@@ -52,7 +52,7 @@
       [(ngModel)]="fieldLabel"
       p-label="Field Label"
       p-required
-      [p-options]="columnsOptions"
+      [p-options]="fieldLabelOptions"
     >
     </po-select>
 
@@ -62,7 +62,7 @@
       [(ngModel)]="fieldValue"
       p-label="Field Value"
       p-required
-      [p-options]="columnsOptions"
+      [p-options]="fieldValueOptions"
     >
     </po-select>
   </div>
@@ -73,7 +73,7 @@
       name="filterService"
       [(ngModel)]="filterService"
       p-clean
-      p-help="https://thf.totvs.com.br/sample/api/new/hotels"
+      p-help="https://po-sample-api.herokuapp.com/v1/people"
       p-label="Filter Service"
     >
     </po-input>
