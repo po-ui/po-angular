@@ -1,7 +1,15 @@
 import { Input, Directive } from '@angular/core';
 
-import { v4 as uuid } from 'uuid';
-import { convertToBoolean, convertToInt, isExternalLink, isTypeof, validValue } from '../../utils/util';
+import {
+  browserLanguage,
+  convertToBoolean,
+  convertToInt,
+  isExternalLink,
+  isTypeof,
+  poLocaleDefault,
+  validValue,
+  uuid
+} from '../../utils/util';
 
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 import { PoMenuItem } from './po-menu-item.interface';
