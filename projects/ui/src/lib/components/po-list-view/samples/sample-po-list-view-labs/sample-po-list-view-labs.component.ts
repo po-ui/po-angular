@@ -25,6 +25,12 @@ export class SamplePoListViewLabsComponent implements OnInit {
   propertyTitle: string;
   titleAction: string;
 
+  propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'select', label: 'Select' },
+    { value: 'hideSelectAll', label: 'Hide Select All', disabled: true },
+    { value: 'showMoreDisabled', label: 'Show More Disabled' }
+  ];
+
   readonly actionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Disabled', value: 'disabled' },
     { label: 'Separator', value: 'separator' },
@@ -36,12 +42,6 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
     { value: 'po-icon-world', label: 'po-icon-world' }
-  ];
-
-  readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { value: 'hideSelectAll', label: 'Hide Select All', disabled: true },
-    { value: 'select', label: 'Select' },
-    { value: 'showMoreDisabled', label: 'Show More Disabled' }
   ];
 
   readonly propertyTitleOptions: Array<PoSelectOption> = [
@@ -79,7 +79,13 @@ export class SamplePoListViewLabsComponent implements OnInit {
   }
 
   changeActionOptions() {
-    this.propertiesOptions[0].disabled = !this.properties.includes(this.propertiesOptions[1].value);
+    this.propertiesOptions = this.propertiesOptions.map(propertyOption => {
+      if (propertyOption.value === 'hideSelectAll') {
+        return { ...propertyOption, disabled: !this.properties.includes('select') };
+      } else {
+        return propertyOption;
+      }
+    });
   }
 
   changeLiterals() {
