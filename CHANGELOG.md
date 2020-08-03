@@ -2,21 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [3.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v3.0.0-beta.1...v3.0.0-rc.1) (2020-07-27)
-
-### Bug Fixes
-
-* **multiselect:** corrige desaparecimento do campo de pesquisa ([cdf7879](https://github.com/po-ui/po-angular/commit/cdf7879f966697dd9a480d2ebce84acc9bd92625))
-* **schematics:** corrige erro ao executar o ng generate ([eae14ed](https://github.com/po-ui/po-angular/commit/eae14ed1a1e01a419f6b8d9b0677e9a4203d69dc))
-
-### Documentation
-
-* **select:** corrige erro no SampleCustomerRegistration ([53a888d](https://github.com/po-ui/po-angular/commit/53a888d41d80cd3eddd99050a8048911618f087d))
-* **table:** corrige no sample o uso da propriedade `p-show-more-disabled` ([f54b210](https://github.com/po-ui/po-angular/commit/f54b210d70cf6965bdf83c533e1a929369456bf5))
-* **contributing:** corrige descrição do commit com breaking change ([82d6a10](https://github.com/po-ui/po-angular/commit/82d6a10c528bb219a2d85c7cb9ddfe736cfd6bdc))
-
-## [3.0.0-beta.1](https://github.com/po-ui/po-angular/compare/v2.10.0...v3.0.0-beta.1) (2020-07-20)
-
+## [3.0.0](https://github.com/po-ui/po-angular/compare/v2.10.0...v3.0.0) (2020-08-03)
 
 ### ⚠ BREAKING CHANGES
 
@@ -82,6 +68,13 @@ Depois:
 
 ### Features
 
+* **ng-tslint:** nova regra `bool-param-default` ([5f5044c](https://github.com/po-ui/po-angular/commit/5f5044ca8418be03902c6a6d57b6c34cf55f43dd))
+* **page-dynamic-table:** nova propriedade `p-page-custom-actions` ([aae9e87](https://github.com/po-ui/po-angular/commit/aae9e878f3cc35b0cdf19f02a0438935c575aeb5))
+* **page-login:** adiciona botão de suporte ([c7a3b22](https://github.com/po-ui/po-angular/commit/c7a3b220d110a836f31f8b3028785c83780c03b6))
+* **po-menu:** implement i18n to menu and menu filter ([95bab5a](https://github.com/po-ui/po-angular/commit/95bab5a241345073e6eb526b1f2cbf9e2b07e1d3))
+* **table:** adiciona propriedade loading show more ([09b728e](https://github.com/po-ui/po-angular/commit/09b728e4de3e87c7e6214d0e653d34efa325793d))
+* **table:** altera a posição do icone sort ([0ddd169](https://github.com/po-ui/po-angular/commit/0ddd169212e4a791852668abcabda79a0e6d2cc6))
+* atualizacao dos parametros do sonarqube ([3179bed](https://github.com/po-ui/po-angular/commit/3179bedeae976c099b388bdcdd334aa86edfb80e))
 * **components:** implementa ng update para versão 3 ([08958fd](https://github.com/po-ui/po-angular/commit/08958fd0b1ae95395a0b7264e51d0c7bf7995bb7))
 * **page-blocked-user:** adiciona literais em russo ([58d47d3](https://github.com/po-ui/po-angular/commit/58d47d31b26351030cf12265b7ae08991795bd1a))
 * **page-blocked-user:** permite traduzir literais usando serviço i18n ([0134d11](https://github.com/po-ui/po-angular/commit/0134d1141c3579be3d30c9ad86bb3946d8fabe22))
@@ -97,6 +90,24 @@ Depois:
 * **sync:** implementa ng update para versão 3 ([3e2a16d](https://github.com/po-ui/po-angular/commit/3e2a16d7280b99a40e32a9f392eae4eb920a2db8))
 * **table:** implementa opção para mudar a posição do detail ([f997c21](https://github.com/po-ui/po-angular/commit/f997c21c5199fbe29cc0f84d114116d2d334b8c2))
 
+### Bug Fixes
+
+* **list-view:** corrige alinhamento da caixa de seleção ([a92721e](https://github.com/po-ui/po-angular/commit/a92721e491fc138702be6064cb584616a2f13852))
+* **code-editor:** retirada do pacote uuid ([cc6f860](https://github.com/po-ui/po-angular/commit/cc6f860c21b5998cd1de47a8962e5a6fc8518d69))
+* **multiselect:** corrige desaparecimento do campo de pesquisa ([9f9fec7](https://github.com/po-ui/po-angular/commit/9f9fec7cfbb8244564b59203b42a9eb9f9565b46))
+* **page-dynamic-table:** corrige concatFilters e keepFilters no metadata ([bfbf428](https://github.com/po-ui/po-angular/commit/bfbf4286463f7df4ec94936ac9633a0eeb7dd08a))
+* **schematics:** corrige erro ao executar o ng generate ([6acbc00](https://github.com/po-ui/po-angular/commit/6acbc00cdc2b15df8962bdf407ac98d9d275e432))
+* **select:** corrige erro no sample customer registration ([536fbb5](https://github.com/po-ui/po-angular/commit/536fbb5160acb5ec9ee29bb2acceebb502a676f1))
+* **table:** corrige no sample o uso da propriedade showMoreDisabled ([567b66e](https://github.com/po-ui/po-angular/commit/567b66edd10a26fe213f22c0700caccf849b7abe))
+* **multiselect:** corrige desaparecimento do campo de pesquisa ([cdf7879](https://github.com/po-ui/po-angular/commit/cdf7879f966697dd9a480d2ebce84acc9bd92625))
+* **schematics:** corrige erro ao executar o ng generate ([eae14ed](https://github.com/po-ui/po-angular/commit/eae14ed1a1e01a419f6b8d9b0677e9a4203d69dc))
+
+### Documentation
+
+* **select:** corrige erro no SampleCustomerRegistration ([53a888d](https://github.com/po-ui/po-angular/commit/53a888d41d80cd3eddd99050a8048911618f087d))
+* **table:** corrige no sample o uso da propriedade `p-show-more-disabled` ([f54b210](https://github.com/po-ui/po-angular/commit/f54b210d70cf6965bdf83c533e1a929369456bf5))
+* **contributing:** corrige descrição do commit com breaking change ([82d6a10](https://github.com/po-ui/po-angular/commit/82d6a10c528bb219a2d85c7cb9ddfe736cfd6bdc))
+* **lookup** atualiza endpoint dos samples ([8f67a0](https://github.com/po-ui/po-angular/commit/8f67a0609fd250e449cf2bce78b4d1e47dd1408a))
 
 ### Code Refactoring
 
@@ -104,6 +115,7 @@ Depois:
 * **sync:** remove suporte portinari_sync_date ([d298119](https://github.com/po-ui/po-angular/commit/d29811916b5874f3f7cdf9c3e39313c3dd3cb311))
 * **table:** remove a propriedade p-checkbox ([802f7bf](https://github.com/po-ui/po-angular/commit/802f7bf6a43dd2ba15f5870bb2848e88ca1a9be5))
 * **upload:** remove literais ([6c172cb](https://github.com/po-ui/po-angular/commit/6c172cbe52834ba9e4e1e61e2e3d3774466bbe6f))
+
 
 ## [2.10.0](https://github.com/po-ui/po-angular/compare/v2.9.0...v2.10.0) (2020-07-13)
 
