@@ -35,13 +35,17 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component.bodyElement.nativeElement.designMode).toEqual(expectedValue);
     });
 
-    it('onInit: should call `updateValueWithModelValue`', fakeAsync(() => {
+    it('onInit: should call `updateValueWithModelValue` and `addClickListenerOnAnchorElements`', fakeAsync(() => {
       spyOn(component, <any>'updateValueWithModelValue');
+      spyOn(component, <any>'addClickListenerOnAnchorElements');
 
       component.ngOnInit();
       tick(50);
 
-      expect(component['updateValueWithModelValue']).toHaveBeenCalled();
+      expect(component['updateValueWithModelValue']).toHaveBeenCalledBefore(
+        component['addClickListenerOnAnchorElements']
+      );
+      expect(component['addClickListenerOnAnchorElements']).toHaveBeenCalled();
     }));
 
     describe('executeCommand:', () => {
@@ -289,15 +293,16 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component['emitSelectionCommands']).toHaveBeenCalled();
     });
 
-    it('onPaste: should call `addClickListenerOnAnchorElements` and `update`', () => {
+    it('onPaste: should call `addClickListenerOnAnchorElements` and `update`', fakeAsync(() => {
       spyOn(component, <any>'addClickListenerOnAnchorElements');
       spyOn(component, <any>'update');
 
       component.onPaste();
+      tick(50);
 
       expect(component['addClickListenerOnAnchorElements']).toHaveBeenCalled();
-      expect(component['update']).toHaveBeenCalled();
-    });
+      expect(component['update']).toHaveBeenCalledBefore(component['addClickListenerOnAnchorElements']);
+    }));
 
     it('update: should call `updateModel`', fakeAsync(() => {
       spyOn(component, <any>'updateModel');

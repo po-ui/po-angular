@@ -49,7 +49,10 @@ export class PoRichTextBodyComponent implements OnInit {
     this.bodyElement.nativeElement.designMode = 'on';
 
     // timeout necessário para setar o valor vindo do writeValue do componente principal.
-    setTimeout(() => this.updateValueWithModelValue());
+    setTimeout(() => {
+      this.updateValueWithModelValue();
+      this.addClickListenerOnAnchorElements();
+    });
   }
 
   executeCommand(command: string | { command: any; value: string | any }) {
@@ -121,8 +124,8 @@ export class PoRichTextBodyComponent implements OnInit {
   }
 
   onPaste() {
-    this.addClickListenerOnAnchorElements();
     this.update();
+    setTimeout(() => this.addClickListenerOnAnchorElements());
   }
 
   update() {
