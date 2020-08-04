@@ -68,58 +68,60 @@ describe('PoPopoverComponent:', () => {
     expect(fakeThis.arrowDirection).toBe('top');
   }));
 
-  it('should listen mouseenter in setRendererListenInit()', () => {
-    const fakeEvent = getFakeToSetRendererListenInit('hover', component);
+  describe('setRendererListenInit:', () => {
+    it(`should listen for 'mouseenter' `, () => {
+      const fakeEvent = getFakeToSetRendererListenInit('hover', component);
 
-    spyOn(fakeEvent, 'open');
+      spyOn(fakeEvent, 'open');
 
-    component.setRendererListenInit.call(fakeEvent);
+      component.setRendererListenInit.call(fakeEvent);
 
-    const event = document.createEvent('MouseEvents');
-    event.initEvent('mouseenter', false, true);
-    fakeEvent.target.nativeElement.dispatchEvent(event);
+      const event = document.createEvent('MouseEvents');
+      event.initEvent('mouseenter', false, true);
+      fakeEvent.target.nativeElement.dispatchEvent(event);
 
-    expect(fakeEvent.open).toHaveBeenCalled();
-  });
+      expect(fakeEvent.open).toHaveBeenCalled();
+    });
 
-  it('should listen mouseleave in setRendererListenInit()', () => {
-    const fakeEvent = getFakeToSetRendererListenInit('hover', component);
+    it(`should listen for 'mouseleave' `, () => {
+      const fakeEvent = getFakeToSetRendererListenInit('hover', component);
 
-    spyOn(fakeEvent, 'close');
+      spyOn(fakeEvent, 'close').and.callFake(() => {});
 
-    component.setRendererListenInit.call(fakeEvent);
+      component.setRendererListenInit.call(fakeEvent);
 
-    const event = document.createEvent('MouseEvents');
-    event.initEvent('mouseleave', false, true);
-    fakeEvent.target.nativeElement.dispatchEvent(event);
+      const event = document.createEvent('MouseEvents');
+      event.initEvent('mouseleave', false, true);
+      fakeEvent.target.nativeElement.dispatchEvent(event);
 
-    expect(fakeEvent.close).toHaveBeenCalled();
-  });
+      expect(fakeEvent.close).toHaveBeenCalled();
+    });
 
-  it('should listen click in setRendererListenInit()', () => {
-    const fakeEvent = getFakeToSetRendererListenInit('click', component);
+    it(`should listen for 'click'`, () => {
+      const fakeEvent = getFakeToSetRendererListenInit('click', component);
 
-    spyOn(fakeEvent, 'togglePopup');
+      spyOn(fakeEvent, 'togglePopup').and.callFake(() => {});
 
-    component.setRendererListenInit.call(fakeEvent);
+      component.setRendererListenInit.call(fakeEvent);
 
-    eventClick.initEvent('click', false, true);
+      eventClick.initEvent('click', false, true);
 
-    document.dispatchEvent(eventClick);
+      document.dispatchEvent(eventClick);
 
-    expect(fakeEvent.togglePopup).toHaveBeenCalled();
-  });
+      expect(fakeEvent.togglePopup).toHaveBeenCalled();
+    });
 
-  it('should listen resize in setRendererListenInit()', () => {
-    const fakeEvent = getFakeToSetRendererListenInit('resize', component);
-    const fakeThis = { ...fakeEvent, isHidden: false };
-    spyOn(fakeThis, 'debounceResize');
+    it(`should listen for 'resize' `, () => {
+      const fakeEvent = getFakeToSetRendererListenInit('resize', component);
+      const fakeThis = { ...fakeEvent, isHidden: false };
+      spyOn(fakeThis, 'debounceResize').and.callFake(() => {});
 
-    component.setRendererListenInit.call(fakeThis);
+      component.setRendererListenInit.call(fakeThis);
 
-    window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event('resize'));
 
-    expect(fakeThis.debounceResize).toHaveBeenCalled();
+      expect(fakeThis.debounceResize).toHaveBeenCalled();
+    });
   });
 
   it('should open popover in togglePopup when click on target', () => {
