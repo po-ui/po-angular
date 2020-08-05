@@ -28,6 +28,7 @@ import { InputBoolean } from '../../../decorators';
 @Directive()
 export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnDestroy, OnInit, Validator {
   private _disabled?: boolean = false;
+  private _fieldLabel: string;
   private _filterService: PoLookupFilter | string;
   private _noAutocomplete: boolean;
   private _required?: boolean = false;
@@ -125,7 +126,14 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   @Input('p-field-value') fieldValue: string;
 
   /** Indica a coluna que será utilizada como descrição do campo e como filtro dentro da janela. */
-  @Input('p-field-label') fieldLabel: string;
+  @Input('p-field-label') set fieldLabel(value: string) {
+    this._fieldLabel = value;
+    this.keysDescription = [this.fieldLabel];
+  }
+
+  get fieldLabel() {
+    return this._fieldLabel;
+  }
 
   /** Valor que será repassado como parâmetro para a URL ou aos métodos do serviço que implementam a interface `PoLookupFilter`. */
   @Input('p-filter-params') filterParams?: any;

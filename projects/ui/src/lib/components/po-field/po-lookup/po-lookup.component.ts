@@ -162,7 +162,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   searchEvent() {
     const value = this.getViewValue();
 
-    if (this.oldValue !== value) {
+    if (this.oldValue.toString() !== value) {
       this.searchById(value);
     }
   }
