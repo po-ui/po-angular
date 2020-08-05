@@ -1,5 +1,5 @@
 import { ComponentRef } from '@angular/core';
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -48,6 +48,7 @@ describe('PoLookupComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoLookupComponent);
     component = fixture.componentInstance;
+    component.service = TestBed.inject(LookupFilterService);
     component.columns = [
       { property: 'value', label: 'Chave', type: 'number' },
       { property: 'label', label: 'Nome', type: 'string', fieldLabel: true }
@@ -420,5 +421,21 @@ describe('PoLookupComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
+  });
+
+  describe('Integration', () => {
+    it('should set input element value according with fieldLabel', fakeAsync(() => {
+      const serviceResponse = { id: 1234, name: 'Peter Parker', email: 'peterP@mail.com' };
+      component.fieldValue = 'id';
+      component.fieldLabel = 'name';
+      spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
+
+      component.searchById('Peter Parker');
+
+      tick();
+      fixture.detectChanges();
+
+      expect(component.inputEl.nativeElement.value).toBe('Peter Parker');
+    }));
   });
 });

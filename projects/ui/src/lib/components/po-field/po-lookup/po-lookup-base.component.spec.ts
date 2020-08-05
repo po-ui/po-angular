@@ -503,5 +503,11 @@ describe('PoLookupBaseComponent:', () => {
       expectPropertiesValues(component, 'required', trueValues, true);
       expectPropertiesValues(component, 'required', falseValues, false);
     });
+
+    it('p-field-label: should apply the received value to `keysDescription`', () => {
+      component.fieldLabel = 'label';
+
+      expect(component['keysDescription']).toEqual(['label']);
+    });
   });
 });
