@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
-import { PoBreadcrumb } from '@po-ui/ng-components';
-import { PoPageDynamicTableActions } from '@po-ui/ng-templates';
+import { PoBreadcrumb, PoDynamicViewField, PoModalComponent } from '@po-ui/ng-components';
+import {
+  PoPageDynamicTableActions,
+  PoPageDynamicTableCustomAction,
+  PoPageDynamicTableCustomTableAction
+} from '@po-ui/ng-templates';
 
 import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-table-users.service';
 
@@ -11,19 +15,22 @@ import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-t
   providers: [SamplePoPageDynamicTableUsersService]
 })
 export class SamplePoPageDynamicTableUsersComponent {
-  public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+  @ViewChild('userDetailModal') userDetailModal: PoModalComponent;
 
-  public readonly actions: PoPageDynamicTableActions = {
+  readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+  detailedUser;
+
+  readonly actions: PoPageDynamicTableActions = {
     new: '/documentation/po-page-dynamic-edit',
     remove: true,
     removeAll: true
   };
 
-  public readonly breadcrumb: PoBreadcrumb = {
+  readonly breadcrumb: PoBreadcrumb = {
     items: [{ label: 'Home', link: '/' }, { label: 'People' }]
   };
 
-  public readonly cityOptions: Array<object> = [
+  readonly cityOptions: Array<object> = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Joinville', label: 'Joinville' },
     { value: 'São Bento', label: 'São Bento' },
@@ -32,7 +39,7 @@ export class SamplePoPageDynamicTableUsersComponent {
     { value: 'Osasco', label: 'Osasco' }
   ];
 
-  public readonly fields: Array<any> = [
+  readonly fields: Array<any> = [
     { property: 'id', key: true },
     { property: 'name', label: 'Name', filter: true, gridColumns: 6 },
     { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true },
@@ -40,14 +47,36 @@ export class SamplePoPageDynamicTableUsersComponent {
     { property: 'city', label: 'City', filter: true, duplicate: true, options: this.cityOptions, gridColumns: 12 }
   ];
 
-  public pageCustomActions = [
+  readonly detailFields: Array<PoDynamicViewField> = [
+    { property: 'status', tag: true, gridLgColumns: 4, divider: 'Personal Data' },
+    { property: 'name', gridLgColumns: 4 },
+    { property: 'nickname', label: 'User name', gridLgColumns: 4 },
+    { property: 'email', gridLgColumns: 4 },
+    { property: 'birthdate', gridLgColumns: 4, type: 'date' },
+    { property: 'genre', gridLgColumns: 4, gridSmColumns: 6 },
+    { property: 'cityName', label: 'City', divider: 'Address' },
+    { property: 'state' },
+    { property: 'country' }
+  ];
+
+  pageCustomActions: Array<PoPageDynamicTableCustomAction> = [
     { label: 'Print', action: this.printPage.bind(this) },
     { label: 'Download .csv', action: this.usersService.downloadCsv.bind(this.usersService, this.serviceApi) }
+  ];
+
+  tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [
+    { label: 'Details', action: this.onClickUserDetail.bind(this) }
   ];
 
   constructor(private usersService: SamplePoPageDynamicTableUsersService) {}
 
   printPage() {
     window.print();
+  }
+
+  private onClickUserDetail(user) {
+    this.detailedUser = user;
+
+    this.userDetailModal.open();
   }
 }

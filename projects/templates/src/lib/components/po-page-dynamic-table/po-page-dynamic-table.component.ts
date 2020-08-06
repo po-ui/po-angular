@@ -36,6 +36,7 @@ import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-tab
 import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
+import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -123,6 +124,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _pageActions: Array<PoPageAction> = [];
   private _tableActions: Array<PoTableAction> = [];
   private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
+  private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
   private page: number = 1;
   private params = {};
@@ -130,6 +132,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private subscriptions = new Subscription();
   private hasCustomActionWithSelectable = false;
   private customPageListActions = [];
+  private customTableActions = [];
 
   hasNext = false;
   items = [];
@@ -190,7 +193,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @description
    *
-   * Lista de ações customizadas na página.
+   * Lista de ações customizadas da página que serão incorporadas às ações
+   * informadas através da propriedade `p-actions`.
    *
    * Essas ações ficam localizadas na parte superior da página em botões com ações.
    *
@@ -203,7 +207,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * ```
    */
   @Input('p-page-custom-actions') set pageCustomActions(value: Array<PoPageDynamicTableCustomAction>) {
-    this._pageCustomActions = value;
+    this._pageCustomActions = Array.isArray(value) ? value : [];
 
     this.customPageListActions = this.transformCustomActionsToPageListAction(this.pageCustomActions);
     this.hasCustomActionWithSelectable = this.pageCustomActions.some(customAction => customAction.selectable);
@@ -211,6 +215,32 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   get pageCustomActions(): Array<PoPageDynamicTableCustomAction> {
     return this._pageCustomActions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de ações customizadas na tabela da página que serão incorporadas às ações
+   * informadas através da propriedade `p-actions`.
+   *
+   * Exemplo de utilização:
+   * ```
+   * [
+   *  { label: 'Apply discount', action: this.applyDiscount.bind(this) },
+   *  { label: 'Details', action: this.details.bind(this) }
+   * ];
+   * ```
+   */
+  @Input('p-table-custom-actions') set tableCustomActions(value: Array<PoPageDynamicTableCustomTableAction>) {
+    this._tableCustomActions = Array.isArray(value) ? value : [];
+
+    this.customTableActions = this.transformTableCustomActionsToTableActions(this.tableCustomActions);
+  }
+
+  get tableCustomActions(): Array<PoPageDynamicTableCustomTableAction> {
+    return this._tableCustomActions;
   }
 
   /**
@@ -327,7 +357,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   get tableActions() {
-    return this._tableActions;
+    return [...this._tableActions, ...this.customTableActions];
   }
 
   private confirmRemove(
@@ -409,6 +439,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
           this.fields = response.fields || this.fields;
           this.title = response.title || this.title;
           this.pageCustomActions = response.pageCustomActions || this.pageCustomActions;
+          this.tableCustomActions = response.tableCustomActions || this.tableCustomActions;
           this.keepFilters = response.keepFilters || this.keepFilters;
           this.concatFilters = response.concatFilters || this.concatFilters;
         }),
@@ -741,8 +772,17 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return customActions.map(customAction => {
       return {
         label: customAction.label,
-        action: this.callCustomAction.bind(this, customAction),
+        action: this.callPageCustomAction.bind(this, customAction),
         disabled: this.isDisablePageCustomAction.bind(this, customAction)
+      };
+    });
+  }
+
+  private transformTableCustomActionsToTableActions(tableCustomActions: Array<PoPageDynamicTableCustomTableAction>) {
+    return tableCustomActions.map(tableCustomAction => {
+      return {
+        label: tableCustomAction.label,
+        action: this.callTableCustomAction.bind(this, tableCustomAction)
       };
     });
   }
@@ -751,13 +791,29 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return customAction.selectable && !this.getSelectedItemsKeys();
   }
 
-  private callCustomAction(customAction: PoPageDynamicTableCustomAction) {
+  private callPageCustomAction(customAction: PoPageDynamicTableCustomAction) {
     if (customAction.action) {
       const selectedItems = customAction.selectable ? this.getSelectedItemsKeys() : undefined;
 
       const sendCustomActionSubscription = this.poPageDynamicTableActionsService
         .customAction(customAction.action, selectedItems)
         .subscribe();
+
+      this.subscriptions.add(sendCustomActionSubscription);
+    } else if (customAction.url) {
+      this.navigateTo({ path: customAction.url });
+    }
+  }
+
+  private callTableCustomAction(customAction: PoPageDynamicTableCustomTableAction, selectedItem) {
+    if (customAction.action) {
+      const sendCustomActionSubscription = this.poPageDynamicTableActionsService
+        .customAction(customAction.action, selectedItem)
+        .subscribe(updatedItem => {
+          if (typeof updatedItem === 'object' && updatedItem !== null) {
+            this.modifyUITableItem(selectedItem, util.removeKeysProperties(this.keys, updatedItem));
+          }
+        });
 
       this.subscriptions.add(sendCustomActionSubscription);
     } else if (customAction.url) {
@@ -865,7 +921,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       title: this.title,
       keepFilters: this.keepFilters,
       concatFilters: this.concatFilters,
-      pageCustomActions: this.pageCustomActions
+      pageCustomActions: this.pageCustomActions,
+      tableCustomActions: this.tableCustomActions
     };
 
     const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicTableOptions> = {
@@ -893,6 +950,11 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         },
         {
           nameProp: 'pageCustomActions',
+          merge: true,
+          keyForMerge: 'label'
+        },
+        {
+          nameProp: 'tableCustomActions',
           merge: true,
           keyForMerge: 'label'
         }

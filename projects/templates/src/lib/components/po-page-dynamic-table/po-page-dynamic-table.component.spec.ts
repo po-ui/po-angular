@@ -143,6 +143,7 @@ describe('PoPageDynamicTableComponent:', () => {
               items: [{ label: 'Test' }, { label: 'Test2' }]
             },
             pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }],
+            tableCustomActions: [{ label: 'Details', action: 'endpoint/' }],
             actions: {
               detail: '/new_datail',
               new: '/new'
@@ -172,6 +173,7 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.keepFilters).toBeTrue();
         expect(component.concatFilters).toBeTrue();
         expect(component.pageCustomActions).toEqual([{ label: 'Custom Action', action: 'endpoint/' }]);
+        expect(component.tableCustomActions).toEqual([{ label: 'Details', action: 'endpoint/' }]);
 
         component.ngOnDestroy();
         expect(component['subscriptions']['_subscriptions']).toBeNull();
@@ -201,6 +203,7 @@ describe('PoPageDynamicTableComponent:', () => {
           },
           title: 'Original Title',
           pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }],
+          tableCustomActions: [{ label: 'Details', action: 'endpoint/' }],
           keepFilters: true,
           concatFilters: true
         };
@@ -223,6 +226,7 @@ describe('PoPageDynamicTableComponent:', () => {
         });
 
         expect(component.pageCustomActions).toEqual([{ label: 'Custom Action', action: 'endpoint/' }]);
+        expect(component.tableCustomActions).toEqual([{ label: 'Details', action: 'endpoint/' }]);
         expect(component.keepFilters).toBe(true);
         expect(component.concatFilters).toBe(true);
       }));
@@ -1875,6 +1879,21 @@ describe('PoPageDynamicTableComponent:', () => {
   });
 
   describe('Integration', () => {
+    const visibleTableActions = () => component.tableActions.filter(action => action.visible !== false);
+
+    it('should keep default action if custom actions is null', () => {
+      component.actions = {
+        new: 'dynamic-new',
+        removeAll: true
+      };
+
+      expect(component.pageActions.length).toBe(2);
+
+      component.pageCustomActions = null;
+
+      expect(component.pageActions.length).toBe(2);
+    });
+
     it('should merge default action with custom actions', () => {
       component.actions = {
         new: 'dynamic-new',
@@ -2062,6 +2081,138 @@ describe('PoPageDynamicTableComponent:', () => {
       component.pageActions[2].action(customAction);
 
       expect(customActionServiceSpy).toHaveBeenCalledWith(action, [selectedItemKey]);
+    });
+
+    it('should keep default table action if custom table actions is null', () => {
+      component.actions = {
+        detail: '/detail',
+        edit: '/edit'
+      };
+
+      expect(visibleTableActions().length).toBe(2);
+
+      component.tableCustomActions = null;
+
+      expect(visibleTableActions().length).toBe(2);
+    });
+
+    it('should merge default table action with custom table actions', () => {
+      component.actions = {
+        detail: '/detail',
+        edit: '/edit'
+      };
+
+      expect(visibleTableActions().length).toBe(2);
+
+      component.tableCustomActions = [
+        { label: 'Table Custom Action 1', action: 'endpoint/' },
+        { label: 'Table Custom Action 2', action: 'endpoint/' }
+      ];
+
+      const tableActions = visibleTableActions();
+      expect(tableActions.length).toBe(4);
+      expect(tableActions[2].label).toBe('Table Custom Action 1');
+      expect(tableActions[3].label).toBe('Table Custom Action 2');
+    });
+
+    it('should navigate to `test/` if action of tableCustomAction is undefined and url is defined', () => {
+      component.actions = {
+        detail: '/detail',
+        edit: '/edit'
+      };
+
+      const tableCustomAction = { label: 'Table Custom Action 1', url: 'test/' };
+
+      component.tableCustomActions = [tableCustomAction];
+
+      spyOn(component['router'], 'navigate').and.callThrough();
+
+      const tableActions = visibleTableActions();
+      tableActions[2].action(tableCustomAction);
+
+      expect(component['router'].navigate).toHaveBeenCalledWith(['test/'], { queryParams: undefined });
+    });
+
+    it('shouldn`t navigate and call action from tableActions if action and url are undefined', () => {
+      component.actions = {
+        detail: '/detail',
+        edit: '/edit'
+      };
+
+      const customTableAction = { label: 'Table Custom Action 1' };
+
+      component.tableCustomActions = [customTableAction];
+
+      const routerNavigateSpy = spyOn(component['router'], 'navigate');
+      const customActionServiceSpy = spyOn(component['poPageDynamicTableActionsService'], 'customAction');
+
+      const tableActions = visibleTableActions();
+      tableActions[2].action(customTableAction);
+
+      expect(routerNavigateSpy).not.toHaveBeenCalled();
+      expect(customActionServiceSpy).not.toHaveBeenCalled();
+    });
+
+    it('should call action from tableActions and call modifyUITableItem if return an object', () => {
+      const item = { name: 'Jane', status: 'active' };
+
+      component.items = [{ ...item }];
+      component.actions = {
+        detail: '/detail',
+        edit: '/edit'
+      };
+
+      const customTableAction = {
+        label: 'Table Custom Action 1',
+        action: resource => ({ ...resource, status: 'inactive' })
+      };
+
+      component.tableCustomActions = [customTableAction];
+
+      const routerNavigateSpy = spyOn(component['router'], 'navigate');
+      const customActionServiceSpy = spyOn(
+        component['poPageDynamicTableActionsService'],
+        'customAction'
+      ).and.callThrough();
+      const modifyUITableItemSpy = spyOn(component, <any>'modifyUITableItem');
+
+      const tableActions = visibleTableActions();
+      tableActions[2].action(customTableAction, item);
+
+      expect(modifyUITableItemSpy).toHaveBeenCalled();
+      expect(routerNavigateSpy).not.toHaveBeenCalled();
+      expect(customActionServiceSpy).toHaveBeenCalled();
+    });
+
+    it('should call action from tableActions and not call modifyUITableItem if action return null', () => {
+      const item = { name: 'Jane', status: 'active' };
+
+      component.items = [{ ...item }];
+      component.actions = {
+        detail: '/detail',
+        edit: '/edit'
+      };
+
+      const customTableAction = {
+        label: 'Table Custom Action 1',
+        action: resource => null
+      };
+
+      component.tableCustomActions = [customTableAction];
+
+      const routerNavigateSpy = spyOn(component['router'], 'navigate');
+      const customActionServiceSpy = spyOn(
+        component['poPageDynamicTableActionsService'],
+        'customAction'
+      ).and.callThrough();
+      const modifyUITableItemSpy = spyOn(component, <any>'modifyUITableItem');
+
+      const tableActions = visibleTableActions();
+      tableActions[2].action(customTableAction, item);
+
+      expect(modifyUITableItemSpy).not.toHaveBeenCalled();
+      expect(routerNavigateSpy).not.toHaveBeenCalled();
+      expect(customActionServiceSpy).toHaveBeenCalled();
     });
   });
 });
