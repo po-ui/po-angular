@@ -126,6 +126,26 @@ ng generate @po-ui/ng-templates:<schematic-name>
           <td class="po-table-column">Componente com as ações de pesquisa já definidas, bastando que o desenvolvedor implemente apenas a chamada para as APIs e exiba as informações.
           </td>
         </tr>
+        <tr class="po-table-row">
+          <td class="po-table-column"><a href="/documentation/po-page-job-scheduler"><strong>po-page-job-scheduler</strong></a></td>
+          <td class="po-table-column">Página que serve para criação e atualização de agendamentos da execução de processos (Job Scheduler), como por exemplo: a geração da folha de pagamento dos funcionários. Para utilizá-la, basta informar o serviço (endpoint) para consumo, sem a necessidade de criar componentes e tratamentos dos dados.
+          </td>
+        </tr>
+        <tr class="po-table-row">
+          <td class="po-table-column"><a href="/documentation/po-page-login"><strong>po-page-login</strong></a></td>
+          <td class="po-table-column">Página utilizada como template para tela de login. Com ele é possível definirmos valores para usuário, senha e definir ações para recuperação de senha e gravação de dados do usuário. Também é possível inserir uma imagem em conjunto com um texto de destaque.
+          </td>
+        </tr>
+        <tr class="po-table-row">
+          <td class="po-table-column"><a href="/documentation/po-page-change-password"><strong>po-page-change-password</strong></a></td>
+          <td class="po-table-column">Página utilizada como template para tela de cadastro ou alteração de senha.
+          </td>
+        </tr>
+        <tr class="po-table-row">
+          <td class="po-table-column"><a href="/documentation/po-page-blocked-user"><strong>po-page-blocked-user</strong></a></td>
+          <td class="po-table-column">Página utilizada como template para tela de bloqueio de usuário. 
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

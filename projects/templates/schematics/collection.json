@@ -25,6 +25,26 @@
       "description": "Create a component with po-page-dynamic-search",
       "factory": "./ng-generate/po-page-dynamic-search/index",
       "schema": "./ng-generate/po-page-dynamic-search/schema.json"
+    },
+    "po-page-job-scheduler": {
+      "description": "Create a component with po-page-job-scheduler",
+      "factory": "./ng-generate/po-page-job-scheduler/index",
+      "schema": "./ng-generate/po-page-job-scheduler/schema.json"
+    },
+    "po-page-blocked-user": {
+      "description": "Create a component with po-page-blocked-user",
+      "factory": "./ng-generate/po-page-blocked-user/index",
+      "schema": "./ng-generate/po-page-blocked-user/schema.json"
+    },
+    "po-page-change-password": {
+      "description": "Create a component with po-page-change-password",
+      "factory": "./ng-generate/po-page-change-password/index",
+      "schema": "./ng-generate/po-page-change-password/schema.json"
+    },
+    "po-page-login": {
+      "description": "Create a component with po-page-login",
+      "factory": "./ng-generate/po-page-login/index",
+      "schema": "./ng-generate/po-page-login/schema.json"
     }
   }
 }

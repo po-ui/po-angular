@@ -1,0 +1,4 @@
+<po-page-job-scheduler
+  p-title="<%= classify(name) %>"
+  [p-service-api]="apiService">
+</po-page-job-scheduler>
