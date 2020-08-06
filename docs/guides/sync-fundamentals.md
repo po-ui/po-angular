@@ -802,4 +802,4 @@ o método `PoSyncService.prepare()` logo após o método `PoSynceService.destroy
 
 PO Conference Application é um aplicativo de demonstração do PO Sync baseado no [Ionic Conference Application](https://github.com/ionic-team/ionic-conference-app). Tendo como objetivo, demonstrar as funcionalidades do PO Sync de forma didática.
 
-> Acesse o repositório do aplicativo [neste link](https://github.com/po-ui/po-conference-sample).
+> Acesse o repositório do aplicativo [neste link](https://github.com/po-ui/po-sample-conference).
