@@ -3,6 +3,7 @@ import { PoBreadcrumb } from '@po-ui/ng-components';
 import { PoPageDynamicTableActions } from './po-page-dynamic-table-actions.interface';
 import { PoPageDynamicTableFilters } from './po-page-dynamic-table-filters.interface';
 import { PoPageDynamicTableCustomAction } from './po-page-dynamic-table-custom-action.interface';
+import { PoPageDynamicTableCustomTableAction } from './po-page-dynamic-table-custom-table-action.interface';
 
 /**
  * @usedBy PoPageDynamicTableComponent
@@ -64,7 +65,7 @@ export interface PoPageDynamicTableOptions {
   concatFilters?: boolean;
 
   /**
-   * Lista de ações customizadas na página.
+   * Lista de ações customizadas da página que serão incorporadas às ações informadas através da propriedade `actions`
    *
    * Essas ações ficam localizadas na parte superior da página em botões com ações.
    *
@@ -77,4 +78,17 @@ export interface PoPageDynamicTableOptions {
    * ```
    */
   pageCustomActions?: Array<PoPageDynamicTableCustomAction>;
+
+  /**
+   * Lista de ações customizadas da tabela que serão incorporadas às ações informadas através da propriedade `actions`.
+   *
+   * Exemplo de utilização:
+   * ```
+   * [
+   *  { label: 'Apply Discount', action: this.applyDiscount.bind(this) },
+   *  { label: 'Details', action: this.details.bind(this) }
+   * ];
+   * ```
+   */
+  tableCustomActions?: Array<PoPageDynamicTableCustomTableAction>;
 }
