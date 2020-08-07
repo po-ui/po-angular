@@ -7,13 +7,14 @@ import { Observable } from 'rxjs';
 import {
   PoDialogService,
   PoDynamicFormField,
+  PoLanguageService,
   PoNotificationService,
   PoPageAction,
   PoStepperItem,
   PoStepperStatus
 } from '@po-ui/ng-components';
 
-import * as util from './../../utils/util';
+import { poLocaleDefault } from './../../utils/util';
 
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
@@ -48,8 +49,7 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit {
   isEdit = false;
   literals = {
-    ...poPageJobSchedulerLiteralsDefault[util.poLocaleDefault],
-    ...poPageJobSchedulerLiteralsDefault[util.browserLanguage()]
+    ...poPageJobSchedulerLiteralsDefault[poLocaleDefault]
   };
   parameters: Array<PoDynamicFormField> = [];
   publicValues: PoJobSchedulerInternal;
@@ -62,30 +62,24 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     disabled: this.isDisabledBack.bind(this)
   };
 
-  private concludePageActions: Array<PoPageAction> = [
-    {
-      label: this.literals.conclude,
-      action: this.confirmJobScheduler.bind(this)
-    },
-    { ...this.backPageAction }
-  ];
+  private concludePageAction: PoPageAction = {
+    label: this.literals.conclude,
+    action: this.confirmJobScheduler.bind(this)
+  };
 
-  private nextPageActions: Array<PoPageAction> = [
-    {
-      label: this.literals.next,
-      action: this.nextStepOperation.bind(this, 'next'),
-      disabled: this.isDisabledAdvance.bind(this)
-    },
-    { ...this.backPageAction }
-  ];
+  private nextPageAction: PoPageAction = {
+    label: this.literals.next,
+    action: this.nextStepOperation.bind(this, 'next'),
+    disabled: this.isDisabledAdvance.bind(this)
+  };
+
+  private concludePageActions: Array<PoPageAction> = [this.concludePageAction, this.backPageAction];
+
+  private nextPageActions: Array<PoPageAction> = [this.nextPageAction, this.backPageAction];
 
   jobSchedulerActions: Array<PoPageAction> = [...this.nextPageActions];
 
-  readonly steps: Array<PoStepperItem> = [
-    { label: this.literals.scheduling },
-    { label: this.literals.parameterization },
-    { label: this.literals.conclude }
-  ];
+  readonly steps: Array<PoStepperItem> = [];
 
   @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
   @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
@@ -95,9 +89,27 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     private activatedRoute: ActivatedRoute,
     private poDialogService: PoDialogService,
     private poNotification: PoNotificationService,
-    protected poPageJobSchedulerService: PoPageJobSchedulerService
+    protected poPageJobSchedulerService: PoPageJobSchedulerService,
+    languageService: PoLanguageService
   ) {
     super(poPageJobSchedulerService);
+
+    const language = languageService.getShortLanguage();
+
+    this.literals = {
+      ...this.literals,
+      ...poPageJobSchedulerLiteralsDefault[language]
+    };
+
+    this.backPageAction.label = this.literals.back;
+    this.concludePageAction.label = this.literals.conclude;
+    this.nextPageAction.label = this.literals.next;
+
+    this.steps = [
+      { label: this.literals.scheduling },
+      { label: this.literals.parameterization },
+      { label: this.literals.conclude }
+    ];
   }
 
   get stepperOrientation(): 'horizontal' | 'vertical' {
