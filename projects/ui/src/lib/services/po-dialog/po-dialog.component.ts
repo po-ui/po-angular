@@ -2,7 +2,9 @@ import { Component, ComponentRef, OnDestroy, OnInit, ViewChild } from '@angular/
 
 import { Subscription } from 'rxjs';
 
-import { browserLanguage, poLocaleDefault } from '../../utils/util';
+import { poLocaleDefault } from '../../utils/util';
+
+import { PoLanguageService } from '../po-language/po-language.service';
 
 import { PoDialogAlertLiterals } from './interfaces/po-dialog-alert-literals.interface';
 import { PoDialogAlertOptions, PoDialogConfirmOptions } from './interfaces/po-dialog.interface';
@@ -37,6 +39,8 @@ export const poDialogConfirmLiteralsDefault = {
   templateUrl: './po-dialog.component.html'
 })
 export class PoDialogComponent implements OnDestroy, OnInit {
+  private language: string;
+
   // ViewChild para o uso do po-modal.component
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
@@ -61,6 +65,10 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   // Atributo para armazenar a referencia do componente criado via serviço.
   private componentRef: ComponentRef<PoDialogComponent>;
   private closeSubscription: Subscription;
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   ngOnDestroy() {
     this.closeSubscription.unsubscribe();
@@ -145,11 +153,11 @@ export class PoDialogComponent implements OnDestroy, OnInit {
     const literals = dialogOptions.literals;
 
     if (dialogType === PoDialogType.Alert) {
-      this.literalsAlert = { ...alertLiterals[poLocaleDefault], ...alertLiterals[browserLanguage()], ...literals };
+      this.literalsAlert = { ...alertLiterals[poLocaleDefault], ...alertLiterals[this.language], ...literals };
     } else {
       this.literalsConfirm = {
         ...confirmLiterals[poLocaleDefault],
-        ...confirmLiterals[browserLanguage()],
+        ...confirmLiterals[this.language],
         ...literals
       };
     }
