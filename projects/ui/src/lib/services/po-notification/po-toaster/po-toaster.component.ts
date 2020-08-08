@@ -2,10 +2,29 @@ import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/co
 
 import { Subject } from 'rxjs';
 
+import { poLocaleDefault } from '../../../utils/util';
+
+import { PoLanguageService } from '../../po-language/po-language.service';
+
 import { PoToasterBaseComponent } from './po-toaster-base.component';
 import { PoToaster } from './po-toaster.interface';
 import { PoToasterType } from './po-toaster-type.enum';
 import { PoToasterOrientation } from './po-toaster-orientation.enum';
+
+export const poToasterLiteralsDefault = {
+  en: {
+    closeToaster: 'Close'
+  },
+  es: {
+    closeToaster: 'Cerca'
+  },
+  pt: {
+    closeToaster: 'Fechar'
+  },
+  ru: {
+    closeToaster: 'близко'
+  }
+};
 
 /**
  * @docsPrivate
@@ -17,6 +36,10 @@ import { PoToasterOrientation } from './po-toaster-orientation.enum';
   templateUrl: './po-toaster.component.html'
 })
 export class PoToasterComponent extends PoToasterBaseComponent {
+  private literals = {
+    ...poToasterLiteralsDefault[poLocaleDefault]
+  };
+
   /* Ícone do Toaster */
   private icon: string;
   /* Margem do Toaster referênte à sua orientação e posição*/
@@ -33,8 +56,17 @@ export class PoToasterComponent extends PoToasterBaseComponent {
   /* Componente toaster */
   @ViewChild('toaster') toaster: ElementRef;
 
-  constructor(public changeDetector: ChangeDetectorRef, private elementeRef?: ElementRef) {
+  constructor(
+    languageService: PoLanguageService,
+    public changeDetector: ChangeDetectorRef,
+    private elementeRef?: ElementRef
+  ) {
     super();
+
+    this.literals = {
+      ...this.literals,
+      ...poToasterLiteralsDefault[languageService.getShortLanguage()]
+    };
   }
 
   /* Muda a posição do Toaster na tela*/
@@ -63,7 +95,7 @@ export class PoToasterComponent extends PoToasterBaseComponent {
     this.orientation = poToaster.orientation;
     this.position = poToaster.position;
     this.action = poToaster.action;
-    this.actionLabel = poToaster.actionLabel ? poToaster.actionLabel : 'Fechar';
+    this.actionLabel = poToaster.actionLabel ? poToaster.actionLabel : this.literals.closeToaster;
     this.componentRef = poToaster.componentRef;
 
     /* Muda a orientação do Toaster */

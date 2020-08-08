@@ -114,11 +114,15 @@ describe('PoToasterComponent', () => {
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Error and with action correctly', () => {
+    const toasterActionLabel = component['literals'].closeToaster;
+
     component.configToaster(toasterErrorWithAction);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.po-toaster-error'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-close'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain('Fechar');
+    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain(
+      toasterActionLabel
+    );
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Info and with action correctly', () => {
@@ -130,19 +134,27 @@ describe('PoToasterComponent', () => {
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Success and with action correctly', () => {
+    const toasterActionLabel = component['literals'].closeToaster;
+
     component.configToaster(toasterSuccessWithAction);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.po-toaster-success'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-ok'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain('Fechar');
+    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain(
+      toasterActionLabel
+    );
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Warning and with action correctly', () => {
+    const toasterActionLabel = component['literals'].closeToaster;
+
     component.configToaster(toasterWarningWithAction);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.po-toaster-warning'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-warning'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain('Fechar');
+    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain(
+      toasterActionLabel
+    );
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Error and without action correctly', () => {
