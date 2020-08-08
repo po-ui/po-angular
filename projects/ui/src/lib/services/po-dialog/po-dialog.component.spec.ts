@@ -2,8 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
-import * as UtilsFunctions from '../../utils/util';
-
 import { poDialogAlertLiteralsDefault, PoDialogComponent, poDialogConfirmLiteralsDefault } from './po-dialog.component';
 import { PoDialogAlertOptions, PoDialogConfirmOptions } from './interfaces/po-dialog.interface';
 import { PoDialogModule } from './po-dialog.module';
@@ -214,7 +212,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it('setDialogLiterals: should set `literalsAlert` in portuguese if browser is setted with an unsupported language.', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('xx');
+      component['language'] = 'xx';
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -222,7 +220,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it('setDialogLiterals: should set `literalsConfirm` in portuguese if browser is setted with an unsupported language.', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('xx');
+      component['language'] = 'xx';
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -230,7 +228,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in english.`, () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('en');
+      component['language'] = 'en';
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -238,7 +236,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in spanish.`, () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -246,7 +244,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in portuguese.`, () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -254,7 +252,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in english.`, () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('en');
+      component['language'] = 'en';
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -262,7 +260,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in spanish.`, () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -270,7 +268,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in russian.`, () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      component['language'] = 'ru';
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -278,7 +276,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in portuguese.`, () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -294,7 +292,7 @@ describe('PoDialogComponent:', () => {
         ok: () => {}
       };
 
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component['setDialogLiterals'](alertOptionsCustom, PoDialogType.Alert);
 
@@ -311,7 +309,7 @@ describe('PoDialogComponent:', () => {
         cancel: () => {}
       };
 
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component['setDialogLiterals'](confirmOptionsCustom, PoDialogType.Confirm);
 
