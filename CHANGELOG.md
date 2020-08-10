@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/po-ui/po-angular/compare/v3.0.0...v3.1.0) (2020-08-10)
+
+
+### Features
+
+* **dialog:** permite traduzir literais usando serviço i18n ([f09b236](https://github.com/po-ui/po-angular/commit/f09b236d52890991148b9a652c67c5c40b393e83))
+* **notification:** permite traduzir literais usando serviço i18n ([6c67aa3](https://github.com/po-ui/po-angular/commit/6c67aa3012ab8df62192dfe5820a1b735f433e37))
+* **page-dynamic-table:** adiciona a propriedade p-table-custom-actions ([a03d35a](https://github.com/po-ui/po-angular/commit/a03d35a1540e4dd864554cc76b9aa00a8e6bd7b7))
+* **page-job-scheduler:** permite traduzir literais usando serviço i18n ([b076757](https://github.com/po-ui/po-angular/commit/b076757958c25b274f2bd9c31ab567c3ca003d96))
+* **portal:** adiciona o projeto ao monorepo ([754f740](https://github.com/po-ui/po-angular/commit/754f74057594f980110a3e04cb99b11df4b968fc))
+* **schematics:** adiciona schematics de templates ([81970c9](https://github.com/po-ui/po-angular/commit/81970c9adf1dc657585cecf89a5d037548801c6b))
+
+
+### Bug Fixes
+
+* **lookup:** altera p-field-label dinamicamente ([79cec4e](https://github.com/po-ui/po-angular/commit/79cec4ebbea7686afa5972ee215274b723a9ab8b))
+* **rich-text:** corrige abertura de links com CMD ou Ctrl ([10b6461](https://github.com/po-ui/po-angular/commit/10b64611c0021df1be8dbdf79ce3f45af4241c91))
+
+### Documentation
+
+* **sync:** corrige link do repositorio de demonstração ([5d98d5b](https://github.com/po-ui/po-angular/commit/5d98d5be642bbc922be02e401bf451aae24d1357))
+
+### Tests
+
+* **popover:** correção para erros intermitentes ([8548962](https://github.com/po-ui/po-angular/commit/85489623aaf5c0685f6f8a0aebd9d2171ff12bd5))
+
 ## [3.0.0](https://github.com/po-ui/po-angular/compare/v2.10.0...v3.0.0) (2020-08-03)
 
 ### ⚠ BREAKING CHANGES
