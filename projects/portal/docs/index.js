@@ -17,11 +17,11 @@ const isEnvironmentPath = configuration.sourceFolder !== './../';
 
 let fileNames = [];
 
-const fsPath = require('fs-path');
+const fileWriter = require('./processors/helpers/file-writer');
 const versionPath = 'src/assets/json/version.json';
 const data = `{ "version": "${configuration.version}" }\n`;
 
-fsPath.writeFile(versionPath, data, error => {
+fileWriter.writeFile(versionPath, data, error => {
   error ? console.error('write error:  ' + error.message) : console.log('Successful Write to ' + versionPath);
 });
 
