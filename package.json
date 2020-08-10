@@ -75,7 +75,6 @@
     "colors": "^1.4.0",
     "core-js": "3.6.4",
     "custom-idle-queue": "2.1.2",
-    "fs-path": "0.0.24",
     "gulp-run": "^1.7.1",
     "highlight.js": "^10.1.2",
     "http-status-codes": "^1.4.0",

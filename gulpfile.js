@@ -92,7 +92,7 @@ const sonarqube = task('sonarqube', function (callback) {
         'sonar.projectName': 'PO UI',
         'sonar.sources': 'projects',
         'sonar.exclusions':
-          '**/node_modules/**,**/*.spec.ts,projects/app/**,**/samples/**,**/karma.conf.js,**/*-literals.ts,**/schematics/**',
+          '**/node_modules/**,**/*.spec.ts,projects/app/**,projects/portal/**,**/samples/**,**/karma.conf.js,**/*-literals.ts,**/schematics/**',
         'sonar.typescript.lcov.reportPaths':
           'coverage/code-editor/lcov.info,coverage/storage/lcov.info,coverage/sync/lcov.info,coverage/templates/lcov.info,coverage/ui/lcov.info'
       }

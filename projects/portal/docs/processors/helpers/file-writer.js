@@ -1,9 +1,7 @@
 const capitalize = require('capitalize'),
   fs = require('fs'),
-  fsPath = require('fs-path'),
   mkdirp = require('mkdirp'),
   getDirName = require('path').dirname,
-  colors = require('colors'),
   handlebars = require('handlebars');
 configuration = require('./../../configuration');
 
@@ -65,7 +63,7 @@ module.exports = {
 
   //File api-list.json
   generateDocsJsonFile: function (jsonDocs) {
-    fsPath.writeFile('src/assets/json/api-list.json', jsonDocs, 'utf8', function (result) {
+    this.writeFile('src/assets/json/api-list.json', jsonDocs, function (result) {
       if (result) {
         console.error(`error`.red + ':   ', `Erro ao salvar arquivo api-list.json: ${result.message}`);
       }
