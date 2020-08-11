@@ -1,0 +1,119 @@
+# Nome do workflow, um repositório pode tem um ou mais workflows.
+name: CI
+
+# Define em quais situações esse workflow será executado
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
+# É possível ter mais de um job e assim executar ações paralelamente.
+jobs:
+
+  lint:
+
+    runs-on: ubuntu-latest
+
+    # As etapas do workflow são definidas nessa tag.
+    steps:
+
+    # Definição da action
+    - uses: actions/checkout@v2
+      # Parâmetros para a ação
+      with:
+        fetch-depth: 0
+
+    - uses: wagoid/commitlint-github-action@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    # Executa um comando do projeto na máquina virtual
+    - run: npm i
+    - run: npm run format:check
+    - run: npm run lint
+
+  test-ui:
+    name: Test ui
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - run: npm i
+    - run: npm run test:ui
+
+  test-templates:
+    name: Test templates
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - run: npm i
+    - run: npm run build:ui:lite
+    - run: npm run test:templates
+
+  test-code-editor:
+    name: Test code editor
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - run: npm i
+    - run: npm run test:code-editor
+
+  test-storage:
+    name: Test storage
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+        
+    - run: npm i
+    - run: npm run test:storage
+
+  test-sync:
+    name: Test sync
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - run: npm i
+    - run: npm run build:storage:lite
+    - run: npm run test:sync
