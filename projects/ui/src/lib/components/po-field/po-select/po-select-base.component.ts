@@ -70,8 +70,20 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
   @Input('p-optional') optional: boolean;
 
   /**
-   * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface PoSelectOption.
-   * Caso esta lista estiver vazia, o model será undefined.
+   * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`.
+   *
+   * Caso esta lista estiver vazia, o model será `undefined`.
+   *
+   * > Essa propriedade é imutável, ou seja, sempre que quiser atualizar a lista de opções disponíveis
+   * atualize a referência do objeto:
+   *
+   * ```
+   * // atualiza a referência do objeto garantindo a atualização do template
+   * this.options = [...this.options, { value: 'x', label: 'Nova opção' }];
+   *
+   * // evite, pois não atualiza a referência do objeto podendo gerar atrasos na atualização do template
+   * this.options.push({ value: 'x', label: 'Nova opção' });
+   * ```
    */
   @Input('p-options') set options(options: Array<PoSelectOption>) {
     this._options = options;
