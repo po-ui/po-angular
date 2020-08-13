@@ -1,19 +1,26 @@
-const fs = require('fs');
+const { task, src } = require('gulp');
 const { platform } = require('os');
 const { spawnSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
-/** Versão do projeto. */
 const buildVersion = require('../package.json').version;
-
 const versionPlaceholderText = '0.0.0-PLACEHOLDER';
-
 const versionPlaceholderRegex = new RegExp(versionPlaceholderText, 'g');
+
+/** replace version of dist/<package>/package.json and other files to repository version */
+task('replaceVersion', () => {
+  const rootFolder = path.join(__dirname, '../');
+  const distFolder = path.resolve(rootFolder, './dist');
+
+  return src([`${rootFolder}/package.json`]).on('end', () => replaceVersionPlaceholders(distFolder));
+});
 
 /**
  * Altera todos os arquivos do diretorio informado como paramentro, que contenham 0.0.0-PLACEHOLDER e 0.0.0-NG
  * para a versão do package.json raiz do projeto.
  */
-function _replaceVersionPlaceholders(packageDir) {
+function replaceVersionPlaceholders(packageDir) {
   // Busca todos os arquivos que contenham placeholders de versão, usando findstr e grep.
   const files = findFilesWithPlaceholders(packageDir);
 
@@ -48,7 +55,3 @@ function buildPlaceholderFindCommand(packageDir) {
     };
   }
 }
-
-module.exports = {
-  replaceVersionPlaceholders: _replaceVersionPlaceholders
-};
