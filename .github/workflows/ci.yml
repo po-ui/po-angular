@@ -36,6 +36,22 @@ jobs:
     - run: npm run format:check
     - run: npm run lint
 
+  build:
+    name: Build packages
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - run: npm i
+    - run: npm run build
+
   test-ui:
     name: Test ui
 
@@ -97,7 +113,7 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: 12.x
-        
+
     - run: npm i
     - run: npm run test:storage
 
