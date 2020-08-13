@@ -90,7 +90,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridSmColumns: 12,
       label: 'Favorite hero',
       optional: true,
-      searchService: 'https://po-sample-api.herokuapp.com/v1/heroes',
+      searchService: 'https://po-sample-api.herokuapp.com/v1/people',
       columns: [
         { property: 'nickname', label: 'Hero' },
         { property: 'label', label: 'Name' }
