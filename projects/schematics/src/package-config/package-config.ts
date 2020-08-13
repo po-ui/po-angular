@@ -40,9 +40,12 @@ export function updatePackageJson(version: string, { dependencies, devDependenci
         }
       });
 
-      devDependencies?.forEach(pkg => {
-        if (json.devDependencies[pkg]) {
-          json.devDependencies[pkg] = version;
+      devDependencies?.forEach(devDependency => {
+        const updatedDependency =
+          typeof devDependency === 'object' ? devDependency : { package: devDependency, version };
+
+        if (json.devDependencies[updatedDependency.package]) {
+          json.devDependencies[updatedDependency.package] = updatedDependency.version;
         }
       });
 
