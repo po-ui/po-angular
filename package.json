@@ -40,7 +40,7 @@
     "build:lite": "ng build ui && ng build storage && ng build sync && ng build templates && ng build code-editor",
     "build:portal:prod": "node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build portal --prod --build-optimizer=false",
     "build:portal": "cd projects/portal && gulp build",
-    "release": "standard-version",
+    "release": "standard-version --preset angular",
     "sonarqube": "gulp sonarqube",
     "format:fix": "pretty-quick --staged",
     "format:check": "prettier --check --loglevel error \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
