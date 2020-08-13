@@ -243,7 +243,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
         this.controlModel(newDate);
         this.date = newDate;
       } else {
-        this.date = undefined;
+        this.date = null;
         this.controlModel(this.date);
       }
     } else {

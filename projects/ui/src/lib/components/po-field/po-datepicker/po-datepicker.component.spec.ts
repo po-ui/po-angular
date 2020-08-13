@@ -129,24 +129,6 @@ describe('PoDatepickerComponent:', () => {
     expect(fakeThis.objMask.keydown).not.toHaveBeenCalled();
   });
 
-  it('should change value of the mask when typing', () => {
-    const fakeThis = {
-      objMask: {
-        valueToModel: '11/11/1111',
-        keyup: (v: any) => {}
-      },
-      mask: '99/99/9999',
-      controlModel: component.controlModel,
-      callOnChange: component.callOnChange,
-      getDateFromString: (v: any) => true,
-      inputEl: component.inputEl
-    };
-
-    spyOn(fakeThis, 'controlModel');
-    component.onKeyup.call(fakeThis, {});
-    expect(fakeThis.controlModel).toHaveBeenCalled();
-  });
-
   it('should call onblur', () => {
     spyOn(component.onblur, 'emit');
 
@@ -686,7 +668,7 @@ describe('PoDatepickerComponent:', () => {
         expect(fakeThis.onblur.emit).toHaveBeenCalled();
       });
 
-      it('should call `controlModel` and if have a `objMask.valueToModel`', () => {
+      it('should call `controlModel` if have a `objMask.valueToModel equal or greater than 10`', () => {
         fakeEvent.target.value = '06/11/2019';
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
@@ -714,7 +696,7 @@ describe('PoDatepickerComponent:', () => {
         expect(component.controlModel).not.toHaveBeenCalled();
       });
 
-      it(`should call 'controlModel' with undefined if 'objMask.valueToModel.length' is less than 10`, () => {
+      it(`should call 'controlModel' with null if 'objMask.valueToModel.length' is lower than 10`, () => {
         fakeEvent.target.value = '05/02/20';
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
@@ -724,7 +706,7 @@ describe('PoDatepickerComponent:', () => {
 
         component.eventOnBlur(fakeEvent);
 
-        expect(component.controlModel).toHaveBeenCalledWith(undefined);
+        expect(component.controlModel).toHaveBeenCalledWith(null);
       });
     });
 
@@ -1123,6 +1105,24 @@ describe('PoDatepickerComponent:', () => {
       component.writeValue('2019-11-21');
 
       expect(component.hour).toBe('T00:00:01-00:00');
+    });
+
+    it('onKeyup: should change value of the mask when typing', () => {
+      const fakeThis = {
+        objMask: {
+          valueToModel: '11/11/1111',
+          keyup: (v: any) => {}
+        },
+        mask: '99/99/9999',
+        controlModel: component.controlModel,
+        callOnChange: component.callOnChange,
+        getDateFromString: (v: any) => true,
+        inputEl: component.inputEl
+      };
+
+      spyOn(fakeThis, 'controlModel');
+      component.onKeyup.call(fakeThis, {});
+      expect(fakeThis.controlModel).toHaveBeenCalled();
     });
   });
 
