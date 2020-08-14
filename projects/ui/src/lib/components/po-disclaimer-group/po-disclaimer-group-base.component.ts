@@ -7,7 +7,8 @@ import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 export const poDisclaimerGroupLiteralsDefault = {
   en: { removeAll: 'Remove all' },
   es: { removeAll: 'Eliminar todos' },
-  pt: { removeAll: 'Remover todos' }
+  pt: { removeAll: 'Remover todos' },
+  ru: { removeAll: 'Удалить все' }
 };
 
 /**
