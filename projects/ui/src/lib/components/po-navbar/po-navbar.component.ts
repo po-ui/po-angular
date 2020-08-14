@@ -9,7 +9,9 @@ import {
 } from '@angular/core';
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuItem } from '../po-menu';
+
 import { PoNavbarBaseComponent } from './po-navbar-base.component';
 import { PoNavbarItem } from './interfaces/po-navbar-item.interface';
 import { PoNavbarItemsComponent } from './po-navbar-items/po-navbar-items.component';
@@ -50,11 +52,12 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   @ViewChild(PoNavbarItemsComponent, { static: true }) navbarItems: PoNavbarItemsComponent;
 
   constructor(
+    poLanguageService: PoLanguageService,
     private renderer: Renderer2,
     private builder: AnimationBuilder,
     private changeDetector: ChangeDetectorRef
   ) {
-    super();
+    super(poLanguageService);
     this.windowResizeListener = this.renderer.listen(window, 'resize', this.displayItemsNavigation.bind(this));
   }
 

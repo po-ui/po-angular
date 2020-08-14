@@ -1,8 +1,9 @@
 import { Input, Directive } from '@angular/core';
 
-import { browserLanguage, convertToBoolean, poLocaleDefault } from '../../utils/util';
-
+import { convertToBoolean, poLocaleDefault } from '../../utils/util';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuComponent } from '../po-menu';
+
 import { PoNavbarIconAction } from './interfaces/po-navbar-icon-action.interface';
 import { PoNavbarItem } from './interfaces/po-navbar-item.interface';
 import { PoNavbarLiterals } from './interfaces/po-navbar-literals.interface';
@@ -35,6 +36,7 @@ export abstract class PoNavbarBaseComponent {
   private _literals: PoNavbarLiterals;
   private _logo: string;
   private _shadow: boolean = false;
+  private language: string = poLocaleDefault;
 
   /**
    * @optional
@@ -89,21 +91,22 @@ export abstract class PoNavbarBaseComponent {
    * </po-navbar>
    * ```
    *
-   *  > O objeto padrão de literais será traduzido de acordo com o idioma do *browser* (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
   @Input('p-literals') set literals(value: PoNavbarLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poNavbarLiteralsDefault[poLocaleDefault],
-        ...poNavbarLiteralsDefault[browserLanguage()],
+        ...poNavbarLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poNavbarLiteralsDefault[browserLanguage()];
+      this._literals = poNavbarLiteralsDefault[this.language];
     }
   }
   get literals() {
-    return this._literals || poNavbarLiteralsDefault[browserLanguage()];
+    return this._literals || poNavbarLiteralsDefault[this.language];
   }
 
   /**
@@ -166,6 +169,10 @@ export abstract class PoNavbarBaseComponent {
 
   get shadow(): boolean {
     return this._shadow;
+  }
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
   }
 
   protected abstract validateMenuLogo(): void;
