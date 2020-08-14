@@ -20,6 +20,7 @@ import { Router } from '@angular/router';
 
 import { convertToBoolean } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
 import { PoTableAction } from './interfaces/po-table-action.interface';
@@ -121,11 +122,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     differs: IterableDiffers,
     viewRef: ViewContainerRef,
     renderer: Renderer2,
+    poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private router: Router
   ) {
-    super(poDate);
+    super(poDate, poLanguageService);
 
     this.differ = differs.find([]).create(null);
 
