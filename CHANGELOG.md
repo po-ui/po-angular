@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.2.0"></a>
+# [3.2.0](https://github.com/po-ui/po-angular/compare/v3.1.0...v3.2.0) (2020-08-17)
+
+
+### Bug Fixes
+
+* **datepicker:** valida input ao sair do campo ([1bb1190](https://github.com/po-ui/po-angular/commit/1bb1190))
+* **dynamic-form:** corrige chamada de evento na seleção de um campo do tipo lookup [c7a67c2](https://github.com/po-ui/po-angular/commit/c7a67c2))
+* **schematics:** corrige versão do po-ui/ng-tslint no ngUpdate ([52731f1](https://github.com/po-ui/po-angular/commit/52731f1))
+
+
+### Features
+
+* **disclaimer-group:** adiciona literais em russo ([97b1bf9](https://github.com/po-ui/po-angular/commit/97b1bf9))
+* **disclaimer-group:** permite traduzir literais usando serviço i18n ([9a6a311](https://github.com/po-ui/po-angular/commit/9a6a311)), closes [#567](https://github.com/po-ui/po-angular/issues/567)
+* **navbar:** permite traduzir literais usando serviço i18n ([ddc1d08](https://github.com/po-ui/po-angular/commit/ddc1d08))
+* **table:** permite traduzir literais usando serviço i18n ([9d88206](https://github.com/po-ui/po-angular/commit/9d88206))
+
+
 ## [3.1.0](https://github.com/po-ui/po-angular/compare/v3.0.0...v3.1.0) (2020-08-10)
 
 
