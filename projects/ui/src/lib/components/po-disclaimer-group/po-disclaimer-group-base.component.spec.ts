@@ -2,7 +2,9 @@ import { expectSettersMethod } from './../../util-test/util-expect.spec';
 
 import * as UtilsFunction from '../../utils/util';
 
-import { PoDisclaimer } from '../po-disclaimer//po-disclaimer.interface';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+
+import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerGroupBaseComponent } from './po-disclaimer-group-base.component';
 import { tick, fakeAsync } from '@angular/core/testing';
 
@@ -11,7 +13,9 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     find: () => ({ create: () => {} })
   };
 
-  const component = new PoDisclaimerGroupBaseComponent(<any>differ);
+  const languageService = new PoLanguageService();
+
+  const component = new PoDisclaimerGroupBaseComponent(<any>differ, languageService);
 
   it('should be created', () => {
     expect(component instanceof PoDisclaimerGroupBaseComponent).toBeTruthy();

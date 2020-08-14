@@ -1,6 +1,7 @@
 import { DoCheck, EventEmitter, Input, IterableDiffers, Output, Directive } from '@angular/core';
 
-import { browserLanguage, convertToBoolean, isKeyCodeEnter, poLocaleDefault, uuid } from '../../utils/util';
+import { convertToBoolean, isKeyCodeEnter, poLocaleDefault, uuid } from '../../utils/util';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 
@@ -32,10 +33,7 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
   private differ;
   private previousDisclaimers: Array<PoDisclaimer> = [];
 
-  readonly literals = {
-    ...poDisclaimerGroupLiteralsDefault[poLocaleDefault],
-    ...poDisclaimerGroupLiteralsDefault[browserLanguage()]
-  };
+  literals;
 
   /** Lista de *disclaimers*. */
 
@@ -108,8 +106,15 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
    */
   @Output('p-remove-all') removeAll?: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(differs: IterableDiffers) {
+  constructor(differs: IterableDiffers, languageService: PoLanguageService) {
+    const language = languageService.getShortLanguage();
+
     this.differ = differs.find([]).create(null);
+
+    this.literals = {
+      ...poDisclaimerGroupLiteralsDefault[poLocaleDefault],
+      ...poDisclaimerGroupLiteralsDefault[language]
+    };
   }
 
   ngDoCheck() {
