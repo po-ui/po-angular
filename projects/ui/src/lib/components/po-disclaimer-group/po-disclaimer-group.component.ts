@@ -1,5 +1,7 @@
 import { Component, IterableDiffers } from '@angular/core';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+
 import { PoDisclaimerGroupBaseComponent } from './po-disclaimer-group-base.component';
 
 /**
@@ -29,7 +31,7 @@ import { PoDisclaimerGroupBaseComponent } from './po-disclaimer-group-base.compo
   templateUrl: './po-disclaimer-group.component.html'
 })
 export class PoDisclaimerGroupComponent extends PoDisclaimerGroupBaseComponent {
-  constructor(differs: IterableDiffers) {
-    super(differs);
+  constructor(differs: IterableDiffers, languageService: PoLanguageService) {
+    super(differs, languageService);
   }
 }
