@@ -1,6 +1,7 @@
 import {
   AfterViewChecked,
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -42,6 +43,7 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 @Component({
   selector: 'po-switch',
   templateUrl: './po-switch.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -50,15 +52,11 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
     }
   ]
 })
-export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterViewChecked, AfterViewInit {
+export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterViewInit {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
-    super();
-  }
-
-  ngAfterViewChecked(): void {
-    this.changeDetector.detectChanges();
+  constructor(changeDetector: ChangeDetectorRef) {
+    super(changeDetector);
   }
 
   ngAfterViewInit() {

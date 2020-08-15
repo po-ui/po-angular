@@ -1,3 +1,6 @@
+import { ChangeDetectorRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
 import { PoSwitchBaseComponent } from './po-switch-base.component';
@@ -8,14 +11,20 @@ describe('PoSwitchBaseComponent:', () => {
   let fakeInstance;
 
   beforeEach(() => {
-    component = new PoSwitchBaseComponent();
+    TestBed.configureTestingModule({
+      providers: [ChangeDetectorRef]
+    });
+
+    const changeDetector = TestBed.inject(ChangeDetectorRef);
+
+    component = new PoSwitchBaseComponent(changeDetector);
 
     fakeInstance = {
       disabled: false,
       switchValue: false,
       changeValue: (value: any) => {},
       changeDetector: {
-        detectChanges: () => {}
+        markForCheck: () => {}
       },
       propagateChange: (value: any) => {},
       ngModelChange: {
@@ -116,16 +125,25 @@ describe('PoSwitchBaseComponent:', () => {
   it('should updated switchValue on writeValue', () => {
     component.switchValue = true;
 
+    component['changeDetector'] = <any>{ markForCheck: () => {} };
+    spyOn(component['changeDetector'], 'markForCheck');
+
     component.writeValue(false);
 
+    expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
     expect(component.switchValue).toBeFalsy();
   });
 
   it('shouldn`t updated switchValue on writeValue if new value equals old value', () => {
     component.switchValue = true;
 
+    component['changeDetector'] = <any>{ markForCheck: () => {} };
+
+    spyOn(component['changeDetector'], 'markForCheck');
+
     component.writeValue(true);
 
+    expect(component['changeDetector'].markForCheck).not.toHaveBeenCalled();
     expect(component.switchValue).toBeTruthy();
   });
 

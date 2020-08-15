@@ -7,7 +7,7 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from './../po-field-container/po-field-container.component';
 
-describe('PoRadioGroupComponent', () => {
+describe('PoSwitchComponent', () => {
   let component: PoSwitchComponent;
   let fixture: ComponentFixture<PoSwitchComponent>;
   let nativeElement: any;
@@ -21,8 +21,6 @@ describe('PoRadioGroupComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoSwitchComponent);
     component = fixture.componentInstance;
-
-    fixture.detectChanges();
 
     nativeElement = fixture.debugElement.nativeElement;
   });
