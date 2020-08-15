@@ -1,5 +1,5 @@
 import { ControlValueAccessor } from '@angular/forms';
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
 import { InputBoolean } from '../../../decorators';
@@ -105,6 +105,8 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
   // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
   @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
 
+  constructor(private changeDetector: ChangeDetectorRef) {}
+
   changeValue(value: any) {
     if (this.switchValue !== value) {
       this.switchValue = value;
@@ -133,6 +135,8 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
   writeValue(value: any): void {
     if (value !== this.switchValue) {
       this.switchValue = !!value;
+
+      this.changeDetector.markForCheck();
     }
   }
 }
