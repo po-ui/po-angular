@@ -1,14 +1,16 @@
 import * as UtilsFunctions from '../../utils/util';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { poLocaleDefault } from '../../utils/util';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 import { PoListViewBaseComponent, poListViewLiteralsDefault } from './po-list-view-base.component';
 
 describe('PoListViewBaseComponent:', () => {
+  const languageService: PoLanguageService = new PoLanguageService();
   let component: PoListViewBaseComponent;
 
   beforeEach(() => {
-    component = new PoListViewBaseComponent();
+    component = new PoListViewBaseComponent(languageService);
   });
 
   describe('Properties:', () => {
@@ -65,7 +67,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('zw');
+      component['language'] = 'zw';
 
       component.literals = {};
 
@@ -73,7 +75,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component.literals = {};
 
@@ -81,7 +83,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in english if browser is setted with `en`', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('en');
+      component['language'] = 'en';
 
       component.literals = {};
 
@@ -89,7 +91,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
 
       component.literals = {};
 
@@ -97,7 +99,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue('ru');
+      component['language'] = 'ru';
 
       component.literals = {};
 
@@ -105,7 +107,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('p-literals: should accept custom literals', () => {
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      component['language'] = poLocaleDefault;
 
       const customLiterals = Object.assign({}, poListViewLiteralsDefault[poLocaleDefault]);
 
@@ -120,7 +122,7 @@ describe('PoListViewBaseComponent:', () => {
     it('p-literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      component['language'] = poLocaleDefault;
 
       expectPropertiesValues(component, 'literals', invalidValues, poListViewLiteralsDefault[poLocaleDefault]);
     });
