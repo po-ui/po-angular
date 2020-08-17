@@ -1,6 +1,7 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { browserLanguage, poLocaleDefault, convertToBoolean } from '../../utils/util';
+import { poLocaleDefault, convertToBoolean } from '../../utils/util';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewLiterals } from './interfaces/po-list-view-literals.interface';
@@ -56,6 +57,7 @@ export class PoListViewBaseComponent {
   private _literals: PoListViewLiterals;
   private _select: boolean;
   private _showMoreDisabled: boolean;
+  private language: string = poLocaleDefault;
 
   popupTarget: any;
   selectAll: boolean = false;
@@ -150,22 +152,23 @@ export class PoListViewBaseComponent {
    * </po-list-view>
    * ```
    *
-   * > O objeto padrão de literais será traduzido de acordo com o idioma do browser (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
   @Input('p-literals') set literals(value: PoListViewLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poListViewLiteralsDefault[poLocaleDefault],
-        ...poListViewLiteralsDefault[browserLanguage()],
+        ...poListViewLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poListViewLiteralsDefault[browserLanguage()];
+      this._literals = poListViewLiteralsDefault[this.language];
     }
   }
 
   get literals() {
-    return this._literals || poListViewLiteralsDefault[browserLanguage()];
+    return this._literals || poListViewLiteralsDefault[this.language];
   }
 
   /** Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será usado como link para o título. */
@@ -229,6 +232,10 @@ export class PoListViewBaseComponent {
    * Ao ser disparado, o método inserido na ação irá receber como parâmetro o item da lista clicado.
    */
   @Output('p-title-action') titleAction?: EventEmitter<any> = new EventEmitter<any>();
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   onClickAction(listViewAction: PoListViewAction, item) {
     const cleanItem = this.deleteInternalAttrs(item);
