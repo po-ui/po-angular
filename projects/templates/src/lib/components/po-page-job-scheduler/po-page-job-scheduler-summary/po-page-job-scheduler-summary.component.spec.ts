@@ -1,13 +1,17 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import * as util from '../../../utils/util';
+import { PoLanguageService } from '@po-ui/ng-components';
+
+import { poLocaleDefault } from '../../../utils/util';
 
 import { poPageJobSchedulerLiteralsDefault } from '../po-page-job-scheduler-literals';
 import { PoPageJobSchedulerModule } from '../po-page-job-scheduler.module';
 import { PoPageJobSchedulerSummaryComponent } from './po-page-job-scheduler-summary.component';
 
 describe('PoPageJobSchedulerSummaryComponent:', () => {
+  const languageService: PoLanguageService = new PoLanguageService();
+
   let component: PoPageJobSchedulerSummaryComponent;
   let fixture: ComponentFixture<PoPageJobSchedulerSummaryComponent>;
 
@@ -24,8 +28,8 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
     component = fixture.componentInstance;
 
     component.literals = {
-      ...poPageJobSchedulerLiteralsDefault[util.poLocaleDefault],
-      ...poPageJobSchedulerLiteralsDefault[util.browserLanguage()]
+      ...poPageJobSchedulerLiteralsDefault[poLocaleDefault],
+      ...poPageJobSchedulerLiteralsDefault[languageService.getShortLanguage()]
     };
 
     fixture.detectChanges();
