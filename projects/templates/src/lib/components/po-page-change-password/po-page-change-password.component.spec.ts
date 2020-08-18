@@ -3,6 +3,7 @@ import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
+import { PoModule } from '@po-ui/ng-components';
 
 import * as utilsFunctions from './../../utils/util';
 import { getObservable } from './../../util-test/util-expect.spec';
@@ -12,6 +13,7 @@ import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
 import { PoPageChangePasswordComponent } from './po-page-change-password.component';
 import { PoPageChangePasswordService } from './po-page-change-password.service';
+import { PoPageBackgroundModule } from '../po-page-background/index';
 
 describe('PoPageChangePasswordComponent:', () => {
   let component: PoPageChangePasswordComponent;
@@ -21,10 +23,9 @@ describe('PoPageChangePasswordComponent:', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule.withRoutes([])],
+      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoModule, PoPageBackgroundModule],
       declarations: [PoPageChangePasswordComponent],
-      providers: [HttpClient, HttpHandler, PoPageChangePasswordService],
-      schemas: [NO_ERRORS_SCHEMA]
+      providers: [HttpClient, HttpHandler, PoPageChangePasswordService]
     }).compileComponents();
   }));
 
