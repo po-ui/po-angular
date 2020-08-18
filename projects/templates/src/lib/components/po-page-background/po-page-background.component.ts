@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { browserLanguage, convertToBoolean, isTypeof } from './../../utils/util';
-import { PoSelectOption } from '@po-ui/ng-components';
-import { PoLanguageService } from '@po-ui/ng-components';
+import { PoSelectOption, PoLanguageService } from '@po-ui/ng-components';
+
+import { convertToBoolean, isTypeof } from './../../utils/util';
 
 @Component({
   selector: 'po-page-background',

@@ -6,17 +6,6 @@ export const poLocales = ['pt', 'en', 'es', 'ru'];
 export const poLocaleDefault = 'pt';
 
 /**
- * @deprecated
- * Utilize o método `getShortBrowserLanguage`.
- *
- * @description
- * Retorna idioma do browser ou o idioma padrão.
- */
-export function browserLanguage() {
-  return getShortBrowserLanguage();
-}
-
-/**
  * Retorna o idioma atual do navegador
  */
 export function getBrowserLanguage(): string {

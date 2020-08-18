@@ -1,5 +1,4 @@
 import { ViewContainerRef } from '@angular/core';
-import { changeChromeProperties } from '../util-test/util-expect.spec';
 
 import {
   callFunction,
@@ -9,6 +8,8 @@ import {
   convertToBoolean,
   convertToInt,
   formatYear,
+  getBrowserLanguage,
+  getShortBrowserLanguage,
   getFormattedLink,
   isEquals,
   isExternalLink,
@@ -17,17 +18,16 @@ import {
   mapObjectByProperties,
   openExternalLink,
   removeDuplicatedOptions,
+  removeKeysProperties,
   removeUndefinedAndNullOptions,
   setYearFrom0To100,
   sortOptionsByProperty,
   sortValues,
   validateDateRange,
   validValue,
-  valuesFromObject,
-  removeKeysProperties
+  valuesFromObject
 } from './util';
-
-import * as UtilFunctions from './util';
+import { changeChromeProperties } from '../util-test/util-expect.spec';
 
 describe('Language:', () => {
   let navigatorLanguageSpy;
@@ -40,43 +40,11 @@ describe('Language:', () => {
     navigatorLanguageSpy.calls.reset();
   });
 
-  describe('Function browserLanguage:', () => {
-    it('should return `pt` as default language if language is undefined', () => {
-      navigatorLanguageSpy.and.returnValue(undefined);
-
-      expect(UtilFunctions.browserLanguage()).toBe('pt');
-    });
-
-    it('should return `pt` as default language if language is invalid', () => {
-      navigatorLanguageSpy.and.returnValue('wz');
-
-      expect(UtilFunctions.browserLanguage()).toBe('pt');
-    });
-
-    it('should return `en` if browser language is `en-US`', () => {
-      navigatorLanguageSpy.and.returnValue('en-US');
-
-      expect(UtilFunctions.browserLanguage()).toBe('en');
-    });
-
-    it('should return `es` if browser language is `es`', () => {
-      navigatorLanguageSpy.and.returnValue('es');
-
-      expect(UtilFunctions.browserLanguage()).toBe('es');
-    });
-
-    it('should return `ru` if browser language is `ru`', () => {
-      navigatorLanguageSpy.and.returnValue('ru');
-
-      expect(UtilFunctions.browserLanguage()).toBe('ru');
-    });
-  });
-
   describe('Function getBrowserLanguage:', () => {
     it('should return the value of `navigator.language` if it`s defined', () => {
       navigatorLanguageSpy.and.returnValue('pt');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+      expect(getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return the value of `navigator.userLanguage` if it`s defined and `navigator.language` is undefined', () => {
@@ -84,7 +52,7 @@ describe('Language:', () => {
 
       changeChromeProperties(navigator, 'userLanguage', 'en');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
+      expect(getShortBrowserLanguage()).toBe('en');
 
       changeChromeProperties(navigator, 'userLanguage', undefined);
     });
@@ -94,7 +62,7 @@ describe('Language:', () => {
 
       changeChromeProperties(navigator, 'userLanguage', undefined);
 
-      expect(UtilFunctions.getBrowserLanguage()).toBe(undefined);
+      expect(getBrowserLanguage()).toBe(undefined);
     });
   });
 
@@ -102,61 +70,61 @@ describe('Language:', () => {
     it('should return `pt` as default language if language is undefined', () => {
       navigatorLanguageSpy.and.returnValue(undefined);
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+      expect(getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return `pt` as default language if language is invalid', () => {
       navigatorLanguageSpy.and.returnValue('wz');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+      expect(getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return `pt` if browser language is `pt`', () => {
       navigatorLanguageSpy.and.returnValue('pt');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+      expect(getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return `pt` if browser language is `pt-BR`', () => {
       navigatorLanguageSpy.and.returnValue('pt-BR');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
+      expect(getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return `en` if browser language is `en`', () => {
       navigatorLanguageSpy.and.returnValue('en');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
+      expect(getShortBrowserLanguage()).toBe('en');
     });
 
     it('should return `en` if browser language is `en-US`', () => {
       navigatorLanguageSpy.and.returnValue('en-US');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
+      expect(getShortBrowserLanguage()).toBe('en');
     });
 
     it('should return `es` if browser language is `es`', () => {
       navigatorLanguageSpy.and.returnValue('es');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('es');
+      expect(getShortBrowserLanguage()).toBe('es');
     });
 
     it('should return `es` if browser language is `es-ES`', () => {
       navigatorLanguageSpy.and.returnValue('es-ES');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('es');
+      expect(getShortBrowserLanguage()).toBe('es');
     });
 
     it('should return `ru` if browser language is `ru`', () => {
       navigatorLanguageSpy.and.returnValue('ru');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('ru');
+      expect(getShortBrowserLanguage()).toBe('ru');
     });
 
     it('should return `ru` if browser language is `ru-RU`', () => {
       navigatorLanguageSpy.and.returnValue('ru-RU');
 
-      expect(UtilFunctions.getShortBrowserLanguage()).toBe('ru');
+      expect(getShortBrowserLanguage()).toBe('ru');
     });
   });
 });
