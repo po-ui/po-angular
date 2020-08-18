@@ -3,8 +3,15 @@ import { AbstractControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import {
+  PoI18nPipe,
+  PoLanguageService,
+  PoModalAction,
+  PoModalComponent,
+  PoRadioGroupOption
+} from '@po-ui/ng-components';
+
 import { isExternalLink } from '../../utils/util';
-import { PoI18nPipe, PoModalAction, PoModalComponent, PoRadioGroupOption } from '@po-ui/ng-components';
 
 import { PoModalPasswordRecovery } from './interfaces/po-modal-password-recovery.interface';
 import { PoModalPasswordRecoveryBaseComponent } from './po-modal-password-recovery-base.component';
@@ -75,9 +82,10 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   constructor(
     private router: Router,
     private poI18nPipe: PoI18nPipe,
-    private poModalPasswordRecoveryService: PoModalPasswordRecoveryService
+    private poModalPasswordRecoveryService: PoModalPasswordRecoveryService,
+    poLanguageService: PoLanguageService
   ) {
-    super();
+    super(poLanguageService);
   }
 
   ngOnDestroy() {

@@ -1,5 +1,7 @@
 import { Directive } from '@angular/core';
 
+import { PoLanguageService } from '@po-ui/ng-components';
+
 import { PoModalPasswordRecoveryBaseComponent } from './po-modal-password-recovery-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
@@ -13,10 +15,11 @@ class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseCompon
 }
 
 describe('PoModalPasswordRecoveryBaseComponent:', () => {
+  const poLanguageService: PoLanguageService = new PoLanguageService();
   let component: PoModalPasswordRecoveryComponent;
 
   beforeEach(() => {
-    component = new PoModalPasswordRecoveryComponent();
+    component = new PoModalPasswordRecoveryComponent(poLanguageService);
   });
 
   it('should be created', () => {
