@@ -1,6 +1,8 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { browserLanguage, poLocaleDefault } from '../../utils/util';
+import { PoLanguageService } from '@po-ui/ng-components';
+
+import { poLocaleDefault } from '../../utils/util';
 
 import { poModalPasswordRecoveryLiterals } from './literals/i18n/po-modal-password-recovery-literals';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
@@ -100,10 +102,7 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
     supportContact: string;
     telephone: string;
     typeCodeTitle: string;
-  } = {
-    ...poModalPasswordRecoveryLiterals[poLocaleDefault],
-    ...poModalPasswordRecoveryLiterals[browserLanguage()]
-  };
+  } = poModalPasswordRecoveryLiterals[poLocaleDefault];
 
   /**
    * @optional
@@ -298,6 +297,13 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
    * > Esta propriedade será ignorada se for definido valor para a propriedade `p-url-recovery`.
    */
   @Output('p-submit') submit = new EventEmitter<any>();
+
+  constructor(languageService: PoLanguageService) {
+    this.literals = {
+      ...this.literals,
+      ...poModalPasswordRecoveryLiterals[languageService.getShortLanguage()]
+    };
+  }
 
   /**
    * Acão para conclusão de processo e fechamento da modal. Indica-se sua utilização
