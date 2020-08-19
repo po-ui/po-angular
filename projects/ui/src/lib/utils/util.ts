@@ -577,3 +577,17 @@ export function validateObjectType(value: any) {
 export function getParentRef(viewRef: ViewContainerRef): ViewContainerRef {
   return viewRef['_hostView'] ? viewRef['_hostView'][8] : viewRef['_view']['component'];
 }
+
+/**
+ * Retorna os elementos DOM capazes de receber foco.
+ *
+ * > Atualmente são considerados "focáveis" os elementos DOM `input`, `select`,
+ * `textarea`, `button` e `a`.
+ *
+ * @param parentElement Elemento DOM pai.
+ * @returns Lista dos elementos DOM filhos "focáveis".
+ */
+export function getFocusableElements(parentElement: Element): NodeListOf<Element> {
+  const focusableElements = 'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"]';
+  return parentElement.querySelectorAll(focusableElements);
+}

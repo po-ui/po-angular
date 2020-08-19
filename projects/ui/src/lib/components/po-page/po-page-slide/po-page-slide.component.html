@@ -1,0 +1,20 @@
+<div class="po-page-slide" tabindex="0" *ngIf="!hidden" [@fade]>
+  <div class="po-page-slide-overlay" (mousedown)="onClickOut($event)">
+    <div class="po-page-slide-container po-page-slide-right po-page-slide-{{ size }}" [@slide]>
+      <div class="po-page-slide-content" tabindex="-1" #pageContent>
+        <div class="po-page-slide-header">
+          <div class="po-page-slide-title">
+            <span>{{ title }}</span>
+            <button *ngIf="!hideClose" class="po-page-slide-close-button" (click)="close()" (key.enter)="close()">
+              <span class="po-icon po-icon-close"></span>
+            </button>
+          </div>
+          <div class="po-page-slide-subtitle" *ngIf="subtitle">{{ subtitle }}</div>
+        </div>
+        <div class="po-page-slide-body">
+          <ng-content></ng-content>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

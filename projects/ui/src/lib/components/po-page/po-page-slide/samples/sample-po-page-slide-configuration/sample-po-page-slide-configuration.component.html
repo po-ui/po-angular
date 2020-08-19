@@ -1,0 +1,98 @@
+<po-page-slide p-title="Configuration" p-size="sm" #pageSlide>
+  <div class="po-row po-mb-2">
+    <po-switch
+      class="po-sm-6"
+      p-label-off="Bluetooth"
+      p-label-on="Bluetooth"
+      name="bluetooth"
+      [(ngModel)]="bluetooth"
+    ></po-switch>
+    <po-switch
+      class="po-sm-6"
+      p-label-off="Unlocked"
+      p-label-on="Locked"
+      name="locked"
+      [(ngModel)]="locked"
+    ></po-switch>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-switch
+      class="po-sm-6"
+      p-label-off="Microphone"
+      p-label-on="Microphone"
+      name="microphone"
+      [(ngModel)]="microphone"
+    ></po-switch>
+    <po-switch
+      class="po-sm-6"
+      p-label-off="Notification"
+      p-label-on="Notification"
+      name="notification"
+      [(ngModel)]="notification"
+    ></po-switch>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-switch
+      class="po-sm-6"
+      p-label-off="Localization"
+      p-label-on="Localization"
+      name="localization"
+      [(ngModel)]="localization"
+    ></po-switch>
+    <po-switch
+      class="po-sm-6"
+      p-label-off="Not favorited"
+      p-label-on="Favorited"
+      name="favorited"
+      [(ngModel)]="favorited"
+    ></po-switch>
+  </div>
+
+  <hr />
+
+  <h2 class="po-font-title">About Page Slide</h2>
+
+  <section class="po-m-2">
+    <h3 class="po-font-subtitle po-mb-1">Usage</h3>
+    <ul class="po-ml-2">
+      <li>To reveal additional navigation controls</li>
+      <li>In TV or mobile space since controls and/or space is limited</li>
+      <li>To expose a configuration panel (similar to the Module Configure Pattern)</li>
+      <li>
+        To a lesser extent to reveal help or contextual information (the partial hiding of the related content might
+        make it a poor choice for this)
+      </li>
+    </ul>
+  </section>
+
+  <section class="po-m-2">
+    <h3 class="po-font-subtitle po-mb-1">Challenges</h3>
+    <ul class="po-ml-2">
+      <li>Discoverability</li>
+      <li>Losing context with the rest of the page</li>
+      <li>Make the disruption work for you</li>
+    </ul>
+  </section>
+
+  <section class="po-m-2">
+    <h3 class="po-font-subtitle po-mb-1">Recommendations</h3>
+    <ul class="po-ml-2">
+      <li>Use it sparingly only for major context switches</li>
+      <li>Make the animation fast. No reason to wow the user with your ability to scroll</li>
+      <li>Make the activation/deactivation dead simple</li>
+    </ul>
+  </section>
+
+  <p>
+    For more information visit
+    <a href="http://designingwebinterfaces.com/page-slide-stay-on-the-page-pattern" target="_blank" rel="noopener"
+      >Designing Web Interfaces: Page Slide</a
+    >
+  </p>
+</po-page-slide>
+
+<div class="po-row">
+  <po-button class="po-sm-3" p-label="Open Configuration" (p-click)="pageSlide.open()"></po-button>
+</div>
