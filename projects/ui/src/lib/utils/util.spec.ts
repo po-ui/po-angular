@@ -823,39 +823,39 @@ describe('Function sortValues:', () => {
   });
 
   describe('Invalid values:', () => {
-    const invalidValues: Array<any> = [undefined, null, false, NaN, 0];
+    const invalidValues: Array<any> = [undefined, null, NaN];
     const validParam: string = 'ABC';
     const expectedReturn: number = 0;
 
-    it('should return `0` if `leftSide` is invalid value and `ascending` is `true`', () => {
+    it('should return `-1` if `leftSide` is invalid value and `ascending` is `true`', () => {
       const ascending: boolean = true;
 
       invalidValues.forEach(invalidValue => {
-        expect(sortValues(invalidValue, validParam, ascending)).toBe(expectedReturn);
+        expect(sortValues(invalidValue, validParam, ascending)).toBe(-1);
       });
     });
 
-    it('should return `0` if `leftSide` is invalid value and `ascending` is `false`', () => {
+    it('should return `1` if `leftSide` is invalid value and `ascending` is `false`', () => {
       const ascending: boolean = false;
 
       invalidValues.forEach(invalidValue => {
-        expect(sortValues(invalidValue, validParam, ascending)).toBe(expectedReturn);
+        expect(sortValues(invalidValue, validParam, ascending)).toBe(1);
       });
     });
 
-    it('should return `0` if `rightSide` is invalid value and `ascending` is `true`', () => {
+    it('should return `1` if `rightSide` is invalid value and `ascending` is `true`', () => {
       const ascending: boolean = true;
 
       invalidValues.forEach(invalidValue => {
-        expect(sortValues(validParam, invalidValue, ascending)).toBe(expectedReturn);
+        expect(sortValues(validParam, invalidValue, ascending)).toBe(1);
       });
     });
 
-    it('should return `0` if `rightSide` is invalid value and `ascending` is `false`', () => {
+    it('should return `-1` if `rightSide` is invalid value and `ascending` is `false`', () => {
       const ascending: boolean = false;
 
       invalidValues.forEach(invalidValue => {
-        expect(sortValues(validParam, invalidValue, ascending)).toBe(expectedReturn);
+        expect(sortValues(validParam, invalidValue, ascending)).toBe(-1);
       });
     });
 

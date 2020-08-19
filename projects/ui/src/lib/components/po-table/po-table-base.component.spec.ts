@@ -377,7 +377,7 @@ describe('PoTableBaseComponent:', () => {
     expect(component.selectAll).toBe(null);
   });
 
-  it('shoul not sort column', () => {
+  it('should not sort column', () => {
     const unSortedItems = items.slice();
     component.sort = false;
 
@@ -1100,6 +1100,80 @@ describe('PoTableBaseComponent:', () => {
 
       expect(component.subtitleColumns).toEqual(expectedValue);
       expect(spyGetSubtitleColumns).toHaveBeenCalled();
+    });
+
+    describe('sortColumn', () => {
+      it('should sort items by number type column', () => {
+        const sortedItems = [
+          { name: 'Chris Doe', age: null },
+          { name: 'John Doe', age: 30 },
+          { name: 'Evelyn Doe', age: 30 },
+          { name: 'Jane Doe', age: 31 }
+        ];
+
+        component.sort = true;
+        component.columns = [{ property: 'name' }, { property: 'age', type: 'number' }];
+        component.items = [
+          { name: 'John Doe', age: 30 },
+          { name: 'Jane Doe', age: 31 },
+          { name: 'Chris Doe', age: null },
+          { name: 'Evelyn Doe', age: 30 }
+        ];
+
+        component.sortColumn(component.columns.find(c => c.property === 'age'));
+
+        expect(component.items).toEqual(sortedItems);
+      });
+
+      it('should sort items by default type column', () => {
+        const sortedItems = [
+          { name: null, age: 30 },
+          { name: 'Evelyn Doe', age: 30 },
+          { name: 'Jane Doe', age: 31 },
+          { name: 'John Doe', age: 30 }
+        ];
+
+        component.sort = true;
+        component.columns = [{ property: 'name' }, { property: 'age', type: 'number' }];
+        component.items = [
+          { name: 'John Doe', age: 30 },
+          { name: 'Jane Doe', age: 31 },
+          { name: null, age: 30 },
+          { name: 'Evelyn Doe', age: 30 }
+        ];
+
+        component.sortColumn(component.columns.find(c => c.property === 'name'));
+
+        expect(component.items).toEqual(sortedItems);
+      });
+
+      it('should sort items by date type column', () => {
+        const sortedItems = [
+          { name: 'Evelyn Doe', age: 30, birthday: null },
+          { name: 'Mr Doe', age: 65, birthday: null },
+          { name: 'John Doe', age: 45, birthday: '1975-02-20' },
+          { name: 'Jane Doe', age: 44, birthday: '1976-05-12' },
+          { name: 'Chris Doe', age: 25, birthday: '1995-01-05' }
+        ];
+
+        component.sort = true;
+        component.columns = [
+          { property: 'name' },
+          { property: 'age', type: 'number' },
+          { property: 'birthday', type: 'date' }
+        ];
+        component.items = [
+          { name: 'John Doe', age: 45, birthday: '1975-02-20' },
+          { name: 'Mr Doe', age: 65, birthday: null },
+          { name: 'Jane Doe', age: 44, birthday: '1976-05-12' },
+          { name: 'Chris Doe', age: 25, birthday: '1995-01-05' },
+          { name: 'Evelyn Doe', age: 30, birthday: null }
+        ];
+
+        component.sortColumn(component.columns.find(c => c.property === 'birthday'));
+
+        expect(component.items).toEqual(sortedItems);
+      });
     });
   });
 
