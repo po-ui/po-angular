@@ -10,17 +10,19 @@ import { PoDropdownModule } from '../po-dropdown/po-dropdown.module';
 import { PoFieldModule } from '../po-field/po-field.module';
 import { PoLanguageModule } from './../../services/po-language/po-language.module';
 import { PoModalModule } from './../po-modal/po-modal.module';
-import { PoPageComponent } from './po-page.component';
 import { PoPageContentComponent } from './po-page-content/po-page-content.component';
 import { PoPageDefaultComponent } from './po-page-default/po-page-default.component';
 import { PoPageDetailComponent } from './po-page-detail/po-page-detail.component';
 import { PoPageEditComponent } from './po-page-edit/po-page-edit.component';
 import { PoPageHeaderComponent } from './po-page-header/po-page-header.component';
 import { PoPageListComponent } from './po-page-list/po-page-list.component';
+import { PoPageSlideComponent } from './po-page-slide/po-page-slide.component';
+import { PoPageComponent } from './po-page.component';
 
 /**
  * @description
- * Módulo dos componentes po-page-default, po-page-edit, po-page-list, po-page-login e po-page-detail.
+ * Módulo dos componentes po-page-default, po-page-detail, po-page-edit,
+ * po-page-list e po-page-slide.
  */
 @NgModule({
   imports: [
@@ -42,8 +44,15 @@ import { PoPageListComponent } from './po-page-list/po-page-list.component';
     PoPageDetailComponent,
     PoPageEditComponent,
     PoPageHeaderComponent,
-    PoPageListComponent
+    PoPageListComponent,
+    PoPageSlideComponent
   ],
-  exports: [PoPageDetailComponent, PoPageDefaultComponent, PoPageEditComponent, PoPageListComponent]
+  exports: [
+    PoPageDefaultComponent,
+    PoPageDetailComponent,
+    PoPageEditComponent,
+    PoPageListComponent,
+    PoPageSlideComponent
+  ]
 })
 export class PoPageModule {}

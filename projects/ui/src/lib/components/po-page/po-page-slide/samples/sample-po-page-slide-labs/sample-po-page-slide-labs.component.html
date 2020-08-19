@@ -1,0 +1,45 @@
+<po-page-slide
+  [p-click-out]="properties.includes('click-out')"
+  [p-hide-close]="properties.includes('hide-close')"
+  [p-size]="size"
+  [p-subtitle]="subtitle"
+  [p-title]="title"
+  #poPageSlide
+>
+  {{ content }}
+</po-page-slide>
+
+<po-button p-label="Open Page Slide" [p-disabled]="f.form.invalid" (p-click)="openPage()"></po-button>
+
+<hr />
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input class="po-md-6" name="Title" [(ngModel)]="title" p-clean p-label="Title" p-required></po-input>
+    <po-input class="po-md-6" name="Subtitle" [(ngModel)]="subtitle" p-clean p-label="Subtitle" p-optional></po-input>
+    <po-input class="po-sm-12" name="Content" [(ngModel)]="content" p-clean p-label="Content" p-required></po-input>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-sm-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions"
+    ></po-checkbox-group>
+
+    <po-radio-group
+      class="po-sm-6"
+      name="Size"
+      [(ngModel)]="size"
+      p-label="Size"
+      [p-options]="sizeOptions"
+      p-optional
+    ></po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-button class="po-sm-3" p-label="Sample Restore" (p-click)="restore()"></po-button>
+  </div>
+</form>
