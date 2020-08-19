@@ -373,16 +373,19 @@ export function sortValues(leftSide: string, rightSide: string, ascending: boole
   const left = isTypeof(leftSide, 'string') ? leftSide.toLowerCase() : leftSide;
   const right = isTypeof(rightSide, 'string') ? rightSide.toLowerCase() : rightSide;
 
+  const leftIsInvalid = left === null || left === undefined || Number.isNaN(left);
+  const rightIsInvalid = right === null || right === undefined || Number.isNaN(right);
+
   if (ascending) {
-    if (left < right) {
+    if (left < right || leftIsInvalid) {
       return -1;
-    } else if (left > right) {
+    } else if (left > right || rightIsInvalid) {
       return 1;
     }
   } else if (ascending === false) {
-    if (left < right) {
+    if (left < right || leftIsInvalid) {
       return 1;
-    } else if (left > right) {
+    } else if (left > right || rightIsInvalid) {
       return -1;
     }
   }
