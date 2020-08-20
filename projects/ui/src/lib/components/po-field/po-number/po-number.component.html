@@ -15,7 +15,7 @@
       [readonly]="readonly"
       [required]="required"
       [tabindex]="disabled ? -1 : 0"
-      (blur)="eventOnBlur($event)"
+      (blur)="onBlur($event)"
       (focus)="eventOnFocus($event)"
       (input)="eventOnInput($event)"
     />
@@ -25,5 +25,5 @@
     </div>
   </div>
 
-  <po-field-container-bottom [p-error-pattern]="getErrorPattern()"> </po-field-container-bottom>
+  <po-field-container-bottom [p-error-pattern]="getErrorPatternMessage()"> </po-field-container-bottom>
 </po-field-container>

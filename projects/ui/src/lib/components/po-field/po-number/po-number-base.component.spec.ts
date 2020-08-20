@@ -55,77 +55,63 @@ describe('PoNumberBaseComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call keyup from mask with keyCode different 229', () => {
+  it('onBlur: shouldn`t call `callOnChange` if event.target.value is empty and event.target.validity.valid is true', () => {
+    fakeEvent.target.value = '';
+    fakeEvent.target.validity.valid = true;
+
     const fakeThis = {
-      isMobile: () => false,
-      mask: '(999)',
-      objMask: {
-        keyup: (value: any) => {},
-        valueToModel: ''
-      },
-      callOnChange: () => {},
+      invalidInputValueOnBlur: false,
+      callOnChange: (v: any) => {},
       eventOnBlur: e => {}
     };
 
     spyOn(fakeThis, 'callOnChange');
-    spyOn(fakeThis.objMask, 'keyup');
     spyOn(fakeThis, 'eventOnBlur');
 
-    component.onKeyup.call(fakeThis, fakeEvent);
-
-    expect(fakeThis.callOnChange).toHaveBeenCalled();
-    expect(fakeThis.objMask.keyup).toHaveBeenCalled();
-    expect(fakeThis.eventOnBlur).toHaveBeenCalled();
-  });
-
-  it('shouldn`t call keyup from mask with keyCode equal to 229', () => {
-    const fakeThis = {
-      isMobile: () => true,
-      mask: '(999)',
-      objMask: {
-        keyup: (value: any) => {},
-        valueToModel: ''
-      },
-      callOnChange: () => {},
-      eventOnBlur: e => {}
-    };
-
-    const fakeEventLocal = {
-      target: {
-        value: '',
-        keyCode: 229
-      }
-    };
-
-    spyOn(fakeThis.objMask, 'keyup');
-    spyOn(fakeThis, 'eventOnBlur');
-
-    component.onKeyup.call(fakeThis, fakeEventLocal);
-
-    expect(fakeThis.objMask.keyup).not.toHaveBeenCalled();
-    expect(fakeThis.eventOnBlur).not.toHaveBeenCalled();
-  });
-
-  it('should not call keyup when the mask is empty and keyCode is different of 229', () => {
-    const fakeThis = {
-      mask: '',
-      objMask: {
-        keyup: (value: any) => {},
-        valueToModel: ''
-      },
-      callOnChange: () => {}
-    };
-
-    spyOn(fakeThis, 'callOnChange');
-    spyOn(fakeThis.objMask, 'keyup');
-
-    component.onKeyup.call(fakeThis, event);
+    component.onBlur.call(fakeThis, fakeEvent);
 
     expect(fakeThis.callOnChange).not.toHaveBeenCalled();
-    expect(fakeThis.objMask.keyup).not.toHaveBeenCalled();
+    expect(fakeThis.eventOnBlur).toHaveBeenCalledWith(fakeEvent);
   });
 
-  it('should call "callOnChange" eventOnInput without mask', () => {
+  it('onBlur: shouldn`t call `callOnChange` if event.target.value has value and event.target.validity.valid is true', () => {
+    fakeEvent.target.value = '1234567890';
+    fakeEvent.target.validity.valid = true;
+
+    const fakeThis = {
+      invalidInputValueOnBlur: false,
+      callOnChange: (v: any) => {},
+      eventOnBlur: e => {}
+    };
+
+    spyOn(fakeThis, 'callOnChange');
+    spyOn(fakeThis, 'eventOnBlur');
+
+    component.onBlur.call(fakeThis, fakeEvent);
+
+    expect(fakeThis.callOnChange).not.toHaveBeenCalled();
+    expect(fakeThis.eventOnBlur).toHaveBeenCalledWith(fakeEvent);
+  });
+
+  it('onBlur: should call `callOnChange` if event.target.value is empty and event.target.validity.valid is false', () => {
+    fakeEvent.target.value = '';
+    fakeEvent.target.validity.valid = false;
+    const fakeThis = {
+      invalidInputValueOnBlur: false,
+      callOnChange: (v: any) => {},
+      eventOnBlur: e => {}
+    };
+
+    spyOn(fakeThis, 'callOnChange');
+    spyOn(fakeThis, 'eventOnBlur');
+
+    component.onBlur.call(fakeThis, fakeEvent);
+
+    expect(fakeThis.callOnChange).toHaveBeenCalledWith('Valor Inválido');
+    expect(fakeThis.eventOnBlur).toHaveBeenCalledWith(fakeEvent);
+  });
+
+  it('eventOnInput: should call "callOnChange" if doesn`t contain mask and set invalidInputValueOnBlur with false', () => {
     fakeEvent.target.value = '1234567890';
     const fakeThis = {
       mask: false,
@@ -134,6 +120,7 @@ describe('PoNumberBaseComponent', () => {
       maxlength: 5,
       formatNumber: component['formatNumber'],
       inputEl: component.inputEl,
+      invalidInputValueOnBlur: true,
       isEndWithDot: () => {}
     };
 
@@ -142,10 +129,11 @@ describe('PoNumberBaseComponent', () => {
     component.eventOnInput.call(fakeThis, fakeEvent);
 
     expect(fakeThis.callOnChange).toHaveBeenCalledWith(12345);
+    expect(fakeThis.invalidInputValueOnBlur).toBe(false);
     expect(fakeThis.inputEl.nativeElement.value).toBe('12345');
   });
 
-  it('should call "callOnChange" eventOnInput without mask and maxlength', () => {
+  it('eventOnInput: should call "callOnChange" if doesn`t contain mask and maxlength', () => {
     fakeEvent.target.value = '12345';
     const fakeThis = {
       mask: false,
@@ -153,6 +141,7 @@ describe('PoNumberBaseComponent', () => {
       validMaxLength: component.validMaxLength,
       formatNumber: component['formatNumber'],
       inputEl: component.inputEl,
+      invalidInputValueOnBlur: true,
       isEndWithDot: () => {}
     };
 
@@ -163,7 +152,7 @@ describe('PoNumberBaseComponent', () => {
     expect(fakeThis.callOnChange).toHaveBeenCalledWith(12345);
   });
 
-  it('should not call "callOnChange" on eventOnInput with mask', () => {
+  it('eventOnInput: should not call "callOnChange" if has mask', () => {
     const fakeThis = {
       mask: true,
       callOnChange: () => {},
