@@ -6,6 +6,8 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 export abstract class PoNumberBaseComponent extends PoInputGeneric {
   type = 'number';
 
+  protected invalidInputValueOnBlur = false;
+
   /* istanbul ignore next */
   constructor(elementRef: ElementRef) {
     super(elementRef);
@@ -15,6 +17,7 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
     if (!this.mask) {
       let value = e.target.value;
       const valueMaxlength = this.validMaxLength(this.maxlength, value);
+      this.invalidInputValueOnBlur = false;
 
       if (value !== valueMaxlength) {
         value = valueMaxlength;
@@ -24,6 +27,17 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
 
       this.callOnChange(this.formatNumber(value));
     }
+  }
+
+  onBlur(event: any) {
+    const target = event.target;
+    this.invalidInputValueOnBlur = target.value === '' && !target.validity.valid;
+
+    if (this.invalidInputValueOnBlur) {
+      this.callOnChange('Valor Inválido');
+    }
+
+    this.eventOnBlur(event);
   }
 
   validMaxLength(maxlength: number, value: string) {

@@ -81,6 +81,9 @@ export class PoNumberComponent extends PoNumberBaseComponent {
   }
 
   extraValidation(abstractControl: AbstractControl): { [key: string]: any } {
+    // Verifica se já possui algum error pattern padrão.
+    this.errorPattern = this.errorPattern !== 'Valor Inválido' ? this.errorPattern : '';
+
     if (minFailed(this.min, abstractControl.value)) {
       return {
         min: {
@@ -97,6 +100,29 @@ export class PoNumberComponent extends PoNumberBaseComponent {
       };
     }
 
+    if (this.invalidInputValueOnBlur) {
+      this.errorPattern = this.errorPattern || 'Valor Inválido';
+
+      return {
+        number: {
+          valid: false
+        }
+      };
+    }
+
     return null;
+  }
+
+  getErrorPatternMessage() {
+    return this.errorPattern !== '' && this.containsInvalidClass() ? this.errorPattern : '';
+  }
+
+  private containsInvalidClass(): boolean {
+    return (
+      (this.el.nativeElement.classList.contains('ng-invalid') &&
+        this.el.nativeElement.classList.contains('ng-dirty') &&
+        this.inputEl.nativeElement.value !== '') ||
+      this.invalidInputValueOnBlur
+    );
   }
 }

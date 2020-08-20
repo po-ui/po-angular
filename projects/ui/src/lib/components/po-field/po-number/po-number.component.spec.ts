@@ -55,13 +55,6 @@ describe('PoNumberComponent:', () => {
     expectSettersMethod(component, 'setMin', '10', 'min', 10);
   });
 
-  it('should return null in extraValidation()', () => {
-    component.min = 0;
-    component.max = 0;
-
-    expect(component.extraValidation(new FormControl(null))).toBeNull();
-  });
-
   it('should call minFailed', () => {
     component.min = 4;
 
@@ -72,6 +65,81 @@ describe('PoNumberComponent:', () => {
     component.max = 5;
 
     expect(component.validate(new FormControl('10'))).not.toBeNull();
+  });
+
+  describe('Methods: ', () => {
+    it('extraValidation: should invalidate number if invalidInputValueOnBlur is true and set errorPattern with a defined value', () => {
+      component['invalidInputValueOnBlur'] = true;
+      component.errorPattern = 'errorPattern';
+
+      const expectedReturn = { number: { valid: false } };
+      const result = component.validate(new FormControl('2e'));
+
+      expect(result).toEqual(expectedReturn);
+      expect(component.errorPattern).toBe('errorPattern');
+    });
+
+    it('extraValidation: should invalidate number if invalidInputValueOnBlur is true and set errorPattern with default value', () => {
+      component['invalidInputValueOnBlur'] = true;
+      component.errorPattern = 'Valor Inválido';
+
+      const expectedReturn = { number: { valid: false } };
+      const result = component.validate(new FormControl('2e'));
+
+      expect(result).toEqual(expectedReturn);
+      expect(component.errorPattern).toBe('Valor Inválido');
+    });
+
+    it('extraValidation: should return null in extraValidation()', () => {
+      component.min = 0;
+      component.max = 0;
+      component['invalidInputValueOnBlur'] = false;
+
+      expect(component.extraValidation(new FormControl(null))).toBeNull();
+    });
+
+    describe('getErrorPatternMessage: ', () => {
+      it('should return errorPattern value if errorPattern has value and containsInvalidClass returns true and show the properly message in template', () => {
+        component.el.nativeElement.value = '1e';
+        component.errorPattern = 'erro';
+        component.el.nativeElement.classList.add('ng-invalid');
+        component.el.nativeElement.classList.add('ng-dirty');
+        component['invalidInputValueOnBlur'] = true;
+
+        const expectedResult = component.getErrorPatternMessage();
+
+        expect(expectedResult).toBe('erro');
+
+        fixture.detectChanges();
+        const content = fixture.debugElement.nativeElement
+          .querySelector('.po-field-container-bottom-text-error')
+          .innerHTML.toString();
+
+        expect(content.indexOf('erro') > -1).toBeTruthy();
+      });
+
+      it('should return empty string if errorPattern is empty', () => {
+        component.errorPattern = '';
+
+        const expectedResult = component.getErrorPatternMessage();
+
+        expect(expectedResult).toBe('');
+        expect(fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error')).toBeNull();
+      });
+
+      it('should return empty string if errorPattern has value but containsInvalidClass returns false', () => {
+        component.el.nativeElement.value = '';
+        component.errorPattern = 'error';
+        component.el.nativeElement.classList.add('ng-invalid');
+        component.el.nativeElement.classList.add('ng-dirty');
+        component['invalidInputValueOnBlur'] = false;
+
+        const expectedResult = component.getErrorPatternMessage();
+
+        expect(expectedResult).toBe('');
+        expect(fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error')).toBeNull();
+      });
+    });
   });
 
   describe('Templates: ', () => {
