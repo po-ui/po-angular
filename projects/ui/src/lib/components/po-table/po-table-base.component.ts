@@ -742,11 +742,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   private sortArray(column: PoTableColumn, ascending: boolean) {
     this.items.sort((leftSide, rightSide): number => {
-      if (column.type === 'date' || column.type === 'dateTime') {
-        return this.poDate.sortDate(leftSide[column.property], rightSide[column.property], ascending);
-      } else {
-        return sortValues(leftSide[column.property], rightSide[column.property], ascending);
-      }
+      return sortValues(leftSide[column.property], rightSide[column.property], ascending);
     });
   }
 

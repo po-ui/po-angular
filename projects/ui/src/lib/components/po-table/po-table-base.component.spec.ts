@@ -753,27 +753,7 @@ describe('PoTableBaseComponent:', () => {
       expect(component.hasItems).toBeFalsy();
     });
 
-    it(`sortArray: should call 'sortDate' when column type is 'date'.`, () => {
-      const columnDate = component.columns[2];
-
-      spyOn(component['poDate'], 'sortDate');
-
-      component['sortArray'](columnDate, true);
-
-      expect(component['poDate'].sortDate).toHaveBeenCalled();
-    });
-
-    it(`sortArray: should call 'sortDate' when column type is 'dateTime'.`, () => {
-      const columnDate = component.columns[4];
-
-      spyOn(component['poDate'], 'sortDate');
-
-      component['sortArray'](columnDate, true);
-
-      expect(component['poDate'].sortDate).toHaveBeenCalled();
-    });
-
-    it(`sortArray: should call 'sortValues' when column type is not 'date' or 'dateTime'.`, () => {
+    it(`sortArray: should call 'sortValues'`, () => {
       const columnDate = component.columns[3];
 
       spyOn(utilsFunctions, 'sortValues');
