@@ -166,17 +166,6 @@ export class PoDateService {
   }
 
   /**
-   * Método responsável por ordenar duas datas.
-   *
-   * @param leftSide Primeira data a ser comparada.
-   * @param rightSide Segunda data a ser comparada.
-   * @param ascending Determina se será em ordem crescente ou decrescente.
-   */
-  sortDate(leftSide: string | Date, rightSide: string | Date, ascending: boolean): number {
-    return sortValues(this.validateDate(leftSide), this.validateDate(rightSide), ascending);
-  }
-
-  /**
    * Método responsável por retornar o dia , mês e ano de uma data informada.
    *
    * @param date Valor da data.

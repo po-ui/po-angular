@@ -369,9 +369,9 @@ export function getFormattedLink(link: string): string {
  * @param rightSide Segundo valor a ser comparado.
  * @param ascending Determina se será em ordem ascendente ou descendente.
  */
-export function sortValues(leftSide: string, rightSide: string, ascending: boolean = true): number {
-  const left = isTypeof(leftSide, 'string') ? leftSide.toLowerCase() : leftSide;
-  const right = isTypeof(rightSide, 'string') ? rightSide.toLowerCase() : rightSide;
+export function sortValues(leftSide: string | Date, rightSide: string | Date, ascending: boolean = true): number {
+  const left = isTypeof(leftSide, 'string') ? (leftSide as string).toLowerCase() : leftSide;
+  const right = isTypeof(rightSide, 'string') ? (rightSide as string).toLowerCase() : rightSide;
 
   const leftIsInvalid = left === null || left === undefined || Number.isNaN(left);
   const rightIsInvalid = right === null || right === undefined || Number.isNaN(right);

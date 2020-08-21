@@ -282,20 +282,6 @@ describe('PoDateTimeService:', () => {
       expect(date).toBe(date);
     });
 
-    it(`sortDate: should call 'sortValues' and 'validateDate'.`, () => {
-      const leftSide = new Date(2018, 5, 5);
-      const rightSide = new Date(2018, 3, 5);
-      const ascending = true;
-
-      spyOn(utilsFunctions, 'sortValues');
-      spyOn(dateService, <any>'validateDate');
-
-      dateService.sortDate(leftSide, rightSide, ascending);
-
-      expect(utilsFunctions.sortValues).toHaveBeenCalled();
-      expect(dateService['validateDate']).toHaveBeenCalled();
-    });
-
     it('splitDate: should return an object with year, month and day of the date', () => {
       const dateSplited = { year: 2018, month: 3, day: 24 };
       const date = new Date(dateSplited.year, dateSplited.month, dateSplited.day);

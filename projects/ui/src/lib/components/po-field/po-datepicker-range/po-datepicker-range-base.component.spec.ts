@@ -26,7 +26,6 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     isDateRangeValid: () => {},
     isValidIso: () => {},
     setYearFrom0To100: () => {},
-    sortDate: () => {},
     splitDate: () => {},
     validateDateRange: () => {},
     validateDate: () => {}

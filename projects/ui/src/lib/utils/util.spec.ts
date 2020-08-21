@@ -873,8 +873,8 @@ describe('Function sortValues:', () => {
       dates are Javascript Date format`, () => {
       const ascending: boolean = true;
       const expectedReturn: number = 1;
-      const leftSide = new Date(2018, 5, 5).toString();
-      const rightSide = new Date(2018, 3, 5).toString();
+      const leftSide = new Date(2018, 5, 5);
+      const rightSide = new Date(2018, 3, 5);
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -913,8 +913,8 @@ describe('Function sortValues:', () => {
       dates are Javascript Date format`, () => {
       const ascending: boolean = true;
       const expectedReturn: number = -1;
-      const leftSide = new Date(2018, 3, 5).toString();
-      const rightSide = new Date(2018, 5, 5).toString();
+      const leftSide = new Date(2018, 3, 5);
+      const rightSide = new Date(2018, 5, 5);
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -943,8 +943,8 @@ describe('Function sortValues:', () => {
       dates are Javascript Date format`, () => {
       const ascending: boolean = false;
       const expectedReturn: number = -1;
-      const leftSide = new Date(2018, 5, 5).toString();
-      const rightSide = new Date(2018, 3, 5).toString();
+      const leftSide = new Date(2018, 5, 5);
+      const rightSide = new Date(2018, 3, 5);
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -973,8 +973,8 @@ describe('Function sortValues:', () => {
       dates are Javascript Date format`, () => {
       const ascending: boolean = false;
       const expectedReturn: number = 1;
-      const leftSide = new Date(2018, 3, 5).toString();
-      const rightSide = new Date(2018, 5, 5).toString();
+      const leftSide = new Date(2018, 3, 5);
+      const rightSide = new Date(2018, 5, 5);
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -1003,8 +1003,8 @@ describe('Function sortValues:', () => {
       dates are Javascript Date format`, () => {
       const ascending: boolean = true;
       const expectedReturn: number = 0;
-      const leftSide = new Date(2018, 3, 5).toString();
-      const rightSide = new Date(2018, 3, 5).toString();
+      const leftSide = new Date(2018, 3, 5);
+      const rightSide = new Date(2018, 3, 5);
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -1033,8 +1033,8 @@ describe('Function sortValues:', () => {
       dates are Javascript Date format`, () => {
       const ascending: boolean = false;
       const expectedReturn: number = 0;
-      const leftSide = new Date(2018, 3, 5).toString();
-      const rightSide = new Date(2018, 3, 5).toString();
+      const leftSide = new Date(2018, 3, 5);
+      const rightSide = new Date(2018, 3, 5);
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
@@ -1055,6 +1055,66 @@ describe('Function sortValues:', () => {
       const expectedReturn: number = 0;
       const leftSide = '2018-03-05T05:05:13-02:00';
       const rightSide = '2018-03-05T05:05:13-02:00';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it(`should return '1' if 'leftSide' is greater than 'rightSide', 'ascending' is 'true' and
+      dates are a Javascript DateTime format`, () => {
+      const ascending: boolean = true;
+      const expectedReturn: number = 1;
+      const leftSide = new Date(2018, 3, 5, 9, 10, 0);
+      const rightSide = new Date(2018, 3, 5, 9, 0, 0);
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it(`should return '-1' if 'leftSide' is less than 'rightSide', 'ascending' is 'true' and
+      dates are a Javascript DateTime format`, () => {
+      const ascending: boolean = true;
+      const expectedReturn: number = -1;
+      const leftSide = new Date(2018, 3, 5, 9, 0, 0);
+      const rightSide = new Date(2018, 3, 5, 9, 10, 0);
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it(`should return '-1' if 'leftSide' is greater than 'rightSide', 'ascending' is 'false' and
+      dates are a Javascript DateTime format`, () => {
+      const ascending: boolean = false;
+      const expectedReturn: number = -1;
+      const leftSide = new Date(2018, 3, 5, 9, 10, 0);
+      const rightSide = new Date(2018, 3, 5, 9, 0, 0);
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it(`should return '1' if 'leftSide' is less than 'rightSide', 'ascending' is 'false' and
+      dates are a Javascript DateTime format`, () => {
+      const ascending: boolean = false;
+      const expectedReturn: number = 1;
+      const leftSide = new Date(2018, 3, 5, 9, 0, 0);
+      const rightSide = new Date(2018, 3, 5, 9, 10, 0);
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it(`should return '0' if 'leftSide' is equal to 'rightSide', 'ascending' is 'true' and
+      dates are a Javascript DateTime format`, () => {
+      const ascending: boolean = true;
+      const expectedReturn: number = 0;
+      const leftSide = new Date(2018, 3, 5, 9, 0, 0);
+      const rightSide = new Date(2018, 3, 5, 9, 0, 0);
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+    });
+
+    it(`should return '0' if 'leftSide' is equal to 'rightSide', 'ascending' is 'false' and
+      dates are a Javascript DateTime format`, () => {
+      const ascending: boolean = false;
+      const expectedReturn: number = 0;
+      const leftSide = new Date(2018, 3, 5, 9, 0, 0);
+      const rightSide = new Date(2018, 3, 5, 9, 0, 0);
 
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
