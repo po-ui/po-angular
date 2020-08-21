@@ -448,7 +448,7 @@ describe('PoComboBaseComponent:', () => {
 
       expect(component.getOptionFromValue).not.toHaveBeenCalled();
       expect(component.getObjectByValue).not.toHaveBeenCalled();
-      expect(component.updateSelectedValue).toHaveBeenCalledWith(null, true, true);
+      expect(component.updateSelectedValue).toHaveBeenCalledWith(null);
       expect(component.updateComboList).toHaveBeenCalled();
     });
 
@@ -475,6 +475,24 @@ describe('PoComboBaseComponent:', () => {
       component.writeValue('1');
 
       expect(component.updateSelectedValue).toHaveBeenCalled();
+    });
+
+    it('shouldn`t call `callModelChange` and `fromWriteValue` should be false after call `updateSelectedValue`', () => {
+      const newModel = 2;
+
+      component.options = [
+        { label: 'Test 1', value: 1 },
+        { label: 'Test 2', value: 2 }
+      ];
+
+      spyOn(component, 'callModelChange');
+      spyOn(component, 'updateSelectedValue').and.callThrough();
+
+      component.writeValue(newModel);
+
+      expect(component.updateSelectedValue).toHaveBeenCalled();
+      expect(component.callModelChange).not.toHaveBeenCalled();
+      expect(component['fromWriteValue']).toBe(false);
     });
   });
 
@@ -514,11 +532,12 @@ describe('PoComboBaseComponent:', () => {
       const value = 1;
 
       component.selectedValue = undefined;
+      component['fromWriteValue'] = true;
 
       const spyCallModelChange = spyOn(component, 'callModelChange');
       const spyChangeEmit = spyOn(component.change, 'emit');
 
-      component['updateModel'](value, true);
+      component['updateModel'](value);
 
       expect(spyCallModelChange).not.toHaveBeenCalled();
       expect(spyChangeEmit).toHaveBeenCalled();
@@ -776,7 +795,7 @@ describe('PoComboBaseComponent:', () => {
 
       expect(spySetInputValue).toHaveBeenCalledWith(option.label);
       expect(spyUpdateInternalVariables).toHaveBeenCalledWith(option);
-      expect(spyUpdateModel).toHaveBeenCalledWith(option.value, false);
+      expect(spyUpdateModel).toHaveBeenCalledWith(option.value);
     });
 
     it(`updateSelectedValue: should call 'setInputValue', 'updateInternalVariables' and 'updateModel' with
@@ -793,7 +812,7 @@ describe('PoComboBaseComponent:', () => {
 
       expect(spySetInputValue).toHaveBeenCalledWith(option.label);
       expect(spyUpdateInternalVariables).toHaveBeenCalledWith(option);
-      expect(spyUpdateModel).toHaveBeenCalledWith(option.value, false);
+      expect(spyUpdateModel).toHaveBeenCalledWith(option.value);
     });
 
     it(`updateSelectedValue: should call 'setInputValue', 'updateInternalVariables' and 'updateModel' with
@@ -810,7 +829,7 @@ describe('PoComboBaseComponent:', () => {
 
       expect(spySetInputValue).toHaveBeenCalledWith('');
       expect(spyUpdateInternalVariables).toHaveBeenCalledWith(option);
-      expect(spyUpdateModel).toHaveBeenCalledWith(undefined, false);
+      expect(spyUpdateModel).toHaveBeenCalledWith(undefined);
     });
 
     it(`updateSelectedValue: shouldn't call 'setInputValue' and 'updateModel' if 'changeOnEnter' is true

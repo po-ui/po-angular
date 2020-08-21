@@ -68,6 +68,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _sort?: boolean = false;
   private language: string;
 
+  // utilizado para fazer o controle de atualizar o model.
+  // não deve forçar a atualização se o gatilho for o writeValue para não deixar o campo dirty.
+  private fromWriteValue: boolean = false;
+
   protected cacheStaticOptions: Array<PoComboOption | PoComboGroup> = [];
   protected comboOptionsList: Array<PoComboOption | PoComboGroup> = [];
 
@@ -522,7 +526,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  updateSelectedValue(option: PoComboOption | PoComboGroup, isUpdateModel: boolean = true, isWriteValue = false) {
+  updateSelectedValue(option: PoComboOption | PoComboGroup, isUpdateModel: boolean = true) {
     const optionLabel = (option && option.label) || '';
 
     this.updateInternalVariables(option);
@@ -537,7 +541,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     if (isUpdateModel) {
       const optionValue = (option && option.value) || undefined;
 
-      this.updateModel(optionValue, isWriteValue);
+      this.updateModel(optionValue);
     }
   }
 
@@ -659,6 +663,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   // Recebe as alterações do model
   writeValue(value: any) {
+    this.fromWriteValue = true;
+
     if (validValue(value) && !this.service && this.comboOptionsList && this.comboOptionsList.length) {
       const option = this.getOptionFromValue(value, this.comboOptionsList);
       this.updateSelectedValue(option);
@@ -670,7 +676,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     if (value && this.service) {
       return this.getObjectByValue(value);
     } else {
-      this.updateSelectedValue(null, true, true);
+      this.updateSelectedValue(null);
       this.updateComboList();
     }
   }
@@ -838,9 +844,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  private updateModel(value: any, fromWriteValue = false): void {
+  private updateModel(value: any): void {
     if (value !== this.selectedValue) {
-      if (!fromWriteValue) {
+      if (!this.fromWriteValue) {
         this.callModelChange(value);
       }
 
@@ -848,6 +854,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
 
     this.selectedValue = value;
+    this.fromWriteValue = false;
   }
 
   private updateSelectedValueWithOldOption() {
