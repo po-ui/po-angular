@@ -1,7 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
+
+import { Subscription } from 'rxjs';
 
 import { isFirefox, isIE, isIEOrEdge, openExternalLink } from './../../../../utils/util';
 import { PoKeyCodeEnum } from './../../../../enums/po-key-code.enum';
+import { PoRichTextService } from '../po-rich-text.service';
 
 const poRichTextBodyCommands = [
   'bold',
@@ -19,11 +22,12 @@ const poRichTextBodyCommands = [
   selector: 'po-rich-text-body',
   templateUrl: './po-rich-text-body.component.html'
 })
-export class PoRichTextBodyComponent implements OnInit {
+export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   private isLinkEditing: boolean;
   private linkElement: any;
   private timeoutChange: any;
   private valueBeforeChange: any;
+  private modelSubscription: Subscription;
 
   @ViewChild('bodyElement', { static: true }) bodyElement: ElementRef;
 
@@ -45,14 +49,21 @@ export class PoRichTextBodyComponent implements OnInit {
 
   @Output('p-value') value = new EventEmitter<any>();
 
+  constructor(private richTextService: PoRichTextService) {}
+
   ngOnInit() {
     this.bodyElement.nativeElement.designMode = 'on';
 
-    // timeout necessário para setar o valor vindo do writeValue do componente principal.
-    setTimeout(() => {
+    this.modelSubscription = this.richTextService.getModel().subscribe(modelValue => {
+      this.modelValue = modelValue;
+      this.bodyElement.nativeElement.innerHTML = '';
       this.updateValueWithModelValue();
       this.addClickListenerOnAnchorElements();
     });
+  }
+
+  ngOnDestroy() {
+    this.modelSubscription?.unsubscribe();
   }
 
   executeCommand(command: string | { command: any; value: string | any }) {

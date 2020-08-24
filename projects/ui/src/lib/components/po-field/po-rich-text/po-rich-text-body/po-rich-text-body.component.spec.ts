@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
+import { of } from 'rxjs';
+
 import * as UtilsFunction from '../../../../utils/util';
 import { configureTestSuite } from './../../../../util-test/util-expect.spec';
 
@@ -28,6 +30,8 @@ describe('PoRichTextBodyComponent:', () => {
   });
 
   describe('Methods:', () => {
+    const fakeSubscription = <any>{ unsubscribe: () => {} };
+
     it('onInit: should update `bodyElement`', () => {
       const expectedValue = 'on';
       component.ngOnInit();
@@ -35,18 +39,45 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component.bodyElement.nativeElement.designMode).toEqual(expectedValue);
     });
 
-    it('onInit: should call `updateValueWithModelValue` and `addClickListenerOnAnchorElements`', fakeAsync(() => {
+    it('onInit: should call `richTextService.getModel.subscribe`, update the model and add listeners to the anchor elements', fakeAsync(() => {
+      const response = 'valor inicial';
+      spyOn(component['richTextService'], 'getModel').and.returnValue(of(response));
       spyOn(component, <any>'updateValueWithModelValue');
       spyOn(component, <any>'addClickListenerOnAnchorElements');
 
       component.ngOnInit();
-      tick(50);
 
-      expect(component['updateValueWithModelValue']).toHaveBeenCalledBefore(
-        component['addClickListenerOnAnchorElements']
-      );
-      expect(component['addClickListenerOnAnchorElements']).toHaveBeenCalled();
+      component['richTextService'].getModel().subscribe(() => {
+        expect(component['updateValueWithModelValue']).toHaveBeenCalled();
+        expect(component['addClickListenerOnAnchorElements']).toHaveBeenCalled();
+      });
+
+      tick();
+
+      expect(component['modelSubscription']).toBeTruthy();
+      expect(component.modelValue).toEqual(response);
     }));
+
+    it('ngOnDestroy: should unsubscribe modelSubscription.', () => {
+      component['modelSubscription'] = fakeSubscription;
+
+      spyOn(fakeSubscription, <any>'unsubscribe');
+
+      component.ngOnDestroy();
+
+      expect(fakeSubscription.unsubscribe).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: should not unsubscribe if modelSubscription is falsy.', () => {
+      component['modelSubscription'] = fakeSubscription;
+
+      spyOn(fakeSubscription, <any>'unsubscribe');
+
+      component['modelSubscription'] = undefined;
+      component.ngOnDestroy();
+
+      expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
+    });
 
     describe('executeCommand:', () => {
       it('should call `focus`', () => {
@@ -1037,6 +1068,15 @@ describe('PoRichTextBodyComponent:', () => {
         'afterbegin',
         component.modelValue
       );
+    });
+
+    it('updateValueWithModelValue: shouldn`t call `bodyElement.nativeElement.insertAdjacentHTML`', () => {
+      component.modelValue = undefined;
+
+      spyOn(component.bodyElement.nativeElement, 'insertAdjacentHTML');
+      component['updateValueWithModelValue']();
+
+      expect(component.bodyElement.nativeElement.insertAdjacentHTML).not.toHaveBeenCalled();
     });
 
     it('verifyCursorPositionInFirefoxIEEdge: should return true if nodeName is an A tag', () => {

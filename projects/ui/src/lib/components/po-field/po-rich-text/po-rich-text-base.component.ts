@@ -4,6 +4,7 @@ import { EventEmitter, Input, Output, Directive } from '@angular/core';
 import { convertToBoolean } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 import { InputBoolean } from '../../../decorators';
+import { PoRichTextService } from './po-rich-text.service';
 
 /**
  * @description
@@ -161,6 +162,8 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   /** Evento disparado ao modificar valor do model e que recebe como parâmetro o valor alterado. */
   @Output('p-change-model') changeModel?: EventEmitter<any> = new EventEmitter();
 
+  constructor(private richTextService: PoRichTextService) {}
+
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model
   registerOnChange(func: any): void {
@@ -189,6 +192,8 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
 
   writeValue(value: string): void {
     this.value = value;
+
+    this.richTextService.emitModel(value);
   }
 
   // Executa a função onChange

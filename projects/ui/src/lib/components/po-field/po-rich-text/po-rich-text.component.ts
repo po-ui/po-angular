@@ -4,6 +4,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
+import { PoRichTextService } from './po-rich-text.service';
 
 /* istanbul ignore next */
 const providers = [
@@ -57,8 +58,8 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
     return this.errorMessage !== '' && !this.value && this.required && this.invalid ? this.errorMessage : '';
   }
 
-  constructor(private element: ElementRef) {
-    super();
+  constructor(private element: ElementRef, richTextService: PoRichTextService) {
+    super(richTextService);
   }
 
   ngAfterViewInit() {

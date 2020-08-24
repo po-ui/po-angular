@@ -5,15 +5,17 @@ import * as ValidatorsFunctions from '../validators';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
+import { PoRichTextService } from './po-rich-text.service';
 
 @Directive()
 class PoRichTextComponent extends PoRichTextBaseComponent {}
 
 describe('PoRichTextBaseComponent:', () => {
+  const poRichTextService: PoRichTextService = new PoRichTextService();
   let component: PoRichTextComponent;
 
   beforeEach(() => {
-    component = new PoRichTextComponent();
+    component = new PoRichTextComponent(poRichTextService);
   });
 
   it('should be created', () => {
@@ -103,11 +105,14 @@ describe('PoRichTextBaseComponent:', () => {
     });
 
     it('writeValue: should set value with the received param', () => {
+      spyOn(component['richTextService'], 'emitModel');
+      const model = 'value B';
       component.value = 'value A';
 
-      component.writeValue('value B');
+      component.writeValue(model);
 
-      expect(component.value).toBe('value B');
+      expect(component.value).toBe(model);
+      expect(component['richTextService'].emitModel).toHaveBeenCalledWith(model);
     });
 
     it('updateModel: should call onChangeModel method if onChangeModel isn`t false', () => {
