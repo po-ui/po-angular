@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.3.0"></a>
+# [3.3.0](https://github.com/po-ui/po-angular/compare/v3.2.0...v3.3.0) (2020-08-24)
+
+
+### Bug Fixes
+
+* **combo:** corrige mudança para dirty caso alterar model via typescript ([1d143cf](https://github.com/po-ui/po-angular/commit/1d143cf))
+* **number:** valida campo no evento blur ([e270b50](https://github.com/po-ui/po-angular/commit/e270b50))
+* **table:** corrige ordenação das colunas dos tipos date e dateTime ([5251125](https://github.com/po-ui/po-angular/commit/5251125))
+* **table:** corrige ordenação quando possui valores inválidos ([c991f7f](https://github.com/po-ui/po-angular/commit/c991f7f))
+
+
+### Features
+
+* **list-view:** permite traduzir literais usando serviço i18n ([e550a31](https://github.com/po-ui/po-angular/commit/e550a31))
+* **modal-password-recovery:** faz tradução de literais com serviço i18n ([0b7e409](https://github.com/po-ui/po-angular/commit/0b7e409))
+* **page-login:** use the i18n language to translate initially ([06958cb](https://github.com/po-ui/po-angular/commit/06958cb))
+
+
+### Performance Improvements
+
+* **switch:** implementa ChangeDetectionStrategy.OnPush ([b84621f](https://github.com/po-ui/po-angular/commit/b84621f))
+
+
+
 <a name="3.2.0"></a>
 # [3.2.0](https://github.com/po-ui/po-angular/compare/v3.1.0...v3.2.0) (2020-08-17)
 
