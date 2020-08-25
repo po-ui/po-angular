@@ -25,13 +25,6 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* sobrepoe para nao gerar scroll a mais na paginas do portal */
-po-navbar ~ .po-wrapper {
-  padding-top: 56px;
-  height: 100%;
-  margin-top: unset;
-}
-
 .docs-api-property-type {
   border-radius: 3px;
   color: #ffffff;
