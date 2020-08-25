@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { GuidesComponent } from './guides.components';
 import { GuideApiComponent } from './guides/guide-api/guide-api.component';
 import { GuideBrowserSupportComponent } from './guides/guide-browser-support/guide-browser-support.component';
+import { GuideDevelopmentFlowComponent } from './guides/guide-development-flow/guide-development-flow.component';
 import { GuideGettingStartedComponent } from './guides/guide-getting-started/guide-getting-started.component';
 import { GuideGuideCodeComponent } from './guides/guide-guide-code/guide-guide-code.component';
 import { GuideMigrationPouiV2Component } from './guides/guide-migration-poui-v2/guide-migration-poui-v2.component';
@@ -29,6 +30,7 @@ export const guidesRoutes: Routes = [
     children: [
       { path: 'api', component: GuideApiComponent },
       { path: 'browser-support', component: GuideBrowserSupportComponent },
+      { path: 'development-flow', component: GuideDevelopmentFlowComponent },
       { path: 'getting-started', component: GuideGettingStartedComponent },
       { path: 'guide-code', component: GuideGuideCodeComponent },
       { path: 'migration-poui-v2', component: GuideMigrationPouiV2Component },

@@ -4,7 +4,7 @@
 
 - [Introdução](#introduction)
 - [Fluxo](#flow)
-- [Regras para criação de *branchs*](#branchs)
+- [Regras para criação de *branches*](#branches)
 - [Regras para criação de *commits*](#commits)
   - [Tipo](#type)
   - [Escopo](#scope)
@@ -25,34 +25,15 @@
 <a id="introduction"></a>
 ## Introdução
 
-Este guia tem por objetivo definir as regras para criação de *Branchs*, *Pull Requests* e *Commits* no projeto PO UI.
+Este guia tem por objetivo definir as regras para criação de *Branches*, *Pull Requests* e *Commits* no projeto PO UI.
 Para seguir o guia é fundamental o conhecimento da [ferramenta Git](https://git-scm.com/book/en/v2).
 
 <a id="flow"></a>
 ## Fluxo
 
-1. A primeira etapa consiste em avaliar se nas [*Pull Requests* do PO UI](https://github.com/po-ui/po-angular/pulls) não tem nenhuma outra submissão anterior que resolve o problema, eliminando assim a duplicidade.
-2. Com o repositório atualizado, deve-se [gerar a *branch*](#branchs) ou *fork* que conterá as alterações necessárias dependendo do seu tipo de usuário:
-  - Para membros do Core Team do PO UI deve ser gerada uma [*branch*](#branchs);
-  - Para os demais contribuintes do projeto deve-se optar por *fork*.
-3. Próximo passo é gerar as alterações e ao finalizar deve-se rodar os testes.
-  - É muito importante analisar os documentos [**STYLEGUIDE**](https://github.com/po-ui/po-angular/blob/master/STYLEGUIDE.md) e [**HOW_TO_DOCUMENT**](https://github.com/po-ui/po-angular/blob/master/HOW_TO_DOCUMENT.md) antes de iniciar o desenvolvimento para que a contribuição seja mais rápida e eficiente.
-  - Para executar o Portal e poder analisar a sua alteração, como documentação e *sample*, você deve executar os comandos abaixo:
-    ```
-      npm run build
+O fluxo para o desenvolvimento e criação de issues e Pull Requests está definido em [Contribuindo para o PO UI](https://po-ui.io/guides/development-flow)
 
-      npm run build:portal
-      ng serve portal
-    ```
-4. Finalizando a etapa anterior deve-se gerar o *commit* e verificar se foi gerado apenas um [*commit* final](#commits).
-5. Próximo passo é gerar a [*Pull Request*](#pull-requests) preenchendo os campos necessários.
-6. Depois é só aguardar aprovação.
-7. Caso tiver alguma sugestão deve-se fazer as atualizações necessárias e rodar os testes novamente.
-8. Faça um *rebase* e em seguida faça um *push* com as alterações e aguarde a aprovação.
-9. Caso seja aprovado, parabéns, sua alteração já estará na *branch master* do PO UI.
-10. No próximo ciclo de release sua alteração será incorporada no pacote publicado no npm.
-
-<a id="branchs"></a>
+<a id="branches"></a>
 ## Regras para criação da *Branch*
 
 Antes de criar uma nova *branch* deve-se assegurar de estar na *branch master* do projeto.

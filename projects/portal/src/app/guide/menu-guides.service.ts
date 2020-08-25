@@ -10,6 +10,7 @@ export class MenuGuidesService {
     return new Array<PoMenuItem>(
       { label: 'Guia de implementação de APIs', link: 'guides/api' },
       { label: 'Compatibilidade com os navegadores', link: 'guides/browser-support' },
+      { label: 'Contribuindo para o PO UI', link: 'guides/development-flow' },
       { label: 'Primeiros passos', link: 'guides/getting-started' },
       { label: 'Guia de codificação', link: 'guides/guide-code' },
       { label: 'Migração do PO UI para V2', link: 'guides/migration-poui-v2' },
