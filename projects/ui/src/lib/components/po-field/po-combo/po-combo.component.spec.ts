@@ -3,7 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 import { changeBrowserInnerWidth, configureTestSuite } from './../../../util-test/util-expect.spec';
 
@@ -1222,12 +1222,9 @@ describe('PoComboComponent:', () => {
       expect(component.isServerSearching).toBe(true);
     });
 
-    it('isServerSearching: should call `removeListeners` if isServerSearching is false', () => {
-      const spyRemoveListeners = spyOn(component, <any>'removeListeners');
-
+    it('isServerSearching: should set isServerSearching with false', () => {
       component.isServerSearching = false;
 
-      expect(spyRemoveListeners).toHaveBeenCalled();
       expect(component.isServerSearching).toBe(false);
     });
 
@@ -1718,6 +1715,35 @@ describe('PoComboComponent - with service:', () => {
       expect(fakeThis.service.getFilteredData).toHaveBeenCalledWith(param, filterParams);
     });
 
+    it('applyFilter: should set isServerSearching and call controlComboVisibility with false if getFilteredData throw error', () => {
+      const value = 'test';
+      const error = { 'error': { 'message': 'message' } };
+
+      spyOn(component, 'controlComboVisibility');
+      spyOn(component.service, 'getFilteredData').and.returnValue(throwError(error));
+
+      component.applyFilter(value);
+      fixture.detectChanges();
+
+      expect(component.service.getFilteredData).toHaveBeenCalled();
+      expect(component.isServerSearching).toBe(false);
+      expect(component.visibleOptions).toEqual([]);
+      expect(component.controlComboVisibility).toHaveBeenCalledWith(true);
+    });
+
+    it('getObjectByValue: should call updateSelectedValue with null if getObjectByValue throw error', () => {
+      const value = 'XPTO';
+      const error = { 'error': { 'message': 'message' } };
+
+      spyOn(component.service, 'getObjectByValue').and.returnValue(throwError(error));
+      spyOn(component, 'updateSelectedValue');
+
+      component.getObjectByValue(value);
+
+      expect(component.updateSelectedValue).toHaveBeenCalledWith(null);
+      expect(component.service.getObjectByValue).toHaveBeenCalled();
+    });
+
     it(`getObjectByValue: should call PoComboFilterService.getObjectByValue() with param and filterParam if
       selectedValue is invalid`, () => {
       const filterParams = 'filter';
@@ -1919,6 +1945,25 @@ describe('PoComboComponent - with service:', () => {
       component.onKeyUp(event);
 
       expect(spyUpdateComboList).toHaveBeenCalledWith([...component.cacheOptions]);
+    });
+  });
+
+  describe('Templates:', () => {
+    it('should display `.po-combo-container-no-data` if error in filtered data', () => {
+      const value = 'test';
+      const error = { 'error': { 'message': 'message' } };
+
+      component.options = [
+        { value: 1, label: 'John Doe' },
+        { value: 2, label: 'Jane Doe' }
+      ];
+
+      spyOn(component.service, 'getFilteredData').and.returnValue(throwError(error));
+
+      component.applyFilter(value);
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeTruthy();
     });
   });
 });

@@ -146,8 +146,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.initializeListeners();
     } else {
       this._isServerSearching = value;
-
-      this.removeListeners();
     }
   }
 
@@ -346,9 +344,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     const param = { property: this.fieldLabel, value };
 
-    this.filterSubscription = this.service
-      .getFilteredData(param, this.filterParams)
-      .subscribe(items => this.setOptionsByApplyFilter(value, items));
+    this.filterSubscription = this.service.getFilteredData(param, this.filterParams).subscribe(
+      items => this.setOptionsByApplyFilter(value, items),
+      error => this.onErrorFilteredData()
+    );
   }
 
   setOptionsByApplyFilter(value, items) {
@@ -373,9 +372,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (!this.selectedValue) {
       this.isProcessingGetObjectByValue = true;
 
-      this.getSubscription = this.service
-        .getObjectByValue(value, this.filterParams)
-        .subscribe(item => this.updateOptionByFilteredValue(item));
+      this.getSubscription = this.service.getObjectByValue(value, this.filterParams).subscribe(
+        item => this.updateOptionByFilteredValue(item),
+        error => this.onErrorGetObjectByValue()
+      );
     }
   }
 
@@ -606,6 +606,18 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private onErrorGetObjectByValue() {
+    this.updateOptionByFilteredValue(null);
+  }
+
+  private onErrorFilteredData() {
+    this.isServerSearching = false;
+
+    this.updateComboList([]);
+
+    this.controlComboVisibility(true);
   }
 
   private onScroll = (): void => {

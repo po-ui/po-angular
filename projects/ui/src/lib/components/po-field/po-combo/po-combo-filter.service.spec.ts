@@ -97,6 +97,24 @@ describe('PoComboFilterService ', () => {
   });
 
   describe('Methods:', () => {
+    it('getFilteredData: should contains X-PO-NO-MESSAGE in headers request', done => {
+      const urlWithParams = 'http://mockurl.com?filter=test';
+      const parsedParams: Array<PoComboOption> = [{ label: 'value1', value: 'value1' }];
+
+      spyOn(comboService, <any>'parseToArrayComboOption').and.returnValue(parsedParams);
+      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+
+      comboService.getFilteredData({ value: 'test' }).subscribe(response => {
+        expect(response).toEqual(parsedParams);
+        done();
+      });
+
+      const req = httpMock.expectOne((request: HttpRequest<any>) => request.urlWithParams === urlWithParams);
+      expect(req.request.headers.get('X-PO-No-Message')).toBe('true');
+
+      req.flush({});
+    });
+
     it('getFilteredData: should concatenate url with filter params', done => {
       const urlWithParams = 'http://mockurl.com?param1=value1&param2=value2&filter=test';
       const parsedParams: Array<PoComboOption> = [{ label: 'value1', value: 'value1' }];
@@ -181,6 +199,25 @@ describe('PoComboFilterService ', () => {
       });
 
       httpMock.expectOne(`http://mockurl.com?filter=`).flush({ items });
+    });
+
+    it('getObjectByValue: should contains X-PO-NO-MESSAGE in headers request', done => {
+      const filteredObject: PoComboOption = { label: 'value1', value: 'value1' };
+      const param = 'angular';
+      const urlWithParams = 'http://mockurl.com/angular';
+
+      spyOn(comboService, <any>'parseToComboOption').and.returnValue(filteredObject);
+      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+
+      comboService.getObjectByValue(param).subscribe(response => {
+        expect(response).toEqual(filteredObject);
+        done();
+      });
+
+      const req = httpMock.expectOne((request: HttpRequest<any>) => request.urlWithParams === urlWithParams);
+      expect(req.request.headers.get('X-PO-No-Message')).toBe('true');
+
+      req.flush({});
     });
 
     it('getObjectByValue: should add filter params', done => {
