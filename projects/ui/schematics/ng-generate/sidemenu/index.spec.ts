@@ -25,16 +25,18 @@ describe('sidemenu:', () => {
 
   let appTree: UnitTestTree;
 
-  beforeEach(() => {
-    appTree = runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
-    appTree = runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
+  beforeEach(async () => {
+    appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
+    appTree = await runner
+      .runExternalSchematicAsync('@schematics/angular', 'application', componentOptions, appTree)
+      .toPromise();
   });
 
   describe('Imports:', () => {
-    it('should add the RouterModule to the project module', () => {
+    it('should add the RouterModule to the project module', async () => {
       const routerModuleName = 'RouterModule';
 
-      const tree = runner.runSchematic('sidemenu', componentOptions, appTree);
+      const tree = await runner.runSchematicAsync('sidemenu', componentOptions, appTree).toPromise();
       const fileContent = getFileContent(tree, `projects/${componentOptions.project}/src/app/app.module.ts`);
 
       expect(fileContent).toContain(routerModuleName);
@@ -42,8 +44,8 @@ describe('sidemenu:', () => {
   });
 
   describe('Component: ', () => {
-    it('should create app.component.ts|html|css', () => {
-      const tree = runner.runSchematic('sidemenu', componentOptions, appTree);
+    it('should create app.component.ts|html|css', async () => {
+      const tree = await runner.runSchematicAsync('sidemenu', componentOptions, appTree).toPromise();
 
       const files: Array<string> = tree.files;
 
@@ -52,14 +54,14 @@ describe('sidemenu:', () => {
       expect(files).toContain(`/projects/${componentOptions.project}/src/app/app.component.${componentOptions.style}`);
     });
 
-    it('should contains `po-wrapper`, `po-toolbar` and `po-menu` in app.component.html', () => {
+    it('should contains `po-wrapper`, `po-toolbar` and `po-menu` in app.component.html', async () => {
       const poWrapper = '<div class="po-wrapper">';
       const poToolbar = 'po-toolbar';
       const poMenu = '<po-menu [p-menus]="menus"></po-menu>';
 
       const htmlComponent = `projects/${componentOptions.project}/src/app/app.component.html`;
 
-      const tree = runner.runSchematic('sidemenu', componentOptions, appTree);
+      const tree = await runner.runSchematicAsync('sidemenu', componentOptions, appTree).toPromise();
 
       const fileContent = getFileContent(tree, htmlComponent);
 
