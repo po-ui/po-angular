@@ -67,6 +67,7 @@ jobs:
 
     - run: npm i
     - run: npm run test:ui
+    - run: npm run test:ui:schematics
 
   test-templates:
     name: Test templates

@@ -25,14 +25,18 @@ describe('po-page-edit:', () => {
 
   let appTree: UnitTestTree;
 
-  beforeEach(() => {
-    appTree = runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
-    appTree = runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
+  beforeEach(async () => {
+    appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
+    appTree = await runner
+      .runExternalSchematicAsync('@schematics/angular', 'application', componentOptions, appTree)
+      .toPromise();
   });
 
-  it('should create <name> component', () => {
+  it('should create <name> component', async () => {
     const componentName = 'supply';
-    const tree = runner.runSchematic('po-page-edit', { ...componentOptions, name: componentName }, appTree);
+    const tree = await runner
+      .runSchematicAsync('po-page-edit', { ...componentOptions, name: componentName }, appTree)
+      .toPromise();
 
     const files: Array<string> = tree.files;
 
@@ -45,13 +49,13 @@ describe('po-page-edit:', () => {
     expect(files).toContain(fullFilePath(componentOptions.style));
   });
 
-  it('should create <name> component and <name> module', () => {
+  it('should create <name> component and <name> module', async () => {
     const componentName = 'supply';
     const createModule = true;
 
     const options = { ...componentOptions, name: componentName, createModule };
 
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
 
     const files: Array<string> = tree.files;
 
@@ -60,7 +64,7 @@ describe('po-page-edit:', () => {
 
   it('should add declaration component in closest module by default', async () => {
     const options = { ...componentOptions, name: 'customers' };
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
 
     const moduleContent = getFileContent(tree, `/projects/${componentOptions.name}/src/app/app.module.ts`);
 
@@ -68,19 +72,19 @@ describe('po-page-edit:', () => {
     expect(moduleContent).toMatch(/declarations:\s*\[[^\]]+?,\r?\n\s+CustomersComponent\r?\n/m);
   });
 
-  it('should import <name> component module if createModule is true', () => {
+  it('should import <name> component module if createModule is true', async () => {
     const options = { ...componentOptions, name: 'customers', createModule: true };
 
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
     const moduleContent = getFileContent(tree, `/projects/${componentOptions.name}/src/app/app.module.ts`);
 
     expect(moduleContent).toMatch(/import.*CustomersModule.*from '.\/customers\/customers.module'/);
     expect(moduleContent).toMatch(/imports:\s*\[[^\]]+?,\r?\n\s+CustomersModule\r?\n/m);
   });
 
-  it('should generate component.less if style is `less`', () => {
+  it('should generate component.less if style is `less`', async () => {
     const options = { ...componentOptions, name: 'customers', style: 'less' };
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
 
     const files = tree.files;
 
@@ -89,18 +93,18 @@ describe('po-page-edit:', () => {
     );
   });
 
-  it('should generate component with stylesheet `css` if options.style is empty', () => {
+  it('should generate component with stylesheet `css` if options.style is empty', async () => {
     const options = { ...componentOptions, name: 'customers', style: '' };
 
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
     const files = tree.files;
 
     expect(files).toContain(`/projects/${componentOptions.name}/src/app/customers/customers.component.css`);
   });
 
-  it('shouldn`t generate component spec if `skipTests` is true', () => {
+  it('shouldn`t generate component spec if `skipTests` is true', async () => {
     const options = { ...componentOptions, name: 'customers', skipTests: true };
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
 
     const files = tree.files;
 
@@ -108,10 +112,10 @@ describe('po-page-edit:', () => {
     expect(files).not.toContain(`/projects/${componentOptions.name}/src/app/customers/customers.component.spec.ts`);
   });
 
-  it('should generate component in path informed', () => {
+  it('should generate component in path informed', async () => {
     // create customers component module to use with path option
     const options = { ...componentOptions, name: 'customers', createModule: true };
-    runner.runSchematic('po-page-edit', options, appTree);
+    await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
 
     const optionsPath = {
       ...componentOptions,
@@ -119,7 +123,7 @@ describe('po-page-edit:', () => {
       path: `/projects/${componentOptions.name}/src/app/customers`
     };
 
-    const treePath = runner.runSchematic('po-page-edit', optionsPath, appTree);
+    const treePath = await runner.runSchematicAsync('po-page-edit', optionsPath, appTree).toPromise();
 
     const files = treePath.files;
 
@@ -129,11 +133,11 @@ describe('po-page-edit:', () => {
     expect(files).toContain(`/projects/${componentOptions.name}/src/app/customers/wms/wms.component.${options.style}`);
   });
 
-  it('should use the custom prefix when create component', () => {
+  it('should use the custom prefix when create component', async () => {
     const prefix = 'wms';
 
     const options = { ...componentOptions, name: 'customers', prefix };
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
 
     const componentContent = getFileContent(
       tree,
@@ -143,11 +147,11 @@ describe('po-page-edit:', () => {
     expect(componentContent).toMatch(new RegExp(`selector: '${prefix}-customers'`));
   });
 
-  it('should use the default prefix when create component if prefix is null', () => {
+  it('should use the default prefix when create component if prefix is null', async () => {
     const prefix = undefined;
 
     const options = { ...componentOptions, name: 'customers', sample: true, prefix };
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
 
     const componentContent = getFileContent(
       tree,
@@ -157,11 +161,11 @@ describe('po-page-edit:', () => {
     expect(componentContent).toMatch(new RegExp(`selector: 'app-customers'`));
   });
 
-  it('should use only the name how prefix when create component if prefix is ""', () => {
+  it('should use only the name how prefix when create component if prefix is ""', async () => {
     const prefix = '';
 
     const options = { ...componentOptions, name: 'customers', prefix };
-    const tree = runner.runSchematic('po-page-edit', options, appTree);
+    const tree = await runner.runSchematicAsync('po-page-edit', options, appTree).toPromise();
 
     const componentContent = getFileContent(
       tree,
