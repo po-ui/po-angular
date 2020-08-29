@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -10,7 +10,8 @@ import { Component, Input } from '@angular/core';
  */
 @Component({
   selector: 'po-field-container-bottom',
-  templateUrl: './po-field-container-bottom.component.html'
+  templateUrl: './po-field-container-bottom.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoFieldContainerBottomComponent {
   /**

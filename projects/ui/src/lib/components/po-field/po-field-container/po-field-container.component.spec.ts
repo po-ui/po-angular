@@ -21,7 +21,6 @@ describe('PoFieldContainerComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoFieldContainerComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
