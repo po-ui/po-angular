@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { convertToBoolean, getShortBrowserLanguage } from '../../../utils/util';
 
@@ -9,7 +9,8 @@ import { convertToBoolean, getShortBrowserLanguage } from '../../../utils/util';
  */
 @Component({
   selector: 'po-field-container',
-  templateUrl: './po-field-container.component.html'
+  templateUrl: './po-field-container.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoFieldContainerComponent {
   private _optional: boolean = false;
