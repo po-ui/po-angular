@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.4.0"></a>
+# [3.4.0](https://github.com/po-ui/po-angular/compare/v3.3.0...v3.4.0) (2020-08-31)
+
+
+### Bug Fixes
+
+* **combo:** adiciona tratamento para retorno de erro HTTP na pesquisa ([2eb1d5c](https://github.com/po-ui/po-angular/commit/2eb1d5c))
+* **navbar:** corrige scrollbar vertical desnecessário ([a9e4a0c](https://github.com/po-ui/po-angular/commit/a9e4a0c))
+* **rich-text:** corrige atualização do model via código ([c3fe5f7](https://github.com/po-ui/po-angular/commit/c3fe5f7))
+
+
+### Features
+
+* **code-editor:** adiciona propriedade `p-suggestions` para incluir sugestões customizadas de código ([9eac396](https://github.com/po-ui/po-angular/commit/9eac396))
+
+
 <a name="3.3.0"></a>
 # [3.3.0](https://github.com/po-ui/po-angular/compare/v3.2.0...v3.3.0) (2020-08-24)
 
