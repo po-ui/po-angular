@@ -10,7 +10,7 @@ import { PoI18nConfig } from './interfaces/po-i18n-config.interface';
  * @docsExtends PoI18nBaseService
  */
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PoI18nService extends PoI18nBaseService {}
 
 // Função usada para retornar instância para o módulo po-i18n.module
