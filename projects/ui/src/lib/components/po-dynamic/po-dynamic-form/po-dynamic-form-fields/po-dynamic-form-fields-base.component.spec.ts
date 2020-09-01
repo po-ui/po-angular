@@ -51,6 +51,18 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
       expectPropertiesValues(component, 'value', validValues, validValues);
     });
+
+    it('validateFields: should set `p-validate-fields` with `[]` if it is an invalid Array type value', () => {
+      const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
+
+      expectPropertiesValues(component, 'validateFields', invalidValues, []);
+    });
+
+    it('validateFields: should update property `p-validate-fields` with valid values', () => {
+      const validValues = [['propertyA'], ['propertyB']];
+
+      expectPropertiesValues(component, 'validateFields', validValues, validValues);
+    });
   });
 
   describe('Methods:', () => {

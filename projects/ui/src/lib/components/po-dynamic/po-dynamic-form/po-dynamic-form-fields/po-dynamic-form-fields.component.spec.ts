@@ -168,6 +168,62 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         expect(component['previousValue']).toEqual(newValue);
       });
 
+      it('should emit `formValidate` if the changed field is included in `validateFields`', async () => {
+        const fakeVisibleField = { property: 'test1' };
+        const field = { changedField: { property: 'test1' }, changedFieldIndex: 0 };
+
+        component.formValidate.observers.length = 1;
+        component.validate = 'http://fakeUrlPo.com';
+        component.fields = [{ property: 'test1', validate: 'teste' }];
+        component['previousValue']['test1'] = 'value';
+        component['value']['test1'] = 'new value';
+        component.validateFields = ['test1'];
+
+        spyOn(component, <any>'getField').and.returnValue(field);
+        const spyEmit = spyOn(component.formValidate, 'emit');
+
+        await component.onChangeField(fakeVisibleField);
+
+        expect(spyEmit).toHaveBeenCalledWith(component.fields[0]);
+      });
+
+      it('should emit `formValidate` if `validateFields` isn`t defined', async () => {
+        const fakeVisibleField = { property: 'test1' };
+        const field = { changedField: { property: 'test1' }, changedFieldIndex: 0 };
+
+        component.formValidate.observers.length = 1;
+        component.validate = 'http://fakeUrlPo.com';
+        component.fields = [{ property: 'test1', validate: 'teste' }];
+        component['previousValue']['test1'] = 'value';
+        component['value']['test1'] = 'new value';
+
+        spyOn(component, <any>'getField').and.returnValue(field);
+        const spyEmit = spyOn(component.formValidate, 'emit');
+
+        await component.onChangeField(fakeVisibleField);
+
+        expect(spyEmit).toHaveBeenCalledWith(component.fields[0]);
+      });
+
+      it('shouldn`t emit `formValidate` if the changed field isn`t included in `validateFields`', async () => {
+        const fakeVisibleField = { property: 'test1' };
+        const field = { changedField: { property: 'test1' }, changedFieldIndex: 0 };
+
+        component.formValidate.observers.length = 1;
+        component.validate = 'http://fakeUrlPo.com';
+        component.fields = [{ property: 'test1', validate: 'teste' }];
+        component['previousValue']['test1'] = 'value';
+        component['value']['test1'] = 'new value';
+        component.validateFields = ['test2', 'test3'];
+
+        spyOn(component, <any>'getField').and.returnValue(field);
+        const spyEmit = spyOn(component.formValidate, 'emit');
+
+        await component.onChangeField(fakeVisibleField);
+
+        expect(spyEmit).not.toHaveBeenCalled();
+      });
+
       it('shouldn`t call `validateField` if `changedField.validate` doesn`t have value', async () => {
         const fakeVisibleField = { property: 'test1' };
 

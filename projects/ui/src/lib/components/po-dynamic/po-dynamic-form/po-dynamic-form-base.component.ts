@@ -217,6 +217,17 @@ export class PoDynamicFormBaseComponent {
    * ```
    *  [p-validate]="this.myFunction.bind(this)"
    * ```
+   *
+   * > Se houver uma lista de campos para validação definida em `p-validate-fields`, a propriedade `validate` só receberá o disparo para os campos equivalentes.
    */
   @Input('p-validate') validate?: string | Function;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista que define os campos que irão disparar o validate do form.
+   */
+  @Input('p-validate-fields') validateFields?: Array<string>;
 }
