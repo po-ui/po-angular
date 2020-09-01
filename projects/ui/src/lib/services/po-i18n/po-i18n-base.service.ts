@@ -84,6 +84,9 @@ import { PoI18nLiterals } from './interfaces/po-i18n-literals.interface';
  *
  * Abaixo segue um exemplo de *setup* inicial de teste unitário do *AppComponent* que utiliza o `PoI18nService`:
  *
+ * > Atenção: não declarar o `PoI18nService` no providers do TestBed pois a biblioteca realiza a injeção de dependência de forma dinâmica.
+ * > Se o serviço for declarado o teste não fará a injeção e o teste apresentará erros.
+ *
  * ```
  * import { async, TestBed } from '@angular/core/testing';
  * import { HttpClientTestingModule } from '@angular/common/http/testing';
