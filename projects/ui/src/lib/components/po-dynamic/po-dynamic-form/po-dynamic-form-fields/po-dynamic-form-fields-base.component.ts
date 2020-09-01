@@ -11,6 +11,7 @@ import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.int
 @Directive()
 export class PoDynamicFormFieldsBaseComponent {
   private _fields: Array<PoDynamicFormField>;
+  private _validateFields: Array<string>;
   private _value?: any = {};
 
   visibleFields: Array<PoDynamicFormFieldInternal> = [];
@@ -40,6 +41,14 @@ export class PoDynamicFormFieldsBaseComponent {
   @Input('p-disabled-form') disabledForm: boolean;
 
   @Input('p-validate') validate?: string | Function;
+
+  @Input('p-validate-fields') set validateFields(value: Array<string>) {
+    this._validateFields = Array.isArray(value) ? [...value] : [];
+  }
+
+  get validateFields() {
+    return this._validateFields;
+  }
 
   @Output('p-form-validate') formValidate = new EventEmitter<any>();
 

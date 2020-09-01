@@ -100,7 +100,10 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   }
 
   private triggerValidationOnForm(changedFieldIndex: number) {
-    const hasValidationForm = this.validate && this.formValidate.observers.length;
+    const isValidatableField = this.validateFields?.length
+      ? this.validateFieldsChecker(this.validateFields, this.fields[changedFieldIndex].property)
+      : true;
+    const hasValidationForm = this.validate && isValidatableField && this.formValidate.observers.length;
 
     if (hasValidationForm) {
       const updatedField = this.fields[changedFieldIndex];
@@ -111,6 +114,10 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   private updateFields() {
     this.fieldsChange.emit(this.fields);
     this.visibleFields = this.getVisibleFields();
+  }
+
+  private validateFieldsChecker(validateFields: Array<string>, propertyField: PoDynamicFormField['property']): boolean {
+    return validateFields.some(validateFieldItem => validateFieldItem === propertyField);
   }
 
   private async validateField(field: PoDynamicFormField, fieldIndex: number, visibleField: PoDynamicFormField) {

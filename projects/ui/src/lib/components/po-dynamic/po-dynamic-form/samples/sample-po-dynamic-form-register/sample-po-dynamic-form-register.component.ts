@@ -15,6 +15,7 @@ import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.
 })
 export class SamplePoDynamicFormRegisterComponent implements OnInit {
   person = {};
+  validateFields: Array<string> = ['state'];
 
   fields: Array<PoDynamicFormField> = [
     {
@@ -111,19 +112,17 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
   }
 
   onChangeFields(changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation {
-    if (changedValue.property === 'state') {
-      return {
-        value: { city: undefined },
-        fields: [
-          {
-            property: 'city',
-            gridColumns: 6,
-            options: this.registerService.getCity(changedValue.value.state),
-            disabled: false
-          }
-        ]
-      };
-    }
+    return {
+      value: { city: undefined },
+      fields: [
+        {
+          property: 'city',
+          gridColumns: 6,
+          options: this.registerService.getCity(changedValue.value.state),
+          disabled: false
+        }
+      ]
+    };
   }
 
   onLoadFields(value: any) {
