@@ -16,4 +16,12 @@ export interface PoPageDynamicTableField extends PoDynamicFormField {
 
   /** Tamanho da coluna em pixels ou porcetagem. */
   width?: number | string;
+
+  /**
+   * Permite o campo aparecer no gerenciador de colunas, mesmo que esteja utilizando `visible: false`,
+   * possibilitando ativar a exibição na tabela.
+   *
+   * > Quando for `false`, será desconsiderado.
+   */
+  allowColumnsManager?: boolean;
 }

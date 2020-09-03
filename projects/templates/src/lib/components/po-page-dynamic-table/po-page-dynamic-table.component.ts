@@ -121,22 +121,46 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
   private _actions: PoPageDynamicTableActions = {};
-  private _pageActions: Array<PoPageAction> = [];
-  private _tableActions: Array<PoTableAction> = [];
   private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
   private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
+
+  hasNext = false;
+  items = [];
+  literals;
+
+  pageActions: Array<PoPageAction> = [];
+  tableActions: Array<PoTableAction> = [];
 
   private page: number = 1;
   private params = {};
   private sortedColumn: PoTableColumnSort;
   private subscriptions = new Subscription();
   private hasCustomActionWithSelectable = false;
-  private customPageListActions = [];
-  private customTableActions = [];
 
-  hasNext = false;
-  items = [];
-  literals;
+  private _customPageListActions: Array<PoPageAction> = [];
+  private _customTableActions: Array<PoTableAction> = [];
+  private _defaultPageActions: Array<PoPageAction> = [];
+  private _defaultTableActions: Array<PoTableAction> = [];
+
+  private set defaultPageActions(value: Array<PoPageAction>) {
+    this._defaultPageActions = value;
+    this.updatePageActions();
+  }
+
+  private set defaultTableActions(value: Array<PoTableAction>) {
+    this._defaultTableActions = value;
+    this.updateTableActions();
+  }
+
+  private set customPageListActions(value: Array<PoPageAction>) {
+    this._customPageListActions = value;
+    this.updatePageActions();
+  }
+
+  private set customTableActions(value: Array<PoTableAction>) {
+    this._customTableActions = value;
+    this.updateTableActions();
+  }
 
   /**
    * Função ou serviço que será executado na inicialização do componente.
@@ -350,14 +374,6 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   get hasActionRemoveAll() {
     return !!this.actions.removeAll;
-  }
-
-  get pageActions() {
-    return [...this._pageActions, ...this.customPageListActions];
-  }
-
-  get tableActions() {
-    return [...this._tableActions, ...this.customTableActions];
   }
 
   private confirmRemove(
@@ -760,9 +776,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   private setPageActions(actions: PoPageDynamicTableActions) {
     if (actions?.new) {
-      this._pageActions = [
-        { label: this.literals.pageAction, action: this.openNew.bind(this, actions.new) }
-      ];
+      this.defaultPageActions = [{ label: this.literals.pageAction, action: this.openNew.bind(this, actions.new) }];
     }
   }
 
@@ -824,11 +838,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private setRemoveAllAction() {
     const action = this._actions;
     if (this.showRemove(action.removeAll)) {
-      this._pageActions.push({
-        label: this.literals.pageActionRemoveAll,
-        action: this.confirmRemoveAll.bind(this, action.removeAll, action.beforeRemoveAll),
-        disabled: this.disableRemoveAll.bind(this)
-      });
+      this.defaultPageActions = [
+        ...this._defaultPageActions,
+        {
+          label: this.literals.pageActionRemoveAll,
+          action: this.confirmRemoveAll.bind(this, action.removeAll, action.beforeRemoveAll),
+          disabled: this.disableRemoveAll.bind(this)
+        }
+      ];
     }
   }
 
@@ -839,7 +856,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private setTableActions(actions: PoPageDynamicTableActions) {
     if (actions) {
       const visibleRemove = this.showRemove(actions.remove);
-      this._tableActions = [
+      this.defaultTableActions = [
         {
           action: this.openDetail.bind(this, actions.detail),
           label: this.literals.tableActionView,
@@ -978,5 +995,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         item.initValue = filter[item.property];
       }
     });
+  }
+
+  private updatePageActions() {
+    this.pageActions = [...this._defaultPageActions, ...this._customPageListActions];
+  }
+
+  private updateTableActions() {
+    this.tableActions = [...this._defaultTableActions, ...this._customTableActions];
   }
 }
