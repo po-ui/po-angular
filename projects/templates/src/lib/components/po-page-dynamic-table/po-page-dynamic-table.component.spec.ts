@@ -1621,6 +1621,15 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component.pageActions).toEqual([]);
     });
 
+    it('setPageActions: shouldn`t set `new` page action if haven`t `actions.new`', () => {
+      component['_pageActions'] = [];
+
+      const actions = { new: '' };
+      component['setPageActions'](actions);
+
+      expect(component.pageActions).toEqual([]);
+    });
+
     it('setPageActions: should set page actions if have `actions`', () => {
       component['_pageActions'] = [];
 
@@ -1635,8 +1644,7 @@ describe('PoPageDynamicTableComponent:', () => {
       const pageAction = [
         {
           label: component.literals.pageAction,
-          action: jasmine.any(Function),
-          disabled: !component.actions.new
+          action: jasmine.any(Function)
         }
       ];
 
@@ -1655,7 +1663,6 @@ describe('PoPageDynamicTableComponent:', () => {
           {
             label: component.literals.pageAction,
             action: jasmine.any(Function),
-            disabled: !component.actions.new
           }
         ];
 
@@ -1677,7 +1684,6 @@ describe('PoPageDynamicTableComponent:', () => {
           {
             label: component.literals.pageAction,
             action: jasmine.any(Function),
-            disabled: false
           },
           {
             label: component.literals.pageActionRemoveAll,
