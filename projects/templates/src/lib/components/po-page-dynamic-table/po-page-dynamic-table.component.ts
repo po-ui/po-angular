@@ -759,9 +759,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private setPageActions(actions: PoPageDynamicTableActions) {
-    if (actions) {
+    if (actions?.new) {
       this._pageActions = [
-        { label: this.literals.pageAction, action: this.openNew.bind(this, actions.new), disabled: !this._actions.new }
+        { label: this.literals.pageAction, action: this.openNew.bind(this, actions.new) }
       ];
     }
   }
