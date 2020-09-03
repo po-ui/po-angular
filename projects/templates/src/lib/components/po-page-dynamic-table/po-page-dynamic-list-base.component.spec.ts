@@ -42,6 +42,39 @@ describe('PoPageDynamicListBaseComponent:', () => {
       expect(component['setFieldsProperties']).toHaveBeenCalled();
     });
 
+    it('fields: should set `filters` with fields that have `filter` as true', () => {
+      const newFields = [
+        { property: 'name', filter: true },
+        { property: 'birthdateTo', label: 'Birthdate', type: 'date', filter: true, visible: false },
+        { property: 'state', options: this.cityOptions, visible: false },
+        { property: 'address', visible: true, filter: false }
+      ];
+
+      component.fields = newFields;
+
+      expect(component.filters).toEqual([
+        { property: 'name', filter: true, visible: true },
+        { property: 'birthdateTo', label: 'Birthdate', type: 'date', filter: true, visible: true }
+      ]);
+    });
+
+    it('fields: should set `columns` with fields that have `allowColumnsManager` and `visible` as true', () => {
+      const newFields = [
+        { property: 'name', filter: true },
+        { property: 'birthdate', label: 'Birthdate', type: 'date', filter: true, visible: false },
+        { property: 'state', options: this.cityOptions, visible: false, allowColumnsManager: true },
+        { property: 'address', visible: true, filter: false }
+      ];
+
+      component.fields = newFields;
+
+      expect(component.columns).toEqual([
+        { property: 'name', filter: true },
+        { property: 'state', options: this.cityOptions, visible: false, allowColumnsManager: true },
+        { property: 'address', visible: true, filter: false }
+      ]);
+    });
+
     it('columns: should return a new reference', () => {
       const columns = [
         { property: 'id', key: true },
@@ -69,11 +102,11 @@ describe('PoPageDynamicListBaseComponent:', () => {
         ];
       });
 
-      it('should set `_filters` with items that have the `filter` property', () => {
+      it('should set `filters` with items that have the `filter` property', () => {
         const filtersResult = [
           { property: 'name', label: 'Name', filter: true, visible: true, gridColumns: 6 },
-          { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true },
-          { property: 'city', label: 'City', filter: true, duplicate: true, gridColumns: 12 }
+          { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, visible: true, duplicate: true },
+          { property: 'city', label: 'City', filter: true, duplicate: true, visible: true, gridColumns: 12 }
         ];
 
         component['setFieldsProperties'](fields);
@@ -81,7 +114,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
         expect(component.filters).toEqual(filtersResult);
       });
 
-      it('should set `_filters` with [] if no item has the `filter` property', () => {
+      it('should set `filters` with [] if no item has the `filter` property', () => {
         const fieldsWithoutFilter = [
           { property: 'id', key: true },
           { property: 'birthdate', label: 'Birthdate', type: 'date', gridColumns: 6 }
@@ -107,7 +140,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
         expect(component.filters).toEqual(fieldsEmpty);
       });
 
-      it('should set `_keys` with items that have the `key` property', () => {
+      it('should set `keys` with items that have the `key` property', () => {
         const keysResult = ['id'];
 
         component['setFieldsProperties'](fields);
@@ -115,7 +148,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
         expect(component.keys).toEqual(keysResult);
       });
 
-      it('should set `_keys` with [] if no item has the `key` property', () => {
+      it('should set `keys` with [] if no item has the `key` property', () => {
         const fieldsWithoutKey = [
           { property: 'birthdate', label: 'Birthdate', type: 'date', gridColumns: 6 },
           { property: 'city', label: 'City', filter: true, duplicate: true, gridColumns: 12 }
@@ -127,7 +160,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
         expect(component.keys).toEqual(keysResult);
       });
 
-      it('should set `_duplicates` with items that have the `duplicate` property', () => {
+      it('should set `duplicates` with items that have the `duplicate` property', () => {
         const duplicatesResult = ['genre', 'city'];
 
         component['setFieldsProperties'](fields);
@@ -135,7 +168,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
         expect(component.duplicates).toEqual(duplicatesResult);
       });
 
-      it('should set `_duplicates` with [] if no item has the `duplicate` property', () => {
+      it('should set `duplicates` with [] if no item has the `duplicate` property', () => {
         const fieldsWithoutDuplicate = [
           { property: 'birthdate', label: 'Birthdate', type: 'date', gridColumns: 6 },
           { property: 'city', label: 'City', filter: true, gridColumns: 12 }

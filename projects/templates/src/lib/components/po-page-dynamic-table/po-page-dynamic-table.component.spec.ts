@@ -1662,7 +1662,7 @@ describe('PoPageDynamicTableComponent:', () => {
         const pageAction = [
           {
             label: component.literals.pageAction,
-            action: jasmine.any(Function),
+            action: jasmine.any(Function)
           }
         ];
 
@@ -1683,7 +1683,7 @@ describe('PoPageDynamicTableComponent:', () => {
         const pageAction = [
           {
             label: component.literals.pageAction,
-            action: jasmine.any(Function),
+            action: jasmine.any(Function)
           },
           {
             label: component.literals.pageActionRemoveAll,
@@ -1979,7 +1979,7 @@ describe('PoPageDynamicTableComponent:', () => {
         { id: '3', name: 'vue', $selected: false }
       ];
 
-      expect(component.pageActions[2].disabled()).toBe(true);
+      expect((<Function>component.pageActions[2].disabled)()).toBe(true);
     });
 
     it('should enable a custom action if selectable is true and the table has some item selected', () => {
@@ -1999,7 +1999,7 @@ describe('PoPageDynamicTableComponent:', () => {
         { id: '3', name: 'vue' }
       ];
 
-      expect(component.pageActions[2].disabled()).toBe(false);
+      expect((<Function>component.pageActions[2].disabled)()).toBe(false);
     });
 
     it('should navigate to `test/` if action of pageCustomAction is undefined and url is defined', () => {

@@ -10,10 +10,10 @@ import { PoPageDynamicTableFilters } from './interfaces/po-page-dynamic-table-fi
 export class PoPageDynamicListBaseComponent {
   private _autoRouter: boolean = false;
   private _columns: Array<any> = [];
-  private _duplicates: Array<any> = [];
+  private _duplicates: Array<string> = [];
   private _fields: Array<any> = [];
   private _filters: Array<any> = [];
-  private _keys: Array<any> = [];
+  private _keys: Array<string> = [];
 
   /**
    * @optional
@@ -148,22 +148,38 @@ export class PoPageDynamicListBaseComponent {
     return this._columns;
   }
 
+  set duplicates(value: Array<string>) {
+    this._duplicates = [...value];
+  }
+
   get duplicates() {
-    return [...this._duplicates];
+    return this._duplicates;
+  }
+
+  set filters(value: Array<PoPageDynamicTableFilters>) {
+    this._filters = [...value];
   }
 
   get filters() {
-    return [...this._filters];
+    return this._filters;
+  }
+
+  set keys(value: Array<string>) {
+    this._keys = [...value];
   }
 
   get keys() {
-    return [...this._keys];
+    return this._keys;
   }
 
   private setFieldsProperties(fields: Array<any>) {
-    this._filters = fields.filter(field => field.filter === true);
-    this.columns = fields.filter(field => field.visible === undefined || field.visible === true);
-    this._keys = fields.filter(field => field.key === true).map(field => field.property);
-    this._duplicates = fields.filter(field => field.duplicate === true).map(field => field.property);
+    this.filters = fields
+      .filter(field => field.filter === true)
+      .map(filterField => ({ ...filterField, visible: true }));
+    this.columns = fields.filter(
+      field => field.visible === undefined || field.visible === true || field.allowColumnsManager === true
+    );
+    this.keys = fields.filter(field => field.key === true).map(field => field.property);
+    this.duplicates = fields.filter(field => field.duplicate === true).map(field => field.property);
   }
 }

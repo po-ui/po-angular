@@ -40,10 +40,17 @@ export class SamplePoPageDynamicTableUsersComponent {
   ];
 
   readonly fields: Array<any> = [
-    { property: 'id', key: true },
+    { property: 'id', key: true, visible: false, filter: true },
     { property: 'name', label: 'Name', filter: true, gridColumns: 6 },
     { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true },
-    { property: 'birthdate', label: 'Birthdate', type: 'date', gridColumns: 6 },
+    {
+      property: 'birthdate',
+      label: 'Birthdate',
+      type: 'date',
+      gridColumns: 6,
+      visible: false,
+      allowColumnsManager: true
+    },
     { property: 'city', label: 'City', filter: true, duplicate: true, options: this.cityOptions, gridColumns: 12 }
   ];
 

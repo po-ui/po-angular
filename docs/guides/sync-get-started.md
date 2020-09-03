@@ -11,7 +11,7 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 - [Node.js e NPM](https://nodejs.org/en/)
 - [Angular CLI](https://cli.angular.io/) (^10.0.2):
   - ```shell
-    npm install -g @angular/cli@^10.0.2
+    npm install -g @angular/cli@~10.0.2
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (5.4.16):
   - ```shell
