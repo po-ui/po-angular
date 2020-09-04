@@ -76,7 +76,7 @@
     "gulp-run": "^1.7.1",
     "highlight.js": "^10.1.2",
     "http-status-codes": "^1.4.0",
-    "localforage": "1.4.0",
+    "localforage": "1.9.0",
     "lokijs": "1.5.8",
     "monaco-editor": "0.20.0",
     "ngx-markdown": "^10.1.0",
