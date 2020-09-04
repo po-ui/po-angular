@@ -17,14 +17,14 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/animations": "^10.0.3",
-    "@angular/common": "^10.0.3",
-    "@angular/compiler": "^10.0.3",
-    "@angular/core": "^10.0.3",
-    "@angular/forms": "^10.0.3",
-    "@angular/platform-browser": "^10.0.3",
-    "@angular/platform-browser-dynamic": "^10.0.3",
-    "@angular/router": "^10.0.3",
+    "@angular/animations": "~10.0.3",
+    "@angular/common": "~10.0.3",
+    "@angular/compiler": "~10.0.3",
+    "@angular/core": "~10.0.3",
+    "@angular/forms": "~10.0.3",
+    "@angular/platform-browser": "~10.0.3",
+    "@angular/platform-browser-dynamic": "~10.0.3",
+    "@angular/router": "~10.0.3",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "rxjs": "~6.5.5",
     "zone.js": "~0.10.3"
