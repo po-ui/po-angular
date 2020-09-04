@@ -17,13 +17,11 @@ export class DocumentationListComponent implements OnInit {
     { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'po-icon-light' }
   ];
 
-  public searchText = '';
   public filteredItems;
 
   public filter = {
     placeholder: 'Pesquise',
-    action: this.filterAction,
-    ngModel: 'searchText'
+    action: this.filterAction.bind(this)
   };
 
   constructor(private docService: DocumentationService, private router: Router) {}
@@ -54,8 +52,8 @@ export class DocumentationListComponent implements OnInit {
     this.router.navigate(['/documentation', item.name], { queryParams: { view: 'web' } });
   }
 
-  public filterAction() {
-    const searchText = this.searchText.toLocaleLowerCase();
+  public filterAction(searchTextTerm = '') {
+    const searchText = searchTextTerm.toLocaleLowerCase();
 
     if (searchText) {
       this.filteredItems = [
