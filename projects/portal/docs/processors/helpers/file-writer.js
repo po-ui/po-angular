@@ -204,8 +204,8 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
   activeTab = 'doc';
 
   actions: Array<{}> = [
-    { label: 'Documentação', action: this.goBack, icon: 'po-icon-document-filled' },
-    { label: 'Colabore', action: this.improveDocs },
+    { label: 'Documentação', action: this.goBack.bind(this), icon: 'po-icon-document-filled' },
+    { label: 'Colabore', action: this.improveDocs.bind(this) },
   ];
 
   constructor(private route: ActivatedRoute, private router: Router) { }
@@ -217,7 +217,7 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
 
   // Aprimorar Docs
   improveDocs(): void {
-      window.open('https://github.com/po-ui/po-angular/tree/master{{path}}', '_blank');
+    this.router.navigate(['guides/development-flow']);
   }
 
   ngOnInit() {
