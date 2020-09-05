@@ -16,6 +16,7 @@ import { PoComboComponent } from './po-combo.component';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { PoCleanComponent } from '../po-clean/po-clean.component';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -32,7 +33,7 @@ describe('PoComboComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [PoLoadingModule],
-      declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
+      declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent, PoCleanComponent],
       providers: [HttpClient, HttpHandler]
     });
   });
@@ -84,7 +85,7 @@ describe('PoComboComponent:', () => {
 
     spyOn(component, 'controlApplyFilter');
 
-    component.inputElement.nativeElement.dispatchEvent(eventKeyBoard);
+    component.inputEl.nativeElement.dispatchEvent(eventKeyBoard);
 
     tick(100);
 
@@ -99,7 +100,7 @@ describe('PoComboComponent:', () => {
 
     spyOn(component, 'controlApplyFilter');
 
-    component.inputElement.nativeElement.dispatchEvent(eventKeyBoard);
+    component.inputEl.nativeElement.dispatchEvent(eventKeyBoard);
 
     tick(100);
 
@@ -308,7 +309,7 @@ describe('PoComboComponent:', () => {
   it('should update value in the input', () => {
     component.setInputValue('1234567890');
     fixture.detectChanges();
-    expect(component.inputElement.nativeElement.value).toBe('1234567890');
+    expect(component.inputEl.nativeElement.value).toBe('1234567890');
   });
 
   it('should click in document', () => {
@@ -330,7 +331,7 @@ describe('PoComboComponent:', () => {
   });
 
   it('should not hide combo list when was click in input', () => {
-    component.inputElement.nativeElement.dispatchEvent(eventClick);
+    component.inputEl.nativeElement.dispatchEvent(eventClick);
 
     spyOn(component, 'controlComboVisibility');
     component.wasClickedOnToggle(eventClick);
@@ -383,32 +384,32 @@ describe('PoComboComponent:', () => {
     };
 
     it('focus: should call `focus` of combo', () => {
-      component.inputElement = {
+      component.inputEl = {
         nativeElement: {
           focus: () => {}
         }
       };
 
-      spyOn(component.inputElement.nativeElement, 'focus');
+      spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
-      expect(component.inputElement.nativeElement.focus).toHaveBeenCalled();
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
     });
 
     it('focus: should`t call `focus` of combo if `disabled`', () => {
-      component.inputElement = {
+      component.inputEl = {
         nativeElement: {
           focus: () => {}
         }
       };
       component.disabled = true;
 
-      spyOn(component.inputElement.nativeElement, 'focus');
+      spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
-      expect(component.inputElement.nativeElement.focus).not.toHaveBeenCalled();
+      expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
     });
 
     describe('onKeyUp:', () => {
@@ -1120,7 +1121,7 @@ describe('PoComboComponent:', () => {
       expect(spySetElements).toHaveBeenCalledWith(
         component.containerElement.nativeElement,
         containerOffset,
-        component.inputElement,
+        component.inputEl,
         customPositions,
         isSetElementWidth
       );
@@ -1178,7 +1179,7 @@ describe('PoComboComponent:', () => {
       const spySetContainerPosition = spyOn(component, <any>'setContainerPosition');
       const spyScrollTo = spyOn(component, <any>'scrollTo');
       const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
-      const spyInputFocus = spyOn(component.inputElement.nativeElement, <any>'focus');
+      const spyInputFocus = spyOn(component.inputEl.nativeElement, <any>'focus');
 
       component['open']();
 
@@ -1294,7 +1295,7 @@ describe('PoComboComponent:', () => {
       component.isFiltering = true;
       component.filterMode = PoComboFilterMode.endsWith;
       component.safeHtml = (value: any) => value;
-      component.inputElement.nativeElement.value = 'othervalue';
+      component.inputEl.nativeElement.value = 'othervalue';
 
       expect(component.getLabelFormatted(label)).not.toBe(expectedValue);
     });
@@ -1306,7 +1307,7 @@ describe('PoComboComponent:', () => {
       component.isFiltering = true;
       component.filterMode = PoComboFilterMode.contains;
       component.safeHtml = (value: any) => value;
-      component.inputElement.nativeElement.value = 'othervalue';
+      component.inputEl.nativeElement.value = 'othervalue';
 
       expect(component.getLabelFormatted(label)).not.toBe(expectedValue);
     });
@@ -1315,7 +1316,7 @@ describe('PoComboComponent:', () => {
       component.isFiltering = true;
       component.filterMode = PoComboFilterMode.startsWith;
       component.safeHtml = (value: any) => value;
-      component.inputElement.nativeElement.value = 'val';
+      component.inputEl.nativeElement.value = 'val';
 
       expect(component.getLabelFormatted('values')).toBe('<span class="po-font-text-large-bold">val</span>ues');
     });
@@ -1324,7 +1325,7 @@ describe('PoComboComponent:', () => {
       component.isFiltering = true;
       component.filterMode = PoComboFilterMode.contains;
       component.safeHtml = (value: any) => value;
-      component.inputElement.nativeElement.value = 'lue';
+      component.inputEl.nativeElement.value = 'lue';
 
       expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-large-bold">lue</span>s');
     });
@@ -1333,7 +1334,7 @@ describe('PoComboComponent:', () => {
       component.isFiltering = true;
       component.filterMode = PoComboFilterMode.endsWith;
       component.safeHtml = (value: any) => value;
-      component.inputElement.nativeElement.value = 'lues';
+      component.inputEl.nativeElement.value = 'lues';
 
       expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-large-bold">lues</span>');
     });
@@ -1341,7 +1342,7 @@ describe('PoComboComponent:', () => {
     it('getLabelFormatted: should not get formatted label', () => {
       component.isFiltering = false;
       component.safeHtml = (value: any) => value;
-      component.inputElement.nativeElement.value = 'lues';
+      component.inputEl.nativeElement.value = 'lues';
 
       expect(component.getLabelFormatted('values')).toBe('values');
     });
@@ -1353,7 +1354,7 @@ describe('PoComboComponent:', () => {
       component.getInputValue = () => true;
       component.compareObjects = (a, b) => false;
       component.safeHtml = (value: any) => value;
-      component.inputElement.nativeElement.value = 'lues';
+      component.inputEl.nativeElement.value = 'lues';
 
       expect(component.getLabelFormatted('values')).toBe('values');
     });
@@ -1679,12 +1680,12 @@ describe('PoComboComponent - with service:', () => {
 
     component.debounceTime = 10;
     component.filterMinlength = 5;
-    component.inputElement.nativeElement.value = 'po';
+    component.inputEl.nativeElement.value = 'po';
     component.initInputObservable();
 
     spyOn(component, 'controlApplyFilter');
 
-    component.inputElement.nativeElement.dispatchEvent(eventKeyBoard);
+    component.inputEl.nativeElement.dispatchEvent(eventKeyBoard);
 
     tick(100);
 

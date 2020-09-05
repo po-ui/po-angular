@@ -5,8 +5,9 @@
     </div>
 
     <input
-      #inputElement
+      #inp
       class="po-input po-combo-input"
+      [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [class.po-input-icon-left]="icon"
       autocomplete="off"
       type="text"
@@ -21,6 +22,13 @@
     />
 
     <div class="po-field-icon-container-right">
+      <po-clean
+        [class.po-field-icon]="!disabled"
+        [class.po-field-icon-disabled]="disabled"
+        (p-change-event)="clear($event)"
+        [p-element-ref]="inputEl"
+      >
+      </po-clean>
       <span
         #iconArrow
         class="po-icon po-field-icon {{ comboIcon }}"
