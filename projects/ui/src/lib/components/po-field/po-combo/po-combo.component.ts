@@ -119,7 +119,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   @ViewChild('containerElement', { read: ElementRef }) containerElement: ElementRef;
   @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef;
   @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
-  @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   constructor(
     public element: ElementRef,
@@ -201,7 +201,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
    */
   focus(): void {
     if (!this.disabled) {
-      this.inputElement.nativeElement.focus();
+      this.inputEl.nativeElement.focus();
     }
   }
 
@@ -314,7 +314,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   initInputObservable() {
     if (this.service) {
-      const keyupObservable = fromEvent(this.inputElement.nativeElement, 'keyup').pipe(
+      const keyupObservable = fromEvent(this.inputEl.nativeElement, 'keyup').pipe(
         filter((e: any) => this.isValidCharacterToSearch(e.keyCode)),
         map((e: any) => e.currentTarget.value),
         distinctUntilChanged(),
@@ -468,17 +468,17 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   getInputValue() {
-    return this.inputElement.nativeElement.value;
+    return this.inputEl.nativeElement.value;
   }
 
   setInputValue(value: string): void {
-    this.inputElement.nativeElement.value = value;
+    this.inputEl.nativeElement.value = value;
   }
 
   wasClickedOnToggle(event: MouseEvent): void {
     if (
       this.comboOpen &&
-      !this.inputElement.nativeElement.contains(event.target) &&
+      !this.inputEl.nativeElement.contains(event.target) &&
       !this.iconElement.nativeElement.contains(event.target) &&
       (!this.contentElement || !this.contentElement.nativeElement.contains(event.target))
     ) {
@@ -633,7 +633,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     this.initializeListeners();
 
-    this.inputElement.nativeElement.focus();
+    this.inputEl.nativeElement.focus();
     this.scrollTo(this.getIndexSelectedView());
 
     this.setContainerPosition();
@@ -659,7 +659,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.controlPosition.setElements(
       this.containerElement.nativeElement,
       poComboContainerOffset,
-      this.inputElement,
+      this.inputEl,
       ['top', 'bottom'],
       true
     );
