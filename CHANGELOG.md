@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.5.0"></a>
+# [3.5.0](https://github.com/po-ui/po-angular/compare/v3.4.0...v3.5.0) (2020-09-08)
+
+
+### Bug Fixes
+
+* **i18n:** correção para uso do componente PoI18n nos testes unitários ([7b1d7cb](https://github.com/po-ui/po-angular/commit/7b1d7cb))
+
+
+### Features
+
+* **dynamic-form:** adiciona propriedade `p-validate-fields` ([c94d2fa](https://github.com/po-ui/po-angular/commit/c94d2fa))
+* **dynamic-table:** esconde o botão `new` ao não informar `actions.new` ([f69fb34](https://github.com/po-ui/po-angular/commit/f69fb34))
+* **dynamic-table:** adicionada propriedade `allowColumnsManager` que permite o campo aparecer no gerenciador de coluna mesmo que o visible seja `false` ([8a96058](https://github.com/po-ui/po-angular/commit/8a96058))
+
+
+### Performance Improvements
+
+* **field-container:** implementa ChangeDetectionStrategy.OnPush ([bb6a40f](https://github.com/po-ui/po-angular/commit/bb6a40f))
+
+
+
 <a name="3.4.0"></a>
 # [3.4.0](https://github.com/po-ui/po-angular/compare/v3.3.0...v3.4.0) (2020-08-31)
 
