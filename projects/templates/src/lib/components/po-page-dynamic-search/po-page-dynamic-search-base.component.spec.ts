@@ -121,6 +121,18 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
         expect(component.literals).toEqual(poPageDynamicSearchLiteralsDefault['pt']);
       });
     });
+
+    it('p-quick-search-width: should update property p-quick-search-width with valid values.', () => {
+      const validValues = [105, 1, 98, 0];
+
+      expectPropertiesValues(component, 'quickSearchWidth', validValues, validValues);
+    });
+
+    it('p-quick-search-width: should update property p-quick-search-width with invalid values for undefined.', () => {
+      const invalidValues = [null, undefined, '', ' ', {}, [], false, true];
+
+      expectPropertiesValues(component, 'quickSearchWidth', invalidValues, undefined);
+    });
   });
 
   describe('Methods:', () => {

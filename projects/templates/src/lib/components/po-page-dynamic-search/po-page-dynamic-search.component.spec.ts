@@ -48,6 +48,13 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(typeof component.filterSettings.advancedAction).toBe('function');
     });
 
+    it('get filterSettings: should apply `quickSearchWidth` value to `filterSettings.width`', () => {
+      const filterWidth = 3;
+      component.quickSearchWidth = filterWidth;
+
+      expect(component.filterSettings.width).toBe(filterWidth);
+    });
+
     describe('onAction:', () => {
       let fakethis;
 
@@ -460,6 +467,7 @@ describe('PoPageDynamicSearchComponent:', () => {
         };
         component.filters = [{ property: 'filter1' }, { property: 'filter2' }];
         component.title = 'Original Title';
+        component.quickSearchWidth = 3;
 
         component.onLoad = () => {
           return {
@@ -472,7 +480,8 @@ describe('PoPageDynamicSearchComponent:', () => {
               { label: 'Feature 3', url: '/new-feature3' }
             ],
             filters: [{ property: 'filter1' }, { property: 'filter3' }],
-            keepFilters: true
+            keepFilters: true,
+            quickSearchWidth: 6
           };
         };
 
@@ -489,6 +498,7 @@ describe('PoPageDynamicSearchComponent:', () => {
           items: [{ label: 'Test' }, { label: 'Test2' }]
         });
         expect(component.keepFilters).toBeTrue();
+        expect(component.quickSearchWidth).toBe(6);
       }));
     });
   });

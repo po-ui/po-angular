@@ -22,6 +22,7 @@ import { SamplePoPageDynamicSearchHiringProcessesService } from './sample-po-pag
 export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit {
   hiringProcesses: Array<object>;
   hiringProcessesColumns: Array<PoTableColumn>;
+  quickSearchWidth: number = 6;
 
   private jobDescriptionOptions: Array<PoSelectOption>;
   private statusOptions: Array<PoSelectOption>;

@@ -2,7 +2,7 @@ import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { InputBoolean, PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } from '@po-ui/ng-components';
 
-import { poLocaleDefault } from '../../utils/util';
+import { convertToInt, poLocaleDefault } from '../../utils/util';
 
 import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
 import { poAdvancedFiltersLiteralsDefault } from './po-advanced-filter/po-advanced-filter-base.component';
@@ -55,6 +55,7 @@ export const poPageDynamicSearchLiteralsDefault = {
 export abstract class PoPageDynamicSearchBaseComponent {
   private _filters: Array<PoDynamicFormField> = [];
   private _literals: PoPageDynamicSearchLiterals;
+  private _quickSearchWidth: number;
 
   advancedFilterLiterals: PoAdvancedFilterLiterals;
 
@@ -212,6 +213,23 @@ export abstract class PoPageDynamicSearchBaseComponent {
 
   /** Título da página. */
   @Input('p-title') title: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Largura do campo de busca, utilizando o *Grid System*,
+   * e limitado ao máximo de 6 colunas. O tamanho mínimo é controlado
+   * conforme resolução de tela para manter a consistência do layout.
+   */
+  @Input('p-quick-search-width') set quickSearchWidth(value: number) {
+    this._quickSearchWidth = convertToInt(value);
+  }
+
+  get quickSearchWidth(): number {
+    return this._quickSearchWidth;
+  }
 
   /**
    * @description

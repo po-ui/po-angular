@@ -54,7 +54,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   private readonly _filterSettings: PoPageFilter = {
     action: this.onAction.bind(this),
     advancedAction: this.onAdvancedAction.bind(this),
-    placeholder: this.literals.searchPlaceholder
+    placeholder: this.literals.searchPlaceholder,
+    width: this.quickSearchWidth
   };
 
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
@@ -74,7 +75,10 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   get filterSettings() {
     this._filterSettings.advancedAction = this.filters.length === 0 ? undefined : this.onAdvancedAction.bind(this);
 
-    return Object.assign({}, this._filterSettings, { placeholder: this.literals.searchPlaceholder });
+    return Object.assign({}, this._filterSettings, {
+      placeholder: this.literals.searchPlaceholder,
+      width: this.quickSearchWidth
+    });
   }
 
   ngOnInit() {
@@ -270,7 +274,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
       breadcrumb: this.breadcrumb,
       filters: this.filters,
       keepFilters: this.keepFilters,
-      concatFilters: this.concatFilters
+      concatFilters: this.concatFilters,
+      quickSearchWidth: this.quickSearchWidth
     };
 
     const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicSearchOptions> = {
@@ -296,6 +301,9 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
         },
         {
           nameProp: 'concatFilters'
+        },
+        {
+          nameProp: 'quickSearchWidth'
         }
       ]
     };
