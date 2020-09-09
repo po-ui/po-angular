@@ -122,6 +122,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
   private _actions: PoPageDynamicTableActions = {};
   private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
+  private _quickSearchWidth: number;
   private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
   hasNext = false;
@@ -306,6 +307,23 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   @Input('p-concat-filters')
   concatFilters: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Largura do campo de busca, utilizando o *Grid System*,
+   * e limitado ao máximo de 6 colunas. O tamanho mínimo é controlado
+   * conforme resolução de tela para manter a consistência do layout.
+   */
+  @Input('p-quick-search-width') set quickSearchWidth(value: number) {
+    this._quickSearchWidth = util.convertToInt(value);
+  }
+
+  get quickSearchWidth(): number {
+    return this._quickSearchWidth;
+  }
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -458,6 +476,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
           this.tableCustomActions = response.tableCustomActions || this.tableCustomActions;
           this.keepFilters = response.keepFilters || this.keepFilters;
           this.concatFilters = response.concatFilters || this.concatFilters;
+          this.quickSearchWidth = response.quickSearchWidth || this.quickSearchWidth;
         }),
         switchMap(() => this.loadOptionsOnInitialize(onLoad))
       );
@@ -939,7 +958,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       keepFilters: this.keepFilters,
       concatFilters: this.concatFilters,
       pageCustomActions: this.pageCustomActions,
-      tableCustomActions: this.tableCustomActions
+      tableCustomActions: this.tableCustomActions,
+      quickSearchWidth: this.quickSearchWidth
     };
 
     const pageOptionSchema: PoPageDynamicOptionsSchema<PoPageDynamicTableOptions> = {
@@ -961,6 +981,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         },
         {
           nameProp: 'keepFilters'
+        },
+        {
+          nameProp: 'quickSearchWidth'
         },
         {
           nameProp: 'concatFilters'

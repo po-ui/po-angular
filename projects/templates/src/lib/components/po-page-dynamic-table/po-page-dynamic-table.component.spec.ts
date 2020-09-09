@@ -69,6 +69,18 @@ describe('PoPageDynamicTableComponent:', () => {
 
       expectPropertiesValues(component, 'actions', validValues, validValues);
     });
+
+    it('p-quick-search-width: should update property p-quick-search-width with valid values.', () => {
+      const validValues = [105, 1, 98, 0];
+
+      expectPropertiesValues(component, 'quickSearchWidth', validValues, validValues);
+    });
+
+    it('p-quick-search-width: should update property p-quick-search-width with invalid values for undefined.', () => {
+      const invalidValues = [null, undefined, '', ' ', {}, [], false, true];
+
+      expectPropertiesValues(component, 'quickSearchWidth', invalidValues, undefined);
+    });
   });
 
   describe('Methods:', () => {
@@ -135,9 +147,11 @@ describe('PoPageDynamicTableComponent:', () => {
         };
         component.fields = [{ property: 'filter1' }, { property: 'filter2' }];
         component.title = 'Original Title';
+        component.quickSearchWidth = 3;
 
         component.onLoad = () => {
           return {
+            quickSearchWidth: 6,
             title: 'New Title',
             breadcrumb: {
               items: [{ label: 'Test' }, { label: 'Test2' }]
@@ -160,6 +174,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
         tick();
 
+        expect(component.quickSearchWidth).toBe(6);
         expect(component.title).toBe('New Title');
         expect(component.actions).toEqual({
           detail: '/new_datail',
@@ -185,6 +200,7 @@ describe('PoPageDynamicTableComponent:', () => {
         component.breadcrumb = <any>{};
         component.fields = [];
         component.title = '';
+        component.quickSearchWidth = undefined;
 
         const activatedRoute: any = {
           snapshot: {
@@ -202,6 +218,7 @@ describe('PoPageDynamicTableComponent:', () => {
             items: [{ label: 'Home' }, { label: 'Hiring processes' }]
           },
           title: 'Original Title',
+          quickSearchWidth: 6,
           pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }],
           tableCustomActions: [{ label: 'Details', action: 'endpoint/' }],
           keepFilters: true,
@@ -229,6 +246,7 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.tableCustomActions).toEqual([{ label: 'Details', action: 'endpoint/' }]);
         expect(component.keepFilters).toBe(true);
         expect(component.concatFilters).toBe(true);
+        expect(component.quickSearchWidth).toBe(6);
       }));
     });
 
@@ -454,7 +472,8 @@ describe('PoPageDynamicTableComponent:', () => {
           actions: undefined,
           breadcrumb: undefined,
           fields: [],
-          title: 'Title'
+          title: 'Title',
+          quickSearchWidth: 4
         };
 
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
@@ -468,6 +487,7 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.autoRouter).toEqual(response.autoRouter);
         expect(component.fields).toEqual(response.fields);
         expect(component.title).toEqual(response.title);
+        expect(component.quickSearchWidth).toEqual(response.quickSearchWidth);
       }));
 
       it('should call `getMetadata` and set properties', fakeAsync(() => {
