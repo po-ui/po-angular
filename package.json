@@ -21,6 +21,7 @@
     "e2e": "ng e2e",
     "test": "ng test --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:storage": "ng test storage --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
+    "test:storage:schematics": "gulp build:schematics --lib storage && jasmine \"dist/ng-storage/schematics/**/*.spec.js\"",
     "test:sync": "ng test sync --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:sync:browse": "ng test sync --code-coverage --browsers=Chrome --source-map",
     "test:ui": "ng test ui --watch=false --code-coverage --browsers=ChromeHeadless --source-map",

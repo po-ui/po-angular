@@ -118,6 +118,7 @@ jobs:
 
     - run: npm i
     - run: npm run test:storage
+    - run: npm run test:storage:schematics
 
   test-sync:
     name: Test sync
