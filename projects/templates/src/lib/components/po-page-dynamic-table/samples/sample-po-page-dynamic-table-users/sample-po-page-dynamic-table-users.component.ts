@@ -19,6 +19,7 @@ export class SamplePoPageDynamicTableUsersComponent {
 
   readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
   detailedUser;
+  quickSearchWidth: number = 3;
 
   readonly actions: PoPageDynamicTableActions = {
     new: '/documentation/po-page-dynamic-edit',

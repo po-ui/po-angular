@@ -91,4 +91,11 @@ export interface PoPageDynamicTableOptions {
    * ```
    */
   tableCustomActions?: Array<PoPageDynamicTableCustomTableAction>;
+
+  /**
+   * Largura do campo de busca, utilizando o *Grid System*,
+   * e limitado ao máximo de 6 colunas. O tamanho mínimo é controlado
+   * conforme resolução de tela para manter a consistência do layout.
+   */
+  quickSearchWidth?: number;
 }
