@@ -85,6 +85,7 @@ jobs:
     - run: npm i
     - run: npm run build:ui:lite
     - run: npm run test:templates
+    - run: npm run test:templates:schematics
 
   test-code-editor:
     name: Test code editor
