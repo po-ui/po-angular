@@ -9,5 +9,8 @@
   p-blocked-url="/documentation/po-page-blocked-user"
   p-logo="https://via.placeholder.com/160x64?text=MAIN+LOGO"
   p-secondary-logo="https://via.placeholder.com/80x24?text=SECONDARY+LOGO"
+  [p-languages]="languages"
+  [p-literals]="literals"
+  (p-language-change)="changeLanguage($event)"
 >
 </po-page-login>

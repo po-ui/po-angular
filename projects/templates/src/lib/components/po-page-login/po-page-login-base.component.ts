@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { convertToBoolean, convertToInt, getShortBrowserLanguage, isExternalLink, isTypeof } from './../../utils/util';
 
-import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
+import { PoLanguageService, poLocaleDefault, PoLanguage, poLanguageDefault } from '@po-ui/ng-components';
 
 import { PoPageLogin } from './interfaces/po-page-login.interface';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
@@ -193,6 +193,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   private _recovery: string | PoPageLoginRecovery | Function;
   private _registerUrl: string;
   private _support: string | Function;
+  private _languagesList: Array<PoLanguage>;
 
   /**
    * @optional
@@ -834,6 +835,44 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Coleção de idiomas que o componente irá tratar e disponibilizará para o usuário escolher.
+   *
+   * Caso essa propriedade não seja utilizada o componente mostrará no combo os idiomas que ele suporta por padrão.
+   *
+   * Caso a coleção tenha um idioma, a página estará nesse idioma e não mostrará o combo.
+   *
+   * Caso seja passado um array vazio, a página terá o idioma configurado no `i18n` e não mostrará o combo de seleção.
+   *
+   * > Se for passado um idioma não suportado, será preciso passar as literais pela propriedade `p-literals`.
+   *
+   *
+   */
+  @Input('p-languages') set languagesList(languagesList: Array<PoLanguage>) {
+    if (languagesList) {
+      if (languagesList.length) {
+        this._languagesList = languagesList;
+      } else {
+        this._languagesList = poLanguageDefault.filter(language => language.language === this.language);
+      }
+    }
+  }
+
+  get languagesList(): Array<PoLanguage> {
+    if (this._languagesList) {
+      return this._languagesList;
+    }
+    return poLanguageDefault;
+  }
+
+  get showLanguage() {
+    return this.languagesList.length > 1;
+  }
+
+  /**
    * Evento disparado quando o usuário alterar o input do campo login.
    *
    * Esse evento receberá como parâmetro uma variável do tipo `string` com o texto informado no campo.
@@ -861,6 +900,14 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * > Esta propriedade será ignorada se for definido valor para a propriedade `p-authentication-url`.
    */
   @Output('p-password-change') passwordChange?: EventEmitter<string> = new EventEmitter<string>();
+
+  /**
+   * Evento disparado quando o usuário alterar o idioma da página.
+   *
+   * Esse evento receberá como parâmetro um objeto do tipo `PoLanguage` com a linguagem selecionada.
+   *
+   */
+  @Output('p-language-change') languageChange?: EventEmitter<PoLanguage> = new EventEmitter<PoLanguage>();
 
   get language(): string {
     return this.selectedLanguage || getShortBrowserLanguage();
