@@ -1,7 +1,7 @@
 import * as utilsFunctions from './../../../utils/util';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { PoLanguageService } from '../../../../../../ui/src/lib/services/po-language/po-language.service';
-
+import { poLocaleDefault } from '../../../../../../ui/src/lib/services/po-language/po-language.constant';
 import { PoAdvancedFilterBaseComponent, poAdvancedFiltersLiteralsDefault } from './po-advanced-filter-base.component';
 
 describe('PoAdvancedFilterBaseComponent', () => {
@@ -31,8 +31,6 @@ describe('PoAdvancedFilterBaseComponent', () => {
     });
 
     describe('literals:', () => {
-      const poLocaleDefault = utilsFunctions.poLocaleDefault;
-
       it('should be in portuguese if browser is setted with an unsupported language', () => {
         component['language'] = 'zw';
 

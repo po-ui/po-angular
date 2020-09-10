@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { getBrowserLanguage, getShortLanguage, isLanguage, poLocaleDefault, poLocales } from '../../utils/util';
+import { getBrowserLanguage, getShortLanguage, isLanguage } from '../../utils/util';
+import { poLocaleDefault, poLocales } from './po-language.constant';
 
 const poDefaultLanguage = 'PO_DEFAULT_LANGUAGE';
 const poLocaleKey = 'PO_USER_LOCALE';

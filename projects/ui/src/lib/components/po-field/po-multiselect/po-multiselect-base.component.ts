@@ -5,11 +5,11 @@ import {
   convertToBoolean,
   removeDuplicatedOptions,
   removeUndefinedAndNullOptions,
-  sortOptionsByProperty,
-  poLocaleDefault
+  sortOptionsByProperty
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
 import { PoMultiselectLiterals } from './po-multiselect-literals.interface';

@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 
-import { formatBytes, poLocaleDefault } from '../../../../utils/util';
+import { formatBytes } from '../../../../utils/util';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 
 import { poUploadLiteralsDefault } from '../po-upload-base.component';
 

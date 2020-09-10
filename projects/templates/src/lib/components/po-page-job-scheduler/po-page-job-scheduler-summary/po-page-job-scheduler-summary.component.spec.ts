@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { PoLanguageService } from '@po-ui/ng-components';
-
-import { poLocaleDefault } from '../../../utils/util';
+import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 import { poPageJobSchedulerLiteralsDefault } from '../po-page-job-scheduler-literals';
 import { PoPageJobSchedulerModule } from '../po-page-job-scheduler.module';

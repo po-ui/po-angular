@@ -2,7 +2,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from '../../../../../util-test/util-expect.spec';
-import { poLocaleDefault } from 'projects/ui/src/lib/utils/util';
+import { poLocaleDefault } from '../../../../../services/po-language/po-language.constant';
 
 import { PoUploadDragDropAreaComponent } from './po-upload-drag-drop-area.component';
 import { poUploadLiteralsDefault } from '../../po-upload-base.component';

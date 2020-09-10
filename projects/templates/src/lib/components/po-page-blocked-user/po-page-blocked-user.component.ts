@@ -1,9 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
-import { PoLanguageService } from '@po-ui/ng-components';
+import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
-import { isExternalLink, poLocaleDefault } from '../../utils/util';
+import { isExternalLink } from '../../utils/util';
 
 import { PoPageBlockedUserBaseComponent } from './po-page-blocked-user-base.component';
 

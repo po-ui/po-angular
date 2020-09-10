@@ -2,9 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangeDetectorRef } from '@angular/core';
 
 import { expectSettersMethod } from './../../../../util-test/util-expect.spec';
-import { poLocaleDefault } from './../../../../utils/util';
+
 import { PoServicesModule } from './../../../../services/services.module';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
+import { poLocaleDefault } from './../../../../services/po-language/po-language.constant';
 
 import { PoUploadFileRestrictionsComponent } from './po-upload-file-restrictions.component';
 import { poUploadLiteralsDefault } from '../po-upload-base.component';

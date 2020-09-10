@@ -4,9 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { PoComponentInjectorService, PoLanguageService, PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import {
+  PoComponentInjectorService,
+  PoLanguageService,
+  PoModalAction,
+  PoModalComponent,
+  poLocaleDefault
+} from '@po-ui/ng-components';
 
-import { isExternalLink, isTypeof, poLocaleDefault } from '../../utils/util';
+import { isExternalLink, isTypeof } from '../../utils/util';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';

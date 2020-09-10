@@ -1,8 +1,8 @@
 import { fakeAsync, tick } from '@angular/core/testing';
 
 import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
-import { poLocaleDefault } from './../../../utils/util';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoPageDetailBaseComponent, poPageDetailLiteralsDefault } from './po-page-detail-base.component';
 

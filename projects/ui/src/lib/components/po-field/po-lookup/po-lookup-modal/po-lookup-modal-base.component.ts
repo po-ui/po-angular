@@ -3,7 +3,8 @@ import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive } 
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { isTypeof, poLocaleDefault } from '../../../../utils/util';
+import { isTypeof } from '../../../../utils/util';
+import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';

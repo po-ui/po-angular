@@ -6,6 +6,7 @@ import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 
 import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
@@ -82,7 +83,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
       component.literals = {};
 
-      expect(component.literals).toEqual(poLookupLiteralsDefault[UtilsFunctions.poLocaleDefault]);
+      expect(component.literals).toEqual(poLookupLiteralsDefault[poLocaleDefault]);
     });
 
     it('literals: should be in portuguese if browser is setted with `pt`', () => {
@@ -102,11 +103,11 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should accept custom literals and call `setTableLiterals`', () => {
-      component['language'] = UtilsFunctions.poLocaleDefault;
+      component['language'] = poLocaleDefault;
 
       spyOn(component, <any>'setTableLiterals');
 
-      const customLiterals = Object.assign({}, poLookupLiteralsDefault[UtilsFunctions.poLocaleDefault]);
+      const customLiterals = Object.assign({}, poLookupLiteralsDefault[poLocaleDefault]);
 
       customLiterals.modalPrimaryActionLabel = 'Incorrect format';
 
@@ -135,14 +136,9 @@ describe('PoLookupModalBaseComponent:', () => {
     it('literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      component['language'] = UtilsFunctions.poLocaleDefault;
+      component['language'] = poLocaleDefault;
 
-      expectPropertiesValues(
-        component,
-        'literals',
-        invalidValues,
-        poLookupLiteralsDefault[UtilsFunctions.poLocaleDefault]
-      );
+      expectPropertiesValues(component, 'literals', invalidValues, poLookupLiteralsDefault[poLocaleDefault]);
     });
 
     it('title: should update property with valid values', () => {

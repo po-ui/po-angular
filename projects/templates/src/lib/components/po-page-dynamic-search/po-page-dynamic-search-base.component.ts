@@ -1,8 +1,15 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { InputBoolean, PoBreadcrumb, PoDynamicFormField, PoLanguageService, PoPageAction } from '@po-ui/ng-components';
+import {
+  InputBoolean,
+  PoBreadcrumb,
+  PoDynamicFormField,
+  PoLanguageService,
+  PoPageAction,
+  poLocaleDefault
+} from '@po-ui/ng-components';
 
-import { convertToInt, poLocaleDefault } from '../../utils/util';
+import { convertToInt } from '../../utils/util';
 
 import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
 import { poAdvancedFiltersLiteralsDefault } from './po-advanced-filter/po-advanced-filter-base.component';

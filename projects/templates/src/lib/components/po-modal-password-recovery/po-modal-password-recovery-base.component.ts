@@ -1,8 +1,6 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { PoLanguageService } from '@po-ui/ng-components';
-
-import { poLocaleDefault } from '../../utils/util';
+import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 import { poModalPasswordRecoveryLiterals } from './literals/i18n/po-modal-password-recovery-literals';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';

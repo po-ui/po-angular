@@ -2,16 +2,9 @@ import { Subscription } from 'rxjs';
 import { EventEmitter, Input, OnDestroy, Output, Directive } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {
-  convertToBoolean,
-  convertToInt,
-  getShortBrowserLanguage,
-  isExternalLink,
-  isTypeof,
-  poLocaleDefault
-} from './../../utils/util';
+import { convertToBoolean, convertToInt, getShortBrowserLanguage, isExternalLink, isTypeof } from './../../utils/util';
 
-import { PoLanguageService } from '@po-ui/ng-components';
+import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 import { PoPageLogin } from './interfaces/po-page-login.interface';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';

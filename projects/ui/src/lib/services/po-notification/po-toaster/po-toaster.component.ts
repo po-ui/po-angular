@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/co
 
 import { Subject } from 'rxjs';
 
-import { poLocaleDefault } from '../../../utils/util';
+import { poLocaleDefault } from '../../po-language/po-language.constant';
 
 import { PoLanguageService } from '../../po-language/po-language.service';
 

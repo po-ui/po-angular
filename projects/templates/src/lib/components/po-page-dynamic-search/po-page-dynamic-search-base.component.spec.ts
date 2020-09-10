@@ -1,6 +1,7 @@
 import * as utilsFunctions from './../../utils/util';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoLanguageService } from './../../../../../ui/src/lib/services/po-language/po-language.service';
+import { poLocaleDefault } from './../../../../../ui/src/lib/services/po-language/po-language.constant';
 
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
 import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
@@ -47,8 +48,6 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
     });
 
     describe('p-literals:', () => {
-      const poLocaleDefault = utilsFunctions.poLocaleDefault;
-
       it('should be in portuguese if browser is setted with an unsupported language', () => {
         component['language'] = 'zw';
 

@@ -13,7 +13,8 @@ import {
   PoPageAction,
   PoTableAction,
   PoTableColumnSort,
-  PoTableColumnSortType
+  PoTableColumnSortType,
+  poLocaleDefault
 } from '@po-ui/ng-components';
 
 import * as util from '../../utils/util';
@@ -339,7 +340,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const language = languageService.getShortLanguage();
 
     this.literals = {
-      ...poPageDynamicTableLiteralsDefault[util.poLocaleDefault],
+      ...poPageDynamicTableLiteralsDefault[poLocaleDefault],
       ...poPageDynamicTableLiteralsDefault[language]
     };
   }

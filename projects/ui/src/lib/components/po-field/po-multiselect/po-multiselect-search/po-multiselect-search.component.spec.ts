@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
-import { poLocaleDefault } from '../../../../utils/util';
+import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 
 import { poMultiselectLiteralsDefault } from '../po-multiselect-base.component';
 import { PoMultiselectSearchComponent } from './po-multiselect-search.component';

@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
-import { poLocaleDefault } from './../../../utils/util';
+import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import * as UtilFunctions from './../../../utils/util';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 

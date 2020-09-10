@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { poLocaleDefault } from './../../../utils/util';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';

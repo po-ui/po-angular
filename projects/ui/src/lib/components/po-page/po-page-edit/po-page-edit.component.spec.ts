@@ -8,7 +8,7 @@ import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoButtonModule } from '../../po-button';
 
-import { poLocaleDefault } from './../../../utils/util';
+import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoPageComponent } from '../po-page.component';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageEditComponent } from './po-page-edit.component';

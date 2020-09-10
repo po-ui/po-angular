@@ -1,9 +1,9 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 
-import { convertToBoolean, isTypeof, poLocaleDefault, validValue } from '../../../utils/util';
+import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { InputBoolean } from '../../../decorators';
 import { requiredFailed } from '../validators';
 

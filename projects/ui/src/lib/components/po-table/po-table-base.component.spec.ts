@@ -4,7 +4,7 @@ import * as utilsFunctions from '../../utils/util';
 import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../utils/util';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';

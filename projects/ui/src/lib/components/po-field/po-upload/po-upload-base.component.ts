@@ -1,7 +1,7 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { convertToBoolean, isEquals, isIE, isMobile, poLocaleDefault } from '../../../utils/util';
+import { convertToBoolean, isEquals, isIE, isMobile } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoUploadFile } from './po-upload-file';
@@ -11,6 +11,7 @@ import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { InputBoolean } from '../../../decorators';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals>{

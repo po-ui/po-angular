@@ -3,13 +3,12 @@ import { TestBed, async } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 
 import { expectPropertiesValues, getObservable } from '../../util-test/util-expect.spec';
-import { poLocaleDefault } from './../../utils/util';
 import * as UtilFunctions from './../../utils/util';
 
 import { PoPageLoginBaseComponent, poPageLoginLiteralsDefault } from './po-page-login-base.component';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
 import { PoPageLoginService } from './po-page-login.service';
-import { PoLanguageService } from '@po-ui/ng-components';
+import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 const routerStub = {
   navigate: jasmine.createSpy('navigate')

@@ -1,7 +1,8 @@
 import { Input, Directive } from '@angular/core';
 
-import { convertToBoolean, poLocaleDefault } from '../../utils/util';
+import { convertToBoolean } from '../../utils/util';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoMenuComponent } from '../po-menu';
 
 import { PoNavbarIconAction } from './interfaces/po-navbar-icon-action.interface';

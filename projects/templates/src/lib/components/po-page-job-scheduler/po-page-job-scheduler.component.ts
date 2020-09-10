@@ -11,10 +11,9 @@ import {
   PoNotificationService,
   PoPageAction,
   PoStepperItem,
-  PoStepperStatus
+  PoStepperStatus,
+  poLocaleDefault
 } from '@po-ui/ng-components';
-
-import { poLocaleDefault } from './../../utils/util';
 
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
