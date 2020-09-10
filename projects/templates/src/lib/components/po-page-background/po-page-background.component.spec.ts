@@ -5,7 +5,7 @@ import * as utilFunctions from './../../utils/util';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoPageBackgroundComponent } from './po-page-background.component';
-import { PoLanguageService } from '@po-ui/ng-components';
+import { PoLanguage, poLanguageDefault, PoLanguageService } from '@po-ui/ng-components';
 
 describe('PoPageBackgroundComponent:', () => {
   let component: PoPageBackgroundComponent;
@@ -73,6 +73,18 @@ describe('PoPageBackgroundComponent:', () => {
 
       expectPropertiesValues(component, 'showSelectLanguage', trueValues, true);
       expectPropertiesValues(component, 'showSelectLanguage', falseValues, false);
+    });
+
+    it('p-languages: should set property with default languages if invalid.', () => {
+      const invalidValues = [[], null, undefined];
+      const expectedValue = [poLanguageDefault];
+      expectPropertiesValues(component, 'languagesList', invalidValues, expectedValue);
+    });
+
+    it('p-languages: should set property with languages.', () => {
+      const languages: Array<PoLanguage> = [{ description: 'portugues', language: 'pt' }];
+      const validValues = [languages];
+      expectPropertiesValues(component, 'languagesList', validValues, validValues);
     });
   });
 

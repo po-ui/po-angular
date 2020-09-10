@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { PoSelectOption, PoLanguageService } from '@po-ui/ng-components';
+import { PoSelectOption, PoLanguageService, PoLanguage, poLanguageDefault } from '@po-ui/ng-components';
 
 import { convertToBoolean, isTypeof } from './../../utils/util';
 
@@ -21,18 +21,28 @@ export class PoPageBackgroundComponent implements OnInit {
   private _logo?: string;
   private _secondaryLogo?: string;
   private _showSelectLanguage?: boolean = false;
+  private _languagesList: Array<PoLanguage>;
+  private _selectLanguageOptions: Array<PoSelectOption>;
 
   selectedLanguageOption: string;
 
-  selectLanguageOptions: Array<PoSelectOption> = [
-    { label: 'English', value: 'en' },
-    { label: 'Español', value: 'es' },
-    { label: 'Português', value: 'pt' },
-    { label: 'Pусский', value: 'ru' }
-  ];
-
   /** Insere uma imagem de destaque ao lado direito do container. */
   @Input('p-background') background?: string;
+
+  /** Lista de idiomas para o combo box */
+  @Input('p-languages') set languagesList(value: Array<PoLanguage>) {
+    this._languagesList = value;
+  }
+
+  get languagesList(): Array<PoLanguage> {
+    if (this._languagesList?.length) {
+      return this._languagesList;
+    }
+    return poLanguageDefault;
+  }
+
+  /** Idioma inicial selecionado no combo */
+  @Input('p-initial-language') initialSelectLanguage?: string;
 
   /** Designa se o logotipo deve desaparecer em resoluções menores. */
   @Input('p-hide-logo') hideLogo?: boolean;
@@ -76,15 +86,23 @@ export class PoPageBackgroundComponent implements OnInit {
    * Evento disparado ao selecionar alguma opção no seletor de idiomas.
    * Para este evento será passado como parâmetro o valor de idioma selecionado.
    */
-  @Output('p-selected-language') selectedLanguage?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-selected-language') selectedLanguage?: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(public poLanguageService: PoLanguageService) {}
 
   ngOnInit() {
-    this.selectedLanguageOption = this.poLanguageService.getShortLanguage();
+    this.selectedLanguageOption = this.initialSelectLanguage || this.poLanguageService.getShortLanguage();
+    this._selectLanguageOptions = this.languagesList.map<PoSelectOption>(language => ({
+      label: language.description,
+      value: language.language
+    }));
   }
 
   onChangeLanguage() {
     this.selectedLanguage.emit(this.selectedLanguageOption);
+  }
+
+  get selectLanguageOptions(): Array<PoSelectOption> {
+    return this._selectLanguageOptions;
   }
 }

@@ -61,6 +61,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   private componentRef: ComponentRef<any> = null;
   private differ: any;
   private readonly customPasswordError = { custom: false };
+  initialSelectLanguage: string;
 
   @ViewChild('loginForm', { read: NgForm, static: true }) loginForm: NgForm;
   @ViewChild('pageLogin', { read: ViewContainerRef, static: true }) pageLogin: ViewContainerRef;
@@ -89,6 +90,8 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
 
   ngOnInit() {
     this.checkingForRouteMetadata(this.activatedRoute.snapshot.data);
+    this.selectedLanguage = this.initializeLanguage();
+    this.initialSelectLanguage = this.selectedLanguage;
   }
 
   activateSupport() {
@@ -123,6 +126,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   }
 
   onSelectedLanguage(language: string) {
+    this.languageChange.emit(this.languagesList.find(languageItem => languageItem.language === language));
     this.selectedLanguage = language;
   }
 
@@ -253,5 +257,10 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   protected setPasswordErrors(errors: Array<string>) {
     const control = this.loginForm.form.controls['password'];
     this.setControlErrors('allPasswordErrors', control, errors, this.pageLoginLiterals.passwordErrorPattern);
+  }
+
+  private initializeLanguage() {
+    const language = this.languagesList.find(languageItem => languageItem.language === this.language);
+    return language?.language || this.languagesList[0].language;
   }
 }

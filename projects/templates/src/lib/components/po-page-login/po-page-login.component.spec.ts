@@ -165,14 +165,36 @@ describe('PoPageLoginComponent: ', () => {
   });
 
   describe('Methods:', () => {
-    it('ngOnInit: should call checkingForRouteMetadata', () => {
-      const activatedRoute = { snapshot: { data: {} } };
+    describe('ngOnInit:', () => {
+      it('should call checkingForRouteMetadata', () => {
+        const activatedRoute = { snapshot: { data: {} } };
 
-      spyOn(component, <any>'checkingForRouteMetadata');
+        spyOn(component, <any>'checkingForRouteMetadata');
 
-      component.ngOnInit();
+        component.ngOnInit();
 
-      expect(component['checkingForRouteMetadata']).toHaveBeenCalledWith(activatedRoute.snapshot.data);
+        expect(component['checkingForRouteMetadata']).toHaveBeenCalledWith(activatedRoute.snapshot.data);
+      });
+
+      it('should set selectedLanguage if languagesList is valid ', () => {
+        component.languagesList = [{ language: 'en', description: 'English' }];
+
+        spyOnProperty(component, 'language').and.returnValue('en');
+
+        component.ngOnInit();
+
+        expect(component.selectedLanguage).toBe('en');
+      });
+
+      it('should set selectedLanguage with a default language if languagesList is invalid ', () => {
+        component.languagesList = [{ language: 'en', description: 'English' }];
+
+        spyOnProperty(component, 'language').and.returnValue('ru');
+
+        component.ngOnInit();
+
+        expect(component.selectedLanguage).toBe('en');
+      });
     });
 
     it('ngAfterViewChecked: should call `validateArrayChanges` if has differ', () => {

@@ -8,7 +8,7 @@ import * as UtilFunctions from './../../utils/util';
 import { PoPageLoginBaseComponent, poPageLoginLiteralsDefault } from './po-page-login-base.component';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
 import { PoPageLoginService } from './po-page-login.service';
-import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
+import { PoLanguage, poLanguageDefault, PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 const routerStub = {
   navigate: jasmine.createSpy('navigate')
@@ -289,6 +289,34 @@ describe('PoPageLoginBaseComponent: ', () => {
         spyOn(component, <any>'setLoginErrors');
         component.loginErrors = validValues;
         expect(component['setLoginErrors']).toHaveBeenCalledWith(validValues);
+      });
+    });
+
+    describe('p-languages:', () => {
+      it('should set property with default languages when the value is invalid.', () => {
+        const invalidValues = [null, undefined, NaN];
+        const expectedValues = [poLanguageDefault];
+
+        expectPropertiesValues(component, 'languagesList', invalidValues, expectedValues);
+      });
+
+      it('should set property with the language defined by the browse if the value is empty.', () => {
+        const validValues = [[]];
+        const expectedValues = [[{ description: 'Português', language: 'pt' }]];
+        spyOnProperty(component, 'language').and.returnValue('pt');
+        expectPropertiesValues(component, 'languagesList', validValues, expectedValues);
+        expect(component.showLanguage).toBeFalse();
+      });
+
+      it('should set property with the language if the value is valid.', () => {
+        const languages: Array<PoLanguage> = [
+          { description: 'português', language: 'pt' },
+          { description: 'english', language: 'en' }
+        ];
+        const validValues = [languages];
+
+        expectPropertiesValues(component, 'languagesList', validValues, validValues);
+        expect(component.showLanguage).toBeTrue();
       });
     });
 

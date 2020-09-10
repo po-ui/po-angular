@@ -5,7 +5,9 @@
 
 <po-page-background
   #pageLogin
-  p-show-select-language
+  [p-show-select-language]="showLanguage"
+  [p-languages]="languagesList"
+  [p-initial-language]="initialSelectLanguage"
   [p-background]="background"
   [p-highlight-info]="pageLoginLiterals.highlightInfo"
   [p-logo]="logo"
