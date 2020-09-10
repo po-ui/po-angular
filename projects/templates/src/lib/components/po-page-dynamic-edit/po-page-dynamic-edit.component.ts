@@ -12,10 +12,11 @@ import {
   PoGridRowActions,
   PoLanguageService,
   PoNotificationService,
-  PoPageAction
+  PoPageAction,
+  poLocaleDefault
 } from '@po-ui/ng-components';
 
-import * as util from './../../utils/util';
+import { convertToBoolean, mapObjectByProperties, valuesFromObject, removeKeysProperties } from './../../utils/util';
 
 import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
 import { PoPageDynamicEditField } from './interfaces/po-page-dynamic-edit-field.interface';
@@ -220,7 +221,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    * @default false
    */
   @Input('p-auto-router') set autoRouter(value: boolean) {
-    this._autoRouter = util.convertToBoolean(value);
+    this._autoRouter = convertToBoolean(value);
   }
 
   get autoRouter(): boolean {
@@ -366,7 +367,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     const language = languageService.getShortLanguage();
 
     this.literals = {
-      ...poPageDynamicEditLiteralsDefault[util.poLocaleDefault],
+      ...poPageDynamicEditLiteralsDefault[poLocaleDefault],
       ...poPageDynamicEditLiteralsDefault[language]
     };
   }
@@ -439,9 +440,9 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   private formatUniqueKey(item) {
-    const keys = util.mapObjectByProperties(item, this.keys);
+    const keys = mapObjectByProperties(item, this.keys);
 
-    return util.valuesFromObject(keys).join('|');
+    return valuesFromObject(keys).join('|');
   }
 
   private goBack(
@@ -595,7 +596,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private updateModel(newResource: any = {}) {
     const dynamicNgForm = this.dynamicForm.form;
 
-    util.removeKeysProperties(this.keys, newResource);
+    removeKeysProperties(this.keys, newResource);
 
     this.model = { ...this.model, ...newResource };
 

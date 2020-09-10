@@ -11,10 +11,9 @@ import {
   PoLoginComponent,
   PoPasswordComponent,
   PoSelectComponent,
-  PoSwitchComponent
+  PoSwitchComponent,
+  poLocaleDefault
 } from '@po-ui/ng-components';
-
-import { poLocaleDefault } from './../../utils/util';
 
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';

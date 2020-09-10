@@ -4,6 +4,7 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import * as utilsFunctions from '../../utils/util';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
 import { PoNavbarBaseComponent, poNavbarLiteralsDefault } from './po-navbar-base.component';
 
@@ -50,7 +51,7 @@ describe('PoNavbarBaseComponent:', () => {
 
       component.literals = {};
 
-      expect(component.literals).toEqual(poNavbarLiteralsDefault[utilsFunctions.poLocaleDefault]);
+      expect(component.literals).toEqual(poNavbarLiteralsDefault[poLocaleDefault]);
     });
 
     it('literals: should be in portuguese if browser is setted with `pt`', () => {
@@ -86,9 +87,9 @@ describe('PoNavbarBaseComponent:', () => {
     });
 
     it('literals: should accept custom literals', () => {
-      component['language'] = utilsFunctions.poLocaleDefault;
+      component['language'] = poLocaleDefault;
 
-      const customLiterals = Object.assign({}, poNavbarLiteralsDefault[utilsFunctions.poLocaleDefault]);
+      const customLiterals = Object.assign({}, poNavbarLiteralsDefault[poLocaleDefault]);
 
       // Custom some literals
       customLiterals.navbarLinks = 'links';
@@ -101,14 +102,9 @@ describe('PoNavbarBaseComponent:', () => {
     it('literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      component['language'] = utilsFunctions.poLocaleDefault;
+      component['language'] = poLocaleDefault;
 
-      expectPropertiesValues(
-        component,
-        'literals',
-        invalidValues,
-        poNavbarLiteralsDefault[utilsFunctions.poLocaleDefault]
-      );
+      expectPropertiesValues(component, 'literals', invalidValues, poNavbarLiteralsDefault[poLocaleDefault]);
     });
 
     it('shadow: should update property with true if values are valid', () => {

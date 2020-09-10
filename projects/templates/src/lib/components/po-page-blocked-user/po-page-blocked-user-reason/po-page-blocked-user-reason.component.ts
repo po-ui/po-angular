@@ -1,8 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
-import { PoLanguageService } from '@po-ui/ng-components';
-
-import { poLocaleDefault } from '../../../utils/util';
+import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 import { poPageBlockedUserLiterals } from './../literals/i18n/po-page-blocked-user-literals';
 import { PoPageBlockedUserReason } from '../enums/po-page-blocked-user-reason.enum';

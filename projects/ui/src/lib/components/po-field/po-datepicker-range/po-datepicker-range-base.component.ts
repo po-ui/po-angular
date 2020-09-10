@@ -1,9 +1,9 @@
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { browserLanguage, convertToBoolean, poLocaleDefault } from './../../../utils/util';
+import { browserLanguage, convertToBoolean } from './../../../utils/util';
 import { requiredFailed } from '../validators';
-
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { InputBoolean } from '../../../decorators';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';

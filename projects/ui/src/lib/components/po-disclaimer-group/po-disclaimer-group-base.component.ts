@@ -1,7 +1,8 @@
 import { DoCheck, EventEmitter, Input, IterableDiffers, Output, Directive } from '@angular/core';
 
-import { convertToBoolean, isKeyCodeEnter, poLocaleDefault, uuid } from '../../utils/util';
+import { convertToBoolean, isKeyCodeEnter, uuid } from '../../utils/util';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
 import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 

@@ -1,8 +1,9 @@
 import { EventEmitter, Input, OnChanges, Output, Directive, SimpleChanges } from '@angular/core';
 
-import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues, poLocaleDefault } from '../../utils/util';
+import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';

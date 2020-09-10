@@ -1,8 +1,8 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { poLocaleDefault, convertToBoolean } from '../../utils/util';
+import { convertToBoolean } from '../../utils/util';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewLiterals } from './interfaces/po-list-view-literals.interface';
 

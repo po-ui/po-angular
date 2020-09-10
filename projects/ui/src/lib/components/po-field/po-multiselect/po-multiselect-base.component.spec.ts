@@ -2,14 +2,10 @@ import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
-import {
-  removeDuplicatedOptions,
-  removeUndefinedAndNullOptions,
-  sortOptionsByProperty,
-  poLocaleDefault
-} from '../../../utils/util';
+import { removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty } from '../../../utils/util';
 import * as UtilsFunctions from '../../../utils/util';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';

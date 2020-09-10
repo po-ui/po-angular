@@ -6,7 +6,6 @@ import {
   convertToInt,
   isExternalLink,
   isTypeof,
-  poLocaleDefault,
   validValue,
   uuid
 } from '../../utils/util';
@@ -15,6 +14,7 @@ import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 import { PoMenuItem } from './po-menu-item.interface';
 import { PoMenuService } from './services/po-menu.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
 export const poMenuLiteralsDefault = {
   en: { itemNotFound: 'Item not found.', emptyLabelError: 'Attribute PoMenuItem.label can not be empty.' },

@@ -2,7 +2,7 @@ import { Component, ComponentRef, OnDestroy, OnInit, ViewChild } from '@angular/
 
 import { Subscription } from 'rxjs';
 
-import { poLocaleDefault } from '../../utils/util';
+import { poLocaleDefault } from '../po-language/po-language.constant';
 
 import { PoLanguageService } from '../po-language/po-language.service';
 

@@ -8,6 +8,7 @@ import * as ValidatorsFunctions from '../validators';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoComboBaseComponent, poComboLiteralsDefault } from './po-combo-base.component';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
@@ -119,7 +120,7 @@ describe('PoComboBaseComponent:', () => {
 
         component.literals = {};
 
-        expect(component.literals).toEqual(poComboLiteralsDefault[Utils.poLocaleDefault]);
+        expect(component.literals).toEqual(poComboLiteralsDefault[poLocaleDefault]);
       });
 
       it('should be in english if browser is set with `en`.', () => {
@@ -147,9 +148,9 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should accept custom literals.', () => {
-        component['language'] = Utils.poLocaleDefault;
+        component['language'] = poLocaleDefault;
 
-        const customLiterals = Object.assign({}, poComboLiteralsDefault[Utils.poLocaleDefault]);
+        const customLiterals = Object.assign({}, poComboLiteralsDefault[poLocaleDefault]);
         customLiterals.noData = 'Sem dados';
         component.literals = customLiterals;
 

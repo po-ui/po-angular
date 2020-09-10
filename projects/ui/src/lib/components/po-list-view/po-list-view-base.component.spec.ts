@@ -1,7 +1,7 @@
 import * as UtilsFunctions from '../../utils/util';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
-import { poLocaleDefault } from '../../utils/util';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
 import { PoListViewBaseComponent, poListViewLiteralsDefault } from './po-list-view-base.component';
 

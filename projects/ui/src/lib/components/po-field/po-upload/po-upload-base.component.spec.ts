@@ -8,6 +8,7 @@ import { expectPropertiesValues, configureTestSuite } from '../../../util-test/u
 import * as utilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoUploadBaseComponent, poUploadLiteralsDefault } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
@@ -567,7 +568,7 @@ describe('PoUploadBaseComponent:', () => {
 
       component.literals = {};
 
-      expect(component.literals).toEqual(poUploadLiteralsDefault[utilsFunctions.poLocaleDefault]);
+      expect(component.literals).toEqual(poUploadLiteralsDefault[poLocaleDefault]);
     });
 
     it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
@@ -603,9 +604,9 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('p-literals: should accept custom literals', () => {
-      component['language'] = utilsFunctions.poLocaleDefault;
+      component['language'] = poLocaleDefault;
 
-      const customLiterals = Object.assign({}, poUploadLiteralsDefault[utilsFunctions.poLocaleDefault]);
+      const customLiterals = Object.assign({}, poUploadLiteralsDefault[poLocaleDefault]);
 
       // Custom some literals
       customLiterals.invalidDropArea = 'Área inválida';
@@ -618,14 +619,9 @@ describe('PoUploadBaseComponent:', () => {
     it('p-literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      component['language'] = utilsFunctions.poLocaleDefault;
+      component['language'] = poLocaleDefault;
 
-      expectPropertiesValues(
-        component,
-        'literals',
-        invalidValues,
-        poUploadLiteralsDefault[utilsFunctions.poLocaleDefault]
-      );
+      expectPropertiesValues(component, 'literals', invalidValues, poUploadLiteralsDefault[poLocaleDefault]);
     });
 
     it('required: should set `required` with valid values', () => {

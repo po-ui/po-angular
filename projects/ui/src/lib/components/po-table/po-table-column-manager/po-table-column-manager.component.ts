@@ -13,11 +13,11 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { capitalizeFirstLetter, convertToInt, poLocaleDefault } from '../../../utils/util';
+import { capitalizeFirstLetter, convertToInt } from '../../../utils/util';
 import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 const PoTableColumnManagerMaxColumnsDefault = 99999;

@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import * as UtilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent, poDatepickerRangeLiteralsDefault } from './po-datepicker-range-base.component';
@@ -111,7 +112,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
       component.literals = {};
 
-      expect(component.literals).toEqual(poDatepickerRangeLiteralsDefault[UtilsFunctions.poLocaleDefault]);
+      expect(component.literals).toEqual(poDatepickerRangeLiteralsDefault[poLocaleDefault]);
     });
 
     it('literals: should be in portuguese if browser is setted with `pt`', () => {
@@ -131,9 +132,9 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should accept custom literals', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue(UtilsFunctions.poLocaleDefault);
+      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue(poLocaleDefault);
 
-      const customLiterals = Object.assign({}, poDatepickerRangeLiteralsDefault[UtilsFunctions.poLocaleDefault]);
+      const customLiterals = Object.assign({}, poDatepickerRangeLiteralsDefault[poLocaleDefault]);
 
       customLiterals.invalidFormat = 'Incorrect format';
 
@@ -161,14 +162,9 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     it('literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(UtilsFunctions.poLocaleDefault);
+      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
 
-      expectPropertiesValues(
-        component,
-        'literals',
-        invalidValues,
-        poDatepickerRangeLiteralsDefault[UtilsFunctions.poLocaleDefault]
-      );
+      expectPropertiesValues(component, 'literals', invalidValues, poDatepickerRangeLiteralsDefault[poLocaleDefault]);
     });
 
     it('readonly: should update with true value.', () => {

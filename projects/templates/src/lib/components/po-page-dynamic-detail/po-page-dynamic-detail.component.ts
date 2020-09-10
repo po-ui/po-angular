@@ -10,10 +10,11 @@ import {
   PoDialogService,
   PoLanguageService,
   PoNotificationService,
-  PoPageAction
+  PoPageAction,
+  poLocaleDefault
 } from '@po-ui/ng-components';
 
-import * as util from '../../utils/util';
+import { convertToBoolean, mapObjectByProperties, valuesFromObject } from '../../utils/util';
 
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';
@@ -183,7 +184,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
    * @default false
    */
   @Input('p-auto-router') set autoRouter(value: boolean) {
-    this._autoRouter = util.convertToBoolean(value);
+    this._autoRouter = convertToBoolean(value);
   }
 
   get autoRouter(): boolean {
@@ -288,7 +289,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     const language = languageService.getShortLanguage();
 
     this.literals = {
-      ...poPageDynamicDetailLiteralsDefault[util.poLocaleDefault],
+      ...poPageDynamicDetailLiteralsDefault[poLocaleDefault],
       ...poPageDynamicDetailLiteralsDefault[language]
     };
   }
@@ -370,9 +371,9 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   }
 
   private formatUniqueKey(item) {
-    const keys = util.mapObjectByProperties(item, this.keys);
+    const keys = mapObjectByProperties(item, this.keys);
 
-    return util.valuesFromObject(keys).join('|');
+    return valuesFromObject(keys).join('|');
   }
 
   private goBack(actionBack: PoPageDynamicDetailActions['back']) {

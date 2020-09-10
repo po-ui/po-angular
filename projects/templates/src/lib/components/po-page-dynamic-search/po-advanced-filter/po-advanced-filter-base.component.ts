@@ -5,10 +5,9 @@ import {
   PoDynamicFormField,
   PoLanguageService,
   PoModalAction,
-  PoModalComponent
+  PoModalComponent,
+  poLocaleDefault
 } from '@po-ui/ng-components';
-
-import { poLocaleDefault } from '../../../utils/util';
 
 import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
 import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search-filters.interface';
