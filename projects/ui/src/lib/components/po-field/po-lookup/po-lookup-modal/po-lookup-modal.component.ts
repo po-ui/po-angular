@@ -26,6 +26,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   ngOnInit() {
     super.ngOnInit();
+    console.log('teste');
 
     this.initializeEventInput();
     this.setTableHeight();

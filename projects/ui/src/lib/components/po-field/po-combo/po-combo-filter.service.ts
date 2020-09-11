@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -25,6 +25,10 @@ export class PoComboFilterService implements PoComboFilter {
 
   private messages = [];
 
+  readonly headers: HttpHeaders = new HttpHeaders({
+    'X-PO-No-Message': 'true'
+  });
+
   get url(): string {
     return this._url;
   }
@@ -38,7 +42,7 @@ export class PoComboFilterService implements PoComboFilter {
     const params = { ...filterParamsValidated, filter: value };
 
     return this.http
-      .get(`${this.url}`, { responseType: 'json', params: params })
+      .get(`${this.url}`, { responseType: 'json', params, headers: this.headers })
       .pipe(map((response: PoResponse) => this.parseToArrayComboOption(response.items)));
   }
 
@@ -46,7 +50,7 @@ export class PoComboFilterService implements PoComboFilter {
     const filterParamsValidated = validateObjectType(filterParams);
 
     return this.http
-      .get(`${this.url}/${value}`, { params: filterParamsValidated })
+      .get(`${this.url}/${value}`, { params: filterParamsValidated, headers: this.headers })
       .pipe(map(item => this.parseToComboOption(item)));
   }
 
