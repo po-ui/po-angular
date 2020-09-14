@@ -7,8 +7,6 @@ import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 
-import { PoDisclaimerGroup } from './../../../po-disclaimer-group/po-disclaimer-group.interface';
-import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
 
@@ -17,15 +15,10 @@ class PoLookupModalComponent extends PoLookupModalBaseComponent {
   openModal(): void {}
 }
 
-fdescribe('PoLookupModalBaseComponent:', () => {
+describe('PoLookupModalBaseComponent:', () => {
   let component: PoLookupModalComponent;
   let fakeSubscription;
   let items;
-  const fakeDisclaimer: PoDisclaimer = { property: 'propertyTest', value: 'valueTest' };
-  const fakeDisclaimerGroup: PoDisclaimerGroup = {
-    title: 'titleTest',
-    disclaimers: [{ property: 'propertyTest', value: 'valueTest' }]
-  };
 
   beforeEach(() => {
     component = new PoLookupModalComponent(new PoLanguageService());
@@ -247,10 +240,21 @@ fdescribe('PoLookupModalBaseComponent:', () => {
     });
 
     it('getAdvancedFilters: should return a new object of the disclaimer', () => {
-      const fakeFilter: Object = { propertyTest: 'valueTest' };
+      const fakeFilter = { propertyTest: 'valueTest' };
+      const fakeDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'propertyTest', value: 'valueTest' }]
+      };
       const advancedFilters = component['getAdvancedFilters'](fakeDisclaimerGroup.disclaimers);
 
       expect(advancedFilters).toEqual(fakeFilter);
+    });
+
+    it('getAdvancedFilters: should return undefined if advancedParams length is equal to 0', () => {
+      const emptyAdvancedParams = [];
+      const advancedFilters = component['getAdvancedFilters'](emptyAdvancedParams);
+
+      expect(advancedFilters).toBeUndefined();
     });
 
     it('search: should call `getFilteredItems` if `searchValue` it`s truthy.', () => {
@@ -441,11 +445,11 @@ fdescribe('PoLookupModalBaseComponent:', () => {
       expect(component.isLoading).toBeFalsy();
     });
 
-    it('onChangeDisclaimerGroup: should clear searchValue if disclaimer length is greater than 0', () => {
+    it('onChangeDisclaimerGroup: should call Search', () => {
       const spySearch = spyOn(component, <any>'search');
-      component.onChangeDisclaimerGroup(fakeDisclaimer);
 
-      expect(component.searchValue).toEqual('');
+      component.onChangeDisclaimerGroup();
+
       expect(spySearch).toHaveBeenCalled();
     });
 
@@ -459,18 +463,23 @@ fdescribe('PoLookupModalBaseComponent:', () => {
 
     it('createDisclaimer: should call addDisclaimer if dynamicFormValue is not empty', () => {
       const spyAddDisclaimer = spyOn(component, <any>'addDisclaimer');
-      const fakeDynamicFormValue = { name: 'nameTest' };
-      component.dynamicFormValue = fakeDynamicFormValue;
+      component.dynamicFormValue = { name: 'nameTest' };
       component.createDisclaimer();
 
       expect(spyAddDisclaimer).toHaveBeenCalled();
     });
 
     it('addDisclaimer: should create disclaimer and disclaimerGroup.disclaimer with parameters', () => {
+      const expectedValueDisclaimer = { property: 'propertyTest', value: 'valueTest' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'propertyTest', value: 'valueTest' }]
+      };
+
       component.addDisclaimer('valueTest', 'propertyTest');
 
-      expect(component.disclaimer).toEqual(fakeDisclaimer);
-      expect(component.disclaimerGroup.disclaimers).toEqual(fakeDisclaimerGroup.disclaimers);
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
     });
   });
 });

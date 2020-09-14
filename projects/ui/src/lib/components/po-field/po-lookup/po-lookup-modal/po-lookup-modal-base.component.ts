@@ -6,9 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { isTypeof, poLocaleDefault } from '../../../../utils/util';
 import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerGroup } from './../../../po-disclaimer-group/po-disclaimer-group.interface';
-import { PoDisclaimerGroupRemoveAction } from './../../../po-disclaimer-group/po-disclaimer-group-remove-action.interface';
 import { PoDynamicFormField } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form-field.interface';
-import { PoDynamicFormFieldChanged } from '../../../po-dynamic';
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
@@ -320,9 +318,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   private getAdvancedFilters(advancedParams: any) {
     if (advancedParams && advancedParams.length > 0) {
       const filters: Object = {};
-      let validatedAdvacendFilters;
+      let validatedAdvacendFilters: any;
 
-      advancedParams.forEach(filter => {
+      advancedParams.forEach((filter: any) => {
         filters[filter.property] = filter.value;
         validatedAdvacendFilters = { ...validatedAdvacendFilters, ...filters };
       });
@@ -358,6 +356,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   createDisclaimer() {
     this.disclaimerGroup.disclaimers = [];
+    this.searchValue = '';
 
     for (const [key, value] of Object.entries(this.dynamicFormValue)) {
       this.addDisclaimer(value, key);
@@ -369,23 +368,13 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   addDisclaimer(value: any, property: string) {
-    this.disclaimer = this.disclaimerGroup.disclaimers.find(item => item.property === property);
-
-    if (!this.disclaimer) {
-      this.disclaimer = <any>{ property: property };
-    } else {
-      this.disclaimerGroup.disclaimers.splice(this.disclaimerGroup.disclaimers.indexOf(this.disclaimer), 1);
-      this.disclaimer = Object.assign({}, this.disclaimer);
-    }
-
+    this.disclaimer = <any>{ property: property };
     this.disclaimer.value = value;
+
     this.disclaimerGroup.disclaimers = [...this.disclaimerGroup.disclaimers, this.disclaimer];
   }
 
-  onChangeDisclaimerGroup(disclaimers: any) {
-    if (disclaimers.length > 0) {
-      this.searchValue = '';
-    }
+  onChangeDisclaimerGroup() {
     this.search();
   }
 }

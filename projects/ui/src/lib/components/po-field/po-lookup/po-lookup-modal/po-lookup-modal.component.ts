@@ -4,7 +4,6 @@ import {
   OnInit,
   ViewChild,
   ViewContainerRef,
-  TemplateRef,
   ComponentFactoryResolver,
   ChangeDetectorRef,
   ComponentRef
@@ -15,7 +14,6 @@ import { fromEvent, Observable } from 'rxjs';
 import { debounceTime, filter, tap, switchMap } from 'rxjs/operators';
 
 import { PoDynamicFormComponent } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form.component';
-import { PoDynamicFormField } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form-field.interface';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 

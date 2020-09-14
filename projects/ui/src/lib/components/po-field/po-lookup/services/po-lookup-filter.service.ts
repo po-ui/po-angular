@@ -26,11 +26,12 @@ export class PoLookupFilterService implements PoLookupFilter {
   constructor(private httpClient: HttpClient) {}
 
   getFilteredItems(filteredItemsParams: PoLookupFilteredItemsParams): Observable<any> {
-    const { filterParams, ...restFilteredItemsParams } = filteredItemsParams;
+    const { filterParams, advancedFilters, ...restFilteredItemsParams } = filteredItemsParams;
 
     const validatedFilterParams = this.validateParams(filterParams);
+    const validatedAdvancedFilters = this.validateParams(advancedFilters);
 
-    const params = { ...restFilteredItemsParams, ...validatedFilterParams };
+    const params = { ...restFilteredItemsParams, ...validatedFilterParams, ...validatedAdvancedFilters };
 
     return this.httpClient.get(this.url, { headers: this.headers, params });
   }

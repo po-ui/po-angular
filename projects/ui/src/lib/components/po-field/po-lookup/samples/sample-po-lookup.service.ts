@@ -12,10 +12,8 @@ export class SamplePoLookupService implements PoLookupFilter {
   constructor(private httpClient: HttpClient) {}
 
   getFilteredItems(filteredParams: PoLookupFilteredItemsParams): Observable<any> {
-    const { advancedFilters, page, pageSize } = filteredParams;
-    delete filteredParams.advancedFilters;
-
-    const params = { ...filteredParams, page: page.toString(), pageSize: pageSize.toString(), ...advancedFilters };
+    const { filterParams, advancedFilters, ...restFilteredItemsParams } = filteredParams;
+    const params = { ...restFilteredItemsParams, ...filterParams, ...advancedFilters };
 
     return this.httpClient.get(this.url, { params });
   }

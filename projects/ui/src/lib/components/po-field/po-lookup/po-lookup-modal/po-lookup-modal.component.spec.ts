@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
@@ -12,11 +12,9 @@ import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-s
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalComponent } from '../../../../components/po-field/po-lookup/po-lookup-modal/po-lookup-modal.component';
 
-import { PoDynamicFormLoadService } from '../../../po-dynamic/po-dynamic-form/po-dynamic-form-load/po-dynamic-form-load.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
@@ -27,24 +25,13 @@ class LookupFilterService implements PoLookupFilter {
   }
 }
 
-fdescribe('PoLookupModalComponent', () => {
+describe('PoLookupModalComponent', () => {
   let component: PoLookupModalComponent;
   let fixture: ComponentFixture<PoLookupModalComponent>;
 
   const defaultTableHeight = 370;
   const defaultContainerHeight = 375;
-  const dynamicForm = {};
-  const advancedFilters = [
-    { property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1 },
-    {
-      property: 'birthday',
-      label: 'Date of birth',
-      type: 'date',
-      format: 'mm/dd/yyyy',
-      gridColumns: 6,
-      gridSmColumns: 12
-    }
-  ];
+  const advancedFilters = [{ property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1 }];
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -226,15 +213,62 @@ fdescribe('PoLookupModalComponent', () => {
 
     it('should set fields with property p-advanced-filters and value with a empty object', () => {
       expect(component.componentRef.instance.fields).toEqual(advancedFilters);
-      expect(component.componentRef.instance.value).toEqual(dynamicForm);
+      expect(component.componentRef.instance.value).toEqual({});
     });
 
-    it('should create a formOutput', () => {
-      // console.log(component.dynamicForm)
-      // const spyteste = spyOn(component.componentRef.instance, <any>'formOutput').and.returnValue(of({ items: filteredItems, hasNext: true }));
+    it('should create a formOutput', fakeAsync(() => {
+      component.onAdvancedSearch();
+      fixture.detectChanges();
+      tick();
 
-      expect(component.componentRef.instance.formOutput).not.toBeNull();
-    });
+      expect(component.dynamicForm).not.toBeNull();
+    }));
+
+    it('form should be invalid and primary action should be disabled', fakeAsync(() => {
+      const advancedFiltersRequired = [
+        { property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1, required: true }
+      ];
+
+      component.advancedFilters = advancedFiltersRequired;
+      component.onAdvancedSearch();
+      fixture.detectChanges();
+
+      tick();
+
+      expect(component.dynamicForm.invalid).toBeTruthy();
+      expect(component.primaryActionAdvancedSearch.disabled).toBeTruthy();
+    }));
+
+    it('form should be valid and primary action should be enable', fakeAsync(() => {
+      const advancedFiltersRequired = [{ property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1 }];
+
+      component.advancedFilters = advancedFiltersRequired;
+      component.onAdvancedSearch();
+      fixture.detectChanges();
+      tick();
+
+      expect(component.dynamicForm.invalid).toBeFalsy();
+      expect(component.primaryActionAdvancedSearch.disabled).toBeFalsy();
+    }));
+
+    it('should set button primary action disable to false when form changed from invalid to valid', fakeAsync(() => {
+      const advancedFiltersRequired = [
+        { property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1, required: true }
+      ];
+      const spyFormOutput = spyOn<any>(component.componentRef.instance, 'formOutput');
+
+      component.advancedFilters = advancedFiltersRequired;
+      component.onAdvancedSearch();
+      fixture.detectChanges();
+      tick();
+
+      component.dynamicForm.form.patchValue({
+        name: 'formIsNowValid'
+      });
+
+      expect(spyFormOutput).not.toBeNull();
+      expect(component.primaryActionAdvancedSearch.disabled).toBeFalsy();
+    }));
 
     it('secondaryActionAdvancedSearch should set isAdvancedSearch to false', () => {
       component.secondaryActionAdvancedSearch.action();
@@ -242,6 +276,7 @@ fdescribe('PoLookupModalComponent', () => {
 
       const selectElement = fixture.nativeElement.querySelector('po-modal');
 
+      // TODO aqui deveria analisar se tem a table (que só existe fora do busca avançada)
       // console.log(selectElement.getAttribute('ng-reflect-title'))
       // console.log(component.componentRef.location.nativeElement.querySelector('.form'))
 
