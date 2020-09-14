@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.6.0"></a>
+# [3.6.0](https://github.com/po-ui/po-angular/compare/v3.5.0...v3.6.0) (2020-09-14)
+
+
+### Features
+
+* **combo:** adiciona a propriedade p-clean ([7e3a579](https://github.com/po-ui/po-angular/commit/7e3a579)), closes [#152](https://github.com/po-ui/po-angular/issues/152)
+* **page-dynamic-search:** adiciona propriedade p-quick-search-width ([584dbf0](https://github.com/po-ui/po-angular/commit/584dbf0))
+* **page-dynamic-table:** adiciona propriedade p-quick-search-width ([c6909b0](https://github.com/po-ui/po-angular/commit/c6909b0))
+* **page-slide:** cria o componente po-page-slide ([080e2db](https://github.com/po-ui/po-angular/commit/080e2db))
+* **po-login:** criada propriedade `p-languages` e o evento `p-language-change` ([b7ac5c1](https://github.com/po-ui/po-angular/commit/b7ac5c1))
+* **schematics:** adiciona testes unitários para o [@po-ui](https://github.com/po-ui)/ng-storage ([685e3c4](https://github.com/po-ui/po-angular/commit/685e3c4))
+* **schematics:** adiciona testes unitários para o [@po-ui](https://github.com/po-ui)/ng-templates ([1701eea](https://github.com/po-ui/po-angular/commit/1701eea))
+* **storage:** atualiza pacote do localForage ([3d00bee](https://github.com/po-ui/po-angular/commit/3d00bee))
+
+
+
 <a name="3.5.0"></a>
 # [3.5.0](https://github.com/po-ui/po-angular/compare/v3.4.0...v3.5.0) (2020-09-08)
 
