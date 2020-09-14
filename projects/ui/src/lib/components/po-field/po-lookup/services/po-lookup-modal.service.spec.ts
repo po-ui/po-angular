@@ -33,6 +33,7 @@ describe('PoLookupModalService:', () => {
   let lookupFilterService: LookupFilterService;
   let poLookupModalService: PoLookupModalService;
   const params = {
+    advancedFilters: [],
     service: undefined,
     columns: [],
     filterParams: undefined,

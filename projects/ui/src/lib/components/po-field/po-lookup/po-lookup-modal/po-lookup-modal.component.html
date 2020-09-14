@@ -2,43 +2,70 @@
   p-click-out="false"
   p-hide-close="false"
   p-size="lg"
-  [p-primary-action]="primaryAction"
-  [p-secondary-action]="secondaryAction"
-  [p-title]="title"
+  [p-primary-action]="isAdvancedFilter ? primaryActionAdvancedFilter : primaryAction"
+  [p-secondary-action]="isAdvancedFilter ? secondaryActionAdvancedFilter : secondaryAction"
+  [p-title]="isAdvancedFilter ? advancedFilterModalTitle : title"
 >
-  <po-field-container class="po-lookup-header po-md-6 po-pull-right" [p-optional]="false">
-    <div class="po-field-container-content">
-      <input
-        #inpsearch
-        class="po-input po-input-icon-right"
-        name="contentSearch"
-        [(ngModel)]="searchValue"
-        [placeholder]="literals.modalPlaceholder"
-        type="text"
-      />
+  <div [hidden]="isAdvancedFilter">
+    <po-field-container class="po-lookup-header po-pull-right" [p-optional]="false">
+      <div class="po-lookup-filter-content">
+        <div class="po-field-icon-container-right">
+          <span #iconLookup class="po-icon po-field-icon po-icon-search" (click)="search()"> </span>
+        </div>
 
-      <div class="po-field-icon-container-right">
-        <span #iconLookup class="po-icon po-field-icon po-icon-search" (click)="search()"> </span>
+        <input
+          #inpsearch
+          class="po-input po-input-icon-right"
+          name="contentSearch"
+          [(ngModel)]="searchValue"
+          [placeholder]="literals.modalPlaceholder"
+          type="text"
+        />
       </div>
-    </div>
-  </po-field-container>
 
-  <div class="po-row po-lookup-container-table" [style.height.px]="containerHeight">
-    <po-table
+      <div *ngIf="advancedFilters && advancedFilters.length > 0" class="po-lookup-advanced-search">
+        <span
+          class="po-lookup-advanced-search-link"
+          tabindex="0"
+          (click)="onAdvancedFilter()"
+          (keydown.enter)="onAdvancedFilter()"
+          tabindex="0"
+        >
+          {{ literals.modalAdvancedSearch }}
+        </span>
+      </div>
+    </po-field-container>
+
+    <!-- DISCLAIMER -->
+    <po-disclaimer-group
       class="po-md-12"
-      p-selectable="true"
-      p-hide-detail="true"
-      p-single-select="true"
-      p-sort="true"
-      [p-columns]="columns"
-      [p-height]="tableHeight"
-      [p-items]="items"
-      [p-literals]="tableLiterals"
-      [p-loading]="isLoading"
-      [p-show-more-disabled]="!hasNext"
-      (p-show-more)="showMoreEvent()"
-      (p-sort-by)="sortBy($event)"
+      *ngIf="!!disclaimerGroup"
+      [p-disclaimers]="disclaimerGroup?.disclaimers"
+      [p-title]="disclaimerGroup?.title"
+      (p-change)="onChangeDisclaimerGroup()"
     >
-    </po-table>
+    </po-disclaimer-group>
+
+    <div class="po-row po-lookup-container-table" [style.height.px]="containerHeight">
+      <po-table
+        class="po-md-12"
+        p-selectable="true"
+        p-hide-detail="true"
+        p-single-select="true"
+        p-sort="true"
+        [p-columns]="columns"
+        [p-height]="tableHeight"
+        [p-items]="items"
+        [p-literals]="tableLiterals"
+        [p-loading]="isLoading"
+        [p-show-more-disabled]="!hasNext"
+        (p-show-more)="showMoreEvent()"
+        (p-sort-by)="sortBy($event)"
+      >
+      </po-table>
+    </div>
+  </div>
+  <div [hidden]="!isAdvancedFilter">
+    <ng-container #container> </ng-container>
   </div>
 </po-modal>

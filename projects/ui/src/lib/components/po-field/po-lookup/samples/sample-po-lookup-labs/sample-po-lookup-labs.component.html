@@ -10,6 +10,7 @@
   [p-help]="help"
   [p-label]="label"
   [p-literals]="customLiterals"
+  [p-advanced-filters]="customAdvancedFilters"
   [p-no-autocomplete]="properties.includes('noAutocomplete')"
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
@@ -106,6 +107,19 @@
       (p-change)="onChangeProperties($event)"
     >
     </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-textarea
+      class="po-md-6"
+      name="advancedFilters"
+      [(ngModel)]="advancedFilters"
+      (p-change)="changeAdvancedFilters()"
+      p-help='Ex.: [{"property":"name","divider":"PERSONAL DATA","required":true,"gridColumns":6},{"property":"id","optional":true,"gridColumns":6}]'
+      p-label="Advanced Filters"
+      p-rows="4"
+    >
+    </po-textarea>
   </div>
 
   <div class="po-row">
