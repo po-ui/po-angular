@@ -1,8 +1,22 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  TemplateRef,
+  ComponentFactoryResolver,
+  ChangeDetectorRef,
+  ComponentRef
+} from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { fromEvent, Observable } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, tap, switchMap } from 'rxjs/operators';
 
+import { PoDynamicFormComponent } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form.component';
+import { PoDynamicFormField } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form-field.interface';
+import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 
 import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-base.component';
@@ -17,19 +31,33 @@ import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-b
   templateUrl: './po-lookup-modal.component.html'
 })
 export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit {
-  @ViewChild('inpsearch', { static: true }) inputSearchEl: ElementRef;
+  @ViewChild('inpsearch') inputSearchEl: ElementRef;
+  @ViewChild('container', { read: ViewContainerRef }) container: ViewContainerRef;
 
   keyUpObservable: Observable<any> = null;
 
   containerHeight: number = 375;
   tableHeight: number = 370;
 
+  componentRef: ComponentRef<PoDynamicFormComponent>;
+  dynamicForm: NgForm;
+
+  constructor(
+    private cd: ChangeDetectorRef,
+    private componentFactory: ComponentFactoryResolver,
+    poLanguage: PoLanguageService
+  ) {
+    super(poLanguage);
+  }
+
   ngOnInit() {
     super.ngOnInit();
-    console.log('teste');
 
-    this.initializeEventInput();
     this.setTableHeight();
+  }
+
+  ngAfterViewInit(): void {
+    this.initializeEventInput();
   }
 
   initializeEventInput(): void {
@@ -45,6 +73,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   openModal() {
     this.poModal.open();
+    this.cd.detectChanges();
   }
 
   sortBy(sort: PoTableColumnSort) {
@@ -60,5 +89,36 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   private validateEnterPressed(e: any) {
     return e.keyCode === 13;
+  }
+
+  onAdvancedSearch() {
+    this.setupModalAdvancedSearch();
+    this.cd.detectChanges();
+    this.createDynamicForm();
+  }
+
+  private setupModalAdvancedSearch() {
+    this.dynamicFormValue = {};
+    this.isAdvancedSearch = true;
+  }
+
+  private createDynamicForm() {
+    const component = this.componentFactory.resolveComponentFactory(PoDynamicFormComponent);
+
+    this.componentRef = this.container.createComponent(component);
+    this.componentRef.instance.fields = this.advancedFilters;
+    this.componentRef.instance.value = this.dynamicFormValue;
+
+    this.componentRef.instance.formOutput
+      .pipe(
+        tap(form => {
+          this.dynamicForm = form;
+          this.primaryActionAdvancedSearch.disabled = this.dynamicForm.invalid;
+        }),
+        switchMap(form => form.valueChanges)
+      )
+      .subscribe(() => {
+        this.primaryActionAdvancedSearch.disabled = this.dynamicForm.invalid;
+      });
   }
 }

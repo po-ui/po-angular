@@ -29,4 +29,19 @@ export interface PoLookupLiterals {
 
   /** Texto exibido no título da modal. */
   modalTitle?: string;
+
+  /** Texto do span do busca avançada. */
+  modalAdvancedSearch?: string;
+
+  /** Texto exibido no título da modal de busca avançada. */
+  modalAdvancedSearchTitle?: string;
+
+  /** Texto exibido no label do botão de ação primária da modal de busca avançada. */
+  modalAdvancedSearchPrimaryActionLabel?: string;
+
+  /** Texto exibido no label do botão de ação secundária da modal de busca avançada. */
+  modalAdvancedSearchSecondaryActionLabel?: string;
+
+  /** Texto exibido no título do disclaimer. */
+  modalDisclaimerGroupTitle?: string;
 }

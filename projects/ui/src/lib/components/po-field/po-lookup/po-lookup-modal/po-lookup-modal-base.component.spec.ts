@@ -7,6 +7,8 @@ import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 
+import { PoDisclaimerGroup } from './../../../po-disclaimer-group/po-disclaimer-group.interface';
+import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
 
@@ -15,10 +17,15 @@ class PoLookupModalComponent extends PoLookupModalBaseComponent {
   openModal(): void {}
 }
 
-describe('PoLookupModalBaseComponent:', () => {
+fdescribe('PoLookupModalBaseComponent:', () => {
   let component: PoLookupModalComponent;
   let fakeSubscription;
   let items;
+  const fakeDisclaimer: PoDisclaimer = { property: 'propertyTest', value: 'valueTest' };
+  const fakeDisclaimerGroup: PoDisclaimerGroup = {
+    title: 'titleTest',
+    disclaimers: [{ property: 'propertyTest', value: 'valueTest' }]
+  };
 
   beforeEach(() => {
     component = new PoLookupModalComponent(new PoLanguageService());
@@ -239,6 +246,13 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.filterService.getFilteredItems).toHaveBeenCalledWith({ filter, page, pageSize, filterParams });
     });
 
+    it('getAdvancedFilters: should return a new object of the disclaimer', () => {
+      const fakeFilter: Object = { propertyTest: 'valueTest' };
+      const advancedFilters = component['getAdvancedFilters'](fakeDisclaimerGroup.disclaimers);
+
+      expect(advancedFilters).toEqual(fakeFilter);
+    });
+
     it('search: should call `getFilteredItems` if `searchValue` it`s truthy.', () => {
       component.searchValue = 'Suco';
 
@@ -425,6 +439,38 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.items.length).toBe(2);
       expect(component.hasNext).toBeFalsy();
       expect(component.isLoading).toBeFalsy();
+    });
+
+    it('onChangeDisclaimerGroup: should clear searchValue if disclaimer length is greater than 0', () => {
+      const spySearch = spyOn(component, <any>'search');
+      component.onChangeDisclaimerGroup(fakeDisclaimer);
+
+      expect(component.searchValue).toEqual('');
+      expect(spySearch).toHaveBeenCalled();
+    });
+
+    it('createDisclaimer: should call initializeData if dynamicFormValue is empty', () => {
+      const spyInitializeData = spyOn(component, <any>'initializeData');
+      component.dynamicFormValue = {};
+      component.createDisclaimer();
+
+      expect(spyInitializeData).toHaveBeenCalled();
+    });
+
+    it('createDisclaimer: should call addDisclaimer if dynamicFormValue is not empty', () => {
+      const spyAddDisclaimer = spyOn(component, <any>'addDisclaimer');
+      const fakeDynamicFormValue = { name: 'nameTest' };
+      component.dynamicFormValue = fakeDynamicFormValue;
+      component.createDisclaimer();
+
+      expect(spyAddDisclaimer).toHaveBeenCalled();
+    });
+
+    it('addDisclaimer: should create disclaimer and disclaimerGroup.disclaimer with parameters', () => {
+      component.addDisclaimer('valueTest', 'propertyTest');
+
+      expect(component.disclaimer).toEqual(fakeDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(fakeDisclaimerGroup.disclaimers);
     });
   });
 });

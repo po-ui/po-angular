@@ -1,5 +1,6 @@
 import { Injectable, ComponentRef, EventEmitter } from '@angular/core';
 
+import { PoDynamicFormField } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form-field.interface';
 import { PoComponentInjectorService } from '../../../../services/po-component-injector/po-component-injector.service';
 import { PoLookupColumn } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
@@ -22,6 +23,7 @@ export class PoLookupModalService {
   /**
    * Método responsável por abrir a modal de busca das informações.
    *
+   * @param advancedFilters {Array<PoDynamicFormField>} Objeto utilizado para criar o busca avançada.
    * @param service {PoLookupFilter} Serviço responsável por realizar a busca no serviço dos dados.
    * @param columns {Array<PoLookupColumn>} Definição das colunas na modal de busca.
    * @param filterParams {any} Valor que será repassado aos métodos do serviço para auxiliar no filtro dos dados.
@@ -29,15 +31,17 @@ export class PoLookupModalService {
    * @param literals {PoLookupLiterals} Literais utilizadas no componente.
    */
   openModal(params: {
+    advancedFilters: Array<PoDynamicFormField>;
     service: PoLookupFilter;
     columns: Array<PoLookupColumn>;
     filterParams: any;
     title: string;
     literals: PoLookupLiterals;
   }): void {
-    const { service, columns, filterParams, title, literals } = params;
+    const { advancedFilters, service, columns, filterParams, title, literals } = params;
 
     this.componentRef = this.poComponentInjector.createComponentInApplication(PoLookupModalComponent);
+    this.componentRef.instance.advancedFilters = advancedFilters;
     this.componentRef.instance.title = title;
     this.componentRef.instance.columns = columns;
     this.componentRef.instance.filterService = service;

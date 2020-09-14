@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
@@ -12,6 +12,12 @@ import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-s
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalComponent } from '../../../../components/po-field/po-lookup/po-lookup-modal/po-lookup-modal.component';
 
+import { PoDynamicFormLoadService } from '../../../po-dynamic/po-dynamic-form/po-dynamic-form-load/po-dynamic-form-load.service';
+import { HttpClientModule } from '@angular/common/http';
+import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
+
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
     return of({ items: [{ value: 123, label: 'teste' }] });
@@ -21,16 +27,28 @@ class LookupFilterService implements PoLookupFilter {
   }
 }
 
-describe('PoLookupModalComponent', () => {
+fdescribe('PoLookupModalComponent', () => {
   let component: PoLookupModalComponent;
   let fixture: ComponentFixture<PoLookupModalComponent>;
 
   const defaultTableHeight = 370;
   const defaultContainerHeight = 375;
+  const dynamicForm = {};
+  const advancedFilters = [
+    { property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1 },
+    {
+      property: 'birthday',
+      label: 'Date of birth',
+      type: 'date',
+      format: 'mm/dd/yyyy',
+      gridColumns: 6,
+      gridSmColumns: 12
+    }
+  ];
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoModalModule],
+      imports: [PoModalModule, HttpClientModule, PoDynamicModule, RouterTestingModule],
       declarations: [PoLookupModalComponent],
       providers: [LookupFilterService, PoComponentInjectorService],
       schemas: [NO_ERRORS_SCHEMA]
@@ -61,6 +79,7 @@ describe('PoLookupModalComponent', () => {
 
   it('should init modal with items', () => {
     component.ngOnInit();
+    component.ngAfterViewInit();
 
     expect(component.items.length).toBe(2);
   });
@@ -110,7 +129,6 @@ describe('PoLookupModalComponent', () => {
 
   it('should be modal opened', () => {
     component.openModal();
-    fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('.po-modal')).not.toBeNull();
   });
@@ -118,7 +136,6 @@ describe('PoLookupModalComponent', () => {
   it('should filter the key pressed', () => {
     component.ngOnInit();
     component.openModal();
-    fixture.detectChanges();
 
     spyOn(component, <any>'validateEnterPressed').and.returnValue(of(true));
 
@@ -133,7 +150,6 @@ describe('PoLookupModalComponent', () => {
 
   it('should call search method', (): void => {
     component.openModal();
-    fixture.detectChanges();
 
     spyOn(component, 'search');
     spyOn(component, <any>'validateEnterPressed').and.returnValue(true);
@@ -174,6 +190,73 @@ describe('PoLookupModalComponent', () => {
 
     expect(component.tableHeight).toBe(defaultTableHeight);
     expect(component.containerHeight).toBe(defaultContainerHeight);
+  });
+
+  describe('AdvancedSearch: ', () => {
+    beforeEach(() => {
+      component.advancedFilters = advancedFilters;
+      component.onAdvancedSearch();
+      fixture.detectChanges();
+    });
+
+    afterEach(() => {
+      component.advancedFilters = [];
+      component.isAdvancedSearch = false;
+      fixture.detectChanges();
+    });
+
+    // fit('should open modal advanced search', fakeAsync(() => {
+    //   component.advancedFilters = advancedFilters;
+    //   component.onAdvancedSearch();
+    //   fixture.detectChanges();
+
+    //   console.log(fixture.debugElement);
+    //   console.log(fixture.debugElement.query(By.css(' #dynamicFormTemplate')));
+    //   tick(500);
+    //   // console.log(component.componentRef.location.nativeElement.querySelector('.po-dynamic-form'))
+    //   // console.log(advancedElement);
+
+    //   // expect(advancedElement.querySelectorAll('.po-dynamic-form')).not.toBeNull();
+    // }));
+
+    it('should clear dynamicForm and set isAdvancedSearch to true', () => {
+      expect(Object.keys(component.dynamicFormValue).length).toBe(0);
+      expect(component.isAdvancedSearch).toBe(true);
+    });
+
+    it('should set fields with property p-advanced-filters and value with a empty object', () => {
+      expect(component.componentRef.instance.fields).toEqual(advancedFilters);
+      expect(component.componentRef.instance.value).toEqual(dynamicForm);
+    });
+
+    it('should create a formOutput', () => {
+      // console.log(component.dynamicForm)
+      // const spyteste = spyOn(component.componentRef.instance, <any>'formOutput').and.returnValue(of({ items: filteredItems, hasNext: true }));
+
+      expect(component.componentRef.instance.formOutput).not.toBeNull();
+    });
+
+    it('secondaryActionAdvancedSearch should set isAdvancedSearch to false', () => {
+      component.secondaryActionAdvancedSearch.action();
+      fixture.detectChanges();
+
+      const selectElement = fixture.nativeElement.querySelector('po-modal');
+
+      // console.log(selectElement.getAttribute('ng-reflect-title'))
+      // console.log(component.componentRef.location.nativeElement.querySelector('.form'))
+
+      expect(component.isAdvancedSearch).toBe(false);
+    });
+
+    it('primaryActionAdvancedSearch should set isAdvancedSearch to false and call createDisclaimer', () => {
+      const spyCreateDisclaimer = spyOn(component, <any>'createDisclaimer');
+      component.ngOnInit();
+
+      component.primaryActionAdvancedSearch.action();
+
+      expect(component.isAdvancedSearch).toBe(false);
+      expect(spyCreateDisclaimer).toHaveBeenCalled();
+    });
   });
 
   describe('Methods: ', () => {

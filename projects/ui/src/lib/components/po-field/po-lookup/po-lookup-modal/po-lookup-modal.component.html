@@ -2,11 +2,25 @@
   p-click-out="false"
   p-hide-close="false"
   p-size="lg"
-  [p-primary-action]="primaryAction"
-  [p-secondary-action]="secondaryAction"
-  [p-title]="title"
+  [p-primary-action]="isAdvancedSearch ? primaryActionAdvancedSearch : primaryAction"
+  [p-secondary-action]="isAdvancedSearch ? secondaryActionAdvancedSearch : secondaryAction"
+  [p-title]="isAdvancedSearch ? modalAdvancedTitle : title"
 >
-  <po-field-container class="po-lookup-header po-md-6 po-pull-right" [p-optional]="false">
+  <ng-container *ngIf="isAdvancedSearch; then dynamicFormTemplate; else defaultTemplate"></ng-container>
+</po-modal>
+
+<ng-template #defaultTemplate>
+  <div *ngIf="advancedFilters && advancedFilters.length > 0" class="po-lookup-filter-search po-pull-right">
+    <span
+      class="po-lookup-filter-search-link"
+      tabindex="0"
+      (click)="onAdvancedSearch()"
+      (keydown.enter)="onAdvancedSearch()"
+    >
+      {{ literals.modalAdvancedSearch }}
+    </span>
+  </div>
+  <po-field-container class="po-lookup-header po-md-6 po-sm-6 po-pull-right" [p-optional]="false">
     <div class="po-field-container-content">
       <input
         #inpsearch
@@ -22,6 +36,17 @@
       </div>
     </div>
   </po-field-container>
+
+  <div class="po-row">
+    <!-- DISCLAIMER -->
+    <po-disclaimer-group
+      *ngIf="!!disclaimerGroup"
+      [p-disclaimers]="disclaimerGroup?.disclaimers"
+      [p-title]="disclaimerGroup?.title"
+      (p-change)="onChangeDisclaimerGroup($event)"
+    >
+    </po-disclaimer-group>
+  </div>
 
   <div class="po-row po-lookup-container-table" [style.height.px]="containerHeight">
     <po-table
@@ -41,4 +66,8 @@
     >
     </po-table>
   </div>
-</po-modal>
+</ng-template>
+
+<ng-template #dynamicFormTemplate>
+  <ng-container #container> </ng-container>
+</ng-template>

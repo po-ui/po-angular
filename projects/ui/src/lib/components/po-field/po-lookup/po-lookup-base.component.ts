@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { convertToBoolean, isTypeof } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoDynamicFormField } from './../../po-dynamic/po-dynamic-form/po-dynamic-form-field.interface';
 import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
@@ -50,6 +51,18 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    *
    * @description
    *
+   * Lista de objetos dos campos que serão criados na busca avançada.
+   *
+   * > Não informando valor, o botão de busca avançada não será exibido.
+   *
+   */
+  @Input('p-advanced-filters') advancedFilters: Array<PoDynamicFormField>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Aplica foco no elemento ao ser iniciado.
    *
    * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
@@ -82,7 +95,12 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    *    modalTableNoData: 'No data',
    *    modalTableLoadingData: 'Loading data',
    *    modalTableLoadMoreData: 'Load more',
-   *    modalTitle: 'Select a user'
+   *    modalTitle: 'Select a user',
+   *    modalAdvancedSearch: 'Advanced search',
+   *    modalAdvancedSearchTitle: 'Advanced search',
+   *    modalAdvancedSearchPrimaryActionLabel: 'Filter',
+   *    modalAdvancedSearchSecondaryActionLabel: 'Return',
+   *    modalDisclaimerGroupTitle: 'Presenting results filtered by:'
    *  };
    * ```
    *
