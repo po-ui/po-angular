@@ -1,9 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
-import { changeBrowserInnerHeight, configureTestSuite } from '../../../../util-test/util-expect.spec';
+import { changeBrowserInnerHeight } from '../../../../util-test/util-expect.spec';
 import { PoComponentInjectorService } from '../../../../services/po-component-injector/po-component-injector.service';
 import { PoModalModule } from '../../../../components/po-modal/po-modal.module';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
@@ -11,6 +11,10 @@ import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-s
 
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalComponent } from '../../../../components/po-field/po-lookup/po-lookup-modal/po-lookup-modal.component';
+
+import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
@@ -27,15 +31,18 @@ describe('PoLookupModalComponent', () => {
 
   const defaultTableHeight = 370;
   const defaultContainerHeight = 375;
+  const advancedFilters = [{ property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1, required: true }];
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [PoModalModule],
-      declarations: [PoLookupModalComponent],
-      providers: [LookupFilterService, PoComponentInjectorService],
-      schemas: [NO_ERRORS_SCHEMA]
-    });
-  });
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [PoModalModule, HttpClientTestingModule, PoDynamicModule, RouterTestingModule],
+        declarations: [PoLookupModalComponent],
+        providers: [LookupFilterService, PoComponentInjectorService],
+        schemas: [NO_ERRORS_SCHEMA]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoLookupModalComponent);
@@ -174,6 +181,80 @@ describe('PoLookupModalComponent', () => {
 
     expect(component.tableHeight).toBe(defaultTableHeight);
     expect(component.containerHeight).toBe(defaultContainerHeight);
+  });
+
+  describe('AdvancedSearch: ', () => {
+    beforeEach(
+      waitForAsync(() => {
+        component.advancedFilters = advancedFilters;
+        component.onAdvancedFilter();
+        fixture.detectChanges();
+      })
+    );
+
+    afterEach(() => {
+      component.advancedFilters = [];
+      component.isAdvancedFilter = false;
+      fixture.detectChanges();
+    });
+
+    it('should clear dynamicForm and set isAdvancedFilter to true', () => {
+      expect(Object.keys(component.dynamicFormValue).length).toBe(0);
+      expect(component.isAdvancedFilter).toBe(true);
+    });
+
+    it('should set fields with property p-advanced-filters and value with a empty object', () => {
+      expect(component.componentRef.instance.fields).toEqual(advancedFilters);
+      expect(component.componentRef.instance.value).toEqual({});
+    });
+
+    it('should create a formOutput', () => {
+      expect(component.dynamicForm).not.toBeNull();
+    });
+
+    it('form should be invalid and primary action should be disabled', () => {
+      expect(component.dynamicForm.invalid).toBeTruthy();
+      expect(component.primaryActionAdvancedFilter.disabled).toBeTruthy();
+    });
+
+    it('should set button primary action disable to false when form changed from invalid to valid', () => {
+      component.dynamicForm.form.patchValue({
+        name: 'formIsNowValid'
+      });
+
+      expect(component.primaryActionAdvancedFilter.disabled).toBeFalsy();
+    });
+
+    it('secondaryActionAdvancedFilter should set isAdvancedFilter to false', () => {
+      const spyComponentRefDestroy = spyOn(component.componentRef, <any>'destroy');
+
+      component.secondaryActionAdvancedFilter.action();
+      fixture.detectChanges();
+
+      expect(component.isAdvancedFilter).toBe(false);
+      expect(spyComponentRefDestroy).toHaveBeenCalled();
+    });
+
+    it('primaryActionAdvancedFilter should set isAdvancedFilter to false and call createDisclaimer', () => {
+      const spyCreateDisclaimer = spyOn(component, <any>'createDisclaimer');
+      const spyComponentRefDestroy = spyOn(component.componentRef, <any>'destroy');
+      component.ngOnInit();
+
+      component.primaryActionAdvancedFilter.action();
+
+      expect(component.isAdvancedFilter).toBe(false);
+      expect(spyCreateDisclaimer).toHaveBeenCalled();
+      expect(spyComponentRefDestroy).toHaveBeenCalled();
+    });
+
+    it('should not destroy dynamicForm if its null', () => {
+      const spyDestroyDynamicForm = spyOn(component.componentRef, <any>'destroy');
+      component.componentRef = null;
+
+      component.destroyDynamicForm();
+
+      expect(spyDestroyDynamicForm).not.toHaveBeenCalled();
+    });
   });
 
   describe('Methods: ', () => {

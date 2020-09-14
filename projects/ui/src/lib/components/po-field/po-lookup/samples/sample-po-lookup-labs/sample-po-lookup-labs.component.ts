@@ -5,6 +5,7 @@ import {
   PoLookupColumn,
   PoLookupFilter,
   PoLookupLiterals,
+  PoDynamicFormField,
   PoSelectOption
 } from '@po-ui/ng-components';
 
@@ -30,6 +31,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
   lookup: any;
   placeholder: string;
   properties: Array<string>;
+  advancedFilters: string;
+  customAdvancedFilters: Array<PoDynamicFormField>;
 
   private readonly columnsDefinition = {
     id: <PoLookupColumn>{ property: 'id', label: 'Id' },
@@ -91,6 +94,14 @@ export class SamplePoLookupLabsComponent implements OnInit {
     }
   }
 
+  changeAdvancedFilters() {
+    try {
+      this.customAdvancedFilters = JSON.parse(this.advancedFilters);
+    } catch {
+      this.customAdvancedFilters = undefined;
+    }
+  }
+
   restore() {
     this.columnsName = ['id', 'name'];
     this.customLiterals = undefined;
@@ -107,6 +118,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
     this.lookup = undefined;
     this.placeholder = '';
     this.properties = [];
+    this.customAdvancedFilters = [];
   }
 
   updateColumns() {

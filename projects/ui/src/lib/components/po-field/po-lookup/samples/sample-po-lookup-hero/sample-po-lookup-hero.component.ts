@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { PoLookupColumn, PoSelectOption } from '@po-ui/ng-components';
 
-import { PoNotificationService } from '@po-ui/ng-components';
+import { PoNotificationService, PoDynamicFormField } from '@po-ui/ng-components';
 
 import { SamplePoLookupService } from '../sample-po-lookup.service';
 
@@ -30,6 +30,11 @@ export class SamplePoLookupHeroComponent {
     { label: 'Spaceship', value: 'spaceship' },
     { label: 'Submarine', value: 'submarine' },
     { label: 'Truck', value: 'truck' }
+  ];
+
+  advancedFilters: Array<PoDynamicFormField> = [
+    { property: 'nickname', divider: 'Hero Informations', optional: true, gridColumns: 6, label: 'Hero' },
+    { property: 'name', optional: true, gridColumns: 6 }
   ];
 
   constructor(public service: SamplePoLookupService, public notification: PoNotificationService) {}

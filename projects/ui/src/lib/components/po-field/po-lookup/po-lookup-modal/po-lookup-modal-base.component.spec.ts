@@ -1,7 +1,6 @@
 import { Directive } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 
-import * as UtilsFunctions from '../../../../utils/util';
 import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
@@ -14,6 +13,7 @@ import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interf
 @Directive()
 class PoLookupModalComponent extends PoLookupModalBaseComponent {
   openModal(): void {}
+  destroyDynamicForm(): void {}
 }
 
 describe('PoLookupModalBaseComponent:', () => {
@@ -38,6 +38,8 @@ describe('PoLookupModalBaseComponent:', () => {
       { value: 4, label: 'Suco Natural' },
       { value: 5, label: 'Suco em lata' }
     ];
+
+    component.ngOnInit();
   });
 
   it('should init modal with items', () => {
@@ -235,6 +237,27 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.filterService.getFilteredItems).toHaveBeenCalledWith({ filter, page, pageSize, filterParams });
     });
 
+    it('getAdvancedFilters: should return a new object of the disclaimer', () => {
+      const expectedValue = { propertyTest: 'valueTest', propertyArrayTest: 'valueTest01,valueTest02' };
+      const disclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [
+          { property: 'propertyTest', value: 'valueTest' },
+          { property: 'propertyArrayTest', value: ['valueTest01', 'valueTest02'] }
+        ]
+      };
+      const advancedFilters = component['getAdvancedFilters'](disclaimerGroup.disclaimers);
+
+      expect(advancedFilters).toEqual(expectedValue);
+    });
+
+    it('getAdvancedFilters: should return undefined if advancedParams length is equal to 0', () => {
+      const emptyAdvancedParams = [];
+      const advancedFilters = component['getAdvancedFilters'](emptyAdvancedParams);
+
+      expect(advancedFilters).toBeUndefined();
+    });
+
     it('search: should call `getFilteredItems` if `searchValue` it`s truthy.', () => {
       component.searchValue = 'Suco';
 
@@ -421,6 +444,53 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.items.length).toBe(2);
       expect(component.hasNext).toBeFalsy();
       expect(component.isLoading).toBeFalsy();
+    });
+
+    it('onChangeDisclaimerGroup: should call searchFilteredItems if searchValue is empty', () => {
+      component.searchValue = undefined;
+      const spySearch = spyOn(component, <any>'searchFilteredItems');
+
+      component.onChangeDisclaimerGroup();
+
+      expect(spySearch).toHaveBeenCalled();
+    });
+
+    it('onChangeDisclaimerGroup: should not call searchFilteredItems if searchValue is not empty', () => {
+      component.searchValue = 'hasValue';
+      const spySearch = spyOn(component, <any>'searchFilteredItems');
+
+      component.onChangeDisclaimerGroup();
+
+      expect(spySearch).not.toHaveBeenCalled();
+    });
+
+    it('createDisclaimer: should call initializeData if dynamicFormValue is empty', () => {
+      const spyInitializeData = spyOn(component, <any>'initializeData');
+      component.dynamicFormValue = {};
+      component.createDisclaimer();
+
+      expect(spyInitializeData).toHaveBeenCalled();
+    });
+
+    it('createDisclaimer: should call addDisclaimer if dynamicFormValue is not empty', () => {
+      const spyAddDisclaimer = spyOn(component, <any>'addDisclaimer');
+      component.dynamicFormValue = { name: 'nameTest' };
+      component.createDisclaimer();
+
+      expect(spyAddDisclaimer).toHaveBeenCalled();
+    });
+
+    it('addDisclaimer: should create disclaimer and disclaimerGroup.disclaimer with parameters', () => {
+      const expectedValueDisclaimer = { property: 'propertyTest', value: 'valueTest' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'propertyTest', value: 'valueTest' }]
+      };
+
+      component.addDisclaimer('valueTest', 'propertyTest');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
     });
   });
 });

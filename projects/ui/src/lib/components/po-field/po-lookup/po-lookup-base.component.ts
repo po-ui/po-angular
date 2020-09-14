@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { convertToBoolean, isTypeof } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
@@ -82,7 +83,12 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    *    modalTableNoData: 'No data',
    *    modalTableLoadingData: 'Loading data',
    *    modalTableLoadMoreData: 'Load more',
-   *    modalTitle: 'Select a user'
+   *    modalTitle: 'Select a user',
+   *    modalAdvancedSearch: 'Advanced search',
+   *    modalAdvancedSearchTitle: 'Advanced search',
+   *    modalAdvancedSearchPrimaryActionLabel: 'Filter',
+   *    modalAdvancedSearchSecondaryActionLabel: 'Return',
+   *    modalDisclaimerGroupTitle: 'Presenting results filtered by:'
    *  };
    * ```
    *
@@ -280,10 +286,32 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   }
 
   /**
+   *
    * @optional
    *
    * @description
    *
+   * Lista de objetos dos campos que serão criados na busca avançada.
+   *
+   * > Caso não seja passado um objeto ou então ele esteja em branco o link de busca avançada ficará escondido.
+   *
+   * Exemplo de URL com busca avançada:
+   *
+   * ```
+   * url + ?page=1&pageSize=20&name=Tony%20Stark&nickname=Homem%20de%20Ferro
+   * ```
+   *
+   * Caso algum parâmetro seja uma lista, a concatenação é feita utilizando vírgula.
+   * Exemplo:
+   *
+   * ```
+   * url + ?page=1&pageSize=20&name=Tony%20Stark,Peter%20Parker,Gohan
+   * ```
+   *
+   */
+  @Input('p-advanced-filters') advancedFilters: Array<PoLookupAdvancedFilter>;
+
+  /**
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
    * Será passado por parâmetro o objeto de erro retornado.
    */
