@@ -75,7 +75,7 @@ describe('PoLookupFilterService', () => {
     it(`getObjectByValue: should return the request response and create request with url, headers and 'filterParams' correctly`, fakeAsync(() => {
       service['url'] = 'http://url.com';
       const filterParams = { name: 'test' };
-      const value = '1';
+      const value = 'test/encoding';
       const expectedResponse = { user: 'test' };
 
       spyOn(service, <any>'validateParams').and.returnValue(filterParams);
@@ -87,7 +87,7 @@ describe('PoLookupFilterService', () => {
 
       const req = httpMock.expectOne(httpRequest => {
         return (
-          httpRequest.url === 'http://url.com/1' &&
+          httpRequest.url === 'http://url.com/test%2Fencoding' &&
           httpRequest.method === 'GET' &&
           httpRequest.params.get('name') === 'test'
         );
