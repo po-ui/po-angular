@@ -47,8 +47,6 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
   icon = 'po-icon-world';
 
-  maxlength: number = 254;
-
   type = 'url';
 
   pattern =
@@ -66,6 +64,7 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
   /* istanbul ignore next */
   constructor(el: ElementRef) {
     super(el);
+    this.maxlength = 254;
   }
 
   ngAfterViewInit() {

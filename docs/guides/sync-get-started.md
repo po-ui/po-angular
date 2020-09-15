@@ -51,29 +51,27 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/common": "^10.0.3",
-    "@angular/core": "^10.0.3",
-    "@angular/forms": "^10.0.3",
-    "@angular/platform-browser": "^10.0.3",
-    "@angular/platform-browser-dynamic": "^10.0.3",
-    "@angular/router": "^10.0.3",
-    "@ionic-native/network": "5.21.5",
-    "@ionic-native/core": "5.21.5",
-    "@ionic-native/splash-screen": "5.21.5",
-    "@ionic-native/status-bar": "5.21.5",
-    "@ionic/angular": "5.0.7",
-    "tslib": "^2.0.0",
+    "@angular/common": "~10.0.0",
+    "@angular/core": "~10.0.0",
+    "@angular/forms": "~10.0.0",
+    "@angular/platform-browser": "~10.0.0",
+    "@angular/platform-browser-dynamic": "~10.0.0",
+    "@angular/router": "~10.0.0",
+    "@ionic-native/core": "5.23.0",
+    "@ionic-native/splash-screen": "5.23.0",
+    "@ionic-native/status-bar": "5.23.0",
+    "@ionic/angular": "5.3.3",
     "rxjs": "~6.5.5",
+    "tslib": "^2.0.0",
+    "zone.js": "~0.10.3"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1000.2",
-    "@angular-devkit/core": "^10.0.2",
-    "@angular-devkit/schematics": "^10.0.2",
-    "@angular/cli": "^10.0.2",
-    "@angular/compiler": "^10.0.3",
-    "@angular/compiler-cli": "^10.0.3",
-    "@angular/language-service": "^10.0.3",
+    "@angular-devkit/build-angular": "~0.1000.0",
+    "@angular/cli": "~10.0.5",
+    "@angular/compiler": "~10.0.0",
+    "@angular/compiler-cli": "~10.0.0",
+    "@angular/language-service": "~10.0.0",
     "typescript": "~3.9.6"
   },
   ...

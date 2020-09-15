@@ -148,7 +148,7 @@ describe('PoPageDynamicDetailComponent:', () => {
       expect(component['navigateTo']).toHaveBeenCalledTimes(2);
       expect(component['router'].config.unshift).toHaveBeenCalledWith({
         ...route,
-        data: { serviceApi: this.serviceApi, autoRouter: true }
+        data: { serviceApi: component.serviceApi, autoRouter: true }
       });
       expect(component['router'].navigate).toHaveBeenCalledWith([route.path], { queryParams: route.params });
     }));

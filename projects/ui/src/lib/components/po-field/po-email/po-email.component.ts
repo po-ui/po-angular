@@ -53,8 +53,6 @@ const providers = [
 export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
   icon = 'po-icon-mail';
 
-  maxlength: number = 254;
-
   type = 'email';
 
   pattern = '^([\\w-]+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$';
@@ -66,6 +64,7 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
   /* istanbul ignore next */
   constructor(el: ElementRef) {
     super(el);
+    this.maxlength = 254;
   }
 
   ngAfterViewInit() {
