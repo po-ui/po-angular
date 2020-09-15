@@ -73,6 +73,21 @@ function customOptionFunctionMock(): PoPageDynamicSearchOptions {
 describe('PoPageCustomizationService:', () => {
   let poPageCustomizationService: PoPageCustomizationService;
   let httpMock: HttpTestingController;
+  const statusOptions = [
+    { value: '1', label: 'Hired' },
+    { value: '2', label: 'Progress' },
+    { value: '3', label: 'Canceled' }
+  ];
+
+  const jobDescriptionOptions = [
+    { value: 'abc', label: 'Systems Analyst' },
+    { value: 'def', label: 'Trainee' },
+    { value: 'ghi', label: 'Programmer' },
+    { value: 'jkl', label: 'Web developer' },
+    { value: 'mno', label: 'Recruiter' },
+    { value: 'pqr', label: 'Consultant' },
+    { value: 'stu', label: 'DBA' }
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -192,10 +207,10 @@ describe('PoPageCustomizationService:', () => {
       it('should deep merge the objects inside arrays.', fakeAsync(() => {
         const originalOption: PoPageDynamicSearchOptions = {
           filters: [
-            { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
+            { property: 'hireStatus', label: 'Hire Status', options: statusOptions, gridColumns: 6 },
             { property: 'name', gridColumns: 6 },
             { property: 'city', gridColumns: 6 },
-            { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
+            { property: 'job', label: 'Job Description', options: jobDescriptionOptions, gridColumns: 6 }
           ]
         };
         const newOption: PoPageDynamicSearchOptions = {
@@ -203,10 +218,10 @@ describe('PoPageCustomizationService:', () => {
         };
         const mergedOptions: PoPageDynamicSearchOptions = {
           filters: [
-            { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 12 },
+            { property: 'hireStatus', label: 'Hire Status', options: statusOptions, gridColumns: 12 },
             { property: 'name', gridColumns: 6 },
             { property: 'city', gridColumns: 6 },
-            { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
+            { property: 'job', label: 'Job Description', options: jobDescriptionOptions, gridColumns: 6 }
           ]
         };
 

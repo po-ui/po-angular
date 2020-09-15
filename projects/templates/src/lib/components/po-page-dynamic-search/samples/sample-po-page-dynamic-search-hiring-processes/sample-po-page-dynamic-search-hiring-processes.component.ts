@@ -24,8 +24,8 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   hiringProcessesColumns: Array<PoTableColumn>;
   quickSearchWidth: number = 6;
 
-  private jobDescriptionOptions: Array<PoSelectOption>;
-  private statusOptions: Array<PoSelectOption>;
+  private jobDescriptionOptions: Array<PoSelectOption> = [];
+  private statusOptions: Array<PoSelectOption> = [];
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Hire', action: this.hireCandidate.bind(this), disabled: this.disableHireButton.bind(this) }

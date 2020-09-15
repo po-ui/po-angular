@@ -281,7 +281,7 @@ describe('PoMultiselectBaseComponent:', () => {
   });
 
   it('should keep visibleOptionsDropdown', () => {
-    this.visibleOptionsDropdown = [{ value: 1, label: 'Label 1' }];
+    component.visibleOptionsDropdown = [{ value: 1, label: 'Label 1' }];
 
     spyOn(component, 'compareMethod');
     component.searchByLabel('', [], PoMultiselectFilterMode.startsWith);

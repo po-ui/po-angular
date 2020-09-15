@@ -86,7 +86,7 @@ Este guia tem por objetivo definir as regras para criação de *Issues* relacion
           <li>
             <p>É importante que tenha a versão equivalente do Angular instalada. Instale-o via <code>npm</code> ou <code>yarn</code>:</p>
             <p>Instalando com npm:</p>
-            <pre><code>npm i -g @angular/cli@^10.0.2</code></pre>
+            <pre><code>npm i -g @angular/cli@^10</code></pre>
             <p>Caso opte pelo yarn:</p>
             <pre><code>yarn global add @angular/cli@^10.0.2</code></pre>
           </li>

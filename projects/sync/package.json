@@ -27,13 +27,13 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/core": "~10.0.3",
+    "@angular/core": "^10.0.3",
     "@ionic-native/core": "5.23.0",
     "@ionic-native/network": "5.23.0",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^1.4.0",
-    "rxjs": "~6.5.5",
-    "rxjs-compat": "~6.5.5",
+    "rxjs": "~6.6.0",
+    "rxjs-compat": "~6.6.0",
     "zone.js": "~0.10.3"
   }
 }

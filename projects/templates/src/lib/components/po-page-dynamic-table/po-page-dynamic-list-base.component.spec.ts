@@ -4,6 +4,7 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 describe('PoPageDynamicListBaseComponent:', () => {
   const component = new PoPageDynamicListBaseComponent();
+  const cityOptions = [{ label: 'São Paulo', value: 'sp' }];
 
   it('should be created', () => {
     expect(component).toBeTruthy();
@@ -46,7 +47,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
       const newFields = [
         { property: 'name', filter: true },
         { property: 'birthdateTo', label: 'Birthdate', type: 'date', filter: true, visible: false },
-        { property: 'state', options: this.cityOptions, visible: false },
+        { property: 'state', options: cityOptions, visible: false },
         { property: 'address', visible: true, filter: false }
       ];
 
@@ -62,7 +63,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
       const newFields = [
         { property: 'name', filter: true },
         { property: 'birthdate', label: 'Birthdate', type: 'date', filter: true, visible: false },
-        { property: 'state', options: this.cityOptions, visible: false, allowColumnsManager: true },
+        { property: 'state', options: cityOptions, visible: false, allowColumnsManager: true },
         { property: 'address', visible: true, filter: false }
       ];
 
@@ -70,7 +71,7 @@ describe('PoPageDynamicListBaseComponent:', () => {
 
       expect(component.columns).toEqual([
         { property: 'name', filter: true },
-        { property: 'state', options: this.cityOptions, visible: false, allowColumnsManager: true },
+        { property: 'state', options: cityOptions, visible: false, allowColumnsManager: true },
         { property: 'address', visible: true, filter: false }
       ]);
     });

@@ -14,6 +14,8 @@ const Padding: number = 24;
 export abstract class PoChartDynamicTypeComponent {
   protected windowResizeListener: () => void;
   protected windowScrollListener: () => void;
+  // tslint:disable-next-line: use-type-alias
+  protected _series: Array<PoPieChartSeries | PoDonutChartSeries | PoChartGaugeSerie> = [];
 
   centerX: number;
   chartElementCategory: any;
@@ -27,7 +29,6 @@ export abstract class PoChartDynamicTypeComponent {
   innerRadius: number = 0;
   onSerieClick: Subject<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie> = new Subject();
   onSerieHover: Subject<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie> = new Subject();
-  series: Array<any> = [];
   svgElement: HTMLObjectElement;
   svgHeight: number;
   target: HTMLInputElement & EventTarget;
@@ -56,5 +57,17 @@ export abstract class PoChartDynamicTypeComponent {
       this.type === PoChartType.Gauge
         ? 100
         : this.series.reduce((previousValue, serie) => previousValue + serie.value, 0);
+  }
+
+  set series(value: Array<PoPieChartSeries | PoDonutChartSeries | PoChartGaugeSerie>) {
+    this._series = this.getSeriesWithValue(value);
+  }
+
+  get series() {
+    return this._series;
+  }
+
+  protected getSeriesWithValue(value) {
+    return value;
   }
 }
