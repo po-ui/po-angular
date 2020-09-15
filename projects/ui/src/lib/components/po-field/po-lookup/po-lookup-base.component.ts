@@ -192,6 +192,17 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    *
    * > Esta URL deve retornar e receber os dados no padrão de [API do PO UI](https://po-ui.io/guides/api) e utiliza os valores
    * definidos nas propriedades `p-field-label` e `p-field-value` para a construção do `po-lookup`.
+   *
+   * Caso o usuário digite um valor e pressione a tecla *TAB* para realizar a busca de um registro específico, o valor que se
+   * deseja filtrar será codificado utilizando a função [encodeURIComponent](https://tc39.es/ecma262/#sec-encodeuricomponent-uricomponent)
+   * e concatenado na URL da seguinte forma:
+   *
+   * ```
+   * url/valor%20que%20se%20deseja%20filtrar
+   * ```
+   *
+   * > Quando informado um serviço que implemente a interface `PoLookupFilter` o tratamento de encoding do valor a ser filtrado ficará a cargo do desenvolvedor.
+   *
    */
   @Input('p-filter-service') set filterService(filterService: PoLookupFilter | string) {
     this._filterService = filterService;

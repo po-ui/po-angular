@@ -36,9 +36,10 @@ export class PoLookupFilterService implements PoLookupFilter {
   }
 
   getObjectByValue(value: string, filterParams?: any): Observable<any> {
+    const encodedValue = encodeURIComponent(value);
     const validatedFilterParams = this.validateParams(filterParams);
 
-    return this.httpClient.get(`${this.url}/${value}`, { headers: this.headers, params: validatedFilterParams });
+    return this.httpClient.get(`${this.url}/${encodedValue}`, { headers: this.headers, params: validatedFilterParams });
   }
 
   setUrl(url: string) {
