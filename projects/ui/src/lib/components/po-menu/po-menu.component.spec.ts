@@ -530,6 +530,81 @@ describe('PoMenuComponent:', () => {
     );
   });
 
+  it('should find items that have action or link', fakeAsync(() => {
+    const items = [
+      { label: 'Test AA', link: 'test/' },
+      { label: 'Test AB', link: 'test/' },
+      { label: 'Test ABC' },
+      { label: 'Test BB', link: 'test/' }
+    ];
+
+    const itemsFound = [
+      { label: 'Test AA', link: 'test/' },
+      { label: 'Test AB', link: 'test/' }
+    ];
+
+    const label = 'Test A';
+
+    component.menus = items;
+    component.filteredItems = [];
+
+    component.debounceFilter(label);
+
+    tick(500);
+
+    expect(component.filteredItems).toEqual(itemsFound);
+  }));
+
+  it('should find items and subItems that have action or link', fakeAsync(() => {
+    const action = () => {};
+
+    const items = [
+      { label: 'Test AA', link: 'test/' },
+      {
+        label: 'Test AB',
+        link: 'test/',
+        subItems: [
+          {
+            label: 'Test ABB',
+            link: 'test/',
+            subItems: [
+              { label: 'Test ABBC', action },
+              { label: 'Test ABBCD', action },
+              { label: 'Test ABBCE', action }
+            ]
+          },
+          { label: 'Test AABB', action },
+          { label: 'Test AABBB' }
+        ]
+      },
+      { label: 'Test ABD' },
+      { label: 'Test ABF', link: 'test/', subItems: [] },
+      { label: 'Test BB', link: 'test/' }
+    ];
+
+    const itemsFound = [
+      { label: 'Test AA', link: 'test/' },
+      { label: 'Test AB', link: 'test/', type: 'internalLink' },
+      { label: 'Test ABB', link: 'test/', type: 'internalLink' },
+      { label: 'Test ABBC', action },
+      { label: 'Test ABBCD', action },
+      { label: 'Test ABBCE', action },
+      { label: 'Test AABB', action },
+      { label: 'Test ABF', link: 'test/', subItems: [] }
+    ];
+
+    const label = 'Test A';
+
+    component.menus = items;
+    component.filteredItems = [];
+
+    component.debounceFilter(label);
+
+    tick(500);
+
+    expect(component.filteredItems).toEqual(itemsFound);
+  }));
+
   describe('Templates:', () => {
     it('should show collapse button if `enableCollapseButton` is enabled', () => {
       component.allowCollapseMenu = true;

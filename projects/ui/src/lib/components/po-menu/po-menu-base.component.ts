@@ -265,6 +265,19 @@ export abstract class PoMenuBaseComponent {
     menus.forEach(menu => this.validateMenu(menu));
   }
 
+  protected setMenuType(menuItem: PoMenuItem): string {
+    if (menuItem.subItems && menuItem.subItems.length > 0 && this._level < this.maxLevel) {
+      return 'subItems';
+    }
+    if (!menuItem.link) {
+      return 'noLink';
+    }
+    if (isExternalLink(menuItem.link)) {
+      return 'externalLink';
+    }
+    return 'internalLink';
+  }
+
   private processSubItems(menu) {
     menu.subItems.forEach((menuItem, index, menuItems) => {
       const previousItem = menuItems[index - 1];
@@ -307,19 +320,6 @@ export abstract class PoMenuBaseComponent {
     parent['badgeAlert'] = childHasBadgeAlert || (childHasBadge && !childHasSubItems);
 
     return parent;
-  }
-
-  private setMenuType(menuItem: PoMenuItem): string {
-    if (menuItem.subItems && menuItem.subItems.length > 0 && this._level < this.maxLevel) {
-      return 'subItems';
-    }
-    if (!menuItem.link) {
-      return 'noLink';
-    }
-    if (isExternalLink(menuItem.link)) {
-      return 'externalLink';
-    }
-    return 'internalLink';
   }
 
   private validateMenu(menuItem: PoMenuItem): void {
