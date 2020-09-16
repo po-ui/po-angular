@@ -427,11 +427,22 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
 
   private findItems(menus: Array<PoMenuItem>, filter: string, filteredItems: Array<any>) {
     menus.forEach(menu => {
-      if (
-        (menu.label.toLowerCase().includes(filter) && !menu.subItems) ||
-        (menu.subItems && this.findItems(menu.subItems, filter, filteredItems))
-      ) {
-        filteredItems.push(menu);
+      const hasAction = menu.action || menu.link;
+      const labelHasFilter = menu.label.toLowerCase().includes(filter);
+
+      if (labelHasFilter && hasAction) {
+        const newMenu = { ...menu };
+
+        if (newMenu.subItems?.length) {
+          delete newMenu.subItems;
+          newMenu['type'] = this.setMenuType(newMenu);
+        }
+
+        filteredItems.push(newMenu);
+      }
+
+      if (menu.subItems) {
+        this.findItems(menu.subItems, filter, filteredItems);
       }
     });
   }
