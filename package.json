@@ -31,6 +31,7 @@
     "test:templates:schematics": "gulp build:schematics --lib templates && jasmine \"dist/ng-templates/schematics/**/*.spec.js\"",
     "test:templates:browse": "ng test templates --code-coverage --browsers=Chrome --source-map",
     "test:code-editor": "ng test code-editor --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
+    "test:code-editor:schematics": "gulp build:schematics --lib code-editor && jasmine \"dist/ng-code-editor/schematics/**/*.spec.js\"",
     "test:code-editor:browse": "ng test code-editor --code-coverage --browsers=Chrome --source-map",
     "test:dev": "ng test --browsers=ChromeHeadless",
     "build:schematics": "cd ./projects/schematics && npm run build",
