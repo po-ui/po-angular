@@ -3,7 +3,8 @@ import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive } 
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { isTypeof, poLocaleDefault } from '../../../../utils/util';
+import { isTypeof } from '../../../../utils/util';
+import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerGroup } from './../../../po-disclaimer-group/po-disclaimer-group.interface';
 import { PoDynamicFormField } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form-field.interface';
