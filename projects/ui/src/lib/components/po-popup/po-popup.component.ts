@@ -145,8 +145,8 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     window.addEventListener('scroll', this.onScroll, true);
   }
 
-  private onScroll = (): void => {
-    if (this.showPopup) {
+  private onScroll = ({ target }): void => {
+    if (this.showPopup && target.className !== 'po-popup-container') {
       this.close();
     }
   };

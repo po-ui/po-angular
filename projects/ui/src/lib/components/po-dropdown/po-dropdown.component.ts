@@ -74,8 +74,8 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
     window.addEventListener('scroll', this.onScroll, true);
   }
 
-  private onScroll = (): void => {
-    if (this.open) {
+  private onScroll = ({ target }): void => {
+    if (this.open && target.className !== 'po-popup-container') {
       this.hideDropdown();
     }
   };
