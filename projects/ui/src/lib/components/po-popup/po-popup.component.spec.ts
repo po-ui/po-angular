@@ -291,7 +291,7 @@ describe('PoPopupComponent:', () => {
 
       spyOn(component, 'close');
 
-      component['onScroll']();
+      component['onScroll']({ target: {} });
 
       expect(component.close).toHaveBeenCalled();
     });
@@ -301,7 +301,18 @@ describe('PoPopupComponent:', () => {
 
       spyOn(component, 'close');
 
-      component['onScroll']();
+      component['onScroll']({ target: {} });
+
+      expect(component.close).not.toHaveBeenCalled();
+    });
+
+    it('onScroll: shouldn`t call `close` if `showPopup` is true and target.className is `po-popup-container`', () => {
+      const fakeEvent = { target: { className: 'po-popup-container' } };
+      component.showPopup = true;
+
+      spyOn(component, 'close');
+
+      component['onScroll'](fakeEvent);
 
       expect(component.close).not.toHaveBeenCalled();
     });

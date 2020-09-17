@@ -162,7 +162,7 @@ describe('PoDropdownComponent: ', () => {
       component['open'] = true;
       spyOn(component, <any>'hideDropdown');
 
-      component['onScroll']();
+      component['onScroll']({ target: {} });
 
       expect(component['hideDropdown']).toHaveBeenCalled();
     });
@@ -171,7 +171,18 @@ describe('PoDropdownComponent: ', () => {
       component['open'] = false;
       spyOn(component, <any>'hideDropdown');
 
-      component['onScroll']();
+      component['onScroll']({ target: {} });
+
+      expect(component['hideDropdown']).not.toHaveBeenCalled();
+    });
+
+    it('onScroll: shouldn`t call `hideDropdown` if `open` is true and target.className is `po-popup-container`', () => {
+      const fakeEvent = { target: { className: 'po-popup-container' } };
+      component['open'] = true;
+
+      spyOn(component, <any>'hideDropdown');
+
+      component['onScroll'](fakeEvent);
 
       expect(component['hideDropdown']).not.toHaveBeenCalled();
     });
