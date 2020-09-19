@@ -68,6 +68,50 @@ export interface PoDynamicField {
   gridXlColumns?: number;
 
   /**
+   * Tamanho do espaçamento após o campo antes da exibição do próximo campo em telas menores (sm).
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 11 colunas).
+   *
+   * > Esta propriedade não funciona com a propriedade `gridColumns`. Deve-se especificar o tamanho da tela.
+   *
+   * @default `0`
+   */
+  gridSmPull?: number;
+
+  /**
+   * Tamanho do espaçamento após o campo antes da exibição do próximo campo em telas médias (md).
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 11 colunas).
+   *
+   * > Esta propriedade não funciona com a propriedade `gridColumns`. Deve-se especificar o tamanho da tela.
+   *
+   * @default `0`
+   */
+  gridMdPull?: number;
+
+  /**
+   * Tamanho do espaçamento após o campo antes da exibição do próximo campo em telas grandes (lg).
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 11 colunas).
+   *
+   * > Esta propriedade não funciona com a propriedade `gridColumns`. Deve-se especificar o tamanho da tela.
+   *
+   * @default `0`
+   */
+  gridLgPull?: number;
+
+  /**
+   * Tamanho do espaçamento após o campo antes da exibição do próximo campo em telas extra grandes (xl).
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 11 colunas).
+   *
+   * > Esta propriedade não funciona com a propriedade `gridColumns`. Deve-se especificar o tamanho da tela.
+   *
+   * @default `0`
+   */
+  gridXlPull?: number;
+
+  /**
    * Indica se o campo será visível.
    *
    * @default `true`
