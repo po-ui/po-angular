@@ -177,7 +177,13 @@ export class PoDynamicViewBaseComponent {
       field.gridMdColumns,
       field.gridLgColumns,
       field.gridXlColumns,
-      field.gridColumns
+      field.gridColumns,
+      {
+        smPull: field.gridSmPull,
+        mdPull: field.gridMdPull,
+        lgPull: field.gridLgPull,
+        xlPull: field.gridXlPull
+      }
     );
 
     return {
