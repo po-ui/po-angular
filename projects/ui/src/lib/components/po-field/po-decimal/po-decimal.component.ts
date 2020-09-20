@@ -312,6 +312,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     }
   }
 
+  getErrorPatternMessage() {
+    return this.errorPattern !== '' && this.hasInvalidClass() ? this.errorPattern : '';
+  }
+
   // reponsável por adicionar 0 antes da virgula (decimalSeparator).
   private addZeroBefore(value) {
     const isDecimalSeparator = value === this.decimalSeparator;

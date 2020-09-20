@@ -1286,6 +1286,48 @@ describe('PoDecimalComponent:', () => {
     it('isValueBetweenAllowed: should return `false` if is value below allowed.', () => {
       expect(component['isValueBetweenAllowed'](-1, 9)).toBe(false);
     });
+
+    describe('getErrorPatternMessage: ', () => {
+      it('should return errorPattern value if errorPattern has value and containsInvalidClass returns true and show the properly message in template', () => {
+        const fakeThis = {
+          errorPattern: 'erro',
+          hasInvalidClass: () => true
+        };
+
+        expect(component.getErrorPatternMessage.call(fakeThis)).toBe('erro');
+
+        component.errorPattern = 'MENSAGEM DE ERRO';
+        component.hasInvalidClass = () => true;
+        fixture.detectChanges();
+        const content = fixture.debugElement.nativeElement
+          .querySelector('.po-field-container-bottom-text-error')
+          .innerHTML.toString();
+
+        expect(content.indexOf('MENSAGEM DE ERRO') > -1).toBeTruthy();
+      });
+
+      it('should return empty string if errorPattern is empty', () => {
+        component.errorPattern = '';
+
+        const expectedResult = component.getErrorPatternMessage();
+
+        expect(expectedResult).toBe('');
+        expect(fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error')).toBeNull();
+      });
+
+      it('should return empty string if errorPattern has value but containsInvalidClass returns false', () => {
+        component.inputEl.nativeElement.value = '';
+        component.errorPattern = 'error';
+        component.inputEl.nativeElement.classList.add('ng-invalid');
+        component.inputEl.nativeElement.classList.add('ng-dirty');
+        component['invalidInputValueOnBlur'] = false;
+
+        const expectedResult = component.getErrorPatternMessage();
+
+        expect(expectedResult).toBe('');
+        expect(fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error')).toBeNull();
+      });
+    });
   });
 
   describe('Templates:', () => {
