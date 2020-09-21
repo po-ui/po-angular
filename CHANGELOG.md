@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.7.0"></a>
+# [3.7.0](https://github.com/po-ui/po-angular/compare/v3.6.0...v3.7.0) (2020-09-21)
+
+
+### Bug Fixes
+
+* **lookup:** inclui encoding de caracteres especiais no filtro rápido ([cb9bb24](https://github.com/po-ui/po-angular/commit/cb9bb24))
+* **menu:** corrige pesquisa para usar itens com subItens vazio ([28f6547](https://github.com/po-ui/po-angular/commit/28f6547))
+* **popup:** ativa scroll quando o elemento chegar na altura máxima ([ac5b79b](https://github.com/po-ui/po-angular/commit/ac5b79b))
+
+
+### Features
+
+* adequação do projeto para versão 10.1.0 e TypeScript 4 ([95ac544](https://github.com/po-ui/po-angular/commit/95ac544))
+* **schematics:** adiciona testes unitários para o [@po-ui](https://github.com/po-ui)/ng-code-editor ([449d170](https://github.com/po-ui/po-angular/commit/449d170))
+
+
+
 <a name="3.6.0"></a>
 # [3.6.0](https://github.com/po-ui/po-angular/compare/v3.5.0...v3.6.0) (2020-09-14)
 
