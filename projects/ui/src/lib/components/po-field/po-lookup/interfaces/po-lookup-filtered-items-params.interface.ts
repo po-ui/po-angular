@@ -33,4 +33,11 @@ export interface PoLookupFilteredItemsParams {
    * - Coluna ascendente será informada da seguinte forma: `<colunaOrdenada>`, por exemplo `name`.
    */
   order?: string;
+
+  /**
+   *
+   * Valores informados nos campos de busca avançada, utilizado para filtrar a lista de itens.
+   *
+   */
+  advancedFilters?: any;
 }
