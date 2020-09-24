@@ -1,11 +1,24 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ComponentRef,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
+import { PoDynamicFormComponent } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form.component';
 
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 
 import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-base.component';
+import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 
 /**
  * @docsPrivate
@@ -16,19 +29,33 @@ import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-b
   selector: 'po-lookup-modal',
   templateUrl: './po-lookup-modal.component.html'
 })
-export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit {
-  @ViewChild('inpsearch', { static: true }) inputSearchEl: ElementRef;
+export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit, AfterViewInit {
+  @ViewChild('inpsearch') inputSearchEl: ElementRef;
+  @ViewChild('container', { read: ViewContainerRef }) container: ViewContainerRef;
 
   keyUpObservable: Observable<any> = null;
 
   containerHeight: number = 375;
   tableHeight: number = 370;
 
+  componentRef: ComponentRef<PoDynamicFormComponent>;
+  dynamicForm: NgForm;
+
+  constructor(
+    private cd: ChangeDetectorRef,
+    private componentFactory: ComponentFactoryResolver,
+    poLanguage: PoLanguageService
+  ) {
+    super(poLanguage);
+  }
+
   ngOnInit() {
     super.ngOnInit();
-
-    this.initializeEventInput();
     this.setTableHeight();
+  }
+
+  ngAfterViewInit() {
+    this.initializeEventInput();
   }
 
   initializeEventInput(): void {
@@ -44,6 +71,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   openModal() {
     this.poModal.open();
+    this.cd.detectChanges();
   }
 
   sortBy(sort: PoTableColumnSort) {

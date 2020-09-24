@@ -2,10 +2,14 @@
   p-click-out="false"
   p-hide-close="false"
   p-size="lg"
-  [p-primary-action]="primaryAction"
-  [p-secondary-action]="secondaryAction"
-  [p-title]="title"
+  [p-primary-action]="isAdvancedSearch ? primaryActionAdvancedSearch : primaryAction"
+  [p-secondary-action]="isAdvancedSearch ? secondaryActionAdvancedSearch : secondaryAction"
+  [p-title]="isAdvancedSearch ? modalAdvancedTitle : title"
 >
+  <ng-container *ngIf="isAdvancedSearch; then dynamicFormTemplate; else defaultTemplate"></ng-container>
+</po-modal>
+
+<ng-template #defaultTemplate>
   <po-field-container class="po-lookup-header po-md-6 po-pull-right" [p-optional]="false">
     <div class="po-field-container-content">
       <input
@@ -41,4 +45,8 @@
     >
     </po-table>
   </div>
-</po-modal>
+</ng-template>
+
+<ng-template #dynamicFormTemplate>
+  <ng-container #container> </ng-container>
+</ng-template>
