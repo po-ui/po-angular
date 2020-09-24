@@ -21,7 +21,7 @@ class LookupFilterService implements PoLookupFilter {
   }
 }
 
-xdescribe('PoLookupModalComponent', () => {
+describe('PoLookupModalComponent', () => {
   let component: PoLookupModalComponent;
   let fixture: ComponentFixture<PoLookupModalComponent>;
 

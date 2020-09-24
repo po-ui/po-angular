@@ -10,7 +10,17 @@
 </po-modal>
 
 <ng-template #defaultTemplate>
-  <po-field-container class="po-lookup-header po-md-6 po-pull-right" [p-optional]="false">
+  <div *ngIf="advancedFilters && advancedFilters.length > 0" class="po-lookup-filter-search po-pull-right">
+    <span
+      class="po-lookup-filter-search-link"
+      tabindex="0"
+      (click)="onAdvancedSearch()"
+      (keydown.enter)="onAdvancedSearch()"
+    >
+      {{ literals.modalAdvancedSearch }}
+    </span>
+  </div>
+  <po-field-container class="po-lookup-header po-md-6 po-sm-6 po-pull-right" [p-optional]="false">
     <div class="po-field-container-content">
       <input
         #inpsearch
@@ -18,6 +28,7 @@
         name="contentSearch"
         [(ngModel)]="searchValue"
         [placeholder]="literals.modalPlaceholder"
+        (keyup.enter)="search()"
         type="text"
       />
 
@@ -26,6 +37,17 @@
       </div>
     </div>
   </po-field-container>
+
+  <div class="po-row">
+    <!-- DISCLAIMER -->
+    <po-disclaimer-group
+      *ngIf="!!disclaimerGroup"
+      [p-disclaimers]="disclaimerGroup?.disclaimers"
+      [p-title]="disclaimerGroup?.title"
+      (p-change)="onChangeDisclaimerGroup()"
+    >
+    </po-disclaimer-group>
+  </div>
 
   <div class="po-row po-lookup-container-table" [style.height.px]="containerHeight">
     <po-table
