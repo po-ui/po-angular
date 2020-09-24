@@ -12,7 +12,7 @@ import {
 import { NgForm } from '@angular/forms';
 
 import { fromEvent, Observable } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, switchMap, tap } from 'rxjs/operators';
 import { PoDynamicFormComponent } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form.component';
 
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
@@ -71,7 +71,6 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   openModal() {
     this.poModal.open();
-    this.cd.detectChanges();
   }
 
   sortBy(sort: PoTableColumnSort) {
@@ -87,5 +86,36 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   private validateEnterPressed(e: any) {
     return e.keyCode === 13;
+  }
+
+  onAdvancedSearch() {
+    this.setupModalAdvancedSearch();
+    this.cd.detectChanges();
+    this.createDynamicForm();
+  }
+
+  private setupModalAdvancedSearch() {
+    this.dynamicFormValue = {};
+    this.isAdvancedSearch = true;
+  }
+
+  private createDynamicForm() {
+    const component = this.componentFactory.resolveComponentFactory(PoDynamicFormComponent);
+
+    this.componentRef = this.container.createComponent(component);
+    this.componentRef.instance.fields = this.advancedFilters;
+    this.componentRef.instance.value = this.dynamicFormValue;
+
+    this.componentRef.instance.formOutput
+      .pipe(
+        tap(form => {
+          this.dynamicForm = form;
+          this.primaryActionAdvancedSearch.disabled = this.dynamicForm.invalid;
+        }),
+        switchMap(form => form.valueChanges)
+      )
+      .subscribe(() => {
+        this.primaryActionAdvancedSearch.disabled = this.dynamicForm.invalid;
+      });
   }
 }
