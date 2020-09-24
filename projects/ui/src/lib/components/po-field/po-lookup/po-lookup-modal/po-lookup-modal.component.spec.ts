@@ -12,7 +12,6 @@ import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-s
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalComponent } from '../../../../components/po-field/po-lookup/po-lookup-modal/po-lookup-modal.component';
 
-import { HttpClientModule } from '@angular/common/http';
 import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';

@@ -102,7 +102,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   private createDynamicForm() {
     const component = this.componentFactory.resolveComponentFactory(PoDynamicFormComponent);
 
-    this.componentRef = this.container.createComponent(component);
+    this.componentRef = this.container.createComponent<PoDynamicFormComponent>(component);
     this.componentRef.instance.fields = this.advancedFilters;
     this.componentRef.instance.value = this.dynamicFormValue;
 
