@@ -23,6 +23,7 @@
     "test:storage": "ng test storage --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:storage:schematics": "gulp build:schematics --lib storage && jasmine \"dist/ng-storage/schematics/**/*.spec.js\"",
     "test:sync": "ng test sync --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
+    "test:sync:schematics": "gulp build:schematics --lib sync && jasmine \"dist/ng-sync/schematics/**/*.spec.js\"",
     "test:sync:browse": "ng test sync --code-coverage --browsers=Chrome --source-map",
     "test:ui": "ng test ui --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:ui:schematics": "gulp build:schematics --lib ui && jasmine \"./dist/ng-components/schematics/**/*.spec.js\"",
