@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.8.0"></a>
+# [3.8.0](https://github.com/po-ui/po-angular/compare/v3.7.0...v3.8.0) (2020-09-28)
+
+
+### Features
+
+* **schematics:** adiciona testes unitários para o [@po-ui](https://github.com/po-ui)/ng-sync ([66b21be](https://github.com/po-ui/po-angular/commit/66b21be))
+
+
+
 <a name="3.7.0"></a>
 # [3.7.0](https://github.com/po-ui/po-angular/compare/v3.6.0...v3.7.0) (2020-09-21)
 
