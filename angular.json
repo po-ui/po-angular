@@ -298,6 +298,7 @@
             "aot": true,
             "assets": [
               "projects/portal/src/favicon.ico",
+              "projects/portal/src/web.config",
               "projects/portal/src/assets",
               {
                 "glob": "**/*",

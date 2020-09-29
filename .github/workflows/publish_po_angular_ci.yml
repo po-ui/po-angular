@@ -8,10 +8,12 @@ env:
   COMPONENTS_NPM_PATH: po-ui/ng-components
   TEMPLATES_NPM_PATH: po-ui/ng-templates
   CODE_EDITOR_NPM_PATH: po-ui/ng-code-editor
+  AZURE_WEBAPP_NAME: wa-po-ui
+  AZURE_WEBAPP_PACKAGE_PATH: './dist/portal'      
 
 on:
   workflow_dispatch:
-  
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
@@ -48,7 +50,7 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - name: ng-schematics - add "latest" tag
-    
+
       if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
       run: npm dist-tags add @${{ env.SCHEMATICS_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
       env:
@@ -69,9 +71,9 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+
     # PUBLISH NG-SYNC
-    - name: ng-sync - publish 
+    - name: ng-sync - publish
       if: (!contains(env.PACKAGE_VERSION, env.SYNC_LAST_PUBLISHED_VERSION))
       run: npm publish dist/ng-sync
       env:
@@ -84,7 +86,7 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+
     # PUBLISH NG-COMPONENTS
     - name: ng-components - publish
       if: (!contains(env.PACKAGE_VERSION, env.COMPONENTS_LAST_PUBLISHED_VERSION))
@@ -99,7 +101,7 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+
     # PUBLISH NG-TEMPLATES
     - name: ng-templates - publish
       if: (!contains(env.PACKAGE_VERSION, env.TEMPLATES_LAST_PUBLISHED_VERSION))
@@ -114,7 +116,7 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+
     # PUBLISH NG-CODE-EDITOR
     - name: ng-code-editor publish
       if: (!contains(env.PACKAGE_VERSION, env.CODE_EDITOR_LAST_PUBLISHED_VERSION))
@@ -129,4 +131,15 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+
+    # PUBLISH PORTAL
+    - name: portal build
+      run: npm run build:portal && npm run build:portal:prod
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_TOKEN }}
+
