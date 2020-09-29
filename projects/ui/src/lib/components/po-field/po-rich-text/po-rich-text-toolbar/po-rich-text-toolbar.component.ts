@@ -7,12 +7,14 @@ import { PoButtonGroupItem } from '../../../po-button-group';
 import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 import { PoRichTextModalType } from '../enums/po-rich-text-modal-type.enum';
 import { PoRichTextToolbarButtonGroupItem } from '../interfaces/po-rich-text-toolbar-button-group-item.interface';
+import { PoRichTextBoldCommand } from '../commands/po-rich-text-bold-command';
 
 const poRichTextDefaultColor = '#000000';
 
 @Component({
   selector: 'po-rich-text-toolbar',
-  templateUrl: './po-rich-text-toolbar.component.html'
+  templateUrl: './po-rich-text-toolbar.component.html',
+  providers: [PoRichTextBoldCommand]
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
   private _readonly: boolean;
@@ -54,7 +56,8 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
       command: 'bold',
       icon: 'po-icon-text-bold',
       tooltip: this.literals.bold,
-      action: this.emitCommand.bind(this, 'bold')
+      action: this.boldCommand.execute.bind(this, document)
+      // action: this.emitCommand.bind(this, 'bold')
     },
     {
       command: 'italic',
@@ -117,7 +120,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return isIE();
   }
 
-  constructor(private languageService: PoLanguageService) {}
+  constructor(private languageService: PoLanguageService, private boldCommand: PoRichTextBoldCommand) {}
 
   ngAfterViewInit() {
     this.removeButtonFocus();
@@ -131,6 +134,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   }
 
   setButtonsStates(obj: { commands: Array<string>; hexColor: string }) {
+    console.log('setButtonsStates:', obj);
     if (!this.readonly) {
       this.alignButtons.forEach(button => (button.selected = obj.commands.includes(button.command)));
       this.formatButtons.forEach(button => (button.selected = obj.commands.includes(button.command)));

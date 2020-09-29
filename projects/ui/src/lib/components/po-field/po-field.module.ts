@@ -51,6 +51,7 @@ import { PoUploadDragDropAreaOverlayComponent } from './po-upload/po-upload-drag
 import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
+import { PoRichTextModule } from './po-rich-text/po-rich-text.module';
 
 /**
  * @description
@@ -78,11 +79,13 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoProgressModule,
     PoServicesModule,
     PoTableModule,
-    PoTooltipModule
+    PoTooltipModule,
+    PoRichTextModule
   ],
   exports: [
     PoCheckboxComponent,
     PoCheckboxGroupModule,
+    PoRichTextModule,
     PoCleanComponent,
     PoComboComponent,
     PoComboOptionTemplateDirective,
@@ -98,7 +101,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoNumberComponent,
     PoPasswordComponent,
     PoRadioGroupComponent,
-    PoRichTextComponent,
+    // PoRichTextComponent,
     PoSelectComponent,
     PoSelectOptionTemplateDirective,
     PoSwitchComponent,
@@ -127,10 +130,10 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoNumberComponent,
     PoPasswordComponent,
     PoRadioGroupComponent,
-    PoRichTextBodyComponent,
-    PoRichTextComponent,
-    PoRichTextModalComponent,
-    PoRichTextToolbarComponent,
+    // PoRichTextBodyComponent,
+    // PoRichTextComponent,
+    // PoRichTextModalComponent,
+    // PoRichTextToolbarComponent,
     PoSelectComponent,
     PoSelectOptionTemplateDirective,
     PoSwitchComponent,

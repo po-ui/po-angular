@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { isFirefox, isIE, isIEOrEdge, openExternalLink } from './../../../../utils/util';
 import { PoKeyCodeEnum } from './../../../../enums/po-key-code.enum';
 import { PoRichTextService } from '../po-rich-text.service';
+import { PoRichTextLinkCommand } from '../commands/po-rich-text-link-command';
 
 const poRichTextBodyCommands = [
   'bold',
@@ -20,7 +21,8 @@ const poRichTextBodyCommands = [
 
 @Component({
   selector: 'po-rich-text-body',
-  templateUrl: './po-rich-text-body.component.html'
+  templateUrl: './po-rich-text-body.component.html',
+  providers: [PoRichTextLinkCommand]
 })
 export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   private isLinkEditing: boolean;
@@ -49,13 +51,14 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   @Output('p-value') value = new EventEmitter<any>();
 
-  constructor(private richTextService: PoRichTextService) {}
+  constructor(private richTextService: PoRichTextService, private richTextLinkCommand: PoRichTextLinkCommand) {}
 
   ngOnInit() {
     this.bodyElement.nativeElement.designMode = 'on';
 
     this.modelSubscription = this.richTextService.getModel().subscribe(modelValue => {
       this.modelValue = modelValue;
+      console.log('ngOnInit muda o modelValue: ', modelValue);
       this.bodyElement.nativeElement.innerHTML = '';
       this.updateValueWithModelValue();
       this.addClickListenerOnAnchorElements();
@@ -68,6 +71,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   executeCommand(command: string | { command: any; value: string | any }) {
     this.bodyElement.nativeElement.focus();
+    console.log('executeCommand: ', command);
 
     if (typeof command === 'object') {
       if (command.command === 'InsertHTML') {
@@ -77,7 +81,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
           value: { urlLinkText }
         } = command;
 
-        this.handleCommandLink(linkCommand, urlLink, urlLinkText);
+        this.richTextLinkCommand.execute(document, { command: linkCommand, link: urlLink, value: urlLinkText });
       } else {
         document.execCommand(command.command, false, command.value);
       }
@@ -86,7 +90,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     }
 
     this.updateModel();
-    this.value.emit(this.modelValue);
+    // this.value.emit(this.modelValue);
   }
 
   linkEditing(event) {
@@ -191,38 +195,6 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleCommandLink(linkCommand: string, urlLink: string, urlLinkText: string) {
-    if (isIE()) {
-      this.insertHtmlLinkElement(urlLink, urlLinkText);
-    } else {
-      // '&nbsp;' necessário para o cursor não ficar preso dentro do link no Firefox.
-      const linkValue =
-        isFirefox() && !this.isLinkEditing
-          ? `&nbsp;${this.makeLinkTag(urlLink, urlLinkText)}&nbsp;`
-          : this.makeLinkTag(urlLink, urlLinkText);
-
-      document.execCommand(linkCommand, false, linkValue);
-    }
-
-    this.addClickListenerOnAnchorElements();
-  }
-
-  // tratamento específico para IE pois não suporta o comando 'insertHTML'.
-  private insertHtmlLinkElement(urlLink: string, urlLinkText: string) {
-    const selection = document.getSelection();
-    const selectionRange = selection.getRangeAt(0);
-    const elementLink = document.createElement('a');
-    const elementlinkText = document.createTextNode(urlLinkText);
-
-    elementLink.appendChild(elementlinkText);
-    elementLink.href = urlLink;
-    elementLink.setAttribute('target', '_blank');
-    elementLink.classList.add('po-rich-text-link');
-
-    selectionRange.deleteContents();
-    selectionRange.insertNode(elementLink);
-  }
-
   private isCursorPositionedInALink(): boolean {
     const textSelection = this.getTextSelection();
     this.linkElement = undefined;
@@ -255,10 +227,6 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
     this.linkElement = undefined;
     return isLink;
-  }
-
-  private makeLinkTag(urlLink: string, urlLinkText: string) {
-    return `<a class="po-rich-text-link" href="${urlLink}" target="_blank">${urlLinkText || urlLink}</a>`;
   }
 
   private onAnchorClick = event => {
