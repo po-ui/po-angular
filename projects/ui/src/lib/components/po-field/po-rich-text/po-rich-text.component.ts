@@ -19,6 +19,9 @@ const providers = [
     // tslint:disable-next-line
     useExisting: forwardRef(() => PoRichTextComponent),
     multi: true
+  },
+  {
+    provide: PoRichTextService
   }
 ];
 

@@ -6,6 +6,7 @@ import * as UtilsFunction from '../../../../utils/util';
 import { configureTestSuite } from './../../../../util-test/util-expect.spec';
 
 import { PoRichTextBodyComponent } from './po-rich-text-body.component';
+import { PoRichTextService } from '../po-rich-text.service';
 
 describe('PoRichTextBodyComponent:', () => {
   let component: PoRichTextBodyComponent;
@@ -14,7 +15,8 @@ describe('PoRichTextBodyComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoRichTextBodyComponent]
+      declarations: [PoRichTextBodyComponent],
+      providers: [PoRichTextService]
     });
   });
 
