@@ -47,8 +47,6 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   @Output('p-selected-link') selectedLink = new EventEmitter<any>();
 
-  @Output('p-shortcut-command') shortcutCommand = new EventEmitter<any>();
-
   @Output('p-value') value = new EventEmitter<any>();
 
   constructor(private richTextService: PoRichTextService, private richTextLinkCommand: PoRichTextLinkCommand) {}
@@ -122,10 +120,10 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     const keyK = event.keyCode === PoKeyCodeEnum.keyK;
     const isLinkShortcut = (keyK && event.ctrlKey) || (keyK && event.metaKey);
 
-    if (isLinkShortcut) {
-      event.preventDefault();
-      this.shortcutCommand.emit();
-    }
+    // if (isLinkShortcut) {
+    //   event.preventDefault();
+    //   this.shortcutCommand.emit();
+    // }
 
     this.toggleCursorOnLink(event, 'add');
   }

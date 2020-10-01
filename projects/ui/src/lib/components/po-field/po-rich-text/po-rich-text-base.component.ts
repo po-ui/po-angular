@@ -193,14 +193,12 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   writeValue(value: string): void {
     this.value = value;
 
-    console.log('writeValue:', value);
-
     this.richTextService.emitModel(value);
   }
 
   // Executa a função onChange
   protected updateModel(value: any) {
-    console.log('updateModel: ', value);
+    // console.log('updateModel: ', value);
     // Quando o rich-text não possui um formulário, então esta função não é registrada
     if (this.onChangeModel) {
       this.onChangeModel(value);

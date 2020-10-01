@@ -8,13 +8,14 @@ import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 import { PoRichTextModalType } from '../enums/po-rich-text-modal-type.enum';
 import { PoRichTextToolbarButtonGroupItem } from '../interfaces/po-rich-text-toolbar-button-group-item.interface';
 import { PoRichTextBoldCommand } from '../commands/po-rich-text-bold-command';
+import { PoRichTextShortcuts } from '../po-rich-text-shortcuts';
 
 const poRichTextDefaultColor = '#000000';
 
 @Component({
   selector: 'po-rich-text-toolbar',
   templateUrl: './po-rich-text-toolbar.component.html',
-  providers: [PoRichTextBoldCommand]
+  providers: [PoRichTextBoldCommand, PoRichTextShortcuts]
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
   private _readonly: boolean;
@@ -91,8 +92,9 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     }
   ];
 
-  mediaButtons: Array<PoButtonGroupItem> = [
+  mediaButtons: Array<PoRichTextToolbarButtonGroupItem> = [
     {
+      command: 'image',
       tooltip: this.literals.insertImage,
       icon: 'po-icon-picture',
       action: () => this.modal.emit(PoRichTextModalType.Image)
@@ -120,9 +122,21 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return isIE();
   }
 
-  constructor(private languageService: PoLanguageService, private boldCommand: PoRichTextBoldCommand) {}
+  constructor(
+    private languageService: PoLanguageService,
+    private boldCommand: PoRichTextBoldCommand,
+    private shorcuts: PoRichTextShortcuts,
+    private elementRef: ElementRef
+  ) {}
 
   ngAfterViewInit() {
+    const commands = [...this.mediaButtons, ...this.listButtons, ...this.alignButtons, ...this.linkButtons];
+
+    this.shorcuts.listenerShortcuts(this.elementRef.nativeElement.parentElement).subscribe(action => {
+      const commandTriggered = commands.find(command => command['command'] === action);
+      commandTriggered.action();
+    });
+
     this.removeButtonFocus();
     this.setColorInColorPicker(poRichTextDefaultColor);
   }
@@ -134,7 +148,6 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   }
 
   setButtonsStates(obj: { commands: Array<string>; hexColor: string }) {
-    console.log('setButtonsStates:', obj);
     if (!this.readonly) {
       this.alignButtons.forEach(button => (button.selected = obj.commands.includes(button.command)));
       this.formatButtons.forEach(button => (button.selected = obj.commands.includes(button.command)));
@@ -144,9 +157,9 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     }
   }
 
-  shortcutTrigger() {
-    this.modal.emit(PoRichTextModalType.Link);
-  }
+  // shortcutTrigger() {
+  //   this.modal.emit(PoRichTextModalType.Link);
+  // }
 
   private emitAlignCommand(command: string) {
     const index = this.alignButtons.findIndex(btn => btn.command === command);

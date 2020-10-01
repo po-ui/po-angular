@@ -100,12 +100,10 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
   }
 
   onChangeValue(value: any) {
-    console.log('onChangeValue: ', value);
     this.change.emit(value);
   }
 
   updateValue(value: string) {
-    console.log('updateValue: ', value);
     this.value = value;
     this.invalid = !value;
     this.controlChangeModelEmitter(this.value);
