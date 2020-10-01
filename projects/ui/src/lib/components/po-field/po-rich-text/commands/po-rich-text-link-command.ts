@@ -49,5 +49,7 @@ export class PoRichTextLinkCommand {
 
     selectionRange.deleteContents();
     selectionRange.insertNode(elementLink);
+
+    // criar a tag utilizando o renderer do angular
   }
 }
