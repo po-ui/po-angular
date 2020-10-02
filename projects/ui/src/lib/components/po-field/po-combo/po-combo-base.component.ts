@@ -446,11 +446,23 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */
   @Input('p-clean') @InputBoolean() clean?: boolean;
 
-  /** Deve ser informada uma função que será disparada quando houver alterações no ngModel. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser informada uma função que será disparada quando houver alterações no ngModel.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
-  // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
-  @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

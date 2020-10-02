@@ -465,6 +465,10 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Função que será executada no momento de realizar o envio do arquivo,
    * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
    * É passado por parâmetro um objeto com o arquivo e a propiedade data nesta propriedade pode ser informado algum dado,
@@ -474,22 +478,36 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *   event.data = {id: 'id do usuario'};
    * ```
    */
-  @Output('p-upload') onUpload?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-upload') onUpload: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento será disparado quando ocorrer algum erro no envio do arquivo.
    * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpErrorResponse`.
    */
-  @Output('p-error') onError?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-error') onError: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento será disparado quando o envio do arquivo for realizado com sucesso.
    * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpResponse`.
    */
-  @Output('p-success') onSuccess?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-success') onSuccess: EventEmitter<any> = new EventEmitter<any>();
 
-  // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da *tag* `form`.
-  @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da *tag* `form`.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(protected uploadService: PoUploadService, languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

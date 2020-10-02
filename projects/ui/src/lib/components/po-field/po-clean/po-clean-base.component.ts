@@ -17,11 +17,16 @@ export abstract class PoCleanBaseComponent {
   @Input('p-default-value') defaultValue?: string = '';
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   *
    * Evento disparado quando executada ação do po-clean.
    * Este evento deve ser usado para avisar para o componente que está usando o po-clean, que o botão foi disparado,
    * e provavelmente será preciso emitir o evento para atualizar o model.
    */
-  @Output('p-change-event') changeEvent?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-change-event') changeEvent: EventEmitter<any> = new EventEmitter<any>();
 
   protected parentComponent: any;
 

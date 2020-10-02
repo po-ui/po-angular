@@ -220,18 +220,26 @@ export class PoListViewBaseComponent {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Recebe uma ação, que será executada quando clicar no botão "Carregar mais resultados".
    *
    * > Caso nenhuma ação for definida o mesmo não ficará visível.
    */
-  @Output('p-show-more') showMore?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-show-more') showMore: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Ação que será executada ao clicar no título.
    *
    * Ao ser disparado, o método inserido na ação irá receber como parâmetro o item da lista clicado.
    */
-  @Output('p-title-action') titleAction?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -239,19 +239,33 @@ export abstract class PoPageDynamicSearchBaseComponent {
   }
 
   /**
+   * @optional
+   *
    * @description
    *
    * Evento disparado ao executar a pesquisa avançada, o mesmo irá repassar um objeto com os valores preenchidos no modal de pesquisa.
    *
    * > Campos não preenchidos não irão aparecer no objeto passado por parâmetro.
    */
-  @Output('p-advanced-search') advancedSearch?: EventEmitter<any> = new EventEmitter();
+  @Output('p-advanced-search') advancedSearch: EventEmitter<any> = new EventEmitter();
 
-  /** Evento disparado ao remover um ou todos os disclaimers pelo usuário. */
-  @Output('p-change-disclaimers') changeDisclaimers?: EventEmitter<any> = new EventEmitter();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao remover um ou todos os disclaimers pelo usuário.
+   */
+  @Output('p-change-disclaimers') changeDisclaimers: EventEmitter<any> = new EventEmitter();
 
-  /** Evento disparado ao realizar uma busca pelo campo de pesquisa rápida, o mesmo será chamado repassando o valor digitado. */
-  @Output('p-quick-search') quickSearch?: EventEmitter<string> = new EventEmitter();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao realizar uma busca pelo campo de pesquisa rápida, o mesmo será chamado repassando o valor digitado.
+   */
+  @Output('p-quick-search') quickSearch: EventEmitter<string> = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -326,7 +326,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * Evento disparado ao alterar valor do campo.
    */
-  @Output('p-change') onChange?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-change') onChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(protected poDateService: PoDateService) {}
 

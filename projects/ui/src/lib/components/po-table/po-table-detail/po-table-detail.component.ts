@@ -42,9 +42,13 @@ export class PoTableDetailComponent {
   @Input('p-selectable') isSelectable?: boolean = false;
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Ação executada ao selecionar ou desmarcar a seleção de uma linha de detalhe do `po-table`.
    */
-  @Output('p-select-row') selectRow?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-select-row') selectRow: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private decimalPipe: DecimalPipe) {}
 

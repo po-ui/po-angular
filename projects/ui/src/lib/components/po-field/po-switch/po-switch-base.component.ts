@@ -99,11 +99,23 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
     return this._disabled;
   }
 
-  /** Evento disparado ao alterar valor do campo. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor do campo.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
-  // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
-  @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
