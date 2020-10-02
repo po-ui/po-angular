@@ -280,16 +280,24 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
    * Será passado por parâmetro o objeto de erro retornado.
    */
-  @Output('p-error') onError?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-error') onError: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento será disparado quando ocorrer alguma seleção.
    * Será passado por parâmetro o objeto com o valor selecionado.
    */
-  @Output('p-selected') selected?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-selected') selected: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private defaultService: PoLookupFilterService) {}
 

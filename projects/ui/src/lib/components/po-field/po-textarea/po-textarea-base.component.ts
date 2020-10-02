@@ -181,17 +181,41 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
     return this._rows;
   }
 
-  /** Evento disparado ao sair do campo. */
-  @Output('p-blur') blur?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao sair do campo.
+   */
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter<any>();
 
-  /** Evento disparado ao entrar do campo. */
-  @Output('p-enter') enter?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao entrar do campo.
+   */
+  @Output('p-enter') enter: EventEmitter<any> = new EventEmitter<any>();
 
-  /** Evento disparado ao alterar valor e deixar o campo. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor e deixar o campo.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
-  /** Evento disparado ao alterar valor do model. */
-  @Output('p-change-model') changeModel?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor do model.
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter<any>();
 
   callOnChange(value: any) {
     // Quando o input não possui um formulário, então esta função não é registrada

@@ -306,11 +306,23 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     return this._locale || getShortBrowserLanguage();
   }
 
-  /** Evento disparado ao sair do campo. */
-  @Output('p-blur') onblur?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao sair do campo.
+   */
+  @Output('p-blur') onblur: EventEmitter<any> = new EventEmitter<any>();
 
-  /** Evento disparado ao alterar valor do campo. */
-  @Output('p-change') onchange?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor do campo.
+   */
+  @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() {}
 

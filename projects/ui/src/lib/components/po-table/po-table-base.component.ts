@@ -439,30 +439,58 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Input('p-max-columns') maxColumns?: number;
 
-  /** Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas. */
-  @Output('p-all-selected') allSelected?: EventEmitter<any> = new EventEmitter<any>();
-
-  /** Evento executado quando a seleção das linhas é desmarcada por meio do *checkbox* que seleciona todas as linhas. */
-  @Output('p-all-unselected') allUnselected?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   * Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas.
+   */
+  @Output('p-all-selected') allSelected: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * @optional
+   *
+   * @description
+   * Evento executado quando a seleção das linhas é desmarcada por meio do *checkbox* que seleciona todas as linhas.
+   */
+  @Output('p-all-unselected') allUnselected: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento executado ao colapsar uma linha do `po-table`.
    *
    * > Como parâmetro o componente envia o item colapsado.
    */
-  @Output('p-collapsed') collapsed?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-collapsed') collapsed: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento executado ao expandir uma linha do `po-table`.
    *
    * > Como parâmetro o componente envia o item expandido.
    */
-  @Output('p-expanded') expanded?: EventEmitter<any> = new EventEmitter<any>();
-
-  /** Evento executado ao selecionar uma linha do `po-table`. */
-  @Output('p-selected') selected?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-expanded') expanded: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento executado ao selecionar uma linha do `po-table`.
+   */
+  @Output('p-selected') selected: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Recebe uma ação de clique para o botão "Carregar mais resultados", caso nenhuma ação for definida o mesmo
    * não é visível.
    *
@@ -471,9 +499,13 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * - column (`PoTableColumn`): objeto da coluna que está ordenada.
    * - type (`PoTableColumnSortType`): tipo da ordenação.
    */
-  @Output('p-show-more') showMore?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
+  @Output('p-show-more') showMore: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento executado ao ordenar colunas da tabela.
    *
    * Recebe um objeto `{ column, type }` onde:
@@ -481,10 +513,15 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * - column (`PoTableColumn`): objeto da coluna que foi clicada/ordenada.
    * - type (`PoTableColumnSortType`): tipo da ordenação.
    */
-  @Output('p-sort-by') sortBy?: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
+  @Output('p-sort-by') sortBy: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
 
-  /** Evento executado ao desmarcar a seleção de uma linha do `po-table`. */
-  @Output('p-unselected') unselected?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   * Evento executado ao desmarcar a seleção de uma linha do `po-table`.
+   */
+  @Output('p-unselected') unselected: EventEmitter<any> = new EventEmitter<any>();
 
   get hasColumns(): boolean {
     return this.columns && this.columns.length > 0;

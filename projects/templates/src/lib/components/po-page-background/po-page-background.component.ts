@@ -83,10 +83,14 @@ export class PoPageBackgroundComponent implements OnInit {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao selecionar alguma opção no seletor de idiomas.
    * Para este evento será passado como parâmetro o valor de idioma selecionado.
    */
-  @Output('p-selected-language') selectedLanguage?: EventEmitter<string> = new EventEmitter<string>();
+  @Output('p-selected-language') selectedLanguage: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(public poLanguageService: PoLanguageService) {}
 

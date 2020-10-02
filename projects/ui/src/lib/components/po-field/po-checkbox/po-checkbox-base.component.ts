@@ -59,8 +59,14 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   /** Texto de exibição do *checkbox*. */
   @Input('p-label') label?: string;
 
-  /** Evento disparado quando o valor do *checkbox* for alterado. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado quando o valor do *checkbox* for alterado.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
   changeValue() {
     if (this.propagateChange) {

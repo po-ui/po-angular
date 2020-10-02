@@ -300,8 +300,14 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     return this._filterMode;
   }
 
-  /** Pode ser informada uma função que será disparada quando houver alterações no ngModel. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Pode ser informada uma função que será disparada quando houver alterações no ngModel.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
   protected clickOutListener: () => void;
   protected resizeListener: () => void;

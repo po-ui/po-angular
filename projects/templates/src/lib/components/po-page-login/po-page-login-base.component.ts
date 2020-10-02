@@ -873,13 +873,17 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado quando o usuário alterar o input do campo login.
    *
    * Esse evento receberá como parâmetro uma variável do tipo `string` com o texto informado no campo.
    *
    * > Esta propriedade será ignorada se for definido valor para a propriedade `p-authentication-url`.
    */
-  @Output('p-login-change') loginChange?: EventEmitter<string> = new EventEmitter<string>();
+  @Output('p-login-change') loginChange: EventEmitter<string> = new EventEmitter<string>();
 
   /**
    * Evento disparado ao submeter o formulário de login (apertando `Enter` dentro dos campos ou pressionando o botão de confirmação).
@@ -893,21 +897,29 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   @Output('p-login-submit') loginSubmit = new EventEmitter<PoPageLogin>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado quando o usuário alterar o input do campo password.
    *
    * Esse evento receberá como parâmetro uma variável do tipo `string` com o texto informado no campo.
    *
    * > Esta propriedade será ignorada se for definido valor para a propriedade `p-authentication-url`.
    */
-  @Output('p-password-change') passwordChange?: EventEmitter<string> = new EventEmitter<string>();
+  @Output('p-password-change') passwordChange: EventEmitter<string> = new EventEmitter<string>();
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado quando o usuário alterar o idioma da página.
    *
    * Esse evento receberá como parâmetro um objeto do tipo `PoLanguage` com a linguagem selecionada.
    *
    */
-  @Output('p-language-change') languageChange?: EventEmitter<PoLanguage> = new EventEmitter<PoLanguage>();
+  @Output('p-language-change') languageChange: EventEmitter<PoLanguage> = new EventEmitter<PoLanguage>();
 
   get language(): string {
     return this.selectedLanguage || getShortBrowserLanguage();

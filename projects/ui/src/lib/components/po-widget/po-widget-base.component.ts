@@ -174,23 +174,57 @@ export abstract class PoWidgetBaseComponent {
     return this._title;
   }
 
-  /** Ação que será executada quando o usuário clicar sobre a área total do `po-widget`. */
-  @Output('p-click') click?: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será executada quando o usuário clicar sobre a área total do `po-widget`.
+   */
+  @Output('p-click') click: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
 
-  /** Função que será disparada com o valor do `p-disabled` quando esta propriedade for alterada. */
-  @Output('p-on-disabled') onDisabled?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será disparada com o valor do `p-disabled` quando esta propriedade for alterada.
+   */
+  @Output('p-on-disabled') onDisabled: EventEmitter<any> = new EventEmitter<any>();
 
-  /** Função que será chamada na primeira ação. */
-  @Output('p-primary-action') primaryAction?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será chamada na primeira ação.
+   */
+  @Output('p-primary-action') primaryAction: EventEmitter<any> = new EventEmitter<any>();
 
-  /** Função que será chamada na segunda ação. */
-  @Output('p-secondary-action') secondaryAction?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será chamada na segunda ação.
+   */
+  @Output('p-secondary-action') secondaryAction: EventEmitter<any> = new EventEmitter<any>();
 
-  /** Função chamada ao clicar no ícone de configuração */
-  @Output('p-setting') setting?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   * Função chamada ao clicar no ícone de configuração
+   */
+  @Output('p-setting') setting: EventEmitter<any> = new EventEmitter<any>();
 
-  /** Função que será chamada ao clicar no título. */
-  @Output('p-title-action') titleAction?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   * Função que será chamada ao clicar no título.
+   */
+  @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
 
   abstract setHeight(height: number);
 }

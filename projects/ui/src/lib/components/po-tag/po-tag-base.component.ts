@@ -172,5 +172,5 @@ export class PoTagBaseComponent {
    *
    * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
    */
-  @Output('p-click') click?: EventEmitter<any> = new EventEmitter<PoTagItem>();
+  @Output('p-click') click: EventEmitter<any> = new EventEmitter<PoTagItem>();
 }

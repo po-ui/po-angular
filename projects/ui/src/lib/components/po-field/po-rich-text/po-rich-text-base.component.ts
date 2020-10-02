@@ -156,11 +156,23 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
     return this._required;
   }
 
-  /** Evento disparado ao deixar o campo e que recebe como parâmetro o valor alterado. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao deixar o campo e que recebe como parâmetro o valor alterado.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter();
 
-  /** Evento disparado ao modificar valor do model e que recebe como parâmetro o valor alterado. */
-  @Output('p-change-model') changeModel?: EventEmitter<any> = new EventEmitter();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao modificar valor do model e que recebe como parâmetro o valor alterado.
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
 
   constructor(private richTextService: PoRichTextService) {}
 

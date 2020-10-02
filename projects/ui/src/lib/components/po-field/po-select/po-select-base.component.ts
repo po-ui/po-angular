@@ -96,11 +96,23 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
     return this._options;
   }
 
-  /** Deve ser informada uma função que será disparada quando houver alterações no ngModel. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser informada uma função que será disparada quando houver alterações no ngModel.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
-  // Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
-  @Output('ngModelChange') ngModelChange?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @optional

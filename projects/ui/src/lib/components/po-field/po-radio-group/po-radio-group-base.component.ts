@@ -142,8 +142,14 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    */
   @Input('p-optional') optional: boolean;
 
-  /** Evento ao alterar valor do campo. */
-  @Output('p-change') change?: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento ao alterar valor do campo.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
   // Deve retornar o valor elemento que contém o valor passado por parâmetro
   abstract getElementByValue(value: any): any;

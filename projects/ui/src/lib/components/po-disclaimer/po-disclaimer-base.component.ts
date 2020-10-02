@@ -51,10 +51,14 @@ export class PoDisclaimerBaseComponent {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao fechar o disclaimer.
    * Para este evento será passado como parâmetro um objeto com value, label e property.
    */
-  @Output('p-close-action') closeAction?: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-close-action') closeAction: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @description
