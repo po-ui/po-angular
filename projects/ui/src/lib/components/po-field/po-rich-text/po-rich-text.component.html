@@ -8,7 +8,7 @@
       [p-readonly]="readonly"
       (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar.setButtonsStates($event)"
-      (p-selected-link)="richTextModal.selectedLink($event)"
+      (p-selected-link)="richTextToolbar.selectedLink($event)"
       (p-shortcut-command)="richTextToolbar.shortcutTrigger()"
       (p-value)="updateValue($event)"
     >
@@ -17,17 +17,10 @@
     <po-rich-text-toolbar
       #richTextToolbar
       [p-readonly]="readonly"
+      (p-link-editing)="richTextBody.linkEditing($event)"
       (p-command)="richTextBody.executeCommand($event)"
-      (p-modal)="richTextModal.openModal($event)"
     >
     </po-rich-text-toolbar>
-
-    <po-rich-text-modal
-      #richTextModal
-      (p-command)="richTextBody.executeCommand($event)"
-      (p-link-editing)="richTextBody.linkEditing($event)"
-    >
-    </po-rich-text-modal>
   </div>
 
   <po-field-container-bottom [p-error-pattern]="errorMsg"></po-field-container-bottom>

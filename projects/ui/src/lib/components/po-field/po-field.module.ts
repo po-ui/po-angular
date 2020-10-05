@@ -35,7 +35,8 @@ import { PoMultiselectItemComponent } from './po-multiselect/po-multiselect-item
 import { PoMultiselectSearchComponent } from './po-multiselect/po-multiselect-search/po-multiselect-search.component';
 import { PoRichTextBodyComponent } from './po-rich-text/po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextComponent } from './po-rich-text/po-rich-text.component';
-import { PoRichTextModalComponent } from './po-rich-text/po-rich-text-modal/po-rich-text-modal.component';
+import { PoRichTextImageModalComponent } from './po-rich-text/po-rich-text-image-modal/po-rich-text-image-modal.component';
+import { PoRichTextLinkModalComponent } from './po-rich-text/po-rich-text-link-modal/po-rich-text-link-modal.component';
 import { PoRichTextToolbarComponent } from './po-rich-text/po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoInputComponent } from './po-input/po-input.component';
 import { PoNumberComponent } from './po-number/po-number.component';
@@ -131,7 +132,8 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoRadioGroupComponent,
     PoRichTextBodyComponent,
     PoRichTextComponent,
-    PoRichTextModalComponent,
+    PoRichTextImageModalComponent,
+    PoRichTextLinkModalComponent,
     PoRichTextToolbarComponent,
     PoSelectComponent,
     PoSelectOptionTemplateDirective,

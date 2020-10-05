@@ -37,3 +37,12 @@
     <po-button-group [p-buttons]="mediaButtons"> </po-button-group>
   </div>
 </div>
+
+<po-rich-text-image-modal #richTextImageModal (p-command)="emitCommand($event)"> </po-rich-text-image-modal>
+
+<po-rich-text-link-modal
+  #richTextLinkModal
+  (p-command)="emitCommand($event)"
+  (p-link-editing)="emitLinkEditing($event)"
+>
+</po-rich-text-link-modal>

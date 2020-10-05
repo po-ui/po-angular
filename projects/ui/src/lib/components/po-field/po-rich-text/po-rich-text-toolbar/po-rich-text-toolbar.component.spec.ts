@@ -49,20 +49,22 @@ describe('PoRichTextToolbarComponent:', () => {
       expect(spyIsIE).toHaveBeenCalled();
     });
 
-    it('mediaButtons: should call modal', () => {
-      spyOn(component.modal, <any>'emit');
+    it('mediaButtons: should call richTextImageModal.openModal', () => {
+      spyOn(component.richTextImageModal, <any>'openModal');
 
       component.mediaButtons[0].action();
 
-      expect(component.modal.emit).toHaveBeenCalled();
+      expect(component.richTextImageModal.openModal).toHaveBeenCalled();
     });
 
-    it('linkButtons: should call modal.emit', () => {
-      spyOn(component.modal, 'emit');
+    it('linkButtons: should call richTextLinkModal.openModal', () => {
+      component['selectedLinkElement'] = undefined;
+
+      spyOn(component.richTextLinkModal, 'openModal');
 
       component.linkButtons[0].action();
 
-      expect(component.modal.emit).toHaveBeenCalled();
+      expect(component.richTextLinkModal.openModal).toHaveBeenCalledWith(component['selectedLinkElement']);
     });
   });
 
@@ -139,6 +141,22 @@ describe('PoRichTextToolbarComponent:', () => {
       });
     });
 
+    it('emitLinkEditing: should emit linkEditing', () => {
+      const isLinkEdit = false;
+
+      spyOn(component.linkEditing, 'emit');
+
+      component.emitLinkEditing(isLinkEdit);
+
+      expect(component.linkEditing.emit).toHaveBeenCalledWith(isLinkEdit);
+    });
+
+    it('selectedLink: should apply value to selectedLink', () => {
+      component.selectedLink(undefined);
+
+      expect(component['selectedLinkElement']).toBe(undefined);
+    });
+
     it('emitAlignCommand: should emit command', () => {
       spyOn(component.command, 'emit');
 
@@ -166,7 +184,7 @@ describe('PoRichTextToolbarComponent:', () => {
     it('emitCommand: should emit command', () => {
       spyOn(component.command, 'emit');
 
-      component['emitCommand']('justifyleft');
+      component.emitCommand('justifyleft');
 
       expect(component.command.emit).toHaveBeenCalledWith('justifyleft');
     });
@@ -229,12 +247,14 @@ describe('PoRichTextToolbarComponent:', () => {
       expect(component.colorPickerInput.nativeElement.value).toBe(color);
     });
 
-    it('shortcutTrigger: should call `openModalLink`', () => {
-      spyOn(component.modal, <any>'emit');
+    it('shortcutTrigger: should call `richTextLinkModal.openModal`', () => {
+      component['selectedLinkElement'] = undefined;
+
+      spyOn(component.richTextLinkModal, <any>'openModal');
 
       component.shortcutTrigger();
 
-      expect(component.modal.emit).toHaveBeenCalled();
+      expect(component.richTextLinkModal.openModal).toHaveBeenCalledWith(component['selectedLinkElement']);
     });
   });
 

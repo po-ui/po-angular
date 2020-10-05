@@ -5,8 +5,9 @@ import { PoLanguageService } from '../../../../services/po-language/po-language.
 
 import { PoButtonGroupItem } from '../../../po-button-group';
 import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
-import { PoRichTextModalType } from '../enums/po-rich-text-modal-type.enum';
 import { PoRichTextToolbarButtonGroupItem } from '../interfaces/po-rich-text-toolbar-button-group-item.interface';
+import { PoRichTextImageModalComponent } from '../po-rich-text-image-modal/po-rich-text-image-modal.component';
+import { PoRichTextLinkModalComponent } from '../po-rich-text-link-modal/po-rich-text-link-modal.component';
 
 const poRichTextDefaultColor = '#000000';
 
@@ -16,6 +17,7 @@ const poRichTextDefaultColor = '#000000';
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
   private _readonly: boolean;
+  private selectedLinkElement;
 
   readonly literals = {
     ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
@@ -84,7 +86,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
       command: 'Createlink',
       icon: 'po-icon-link',
       tooltip: `${this.literals.insertLink} (Ctrl + K)`,
-      action: () => this.modal.emit(PoRichTextModalType.Link)
+      action: () => this.richTextLinkModal.openModal(this.selectedLinkElement)
     }
   ];
 
@@ -92,13 +94,17 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     {
       tooltip: this.literals.insertImage,
       icon: 'po-icon-picture',
-      action: () => this.modal.emit(PoRichTextModalType.Image)
+      action: () => this.richTextImageModal.openModal()
     }
   ];
 
   @ViewChild('colorPickerInput', { read: ElementRef }) colorPickerInput: ElementRef;
 
   @ViewChild('toolbarElement', { static: true }) toolbarElement: ElementRef;
+
+  @ViewChild(PoRichTextImageModalComponent, { static: true }) richTextImageModal: PoRichTextImageModalComponent;
+
+  @ViewChild(PoRichTextLinkModalComponent, { static: true }) richTextLinkModal: PoRichTextLinkModalComponent;
 
   @Input('p-readonly') set readonly(value: boolean) {
     this._readonly = value;
@@ -112,6 +118,8 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   @Output('p-command') command = new EventEmitter<string | { command: string; value: string }>();
 
   @Output('p-modal') modal = new EventEmitter<any>();
+
+  @Output('p-link-editing') linkEditing = new EventEmitter<any>();
 
   get isInternetExplorer() {
     return isIE();
@@ -130,6 +138,14 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.command.emit({ command, value });
   }
 
+  emitLinkEditing(isLinkEdit: boolean) {
+    this.linkEditing.emit(isLinkEdit);
+  }
+
+  selectedLink(selectedLinkElement) {
+    this.selectedLinkElement = selectedLinkElement;
+  }
+
   setButtonsStates(obj: { commands: Array<string>; hexColor: string }) {
     if (!this.readonly) {
       this.alignButtons.forEach(button => (button.selected = obj.commands.includes(button.command)));
@@ -141,7 +157,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   }
 
   shortcutTrigger() {
-    this.modal.emit(PoRichTextModalType.Link);
+    this.richTextLinkModal.openModal(this.selectedLinkElement);
   }
 
   private emitAlignCommand(command: string) {
@@ -154,7 +170,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.command.emit(command);
   }
 
-  private emitCommand(command: string) {
+  emitCommand(command: string) {
     this.command.emit(command);
   }
 
