@@ -1,30 +1,19 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 
-import { convertImageToBase64, isExternalLink, isIE } from '../../../../utils/util';
+import { isExternalLink, isIE } from '../../../../utils/util';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 
 import { PoModalAction, PoModalComponent } from '../../../po-modal';
 import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
-import { PoRichTextModalType } from '../enums/po-rich-text-modal-type.enum';
-import { PoUploadComponent } from '../../po-upload/po-upload.component';
-import { PoUploadFileRestrictions } from '../../po-upload/interfaces/po-upload-file-restriction.interface';
-
-const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.svg'];
 
 @Component({
-  selector: 'po-rich-text-modal',
-  templateUrl: './po-rich-text-modal.component.html'
+  selector: 'po-rich-text-link-modal',
+  templateUrl: './po-rich-text-link-modal.component.html'
 })
-export class PoRichTextModalComponent {
-  modalType: PoRichTextModalType;
+export class PoRichTextLinkModalComponent {
   savedCursorPosition;
   selection = document.getSelection();
-  uploadModel: Array<any>;
-  uploadRestrictions: PoUploadFileRestrictions = {
-    allowedExtensions: uploadRestrictions
-  };
-  urlImage: string;
   urlLink: string;
   urlLinkText: string;
 
@@ -47,47 +36,13 @@ export class PoRichTextModalComponent {
     }
   };
 
-  modalConfirmAction: PoModalAction = {
-    label: this.literals.insert,
-    disabled: false,
-    action: () => this.insertElementRef()
-  };
-
-  modalLinkConfirmAction = {
+  modalConfirmAction = {
     label: this.linkConfirmAction(),
     disabled: true,
     action: () => (this.isLinkEditing ? this.toEditLink() : this.toInsertLink(this.urlLink, this.urlLinkText))
   };
 
-  get modalTitle(): string {
-    if (this.modalType === 'image') {
-      return this.literals.insertImage;
-    }
-
-    return this.linkConfirmAction();
-  }
-
-  get isUploadValid(): boolean {
-    return !!(this.uploadModel && this.uploadModel.length);
-  }
-
-  get isUrlValid(): boolean {
-    return !!this.urlImage && this.modalImageForm && this.modalImageForm.valid;
-  }
-
-  get modalPrimaryAction() {
-    return this.modalType === 'image' ? this.modalConfirmAction : this.modalLinkConfirmAction;
-  }
-
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
-
-  @ViewChild('modalImageForm') modalImageForm: NgForm;
-
-  @ViewChild('upload', { static: true }) upload: PoUploadComponent;
-
-  @ViewChild('modalImage', { static: true }) modalImage: ElementRef;
-
-  @ViewChild('modalLink', { static: true }) modalLink: PoModalComponent;
 
   @ViewChild('modalLinkForm') modalLinkForm: NgForm;
 
@@ -97,61 +52,25 @@ export class PoRichTextModalComponent {
 
   constructor(private languageService: PoLanguageService) {}
 
-  async convertToBase64() {
-    if (this.isUploadValid) {
-      const uploadImage = this.uploadModel[0].rawFile;
-      return await convertImageToBase64(uploadImage);
-    }
-  }
-
   linkConfirmAction(): string {
     return this.isLinkEditing ? this.literals.editLink : this.literals.insertLink;
   }
 
-  emitCommand(value) {
-    let command: string;
-    if (value && this.modalType === PoRichTextModalType.Image) {
-      command = 'insertImage';
-      this.command.emit({ command, value });
-    }
-  }
-
   formModelValidate() {
-    return (this.modalLinkConfirmAction.disabled = this.modalLinkForm && this.modalLinkForm.invalid);
+    return (this.modalConfirmAction.disabled = this.modalLinkForm?.invalid);
   }
 
-  async insertElementRef() {
-    let uploadImage: string;
-
-    if (this.modalType === PoRichTextModalType.Image && !this.urlImage) {
-      uploadImage = await this.convertToBase64();
-    }
-
-    this.retrieveCursorPosition();
-    this.modal.close();
-
-    if (this.isUrlValid || this.isUploadValid) {
-      this.emitCommand(this.urlImage || uploadImage);
-    }
-    this.cleanUpFields();
-  }
-
-  openModal(type: PoRichTextModalType) {
-    this.modalType = type;
-
+  openModal(selectedLinkElement: ElementRef) {
     this.saveCursorPosition();
+    this.prepareModalForLink(selectedLinkElement);
 
-    if (this.modalType === PoRichTextModalType.Link) {
-      this.prepareModalForLink();
-      this.modalLinkConfirmAction.label = this.linkConfirmAction();
-    }
-
+    this.modalConfirmAction.label = this.linkConfirmAction();
     this.modal.open();
   }
 
-  selectedLink(event) {
-    this.isSelectedLink = !!event;
-    this.linkElement = event;
+  private selectedLink(linkElement: ElementRef) {
+    this.isSelectedLink = !!linkElement;
+    this.linkElement = linkElement;
   }
 
   private checkIfIsEmpty(urlLink: string, urlLinkText: string) {
@@ -159,10 +78,8 @@ export class PoRichTextModalComponent {
   }
 
   private cleanUpFields() {
-    this.urlImage = undefined;
     this.urlLink = undefined;
     this.urlLinkText = undefined;
-    this.uploadModel = undefined;
     this.isLinkEditing = false;
     this.isSelectedLink = false;
     this.linkElement = undefined;
@@ -174,7 +91,7 @@ export class PoRichTextModalComponent {
     control.updateValueAndValidity();
   }
 
-  private prepareModalForLink() {
+  private prepareModalForLink(selectedLinkElement: ElementRef) {
     this.saveSelectionText();
     if (this.modalLinkForm) {
       this.formReset(this.modalLinkForm.control);
@@ -183,6 +100,8 @@ export class PoRichTextModalComponent {
     setTimeout(() => {
       this.formModelValidate();
     });
+
+    this.selectedLink(selectedLinkElement);
 
     if (this.isSelectedLink) {
       this.isLinkEditing = true;

@@ -1,0 +1,38 @@
+<po-modal
+  #modal
+  p-hide-close
+  [p-primary-action]="modalConfirmAction"
+  [p-secondary-action]="modalCancelAction"
+  [p-title]="literals.insertImage"
+>
+  <form #modalImageForm="ngForm">
+    <div class="po-row">
+      <!-- po-upload desabilita o drag drop caso não tenha valor atribuido para a propriedade p-url -->
+      <po-upload
+        #upload
+        class="po-md-12"
+        name="upload"
+        [(ngModel)]="uploadModel"
+        p-drag-drop-height="160"
+        p-hide-restrictions-info
+        p-hide-send-button
+        p-url="x"
+        [p-drag-drop]="!modal.isHidden"
+        [p-disabled]="isUrlValid"
+        [p-restrictions]="uploadRestrictions"
+      >
+      </po-upload>
+    </div>
+
+    <div class="po-row">
+      <po-url
+        class="po-md-12 po-mt-3"
+        name="url"
+        [(ngModel)]="urlImage"
+        [p-label]="literals.urlImage"
+        [p-disabled]="isUploadValid"
+      >
+      </po-url>
+    </div>
+  </form>
+</po-modal>
