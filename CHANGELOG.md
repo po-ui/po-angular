@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.9.0"></a>
+# [3.9.0](https://github.com/po-ui/po-angular/compare/v3.8.0...v3.9.0) (2020-10-05)
+
+
+### Bug Fixes
+
+* **rich-text:** corrige compartilhamento do ngModel ([0888438](https://github.com/po-ui/po-angular/commit/0888438))
+* **ui:** ajusta declaração incorreta dos event para uso de projetos Angular com a opção strict ([957f1c5](https://github.com/po-ui/po-angular/commit/957f1c5))
+
+
+### Features
+
+* **lookup:** criada a propriedade p-advanced-filters ([0fe5116](https://github.com/po-ui/po-angular/commit/0fe5116))
+
+
+
 <a name="3.8.0"></a>
 # [3.8.0](https://github.com/po-ui/po-angular/compare/v3.7.0...v3.8.0) (2020-09-28)
 
