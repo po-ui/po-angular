@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, HostListener, ViewChild, Directive } from '@angular/core';
+import { AfterViewInit, ElementRef, HostListener, ViewChild, Directive, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
@@ -18,8 +18,8 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     return this.noAutocomplete ? 'off' : 'on';
   }
 
-  constructor(el: ElementRef) {
-    super();
+  constructor(el: ElementRef, cd?: ChangeDetectorRef) {
+    super(cd);
 
     this.el = el;
   }

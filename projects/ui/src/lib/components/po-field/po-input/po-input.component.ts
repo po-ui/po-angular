@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
@@ -37,12 +37,13 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
       useExisting: forwardRef(() => PoInputComponent),
       multi: true
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoInputComponent extends PoInputGeneric {
   /* istanbul ignore next */
-  constructor(el: ElementRef) {
-    super(el);
+  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+    super(el, cd);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

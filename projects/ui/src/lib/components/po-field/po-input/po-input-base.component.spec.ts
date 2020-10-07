@@ -269,6 +269,24 @@ describe('PoInputBase:', () => {
       expect(component.disabled).toBe(expectedValue);
     });
 
+    it('setDisabledState: should call markForCheck if changeDetector is not undefined', () => {
+      component['cd'] = <any>{ markForCheck: () => {} };
+      spyOn(component['cd'], 'markForCheck');
+
+      component.setDisabledState(true);
+
+      expect(component['cd'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('writeValue: should call markForCheck if changeDetector is not undefined', () => {
+      component['cd'] = <any>{ markForCheck: () => {} };
+      spyOn(component['cd'], 'markForCheck');
+
+      component.writeValue('1');
+
+      expect(component['cd'].markForCheck).toHaveBeenCalled();
+    });
+
     it('registerOnValidatorChange: should register validatorChange function', () => {
       const registerOnValidatorChangeFn = () => {};
 
