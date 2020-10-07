@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, ElementRef, NgZone, Renderer2 } from '@angular/core';
 
 import { PoChartCircular } from './po-chart-circular';
-import { PoChartColors, PoSeriesTextBlack } from '../../po-chart-colors.constant';
+import { PoChartColors, PoSeriesTextBlack } from '../../helpers/po-chart-colors.constant';
 import { poChartCompleteCircle, poChartGaugeSerieWidth } from './po-chart-circular.constant';
 import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component';
 import { PoChartGaugeSerie } from '../po-chart-gauge/po-chart-gauge-series.interface';

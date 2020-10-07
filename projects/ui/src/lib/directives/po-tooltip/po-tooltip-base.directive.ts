@@ -1,5 +1,7 @@
 import { Input, Directive } from '@angular/core';
 
+import { InputBoolean } from '../../decorators';
+
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
 const CONTENT_MAX_LENGTH = 140;
@@ -70,4 +72,16 @@ export class PoTooltipBaseDirective {
   get tooltipPosition(): string {
     return this._tooltipPosition;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o po-tooltip será incluido no body e não dentro do elemento ao qual o tooltip foi especificado.
+   * Opção necessária para o caso de uso de tooltip em um elemento SVG.
+   *
+   * @default `false`
+   */
+  @Input('p-append-in-body') @InputBoolean() appendInBody: boolean = false;
 }

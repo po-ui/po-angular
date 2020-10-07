@@ -1,0 +1,5 @@
+<svg:path
+  class="po-chart-line-path"
+  [attr.stroke]="color"
+  [attr.d]="coordinates">
+</svg:path> 

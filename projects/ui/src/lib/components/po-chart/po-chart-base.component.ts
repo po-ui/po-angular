@@ -6,12 +6,14 @@ import { PoChartGaugeSerie } from './po-chart-types/po-chart-gauge/po-chart-gaug
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoDonutChartSeries } from './po-chart-types/po-chart-donut/po-chart-donut-series.interface';
 import { PoPieChartSeries } from './po-chart-types/po-chart-pie/po-chart-pie-series.interface';
+import { PoLineChartSeries } from './interfaces/po-chart-line-series.interface';
+import { PoChartOptions } from './interfaces/po-chart-options.interface';
 
 const poChartDefaultHeight = 400;
 const poChartMinHeight = 200;
 const poChartTypeDefault = PoChartType.Pie;
 
-export type PoChartSeries = Array<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie>;
+export type PoChartSeries = Array<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie | PoLineChartSeries>;
 
 /**
  * @description
@@ -31,12 +33,14 @@ export type PoChartSeries = Array<PoDonutChartSeries | PoPieChartSeries | PoChar
  */
 @Directive()
 export abstract class PoChartBaseComponent {
+  private _options: PoChartOptions;
+  private _categories: Array<string>;
   private _height: number;
-  private _series: Array<PoDonutChartSeries | PoPieChartSeries> | PoChartGaugeSerie;
+  private _series: Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries> | PoChartGaugeSerie;
   private _type: PoChartType = poChartTypeDefault;
 
   // manipulação das séries tratadas internamente para preservar 'p-series';
-  protected chartSeries: PoChartSeries;
+  chartSeries: PoChartSeries;
 
   public readonly poChartType = PoChartType;
 
@@ -67,7 +71,8 @@ export abstract class PoChartBaseComponent {
 
     this._height = height;
 
-    this.rebuildComponent();
+    this.getSvgContainerSize();
+    this.rebuildComponentRef();
   }
 
   get height(): number {
@@ -82,18 +87,42 @@ export abstract class PoChartBaseComponent {
    * > A coleção de objetos deve implementar alguma das interfaces abaixo:
    * - `PoDonutChartSeries`
    * - `PoPieChartSeries`
+   * - `PoLineChartSeries`
    * - `PoChartGaugeSerie`
    */
-  @Input('p-series') set series(value: PoChartGaugeSerie | Array<PoDonutChartSeries | PoPieChartSeries>) {
+  @Input('p-series') set series(
+    value: PoChartGaugeSerie | Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries>
+  ) {
     this._series = value || [];
 
     this.chartSeries = Array.isArray(this._series)
       ? [...this._series]
       : this.transformObjectToArrayObject(this._series);
+
+    this.rebuildComponentRef();
   }
 
   get series() {
     return this._series;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define os nomes das categorias que serão plotadas nos eixos Y do grid do gráfico.
+   *
+   * > Caso não seja especificado um valor para a categoria, será plotado um hífen na categoria referente a cada valor de série.
+   */
+  @Input('p-categories') set categories(value: Array<string>) {
+    if (Array.isArray(value)) {
+      this._categories = value;
+    }
+  }
+
+  get categories() {
+    return this._categories;
   }
 
   /** Define o título do gráfico. */
@@ -113,7 +142,7 @@ export abstract class PoChartBaseComponent {
   @Input('p-type') set type(value: PoChartType) {
     this._type = (<any>Object).values(PoChartType).includes(value) ? value : poChartTypeDefault;
 
-    this.rebuildComponent();
+    this.rebuildComponentRef();
   }
 
   get type(): PoChartType {
@@ -125,9 +154,40 @@ export abstract class PoChartBaseComponent {
    *
    * @description
    *
+   * Objeto com as configurações usadas no `po-chart`.
+   *
+   * É possível definir as configurações dos eixos(*axis*) do gráfico do tipo `Line` da seguinte forma:
+   *
+   * ```
+   *  chartOptions: PoChartOptions = {
+   *    axis: {
+   *      minRange: 0,
+   *      maxRange: 100,
+   *      axisXGridLines: 5,
+   *    },
+   *  };
+   * ```
+   */
+  @Input('p-options') set options(value: PoChartOptions) {
+    if (value instanceof Object && !(value instanceof Array)) {
+      this._options = value;
+    }
+  }
+
+  get options() {
+    return this._options;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento executado quando o usuário clicar sobre um elemento do gráfico.
    *
-   * > Será passado por parâmetro um objeto contendo a categoria e valor da série.
+   * O evento emitirá o seguinte parâmetro:
+   * - *gauge*, *donut* e *pie*: um objeto contendo a categoria e valor da série.
+   * - *line*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
    */
   @Output('p-series-click')
   seriesClick = new EventEmitter<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie>();
@@ -139,7 +199,9 @@ export abstract class PoChartBaseComponent {
    *
    * Evento executado quando o usuário passar o *mouse* sobre um elemento do gráfico.
    *
-   * > Será passado por parâmetro um objeto contendo a categoria e valor da série.
+   * O evento emitirá o seguinte parâmetro de acordo com o tipo de gráfico:
+   * - *gauge*, *donut* e *pie*: um objeto contendo a categoria e valor da série.
+   * - *line*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
    */
   @Output('p-series-hover')
   seriesHover = new EventEmitter<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie>();
@@ -160,5 +222,7 @@ export abstract class PoChartBaseComponent {
     return typeof serie === 'object' && Object.keys(serie).length ? [{ ...serie }] : [];
   }
 
-  abstract rebuildComponent(): void;
+  // válido para gráficos do tipo circular e que será refatorado.
+  protected abstract getSvgContainerSize(): void;
+  abstract rebuildComponentRef(): void;
 }

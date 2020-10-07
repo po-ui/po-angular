@@ -20,5 +20,10 @@ export enum PoChartType {
   /**
    * Exibe os dados em formato circular, dividindo proporcionalmente em fatias.
    */
-  Pie = 'pie'
+  Pie = 'pie',
+
+  /**
+   * Gráfico mostra os dados do modo linear e contínuo. É útil, por exemplo, para fazer comparações de tendência durante determinado período.
+   */
+  Line = 'line'
 }

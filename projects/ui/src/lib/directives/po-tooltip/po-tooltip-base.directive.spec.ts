@@ -44,4 +44,8 @@ describe('PoTooltipBaseDirective', () => {
 
     expectPropertiesValues(component, 'tooltipPosition', invalidValues, 'bottom');
   });
+
+  it('should set p-append-in-body', () => {
+    expect(component.appendInBody).toBeFalse();
+  });
 });

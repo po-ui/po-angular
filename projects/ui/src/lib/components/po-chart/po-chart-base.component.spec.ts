@@ -7,7 +7,8 @@ import { PoChartType } from './enums/po-chart-type.enum';
 
 @Directive()
 class PoCharComponent extends PoChartBaseComponent {
-  rebuildComponent() {}
+  rebuildComponentRef() {}
+  getSvgContainerSize() {}
 }
 
 describe('PoChartBaseComponent:', () => {
@@ -22,27 +23,29 @@ describe('PoChartBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-    it('p-height: should update property with 200 if values is lower than 200', () => {
+    it('p-height: should update property with 200 if values is lower than 200 and call `rebuildComponentRef` plus `getSvgContainerSize`', () => {
       const validValues = [105, 1, 7, 0, -5];
 
-      spyOn(component, 'rebuildComponent');
+      spyOn(component, 'rebuildComponentRef');
+      spyOn(component, 'getSvgContainerSize');
 
       expectPropertiesValues(component, 'height', validValues, 200);
 
-      expect(component.rebuildComponent).toHaveBeenCalled();
+      expect(component.rebuildComponentRef).toHaveBeenCalled();
+      expect(component.getSvgContainerSize).toHaveBeenCalled();
     });
 
     it('p-height: should update property with valid values', () => {
       const validValues = [250, 300, 500];
 
-      spyOn(component, 'rebuildComponent');
+      spyOn(component, 'rebuildComponentRef');
 
       expectPropertiesValues(component, 'height', validValues, validValues);
 
-      expect(component.rebuildComponent).toHaveBeenCalled();
+      expect(component.rebuildComponentRef).toHaveBeenCalled();
     });
 
-    it('p-height: should call `setDefaultHeight` if height isn`t defined`', () => {
+    it('p-height: should call `setDefaultHeight` and if height isn`t defined`', () => {
       spyOn(component, <any>'setDefaultHeight').and.callThrough();
 
       const expectedHeight = component.height;
@@ -54,11 +57,11 @@ describe('PoChartBaseComponent:', () => {
     it('p-height: should update property with 400 if invalid values.', () => {
       const invalidValues = [null, undefined, '', 'string', {}, [], false, true];
 
-      spyOn(component, 'rebuildComponent');
+      spyOn(component, 'rebuildComponentRef');
 
       expectPropertiesValues(component, 'height', invalidValues, 400);
 
-      expect(component.rebuildComponent).toHaveBeenCalled();
+      expect(component.rebuildComponentRef).toHaveBeenCalled();
     });
 
     it('p-type: should update property with valid values.', () => {
@@ -91,6 +94,30 @@ describe('PoChartBaseComponent:', () => {
       component.series = { value: 1, description: 'value' };
 
       expect(component['transformObjectToArrayObject']).toHaveBeenCalledWith(component.series);
+    });
+
+    it('p-options: should update property with valid values', () => {
+      const validValue = [{}, { axis: { minRange: 0 } }];
+
+      expectPropertiesValues(component, 'options', validValue, validValue);
+    });
+
+    it('p-options: shouldn`t update property if receives invalid values', () => {
+      const invalidValues = [undefined, null, '', false, 0, ['1'], [{ key: 'value' }]];
+
+      expectPropertiesValues(component, 'options', invalidValues, undefined);
+    });
+
+    it('p-categories: should update property with valid values', () => {
+      const validValue = [[], [1, 2, 3]];
+
+      expectPropertiesValues(component, 'categories', validValue, validValue);
+    });
+
+    it('p-categories: shouldn`t update property if receives invalid values', () => {
+      const invalidValues = [undefined, null, '', false, 0, {}, { key: 'value' }];
+
+      expectPropertiesValues(component, 'categories', invalidValues, undefined);
     });
   });
 

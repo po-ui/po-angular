@@ -1,0 +1,25 @@
+<svg:g #chartLine>
+
+  <svg:g *ngFor="let item of seriesPathsCoordinates; let i = index; trackBy: trackBy"
+    [class]="'po-chart-line-path-group-' + i"
+  >
+    <!-- SERIES PATHS -->
+    <svg:g po-chart-path
+      [attr.key]="'po-chart-line-path-' + i"
+      [p-color]="colors[i]" 
+      [p-coordinates]="item?.coordinates"
+      >
+      </svg:g>
+
+    <!-- SERIES POINTS -->
+    <svg:g po-chart-series-point 
+      [p-color]="colors[i]"
+      [p-relative-to]="'po-chart-line-path-group-' + i" 
+      [p-coordinates]="seriesPointsCoordinates[i]"
+      [attr.key]="'po-chart-line-path-points-group-' + i"
+      (p-point-click)="onSeriePointClick($event)"
+      (p-point-hover)="onSeriePointHover($event)"
+      ></svg:g>
+  </svg:g>
+
+</svg:g>

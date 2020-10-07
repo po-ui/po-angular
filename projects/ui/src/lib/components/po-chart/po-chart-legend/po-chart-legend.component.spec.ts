@@ -21,6 +21,21 @@ describe('PoChartLegendComponent:', () => {
     expect(component instanceof PoChartLegendComponent).toBeTruthy();
   });
 
+  describe('Properties:', () => {
+    it('p-series: should call `colorService.getSeriesColor` and apply the returned value to `colors`', () => {
+      const spyGetSeriesColor = spyOn(component['colorService'], <any>'getSeriesColor').and.callThrough();
+
+      component.series = [
+        { cat: 1, value: 2 },
+        { cat: 1, value: 2 }
+      ];
+
+      expect(spyGetSeriesColor).toHaveBeenCalledWith(component.series, component.type);
+      expect(component.colors.length).toBe(2);
+      expect(component.colors).toEqual(['#0C6C94', '#29B6C5']);
+    });
+  });
+
   describe('Templates:', () => {
     it('should apply valid text and color values', () => {
       component.series = <any>[

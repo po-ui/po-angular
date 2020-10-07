@@ -1,0 +1,27 @@
+<svg:svg
+  class="po-chart-svg-element"
+  preserveAspectRatio="xMidYMin meet"
+  [attr.viewBox]="viewBox"
+  [attr.width]="containerSize.svgWidth"
+  [attr.height]="containerSize.svgHeight"
+>
+  <!-- axis -->
+  <svg:g
+    po-chart-axis
+    [p-series]="series"
+    [p-container-size]="containerSize"
+    [p-options]="axisOptions"
+    [p-categories]="categories"
+  ></svg:g>
+
+  <!-- chart line -->
+  <svg:g
+    po-chart-line
+    [p-categories]="categories"
+    [p-series]="series"
+    [p-options]="axisOptions"
+    [p-container-size]="containerSize"
+    (p-point-hover)="onSerieHover($event)"
+    (p-point-click)="onSerieClick($event)"
+  ></svg:g>
+</svg:svg>
