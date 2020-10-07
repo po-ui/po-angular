@@ -1,11 +1,8 @@
 import { PoDynamicFormField } from '@po-ui/ng-components';
 
 /**
- * @usedBy PoPageDynamicTableComponent
+ * @docsExtends PoDynamicFormField
  *
- * @description
- *
- * Interface dos fields usados para compor o template `po-page-dynamic-table`.
  */
 export interface PoPageDynamicTableField extends PoDynamicFormField {
   /** Indica se o campo será duplicado caso seja executada a ação de duplicação. */

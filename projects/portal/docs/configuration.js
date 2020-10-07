@@ -57,6 +57,7 @@ module.exports = {
     { name: 'examplePrivate' },
     { name: 'description' },
     { name: 'docsExtends' },
+    { name: 'ignoreExtendedDescription' },
     { name: 'usedBy' },
     { name: 'optional' },
     { name: 'default' }
