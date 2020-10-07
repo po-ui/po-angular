@@ -142,6 +142,16 @@ classe que se deseja herdar, conforme o exemplo a seguir:
  */
 ```
 
+É possivel ignorar a descrição da classe ou interface estendida. Para isso, adicione a tag `@ignoreExtendedDescription` na classe ou interface mãe, conforme o exemplo a seguir:
+
+``` typescript
+/**
+ * @docExtends PoButtonBaseComponent
+ * 
+ * @ignoreExtendedDescription
+ */
+```
+
 ## Samples
 
 Os samples podem ser incluídos na documentação através da tag `@example` e incluindo o exemplo dentro de `<example></example>`. 

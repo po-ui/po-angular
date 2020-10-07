@@ -9,6 +9,8 @@ import { PoPopupAction } from '../po-popup/po-popup-action.interface';
  *
  * @docsExtends PoPopupAction
  *
+ * @ignoreExtendedDescription
+ *
  * @usedBy PoPageDefaultComponent, PoPageListComponent
  */
 export interface PoPageAction extends PoPopupAction {}

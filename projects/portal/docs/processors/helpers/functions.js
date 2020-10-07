@@ -7,15 +7,33 @@ module.exports = {
     classDoc.methods = [];
 
     //Extends
+    const resolvePropertiesRecursive = (classDoc, properties) => {
+      if (classDoc.docsExtends) {
+        let extendedDoc = allDocs.filter(doc => doc.name == classDoc.docsExtends)[0];
+
+        properties = resolvePropertiesRecursive(extendedDoc, properties);
+      }
+
+      properties = properties.concat(this.resolveProperties(classDoc));
+
+      return properties;
+    }
+
     if (classDoc.docsExtends) {
       let extendedDoc = allDocs.filter(doc => doc.name == classDoc.docsExtends)[0];
 
       if (extendedDoc) {
         let description = classDoc.description;
 
-        classDoc.description = `${extendedDoc.description} ${description}`;
-        classDoc.properties = this.resolveProperties(extendedDoc);
+        classDoc.properties = resolvePropertiesRecursive(extendedDoc, []);
         classDoc.methods = this.resolveMethods(extendedDoc);
+
+        if (classDoc.ignoreExtendedDescription == null) {
+          classDoc.description = `${extendedDoc.description} ${description}`;
+        } else {
+          classDoc.description = `${description}`;
+        }
+
       } else {
         console.warn(`Classe ${classDoc.docsExtends} extended by ${classDoc.name} não encontrada!`.red);
       }
