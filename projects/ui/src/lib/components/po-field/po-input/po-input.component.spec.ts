@@ -27,8 +27,6 @@ describe('PoInputComponent: ', () => {
     component.help = 'Help de teste';
     component.clean = true;
 
-    fixture.detectChanges();
-
     nativeElement = fixture.debugElement.nativeElement;
   });
 
@@ -37,14 +35,17 @@ describe('PoInputComponent: ', () => {
   });
 
   it('should create button clean', () => {
+    fixture.detectChanges();
     expect(nativeElement.querySelector('po-clean')).not.toBeNull();
   });
 
   it('should have a Label', () => {
+    fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Label de teste');
   });
 
   it('should have a Help', () => {
+    fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
   });
 

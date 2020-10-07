@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -327,6 +327,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
+  constructor(private cd?: ChangeDetectorRef) {}
+
   callOnChange(value: any) {
     this.updateModel(value);
 
@@ -348,6 +350,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.cd?.markForCheck();
   }
 
   // Função implementada do ControlValueAccessor
@@ -413,6 +416,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   // Função implementada do ControlValueAccessor
   writeValue(value: any) {
     this.writeValueModel(value);
+    this.cd?.markForCheck();
   }
 
   protected validateModel() {
