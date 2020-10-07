@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { PoCircularChartSeries } from '../po-chart-types/po-chart-circular/po-chart-circular-series.interface';
+import { PoChartType } from '../enums/po-chart-type.enum';
+import { PoChartColorService } from '../services/po-chart-color.service';
 
 @Component({
   selector: 'po-chart-legend',
@@ -8,7 +9,21 @@ import { PoCircularChartSeries } from '../po-chart-types/po-chart-circular/po-ch
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoChartLegendComponent {
-  @Input('p-colors') colors: Array<string>;
+  colors: Array<string>;
 
-  @Input('p-series') series: PoCircularChartSeries;
+  private _series: Array<any>;
+
+  @Input('p-type') type: PoChartType;
+
+  @Input('p-series') set series(value: Array<any>) {
+    this._series = value;
+
+    this.colors = this.colorService.getSeriesColor(this._series, this.type);
+  }
+
+  get series() {
+    return this._series;
+  }
+
+  constructor(private colorService: PoChartColorService) {}
 }

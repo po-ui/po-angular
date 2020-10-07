@@ -59,7 +59,7 @@ export abstract class PoChartDynamicTypeComponent {
         : this.series.reduce((previousValue, serie) => previousValue + serie.value, 0);
   }
 
-  set series(value: Array<PoPieChartSeries | PoDonutChartSeries | PoChartGaugeSerie>) {
+  set series(value: Array<any>) {
     this._series = this.getSeriesWithValue(value);
   }
 

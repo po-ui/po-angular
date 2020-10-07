@@ -7,22 +7,23 @@ import {
   DoCheck,
   ElementRef,
   HostListener,
-  IterableDiffers,
   OnDestroy,
-  OnInit,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  OnInit
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
 import { PoChartBaseComponent } from './po-chart-base.component';
-import { PoChartColors } from './po-chart-colors.constant';
+import { PoChartColorService } from './services/po-chart-color.service';
+import { PoChartSvgContainerService } from './services/po-chart-svg-container.service';
 import { PoChartDonutComponent } from './po-chart-types/po-chart-donut/po-chart-donut.component';
 import { PoChartDynamicTypeComponent } from './po-chart-types/po-chart-dynamic-type.component';
 import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
 import { PoChartPieComponent } from './po-chart-types/po-chart-pie/po-chart-pie.component';
 import { PoChartType } from './enums/po-chart-type.enum';
+import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
 
 /**
  * @docsExtends PoChartBaseComponent
@@ -49,9 +50,10 @@ import { PoChartType } from './enums/po-chart-type.enum';
   templateUrl: './po-chart.component.html'
 })
 export class PoChartComponent extends PoChartBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
-  private calculatedElement: boolean = false;
+  private calculatedComponentRefElement: boolean = false;
+  private calculatedSvgContainerElement: boolean = false;
+  private colors: Array<string> = [];
   private componentRef: ComponentRef<{}>;
-  private differ: any;
   private initialized: boolean = false;
   private windowResizeListener: Subject<any> = new Subject();
 
@@ -61,10 +63,9 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     [PoChartType.Pie]: PoChartPieComponent
   };
 
-  colors: Array<string> = [];
+  svgContainerSize: PoChartContainerSize;
 
-  @ViewChild('chartContainer', { read: ViewContainerRef, static: true })
-  chartContainer: ViewContainerRef;
+  @ViewChild('chartContainer', { read: ViewContainerRef, static: true }) chartContainer: ViewContainerRef;
 
   @ViewChild('chartHeader', { static: true }) chartHeader: ElementRef;
 
@@ -74,37 +75,48 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
   constructor(
     public changeDetector: ChangeDetectorRef,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private differs: IterableDiffers
+    private colorService: PoChartColorService,
+    private containerService: PoChartSvgContainerService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     super();
-
-    this.differ = this.differs.find([]).create(null);
   }
 
   get isChartGaugeType(): boolean {
     return this.type === PoChartType.Gauge;
   }
 
+  get isDynamicComponentType(): boolean {
+    return this.type !== PoChartType.Line;
+  }
+
   @HostListener('window:resize')
-  onResize = () => this.windowResizeListener.next();
+  onResize = () => {
+    this.getSvgContainerSize();
+    this.windowResizeListener.next();
+  };
 
   ngAfterViewInit() {
     this.initialized = true;
+    this.getSvgContainerSize();
   }
 
   ngDoCheck() {
     const charWrapperWidth = this.chartWrapper.nativeElement.offsetWidth;
+    const isDynamicChart = this.getComponentType(this.type);
 
     // Permite que o chart seja calculado na primeira vez que o componente torna-se visível,
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
-    if (charWrapperWidth && !this.calculatedElement && this.initialized) {
-      this.calculatedElement = true;
-      this.getSeriesColor();
-      this.dynamicComponentSetting();
+    // Quando modificada a estrutura dos gráficos do tipo circular isto será melhorado.
+    if (charWrapperWidth && this.initialized) {
+      if (!isDynamicChart && !this.calculatedSvgContainerElement) {
+        this.getSvgContainerSize();
+        this.calculatedSvgContainerElement = true;
+      } else if (isDynamicChart && !this.calculatedComponentRefElement) {
+        this.dynamicComponentSetting();
+        this.calculatedComponentRefElement = true;
+      }
     }
-
-    this.checkingForSerieChanges();
   }
 
   ngOnDestroy() {
@@ -112,29 +124,33 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   }
 
   ngOnInit() {
-    this.getSeriesColor();
+    this.getSvgContainerSize();
   }
 
-  rebuildComponent() {
+  rebuildComponentRef() {
     if (this.componentRef) {
       this.componentRef.destroy();
-      this.getSeriesColor();
-      this.dynamicComponentSetting();
+
+      if (this.isDynamicComponentType) {
+        this.dynamicComponentSetting();
+      }
     }
+  }
+
+  protected getSvgContainerSize() {
+    const { chartHeaderHeight, chartLegendHeight, chartWrapperWidth } = this.getChartMeasurements();
+
+    this.svgContainerSize = this.containerService.calculateSVGContainerMeasurements(
+      this.height,
+      chartWrapperWidth,
+      chartHeaderHeight,
+      chartLegendHeight,
+      this.categories?.length
+    );
   }
 
   private chartLegendHeight(chartLegend: ElementRef) {
     return chartLegend ? chartLegend.nativeElement.offsetHeight : 0;
-  }
-
-  private checkingForSerieChanges() {
-    if (this.componentRef && this.differ) {
-      const changeSeries = this.differ.diff(this.chartSeries);
-      if (changeSeries) {
-        this.getSeriesColor();
-        this.rebuildComponent();
-      }
-    }
   }
 
   private createComponent() {
@@ -145,7 +161,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
     const instance = <PoChartDynamicTypeComponent>this.componentRef.instance;
 
-    this.setChartProperties(instance);
+    this.setComponentRefProperties(instance);
 
     return instance;
   }
@@ -163,32 +179,12 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     return this.mappings[typeName];
   }
 
-  private getSeriesColor() {
-    const colorsLength = PoChartColors.length - 1;
+  private getChartMeasurements() {
+    const chartWrapperWidth = this.chartWrapper.nativeElement.offsetWidth;
+    const chartHeaderHeight = this.chartHeader.nativeElement.offsetHeight;
+    const chartLegendHeight = this.chartLegendHeight(this.chartLegend);
 
-    if (!this.chartSeries) {
-      return (this.colors = PoChartColors[colorsLength]);
-    }
-    if (this.type === PoChartType.Gauge) {
-      return (this.colors = PoChartColors[0]);
-    }
-
-    const seriesLength = this.chartSeries.length - 1;
-
-    if (seriesLength > colorsLength) {
-      let colors = PoChartColors[colorsLength];
-
-      // recupera o resultado da divisao entre tamanho das series e o numero de cores disponiveis
-      const quantityDuplicates = seriesLength / colorsLength;
-
-      for (let i = 1; i <= quantityDuplicates; i++) {
-        colors = colors.concat(PoChartColors[colorsLength]);
-      }
-
-      return (this.colors = colors);
-    }
-
-    return (this.colors = PoChartColors[seriesLength]);
+    return { chartWrapperWidth, chartHeaderHeight, chartLegendHeight };
   }
 
   private removeWindowResizeListener() {
@@ -197,10 +193,14 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     }
   }
 
-  private setChartProperties(instance: PoChartDynamicTypeComponent) {
-    instance.chartHeader = this.chartHeader.nativeElement.offsetHeight;
-    instance.chartLegend = this.chartLegendHeight(this.chartLegend);
-    instance.chartWrapper = this.chartWrapper.nativeElement.offsetWidth;
+  private setComponentRefProperties(instance: PoChartDynamicTypeComponent) {
+    const { chartHeaderHeight, chartLegendHeight, chartWrapperWidth } = this.getChartMeasurements();
+
+    this.colors = this.colorService.getSeriesColor(this.chartSeries, this.type);
+
+    instance.chartHeader = chartHeaderHeight;
+    instance.chartLegend = chartLegendHeight;
+    instance.chartWrapper = chartWrapperWidth;
     instance.colors = Array.isArray(this.colors) ? [...this.colors] : [];
     instance.height = this.height;
     instance.type = this.type;
@@ -221,9 +221,11 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
   private setResizeListenerSubscribe(instance: PoChartDynamicTypeComponent) {
     this.windowResizeListener.subscribe(() => {
-      instance.chartHeader = this.chartHeader.nativeElement.offsetHeight;
-      instance.chartLegend = this.chartLegendHeight(this.chartLegend);
-      instance.chartWrapper = this.chartWrapper.nativeElement.offsetWidth;
+      const measuresForComponentRef = this.getChartMeasurements();
+
+      instance.chartWrapper = measuresForComponentRef.chartWrapperWidth;
+      instance.chartHeader = measuresForComponentRef.chartHeaderHeight;
+      instance.chartLegend = measuresForComponentRef.chartLegendHeight;
     });
   }
 }

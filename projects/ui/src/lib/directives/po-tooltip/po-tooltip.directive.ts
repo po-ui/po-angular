@@ -73,7 +73,12 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     // necessita do timeout para conseguir adicionar ".po-invisible", pois quando tem alguns elementos
     // próximos com tooltips e ficar passando o mouse em cima, os mesmos não estavam ficando invisiveis.
     setTimeout(() => {
-      this.hideTooltip();
+      if (this.appendInBody) {
+        this.renderer.removeChild(document.body, this.tooltipContent);
+        this.tooltipContent = undefined;
+      } else {
+        this.hideTooltip();
+      }
     });
   }
 
@@ -101,7 +106,9 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     this.renderer.appendChild(this.divContent, this.textContent);
     this.renderer.appendChild(this.tooltipContent, this.divArrow);
     this.renderer.appendChild(this.tooltipContent, this.divContent);
-    this.renderer.appendChild(this.elementRef.nativeElement, this.tooltipContent);
+
+    const parentTarget = this.appendInBody ? document.body : this.elementRef.nativeElement;
+    this.renderer.appendChild(parentTarget, this.tooltipContent);
 
     this.poControlPosition.setElements(this.tooltipContent, this.tooltipOffset, this.elementRef);
 

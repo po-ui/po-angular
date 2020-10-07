@@ -15,6 +15,7 @@
     "no-commented-code": false,
     "no-duplicated-branches": false,
     "max-union-size": false,
-    "directive-class-suffix": false
+    "directive-class-suffix": false,
+    "component-selector": [true, ["element", "attribute"], "", "kebab-case"]
   }
 }

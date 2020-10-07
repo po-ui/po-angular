@@ -19,7 +19,7 @@ import { PoChartType } from '../../enums/po-chart-type.enum';
 import { PoCircularChartSeries } from './po-chart-circular-series.interface';
 import { PoDonutChartSeries } from '../po-chart-donut/po-chart-donut-series.interface';
 import { PoPieChartSeries } from '../po-chart-pie/po-chart-pie-series.interface';
-import { PoSeriesTextBlack } from '../../po-chart-colors.constant';
+import { PoSeriesTextBlack } from '../../helpers/po-chart-colors.constant';
 
 const poChartBlackColor = '#000000';
 const poChartWhiteColor = '#ffffff';

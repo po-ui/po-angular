@@ -1,0 +1,112 @@
+import { TestBed } from '@angular/core/testing';
+
+import { PoChartSvgContainerService } from './po-chart-svg-container.service';
+
+describe('PoChartSvgContainerService', () => {
+  let service: PoChartSvgContainerService;
+  let chartHeight;
+  let chartWrapperWidth;
+  let chartHeaderHeight;
+  let chartLegendHeight;
+  let categoriesLength;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(PoChartSvgContainerService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  describe('Methods:', () => {
+    beforeEach(() => {
+      chartHeight = 400;
+      chartWrapperWidth = 200;
+      chartHeaderHeight = 50;
+      chartLegendHeight = 50;
+      categoriesLength = 2;
+    });
+
+    describe('calculateSVGContainerMeasurements: ', () => {
+      it('should call `svgWidth`, `center`, `svgHeight`, `svgPlottingAreaWidth`, `svgPlottingAreaHeight`', () => {
+        const spySvgWidth = spyOn(service, <any>'svgWidth');
+        const spyCenter = spyOn(service, <any>'center');
+        const spySvgHeiht = spyOn(service, <any>'svgHeight');
+        const spySvgPlottingAreaWidth = spyOn(service, <any>'svgPlottingAreaWidth');
+        const spySvgPlottingAreaHeight = spyOn(service, <any>'svgPlottingAreaHeight');
+
+        service.calculateSVGContainerMeasurements(
+          chartHeight,
+          chartWrapperWidth,
+          chartHeaderHeight,
+          chartLegendHeight,
+          categoriesLength
+        );
+
+        expect(spySvgWidth).toHaveBeenCalledWith(chartWrapperWidth);
+        expect(spyCenter).toHaveBeenCalledTimes(2);
+        expect(spySvgHeiht).toHaveBeenCalledWith(chartHeight, chartHeaderHeight, chartLegendHeight);
+        expect(spySvgPlottingAreaWidth).toHaveBeenCalled();
+        expect(spySvgPlottingAreaHeight).toHaveBeenCalled();
+      });
+
+      it('should get default param values', () => {
+        const spySvgWidth = spyOn(service, <any>'svgWidth');
+        const spyCenter = spyOn(service, <any>'center');
+        const spySvgHeiht = spyOn(service, <any>'svgHeight');
+        const spySvgPlottingAreaWidth = spyOn(service, <any>'svgPlottingAreaWidth');
+        const spySvgPlottingAreaHeight = spyOn(service, <any>'svgPlottingAreaHeight');
+
+        service.calculateSVGContainerMeasurements();
+
+        expect(spySvgWidth).toHaveBeenCalled();
+        expect(spyCenter).toHaveBeenCalledTimes(2);
+        expect(spySvgHeiht).toHaveBeenCalled();
+        expect(spySvgPlottingAreaWidth).toHaveBeenCalled();
+        expect(spySvgPlottingAreaHeight).toHaveBeenCalled();
+      });
+    });
+
+    it('svgWidth: should calculate and return `svgWidth` value', () => {
+      expect(service['svgWidth'](chartWrapperWidth)).toBe(152);
+    });
+
+    it('svgWidth: should return zero if `wrapperWidth` is not greater than zero', () => {
+      chartWrapperWidth = 20;
+      expect(service['svgWidth'](chartWrapperWidth)).toBe(0);
+    });
+
+    it('center: should calculate and return `centerX` value', () => {
+      expect(service['center'](chartWrapperWidth)).toBe(100);
+    });
+
+    it('svgHeight: should return the result of the calculation', () => {
+      expect(service['svgHeight'](chartHeight, chartHeaderHeight, chartLegendHeight)).toBe(252);
+    });
+
+    it('svgHeight: should return `0` the result of the calculation is lower than 0', () => {
+      chartHeight = 50;
+
+      expect(service['svgHeight'](chartHeight, chartHeaderHeight, chartLegendHeight)).toBe(0);
+    });
+
+    it('svgPlottingAreaWidth: should return the result of the calculation', () => {
+      const svgWidth = 200;
+
+      expect(service['svgPlottingAreaWidth'](svgWidth, categoriesLength)).toBe(80);
+    });
+
+    it('svgPlottingAreaWidth: should return value considering that svgAxisSideSpace is 48(Padding * 2)', () => {
+      const svgWidth = 50;
+
+      expect(service['svgPlottingAreaWidth'](svgWidth, categoriesLength)).toBe(-11);
+    });
+
+    it('svgPlottingAreaHeight: should return the result of the calculation', () => {
+      const svgHeight = 200;
+
+      expect(service['svgPlottingAreaWidth'](svgHeight, categoriesLength)).toBe(80);
+    });
+  });
+});

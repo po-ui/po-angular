@@ -5,7 +5,9 @@ import {
   PoChartType,
   PoDialogService,
   PoDonutChartSeries,
-  PoPieChartSeries
+  PoLineChartSeries,
+  PoPieChartSeries,
+  PoChartOptions
 } from '@po-ui/ng-components';
 
 @Component({
@@ -19,8 +21,10 @@ export class SamplePoChartCoffeeRankingComponent {
   };
 
   brazilianCoffeeProductionChartType: PoChartType = PoChartType.Gauge;
-
+  participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;
   coffeConsumingChartType: PoChartType = PoChartType.Donut;
+
+  categories: Array<string> = ['2010', '2011', '2012', '2013', '2014', '2015'];
 
   coffeeConsumption: Array<PoDonutChartSeries> = [
     { category: 'Finland', value: 9.6, tooltip: 'Finland (Europe)' },
@@ -28,6 +32,14 @@ export class SamplePoChartCoffeeRankingComponent {
     { category: 'Netherlands', value: 6.7, tooltip: 'Netherlands (Europe)' },
     { category: 'Slovenia', value: 6.1, tooltip: 'Slovenia (Europe)' },
     { category: 'Austria', value: 5.5, tooltip: 'Austria (Europe)' }
+  ];
+
+  participationByCountryInWorldExports: Array<PoLineChartSeries> = [
+    { label: 'Brazil', data: [35, 32, 25, 29, 33, 33] },
+    { label: 'Vietnam', data: [15, 17, 23, 19, 22, 18] },
+    { label: 'Colombia', data: [8, 7, 6, 9, 10, 11] },
+    { label: 'India', data: [5, 6, 5, 4, 5, 5] },
+    { label: 'Indonesia', data: [7, 6, 10, 10, 4, 6] }
   ];
 
   coffeeProduction: Array<PoPieChartSeries> = [
@@ -50,6 +62,14 @@ export class SamplePoChartCoffeeRankingComponent {
     { position: '9', company: 'Dunkin’ Donuts', location: 'Quincy, Massachusetts, US', foundation: '1950' },
     { position: '10', company: 'Coffee Beanery', location: 'Flushing, Michigan, US', foundation: '1976' }
   ];
+
+  options: PoChartOptions = {
+    axis: {
+      minRange: 0,
+      maxRange: 40,
+      axisXGridLines: 5
+    }
+  };
 
   constructor(private poAlert: PoDialogService) {}
 

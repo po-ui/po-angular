@@ -1,0 +1,13 @@
+<svg:g>
+  <svg:path *ngFor="let item of axisXCoordinates; trackBy: trackBy"
+    class="po-chart-axis-path" 
+    [attr.d]="item.coordinates">
+  </svg:path> 
+</svg:g>
+
+<svg:g>
+  <svg:path *ngFor="let item of axisYCoordinates; trackBy: trackBy"
+    class="po-chart-axis-path" 
+    [attr.d]="item.coordinates">
+  </svg:path> 
+</svg:g>

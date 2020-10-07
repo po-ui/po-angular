@@ -1,4 +1,16 @@
 <div class="po-row">
+  <div class="po-md-12">
+    <po-chart
+      class="po-md-12 po-mt-2"
+      p-title="Participation by country in world exports - %"
+      [p-options]="options"
+      [p-categories]="categories"
+      [p-series]="participationByCountryInWorldExports"
+      [p-type]="participationByCountryInWorldExportsType"
+    >
+    </po-chart>
+  </div>
+
   <div class="po-lg-6">
     <po-chart
       class="po-lg-12 po-mt-2"

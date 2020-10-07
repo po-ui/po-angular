@@ -1,5 +1,7 @@
 <po-chart
+  [p-categories]="allCategories"
   [p-height]="height"
+  [p-options]="options"
   [p-series]="series"
   [p-title]="title"
   [p-type]="type"
@@ -8,72 +10,153 @@
 >
 </po-chart>
 
-<po-divider p-label="Events"></po-divider>
+<po-divider class="po-md-12" p-label="Events"></po-divider>
 
 <div class="po-row">
   <po-info p-label="Event" [p-value]="event"> </po-info>
 </div>
 
-<po-divider p-label="Chart series"></po-divider>
+<po-divider class="po-md-12" p-label="Properties"></po-divider>
+
+<form>
+  <po-select
+    class="po-md-4"
+    name="type"
+    [(ngModel)]="type"
+    p-columns="3"
+    p-label="Type"
+    [p-options]="typeOptions"
+    (p-change)="restore()"
+  >
+  </po-select>
+
+  <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+
+  <po-input class="po-md-4" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
+</form>
 
 <form #chartSeries="ngForm">
-  <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="category"
-      [(ngModel)]="category"
-      p-label="Category"
-      [p-disabled]="isSingleSerie"
-      [p-required]="!isSingleSerie"
-    >
-    </po-input>
+  <po-divider class="po-md-12" p-label="Chart series"></po-divider>
 
-    <po-number class="po-md-6" name="value" [(ngModel)]="value" p-label="Value" p-required> </po-number>
+  <div *ngIf="!isMultipleValues">
+    <div class="po-row">
+      <po-input
+        class="po-md-6"
+        name="category"
+        [(ngModel)]="category"
+        p-label="Category"
+        [p-disabled]="isSingleSerie"
+        [p-required]="!isSingleSerie"
+      >
+      </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="description"
-      [(ngModel)]="description"
-      p-label="Gauge Description"
-      [p-disabled]="!isSingleSerie"
-    >
-    </po-input>
+      <po-number class="po-md-6" name="value" [(ngModel)]="value" p-label="Value" p-required></po-number>
 
-    <po-input class="po-md-6" name="tooltip" [(ngModel)]="tooltip" p-label="Tooltip Text" [p-disabled]="isSingleSerie">
-    </po-input>
+      <po-input
+        class="po-md-6"
+        name="description"
+        [(ngModel)]="description"
+        p-label="Gauge Description"
+        [p-disabled]="!isSingleSerie"
+      >
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="tooltip"
+        [(ngModel)]="tooltip"
+        p-label="Tooltip Text"
+        [p-disabled]="isSingleSerie"
+      >
+      </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-button
+        class="po-md-3"
+        p-label="Add Data"
+        [p-disabled]="chartSeries.invalid"
+        (p-click)="addData(); chartSeries.reset()"
+      >
+      </po-button>
+    </div>
   </div>
 
-  <div class="po-row">
-    <po-button
-      class="po-md-3"
-      p-label="Add Data"
-      [p-disabled]="chartSeries.invalid"
-      (p-click)="addData(); chartSeries.reset()"
+  <div class="po-row" *ngIf="isMultipleValues">
+    <po-input
+      class="po-md-4"
+      name="multipleValuesLabel"
+      [(ngModel)]="multipleValuesLabel"
+      p-label="Label"
+      p-help="Series label"
+      p-required
     >
-    </po-button>
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      name="inputDataSeries"
+      [(ngModel)]="inputDataSeries"
+      p-label="Data"
+      p-help="Example: [24, 58, 83, 66, 75, 19]"
+      p-required
+    >
+    </po-input>
+
+    <div class="po-row">
+      <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData(); chartSeries.reset()"> </po-button>
+    </div>
   </div>
 </form>
 
-<po-divider p-label="Properties"></po-divider>
-
 <form>
-  <div class="po-row">
-    <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+  <div class="po-row" *ngIf="isMultipleValues">
+    <po-divider class="po-md-12"></po-divider>
 
-    <po-input class="po-md-4" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
-
-    <po-radio-group
+    <po-input
       class="po-md-4"
-      name="type"
-      [(ngModel)]="type"
-      p-columns="3"
-      p-label="Type"
-      [p-options]="typeOptions"
-      (p-change)="applySeriesData()"
+      name="categories"
+      [(ngModel)]="categories"
+      p-help='Example: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]'
+      p-label="Categories"
+      (p-blur)="addCategories()"
     >
-    </po-radio-group>
+    </po-input>
+
+    <po-divider class="po-md-12" p-label="Chart options"></po-divider>
+
+    <po-number
+      class="po-md-4"
+      name="minRange"
+      [(ngModel)]="options.axis.minRange"
+      p-help="Example: 0"
+      p-label="minRange"
+      (p-blur)="addOptions()"
+    >
+    </po-number>
+
+    <po-number
+      class="po-md-4"
+      name="maxRange"
+      [(ngModel)]="options.axis.maxRange"
+      p-help="Example: 100"
+      p-label="maxRange"
+      (p-blur)="addOptions()"
+    >
+    </po-number>
+
+    <po-number
+      class="po-md-4"
+      name="axisXGridLines"
+      [(ngModel)]="options.axis.axisXGridLines"
+      p-help="Example: 6"
+      p-label="axisXGridLines"
+      (p-blur)="addOptions()"
+    >
+    </po-number>
   </div>
 
+  <po-divider class="po-md-12"></po-divider>
   <div class="po-row">
     <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
