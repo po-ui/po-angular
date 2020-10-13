@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.9.1"></a>
+# [3.9.1](https://github.com/po-ui/po-angular/compare/v3.9.0...v3.9.1) (2020-10-13)
+
+### Refactor
+
+* **rich-text:** refatora po-rich-text-modal ([b629770](https://github.com/po-ui/po-angular/commit/b6297705f1de64d3979a441226fd163f3bde1e24))
+
+
 <a name="3.9.0"></a>
 # [3.9.0](https://github.com/po-ui/po-angular/compare/v3.8.0...v3.9.0) (2020-10-05)
 
