@@ -1,7 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NavigationCancel, NavigationEnd, RouterModule } from '@angular/router';
 
-import { configureTestSuite } from 'projects/ui/src/lib/util-test/util-expect.spec';
 import { Subscription } from 'rxjs';
 
 import { PoNavbarItemComponent } from './po-navbar-item/po-navbar-item.component';
@@ -12,12 +11,14 @@ describe('PoNavbarItemsComponent:', () => {
   let fixture: ComponentFixture<PoNavbarItemsComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoNavbarItemsComponent, PoNavbarItemComponent],
-      imports: [RouterModule.forRoot([])]
-    });
-  });
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PoNavbarItemsComponent, PoNavbarItemComponent],
+        imports: [RouterModule.forRoot([])]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoNavbarItemsComponent);
@@ -49,48 +50,57 @@ describe('PoNavbarItemsComponent:', () => {
       expect(component['subscribeToRoute']).toHaveBeenCalled();
     });
 
-    it('selectItem: should set `selectedItem` with `item` parameter', () => {
-      const item = { label: 'home', link: 'home/' };
-      component.selectedItem = undefined;
+    describe('checkActiveItemByUrl:', () => {
+      it('should set `selectedItem` with the route item if the item is in a nested route', () => {
+        const urlItem = '/guide/test';
+        const selectedItem = { label: 'Guide', link: '/guide' };
+        component.selectedItem = undefined;
 
-      component.selectItem(item);
+        component.items = [
+          { label: 'Guide', link: '/guide' },
+          { label: 'Document', link: '/doc' },
+          { label: 'Tools', link: '/tool' }
+        ];
 
-      expect(component.selectedItem).toEqual(item);
-    });
+        component['checkActiveItemByUrl'](urlItem);
 
-    it('checkActiveItemByUrl: should set `selectedItem` with the route item', () => {
-      const urlItem = 'http://test3.com';
-      const selectedItem = { label: 'test 3', link: 'http://test3.com' };
-      component.selectedItem = undefined;
+        expect(component.selectedItem).toEqual(selectedItem);
+      });
 
-      component.items = [
-        { label: 'test 1', link: 'http://test1.com' },
-        { label: 'test 2', link: 'http://test2.com' },
-        selectedItem,
-        { label: 'test 4', link: 'http://test4.com' },
-        { label: 'test 5', link: 'http://test5.com' }
-      ];
+      it('should set `selectedItem` with the route item', () => {
+        const urlItem = 'http://test3.com';
+        const selectedItem = { label: 'test 3', link: 'http://test3.com' };
+        component.selectedItem = undefined;
 
-      component['checkActiveItemByUrl'](urlItem);
+        component.items = [
+          { label: 'test 1', link: 'http://test1.com' },
+          { label: 'test 2', link: 'http://test2.com' },
+          { label: 'test 3', link: 'http://test3.com' },
+          { label: 'test 4', link: 'http://test4.com' },
+          { label: 'test 5', link: 'http://test5.com' }
+        ];
 
-      expect(component.selectedItem).toEqual(selectedItem);
-    });
+        component['checkActiveItemByUrl'](urlItem);
 
-    it('checkActiveItemByUrl: should set `selectedItem` with undefined if item url is not included in `items`', () => {
-      const urlItem = 'http://test6.com';
-      component.selectedItem = { label: 'test 3', link: 'http://test3.com' };
+        expect(component.selectedItem).toEqual(selectedItem);
+      });
 
-      component.items = [
-        { label: 'test 1', link: 'http://test1.com' },
-        { label: 'test 2', link: 'http://test2.com' },
-        { label: 'test 3', link: 'http://test3.com' },
-        { label: 'test 4', link: 'http://test4.com' },
-        { label: 'test 5', link: 'http://test5.com' }
-      ];
+      it('should set `selectedItem` with undefined if item url is not included in `items`', () => {
+        const urlItem = 'http://test6.com';
+        component.selectedItem = { label: 'test 3', link: 'http://test3.com' };
 
-      component['checkActiveItemByUrl'](urlItem);
+        component.items = [
+          { label: 'test 1', link: 'http://test1.com' },
+          { label: 'test 2', link: 'http://test2.com' },
+          { label: 'test 3', link: 'http://test3.com' },
+          { label: 'test 4', link: 'http://test4.com' },
+          { label: 'test 5', link: 'http://test5.com' }
+        ];
 
-      expect(component.selectedItem).toBeUndefined();
+        component['checkActiveItemByUrl'](urlItem);
+
+        expect(component.selectedItem).toBeUndefined();
+      });
     });
 
     it('checkRouterChildrenFragments: should return url without params and `#`', () => {
@@ -101,12 +111,12 @@ describe('PoNavbarItemsComponent:', () => {
       expect(result).toBe('/test/label');
     });
 
-    it('checkRouterChildrenFragments: should return empty string if `url` is `undefined`', () => {
+    it('checkRouterChildrenFragments: should return `/` if `url` is `undefined`', () => {
       spyOnProperty(component['router'], 'url').and.returnValue(undefined);
 
       const result = component['checkRouterChildrenFragments']();
 
-      expect(result).toBe('');
+      expect(result).toBe('/');
     });
 
     it('checkRouterChildrenFragments: should return same url', () => {

@@ -31,18 +31,25 @@ export class PoNavbarItemsComponent implements OnInit, OnDestroy {
     this.subscribeToRoute();
   }
 
-  selectItem(item: PoNavbarItem) {
-    this.selectedItem = item;
-  }
-
   private checkActiveItemByUrl(urlRouter: string) {
-    this.selectedItem = this.items.find(item => item.link === urlRouter);
+    const urlArray = urlRouter.split('/');
+    let counter = urlArray.length;
+
+    while (counter >= 0) {
+      const url = urlArray.slice(0, counter).join('/');
+      this.selectedItem = this.items.find(item => item.link === url);
+
+      if (this.selectedItem) {
+        break;
+      }
+      counter--;
+    }
   }
 
   private checkRouterChildrenFragments() {
     const childrenPrimary = this.router.parseUrl(this.router.url).root.children['primary'];
 
-    return childrenPrimary ? `/${childrenPrimary.segments.map(it => it.path).join('/')}` : '';
+    return childrenPrimary ? `/${childrenPrimary.segments.map(it => it.path).join('/')}` : '/';
   }
 
   private subscribeToRoute() {
