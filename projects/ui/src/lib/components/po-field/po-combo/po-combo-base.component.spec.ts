@@ -509,8 +509,35 @@ describe('PoComboBaseComponent:', () => {
       component['updateModel'](value);
 
       expect(component.callModelChange).toHaveBeenCalledWith(value);
-      expect(component.change.emit).toHaveBeenCalledWith(value);
+      expect(component.change.emit).toHaveBeenCalled();
       expect(component.selectedValue).toBe(value);
+    });
+
+    it('updateModel: should call `change.emit` passing `value` as param', () => {
+      const value = 1;
+
+      component.objectValue = false;
+
+      spyOn(component, 'callModelChange');
+      spyOn(component.change, 'emit');
+
+      component['updateModel'](value);
+
+      expect(component.change.emit).toHaveBeenCalledWith(value);
+    });
+
+    it('updateModel: should call `change.emit` passing `selectedOption` as param if `objectValue` is true', () => {
+      const value = 1;
+
+      component.objectValue = true;
+      component.selectedOption = { label: '1', value: '1' };
+
+      spyOn(component, 'callModelChange');
+      spyOn(component.change, 'emit');
+
+      component['updateModel'](value);
+
+      expect(component.change.emit).toHaveBeenCalledWith(component.selectedOption);
     });
 
     it('updateModel: shouldn`t call `callModelChange` and `change.emit` if `selectedValue` is equal value param', () => {

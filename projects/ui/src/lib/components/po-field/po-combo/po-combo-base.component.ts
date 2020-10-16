@@ -451,7 +451,20 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
-   * Deve ser informada uma função que será disparada quando houver alterações no ngModel.
+   * Se verdadeiro, o evento `p-change` receberá como argumento o `PoComboOption` referente à opção selecionada.
+   *
+   * @default `false`
+   */
+  @Input('p-object-value') @InputBoolean() objectValue?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser informada uma função que será disparada quando houver alterações no ngModel. A função receberá como argumento o model modificado.
+   *
+   * > Pode-se optar pelo recebimento do objeto selecionado ao invés do model através da propriedade `p-object-value`.
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
@@ -871,7 +884,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
         this.callModelChange(value);
       }
 
-      this.change.emit(value);
+      this.change.emit(this.objectValue ? this.selectedOption : value);
     }
 
     this.selectedValue = value;
