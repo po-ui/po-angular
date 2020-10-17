@@ -111,6 +111,147 @@ describe('PoNumberBaseComponent', () => {
     expect(fakeThis.eventOnBlur).toHaveBeenCalledWith(fakeEvent);
   });
 
+  it('onKeyDown: shouldn`t allow invalid keys and should call `preventDefault`', () => {
+    const fakeKeyboardEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      key: 'e'
+    };
+
+    spyOn(fakeKeyboardEvent, 'preventDefault');
+    spyOn(fakeKeyboardEvent, 'stopPropagation');
+    spyOn(component, <any>'isKeyAllowed').and.returnValue(false);
+
+    component.onKeyDown(fakeKeyboardEvent);
+
+    expect(fakeKeyboardEvent.preventDefault).toHaveBeenCalled();
+    expect(fakeKeyboardEvent.stopPropagation).toHaveBeenCalled();
+    expect(component['isKeyAllowed']).toHaveBeenCalledWith(fakeKeyboardEvent);
+  });
+
+  it('onKeyDown: shouldn`t call `preventDefault`', () => {
+    const fakeKeyboardEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      key: '1'
+    };
+
+    spyOn(fakeKeyboardEvent, 'preventDefault');
+    spyOn(fakeKeyboardEvent, 'stopPropagation');
+    spyOn(component, <any>'isKeyAllowed').and.returnValue(true);
+
+    component.onKeyDown(fakeKeyboardEvent);
+
+    expect(fakeKeyboardEvent.preventDefault).not.toHaveBeenCalled();
+    expect(fakeKeyboardEvent.stopPropagation).not.toHaveBeenCalled();
+  });
+
+  it('isKeyAllowed: should return false if is a letter', () => {
+    const fakeKeyboardEvent = {
+      key: 'e'
+    };
+    spyOn(component, <any>'isShortcut').and.returnValue(false);
+    spyOn(component, <any>'isControlKeys').and.returnValue(false);
+    spyOn(component, <any>'isInvalidKey').and.returnValue(true);
+
+    const result = component['isKeyAllowed'](fakeKeyboardEvent);
+    expect(result).toBeFalse();
+  });
+
+  it('isKeyAllowed: should return true if isn`t a letter', () => {
+    const fakeKeyboardEvent = {
+      key: '1'
+    };
+    spyOn(component, <any>'isShortcut').and.returnValue(false);
+    spyOn(component, <any>'isControlKeys').and.returnValue(false);
+    spyOn(component, <any>'isInvalidKey').and.returnValue(false);
+
+    const result = component['isKeyAllowed'](fakeKeyboardEvent);
+    expect(result).toBeTrue();
+  });
+
+  it('isShortcut: should return true if is an copy event', () => {
+    const fakeKeyboardEvent = {
+      keyCode: 67,
+      ctrlKey: true
+    };
+
+    const result = component['isShortcut'](fakeKeyboardEvent);
+    expect(result).toBeTrue();
+  });
+
+  it('isShortcut: should return true if is a paste event', () => {
+    const fakeKeyboardEvent = {
+      keyCode: 86,
+      metaKey: true
+    };
+
+    const result = component['isShortcut'](fakeKeyboardEvent);
+    expect(result).toBeTrue();
+  });
+
+  it('isShortcut: should return true if is a select all event', () => {
+    const fakeKeyboardEvent = {
+      keyCode: 65,
+      metaKey: true
+    };
+
+    const result = component['isShortcut'](fakeKeyboardEvent);
+    expect(result).toBeTrue();
+  });
+
+  it('isShortcut: should return true if is a cut event', () => {
+    const fakeKeyboardEvent = {
+      keyCode: 88,
+      metaKey: true
+    };
+
+    const result = component['isShortcut'](fakeKeyboardEvent);
+    expect(result).toBeTrue();
+  });
+
+  it('isShortcut: should return false if isn`t a allowed shortcut', () => {
+    const fakeKeyboardEvent = {
+      keyCode: 66,
+      metaKey: false
+    };
+
+    const result = component['isShortcut'](fakeKeyboardEvent);
+    expect(result).toBeFalse();
+  });
+
+  it('isControlKeys: should return true if is a control key', () => {
+    const fakeKeyboardEvent = {
+      key: 'Backspace'
+    };
+
+    const result = component['isControlKeys'](fakeKeyboardEvent);
+    expect(result).toBeTrue();
+  });
+
+  it('isControlKeys: should return false if isn`t a control key', () => {
+    const fakeKeyboardEvent = {
+      key: 'e'
+    };
+
+    const result = component['isControlKeys'](fakeKeyboardEvent);
+    expect(result).toBeFalse();
+  });
+
+  it('isInvalidKey: should return true if is invalid', () => {
+    const key = 'e';
+
+    const result = component['isInvalidKey'](key);
+    expect(result).toBeTrue();
+  });
+
+  it('isInvalidKey: should return false if is valid', () => {
+    const key = '1';
+
+    const result = component['isInvalidKey'](key);
+    expect(result).toBeFalse();
+  });
+
   it('eventOnInput: should call "callOnChange" if doesn`t contain mask and set invalidInputValueOnBlur with false', () => {
     fakeEvent.target.value = '1234567890';
     const fakeThis = {

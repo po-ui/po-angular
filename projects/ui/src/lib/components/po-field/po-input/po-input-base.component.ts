@@ -19,7 +19,8 @@ import { PoMask } from './po-mask';
  *
  * - Caso o input tenha um [(ngModel)] sem o atributo name, ocorrerá um erro de angular.
  * Então você precisa informar o atributo name ou o atributo [ngModelOptions]="{standalone: true}".
- * Exemplo: [(ngModel)]="pessoa.nome" [ngModelOptions]="{standalone: true}"
+ * Exemplo: [(ngModel)]="pessoa.nome" [ngModelOptions]="{standalone: true}".
+ *
  */
 @Directive()
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator {

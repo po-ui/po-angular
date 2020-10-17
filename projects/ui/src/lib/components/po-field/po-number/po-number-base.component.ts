@@ -40,6 +40,13 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
     this.eventOnBlur(event);
   }
 
+  onKeyDown(event) {
+    if (!this.isKeyAllowed(event)) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
   validMaxLength(maxlength: number, value: string) {
     if (maxlength && value.length > maxlength) {
       const substringValue = value.toString().substring(0, maxlength);
@@ -84,5 +91,43 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
 
   private formatNumber(value) {
     return value ? Number(value) : null;
+  }
+
+  private isKeyAllowed(event): boolean {
+    return this.isShortcut(event) || this.isControlKeys(event) || !this.isInvalidKey(event.key);
+  }
+
+  private isInvalidKey(key) {
+    const validatesKey = new RegExp(/[a-zA-Z:;=_´`^~"'?!@#$%¨&*()><{}çÇ\[\]/\\|]+/);
+    return validatesKey.test(key);
+  }
+
+  private isShortcut(event): boolean {
+    const key = event.keyCode;
+    const ctrl = event.ctrlKey || event.metaKey;
+    const keyA = key === 65;
+    const keyC = key === 67;
+    const keyX = key === 88;
+    const keyV = key === 86;
+
+    return (ctrl && keyC) || (ctrl && keyV) || (ctrl && keyA) || (ctrl && keyX);
+  }
+
+  private isControlKeys(event) {
+    const controlKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'Left',
+      'Right',
+      'Up',
+      'Down',
+      'Tab',
+      'Delete'
+    ];
+
+    return controlKeys.indexOf(event.key) !== -1;
   }
 }
