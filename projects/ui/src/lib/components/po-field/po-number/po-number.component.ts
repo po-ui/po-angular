@@ -10,7 +10,7 @@ import { PoNumberBaseComponent } from './po-number-base.component';
  *
  * @description
  *
- * po-number é um input específico para receber apenas números.
+ * O `po-number` é um input específico para receber apenas números.
  * É possível configurar um valor mínimo, máximo e um step com p-min, p-max e p-step,
  * respectivamente.
  *
