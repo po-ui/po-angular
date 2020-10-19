@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.9.2](https://github.com/po-ui/po-angular/compare/v3.9.1...v3.9.2) (2020-10-19)
+
+
+### Bug Fixes
+
+* **navbar:** corrige marca do item selecionado a partir da rota ([3a08cbf](https://github.com/po-ui/po-angular/commit/3a08cbfb2b2cf37455747bd816abf13ed319a3c7))
+* **number:** permite apenas números no campo ([0908856](https://github.com/po-ui/po-angular/commit/090885600a77824519a04c08f06a52fed2eb89df))
+
+
 <a name="3.9.1"></a>
 # [3.9.1](https://github.com/po-ui/po-angular/compare/v3.9.0...v3.9.1) (2020-10-13)
 
