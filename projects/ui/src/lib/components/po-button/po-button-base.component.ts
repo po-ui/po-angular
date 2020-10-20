@@ -1,6 +1,7 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
+import { InputBoolean } from '../../decorators';
 
 const PO_BUTTON_TYPES = ['default', 'primary', 'danger', 'link'];
 const PO_BUTTON_TYPE_DEFAULT = 'default';
@@ -25,6 +26,19 @@ export class PoButtonBaseComponent {
   private _loading?: boolean = false;
   private _small?: boolean = false;
   private _type?: string = 'default';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   * > Caso mais de um elemento seja configurado com essa propriedade,
+   * o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
    * @optional
