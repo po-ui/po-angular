@@ -155,12 +155,12 @@ Crie o arquivo `src/app/home/conference-schema.constants.ts` e adicione o conte√
 import { PoSyncSchema } from '@po-ui/ng-sync';
 
 export const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'https://po-sample-api.herokuapp.com/conference/conference-api/api/v1/conferences',
-  diffUrlApi: 'https://po-sample-api.herokuapp.com/conference/conference-api/api/v1/conferences/diff',
+  getUrlApi: 'https://po-sample-conference.herokuapp.com/conferences',
+  diffUrlApi: 'https://po-sample-conference.herokuapp.com/conferences/diff',
   deletedField: 'deleted',
   fields: [ 'id', 'title', 'location', 'description' ],
   idField: 'id',
-  name: 'Conference',
+  name: 'conference',
   pageSize: 1
 };
 ```
@@ -246,7 +246,7 @@ export class HomePage {
   }
 
   async loadHomePage() {
-    this.conference = await this.poSync.getModel('Conference').findOne().exec();
+    this.conference = await this.poSync.getModel('conference').findOne().exec();
   }
 
   clear() {

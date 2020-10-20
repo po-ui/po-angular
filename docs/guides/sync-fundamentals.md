@@ -113,12 +113,12 @@ import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
   // Endpoint para o método GET
-  getUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences',
-  diffUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences/diff',
+  getUrlApi: 'https://po-sample-conference.herokuapp.com/conferences',
+  diffUrlApi: 'https://po-sample-conference.herokuapp.com/conferences/diff',
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
   idField: 'id',
-  name: 'Conference',
+  name: 'conference',
   pageSize: 1
 };
 ```
@@ -190,13 +190,13 @@ propriedade `deletedField` na interface [PoSyncSchema](/documentation/po-sync), 
 import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences',
-  diffUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences/diff',
+  getUrlApi: 'https://po-sample-conference.herokuapp.com/conferences',
+  diffUrlApi: 'https://po-sample-conference.herokuapp.com/conferences/diff',
   // Definição do nome do campo
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
   idField: 'id',
-  name: 'Conference',
+  name: 'conference',
   pageSize: 1
 };
 ```
@@ -218,7 +218,7 @@ tiveram a última atualização maior ou igual a data que foi recebida como par�
 sincronizados serão retornados. Para cada um dos *schemas* é necessário ter um *endpoint* de sincronização.
 
 Abra o seu navegador e acesse a URL
-https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences/diff/2018-10-08T13:23:31.893Z.
+https://po-sample-conference.herokuapp.com/conferences/diff/2018-10-08T13:23:31.893Z.
 
 O *endpoint* de sincronização deve retornar uma resposta com a estrutura como a da URL acima, por exemplo:
 
@@ -251,13 +251,13 @@ abaixo:
 import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences',
+  getUrlApi: 'https://po-sample-conference.herokuapp.com/conferences',
   // Definição da URL de sincronização
-  diffUrlApi: 'https://po-sample-api.herokuapp.com/api/conference/conference-api/api/v1/conferences/diff',
+  diffUrlApi: 'https://po-sample-conference.herokuapp.com/conferences/diff',
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
   idField: 'id',
-  name: 'Conference',
+  name: 'conference',
   pageSize: 1
 };
 ```
@@ -348,10 +348,10 @@ Toda a manipulação dos registros de um *schema* como salvar, remover e buscar 
 [PoEntity](/documentation/po-entity) que pode ser obtida a partir do método `PoSyncService.getModel()`, por exemplo:
 
 ``` typescript
-this.conferenceModel = await this.poSync.getModel('Conference');
+this.conferenceModel = await this.poSync.getModel('conference');
 ```
 
-Onde o parâmetro "Conference" representa o nome do *schema* que se deseja manipular.
+Onde o parâmetro "conference" representa o nome do *schema* que se deseja manipular.
 Este é o mesmo valor colocado na propriedade `name` da interface [PoSyncSchema](/documentation/po-sync).
 
 Agora com esta instância podemos utilizar todos os métodos do [PoEntity](/documentation/po-entity) para manipular os registros.
@@ -473,7 +473,7 @@ constructor(public navCtrl: NavController, private poSync: PoSyncService) {
 }
 
 async loadHomePage() {
-  this.conference = await this.poSync.getModel('Conference').findOne().exec();
+  this.conference = await this.poSync.getModel('conference').findOne().exec();
 }
 ```
 
@@ -717,7 +717,7 @@ this.poSync.getResponses().subscribe(poSyncResponse => {
 
 });
 
-const conferenceModel = this.poSync.getModel('Conference');
+const conferenceModel = this.poSync.getModel('conference');
 
 const customId = 'id-1234';
 
@@ -737,7 +737,7 @@ this.poSync.getResponses().subscribe(poSyncResponse => {
 
 });
 
-const conferenceModel = this.poSync.getModel('Conference');
+const conferenceModel = this.poSync.getModel('conference');
 
 const customId = 'id-ABC';
 
