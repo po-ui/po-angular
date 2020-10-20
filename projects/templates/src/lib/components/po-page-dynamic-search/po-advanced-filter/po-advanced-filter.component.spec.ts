@@ -1,5 +1,6 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { of } from 'rxjs';
 
 import { PoDynamicModule, PoFieldModule, PoModalModule } from '@po-ui/ng-components';
 
@@ -11,12 +12,14 @@ describe('PoAdvancedFilterComponent', () => {
   let fixture: ComponentFixture<PoAdvancedFilterComponent>;
   let filters: Array<any>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule, PoDynamicModule, PoFieldModule, PoModalModule],
-      declarations: [PoAdvancedFilterComponent]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, PoDynamicModule, PoFieldModule, PoModalModule],
+        declarations: [PoAdvancedFilterComponent]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoAdvancedFilterComponent);
@@ -79,6 +82,62 @@ describe('PoAdvancedFilterComponent', () => {
       const getInitialValues = component['getInitialValuesFromFilter'](component.filters);
 
       expect(getInitialValues).toEqual(expectedFilter);
+    });
+
+    it('ngOnInit: should call `optionsServiceSubscribe`', () => {
+      const spyOptionsServiceSubscribe = spyOn(component, <any>'optionsServiceSubscribe');
+
+      component.ngOnInit();
+
+      expect(spyOptionsServiceSubscribe).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: should call subscription.unsubscribe', () => {
+      const spyUnsubscribe = spyOn(component['subscription'], 'unsubscribe');
+
+      component.ngOnDestroy();
+
+      expect(spyUnsubscribe).toHaveBeenCalled();
+    });
+
+    describe('optionsServiceSubscribe: ', () => {
+      it(`should append the received value from dynamicForm into 'optionsServiceChosenOptions' 
+        if it's different from undefined and if it does not already exist`, () => {
+        const objectValue = { label: 'Vancouver', value: 12345 };
+        component['optionsServiceChosenOptions'] = [{ label: 'Toronto', value: 12312 }];
+
+        const expectedResult = [...component['optionsServiceChosenOptions'], objectValue];
+
+        spyOn(component.poDynamicForm, 'getObjectValue').and.returnValue(of(objectValue));
+
+        component['optionsServiceSubscribe']();
+
+        expect(component['optionsServiceChosenOptions']).toEqual(expectedResult);
+      });
+
+      it(`shouldn't append the received value from dynamicForm into 'optionsServiceChosenOptions' 
+        if it already exists`, () => {
+        const objectValue = { label: 'Vancouver', value: 12345 };
+        component['optionsServiceChosenOptions'] = [objectValue];
+
+        spyOn(component.poDynamicForm, 'getObjectValue').and.returnValue(of(objectValue));
+
+        component['optionsServiceSubscribe']();
+
+        expect(component['optionsServiceChosenOptions']).toEqual([objectValue]);
+      });
+
+      it(`shouldn't append the received value from dynamicForm into 'optionsServiceChosenOptions' 
+        if it is undefined`, () => {
+        const objectValue = { label: 'Vancouver', value: 12345 };
+        component['optionsServiceChosenOptions'] = [objectValue];
+
+        spyOn(component.poDynamicForm, 'getObjectValue').and.returnValue(of(undefined));
+
+        component['optionsServiceSubscribe']();
+
+        expect(component['optionsServiceChosenOptions']).toEqual([objectValue]);
+      });
     });
   });
 });

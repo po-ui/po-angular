@@ -516,7 +516,7 @@ describe('PoComboBaseComponent:', () => {
     it('updateModel: should call `change.emit` passing `value` as param', () => {
       const value = 1;
 
-      component.objectValue = false;
+      component.emitObjectValue = false;
 
       spyOn(component, 'callModelChange');
       spyOn(component.change, 'emit');
@@ -526,10 +526,10 @@ describe('PoComboBaseComponent:', () => {
       expect(component.change.emit).toHaveBeenCalledWith(value);
     });
 
-    it('updateModel: should call `change.emit` passing `selectedOption` as param if `objectValue` is true', () => {
+    it('updateModel: should call `change.emit` passing `selectedOption` as param if `emitObjectValue` is true', () => {
       const value = 1;
 
-      component.objectValue = true;
+      component.emitObjectValue = true;
       component.selectedOption = { label: '1', value: '1' };
 
       spyOn(component, 'callModelChange');

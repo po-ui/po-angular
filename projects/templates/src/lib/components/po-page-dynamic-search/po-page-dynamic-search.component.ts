@@ -7,7 +7,8 @@ import {
   PoDynamicFormField,
   PoLanguageService,
   PoPageFilter,
-  PoDisclaimerGroupRemoveAction
+  PoDisclaimerGroupRemoveAction,
+  PoComboOption
 } from '@po-ui/ng-components';
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
@@ -102,7 +103,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
       }, {});
 
     if (Object.keys(filterObjectWithValue).length) {
-      this.onAdvancedSearch(filterObjectWithValue);
+      this.onAdvancedSearch({ filter: filterObjectWithValue });
     }
   }
 
@@ -137,12 +138,14 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.poAdvancedFilter.open();
   }
 
-  onAdvancedSearch(filters) {
-    this._disclaimerGroup.disclaimers = this.setDisclaimers(filters);
+  onAdvancedSearch(filteredItems) {
+    const { filter, optionsService } = filteredItems;
 
-    this.setFilters(filters);
+    this._disclaimerGroup.disclaimers = this.setDisclaimers(filter, optionsService);
 
-    this.advancedSearch.emit(filters);
+    this.setFilters(filter);
+
+    this.advancedSearch.emit(filter);
   }
 
   private getDisclaimersWithoutQuickSearch() {
@@ -166,6 +169,12 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
 
   private convertToFilters(filters) {
     return Object.entries(filters).map(([property, value]) => ({ property, value }));
+  }
+
+  private optionsServiceDisclaimerLabel(value: any, optionsServiceObjectsList: Array<PoComboOption>) {
+    const optionServiceMatch = optionsServiceObjectsList.find(option => option.value === value);
+
+    return optionServiceMatch.label || optionServiceMatch.value;
   }
 
   private applyDisclaimerLabelValue(field: any, filterValue: any) {
@@ -211,7 +220,11 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return fields.find((field: PoDynamicFormField) => field.property === fieldName);
   }
 
-  private getFilterValueToDisclaimer(field: any, value: any) {
+  private getFilterValueToDisclaimer(field: any, value: any, optionsServiceObjectsList?: Array<PoComboOption>) {
+    if (field.optionsService && optionsServiceObjectsList) {
+      return this.optionsServiceDisclaimerLabel(value, optionsServiceObjectsList);
+    }
+
     if (field.type === PoDynamicFieldType.Date) {
       return this.formatDate(value);
     }
@@ -238,7 +251,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.emitChangesDisclaimers([]);
   }
 
-  private setDisclaimers(filters) {
+  private setDisclaimers(filters, optionsServiceObjects?: Array<PoComboOption>) {
     const disclaimers = [];
     const properties = Object.keys(filters);
 
@@ -247,7 +260,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
       const label = field.label || capitalizeFirstLetter(field.property);
       const value = filters[property];
 
-      const valueDisplayedOnTheDisclaimerLabel = this.getFilterValueToDisclaimer(field, value);
+      const valueDisplayedOnTheDisclaimerLabel = this.getFilterValueToDisclaimer(field, value, optionsServiceObjects);
 
       if (valueDisplayedOnTheDisclaimerLabel !== '') {
         disclaimers.push({

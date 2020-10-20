@@ -15,6 +15,7 @@
       [p-validate]="validate"
       [p-validate-fields]="validateFields"
       [p-value]="value"
+      (p-object-value)="sendObjectValue($event)"
       (p-form-validate)="validateForm($event)"
     >
     </po-dynamic-form-fields>

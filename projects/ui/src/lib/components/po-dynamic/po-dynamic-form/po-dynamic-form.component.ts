@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormField } from './po-dynamic-form-field.interface';
@@ -38,6 +38,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
 
   private onLoadSubscription: Subscription;
   private sendFormSubscription: Subscription;
+  private comboOptionSubject = new Subject<any>();
 
   @ViewChild('dynamicForm') set form(value: NgForm) {
     // necessario para nao ocorrer o ExpressionChangedAfterItHasBeenCheckedError
@@ -102,6 +103,14 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
    */
   focus(property: string) {
     this.fieldsComponent.focus(property);
+  }
+
+  getObjectValue(): Observable<any> {
+    return this.comboOptionSubject.asObservable();
+  }
+
+  sendObjectValue(objectValue: any) {
+    this.comboOptionSubject.next(objectValue);
   }
 
   validateForm(field: PoDynamicFormField) {

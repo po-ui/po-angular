@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { PoDynamicFieldType } from '@po-ui/ng-components';
+import { PoDynamicFieldType, PoDynamicModule } from '@po-ui/ng-components';
 
 import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component';
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
@@ -18,14 +18,16 @@ describe('PoPageDynamicSearchComponent:', () => {
   let component: PoPageDynamicSearchComponent;
   let fixture: ComponentFixture<PoPageDynamicSearchComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule.withRoutes(routes), PoPageCustomizationModule],
-      declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
-      providers: [TitleCasePipe],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, RouterTestingModule.withRoutes(routes), PoPageCustomizationModule, PoDynamicModule],
+        declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
+        providers: [TitleCasePipe],
+        schemas: [NO_ERRORS_SCHEMA]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicSearchComponent);
@@ -137,7 +139,7 @@ describe('PoPageDynamicSearchComponent:', () => {
 
     it('onChangeFilters: should call `onAdvancedSearch`', () => {
       const filters = [{ property: 'city', initValue: 'Ontario' }, { property: 'name' }];
-      const filterObjectWithValue = { city: 'Ontario' };
+      const filterObjectWithValue = { filter: { city: 'Ontario' } };
       spyOn(component, 'onAdvancedSearch');
 
       component.onChangeFilters(filters);
@@ -153,18 +155,19 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component.poAdvancedFilter.open).toHaveBeenCalled();
     });
 
-    it(`onAdvancedSearch: should call 'setDisclaimers', 'setFilters' and 'advancedSearch.emit' with 'filters'`, () => {
-      const filters = [{ property: 'value1' }];
+    it(`onAdvancedSearch: should call 'setDisclaimers', 'setFilters' and 'advancedSearch.emit'`, () => {
+      const filter = { property: 'value1' };
+      const optionsService = undefined;
 
       spyOn(component, <any>'setDisclaimers');
       spyOn(component.advancedSearch, 'emit');
       spyOn(component, <any>'setFilters');
 
-      component.onAdvancedSearch(filters);
+      component.onAdvancedSearch({ filter, optionsService });
 
-      expect(component['setDisclaimers']).toHaveBeenCalled();
+      expect(component['setDisclaimers']).toHaveBeenCalledWith(filter, optionsService);
       expect(component['setFilters']).toHaveBeenCalledBefore(component.advancedSearch.emit);
-      expect(component.advancedSearch.emit).toHaveBeenCalledWith(filters);
+      expect(component.advancedSearch.emit).toHaveBeenCalledWith(filter);
     });
 
     it(`setFilters: should call 'convertToFilters'`, () => {
@@ -446,6 +449,72 @@ describe('PoPageDynamicSearchComponent:', () => {
       const result = component['getFilterValueToDisclaimer'](field, value);
 
       expect(result).toBe('');
+    });
+
+    it('getFilterValueToDisclaimer: should call optionsServiceDisclaimerLabel and return the combo label value as disclaimer label.', () => {
+      const field = {
+        property: '1',
+        optionsService: 'url.com'
+      };
+      const value = 123;
+      const optionsServiceObjectsList = [
+        { label: 'Vancouver', value: 123 },
+        { label: 'Ontario', value: 456 }
+      ];
+
+      spyOn(component, <any>'optionsServiceDisclaimerLabel').and.callThrough();
+
+      const result = component['getFilterValueToDisclaimer'](field, value, optionsServiceObjectsList);
+
+      expect(component['optionsServiceDisclaimerLabel']).toHaveBeenCalledWith(value, optionsServiceObjectsList);
+      expect(result).toBe('Vancouver');
+    });
+
+    it('getFilterValueToDisclaimer: should call optionsServiceDisclaimerLabel but return the combo value if optionsServiceObjectsList doesn`t contain the label property.', () => {
+      const field = {
+        property: '1',
+        optionsService: 'url.com'
+      };
+      const value = 123;
+      const optionsServiceObjectsList = [{ value: 123 }, { value: 456 }];
+
+      spyOn(component, <any>'optionsServiceDisclaimerLabel').and.callThrough();
+
+      const result = component['getFilterValueToDisclaimer'](field, value, optionsServiceObjectsList);
+
+      expect(component['optionsServiceDisclaimerLabel']).toHaveBeenCalledWith(value, optionsServiceObjectsList);
+      expect(result).toBe(123);
+    });
+
+    it('getFilterValueToDisclaimer: shouldn`t call optionsServiceDisclaimerLabel if optionsServiceObjectsList is undefined.', () => {
+      const field = {
+        property: '1',
+        optionsService: 'url.com'
+      };
+      const value = 123;
+      const optionsServiceObjectsList = undefined;
+
+      spyOn(component, <any>'optionsServiceDisclaimerLabel');
+
+      const result = component['getFilterValueToDisclaimer'](field, value, optionsServiceObjectsList);
+
+      expect(component['optionsServiceDisclaimerLabel']).not.toHaveBeenCalled();
+      expect(result).toBe(123);
+    });
+
+    it('getFilterValueToDisclaimer: shouldn`t call optionsServiceDisclaimerLabel if field doesn`t contain optionsService key.', () => {
+      const field = {
+        property: '1'
+      };
+      const value = 123;
+      const optionsServiceObjectsList = undefined;
+
+      spyOn(component, <any>'optionsServiceDisclaimerLabel');
+
+      const result = component['getFilterValueToDisclaimer'](field, value, optionsServiceObjectsList);
+
+      expect(component['optionsServiceDisclaimerLabel']).not.toHaveBeenCalled();
+      expect(result).toBe(123);
     });
 
     describe('ngOnInit:', () => {

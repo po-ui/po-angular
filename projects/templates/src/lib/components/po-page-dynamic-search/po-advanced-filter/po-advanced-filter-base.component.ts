@@ -6,7 +6,8 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
-  poLocaleDefault
+  poLocaleDefault,
+  PoComboOption
 } from '@po-ui/ng-components';
 
 import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
@@ -49,6 +50,8 @@ export class PoAdvancedFilterBaseComponent {
 
   private _filters: Array<PoDynamicFormField> = [];
   private _literals: PoAdvancedFilterLiterals;
+
+  protected optionsServiceChosenOptions: Array<PoComboOption> = [];
 
   filter = {};
   language: string = poLocaleDefault;
@@ -118,12 +121,21 @@ export class PoAdvancedFilterBaseComponent {
 
   // Retorna os models dos campos preenchidos
   private getValuesFromForm() {
+    let optionServiceOptions: Array<PoComboOption>;
+
     Object.keys(this.filter).forEach(property => {
       if (this.filter[property] === undefined || this.filter[property] === '') {
         delete this.filter[property];
+        return;
       }
     });
 
-    return this.filter;
+    if (this.optionsServiceChosenOptions.length) {
+      optionServiceOptions = this.optionsServiceChosenOptions.filter((optionItem: PoComboOption) => {
+        return Object.values(this.filter).includes(optionItem.value);
+      });
+    }
+
+    return { filter: this.filter, optionsService: optionServiceOptions };
   }
 }

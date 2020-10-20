@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { NgForm } from '@angular/forms';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
-import { of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormComponent } from './po-dynamic-form.component';
@@ -504,6 +504,30 @@ describe('PoDynamicFormComponent:', () => {
       component['loadDataOnInitialize']();
 
       expect(spyApplyFormUpdatesOnLoad).toHaveBeenCalled();
+    });
+
+    it('getObjectValue: should call comboOptionSubject.asObservable', () => {
+      const spyComboOptionSubjectObservable = spyOn(component['comboOptionSubject'], 'asObservable');
+
+      component.getObjectValue();
+
+      expect(spyComboOptionSubjectObservable).toHaveBeenCalled();
+    });
+
+    it('getObjectValue: should return  an instanceof Observable', () => {
+      const result = component.getObjectValue();
+
+      expect(result instanceof Observable).toBeTruthy();
+    });
+
+    it('sendObjectValue: should call comboOptionSubject.next with value', () => {
+      const value = 'test';
+
+      const spyComboOptionSubjectNext = spyOn(component['comboOptionSubject'], 'next');
+
+      component.sendObjectValue('test');
+
+      expect(spyComboOptionSubjectNext).toHaveBeenCalledWith(value);
     });
   });
 

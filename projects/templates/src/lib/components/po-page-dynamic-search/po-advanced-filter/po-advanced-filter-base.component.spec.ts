@@ -102,12 +102,36 @@ describe('PoAdvancedFilterBaseComponent', () => {
   });
 
   describe('Methods:', () => {
-    it('getValuesFromForm: should return all items that property isn´t undefined or ``.', () => {
-      component.filter = { name: 'name', birthdate: 'Birthdate', age: '', Adress: undefined };
+    describe('getValuesFromForm', () => {
+      it('should return an object containing filter and optionsService key values if optionsServiceChosenOptions has length', () => {
+        component.filter = { name: 'name', birthdate: 'Birthdate', age: '', city: 12345 };
+        component.optionsServiceChosenOptions = [{ label: 'Vancouver', value: 12345 }];
 
-      const filteredItems = { name: 'name', birthdate: 'Birthdate' };
+        const expectedReturnValue = { filter: component.filter, optionsService: component.optionsServiceChosenOptions };
 
-      expect(component['getValuesFromForm']()).toEqual(filteredItems);
+        component['getValuesFromForm']();
+
+        expect(component['getValuesFromForm']()).toEqual(expectedReturnValue);
+      });
+
+      it('should return an object with undefined to optionService if optionsServiceChosenOptions doesn`t have length', () => {
+        component.filter = { name: 'name', birthdate: 'Birthdate', age: '', city: 12345 };
+        component.optionsServiceChosenOptions = [];
+
+        const expectedReturnValue = { filter: component.filter, optionsService: undefined };
+
+        component['getValuesFromForm']();
+
+        expect(component['getValuesFromForm']()).toEqual(expectedReturnValue);
+      });
+
+      it('should return the items that do not have undefined or empty property values.', () => {
+        component.filter = { name: 'name', birthdate: 'Birthdate', age: '', Adress: undefined };
+
+        const filteredItems = { filter: { name: 'name', birthdate: 'Birthdate' }, optionsService: undefined };
+
+        expect(component['getValuesFromForm']()).toEqual(filteredItems);
+      });
     });
 
     it('primaryAction: should emit `searchEvent` and call `getValuesFromForm` and `poModal.close`', () => {
