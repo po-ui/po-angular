@@ -141,6 +141,7 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      p-emit-object-value
       [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
       [p-field-label]="field.fieldLabel"
@@ -151,7 +152,7 @@
       [p-label]="field.label"
       [p-optional]="field.optional"
       [p-required]="field.required"
-      (p-change)="onChangeField(field)"
+      (p-change)="onChangeField(field, $event)"
     >
     </po-combo>
 

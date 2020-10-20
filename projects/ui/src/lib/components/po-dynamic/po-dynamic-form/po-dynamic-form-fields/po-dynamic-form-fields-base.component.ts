@@ -29,6 +29,9 @@ export class PoDynamicFormFieldsBaseComponent {
 
   @Output('p-fieldsChange') fieldsChange = new EventEmitter<any>();
 
+  // Evento disparado se existir optionsService em visibleField. Necessário resgatar referência do objeto selecionado para quando se tratar de recebimento de opções via serviço.
+  @Output('p-object-value') objectValue = new EventEmitter<any>();
+
   // valor que será utilizado para iniciar valor no componente.
   @Input('p-value') set value(value: any) {
     this._value = value && isTypeof(value, 'object') ? value : {};

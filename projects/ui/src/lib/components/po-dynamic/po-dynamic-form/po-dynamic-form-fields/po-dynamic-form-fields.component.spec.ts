@@ -245,6 +245,28 @@ describe('PoDynamicFormFieldsComponent: ', () => {
           fakeVisibleField
         );
       });
+
+      it('should emit `objectValue` if `visibleField` has `optionsService` property', async () => {
+        const fakeVisibleField = { property: 'test1', optionsService: 'url.com' };
+        const objectValue = { label: 'Vancouver', value: 12343 };
+
+        const spyObjectValue = spyOn(component.objectValue, 'emit');
+
+        await component.onChangeField(fakeVisibleField, objectValue);
+
+        expect(spyObjectValue).toHaveBeenCalledWith(objectValue);
+      });
+
+      it('shouldn`t emit `objectValue` if `visibleField` doesn`t have the `optionsService` property', async () => {
+        const fakeVisibleField = { property: 'test1' };
+        const objectValue = { label: 'Vancouver', value: 12343 };
+
+        const spyObjectValue = spyOn(component.objectValue, 'emit');
+
+        await component.onChangeField(fakeVisibleField, objectValue);
+
+        expect(spyObjectValue).not.toHaveBeenCalled();
+      });
     });
 
     it('applyFieldValidation: should merge fields and validatedFields and apply new value to `fields` and `value``', () => {
