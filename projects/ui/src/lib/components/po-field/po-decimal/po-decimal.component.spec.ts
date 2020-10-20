@@ -1,37 +1,52 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
-import { configureTestSuite, expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoCleanComponent } from './../po-clean/po-clean.component';
 import { PoDecimalComponent } from './po-decimal.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { PoLanguageService } from '../../../services';
 
 describe('PoDecimalComponent:', () => {
   let component: PoDecimalComponent;
   let fixture: ComponentFixture<PoDecimalComponent>;
   let nativeElement: any;
+  let languageService: PoLanguageService;
+  let inputEl: any;
+  let spyService: jasmine.Spy;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoDecimalComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
-    });
-  });
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          PoDecimalComponent,
+          PoFieldContainerComponent,
+          PoCleanComponent,
+          PoFieldContainerBottomComponent
+        ],
+        providers: [PoLanguageService]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
+    languageService = TestBed.inject(PoLanguageService);
+    spyService = spyOn(languageService, 'getShortLanguage').and.returnValue('pt');
     fixture = TestBed.createComponent(PoDecimalComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';
     component.help = 'Help de teste';
     component.clean = true;
-    component['regex'] = {
-      thousand: new RegExp('\\' + '.', 'g'),
-      decimal: new RegExp('\\' + ',', 'g')
-    };
+    inputEl = component.inputEl;
 
     fixture.detectChanges();
 
     nativeElement = fixture.debugElement.nativeElement;
+  });
+
+  afterEach(() => {
+    component.inputEl = inputEl;
   });
 
   it('should be created', () => {
@@ -39,6 +54,13 @@ describe('PoDecimalComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('locale: should set decimal and thousand separator', () => {
+      component.locale = 'ru';
+
+      expect(component['decimalSeparator']).toBe(',');
+      expect(component['thousandSeparator']).toBe(' ');
+    });
+
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;
 
@@ -50,43 +72,43 @@ describe('PoDecimalComponent:', () => {
 
       expect(component.autocomplete).toBe('on');
     });
-  });
 
-  it('decimalsLength: should update property with default value if is invalid value.', () => {
-    const invalidValues = [undefined, null, '', true, false, 'string', [], {}, 16, -1];
-    const defaultValue = 2;
-    expectPropertiesValues(component, 'decimalsLength', invalidValues, defaultValue);
-  });
+    it('decimalsLength: should update property with default value if is invalid value.', () => {
+      const invalidValues = [undefined, null, '', true, false, 'string', [], {}, 16, -1];
+      const defaultValue = 2;
+      expectPropertiesValues(component, 'decimalsLength', invalidValues, defaultValue);
+    });
 
-  it('decimalsLength: should update property with valid values.', () => {
-    let validValues = [0, 3];
-    expectPropertiesValues(component, 'decimalsLength', validValues, validValues);
-    validValues = [3, 15];
-    component.thousandMaxlength = 1;
-    expectPropertiesValues(component, 'decimalsLength', validValues, validValues);
-  });
+    it('decimalsLength: should update property with valid values.', () => {
+      let validValues = [0, 3];
+      expectPropertiesValues(component, 'decimalsLength', validValues, validValues);
+      validValues = [3, 15];
+      component.thousandMaxlength = 1;
+      expectPropertiesValues(component, 'decimalsLength', validValues, validValues);
+    });
 
-  it('thousandMaxlength: should update property with remaining value of total limit minus `decimalsLength`.', () => {
-    component.decimalsLength = 7;
-    component.thousandMaxlength = undefined;
-    const remainingValue = 16 - component.decimalsLength;
+    it('thousandMaxlength: should update property with remaining value of total limit minus `decimalsLength`.', () => {
+      component.decimalsLength = 7;
+      component.thousandMaxlength = undefined;
+      const remainingValue = 16 - component.decimalsLength;
 
-    expect(component.decimalsLength).toEqual(7);
-    expect(component.thousandMaxlength).toEqual(remainingValue);
-  });
+      expect(component.decimalsLength).toEqual(7);
+      expect(component.thousandMaxlength).toEqual(remainingValue);
+    });
 
-  it('thousandMaxlength: should update property with default value if is invalid values.', () => {
-    const invalidValues = [undefined, null, '', true, false, 'string', [], {}, 15];
-    const defaultValue = 13;
-    expectPropertiesValues(component, 'thousandMaxlength', invalidValues, defaultValue);
-  });
+    it('thousandMaxlength: should update property with default value if is invalid values.', () => {
+      const invalidValues = [undefined, null, '', true, false, 'string', [], {}, 15];
+      const defaultValue = 13;
+      expectPropertiesValues(component, 'thousandMaxlength', invalidValues, defaultValue);
+    });
 
-  it('thousandMaxlength: should update property with valid values.', () => {
-    let validValues = [5, 8];
-    expectPropertiesValues(component, 'thousandMaxlength', validValues, validValues);
-    validValues = [13, 21];
-    component.decimalsLength = 4;
-    expectPropertiesValues(component, 'thousandMaxlength', validValues, 13);
+    it('thousandMaxlength: should update property with valid values.', () => {
+      let validValues = [5, 8];
+      expectPropertiesValues(component, 'thousandMaxlength', validValues, validValues);
+      validValues = [13, 21];
+      component.decimalsLength = 4;
+      expectPropertiesValues(component, 'thousandMaxlength', validValues, 13);
+    });
   });
 
   it('should create button clean', () => {
@@ -301,46 +323,22 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call replaceCommaToDot method', () => {
-    const fakeThis = {
-      regex: {
-        decimal: ','
-      }
-    };
-
-    const valueFormatted = component['replaceCommaToDot'].call(fakeThis, '123,10');
+    const valueFormatted = component['replaceCommaToDot']('123,10');
     expect(valueFormatted).toEqual('123.10');
   });
 
   it('should have a call replaceCommaToDot method with undefined param', () => {
-    const fakeThis = {
-      regex: {
-        decimal: ','
-      }
-    };
-
-    const valueFormatted = component['replaceCommaToDot'].call(fakeThis, undefined);
+    const valueFormatted = component['replaceCommaToDot']();
     expect(valueFormatted).toEqual('');
   });
 
   it('should have a call formatValueWithoutThousandSeparator method', () => {
-    const fakeThis = {
-      regex: {
-        thousand: '.'
-      }
-    };
-
-    const valueFormatted = component['formatValueWithoutThousandSeparator'].call(fakeThis, '12345.10');
+    const valueFormatted = component['formatValueWithoutThousandSeparator']('12345.10');
     expect(valueFormatted).toEqual('1234510');
   });
 
   it('should have a call formatValueWithoutThousandSeparator method with undefined param', () => {
-    const fakeThis = {
-      regex: {
-        thousand: '.'
-      }
-    };
-
-    const valueFormatted = component['formatValueWithoutThousandSeparator'].call(fakeThis, undefined);
+    const valueFormatted = component['formatValueWithoutThousandSeparator']();
     expect(valueFormatted).toEqual('');
   });
 
@@ -777,7 +775,7 @@ describe('PoDecimalComponent:', () => {
         selectionEnd: 5
       };
 
-      expect(component['isSelectionStartDifferentSelectionEnd'](fakeTarget)).toBeTruthy();
+      expect(component['isSelectionStartDifferentSelectionEnd'](fakeTarget)).toBeTrue();
     });
 
     it('isSelectionStartDifferentSelectionEnd: should return false if have a selection', () => {
@@ -786,7 +784,7 @@ describe('PoDecimalComponent:', () => {
         selectionEnd: 1
       };
 
-      expect(component['isSelectionStartDifferentSelectionEnd'](fakeTarget)).toBeFalsy();
+      expect(component['isSelectionStartDifferentSelectionEnd'](fakeTarget)).toBeFalse();
     });
 
     it('onFocus: should called `getScreenValue` and `enter.emit`', () => {
@@ -1136,20 +1134,22 @@ describe('PoDecimalComponent:', () => {
       expect(component['callOnChange']).toHaveBeenCalledWith(undefined);
     });
 
-    it('containsMoreThanOneComma: should return `false` if param contains one comma', () => {
-      const value = '1.200,55';
+    describe('containsMoreThanOneDecimalSeparator:', () => {
+      it('should return `false` if param contains one comma', () => {
+        const value = '1.200,55';
 
-      expect(component['containsMoreThanOneComma'](value)).toBeFalsy();
-    });
+        expect(component['containsMoreThanOneDecimalSeparator'](value)).toBeFalsy();
+      });
 
-    it('containsMoreThanOneComma: should return `true` if param contains more than one comma', () => {
-      const value = '1.444,200,55';
+      it('should return `true` if param contains more than one comma', () => {
+        const value = '1.444,200,55';
 
-      expect(component['containsMoreThanOneComma'](value)).toBeTruthy();
-    });
+        expect(component['containsMoreThanOneDecimalSeparator'](value)).toBeTruthy();
+      });
 
-    it('containsMoreThanOneComma: should return `false` if param is undefined', () => {
-      expect(component['containsMoreThanOneComma'](undefined)).toBeFalsy();
+      it('should return `false` if param is undefined', () => {
+        expect(component['containsMoreThanOneDecimalSeparator'](undefined)).toBeFalsy();
+      });
     });
 
     describe('writeValueModel', () => {
@@ -1159,6 +1159,36 @@ describe('PoDecimalComponent:', () => {
 
         component.writeValueModel(value);
         expect(component.change.emit).toHaveBeenCalledWith(value);
+      });
+
+      it(`should show the value formated by locale 'pt'`, () => {
+        const value = '1234567,82';
+        const formated = '1.234.567,82';
+        const spy = spyOn(component, <any>'setViewValue');
+        spyService.and.returnValue('pt');
+        component.ngOnInit();
+        component.writeValueModel(value);
+        expect(spy).toHaveBeenCalledWith(formated);
+      });
+
+      it(`should show the value formated by locale 'ru'`, () => {
+        const value = '1234567,82';
+        const formated = '1 234 567,82';
+        const spy = spyOn(component, <any>'setViewValue');
+        spyService.and.returnValue('ru');
+        component.ngOnInit();
+        component.writeValueModel(value);
+        expect(spy).toHaveBeenCalledWith(formated);
+      });
+
+      it(`should show the value formated by locale 'en'`, () => {
+        const value = '1234567.82';
+        const formated = '1,234,567.82';
+        const spy = spyOn(component, <any>'setViewValue');
+        spyService.and.returnValue('en');
+        component.ngOnInit();
+        component.writeValueModel(value);
+        expect(spy).toHaveBeenCalledWith(formated);
       });
 
       it('shouldn`t call change.emit if param is undefined', () => {

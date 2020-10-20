@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import * as utilFunctions from './../../utils/util';
@@ -11,15 +11,22 @@ describe('PoPageBackgroundComponent:', () => {
   let component: PoPageBackgroundComponent;
   let fixture: ComponentFixture<PoPageBackgroundComponent>;
   let debugElement;
+  let languageService: PoLanguageService;
+  let spyService: jasmine.Spy;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoPageBackgroundComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PoPageBackgroundComponent],
+        providers: [PoLanguageService],
+        schemas: [NO_ERRORS_SCHEMA]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
+    languageService = TestBed.inject(PoLanguageService);
+    spyService = spyOn(languageService, 'getShortLanguage').and.returnValue('pt');
     fixture = TestBed.createComponent(PoPageBackgroundComponent);
     component = fixture.componentInstance;
 
@@ -91,7 +98,6 @@ describe('PoPageBackgroundComponent:', () => {
   describe('Methods:', () => {
     it('ngOnInit: should get the stored language on localstorage (or browserLanguage by default if en, pt, es or ru) and apply it to `selectedLanguageOption`', () => {
       component.ngOnInit();
-      const languageService = new PoLanguageService();
       expect(component.selectedLanguageOption).toBe(languageService.getShortLanguage());
     });
 

@@ -8,6 +8,7 @@
   [p-help]="help"
   [p-icon]="icon"
   [p-label]="label"
+  [p-locale]="locale"
   [p-no-autocomplete]="properties?.includes('noAutocomplete')"
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
@@ -38,7 +39,7 @@
 
   <div class="po-row">
     <po-number
-      class="po-md-6"
+      class="po-md-4"
       name="decimalsLength"
       [(ngModel)]="decimalsLength"
       p-clean
@@ -50,7 +51,7 @@
     </po-number>
 
     <po-number
-      class="po-md-6"
+      class="po-md-4"
       name="thousandMaxlength"
       [(ngModel)]="thousandMaxlength"
       p-clean
@@ -60,6 +61,16 @@
       [p-max]="maxThousandMaxlength"
     >
     </po-number>
+
+    <po-select
+      class="po-md-4"
+      name="locale"
+      [(ngModel)]="locale"
+      p-clean
+      p-help="By default is equal your browser locale"
+      p-label="Locale"
+      [p-options]="localeOptions"
+    ></po-select>
   </div>
 
   <div class="po-row">

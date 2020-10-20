@@ -10,7 +10,7 @@ describe('PoAdvancedFilterBaseComponent', () => {
   const languageService = new PoLanguageService();
 
   beforeEach(() => {
-    component = new PoAdvancedFilterBaseComponent(languageService);
+    component = new PoAdvancedFilterBaseComponent(<any>languageService);
   });
 
   it('should be created', () => {

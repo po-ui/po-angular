@@ -137,5 +137,44 @@ describe('PoLanguageService:', () => {
 
       expect(service.languageDefault).toBeNull();
     });
+
+    describe('getNumberSeparators:', () => {
+      it(`should return language separators if language param is undefined.`, () => {
+        spyOn(service, 'getShortLanguage').and.returnValue('pt');
+        const { decimalSeparator, thousandSeparator } = service.getNumberSeparators();
+        expect(decimalSeparator).toBe(',');
+        expect(thousandSeparator).toBe('.');
+      });
+
+      it(`should return separators if language param is 'pt' .`, () => {
+        const { decimalSeparator, thousandSeparator } = service.getNumberSeparators('pt');
+        expect(decimalSeparator).toBe(',');
+        expect(thousandSeparator).toBe('.');
+      });
+
+      it(`should return separators if language param is 'en'.`, () => {
+        const { decimalSeparator, thousandSeparator } = service.getNumberSeparators('en');
+        expect(decimalSeparator).toBe('.');
+        expect(thousandSeparator).toBe(',');
+      });
+
+      it(`should return separators if language param is 'ru'.`, () => {
+        const { decimalSeparator, thousandSeparator } = service.getNumberSeparators('ru');
+        expect(decimalSeparator).toBe(',');
+        expect(thousandSeparator).toBe(' ');
+      });
+
+      it(`should return separators if language param is 'es'.`, () => {
+        const { decimalSeparator, thousandSeparator } = service.getNumberSeparators('es');
+        expect(decimalSeparator).toBe(',');
+        expect(thousandSeparator).toBe('.');
+      });
+
+      it(`should return default separators if language param is invalid.`, () => {
+        const { decimalSeparator, thousandSeparator } = service.getNumberSeparators('error');
+        expect(decimalSeparator).toBe(',');
+        expect(thousandSeparator).toBe('.');
+      });
+    });
   });
 });
