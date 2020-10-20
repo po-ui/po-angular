@@ -13,9 +13,17 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   help: string;
   icon: string;
   label: string;
+  locale: string;
   placeholder: string;
   properties: Array<string>;
   thousandMaxlength: number;
+
+  public readonly localeOptions: Array<PoSelectOption> = [
+    { value: 'pt', label: 'Portuguese' },
+    { value: 'en', label: 'English' },
+    { value: 'ru', label: 'Russian' },
+    { value: 'es', label: 'Spanish' }
+  ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
     { value: 'po-icon-cart', label: 'po-icon-cart' },
@@ -55,6 +63,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
     this.help = undefined;
     this.icon = undefined;
     this.label = undefined;
+    this.locale = undefined;
     this.placeholder = '';
     this.thousandMaxlength = undefined;
 

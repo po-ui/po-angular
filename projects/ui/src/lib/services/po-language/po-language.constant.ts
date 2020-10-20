@@ -1,4 +1,4 @@
-import { PoLanguage } from './po-language.interface';
+import { PoLanguage, PoNumberSeparator } from './po-language.interface';
 
 /**
  * @description
@@ -42,3 +42,37 @@ export const poLocales = poLanguageDefault.map(language => language.language);
  * @usedBy PoI18nModule
  */
 export const poLocaleDefault = 'pt';
+
+/**
+ * @description
+ *
+ * <a id="poLocaleDecimalSeparatorList"></a>
+ *
+ *
+ * A constante poLocaleDecimalSeparatorList possui os separadores de decimal por linguagens de suporte padrão do Po-UI
+ *
+ * @usedBy PoI18nModule
+ */
+export const poLocaleDecimalSeparatorList: Array<PoNumberSeparator> = [
+  { separator: '.', language: 'en' },
+  { separator: ',', language: 'es' },
+  { separator: ',', language: 'pt' },
+  { separator: ',', language: 'ru' }
+];
+
+/**
+ * @description
+ *
+ * <a id="poLocaleDecimalSeparatorList"></a>
+ *
+ *
+ * A constante poLocaleDecimalSeparatorList possui os separadores de decimal por linguagens de suporte padrão do Po-UI
+ *
+ * @usedBy PoI18nModule
+ */
+export const poLocaleThousandSeparatorList: Array<PoNumberSeparator> = [
+  { separator: ',', language: 'en' },
+  { separator: '.', language: 'es' },
+  { separator: '.', language: 'pt' },
+  { separator: ' ', language: 'ru' }
+];

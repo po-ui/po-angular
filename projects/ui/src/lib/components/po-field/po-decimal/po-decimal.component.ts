@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToInt } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
@@ -65,21 +65,22 @@ const poDecimalTotalLengthLimit = 16;
     }
   ]
 })
-export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit {
+export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit {
   private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
   private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
+  private _locale?: string;
 
-  private decimalSeparator: string = ',';
+  private decimalSeparator: string;
   private fireChange: boolean = false;
   private isKeyboardAndroid: boolean = false;
   private minusSign: string = '-';
   private oldDotsLength = null;
-  private thousandSeparator: string = '.';
+  private thousandSeparator: string;
   private valueBeforeChange: any;
 
   private regex = {
-    thousand: new RegExp('\\' + '.', 'g'),
-    decimal: new RegExp('\\' + ',', 'g')
+    thousand: new RegExp('\\' + ',', 'g'),
+    decimal: new RegExp('\\' + '.', 'g')
   };
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
@@ -157,9 +158,39 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return this._thousandMaxlength;
   }
 
-  constructor(private el: ElementRef) {
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Informa o locale(país) para a formatação do valor.
+   * Por padrão o valor será configurado segundo a o módulo [`I18n`](documentation/po-i18n)
+   *
+   * > Para ver quais linguagens suportadas acesse [`I18n`](documentation/po-i18n)
+   *
+   */
+  @Input('p-locale') set locale(locale: string) {
+    this._locale = locale;
+    this.setNumbersSeparators();
+  }
+
+  constructor(private el: ElementRef, private poLanguageService: PoLanguageService) {
     super();
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
+  }
+
+  ngOnInit() {
+    this.setNumbersSeparators();
+  }
+
+  setNumbersSeparators() {
+    const { decimalSeparator, thousandSeparator } = this.poLanguageService.getNumberSeparators(this._locale);
+    this.decimalSeparator = decimalSeparator;
+    this.thousandSeparator = thousandSeparator;
+    this.regex = {
+      thousand: new RegExp('\\' + thousandSeparator, 'g'),
+      decimal: new RegExp('\\' + decimalSeparator, 'g')
+    };
   }
 
   ngAfterViewInit() {
@@ -211,7 +242,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const value = event.target.value;
 
     if (value) {
-      if (this.hasLetters(value) || this.containsMoreThanOneComma(value)) {
+      if (this.hasLetters(value) || this.containsMoreThanOneDecimalSeparator(value)) {
         this.setViewValue('');
         this.callOnChange(undefined);
         return;
@@ -312,7 +343,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     }
   }
 
-  // reponsável por adicionar 0 antes da virgula (decimalSeparator).
+  // responsável por adicionar 0 antes da virgula (decimalSeparator).
   private addZeroBefore(value) {
     const isDecimalSeparator = value === this.decimalSeparator;
 
@@ -323,8 +354,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return value.includes(this.decimalSeparator);
   }
 
-  private containsMoreThanOneComma(value: string = '') {
-    const foundComma = value.match(/,/g);
+  private containsMoreThanOneDecimalSeparator(value: string = '') {
+    const foundComma = value.match(this.regex.decimal);
 
     return !!(foundComma && foundComma.length > 1);
   }
@@ -349,11 +380,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     // 12.345,12345 (correto)
 
     if (value.match(this.regex.decimal)) {
-      const regex = new RegExp('(\\d)(?=(\\d{3})+(?!\\d),)', 'g');
-      return value.toString().replace(regex, '$1.');
+      const regex = new RegExp(`(\\d)(?=(\\d{3})+(?!\\d)${this.decimalSeparator})`, 'g');
+      return value.toString().replace(regex, `$1${this.thousandSeparator}`);
     }
 
-    return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, `$1${this.thousandSeparator}`);
   }
 
   private formatToModelValue(value: string) {
@@ -374,15 +405,15 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
     numberValue = Number(value).toFixed(this.decimalsLength);
 
-    valueBeforeDot = this.getValueBeforeSeparator(numberValue, this.thousandSeparator);
-    valueAfterDot = this.getValueAfterSeparator(numberValue, this.thousandSeparator);
+    valueBeforeDot = this.getValueBeforeSeparator(numberValue, '.');
+    valueAfterDot = this.getValueAfterSeparator(numberValue, '.');
 
     formatedNumber = this.formatMask(valueBeforeDot);
 
     if (this.decimalsLength === 0) {
       return formatedNumber;
     } else {
-      return formatedNumber + this.decimalSeparator + valueAfterDot;
+      return `${formatedNumber}${this.decimalSeparator}${valueAfterDot}`;
     }
   }
 
@@ -522,7 +553,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   private replaceCommaToDot(value: string = '') {
-    return value.toString().replace(this.regex.decimal, '.');
+    if (this.decimalSeparator === ',') {
+      value = value.toString().replace(this.regex.decimal, '.');
+    }
+
+    return value;
   }
 
   private setCursorInput(event, selectionStart, selectionEnd) {

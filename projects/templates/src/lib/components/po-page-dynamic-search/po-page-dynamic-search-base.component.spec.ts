@@ -27,7 +27,7 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
   const languageService = new PoLanguageService();
 
   beforeEach(() => {
-    component = new MockComponent(languageService);
+    component = new MockComponent(<any>languageService);
   });
 
   it('should be created', () => {
