@@ -1,6 +1,8 @@
 import { AfterContentInit, Component, OnChanges, Renderer2, SimpleChange, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { PoLanguageService } from './../../../services/po-language/po-language.service';
+
 import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoPageAction } from '../po-page-action.interface';
 
@@ -38,8 +40,13 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
 
   private maxWidthMobile: number = 480;
 
-  constructor(viewRef: ViewContainerRef, private renderer: Renderer2, private router: Router) {
-    super();
+  constructor(
+    viewRef: ViewContainerRef,
+    languageService: PoLanguageService,
+    private renderer: Renderer2,
+    private router: Router
+  ) {
+    super(languageService);
   }
 
   public ngAfterContentInit(): void {

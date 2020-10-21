@@ -4,7 +4,7 @@ import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
 import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 import { PoNotificationService } from '@po-ui/ng-components';
-import { PoPageAction } from '@po-ui/ng-components';
+import { PoPageAction, PoPageDefaultLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-default-labs',
@@ -16,6 +16,8 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   breadcrumb: PoBreadcrumb;
   breadcrumbItem: PoBreadcrumbItem;
   breadcrumbParams: any;
+  customLiterals: PoPageDefaultLiterals;
+  literals: string;
   title: string;
 
   public readonly actionOptions: Array<PoCheckboxGroupOption> = [
@@ -67,11 +69,20 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     this.breadcrumbParams = {};
   }
 
+  changeLiterals() {
+    try {
+      this.customLiterals = JSON.parse(this.literals);
+    } catch {
+      this.customLiterals = undefined;
+    }
+  }
+
   restore() {
     this.actions = [];
     this.breadcrumb = { items: [] };
     this.breadcrumbItem = { label: undefined, link: undefined };
     this.breadcrumbParams = {};
+    this.literals = '';
     this.title = 'PO Page Default';
     this.restoreActionForm();
   }

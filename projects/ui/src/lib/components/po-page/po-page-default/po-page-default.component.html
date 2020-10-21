@@ -3,7 +3,11 @@
   <po-page-header *ngIf="hasPageHeader()" [p-breadcrumb]="breadcrumb" [p-title]="title">
     <!-- OPERATIONS -->
     <div class="po-page-header-actions">
-      <po-dropdown *ngIf="actions.length > limitPrimaryActions" p-label="Outras ações" [p-actions]="dropdownActions">
+      <po-dropdown
+        *ngIf="actions.length > limitPrimaryActions"
+        [p-label]="literals.otherActions"
+        [p-actions]="dropdownActions"
+      >
       </po-dropdown>
 
       <po-button
