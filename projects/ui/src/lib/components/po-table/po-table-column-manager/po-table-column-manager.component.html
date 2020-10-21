@@ -1,4 +1,4 @@
-<po-popover #popover *ngIf="target" [p-target]="target" p-position="bottom-left">
+<po-popover #popover *ngIf="target" [p-target]="target" p-position="bottom-left" (p-close)="emitVisibleColumns()">
   <div class="po-table-column-manager-header">
     <div class="po-table-column-manager-header-title">{{ literals.columnsManager }}</div>
 

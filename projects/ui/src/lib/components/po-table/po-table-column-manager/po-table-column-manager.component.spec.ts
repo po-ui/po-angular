@@ -170,6 +170,167 @@ describe('PoTableColumnManagerComponent:', () => {
       expect(component.visibleColumnsChange.emit).toHaveBeenCalledWith(visibleColumnsChange);
     });
 
+    it(`onChangeVisibleColumns: should call 'updatesControlValues'`, () => {
+      spyOn(component, <any>'updatesControlValues');
+      const checkedColumns = ['initial'];
+
+      component.onChangeVisibleColumns(checkedColumns);
+
+      expect(component['updatesControlValues']).toHaveBeenCalledWith(checkedColumns);
+    });
+
+    it(`updatesControlValues: should set 'lastValueCheckedColumns' with 'checkedColumns' if 'lastValueCheckedColumns' is 'undefined'`, () => {
+      component['lastValueCheckedColumns'] = undefined;
+      const checkedColumns = ['initial'];
+
+      component['updatesControlValues'](checkedColumns);
+
+      expect(component['lastValueCheckedColumns']).toEqual(checkedColumns);
+    });
+
+    it(`updatesControlValues: should set 'selectedColumns' with 'checkedColumns' if 'lastValueCheckedColumns' isn't 'undefined'`, () => {
+      component['lastValueCheckedColumns'] = ['teste'];
+      const checkedColumns = ['initial'];
+
+      component['updatesControlValues'](checkedColumns);
+
+      expect(component['selectedColumns']).toEqual(checkedColumns);
+    });
+
+    it(`updatesControlValues: shouldn't set 'selectedColumns' with 'checkedColumns' if 'lastValueCheckedColumns' and 'checkedColumns' are 'undefined'`, () => {
+      component['lastValueCheckedColumns'] = undefined;
+      const checkedColumns = undefined;
+
+      component['updatesControlValues'](checkedColumns);
+
+      expect(component['selectedColumns']).toEqual(undefined);
+    });
+
+    it(`emitVisibleColumns: should set 'lastEmittedValue' if 'isUpdate' is true`, () => {
+      spyOn(component.changeVisibleColumns, 'emit');
+      spyOn(component, <any>'isUpdate').and.returnValue(true);
+      component['selectedColumns'] = ['initial'];
+
+      component.emitVisibleColumns();
+
+      expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(component['selectedColumns']);
+      expect(component['lastEmittedValue']).toEqual(['initial']);
+    });
+
+    it(`emitVisibleColumns: should set 'lastEmittedValue' if 'isFirstTime' is true`, () => {
+      spyOn(component.changeVisibleColumns, 'emit');
+      spyOn(component, <any>'isUpdate').and.returnValue(false);
+      spyOn(component, <any>'isFirstTime').and.returnValue(true);
+      component['selectedColumns'] = ['initial'];
+
+      component.emitVisibleColumns();
+
+      expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(component['selectedColumns']);
+      expect(component['lastEmittedValue']).toEqual(['initial']);
+    });
+
+    it(`isUpdate: should return true if it's an update`, () => {
+      spyOn(component, <any>'columnsAreEquals').and.returnValue(false);
+      component['selectedColumns'] = ['initial'];
+      component['lastEmittedValue'] = ['teste'];
+
+      const result = component['isUpdate'](component['selectedColumns'], component['lastEmittedValue']);
+
+      expect(result).toBeTrue();
+    });
+
+    it(`isUpdate: should return true if it's an update and 'columnsAreEquals' is false`, () => {
+      spyOn(component, <any>'columnsAreEquals').and.returnValue(false);
+      component['selectedColumns'] = ['initial', 'teste'];
+      component['lastEmittedValue'] = ['teste', 'initial'];
+
+      const result = component['isUpdate'](component['selectedColumns'], component['lastEmittedValue']);
+
+      expect(result).toBeTrue();
+    });
+
+    it(`isUpdate: should return false if 'columnsAreEquals' is true`, () => {
+      spyOn(component, <any>'columnsAreEquals').and.returnValue(true);
+      component['selectedColumns'] = ['initial', 'teste'];
+      component['lastEmittedValue'] = ['initial', 'teste'];
+
+      const result = component['isUpdate'](component['selectedColumns'], component['lastEmittedValue']);
+
+      expect(result).toBeFalse();
+    });
+
+    it(`isFirstTime: should return true if it's a first access`, () => {
+      spyOn(component, <any>'columnsAreEquals').and.returnValue(false);
+      component['selectedColumns'] = ['initial'];
+      component['lastValueCheckedColumns'] = ['teste'];
+      component['lastEmittedValue'] = undefined;
+
+      const result = component['isFirstTime'](
+        component['selectedColumns'],
+        component['lastEmittedValue'],
+        component['lastValueCheckedColumns']
+      );
+
+      expect(result).toBeTrue();
+    });
+
+    it(`isFirstTime: should return false if 'columnsAreEquals' is true`, () => {
+      spyOn(component, <any>'columnsAreEquals').and.returnValue(true);
+      component['selectedColumns'] = ['initial'];
+      component['lastValueCheckedColumns'] = ['initial'];
+      component['lastEmittedValue'] = undefined;
+
+      const result = component['isFirstTime'](
+        component['selectedColumns'],
+        component['lastEmittedValue'],
+        component['lastValueCheckedColumns']
+      );
+
+      expect(result).toBeFalse();
+    });
+
+    it(`isFirstTime: should return true if 'columnsAreEquals' is false`, () => {
+      spyOn(component, <any>'columnsAreEquals').and.returnValue(false);
+      component['selectedColumns'] = ['initial', 'teste'];
+      component['lastValueCheckedColumns'] = ['teste', 'initial'];
+      component['lastEmittedValue'] = undefined;
+
+      const result = component['isFirstTime'](
+        component['selectedColumns'],
+        component['lastEmittedValue'],
+        component['lastValueCheckedColumns']
+      );
+
+      expect(result).toBeTrue();
+    });
+
+    it(`columnsAreEquals: should return true if the current value is equal to the old value`, () => {
+      const oldValue = ['initial', 'teste'];
+      const newValue = ['teste', 'initial'];
+
+      const result = component['columnsAreEquals'](oldValue, newValue);
+
+      expect(result).toBeTrue();
+    });
+
+    it(`columnsAreEquals: should return false if the current value is different from the old value`, () => {
+      const oldValue = ['initial', 'teste'];
+      const newValue = ['initial'];
+
+      const result = component['columnsAreEquals'](oldValue, newValue);
+
+      expect(result).toBeFalse();
+    });
+
+    it(`columnsAreEquals: should return false if 'oldValue' is undefined`, () => {
+      const oldValue = undefined;
+      const newValue = ['initial'];
+
+      const result = component['columnsAreEquals'](oldValue, newValue);
+
+      expect(result).toBeFalsy();
+    });
+
     it('restore: should call `updateColumnsOptions` with `defaultColumns`', () => {
       spyOn(component, <any>'updateColumnsOptions');
 

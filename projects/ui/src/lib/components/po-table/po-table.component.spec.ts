@@ -1521,6 +1521,15 @@ describe('PoTableComponent:', () => {
 
       expect(spyStopPropagation).not.toHaveBeenCalled();
     });
+
+    it('onChangeVisibleColumns: should call `changeVisibleColumns.emit`', () => {
+      spyOn(component.changeVisibleColumns, 'emit');
+      const fakeColumns = ['name', 'age'];
+
+      component.onChangeVisibleColumns(fakeColumns);
+
+      expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeColumns);
+    });
   });
 
   describe('Templates:', () => {
