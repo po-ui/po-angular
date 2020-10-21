@@ -1,5 +1,7 @@
 import { Directive } from '@angular/core';
 
+import { fakeAsync, tick } from '@angular/core/testing';
+
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import * as UtilFunctions from './../../../utils/util';
@@ -15,8 +17,13 @@ class PoPageListComponent extends PoPageListBaseComponent {
 }
 
 describe('PoPageListBaseComponent:', () => {
-  const languageService = new PoLanguageService();
-  const component = new PoPageListComponent(languageService);
+  let languageService: PoLanguageService;
+  let component: PoPageListComponent;
+
+  beforeEach(() => {
+    languageService = new PoLanguageService();
+    component = new PoPageListComponent(languageService);
+  });
 
   it('should be created', () => {
     expect(component instanceof PoPageListBaseComponent).toBeTruthy();
@@ -108,5 +115,31 @@ describe('PoPageListBaseComponent:', () => {
 
       expect(component.disclaimerGroup).toBeTruthy();
     });
+
+    it('p-actions: should update property `p-actions` to empty if is invalid values.', () => {
+      const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', [], {}];
+
+      expectPropertiesValues(component, 'actions', invalidValues, []);
+    });
+
+    it('p-actions: should update property `p-actions` if is valid values.', () => {
+      const validValues = [[{ label: 'Share', icon: 'po-icon-share' }]];
+
+      expectPropertiesValues(component, 'actions', validValues, validValues);
+    });
+
+    it('p-title: should call recalculateHeaderSize', fakeAsync(() => {
+      component.poPageContent = <any>{
+        recalculateHeaderSize: () => {}
+      };
+
+      spyOn(component.poPageContent, 'recalculateHeaderSize');
+
+      component.title = 'teste';
+
+      tick();
+
+      expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
+    }));
   });
 });

@@ -1,11 +1,12 @@
-import { Input, Directive } from '@angular/core';
+import { Input, Directive, ViewChild } from '@angular/core';
 
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoDisclaimerGroup } from '../../po-disclaimer-group/po-disclaimer-group.interface';
-import { PoPageDefaultBaseComponent } from '../po-page-default/po-page-default-base.component';
+import { PoPageAction } from '../po-page-action.interface';
+import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageFilter } from './../po-page-filter.interface';
 import { PoPageListLiterals } from './po-page-list-literals.interface';
 
@@ -38,12 +39,32 @@ export const poPageListLiteralsDefault = {
  * [`po-disclaimer-group`](/documentation/po-disclaimer-group).
  */
 @Directive()
-export abstract class PoPageListBaseComponent extends PoPageDefaultBaseComponent {
+export abstract class PoPageListBaseComponent {
+  private _actions?: Array<PoPageAction> = [];
   private _disclaimerGroup?: PoDisclaimerGroup;
   private _literals: PoPageListLiterals;
+  private _title: string;
 
   protected language: string;
   protected resizeListener: () => void;
+
+  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Nesta propriedade deve ser definido um array de objetos que implementam a interface `PoPageAction`.
+   */
+  @Input('p-actions') set actions(actions: Array<PoPageAction>) {
+    this._actions = Array.isArray(actions) ? actions : [];
+    this.setDropdownActions();
+  }
+
+  get actions(): Array<PoPageAction> {
+    return this._actions;
+  }
 
   /**
    * @optional
@@ -129,9 +150,20 @@ export abstract class PoPageListBaseComponent extends PoPageDefaultBaseComponent
     return this._literals || poPageListLiteralsDefault[this.language];
   }
 
-  constructor(languageService: PoLanguageService) {
-    super();
+  /** Título da página. */
+  @Input('p-title') set title(title: string) {
+    this._title = title;
+    setTimeout(() => this.poPageContent.recalculateHeaderSize());
+  }
 
+  get title() {
+    return this._title;
+  }
+
+  constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
+
+  // Seta a lista de ações no dropdown.
+  abstract setDropdownActions();
 }
