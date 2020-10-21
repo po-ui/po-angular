@@ -1,5 +1,6 @@
 export * from './po-page-default/po-page-default.component';
 export * from './po-page-default/po-page-default.interface';
+export * from './po-page-default/po-page-default-literals.interface';
 export * from './po-page-detail/po-page-detail-literals.interface';
 export * from './po-page-detail/po-page-detail.component';
 export * from './po-page-edit/po-page-edit-literals.interface';
