@@ -1,4 +1,4 @@
-import { ElementRef, Input, Directive } from '@angular/core';
+import { ElementRef, EventEmitter, Input, Directive, Output } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -135,6 +135,9 @@ export class PoPopoverBaseComponent {
   get trigger(): string {
     return this._trigger;
   }
+
+  /** Evento disparado ao fechar o popover. */
+  @Output('p-close') closePopover = new EventEmitter<any>();
 
   protected clickoutListener: () => void;
   protected mouseEnterListener: () => void;
