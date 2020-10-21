@@ -203,12 +203,14 @@ describe('PoPopoverComponent:', () => {
     expect(fakeThis.setElementsControlPosition).toHaveBeenCalled();
   }));
 
-  it('should close popover', () => {
+  it('should close popover and call `closePopover.emit`', () => {
+    spyOn(component.closePopover, 'emit');
     component.isHidden = false;
 
     component.close();
 
     expect(component.isHidden).toBeTruthy();
+    expect(component.closePopover.emit).toHaveBeenCalled();
   });
 
   it('should set opacity', () => {

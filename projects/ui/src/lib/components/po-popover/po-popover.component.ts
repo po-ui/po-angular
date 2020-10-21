@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  Output,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 
 import { PoControlPositionService } from './../../services/po-control-position/po-control-position.service';
 import { PoPopoverBaseComponent } from './po-popover-base.component';
@@ -55,6 +64,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
   close(): void {
     this.isHidden = true;
+    this.closePopover.emit();
   }
 
   debounceResize() {
