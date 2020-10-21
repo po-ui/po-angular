@@ -53,6 +53,9 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
   visibleColumns: Array<string> = [];
 
   private defaultColumns: Array<PoTableColumn> = [];
+  private lastEmittedValue: Array<string>;
+  private lastValueCheckedColumns: Array<string>;
+  private selectedColumns: Array<string>;
   private resizeListener: () => void;
 
   @Input('p-columns') columns: Array<PoTableColumn> = [];
@@ -68,6 +71,8 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
   @Input('p-target') target: ElementRef;
 
   @Output('p-visible-columns-change') visibleColumnsChange = new EventEmitter<Array<PoTableColumn>>();
+
+  @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
 
   @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
 
@@ -105,6 +110,9 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
   }
 
   onChangeVisibleColumns(checkedColumns: Array<string>) {
+    // controla quando a alteração das colunas deve ser emitida para o dev
+    this.updatesControlValues(checkedColumns);
+
     this.disableColumnsOptions(this.columnsOptions);
 
     const visibleTableColumns = this.getVisibleTableColumns(checkedColumns);
@@ -112,8 +120,58 @@ export class PoTableColumnManagerComponent implements OnInit, OnChanges, OnDestr
     this.visibleColumnsChange.emit(visibleTableColumns);
   }
 
+  emitVisibleColumns() {
+    if (this.isUpdate(this.selectedColumns, this.lastEmittedValue)) {
+      this.lastEmittedValue = [...this.selectedColumns];
+      this.changeVisibleColumns.emit(this.selectedColumns);
+    } else if (this.isFirstTime(this.selectedColumns, this.lastEmittedValue, this.lastValueCheckedColumns)) {
+      this.lastEmittedValue = [...this.selectedColumns];
+      this.changeVisibleColumns.emit(this.selectedColumns);
+    }
+  }
+
   restore() {
     this.updateColumnsOptions(this.defaultColumns);
+  }
+
+  private updatesControlValues(checkedColumns: Array<string>) {
+    if (!this.lastValueCheckedColumns && checkedColumns) {
+      this.lastValueCheckedColumns = checkedColumns;
+    } else {
+      if (this.lastValueCheckedColumns && checkedColumns && this.lastValueCheckedColumns !== checkedColumns) {
+        this.selectedColumns = checkedColumns;
+      }
+    }
+  }
+
+  private isUpdate(selectedColumns: Array<string>, lastEmittedValue: Array<string>): boolean {
+    return selectedColumns && lastEmittedValue && !this.columnsAreEquals(lastEmittedValue, selectedColumns);
+  }
+
+  private isFirstTime(
+    selectedColumns: Array<string>,
+    lastEmittedValue: Array<string>,
+    lastValueCheckedColumns: Array<string>
+  ): boolean {
+    return (
+      selectedColumns &&
+      lastValueCheckedColumns &&
+      !lastEmittedValue &&
+      !this.columnsAreEquals(lastValueCheckedColumns, selectedColumns)
+    );
+  }
+
+  private columnsAreEquals(oldValue: Array<string>, newValue: Array<string>): boolean {
+    if (oldValue && newValue) {
+      const oldSortedValue = oldValue.slice().sort();
+      return (
+        newValue.length === oldSortedValue.length &&
+        newValue
+          .slice()
+          .sort()
+          .every((value, index) => value === oldSortedValue[index])
+      );
+    }
   }
 
   // desabilitará as colunas, que não estiverem selecionadas, após exeder o numero maximo de colunas.

@@ -310,6 +310,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
   }
 
+  onChangeVisibleColumns(columns: Array<string>) {
+    this.changeVisibleColumns.emit(columns);
+  }
+
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
 

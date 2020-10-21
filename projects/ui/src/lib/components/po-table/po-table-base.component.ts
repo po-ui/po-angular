@@ -523,6 +523,17 @@ export abstract class PoTableBaseComponent implements OnChanges {
    */
   @Output('p-unselected') unselected: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao alterar as colunas visíveis no gerenciador de colunas e fechar o popover do gerenciador.
+   *
+   * O componente envia como parâmetro um array de string com as colunas visíveis atualizadas.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   */
+  @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
+
   get hasColumns(): boolean {
     return this.columns && this.columns.length > 0;
   }
