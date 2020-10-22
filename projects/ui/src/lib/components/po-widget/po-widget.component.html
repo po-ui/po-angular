@@ -8,7 +8,12 @@
   (click)="onClick($event)"
 >
   <div *ngIf="hasTitleHelpOrSetting()" class="po-widget-header">
-    <span *ngIf="showTitleAction; else noTitleAction" class="po-widget-title-action" (click)="runTitleAction($event)">
+    <span
+      *ngIf="showTitleAction; else noTitleAction"
+      class="po-widget-title-action"
+      (click)="runTitleAction($event)"
+      [title]="hint"
+    >
       {{ title }}
     </span>
     <ng-template #noTitleAction>{{ title }}</ng-template>

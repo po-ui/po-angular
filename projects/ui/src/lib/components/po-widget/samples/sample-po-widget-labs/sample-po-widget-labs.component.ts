@@ -16,6 +16,7 @@ export class SamplePoWidgetLabsComponent implements OnInit {
   properties: Array<string>;
   secondaryLabel: string;
   title: string;
+  hint: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
@@ -37,6 +38,7 @@ export class SamplePoWidgetLabsComponent implements OnInit {
     this.content = '';
     this.height = undefined;
     this.help = '';
+    this.hint = '';
     this.title = undefined;
     this.primaryLabel = undefined;
     this.properties = [];

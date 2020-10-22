@@ -123,6 +123,18 @@ describe('PoWidgetBaseComponent:', () => {
       expect(component.setHeight).toHaveBeenCalled();
     });
 
+    it('p-hint: should update property with valid values.', () => {
+      const validValues = ['test', 'value', 'false', '0'];
+
+      expectPropertiesValues(component, 'hint', validValues, validValues);
+    });
+
+    it('p-hint: should update property with empty string when invalid values.', () => {
+      const validValues = [3, null, undefined];
+
+      expectPropertiesValues(component, 'hint', validValues, '');
+    });
+
     it('p-disabled: should update property with true if valid values and call `onDisabled.emit`', () => {
       const validValues = [true, '', 'true'];
 

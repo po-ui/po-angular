@@ -25,6 +25,7 @@ export abstract class PoWidgetBaseComponent {
   private _primary?: boolean = false;
   private _primaryLabel?: string;
   private _title?: string;
+  private _hint?: string;
 
   containerHeight?: string = 'auto';
 
@@ -172,6 +173,23 @@ export abstract class PoWidgetBaseComponent {
 
   get title(): string {
     return this._title;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Dica do titulo do `po-widget`.
+   *
+   * @default `false`
+   */
+  @Input('p-hint') set hint(value: string) {
+    this._hint = isTypeof(value, 'string') ? value : '';
+  }
+
+  get hint(): string {
+    return this._hint;
   }
 
   /**
