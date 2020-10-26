@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-number-labs',
@@ -10,6 +10,7 @@ export class SamplePoNumberLabsComponent implements OnInit {
   event: string;
   messageErrorPattern: string;
   help: string;
+  icon: string;
   label: string;
   max: number;
   maxlength: number;
@@ -19,6 +20,12 @@ export class SamplePoNumberLabsComponent implements OnInit {
   placeholder: string;
   properties: Array<string>;
   step: string;
+
+  public readonly iconOptions: Array<PoSelectOption> = [
+    { value: 'po-icon-finance', label: 'po-icon-finance' },
+    { value: 'po-icon-calculator', label: 'po-icon-calculator' },
+    { value: 'po-icon-finance-bitcoin', label: 'po-icon-finance-bitcoin' }
+  ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
@@ -48,6 +55,7 @@ export class SamplePoNumberLabsComponent implements OnInit {
     this.label = undefined;
     this.placeholder = '';
     this.help = '';
+    this.icon = '';
     this.step = undefined;
     this.properties = [];
   }

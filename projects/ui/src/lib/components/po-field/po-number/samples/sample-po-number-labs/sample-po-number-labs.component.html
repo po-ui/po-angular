@@ -6,6 +6,7 @@
   [p-disabled]="properties.includes('disabled')"
   [p-error-pattern]="messageErrorPattern"
   [p-help]="help"
+  [p-icon]="icon"
   [p-label]="label"
   [p-max]="max"
   [p-maxlength]="maxlength"
@@ -67,6 +68,11 @@
   <div class="po-row">
     <po-number class="po-md-6" name="step" [(ngModel)]="step" p-clean p-label="Step"> </po-number>
 
+    <po-select class="po-lg-6" name="icon" [(ngModel)]="icon" p-clean p-label="Icon" [p-options]="iconOptions">
+    </po-select>
+  </div>
+
+  <div class="po-row">
     <po-checkbox-group
       class="po-md-6"
       name="properties"
