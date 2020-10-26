@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.10.0"></a>
+# [3.10.0](https://github.com/po-ui/po-angular/compare/v3.9.2...v3.10.0) (2020-10-26)
+
+
+### Features
+
+* **button:** adiciona propriedade `p-auto-focus` ([710033a](https://github.com/po-ui/po-angular/commit/710033a))
+* **decimal:** cria propriedade `p-locale` para definição de formatação ([03dd53d](https://github.com/po-ui/po-angular/commit/03dd53d))
+* **page-default:** define literais para idiomas suportados ([1824602](https://github.com/po-ui/po-angular/commit/1824602))
+* **popover:** inclui evento `p-close` ao fechar ([6134b83](https://github.com/po-ui/po-angular/commit/6134b83))
+* **table:** inclui evento `p-change-visible-columns` ([2a892f4](https://github.com/po-ui/po-angular/commit/2a892f4))
+
+
+
 ## [3.9.2](https://github.com/po-ui/po-angular/compare/v3.9.1...v3.9.2) (2020-10-19)
 
 
