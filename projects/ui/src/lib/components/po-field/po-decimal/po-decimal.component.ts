@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+
+import { minFailed, maxFailed } from '../validators';
+
 import { convertToInt } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
@@ -174,6 +177,22 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this.setNumbersSeparators();
   }
 
+  /** Valor mínimo. */
+  min?: number;
+  @Input('p-min') set setMin(min: string) {
+    const parsedFloat = parseFloat(min);
+    this.min = !isNaN(parsedFloat) ? parsedFloat : undefined;
+    this.validateModel();
+  }
+
+  /** Valor máximo. */
+  max?: number;
+  @Input('p-max') set setMax(max: string) {
+    const parsedFloat = parseFloat(max);
+    this.max = !isNaN(parsedFloat) ? parsedFloat : undefined;
+    this.validateModel();
+  }
+
   constructor(private el: ElementRef, private poLanguageService: PoLanguageService) {
     super();
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
@@ -203,7 +222,26 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this.controlChangeEmitter();
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any } {
+  extraValidation(abstractControl: AbstractControl): { [key: string]: any } {
+    // Verifica se já possui algum error pattern padrão.
+    this.errorPattern = this.errorPattern !== 'Valor Inválido' ? this.errorPattern : '';
+
+    if (minFailed(this.min, abstractControl.value)) {
+      return {
+        min: {
+          valid: false
+        }
+      };
+    }
+
+    if (maxFailed(this.max, abstractControl.value)) {
+      return {
+        max: {
+          valid: false
+        }
+      };
+    }
+
     return null;
   }
 
@@ -341,6 +379,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     if (value) {
       this.change.emit(value);
     }
+  }
+
+  getErrorPatternMessage() {
+    return this.errorPattern !== '' && this.hasInvalidClass() ? this.errorPattern : '';
   }
 
   // responsável por adicionar 0 antes da virgula (decimalSeparator).

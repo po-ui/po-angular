@@ -1,6 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { FormControl } from '@angular/forms';
 
-import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
 import { PoCleanComponent } from './../po-clean/po-clean.component';
 import { PoDecimalComponent } from './po-decimal.component';
@@ -51,6 +52,26 @@ describe('PoDecimalComponent:', () => {
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should be max and min', () => {
+    expectSettersMethod(component, 'setMax', '', 'max', undefined);
+    expectSettersMethod(component, 'setMax', '10', 'max', 10);
+
+    expectSettersMethod(component, 'setMin', '', 'min', undefined);
+    expectSettersMethod(component, 'setMin', '10', 'min', 10);
+  });
+
+  it('should call minFailed', () => {
+    component.min = 4;
+
+    expect(component.validate(new FormControl('2'))).not.toBeNull();
+  });
+
+  it('should call maxFailed', () => {
+    component.max = 5;
+
+    expect(component.validate(new FormControl('10'))).not.toBeNull();
   });
 
   describe('Properties:', () => {
@@ -311,7 +332,11 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should return null in extraValidation()', () => {
-    expect(component.extraValidation(null)).toBeNull();
+    component.errorPattern = 'Valor Inválido';
+    component.min = 0;
+    component.max = 0;
+
+    expect(component.extraValidation(new FormControl(null))).toBeNull();
   });
 
   it('should have a call getScreenValue method', () => {
@@ -1315,6 +1340,48 @@ describe('PoDecimalComponent:', () => {
 
     it('isValueBetweenAllowed: should return `false` if is value below allowed.', () => {
       expect(component['isValueBetweenAllowed'](-1, 9)).toBe(false);
+    });
+
+    describe('getErrorPatternMessage: ', () => {
+      it('should return errorPattern value if errorPattern has value and containsInvalidClass returns true and show the properly message in template', () => {
+        const fakeThis = {
+          errorPattern: 'erro',
+          hasInvalidClass: () => true
+        };
+
+        expect(component.getErrorPatternMessage.call(fakeThis)).toBe('erro');
+
+        component.errorPattern = 'MENSAGEM DE ERRO';
+        component.hasInvalidClass = () => true;
+        fixture.detectChanges();
+        const content = fixture.debugElement.nativeElement
+          .querySelector('.po-field-container-bottom-text-error')
+          .innerHTML.toString();
+
+        expect(content.indexOf('MENSAGEM DE ERRO') > -1).toBeTruthy();
+      });
+
+      it('should return empty string if errorPattern is empty', () => {
+        component.errorPattern = '';
+
+        const expectedResult = component.getErrorPatternMessage();
+
+        expect(expectedResult).toBe('');
+        expect(fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error')).toBeNull();
+      });
+
+      it('should return empty string if errorPattern has value but containsInvalidClass returns false', () => {
+        component.inputEl.nativeElement.value = '';
+        component.errorPattern = 'error';
+        component.inputEl.nativeElement.classList.add('ng-invalid');
+        component.inputEl.nativeElement.classList.add('ng-dirty');
+        component['invalidInputValueOnBlur'] = false;
+
+        const expectedResult = component.getErrorPatternMessage();
+
+        expect(expectedResult).toBe('');
+        expect(fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error')).toBeNull();
+      });
     });
   });
 

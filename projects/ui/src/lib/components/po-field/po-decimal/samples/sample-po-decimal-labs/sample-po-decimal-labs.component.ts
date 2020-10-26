@@ -17,6 +17,9 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   placeholder: string;
   properties: Array<string>;
   thousandMaxlength: number;
+  errorPattern: string;
+  max: number;
+  min: number;
 
   public readonly localeOptions: Array<PoSelectOption> = [
     { value: 'pt', label: 'Portuguese' },
@@ -66,6 +69,9 @@ export class SamplePoDecimalLabsComponent implements OnInit {
     this.locale = undefined;
     this.placeholder = '';
     this.thousandMaxlength = undefined;
+    this.errorPattern = undefined;
+    this.max = undefined;
+    this.min = undefined;
 
     this.properties = [];
   }
