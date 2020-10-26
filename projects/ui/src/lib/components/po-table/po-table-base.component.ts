@@ -527,7 +527,7 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * @optional
    *
    * @description
-   * Evento disparado ao alterar as colunas visíveis no gerenciador de colunas e fechar o popover do gerenciador.
+   * Evento disparado ao fechar o popover do gerenciador de colunas após alterar as colunas visíveis.
    *
    * O componente envia como parâmetro um array de string com as colunas visíveis atualizadas.
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
