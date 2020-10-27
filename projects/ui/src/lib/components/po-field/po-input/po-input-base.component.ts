@@ -72,6 +72,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * Define a propriedade nativa `autocomplete` do campo como `off`.
    *
+   * > No componente `po-password` será definido como `new-password`.
+   *
    * @default `false`
    */
   @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {

@@ -70,6 +70,10 @@ export class PoPasswordComponent extends PoInputGeneric {
     return this._hidePasswordPeek;
   }
 
+  get autocomplete(): string {
+    return this.noAutocomplete ? 'new-password' : 'on';
+  }
+
   /* istanbul ignore next */
   constructor(el: ElementRef) {
     super(el);

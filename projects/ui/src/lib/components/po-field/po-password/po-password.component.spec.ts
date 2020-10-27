@@ -109,6 +109,18 @@ describe('PoNumberComponent:', () => {
       expect(component.visiblePassword).toBe(true);
       expect(component.type).toEqual(expectedValue);
     });
+
+    it('autocomplete: should return `new-password` if `noAutocomplete` is true', () => {
+      component.noAutocomplete = true;
+
+      expect(component.autocomplete).toBe('new-password');
+    });
+
+    it('autocomplete: should return `on` if `noAutocomplete` is false', () => {
+      component.noAutocomplete = false;
+
+      expect(component.autocomplete).toBe('on');
+    });
   });
 
   describe('Methods:', () => {
