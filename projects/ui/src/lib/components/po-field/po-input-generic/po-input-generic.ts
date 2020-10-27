@@ -14,7 +14,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   valueBeforeChange: any;
   timeoutChange: any;
 
-  get autocomplete() {
+  get autocomplete(): string {
     return this.noAutocomplete ? 'off' : 'on';
   }
 
