@@ -65,6 +65,9 @@ export interface PoDialogConfirmOptions extends PoDialogOptions {
   /** Ação de cancelamento da caixa de diálogo. */
   cancel?: Function;
 
+  /** Ação de fechamento da caixa de diálogo. */
+  close?: Function;
+
   /**
    * Objeto com as literais usadas no `po-dialog` do tipo confirmação.
    *

@@ -22,7 +22,8 @@ export class SamplePoDialogLabsComponent implements OnInit {
   public readonly dialogActionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Ok', value: 'ok' },
     { label: 'Cancel', value: 'cancel' },
-    { label: 'Confirm', value: 'confirm' }
+    { label: 'Confirm', value: 'confirm' },
+    { label: 'Close', value: 'close' }
   ];
 
   public readonly dialogMethodOptions: Array<PoRadioGroupOption> = [
@@ -74,7 +75,8 @@ export class SamplePoDialogLabsComponent implements OnInit {
       title: this.title,
       message: this.message,
       confirm: () => (this.actionOptions.includes('confirm') ? (this.action = 'Confirm') : undefined),
-      cancel: () => (this.actionOptions.includes('cancel') ? (this.action = 'Cancel') : undefined)
+      cancel: () => (this.actionOptions.includes('cancel') ? (this.action = 'Cancel') : undefined),
+      close: () => (this.actionOptions.includes('close') ? (this.action = 'Close') : undefined)
     });
   }
 

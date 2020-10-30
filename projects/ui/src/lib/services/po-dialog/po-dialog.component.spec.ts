@@ -21,7 +21,8 @@ describe('PoDialogComponent:', () => {
     title: 'Title',
     message: 'Message',
     confirm: () => {},
-    cancel: () => {}
+    cancel: () => {},
+    close: () => {}
   };
 
   configureTestSuite(() => {
@@ -99,6 +100,16 @@ describe('PoDialogComponent:', () => {
     fixture.detectChanges();
 
     expect(component.destroy).toHaveBeenCalled();
+  }));
+
+  it('Should call closeAction if has closeAction callback and was closed with X', async(() => {
+    component.closeAction = () => {};
+    spyOn(component, 'closeAction');
+
+    component.poModal.close(true);
+    fixture.detectChanges();
+
+    expect(component.closeAction).toHaveBeenCalled();
   }));
 
   it('should set var configDialog', () => {
@@ -182,7 +193,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`open: should call 'configDialog()' with 'literals.confirm', 'dialogOptions.confirm()', 'literals.cancel',
-        and 'dialogOptions.cancel()' if 'dialogType' is 'PoDialogType.Confirm'.`, () => {
+        'dialogOptions.cancel()', and 'dialogOptions.close()' if 'dialogType' is 'PoDialogType.Confirm'.`, () => {
       component.literalsConfirm = { 'cancel': 'Cancel', 'confirm': 'Confirm' };
 
       spyOn(component, <any>'setDialogLiterals');
@@ -195,7 +206,8 @@ describe('PoDialogComponent:', () => {
         component.literalsConfirm.confirm,
         confirmOptions.confirm,
         component.literalsConfirm.cancel,
-        confirmOptions.cancel
+        confirmOptions.cancel,
+        confirmOptions.close
       );
     });
 
