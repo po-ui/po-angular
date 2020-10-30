@@ -56,6 +56,9 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   // Objeto secondary do poModal
   secondaryAction: PoModalAction;
 
+  // Callback executado ao fechar o poModal
+  closeAction: Function;
+
   // Literais usadas nos botão de alerta do poModal
   literalsAlert: PoDialogAlertLiterals;
 
@@ -75,11 +78,15 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.closeSubscription = this.poModal.onXClosed.subscribe(close => this.destroy());
+    this.closeSubscription = this.poModal.onXClosed.subscribe(close => this.close(true));
   }
 
   // Fecha o poModal
-  close(): void {
+  close(xClosed = false): void {
+    if (xClosed && this.closeAction) {
+      this.closeAction();
+    }
+
     this.poModal.close();
     this.destroy();
   }
@@ -91,7 +98,7 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   }
 
   // Insere os valores recebidos de this.open para o poModal
-  configDialog(primaryLabel?, primaryAction?, secondaryLabel?, secondaryAction?) {
+  configDialog(primaryLabel?, primaryAction?, secondaryLabel?, secondaryAction?, closeAction?) {
     this.primaryAction = {
       label: primaryLabel,
       action: () => {
@@ -113,6 +120,8 @@ export class PoDialogComponent implements OnDestroy, OnInit {
         }
       };
     }
+
+    this.closeAction = closeAction;
   }
 
   // Insere os valores recebidos de po-dialog.service de acordo com o tipo de diálago solicitado
@@ -134,7 +143,8 @@ export class PoDialogComponent implements OnDestroy, OnInit {
           this.literalsConfirm.confirm,
           (<PoDialogConfirmOptions>dialogOptions).confirm,
           this.literalsConfirm.cancel,
-          (<PoDialogConfirmOptions>dialogOptions).cancel
+          (<PoDialogConfirmOptions>dialogOptions).cancel,
+          (<PoDialogConfirmOptions>dialogOptions).close
         );
         break;
       }
