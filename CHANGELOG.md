@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [3.11.0](https://github.com/po-ui/po-angular/compare/v3.10.0...v3.11.0) (2020-11-03)
+
+
+### Bug Fixes
+
+* **page-dynamic-search:** corrige filtro para tipo combo ([ca6bbe0](https://github.com/po-ui/po-angular/commit/ca6bbe0182fda2dea028e2ba92e173bd8622390e))
+
+
+### Features
+
+* **combo:** nova propriedade `p-emit-object-value` ([47659d1](https://github.com/po-ui/po-angular/commit/47659d12860bbec2f832b905e3c8a3dd2c6dcb0f))
+* **dialog:** adiciona o evento `close` ([c55b602](https://github.com/po-ui/po-angular/commit/c55b6027fd295e4d5ad31f22fbd09239091c5261)), closes [#651](https://github.com/po-ui/po-angular/issues/651)
+* **number:** adiciona a propriedade `p-icon` ([00ccb1f](https://github.com/po-ui/po-angular/commit/00ccb1f29db878fafe9688984560dd7ac751f6b4)), closes [#437](https://github.com/po-ui/po-angular/issues/437)
+
+
+
 <a name="3.10.0"></a>
 # [3.10.0](https://github.com/po-ui/po-angular/compare/v3.9.2...v3.10.0) (2020-10-26)
 
