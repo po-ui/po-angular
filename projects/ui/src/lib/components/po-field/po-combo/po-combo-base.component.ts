@@ -1,19 +1,17 @@
+import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
-
-import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { InputBoolean } from '../../../decorators';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
 import { requiredFailed } from '../validators';
-
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
-import { PoComboFilterMode } from './po-combo-filter-mode.enum';
-import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
-import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
+import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { PoComboFilterMode } from './po-combo-filter-mode.enum';
+import { PoComboFilterService } from './po-combo-filter.service';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
@@ -456,6 +454,29 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `false`
    */
   @Input('p-emit-object-value') @InputBoolean() emitObjectValue?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Se falso a seta do dropdown será visível e clicável.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-arrow') @InputBoolean() shouldHideDropDownArrow?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Se verdadeiro as opções de seleção irão ser abertas toda vez que o usuário clicar no componente. Se falso as opções só
+   * aparecerão quando algo for escrito no input.
+   *
+   * @default `true`
+   */
+  @Input('p-open-options-on-click') @InputBoolean() shouldOpenOptionsOnClick?: boolean = true;
 
   /**
    * @optional

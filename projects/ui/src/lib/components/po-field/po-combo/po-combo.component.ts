@@ -12,21 +12,18 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
-
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
-import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-
+import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
+import { PoComboGroup } from './interfaces/po-combo-group.interface';
+import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
-import { PoComboGroup } from './interfaces/po-combo-group.interface';
-import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
 
 const poComboContainerOffset = 8;
@@ -419,6 +416,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       const visibleOption = this.visibleOptions[index];
 
       this.updateSelectedValue(visibleOption, visibleOption.value !== currentViewValue && !this.changeOnEnter);
+    }
+  }
+
+  onInputClick(): void {
+    if (this.shouldOpenOptionsOnClick) {
+      this.toggleComboVisibility();
     }
   }
 

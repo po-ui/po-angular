@@ -15,13 +15,13 @@
       [disabled]="disabled"
       [placeholder]="placeholder"
       [required]="required"
-      (click)="toggleComboVisibility()"
+      (click)="onInputClick()"
       (keyup)="onKeyUp($event)"
       (keyup.enter)="searchOnEnter($event.target.value)"
       (keydown)="onKeyDown($event)"
     />
 
-    <div class="po-field-icon-container-right">
+    <div class="po-field-icon-container-right" [hidden]="shouldHideDropDownArrow">
       <po-clean
         [class.po-field-icon]="!disabled"
         [class.po-field-icon-disabled]="disabled"

@@ -1,22 +1,17 @@
-import { By } from '@angular/platform-browser';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { Observable, throwError } from 'rxjs';
-
-import { changeBrowserInnerWidth, configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoLoadingModule } from '../../po-loading/po-loading.module';
-
-import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
+import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
-
-import { PoComboComponent } from './po-combo.component';
+import { changeBrowserInnerWidth, configureTestSuite } from './../../../util-test/util-expect.spec';
+import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
+import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
-import { PoComboOption } from './interfaces/po-combo-option.interface';
-import { PoCleanComponent } from '../po-clean/po-clean.component';
+import { PoComboComponent } from './po-combo.component';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -373,6 +368,19 @@ describe('PoComboComponent:', () => {
 
     expect(spyAdjustContainerPosition).toHaveBeenCalled();
   }));
+
+  it('should hide the dropdown arrow if `shouldHideDropDownArrow` is true', () => {
+    const componentElement: HTMLElement = fixture.componentInstance.element.nativeElement;
+
+    const fieldIconContainerRight: HTMLElement = componentElement.querySelector('.po-field-icon-container-right');
+
+    expect(fieldIconContainerRight.hidden).toEqual(false);
+
+    component.shouldHideDropDownArrow = true;
+    fixture.detectChanges();
+
+    expect(fieldIconContainerRight.hidden).toEqual(true);
+  });
 
   describe('Methods:', () => {
     const fakeEvent = {
@@ -1558,6 +1566,22 @@ describe('PoComboComponent:', () => {
       const noDataTemplate = nativeElement.querySelector('.po-combo-container-no-data');
 
       expect(noDataTemplate).toBeNull();
+    });
+
+    it('shouldn´t open combo container on click if `shouldOpenOptionsOnClick` is false', () => {
+      component.visibleOptions = [{ label: '1', value: '1' }];
+      component.shouldOpenOptionsOnClick = false;
+
+      fixture.detectChanges();
+
+      const comboInput = nativeElement.querySelector('.po-combo-input');
+      comboInput.dispatchEvent(eventClick);
+
+      fixture.detectChanges();
+
+      const noDataTemplate = nativeElement.querySelector('.po-combo-container');
+
+      expect(noDataTemplate.hidden).toBeTrue();
     });
 
     it('should display `literals.noData` in Spanish if browser language is `es`.', () => {
