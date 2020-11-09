@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.12.0"></a>
+# [3.12.0](https://github.com/po-ui/po-angular/compare/v3.11.0...v3.12.0) (2020-11-09)
+
+
+### Bug Fixes
+
+* **password:** sobrescreve a propriedade autocomplete ([edd2dde](https://github.com/po-ui/po-angular/commit/edd2dde)), closes [#633](https://github.com/po-ui/po-angular/issues/633)
+
+
+### Features
+
+* **chart:** inclui gráfico do tipo linha ([1a9aef5](https://github.com/po-ui/po-angular/commit/1a9aef5))
+
+
+
 # [3.11.0](https://github.com/po-ui/po-angular/compare/v3.10.0...v3.11.0) (2020-11-03)
 
 
