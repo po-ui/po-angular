@@ -107,7 +107,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     const labelActive = nativeElement.querySelector('.po-breadcrumb-favorite-label');
 
     expect(starActive).toBeTruthy();
-    expect(labelActive.innerHTML).toContain('Desfavoritar');
+    expect(labelActive.innerHTML).toContain(component.literals.unfavorite);
   });
 
   it('should show the star and label with status unfavorite', () => {
@@ -118,7 +118,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     fixture.detectChanges();
 
     expect(starActive).toBeFalsy();
-    expect(label.innerHTML).toContain('Favoritar');
+    expect(label.innerHTML).toContain(component.literals.favorite);
   });
 
   describe('Methods: ', () => {
