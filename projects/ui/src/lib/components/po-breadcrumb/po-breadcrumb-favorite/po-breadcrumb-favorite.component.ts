@@ -4,6 +4,26 @@ import { Subscription } from 'rxjs';
 
 import { PoBreadcrumbItem } from './../po-breadcrumb-item.interface';
 import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+
+export const PoBreadcrumbLiterals: Object = {
+  en: <any>{
+    favorite: 'Favorite',
+    unfavorite: 'Unfavorite'
+  },
+  es: <any>{
+    favorite: 'Favor',
+    unfavorite: 'Desfavorecer'
+  },
+  pt: <any>{
+    favorite: 'Favoritar',
+    unfavorite: 'Desfavoritar'
+  },
+  ru: <any>{
+    favorite: 'Любимый',
+    unfavorite: 'Немилость'
+  }
+};
 
 /**
  * @docsPrivate
@@ -12,6 +32,7 @@ import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
  *
  * Componente que renderiza o serviço de favoritar do po-breadcrumb.
  */
+
 @Component({
   selector: 'po-breadcrumb-favorite',
   templateUrl: './po-breadcrumb-favorite.component.html',
@@ -19,6 +40,8 @@ import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
 })
 export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   favorite: boolean = false;
+  literals;
+
   private getSubscription: Subscription;
   private setSubscription: Subscription;
 
@@ -31,7 +54,13 @@ export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   // Parâmetro que será enviado junto com o serviço de favoritar.
   @Input('p-params-service') paramsService: object;
 
-  constructor(private service: PoBreadcrumbFavoriteService) {}
+  constructor(private service: PoBreadcrumbFavoriteService, private languageService: PoLanguageService) {
+    const language = languageService.getShortLanguage();
+
+    this.literals = {
+      ...PoBreadcrumbLiterals[language]
+    };
+  }
 
   ngOnInit() {
     this.service.configService(this.favoriteService, this.paramsService, this.itemActive);

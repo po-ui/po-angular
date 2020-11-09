@@ -5,6 +5,6 @@
   >
   </span>
 
-  <span class="po-hidden-sm po-breadcrumb-favorite-label" *ngIf="favorite">Desfavoritar</span>
-  <span class="po-hidden-sm po-breadcrumb-favorite-label" *ngIf="!favorite">Favoritar</span>
+  <span class="po-hidden-sm po-breadcrumb-favorite-label" *ngIf="favorite">{{ literals?.unfavorite }}</span>
+  <span class="po-hidden-sm po-breadcrumb-favorite-label" *ngIf="!favorite">{{ literals?.favorite }}</span>
 </div>
