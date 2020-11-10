@@ -4,6 +4,7 @@ import { convertToInt, isTypeof } from '../../utils/util';
 
 import { PoChartGaugeSerie } from './po-chart-types/po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from './enums/po-chart-type.enum';
+import { PoColumnChartSeries } from './interfaces/po-chart-column-series.interface';
 import { PoDonutChartSeries } from './po-chart-types/po-chart-donut/po-chart-donut-series.interface';
 import { PoPieChartSeries } from './po-chart-types/po-chart-pie/po-chart-pie-series.interface';
 import { PoLineChartSeries } from './interfaces/po-chart-line-series.interface';
@@ -13,7 +14,9 @@ const poChartDefaultHeight = 400;
 const poChartMinHeight = 200;
 const poChartTypeDefault = PoChartType.Pie;
 
-export type PoChartSeries = Array<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie | PoLineChartSeries>;
+export type PoChartSeries = Array<
+  PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie | PoLineChartSeries | PoColumnChartSeries
+>;
 
 /**
  * @description
@@ -36,7 +39,9 @@ export abstract class PoChartBaseComponent {
   private _options: PoChartOptions;
   private _categories: Array<string>;
   private _height: number;
-  private _series: Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries> | PoChartGaugeSerie;
+  private _series:
+    | Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries | PoColumnChartSeries>
+    | PoChartGaugeSerie;
   private _type: PoChartType = poChartTypeDefault;
 
   // manipulação das séries tratadas internamente para preservar 'p-series';
@@ -83,15 +88,9 @@ export abstract class PoChartBaseComponent {
    * @description
    *
    * Define os elementos do gráfico que serão criados dinamicamente.
-   *
-   * > A coleção de objetos deve implementar alguma das interfaces abaixo:
-   * - `PoDonutChartSeries`
-   * - `PoPieChartSeries`
-   * - `PoLineChartSeries`
-   * - `PoChartGaugeSerie`
    */
   @Input('p-series') set series(
-    value: PoChartGaugeSerie | Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries>
+    value: PoChartGaugeSerie | Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries | PoColumnChartSeries>
   ) {
     this._series = value || [];
 
@@ -156,7 +155,7 @@ export abstract class PoChartBaseComponent {
    *
    * Objeto com as configurações usadas no `po-chart`.
    *
-   * É possível definir as configurações dos eixos(*axis*) do gráfico do tipo `Line` da seguinte forma:
+   * É possível definir as configurações dos eixos(*axis*) para os gráfico do tipo `Line` e `Column` da seguinte forma:
    *
    * ```
    *  chartOptions: PoChartOptions = {
@@ -167,6 +166,7 @@ export abstract class PoChartBaseComponent {
    *    },
    *  };
    * ```
+   * > Para gráficos do tipo `Column`, não será aceito valor negativo para a cofiguração `axis.minRange`.
    */
   @Input('p-options') set options(value: PoChartOptions) {
     if (value instanceof Object && !(value instanceof Array)) {

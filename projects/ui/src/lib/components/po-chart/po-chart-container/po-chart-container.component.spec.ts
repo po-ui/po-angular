@@ -6,10 +6,12 @@ import { PoChartModule } from '../po-chart.module';
 
 import { PoChartContainerComponent } from './po-chart-container.component';
 import { PoChartContainerSize } from '../interfaces/po-chart-container-size.interface';
+import { PoChartType } from '../enums/po-chart-type.enum';
 
 describe('PoChartContainerComponent', () => {
   let component: PoChartContainerComponent;
   let fixture: ComponentFixture<PoChartContainerComponent>;
+  let nativeElement;
 
   const series = [{ label: 'category', data: [1, 2, 3] }];
   const containerSize: PoChartContainerSize = {
@@ -35,6 +37,8 @@ describe('PoChartContainerComponent', () => {
     component.containerSize = containerSize;
 
     fixture.detectChanges();
+
+    nativeElement = fixture.debugElement.nativeElement;
   });
 
   it('should create', () => {
@@ -93,6 +97,28 @@ describe('PoChartContainerComponent', () => {
       component.options = {};
 
       expect(component.axisOptions).toBeUndefined();
+    });
+  });
+
+  describe('Template:', () => {
+    it('should have po-chart-bar-path tag if type is `Line`', () => {
+      component.type = PoChartType.Column;
+
+      fixture.detectChanges();
+
+      const chartContainerContent = nativeElement.querySelector('.po-chart-bar-path');
+
+      expect(chartContainerContent).toBeTruthy();
+    });
+
+    it('should have po-chart-line-path tag if type is `Line`', () => {
+      component.type = PoChartType.Line;
+
+      fixture.detectChanges();
+
+      const chartContainerContent = nativeElement.querySelector('.po-chart-line-path');
+
+      expect(chartContainerContent).toBeTruthy();
     });
   });
 });

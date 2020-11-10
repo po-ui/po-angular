@@ -16,15 +16,12 @@ export class PoChartMathsService {
    * Calcula e retorna os válores mínimo e máximo das séries.
    *
    * @param series Lista de séries.
+   * @param acceptNegativeValues boolean.
    */
-  calculateMinAndMaxValues(series: Array<any>): PoChartMinMaxValues {
+  calculateMinAndMaxValues(series: Array<any>, acceptNegativeValues: boolean = true): PoChartMinMaxValues {
     const minValue = this.getDomain(series, 'min');
     const maxValue = this.getDomain(series, 'max');
-
-    return {
-      minValue,
-      maxValue
-    };
+    return { minValue: !acceptNegativeValues && minValue < 0 ? 0 : minValue, maxValue };
   }
 
   /**
@@ -86,7 +83,7 @@ export class PoChartMathsService {
     const result = [];
     const step = this.getAxisXGridLineArea(minMaxValues, axisXGridLines);
 
-    for (let index = minValue; index <= maxValue; index += step) {
+    for (let index = minValue; index <= maxValue; index = (index * 10 + step * 10) / 10) {
       result.push(index);
     }
 

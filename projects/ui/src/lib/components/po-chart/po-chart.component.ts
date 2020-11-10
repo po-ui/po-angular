@@ -87,7 +87,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   }
 
   get isDynamicComponentType(): boolean {
-    return this.type !== PoChartType.Line;
+    return this.type === PoChartType.Gauge || this.type === PoChartType.Donut || this.type === PoChartType.Pie;
   }
 
   @HostListener('window:resize')
