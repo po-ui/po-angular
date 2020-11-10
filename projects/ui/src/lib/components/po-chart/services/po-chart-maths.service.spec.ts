@@ -36,6 +36,17 @@ describe('PoChartMathsService', () => {
       expect(service.calculateMinAndMaxValues(series)).toEqual(expectedResult);
     });
 
+    it('calculateMinAndMaxValues: should return 0 for minValue if `acceptNegativeValues` is false and minValue is negative', () => {
+      const series = [
+        { label: 'A', data: [-20, 20, 45] },
+        { label: 'B', data: [200, 170, 210] }
+      ];
+      const expectedResult = { minValue: 0, maxValue: 210 };
+      const acceptNegativeValues = false;
+
+      expect(service.calculateMinAndMaxValues(series, acceptNegativeValues)).toEqual(expectedResult);
+    });
+
     it('range: should call `getAxisXGridLineArea` and return a list of values according with axisXGridLabels default value', () => {
       const minMaxValues = { minValue: 0, maxValue: 200 };
       const expectedResult = [0, 50, 100, 150, 200];
@@ -63,6 +74,15 @@ describe('PoChartMathsService', () => {
       const expectedResult = [1];
 
       const axisXGridLines = 5;
+
+      expect(service.range(minMaxValues, axisXGridLines)).toEqual(expectedResult);
+    });
+
+    it('range: should return 6 itens', () => {
+      const minMaxValues = { minValue: 19, maxValue: 100 };
+      const expectedResult = [19, 35.2, 51.4, 67.6, 83.8, 100];
+
+      const axisXGridLines = 6;
 
       expect(service.range(minMaxValues, axisXGridLines)).toEqual(expectedResult);
     });

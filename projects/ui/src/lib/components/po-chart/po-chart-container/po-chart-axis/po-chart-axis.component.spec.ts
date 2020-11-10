@@ -6,6 +6,7 @@ import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinat
 
 import { PoChartModule } from '../../po-chart.module';
 import { PoChartAxisComponent } from './po-chart-axis.component';
+import { PoChartType } from '../../enums/po-chart-type.enum';
 
 describe('PoChartAxisComponent', () => {
   let component: PoChartAxisComponent;
@@ -47,6 +48,7 @@ describe('PoChartAxisComponent', () => {
           minValue: 1,
           maxValue: 3
         };
+        component['acceptNegativeValues'] = true;
         spyOn(component['mathsService'], 'calculateMinAndMaxValues').and.returnValue(fakeMinMaxAxisValues);
 
         component.series = fakeSeries;
@@ -190,6 +192,22 @@ describe('PoChartAxisComponent', () => {
         );
       });
     });
+
+    describe('p-type: ', () => {
+      it('should apply true to `hasAxisSideSpacing` if the type is `PoChartType.Line`', () => {
+        component.type = PoChartType.Line;
+
+        expect(component['hasAxisSideSpacing']).toBeTrue();
+        expect(component.type).toBe(PoChartType.Line);
+      });
+
+      it('should apply false to `hasAxisSideSpacing` if the type isn`t `PoChartType.Line`', () => {
+        component.type = PoChartType.Column;
+
+        expect(component['hasAxisSideSpacing']).toBeFalse();
+        expect(component.type).toBe(PoChartType.Column);
+      });
+    });
   });
 
   describe('Methods', () => {
@@ -261,7 +279,50 @@ describe('PoChartAxisComponent', () => {
       });
     });
 
-    it('setAxisYCoordinates: should apply value to `axisYCoordinates`', () => {
+    it('setAxisYCoordinates: should call `setAxisYCoordinatesWithSideSpacing` if `hasAxisSideSpacing` is true', () => {
+      const fakeSeriesLength = 1;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+
+      component.type = PoChartType.Line;
+
+      spyOn(component, <any>'setAxisYCoordinatesWithSideSpacing');
+
+      component['setAxisYCoordinates'](fakeContainerSize, fakeSeriesLength);
+
+      expect(component['setAxisYCoordinatesWithSideSpacing']).toHaveBeenCalledWith(fakeContainerSize, fakeSeriesLength);
+    });
+
+    it('setAxisYCoordinates: should call `setAxisYCoordinatesWithoutSideSpacing` if `hasAxisSideSpacing` is false', () => {
+      const fakeSeriesLength = 1;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+
+      component.type = PoChartType.Column;
+
+      spyOn(component, <any>'setAxisYCoordinatesWithoutSideSpacing');
+
+      component['setAxisYCoordinates'](fakeContainerSize, fakeSeriesLength);
+
+      expect(component['setAxisYCoordinatesWithoutSideSpacing']).toHaveBeenCalledWith(
+        fakeContainerSize,
+        fakeSeriesLength
+      );
+    });
+
+    it('setAxisYCoordinatesWithSideSpacing: should apply value to `axisYCoordinates`', () => {
       const fakeSeriesLength = 1;
       const fakeContainerSize = {
         svgWidth: 500,
@@ -279,11 +340,34 @@ describe('PoChartAxisComponent', () => {
       const fakeOuterYCoordinates: Array<PoChartPathCoordinates> = [{ coordinates: '1' }, { coordinates: '2' }];
 
       spyOn(component, <any>'setAxisYOuterCoordinates').and.returnValue(fakeOuterYCoordinates);
-      spyOn(component, <any>'calculateAxisYCoordinateX');
+      spyOn(component, <any>'calculateAxisYCoordinateXWithSideSpacing');
 
-      component['setAxisYCoordinates'](fakeContainerSize, fakeSeriesLength);
+      component['setAxisYCoordinatesWithSideSpacing'](fakeContainerSize, fakeSeriesLength);
 
       expect(component['setAxisYOuterCoordinates']).toHaveBeenCalled();
+      expect(component['calculateAxisYCoordinateXWithSideSpacing']).toHaveBeenCalled();
+      expect(component.axisYCoordinates).toEqual(expectedResult);
+    });
+
+    it('setAxisYCoordinatesWithoutSideSpacing: should apply value to `axisYCoordinates`', () => {
+      const fakeSeriesLength = 1;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const expectedResult: Array<PoChartPathCoordinates> = [
+        { coordinates: 'Mundefined 8 Lundefined, 288' },
+        { coordinates: 'Mundefined 8 Lundefined, 288' }
+      ];
+
+      spyOn(component, <any>'calculateAxisYCoordinateX');
+
+      component['setAxisYCoordinatesWithoutSideSpacing'](fakeContainerSize, fakeSeriesLength);
+
       expect(component['calculateAxisYCoordinateX']).toHaveBeenCalled();
       expect(component.axisYCoordinates).toEqual(expectedResult);
     });
@@ -319,12 +403,41 @@ describe('PoChartAxisComponent', () => {
       const fakeSeriesLength = 1;
       const fakeCategories = ['teste'];
 
-      spyOn(component, <any>'calculateAxisYCoordinateX').and.returnValue(0);
+      component['hasAxisSideSpacing'] = true;
+
+      spyOn(component, <any>'calculateAxisYCoordinateXWithSideSpacing').and.returnValue(0);
       spyOn(component, <any>'calculateAxisYLabelYCoordinate').and.returnValue(0);
 
       component['setAxisYLabelCoordinates'](fakeContainerSize, fakeSeriesLength, fakeCategories);
 
-      expect(component['calculateAxisYCoordinateX']).toHaveBeenCalled();
+      expect(component['calculateAxisYCoordinateXWithSideSpacing']).toHaveBeenCalled();
+      expect(component['calculateAxisYLabelYCoordinate']).toHaveBeenCalled();
+      expect(component.axisYLabelCoordinates).toEqual(expectedResult);
+    });
+
+    it('setAxisYLabelCoordinates: should call `calculateAxisYLabelXCoordinateWithoutSideSpace` if `hasAxisSideSpacing` is false', () => {
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const expectedResult = [{ label: 'teste', xCoordinate: 0, yCoordinate: 0 }];
+      const fakeSeriesLength = 1;
+      const fakeCategories = ['teste'];
+
+      component['hasAxisSideSpacing'] = false;
+
+      spyOn(component, <any>'calculateAxisYCoordinateXWithSideSpacing');
+      spyOn(component, <any>'calculateAxisYLabelXCoordinateWithoutSideSpace').and.returnValue(0);
+      spyOn(component, <any>'calculateAxisYLabelYCoordinate').and.returnValue(0);
+
+      component['setAxisYLabelCoordinates'](fakeContainerSize, fakeSeriesLength, fakeCategories);
+
+      expect(component['calculateAxisYCoordinateXWithSideSpacing']).not.toHaveBeenCalled();
+      expect(component['calculateAxisYLabelXCoordinateWithoutSideSpace']).toHaveBeenCalled();
       expect(component['calculateAxisYLabelYCoordinate']).toHaveBeenCalled();
       expect(component.axisYLabelCoordinates).toEqual(expectedResult);
     });
@@ -371,7 +484,27 @@ describe('PoChartAxisComponent', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    it('calculateAxisYCoordinateX: should return the result of `PoChartAxisXLabelArea` - `labelPoChartPadding`', () => {
+    it(`calculateAxisYLabelXCoordinateWithoutSideSpace: should return the result of 'PoChartAxisXLabelArea +
+    halfCategoryWidth + (containerSize.svgPlottingAreaWidth + PoChartPadding * 2) * xRatio'`, () => {
+      const expectedResult = 403;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const fakeIndex = 1;
+      component['seriesLength'] = 2;
+
+      const result = component['calculateAxisYLabelXCoordinateWithoutSideSpace'](fakeContainerSize, fakeIndex);
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it(`calculateAxisYCoordinateXWithSideSpacing: should return the result of 'PoChartAxisXLabelArea + svgAxisSideSpacing +
+    containerSize.svgPlottingAreaWidth * xRatio'`, () => {
       const expectedResult = 496;
       const fakeContainerSize = {
         svgWidth: 500,
@@ -386,13 +519,13 @@ describe('PoChartAxisComponent', () => {
 
       spyOn(component['mathsService'], 'calculateSideSpacing').and.returnValue(24);
 
-      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, fakeIndex);
+      const result = component['calculateAxisYCoordinateXWithSideSpacing'](fakeContainerSize, fakeIndex);
 
       expect(component['mathsService'].calculateSideSpacing).toHaveBeenCalled();
       expect(result).toEqual(expectedResult);
     });
 
-    it('calculateAxisYCoordinateX: should calculate even if `seriesLenght - 1` is zero', () => {
+    it('calculateAxisYCoordinateXWithSideSpacing: should calculate even if `seriesLenght - 1` is zero', () => {
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -404,9 +537,46 @@ describe('PoChartAxisComponent', () => {
       component.series = [{ label: 'test 1', data: [1] }];
       component['seriesLength'] = 1;
 
-      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, 0);
+      const result = component['calculateAxisYCoordinateXWithSideSpacing'](fakeContainerSize, 0);
 
       expect(result).toBe(96);
+    });
+
+    it(`calculateAxisYCoordinateX: should return the result of 'PoChartAxisXLabelArea +
+    (containerSize.svgPlottingAreaWidth + PoChartPadding * 2) * xRatio'`, () => {
+      const expectedResult = 296;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const fakeIndex = 1;
+      component['seriesLength'] = 2;
+
+      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, fakeIndex);
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it(`calculateAxisYCoordinateX: should return the result even if 'seriesLength' is zero`, () => {
+      const expectedResult = 72;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const fakeIndex = 1;
+      component['seriesLength'] = 0;
+
+      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, fakeIndex);
+
+      expect(result).toEqual(expectedResult);
     });
 
     it('isValidGridLinesLengthOption: should return true', () => {
@@ -441,11 +611,67 @@ describe('PoChartAxisComponent', () => {
           minValue: 1,
           maxValue: 3
         };
+
+        component['acceptNegativeValues'] = true;
+
         spyOn(component['mathsService'], <any>'calculateMinAndMaxValues').and.returnValue(fakeMinMaxAxisValues);
 
         component['checkAxisOptions']();
 
         expect(component['minMaxAxisValues']).toEqual(fakeMinMaxAxisValues);
+      });
+
+      it('should apply zero to `minMaxAxisValues` if `minRange` is undefined', () => {
+        const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+          minValue: 0,
+          maxValue: 3
+        };
+
+        component['acceptNegativeValues'] = false;
+
+        spyOn(component['mathsService'], <any>'calculateMinAndMaxValues').and.returnValue(fakeMinMaxAxisValues);
+
+        component['checkAxisOptions']();
+
+        expect(component['minMaxAxisValues']).toEqual(fakeMinMaxAxisValues);
+      });
+
+      it('should apply zero to `minValue` if `minRange` is negative', () => {
+        const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+          minValue: 0,
+          maxValue: 3
+        };
+
+        component['acceptNegativeValues'] = false;
+
+        spyOn(component['mathsService'], <any>'calculateMinAndMaxValues').and.returnValue(fakeMinMaxAxisValues);
+
+        component['checkAxisOptions']();
+
+        expect(component['minMaxAxisValues']).toEqual(fakeMinMaxAxisValues);
+      });
+
+      it('should apply the lowest value to `minMaxAxisValues`', () => {
+        const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+          maxValue: 3,
+          minValue: 1
+        };
+        const fakeOptions: PoChartAxisOptions = {
+          maxRange: 4,
+          minRange: 2
+        };
+        const expectedValue = {
+          minValue: 1,
+          maxValue: 4
+        };
+
+        component['acceptNegativeValues'] = false;
+
+        spyOn(component['mathsService'], <any>'calculateMinAndMaxValues').and.returnValue(fakeMinMaxAxisValues);
+
+        component['checkAxisOptions'](fakeOptions);
+
+        expect(component['minMaxAxisValues']).toEqual(expectedValue);
       });
 
       it('should apply the highest value to `minMaxAxisValues`', () => {
@@ -461,6 +687,9 @@ describe('PoChartAxisComponent', () => {
           minValue: 0,
           maxValue: 4
         };
+
+        component['acceptNegativeValues'] = true;
+
         spyOn(component['mathsService'], <any>'calculateMinAndMaxValues').and.returnValue(fakeMinMaxAxisValues);
 
         component['checkAxisOptions'](fakeOptions);
@@ -474,6 +703,8 @@ describe('PoChartAxisComponent', () => {
           minRange: 0,
           axisXGridLines: 2
         };
+
+        component['acceptNegativeValues'] = true;
 
         spyOn(component, <any>'isValidGridLinesLengthOption').and.returnValue(true);
 
@@ -490,6 +721,8 @@ describe('PoChartAxisComponent', () => {
         };
         const expectedValue = 5;
 
+        component['acceptNegativeValues'] = true;
+
         spyOn(component, <any>'isValidGridLinesLengthOption').and.returnValue(false);
 
         component['checkAxisOptions'](fakeOptions);
@@ -503,6 +736,25 @@ describe('PoChartAxisComponent', () => {
         component['checkAxisOptions']();
 
         expect(component['setAxisXGridLines']).toHaveBeenCalled();
+      });
+
+      it('should apply 0 to the `minValue` if `hasAxisSideSpacing` is false and `minValue < 0`', () => {
+        const fakeOptions: PoChartAxisOptions = {
+          maxRange: 4,
+          minRange: -100,
+          axisXGridLines: 1
+        };
+
+        const expectedValue = {
+          minValue: 0,
+          maxValue: 4
+        };
+
+        component['hasAxisSideSpacing'] = false;
+
+        component['checkAxisOptions'](fakeOptions);
+
+        expect(component['minMaxAxisValues']).toEqual(expectedValue);
       });
     });
   });

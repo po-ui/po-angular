@@ -1,0 +1,15 @@
+<svg:g>
+  <svg:g *ngFor="let item of seriesPathsCoordinates; let i = index; trackBy: trackBy"
+    [class]="'po-chart-bar-group-' + i"
+  >
+    <!-- SERIES PATHS -->
+    <svg:g po-chart-bar-path
+      [attr.key]="'po-chart-bar-path-' + i"
+      [p-color]="colors[i]" 
+      [p-coordinates]="item"
+      (p-bar-click)="onSerieBarClick($event)"
+      (p-bar-hover)="onSerieBarHover($event)"
+      >
+      </svg:g>
+  </svg:g>
+</svg:g>

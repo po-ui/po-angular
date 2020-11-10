@@ -1,0 +1,10 @@
+<svg:path *ngFor="let item of coordinates; trackBy: trackBy"
+  [p-tooltip]="item.tooltipLabel"
+  p-tooltip-position="top"
+  [p-append-in-body]='true'
+  class="po-chart-bar-path"
+  [attr.fill]="color"
+  [attr.d]="item.coordinates"
+  (mouseenter)="onMouseEnter(item)"
+  (click)="onClick(item)">
+</svg:path> 

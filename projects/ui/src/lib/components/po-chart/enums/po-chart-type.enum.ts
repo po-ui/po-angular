@@ -23,7 +23,13 @@ export enum PoChartType {
   Pie = 'pie',
 
   /**
-   * Gráfico mostra os dados do modo linear e contínuo. É útil, por exemplo, para fazer comparações de tendência durante determinado período.
+   * Gráfico que mostra os dados de modo linear e contínuo. É útil, por exemplo, para fazer comparações de tendência durante determinado período.
    */
-  Line = 'line'
+  Line = 'line',
+
+  /**
+   * Gráfico que exibe os dados em forma de barras verticais e sua extensão varia de acordo com seus valores. É comumente usado como comparativo para diversas séries.
+   * As séries são exibidas lado-a-lado, com um pequeno espaço entre elas.
+   */
+  Column = 'column'
 }

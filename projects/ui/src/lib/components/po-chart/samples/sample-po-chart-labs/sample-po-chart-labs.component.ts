@@ -45,7 +45,8 @@ export class SamplePoChartLabsComponent implements OnInit {
     { label: 'Donut', value: PoChartType.Donut },
     { label: 'Gauge', value: PoChartType.Gauge },
     { label: 'Pie', value: PoChartType.Pie },
-    { label: 'Line', value: PoChartType.Line }
+    { label: 'Line', value: PoChartType.Line },
+    { label: 'Column', value: PoChartType.Column }
   ];
 
   ngOnInit() {
@@ -58,7 +59,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   }
 
   get isMultipleValues(): boolean {
-    return this.type === PoChartType.Line;
+    return this.type === PoChartType.Line || this.type === PoChartType.Column;
   }
 
   addOptions() {

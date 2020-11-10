@@ -3,9 +3,9 @@
  *
  * @description
  *
- * Interface que define o objeto da série `PoChartType.Line`.
+ * Interface que define o objeto das séries para gráficos do tipo `Column`.
  */
-export interface PoLineChartSeries {
+export interface PoColumnChartSeries {
   /** Define o texto da série. */
   label: string;
 

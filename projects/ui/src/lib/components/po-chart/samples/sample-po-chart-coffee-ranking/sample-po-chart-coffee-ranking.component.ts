@@ -22,9 +22,12 @@ export class SamplePoChartCoffeeRankingComponent {
 
   brazilianCoffeeProductionChartType: PoChartType = PoChartType.Gauge;
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;
+  evolutionOfCoffeeAndSomeCompetitorsType: PoChartType = PoChartType.Column;
   coffeConsumingChartType: PoChartType = PoChartType.Donut;
 
   categories: Array<string> = ['2010', '2011', '2012', '2013', '2014', '2015'];
+
+  categoriesColumn: Array<string> = ['coffee', 'chocolate', 'tea'];
 
   coffeeConsumption: Array<PoDonutChartSeries> = [
     { category: 'Finland', value: 9.6, tooltip: 'Finland (Europe)' },
@@ -40,6 +43,12 @@ export class SamplePoChartCoffeeRankingComponent {
     { label: 'Colombia', data: [8, 7, 6, 9, 10, 11] },
     { label: 'India', data: [5, 6, 5, 4, 5, 5] },
     { label: 'Indonesia', data: [7, 6, 10, 10, 4, 6] }
+  ];
+
+  evolutionOfCoffeeAndSomeCompetitors: Array<PoLineChartSeries> = [
+    { label: '2014', data: [91, 40, 42] },
+    { label: '2017', data: [93, 52, 39] },
+    { label: '2020', data: [95, 46, 31] }
   ];
 
   coffeeProduction: Array<PoPieChartSeries> = [
@@ -67,6 +76,14 @@ export class SamplePoChartCoffeeRankingComponent {
     axis: {
       minRange: 0,
       maxRange: 40,
+      axisXGridLines: 5
+    }
+  };
+
+  optionsColumn: PoChartOptions = {
+    axis: {
+      minRange: 0,
+      maxRange: 100,
       axisXGridLines: 5
     }
   };
