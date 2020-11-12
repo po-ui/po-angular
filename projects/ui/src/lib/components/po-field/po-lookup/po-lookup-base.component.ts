@@ -38,6 +38,7 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   protected keysDescription: Array<any>;
   protected oldValue: string = '';
   protected valueToModel;
+  protected oldValueToModel = null;
 
   private onChangePropagate: any = null;
   // tslint:disable-next-line
@@ -327,6 +328,16 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    */
   @Output('p-selected') selected: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   *  Evento que será disparado ao alterar o model.
+   *  Por parâmetro será passado o novo valor.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(private defaultService: PoLookupFilterService) {}
 
   ngOnDestroy() {
@@ -378,6 +389,13 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
     if (this.onChangePropagate) {
       this.onChangePropagate(value);
     }
+
+    if (this.oldValueToModel !== this.valueToModel) {
+      this.change.emit(this.valueToModel);
+    }
+
+    // Armazenar o valor antigo do model
+    this.oldValueToModel = this.valueToModel;
   }
 
   searchById(value: string) {
