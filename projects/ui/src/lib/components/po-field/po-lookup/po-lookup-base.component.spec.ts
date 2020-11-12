@@ -157,7 +157,10 @@ describe('PoLookupBaseComponent:', () => {
 
   it('should not be called the onChangePropate event', () => {
     const fakeThis = {
-      onChangePropagate: ''
+      onChangePropagate: '',
+      change: {
+        emit: () => {}
+      }
     };
 
     spyOn<any>(component, 'onChangePropagate');
@@ -207,6 +210,16 @@ describe('PoLookupBaseComponent:', () => {
       expect(component.setViewValue).toHaveBeenCalledWith('123 - teste', objectSelected);
     }
   ));
+
+  it('callOnChange: should call change.emit with value', () => {
+    const objectSelected = { value: 1495832652942, label: 'Kakaroto' };
+    component.fieldValue = 'value';
+
+    spyOn(component.change, 'emit');
+
+    component.selectValue(objectSelected);
+    expect(component.change.emit).toHaveBeenCalledWith(1495832652942);
+  });
 
   it('call writeValue with invalid Id', inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
     component.service = lookupFilterService;
