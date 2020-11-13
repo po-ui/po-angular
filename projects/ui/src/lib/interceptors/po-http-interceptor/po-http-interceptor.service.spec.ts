@@ -7,6 +7,7 @@ import { PoNotificationService } from './../../services/po-notification/po-notif
 
 import { PoHttpInterceptorBaseService } from './po-http-interceptor-base.service';
 import { PoHttpInterceptorService } from './po-http-interceptor.service';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 describe('PoHttpInterceptor', () => {
   configureTestSuite(() => {
@@ -26,8 +27,9 @@ describe('PoHttpInterceptor', () => {
   it('should be created', () => {
     const notification = TestBed.inject(PoNotificationService);
     const componentInjector = TestBed.inject(PoComponentInjectorService);
+    const languageService = TestBed.inject(PoLanguageService);
 
-    const service = new PoHttpInterceptorService(notification, componentInjector);
+    const service = new PoHttpInterceptorService(notification, componentInjector, languageService);
 
     expect(service instanceof PoHttpInterceptorService).toBeTruthy();
     expect(service instanceof PoHttpInterceptorBaseService).toBeTruthy();

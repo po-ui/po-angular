@@ -14,6 +14,8 @@ import { tap } from 'rxjs/operators';
 import { PoComponentInjectorService } from '../../services/po-component-injector/po-component-injector.service';
 import { PoHttpInterceptorDetail } from './po-http-interceptor-detail/po-http-interceptor-detail.interface';
 import { PoHttpInterceptorDetailComponent } from './po-http-interceptor-detail/po-http-interceptor-detail.component';
+import { poHttpInterceptorLiterals } from './po-http-interceptor-literals';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 // DEPRECATED 4.x.x
 const NO_ERROR_HEADER_PARAM = 'X-PO-No-Error';
@@ -147,9 +149,15 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
 export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
   notificationTypes = ['success', 'warning', 'error', 'information'];
 
+  literals = poHttpInterceptorLiterals[this.languageService.getShortLanguage()];
+
   private httpInterceptorDetailComponent: ComponentRef<PoHttpInterceptorDetailComponent> = undefined;
 
-  constructor(private componentInjector: PoComponentInjectorService, private notification: any) {}
+  constructor(
+    private componentInjector: PoComponentInjectorService,
+    private notification: any,
+    private languageService: PoLanguageService
+  ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const cloneRequest = request.clone();
@@ -190,7 +198,7 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
     const errorResponse =
       response.status !== 0
         ? response.error
-        : { code: 0, message: 'Servidor não está respondendo.', detailedMessage: response.message };
+        : { code: 0, message: this.literals.serverNotResponse, detailedMessage: response.message };
 
     const hasNoErrorParam = this.hasNoErrorParam(request);
     const hasNoMessageParam = this.hasNoMessageParam(request);
@@ -275,10 +283,10 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
     let notificationLabel;
 
     if (responseMessage.helpUrl && !(responseMessage.detailedMessage || responseMessage.details)) {
-      notificationLabel = 'Ajuda';
+      notificationLabel = this.literals.help;
       notificationAction = this.generateUrlHelpFunction(responseMessage.helpUrl);
     } else if (responseMessage.detailedMessage || responseMessage.details) {
-      notificationLabel = 'Detalhes';
+      notificationLabel = this.literals.detail;
       notificationAction = this.generateDetailModal(responseMessage);
     }
     return { label: notificationLabel, action: notificationAction };

@@ -1,11 +1,11 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 
-import { getShortBrowserLanguage } from '../../../utils/util';
 import { PoModalAction } from '../../../components/po-modal/po-modal-action.interface';
 import { PoModalComponent } from '../../../components/po-modal/po-modal.component';
 
 import { PoHttpInterceptorDetail } from './po-http-interceptor-detail.interface';
 import { poHttpInterceptorDetailLiteralsDefault } from './po-http-interceptor-detail-literals.interface';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 export const colors = { success: 'color-11', error: 'color-07', warning: 'color-08', info: '' };
 
@@ -25,8 +25,8 @@ export class PoHttpInterceptorDetailComponent {
 
   closed = new EventEmitter<any>();
   details: Array<PoHttpInterceptorDetail> = [];
-  language = getShortBrowserLanguage();
-  literals = poHttpInterceptorDetailLiteralsDefault[this.language];
+  private language = this.languageService.getShortLanguage();
+  private literals = poHttpInterceptorDetailLiteralsDefault[this.language];
 
   primaryAction: PoModalAction = {
     action: () => this.close(),
@@ -34,6 +34,8 @@ export class PoHttpInterceptorDetailComponent {
   };
 
   title: string;
+
+  constructor(private languageService: PoLanguageService) {}
 
   set detail(details: Array<PoHttpInterceptorDetail>) {
     if (details && details.length) {

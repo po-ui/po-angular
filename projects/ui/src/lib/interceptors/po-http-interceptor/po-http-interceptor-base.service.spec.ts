@@ -215,7 +215,7 @@ describe('PoHttpInterceptorBaseService', () => {
       httpMock.expectOne('/data').flush(poErrorMessage, mockErrorServerNotResponding);
 
       expect(service.notification.error).toHaveBeenCalledWith({
-        message: 'Servidor não está respondendo.',
+        message: 'Servidor não está respondendo',
         actionLabel: 'Detalhes',
         action: jasmine.any(Function)
       });

@@ -28,7 +28,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
 
-    component.literals = poHttpInterceptorDetailLiteralsDefault['en'];
+    component['literals'] = poHttpInterceptorDetailLiteralsDefault['en'];
   });
 
   it('should create', () => {
@@ -167,9 +167,9 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     it('formatTitle: should return literals.detail if details length is 1', () => {
       const details = [{ code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' }];
 
-      component.literals.detail = 'Detail';
+      component['literals'].detail = 'Detail';
 
-      expect(component['formatTitle'](details)).toBe(component.literals.detail);
+      expect(component['formatTitle'](details)).toBe(component['literals'].detail);
     });
 
     it('formatTitle: should return literals.details and details legth if details length isn`t 1', () => {
@@ -181,7 +181,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
 
       spyOn(UtilsFunctions, 'getShortBrowserLanguage').and.returnValue('en');
 
-      component.literals.details = 'Details';
+      component['literals'].details = 'Details';
 
       const expectedTitle = 'Details (3)';
 

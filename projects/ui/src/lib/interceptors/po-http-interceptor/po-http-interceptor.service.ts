@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 import { PoComponentInjectorService } from '../../services/po-component-injector/po-component-injector.service';
 import { PoNotificationService } from './../../services/po-notification/po-notification.service';
@@ -16,7 +17,11 @@ import { PoHttpInterceptorBaseService } from './po-http-interceptor-base.service
  */
 @Injectable()
 export class PoHttpInterceptorService extends PoHttpInterceptorBaseService {
-  constructor(notification: PoNotificationService, componentInjector: PoComponentInjectorService) {
-    super(componentInjector, notification);
+  constructor(
+    notification: PoNotificationService,
+    componentInjector: PoComponentInjectorService,
+    languageService: PoLanguageService
+  ) {
+    super(componentInjector, notification, languageService);
   }
 }
