@@ -644,19 +644,21 @@ describe('PoMenuComponent:', () => {
     });
 
     it('should show `po-menu-footer` if `hasFooter` is `true`', () => {
-      spyOnProperty(component, 'hasFooter').and.returnValue(true);
+      component.collapsed = true;
+      component.menus = [{ label: '1', icon: 'po-icon-user', shortLabel: '123', action: () => {} }];
 
-      fixture.detectChanges();
+      const footer = fixture.debugElement.nativeElement.querySelector('.po-menu-footer');
 
-      expect(nativeElement.querySelector('.po-menu-footer')).toBeTruthy();
+      expect(footer).toBe(null);
     });
 
     it('shouldn`t show `po-menu-footer` if `hasFooter` is `false`', () => {
-      spyOnProperty(component, 'hasFooter').and.returnValue(false);
+      component.collapsed = true;
+      component.menus = [{ label: '1', icon: 'po-icon-user', shortLabel: '123', action: () => {} }];
 
-      fixture.detectChanges();
+      const footer = fixture.debugElement.nativeElement.querySelector('.po-menu-footer');
 
-      expect(nativeElement.querySelector('.po-menu-footer')).toBeNull();
+      expect(footer).toBe(null);
     });
 
     it('should show the button at menu bottom if menu is collapsed', () => {
