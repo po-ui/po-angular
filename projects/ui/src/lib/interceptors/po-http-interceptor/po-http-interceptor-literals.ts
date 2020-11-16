@@ -1,22 +1,22 @@
 export const poHttpInterceptorLiterals = {
   pt: <any>{
     help: 'Ajuda',
-    detail: 'Detalhes',
+    details: 'Detalhes',
     serverNotResponse: 'Servidor não está respondendo'
   },
   en: <any>{
     help: 'Help',
-    detail: 'Details',
+    details: 'Details',
     serverNotResponse: 'Server is not responding'
   },
   es: <any>{
     help: 'Ayuda',
-    detail: 'Detalles',
+    details: 'Detalles',
     serverNotResponse: 'El servidor no está respondiendo'
   },
   ru: <any>{
     help: 'Помогите',
-    detail: 'Детали',
+    details: 'Детали',
     serverNotResponse: 'Сервер не отвечает'
   }
 };

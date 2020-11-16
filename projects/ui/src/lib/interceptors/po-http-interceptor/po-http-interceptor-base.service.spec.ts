@@ -168,7 +168,7 @@ describe('PoHttpInterceptorBaseService', () => {
       // TODO: Validar notification function
       expect(service.notification.error).toHaveBeenCalledWith({
         message: poErrorMessage.message,
-        actionLabel: 'Detalhes',
+        actionLabel: service.literals.details,
         action: jasmine.any(Function)
       });
     }
@@ -193,7 +193,7 @@ describe('PoHttpInterceptorBaseService', () => {
       // TODO: Validar help Url
       expect(service.notification.error).toHaveBeenCalledWith({
         message: poErrorMessage.message,
-        actionLabel: 'Ajuda',
+        actionLabel: service.literals.help,
         action: jasmine.any(Function)
       });
     }
@@ -215,8 +215,8 @@ describe('PoHttpInterceptorBaseService', () => {
       httpMock.expectOne('/data').flush(poErrorMessage, mockErrorServerNotResponding);
 
       expect(service.notification.error).toHaveBeenCalledWith({
-        message: 'Servidor não está respondendo',
-        actionLabel: 'Detalhes',
+        message: service.literals.serverNotResponse,
+        actionLabel: service.literals.details,
         action: jasmine.any(Function)
       });
     }
