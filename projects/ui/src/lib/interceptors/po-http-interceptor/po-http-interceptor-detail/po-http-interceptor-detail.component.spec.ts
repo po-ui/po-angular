@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from '../../../util-test/util-expect.spec';
-import * as UtilsFunctions from '../../../utils/util';
 
 import { PoAccordionModule } from '../../../components/po-accordion/po-accordion.module';
 import { PoHttpInterceptorDetail } from './po-http-interceptor-detail.interface';
@@ -178,8 +177,6 @@ describe('PoHttpInterceptorDetailComponent:', () => {
         { code: '201', detailedMessage: 'test 2', message: 'message 2', type: 'success' },
         { code: '400', detailedMessage: 'test 3', message: 'message 3', type: 'error' }
       ];
-
-      spyOn(UtilsFunctions, 'getShortBrowserLanguage').and.returnValue('en');
 
       component['literals'].details = 'Details';
 

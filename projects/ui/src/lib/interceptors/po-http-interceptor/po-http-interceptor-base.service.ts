@@ -286,7 +286,7 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
       notificationLabel = this.literals.help;
       notificationAction = this.generateUrlHelpFunction(responseMessage.helpUrl);
     } else if (responseMessage.detailedMessage || responseMessage.details) {
-      notificationLabel = this.literals.detail;
+      notificationLabel = this.literals.details;
       notificationAction = this.generateDetailModal(responseMessage);
     }
     return { label: notificationLabel, action: notificationAction };
