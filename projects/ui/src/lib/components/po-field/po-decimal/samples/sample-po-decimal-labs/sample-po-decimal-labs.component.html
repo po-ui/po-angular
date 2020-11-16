@@ -9,6 +9,7 @@
   [p-icon]="icon"
   [p-label]="label"
   [p-locale]="locale"
+  [p-error-pattern]="errorPattern"
   [p-no-autocomplete]="properties?.includes('noAutocomplete')"
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
@@ -78,6 +79,11 @@
 
     <po-select class="po-md-6" name="icon" [(ngModel)]="icon" p-clean p-label="Icon" [p-options]="iconOptions">
     </po-select>
+  </div>
+
+  <div class="po-row">
+    <po-input class="po-md-6" name="errorPattern" [(ngModel)]="errorPattern" p-clean p-label="Error Pattern">
+    </po-input>
   </div>
 
   <div class="po-row">
