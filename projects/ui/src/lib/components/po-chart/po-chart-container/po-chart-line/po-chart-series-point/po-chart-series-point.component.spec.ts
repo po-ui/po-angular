@@ -1,7 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { of } from 'rxjs';
+
+import * as UtilsFunction from '../../../../../utils/util';
 
 import { PoTooltipModule } from 'projects/ui/src/lib/directives/po-tooltip/po-tooltip.module';
 import { PoChartSeriesPointComponent } from './po-chart-series-point.component';
+import { PoChartPointsCoordinates } from '../../../interfaces/po-chart-points-coordinates.interface';
 
 describe('PoChartSeriesPointComponent', () => {
   let component: PoChartSeriesPointComponent;
@@ -114,10 +118,131 @@ describe('PoChartSeriesPointComponent', () => {
 
       expect(component.trackBy(index)).toBe(expectedValue);
     });
+
+    it('displayPointsWithDelay: should return an observable of coordinates and update status after a while', fakeAsync(() => {
+      component.animate = true;
+      let coordinatesWithDelay: Array<PoChartPointsCoordinates> = [];
+
+      const serieA = {
+        category: 'janeiro',
+        tooltipLabel: 'Vancouver: 200',
+        label: 'Vancouver',
+        data: 200,
+        xCoordinate: 200,
+        yCoordinate: 200
+      };
+      const serieB = {
+        category: 'fevereiro',
+        tooltipLabel: 'Vancouver: 300',
+        label: 'Vancouver',
+        data: 300,
+        xCoordinate: 300,
+        yCoordinate: 300
+      };
+
+      spyOn(UtilsFunction, 'isIE').and.returnValue(false);
+
+      const subscription = component['displayPointsWithDelay']([serieA, serieB]).subscribe(value => {
+        coordinatesWithDelay = value;
+      });
+
+      tick();
+      expect(coordinatesWithDelay.length).toBe(1);
+      expect(coordinatesWithDelay).toEqual([serieA]);
+
+      tick(700);
+      expect(coordinatesWithDelay.length).toBe(2);
+      expect(coordinatesWithDelay).toEqual([serieA, serieB]);
+      expect(component['animationState']).toBeFalsy();
+
+      subscription.unsubscribe();
+    }));
+
+    it('displayPointsWithDelay: shuold return an observable without any delay if animationState is false', fakeAsync(() => {
+      component['animationState'] = false;
+      let delayedCoordinates: Array<PoChartPointsCoordinates> = [];
+
+      const serieA = {
+        category: 'janeiro',
+        tooltipLabel: 'Vancouver: 200',
+        label: 'Vancouver',
+        data: 200,
+        xCoordinate: 200,
+        yCoordinate: 200
+      };
+      const serieB = {
+        category: 'fevereiro',
+        tooltipLabel: 'Vancouver: 300',
+        label: 'Vancouver',
+        data: 300,
+        xCoordinate: 300,
+        yCoordinate: 300
+      };
+
+      spyOn(UtilsFunction, 'isIE').and.returnValue(false);
+
+      const subscription = component['displayPointsWithDelay']([serieA, serieB]).subscribe(value => {
+        delayedCoordinates = value;
+      });
+
+      tick();
+      expect(delayedCoordinates.length).toBe(2);
+      expect(component['animationState']).toBeFalsy();
+
+      subscription.unsubscribe();
+    }));
+
+    it('displayPointsWithDelay: shuold return an observable without any delay if isIE is true', fakeAsync(() => {
+      let delayedCoordinates: Array<PoChartPointsCoordinates> = [];
+
+      const serieA = {
+        category: 'janeiro',
+        tooltipLabel: 'Vancouver: 200',
+        label: 'Vancouver',
+        data: 200,
+        xCoordinate: 200,
+        yCoordinate: 200
+      };
+      const serieB = {
+        category: 'fevereiro',
+        tooltipLabel: 'Vancouver: 300',
+        label: 'Vancouver',
+        data: 300,
+        xCoordinate: 300,
+        yCoordinate: 300
+      };
+
+      spyOn(UtilsFunction, 'isIE').and.returnValue(true);
+
+      const subscription = component['displayPointsWithDelay']([serieA, serieB]).subscribe(value => {
+        delayedCoordinates = value;
+      });
+
+      tick();
+      expect(delayedCoordinates.length).toBe(2);
+      expect(component['animationState']).toBeTruthy();
+
+      subscription.unsubscribe();
+    }));
+  });
+
+  describe('Properties', () => {
+    it('p-coordinates: should call `displayPointsWithDelay`', () => {
+      const spyDisplayPointsWithDelay = spyOn(component, <any>'displayPointsWithDelay');
+
+      component.coordinates = [coordinates];
+
+      expect(spyDisplayPointsWithDelay).toHaveBeenCalledWith(component.coordinates);
+    });
   });
 
   describe('Template:', () => {
     it('should contain `po-chart-line-point`', () => {
+      spyOn(component, <any>['displayPointsWithDelay']).and.returnValue(of(component.coordinates));
+      component.coordinates = [coordinates];
+
+      fixture.detectChanges();
+
       const chartPoints = nativeElement.querySelectorAll('.po-chart-line-point');
 
       expect(chartPoints).toBeTruthy();

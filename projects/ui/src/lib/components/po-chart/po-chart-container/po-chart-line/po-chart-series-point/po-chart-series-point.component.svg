@@ -1,4 +1,4 @@
-<svg:circle *ngFor="let item of coordinates; trackBy: trackBy" 
+<svg:circle *ngFor="let item of coordinates$ | async; trackBy: trackBy" 
   [p-tooltip]="item.tooltipLabel"
   p-tooltip-position="top"
   [p-append-in-body]='true'

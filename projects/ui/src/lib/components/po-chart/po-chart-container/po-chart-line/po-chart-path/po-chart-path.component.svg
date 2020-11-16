@@ -1,5 +1,7 @@
-<svg:path
+<svg:path #chartPath
   class="po-chart-line-path"
+  [attr.stroke-dasharray]="pathWidth"
+  [attr.stroke-dashoffset]="pathWidth"
   [attr.stroke]="color"
   [attr.d]="coordinates">
 </svg:path> 
