@@ -269,13 +269,14 @@ describe('PoChartLineComponent', () => {
       });
     });
 
-    it('reorderSVGGroup: should call `renderer.appendChild` and `querySelectorAll`', () => {
+    it('reorderSVGGroup: should apply false to `animate` and call `renderer.appendChild` and `querySelectorAll`', () => {
       const pathGroup = 'po-chart-line-path-group-0';
 
       const spyAppendChild = spyOn(component['renderer'], 'appendChild');
 
       component['reorderSVGGroup'](pathGroup);
 
+      expect(component.animate).toBeFalsy();
       expect(spyAppendChild).toHaveBeenCalled();
     });
   });

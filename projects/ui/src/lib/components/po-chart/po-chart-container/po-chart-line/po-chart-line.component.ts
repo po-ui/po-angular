@@ -19,6 +19,7 @@ import { PoLineChartSeries } from '../../interfaces/po-chart-line-series.interfa
   templateUrl: './po-chart-line.component.svg'
 })
 export class PoChartLineComponent {
+  animate: boolean = true;
   colors: Array<string>;
   seriesPathsCoordinates: Array<PoChartPathCoordinates>;
   seriesPointsCoordinates: Array<Array<PoChartPointsCoordinates>> = [];
@@ -51,6 +52,7 @@ export class PoChartLineComponent {
 
     if (seriesDataArrayFilter.length) {
       this._series = seriesDataArrayFilter;
+      this.animate = true;
       this.seriesLength = this.mathsService.seriesGreaterLength(this.series);
       this.colors = this.colorService.getSeriesColor(this._series, PoChartType.Line);
       this.getDomainValues(this.options);
@@ -198,6 +200,7 @@ export class PoChartLineComponent {
   private reorderSVGGroup(pathGroup: string) {
     const pathGroupElement = this.elementRef.nativeElement.querySelectorAll(`.${pathGroup}`);
 
+    this.animate = false;
     this.renderer.appendChild(this.chartLine.nativeElement, pathGroupElement[0]);
   }
 }
