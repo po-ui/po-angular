@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [3.13.0](https://github.com/po-ui/po-angular/compare/v3.12.0...v3.13.0) (2020-11-16)
+
+
+### Features
+
+* **breadcrumb:** define literais para idiomas suportados ([85580df](https://github.com/po-ui/po-angular/commit/85580df0b79d95091499cb088f381f078fda6f9a))
+* **http-interceptor:** traduz as literais para os idiomas suportados ([025dc36](https://github.com/po-ui/po-angular/commit/025dc36cfb7c81f913c91d1a588404f0ba87f4ad))
+* **lookup:** adiciona evento `p-change` ([b256893](https://github.com/po-ui/po-angular/commit/b2568935739dea3de63b06943bb8a27fb131b187))
+* **notification:** atualiza espaçamentos para notificações ([8577d0e](https://github.com/po-ui/po-angular/commit/8577d0eaec14c214e47fa6e4f3038c24640e2433))
+
+
+
 <a name="3.12.0"></a>
 # [3.12.0](https://github.com/po-ui/po-angular/compare/v3.11.0...v3.12.0) (2020-11-09)
 
