@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+
+import { minFailed, maxFailed } from '../validators';
+
 import { convertToInt } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
@@ -69,6 +72,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
   private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
   private _locale?: string;
+  private _min?: number;
+  private _max?: number;
 
   private decimalSeparator: string;
   private fireChange: boolean = false;
@@ -174,6 +179,52 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this.setNumbersSeparators();
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Valor mínimo.
+   */
+  @Input('p-min') set min(value: number) {
+    if (!isNaN(value)) {
+      this._min = value;
+
+      this.validateModel();
+    } else if (!value) {
+      this._min = undefined;
+
+      this.validateModel();
+    }
+  }
+
+  get min(): number {
+    return this._min;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Valor máximo.
+   */
+  @Input('p-max') set max(value: number) {
+    if (!isNaN(value)) {
+      this._max = value;
+
+      this.validateModel();
+    } else if (!value) {
+      this._max = undefined;
+
+      this.validateModel();
+    }
+  }
+
+  get max(): number {
+    return this._max;
+  }
+
   constructor(private el: ElementRef, private poLanguageService: PoLanguageService) {
     super();
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
@@ -203,7 +254,26 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this.controlChangeEmitter();
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any } {
+  extraValidation(abstractControl: AbstractControl): { [key: string]: any } {
+    // Verifica se já possui algum error pattern padrão.
+    this.errorPattern = this.errorPattern !== 'Valor Inválido' ? this.errorPattern : '';
+
+    if (minFailed(this.min, abstractControl.value)) {
+      return {
+        min: {
+          valid: false
+        }
+      };
+    }
+
+    if (maxFailed(this.max, abstractControl.value)) {
+      return {
+        max: {
+          valid: false
+        }
+      };
+    }
+
     return null;
   }
 
