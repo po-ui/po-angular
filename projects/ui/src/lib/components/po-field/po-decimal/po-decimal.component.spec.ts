@@ -1,6 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { FormControl } from '@angular/forms';
 
-import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
 import { PoCleanComponent } from './../po-clean/po-clean.component';
 import { PoDecimalComponent } from './po-decimal.component';
@@ -108,6 +109,46 @@ describe('PoDecimalComponent:', () => {
       validValues = [13, 21];
       component.decimalsLength = 4;
       expectPropertiesValues(component, 'thousandMaxlength', validValues, 13);
+    });
+
+    it('p-min: should update property with valid values', () => {
+      let validValues = [undefined, undefined];
+      expectPropertiesValues(component, 'min', validValues, validValues);
+
+      validValues = [19.9];
+      component.decimalsLength = 2;
+      expectPropertiesValues(component, 'min', validValues, 19.9);
+    });
+
+    it('p-min: should update property with `undefined` if values are invalid.', () => {
+      component.min = <any>'one';
+      expect(component.min).toBeUndefined();
+    });
+
+    it('p-min: should call min failed', () => {
+      component.min = 4;
+
+      expect(component.validate(new FormControl('2'))).not.toBeNull();
+    });
+
+    it('p-max: should update property with valid values', () => {
+      let validValues = [undefined, undefined];
+      expectPropertiesValues(component, 'max', validValues, validValues);
+
+      validValues = [49.99];
+      component.decimalsLength = 2;
+      expectPropertiesValues(component, 'max', validValues, 49.99);
+    });
+
+    it('p-max: should update property with `undefined` if values are invalid.', () => {
+      component.max = <any>'one';
+      expect(component.max).toBeUndefined();
+    });
+
+    it('p-max: should call max failed', () => {
+      component.max = 5;
+
+      expect(component.validate(new FormControl('10'))).not.toBeNull();
     });
   });
 
@@ -311,7 +352,11 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should return null in extraValidation()', () => {
-    expect(component.extraValidation(null)).toBeNull();
+    component.errorPattern = 'Valor Inválido';
+    component.min = 0;
+    component.max = 0;
+
+    expect(component.extraValidation(new FormControl(null))).toBeNull();
   });
 
   it('should have a call getScreenValue method', () => {
