@@ -47,3 +47,26 @@ export const validateArray = (value: object) => {
     throw new Error(`${paramName} cannot be empty array`);
   }
 };
+
+/**
+ * Recebe um arquivo e converte para uma string base64
+ *
+ * @param Objeto do tipo file.
+ */
+export const toBase64 = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+
+/**
+ * Recebe um arquivo e converte para uma string base64
+ *
+ * @param Objeto do tipo file.
+ */
+export const toFile = (url: string, filename: string, mimeType: string) =>
+  fetch(url)
+    .then(res => res.arrayBuffer())
+    .then(buf => new File([buf], filename, { type: mimeType }));

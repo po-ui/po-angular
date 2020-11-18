@@ -25,7 +25,7 @@ export interface PoEventSourcingItem {
    *
    * > Caso a operação seja do tipo HTTP, o registro deverá ter a assinatura da interface `PoHttpOperationData`.
    */
-  record: any | PoHttpRequestData;
+  record: PoHttpRequestData;
 
   /** Nome do *schema* à qual se refere o `EventSourcing`. */
   schema?: string;

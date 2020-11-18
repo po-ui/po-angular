@@ -21,6 +21,7 @@ import { PoSchemaUtil } from './../po-schema/po-schema-util/po-schema-util.model
 import { PoSyncConfig } from '../po-sync/interfaces/po-sync-config.interface';
 import { PoSyncResponse } from '../po-sync/interfaces/po-sync-response.interface';
 import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
+import { toBase64, toFile } from '../../utils/utils';
 
 @Injectable()
 export class PoEventSourcingService {
@@ -99,6 +100,8 @@ export class PoEventSourcingService {
   }
 
   async httpCommand(httpOperationData: PoHttpRequestData, customRequestId?: string): Promise<number> {
+    httpOperationData = await this.serializeBody(httpOperationData);
+
     const eventSourcingItem = this.createEventSourcingItem(
       PoEventSourcingOperation.Http,
       httpOperationData,
@@ -108,6 +111,29 @@ export class PoEventSourcingService {
 
     await this.insertEventSourcingQueue(eventSourcingItem);
     return eventSourcingItem.id;
+  }
+
+  /**
+   * Avalia se o body é do tipo File e se for converte para byte64
+   *
+   * > Veja mais detalhes em [Fundamentos do PO Sync - Inserindo requisições HTTP na fila de eventos](/guides/sync-fundamentals).
+   *
+   */
+  private async serializeBody(requestData: PoHttpRequestData): Promise<PoHttpRequestData> {
+    let { body, mimeType, bodyType, fileName } = requestData;
+
+    if (body instanceof File) {
+      bodyType = 'File';
+      mimeType = body.type;
+      fileName = body.name;
+      body = await toBase64(body);
+    }
+
+    const newRequestData = { ...requestData, body, mimeType, bodyType, fileName };
+
+    console.log(newRequestData);
+
+    return newRequestData;
   }
 
   responsesSubject(): Observable<PoSyncResponse> {
@@ -425,10 +451,36 @@ export class PoEventSourcingService {
     return Promise.resolve();
   }
 
-  private sendServerItem(url, method, body?) {
-    const requestData: PoHttpRequestData = { url: url, method: method, body: body };
+  private async sendServerItem(url: string, method: PoHttpRequestType, body?: PoEventSourcingItem['record']) {
+    const requestData: PoHttpRequestData = await this.createPoHttpRequestData(url, method, body);
 
     return this.poHttpClient.createRequest(requestData).toPromise();
+  }
+
+  private async createPoHttpRequestData(
+    url: string,
+    method: PoHttpRequestType,
+    record?: PoEventSourcingItem['record']
+  ): Promise<PoHttpRequestData> {
+    let body = record.body;
+    if (record.bodyType === 'File') {
+      body = await this.createFormData(body, record.fileName, record.mimeType);
+    }
+    return { url, method, body };
+  }
+
+  /**
+   * Avalia se o body é do tipo File e se for converte para byte64
+   *
+   * > Veja mais detalhes em [Fundamentos do PO Sync - Inserindo requisições HTTP na fila de eventos](/guides/sync-fundamentals).
+   *
+   */
+  private async createFormData(body: string, fileName: string, mimeType: string): Promise<FormData> {
+    const file = await toFile(body, fileName, mimeType);
+    const formData: FormData = new FormData();
+
+    formData.append(fileName, file, fileName);
+    return formData;
   }
 
   private async updateOperation(eventSourcingItem: PoEventSourcingItem): Promise<Array<any> | number> {
