@@ -6,6 +6,8 @@ import { TestBed } from '@angular/core/testing';
 import { Observable, of, Subscriber } from 'rxjs';
 import { PoStorageService } from '@po-ui/ng-storage';
 
+import * as utilsFunctions from '../../utils/utils';
+
 import { PoDataMessage, PoDataTransform } from '../../models';
 import { PoEventSourcingErrorResponse } from '../../models/po-event-sourcing-error-response.model';
 import { PoEventSourcingItem } from './interfaces/po-event-sourcing-item.interface';
@@ -205,39 +207,98 @@ describe('PoEventSourcingService:', () => {
 
     it('httpCommand: should call createEventSourcingItem and insertEventSourcingQueue with the valid params', async () => {
       const httpOperationDataMock: PoHttpRequestData = { url: 'url-request', method: PoHttpRequestType.GET };
+      const serializeResult = {
+        url: 'url-request',
+        method: 'GET',
+        body: undefined,
+        mimeType: undefined,
+        bodyType: undefined,
+        fileName: undefined
+      };
       const eventSourcingItemMock = { value: 'PoEventSourcingItem' };
 
       spyOn(eventSourcingService, <any>'createEventSourcingItem').and.returnValue(eventSourcingItemMock);
       spyOn(eventSourcingService, <any>'insertEventSourcingQueue').and.returnValue(Promise.resolve(null));
+      spyOn(eventSourcingService, <any>'serializeBody').and.returnValue(Promise.resolve(serializeResult));
 
       await eventSourcingService.httpCommand(httpOperationDataMock);
 
       expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
         PoEventSourcingOperation.Http,
-        httpOperationDataMock,
+        serializeResult,
         undefined,
         undefined
       );
 
       expect(eventSourcingService['insertEventSourcingQueue']).toHaveBeenCalledWith(eventSourcingItemMock);
+      expect(eventSourcingService['serializeBody']).toHaveBeenCalledWith(httpOperationDataMock);
     });
 
     it('httpCommand: should call createEventSourcingItem with customRequestId', async () => {
       const httpOperationDataMock: PoHttpRequestData = { url: 'url-request', method: PoHttpRequestType.GET };
+      const serializeResult = {
+        url: 'url-request',
+        method: 'GET',
+        body: undefined,
+        mimeType: undefined,
+        bodyType: undefined,
+        fileName: undefined
+      };
       const eventSourcingItemMock = { value: 'PoEventSourcingItem' };
       const customRequestId: string = '123';
 
       spyOn(eventSourcingService, <any>'createEventSourcingItem').and.returnValue(eventSourcingItemMock);
       spyOn(eventSourcingService, <any>'insertEventSourcingQueue').and.returnValue(Promise.resolve(null));
+      spyOn(eventSourcingService, <any>'serializeBody').and.returnValue(Promise.resolve(serializeResult));
 
       await eventSourcingService.httpCommand(httpOperationDataMock, customRequestId);
 
       expect(eventSourcingService['createEventSourcingItem']).toHaveBeenCalledWith(
         PoEventSourcingOperation.Http,
-        httpOperationDataMock,
+        serializeResult,
         undefined,
         customRequestId
       );
+    });
+
+    it('serializeBody: should return a string base64 if body is an instance of File', async () => {
+      const file = new File([''], 'filename', { type: 'text/html' });
+      const httpOperationDataMock: PoHttpRequestData = {
+        url: 'url-request',
+        method: PoHttpRequestType.GET,
+        body: file
+      };
+      const newRequestData: PoHttpRequestData = {
+        url: 'url-request',
+        method: PoHttpRequestType.GET,
+        body: 'data:',
+        mimeType: 'text/html',
+        bodyType: 'File',
+        fileName: 'filename'
+      };
+
+      const result = await eventSourcingService['serializeBody'](httpOperationDataMock);
+
+      expect(typeof result.body).toBe('string');
+      expect(result).toEqual(newRequestData);
+    });
+
+    it('serializeBody: shouldn`t return a string base64 if body isn`t an instance of File', async () => {
+      const body = {};
+      const httpOperationDataMock: PoHttpRequestData = { url: 'url-request', method: PoHttpRequestType.GET, body };
+      const newRequestData: PoHttpRequestData = {
+        url: 'url-request',
+        method: PoHttpRequestType.GET,
+        body,
+        mimeType: undefined,
+        bodyType: undefined,
+        fileName: undefined
+      };
+
+      const result = await eventSourcingService['serializeBody'](httpOperationDataMock);
+
+      expect(typeof result.body).toBe('object');
+      expect(result).toEqual(newRequestData);
     });
 
     it('onSaveData: should return eventSub and do not call Observable.create if eventSub is defined', done => {
@@ -670,7 +731,9 @@ describe('PoEventSourcingService:', () => {
         body: { data: 'value' }
       };
 
+      spyOn(eventSourcingService, <any>'createPoHttpRequestData').and.returnValue(Promise.resolve(poHttpRequestData));
       spyOn(eventSourcingService['poHttpClient'], 'createRequest').and.returnValue(<any>of({}));
+
       await eventSourcingService['sendServerItem'](
         poHttpRequestData.url,
         poHttpRequestData.method,
@@ -678,6 +741,83 @@ describe('PoEventSourcingService:', () => {
       );
 
       expect(eventSourcingService['poHttpClient']['createRequest']).toHaveBeenCalledWith(poHttpRequestData);
+    });
+
+    it('createPoHttpRequestData: should return newRequestData', async () => {
+      const poHttpRequestData: PoHttpRequestData = {
+        url: 'http://url.com/customers',
+        method: PoHttpRequestType.POST,
+        headers: [{ name: 'test', value: 'teste1' }],
+        body: {}
+      };
+
+      spyOn(eventSourcingService, <any>'createFormData');
+
+      const result = await eventSourcingService['createPoHttpRequestData'](
+        poHttpRequestData.url,
+        poHttpRequestData.method,
+        poHttpRequestData,
+        poHttpRequestData.headers
+      );
+
+      expect(result).toEqual(poHttpRequestData);
+      expect(eventSourcingService['createFormData']).not.toHaveBeenCalled();
+    });
+
+    it('createPoHttpRequestData: should call createFormData if record.bodyType is `File`', async () => {
+      const poHttpRequestData: PoHttpRequestData = {
+        url: 'http://url.com/customers',
+        method: PoHttpRequestType.POST,
+        headers: [{ name: 'test', value: 'teste1' }],
+        body: new File([''], 'filename', { type: 'text/html' }),
+        bodyType: 'File'
+      };
+
+      const body = new FormData();
+
+      const expectedValue: PoHttpRequestData = {
+        url: 'http://url.com/customers',
+        method: PoHttpRequestType.POST,
+        headers: [{ name: 'test', value: 'teste1' }],
+        body
+      };
+
+      spyOn(eventSourcingService, <any>'createFormData').and.returnValue(Promise.resolve(body));
+
+      const result = await eventSourcingService['createPoHttpRequestData'](
+        poHttpRequestData.url,
+        poHttpRequestData.method,
+        poHttpRequestData,
+        poHttpRequestData.headers
+      );
+
+      expect(result).toEqual(expectedValue);
+    });
+
+    it('createFormData: should return a FormData', async () => {
+      const file = new File([''], 'filename', { type: 'text/html' });
+      const body = 'Data: ';
+      const expectedValue: FormData = new FormData();
+      expectedValue.append('file', file, 'fileName');
+
+      spyOn(utilsFunctions, <any>'toFile').and.returnValue(Promise.resolve(file));
+
+      const result = await eventSourcingService['createFormData'](body, 'filename', 'text/html');
+
+      expect(result).toEqual(expectedValue);
+    });
+
+    it('createFormData: should return a FormData', async () => {
+      const file = new File([''], 'filename', { type: 'text/html' });
+      const body = 'Data: ';
+      const expectedValue: FormData = new FormData();
+      expectedValue.append('file_field', file, 'fileName');
+
+      spyOn(utilsFunctions, <any>'toFile').and.returnValue(Promise.resolve(file));
+
+      const result = await eventSourcingService['createFormData'](body, 'filename', 'text/html', 'file_field');
+
+      expect(result).toEqual(expectedValue);
     });
 
     it('diffServerItems: should call poHttpClient.get with schemasSyncConfig.schemaName.currentUrlDiff', done => {
@@ -841,6 +981,12 @@ describe('PoEventSourcingService:', () => {
 
     it('httpOperation: should create httpOperation correctly', async () => {
       const httpOperationData: PoHttpRequestData = { url: 'http://url-test.com', method: PoHttpRequestType.GET };
+      const requestData: PoHttpRequestData = {
+        url: 'http://url-test.com',
+        method: PoHttpRequestType.GET,
+        body: undefined,
+        headers: undefined
+      };
       const itemEvent: PoEventSourcingItem = {
         id: 123,
         operation: PoEventSourcingOperation.Http,
@@ -859,12 +1005,19 @@ describe('PoEventSourcingService:', () => {
       spyOn(poHttpClientMock, 'createRequest').and.returnValue(of(response));
       spyOn(eventSourcingService['responseSubject'], <any>'next');
       spyOn(eventSourcingService, <any>'removeEventSourcingValidItem').and.returnValue(Promise.resolve());
+      spyOn(eventSourcingService, <any>'createPoHttpRequestData').and.returnValue(Promise.resolve(requestData));
 
       await eventSourcingService['httpOperation'](itemEvent);
 
-      expect(poHttpClientMock.createRequest).toHaveBeenCalledWith(itemEvent.record);
+      expect(poHttpClientMock.createRequest).toHaveBeenCalledWith(requestData);
       expect(eventSourcingService['responseSubject']['next']).toHaveBeenCalledWith(poHttpCommandResponse);
       expect(eventSourcingService['removeEventSourcingValidItem']).toHaveBeenCalledWith(response.status, itemEvent);
+      expect(eventSourcingService['createPoHttpRequestData']).toHaveBeenCalledWith(
+        itemEvent.record.url,
+        itemEvent.record.method,
+        itemEvent.record,
+        itemEvent.record.headers
+      );
     });
 
     it(`httpOperation: should call sendResponseSubject if createRequest return a error and not

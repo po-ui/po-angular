@@ -20,4 +20,16 @@ export interface PoHttpRequestData {
 
   /** Corpo da requisição. */
   body?: any;
+
+  /** Nome da propriedade que conterá o arquivo enviado para o servidor */
+  formField?: string;
+
+  // Tipo do body
+  bodyType?: string;
+
+  // MimeType da requisição caso seja um arquivo
+  mimeType?: string;
+
+  // Nome do arquivo
+  fileName?: string;
 }
