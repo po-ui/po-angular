@@ -41,7 +41,7 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
 export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterViewInit, OnDestroy {
   arrowDirection = 'left';
   timeoutResize;
-
+  targetElement;
   eventListenerFunction: () => void;
 
   @ViewChild('popoverElement', { read: ElementRef, static: true }) popoverElement: ElementRef;
@@ -51,6 +51,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   }
 
   ngAfterViewInit(): void {
+    this.targetElement = this.target instanceof ElementRef ? this.target.nativeElement : this.target;
     this.initEventListenerFunction();
 
     this.setElementsControlPosition();
@@ -104,11 +105,11 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     });
 
     if (this.trigger === 'hover') {
-      this.mouseEnterListener = this.renderer.listen(this.target.nativeElement, 'mouseenter', (event: MouseEvent) => {
+      this.mouseEnterListener = this.renderer.listen(this.targetElement, 'mouseenter', (event: MouseEvent) => {
         this.open();
       });
 
-      this.mouseLeaveListener = this.renderer.listen(this.target.nativeElement, 'mouseleave', (event: MouseEvent) => {
+      this.mouseLeaveListener = this.renderer.listen(this.targetElement, 'mouseleave', (event: MouseEvent) => {
         this.close();
       });
     } else {
@@ -122,10 +123,10 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     if (
       !this.isHidden &&
       !this.popoverElement.nativeElement.contains(event.target) &&
-      !this.target.nativeElement.contains(event.target)
+      !this.targetElement.contains(event.target)
     ) {
       this.close();
-    } else if (this.target.nativeElement.contains(event.target)) {
+    } else if (this.targetElement.contains(event.target)) {
       this.popoverElement.nativeElement.hidden ? this.open() : this.close();
     }
   }

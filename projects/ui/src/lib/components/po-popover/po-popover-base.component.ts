@@ -99,7 +99,7 @@ export class PoPopoverBaseComponent {
    * </po-button>
    *
    * <po-popover
-   *   [p-origin]="poButton"
+   *   [p-target]="poButton"
    *   [p-title]="PO Popover">
    * </po-popover>
    * ```
@@ -110,8 +110,26 @@ export class PoPopoverBaseComponent {
    * ```
    * @ViewChild(PoButtonComponent, {read: ElementRef}) poButton: PoButtonComponent;
    * ```
+   *
+   * Pode-se tambem informar diretamente o HTMLElement, para não ter que utilizar o ViewChild.
+   * Para utilizar o po-popover deve-se colocar uma variável no componente que vai disparar o evento
+   * de abertura, exemplo:
+   *
+   * ```
+   * <button #target>
+   *   Abrir popover
+   * </button>
+   *
+   * <po-popover
+   *     [p-target]="target"
+   *     p-trigger="click" >
+   * </po-popover>
+   * ```
+   *
+   *
+   *
    */
-  @Input('p-target') target: ElementRef;
+  @Input('p-target') target: ElementRef | HTMLElement;
 
   /** Título do popover. */
   @Input('p-title') title?: string;

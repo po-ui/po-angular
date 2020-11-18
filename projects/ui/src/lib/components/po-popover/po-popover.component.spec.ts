@@ -27,6 +27,7 @@ describe('PoPopoverComponent:', () => {
     nativeElement = fixture.debugElement.nativeElement;
 
     component.target = component.popoverElement;
+    component.targetElement = component.popoverElement.nativeElement;
   });
 
   it('should be created', () => {
@@ -39,6 +40,11 @@ describe('PoPopoverComponent:', () => {
     component.ngAfterViewInit();
     expect(component['poControlPosition'].setElements).toHaveBeenCalled();
     expect(component.setRendererListenInit).toHaveBeenCalled();
+  });
+
+  it('should set targetElement in ngAfterViewInit', () => {
+    component.ngAfterViewInit();
+    expect(component.targetElement).toBeTruthy();
   });
 
   it('should call setPopoverPosition in debounceResize', fakeAsync(() => {
@@ -71,6 +77,7 @@ describe('PoPopoverComponent:', () => {
   describe('setRendererListenInit:', () => {
     it(`should listen for 'mouseenter' `, () => {
       const fakeEvent = getFakeToSetRendererListenInit('hover', component);
+      component.targetElement = component.popoverElement.nativeElement;
 
       spyOn(fakeEvent, 'open');
 
@@ -127,6 +134,7 @@ describe('PoPopoverComponent:', () => {
   it('should open popover in togglePopup when click on target', () => {
     component.popoverElement.nativeElement.hidden = true;
     component.target = component.popoverElement;
+    component.targetElement = component.popoverElement.nativeElement;
 
     spyOn(component, 'open');
 
@@ -143,6 +151,7 @@ describe('PoPopoverComponent:', () => {
   it('should close popover in togglePopup when click on target', () => {
     component.popoverElement.nativeElement.hidden = false;
     component.target = component.popoverElement;
+    component.targetElement = component.popoverElement.nativeElement;
 
     spyOn(component, 'close');
 
@@ -162,6 +171,7 @@ describe('PoPopoverComponent:', () => {
       target: {
         nativeElement: document.head
       },
+      targetElement: document.head,
       close: () => {},
       open: () => {}
     };
@@ -294,6 +304,10 @@ describe('PoPopoverComponent:', () => {
           nativeElement: {
             contains: () => {}
           }
+        },
+        targetElement: {
+          contains: () => undefined,
+          hidden: false
         }
       };
 
@@ -321,6 +335,10 @@ describe('PoPopoverComponent:', () => {
           nativeElement: {
             contains: () => undefined
           }
+        },
+        targetElement: {
+          contains: () => undefined,
+          hidden: false
         },
         close: () => {},
         open: () => {}
@@ -379,6 +397,7 @@ function getFakeToSetRendererListenInit(trigger, component) {
     target: {
       nativeElement: document.body
     },
+    targetElement: document.body,
     open: () => {},
     close: () => {},
     togglePopup: () => {},
