@@ -7,10 +7,13 @@ import { expand, map, reduce } from 'rxjs/operators';
 
 import { PoStorageService } from '@po-ui/ng-storage';
 
+import { toBase64, toFile } from '../../utils/utils';
+
 import { PoEventSourcingErrorResponse } from '../../models/po-event-sourcing-error-response.model';
 import { PoEventSourcingItem } from './interfaces/po-event-sourcing-item.interface';
 import { PoEventSourcingOperation } from './enums/po-event-sourcing-operation.enum';
 import { PoEventSourcingSummaryItem } from './interfaces/po-event-sourcing-summary-item.interface';
+import { PoHttpHeaderOption } from './../po-http-client/interfaces/po-http-header-option.interface';
 import { PoHttpClientService } from './../po-http-client/po-http-client.service';
 import { PoHttpRequestData } from '../po-http-client/interfaces/po-http-request-data.interface';
 import { PoHttpRequestType } from '../po-http-client/po-http-request-type.enum';
@@ -99,6 +102,8 @@ export class PoEventSourcingService {
   }
 
   async httpCommand(httpOperationData: PoHttpRequestData, customRequestId?: string): Promise<number> {
+    httpOperationData = await this.serializeBody(httpOperationData);
+
     const eventSourcingItem = this.createEventSourcingItem(
       PoEventSourcingOperation.Http,
       httpOperationData,
@@ -108,6 +113,20 @@ export class PoEventSourcingService {
 
     await this.insertEventSourcingQueue(eventSourcingItem);
     return eventSourcingItem.id;
+  }
+
+  /* Avalia se o body é do tipo File e se for converte para base64 */
+  private async serializeBody(requestData: PoHttpRequestData): Promise<PoHttpRequestData> {
+    let { body, mimeType, bodyType, fileName } = requestData;
+
+    if (body instanceof File) {
+      bodyType = 'File';
+      mimeType = body.type;
+      fileName = body.name;
+      body = await toBase64(body);
+    }
+
+    return { ...requestData, body, mimeType, bodyType, fileName };
   }
 
   responsesSubject(): Observable<PoSyncResponse> {
@@ -298,7 +317,13 @@ export class PoEventSourcingService {
 
   private async httpOperation(eventSourcingItem: PoEventSourcingItem): Promise<Array<PoEventSourcingItem> | number> {
     try {
-      const response = await this.poHttpClient.createRequest(eventSourcingItem.record).toPromise();
+      const requestData: PoHttpRequestData = await this.createPoHttpRequestData(
+        eventSourcingItem.record.url,
+        eventSourcingItem.record.method,
+        eventSourcingItem.record,
+        eventSourcingItem.record.headers
+      );
+      const response = await this.poHttpClient.createRequest(requestData).toPromise();
       const poHttpCommandResponse: PoSyncResponse = {
         id: eventSourcingItem.id,
         customRequestId: eventSourcingItem.customRequestId,
@@ -425,10 +450,38 @@ export class PoEventSourcingService {
     return Promise.resolve();
   }
 
-  private sendServerItem(url, method, body?) {
-    const requestData: PoHttpRequestData = { url: url, method: method, body: body };
+  private async sendServerItem(url: string, method: PoHttpRequestType, body?: PoEventSourcingItem['record']) {
+    const requestData: PoHttpRequestData = await this.createPoHttpRequestData(url, method, body);
 
     return this.poHttpClient.createRequest(requestData).toPromise();
+  }
+
+  private async createPoHttpRequestData(
+    url: string,
+    method: PoHttpRequestType,
+    record?: PoEventSourcingItem['record'],
+    headers?: Array<PoHttpHeaderOption>
+  ): Promise<PoHttpRequestData> {
+    let body = record.body;
+
+    if (record.bodyType === 'File') {
+      body = await this.createFormData(body, record.fileName, record.mimeType, record.formField);
+    }
+
+    return { url, method, body, headers };
+  }
+
+  private async createFormData(
+    body: string,
+    fileName: string,
+    mimeType: string,
+    formField: string = 'file'
+  ): Promise<FormData> {
+    const file = await toFile(body, fileName, mimeType);
+    const formData: FormData = new FormData();
+
+    formData.append(formField, file, fileName);
+    return formData;
   }
 
   private async updateOperation(eventSourcingItem: PoEventSourcingItem): Promise<Array<any> | number> {

@@ -699,6 +699,46 @@ this.poSync.insertHttpCommand(poHttpRequestData).then(commandId => {
 });
 ```
 
+Também é possível fazer o envio de arquivo (File) para o servidor utilizando o `Content-Type: multipart/form-data`. Para isso, deve ser informado no `body` o `rawFile`, conforme exemplo abaixo:
+
+``` typescript
+public insertFileHttpCommand(file: File) {
+  const requestData: PoHttpRequestData = {
+    url: 'http://my-server/api/v1/upload';,
+    method: PoHttpRequestType.POST,
+    headers: Array<PoHttpHeaderOption> = [{ name: 'Authorization', value: 'Basic ' + btoa('13' + ':' + '13') }],
+    body: file.rawFile,
+    formField: 'files',
+  };
+
+  this.poSync.insertHttpCommand(requestData).then(commandId => {
+    // Evento HTTP adicionado na fila de eventos e retornado o ID do evento em "commandId"
+  });
+}
+```
+> Caso não seja passado nenhum valor para a propriedade `formField` será aplicado o valor padrão `file`.
+
+> Para o envio de arquivos recomendamos o uso prioritário do `lokijs` nas configurações do `PoStorageModule` por sua maior capacidade de armazenamento.
+A configuração deve ser feita no `app.module.ts` da sua aplicação, por exemplo:
+
+``` typescript
+...
+@NgModule({
+  ...
+  imports: [
+    ...
+    PoStorageModule.forRoot({ // import do módulo Po Storage,
+      name: 'mystorage',
+      storeName: '_mystore',
+      driverOrder: ['lokijs', 'indexeddb', 'localstorage', 'websql']
+    }),
+    PoSyncModule, // import do módulo Po Sync
+  ],
+  ...
+})
+export class AppModule {}
+```
+
 <a id="custom-request-id"></a>
 ### Criação de identificador customizado para eventos da fila
 
