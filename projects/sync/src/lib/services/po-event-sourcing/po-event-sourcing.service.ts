@@ -131,6 +131,7 @@ export class PoEventSourcingService {
 
     const newRequestData = { ...requestData, body, mimeType, bodyType, fileName };
 
+    console.log('httpCommand');
     console.log(newRequestData);
 
     return newRequestData;
@@ -466,7 +467,11 @@ export class PoEventSourcingService {
     if (record.bodyType === 'File') {
       body = await this.createFormData(body, record.fileName, record.mimeType);
     }
-    return { url, method, body };
+
+    const newRequestData = { url, method, body };
+    console.log('sendServerItem');
+    console.log(newRequestData);
+    return newRequestData;
   }
 
   /**
