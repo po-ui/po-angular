@@ -325,7 +325,12 @@ export class PoEventSourcingService {
 
   private async httpOperation(eventSourcingItem: PoEventSourcingItem): Promise<Array<PoEventSourcingItem> | number> {
     try {
-      const response = await this.poHttpClient.createRequest(eventSourcingItem.record).toPromise();
+      const requestData: PoHttpRequestData = await this.createPoHttpRequestData(
+        eventSourcingItem.record.url,
+        eventSourcingItem.record.method,
+        eventSourcingItem.record
+      );
+      const response = await this.poHttpClient.createRequest(requestData).toPromise();
       const poHttpCommandResponse: PoSyncResponse = {
         id: eventSourcingItem.id,
         customRequestId: eventSourcingItem.customRequestId,
@@ -465,7 +470,7 @@ export class PoEventSourcingService {
   ): Promise<PoHttpRequestData> {
     let body = record.body;
     if (record.bodyType === 'File') {
-      body = await this.createFormData(body, record.fileName, record.mimeType);
+      body = await this.createFormData(body, record.fileName, record.mimeType, record.fileField);
     }
 
     const newRequestData = { url, method, body };
@@ -480,11 +485,11 @@ export class PoEventSourcingService {
    * > Veja mais detalhes em [Fundamentos do PO Sync - Inserindo requisições HTTP na fila de eventos](/guides/sync-fundamentals).
    *
    */
-  private async createFormData(body: string, fileName: string, mimeType: string): Promise<FormData> {
+  private async createFormData(body: string, fileName: string, mimeType: string, fileField: string): Promise<FormData> {
     const file = await toFile(body, fileName, mimeType);
     const formData: FormData = new FormData();
 
-    formData.append(fileName, file, fileName);
+    formData.append(fileField, file, fileName);
     return formData;
   }
 

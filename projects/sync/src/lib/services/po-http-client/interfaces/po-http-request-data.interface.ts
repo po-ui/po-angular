@@ -28,4 +28,6 @@ export interface PoHttpRequestData {
   mimeType?: string;
 
   fileName?: string;
+
+  fileField?: string;
 }
