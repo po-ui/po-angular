@@ -330,7 +330,17 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(component['isNumberType']).toHaveBeenCalled();
       });
 
-      it('should return `input` if type is `number` and have a pattern', () => {
+      it('should return `input` if type is `number` and have a mask', () => {
+        const expectedValue = 'input';
+        const field = { type: 'number', property: 'code', mask: '99:99:99' };
+
+        spyOn(component, <any>'isNumberType').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['isNumberType']).toHaveBeenCalled();
+      });
+
+      it('should `input` if type is `number` or `currency` or `combo` can use icon', () => {
         const expectedValue = 'input';
         const field = { type: 'number', property: 'code', pattern: '99:99:99' };
 
@@ -338,6 +348,16 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isNumberType']).toHaveBeenCalled();
+      });
+
+      it('should return `decimal` if type is `decimal` and `isCurrencyType` can use decimalsLength', () => {
+        const expectedValue = 'decimal';
+        const field = { type: 'decimal', property: 'code' };
+
+        spyOn(component, <any>'isCurrencyType').and.returnValue(true);
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['isCurrencyType']).toHaveBeenCalled();
       });
 
       it('should return `decimal` if type is `decimal` and `isCurrencyType` is `true`', () => {

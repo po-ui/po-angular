@@ -61,6 +61,29 @@ export interface PoDynamicFormField extends PoDynamicField {
   /** Máscara para o campo. */
   mask?: string;
 
+  /** Define o ícone que será exibido no início do campo.
+   * > Esta propriedade o pode ser utilizado nos campos:
+   * - Input;
+   * - Number;
+   * - Decimal;
+   * - Combo;
+   *
+   * > Veja a disponibilidade de ícones em [biblioteca de ícones](guides/icons).
+   */
+  icon?: string;
+
+  /**  Quantidade máxima de casas decimais.
+   *
+   * > Esta propriedade só pode ser utilizada quando o `type` for *currency*.
+   */
+  decimalsLength?: number;
+
+  /** Quantidade máxima de dígitos antes do separador decimal. O valor máximo permitido é 13
+   *
+   * > Esta propriedade só pode ser utilizada quando o `type` for *currency*.
+   */
+  thousandMaxlength?: number;
+
   /** Regex para validação do campo. */
   pattern?: string;
 
