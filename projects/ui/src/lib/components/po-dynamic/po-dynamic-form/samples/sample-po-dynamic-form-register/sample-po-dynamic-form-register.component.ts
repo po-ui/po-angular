@@ -51,7 +51,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       pattern: '[a-zA]{5}[Z0-9]{3}',
       errorMessage: 'At least 5 alphabetic and 3 numeric characters are required.'
     },
-    { property: 'email', divider: 'CONTACTS', gridColumns: 6 },
+    { property: 'email', divider: 'CONTACTS', gridColumns: 6, icon: 'po-icon-mail' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },
     {
@@ -75,7 +75,14 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
     { property: 'city', disabled: true, gridColumns: 6 },
     { property: 'entryTime', label: 'Entry time', type: 'time', divider: 'Work data', gridColumns: 6 },
     { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 6 },
-    { property: 'wage', type: 'currency', gridColumns: 6 },
+    {
+      property: 'wage',
+      type: 'currency',
+      gridColumns: 6,
+      decimalsLength: 2,
+      thousandMaxlength: 7,
+      icon: 'po-icon-finance'
+    },
     {
       property: 'hobbies',
       divider: 'MORE INFO',
