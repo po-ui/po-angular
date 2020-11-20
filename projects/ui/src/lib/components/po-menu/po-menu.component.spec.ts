@@ -1677,14 +1677,7 @@ describe('PoMenuComponent:', () => {
       expect(component.enableCollapseButton).toBe(false);
     });
 
-    it(`hasFooter: should return 'false' if 'allowCollapseMenu' is 'false'`, () => {
-      component.allowCollapseMenu = false;
-
-      expect(component.hasFooter).toBe(false);
-    });
-
-    it(`hasFooter: should return 'false' if 'allowCollapseMenu' is 'true' and 'enableCollapseButton' and 'collapsed'
-    are 'false'`, () => {
+    it(`hasFooter: should return 'false' if 'enableCollapseButton' is 'false'`, () => {
       component.allowCollapseMenu = true;
       component.collapsed = false;
       spyOnProperty(component, 'enableCollapseButton').and.returnValue(false);
@@ -1692,21 +1685,21 @@ describe('PoMenuComponent:', () => {
       expect(component.hasFooter).toBe(false);
     });
 
-    it(`hasFooter: should return 'true' if 'allowCollapseMenu' and 'enableCollapseButton' are 'true'`, () => {
+    it(`hasFooter: should return 'true' if 'enableCollapseButton' is 'true'`, () => {
       component.allowCollapseMenu = true;
       spyOnProperty(component, 'enableCollapseButton').and.returnValue(true);
 
       expect(component.hasFooter).toBe(true);
     });
 
-    it(`hasFooter: should return 'true' if 'collapsed' is 'true' and 'collapsedMobile' is 'false'`, () => {
+    it(`hasFooter: should return 'true' if 'collapsed' is 'true'`, () => {
       component.collapsed = true;
       component.collapsedMobile = false;
 
       expect(component.hasFooter).toBe(true);
     });
 
-    it(`hasFooter: should return 'false' if 'collapsed' is 'true' and 'collapsedMobile' is 'false'`, () => {
+    it(`hasFooter: should return 'false' if 'collapsed' is 'true'`, () => {
       component.collapsed = false;
       component.collapsedMobile = false;
 
