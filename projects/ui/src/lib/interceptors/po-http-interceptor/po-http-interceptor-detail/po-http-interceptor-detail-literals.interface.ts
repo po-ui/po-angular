@@ -27,12 +27,12 @@ export const poHttpInterceptorDetailLiteralsDefault = {
     success: 'Sucesso'
   },
   ru: <any>{
-    closeButton: 'близко',
+    closeButton: 'Закрывать',
     details: 'Детали',
-    detail: 'деталь',
-    error: 'ошибка',
-    warning: 'предупреждение',
-    info: 'информация',
+    detail: 'Деталь',
+    error: 'Ошибка',
+    warning: 'Предупреждение',
+    info: 'Информация',
     success: 'Yспех'
   }
 };
