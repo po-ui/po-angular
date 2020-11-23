@@ -47,12 +47,12 @@ jobs:
       working-directory: ${{env.WORKING_DIR}}
 
     # Pega a última versão dos pacotes publicados no npm e armazena em variáveis
-    - run: echo ::set-env name=SCHEMATICS_LAST_PUBLISHED_VERSION::$(npm view @${{ env.SCHEMATICS_NPM_PATH }} dist-tags.next)
-    - run: echo ::set-env name=STORAGE_LAST_PUBLISHED_VERSION::$(npm view @${{ env.STORAGE_NPM_PATH }} dist-tags.next)
-    - run: echo ::set-env name=SYNC_LAST_PUBLISHED_VERSION::$(npm view @${{ env.SYNC_NPM_PATH }} dist-tags.next)
-    - run: echo ::set-env name=COMPONENTS_LAST_PUBLISHED_VERSION::$(npm view @${{ env.COMPONENTS_NPM_PATH }} dist-tags.next)
-    - run: echo ::set-env name=TEMPLATES_LAST_PUBLISHED_VERSION::$(npm view @${{ env.TEMPLATES_NPM_PATH }} dist-tags.next)
-    - run: echo ::set-env name=CODE_EDITOR_LAST_PUBLISHED_VERSION::$(npm view @${{ env.CODE_EDITOR_NPM_PATH }} dist-tags.next)
+    - run: echo "SCHEMATICS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.SCHEMATICS_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
+    - run: echo "STORAGE_LAST_PUBLISHED_VERSION=$(npm view @${{ env.STORAGE_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
+    - run: echo "SYNC_LAST_PUBLISHED_VERSION=$(npm view @${{ env.SYNC_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
+    - run: echo "COMPONENTS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.COMPONENTS_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
+    - run: echo "TEMPLATES_LAST_PUBLISHED_VERSION=$(npm view @${{ env.TEMPLATES_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
+    - run: echo "CODE_EDITOR_LAST_PUBLISHED_VERSION=$(npm view @${{ env.CODE_EDITOR_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
 
     # Pega a versão no package.json
     - name: Get package.json version.
