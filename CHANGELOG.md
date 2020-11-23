@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [3.14.0](https://github.com/po-ui/po-angular/compare/v3.13.0...v3.14.0) (2020-11-23)
+
+
+### Bug Fixes
+
+* **http-interceptor:** corrected close button translation in russian ([3a6f26a](https://github.com/po-ui/po-angular/commit/3a6f26a6be6ce96eb9936b0bea654a3ef67a5c7d))
+
+
+### Features
+
+* **chart:** adiciona gráfico do tipo `column` ([5f366e3](https://github.com/po-ui/po-angular/commit/5f366e33c2905c24930488bef38ddcfb86d37017))
+* **chart:** define animação para gráfico de linha ([6a5fced](https://github.com/po-ui/po-angular/commit/6a5fced45ce87d1a3879e1685f925e4de929e572))
+* **dynamic-form:** adiciona decimalsLength, thousandMaxlength e icon ([25862bb](https://github.com/po-ui/po-angular/commit/25862bb912d49cd470a9f0db5738f629f6edfe93))
+* **po-decimal:** inclui a propriedade `p-error-pattern` ([436145a](https://github.com/po-ui/po-angular/commit/436145a116a38dd63c1a6b54661819a608a69a16)), closes [#325](https://github.com/po-ui/po-angular/issues/325)
+* **po-decimal:** inclui as propriedades `p-min` e `p-max` ([fd912f1](https://github.com/po-ui/po-angular/commit/fd912f1646c03434b886dfc1e45928027601bb79)), closes [#325](https://github.com/po-ui/po-angular/issues/325)
+* **popover:** permite HTMLElement como target ([febdc1f](https://github.com/po-ui/po-angular/commit/febdc1f9ee4920b03ba89e8c7887b7a995ceaea3))
+
+
+
 # [3.13.0](https://github.com/po-ui/po-angular/compare/v3.12.0...v3.13.0) (2020-11-16)
 
 
