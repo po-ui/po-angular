@@ -7,7 +7,9 @@
  */
 export interface PoChartAxisOptions {
   /**
-   * Número de linhas exibidas no eixo X.
+   * Número de linhas exibidas no eixo X dos gráficos do tipo `Line` e `Column`.
+   * Para gráficos do tipo `Bar` define-se as linhas do eixo Y.
+   *
    * - Valor padrão: '5';
    * - Valor mínimo permitido: '2';
    * - Máximo Máximo permitido: '10';

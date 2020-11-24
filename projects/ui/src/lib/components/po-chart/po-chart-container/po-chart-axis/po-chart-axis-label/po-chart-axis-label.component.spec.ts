@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoChartAxisLabelComponent } from './po-chart-axis-label.component';
+import { PoChartType } from '../../../enums/po-chart-type.enum';
 
 describe('PoChartAxisXLabelComponent', () => {
   let component: PoChartAxisLabelComponent;
@@ -56,6 +57,45 @@ describe('PoChartAxisXLabelComponent', () => {
 
       expect(chartAxisYLabel).toBeTruthy();
       expect(chartAxisYLabel.length).toBe(2);
+    });
+
+    it('should find `po-chart-centered-label` class if type is different of `Bar`', () => {
+      component.type = PoChartType.Line;
+
+      component.axisXLabelCoordinates = [
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 }
+      ];
+      component.axisYLabelCoordinates = [
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 }
+      ];
+
+      fixture.detectChanges();
+
+      const chartCenteredLabel = nativeElement.querySelectorAll('.po-chart-centered-label');
+      expect(chartCenteredLabel).toBeTruthy();
+      expect(chartCenteredLabel.length).toBe(2);
+    });
+
+    it('shouldn`t find `po-chart-centered-label` class if type is `Bar`', () => {
+      component.type = PoChartType.Bar;
+
+      component.axisXLabelCoordinates = [
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 }
+      ];
+      component.axisYLabelCoordinates = [
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 }
+      ];
+
+      fixture.detectChanges();
+
+      const chartCenteredLabel = nativeElement.querySelectorAll('.po-chart-centered-label');
+      expect(chartCenteredLabel.length).toBe(0);
     });
   });
 });

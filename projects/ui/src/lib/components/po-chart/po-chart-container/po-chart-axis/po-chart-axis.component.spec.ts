@@ -94,12 +94,15 @@ describe('PoChartAxisComponent', () => {
     });
 
     describe('p-categories: ', () => {
-      it('should call `setAxisYCoordinates` and `setAxisYLabelCoordinates`', () => {
+      it('should call `setAxisYCoordinates` if type value is different than `Bar`', () => {
+        component.series = [{ label: 'Label', data: [1, 2, 3] }];
+        component.type = PoChartType.Line;
+
         const fakeMinMaxAxisValues: PoChartMinMaxValues = {
           minValue: 1,
           maxValue: 3
         };
-        const fakeSeriesLength = 3;
+        const fakeSeriesLength = 1;
         const fakeContainerSize = {
           svgWidth: 500,
           centerX: 250,
@@ -110,26 +113,63 @@ describe('PoChartAxisComponent', () => {
         };
         const fakeCategories = ['jan', 'fev', 'mar'];
 
-        spyOn(component, <any>'setAxisYCoordinates');
-        spyOn(component, <any>'setAxisYLabelCoordinates');
+        spyOn(component, <any>'setAxisXCoordinates');
 
         component['seriesLength'] = fakeSeriesLength;
         component['minMaxAxisValues'] = fakeMinMaxAxisValues;
         component.containerSize = fakeContainerSize;
         component.categories = fakeCategories;
 
-        expect(component['setAxisYCoordinates']).toHaveBeenCalledWith(fakeContainerSize, fakeSeriesLength);
-        expect(component['setAxisYLabelCoordinates']).toHaveBeenCalledWith(
-          fakeContainerSize,
+        expect(component['setAxisXCoordinates']).toHaveBeenCalledWith(
+          component['axisXGridLines'],
           fakeSeriesLength,
-          fakeCategories
+          fakeContainerSize,
+          fakeMinMaxAxisValues,
+          component.type
+        );
+        expect(component.categories).toEqual(fakeCategories);
+      });
+
+      it('should call `setAxisXCoordinates` if type value is `Bar`', () => {
+        component.series = [{ label: 'Label', data: [1, 2, 3] }];
+        component.type = PoChartType.Bar;
+
+        const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+          minValue: 0,
+          maxValue: 3
+        };
+        const fakeSeriesLength = 1;
+        const fakeContainerSize = {
+          svgWidth: 500,
+          centerX: 250,
+          svgHeight: 300,
+          centerY: 150,
+          svgPlottingAreaWidth: 400,
+          svgPlottingAreaHeight: 280
+        };
+        const fakeCategories = ['jan', 'fev', 'mar'];
+
+        spyOn(component, <any>'setAxisXCoordinates');
+        spyOn(component, <any>'setAxisYCoordinates');
+
+        component['seriesLength'] = fakeSeriesLength;
+        component['minMaxAxisValues'] = fakeMinMaxAxisValues;
+        component.containerSize = fakeContainerSize;
+        component.categories = fakeCategories;
+
+        expect(component['setAxisXCoordinates']).toHaveBeenCalledWith(
+          component['axisXGridLines'],
+          fakeSeriesLength,
+          fakeContainerSize,
+          fakeMinMaxAxisValues,
+          component.type
         );
         expect(component.categories).toEqual(fakeCategories);
       });
     });
 
     describe('p-container-size: ', () => {
-      it('should call `setAxisXCoordinates`, `setAxisXLabelCoordinates`, `setAxisYCoordinates` and `setAxisYLabelCoordinates`', () => {
+      it('should call `checkAxisOptions`, `setAxisXCoordinates` and `setAxisYCoordinates`', () => {
         const fakeContainerSize = {
           svgWidth: 500,
           centerX: 250,
@@ -141,22 +181,19 @@ describe('PoChartAxisComponent', () => {
 
         spyOn(component, <any>'checkAxisOptions');
         spyOn(component, <any>'setAxisXCoordinates');
-        spyOn(component, <any>'setAxisXLabelCoordinates');
         spyOn(component, <any>'setAxisYCoordinates');
-        spyOn(component, <any>'setAxisYLabelCoordinates');
 
         component.containerSize = fakeContainerSize;
 
         expect(component['checkAxisOptions']).toHaveBeenCalled();
         expect(component['setAxisXCoordinates']).toHaveBeenCalled();
-        expect(component['setAxisXLabelCoordinates']).toHaveBeenCalled();
         expect(component['setAxisYCoordinates']).toHaveBeenCalled();
-        expect(component['setAxisYLabelCoordinates']).toHaveBeenCalled();
       });
     });
 
     describe('p-options: ', () => {
-      it('should call `checkAxisOptions` and `setAxisXLabelCoordinates`', () => {
+      it('should call `checkAxisOptions` and `setAxisYCoordinates` if type is Bar', () => {
+        const fakeSeriesLength = 0;
         const fakeAxisXGridLines = 5;
         const fakeMinMaxAxisValues: PoChartMinMaxValues = {
           minValue: 1,
@@ -177,18 +214,63 @@ describe('PoChartAxisComponent', () => {
         };
 
         spyOn(component, <any>'checkAxisOptions');
-        spyOn(component, <any>'setAxisXLabelCoordinates');
+        spyOn(component, <any>'setAxisXCoordinates');
+        spyOn(component, <any>'setAxisYCoordinates');
 
+        component.type = PoChartType.Bar;
         component['minMaxAxisValues'] = fakeMinMaxAxisValues;
         component['axisXGridLines'] = fakeAxisXGridLines;
         component.containerSize = fakeContainerSize;
         component.axisOptions = fakeAxisOptions;
 
         expect(component['checkAxisOptions']).toHaveBeenCalledWith(fakeAxisOptions);
-        expect(component['setAxisXLabelCoordinates']).toHaveBeenCalledWith(
-          fakeAxisXGridLines,
+        expect(component['setAxisYCoordinates']).toHaveBeenCalledWith(
+          component['axisXGridLines'],
+          fakeSeriesLength,
           fakeContainerSize,
-          fakeMinMaxAxisValues
+          fakeMinMaxAxisValues,
+          component.type
+        );
+      });
+
+      it('should call `checkAxisOptions` and `setAxisXCoordinates` if type is different than Bar', () => {
+        const fakeSeriesLength = 0;
+        const fakeAxisXGridLines = 5;
+        const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+          minValue: 1,
+          maxValue: 3
+        };
+        const fakeAxisOptions: PoChartAxisOptions = {
+          minRange: 0,
+          maxRange: 100,
+          axisXGridLines: 5
+        };
+        const fakeContainerSize = {
+          svgWidth: 500,
+          centerX: 250,
+          svgHeight: 300,
+          centerY: 150,
+          svgPlottingAreaWidth: 400,
+          svgPlottingAreaHeight: 280
+        };
+
+        spyOn(component, <any>'checkAxisOptions');
+        spyOn(component, <any>'setAxisXCoordinates');
+        spyOn(component, <any>'setAxisYCoordinates');
+
+        component.type = PoChartType.Line;
+        component['minMaxAxisValues'] = fakeMinMaxAxisValues;
+        component['axisXGridLines'] = fakeAxisXGridLines;
+        component.containerSize = fakeContainerSize;
+        component.axisOptions = fakeAxisOptions;
+
+        expect(component['checkAxisOptions']).toHaveBeenCalledWith(fakeAxisOptions);
+        expect(component['setAxisXCoordinates']).toHaveBeenCalledWith(
+          component['axisXGridLines'],
+          fakeSeriesLength,
+          fakeContainerSize,
+          fakeMinMaxAxisValues,
+          component.type
         );
       });
     });
@@ -211,9 +293,10 @@ describe('PoChartAxisComponent', () => {
   });
 
   describe('Methods', () => {
-    it('setAxisXCoordinates: should apply value to `axisXCoordinates`', () => {
-      const fakeAxisXGridLines = 1;
-      const fakeContainerSize = {
+    it(`setAxisXCoordinates: should call 'calculateAxisXCoordinates' and 'calculateAxisXLabelCoordinates' passing 'seriesLength' as argument if type is Bar`, () => {
+      const axisXGridLines = 5;
+      const seriesLength = 3;
+      const containerSize = {
         svgWidth: 500,
         centerX: 250,
         svgHeight: 300,
@@ -221,18 +304,59 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaWidth: 400,
         svgPlottingAreaHeight: 280
       };
-      const expectedResult: Array<PoChartPathCoordinates> = [{ coordinates: 'M72 300 L500, 300' }];
+      const minMaxAxisValues: PoChartMinMaxValues = {
+        minValue: 1,
+        maxValue: 3
+      };
+      const type = PoChartType.Bar;
 
-      spyOn(component, <any>'calculateAxisXCoordinateY').and.returnValue(300);
+      const spyCalculateAxisXCoordinates = spyOn(component, <any>'calculateAxisXCoordinates');
+      const spyCalculateAxisXLabelCoordinates = spyOn(component, <any>'calculateAxisXLabelCoordinates');
 
-      component['setAxisXCoordinates'](fakeAxisXGridLines, fakeContainerSize);
+      component['setAxisXCoordinates'](axisXGridLines, seriesLength, containerSize, minMaxAxisValues, type);
 
-      expect(component['calculateAxisXCoordinateY']).toHaveBeenCalled();
-      expect(component.axisXCoordinates).toEqual(expectedResult);
+      expect(spyCalculateAxisXCoordinates).toHaveBeenCalledWith(seriesLength + 1, containerSize);
+      expect(spyCalculateAxisXLabelCoordinates).toHaveBeenCalledWith(
+        seriesLength,
+        containerSize,
+        minMaxAxisValues,
+        type
+      );
     });
 
-    it('setAxisXLabelCoordinates: should apply value to `axisXLabelCoordinates`', () => {
-      const fakeAxisXGridLines = 1;
+    it(`setAxisXCoordinates: should call 'calculateAxisXCoordinates' and 'calculateAxisXLabelCoordinates' passing 'axisXGridLines' as argument if type is Bar`, () => {
+      const axisXGridLines = 5;
+      const seriesLength = 3;
+      const containerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const minMaxAxisValues: PoChartMinMaxValues = {
+        minValue: 1,
+        maxValue: 3
+      };
+      const type = PoChartType.Line;
+
+      const spyCalculateAxisXCoordinates = spyOn(component, <any>'calculateAxisXCoordinates');
+      const spyCalculateAxisXLabelCoordinates = spyOn(component, <any>'calculateAxisXLabelCoordinates');
+
+      component['setAxisXCoordinates'](axisXGridLines, seriesLength, containerSize, minMaxAxisValues, type);
+
+      expect(spyCalculateAxisXCoordinates).toHaveBeenCalledWith(axisXGridLines, containerSize);
+      expect(spyCalculateAxisXLabelCoordinates).toHaveBeenCalledWith(
+        axisXGridLines,
+        containerSize,
+        minMaxAxisValues,
+        type
+      );
+    });
+
+    it('calculateAxisXLabelCoordinates: should apply value to `axisXLabelCoordinates`', () => {
+      const amountOfAxisX = 2;
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -246,41 +370,24 @@ describe('PoChartAxisComponent', () => {
         maxValue: 3
       };
       const expectedResult: any = [
-        { label: '0', xCoordinate: undefined, yCoordinate: undefined },
-        { label: '50', xCoordinate: undefined, yCoordinate: undefined },
-        { label: '100', xCoordinate: undefined, yCoordinate: undefined },
-        { label: '150', xCoordinate: undefined, yCoordinate: undefined },
-        { label: '200', xCoordinate: undefined, yCoordinate: undefined }
+        { label: '1', xCoordinate: 64, yCoordinate: 288 },
+        { label: '3', xCoordinate: 64, yCoordinate: 8 }
       ];
+      const type = PoChartType.Column;
 
-      spyOn(component['mathsService'], <any>'range').and.returnValue([0, 50, 100, 150, 200]);
-      spyOn(component, <any>'calculateAxisXLabelXCoordinate');
-      spyOn(component, <any>'calculateAxisXCoordinateY');
+      spyOn(component, <any>'calculateAxisXLabelXCoordinate').and.callThrough();
+      spyOn(component, <any>'calculateAxisXLabelYCoordinate').and.callThrough();
 
-      component['setAxisXLabelCoordinates'](fakeAxisXGridLines, fakeContainerSize, fakeMinMaxAxisValues);
+      component['calculateAxisXLabelCoordinates'](amountOfAxisX, fakeContainerSize, fakeMinMaxAxisValues, type);
 
-      expect(component['mathsService'].range).toHaveBeenCalled();
       expect(component['calculateAxisXLabelXCoordinate']).toHaveBeenCalled();
-      expect(component['calculateAxisXCoordinateY']).toHaveBeenCalled();
+      expect(component['calculateAxisXLabelYCoordinate']).toHaveBeenCalled();
       expect(component.axisXLabelCoordinates).toEqual(expectedResult);
     });
 
-    describe('formatLabel:', () => {
-      it('formatLabel: should format label', () => {
-        const labelValue = 0.99999999;
-
-        expect(component['formatLabel'](labelValue)).toBe('1');
-      });
-
-      it('formatLabel: should return a decimal value with two digits', () => {
-        const labelValue = 10.555555555;
-
-        expect(component['formatLabel'](labelValue)).toBe('10.56');
-      });
-    });
-
-    it('setAxisYCoordinates: should call `setAxisYCoordinatesWithSideSpacing` if `hasAxisSideSpacing` is true', () => {
-      const fakeSeriesLength = 1;
+    it('calculateAxisXLabelCoordinates: should apply value to `axisXLabelCoordinates` considering that type is Bar', () => {
+      component.categories = [];
+      const amountOfAxisX = 2;
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -289,19 +396,33 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaWidth: 400,
         svgPlottingAreaHeight: 280
       };
+      const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+        minValue: 1,
+        maxValue: 3
+      };
+      const type = PoChartType.Bar;
+      const expectedResult: any = [
+        { label: '-', xCoordinate: 64, yCoordinate: 218 },
+        { label: '-', xCoordinate: 64, yCoordinate: 78 }
+      ];
 
-      component.type = PoChartType.Line;
+      component['calculateAxisXLabelCoordinates'](amountOfAxisX, fakeContainerSize, fakeMinMaxAxisValues, type);
 
-      spyOn(component, <any>'setAxisYCoordinatesWithSideSpacing');
-
-      component['setAxisYCoordinates'](fakeContainerSize, fakeSeriesLength);
-
-      expect(component['setAxisYCoordinatesWithSideSpacing']).toHaveBeenCalledWith(fakeContainerSize, fakeSeriesLength);
+      expect(component.axisXLabelCoordinates).toEqual(expectedResult);
     });
 
-    it('setAxisYCoordinates: should call `setAxisYCoordinatesWithoutSideSpacing` if `hasAxisSideSpacing` is false', () => {
-      const fakeSeriesLength = 1;
-      const fakeContainerSize = {
+    it('generateAverageOfLabels: should return a list with formatted values', () => {
+      const amountOfAxisLines = 5;
+      const minMaxAxisValues: PoChartMinMaxValues = { minValue: 1, maxValue: 3 };
+      const expectedResult = ['1', '1.50', '2', '2.50', '3'];
+
+      expect(component['generateAverageOfLabels'](minMaxAxisValues, amountOfAxisLines)).toEqual(expectedResult);
+    });
+
+    it(`setAxisYCoordinates: should call 'calculateAxisYCoordinates' and 'calculateAxisYLabelCoordinates' passing 'axisXGridLines' as argument if type is Bar`, () => {
+      const axisXGridLines = 5;
+      const seriesLength = 3;
+      const containerSize = {
         svgWidth: 500,
         centerX: 250,
         svgHeight: 300,
@@ -309,16 +430,54 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaWidth: 400,
         svgPlottingAreaHeight: 280
       };
+      const minMaxAxisValues: PoChartMinMaxValues = {
+        minValue: 1,
+        maxValue: 3
+      };
+      const type = PoChartType.Bar;
 
-      component.type = PoChartType.Column;
+      const spyCalculateAxisYCoordinates = spyOn(component, <any>'calculateAxisYCoordinates');
+      const spyCalculateAxisYLabelCoordinates = spyOn(component, <any>'calculateAxisYLabelCoordinates');
 
-      spyOn(component, <any>'setAxisYCoordinatesWithoutSideSpacing');
+      component['setAxisYCoordinates'](axisXGridLines, seriesLength, containerSize, minMaxAxisValues, type);
 
-      component['setAxisYCoordinates'](fakeContainerSize, fakeSeriesLength);
+      expect(spyCalculateAxisYCoordinates).toHaveBeenCalledWith(axisXGridLines, containerSize, type);
+      expect(spyCalculateAxisYLabelCoordinates).toHaveBeenCalledWith(
+        axisXGridLines,
+        containerSize,
+        minMaxAxisValues,
+        type
+      );
+    });
 
-      expect(component['setAxisYCoordinatesWithoutSideSpacing']).toHaveBeenCalledWith(
-        fakeContainerSize,
-        fakeSeriesLength
+    it(`setAxisYCoordinates: should call 'calculateAxisYCoordinates' and 'calculateAxisYLabelCoordinates' passing 'seriesLength' as argument if type is Bar`, () => {
+      const axisXGridLines = 5;
+      const seriesLength = 3;
+      const containerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const minMaxAxisValues: PoChartMinMaxValues = {
+        minValue: 1,
+        maxValue: 3
+      };
+      const type = PoChartType.Line;
+
+      const spyCalculateAxisYCoordinates = spyOn(component, <any>'calculateAxisYCoordinates');
+      const spyCalculateAxisYLabelCoordinates = spyOn(component, <any>'calculateAxisYLabelCoordinates');
+
+      component['setAxisYCoordinates'](axisXGridLines, seriesLength, containerSize, minMaxAxisValues, type);
+
+      expect(spyCalculateAxisYCoordinates).toHaveBeenCalledWith(seriesLength, containerSize, type);
+      expect(spyCalculateAxisYLabelCoordinates).toHaveBeenCalledWith(
+        seriesLength,
+        containerSize,
+        minMaxAxisValues,
+        type
       );
     });
 
@@ -349,8 +508,29 @@ describe('PoChartAxisComponent', () => {
       expect(component.axisYCoordinates).toEqual(expectedResult);
     });
 
-    it('setAxisYCoordinatesWithoutSideSpacing: should apply value to `axisYCoordinates`', () => {
-      const fakeSeriesLength = 1;
+    it('setAxisYCoordinatesWithoutSideSpacing: should call `calculateAxisYCoordinateX` once if type is `Bar` and apply value to `axisYCoordinates`', () => {
+      const amountOfAxisY = 1;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const expectedResult: Array<PoChartPathCoordinates> = [{ coordinates: 'Mundefined 8 Lundefined, 288' }];
+      const type = PoChartType.Bar;
+
+      spyOn(component, <any>'calculateAxisYCoordinateX');
+
+      component['setAxisYCoordinatesWithoutSideSpacing'](fakeContainerSize, amountOfAxisY, type);
+
+      expect(component['calculateAxisYCoordinateX']).toHaveBeenCalledTimes(1);
+      expect(component.axisYCoordinates).toEqual(expectedResult);
+    });
+
+    it('setAxisYCoordinatesWithoutSideSpacing: should call `calculateAxisYCoordinateX` twice if type is different than `Bar` and apply value to `axisYCoordinates`', () => {
+      const amountOfAxisY = 1;
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -363,12 +543,13 @@ describe('PoChartAxisComponent', () => {
         { coordinates: 'Mundefined 8 Lundefined, 288' },
         { coordinates: 'Mundefined 8 Lundefined, 288' }
       ];
+      const type = PoChartType.Line;
 
       spyOn(component, <any>'calculateAxisYCoordinateX');
 
-      component['setAxisYCoordinatesWithoutSideSpacing'](fakeContainerSize, fakeSeriesLength);
+      component['setAxisYCoordinatesWithoutSideSpacing'](fakeContainerSize, amountOfAxisY, type);
 
-      expect(component['calculateAxisYCoordinateX']).toHaveBeenCalled();
+      expect(component['calculateAxisYCoordinateX']).toHaveBeenCalledTimes(2);
       expect(component.axisYCoordinates).toEqual(expectedResult);
     });
 
@@ -390,7 +571,8 @@ describe('PoChartAxisComponent', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    it('setAxisYLabelCoordinates: should apply value to `axisYLabelCoordinates`', () => {
+    it('calculateAxisYLabelCoordinates: should apply value to `axisYLabelCoordinates`', () => {
+      const amountOfAxisY = 2;
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -399,23 +581,34 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaWidth: 400,
         svgPlottingAreaHeight: 280
       };
-      const expectedResult = [{ label: 'teste', xCoordinate: 0, yCoordinate: 0 }];
-      const fakeSeriesLength = 1;
-      const fakeCategories = ['teste'];
-
+      const expectedResult = [
+        { label: '1', xCoordinate: 0, yCoordinate: 0 },
+        { label: '3', xCoordinate: 0, yCoordinate: 0 }
+      ];
+      const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+        minValue: 1,
+        maxValue: 3
+      };
       component['hasAxisSideSpacing'] = true;
+      const type = PoChartType.Bar;
 
       spyOn(component, <any>'calculateAxisYCoordinateXWithSideSpacing').and.returnValue(0);
       spyOn(component, <any>'calculateAxisYLabelYCoordinate').and.returnValue(0);
 
-      component['setAxisYLabelCoordinates'](fakeContainerSize, fakeSeriesLength, fakeCategories);
+      component['calculateAxisYLabelCoordinates'](amountOfAxisY, fakeContainerSize, fakeMinMaxAxisValues, type);
 
       expect(component['calculateAxisYCoordinateXWithSideSpacing']).toHaveBeenCalled();
       expect(component['calculateAxisYLabelYCoordinate']).toHaveBeenCalled();
       expect(component.axisYLabelCoordinates).toEqual(expectedResult);
     });
 
-    it('setAxisYLabelCoordinates: should call `calculateAxisYLabelXCoordinateWithoutSideSpace` if `hasAxisSideSpacing` is false', () => {
+    it('calculateAxisYLabelCoordinates: should call `calculateAxisYLabelXCoordinateWithoutSideSpace` if `hasAxisSideSpacing` is false', () => {
+      component.categories = [];
+      const amountOfAxisY = 2;
+      const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+        minValue: 1,
+        maxValue: 3
+      };
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -424,9 +617,11 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaWidth: 400,
         svgPlottingAreaHeight: 280
       };
-      const expectedResult = [{ label: 'teste', xCoordinate: 0, yCoordinate: 0 }];
-      const fakeSeriesLength = 1;
-      const fakeCategories = ['teste'];
+      const expectedResult = [
+        { label: '-', xCoordinate: 0, yCoordinate: 0 },
+        { label: '-', xCoordinate: 0, yCoordinate: 0 }
+      ];
+      const type = PoChartType.Column;
 
       component['hasAxisSideSpacing'] = false;
 
@@ -434,7 +629,7 @@ describe('PoChartAxisComponent', () => {
       spyOn(component, <any>'calculateAxisYLabelXCoordinateWithoutSideSpace').and.returnValue(0);
       spyOn(component, <any>'calculateAxisYLabelYCoordinate').and.returnValue(0);
 
-      component['setAxisYLabelCoordinates'](fakeContainerSize, fakeSeriesLength, fakeCategories);
+      component['calculateAxisYLabelCoordinates'](amountOfAxisY, fakeContainerSize, fakeMinMaxAxisValues, type);
 
       expect(component['calculateAxisYCoordinateXWithSideSpacing']).not.toHaveBeenCalled();
       expect(component['calculateAxisYLabelXCoordinateWithoutSideSpace']).toHaveBeenCalled();
@@ -450,9 +645,9 @@ describe('PoChartAxisComponent', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    it('calculateAxisXCoordinateY: should return the calculation result', () => {
+    it('calculateAxisXCoordinateY: should return the calculation result considering that type is Bar', () => {
       const expectedResult = 218;
-      const fakeAxisXGridLines = 5;
+      const amountOfAxisX = 5;
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -463,7 +658,25 @@ describe('PoChartAxisComponent', () => {
       };
       const fakeIndex = 1;
 
-      const result = component['calculateAxisXCoordinateY'](fakeAxisXGridLines, fakeContainerSize, fakeIndex);
+      const result = component['calculateAxisXCoordinateY'](amountOfAxisX, fakeContainerSize, fakeIndex);
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('calculateAxisXCoordinateY: should return the calculation result considering that type isn`t Bar', () => {
+      const expectedResult = 218;
+      const amountOfAxisX = 5;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const fakeIndex = 1;
+
+      const result = component['calculateAxisXCoordinateY'](amountOfAxisX, fakeContainerSize, fakeIndex);
 
       expect(result).toEqual(expectedResult);
     });
@@ -484,9 +697,10 @@ describe('PoChartAxisComponent', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    it(`calculateAxisYLabelXCoordinateWithoutSideSpace: should return the result of 'PoChartAxisXLabelArea +
-    halfCategoryWidth + (containerSize.svgPlottingAreaWidth + PoChartPadding * 2) * xRatio'`, () => {
-      const expectedResult = 403;
+    it(`calculateAxisYLabelXCoordinateWithoutSideSpace: should return the result of the equation considering that type is Bar'`, () => {
+      const expectedResult = 158;
+      const amountOfAxisY = 6;
+      const type = PoChartType.Bar;
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -496,9 +710,37 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
-      component['seriesLength'] = 2;
 
-      const result = component['calculateAxisYLabelXCoordinateWithoutSideSpace'](fakeContainerSize, fakeIndex);
+      const result = component['calculateAxisYLabelXCoordinateWithoutSideSpace'](
+        fakeContainerSize,
+        amountOfAxisY,
+        type,
+        fakeIndex
+      );
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it(`calculateAxisYLabelXCoordinateWithoutSideSpace: should return the result of the equation considering that type isn't Bar'`, () => {
+      const expectedResult = 179;
+      const amountOfAxisY = 6;
+      const type = PoChartType.Line;
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const fakeIndex = 1;
+
+      const result = component['calculateAxisYLabelXCoordinateWithoutSideSpace'](
+        fakeContainerSize,
+        amountOfAxisY,
+        type,
+        fakeIndex
+      );
 
       expect(result).toEqual(expectedResult);
     });
@@ -542,9 +784,8 @@ describe('PoChartAxisComponent', () => {
       expect(result).toBe(96);
     });
 
-    it(`calculateAxisYCoordinateX: should return the result of 'PoChartAxisXLabelArea +
-    (containerSize.svgPlottingAreaWidth + PoChartPadding * 2) * xRatio'`, () => {
-      const expectedResult = 296;
+    it(`calculateAxisYCoordinateX: should return the result of equation considering that type is 'Bar'`, () => {
+      const expectedResult = 158;
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -554,15 +795,16 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
-      component['seriesLength'] = 2;
+      const type = PoChartType.Bar;
+      const amountOfAxisY = 6;
 
-      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, fakeIndex);
+      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, type, fakeIndex);
 
       expect(result).toEqual(expectedResult);
     });
 
-    it(`calculateAxisYCoordinateX: should return the result even if 'seriesLength' is zero`, () => {
-      const expectedResult = 72;
+    it(`calculateAxisYCoordinateX: should return the result of equation considering that type isn't 'Bar'`, () => {
+      const expectedResult = 143;
       const fakeContainerSize = {
         svgWidth: 500,
         centerX: 250,
@@ -572,9 +814,29 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
-      component['seriesLength'] = 0;
+      const type = PoChartType.Line;
+      const amountOfAxisY = 6;
 
-      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, fakeIndex);
+      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, type, fakeIndex);
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it(`calculateAxisYCoordinateX: should return the result of equation considering that type isn't 'Bar' and 'amountOfAxisX' is 0`, () => {
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        svgPlottingAreaWidth: 400,
+        svgPlottingAreaHeight: 280
+      };
+      const fakeIndex = 1;
+      const type = PoChartType.Line;
+      const amountOfAxisY = 0;
+      const expectedResult = 72;
+
+      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, type, fakeIndex);
 
       expect(result).toEqual(expectedResult);
     });
@@ -593,16 +855,6 @@ describe('PoChartAxisComponent', () => {
       const result = component['isValidGridLinesLengthOption'](fakeAxisXGridLines);
 
       expect(result).toBeFalse();
-    });
-
-    it('setAxisXGridLines: should call `setAxisXCoordinates` and `setAxisXLabelCoordinates`', () => {
-      spyOn(component, <any>'setAxisXCoordinates');
-      spyOn(component, <any>'setAxisXLabelCoordinates');
-
-      component['setAxisXGridLines']();
-
-      expect(component['setAxisXCoordinates']).toHaveBeenCalled();
-      expect(component['setAxisXLabelCoordinates']).toHaveBeenCalled();
     });
 
     describe('checkAxisOptions: ', () => {
@@ -730,14 +982,6 @@ describe('PoChartAxisComponent', () => {
         expect(component['axisXGridLines']).toEqual(expectedValue);
       });
 
-      it('should call `setAxisXGridLines`', () => {
-        spyOn(component, <any>'setAxisXGridLines');
-
-        component['checkAxisOptions']();
-
-        expect(component['setAxisXGridLines']).toHaveBeenCalled();
-      });
-
       it('should apply 0 to the `minValue` if `hasAxisSideSpacing` is false and `minValue < 0`', () => {
         const fakeOptions: PoChartAxisOptions = {
           maxRange: 4,
@@ -755,6 +999,114 @@ describe('PoChartAxisComponent', () => {
         component['checkAxisOptions'](fakeOptions);
 
         expect(component['minMaxAxisValues']).toEqual(expectedValue);
+      });
+
+      it('getAxisXLabels: should call `formatCategoriesLabels` if type is `Bar`', () => {
+        const type = PoChartType.Bar;
+        const minMaxAxisValues: PoChartMinMaxValues = { minValue: 1, maxValue: 3 };
+        const amountOfAxisX = 5;
+
+        const spyFormatCategoriesLabels = spyOn(component, <any>'formatCategoriesLabels').and.returnValue(['-', '-']);
+
+        component['getAxisXLabels'](type, minMaxAxisValues, amountOfAxisX);
+
+        expect(spyFormatCategoriesLabels).toHaveBeenCalledWith(amountOfAxisX, component.categories);
+      });
+
+      it('formatCategoriesLabels: should return an array with 2 items', () => {
+        const amountOfAxisX = 2;
+        const categories = undefined;
+
+        const expectedResult = component['formatCategoriesLabels'](amountOfAxisX, categories);
+
+        expect(expectedResult).toEqual(['-', '-']);
+      });
+
+      it('getAxisXLabels: should call `generateAverageOfLabels` if type isn`t `Bar`', () => {
+        const type = PoChartType.Column;
+        const minMaxAxisValues: PoChartMinMaxValues = { minValue: 1, maxValue: 3 };
+        const amountOfAxisX = 5;
+
+        const spyGenerateAverageOfLabels = spyOn(component, <any>'generateAverageOfLabels');
+
+        component['getAxisXLabels'](type, minMaxAxisValues, amountOfAxisX);
+
+        expect(spyGenerateAverageOfLabels).toHaveBeenCalledWith(minMaxAxisValues, amountOfAxisX);
+      });
+
+      it('calculateAxisXCoordinates: should call calculateAxisXCoordinateY twice if type is Bar', () => {
+        const amountOfAxisX = 2;
+        const containerSize = {
+          svgWidth: 500,
+          centerX: 250,
+          svgHeight: 300,
+          centerY: 150,
+          svgPlottingAreaWidth: 400,
+          svgPlottingAreaHeight: 280
+        };
+        const spyCalculateAxisXCoordinateY = spyOn(component, <any>'calculateAxisXCoordinateY').and.callThrough();
+
+        component['calculateAxisXCoordinates'](amountOfAxisX, containerSize);
+
+        expect(spyCalculateAxisXCoordinateY).toHaveBeenCalledTimes(2);
+      });
+
+      it('calculateAxisXCoordinates: should call calculateAxisXCoordinateY twice if type isn`t Bar', () => {
+        const amountOfAxisX = 2;
+        const containerSize = {
+          svgWidth: 500,
+          centerX: 250,
+          svgHeight: 300,
+          centerY: 150,
+          svgPlottingAreaWidth: 400,
+          svgPlottingAreaHeight: 280
+        };
+
+        const spyCalculateAxisXCoordinateY = spyOn(component, <any>'calculateAxisXCoordinateY').and.callThrough();
+
+        component['calculateAxisXCoordinates'](amountOfAxisX, containerSize);
+
+        expect(spyCalculateAxisXCoordinateY).toHaveBeenCalledTimes(2);
+      });
+
+      it('amountOfAxisXLines: should return `seriesLength` plus 1 if chart type is `Bar` and seriesLength is greater than 1', () => {
+        const seriesLength = 2;
+        const axisXGridLines = 5;
+        const type = PoChartType.Bar;
+
+        const expectedResult = component['amountOfAxisXLines'](seriesLength, axisXGridLines, type);
+
+        expect(expectedResult).toBe(3);
+      });
+
+      it('amountOfAxisXLines: should return `2` if chart type is `Bar` and seriesLength is 1', () => {
+        const seriesLength = 1;
+        const axisXGridLines = 5;
+        const type = PoChartType.Bar;
+
+        const expectedResult = component['amountOfAxisXLines'](seriesLength, axisXGridLines, type);
+
+        expect(expectedResult).toBe(2);
+      });
+
+      it('amountOfAxisXLines: should return `1` if chart type isn`t `Bar` and axisXGridLines value is zero', () => {
+        const seriesLength = 1;
+        const axisXGridLines = 0;
+        const type = PoChartType.Line;
+
+        const expectedResult = component['amountOfAxisXLines'](seriesLength, axisXGridLines, type);
+
+        expect(expectedResult).toBe(1);
+      });
+
+      it('amountOfAxisXLines: should return `axisXGridLines` if chart type isn`t `Bar` and axisXGridLines is different of zero', () => {
+        const seriesLength = 1;
+        const axisXGridLines = 5;
+        const type = PoChartType.Line;
+
+        const expectedResult = component['amountOfAxisXLines'](seriesLength, axisXGridLines, type);
+
+        expect(expectedResult).toBe(5);
       });
     });
   });

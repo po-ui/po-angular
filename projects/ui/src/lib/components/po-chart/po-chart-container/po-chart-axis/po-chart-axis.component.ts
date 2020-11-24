@@ -37,64 +37,6 @@ export class PoChartAxisComponent {
   private _series: Array<any> = [];
   private _type: PoChartType;
 
-  @Input('p-series') set series(seriesList: Array<any>) {
-    const seriesDataArrayFilter = seriesList.filter(serie => {
-      return Array.isArray(serie.data);
-    });
-
-    if (seriesDataArrayFilter.length) {
-      this._series = seriesDataArrayFilter;
-
-      this.seriesLength = this.mathsService.seriesGreaterLength(this.series);
-      this.minMaxAxisValues = this.mathsService.calculateMinAndMaxValues(this._series);
-      this.checkAxisOptions(this.axisOptions);
-      this.setAxisYCoordinates(this.containerSize, this.seriesLength);
-      this.setAxisYLabelCoordinates(this.containerSize, this.seriesLength, this.categories);
-    } else {
-      this._series = [];
-    }
-  }
-
-  get series() {
-    return this._series;
-  }
-
-  @Input('p-categories') set categories(value: Array<string>) {
-    this._categories = value;
-
-    this.setAxisYCoordinates(this.containerSize, this.seriesLength);
-    this.setAxisYLabelCoordinates(this.containerSize, this.seriesLength, this._categories);
-  }
-
-  get categories() {
-    return this._categories;
-  }
-
-  @Input('p-container-size') set containerSize(value: PoChartContainerSize) {
-    this._containerSize = value;
-
-    this.checkAxisOptions(this.axisOptions);
-    this.setAxisXCoordinates(this.axisXGridLines, this._containerSize);
-    this.setAxisXLabelCoordinates(this.axisXGridLines, this._containerSize, this.minMaxAxisValues);
-    this.setAxisYCoordinates(this._containerSize, this.seriesLength);
-    this.setAxisYLabelCoordinates(this._containerSize, this.seriesLength, this._categories);
-  }
-
-  get containerSize() {
-    return this._containerSize;
-  }
-
-  @Input('p-options') set axisOptions(value: PoChartAxisOptions) {
-    this._axisOptions = value;
-
-    this.checkAxisOptions(this._axisOptions);
-    this.setAxisXLabelCoordinates(this.axisXGridLines, this.containerSize, this.minMaxAxisValues);
-  }
-
-  get axisOptions() {
-    return this._axisOptions;
-  }
-
   @Input('p-type') set type(value: PoChartType) {
     this._type = value;
 
@@ -106,13 +48,165 @@ export class PoChartAxisComponent {
     return this._type;
   }
 
+  @Input('p-series') set series(seriesList: Array<any>) {
+    const seriesDataArrayFilter = seriesList.filter(serie => {
+      return Array.isArray(serie.data);
+    });
+
+    if (seriesDataArrayFilter.length) {
+      this._series = seriesDataArrayFilter;
+
+      this.seriesLength = this.mathsService.seriesGreaterLength(this.series);
+      this.minMaxAxisValues = this.mathsService.calculateMinAndMaxValues(this._series);
+      this.checkAxisOptions(this.axisOptions);
+      this.setAxisXCoordinates(
+        this.axisXGridLines,
+        this.seriesLength,
+        this.containerSize,
+        this.minMaxAxisValues,
+        this.type
+      );
+      this.setAxisYCoordinates(
+        this.axisXGridLines,
+        this.seriesLength,
+        this.containerSize,
+        this.minMaxAxisValues,
+        this.type
+      );
+    } else {
+      this._series = [];
+      this.cleanUpCoordinates();
+    }
+  }
+
+  get series() {
+    return this._series;
+  }
+
+  @Input('p-categories') set categories(value: Array<string>) {
+    this._categories = value;
+
+    if (this.type === PoChartType.Bar) {
+      this.setAxisXCoordinates(
+        this.axisXGridLines,
+        this.seriesLength,
+        this.containerSize,
+        this.minMaxAxisValues,
+        this.type
+      );
+    } else {
+      this.setAxisYCoordinates(
+        this.axisXGridLines,
+        this.seriesLength,
+        this._containerSize,
+        this.minMaxAxisValues,
+        this.type
+      );
+    }
+  }
+
+  get categories() {
+    return this._categories;
+  }
+
+  @Input('p-container-size') set containerSize(value: PoChartContainerSize) {
+    this._containerSize = value;
+
+    this.checkAxisOptions(this.axisOptions);
+    this.setAxisXCoordinates(
+      this.axisXGridLines,
+      this.seriesLength,
+      this._containerSize,
+      this.minMaxAxisValues,
+      this.type
+    );
+    this.setAxisYCoordinates(
+      this.axisXGridLines,
+      this.seriesLength,
+      this._containerSize,
+      this.minMaxAxisValues,
+      this.type
+    );
+  }
+
+  get containerSize() {
+    return this._containerSize;
+  }
+
+  @Input('p-options') set axisOptions(value: PoChartAxisOptions) {
+    this._axisOptions = value;
+
+    this.checkAxisOptions(this._axisOptions);
+
+    if (this.type === PoChartType.Bar) {
+      this.setAxisYCoordinates(
+        this.axisXGridLines,
+        this.seriesLength,
+        this.containerSize,
+        this.minMaxAxisValues,
+        this.type
+      );
+    } else {
+      this.setAxisXCoordinates(
+        this.axisXGridLines,
+        this.seriesLength,
+        this.containerSize,
+        this.minMaxAxisValues,
+        this.type
+      );
+    }
+  }
+
+  get axisOptions() {
+    return this._axisOptions;
+  }
+
   constructor(private mathsService: PoChartMathsService) {}
 
-  private setAxisXCoordinates(axisXGridLines: number, containerSize: PoChartContainerSize) {
-    this.axisXCoordinates = [...Array(axisXGridLines)].map((_, index: number) => {
+  private setAxisXCoordinates(
+    axisXGridLines: number,
+    seriesLength: number,
+    containerSize: PoChartContainerSize,
+    minMaxAxisValues: PoChartMinMaxValues,
+    type: PoChartType
+  ) {
+    const amountOfAxisXLines = this.amountOfAxisXLines(seriesLength, axisXGridLines, type);
+    this.calculateAxisXCoordinates(amountOfAxisXLines, containerSize);
+
+    if (seriesLength) {
+      const amountOfAxisLabels = type === PoChartType.Bar ? seriesLength : axisXGridLines;
+      this.calculateAxisXLabelCoordinates(amountOfAxisLabels, containerSize, minMaxAxisValues, type);
+    }
+  }
+
+  private amountOfAxisXLines(seriesLength: number, axisXGridLines: number, type: PoChartType): number {
+    if (type === PoChartType.Bar) {
+      return seriesLength <= 1 ? 2 : seriesLength + 1;
+    }
+    return axisXGridLines === 0 ? 1 : axisXGridLines;
+  }
+
+  private setAxisYCoordinates(
+    axisXGridLines: number,
+    seriesLength: number,
+    containerSize: PoChartContainerSize,
+    minMaxAxisValues: PoChartMinMaxValues,
+    type: PoChartType
+  ) {
+    const amountOfAxisY = type === PoChartType.Bar ? axisXGridLines : seriesLength;
+
+    this.calculateAxisYCoordinates(amountOfAxisY, containerSize, type);
+
+    if (seriesLength) {
+      this.calculateAxisYLabelCoordinates(amountOfAxisY, containerSize, minMaxAxisValues, type);
+    }
+  }
+
+  private calculateAxisXCoordinates(amountOfAxisX: number, containerSize: PoChartContainerSize) {
+    this.axisXCoordinates = [...Array(amountOfAxisX)].map((_, index: number) => {
       const startX = PoChartAxisXLabelArea;
       const endX = containerSize.svgWidth;
-      const yCoordinate = this.calculateAxisXCoordinateY(axisXGridLines, containerSize, index);
+      const yCoordinate = this.calculateAxisXCoordinateY(amountOfAxisX, containerSize, index);
 
       const coordinates = `M${startX} ${yCoordinate} L${endX}, ${yCoordinate}`;
 
@@ -120,42 +214,36 @@ export class PoChartAxisComponent {
     });
   }
 
-  private setAxisXLabelCoordinates(
-    axisXGridLines: number,
+  private calculateAxisXLabelCoordinates(
+    amountOfAxisX: number,
     containerSize: PoChartContainerSize,
-    minMaxAxisValues: PoChartMinMaxValues
+    minMaxAxisValues: PoChartMinMaxValues,
+    type: PoChartType
   ) {
-    const labels = this.mathsService.range(minMaxAxisValues, axisXGridLines);
+    const axisXLabels = this.getAxisXLabels(type, minMaxAxisValues, amountOfAxisX);
 
-    this.axisXLabelCoordinates = labels.map((labelItem, index: number) => {
-      const label = this.formatLabel(labelItem);
+    this.axisXLabelCoordinates = [...Array(amountOfAxisX)].map((_, index: number) => {
+      const label = axisXLabels[index];
       const xCoordinate = this.calculateAxisXLabelXCoordinate();
-      const yCoordinate = this.calculateAxisXCoordinateY(axisXGridLines, containerSize, index);
+      const yCoordinate = this.calculateAxisXLabelYCoordinate(amountOfAxisX, containerSize, type, index);
 
       return { label, xCoordinate, yCoordinate };
     });
   }
 
-  private formatLabel(labelItem: number) {
-    const formattedDigit = labelItem.toFixed(labelItem % 1 && 2);
-    const removeZeroDigits = formattedDigit.replace(/\.00$/, '');
-
-    return removeZeroDigits.toString();
-  }
-
-  private setAxisYCoordinates(containerSize, seriesLength) {
+  private calculateAxisYCoordinates(amountOfAxisY: number, containerSize: PoChartContainerSize, type: PoChartType) {
     return this.hasAxisSideSpacing
-      ? this.setAxisYCoordinatesWithSideSpacing(containerSize, seriesLength)
-      : this.setAxisYCoordinatesWithoutSideSpacing(containerSize, seriesLength);
+      ? this.setAxisYCoordinatesWithSideSpacing(containerSize, amountOfAxisY)
+      : this.setAxisYCoordinatesWithoutSideSpacing(containerSize, amountOfAxisY, type);
   }
 
-  private setAxisYCoordinatesWithSideSpacing(containerSize: PoChartContainerSize, seriesLength: number) {
+  private setAxisYCoordinatesWithSideSpacing(containerSize: PoChartContainerSize, amountOfAxisY: number) {
     const startY = PoChartPlotAreaPaddingTop;
     const endY = containerSize.svgPlottingAreaHeight + PoChartPlotAreaPaddingTop;
 
     const outerYCoordinates = this.setAxisYOuterCoordinates(startY, endY, containerSize);
 
-    const innerYCoordinates = [...Array(seriesLength)].map((_, index: number) => {
+    const innerYCoordinates = [...Array(amountOfAxisY)].map((_, index: number) => {
       const xCoordinate = this.calculateAxisYCoordinateXWithSideSpacing(containerSize, index);
 
       const coordinates = `M${xCoordinate} ${startY} L${xCoordinate}, ${endY}`;
@@ -166,15 +254,19 @@ export class PoChartAxisComponent {
     this.axisYCoordinates = [...outerYCoordinates, ...innerYCoordinates];
   }
 
-  private setAxisYCoordinatesWithoutSideSpacing(containerSize: PoChartContainerSize, seriesLength: number) {
+  private setAxisYCoordinatesWithoutSideSpacing(
+    containerSize: PoChartContainerSize,
+    amountOfAxisY: number,
+    type: PoChartType
+  ) {
     const startY = PoChartPlotAreaPaddingTop;
     const endY = containerSize.svgPlottingAreaHeight + PoChartPlotAreaPaddingTop;
 
     // tratamento necessário para criar uma linha a mais para fechar o gráfico
-    const lenght = seriesLength === 0 ? seriesLength : seriesLength + 1;
+    const length = amountOfAxisY === 0 || type === PoChartType.Bar ? amountOfAxisY : amountOfAxisY + 1;
 
-    const innerYCoordinates = [...Array(lenght)].map((_, index: number) => {
-      const xCoordinate = this.calculateAxisYCoordinateX(containerSize, index);
+    const innerYCoordinates = [...Array(length)].map((_, index: number) => {
+      const xCoordinate = this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, type, index);
 
       const coordinates = `M${xCoordinate} ${startY} L${xCoordinate}, ${endY}`;
 
@@ -195,17 +287,20 @@ export class PoChartAxisComponent {
     return [firstLineCoordinates, lastLineCoordinates];
   }
 
-  private setAxisYLabelCoordinates(
+  private calculateAxisYLabelCoordinates(
+    amountOfAxisY: number,
     containerSize: PoChartContainerSize,
-    seriesLength: number,
-    categories: Array<string> = []
+    minMaxAxisValues: PoChartMinMaxValues,
+    type: PoChartType
   ) {
-    this.axisYLabelCoordinates = [...Array(seriesLength)].map((_, index: number) => {
-      const label = categories[index] ?? '-';
+    const axisYLabels = this.getAxisYLabels(type, minMaxAxisValues, amountOfAxisY);
+
+    this.axisYLabelCoordinates = [...Array(amountOfAxisY)].map((_, index: number) => {
+      const label = axisYLabels[index];
 
       const xCoordinate = this.hasAxisSideSpacing
         ? this.calculateAxisYCoordinateXWithSideSpacing(containerSize, index)
-        : this.calculateAxisYLabelXCoordinateWithoutSideSpace(containerSize, index);
+        : this.calculateAxisYLabelXCoordinateWithoutSideSpace(containerSize, amountOfAxisY, type, index);
       const yCoordinate = this.calculateAxisYLabelYCoordinate(containerSize);
 
       return { label, xCoordinate, yCoordinate };
@@ -218,12 +313,32 @@ export class PoChartAxisComponent {
     return PoChartAxisXLabelArea - labelPoChartPadding;
   }
 
-  private calculateAxisXCoordinateY(
-    axisXGridLines: number,
+  private calculateAxisXLabelYCoordinate(
+    amountOfAxisX: number,
     containerSize: PoChartContainerSize,
+    type: PoChartType,
     index: number
   ): number {
-    const yRatio = index / (axisXGridLines - 1);
+    const amountOfLines = type === PoChartType.Bar ? amountOfAxisX : amountOfAxisX - 1;
+    const yRatio = index / amountOfLines;
+
+    if (type !== PoChartType.Bar) {
+      return (
+        containerSize.svgPlottingAreaHeight - containerSize.svgPlottingAreaHeight * yRatio + PoChartPlotAreaPaddingTop
+      );
+    }
+
+    const halfCategoryHeight = containerSize.svgPlottingAreaHeight / amountOfAxisX / 2;
+    return (
+      containerSize.svgPlottingAreaHeight -
+      halfCategoryHeight -
+      containerSize.svgPlottingAreaHeight * yRatio +
+      PoChartPlotAreaPaddingTop
+    );
+  }
+
+  private calculateAxisXCoordinateY(amountOfAxisX: number, containerSize: PoChartContainerSize, index: number): number {
+    const yRatio = index / (amountOfAxisX - 1);
 
     return (
       containerSize.svgPlottingAreaHeight - containerSize.svgPlottingAreaHeight * yRatio + PoChartPlotAreaPaddingTop
@@ -236,13 +351,22 @@ export class PoChartAxisComponent {
     return containerSize.svgHeight - textPoChartPadding;
   }
 
-  private calculateAxisYLabelXCoordinateWithoutSideSpace(containerSize: PoChartContainerSize, index: number): number {
-    const divideIndexBySeriesLength = index / this.seriesLength;
-    const xRatio = divideIndexBySeriesLength;
-    const halfCategoryWidth = (containerSize.svgWidth - PoChartAxisXLabelArea) / this.seriesLength / 2;
+  private calculateAxisYLabelXCoordinateWithoutSideSpace(
+    containerSize: PoChartContainerSize,
+    amountOfAxisY: number,
+    type: PoChartType,
+    index: number
+  ): number {
+    const amountOfLines = type === PoChartType.Bar ? amountOfAxisY - 1 : amountOfAxisY;
+    const xRatio = index / amountOfLines;
 
-    return (
-      PoChartAxisXLabelArea + halfCategoryWidth + (containerSize.svgPlottingAreaWidth + PoChartPadding * 2) * xRatio
+    if (type === PoChartType.Bar) {
+      return Math.round(PoChartAxisXLabelArea + (containerSize.svgWidth - PoChartAxisXLabelArea) * xRatio);
+    }
+
+    const halfCategoryWidth = (containerSize.svgWidth - PoChartAxisXLabelArea) / amountOfAxisY / 2;
+    return Math.round(
+      PoChartAxisXLabelArea + halfCategoryWidth + (containerSize.svgWidth - PoChartAxisXLabelArea) * xRatio
     );
   }
 
@@ -250,14 +374,21 @@ export class PoChartAxisComponent {
     const divideIndexBySeriesLength = index / (this.seriesLength - 1);
     const xRatio = isNaN(divideIndexBySeriesLength) ? 0 : divideIndexBySeriesLength;
     const svgAxisSideSpacing = this.mathsService.calculateSideSpacing(containerSize.svgWidth, this.seriesLength);
-    return PoChartAxisXLabelArea + svgAxisSideSpacing + containerSize.svgPlottingAreaWidth * xRatio;
+
+    return Math.round(PoChartAxisXLabelArea + svgAxisSideSpacing + containerSize.svgPlottingAreaWidth * xRatio);
   }
 
-  private calculateAxisYCoordinateX(containerSize: PoChartContainerSize, index: number): number {
-    const divideIndexBySeriesLength = index / this.seriesLength;
-    const xRatio = divideIndexBySeriesLength === Infinity ? 0 : divideIndexBySeriesLength;
+  private calculateAxisYCoordinateX(
+    containerSize: PoChartContainerSize,
+    amountOfAxisY: number,
+    type: PoChartType,
+    index: number
+  ): number {
+    const amountOfLines = type === PoChartType.Bar ? amountOfAxisY - 1 : amountOfAxisY;
+    const divideIndexByAmountOfLines = index / amountOfLines;
+    const xRatio = divideIndexByAmountOfLines === Infinity ? 0 : divideIndexByAmountOfLines;
 
-    return PoChartAxisXLabelArea + (containerSize.svgPlottingAreaWidth + PoChartPadding * 2) * xRatio;
+    return Math.round(PoChartAxisXLabelArea + (containerSize.svgWidth - PoChartAxisXLabelArea) * xRatio);
   }
 
   private checkAxisOptions(options: PoChartAxisOptions = {}): void {
@@ -269,8 +400,6 @@ export class PoChartAxisComponent {
       options.axisXGridLines && this.isValidGridLinesLengthOption(options.axisXGridLines)
         ? options.axisXGridLines
         : PoChartAxisXGridLines;
-
-    this.setAxisXGridLines();
   }
 
   private checksMinAndMaxValues(
@@ -296,12 +425,47 @@ export class PoChartAxisComponent {
     };
   }
 
+  private cleanUpCoordinates() {
+    this.axisXCoordinates = [];
+    this.axisYCoordinates = [];
+    this.axisXLabelCoordinates = [];
+    this.axisYLabelCoordinates = [];
+    this.seriesLength = 0;
+  }
+
   private isValidGridLinesLengthOption(axisXGridLines: number): boolean {
     return axisXGridLines >= 2 && axisXGridLines <= 10;
   }
 
-  private setAxisXGridLines() {
-    this.setAxisXCoordinates(this.axisXGridLines, this.containerSize);
-    this.setAxisXLabelCoordinates(this.axisXGridLines, this.containerSize, this.minMaxAxisValues);
+  private getAxisXLabels(type: PoChartType, minMaxAxisValues: PoChartMinMaxValues, amountOfAxisX: number) {
+    if (type === PoChartType.Bar) {
+      const axisXLabelsList = this.formatCategoriesLabels(amountOfAxisX, this.categories);
+      return axisXLabelsList.reverse();
+    }
+
+    return this.generateAverageOfLabels(minMaxAxisValues, amountOfAxisX);
+  }
+
+  private getAxisYLabels(type: PoChartType, minMaxAxisValues: PoChartMinMaxValues, amountOfAxisX: number) {
+    return type === PoChartType.Bar
+      ? this.generateAverageOfLabels(minMaxAxisValues, amountOfAxisX)
+      : this.formatCategoriesLabels(amountOfAxisX, this.categories);
+  }
+
+  private formatCategoriesLabels(amountOfAxisX: number, categories: Array<string> = []) {
+    return [...Array(amountOfAxisX)].map((_, index: number) => {
+      return categories[index] ?? '-';
+    });
+  }
+
+  private generateAverageOfLabels(minMaxAxisValues: PoChartMinMaxValues, amountOfAxisLines: number) {
+    const averageLabelsList = this.mathsService.range(minMaxAxisValues, amountOfAxisLines);
+
+    return averageLabelsList.map(label => {
+      const formattedDigit = label.toFixed(label % 1 && 2);
+      const removeZeroDigits = formattedDigit.replace(/\.00$/, '');
+
+      return removeZeroDigits.toString();
+    });
   }
 }

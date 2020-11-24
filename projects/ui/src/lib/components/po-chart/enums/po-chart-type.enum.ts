@@ -28,8 +28,13 @@ export enum PoChartType {
   Line = 'line',
 
   /**
-   * Gráfico que exibe os dados em forma de barras verticais e sua extensão varia de acordo com seus valores. É comumente usado como comparativo para diversas séries.
+   * Gráfico que exibe os dados em forma de barras verticais e sua extensão varia de acordo com seus valores. É comumente usado como comparativo entre diversas séries.
    * As séries são exibidas lado-a-lado, com um pequeno espaço entre elas.
    */
-  Column = 'column'
+  Column = 'column',
+
+  /**
+   * Gráfico que exibe os dados em forma de barras horizontais e sua extensão varia de acordo com seus valores. É comumente usado como comparativo de séries e categorias.
+   */
+  Bar = 'bar'
 }

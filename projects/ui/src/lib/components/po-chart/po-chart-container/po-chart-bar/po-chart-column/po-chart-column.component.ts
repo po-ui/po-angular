@@ -44,7 +44,7 @@ export class PoChartColumnComponent extends PoChartBarBaseComponent {
     const spaceBetweenBars = this.series.length > 1 ? columnFraction / (this.series.length + 2) : 0;
 
     // Subtrai a fração das séries pelo espaço entre as colunas.
-    const barWidth = columnFraction - spaceBetweenBars / (this.series.length + 2);
+    const barWidth = columnFraction - (spaceBetweenBars * (this.series.length - 1)) / (this.series.length + 2);
 
     return { chartBarPlotArea, barWidth, spaceBetweenBars };
   }

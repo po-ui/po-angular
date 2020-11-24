@@ -1,24 +1,37 @@
 <div class="po-row">
-  <div class="po-md-12">
-    <po-chart
-      class="po-md-12 po-mt-2"
-      p-title="Participation by country in world exports - %"
-      [p-options]="options"
-      [p-categories]="categories"
-      [p-series]="participationByCountryInWorldExports"
-      [p-type]="participationByCountryInWorldExportsType"
-    >
-    </po-chart>
+  <div class="po-md-12 po-lg-6">
+    <div class="po-row">
+      <po-chart
+        class="po-md-12 po-mt-2"
+        p-title="Participation by country in world exports - %"
+        [p-options]="options"
+        [p-categories]="categories"
+        [p-series]="participationByCountryInWorldExports"
+        [p-type]="participationByCountryInWorldExportsType"
+      >
+      </po-chart>
+
+      <po-chart
+        class="po-md-12 po-mt-2"
+        p-title="Evolution of coffee and some competitors - %"
+        [p-options]="optionsColumn"
+        [p-categories]="categoriesColumn"
+        [p-series]="evolutionOfCoffeeAndSomeCompetitors"
+        [p-type]="evolutionOfCoffeeAndSomeCompetitorsType"
+      >
+      </po-chart>
+    </div>
   </div>
 
-  <div class="po-md-12">
+  <div class="po-md-12 po-lg-6">
     <po-chart
       class="po-md-12 po-mt-2"
-      p-title="Evolution of coffee and some competitors - %"
-      [p-options]="optionsColumn"
-      [p-categories]="categoriesColumn"
-      [p-series]="evolutionOfCoffeeAndSomeCompetitors"
-      [p-type]="evolutionOfCoffeeAndSomeCompetitorsType"
+      p-title="Ranking of the most purchased and consumed beverages in Germany between 2018 and 2020 - in %"
+      [p-height]="816"
+      [p-categories]="consumptionPerCapitaItems"
+      [p-series]="consumptionPerCapita"
+      [p-type]="consumptionPerCapitaType"
+      [p-options]="consumptionPerCapitaOptions"
     >
     </po-chart>
   </div>
