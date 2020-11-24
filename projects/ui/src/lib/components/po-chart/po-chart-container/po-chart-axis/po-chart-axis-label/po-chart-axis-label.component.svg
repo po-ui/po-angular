@@ -11,6 +11,7 @@
 <svg:g>
   <svg:text *ngFor="let item of axisYLabelCoordinates; trackBy: trackBy"
     class="po-chart-axis-y-label" 
+    [class.po-chart-centered-label]="type !== 'bar'"
     [attr.x]="item.xCoordinate"
     [attr.y]="item.yCoordinate">
     {{ item.label }}

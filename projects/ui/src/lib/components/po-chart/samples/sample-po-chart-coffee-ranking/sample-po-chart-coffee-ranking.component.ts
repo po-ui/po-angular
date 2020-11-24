@@ -7,6 +7,7 @@ import {
   PoDonutChartSeries,
   PoLineChartSeries,
   PoPieChartSeries,
+  PoBarChartSeries,
   PoChartOptions
 } from '@po-ui/ng-components';
 
@@ -24,10 +25,27 @@ export class SamplePoChartCoffeeRankingComponent {
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;
   evolutionOfCoffeeAndSomeCompetitorsType: PoChartType = PoChartType.Column;
   coffeConsumingChartType: PoChartType = PoChartType.Donut;
+  consumptionPerCapitaType: PoChartType = PoChartType.Bar;
 
   categories: Array<string> = ['2010', '2011', '2012', '2013', '2014', '2015'];
 
   categoriesColumn: Array<string> = ['coffee', 'chocolate', 'tea'];
+
+  consumptionPerCapitaItems: Array<string> = [
+    'Water',
+    'Fruit Juice',
+    'Coffee',
+    'Cola drinks',
+    'Pils',
+    'Tea',
+    'Red Wine',
+    'Prosecco',
+    'Sodas',
+    'Beer 0% A.',
+    'Wheat Beer',
+    'Milk Shakes',
+    'Icetea'
+  ];
 
   coffeeConsumption: Array<PoDonutChartSeries> = [
     { label: 'Finland', data: 9.6, tooltip: 'Finland (Europe)' },
@@ -35,6 +53,11 @@ export class SamplePoChartCoffeeRankingComponent {
     { label: 'Netherlands', data: 6.7, tooltip: 'Netherlands (Europe)' },
     { label: 'Slovenia', data: 6.1, tooltip: 'Slovenia (Europe)' },
     { label: 'Austria', data: 5.5, tooltip: 'Austria (Europe)' }
+  ];
+
+  consumptionPerCapita: Array<PoBarChartSeries> = [
+    { label: '2018', data: [86.5, 51.3, 44.6, 39.5, 27.6, 27.3, 25.4, 21.5, 20.8, 15.9, 15.4, 14.4] },
+    { label: '2020', data: [86.1, 52.1, 47.3, 37.8, 29.8, 28.5, 24.9, 22.5, 21.1, 14.5, 15.5, 15.5] }
   ];
 
   participationByCountryInWorldExports: Array<PoLineChartSeries> = [
@@ -71,6 +94,13 @@ export class SamplePoChartCoffeeRankingComponent {
     { position: '9', company: 'Dunkin’ Donuts', location: 'Quincy, Massachusetts, US', foundation: '1950' },
     { position: '10', company: 'Coffee Beanery', location: 'Flushing, Michigan, US', foundation: '1976' }
   ];
+
+  consumptionPerCapitaOptions: PoChartOptions = {
+    axis: {
+      maxRange: 100,
+      axisXGridLines: 2
+    }
+  };
 
   options: PoChartOptions = {
     axis: {

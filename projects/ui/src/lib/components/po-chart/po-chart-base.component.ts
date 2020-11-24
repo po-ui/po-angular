@@ -2,6 +2,7 @@ import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToInt, isTypeof } from '../../utils/util';
 
+import { PoBarChartSeries } from './interfaces/po-chart-bar-series.interface';
 import { PoChartGaugeSerie } from './po-chart-types/po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoColumnChartSeries } from './interfaces/po-chart-column-series.interface';
@@ -15,7 +16,7 @@ const poChartMinHeight = 200;
 const poChartTypeDefault = PoChartType.Pie;
 
 export type PoChartSeries = Array<
-  PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie | PoLineChartSeries | PoColumnChartSeries
+  PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie | PoLineChartSeries | PoBarChartSeries | PoColumnChartSeries
 >;
 
 /**
@@ -24,7 +25,7 @@ export type PoChartSeries = Array<
  * O `po-chart` é um componente para renderização de dados através de gráficos, com isso facilitando a compreensão e tornando a
  * visualização destes dados mais agradável.
  *
- * Através de suas principais propriedades é possível definir o tipo de gráfico, uma altura e um título.
+ * Através de suas principais propriedades é possível definir atributos, tais como tipo de gráfico, altura, título, opções para os eixos, entre outros.
  *
  * Além disso, também é possível definir uma ação que será executada ao clicar em determinado elemento do gráfico
  * e outra que será executada ao passar o *mouse* sobre o elemento.
@@ -40,7 +41,7 @@ export abstract class PoChartBaseComponent {
   private _categories: Array<string>;
   private _height: number;
   private _series:
-    | Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries | PoColumnChartSeries>
+    | Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries | PoBarChartSeries | PoColumnChartSeries>
     | PoChartGaugeSerie;
   private _type: PoChartType = poChartTypeDefault;
 
@@ -90,7 +91,9 @@ export abstract class PoChartBaseComponent {
    * Define os elementos do gráfico que serão criados dinamicamente.
    */
   @Input('p-series') set series(
-    value: PoChartGaugeSerie | Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries | PoColumnChartSeries>
+    value:
+      | Array<PoDonutChartSeries | PoPieChartSeries | PoLineChartSeries | PoBarChartSeries | PoColumnChartSeries>
+      | PoChartGaugeSerie
   ) {
     this._series = value || [];
 
@@ -155,7 +158,7 @@ export abstract class PoChartBaseComponent {
    *
    * Objeto com as configurações usadas no `po-chart`.
    *
-   * É possível definir as configurações dos eixos(*axis*) para os gráfico do tipo `Line` e `Column` da seguinte forma:
+   * É possível definir as configurações dos eixos(*axis*) para os gráfico do tipo `Line`, `Column` e `Bar` da seguinte forma:
    *
    * ```
    *  chartOptions: PoChartOptions = {
@@ -166,7 +169,7 @@ export abstract class PoChartBaseComponent {
    *    },
    *  };
    * ```
-   * > Para gráficos do tipo `Column`, não será aceito valor negativo para a cofiguração `axis.minRange`.
+   * > Para gráficos dos tipos `Column` e `Bar`, não será aceito valor negativo para a cofiguração `axis.minRange`.
    */
   @Input('p-options') set options(value: PoChartOptions) {
     if (value instanceof Object && !(value instanceof Array)) {
@@ -187,7 +190,7 @@ export abstract class PoChartBaseComponent {
    *
    * O evento emitirá o seguinte parâmetro:
    * - *gauge*, *donut* e *pie*: um objeto contendo a categoria e valor da série.
-   * - *line*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
+   * - *line*, *column* e *bar*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
    */
   @Output('p-series-click')
   seriesClick = new EventEmitter<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie>();
@@ -201,7 +204,7 @@ export abstract class PoChartBaseComponent {
    *
    * O evento emitirá o seguinte parâmetro de acordo com o tipo de gráfico:
    * - *gauge*, *donut* e *pie*: um objeto contendo a categoria e valor da série.
-   * - *line*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
+   * - *line*, *column* e *bar*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
    */
   @Output('p-series-hover')
   seriesHover = new EventEmitter<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie>();

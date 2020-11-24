@@ -38,4 +38,16 @@
     (p-bar-hover)="onSerieHover($event)"
     (p-bar-click)="onSerieClick($event)"
   ></svg:g>
+
+  <!-- chart bar -->
+  <svg:g
+    *ngIf="type === 'bar'"
+    po-chart-bar
+    [p-categories]="categories"
+    [p-series]="series"
+    [p-options]="axisOptions"
+    [p-container-size]="containerSize"
+    (p-bar-hover)="onSerieHover($event)"
+    (p-bar-click)="onSerieClick($event)"
+  ></svg:g>
 </svg:svg>

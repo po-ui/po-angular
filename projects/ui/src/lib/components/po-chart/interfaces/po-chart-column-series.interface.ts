@@ -1,3 +1,5 @@
+import { PoBarChartSeries } from './po-chart-bar-series.interface';
+
 /**
  * @usedBy PoChartComponent
  *
@@ -5,18 +7,4 @@
  *
  * Interface que define o objeto das séries para gráficos do tipo `Column`.
  */
-export interface PoColumnChartSeries {
-  /** Define o texto da série. */
-  label: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define a lista de valores para a série.
-   *
-   * > Se passado valor `null` em determinado item da lista, a iteração irá ignorá-lo.
-   */
-  data: Array<number>;
-}
+export interface PoColumnChartSeries extends PoBarChartSeries {}

@@ -6,6 +6,7 @@ import { PoTooltipModule } from '../../directives/po-tooltip/po-tooltip.module';
 import { PoChartAxisComponent } from './po-chart-container/po-chart-axis/po-chart-axis.component';
 import { PoChartAxisPathComponent } from './po-chart-container/po-chart-axis/po-chart-axis-path/po-chart-axis-path.component';
 import { PoChartAxisLabelComponent } from './po-chart-container/po-chart-axis/po-chart-axis-label/po-chart-axis-label.component';
+import { PoChartBarComponent } from './po-chart-container/po-chart-bar/po-chart-bar.component';
 import { PoChartColumnComponent } from './po-chart-container/po-chart-bar/po-chart-column/po-chart-column.component';
 import { PoChartComponent } from './po-chart.component';
 import { PoChartContainerComponent } from './po-chart-container/po-chart-container.component';
@@ -40,6 +41,7 @@ import { PoChartSeriesPointComponent } from './po-chart-container/po-chart-line/
     PoChartPathComponent,
     PoChartPieComponent,
     PoChartSeriesPointComponent,
+    PoChartBarComponent,
     PoChartColumnComponent,
     PoChartBarPathComponent
   ],
