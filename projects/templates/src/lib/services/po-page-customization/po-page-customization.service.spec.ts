@@ -1,5 +1,5 @@
 import { PoPageDynamicOptionsSchema } from './po-page-dynamic-options.interface';
-import { TestBed, async, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { PoPageCustomizationService } from './po-page-customization.service';
@@ -141,13 +141,16 @@ describe('PoPageCustomizationService:', () => {
     });
 
     describe('getCustomOptions:', () => {
-      it('should get customized option from a function', async(() => {
-        poPageCustomizationService
-          .getCustomOptions(customOptionFunctionMock, originalPageOptions, pageOptionSchema)
-          .subscribe(optionResult => {
-            expect(optionResult).toEqual(mergedPageOptions);
-          });
-      }));
+      it(
+        'should get customized option from a function',
+        waitForAsync(() => {
+          poPageCustomizationService
+            .getCustomOptions(customOptionFunctionMock, originalPageOptions, pageOptionSchema)
+            .subscribe(optionResult => {
+              expect(optionResult).toEqual(mergedPageOptions);
+            });
+        })
+      );
 
       it('should get customized option from a url', fakeAsync(() => {
         testUrl(originalPageOptions, newPageOptions, mergedPageOptions);

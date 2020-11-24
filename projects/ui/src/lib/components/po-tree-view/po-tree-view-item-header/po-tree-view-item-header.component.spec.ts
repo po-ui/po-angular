@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { PoFieldModule } from '../../po-field/po-field.module';
@@ -10,12 +10,14 @@ describe('PoTreeViewItemHeaderComponent:', () => {
   let fixture: ComponentFixture<PoTreeViewItemHeaderComponent>;
   let debugNativeElement;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule, PoFieldModule],
-      declarations: [PoTreeViewItemHeaderComponent]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, PoFieldModule],
+        declarations: [PoTreeViewItemHeaderComponent]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTreeViewItemHeaderComponent);

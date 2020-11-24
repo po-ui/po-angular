@@ -10,7 +10,7 @@
       "prefix": "po",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/ui/tsconfig.lib.json",
             "project": "projects/ui/ng-package.json"
@@ -82,7 +82,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -148,7 +147,7 @@
       "sourceRoot": "projects/storage/src",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/storage/tsconfig.lib.json",
             "project": "projects/storage/ng-package.json"
@@ -182,7 +181,7 @@
       "sourceRoot": "projects/sync/src",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/sync/tsconfig.lib.json",
             "project": "projects/sync/ng-package.json"
@@ -217,7 +216,7 @@
       "prefix": "po",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/templates/tsconfig.lib.json",
             "project": "projects/templates/ng-package.json"
@@ -252,7 +251,7 @@
       "prefix": "po",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/code-editor/tsconfig.lib.json",
             "project": "projects/code-editor/ng-package.json"
@@ -329,7 +328,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,

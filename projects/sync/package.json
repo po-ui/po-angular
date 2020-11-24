@@ -27,7 +27,7 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/core": "^10.0.3",
+    "@angular/core": "~11.0.1",
     "@ionic-native/core": "5.23.0",
     "@ionic-native/network": "5.23.0",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",

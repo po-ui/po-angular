@@ -1410,14 +1410,14 @@ describe('Function validateObjectType:', () => {
 });
 
 describe('Function getParentRef:', () => {
-  it(`should return 'viewRef['_hostView'][8]' if 'viewRef['_hostView']' is truthy`, () => {
-    const viewRef = { _hostView: [null, null, null, null, null, null, null, null, 'teste'] };
+  it(`should return 'viewRef['_hostLView'][8]' if 'viewRef['_hostLView']' is truthy`, () => {
+    const viewRef = { _hostLView: [null, null, null, null, null, null, null, null, 'teste'] };
     const expectedValue = ('teste' as unknown) as ViewContainerRef;
 
     expect(getParentRef((viewRef as unknown) as ViewContainerRef)).toEqual(expectedValue);
   });
 
-  it(`should return 'viewRef['_view']['component']' if 'viewRef['_hostView']' is falsy`, () => {
+  it(`should return 'viewRef['_view']['component']' if 'viewRef['_hostLView']' is falsy`, () => {
     const viewRef = { _view: { component: 'teste2' } };
     const expectedValue = ('teste2' as unknown) as ViewContainerRef;
 

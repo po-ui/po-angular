@@ -48,7 +48,8 @@ import { PoPageListBaseComponent } from './po-page-list-base.component';
   selector: 'po-page-list',
   templateUrl: './po-page-list.component.html'
 })
-export class PoPageListComponent extends PoPageListBaseComponent
+export class PoPageListComponent
+  extends PoPageListBaseComponent
   implements AfterContentInit, OnChanges, OnDestroy, OnInit {
   advancedSearch: string;
   dropdownActions: Array<PoPageAction>;

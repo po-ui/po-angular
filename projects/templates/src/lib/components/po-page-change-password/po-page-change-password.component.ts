@@ -57,7 +57,8 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
   selector: 'po-page-change-password',
   templateUrl: './po-page-change-password.component.html'
 })
-export class PoPageChangePasswordComponent extends PoPageChangePasswordBaseComponent
+export class PoPageChangePasswordComponent
+  extends PoPageChangePasswordBaseComponent
   implements AfterViewInit, OnDestroy, OnInit {
   literals: {
     backButton: string;

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
@@ -12,13 +12,15 @@ describe('PoTreeviewItemComponent:', () => {
   let component: PoTreeViewItemComponent;
   let fixture: ComponentFixture<PoTreeViewItemComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, FormsModule, PoFieldModule],
-      declarations: [PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
-      providers: [PoTreeViewService]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [BrowserAnimationsModule, FormsModule, PoFieldModule],
+        declarations: [PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
+        providers: [PoTreeViewService]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTreeViewItemComponent);

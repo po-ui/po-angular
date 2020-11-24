@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 
 import { expectPropertiesValues, getObservable } from '../../util-test/util-expect.spec';
@@ -25,12 +25,14 @@ describe('PoPageLoginBaseComponent: ', () => {
   let servicePageLogin: PoPageLoginService;
   let languageService: PoLanguageService;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [],
-      providers: [PoPageLoginService, PoLanguageService]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [],
+        providers: [PoPageLoginService, PoLanguageService]
+      }).compileComponents();
+    })
+  );
 
   const booleanValidTrueValues = [true, 'true', 1, ''];
   const booleanValidFalseValues = [false, 'false', 0];

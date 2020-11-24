@@ -19,11 +19,11 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/core": "^10.0.3",
+    "@angular/core": "~11.0.1",
     "custom-idle-queue": "2.1.2",
     "localforage": "1.9.0",
     "lokijs": "1.5.8",
-    "rxjs": "^6.5.5",
+    "rxjs": "~6.6.0",
     "zone.js": "~0.10.3"
   }
 }

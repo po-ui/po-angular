@@ -20,11 +20,11 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/common": "^10.0.3",
-    "@angular/core": "^10.0.3",
-    "@angular/forms": "^10.0.3",
+    "@angular/common": "~11.0.1",
+    "@angular/core": "~11.0.1",
+    "@angular/forms": "~11.0.1",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "monaco-editor": "0.20.0",
-    "zone.js": "~0.10.3"
+    "zone.js": "~0.10.2"
   }
 }

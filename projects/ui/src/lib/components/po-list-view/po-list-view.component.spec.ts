@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -689,59 +689,71 @@ describe('PoListViewComponent:', () => {
       expect(debugElement.querySelector('.po-list-view-title-link')).toBeFalsy();
     });
 
-    it(`should call 'runTitleAction' with 'clickableItem' if 'titleAction' is clicked, 'titleHasAction' return
-      true and 'checkTitleType' return noLink`, async(() => {
-      const clickableItem = { label: 'item label' };
-      component.items = [clickableItem];
+    it(
+      `should call 'runTitleAction' with 'clickableItem' if 'titleAction' is clicked, 'titleHasAction' return
+      true and 'checkTitleType' return noLink`,
+      waitForAsync(() => {
+        const clickableItem = { label: 'item label' };
+        component.items = [clickableItem];
 
-      spyOn(component, 'runTitleAction');
-      spyOnProperty(component, 'titleHasAction').and.returnValue(true);
-      spyOn(component, 'checkTitleType').and.returnValue('noLink');
+        spyOn(component, 'runTitleAction');
+        spyOnProperty(component, 'titleHasAction').and.returnValue(true);
+        spyOn(component, 'checkTitleType').and.returnValue('noLink');
 
-      fixture.detectChanges();
+        fixture.detectChanges();
 
-      const titleAction = fixture.debugElement.nativeElement.querySelector('.po-list-view-title-no-link');
-      titleAction.click();
+        const titleAction = fixture.debugElement.nativeElement.querySelector('.po-list-view-title-no-link');
+        titleAction.click();
 
-      fixture.whenStable().then(() => {
-        expect(component.runTitleAction).toHaveBeenCalledWith(clickableItem);
-      });
-    }));
+        fixture.whenStable().then(() => {
+          expect(component.runTitleAction).toHaveBeenCalledWith(clickableItem);
+        });
+      })
+    );
 
-    it(`should not call 'runTitleAction' if 'titleAction' is clicked, 'titleHasAction' return false and 'checkTitleType' return
-      noLink`, async(() => {
-      spyOnProperty(component, 'titleHasAction').and.returnValue(false);
-      spyOn(component, 'checkTitleType').and.returnValue('noLink');
-      spyOn(component, 'runTitleAction');
+    it(
+      `should not call 'runTitleAction' if 'titleAction' is clicked, 'titleHasAction' return false and 'checkTitleType' return
+      noLink`,
+      waitForAsync(() => {
+        spyOnProperty(component, 'titleHasAction').and.returnValue(false);
+        spyOn(component, 'checkTitleType').and.returnValue('noLink');
+        spyOn(component, 'runTitleAction');
 
-      fixture.detectChanges();
+        fixture.detectChanges();
 
-      const titleAction = fixture.debugElement.nativeElement.querySelector('.po-list-view-title-no-link');
-      titleAction.click();
+        const titleAction = fixture.debugElement.nativeElement.querySelector('.po-list-view-title-no-link');
+        titleAction.click();
 
-      fixture.whenStable().then(() => {
-        expect(component.runTitleAction).not.toHaveBeenCalled();
-      });
-    }));
+        fixture.whenStable().then(() => {
+          expect(component.runTitleAction).not.toHaveBeenCalled();
+        });
+      })
+    );
 
-    it(`should aply class 'po-list-view-container-no-data' if items is undefined`, async(() => {
-      component.items = undefined;
+    it(
+      `should aply class 'po-list-view-container-no-data' if items is undefined`,
+      waitForAsync(() => {
+        component.items = undefined;
 
-      fixture.detectChanges();
+        fixture.detectChanges();
 
-      const noDatacontainer = fixture.debugElement.nativeElement.querySelector('.po-list-view-container-no-data');
+        const noDatacontainer = fixture.debugElement.nativeElement.querySelector('.po-list-view-container-no-data');
 
-      expect(noDatacontainer).toBeTruthy();
-    }));
+        expect(noDatacontainer).toBeTruthy();
+      })
+    );
 
-    it(`shouldn't aply class 'po-list-view-container-no-data' if items is defined`, async(() => {
-      component.items = [{ name: '1', $showDetail: true }];
+    it(
+      `shouldn't aply class 'po-list-view-container-no-data' if items is defined`,
+      waitForAsync(() => {
+        component.items = [{ name: '1', $showDetail: true }];
 
-      fixture.detectChanges();
+        fixture.detectChanges();
 
-      const noDatacontainer = fixture.debugElement.nativeElement.querySelector('.po-list-view-container-no-data');
+        const noDatacontainer = fixture.debugElement.nativeElement.querySelector('.po-list-view-container-no-data');
 
-      expect(noDatacontainer).toBeFalsy();
-    }));
+        expect(noDatacontainer).toBeFalsy();
+      })
+    );
   });
 });

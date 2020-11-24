@@ -13,7 +13,7 @@ describe('PoNavbarItemComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [PoNavbarItemComponent],
-      imports: [RouterModule.forRoot([])]
+      imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })]
     });
   });
 

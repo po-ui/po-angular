@@ -16,7 +16,7 @@ describe('PoInfoComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([])],
+      imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })],
       declarations: [PoInfoComponent]
     });
   });

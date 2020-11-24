@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { Observable } from 'rxjs';
 
@@ -12,11 +12,13 @@ describe('PoProgressComponent:', () => {
 
   let nativeElement: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [PoProgressModule]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [PoProgressModule]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoProgressComponent);

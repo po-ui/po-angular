@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ChangeDetectorRef } from '@angular/core';
 
 import { expectSettersMethod } from './../../../../util-test/util-expect.spec';
@@ -16,13 +16,15 @@ describe('PoUploadFileRestrictionsComponent:', () => {
   let fixture: ComponentFixture<PoUploadFileRestrictionsComponent>;
   let nativeElement: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoUploadFileRestrictionsComponent],
-      imports: [PoServicesModule],
-      providers: [PoLanguageService]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PoUploadFileRestrictionsComponent],
+        imports: [PoServicesModule],
+        providers: [PoLanguageService]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoUploadFileRestrictionsComponent);

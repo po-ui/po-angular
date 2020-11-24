@@ -14,7 +14,7 @@ describe('PoNavbarActionComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [PoNavbarActionComponent],
-      imports: [PoTooltipModule, RouterModule.forRoot([])]
+      imports: [PoTooltipModule, RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })]
     });
   });
 

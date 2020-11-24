@@ -14,7 +14,7 @@ describe('PoNavbarActionPopupComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [PoNavbarActionPopupComponent],
-      imports: [PoPopupModule, RouterModule.forRoot([])]
+      imports: [PoPopupModule, RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })]
     });
   });
 

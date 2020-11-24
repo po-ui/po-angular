@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -22,13 +22,15 @@ describe('PoModalPasswordRecoveryComponent:', () => {
   let debugElement;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoFieldModule, PoModalModule],
-      declarations: [PoModalPasswordRecoveryErrorMessageComponent, PoModalPasswordRecoveryComponent],
-      providers: [PoI18nPipe, PoModalPasswordRecoveryService]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, RouterTestingModule.withRoutes([]), PoFieldModule, PoModalModule],
+        declarations: [PoModalPasswordRecoveryErrorMessageComponent, PoModalPasswordRecoveryComponent],
+        providers: [PoI18nPipe, PoModalPasswordRecoveryService]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoModalPasswordRecoveryComponent);

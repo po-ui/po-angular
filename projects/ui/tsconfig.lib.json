@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist/",
+    "declarationMap": true,
     "target": "es2015",
     "declaration": true,
     "inlineSources": true,

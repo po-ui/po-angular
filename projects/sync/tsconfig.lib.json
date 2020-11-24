@@ -3,6 +3,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "outDir": "../../out-tsc/lib",
+    "declarationMap": true,
     "target": "es2015",
     "declaration": true,
     "inlineSources": true,

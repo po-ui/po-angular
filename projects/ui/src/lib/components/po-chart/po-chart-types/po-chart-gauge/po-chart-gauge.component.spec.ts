@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { PoChartCircular } from '../po-chart-circular/po-chart-circular';
@@ -9,11 +9,13 @@ describe('PoChartGaugeComponent:', () => {
   let component: PoChartGaugeComponent;
   let fixture: ComponentFixture<PoChartGaugeComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoChartGaugeComponent]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PoChartGaugeComponent]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoChartGaugeComponent);
