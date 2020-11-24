@@ -904,6 +904,28 @@ describe('PoTableBaseComponent:', () => {
       expect(component.collapsed.emit).toHaveBeenCalled();
     });
 
+    it('autoCollapse: should all items collapsed and expand seleted item', () => {
+      component.items = [
+        {
+          $showDetail: true,
+          id: 11234,
+          country: 'Brazil',
+          destination: 'Rio de Janeiro',
+          detail: [{ package: 'Basic', tour: 'City tour by public bus and visit to the main museums.' }]
+        },
+        {
+          $showDetail: false,
+          id: 23334,
+          country: 'Brazil',
+          destination: 'Joinville',
+          detail: [{ package: 'Intermediary', tour: 'Tour city.' }]
+        }
+      ];
+      component.autoCollapse = true;
+      component.toggleDetail(component.items[1]);
+      expect(component.items[0].$showDetail).toBe(false);
+    });
+
     it('expand: should set showDetail to true', () => {
       const currentRow = {
         id: 1,
@@ -1328,6 +1350,14 @@ describe('PoTableBaseComponent:', () => {
 
     it('p-loading-show-more: should update property `p-loading-show-more` with invalid values.', () => {
       expectPropertiesValues(component, 'loadingShowMore', booleanInvalidValues, false);
+    });
+
+    it('p-auto-collapse: should update property `p-auto-collapse` with valid values.', () => {
+      expectPropertiesValues(component, 'autoCollapse', booleanValidTrueValues, true);
+    });
+
+    it('p-auto-collapse: should update property `p-auto-collapse` with invalid values.', () => {
+      expectPropertiesValues(component, 'autoCollapse', booleanInvalidValues, false);
     });
   });
 });

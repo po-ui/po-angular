@@ -83,6 +83,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Loading show more', value: 'loadingShowMore' },
     { label: 'Hide detail', value: 'hideDetail' },
     { label: 'Loading', value: 'loading' },
+    { label: 'Auto collapse', value: 'autoCollapse' },
     { label: 'Hide columns manager', value: 'hideColumnsManager' }
   ];
 
