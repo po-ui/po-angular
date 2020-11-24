@@ -354,6 +354,17 @@ export abstract class PoTableBaseComponent implements OnChanges {
    *
    * @description
    *
+   * Permite fechar um detalhe ou row template automaticamente, ao abrir outro item.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-collapse') @InputBoolean() autoCollapse?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Permite que seja adicionado o estado de carregamento no botão "Carregar mais resultados".
    *
    * @default `false`
@@ -647,8 +658,22 @@ export abstract class PoTableBaseComponent implements OnChanges {
   }
 
   toggleDetail(row: any) {
-    this.setShowDetail(row, !row.$showDetail);
+    const rowShowDetail = row.$showDetail;
+    if (this.autoCollapse) {
+      this.collapseAllItems(this.items);
+    }
+
+    this.setShowDetail(row, !rowShowDetail);
     this.emitExpandEvents(row);
+  }
+
+  private collapseAllItems(items: Array<{ [key: string]: any }>) {
+    for (const item of items) {
+      if (item.$showDetail) {
+        this.setShowDetail(item, false);
+        this.emitExpandEvents(item);
+      }
+    }
   }
 
   toggleRowAction(row: any) {
