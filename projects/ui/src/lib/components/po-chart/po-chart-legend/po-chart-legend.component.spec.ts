@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PoChartLegendComponent } from './po-chart-legend.component';
 
@@ -6,11 +6,13 @@ describe('PoChartLegendComponent:', () => {
   let component: PoChartLegendComponent;
   let fixture: ComponentFixture<PoChartLegendComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoChartLegendComponent]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PoChartLegendComponent]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoChartLegendComponent);

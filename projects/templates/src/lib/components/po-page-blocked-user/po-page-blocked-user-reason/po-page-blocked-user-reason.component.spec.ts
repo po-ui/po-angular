@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SimpleChange } from '@angular/core';
 
 import { PoI18nModule } from './../../../../../../ui/src/lib/services/po-i18n/po-i18n.module';
@@ -39,12 +39,14 @@ describe('PoPageBlockedUserReasonContactsComponent: ', () => {
     }
   };
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [PoI18nModule.config(config)],
-      declarations: [PoI18nPipe, PoPageBlockedUserReasonComponent]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [PoI18nModule.config(config)],
+        declarations: [PoI18nPipe, PoPageBlockedUserReasonComponent]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageBlockedUserReasonComponent);

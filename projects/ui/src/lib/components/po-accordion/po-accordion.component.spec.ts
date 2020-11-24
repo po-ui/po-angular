@@ -11,12 +11,8 @@ import { PoAccordionService } from './services/po-accordion.service';
 @Component({
   template: `
     <po-accordion>
-      <po-accordion-item p-label="PO Accordion 1">
-        Item 1
-      </po-accordion-item>
-      <po-accordion-item p-label="PO Accordion 2">
-        Item 2
-      </po-accordion-item>
+      <po-accordion-item p-label="PO Accordion 1"> Item 1 </po-accordion-item>
+      <po-accordion-item p-label="PO Accordion 2"> Item 2 </po-accordion-item>
     </po-accordion>
   `
 })

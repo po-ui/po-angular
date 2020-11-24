@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
@@ -10,11 +10,13 @@ describe('PoTreeViewComponent:', () => {
   let component: PoTreeViewComponent;
   let fixture: ComponentFixture<PoTreeViewComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [PoTreeViewModule]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [PoTreeViewModule]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTreeViewComponent);

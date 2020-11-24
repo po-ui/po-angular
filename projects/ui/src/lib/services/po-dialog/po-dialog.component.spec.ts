@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
@@ -93,24 +93,30 @@ describe('PoDialogComponent:', () => {
     expect(fakeThis.destroy).toHaveBeenCalled();
   });
 
-  it('Should call destroy if was closed with X', async(() => {
-    spyOn(component, 'destroy');
+  it(
+    'Should call destroy if was closed with X',
+    waitForAsync(() => {
+      spyOn(component, 'destroy');
 
-    component.poModal.close(true);
-    fixture.detectChanges();
+      component.poModal.close(true);
+      fixture.detectChanges();
 
-    expect(component.destroy).toHaveBeenCalled();
-  }));
+      expect(component.destroy).toHaveBeenCalled();
+    })
+  );
 
-  it('Should call closeAction if has closeAction callback and was closed with X', async(() => {
-    component.closeAction = () => {};
-    spyOn(component, 'closeAction');
+  it(
+    'Should call closeAction if has closeAction callback and was closed with X',
+    waitForAsync(() => {
+      component.closeAction = () => {};
+      spyOn(component, 'closeAction');
 
-    component.poModal.close(true);
-    fixture.detectChanges();
+      component.poModal.close(true);
+      fixture.detectChanges();
 
-    expect(component.closeAction).toHaveBeenCalled();
-  }));
+      expect(component.closeAction).toHaveBeenCalled();
+    })
+  );
 
   it('should set var configDialog', () => {
     const fakeThis = {

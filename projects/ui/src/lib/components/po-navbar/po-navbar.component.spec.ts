@@ -25,7 +25,7 @@ describe('PoNavbarComponent:', () => {
         PoNavbarItemsModule,
         PoNavbarItemNavigationModule,
         PoMenuModule,
-        RouterModule.forRoot([])
+        RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })
       ]
     });
   });

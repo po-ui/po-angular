@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -19,14 +19,16 @@ describe('PoPageDynamicDetailComponent:', () => {
   let component: PoPageDynamicDetailComponent;
   let fixture: ComponentFixture<PoPageDynamicDetailComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-      providers: [PoDialogService],
-      declarations: [PoPageDynamicDetailComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+        providers: [PoDialogService],
+        declarations: [PoPageDynamicDetailComponent],
+        schemas: [NO_ERRORS_SCHEMA]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicDetailComponent);

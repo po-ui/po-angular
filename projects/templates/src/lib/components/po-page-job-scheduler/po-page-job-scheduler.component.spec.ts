@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
@@ -14,11 +14,13 @@ describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
   let fixture: ComponentFixture<PoPageJobSchedulerComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageJobSchedulerComponent);

@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -34,23 +34,25 @@ describe('PoPageLoginComponent: ', () => {
 
   let nativeElement: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule.withRoutes([])],
-      declarations: [
-        PoButtonComponent,
-        PoComboComponent,
-        PoInputComponent,
-        PoLoginComponent,
-        PoPasswordComponent,
-        PoPageLoginComponent,
-        PoSelectComponent,
-        PoSwitchComponent
-      ],
-      providers: [HttpClient, HttpHandler, PoPageLoginService],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, RouterTestingModule.withRoutes([])],
+        declarations: [
+          PoButtonComponent,
+          PoComboComponent,
+          PoInputComponent,
+          PoLoginComponent,
+          PoPasswordComponent,
+          PoPageLoginComponent,
+          PoSelectComponent,
+          PoSwitchComponent
+        ],
+        providers: [HttpClient, HttpHandler, PoPageLoginService],
+        schemas: [NO_ERRORS_SCHEMA]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageLoginComponent);

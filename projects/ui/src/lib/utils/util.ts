@@ -571,7 +571,7 @@ export function validateObjectType(value: any) {
  * @returns ViewContainerRef
  */
 export function getParentRef(viewRef: ViewContainerRef): ViewContainerRef {
-  return viewRef['_hostView'] ? viewRef['_hostView'][8] : viewRef['_view']['component'];
+  return viewRef['_hostLView'] ? viewRef['_hostLView'][8] : viewRef['_view']['component'];
 }
 
 /**

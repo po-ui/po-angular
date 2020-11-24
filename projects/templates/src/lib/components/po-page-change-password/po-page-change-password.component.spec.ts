@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, async } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -21,13 +21,15 @@ describe('PoPageChangePasswordComponent:', () => {
   let nativeElement: any;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoModule, PoPageBackgroundModule],
-      declarations: [PoPageChangePasswordComponent],
-      providers: [HttpClient, HttpHandler, PoPageChangePasswordService]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, RouterTestingModule.withRoutes([]), PoModule, PoPageBackgroundModule],
+        declarations: [PoPageChangePasswordComponent],
+        providers: [HttpClient, HttpHandler, PoPageChangePasswordService]
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageChangePasswordComponent);
