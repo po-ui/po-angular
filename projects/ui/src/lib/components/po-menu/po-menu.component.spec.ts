@@ -16,7 +16,6 @@ import { PoLoadingModule } from '../po-loading/po-loading.module';
 import { PoBadgeComponent } from '../po-badge';
 import { PoMenuComponent } from './po-menu.component';
 import { PoMenuFilterComponent } from './po-menu-filter/po-menu-filter.component';
-import { PoMenuItem } from './po-menu-item.interface';
 import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
 import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
@@ -643,20 +642,24 @@ describe('PoMenuComponent:', () => {
       expect(nativeElement.querySelector('po-menu-filter')).toBeFalsy();
     });
 
-    it('should show `po-menu-footer` if `hasFooter` is `true`', () => {
-      spyOnProperty(component, 'hasFooter').and.returnValue(true);
+    it('should show `po-menu-footer` if `collapsed` is `true` and `menus` are valid', () => {
+      component.collapsed = true;
+      component.menus = [{ label: '1', icon: 'po-icon-user', shortLabel: '123', action: () => {} }];
 
       fixture.detectChanges();
+      const footer = fixture.debugElement.nativeElement.querySelector('.po-menu-footer');
 
-      expect(nativeElement.querySelector('.po-menu-footer')).toBeTruthy();
+      expect(footer).toBeTruthy();
     });
 
-    it('shouldn`t show `po-menu-footer` if `hasFooter` is `false`', () => {
-      spyOnProperty(component, 'hasFooter').and.returnValue(false);
+    it('should not show `po-menu-footer` if `collapsed` is `true` and `menus` are invalid', () => {
+      component.collapsed = true;
+      component.menus = [{ label: '1', icon: 'po-icon-user', action: () => {} }];
 
       fixture.detectChanges();
+      const footer = fixture.debugElement.nativeElement.querySelector('.po-menu-footer');
 
-      expect(nativeElement.querySelector('.po-menu-footer')).toBeNull();
+      expect(footer).toBeNull();
     });
 
     it('should show the button at menu bottom if menu is collapsed', () => {
@@ -1675,38 +1678,30 @@ describe('PoMenuComponent:', () => {
       expect(component.enableCollapseButton).toBe(false);
     });
 
-    it(`hasFooter: should return 'false' if 'allowCollapseMenu' is 'false'`, () => {
-      component.allowCollapseMenu = false;
-
-      expect(component.hasFooter).toBe(false);
-    });
-
-    it(`hasFooter: should return 'false' if 'allowCollapseMenu' is 'true' and 'enableCollapseButton' and 'collapsed'
-    are 'false'`, () => {
-      component.allowCollapseMenu = true;
-      component.collapsed = false;
-      spyOnProperty(component, 'enableCollapseButton').and.returnValue(false);
-
-      expect(component.hasFooter).toBe(false);
-    });
-
-    it(`hasFooter: should return 'true' if 'allowCollapseMenu' and 'enableCollapseButton' are 'true'`, () => {
-      component.allowCollapseMenu = true;
+    it(`hasFooter: should return 'true' if 'enableCollapseButton' and 'enableCollapse' are 'true'`, () => {
       spyOnProperty(component, 'enableCollapseButton').and.returnValue(true);
+      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
 
       expect(component.hasFooter).toBe(true);
     });
 
-    it(`hasFooter: should return 'true' if 'collapsed' is 'true' and 'collapsedMobile' is 'false'`, () => {
-      component.collapsed = true;
-      component.collapsedMobile = false;
+    it(`hasFooter: should return 'true' if 'enableCollapseButton' is 'true' and 'enableCollapse' is 'false'`, () => {
+      spyOnProperty(component, 'enableCollapseButton').and.returnValue(true);
+      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
 
       expect(component.hasFooter).toBe(true);
     });
 
-    it(`hasFooter: should return 'false' if 'collapsed' is 'true' and 'collapsedMobile' is 'false'`, () => {
-      component.collapsed = false;
-      component.collapsedMobile = false;
+    it(`hasFooter: should return 'true' if 'enableCollapseButton' is 'false' and 'enableCollapse' is 'true'`, () => {
+      spyOnProperty(component, 'enableCollapseButton').and.returnValue(false);
+      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
+
+      expect(component.hasFooter).toBe(true);
+    });
+
+    it(`hasFooter: should return 'false' if 'enableCollapseButton' and 'enableCollapse' are 'false'`, () => {
+      spyOnProperty(component, 'enableCollapseButton').and.returnValue(false);
+      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
 
       expect(component.hasFooter).toBe(false);
     });

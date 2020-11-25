@@ -162,10 +162,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   }
 
   get hasFooter() {
-    return (
-      (this.allowCollapseMenu && !this.mobileOpened && this.enableCollapseButton) ||
-      (this.collapsed && !this.collapsedMobile)
-    );
+    return this.enableCollapseButton || this.enableCollapse;
   }
 
   get isCollapsed() {
