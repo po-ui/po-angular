@@ -563,18 +563,6 @@ export function validateObjectType(value: any) {
 }
 
 /**
- * @deprecated
- * Retorna um ViewContainerRef compatível para projetos com Ivy habilitado ou não.
- *
- * @param viewRef ViewContainerRef
- *
- * @returns ViewContainerRef
- */
-export function getParentRef(viewRef: ViewContainerRef): ViewContainerRef {
-  return viewRef['_hostLView'] ? viewRef['_hostLView'][8] : viewRef['_view']['component'];
-}
-
-/**
  * Retorna os elementos DOM capazes de receber foco.
  *
  * > Atualmente são considerados "focáveis" os elementos DOM `input`, `select`,

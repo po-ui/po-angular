@@ -29,8 +29,7 @@ import {
   validateDateRange,
   validateObjectType,
   validValue,
-  valuesFromObject,
-  getParentRef
+  valuesFromObject
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -1406,22 +1405,6 @@ describe('Function validateObjectType:', () => {
 
     value = ['value'];
     expect(validateObjectType(value)).toBe(undefined);
-  });
-});
-
-describe('Function getParentRef:', () => {
-  it(`should return 'viewRef['_hostLView'][8]' if 'viewRef['_hostLView']' is truthy`, () => {
-    const viewRef = { _hostLView: [null, null, null, null, null, null, null, null, 'teste'] };
-    const expectedValue = ('teste' as unknown) as ViewContainerRef;
-
-    expect(getParentRef((viewRef as unknown) as ViewContainerRef)).toEqual(expectedValue);
-  });
-
-  it(`should return 'viewRef['_view']['component']' if 'viewRef['_hostLView']' is falsy`, () => {
-    const viewRef = { _view: { component: 'teste2' } };
-    const expectedValue = ('teste2' as unknown) as ViewContainerRef;
-
-    expect(getParentRef((viewRef as unknown) as ViewContainerRef)).toEqual(expectedValue);
   });
 });
 

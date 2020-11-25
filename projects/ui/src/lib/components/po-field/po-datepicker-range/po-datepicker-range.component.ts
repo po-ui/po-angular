@@ -72,7 +72,7 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   }
 
   get enableCleaner(): boolean {
-    return (this.startDateInputValue || this.endDateInputValue) && !this.disabled && !this.readonly;
+    return this.clean && (this.startDateInputValue || this.endDateInputValue) && !this.disabled && !this.readonly;
   }
 
   get endDateInputName(): string {

@@ -1577,6 +1577,30 @@ describe('PoComboComponent:', () => {
 
       expect(noDataTemplateText).toEqual(noDataTemplateTextCompare);
     });
+
+    it('should show po-clean if `clean` is true and `disabled` is false', () => {
+      component.clean = true;
+      component.disabled = false;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-clean')).toBeTruthy();
+    });
+
+    it('shouldn`t show po-clean if `clean` is true and `disabled` is true', () => {
+      component.clean = true;
+      component.disabled = true;
+
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('po-clean')).toBe(null);
+    });
+
+    it('shouldn`t show po-clean if `clean` is false', () => {
+      component.clean = false;
+
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('po-clean')).toBe(null);
+    });
   });
 
   describe('Integration:', () => {

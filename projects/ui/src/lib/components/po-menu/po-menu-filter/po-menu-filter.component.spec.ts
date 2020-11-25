@@ -43,10 +43,6 @@ describe('PoMenuFilterComponent:', () => {
     expect(fixture.debugElement.nativeElement.querySelector('.po-icon-close')).toBeNull();
   });
 
-  it('should exists the clean variable', () => {
-    expect(component.clean).toBeTruthy();
-  });
-
   describe('Methods:', () => {
     it('filterItems: should call `filter.emit` with search param', () => {
       const search = 'menu';

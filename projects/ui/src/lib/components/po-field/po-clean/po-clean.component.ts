@@ -1,6 +1,4 @@
-import { Component, ViewContainerRef } from '@angular/core';
-
-import { getParentRef } from '../../../utils/util';
+import { Component } from '@angular/core';
 
 import { PoCleanBaseComponent } from './po-clean-base.component';
 
@@ -21,11 +19,6 @@ import { PoCleanBaseComponent } from './po-clean-base.component';
   templateUrl: './po-clean.component.html'
 })
 export class PoCleanComponent extends PoCleanBaseComponent {
-  constructor(private viewRef: ViewContainerRef) {
-    super();
-    this.parentComponent = getParentRef(this.viewRef);
-  }
-
   setInputValue(value?: string) {
     if (this.inputRef && this.inputRef.nativeElement) {
       this.inputRef.nativeElement.value = value;

@@ -317,5 +317,39 @@ describe('PoNumberComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
+
+    it('should show po-clean if `clean` is true and `disabled` and `readonly` are false', () => {
+      component.clean = true;
+      component.disabled = false;
+      component.readonly = false;
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('po-clean')).toBeTruthy();
+    });
+
+    it('shouldn`t show po-clean if `clean` is true and `disabled` is true', () => {
+      component.clean = true;
+      component.disabled = true;
+
+      fixture.detectChanges();
+      expect(fixture.debugElement.nativeElement.querySelector('po-clean')).toBe(null);
+    });
+
+    it('shouldn`t show po-clean if `clean` is true and `readonly` is true and `disabled` is false', () => {
+      component.clean = true;
+      component.disabled = false;
+      component.readonly = true;
+
+      fixture.detectChanges();
+      expect(fixture.debugElement.nativeElement.querySelector('po-clean')).toBe(null);
+    });
+
+    it('shouldn`t show po-clean if `clean` is false', () => {
+      component.clean = false;
+
+      fixture.detectChanges();
+      expect(fixture.debugElement.nativeElement.querySelector('po-clean')).toBe(null);
+    });
   });
 });

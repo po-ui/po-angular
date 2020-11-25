@@ -23,7 +23,8 @@
     />
 
     <div class="po-field-icon-container-right">
-      <po-clean [p-element-ref]="inputEl" (p-change-event)="clear($event)"></po-clean>
+      <po-clean *ngIf="clean && !disabled && !readonly" [p-element-ref]="inputEl" (p-change-event)="clear($event)">
+      </po-clean>
     </div>
   </div>
 

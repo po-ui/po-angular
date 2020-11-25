@@ -21,8 +21,6 @@ export const poMenuFilterLiteralsDefault = {
   templateUrl: './po-menu-filter.component.html'
 })
 export class PoMenuFilterComponent {
-  // Variável necessária para o po-clean identificar que deve ser criado.
-  readonly clean = true;
   public literals = {
     ...poMenuFilterLiteralsDefault[this.languageService.getLanguageDefault()],
     ...poMenuFilterLiteralsDefault[this.languageService.getShortLanguage()]

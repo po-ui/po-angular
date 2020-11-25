@@ -32,31 +32,10 @@ describe('PoCleanBaseComponent', () => {
     expect(component.changeEvent.emit).toHaveBeenCalledWith('123');
   });
 
-  it('should return a boolean value if parentComponent has clean attr', () => {
-    component['parentComponent']['clean'] = true;
-
-    expect(component['hasCleanAttr']()).toBeTruthy();
-  });
-
-  it('should return disabled attr of parentComponent', () => {
-    component['parentComponent']['disabled'] = true;
-
-    expect(component['isDisabled']()).toBeTruthy();
-  });
-
-  it('should return readonly attr of parentComponent', () => {
-    component['parentComponent']['readonly'] = true;
-
-    expect(component['isReadonly']()).toBeTruthy();
-  });
-
   it('should show icon', () => {
     const fakeThis = {
       defaultValue: '',
-      getInputValue: () => 'valor',
-      hasCleanAttr: () => true,
-      isDisabled: () => false,
-      isReadonly: () => false
+      getInputValue: () => 'valor'
     };
     expect(component.showIcon.call(fakeThis)).toBeTruthy();
   });
@@ -64,42 +43,7 @@ describe('PoCleanBaseComponent', () => {
   it('shouldn`t show icon when value is equals', () => {
     const fakeThis = {
       defaultValue: '',
-      getInputValue: () => '',
-      hasCleanAttr: () => true,
-      isDisabled: () => false,
-      isReadonly: () => false
-    };
-    expect(component.showIcon.call(fakeThis)).toBeFalsy();
-  });
-
-  it('shouldn`t show icon when is disabled', () => {
-    const fakeThis = {
-      defaultValue: '',
-      getInputValue: () => 'valor',
-      hasCleanAttr: () => true,
-      isDisabled: () => true,
-      isReadonly: () => false
-    };
-    expect(component.showIcon.call(fakeThis)).toBeFalsy();
-  });
-
-  it('shouldn`t show icon when is readonly', () => {
-    const fakeThis = {
-      defaultValue: '',
-      getInputValue: () => 'valor',
-      hasCleanAttr: () => true,
-      isDisabled: () => false,
-      isReadonly: () => true
-    };
-    expect(component.showIcon.call(fakeThis)).toBeFalsy();
-  });
-
-  it('shouldn`t show icon when hasn`t clean attr', () => {
-    const fakeThis = {
-      defaultValue: '',
-      getInputValue: () => 'valor',
-      hasCleanAttr: () => false,
-      isDisabled: () => false
+      getInputValue: () => ''
     };
     expect(component.showIcon.call(fakeThis)).toBeFalsy();
   });
