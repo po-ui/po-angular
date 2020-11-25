@@ -28,33 +28,13 @@ export abstract class PoCleanBaseComponent {
    */
   @Output('p-change-event') changeEvent: EventEmitter<any> = new EventEmitter<any>();
 
-  protected parentComponent: any;
-
   clear() {
     this.setInputValue(this.defaultValue);
     this.changeEvent.emit(this.defaultValue);
   }
 
   showIcon() {
-    return (
-      this.defaultValue !== this.getInputValue() && this.hasCleanAttr() && !this.isDisabled() && !this.isReadonly()
-    );
-  }
-
-  // Este método verifica se o componente pai possui a propriedade clean diferente de vazio,
-  // ou seja, se o po-clean deve ser usado.
-  private hasCleanAttr(): boolean {
-    return this.parentComponent.clean;
-  }
-
-  // Este método verifica se o componente pai está desabilitado.
-  private isDisabled(): boolean {
-    return this.parentComponent.disabled;
-  }
-
-  // Este método verifica se o componente pai está somente leitura.
-  private isReadonly(): boolean {
-    return this.parentComponent.readonly;
+    return this.defaultValue !== this.getInputValue();
   }
 
   abstract setInputValue(value: string): void;

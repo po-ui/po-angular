@@ -57,6 +57,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('enableCleaner: should return true if `startDateInputValue` has value, `disabled` is false and `readonly` is false', () => {
+      component.clean = true;
       component.readonly = false;
       component.disabled = false;
       component.startDateInput.nativeElement.value = '23/08/2009';
@@ -66,6 +67,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('enableCleaner: should return true if `endDateInputValue` has value, `disabled` is false and `readonly` is false', () => {
+      component.clean = true;
       component.readonly = false;
       component.disabled = false;
       component.endDateInput.nativeElement.value = '23/08/2009';
@@ -75,6 +77,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it(`enableCleaner: should return false if 'endDateInputValue' and 'startDateInputValue' have no value`, () => {
+      component.clean = true;
       component.readonly = false;
       component.disabled = false;
       component.endDateInput.nativeElement.value = '';
@@ -84,6 +87,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it(`enableCleaner: should return false if 'readonly' is true`, () => {
+      component.clean = true;
       component.readonly = true;
       component.disabled = false;
       component.endDateInput.nativeElement.value = '23/08/2009';
@@ -93,6 +97,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it(`enableCleaner: should return false if 'disabled' is true`, () => {
+      component.clean = true;
       component.readonly = false;
       component.disabled = true;
       component.endDateInput.nativeElement.value = '23/08/2009';

@@ -22,13 +22,7 @@
     />
 
     <div class="po-field-icon-container-right">
-      <po-clean
-        [class.po-field-icon]="!disabled"
-        [class.po-field-icon-disabled]="disabled"
-        (p-change-event)="clear($event)"
-        [p-element-ref]="inputEl"
-      >
-      </po-clean>
+      <po-clean *ngIf="clean && !disabled" (p-change-event)="clear($event)" [p-element-ref]="inputEl"> </po-clean>
       <span
         #iconArrow
         class="po-icon po-field-icon {{ comboIcon }}"
