@@ -48,19 +48,24 @@ import { PoNumberBaseComponent } from './po-number-base.component';
   ]
 })
 export class PoNumberComponent extends PoNumberBaseComponent {
-  /** Valor mínimo. */
+  /** Valor mínimo.
+   *
+   * > Quando o valor mínimo for um número com decimais aconselha-se utilizar junto da propriedade `p-step` também passando a ela um valor decimal.
+   */
+
   min?: number;
-  @Input('p-min') set setMin(min: string) {
-    const parsedInt = parseInt(min, 10);
-    this.min = !isNaN(parsedInt) ? parsedInt : undefined;
+  @Input('p-min') set setMin(min: number) {
+    this.min = !isNaN(min) ? min : undefined;
     this.validateModel();
   }
 
-  /** Valor máximo. */
+  /** Valor máximo.
+   *
+   * > Quando o valor máximo for um número com decimais aconselha-se utilizar junto da propriedade `p-step` também passando a ela um valor decimal.
+   */
   max?: number;
-  @Input('p-max') set setMax(max: string) {
-    const parsedInt = parseInt(max, 10);
-    this.max = !isNaN(parsedInt) ? parsedInt : undefined;
+  @Input('p-max') set setMax(max: number) {
+    this.max = !isNaN(max) ? max : undefined;
     this.validateModel();
   }
 

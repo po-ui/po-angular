@@ -48,11 +48,11 @@ describe('PoNumberComponent:', () => {
   });
 
   it('should be max and min', () => {
-    expectSettersMethod(component, 'setMax', '', 'max', undefined);
-    expectSettersMethod(component, 'setMax', '10', 'max', 10);
+    expectSettersMethod(component, 'setMax', '', 'max', '');
+    expectSettersMethod(component, 'setMax', 10, 'max', 10);
 
-    expectSettersMethod(component, 'setMin', '', 'min', undefined);
-    expectSettersMethod(component, 'setMin', '10', 'min', 10);
+    expectSettersMethod(component, 'setMin', '', 'min', '');
+    expectSettersMethod(component, 'setMin', 10, 'min', 10);
   });
 
   it('should call minFailed', () => {
@@ -96,6 +96,18 @@ describe('PoNumberComponent:', () => {
       component['invalidInputValueOnBlur'] = false;
 
       expect(component.extraValidation(new FormControl(null))).toBeNull();
+    });
+
+    it('should return null stating that there is no validation error in the value between max and min in format decimal', () => {
+      component.min = 0.6;
+      component.max = 0.9;
+      expect(component.validate(new FormControl(0.7))).toBeNull();
+    });
+
+    it('should not return null stating that there is a validation error in the value between max and min in decimal format', () => {
+      component.min = 1.6;
+      component.max = 3.9;
+      expect(component.validate(new FormControl(5))).not.toBeNull();
     });
 
     describe('getErrorPatternMessage: ', () => {
