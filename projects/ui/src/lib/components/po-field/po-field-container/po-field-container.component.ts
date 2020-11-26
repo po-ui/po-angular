@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { convertToBoolean, getShortBrowserLanguage } from '../../../utils/util';
+import { convertToBoolean } from '../../../utils/util';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poFieldContainerLiterals } from './po-field-container-literals';
 
 /**
  * @docsPrivate
@@ -13,6 +15,8 @@ import { convertToBoolean, getShortBrowserLanguage } from '../../../utils/util';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoFieldContainerComponent {
+  literals;
+
   private _optional: boolean = false;
 
   /** Label do campo. */
@@ -30,15 +34,11 @@ export class PoFieldContainerComponent {
     return this._optional;
   }
 
-  getOptionalText() {
-    const browserLanguage = getShortBrowserLanguage();
+  constructor(languageService: PoLanguageService) {
+    const language = languageService.getShortLanguage();
 
-    const optional = {
-      pt: '(Opcional)',
-      en: '(Optional)',
-      es: '(Opcional)'
+    this.literals = {
+      ...poFieldContainerLiterals[language]
     };
-
-    return optional[browserLanguage];
   }
 }
