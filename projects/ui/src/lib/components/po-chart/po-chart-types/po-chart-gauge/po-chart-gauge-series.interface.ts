@@ -21,11 +21,13 @@ export interface PoChartGaugeSerie {
   description?: string;
 
   /**
+   * @optional
+   *
    * @description
    *
    * Define o valor que será exibido no gráfico, sendo possível atribuir entre 0 e 100.
    *
-   * > **Importante:**
+   * **Importante:**
    * - Valores inferiores a 0 serão convertidos para 0;
    * - Valores superiores a 100 serão convertidos para 100.
    */

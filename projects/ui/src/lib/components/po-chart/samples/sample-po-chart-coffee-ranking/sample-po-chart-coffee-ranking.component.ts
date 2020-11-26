@@ -30,11 +30,11 @@ export class SamplePoChartCoffeeRankingComponent {
   categoriesColumn: Array<string> = ['coffee', 'chocolate', 'tea'];
 
   coffeeConsumption: Array<PoDonutChartSeries> = [
-    { category: 'Finland', value: 9.6, tooltip: 'Finland (Europe)' },
-    { category: 'Norway', value: 7.2, tooltip: 'Norway (Europe)' },
-    { category: 'Netherlands', value: 6.7, tooltip: 'Netherlands (Europe)' },
-    { category: 'Slovenia', value: 6.1, tooltip: 'Slovenia (Europe)' },
-    { category: 'Austria', value: 5.5, tooltip: 'Austria (Europe)' }
+    { label: 'Finland', data: 9.6, tooltip: 'Finland (Europe)' },
+    { label: 'Norway', data: 7.2, tooltip: 'Norway (Europe)' },
+    { label: 'Netherlands', data: 6.7, tooltip: 'Netherlands (Europe)' },
+    { label: 'Slovenia', data: 6.1, tooltip: 'Slovenia (Europe)' },
+    { label: 'Austria', data: 5.5, tooltip: 'Austria (Europe)' }
   ];
 
   participationByCountryInWorldExports: Array<PoLineChartSeries> = [
@@ -52,11 +52,11 @@ export class SamplePoChartCoffeeRankingComponent {
   ];
 
   coffeeProduction: Array<PoPieChartSeries> = [
-    { category: 'Brazil', value: 2796, tooltip: 'Brazil (South America)' },
-    { category: 'Vietnam', value: 1076, tooltip: 'Vietnam (Asia)' },
-    { category: 'Colombia', value: 688, tooltip: 'Colombia (South America)' },
-    { category: 'Indonesia', value: 682, tooltip: 'Indonesia (Asia/Oceania)' },
-    { category: 'Peru', value: 273, tooltip: 'Peru (South America)' }
+    { label: 'Brazil', data: 2796, tooltip: 'Brazil (South America)' },
+    { label: 'Vietnam', data: 1076, tooltip: 'Vietnam (Asia)' },
+    { label: 'Colombia', data: 688, tooltip: 'Colombia (South America)' },
+    { label: 'Indonesia', data: 682, tooltip: 'Indonesia (Asia/Oceania)' },
+    { label: 'Peru', data: 273, tooltip: 'Peru (South America)' }
   ];
 
   items: Array<any> = [
@@ -91,13 +91,13 @@ export class SamplePoChartCoffeeRankingComponent {
   constructor(private poAlert: PoDialogService) {}
 
   searchMore(event: any) {
-    window.open(`http://google.com/search?q=coffee+producing+${event.category}`, '_blank');
+    window.open(`http://google.com/search?q=coffee+producing+${event.label}`, '_blank');
   }
 
   showMeTheDates(event: any) {
     this.poAlert.alert({
       title: 'Statistic',
-      message: `${event.category} consuming ${event.value}kg per capita!`,
+      message: `${event.label} consuming ${event.data}kg per capita!`,
       ok: () => {}
     });
   }

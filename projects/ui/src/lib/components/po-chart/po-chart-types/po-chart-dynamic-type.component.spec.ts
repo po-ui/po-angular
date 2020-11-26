@@ -72,6 +72,26 @@ describe('PoChartDynamicTypeComponent:', () => {
     });
 
     describe('calculateTotalValue:', () => {
+      it('should return sum of data series', () => {
+        component['series'] = [{ data: 1 }, { data: 4 }, { data: 7 }];
+
+        const totalSum = 12;
+
+        component['calculateTotalValue']();
+
+        expect(component['totalValue']).toBe(totalSum);
+      });
+
+      it('should return sum of data series and value series', () => {
+        component['series'] = [{ data: 2, value: 1 }, { data: 4 }, { value: 7 }];
+
+        const totalSum = 13;
+
+        component['calculateTotalValue']();
+
+        expect(component['totalValue']).toBe(totalSum);
+      });
+
       it('should return sum of value series', () => {
         component['series'] = [{ value: 1 }, { value: 4 }, { value: 7 }];
 

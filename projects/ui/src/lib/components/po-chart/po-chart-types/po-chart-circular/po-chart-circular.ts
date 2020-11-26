@@ -142,8 +142,9 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   protected getSeriesWithValue(series: Array<PoCircularChartSeries | PoChartGaugeSerie>) {
     const newSeries = [];
 
-    series.forEach((serie, index) => {
-      if (serie.value > 0) {
+    series.forEach((serie: any, index) => {
+      const value = serie.data ?? serie.value;
+      if (value > 0) {
         newSeries.push({ ...serie, color: this.colors[index] });
       }
     });
@@ -165,9 +166,10 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private calculateAngleRadians() {
-    this.series.forEach(
-      (serie, index) => (this.chartItemsEndAngleList[index] = this.calculateEndAngle(serie.value, this.totalValue))
-    );
+    this.series.forEach((serie, index) => {
+      const data = serie.data ?? serie.value;
+      this.chartItemsEndAngleList[index] = this.calculateEndAngle(data, this.totalValue);
+    });
   }
 
   private calculateCurrentEndAngle(angleCurrentPosition: number) {
@@ -247,7 +249,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private createText(serie: PoCircularChartSeries | PoChartGaugeSerie) {
-    const { value } = serie;
+    const data = (<any>serie).data ?? (<any>serie).value;
 
     const svgG = this.renderer.createElement('svg:g', 'svg');
     const svgText = this.renderer.createElement('svg:text', 'svg');
@@ -255,7 +257,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     const fontSize = this.getFontSize();
     const textColor = this.getTextColor(serie.color);
 
-    svgText.textContent = this.getPercentValue(value, this.totalValue) + '%';
+    svgText.textContent = this.getPercentValue(data, this.totalValue) + '%';
 
     this.renderer.setAttribute(svgText, 'class', 'po-path-item');
     this.renderer.setAttribute(svgText, 'fill', textColor);
@@ -383,7 +385,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
       const { color, ...serie } = this.series[0];
       serieOnClick = serie;
     } else {
-      serieOnClick = { category: this.chartElementCategory, value: this.chartElementValue };
+      serieOnClick = { label: this.chartElementCategory, data: this.chartElementValue };
     }
 
     this.onSerieClick.next(serieOnClick);
@@ -400,7 +402,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
       this.showTooltip();
       this.changeTooltipPosition(event);
 
-      serieOnEnter = { category: this.chartElementCategory, value: this.chartElementValue };
+      serieOnEnter = { label: this.chartElementCategory, data: this.chartElementValue };
     } else {
       const { color, ...serie } = this.series[0];
 
@@ -503,17 +505,19 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private setElementAttributes(svgElement, serie) {
-    const { value, category, tooltip, description } = serie;
+    const { tooltip } = serie;
+    const data = serie.data ?? serie.value;
+    const label = serie.label ?? (serie.description || serie.category);
 
-    this.renderer.setAttribute(svgElement, 'data-tooltip-value', `${value}`);
+    this.renderer.setAttribute(svgElement, 'data-tooltip-value', `${data}`);
 
     if (this.isChartGaugeType) {
-      this.renderer.setAttribute(svgElement, 'data-tooltip-description', description);
+      this.renderer.setAttribute(svgElement, 'data-tooltip-description', label);
     } else {
-      const tooltipValue = this.getTooltipValue(value);
+      const tooltipValue = this.getTooltipValue(data);
 
-      this.renderer.setAttribute(svgElement, 'data-tooltip-category', category);
-      this.renderer.setAttribute(svgElement, 'data-tooltip-text', tooltip || `${category}: ${tooltipValue}`);
+      this.renderer.setAttribute(svgElement, 'data-tooltip-category', label);
+      this.renderer.setAttribute(svgElement, 'data-tooltip-text', tooltip || `${label}: ${tooltipValue}`);
     }
   }
 

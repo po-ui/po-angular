@@ -97,10 +97,47 @@ describe('PoChartCircular:', () => {
 
       component.colors = PoChartColors[3];
       component['series'] = [
+        { label: '1', data: 1 },
+        { label: '2', data: 2 },
+        { label: '3', data: 3 },
+        { label: '4', data: 4 }
+      ];
+
+      component['calculateAngleRadians']();
+
+      expect(component['chartItemsEndAngleList']).toEqual(itemsEndAngle);
+    });
+
+    it('calculateAngleRadians: should set `chartItemsEndAngleList` with items end angle even if serie.category and serie.value', () => {
+      const itemsEndAngle = [0.1, 0.2, 0.3, 0.4];
+
+      spyOn(component, <any>'calculateEndAngle').and.returnValues(...itemsEndAngle);
+
+      component.colors = PoChartColors[3];
+      component['series'] = [
         { category: '1', value: 1 },
         { category: '2', value: 2 },
         { category: '3', value: 3 },
         { category: '4', value: 4 }
+      ];
+
+      component['calculateAngleRadians']();
+
+      expect(component['chartItemsEndAngleList']).toEqual(itemsEndAngle);
+    });
+
+    it(`calculateAngleRadians: should set 'chartItemsEndAngleList' with items end angle even if serie.data, serie.value,
+    serie.category and serie.label are mixed`, () => {
+      const itemsEndAngle = [0.1, 0.2, 0.3, 0.4];
+
+      spyOn(component, <any>'calculateEndAngle').and.returnValues(...itemsEndAngle);
+
+      component.colors = PoChartColors[3];
+      component['series'] = [
+        { label: '1', data: 1 },
+        { category: '2', data: 2 },
+        { category: '3', value: 3 },
+        { label: '4', value: 4 }
       ];
 
       component['calculateAngleRadians']();
@@ -402,7 +439,7 @@ describe('PoChartCircular:', () => {
       component.type = PoChartType.Pie;
       component.chartElementCategory = 'category';
       component.chartElementValue = 10;
-      const expectedParameterValue = { category: component.chartElementCategory, value: component.chartElementValue };
+      const expectedParameterValue = { label: component.chartElementCategory, data: component.chartElementValue };
 
       spyOn(component['onSerieClick'], 'next');
 
@@ -416,7 +453,7 @@ describe('PoChartCircular:', () => {
       component.type = PoChartType.Donut;
       component.chartElementCategory = 'category';
       component.chartElementValue = 10;
-      const expectedParameterValue = { category: component.chartElementCategory, value: component.chartElementValue };
+      const expectedParameterValue = { label: component.chartElementCategory, data: component.chartElementValue };
 
       spyOn(component['onSerieClick'], 'next');
 
@@ -753,6 +790,26 @@ describe('PoChartCircular:', () => {
     });
 
     it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text`', () => {
+      const serie: PoPieChartSeries = { label: 'po', data: 2 };
+      const svgPath = '<text></text>';
+      component.type = PoChartType.Pie;
+
+      spyOn(component['renderer'], 'setAttribute');
+      spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
+      spyOn(component, <any>'getTooltipValue').and.callThrough();
+
+      component['setElementAttributes'](svgPath, serie);
+
+      expect(component['getTooltipValue']).toHaveBeenCalledWith(serie.data);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(3);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(
+        svgPath,
+        'data-tooltip-text',
+        `${serie.label}: ${serie.data}`
+      );
+    });
+
+    it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text` even if serie.category and serie.value', () => {
       const serie: PoPieChartSeries = { category: 'po', value: 2 };
       const svgPath = '<text></text>';
       component.type = PoChartType.Pie;
@@ -765,11 +822,39 @@ describe('PoChartCircular:', () => {
 
       expect(component['getTooltipValue']).toHaveBeenCalledWith(serie.value);
       expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(3);
-      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(
-        svgPath,
-        'data-tooltip-text',
-        `${serie.category}: ${serie.value}`
-      );
+      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(svgPath, 'data-tooltip-text', 'po: 2');
+    });
+
+    it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text` even if serie.category and serie.data', () => {
+      const serie: PoPieChartSeries = { category: 'po', data: 2 };
+      const svgPath = '<text></text>';
+      component.type = PoChartType.Pie;
+
+      spyOn(component['renderer'], 'setAttribute');
+      spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
+      spyOn(component, <any>'getTooltipValue').and.callThrough();
+
+      component['setElementAttributes'](svgPath, serie);
+
+      expect(component['getTooltipValue']).toHaveBeenCalledWith(serie.data);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(3);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(svgPath, 'data-tooltip-text', 'po: 2');
+    });
+
+    it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text` even if serie.label and serie.value', () => {
+      const serie: PoPieChartSeries = { label: 'po', value: 2 };
+      const svgPath = '<text></text>';
+      component.type = PoChartType.Pie;
+
+      spyOn(component['renderer'], 'setAttribute');
+      spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
+      spyOn(component, <any>'getTooltipValue').and.callThrough();
+
+      component['setElementAttributes'](svgPath, serie);
+
+      expect(component['getTooltipValue']).toHaveBeenCalledWith(serie.value);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(3);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(svgPath, 'data-tooltip-text', `po: 2`);
     });
 
     it('setElementAttributes: shouldn`t call `getTooltipValue` and call `setAttribute` passing `description` as param`', () => {
@@ -886,7 +971,63 @@ describe('PoChartCircular:', () => {
     });
 
     it('createText: should create a svg text element with some attributes and add it into `svgTextElementsList`', () => {
+      const serie: PoDonutChartSeries = { label: 'po', data: 2 };
+
+      component.colors = PoChartColors[0];
+
+      spyOn(component, <any>'getFontSize');
+      spyOn(component, <any>'getTextColor');
+      spyOn(component, <any>'getPercentValue');
+      spyOn(component, <any>'setElementAttributes');
+
+      spyOn(component['renderer'], 'createElement').and.callThrough();
+      spyOn(component['renderer'], 'setAttribute');
+      spyOn(component['renderer'], 'appendChild');
+
+      component['createText'](serie);
+
+      expect(component['getFontSize']).toHaveBeenCalled();
+      expect(component['getTextColor']).toHaveBeenCalled();
+      expect(component['getPercentValue']).toHaveBeenCalled();
+      expect(component['setElementAttributes']).toHaveBeenCalled();
+
+      expect(component['renderer'].createElement).toHaveBeenCalledTimes(2);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(4);
+      expect(component['renderer'].appendChild).toHaveBeenCalledTimes(2);
+
+      expect(component['svgTextElementsList'].length).toEqual(1);
+    });
+
+    it('createText: should create a svg text element with some attributes and add it into `svgTextElementsList` even serie.label and serie.value', () => {
       const serie: PoDonutChartSeries = { category: 'po', value: 2 };
+
+      component.colors = PoChartColors[0];
+
+      spyOn(component, <any>'getFontSize');
+      spyOn(component, <any>'getTextColor');
+      spyOn(component, <any>'getPercentValue');
+      spyOn(component, <any>'setElementAttributes');
+
+      spyOn(component['renderer'], 'createElement').and.callThrough();
+      spyOn(component['renderer'], 'setAttribute');
+      spyOn(component['renderer'], 'appendChild');
+
+      component['createText'](serie);
+
+      expect(component['getFontSize']).toHaveBeenCalled();
+      expect(component['getTextColor']).toHaveBeenCalled();
+      expect(component['getPercentValue']).toHaveBeenCalled();
+      expect(component['setElementAttributes']).toHaveBeenCalled();
+
+      expect(component['renderer'].createElement).toHaveBeenCalledTimes(2);
+      expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(4);
+      expect(component['renderer'].appendChild).toHaveBeenCalledTimes(2);
+
+      expect(component['svgTextElementsList'].length).toEqual(1);
+    });
+
+    it(`createText: should create a svg text element with some attributes and add it into 'svgTextElementsList' even serie.label, serie.value, serie.data and serie.category are mixed`, () => {
+      const serie: PoDonutChartSeries = { category: 'po', data: 2 };
 
       component.colors = PoChartColors[0];
 
@@ -1015,10 +1156,10 @@ describe('PoChartCircular:', () => {
     });
 
     it('getSeriesWithValue: should return only series with value and color attr', () => {
-      const invalidSeries = [{ category: 'Valor 0', value: 0 }];
+      const invalidSeries = [{ label: 'Valor 0', data: 0 }];
       const series = [
-        { category: 'Valor 2', value: 2 },
-        { category: 'Valor 3', value: 3 }
+        { label: 'Valor 2', data: 2 },
+        { label: 'Valor 3', data: 3 }
       ];
       const seriesParam = [...series, ...invalidSeries];
 
@@ -1031,7 +1172,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('getSeriesWithValue: should return empty array if series has value 0', () => {
-      const invalidSeries = [{ category: 'Valor 0', value: 0 }];
+      const invalidSeries = [{ label: 'Valor 0', data: 0 }];
 
       const validSeries = component['getSeriesWithValue'](invalidSeries);
 
@@ -1039,11 +1180,41 @@ describe('PoChartCircular:', () => {
     });
 
     it('getSeriesWithValue: should return empty array if series has value -1', () => {
-      const invalidSeries = [{ category: 'Valor -1', value: -1 }];
+      const invalidSeries = [{ label: 'Valor -1', data: -1 }];
 
       const validSeries = component['getSeriesWithValue'](invalidSeries);
 
       expect(validSeries).toEqual([]);
+    });
+
+    it('getSeriesWithValue: should return only series with value and color attr even with serie.value', () => {
+      const invalidSeries = [{ category: 'Valor 0', value: 0 }];
+      const series = [
+        { category: 'Valor 2', value: 2 },
+        { category: 'Valor 3', value: 3 }
+      ];
+      const seriesParam = [...series, ...invalidSeries];
+
+      component.colors = PoChartColors[seriesParam.length];
+
+      const validSeries = component['getSeriesWithValue'](seriesParam);
+
+      expect(validSeries.length).toEqual(series.length);
+    });
+
+    it('getSeriesWithValue: should return only series with value and color attr even with serie.value and serie.data', () => {
+      const invalidSeries = [{ category: 'Valor 0', value: 0 }];
+      const series = [
+        { category: 'Valor 2', value: 2 },
+        { label: 'Valor 3', data: 3 }
+      ];
+      const seriesParam = [...series, ...invalidSeries];
+
+      component.colors = PoChartColors[seriesParam.length];
+
+      const validSeries = component['getSeriesWithValue'](seriesParam);
+
+      expect(validSeries.length).toEqual(series.length);
     });
 
     it('appendGaugeBackgroundPathElement: should create a svg path and append it into `svgPathsWrapper`', () => {
