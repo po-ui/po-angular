@@ -1,12 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {
-  configureTestSuite,
-  expectBrowserLanguageMethod,
-  expectPropertiesValues
-} from './../../../util-test/util-expect.spec';
+import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
 
 import { PoFieldContainerComponent } from './po-field-container.component';
+import { poFieldContainerLiterals } from './po-field-container-literals';
 
 describe('PoFieldContainerComponent:', () => {
   let component: PoFieldContainerComponent;
@@ -21,29 +18,11 @@ describe('PoFieldContainerComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoFieldContainerComponent);
     component = fixture.componentInstance;
+    component.literals = poFieldContainerLiterals['en'];
   });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should get pt optional literal', () => {
-    expectBrowserLanguageMethod('pt', component, 'getOptionalText', '(Opcional)');
-  });
-
-  it('should get es optional literal', () => {
-    expectBrowserLanguageMethod('es', component, 'getOptionalText', '(Opcional)');
-  });
-
-  it('should get en optional literal', () => {
-    expectBrowserLanguageMethod('en', component, 'getOptionalText', '(Optional)');
-  });
-
-  it('should get not existent optional literal', () => {
-    expectBrowserLanguageMethod('al', component, 'getOptionalText', '(Opcional)');
-  });
-  it('should get default optional literal', () => {
-    expectBrowserLanguageMethod('', component, 'getOptionalText', '(Opcional)');
   });
 
   describe('Properties: ', () => {
@@ -127,6 +106,18 @@ describe('PoFieldContainerComponent:', () => {
       fixture.detectChanges();
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
+    });
+
+    it('should show optional and verify literal.optional', () => {
+      component.optional = true;
+      component.label = 'label';
+
+      fixture.detectChanges();
+
+      const fieldOptionalHtml = fixture.debugElement.nativeElement.querySelector('.po-field-optional');
+
+      expect(fieldOptionalHtml).toBeTruthy();
+      expect(fieldOptionalHtml.innerHTML).toBe(component.literals.optional);
     });
   });
 });
