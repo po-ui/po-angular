@@ -42,24 +42,20 @@
     <div class="po-row">
       <po-input
         class="po-md-6"
-        name="category"
-        [(ngModel)]="category"
-        p-label="Category"
-        [p-disabled]="isSingleSerie"
-        [p-required]="!isSingleSerie"
+        name="label"
+        [(ngModel)]="label"
+        p-label="{{ isSingleSerie ? 'Description' : 'Label' }}"
       >
       </po-input>
 
-      <po-number class="po-md-6" name="value" [(ngModel)]="value" p-label="Value" p-required></po-number>
-
-      <po-input
+      <po-number
         class="po-md-6"
-        name="description"
-        [(ngModel)]="description"
-        p-label="Gauge Description"
-        [p-disabled]="!isSingleSerie"
+        name="data"
+        [(ngModel)]="data"
+        p-label="{{ isSingleSerie ? 'Value' : 'Data' }}"
+        p-required
       >
-      </po-input>
+      </po-number>
 
       <po-input
         class="po-md-6"
@@ -69,16 +65,6 @@
         [p-disabled]="isSingleSerie"
       >
       </po-input>
-    </div>
-
-    <div class="po-row">
-      <po-button
-        class="po-md-3"
-        p-label="Add Data"
-        [p-disabled]="chartSeries.invalid"
-        (p-click)="addData(); chartSeries.reset()"
-      >
-      </po-button>
     </div>
   </div>
 
@@ -102,10 +88,10 @@
       p-required
     >
     </po-input>
+  </div>
 
-    <div class="po-row">
-      <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData(); chartSeries.reset()"> </po-button>
-    </div>
+  <div class="po-row">
+    <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData(); chartSeries.reset()"> </po-button>
   </div>
 </form>
 

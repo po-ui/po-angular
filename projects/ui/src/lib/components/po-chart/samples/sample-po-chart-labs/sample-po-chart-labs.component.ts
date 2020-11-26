@@ -15,9 +15,8 @@ import {
   templateUrl: './sample-po-chart-labs.component.html'
 })
 export class SamplePoChartLabsComponent implements OnInit {
-  category: string;
+  label: string;
   totalValues: Array<number> = [];
-  description: string;
   event: string;
   height: number;
   multipleSeries: Array<PoPieChartSeries | PoDonutChartSeries>;
@@ -26,7 +25,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   singleSerie: PoChartGaugeSerie;
   title: string;
   tooltip: string;
-  value: number;
+  data: number;
   type: PoChartType;
   lineValues: number;
   multipleValuesLabel: string = '';
@@ -72,16 +71,13 @@ export class SamplePoChartLabsComponent implements OnInit {
 
   addData() {
     if (this.isSingleSerie) {
-      this.singleSerie = { value: this.value, description: this.description };
+      this.singleSerie = { value: this.data, description: this.label };
     } else if (this.isMultipleValues) {
       const dataSeries = this.convertToArray(this.inputDataSeries);
 
       this.multipleValues = [...this.multipleValues, { label: this.multipleValuesLabel, data: dataSeries }];
     } else {
-      this.multipleSeries = [
-        ...this.multipleSeries,
-        { category: this.category, value: this.value, tooltip: this.tooltip }
-      ];
+      this.multipleSeries = [...this.multipleSeries, { label: this.label, data: this.data, tooltip: this.tooltip }];
     }
 
     this.applySeriesData();
@@ -100,7 +96,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   }
 
   restore() {
-    this.category = undefined;
+    this.label = undefined;
     this.categories = undefined;
     this.event = undefined;
     this.height = undefined;
@@ -109,8 +105,7 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.series = [];
     this.title = undefined;
     this.tooltip = undefined;
-    this.value = undefined;
-    this.description = undefined;
+    this.data = undefined;
     this.allCategories = [];
     this.inputDataSeries = undefined;
     this.multipleValuesLabel = undefined;

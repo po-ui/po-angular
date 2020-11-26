@@ -56,7 +56,7 @@ export abstract class PoChartDynamicTypeComponent {
     this.totalValue =
       this.type === PoChartType.Gauge
         ? 100
-        : this.series.reduce((previousValue, serie) => previousValue + serie.value, 0);
+        : this.series.reduce((previousValue, serie) => previousValue + (serie.data ? serie.data : serie.value), 0);
   }
 
   set series(value: Array<any>) {
