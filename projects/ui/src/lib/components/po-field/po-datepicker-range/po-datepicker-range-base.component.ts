@@ -1,32 +1,16 @@
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { browserLanguage, convertToBoolean } from './../../../utils/util';
+import { convertToBoolean } from './../../../utils/util';
 import { requiredFailed } from '../validators';
-import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { InputBoolean } from '../../../decorators';
+import { PoDateService } from './../../../services/po-date/po-date.service';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
-import { PoDateService } from './../../../services/po-date/po-date.service';
-
-export const poDatepickerRangeLiteralsDefault = {
-  en: <PoDatepickerRangeLiterals>{
-    invalidFormat: 'Date in invalid format',
-    startDateGreaterThanEndDate: 'Start date greater than end date'
-  },
-  es: <PoDatepickerRangeLiterals>{
-    invalidFormat: 'Fecha en formato no válido',
-    startDateGreaterThanEndDate: 'Fecha de inicio mayor que fecha final'
-  },
-  pt: <PoDatepickerRangeLiterals>{
-    invalidFormat: 'Data no formato inválido',
-    startDateGreaterThanEndDate: 'Data inicial maior que data final'
-  },
-  ru: <PoDatepickerRangeLiterals>{
-    invalidFormat: 'Дата в неверном формате',
-    startDateGreaterThanEndDate: 'Дата начала больше даты окончания'
-  }
-};
+import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
 
 /**
  * @description
@@ -81,6 +65,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _readonly: boolean = false;
   private _required?: boolean = false;
   private _startDate?;
+
+  private language;
   private onChangeModel: any;
   private validatorChange: any;
 
@@ -212,22 +198,23 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    * </po-datepicker-range>
    * ```
    *
-   * > O objeto padrão de literais será traduzido de acordo com o idioma do browser (pt, en, es).
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
   @Input('p-literals') set literals(value: PoDatepickerRangeLiterals) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._literals = {
         ...poDatepickerRangeLiteralsDefault[poLocaleDefault],
-        ...poDatepickerRangeLiteralsDefault[browserLanguage()],
+        ...poDatepickerRangeLiteralsDefault[this.language],
         ...value
       };
     } else {
-      this._literals = poDatepickerRangeLiteralsDefault[browserLanguage()];
+      this._literals = poDatepickerRangeLiteralsDefault[this.language];
     }
   }
 
   get literals() {
-    return this._literals || poDatepickerRangeLiteralsDefault[browserLanguage()];
+    return this._literals || poDatepickerRangeLiteralsDefault[this.language];
   }
 
   /**
@@ -328,7 +315,9 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    */
   @Output('p-change') onChange: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(protected poDateService: PoDateService) {}
+  constructor(protected poDateService: PoDateService, languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   protected abstract resetDateRangeInputValidation(): void;
 

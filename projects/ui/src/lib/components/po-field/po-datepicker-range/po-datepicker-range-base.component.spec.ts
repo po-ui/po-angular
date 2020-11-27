@@ -7,7 +7,9 @@ import * as ValidatorsFunctions from '../validators';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
-import { PoDatepickerRangeBaseComponent, poDatepickerRangeLiteralsDefault } from './po-datepicker-range-base.component';
+import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
+import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
+import { PoLanguageService } from '../../../services';
 
 describe('PoDatepickerRangeBaseComponent:', () => {
   @Directive()
@@ -32,7 +34,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     validateDate: () => {}
   };
 
-  const component = new PoDatepickerRangeComponent(mockedService);
+  const component = new PoDatepickerRangeComponent(mockedService, new PoLanguageService());
 
   it('should be created', () => {
     expect(component instanceof PoDatepickerRangeBaseComponent).toBeTruthy();
@@ -100,7 +102,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should return literals default if `_literals` is undefined', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component['_literals'] = undefined;
 
@@ -108,7 +110,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('zw');
+      component['language'] = 'zw';
 
       component.literals = {};
 
@@ -116,7 +118,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should be in portuguese if browser is setted with `pt`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('pt');
+      component['language'] = 'pt';
 
       component.literals = {};
 
@@ -124,7 +126,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should be in english if browser is setted with `en`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('en');
+      component['language'] = 'en';
 
       component.literals = {};
 
@@ -132,7 +134,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should accept custom literals', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue(poLocaleDefault);
+      component['language'] = poLocaleDefault;
 
       const customLiterals = Object.assign({}, poDatepickerRangeLiteralsDefault[poLocaleDefault]);
 
@@ -144,7 +146,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should be in spanish if browser is setted with `es`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('es');
+      component['language'] = 'es';
 
       component.literals = {};
 
@@ -152,7 +154,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('literals: should be in russian if browser is setted with `ru`', () => {
-      spyOn(UtilsFunctions, 'browserLanguage').and.returnValue('ru');
+      component['language'] = 'ru';
 
       component.literals = {};
 
@@ -162,7 +164,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     it('literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      spyOn(UtilsFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+      component['language'] = poLocaleDefault;
 
       expectPropertiesValues(component, 'literals', invalidValues, poDatepickerRangeLiteralsDefault[poLocaleDefault]);
     });

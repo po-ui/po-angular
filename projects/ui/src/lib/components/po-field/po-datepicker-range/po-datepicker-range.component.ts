@@ -5,6 +5,7 @@ import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { PoDateService } from './../../../services/po-date/po-date.service';
 import { PoMask } from '../po-input/po-mask';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 const arrowLeftKey = 37;
 const arrowRightKey = 39;
@@ -123,9 +124,10 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   constructor(
     private changeDetector: ChangeDetectorRef,
     poDateService: PoDateService,
-    poDatepickerRangeElement: ElementRef
+    poDatepickerRangeElement: ElementRef,
+    poLanguageService: PoLanguageService
   ) {
-    super(poDateService);
+    super(poDateService, poLanguageService);
     this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
 
