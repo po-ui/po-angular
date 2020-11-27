@@ -135,8 +135,7 @@ class DesktopComponent {
 
   public filter = {
     placeholder: 'Pesquise',
-    action: this.action,
-    ngModel: 'model'
+    action: this.action
   };
 
   public actions: Array<{}> = [
@@ -260,20 +259,6 @@ describe('PoPageListComponent - Desktop:', () => {
     });
   });
 
-  it('should change model in parentRef', () => {
-    const fakeThis = {
-      parentRef: {
-        modelFilter: 'filter'
-      },
-      filter: {
-        ngModel: 'modelFilter'
-      }
-    };
-
-    component.changeModel.call(fakeThis, 'new filter');
-    expect(fakeThis.parentRef.modelFilter).toBe('new filter');
-  });
-
   it('onChangeDisclaimerGroup: should call recalculateHeaderSize when have disclaimers and isRecalculate is true', () => {
     component['isRecalculate'] = true;
     const disclaimers: Array<PoDisclaimer> = [{ value: 'hotel', label: 'Hotel', property: 'hotel' }];
@@ -382,11 +367,6 @@ describe('PoPageListComponent - Desktop:', () => {
   });
 
   describe('Templates:', () => {
-    const fakeFilter = {
-      advancedAction: 'xxx',
-      ngModel: 'model'
-    };
-
     it('po-disclaimer-group: should check if the po-disclaimer-group is visible ', () => {
       component.disclaimerGroup = { change: () => {}, disclaimers: [], title: 'teste' };
 
@@ -448,7 +428,7 @@ describe('PoPageListComponent - Desktop:', () => {
 
     it('should add class `po-page-list-header-padding` if has filter and doesn`t have action.', () => {
       component.title = 'Title';
-      component.filter = fakeFilter;
+      component.filter = { action: () => {} };
       component.actions = [];
       fixture.detectChanges();
 
@@ -456,7 +436,7 @@ describe('PoPageListComponent - Desktop:', () => {
     });
 
     it('should add class `po-page-list-actions-padding` if has filter.', () => {
-      component.filter = fakeFilter;
+      component.filter = { action: () => {} };
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-page-list-actions-padding')).toBeTruthy();

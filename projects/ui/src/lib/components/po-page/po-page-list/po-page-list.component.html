@@ -68,10 +68,8 @@
             class="po-input po-input-icon-right"
             name="model"
             type="text"
-            [ngModel]="parentRef[filter.ngModel]"
             [placeholder]="filter.placeholder || ''"
             (keypress)="onkeypress($event.keyCode)"
-            (ngModelChange)="changeModel($event)"
           />
         </div>
 

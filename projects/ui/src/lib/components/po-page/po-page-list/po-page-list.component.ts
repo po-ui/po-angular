@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, getParentRef, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
+import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoPageAction } from '../po-page-action.interface';
@@ -55,7 +55,7 @@ export class PoPageListComponent
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
   limitPrimaryActions: number = 3;
-  parentRef: ViewContainerRef;
+
   @ViewChild('filterInput') filterInput: ElementRef;
 
   private isRecalculate = true;
@@ -74,7 +74,6 @@ export class PoPageListComponent
     private changeDetector: ChangeDetectorRef
   ) {
     super(languageService);
-    this.parentRef = getParentRef(viewRef);
     this.initializeListeners();
   }
 
@@ -163,10 +162,6 @@ export class PoPageListComponent
     if (key === 13) {
       this.callActionFilter('action');
     }
-  }
-
-  changeModel(newModel): void {
-    this.parentRef[this.filter.ngModel] = newModel;
   }
 
   // Recebe evento change do disclaimer e recalcula tela
