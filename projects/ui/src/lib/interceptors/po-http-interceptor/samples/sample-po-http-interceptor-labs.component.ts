@@ -1,3 +1,4 @@
+// import { PoRadioGroupOption } from './../../../../../../../dist/ng-components/lib/components/po-field/po-radio-group/po-radio-group-option.interface.d';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -9,7 +10,7 @@ import { PoRadioGroupOption } from '@po-ui/ng-components';
   templateUrl: './sample-po-http-interceptor-labs.component.html'
 })
 export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
-  noMessageHeaderParam: boolean;
+  headerParam: string;
   requestMessage: string;
   status: string;
 
@@ -50,6 +51,11 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     { label: '401 - Error', value: '401' }
   ];
 
+  readonly headerParamOptions: Array<PoRadioGroupOption> = [
+    { label: 'X-PO-No-Message', value: 'No-Message' },
+    { label: 'X-PO-No-Error', value: 'No-Error' }
+  ];
+
   private apiSubscription: Subscription;
 
   constructor(private http: HttpClient) {}
@@ -68,8 +74,16 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     this.requestMessage = this.status === '200' ? this.successMessage : this.errorMessage;
   }
 
+  getParam() {
+    return this.headerParam === 'No-Message'
+      ? { 'X-PO-No-Message': 'true' }
+      : this.headerParam === 'No-Error'
+      ? { 'X-PO-No-Error': 'true' }
+      : {};
+  }
+
   processRequest() {
-    const headers = { 'X-PO-No-Message': (!!this.noMessageHeaderParam).toString() };
+    const headers = this.getParam();
     const body = JSON.parse(this.requestMessage);
     const params = { status: this.status || '' };
 
@@ -79,7 +93,7 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
   }
 
   restore() {
-    this.noMessageHeaderParam = undefined;
+    this.headerParam = undefined;
     this.requestMessage = this.successMessage;
     this.status = '200';
   }

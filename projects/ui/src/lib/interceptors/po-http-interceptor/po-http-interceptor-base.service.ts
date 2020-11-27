@@ -17,7 +17,6 @@ import { PoHttpInterceptorDetailComponent } from './po-http-interceptor-detail/p
 import { poHttpInterceptorLiterals } from './po-http-interceptor-literals';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
-// DEPRECATED 4.x.x
 const NO_ERROR_HEADER_PARAM = 'X-PO-No-Error';
 const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
 
@@ -132,7 +131,7 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  *
  * - `X-PO-No-Message`: Não exibe notificações de erro e/ou sucesso.
  *
- * - **Depreciado** `X-PO-No-Error`: não mostra notificações de erro com códigos `4xx` e `5xx`.
+ * - `X-PO-No-Error`: Não mostra notificações de erro com códigos `4xx` e `5xx`.
  *
  * ```
  * ...
