@@ -129,7 +129,6 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   hasNext = false;
   items = [];
   literals;
-
   pageActions: Array<PoPageAction> = [];
   tableActions: Array<PoTableAction> = [];
 
@@ -201,6 +200,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * @description
    *
    * Ações da página e da tabela.
+   * > Caso utilizar a ação padrão de excluir, a mesma será exibida por último na tabela.
    */
   @Input('p-actions') set actions(value: PoPageDynamicTableActions) {
     this._actions = value && typeof value === 'object' && Object.keys(value).length > 0 ? value : {};
@@ -258,6 +258,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *  { label: 'Details', action: this.details.bind(this) }
    * ];
    * ```
+   * > Caso utilizar a ação padrão de excluir, a mesma será exibida por último na tabela.
    */
   @Input('p-table-custom-actions') set tableCustomActions(value: Array<PoPageDynamicTableCustomTableAction>) {
     this._tableCustomActions = Array.isArray(value) ? value : [];
@@ -1026,6 +1027,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private updateTableActions() {
-    this.tableActions = [...this._defaultTableActions, ...this._customTableActions];
+    const tableActionDelete = this._defaultTableActions.find(
+      tableAction => tableAction.label === this.literals.tableActionDelete
+    );
+    const defaultTableActionsWithoutActionDelete = this._defaultTableActions.filter(
+      tableAction => tableAction.label !== this.literals.tableActionDelete
+    );
+
+    this.tableActions = [...defaultTableActionsWithoutActionDelete, ...this._customTableActions, tableActionDelete];
   }
 }

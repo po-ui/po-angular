@@ -2242,5 +2242,22 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(routerNavigateSpy).not.toHaveBeenCalled();
       expect(customActionServiceSpy).toHaveBeenCalled();
     });
+
+    it('should set "Excluir" button in last item of action', () => {
+      component.actions = {
+        remove: true,
+        new: '/documentation/po-page-dynamic-edit',
+        edit: 'edit/:id',
+        duplicate: 'duplicate/:id'
+      };
+
+      component.tableCustomActions = [
+        { label: 'Details', action: () => alert('DETALHES') },
+        { label: 'teste', action: () => alert('teste') }
+      ];
+
+      const tableActions = visibleTableActions();
+      expect(tableActions[tableActions.length - 1].label).toBe(component.literals.tableActionDelete);
+    });
   });
 });
