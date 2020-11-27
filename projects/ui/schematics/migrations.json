@@ -10,6 +10,11 @@
       "version": "3",
       "description": "Atualiza @po-ui/ng-components para v3",
       "factory": "./ng-update/v3/index#updateToV3"
+    },
+    "migration-v4": {
+      "version": "0.0.0-PLACEHOLDER",
+      "description": "Atualiza @po-ui/ng-components para v4",
+      "factory": "./ng-update/v4/index"
     }
   }
 }

@@ -67,9 +67,7 @@ ter o npm registry local em execução, confirmando essas situações, podemos r
 
 Por fim, execute os comandos abaixo no seu projeto Angular:
 
-`> npm i --save @po-ui/ng-components`
-
-`> ng update @po-ui/ng-components --next --from 1 --migrate-only`
+`> ng update @po-ui/ng-components --next`
 
 Pode ser utilizado o verdaccio para publicar os pacotes locais, como `@po-ui/style`, assim não precisamos instalar local e o fluxo fica mais próximo do oficial.
 
