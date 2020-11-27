@@ -85,8 +85,6 @@ describe('PoPageLoginComponent: ', () => {
 
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('.po-page-login-header').innerHTML).toContain(component.literals.title);
-
     expect(nativeElement.querySelector('po-login').innerHTML).toContain(component.literals.loginPlaceholder);
     expect(nativeElement.querySelector('po-login').innerHTML).not.toContain(component.literals.loginErrorPattern);
 
@@ -104,7 +102,6 @@ describe('PoPageLoginComponent: ', () => {
 
   it('should show custom literals', () => {
     const customLiterals: PoPageLoginLiterals = {
-      title: 'Custom title',
       loginPlaceholder: 'Custom placeholder login',
       passwordPlaceholder: 'Custom placeholder password',
       rememberUser: 'Custom remember user',
@@ -121,7 +118,6 @@ describe('PoPageLoginComponent: ', () => {
 
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('.po-page-login-header').innerHTML).toContain(customLiterals.title);
     expect(nativeElement.querySelector('po-login').innerHTML).toContain(customLiterals.loginPlaceholder);
 
     expect(nativeElement.querySelector('po-password').innerHTML).toContain(customLiterals.passwordPlaceholder);
@@ -824,11 +820,15 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it(`concatenateLiteral: should call 'concatenate' and return expected value`, () => {
-      const value = 'Portal RH';
-      const currentLiteral = 'title';
-      const defaultLiteral = 'Welcome';
+      const value = 'email@email.com.br';
+      const currentLiteral = 'loginHint';
+      const defaultLiteral = `Your login user was given to you at your first day.
+      If you don't have this information contact support`;
       const prepositionLiteral = 'to';
-      const result = { title: 'Welcome to Portal RH' };
+      const result = {
+        loginHint: `Your login user was given to you at your first day.
+      If you don't have this information contact support to email@email.com.br`
+      };
 
       spyOn(component, <any>'concatenate').and.callThrough();
 
@@ -893,32 +893,6 @@ describe('PoPageLoginComponent: ', () => {
 
       expect(productNameElement.innerText).toBe(productName);
       expect(welcomeElement.innerText).toBe(welcome);
-    });
-
-    it('should contain value of title if productName is undefined', () => {
-      const title = 'custom title';
-      component.literals = { title };
-
-      component.productName = undefined;
-
-      fixture.detectChanges();
-
-      const productNameElement = fixture.debugElement.nativeElement.querySelector('.po-page-login-header-product-name');
-
-      expect(productNameElement.innerText).toBe(title);
-    });
-
-    it('should use value of productName if title and productName are defined', () => {
-      const productName = 'custom product name';
-      component.literals = { title: 'custom title' };
-
-      component.productName = productName;
-
-      fixture.detectChanges();
-
-      const productNameElement = fixture.debugElement.nativeElement.querySelector('.po-page-login-header-product-name');
-
-      expect(productNameElement.innerText).toBe(productName);
     });
 
     it('customField po-input: should have po-input when placeholder is filled and shouldn`t have po-select and po-combo.', () => {
