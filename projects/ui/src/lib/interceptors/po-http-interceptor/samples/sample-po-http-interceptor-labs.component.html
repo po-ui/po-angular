@@ -17,16 +17,14 @@
     >
     </po-radio-group>
 
-    <po-switch
+    <po-radio-group
       class="po-md-6"
-      name="noMessageHeaderParam"
-      [(ngModel)]="noMessageHeaderParam"
-      p-help="Enable/disables notification"
-      p-label="X-PO-No-Message"
-      p-label-off="Off"
-      p-label-on="On"
+      name="headerParam"
+      [(ngModel)]="headerParam"
+      p-label="Disables Notifications"
+      [p-options]="headerParamOptions"
     >
-    </po-switch>
+    </po-radio-group>
   </div>
 
   <div class="po-row po-mt-1">
