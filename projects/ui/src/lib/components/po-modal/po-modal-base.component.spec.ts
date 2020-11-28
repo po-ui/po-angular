@@ -1,12 +1,13 @@
 import { PoModalBaseComponent } from './po-modal-base.component';
 
 import { expectPropertiesValues, expectSettersMethod } from './../../util-test/util-expect.spec';
+import { PoLanguageService } from '../../services';
 
 describe('PoModalBaseComponent:', () => {
   let component: PoModalBaseComponent;
 
   beforeEach(() => {
-    component = new PoModalBaseComponent();
+    component = new PoModalBaseComponent(new PoLanguageService());
   });
 
   it('should create component hidden', () => {
@@ -69,7 +70,7 @@ describe('PoModalBaseComponent:', () => {
 
     component.validPrimaryAction();
 
-    expect(component.primaryAction.label).toBe('Ok');
+    expect(component.primaryAction.label).toBe(component.literals.close);
     expect(component.primaryAction.action).not.toBeUndefined();
 
     spyOn(component, 'close');
@@ -80,7 +81,7 @@ describe('PoModalBaseComponent:', () => {
   it('should complete primaryAction when is undefined in validPrimaryAction', () => {
     component.primaryAction = undefined;
     component.validPrimaryAction();
-    expect(component.primaryAction.label).toBe('Ok');
+    expect(component.primaryAction.label).toBe(component.literals.close);
     expect(component.primaryAction.action).not.toBeUndefined();
 
     spyOn(component, 'close');

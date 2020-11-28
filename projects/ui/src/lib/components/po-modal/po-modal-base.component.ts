@@ -3,6 +3,9 @@ import { Input, EventEmitter, Directive } from '@angular/core';
 import { convertToBoolean } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poModalLiterals } from './po-modal.literals';
+
 /**
  * @description
  *
@@ -20,6 +23,9 @@ import { PoModalAction } from './po-modal-action.interface';
  */
 @Directive()
 export class PoModalBaseComponent {
+  language;
+  literals;
+
   private _hideClose?: boolean = false;
   private _size?: string = 'md';
 
@@ -94,6 +100,14 @@ export class PoModalBaseComponent {
   // Event emmiter para quando a modal é fechada pelo 'X'.
   public onXClosed = new EventEmitter<boolean>();
 
+  constructor(poLanguageService: PoLanguageService) {
+    this.language = poLanguageService.getShortLanguage();
+
+    this.literals = {
+      ...poModalLiterals[this.language]
+    };
+  }
+
   /** Função para fechar a modal. */
   close(xClosed = false): void {
     this.isHidden = true;
@@ -113,7 +127,7 @@ export class PoModalBaseComponent {
     if (!this.primaryAction) {
       this.primaryAction = {
         action: () => this.close(),
-        label: 'Ok'
+        label: this.literals.close
       };
     }
 
@@ -121,7 +135,7 @@ export class PoModalBaseComponent {
       this.primaryAction['action'] = () => this.close();
     }
     if (!this.primaryAction['label']) {
-      this.primaryAction['label'] = 'Ok';
+      this.primaryAction['label'] = this.literals.close;
     }
   }
 }
