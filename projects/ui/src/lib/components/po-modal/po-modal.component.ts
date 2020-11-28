@@ -3,6 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { PoModalBaseComponent } from './po-modal-base.component';
 import { PoModalService } from './po-modal-service';
 import { uuid } from '../../utils/util';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 /**
  * @docsExtends PoModalBaseComponent
@@ -38,8 +39,8 @@ export class PoModalComponent extends PoModalBaseComponent {
   private id: string = uuid();
   private sourceElement;
 
-  constructor(private poModalService: PoModalService) {
-    super();
+  constructor(private poModalService: PoModalService, poLanguageService: PoLanguageService) {
+    super(poLanguageService);
   }
 
   close(xClosed = false) {
