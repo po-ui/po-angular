@@ -2,6 +2,79 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v3.14.0...v4.0.0-rc.1) (2020-11-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* **angular:** atualiza para a versão 11
+
+Atualize seu projeto para utilizar a versão 11 do Angular, acesse a documentação [**Guia de Atualização do Angular**](https://update.angular.io/) para fazer a migração completa.
+
+Veja nossa [**documentação para fazer a migração**](https://github.com/po-ui/po-angular/blob/master/docs/guides/migration-poui-v4.md) para a versão 4.
+
+* **page-list:** remove a propriedade `PoPageFilter.ngModel`
+
+Foi removida a propriedade `PoPageFilter.ngModel` e as propriedades `action` e
+`advancedAction` foram alteradas e passam a aceitar somente o tipo Function deixando de aceitar o tipo string.
+
+Antes:
+```
+readonly filterSettings: PoPageFilter = {
+  action: 'filterAction',
+  advancedAction: 'advancedFilterActionModal',
+  ngModel: 'labelFilter',
+  placeholder: 'Search'
+};
+```
+
+Depois:
+```
+readonly filterSettings: PoPageFilter = {
+  action: this.filterAction.bind(this),
+  advancedAction: this.advancedFilterActionModal.bind(this),
+  placeholder: 'Search'
+};
+```
+* **page-login:** remove a propriedade `PoPageLoginLiterals.title`
+
+Foi removida a propriedade `PoPageLoginLiterals.title` do `po-page-login` pois o
+mesmo deve ser definido através do uso da propriedade `p-product-name`.
+
+Antes:
+```
+<po-page-login [p-literals]='{"title": "Nome do meu produto"}'></po-page-login>
+```
+
+Depois:
+```
+<po-page-login p-product-name="Nome do meu produto"></po-page-login>
+```
+
+### Bug Fixes
+
+* **dynamic-form:** corrige disparo do evento `p-validate` quando utilizado `po-lookup` ([67202de](https://github.com/po-ui/po-angular/commit/67202de257d88dac6925f3533630107c68d5f716))
+* **menu:** corrige exibição do rodapé caso collasped for verdadeiro ([6bcf967](https://github.com/po-ui/po-angular/commit/6bcf967aefc8872e48f6b1f42fedd4f51627047c))
+
+
+### Code Refactoring
+
+* **page-list:** remove a propriedade `PoPageFilter.ngModel` ([6ff7def](https://github.com/po-ui/po-angular/commit/6ff7def6eef565b7b10dc3a271ae93203086845b))
+* **page-login:** remove a propriedade `PoPageLoginLiterals.title` ([b1b5a42](https://github.com/po-ui/po-angular/commit/b1b5a42f109d271a9b0a3ba44e70acd542d70771))
+
+
+### Features
+
+* **angular:** atualiza para a versão 11 ([95041a7](https://github.com/po-ui/po-angular/commit/95041a78d79e308a5328417a75b8db3248cb8628))
+* **chart:** adiciona `label` e `data` e deprecia `value` e `category` ([e739e2d](https://github.com/po-ui/po-angular/commit/e739e2d49278a8b20d9d8bcfbf9276d331127c4e))
+* **components|sync:** implementa ng update para v4 ([5024522](https://github.com/po-ui/po-angular/commit/502452241c2b27898331889417bf2646da9c8115))
+* **datepicker-range:** traduz as literais para os idiomas suportados ([c62c071](https://github.com/po-ui/po-angular/commit/c62c0717b4df2d733fa89c81ed16b1b309e8e517))
+* **field-container:** traduz literal para os idiomas suportados ([284f7c4](https://github.com/po-ui/po-angular/commit/284f7c46515d1644a621480cf24b394079ac2b22))
+* **modal:** traduzir literais para os idiomas suportados ([a2bcc9c](https://github.com/po-ui/po-angular/commit/a2bcc9c44be22e8f2471192135699e260a74ad71))
+* **number:** permite usar números decimais nas propriedades `p-min` e `p-max` ([300cae0](https://github.com/po-ui/po-angular/commit/300cae098115df9b2c0d6a796b54400b98ec44d7))
+* **table:** adiciona propriedade `p-auto-collapse` ([b6df125](https://github.com/po-ui/po-angular/commit/b6df12502480529c4237bd20a0ce14d615fbdd77)), closes [#167](https://github.com/po-ui/po-angular/issues/167)
+
+
 # [3.14.0](https://github.com/po-ui/po-angular/compare/v3.13.0...v3.14.0) (2020-11-23)
 
 

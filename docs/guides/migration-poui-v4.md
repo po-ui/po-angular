@@ -88,6 +88,12 @@ Remoção das propriedades, onde passam a valer as novas definições, veja a ta
   </div>
 </div>
 
+#### Depreciação
+
+Componente <a href="/documentation/po-chart">PoChart:</a>
+Depreciadas as propriedades `category` e `value` nas interfaces `PoPieChartSeries` e `PoDonutChartSeries`,
+que passam a aceitar `label` e `data` respectivamente.
+
 <a id="sync"></a>
 ### ng update @po-ui/ng-sync
 
