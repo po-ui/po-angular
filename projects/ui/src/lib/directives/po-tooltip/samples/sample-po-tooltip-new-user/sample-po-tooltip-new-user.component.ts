@@ -43,7 +43,7 @@ export class SamplePoTooltipNewUserComponent implements OnInit {
   }
 
   initialize() {
-    this.emailTooltip = 'PO email provided on the registration form';
+    this.emailTooltip = 'your_account@po-ui.com';
     this.nameTooltip = 'Enter full name';
     this.passwordTooltip = 'Password must contain at least 8 characters';
     this.registrationTooltip = 'The registration number is on the registration form';
