@@ -93,6 +93,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoDatepickerComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
+    PoFieldContainerModule,
     PoInputComponent,
     PoLoginComponent,
     PoLookupComponent,
