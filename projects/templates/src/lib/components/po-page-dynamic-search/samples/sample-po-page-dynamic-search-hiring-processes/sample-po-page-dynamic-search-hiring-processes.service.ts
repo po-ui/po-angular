@@ -139,7 +139,7 @@ export class SamplePoPageDynamicSearchHiringProcessesService {
 
   getPageOptions() {
     return {
-      actions: [{ label: 'Find on Google' }],
+      actions: [{ label: 'Find on Google', disabled: false }],
       filters: [
         { property: 'idCard', gridColumns: 6 },
         { property: 'city', initValue: 'Ontario' }

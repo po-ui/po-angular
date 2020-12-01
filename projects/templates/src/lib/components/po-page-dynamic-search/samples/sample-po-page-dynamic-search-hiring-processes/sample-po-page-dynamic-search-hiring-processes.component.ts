@@ -28,7 +28,8 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   private statusOptions: Array<PoSelectOption> = [];
 
   public readonly actions: Array<PoPageAction> = [
-    { label: 'Hire', action: this.hireCandidate.bind(this), disabled: this.disableHireButton.bind(this) }
+    { label: 'Hire', action: this.hireCandidate.bind(this), disabled: this.disableHireButton.bind(this) },
+    { label: 'Find on Google', action: this.findOnGoogle.bind(this), disabled: true }
   ];
 
   public readonly breadcrumb: PoBreadcrumb = {
@@ -129,6 +130,12 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   private updateFilters() {
     this.filters[0].options = this.statusOptions;
     this.filters[3].options = this.jobDescriptionOptions;
+  }
+
+  private findOnGoogle() {
+    const selectedItem = this.hiringProcesses.find(item => item['$selected']);
+    const jobDescription = selectedItem ? selectedItem['jobDescription'] : '';
+    window.open(`http://google.com/search?q=${jobDescription}`, '_blank');
   }
 
   onLoadFields() {
