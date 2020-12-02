@@ -31,6 +31,7 @@ export * from './po-stepper/index';
 export * from './po-table/index';
 export * from './po-tabs/index';
 export * from './po-tag/index';
+export * from './po-timeline/index';
 export * from './po-toolbar/index';
 export * from './po-tree-view/index';
 export * from './po-widget/index';

@@ -1,0 +1,22 @@
+<ul class="po-timeline {{ timelineMode }}">
+  <li *ngFor="let item of items; index as i" class="{{ 'po-timeline-' + (i % 2 == 0 ? 'left' : 'right') }}">
+    <div class="po-timeline-badge {{ item.color }}">
+      <i class=" {{ item.icon }} "></i>
+    </div>
+    <div
+      class="po-timeline-panel {{ clickable ? 'po-timeline-panel-clickable' : '' }}"
+      p-tooltip="{{ item.tooltip }}"
+      p-tooltip-position="top"
+      (click)="itemSelected(item)"
+    >
+      <div class="po-timeline-heading">
+        <h4 class="po-font-text-large-bold">
+          {{ item.title }}
+        </h4>
+      </div>
+      <div class="po-timeline-body po-font-text-small">
+        <p>{{ item.description }}</p>
+      </div>
+    </div>
+  </li>
+</ul>
