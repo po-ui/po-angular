@@ -6,7 +6,7 @@ import { PoTimelineItem } from '@po-ui/ng-components';
   templateUrl: './sample-po-timeline-basic.component.html'
 })
 export class SamplePoContainerBasicComponent {
-  public readonly items: PoTimelineItem[] = [
+  public readonly items: Array<PoTimelineItem> = [
     {
       title: 'Title',
       description:

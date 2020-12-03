@@ -1,4 +1,4 @@
-<ul class="po-timeline {{ timelineMode }}">
+<ul class="po-timeline {{ timelineModeClass }}">
   <li *ngFor="let item of items; index as i" class="{{ 'po-timeline-' + (i % 2 == 0 ? 'left' : 'right') }}">
     <div class="po-timeline-badge {{ item.color }}">
       <i class=" {{ item.icon }} "></i>

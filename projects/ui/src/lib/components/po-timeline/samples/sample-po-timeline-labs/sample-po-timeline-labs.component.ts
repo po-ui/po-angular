@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoSelectOption, PoRadioGroupOption, PoTimelineItem } from '@po-ui/ng-components';
+import { PoSelectOption, PoRadioGroupOption, PoTimelineItem, PoTimelineMode } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-timeline-labs',
@@ -12,9 +12,9 @@ export class SamplePoContainerBasicComponent {
     color: 'po-color-primary'
   };
 
-  public items: PoTimelineItem[] = [{ ...this.newItem }];
+  public items: Array<PoTimelineItem> = [{ ...this.newItem }];
 
-  public mode: string = 'full';
+  public mode: PoTimelineMode = PoTimelineMode.Full;
 
   public clickable: boolean = false;
 
@@ -29,6 +29,8 @@ export class SamplePoContainerBasicComponent {
     { label: 'Warning', value: 'po-color-warning' },
     { label: 'Danger', value: 'po-color-danger' }
   ];
+
+  public clickedItem: string = '';
 
   public addItem() {
     this.items.push({ ...this.newItem });
@@ -46,12 +48,10 @@ export class SamplePoContainerBasicComponent {
   public restore() {
     this.resetNewItem();
     this.items = [{ ...this.newItem }];
-    this.mode = 'full';
+    this.mode = PoTimelineMode.Full;
     this.clickable = false;
     this.clickedItem = '';
   }
-
-  public clickedItem: string = '';
 
   public clickEvent(poTimelineItem: PoTimelineItem) {
     this.clickedItem = JSON.stringify(poTimelineItem);

@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PoTimelineComponent } from './po-timeline.component';
 import { Component } from '@angular/core';
 import { PoTimelineItem } from './interfaces/po-timeline-item.interface';
+import { PoTimelineMode } from './enums/po-timeline-mode.enum';
 
 describe('PoTimelineComponent', () => {
   let component: PoTimelineComponent;
@@ -27,8 +28,28 @@ describe('PoTimelineComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('Properties:', () => {
+    it('timelineModeClass: should update to "po-timeline-full" if `timelineMode` is "full".', () => {
+      component.timelineMode = PoTimelineMode.Full;
+      expect(component.timelineModeClass).toEqual('po-timeline-full');
+    });
+
+    it('timelineModeClass: should update to "po-timeline-compact" if `timelineMode` is "compact".', () => {
+      component.timelineMode = PoTimelineMode.Compact;
+      expect(component.timelineModeClass).toEqual('po-timeline-compact');
+    });
+
+    it('timelineMode: should update property with valid values', () => {
+      component.timelineMode = PoTimelineMode.Full;
+      expect(component.timelineMode).toBe(PoTimelineMode.Full);
+
+      component.timelineMode = PoTimelineMode.Compact;
+      expect(component.timelineMode).toBe(PoTimelineMode.Compact);
+    });
+  });
+
   describe('Methods:', () => {
-    let item: PoTimelineItem = {
+    const item: PoTimelineItem = {
       title: 'Test title',
       color: 'test color',
       description: 'test description',
@@ -42,12 +63,6 @@ describe('PoTimelineComponent', () => {
 
       component.itemSelected(item);
       expect(component.onClickCard.emit).toHaveBeenCalledWith(item);
-    });
-
-    it('Should call `itemSelected` with `item` and return undefined', () => {
-      component.clickable = false;
-
-      expect(component.itemSelected(item)).toEqual(undefined);
     });
 
     it('Should return `item` when click in panel', () => {
@@ -66,7 +81,7 @@ describe('PoTimelineComponent', () => {
   });
 
   describe('Templates:', () => {
-    const items: PoTimelineItem[] = [
+    const items: Array<PoTimelineItem> = [
       {
         title: 'Mock',
         description:
@@ -100,14 +115,14 @@ describe('PoTimelineComponent', () => {
     });
 
     it('Should contain `po-timeline-full` if `p-mode` equals full', () => {
-      component.timelineMode = 'full';
+      component.timelineMode = PoTimelineMode.Full;
       fixture.detectChanges();
       const fullTimeline = nativeElement.querySelector('.po-timeline-full');
       expect(fullTimeline).toBeTruthy();
     });
 
     it('Should contain `po-timeline-compact` if `p-mode` equals compact', () => {
-      component.timelineMode = 'compact';
+      component.timelineMode = PoTimelineMode.Compact;
       fixture.detectChanges();
       const compactTimeline = nativeElement.querySelector('.po-timeline-compact');
       expect(compactTimeline).toBeTruthy();

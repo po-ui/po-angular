@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { PoTimelineMode } from './enums/po-timeline-mode.enum';
 import { PoTimelineItem } from './interfaces/po-timeline-item.interface';
 
-const PO_TIMELINE_SIZES = ['compact', 'full'];
-const PO_TIMELINE_SIZE_DEFAULT = 'full';
+const PO_TIMELINE_MODE_DEFAULT = PoTimelineMode.Full;
 
 @Component({
   selector: 'po-timeline',
@@ -16,13 +16,13 @@ const PO_TIMELINE_SIZE_DEFAULT = 'full';
  * O `po-timeline` conta com alguns recursos como controle de tamanho, e seleção dos paineis (acontecimentos)
  */
 export class PoTimelineComponent {
-  private _timeLineMode: string = 'full';
+  private _timeLineMode: PoTimelineMode = PO_TIMELINE_MODE_DEFAULT;
 
   /**
    * @description
    * Propriedade que receberá os dados dos itens
    */
-  @Input('p-items') items: PoTimelineItem[] = [];
+  @Input('p-items') items: Array<PoTimelineItem> = [];
 
   /**
    * @optional
@@ -32,12 +32,16 @@ export class PoTimelineComponent {
    * #### Tamanhos disponíveis:
    * - `compact`, itens são exibidos um abaixo do outro com 100% de width
    * - `full`, itens são exibidos um abaixo do outro intercalando direito e esquerda com 50% de width
-   * @default `lg`
+   * @default `full`
    */
-  @Input('p-mode') set timelineMode(size: string) {
-    this._timeLineMode = PO_TIMELINE_SIZES.includes(size) ? size : PO_TIMELINE_SIZE_DEFAULT;
+  @Input('p-mode') set timelineMode(value: PoTimelineMode) {
+    this._timeLineMode = (<any>Object).values(PoTimelineMode).includes(value) ? value : PO_TIMELINE_MODE_DEFAULT;
   }
-  get timelineMode(): string {
+  get timelineMode(): PoTimelineMode {
+    return this._timeLineMode;
+  }
+
+  public get timelineModeClass(): string {
     return 'po-timeline-' + this._timeLineMode;
   }
 
@@ -54,15 +58,13 @@ export class PoTimelineComponent {
    */
   @Output('p-click') onClickCard: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() {}
-
   /**
-   * @method cardSelect Método que emite um evento com os dados do item a partir de um click
-   * @param card Dados do item selecionado
+   * @method itemSelected Método que emite um evento com os dados do item a partir de um click
+   * @param item Dados do item selecionado
    */
-  itemSelected(card: PoTimelineItem) {
+  itemSelected(item: PoTimelineItem) {
     if (this.clickable) {
-      return this.onClickCard.emit(card);
+      return this.onClickCard.emit(item);
     }
   }
 }
