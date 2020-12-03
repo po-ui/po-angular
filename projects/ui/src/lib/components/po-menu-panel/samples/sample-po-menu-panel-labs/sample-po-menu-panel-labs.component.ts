@@ -10,6 +10,7 @@ export class SamplePoMenuPanelLabsComponent implements OnInit {
   menuItem: PoMenuPanelItem = { icon: undefined, label: undefined };
   menuItems: Array<PoMenuPanelItem>;
   menuItemSelected: string;
+  logo: string;
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
     { label: 'po-icon-news', value: 'po-icon-news' },
@@ -33,6 +34,7 @@ export class SamplePoMenuPanelLabsComponent implements OnInit {
   restore() {
     this.menuItems = [];
     this.menuItemSelected = undefined;
+    this.logo = undefined;
   }
 
   private onMenuItemSelected(menu: PoMenuPanelItem) {
