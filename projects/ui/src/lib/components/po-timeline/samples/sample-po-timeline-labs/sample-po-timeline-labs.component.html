@@ -1,4 +1,10 @@
-<po-timeline [p-items]="items" [p-mode]="mode"></po-timeline>
+<po-timeline [p-items]="items" [p-clickable]="clickable" (p-click)="clickEvent($event)" [p-mode]="mode"></po-timeline>
+
+<po-divider></po-divider>
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Clicked Item" [p-value]="clickedItem"> </po-info>
+</div>
 
 <po-divider></po-divider>
 
@@ -21,6 +27,7 @@
 <div class="po-row">
   <po-radio-group class="po-lg-6" name="mode" [(ngModel)]="mode" p-label="Mode" [p-options]="modeOptions">
   </po-radio-group>
+  <po-switch class="po-lg-6" name="enableClickable" [(ngModel)]="clickable" p-label="Clickable"> </po-switch>
 </div>
 <po-divider></po-divider>
 <div class="po-row">

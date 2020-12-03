@@ -6,15 +6,17 @@ import { PoSelectOption, PoRadioGroupOption, PoTimelineItem } from '@po-ui/ng-co
   templateUrl: './sample-po-timeline-labs.component.html'
 })
 export class SamplePoContainerBasicComponent {
-  public items: PoTimelineItem[] = [];
-
-  public mode: string = 'full';
-
   public newItem: PoTimelineItem = {
     title: 'Title',
     description: 'Description',
     color: 'po-color-primary'
   };
+
+  public items: PoTimelineItem[] = [{ ...this.newItem }];
+
+  public mode: string = 'full';
+
+  public clickable: boolean = false;
 
   public readonly modeOptions: Array<PoRadioGroupOption> = [
     { label: 'Full', value: 'full' },
@@ -45,5 +47,13 @@ export class SamplePoContainerBasicComponent {
     this.resetNewItem();
     this.items = [{ ...this.newItem }];
     this.mode = 'full';
+    this.clickable = false;
+    this.clickedItem = '';
+  }
+
+  public clickedItem: string = '';
+
+  public clickEvent(poTimelineItem: PoTimelineItem) {
+    this.clickedItem = JSON.stringify(poTimelineItem);
   }
 }
