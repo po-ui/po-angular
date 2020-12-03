@@ -1,16 +1,19 @@
-<po-timeline [p-items]="items" p-mode="full"></po-timeline>
+<po-timeline [p-items]="items" [p-mode]="mode"></po-timeline>
 
 <po-divider></po-divider>
 
 <div class="po-row">
-  <po-button class="po-md-3" p-label="Add Item" (p-click)="addItem()"> </po-button>
-
   <po-select name="color" class="po-md-3" p-label="Color" [(ngModel)]="newItem.color" [p-options]="colorsOptions">
   </po-select>
 
   <po-input class="po-md-3" [(ngModel)]="newItem.title" name="title" p-label="Title"> </po-input>
 
-  <po-input class="po-md-3" [(ngModel)]="newItem.description" name="description" p-label="Description"> </po-input>
+  <po-textarea class="po-md-6" [(ngModel)]="newItem.description" name="description" p-label="Description">
+  </po-textarea>
+</div>
+
+<div class="po-row">
+  <po-button class="po-md-3" p-label="Add Item" (p-click)="addItem()"> </po-button>
 </div>
 
 <po-divider></po-divider>
@@ -19,7 +22,7 @@
   <po-radio-group class="po-lg-6" name="mode" [(ngModel)]="mode" p-label="Mode" [p-options]="modeOptions">
   </po-radio-group>
 </div>
-
+<po-divider></po-divider>
 <div class="po-row">
   <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
 </div>

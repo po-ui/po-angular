@@ -22,12 +22,10 @@ export class SamplePoContainerBasicComponent {
   ];
 
   public readonly colorsOptions: Array<PoSelectOption> = [
-    [
-      { label: 'Primary', value: 'po-color-primary' },
-      { label: 'Secondary', value: 'po-color-secondary' },
-      { label: 'Warning', value: 'po-color-warning' },
-      { label: 'Danger', value: 'po-color-danger' }
-    ]
+    { label: 'Primary', value: 'po-color-primary' },
+    { label: 'Secondary', value: 'po-color-secondary' },
+    { label: 'Warning', value: 'po-color-warning' },
+    { label: 'Danger', value: 'po-color-danger' }
   ];
 
   public addItem() {
