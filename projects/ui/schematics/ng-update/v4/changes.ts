@@ -1,4 +1,12 @@
 import { UpdateDependencies } from '@po-ui/ng-schematics/package-config';
+import { ReplaceChanges } from '@po-ui/ng-schematics/replace/replace';
+
+export const replaceChanges: Array<ReplaceChanges> = [
+  {
+    replace: 'axisXGridLines',
+    replaceWith: 'gridLines'
+  }
+];
 
 export const updateDepedenciesVersion: UpdateDependencies = {
   dependencies: [
