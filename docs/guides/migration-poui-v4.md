@@ -37,6 +37,7 @@ Para realizar a migração, execute o comando abaixo:
 ``` ng update @po-ui/ng-components --next```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
+  - Modificada propriedade contida na interface `PoChartAxisOptions` de `axisXGridLines` para `gridLines`;
   - Atualizar as versões dos pacotes:
     - `@po-ui/ng-componentes`;
     - `@po-ui/ng-templates`;
@@ -81,6 +82,16 @@ Remoção das propriedades, onde passam a valer as novas definições, veja a ta
           </td>
           <td class="po-table-column">
             Será enviado por parâmetro na função <i>PoPageFilter.onAction</i> o valor de pesquisa.
+          </td>
+        </tr>
+        <tr class="po-table-row">
+          <td class="po-table-column">
+          <a href="/documentation/po-chart"><strong>PoChartAxisOptions</strong></a>
+          </td>
+          <td class="po-table-column">axisXGridLines
+          </td>
+          <td class="po-table-column">
+            gridLines
           </td>
         </tr>
       </tbody>
