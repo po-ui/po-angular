@@ -915,13 +915,21 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const metadata$ = this.getMetadata(serviceApiFromRoute, onLoad);
     const data$ = this.loadData();
 
-    const initialFilters = this.getInitialValuesFromFilter();
+    this.subscriptions.add(
+      metadata$
+        .pipe(
+          switchMap(() => {
+            const initialFilters = this.getInitialValuesFromFilter();
 
-    if (Object.keys(initialFilters).length) {
-      this.subscriptions.add(metadata$.subscribe());
-    } else {
-      this.subscriptions.add(concat(metadata$, data$).subscribe());
-    }
+            if (!Object.keys(initialFilters).length) {
+              return data$;
+            }
+
+            return EMPTY;
+          })
+        )
+        .subscribe()
+    );
   }
 
   private getInitialValuesFromFilter() {
@@ -948,7 +956,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       );
     }
 
-    return EMPTY;
+    return of(null);
   }
 
   private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicTableOptions> {
