@@ -46,6 +46,22 @@ describe('PoTimelineComponent', () => {
       component.timelineMode = PoTimelineMode.Compact;
       expect(component.timelineMode).toBe(PoTimelineMode.Compact);
     });
+
+    it('timelineMode: should update property to default value when passed invalid value', () => {
+      component.timelineMode = null;
+      expect(component.timelineMode).toBe(PoTimelineMode.Full);
+
+      component.timelineMode = undefined;
+      expect(component.timelineMode).toBe(PoTimelineMode.Full);
+    });
+
+    it('clickable: should update property with valid values', () => {
+      component.clickable = false;
+      expect(component.clickable).toBe(false);
+
+      component.clickable = true;
+      expect(component.clickable).toBe(true);
+    });
   });
 
   describe('Methods:', () => {
@@ -56,13 +72,22 @@ describe('PoTimelineComponent', () => {
       icon: 'test icon'
     };
 
+    it('Should call `itemSelected` with `clickable` equal false and not emit event', () => {
+      component.clickable = false;
+
+      spyOn(component.onClickItem, 'emit');
+
+      component.itemSelected(item);
+      expect(component.onClickItem.emit).toHaveBeenCalledTimes(0);
+    });
+
     it('Should call `itemSelected` with `item` and return the same', () => {
       component.clickable = true;
 
-      spyOn(component.onClickCard, 'emit');
+      spyOn(component.onClickItem, 'emit');
 
       component.itemSelected(item);
-      expect(component.onClickCard.emit).toHaveBeenCalledWith(item);
+      expect(component.onClickItem.emit).toHaveBeenCalledWith(item);
     });
 
     it('Should return `item` when click in panel', () => {
@@ -70,13 +95,13 @@ describe('PoTimelineComponent', () => {
       component.items = [item];
       fixture.detectChanges();
 
-      spyOn(component.onClickCard, 'emit');
+      spyOn(component.onClickItem, 'emit');
 
       const panel = nativeElement.querySelector('.po-timeline-panel');
 
       panel.click();
 
-      expect(component.onClickCard.emit).toBeTruthy();
+      expect(component.onClickItem.emit).toBeTruthy();
     });
   });
 

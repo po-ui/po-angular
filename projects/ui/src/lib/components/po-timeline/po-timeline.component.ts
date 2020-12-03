@@ -56,7 +56,7 @@ export class PoTimelineComponent {
    * @description
    * Evento usado para emitir um click no item
    */
-  @Output('p-click') onClickCard: EventEmitter<any> = new EventEmitter<any>();
+  @Output('p-click') onClickItem: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @method itemSelected Método que emite um evento com os dados do item a partir de um click
@@ -64,7 +64,7 @@ export class PoTimelineComponent {
    */
   itemSelected(item: PoTimelineItem) {
     if (this.clickable) {
-      return this.onClickCard.emit(item);
+      this.onClickItem.emit(item);
     }
   }
 }
