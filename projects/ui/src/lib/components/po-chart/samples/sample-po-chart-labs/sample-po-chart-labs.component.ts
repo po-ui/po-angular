@@ -36,7 +36,7 @@ export class SamplePoChartLabsComponent implements OnInit {
     axis: {
       minRange: undefined,
       maxRange: undefined,
-      axisXGridLines: undefined
+      gridLines: undefined
     }
   };
 
@@ -116,7 +116,7 @@ export class SamplePoChartLabsComponent implements OnInit {
       axis: {
         minRange: undefined,
         maxRange: undefined,
-        axisXGridLines: undefined
+        gridLines: undefined
       }
     };
   }

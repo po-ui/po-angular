@@ -5,7 +5,7 @@ export const PoChartPadding = 24;
 export const PoChartAxisXLabelArea = 72;
 
 // Quantidade de linhas do eixo X
-export const PoChartAxisXGridLines = 5;
+export const PoChartGridLines = 5;
 
 // Padding top para área interna de plotagem do grid para evitar overflow no hover dos pontos do gráfico do tipo linha;
 export const PoChartPlotAreaPaddingTop = 8;

@@ -98,7 +98,7 @@ export class SamplePoChartCoffeeRankingComponent {
   consumptionPerCapitaOptions: PoChartOptions = {
     axis: {
       maxRange: 100,
-      axisXGridLines: 2
+      gridLines: 2
     }
   };
 
@@ -106,7 +106,7 @@ export class SamplePoChartCoffeeRankingComponent {
     axis: {
       minRange: 0,
       maxRange: 40,
-      axisXGridLines: 5
+      gridLines: 5
     }
   };
 
@@ -114,7 +114,7 @@ export class SamplePoChartCoffeeRankingComponent {
     axis: {
       minRange: 0,
       maxRange: 100,
-      axisXGridLines: 5
+      gridLines: 5
     }
   };
 
