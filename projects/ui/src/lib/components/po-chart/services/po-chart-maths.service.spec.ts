@@ -47,44 +47,44 @@ describe('PoChartMathsService', () => {
       expect(service.calculateMinAndMaxValues(series, acceptNegativeValues)).toEqual(expectedResult);
     });
 
-    it('range: should call `getAxisXGridLineArea` and return a list of values according with axisXGridLabels default value', () => {
+    it('range: should call `getGridLineArea` and return a list of values according with gridLabels default value', () => {
       const minMaxValues = { minValue: 0, maxValue: 200 };
       const expectedResult = [0, 50, 100, 150, 200];
-      const axisXGridLines = 5;
+      const gridLines = 5;
 
-      const spyGetAxisXGridLineArea = spyOn(service, <any>'getAxisXGridLineArea').and.callThrough();
+      const spygetGridLineArea = spyOn(service, <any>'getGridLineArea').and.callThrough();
 
       expect(service.range(minMaxValues)).toEqual(expectedResult);
-      expect(spyGetAxisXGridLineArea).toHaveBeenCalledWith(minMaxValues, axisXGridLines);
+      expect(spygetGridLineArea).toHaveBeenCalledWith(minMaxValues, gridLines);
     });
 
-    it('range: return a list of values according with axisXGridLabels passed value', () => {
+    it('range: return a list of values according with gridLabels passed value', () => {
       const minMaxValues = { minValue: 0, maxValue: 200 };
       const expectedResult = [0, 100, 200];
-      const axisXGridLines = 3;
+      const gridLines = 3;
 
-      const spyGetAxisXGridLineArea = spyOn(service, <any>'getAxisXGridLineArea').and.callThrough();
+      const spyGetGridLineArea = spyOn(service, <any>'getGridLineArea').and.callThrough();
 
-      expect(service.range(minMaxValues, axisXGridLines)).toEqual(expectedResult);
-      expect(spyGetAxisXGridLineArea).toHaveBeenCalledWith(minMaxValues, axisXGridLines);
+      expect(service.range(minMaxValues, gridLines)).toEqual(expectedResult);
+      expect(spyGetGridLineArea).toHaveBeenCalledWith(minMaxValues, gridLines);
     });
 
     it('range: should return only one item if minValue and maxValue have same value', () => {
       const minMaxValues = { minValue: 1, maxValue: 1 };
       const expectedResult = [1];
 
-      const axisXGridLines = 5;
+      const gridLines = 5;
 
-      expect(service.range(minMaxValues, axisXGridLines)).toEqual(expectedResult);
+      expect(service.range(minMaxValues, gridLines)).toEqual(expectedResult);
     });
 
     it('range: should return 6 itens', () => {
       const minMaxValues = { minValue: 19, maxValue: 100 };
       const expectedResult = [19, 35.2, 51.4, 67.6, 83.8, 100];
 
-      const axisXGridLines = 6;
+      const gridLines = 6;
 
-      expect(service.range(minMaxValues, axisXGridLines)).toEqual(expectedResult);
+      expect(service.range(minMaxValues, gridLines)).toEqual(expectedResult);
     });
 
     it('calculateSideSpacing: should return value referring to space between label x and serie`s plot', () => {

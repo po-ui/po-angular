@@ -165,7 +165,7 @@ export abstract class PoChartBaseComponent {
    *    axis: {
    *      minRange: 0,
    *      maxRange: 100,
-   *      axisXGridLines: 5,
+   *      gridLines: 5,
    *    },
    *  };
    * ```

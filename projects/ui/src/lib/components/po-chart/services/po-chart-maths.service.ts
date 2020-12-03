@@ -75,13 +75,13 @@ export class PoChartMathsService {
    * Calcula e retorna uma lista de valores referentes aos textos dos eixos X em relação à quantidade de linhas horizontais.
    *
    * @param minMaxValues Objeto contendo os valores mínimo e máximo de todas as séries.
-   * @param axisXGridLines Quantidade de linhas horizontais. Valor default é 5.
+   * @param gridLines Quantidade de linhas horizontais. Valor default é 5.
    */
-  range(minMaxValues: PoChartMinMaxValues, axisXGridLines: number = 5) {
+  range(minMaxValues: PoChartMinMaxValues, gridLines: number = 5) {
     const { minValue, maxValue } = minMaxValues;
 
     const result = [];
-    const step = this.getAxisXGridLineArea(minMaxValues, axisXGridLines);
+    const step = this.getGridLineArea(minMaxValues, gridLines);
 
     for (let index = minValue; index <= maxValue; index = (index * 10 + step * 10) / 10) {
       result.push(index);
@@ -106,9 +106,9 @@ export class PoChartMathsService {
     return (notABoolean && isInteger) || (notABoolean && isFloat);
   }
 
-  // Cálculo que retorna o valor obtido da quantidade de AXISXGRIDL INES em relação ao alcance dos valores mínimos e máximos das séries (maxMinValues)
-  private getAxisXGridLineArea(minMaxValues: PoChartMinMaxValues, axisXGridLines: number) {
-    const percentageValue = this.getFractionFromInt(axisXGridLines - 1);
+  // Cálculo que retorna o valor obtido de gridLines em relação ao alcance dos valores mínimos e máximos das séries (maxMinValues)
+  private getGridLineArea(minMaxValues: PoChartMinMaxValues, gridLines: number) {
+    const percentageValue = this.getFractionFromInt(gridLines - 1);
     const { minValue, maxValue } = minMaxValues;
     const result = (percentageValue * (maxValue - minValue)) / 100;
 
@@ -127,7 +127,7 @@ export class PoChartMathsService {
     return isNaN(result) ? 0 : result;
   }
 
-  // Retorna a fração do número passado referente à quantidade de linhas no eixo X (axisXGridLines)
+  // Retorna a fração do número passado referente à quantidade de linhas no eixo X (gridLines)
   private getFractionFromInt(value: number) {
     return (1 / value) * (100 / 1);
   }

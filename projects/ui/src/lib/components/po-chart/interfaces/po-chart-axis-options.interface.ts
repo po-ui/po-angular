@@ -7,14 +7,16 @@
  */
 export interface PoChartAxisOptions {
   /**
-   * Número de linhas exibidas no eixo X dos gráficos do tipo `Line` e `Column`.
-   * Para gráficos do tipo `Bar` define-se as linhas do eixo Y.
+   * Define a quantidade de linhas exibidas no grid.
+   * Para os gráficos dos tipos `Line` e `Column`, as linhas modificadas serão as horizontais (eixo X).
+   * Já para gráficos do tipo `Bar`, tratará as linhas verticais (eixo Y).
    *
-   * - Valor padrão: '5';
-   * - Valor mínimo permitido: '2';
-   * - Máximo Máximo permitido: '10';
+   * A propriedade contém as seguintes diretrizes para seu correto funcionamento:
+   * - Quantidade padrão de linhas: '5';
+   * - Quantidade mínima permitida: '2';
+   * - Quantidade máxima permitida: '10';
    */
-  axisXGridLines?: number;
+  gridLines?: number;
 
   /**
    * Define o alcance de valor máximo exibido no eixo Y.

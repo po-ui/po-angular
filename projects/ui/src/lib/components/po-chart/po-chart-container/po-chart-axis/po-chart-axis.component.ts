@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import {
   PoChartAxisXLabelArea,
-  PoChartAxisXGridLines,
+  PoChartGridLines,
   PoChartPadding,
   PoChartPlotAreaPaddingTop
 } from '../../helpers/po-chart-default-values.constant';
@@ -25,7 +25,7 @@ export class PoChartAxisComponent {
   axisYCoordinates: Array<PoChartPathCoordinates>;
   axisYLabelCoordinates: Array<PoChartAxisLabelCoordinates>;
 
-  private axisXGridLines: number = PoChartAxisXGridLines;
+  private gridLines: number = PoChartGridLines;
   private minMaxAxisValues: PoChartMinMaxValues;
   private seriesLength: number = 0;
   private hasAxisSideSpacing: boolean;
@@ -59,20 +59,8 @@ export class PoChartAxisComponent {
       this.seriesLength = this.mathsService.seriesGreaterLength(this.series);
       this.minMaxAxisValues = this.mathsService.calculateMinAndMaxValues(this._series);
       this.checkAxisOptions(this.axisOptions);
-      this.setAxisXCoordinates(
-        this.axisXGridLines,
-        this.seriesLength,
-        this.containerSize,
-        this.minMaxAxisValues,
-        this.type
-      );
-      this.setAxisYCoordinates(
-        this.axisXGridLines,
-        this.seriesLength,
-        this.containerSize,
-        this.minMaxAxisValues,
-        this.type
-      );
+      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
+      this.setAxisYCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
     } else {
       this._series = [];
       this.cleanUpCoordinates();
@@ -87,16 +75,10 @@ export class PoChartAxisComponent {
     this._categories = value;
 
     if (this.type === PoChartType.Bar) {
-      this.setAxisXCoordinates(
-        this.axisXGridLines,
-        this.seriesLength,
-        this.containerSize,
-        this.minMaxAxisValues,
-        this.type
-      );
+      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
     } else {
       this.setAxisYCoordinates(
-        this.axisXGridLines,
+        this.gridLines,
         this.seriesLength,
         this._containerSize,
         this.minMaxAxisValues,
@@ -113,20 +95,8 @@ export class PoChartAxisComponent {
     this._containerSize = value;
 
     this.checkAxisOptions(this.axisOptions);
-    this.setAxisXCoordinates(
-      this.axisXGridLines,
-      this.seriesLength,
-      this._containerSize,
-      this.minMaxAxisValues,
-      this.type
-    );
-    this.setAxisYCoordinates(
-      this.axisXGridLines,
-      this.seriesLength,
-      this._containerSize,
-      this.minMaxAxisValues,
-      this.type
-    );
+    this.setAxisXCoordinates(this.gridLines, this.seriesLength, this._containerSize, this.minMaxAxisValues, this.type);
+    this.setAxisYCoordinates(this.gridLines, this.seriesLength, this._containerSize, this.minMaxAxisValues, this.type);
   }
 
   get containerSize() {
@@ -139,21 +109,9 @@ export class PoChartAxisComponent {
     this.checkAxisOptions(this._axisOptions);
 
     if (this.type === PoChartType.Bar) {
-      this.setAxisYCoordinates(
-        this.axisXGridLines,
-        this.seriesLength,
-        this.containerSize,
-        this.minMaxAxisValues,
-        this.type
-      );
+      this.setAxisYCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
     } else {
-      this.setAxisXCoordinates(
-        this.axisXGridLines,
-        this.seriesLength,
-        this.containerSize,
-        this.minMaxAxisValues,
-        this.type
-      );
+      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
     }
   }
 
@@ -164,36 +122,36 @@ export class PoChartAxisComponent {
   constructor(private mathsService: PoChartMathsService) {}
 
   private setAxisXCoordinates(
-    axisXGridLines: number,
+    gridLines: number,
     seriesLength: number,
     containerSize: PoChartContainerSize,
     minMaxAxisValues: PoChartMinMaxValues,
     type: PoChartType
   ) {
-    const amountOfAxisXLines = this.amountOfAxisXLines(seriesLength, axisXGridLines, type);
+    const amountOfAxisXLines = this.amountOfAxisXLines(seriesLength, gridLines, type);
     this.calculateAxisXCoordinates(amountOfAxisXLines, containerSize);
 
     if (seriesLength) {
-      const amountOfAxisLabels = type === PoChartType.Bar ? seriesLength : axisXGridLines;
+      const amountOfAxisLabels = type === PoChartType.Bar ? seriesLength : gridLines;
       this.calculateAxisXLabelCoordinates(amountOfAxisLabels, containerSize, minMaxAxisValues, type);
     }
   }
 
-  private amountOfAxisXLines(seriesLength: number, axisXGridLines: number, type: PoChartType): number {
+  private amountOfAxisXLines(seriesLength: number, gridLines: number, type: PoChartType): number {
     if (type === PoChartType.Bar) {
       return seriesLength <= 1 ? 2 : seriesLength + 1;
     }
-    return axisXGridLines === 0 ? 1 : axisXGridLines;
+    return gridLines === 0 ? 1 : gridLines;
   }
 
   private setAxisYCoordinates(
-    axisXGridLines: number,
+    gridLines: number,
     seriesLength: number,
     containerSize: PoChartContainerSize,
     minMaxAxisValues: PoChartMinMaxValues,
     type: PoChartType
   ) {
-    const amountOfAxisY = type === PoChartType.Bar ? axisXGridLines : seriesLength;
+    const amountOfAxisY = type === PoChartType.Bar ? gridLines : seriesLength;
 
     this.calculateAxisYCoordinates(amountOfAxisY, containerSize, type);
 
@@ -396,10 +354,8 @@ export class PoChartAxisComponent {
 
     this.minMaxAxisValues = this.checksMinAndMaxValues(options, minMaxSeriesValues);
 
-    this.axisXGridLines =
-      options.axisXGridLines && this.isValidGridLinesLengthOption(options.axisXGridLines)
-        ? options.axisXGridLines
-        : PoChartAxisXGridLines;
+    this.gridLines =
+      options.gridLines && this.isValidGridLinesLengthOption(options.gridLines) ? options.gridLines : PoChartGridLines;
   }
 
   private checksMinAndMaxValues(
@@ -433,8 +389,8 @@ export class PoChartAxisComponent {
     this.seriesLength = 0;
   }
 
-  private isValidGridLinesLengthOption(axisXGridLines: number): boolean {
-    return axisXGridLines >= 2 && axisXGridLines <= 10;
+  private isValidGridLinesLengthOption(gridLines: number): boolean {
+    return gridLines >= 2 && gridLines <= 10;
   }
 
   private getAxisXLabels(type: PoChartType, minMaxAxisValues: PoChartMinMaxValues, amountOfAxisX: number) {

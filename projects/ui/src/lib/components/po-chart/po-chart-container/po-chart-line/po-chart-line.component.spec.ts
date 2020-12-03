@@ -353,7 +353,7 @@ describe('PoChartLineComponent', () => {
     });
 
     it('p-options: should update property if valid values', () => {
-      const validValues = [{}, { axisXGridLines: 5 }];
+      const validValues = [{}, { gridLines: 5 }];
 
       expectPropertiesValues(component, 'options', validValues, validValues);
     });
@@ -368,7 +368,7 @@ describe('PoChartLineComponent', () => {
       const spyGetDomainValues = spyOn(component, <any>'getDomainValues');
       const spySeriePathPointsDefinition = spyOn(component, <any>'seriePathPointsDefinition');
 
-      component.options = { axisXGridLines: 5, maxRange: 100, minRange: 0 };
+      component.options = { gridLines: 5, maxRange: 100, minRange: 0 };
 
       expect(spyGetDomainValues).toHaveBeenCalledWith(component.options);
       expect(spySeriePathPointsDefinition).toHaveBeenCalledWith(
