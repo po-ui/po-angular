@@ -255,6 +255,10 @@ pre code {
   position: relative;
 }
 
+.docs-sample-container .po-wrapper-menu-panel .po-page {
+  display: inline-block;
+}
+
 .docs-sample-container po-menu + po-page-default {
   width: 80%;
 }
@@ -398,10 +402,6 @@ sample-po-menu-human-resources .po-wrapper.po-collapsed-menu .po-toolbar {
     margin-left: 60px;
     margin-top: 12px;
     position: relative;
-  }
-
-  .docs-sample-container .po-wrapper-menu-panel .po-page {
-    display: inline-block;
   }
 
   .docs-sample-container .po-wrapper .po-page {

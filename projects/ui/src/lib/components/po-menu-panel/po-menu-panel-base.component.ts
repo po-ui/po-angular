@@ -5,6 +5,8 @@ import { isExternalLink, uuid } from '../../utils/util';
 import { PoMenuPanelItem } from './po-menu-panel-item/po-menu-panel-item.interface';
 import { PoMenuPanelItemInternal } from './po-menu-panel-item/po-menu-panel-item-internal.interface';
 
+const poDefaultLogo = 'https://po-ui.io/assets/po-logos/po_black.svg';
+
 /**
  * @description
  *
@@ -17,6 +19,7 @@ import { PoMenuPanelItemInternal } from './po-menu-panel-item/po-menu-panel-item
 @Directive()
 export class PoMenuPanelBaseComponent {
   private _menus;
+  private _logo: string = poDefaultLogo;
 
   /** Lista dos itens do `po-menu-panel`. Se o valor estiver indefinido ou inválido, será inicializado como um array vazio. */
   @Input('p-menus') set menus(menus: Array<PoMenuPanelItem>) {
@@ -28,6 +31,23 @@ export class PoMenuPanelBaseComponent {
 
   get menus() {
     return this._menus;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Caminho para a logomarca localizada na parte superior do menu.
+   *
+   * > Caso seja indefinida será aplicada a imagem default do PO UI.
+   */
+  @Input('p-logo') set logo(src: string) {
+    this._logo = src ?? poDefaultLogo;
+  }
+
+  get logo() {
+    return this._logo;
   }
 
   private setMenuExtraProperties(menus: Array<PoMenuPanelItem>) {

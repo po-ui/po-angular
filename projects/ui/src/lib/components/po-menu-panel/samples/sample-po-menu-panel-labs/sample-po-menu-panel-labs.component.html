@@ -1,5 +1,5 @@
 <div class="po-wrapper-menu-panel">
-  <po-menu-panel [p-menus]="menuItems"> </po-menu-panel>
+  <po-menu-panel [p-menus]="menuItems" [p-logo]="logo"> </po-menu-panel>
 
   <po-page-default p-title="PO Menu Panel">
     <div class="po-row">
@@ -7,6 +7,17 @@
     </div>
 
     <hr />
+
+    <div class="po-row">
+      <po-input
+        class="po-md-12"
+        name="logo"
+        [(ngModel)]="logo"
+        p-label="Logo"
+        p-help="Exemplo: https://po-ui.io/assets/po-logos/po_inverse.svg"
+      >
+      </po-input>
+    </div>
 
     <form #fMenuPanel="ngForm">
       <div class="po-row">

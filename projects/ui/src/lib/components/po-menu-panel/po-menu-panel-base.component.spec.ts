@@ -4,6 +4,7 @@ import { PoMenuPanelBaseComponent } from './po-menu-panel-base.component';
 
 describe('PoMenuPanelBaseComponent: ', () => {
   const component = new PoMenuPanelBaseComponent();
+  const poDefaultLogo = 'https://po-ui.io/assets/po-logos/po_black.svg';
 
   beforeEach(() => {
     component.menus = [
@@ -32,6 +33,24 @@ describe('PoMenuPanelBaseComponent: ', () => {
 
       expect(component['setMenuExtraProperties']).toHaveBeenCalled();
       expect(component['validateMenus']).toHaveBeenCalled();
+    });
+
+    it('logo: should set `logo` with default value', () => {
+      expect(component.logo).toEqual(poDefaultLogo);
+    });
+
+    it('logo: should set `logo` with the developer image url', () => {
+      const src = 'https://po-ui.io/assets/po-logos/po_color_bg.svg';
+      component.logo = src;
+      expect(component.logo).not.toEqual(poDefaultLogo);
+      expect(component.logo).toEqual(src);
+    });
+
+    it('logo: should set `logo` with default value if the url passed by the developer is undefined', () => {
+      const src = undefined;
+      component.logo = src;
+      expect(component.logo).toEqual(poDefaultLogo);
+      expect(component.logo).not.toEqual(src);
     });
   });
 
