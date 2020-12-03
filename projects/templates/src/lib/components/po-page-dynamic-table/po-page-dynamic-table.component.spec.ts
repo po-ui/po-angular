@@ -526,7 +526,31 @@ describe('PoPageDynamicTableComponent:', () => {
       }));
 
       it(`shouldn't call 'loadData' if 'initialFilters'`, () => {
-        const fakeMetadata = { subscribe: () => 'metadata' };
+        const fakeMetadata = {
+          pipe: function () {
+            return this;
+          },
+          subscribe: () => 'metadata'
+        };
+        const fakeLoadData = { subscribe: () => 'data' };
+        const spyMetaData = spyOn(fakeMetadata, 'subscribe');
+        const spyLoadData = spyOn(fakeLoadData, 'subscribe');
+        spyOn(component, <any>'getInitialValuesFromFilter').and.returnValue({ name: 'teste' });
+        spyOn(component, <any>'loadData').and.returnValue(fakeLoadData);
+        spyOn(component, <any>'getMetadata').and.returnValue(fakeMetadata);
+
+        component['loadDataFromAPI']();
+        expect(spyMetaData).toHaveBeenCalled();
+        expect(spyLoadData).not.toHaveBeenCalled();
+      });
+
+      it(`shouldn't call 'loadData' if 'initialFilters'`, () => {
+        const fakeMetadata = {
+          pipe: function () {
+            return this;
+          },
+          subscribe: () => 'metadata'
+        };
         const fakeLoadData = { subscribe: () => 'data' };
         const spyMetaData = spyOn(fakeMetadata, 'subscribe');
         const spyLoadData = spyOn(fakeLoadData, 'subscribe');
@@ -573,6 +597,43 @@ describe('PoPageDynamicTableComponent:', () => {
         const returnedValue = component['getInitialValuesFromFilter']();
 
         expect(returnedValue).toEqual(filters);
+      });
+
+      it(`should call 'metaData' once time`, fakeAsync(() => {
+        const fakeMetadata = {
+          pipe: function () {
+            return this;
+          },
+          subscribe: () => 'metadata'
+        };
+        const fakeLoadData = { subscribe: () => 'data' };
+
+        const spyMetaData = spyOn(fakeMetadata, 'subscribe');
+
+        const filters = { name: 'teste' };
+        component.fields = [{ property: 'name', filter: true, initValue: 'teste' }, { property: 'city' }];
+        const returnedValue = component['getInitialValuesFromFilter']();
+
+        spyOn(component, <any>'getInitialValuesFromFilter').and.returnValue({ name: 'teste' });
+        spyOn(component, <any>'loadData').and.returnValue(fakeLoadData);
+        spyOn(component, <any>'getMetadata').and.returnValue(fakeMetadata);
+
+        tick();
+
+        component['loadDataFromAPI']();
+        expect(returnedValue).toEqual(filters);
+        expect(spyMetaData).toHaveBeenCalledTimes(1);
+      }));
+
+      it(`should return empty in 'metaData'`, () => {
+        component.fields = [
+          { property: 'name', filter: true },
+          { property: 'search', filter: true, initValue: '0348093615904' }
+        ];
+        const returnedValue = component['getInitialValuesFromFilter']();
+
+        component['loadDataFromAPI']();
+        expect(!Object.keys(returnedValue).length).toEqual(false);
       });
 
       it('should delete empty props', () => {

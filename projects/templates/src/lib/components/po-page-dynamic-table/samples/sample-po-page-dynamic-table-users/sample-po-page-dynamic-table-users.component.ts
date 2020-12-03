@@ -4,7 +4,8 @@ import { PoBreadcrumb, PoDynamicViewField, PoModalComponent } from '@po-ui/ng-co
 import {
   PoPageDynamicTableActions,
   PoPageDynamicTableCustomAction,
-  PoPageDynamicTableCustomTableAction
+  PoPageDynamicTableCustomTableAction,
+  PoPageDynamicTableOptions
 } from '@po-ui/ng-templates';
 
 import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-table-users.service';
@@ -44,6 +45,7 @@ export class SamplePoPageDynamicTableUsersComponent {
     { property: 'id', key: true, visible: false, filter: true },
     { property: 'name', label: 'Name', filter: true, gridColumns: 6 },
     { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true },
+    { property: 'search', filter: true, visible: false },
     {
       property: 'birthdate',
       label: 'Birthdate',
@@ -77,6 +79,25 @@ export class SamplePoPageDynamicTableUsersComponent {
   ];
 
   constructor(private usersService: SamplePoPageDynamicTableUsersService) {}
+
+  onLoad(): PoPageDynamicTableOptions {
+    return {
+      fields: [
+        { property: 'id', key: true, visible: true, filter: true },
+        { property: 'name', label: 'Name', filter: true, gridColumns: 6 },
+        { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true },
+        { property: 'search', initValue: '0748093840433' },
+        {
+          property: 'birthdate',
+          label: 'Birthdate',
+          type: 'date',
+          gridColumns: 6,
+          visible: false,
+          allowColumnsManager: true
+        }
+      ]
+    };
+  }
 
   printPage() {
     window.print();
