@@ -1,0 +1,15 @@
+<svg:g>
+  <svg:path #pointer
+    class="po-gauge-pointer"
+    [attr.d]="coordinates?.coordinates"
+  >
+  </svg:path> 
+
+  <svg:circle 
+    class="po-gauge-pointer-circle" 
+    [attr.cx]="coordinates?.radius" 
+    [attr.cy]="coordinates?.radius" 
+    [attr.r]="radiusScale"
+  >
+  </svg:circle>
+</svg:g>

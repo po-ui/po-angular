@@ -1,0 +1,42 @@
+<po-gauge
+  [p-description]="description"
+  [p-height]="height"
+  [p-ranges]="ranges"
+  [p-title]="title"
+  [p-value]="gaugeValue"
+>
+</po-gauge>
+
+<po-divider class="po-md-12" p-label="Properties"></po-divider>
+
+<form>
+  <div class="row">
+    <po-input class="po-md-6" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
+    <po-number class="po-md-6" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+    <po-number class="po-md-6" name="gaugeValue" [(ngModel)]="gaugeValue" p-label="Value"> </po-number>
+    <po-input class="po-md-6" name="description" [(ngModel)]="description" p-label="Description"> </po-input>
+  </div>
+
+  <form #rangesForm="ngForm">
+    <div class="row">
+      <po-divider class="po-md-12" p-label="Ranges"></po-divider>
+      <po-number class="po-md-3" name="from" [(ngModel)]="options.from" p-label="from"></po-number>
+      <po-number class="po-md-3" name="from" [(ngModel)]="options.to" p-label="to"></po-number>
+      <po-input class="po-md-3" name="label" [(ngModel)]="options.label" p-label="label"></po-input>
+      <po-input class="po-md-3" name="color" [(ngModel)]="options.color" p-label="color"></po-input>
+    </div>
+    <div class="row">
+      <po-button
+        class="po-md-3"
+        p-label="Add Range"
+        [p-disabled]="rangesForm.invalid || isEmptyObject"
+        (p-click)="addRange()"
+      ></po-button>
+    </div>
+  </form>
+</form>
+
+<div class="po-row">
+  <po-divider class="po-md-12"></po-divider>
+  <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"></po-button>
+</div>

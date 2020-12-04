@@ -1,0 +1,12 @@
+<svg:g>
+  <svg:path
+    class="po-gauge-base"
+    [attr.d]="baseCoordinates?.coordinates">
+  </svg:path> 
+
+  <svg:path *ngFor="let range of rangesCoordinates; trackBy: trackBy"
+    [class]="range?.color?.includes('po-color') ? range.color : ''"
+    [attr.d]="range?.coordinates"
+    [attr.fill]="range?.color">
+  </svg:path> 
+</svg:g>

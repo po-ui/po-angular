@@ -14,6 +14,7 @@ import { PoDividerModule } from './po-divider/po-divider.module';
 import { PoDropdownModule } from './po-dropdown/po-dropdown.module';
 import { PoDynamicModule } from './po-dynamic/po-dynamic.module';
 import { PoFieldModule } from './po-field/po-field.module';
+import { PoGaugeModule } from './po-gauge/po-gauge.module';
 import { PoGridModule } from './po-grid/po-grid.module';
 import { PoInfoModule } from './po-info/po-info.module';
 import { PoListViewModule } from './po-list-view/po-list-view.module';
@@ -36,7 +37,6 @@ import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
 
 @NgModule({
-  declarations: [],
   imports: [
     PoAccordionModule,
     PoAvatarModule,
@@ -52,6 +52,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoDropdownModule,
     PoDynamicModule,
     PoFieldModule,
+    PoGaugeModule,
     PoGridModule,
     PoInfoModule,
     PoListViewModule,
@@ -88,6 +89,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoDropdownModule,
     PoDynamicModule,
     PoFieldModule,
+    PoGaugeModule,
     PoGridModule,
     PoInfoModule,
     PoListViewModule,

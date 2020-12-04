@@ -1,0 +1,30 @@
+<div class="po-gauge-description">
+  <ng-container *ngTemplateOutlet="hasRanges ? rangesDescription : percentageDescription"> </ng-container>
+</div>
+
+<ng-template #rangesDescription>
+  <p
+    #descriptionText
+    *ngIf="description"
+    class="po-gauge-description-text po-gauge-description-upper-text"
+    [p-tooltip]="tooltip"
+    (mouseenter)="verifyIfHasEllipsis()"
+  >
+    {{ description }}
+  </p>
+</ng-template>
+
+<ng-template #percentageDescription>
+  <div class="po-gauge-description-bottom" tabindex="0" [style.width.px]="descriptionWidth">
+    <p *ngIf="isValidValue" class="po-gauge-description-bottom-value">{{ value }}%</p>
+    <p
+      #descriptionText
+      *ngIf="description"
+      class="po-gauge-description-text po-gauge-description-bottom-text"
+      [p-tooltip]="tooltip"
+      (mouseenter)="verifyIfHasEllipsis()"
+    >
+      {{ description }}
+    </p>
+  </div>
+</ng-template>

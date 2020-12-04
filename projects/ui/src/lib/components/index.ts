@@ -14,6 +14,7 @@ export * from './po-divider/index';
 export * from './po-dropdown/index';
 export * from './po-dynamic/index';
 export * from './po-field/index';
+export * from './po-gauge/index';
 export * from './po-grid/index';
 export * from './po-info/index';
 export * from './po-list-view/index';
