@@ -1,0 +1,16 @@
+<ul class="po-gauge-legend">
+  <li class="po-gauge-legend-item" *ngFor="let range of ranges; trackBy: trackBy">
+    <ng-container
+      *ngTemplateOutlet="range.color?.includes('po-color') ? colorpalette : colorstyle; context: { $implicit: range }"
+    ></ng-container>
+    <p class="po-gauge-legend-text">{{ range.label }}</p>
+  </li>
+</ul>
+
+<ng-template #colorpalette let-range>
+  <span class="po-gauge-legend-square" [class]="range.color"></span>
+</ng-template>
+
+<ng-template #colorstyle let-range>
+  <span class="po-gauge-legend-square" [style.background]="range.color"></span>
+</ng-template>

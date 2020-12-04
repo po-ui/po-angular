@@ -1,0 +1,14 @@
+<svg:svg
+  *ngIf="addSvgElement"
+  class="po-gauge-svg"
+  preserveAspectRatio="xMidYMax meet"
+  width="100%"
+  [attr.viewBox]="viewBox"
+  [attr.height]="container?.height"
+>
+  <!-- GAUGE PATHS -->
+  <svg:g po-gauge-path [p-base-coordinates]="baseCoordinates" [p-ranges-coordinates]="coordinates"></svg:g>
+
+  <!-- GAUGE POINTER -->
+  <svg:g *ngIf="hasRanges" po-gauge-pointer [p-coordinates]="pointerCoordinates"></svg:g>
+</svg:svg>

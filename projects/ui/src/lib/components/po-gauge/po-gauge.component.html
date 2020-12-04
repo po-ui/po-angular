@@ -1,0 +1,15 @@
+<div class="po-gauge-wrapper" [style.height.px]="height">
+  <po-gauge-title #titleEl [p-title]="title"></po-gauge-title>
+
+  <po-gauge-description
+    #descriptionEl
+    [p-description]="description"
+    [p-description-width]="height"
+    [p-has-ranges]="hasRanges"
+    [p-value]="value"
+  ></po-gauge-description>
+
+  <po-gauge-svg #svgEl [p-container]="svgContainer" [p-ranges]="ranges" [p-value]="value"></po-gauge-svg>
+
+  <po-gauge-legend #legendEl [p-ranges]="ranges"> </po-gauge-legend>
+</div>

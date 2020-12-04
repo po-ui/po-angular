@@ -1,0 +1,21 @@
+<po-container>
+  <div class="po-font-title po-mb-3">Sales Performance</div>
+  <div class="po-row">
+    <div class="po-md-6">
+      <po-gauge
+        p-title="Employee turnover rate"
+        p-value="25"
+        p-description="25% of turnover"
+        [p-ranges]="turnoverRanges"
+      ></po-gauge>
+    </div>
+    <div class="po-md-6">
+      <po-gauge
+        p-title="Sales performance"
+        p-value="82"
+        p-description="The sales increased in 82% in the first bimester of 2020"
+        [p-ranges]="salesRanges"
+      ></po-gauge>
+    </div>
+  </div>
+</po-container>
