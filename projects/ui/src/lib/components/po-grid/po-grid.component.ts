@@ -177,10 +177,6 @@ export class PoGridComponent implements OnDestroy {
     let prow = +row;
     let pcol = +col;
 
-    // event.preventDefault();
-    // event.stopPropagation();
-
-    // debugger;
     if (direction === 'down') {
       if (row <= this.data.length) {
         prow++;
@@ -226,11 +222,9 @@ export class PoGridComponent implements OnDestroy {
     }
 
     if (this.currencyCell === `${prow}-${pcol}`) {
-      // console.log('vazou');
       return;
     }
 
-    // debugger;
     if (prow !== this.currencyRow && row > 0 && this.data.length >= row) {
       if (!this.isEmptyRow(row)) {
         if (!this.saveRow(row)) {
@@ -245,7 +239,6 @@ export class PoGridComponent implements OnDestroy {
 
     if (this.currencyRow !== prow) {
       this.currencyObj = Object.assign({}, this.data[prow - 1]);
-      // console.log('mudou de linha');
     }
 
     this.lastCell = event.target.id;
@@ -286,7 +279,6 @@ export class PoGridComponent implements OnDestroy {
       }
 
       this.currencyObj = Object.assign({}, this.data[prow - 1]);
-      // console.log('>>>>>>> ', prow - 1);
     }
 
     this.lastCell = this.currencyCell;
@@ -299,12 +291,9 @@ export class PoGridComponent implements OnDestroy {
   }
 
   saveRow(row: number): boolean {
-    // console.log(this.data[row - 1]);
-
     const obj = this.data[row - 1];
 
     if (!Object.keys(obj).some(prop => obj[prop] !== this.currencyObj[prop])) {
-      // console.log('tudo igual');
       return true;
     }
 
@@ -329,8 +318,6 @@ export class PoGridComponent implements OnDestroy {
     if (this.rowActions.beforeInsert && !this.rowActions.beforeInsert(obj)) {
       return false;
     }
-
-    // this.currencyObj = Object.assign({}, obj);
 
     this.data.push(obj);
     this.changeDetectorRef.detectChanges();

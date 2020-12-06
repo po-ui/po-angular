@@ -25,14 +25,7 @@
       (keydown.arrowleft)="$event.stopPropagation()"
       (keydown.arrowright)="$event.stopPropagation()"
       (keydown)="onKeyDownInput($event)"
-      (blur)="onBlurInput($event)"
+      (blur)="onBlurInput()"
     />
-
-    <!-- <po-input
-      #inputElement class="po-grid-cell-input"
-      [(ngModel)]="editValue"
-      (keydown)="onKeyDownInput($event)"
-      (p-blur)="onBlurInput($event)">
-    </po-input> -->
   </ng-template>
 </div>
