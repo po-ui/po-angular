@@ -160,8 +160,27 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    * }
    * ```
    * > Esta propriedade sobrepõe o valor da propriedade `p-field-label` na descrição do campo.
+   *
+   * Pode-se informar uma lista de propriedades que deseja exibir como descrição do campo, Por exemplo:
+   * ```
+   * <po-lookup
+   *  ...
+   *  [p-field-format]="['id','nickname']"
+   *  ...
+   * >
+   *
+   * Objeto retornado:
+   *   {
+   *      id:123,
+   *      name: 'Kakaroto',
+   *      nickname: 'Goku',
+   *   }
+   * Apresentação no campo: 123 - Goku
+   * ```
+   *
+   * > Será utilizado ` - ` como separador.
    */
-  @Input('p-field-format') fieldFormat?: (value) => string;
+  @Input('p-field-format') fieldFormat?: ((value) => string) | Array<string>;
 
   /**
    * Lista das colunas da tabela.

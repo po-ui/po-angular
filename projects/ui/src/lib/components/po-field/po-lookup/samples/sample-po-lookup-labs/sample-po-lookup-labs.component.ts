@@ -21,7 +21,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
   columnsName: Array<string>;
   customLiterals: PoLookupLiterals;
   event: string;
-  fieldFormat: (objectSelected) => string;
+  fieldFormat: Array<string>;
+  formatField: string;
   fieldLabel: string;
   fieldValue: string;
   filterService: PoLookupFilter | string;
@@ -58,7 +59,6 @@ export class SamplePoLookupLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
-    { value: 'fieldFormat', label: 'Field format' },
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' }
@@ -82,14 +82,10 @@ export class SamplePoLookupLabsComponent implements OnInit {
     }
   }
 
-  fieldFormatFn(objectSelected) {
-    return `${objectSelected.id} - ${objectSelected.name}`;
-  }
-
-  onChangeProperties(properties: Array<string>) {
-    if (properties.includes('fieldFormat')) {
-      this.fieldFormat = this.fieldFormatFn;
-    } else {
+  onFieldFormatChange(event) {
+    try {
+      this.fieldFormat = JSON.parse(event);
+    } catch {
       this.fieldFormat = undefined;
     }
   }
@@ -109,7 +105,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
 
     this.fieldLabel = 'name';
     this.fieldValue = 'id';
-
+    this.fieldFormat = undefined;
+    this.formatField = undefined;
     this.event = undefined;
     this.filterService = undefined;
     this.label = undefined;
