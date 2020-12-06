@@ -95,13 +95,9 @@ export class PoGridCellComponent {
   }
 
   onKeyDownInput(event: any) {
-    // console.log('onKeyDownInput: ', event);
-
     // ENTER
     if (event.keyCode === 13) {
-      this.value = this.editValue;
-      this.editValue = undefined;
-      this.edit = false;
+      event.target.blur();
       this.changeDetectorRef.detectChanges();
       this.contentElement.nativeElement.focus();
     }
