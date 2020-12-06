@@ -324,6 +324,34 @@ describe('PoLookupComponent:', () => {
       expect(component.inputEl.nativeElement.value).toBe('123 - teste');
     });
 
+    it('setInputValueWipoieldFormat: should set input value and old value with formatedField  if fieldFormat is array', () => {
+      component.fieldFormat = ['label', 'value'];
+      component['setInputValueWipoieldFormat'](objectSelected);
+      expect(component['oldValue']).toBe('teste - 123');
+      expect(component.inputEl.nativeElement.value).toBe('teste - 123');
+    });
+
+    it('formatFields: shouldformat the return based on the array sent by fieldFormat, even if the array contains an invalid property ', () => {
+      component.fieldFormat = ['label', 'cnpj'];
+      expect(component['formatFields'](objectSelected, component.fieldFormat)).toBe('teste');
+    });
+
+    it('formatFields: should format the return based on the default fieldValue sent if fieldFormat is an invalid value', () => {
+      component.fieldValue = 'value';
+      expect(component['formatFields'](objectSelected, 'abc')).toBe(123);
+    });
+
+    it('formatFields: should formats the return based on the array sent by fieldFormat ', () => {
+      component.fieldFormat = ['label', 'value'];
+      expect(component['formatFields'](objectSelected, component.fieldFormat)).toBe('teste - 123');
+    });
+
+    it('formatFields: should format the return based on the default fieldValue sent if the fieldFormat is undefined', () => {
+      component.fieldFormat = ['label', 'value'];
+      component.fieldValue = 'value';
+      expect(component['formatFields'](objectSelected, undefined)).toBe(123);
+    });
+
     it('setInputValueWipoieldFormat: should set `oldValue` and `inputValue` to `` ', () => {
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
       component['oldValue'] = '';

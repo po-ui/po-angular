@@ -89,12 +89,22 @@
 
   <div class="po-row">
     <po-input
-      class="po-lg-6"
+      class="po-lg-12"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: { "modalTitle": "Select a register", "modalPrimaryActionLabel": "Select", "modalPlaceholder": "Search Value" }'
       p-label="Literals"
       (p-change)="changeLiterals()"
+    >
+    </po-input>
+
+    <po-input
+      name="formatField"
+      [(ngModel)]="formatField"
+      class="po-lg-6"
+      p-label="Field Format"
+      p-help='Ex.: ["id", "name"]'
+      (p-change)="onFieldFormatChange($event)"
     >
     </po-input>
 
@@ -105,7 +115,6 @@
       p-columns="3"
       p-label="Properties"
       [p-options]="propertiesOptions"
-      (p-change)="onChangeProperties($event)"
     >
     </po-checkbox-group>
   </div>

@@ -181,10 +181,35 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
     return !!(this.service && !this.disabled);
   }
+  private formatFields(objectSelected, properties) {
+    let formatedField;
+    if (Array.isArray(properties)) {
+      for (const property of properties) {
+        if (objectSelected && objectSelected[property]) {
+          if (!formatedField) {
+            formatedField = objectSelected[property];
+          } else {
+            formatedField = formatedField + ' - ' + objectSelected[property];
+          }
+        }
+      }
+    }
+
+    if (!formatedField) {
+      formatedField = objectSelected[this.fieldValue];
+    }
+    return formatedField;
+  }
 
   private setInputValueWipoieldFormat(objectSelected: any) {
     const isEmpty = Object.keys(objectSelected).length === 0;
-    const fieldFormated = this.fieldFormat(objectSelected);
+    let fieldFormated;
+
+    if (Array.isArray(this.fieldFormat)) {
+      fieldFormated = this.formatFields(objectSelected, this.fieldFormat);
+    } else {
+      fieldFormated = this.fieldFormat(objectSelected);
+    }
 
     this.oldValue = isEmpty ? '' : fieldFormated;
     this.inputEl.nativeElement.value = isEmpty ? '' : fieldFormated;
