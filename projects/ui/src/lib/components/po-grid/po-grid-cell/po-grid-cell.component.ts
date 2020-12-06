@@ -44,8 +44,8 @@ export class PoGridCellComponent {
     return this._value;
   }
 
-  @ViewChild('inputElement', { static: true }) inputElement: ElementRef;
-  @ViewChild('contentElement', { static: true }) contentElement: ElementRef;
+  @ViewChild('inputElement') inputElement: ElementRef;
+  @ViewChild('contentElement') contentElement: ElementRef;
 
   constructor(private changeDetectorRef: ChangeDetectorRef) {}
 
