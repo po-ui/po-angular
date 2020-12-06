@@ -12,13 +12,9 @@ export class PoGridCellActionComponent {
   constructor() {}
 
   onKeyDownContent(event) {
-    // console.log('onKeyDownContent: ', event);
-
     // ENTER
     if (event.keyCode === 13) {
       event.preventDefault();
-
-      // this.openActions(this.value);
 
       return;
     }

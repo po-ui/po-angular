@@ -19,8 +19,7 @@ export class SamplePoGridBasicComponent {
     { property: 'occupation', label: 'Cargo', width: 150 },
     { property: 'email', label: 'E-mail', width: 100, required: true },
     { property: 'status', label: 'Status', align: 'center', width: 80 },
-    { property: 'lastActivity', label: 'Última atividade', align: 'center', width: 140 },
-    { property: 'actions', label: '.', align: 'center', readonly: true, action: true }
+    { property: 'lastActivity', label: 'Última atividade', align: 'center', width: 140 }
   ];
 
   data = [
@@ -30,8 +29,7 @@ export class SamplePoGridBasicComponent {
       occupation: 'Developer',
       email: 'jhonatas.silvano@po-ui.com.br',
       status: 'Active',
-      lastActivity: '2018-12-12',
-      actions: '...'
+      lastActivity: '2018-12-12'
     },
     {
       id: 78492341,
@@ -39,8 +37,7 @@ export class SamplePoGridBasicComponent {
       occupation: 'Engineer',
       email: 'rafael.goncalvez@po-ui.com.br',
       status: 'Active',
-      lastActivity: '2018-12-10',
-      actions: '...'
+      lastActivity: '2018-12-10'
     },
     {
       id: 986434,
@@ -48,8 +45,7 @@ export class SamplePoGridBasicComponent {
       occupation: 'Developer',
       email: 'nicoli.pereira@po-ui.com.br',
       status: 'Active',
-      lastActivity: '2018-12-12',
-      actions: '...'
+      lastActivity: '2018-12-12'
     },
     {
       id: 4235652,
@@ -57,8 +53,7 @@ export class SamplePoGridBasicComponent {
       occupation: 'Developer',
       email: 'mauricio.joao@po-ui.com.br',
       status: 'Active',
-      lastActivity: '2018-11-23',
-      actions: '...'
+      lastActivity: '2018-11-23'
     },
     {
       id: 629131,
@@ -66,8 +61,7 @@ export class SamplePoGridBasicComponent {
       occupation: 'Engineer',
       email: 'leandro.oliveira@po-ui.com.br',
       status: 'Active',
-      lastActivity: '2018-11-30',
-      actions: '...'
+      lastActivity: '2018-11-30'
     }
   ];
 

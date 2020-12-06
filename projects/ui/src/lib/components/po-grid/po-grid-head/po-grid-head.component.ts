@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'po-grid-head',
@@ -23,6 +23,4 @@ export class PoGridHeadComponent {
   }
 
   @Input('p-title') title?: string;
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 }

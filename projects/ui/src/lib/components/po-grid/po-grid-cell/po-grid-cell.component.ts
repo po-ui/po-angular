@@ -35,7 +35,7 @@ export class PoGridCellComponent {
   @Input('p-required') required?: boolean = false;
 
   @Output('p-valueChange') valueChange = new EventEmitter<any>();
-  // @Input('p-value') value?: string;
+
   @Input('p-value') set value(value: any) {
     this._value = value;
     this.valueChange.emit(this._value);
@@ -50,8 +50,6 @@ export class PoGridCellComponent {
   constructor(private changeDetectorRef: ChangeDetectorRef) {}
 
   onKeyDownContent(event: any) {
-    // console.log('onKeyDownContent: ', event);
-
     // BACKSPACE / DELETE
     if (!event.ctrlKey && (event.keyCode === 8 || event.keyCode === 46)) {
       if (this.readonly) {
@@ -79,16 +77,12 @@ export class PoGridCellComponent {
   }
 
   dblclick(event: any) {
-    // console.log('dblclick: ', event);
-
     event.preventDefault();
 
     this.onEditCell(this.value);
   }
 
-  onBlurInput(event: any) {
-    // console.log('onBlurInput: ', event);
-
+  onBlurInput() {
     this.value = this.editValue;
     this.editValue = undefined;
     this.edit = false;
