@@ -5,6 +5,8 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
 /**
  * @description
  *
+ * > Componente em desenvolvimento, podendo haver BREAKING CHANGES nas próximas versões.
+ *
  * Componente grid.
  *
  * Ações / atalhos:
@@ -128,7 +130,7 @@ export class PoGridComponent implements OnDestroy {
   }
 
   cancelRow(event: any, row: any) {
-    const el = event.path.find(element => element.id);
+    const el = this.getEventPath(event).find(element => element.id);
 
     if (!el) {
       return;
@@ -254,7 +256,7 @@ export class PoGridComponent implements OnDestroy {
   }
 
   tableClick(event: any) {
-    const el = event.path.find(element => element.id);
+    const el = this.getEventPath(event).find(element => element.id);
 
     if (!el) {
       this.selectCell(this.currencyRow, this.currencyColumn);
@@ -358,5 +360,10 @@ export class PoGridComponent implements OnDestroy {
       this.currencyColumn = col;
       nextCell.focus();
     }
+  }
+
+  private getEventPath(event) {
+    // firefox do not have support to event.path
+    return event.path || event.composedPath();
   }
 }
