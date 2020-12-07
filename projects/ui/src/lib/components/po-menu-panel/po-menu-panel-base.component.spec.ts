@@ -35,10 +35,6 @@ describe('PoMenuPanelBaseComponent: ', () => {
       expect(component['validateMenus']).toHaveBeenCalled();
     });
 
-    it('logo: should set `logo` with default value', () => {
-      expect(component.logo).toEqual(poDefaultLogo);
-    });
-
     it('logo: should set `logo` with the developer image url', () => {
       const src = 'https://po-ui.io/assets/po-logos/po_color_bg.svg';
       component.logo = src;
