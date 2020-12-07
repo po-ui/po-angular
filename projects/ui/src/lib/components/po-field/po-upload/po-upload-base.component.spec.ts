@@ -183,6 +183,12 @@ describe('PoUploadBaseComponent:', () => {
         component.isMultiple = true;
       });
 
+      it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+        const expectedValue = true;
+        component.setDisabledState(expectedValue);
+        expect(component.disabled).toBe(expectedValue);
+      });
+
       it(`should return false if 'fileRestrictions' is undefined.`, () => {
         component.fileRestrictions = undefined;
 

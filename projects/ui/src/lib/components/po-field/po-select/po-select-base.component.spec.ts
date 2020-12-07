@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { ChangeDetectorRef, Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -164,6 +164,18 @@ describe('PoSelectBaseComponent:', () => {
       component['validateModel']();
 
       expect(component['onValidatorChange']).toHaveBeenCalled();
+    });
+
+    it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+      component.changeDetector = <any>{ detectChanges: () => {} };
+
+      spyOn(component.changeDetector, 'detectChanges');
+
+      const expectedValue = true;
+      component.setDisabledState(expectedValue);
+      expect(component.disabled).toBe(expectedValue);
+
+      expect(component.changeDetector.detectChanges).toHaveBeenCalled();
     });
 
     it('validateModel: shouldn`t call `onValidatorChange` when it is false.', () => {

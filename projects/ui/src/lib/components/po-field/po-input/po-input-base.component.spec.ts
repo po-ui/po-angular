@@ -267,6 +267,12 @@ describe('PoInputBase:', () => {
       expect(component['validatorChange']).toHaveBeenCalledWith();
     });
 
+    it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+      const expectedValue = true;
+      component.setDisabledState(expectedValue);
+      expect(component.disabled).toBe(expectedValue);
+    });
+
     it('registerOnValidatorChange: should register validatorChange function', () => {
       const registerOnValidatorChangeFn = () => {};
 

@@ -103,6 +103,12 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     expect(component.change.emit).toHaveBeenCalledWith(valuesObject);
   });
 
+  it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+    const expectedValue = true;
+    component.setDisabledState(expectedValue);
+    expect(component.disabled).toBe(expectedValue);
+  });
+
   it('should update checked options list on changeValue (ngModelChange)', () => {
     component.checkedOptionsList = [].concat(valuesList);
     component.indeterminate = false;

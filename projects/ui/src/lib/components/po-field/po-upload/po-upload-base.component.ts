@@ -515,6 +515,12 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
   abstract sendFeedback(): void;
 
+  // Função implementada do ControlValueAccessor
+  // Usada para interceptar os estados de habilitado via forms api
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
+
   registerOnChange(fn: any): void {
     this.onModelChange = fn;
   }

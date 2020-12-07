@@ -122,6 +122,12 @@ describe('PoSwitchBaseComponent:', () => {
     expect(component.change.emit).not.toHaveBeenCalled();
   });
 
+  it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+    const expectedValue = true;
+    component.setDisabledState(expectedValue);
+    expect(component.disabled).toBe(expectedValue);
+  });
+
   it('should updated switchValue on writeValue', () => {
     component.switchValue = true;
 

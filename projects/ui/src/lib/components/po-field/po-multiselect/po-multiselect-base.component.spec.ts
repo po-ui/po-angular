@@ -186,6 +186,12 @@ describe('PoMultiselectBaseComponent:', () => {
     expect(component.visibleOptionsDropdown.length).toBe(1);
   });
 
+  it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+    const expectedValue = true;
+    component.setDisabledState(expectedValue);
+    expect(component.disabled).toBe(expectedValue);
+  });
+
   it('should call onModelChange and eventChange', () => {
     const fakeThis = {
       onModelChange: v => {},
