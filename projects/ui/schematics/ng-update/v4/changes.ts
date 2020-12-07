@@ -17,5 +17,5 @@ export const updateDepedenciesVersion: UpdateDependencies = {
     '@po-ui/ng-sync',
     '@po-ui/style'
   ],
-  devDependencies: [{ package: '@po-ui/ng-tslint', version: '0.0.0-PLACEHOLDER' }]
+  devDependencies: [{ package: '@po-ui/ng-tslint', version: '4.0.0' }]
 };

@@ -2,8 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [4.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v3.14.0...v4.0.0-rc.1) (2020-11-30)
-
+# [4.0.0](https://github.com/po-ui/po-angular/compare/v3.14.0...v4.0.0) (2020-12-07)
 
 ### ⚠ BREAKING CHANGES
 
@@ -51,6 +50,19 @@ Depois:
 <po-page-login p-product-name="Nome do meu produto"></po-page-login>
 ```
 
+* **chart:** altera `axisXGridLines` para `gridLines`
+
+Antes:
+```
+<po-chart [p-options]="{ axis: { axisXGridLines: 8 } }"></po-chart>
+```
+
+Depois:
+```
+<po-chart [p-options]="{ axis: { gridLines: 8 } }"></po-chart>
+```
+
+
 ### Bug Fixes
 
 * **dynamic-form:** corrige disparo do evento `p-validate` quando utilizado `po-lookup` ([67202de](https://github.com/po-ui/po-angular/commit/67202de257d88dac6925f3533630107c68d5f716))
@@ -61,6 +73,7 @@ Depois:
 
 * **page-list:** remove a propriedade `PoPageFilter.ngModel` ([6ff7def](https://github.com/po-ui/po-angular/commit/6ff7def6eef565b7b10dc3a271ae93203086845b))
 * **page-login:** remove a propriedade `PoPageLoginLiterals.title` ([b1b5a42](https://github.com/po-ui/po-angular/commit/b1b5a42f109d271a9b0a3ba44e70acd542d70771))
+* **chart:** altera `axisXGridLines` para `gridLines` ([91d3943](https://github.com/po-ui/po-angular/commit/91d394310dc0abe600872f71b98f94d8b8254fd1))
 
 
 ### Features
@@ -73,6 +86,11 @@ Depois:
 * **modal:** traduzir literais para os idiomas suportados ([a2bcc9c](https://github.com/po-ui/po-angular/commit/a2bcc9c44be22e8f2471192135699e260a74ad71))
 * **number:** permite usar números decimais nas propriedades `p-min` e `p-max` ([300cae0](https://github.com/po-ui/po-angular/commit/300cae098115df9b2c0d6a796b54400b98ec44d7))
 * **table:** adiciona propriedade `p-auto-collapse` ([b6df125](https://github.com/po-ui/po-angular/commit/b6df12502480529c4237bd20a0ce14d615fbdd77)), closes [#167](https://github.com/po-ui/po-angular/issues/167)
+* **field-container:** exporta o módulo PoFieldContainerModule ([2dcb5a5](https://github.com/po-ui/po-angular/commit/2dcb5a56d48166065f5a8b75907d76a504164296)), closes [#148](https://github.com/po-ui/po-angular/issues/148)
+* **menu-panel:** inclui propriedade `p-logo` ([e7a89e8](https://github.com/po-ui/po-angular/commit/e7a89e86ac13f4f17d5a60c38791b436d0362c18))
+* **migration:** modifica `axisXGridLines` no `ng-update` ([d669954](https://github.com/po-ui/po-angular/commit/d669954ed490f42927f61d35e36fddc4820d654c))
+* **page-dynamic-table:** ordena a ação de excluir por ultimo na tabela ([8ebec97](https://github.com/po-ui/po-angular/commit/8ebec97df96f3621d8c7fc1e379eb1d8d6550b1d))
+* **chart:** adiciona gráfico do tipo `bar` ([285a41e](https://github.com/po-ui/po-angular/commit/285a41e68ad19a21744da31732c67119331430d7))
 
 
 # [3.14.0](https://github.com/po-ui/po-angular/compare/v3.13.0...v3.14.0) (2020-11-23)
