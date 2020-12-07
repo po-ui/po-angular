@@ -343,6 +343,12 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   abstract focus(): void;
 
   // Função implementada do ControlValueAccessor
+  // Usada para interceptar os estados de habilitado via forms api
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
+
+  // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model
   registerOnChange(func: any): void {
     this.onChangePropagate = func;

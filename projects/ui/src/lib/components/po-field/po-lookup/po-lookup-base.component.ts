@@ -360,6 +360,12 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
     }
   }
 
+  // Função implementada do ControlValueAccessor
+  // Usada para interceptar os estados de habilitado via forms api
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
+
   registerOnValidatorChange(fn: () => void) {
     this.validatorChange = fn;
   }

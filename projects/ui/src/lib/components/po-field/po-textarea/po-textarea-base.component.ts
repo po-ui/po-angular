@@ -233,6 +233,12 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
     }
   }
 
+  // Função implementada do ControlValueAccessor
+  // Usada para interceptar os estados de habilitado via forms api
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
+
   // Funções `registerOnChange`, `registerOnTouched` e `registerOnValidatorChange` implementadas referentes ao ControlValueAccessor
   // usadas para interceptar as mudanças e não atualizar automaticamente o Model
   registerOnChange(func: any): void {

@@ -201,6 +201,13 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
     return null;
   }
 
+  // Função implementada do ControlValueAccessor
+  // Usada para interceptar os estados de habilitado via forms api
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+    this.changeDetector.detectChanges();
+  }
+
   registerOnChange(fn: any): void {
     this.onModelChange = fn;
   }

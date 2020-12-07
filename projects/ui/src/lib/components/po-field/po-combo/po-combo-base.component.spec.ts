@@ -573,6 +573,12 @@ describe('PoComboBaseComponent:', () => {
       expect(component.selectedValue).toBe(value);
     });
 
+    it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+      const expectedValue = true;
+      component.setDisabledState(expectedValue);
+      expect(component.disabled).toBe(expectedValue);
+    });
+
     it(`updateSelectedValueWithOldOption: should call 'updateSelectedValue' passing oldOption found and 'true' when
       'onModelChange' is undefined`, () => {
       const oldOption = { label: '1', value: 1 };

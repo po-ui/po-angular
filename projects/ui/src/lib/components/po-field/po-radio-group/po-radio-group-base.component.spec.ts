@@ -177,6 +177,12 @@ describe('PoRadioGroupBase: ', () => {
       expect(component['getGridSystemColumns'](columns, maxColumns)).toBe(4);
     });
 
+    it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+      const expectedValue = true;
+      component.setDisabledState(expectedValue);
+      expect(component.disabled).toBe(expectedValue);
+    });
+
     it('getGridSystemColumns: should return `6 grid system columns` if `columns` aren`t between columns range', () => {
       const columns = 7;
       const maxColumns = 4;

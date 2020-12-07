@@ -295,6 +295,12 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         expect(validate).toEqual(invalidDateRangeRequiredError);
       });
 
+      it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+        const expectedValue = true;
+        component.setDisabledState(expectedValue);
+        expect(component.disabled).toBe(expectedValue);
+      });
+
       it(`should call 'dateRangeObjectFailed', set 'errorMessage' as 'literals.invalidFormat'
         and return 'invalidDateRangeError'.`, () => {
         component.literals = poDatepickerRangeLiteralsDefault.pt;

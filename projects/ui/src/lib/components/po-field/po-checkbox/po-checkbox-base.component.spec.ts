@@ -52,6 +52,12 @@ describe('PoCheckboxBaseComponent:', () => {
       expect(component.change.emit).toHaveBeenCalledWith(component.checkboxValue);
     });
 
+    it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+      const expectedValue = true;
+      component.setDisabledState(expectedValue);
+      expect(component.disabled).toBe(expectedValue);
+    });
+
     it('changeValue: should call only `change.emit` with `checkboxValue` if propagateChange is `null`', () => {
       component.checkboxValue = true;
       component.propagateChange = null;

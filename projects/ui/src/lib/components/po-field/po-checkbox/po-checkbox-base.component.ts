@@ -83,6 +83,12 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     }
   }
 
+  // Função implementada do ControlValueAccessor
+  // Usada para interceptar os estados de habilitado via forms api
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
+
   registerOnChange(fn: any): void {
     this.propagateChange = fn;
   }

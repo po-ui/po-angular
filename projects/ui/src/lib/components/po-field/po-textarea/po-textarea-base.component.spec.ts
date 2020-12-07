@@ -176,6 +176,12 @@ describe('PoTextareaBase:', () => {
         expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
       });
 
+      it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+        const expectedValue = true;
+        component.setDisabledState(expectedValue);
+        expect(component.disabled).toBe(expectedValue);
+      });
+
       it('should return minlenght obj if `minlengpoailed` is true.', () => {
         const invalidMinlenghtError = {
           minlength: {

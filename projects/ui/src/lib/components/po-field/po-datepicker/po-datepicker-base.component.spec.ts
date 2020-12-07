@@ -175,6 +175,12 @@ describe('PoDatepickerBaseComponent:', () => {
     expect(component.callOnChange).toHaveBeenCalledWith('');
   });
 
+  it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+    const expectedValue = true;
+    component.setDisabledState(expectedValue);
+    expect(component.disabled).toBe(expectedValue);
+  });
+
   it('should be call callOnChange with minDate', () => {
     spyOn(component, 'callOnChange');
     component.minDate = '2000-01-01';
