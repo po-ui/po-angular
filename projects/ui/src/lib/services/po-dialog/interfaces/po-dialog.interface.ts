@@ -10,11 +10,13 @@ import { PoDialogConfirmLiterals } from './po-dialog-confirm-literals.interface'
  *
  * Interface para o título e a mensagem do serviço po-dialog.
  */
-interface PoDialogOptions {
+export interface PoDialogOptions {
   /** Título da caixa de diálogo. */
   title: string;
 
-  /** Mensagem da caixa de diálogo. */
+  /** Mensagem da caixa de diálogo.
+   * > Pode-se informar um conteúdo HTML na mensagem.
+   */
   message: string;
 }
 
