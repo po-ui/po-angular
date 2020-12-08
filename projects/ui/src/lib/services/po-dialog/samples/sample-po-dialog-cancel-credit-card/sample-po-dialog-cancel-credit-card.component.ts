@@ -63,7 +63,7 @@ export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnIni
   openConfirmDialog() {
     this.poDialog.confirm({
       title: 'Confirm',
-      message: `Hi ${this.name},  do you confirm the cancellation of the card number ${this.cardNumber} ?`,
+      message: `<p>Hi <b>${this.name}</b>.</p> <p> Do you confirm the cancellation of the card number  <i class="po-icon po-icon-credit-payment"></i> <b>${this.cardNumber}<b>? </p>`,
       confirm: () => this.confirmCancelation()
     });
   }
