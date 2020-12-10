@@ -34,6 +34,8 @@ export abstract class PoPageDefaultBaseComponent {
   private _literals: PoPageDefaultLiterals;
   private _title: string;
 
+  visibleActions: Array<PoPageAction> = [];
+
   protected language: string;
 
   @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
@@ -47,6 +49,7 @@ export abstract class PoPageDefaultBaseComponent {
    */
   @Input('p-actions') set actions(actions: Array<PoPageAction>) {
     this._actions = Array.isArray(actions) ? actions : [];
+    this.visibleActions = this.actions.filter(action => action.visible !== false);
     this.setDropdownActions();
   }
 

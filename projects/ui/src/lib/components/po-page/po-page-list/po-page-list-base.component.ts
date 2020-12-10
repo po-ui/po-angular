@@ -45,6 +45,8 @@ export abstract class PoPageListBaseComponent {
   private _literals: PoPageListLiterals;
   private _title: string;
 
+  visibleActions: Array<PoPageAction> = [];
+
   protected language: string;
   protected resizeListener: () => void;
 
@@ -59,6 +61,7 @@ export abstract class PoPageListBaseComponent {
    */
   @Input('p-actions') set actions(actions: Array<PoPageAction>) {
     this._actions = Array.isArray(actions) ? actions : [];
+    this.visibleActions = this.actions.filter(action => action.visible !== false);
     this.setDropdownActions();
   }
 

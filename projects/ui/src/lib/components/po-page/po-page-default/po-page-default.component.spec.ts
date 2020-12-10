@@ -212,8 +212,8 @@ describe('PoPageDefaultComponent desktop', () => {
 
   describe('Template', () => {
     it('actionIsDisabled: should disable page button with boolean value', () => {
-      component.actions[0] = { label: 'First Action', disabled: true };
-      component.actions[1] = { label: 'Second Action', disabled: true };
+      component.visibleActions[0] = { label: 'First Action', disabled: true };
+      component.visibleActions[1] = { label: 'Second Action', disabled: true };
 
       fixture.detectChanges();
 
@@ -222,8 +222,8 @@ describe('PoPageDefaultComponent desktop', () => {
     });
 
     it('actionIsDisabled: should disable page button with function value', () => {
-      component.actions[0] = { label: 'First Action', disabled: () => true };
-      component.actions[1] = { label: 'Second Action', disabled: () => true };
+      component.visibleActions[0] = { label: 'First Action', disabled: () => true };
+      component.visibleActions[1] = { label: 'Second Action', disabled: () => true };
 
       fixture.detectChanges();
 
@@ -264,15 +264,28 @@ describe('PoPageDefaultComponent desktop', () => {
     });
 
     it('should show only one icon in button actions.', () => {
-      component.actions[0] = { label: 'action 1', icon: 'po-icon-news' };
-      component.actions[1] = { label: 'action 2', icon: 'po-icon-news' };
-      component.actions[2] = { label: 'action 3', icon: 'po-icon-news' };
+      component.visibleActions[0] = { label: 'action 1', icon: 'po-icon-news' };
+      component.visibleActions[1] = { label: 'action 2', icon: 'po-icon-news' };
+      component.visibleActions[2] = { label: 'action 3', icon: 'po-icon-news' };
 
       fixture.detectChanges();
 
       const icons = fixture.debugElement.nativeElement.querySelectorAll('.po-icon-news');
 
       expect(icons.length).toBe(1);
+    });
+
+    it('should not display buttons that have visible equal to false', () => {
+      component.actions = [
+        { label: 'action 1', visible: true },
+        { label: 'action 2', visible: false },
+        { label: 'action 3', visible: null },
+        { label: 'action 4', visible: undefined }
+      ];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelectorAll('po-button').length).toBe(3);
     });
   });
 

@@ -107,7 +107,11 @@ export class PoPageListComponent
   }
 
   hasPageHeader(): boolean {
-    return !!(this.title || (this.actions && this.actions.length) || (this.breadcrumb && this.breadcrumb.items.length));
+    return !!(
+      this.title ||
+      (this.visibleActions && this.visibleActions.length) ||
+      (this.breadcrumb && this.breadcrumb.items.length)
+    );
   }
 
   hasCustomFilterSize(): boolean {
@@ -148,8 +152,8 @@ export class PoPageListComponent
   }
 
   setDropdownActions(): void {
-    if (this.actions.length > this.limitPrimaryActions) {
-      this.dropdownActions = this.actions.slice(this.limitPrimaryActions - 1);
+    if (this.visibleActions.length > this.limitPrimaryActions) {
+      this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
     }
   }
 

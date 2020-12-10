@@ -394,6 +394,19 @@ describe('PoPageListComponent - Desktop:', () => {
       expect(buttons.length).toBe(2);
     });
 
+    it('should not display buttons that have visible equal to false', () => {
+      component.actions = [
+        { label: 'action 1', visible: true },
+        { label: 'action 2', visible: false },
+        { label: 'action 3', visible: null },
+        { label: 'action 4', visible: undefined }
+      ];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelectorAll('po-button').length).toBe(3);
+    });
+
     it('actionIsDisabled: should not disable page buttons with boolean value', () => {
       component.actions[0] = { label: 'First Action', disabled: false };
       component.actions[1] = { label: 'Second Action', disabled: false };
