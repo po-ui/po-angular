@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <po-page-header
     *ngIf="hasPageHeader()"
-    [class.po-page-list-header-padding]="filter && !actions.length"
+    [class.po-page-list-header-padding]="filter && !visibleActions.length"
     [p-breadcrumb]="breadcrumb"
     [p-title]="title"
   >
@@ -10,33 +10,33 @@
     <div class="po-page-list-operations">
       <div class="po-page-list-actions" [class.po-page-list-actions-padding]="filter">
         <po-button
-          *ngIf="actions[0]"
+          *ngIf="visibleActions[0]"
           p-type="primary"
           [p-disabled]="actionIsDisabled(actions[0])"
-          [p-icon]="actions[0].icon"
-          [p-label]="actions[0].label"
-          (p-click)="callAction(actions[0])"
+          [p-icon]="visibleActions[0].icon"
+          [p-label]="visibleActions[0].label"
+          (p-click)="callAction(visibleActions[0])"
         >
         </po-button>
 
         <po-button
-          *ngIf="actions[1] && (actions.length === 2 || !isMobile)"
+          *ngIf="visibleActions[1] && (visibleActions.length === 2 || !isMobile)"
           [p-disabled]="actionIsDisabled(actions[1])"
-          [p-label]="actions[1].label"
-          (p-click)="callAction(actions[1])"
+          [p-label]="visibleActions[1].label"
+          (p-click)="callAction(visibleActions[1])"
         >
         </po-button>
 
         <po-button
-          *ngIf="actions.length == 3 && actions[2] && !isMobile"
-          [p-disabled]="actionIsDisabled(actions[2])"
-          [p-label]="actions[2].label"
-          (p-click)="callAction(actions[2])"
+          *ngIf="visibleActions.length == 3 && visibleActions[2] && !isMobile"
+          [p-disabled]="actionIsDisabled(visibleActions[2])"
+          [p-label]="visibleActions[2].label"
+          (p-click)="callAction(visibleActions[2])"
         >
         </po-button>
 
         <po-dropdown
-          *ngIf="actions.length > limitPrimaryActions"
+          *ngIf="visibleActions.length > limitPrimaryActions"
           [p-actions]="dropdownActions"
           [p-label]="literals.otherActions"
         >
