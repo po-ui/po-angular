@@ -1688,14 +1688,33 @@ describe('PoComboComponent - with service:', () => {
     expect(component.controlComboVisibility).toHaveBeenCalledWith(false);
   });
 
-  it('shouldn`t call updateOptionByFilteredValue if not exists selectedValue', () => {
+  it('should call updateOptionByFilteredValue if selectedValue is different of value parameter', () => {
     component.service = getFakeService([{ label: 'label', value: 1 }]);
     component.selectedValue = 'po';
 
     spyOn(component, 'updateOptionByFilteredValue');
-
     component.getObjectByValue('value');
 
+    expect(component.updateOptionByFilteredValue).toHaveBeenCalled();
+  });
+
+  it('shouldn`t call updateOptionByFilteredValue if selectedValue exists and is equal to the value', () => {
+    component.service = getFakeService([{ label: 'label', value: 1 }]);
+    component.selectedValue = 1;
+
+    spyOn(component, 'updateOptionByFilteredValue');
+
+    component.getObjectByValue(1);
+    expect(component.updateOptionByFilteredValue).not.toHaveBeenCalled();
+  });
+
+  it('should not call updateOptionByFilteredValue if the selectedOption label exists and is equal to the value', () => {
+    component.service = getFakeService([{ label: 'label', value: 1 }]);
+    component.selectedValue = 1;
+    component.selectedOption = { label: 'label', value: 1 };
+
+    spyOn(component, 'updateOptionByFilteredValue');
+    component.getObjectByValue('label');
     expect(component.updateOptionByFilteredValue).not.toHaveBeenCalled();
   });
 
@@ -1787,22 +1806,6 @@ describe('PoComboComponent - with service:', () => {
       component.getObjectByValue.apply(fakeThis, [param]);
 
       expect(fakeThis.service.getObjectByValue).toHaveBeenCalledWith(param, filterParams);
-    });
-
-    it('getObjectByValue: should not call PoComboFilterService.getObjectByValue() if selectedValue is valid', () => {
-      const param = 'value';
-      const fakeThis = {
-        service: {
-          getObjectByValue: () => {}
-        },
-        selectedValue: 'valid'
-      };
-
-      spyOn(fakeThis.service, 'getObjectByValue');
-
-      component.getObjectByValue.apply(fakeThis, [param]);
-
-      expect(fakeThis.service.getObjectByValue).not.toHaveBeenCalled();
     });
 
     it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {

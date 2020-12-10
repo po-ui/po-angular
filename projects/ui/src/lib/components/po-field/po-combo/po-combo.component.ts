@@ -368,7 +368,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   getObjectByValue(value) {
-    if (!this.selectedValue) {
+    if (this.selectedValue !== value && this.selectedOption?.label !== value) {
       this.isProcessingGetObjectByValue = true;
 
       this.getSubscription = this.service.getObjectByValue(value, this.filterParams).subscribe(
