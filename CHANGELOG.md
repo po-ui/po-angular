@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.1.0](https://github.com/po-ui/po-angular/compare/v4.0.0...v4.1.0) (2020-12-14)
+
+
+### Bug Fixes
+
+* **grid:** atualiza o valor corretamente ao pressionar ENTER ([050a52a](https://github.com/po-ui/po-angular/commit/050a52a3ce9414202cbadb0abe72f0e969969d41))
+* **grid:** corrige erro disparado ao editar uma célula ([162ff00](https://github.com/po-ui/po-angular/commit/162ff00dc279631a572140454244d581443b3184)), closes [#159](https://github.com/po-ui/po-angular/issues/159)
+
+
+### Features
+
+* **dialog:** permite informar conteúdo HTML na mensagem ([8ea85b8](https://github.com/po-ui/po-angular/commit/8ea85b8a8ead7cfa38f5a452355ef1e6ecb5b37d)), closes [#656](https://github.com/po-ui/po-angular/issues/656)
+* **fields:** permite desabilitar os campos via formGroup / formControl ([6d02f1d](https://github.com/po-ui/po-angular/commit/6d02f1dfb23c6e9409f14d61f34650efafd3d4c1)), closes [#238](https://github.com/po-ui/po-angular/issues/238)
+* **lookup:** permite informar lista de propriedades para exibir campo formatado ([b2cc0fe](https://github.com/po-ui/po-angular/commit/b2cc0fe968fd1cad43f3bf0521641bd87e85259a))
+
+
+
 # [4.0.0](https://github.com/po-ui/po-angular/compare/v3.14.0...v4.0.0) (2020-12-07)
 
 ### ⚠ BREAKING CHANGES
