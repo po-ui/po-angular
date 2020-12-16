@@ -41,8 +41,9 @@
       name="favoriteService"
       [(ngModel)]="favoriteService"
       p-clean
-      p-help="Ex.: https://thf.totvs.com.br/sample/api/favorite"
+      p-help="Ex.: https://po-sample-api.herokuapp.com/v1/favorite"
       p-label="Favorite service"
+      [p-disabled]="!breadcrumbItems?.length"
     >
     </po-input>
 
@@ -53,9 +54,12 @@
       p-clean
       p-help="Ex.: { id: 14, user: 'dev.po' }"
       p-label="Params service"
+      [p-disabled]="!breadcrumbItems?.length"
     >
     </po-input>
   </div>
+
+  <hr />
 
   <div class="po-row">
     <po-button
