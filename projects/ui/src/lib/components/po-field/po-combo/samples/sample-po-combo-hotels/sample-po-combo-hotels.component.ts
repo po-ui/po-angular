@@ -3,12 +3,9 @@ import { NgForm } from '@angular/forms';
 
 import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
-import { SamplePoComboHotelsService } from './sample-po-combo-hotels.service';
-
 @Component({
   selector: 'sample-po-combo-hotels',
-  templateUrl: './sample-po-combo-hotels.component.html',
-  providers: [SamplePoComboHotelsService]
+  templateUrl: './sample-po-combo-hotels.component.html'
 })
 export class SamplePoComboHotelsComponent {
   adults: number = 1;
@@ -18,6 +15,7 @@ export class SamplePoComboHotelsComponent {
   children: number = 0;
   hotel: string;
   rooms: number = 1;
+  filterParams = {};
 
   readonly adultsOptions: Array<PoSelectOption> = [
     { label: '1 Adult', value: 1 },
@@ -41,7 +39,7 @@ export class SamplePoComboHotelsComponent {
   @ViewChild('bookingForm', { static: true }) form: NgForm;
   @ViewChild('datepicker', { static: true }) datepickerComponent: PoDatepickerComponent;
 
-  constructor(public comboService: SamplePoComboHotelsService, private poNotification: PoNotificationService) {}
+  constructor(private poNotification: PoNotificationService) {}
 
   booking() {
     this.poNotification.success('Hotel booked successfully');
@@ -49,6 +47,11 @@ export class SamplePoComboHotelsComponent {
     this.formReset();
 
     this.datepickerComponent.focus();
+  }
+
+  onChangeParams(isLuxury: boolean) {
+    this.filterParams = isLuxury ? { category: 'Luxo' } : {};
+    this.hotel = undefined;
   }
 
   private formReset() {
