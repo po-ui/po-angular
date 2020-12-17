@@ -36,47 +36,35 @@
     </po-chart>
   </div>
 
-  <div class="po-lg-6">
+  <div class="po-md-12">
     <po-chart
-      class="po-lg-12 po-mt-2"
-      p-title="Brazilian Coffee production"
-      [p-height]="300"
-      [p-series]="brazilianCoffeeProduction"
-      [p-type]="brazilianCoffeeProductionChartType"
-    >
-    </po-chart>
-
-    <po-chart
-      class="po-lg-12 po-mt-2"
+      class="po-lg-6 po-mt-2"
       p-title="Top 5 coffee producing countries (in tons)"
       [p-series]="coffeeProduction"
       (p-series-click)="searchMore($event)"
     >
     </po-chart>
+
+    <po-chart
+      class="po-lg-6 po-mt-2"
+      p-title="Top 5 Coffee Consuming Countries (in kg per capita)"
+      [p-series]="coffeeConsumption"
+      [p-type]="coffeConsumingChartType"
+      (p-series-click)="showMeTheDates($event)"
+    >
+    </po-chart>
   </div>
 
-  <div class="po-lg-6">
-    <div class="po-row">
-      <po-chart
-        class="po-lg-12 po-mt-2"
-        [p-height]="500"
-        p-title="Top 5 Coffee Consuming Countries (in kg per capita)"
-        [p-series]="coffeeConsumption"
-        [p-type]="coffeConsumingChartType"
-        (p-series-click)="showMeTheDates($event)"
-      >
-      </po-chart>
+  <div class="po-row">
+    <po-widget class="po-md-6 po-mt-2" p-height="200">
+      <div class="po-font-title po-text-center po-pt-5">66 billion</div>
+      <div class="po-text-center">cups of coffee are consumed per year in U.S.</div>
+    </po-widget>
 
-      <po-widget class="po-lg-6 po-mt-2" p-height="200">
-        <div class="po-font-title po-text-center po-pt-5">66 billion</div>
-        <div class="po-text-center">cups of coffee are consumed per year in U.S.</div>
-      </po-widget>
-
-      <po-widget class="po-lg-6 po-mt-2" p-height="200">
-        <div class="po-font-title po-text-center po-pt-5">2nd most</div>
-        <div class="po-text-center">traded commodity in the world second to Oil.</div>
-      </po-widget>
-    </div>
+    <po-widget class="po-md-6 po-mt-2" p-height="200">
+      <div class="po-font-title po-text-center po-pt-5">2nd most</div>
+      <div class="po-text-center">traded commodity in the world second to Oil.</div>
+    </po-widget>
   </div>
 </div>
 

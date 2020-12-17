@@ -1,9 +1,15 @@
 /**
+ * deprecated 6.x.x
+ *
  * @usedBy PoChartComponent
  *
  * @description
  *
+ * **Deprecated 6.x.x**
+ *
  * Interface que define o objeto da série `PoChartType.Gauge`.
+ *
+ * > Componente depreciado, por favor utilizar componente [po-gauge](/documentation/po-gauge).
  */
 export interface PoChartGaugeSerie {
   color?: string;

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 import {
-  PoChartGaugeSerie,
   PoChartType,
   PoDialogService,
   PoDonutChartSeries,
@@ -16,12 +15,6 @@ import {
   templateUrl: './sample-po-chart-coffee-ranking.component.html'
 })
 export class SamplePoChartCoffeeRankingComponent {
-  brazilianCoffeeProduction: PoChartGaugeSerie = {
-    value: 33,
-    description: `of world's coffee beans were produced in Brazil`
-  };
-
-  brazilianCoffeeProductionChartType: PoChartType = PoChartType.Gauge;
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;
   evolutionOfCoffeeAndSomeCompetitorsType: PoChartType = PoChartType.Column;
   coffeConsumingChartType: PoChartType = PoChartType.Donut;

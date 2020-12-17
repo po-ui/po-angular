@@ -33,7 +33,7 @@ export type PoChartSeries = Array<
  * #### Boas práticas
  *
  * - Para que o gráfico não fique ilegível e incompreensível, evite uma quantia excessiva de séries.
- * - Para exibir a intensidade de um único dado dê preferência ao tipo `gauge`.
+ * - Para exibir a intensidade de um único dado dê preferência ao componente `po-gauge`.
  */
 @Directive()
 export abstract class PoChartBaseComponent {
@@ -56,10 +56,6 @@ export abstract class PoChartBaseComponent {
    * @description
    *
    * Define a altura do gráfico.
-   *
-   * O valor padrão dos gráficos são:
-   * - para o tipo *gauge*: `200px`;
-   * - para os demais tipos: `400px`.
    *
    * > O valor mínimo aceito nesta propriedade é 200.
    *
@@ -189,7 +185,7 @@ export abstract class PoChartBaseComponent {
    * Evento executado quando o usuário clicar sobre um elemento do gráfico.
    *
    * O evento emitirá o seguinte parâmetro:
-   * - *gauge*, *donut* e *pie*: um objeto contendo a categoria e valor da série.
+   * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
    * - *line*, *column* e *bar*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
    */
   @Output('p-series-click')
@@ -203,7 +199,7 @@ export abstract class PoChartBaseComponent {
    * Evento executado quando o usuário passar o *mouse* sobre um elemento do gráfico.
    *
    * O evento emitirá o seguinte parâmetro de acordo com o tipo de gráfico:
-   * - *gauge*, *donut* e *pie*: um objeto contendo a categoria e valor da série.
+   * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
    * - *line*, *column* e *bar*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
    */
   @Output('p-series-hover')
