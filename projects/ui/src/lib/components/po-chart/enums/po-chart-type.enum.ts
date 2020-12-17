@@ -12,8 +12,16 @@ export enum PoChartType {
   Donut = 'donut',
 
   /**
+   * @deprecated 6.x.x
+   *
+   * @description
+   *
+   * **Deprecated 6.x.x**
+   *
    * O gráfico de *gauge* fornece como opção uma melhor relação de intensidade de dados que nos gráficos de pizza padrão ou rosca, uma vez
    * que o centro em branco pode ser usado para exibir dados adicionais relacionados.
+   *
+   * > Componente depreciado, por favor utilizar componente [po-gauge](/documentation/po-gauge).
    */
   Gauge = 'gauge',
 
