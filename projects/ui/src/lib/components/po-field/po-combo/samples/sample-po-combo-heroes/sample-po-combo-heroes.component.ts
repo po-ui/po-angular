@@ -26,6 +26,6 @@ export class SamplePoComboHeroesComponent {
   }
 
   private getHero(heroName: string) {
-    return this.http.get(`https://po-sample-api.herokuapp.com/v1/${heroName}`);
+    return this.http.get(`https://po-sample-api.herokuapp.com/v1/heroes/${heroName}`);
   }
 }

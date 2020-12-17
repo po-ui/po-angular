@@ -76,7 +76,6 @@ const poComboContainerPositionDefault = 'bottom';
  * <example name="po-combo-hotels" title="PO Combo - Booking Hotel">
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.component.html"> </file>
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.component.ts"> </file>
- *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.service.ts"> </file>
  * </example>
  */
 @Component({

@@ -34,6 +34,7 @@
       p-label-off="No, thank you."
       p-label-on="Yes, please."
       p-label="Only Luxury Category"
+      (p-change)="onChangeParams($event)"
     >
     </po-switch>
   </div>
@@ -57,11 +58,13 @@
       p-disabled-init-filter
       p-filter-minlength="1"
       p-icon="po-icon-search"
-      p-label="Search a Hotel"
       p-required
+      p-field-label="name"
+      p-field-value="value"
+      p-label="Search a hotel"
       p-sort
-      [p-filter-service]="comboService"
-      [p-filter-params]="category"
+      p-filter-service="https://po-sample-api.herokuapp.com/v1/hotels"
+      [p-filter-params]="filterParams"
     >
     </po-combo>
   </div>
