@@ -3,9 +3,7 @@ import { EventEmitter, Input, Output, Directive } from '@angular/core';
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoDateService } from '../../services/po-date';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-
-const poCalendarLocaleDefault = 'pt';
-const poCalendarLocales = ['pt', 'en', 'es', 'ru'];
+import { poLocales } from '../../services/po-language/po-language.constant';
 
 /**
  * @description
@@ -41,7 +39,8 @@ const poCalendarLocales = ['pt', 'en', 'es', 'ru'];
  */
 @Directive()
 export class PoCalendarBaseComponent {
-  private _locale: string;
+  private shortLanguage: string;
+  private _locale: string = this.languageService.getShortLanguage();
   private _maxDate: Date;
   private _minDate: Date;
 
@@ -75,15 +74,10 @@ export class PoCalendarBaseComponent {
    *
    * Idioma do calendário.
    *
-   * Valores válidos:
-   *  - `pt`
-   *  - `en`
-   *  - `es`
-   *
-   * @default `pt`
+   * > O locale padrão sera recuperado com base no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
   @Input('p-locale') set locale(locale: string) {
-    this._locale = poCalendarLocales.includes(locale) ? locale : poCalendarLocaleDefault;
+    this._locale = poLocales.includes(locale) ? locale : this.shortLanguage;
     this.initializeLanguage();
   }
   get locale() {
@@ -155,7 +149,13 @@ export class PoCalendarBaseComponent {
   /** Evento disparado ao selecionar um dia do calendário. */
   @Output('p-change') change = new EventEmitter<string>();
 
-  constructor(public poDate: PoDateService, public poCalendarLangService: PoCalendarLangService) {}
+  constructor(
+    public poDate: PoDateService,
+    public poCalendarLangService: PoCalendarLangService,
+    private languageService: PoLanguageService
+  ) {
+    this.shortLanguage = languageService.getShortLanguage();
+  }
 
   initializeLanguage() {
     this.poCalendarLangService.setLanguage(this.locale);
