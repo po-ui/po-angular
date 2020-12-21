@@ -22,7 +22,7 @@ import { poLocales } from '../../../../services/po-language/po-language.constant
 export class PoCalendarComponent {
   private _dateEnd: Date;
   private _dateStart: Date;
-  private _locale: string;
+  private _locale: string = this.languageService.getShortLanguage();
   private _selectedDate?: Date;
 
   currentYear: number;
@@ -45,6 +45,7 @@ export class PoCalendarComponent {
   private isMobile: any = isMobile;
   private lastDisplay: string;
   private today: Date = new Date();
+  private shortLanguage: string;
 
   @ViewChild('days', { read: ElementRef, static: true }) elDays: ElementRef;
   @ViewChild('months', { read: ElementRef, static: true }) elMonths: ElementRef;
@@ -82,10 +83,7 @@ export class PoCalendarComponent {
    *
    * Idioma do calendário.
    *
-   * Valores válidos:
-   *  - `pt`
-   *  - `en`
-   *  - `es`
+   * > O locale padrão sera recuperado com base no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
   @Input('p-locale') set locale(locale: string) {
     this._locale = poLocales.includes(locale) ? locale : this.shortLanguage;
@@ -137,7 +135,13 @@ export class PoCalendarComponent {
   @Output('p-selected-dateChange') selectedDateChange = new EventEmitter<Date>();
   @Output('p-submit') submit = new EventEmitter<Date>();
 
-  constructor(private poCalendarService: PoCalendarService, private poCalendarLangService: PoCalendarLangService) {}
+  constructor(
+    private poCalendarService: PoCalendarService,
+    private poCalendarLangService: PoCalendarLangService,
+    private languageService: PoLanguageService
+  ) {
+    this.shortLanguage = languageService.getShortLanguage();
+  }
 
   close() {
     this.overlayInvisible = true;

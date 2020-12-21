@@ -17,6 +17,8 @@ import { InputBoolean } from '../../../decorators';
 import { PoMask } from '../po-input/po-mask';
 
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
 
@@ -70,7 +72,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _minDate: Date;
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
-
+  private shortLanguage: string;
   protected date: Date;
   protected firstStart = true;
   protected hour: string = 'T00:00:01-00:00';
@@ -289,21 +291,18 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * Idioma do Datepicker.
    *
-   * Valores válidos:
-   *  - `pt`
-   *  - `en`
-   *  - `es`
+   * > O locale padrão sera recuperado com base no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
   _locale?: string;
   @Input('p-locale') set locale(value: string) {
     if (value) {
-      this._locale = value.length >= 2 ? value : 'pt';
+      this._locale = value.length >= 2 ? value : poLocaleDefault;
     } else {
-      this._locale = getShortBrowserLanguage();
+      this._locale = this.shortLanguage;
     }
   }
   get locale() {
-    return this._locale || getShortBrowserLanguage();
+    return this._locale || this.shortLanguage;
   }
 
   /**
@@ -324,7 +323,9 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() {}
+  constructor(private languageService: PoLanguageService) {
+    this.shortLanguage = this.languageService.getShortLanguage();
+  }
 
   abstract writeValue(value: any): void;
 

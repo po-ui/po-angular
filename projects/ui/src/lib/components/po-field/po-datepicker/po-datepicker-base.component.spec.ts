@@ -10,6 +10,7 @@ import { expectSettersMethod, expectPropertiesValues } from '../../../util-test/
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoMask } from '../po-input/po-mask';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 @Directive()
 class PoDatepickerComponent extends PoDatepickerBaseComponent {
@@ -19,14 +20,17 @@ class PoDatepickerComponent extends PoDatepickerBaseComponent {
 
 describe('PoDatepickerBaseComponent:', () => {
   let component: PoDatepickerComponent;
+  let languageService: PoLanguageService;
+  languageService = new PoLanguageService();
 
   beforeEach(() => {
-    component = new PoDatepickerComponent();
+    component = new PoDatepickerComponent(languageService);
+    component['shortLanguage'] = 'pt';
   });
 
   it('should be created', () => {
     expect(component instanceof PoDatepickerBaseComponent).toBeTruthy();
-    expect(component.locale).toBe(getShortBrowserLanguage());
+    expect(component.locale).toBe(component['shortLanguage']);
   });
 
   it('should be update property p-disabled', () => {
@@ -117,7 +121,7 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should be update property p-locale', () => {
-    expectPropertiesValues(component, 'locale', '', languageService.getShortLanguage());
+    expectPropertiesValues(component, 'locale', '', 'pt');
     expectPropertiesValues(component, 'locale', ['pt', 'x'], 'pt');
     expectPropertiesValues(component, 'locale', 'en', 'en');
     expectPropertiesValues(component, 'locale', 'es', 'es');
