@@ -3,7 +3,7 @@ import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/com
 
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 
-import { PoDynamicFormField } from './../po-dynamic-form/po-dynamic-form-field.interface';
+import { PoDynamicViewField } from './../po-dynamic-view/po-dynamic-view-field.interface';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
 import { PoDynamicViewService } from './po-dynamic-view.service';
 
@@ -55,7 +55,7 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     }
   }
 
-  private async getValuesAndFieldsFromLoad(): Promise<{ value?: any; fields?: Array<PoDynamicFormField> }> {
+  private async getValuesAndFieldsFromLoad(): Promise<{ value?: any; fields?: Array<PoDynamicViewField> }> {
     let valueAndFieldsFromLoad;
 
     if (typeof this.load === 'string') {
@@ -75,7 +75,7 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     return this.value && this.fields.length ? this.getConfiguredFields() : this.getValueFields();
   }
 
-  private setFieldOnLoad(fieldOnLoad: PoDynamicFormField) {
+  private setFieldOnLoad(fieldOnLoad: PoDynamicViewField) {
     const index = this.fields.findIndex(field => field.property === fieldOnLoad.property);
 
     if (index >= 0) {
@@ -85,7 +85,7 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     }
   }
 
-  private setFieldsOnLoad(fields: Array<PoDynamicFormField>) {
+  private setFieldsOnLoad(fields: Array<PoDynamicViewField>) {
     if (fields) {
       fields.forEach(fieldOnLoad => {
         this.setFieldOnLoad(fieldOnLoad);

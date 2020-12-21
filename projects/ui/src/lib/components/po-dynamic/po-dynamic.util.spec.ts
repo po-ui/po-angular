@@ -2,7 +2,7 @@ import { isVisibleField, getGridColumnsClasses } from './po-dynamic.util';
 
 describe('isVisibleField:', () => {
   it('should return `true` if not contain visible property', () => {
-    const field = { property: 'name' };
+    const field: any = { property: 'name' };
 
     expect(isVisibleField(field)).toBe(true);
   });
