@@ -21,6 +21,9 @@ describe('PoCalendarLangService:', () => {
     service.setLanguage('es');
     expect(service['language']).toBe('es');
 
+    service.setLanguage('ru');
+    expect(service['language']).toBe('ru');
+
     service.setLanguage('rs');
     expect(service['language']).toBe('pt');
 

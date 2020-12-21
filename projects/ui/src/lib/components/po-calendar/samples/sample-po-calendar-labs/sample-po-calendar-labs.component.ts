@@ -16,7 +16,8 @@ export class SamplePoCalendarLabsComponent implements OnInit {
   readonly localeOptions: Array<PoRadioGroupOption> = [
     { label: 'pt', value: 'pt' },
     { label: 'es', value: 'es' },
-    { label: 'en', value: 'en' }
+    { label: 'en', value: 'en' },
+    { label: 'ru', value: 'ru' }
   ];
 
   ngOnInit() {

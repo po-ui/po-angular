@@ -1,69 +1,83 @@
 import { Injectable } from '@angular/core';
 
+import { poLocales, poLocaleDefault } from '../../../services/po-language/po-language.constant';
+
 @Injectable()
 export class PoCalendarLangService {
-  private language = 'pt';
+  private language = poLocaleDefault;
 
   private months = [
     {
       pt: 'Janeiro',
       en: 'January',
-      es: 'Enero'
+      es: 'Enero',
+      ru: 'Январь'
     },
     {
       pt: 'Fevereiro',
       en: 'February',
-      es: 'Febrero'
+      es: 'Febrero',
+      ru: 'Февраль'
     },
     {
       pt: 'Março',
       en: 'March',
-      es: 'Marzo'
+      es: 'Marzo',
+      ru: 'Март'
     },
     {
       pt: 'Abril',
       en: 'April',
-      es: 'Abril'
+      es: 'Abril',
+      ru: 'Апрель'
     },
     {
       pt: 'Maio',
       en: 'May',
-      es: 'Mayo'
+      es: 'Mayo',
+      ru: 'Май'
     },
     {
       pt: 'Junho',
       en: 'June',
-      es: 'Junio'
+      es: 'Junio',
+      ru: 'Июнь'
     },
     {
       pt: 'Julho',
       en: 'July',
-      es: 'Julio'
+      es: 'Julio',
+      ru: 'Июль'
     },
     {
       pt: 'Agosto',
       en: 'August',
-      es: 'Agosto'
+      es: 'Agosto',
+      ru: 'Август'
     },
     {
       pt: 'Setembro',
       en: 'September',
-      es: 'Setiembre'
+      es: 'Setiembre',
+      ru: 'Сентябрь'
     },
     {
       pt: 'Outubro',
       en: 'October',
-      es: 'Octubre'
+      es: 'Octubre',
+      ru: 'Октябрь'
     },
     {
       pt: 'Novembro',
       en: 'November',
-      es: 'Noviembre'
+      es: 'Noviembre',
+      ru: 'Ноябрь'
     },
     {
       pt: 'Dezembro',
       en: 'December',
-      es: 'Diciembre'
+      es: 'Diciembre',
+      ru: 'Декабрь'
     }
   ];
 
@@ -71,50 +85,59 @@ export class PoCalendarLangService {
     {
       pt: 'Dom',
       en: 'Sun',
-      es: 'Dom'
+      es: 'Dom',
+      ru: 'Вс'
     },
     {
       pt: 'Seg',
       en: 'Mon',
-      es: 'Lun'
+      es: 'Lun',
+      ru: 'Пн'
     },
     {
       pt: 'Ter',
       en: 'Tue',
-      es: 'Mar'
+      es: 'Mar',
+      ru: 'Вт'
     },
     {
       pt: 'Qua',
       en: 'Wed',
-      es: 'Mié'
+      es: 'Mié',
+      ru: 'Ср'
     },
     {
       pt: 'Qui',
       en: 'Thu',
-      es: 'Jue'
+      es: 'Jue',
+      ru: 'Чт'
     },
     {
       pt: 'Sex',
       en: 'Fri',
-      es: 'Vie'
+      es: 'Vie',
+      ru: 'Пт'
     },
     {
       pt: 'Sáb',
       en: 'Sat',
-      es: 'Sáb'
+      es: 'Sáb',
+      ru: 'Сб'
     }
   ];
 
   private monthLabel = {
     pt: 'Mês',
     en: 'Month',
-    es: 'Mes'
+    es: 'Mes',
+    ru: 'Месяц'
   };
 
   private yearLabel = {
     pt: 'Ano',
     en: 'Year',
-    es: 'Año'
+    es: 'Año',
+    ru: 'Год'
   };
 
   getMonth(month: number) {
@@ -152,7 +175,7 @@ export class PoCalendarLangService {
   setLanguage(language: string) {
     if (language && language.length >= 2) {
       language = language.toLowerCase().slice(0, 2);
-      this.language = language === 'pt' || language === 'en' || language === 'es' ? language : 'pt';
+      this.language = poLocales.includes(language) ? language : poLocaleDefault;
     }
   }
 }

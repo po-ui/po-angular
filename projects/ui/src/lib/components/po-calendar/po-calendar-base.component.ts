@@ -2,9 +2,10 @@ import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoDateService } from '../../services/po-date';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
-const poCalendarLocales = ['pt', 'en', 'es'];
 const poCalendarLocaleDefault = 'pt';
+const poCalendarLocales = ['pt', 'en', 'es', 'ru'];
 
 /**
  * @description
