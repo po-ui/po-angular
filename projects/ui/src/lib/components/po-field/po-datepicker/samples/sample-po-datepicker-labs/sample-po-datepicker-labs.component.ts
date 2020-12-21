@@ -43,7 +43,8 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
   public readonly localeOptions: Array<PoRadioGroupOption> = [
     { label: 'pt', value: 'pt' },
     { label: 'en', value: 'en' },
-    { label: 'es', value: 'es' }
+    { label: 'es', value: 'es' },
+    { label: 'ru', value: 'ru' }
   ];
 
   ngOnInit() {

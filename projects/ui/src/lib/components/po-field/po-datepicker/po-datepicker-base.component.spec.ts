@@ -117,10 +117,11 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should be update property p-locale', () => {
-    expectPropertiesValues(component, 'locale', '', getShortBrowserLanguage());
+    expectPropertiesValues(component, 'locale', '', languageService.getShortLanguage());
     expectPropertiesValues(component, 'locale', ['pt', 'x'], 'pt');
     expectPropertiesValues(component, 'locale', 'en', 'en');
     expectPropertiesValues(component, 'locale', 'es', 'es');
+    expectPropertiesValues(component, 'locale', 'ru', 'ru');
   });
 
   it('should transform a String to Date', () => {

@@ -85,7 +85,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('p-locale: should update with valid values and call `initializeLanguage`', () => {
-      const validValues = ['pt', 'es', 'en'];
+      const validValues = ['pt', 'es', 'en', 'ru'];
 
       spyOn(component, 'initializeLanguage');
 
