@@ -4,8 +4,8 @@ import { isMobile, setYearFrom0To100, validateDateRange } from '../../../../util
 import { PoCalendarLangService } from './po-calendar.lang.service';
 import { PoCalendarService } from './po-calendar.service';
 
-const poCalendarLocaleDefault = 'pt';
-const poCalendarLocales = ['pt', 'en', 'es'];
+import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+import { poLocales } from '../../../../services/po-language/po-language.constant';
 
 /**
  * @docsPrivate
@@ -88,7 +88,7 @@ export class PoCalendarComponent {
    *  - `es`
    */
   @Input('p-locale') set locale(locale: string) {
-    this._locale = poCalendarLocales.includes(locale) ? locale : poCalendarLocaleDefault;
+    this._locale = poLocales.includes(locale) ? locale : this.shortLanguage;
     this.initializeLanguage();
   }
   get locale() {
