@@ -179,7 +179,10 @@ export interface PoDynamicFormField extends PoDynamicField {
   errorMessage?: string;
 
   /**
-   * Formato de exibição da data.
+   * Formato de exibição no campo.
+   *
+   * Ao utilizar esta propriedade com o `type` *PoDynamicFieldType.Date* ou *PoDynamicFieldType.DateTime*,
+   * pode ser utilizada para formatação de exibição da data:
    *
    * Valores válidos:
    *
@@ -187,9 +190,11 @@ export interface PoDynamicFormField extends PoDynamicField {
    * - mm/dd/yyyy
    * - yyyy/mm/dd
    *
-   * > Esta propriedade pode ser utilizada quando o `type` for *PoDynamicFieldType.Date* ou *PoDynamicFieldType.DateTime*.
+   *
+   * Também pode-se utilizar em conjunto com `searchService`, informando uma lista de propriedades que será utilizado
+   * para formatação da exibição no campo, por exemplo: ["id", "name"].
    */
-  format?: string;
+  format?: string | Array<string>;
 
   /**
    * Nome da propriedade do objeto retornado que será utilizado como descrição do campo.

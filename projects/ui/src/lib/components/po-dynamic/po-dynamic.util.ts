@@ -11,7 +11,7 @@ export function getGridColumnsClasses(smColumns, mdColumns, lgColumns, xlColumns
   return `po-sm-${systemGrid.sm} po-md-${systemGrid.md} po-lg-${systemGrid.lg} po-xl-${systemGrid.xl}`;
 }
 
-export function isVisibleField(field: PoDynamicViewField): boolean {
+export function isVisibleField(field: { visible?: boolean }): boolean {
   const containsVisible = 'visible' in field;
 
   return containsVisible ? field.visible : true;

@@ -103,6 +103,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
         { property: 'nickname', label: 'Hero' },
         { property: 'label', label: 'Name' }
       ],
+      format: ['id', 'nickname'],
       fieldLabel: 'nickname',
       fieldValue: 'email'
     }
