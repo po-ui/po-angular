@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/po-ui/po-angular/compare/v4.1.0...v4.2.0) (2020-12-21)
+
+
+### Bug Fixes
+
+* **combo:** efetua disparo do getObjectByValue caso alterar valor ([f20490e](https://github.com/po-ui/po-angular/commit/f20490e))
+* **page-dynamic-table::**  corrige disparo duplicado dos recursos ([5d7a85b](https://github.com/po-ui/po-angular/commit/5d7a85b))
+
+
+### Features
+
+* **gauge:** novo componente ([3822d48](https://github.com/po-ui/po-angular/commit/3822d48))
+* **page-default|list:** permite utilizar a propriedade visible ([2f768e3](https://github.com/po-ui/po-angular/commit/2f768e3)), closes [#117](https://github.com/po-ui/po-angular/issues/117)
+* **sync:** permite envio de arquivo offline via insertHttpCommand ([bcdd296](https://github.com/po-ui/po-angular/commit/bcdd296))
+* **chart:** deprecia `PoChartType.Gauge` ([3937b9d](https://github.com/po-ui/po-angular/commit/3937b9d))
+
+
+
 # [4.1.0](https://github.com/po-ui/po-angular/compare/v4.0.0...v4.1.0) (2020-12-14)
 
 
