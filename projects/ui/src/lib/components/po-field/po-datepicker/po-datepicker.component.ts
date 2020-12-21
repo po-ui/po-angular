@@ -16,6 +16,7 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 
 import { PoCalendarComponent } from './po-calendar/po-calendar.component';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -102,8 +103,13 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
 
-  constructor(private controlPosition: PoControlPositionService, private renderer: Renderer2, el: ElementRef) {
-    super();
+  constructor(
+    private controlPosition: PoControlPositionService,
+    languageService: PoLanguageService,
+    private renderer: Renderer2,
+    el: ElementRef
+  ) {
+    super(languageService);
     this.el = el;
   }
 

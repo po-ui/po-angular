@@ -27,6 +27,8 @@ describe('PoCalendarComponent:', () => {
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;
     fixture.detectChanges();
+
+    component['shortLanguage'] = 'pt';
   });
 
   it('should be created', () => {
