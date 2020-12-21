@@ -3,17 +3,20 @@ import { PoDateService } from './../../services/po-date/po-date.service';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 describe('PoCalendarBaseComponent:', () => {
   let component: PoCalendarBaseComponent;
   let poDate: PoDateService;
   let poCalendarLangService: PoCalendarLangService;
+  let languageService: PoLanguageService;
 
   beforeEach(() => {
     poDate = new PoDateService();
     poCalendarLangService = new PoCalendarLangService();
-
-    component = new PoCalendarBaseComponent(poDate, poCalendarLangService);
+    languageService = new PoLanguageService();
+    component = new PoCalendarBaseComponent(poDate, poCalendarLangService, languageService);
+    component['shortLanguage'] = 'pt';
   });
 
   describe('Properties:', () => {

@@ -5,6 +5,7 @@ import { PoCalendarBaseComponent } from './po-calendar-base.component';
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoCalendarService } from './services/po-calendar.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 /* istanbul ignore next */
 const providers = [
@@ -53,9 +54,10 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   constructor(
     private poCalendarService: PoCalendarService,
     poCalendarLangService: PoCalendarLangService,
-    poDate: PoDateService
+    poDate: PoDateService,
+    languageService: PoLanguageService
   ) {
-    super(poDate, poCalendarLangService);
+    super(poDate, poCalendarLangService, languageService);
   }
 
   ngOnInit() {
