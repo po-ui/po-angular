@@ -14,6 +14,8 @@ import { PoChartMinMaxValues } from '../../../interfaces/po-chart-min-max-values
   templateUrl: '../po-chart-bar.component.svg'
 })
 export class PoChartColumnComponent extends PoChartBarBaseComponent {
+  readonly tooltipPosition = 'top';
+
   constructor(protected colorService: PoChartColorService, protected mathsService: PoChartMathsService) {
     super(colorService, mathsService);
   }
