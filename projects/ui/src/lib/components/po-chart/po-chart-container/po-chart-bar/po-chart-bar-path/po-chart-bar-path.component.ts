@@ -11,6 +11,8 @@ export class PoChartBarPathComponent {
 
   @Input('p-coordinates') coordinates: Array<PoChartBarCoordinates>;
 
+  @Input('p-tooltip-position') tooltipPosition: string;
+
   @Output('p-bar-click') barClick = new EventEmitter<any>();
 
   @Output('p-bar-hover') barHover = new EventEmitter<any>();
