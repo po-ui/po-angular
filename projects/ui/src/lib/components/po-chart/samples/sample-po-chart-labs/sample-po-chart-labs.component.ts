@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
-  PoChartGaugeSerie,
   PoLineChartSeries,
   PoChartType,
   PoDonutChartSeries,
@@ -21,8 +20,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   height: number;
   multipleSeries: Array<PoPieChartSeries | PoDonutChartSeries>;
   multipleValues: Array<PoLineChartSeries>;
-  series: Array<PoPieChartSeries | PoDonutChartSeries | PoLineChartSeries> | PoChartGaugeSerie;
-  singleSerie: PoChartGaugeSerie;
+  series: Array<PoPieChartSeries | PoDonutChartSeries | PoLineChartSeries>;
   title: string;
   tooltip: string;
   data: number;
@@ -42,7 +40,6 @@ export class SamplePoChartLabsComponent implements OnInit {
 
   readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Donut', value: PoChartType.Donut },
-    { label: 'Gauge', value: PoChartType.Gauge },
     { label: 'Pie', value: PoChartType.Pie },
     { label: 'Line', value: PoChartType.Line },
     { label: 'Column', value: PoChartType.Column },
@@ -52,10 +49,6 @@ export class SamplePoChartLabsComponent implements OnInit {
   ngOnInit() {
     this.restore();
     this.type = PoChartType.Line;
-  }
-
-  get isSingleSerie(): boolean {
-    return this.type === PoChartType.Gauge;
   }
 
   get isMultipleValues(): boolean {
@@ -71,9 +64,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   }
 
   addData() {
-    if (this.isSingleSerie) {
-      this.singleSerie = { value: this.data, description: this.label };
-    } else if (this.isMultipleValues) {
+    if (this.isMultipleValues) {
       const dataSeries = this.convertToArray(this.inputDataSeries);
 
       this.multipleValues = [...this.multipleValues, { label: this.multipleValuesLabel, data: dataSeries }];
@@ -85,11 +76,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   }
 
   applySeriesData() {
-    this.series = this.isSingleSerie
-      ? this.singleSerie
-      : this.isMultipleValues
-      ? this.multipleValues
-      : this.multipleSeries;
+    this.series = this.isMultipleValues ? this.multipleValues : this.multipleSeries;
   }
 
   changeEvent(eventName: string, serieEvent: PoPieChartSeries): void {
@@ -101,7 +88,6 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.categories = undefined;
     this.event = undefined;
     this.height = undefined;
-    this.singleSerie = undefined;
     this.multipleSeries = [];
     this.series = [];
     this.title = undefined;
