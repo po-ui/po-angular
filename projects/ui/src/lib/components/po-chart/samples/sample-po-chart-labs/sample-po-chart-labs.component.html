@@ -40,31 +40,11 @@
 
   <div *ngIf="!isMultipleValues">
     <div class="po-row">
-      <po-input
-        class="po-md-6"
-        name="label"
-        [(ngModel)]="label"
-        p-label="{{ isSingleSerie ? 'Description' : 'Label' }}"
-      >
-      </po-input>
+      <po-input class="po-md-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
 
-      <po-number
-        class="po-md-6"
-        name="data"
-        [(ngModel)]="data"
-        p-label="{{ isSingleSerie ? 'Value' : 'Data' }}"
-        p-required
-      >
-      </po-number>
+      <po-number class="po-md-6" name="data" [(ngModel)]="data" p-label="Data" p-required> </po-number>
 
-      <po-input
-        class="po-md-6"
-        name="tooltip"
-        [(ngModel)]="tooltip"
-        p-label="Tooltip Text"
-        [p-disabled]="isSingleSerie"
-      >
-      </po-input>
+      <po-input class="po-md-6" name="tooltip" [(ngModel)]="tooltip" p-label="Tooltip Text"> </po-input>
     </div>
   </div>
 
