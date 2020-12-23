@@ -581,7 +581,7 @@ describe('PoUploadComponent:', () => {
       it('should call uploadingHandler function when upload files', () => {
         const fakeThis = {
           uploadService: {
-            upload: function (url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
+            upload: function (url, filez, headers, tUpload, uploadCallback, successCallback, errorCallback) {
               return uploadCallback(file, 100);
             }
           },
@@ -597,7 +597,7 @@ describe('PoUploadComponent:', () => {
       it('should call responseHandler function when upload files', () => {
         const fakeThis = {
           uploadService: {
-            upload: function (url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
+            upload: function (url, filez, headers, tUpload, uploadCallback, successCallback, errorCallback) {
               return successCallback(file, 100);
             }
           },
@@ -615,7 +615,7 @@ describe('PoUploadComponent:', () => {
       it('should call responseHandler function when upload files', () => {
         const fakeThis = {
           uploadService: {
-            upload: function (url, filez, tUpload, uploadCallback, successCallback, errorCallback) {
+            upload: function (url, filez, headers, tUpload, uploadCallback, successCallback, errorCallback) {
               return errorCallback(file, 100);
             }
           },

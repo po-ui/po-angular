@@ -22,7 +22,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
   restrictions: PoUploadFileRestrictions;
   upload: Array<any>;
   url: string;
-
+  headers: { [name: string]: string | Array<string> };
+  headersLabs: string;
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'autoupload', label: 'Automatic upload' },
     { value: 'directory', label: 'Directory' },
@@ -52,6 +53,13 @@ export class SamplePoUploadLabsComponent implements OnInit {
     }
   }
 
+  onChangeHeaders(headers) {
+    try {
+      this.headers = JSON.parse(headers);
+    } catch {
+      this.headers = undefined;
+    }
+  }
   onChangeExtension() {
     this.restrictions = Object.assign({}, this.restrictions, { allowedExtensions: this.allowedExtensions.split(',') });
   }
@@ -84,6 +92,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.restrictions = {};
     this.upload = undefined;
     this.url = 'https://thf.totvs.com.br/sample/api/uploads/addFile';
+    this.headers = undefined;
+    this.headersLabs = undefined;
   }
 
   private getValueInBytes(value: number) {

@@ -464,6 +464,9 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     return this._required;
   }
 
+  /** Objeto que contém os cabeçalhos que será enviado na requisição dos arquvios. */
+  @Input('p-headers') headers: { [name: string]: string | Array<string> };
+
   /**
    * @optional
    *
