@@ -28,7 +28,7 @@ export class PoChartSvgContainerService {
     const centerX = this.center(chartWrapperWidth);
     const svgHeight = this.svgHeight(chartHeight, chartHeaderHeight, chartLegendHeight);
     const centerY = this.center(svgHeight);
-    const svgPlottingAreaWidth = this.svgPlottingAreaWidth(svgWidth, categoriesLength);
+    const svgPlottingAreaWidth = this.svgPlottingAreaWidth(svgWidth);
     const svgPlottingAreaHeight = this.svgPlottingAreaHeight(svgHeight);
 
     return {
@@ -70,11 +70,8 @@ export class PoChartSvgContainerService {
    *
    * > A largura máxima para 'svgAxisSideSpace' é de 48px.
    */
-  private svgPlottingAreaWidth(svgWidth: number, categoriesLength: number) {
-    const categoryWidth = (svgWidth - PoChartAxisXLabelArea) / categoriesLength;
-    const svgAxisSideSpace = categoryWidth <= PoChartPadding * 2 ? categoryWidth : PoChartPadding * 2;
-
-    return svgWidth - PoChartAxisXLabelArea - svgAxisSideSpace;
+  private svgPlottingAreaWidth(svgWidth: number) {
+    return svgWidth - PoChartAxisXLabelArea;
   }
 
   /**

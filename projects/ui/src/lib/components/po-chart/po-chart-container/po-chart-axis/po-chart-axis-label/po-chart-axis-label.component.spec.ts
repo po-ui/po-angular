@@ -59,7 +59,28 @@ describe('PoChartAxisXLabelComponent', () => {
       expect(chartAxisYLabel.length).toBe(2);
     });
 
-    it('should find `po-chart-centered-label` class if type is different of `Bar`', () => {
+    it('should find `po-chart-centered-label` class once if type is different of `Bar`', () => {
+      component.type = PoChartType.Line;
+
+      component.axisXLabelCoordinates = [
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 }
+      ];
+      component.axisYLabelCoordinates = [
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 },
+        { label: 'label', xCoordinate: 20, yCoordinate: 20 }
+      ];
+
+      fixture.detectChanges();
+
+      const chartCenteredLabel = nativeElement.querySelectorAll('.po-chart-centered-label');
+      expect(chartCenteredLabel).toBeTruthy();
+      expect(chartCenteredLabel.length).toBe(1);
+    });
+
+    it('shouldn`t find `po-chart-centered-label` class if type is different of `Bar` however it contains only two axisY items', () => {
       component.type = PoChartType.Line;
 
       component.axisXLabelCoordinates = [
@@ -76,7 +97,7 @@ describe('PoChartAxisXLabelComponent', () => {
 
       const chartCenteredLabel = nativeElement.querySelectorAll('.po-chart-centered-label');
       expect(chartCenteredLabel).toBeTruthy();
-      expect(chartCenteredLabel.length).toBe(2);
+      expect(chartCenteredLabel.length).toBe(0);
     });
 
     it('shouldn`t find `po-chart-centered-label` class if type is `Bar`', () => {
