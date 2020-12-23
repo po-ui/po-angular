@@ -295,10 +295,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   // Envia os arquivos passados por parâmetro, exceto os que já foram enviados ao serviço.
   uploadFiles(files: Array<PoUploadFile>) {
     const filesFiltered = files.filter(file => file.status !== PoUploadStatus.Uploaded);
-
     this.uploadService.upload(
       this.url,
       filesFiltered,
+      this.headers,
       this.onUpload,
       (file, percent): any => {
         // UPLOADING

@@ -1,5 +1,12 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient, HttpEventType, HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpEventType,
+  HttpErrorResponse,
+  HttpRequest,
+  HttpResponse,
+  HttpHeaders
+} from '@angular/common/http';
 
 import { PoUploadFile } from './po-upload-file';
 
@@ -25,6 +32,7 @@ export class PoUploadBaseService {
   public upload(
     url: string,
     files: Array<PoUploadFile>,
+    headers: { [name: string]: string | Array<string> },
     tOnUpload: EventEmitter<any>,
     uploadCallback: (file: PoUploadFile, percent: number) => void,
     successCallback: (file: PoUploadFile, event: any) => void,
@@ -51,19 +59,20 @@ export class PoUploadBaseService {
         formData.append('data', JSON.stringify(uploadEvent.data));
       }
 
-      this.sendFile(url, file, formData, uploadCallback, successCallback, errorCallback);
+      this.sendFile(url, file, headers, formData, uploadCallback, successCallback, errorCallback);
     }
   }
 
   public sendFile(
     url: string,
     file: PoUploadFile,
+    headers: { [name: string]: string | Array<string> },
     formData: FormData,
     uploadCallback: (file: PoUploadFile, percent: number) => void,
     successCallback: (file: PoUploadFile, event: any) => void,
     errorCallback: (file: PoUploadFile, event: any) => void
   ) {
-    const request = this.getRequest(url, formData).subscribe(
+    const request = this.getRequest(url, headers, formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.addRequest(file, request);
@@ -81,11 +90,17 @@ export class PoUploadBaseService {
     );
   }
 
-  public getRequest(url: string, formData: FormData): Observable<any> {
-    const req = new HttpRequest('POST', url, formData, {
-      reportProgress: true
-    });
+  public getRequest(
+    url: string,
+    headers: { [name: string]: string | Array<string> },
+    formData: FormData
+  ): Observable<any> {
+    const httpHeaders = new HttpHeaders(headers);
 
+    const req = new HttpRequest('POST', url, formData, {
+      reportProgress: true,
+      headers: httpHeaders
+    });
     return this.http.request(req);
   }
 
