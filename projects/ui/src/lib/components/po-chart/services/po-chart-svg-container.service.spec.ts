@@ -94,19 +94,13 @@ describe('PoChartSvgContainerService', () => {
     it('svgPlottingAreaWidth: should return the result of the calculation', () => {
       const svgWidth = 200;
 
-      expect(service['svgPlottingAreaWidth'](svgWidth, categoriesLength)).toBe(80);
-    });
-
-    it('svgPlottingAreaWidth: should return value considering that svgAxisSideSpace is 48(Padding * 2)', () => {
-      const svgWidth = 50;
-
-      expect(service['svgPlottingAreaWidth'](svgWidth, categoriesLength)).toBe(-11);
+      expect(service['svgPlottingAreaWidth'](svgWidth)).toBe(128);
     });
 
     it('svgPlottingAreaHeight: should return the result of the calculation', () => {
       const svgHeight = 200;
 
-      expect(service['svgPlottingAreaWidth'](svgHeight, categoriesLength)).toBe(80);
+      expect(service['svgPlottingAreaHeight'](svgHeight)).toBe(168);
     });
   });
 });

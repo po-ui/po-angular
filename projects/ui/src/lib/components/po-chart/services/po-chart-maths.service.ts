@@ -25,20 +25,6 @@ export class PoChartMathsService {
   }
 
   /**
-   * Efetua o cálculo da área lateral entre o os labels X e a plotagem da primeira série. Válido para gráficos do tipo linha e área.
-   *
-   * > A largura máxima permitida é de 24px.
-   *
-   * @param containerWidth Largura do container SVG.
-   * @param seriesLength Quantidade de séries.
-   */
-  calculateSideSpacing(containerWidth: PoChartContainerSize['svgWidth'], seriesLength: number): number {
-    const halfCategoryWidth = Math.trunc((containerWidth - PoChartAxisXLabelArea) / seriesLength / 2);
-
-    return halfCategoryWidth <= PoChartPadding ? halfCategoryWidth : PoChartPadding;
-  }
-
-  /**
    * Retorna o tamanho da série que tiver mais itens.
    *
    * @param series Lista de séries.

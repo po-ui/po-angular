@@ -87,20 +87,6 @@ describe('PoChartMathsService', () => {
       expect(service.range(minMaxValues, gridLines)).toEqual(expectedResult);
     });
 
-    it('calculateSideSpacing: should return value referring to space between label x and serie`s plot', () => {
-      const containerWidth = 200;
-      const seriesLength = 7;
-
-      expect(service.calculateSideSpacing(containerWidth, seriesLength)).toBe(9);
-    });
-
-    it('calculateSideSpacing: should return 24 referring to space between label x and serie`s plot if halfCategoryWidth exceeds the limit of 24', () => {
-      const containerWidth = 200;
-      const seriesLength = 2;
-
-      expect(service.calculateSideSpacing(containerWidth, seriesLength)).toBe(24);
-    });
-
     it('seriesGreaterLength: should return the serie`s greater length value', () => {
       const series = [
         { label: 'A', data: [-20, 20, 45] },

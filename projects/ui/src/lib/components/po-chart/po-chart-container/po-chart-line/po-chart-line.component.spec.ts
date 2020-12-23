@@ -110,7 +110,7 @@ describe('PoChartLineComponent', () => {
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
 
-        const expectedResult = [{ coordinates: ' M96 28 L116 8' }];
+        const expectedResult = [{ coordinates: ' M72 28 L92 8' }];
 
         expect(component.seriesPathsCoordinates).toEqual(expectedResult);
         expect(component.seriesPathsCoordinates.length).toBe(1);
@@ -129,7 +129,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 5',
               data: 5,
-              xCoordinate: 96,
+              xCoordinate: 72,
               yCoordinate: 28
             },
             {
@@ -137,7 +137,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
-              xCoordinate: 116,
+              xCoordinate: 92,
               yCoordinate: 8
             }
           ]
@@ -161,7 +161,7 @@ describe('PoChartLineComponent', () => {
               label: undefined,
               tooltipLabel: '5',
               data: 5,
-              xCoordinate: 96,
+              xCoordinate: 72,
               yCoordinate: 28
             },
             {
@@ -169,7 +169,7 @@ describe('PoChartLineComponent', () => {
               label: undefined,
               tooltipLabel: '10',
               data: 10,
-              xCoordinate: 116,
+              xCoordinate: 92,
               yCoordinate: 8
             }
           ]
@@ -194,7 +194,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 5',
               data: 5,
-              xCoordinate: 96,
+              xCoordinate: 72,
               yCoordinate: 28
             },
             {
@@ -202,7 +202,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
-              xCoordinate: 116,
+              xCoordinate: 92,
               yCoordinate: 8
             }
           ]
@@ -225,7 +225,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
-              xCoordinate: 93,
+              xCoordinate: 72,
               yCoordinate: 8
             },
             {
@@ -233,7 +233,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 12',
               data: 12,
-              xCoordinate: 113,
+              xCoordinate: 92,
               yCoordinate: 0
             }
           ]
@@ -242,7 +242,7 @@ describe('PoChartLineComponent', () => {
         component['seriePathPointsDefinition'](component.containerSize, <any>chartSeries, minMaxSeriesValues);
 
         expect(component.seriesPointsCoordinates).toEqual(expectedPointsResult);
-        expect(component.seriesPathsCoordinates).toEqual([{ coordinates: ' M93 8 L113 0' }]);
+        expect(component.seriesPathsCoordinates).toEqual([{ coordinates: ' M72 8 L92 0' }]);
       });
 
       it('shouldn`t apply values to `seriesPointsCoordinates` neither to `seriesPathsCoordinates` if series.data isn`t an array', () => {
@@ -262,7 +262,7 @@ describe('PoChartLineComponent', () => {
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
 
-        const expectedResult = [{ coordinates: ' M96 28' }];
+        const expectedResult = [{ coordinates: ' M72 28' }];
 
         expect(component.seriesPathsCoordinates).toEqual(expectedResult);
         expect(component.seriesPathsCoordinates.length).toBe(1);
