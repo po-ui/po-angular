@@ -424,11 +424,13 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   }
 
   searchById(value: string) {
-    if (typeof value === 'string') {
-      value = value.trim();
+    let checkedValue = value;
+
+    if (typeof checkedValue === 'string') {
+      checkedValue = checkedValue.trim();
     }
 
-    if (value !== '') {
+    if (checkedValue !== '') {
       this.getSubscription = this.service.getObjectByValue(value, this.filterParams).subscribe(
         element => {
           if (element) {

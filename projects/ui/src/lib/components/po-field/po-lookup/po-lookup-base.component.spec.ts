@@ -371,6 +371,21 @@ describe('PoLookupBaseComponent:', () => {
       }
     ));
 
+    it('searchById: should call getObjectByValue with value starting with white spaces', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
+        const expectedValue = ' Item X';
+        component.service = lookupFilterService;
+
+        spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ id: 1 }));
+
+        component.filterParams = undefined;
+        component.searchById(expectedValue);
+
+        expect(component.service['getObjectByValue']).toHaveBeenCalledWith(expectedValue, component.filterParams);
+      }
+    ));
+
     it('writeValue: should call `cleanViewValue` when execute the method `writeValue` with undefined param.', () => {
       spyOn(component, <any>'cleanViewValue');
 
