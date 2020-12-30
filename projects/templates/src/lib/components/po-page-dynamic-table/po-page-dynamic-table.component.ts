@@ -1035,13 +1035,20 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private updateTableActions() {
-    const tableActionDelete = this._defaultTableActions.find(
-      tableAction => tableAction.label === this.literals.tableActionDelete
-    );
     const defaultTableActionsWithoutActionDelete = this._defaultTableActions.filter(
       tableAction => tableAction.label !== this.literals.tableActionDelete
     );
 
-    this.tableActions = [...defaultTableActionsWithoutActionDelete, ...this._customTableActions, tableActionDelete];
+    const tableActionDelete = this._defaultTableActions.find(
+      tableAction => tableAction.label === this.literals.tableActionDelete
+    );
+
+    const newTableActions = [...defaultTableActionsWithoutActionDelete, ...this._customTableActions];
+
+    if (tableActionDelete) {
+      newTableActions.push(tableActionDelete);
+    }
+
+    this.tableActions = newTableActions;
   }
 }
