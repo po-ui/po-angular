@@ -205,7 +205,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   get visibleActions() {
-    return this.actions && this.actions.filter(action => action.visible !== false);
+    return this.actions && this.actions.filter(action => action && action.visible !== false);
   }
 
   ngAfterViewInit() {
