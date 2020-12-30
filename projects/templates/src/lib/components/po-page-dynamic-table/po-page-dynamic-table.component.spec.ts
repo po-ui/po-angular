@@ -2304,7 +2304,7 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(customActionServiceSpy).toHaveBeenCalled();
     });
 
-    it('should set "Excluir" button in last item of action', () => {
+    it('should set "Remove" button in last item of action', () => {
       component.actions = {
         remove: true,
         new: '/documentation/po-page-dynamic-edit',
@@ -2319,6 +2319,16 @@ describe('PoPageDynamicTableComponent:', () => {
 
       const tableActions = visibleTableActions();
       expect(tableActions[tableActions.length - 1].label).toBe(component.literals.tableActionDelete);
+    });
+
+    it('shouldn`t add remove action if actions.remove is undefined', () => {
+      component.actions = {};
+      component.tableCustomActions = [{ label: 'Details', action: () => {} }];
+
+      const tableActions = visibleTableActions();
+
+      expect(tableActions.length).toEqual(1);
+      expect(tableActions[0].label).toEqual('Details');
     });
   });
 });
