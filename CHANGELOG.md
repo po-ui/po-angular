@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.3.0](https://github.com/po-ui/po-angular/compare/v4.2.0...v4.3.0) (2020-12-30)
+
+
+### Bug Fixes
+
+* **chart:** corrige posição do tooltip ([bb04378](https://github.com/po-ui/po-angular/commit/bb04378aff2cfb9248691cd509a8fb836e955267))
+* **dynamic-table:** corrige utilização do tableCustomActions sem Actions ([d29101a](https://github.com/po-ui/po-angular/commit/d29101af1ff00c541a147f72102cb58f42c8012d)), closes [#732](https://github.com/po-ui/po-angular/issues/732)
+* **lookup:** não remove espaços quando realizada busca pelo código ([3bf48e8](https://github.com/po-ui/po-angular/commit/3bf48e8657cf9f2ab1091fce0f94cc47f66be7cc))
+* **table:** realiza tratamento das ações invalidas ([84b557d](https://github.com/po-ui/po-angular/commit/84b557d4b8a03ad8f0327a8bfd1727e786c3a5a8)), closes [#732](https://github.com/po-ui/po-angular/issues/732)
+
+
+### Features
+
+* **calendar:** adiciona suporte ao idioma russo ([96bc2a7](https://github.com/po-ui/po-angular/commit/96bc2a77bdfb5f8df46723aa69aaa16a77a17d47))
+* **calendar:** utiliza i18n para recuperar o locale padrão ([414a0d3](https://github.com/po-ui/po-angular/commit/414a0d374391a17f6dd2b69663d1d972c7062c25))
+* **datepicker:** adiciona suporte ao idioma russo ([b2c38a6](https://github.com/po-ui/po-angular/commit/b2c38a62a89022fba043a1a082084950fa79797a))
+* **datepicker:** utiliza i18n para recuperar o locale padrão ([375d720](https://github.com/po-ui/po-angular/commit/375d72084eb1501acb13e580024e51b1c7d931e7))
+* **decimal:** utiliza keyboard decimal ao usar no mobile ([a6ff215](https://github.com/po-ui/po-angular/commit/a6ff215bada4d99039753be046f5883dceb1188a)), closes [#751](https://github.com/po-ui/po-angular/issues/751)
+* **dynamic-form:** permite formatar descrição do campo no lookup através do `PoDynamicFormField.Format` ([11bee6f](https://github.com/po-ui/po-angular/commit/11bee6ff81bab5ca010791cb721d6a3799c25e0d))
+* **upload:** adiciona a propriedade `p-headers` ([9e2ce11](https://github.com/po-ui/po-angular/commit/9e2ce113c75d3e3d702cf377e16d18649cce3671)), closes [#593](https://github.com/po-ui/po-angular/issues/593)
+
+
+
 <a name="4.2.0"></a>
 # [4.2.0](https://github.com/po-ui/po-angular/compare/v4.1.0...v4.2.0) (2020-12-21)
 
