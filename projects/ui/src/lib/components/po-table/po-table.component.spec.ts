@@ -1358,6 +1358,12 @@ describe('PoTableComponent:', () => {
       expect(component.visibleActions).toEqual([{ label: 'PO2', visible: true }]);
     });
 
+    it('visibleActions: should return only valid values', () => {
+      component.actions = [{ label: 'PO1' }, undefined, null];
+
+      expect(component.visibleActions).toEqual([{ label: 'PO1' }]);
+    });
+
     it('visibleActions: should be `true` if has action.', () => {
       component.actions = actions;
 
