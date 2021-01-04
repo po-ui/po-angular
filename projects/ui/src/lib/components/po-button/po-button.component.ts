@@ -1,6 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 
 import { PoButtonBaseComponent } from './po-button-base.component';
+
+import 'web-components-alvaro-teste/index.js';
 
 /**
  * @docsExtends PoButtonBaseComponent
@@ -58,6 +60,7 @@ export class PoButtonComponent extends PoButtonBaseComponent implements AfterVie
     }
   }
 
+  @HostListener('clickButton')
   onClick() {
     this.click.emit(null);
   }

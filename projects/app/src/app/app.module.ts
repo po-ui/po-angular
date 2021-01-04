@@ -3,9 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoModule } from '@po-ui/ng-components';
-
 import { AppComponent } from './app.component';
+import { PoModule } from '../../../../dist/ng-components';
 
 @NgModule({
   declarations: [AppComponent],

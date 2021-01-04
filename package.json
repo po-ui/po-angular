@@ -88,6 +88,7 @@
     "rxjs": "~6.6.0",
     "rxjs-compat": "~6.6.0",
     "tslib": "^2.0.0",
+    "web-components-alvaro-teste": "^1.0.0",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
