@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostList
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
-import 'web-components-alvaro-teste/index.js';
+import '@pods/pods-button/pods-button/index.js';
 
 /**
  * @docsExtends PoButtonBaseComponent
