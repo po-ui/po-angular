@@ -4,5 +4,5 @@
   "lib": {
     "entryFile": "./src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@po-ui/style", "@po-ui/ng-schematics", "@pods/pods-button"]
+  "whitelistedNonPeerDependencies": ["@po-ui/style", "@po-ui/ng-schematics", "@pods/pods-web-components"]
 }

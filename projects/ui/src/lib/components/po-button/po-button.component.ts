@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostList
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
-import '@pods/pods-button/pods-button/index.js';
+import '@pods/pods-web-components/pods-web-components/index.js';
 
 /**
  * @docsExtends PoButtonBaseComponent
