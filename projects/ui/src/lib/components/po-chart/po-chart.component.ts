@@ -13,7 +13,7 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartColorService } from './services/po-chart-color.service';
@@ -22,6 +22,7 @@ import { PoChartDynamicTypeComponent } from './po-chart-types/po-chart-dynamic-t
 import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
+import { debounceTime } from 'rxjs/operators';
 
 /**
  * @docsExtends PoChartBaseComponent
@@ -54,6 +55,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   private componentRef: ComponentRef<{}>;
   private initialized: boolean = false;
   private windowResizeListener: Subject<any> = new Subject();
+  private subscription = new Subscription();
 
   private mappings = {
     [PoChartType.Gauge]: PoChartGaugeComponent
@@ -73,7 +75,8 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     public changeDetector: ChangeDetectorRef,
     private colorService: PoChartColorService,
     private containerService: PoChartSvgContainerService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private elementRef: ElementRef
   ) {
     super();
   }
@@ -112,7 +115,14 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   }
 
   ngOnDestroy() {
+    this.subscription.unsubscribe();
     this.removeWindowResizeListener();
+  }
+
+  resizeAction() {
+    this.getSvgContainerSize();
+    this.windowResizeListener.next();
+    this.changeDetector.detectChanges();
   }
 
   ngOnInit() {
@@ -200,24 +210,30 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   }
 
   private setClickSubscribe(instance: PoChartDynamicTypeComponent) {
-    instance.onSerieClick.subscribe(event => {
-      this.onSeriesClick(event);
-    });
+    this.subscription.add(
+      instance.onSerieClick.subscribe(event => {
+        this.onSeriesClick(event);
+      })
+    );
   }
 
   private setHoverSubscribe(instance: PoChartDynamicTypeComponent) {
-    instance.onSerieHover.subscribe(event => {
-      this.onSeriesHover(event);
-    });
+    this.subscription.add(
+      instance.onSerieHover.subscribe(event => {
+        this.onSeriesHover(event);
+      })
+    );
   }
 
   private setResizeListenerSubscribe(instance: PoChartDynamicTypeComponent) {
-    this.windowResizeListener.subscribe(() => {
-      const measuresForComponentRef = this.getChartMeasurements();
+    this.subscription.add(
+      this.windowResizeListener.subscribe(() => {
+        const measuresForComponentRef = this.getChartMeasurements();
 
-      instance.chartWrapper = measuresForComponentRef.chartWrapperWidth;
-      instance.chartHeader = measuresForComponentRef.chartHeaderHeight;
-      instance.chartLegend = measuresForComponentRef.chartLegendHeight;
-    });
+        instance.chartWrapper = measuresForComponentRef.chartWrapperWidth;
+        instance.chartHeader = measuresForComponentRef.chartHeaderHeight;
+        instance.chartLegend = measuresForComponentRef.chartLegendHeight;
+      })
+    );
   }
 }

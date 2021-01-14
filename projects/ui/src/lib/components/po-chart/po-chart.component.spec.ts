@@ -1,4 +1,4 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
@@ -58,7 +58,30 @@ describe('PoChartComponent:', () => {
       expect(component['removeWindowResizeListener']).toHaveBeenCalled();
     });
 
+    it('resizeAction: should call `getSvgContainerSize`', () => {
+      const spy = spyOn(component, <any>'getSvgContainerSize');
+      component.resizeAction();
+      expect(spy).toHaveBeenCalled();
+    });
+
     describe('NgDoCheck: ', () => {
+      it('should call getSvgContainerSize() by emit to divResizeListener', fakeAsync(() => {
+        Object.defineProperty(component.chartWrapper.nativeElement, 'offsetWidth', {
+          writable: true,
+          value: 500
+        });
+
+        const spy = spyOn(component, <any>'getSvgContainerSize');
+
+        component.ngAfterViewInit();
+        component.ngDoCheck();
+
+        // Tick de 500 pois o sub espera 200
+        tick(500);
+
+        expect(spy).toHaveBeenCalled();
+      }));
+
       it('should call `dynamicComponentSetting` on first loading and if chartWrapper has width', () => {
         Object.defineProperty(component.chartWrapper.nativeElement, 'offsetWidth', {
           writable: true,

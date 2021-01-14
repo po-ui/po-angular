@@ -103,6 +103,7 @@
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "^13.13.4",
+    "@types/resize-observer-browser": "^0.1.5",
     "@types/systemjs": "^6.1.0",
     "codelyzer": "^6.0.0",
     "del": "^5.1.0",
