@@ -1,4 +1,4 @@
-<div #chartWrapper class="po-chart-wrapper">
+<div #chartWrapper class="po-chart-wrapper" (p-resize-observer)="resizeAction()">
   <div #chartHeader class="po-chart-header">
     <div class="po-chart-title">{{ title }}</div>
   </div>

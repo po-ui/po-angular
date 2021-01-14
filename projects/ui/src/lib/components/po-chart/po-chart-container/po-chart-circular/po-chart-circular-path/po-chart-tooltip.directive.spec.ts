@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
-import { configureTestSuite } from '../../../../../util-test/util-expect.spec';
 
 import { PoChartModule } from '../../../po-chart.module';
 
@@ -39,12 +37,14 @@ describe('PoChartTooltipDirective', () => {
 
   let event;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [PoChartModule],
-      declarations: [PoChartTooltipDirective, TestComponent]
-    });
-  });
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [PoChartModule],
+        declarations: [PoChartTooltipDirective, TestComponent]
+      });
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
