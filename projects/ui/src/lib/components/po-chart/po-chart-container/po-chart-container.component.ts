@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { PoChartType } from '../enums/po-chart-type.enum';
 import { PoLineChartSeries } from '../interfaces/po-chart-line-series.interface';
@@ -10,23 +10,17 @@ import { PoChartAxisOptions } from '../interfaces/po-chart-axis-options.interfac
   selector: 'po-chart-container',
   templateUrl: './po-chart-container.component.html'
 })
-export class PoChartContainerComponent {
+export class PoChartContainerComponent implements OnChanges {
   axisOptions: PoChartAxisOptions;
   viewBox: string;
 
-  private _containerSize: PoChartContainerSize;
   private _options: PoChartOptions;
 
   @Input('p-categories') categories: Array<string>;
 
-  @Input('p-container-size') set containerSize(value: PoChartContainerSize) {
-    this._containerSize = value;
-    this.viewBox = this.setViewBox();
-  }
+  @Input('p-type') type: PoChartType;
 
-  get containerSize() {
-    return this._containerSize;
-  }
+  @Input('p-container-size') containerSize: PoChartContainerSize;
 
   @Output('p-serie-click') serieClick = new EventEmitter<any>();
 
@@ -44,11 +38,17 @@ export class PoChartContainerComponent {
     return this._options;
   }
 
-  @Input('p-type') type: PoChartType;
-
   @Input('p-series') series: Array<PoLineChartSeries>;
 
-  constructor() {}
+  get isTypeCircular() {
+    return this.type === PoChartType.Pie || this.type === PoChartType.Donut;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.type || changes.containerSize) {
+      this.setViewBox();
+    }
+  }
 
   onSerieClick(event: any) {
     this.serieClick.emit(event);
@@ -60,18 +60,18 @@ export class PoChartContainerComponent {
 
   private setViewBox() {
     const { svgWidth, svgHeight } = this.containerSize;
-
+    const viewBoxWidth = this.isTypeCircular ? svgHeight : svgWidth;
     // Tratamento necessário para que não corte o vetor nas extremidades
     const offsetXY = 1;
 
-    return `${offsetXY} -${offsetXY} ${svgWidth} ${svgHeight}`;
+    this.viewBox = `${offsetXY} -${offsetXY} ${viewBoxWidth} ${this.containerSize.svgHeight}`;
   }
 
   private verifyAxisOptions(options: PoChartOptions): void {
-    if (this._options.hasOwnProperty('axis')) {
+    if (options.hasOwnProperty('axis')) {
       this.axisOptions = {
         ...this.axisOptions,
-        ...this._options.axis
+        ...options.axis
       };
     }
   }

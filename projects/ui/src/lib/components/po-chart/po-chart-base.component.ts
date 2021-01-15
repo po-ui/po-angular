@@ -6,8 +6,8 @@ import { PoBarChartSeries } from './interfaces/po-chart-bar-series.interface';
 import { PoChartGaugeSerie } from './po-chart-types/po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoColumnChartSeries } from './interfaces/po-chart-column-series.interface';
-import { PoDonutChartSeries } from './po-chart-types/po-chart-donut/po-chart-donut-series.interface';
-import { PoPieChartSeries } from './po-chart-types/po-chart-pie/po-chart-pie-series.interface';
+import { PoDonutChartSeries } from './interfaces/po-chart-donut-series.interface';
+import { PoPieChartSeries } from './interfaces/po-chart-pie-series.interface';
 import { PoLineChartSeries } from './interfaces/po-chart-line-series.interface';
 import { PoChartOptions } from './interfaces/po-chart-options.interface';
 

@@ -7,6 +7,7 @@ import { PoChartModule } from '../po-chart.module';
 import { PoChartContainerComponent } from './po-chart-container.component';
 import { PoChartContainerSize } from '../interfaces/po-chart-container-size.interface';
 import { PoChartType } from '../enums/po-chart-type.enum';
+import { SimpleChange } from '@angular/core';
 
 describe('PoChartContainerComponent', () => {
   let component: PoChartContainerComponent;
@@ -46,6 +47,42 @@ describe('PoChartContainerComponent', () => {
   });
 
   describe('Methods', () => {
+    it('ngOnChanges: should call `setViewBox` if type has new value and apply value to `viewBox`', () => {
+      const changes = { type: { firstChange: true } };
+      const spySetViewBox = spyOn(component, <any>'setViewBox').and.callThrough();
+      component.type = PoChartType.Donut;
+
+      component.ngOnChanges(<any>changes);
+
+      const expectedResult = `1 -1 ${containerSize.svgWidth} ${containerSize.svgHeight}`;
+
+      expect(spySetViewBox).toHaveBeenCalled();
+      expect(component.viewBox).toEqual(expectedResult);
+    });
+
+    it('ngOnChanges: should call `setViewBox` if containerSize has new value and apply value to `viewBox`', () => {
+      const changes = { containerSize: { firstChange: true } };
+
+      const expectedResult = `1 -1 ${containerSize.svgWidth} ${containerSize.svgHeight}`;
+
+      const spySetViewBox = spyOn(component, <any>'setViewBox').and.callThrough();
+
+      component.ngOnChanges(<any>changes);
+
+      expect(spySetViewBox).toHaveBeenCalled();
+      expect(component.viewBox).toEqual(expectedResult);
+    });
+
+    it('ngOnChanges: shouldn`t call `setViewBox`', () => {
+      const changes = { type: undefined, containerSize: undefined };
+
+      const spySetViewBox = spyOn(component, <any>'setViewBox');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(spySetViewBox).not.toHaveBeenCalled();
+    });
+
     it('onSerieClick: should emit `serieClick`', () => {
       const spySerieClick = spyOn(component.serieClick, 'emit');
 
@@ -64,17 +101,6 @@ describe('PoChartContainerComponent', () => {
   });
 
   describe('Properties: ', () => {
-    it('p-container-size: should call `setViewBox` and apply value to `viewBox`', () => {
-      const expectedResult = `1 -1 ${containerSize.svgWidth} ${containerSize.svgHeight}`;
-
-      const spySetViewBox = spyOn(component, <any>'setViewBox').and.callThrough();
-
-      component.containerSize = containerSize;
-
-      expect(spySetViewBox).toHaveBeenCalled();
-      expect(component.viewBox).toEqual(expectedResult);
-    });
-
     it('p-options: should update property with valid values', () => {
       const validValue = [{}, { axis: { minRange: 0 } }];
 

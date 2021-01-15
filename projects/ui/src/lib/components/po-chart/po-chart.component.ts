@@ -18,10 +18,8 @@ import { Subject } from 'rxjs';
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartColorService } from './services/po-chart-color.service';
 import { PoChartSvgContainerService } from './services/po-chart-svg-container.service';
-import { PoChartDonutComponent } from './po-chart-types/po-chart-donut/po-chart-donut.component';
 import { PoChartDynamicTypeComponent } from './po-chart-types/po-chart-dynamic-type.component';
 import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
-import { PoChartPieComponent } from './po-chart-types/po-chart-pie/po-chart-pie.component';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
 
@@ -58,9 +56,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   private windowResizeListener: Subject<any> = new Subject();
 
   private mappings = {
-    [PoChartType.Donut]: PoChartDonutComponent,
-    [PoChartType.Gauge]: PoChartGaugeComponent,
-    [PoChartType.Pie]: PoChartPieComponent
+    [PoChartType.Gauge]: PoChartGaugeComponent
   };
 
   svgContainerSize: PoChartContainerSize;
@@ -84,10 +80,6 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
   get isChartGaugeType(): boolean {
     return this.type === PoChartType.Gauge;
-  }
-
-  get isDynamicComponentType(): boolean {
-    return this.type === PoChartType.Gauge || this.type === PoChartType.Donut || this.type === PoChartType.Pie;
   }
 
   @HostListener('window:resize')
@@ -131,7 +123,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     if (this.componentRef) {
       this.componentRef.destroy();
 
-      if (this.isDynamicComponentType) {
+      if (this.isChartGaugeType) {
         this.dynamicComponentSetting();
       }
     }

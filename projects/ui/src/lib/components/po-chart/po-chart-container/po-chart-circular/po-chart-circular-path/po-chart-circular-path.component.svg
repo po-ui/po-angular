@@ -1,0 +1,8 @@
+<svg:path #svgPath
+  class="po-path-item"
+  [p-chart-tooltip]="serie?.tooltipLabel"
+  [attr.fill]="serie?.color"
+  (click)="onMouseClick()"
+  (mouseenter)="onMouseEnter()"
+  >
+</svg:path> 

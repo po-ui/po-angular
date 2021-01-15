@@ -5,8 +5,8 @@ import { of } from 'rxjs';
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartComponent } from './po-chart.component';
 import { PoChartModule } from './po-chart.module';
-import { PoChartPieComponent } from './po-chart-types/po-chart-pie/po-chart-pie.component';
 import { PoChartType } from './enums/po-chart-type.enum';
+import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
 
 describe('PoChartComponent:', () => {
   let component: PoChartComponent;
@@ -47,18 +47,6 @@ describe('PoChartComponent:', () => {
 
       expect(component.isChartGaugeType).toBeFalsy();
     });
-
-    it('isChartLineType: should return `false` if type is equal `PoChartType.Line`', () => {
-      component.type = PoChartType.Line;
-
-      expect(component.isDynamicComponentType).toBeFalsy();
-    });
-
-    it('isChartLineType: should return `true` if type is diferent from `PoChartType.Line`', () => {
-      component.type = PoChartType.Pie;
-
-      expect(component.isDynamicComponentType).toBeTruthy();
-    });
   });
 
   describe('Methods:', () => {
@@ -77,6 +65,10 @@ describe('PoChartComponent:', () => {
           value: 500
         });
 
+        component.type = PoChartType.Gauge;
+        component['calculatedComponentRefElement'] = false;
+        component['initialized'] = true;
+
         spyOn(component, <any>'dynamicComponentSetting');
 
         component.ngDoCheck();
@@ -90,7 +82,10 @@ describe('PoChartComponent:', () => {
           writable: true,
           value: 500
         });
+
         component.type = PoChartType.Line;
+        component['calculatedSvgContainerElement'] = false;
+        component['initialized'] = true;
 
         spyOn(component, <any>'getSvgContainerSize');
 
@@ -106,7 +101,9 @@ describe('PoChartComponent:', () => {
           value: 500
         });
 
-        component['calculatedSvgContainerElement'] = false;
+        component.type = PoChartType.Line;
+        component['calculatedSvgContainerElement'] = true;
+        component['initialized'] = true;
 
         spyOn(component, <any>'getSvgContainerSize');
 
@@ -121,6 +118,8 @@ describe('PoChartComponent:', () => {
           value: 500
         });
 
+        component.type = PoChartType.Gauge;
+        component['initialized'] = true;
         component['calculatedComponentRefElement'] = true;
 
         spyOn(component, <any>'dynamicComponentSetting');
@@ -144,8 +143,10 @@ describe('PoChartComponent:', () => {
         expect(component['dynamicComponentSetting']).not.toHaveBeenCalled();
       });
 
-      it('shouldn`t call `dynamicComponentSetting` if `getComponentType` returns false', () => {
+      it('shouldn`t call `dynamicComponentSetting` if `isDynamicChart` is false', () => {
         component.type = PoChartType.Line;
+        component['calculatedComponentRefElement'] = false;
+        component['initialized'] = true;
 
         spyOn(component, <any>'dynamicComponentSetting');
 
@@ -177,7 +178,7 @@ describe('PoChartComponent:', () => {
       const sourceObject = { componentRef: { destroy: () => {} } };
       Object.assign(component, sourceObject);
 
-      spyOnProperty(component, 'isDynamicComponentType').and.returnValue(true);
+      spyOnProperty(component, 'isChartGaugeType').and.returnValue(true);
       spyOn(sourceObject.componentRef, 'destroy');
       spyOn(component, <any>'dynamicComponentSetting');
 
@@ -201,7 +202,7 @@ describe('PoChartComponent:', () => {
       const sourceObject = { componentRef: { destroy: () => {} } };
       Object.assign(component, sourceObject);
 
-      spyOnProperty(component, 'isDynamicComponentType').and.returnValue(false);
+      spyOnProperty(component, 'isChartGaugeType').and.returnValue(false);
       spyOn(sourceObject.componentRef, 'destroy');
       spyOn(component, <any>'dynamicComponentSetting');
 
@@ -316,9 +317,9 @@ describe('PoChartComponent:', () => {
     });
 
     it('getComponentType: should return component of the mappings by key', () => {
-      const type = 'pie';
+      const type = 'gauge';
 
-      expect(component['getComponentType'](type)).toBe(PoChartPieComponent);
+      expect(component['getComponentType'](type)).toBe(PoChartGaugeComponent);
     });
 
     it('onResize: should trigger onResize method when window is resized ', () => {

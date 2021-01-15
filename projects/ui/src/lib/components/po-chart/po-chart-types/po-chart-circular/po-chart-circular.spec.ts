@@ -7,8 +7,6 @@ import { poChartCompleteCircle, poChartGaugeSerieWidth } from './po-chart-circul
 import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component';
 import { PoChartGaugeSerie } from '../po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../../enums/po-chart-type.enum';
-import { PoDonutChartSeries } from '../po-chart-donut/po-chart-donut-series.interface';
-import { PoPieChartSeries } from '../po-chart-pie/po-chart-pie-series.interface';
 
 @Component({
   selector: 'po-chart-circular-test',
@@ -254,7 +252,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('createPath: should create a svg path element with some attributes and append it into `svgPathsWrapper`', () => {
-      const serie: PoPieChartSeries = { category: 'po', value: 2 };
+      const serie = { category: 'po', value: 2 };
       const svgPathsWrapper = { appendChild: () => {} };
       component.colors = PoChartColors[0];
 
@@ -270,7 +268,7 @@ describe('PoChartCircular:', () => {
 
     it(`createPath: should call 'setElementAttributes' with 'svgPath' and 'serie'`, () => {
       const tooltipText = 'tooltipText';
-      const serie: PoPieChartSeries = { category: 'po', value: 2, tooltip: tooltipText };
+      const serie = { category: 'po', value: 2, tooltip: tooltipText };
       const svgPath = '<svg></svg>';
       const svgPathsWrapper = { appendChild: () => {} };
       component.colors = PoChartColors[0];
@@ -285,25 +283,7 @@ describe('PoChartCircular:', () => {
       expect(component['setElementAttributes']).toHaveBeenCalledWith(svgPath, serie);
     });
 
-    it('onMouseEnter: should call `showTooltip`, `changeTooltipPosition` and `emitEventOnEnter`', () => {
-      const eventMock = { target: { getAttributeNS: a => a }, category: 'value', value: 1 };
-      const tooltipElement = component.chartBody.nativeElement.querySelector('.po-chart-tooltip');
-      component.chartElementCategory = eventMock.target.getAttributeNS('category');
-      component.chartElementValue = eventMock.target.getAttributeNS('value');
-
-      spyOn(component, <any>'showTooltip');
-      spyOn(component, <any>'changeTooltipPosition');
-      spyOn(component, <any>'emitEventOnEnter')(eventMock);
-
-      component['onMouseEnter'](eventMock);
-
-      expect(component.tooltipElement).toBe(tooltipElement);
-      expect(component['showTooltip']).toHaveBeenCalled();
-      expect(component['changeTooltipPosition']).toHaveBeenCalled();
-      expect(component['emitEventOnEnter']).toHaveBeenCalledWith(eventMock);
-    });
-
-    it('onMouseEnter: should emit serie object and set `chartElementDescription` if tye is gauge', () => {
+    it('onMouseEnter: should emit serie object and set `chartElementDescription` if type is gauge', () => {
       const eventMock = { target: { getAttributeNS: () => 'First' } };
       const serie = { value: 10, description: 'First' };
 
@@ -406,7 +386,6 @@ describe('PoChartCircular:', () => {
       expect(path.setAttribute).toHaveBeenCalled();
       expect(path.d.includes('M')).toBe(true);
       expect(path.d.includes('A')).toBe(true);
-      expect(path.d.includes('L')).toBe(true);
       expect(path.d.includes('Z')).toBe(true);
     });
 
@@ -436,34 +415,6 @@ describe('PoChartCircular:', () => {
       expect(path.d.includes('Z')).toBe(true);
     });
 
-    it(`onMouseClick: should call 'onSerieClick.next' passing 'chartElementCategory' and 'chartElementValue'
-    as object values if type is Pie`, () => {
-      component.type = PoChartType.Pie;
-      component.chartElementCategory = 'category';
-      component.chartElementValue = 10;
-      const expectedParameterValue = { label: component.chartElementCategory, data: component.chartElementValue };
-
-      spyOn(component['onSerieClick'], 'next');
-
-      component['onMouseClick']();
-
-      expect(component['onSerieClick'].next).toHaveBeenCalledWith(expectedParameterValue);
-    });
-
-    it(`onMouseClick: should call 'onSerieClick.next' passing 'chartElementCategory' and 'chartElementValue'
-    as object values if type is Donut`, () => {
-      component.type = PoChartType.Donut;
-      component.chartElementCategory = 'category';
-      component.chartElementValue = 10;
-      const expectedParameterValue = { label: component.chartElementCategory, data: component.chartElementValue };
-
-      spyOn(component['onSerieClick'], 'next');
-
-      component['onMouseClick']();
-
-      expect(component['onSerieClick'].next).toHaveBeenCalledWith(expectedParameterValue);
-    });
-
     it(`onMouseClick: should call 'onSerieClick.next' passing the serie object if type is gauge`, () => {
       const serie = { value: 10, description: 'First' };
 
@@ -481,7 +432,7 @@ describe('PoChartCircular:', () => {
     it('emitEventOnEnter: should call `onSerieHover.next`', () => {
       spyOn(component['onSerieHover'], 'next');
 
-      component['emitEventOnEnter']({ category: 'Data', value: 1 });
+      component['emitEventOnEnter']({ description: 'Data', value: 1 });
 
       expect(component['onSerieHover'].next).toHaveBeenCalled();
     });
@@ -792,7 +743,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text`', () => {
-      const serie: PoPieChartSeries = { label: 'po', data: 2 };
+      const serie = { label: 'po', data: 2 };
       const svgPath = '<text></text>';
       component.type = PoChartType.Pie;
 
@@ -812,7 +763,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text` even if serie.category and serie.value', () => {
-      const serie: PoPieChartSeries = { category: 'po', value: 2 };
+      const serie = { category: 'po', value: 2 };
       const svgPath = '<text></text>';
       component.type = PoChartType.Pie;
 
@@ -828,7 +779,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text` even if serie.category and serie.data', () => {
-      const serie: PoPieChartSeries = { category: 'po', data: 2 };
+      const serie = { category: 'po', data: 2 };
       const svgPath = '<text></text>';
       component.type = PoChartType.Pie;
 
@@ -844,7 +795,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text` even if serie.label and serie.value', () => {
-      const serie: PoPieChartSeries = { label: 'po', value: 2 };
+      const serie = { label: 'po', value: 2 };
       const svgPath = '<text></text>';
       component.type = PoChartType.Pie;
 
@@ -973,7 +924,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('createText: should create a svg text element with some attributes and add it into `svgTextElementsList`', () => {
-      const serie: PoDonutChartSeries = { label: 'po', data: 2 };
+      const serie = { description: 'po', value: 2 };
 
       component.colors = PoChartColors[0];
 
@@ -1001,7 +952,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('createText: should create a svg text element with some attributes and add it into `svgTextElementsList` even serie.label and serie.value', () => {
-      const serie: PoDonutChartSeries = { category: 'po', value: 2 };
+      const serie = { category: 'po', value: 2 };
 
       component.colors = PoChartColors[0];
 
@@ -1029,7 +980,7 @@ describe('PoChartCircular:', () => {
     });
 
     it(`createText: should create a svg text element with some attributes and add it into 'svgTextElementsList' even serie.label, serie.value, serie.data and serie.category are mixed`, () => {
-      const serie: PoDonutChartSeries = { category: 'po', data: 2 };
+      const serie = { description: 'po', value: 2 };
 
       component.colors = PoChartColors[0];
 
@@ -1158,10 +1109,10 @@ describe('PoChartCircular:', () => {
     });
 
     it('getSeriesWithValue: should return only series with value and color attr', () => {
-      const invalidSeries = [{ label: 'Valor 0', data: 0 }];
+      const invalidSeries = [{ description: 'Valor 0', value: 0 }];
       const series = [
-        { label: 'Valor 2', data: 2 },
-        { label: 'Valor 3', data: 3 }
+        { description: 'Valor 2', value: 2 },
+        { description: 'Valor 3', value: 3 }
       ];
       const seriesParam = [...series, ...invalidSeries];
 
@@ -1174,7 +1125,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('getSeriesWithValue: should return empty array if series has value 0', () => {
-      const invalidSeries = [{ label: 'Valor 0', data: 0 }];
+      const invalidSeries = [{ description: 'Valor 0', value: 0 }];
 
       const validSeries = component['getSeriesWithValue'](invalidSeries);
 
@@ -1182,7 +1133,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('getSeriesWithValue: should return empty array if series has value -1', () => {
-      const invalidSeries = [{ label: 'Valor -1', data: -1 }];
+      const invalidSeries = [{ description: 'Valor -1', value: -1 }];
 
       const validSeries = component['getSeriesWithValue'](invalidSeries);
 
@@ -1205,11 +1156,8 @@ describe('PoChartCircular:', () => {
     });
 
     it('getSeriesWithValue: should return only series with value and color attr even with serie.value and serie.data', () => {
-      const invalidSeries = [{ category: 'Valor 0', value: 0 }];
-      const series = [
-        { category: 'Valor 2', value: 2 },
-        { label: 'Valor 3', data: 3 }
-      ];
+      const invalidSeries = [{ description: 'Valor 0', value: 0 }];
+      const series = [{ description: 'Valor 2', value: 2 }];
       const seriesParam = [...series, ...invalidSeries];
 
       component.colors = PoChartColors[seriesParam.length];
