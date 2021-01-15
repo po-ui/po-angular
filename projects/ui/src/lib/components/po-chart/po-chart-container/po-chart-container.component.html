@@ -7,6 +7,7 @@
 >
   <!-- axis -->
   <svg:g
+    *ngIf="!isTypeCircular"
     po-chart-axis
     [p-type]="type"
     [p-series]="series"
@@ -49,5 +50,23 @@
     [p-container-size]="containerSize"
     (p-bar-hover)="onSerieHover($event)"
     (p-bar-click)="onSerieClick($event)"
+  ></svg:g>
+
+  <svg:g
+    *ngIf="type === 'pie'"
+    po-chart-pie
+    [p-series]="series"
+    [p-container-size]="containerSize"
+    (p-circular-hover)="onSerieHover($event)"
+    (p-circular-click)="onSerieClick($event)"
+  ></svg:g>
+
+  <svg:g
+    *ngIf="type === 'donut'"
+    po-chart-donut
+    [p-series]="series"
+    [p-container-size]="containerSize"
+    (p-circular-hover)="onSerieHover($event)"
+    (p-circular-click)="onSerieClick($event)"
   ></svg:g>
 </svg:svg>

@@ -11,7 +11,7 @@ import { PoChartMathsService } from '../../services/po-chart-maths.service';
 import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.interface';
 import { PoChartMinMaxValues } from '../../interfaces/po-chart-min-max-values.interface';
 import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinates.interface';
-import { PoChartAxisLabelCoordinates } from '../../interfaces/po-chart-axis-label-coordinates.interface';
+import { PoChartLabelCoordinates } from '../../interfaces/po-chart-label-coordinates.interface';
 import { PoChartAxisOptions } from '../../interfaces/po-chart-axis-options.interface';
 import { PoChartType } from '../../enums/po-chart-type.enum';
 
@@ -21,9 +21,9 @@ import { PoChartType } from '../../enums/po-chart-type.enum';
 })
 export class PoChartAxisComponent {
   axisXCoordinates: Array<PoChartPathCoordinates>;
-  axisXLabelCoordinates: Array<PoChartAxisLabelCoordinates>;
+  axisXLabelCoordinates: Array<PoChartLabelCoordinates>;
   axisYCoordinates: Array<PoChartPathCoordinates>;
-  axisYLabelCoordinates: Array<PoChartAxisLabelCoordinates>;
+  axisYLabelCoordinates: Array<PoChartLabelCoordinates>;
 
   private gridLines: number = PoChartGridLines;
   private minMaxAxisValues: PoChartMinMaxValues;

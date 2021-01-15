@@ -1,0 +1,21 @@
+<svg:g>
+  <!-- SERIES PATHS -->
+  <svg:g *ngFor="let item of seriesList; let i = index">
+    <svg:g #svgPaths po-chart-circular-path
+      [attr.key]="'po-chart-circular-path-' + i"
+      [p-serie]="item"
+      (p-on-click)="onSerieClick($event)"
+      (p-on-hover)="onSerieHover($event)">
+    </svg:g>
+  </svg:g>
+
+  <!-- SERIES LABELS -->
+  <svg:g *ngFor="let item of seriesLabels; let i = index">
+    <svg:g #svgLabels po-chart-circular-label
+      [attr.key]="'po-chart-circular-label-' + i"
+      [p-serie]="item"
+      [p-show-label]="showLabels">
+    </svg:g>
+  </svg:g>
+</svg:g>
+

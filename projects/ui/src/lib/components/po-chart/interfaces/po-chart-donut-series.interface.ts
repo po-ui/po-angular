@@ -1,4 +1,4 @@
-import { PoCircularChartSeries } from '../po-chart-circular/po-chart-circular-series.interface';
+import { PoCircularChartSeries } from './po-chart-circular-series.interface';
 
 /**
  * @usedBy PoChartComponent

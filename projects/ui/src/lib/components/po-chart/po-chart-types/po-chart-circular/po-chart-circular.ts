@@ -10,15 +10,11 @@ import {
   poChartCompleteCircle,
   poChartDonutSerieWidth,
   poChartGaugeSerieWidth,
-  poChartPadding,
   poChartStartAngle
 } from './po-chart-circular.constant';
 import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component';
 import { PoChartGaugeSerie } from '../po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../../enums/po-chart-type.enum';
-import { PoCircularChartSeries } from './po-chart-circular-series.interface';
-import { PoDonutChartSeries } from '../po-chart-donut/po-chart-donut-series.interface';
-import { PoPieChartSeries } from '../po-chart-pie/po-chart-pie-series.interface';
 import { PoSeriesTextBlack } from '../../helpers/po-chart-colors.constant';
 
 const poChartBlackColor = '#000000';
@@ -57,8 +53,6 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   protected drawPath(path, chartItemStartAngle, chartItemEndAngle) {
-    const largeArc = chartItemEndAngle - chartItemStartAngle > Math.PI;
-
     const sinAlpha = Math.sin(chartItemStartAngle);
     const cosAlpha = Math.cos(chartItemStartAngle);
 
@@ -112,34 +106,10 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
       'Z'
     ].join(' ');
 
-    const pathCoordinates = [
-      'M',
-      startX,
-      startY,
-      'A',
-      this.centerX,
-      this.centerX,
-      0,
-      largeArc ? '1,1' : '0,1',
-      endX,
-      endY,
-      'L',
-      endInnerX,
-      endInnerY,
-      'A',
-      this.innerRadius,
-      this.innerRadius,
-      0,
-      largeArc ? '1,0' : '0,0',
-      startInnerX,
-      startInnerY,
-      'Z'
-    ].join(' ');
-
-    return path.setAttribute('d', this.isChartGaugeType ? halfGaugeCoordinates : pathCoordinates);
+    return path.setAttribute('d', halfGaugeCoordinates);
   }
 
-  protected getSeriesWithValue(series: Array<PoCircularChartSeries | PoChartGaugeSerie>) {
+  protected getSeriesWithValue(series: Array<PoChartGaugeSerie>) {
     const newSeries = [];
 
     series.forEach((serie: any, index) => {
@@ -219,7 +189,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     return poPageContent.length ? poPageContent[0] : window;
   }
 
-  private createPath(serie: PoCircularChartSeries | PoChartGaugeSerie, svgPathsWrapper: any) {
+  private createPath(serie: PoChartGaugeSerie, svgPathsWrapper: any) {
     const svgPath = this.renderer.createElement('svg:path', 'svg');
 
     this.renderer.setAttribute(svgPath, 'class', 'po-path-item');
@@ -248,8 +218,8 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     this.series.forEach(serie => this.createPath(serie, svgPathsWrapper));
   }
 
-  private createText(serie: PoCircularChartSeries | PoChartGaugeSerie) {
-    const data = (<any>serie).data ?? (<any>serie).value;
+  private createText(serie: PoChartGaugeSerie) {
+    const data = serie.value;
 
     const svgG = this.renderer.createElement('svg:g', 'svg');
     const svgText = this.renderer.createElement('svg:text', 'svg');
@@ -338,7 +308,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     window.requestAnimationFrame(this.drawSeries.bind(this, currentSerieIndex, angleCurrentPosition));
   }
 
-  private emitEventOnEnter(event: PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie) {
+  private emitEventOnEnter(event: PoChartGaugeSerie) {
     this.onSerieHover.next(event);
   }
 
@@ -379,36 +349,21 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private onMouseClick() {
-    let serieOnClick: PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie;
+    let serieOnClick: PoChartGaugeSerie;
 
-    if (this.isChartGaugeType) {
-      const { color, ...serie } = this.series[0];
-      serieOnClick = serie;
-    } else {
-      serieOnClick = { label: this.chartElementCategory, data: this.chartElementValue };
-    }
+    const { color, ...serie } = this.series[0];
+    serieOnClick = serie;
 
     this.onSerieClick.next(serieOnClick);
   }
 
   private onMouseEnter(event) {
-    let serieOnEnter: PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie;
+    let serieOnEnter: PoChartGaugeSerie;
 
-    if (!this.isChartGaugeType) {
-      this.tooltipElement = this.chartBody.nativeElement.querySelector('.po-chart-tooltip');
-      this.chartElementCategory = event.target.getAttributeNS(null, 'data-tooltip-category');
-      this.chartElementValue = event.target.getAttributeNS(null, 'data-tooltip-value');
-      this.tooltipText = event.target.getAttributeNS(null, 'data-tooltip-text');
-      this.showTooltip();
-      this.changeTooltipPosition(event);
+    const { color, ...serie } = this.series[0];
 
-      serieOnEnter = { label: this.chartElementCategory, data: this.chartElementValue };
-    } else {
-      const { color, ...serie } = this.series[0];
-
-      this.chartElementDescription = event.target.getAttributeNS(null, 'data-tooltip-category');
-      serieOnEnter = serie;
-    }
+    this.chartElementDescription = event.target.getAttributeNS(null, 'data-tooltip-category');
+    serieOnEnter = serie;
 
     this.emitEventOnEnter(serieOnEnter);
   }

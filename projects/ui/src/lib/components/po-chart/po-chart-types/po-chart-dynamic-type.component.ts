@@ -4,8 +4,6 @@ import { Subject } from 'rxjs';
 
 import { PoChartGaugeSerie } from './po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../enums/po-chart-type.enum';
-import { PoDonutChartSeries } from './po-chart-donut/po-chart-donut-series.interface';
-import { PoPieChartSeries } from './po-chart-pie/po-chart-pie-series.interface';
 
 const Padding: number = 24;
 
@@ -15,7 +13,7 @@ export abstract class PoChartDynamicTypeComponent {
   protected windowResizeListener: () => void;
   protected windowScrollListener: () => void;
   // tslint:disable-next-line: use-type-alias
-  protected _series: Array<PoPieChartSeries | PoDonutChartSeries | PoChartGaugeSerie> = [];
+  protected _series: Array<PoChartGaugeSerie> = [];
 
   centerX: number;
   chartElementCategory: any;
@@ -27,8 +25,8 @@ export abstract class PoChartDynamicTypeComponent {
   colors: Array<string>;
   height: number;
   innerRadius: number = 0;
-  onSerieClick: Subject<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie> = new Subject();
-  onSerieHover: Subject<PoDonutChartSeries | PoPieChartSeries | PoChartGaugeSerie> = new Subject();
+  onSerieClick: Subject<PoChartGaugeSerie> = new Subject();
+  onSerieHover: Subject<PoChartGaugeSerie> = new Subject();
   svgElement: HTMLObjectElement;
   svgHeight: number;
   target: HTMLInputElement & EventTarget;
