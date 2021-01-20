@@ -1,5 +1,15 @@
-import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, OnDestroy, OnInit, Output, Directive } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, NgControl, Validator, FormControl } from '@angular/forms';
+import {
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  Directive,
+  Injector,
+  AfterViewInit,
+  Inject
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -12,6 +22,7 @@ import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { InputBoolean } from '../../../decorators';
+import { finalize } from 'rxjs/operators';
 
 /**
  * @description
@@ -27,7 +38,8 @@ import { InputBoolean } from '../../../decorators';
  * `po-select` ou o `po-combo`.
  */
 @Directive()
-export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnDestroy, OnInit, Validator {
+export abstract class PoLookupBaseComponent
+  implements ControlValueAccessor, OnDestroy, OnInit, Validator, AfterViewInit {
   private _disabled?: boolean = false;
   private _fieldLabel: string;
   private _filterService: PoLookupFilter | string;
@@ -44,6 +56,8 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
   // tslint:disable-next-line
   private onTouched: any = null;
   private validatorChange: any;
+
+  private control!: AbstractControl;
 
   service: any;
 
@@ -357,7 +371,7 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private defaultService: PoLookupFilterService) {}
+  constructor(private defaultService: PoLookupFilterService, @Inject(Injector) private injector: Injector) {}
 
   ngOnDestroy() {
     if (this.getSubscription) {
@@ -367,6 +381,14 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
 
   ngOnInit(): void {
     this.initializeColumn();
+  }
+
+  ngAfterViewInit(): void {
+    const ngControl: NgControl = this.injector.get<NgControl>(NgControl);
+
+    if (ngControl) {
+      this.control = ngControl.control as FormControl;
+    }
   }
 
   private initializeColumn(): void {
@@ -431,21 +453,39 @@ export abstract class PoLookupBaseComponent implements ControlValueAccessor, OnD
     }
 
     if (checkedValue !== '') {
-      this.getSubscription = this.service.getObjectByValue(value, this.filterParams).subscribe(
-        element => {
-          if (element) {
-            this.oldValue = element[this.fieldLabel];
-            this.selectValue(element);
-            this.setViewValue(this.getFormattedLabel(element), element);
-          } else {
+      const oldDisable = this.disabled;
+
+      if (this.control) {
+        this.control.markAsPending();
+      }
+
+      this.disabled = true;
+      this.getSubscription = this.service
+        .getObjectByValue(value, this.filterParams)
+        .pipe(
+          finalize(() => {
+            this.disabled = oldDisable;
+
+            if (this.control) {
+              this.control.updateValueAndValidity();
+            }
+          })
+        )
+        .subscribe(
+          element => {
+            if (element) {
+              this.oldValue = element[this.fieldLabel];
+              this.selectValue(element);
+              this.setViewValue(this.getFormattedLabel(element), element);
+            } else {
+              this.cleanModel();
+            }
+          },
+          error => {
             this.cleanModel();
+            this.onError.emit(error);
           }
-        },
-        error => {
-          this.cleanModel();
-          this.onError.emit(error);
-        }
-      );
+        );
     } else {
       this.cleanModel();
     }

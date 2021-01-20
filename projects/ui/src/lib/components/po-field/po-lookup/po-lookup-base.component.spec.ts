@@ -1,6 +1,6 @@
-import { Directive } from '@angular/core';
+import { Directive, Inject, Injector } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
+import { FormControl, NgControl } from '@angular/forms';
 
 import { Observable, of, throwError } from 'rxjs';
 
@@ -32,19 +32,21 @@ class PoLookupComponent extends PoLookupBaseComponent {
 describe('PoLookupBaseComponent:', () => {
   let component: PoLookupComponent;
   let defaultService: PoLookupFilterService;
+  let injector: Injector;
 
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      providers: [LookupFilterService]
+      providers: [LookupFilterService, Injector, NgControl]
     });
   });
 
   beforeEach(() => {
     defaultService = new PoLookupFilterService(undefined);
-    component = new PoLookupComponent(defaultService);
+    injector = TestBed.inject(Injector);
+    component = new PoLookupComponent(defaultService, injector);
     component['keysDescription'] = ['label'];
   });
 
@@ -254,6 +256,24 @@ describe('PoLookupBaseComponent:', () => {
     expect(component['initializeColumn']).toHaveBeenCalled();
   });
 
+  describe('ngAfterViewInit', () => {
+    it('not inject control the ngAfterViewInit method if is not in a Form', () => {
+      spyOn(component['injector'], <any>'get').and.returnValue(undefined);
+      component.ngAfterViewInit();
+
+      expect(component['control']).toBeUndefined();
+    });
+
+    it('inject control the ngAfterViewInit method ', () => {
+      const returnObj = { control: { markAsPending: () => {} } } as NgControl;
+      spyOn(component['injector'], <any>'get').and.returnValue(returnObj);
+
+      component.ngAfterViewInit();
+
+      expect(component['control']).toEqual(returnObj.control);
+    });
+  });
+
   it('selectModel: should call `setViewValue` with `test label` and object selected', () => {
     const objectSelected = { value: 123, label: 'test label' };
     component['keysDescription'] = ['label'];
@@ -326,14 +346,20 @@ describe('PoLookupBaseComponent:', () => {
       (lookupFilterService: LookupFilterService) => {
         const searchValue = 'po';
         const filterParams = { code: '' };
+
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
         component.filterParams = filterParams;
         component.service = lookupFilterService;
 
         spyOn(component, 'selectValue');
+        const spyPending = spyOn(component['control'], 'markAsPending');
+        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
         spyOn(component.service, 'getObjectByValue').and.returnValue(of({ id: 1, name: 'po' }));
 
         component.searchById(searchValue);
 
+        expect(spyPending).toHaveBeenCalled();
+        expect(spyUpdate).toHaveBeenCalled();
         expect(component['selectValue']).toHaveBeenCalled();
         expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
       }
