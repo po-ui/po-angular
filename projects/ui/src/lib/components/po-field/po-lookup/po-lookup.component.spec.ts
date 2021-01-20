@@ -1,4 +1,4 @@
-import { ComponentRef } from '@angular/core';
+import { ComponentRef, Injector } from '@angular/core';
 import { ComponentFixture, inject, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -14,6 +14,7 @@ import { PoFieldModule } from '../../../components/po-field';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupComponent } from './po-lookup.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
+import { NgControl } from '@angular/forms';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
@@ -41,7 +42,7 @@ describe('PoLookupComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
-      providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService]
+      providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService, Injector, NgControl]
     });
   });
 

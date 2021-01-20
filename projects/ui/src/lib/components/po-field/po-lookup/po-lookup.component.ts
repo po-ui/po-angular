@@ -1,4 +1,13 @@
-import { Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  Injector
+} from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -90,11 +99,16 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     return this.noAutocomplete ? 'off' : 'on';
   }
 
-  constructor(poLookupFilterService: PoLookupFilterService, private poLookupModalService: PoLookupModalService) {
-    super(poLookupFilterService);
+  constructor(
+    poLookupFilterService: PoLookupFilterService,
+    private poLookupModalService: PoLookupModalService,
+    injector: Injector
+  ) {
+    super(poLookupFilterService, injector);
   }
 
   ngAfterViewInit() {
+    super.ngAfterViewInit();
     if (this.autoFocus) {
       this.focus();
     }
