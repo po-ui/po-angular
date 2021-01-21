@@ -1,16 +1,16 @@
 import { apply, applyTemplates, chain, mergeWith, move, Rule, url, Tree } from '@angular-devkit/schematics';
 
-import { getWorkspace } from '@schematics/angular/utility/config';
 import { strings } from '@angular-devkit/core';
 import { parseName } from '@schematics/angular/utility/parse-name';
 import { validateName } from '@schematics/angular/utility/validation';
 
-import { getProjectFromWorkspace, getDefaultPath } from '../project';
+import { getProjectFromWorkspace, getDefaultPath, getWorkspaceConfigGracefully } from '../project';
 import { FileOptions } from './file-options.interface';
+import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 export function buildFile(options: FileOptions): Rule {
   return (host: Tree) => {
-    const workspace = getWorkspace(host);
+    const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);
 
     if (options.path === undefined && project) {

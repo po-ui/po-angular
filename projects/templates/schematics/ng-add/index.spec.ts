@@ -1,10 +1,13 @@
-import { getWorkspace } from '@schematics/angular/utility/config';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
 import { Tree } from '@angular-devkit/schematics';
-import { WorkspaceProject } from '@schematics/angular/utility/workspace-models';
+import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
-import { getProjectFromWorkspace, getProjectTargetOptions } from '@po-ui/ng-schematics/project';
+import {
+  getProjectFromWorkspace,
+  getProjectTargetOptions,
+  getWorkspaceConfigGracefully
+} from '@po-ui/ng-schematics/project';
 
 import * as path from 'path';
 
@@ -66,7 +69,7 @@ describe('Schematic: ng-add', () => {
     it('should add default theme in styles of build project', async () => {
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
 
-      const workspace = getWorkspace(tree);
+      const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
 
       expectProjectStyleFile(project, defaultThemePath);
@@ -77,7 +80,7 @@ describe('Schematic: ng-add', () => {
 
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
 
-      const workspace = getWorkspace(tree);
+      const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
       const styles = getProjectTargetOptions(project, 'build').styles;
 
@@ -107,7 +110,7 @@ function getFileContent(tree: Tree, filePath: string): string {
 
 /** Writes a specific style file to the workspace in the given tree */
 function writeStyleFileToWorkspace(tree: Tree, stylePath: string) {
-  const workspace = getWorkspace(tree);
+  const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
   const project = getProjectFromWorkspace(workspace);
   const buildOptions = getProjectTargetOptions(project, 'build');
 

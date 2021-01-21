@@ -5,6 +5,7 @@ import { strings } from '@angular-devkit/core';
 import { ReplaceChanges, replaceInFile } from '@po-ui/ng-schematics/replace';
 import { getWorkspaceConfigGracefully } from '@po-ui/ng-schematics/project';
 import { sortObjectByKeys } from '@po-ui/ng-schematics/package-config';
+import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 import {
   angularJsonReplaces,
@@ -35,7 +36,7 @@ function postUpdate() {
 function createUpgradeRule() {
   return (tree: Tree, context: SchematicContext) => {
     const logger = context.logger;
-    const workspace = getWorkspaceConfigGracefully(tree);
+    const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
 
     if (workspace === null) {
       logger.error('Não foi possível encontrar o arquivo de configuração de workspace.');

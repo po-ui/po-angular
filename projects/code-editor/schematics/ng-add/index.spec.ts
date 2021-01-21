@@ -1,10 +1,13 @@
-import { getWorkspace } from '@schematics/angular/utility/config';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
-import { WorkspaceProject } from '@schematics/angular/utility/workspace-models';
+import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 import { Tree } from '@angular-devkit/schematics';
 
-import { getProjectFromWorkspace, getProjectTargetOptions } from '@po-ui/ng-schematics/project';
+import {
+  getProjectFromWorkspace,
+  getProjectTargetOptions,
+  getWorkspaceConfigGracefully
+} from '@po-ui/ng-schematics/project';
 
 import * as path from 'path';
 
@@ -63,7 +66,7 @@ describe('Schematic: ng-add', () => {
     it('should add default theme in styles of build project', async () => {
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
 
-      const workspace = getWorkspace(tree);
+      const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
 
       expectProjectPropertyFile(project, defaultThemePath, 'styles');
@@ -74,7 +77,7 @@ describe('Schematic: ng-add', () => {
 
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
 
-      const workspace = getWorkspace(tree);
+      const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
       const styles = getProjectTargetOptions(project, 'build').styles;
 
@@ -92,7 +95,7 @@ describe('Schematic: ng-add', () => {
     it('should add assets of build project', async () => {
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
 
-      const workspace = getWorkspace(tree);
+      const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
       const assets = getProjectTargetOptions(project, 'build').assets;
 
@@ -108,7 +111,7 @@ describe('Schematic: ng-add', () => {
 
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
 
-      const workspace = getWorkspace(tree);
+      const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
       const assets = getProjectTargetOptions(project, 'build').assets;
 
@@ -139,7 +142,7 @@ function expectProjectPropertyFile(project: WorkspaceProject, filePath: string, 
 }
 
 function writePropertiesFileToWorkspace(tree: Tree, filePath: string, property) {
-  const workspace = getWorkspace(tree);
+  const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
   const project = getProjectFromWorkspace(workspace);
   const buildOptions = getProjectTargetOptions(project, 'build');
 

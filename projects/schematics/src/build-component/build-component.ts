@@ -11,19 +11,19 @@ import {
   noop
 } from '@angular-devkit/schematics';
 import { buildRelativePath, findModuleFromOptions } from '@schematics/angular/utility/find-module';
-import { getWorkspace } from '@schematics/angular/utility/config';
 import { normalize, strings } from '@angular-devkit/core';
 import { parseName } from '@schematics/angular/utility/parse-name';
 import { validateHtmlSelector, validateName } from '@schematics/angular/utility/validation';
 
 import { supportedCssExtensions } from '../utils/supported-css-extensions';
-import { getProjectFromWorkspace, getDefaultPath } from '../project';
+import { getProjectFromWorkspace, getDefaultPath, getWorkspaceConfigGracefully } from '../project';
 import { addModuleImportToModule, addDeclarationComponentToModule, addExportComponentToModule } from '../module';
 import { Schema as ComponentOptions } from './schema';
+import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 export function buildComponent(options: ComponentOptions): Rule {
   return (host: Tree) => {
-    const workspace = getWorkspace(host);
+    const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);
 
     if (options.path === undefined && project) {

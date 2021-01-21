@@ -1,16 +1,16 @@
 import { addImportToModule, addDeclarationToModule, addExportToModule } from '@schematics/angular/utility/ast-utils';
 import { getAppModulePath } from '@schematics/angular/utility/ng-ast-utils';
-import { getWorkspace } from '@schematics/angular/utility/config';
 import { InsertChange, Change } from '@schematics/angular/utility/change';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 
 import * as ts from 'typescript';
 
-import { getProjectMainFile, getProjectFromWorkspace } from '../project';
+import { getProjectMainFile, getProjectFromWorkspace, getWorkspaceConfigGracefully } from '../project';
+import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 export function addModuleImportToRootModule(options: any, moduleName: string, modulePath: string) {
   return (host: Tree) => {
-    const workspace = getWorkspace(host);
+    const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project = getProjectFromWorkspace(workspace, options.project);
     const appModulePath = getAppModulePath(host, getProjectMainFile(project));
 

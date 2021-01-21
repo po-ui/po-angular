@@ -50,7 +50,7 @@ export class PoLokiDriver {
         if (this.hasCollectionAndDataInCollection()) {
           this.clearCollection();
         }
-        resolve();
+        resolve(null);
       });
     });
   }
@@ -85,7 +85,7 @@ export class PoLokiDriver {
         if (this.hasCollectionAndDataInCollection()) {
           this.iterateWithDataItem(iteratorCallback);
         }
-        resolve();
+        resolve(null);
       });
     });
   }
@@ -135,7 +135,7 @@ export class PoLokiDriver {
         if (this.hasCollection()) {
           this.findAndRemoveItem(key);
         }
-        resolve();
+        resolve(null);
       });
     });
   }
