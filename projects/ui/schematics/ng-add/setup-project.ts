@@ -1,9 +1,12 @@
 import { chain, Rule, schematic, Tree, noop } from '@angular-devkit/schematics';
-import { getWorkspace } from '@schematics/angular/utility/config';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
-import { getProjectFromWorkspace, getProjectTargetOptions } from '@po-ui/ng-schematics/project';
+import {
+  getProjectFromWorkspace,
+  getProjectTargetOptions,
+  getWorkspaceConfigGracefully
+} from '@po-ui/ng-schematics/project';
 
 /** PO Module name that will insert in app root module */
 const poModuleName = 'PoModule';
@@ -26,7 +29,7 @@ export default function (options: any): Rule {
 /** Add PO theme to project styles */
 function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
   return function (tree: Tree): Tree {
-    const workspace = getWorkspace(tree);
+    const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
     const project = getProjectFromWorkspace(workspace, options.project);
 
     // Path needs to be always relative to the `package.json` or workspace root.

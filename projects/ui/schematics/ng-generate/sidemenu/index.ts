@@ -15,12 +15,12 @@ import {
   Source,
   filter
 } from '@angular-devkit/schematics';
-import { getWorkspace } from '@schematics/angular/utility/config';
 import { normalize, strings } from '@angular-devkit/core';
 
 import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
-import { getProjectFromWorkspace } from '@po-ui/ng-schematics/project';
+import { getProjectFromWorkspace, getWorkspaceConfigGracefully } from '@po-ui/ng-schematics/project';
 import { supportedCssExtensions } from '@po-ui/ng-schematics/utils';
+import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 import { Schema as ComponentOptions } from './schema';
 
@@ -38,7 +38,7 @@ export default function (options: ComponentOptions): Rule {
 
 function createAppComponent(options: ComponentOptions): Rule {
   return (tree: Tree) => {
-    const workspace = getWorkspace(tree);
+    const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
     const project = getProjectFromWorkspace(workspace, options.project);
     const sourceDir = `${project.sourceRoot}/app`;
 

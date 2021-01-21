@@ -1,9 +1,8 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getWorkspace } from '@schematics/angular/utility/config';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 import { AssetSpecification } from './asset-specification.interface';
-import { getProjectTargetOptions, getProjectFromWorkspace } from '../project';
+import { getProjectTargetOptions, getProjectFromWorkspace, getWorkspaceConfigGracefully } from '../project';
 
 /** Add a file or asset in project workspace */
 export function configuringBuildTargets(
@@ -12,7 +11,7 @@ export function configuringBuildTargets(
   buildTargetElement: string | AssetSpecification
 ): (tree: Tree) => Tree {
   return function (tree: Tree): Tree {
-    const workspace = getWorkspace(tree);
+    const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
     const project = getProjectFromWorkspace(workspace, options.project);
 
     addOptionToTarget(project, 'build', tree, optionsProperty, buildTargetElement, workspace);
