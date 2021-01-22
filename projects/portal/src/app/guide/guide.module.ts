@@ -12,6 +12,7 @@ import { GuideGettingStartedComponent } from './guides/guide-getting-started/gui
 import { GuideGuideCodeComponent } from './guides/guide-guide-code/guide-guide-code.component';
 import { GuideMigrationPouiV2Component } from './guides/guide-migration-poui-v2/guide-migration-poui-v2.component';
 import { GuideMigrationPouiV3Component } from './guides/guide-migration-poui-v3/guide-migration-poui-v3.component';
+import { GuideMigrationPouiV4Component } from './guides/guide-migration-poui-v4/guide-migration-poui-v4.component';
 import { GuideMigrationThfToPoUiComponent } from './guides/guide-migration-thf-to-po-ui/guide-migration-thf-to-po-ui.component';
 import { GuidePressKitComponent } from './guides/guide-press-kit/guide-press-kit.component';
 import { GuideSchematicsComponent } from './guides/guide-schematics/guide-schematics.component';
@@ -36,6 +37,7 @@ import { GuideGettingStartedPoTslintComponent } from './guides/guide-getting-sta
     GuideGuideCodeComponent,
     GuideMigrationPouiV2Component,
     GuideMigrationPouiV3Component,
+    GuideMigrationPouiV4Component,
     GuideMigrationThfToPoUiComponent,
     GuidePressKitComponent,
     GuideSchematicsComponent,

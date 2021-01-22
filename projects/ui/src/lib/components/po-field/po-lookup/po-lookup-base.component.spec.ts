@@ -1,5 +1,5 @@
 import { Directive, Inject, Injector } from '@angular/core';
-import { inject, TestBed } from '@angular/core/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { FormControl, NgControl } from '@angular/forms';
 
 import { Observable, of, throwError } from 'rxjs';
@@ -341,9 +341,8 @@ describe('PoLookupBaseComponent:', () => {
       expect(component.callOnChange).toHaveBeenCalled();
     });
 
-    it('searchById: should call `selectValue` if `getObjectByValue` return value', inject(
-      [LookupFilterService],
-      (lookupFilterService: LookupFilterService) => {
+    it('searchById: should call `selectValue` if `getObjectByValue` return value', fakeAsync(
+      inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
         const searchValue = 'po';
         const filterParams = { code: '' };
 
@@ -358,11 +357,13 @@ describe('PoLookupBaseComponent:', () => {
 
         component.searchById(searchValue);
 
+        tick();
+
         expect(spyPending).toHaveBeenCalled();
         expect(spyUpdate).toHaveBeenCalled();
         expect(component['selectValue']).toHaveBeenCalled();
         expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
-      }
+      })
     ));
 
     it('searchById: should call `cleanModel` when execute the method `searchById` with empty param.', () => {

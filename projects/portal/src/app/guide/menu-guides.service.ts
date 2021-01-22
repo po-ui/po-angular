@@ -15,6 +15,7 @@ export class MenuGuidesService {
       { label: 'Guia de codificação', link: 'guides/guide-code' },
       { label: 'Migração do PO UI para V2', link: 'guides/migration-poui-v2' },
       { label: 'Migração do PO UI para V3', link: 'guides/migration-poui-v3' },
+      { label: 'Migração do PO UI para V4', link: 'guides/migration-poui-v4' },
       { label: 'Migração do THF para o PO UI v1.x', link: 'guides/migration-thf-to-po-ui' },
       { label: 'Press Kit', link: 'guides/press-kit' },
       { label: 'Schematics', link: 'guides/schematics' },
