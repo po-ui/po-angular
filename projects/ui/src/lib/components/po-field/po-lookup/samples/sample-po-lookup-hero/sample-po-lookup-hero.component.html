@@ -37,7 +37,12 @@
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-6" p-label="Start Mission" [p-disabled]="f.form.invalid" (p-click)="startMission()">
+    <po-button
+      class="po-md-6"
+      p-label="Start Mission"
+      [p-disabled]="f.form.invalid || f.form.pending"
+      (p-click)="startMission()"
+    >
     </po-button>
   </div>
 </form>

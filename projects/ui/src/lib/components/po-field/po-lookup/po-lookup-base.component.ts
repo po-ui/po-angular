@@ -8,7 +8,8 @@ import {
   Directive,
   Injector,
   AfterViewInit,
-  Inject
+  Inject,
+  InjectFlags
 } from '@angular/core';
 
 import { Subscription } from 'rxjs';
@@ -33,6 +34,9 @@ import { finalize } from 'rxjs/operators';
  *
  * > Caso o campo seja iniciado ou preenchido com um valor inexistente na busca, o mesmo será limpado.
  * No segundo caso ocorrerá após este perder o foco; ambos os casos o campo ficará inválido quando requerido.
+ *
+ * > Enquanto o componente realiza a requisição ao servidor, o componente ficará desabilitado e com o status interno do
+ * [modelo](https://angular.io/guide/form-validation#creating-asynchronous-validators) como `pending`.
  *
  * Este componente não é recomendado quando a busca dos dados possuir poucas informações, para isso utilize outros componentes como o
  * `po-select` ou o `po-combo`.
@@ -384,7 +388,11 @@ export abstract class PoLookupBaseComponent
   }
 
   ngAfterViewInit(): void {
-    const ngControl: NgControl = this.injector.get<NgControl>(NgControl);
+    this.setControl();
+  }
+
+  private setControl() {
+    const ngControl: NgControl = this.injector.get(NgControl, null, InjectFlags.Self);
 
     if (ngControl) {
       this.control = ngControl.control as FormControl;
@@ -454,12 +462,15 @@ export abstract class PoLookupBaseComponent
 
     if (checkedValue !== '') {
       const oldDisable = this.disabled;
+      this.disabled = true;
 
       if (this.control) {
-        this.control.markAsPending();
+        // :TODO: Retirar no futuro pois esse setTimeout foi feito
+        // pois quando o campo é acionado pelos métodos setValue ou patchValue
+        // a mudança não é detectada
+        setTimeout(() => this.control.markAsPending());
       }
 
-      this.disabled = true;
       this.getSubscription = this.service
         .getObjectByValue(value, this.filterParams)
         .pipe(
