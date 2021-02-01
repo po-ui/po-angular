@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.4.0](https://github.com/po-ui/po-angular/compare/v4.3.0...v4.4.0) (2021-02-01)
+
+
+### Bug Fixes
+
+* **lookup:** configuração do status como pending no processamento ([ab82c2c](https://github.com/po-ui/po-angular/commit/ab82c2caccdc0e1ebebc9bd7034b90f7020f4352))
+
+### Features
+
+* **build:** atualização do projeto para a 11.1 ([b756410](https://github.com/po-ui/po-angular/commit/b756410e9fa478a3d78241e195f5a87d6f2d3065))
+
+
 # [4.3.0](https://github.com/po-ui/po-angular/compare/v4.2.0...v4.3.0) (2020-12-30)
 
 
