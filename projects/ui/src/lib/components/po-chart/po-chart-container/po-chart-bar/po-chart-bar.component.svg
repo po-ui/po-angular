@@ -5,7 +5,7 @@
     <!-- SERIES PATHS -->
     <svg:g po-chart-bar-path
       [attr.key]="'po-chart-bar-path-' + i"
-      [p-color]="colors[i]" 
+      [p-color]="item[0].color" 
       [p-coordinates]="item"
       [p-tooltip-position]="tooltipPosition"
       (p-bar-click)="onSerieBarClick($event)"

@@ -6,7 +6,7 @@
   <po-chart-container
     *ngIf="!isChartGaugeType"
     [p-options]="options"
-    [p-type]="type"
+    [p-type]="chartType"
     [p-series]="chartSeries"
     [p-categories]="categories"
     [p-container-size]="svgContainerSize"
@@ -23,5 +23,5 @@
 </div>
 
 <ng-template #chartLegendGroup>
-  <po-chart-legend #chartLegend [p-series]="series" [p-type]="type"> </po-chart-legend>
+  <po-chart-legend #chartLegend [p-series]="chartSeries" [p-type]="type"> </po-chart-legend>
 </ng-template>

@@ -17,7 +17,7 @@ export interface PoPieChartSeries extends PoCircularChartSeries {
    *
    * Define o texto que será exibido ao passar o mouse por cima das séries do *chart*.
    *
-   * > Caso não seja informado um valor para o *tooltip*, será exibido: `categoria: valor`.
+   * > Caso não seja informado um valor para o *tooltip*, será exibido: `label`: `data`.
    */
   tooltip?: string;
 }

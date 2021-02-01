@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { PoChartType } from '../enums/po-chart-type.enum';
-import { PoChartSeries } from '../po-chart-base.component';
 import { PoChartColors } from '../helpers/po-chart-colors.constant';
+import { PoChartSerie } from '../interfaces/po-chart-serie.interface';
+import { PoChartGaugeSerie } from '../po-chart-types/po-chart-gauge/po-chart-gauge-series.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class PoChartColorService {
    * @param series
    * @param type
    */
-  getSeriesColor(series: PoChartSeries, type: PoChartType) {
+  getSeriesColor(series: Array<PoChartSerie | PoChartGaugeSerie>, type: PoChartType) {
     const colorsLength = PoChartColors.length - 1;
 
     if (!series) {

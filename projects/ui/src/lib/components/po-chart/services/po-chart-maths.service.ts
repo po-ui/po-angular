@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { PoChartAxisXLabelArea, PoChartPadding } from '../helpers/po-chart-default-values.constant';
-
-import { PoChartContainerSize } from '../interfaces/po-chart-container-size.interface';
-import { PoLineChartSeries } from '../interfaces/po-chart-line-series.interface';
 import { PoChartMinMaxValues } from '../interfaces/po-chart-min-max-values.interface';
+import { PoChartSerie } from '../interfaces/po-chart-serie.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PoChartMathsService {
-  constructor() {}
-
   /**
    * Calcula e retorna os válores mínimo e máximo das séries.
    *
@@ -29,8 +24,8 @@ export class PoChartMathsService {
    *
    * @param series Lista de séries.
    */
-  seriesGreaterLength(series: Array<PoLineChartSeries>): number {
-    return series.reduce((result, serie) => (result > serie.data.length ? result : serie.data.length), 0);
+  seriesGreaterLength(series: Array<PoChartSerie>): number {
+    return series.reduce((result, serie: any) => (result > serie.data.length ? result : serie.data.length), 0);
   }
 
   /**

@@ -7,7 +7,7 @@
     <svg:g po-chart-path
       [attr.key]="'po-chart-line-path-' + i"
       [p-animate]="animate"
-      [p-color]="colors[i]" 
+      [p-color]="item.color" 
       [p-coordinates]="item?.coordinates"
       >
       </svg:g>
@@ -15,7 +15,7 @@
     <!-- SERIES POINTS -->
     <svg:g po-chart-series-point
       [p-animate]="animate"
-      [p-color]="colors[i]"
+      [p-color]="item.color"
       [p-relative-to]="'po-chart-line-path-group-' + i" 
       [p-coordinates]="seriesPointsCoordinates[i]"
       [attr.key]="'po-chart-line-path-points-group-' + i"

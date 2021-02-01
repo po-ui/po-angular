@@ -1,43 +1,47 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { PoChartColorService } from '../../services/po-chart-color.service';
 import { PoChartMathsService } from '../../services/po-chart-maths.service';
 
-import { PoChartType } from '../../enums/po-chart-type.enum';
-import { PoBarChartSeries } from '../../interfaces/po-chart-bar-series.interface';
-import { PoChartAxisOptions } from '../../interfaces/po-chart-axis-options.interface';
 import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.interface';
-import { PoColumnChartSeries } from '../../interfaces/po-chart-column-series.interface';
 import { PoChartMinMaxValues } from '../../interfaces/po-chart-min-max-values.interface';
 import { PoChartBarCoordinates } from '../../interfaces/po-chart-bar-coordinates.interface';
+import { ChartSerieColor } from '../po-chart-container.component';
 
 @Directive()
 export abstract class PoChartBarBaseComponent {
-  colors: Array<string>;
   seriesPathsCoordinates: Array<Array<PoChartBarCoordinates>>;
 
   protected seriesGreaterLength: number;
 
-  private minMaxSeriesValues: PoChartMinMaxValues;
-
   private _containerSize: PoChartContainerSize = {};
-  private _options: PoChartAxisOptions;
-  private _series: Array<PoBarChartSeries | PoColumnChartSeries> = [];
+  private _range: PoChartMinMaxValues = {};
+  private _series: Array<ChartSerieColor> = [];
 
   @Input('p-categories') categories: Array<string>;
+
+  @Input('p-range') set range(value: PoChartMinMaxValues) {
+    if (value instanceof Object && !(value instanceof Array)) {
+      this._range = value;
+
+      this.calculateSeriesPathsCoordinates(this.containerSize, this._series, this._range);
+    }
+  }
+
+  get range() {
+    return this._range;
+  }
 
   @Input('p-container-size') set containerSize(value: PoChartContainerSize) {
     this._containerSize = value;
 
-    this.getDomainValues(this.options);
-    this.calculateSeriesPathsCoordinates(this._containerSize, this.series, this.minMaxSeriesValues);
+    this.calculateSeriesPathsCoordinates(this._containerSize, this.series, this.range);
   }
 
   get containerSize() {
     return this._containerSize;
   }
 
-  @Input('p-series') set series(seriesList: Array<PoBarChartSeries | PoColumnChartSeries>) {
+  @Input('p-series') set series(seriesList: Array<ChartSerieColor>) {
     const seriesDataArrayFilter = seriesList.filter(serie => {
       return Array.isArray(serie.data);
     });
@@ -45,9 +49,7 @@ export abstract class PoChartBarBaseComponent {
     if (seriesDataArrayFilter.length) {
       this._series = seriesDataArrayFilter;
       this.seriesGreaterLength = this.mathsService.seriesGreaterLength(this.series);
-      this.colors = this.colorService.getSeriesColor(this._series, PoChartType.Column);
-      this.getDomainValues(this.options);
-      this.calculateSeriesPathsCoordinates(this.containerSize, seriesDataArrayFilter, this.minMaxSeriesValues);
+      this.calculateSeriesPathsCoordinates(this.containerSize, seriesDataArrayFilter, this.range);
     } else {
       this._series = [];
     }
@@ -57,24 +59,11 @@ export abstract class PoChartBarBaseComponent {
     return this._series;
   }
 
-  @Input('p-options') set options(value: PoChartAxisOptions) {
-    if (value instanceof Object && !(value instanceof Array)) {
-      this._options = value;
-
-      this.getDomainValues(this.options);
-      this.calculateSeriesPathsCoordinates(this.containerSize, this._series, this.minMaxSeriesValues);
-    }
-  }
-
-  get options() {
-    return this._options;
-  }
-
   @Output('p-bar-click') barClick = new EventEmitter<any>();
 
   @Output('p-bar-hover') barHover = new EventEmitter<any>();
 
-  constructor(protected colorService: PoChartColorService, protected mathsService: PoChartMathsService) {}
+  constructor(protected mathsService: PoChartMathsService) {}
 
   onSerieBarClick(selectedItem: any) {
     this.barClick.emit(selectedItem);
@@ -88,50 +77,26 @@ export abstract class PoChartBarBaseComponent {
     return index;
   }
 
-  private getDomainValues(options: PoChartAxisOptions = {}): void {
-    const acceptNegativeValues = false;
-    this.minMaxSeriesValues = this.mathsService.calculateMinAndMaxValues(this._series, acceptNegativeValues);
-
-    const minValue =
-      !acceptNegativeValues && !options.minRange
-        ? 0
-        : options.minRange < this.minMaxSeriesValues.minValue
-        ? options.minRange
-        : this.minMaxSeriesValues.minValue;
-    const maxValue =
-      options.maxRange > this.minMaxSeriesValues.maxValue ? options.maxRange : this.minMaxSeriesValues.maxValue;
-    const minMaxUpdatedValues = { minValue: !acceptNegativeValues && minValue < 0 ? 0 : minValue, maxValue };
-
-    this.minMaxSeriesValues = {
-      ...this.minMaxSeriesValues,
-      ...minMaxUpdatedValues
-    };
-  }
-
   private calculateSeriesPathsCoordinates(
     containerSize: PoChartContainerSize,
-    series: Array<PoBarChartSeries | PoColumnChartSeries>,
-    minMaxSeriesValues: PoChartMinMaxValues
+    series: Array<ChartSerieColor>,
+    range: PoChartMinMaxValues
   ) {
-    this.seriesPathsCoordinates = series.map((serie: PoBarChartSeries | PoColumnChartSeries, seriesIndex) => {
+    this.seriesPathsCoordinates = series.map((serie: ChartSerieColor, seriesIndex) => {
       if (Array.isArray(serie.data)) {
         let pathCoordinates: Array<PoChartBarCoordinates> = [];
 
-        serie.data.forEach((serieValue, serieDataIndex) => {
-          if (this.mathsService.verifyIfFloatOrInteger(serieValue)) {
-            const coordinates = this.barCoordinates(
-              seriesIndex,
-              serieDataIndex,
-              containerSize,
-              minMaxSeriesValues,
-              serieValue
-            );
+        serie.data.forEach((data, serieDataIndex) => {
+          if (this.mathsService.verifyIfFloatOrInteger(data)) {
+            const coordinates = this.barCoordinates(seriesIndex, serieDataIndex, containerSize, range, data);
 
             const category = this.serieCategory(serieDataIndex, this.categories);
             const label = serie['label'];
-            const tooltipLabel = this.serieLabel(serieValue, label);
+            const color = serie['color'];
+            const tooltip = serie['tooltip'];
+            const tooltipLabel = this.getTooltipLabel(data, label, tooltip);
 
-            pathCoordinates = [...pathCoordinates, { category, label, tooltipLabel, data: serieValue, coordinates }];
+            pathCoordinates = [...pathCoordinates, { category, color, label, tooltipLabel, data, coordinates }];
           }
         });
 
@@ -140,21 +105,22 @@ export abstract class PoChartBarBaseComponent {
     });
   }
 
-  private serieCategory(index: number, categories: Array<string> = []) {
-    return categories[index] ?? undefined;
+  private getTooltipLabel(data: number, label: string, tooltipLabel: string) {
+    const dataLabel = label ? `${label}: ` : '';
+    const dataValue = data.toString();
+
+    return tooltipLabel || `${dataLabel}${dataValue}`;
   }
 
-  private serieLabel(serieValue: number, label: string) {
-    const hasLabel = label !== null && label !== undefined && label !== '';
-
-    return hasLabel ? `${label}: ${serieValue}` : serieValue.toString();
+  private serieCategory(index: number, categories: Array<string> = []) {
+    return categories[index] ?? undefined;
   }
 
   protected abstract barCoordinates(
     seriesIndex: number,
     serieDataIndex: number,
     containerSize: PoChartContainerSize,
-    minMaxSeriesValues: PoChartMinMaxValues,
+    range: PoChartMinMaxValues,
     serieValue: number
   );
 }

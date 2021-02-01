@@ -11,6 +11,9 @@ export interface PoChartBarCoordinates {
   /** Categoria do eixo Y na qual o item da série está presente. */
   category: string;
 
+  /** A cor da série. */
+  color?: string;
+
   /** A série para a qual correspondem as coordenadas. */
   label: string;
 

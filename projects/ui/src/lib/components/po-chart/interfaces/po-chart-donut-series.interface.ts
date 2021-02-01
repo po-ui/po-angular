@@ -17,7 +17,7 @@ export interface PoDonutChartSeries extends PoCircularChartSeries {
    *
    * Define o texto que será exibido ao passar o mouse por cima das séries do *chart*.
    *
-   * > Caso não seja informado um valor para o *tooltip*, será exibido: `categoria: valor proporcional ao total em porcentagem`.
+   * > Caso não seja informado um valor para o *tooltip*, será exibido: `label`: valor proporcional ao total em porcentagem.
    */
   tooltip?: string;
 }

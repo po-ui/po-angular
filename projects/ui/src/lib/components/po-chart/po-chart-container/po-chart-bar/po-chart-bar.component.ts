@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { PoChartAxisXLabelArea, PoChartPlotAreaPaddingTop } from './../../helpers/po-chart-default-values.constant';
 
 import { PoChartBarBaseComponent } from './po-chart-bar-base.component';
-import { PoChartColorService } from './../../services/po-chart-color.service';
 import { PoChartMathsService } from './../../services/po-chart-maths.service';
 
 import { PoChartContainerSize } from './../../interfaces/po-chart-container-size.interface';
@@ -16,8 +15,8 @@ import { PoChartMinMaxValues } from './../../interfaces/po-chart-min-max-values.
 export class PoChartBarComponent extends PoChartBarBaseComponent {
   readonly tooltipPosition = 'right';
 
-  constructor(protected colorService: PoChartColorService, protected mathsService: PoChartMathsService) {
-    super(colorService, mathsService);
+  constructor(protected mathsService: PoChartMathsService) {
+    super(mathsService);
   }
 
   protected barCoordinates(
