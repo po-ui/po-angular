@@ -1,35 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 
-import {
-  PoLineChartSeries,
-  PoChartType,
-  PoDonutChartSeries,
-  PoPieChartSeries,
-  PoSelectOption,
-  PoChartOptions
-} from '@po-ui/ng-components';
+import { PoChartSerie, PoChartType, PoSelectOption, PoChartOptions } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-labs',
   templateUrl: './sample-po-chart-labs.component.html'
 })
 export class SamplePoChartLabsComponent implements OnInit {
-  label: string;
-  totalValues: Array<number> = [];
+  allCategories: Array<string> = [];
+  categories: string;
+  data;
   event: string;
   height: number;
-  multipleSeries: Array<PoPieChartSeries | PoDonutChartSeries>;
-  multipleValues: Array<PoLineChartSeries>;
-  series: Array<PoPieChartSeries | PoDonutChartSeries | PoLineChartSeries>;
+  label: string;
+  series: Array<PoChartSerie>;
+  serieType: PoChartType;
   title: string;
   tooltip: string;
-  data: number;
   type: PoChartType;
-  lineValues: number;
-  multipleValuesLabel: string = '';
-  categories: string;
-  allCategories: Array<string> = [];
-  inputDataSeries: string;
   options: PoChartOptions = {
     axis: {
       minRange: undefined,
@@ -48,11 +36,6 @@ export class SamplePoChartLabsComponent implements OnInit {
 
   ngOnInit() {
     this.restore();
-    this.type = PoChartType.Line;
-  }
-
-  get isMultipleValues(): boolean {
-    return this.type === PoChartType.Line || this.type === PoChartType.Column || this.type === PoChartType.Bar;
   }
 
   addOptions() {
@@ -64,40 +47,28 @@ export class SamplePoChartLabsComponent implements OnInit {
   }
 
   addData() {
-    if (this.isMultipleValues) {
-      const dataSeries = this.convertToArray(this.inputDataSeries);
+    const data = isNaN(this.data) ? this.convertToArray(this.data) : Math.floor(this.data);
+    const type = this.serieType ?? this.type;
 
-      this.multipleValues = [...this.multipleValues, { label: this.multipleValuesLabel, data: dataSeries }];
-    } else {
-      this.multipleSeries = [...this.multipleSeries, { label: this.label, data: this.data, tooltip: this.tooltip }];
-    }
-
-    this.applySeriesData();
+    this.series = [...this.series, { label: this.label, data, tooltip: this.tooltip, type }];
   }
 
-  applySeriesData() {
-    this.series = this.isMultipleValues ? this.multipleValues : this.multipleSeries;
-  }
-
-  changeEvent(eventName: string, serieEvent: PoPieChartSeries): void {
+  changeEvent(eventName: string, serieEvent: PoChartSerie): void {
     this.event = `${eventName}: ${JSON.stringify(serieEvent)}`;
   }
 
   restore() {
+    this.type = undefined;
+    this.serieType = undefined;
     this.label = undefined;
     this.categories = undefined;
     this.event = undefined;
     this.height = undefined;
-    this.multipleSeries = [];
     this.series = [];
     this.title = undefined;
     this.tooltip = undefined;
     this.data = undefined;
     this.allCategories = [];
-    this.inputDataSeries = undefined;
-    this.multipleValuesLabel = undefined;
-    this.lineValues = undefined;
-    this.multipleValues = [];
     this.options = {
       axis: {
         minRange: undefined,

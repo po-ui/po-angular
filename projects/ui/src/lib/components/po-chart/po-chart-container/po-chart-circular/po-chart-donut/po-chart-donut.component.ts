@@ -4,7 +4,6 @@ import { convertNumberToDecimal } from '../../../../../utils/util';
 
 import { PoChartCircularComponent } from '../po-chart-circular.component';
 import { PoChartDonutThickness, PoChartStartAngle } from '../../../helpers/po-chart-default-values.constant';
-import { PoChartColorService } from '../../../services/po-chart-color.service';
 import { PoSeriesTextBlack } from '../../../helpers/po-chart-colors.constant';
 
 @Component({
@@ -16,8 +15,8 @@ export class PoChartDonutComponent extends PoChartCircularComponent implements O
   private readonly poChartWhiteColor = '#ffffff';
 
   /* istanbul ignore next */
-  constructor(colorService: PoChartColorService, ngZone: NgZone, changeDetector: ChangeDetectorRef) {
-    super(colorService, ngZone, changeDetector);
+  constructor(ngZone: NgZone, changeDetector: ChangeDetectorRef) {
+    super(ngZone, changeDetector);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

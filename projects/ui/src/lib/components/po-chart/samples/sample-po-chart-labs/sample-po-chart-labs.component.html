@@ -19,15 +19,7 @@
 <po-divider class="po-md-12" p-label="Properties"></po-divider>
 
 <form>
-  <po-select
-    class="po-md-4"
-    name="type"
-    [(ngModel)]="type"
-    p-columns="3"
-    p-label="Type"
-    [p-options]="typeOptions"
-    (p-change)="restore()"
-  >
+  <po-select class="po-md-4" name="type" [(ngModel)]="type" p-columns="3" p-label="Type" [p-options]="typeOptions">
   </po-select>
 
   <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
@@ -38,35 +30,37 @@
 <form #chartSeries="ngForm">
   <po-divider class="po-md-12" p-label="Chart series"></po-divider>
 
-  <div *ngIf="!isMultipleValues">
-    <div class="po-row">
-      <po-input class="po-md-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
-
-      <po-number class="po-md-6" name="data" [(ngModel)]="data" p-label="Data" p-required> </po-number>
-
-      <po-input class="po-md-6" name="tooltip" [(ngModel)]="tooltip" p-label="Tooltip Text"> </po-input>
-    </div>
-  </div>
-
-  <div class="po-row" *ngIf="isMultipleValues">
+  <div class="po-row">
     <po-input
-      class="po-md-4"
-      name="multipleValuesLabel"
-      [(ngModel)]="multipleValuesLabel"
+      class="po-md-3"
+      name="label"
+      [(ngModel)]="label"
       p-label="Label"
-      p-help="Series label"
+      p-help="Serie label"
+      p-required
+    ></po-input>
+
+    <po-input
+      class="po-md-3"
+      name="data"
+      [(ngModel)]="data"
+      p-label="Data"
+      p-help="Example: [25, 58, 83, 66] or 25"
       p-required
     >
     </po-input>
 
-    <po-input
-      class="po-md-4"
-      name="inputDataSeries"
-      [(ngModel)]="inputDataSeries"
-      p-label="Data"
-      p-help="Example: [24, 58, 83, 66, 75, 19]"
-      p-required
+    <po-select
+      class="po-md-3"
+      name="serieType"
+      [(ngModel)]="serieType"
+      p-help="Serie Type"
+      p-label="Type"
+      [p-options]="typeOptions"
     >
+    </po-select>
+
+    <po-input class="po-md-3" name="tooltip" [(ngModel)]="tooltip" p-label="Tooltip" p-help="Custom Tooltip">
     </po-input>
   </div>
 
@@ -76,7 +70,7 @@
 </form>
 
 <form>
-  <div class="po-row" *ngIf="isMultipleValues">
+  <div class="po-row">
     <po-divider class="po-md-12"></po-divider>
 
     <po-input

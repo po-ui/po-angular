@@ -9,6 +9,7 @@
   <svg:g
     *ngIf="!isTypeCircular"
     po-chart-axis
+    [p-allow-negative-data]="allowNegativeData"
     [p-type]="type"
     [p-series]="series"
     [p-container-size]="containerSize"
@@ -16,28 +17,29 @@
     [p-categories]="categories"
   ></svg:g>
 
-  <!-- chart line -->
-  <svg:g
-    *ngIf="type === 'line'"
-    po-chart-line
-    [p-categories]="categories"
-    [p-series]="series"
-    [p-options]="axisOptions"
-    [p-container-size]="containerSize"
-    (p-point-hover)="onSerieHover($event)"
-    (p-point-click)="onSerieClick($event)"
-  ></svg:g>
-
   <!-- chart column -->
   <svg:g
-    *ngIf="type === 'column'"
+    *ngIf="(type === 'column' || type === 'line') && seriesByType['column'].length"
     po-chart-column
     [p-categories]="categories"
-    [p-series]="series"
-    [p-options]="axisOptions"
+    [p-range]="range"
+    [p-series]="seriesByType['column']"
     [p-container-size]="containerSize"
     (p-bar-hover)="onSerieHover($event)"
     (p-bar-click)="onSerieClick($event)"
+  ></svg:g>
+
+  <!-- chart line -->
+  <svg:g
+    *ngIf="(type === 'column' || type === 'line') && seriesByType['line'].length"
+    po-chart-line
+    [p-allow-negative-data]="allowNegativeData"
+    [p-categories]="categories"
+    [p-range]="range"
+    [p-series]="seriesByType['line']"
+    [p-container-size]="containerSize"
+    (p-point-hover)="onSerieHover($event)"
+    (p-point-click)="onSerieClick($event)"
   ></svg:g>
 
   <!-- chart bar -->
@@ -45,8 +47,8 @@
     *ngIf="type === 'bar'"
     po-chart-bar
     [p-categories]="categories"
-    [p-series]="series"
-    [p-options]="axisOptions"
+    [p-range]="range"
+    [p-series]="seriesByType['bar']"
     [p-container-size]="containerSize"
     (p-bar-hover)="onSerieHover($event)"
     (p-bar-click)="onSerieClick($event)"
@@ -55,7 +57,7 @@
   <svg:g
     *ngIf="type === 'pie'"
     po-chart-pie
-    [p-series]="series"
+    [p-series]="seriesByType['pie']"
     [p-container-size]="containerSize"
     (p-circular-hover)="onSerieHover($event)"
     (p-circular-click)="onSerieClick($event)"
@@ -64,7 +66,7 @@
   <svg:g
     *ngIf="type === 'donut'"
     po-chart-donut
-    [p-series]="series"
+    [p-series]="seriesByType['donut']"
     [p-container-size]="containerSize"
     (p-circular-hover)="onSerieHover($event)"
     (p-circular-click)="onSerieClick($event)"

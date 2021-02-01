@@ -12,7 +12,7 @@ export interface PoChartPathCoordinates {
   color?: string;
 
   /** As coordenadas da série. */
-  coordinates: string;
+  coordinates?: string;
 
   /** Valor da série. */
   data?: number;

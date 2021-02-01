@@ -96,6 +96,20 @@ describe('PoChartPieComponent', () => {
       expect(result).toBe(expectedResult);
     });
 
+    it('calculateCoordinates: should return coordinates considering largeArc as false', () => {
+      const height = 50;
+      const startRadianAngle = 0.5;
+      const endRadianAngle = 1;
+      const expectedResult =
+        'M 46.93956404725932 36.985638465105076 A 25 25 0 0,1 38.507557646703496 46.03677462019741 L 25 25 Z';
+
+      spyOn(component, <any>'drawSeries');
+
+      const result = component['calculateCoordinates'](height, startRadianAngle, endRadianAngle);
+
+      expect(result).toBe(expectedResult);
+    });
+
     it('getTooltipLabel: should return tooltipLabel', () => {
       const data = 30;
       const label = 'teste';
@@ -105,6 +119,14 @@ describe('PoChartPieComponent', () => {
       const result = component['getTooltipLabel'](data, label, tooltipLabel);
 
       expect(result).toEqual(expectedResult);
+    });
+
+    it('getTooltipLabel: should return only `data` if `label` is undefined', () => {
+      const data = 30;
+      const label = undefined;
+      const result = component['getTooltipLabel'](data, label);
+
+      expect(result).toBe(data.toString());
     });
 
     it('getTooltipLabel: should return dataLabel:dataValue if tooltipLabel is undefied', () => {

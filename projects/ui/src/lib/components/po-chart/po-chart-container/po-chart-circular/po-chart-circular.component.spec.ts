@@ -7,18 +7,16 @@ import { PoChartCompleteCircle } from '../../helpers/po-chart-default-values.con
 import { PoChartCircularComponent } from './po-chart-circular.component';
 import { PoChartCircularLabelComponent } from './po-chart-circular-label/po-chart-circular-label.component';
 import { PoChartCircularPathComponent } from './po-chart-circular-path/po-chart-circular-path.component';
-import { PoChartColorService } from '../../services/po-chart-color.service';
 import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.interface';
 import { PoChartModule } from '../../po-chart.module';
-import { PoChartType } from '../../enums/po-chart-type.enum';
 
 @Component({
   selector: 'po-chart-circular-test',
   template: ` <svg:path #svgPaths></svg:path> `
 })
 class PoChartPieComponent extends PoChartCircularComponent {
-  constructor(colorService: PoChartColorService, ngZone: NgZone, changeDetector: ChangeDetectorRef) {
-    super(colorService, ngZone, changeDetector);
+  constructor(ngZone: NgZone, changeDetector: ChangeDetectorRef) {
+    super(ngZone, changeDetector);
   }
 
   getTooltipLabel() {}
@@ -34,11 +32,9 @@ describe('PoChartCircularComponent', () => {
   let fixturePath: ComponentFixture<PoChartCircularPathComponent>;
   let fixtureLabel: ComponentFixture<PoChartCircularLabelComponent>;
 
-  const colorList = ['#0C6C94', '#29B6C5'];
-
   const series = [
-    { label: 'category A', data: 10 },
-    { label: 'category B', data: 20 }
+    { label: 'category A', data: 10, color: '#0C6C94' },
+    { label: 'category B', data: 20, color: '#29B6C5' }
   ];
 
   const containerSize: PoChartContainerSize = {
@@ -67,7 +63,6 @@ describe('PoChartCircularComponent', () => {
     componentLabel = fixtureLabel.componentInstance;
 
     component.containerSize = containerSize;
-    component['colorList'] = colorList;
     spyOn(component, <any>'getTooltipLabel').and.returnValue('label');
 
     fixture.detectChanges();
@@ -158,6 +153,16 @@ describe('PoChartCircularComponent', () => {
       const spyInitDrawPaths = spyOn(component, <any>'initDrawPaths');
 
       component['drawSeries'](mockSeries, containerSize.svgHeight);
+
+      expect(spyInitDrawPaths).not.toHaveBeenCalled();
+    });
+
+    it('drawSeries: shouldn`t call `initDrawPaths` if seriesList doesn`t have length', () => {
+      spyOn(component, <any>'validateSeries').and.returnValue([]);
+      spyOn(component['changeDetector'], <any>'detectChanges');
+      const spyInitDrawPaths = spyOn(component, <any>'initDrawPaths');
+
+      component['drawSeries'](undefined, containerSize.svgHeight);
 
       expect(spyInitDrawPaths).not.toHaveBeenCalled();
     });
@@ -387,15 +392,9 @@ describe('PoChartCircularComponent', () => {
   });
 
   describe('Properties:', () => {
-    it('p-series: should apply value to `animate` and `colorList`', () => {
-      const type = PoChartType.Pie;
-      const seriesColors = ['#0C6C94', '#29B6C5'];
-      const spyGetSeriesColor = spyOn(component['colorService'], 'getSeriesColor').and.callThrough();
-
+    it('p-series: should apply value to `animate`', () => {
       component.series = series;
 
-      expect(spyGetSeriesColor).toHaveBeenCalledWith(component.series, type);
-      expect(component['colorList']).toEqual(seriesColors);
       expect(component['animate']).toBe(true);
     });
   });

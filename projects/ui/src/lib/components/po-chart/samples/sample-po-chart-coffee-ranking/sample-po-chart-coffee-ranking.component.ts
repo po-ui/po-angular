@@ -1,14 +1,6 @@
 import { Component } from '@angular/core';
 
-import {
-  PoChartType,
-  PoDialogService,
-  PoDonutChartSeries,
-  PoLineChartSeries,
-  PoPieChartSeries,
-  PoBarChartSeries,
-  PoChartOptions
-} from '@po-ui/ng-components';
+import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-coffee-ranking',
@@ -40,7 +32,7 @@ export class SamplePoChartCoffeeRankingComponent {
     'Icetea'
   ];
 
-  coffeeConsumption: Array<PoDonutChartSeries> = [
+  coffeeConsumption: Array<PoChartSerie> = [
     { label: 'Finland', data: 9.6, tooltip: 'Finland (Europe)' },
     { label: 'Norway', data: 7.2, tooltip: 'Norway (Europe)' },
     { label: 'Netherlands', data: 6.7, tooltip: 'Netherlands (Europe)' },
@@ -48,12 +40,12 @@ export class SamplePoChartCoffeeRankingComponent {
     { label: 'Austria', data: 5.5, tooltip: 'Austria (Europe)' }
   ];
 
-  consumptionPerCapita: Array<PoBarChartSeries> = [
+  consumptionPerCapita: Array<PoChartSerie> = [
     { label: '2018', data: [86.5, 51.3, 44.6, 39.5, 27.6, 27.3, 25.4, 21.5, 20.8, 15.9, 15.4, 14.4] },
     { label: '2020', data: [86.1, 52.1, 47.3, 37.8, 29.8, 28.5, 24.9, 22.5, 21.1, 14.5, 15.5, 15.5] }
   ];
 
-  participationByCountryInWorldExports: Array<PoLineChartSeries> = [
+  participationByCountryInWorldExports: Array<PoChartSerie> = [
     { label: 'Brazil', data: [35, 32, 25, 29, 33, 33] },
     { label: 'Vietnam', data: [15, 17, 23, 19, 22, 18] },
     { label: 'Colombia', data: [8, 7, 6, 9, 10, 11] },
@@ -61,13 +53,14 @@ export class SamplePoChartCoffeeRankingComponent {
     { label: 'Indonesia', data: [7, 6, 10, 10, 4, 6] }
   ];
 
-  evolutionOfCoffeeAndSomeCompetitors: Array<PoLineChartSeries> = [
-    { label: '2014', data: [91, 40, 42] },
-    { label: '2017', data: [93, 52, 39] },
-    { label: '2020', data: [95, 46, 31] }
+  evolutionOfCoffeeAndSomeCompetitors: Array<PoChartSerie> = [
+    { label: '2014', data: [91, 40, 42], type: PoChartType.Column },
+    { label: '2017', data: [93, 52, 39], type: PoChartType.Column },
+    { label: '2020', data: [95, 46, 31], type: PoChartType.Column },
+    { label: 'Coffee consumption in Brazil', data: [34, 27, 79], type: PoChartType.Line }
   ];
 
-  coffeeProduction: Array<PoPieChartSeries> = [
+  coffeeProduction: Array<PoChartSerie> = [
     { label: 'Brazil', data: 2796, tooltip: 'Brazil (South America)' },
     { label: 'Vietnam', data: 1076, tooltip: 'Vietnam (Asia)' },
     { label: 'Colombia', data: 688, tooltip: 'Colombia (South America)' },

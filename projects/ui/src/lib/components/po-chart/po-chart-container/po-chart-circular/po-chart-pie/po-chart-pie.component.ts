@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 
 import { PoChartCircularComponent } from '../po-chart-circular.component';
-import { PoChartColorService } from '../../../services/po-chart-color.service';
 
 @Component({
   selector: '[po-chart-pie]',
@@ -9,8 +8,8 @@ import { PoChartColorService } from '../../../services/po-chart-color.service';
 })
 export class PoChartPieComponent extends PoChartCircularComponent implements OnChanges {
   /* istanbul ignore next */
-  constructor(colorService: PoChartColorService, ngZone: NgZone, changeDetector: ChangeDetectorRef) {
-    super(colorService, ngZone, changeDetector);
+  constructor(ngZone: NgZone, changeDetector: ChangeDetectorRef) {
+    super(ngZone, changeDetector);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -241,18 +241,16 @@ describe('PoChartComponent:', () => {
         chartWrapper: { nativeElement: { offsetWidth: 200 } }
       };
 
+      component.type = PoChartType.Gauge;
       component.height = 400;
-      component['series'] = <any>[
-        { category: 'A', value: 10 },
-        { category: 'B', value: 10 }
-      ];
+      component.series = { description: 'A', value: 10 };
       component['colors'] = ['orange', 'red'];
 
       component['setComponentRefProperties'](instance);
 
       expect(instance.height).toBe(component.height);
       expect(instance.type).toBe(component.type);
-      expect(instance.series).toEqual(component['series']);
+      expect(instance.series).toEqual([component.series]);
       expect(instance.colors).toEqual(component['colors']);
       expect(instance.chartHeader).toBe(component.chartHeader.nativeElement.offsetHeight);
       expect(instance.chartLegend).toBe(component.chartLegend.nativeElement.offsetHeight);
@@ -417,29 +415,5 @@ describe('PoChartComponent:', () => {
       component.categories.length
     );
     expect(spyGetChartMeasurements).toHaveBeenCalled();
-  });
-
-  describe('Templates:', () => {
-    it('should have po-chart-line-path tag if type is `Line`', () => {
-      component.series = [{ label: 'catA', data: [1, 2, 3] }];
-      component.type = PoChartType.Line;
-
-      fixture.detectChanges();
-
-      const chartContainerContent = nativeElement.querySelector('.po-chart-line-path');
-
-      expect(chartContainerContent).toBeTruthy();
-    });
-
-    it('shouldn`t have po-chart-line-path if type is different from `Line`', () => {
-      component.type = PoChartType.Pie;
-      component.series = [{ category: 'catA', value: 20 }];
-
-      fixture.detectChanges();
-
-      const chartContainerContent = nativeElement.querySelector('.po-chart-line-path');
-
-      expect(chartContainerContent).toBeNull();
-    });
   });
 });

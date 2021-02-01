@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
+import { expectPropertiesValues } from 'projects/ui/src/lib/util-test/util-expect.spec';
 
 import { PoChartLineComponent } from './po-chart-line.component';
-import { PoChartType } from '../../enums/po-chart-type.enum';
 import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.interface';
 import { PoChartModule } from '../../po-chart.module';
 
@@ -12,8 +11,8 @@ describe('PoChartLineComponent', () => {
   let fixture: ComponentFixture<PoChartLineComponent>;
 
   const series = [
-    { label: 'category', data: [1, 2, 3] },
-    { label: 'category B', data: [10, 20, 30] }
+    { label: 'category', data: [1, 2, 3], color: '#94DAE2' },
+    { label: 'category B', data: [10, 20, 30], color: '#29B6C5' }
   ];
   const containerSize: PoChartContainerSize = {
     svgWidth: 200,
@@ -21,6 +20,8 @@ describe('PoChartLineComponent', () => {
     svgPlottingAreaWidth: 20,
     svgPlottingAreaHeight: 20
   };
+
+  const range = { minValue: 1, maxValue: 30 };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -71,29 +72,15 @@ describe('PoChartLineComponent', () => {
       expect(component.trackBy(index)).toBe(expectedValue);
     });
 
-    it('getDomainValues: should apply value to `minMaxSeriesValues` with the min and max series values', () => {
-      component.options = undefined;
-      component['getDomainValues'](component.options);
-
-      expect(component['minMaxSeriesValues']).toEqual({ minValue: 1, maxValue: 30 });
-    });
-
-    it('getDomainValues: should apply value to `minMaxSeriesValues` with the min and max values of `options`', () => {
-      component.options = { minRange: -10, maxRange: 50 };
-      component['getDomainValues'](component.options);
-
-      expect(component['minMaxSeriesValues']).toEqual({ minValue: -10, maxValue: 50 });
-    });
-
     describe('seriePathPointsDefinition: ', () => {
-      it('should call `svgPathCommand`, `xCoordinate`, `yCoordinate`, `serieCategory` and `serieLabel`', () => {
+      it('should call `svgPathCommand`, `xCoordinate`, `yCoordinate`, `serieCategory` and `getTooltipLabel`', () => {
         const minMaxSeriesValues = { minValue: 0, maxValue: 30 };
 
         const spySvgPathCommand = spyOn(component, <any>'svgPathCommand');
         const spyXCoordinate = spyOn(component, <any>'xCoordinate');
         const spyYCoordinate = spyOn(component, <any>'yCoordinate');
         const spySerieCategory = spyOn(component, <any>'serieCategory');
-        const spySerieLabel = spyOn(component, <any>'serieLabel');
+        const spyGetTooltipLabel = spyOn(component, <any>'getTooltipLabel');
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
 
@@ -101,26 +88,24 @@ describe('PoChartLineComponent', () => {
         expect(spyXCoordinate).toHaveBeenCalled();
         expect(spyYCoordinate).toHaveBeenCalled();
         expect(spySerieCategory).toHaveBeenCalled();
-        expect(spySerieLabel).toHaveBeenCalled();
+        expect(spyGetTooltipLabel).toHaveBeenCalled();
       });
 
       it('should apply apply value to `seriesPathsCoordinates`', () => {
-        const minMaxSeriesValues = { minValue: 5, maxValue: 10 };
-        component.series = [{ label: 'Vancouver', data: [5, 10] }];
+        component.series = [{ label: 'Vancouver', data: [5, 10], color: '#94DAE2' }];
 
-        component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
+        component['seriePathPointsDefinition'](component.containerSize, component.series, range);
 
-        const expectedResult = [{ coordinates: ' M72 28 L92 8' }];
+        const expectedResult = [{ coordinates: ' M104 25 L114 21', color: '#94DAE2' }];
 
         expect(component.seriesPathsCoordinates).toEqual(expectedResult);
         expect(component.seriesPathsCoordinates.length).toBe(1);
       });
 
       it('should apply apply value to `seriesPointsCoordinates`', () => {
-        const minMaxSeriesValues = { minValue: 5, maxValue: 10 };
         component.series = [{ label: 'Vancouver', data: [5, 10] }];
 
-        component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
+        component['seriePathPointsDefinition'](component.containerSize, component.series, range);
 
         const expectedResult = [
           [
@@ -129,16 +114,16 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 5',
               data: 5,
-              xCoordinate: 72,
-              yCoordinate: 28
+              xCoordinate: 104,
+              yCoordinate: 25
             },
             {
               category: undefined,
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
-              xCoordinate: 92,
-              yCoordinate: 8
+              xCoordinate: 114,
+              yCoordinate: 21
             }
           ]
         ];
@@ -161,7 +146,7 @@ describe('PoChartLineComponent', () => {
               label: undefined,
               tooltipLabel: '5',
               data: 5,
-              xCoordinate: 72,
+              xCoordinate: 104,
               yCoordinate: 28
             },
             {
@@ -169,7 +154,7 @@ describe('PoChartLineComponent', () => {
               label: undefined,
               tooltipLabel: '10',
               data: 10,
-              xCoordinate: 92,
+              xCoordinate: 114,
               yCoordinate: 8
             }
           ]
@@ -194,7 +179,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 5',
               data: 5,
-              xCoordinate: 72,
+              xCoordinate: 104,
               yCoordinate: 28
             },
             {
@@ -202,7 +187,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
-              xCoordinate: 92,
+              xCoordinate: 114,
               yCoordinate: 8
             }
           ]
@@ -215,7 +200,7 @@ describe('PoChartLineComponent', () => {
 
       it('should ignore to coordinates the serie.data which it`s value is null', () => {
         const minMaxSeriesValues = { minValue: 5, maxValue: 10 };
-        const chartSeries = [{ label: 'Vancouver', data: [10, null, 12] }];
+        const chartSeries = [{ label: 'Vancouver', data: [10, null, 12], color: '#29B6C5' }];
         component.categories = ['janeiro', 'fevereiro', 'março'];
 
         const expectedPointsResult = [
@@ -225,7 +210,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
-              xCoordinate: 72,
+              xCoordinate: 93.33333333333333,
               yCoordinate: 8
             },
             {
@@ -233,7 +218,7 @@ describe('PoChartLineComponent', () => {
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 12',
               data: 12,
-              xCoordinate: 92,
+              xCoordinate: 106.66666666666666,
               yCoordinate: 0
             }
           ]
@@ -242,7 +227,9 @@ describe('PoChartLineComponent', () => {
         component['seriePathPointsDefinition'](component.containerSize, <any>chartSeries, minMaxSeriesValues);
 
         expect(component.seriesPointsCoordinates).toEqual(expectedPointsResult);
-        expect(component.seriesPathsCoordinates).toEqual([{ coordinates: ' M72 8 L92 0' }]);
+        expect(component.seriesPathsCoordinates).toEqual([
+          { coordinates: ' M93.33333333333333 8 L106.66666666666666 0', color: '#29B6C5' }
+        ]);
       });
 
       it('shouldn`t apply values to `seriesPointsCoordinates` neither to `seriesPathsCoordinates` if series.data isn`t an array', () => {
@@ -258,14 +245,45 @@ describe('PoChartLineComponent', () => {
 
       it('shouldn`t apply only `M` coordenate at `seriesPathsCoordinates.coordinates` `seriesPathsCoordinates` if series.data has only one item', () => {
         const minMaxSeriesValues = { minValue: 10, maxValue: 10 };
-        component.series = [{ label: 'Vancouver', data: [10] }];
+        component.series = [{ label: 'Vancouver', data: [10], color: '#29B6C5' }];
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
 
-        const expectedResult = [{ coordinates: ' M72 28' }];
+        const expectedResult = [{ coordinates: ' M136 28', color: '#29B6C5' }];
 
         expect(component.seriesPathsCoordinates).toEqual(expectedResult);
         expect(component.seriesPathsCoordinates.length).toBe(1);
+      });
+
+      it('should convert series values to zero if allowNegativeData is false and serie.data has negative value', () => {
+        component.allowNegativeData = false;
+        component.categories = ['janeiro', 'fevereiro', 'março'];
+
+        const chartSeries = [{ label: 'Vancouver', data: [-10, -15], color: '#29B6C5' }];
+        const expectedPointsResult = [
+          [
+            {
+              category: 'janeiro',
+              label: 'Vancouver',
+              tooltipLabel: 'Vancouver: 0',
+              data: 0,
+              xCoordinate: 93.33333333333333,
+              yCoordinate: 28
+            },
+            {
+              category: 'fevereiro',
+              label: 'Vancouver',
+              tooltipLabel: 'Vancouver: 0',
+              data: 0,
+              xCoordinate: 100,
+              yCoordinate: 28
+            }
+          ]
+        ];
+
+        component['seriePathPointsDefinition'](component.containerSize, <any>chartSeries, range);
+
+        expect(component.seriesPointsCoordinates).toEqual(expectedPointsResult);
       });
     });
 
@@ -279,66 +297,61 @@ describe('PoChartLineComponent', () => {
       expect(component.animate).toBeFalsy();
       expect(spyAppendChild).toHaveBeenCalled();
     });
+
+    it('xCoordinate: should return `Infinity` if xRatio returns` isNan', () => {
+      component['seriesLength'] = 0;
+
+      expect(component['xCoordinate'](0, containerSize)).toBe(Infinity);
+    });
   });
 
   describe('Properties:', () => {
-    it('p-container-size: should call `getDomainValues` and `seriePathPointsDefinition`', () => {
-      const spyGetDomainValues = spyOn(component, <any>'getDomainValues');
+    it('p-container-size: should call `seriePathPointsDefinition`', () => {
       const spySeriePathPointsDefinition = spyOn(component, <any>'seriePathPointsDefinition');
 
       component.containerSize = containerSize;
+      component.range = range;
 
-      expect(spyGetDomainValues).toHaveBeenCalledWith(component.options);
       expect(spySeriePathPointsDefinition).toHaveBeenCalledWith(
         component.containerSize,
         component.series,
-        component['minMaxSeriesValues']
+        component.range
       );
     });
 
-    it('p-series: should call `calculateMinAndMaxValues`, `getDomainValues`, `seriePathPointsDefinition`, `seriesGreaterLength` and `getSeriesColor`', () => {
-      const type = PoChartType.Line;
+    it('p-series: should call `calculateMinAndMaxValues`, `seriePathPointsDefinition` and `seriesGreaterLength`', () => {
       const spySeriesGreaterLength = spyOn(component['mathsService'], <any>'seriesGreaterLength');
-      const spyGetSeriesColor = spyOn(component['colorService'], 'getSeriesColor');
-      const spyGetDomainValues = spyOn(component, <any>'getDomainValues');
       const spySeriePathPointsDefinition = spyOn(component, <any>'seriePathPointsDefinition');
 
       component.series = series;
+      component.range = range;
 
       expect(spySeriesGreaterLength).toHaveBeenCalledWith(component.series);
-      expect(spyGetSeriesColor).toHaveBeenCalledWith(component.series, type);
-      expect(spyGetDomainValues).toHaveBeenCalledWith(component.options);
       expect(spySeriePathPointsDefinition).toHaveBeenCalledWith(
         component.containerSize,
         component.series,
-        component['minMaxSeriesValues']
+        component.range
       );
     });
 
-    it(`p-series: should call 'calculateMinAndMaxValues', 'getDomainValues', 'seriePathPointsDefinition', 'seriesGreaterLength' and 'getSeriesColor' if 'serie.data'
+    it(`p-series: should call 'calculateMinAndMaxValues', 'seriePathPointsDefinition' and 'seriesGreaterLength' if 'serie.data'
     is an empty array`, () => {
-      const type = PoChartType.Line;
       const spySeriesGreaterLength = spyOn(component['mathsService'], <any>'seriesGreaterLength');
-      const spyGetSeriesColor = spyOn(component['colorService'], 'getSeriesColor');
-      const spyGetDomainValues = spyOn(component, <any>'getDomainValues');
       const spySeriePathPointsDefinition = spyOn(component, <any>'seriePathPointsDefinition');
 
       component.series = <any>[{ label: 'category', data: [] }];
+      component.range = range;
 
       expect(spySeriesGreaterLength).toHaveBeenCalledWith(component.series);
-      expect(spyGetSeriesColor).toHaveBeenCalledWith(component.series, type);
-      expect(spyGetDomainValues).toHaveBeenCalledWith(component.options);
       expect(spySeriePathPointsDefinition).toHaveBeenCalledWith(
         component.containerSize,
         component.series,
-        component['minMaxSeriesValues']
+        component.range
       );
     });
 
     it('p-series: shouldn`t bind any function if `serie.data` isn`t an array', () => {
       const spySeriesGreaterLength = spyOn(component['mathsService'], <any>'seriesGreaterLength');
-      const spyGetSeriesColor = spyOn(component['colorService'], 'getSeriesColor');
-      const spyGetDomainValues = spyOn(component, <any>'getDomainValues');
       const spySeriePathPointsDefinition = spyOn(component, <any>'seriePathPointsDefinition');
 
       component.series = <any>[
@@ -347,35 +360,35 @@ describe('PoChartLineComponent', () => {
       ];
 
       expect(spySeriesGreaterLength).not.toHaveBeenCalled();
-      expect(spyGetSeriesColor).not.toHaveBeenCalled();
-      expect(spyGetDomainValues).not.toHaveBeenCalled();
       expect(spySeriePathPointsDefinition).not.toHaveBeenCalled();
     });
 
-    it('p-options: should update property if valid values', () => {
-      const validValues = [{}, { gridLines: 5 }];
+    it('p-range: should update property with valid values', () => {
+      const validValues = [{ minValue: 1, maxValue: 30 }, {}];
 
-      expectPropertiesValues(component, 'options', validValues, validValues);
+      expectPropertiesValues(component, 'range', validValues, validValues);
     });
 
-    it('p-options: shouldn`t update property if invalid values', () => {
-      const invalidValues = [undefined, null, '', false, 0, ['1'], [{ key: 'value' }]];
+    it('p-range: should update property if invalid values', () => {
+      const invalidValues = [undefined, null, '', false, 0, [], 'value'];
 
-      expectPropertiesValues(component, 'options', invalidValues, undefined);
+      expectPropertiesValues(component, 'range', invalidValues, {});
     });
 
-    it('p-options: should call `getDomainValues` and `seriePathPointsDefinition`', () => {
-      const spyGetDomainValues = spyOn(component, <any>'getDomainValues');
-      const spySeriePathPointsDefinition = spyOn(component, <any>'seriePathPointsDefinition');
+    it('p-range: should call `seriePathPointsDefinition` if range is an object', () => {
+      const spyseriePathPointsDefinition = spyOn(component, <any>'seriePathPointsDefinition');
 
-      component.options = { gridLines: 5, maxRange: 100, minRange: 0 };
+      component.range = { minValue: 1, maxValue: 30 };
 
-      expect(spyGetDomainValues).toHaveBeenCalledWith(component.options);
-      expect(spySeriePathPointsDefinition).toHaveBeenCalledWith(
-        component.containerSize,
-        component.series,
-        component['minMaxSeriesValues']
-      );
+      expect(spyseriePathPointsDefinition).toHaveBeenCalled();
+    });
+
+    it('p-range: shouldn`t call `calculateSeriesPathsCoordinates` if range isn`t an object', () => {
+      const spyseriePathPointsDefinition = spyOn(component, <any>'seriePathPointsDefinition');
+
+      component.range = <any>false;
+
+      expect(spyseriePathPointsDefinition).not.toHaveBeenCalled();
     });
   });
 });
