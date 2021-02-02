@@ -30,10 +30,10 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 Para a aplicação de exemplo usaremos o template *blank* do Ionic. Para isso, execute o seguinte comando:
 
 ```shell
-ionic start po-sync-getting-started blank --skip-deps
+ionic start po-sync-getting-started blank --no-deps
 ```
 
-> `--skip-deps`: pula a instalação das dependências do `package.json`.
+> `--no-deps`: pula a instalação das dependências do `package.json`.
 
 Caso surja a questão relacionada ao framework desejado, opte por `Angular`.
 
@@ -51,31 +51,31 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~11.0.2",
-    "@angular/common": "~11.0.2",
-    "@angular/core": "~11.0.2",
-    "@angular/forms": "~11.0.2",
-    "@angular/platform-browser": "~11.0.2",
-    "@angular/platform-browser-dynamic": "~11.0.2",
-    "@angular/router": "~11.0.2",
-    "@angular/service-worker": "~11.0.2",
+    "@angular/animations": "~11.1.0",
+    "@angular/common": "~11.1.0",
+    "@angular/core": "~11.1.0",
+    "@angular/forms": "~11.1.0",
+    "@angular/platform-browser": "~11.1.0",
+    "@angular/platform-browser-dynamic": "~11.1.0",
+    "@angular/router": "~11.1.0",
+    "@angular/service-worker": "~11.1.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/splash-screen": "^5.0.0",
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^5.0.0",
-    "rxjs": "^6.6.0",
+    "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "zone.js": "0.10.3"
+    "zone.js": "~0.10.3"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.1100.2",
-    "@angular/cli": "~11.0.2",
-    "@angular/compiler": "~11.0.2",
-    "@angular/compiler-cli": "~11.0.2",
-    "@angular/language-service": "~11.0.2",
+    "@angular-devkit/build-angular": "~0.1101.1",
+    "@angular/cli": "~11.1.0",
+    "@angular/compiler": "~11.1.0",
+    "@angular/compiler-cli": "~11.1.0",
+    "@angular/language-service": "~11.1.0",
     "@ionic/angular-toolkit": "^3.0.0",
-    "typescript": "~4.0.2"
+    "typescript": "~4.1.3"
   },
   ...
 ```
