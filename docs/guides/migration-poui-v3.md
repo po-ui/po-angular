@@ -11,7 +11,7 @@ Antes de atualizar a versão do PO UI, é importante que você tenha atualizado 
 o Angular 10, executando o comando abaixo:
 
 ```
-ng update @angular/cli @angular/core
+ng update @angular/cli@10 @angular/core@10
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
@@ -33,7 +33,7 @@ Para facilitar a migração do seu projeto para o PO UI v3, implementamos o `ng 
 
 Para realizar a migração, execute o comando abaixo:
 
-``` ng update @po-ui/ng-components --next```
+``` ng update @po-ui/ng-components@3 --next```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
   - Altera o uso do `[p-checkbox]` para `[p-selectable]` utilizado no `PoTable`

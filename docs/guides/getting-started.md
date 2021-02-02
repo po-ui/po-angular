@@ -36,22 +36,22 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "~11.0.1",
-    "@angular/common": "~11.0.1",
-    "@angular/compiler": "~11.0.1",
-    "@angular/core": "~11.0.1",
-    "@angular/forms": "~11.0.1",
-    "@angular/platform-browser": "~11.0.1",
-    "@angular/platform-browser-dynamic": "~11.0.1",
-    "@angular/router": "~11.0.1",
+    "@angular/animations": "~11.1.0",
+    "@angular/common": "~11.1.0",
+    "@angular/compiler": "~11.1.0",
+    "@angular/core": "~11.1.0",
+    "@angular/forms": "~11.1.0",
+    "@angular/platform-browser": "~11.1.0",
+    "@angular/platform-browser-dynamic": "~11.1.0",
+    "@angular/router": "~11.1.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.3"
     ...
   },
   "devDependencies": {
     ...
-    "typescript": "~4.0.2"
+    "typescript": "~4.1.3"
   }
 ```
 
@@ -99,18 +99,11 @@ Abra o *browser* e acesse a url http://localhost:4200. Pronto! Se você escolheu
 
 Agora é só abrir seu **editor / IDE** favorito e começar a trabalhar no seu projeto.
 
-Caso você queira utilizar nossos componentes de templates, como o **[po-page-login](/documentation/po-page-login)**, **[po-modal-password-recovery](/documentation/po-modal-password-recovery)**, **[po-page-blocked-user](/documentation/po-page-blocked-user)**, **[po-page-dynamic-table](/documentation/po-page-dynamic-table)** entre outros, basta instalar o pacote `@po-ui/ng-templates` e incluí-lo nas dependências do seu projeto rodando o comando abaixo:
+Caso você queira utilizar nossos componentes de templates, como o **[po-page-login](/documentation/po-page-login)**, **[po-modal-password-recovery](/documentation/po-modal-password-recovery)**, **[po-page-blocked-user](/documentation/po-page-blocked-user)**, **[po-page-dynamic-table](/documentation/po-page-dynamic-table)** entre outros, basta adicionar o pacote `@po-ui/ng-templates` executando o comando abaixo:
 
-Instalando com npm:
 ```
-npm i @po-ui/ng-templates
+ng add @po-ui/ng-templates
 ```
-
-Caso prefira instalar com o yarn:
-```
-yarn add @po-ui/ng-templates
-```
-
-E depois adicionar o `PoTemplatesModule` no módulo principal da sua aplicação :).
+> Ao executar este comando, será instalado o pacote `@po-ui/ng-templates` e configurado o `PoTemplatesModules` no `app.module`
 
 A partir dai o seu projeto está preparado para receber outros componentes do **[Po](/documentation)**! \o/

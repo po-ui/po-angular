@@ -24,12 +24,12 @@ Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@^10
+npm i -g @angular/cli@11
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@^10
+yarn global add @angular/cli@11
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -53,23 +53,23 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "~10.0.3",
-    "@angular/common": "~10.0.3",
-    "@angular/compiler": "~10.0.3",
-    "@angular/core": "~10.0.3",
-    "@angular/forms": "~10.0.3",
-    "@angular/platform-browser": "~10.0.3",
-    "@angular/platform-browser-dynamic": "~10.0.3",
-    "@angular/platform-server": "~10.0.3",
-    "@angular/router": "~10.0.3",
+    "@angular/animations": "~11.1.0",
+    "@angular/common": "~11.1.0",
+    "@angular/compiler": "~11.1.0",
+    "@angular/core": "~11.1.0",
+    "@angular/forms": "~11.1.0",
+    "@angular/platform-browser": "~11.1.0",
+    "@angular/platform-browser-dynamic": "~11.1.0",
+    "@angular/platform-server": "~11.1.0",
+    "@angular/router": "~11.1.0",
     "tslib": "^2.0.0",
-    "rxjs": "~6.5.5",
+    "rxjs": "~6.6.0",
     "zone.js": "~0.10.3"
     ...
   },
   "devDependencies": {
     ...
-    "typescript": "~3.9.7"
+    "typescript": "~4.1.3"
   }
 ```
 
@@ -113,18 +113,11 @@ Abra o *browser* e acesse a url http://localhost:4200. Pronto!
 
 Agora é só abrir seu **editor / IDE** favorito e começar a trabalhar no seu projeto.
 
-Caso você queira utilizar nossos componentes de templates, como o **[po-page-login](https://po-ui.io/documentation/po-page-login)**, **[po-modal-password-recovery](https://po-ui.io/documentation/po-modal-password-recovery)**, **[po-page-blocked-user](https://po-ui.io/documentation/po-page-blocked-user)**, **[po-page-dynamic-table](https://po-ui.io/documentation/po-page-dynamic-table)** entre outros, basta instalar o pacote `@po-ui/ng-templates` e incluí-lo nas dependências do seu projeto rodando o comando abaixo:
+Caso você queira utilizar nossos componentes de templates, como o **[po-page-login](https://po-ui.io/documentation/po-page-login)**, **[po-modal-password-recovery](https://po-ui.io/documentation/po-modal-password-recovery)**, **[po-page-blocked-user](https://po-ui.io/documentation/po-page-blocked-user)**, **[po-page-dynamic-table](https://po-ui.io/documentation/po-page-dynamic-table)** entre outros, basta adicionar o pacote `@po-ui/ng-templates` executando o comando abaixo:
 
-Instalando com npm:
 ```
-npm i @po-ui/ng-templates
+ng add @po-ui/ng-templates
 ```
-
-Caso prefira instalar com o yarn:
-```
-yarn add @po-ui/ng-templates
-```
-
-E depois adicionar o `PoTemplatesModule` no módulo principal da sua aplicação :).
+> Ao executar este comando, será instalado o pacote `@po-ui/ng-templates` e configurado o `PoTemplatesModules` no `app.module`
 
 A partir dai o seu projeto está preparado para receber outros componentes do **[PO UI](https://po-ui.io/documentation)**! \o/
