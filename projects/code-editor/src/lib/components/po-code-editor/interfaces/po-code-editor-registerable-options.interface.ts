@@ -22,4 +22,7 @@ export interface PoCodeEditorRegisterableOptions {
 
   /** Interface para recebimento de token específicos da sintaxe. */
   tokenizer: PoCodeEditorRegisterableTokens;
+
+  /** Define se a sintaxe será case sensitive ou não. */
+  ignoreCase?: boolean;
 }
