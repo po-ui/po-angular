@@ -28,6 +28,7 @@ export function provideCompletionItems() {
 export const customRegister: PoCodeEditorRegisterable = {
   language: 'terraform',
   options: {
+    ignoreCase: false,
     keywords: ['resource', 'provider', 'variable', 'output', 'module', 'true', 'false'],
     operators: ['{', '}', '(', ')', '[', ']', '?', ':'],
     symbols: new RegExp('[=><!~?:&|+\\-*\\/\\^%]+'),
