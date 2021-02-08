@@ -67,8 +67,7 @@ jobs:
 
     - run: npm i
     - run: npm run test:ui
-    # retirado pois é preciso buildar a versao 4.4 do schematic
-    #- run: npm run test:ui:schematics
+    - run: npm run test:ui:schematics
 
   test-templates:
     name: Test templates
@@ -86,8 +85,7 @@ jobs:
     - run: npm i
     - run: npm run build:ui:lite
     - run: npm run test:templates
-    # retirado pois é preciso buildar a versao 4.4 do schematic
-    #- run: npm run test:templates:schematics
+    - run: npm run test:templates:schematics
 
   test-code-editor:
     name: Test code editor
@@ -104,8 +102,7 @@ jobs:
 
     - run: npm i
     - run: npm run test:code-editor
-    # retirado pois é preciso buildar a versao 4.4 do schematic
-    #- run: npm run test:code-editor:schematics
+    - run: npm run test:code-editor:schematics
 
   test-storage:
     name: Test storage
@@ -122,8 +119,7 @@ jobs:
 
     - run: npm i
     - run: npm run test:storage
-    # retirado pois é preciso buildar a versao 4.4 do schematic
-    #- run: npm run test:storage:schematics
+    - run: npm run test:storage:schematics
 
   test-sync:
     name: Test sync
@@ -141,5 +137,4 @@ jobs:
     - run: npm i
     - run: npm run build:storage:lite
     - run: npm run test:sync
-    # retirado pois é preciso buildar a versao 4.4 do schematic
-    #- run: npm run test:sync:schematics
+    - run: npm run test:sync:schematics

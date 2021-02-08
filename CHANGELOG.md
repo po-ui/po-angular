@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.5.0](https://github.com/po-ui/po-angular/compare/v4.4.0...v4.5.0) (2021-02-08)
+
+
+### Bug Fixes
+
+* **table:** corrige tradução pelo google translate ([9163019](https://github.com/po-ui/po-angular/commit/9163019a294b48c7a900a1b872274c0b0c0525ff))
+
+* **select:** padroniza a altura do campo ([8cfe799](https://github.com/po-ui/po-style/commit/8cfe799f005d66205cef31dd010ca06427bc70fa))
+
+
+### Features
+
+* **code-editor:** adiciona o atributo ignoreCase à interface options ([b4c576d](https://github.com/po-ui/po-angular/commit/b4c576d1a055857d8de55dfd1cb009c2a0592466)), closes [#778](https://github.com/po-ui/po-angular/issues/778)
+
+* **icons:** adiciona novos ícones a biblioteca ([a6b6c66](https://github.com/po-ui/po-style/commit/a6b6c661d8ba68beeae78f857dd7cf5f5f348ab1))
+
+
 # [4.4.0](https://github.com/po-ui/po-angular/compare/v4.3.0...v4.4.0) (2021-02-01)
 
 
