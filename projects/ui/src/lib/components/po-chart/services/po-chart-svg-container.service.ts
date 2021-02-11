@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { PoChartAxisXLabelArea, PoChartPadding } from '../helpers/po-chart-default-values.constant';
+import { PoChartPadding } from '../helpers/po-chart-default-values.constant';
 import { PoChartContainerSize } from '../interfaces/po-chart-container-size.interface';
 
 @Injectable({
@@ -15,20 +15,17 @@ export class PoChartSvgContainerService {
    * @param chartWrapperWidth
    * @param chartHeaderHeight
    * @param chartLegendHeight
-   * @param categoriesLength
    */
   calculateSVGContainerMeasurements(
     chartHeight: number = 0,
     chartWrapperWidth: number = 0,
     chartHeaderHeight: number = 0,
-    chartLegendHeight: number = 0,
-    categoriesLength: number = 0
+    chartLegendHeight: number = 0
   ): PoChartContainerSize {
     const svgWidth = this.svgWidth(chartWrapperWidth);
     const centerX = this.center(chartWrapperWidth);
     const svgHeight = this.svgHeight(chartHeight, chartHeaderHeight, chartLegendHeight);
     const centerY = this.center(svgHeight);
-    const svgPlottingAreaWidth = this.svgPlottingAreaWidth(svgWidth);
     const svgPlottingAreaHeight = this.svgPlottingAreaHeight(svgHeight);
 
     return {
@@ -36,7 +33,6 @@ export class PoChartSvgContainerService {
       svgHeight,
       centerX,
       centerY,
-      svgPlottingAreaWidth,
       svgPlottingAreaHeight
     };
   }
@@ -58,20 +54,6 @@ export class PoChartSvgContainerService {
     const subtractedHeights = chartHeight - chartHeaderHeight - chartLegendHeight - PoChartPadding * 2;
 
     return subtractedHeights <= 0 ? 0 : subtractedHeights;
-  }
-
-  /**
-   * Largura de área de plotagem das séries designada para gráficos do tipo linha e área.
-   *
-   * Contempla:
-   *   - a largura do svg: svgWidth.
-   *   - área dos labels eixo X: PoChartAxisXLabelArea
-   *   - espaços laterais dentro do eixo: svgAxisSideSpace
-   *
-   * > A largura máxima para 'svgAxisSideSpace' é de 48px.
-   */
-  private svgPlottingAreaWidth(svgWidth: number) {
-    return svgWidth - PoChartAxisXLabelArea;
   }
 
   /**

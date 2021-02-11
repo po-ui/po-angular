@@ -21,7 +21,7 @@ describe('PoChartBarBaseComponent', () => {
   const containerSize: PoChartContainerSize = {
     svgWidth: 200,
     svgHeight: 200,
-    svgPlottingAreaWidth: 20,
+    axisXLabelWidth: 72,
     svgPlottingAreaHeight: 20
   };
   const range = { minValue: 0, maxValue: 30 };

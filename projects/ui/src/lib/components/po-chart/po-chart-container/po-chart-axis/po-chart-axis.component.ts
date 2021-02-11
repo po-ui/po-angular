@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 
 import {
-  PoChartAxisXLabelArea,
   PoChartGridLines,
   PoChartPadding,
   PoChartPlotAreaPaddingTop
@@ -152,7 +151,7 @@ export class PoChartAxisComponent {
 
   private calculateAxisXCoordinates(amountOfAxisX: number, containerSize: PoChartContainerSize) {
     this.axisXCoordinates = [...Array(amountOfAxisX)].map((_, index: number) => {
-      const startX = PoChartAxisXLabelArea;
+      const startX = containerSize.axisXLabelWidth;
       const endX = containerSize.svgWidth;
       const yCoordinate = this.calculateAxisXCoordinateY(amountOfAxisX, containerSize, index);
 
@@ -172,7 +171,7 @@ export class PoChartAxisComponent {
 
     this.axisXLabelCoordinates = [...Array(amountOfAxisX)].map((_, index: number) => {
       const label = axisXLabels[index];
-      const xCoordinate = this.calculateAxisXLabelXCoordinate();
+      const xCoordinate = this.calculateAxisXLabelXCoordinate(containerSize.axisXLabelWidth);
       const yCoordinate = this.calculateAxisXLabelYCoordinate(amountOfAxisX, containerSize, type, index);
 
       return { label, xCoordinate, yCoordinate };
@@ -219,10 +218,10 @@ export class PoChartAxisComponent {
     });
   }
 
-  private calculateAxisXLabelXCoordinate(): number {
+  private calculateAxisXLabelXCoordinate(axisXLabelWidth: number): number {
     const labelPoChartPadding = PoChartPadding / 3;
 
-    return PoChartAxisXLabelArea - labelPoChartPadding;
+    return axisXLabelWidth - labelPoChartPadding;
   }
 
   private calculateAxisXLabelYCoordinate(
@@ -273,12 +272,16 @@ export class PoChartAxisComponent {
     const xRatio = index / amountOfLines;
 
     if (type === PoChartType.Bar) {
-      return Math.round(PoChartAxisXLabelArea + (containerSize.svgWidth - PoChartAxisXLabelArea) * xRatio);
+      return Math.round(
+        containerSize.axisXLabelWidth + (containerSize.svgWidth - containerSize.axisXLabelWidth) * xRatio
+      );
     }
 
-    const halfCategoryWidth = (containerSize.svgWidth - PoChartAxisXLabelArea) / amountOfAxisY / 2;
+    const halfCategoryWidth = (containerSize.svgWidth - containerSize.axisXLabelWidth) / amountOfAxisY / 2;
     return Math.round(
-      PoChartAxisXLabelArea + halfCategoryWidth + (containerSize.svgWidth - PoChartAxisXLabelArea) * xRatio
+      containerSize.axisXLabelWidth +
+        halfCategoryWidth +
+        (containerSize.svgWidth - containerSize.axisXLabelWidth) * xRatio
     );
   }
 
@@ -292,7 +295,9 @@ export class PoChartAxisComponent {
     const divideIndexByAmountOfLines = index / amountOfLines;
     const xRatio = divideIndexByAmountOfLines === Infinity ? 0 : divideIndexByAmountOfLines;
 
-    return Math.round(PoChartAxisXLabelArea + (containerSize.svgWidth - PoChartAxisXLabelArea) * xRatio);
+    return Math.round(
+      containerSize.axisXLabelWidth + (containerSize.svgWidth - containerSize.axisXLabelWidth) * xRatio
+    );
   }
 
   private checkAxisOptions(options: PoChartAxisOptions = {}): void {

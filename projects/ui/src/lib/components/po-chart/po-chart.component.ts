@@ -10,10 +10,14 @@ import {
   OnDestroy,
   ViewChild,
   ViewContainerRef,
-  OnInit
+  OnInit,
+  Renderer2
 } from '@angular/core';
 
 import { Subject, Subscription } from 'rxjs';
+
+import { PoChartAxisXLabelArea, PoChartPadding } from './helpers/po-chart-default-values.constant';
+import { PoDefaultColors } from '../../services/po-color/po-colors.constant';
 
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartSvgContainerService } from './services/po-chart-svg-container.service';
@@ -22,7 +26,7 @@ import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
 import { PoColorService } from '../../services/po-color/po-color.service';
-import { PoDefaultColors } from '../../services/po-color/po-colors.constant';
+import { PoChartMathsService } from './services/po-chart-maths.service';
 
 /**
  * @docsExtends PoChartBaseComponent
@@ -60,8 +64,6 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     [PoChartType.Gauge]: PoChartGaugeComponent
   };
 
-  svgContainerSize: PoChartContainerSize;
-
   @ViewChild('chartContainer', { read: ViewContainerRef, static: true }) chartContainer: ViewContainerRef;
 
   @ViewChild('chartHeader', { static: true }) chartHeader: ElementRef;
@@ -74,7 +76,10 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     protected colorService: PoColorService,
     private changeDetector: ChangeDetectorRef,
     private containerService: PoChartSvgContainerService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private elementRef: ElementRef,
+    private mathsService: PoChartMathsService,
+    private renderer: Renderer2
   ) {
     super(colorService);
   }
@@ -137,16 +142,29 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     }
   }
 
+  protected calculateAxisXLabelArea() {
+    const axisXLabels = this.chartType === PoChartType.Bar ? this.categories : this.chartSeries;
+
+    return this.getAxisXLabelArea(this.mathsService.getLongestDataValue(axisXLabels, this.chartType, this.options));
+  }
+
   protected getSvgContainerSize() {
+    let axisXLabelWidth;
     const { chartHeaderHeight, chartLegendHeight, chartWrapperWidth } = this.getChartMeasurements();
 
-    this.svgContainerSize = this.containerService.calculateSVGContainerMeasurements(
-      this.height,
-      chartWrapperWidth,
-      chartHeaderHeight,
-      chartLegendHeight,
-      this.categories?.length
-    );
+    if (!this.isTypeCircular) {
+      axisXLabelWidth = this.calculateAxisXLabelArea();
+    }
+
+    this.svgContainerSize = {
+      ...this.containerService.calculateSVGContainerMeasurements(
+        this.height,
+        chartWrapperWidth,
+        chartHeaderHeight,
+        chartLegendHeight
+      ),
+      axisXLabelWidth
+    };
   }
 
   private chartLegendHeight(chartLegend: ElementRef) {
@@ -173,6 +191,20 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     this.changeDetector.detectChanges();
     this.setClickSubscribe(instance);
     this.setHoverSubscribe(instance);
+  }
+
+  private getAxisXLabelArea(axisXLabel: any) {
+    const labelPoChartPadding = PoChartPadding / 3;
+    const spanElement = this.renderer.createElement('span');
+
+    this.renderer.addClass(spanElement, 'po-chart-axis-x-label');
+    spanElement.innerHTML = axisXLabel;
+
+    this.renderer.appendChild(this.elementRef.nativeElement, spanElement);
+    const axisXLabelWidth = Math.ceil(spanElement.offsetWidth) + labelPoChartPadding;
+    this.renderer.removeChild(this.elementRef.nativeElement, spanElement);
+
+    return axisXLabelWidth > PoChartAxisXLabelArea ? axisXLabelWidth : PoChartAxisXLabelArea;
   }
 
   private getComponentType(typeName) {

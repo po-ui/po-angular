@@ -2,6 +2,7 @@ import { EventEmitter, Input, Output, Directive, OnChanges, SimpleChanges } from
 
 import { convertToInt, isTypeof } from '../../utils/util';
 
+import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
 import { PoChartGaugeSerie } from './po-chart-types/po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartOptions } from './interfaces/po-chart-options.interface';
@@ -39,6 +40,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
   // manipulação das séries tratadas internamente para preservar 'p-series';
   chartSeries: Array<PoChartSerie | PoChartGaugeSerie> = [];
   chartType: PoChartType;
+  svgContainerSize: PoChartContainerSize;
 
   private defaultType: PoChartType;
 
@@ -126,9 +128,11 @@ export abstract class PoChartBaseComponent implements OnChanges {
    *
    * @description
    *
-   * Define os nomes das categorias que serão plotadas nos eixos Y do grid do gráfico.
+   * Define os nomes das categorias que serão plotadas no eixo X do gráfico caso seja do tipo `bar`, ou então nos eixos Y do grid de gráficos dos tipos `columnn` e `line`.
    *
-   * > Caso não seja especificado um valor para a categoria, será plotado um hífen na categoria referente a cada valor de série.
+   * > Gráficos do tipo `bar` dimensionam a área do gráfico de acordo com a largura do maior texto de categorias. No entanto, é uma boa prática optar por palavras curtas para que a leitura do gráfico não seja prejudicada.
+   *
+   * > Caso não seja especificado um valor para a categoria, será plotado um hífen na categoria referente a cada série.
    */
   @Input('p-categories') set categories(value: Array<string>) {
     if (Array.isArray(value)) {
@@ -203,12 +207,26 @@ export abstract class PoChartBaseComponent implements OnChanges {
 
   constructor(protected colorService: PoColorService) {}
 
+  get isTypeCircular() {
+    return this.defaultType === PoChartType.Pie || this.defaultType === PoChartType.Donut;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
+    const isArrayOfseries = Array.isArray(this.series) && this.series.length > 0;
+
     if (
-      (changes.series && Array.isArray(this.series) && this.series.length) ||
-      (changes.type && Array.isArray(this.series) && this.series.length)
+      (changes.series && isArrayOfseries) ||
+      (changes.type && isArrayOfseries) ||
+      (changes.categories && isArrayOfseries)
     ) {
-      this.validateSerieAndAddType(this.series);
+      this.validateSerieAndAddType(this.series as Array<PoChartSerie>);
+    }
+
+    if ((changes.type && !this.isTypeCircular) || (changes.categories && !this.isTypeCircular)) {
+      this.svgContainerSize = {
+        ...this.svgContainerSize,
+        axisXLabelWidth: this.calculateAxisXLabelArea()
+      };
     }
   }
 
@@ -236,9 +254,10 @@ export abstract class PoChartBaseComponent implements OnChanges {
   }
 
   private validateSerieAndAddType(series: Array<PoChartSerie>): void {
-    const isTypeCircular = this.defaultType === PoChartType.Pie || this.defaultType === PoChartType.Donut;
     const filteredSeries = series.filter(serie =>
-      isTypeCircular ? typeof serie.data === 'number' || typeof serie.value === 'number' : Array.isArray(serie.data)
+      this.isTypeCircular
+        ? typeof serie.data === 'number' || typeof serie.value === 'number'
+        : Array.isArray(serie.data)
     );
 
     this.chartSeries = this.appendType(this.appendColors(filteredSeries));
@@ -262,5 +281,6 @@ export abstract class PoChartBaseComponent implements OnChanges {
 
   // válido para gráficos do tipo circular e que será refatorado.
   protected abstract getSvgContainerSize(): void;
+  protected abstract calculateAxisXLabelArea(): number;
   abstract rebuildComponentRef(): void;
 }

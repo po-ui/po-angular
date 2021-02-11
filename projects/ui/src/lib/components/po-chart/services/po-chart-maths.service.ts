@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 
+import { PoChartGridLines } from '../helpers/po-chart-default-values.constant';
+import { PoChartType } from '../enums/po-chart-type.enum';
+
+import { PoChartAxisOptions } from '../interfaces/po-chart-axis-options.interface';
 import { PoChartMinMaxValues } from '../interfaces/po-chart-min-max-values.interface';
+import { PoChartOptions } from '../interfaces/po-chart-options.interface';
 import { PoChartSerie } from '../interfaces/po-chart-serie.interface';
 
 @Injectable({
@@ -17,6 +22,26 @@ export class PoChartMathsService {
     const minValue = this.getDomain(series, 'min');
     const maxValue = this.getDomain(series, 'max');
     return { minValue: !acceptNegativeValues && minValue < 0 ? 0 : minValue, maxValue };
+  }
+
+  /**
+   * Retorna o valor com maior quantidade de dígitos entre todas as séries.
+   * Pode receber uma lista de categorias para o caso de gráfico de barra, ou então a lista de séries se o tipo de gráfico for linha ou coluna.
+   *
+   * @param data Lista de séries.
+   * @param type O tipo do gráfico'.
+   * @param options As opções para validação de número de linhas do eixo X'.
+   */
+  getLongestDataValue(
+    data: Array<PoChartSerie | string> = [],
+    type: PoChartType,
+    options: PoChartOptions
+  ): number | string {
+    if (type === PoChartType.Bar) {
+      return this.sortLongestData<string>(data as Array<string>);
+    } else {
+      return this.getAxisXLabelLongestValue(data as Array<PoChartSerie>, this.amountOfGridLines(options?.axis));
+    }
   }
 
   /**
@@ -87,6 +112,20 @@ export class PoChartMathsService {
     return (notABoolean && isInteger) || (notABoolean && isFloat);
   }
 
+  private amountOfGridLines(options: PoChartAxisOptions): number {
+    const gridLines = options?.gridLines ?? PoChartGridLines;
+
+    return gridLines && gridLines >= 2 && gridLines <= 10 ? gridLines : PoChartGridLines;
+  }
+
+  private getAxisXLabelLongestValue(data: Array<PoChartSerie>, gridLines: number): number {
+    const allowNegativeData: boolean = data.every(dataItem => dataItem.type === PoChartType.Line);
+    const domain: PoChartMinMaxValues = this.calculateMinAndMaxValues(data, allowNegativeData);
+    const axisXLabelsList: Array<number> = this.range(domain, gridLines);
+
+    return this.sortLongestData<number>(axisXLabelsList);
+  }
+
   // Cálculo que retorna o valor obtido de gridLines em relação ao alcance dos valores mínimos e máximos das séries (maxMinValues)
   private getGridLineArea(minMaxValues: PoChartMinMaxValues, gridLines: number) {
     const percentageValue = this.getFractionFromInt(gridLines - 1);
@@ -111,5 +150,11 @@ export class PoChartMathsService {
   // Retorna a fração do número passado referente à quantidade de linhas no eixo X (gridLines)
   private getFractionFromInt(value: number) {
     return (1 / value) * (100 / 1);
+  }
+
+  private sortLongestData<T>(serie: Array<T>): T {
+    return serie.sort((longest, current) => {
+      return current.toString().length - longest.toString().length;
+    })['0'];
   }
 }

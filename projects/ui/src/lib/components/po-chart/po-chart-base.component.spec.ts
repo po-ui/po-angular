@@ -9,6 +9,9 @@ import { PoColorService } from '../../services/po-color/po-color.service';
 @Directive()
 class PoCharComponent extends PoChartBaseComponent {
   rebuildComponentRef() {}
+  calculateAxisXLabelArea() {
+    return 0;
+  }
   getSvgContainerSize() {}
 }
 
@@ -156,51 +159,85 @@ describe('PoChartBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('ngOnChanges: should `validateSerieAndAddType` if type changes', () => {
-      const changes = { type: new SimpleChange(null, component.type, true) };
+    describe('ngOnChanges:', () => {
+      it('should call `validateSerieAndAddType` and `calculateAxisXLabelArea` if type changes', () => {
+        const changes = { type: new SimpleChange(null, component.type, true) };
 
-      const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
+        const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
+        const spycClculateAxisXLabelArea = spyOn(component, <any>'calculateAxisXLabelArea');
 
-      component.type = PoChartType.Bar;
-      component.series = [{ data: 1, label: 'value' }];
+        component.type = PoChartType.Bar;
+        component.series = [{ data: [1, 2, 3], label: 'value', type: PoChartType.Bar }];
 
-      component.ngOnChanges(changes);
+        component.ngOnChanges(changes);
 
-      expect(spyValidateSerieAndAddType).toHaveBeenCalledWith(component.series);
-    });
+        expect(spyValidateSerieAndAddType).toHaveBeenCalledWith(component.series);
+        expect(spycClculateAxisXLabelArea).toHaveBeenCalled();
+      });
 
-    it('ngOnChanges: should `validateSerieAndAddType` if series is an array', () => {
-      const changes = { series: new SimpleChange(null, component.series, true) };
+      it('should call `validateSerieAndAddType` and `calculateAxisXLabelArea` if `categories` changes', () => {
+        const changes = { categories: new SimpleChange(null, component.categories, true) };
 
-      const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
+        const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
+        const spycClculateAxisXLabelArea = spyOn(component, <any>'calculateAxisXLabelArea');
 
-      component.series = [{ data: 1, label: 'value' }];
+        component.categories = ['cat1', 'cat2'];
+        component.series = [{ data: [1, 2, 3], label: 'value' }];
+        component.type = PoChartType.Column;
 
-      component.ngOnChanges(changes);
+        component.ngOnChanges(changes);
 
-      expect(spyValidateSerieAndAddType).toHaveBeenCalledWith(component.series);
-    });
+        expect(spyValidateSerieAndAddType).toHaveBeenCalledWith(component.series);
+        expect(spycClculateAxisXLabelArea).toHaveBeenCalled();
+      });
 
-    it('ngOnChanges: shouldn`t call `validateSerieAndAddType` if series is an empty array', () => {
-      const changes = { series: new SimpleChange(null, component.series, true) };
+      it('shouldn`t call `calculateAxisXLabelArea` if `categories` changes but `type` is a circular type', () => {
+        const changes = { categories: new SimpleChange(null, component.categories, true) };
 
-      const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
+        const spycClculateAxisXLabelArea = spyOn(component, <any>'calculateAxisXLabelArea');
 
-      component.series = [];
+        component.categories = ['cat1', 'cat2'];
+        component.series = [{ data: 1, label: 'value' }];
+        component.type = PoChartType.Donut;
 
-      component.ngOnChanges(changes);
+        component.ngOnChanges(changes);
 
-      expect(spyValidateSerieAndAddType).not.toHaveBeenCalled();
-    });
+        expect(spycClculateAxisXLabelArea).not.toHaveBeenCalled();
+      });
 
-    it('ngOnChanges: shouldn`t call `validateSerieAndAddType` if series doesn`t change', () => {
-      const changes = { height: new SimpleChange(null, component.height, true) };
+      it('should call `validateSerieAndAddType` if series is an array', () => {
+        const changes = { series: new SimpleChange(null, component.series, true) };
 
-      const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
+        const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
 
-      component.ngOnChanges(changes);
+        component.series = [{ data: 1, label: 'value' }];
 
-      expect(spyValidateSerieAndAddType).not.toHaveBeenCalled();
+        component.ngOnChanges(changes);
+
+        expect(spyValidateSerieAndAddType).toHaveBeenCalledWith(component.series);
+      });
+
+      it('shouldn`t call `validateSerieAndAddType` if series is an empty array', () => {
+        const changes = { series: new SimpleChange(null, component.series, true) };
+
+        const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
+
+        component.series = [];
+
+        component.ngOnChanges(changes);
+
+        expect(spyValidateSerieAndAddType).not.toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `validateSerieAndAddType` if series doesn`t change', () => {
+        const changes = { height: new SimpleChange(null, component.height, true) };
+
+        const spyValidateSerieAndAddType = spyOn(component, <any>'validateSerieAndAddType');
+
+        component.ngOnChanges(changes);
+
+        expect(spyValidateSerieAndAddType).not.toHaveBeenCalled();
+      });
     });
 
     it('onSeriesClick: should call `seriesClick.emit` with `event`', () => {
