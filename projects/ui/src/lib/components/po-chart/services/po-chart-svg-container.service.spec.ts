@@ -29,25 +29,17 @@ describe('PoChartSvgContainerService', () => {
     });
 
     describe('calculateSVGContainerMeasurements: ', () => {
-      it('should call `svgWidth`, `center`, `svgHeight`, `svgPlottingAreaWidth`, `svgPlottingAreaHeight`', () => {
+      it('should call `svgWidth`, `center`, `svgHeight`, svgPlottingAreaHeight`', () => {
         const spySvgWidth = spyOn(service, <any>'svgWidth');
         const spyCenter = spyOn(service, <any>'center');
         const spySvgHeiht = spyOn(service, <any>'svgHeight');
-        const spySvgPlottingAreaWidth = spyOn(service, <any>'svgPlottingAreaWidth');
         const spySvgPlottingAreaHeight = spyOn(service, <any>'svgPlottingAreaHeight');
 
-        service.calculateSVGContainerMeasurements(
-          chartHeight,
-          chartWrapperWidth,
-          chartHeaderHeight,
-          chartLegendHeight,
-          categoriesLength
-        );
+        service.calculateSVGContainerMeasurements(chartHeight, chartWrapperWidth, chartHeaderHeight, chartLegendHeight);
 
         expect(spySvgWidth).toHaveBeenCalledWith(chartWrapperWidth);
         expect(spyCenter).toHaveBeenCalledTimes(2);
         expect(spySvgHeiht).toHaveBeenCalledWith(chartHeight, chartHeaderHeight, chartLegendHeight);
-        expect(spySvgPlottingAreaWidth).toHaveBeenCalled();
         expect(spySvgPlottingAreaHeight).toHaveBeenCalled();
       });
 
@@ -55,7 +47,6 @@ describe('PoChartSvgContainerService', () => {
         const spySvgWidth = spyOn(service, <any>'svgWidth');
         const spyCenter = spyOn(service, <any>'center');
         const spySvgHeiht = spyOn(service, <any>'svgHeight');
-        const spySvgPlottingAreaWidth = spyOn(service, <any>'svgPlottingAreaWidth');
         const spySvgPlottingAreaHeight = spyOn(service, <any>'svgPlottingAreaHeight');
 
         service.calculateSVGContainerMeasurements();
@@ -63,7 +54,6 @@ describe('PoChartSvgContainerService', () => {
         expect(spySvgWidth).toHaveBeenCalled();
         expect(spyCenter).toHaveBeenCalledTimes(2);
         expect(spySvgHeiht).toHaveBeenCalled();
-        expect(spySvgPlottingAreaWidth).toHaveBeenCalled();
         expect(spySvgPlottingAreaHeight).toHaveBeenCalled();
       });
     });
@@ -89,12 +79,6 @@ describe('PoChartSvgContainerService', () => {
       chartHeight = 50;
 
       expect(service['svgHeight'](chartHeight, chartHeaderHeight, chartLegendHeight)).toBe(0);
-    });
-
-    it('svgPlottingAreaWidth: should return the result of the calculation', () => {
-      const svgWidth = 200;
-
-      expect(service['svgPlottingAreaWidth'](svgWidth)).toBe(128);
     });
 
     it('svgPlottingAreaHeight: should return the result of the calculation', () => {

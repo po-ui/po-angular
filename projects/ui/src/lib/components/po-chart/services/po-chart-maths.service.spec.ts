@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PoChartMathsService } from './po-chart-maths.service';
+import { PoChartType } from '../enums/po-chart-type.enum';
 
 describe('PoChartMathsService', () => {
   let service: PoChartMathsService;
@@ -125,6 +126,117 @@ describe('PoChartMathsService', () => {
       validValues.forEach(value => {
         expect(service.verifyIfFloatOrInteger(<any>value)).toBeFalsy();
       });
+    });
+
+    it('getLongestDataValue: should call `sortLongestData` if type is `bar`', () => {
+      const data = ['Vancouver', 'Otawa'];
+      const type = PoChartType.Bar;
+      const options = {};
+
+      const spySortLongestData = spyOn(service, <any>'sortLongestData');
+      const spyGetAxisXLabelLongestValue = spyOn(service, <any>'getAxisXLabelLongestValue');
+
+      service.getLongestDataValue(data, type, options);
+
+      expect(spySortLongestData).toHaveBeenCalledWith(data);
+      expect(spyGetAxisXLabelLongestValue).not.toHaveBeenCalled();
+    });
+
+    it('getLongestDataValue: should call `getAxisXLabelLongestValue` if type is not `bar`', () => {
+      const data = ['Vancouver', 'Otawa'];
+      const type = PoChartType.Line;
+      const options = { axis: { gridLines: 5 } };
+
+      const spySortLongestData = spyOn(service, <any>'sortLongestData');
+      const spyGetAxisXLabelLongestValue = spyOn(service, <any>'getAxisXLabelLongestValue');
+
+      service.getLongestDataValue(data, type, options);
+
+      expect(spyGetAxisXLabelLongestValue).toHaveBeenCalledWith(data, 5);
+      expect(spySortLongestData).not.toHaveBeenCalled();
+    });
+
+    it('getLongestDataValue: should call `getAxisXLabelLongestValue` passing data and 5 as params if options.axis is undefined', () => {
+      const type = PoChartType.Line;
+      const options = undefined;
+
+      const spySortLongestData = spyOn(service, <any>'sortLongestData');
+      const spyGetAxisXLabelLongestValue = spyOn(service, <any>'getAxisXLabelLongestValue');
+
+      service.getLongestDataValue(undefined, type, options);
+
+      expect(spyGetAxisXLabelLongestValue).toHaveBeenCalledWith([], 5);
+      expect(spySortLongestData).not.toHaveBeenCalled();
+    });
+
+    it('getAxisXLabelLongestValue: should call `calculateMinAndMaxValues` passing data and allowNegativeData false as params', () => {
+      const data = [{ data: [-30, 0, 10], type: PoChartType.Column }];
+      const gridLines = 5;
+
+      const spyCalculateMinAndMaxValues = spyOn(service, <any>'calculateMinAndMaxValues');
+      spyOn(service, <any>'range');
+      spyOn(service, <any>'sortLongestData');
+
+      service['getAxisXLabelLongestValue'](data, gridLines);
+
+      expect(spyCalculateMinAndMaxValues).toHaveBeenCalledWith(data, false);
+    });
+
+    it('getAxisXLabelLongestValue: should call `calculateMinAndMaxValues` passing data and allowNegativeData true as params', () => {
+      const data = [{ data: [-30, 0, 10], type: PoChartType.Line }];
+      const gridLines = 5;
+
+      const spyCalculateMinAndMaxValues = spyOn(service, <any>'calculateMinAndMaxValues');
+      spyOn(service, <any>'range');
+      spyOn(service, <any>'sortLongestData');
+
+      service['getAxisXLabelLongestValue'](data, gridLines);
+
+      expect(spyCalculateMinAndMaxValues).toHaveBeenCalledWith(data, true);
+    });
+
+    it('getAxisXLabelLongestValue: should call `range` and `sortLongestData`', () => {
+      const data = [{ data: [-30, 0, 10], type: PoChartType.Line }];
+      const gridLines = 5;
+
+      spyOn(service, <any>'calculateMinAndMaxValues');
+      const spyRange = spyOn(service, <any>'range');
+      const spySortLongestData = spyOn(service, <any>'sortLongestData');
+
+      service['getAxisXLabelLongestValue'](data, gridLines);
+
+      expect(spyRange).toHaveBeenCalled();
+      expect(spySortLongestData).toHaveBeenCalled();
+    });
+
+    it('amountOfGridLines: should return 5 if options is undefined', () => {
+      const options = undefined;
+
+      expect(service['amountOfGridLines'](options)).toBe(5);
+    });
+
+    it('amountOfGridLines: should return 5 if options.gridLines value is lower than 2', () => {
+      const options = { gridLines: 1 };
+
+      expect(service['amountOfGridLines'](options)).toBe(5);
+    });
+
+    it('amountOfGridLines: should return 5 if options.gridLines value is greater than 10', () => {
+      const options = { gridLines: 19 };
+
+      expect(service['amountOfGridLines'](options)).toBe(5);
+    });
+
+    it('amountOfGridLines: should return options.gridLines value', () => {
+      const options = { gridLines: 7 };
+
+      expect(service['amountOfGridLines'](options)).toBe(7);
+    });
+
+    it('sortLongestData: should return 400 as longest data value', () => {
+      const data = [1, 2, 400, 3];
+
+      expect(service['sortLongestData'](data)).toBe(400);
     });
   });
 });

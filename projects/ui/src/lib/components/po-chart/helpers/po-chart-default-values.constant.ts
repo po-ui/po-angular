@@ -2,7 +2,7 @@
 export const PoChartPadding = 24;
 
 // Área lateral designada para os rótulos do eixo X
-export const PoChartAxisXLabelArea = 72;
+export const PoChartAxisXLabelArea = 56;
 
 // Quantidade de linhas do eixo X
 export const PoChartGridLines = 5;

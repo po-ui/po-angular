@@ -103,7 +103,7 @@ describe('PoChartAxisComponent', () => {
           centerX: 250,
           svgHeight: 300,
           centerY: 150,
-          svgPlottingAreaWidth: 400,
+          axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
         const fakeCategories = ['jan', 'fev', 'mar'];
@@ -137,7 +137,7 @@ describe('PoChartAxisComponent', () => {
           centerX: 250,
           svgHeight: 300,
           centerY: 150,
-          svgPlottingAreaWidth: 400,
+          axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
         const fakeCategories = ['jan', 'fev', 'mar'];
@@ -168,7 +168,7 @@ describe('PoChartAxisComponent', () => {
           centerX: 250,
           svgHeight: 300,
           centerY: 150,
-          svgPlottingAreaWidth: 400,
+          axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
 
@@ -202,7 +202,7 @@ describe('PoChartAxisComponent', () => {
           centerX: 250,
           svgHeight: 300,
           centerY: 150,
-          svgPlottingAreaWidth: 400,
+          axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
 
@@ -243,7 +243,7 @@ describe('PoChartAxisComponent', () => {
           centerX: 250,
           svgHeight: 300,
           centerY: 150,
-          svgPlottingAreaWidth: 400,
+          axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
 
@@ -278,7 +278,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const minMaxAxisValues: PoChartMinMaxValues = {
@@ -309,7 +309,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const minMaxAxisValues: PoChartMinMaxValues = {
@@ -334,7 +334,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeMinMaxAxisValues: PoChartMinMaxValues = {
@@ -365,7 +365,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeMinMaxAxisValues: PoChartMinMaxValues = {
@@ -399,7 +399,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const minMaxAxisValues: PoChartMinMaxValues = {
@@ -425,7 +425,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const minMaxAxisValues: PoChartMinMaxValues = {
@@ -455,7 +455,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const expectedResult: Array<PoChartPathCoordinates> = [{ coordinates: 'Mundefined 8 Lundefined, 288' }];
@@ -476,7 +476,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const expectedResult: Array<PoChartPathCoordinates> = [
@@ -505,7 +505,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const expectedResult = [
@@ -526,8 +526,9 @@ describe('PoChartAxisComponent', () => {
 
     it('calculateAxisXLabelXCoordinate: should return the result of `PoChartAxisXLabelArea` - `labelPoChartPadding`', () => {
       const expectedResult = 64;
+      const axisXLabelWidth = 72;
 
-      const result = component['calculateAxisXLabelXCoordinate']();
+      const result = component['calculateAxisXLabelXCoordinate'](axisXLabelWidth);
 
       expect(result).toEqual(expectedResult);
     });
@@ -540,7 +541,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
@@ -558,7 +559,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
@@ -575,7 +576,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
 
@@ -593,7 +594,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
@@ -612,7 +613,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
@@ -629,7 +630,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
@@ -648,7 +649,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
@@ -666,7 +667,7 @@ describe('PoChartAxisComponent', () => {
         centerX: 250,
         svgHeight: 300,
         centerY: 150,
-        svgPlottingAreaWidth: 400,
+        axisXLabelWidth: 72,
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
@@ -879,7 +880,7 @@ describe('PoChartAxisComponent', () => {
           centerX: 250,
           svgHeight: 300,
           centerY: 150,
-          svgPlottingAreaWidth: 400,
+          axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
         const spyCalculateAxisXCoordinateY = spyOn(component, <any>'calculateAxisXCoordinateY').and.callThrough();
@@ -896,7 +897,7 @@ describe('PoChartAxisComponent', () => {
           centerX: 250,
           svgHeight: 300,
           centerY: 150,
-          svgPlottingAreaWidth: 400,
+          axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
 

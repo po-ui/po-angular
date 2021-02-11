@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoChartAxisXLabelArea, PoChartPlotAreaPaddingTop } from '../../../helpers/po-chart-default-values.constant';
+import { PoChartPlotAreaPaddingTop } from '../../../helpers/po-chart-default-values.constant';
 
 import { PoChartBarBaseComponent } from '../po-chart-bar-base.component';
 import { PoChartMathsService } from '../../../services/po-chart-maths.service';
@@ -26,18 +26,31 @@ export class PoChartColumnComponent extends PoChartBarBaseComponent {
     minMaxSeriesValues: PoChartMinMaxValues,
     serieValue: number
   ) {
-    const { svgWidth, svgPlottingAreaHeight } = containerSize;
-    const { chartBarPlotArea, barWidth, spaceBetweenBars } = this.calculateElementsMeasurements(svgWidth);
+    const { svgWidth, axisXLabelWidth, svgPlottingAreaHeight } = containerSize;
+    const { chartBarPlotArea, barWidth, spaceBetweenBars } = this.calculateElementsMeasurements(
+      svgWidth,
+      axisXLabelWidth
+    );
 
-    const { x1, x2 } = this.xCoordinates(seriesIndex, serieItemDataIndex, chartBarPlotArea, barWidth, spaceBetweenBars);
+    const { x1, x2 } = this.xCoordinates(
+      seriesIndex,
+      serieItemDataIndex,
+      chartBarPlotArea,
+      barWidth,
+      spaceBetweenBars,
+      axisXLabelWidth
+    );
     const { y1, y2 } = this.yCoordinates(minMaxSeriesValues, svgPlottingAreaHeight, serieValue);
 
     return ['M', x1, y2, 'L', x2, y2, 'L', x2, y1, 'L', x1, y1, 'z'].join(' ');
   }
 
-  private calculateElementsMeasurements(svgWidth: PoChartContainerSize['svgWidth']) {
+  private calculateElementsMeasurements(
+    svgWidth: PoChartContainerSize['svgWidth'],
+    axisXLabelWidth: PoChartContainerSize['axisXLabelWidth']
+  ) {
     // Fração das séries em relação à largura da categoria. Incrementa + 2 na extensão das séries pois se trata da área de margem entre as categorias.
-    const chartBarPlotArea = svgWidth - PoChartAxisXLabelArea;
+    const chartBarPlotArea = svgWidth - axisXLabelWidth;
     const categoryWidth = chartBarPlotArea / this.seriesGreaterLength;
     const columnFraction = categoryWidth / (this.series.length + 2);
 
@@ -55,14 +68,15 @@ export class PoChartColumnComponent extends PoChartBarBaseComponent {
     serieItemDataIndex: number,
     chartBarPlotArea: number,
     barWidth: number,
-    spaceBetweenBars: number
+    spaceBetweenBars: number,
+    axisXLabelWidth: PoChartContainerSize['axisXLabelWidth']
   ) {
     // A área lateral entre a coluna e a linha do eixo Y do grid será sempre equivalente à largura da coluna.
     const spaceBetweenAxisAndBars = barWidth;
     const xRatio = serieItemDataIndex / this.seriesGreaterLength;
 
     const x1 = Math.round(
-      PoChartAxisXLabelArea +
+      axisXLabelWidth +
         chartBarPlotArea * xRatio +
         spaceBetweenAxisAndBars +
         barWidth * seriesIndex +

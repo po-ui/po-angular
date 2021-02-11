@@ -17,7 +17,7 @@ describe('PoChartContainerComponent', () => {
   const containerSize: PoChartContainerSize = {
     svgWidth: 200,
     svgHeight: 200,
-    svgPlottingAreaWidth: 20,
+    axisXLabelWidth: 72,
     svgPlottingAreaHeight: 20
   };
 
