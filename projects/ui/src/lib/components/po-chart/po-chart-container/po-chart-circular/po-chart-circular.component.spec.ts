@@ -168,20 +168,24 @@ describe('PoChartCircularComponent', () => {
     });
 
     it('calculateSerieCoordinates: should call `calculateAngle`, `calculateCoordinates`, `svgPaths.toArray`, `applyCoordinates`, and set value to `showLabels`:', () => {
-      const serie = [{ label: 'category A', data: 10 }];
+      const serie = [{ label: 'category A', data: 30 }];
+      const expectedStartAngle = -1.5707963267948966;
+      const expectedEndAngle = 4.71228898038469;
+      const height = 200;
+
       component['totalValue'] = 30;
 
       const spyApplyCoordinates = spyOn(componentPath, 'applyCoordinates');
       const spySvgPathsToArray = spyOn(component['svgPaths'], 'toArray').and.returnValue([componentPath]);
-      const spyCalculateAngle = spyOn(component, <any>'calculateAngle');
+      const spyCalculateAngle = spyOn(component, <any>'calculateAngle').and.callThrough();
       const spyCalculateCoordinates = spyOn(component, <any>'calculateCoordinates');
 
-      component['calculateSerieCoordinates'](serie, component['totalValue'], 200);
+      component['calculateSerieCoordinates'](serie, component['totalValue'], height);
 
       expect(spyApplyCoordinates).toHaveBeenCalled();
       expect(spySvgPathsToArray).toHaveBeenCalled();
-      expect(spyCalculateAngle).toHaveBeenCalled();
-      expect(spyCalculateCoordinates).toHaveBeenCalled();
+      expect(spyCalculateAngle).toHaveBeenCalledWith(serie[0].data, serie[0].data);
+      expect(spyCalculateCoordinates).toHaveBeenCalledWith(height, expectedStartAngle, expectedEndAngle);
       expect(component.showLabels).toBeTruthy();
     });
 
