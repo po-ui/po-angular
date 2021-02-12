@@ -109,7 +109,7 @@ export abstract class PoChartCircularComponent {
 
     series.forEach((serie, index) => {
       startRadianAngle = endRadianAngle;
-      endRadianAngle = startRadianAngle + this.calculateAngle(serie.data, totalValue);
+      endRadianAngle = startRadianAngle + this.calculateAngle(serie.data, totalValue) - PoChartCompleteCircle;
 
       const coordinates = this.calculateCoordinates(height, startRadianAngle, endRadianAngle);
 
