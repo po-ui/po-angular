@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.6.0](https://github.com/po-ui/po-angular/compare/v4.5.0...v4.6.0) (2021-02-15)
+
+
+### Bug Fixes
+
+* **chart:** corrige resize em gráficos do tipo circular ([200cc59](https://github.com/po-ui/po-angular/commit/200cc599f0e8ea2e5a5872292d5276a233aae862))
+* **chart:** corrige resize do gráfico com elementos externos ([fef0562](https://github.com/po-ui/po-angular/commit/fef05621793309d5d88dff49533f4d83bce4afb5))
+
+### Features
+* **chart:** permite combinar gráficos dos tipos `line` e `column` ([0aa20a1](https://github.com/po-ui/po-angular/commit/0aa20a1090d940edac10650df70bef0e68b321b8))
+* **chart:** adiciona nova interface `PoChartSerie` ([0aa20a1](https://github.com/po-ui/po-angular/commit/0aa20a1090d940edac10650df70bef0e68b321b8))
+
+
 # [4.5.0](https://github.com/po-ui/po-angular/compare/v4.4.0...v4.5.0) (2021-02-08)
 
 
