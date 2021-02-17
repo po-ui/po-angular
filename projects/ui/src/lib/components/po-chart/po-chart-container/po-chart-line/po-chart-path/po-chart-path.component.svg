@@ -1,5 +1,6 @@
 <svg:path #chartPath
   class="po-chart-line-path"
+  [class]="color?.includes('po-border-color') ? color : ''"
   [attr.stroke-dasharray]="pathWidth"
   [attr.stroke-dashoffset]="pathWidth"
   [attr.stroke]="color"

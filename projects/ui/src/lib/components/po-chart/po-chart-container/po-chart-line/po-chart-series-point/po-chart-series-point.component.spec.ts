@@ -84,32 +84,68 @@ describe('PoChartSeriesPointComponent', () => {
       expect(spySetPointAttribute).toHaveBeenCalledWith(event.target, false);
     });
 
-    it('setPointAttribute: should call `setStyle` and `setAttribute` if `isHover` is true', () => {
-      const event = { target: { r: '2', fill: 'red' } };
+    describe('setPointAttribute:', () => {
+      it('should call `setAttribute` for `r` with with properly values and `setStyle` if isHover is true', () => {
+        const event = { target: { r: '2', fill: 'red' } };
+        const radiusHoverSize = '10';
+        const isHover = true;
 
-      const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
-      const spysetStyle = spyOn(component['renderer'], 'setStyle');
-      const spyRemoveStyle = spyOn(component['renderer'], 'removeStyle');
+        component.color = 'red';
 
-      component['setPointAttribute'](<any>event.target, true);
+        const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
+        const spysetStyle = spyOn(component['renderer'], 'setStyle');
 
-      expect(spySetAttribute).toHaveBeenCalled();
-      expect(spysetStyle).toHaveBeenCalled();
-      expect(spyRemoveStyle).not.toHaveBeenCalled();
-    });
+        component['setPointAttribute'](<any>event.target, isHover);
 
-    it('setPointAttribute: should call `removeStyle` and `setAttribute` if `isHover` is false', () => {
-      const event = { target: { r: '2', fill: 'red' } };
+        expect(spySetAttribute).toHaveBeenCalledWith(event.target, 'r', radiusHoverSize);
+        expect(spysetStyle).toHaveBeenCalledWith(event.target, 'fill', 'red');
+      });
 
-      const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
-      const spysetStyle = spyOn(component['renderer'], 'setStyle');
-      const spyRemoveStyle = spyOn(component['renderer'], 'removeStyle');
+      it('should call `setAttribute` twice if isHover is true and `colorPalletteFillColorClass` has value', () => {
+        component.color = 'po-color-01';
+        component['colorPalletteFillColorClass'] = 'po-border-color-01';
 
-      component['setPointAttribute'](<any>event.target, false);
+        const event = { target: { r: '2', fill: 'red' } };
+        const isHover = true;
 
-      expect(spySetAttribute).toHaveBeenCalled();
-      expect(spyRemoveStyle).toHaveBeenCalled();
-      expect(spysetStyle).not.toHaveBeenCalled();
+        spyOn(component['renderer'], 'setStyle');
+        const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
+
+        component['setPointAttribute'](<any>event.target, isHover);
+
+        expect(spySetAttribute).toHaveBeenCalledTimes(2);
+      });
+
+      it('should call `setAttribute` twice if isHover is false and `colorPalletteFillColorClass` has value', () => {
+        component.color = 'po-color-01';
+        component['colorPalletteFillColorClass'] = 'po-border-color-01';
+
+        const event = { target: { r: '2', fill: 'red' } };
+        const isHover = false;
+
+        spyOn(component['renderer'], 'setStyle');
+        const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
+
+        component['setPointAttribute'](<any>event.target, isHover);
+
+        expect(spySetAttribute).toHaveBeenCalledTimes(2);
+      });
+
+      it('should call `setAttribute` for `r` with properly values and `removeStyle` if isHover is false', () => {
+        const event = { target: { r: '2', fill: 'red' } };
+        const radiusDefaultSize = '5';
+        const isHover = false;
+
+        component.color = 'red';
+
+        const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
+        const spyRemoveStyle = spyOn(component['renderer'], 'removeStyle');
+
+        component['setPointAttribute'](<any>event.target, isHover);
+
+        expect(spySetAttribute).toHaveBeenCalledWith(event.target, 'r', radiusDefaultSize);
+        expect(spyRemoveStyle).toHaveBeenCalledWith(event.target, 'fill', undefined);
+      });
     });
 
     it('trackBy: should return index param', () => {
@@ -234,12 +270,25 @@ describe('PoChartSeriesPointComponent', () => {
 
       expect(spyDisplayPointsWithDelay).toHaveBeenCalledWith(component.coordinates);
     });
+
+    it('p-color: should apply value to `colorPalletteFillColorClass` if p-color includes `po-border-color`', () => {
+      component.color = 'po-border-color-01';
+
+      expect(component['colorPalletteFillColorClass']).toBe('po-color-01');
+    });
+
+    it('p-color: should apply value to `colorPalletteFillColorClass` if p-color includes `po-border-color`', () => {
+      component.color = 'red';
+
+      expect(component['colorPalletteFillColorClass']).toBeUndefined();
+    });
   });
 
   describe('Template:', () => {
     it('should contain `po-chart-line-point`', () => {
       spyOn(component, <any>['displayPointsWithDelay']).and.returnValue(of(component.coordinates));
       component.coordinates = [coordinates];
+      component.color = 'blue';
 
       fixture.detectChanges();
 

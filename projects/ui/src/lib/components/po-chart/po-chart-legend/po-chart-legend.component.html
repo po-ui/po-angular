@@ -1,7 +1,11 @@
 <div class="po-chart-legend">
   <div class="po-chart-legend-container">
     <div class="po-chart-legend-item" *ngFor="let serie of series; let i = index">
-      <div class="po-chart-legend-square" [style.background]="colors[i]"></div>
+      <div
+        class="po-chart-legend-square"
+        [class]="serie.color?.includes('po-color') ? serie.color : ''"
+        [style.background]="serie.color"
+      ></div>
       <span class="po-chart-legend-text">{{ serie.label || serie.category }}</span>
     </div>
   </div>

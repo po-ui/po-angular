@@ -4,15 +4,9 @@ import { PoChartType } from '../enums/po-chart-type.enum';
 import { PoChartContainerSize } from '../interfaces/po-chart-container-size.interface';
 import { PoChartOptions } from '../interfaces/po-chart-options.interface';
 import { PoChartAxisOptions } from '../interfaces/po-chart-axis-options.interface';
-import { PoChartColorService } from '../services/po-chart-color.service';
 import { PoChartMathsService } from '../services/po-chart-maths.service';
 import { PoChartMinMaxValues } from '../interfaces/po-chart-min-max-values.interface';
 import { PoChartSerie } from '../interfaces/po-chart-serie.interface';
-
-// TODO: remover quando PoChartSerie tiver color.
-export interface ChartSerieColor extends PoChartSerie {
-  color?: string;
-}
 
 @Component({
   selector: 'po-chart-container',
@@ -20,7 +14,7 @@ export interface ChartSerieColor extends PoChartSerie {
 })
 export class PoChartContainerComponent implements OnChanges {
   private _options: PoChartOptions;
-  private _series: Array<ChartSerieColor> = [];
+  private _series: Array<PoChartSerie> = [];
 
   allowNegativeData: boolean;
   axisOptions: PoChartAxisOptions;
@@ -51,10 +45,7 @@ export class PoChartContainerComponent implements OnChanges {
   }
 
   @Input('p-series') set series(data: Array<PoChartSerie>) {
-    const seriesColors = this.colorService.getSeriesColor(data, PoChartType.Line);
-    this._series = data.map((serie, index) => {
-      return { ...serie, color: seriesColors[index] };
-    });
+    this._series = data;
     this.allowNegativeData = this.seriesTypeLine(this._series);
     this.setSeriesByType(this._series);
     this.setRange(this._series, this.options);
@@ -68,7 +59,7 @@ export class PoChartContainerComponent implements OnChanges {
     return this.type === PoChartType.Pie || this.type === PoChartType.Donut;
   }
 
-  constructor(private colorService: PoChartColorService, private mathsService: PoChartMathsService) {}
+  constructor(private mathsService: PoChartMathsService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.type || changes.containerSize) {

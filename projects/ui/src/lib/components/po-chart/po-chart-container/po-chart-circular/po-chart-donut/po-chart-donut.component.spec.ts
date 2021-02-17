@@ -2,8 +2,8 @@ import { SimpleChanges } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoChartContainerSize } from '../../../interfaces/po-chart-container-size.interface';
-import { ChartSerieColor } from '../../po-chart-container.component';
 import { PoChartDonutComponent } from './po-chart-donut.component';
+import { PoChartSerie } from '../../../interfaces/po-chart-serie.interface';
 
 describe('PoChartDonutComponent', () => {
   let component: PoChartDonutComponent;
@@ -27,7 +27,7 @@ describe('PoChartDonutComponent', () => {
 
   describe('Methods:', () => {
     it('ngOnChanges: should call `drawSeries` and `applySeriesLabels` if `changes.series`', () => {
-      const series: Array<ChartSerieColor> = [{ label: 'teste', data: 30 }];
+      const series: Array<PoChartSerie> = [{ label: 'teste', data: 30 }];
       const containerSize: PoChartContainerSize = { svgHeight: 300 };
       const seriesList = [];
       const changes: SimpleChanges = {
@@ -53,7 +53,7 @@ describe('PoChartDonutComponent', () => {
     });
 
     it('ngOnChanges: should call `drawSeries` and `applySeriesLabels` if `changes.containerSize`', () => {
-      const series: Array<ChartSerieColor> = [{ label: 'teste', data: 30 }];
+      const series: Array<PoChartSerie> = [{ label: 'teste', data: 30 }];
       const containerSize: PoChartContainerSize = { svgHeight: 300 };
       const seriesList = [];
       const changes: SimpleChanges = {
@@ -79,7 +79,7 @@ describe('PoChartDonutComponent', () => {
     });
 
     it('ngOnChanges: should`t call `drawSeries` and `applySeriesLabels`', () => {
-      const series: Array<ChartSerieColor> = [{ label: 'teste', data: 30 }];
+      const series: Array<PoChartSerie> = [{ label: 'teste', data: 30 }];
       const containerSize: PoChartContainerSize = { svgHeight: 300 };
       const seriesList = [];
       const changes: SimpleChanges = {};

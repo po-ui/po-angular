@@ -244,23 +244,20 @@ describe('PoChartComponent:', () => {
       component.type = PoChartType.Gauge;
       component.height = 400;
       component.series = { description: 'A', value: 10 };
-      component['colors'] = ['orange', 'red'];
 
       component['setComponentRefProperties'](instance);
 
       expect(instance.height).toBe(component.height);
       expect(instance.type).toBe(component.type);
       expect(instance.series).toEqual([component.series]);
-      expect(instance.colors).toEqual(component['colors']);
+      expect(instance.colors).toEqual(['#29B6C5']);
       expect(instance.chartHeader).toBe(component.chartHeader.nativeElement.offsetHeight);
       expect(instance.chartLegend).toBe(component.chartLegend.nativeElement.offsetHeight);
       expect(instance.chartWrapper).toBe(component.chartWrapper.nativeElement.offsetWidth);
     });
 
-    it('setComponentRefProperties: should set `instance.colors` and `instance.series` with empty array if `colors` and `series` are undefined', () => {
+    it('setComponentRefProperties: should set `instance.series` with empty array if `series` is undefined', () => {
       const instance: any = {};
-
-      spyOn(component['colorService'], 'getSeriesColor').and.returnValue(undefined);
 
       component['chartSeries'] = undefined;
       component.chartHeader = { nativeElement: { offsetHeight: 200 } };
@@ -269,7 +266,6 @@ describe('PoChartComponent:', () => {
 
       component['setComponentRefProperties'](instance);
 
-      expect(instance.colors).toEqual([]);
       expect(instance.series).toEqual([]);
     });
 
@@ -324,7 +320,7 @@ describe('PoChartComponent:', () => {
       and 'setHoverSubscribe' if has type`, () => {
       spyOn(component, <any>'createComponent');
       spyOn(component, <any>'setResizeListenerSubscribe');
-      spyOn(component.changeDetector, 'detectChanges');
+      spyOn(component['changeDetector'], 'detectChanges');
       spyOn(component, <any>'setClickSubscribe');
       spyOn(component, <any>'setHoverSubscribe');
 
@@ -332,7 +328,7 @@ describe('PoChartComponent:', () => {
 
       expect(component['createComponent']).toHaveBeenCalled();
       expect(component['setResizeListenerSubscribe']).toHaveBeenCalled();
-      expect(component.changeDetector.detectChanges).toHaveBeenCalled();
+      expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
       expect(component['setClickSubscribe']).toHaveBeenCalled();
       expect(component['setHoverSubscribe']).toHaveBeenCalled();
     });

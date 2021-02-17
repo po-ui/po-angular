@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Component, ElementRef, NgZone, Renderer2 } from '@angular/core';
 
+import { PoDefaultColors, PoDefaultColorsTextBlack } from 'projects/ui/src/lib/services/po-color/po-colors.constant';
+
 import { PoChartCircular } from './po-chart-circular';
-import { PoChartColors, PoSeriesTextBlack } from '../../helpers/po-chart-colors.constant';
 import { poChartCompleteCircle, poChartGaugeSerieWidth } from './po-chart-circular.constant';
 import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component';
 import { PoChartGaugeSerie } from '../po-chart-gauge/po-chart-gauge-series.interface';
@@ -95,7 +96,7 @@ describe('PoChartCircular:', () => {
 
       spyOn(component, <any>'calculateEndAngle').and.returnValues(...itemsEndAngle);
 
-      component.colors = PoChartColors[3];
+      component.colors = PoDefaultColors[3];
       component['series'] = [
         { label: '1', data: 1 },
         { label: '2', data: 2 },
@@ -113,7 +114,7 @@ describe('PoChartCircular:', () => {
 
       spyOn(component, <any>'calculateEndAngle').and.returnValues(...itemsEndAngle);
 
-      component.colors = PoChartColors[3];
+      component.colors = PoDefaultColors[3];
       component['series'] = [
         { category: '1', value: 1 },
         { category: '2', value: 2 },
@@ -132,7 +133,7 @@ describe('PoChartCircular:', () => {
 
       spyOn(component, <any>'calculateEndAngle').and.returnValues(...itemsEndAngle);
 
-      component.colors = PoChartColors[3];
+      component.colors = PoDefaultColors[3];
       component['series'] = [
         { label: '1', data: 1 },
         { category: '2', data: 2 },
@@ -149,7 +150,7 @@ describe('PoChartCircular:', () => {
       spyOn(component, <any>'calculateEndAngle');
       component['totalValue'] = 24;
 
-      component.colors = PoChartColors[3];
+      component.colors = PoDefaultColors[3];
       component['series'] = [
         { category: '1', value: 1 },
         { category: '2', value: 2 },
@@ -254,7 +255,7 @@ describe('PoChartCircular:', () => {
     it('createPath: should create a svg path element with some attributes and append it into `svgPathsWrapper`', () => {
       const serie = { category: 'po', value: 2 };
       const svgPathsWrapper = { appendChild: () => {} };
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
 
       spyOn(component['renderer'], 'setAttribute');
       spyOn(component['renderer'], 'appendChild');
@@ -271,7 +272,7 @@ describe('PoChartCircular:', () => {
       const serie = { category: 'po', value: 2, tooltip: tooltipText };
       const svgPath = '<svg></svg>';
       const svgPathsWrapper = { appendChild: () => {} };
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
 
       spyOn(component['renderer'], 'setAttribute');
       spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
@@ -288,7 +289,7 @@ describe('PoChartCircular:', () => {
       const serie = { value: 10, description: 'First' };
 
       component.type = PoChartType.Gauge;
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
       component['series'] = [{ ...serie }];
 
       spyOn(component, <any>'emitEventOnEnter')(eventMock);
@@ -419,7 +420,7 @@ describe('PoChartCircular:', () => {
       const serie = { value: 10, description: 'First' };
 
       component.type = PoChartType.Gauge;
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
       component['series'] = [{ ...serie }];
 
       spyOn(component['onSerieClick'], 'next');
@@ -489,7 +490,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('createPaths: should call `renderer.createElement` and call `createPath`', () => {
-      component.colors = PoChartColors[2];
+      component.colors = PoDefaultColors[2];
       component['series'] = [
         { value: 10, category: 'First' },
         { value: 20, category: 'Second' }
@@ -509,7 +510,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('createPaths: should call `appendGaugeBackgroundPathElement` if type is `gauge`', () => {
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
       component['series'] = [{ value: 10, description: 'First' }];
       component.type = PoChartType.Gauge;
 
@@ -522,7 +523,7 @@ describe('PoChartCircular:', () => {
 
     it('createPaths: shouldn`t call `createPath` if type is gauge and serie`s property value is equal 0', () => {
       const fakeThis = {
-        colors: PoChartColors[1],
+        colors: PoDefaultColors[1],
         series: [{ value: 0, description: 'First' }],
         type: PoChartType.Gauge,
         isChartGaugeType: true,
@@ -543,7 +544,7 @@ describe('PoChartCircular:', () => {
 
     it(`createSVGElements: should create svgElement and call 'createPaths', 'createTexts',
       append svgElement in svgContainer and setAttributes`, () => {
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
       component.series = [{ category: 'po', value: 1 }];
       spyOn(component, <any>'createPaths');
       spyOn(component, <any>'createTexts');
@@ -564,7 +565,7 @@ describe('PoChartCircular:', () => {
     it('createSVGElements: should set `xMidYMax` to `preservAspectRatio` if type is `gauge`', () => {
       const expectedPreserveAspectRatio = 'xMidYMax meet';
       component.type = PoChartType.Gauge;
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
       component.series = [{ category: 'po', value: 1 }];
       component.centerX = 500;
       component.chartWrapper = 1000;
@@ -577,7 +578,7 @@ describe('PoChartCircular:', () => {
     it('createSVGElements: should set `xMidYMin` to `preservAspectRatio` if type different from `gauge`', () => {
       const expectedPreserveAspectRatio = 'xMidYMin meet';
       component.type = PoChartType.Pie;
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
       component.series = [{ category: 'po', value: 1 }];
       component.centerX = 500;
       component.chartWrapper = 1000;
@@ -589,7 +590,7 @@ describe('PoChartCircular:', () => {
 
     it('createSVGElements: should set properly viewBox attribute values if type is different from `gauge``', () => {
       component.type = PoChartType.Pie;
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
       component.series = [{ category: 'po', value: 1 }];
       component.centerX = 500;
       component.chartWrapper = 1000;
@@ -603,7 +604,7 @@ describe('PoChartCircular:', () => {
 
     it('createSVGElements: should set properly viewBox attribute values if type is `gauge`', () => {
       component.type = PoChartType.Gauge;
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
       component.series = [{ category: 'po', value: 1 }];
       component.centerX = 500;
       component.chartWrapper = 1000;
@@ -850,7 +851,7 @@ describe('PoChartCircular:', () => {
     });
 
     it('getTextColor: should return black hexadecimal color', () => {
-      const color = PoSeriesTextBlack[0];
+      const color = PoDefaultColorsTextBlack[0];
       const expectedValue = '#000000';
 
       expect(component['getTextColor'](color)).toBe(expectedValue);
@@ -895,7 +896,7 @@ describe('PoChartCircular:', () => {
         { value: 20, category: 'Second' }
       ];
 
-      component.colors = PoChartColors[mockSeries.length];
+      component.colors = PoDefaultColors[mockSeries.length];
       component['series'] = mockSeries;
       component.type = PoChartType.Donut;
 
@@ -912,7 +913,7 @@ describe('PoChartCircular:', () => {
         { value: 20, category: 'Second' }
       ];
 
-      component.colors = PoChartColors[mockSeries.length];
+      component.colors = PoDefaultColors[mockSeries.length];
       component['series'] = mockSeries;
       component.type = PoChartType.Donut;
 
@@ -926,7 +927,7 @@ describe('PoChartCircular:', () => {
     it('createText: should create a svg text element with some attributes and add it into `svgTextElementsList`', () => {
       const serie = { description: 'po', value: 2 };
 
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
 
       spyOn(component, <any>'getFontSize');
       spyOn(component, <any>'getTextColor');
@@ -954,7 +955,7 @@ describe('PoChartCircular:', () => {
     it('createText: should create a svg text element with some attributes and add it into `svgTextElementsList` even serie.label and serie.value', () => {
       const serie = { category: 'po', value: 2 };
 
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
 
       spyOn(component, <any>'getFontSize');
       spyOn(component, <any>'getTextColor');
@@ -982,7 +983,7 @@ describe('PoChartCircular:', () => {
     it(`createText: should create a svg text element with some attributes and add it into 'svgTextElementsList' even serie.label, serie.value, serie.data and serie.category are mixed`, () => {
       const serie = { description: 'po', value: 2 };
 
-      component.colors = PoChartColors[0];
+      component.colors = PoDefaultColors[0];
 
       spyOn(component, <any>'getFontSize');
       spyOn(component, <any>'getTextColor');
@@ -1116,7 +1117,7 @@ describe('PoChartCircular:', () => {
       ];
       const seriesParam = [...series, ...invalidSeries];
 
-      component.colors = PoChartColors[seriesParam.length];
+      component.colors = PoDefaultColors[seriesParam.length];
 
       const validSeries = component['getSeriesWithValue'](seriesParam);
 
@@ -1148,7 +1149,7 @@ describe('PoChartCircular:', () => {
       ];
       const seriesParam = [...series, ...invalidSeries];
 
-      component.colors = PoChartColors[seriesParam.length];
+      component.colors = PoDefaultColors[seriesParam.length];
 
       const validSeries = component['getSeriesWithValue'](seriesParam);
 
@@ -1160,7 +1161,7 @@ describe('PoChartCircular:', () => {
       const series = [{ description: 'Valor 2', value: 2 }];
       const seriesParam = [...series, ...invalidSeries];
 
-      component.colors = PoChartColors[seriesParam.length];
+      component.colors = PoDefaultColors[seriesParam.length];
 
       const validSeries = component['getSeriesWithValue'](seriesParam);
 

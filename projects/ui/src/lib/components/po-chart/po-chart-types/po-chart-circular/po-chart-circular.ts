@@ -12,10 +12,11 @@ import {
   poChartGaugeSerieWidth,
   poChartStartAngle
 } from './po-chart-circular.constant';
+import { PoDefaultColorsTextBlack } from '../../../../services/po-color/po-colors.constant';
+
 import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component';
 import { PoChartGaugeSerie } from '../po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../../enums/po-chart-type.enum';
-import { PoSeriesTextBlack } from '../../helpers/po-chart-colors.constant';
 
 const poChartBlackColor = '#000000';
 const poChartWhiteColor = '#ffffff';
@@ -329,7 +330,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   }
 
   private getTextColor(color: string) {
-    if (PoSeriesTextBlack.includes(color)) {
+    if (PoDefaultColorsTextBlack.includes(color)) {
       return poChartBlackColor;
     }
 

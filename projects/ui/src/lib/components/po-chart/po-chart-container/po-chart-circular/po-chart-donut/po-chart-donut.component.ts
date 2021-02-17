@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 
 import { convertNumberToDecimal } from '../../../../../utils/util';
+import { PoDefaultColorsTextBlack } from '../../../../../services/po-color/po-colors.constant';
 
 import { PoChartCircularComponent } from '../po-chart-circular.component';
 import { PoChartDonutThickness, PoChartStartAngle } from '../../../helpers/po-chart-default-values.constant';
-import { PoSeriesTextBlack } from '../../../helpers/po-chart-colors.constant';
 
 @Component({
   selector: '[po-chart-donut]',
@@ -119,7 +119,7 @@ export class PoChartDonutComponent extends PoChartCircularComponent implements O
   }
 
   private getTextColor(color: string) {
-    if (PoSeriesTextBlack.includes(color)) {
+    if (PoDefaultColorsTextBlack.includes(color)) {
       return this.poChartBlackColor;
     }
 

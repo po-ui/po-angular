@@ -5,7 +5,7 @@ import { PoChartMathsService } from '../../services/po-chart-maths.service';
 import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.interface';
 import { PoChartMinMaxValues } from '../../interfaces/po-chart-min-max-values.interface';
 import { PoChartBarCoordinates } from '../../interfaces/po-chart-bar-coordinates.interface';
-import { ChartSerieColor } from '../po-chart-container.component';
+import { PoChartSerie } from '../../interfaces/po-chart-serie.interface';
 
 @Directive()
 export abstract class PoChartBarBaseComponent {
@@ -15,7 +15,7 @@ export abstract class PoChartBarBaseComponent {
 
   private _containerSize: PoChartContainerSize = {};
   private _range: PoChartMinMaxValues = {};
-  private _series: Array<ChartSerieColor> = [];
+  private _series: Array<PoChartSerie> = [];
 
   @Input('p-categories') categories: Array<string>;
 
@@ -41,7 +41,7 @@ export abstract class PoChartBarBaseComponent {
     return this._containerSize;
   }
 
-  @Input('p-series') set series(seriesList: Array<ChartSerieColor>) {
+  @Input('p-series') set series(seriesList: Array<PoChartSerie>) {
     const seriesDataArrayFilter = seriesList.filter(serie => {
       return Array.isArray(serie.data);
     });
@@ -79,10 +79,10 @@ export abstract class PoChartBarBaseComponent {
 
   private calculateSeriesPathsCoordinates(
     containerSize: PoChartContainerSize,
-    series: Array<ChartSerieColor>,
+    series: Array<PoChartSerie>,
     range: PoChartMinMaxValues
   ) {
-    this.seriesPathsCoordinates = series.map((serie: ChartSerieColor, seriesIndex) => {
+    this.seriesPathsCoordinates = series.map((serie: PoChartSerie, seriesIndex) => {
       if (Array.isArray(serie.data)) {
         let pathCoordinates: Array<PoChartBarCoordinates> = [];
 

@@ -16,13 +16,13 @@ import {
 import { Subject, Subscription } from 'rxjs';
 
 import { PoChartBaseComponent } from './po-chart-base.component';
-import { PoChartColorService } from './services/po-chart-color.service';
 import { PoChartSvgContainerService } from './services/po-chart-svg-container.service';
 import { PoChartDynamicTypeComponent } from './po-chart-types/po-chart-dynamic-type.component';
 import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
-import { debounceTime } from 'rxjs/operators';
+import { PoColorService } from '../../services/po-color/po-color.service';
+import { PoDefaultColors } from '../../services/po-color/po-colors.constant';
 
 /**
  * @docsExtends PoChartBaseComponent
@@ -51,7 +51,6 @@ import { debounceTime } from 'rxjs/operators';
 export class PoChartComponent extends PoChartBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   private calculatedComponentRefElement: boolean = false;
   private calculatedSvgContainerElement: boolean = false;
-  private colors: Array<string> = [];
   private componentRef: ComponentRef<{}>;
   private initialized: boolean = false;
   private windowResizeListener: Subject<any> = new Subject();
@@ -72,13 +71,12 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   @ViewChild('chartWrapper', { static: true }) chartWrapper: ElementRef;
 
   constructor(
-    public changeDetector: ChangeDetectorRef,
-    private colorService: PoChartColorService,
+    protected colorService: PoColorService,
+    private changeDetector: ChangeDetectorRef,
     private containerService: PoChartSvgContainerService,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private elementRef: ElementRef
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
-    super();
+    super(colorService);
   }
 
   get isChartGaugeType(): boolean {
@@ -198,12 +196,10 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   private setComponentRefProperties(instance: PoChartDynamicTypeComponent) {
     const { chartHeaderHeight, chartLegendHeight, chartWrapperWidth } = this.getChartMeasurements();
 
-    this.colors = this.colorService.getSeriesColor(this.chartSeries, this.type);
-
     instance.chartHeader = chartHeaderHeight;
     instance.chartLegend = chartLegendHeight;
     instance.chartWrapper = chartWrapperWidth;
-    instance.colors = Array.isArray(this.colors) ? [...this.colors] : [];
+    instance.colors = PoDefaultColors[0];
     instance.height = this.height;
     instance.type = this.type;
     instance.series = this.chartSeries || [];

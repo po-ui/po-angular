@@ -4,6 +4,7 @@ import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartType } from './enums/po-chart-type.enum';
+import { PoColorService } from '../../services/po-color/po-color.service';
 
 @Directive()
 class PoCharComponent extends PoChartBaseComponent {
@@ -14,8 +15,10 @@ class PoCharComponent extends PoChartBaseComponent {
 describe('PoChartBaseComponent:', () => {
   let component: PoCharComponent;
 
+  const colorService: PoColorService = new PoColorService();
+
   beforeEach(() => {
-    component = new PoCharComponent();
+    component = new PoCharComponent(colorService);
   });
 
   it('should be create', () => {
@@ -294,8 +297,8 @@ describe('PoChartBaseComponent:', () => {
         ];
 
         const expectedResult = [
-          { label: 'serie 1', data: 1, type: PoChartType.Pie },
-          { label: 'serie 2', data: 2, type: PoChartType.Pie }
+          { label: 'serie 1', data: 1, type: PoChartType.Pie, color: '#0C6C94' },
+          { label: 'serie 2', data: 2, type: PoChartType.Pie, color: '#29B6C5' }
         ];
 
         component['validateSerieAndAddType'](component.series);
@@ -310,8 +313,8 @@ describe('PoChartBaseComponent:', () => {
         ];
 
         const expectedResult = [
-          { label: 'serie 1', value: 1, type: PoChartType.Pie },
-          { label: 'serie 2', value: 2, type: PoChartType.Pie }
+          { label: 'serie 1', value: 1, type: PoChartType.Pie, color: '#0C6C94' },
+          { label: 'serie 2', value: 2, type: PoChartType.Pie, color: '#29B6C5' }
         ];
 
         component['validateSerieAndAddType'](component.series);
@@ -326,8 +329,8 @@ describe('PoChartBaseComponent:', () => {
         ];
 
         const expectedResult = [
-          { label: 'serie 1', data: [1, 2], type: PoChartType.Column },
-          { label: 'serie 2', data: [3, 4], type: PoChartType.Column }
+          { label: 'serie 1', data: [1, 2], type: PoChartType.Column, color: '#0C6C94' },
+          { label: 'serie 2', data: [3, 4], type: PoChartType.Column, color: '#29B6C5' }
         ];
 
         component['validateSerieAndAddType'](component.series);
@@ -341,7 +344,7 @@ describe('PoChartBaseComponent:', () => {
           { label: 'serie 2', data: 3 }
         ];
 
-        const expectedResult = [{ label: 'serie 1', data: [1, 2], type: PoChartType.Column }];
+        const expectedResult = [{ label: 'serie 1', data: [1, 2], type: PoChartType.Column, color: '#29B6C5' }];
 
         component['validateSerieAndAddType'](component.series);
 
@@ -356,8 +359,8 @@ describe('PoChartBaseComponent:', () => {
         ];
 
         const expectedResult = [
-          { label: 'serie 2', data: 3, type: PoChartType.Donut },
-          { label: 'serie 3', data: 4, type: PoChartType.Donut }
+          { label: 'serie 2', data: 3, type: PoChartType.Donut, color: '#0C6C94' },
+          { label: 'serie 3', data: 4, type: PoChartType.Donut, color: '#29B6C5' }
         ];
 
         component['validateSerieAndAddType'](component.series);
@@ -372,8 +375,8 @@ describe('PoChartBaseComponent:', () => {
         ];
 
         const expectedResult = [
-          { label: 'serie 1', data: [1, 2], type: PoChartType.Line },
-          { label: 'serie 2', data: [3, 4], type: PoChartType.Line }
+          { label: 'serie 1', data: [1, 2], type: PoChartType.Line, color: '#0C6C94' },
+          { label: 'serie 2', data: [3, 4], type: PoChartType.Line, color: '#29B6C5' }
         ];
 
         component['validateSerieAndAddType'](component.series);

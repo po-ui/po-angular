@@ -8,7 +8,7 @@ import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.i
 import { PoChartMinMaxValues } from '../../interfaces/po-chart-min-max-values.interface';
 import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinates.interface';
 import { PoChartPointsCoordinates } from '../../interfaces/po-chart-points-coordinates.interface';
-import { ChartSerieColor } from '../po-chart-container.component';
+import { PoChartSerie } from '../../interfaces/po-chart-serie.interface';
 
 @Component({
   selector: '[po-chart-line]',
@@ -24,7 +24,7 @@ export class PoChartLineComponent {
 
   private _containerSize: PoChartContainerSize = {};
   private _range: PoChartMinMaxValues = {};
-  private _series: Array<ChartSerieColor> = [];
+  private _series: Array<PoChartSerie> = [];
 
   @Input('p-allow-negative-data') allowNegativeData;
 
@@ -52,7 +52,7 @@ export class PoChartLineComponent {
     return this._containerSize;
   }
 
-  @Input('p-series') set series(seriesList: Array<ChartSerieColor>) {
+  @Input('p-series') set series(seriesList: Array<PoChartSerie>) {
     const seriesDataArrayFilter = seriesList.filter(serie => {
       return Array.isArray(serie.data);
     });
@@ -96,15 +96,16 @@ export class PoChartLineComponent {
 
   private seriePathPointsDefinition(
     containerSize: PoChartContainerSize,
-    series: Array<ChartSerieColor>,
+    series: Array<PoChartSerie>,
     range: PoChartMinMaxValues
   ) {
     this.seriesPointsCoordinates = [];
 
-    this.seriesPathsCoordinates = series.map((serie: ChartSerieColor) => {
+    this.seriesPathsCoordinates = series.map((serie: PoChartSerie) => {
       if (Array.isArray(serie.data)) {
         let pathCoordinates: string = '';
         let pointCoordinates: Array<PoChartPointsCoordinates> = [];
+        const color: string = serie.color.replace('po-color', 'po-border-color');
         this.firstValidItemFromSerieArray = true;
 
         serie.data.forEach((data, index) => {
@@ -115,20 +116,20 @@ export class PoChartLineComponent {
             const xCoordinate = this.xCoordinate(index, containerSize);
             const yCoordinate = this.yCoordinate(range, verifiedData, containerSize);
             const category = this.serieCategory(index, this.categories);
-            const label = serie['label'];
-            const tooltip = serie['tooltip'];
+            const label = serie.label;
+            const tooltip = serie.tooltip;
             const tooltipLabel = this.getTooltipLabel(verifiedData, label, tooltip);
 
             pointCoordinates = [
               ...pointCoordinates,
-              { category, label, tooltipLabel, data: verifiedData, xCoordinate, yCoordinate }
+              { category, label, tooltipLabel, data: verifiedData, xCoordinate, yCoordinate, color }
             ];
             pathCoordinates += ` ${svgPathCommand}${xCoordinate} ${yCoordinate}`;
           }
         });
         this.seriesPointsCoordinates = [...this.seriesPointsCoordinates, pointCoordinates];
 
-        return { coordinates: pathCoordinates, color: serie['color'] };
+        return { coordinates: pathCoordinates, color };
       }
     });
   }

@@ -9,6 +9,7 @@ import { PoChartSerie, PoChartType, PoSelectOption, PoChartOptions } from '@po-u
 export class SamplePoChartLabsComponent implements OnInit {
   allCategories: Array<string> = [];
   categories: string;
+  color: string;
   data;
   event: string;
   height: number;
@@ -50,7 +51,7 @@ export class SamplePoChartLabsComponent implements OnInit {
     const data = isNaN(this.data) ? this.convertToArray(this.data) : Math.floor(this.data);
     const type = this.serieType ?? this.type;
 
-    this.series = [...this.series, { label: this.label, data, tooltip: this.tooltip, type }];
+    this.series = [...this.series, { label: this.label, data, tooltip: this.tooltip, color: this.color, type }];
   }
 
   changeEvent(eventName: string, serieEvent: PoChartSerie): void {

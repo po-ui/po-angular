@@ -46,7 +46,7 @@ export class SamplePoChartCoffeeRankingComponent {
   ];
 
   participationByCountryInWorldExports: Array<PoChartSerie> = [
-    { label: 'Brazil', data: [35, 32, 25, 29, 33, 33] },
+    { label: 'Brazil', data: [35, 32, 25, 29, 33, 33], color: 'color-10' },
     { label: 'Vietnam', data: [15, 17, 23, 19, 22, 18] },
     { label: 'Colombia', data: [8, 7, 6, 9, 10, 11] },
     { label: 'India', data: [5, 6, 5, 4, 5, 5] },
@@ -57,11 +57,11 @@ export class SamplePoChartCoffeeRankingComponent {
     { label: '2014', data: [91, 40, 42], type: PoChartType.Column },
     { label: '2017', data: [93, 52, 39], type: PoChartType.Column },
     { label: '2020', data: [95, 46, 31], type: PoChartType.Column },
-    { label: 'Coffee consumption in Brazil', data: [34, 27, 79], type: PoChartType.Line }
+    { label: 'Coffee consumption in Brazil', data: [34, 27, 79], type: PoChartType.Line, color: 'color-10' }
   ];
 
   coffeeProduction: Array<PoChartSerie> = [
-    { label: 'Brazil', data: 2796, tooltip: 'Brazil (South America)' },
+    { label: 'Brazil', data: 2796, tooltip: 'Brazil (South America)', color: 'color-10' },
     { label: 'Vietnam', data: 1076, tooltip: 'Vietnam (Asia)' },
     { label: 'Colombia', data: 688, tooltip: 'Colombia (South America)' },
     { label: 'Indonesia', data: 682, tooltip: 'Indonesia (Asia/Oceania)' },
