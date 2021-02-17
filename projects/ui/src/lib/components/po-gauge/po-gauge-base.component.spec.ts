@@ -3,8 +3,9 @@ import { Directive } from '@angular/core';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 import { poGaugeMinHeight } from './po-gauge-default-values.constant';
 
+import { PoColorService } from '../../services/po-color/po-color.service';
+
 import { PoGaugeBaseComponent } from './po-gauge-base.component';
-import { PoGaugeColorService } from './services/po-gauge-color.service';
 
 @Directive()
 class PoGaugeComponent extends PoGaugeBaseComponent {
@@ -12,12 +13,12 @@ class PoGaugeComponent extends PoGaugeBaseComponent {
 }
 
 describe('PoGaugeBaseComponent:', () => {
-  let colorService: PoGaugeColorService;
+  let colorService: PoColorService;
 
   let component: PoGaugeComponent;
 
   beforeEach(() => {
-    colorService = new PoGaugeColorService();
+    colorService = new PoColorService();
 
     component = new PoGaugeComponent(colorService);
   });
