@@ -13,7 +13,7 @@ describe('PoChartContainerComponent', () => {
   let fixture: ComponentFixture<PoChartContainerComponent>;
   let nativeElement;
 
-  const series = [{ label: 'category', data: [1, 2, 3] }];
+  const series = [{ label: 'category', data: [1, 2, 3], color: 'red' }];
   const containerSize: PoChartContainerSize = {
     svgWidth: 200,
     svgHeight: 200,
@@ -271,15 +271,14 @@ describe('PoChartContainerComponent', () => {
   });
 
   describe('Properties: ', () => {
-    it('p-series: should call `getSeriesColor`, `seriesTypeLine` `setSeriesByType` and `setRange`', () => {
-      const spyGetSeriesColor = spyOn(component['colorService'], <any>'getSeriesColor').and.callThrough();
+    it('p-series: should `seriesTypeLine` `setSeriesByType` and `setRange`', () => {
       const spySeriesTypeLine = spyOn(component, <any>['seriesTypeLine']);
       const spysetSeriesByType = spyOn(component, <any>['setSeriesByType']).and.callThrough();
       const spySetRange = spyOn(component, <any>['setRange']);
 
       component.series = [
-        { data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Line },
-        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column }
+        { data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Line, color: '#0C6C94' },
+        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column, color: '#29B6C5' }
       ];
 
       const seriesWithColor = [
@@ -287,7 +286,6 @@ describe('PoChartContainerComponent', () => {
         { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column, color: '#29B6C5' }
       ];
 
-      expect(spyGetSeriesColor).toHaveBeenCalled();
       expect(spySeriesTypeLine).toHaveBeenCalledWith(seriesWithColor);
       expect(spysetSeriesByType).toHaveBeenCalledWith(seriesWithColor);
       expect(spySetRange).toHaveBeenCalledWith(seriesWithColor, component.options);
@@ -333,7 +331,7 @@ describe('PoChartContainerComponent', () => {
     it('should have `po-chart-line-path` if type is `Line`', () => {
       component.type = PoChartType.Line;
 
-      component.series = [{ data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Line }];
+      component.series = [{ data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Line, color: 'blue' }];
 
       fixture.detectChanges();
 
@@ -346,9 +344,9 @@ describe('PoChartContainerComponent', () => {
       component.type = PoChartType.Line;
 
       component.series = [
-        { data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Line },
-        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Line },
-        { data: [1, 2, 3], label: 'Montreal', type: PoChartType.Bar }
+        { data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Line, color: 'red' },
+        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Line, color: 'blue' },
+        { data: [1, 2, 3], label: 'Montreal', type: PoChartType.Bar, color: 'pink' }
       ];
 
       fixture.detectChanges();
@@ -385,10 +383,10 @@ describe('PoChartContainerComponent', () => {
       component.type = PoChartType.Line;
 
       component.series = [
-        { data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Line },
-        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column },
-        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column },
-        { data: [1, 2, 3], label: 'Montreal', type: PoChartType.Bar }
+        { data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Line, color: 'red' },
+        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column, color: 'green' },
+        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column, color: 'yellow' },
+        { data: [1, 2, 3], label: 'Montreal', type: PoChartType.Bar, color: 'pink' }
       ];
 
       fixture.detectChanges();

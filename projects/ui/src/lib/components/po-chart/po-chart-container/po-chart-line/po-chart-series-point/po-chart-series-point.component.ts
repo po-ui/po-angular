@@ -15,15 +15,28 @@ const ANIMATION_DURATION_TIME = 700;
   templateUrl: './po-chart-series-point.component.svg'
 })
 export class PoChartSeriesPointComponent {
+  private _color: string;
+  private _coordinates: Array<PoChartPointsCoordinates> = [];
+
   radius: number = RADIUS_DEFAULT_SIZE;
   coordinates$: Observable<Array<PoChartPointsCoordinates>>;
 
-  private _coordinates: Array<PoChartPointsCoordinates> = [];
   private animationState: boolean = true;
+  private colorPalletteFillColorClass: string;
 
   @Input('p-animate') animate: boolean;
 
-  @Input('p-color') color?: string;
+  @Input('p-color') set color(value: string) {
+    this._color = value;
+
+    if (this.color.includes('po-border-color')) {
+      this.colorPalletteFillColorClass = this.color.replace('po-border-color', 'po-color');
+    }
+  }
+
+  get color() {
+    return this._color;
+  }
 
   @Input('p-coordinates') set coordinates(value: Array<PoChartPointsCoordinates>) {
     this._coordinates = value;
@@ -82,13 +95,15 @@ export class PoChartSeriesPointComponent {
   }
 
   private setPointAttribute(target: SVGElement, isHover: boolean) {
-    if (isHover) {
-      this.renderer.setAttribute(target, 'r', RADIUS_HOVER_SIZE.toString());
-      this.renderer.setStyle(target, 'fill', this.color);
-      return;
+    this.renderer.setAttribute(target, 'r', isHover ? RADIUS_HOVER_SIZE.toString() : RADIUS_DEFAULT_SIZE.toString());
+    if (this.colorPalletteFillColorClass) {
+      this.renderer.setAttribute(
+        target,
+        'class',
+        isHover ? `${this.color} ${this.colorPalletteFillColorClass}` : `po-chart-line-point ${this.color}`
+      );
+    } else {
+      this.renderer[isHover ? 'setStyle' : 'removeStyle'](target, 'fill', isHover ? this.color : undefined);
     }
-
-    this.renderer.setAttribute(target, 'r', RADIUS_DEFAULT_SIZE.toString());
-    this.renderer.removeStyle(target, 'fill');
   }
 }

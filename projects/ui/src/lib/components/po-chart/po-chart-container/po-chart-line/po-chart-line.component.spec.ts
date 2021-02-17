@@ -103,7 +103,7 @@ describe('PoChartLineComponent', () => {
       });
 
       it('should apply apply value to `seriesPointsCoordinates`', () => {
-        component.series = [{ label: 'Vancouver', data: [5, 10] }];
+        component.series = [{ label: 'Vancouver', data: [5, 10], color: 'blue' }];
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, range);
 
@@ -111,6 +111,7 @@ describe('PoChartLineComponent', () => {
           [
             {
               category: undefined,
+              color: 'blue',
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 5',
               data: 5,
@@ -119,6 +120,7 @@ describe('PoChartLineComponent', () => {
             },
             {
               category: undefined,
+              color: 'blue',
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
@@ -135,7 +137,7 @@ describe('PoChartLineComponent', () => {
 
       it('should apply apply only data to tooltipLabel if label is undefined', () => {
         const minMaxSeriesValues = { minValue: 5, maxValue: 10 };
-        component.series = [{ label: undefined, data: [5, 10] }];
+        component.series = [{ label: undefined, data: [5, 10], color: 'blue' }];
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
 
@@ -143,6 +145,7 @@ describe('PoChartLineComponent', () => {
           [
             {
               category: undefined,
+              color: 'blue',
               label: undefined,
               tooltipLabel: '5',
               data: 5,
@@ -151,6 +154,7 @@ describe('PoChartLineComponent', () => {
             },
             {
               category: undefined,
+              color: 'blue',
               label: undefined,
               tooltipLabel: '10',
               data: 10,
@@ -167,7 +171,7 @@ describe('PoChartLineComponent', () => {
 
       it('should apply apply value to `seriesPointsCoordinates` passing `categories` value of each one', () => {
         const minMaxSeriesValues = { minValue: 5, maxValue: 10 };
-        component.series = [{ label: 'Vancouver', data: [5, 10] }];
+        component.series = [{ label: 'Vancouver', data: [5, 10], color: 'blue' }];
         component.categories = ['janeiro', 'fevereiro'];
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
@@ -176,6 +180,7 @@ describe('PoChartLineComponent', () => {
           [
             {
               category: 'janeiro',
+              color: 'blue',
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 5',
               data: 5,
@@ -184,6 +189,7 @@ describe('PoChartLineComponent', () => {
             },
             {
               category: 'fevereiro',
+              color: 'blue',
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
@@ -207,6 +213,7 @@ describe('PoChartLineComponent', () => {
           [
             {
               category: 'janeiro',
+              color: '#29B6C5',
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 10',
               data: 10,
@@ -215,6 +222,7 @@ describe('PoChartLineComponent', () => {
             },
             {
               category: 'março',
+              color: '#29B6C5',
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 12',
               data: 12,
@@ -264,6 +272,7 @@ describe('PoChartLineComponent', () => {
           [
             {
               category: 'janeiro',
+              color: '#29B6C5',
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 0',
               data: 0,
@@ -272,6 +281,7 @@ describe('PoChartLineComponent', () => {
             },
             {
               category: 'fevereiro',
+              color: '#29B6C5',
               label: 'Vancouver',
               tooltipLabel: 'Vancouver: 0',
               data: 0,

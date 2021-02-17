@@ -3,6 +3,7 @@
   p-tooltip-position="top"
   [p-append-in-body]='true'
   class="po-chart-line-point"
+  [class]="color?.includes('po-border-color') ? color : ''"
   [attr.cx]="item.xCoordinate"
   [attr.cy]="item.yCoordinate"
   [attr.r]="radius"

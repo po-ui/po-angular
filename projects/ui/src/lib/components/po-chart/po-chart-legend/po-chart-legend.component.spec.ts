@@ -23,28 +23,12 @@ describe('PoChartLegendComponent:', () => {
     expect(component instanceof PoChartLegendComponent).toBeTruthy();
   });
 
-  describe('Properties:', () => {
-    it('p-series: should call `colorService.getSeriesColor` and apply the returned value to `colors`', () => {
-      const spyGetSeriesColor = spyOn(component['colorService'], <any>'getSeriesColor').and.callThrough();
-
-      component.series = [
-        { cat: 1, value: 2 },
-        { cat: 1, value: 2 }
-      ];
-
-      expect(spyGetSeriesColor).toHaveBeenCalledWith(component.series, component.type);
-      expect(component.colors.length).toBe(2);
-      expect(component.colors).toEqual(['#0C6C94', '#29B6C5']);
-    });
-  });
-
   describe('Templates:', () => {
     it('should apply valid text and color values', () => {
       component.series = <any>[
-        { data: 10, label: '1' },
-        { data: 20, label: '2' }
+        { data: 10, label: '1', color: 'red' },
+        { data: 20, label: '2', color: 'green' }
       ];
-      component.colors = ['red', 'green'];
 
       fixture.detectChanges();
 
@@ -59,10 +43,9 @@ describe('PoChartLegendComponent:', () => {
 
     it('should apply valid text and color values when the series have value and category', () => {
       component.series = <any>[
-        { value: 10, category: '1' },
-        { value: 20, category: '2' }
+        { value: 10, category: '1', color: 'red' },
+        { value: 20, category: '2', color: 'green' }
       ];
-      component.colors = ['red', 'green'];
 
       fixture.detectChanges();
 
@@ -77,10 +60,9 @@ describe('PoChartLegendComponent:', () => {
 
     it('should apply valid text and color values when the series have value, category, label and data', () => {
       component.series = <any>[
-        { value: 10, label: '1' },
-        { data: 20, category: '2' }
+        { value: 10, label: '1', color: 'red' },
+        { data: 20, category: '2', color: 'green' }
       ];
-      component.colors = ['red', 'green'];
 
       fixture.detectChanges();
 

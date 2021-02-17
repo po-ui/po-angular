@@ -6,6 +6,7 @@ import { PoChartGaugeSerie } from './po-chart-types/po-chart-gauge/po-chart-gaug
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartOptions } from './interfaces/po-chart-options.interface';
 import { PoChartSerie } from './interfaces/po-chart-serie.interface';
+import { PoColorService } from '../../services/po-color/po-color.service';
 
 const poChartDefaultHeight = 400;
 const poChartMinHeight = 200;
@@ -16,7 +17,7 @@ const poChartMinHeight = 200;
  * O `po-chart` é um componente para renderização de dados através de gráficos, com isso facilitando a compreensão e tornando a
  * visualização destes dados mais agradável.
  *
- * Através de suas principais propriedades é possível definir atributos, tais como tipo de gráfico, altura, título, opções para os eixos, entre outros.
+ * Através de suas principais propriedades é possível definir atributos, tais como tipo de gráfico, altura, título, cores customizadas, opções para os eixos, entre outros.
  *
  * O componente permite utilizar em conjunto séries do tipo linha e coluna.
  *
@@ -107,6 +108,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
    */
   @Input('p-series') set series(value: Array<PoChartSerie> | PoChartGaugeSerie) {
     this._series = value || [];
+
     if (Array.isArray(this._series) && this._series.length) {
       this.setTypeDefault(this._series[0]);
     } else {
@@ -199,6 +201,8 @@ export abstract class PoChartBaseComponent implements OnChanges {
   @Output('p-series-hover')
   seriesHover = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();
 
+  constructor(protected colorService: PoColorService) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     if (
       (changes.series && Array.isArray(this.series) && this.series.length) ||
@@ -233,20 +237,27 @@ export abstract class PoChartBaseComponent implements OnChanges {
 
   private validateSerieAndAddType(series: Array<PoChartSerie>): void {
     const isTypeCircular = this.defaultType === PoChartType.Pie || this.defaultType === PoChartType.Donut;
+    const filteredSeries = series.filter(serie =>
+      isTypeCircular ? typeof serie.data === 'number' || typeof serie.value === 'number' : Array.isArray(serie.data)
+    );
 
-    this.chartSeries = series
-      .filter(serie =>
-        isTypeCircular ? typeof serie.data === 'number' || typeof serie.value === 'number' : Array.isArray(serie.data)
-      )
-      .map((serie, index) => {
-        if (index === 0) {
-          this.chartType = (<any>Object).values(PoChartType).includes(serie.type)
-            ? serie.type
-            : this.type || this.defaultType;
-        }
+    this.chartSeries = this.appendType(this.appendColors(filteredSeries));
+  }
 
-        return { ...serie, type: serie.type || this.chartType };
-      });
+  private appendColors(series: Array<PoChartSerie>) {
+    return this.colorService.getColors<PoChartSerie>(series);
+  }
+
+  private appendType(series: Array<PoChartSerie>) {
+    return series.map((serie, index) => {
+      if (index === 0) {
+        this.chartType = (<any>Object).values(PoChartType).includes(serie.type)
+          ? serie.type
+          : this.type || this.defaultType;
+      }
+
+      return { ...serie, type: serie.type || this.chartType };
+    });
   }
 
   // válido para gráficos do tipo circular e que será refatorado.

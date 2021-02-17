@@ -1,5 +1,6 @@
 <svg:path #svgPath
   class="po-path-item"
+  [class]="serie?.color.includes('po-color') ? serie.color : ''"
   [p-chart-tooltip]="serie?.tooltipLabel"
   [attr.fill]="serie?.color"
   (click)="onMouseClick()"

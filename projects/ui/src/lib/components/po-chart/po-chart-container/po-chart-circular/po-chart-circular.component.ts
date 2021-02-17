@@ -20,11 +20,11 @@ import { PoChartCircularPathComponent } from './po-chart-circular-path/po-chart-
 import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.interface';
 import { PoChartLabelCoordinates } from '../../interfaces/po-chart-label-coordinates.interface';
 import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinates.interface';
-import { ChartSerieColor } from '../po-chart-container.component';
+import { PoChartSerie } from '../../interfaces/po-chart-serie.interface';
 
 @Directive()
 export abstract class PoChartCircularComponent {
-  private _series: Array<ChartSerieColor>;
+  private _series: Array<PoChartSerie>;
 
   seriesLabels: Array<PoChartLabelCoordinates> = [];
   seriesList: Array<PoChartPathCoordinates>;
@@ -36,7 +36,7 @@ export abstract class PoChartCircularComponent {
 
   @Input('p-container-size') containerSize: PoChartContainerSize;
 
-  @Input('p-series') set series(value: Array<ChartSerieColor>) {
+  @Input('p-series') set series(value: Array<PoChartSerie>) {
     this._series = value;
 
     this.animate = true;
@@ -68,7 +68,7 @@ export abstract class PoChartCircularComponent {
     return (data / totalValue) * (Math.PI * 2);
   }
 
-  protected drawSeries(series: Array<ChartSerieColor> = [], height: number) {
+  protected drawSeries(series: Array<PoChartSerie> = [], height: number) {
     this.seriesList = [];
     this.showLabels = false;
     this.totalValue = this.calculateTotalValue(series);
@@ -82,7 +82,7 @@ export abstract class PoChartCircularComponent {
     }
   }
 
-  private calculateTotalValue(series: Array<ChartSerieColor>) {
+  private calculateTotalValue(series: Array<PoChartSerie>) {
     return series.reduce((previousValue, serie: any) => {
       const data = serie.data ? serie.data : serie.value;
 
@@ -179,7 +179,7 @@ export abstract class PoChartCircularComponent {
     }
   }
 
-  private validateSeries(series: Array<ChartSerieColor>) {
+  private validateSeries(series: Array<PoChartSerie>) {
     return series.reduce((seriesList, serie: any) => {
       const data = serie.data ?? serie.value;
       if (data && data > 0) {

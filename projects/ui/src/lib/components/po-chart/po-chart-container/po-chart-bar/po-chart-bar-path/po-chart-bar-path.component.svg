@@ -3,6 +3,7 @@
   [p-tooltip-position]="tooltipPosition"
   [p-append-in-body]='true'
   class="po-chart-bar-path"
+  [class]="color?.includes('po-color') ? color : ''"
   [attr.fill]="color"
   [attr.d]="item.coordinates"
   (mouseenter)="onMouseEnter(item)"
