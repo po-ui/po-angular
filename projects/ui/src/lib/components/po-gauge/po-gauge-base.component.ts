@@ -3,7 +3,8 @@ import { Input, Directive } from '@angular/core';
 import { convertToInt } from '../../utils/util';
 import { poGaugeMinHeight } from './po-gauge-default-values.constant';
 
-import { PoGaugeColorService } from './services/po-gauge-color.service';
+import { PoColorService } from '../../services/po-color/po-color.service';
+
 import { PoGaugeRanges } from './interfaces/po-gauge-ranges.interface';
 
 /**
@@ -135,10 +136,10 @@ export abstract class PoGaugeBaseComponent {
     return this._value;
   }
 
-  constructor(protected colorService: PoGaugeColorService) {}
+  constructor(protected colorService: PoColorService) {}
 
   private verifyColors(ranges: Array<PoGaugeRanges>) {
-    return this.colorService.getColors(ranges);
+    return this.colorService.getColors<PoGaugeRanges>(ranges);
   }
 
   private setGaugeHeight(height: number): number {

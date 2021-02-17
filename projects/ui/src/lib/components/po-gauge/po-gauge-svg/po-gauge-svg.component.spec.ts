@@ -1,7 +1,7 @@
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PoGaugeColors } from '../po-gauge-colors.constant';
+import { PoDefaultColors } from '../../../services/po-color/po-colors.constant';
 
 import { PoGaugeModule } from '../po-gauge.module';
 
@@ -215,7 +215,7 @@ describe('PoGaugeSvgComponent', () => {
       const expectedResult = [
         {
           coordinates: 'M 0 188 A 188 188 0 0,1 36 77 A 1 1 0 0,1 49 87 A 172 172 0 0,0 16 188 A 1 1 0 0,1 0 188 Z',
-          color: PoGaugeColors[0][0]
+          color: PoDefaultColors[0][0]
         }
       ];
       const value = 20;
@@ -230,7 +230,7 @@ describe('PoGaugeSvgComponent', () => {
       const expectedResult = [
         {
           coordinates: 'M 0 188 A 188 188 0 0,1 376 188 A 1 1 0 0,1 360 188 A 172 172 0 0,0 16 188 A 1 1 0 0,1 0 188 Z',
-          color: PoGaugeColors[0][0]
+          color: PoDefaultColors[0][0]
         }
       ];
       component.value = 200;
@@ -246,7 +246,7 @@ describe('PoGaugeSvgComponent', () => {
       const expectedResult = [
         {
           coordinates: undefined,
-          color: PoGaugeColors[0][0]
+          color: PoDefaultColors[0][0]
         }
       ];
       const value = -10;

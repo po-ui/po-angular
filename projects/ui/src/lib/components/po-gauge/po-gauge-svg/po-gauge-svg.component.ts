@@ -1,7 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { PoGaugePointerEnd, PoGaugeThickness, poGaugeTotalValueDefault } from '../po-gauge-default-values.constant';
-import { PoGaugeColors } from '../po-gauge-colors.constant';
+
+import { PoDefaultColors } from '../../../services/po-color/po-colors.constant';
 
 import { PoGaugeCoordinates } from '../interfaces/po-gauge-coordinates.interface';
 import { PoGaugeRanges } from '../interfaces/po-gauge-ranges.interface';
@@ -89,7 +90,7 @@ export class PoGaugeSvgComponent implements OnChanges {
     const endAngleRadian = poGaugeStartAngle + this.calculateAngleRadius(verifiedValue, poGaugeTotalValueDefault);
 
     const coordinates = value > 0 ? this.calculateCoordinates(height, poGaugeStartAngle, endAngleRadian) : undefined;
-    const color = PoGaugeColors[0][0];
+    const color = PoDefaultColors[0][0];
     this.coordinates = [{ coordinates, color }];
   }
 

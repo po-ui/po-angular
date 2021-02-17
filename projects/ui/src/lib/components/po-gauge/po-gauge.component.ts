@@ -2,8 +2,9 @@ import { ChangeDetectorRef, Component, DoCheck, ElementRef, ViewChild } from '@a
 
 import { PoGaugePadding } from './po-gauge-default-values.constant';
 
+import { PoColorService } from '../../services/po-color/po-color.service';
+
 import { PoGaugeBaseComponent } from './po-gauge-base.component';
-import { PoGaugeColorService } from './services/po-gauge-color.service';
 import { PoGaugeSvgContainer } from './interfaces/po-gauge-svg-container.interface';
 
 /**
@@ -38,7 +39,7 @@ export class PoGaugeComponent extends PoGaugeBaseComponent implements DoCheck {
   @ViewChild('titleEl', { read: ElementRef }) titleEl: ElementRef;
   @ViewChild('svgEl', { read: ElementRef }) svgEl: ElementRef;
 
-  constructor(protected colorService: PoGaugeColorService, private changeDetector: ChangeDetectorRef) {
+  constructor(protected colorService: PoColorService, private changeDetector: ChangeDetectorRef) {
     super(colorService);
   }
 
