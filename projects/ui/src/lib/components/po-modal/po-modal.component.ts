@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 import { PoModalBaseComponent } from './po-modal-base.component';
-import { PoModalService } from './po-modal-service';
 import { uuid } from '../../utils/util';
+
+import { PoActiveOverlayService } from '../../services/po-active-overlay/po-active-overlay.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 /**
@@ -39,12 +40,12 @@ export class PoModalComponent extends PoModalBaseComponent {
   private id: string = uuid();
   private sourceElement;
 
-  constructor(private poModalService: PoModalService, poLanguageService: PoLanguageService) {
+  constructor(private poActiveOverlayService: PoActiveOverlayService, poLanguageService: PoLanguageService) {
     super(poLanguageService);
   }
 
   close(xClosed = false) {
-    this.poModalService.modalActive = undefined;
+    this.poActiveOverlayService.activeOverlay = undefined;
 
     super.close(xClosed);
 
@@ -86,7 +87,7 @@ export class PoModalComponent extends PoModalBaseComponent {
   }
 
   private handleFocus(): any {
-    this.poModalService.modalActive = this.id;
+    this.poActiveOverlayService.activeOverlay = this.id;
 
     setTimeout(() => {
       if (this.modalContent) {
@@ -98,10 +99,10 @@ export class PoModalComponent extends PoModalBaseComponent {
 
   private initFocus() {
     this.focusFunction = (event: any) => {
-      this.poModalService.modalActive = this.poModalService.modalActive || this.id;
+      this.poActiveOverlayService.activeOverlay = this.poActiveOverlayService.activeOverlay || this.id;
       const modalElement = this.modalContent.nativeElement;
 
-      if (!modalElement.contains(event.target) && this.poModalService.modalActive === this.id) {
+      if (!modalElement.contains(event.target) && this.poActiveOverlayService.activeOverlay === this.id) {
         event.stopPropagation();
         this.firstElement.focus();
       }

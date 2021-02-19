@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
+import { PoActiveOverlayService } from '../../../services/po-active-overlay';
 import { PoFieldModule } from '../../po-field';
 import { PoPageSlideComponent } from './po-page-slide.component';
 
@@ -34,7 +35,8 @@ describe('PoPageSlideComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         imports: [FormsModule, NoopAnimationsModule, PoFieldModule],
-        declarations: [PoPageSlideComponent, TestComponent]
+        declarations: [PoPageSlideComponent, TestComponent],
+        providers: [PoActiveOverlayService]
       }).compileComponents();
     })
   );
@@ -55,6 +57,26 @@ describe('PoPageSlideComponent', () => {
 
   it('should create component', () => {
     expect(component instanceof PoPageSlideComponent).toBeTruthy();
+  });
+
+  describe('Methods:', () => {
+    it('focusEvent: should call `stopPropagation` if `activeOverlay` is equal to id', () => {
+      const fakeEvent = { target: 'click', stopPropagation: () => {} };
+
+      component['firstElement'] = <any>{ focus: () => {} };
+      component['id'] = '1';
+      component['poActiveOverlayService'] = { activeOverlay: undefined };
+      component['pageContent'] = { nativeElement: { contains: () => 0 } };
+      component.hideClose = true;
+
+      const spyEvent = spyOn(fakeEvent, 'stopPropagation');
+
+      component['initFocus']();
+      fixture.detectChanges();
+      component['focusEvent'](<any>fakeEvent);
+
+      expect(spyEvent).toHaveBeenCalled();
+    });
   });
 
   it('should open() and close() methods includes and removes component on DOM', () => {
