@@ -3,7 +3,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
 
-import { getFocusableElements } from '../../../utils/util';
+import { getFocusableElements, uuid } from '../../../utils/util';
+
+import { PoActiveOverlayService } from '../../../services/po-active-overlay/po-active-overlay.service';
 import { PoPageSlideBaseComponent } from './po-page-slide-base.component';
 
 /**
@@ -49,10 +51,11 @@ import { PoPageSlideBaseComponent } from './po-page-slide-base.component';
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private _pageContent: ElementRef;
-  private loadingCompleted = new ReplaySubject<void>();
 
-  private sourceElement: any;
   private firstElement: any;
+  private id: string = uuid();
+  private loadingCompleted = new ReplaySubject<void>();
+  private sourceElement: any;
 
   private focusEvent: EventListener;
 
@@ -67,7 +70,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     return this._pageContent;
   }
 
-  constructor() {
+  constructor(private poActiveOverlayService: PoActiveOverlayService) {
     super();
   }
 
@@ -78,6 +81,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   public close(): void {
+    this.poActiveOverlayService.activeOverlay = undefined;
     super.close();
 
     this.removeEventListeners();
@@ -91,11 +95,22 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   private handleFocus(): void {
+    this.poActiveOverlayService.activeOverlay = this.id;
     this.loadFirstElement();
+    this.initFocus();
 
+    document.addEventListener('focus', this.focusEvent, true);
+  }
+
+  private initFocus() {
     // O foco não pode sair da página.
     this.focusEvent = (event: Event) => {
-      if (!this.pageContent.nativeElement.contains(event.target)) {
+      this.poActiveOverlayService.activeOverlay = this.poActiveOverlayService.activeOverlay || this.id;
+
+      if (
+        !this.pageContent.nativeElement.contains(event.target) &&
+        this.poActiveOverlayService.activeOverlay === this.id
+      ) {
         event.stopPropagation();
         this.firstElement.focus();
       }
@@ -108,8 +123,6 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
       const element = elements[1] || this.pageContent.nativeElement;
       element.focus();
     }
-
-    document.addEventListener('focus', this.focusEvent, true);
   }
 
   private loadFirstElement(): void {

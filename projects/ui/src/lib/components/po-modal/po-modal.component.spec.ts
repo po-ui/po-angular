@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { PoButtonModule } from '../po-button';
 
+import { PoActiveOverlayService } from '../../services/po-active-overlay/po-active-overlay.service';
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 import { PoFieldContainerBottomComponent } from './../po-field/po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from './../po-field/po-field-container/po-field-container.component';
@@ -13,7 +14,6 @@ import { PoInputComponent } from './../po-field/po-input/po-input.component';
 import { PoModalAction } from './po-modal-action.interface';
 import { PoModalBaseComponent } from './po-modal-base.component';
 import { PoModalComponent } from './po-modal.component';
-import { PoModalService } from './po-modal-service';
 
 @Component({
   template: `
@@ -51,7 +51,7 @@ describe('PoModalComponent:', () => {
         ContentProjectionComponent,
         PoFieldContainerBottomComponent
       ],
-      providers: [PoModalService]
+      providers: [PoActiveOverlayService]
     });
     fixture = TestBed.createComponent(PoModalComponent);
     component = fixture.componentInstance;
@@ -231,7 +231,7 @@ describe('PoModalComponent:', () => {
     expect(element.nativeElement.querySelectorAll('.po-button').length).toBe(1);
   });
 
-  it(`focusFunction: should call 'stopPropagation' if 'modalActive' is equal to id`, () => {
+  it(`focusFunction: should call 'stopPropagation' if 'activeOverlay' is equal to id`, () => {
     const fakeEvent = {
       target: 'click',
       stopPropagation: () => {}
@@ -241,7 +241,7 @@ describe('PoModalComponent:', () => {
       focus: () => {}
     };
     component['id'] = '1';
-    component['poModalService'] = { modalActive: undefined };
+    component['poActiveOverlayService'] = { activeOverlay: undefined };
     component['modalContent'] = {
       nativeElement: {
         contains: () => 0
