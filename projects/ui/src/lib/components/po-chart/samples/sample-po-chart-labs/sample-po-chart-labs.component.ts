@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoChartSerie, PoChartType, PoSelectOption, PoChartOptions } from '@po-ui/ng-components';
+import { PoChartSerie, PoChartType, PoSelectOption, PoChartOptions, PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-labs',
@@ -14,6 +14,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   event: string;
   height: number;
   label: string;
+  optionsActions: PoChartOptions;
   series: Array<PoChartSerie>;
   serieType: PoChartType;
   title: string;
@@ -27,6 +28,8 @@ export class SamplePoChartLabsComponent implements OnInit {
     }
   };
 
+  readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'legend', label: 'Legend' }];
+
   readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Donut', value: PoChartType.Donut },
     { label: 'Pie', value: PoChartType.Pie },
@@ -39,8 +42,8 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.restore();
   }
 
-  addOptions() {
-    this.options = { ...this.options };
+  addOptions(actionOptions?: PoChartOptions) {
+    this.options = { ...this.options, ...(actionOptions ? { ...actionOptions } : {}) };
   }
 
   addCategories() {
@@ -50,8 +53,18 @@ export class SamplePoChartLabsComponent implements OnInit {
   addData() {
     const data = isNaN(this.data) ? this.convertToArray(this.data) : Math.floor(this.data);
     const type = this.serieType ?? this.type;
+    const color = this.color;
 
-    this.series = [...this.series, { label: this.label, data, tooltip: this.tooltip, color: this.color, type }];
+    this.series = [
+      ...this.series,
+      { label: this.label, data, tooltip: this.tooltip, ...(color ? { color } : {}), type }
+    ];
+  }
+
+  changeActionOptions() {
+    const legend = this.optionsActions.legend;
+
+    this.addOptions({ legend });
   }
 
   changeEvent(eventName: string, serieEvent: PoChartSerie): void {
@@ -59,6 +72,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   }
 
   restore() {
+    this.color = undefined;
     this.type = undefined;
     this.serieType = undefined;
     this.label = undefined;
@@ -70,7 +84,11 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.tooltip = undefined;
     this.data = undefined;
     this.allCategories = [];
+    this.optionsActions = {
+      legend: null
+    };
     this.options = {
+      ...this.optionsActions,
       axis: {
         minRange: undefined,
         maxRange: undefined,

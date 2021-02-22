@@ -17,7 +17,7 @@
   <!-- Diretiva para injeção de gráficos do tipo circular. Serão repassados para dentro do po-chart-container futuramente.  -->
   <ng-template #chartContainer></ng-template>
 
-  <div *ngIf="!isChartGaugeType">
+  <div *ngIf="!isChartGaugeType && options?.legend !== false">
     <ng-container *ngTemplateOutlet="chartLegendGroup"></ng-container>
   </div>
 </div>

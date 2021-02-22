@@ -86,7 +86,7 @@
     <po-divider class="po-md-12" p-label="Chart options"></po-divider>
 
     <po-number
-      class="po-md-4"
+      class="po-md-3"
       name="minRange"
       [(ngModel)]="options.axis.minRange"
       p-help="Example: 0"
@@ -96,7 +96,7 @@
     </po-number>
 
     <po-number
-      class="po-md-4"
+      class="po-md-3"
       name="maxRange"
       [(ngModel)]="options.axis.maxRange"
       p-help="Example: 100"
@@ -106,7 +106,7 @@
     </po-number>
 
     <po-number
-      class="po-md-4"
+      class="po-md-3"
       name="gridLines"
       [(ngModel)]="options.axis.gridLines"
       p-help="Example: 6"
@@ -114,6 +114,18 @@
       (p-blur)="addOptions()"
     >
     </po-number>
+
+    <po-checkbox-group
+      class="po-md-3"
+      name="propertiesOptions"
+      p-help="Boolean properties"
+      p-indeterminate
+      p-label="Properties"
+      [(ngModel)]="optionsActions"
+      [p-options]="propertiesOptions"
+      (p-change)="changeActionOptions()"
+    >
+    </po-checkbox-group>
   </div>
 
   <po-divider class="po-md-12"></po-divider>
