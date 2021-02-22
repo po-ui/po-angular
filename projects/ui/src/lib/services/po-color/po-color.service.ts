@@ -35,8 +35,7 @@ export class PoColorService {
   }
 
   private verifyIfHasColorProperty<T extends PoColorArgs>(data: Array<T>): void {
-    const hasColorProperty = data.every(serie => serie.hasOwnProperty('color'));
-
+    const hasColorProperty = data.every(dataItem => dataItem.hasOwnProperty('color') && dataItem.color?.length > 0);
     if (!hasColorProperty) {
       this.defaultColors = this.getDefaultColors(data.length);
     }

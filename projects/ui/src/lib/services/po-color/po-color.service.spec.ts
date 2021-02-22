@@ -25,6 +25,14 @@ describe('PoColorService', () => {
         expect(service.defaultColors).toEqual(PoDefaultColors[0]);
       });
 
+      it('should apply value to `defaultColors` if data has property color but its value is undefined', () => {
+        const data = [{ from: 0, to: 50, color: undefined }];
+
+        service.getColors<any>(data);
+
+        expect(service.defaultColors).toEqual(PoDefaultColors[0]);
+      });
+
       it('should apply value to `defaultColors` if one of data list doesn`t contain property `color`', () => {
         const data = [
           { from: 0, to: 50, color: 'red' },

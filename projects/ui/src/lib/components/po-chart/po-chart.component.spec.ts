@@ -389,89 +389,113 @@ describe('PoChartComponent:', () => {
 
       expect(expectedResult).toBe(0);
     });
+
+    it('getSvgContainerSize: should call `containerService.calculateSVGContainerMeasurements` and `getChartMeasurements`', () => {
+      const chartMeasurements = { chartHeaderHeight: 100, chartLegendHeight: 200, chartWrapperWidth: 300 };
+
+      const spyCalculateSVGContainerMeasurements = spyOn(
+        component['containerService'],
+        'calculateSVGContainerMeasurements'
+      );
+      const spyGetChartMeasurements = spyOn(component, <any>'getChartMeasurements').and.returnValue(chartMeasurements);
+
+      component['getSvgContainerSize']();
+
+      expect(spyCalculateSVGContainerMeasurements).toHaveBeenCalledWith(
+        component.height,
+        chartMeasurements.chartWrapperWidth,
+        chartMeasurements.chartHeaderHeight,
+        chartMeasurements.chartLegendHeight
+      );
+      expect(spyGetChartMeasurements).toHaveBeenCalled();
+    });
+
+    it('getSvgContainerSize: should call `calculateAxisXLabelArea` if `type` isn`t a circular type', () => {
+      component.series = [{ data: [1, 2, 3], type: PoChartType.Column }];
+      component.type = PoChartType.Column;
+
+      const spyCalculateAxisXLabelArea = spyOn(component, <any>'calculateAxisXLabelArea');
+
+      component['getSvgContainerSize']();
+
+      expect(spyCalculateAxisXLabelArea).toHaveBeenCalled();
+    });
+
+    it('getSvgContainerSize: shouldn`t call `calculateAxisXLabelArea` if `type` is a circular type', () => {
+      component.series = [{ data: 12, type: PoChartType.Pie }];
+      component.type = PoChartType.Pie;
+
+      const spyCalculateAxisXLabelArea = spyOn(component, <any>'calculateAxisXLabelArea');
+
+      component['getSvgContainerSize']();
+
+      expect(spyCalculateAxisXLabelArea).not.toHaveBeenCalled();
+    });
+
+    it('calculateAxisXLabelArea: should call `calculateAxisXLabelArea` passing `Vancouver` as param if type is `bar`', () => {
+      component.chartType = PoChartType.Bar;
+      component.categories = ['Vancouver', 'Otawa'];
+      component.series = [
+        { data: [1, 2, 3], type: PoChartType.Bar },
+        { data: [2, 3, 4], type: PoChartType.Bar }
+      ];
+
+      const spyGetAxisXLabelArea = spyOn(component, <any>'getAxisXLabelArea');
+
+      component['calculateAxisXLabelArea']();
+
+      expect(spyGetAxisXLabelArea).toHaveBeenCalledWith(component.categories[0]);
+    });
+
+    it('calculateAxisXLabelArea: should call `calculateAxisXLabelArea` passing `10.75` relative to axis x label average value as param if type isn`t `bar`', () => {
+      component.chartType = PoChartType.Column;
+      component.categories = ['Vancouver', 'Otawa'];
+      component.chartSeries = [
+        { data: [1, 2, 3], type: PoChartType.Column },
+        { data: [2, 3, 40], type: PoChartType.Column }
+      ];
+
+      const spyGetAxisXLabelArea = spyOn(component, <any>'getAxisXLabelArea');
+
+      component['calculateAxisXLabelArea']();
+
+      expect(spyGetAxisXLabelArea).toHaveBeenCalledWith(10.75);
+    });
+
+    it('getAxisXLabelArea: should calculate and return axisXLabel width', () => {
+      const axisXLabel = 'Vancouver';
+
+      expect(component['getAxisXLabelArea'](axisXLabel)).toBe(76);
+    });
+
+    it('getAxisXLabelArea: should calculate and return PoChartAxisXLabelArea default width', () => {
+      const axisXLabel = 12;
+
+      expect(component['getAxisXLabelArea'](axisXLabel)).toBe(56);
+    });
   });
 
-  it('getSvgContainerSize: should call `containerService.calculateSVGContainerMeasurements` and `getChartMeasurements`', () => {
-    const chartMeasurements = { chartHeaderHeight: 100, chartLegendHeight: 200, chartWrapperWidth: 300 };
+  describe('Template', () => {
+    it('should have `po-chart-legend` class if `PoChartOptions.legend` is true', () => {
+      component.options = { legend: true };
+      component.series = [{ data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Column }];
 
-    const spyCalculateSVGContainerMeasurements = spyOn(
-      component['containerService'],
-      'calculateSVGContainerMeasurements'
-    );
-    const spyGetChartMeasurements = spyOn(component, <any>'getChartMeasurements').and.returnValue(chartMeasurements);
+      fixture.detectChanges();
 
-    component['getSvgContainerSize']();
+      const chartLegendElement = nativeElement.querySelector('.po-chart-legend');
 
-    expect(spyCalculateSVGContainerMeasurements).toHaveBeenCalledWith(
-      component.height,
-      chartMeasurements.chartWrapperWidth,
-      chartMeasurements.chartHeaderHeight,
-      chartMeasurements.chartLegendHeight
-    );
-    expect(spyGetChartMeasurements).toHaveBeenCalled();
-  });
+      expect(chartLegendElement).toBeTruthy();
+    });
 
-  it('getSvgContainerSize: should call `calculateAxisXLabelArea` if `type` isn`t a circular type', () => {
-    component.series = [{ data: [1, 2, 3], type: PoChartType.Column }];
-    component.type = PoChartType.Column;
+    it('should have `po-chart-legend` class if `PoChartOptions.legend` is false', () => {
+      component.options = { legend: false };
+      component.series = [{ data: [1, 2, 3], label: 'Vancouver', type: PoChartType.Column }];
 
-    const spyCalculateAxisXLabelArea = spyOn(component, <any>'calculateAxisXLabelArea');
+      fixture.detectChanges();
 
-    component['getSvgContainerSize']();
+      const chartLegendElement = nativeElement.querySelector('.po-chart-legend');
 
-    expect(spyCalculateAxisXLabelArea).toHaveBeenCalled();
-  });
-
-  it('getSvgContainerSize: shouldn`t call `calculateAxisXLabelArea` if `type` is a circular type', () => {
-    component.series = [{ data: 12, type: PoChartType.Pie }];
-    component.type = PoChartType.Pie;
-
-    const spyCalculateAxisXLabelArea = spyOn(component, <any>'calculateAxisXLabelArea');
-
-    component['getSvgContainerSize']();
-
-    expect(spyCalculateAxisXLabelArea).not.toHaveBeenCalled();
-  });
-
-  it('calculateAxisXLabelArea: should call `calculateAxisXLabelArea` passing `Vancouver` as param if type is `bar`', () => {
-    component.chartType = PoChartType.Bar;
-    component.categories = ['Vancouver', 'Otawa'];
-    component.series = [
-      { data: [1, 2, 3], type: PoChartType.Bar },
-      { data: [2, 3, 4], type: PoChartType.Bar }
-    ];
-
-    const spyGetAxisXLabelArea = spyOn(component, <any>'getAxisXLabelArea');
-
-    component['calculateAxisXLabelArea']();
-
-    expect(spyGetAxisXLabelArea).toHaveBeenCalledWith(component.categories[0]);
-  });
-
-  it('calculateAxisXLabelArea: should call `calculateAxisXLabelArea` passing `10.75` relative to axis x label average value as param if type isn`t `bar`', () => {
-    component.chartType = PoChartType.Column;
-    component.categories = ['Vancouver', 'Otawa'];
-    component.chartSeries = [
-      { data: [1, 2, 3], type: PoChartType.Column },
-      { data: [2, 3, 40], type: PoChartType.Column }
-    ];
-
-    const spyGetAxisXLabelArea = spyOn(component, <any>'getAxisXLabelArea');
-
-    component['calculateAxisXLabelArea']();
-
-    expect(spyGetAxisXLabelArea).toHaveBeenCalledWith(10.75);
-  });
-
-  it('getAxisXLabelArea: should calculate and return axisXLabel width', () => {
-    const axisXLabel = 'Vancouver';
-
-    expect(component['getAxisXLabelArea'](axisXLabel)).toBe(76);
-  });
-
-  it('getAxisXLabelArea: should calculate and return PoChartAxisXLabelArea default width', () => {
-    const axisXLabel = 12;
-
-    expect(component['getAxisXLabelArea'](axisXLabel)).toBe(56);
+      expect(chartLegendElement).toBeNull();
+    });
   });
 });

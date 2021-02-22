@@ -154,10 +154,11 @@ export abstract class PoChartBaseComponent implements OnChanges {
    *
    * Objeto com as configurações usadas no `po-chart`.
    *
-   * É possível definir as configurações dos eixos(*axis*) para os gráfico do tipo `Line`, `Column` e `Bar` da seguinte forma:
+   * É possível, por exemplo, definir as configurações de exibição das legendas, configurar os eixos(*axis*) para os gráfico do tipo `Line`, `Column` e `Bar` da seguinte forma:
    *
    * ```
    *  chartOptions: PoChartOptions = {
+   *    legend: true,
    *    axis: {
    *      minRange: 0,
    *      maxRange: 100,
@@ -170,6 +171,10 @@ export abstract class PoChartBaseComponent implements OnChanges {
   @Input('p-options') set options(value: PoChartOptions) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._options = value;
+
+      if (this._options.hasOwnProperty('legend') && typeof this._options.legend === 'boolean') {
+        this.getSvgContainerSize();
+      }
     }
   }
 
