@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.7.0](https://github.com/po-ui/po-angular/compare/v4.6.0...v4.7.0) (2021-02-22)
+
+
+### Bug Fixes
+
+* **page-slide:** corrige focus ao usar modal dentro do page-slide ([9d17730](https://github.com/po-ui/po-angular/commit/9d177303106a8b1c760a0fbb9b7667dbc682b35b))
+
+
+### Features
+
+* **chart:** calcula a área de texto no grid ([6b18a83](https://github.com/po-ui/po-angular/commit/6b18a8315145d6851f61a961fb08f83e1875ea8b))
+* **chart:** permite customizar cores ([cb1637e](https://github.com/po-ui/po-angular/commit/cb1637ea88d1c9ccc9523536a2ec2e263f3e519a))
+
+
+
 # [4.6.0](https://github.com/po-ui/po-angular/compare/v4.5.0...v4.6.0) (2021-02-15)
 
 
