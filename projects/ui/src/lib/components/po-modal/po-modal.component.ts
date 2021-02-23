@@ -45,7 +45,7 @@ export class PoModalComponent extends PoModalBaseComponent {
   }
 
   close(xClosed = false) {
-    this.poActiveOverlayService.activeOverlay = undefined;
+    this.poActiveOverlayService.activeOverlay.pop();
 
     super.close(xClosed);
 
@@ -80,14 +80,12 @@ export class PoModalComponent extends PoModalBaseComponent {
 
   open() {
     this.sourceElement = document.activeElement;
-
     super.open();
-
     this.handleFocus();
   }
 
   private handleFocus(): any {
-    this.poActiveOverlayService.activeOverlay = this.id;
+    this.poActiveOverlayService.activeOverlay.push(this.id);
 
     setTimeout(() => {
       if (this.modalContent) {
@@ -99,10 +97,12 @@ export class PoModalComponent extends PoModalBaseComponent {
 
   private initFocus() {
     this.focusFunction = (event: any) => {
-      this.poActiveOverlayService.activeOverlay = this.poActiveOverlayService.activeOverlay || this.id;
       const modalElement = this.modalContent.nativeElement;
 
-      if (!modalElement.contains(event.target) && this.poActiveOverlayService.activeOverlay === this.id) {
+      if (
+        !modalElement.contains(event.target) &&
+        this.poActiveOverlayService.activeOverlay[this.poActiveOverlayService.activeOverlay.length - 1] === this.id
+      ) {
         event.stopPropagation();
         this.firstElement.focus();
       }
