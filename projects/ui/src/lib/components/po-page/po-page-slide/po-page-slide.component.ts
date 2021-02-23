@@ -81,7 +81,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   public close(): void {
-    this.poActiveOverlayService.activeOverlay = undefined;
+    this.poActiveOverlayService.activeOverlay.pop();
     super.close();
 
     this.removeEventListeners();
@@ -95,7 +95,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   private handleFocus(): void {
-    this.poActiveOverlayService.activeOverlay = this.id;
+    this.poActiveOverlayService.activeOverlay.push(this.id);
     this.loadFirstElement();
     this.initFocus();
 
@@ -105,11 +105,9 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private initFocus() {
     // O foco não pode sair da página.
     this.focusEvent = (event: Event) => {
-      this.poActiveOverlayService.activeOverlay = this.poActiveOverlayService.activeOverlay || this.id;
-
       if (
         !this.pageContent.nativeElement.contains(event.target) &&
-        this.poActiveOverlayService.activeOverlay === this.id
+        this.poActiveOverlayService.activeOverlay[this.poActiveOverlayService.activeOverlay.length - 1] === this.id
       ) {
         event.stopPropagation();
         this.firstElement.focus();
