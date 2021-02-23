@@ -74,12 +74,8 @@ describe('PoInputBase:', () => {
   });
 
   it('should set mask', () => {
-    spyOn(component, <any>'validateModel');
-
     expectSettersMethod(component, 'setMask', '', 'mask', '');
     expectSettersMethod(component, 'setMask', '(999)', 'mask', '(999)');
-
-    expect(component['validateModel']).toHaveBeenCalled();
   });
 
   it('should set maskFormatModel', () => {
