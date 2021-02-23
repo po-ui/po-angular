@@ -226,8 +226,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
     // Atualiza Máscara do Campo
     this.objMask = new PoMask(this.mask, this.maskFormatModel);
-
-    this.validateModel();
   }
 
   /**
