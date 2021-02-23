@@ -65,7 +65,7 @@ describe('PoPageSlideComponent', () => {
 
       component['firstElement'] = <any>{ focus: () => {} };
       component['id'] = '1';
-      component['poActiveOverlayService'] = { activeOverlay: undefined };
+      component['poActiveOverlayService'] = { activeOverlay: ['1'] };
       component['pageContent'] = { nativeElement: { contains: () => 0 } };
       component.hideClose = true;
 
@@ -76,6 +76,25 @@ describe('PoPageSlideComponent', () => {
       component['focusEvent'](<any>fakeEvent);
 
       expect(spyEvent).toHaveBeenCalled();
+    });
+
+    it('open: should append id value to `poActiveOverlayService.activeOverlay` list', () => {
+      component.open();
+
+      fixture.detectChanges();
+
+      component['handleFocus']();
+
+      expect(component['poActiveOverlayService'].activeOverlay).toEqual([component['id']]);
+    });
+
+    it('close: should remove id value from `poActiveOverlayService.activeOverlay` list', () => {
+      component.open();
+      fixture.detectChanges();
+
+      component.close();
+
+      expect(component['poActiveOverlayService'].activeOverlay).toEqual([]);
     });
   });
 

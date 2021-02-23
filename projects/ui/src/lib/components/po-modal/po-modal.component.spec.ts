@@ -241,7 +241,7 @@ describe('PoModalComponent:', () => {
       focus: () => {}
     };
     component['id'] = '1';
-    component['poActiveOverlayService'] = { activeOverlay: undefined };
+    component['poActiveOverlayService'] = { activeOverlay: ['1'] };
     component['modalContent'] = {
       nativeElement: {
         contains: () => 0
@@ -343,11 +343,29 @@ describe('PoModalComponent:', () => {
       expect(spyOnHandleFocus).toHaveBeenCalled();
     });
 
+    it(`open: should append id to 'poActiveOverlayService.activeOverlay'.`, () => {
+      const expectedResult = [component['id']];
+
+      component.open();
+
+      expect(component['poActiveOverlayService'].activeOverlay).toEqual(expectedResult);
+    });
+
     it('close: should focus on source element ', () => {
       component.open();
       spyOn(component['sourceElement'], 'focus');
       component.close();
       expect(component['sourceElement'].focus).toHaveBeenCalled();
+    });
+
+    it('close: should remove id from `poActiveOverlayService.activeOverlay` list', () => {
+      component.open();
+
+      fixture.detectChanges();
+
+      component.close();
+
+      expect(component['poActiveOverlayService'].activeOverlay).toEqual([]);
     });
 
     describe('closeModalOnEscapeKey:', () => {
