@@ -5,7 +5,7 @@ export const poHttpInterceptorDetailLiteralsDefault = {
     detail: 'Detail',
     error: 'Error',
     warning: 'Warning',
-    info: 'Information',
+    information: 'Information',
     success: 'Success'
   },
   es: <any>{
@@ -14,7 +14,7 @@ export const poHttpInterceptorDetailLiteralsDefault = {
     detail: 'Detalle',
     error: 'Error',
     warning: 'Advertencia',
-    info: 'Informacion',
+    information: 'Informacion',
     success: 'Éxito'
   },
   pt: <any>{
@@ -23,7 +23,7 @@ export const poHttpInterceptorDetailLiteralsDefault = {
     detail: 'Detalhe',
     error: 'Erro',
     warning: 'Aviso',
-    info: 'Informação',
+    information: 'Informação',
     success: 'Sucesso'
   },
   ru: <any>{
@@ -32,7 +32,7 @@ export const poHttpInterceptorDetailLiteralsDefault = {
     detail: 'Деталь',
     error: 'Ошибка',
     warning: 'Предупреждение',
-    info: 'Информация',
+    information: 'Информация',
     success: 'Yспех'
   }
 };

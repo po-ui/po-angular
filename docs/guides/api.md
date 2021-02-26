@@ -40,7 +40,7 @@ Para todas as mensagens que representam um erro (códigos HTTP 4xx e 5xx) deve-s
 Opcionalmente pode-se retornar os campos:
 
 - `helpUrl`: link para a documentação do erro;
-- `type`: pode ser informado os seguintes valores: `success`, `information`, `warning` e `error`;
+- `type`: pode ser informado os seguintes valores: `error`, `warning` e `information`;
 - `details`: lista de objetos de erro (recursiva) com mais detalhes sobre o erro principal.
 
 ```

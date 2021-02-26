@@ -120,6 +120,7 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  *
  * - `helpUrl`: link para a documentação do erro;
  *    - Caso for informado, será exibido uma ação de "Ajuda" na notificação, para isso não deverá ter a propriedade `detailedMessage`.
+ * - `type`: É possível informar `error`, `warning` e `information`, sendo `error` o valor padrão.
  * - `details`: Uma lista de objetos de mensagem (recursiva) com mais detalhes sobre a mensagem principal.
  *
  * > Veja o [Guia de implementação de APIs](guides/api) para mais detalhes sobre a estrutura das mensagens.
@@ -201,9 +202,13 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
 
     const hasNoErrorParam = this.hasNoErrorParam(request);
     const hasNoMessageParam = this.hasNoMessageParam(request);
+    const errorResponseValidTypes = this.notificationTypes.slice(1);
 
     if (errorResponse && errorResponse.message && !hasNoErrorParam && !hasNoMessageParam) {
-      this.showNotification({ ...errorResponse, type: 'error' });
+      this.showNotification({
+        ...errorResponse,
+        type: errorResponseValidTypes.includes(errorResponse.type) ? errorResponse.type : 'error'
+      });
     }
   }
 
