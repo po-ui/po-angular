@@ -30,6 +30,8 @@ describe('PoHttpInterceptorBaseService', () => {
   let errResponse: HttpErrorResponse;
 
   let mockErrorResponse;
+  let mockWarningResponse;
+  let mockInfoResponse;
   let mockErrorServerNotResponding;
   let mockSuccessResponse;
   let poErrorMessage;
@@ -53,6 +55,8 @@ describe('PoHttpInterceptorBaseService', () => {
 
   beforeEach(() => {
     mockErrorResponse = { status: 404, statusText: 'Bad Request' };
+    mockWarningResponse = { status: 102, statusText: 'Processing', type: 'warning' };
+    mockInfoResponse = { status: 102, statusText: 'Processing', type: 'info' };
     mockErrorServerNotResponding = { status: 0, statusText: 'Server not responding' };
     mockSuccessResponse = { status: 200, statusText: 'Success' };
     poErrorMessage = { message: 'erro po', code: '1', detailedMessage: '', details: [{}], helpUrl: '' };
@@ -135,6 +139,78 @@ describe('PoHttpInterceptorBaseService', () => {
 
       poErrorMessage.details = undefined;
       poErrorMessage.detailedMessage = undefined;
+
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
+
+      httpMock.expectOne('/data').flush(poErrorMessage, mockErrorResponse);
+
+      expect(service.notification.error).toHaveBeenCalledWith({
+        message: poErrorMessage.message,
+        actionLabel: undefined,
+        action: undefined
+      });
+    }
+  ));
+
+  it('should show warning notification', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
+      spyOn(service.notification, 'warning');
+
+      poErrorMessage.details = undefined;
+      poErrorMessage.detailedMessage = undefined;
+      poErrorMessage.type = 'warning';
+
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
+
+      httpMock.expectOne('/data').flush(poErrorMessage, mockWarningResponse);
+
+      expect(service.notification.warning).toHaveBeenCalledWith({
+        message: poErrorMessage.message,
+        actionLabel: undefined,
+        action: undefined
+      });
+    }
+  ));
+
+  it('should show information notification', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
+      spyOn(service.notification, 'information');
+
+      poErrorMessage.details = undefined;
+      poErrorMessage.detailedMessage = undefined;
+      poErrorMessage.type = 'information';
+
+      http.get('/data').subscribe(
+        res => (response = res),
+        err => (errResponse = err)
+      );
+
+      httpMock.expectOne('/data').flush(poErrorMessage, mockInfoResponse);
+
+      expect(service.notification.information).toHaveBeenCalledWith({
+        message: poErrorMessage.message,
+        actionLabel: undefined,
+        action: undefined
+      });
+    }
+  ));
+
+  it('should show error notification when return invalid type', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
+      spyOn(service.notification, 'error');
+
+      poErrorMessage.details = undefined;
+      poErrorMessage.detailedMessage = undefined;
+      poErrorMessage.type = 'angular';
 
       http.get('/data').subscribe(
         res => (response = res),
