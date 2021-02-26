@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.8.0](https://github.com/po-ui/po-angular/compare/v4.7.0...v4.8.0) (2021-02-26)
+
+
+### Bug Fixes
+
+* **input:** corrige validação do model quando p-mask é dinâmico ([c1f197f](https://github.com/po-ui/po-angular/commit/c1f197f608bb4ddc3b745c6d5fc7d8da0555554a))
+* **modal:** corrige controle de focus em modais ([fa4033d](https://github.com/po-ui/po-angular/commit/fa4033dc07de6aad54faee59b18cc7268f758500))
+* **page-slide:** corrige controle de focus em modais ([1c024d2](https://github.com/po-ui/po-angular/commit/1c024d2a02ba7a6748b010a0c74aa8a7e2b8dce2))
+
+
+### Features
+
+* **build:** atualização do projeto para a Angular 11.2 ([98c00b4](https://github.com/po-ui/po-angular/commit/98c00b4b31e959d6ef7cda888a3511b78de5a203))
+* **chart:** nova propriedade `PoChartOptions.legend` ([49b797d](https://github.com/po-ui/po-angular/commit/49b797da7964e25680661d4fcebc18e576db85aa))
+* **interceptor:** permite informar type no retorno do erro ([e388894](https://github.com/po-ui/po-angular/commit/e3888946252883cf7d8ee26a996bcb29919a130c))
+* **icons:** adiciona novos icones a biblioteca ([3966b45](https://github.com/po-ui/po-style/commit/3966b4560218c59b956faebf367d24ab591495f1))
+ícones adicionados:
+  - pallet-full
+  - pallet-partial
+
+
+
 # [4.7.0](https://github.com/po-ui/po-angular/compare/v4.6.0...v4.7.0) (2021-02-22)
 
 
