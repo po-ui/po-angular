@@ -21,7 +21,11 @@ export class PoChartMathsService {
   calculateMinAndMaxValues(series: Array<any>, acceptNegativeValues: boolean = true): PoChartMinMaxValues {
     const minValue = this.getDomain(series, 'min');
     const maxValue = this.getDomain(series, 'max');
-    return { minValue: !acceptNegativeValues && minValue < 0 ? 0 : minValue, maxValue };
+
+    return {
+      minValue: !acceptNegativeValues && minValue < 0 ? 0 : minValue,
+      maxValue: acceptNegativeValues && maxValue < 0 ? 0 : maxValue
+    };
   }
 
   /**

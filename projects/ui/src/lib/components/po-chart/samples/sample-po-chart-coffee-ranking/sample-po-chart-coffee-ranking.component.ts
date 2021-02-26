@@ -55,8 +55,8 @@ export class SamplePoChartCoffeeRankingComponent {
 
   evolutionOfCoffeeAndSomeCompetitors: Array<PoChartSerie> = [
     { label: '2014', data: [91, 40, 42], type: PoChartType.Column },
-    { label: '2017', data: [93, 52, 39], type: PoChartType.Column },
-    { label: '2020', data: [95, 46, 31], type: PoChartType.Column },
+    { label: '2017', data: [93, 52, 18], type: PoChartType.Column },
+    { label: '2020', data: [95, 21, -17], type: PoChartType.Column },
     { label: 'Coffee consumption in Brazil', data: [34, 27, 79], type: PoChartType.Line, color: 'color-10' }
   ];
 
@@ -98,9 +98,9 @@ export class SamplePoChartCoffeeRankingComponent {
 
   optionsColumn: PoChartOptions = {
     axis: {
-      minRange: 0,
+      minRange: -20,
       maxRange: 100,
-      gridLines: 5
+      gridLines: 7
     }
   };
 

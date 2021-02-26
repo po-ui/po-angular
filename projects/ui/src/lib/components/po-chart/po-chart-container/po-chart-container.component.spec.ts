@@ -205,22 +205,22 @@ describe('PoChartContainerComponent', () => {
       expect(spyGetRange).not.toHaveBeenCalled();
     });
 
-    it('seriesTypeLine: should return true if all series type are `PoChartType.Line`', () => {
+    it('allowSeriesWithNegativeValues: should return true if all series type are `PoChartType.Line` or `PoChartType.Column`', () => {
       const chartSeries = [
         { data: [10, 2, 300], label: 'Vancouver', type: PoChartType.Line },
-        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Line }
+        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column }
       ];
 
-      expect(component['seriesTypeLine'](chartSeries)).toBeTruthy();
+      expect(component['allowSeriesWithNegativeValues'](chartSeries)).toBeTruthy();
     });
 
-    it('seriesTypeLine: should return false if series have a serie with `type` property value different of `line`', () => {
+    it('allowSeriesWithNegativeValues: should return false if series have a serie with `type` property value different of `line` or `column`', () => {
       const chartSeries = [
         { data: [10, 2, 300], label: 'Vancouver', type: PoChartType.Line },
         { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Bar }
       ];
 
-      expect(component['seriesTypeLine'](chartSeries)).toBeFalsy();
+      expect(component['allowSeriesWithNegativeValues'](chartSeries)).toBeFalsy();
     });
 
     it('verifyAxisOptions: shouldn`t call `getRange` if `isTypeCircular` is false', () => {
@@ -271,8 +271,8 @@ describe('PoChartContainerComponent', () => {
   });
 
   describe('Properties: ', () => {
-    it('p-series: should `seriesTypeLine` `setSeriesByType` and `setRange`', () => {
-      const spySeriesTypeLine = spyOn(component, <any>['seriesTypeLine']);
+    it('p-series: should `allowSeriesWithNegativeValues` `setSeriesByType` and `setRange`', () => {
+      const spyAllowSeriesWithNegativeValues = spyOn(component, <any>['allowSeriesWithNegativeValues']);
       const spysetSeriesByType = spyOn(component, <any>['setSeriesByType']).and.callThrough();
       const spySetRange = spyOn(component, <any>['setRange']);
 
@@ -286,7 +286,7 @@ describe('PoChartContainerComponent', () => {
         { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column, color: '#29B6C5' }
       ];
 
-      expect(spySeriesTypeLine).toHaveBeenCalledWith(seriesWithColor);
+      expect(spyAllowSeriesWithNegativeValues).toHaveBeenCalledWith(seriesWithColor);
       expect(spysetSeriesByType).toHaveBeenCalledWith(seriesWithColor);
       expect(spySetRange).toHaveBeenCalledWith(seriesWithColor, component.options);
     });

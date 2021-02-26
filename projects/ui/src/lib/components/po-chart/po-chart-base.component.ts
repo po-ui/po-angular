@@ -166,7 +166,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
    *    },
    *  };
    * ```
-   * > Para gráficos dos tipos `Column` e `Bar`, não será aceito valor negativo para a cofiguração `axis.minRange`.
+   * > Gráficos do tipo `Bar` não possuem implementação de tratamento para valores negativos. Por conta disso, neste caso não é possível declarar valor negativo para a configuração `axis.minRange`.
    */
   @Input('p-options') set options(value: PoChartOptions) {
     if (value instanceof Object && !(value instanceof Array)) {

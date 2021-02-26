@@ -46,7 +46,7 @@ export class PoChartContainerComponent implements OnChanges {
 
   @Input('p-series') set series(data: Array<PoChartSerie>) {
     this._series = data;
-    this.allowNegativeData = this.seriesTypeLine(this._series);
+    this.allowNegativeData = this.allowSeriesWithNegativeValues(this._series);
     this.setSeriesByType(this._series);
     this.setRange(this._series, this.options);
   }
@@ -78,7 +78,7 @@ export class PoChartContainerComponent implements OnChanges {
   private getRange(series: Array<PoChartSerie>, options: PoChartOptions = {}): PoChartMinMaxValues {
     const domain = this.mathsService.calculateMinAndMaxValues(series, this.allowNegativeData);
     const minValue =
-      !this.allowNegativeData && !options.axis?.minRange
+      (!this.allowNegativeData && !options.axis?.minRange) || (this.allowNegativeData && domain.minValue > 0)
         ? 0
         : options.axis?.minRange < domain.minValue
         ? options.axis.minRange
@@ -95,8 +95,8 @@ export class PoChartContainerComponent implements OnChanges {
     }
   }
 
-  private seriesTypeLine(series: Array<PoChartSerie>): boolean {
-    return series.every(serie => serie.type === PoChartType.Line);
+  private allowSeriesWithNegativeValues(series: Array<PoChartSerie>): boolean {
+    return series.every(serie => serie.type === PoChartType.Line || serie.type === PoChartType.Column);
   }
 
   private setSeriesByType(series: Array<PoChartSerie>) {

@@ -24,6 +24,7 @@ export class PoChartAxisComponent {
   axisYCoordinates: Array<PoChartPathCoordinates>;
   axisYLabelCoordinates: Array<PoChartLabelCoordinates>;
 
+  private axisXLabels: Array<string> = [];
   private gridLines: number = PoChartGridLines;
   private minMaxAxisValues: PoChartMinMaxValues;
   private seriesLength: number = 0;
@@ -117,13 +118,13 @@ export class PoChartAxisComponent {
     minMaxAxisValues: PoChartMinMaxValues,
     type: PoChartType
   ) {
-    const amountOfAxisXLines = this.amountOfAxisXLines(seriesLength, gridLines, type);
-    this.calculateAxisXCoordinates(amountOfAxisXLines, containerSize);
-
     if (seriesLength) {
       const amountOfAxisLabels = type === PoChartType.Bar ? seriesLength : gridLines;
       this.calculateAxisXLabelCoordinates(amountOfAxisLabels, containerSize, minMaxAxisValues, type);
     }
+
+    const amountOfAxisXLines = this.amountOfAxisXLines(seriesLength, gridLines, type);
+    this.calculateAxisXCoordinates(amountOfAxisXLines, containerSize, minMaxAxisValues);
   }
 
   private amountOfAxisXLines(seriesLength: number, gridLines: number, type: PoChartType): number {
@@ -149,16 +150,52 @@ export class PoChartAxisComponent {
     }
   }
 
-  private calculateAxisXCoordinates(amountOfAxisX: number, containerSize: PoChartContainerSize) {
-    this.axisXCoordinates = [...Array(amountOfAxisX)].map((_, index: number) => {
-      const startX = containerSize.axisXLabelWidth;
-      const endX = containerSize.svgWidth;
-      const yCoordinate = this.calculateAxisXCoordinateY(amountOfAxisX, containerSize, index);
+  private calculateAxisXCoordinates(
+    amountOfAxisX: number,
+    containerSize: PoChartContainerSize,
+    range: PoChartMinMaxValues
+  ) {
+    const startX = containerSize.axisXLabelWidth;
+    const endX = containerSize.svgWidth;
 
+    let coordinatesReferedToZero;
+    let coordinatesList = [...Array(amountOfAxisX)].map((_, index: number) => {
+      const yCoordinate = this.calculateAxisXCoordinateY(amountOfAxisX, containerSize, index);
       const coordinates = `M${startX} ${yCoordinate} L${endX}, ${yCoordinate}`;
 
       return { coordinates };
     });
+
+    // Avalia a necessidade de adicionar a linha referente ao valor zero.
+    if (
+      (this.type !== PoChartType.Bar && !this.axisXLabels.includes('0')) ||
+      (this.type === PoChartType.Column && range.minValue < 0)
+    ) {
+      coordinatesReferedToZero = this.getCoordinatesRelatedToZero(containerSize, range, startX, endX);
+      coordinatesList = [...coordinatesList, coordinatesReferedToZero];
+    }
+
+    this.axisXCoordinates = coordinatesList;
+  }
+
+  private getCoordinatesRelatedToZero(
+    containerSize: PoChartContainerSize,
+    range: PoChartMinMaxValues,
+    startX: number,
+    endX: number
+  ) {
+    const yCoordinate = this.valueZeroAxisYCoordinate(range, 0, containerSize);
+    const coordinates = `M${startX} ${yCoordinate} L${endX}, ${yCoordinate}`;
+
+    return { coordinates };
+  }
+
+  private valueZeroAxisYCoordinate(range: PoChartMinMaxValues, data: number, containerSize: PoChartContainerSize) {
+    const yRratio = this.mathsService.getSeriePercentage(range, data);
+
+    return Math.floor(
+      containerSize.svgPlottingAreaHeight - containerSize.svgPlottingAreaHeight * yRratio + PoChartPlotAreaPaddingTop
+    );
   }
 
   private calculateAxisXLabelCoordinates(
@@ -167,10 +204,10 @@ export class PoChartAxisComponent {
     minMaxAxisValues: PoChartMinMaxValues,
     type: PoChartType
   ) {
-    const axisXLabels = this.getAxisXLabels(type, minMaxAxisValues, amountOfAxisX);
+    this.axisXLabels = this.getAxisXLabels(type, minMaxAxisValues, amountOfAxisX);
 
     this.axisXLabelCoordinates = [...Array(amountOfAxisX)].map((_, index: number) => {
-      const label = axisXLabels[index];
+      const label = this.axisXLabels[index];
       const xCoordinate = this.calculateAxisXLabelXCoordinate(containerSize.axisXLabelWidth);
       const yCoordinate = this.calculateAxisXLabelYCoordinate(amountOfAxisX, containerSize, type, index);
 
@@ -322,7 +359,7 @@ export class PoChartAxisComponent {
     }
 
     const minMaxUpdatedValues = {
-      minValue: min,
+      minValue: this.type === PoChartType.Column && !isNegative ? 0 : min,
       maxValue: max
     };
 
@@ -370,7 +407,9 @@ export class PoChartAxisComponent {
 
     return averageLabelsList.map(label => {
       const formattedDigit = label.toFixed(label % 1 && 2);
-      const removeZeroDigits = formattedDigit.replace(/\.00$/, '');
+      // Remove dígitos com zero.
+      // Também trata caso quando o valor retornado era -0, substituindo-o por 0.
+      const removeZeroDigits = formattedDigit.replace(/\.00$/, '').replace(/\-0$/, 0);
 
       return removeZeroDigits.toString();
     });
