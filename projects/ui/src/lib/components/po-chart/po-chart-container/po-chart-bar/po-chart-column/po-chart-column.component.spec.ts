@@ -86,28 +86,8 @@ describe('PoChartColumnComponent', () => {
           minMaxSeriesValues,
           serieValue
         );
-        expect(expectedResult).toBe('M 82 28 L 92 28 L 92 28 L 82 28 z');
+        expect(expectedResult).toBe('M 82 28 L 92 28 L 92 29 L 82 29 z');
       });
-    });
-
-    it('should consider serieValue as 0 for calculations if it is a negative value', () => {
-      component.series = [
-        { label: 'category', data: [-10, 2, 3] },
-        { label: 'category B', data: [10, 20, 30] }
-      ];
-      const seriesIndex = 0;
-      const serieItemDataIndex = 0;
-      const minMaxSeriesValues = { minValue: 0, maxValue: 30 };
-      const serieValue = -10;
-
-      const expectedResult = component['barCoordinates'](
-        seriesIndex,
-        serieItemDataIndex,
-        component.containerSize,
-        minMaxSeriesValues,
-        serieValue
-      );
-      expect(expectedResult).toBe('M 82 28 L 92 28 L 92 28 L 82 28 z');
     });
 
     it('shouldn`t subctract the spaceBetweenBars calculation by the X coordinate if series.length is lower than 2', () => {
@@ -125,7 +105,7 @@ describe('PoChartColumnComponent', () => {
         minMaxSeriesValues,
         serieValue
       );
-      expect(expectedResult).toBe('M 86 28 L 100 28 L 100 28 L 86 28 z');
+      expect(expectedResult).toBe('M 86 28 L 100 28 L 100 38 L 86 38 z');
     });
   });
 });

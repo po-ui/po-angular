@@ -48,6 +48,17 @@ describe('PoChartMathsService', () => {
       expect(service.calculateMinAndMaxValues(series, acceptNegativeValues)).toEqual(expectedResult);
     });
 
+    it('calculateMinAndMaxValues: should return 0 for maxValue if `acceptNegativeValues` is true and maxValue is negative', () => {
+      const series = [
+        { label: 'A', data: [-20, -20, -45] },
+        { label: 'B', data: [-200, -170, -210] }
+      ];
+      const expectedResult = { minValue: -210, maxValue: 0 };
+      const acceptNegativeValues = true;
+
+      expect(service.calculateMinAndMaxValues(series, acceptNegativeValues)).toEqual(expectedResult);
+    });
+
     it('range: should call `getGridLineArea` and return a list of values according with gridLabels default value', () => {
       const minMaxValues = { minValue: 0, maxValue: 200 };
       const expectedResult = [0, 50, 100, 150, 200];

@@ -11,6 +11,7 @@ import { PoChartType } from '../../enums/po-chart-type.enum';
 describe('PoChartAxisComponent', () => {
   let component: PoChartAxisComponent;
   let fixture: ComponentFixture<PoChartAxisComponent>;
+  let nativeElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -23,6 +24,8 @@ describe('PoChartAxisComponent', () => {
     fixture = TestBed.createComponent(PoChartAxisComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    nativeElement = fixture.debugElement.nativeElement;
   });
 
   it('should create', () => {
@@ -292,7 +295,7 @@ describe('PoChartAxisComponent', () => {
 
       component['setAxisXCoordinates'](gridLines, seriesLength, containerSize, minMaxAxisValues, type);
 
-      expect(spyCalculateAxisXCoordinates).toHaveBeenCalledWith(seriesLength + 1, containerSize);
+      expect(spyCalculateAxisXCoordinates).toHaveBeenCalledWith(seriesLength + 1, containerSize, minMaxAxisValues);
       expect(spyCalculateAxisXLabelCoordinates).toHaveBeenCalledWith(
         seriesLength,
         containerSize,
@@ -323,7 +326,7 @@ describe('PoChartAxisComponent', () => {
 
       component['setAxisXCoordinates'](gridLines, seriesLength, containerSize, minMaxAxisValues, type);
 
-      expect(spyCalculateAxisXCoordinates).toHaveBeenCalledWith(gridLines, containerSize);
+      expect(spyCalculateAxisXCoordinates).toHaveBeenCalledWith(gridLines, containerSize, minMaxAxisValues);
       expect(spyCalculateAxisXLabelCoordinates).toHaveBeenCalledWith(gridLines, containerSize, minMaxAxisValues, type);
     });
 
@@ -883,9 +886,16 @@ describe('PoChartAxisComponent', () => {
           axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
+        const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+          minValue: 1,
+          maxValue: 3
+        };
+
+        component['axisXLabels'] = ['-20', '11', '40'];
+
         const spyCalculateAxisXCoordinateY = spyOn(component, <any>'calculateAxisXCoordinateY').and.callThrough();
 
-        component['calculateAxisXCoordinates'](amountOfAxisX, containerSize);
+        component['calculateAxisXCoordinates'](amountOfAxisX, containerSize, fakeMinMaxAxisValues);
 
         expect(spyCalculateAxisXCoordinateY).toHaveBeenCalledTimes(2);
       });
@@ -900,10 +910,16 @@ describe('PoChartAxisComponent', () => {
           axisXLabelWidth: 72,
           svgPlottingAreaHeight: 280
         };
+        const fakeMinMaxAxisValues: PoChartMinMaxValues = {
+          minValue: 1,
+          maxValue: 3
+        };
+
+        component['axisXLabels'] = ['-20', '11', '40'];
 
         const spyCalculateAxisXCoordinateY = spyOn(component, <any>'calculateAxisXCoordinateY').and.callThrough();
 
-        component['calculateAxisXCoordinates'](amountOfAxisX, containerSize);
+        component['calculateAxisXCoordinates'](amountOfAxisX, containerSize, fakeMinMaxAxisValues);
 
         expect(spyCalculateAxisXCoordinateY).toHaveBeenCalledTimes(2);
       });
@@ -958,6 +974,32 @@ describe('PoChartAxisComponent', () => {
       component['getAxisYLabels'](component.type, component['minMaxAxisValues'], 5);
 
       expect(spyGenerateAverageOfLabels).toHaveBeenCalled();
+    });
+  });
+
+  describe('Template', () => {
+    it(`should contain an extra axis X line related to value 'zero'`, () => {
+      component.allowNegativeData = true;
+      component.type = PoChartType.Column;
+      component.series = [{ data: [-25, 58, 83, 66], label: 'Vancouver', type: PoChartType.Column }];
+
+      fixture.detectChanges();
+
+      const chartBarElement = nativeElement.querySelectorAll('.po-chart-axis-path');
+      expect(chartBarElement).toBeTruthy();
+      expect(chartBarElement.length).toBe(11);
+    });
+
+    it(`shouldn't contain an extra axis X line if one of axisXLabel's value is zero`, () => {
+      component.allowNegativeData = true;
+      component.type = PoChartType.Column;
+      component.series = [{ data: [0, 58, 83, 66], label: 'Vancouver', type: PoChartType.Column }];
+
+      fixture.detectChanges();
+
+      const chartBarElement = nativeElement.querySelectorAll('.po-chart-axis-path');
+      expect(chartBarElement).toBeTruthy();
+      expect(chartBarElement.length).toBe(10);
     });
   });
 });

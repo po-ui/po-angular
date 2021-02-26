@@ -89,11 +89,12 @@ export class PoChartColumnComponent extends PoChartBarBaseComponent {
   }
 
   private yCoordinates(minMaxSeriesValues: PoChartMinMaxValues, svgPlottingAreaHeight: number, serieValue: number) {
-    // TO DO: tratamento para valores negativos.
-    const filterNegativeSerieValue = serieValue <= 0 ? 0 : serieValue;
+    const valueZeroPercentage = this.mathsService.getSeriePercentage(minMaxSeriesValues, 0);
+    const y1 = Math.round(
+      svgPlottingAreaHeight - svgPlottingAreaHeight * valueZeroPercentage + PoChartPlotAreaPaddingTop
+    );
 
-    const yRatio = this.mathsService.getSeriePercentage(minMaxSeriesValues, filterNegativeSerieValue);
-    const y1 = Math.round(svgPlottingAreaHeight + PoChartPlotAreaPaddingTop);
+    const yRatio = this.mathsService.getSeriePercentage(minMaxSeriesValues, serieValue);
     const y2 = Math.round(svgPlottingAreaHeight - svgPlottingAreaHeight * yRatio + PoChartPlotAreaPaddingTop);
 
     return { y1, y2 };
