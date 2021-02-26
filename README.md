@@ -53,15 +53,15 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "~11.1.0",
-    "@angular/common": "~11.1.0",
-    "@angular/compiler": "~11.1.0",
-    "@angular/core": "~11.1.0",
-    "@angular/forms": "~11.1.0",
-    "@angular/platform-browser": "~11.1.0",
-    "@angular/platform-browser-dynamic": "~11.1.0",
-    "@angular/platform-server": "~11.1.0",
-    "@angular/router": "~11.1.0",
+    "@angular/animations": "~11.2.0",
+    "@angular/common": "~11.2.0",
+    "@angular/compiler": "~11.2.0",
+    "@angular/core": "~11.2.0",
+    "@angular/forms": "~11.2.0",
+    "@angular/platform-browser": "~11.2.0",
+    "@angular/platform-browser-dynamic": "~11.2.0",
+    "@angular/platform-server": "~11.2.0",
+    "@angular/router": "~11.2.0",
     "tslib": "^2.0.0",
     "rxjs": "~6.6.0",
     "zone.js": "~0.10.3"
