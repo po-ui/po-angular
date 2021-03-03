@@ -173,7 +173,11 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     }
   }
 
-  onBlur() {
+  onBlur(event: any) {
+    const isStartDateTargetEvent = event.target.name === this.startDateInputName;
+
+    this.updateModelByScreen(isStartDateTargetEvent);
+
     this.removeFocusFromDatePickerRangeField();
   }
 
@@ -203,7 +207,7 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
 
     this.setFocus(event);
     this.poMaskObject.keyup(event);
-    this.updateModelByScreen(isStartDateTargetEvent);
+    this.updateModelWhenComplete(isStartDateTargetEvent);
   }
 
   resetDateRangeInputValidation() {
@@ -379,10 +383,31 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     }
   }
 
+  private updateModelWhenComplete(isStartDateTargetEvent: boolean) {
+    const endDateFormatted = this.formatScreenToModel(this.endDateInputValue);
+    const startDateFormatted = this.formatScreenToModel(this.startDateInputValue);
+    const dateFormatValidation = this.getDateRangeFormatValidation(
+      startDateFormatted,
+      endDateFormatted,
+      isStartDateTargetEvent
+    );
+
+    if (this.isEqualBeforeValue(startDateFormatted, endDateFormatted)) {
+      this.resetDateRangeInputValidation();
+      this.validateModel(this.dateRange);
+      return;
+    }
+
+    if (dateFormatValidation.isValid) {
+      this.dateRange = { start: startDateFormatted, end: endDateFormatted };
+      this.updateModel(this.dateRange);
+      this.onChange.emit({ ...this.dateRange });
+    }
+  }
+
   private updateModelByScreen(isStartDateTargetEvent: boolean) {
     const endDateFormatted = this.formatScreenToModel(this.endDateInputValue);
     const startDateFormatted = this.formatScreenToModel(this.startDateInputValue);
-
     if (this.isDateRangeInputUncompleted && this.isDirtyDateRangeInput) {
       this.updateModel(this.dateRange);
       return;
@@ -406,9 +431,13 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
       this.onChange.emit({ ...this.dateRange });
     }
 
-    if (!dateFormatValidation.isValid) {
+    if (!dateFormatValidation.isValid && this.verifyFormattedDates(startDateFormatted, endDateFormatted)) {
       this.dateRange = { ...dateFormatValidation.dateRangeModel };
       this.updateModel(dateFormatValidation.dateRangeModel);
     }
+  }
+
+  private verifyFormattedDates(start: string, end: string): boolean {
+    return !!start || !!end;
   }
 }
