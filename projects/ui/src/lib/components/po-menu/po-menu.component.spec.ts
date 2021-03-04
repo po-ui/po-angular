@@ -509,16 +509,6 @@ describe('PoMenuComponent:', () => {
     expect(component['itemSubscription'].unsubscribe).toHaveBeenCalled();
   });
 
-  it('routeSubscription: should `unsubscribe` `routeSubscription` on destroy.', () => {
-    component['routeSubscription'] = <any>{ unsubscribe: () => {} };
-
-    spyOn(component['routeSubscription'], <any>'unsubscribe');
-
-    component.ngOnDestroy();
-
-    expect(component['routeSubscription'].unsubscribe).toHaveBeenCalled();
-  });
-
   it('should set menu item not found with `literals.itemNotFound`.', () => {
     component.noData = true;
 
@@ -830,22 +820,13 @@ describe('PoMenuComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it(`ngOnInit: should call 'subscribeToMenuItem', 'subscribeToRoute',
-      'checkingRouterChildrenFragments' and 'checkActiveMenuByUrl'`, fakeAsync(() => {
+    it(`ngOnInit: should call 'subscribeToMenuItem'`, () => {
       spyOn(component, 'subscribeToMenuItem');
-      spyOn(component, 'subscribeToRoute');
-      spyOn(component, <any>'checkingRouterChildrenFragments');
-      spyOn(component, 'checkActiveMenuByUrl');
 
       component.ngOnInit();
 
-      tick(50);
-
-      expect(component['checkActiveMenuByUrl']).toHaveBeenCalled();
-      expect(component['checkingRouterChildrenFragments']).toHaveBeenCalled();
       expect(component['subscribeToMenuItem']).toHaveBeenCalled();
-      expect(component['subscribeToRoute']).toHaveBeenCalled();
-    }));
+    });
 
     it(`ngOnDestroy: should call 'resizeListener' if has 'resizeListener`, () => {
       component['createResizeListener']();
@@ -1416,23 +1397,6 @@ describe('PoMenuComponent:', () => {
 
       const rootParent = component['getActiveMenuParent']([groupedMenuItem], activeMenuItem, groupedMenuItem);
       expect(rootParent).toBeUndefined();
-    });
-
-    // TODO Ng V9
-    xit('subscribeToRoute: should call `checkActiveMenuByUrl` if router emits an event', done => {
-      spyOn(component, 'checkActiveMenuByUrl');
-      spyOn(component, <any>'checkingRouterChildrenFragments');
-
-      fixture.ngZone.run(() => {
-        router.navigate(['/search']).then(() => {
-          component.subscribeToRoute();
-
-          expect(component.checkActiveMenuByUrl).toHaveBeenCalled();
-          expect(component['checkingRouterChildrenFragments']).toHaveBeenCalled();
-
-          done();
-        });
-      });
     });
 
     // TODO Ng V9

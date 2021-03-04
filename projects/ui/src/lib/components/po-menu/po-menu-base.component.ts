@@ -85,6 +85,11 @@ export abstract class PoMenuBaseComponent {
   /** Lista dos itens do menu. Se o valor estiver indefinido ou inválido, será inicializado como um array vazio. */
   @Input('p-menus') set menus(menus: Array<PoMenuItem>) {
     this._menus = Array.isArray(menus) ? menus : [];
+
+    setTimeout(() => {
+      const urlRouter = this.checkingRouterChildrenFragments();
+      this.checkActiveMenuByUrl(urlRouter);
+    });
   }
 
   get menus() {
@@ -332,5 +337,7 @@ export abstract class PoMenuBaseComponent {
     }
   }
 
+  protected abstract checkActiveMenuByUrl(urlRouter);
+  protected abstract checkingRouterChildrenFragments();
   protected abstract validateCollapseClass();
 }

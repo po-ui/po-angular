@@ -1,4 +1,5 @@
 import { Directive } from '@angular/core';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
@@ -9,6 +10,8 @@ import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 @Directive()
 export class PoMenuComponent extends PoMenuBaseComponent {
   protected validateCollapseClass() {}
+  protected checkActiveMenuByUrl() {}
+  protected checkingRouterChildrenFragments() {}
 }
 
 describe('PoMenuBaseComponent:', () => {
@@ -480,6 +483,26 @@ describe('PoMenuBaseComponent:', () => {
       const invalidValues = [0, null, undefined, 'undefined', 'null'];
 
       expectPropertiesValues(component, 'collapsed', invalidValues, false);
+    });
+
+    it('menus: should update property with valid values.', fakeAsync(() => {
+      const validValues = [[{ label: 'Level 1.1', link: '/level-1-1', icon: 'clock' }]];
+
+      const spyCheckingRouterChildrenFragments = spyOn(component, <any>'checkingRouterChildrenFragments');
+      const spyCheckActiveMenuByUrl = spyOn(component, <any>'checkActiveMenuByUrl');
+
+      expectPropertiesValues(component, 'menus', validValues, validValues);
+
+      tick();
+
+      expect(spyCheckingRouterChildrenFragments).toHaveBeenCalled();
+      expect(spyCheckActiveMenuByUrl).toHaveBeenCalled();
+    }));
+
+    it('menus: should update property with `[]` if values are invalid.', () => {
+      const invalidValues = [0, null, undefined, 'undefined', 'null', {}, false, true];
+
+      expectPropertiesValues(component, 'menus', invalidValues, []);
     });
   });
 
