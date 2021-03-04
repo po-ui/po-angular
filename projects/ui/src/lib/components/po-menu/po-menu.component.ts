@@ -6,11 +6,10 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  Renderer2,
-  ViewContainerRef
+  Renderer2
 } from '@angular/core';
 
-import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -134,11 +133,9 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   private resizeListener: () => void;
 
   private itemSubscription: Subscription;
-  private routeSubscription: Subscription;
 
   constructor(
     public changeDetector: ChangeDetectorRef,
-    viewRef: ViewContainerRef,
     private element: ElementRef,
     private renderer: Renderer2,
     private router: Router,
@@ -184,7 +181,6 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
 
   ngOnDestroy() {
     this.itemSubscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
 
     if (this.resizeListener) {
       this.resizeListener();
@@ -193,20 +189,19 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
 
   ngOnInit() {
     this.subscribeToMenuItem();
-    this.subscribeToRoute();
-
-    setTimeout(() => {
-      const urlRouter = this.checkingRouterChildrenFragments();
-      this.checkActiveMenuByUrl(urlRouter);
-    });
   }
 
   activateMenuByUrl(urlPath: string, menus: Array<PoMenuItem>) {
     if (menus) {
+      const urlPathWithoutLastFragment = urlPath.substr(0, urlPath.lastIndexOf('/'));
       return menus.some(menu => {
-        const formattedLink = getFormattedLink(menu.link);
-        if (formattedLink === urlPath) {
-          this.linkActive = formattedLink;
+        const formattedMenuLink = getFormattedLink(menu.link);
+        const menuLinkPath = `${urlPathWithoutLastFragment}${formattedMenuLink.substr(
+          formattedMenuLink.lastIndexOf('/')
+        )}`;
+
+        if (menuLinkPath === urlPath) {
+          this.linkActive = formattedMenuLink;
           this.activateMenuItem(menu);
           return true;
         } else {
@@ -251,15 +246,6 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
   subscribeToMenuItem() {
     this.itemSubscription = this.menuItemsService.receiveFromChildMenuClicked().subscribe((menu: PoMenuItem) => {
       this.clickMenuItem(menu);
-    });
-  }
-
-  subscribeToRoute() {
-    this.routeSubscription = this.router.events.subscribe(val => {
-      if (val instanceof NavigationEnd || val instanceof NavigationCancel) {
-        const urlRouter = this.checkingRouterChildrenFragments();
-        this.checkActiveMenuByUrl(urlRouter);
-      }
     });
   }
 
@@ -316,7 +302,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     return menus.every(menu => menu['level'] > poMenuRootLevel);
   }
 
-  private checkingRouterChildrenFragments() {
+  protected checkingRouterChildrenFragments() {
     const childrenPrimary = this.router.parseUrl(this.router.url).root.children['primary'];
 
     return childrenPrimary ? `/${childrenPrimary.segments.map(it => it.path).join('/')}` : '';
