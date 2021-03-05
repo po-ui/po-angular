@@ -99,24 +99,12 @@ describe('PoChartContainerComponent', () => {
     });
 
     describe('getRange:', () => {
-      it('should return zero to `minValue` if `allowNegativeData` is false and has a serie with negative value', () => {
-        const chartSeries = [
-          { data: [-70, 2, 3], label: 'Vancouver', type: PoChartType.Line },
-          { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column }
-        ];
-        const expectedResult = { minValue: 0, maxValue: 4 };
-        component.allowNegativeData = false;
-
-        expect(component['getRange'](chartSeries)).toEqual(expectedResult);
-      });
-
-      it('should return the lowest value to `minValue` if `allowNegativeData` is true and has a serie with negative value', () => {
+      it('should return the lowest value to `minValue`', () => {
         const chartSeries = [
           { data: [-70, 2, 3], label: 'Vancouver', type: PoChartType.Line },
           { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column }
         ];
         const expectedResult = { minValue: -70, maxValue: 4 };
-        component.allowNegativeData = true;
 
         expect(component['getRange'](chartSeries)).toEqual(expectedResult);
       });
@@ -128,19 +116,17 @@ describe('PoChartContainerComponent', () => {
         ];
         const options = { axis: { minRange: 0, maxRange: 100 } };
         const expectedResult = { minValue: 0, maxValue: 100 };
-        component.allowNegativeData = false;
 
         expect(component['getRange'](chartSeries, options)).toEqual(expectedResult);
       });
 
-      it('should return `minValue` of series instead of `options` if it is lower and `allowNegativeData` is true', () => {
+      it('should return `minValue` of series instead of `options` if it is lower', () => {
         const chartSeries = [
           { data: [-10, 2, 3], label: 'Vancouver', type: PoChartType.Line },
           { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Line }
         ];
         const options = { axis: { minRange: 0, maxRange: 100 } };
         const expectedResult = { minValue: -10, maxValue: 100 };
-        component.allowNegativeData = true;
 
         expect(component['getRange'](chartSeries, options)).toEqual(expectedResult);
       });
@@ -152,20 +138,17 @@ describe('PoChartContainerComponent', () => {
         ];
         const options = { axis: { minRange: 0, maxRange: 100 } };
         const expectedResult = { minValue: 0, maxValue: 300 };
-        component.allowNegativeData = true;
 
         expect(component['getRange'](chartSeries, options)).toEqual(expectedResult);
       });
 
-      it('should apply zero to minValue if `options.axis.minRange` has negative value but `allowNegativeData` is false', () => {
+      it('should apply `minValue` value from options.axis.minRange if it is lower than data series minValue', () => {
         const chartSeries = [
-          { data: [10, 2, 300], label: 'Vancouver', type: PoChartType.Bar },
-          { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Bar }
+          { data: [-10, 2, 300], label: 'Vancouver', type: PoChartType.Line },
+          { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Line }
         ];
-        const options = { axis: { minRange: -100, maxRange: 100 } };
-        const expectedResult = { minValue: 0, maxValue: 300 };
-
-        component.allowNegativeData = false;
+        const options = { axis: { minRange: -30, maxRange: 100 } };
+        const expectedResult = { minValue: -30, maxValue: 300 };
 
         expect(component['getRange'](chartSeries, options)).toEqual(expectedResult);
       });
@@ -203,24 +186,6 @@ describe('PoChartContainerComponent', () => {
       component['setRange'](serie);
 
       expect(spyGetRange).not.toHaveBeenCalled();
-    });
-
-    it('allowSeriesWithNegativeValues: should return true if all series type are `PoChartType.Line` or `PoChartType.Column`', () => {
-      const chartSeries = [
-        { data: [10, 2, 300], label: 'Vancouver', type: PoChartType.Line },
-        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column }
-      ];
-
-      expect(component['allowSeriesWithNegativeValues'](chartSeries)).toBeTruthy();
-    });
-
-    it('allowSeriesWithNegativeValues: should return false if series have a serie with `type` property value different of `line` or `column`', () => {
-      const chartSeries = [
-        { data: [10, 2, 300], label: 'Vancouver', type: PoChartType.Line },
-        { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Bar }
-      ];
-
-      expect(component['allowSeriesWithNegativeValues'](chartSeries)).toBeFalsy();
     });
 
     it('verifyAxisOptions: shouldn`t call `getRange` if `isTypeCircular` is false', () => {
@@ -271,8 +236,7 @@ describe('PoChartContainerComponent', () => {
   });
 
   describe('Properties: ', () => {
-    it('p-series: should `allowSeriesWithNegativeValues` `setSeriesByType` and `setRange`', () => {
-      const spyAllowSeriesWithNegativeValues = spyOn(component, <any>['allowSeriesWithNegativeValues']);
+    it('p-series: should call `setSeriesByType` and `setRange`', () => {
       const spysetSeriesByType = spyOn(component, <any>['setSeriesByType']).and.callThrough();
       const spySetRange = spyOn(component, <any>['setRange']);
 
@@ -286,7 +250,6 @@ describe('PoChartContainerComponent', () => {
         { data: [4, 2, 2], label: 'Toronto', type: PoChartType.Column, color: '#29B6C5' }
       ];
 
-      expect(spyAllowSeriesWithNegativeValues).toHaveBeenCalledWith(seriesWithColor);
       expect(spysetSeriesByType).toHaveBeenCalledWith(seriesWithColor);
       expect(spySetRange).toHaveBeenCalledWith(seriesWithColor, component.options);
     });

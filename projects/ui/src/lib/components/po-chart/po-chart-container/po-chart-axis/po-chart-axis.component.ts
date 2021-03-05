@@ -25,8 +25,8 @@ export class PoChartAxisComponent {
   axisYLabelCoordinates: Array<PoChartLabelCoordinates>;
 
   private axisXLabels: Array<string> = [];
+  private axisYLabels: Array<string> = [];
   private gridLines: number = PoChartGridLines;
-  private minMaxAxisValues: PoChartMinMaxValues;
   private seriesLength: number = 0;
 
   private _axisOptions: PoChartAxisOptions;
@@ -34,9 +34,9 @@ export class PoChartAxisComponent {
   private _containerSize: PoChartContainerSize = {};
   private _series: Array<any> = [];
 
-  @Input('p-allow-negative-data') allowNegativeData: boolean;
-
   @Input('p-type') type: PoChartType;
+
+  @Input('p-range') range: PoChartMinMaxValues;
 
   @Input('p-series') set series(seriesList: Array<any>) {
     const seriesDataArrayFilter = seriesList.filter(serie => {
@@ -47,10 +47,9 @@ export class PoChartAxisComponent {
       this._series = seriesDataArrayFilter;
 
       this.seriesLength = this.mathsService.seriesGreaterLength(this.series);
-      this.minMaxAxisValues = this.mathsService.calculateMinAndMaxValues(this._series);
       this.checkAxisOptions(this.axisOptions);
-      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
-      this.setAxisYCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
+      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.range, this.type);
+      this.setAxisYCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.range, this.type);
     } else {
       this._series = [];
       this.cleanUpCoordinates();
@@ -65,15 +64,9 @@ export class PoChartAxisComponent {
     this._categories = value;
 
     if (this.type === PoChartType.Bar) {
-      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
+      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.range, this.type);
     } else {
-      this.setAxisYCoordinates(
-        this.gridLines,
-        this.seriesLength,
-        this._containerSize,
-        this.minMaxAxisValues,
-        this.type
-      );
+      this.setAxisYCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.range, this.type);
     }
   }
 
@@ -85,8 +78,8 @@ export class PoChartAxisComponent {
     this._containerSize = value;
 
     this.checkAxisOptions(this.axisOptions);
-    this.setAxisXCoordinates(this.gridLines, this.seriesLength, this._containerSize, this.minMaxAxisValues, this.type);
-    this.setAxisYCoordinates(this.gridLines, this.seriesLength, this._containerSize, this.minMaxAxisValues, this.type);
+    this.setAxisXCoordinates(this.gridLines, this.seriesLength, this._containerSize, this.range, this.type);
+    this.setAxisYCoordinates(this.gridLines, this.seriesLength, this._containerSize, this.range, this.type);
   }
 
   get containerSize() {
@@ -99,9 +92,9 @@ export class PoChartAxisComponent {
     this.checkAxisOptions(this._axisOptions);
 
     if (this.type === PoChartType.Bar) {
-      this.setAxisYCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
+      this.setAxisYCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.range, this.type);
     } else {
-      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.minMaxAxisValues, this.type);
+      this.setAxisXCoordinates(this.gridLines, this.seriesLength, this.containerSize, this.range, this.type);
     }
   }
 
@@ -143,11 +136,10 @@ export class PoChartAxisComponent {
   ) {
     const amountOfAxisY = type === PoChartType.Bar ? gridLines : seriesLength;
 
-    this.calculateAxisYCoordinates(amountOfAxisY, containerSize, type);
-
     if (seriesLength) {
       this.calculateAxisYLabelCoordinates(amountOfAxisY, containerSize, minMaxAxisValues, type);
     }
+    this.calculateAxisYCoordinates(amountOfAxisY, containerSize, type, minMaxAxisValues);
   }
 
   private calculateAxisXCoordinates(
@@ -166,11 +158,8 @@ export class PoChartAxisComponent {
       return { coordinates };
     });
 
-    // Avalia a necessidade de adicionar a linha referente ao valor zero.
-    if (
-      (this.type !== PoChartType.Bar && !this.axisXLabels.includes('0')) ||
-      (this.type === PoChartType.Column && range.minValue < 0)
-    ) {
+    // Avalia a necessidade de adicionar a linha referente ao valor zero em gráficos do tipo `column` e `line`.
+    if (this.type !== PoChartType.Bar && range.minValue < 0 && !this.axisXLabels.includes('0')) {
       coordinatesReferedToZero = this.getCoordinatesRelatedToZero(containerSize, range, startX, endX);
       coordinatesList = [...coordinatesList, coordinatesReferedToZero];
     }
@@ -181,20 +170,45 @@ export class PoChartAxisComponent {
   private getCoordinatesRelatedToZero(
     containerSize: PoChartContainerSize,
     range: PoChartMinMaxValues,
-    startX: number,
-    endX: number
+    start: number,
+    end: number,
+    isAxisY: boolean = false
   ) {
-    const yCoordinate = this.valueZeroAxisYCoordinate(range, 0, containerSize);
-    const coordinates = `M${startX} ${yCoordinate} L${endX}, ${yCoordinate}`;
+    const type = isAxisY ? PoChartType.Bar : PoChartType.Column;
+    const basePosition = this.axisCoordinatesForValueZero(range, 0, containerSize, isAxisY);
+    const coordinates = {
+      column: {
+        startX: start,
+        endX: end,
+        startY: basePosition,
+        endY: basePosition
+      },
+      bar: {
+        startX: basePosition,
+        endX: basePosition,
+        startY: start,
+        endY: end
+      }
+    };
 
-    return { coordinates };
+    return {
+      coordinates: `M${coordinates[type].startX} ${coordinates[type].startY} L${coordinates[type].endX} ${coordinates[type].endY}`
+    };
   }
 
-  private valueZeroAxisYCoordinate(range: PoChartMinMaxValues, data: number, containerSize: PoChartContainerSize) {
-    const yRratio = this.mathsService.getSeriePercentage(range, data);
+  private axisCoordinatesForValueZero(
+    range: PoChartMinMaxValues,
+    data: number,
+    containerSize: PoChartContainerSize,
+    isAxisY: boolean
+  ) {
+    const { axisXLabelWidth, svgWidth, svgPlottingAreaHeight } = containerSize;
+    const ratio = this.mathsService.getSeriePercentage(range, data);
 
     return Math.floor(
-      containerSize.svgPlottingAreaHeight - containerSize.svgPlottingAreaHeight * yRratio + PoChartPlotAreaPaddingTop
+      isAxisY
+        ? axisXLabelWidth + (svgWidth - axisXLabelWidth) * ratio
+        : svgPlottingAreaHeight - svgPlottingAreaHeight * ratio + PoChartPlotAreaPaddingTop
     );
   }
 
@@ -215,18 +229,20 @@ export class PoChartAxisComponent {
     });
   }
 
-  private calculateAxisYCoordinates(amountOfAxisY: number, containerSize: PoChartContainerSize, type: PoChartType) {
-    this.categoriesDefinedByAreas(containerSize, amountOfAxisY, type);
-  }
-
-  private categoriesDefinedByAreas(containerSize: PoChartContainerSize, amountOfAxisY: number, type: PoChartType) {
+  private calculateAxisYCoordinates(
+    amountOfAxisY: number,
+    containerSize: PoChartContainerSize,
+    type: PoChartType,
+    range: PoChartMinMaxValues
+  ) {
     const startY = PoChartPlotAreaPaddingTop;
     const endY = containerSize.svgPlottingAreaHeight + PoChartPlotAreaPaddingTop;
 
     // tratamento necessário para criar uma linha a mais para fechar o gráfico
     const length = amountOfAxisY === 0 || type === PoChartType.Bar ? amountOfAxisY : amountOfAxisY + 1;
 
-    const innerYCoordinates = [...Array(length)].map((_, index: number) => {
+    let coordinatesReferedToZero;
+    let coordinatesList = [...Array(length)].map((_, index: number) => {
       const xCoordinate = this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, type, index);
 
       const coordinates = `M${xCoordinate} ${startY} L${xCoordinate}, ${endY}`;
@@ -234,7 +250,13 @@ export class PoChartAxisComponent {
       return { coordinates };
     });
 
-    this.axisYCoordinates = [...innerYCoordinates];
+    // Avalia a necessidade de adicionar a linha referente ao valor zero em gráficos do tipo `bar`.
+    if (type === PoChartType.Bar && range.minValue < 0 && !this.axisYLabels.includes('0')) {
+      coordinatesReferedToZero = this.getCoordinatesRelatedToZero(containerSize, range, startY, endY, true);
+      coordinatesList = [...coordinatesList, coordinatesReferedToZero];
+    }
+
+    this.axisYCoordinates = [...coordinatesList];
   }
 
   private calculateAxisYLabelCoordinates(
@@ -243,10 +265,10 @@ export class PoChartAxisComponent {
     minMaxAxisValues: PoChartMinMaxValues,
     type: PoChartType
   ) {
-    const axisYLabels = this.getAxisYLabels(type, minMaxAxisValues, amountOfAxisY);
+    this.axisYLabels = this.getAxisYLabels(type, minMaxAxisValues, amountOfAxisY);
 
     this.axisYLabelCoordinates = [...Array(amountOfAxisY)].map((_, index: number) => {
-      const label = axisYLabels[index];
+      const label = this.axisYLabels[index];
 
       const xCoordinate = this.centeredInCategoryArea(containerSize, amountOfAxisY, type, index);
       const yCoordinate = this.calculateAxisYLabelYCoordinate(containerSize);
@@ -338,35 +360,8 @@ export class PoChartAxisComponent {
   }
 
   private checkAxisOptions(options: PoChartAxisOptions = {}): void {
-    const minMaxSeriesValues = this.mathsService.calculateMinAndMaxValues(this.series, this.allowNegativeData);
-
-    this.minMaxAxisValues = this.checksMinAndMaxValues(options, minMaxSeriesValues);
-
     this.gridLines =
       options.gridLines && this.isValidGridLinesLengthOption(options.gridLines) ? options.gridLines : PoChartGridLines;
-  }
-
-  private checksMinAndMaxValues(
-    options: PoChartAxisOptions,
-    minMaxSeriesValues: PoChartMinMaxValues
-  ): PoChartMinMaxValues {
-    let min = options.minRange < minMaxSeriesValues.minValue ? options.minRange : minMaxSeriesValues.minValue;
-    const max = options.maxRange > minMaxSeriesValues.maxValue ? options.maxRange : minMaxSeriesValues.maxValue;
-    const isNegative = min < 0;
-
-    if (!this.allowNegativeData) {
-      min = !options.minRange || isNegative ? 0 : min;
-    }
-
-    const minMaxUpdatedValues = {
-      minValue: this.type === PoChartType.Column && !isNegative ? 0 : min,
-      maxValue: max
-    };
-
-    return {
-      ...minMaxSeriesValues,
-      ...minMaxUpdatedValues
-    };
   }
 
   private cleanUpCoordinates() {

@@ -9,7 +9,7 @@
   <svg:g
     *ngIf="!isTypeCircular"
     po-chart-axis
-    [p-allow-negative-data]="allowNegativeData"
+    [p-range]="range"
     [p-type]="type"
     [p-series]="series"
     [p-container-size]="containerSize"
@@ -33,7 +33,6 @@
   <svg:g
     *ngIf="(type === 'column' || type === 'line') && seriesByType['line'].length"
     po-chart-line
-    [p-allow-negative-data]="allowNegativeData"
     [p-categories]="categories"
     [p-range]="range"
     [p-series]="seriesByType['line']"

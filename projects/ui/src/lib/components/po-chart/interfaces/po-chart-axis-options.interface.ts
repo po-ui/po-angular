@@ -34,8 +34,6 @@ export interface PoChartAxisOptions {
    * Se por acaso o valor mínimo das séries for inferior ao definido aqui, esta propriedade será ignorada.
    *
    * > Esta definição não deve refletir na plotagem das séries. Os valores máximos e mínimos encontrados nas séries serão as bases para seus alcance.
-   *
-   * > Gráficos do tipo `Bar` não possuem implementação de tratamento para valores negativos. Por conta disso, neste caso não é possível declarar valor negativo para `minRange`.
    */
   minRange?: number;
 }
