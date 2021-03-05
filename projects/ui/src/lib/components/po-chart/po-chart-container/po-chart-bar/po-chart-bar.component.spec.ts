@@ -90,14 +90,14 @@ describe('PoChartBarComponent', () => {
         expect(expectedResult).toBe('M 72 12 L 72 12 L 72 10 L 72 10 z');
       });
 
-      it('should consider serieValue as 0 for calculations if it is a negative value', () => {
+      it('should also consider negative values', () => {
         component.series = [
           { label: 'category', data: [-10, 2, 3] },
           { label: 'category B', data: [10, 20, 30] }
         ];
         const seriesIndex = 0;
         const serieItemDataIndex = 0;
-        const minMaxSeriesValues = { minValue: 0, maxValue: 30 };
+        const minMaxSeriesValues = { minValue: -10, maxValue: 30 };
         const serieValue = -10;
 
         const expectedResult = component['barCoordinates'](
@@ -107,7 +107,7 @@ describe('PoChartBarComponent', () => {
           minMaxSeriesValues,
           serieValue
         );
-        expect(expectedResult).toBe('M 72 12 L 72 12 L 72 10 L 72 10 z');
+        expect(expectedResult).toBe('M 104 12 L 72 12 L 72 10 L 104 10 z');
       });
 
       it('shouldn`t subctract spaceBetweenBars calculation from X coordinate if series.length is lower than 2', () => {

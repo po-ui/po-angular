@@ -262,39 +262,6 @@ describe('PoChartLineComponent', () => {
         expect(component.seriesPathsCoordinates).toEqual(expectedResult);
         expect(component.seriesPathsCoordinates.length).toBe(1);
       });
-
-      it('should convert series values to zero if allowNegativeData is false and serie.data has negative value', () => {
-        component.allowNegativeData = false;
-        component.categories = ['janeiro', 'fevereiro', 'março'];
-
-        const chartSeries = [{ label: 'Vancouver', data: [-10, -15], color: '#29B6C5' }];
-        const expectedPointsResult = [
-          [
-            {
-              category: 'janeiro',
-              color: '#29B6C5',
-              label: 'Vancouver',
-              tooltipLabel: 'Vancouver: 0',
-              data: 0,
-              xCoordinate: 93.33333333333333,
-              yCoordinate: 28
-            },
-            {
-              category: 'fevereiro',
-              color: '#29B6C5',
-              label: 'Vancouver',
-              tooltipLabel: 'Vancouver: 0',
-              data: 0,
-              xCoordinate: 136,
-              yCoordinate: 28
-            }
-          ]
-        ];
-
-        component['seriePathPointsDefinition'](component.containerSize, <any>chartSeries, range);
-
-        expect(component.seriesPointsCoordinates).toEqual(expectedPointsResult);
-      });
     });
 
     it('reorderSVGGroup: should apply false to `animate` and call `renderer.appendChild` and `querySelectorAll`', () => {

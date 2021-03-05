@@ -16,7 +16,6 @@ export class PoChartContainerComponent implements OnChanges {
   private _options: PoChartOptions;
   private _series: Array<PoChartSerie> = [];
 
-  allowNegativeData: boolean;
   axisOptions: PoChartAxisOptions;
   range: PoChartMinMaxValues;
   seriesByType;
@@ -46,7 +45,6 @@ export class PoChartContainerComponent implements OnChanges {
 
   @Input('p-series') set series(data: Array<PoChartSerie>) {
     this._series = data;
-    this.allowNegativeData = this.allowSeriesWithNegativeValues(this._series);
     this.setSeriesByType(this._series);
     this.setRange(this._series, this.options);
   }
@@ -76,15 +74,15 @@ export class PoChartContainerComponent implements OnChanges {
   }
 
   private getRange(series: Array<PoChartSerie>, options: PoChartOptions = {}): PoChartMinMaxValues {
-    const domain = this.mathsService.calculateMinAndMaxValues(series, this.allowNegativeData);
+    const domain = this.mathsService.calculateMinAndMaxValues(series);
     const minValue =
-      (!this.allowNegativeData && !options.axis?.minRange) || (this.allowNegativeData && domain.minValue > 0)
+      !options.axis?.minRange && domain.minValue > 0
         ? 0
         : options.axis?.minRange < domain.minValue
         ? options.axis.minRange
         : domain.minValue;
     const maxValue = options.axis?.maxRange > domain.maxValue ? options.axis.maxRange : domain.maxValue;
-    const updatedDomainValues = { minValue: !this.allowNegativeData && minValue < 0 ? 0 : minValue, maxValue };
+    const updatedDomainValues = { minValue, maxValue };
 
     return { ...domain, ...updatedDomainValues };
   }
@@ -93,10 +91,6 @@ export class PoChartContainerComponent implements OnChanges {
     if (!this.isTypeCircular) {
       this.range = this.getRange(series, options);
     }
-  }
-
-  private allowSeriesWithNegativeValues(series: Array<PoChartSerie>): boolean {
-    return series.every(serie => serie.type === PoChartType.Line || serie.type === PoChartType.Column);
   }
 
   private setSeriesByType(series: Array<PoChartSerie>) {

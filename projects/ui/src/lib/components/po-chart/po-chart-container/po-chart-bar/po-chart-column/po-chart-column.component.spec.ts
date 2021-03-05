@@ -40,7 +40,7 @@ describe('PoChartColumnComponent', () => {
       it('should call `calculateElementsMeasurements`, `xCoordinates` and `yCoordinates`', () => {
         const seriesIndex = 0;
         const serieItemDataIndex = 0;
-        const minMaxSeriesValues = { minValue: 1, maxValue: 30 };
+        const minMaxSeriesValues = { minValue: -10, maxValue: 30 };
         const serieValue = 1;
 
         component.series = [
@@ -71,9 +71,9 @@ describe('PoChartColumnComponent', () => {
       it('should return a string for the coordinates:', () => {
         const seriesIndex = 0;
         const serieItemDataIndex = 0;
-        const minMaxSeriesValues = { minValue: 1, maxValue: 30 };
         const serieValue = 1;
 
+        component.range = { minValue: -10, maxValue: 30 };
         component.series = [
           { label: 'category', data: [-10, 2, 3] },
           { label: 'category B', data: [10, 20, 30] }
@@ -83,19 +83,19 @@ describe('PoChartColumnComponent', () => {
           seriesIndex,
           serieItemDataIndex,
           component.containerSize,
-          minMaxSeriesValues,
+          component.range,
           serieValue
         );
-        expect(expectedResult).toBe('M 82 28 L 92 28 L 92 29 L 82 29 z');
+        expect(expectedResult).toBe('M 82 23 L 92 23 L 92 23 L 82 23 z');
       });
     });
 
-    it('shouldn`t subctract the spaceBetweenBars calculation by the X coordinate if series.length is lower than 2', () => {
+    it('shouldn`t subtract the spaceBetweenBars calculation by the X coordinate if series.length is lower than 2', () => {
       const seriesIndex = 0;
       const serieItemDataIndex = 0;
-      const minMaxSeriesValues = { minValue: 1, maxValue: 3 };
       const serieValue = 1;
 
+      const minMaxSeriesValues = { minValue: 0, maxValue: 3 };
       component.series = [{ label: 'category', data: [1, 2, 3] }];
 
       const expectedResult = component['barCoordinates'](
@@ -105,7 +105,7 @@ describe('PoChartColumnComponent', () => {
         minMaxSeriesValues,
         serieValue
       );
-      expect(expectedResult).toBe('M 86 28 L 100 28 L 100 38 L 86 38 z');
+      expect(expectedResult).toBe('M 86 21 L 100 21 L 100 28 L 86 28 z');
     });
   });
 });

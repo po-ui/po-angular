@@ -89,9 +89,10 @@ export class PoChartColumnComponent extends PoChartBarBaseComponent {
   }
 
   private yCoordinates(minMaxSeriesValues: PoChartMinMaxValues, svgPlottingAreaHeight: number, serieValue: number) {
-    const valueZeroPercentage = this.mathsService.getSeriePercentage(minMaxSeriesValues, 0);
+    const { minValue } = minMaxSeriesValues;
+    const minValuePercentage = this.mathsService.getSeriePercentage(minMaxSeriesValues, minValue < 0 ? 0 : minValue);
     const y1 = Math.round(
-      svgPlottingAreaHeight - svgPlottingAreaHeight * valueZeroPercentage + PoChartPlotAreaPaddingTop
+      svgPlottingAreaHeight - svgPlottingAreaHeight * minValuePercentage + PoChartPlotAreaPaddingTop
     );
 
     const yRatio = this.mathsService.getSeriePercentage(minMaxSeriesValues, serieValue);

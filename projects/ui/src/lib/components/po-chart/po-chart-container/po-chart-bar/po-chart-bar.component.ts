@@ -32,6 +32,7 @@ export class PoChartBarComponent extends PoChartBarBaseComponent {
       minMaxSeriesValues,
       svgPlottingAreaWidth,
       containerSize.axisXLabelWidth,
+      containerSize.svgWidth,
       serieValue
     );
     const { y1, y2 } = this.yCoordinates(
@@ -66,13 +67,14 @@ export class PoChartBarComponent extends PoChartBarBaseComponent {
     minMaxSeriesValues: PoChartMinMaxValues,
     svgPlottingAreaWidth: number,
     axisXLabelWidth: PoChartContainerSize['axisXLabelWidth'],
+    svgWidth: PoChartContainerSize['svgWidth'],
     serieValue: number
   ) {
-    // TO DO: tratamento para valores negativos.
-    const filterNegativeSerieValue = serieValue <= 0 ? 0 : serieValue;
+    const { minValue } = minMaxSeriesValues;
+    const valueZeroPercentage = this.mathsService.getSeriePercentage(minMaxSeriesValues, minValue < 0 ? 0 : minValue);
+    const x1 = axisXLabelWidth + (svgWidth - axisXLabelWidth) * valueZeroPercentage;
 
-    const xRatio = this.mathsService.getSeriePercentage(minMaxSeriesValues, filterNegativeSerieValue);
-    const x1 = axisXLabelWidth;
+    const xRatio = this.mathsService.getSeriePercentage(minMaxSeriesValues, serieValue);
     const x2 = Math.round(svgPlottingAreaWidth * xRatio + axisXLabelWidth);
 
     return { x1, x2 };

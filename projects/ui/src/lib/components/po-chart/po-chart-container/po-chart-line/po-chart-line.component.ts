@@ -26,8 +26,6 @@ export class PoChartLineComponent {
   private _range: PoChartMinMaxValues = {};
   private _series: Array<PoChartSerie> = [];
 
-  @Input('p-allow-negative-data') allowNegativeData;
-
   @Input('p-categories') categories: Array<string>;
 
   @Input('p-range') set range(value: PoChartMinMaxValues) {
@@ -111,18 +109,16 @@ export class PoChartLineComponent {
         serie.data.forEach((data, index) => {
           if (this.mathsService.verifyIfFloatOrInteger(data)) {
             const svgPathCommand = this.svgPathCommand();
-            // TO DO: tratamento para valores negativos se combinado com gráficos do tipo `coluna`.
-            const verifiedData = !this.allowNegativeData && data <= 0 ? 0 : data;
             const xCoordinate = this.xCoordinate(index, containerSize);
-            const yCoordinate = this.yCoordinate(range, verifiedData, containerSize);
+            const yCoordinate = this.yCoordinate(range, data, containerSize);
             const category = this.serieCategory(index, this.categories);
             const label = serie.label;
             const tooltip = serie.tooltip;
-            const tooltipLabel = this.getTooltipLabel(verifiedData, label, tooltip);
+            const tooltipLabel = this.getTooltipLabel(data, label, tooltip);
 
             pointCoordinates = [
               ...pointCoordinates,
-              { category, label, tooltipLabel, data: verifiedData, xCoordinate, yCoordinate, color }
+              { category, label, tooltipLabel, data: data, xCoordinate, yCoordinate, color }
             ];
             pathCoordinates += ` ${svgPathCommand}${xCoordinate} ${yCoordinate}`;
           }
