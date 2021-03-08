@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.9.0](https://github.com/po-ui/po-angular/compare/v4.8.0...v4.9.0) (2021-03-08)
+
+
+### Bug Fixes
+
+* **menu:** corrige "rota" ativa não destacada quando o componente era carregado dinamicamente ([7a4cd41](https://github.com/po-ui/po-angular/commit/7a4cd41b56c2ef72d64c99897c68299676b98548))
+
+
+### Features
+
+* **chart:** permite valores negativos em tipo `column` ([b514246](https://github.com/po-ui/po-angular/commit/b514246bb433ededfa288a39d018c4a0bee4f54f))
+* **dynamic-form:** adiciona propriedade `PoDynamicFormField.gridXXPull` ([b8c6c7a](https://github.com/po-ui/po-angular/commit/b8c6c7add21def8e4d9abe0157973fb5f508e223)), closes [#585](https://github.com/po-ui/po-angular/issues/585)
+* **dynamic-view:** adiciona propriedade `PoDynamicViewField.gridXXPull` ([b8c6c7a](https://github.com/po-ui/po-angular/commit/b8c6c7add21def8e4d9abe0157973fb5f508e223)), closes [#585](https://github.com/po-ui/po-angular/issues/585)
+* **multiselect:** adiciona estilo ao posicionar mouse sobre o campo ([b1c932b](https://github.com/po-ui/po-angular/commit/b1c932bd6ec355d3be92398353dbf8bc94c8e85a)), closes [#399](https://github.com/po-ui/po-angular/issues/399)
+
+
+
 # [4.8.0](https://github.com/po-ui/po-angular/compare/v4.7.0...v4.8.0) (2021-02-26)
 
 
