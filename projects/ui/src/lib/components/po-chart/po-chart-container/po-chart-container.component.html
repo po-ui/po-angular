@@ -65,6 +65,7 @@
   <svg:g
     *ngIf="type === 'donut'"
     po-chart-donut
+    [p-options]="options"
     [p-series]="seriesByType['donut']"
     [p-container-size]="containerSize"
     (p-circular-hover)="onSerieHover($event)"

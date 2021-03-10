@@ -19,22 +19,37 @@ import { PoChartCircularLabelComponent } from './po-chart-circular-label/po-char
 import { PoChartCircularPathComponent } from './po-chart-circular-path/po-chart-circular-path.component';
 import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.interface';
 import { PoChartLabelCoordinates } from '../../interfaces/po-chart-label-coordinates.interface';
+import { PoChartOptions } from '../../interfaces/po-chart-options.interface';
 import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinates.interface';
 import { PoChartSerie } from '../../interfaces/po-chart-serie.interface';
 
 @Directive()
 export abstract class PoChartCircularComponent {
+  private _options: PoChartOptions;
   private _series: Array<PoChartSerie>;
 
+  canDisplayLabels: boolean = false;
   seriesLabels: Array<PoChartLabelCoordinates> = [];
   seriesList: Array<PoChartPathCoordinates>;
   showLabels: boolean = false;
 
+  protected innerRadius: number;
   protected totalValue: number;
 
   private animate: boolean;
 
   @Input('p-container-size') containerSize: PoChartContainerSize;
+
+  @Input('p-options') set options(value: PoChartOptions) {
+    if (!isNaN(value?.innerRadius)) {
+      this._options = value;
+      this.innerRadius = Math.min(Math.max(this._options.innerRadius, 0), 100);
+    }
+  }
+
+  get options() {
+    return this._options;
+  }
 
   @Input('p-series') set series(value: Array<PoChartSerie>) {
     this._series = value;
@@ -101,7 +116,7 @@ export abstract class PoChartCircularComponent {
       const coordinates = this.calculateCoordinates(height, startRadianAngle, endRadianAngle);
 
       this.svgPaths.toArray()[index].applyCoordinates(coordinates);
-      this.showLabels = true;
+      this.showLabels = this.canDisplayLabels;
     });
   }
 
@@ -195,6 +210,6 @@ export abstract class PoChartCircularComponent {
     }, []);
   }
 
-  protected abstract getTooltipLabel(data, label, tooltip);
   protected abstract calculateCoordinates(height, startRadianAngle, currentEndRadianAngle);
+  protected abstract getTooltipLabel(data, label, tooltip);
 }

@@ -2,9 +2,9 @@ import { ChangeDetectorRef, Component, NgZone, OnChanges, SimpleChanges } from '
 
 import { convertNumberToDecimal } from '../../../../../utils/util';
 import { PoDefaultColorsTextBlack } from '../../../../../services/po-color/po-colors.constant';
+import { PoChartDonutDefaultThickness, PoChartStartAngle } from '../../../helpers/po-chart-default-values.constant';
 
 import { PoChartCircularComponent } from '../po-chart-circular.component';
-import { PoChartDonutThickness, PoChartStartAngle } from '../../../helpers/po-chart-default-values.constant';
 
 @Component({
   selector: '[po-chart-donut]',
@@ -20,7 +20,7 @@ export class PoChartDonutComponent extends PoChartCircularComponent implements O
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.series || changes.containerSize) {
+    if (changes.series || changes.containerSize || changes.options) {
       this.drawSeries(this.series, this.containerSize.svgHeight);
       this.applySeriesLabels(this.seriesList, this.containerSize.svgHeight);
     }
@@ -28,7 +28,8 @@ export class PoChartDonutComponent extends PoChartCircularComponent implements O
 
   protected calculateCoordinates(height: number, startRadianAngle: number, endRadianAngle: number) {
     const radius = height / 2;
-    const innerRadius = radius - PoChartDonutThickness;
+
+    const innerRadius = this.getInnerRadius(radius);
 
     const sinAlpha = Math.sin(startRadianAngle);
     const cosAlpha = Math.cos(startRadianAngle);
@@ -49,6 +50,8 @@ export class PoChartDonutComponent extends PoChartCircularComponent implements O
     const endInnerY = radius + sinBeta * innerRadius;
 
     const largeArc = endRadianAngle - startRadianAngle > Math.PI;
+
+    this.verifyDisplayLabels(radius, innerRadius);
 
     return [
       'M',
@@ -100,15 +103,21 @@ export class PoChartDonutComponent extends PoChartCircularComponent implements O
 
   private calculateLabelCoordinates(height: number, startRadianAngle: number, endRadianAngle: number) {
     const radius = height / 2;
-    const innerRadius = radius - PoChartDonutThickness;
+    const innerRadius = this.getInnerRadius(radius);
 
     const sliceCenterAngle = (startRadianAngle + endRadianAngle) / 2;
-    const labelRadius = innerRadius + +(PoChartDonutThickness / 2);
+    const labelRadius = innerRadius + (radius - innerRadius) / 2;
 
     const xCoordinate = labelRadius * Math.cos(sliceCenterAngle) + radius;
     const yCoordinate = labelRadius * Math.sin(sliceCenterAngle) + radius;
 
     return { xCoordinate, yCoordinate };
+  }
+
+  private getInnerRadius(radius: number): number {
+    const defaultInnerRadius = radius - PoChartDonutDefaultThickness;
+
+    return this.innerRadius >= 0 ? (this.innerRadius / 100) * radius : defaultInnerRadius;
   }
 
   private getPercentValue(value: number, totalValue: number) {
@@ -124,5 +133,9 @@ export class PoChartDonutComponent extends PoChartCircularComponent implements O
     }
 
     return this.poChartWhiteColor;
+  }
+
+  private verifyDisplayLabels(radius: number, innerRadius: number): void {
+    this.canDisplayLabels = radius - innerRadius >= radius - (radius - PoChartDonutDefaultThickness);
   }
 }

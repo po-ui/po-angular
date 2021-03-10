@@ -13,8 +13,8 @@ export const PoChartPlotAreaPaddingTop = 8;
 // Angulação inicial de raio para gráficos do tipo circular
 export const PoChartStartAngle = -Math.PI / 2;
 
-// Chamado de coroa circular, refere-se à área entre os círculos externos e internos e que define a espessura do gráfico do tipo Donut.
-export const PoChartDonutThickness = 40;
+// Valor referente à espessura padrão do gráfico do tipo Donut.
+export const PoChartDonutDefaultThickness = 40;
 
 // Valor para subtração do valor de angulo radiano final de série em tipos Donut e Pie. Necessário para o caso de uma série única: se uma circunferência tiver valores de ângulo de raio inicial e final iguais não plota.
 export const PoChartCompleteCircle = 0.0001;

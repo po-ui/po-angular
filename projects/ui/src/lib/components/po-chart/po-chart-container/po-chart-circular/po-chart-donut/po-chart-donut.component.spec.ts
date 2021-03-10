@@ -78,6 +78,32 @@ describe('PoChartDonutComponent', () => {
       expect(component['applySeriesLabels']).toHaveBeenCalledWith(seriesList, containerSize.svgHeight);
     });
 
+    it('ngOnChanges: should call `drawSeries` and `applySeriesLabels` if `changes.options`', () => {
+      const series: Array<PoChartSerie> = [{ label: 'teste', data: 30 }];
+      const containerSize: PoChartContainerSize = { svgHeight: 300 };
+      const seriesList = [];
+      const changes: SimpleChanges = {
+        options: {
+          previousValue: 20,
+          currentValue: 30,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.series = series;
+      component.containerSize = containerSize;
+      component.seriesList = seriesList;
+
+      spyOn(component, <any>'drawSeries');
+      spyOn(component, <any>'applySeriesLabels');
+
+      component.ngOnChanges(changes);
+
+      expect(component['drawSeries']).toHaveBeenCalledWith(series, containerSize.svgHeight);
+      expect(component['applySeriesLabels']).toHaveBeenCalledWith(seriesList, containerSize.svgHeight);
+    });
+
     it('ngOnChanges: should`t call `drawSeries` and `applySeriesLabels`', () => {
       const series: Array<PoChartSerie> = [{ label: 'teste', data: 30 }];
       const containerSize: PoChartContainerSize = { svgHeight: 300 };
@@ -244,6 +270,31 @@ describe('PoChartDonutComponent', () => {
       const result = component['getTextColor'](color);
 
       expect(result).toEqual(expectedResult);
+    });
+
+    it('getInnerRadius: should return innerRadius value based on `innerRadius` value', () => {
+      const radius = 200;
+      component.options = { innerRadius: 50 };
+
+      expect(component['getInnerRadius'](radius)).toBe(100);
+    });
+
+    it('getInnerRadius: should return the innerRadius default value ia `innerRadius` is undefined', () => {
+      const radius = 200;
+
+      expect(component['getInnerRadius'](radius)).toBe(160);
+    });
+
+    it('verifyDisplayLabels: should apply false to `canDisplayLabels` if `innerRadius` value exceeds the maximum allowed chart thickness', () => {
+      component['verifyDisplayLabels'](200, 180);
+
+      expect(component.canDisplayLabels).toBe(false);
+    });
+
+    it('verifyDisplayLabels: should apply trie to `canDisplayLabels` if `innerRadius` value respects the chart thickness maximun width', () => {
+      component['verifyDisplayLabels'](200, 120);
+
+      expect(component.canDisplayLabels).toBe(true);
     });
   });
 });
