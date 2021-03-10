@@ -9,6 +9,7 @@ import { PoChartCircularLabelComponent } from './po-chart-circular-label/po-char
 import { PoChartCircularPathComponent } from './po-chart-circular-path/po-chart-circular-path.component';
 import { PoChartContainerSize } from '../../interfaces/po-chart-container-size.interface';
 import { PoChartModule } from '../../po-chart.module';
+import { expectPropertiesValues } from 'projects/templates/src/lib/util-test/util-expect.spec';
 
 @Component({
   selector: 'po-chart-circular-test',
@@ -173,6 +174,7 @@ describe('PoChartCircularComponent', () => {
       const expectedEndAngle = 4.71228898038469;
       const height = 200;
 
+      component.canDisplayLabels = true;
       component['totalValue'] = 30;
 
       const spyApplyCoordinates = spyOn(componentPath, 'applyCoordinates');
@@ -400,6 +402,20 @@ describe('PoChartCircularComponent', () => {
       component.series = series;
 
       expect(component['animate']).toBe(true);
+    });
+
+    it('p-options: should update property with valid values', () => {
+      const validValue = [{ innerRadius: 30 }];
+
+      expectPropertiesValues(component, 'options', validValue, validValue);
+      expect(component['innerRadius']).toBe(30);
+    });
+
+    it('p-options: shouldn`t update property if receives invalid values', () => {
+      const invalidValues = [undefined, null, '', false, 0, ['1'], [{ key: 'value' }]];
+
+      expectPropertiesValues(component, 'options', invalidValues, undefined);
+      expect(component['innerRadius']).toBeUndefined();
     });
   });
 });

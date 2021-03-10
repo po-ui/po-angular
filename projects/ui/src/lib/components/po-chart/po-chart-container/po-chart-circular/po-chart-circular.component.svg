@@ -10,11 +10,13 @@
   </svg:g>
 
   <!-- SERIES LABELS -->
-  <svg:g *ngFor="let item of seriesLabels; let i = index">
-    <svg:g #svgLabels po-chart-circular-label
-      [attr.key]="'po-chart-circular-label-' + i"
-      [p-serie]="item"
-      [p-show-label]="showLabels">
+  <svg:g *ngIf="canDisplayLabels">
+    <svg:g *ngFor="let item of seriesLabels; let i = index">
+      <svg:g #svgLabels po-chart-circular-label
+        [attr.key]="'po-chart-circular-label-' + i"
+        [p-serie]="item"
+        [p-show-label]="showLabels">
+      </svg:g>
     </svg:g>
   </svg:g>
 </svg:g>
