@@ -61,6 +61,9 @@ export interface PoDynamicFormField extends PoDynamicField {
   /** Máscara para o campo. */
   mask?: string;
 
+  /** Define que o valor do componente será conforme especificado na mascára. O valor padrão é `false`. */
+  maskFormatModel?: boolean;
+
   /** Define o ícone que será exibido no início do campo.
    * > Esta propriedade o pode ser utilizado nos campos:
    * - Input;
