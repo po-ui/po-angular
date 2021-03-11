@@ -102,6 +102,7 @@ export class PoDynamicFormFieldsBaseComponent {
     const control = this.getComponentControl(field);
     const options = !!field.options ? this.convertOptions(field.options) : undefined;
     const focus = this.hasFocus(field);
+    const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
 
     const componentClass = getGridColumnsClasses(
       field.gridSmColumns,
@@ -119,6 +120,7 @@ export class PoDynamicFormFieldsBaseComponent {
 
     return {
       label: this.titleCasePipe.transform(field.property),
+      maskFormatModel: this.compareTo(type, PoDynamicFieldType.Time),
       ...field,
       componentClass,
       control,
