@@ -1,5 +1,6 @@
 import { Input, Directive } from '@angular/core';
 
+import { InputBoolean } from '../../decorators';
 import { convertToInt } from './../../utils/util';
 
 import { PoSlideItem } from './interfaces/po-slide-item.interface';
@@ -89,6 +90,18 @@ export abstract class PoSlideBaseComponent {
   get slides(): Array<PoSlideItem | string | any> {
     return this._slides;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a exibição das setas de navegação.
+   *
+   * @default `false`
+   */
+
+  @Input('p-hide-arrows') @InputBoolean() hideArrows: boolean = false;
 
   abstract setSlideHeight(height: number): void;
 
