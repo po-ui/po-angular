@@ -255,6 +255,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       const newField = component['createField'](field);
 
       expect(typeof newField === 'object').toBe(true);
+      expect(newField.maskFormatModel).toBe(false);
       expect(Array.isArray(newField.options)).toBe(true);
       expect(newField.label).toBe(field.label);
 
@@ -262,6 +263,25 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       expect(spyGetGridColumnsClasses).toHaveBeenCalled();
       expect(spyConvertOptions).toHaveBeenCalled();
       expect(spyHasFocus).toHaveBeenCalled();
+    });
+
+    it(`createField: should set maskFormatModel with true if type is 'time'`, () => {
+      const field = { property: 'propertyName', label: 'labelName', type: 'time' };
+
+      const newField = component['createField'](field);
+
+      expect(newField.label).toBe(field.label);
+      expect(newField.maskFormatModel).toBe(true);
+    });
+
+    it(`createField: should set maskFormatModel and mask`, () => {
+      const field = { property: 'propertyName', label: 'labelName', mask: '99/9999', maskFormatModel: true };
+
+      const newField = component['createField'](field);
+
+      expect(newField.label).toBe(field.label);
+      expect(newField.mask).toBe(field.mask);
+      expect(newField.maskFormatModel).toBe(true);
     });
 
     it(`hasFocus: should return true if 'autoFocus' is equal to 'field.property'`, () => {
