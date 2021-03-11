@@ -15,10 +15,14 @@
       </ng-container>
     </div>
 
-    <po-slide-control *ngIf="hasSlides && slides.length > 1" p-control="previous" (p-click)="previousControl()">
+    <po-slide-control
+      *ngIf="!hideArrows && hasSlides && slides.length > 1"
+      p-control="previous"
+      (p-click)="previousControl()"
+    >
     </po-slide-control>
 
-    <po-slide-control *ngIf="hasSlides && slides.length > 1" p-control="next" (p-click)="nextControl()">
+    <po-slide-control *ngIf="!hideArrows && hasSlides && slides.length > 1" p-control="next" (p-click)="nextControl()">
     </po-slide-control>
   </div>
 
