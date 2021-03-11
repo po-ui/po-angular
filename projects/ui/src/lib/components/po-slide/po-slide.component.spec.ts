@@ -163,6 +163,14 @@ describe('PoSlideComponent:', () => {
       expect(component['setSlideHeight']).not.toHaveBeenCalled();
     });
 
+    it('getCurrentSlideIndex: should call and return current slide index', () => {
+      component.currentSlideIndex = 1;
+
+      const index = component.getCurrentSlideIndex();
+
+      expect(index).toBe(1);
+    });
+
     it('goToItem: should set `currentSlideIndex` and call `animate` with `offset`', () => {
       const index = 3;
 
