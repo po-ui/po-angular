@@ -100,7 +100,6 @@ export abstract class PoSlideBaseComponent {
    *
    * @default `false`
    */
-
   @Input('p-hide-arrows') @InputBoolean() hideArrows: boolean = false;
 
   abstract setSlideHeight(height: number): void;

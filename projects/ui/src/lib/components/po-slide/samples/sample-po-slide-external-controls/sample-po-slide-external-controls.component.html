@@ -1,0 +1,40 @@
+<po-slide #slideComponent p-height="450" [p-slides]="sampleItems" p-interval="0" p-hide-arrows>
+  <ng-template p-slide-content-template let-item>
+    <div
+      class="sample-background-image"
+      [style.background-image]="'url(' + item.imagem + ')'"
+      [style.backgroundSize]="'cover'"
+      [style.height.%]="100"
+    >
+      <div class="po-row">
+        <div
+          class="po-offset-sm-1 po-offset-md-1 po-offset-lg-1 po-offset-xl-1 po-lg-5 po-sm-10 po-mt-4 po-mb-4 po-p-5"
+          [style.background]="'white'"
+        >
+          <div class="po-font-text">{{ item.date }} by {{ item.author }}</div>
+          <div class="po-font-display">{{ item.title }}</div>
+          <po-divider></po-divider>
+          <div class="po-font-text-large-bold po-mb-3">{{ item.description }}</div>
+          <po-button p-label="Read More" (p-click)="redirectLink(item.link)"></po-button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</po-slide>
+
+<div class="po-row">
+  <po-button
+    class="po-xl-4 po-lg-4 po-md-6 po-sm-6"
+    p-label="Previous"
+    (p-click)="previousBtn()"
+    [p-disabled]="slideComponent.getCurrentSlideIndex() === 0"
+  >
+  </po-button>
+  <po-button
+    class="po-offset-lg-4 po-offset-xl-4 po-xl-4 po-lg-4 po-md-6 po-sm-6"
+    p-label="Next"
+    (p-click)="nextBtn()"
+    [p-disabled]="slideComponent.getCurrentSlideIndex() === sampleItems.length - 1"
+  >
+  </po-button>
+</div>

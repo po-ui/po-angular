@@ -46,6 +46,11 @@ const poSlideTiming = '250ms ease';
  *   <file name="sample-po-slide-landscapes/sample-po-slide-landscapes.component.html"> </file>
  *   <file name="sample-po-slide-landscapes/sample-po-slide-landscapes.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-slide-external-controls" title="PO Slide - External Controls">
+ *  <file name="sample-po-slide-external-controls/sample-po-slide-external-controls.component.html"> </file>
+ *  <file name="sample-po-slide-external-controls/sample-po-slide-external-controls.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-slide',
@@ -112,6 +117,21 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, O
     }
   }
 
+  /**
+   * Método que retorna o index do slide atual
+   *
+   * ```
+   * @ViewChild('slideComponent', { static: true }) slideComponent: PoSlideComponent;
+   *  myFunction() {
+   *    let currentIndex = this.slideComponent.getCurrentSlideIndex();
+   * }
+   *
+   * ```
+   */
+  getCurrentSlideIndex(): number {
+    return this.currentSlideIndex;
+  }
+
   goToItem(index: number) {
     if (this.interval > poSlideIntervalMin) {
       this.startInterval();
@@ -129,6 +149,17 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, O
     this.next();
   }
 
+  /**
+   * Método para chamar o próximo slide.
+   *
+   * ```
+   * @ViewChild('slideComponent', { static: true }) slideComponent: PoSlideComponent;
+   *
+   * myFunction() {
+   *  this.slideComponent.next();
+   * }
+   * ```
+   */
   next() {
     if (this.currentSlideIndex + 1 === this.slideItems.length) {
       this.currentSlideIndex = 0;
@@ -138,7 +169,17 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, O
     this.currentSlideIndex = (this.currentSlideIndex + 1) % this.slideItems.length;
     this.animate(this.offset);
   }
-
+  /**
+   * Método para chamar o slide anterior.
+   *
+   * ```
+   * @ViewChild('slideComponent', { static: true }) slideComponent: PoSlideComponent;
+   *
+   * myFunction() {
+   *  this.slideComponent.previous();
+   * }
+   * ```
+   */
   previous() {
     if (this.currentSlideIndex === 0) {
       this.currentSlideIndex = this.slideItems.length - 1;
