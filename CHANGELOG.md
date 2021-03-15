@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.10.0](https://github.com/po-ui/po-angular/compare/v4.9.0...v4.10.0) (2021-03-15)
+
+
+### Bug Fixes
+
+* **chart:** corrige erro quando passado [null] para `serie.data` ([46cc332](https://github.com/po-ui/po-angular/commit/46cc332e66acefc83ae452105169ecc3c48cabac))
+* **datepicker-range:** ajusta validação dos campos ([2a0fccf](https://github.com/po-ui/po-angular/commit/2a0fccfc9ef89549fe6c324d2b36795dfca12e92))
+* **dynamic-form:** corrige valor do model quando informar tipo `time` ([a67a804](https://github.com/po-ui/po-angular/commit/a67a804dfc2fc8c842749d877aa5c0da30d6dc3e)), closes [#766](https://github.com/po-ui/po-angular/issues/766)
+* **email:** corrige expressão regular para permitir letras maiúsculas ([0da450d](https://github.com/po-ui/po-angular/commit/0da450daf1ea6785e1d0e0eadc9b53ae1867d5d7)), closes [#782](https://github.com/po-ui/po-angular/issues/782)
+
+
+### Features
+
+* **chart:** nova propriedade `PoChartOptions.innerRadius` ([455e481](https://github.com/po-ui/po-angular/commit/455e481a88e52d5876ad1b106d0fc201d7b18910))
+* **chart:** permite valores negativos em tipo `bar` ([de33653](https://github.com/po-ui/po-angular/commit/de33653234b786a9cb89434f356a8a79d15560b7))
+* **dynamic-form:** adiciona a propriedade `PoDynamicFormField.maskFormatModel` ([cc66f4c](https://github.com/po-ui/po-angular/commit/cc66f4c3653c1144f07ed898c62265daca71b7c5))
+* **slide:** nova propriedade `hide-arrows` ([4bfbf09](https://github.com/po-ui/po-angular/commit/4bfbf09e02820d92a017148330e5fcac6c570b7e))
+* **slide:** publica os métodos `next`, `previous` e `getCurrentSlideIndex` ([6b403e7](https://github.com/po-ui/po-angular/commit/6b403e73f16cf74639c7e0780d9b21e1b3311fa2))
+
+
+
 # [4.9.0](https://github.com/po-ui/po-angular/compare/v4.8.0...v4.9.0) (2021-03-08)
 
 
