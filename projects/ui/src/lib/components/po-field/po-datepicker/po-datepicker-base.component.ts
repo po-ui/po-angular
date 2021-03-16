@@ -73,6 +73,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
   private shortLanguage: string;
+  private previousValue: any;
   protected date: Date;
   protected firstStart = true;
   protected hour: string = 'T00:00:01-00:00';
@@ -374,8 +375,9 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   // Executa a função onChange
   callOnChange(value: any, retry: boolean = true) {
-    if (this.onChangeModel) {
+    if (this.onChangeModel && value !== this.previousValue) {
       this.onChangeModel(value);
+      this.previousValue = value;
     } else if (retry) {
       setTimeout(() => this.callOnChange(value, false));
     }

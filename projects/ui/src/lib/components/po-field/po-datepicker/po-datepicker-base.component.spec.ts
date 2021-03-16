@@ -449,7 +449,7 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(component['validatorChange']).toBe(registerOnValidatorChangeFn);
     });
 
-    it('callOnChange: should call `onChangeModel` with `value` param if `onChangeModel` is truthy', () => {
+    it('callOnChange: should call `onChangeModel` with `value` param if `onChangeModel` is truthy and `value` is different from the `previousValue`', () => {
       const expectedValue = '2019-04-04';
 
       const spyOnChangeModel = spyOn(component, <any>'onChangeModel');
@@ -457,6 +457,18 @@ describe('PoDatepickerBaseComponent:', () => {
       component.callOnChange(expectedValue);
 
       expect(spyOnChangeModel).toHaveBeenCalledWith(expectedValue);
+    });
+
+    it('callOnChange: shouldn`t call `onChangeModel` if `value` is equal to the `previousValue`', () => {
+      const expectedValue = '2019-04-04';
+
+      component['previousValue'] = '2019-04-04';
+
+      const spyOnChangeModel = spyOn(component, <any>'onChangeModel');
+
+      component.callOnChange(expectedValue);
+
+      expect(spyOnChangeModel).not.toHaveBeenCalled();
     });
 
     it('callOnChange: should call `callOnChange` only twice if `retry` param is true and `onChangeModel` is falsy', fakeAsync(() => {
