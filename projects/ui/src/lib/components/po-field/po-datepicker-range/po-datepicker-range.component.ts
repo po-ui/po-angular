@@ -150,6 +150,10 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     this.updateModel(this.dateRange);
   }
 
+  eventOnClick($event: any) {
+    this.poMaskObject.click($event);
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -181,8 +185,9 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     this.removeFocusFromDatePickerRangeField();
   }
 
-  onFocus() {
+  onFocus(event: any) {
     this.applyFocusOnDatePickerRangeField();
+    this.poMaskObject.resetPositions(event);
   }
 
   onKeydown(event?: any) {

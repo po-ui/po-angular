@@ -177,6 +177,7 @@ export class PoMask {
 
           default:
             // qualquer outra tecla válida
+            this.getPosition($event);
             value = value.slice(0, this.initialPosition) + $event.key + value.slice(this.finalPosition);
             value = this.controlFormatting(value);
             $event.target.value = value;
