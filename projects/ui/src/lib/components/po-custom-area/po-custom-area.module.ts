@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [PoCustomAreaComponent],
-  imports: [CommonModule, HttpClientModule],
-  exports: [PoCustomAreaComponent]
+  imports: [CommonModule, HttpClientModule]
 })
 export class PoCustomAreaModule {}
