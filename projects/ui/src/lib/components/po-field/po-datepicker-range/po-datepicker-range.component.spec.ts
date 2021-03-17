@@ -229,6 +229,15 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component.endDateInputValue).toBe('');
     });
 
+    it('eventOnClick: should click when select text and edit model', () => {
+      spyOn(component['poMaskObject'], 'click');
+      const eventMock = { target: { name: '' } };
+
+      component.eventOnClick(eventMock);
+
+      expect(component['poMaskObject'].click).toHaveBeenCalledWith(eventMock);
+    });
+
     it('focus: should call `focus` of datepicker-range', () => {
       component.startDateInput = {
         nativeElement: {
@@ -282,9 +291,12 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('onFocus: should call `applyFocusOnDatePickerRangeField`', () => {
       spyOn(component, <any>'applyFocusOnDatePickerRangeField');
+      spyOn(component['poMaskObject'], 'resetPositions');
+      const eventMock = { target: { name: '' } };
 
-      component.onFocus();
+      component.onFocus(eventMock);
       expect(component['applyFocusOnDatePickerRangeField']).toHaveBeenCalled();
+      expect(component['poMaskObject'].resetPositions).toHaveBeenCalledWith(eventMock);
     });
 
     it('onKeydown: should call `poMaskObject.keydown` if `readonly` is false', () => {
@@ -1653,7 +1665,6 @@ describe('PoDatepickerRangeComponent:', () => {
       const keydownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
       // keyCode 37 is arrow left
       const keyupBoardEventArrowLeft = new KeyboardEvent('keyup', <any>{ keyCode: 37 });
-
       spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.value = '24/1';
@@ -1768,7 +1779,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const startDateInputName = `input[name="${component.startDateInputName}"]`;
 
       const startDateInput = fixture.debugElement.query(By.css(startDateInputName));
-      startDateInput.triggerEventHandler('focus', null);
+      const eventMock = { target: { name: '' } };
+      startDateInput.triggerEventHandler('focus', eventMock);
 
       fixture.detectChanges();
 
@@ -1782,7 +1794,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const endDateInputName = `input[name="${component.endDateInputName}"]`;
 
       const endDateInput = fixture.debugElement.query(By.css(endDateInputName));
-      endDateInput.triggerEventHandler('focus', null);
+      const eventMock = { target: { name: '' } };
+      endDateInput.triggerEventHandler('focus', eventMock);
 
       fixture.detectChanges();
 

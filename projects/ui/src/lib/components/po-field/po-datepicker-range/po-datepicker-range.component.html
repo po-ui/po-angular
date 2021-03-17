@@ -11,9 +11,10 @@
         [name]="startDateInputName"
         [readonly]="readonly"
         (blur)="onBlur($event)"
-        (focus)="onFocus()"
+        (focus)="onFocus($event)"
         (keydown)="onKeydown($event)"
         (keyup)="onKeyup($event)"
+        (click)="eventOnClick($event)"
       />
     </div>
 
@@ -30,9 +31,10 @@
         [name]="endDateInputName"
         [readonly]="readonly"
         (blur)="onBlur($event)"
-        (focus)="onFocus()"
+        (focus)="onFocus($event)"
         (keydown)="onKeydown($event)"
         (keyup)="onKeyup($event)"
+        (click)="eventOnClick($event)"
       />
     </div>
 
