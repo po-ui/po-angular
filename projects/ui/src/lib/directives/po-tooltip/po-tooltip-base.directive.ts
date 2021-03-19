@@ -21,9 +21,12 @@ const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
  */
 
 @Directive()
-export class PoTooltipBaseDirective {
+export abstract class PoTooltipBaseDirective {
+  private _displayTooltip: boolean = false;
   private _tooltip: string = '';
+
   protected _tooltipPosition?: string = 'bottom';
+  protected tooltipContent;
 
   /**
    * @description
@@ -84,4 +87,16 @@ export class PoTooltipBaseDirective {
    * @default `false`
    */
   @Input('p-append-in-body') @InputBoolean() appendInBody: boolean = false;
+
+  @Input('p-display-tooltip') @InputBoolean() set displayTooltip(value: boolean) {
+    this._displayTooltip = value;
+    this._displayTooltip ? this.addTooltipAction() : this.removeTooltipAction();
+  }
+
+  get displayTooltip(): boolean {
+    return this._displayTooltip;
+  }
+
+  protected abstract addTooltipAction();
+  protected abstract removeTooltipAction();
 }

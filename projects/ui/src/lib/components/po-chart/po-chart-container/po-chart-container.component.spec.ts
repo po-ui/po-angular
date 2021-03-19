@@ -226,12 +226,20 @@ describe('PoChartContainerComponent', () => {
         [PoChartType.Bar]: chartSeries.filter(serie => serie.type === PoChartType.Bar),
         [PoChartType.Line]: chartSeries.filter(serie => serie.type === PoChartType.Line),
         [PoChartType.Donut]: chartSeries.filter(serie => serie.type === PoChartType.Donut),
-        [PoChartType.Pie]: chartSeries.filter(serie => serie.type === PoChartType.Pie)
+        [PoChartType.Pie]: chartSeries.filter(serie => serie.type === PoChartType.Pie),
+        [PoChartType.Area]: chartSeries.filter(serie => serie.type === PoChartType.Area)
       };
 
       component['setSeriesByType'](chartSeries);
 
       expect(component.seriesByType).toEqual(expectedResult);
+    });
+
+    it('getCategoriesCoordinates: should apply param value to `categoriesCoordinates`', () => {
+      const value = [0, 1, 2, 3, 4];
+      component.getCategoriesCoordinates(value);
+
+      expect(component.categoriesCoordinates).toEqual(value);
     });
   });
 

@@ -14,7 +14,7 @@
     (p-serie-hover)="onSeriesHover($event)"
   ></po-chart-container>
 
-  <!-- Diretiva para injeção de gráficos do tipo circular. Serão repassados para dentro do po-chart-container futuramente.  -->
+  <!-- Injeção de gráficos do tipo gauge. Remover na depreciação.  -->
   <ng-template #chartContainer></ng-template>
 
   <div *ngIf="!isChartGaugeType && options?.legend !== false">

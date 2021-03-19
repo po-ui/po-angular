@@ -1,4 +1,5 @@
 <svg:svg
+  #svgELement
   class="po-chart-svg-element"
   preserveAspectRatio="xMidYMin meet"
   [attr.viewBox]="viewBox"
@@ -9,17 +10,34 @@
   <svg:g
     *ngIf="!isTypeCircular"
     po-chart-axis
+    [p-align-by-the-corners]="alignByTheCorners"
     [p-range]="range"
     [p-type]="type"
     [p-series]="series"
     [p-container-size]="containerSize"
     [p-options]="axisOptions"
     [p-categories]="categories"
+    (p-categories-coordinates)="getCategoriesCoordinates($event)"
+  ></svg:g>
+
+  <!-- chart area -->
+  <svg:g
+    *ngIf="(type === 'area' || type === 'line' || type === 'column') && seriesByType['area'].length"
+    po-chart-area
+    [p-align-by-the-corners]="alignByTheCorners"
+    [p-svg-space]="svgSpace"
+    [p-categories]="categories"
+    [p-categories-coordinates]="categoriesCoordinates"
+    [p-range]="range"
+    [p-series]="seriesByType['area']"
+    [p-container-size]="containerSize"
+    (p-bar-hover)="onSerieHover($event)"
+    (p-bar-click)="onSerieClick($event)"
   ></svg:g>
 
   <!-- chart column -->
   <svg:g
-    *ngIf="(type === 'column' || type === 'line') && seriesByType['column'].length"
+    *ngIf="(type === 'area' || type === 'line' || type === 'column') && seriesByType['column'].length"
     po-chart-column
     [p-categories]="categories"
     [p-range]="range"
@@ -31,7 +49,7 @@
 
   <!-- chart line -->
   <svg:g
-    *ngIf="(type === 'column' || type === 'line') && seriesByType['line'].length"
+    *ngIf="(type === 'area' || type === 'line' || type === 'column') && seriesByType['line'].length"
     po-chart-line
     [p-categories]="categories"
     [p-range]="range"

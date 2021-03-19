@@ -66,5 +66,18 @@ describe('PoChartPathComponent', () => {
 
       expect(component.pathWidth).toBe(pathWidth);
     });
+
+    it('p-color: should apply `po-border-color-01` value to color if `p-color` includes `po-color` and `chartLine` is true', () => {
+      component.chartLine = true;
+      component.color = 'po-color-01';
+
+      expect(component.color).toBe('po-border-color-01');
+    });
+
+    it('p-color: should apply received value to `color` if color does not contain `po-color`', () => {
+      component.color = 'red';
+
+      expect(component.color).toBe('red');
+    });
   });
 });

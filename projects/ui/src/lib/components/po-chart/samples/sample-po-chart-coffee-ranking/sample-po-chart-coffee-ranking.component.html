@@ -55,15 +55,26 @@
   </div>
 
   <div class="po-row">
-    <po-widget class="po-md-6 po-mt-2" p-height="200">
-      <div class="po-font-title po-text-center po-pt-5">66 billion</div>
-      <div class="po-text-center">cups of coffee are consumed per year in U.S.</div>
-    </po-widget>
+    <po-chart
+      class="po-md-6 po-mt-2"
+      p-title="While the coffee price falls, all three of these companies profit margins have risen  - (US$ millions)"
+      [p-options]="chartAreaOptions"
+      [p-categories]="chartAreaCategories"
+      [p-series]="chartAreaSeries"
+    >
+    </po-chart>
 
-    <po-widget class="po-md-6 po-mt-2" p-height="200">
-      <div class="po-font-title po-text-center po-pt-5">2nd most</div>
-      <div class="po-text-center">traded commodity in the world second to Oil.</div>
-    </po-widget>
+    <div class="po-md-6 po-mt-2">
+      <po-widget p-height="198">
+        <div class="po-font-title po-text-center po-pt-5">66 billion</div>
+        <div class="po-text-center">cups of coffee are consumed per year in U.S.</div>
+      </po-widget>
+
+      <po-widget p-height="198">
+        <div class="po-font-title po-text-center po-pt-5">2nd most</div>
+        <div class="po-text-center">traded commodity in the world second to Oil.</div>
+      </po-widget>
+    </div>
   </div>
 </div>
 

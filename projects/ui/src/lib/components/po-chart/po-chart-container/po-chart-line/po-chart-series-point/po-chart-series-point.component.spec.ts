@@ -271,16 +271,16 @@ describe('PoChartSeriesPointComponent', () => {
       expect(spyDisplayPointsWithDelay).toHaveBeenCalledWith(component.coordinates);
     });
 
-    it('p-color: should apply value to `colorPalletteFillColorClass` if p-color includes `po-border-color`', () => {
-      component.color = 'po-border-color-01';
+    it('p-color: should apply `po-border-color-01` value to `strokeColor` if p-color includes `po-color`', () => {
+      component.color = 'po-color-01';
 
-      expect(component['colorPalletteFillColorClass']).toBe('po-color-01');
+      expect(component.strokeColor).toBe('po-border-color-01');
     });
 
-    it('p-color: should apply value to `colorPalletteFillColorClass` if p-color includes `po-border-color`', () => {
+    it('p-color: should apply received value to `strokeColor` if color does not contain `po-color`', () => {
       component.color = 'red';
 
-      expect(component['colorPalletteFillColorClass']).toBeUndefined();
+      expect(component.strokeColor).toBe('red');
     });
   });
 

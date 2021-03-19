@@ -8,6 +8,8 @@ import { PoChartLabelCoordinates } from '../../../interfaces/po-chart-label-coor
   templateUrl: './po-chart-axis-label.component.svg'
 })
 export class PoChartAxisLabelComponent {
+  @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;
+
   @Input('p-axis-x-label-coordinates') axisXLabelCoordinates: Array<PoChartLabelCoordinates>;
 
   @Input('p-axis-y-label-coordinates') axisYLabelCoordinates: Array<PoChartLabelCoordinates>;

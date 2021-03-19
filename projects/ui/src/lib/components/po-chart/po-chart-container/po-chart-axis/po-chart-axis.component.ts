@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import {
   PoChartGridLines,
@@ -33,6 +33,8 @@ export class PoChartAxisComponent {
   private _categories: Array<string> = [];
   private _containerSize: PoChartContainerSize = {};
   private _series: Array<any> = [];
+
+  @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;
 
   @Input('p-type') type: PoChartType;
 
@@ -102,6 +104,8 @@ export class PoChartAxisComponent {
     return this._axisOptions;
   }
 
+  @Output('p-categories-coordinates') categoriesCoordinates: EventEmitter<Array<number>> = new EventEmitter();
+
   constructor(private mathsService: PoChartMathsService) {}
 
   private setAxisXCoordinates(
@@ -139,6 +143,11 @@ export class PoChartAxisComponent {
     if (seriesLength) {
       this.calculateAxisYLabelCoordinates(amountOfAxisY, containerSize, minMaxAxisValues, type);
     }
+
+    if (type === PoChartType.Area) {
+      this.getCategoriesRangeForMouseMove(amountOfAxisY, containerSize);
+    }
+
     this.calculateAxisYCoordinates(amountOfAxisY, containerSize, type, minMaxAxisValues);
   }
 
@@ -158,7 +167,7 @@ export class PoChartAxisComponent {
       return { coordinates };
     });
 
-    // Avalia a necessidade de adicionar a linha referente ao valor zero em gráficos do tipo `column` e `line`.
+    // Avalia a necessidade de adicionar a linha referente ao valor zero em gráficos do tipo `column`, `area` e `line`.
     if (this.type !== PoChartType.Bar && range.minValue < 0 && !this.axisXLabels.includes('0')) {
       coordinatesReferedToZero = this.getCoordinatesRelatedToZero(containerSize, range, startX, endX);
       coordinatesList = [...coordinatesList, coordinatesReferedToZero];
@@ -243,8 +252,7 @@ export class PoChartAxisComponent {
 
     let coordinatesReferedToZero;
     let coordinatesList = [...Array(length)].map((_, index: number) => {
-      const xCoordinate = this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, type, index);
-
+      const xCoordinate = this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, index);
       const coordinates = `M${xCoordinate} ${startY} L${xCoordinate}, ${endY}`;
 
       return { coordinates };
@@ -270,7 +278,7 @@ export class PoChartAxisComponent {
     this.axisYLabelCoordinates = [...Array(amountOfAxisY)].map((_, index: number) => {
       const label = this.axisYLabels[index];
 
-      const xCoordinate = this.centeredInCategoryArea(containerSize, amountOfAxisY, type, index);
+      const xCoordinate = this.getAxisXCoordinates(containerSize, amountOfAxisY, type, index);
       const yCoordinate = this.calculateAxisYLabelYCoordinate(containerSize);
 
       return { label, xCoordinate, yCoordinate };
@@ -347,15 +355,21 @@ export class PoChartAxisComponent {
   private calculateAxisYCoordinateX(
     containerSize: PoChartContainerSize,
     amountOfAxisY: number,
-    type: PoChartType,
-    index: number
+    index: number,
+    subtractCategoryWidth: boolean = false
   ): number {
-    const amountOfLines = type === PoChartType.Bar ? amountOfAxisY - 1 : amountOfAxisY;
+    const amountOfLines = this.alignByTheCorners ? amountOfAxisY - 1 : amountOfAxisY;
+    const halfCategoryWidth =
+      this.alignByTheCorners && subtractCategoryWidth
+        ? (containerSize.svgWidth - containerSize.axisXLabelWidth) / (amountOfAxisY - 1) / 2
+        : 0;
     const divideIndexByAmountOfLines = index / amountOfLines;
     const xRatio = divideIndexByAmountOfLines === Infinity ? 0 : divideIndexByAmountOfLines;
 
     return Math.round(
-      containerSize.axisXLabelWidth + (containerSize.svgWidth - containerSize.axisXLabelWidth) * xRatio
+      containerSize.axisXLabelWidth +
+        (containerSize.svgWidth - containerSize.axisXLabelWidth) * xRatio -
+        halfCategoryWidth
     );
   }
 
@@ -370,6 +384,25 @@ export class PoChartAxisComponent {
     this.axisXLabelCoordinates = [];
     this.axisYLabelCoordinates = [];
     this.seriesLength = 0;
+  }
+
+  private getAxisXCoordinates(
+    containerSize: PoChartContainerSize,
+    amountOfAxisY: number,
+    type: PoChartType,
+    index: number
+  ): number {
+    return this.alignByTheCorners
+      ? this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, index)
+      : this.centeredInCategoryArea(containerSize, amountOfAxisY, type, index);
+  }
+
+  private getCategoriesRangeForMouseMove(amountOfAxisY: number, containerSize: PoChartContainerSize) {
+    const categoriesCoordinates = [...Array(amountOfAxisY)].map((_, index: number) => {
+      return this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, index, true);
+    });
+
+    this.categoriesCoordinates.emit(categoriesCoordinates);
   }
 
   private isValidGridLinesLengthOption(gridLines: number): boolean {
