@@ -1,3 +1,9 @@
 <svg:g po-chart-axis-path [p-axis-x-coordinates]="axisXCoordinates" [p-axis-y-coordinates]="axisYCoordinates"></svg:g>
 
-<svg:g po-chart-axis-label [p-axis-x-label-coordinates]="axisXLabelCoordinates" [p-axis-y-label-coordinates]="axisYLabelCoordinates" [p-type]="type"></svg:g>
+<svg:g po-chart-axis-label 
+  [p-align-by-the-corners]="alignByTheCorners" 
+  [p-axis-x-label-coordinates]="axisXLabelCoordinates" 
+  [p-axis-y-label-coordinates]="axisYLabelCoordinates" 
+  [p-type]="type"
+  >
+</svg:g>

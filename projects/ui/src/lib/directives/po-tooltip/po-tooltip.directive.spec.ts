@@ -49,6 +49,18 @@ describe('PoTooltipDirective', () => {
     expect(TestComponent).toBeTruthy();
   });
 
+  describe('Methods:', () => {
+    it('onMouseLeave: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
+      directive.displayTooltip = true;
+
+      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+      directive.onMouseLeave();
+
+      expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
+    });
+  });
+
   it('should call initScrollEventListenerFunction in ngOnInit', () => {
     spyOn(directive, 'initScrollEventListenerFunction');
 
@@ -90,6 +102,32 @@ describe('PoTooltipDirective', () => {
 
   it('onMouseEnter: should not create tooltip when not have tooltip property', fakeAsync(() => {
     directive.tooltip = undefined;
+    directive.tooltipContent = false;
+
+    spyOn(directive, 'showTooltip');
+    spyOn(directive, 'createTooltip');
+    spyOn(directive, 'removeArrow');
+    spyOn(directive, 'addArrow');
+    spyOn(directive['poControlPosition'], 'adjustPosition');
+    spyOn(directive['poControlPosition'], 'getArrowDirection');
+
+    directive.onMouseEnter();
+
+    tick(100);
+
+    expect(directive.showTooltip).not.toHaveBeenCalled();
+    expect(directive.createTooltip).not.toHaveBeenCalled();
+    expect(directive.removeArrow).not.toHaveBeenCalled();
+    expect(directive.addArrow).not.toHaveBeenCalled();
+    expect(directive['poControlPosition'].adjustPosition).not.toHaveBeenCalled();
+    expect(directive['poControlPosition'].getArrowDirection).not.toHaveBeenCalled();
+
+    expect(directive.lastTooltipText).toBe(directive.tooltip);
+  }));
+
+  it('onMouseEnter: should not create tooltip if `displayTooltip` is true', fakeAsync(() => {
+    directive.tooltip = undefined;
+    directive.displayTooltip = true;
     directive.tooltipContent = false;
 
     spyOn(directive, 'showTooltip');

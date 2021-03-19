@@ -5,7 +5,7 @@ import { PoChartType } from '../enums/po-chart-type.enum';
  *
  * @description
  *
- * Interface das series dinâmicas do `po-chart` que possibilita desenhar gráficos dos tipos `bar`, `column`, `line`, `donut` e `pie`
+ * Interface das series dinâmicas do `po-chart` que possibilita desenhar gráficos dos tipos `area`, `bar`, `column`, `line`, `donut` e `pie`
  */
 export interface PoChartSerie {
   /**
@@ -39,7 +39,7 @@ export interface PoChartSerie {
    *
    * Define a lista de valores para a série. Os tipos esperados são de acordo com o tipo de gráfico:
    * - Para gráficos dos tipos `donut` e `pie`, espera-se *number*;
-   * - Para gráficos dos tipos `bar`, `column` e `line`, espera-se um *array* de `data`.
+   * - Para gráficos dos tipos `area`, `bar`, `column` e `line`, espera-se um *array* de `data`.
    *
    * > Se passado valor `null` em determinado item da lista, a iteração irá ignorá-lo.
    */
@@ -57,7 +57,7 @@ export interface PoChartSerie {
    *
    * > Caso não seja informado um valor para o *tooltip*, será exibido da seguinte forma:
    * - `donut`: `label`: valor proporcional ao total em porcentagem.
-   * - `bar`, `column`, `line` e `pie`: `label`: `data`.
+   * - `area`, `bar`, `column`, `line` e `pie`: `label`: `data`.
    */
   tooltip?: string;
 

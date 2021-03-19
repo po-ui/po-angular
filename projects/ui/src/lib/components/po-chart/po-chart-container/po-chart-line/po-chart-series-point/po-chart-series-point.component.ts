@@ -3,6 +3,7 @@ import { from, Observable, timer } from 'rxjs';
 import { concatMap, mapTo, scan, tap } from 'rxjs/operators';
 
 import { isIE } from '../../../../../utils/util';
+import { InputBoolean } from '../../../../../decorators';
 
 import { PoChartPointsCoordinates } from '../../../interfaces/po-chart-points-coordinates.interface';
 
@@ -18,20 +19,19 @@ export class PoChartSeriesPointComponent {
   private _color: string;
   private _coordinates: Array<PoChartPointsCoordinates> = [];
 
-  radius: number = RADIUS_DEFAULT_SIZE;
   coordinates$: Observable<Array<PoChartPointsCoordinates>>;
+  radius: number = RADIUS_DEFAULT_SIZE;
+  strokeColor: string;
 
   private animationState: boolean = true;
-  private colorPalletteFillColorClass: string;
 
   @Input('p-animate') animate: boolean;
 
-  @Input('p-color') set color(value: string) {
-    this._color = value;
+  @Input('p-is-active') @InputBoolean() isActive: boolean;
 
-    if (this.color.includes('po-border-color')) {
-      this.colorPalletteFillColorClass = this.color.replace('po-border-color', 'po-color');
-    }
+  @Input('p-color') set color(value: string) {
+    this.strokeColor = value.includes('po-color') ? value.replace('po-color', 'po-border-color') : value;
+    this._color = value;
   }
 
   get color() {
@@ -47,6 +47,8 @@ export class PoChartSeriesPointComponent {
   get coordinates() {
     return this._coordinates;
   }
+
+  @Input('p-chart-line') @InputBoolean() chartLine: boolean = false;
 
   // Referência para o svgPathGroup ao qual pertence o ponto. Necessário para reordenação dos svgElements no DOM para tratamento onHover
   @Input('p-relative-to') relativeTo: string;
@@ -96,11 +98,11 @@ export class PoChartSeriesPointComponent {
 
   private setPointAttribute(target: SVGElement, isHover: boolean) {
     this.renderer.setAttribute(target, 'r', isHover ? RADIUS_HOVER_SIZE.toString() : RADIUS_DEFAULT_SIZE.toString());
-    if (this.colorPalletteFillColorClass) {
+    if (this.color.includes('po-color')) {
       this.renderer.setAttribute(
         target,
         'class',
-        isHover ? `${this.color} ${this.colorPalletteFillColorClass}` : `po-chart-line-point ${this.color}`
+        isHover ? `${this.strokeColor} ${this.color}` : `po-chart-line-point po-chart-active-point ${this.strokeColor}`
       );
     } else {
       this.renderer[isHover ? 'setStyle' : 'removeStyle'](target, 'fill', isHover ? this.color : undefined);

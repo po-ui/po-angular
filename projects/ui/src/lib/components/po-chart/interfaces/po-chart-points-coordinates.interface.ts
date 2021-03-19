@@ -14,6 +14,9 @@ export interface PoChartPointsCoordinates {
   // Cor da série
   color?: string;
 
+  /** Indica o ponto ativo em relação ao posicionamento do cursor na área do gráfico. */
+  isActive?: boolean;
+
   /** A série para a qual correspondem as coordenadas. */
   label: string;
 

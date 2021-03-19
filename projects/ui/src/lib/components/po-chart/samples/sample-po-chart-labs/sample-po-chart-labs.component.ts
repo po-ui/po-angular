@@ -33,6 +33,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Donut', value: PoChartType.Donut },
     { label: 'Pie', value: PoChartType.Pie },
+    { label: 'Area', value: PoChartType.Area },
     { label: 'Line', value: PoChartType.Line },
     { label: 'Column', value: PoChartType.Column },
     { label: 'Bar', value: PoChartType.Bar }

@@ -1,8 +1,11 @@
 <svg:path #chartPath
-  class="po-chart-line-path"
-  [class]="color?.includes('po-border-color') ? color : ''"
+  class="po-chart-path"
+  [class.po-chart-active-path]="isActive"
+  [class.po-chart-line-path]="chartLine"
+  [class]="color?.includes('po-border-color') || color?.includes('po-color') ? color : ''"
+  [attr.fill]="chartLine ? 'none' : color"
   [attr.stroke-dasharray]="pathWidth"
   [attr.stroke-dashoffset]="pathWidth"
-  [attr.stroke]="color"
+  [attr.stroke]="chartLine ? color : ''"
   [attr.d]="coordinates">
 </svg:path> 

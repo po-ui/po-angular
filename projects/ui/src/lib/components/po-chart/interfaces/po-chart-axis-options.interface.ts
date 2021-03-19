@@ -8,7 +8,7 @@
 export interface PoChartAxisOptions {
   /**
    * Define a quantidade de linhas exibidas no grid.
-   * Para os gráficos dos tipos `Line` e `Column`, as linhas modificadas serão as horizontais (eixo X).
+   * Para os gráficos dos tipos `Area`, `Line` e `Column`, as linhas modificadas serão as horizontais (eixo X).
    * Já para gráficos do tipo `Bar`, tratará as linhas verticais (eixo Y).
    *
    * A propriedade contém as seguintes diretrizes para seu correto funcionamento:

@@ -34,6 +34,11 @@ describe('PoChartAxisComponent', () => {
   });
 
   describe('Properties: ', () => {
+    describe('p-align-by-the-corners: ', () => {
+      it('should apply false default value to `alignByTheCorners`', () => {
+        expect(component.alignByTheCorners).toBeFalse();
+      });
+    });
     describe('p-series: ', () => {
       it('should call `mathsService.seriesGreaterLength` and apply value to `seriesLength`', () => {
         const fakeSeries = [{ label: 'test 1', data: [1, 2, 3] }];
@@ -414,6 +419,35 @@ describe('PoChartAxisComponent', () => {
       );
     });
 
+    it(`setAxisYCoordinates: should call 'calculateAxisYCoordinates' and 'calculateAxisYLabelCoordinates' passing 'seriesLength' as argument if type is Bar`, () => {
+      const gridLines = 5;
+      const seriesLength = 3;
+      const containerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        axisXLabelWidth: 72,
+        svgPlottingAreaHeight: 280
+      };
+      const type = PoChartType.Area;
+
+      const spyCalculateAxisYCoordinates = spyOn(component, <any>'calculateAxisYCoordinates');
+      const spyGetCategoriesRangeForMouseMove = spyOn(component, <any>'getCategoriesRangeForMouseMove');
+      const spyCalculateAxisYLabelCoordinates = spyOn(component, <any>'calculateAxisYLabelCoordinates');
+
+      component['setAxisYCoordinates'](gridLines, seriesLength, containerSize, component.range, type);
+
+      expect(spyCalculateAxisYCoordinates).toHaveBeenCalledWith(seriesLength, containerSize, type, component.range);
+      expect(spyCalculateAxisYLabelCoordinates).toHaveBeenCalledWith(
+        seriesLength,
+        containerSize,
+        component.range,
+        type
+      );
+      expect(spyGetCategoriesRangeForMouseMove).toHaveBeenCalledWith(seriesLength, containerSize);
+    });
+
     it('calculateAxisYCoordinates: should call `calculateAxisYCoordinateX` once if type is `Bar` and apply value to `axisYCoordinates`', () => {
       const amountOfAxisY = 2;
       const fakeContainerSize = {
@@ -432,6 +466,7 @@ describe('PoChartAxisComponent', () => {
       const type = PoChartType.Bar;
 
       component.range = { minValue: -30, maxValue: 120 };
+      component['alignByTheCorners'] = true;
 
       spyOn(component, <any>'calculateAxisYCoordinateX').and.callThrough();
       spyOn(component, <any>'getCoordinatesRelatedToZero').and.callThrough();
@@ -608,10 +643,11 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
-      const type = PoChartType.Bar;
       const amountOfAxisY = 6;
 
-      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, type, fakeIndex);
+      component['alignByTheCorners'] = true;
+
+      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, fakeIndex);
 
       expect(result).toEqual(expectedResult);
     });
@@ -627,10 +663,9 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
-      const type = PoChartType.Line;
       const amountOfAxisY = 6;
 
-      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, type, fakeIndex);
+      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, fakeIndex);
 
       expect(result).toEqual(expectedResult);
     });
@@ -645,11 +680,36 @@ describe('PoChartAxisComponent', () => {
         svgPlottingAreaHeight: 280
       };
       const fakeIndex = 1;
-      const type = PoChartType.Line;
       const amountOfAxisY = 0;
       const expectedResult = 72;
 
-      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, type, fakeIndex);
+      const result = component['calculateAxisYCoordinateX'](fakeContainerSize, amountOfAxisY, fakeIndex);
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it(`calculateAxisYCoordinateX: should return the result of equation considering that 'alignByTheCorners' and 'subtractCategoryWidth' are true`, () => {
+      const fakeContainerSize = {
+        svgWidth: 500,
+        centerX: 250,
+        svgHeight: 300,
+        centerY: 150,
+        axisXLabelWidth: 72,
+        svgPlottingAreaHeight: 280
+      };
+      const fakeIndex = 1;
+      const amountOfAxisY = 0;
+      const expectedResult = -142;
+      const fakeSubtractCategoryWidth = true;
+
+      component['alignByTheCorners'] = true;
+
+      const result = component['calculateAxisYCoordinateX'](
+        fakeContainerSize,
+        amountOfAxisY,
+        fakeIndex,
+        fakeSubtractCategoryWidth
+      );
 
       expect(result).toEqual(expectedResult);
     });
@@ -698,6 +758,106 @@ describe('PoChartAxisComponent', () => {
         component['checkAxisOptions'](fakeOptions);
 
         expect(component['gridLines']).toEqual(expectedValue);
+      });
+    });
+
+    describe('getAxisXCoordinates: ', () => {
+      it('getAxisXCoordinates: shold call `calculateAxisYCoordinateX` if `alignByTheCorners` is true', () => {
+        const fakeContainerSize = {
+          svgWidth: 500,
+          centerX: 250,
+          svgHeight: 300,
+          centerY: 150,
+          axisXLabelWidth: 72,
+          svgPlottingAreaHeight: 280
+        };
+        const fakeIndex = 1;
+        const amountOfAxisY = 0;
+        const type = PoChartType.Column;
+
+        spyOn(component, <any>'calculateAxisYCoordinateX');
+        spyOn(component, <any>'centeredInCategoryArea');
+
+        component['alignByTheCorners'] = true;
+
+        component['getAxisXCoordinates'](fakeContainerSize, amountOfAxisY, type, fakeIndex);
+
+        expect(component['calculateAxisYCoordinateX']).toHaveBeenCalledWith(
+          fakeContainerSize,
+          amountOfAxisY,
+          fakeIndex
+        );
+        expect(component['centeredInCategoryArea']).not.toHaveBeenCalledWith(
+          fakeContainerSize,
+          amountOfAxisY,
+          type,
+          fakeIndex
+        );
+      });
+
+      it('getAxisXCoordinates: shold call `centeredInCategoryArea` if `alignByTheCorners` is false', () => {
+        const fakeContainerSize = {
+          svgWidth: 500,
+          centerX: 250,
+          svgHeight: 300,
+          centerY: 150,
+          axisXLabelWidth: 72,
+          svgPlottingAreaHeight: 280
+        };
+        const fakeIndex = 1;
+        const amountOfAxisY = 0;
+        const type = PoChartType.Column;
+
+        spyOn(component, <any>'calculateAxisYCoordinateX');
+        spyOn(component, <any>'centeredInCategoryArea');
+
+        component['alignByTheCorners'] = false;
+
+        component['getAxisXCoordinates'](fakeContainerSize, amountOfAxisY, type, fakeIndex);
+
+        expect(component['calculateAxisYCoordinateX']).not.toHaveBeenCalledWith(
+          fakeContainerSize,
+          amountOfAxisY,
+          fakeIndex
+        );
+        expect(component['centeredInCategoryArea']).toHaveBeenCalledWith(
+          fakeContainerSize,
+          amountOfAxisY,
+          type,
+          fakeIndex
+        );
+      });
+    });
+
+    describe('getCategoriesRangeForMouseMove: ', () => {
+      it('getCategoriesRangeForMouseMove: shold call `calculateAxisYCoordinateX`', () => {
+        const fakeContainerSize = {
+          svgWidth: 500,
+          centerX: 250,
+          svgHeight: 300,
+          centerY: 150,
+          axisXLabelWidth: 72,
+          svgPlottingAreaHeight: 280
+        };
+        const fakeIndex = 0;
+        const amountOfAxisY = 1;
+        const fakeSubtractCategoryWidth = true;
+        const result = {};
+
+        spyOn(component, <any>'calculateAxisYCoordinateX').and.returnValue(result);
+        spyOn(component.categoriesCoordinates, 'emit');
+
+        component['alignByTheCorners'] = true;
+
+        component['getCategoriesRangeForMouseMove'](amountOfAxisY, fakeContainerSize);
+
+        expect(component['calculateAxisYCoordinateX']).toHaveBeenCalledWith(
+          fakeContainerSize,
+          amountOfAxisY,
+          fakeIndex,
+          fakeSubtractCategoryWidth
+        );
+        expect(component.categoriesCoordinates.emit).toHaveBeenCalled();
       });
     });
 

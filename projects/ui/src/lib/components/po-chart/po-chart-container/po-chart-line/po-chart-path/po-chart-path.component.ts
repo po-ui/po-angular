@@ -1,5 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 
+import { InputBoolean } from '../../../../../decorators';
+
 import { isIE } from '../../../../../utils/util';
 
 const pathDashoffsetDefaultWidth = 0;
@@ -12,8 +14,19 @@ export class PoChartPathComponent implements AfterViewInit {
   pathWidth: number;
 
   private _animate: boolean;
+  private _color: string;
 
-  @Input('p-color') color: string;
+  @Input('p-is-active') @InputBoolean() isActive: boolean = true;
+
+  @Input('p-chart-line') @InputBoolean() chartLine: boolean = false;
+
+  @Input('p-color') set color(value: string) {
+    this._color = value.includes('po-color') && this.chartLine ? value.replace('po-color', 'po-border-color') : value;
+  }
+
+  get color() {
+    return this._color;
+  }
 
   @Input('p-animate') set animate(value: boolean) {
     this._animate = value;
