@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import {
   PoChartGridLines,
@@ -102,6 +102,8 @@ export class PoChartAxisComponent {
     return this._axisOptions;
   }
 
+  @Output('p-categories-coordinates') categoriesCoordinates: EventEmitter<Array<number>> = new EventEmitter();
+
   constructor(private mathsService: PoChartMathsService) {}
 
   private setAxisXCoordinates(
@@ -158,7 +160,7 @@ export class PoChartAxisComponent {
       return { coordinates };
     });
 
-    // Avalia a necessidade de adicionar a linha referente ao valor zero em gráficos do tipo `column` e `line`.
+    // Avalia a necessidade de adicionar a linha referente ao valor zero em gráficos do tipo `column`, `area` e `line`.
     if (this.type !== PoChartType.Bar && range.minValue < 0 && !this.axisXLabels.includes('0')) {
       coordinatesReferedToZero = this.getCoordinatesRelatedToZero(containerSize, range, startX, endX);
       coordinatesList = [...coordinatesList, coordinatesReferedToZero];
@@ -235,6 +237,7 @@ export class PoChartAxisComponent {
     type: PoChartType,
     range: PoChartMinMaxValues
   ) {
+    let categoriesCoordinates = [];
     const startY = PoChartPlotAreaPaddingTop;
     const endY = containerSize.svgPlottingAreaHeight + PoChartPlotAreaPaddingTop;
 
@@ -244,8 +247,9 @@ export class PoChartAxisComponent {
     let coordinatesReferedToZero;
     let coordinatesList = [...Array(length)].map((_, index: number) => {
       const xCoordinate = this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, type, index);
-
       const coordinates = `M${xCoordinate} ${startY} L${xCoordinate}, ${endY}`;
+
+      categoriesCoordinates = [...categoriesCoordinates, xCoordinate];
 
       return { coordinates };
     });
@@ -257,6 +261,7 @@ export class PoChartAxisComponent {
     }
 
     this.axisYCoordinates = [...coordinatesList];
+    this.categoriesCoordinates.emit(categoriesCoordinates);
   }
 
   private calculateAxisYLabelCoordinates(

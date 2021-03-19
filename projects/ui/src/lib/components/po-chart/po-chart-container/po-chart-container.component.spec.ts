@@ -226,7 +226,8 @@ describe('PoChartContainerComponent', () => {
         [PoChartType.Bar]: chartSeries.filter(serie => serie.type === PoChartType.Bar),
         [PoChartType.Line]: chartSeries.filter(serie => serie.type === PoChartType.Line),
         [PoChartType.Donut]: chartSeries.filter(serie => serie.type === PoChartType.Donut),
-        [PoChartType.Pie]: chartSeries.filter(serie => serie.type === PoChartType.Pie)
+        [PoChartType.Pie]: chartSeries.filter(serie => serie.type === PoChartType.Pie),
+        [PoChartType.Area]: chartSeries.filter(serie => serie.type === PoChartType.Area)
       };
 
       component['setSeriesByType'](chartSeries);

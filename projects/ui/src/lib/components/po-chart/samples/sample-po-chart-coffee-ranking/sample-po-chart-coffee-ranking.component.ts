@@ -4,7 +4,8 @@ import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService } from '@po-
 
 @Component({
   selector: 'sample-po-chart-coffee-ranking',
-  templateUrl: './sample-po-chart-coffee-ranking.component.html'
+  templateUrl: './sample-po-chart-coffee-ranking.component.html',
+  providers: [PoDialogService]
 })
 export class SamplePoChartCoffeeRankingComponent {
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;
@@ -13,6 +14,8 @@ export class SamplePoChartCoffeeRankingComponent {
   consumptionPerCapitaType: PoChartType = PoChartType.Bar;
 
   categories: Array<string> = ['2010', '2011', '2012', '2013', '2014', '2015'];
+
+  chartAreaCategories: Array<string> = ['Jan-18', 'Jul-18', 'Jan-19', 'Jul-19', 'Jan-20', 'Jul-20', 'Jan-21'];
 
   categoriesColumn: Array<string> = ['coffee', 'chocolate', 'tea'];
 
@@ -30,6 +33,18 @@ export class SamplePoChartCoffeeRankingComponent {
     'Wheat Beer',
     'Milk Shakes',
     'Icetea'
+  ];
+
+  chartAreaSeries: Array<PoChartSerie> = [
+    { label: 'Starbucks', data: [550, 497, 532, 550, 530, 565, 572], type: PoChartType.Area },
+    { label: 'Green Mntn Coffee Roaster', data: [420, 511, 493, 525, 522, 510, 567], type: PoChartType.Area },
+    { label: 'Dunkin Brands Group', data: [312, 542, 497, 610, 542, 661, 674], type: PoChartType.Area },
+    {
+      label: 'Coffee Arabica Price',
+      data: [550, 612, 525, 373, 342, 297, 282],
+      type: PoChartType.Line,
+      color: 'po-color-07'
+    }
   ];
 
   coffeeConsumption: Array<PoChartSerie> = [
@@ -85,6 +100,13 @@ export class SamplePoChartCoffeeRankingComponent {
     axis: {
       maxRange: 100,
       gridLines: 2
+    }
+  };
+
+  chartAreaOptions: PoChartOptions = {
+    axis: {
+      maxRange: 700,
+      gridLines: 8
     }
   };
 

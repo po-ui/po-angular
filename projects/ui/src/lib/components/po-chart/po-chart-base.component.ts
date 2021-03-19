@@ -128,7 +128,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
    *
    * @description
    *
-   * Define os nomes das categorias que serão plotadas no eixo X do gráfico caso seja do tipo `bar`, ou então nos eixos Y do grid de gráficos dos tipos `columnn` e `line`.
+   * Define os nomes das categorias que serão plotadas no eixo X do gráfico caso seja do tipo `bar`, ou então nos eixos Y do grid de gráficos dos tipos `area`, `columnn` e `line`.
    *
    * > Gráficos do tipo `bar` dimensionam a área do gráfico de acordo com a largura do maior texto de categorias. No entanto, é uma boa prática optar por palavras curtas para que a leitura do gráfico não seja prejudicada.
    *
@@ -154,7 +154,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
    *
    * Objeto com as configurações usadas no `po-chart`.
    *
-   * É possível, por exemplo, definir as configurações de exibição das legendas, configurar os eixos(*axis*) para os gráfico do tipo `Line`, `Column` e `Bar` da seguinte forma:
+   * É possível, por exemplo, definir as configurações de exibição das legendas, configurar os eixos(*axis*) para os gráficos dos tipos `area` `line`, `column` e `bar` da seguinte forma:
    *
    * ```
    *  chartOptions: PoChartOptions = {
@@ -190,7 +190,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
    *
    * O evento emitirá o seguinte parâmetro:
    * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
-   * - *line*, *column* e *bar*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
+   * - *area*, *line*, *column* e *bar*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
    */
   @Output('p-series-click')
   seriesClick = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();
@@ -204,7 +204,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
    *
    * O evento emitirá o seguinte parâmetro de acordo com o tipo de gráfico:
    * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
-   * - *line*, *column* e *bar*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
+   * - *area*, *line*, *column* e *bar*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
    */
   @Output('p-series-hover')
   seriesHover = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();

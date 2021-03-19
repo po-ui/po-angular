@@ -35,7 +35,6 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   private isHidden: boolean;
   private lastTooltipText: string;
   private textContent;
-  private tooltipContent;
   private tooltipOffset: number = 8;
 
   private eventListenerFunction: () => void;
@@ -53,6 +52,26 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   }
 
   @HostListener('mouseenter') onMouseEnter() {
+    if (!this.displayTooltip) {
+      this.addTooltipAction();
+    }
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    if (!this.displayTooltip) {
+      this.removeTooltipAction();
+    }
+  }
+
+  private addArrow(arrowDirection) {
+    this.renderer.addClass(this.divArrow, `po-arrow-${arrowDirection}`);
+  }
+
+  private addScrollEventListener() {
+    window.addEventListener('scroll', this.eventListenerFunction, true);
+  }
+
+  protected addTooltipAction() {
     setTimeout(() => {
       if (this.tooltip) {
         this.tooltipContent ? this.showTooltip() : this.createTooltip();
@@ -67,27 +86,6 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
         this.lastTooltipText = this.tooltip;
       }
     });
-  }
-
-  @HostListener('mouseleave') onMouseLeave() {
-    // necessita do timeout para conseguir adicionar ".po-invisible", pois quando tem alguns elementos
-    // próximos com tooltips e ficar passando o mouse em cima, os mesmos não estavam ficando invisiveis.
-    setTimeout(() => {
-      if (this.appendInBody) {
-        this.renderer.removeChild(document.body, this.tooltipContent);
-        this.tooltipContent = undefined;
-      } else {
-        this.hideTooltip();
-      }
-    });
-  }
-
-  private addArrow(arrowDirection) {
-    this.renderer.addClass(this.divArrow, `po-arrow-${arrowDirection}`);
-  }
-
-  private addScrollEventListener() {
-    window.addEventListener('scroll', this.eventListenerFunction, true);
   }
 
   // Monta a estrutura do tooltip
@@ -142,6 +140,19 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
 
   private removeScrollEventListener() {
     window.removeEventListener('scroll', this.eventListenerFunction, true);
+  }
+
+  protected removeTooltipAction() {
+    // necessita do timeout para conseguir adicionar ".po-invisible", pois quando tem alguns elementos
+    // próximos com tooltips e ficar passando o mouse em cima, os mesmos não estavam ficando invisiveis.
+    setTimeout(() => {
+      if (this.appendInBody && this.tooltipContent) {
+        this.renderer.removeChild(document.body, this.tooltipContent);
+        this.tooltipContent = undefined;
+      } else {
+        this.hideTooltip();
+      }
+    });
   }
 
   private showTooltip() {

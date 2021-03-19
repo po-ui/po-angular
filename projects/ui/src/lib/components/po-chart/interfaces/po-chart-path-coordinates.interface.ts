@@ -17,6 +17,9 @@ export interface PoChartPathCoordinates {
   /** Valor da série. */
   data?: number;
 
+  /** Indica se é elemento ao qual o cursor está selecionado. */
+  isActive?: boolean;
+
   /** A série para a qual correspondem as coordenadas. */
   label?: string;
 

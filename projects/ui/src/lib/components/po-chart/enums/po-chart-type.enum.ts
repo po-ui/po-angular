@@ -7,6 +7,12 @@
  */
 export enum PoChartType {
   /**
+   * Tipo de gráfico que exibe os dados de modo quantitativo, utilizando linhas contínuas demarcadas por pontos para cada valor de série definido.
+   * Similar ao gráfico de linha, diferencia-se pela área localizada abaixo da linha das séries, que é preenchida com cores para um destaque explícita da evolução e mudança dos dados.
+   */
+  Area = 'area',
+
+  /**
    * Exibe os dados em formato de rosca, dividindo em partes proporcionais.
    */
   Donut = 'donut',
@@ -32,6 +38,7 @@ export enum PoChartType {
 
   /**
    * Gráfico que mostra os dados de modo linear e contínuo. É útil, por exemplo, para fazer comparações de tendência durante determinado período.
+   * Pode ser utilizado em conjunto com gráficos dos tipos `column` e `area`, definindo-se o tipo através da propriedade `PoChartSerie.type`.
    */
   Line = 'line',
 

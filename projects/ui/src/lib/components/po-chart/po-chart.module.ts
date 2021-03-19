@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { PoTooltipModule } from '../../directives/po-tooltip/po-tooltip.module';
 
+import { PoChartAreaComponent } from './po-chart-container/po-chart-line/po-chart-area/po-chart-area.component';
 import { PoChartAxisComponent } from './po-chart-container/po-chart-axis/po-chart-axis.component';
 import { PoChartAxisPathComponent } from './po-chart-container/po-chart-axis/po-chart-axis-path/po-chart-axis-path.component';
 import { PoChartAxisLabelComponent } from './po-chart-container/po-chart-axis/po-chart-axis-label/po-chart-axis-label.component';
@@ -32,6 +33,7 @@ import { PoResizeObserverDirective } from './directives/po-resize-observer.direc
 @NgModule({
   imports: [CommonModule, PoTooltipModule],
   declarations: [
+    PoChartAreaComponent,
     PoChartAxisComponent,
     PoChartAxisPathComponent,
     PoChartAxisLabelComponent,
