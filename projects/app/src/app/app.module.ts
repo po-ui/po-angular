@@ -8,11 +8,9 @@ import { PoTemplatesModule } from './../../../templates/src/lib/po-templates.mod
 import { ClientesComponent } from './clientes/clientes.component';
 import { PoModule } from '../../../ui/src/lib';
 import { TesteComponent } from './teste/teste.component';
-import { CalculadoraComponent } from './calculadora/calculadora.component';
-import { ResultadosComponent } from './resultados/resultados.component';
 
 @NgModule({
-  declarations: [AppComponent, ClientesComponent, TesteComponent, CalculadoraComponent, ResultadosComponent],
+  declarations: [AppComponent, ClientesComponent, TesteComponent],
   imports: [BrowserModule, FormsModule, AppRoutingModule, PoModule, PoTemplatesModule],
   bootstrap: [AppComponent]
 })

@@ -1,12 +1,10 @@
-import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { PoCustomAreaService, PoRadioGroupOption } from '../../../../ui/src/lib';
+import { Component, OnInit } from '@angular/core';
+import { PoRadioGroupOption } from '../../../../ui/src/lib';
 
 @Component({
   templateUrl: './teste.component.html'
 })
-export class TesteComponent {
-  constructor(private poCustomAreaService: PoCustomAreaService) {}
+export class TesteComponent implements OnInit {
   open = false;
   personType: string = 'CPF';
   cnpj = 'aaa';
@@ -19,7 +17,6 @@ export class TesteComponent {
   classButton = 'po-md-4';
   eventButon = { clickButton: this.toggle.bind(this) };
   slotButton = 'Teste';
-  eventInput = { emitValue: this.setCNPJ.bind(this) };
 
   readonly personOptions: Array<PoRadioGroupOption> = [
     { label: 'Jurídica', value: 'CNPJ' },
@@ -34,11 +31,35 @@ export class TesteComponent {
   customComponents = [];
 
   changePerson(personType) {
-    this.poCustomAreaService.notifyAll({ personType });
+    //this.notifyAll({ personType });
   }
 
   toggle(event) {
     console.log(event);
     this.open = event.detail.show;
+  }
+  ngOnInit(): void {}
+
+  getData(): [string, string, string] {
+    return [
+      '' + Math.round(Math.random() * 100),
+      '' + Math.round(Math.random() * 100),
+      '' + Math.round(Math.random() * 100)
+    ];
+  }
+
+  addDefault(): void {
+    //this.add('dashboard-tile', 'content', this.getPropData(), 'po-md-4');
+  }
+
+  addExternal(): void {
+    //this.externalService.load('external-dashboard-tile').subscribe(() => {
+    // this.add('external-dashboard-tile', 'content', this.getPropData(), 'po-md-4 po-mt-1');
+    //});
+  }
+
+  getPropData() {
+    const [a, b, c] = this.getData();
+    return { a, b, c };
   }
 }
