@@ -2,4 +2,10 @@
 <br />
 <a routerLink="teste">Teste</a>
 <br />
-<router-outlet></router-outlet>
+
+<div class="po-wrapper">
+  <po-toolbar p-title="AppName"></po-toolbar>
+
+  <po-menu [p-menus]="menus"></po-menu>
+  <router-outlet></router-outlet>
+</div>
