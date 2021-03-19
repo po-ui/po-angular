@@ -1,0 +1,37 @@
+<div class="po-row po-mt-1">
+  <p>
+    {{ open ? 'open' : 'closed' }}
+  </p>
+
+  <po-custom-area
+    class="po-row po-mt-1"
+    [p-api-custom]="url"
+    [p-component-name]="buttonCustom"
+    [p-props]="buttonProps"
+    [p-class-style]="classButton"
+    [p-events]="eventButon"
+    [p-slot-text]="slotButton"
+  ></po-custom-area>
+</div>
+
+<div class="po-row po-mt-1">
+  <po-radio-group
+    class="po-lg-4"
+    name="personType"
+    [(ngModel)]="personType"
+    p-label="Tipo de Pessoa"
+    [p-options]="personOptions"
+    (p-change)="changePerson($event)"
+  >
+  </po-radio-group>
+
+  <div class="po-lg-4" id="content3"></div>
+
+  <po-info p-label="Identificação" [p-value]="cnpj" class="po-lg-4"> </po-info>
+</div>
+
+<div class="po-row po-mt-1">
+  <po-button class="po-md-4" p-label="Adiciona Externo" (p-click)="addExternal()"> </po-button>
+</div>
+
+<div class="po-row po-mt-1" id="content"></div>
