@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.10.1](https://github.com/po-ui/po-angular/compare/v4.10.0...v4.10.1) (2021-03-22)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige disparo indevido da atualização do model ([2316775](https://github.com/po-ui/po-angular/commit/2316775b8f0cf927dd243d4dd5da33b6a24f7e16))
+* **datepicker-range:** corrige posicionamento ao digitar o valor ([f6ff8c8](https://github.com/po-ui/po-angular/commit/f6ff8c8aa600ef3ef8928b3c3ea28fbc264f4129))
+
+
+
 # [4.10.0](https://github.com/po-ui/po-angular/compare/v4.9.0...v4.10.0) (2021-03-15)
 
 
