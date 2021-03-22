@@ -10,8 +10,10 @@
       [p-component-name]="buttonCustom"
       [p-props]="buttonProps"
       [p-class-style]="classButton"
+      p-class-container="po-row po-mt-1"
       [p-events]="eventButon"
       [p-slot-text]="slotButton"
+      p-id-container="content1"
     ></po-custom-area>
   </div>
 
@@ -26,14 +28,16 @@
     >
     </po-radio-group>
 
-    <div class="po-lg-4" id="content3"></div>
+    <po-custom-area
+      class="po-lg-4"
+      [p-api-custom]="url"
+      p-component-name="pods-input-cnpj"
+      p-class-style="po-md-4"
+      p-class-container="po-lg-4"
+      [p-events]="eventInput"
+      p-id-container="content2"
+    ></po-custom-area>
 
     <po-info p-label="Identificação" [p-value]="cnpj" class="po-lg-4"> </po-info>
   </div>
-
-  <div class="po-row po-mt-1">
-    <po-button class="po-md-4" p-label="Adiciona Externo" (p-click)="addExternal()"> </po-button>
-  </div>
-
-  <div class="po-row po-mt-1" id="content"></div>
 </po-page-default>
