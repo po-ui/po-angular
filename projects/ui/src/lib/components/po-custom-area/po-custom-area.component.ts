@@ -14,6 +14,8 @@ export class PoCustomAreaComponent implements OnInit, OnDestroy {
   @Input('p-class-style') classStyle: string;
   @Input('p-events') events: { [key: string]: (event: any) => void };
   @Input('p-slot-text') slotText: string;
+  @Input('p-class-container') classContainer: string;
+  @Input('p-id-container') idContainer: string;
 
   private sub = new Subscription();
 
@@ -23,7 +25,7 @@ export class PoCustomAreaComponent implements OnInit, OnDestroy {
     console.log('Custom 1');
     this.poCustomAreaService.api = this.apiCustom;
     this.sub = this.poCustomAreaService
-      .add(this.componentName, 'content', this.props, this.classStyle, this.events, this.slotText)
+      .add(this.componentName, this.idContainer, this.props, this.classStyle, this.events, this.slotText)
       .subscribe();
   }
 
