@@ -98,7 +98,9 @@ export class PoCustomAreaService {
 
   notifyAll(props) {
     this.componentsAdded.forEach(component => {
-      component.notify(props);
+      if (typeof component.notify === 'function') {
+        component.notify(props);
+      }
     });
   }
 }
