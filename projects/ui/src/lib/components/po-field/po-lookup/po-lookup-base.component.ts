@@ -58,7 +58,7 @@ export abstract class PoLookupBaseComponent
 
   private onChangePropagate: any = null;
   // tslint:disable-next-line
-  private onTouched: any = null;
+  protected onTouched: any = null;
   private validatorChange: any;
 
   private control!: AbstractControl;

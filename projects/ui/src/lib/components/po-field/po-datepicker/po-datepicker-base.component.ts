@@ -80,8 +80,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   protected isExtendedISO: boolean = false;
   protected objMask: any;
   protected onChangeModel: any = null;
-  protected onTouchedModel: any = null;
   protected validatorChange: any;
+  protected onTouchedModel: any = null;
 
   /**
    * @optional

@@ -90,10 +90,14 @@ describe('PoLookupComponent:', () => {
     (lookupFilterService: LookupFilterService) => {
       component['oldValue'] = 'po';
       component.inputEl.nativeElement.value = 'po';
+      component['onTouched'] = () => {};
 
       spyOn(component, <any>'selectModel');
+      spyOn(component, <any>'onTouched');
 
       component.searchEvent();
+
+      expect(component['onTouched']).toHaveBeenCalled();
       expect(component['selectModel']).not.toHaveBeenCalled();
     }
   ));
@@ -141,11 +145,14 @@ describe('PoLookupComponent:', () => {
         component.service = lookupFilterService;
         component.inputEl.nativeElement.value = 'po JOI';
         component['oldValue'] = 'po SP';
+        component['onTouched'] = () => {};
 
         spyOn(component, <any>'searchById');
+        spyOn(component, <any>'onTouched');
 
         component.searchEvent();
 
+        expect(component['onTouched']).toHaveBeenCalled();
         expect(component['searchById']).toHaveBeenCalled();
       }
     ));
@@ -156,11 +163,14 @@ describe('PoLookupComponent:', () => {
         component.service = lookupFilterService;
         component.inputEl.nativeElement.value = 'po';
         component['oldValue'] = 'po';
+        component['onTouched'] = () => {};
 
         spyOn(component, <any>'searchById');
+        spyOn(component, <any>'onTouched');
 
         component.searchEvent();
 
+        expect(component['onTouched']).toHaveBeenCalled();
         expect(component['searchById']).not.toHaveBeenCalled();
       }
     ));

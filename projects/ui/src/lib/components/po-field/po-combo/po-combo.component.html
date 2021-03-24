@@ -17,6 +17,7 @@
       [required]="required"
       (click)="toggleComboVisibility()"
       (keyup)="onKeyUp($event)"
+      (blur)="onBlur()"
       (keyup.enter)="searchOnEnter($event.target.value)"
       (keydown)="onKeyDown($event)"
     />

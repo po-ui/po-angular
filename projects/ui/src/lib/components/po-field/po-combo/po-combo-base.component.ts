@@ -82,7 +82,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   isFiltering: boolean = false;
   keyupSubscribe: any;
   onModelChange: any;
-  onModelTouched: any;
   previousSearchValue: string = '';
   selectedOption: PoComboOption | PoComboGroup;
   selectedValue: any;
@@ -91,6 +90,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   visibleOptions: Array<PoComboOption | PoComboGroup> = [];
 
   private validatorChange: any;
+  protected onModelTouched: any = null;
 
   /**
    * @optional

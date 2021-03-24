@@ -208,6 +208,10 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     }, 200);
   }
 
+  onBlur() {
+    this.onModelTouched();
+  }
+
   onKeyDown(event?: any) {
     if (event.keyCode === PoKeyCodeEnum.arrowUp || event.keyCode === PoKeyCodeEnum.arrowDown) {
       event.preventDefault();

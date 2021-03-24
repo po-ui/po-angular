@@ -412,6 +412,15 @@ describe('PoComboComponent:', () => {
       expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
     });
 
+    it('onBlur: should be called when blur event', () => {
+      component['onModelTouched'] = () => {};
+      spyOn(component, <any>'onModelTouched');
+
+      component.onBlur();
+
+      expect(component['onModelTouched']).toHaveBeenCalled();
+    });
+
     describe('onKeyUp:', () => {
       function fakeKeypressEvent(code: number, target: any = 1) {
         return {

@@ -34,9 +34,9 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
 
   private modelLastUpdate: any;
   private onChangePropagate: any = null;
-  // tslint:disable-next-line
-  private onTouched: any = null;
   private validatorChange: any;
+  // tslint:disable-next-line
+  protected onTouched: any = null;
 
   /**
    * @optional

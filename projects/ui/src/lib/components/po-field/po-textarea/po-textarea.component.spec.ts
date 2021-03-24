@@ -81,10 +81,15 @@ describe('PoTextareaComponent:', () => {
   });
 
   it('blur event must be called', () => {
+    component['onTouched'] = () => {};
+
     spyOn(component.blur, 'emit');
     spyOn(component, 'controlChangeEmitter');
+    spyOn(component, <any>'onTouched');
 
     component.eventOnBlur();
+
+    expect(component['onTouched']).toHaveBeenCalled();
     expect(component.blur.emit).toHaveBeenCalled();
     expect(component.controlChangeEmitter).toHaveBeenCalled();
   });

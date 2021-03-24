@@ -161,6 +161,7 @@ describe('PoRichTextBodyComponent:', () => {
         modelValue: 'value',
         valueBeforeChange: '1',
         change: component.change,
+        blur: component.blur,
         bodyElement: {
           nativeElement: {
             innerHTML: 'value'
@@ -169,9 +170,11 @@ describe('PoRichTextBodyComponent:', () => {
       };
 
       spyOn(fakeThis.change, 'emit');
+      spyOn(fakeThis.blur, 'emit');
       component.onBlur.call(fakeThis);
       tick(250);
 
+      expect(fakeThis.blur.emit).toHaveBeenCalled();
       expect(fakeThis.change.emit).toHaveBeenCalledWith(fakeThis.modelValue);
     }));
 
@@ -182,6 +185,9 @@ describe('PoRichTextBodyComponent:', () => {
         change: {
           emit: () => {}
         },
+        blur: {
+          emit: () => {}
+        },
         bodyElement: {
           nativeElement: {
             innerHTML: 'value'
@@ -189,10 +195,13 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
+      spyOn(fakeThis.blur, 'emit');
       spyOn(fakeThis.change, 'emit');
+
       component.onBlur.call(fakeThis);
       tick(250);
 
+      expect(fakeThis.blur.emit).toHaveBeenCalled();
       expect(fakeThis.change.emit).not.toHaveBeenCalled();
     }));
 

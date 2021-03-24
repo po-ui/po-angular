@@ -130,7 +130,10 @@ describe('PoDatepickerComponent:', () => {
   });
 
   it('should call onblur', () => {
+    component['onTouchedModel'] = () => {};
+
     spyOn(component.onblur, 'emit');
+    spyOn(component, <any>'onTouchedModel');
 
     const input = fixture.debugElement.nativeElement.querySelector('input');
     const event = document.createEvent('Event');
@@ -138,11 +141,16 @@ describe('PoDatepickerComponent:', () => {
     input.dispatchEvent(event);
 
     component.eventOnBlur(event);
+
+    expect(component['onTouchedModel']).toHaveBeenCalled();
     expect(component.onblur.emit).toHaveBeenCalled();
   });
 
   it('should call onblur and callOnChange to have been called', () => {
+    component['onTouchedModel'] = () => {};
+
     spyOn(component, 'callOnChange');
+    spyOn(component, <any>'onTouchedModel');
 
     const input = fixture.debugElement.nativeElement.querySelector('input');
     input.value = '11/11/2011';
@@ -156,6 +164,7 @@ describe('PoDatepickerComponent:', () => {
 
     component.eventOnBlur(fakeEvent);
 
+    expect(component['onTouchedModel']).toHaveBeenCalled();
     expect(component.callOnChange).toHaveBeenCalled();
   });
 
@@ -447,7 +456,10 @@ describe('PoDatepickerComponent:', () => {
   });
 
   it('should call onBlur emit', () => {
+    component['onTouchedModel'] = () => {};
+
     spyOn(component.onblur, 'emit');
+    spyOn(component, <any>'onTouchedModel');
 
     const fakeEvent = {
       keyCode: 10,
@@ -458,6 +470,7 @@ describe('PoDatepickerComponent:', () => {
 
     component.eventOnBlur(fakeEvent);
 
+    expect(component['onTouchedModel']).toHaveBeenCalled();
     expect(component.onblur.emit).toHaveBeenCalled();
   });
 
@@ -654,15 +667,18 @@ describe('PoDatepickerComponent:', () => {
           onblur: { emit: () => {} },
           controlChangeEmitter: () => {},
           callOnChange: () => {},
-          inputEl: { nativeElement: { value: undefined } }
+          inputEl: { nativeElement: { value: undefined } },
+          onTouchedModel: () => {}
         };
 
         spyOn(fakeThis, <any>'controlChangeEmitter');
         spyOn(fakeThis['objMask'], 'blur');
         spyOn(fakeThis.onblur, 'emit');
+        spyOn(fakeThis, 'onTouchedModel');
 
         component.eventOnBlur.call(fakeThis, undefined);
 
+        expect(fakeThis['onTouchedModel']).toHaveBeenCalled();
         expect(fakeThis.controlChangeEmitter).toHaveBeenCalled();
         expect(fakeThis.objMask.blur).toHaveBeenCalled();
         expect(fakeThis.onblur.emit).toHaveBeenCalled();
@@ -672,13 +688,16 @@ describe('PoDatepickerComponent:', () => {
         fakeEvent.target.value = '06/11/2019';
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
+        component['onTouchedModel'] = () => {};
 
         spyOn(component, <any>'verifyMobile').and.returnValue(false);
         spyOn(component, 'controlModel');
         spyOn(component, <any>'controlChangeEmitter');
+        spyOn(component, <any>'onTouchedModel');
 
         component.eventOnBlur(fakeEvent);
 
+        expect(component['onTouchedModel']).toHaveBeenCalled();
         expect(component.controlModel).toHaveBeenCalled();
         expect(component['controlChangeEmitter']).toHaveBeenCalled();
       });
@@ -687,12 +706,15 @@ describe('PoDatepickerComponent:', () => {
         fakeEvent.target.value = undefined;
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
+        component['onTouchedModel'] = () => {};
 
         spyOn(component, <any>'verifyMobile').and.returnValue(false);
         spyOn(component, 'controlModel');
+        spyOn(component, <any>'onTouchedModel');
 
         component.eventOnBlur(fakeEvent);
 
+        expect(component['onTouchedModel']).toHaveBeenCalled();
         expect(component.controlModel).not.toHaveBeenCalled();
       });
 
@@ -700,12 +722,15 @@ describe('PoDatepickerComponent:', () => {
         fakeEvent.target.value = '05/02/20';
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
+        component['onTouchedModel'] = () => {};
 
         spyOn(component, <any>'verifyMobile').and.returnValue(false);
         spyOn(component, 'controlModel');
+        spyOn(component, <any>'onTouchedModel');
 
         component.eventOnBlur(fakeEvent);
 
+        expect(component['onTouchedModel']).toHaveBeenCalled();
         expect(component.controlModel).toHaveBeenCalledWith(null);
       });
     });

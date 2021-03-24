@@ -49,6 +49,8 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   @Output('p-value') value = new EventEmitter<any>();
 
+  @Output('p-blur') blur = new EventEmitter<any>();
+
   constructor(private richTextService: PoRichTextService) {}
 
   ngOnInit() {
@@ -94,6 +96,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   }
 
   onBlur() {
+    this.blur.emit();
     if (this.modelValue !== this.valueBeforeChange) {
       clearTimeout(this.timeoutChange);
       this.timeoutChange = setTimeout(() => {

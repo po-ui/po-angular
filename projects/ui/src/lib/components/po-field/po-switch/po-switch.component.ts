@@ -88,6 +88,10 @@ export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterVie
     }
   }
 
+  onBlur() {
+    this.onTouched();
+  }
+
   getLabelPosition() {
     switch (this.labelPosition) {
       case PoSwitchLabelPosition.Left:

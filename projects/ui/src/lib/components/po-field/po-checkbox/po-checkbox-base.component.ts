@@ -20,6 +20,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   checkboxValue: boolean | null;
   id = uuid();
   propagateChange: any;
+  onTouched;
 
   private _disabled?: boolean = false;
 
@@ -93,7 +94,9 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     this.propagateChange = fn;
   }
 
-  registerOnTouched(fn: any): void {}
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
 
   writeValue(value: any) {
     if (value !== this.checkboxValue) {

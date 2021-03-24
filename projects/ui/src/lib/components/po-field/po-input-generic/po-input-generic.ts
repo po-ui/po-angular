@@ -106,6 +106,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   eventOnBlur(e: any) {
+    this.onTouched();
     if (this.mask) {
       this.objMask.blur(e);
     }

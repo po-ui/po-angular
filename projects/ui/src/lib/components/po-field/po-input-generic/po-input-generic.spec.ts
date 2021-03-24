@@ -418,7 +418,8 @@ describe('PoInputGeneric:', () => {
         mask: hasMask,
         objMask: { blur: (value: any) => {} },
         blur: component.blur,
-        controlChangeEmitter: () => {}
+        controlChangeEmitter: () => {},
+        onTouched: () => {}
       };
     }
 
@@ -538,9 +539,11 @@ describe('PoInputGeneric:', () => {
       const fakeThis = createFakeThis(true);
 
       spyOn(fakeThis.objMask, 'blur');
+      spyOn(fakeThis, <any>'onTouched');
 
       component.eventOnBlur.call(fakeThis, fakeEvent);
 
+      expect(fakeThis['onTouched']).toHaveBeenCalled();
       expect(fakeThis.objMask.blur).toHaveBeenCalled();
     });
 
@@ -548,9 +551,11 @@ describe('PoInputGeneric:', () => {
       const fakeThis = createFakeThis(false);
 
       spyOn(fakeThis.objMask, 'blur');
+      spyOn(fakeThis, <any>'onTouched');
 
       component.eventOnBlur.call(fakeThis, fakeEvent);
 
+      expect(fakeThis['onTouched']).toHaveBeenCalled();
       expect(fakeThis.objMask.blur).not.toHaveBeenCalled();
     });
 
@@ -559,9 +564,11 @@ describe('PoInputGeneric:', () => {
 
       spyOn(fakeThis.blur, 'emit');
       spyOn(fakeThis, 'controlChangeEmitter');
+      spyOn(fakeThis, <any>'onTouched');
 
       component.eventOnBlur.call(fakeThis, { type: 'blur' });
 
+      expect(fakeThis['onTouched']).toHaveBeenCalled();
       expect(fakeThis.blur.emit).toHaveBeenCalled();
       expect(fakeThis.controlChangeEmitter).toHaveBeenCalled();
     });
@@ -571,9 +578,11 @@ describe('PoInputGeneric:', () => {
 
       spyOn(fakeThis.blur, 'emit');
       spyOn(fakeThis, 'controlChangeEmitter');
+      spyOn(fakeThis, <any>'onTouched');
 
       component.eventOnBlur.call(fakeThis, fakeEvent);
 
+      expect(fakeThis['onTouched']).toHaveBeenCalled();
       expect(fakeThis.blur.emit).not.toHaveBeenCalled();
       expect(fakeThis.controlChangeEmitter).not.toHaveBeenCalled();
     });

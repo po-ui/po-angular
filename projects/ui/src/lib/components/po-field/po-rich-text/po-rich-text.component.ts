@@ -101,6 +101,10 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
     this.bodyElement.focus();
   }
 
+  onBlur() {
+    this.onTouched();
+  }
+
   onChangeValue(value: any) {
     this.change.emit(value);
   }
