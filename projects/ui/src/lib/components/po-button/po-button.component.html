@@ -13,6 +13,7 @@
   <div *ngIf="loading" class="po-button-loading-icon">
     <po-loading-icon p-neutral-color></po-loading-icon>
   </div>
-  <span *ngIf="icon" class="po-icon {{ icon }}" aria-hidden="true"></span>
+
+  <po-icon *ngIf="icon" class="po-button-icon" [p-icon]="icon"></po-icon>
   <span *ngIf="label" class="po-button-label">{{ label }}</span>
 </button>

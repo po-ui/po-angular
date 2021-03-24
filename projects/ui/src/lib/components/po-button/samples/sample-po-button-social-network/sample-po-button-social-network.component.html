@@ -1,0 +1,46 @@
+<div class="po-row">
+  <po-widget class="po-lg-6" p-title="Friend Request">
+    <ng-container *ngIf="currentFriend; else noMoreRequest">
+      <div class="po-row">
+        <po-avatar class="po-md-4" p-size="lg" [p-src]="userAvatar"> </po-avatar>
+
+        <div class="po-md-8">
+          <span class="po-sm-12 po-font-subtitle">
+            {{ currentFriend.name }}
+          </span>
+
+          <span class="po-sm-12 po-font-text"> {{ currentFriend.mutualFriends }} mutual friends </span>
+
+          <span class="po-sm-12 po-font-text"> Resides in {{ currentFriend.reside }} </span>
+        </div>
+      </div>
+
+      <div class="po-row">
+        <po-button
+          class="po-md-4"
+          p-icon="fa fa-check-circle"
+          p-label="Confirm"
+          (p-click)="notification('added', 'success')"
+        ></po-button>
+        <po-button
+          class="po-md-4"
+          p-icon="fa fa-eye-slash"
+          p-label="Ignore"
+          (p-click)="notification('ignored', 'warning')"
+        ></po-button>
+        <po-button
+          class="po-md-4"
+          p-icon="fa fa-ban"
+          p-label="Block"
+          (p-click)="notification('blocked', 'information')"
+        ></po-button>
+      </div>
+    </ng-container>
+
+    <ng-template #noMoreRequest>
+      <div class="po-row">
+        <span class="po-lg-8 po-font-subtitle">Congratulations Totver, no more requests!</span>
+      </div>
+    </ng-template>
+  </po-widget>
+</div>

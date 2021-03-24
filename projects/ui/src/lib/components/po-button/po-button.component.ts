@@ -20,6 +20,11 @@ import { PoButtonBaseComponent } from './po-button-base.component';
  *  <file name="sample-po-button-labs/sample-po-button-labs.component.e2e-spec.ts"> </file>
  *  <file name="sample-po-button-labs/sample-po-button-labs.component.po.ts"> </file>
  * </example>
+ *
+ * <example name="po-button-social-network" title="PO Button Social Network">
+ *  <file name="sample-po-button-social-network/sample-po-button-social-network.component.html"> </file>
+ *  <file name="sample-po-button-social-network/sample-po-button-social-network.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-button',

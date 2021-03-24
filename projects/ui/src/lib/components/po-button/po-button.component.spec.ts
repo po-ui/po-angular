@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoLoadingModule } from '../po-loading';
+import { PoIconModule } from './../po-icon';
 
 import { PoButtonComponent } from './po-button.component';
 import { PoButtonBaseComponent } from './po-button-base.component';
@@ -17,7 +18,7 @@ describe('PoButtonComponent: ', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoLoadingModule],
+      imports: [PoLoadingModule, PoIconModule],
       declarations: [PoButtonComponent]
     });
   });
@@ -85,11 +86,11 @@ describe('PoButtonComponent: ', () => {
     expect(nativeElement.querySelector('.po-button-danger')).toBeFalsy();
   });
 
-  it('should add span with an icon when `p-icon` is defined', () => {
+  it('should add i with an icon when `p-icon` is defined', () => {
     component.icon = 'po-icon-news';
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('span.po-icon.po-icon-news')).toBeTruthy();
+    expect(nativeElement.querySelector('i.po-icon.po-icon-news')).toBeTruthy();
   });
 
   it('should simulate button click.', () => {
@@ -118,11 +119,11 @@ describe('PoButtonComponent: ', () => {
       expect(nativeElement.querySelector('span.po-button-label')).toBeTruthy();
     });
 
-    it('p-label: should not add span tag if `p-label` has not been declared', () => {
+    it('p-label: should not add i tag if `p-label` has not been declared', () => {
       component.label = undefined;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('span.po-button-label')).toBeFalsy();
+      expect(nativeElement.querySelector('i.po-button-label')).toBeFalsy();
     });
   });
 
