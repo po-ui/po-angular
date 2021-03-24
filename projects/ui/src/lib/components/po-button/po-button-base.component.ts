@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { InputBoolean } from '../../decorators';
@@ -69,11 +69,30 @@ export class PoButtonBaseComponent {
   }
 
   /**
+   * @optional
+   *
+   * @description
    * Ícone exibido ao lado esquerdo do label do botão.
    *
-   * É possível usar qualquer uma dos ícones da [Biblioteca de ícones](/guides/icons).
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * ```
+   * <po-button p-icon="po-icon-user" p-label="PO button"></po-button>
+   * ```
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
+   * ```
+   * <po-button p-icon="fa fa-podcast" p-label="PO button"></po-button>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-button [p-icon]="template" p-label="button template ionic"></po-button>
+   *
+   * <ng-template #template>
+   *  <ion-icon style="font-size: inherit" name="heart"></ion-icon>
+   * </ng-template>
+   * ```
+   * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
    */
-  @Input('p-icon') icon?: string;
+  @Input('p-icon') icon?: string | TemplateRef<void>;
 
   /**
    * @optional

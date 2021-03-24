@@ -22,7 +22,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
     { label: 'po-icon-news', value: 'po-icon-news' },
     { label: 'po-icon-calendar', value: 'po-icon-calendar' },
     { label: 'po-icon-user', value: 'po-icon-user' },
-    { label: 'po-icon-telephone', value: 'po-icon-telephone' }
+    { label: 'fa fa-podcast', value: 'fa fa-podcast' }
   ];
 
   typesOptions: Array<PoRadioGroupOption> = [
