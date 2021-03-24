@@ -120,6 +120,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   eventOnBlur() {
+    this.onTouched();
     this.blur.emit();
     this.controlChangeEmitter();
   }

@@ -24,6 +24,7 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
   private _disabled?: boolean = false;
 
   propagateChange: any;
+  onTouched;
   switchValue: boolean = false;
 
   /** Nome do componente. */
@@ -148,7 +149,9 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
     this.propagateChange = fn;
   }
 
-  registerOnTouched(fn: any): void {}
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
 
   writeValue(value: any): void {
     if (value !== this.switchValue) {

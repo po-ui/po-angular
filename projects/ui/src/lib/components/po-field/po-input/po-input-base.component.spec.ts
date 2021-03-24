@@ -160,11 +160,11 @@ describe('PoInputBase:', () => {
   });
 
   it('should register function registerOnTouched', () => {
-    component.onTouched = undefined;
+    component['onTouched'] = undefined;
     const func = () => true;
 
     component.registerOnTouched(func);
-    expect(component.onTouched).toBe(func);
+    expect(component['onTouched']).toBe(func);
   });
 
   it('should call writeValueModel', () => {

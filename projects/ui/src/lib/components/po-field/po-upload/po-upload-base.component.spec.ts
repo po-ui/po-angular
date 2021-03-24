@@ -106,7 +106,7 @@ describe('PoUploadBaseComponent:', () => {
       const registerOnTouchedFn = () => {};
 
       component.registerOnTouched(registerOnTouchedFn);
-      expect(component.onModelTouched).toBe(registerOnTouchedFn);
+      expect(component['onModelTouched']).toBe(registerOnTouchedFn);
     });
 
     it('registerOnValidatorChange: should register validatorChange function', () => {

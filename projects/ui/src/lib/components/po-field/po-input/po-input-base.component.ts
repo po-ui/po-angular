@@ -300,9 +300,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   type: string;
 
   onChangePropagate: any = null;
-  onTouched: any = null;
   objMask: any;
   modelLastUpdate: any;
+  protected onTouched: any = null;
 
   callOnChange(value: any) {
     this.updateModel(value);

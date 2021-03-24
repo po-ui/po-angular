@@ -239,6 +239,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   eventOnBlur($event: any) {
+    this.onTouchedModel();
     const date = this.inputEl.nativeElement.value;
     const newDate = date ? this.getDateFromString(date) : undefined;
     this.objMask.blur($event);

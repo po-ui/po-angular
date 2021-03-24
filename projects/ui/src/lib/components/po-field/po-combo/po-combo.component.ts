@@ -204,6 +204,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  onBlur() {
+    this.onModelTouched();
+  }
+
   onKeyDown(event?: any) {
     const key = event.keyCode;
     const inputValue = event.target.value;

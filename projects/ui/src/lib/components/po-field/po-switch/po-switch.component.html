@@ -10,6 +10,7 @@
       [tabindex]="disabled ? -1 : 0"
       (click)="eventClick()"
       (keydown)="onKeyDown($event)"
+      (blur)="onBlur()"
     >
       <div
         class="po-switch-button"

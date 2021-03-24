@@ -16,6 +16,7 @@
     [class.po-clickable]="!disabled"
     [for]="id"
     [tabindex]="disabled ? -1 : 0"
+    (blur)="onBlur()"
     (click)="checkOption(checkboxValue)"
     (keydown)="onKeyDown($event, checkboxValue)"
   >

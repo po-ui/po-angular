@@ -196,11 +196,15 @@ describe('PoDecimalComponent:', () => {
         value: '123.456'
       }
     };
+    component['onTouched'] = () => {};
 
     spyOn(component.blur, 'emit');
     spyOn(component, <any>'controlChangeEmitter');
+    spyOn(component, <any>'onTouched');
 
     component.onBlur(fakeEvent);
+
+    expect(component['onTouched']).toHaveBeenCalled();
     expect(component.blur.emit).toHaveBeenCalled();
     expect(component['controlChangeEmitter']).toHaveBeenCalled();
   });
@@ -209,11 +213,15 @@ describe('PoDecimalComponent:', () => {
     const fakeEvent = {
       target: {}
     };
+    component['onTouched'] = () => {};
 
     spyOn(component.blur, 'emit');
     spyOn(component, <any>'controlChangeEmitter');
+    spyOn(component, <any>'onTouched');
 
     component.onBlur(fakeEvent);
+
+    expect(component['onTouched']).toHaveBeenCalled();
     expect(component.blur.emit).toHaveBeenCalled();
     expect(component['controlChangeEmitter']).toHaveBeenCalled();
   });
@@ -224,11 +232,15 @@ describe('PoDecimalComponent:', () => {
         value: 'ABC'
       }
     };
+    component['onTouched'] = () => {};
 
     spyOn(component, <any>'setViewValue');
     spyOn(component, <any>'callOnChange');
+    spyOn(component, <any>'onTouched');
 
     component.onBlur(fakeEvent);
+
+    expect(component['onTouched']).toHaveBeenCalled();
     expect(component['setViewValue']).toHaveBeenCalled();
     expect(component['callOnChange']).toHaveBeenCalled();
   });
@@ -1169,12 +1181,15 @@ describe('PoDecimalComponent:', () => {
           value: '1,200,50'
         }
       };
+      component['onTouched'] = () => {};
 
       spyOn(component, <any>'setViewValue');
       spyOn(component, <any>'callOnChange');
+      spyOn(component, <any>'onTouched');
 
       component.onBlur(fakeEvent);
 
+      expect(component['onTouched']).toHaveBeenCalled();
       expect(component['setViewValue']).toHaveBeenCalledWith('');
       expect(component['callOnChange']).toHaveBeenCalledWith(undefined);
     });

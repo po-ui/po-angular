@@ -153,6 +153,15 @@ describe('PoRichTextComponent:', () => {
       expect(component.bodyElement.focus).toHaveBeenCalled();
     });
 
+    it('onBlur: should be called when `po-rich-text-body` emit blur event', () => {
+      component['onTouched'] = () => {};
+      spyOn(component, <any>'onTouched');
+
+      component.onBlur();
+
+      expect(component['onTouched']).toHaveBeenCalled();
+    });
+
     it('updateValue: should apply values to value, invalid and call updateModel', () => {
       spyOn(component, <any>'updateModel');
       spyOn(component, <any>'controlChangeModelEmitter');

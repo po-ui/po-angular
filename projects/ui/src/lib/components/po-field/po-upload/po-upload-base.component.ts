@@ -159,13 +159,13 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
   canHandleDirectory: boolean;
   onModelChange: any;
-  onModelTouched: any;
 
   private validatorChange: any;
 
   protected extensionNotAllowed = 0;
   protected quantityNotAllowed = 0;
   protected sizeNotAllowed = 0;
+  protected onModelTouched: any = null;
 
   /**
    * @optional

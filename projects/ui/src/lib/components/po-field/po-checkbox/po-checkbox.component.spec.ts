@@ -138,6 +138,15 @@ describe('PoCheckboxComponent:', () => {
 
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
     });
+
+    it('onBlur: should call `onTouched` on blur', () => {
+      component.onTouched = value => {};
+
+      spyOn(component, 'onTouched');
+      component.onBlur();
+
+      expect(component.onTouched).toHaveBeenCalledWith();
+    });
   });
 
   describe('Templates:', () => {

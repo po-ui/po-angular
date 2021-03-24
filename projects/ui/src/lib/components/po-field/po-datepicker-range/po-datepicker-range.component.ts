@@ -178,6 +178,7 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   }
 
   onBlur(event: any) {
+    this.onTouchedModel();
     const isStartDateTargetEvent = event.target.name === this.startDateInputName;
 
     this.updateModelByScreen(isStartDateTargetEvent);

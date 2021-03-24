@@ -194,6 +194,10 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
     return value === inputValue;
   }
 
+  onBlur() {
+    this.onModelTouched();
+  }
+
   onOptionClick(option: PoSelectOption) {
     this.updateModel(option);
     this.toggleButton();

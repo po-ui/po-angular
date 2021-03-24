@@ -207,6 +207,15 @@ describe('PoSwitchComponent', () => {
         expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
       });
     });
+
+    it('onBlur: should call `onTouched` on blur', () => {
+      component.onTouched = value => {};
+
+      spyOn(component, 'onTouched');
+      component.onBlur();
+
+      expect(component.onTouched).toHaveBeenCalledWith();
+    });
   });
 
   describe('Template:', () => {

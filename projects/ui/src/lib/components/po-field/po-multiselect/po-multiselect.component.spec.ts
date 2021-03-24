@@ -472,6 +472,15 @@ describe('PoMultiselectComponent:', () => {
       expect(closeSpy).toHaveBeenCalled();
     });
 
+    it('onBlur: should be called when blur event', () => {
+      component['onModelTouched '] = () => {};
+      spyOn(component, <any>'onModelTouched');
+
+      component.onBlur();
+
+      expect(component['onModelTouched']).toHaveBeenCalled();
+    });
+
     it('debounceResize: should call `calculateVisibleItems` after 200 milliseconds', done => {
       spyOn(component, 'calculateVisibleItems');
       component.debounceResize();

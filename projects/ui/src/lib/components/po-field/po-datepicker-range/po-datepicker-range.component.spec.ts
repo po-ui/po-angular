@@ -268,23 +268,31 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('onBlur: should call `removeFocusFromDatePickerRangeField` and `updateModelByScreen` with `true`', () => {
+      component['onTouchedModel'] = () => {};
       spyOn(component, <any>'removeFocusFromDatePickerRangeField');
       spyOn(component, <any>'updateModelByScreen');
+      spyOn(component, <any>'onTouchedModel');
+
       const eventMock = { target: { name: 'start-date' } };
 
       component.onBlur(eventMock);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModelByScreen']).toHaveBeenCalledWith(true);
       expect(component['removeFocusFromDatePickerRangeField']).toHaveBeenCalled();
     });
 
     it('onBlur: should call `removeFocusFromDatePickerRangeField` and `updateModelByScreen` with `false`', () => {
+      component['onTouchedModel'] = () => {};
       spyOn(component, <any>'removeFocusFromDatePickerRangeField');
       spyOn(component, <any>'updateModelByScreen');
+      spyOn(component, <any>'onTouchedModel');
+
       const eventMock = { target: { name: 'end-date' } };
 
       component.onBlur(eventMock);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModelByScreen']).toHaveBeenCalledWith(false);
       expect(component['removeFocusFromDatePickerRangeField']).toHaveBeenCalled();
     });
@@ -1386,14 +1394,17 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should update model with empty string if the length of the end date input value is different from 10', () => {
       component.startDate = '';
       component.endDate = '';
+      component['onTouchedModel'] = () => {};
 
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'onTouchedModel');
 
       fixture.detectChanges();
 
       component.endDateInput.nativeElement.value = '2';
       component.endDateInput.nativeElement.dispatchEvent(blurFocusEvent);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModel']).toHaveBeenCalledWith({ start: '', end: '' });
       expect(component.endDateInput.nativeElement.value).toBe('2');
     });
@@ -1401,14 +1412,17 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should update model with empty end date if the length of the end date input value is different from 10', () => {
       component.startDate = '2018-11-05T02:00:00-03:00';
       component.endDate = '2018-12-24';
+      component['onTouchedModel'] = () => {};
 
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'onTouchedModel');
 
       fixture.detectChanges();
 
       component.endDateInput.nativeElement.value = '24/12/201';
       component.endDateInput.nativeElement.dispatchEvent(blurFocusEvent);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModel']).toHaveBeenCalledWith({ start: '2018-11-05', end: '' });
       expect(component['dateRange']).toEqual({ start: '2018-11-05', end: '' });
       expect(component.startDateInput.nativeElement.value).toBe('05/11/2018');
@@ -1418,14 +1432,17 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should update model with empty start date if the length of the start date input value is different from 10', () => {
       component.startDate = '2018-12-24T02:00:00-03:00';
       component.endDate = '2018-12-24';
+      component['onTouchedModel'] = () => {};
 
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'onTouchedModel');
 
       fixture.detectChanges();
 
       component.startDateInput.nativeElement.value = '24/12/201';
       component.startDateInput.nativeElement.dispatchEvent(blurFocusEvent);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModel']).toHaveBeenCalledWith({ start: '', end: '2018-12-24' });
       expect(component['dateRange']).toEqual({ start: '', end: '2018-12-24' });
       expect(component.startDateInput.nativeElement.value).toBe('24/12/201');
@@ -1435,13 +1452,16 @@ describe('PoDatepickerRangeComponent:', () => {
     it(`should update model with empty string if the length of the start date and end date input value are
       different from 10`, () => {
       component['dateRange'] = { start: '', end: '' };
+      component['onTouchedModel'] = () => {};
 
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'onTouchedModel');
 
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '24/12/201';
       component.startDateInput.nativeElement.dispatchEvent(blurFocusEvent);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModel']).toHaveBeenCalledWith({ start: '', end: '' });
       expect(component.startDateInput.nativeElement.value).toBe('24/1');
       expect(component.endDateInput.nativeElement.value).toBe('24/12/201');
@@ -1450,8 +1470,10 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should update model with empty string if end date is invalid', () => {
       component.startDate = '2018-12-24T02:00:00-03:00';
       component.endDate = '2018-12-24';
+      component['onTouchedModel'] = () => {};
 
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'onTouchedModel');
 
       fixture.detectChanges();
 
@@ -1460,6 +1482,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
       fixture.detectChanges();
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModel']).toHaveBeenCalledWith({ start: '2018-12-24', end: '' });
       expect(component['dateRange']).toEqual({ start: '2018-12-24', end: '' });
       expect(component.endDateInput.nativeElement.value).toBe('24/88/2018');
@@ -1468,14 +1491,17 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should update model with empty string if start date is invalid', () => {
       component.startDate = '2018-12-24T02:00:00-03:00';
       component.endDate = '2018-12-24';
+      component['onTouchedModel'] = () => {};
 
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'onTouchedModel');
 
       fixture.detectChanges();
 
       component.startDateInput.nativeElement.value = '24/88/2018';
       component.startDateInput.nativeElement.dispatchEvent(blurFocusEvent);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModel']).toHaveBeenCalledWith({ start: '', end: '2018-12-24' });
       expect(component['dateRange']).toEqual({ start: '', end: '2018-12-24' });
       expect(component.startDateInput.nativeElement.value).toBe('24/88/2018');
@@ -1484,14 +1510,17 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should update model with start date empty if start date is greater than end date', () => {
       component.startDate = '2018-12-24T02:00:00-03:00';
       component.endDate = '2018-12-24';
+      component['onTouchedModel'] = () => {};
 
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'onTouchedModel');
 
       fixture.detectChanges();
 
       component.startDateInput.nativeElement.value = '24/12/2019';
       component.startDateInput.nativeElement.dispatchEvent(blurFocusEvent);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModel']).toHaveBeenCalledWith({ start: '', end: '2018-12-24' });
       expect(component['dateRange']).toEqual({ start: '', end: '2018-12-24' });
       expect(component.startDateInput.nativeElement.value).toBe('24/12/2019');
@@ -1500,14 +1529,17 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should update model with end date empty if start date is greater than end date', () => {
       component.startDate = '2018-12-24T02:00:00-03:00';
       component.endDate = '2018-12-24';
+      component['onTouchedModel'] = () => {};
 
       spyOn(component, <any>'updateModel');
+      spyOn(component, <any>'onTouchedModel');
 
       fixture.detectChanges();
 
       component.endDateInput.nativeElement.value = '24/12/2016';
       component.endDateInput.nativeElement.dispatchEvent(blurFocusEvent);
 
+      expect(component['onTouchedModel']).toHaveBeenCalled();
       expect(component['updateModel']).toHaveBeenCalledWith({ start: '2018-12-24', end: '' });
       expect(component['dateRange']).toEqual({ start: '2018-12-24', end: '' });
       expect(component.endDateInput.nativeElement.value).toBe('24/12/2016');

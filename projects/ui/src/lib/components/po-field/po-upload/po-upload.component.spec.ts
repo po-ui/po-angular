@@ -457,10 +457,13 @@ describe('PoUploadComponent:', () => {
 
     it('selectFiles: should click on input and set `calledByCleanInputValue` to false', () => {
       const calledByCleanInputValue = 'calledByCleanInputValue';
+      component['onModelTouched'] = () => {};
+      spyOn(component, <any>'onModelTouched');
 
       component[calledByCleanInputValue] = true;
       component.selectFiles();
 
+      expect(component['onModelTouched']).toHaveBeenCalled();
       expect(component.selectFiles).toBeTruthy();
       expect(component[calledByCleanInputValue]).toBeFalsy();
     });

@@ -7,6 +7,7 @@
     [ngClass]="{ 'po-select-mobile': isMobile, 'po-invisible': isInvisibleSelectNative }"
     [required]="required"
     (change)="onSelectChange($event.target.value)"
+    (blur)="onBlur()"
   >
     <option *ngIf="isMobile" disabled hidden selected></option>
     <option *ngFor="let option of options" [disabled]="readonly" [value]="option.value" (click)="onOptionClick(option)">
