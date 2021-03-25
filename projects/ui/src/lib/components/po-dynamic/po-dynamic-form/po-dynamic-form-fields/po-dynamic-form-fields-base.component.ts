@@ -7,6 +7,8 @@ import { getGridColumnsClasses, isVisibleField } from '../../po-dynamic.util';
 import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
+import { PoComboFilter } from '../../../po-field/po-combo/interfaces/po-combo-filter.interface';
+import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
 
 @Directive()
 export class PoDynamicFormFieldsBaseComponent {
@@ -185,7 +187,7 @@ export class PoDynamicFormFieldsBaseComponent {
   private isCombo(field: PoDynamicFormField) {
     const { optionsService } = field;
 
-    return !!optionsService && isTypeof(optionsService, 'string');
+    return !!optionsService && (isTypeof(optionsService, 'string') || this.isComboFilter(optionsService));
   }
 
   private isCurrencyType(field: PoDynamicFormField, type: string) {
@@ -194,10 +196,18 @@ export class PoDynamicFormFieldsBaseComponent {
     return this.compareTo(type, PoDynamicFieldType.Currency) && !mask && !pattern;
   }
 
+  private isLookupFilter(object: any): object is PoLookupFilter {
+    return object && (<PoLookupFilter>object).getObjectByValue !== undefined;
+  }
+
+  private isComboFilter(object: any): object is PoComboFilter {
+    return object && (<PoComboFilter>object).getFilteredData !== undefined;
+  }
+
   private isLookup(field: PoDynamicFormField) {
     const { searchService } = field;
 
-    return !!searchService && isTypeof(searchService, 'string');
+    return !!searchService && (isTypeof(searchService, 'string') || this.isLookupFilter(searchService));
   }
 
   private isMultiselect(field: PoDynamicFormField) {
