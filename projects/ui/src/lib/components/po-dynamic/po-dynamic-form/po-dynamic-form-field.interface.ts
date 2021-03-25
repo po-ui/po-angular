@@ -1,3 +1,4 @@
+import { PoComboFilter, PoLookupFilter } from '../../po-field';
 import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
 import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
@@ -45,18 +46,24 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   optionsMulti?: boolean;
 
-  /** Serviço que será utilizado para buscar os itens e preencher a lista de opções dinamicamente. */
-  optionsService?: string;
+  /**
+   *  Serviço que será utilizado para buscar os itens e preencher a lista de opções dinamicamente.
+   *  Pode ser informada uma URL ou uma instancia do serviço baseado em PoComboFilter.
+   *  **Importante**
+   *  > Para que funcione corretamente, é importante que o serviço siga o
+   *  [guia de API do PO UI](https://po-ui.io/guides/api).
+   */
+  optionsService?: string | PoComboFilter;
 
   /**
    * Serviço que será utilizado para realizar a busca avançada. Pode ser utilizado em conjunto com a propriedade `columns`.
-   *
+   * Pode ser ser informada uma URL ou uma instancia do serviço baseado em PoLookupFilter.
    * **Importante:**
    * > Caso utilizar a propriedade `optionsService` esta propriedade será ignorada.
    * > Para que funcione corretamente, é importante que o serviço siga o
    * [guia de API do PO UI](https://po-ui.io/guides/api).
    */
-  searchService?: string;
+  searchService?: string | PoLookupFilter;
 
   /** Máscara para o campo. */
   mask?: string;

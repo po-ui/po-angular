@@ -499,7 +499,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(field.mask).toBe('99:99');
       });
 
-      it('should call `isCombo` and return `combo` if contains `optionsService`', () => {
+      it('should call `isCombo` and return `combo` if contains `optionsService` as url string', () => {
         const expectedValue = 'combo';
         const field = { optionService: 'http://api.example/1', property: 'code' };
 
@@ -509,9 +509,37 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(component['isCombo']).toHaveBeenCalledWith(field);
       });
 
-      it('should call `isLookup` and return `lookup` if contains `searchService`.', () => {
+      it('should call `isCombo` and return `combo` if contains `optionsService` as `PoComboFilter` instance', () => {
+        const expectedValue = 'combo';
+        const mockService = {
+          getFilteredData: null,
+          getObjectByValue: null
+        };
+        const field = { optionService: mockService, property: 'code' };
+
+        spyOn(component, <any>'isCombo').and.returnValue(true);
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['isCombo']).toHaveBeenCalledWith(field);
+      });
+
+      it('should call `isLookup` and return `lookup` if contains `searchService` as url string.', () => {
         const expectedValue = 'lookup';
         const field = { searchService: 'http://api.example/1', property: 'code' };
+
+        spyOn(component, <any>'isLookup').and.returnValue(true);
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['isLookup']).toHaveBeenCalledWith(field);
+      });
+
+      it('should call `isLookup` and return `lookup` if contains `searchService` as `PoLookupFilter` instance.', () => {
+        const expectedValue = 'lookup';
+        const mockService = {
+          getObjectByValue: null,
+          getFilteredItems: null
+        };
+        const field = { searchService: mockService, property: 'code' };
 
         spyOn(component, <any>'isLookup').and.returnValue(true);
 
@@ -567,6 +595,16 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       expect(component['isCombo']({ optionsService, property: 'states' })).toBe(true);
     });
 
+    it('isCombo: should return `true` if `optionsService` is defined service', () => {
+      const optionsService = {
+        getFilteredData: null,
+        getObjectByValue: null
+      };
+      const field = { optionsService, property: 'states' };
+
+      expect(component['isCombo'](field)).toBeTruthy();
+    });
+
     it('isCombo: should return `false` if `optionsService` is invalid string', () => {
       const optionsService = '';
 
@@ -593,6 +631,15 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
     it('isLookup: should return `true` if `searchService` is defined string.', () => {
       const field = { searchService: 'http://service.api:3100', property: 'states' };
+
+      expect(component['isLookup'](field)).toBeTruthy();
+    });
+
+    it('isLookup: should return `true` if `searchService` is defined service.', () => {
+      const searchService = {
+        getObjectByValue: null
+      };
+      const field = { searchService: searchService, property: 'states' };
 
       expect(component['isLookup'](field)).toBeTruthy();
     });
