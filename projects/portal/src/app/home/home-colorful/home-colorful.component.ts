@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { pluck } from 'rxjs/operators';
+import { HomeColorfulService } from './home-colorful.service';
 
 @Component({
   selector: 'app-home-colorful',
@@ -6,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-colorful.component.css']
 })
 export class HomeColorfulComponent implements OnInit {
-  constructor() {}
+  public stargazers_count: number;
 
-  ngOnInit() {}
+  constructor(private service: HomeColorfulService) {}
+
+  ngOnInit() {
+    this.getStargazersCount();
+  }
+
+  getStargazersCount() {
+    this.service
+      .getRepoData()
+      .pipe(pluck('stargazers_count'))
+      .subscribe((result: number) => (this.stargazers_count = result));
+  }
 
   openExternalLink(url) {
     window.open(url, '_blank');
