@@ -44,6 +44,14 @@ export const poPageEditLiteralsDefault = {
 export class PoPageEditBaseComponent {
   @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
 
+  /** Título da página. */
+  @Input('p-api-custom') apiCustom: string;
+
+  /** Título da página. */
+  @Input('p-custom-component-name') customComponent: string;
+
+  @Input('p-custom-events') customEvent: any;
+
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb;
 

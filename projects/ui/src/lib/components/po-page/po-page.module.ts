@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { PoBreadcrumbModule } from '../po-breadcrumb/po-breadcrumb.module';
 import { PoButtonModule } from '../po-button/po-button.module';
+import { PoCustomAreaModule } from '../po-custom-area/po-custom-area.module';
 import { PoDisclaimerGroupModule } from '../po-disclaimer-group/po-disclaimer-group.module';
 import { PoDropdownModule } from '../po-dropdown/po-dropdown.module';
 import { PoFieldModule } from '../po-field/po-field.module';
@@ -35,7 +36,8 @@ import { PoPageComponent } from './po-page.component';
     PoDropdownModule,
     PoFieldModule,
     PoLanguageModule,
-    PoModalModule
+    PoModalModule,
+    PoCustomAreaModule
   ],
   declarations: [
     PoPageComponent,
