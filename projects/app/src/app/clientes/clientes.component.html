@@ -1,9 +1,57 @@
-<po-page-dynamic-table
-  p-auto-router
-  p-title="Users"
-  [p-actions]="actions"
+<po-page-edit
+  p-title="User Edit"
   [p-breadcrumb]="breadcrumb"
-  [p-fields]="fields"
-  [p-service-api]="serviceApi"
+  [p-disable-submit]="formEditUser.invalid"
+  (p-cancel)="cancel()"
+  (p-save)="save()"
+  p-api-custom="http://localhost:3000/custom"
+  p-custom-component-name="pods-input-cnpj"
+  [p-custom-events]="eventInput"
 >
-</po-page-dynamic-table>
+  <form #formEditUser="ngForm">
+    <div class="po-row">
+      <po-number class="po-md-4" name="userId" [(ngModel)]="userId" p-clean p-label="User ID" p-required> </po-number>
+
+      <po-email class="po-md-4" name="email" [(ngModel)]="email" p-clean p-label="Email" p-required> </po-email>
+
+      <po-input class="po-md-4" name="name" [(ngModel)]="name" p-clean p-label="Name" p-required> </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-input class="po-md-4" name="nickname" [(ngModel)]="nickname" p-clean p-label="Nickname"> </po-input>
+
+      <po-datepicker class="po-md-4" name="birthDate" [(ngModel)]="birthDate" p-clean p-label="Birth Date">
+      </po-datepicker>
+
+      <po-input class="po-md-4" name="genre" [(ngModel)]="genre" p-clean p-label="Genre"> </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-input class="po-md-4" name="nationality" [(ngModel)]="nationality" p-clean p-label="Nationality"> </po-input>
+
+      <po-input class="po-md-4" name="placeOfBirth" [(ngModel)]="placeOfBirth" p-clean p-label="Place Of Birth">
+      </po-input>
+
+      <po-input class="po-md-4" name="graduation" [(ngModel)]="graduation" p-clean p-label="Graduation"> </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-input class="po-md-4" name="fathersName" [(ngModel)]="fathersName" p-clean p-label="Father's Name">
+      </po-input>
+
+      <po-input class="po-md-4" name="mothersName" [(ngModel)]="mothersName" p-clean p-label="Mother's Name">
+      </po-input>
+
+      <po-radio-group
+        class="po-lg-4"
+        name="personType"
+        [(ngModel)]="personType"
+        p-label="Tipo de Pessoa"
+        [p-options]="personOptions"
+        (p-change)="changePerson($event)"
+      >
+      </po-radio-group>
+      <po-info p-label="Identificação" [p-value]="cnpj" class="po-lg-4"> </po-info>
+    </div>
+  </form>
+</po-page-edit>
