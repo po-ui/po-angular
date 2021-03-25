@@ -115,6 +115,13 @@ export class PoPageEditBaseComponent {
     return this._title;
   }
 
+  /** Título da página. */
+  @Input('p-api-custom') apiCustom: string;
+
+  /** Título da página. */
+  @Input('p-custom-component-name') customComponent: string;
+
+  @Input('p-custom-events') customEvent: any;
   /**
    * Evento que será disparado ao clicar no botão de "Cancelar".
    *

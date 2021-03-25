@@ -37,5 +37,17 @@
   <!-- CONTENT -->
   <po-page-content>
     <ng-content> </ng-content>
+
+    <div class="po-row" *ngIf="apiCustom">
+      <po-custom-area
+        class="po-md-12"
+        [p-api-custom]="apiCustom"
+        [p-component-name]="customComponent"
+        p-class-style="po-md-4"
+        p-class-container="po-md-12"
+        [p-events]="customEvent"
+        p-id-container="content-page"
+      ></po-custom-area>
+    </div>
   </po-page-content>
 </po-page>
