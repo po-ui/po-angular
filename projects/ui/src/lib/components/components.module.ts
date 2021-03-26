@@ -35,6 +35,7 @@ import { PoTagModule } from './po-tag/po-tag.module';
 import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
 import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
+import { PoIconModule } from './po-icon/po-icon.module';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoFieldModule,
     PoGaugeModule,
     PoGridModule,
+    PoIconModule,
     PoInfoModule,
     PoListViewModule,
     PoLoadingModule,
@@ -91,6 +93,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoFieldModule,
     PoGaugeModule,
     PoGridModule,
+    PoIconModule,
     PoInfoModule,
     PoListViewModule,
     PoLoadingModule,
