@@ -16,6 +16,7 @@ export * from './po-dynamic/index';
 export * from './po-field/index';
 export * from './po-gauge/index';
 export * from './po-grid/index';
+export * from './po-icon/index';
 export * from './po-info/index';
 export * from './po-list-view/index';
 export * from './po-loading/index';

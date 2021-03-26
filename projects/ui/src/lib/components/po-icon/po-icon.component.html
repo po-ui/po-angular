@@ -1,0 +1,5 @@
+<ng-container *ngIf="class; then fontTemplate; else icon"></ng-container>
+
+<ng-template #fontTemplate>
+  <i [class]="class" aria-hidden="true"></i>
+</ng-template>
