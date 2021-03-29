@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.11.0](https://github.com/po-ui/po-angular/compare/v4.10.1...v4.11.0) (2021-03-29)
+
+
+### Features
+
+* **dynamic-form:** adiciona possibilidade de usar instancia de serviço ([4f1f138](https://github.com/po-ui/po-angular/commit/4f1f138188729816263bda779e3dc0de8dbf5abf))
+* **fields:** implementa a atualização do `ng-touched` no blur do campo ([f7d6a00](https://github.com/po-ui/po-angular/commit/f7d6a00c0c6124e6dc11613f9e15baafa00909f5))
+
+
 ## [4.10.1](https://github.com/po-ui/po-angular/compare/v4.10.0...v4.10.1) (2021-03-22)
 
 
