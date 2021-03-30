@@ -15,6 +15,7 @@ export class PoCustomAreaService {
 
   loaded: CustomComponents = [];
   componentsAdded: Array<any> = [];
+  private _model: any = {};
 
   get api() {
     return this._api;
@@ -96,11 +97,16 @@ export class PoCustomAreaService {
     );
   }
 
-  notifyAll(props) {
+  notifyAll(props?: any) {
+    console.log('notify', this._model);
     this.componentsAdded.forEach(component => {
       if (typeof component.notify === 'function') {
-        component.notify(props);
+        component.notify(props, this._model);
       }
     });
+  }
+
+  setModel(model) {
+    this._model = { ...this._model, model };
   }
 }

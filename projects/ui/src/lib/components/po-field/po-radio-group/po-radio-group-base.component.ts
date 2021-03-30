@@ -6,6 +6,7 @@ import { InputBoolean } from '../../../decorators';
 import { requiredFailed } from '../validators';
 
 import { PoRadioGroupOption } from './po-radio-group-option.interface';
+import { PoCustomAreaService } from '../../po-custom-area/services/po-custom-area.service';
 
 const poRadioGroupColumnsDefaultLength: number = 6;
 const poRadioGroupColumnsTotalLength: number = 12;
