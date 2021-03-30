@@ -221,12 +221,10 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const primaryButtons = debugElement.querySelectorAll('po-button > button.po-button-primary > span');
-      const saveButton = primaryButtons[1];
+      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
 
-      expect(saveButton).toBeTruthy();
-      expect(saveButton.innerHTML).toBe(saveLabel);
-      expect(primaryButtons.length).toBe(2);
+      expect(primaryButtonLabel).toBeTruthy();
+      expect(primaryButtonLabel.innerHTML).toBe(saveLabel);
     });
 
     it('should apply `p-primary` only in SaveNew button if save function is undefined', () => {
@@ -239,12 +237,10 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const primaryButtons = debugElement.querySelectorAll('po-button > button.po-button-primary > span');
-      const saveNewButton = primaryButtons[1];
+      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
 
-      expect(saveNewButton).toBeTruthy();
-      expect(saveNewButton.innerHTML).toBe(saveNewLabel);
-      expect(primaryButtons.length).toBe(2);
+      expect(primaryButtonLabel).toBeTruthy();
+      expect(primaryButtonLabel.innerHTML).toBe(saveNewLabel);
     });
 
     it('should apply `p-primary` only in Cancel button if save and saveNew functions are undefined', () => {
@@ -256,12 +252,10 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const primaryButtons = debugElement.querySelectorAll('po-button > button.po-button-primary > span');
-      const cancelButton = primaryButtons[1];
+      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
 
-      expect(cancelButton).toBeTruthy();
-      expect(cancelButton.innerHTML).toBe(cancelLabel);
-      expect(primaryButtons.length).toBe(2);
+      expect(primaryButtonLabel).toBeTruthy();
+      expect(primaryButtonLabel.innerHTML).toBe(cancelLabel);
     });
 
     it('should show page header if `hasPageHeader` return true', () => {
@@ -283,8 +277,8 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const saveIcon = debugElement.querySelectorAll('po-button button span[class="po-icon po-icon-ok"]');
-      const cancelIcon = debugElement.querySelectorAll('po-button button span[class="po-icon po-icon-close"]');
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-ok"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-close"]');
 
       expect(saveIcon.length).toBe(1);
       expect(cancelIcon.length).toBe(0);
@@ -296,8 +290,8 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const saveIcon = debugElement.querySelectorAll('po-button button span[class="po-icon po-icon-ok"]');
-      const cancelIcon = debugElement.querySelectorAll('po-button button span[class="po-icon po-icon-close"]');
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-ok"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-close"]');
 
       expect(saveIcon.length).toBe(1);
       expect(cancelIcon.length).toBe(0);
@@ -308,8 +302,8 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const saveIcon = debugElement.querySelectorAll('po-button button span[class="po-icon po-icon-ok"]');
-      const cancelIcon = debugElement.querySelectorAll('po-button button span[class="po-icon po-icon-close"]');
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-ok"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-close"]');
 
       expect(saveIcon.length).toBe(0);
       expect(cancelIcon.length).toBe(1);
