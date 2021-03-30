@@ -107,6 +107,6 @@ export class PoCustomAreaService {
   }
 
   setModel(model) {
-    this._model = { ...this._model, model };
+    this._model = { ...this._model, ...model };
   }
 }
