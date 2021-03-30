@@ -55,6 +55,7 @@ import { PoUploadDragDropAreaOverlayComponent } from './po-upload/po-upload-drag
 import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
+import { PoCustomAreaModule } from '../po-custom-area/po-custom-area.module';
 
 /**
  * @description
@@ -88,6 +89,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoTableModule,
     PoTooltipModule,
     PoIconModule
+    PoCustomAreaModule
   ],
   exports: [
     PoCheckboxGroupModule,
