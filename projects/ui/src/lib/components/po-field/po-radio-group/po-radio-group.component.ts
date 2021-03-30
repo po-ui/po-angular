@@ -6,6 +6,7 @@ import {
   forwardRef,
   Input,
   IterableDiffers,
+  OnInit,
   QueryList,
   ViewChild,
   ViewChildren
@@ -13,6 +14,7 @@ import {
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { removeDuplicatedOptions } from '../../../utils/util';
+import { PoCustomAreaService } from '../../po-custom-area/services/po-custom-area.service';
 
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 
@@ -60,7 +62,7 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
     }
   ]
 })
-export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck {
+export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck, OnInit {
   /** Label do campo. */
   @Input('p-label') label?: string;
 
@@ -72,9 +74,34 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   differ: any;
 
-  constructor(differs: IterableDiffers) {
+  constructor(differs: IterableDiffers, private poCustomAreaService: PoCustomAreaService) {
     super();
     this.differ = differs.find([]).create(null);
+  }
+
+  getModel() {
+    const model = {};
+    const name = this.name ?? 'radio';
+
+    model[name] = this.value;
+    return model;
+  }
+
+  ngOnInit() {
+    this.poCustomAreaService.setModel(this.getModel());
+  }
+
+  changeValue(changedValue: any) {
+    super.changeValue(changedValue);
+    this.poCustomAreaService.setModel(this.getModel());
+    this.poCustomAreaService.notifyAll();
+  }
+
+  writeValue(modelValue: any) {
+    super.writeValue(modelValue);
+
+    this.poCustomAreaService.setModel(this.getModel());
+    this.poCustomAreaService.notifyAll();
   }
 
   ngAfterViewInit() {
