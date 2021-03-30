@@ -48,10 +48,18 @@
         [(ngModel)]="personType"
         p-label="Tipo de Pessoa"
         [p-options]="personOptions"
-        (p-change)="changePerson($event)"
       >
       </po-radio-group>
       <po-info p-label="Identificação" [p-value]="cnpj" class="po-lg-4"> </po-info>
+
+      <po-radio-group
+        class="po-lg-4"
+        name="typeTest"
+        [(ngModel)]="typeTest"
+        p-label="Radio Teste"
+        [p-options]="typeTestOptions"
+      >
+      </po-radio-group>
     </div>
   </form>
 </po-page-edit>

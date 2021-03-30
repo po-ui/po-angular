@@ -27,6 +27,13 @@ export class ClientesComponent {
   personType: string = 'CNPJ';
   cnpj: string;
 
+  typeTest;
+
+  typeTestOptions: Array<PoRadioGroupOption> = [
+    { label: 'Naruto', value: 'NARUTO' },
+    { label: 'DragonBall', value: 'DRAGON' }
+  ];
+
   readonly personOptions: Array<PoRadioGroupOption> = [
     { label: 'Jurídica', value: 'CNPJ' },
     { label: 'Física', value: 'CPF' }
@@ -90,6 +97,6 @@ export class ClientesComponent {
   }
 
   changePerson(personType) {
-    this.poCustomAreaService.notifyAll({ personType });
+    //this.poCustomAreaService.notifyAll({ personType });
   }
 }
