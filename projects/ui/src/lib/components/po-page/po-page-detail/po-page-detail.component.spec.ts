@@ -223,12 +223,10 @@ describe('PoPageDetailComponent:', () => {
 
       fixture.detectChanges();
 
-      const primaryButtons = debugElement.querySelectorAll('po-button > button.po-button-primary');
-      const editButton = debugElement.querySelectorAll('po-button > button.po-button-primary > span + span')[0];
+      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
 
-      expect(editButton).toBeTruthy();
-      expect(editButton.innerHTML).toBe(editLabel);
-      expect(primaryButtons.length).toBe(1);
+      expect(primaryButtonLabel).toBeTruthy();
+      expect(primaryButtonLabel.innerHTML).toBe(editLabel);
     });
 
     it('should have only one primary action and `Remove` button with `primary` applyed.', () => {
@@ -241,12 +239,10 @@ describe('PoPageDetailComponent:', () => {
 
       fixture.detectChanges();
 
-      const primaryButtons = debugElement.querySelectorAll('po-button > button.po-button-primary');
-      const removeButton = debugElement.querySelectorAll('po-button > button.po-button-primary > span + span')[0];
+      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
 
-      expect(removeButton).toBeTruthy();
-      expect(removeButton.innerHTML).toBe(removeLabel);
-      expect(primaryButtons.length).toBe(1);
+      expect(primaryButtonLabel).toBeTruthy();
+      expect(primaryButtonLabel.innerHTML).toBe(removeLabel);
     });
 
     it('should have only one primary action and `Back` button with `p-primary` applyed.', () => {
@@ -258,12 +254,10 @@ describe('PoPageDetailComponent:', () => {
 
       fixture.detectChanges();
 
-      const primaryButtons = debugElement.querySelectorAll('po-button > button.po-button-primary');
-      const backButton = debugElement.querySelectorAll('po-button > button.po-button-primary > span + span')[0];
+      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
 
-      expect(backButton).toBeTruthy();
-      expect(backButton.innerHTML).toBe(backLabel);
-      expect(primaryButtons.length).toBe(1);
+      expect(primaryButtonLabel).toBeTruthy();
+      expect(primaryButtonLabel.innerHTML).toBe(backLabel);
     });
 
     it('should show page header if `hasPageHeader` return true', () => {
