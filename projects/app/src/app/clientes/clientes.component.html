@@ -4,7 +4,7 @@
   [p-disable-submit]="formEditUser.invalid"
   (p-cancel)="cancel()"
   (p-save)="save()"
-  p-api-custom="http://localhost:3000/custom"
+  [p-api-custom]="url"
   p-custom-component-name="pods-input-cnpj"
   [p-custom-events]="eventInput"
 >
@@ -54,12 +54,21 @@
 
       <po-radio-group
         class="po-lg-4"
-        name="typeTest"
-        [(ngModel)]="typeTest"
+        name="anime"
+        [(ngModel)]="anime"
         p-label="Radio Teste"
         [p-options]="typeTestOptions"
       >
       </po-radio-group>
+
+      <po-custom-area
+        class="po-lg-4"
+        [p-api-custom]="url"
+        p-component-name="pods-input-anime"
+        p-class-style="po-md-4"
+        p-class-container="po-lg-4"
+        p-id-container="content5"
+      ></po-custom-area>
     </div>
   </form>
 </po-page-edit>
