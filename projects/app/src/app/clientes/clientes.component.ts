@@ -26,8 +26,8 @@ export class ClientesComponent {
   userId: number;
   personType: string = 'CNPJ';
   cnpj: string;
-
-  typeTest;
+  url = 'http://localhost:3000/custom';
+  anime;
 
   typeTestOptions: Array<PoRadioGroupOption> = [
     { label: 'Naruto', value: 'NARUTO' },
