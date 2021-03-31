@@ -391,22 +391,39 @@ describe('PoUploadDragDropDirective:', () => {
       expect(directive.notification.information).toHaveBeenCalledWith('fileType 2');
     });
 
-    it(`getOnlyFiles: should return an array of files that only contain type and increment 'invalidFileType'`, () => {
+    it(`getOnlyFiles: should return an array of files and increment 'invalidFileType'`, () => {
       directive['invalidFileType'] = 0;
-      const fileList = [
-        { name: 'file1', type: '', size: 300 },
-        { name: 'file2', type: '.pdf', size: 500 },
-        { name: 'file3', type: '.txt', size: 100 },
-        { name: 'file4', type: '', size: 700 }
+
+      function webkitGetAsEntry() {
+        return {
+          name: this.name,
+          isFile: this.name !== 'folder'
+        };
+      }
+
+      const dataTransfer = {
+        files: [
+          { name: 'file1.zpl', type: '', size: 300 },
+          { name: 'file2.pdf', type: '.pdf', size: 500 },
+          { name: 'file3.txt', type: '.txt', size: 100 },
+          { name: 'folder', type: '', size: 100 }
+        ],
+        items: [
+          { name: 'file1.zpl', webkitGetAsEntry },
+          { name: 'file2.pdf', webkitGetAsEntry },
+          { name: 'file3.txt', webkitGetAsEntry },
+          { name: 'folder', webkitGetAsEntry }
+        ]
+      };
+
+      const expectedValue = [
+        { name: 'file1.zpl', type: '', size: 300 },
+        { name: 'file2.pdf', type: '.pdf', size: 500 },
+        { name: 'file3.txt', type: '.txt', size: 100 }
       ];
 
-      const result = [
-        { name: 'file2', type: '.pdf', size: 500 },
-        { name: 'file3', type: '.txt', size: 100 }
-      ];
-
-      expect(directive.getOnlyFiles(fileList)).toEqual(result);
-      expect(directive['invalidFileType']).toBe(2);
+      expect(directive.getOnlyFiles(dataTransfer)).toEqual(expectedValue);
+      expect(directive['invalidFileType']).toBe(1);
     });
 
     it(`sendFiles: should call 'fileChange.emit' with 'files' if 'areaElement' contains 'event.target' and 'files.length'

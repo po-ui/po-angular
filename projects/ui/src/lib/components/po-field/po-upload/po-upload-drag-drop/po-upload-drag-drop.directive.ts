@@ -64,7 +64,7 @@ export class PoUploadDragDropDirective {
           this.sendFiles(event, this.files);
         });
       } else {
-        const files = this.getOnlyFiles(event.dataTransfer.files);
+        const files = this.getOnlyFiles(event.dataTransfer);
         this.sendFiles(event, files);
       }
     }
@@ -100,9 +100,14 @@ export class PoUploadDragDropDirective {
   }
 
   // return only files. If it is a directory, invalidFileType counts.
-  private getOnlyFiles(fileList: FileList): Array<File> {
-    return Array.from(fileList).reduce((newFiles, file) => {
-      if (file.type) {
+  private getOnlyFiles(dataTransfer: DataTransfer): Array<File> {
+    const fileList: Array<File> = Array.from(dataTransfer.files);
+    const entriesFiles: Array<any> = Array.from(dataTransfer.items).map(item => item.webkitGetAsEntry());
+
+    return fileList.reduce((newFiles, file) => {
+      const entryFile = entriesFiles.find(entry => entry.name === file.name);
+
+      if (entryFile.isFile) {
         return newFiles.concat(file);
       } else {
         this.invalidFileType++;

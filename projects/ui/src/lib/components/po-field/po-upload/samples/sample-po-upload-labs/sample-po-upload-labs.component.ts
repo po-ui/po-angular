@@ -61,7 +61,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
     }
   }
   onChangeExtension() {
-    this.restrictions = Object.assign({}, this.restrictions, { allowedExtensions: this.allowedExtensions.split(',') });
+    const allowedExtensions = this.allowedExtensions.split(',').map(allowedExtension => allowedExtension.trim());
+    this.restrictions = Object.assign({}, this.restrictions, { allowedExtensions });
   }
 
   onChangeMaxFiles(maxFiles: number) {
