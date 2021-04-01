@@ -1,5 +1,6 @@
 import { Component, ElementRef, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { PoCustomAreaService } from '../../po-custom-area/services/po-custom-area.service';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
@@ -41,8 +42,28 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 })
 export class PoInputComponent extends PoInputGeneric {
   /* istanbul ignore next */
-  constructor(el: ElementRef) {
+  constructor(el: ElementRef, private poCustomAreaService: PoCustomAreaService) {
     super(el);
+  }
+
+  getModel(value: any) {
+    const model = {};
+    const name = this.name ?? 'radio';
+
+    model[name] = value;
+    return model;
+  }
+
+  callOnChange(value: any) {
+    super.callOnChange(value);
+    this.poCustomAreaService.setModel(this.getModel(value));
+    this.poCustomAreaService.notifyAll();
+  }
+
+  writeValue(value: any) {
+    super.writeValue(value);
+    this.poCustomAreaService.setModel(this.getModel(value));
+    this.poCustomAreaService.notifyAll();
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {
