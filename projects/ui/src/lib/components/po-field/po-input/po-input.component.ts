@@ -43,7 +43,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 })
 export class PoInputComponent extends PoInputGeneric {
   /* istanbul ignore next */
-  constructor(el: ElementRef, private poCustomAreaService: PoCustomAreaService, cd: ChangeDetectorRef) {
+  constructor(el: ElementRef, private poCustomAreaService: PoCustomAreaService,, cd: ChangeDetectorRef) {
     super(el, cd);
   }
 
