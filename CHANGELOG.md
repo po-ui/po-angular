@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.12.0](https://github.com/po-ui/po-angular/compare/v4.11.0...v4.12.0) (2021-04-05)
+
+
+### Bug Fixes
+
+* **upload:** corrige validação para arquivos especificos ([d7431f1](https://github.com/po-ui/po-angular/commit/d7431f1d79394b4ec7fd47e355d998fd68ecd846))
+
+
+### Features
+
+* **chart:** adiciona gráfico do tipo `area` ([0ffb8d9](https://github.com/po-ui/po-angular/commit/0ffb8d90f65341d101691282d8205da4f519c556))
+
+
+
 # [4.11.0](https://github.com/po-ui/po-angular/compare/v4.10.1...v4.11.0) (2021-03-29)
 
 

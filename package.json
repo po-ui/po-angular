@@ -1,6 +1,6 @@
 {
   "name": "po-ui-sources",
-  "version": "4.11.0",
+  "version": "4.12.0",
   "description": "PO UI",
   "homepage": "https://po-ui.io",
   "license": "MIT",
@@ -72,7 +72,7 @@
     "@angular/router": "~11.2.0",
     "@ionic-native/core": "5.23.0",
     "@ionic-native/network": "5.23.0",
-    "@po-ui/style": "4.11.0",
+    "@po-ui/style": "4.12.0",
     "capitalize": "^2.0.3",
     "colors": "^1.4.0",
     "core-js": "3.6.4",
