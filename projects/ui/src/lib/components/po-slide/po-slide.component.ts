@@ -8,10 +8,15 @@ import {
   ViewChild,
   ViewChildren,
   OnChanges,
+  OnDestroy,
+  OnInit,
   SimpleChanges
 } from '@angular/core';
 
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
+
+import { Subscription, Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { PoSlideBaseComponent } from './po-slide-base.component';
 import { PoSlideContentTemplateDirective } from './directives/po-slide-content-template.directive';
@@ -56,7 +61,7 @@ const poSlideTiming = '250ms ease';
   selector: 'po-slide',
   templateUrl: './po-slide.component.html'
 })
-export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, OnChanges {
+export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   private isLoaded: boolean = false;
   private player: AnimationPlayer;
   private setInterval: any;
@@ -82,6 +87,9 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, O
   slideItems: Array<PoSlideItem | any> = [];
   slideItemWidth: number;
 
+  private resize$ = new Subject<any>();
+  private resizeSubscription: Subscription;
+
   @ContentChild(PoSlideContentTemplateDirective, { static: true })
   slideContentTemplate: PoSlideContentTemplateDirective;
 
@@ -94,10 +102,14 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, O
   }
 
   @HostListener('window:resize') onResize() {
-    if (this.slide) {
+    this.resize$.next();
+  }
+
+  ngOnInit() {
+    this.resizeSubscription = this.resize$.pipe(debounceTime(150)).subscribe(() => {
       this.setSlideItemWidth();
       this.goToItem(this.currentSlideIndex);
-    }
+    });
   }
 
   ngDoCheck() {
@@ -115,6 +127,10 @@ export class PoSlideComponent extends PoSlideBaseComponent implements DoCheck, O
     if (changes.height) {
       this.setSlideHeight(this.height);
     }
+  }
+
+  ngOnDestroy() {
+    this.resizeSubscription?.unsubscribe();
   }
 
   /**
