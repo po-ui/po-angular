@@ -44,39 +44,44 @@ describe('PoSlideComponent:', () => {
       { image: '/image-slide-4.jpg' }
     ];
 
-    describe('onResize:', () => {
-      it('onResize: should trigger onResize method when window is resized ', () => {
-        const spyOnResize = spyOn(component, 'onResize');
+    it('onResize: should trigger onResize method when window is resized ', () => {
+      const spyOnResize = spyOn(component, 'onResize');
 
-        window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event('resize'));
 
-        expect(spyOnResize).toHaveBeenCalled();
-      });
+      expect(spyOnResize).toHaveBeenCalled();
+    });
 
-      it('onResize: should call `setSlideItemWidth` and `goToItem` with `currentSlideIndex` if has slides', () => {
-        // define slide
-        component.slides = slides;
-        fixture.detectChanges();
+    it('onResize: should call `setSlideItemWidth` and `goToItem` with `currentSlideIndex`', fakeAsync(() => {
+      spyOn(component, <any>'setSlideItemWidth');
+      spyOn(component, 'goToItem');
 
-        spyOn(component, <any>'setSlideItemWidth');
-        spyOn(component, 'goToItem');
-        component.onResize();
+      component.onResize();
 
-        expect(component['setSlideItemWidth']).toHaveBeenCalled();
-        expect(component.goToItem).toHaveBeenCalledWith(component.currentSlideIndex);
-      });
+      tick(150);
 
-      it('onResize: shouldn`t call `setSlideItemWidth` and `goToItem` if doesn`t have slide', () => {
-        component['slide'] = undefined;
+      expect(component['setSlideItemWidth']).toHaveBeenCalled();
+      expect(component.goToItem).toHaveBeenCalledWith(component.currentSlideIndex);
+    }));
 
-        spyOn(component, <any>'setSlideItemWidth');
-        spyOn(component, 'goToItem');
+    it('ngOnDestroy: should call resizeSubscription.unsubscribe', fakeAsync(() => {
+      const spyResizeSubscription = spyOn(component['resizeSubscription'], 'unsubscribe');
 
-        component.onResize();
+      component.onResize();
 
-        expect(component['setSlideItemWidth']).not.toHaveBeenCalled();
-        expect(component['goToItem']).not.toHaveBeenCalledWith(component.currentSlideIndex);
-      });
+      tick(150);
+
+      component.ngOnDestroy();
+
+      expect(spyResizeSubscription).toHaveBeenCalled();
+    }));
+
+    it('ngOnDestroy: shouldn`t throw error if resizeSubscription is undefined', () => {
+      component['resizeSubscription'] = undefined;
+
+      const fnDestroy = () => component.ngOnDestroy();
+
+      expect(fnDestroy).not.toThrow();
     });
 
     describe('ngDoCheck:', () => {
