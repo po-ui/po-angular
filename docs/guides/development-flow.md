@@ -125,9 +125,7 @@ Este guia tem por objetivo definir as regras para criação de *Issues* relacion
         <h3 class="po-font-subtitle po-pb-1">Subindo as modificações localmente</h3>
         <ul>
           <li><p>As modificações de código e documentação realizadas podem ser conferidas executando os comandos:</p>
-            <pre><code>npm run build
-npm run build:portal
-ng serve portal</code></pre></li>
+            <pre><code>npm run build:portal && ng serve portal</code></pre></li>
           <li>O navegador exibirá o portal na url <code>http://localhost:4200/</code>.</li>
           <li>A partir disso, navegue até o componente para verificação das modificações.</li>
           <li>Pedimos para que atente para a inclusão da melhoria em nossos <em>samples</em>, em especial no sample <code>labs</code>. Na inviabilidade de usar os <em>samples</em> já existentes, considere a necessidade de criar um novo <em>sample</em> de uso.</li>
