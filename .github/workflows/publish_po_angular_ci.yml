@@ -167,7 +167,7 @@ jobs:
 
     # PUBLISH PORTAL
     - name: portal build
-      run: npm run build:portal && npm run build:portal:prod
+      run: npm run build:portal:docs && npm run build:portal:prod
       working-directory: ${{env.WORKING_DIR}}
 
     - name: 'Deploy to Azure Web App'
