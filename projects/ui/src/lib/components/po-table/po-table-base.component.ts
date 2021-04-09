@@ -1,4 +1,5 @@
-import { EventEmitter, Input, OnChanges, Output, Directive, SimpleChanges } from '@angular/core';
+import { EventEmitter, Input, OnChanges, Output, Directive, SimpleChanges, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 
 import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -11,6 +12,9 @@ import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
 import { InputBoolean } from '../../decorators';
+import { PoTableService } from './services/po-table.service';
+import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
+import { PoTableFilteredItemsParams } from './interfaces/po-table-filtered-items-params.interface';
 
 export const poTableContainer = ['border', 'shadow'];
 export const poTableContainerDefault = 'border';
@@ -79,7 +83,7 @@ export const poTableLiteralsDefault = {
  * completa visualização dos dados.
  */
 @Directive()
-export abstract class PoTableBaseComponent implements OnChanges {
+export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
@@ -90,8 +94,10 @@ export abstract class PoTableBaseComponent implements OnChanges {
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
   private _selectable?: boolean;
-  private _columnManager?: boolean = true;
   private language: string = poLocaleDefault;
+  private _serviceApi: string;
+  private poTableServiceSubscription: Subscription;
+  private sortStore: PoTableColumnSort;
 
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
@@ -100,6 +106,9 @@ export abstract class PoTableBaseComponent implements OnChanges {
   selectAll = false;
   sortedColumn = { property: <PoTableColumn>null, ascending: true };
   subtitleColumns: Array<PoTableColumn> = [];
+  page = 1;
+  pageSize = 10;
+  hasService?: boolean = false;
 
   /**
    * @description
@@ -454,6 +463,43 @@ export abstract class PoTableBaseComponent implements OnChanges {
    * @optional
    *
    * @description
+   *
+   * URL da API responsável por retornar os registros.
+   *
+   * Ao realizar a busca de mais registros via paginação (Carregar mais resultados), será enviado os parâmetros `page` e `pageSize`, conforme abaixo:
+   *
+   * ```
+   * url + ?page=1&pageSize=10
+   * ```
+   *
+   * Caso utilizar ordenação, a coluna ordenada será enviada através do parâmetro `order`, por exemplo:
+   * - Coluna decrescente:
+   * ```
+   *  url + ?page=1&pageSize=10&order=-name
+   * ```
+   *
+   * - Coluna ascendente:
+   * ```
+   *  url + ?page=1&pageSize=10&order=name
+   * ```
+   *
+   * > Esta URL deve retornar e receber os dados no padrão de [API do PO UI](https://po-ui.io/guides/api).
+   */
+  @Input('p-service-api') set serviceApi(service: string) {
+    this._serviceApi = service;
+    this.setService(this.serviceApi);
+    this.hasService = service && service !== '';
+    this.showMoreDisabled = !this.hasService;
+  }
+
+  get serviceApi() {
+    return this._serviceApi;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas.
    */
   @Output('p-all-selected') allSelected: EventEmitter<any> = new EventEmitter<any>();
@@ -580,8 +626,16 @@ export abstract class PoTableBaseComponent implements OnChanges {
     return this.sortedColumn.ascending ? PoTableColumnSortType.Ascending : PoTableColumnSortType.Descending;
   }
 
-  constructor(private poDate: PoDateService, languageService: PoLanguageService) {
+  constructor(
+    private poDate: PoDateService,
+    languageService: PoLanguageService,
+    private poTableService: PoTableService
+  ) {
     this.language = languageService.getShortLanguage();
+  }
+
+  ngOnDestroy() {
+    this.poTableServiceSubscription?.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -696,12 +750,28 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
     this.sortArray(column, this.sortedColumn.ascending);
     this.sortBy.emit({ column, type: this.sortType });
+    if (this.hasService && this.sort) {
+      this.sortStore = { column, type: this.sortType };
+    }
 
     this.sortedColumn.property = column;
   }
 
   onShowMore(): void {
     const sort = this.sortedColumn.property ? { column: this.sortedColumn.property, type: this.sortType } : undefined;
+
+    if (this.hasService) {
+      this.page++;
+      this.loading = true;
+      this.loadingShowMore = true;
+
+      this.poTableServiceSubscription = this.getFilteredItems().subscribe(data => {
+        this.items = [...this.items, ...data.items];
+        this.showMoreDisabled = !data.hasNext;
+        this.loading = false;
+        this.loadingShowMore = false;
+      });
+    }
 
     this.showMore.emit(sort);
   }
@@ -830,5 +900,53 @@ export abstract class PoTableBaseComponent implements OnChanges {
 
   private verifyWidthColumnsPixels() {
     return this.hasMainColumns ? this.mainColumns.every(column => column.width && column.width.includes('px')) : false;
+  }
+
+  setTableResponseProperties(data: PoTableResponseApi) {
+    this.items = data.items || [];
+    this.showMoreDisabled = !data.hasNext;
+    this.loading = false;
+  }
+
+  private setService(service: string) {
+    if (service && isTypeof(service, 'string')) {
+      this.poTableService.setUrl(service);
+    }
+  }
+
+  getFilteredItems(filter?: string): Observable<PoTableResponseApi> {
+    const filteredParams: PoTableFilteredItemsParams = this.getFilteredParams(filter);
+
+    return this.poTableService.getFilteredItems(filteredParams);
+  }
+
+  private getFilteredParams(filter?: string) {
+    const { page, pageSize, sortStore } = this;
+
+    const filteredParams = {};
+    const order = this.getOrderParam(sortStore);
+    const params = { filter, page, pageSize, order };
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key) && params[key] !== undefined) {
+        filteredParams[key] = params[key];
+      }
+    }
+
+    return filteredParams;
+  }
+
+  private getOrderParam(sort: PoTableColumnSort = { type: undefined }) {
+    const { column, type } = sort;
+
+    if (!column) {
+      return;
+    }
+
+    if (type === PoTableColumnSortType.Descending) {
+      return `-${column.property}`;
+    }
+
+    return `${column.property}`;
   }
 }
