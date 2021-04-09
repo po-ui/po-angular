@@ -13,12 +13,13 @@ import {
   ViewChildren,
   ViewContainerRef,
   ContentChildren,
-  TemplateRef
+  TemplateRef,
+  OnInit
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, isTypeof } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
@@ -32,6 +33,7 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subti
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
+import { PoTableService } from './services/po-table.service';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -49,6 +51,11 @@ import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.e2e-spec.ts"> </file>
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.po.ts"> </file>
  *  <file name="sample-po-table-labs/sample-po-table-labs.service.ts"> </file>
+ * </example>
+ *
+ * <example name="po-table-with-api" title="PO Table using API">
+ *  <file name="sample-po-table-with-api/sample-po-table-with-api.component.ts"> </file>
+ *  <file name="sample-po-table-with-api/sample-po-table-with-api.component.html"> </file>
  * </example>
  *
  * <example name="po-table-transport" title="PO Table - Transport">
@@ -76,7 +83,7 @@ import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-
   templateUrl: './po-table.component.html',
   providers: [PoDateService]
 })
-export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
+export class PoTableComponent extends PoTableBaseComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
   private _columnManagerTarget: ElementRef;
 
   heightTableContainer: number;
@@ -125,9 +132,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
-    private router: Router
+    private router: Router,
+    defaultService: PoTableService
   ) {
-    super(poDate, poLanguageService);
+    super(poDate, poLanguageService, defaultService);
 
     this.differ = differs.find([]).create(null);
 
@@ -210,6 +218,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   ngAfterViewInit() {
     this.initialized = true;
+  }
+
+  ngOnInit() {
+    this.initializeData();
   }
 
   ngDoCheck() {
@@ -466,5 +478,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       return null;
     }
     return template.templateRef;
+  }
+
+  private initializeData(): void {
+    if (this.hasService) {
+      this.loading = true;
+      this.getFilteredItems().subscribe(data => {
+        this.setTableResponseProperties(data);
+      });
+    }
   }
 }

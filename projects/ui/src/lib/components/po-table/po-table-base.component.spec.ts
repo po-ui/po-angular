@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 import * as utilsFunctions from '../../utils/util';
-import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
+import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
@@ -10,6 +10,10 @@ import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
+import { PoTableService } from './services/po-table.service';
+import { HttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
+import { Observable, of } from 'rxjs';
 
 @Directive()
 class PoTableComponent extends PoTableBaseComponent {
@@ -20,15 +24,22 @@ class PoTableComponent extends PoTableBaseComponent {
 describe('PoTableBaseComponent:', () => {
   let dateService: PoDateService;
   let languageService: PoLanguageService;
+  let tableService: PoTableService;
   let component: PoTableComponent;
   let actions: Array<PoTableAction>;
   let columns: Array<PoTableColumn>;
   let items;
 
+  configureTestSuite(() => {
+    TestBed.configureTestingModule({
+      providers: [PoTableService, PoLanguageService, PoDateService]
+    });
+  });
   beforeEach(() => {
     dateService = new PoDateService();
     languageService = new PoLanguageService();
-    component = new PoTableComponent(dateService, languageService);
+    tableService = new PoTableService(undefined);
+    component = new PoTableComponent(dateService, languageService, tableService);
 
     actions = [
       {
@@ -413,6 +424,15 @@ describe('PoTableBaseComponent:', () => {
     component['sortArray'](column, true);
 
     expect(component.items).toEqual(sortedItemsAsc);
+  });
+
+  it(`should has service and sort set 'sortStore'`, () => {
+    const column = component.columns[1];
+    component.serviceApi = 'https://po-ui.io';
+    component.sort = true;
+
+    component.sortColumn(column);
+    expect(component['sortStore']).toBeDefined();
   });
 
   it('should call event emitter', () => {
@@ -829,6 +849,25 @@ describe('PoTableBaseComponent:', () => {
       });
     });
 
+    it(`OnShowMore: 'showMore' should call 'getFilteredItems' when has 'p-service-api' url`, () => {
+      spyOn(component, <any>'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
+      spyOn(component.showMore, 'emit');
+
+      const column = component.columns[1];
+      component.sortedColumn.property = column;
+      component.serviceApi = 'https://po-ui.io';
+
+      const params = {
+        column: component.sortedColumn.property,
+        type: PoTableColumnSortType.Ascending
+      };
+
+      component.onShowMore();
+
+      expect(component.showMore.emit).toHaveBeenCalledWith(params);
+      expect(component.getFilteredItems).toHaveBeenCalled();
+    });
+
     it(`onShowMore: 'showMore' should emit an object parameter containing 'descending' as value of property 'type'`, () => {
       const column = component.columns[1];
       component.sortedColumn.property = column;
@@ -1175,6 +1214,193 @@ describe('PoTableBaseComponent:', () => {
         component.sortColumn(component.columns.find(c => c.property === 'birthday'));
 
         expect(component.items).toEqual(sortedItems);
+      });
+    });
+
+    describe('getOrderParam', () => {
+      it('should be called with descending order', () => {
+        const sortMock = { column: component.columns[1], type: PoTableColumnSortType.Descending };
+
+        const result = component['getOrderParam'](sortMock);
+
+        expect(result).toBe('-numberData');
+      });
+
+      it('should be called with ascendind order', () => {
+        const sortMock = { column: component.columns[1], type: PoTableColumnSortType.Ascending };
+
+        const result = component['getOrderParam'](sortMock);
+
+        expect(result).toBe('numberData');
+      });
+
+      it('should be called without column', () => {
+        const sortMock = { column: undefined, type: undefined };
+
+        const result = component['getOrderParam'](sortMock);
+
+        expect(result).toBeUndefined();
+      });
+    });
+
+    describe('setService', () => {
+      it('should be called with string url and set service url', () => {
+        spyOn(component['poTableService'], 'setUrl');
+        const url = 'https://po-ui.io';
+
+        component['setService'](url);
+        expect(component['poTableService'].setUrl).toHaveBeenCalledWith(url);
+      });
+
+      it("should be called with undefined and don't set url", () => {
+        spyOn(component['poTableService'], 'setUrl');
+        const url = undefined;
+
+        component['setService'](url);
+
+        expect(component['poTableService'].setUrl).not.toHaveBeenCalled();
+      });
+
+      it("should be called with empty string and don't set url", () => {
+        spyOn(component['poTableService'], 'setUrl');
+        const url = '';
+
+        component['setService'](url);
+        expect(component.hasService).toBeFalsy();
+        expect(component['poTableService'].setUrl).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('getFilteredParams', () => {
+      it('should return object with empty filter', () => {
+        const page = 1;
+        const pageSize = 10;
+        const filter = '';
+        const expectedValue = { filter, page, pageSize };
+
+        component.page = page;
+        component.pageSize = pageSize;
+        component['sort'] = undefined;
+
+        const filteredParams = component['getFilteredParams'](filter);
+
+        expect(filteredParams).toEqual(expectedValue);
+      });
+
+      it('should return object without undefined values', () => {
+        const page = 1;
+        const pageSize = 10;
+        const filter = undefined;
+        const expectedValue = { page, pageSize };
+
+        component.page = page;
+        component.pageSize = pageSize;
+        component['sort'] = undefined;
+
+        const filteredParams = component['getFilteredParams'](filter);
+
+        expect(filteredParams).toEqual(expectedValue);
+      });
+    });
+
+    describe('getFilteredItems:', () => {
+      beforeEach(() => {
+        items = [
+          { name: 'John Lennon', email: 'john.lennon@mail.com', city: 'Rio de Janeiro' },
+          { name: 'Paul McCartney', email: 'paul.mccartney@mail.com', city: 'São Paulo' },
+          { name: 'Ringo Starr', email: 'ringo.starr@mail.com', city: 'Joinville' },
+          { name: 'George Harrison', email: 'george.harrison@mail.com', city: 'Brasília' }
+        ];
+      });
+
+      it('should call and return an Observable', () => {
+        const page = 1;
+        const pageSize = 10;
+        const filter = '';
+
+        spyOn(component['poTableService'], <any>'getFilteredItems').and.returnValue(of({ items, hasNext: false }));
+
+        component.page = page;
+        component.pageSize = pageSize;
+
+        spyOn(component, <any>'getFilteredParams').and.callThrough();
+
+        const filteredDataObservable = component['getFilteredItems'](filter);
+
+        expect(component['getFilteredParams']).toHaveBeenCalled();
+        expect(filteredDataObservable instanceof Observable);
+      });
+    });
+
+    describe('setTableResponseProperties:', () => {
+      beforeEach(() => {
+        items = [
+          { name: 'John Lennon', email: 'john.lennon@mail.com', city: 'Rio de Janeiro' },
+          { name: 'Paul McCartney', email: 'paul.mccartney@mail.com', city: 'São Paulo' },
+          { name: 'Ringo Starr', email: 'ringo.starr@mail.com', city: 'Joinville' },
+          { name: 'George Harrison', email: 'george.harrison@mail.com', city: 'Brasília' }
+        ];
+      });
+      it(`should be called with data object with items and 'hasNext' 'true'`, () => {
+        const data = {
+          items,
+          hasNext: true
+        };
+
+        component.setTableResponseProperties(data);
+
+        expect(component.items).toBe(items);
+        expect(component.showMoreDisabled).toBeFalsy();
+        expect(component.loading).toBeFalsy();
+      });
+
+      it(`should be called with data object with items and 'hasNext' 'false'`, () => {
+        const data = {
+          items,
+          hasNext: false
+        };
+
+        component.setTableResponseProperties(data);
+
+        expect(component.items).toBe(items);
+        expect(component.showMoreDisabled).toBeTruthy();
+        expect(component.loading).toBeFalsy();
+      });
+      it('should be called with data object without items', () => {
+        const data = {
+          items: undefined,
+          hasNext: false
+        };
+
+        component.setTableResponseProperties(data);
+
+        expect(component.items).toEqual([]);
+        expect(component.showMoreDisabled).toBeTruthy();
+        expect(component.loading).toBeFalsy();
+      });
+    });
+
+    describe('ngOnDestroy:', () => {
+      const fakeSubscription = <any>{ unsubscribe: () => {} };
+
+      it(`should unsubscribe 'poTableServiceSubscription'`, () => {
+        spyOn(fakeSubscription, <any>'unsubscribe');
+        component['poTableServiceSubscription'] = fakeSubscription;
+
+        component.ngOnDestroy();
+
+        expect(fakeSubscription.unsubscribe).toHaveBeenCalled();
+      });
+
+      it(`should not unsubscribe if 'poTableServiceSubscription' is falsy.`, () => {
+        component['poTableServiceSubscription'] = fakeSubscription;
+
+        spyOn(fakeSubscription, <any>'unsubscribe');
+
+        component['poTableServiceSubscription'] = undefined;
+        component.ngOnDestroy();
+
+        expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
       });
     });
   });

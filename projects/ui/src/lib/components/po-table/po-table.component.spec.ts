@@ -4,7 +4,9 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { DecimalPipe } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+import { of } from 'rxjs';
 import * as utilsFunctions from '../../utils/util';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
@@ -18,6 +20,7 @@ import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
+import { PoTableService } from './services/po-table.service';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -189,9 +192,9 @@ describe('PoTableComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoTableModule],
+      imports: [RouterTestingModule.withRoutes(routes), PoTableModule, HttpClientTestingModule],
       declarations: [TestMenuComponent, SearchComponent],
-      providers: [PoControlPositionService, PoDateService, DecimalPipe, PoColorPaletteService]
+      providers: [PoControlPositionService, PoDateService, DecimalPipe, PoColorPaletteService, PoTableService]
     });
   });
 
@@ -1535,6 +1538,15 @@ describe('PoTableComponent:', () => {
       component.onChangeVisibleColumns(fakeColumns);
 
       expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeColumns);
+    });
+
+    describe('initializeData', () => {
+      it('should be called when `p-service-api` is used', () => {
+        spyOn(component, 'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
+        component.hasService = true;
+        component['initializeData']();
+        expect(component.getFilteredItems).toHaveBeenCalled();
+      });
     });
   });
 

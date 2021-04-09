@@ -36,7 +36,11 @@
   </div>
 </ng-template>
 
-<div class="po-row po-table-footer-show-more" [class.po-invisible]="showMore.observers.length === 0" #tableFooter>
+<div
+  class="po-row po-table-footer-show-more"
+  [class.po-invisible]="showMore.observers.length === 0 && !hasService"
+  #tableFooter
+>
   <po-button
     class="po-offset-xl-4 po-offset-lg-4 po-offset-md-3 po-lg-4 po-md-6"
     [p-disabled]="showMoreDisabled"
@@ -81,7 +85,7 @@
           [style.width]="column.width"
           [style.max-width]="column.width"
           [style.min-width]="column.width"
-          [class.po-clickable]="sort"
+          [class.po-clickable]="sort || hasService"
           [class.po-table-header-subtitle]="column.type === 'subtitle'"
           (click)="sortColumn(column)"
         >
