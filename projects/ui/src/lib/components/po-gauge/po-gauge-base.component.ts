@@ -14,6 +14,11 @@ import { PoGaugeRanges } from './interfaces/po-gauge-ranges.interface';
  * O `po-gauge` possui dois tipos de tratamentos:
  * - É possível demonstrar um dado percentual simples em conjunto com uma descrição resumida em seu interior;
  * - Para um demonstrativo mais elaborado, consegue-se definir alcances em cores, um breve texto descritivo e um ponteiro indicando o valor desejado.
+ *
+ * #### Guia de uso para Gráficos
+ *
+ * > Veja nosso [guia de uso para gráficos](/guides/guide-charts) para auxiliar na construção do seu gráfico,
+ * informando em qual caso utilizar, o que devemos evitar e boas práticas relacionada a cores.
  */
 @Directive()
 export abstract class PoGaugeBaseComponent {

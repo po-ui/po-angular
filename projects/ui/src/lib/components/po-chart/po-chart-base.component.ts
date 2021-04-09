@@ -25,9 +25,10 @@ const poChartMinHeight = 200;
  * Além disso, também é possível definir uma ação que será executada ao clicar em determinado elemento do gráfico
  * e outra que será executada ao passar o *mouse* sobre o elemento.
  *
- * #### Boas práticas
+ * #### Guia de uso para Gráficos
  *
- * - Para que o gráfico não fique ilegível e incompreensível, evite uma quantia excessiva de séries.
+ * > Veja nosso [guia de uso para gráficos](/guides/guide-charts) para auxiliar na construção do seu gráfico,
+ * informando em qual caso utilizar, o que devemos evitar e boas práticas relacionada a cores.
  */
 @Directive()
 export abstract class PoChartBaseComponent implements OnChanges {
