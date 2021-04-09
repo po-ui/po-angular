@@ -9,7 +9,7 @@ import { GuideApiComponent } from './guides/guide-api/guide-api.component';
 import { GuideBrowserSupportComponent } from './guides/guide-browser-support/guide-browser-support.component';
 import { GuideDevelopmentFlowComponent } from './guides/guide-development-flow/guide-development-flow.component';
 import { GuideGettingStartedComponent } from './guides/guide-getting-started/guide-getting-started.component';
-import { GuideGuideCodeComponent } from './guides/guide-guide-code/guide-guide-code.component';
+import { GuideGuideChartsComponent } from './guides/guide-guide-charts/guide-guide-charts.component';
 import { GuideMigrationPouiV2Component } from './guides/guide-migration-poui-v2/guide-migration-poui-v2.component';
 import { GuideMigrationPouiV3Component } from './guides/guide-migration-poui-v3/guide-migration-poui-v3.component';
 import { GuideMigrationPouiV4Component } from './guides/guide-migration-poui-v4/guide-migration-poui-v4.component';
@@ -34,7 +34,7 @@ import { GuideGettingStartedPoTslintComponent } from './guides/guide-getting-sta
     GuideBrowserSupportComponent,
     GuideDevelopmentFlowComponent,
     GuideGettingStartedComponent,
-    GuideGuideCodeComponent,
+    GuideGuideChartsComponent,
     GuideMigrationPouiV2Component,
     GuideMigrationPouiV3Component,
     GuideMigrationPouiV4Component,

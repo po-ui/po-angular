@@ -6,7 +6,7 @@ import { GuideApiComponent } from './guides/guide-api/guide-api.component';
 import { GuideBrowserSupportComponent } from './guides/guide-browser-support/guide-browser-support.component';
 import { GuideDevelopmentFlowComponent } from './guides/guide-development-flow/guide-development-flow.component';
 import { GuideGettingStartedComponent } from './guides/guide-getting-started/guide-getting-started.component';
-import { GuideGuideCodeComponent } from './guides/guide-guide-code/guide-guide-code.component';
+import { GuideGuideChartsComponent } from './guides/guide-guide-charts/guide-guide-charts.component';
 import { GuideMigrationPouiV2Component } from './guides/guide-migration-poui-v2/guide-migration-poui-v2.component';
 import { GuideMigrationPouiV3Component } from './guides/guide-migration-poui-v3/guide-migration-poui-v3.component';
 import { GuideMigrationPouiV4Component } from './guides/guide-migration-poui-v4/guide-migration-poui-v4.component';
@@ -33,7 +33,7 @@ export const guidesRoutes: Routes = [
       { path: 'browser-support', component: GuideBrowserSupportComponent },
       { path: 'development-flow', component: GuideDevelopmentFlowComponent },
       { path: 'getting-started', component: GuideGettingStartedComponent },
-      { path: 'guide-code', component: GuideGuideCodeComponent },
+      { path: 'guide-charts', component: GuideGuideChartsComponent },
       { path: 'migration-poui-v2', component: GuideMigrationPouiV2Component },
       { path: 'migration-poui-v3', component: GuideMigrationPouiV3Component },
       { path: 'migration-poui-v4', component: GuideMigrationPouiV4Component },
