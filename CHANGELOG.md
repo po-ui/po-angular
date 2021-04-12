@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.13.0](https://github.com/po-ui/po-angular/compare/v4.12.0...v4.13.0) (2021-04-12)
+
+
+### Bug Fixes
+
+* **slide:** corrige redimensionamento das imagens no resize ([e9d157b](https://github.com/po-ui/po-angular/commit/e9d157bd088d970af695669d68900d333a2421c9)), closes [#795](https://github.com/po-ui/po-angular/issues/795)
+
+
+### Features
+
+* **table:** adiciona possibilidade de uso de serviço de dados ([4d7b2d5](https://github.com/po-ui/po-angular/commit/4d7b2d5bd2c11cf8ba01402c69afc46ee68d5f9b))
+
+
+
 # [4.12.0](https://github.com/po-ui/po-angular/compare/v4.11.0...v4.12.0) (2021-04-05)
 
 
