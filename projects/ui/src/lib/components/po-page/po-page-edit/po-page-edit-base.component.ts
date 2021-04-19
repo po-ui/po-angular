@@ -125,7 +125,7 @@ export class PoPageEditBaseComponent {
    *
    * > Caso não utilizar esta propriedade, o botão de "Cancelar" não será exibido.
    */
-  @Output('p-cancel') cancel? = new EventEmitter();
+  @Output('p-cancel') cancel = new EventEmitter();
 
   /**
    * Evento que será disparado ao clicar no botão de "Salvar".
@@ -137,7 +137,7 @@ export class PoPageEditBaseComponent {
    *
    * > Caso não utilizar esta propriedade, o botão de "Salvar" não será exibido.
    */
-  @Output('p-save') save? = new EventEmitter();
+  @Output('p-save') save = new EventEmitter();
 
   /**
    * Evento que será disparado ao clicar no botão de "Salvar e Novo".
@@ -149,7 +149,7 @@ export class PoPageEditBaseComponent {
    *
    * > Caso não utilizar esta propriedade, o botão de "Salvar e Novo" não será exibido.
    */
-  @Output('p-save-new') saveNew? = new EventEmitter();
+  @Output('p-save-new') saveNew = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
