@@ -391,8 +391,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @default `false`
    */
   sort?: boolean;
-  @Input('p-sort') set setSort(sort: string) {
-    this.sort = sort === '' ? false : convertToBoolean(sort);
+  @Input('p-sort') set setSort(sort: boolean) {
+    this.sort = <any>sort === '' ? false : convertToBoolean(sort);
   }
 
   /**
@@ -403,8 +403,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @default `false`
    */
   showMoreDisabled?: boolean;
-  @Input('p-show-more-disabled') set setShowMoreDisabled(showMoreDisabled: string) {
-    this.showMoreDisabled = showMoreDisabled === '' ? false : convertToBoolean(showMoreDisabled);
+  @Input('p-show-more-disabled') set setShowMoreDisabled(showMoreDisabled: boolean) {
+    this.showMoreDisabled = <any>showMoreDisabled === '' ? false : convertToBoolean(showMoreDisabled);
   }
 
   /**
@@ -416,8 +416,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @default `false`
    */
   striped?: boolean;
-  @Input('p-striped') set setStriped(striped: string) {
-    this.striped = striped === '' ? false : convertToBoolean(striped);
+  @Input('p-striped') set setStriped(striped: boolean) {
+    this.striped = <any>striped === '' ? false : convertToBoolean(striped);
   }
 
   /**
@@ -430,8 +430,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @default `false`
    */
   hideSelectAll?: boolean;
-  @Input('p-hide-select-all') set setHideSelectAll(hideSelectAll: string) {
-    this.hideSelectAll = hideSelectAll === '' ? false : convertToBoolean(hideSelectAll);
+  @Input('p-hide-select-all') set setHideSelectAll(hideSelectAll: boolean) {
+    this.hideSelectAll = <any>hideSelectAll === '' ? false : convertToBoolean(hideSelectAll);
   }
 
   /**
@@ -442,8 +442,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * > Esta definição não se aplica aos itens filhos, os mesmos possuem comportamento independente do item pai.
    */
   singleSelect?: boolean;
-  @Input('p-single-select') set setSingleSelect(value: string) {
-    this.singleSelect = value === '' ? true : convertToBoolean(value);
+  @Input('p-single-select') set setSingleSelect(value: boolean) {
+    this.singleSelect = <any>value === '' ? true : convertToBoolean(value);
   }
 
   /**

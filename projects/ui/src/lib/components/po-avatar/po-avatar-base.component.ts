@@ -46,7 +46,7 @@ export class PoAvatarBaseComponent {
   }
 
   /** Evento disparado ao clicar na imagem do *avatar*. */
-  @Output('p-click') click? = new EventEmitter<any>();
+  @Output('p-click') click = new EventEmitter<any>();
 
   get hasClickEvent() {
     return !!this.click.observers.length;

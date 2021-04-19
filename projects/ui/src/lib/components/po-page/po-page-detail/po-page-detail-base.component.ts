@@ -118,7 +118,7 @@ export class PoPageDetailBaseComponent {
    *
    * > Caso não utilizar esta propriedade, o botão de "Voltar" não será exibido.
    */
-  @Output('p-back') back? = new EventEmitter();
+  @Output('p-back') back = new EventEmitter();
 
   /**
    * Evento que será disparado ao clicar no botão de "Editar".
@@ -130,7 +130,7 @@ export class PoPageDetailBaseComponent {
    *
    * > Caso não utilizar esta propriedade, o botão de "Editar" não será exibido.
    */
-  @Output('p-edit') edit? = new EventEmitter();
+  @Output('p-edit') edit = new EventEmitter();
 
   /**
    * Evento que será disparado ao clicar no botão de "Remover".
@@ -142,7 +142,7 @@ export class PoPageDetailBaseComponent {
    *
    * > Caso não utilizar esta propriedade, o botão de "Remover" não será exibido.
    */
-  @Output('p-remove') remove? = new EventEmitter();
+  @Output('p-remove') remove = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
