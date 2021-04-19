@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.14.0](https://github.com/po-ui/po-angular/compare/v4.13.0...v4.14.0) (2021-04-19)
+
+
+### Bug Fixes
+
+* **ui:** correções para permitir usar com strictTemplates habilitado ([19bec17](https://github.com/po-ui/po-angular/commit/19bec17dbc7e89b45b4bcb56049801023708b70f)), closes [#810](https://github.com/po-ui/po-angular/issues/810)
+
+
+### Features
+
+* **button:** adiciona compatibilidade com outras fontes de ícones ([dac8c25](https://github.com/po-ui/po-angular/commit/dac8c257882313a9e398e33a34faa0986b26ec51))
+* **icon:** inclui novo componente interno ([ce2d16c](https://github.com/po-ui/po-angular/commit/ce2d16c3b17a5eae83055985e62fcd89d4d4ac99))
+
+
+
 # [4.13.0](https://github.com/po-ui/po-angular/compare/v4.12.0...v4.13.0) (2021-04-12)
 
 
