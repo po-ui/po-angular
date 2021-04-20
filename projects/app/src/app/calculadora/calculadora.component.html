@@ -1,0 +1,29 @@
+<po-page-edit p-title="Calculadora" (p-cancel)="cancel()" (p-save)="save()" (p-save-new)="newSave()">
+  <!-- p-custom-component-name="pods-calculator"
+  [p-custom-events]="eventButton" -->
+
+  <po-page-default p-title="Calculadora">
+    <p>calculadora works!</p>
+    <po-info p-label="Resultado" [p-value]="resultado.value"></po-info>
+    <po-input
+      id="resultado"
+      [name]="resultado.name"
+      [(ngModel)]="resultado.value"
+      [p-disabled]="resultado.disabled"
+      [p-label]="resultado.label"
+      [p-placeholder]="resultado.placeholder"
+    ></po-input>
+    <po-input></po-input>
+
+    <button *ngIf="resultado" (click)="resultado.action()">HOW</button>
+
+    <po-custom-area
+      class="po-row po-mt-1"
+      p-api-custom="http://localhost:3000/custom"
+      p-component-name="pods-calculator"
+      p-class-container="po-row po-mt-1"
+      [p-events]="eventButton"
+      p-id-container="content1"
+    ></po-custom-area>
+  </po-page-default>
+</po-page-edit>
