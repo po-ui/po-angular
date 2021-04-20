@@ -6,29 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styles: []
 })
 export class CalculadoraComponent {
-  eventButton = { emitValue: this.send.bind(this) };
+  eventButton = { calculate: this.send.bind(this) };
   resultado = {
-    name: 'result',
+    name: 'resultado',
     disabled: true,
     value: '',
     placeholder: 'Resultado',
     label: 'Resultado',
-    action: () => {}
-  };
-  local = {
-    name: 'local',
-    disabled: false,
-    value: 'Sansão',
-    placeholder: 'Local',
-    label: 'Local',
-    action: () => {}
-  };
-  endereco = {
-    name: 'address',
-    disabled: true,
-    value: '',
-    placeholder: 'Endereco',
-    label: 'Endereco',
     action: () => {}
   };
   url = 'http://localhost:3000/custom';
