@@ -10,6 +10,7 @@ import { PoMenuItem } from '../../../ui/src/lib';
 export class AppComponent {
   readonly menus: Array<PoMenuItem> = [
     { label: 'Cliente', link: '/cliente' },
-    { label: 'Teste', link: '/teste' }
+    { label: 'Teste', link: '/teste' },
+    { label: 'Calculadora', link: '/calculadora' }
   ];
 }
