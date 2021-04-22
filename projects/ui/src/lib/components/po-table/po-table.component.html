@@ -127,6 +127,7 @@
               class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"
               p-tooltip-position="left"
               [p-tooltip]="literals.columnsManager"
+              (click)="onOpenColumnManager()"
             ></button>
           </div>
         </th>
@@ -375,6 +376,7 @@
   [p-columns]="columns"
   [p-max-columns]="maxColumns"
   [p-target]="columnManagerTarget"
+  [p-last-visible-columns-selected]="lastVisibleColumnsSelected"
   (p-visible-columns-change)="onVisibleColumnsChange($event)"
   (p-change-visible-columns)="onChangeVisibleColumns($event)"
 >

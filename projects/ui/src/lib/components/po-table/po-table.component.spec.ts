@@ -1282,6 +1282,14 @@ describe('PoTableComponent:', () => {
       expect(component.tooltipText).toBeUndefined();
     });
 
+    it(`onOpenColumnManager: should update 'lastVisibleColumnsSelected' 'this.columns`, () => {
+      component.columns = columns;
+
+      component.onOpenColumnManager();
+
+      expect(component['lastVisibleColumnsSelected']).toEqual(columns);
+    });
+
     it(`calculateHeightTableContainer: should call 'setTableOpacity' with 1`, () => {
       spyOn(component, <any>'setTableOpacity');
 
