@@ -1667,6 +1667,36 @@ describe('PoTableComponent:', () => {
       expect(component.expanded.emit).not.toHaveBeenCalled();
     });
 
+    it('unselectRows: should set item.$select and selectAll with false', () => {
+      const rows = [
+        { id: 1, $selected: true },
+        { id: 2, $selected: false },
+        { id: 3, $selected: false },
+        { id: 4, $selected: true },
+        { id: 5, detail: [{ package: 'base', $selected: true }], $selected: false }
+      ];
+
+      const newColumns = [
+        { property: 'id', label: 'Identificador' },
+        {
+          property: 'detail',
+          label: 'Identificador',
+          type: 'detail',
+          detail: { columns: [{ property: 'package' }], typeHeader: 'top' }
+        }
+      ];
+
+      component.selectAll = null;
+      component.items = rows;
+      component.columns = newColumns;
+
+      component.unselectRows();
+
+      expect(component.items.every(item => item.$selected === false)).toBe(true);
+      expect(component.items[4].detail.every(item => item.$selected === false)).toBe(true);
+
+      expect(component.selectAll).toBe(false);
+    });
   });
 
   describe('Templates:', () => {
