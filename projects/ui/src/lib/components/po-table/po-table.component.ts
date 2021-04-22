@@ -90,6 +90,7 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
   popupTarget;
   tableOpacity: number = 0;
   tooltipText: string;
+  lastVisibleColumnsSelected: Array<PoTableColumn>;
 
   private differ;
   private footerHeight;
@@ -420,6 +421,10 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
     } else {
       return tableAction.disabled;
     }
+  }
+
+  onOpenColumnManager() {
+    this.lastVisibleColumnsSelected = [...this.columns];
   }
 
   protected calculateHeightTableContainer(height) {

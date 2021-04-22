@@ -1,4 +1,4 @@
-<po-popover #popover *ngIf="target" [p-target]="target" p-position="bottom-left" (p-close)="emitVisibleColumns()">
+<po-popover #popover *ngIf="target" [p-target]="target" p-position="bottom-left" (p-close)="checkChanges([], true)">
   <div class="po-table-column-manager-header">
     <div class="po-table-column-manager-header-title">{{ literals.columnsManager }}</div>
 
@@ -16,7 +16,7 @@
       [(ngModel)]="visibleColumns"
       p-columns="1"
       [p-options]="columnsOptions"
-      (p-change)="onChangeVisibleColumns($event)"
+      (p-change)="checkChanges($event, false)"
     >
     </po-checkbox-group>
   </div>
