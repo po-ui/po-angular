@@ -239,6 +239,40 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
     this.removeListeners();
   }
 
+  /**
+   * Método que colapsa uma linha com detalhe quando executada.
+   *
+   * @param { number } rowIndex Índice da linha que será colapsada.
+   * > Ao reordenar os dados da tabela, o valor contido neste índice será alterado conforme a ordenação.
+   */
+  collapse(rowIndex: number) {
+    this.setShowDetail(rowIndex, false);
+  }
+
+  /**
+   * Método que expande uma linha com detalhe quando executada.
+   *
+   * @param { number } rowIndex Índice da linha que será expandida.
+   * > Ao reordenar os dados da tabela, o valor contido neste índice será alterado conforme a ordenação.
+   */
+  expand(rowIndex: number) {
+    this.setShowDetail(rowIndex, true);
+  }
+
+  /**
+   * Retorna as linhas do `po-table` que estão selecionadas.
+   */
+  getSelectedRows() {
+    return this.items.filter(item => item.$selected);
+  }
+
+  /**
+   * Retorna as linhas do `po-table` que não estão selecionadas.
+   */
+  getUnselectedRows() {
+    return this.items.filter(item => !item.$selected);
+  }
+
   checkDisabled(row, column: PoTableColumn) {
     return column.disabled ? column.disabled(row) : false;
   }

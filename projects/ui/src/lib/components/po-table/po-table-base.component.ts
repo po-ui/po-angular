@@ -649,40 +649,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     }
   }
 
-  /**
-   * Método que colapsa uma linha com detalhe quando executada.
-   *
-   * @param { number } rowIndex Índice da linha que será colapsada.
-   * > Ao reordenar os dados da tabela, o valor contido neste índice será alterado conforme a ordenação.
-   */
-  collapse(rowIndex: number) {
-    this.setShowDetail(rowIndex, false);
-  }
-
-  /**
-   * Método que expande uma linha com detalhe quando executada.
-   *
-   * @param { number } rowIndex Índice da linha que será expandida.
-   * > Ao reordenar os dados da tabela, o valor contido neste índice será alterado conforme a ordenação.
-   */
-  expand(rowIndex: number) {
-    this.setShowDetail(rowIndex, true);
-  }
-
-  /**
-   * Retorna as linhas do `po-table` que estão selecionadas.
-   */
-  getSelectedRows() {
-    return this.items.filter(item => item.$selected);
-  }
-
-  /**
-   * Retorna as linhas do `po-table` que não estão selecionadas.
-   */
-  getUnselectedRows() {
-    return this.items.filter(item => !item.$selected);
-  }
-
   selectAllRows() {
     if (!this.hideSelectAll) {
       this.selectAll = !this.selectAll;
@@ -790,6 +756,14 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
       });
   }
 
+  protected setShowDetail(rowIdentifier: any | number, isShowDetail: boolean) {
+    const isRowIndex = typeof rowIdentifier === 'number' && this.items[rowIdentifier];
+
+    const row = isRowIndex ? this.items[rowIdentifier] : rowIdentifier;
+
+    row.$showDetail = isShowDetail;
+  }
+
   private configAfterSelectRow(rows: Array<any>, row) {
     if (this.singleSelect) {
       this.unselectOtherRows(rows, row);
@@ -870,14 +844,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     this.hasMainColumns = !!this.mainColumns.length;
 
     this.allColumnsWidthPixels = this.verifyWidthColumnsPixels();
-  }
-
-  private setShowDetail(rowIdentifier: any | number, isShowDetail: boolean) {
-    const isRowIndex = typeof rowIdentifier === 'number' && this.items[rowIdentifier];
-
-    const row = isRowIndex ? this.items[rowIdentifier] : rowIdentifier;
-
-    row.$showDetail = isShowDetail;
   }
 
   private setSubtitleColumns() {

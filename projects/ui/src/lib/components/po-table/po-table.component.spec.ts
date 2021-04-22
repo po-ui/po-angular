@@ -1548,6 +1548,125 @@ describe('PoTableComponent:', () => {
         expect(component.getFilteredItems).toHaveBeenCalled();
       });
     });
+
+    it('getSelectedRows: should return selected rows', () => {
+      const rows = [
+        { id: 1, $selected: true },
+        { id: 2, $selected: false },
+        { id: 3, $selected: false },
+        { id: 4, $selected: true },
+        { id: 5, $selected: false }
+      ];
+      component.items = rows;
+      expect(component.getSelectedRows().length).toBe(2);
+    });
+
+    it('getUnselectedRows: should return unselected rows', () => {
+      const rows = [
+        { id: 1, $selected: false },
+        { id: 2, $selected: true },
+        { id: 3, $selected: false },
+        { id: 4, $selected: true },
+        { id: 5, $selected: true }
+      ];
+      component.items = rows;
+      expect(component.getUnselectedRows().length).toBe(2);
+    });
+
+    it('collapse: should set showDetail to false', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [currentRow];
+
+      component.collapse(0);
+
+      expect(component.items[0].$showDetail).toBe(false);
+    });
+
+    it('collapse: should keep showDetail to false', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [currentRow];
+
+      component.collapse(0);
+
+      expect(component.items[0].$showDetail).toBe(false);
+    });
+
+    it('collapse: shouldn`t emit collapsed', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [currentRow];
+
+      spyOn(component.collapsed, 'emit');
+
+      component.collapse(0);
+
+      expect(component.collapsed.emit).not.toHaveBeenCalled();
+    });
+
+    it('expand: should set showDetail to true', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [currentRow];
+
+      component.expand(0);
+
+      expect(component.items[0].$showDetail).toBe(true);
+    });
+
+    it('expand: should keep showDetail to true', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: true
+      };
+
+      component.items = [currentRow];
+
+      component.expand(0);
+
+      expect(component.items[0].$showDetail).toBe(true);
+    });
+
+    it('expand: shouldn`t emit expanded', () => {
+      const currentRow = {
+        id: 1,
+        $selected: true,
+        details: [{ id: 4 }],
+        $showDetail: false
+      };
+
+      component.items = [currentRow];
+
+      spyOn(component.expanded, 'emit');
+
+      component.expand(0);
+
+      expect(component.expanded.emit).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('Templates:', () => {
