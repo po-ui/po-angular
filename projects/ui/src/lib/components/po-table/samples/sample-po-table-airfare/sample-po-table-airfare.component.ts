@@ -70,7 +70,8 @@ export class SamplePoTableAirfareComponent {
           break;
       }
     });
-    this.items.forEach(item => (item.$selected = false));
+
+    this.poTable.unselectRows();
   }
 
   collapseAll() {

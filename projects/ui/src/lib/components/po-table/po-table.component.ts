@@ -273,6 +273,27 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
     return this.items.filter(item => !item.$selected);
   }
 
+  /**
+   * Desmarca as linhas que estão selecionadas.
+   */
+  unselectRows() {
+    const columnDetail = this.nameColumnDetail;
+
+    this.items.forEach(item => {
+      const detailItems = columnDetail ? item[columnDetail] : null;
+
+      if (Array.isArray(detailItems)) {
+        detailItems.forEach(detailItem => {
+          detailItem.$selected = false;
+        });
+      }
+
+      item.$selected = false;
+    });
+
+    this.selectAll = false;
+  }
+
   checkDisabled(row, column: PoTableColumn) {
     return column.disabled ? column.disabled(row) : false;
   }
