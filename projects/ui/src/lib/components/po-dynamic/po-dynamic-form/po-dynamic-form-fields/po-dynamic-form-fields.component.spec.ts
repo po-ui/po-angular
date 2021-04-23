@@ -26,6 +26,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoDynamicFormFieldsComponent);
     component = fixture.componentInstance;
+    component['form'] = <any>{ touched: true };
 
     fixture.detectChanges();
 
@@ -266,6 +267,20 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         await component.onChangeField(fakeVisibleField, objectValue);
 
         expect(spyObjectValue).not.toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `triggerValidationOnForm` if form.touched is false', async () => {
+        const fakeVisibleField = { property: 'test1' };
+
+        component['previousValue']['test1'] = undefined;
+        component['value']['test1'] = 'value';
+        component['form'] = <any>{ touched: false };
+
+        spyOn(component, <any>'triggerValidationOnForm');
+
+        await component.onChangeField(fakeVisibleField);
+
+        expect(component['triggerValidationOnForm']).not.toHaveBeenCalled();
       });
     });
 

@@ -16,7 +16,8 @@ describe('PoDynamicFormComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoDynamicModule]
+      imports: [PoDynamicModule],
+      providers: [NgForm]
     });
   });
 
