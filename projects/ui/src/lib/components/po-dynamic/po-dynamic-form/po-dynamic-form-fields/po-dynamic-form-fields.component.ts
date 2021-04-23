@@ -28,7 +28,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   constructor(
     titleCasePipe: TitleCasePipe,
     private validationService: PoDynamicFormValidationService,
-    private changes: ChangeDetectorRef
+    private changes: ChangeDetectorRef,
+    private form: NgForm
   ) {
     super(titleCasePipe);
   }
@@ -58,7 +59,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       this.objectValue.emit(objectValue);
     }
 
-    if (isChangedValueField) {
+    // verifica se o formulario esta touched para não disparar o validate ao carregar a tela.
+    if (this.form.touched && isChangedValueField) {
       const { changedField, changedFieldIndex } = this.getField(property);
 
       if (changedField.validate) {
