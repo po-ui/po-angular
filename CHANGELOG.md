@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.15.0](https://github.com/po-ui/po-angular/compare/v4.14.0...v4.15.0) (2021-04-26)
+
+
+### Bug Fixes
+
+* **dynamic-form:** corrige disparo do validate ao carregar a tela ([56e097b](https://github.com/po-ui/po-angular/commit/56e097ba119917ece28e450a8ebf5f352315a401))
+
+
+### Features
+
+* **table:** adiciona o método unselectRows ([4b1fb34](https://github.com/po-ui/po-angular/commit/4b1fb347a9e577101d2baf25eed5af7b7f32c15d))
+
+
+
 # [4.14.0](https://github.com/po-ui/po-angular/compare/v4.13.0...v4.14.0) (2021-04-19)
 
 
