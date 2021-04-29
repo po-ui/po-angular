@@ -25,7 +25,24 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   ngAfterViewInit() {
+    this.addCustomEventListener();
+
     this.afterViewInit();
+  }
+
+  addCustomEventListener() {
+    document.addEventListener('emitValue', (object: any) => {
+      object.detail.forEach(element => {
+        if (element.name === this.name) {
+          this.callOnChange(element.value); //atualiza model
+          this.controlChangeEmitter(); // dispara o evento
+          this.writeValueModel(element.value); //passa o valor para o componente
+
+          this.disabled = element.disabled;
+          this.label = element.label ? element.label : this.label;
+        }
+      });
+    });
   }
 
   afterViewInit() {
