@@ -161,6 +161,12 @@ export class PoPageListComponent
     this.filter[field](this.filterInput.nativeElement.value);
     this.changeDetector.detectChanges();
   }
+  /**
+   * Limpa o campo de pesquisa.
+   */
+  clearInputSearch() {
+    this.filterInput.nativeElement.value = null;
+  }
 
   onkeypress(key) {
     if (key === 13) {

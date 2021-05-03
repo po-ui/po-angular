@@ -500,6 +500,16 @@ describe('PoPageListComponent - Desktop:', () => {
       expect(changeDetectorSpy).toHaveBeenCalled();
     });
 
+    it('clearInputSearch: should call and clear input', () => {
+      component.filterInput = <any>{
+        nativeElement: { value: 'test filter' }
+      };
+
+      component.clearInputSearch();
+
+      expect(component.filterInput.nativeElement.value).toBe(null);
+    });
+
     it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {
       const url = 'http://po-ui.io';
 

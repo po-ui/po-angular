@@ -9,6 +9,7 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 import { PoNotificationService } from '@po-ui/ng-components';
 import { PoPageAction, PoPageFilter } from '@po-ui/ng-components';
 import { PoTableColumn } from '@po-ui/ng-components';
+import { PoPageListComponent } from '@po-ui/ng-components';
 
 import { SamplePoPageListHiringProcessesService } from './sample-po-page-list-hiring-processes.service';
 
@@ -39,6 +40,7 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
 
   public readonly advancedFilterPrimaryAction: PoModalAction = {
     action: () => {
+      this.poPageList.clearInputSearch();
       this.advancedFilterModal.close();
       const filters = [...this.jobDescription, ...this.status];
       this.filterAction(filters);
@@ -55,6 +57,7 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   private disclaimers = [];
 
   @ViewChild('advancedFilterModal', { static: true }) advancedFilterModal: PoModalComponent;
+  @ViewChild('poPageList', { static: true }) poPageList: PoPageListComponent;
 
   constructor(
     private sampleHiringProcessesService: SamplePoPageListHiringProcessesService,
@@ -67,7 +70,8 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
     this.disclaimerGroup = {
       title: 'Filters',
       disclaimers: [],
-      change: this.onChangeDisclaimer.bind(this)
+      change: this.onChangeDisclaimer.bind(this),
+      remove: this.onClearDisclaimer.bind(this)
     };
 
     this.hiringProcesses = this.sampleHiringProcessesService.getItems();
@@ -130,8 +134,17 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
     this.filter();
   }
 
+  onClearDisclaimer(disclaimers) {
+    if (disclaimers.removedDisclaimer.property === 'search') {
+      this.poPageList.clearInputSearch();
+    }
+    this.disclaimers = [];
+    this.filter();
+  }
+
   populateDisclaimers(filters: Array<any>) {
-    this.disclaimers = filters.map(value => ({ value }));
+    const property = filters.length > 1 ? 'advanced' : 'search';
+    this.disclaimers = filters.map(value => ({ value, property }));
 
     if (this.disclaimers && this.disclaimers.length > 0) {
       this.disclaimerGroup.disclaimers = [...this.disclaimers];
