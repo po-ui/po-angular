@@ -1697,6 +1697,40 @@ describe('PoTableComponent:', () => {
 
       expect(component.selectAll).toBe(false);
     });
+
+    it('unselectRows: should set item.$select and selectAll with false when `columnMasterDetail` is null', () => {
+      component.selectAll = null;
+      const rows = [
+        { id: 1, $selected: true },
+        { id: 2, $selected: false },
+        { id: 3, $selected: false },
+        { id: 4, $selected: true },
+        { id: 5, detail: [{ package: 'base', $selected: true }], $selected: false }
+      ];
+
+      const newColumns = [
+        { property: 'id', label: 'Identificador' },
+        {
+          property: 'detail',
+          label: 'Identificador',
+          type: 'detail',
+          detail: { columns: [{ property: 'package' }], typeHeader: 'top' }
+        }
+      ];
+
+      component.selectAll = null;
+      component.items = rows;
+      component.columns = newColumns;
+
+      component.columnMasterDetail = null;
+
+      component.unselectRows();
+
+      expect(component.items.every(item => item.$selected === false)).toBeTruthy();
+      expect(component.items[4].detail.every(item => item.$selected === false)).toBeFalsy();
+
+      expect(component.selectAll).toBeFalsy();
+    });
   });
 
   describe('Templates:', () => {
