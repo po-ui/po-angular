@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
@@ -24,7 +24,7 @@ const poTagOrientationDefault = PoTagOrientation.Vertical;
 @Directive()
 export class PoTagBaseComponent {
   private _color?: string;
-  private _icon?: boolean | string;
+  private _icon?: boolean | string | TemplateRef<void>;
   private _inverse?: boolean;
   private _orientation?: PoTagOrientation = poTagOrientationDefault;
   private _type?: PoTagType;
@@ -69,17 +69,33 @@ export class PoTagBaseComponent {
    *
    * Define ou ativa um ícone que será exibido ao lado do valor da *tag*.
    *
-   * > Veja os valores válidos na [biblioteca de ícones](guides/icons).
-   *
    * Quando `p-type` estiver definida, basta informar um valor igual a `true` para que o ícone seja exibido conforme descrições abaixo:
    * - <span class="po-icon po-icon-ok"></span> - `success`
    * - <span class="po-icon po-icon-warning"></span> - `warning`
    * - <span class="po-icon po-icon-close"></span> - `danger`
    * - <span class="po-icon po-icon-info"></span> - `info`
    *
+   * Também É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * ```
+   * <po-tag p-icon="po-icon-user" p-value="PO Tag"></po-tag>
+   * ```
+   * como também utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
+   * ```
+   * <po-tag p-icon="fa fa-podcast" p-value="PO Tag"></po-button>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-tag [p-icon]="template" p-value="Tag template ionic"></po-button>
+   *
+   * <ng-template #template>
+   *  <ion-icon style="font-size: inherit" name="heart"></ion-icon>
+   * </ng-template>
+   * ```
+   * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
+   *
    * @default `false`
    */
-  @Input('p-icon') set icon(value: boolean | string) {
+  @Input('p-icon') set icon(value: boolean | string | TemplateRef<void>) {
     if (this.type) {
       this._icon = convertToBoolean(value);
     } else {
@@ -87,7 +103,7 @@ export class PoTagBaseComponent {
     }
   }
 
-  get icon(): boolean | string {
+  get icon() {
     return this._icon;
   }
 
