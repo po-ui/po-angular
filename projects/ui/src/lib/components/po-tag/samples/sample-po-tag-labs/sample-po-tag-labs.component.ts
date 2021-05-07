@@ -49,7 +49,9 @@ export class SamplePoTagLabsComponent implements OnInit {
     { label: 'po-icon-light', value: 'po-icon-light' },
     { label: 'po-icon-star', value: 'po-icon-star' },
     { label: 'po-icon-settings', value: 'po-icon-settings' },
-    { label: 'po-icon-world', value: 'po-icon-world' }
+    { label: 'po-icon-world', value: 'po-icon-world' },
+    { label: 'fa fa-address-card', value: 'fa fa-address-card' },
+    { label: 'fa fa-bell', value: 'fa fa-bell' }
   ];
 
   public readonly orientationOptions: Array<PoRadioGroupOption> = [

@@ -15,7 +15,8 @@
       (keydown.space)="$event.preventDefault()"
       (keyup.space)="onKeyPressed($event)"
     >
-      <span *ngIf="icon" class="po-icon" [ngClass]="!type && iconTypeString ? icon : iconFromType"></span>
+      <po-icon *ngIf="icon" class="po-tag-icon" [p-icon]="!type ? icon : iconFromType"> </po-icon>
+
       <span class="po-tag-value">{{ value }}</span>
     </div>
   </div>

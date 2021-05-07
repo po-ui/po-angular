@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
+import { PoIconModule } from '../po-icon/po-icon.module';
+
 import { PoTagBaseComponent } from './po-tag-base.component';
 import { PoTagComponent } from './po-tag.component';
 import { PoTagIcon } from './enums/po-tag-icon.enum';
@@ -31,7 +33,8 @@ describe('PoTagComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoTagComponent, PoTagClickableComponent]
+      declarations: [PoTagComponent, PoTagClickableComponent],
+      imports: [PoIconModule]
     });
   });
 
@@ -78,16 +81,6 @@ describe('PoTagComponent:', () => {
 
       component.type = PoTagType.Warning;
       expect(component.iconFromType).toBe(PoTagIcon.Warning);
-    });
-
-    it('iconTypeString: should return `true` if is string value.', () => {
-      component.icon = 'po-icon-news';
-      expect(component.iconTypeString).toBe(true);
-    });
-
-    it('iconTypeString: should return `false` if isn`t string value.', () => {
-      component.icon = false;
-      expect(component.iconTypeString).toBe(false);
     });
 
     it('tagColor: should return tag type without `inverse`.', () => {
@@ -207,7 +200,7 @@ describe('PoTagComponent:', () => {
       expect(nativeElement.querySelector('.po-tag')).toBeTruthy();
       expect(nativeElement.querySelector('.po-tag-value').innerHTML).toContain(value);
 
-      expect(nativeElement.querySelector('.po-icon')).toBeFalsy();
+      expect(nativeElement.querySelector('.po-tag-icon')).toBeFalsy();
       expect(nativeElement.querySelector('.po-tag-title')).toBeFalsy();
       expect(nativeElement.querySelector('.po-tag-label')).toBeFalsy();
     });
