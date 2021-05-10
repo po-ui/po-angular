@@ -29,6 +29,11 @@ export const poNavbarLiteralsDefault = {
  *
  * O componente `po-navbar` é um cabeçalho fixo que permite apresentar uma lista de links para facilitar a navegação pelas
  * páginas da aplicação. Também possui ícones com ações.
+ *
+ * Quando utilizado em uma resolução menor que `768px`, o componente utilizará o menu corrente da aplicação para
+ * incluir seus itens.
+ *
+ * Ao utilizar Navbar com Menu e ambos tiverem logo, será mantido o logo do Navbar.
  */
 @Directive()
 export abstract class PoNavbarBaseComponent {
@@ -36,8 +41,12 @@ export abstract class PoNavbarBaseComponent {
   private _items: Array<PoNavbarItem> = [];
   private _literals: PoNavbarLiterals;
   private _logo: string;
+  private _menu: PoMenuComponent;
   private _shadow: boolean = false;
   private language: string = poLocaleDefault;
+
+  // Menu que esta sendo exibido na pagina corrente.
+  applicationMenu: PoMenuComponent;
 
   /**
    * @optional
@@ -120,7 +129,7 @@ export abstract class PoNavbarBaseComponent {
   @Input('p-logo') set logo(value: string) {
     this._logo = value;
 
-    if (this.menu) {
+    if (this.applicationMenu) {
       this.validateMenuLogo();
     }
   }
@@ -129,9 +138,15 @@ export abstract class PoNavbarBaseComponent {
   }
 
   /**
+   * @deprecated 6.x.x
+   *
    * @optional
    *
    * @description
+   * *Depreciado 6.x.x*
+   *
+   * > Não há necessidade de utilizar esta propriedade, o próprio componente faz o uso do menu corrente
+   * para exibir seus itens quando estiver em resolução pequena.
    *
    * Caso já possua um menu na aplicação o mesmo deve ser repassado para essa propriedade para que quando entre em modo
    * responsivo os items do `po-navbar` possam ser adicionados no primeiro item do menu definido.
