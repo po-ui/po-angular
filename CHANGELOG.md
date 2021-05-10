@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.16.0](https://github.com/po-ui/po-angular/compare/v4.15.0...v4.16.0) (2021-05-10)
+
+
+### Bug Fixes
+
+* **navbar:** itens não estavam sendo incluidos no menu ([d6c9b3b](https://github.com/po-ui/po-angular/commit/d6c9b3bb60c3885ab717ba7c1a214572e38f47ed))
+* **table:** corrige colunas do gerenciador não condizentes com a tabela ([337ee97](https://github.com/po-ui/po-angular/commit/337ee9735fa1c60df2cb09aa70d9e8121a10031f))
+
+
+### Features
+
+* **navbar:** deprecia a propriedade `p-menu` ([dff94ed](https://github.com/po-ui/po-angular/commit/dff94ed2559cb14bde6156a8349cd84c89f2caba))
+* **page-list:** adiciona o método `clearInputSearch` ([e07691f](https://github.com/po-ui/po-angular/commit/e07691f6bdf1657e6c63562e0db56e7b06a2bfda))
+* **tag:** adiciona possibilidade de informar outras fontes de ícones ([eb567ae](https://github.com/po-ui/po-angular/commit/eb567aebcc10c4a365eccfbc3a4794db19c3b5b5))
+
+
+
 # [4.15.0](https://github.com/po-ui/po-angular/compare/v4.14.0...v4.15.0) (2021-04-26)
 
 
