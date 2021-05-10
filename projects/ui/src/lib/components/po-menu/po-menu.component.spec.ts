@@ -828,14 +828,24 @@ describe('PoMenuComponent:', () => {
       expect(component['subscribeToMenuItem']).toHaveBeenCalled();
     });
 
+    it(`ngAfterViewInit: should call 'menuGlobalService.sendApplicationMenu' with component instance`, () => {
+      spyOn(component['menuGlobalService'], <any>'sendApplicationMenu');
+
+      component.ngAfterViewInit();
+
+      expect(component['menuGlobalService'].sendApplicationMenu).toHaveBeenCalledWith(component);
+    });
+
     it(`ngOnDestroy: should call 'resizeListener' if has 'resizeListener`, () => {
       component['createResizeListener']();
 
       spyOn(component, <any>'resizeListener');
+      spyOn(component['menuGlobalService'], <any>'sendRemovedApplicationMenu');
 
       component.ngOnDestroy();
 
       expect(component['resizeListener']).toHaveBeenCalled();
+      expect(component['menuGlobalService'].sendRemovedApplicationMenu).toHaveBeenCalledWith(component.id);
     });
 
     it(`collapse: should call 'validateToggleMenu' with 'true'`, () => {

@@ -1,5 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
+
+import { of, EMPTY } from 'rxjs';
 
 import { configureTestSuite } from 'projects/ui/src/lib/util-test/util-expect.spec';
 
@@ -33,6 +35,8 @@ describe('PoNavbarComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoNavbarComponent);
     component = fixture.componentInstance;
+
+    component['menuGlobalService'].receiveRemovedApplicationMenu$ = EMPTY;
 
     fixture.detectChanges();
   });
@@ -76,32 +80,130 @@ describe('PoNavbarComponent:', () => {
   });
 
   describe('Methods:', () => {
-    describe('ngAfterViewInit', () => {
-      it('should call `displayItemsNavigation`', () => {
-        spyOn(component, <any>'displayItemsNavigation');
+    describe('ngOnInit:', () => {
+      it('should set applicationMenu if previousMenuComponentId is not equal newMenu.id', fakeAsync(() => {
+        const fakeMenu: any = { id: '123', menus: [] };
 
-        component.ngAfterViewInit();
+        component['applicationMenu'] = undefined;
+        component['previousMenuComponentId'] = 'abcd';
 
-        expect(component['displayItemsNavigation']).toHaveBeenCalled();
-      });
-
-      it('should call `initNavbarMenu` if has `menu`', () => {
         spyOn(component, <any>'initNavbarMenu');
-        component.menu = <any>{ menus: [] };
 
-        component.ngAfterViewInit();
+        component['menuGlobalService'].receiveApplicationMenu$ = of(fakeMenu);
 
+        component.ngOnInit();
+
+        tick(100);
+
+        expect(component['applicationMenu']).toEqual(fakeMenu);
         expect(component['initNavbarMenu']).toHaveBeenCalled();
-      });
+      }));
 
-      it('shouldn`t call `initNavbarMenu` if doesn`t have `menu`', () => {
+      it('should set applicationMenu to undefined if previousMenuComponentId is equal newMenu.id', fakeAsync(() => {
+        const fakeMenu: any = { id: '123', menus: [] };
+
+        component['applicationMenu'] = undefined;
+        component['previousMenuComponentId'] = '123';
+
         spyOn(component, <any>'initNavbarMenu');
-        component.menu = undefined;
 
-        component.ngAfterViewInit();
+        component['menuGlobalService'].receiveApplicationMenu$ = of(fakeMenu);
 
+        component.ngOnInit();
+
+        tick(100);
+
+        expect(component['applicationMenu']).toBe(undefined);
         expect(component['initNavbarMenu']).not.toHaveBeenCalled();
+      }));
+
+      it(`should keep 'applicationMenu' and not call 'mediaQuery.removeListener' if
+        previousMenuComponentId is equal applicationMenu`, () => {
+        const fakeMenu: any = { id: '123', menus: [] };
+        const id = '123';
+
+        component['mediaQuery'] = <any>{ removeListener: () => {} };
+        component['applicationMenu'] = fakeMenu;
+        component['previousMenuComponentId'] = id;
+
+        spyOn(component['mediaQuery'], <any>'removeListener');
+
+        component['menuGlobalService'].receiveRemovedApplicationMenu$ = of(id);
+
+        component.ngOnInit();
+
+        expect(component['applicationMenu']).toEqual(fakeMenu);
+        expect(component['mediaQuery'].removeListener).not.toHaveBeenCalled();
       });
+
+      it(`should set 'applicationMenu' with undefined and call 'mediaQuery.removeListener' if
+        previousMenuComponentId is not equal applicationMenu`, () => {
+        const fakeMenu: any = { id: '123', menus: [] };
+        const id = 'abcd';
+
+        component['mediaQuery'] = <any>{ removeListener: () => {} };
+        component['applicationMenu'] = fakeMenu;
+        component['previousMenuComponentId'] = undefined;
+
+        spyOn(component['mediaQuery'], <any>'removeListener');
+
+        component['menuGlobalService'].receiveRemovedApplicationMenu$ = of(id);
+
+        component.ngOnInit();
+
+        expect(component['applicationMenu']).toBe(undefined);
+        expect(component['mediaQuery'].removeListener).toHaveBeenCalled();
+      });
+
+      it(`should not set applicationMenus with Navbar Links if previousMenusItems have not Navbar Links`, () => {
+        const fakeMenu: any = { id: '123', menus: [] };
+        const menus = [
+          { label: 'Item 1', link: '1' },
+          { label: 'Item 2', link: '2' }
+        ];
+
+        component['applicationMenu'] = fakeMenu;
+        component['isNavbarUpdateMenu'] = true;
+        component['previousMenusItems'] = undefined;
+
+        spyOnProperty(component, <any>'isCollapsedMedia').and.returnValue(true);
+
+        component['menuGlobalService'].receiveMenus$ = of(menus);
+
+        component.ngOnInit();
+
+        expect(component['applicationMenu'].menus).toEqual([]);
+        expect(component['isNavbarUpdateMenu']).toBe(false);
+        expect(component['previousMenusItems']).toEqual(menus);
+      });
+
+      it(`should set applicationMenus with Navbar Links if previousMenusItems have Navbar Links and isNavbarUpdatedMenu`, () => {
+        const fakeMenu: any = { id: '123', menus: [] };
+        const menus = [{ label: 'Item 1', link: '1' }];
+
+        component['applicationMenu'] = fakeMenu;
+        component['isNavbarUpdateMenu'] = true;
+        component['previousMenusItems'] = [{ label: 'Navbar Links', id: component['id'] }];
+
+        spyOnProperty(component, <any>'isCollapsedMedia').and.returnValue(true);
+
+        component['menuGlobalService'].receiveMenus$ = of(menus);
+
+        component.ngOnInit();
+
+        expect(component['applicationMenu'].menus[0].label).toBe(component.literals.navbarLinks);
+        expect(component['applicationMenu'].menus.length).toEqual(2);
+        expect(component['isNavbarUpdateMenu']).toBe(false);
+        expect(component['previousMenusItems']).toEqual(menus);
+      });
+    });
+
+    it('ngAfterViewInit: should call `displayItemsNavigation`', () => {
+      spyOn(component, <any>'displayItemsNavigation');
+
+      component.ngAfterViewInit();
+
+      expect(component['displayItemsNavigation']).toHaveBeenCalled();
     });
 
     it('ngOnDestroy: should call `mediaQuery.removeListener` if has `mediaQuery` listener', () => {
@@ -112,6 +214,32 @@ describe('PoNavbarComponent:', () => {
       component.ngOnDestroy();
 
       expect(component['mediaQuery']['removeListener']).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: should call `unsubscribe` of subscriptions', () => {
+      component['removedMenuSubscription'] = <any>{ unsubscribe: () => {} };
+      component['applicationMenuSubscription'] = <any>{ unsubscribe: () => {} };
+      component['menusSubscription'] = <any>{ unsubscribe: () => {} };
+
+      spyOn(component['removedMenuSubscription'], 'unsubscribe');
+      spyOn(component['applicationMenuSubscription'], 'unsubscribe');
+      spyOn(component['menusSubscription'], 'unsubscribe');
+
+      component.ngOnDestroy();
+
+      expect(component['removedMenuSubscription']['unsubscribe']).toHaveBeenCalled();
+      expect(component['applicationMenuSubscription']['unsubscribe']).toHaveBeenCalled();
+      expect(component['menusSubscription']['unsubscribe']).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: shouldn`t throw error if subscriptions are undefined', () => {
+      component['removedMenuSubscription'] = undefined;
+      component['applicationMenuSubscription'] = undefined;
+      component['menusSubscription'] = undefined;
+
+      const fnDestroy = () => component.ngOnDestroy();
+
+      expect(fnDestroy).not.toThrow();
     });
 
     describe('navigateItems', () => {
@@ -190,28 +318,30 @@ describe('PoNavbarComponent:', () => {
     describe('changeNavbarMenuItems', () => {
       it('should set `menus` with `menuItems` if `isCollapsedMedia` is `false`', () => {
         const isCollapsedMedia = false;
-        const menuItems = [{ label: 'menu' }];
 
-        component.menu = <any>{ menus: [] };
+        component.applicationMenu = <any>{
+          menus: [{ label: 'Navbar Link', subItems: [], id: component['id'] }]
+        };
 
-        component['changeNavbarMenuItems'](isCollapsedMedia, menuItems, [], '');
+        component['changeNavbarMenuItems'](isCollapsedMedia, [], '');
 
-        expect(component.menu.menus).toEqual(menuItems);
+        expect(component.applicationMenu.menus).toEqual([]);
       });
 
-      it('should set `menu.menus` with `navbarItems`, `menuItems` and label if `isCollapsedMedia` is `true`', () => {
+      it('should set `applicationMenu.menus` with `navbarItems` and label if `isCollapsedMedia` is `true`', () => {
         const isCollapsedMedia = true;
-        const menuItems = [{ label: 'menu' }];
         const navbarItems = [{ label: 'navbar' }];
         const label = 'Navbar Links';
+        const menus = [{ label: 'Item 1', link: '/1' }];
+        const expectedResult = [{ label, subItems: navbarItems, id: component['id'] }, ...menus];
 
-        const expectedResult = [{ label, subItems: navbarItems }, ...menuItems];
+        component['isNavbarUpdateMenu'] = false;
+        component.applicationMenu = <any>{ menus };
 
-        component.menu = <any>{ menus: [] };
+        component['changeNavbarMenuItems'](isCollapsedMedia, navbarItems, label);
 
-        component['changeNavbarMenuItems'](isCollapsedMedia, menuItems, navbarItems, label);
-
-        expect(component.menu.menus).toEqual(expectedResult);
+        expect(component.applicationMenu.menus).toEqual(expectedResult);
+        expect(component['isNavbarUpdateMenu']).toBe(true);
       });
     });
 
@@ -335,7 +465,7 @@ describe('PoNavbarComponent:', () => {
         removeListener: () => {}
       };
 
-      component.menu = <any>{ menus: [] };
+      component.applicationMenu = <any>{ menus: [] };
 
       spyOn(component, <any>'changeNavbarMenuItems');
       spyOn(window, 'matchMedia').and.returnValue(fakeMediaQuery);
@@ -346,7 +476,7 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`initNavbarMenu: should call changeNavbarMenuItems if window.innerWidth is less than poNavbarMenuMedia`, () => {
-      component.menu = <any>{ menus: [] };
+      component.applicationMenu = <any>{ menus: [] };
 
       spyOn(component, <any>'changeNavbarMenuItems');
 
@@ -358,7 +488,7 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`initNavbarMenu: shouldn't call changeNavbarMenuItems if window.innerWidth is greater than poNavbarMenuMedia`, () => {
-      component.menu = <any>{ menus: [] };
+      component.applicationMenu = <any>{ menus: [] };
 
       spyOn(component, <any>'changeNavbarMenuItems');
 
@@ -370,7 +500,7 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`initNavbarMenu: should call 'validateMenuLogo'`, () => {
-      component.menu = <any>{ menus: [] };
+      component.applicationMenu = <any>{ menus: [] };
       spyOn(component, <any>'validateMenuLogo');
 
       component['initNavbarMenu']();
@@ -461,7 +591,7 @@ describe('PoNavbarComponent:', () => {
     });
 
     it(`onMediaQueryChange: should call 'changeNavbarMenuItems'`, () => {
-      component.menu = <any>{ menus: [] };
+      component.applicationMenu = <any>{ menus: [] };
       spyOn(component, <any>'changeNavbarMenuItems');
 
       component['onMediaQueryChange']({ changed: false });
@@ -516,60 +646,60 @@ describe('PoNavbarComponent:', () => {
     });
 
     describe('validateMenuLogo:', () => {
-      it(`should set 'menu.logo' as 'undefined' and call 'menu.changeDetector.detectChanges' if has 'logo' and 'menu.logo'`, () => {
+      it(`should set 'applicationMenu.logo' as 'undefined' and call 'changeDetector.detectChanges' if has 'logo' and 'applicationMenu.logo'`, () => {
         const fakeThis = {
           logo: 'logo',
-          menu: {
-            logo: 'logo',
-            changeDetector: {
-              detectChanges: () => {}
-            }
+          applicationMenu: {
+            logo: 'logo'
+          },
+          changeDetector: {
+            detectChanges: () => {}
           }
         };
 
-        spyOn(fakeThis.menu.changeDetector, <any>'detectChanges');
+        spyOn(fakeThis.changeDetector, <any>'detectChanges');
         component['validateMenuLogo'].call(fakeThis);
 
-        expect(fakeThis.menu.logo).toBeUndefined();
-        expect(fakeThis.menu.changeDetector.detectChanges).toHaveBeenCalled();
+        expect(fakeThis.applicationMenu.logo).toBeUndefined();
+        expect(fakeThis.changeDetector.detectChanges).toHaveBeenCalled();
       });
 
-      it(`shouldn't call 'menu.changeDetector.detectChanges' if doesn't have 'menu.logo'`, () => {
+      it(`shouldn't call 'changeDetector.detectChanges' if doesn't have 'applicationMenu.logo'`, () => {
         const fakeThis = {
           logo: 'logo',
-          menu: {
-            logo: undefined,
-            changeDetector: {
-              detectChanges: () => {}
-            }
+          applicationMenu: {
+            logo: undefined
+          },
+          changeDetector: {
+            detectChanges: () => {}
           }
         };
 
-        spyOn(fakeThis.menu.changeDetector, 'detectChanges');
+        spyOn(fakeThis.changeDetector, 'detectChanges');
 
         component['validateMenuLogo'].call(fakeThis);
 
-        expect(fakeThis.menu.logo).toBeUndefined();
-        expect(fakeThis.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
+        expect(fakeThis.applicationMenu.logo).toBeUndefined();
+        expect(fakeThis.changeDetector.detectChanges).not.toHaveBeenCalled();
       });
 
-      it(`shouldn't call 'menu.changeDetector.detectChanges' if doesn't have 'logo'`, () => {
+      it(`shouldn't call 'changeDetector.detectChanges' if doesn't have 'logo'`, () => {
         const fakeThis = {
           logo: undefined,
-          menu: {
-            logo: 'logo',
-            changeDetector: {
-              detectChanges: () => {}
-            }
+          applicationMenu: {
+            logo: 'logo'
+          },
+          changeDetector: {
+            detectChanges: () => {}
           }
         };
 
-        spyOn(fakeThis.menu.changeDetector, 'detectChanges');
+        spyOn(fakeThis.changeDetector, 'detectChanges');
 
         component['validateMenuLogo'].call(fakeThis);
 
         expect(fakeThis.logo).toBeUndefined();
-        expect(fakeThis.menu.changeDetector.detectChanges).not.toHaveBeenCalled();
+        expect(fakeThis.changeDetector.detectChanges).not.toHaveBeenCalled();
       });
     });
   });
@@ -597,16 +727,16 @@ describe('PoNavbarComponent:', () => {
       expect(nativeElement.querySelector('.po-navbar-shadow')).toBeNull();
     });
 
-    it(`should apply class 'po-navbar-logo-menu' if have menu`, () => {
-      component.menu = <any>[{ label: 'Item 1' }];
+    it(`should apply class 'po-navbar-logo-menu' if have applicationMenu`, () => {
+      component.applicationMenu = <any>[{ label: 'Item 1' }];
 
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-navbar-logo-menu')).toBeTruthy();
     });
 
-    it(`shouldn't apply class 'po-navbar-logo-menu' if menu is undefined`, () => {
-      component.menu = undefined;
+    it(`shouldn't apply class 'po-navbar-logo-menu' if applicationMenu is undefined`, () => {
+      component.applicationMenu = undefined;
 
       fixture.detectChanges();
 
@@ -629,16 +759,16 @@ describe('PoNavbarComponent:', () => {
       expect(nativeElement.querySelector('.po-navbar-item-navigation')).toBeNull();
     });
 
-    it(`should create 'po-menu' if menu is undefined`, () => {
-      component.menu = undefined;
+    it(`should create 'po-menu' if applicationMenu is undefined`, () => {
+      component.applicationMenu = undefined;
 
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-menu')).toBeTruthy();
     });
 
-    it(`shouldn't create 'po-menu' if has menu`, () => {
-      component.menu = <any>[{ label: 'Item 1' }];
+    it(`shouldn't create 'po-menu' if has applicationMenu`, () => {
+      component.applicationMenu = <any>[{ label: 'Item 1' }];
 
       fixture.detectChanges();
 

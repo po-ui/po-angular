@@ -17,6 +17,9 @@ export class PoMenuComponent extends PoMenuBaseComponent {
 describe('PoMenuBaseComponent:', () => {
   let component: PoMenuBaseComponent;
 
+  const menuGlobalService: any = {
+    sendMenus: menus => {}
+  };
   const languageService: any = {
     getShortLanguage: () => {
       return 'pt';
@@ -30,7 +33,7 @@ describe('PoMenuBaseComponent:', () => {
     getFilteredData: () => {}
   };
   beforeEach(() => {
-    component = new PoMenuComponent(menuService, languageService);
+    component = new PoMenuComponent(menuGlobalService, menuService, languageService);
     component.menus = [
       {
         label: 'Level 1.1',
@@ -491,12 +494,15 @@ describe('PoMenuBaseComponent:', () => {
       const spyCheckingRouterChildrenFragments = spyOn(component, <any>'checkingRouterChildrenFragments');
       const spyCheckActiveMenuByUrl = spyOn(component, <any>'checkActiveMenuByUrl');
 
+      const spySendMenus = spyOn(component.menuGlobalService, <any>'sendMenus');
+
       expectPropertiesValues(component, 'menus', validValues, validValues);
 
       tick();
 
       expect(spyCheckingRouterChildrenFragments).toHaveBeenCalled();
       expect(spyCheckActiveMenuByUrl).toHaveBeenCalled();
+      expect(spySendMenus).toHaveBeenCalled();
     }));
 
     it('menus: should update property with `[]` if values are invalid.', () => {

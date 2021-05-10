@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ContentChild,
@@ -14,13 +15,14 @@ import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
-import { getFormattedLink, isMobile, openExternalLink } from '../../utils/util';
+import { getFormattedLink, isMobile, openExternalLink, uuid } from '../../utils/util';
 
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';
 import { PoMenuItem } from './po-menu-item.interface';
 import { PoMenuItemFiltered } from './po-menu-item/po-menu-item-filtered.interface';
 import { PoMenuItemsService } from './services/po-menu-items.service';
+import { PoMenuGlobalService } from './services/po-menu-global.service';
 import { PoMenuService } from './services/po-menu.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
@@ -115,13 +117,14 @@ const poMenuRootLevel = 1;
   templateUrl: './po-menu.component.html',
   providers: [PoMenuItemsService, PoMenuService]
 })
-export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, OnInit, DoCheck {
+export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
   @ContentChild(PoMenuHeaderTemplateDirective, { static: true }) menuHeaderTemplate: PoMenuHeaderTemplateDirective;
 
   activeMenuItem: PoMenuItem;
   collapsedMobile: boolean;
   filterLoading = false;
   groupedMenuItem: PoMenuItem;
+  id = uuid();
   linkActive: string;
   mobileOpened: boolean = false;
   noData: boolean = false;
@@ -140,10 +143,11 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     private renderer: Renderer2,
     private router: Router,
     private menuItemsService: PoMenuItemsService,
+    menuGlobalService: PoMenuGlobalService,
     menuService: PoMenuService,
     languageService: PoLanguageService
   ) {
-    super(menuService, languageService);
+    super(menuGlobalService, menuService, languageService);
   }
 
   private get isActiveItemMenuSubMenu() {
@@ -185,10 +189,16 @@ export class PoMenuComponent extends PoMenuBaseComponent implements OnDestroy, O
     if (this.resizeListener) {
       this.resizeListener();
     }
+
+    this.menuGlobalService.sendRemovedApplicationMenu(this.id);
   }
 
   ngOnInit() {
     this.subscribeToMenuItem();
+  }
+
+  ngAfterViewInit() {
+    this.menuGlobalService.sendApplicationMenu(this);
   }
 
   activateMenuByUrl(urlPath: string, menus: Array<PoMenuItem>) {

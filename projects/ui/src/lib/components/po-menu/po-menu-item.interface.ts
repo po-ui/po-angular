@@ -46,4 +46,7 @@ export interface PoMenuItem {
 
   /** Lista de sub-items, criando novos níveis dentro do menu. O número máximo de níveis do menu é igual a 4. */
   subItems?: Array<PoMenuItem>;
+
+  // Identificador do Item;
+  id?: string;
 }
