@@ -13,6 +13,7 @@ import {
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 import { PoMenuItem } from './po-menu-item.interface';
 import { PoMenuService } from './services/po-menu.service';
+import { PoMenuGlobalService } from './services/po-menu-global.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
@@ -85,6 +86,8 @@ export abstract class PoMenuBaseComponent {
   /** Lista dos itens do menu. Se o valor estiver indefinido ou inválido, será inicializado como um array vazio. */
   @Input('p-menus') set menus(menus: Array<PoMenuItem>) {
     this._menus = Array.isArray(menus) ? menus : [];
+
+    this.menuGlobalService.sendMenus(menus);
 
     setTimeout(() => {
       const urlRouter = this.checkingRouterChildrenFragments();
@@ -228,7 +231,12 @@ export abstract class PoMenuBaseComponent {
     return this._shortLogo;
   }
 
-  constructor(public menuService: PoMenuService, public languageService: PoLanguageService) {}
+  constructor(
+    public menuGlobalService: PoMenuGlobalService,
+    public menuService: PoMenuService,
+    public languageService: PoLanguageService
+  ) {}
+
   private configService(service: string | PoMenuFilter) {
     if (typeof service === 'string' && service.trim()) {
       // service url

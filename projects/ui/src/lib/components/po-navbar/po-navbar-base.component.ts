@@ -143,10 +143,7 @@ export abstract class PoNavbarBaseComponent {
    * @optional
    *
    * @description
-   * *Depreciado 6.x.x*
-   *
-   * > Não há necessidade de utilizar esta propriedade, o próprio componente faz o uso do menu corrente
-   * para exibir seus itens quando estiver em resolução pequena.
+   * **Depreciado 6.x.x**
    *
    * Caso já possua um menu na aplicação o mesmo deve ser repassado para essa propriedade para que quando entre em modo
    * responsivo os items do `po-navbar` possam ser adicionados no primeiro item do menu definido.

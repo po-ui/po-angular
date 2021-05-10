@@ -119,19 +119,19 @@ describe('PoNavbarBaseComponent:', () => {
       expectPropertiesValues(component, 'shadow', invalidValues, false);
     });
 
-    it('logo: should call `validateMenuLogo` if has `menu`', () => {
+    it('logo: should call `validateMenuLogo` if has `applicationMenu`', () => {
       spyOn(component, 'validateMenuLogo');
 
-      component.menu = <any>{ logo: 'logo' };
+      component.applicationMenu = <any>{ logo: 'logo' };
       component.logo = 'logo';
 
       expect(component.validateMenuLogo).toHaveBeenCalled();
     });
 
-    it('logo: shouldn`t call `validateMenuLogo` if doesn`t have `menu`', () => {
+    it('logo: shouldn`t call `validateMenuLogo` if doesn`t have `applicationMenu`', () => {
       spyOn(component, 'validateMenuLogo');
 
-      component.menu = undefined;
+      component.applicationMenu = undefined;
       component.logo = 'logo';
 
       expect(component.validateMenuLogo).not.toHaveBeenCalled();
