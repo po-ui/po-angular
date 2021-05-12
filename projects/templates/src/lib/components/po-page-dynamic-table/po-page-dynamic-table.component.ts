@@ -698,10 +698,11 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const allow = allowAction ?? true;
 
     if (allow) {
-      const uniqueKey = this.formatUniqueKey(item);
+      let uniqueKey = this.formatUniqueKey(item);
       const resourceToRemoveKey = this.returnResourcesKeys([item]);
 
       if (typeof actionRemove === 'boolean' || newUrl) {
+        uniqueKey = newUrl ? undefined : uniqueKey;
         return this.poPageDynamicService
           .deleteResource(uniqueKey, newUrl)
           .pipe(map(() => this.removeFromUI(resourceToRemoveKey, this.literals.removeSuccessNotification)));

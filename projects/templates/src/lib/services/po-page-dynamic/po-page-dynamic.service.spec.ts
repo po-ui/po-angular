@@ -214,6 +214,18 @@ describe('PoPageDynamicService:', () => {
         req.flush({});
         tick();
       }));
+
+      it('should delete a resource passing undefined id.', fakeAsync(() => {
+        poPageDynamicService.deleteResource(undefined, '/test').subscribe();
+
+        const req = httpMock.expectOne(request => request.url === '/test');
+
+        expect(req.request.method).toBe('DELETE');
+        expect(req.request.headers.get('X-PO-SCREEN-LOCK')).toBe('true');
+
+        req.flush({});
+        tick();
+      }));
     });
 
     describe('deleteResource', () => {

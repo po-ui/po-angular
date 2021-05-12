@@ -84,8 +84,10 @@ export class PoPageDynamicService {
   }
 
   // Deleta um único recurso
-  deleteResource(id, endpoint?: string): Observable<any> {
-    return this.http.delete(`${this.getLocalEndPoint(endpoint, true)}/${id}`, { headers: this.headers });
+  deleteResource(id?, endpoint?: string): Observable<any> {
+    const localEndPoint = this.getLocalEndPoint(endpoint, true);
+    const url = id ? `${localEndPoint}/${id}` : localEndPoint;
+    return this.http.delete(url, { headers: this.headers });
   }
 
   // Deleta recursos em lote
