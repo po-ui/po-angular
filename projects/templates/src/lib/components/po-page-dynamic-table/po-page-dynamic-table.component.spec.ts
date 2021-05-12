@@ -1364,7 +1364,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
         expect(component['poNotification'].success).toHaveBeenCalled();
         expect(component['formatUniqueKey']).toHaveBeenCalled();
-        expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(uniqueKey, '/teste');
+        expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(undefined, '/teste');
       }));
 
       it(`should call 'deleteResource' with other url if beforeRemove return newUrl and remove is a function`, fakeAsync(() => {
@@ -1386,7 +1386,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
         expect(component['poNotification'].success).toHaveBeenCalled();
         expect(component['formatUniqueKey']).toHaveBeenCalled();
-        expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(uniqueKey, '/teste');
+        expect(component['poPageDynamicService'].deleteResource).toHaveBeenCalledWith(undefined, '/teste');
       }));
 
       it(`should call 'poNotification.success' if remove is a function and return true`, fakeAsync(() => {
@@ -1964,6 +1964,15 @@ describe('PoPageDynamicTableComponent:', () => {
       component['updateFilterValue'](filter);
 
       expect(component.fields).toEqual(expectedFields);
+    });
+
+    it('updateTableActions: ', () => {
+      const actions = [{ label: 'detail' }];
+      component['_defaultTableActions'] = actions;
+
+      component['updateTableActions']();
+
+      expect(component.tableActions).toEqual(actions);
     });
   });
 
