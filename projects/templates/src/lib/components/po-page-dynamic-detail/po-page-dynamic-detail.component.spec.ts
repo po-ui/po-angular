@@ -859,28 +859,30 @@ describe('PoPageDynamicDetailComponent:', () => {
     });
 
     describe('remove', () => {
-      const uniqueKey = '1';
-
       it('remove: should call `formatUniqueKey`', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: '' };
+        const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { allowAction: false };
         component.model = { id: 1, name: 'Angular' };
 
         spyOn(component, <any>'formatUniqueKey');
+        spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['formatUniqueKey']).toHaveBeenCalledWith(component.model);
       });
 
       it('shouldn`t call executeRemove if allowAction is false', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: '' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { allowAction: false };
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove');
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).not.toHaveBeenCalled();
       });
@@ -888,6 +890,8 @@ describe('PoPageDynamicDetailComponent:', () => {
       it('shouldn`t call executeRemove if removeAction is a function', () => {
         const removeAction = jasmine.createSpy('removeAction');
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { allowAction: true };
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
@@ -900,105 +904,122 @@ describe('PoPageDynamicDetailComponent:', () => {
       });
 
       it('should call executeRemove if allowAction is true', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: 'test' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { allowAction: true };
+
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove').and.returnValue(of({}));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).toHaveBeenCalledWith(actions.remove, uniqueKey);
       });
 
-      it('should call executeRemove if allowAction is undefined', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+      it('should call executeRemove if beforeRemoveResult.allowAction is undefined', () => {
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: 'test' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { allowAction: undefined };
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove').and.returnValue(of({}));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).toHaveBeenCalledWith(actions.remove, uniqueKey);
       });
 
       it('should call executeRemove if allowAction is null', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: 'test' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { allowAction: null };
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove').and.returnValue(of({}));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).toHaveBeenCalledWith(actions.remove, uniqueKey);
       });
 
       it('should call executeRemove with newUrl if it has a defined value', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: 'test' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { newUrl: 'newUrl' };
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove').and.returnValue(of({}));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).toHaveBeenCalledWith(returnBeforeRemove.newUrl, uniqueKey);
       });
 
       it('should call executeRemove with removeAction if newUrl is undefined', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: 'test' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { newUrl: undefined };
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove').and.returnValue(of({}));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).toHaveBeenCalledWith(actions.remove, uniqueKey);
       });
 
       it('should call executeRemove with removeAction if newUrl is null', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: 'test' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = { newUrl: null };
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove').and.returnValue(of({}));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).toHaveBeenCalledWith(actions.remove, uniqueKey);
       });
 
       it('should call executeRemove with removeAction if returnBeforeRemove is null', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: 'test' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = null;
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove').and.returnValue(of({}));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).toHaveBeenCalledWith(actions.remove, uniqueKey);
       });
 
       it('should call executeRemove with removeAction if returnBeforeRemove is undefined', () => {
-        const actions: PoPageDynamicDetailActions = { remove: 'people/list/' };
+        const actions: PoPageDynamicDetailActions = { remove: 'people/list/', beforeRemove: 'test' };
         const returnBeforeRemove: PoPageDynamicDetailBeforeRemove = undefined;
+        component.model = { id: 1, name: 'Angular' };
+        const uniqueKey = '1';
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue(uniqueKey);
         spyOn(component['poPageDynamicDetailActionsService'], 'beforeRemove').and.returnValue(of(returnBeforeRemove));
         spyOn(component, <any>'executeRemove').and.returnValue(of({}));
 
-        component['remove'](actions.remove);
+        component['remove'](actions.remove, actions.beforeRemove);
 
         expect(component['executeRemove']).toHaveBeenCalledWith(actions.remove, uniqueKey);
       });
