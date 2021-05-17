@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.16.1](https://github.com/po-ui/po-angular/compare/v4.16.0...v4.16.1) (2021-05-17)
+
+
+### Bug Fixes
+
+* **page-dynamic-table:** corrige key no final da url no beforeRemove ([3d546b2](https://github.com/po-ui/po-angular/commit/3d546b20566171e2c1b84098e1968741f4af2b6f))
+
+
+
 # [4.16.0](https://github.com/po-ui/po-angular/compare/v4.15.0...v4.16.0) (2021-05-10)
 
 
