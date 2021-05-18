@@ -31,7 +31,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   public readonly iconOptions: Array<PoSelectOption> = [
     { value: 'po-icon-cart', label: 'po-icon-cart' },
     { value: 'po-icon-finance-secure', label: 'po-icon-finance-secure' },
-    { value: 'po-icon-debit-payment', label: 'po-icon-debit-payment' }
+    { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [

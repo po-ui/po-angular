@@ -8,6 +8,7 @@ import { PoDecimalComponent } from './po-decimal.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoLanguageService } from '../../../services';
+import { PoIconModule } from '../../po-icon';
 
 describe('PoDecimalComponent:', () => {
   let component: PoDecimalComponent;
@@ -20,6 +21,7 @@ describe('PoDecimalComponent:', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
+        imports: [PoIconModule],
         declarations: [
           PoDecimalComponent,
           PoFieldContainerComponent,
