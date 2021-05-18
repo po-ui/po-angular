@@ -21,8 +21,8 @@ export class SamplePoButtonGroupLabsComponent implements OnInit {
   iconsOptions: Array<PoRadioGroupOption> = [
     { label: 'po-icon-news', value: 'po-icon-news' },
     { label: 'po-icon-calendar', value: 'po-icon-calendar' },
-    { label: 'po-icon-user', value: 'po-icon-user' },
-    { label: 'po-icon-telephone', value: 'po-icon-telephone' }
+    { label: 'fa fa-podcast', value: 'fa fa-podcast' },
+    { label: 'fa fa-calculator', value: 'fa fa-calculator' }
   ];
 
   readonly toggleOptions: Array<PoSelectOption> = [
