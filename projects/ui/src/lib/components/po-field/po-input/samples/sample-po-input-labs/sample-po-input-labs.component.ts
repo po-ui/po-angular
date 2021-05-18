@@ -23,7 +23,7 @@ export class SamplePoInputLabsComponent implements OnInit {
   public readonly iconOptions: Array<PoSelectOption> = [
     { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
-    { value: 'po-icon-world', label: 'po-icon-world' }
+    { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [

@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -52,9 +52,25 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * Define o ícone que será exibido no início do campo.
    *
-   * > Veja a disponibilidade de ícones em [biblioteca de ícones](guides/icons).
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * ```
+   * <po-input p-icon="po-icon-user" p-label="PO input"></po-input>
+   * ```
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
+   * ```
+   * <po-input p-icon="fa fa-podcast" p-label="PO input"></po-input>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-input [p-icon]="template" p-label="input template ionic"></po-input>
+   *
+   * <ng-template #template>
+   *  <ion-icon style="font-size: inherit" name="heart"></ion-icon>
+   * </ng-template>
+   * ```
+   * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
    */
-  @Input('p-icon') icon?: string;
+  @Input('p-icon') icon?: string | TemplateRef<void>;
 
   /** Rótulo do campo. */
   @Input('p-label') label?: string;
