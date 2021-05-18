@@ -7,6 +7,7 @@ import { PoEmailComponent } from './po-email.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoCleanComponent } from './../po-clean/po-clean.component';
+import { PoIconModule } from '../../po-icon';
 
 describe('PoEmailComponent:', () => {
   let component: PoEmailComponent;
@@ -14,6 +15,7 @@ describe('PoEmailComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [PoIconModule],
       declarations: [PoEmailComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });

@@ -6,6 +6,7 @@ import { PoUrlComponent } from './po-url.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoCleanComponent } from './../po-clean/po-clean.component';
+import { PoIconModule } from '../../po-icon';
 
 describe('PoUrlComponent:', () => {
   let component: PoUrlComponent;
@@ -13,6 +14,7 @@ describe('PoUrlComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [PoIconModule],
       declarations: [PoUrlComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent]
     });
   });
