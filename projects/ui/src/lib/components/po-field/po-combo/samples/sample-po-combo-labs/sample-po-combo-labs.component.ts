@@ -46,9 +46,9 @@ export class SamplePoComboLabsComponent implements OnInit {
   ];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'Company', value: 'po-icon-company' },
-    { label: 'Gas', value: 'po-icon-gas' },
-    { label: 'Light', value: 'po-icon-light' }
+    { label: 'po-icon-company', value: 'po-icon-company' },
+    { label: 'po-icon-gas', value: 'po-icon-gas' },
+    { label: 'fa fa-calculator', value: 'fa fa-calculator' }
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [

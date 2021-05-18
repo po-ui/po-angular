@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, Directive, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -303,9 +303,25 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * Define o ícone que será exibido no início do campo.
    *
-   * > Veja a disponibilidade de ícones em [biblioteca de ícones](guides/icons).
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * ```
+   * <po-combo p-icon="po-icon-user" p-label="PO combo"></po-combo>
+   * ```
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
+   * ```
+   * <po-combo p-icon="fa fa-podcast" p-label="PO combo"></po-combo>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-combo [p-icon]="template" p-label="combo template ionic"></po-combo>
+   *
+   * <ng-template #template>
+   *  <ion-icon style="font-size: inherit" name="heart"></ion-icon>
+   * </ng-template>
+   * ```
+   * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
    */
-  @Input('p-icon') icon?: string;
+  @Input('p-icon') icon?: string | TemplateRef<void>;
 
   /** Indica que a lista definida na propriedade p-options será ordenada pela descrição. */
   @Input('p-sort') set sort(sort: boolean) {
