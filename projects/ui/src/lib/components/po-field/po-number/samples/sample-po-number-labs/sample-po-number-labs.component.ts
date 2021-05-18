@@ -23,8 +23,8 @@ export class SamplePoNumberLabsComponent implements OnInit {
 
   public readonly iconOptions: Array<PoSelectOption> = [
     { value: 'po-icon-finance', label: 'po-icon-finance' },
-    { value: 'po-icon-calculator', label: 'po-icon-calculator' },
-    { value: 'po-icon-finance-bitcoin', label: 'po-icon-finance-bitcoin' }
+    { value: 'po-icon-finance-bitcoin', label: 'po-icon-finance-bitcoin' },
+    { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [

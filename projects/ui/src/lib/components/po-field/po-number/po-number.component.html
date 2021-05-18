@@ -1,7 +1,7 @@
 <po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
   <div class="po-field-container-content">
     <div *ngIf="icon" class="po-field-icon-container-left">
-      <span class="po-icon po-field-icon {{ icon }}" [class.po-field-icon-disabled]="disabled"></span>
+      <po-icon class="po-field-icon" [class.po-field-icon-disabled]="disabled" [p-icon]="icon"></po-icon>
     </div>
     <input
       #inp
