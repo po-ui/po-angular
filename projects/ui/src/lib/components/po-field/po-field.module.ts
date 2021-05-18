@@ -16,6 +16,7 @@ import { PoProgressModule } from './../po-progress/po-progress.module';
 import { PoServicesModule } from '../../services/services.module';
 import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
+import { PoIconModule } from '../po-icon/po-icon.module';
 
 import { PoCalendarComponent } from './po-datepicker/po-calendar/po-calendar.component';
 import { PoCleanComponent } from './po-clean/po-clean.component';
@@ -81,7 +82,8 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoProgressModule,
     PoServicesModule,
     PoTableModule,
-    PoTooltipModule
+    PoTooltipModule,
+    PoIconModule
   ],
   exports: [
     PoCheckboxComponent,
