@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { poLocales, poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoCalendarLangService {
   private language = poLocaleDefault;
 
@@ -163,7 +165,8 @@ export class PoCalendarLangService {
   getWeekDaysArray() {
     const arrWeekDays = Array();
     for (let i = 0; i < this.shortWeekDays.length; i++) {
-      arrWeekDays.push(this.shortWeekDays[i][this.language]);
+      const weekDay = this.shortWeekDays[i][this.language];
+      arrWeekDays.push(weekDay.toLowerCase());
     }
     return arrWeekDays;
   }

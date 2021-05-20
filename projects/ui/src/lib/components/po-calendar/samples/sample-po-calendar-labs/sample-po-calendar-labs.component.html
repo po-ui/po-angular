@@ -1,16 +1,19 @@
-<po-calendar
-  [(ngModel)]="calendar"
-  [p-locale]="locale"
-  [p-min-date]="minDate"
-  [p-max-date]="maxDate"
-  (p-change)="changeEvent('p-change')"
->
-</po-calendar>
+<div class="po-md-8 po-p-2">
+  <po-calendar
+    [(ngModel)]="calendar"
+    [p-locale]="locale"
+    [p-min-date]="minDate"
+    [p-max-date]="maxDate"
+    [p-mode]="mode"
+    (p-change)="changeEvent('p-change')"
+  >
+  </po-calendar>
+</div>
 
 <hr />
 
 <div class="po-row">
-  <po-info class="po-md-6" p-label="Model" [p-value]="calendar"> </po-info>
+  <po-info class="po-md-6" p-label="Model" p-value="{{ calendar | json }}"> </po-info>
   <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
@@ -19,7 +22,7 @@
 <form #f="ngForm">
   <div class="po-row">
     <po-datepicker
-      class="po-md-6"
+      class="po-md-4"
       name="minDate"
       [(ngModel)]="minDate"
       p-clean
@@ -29,7 +32,7 @@
     </po-datepicker>
 
     <po-datepicker
-      class="po-md-6"
+      class="po-md-4"
       name="maxDate"
       [(ngModel)]="maxDate"
       p-clean
@@ -37,6 +40,9 @@
       [p-min-date]="minDate"
     >
     </po-datepicker>
+
+    <po-radio-group class="po-md-4" name="mode" [(ngModel)]="mode" p-label="Mode" [p-options]="calendarModeOptions">
+    </po-radio-group>
   </div>
 
   <div class="po-row">

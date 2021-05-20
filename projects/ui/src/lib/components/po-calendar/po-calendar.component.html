@@ -1,87 +1,30 @@
-<div class="po-calendar">
-  <div *ngIf="dayVisible">
-    <div class="po-calendar-nav">
-      <span class="po-calendar-nav-left po-icon po-icon-arrow-left" (click)="onPreviousMonth()"></span>
-      <div class="po-calendar-nav-title" attr-calendar>
-        <span class="po-clickable po-mr-1" (click)="selectMonth()">{{ displayMonth }}</span>
-        <span class="po-clickable" (click)="selectYear()">{{ displayYear }}</span>
-      </div>
-      <span class="po-calendar-nav-right po-icon po-icon-arrow-right" (click)="onNextMonth()"></span>
-    </div>
-    <div class="po-calendar-content">
-      <div class="po-calendar-labels">
-        <div class="po-calendar-label" *ngFor="let day of displayWeekDays">
-          {{ day.toLowerCase() }}
-        </div>
-      </div>
-      <div class="po-calendar-content-list-day">
-        <div
-          *ngFor="let day of displayDays"
-          class="po-calendar-day"
-          [ngClass]="getDayBackgroundColor(day)"
-          (click)="onSelectDate(day)"
-        >
-          <span *ngIf="day != 0" [ngClass]="getDayForegroundColor(day)">
-            {{ day.getDate() }}
-          </span>
-        </div>
-      </div>
-    </div>
+<ng-container *ngIf="isRange; then rangeTemplate; else calendarTemplate"></ng-container>
+
+<ng-template #rangeTemplate>
+  <div class="po-calendar-range">
+    <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
+    <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'end' }"></ng-container>
   </div>
-  <div *ngIf="monthVisible">
-    <div class="po-calendar-nav">
-      <span class="po-calendar-nav-left po-icon po-icon-arrow-left" (click)="updateYear(-1)"></span>
-      <div class="po-calendar-nav-title" attr-calendar>
-        <span class="po-clickable" (click)="selectYear()">{{ displayYear }}</span>
-      </div>
-      <span class="po-calendar-nav-right po-icon po-icon-arrow-right" (click)="updateYear(1)"></span>
-    </div>
-    <div class="po-calendar-content">
-      <div class="po-calendar-labels">
-        <div class="po-calendar-label">
-          {{ getMonthLabel() }}
-        </div>
-      </div>
-      <div class="po-calendar-content-list-month">
-        <div
-          *ngFor="let month of displayMonths; let i = index"
-          class="po-calendar-month"
-          [ngClass]="getBackgroundColor(i, displayMonthNumber)"
-          (click)="onSelectMonth(displayYear, i)"
-          attr-calendar
-        >
-          <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
-            {{ month }}
-          </span>
-        </div>
-      </div>
-    </div>
+</ng-template>
+
+<ng-template #calendarTemplate>
+  <div class="po-calendar">
+    <ng-template [ngTemplateOutlet]="calendarWrapper"></ng-template>
   </div>
-  <div *ngIf="yearVisible">
-    <div class="po-calendar-nav">
-      <span class="po-calendar-nav-left po-icon po-icon-arrow-left" (click)="updateYear(-10)"></span>
-      <div class="po-calendar-nav-title">{{ displayStartDecade }} - {{ displayFinalDecade }}</div>
-      <span class="po-calendar-nav-right po-icon po-icon-arrow-right" (click)="updateYear(10)"></span>
-    </div>
-    <div class="po-calendar-content">
-      <div class="po-calendar-labels">
-        <div class="po-calendar-label">
-          {{ getYearLabel() }}
-        </div>
-      </div>
-      <div class="po-calendar-content-list-year">
-        <div
-          *ngFor="let year of displayDecade; let i = index"
-          class="po-calendar-year"
-          [ngClass]="getBackgroundColor(year, currentYear)"
-          (click)="onSelectYear(year, displayMonthNumber)"
-          attr-calendar
-        >
-          <span [ngClass]="getForegroundColor(year, currentYear)">
-            {{ year }}
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+</ng-template>
+
+<ng-template #calendarWrapper let-partType="partType">
+  <po-calendar-wrapper
+    [p-value]="getValue(partType)"
+    [p-activate-date]="getActivateDate(partType)"
+    [p-locale]="locale"
+    [p-min-date]="minDate"
+    [p-max-date]="maxDate"
+    [p-part-type]="partType"
+    [p-range]="isRange"
+    [p-selected-value]="value"
+    (p-header-change)="onHeaderChange($event, partType)"
+    (p-select-date)="onSelectDate($event, partType)"
+  >
+  </po-calendar-wrapper>
+</ng-template>

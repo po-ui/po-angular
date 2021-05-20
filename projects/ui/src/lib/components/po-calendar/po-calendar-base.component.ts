@@ -1,9 +1,10 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoDateService } from '../../services/po-date';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocales } from '../../services/po-language/po-language.constant';
+
+import { PoCalendarMode } from './po-calendar-mode.enum';
 
 /**
  * @description
@@ -43,29 +44,14 @@ export class PoCalendarBaseComponent {
   private _locale: string = this.languageService.getShortLanguage();
   private _maxDate: Date;
   private _minDate: Date;
+  private _mode: PoCalendarMode;
 
-  currentYear: number;
-  dayVisible: boolean = false;
-  displayDays: Array<number>;
-  displayDecade: Array<number>;
-  displayFinalDecade: number;
-  displayMonth: any;
-  displayMonthNumber: number;
-  displayMonths: Array<any> = Array();
-  displayStartDecade: number;
-  displayWeekDays: Array<any> = Array();
-  displayYear: number;
-  monthVisible: boolean = false;
-  yearVisible: boolean = false;
+  activateDate;
+  value;
 
-  protected currentMonthNumber: number;
-  protected date: Date;
-  protected dateIso: string;
-  protected lastDisplay: string;
   protected onTouched: any = null;
   protected propagateChange: any = null;
   protected today: Date = new Date();
-  protected validatorChange: any;
 
   /**
    * @optional
@@ -78,7 +64,6 @@ export class PoCalendarBaseComponent {
    */
   @Input('p-locale') set locale(locale: string) {
     this._locale = poLocales.includes(locale) ? locale : this.shortLanguage;
-    this.initializeLanguage();
   }
   get locale() {
     return this._locale;
@@ -146,21 +131,40 @@ export class PoCalendarBaseComponent {
     return this._minDate;
   }
 
-  /** Evento disparado ao selecionar um dia do calendário. */
-  @Output('p-change') change = new EventEmitter<string>();
+  /**
+   * Propriedade que permite informar o modo de exibição do calendar.
+   *
+   * Implementa o enum `PoCalendarMode`.
+   */
+  @Input('p-mode') set mode(value: PoCalendarMode) {
+    this._mode = value;
 
-  constructor(
-    public poDate: PoDateService,
-    public poCalendarLangService: PoCalendarLangService,
-    private languageService: PoLanguageService
-  ) {
+    this.setActivateDate();
+  }
+
+  get mode() {
+    return this._mode;
+  }
+
+  /** Evento disparado ao selecionar um dia do calendário. */
+  @Output('p-change') change = new EventEmitter<string | { start; end }>();
+
+  get isRange() {
+    return this.mode === PoCalendarMode.Range;
+  }
+
+  constructor(public poDate: PoDateService, private languageService: PoLanguageService) {
     this.shortLanguage = languageService.getShortLanguage();
   }
 
-  initializeLanguage() {
-    this.poCalendarLangService.setLanguage(this.locale);
-    this.displayWeekDays = this.poCalendarLangService.getWeekDaysArray();
-    this.displayMonths = this.poCalendarLangService.getMonthsArray();
-    this.displayMonth = this.displayMonths[this.displayMonthNumber];
+  protected setActivateDate(date?: Date | string) {
+    if (this.isRange) {
+      const checkedStart = new Date(date || this.today);
+      const checkedEnd = new Date(new Date(checkedStart).setMonth(checkedStart.getMonth() + 1));
+
+      this.activateDate = { start: checkedStart, end: checkedEnd };
+    } else {
+      this.activateDate = date instanceof Date ? new Date(date) : new Date(date || this.today);
+    }
   }
 }
