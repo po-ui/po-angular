@@ -1,13 +1,13 @@
 <div class="po-calendar-overlay" [class.po-invisible]="overlayInvisible"></div>
 <div *ngIf="visible" [ngClass]="setMobileVisualization()">
   <div *ngIf="dayVisible" #days>
-    <div class="po-calendar-nav">
-      <span (click)="onPrevMonth()" class="po-calendar-nav-left po-icon po-icon-arrow-left"></span>
-      <div class="po-calendar-nav-title" attr-calendar>
+    <div class="po-calendar-header">
+      <span (click)="onPrevMonth()" class="po-calendar-header-left po-icon po-icon-arrow-left"></span>
+      <div class="po-calendar-header-title" attr-calendar>
         <span class="po-clickable po-mr-1" (click)="selectMonth()">{{ displayMonth }}</span>
         <span class="po-clickable" (click)="selectYear()">{{ displayYear }}</span>
       </div>
-      <span (click)="onNextMonth()" class="po-calendar-nav-right po-icon po-icon-arrow-right"></span>
+      <span (click)="onNextMonth()" class="po-calendar-header-right po-icon po-icon-arrow-right"></span>
     </div>
     <div class="po-calendar-content">
       <div class="po-calendar-labels">
@@ -30,12 +30,12 @@
     </div>
   </div>
   <div *ngIf="monthVisible" #months>
-    <div class="po-calendar-nav">
-      <span (click)="updateYear(-1)" class="po-calendar-nav-left po-icon po-icon-arrow-left"></span>
-      <div class="po-calendar-nav-title" attr-calendar>
+    <div class="po-calendar-header">
+      <span (click)="updateYear(-1)" class="po-calendar-header-left po-icon po-icon-arrow-left"></span>
+      <div class="po-calendar-header-title" attr-calendar>
         <span class="po-clickable" (click)="selectYear()">{{ displayYear }}</span>
       </div>
-      <span (click)="updateYear(1)" class="po-calendar-nav-right po-icon po-icon-arrow-right"></span>
+      <span (click)="updateYear(1)" class="po-calendar-header-right po-icon po-icon-arrow-right"></span>
     </div>
     <div class="po-calendar-content">
       <div class="po-calendar-labels">
@@ -59,10 +59,10 @@
     </div>
   </div>
   <div *ngIf="yearVisible" #years>
-    <div class="po-calendar-nav">
-      <span (click)="updateYear(-10)" class="po-calendar-nav-left po-icon po-icon-arrow-left"></span>
-      <div class="po-calendar-nav-title">{{ displayStartDecade }} - {{ displayFinalDecade }}</div>
-      <span (click)="updateYear(10)" class="po-calendar-nav-right po-icon po-icon-arrow-right"></span>
+    <div class="po-calendar-header">
+      <span (click)="updateYear(-10)" class="po-calendar-header-left po-icon po-icon-arrow-left"></span>
+      <div class="po-calendar-header-title">{{ displayStartDecade }} - {{ displayFinalDecade }}</div>
+      <span (click)="updateYear(10)" class="po-calendar-header-right po-icon po-icon-arrow-right"></span>
     </div>
     <div class="po-calendar-content">
       <div class="po-calendar-labels">

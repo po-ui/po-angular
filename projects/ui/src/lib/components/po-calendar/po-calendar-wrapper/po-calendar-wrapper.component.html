@@ -1,0 +1,90 @@
+<div class="po-calendar-wrapper">
+  <ng-container *ngIf="isDayVisible">
+    <po-calendar-header
+      [p-hide-previous]="isEndPart"
+      [p-hide-next]="isStartPart"
+      (p-previous)="onPreviousMonth()"
+      (p-next)="onNextMonth()"
+    >
+      <span class="po-clickable po-mr-1" (click)="selectDisplayMode('month')">{{ displayMonth }}</span>
+      <span class="po-clickable" (click)="selectDisplayMode('year')">{{ displayYear }}</span>
+    </po-calendar-header>
+
+    <div class="po-calendar-content">
+      <div class="po-calendar-labels">
+        <div class="po-calendar-label" *ngFor="let weekDay of displayWeekDays">
+          {{ weekDay }}
+        </div>
+      </div>
+
+      <div class="po-calendar-content-list-day">
+        <div
+          *ngFor="let day of displayDays"
+          class="po-calendar-day"
+          [ngClass]="getDayBackgroundColor(day)"
+          (click)="onSelectDate(day)"
+        >
+          <span *ngIf="day != 0" [ngClass]="getDayForegroundColor(day)">
+            {{ day.getDate() }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isMonthVisible">
+    <po-calendar-header (p-previous)="updateYear(-1)" (p-next)="updateYear(1)">
+      <span class="po-clickable" (click)="selectDisplayMode('year')">
+        {{ displayYear }}
+      </span>
+    </po-calendar-header>
+
+    <div class="po-calendar-content">
+      <div class="po-calendar-labels">
+        <div class="po-calendar-label">
+          {{ monthLabel }}
+        </div>
+      </div>
+      <div class="po-calendar-content-list-month">
+        <div
+          *ngFor="let month of displayMonths; let i = index"
+          class="po-calendar-month"
+          [ngClass]="getBackgroundColor(i, displayMonthNumber)"
+          (click)="onSelectMonth(displayYear, i)"
+        >
+          <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
+            {{ month }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isYearVisible">
+    <po-calendar-header (p-previous)="updateYear(-10)" (p-next)="updateYear(10)">
+      {{ displayStartDecade }} - {{ displayFinalDecade }}
+    </po-calendar-header>
+
+    <div class="po-calendar-content">
+      <div class="po-calendar-labels">
+        <div class="po-calendar-label">
+          {{ yearLabel }}
+        </div>
+      </div>
+
+      <div class="po-calendar-content-list-year">
+        <div
+          *ngFor="let year of displayDecade; let i = index"
+          class="po-calendar-year"
+          [ngClass]="getBackgroundColor(year, currentYear)"
+          (click)="onSelectYear(year, displayMonthNumber)"
+          attr-calendar
+        >
+          <span [ngClass]="getForegroundColor(year, currentYear)">
+            {{ year }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

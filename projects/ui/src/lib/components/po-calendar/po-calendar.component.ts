@@ -1,16 +1,13 @@
-import { Component, forwardRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnInit } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
-import { PoCalendarService } from './services/po-calendar.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 /* istanbul ignore next */
 const providers = [
-  PoCalendarService,
-  PoCalendarLangService,
   {
     provide: NG_VALUE_ACCESSOR,
     // tslint:disable-next-line
@@ -48,81 +45,73 @@ const providers = [
 @Component({
   selector: 'po-calendar',
   templateUrl: './po-calendar.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit {
-  constructor(
-    private poCalendarService: PoCalendarService,
-    poCalendarLangService: PoCalendarLangService,
-    poDate: PoDateService,
-    languageService: PoLanguageService
-  ) {
-    super(poDate, poCalendarLangService, languageService);
+  constructor(private changeDetector: ChangeDetectorRef, poDate: PoDateService, languageService: PoLanguageService) {
+    super(poDate, languageService);
   }
 
   ngOnInit() {
-    this.init();
+    this.setActivateDate();
   }
 
-  getBackgroundColor(displayValue: number, propertyValue: number) {
-    return displayValue === propertyValue ? 'po-calendar-box-background-selected' : 'po-calendar-box-background';
-  }
-
-  getDayBackgroundColor(date: Date) {
-    return this.getDayColor(date, 'background');
-  }
-
-  getDayForegroundColor(date: Date) {
-    return this.getDayColor(date, 'foreground');
-  }
-
-  getForegroundColor(displayValue: number, propertyValue: number) {
-    return displayValue === propertyValue ? 'po-calendar-box-foreground-selected' : 'po-calendar-box-foreground';
-  }
-
-  getMonthLabel() {
-    return this.poCalendarLangService.getMonthLabel();
-  }
-
-  getYearLabel() {
-    return this.poCalendarLangService.getYearLabel();
-  }
-
-  onNextMonth() {
-    this.displayMonthNumber < 11
-      ? this.updateDisplay(this.displayYear, this.displayMonthNumber + 1)
-      : this.updateDisplay(this.displayYear + 1, 0);
-  }
-
-  onPreviousMonth() {
-    this.displayMonthNumber > 0
-      ? this.updateDisplay(this.displayYear, this.displayMonthNumber - 1)
-      : this.updateDisplay(this.displayYear - 1, 11);
-  }
-
-  // Ao selecionar uma data
-  onSelectDate(date: Date) {
-    this.date = date;
-    this.dateIso = this.poDate.convertDateToISO(date);
-    if (this.propagateChange) {
-      this.propagateChange(this.dateIso);
+  getActivateDate(partType) {
+    if (this.isRange && this.activateDate) {
+      return this.activateDate[partType];
+    } else {
+      return this.activateDate;
     }
-    this.change.emit(this.dateIso);
   }
 
-  // Ao selecionar um mês
-  onSelectMonth(year: number, month: number) {
-    this.selectDay();
-    this.updateDisplay(year, month);
+  getValue(partType) {
+    if (this.isRange && this.value) {
+      return this.value[partType];
+    } else {
+      return this.value;
+    }
   }
 
-  // Ao selecionar um ano
-  onSelectYear(year: number, month: number) {
-    // Se veio da tela de seleção de mês
-    this.lastDisplay === 'month' ? this.selectMonth() : this.selectDay();
+  onSelectDate(selectedDate, partType?) {
+    let newValue;
 
-    this.currentYear = year;
-    this.updateDisplay(year, month);
+    if (this.isRange) {
+      newValue = this.getValueFromSelectedDate(selectedDate);
+
+      if (partType === 'end' && (!this.value?.start || (this.value.start && this.value.end))) {
+        this.setActivateDate(selectedDate);
+      }
+    } else {
+      newValue = selectedDate;
+    }
+
+    this.value = newValue;
+    const newModel = this.convertDateToISO(this.value);
+    this.updateModel(newModel);
+    this.change.emit(newModel);
+  }
+
+  onHeaderChange({ month, year }, partType) {
+    if (this.isRange) {
+      let newStart;
+      let newEnd;
+      const { start, end } = this.activateDate;
+
+      if (partType === 'end') {
+        const newYear = month === 0 ? year - 1 : year;
+
+        newStart = new Date(new Date(start.setMonth(month - 1)).setFullYear(newYear));
+        newEnd = new Date(new Date(end.setMonth(month)).setFullYear(year));
+      } else {
+        const newYear = month === 11 ? year + 1 : year;
+
+        newEnd = new Date(new Date(end.setMonth(month + 1)).setFullYear(newYear));
+        newStart = new Date(new Date(start.setMonth(month)).setFullYear(year));
+      }
+
+      this.activateDate = { start: newStart, end: newEnd };
+    }
   }
 
   registerOnChange(fn: any): void {
@@ -133,40 +122,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this.onTouched = func;
   }
 
-  registerOnValidatorChange(fn: () => void) {
-    this.validatorChange = fn;
-  }
-
-  selectDay() {
-    this.dayVisible = true;
-    this.monthVisible = false;
-    this.yearVisible = false;
-    this.lastDisplay = 'day';
-  }
-
-  selectMonth() {
-    this.dayVisible = false;
-    this.monthVisible = true;
-    this.yearVisible = false;
-    this.lastDisplay = 'month';
-  }
-
-  selectYear() {
-    this.dayVisible = false;
-    this.monthVisible = false;
-    this.yearVisible = true;
-  }
-
-  updateYear(value: number) {
-    this.updateDisplay(this.displayYear + value, this.displayMonthNumber);
-  }
-
-  validateModel(model: any) {
-    if (this.validatorChange) {
-      this.validatorChange(model);
-    }
-  }
-
   validate(c: AbstractControl): { [key: string]: any } {
     return null;
   }
@@ -175,120 +130,73 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     if (value) {
       this.writeDate(value);
     } else {
-      this.date = undefined;
-      this.updateDate(this.today);
+      this.value = null;
     }
+
+    const activateDate = this.getValidateStartDate(value);
+    this.setActivateDate(activateDate);
+
+    this.changeDetector.markForCheck();
   }
 
-  private addAllYearsInDecade(year: number) {
-    let i;
-    for (i = year; i < year + 10; i++) {
-      this.displayDecade.push(i);
+  private getValidateStartDate(value) {
+    if (this.isRange) {
+      return value?.start || null;
+    } else if (value instanceof Date || typeof value === 'string') {
+      return value;
     }
+
+    return null;
   }
 
-  private equalsDate(date1: Date, date2: Date): boolean {
-    try {
-      return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
-      );
-    } catch (error) {
-      return false;
+  private getValueFromSelectedDate(selectedDate: Date): { start: Date; end?: Date } {
+    if (!this.value?.start || this.value.start > selectedDate || (this.value.end && this.value.start)) {
+      return { start: new Date(selectedDate), end: null };
     }
+
+    return { start: new Date(this.value.start), end: new Date(selectedDate) };
   }
 
-  // Obtém um array de todos os anos desta década
-  private getDecadeArray(year) {
-    this.displayDecade = Array();
+  private convertDateToISO(date) {
+    if (this.isRange) {
+      const start = date?.start instanceof Date ? this.poDate.convertDateToISO(date.start) : null;
+      const end = date?.end instanceof Date ? this.poDate.convertDateToISO(date.end) : null;
 
-    if (year % 10 !== 0) {
-      while (year % 10 !== 0) {
-        year--;
-      }
-    }
-    this.updateDecade(year);
-  }
-
-  private getColorForDate(date: Date, local: string) {
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
-      ? `po-calendar-box-${local}-selected`
-      : `po-calendar-box-${local}-selected-disabled`;
-  }
-
-  private getColorForDateRange(date: Date, local: string) {
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
-      ? `po-calendar-box-${local}`
-      : `po-calendar-box-${local}-disabled`;
-  }
-
-  private getColorForToday(date: Date, local: string) {
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
-      ? `po-calendar-box-${local}-today`
-      : `po-calendar-box-${local}-today-disabled`;
-  }
-
-  private getDayColor(date: Date, local: string) {
-    if (this.equalsDate(date, this.date)) {
-      return this.getColorForDate(date, local);
-    } else if (this.equalsDate(date, this.today)) {
-      return this.getColorForToday(date, local);
+      return { start, end };
     } else {
-      return this.getColorForDateRange(date, local);
+      return this.poDate.convertDateToISO(date);
     }
   }
 
-  private init() {
-    this.date && this.poDate.isValidIso(this.poDate.convertDateToISO(this.date))
-      ? this.updateDate(this.date)
-      : this.updateDate(this.today);
-    this.initializeLanguage();
-    this.selectDay();
-  }
+  private convertDateFromIso(stringDate: string) {
+    if (typeof stringDate === 'string') {
+      const { year, month, day } = this.poDate.getDateFromIso(stringDate);
+      const date = new Date(year, month - 1, day);
+      this.poDate.setYearFrom0To100(date, year);
 
-  private selectDateFromDate(date: Date) {
-    this.date = date;
-    this.onSelectDate(this.date);
-  }
-
-  private selectDateFromIso(stringDate: string) {
-    const { year, month, day } = this.poDate.getDateFromIso(stringDate);
-    const date = new Date(year, month - 1, day);
-    this.poDate.setYearFrom0To100(date, year);
-    this.date = date;
-    this.onSelectDate(this.date);
-  }
-
-  private updateDate(date: Date) {
-    if (date) {
-      this.currentMonthNumber = date.getMonth();
-      this.currentYear = date.getFullYear();
-      this.updateDisplay(this.currentYear, this.currentMonthNumber);
+      return date;
     }
+
+    return null;
   }
 
-  private updateDecade(year: number) {
-    this.addAllYearsInDecade(year);
-    this.displayStartDecade = year;
-    this.displayFinalDecade = year + 9;
-  }
-
-  private updateDisplay(year: number, month: number) {
-    const calendarArray = this.poCalendarService.monthDays(year, month);
-    this.displayDays = [].concat.apply([], calendarArray);
-    this.displayMonthNumber = month;
-    this.displayMonth = this.displayMonths[month];
-    this.displayYear = year;
-    this.getDecadeArray(year);
+  private updateModel(value) {
+    if (this.propagateChange) {
+      this.propagateChange(value);
+    }
   }
 
   private writeDate(value: any) {
-    value instanceof Date ? this.selectDateFromDate(value) : this.writeDateIso(value);
-    this.updateDate(this.date);
-  }
+    if (this.isRange) {
+      const start = value?.start;
+      const end = value?.end;
 
-  private writeDateIso(value: any) {
-    this.poDate.isValidIso(value) ? this.selectDateFromIso(value) : (this.date = undefined);
+      const newStart = start instanceof Date ? new Date(start) : this.convertDateFromIso(start);
+      const newEnd = end instanceof Date ? new Date(end) : this.convertDateFromIso(end);
+
+      this.value = { start: newStart, end: newEnd };
+    } else {
+      this.value = value instanceof Date ? new Date(value) : this.convertDateFromIso(value);
+    }
   }
 }

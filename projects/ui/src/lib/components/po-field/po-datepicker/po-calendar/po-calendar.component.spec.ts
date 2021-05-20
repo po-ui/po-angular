@@ -563,9 +563,9 @@ describe('PoCalendarComponent:', () => {
 
       fixture.detectChanges();
 
-      const poCalendarDayVibled = nativeElement.querySelector('.po-calendar-nav');
+      const poCalendarDayVibled = nativeElement.querySelector('.po-calendar-header');
 
-      expect(poCalendarDayVibled.querySelector('div.po-calendar-nav-title > span.po-mr-1')).toBeTruthy();
+      expect(poCalendarDayVibled.querySelector('div.po-calendar-header-title > span.po-mr-1')).toBeTruthy();
     });
   });
 });

@@ -79,7 +79,7 @@ describe('PoCalendarLangService:', () => {
   it('should get array of week days', () => {
     service['language'] = 'pt';
 
-    const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    const weekDays = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
 
     expect(service.getWeekDaysArray().toString()).toBe(weekDays.toString());
   });

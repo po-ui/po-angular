@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { PoCalendarComponent } from './po-calendar.component';
-import { PoCalendarLangService } from './services/po-calendar.lang.service';
-import { PoCalendarService } from './services/po-calendar.service';
+import { PoCalendarHeaderComponent } from './po-calendar-header/po-calendar-header.component';
+import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wrapper.component';
 
 /**
  * @description
@@ -11,8 +11,7 @@ import { PoCalendarService } from './services/po-calendar.service';
  */
 @NgModule({
   imports: [CommonModule],
-  declarations: [PoCalendarComponent],
-  exports: [PoCalendarComponent],
-  providers: [PoCalendarLangService, PoCalendarService]
+  declarations: [PoCalendarComponent, PoCalendarHeaderComponent, PoCalendarWrapperComponent],
+  exports: [PoCalendarComponent]
 })
 export class PoCalendarModule {}
