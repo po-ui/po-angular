@@ -85,5 +85,7 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /** Esconde a informação estilo *password*, pode ser utilizado quando o tipo de dado for *string*. */
   secret?: boolean;
-
+  
+  /** Mensagem que será exibida enquanto o campo não estiver preenchido. */
+  placeholder?: string;
 }
