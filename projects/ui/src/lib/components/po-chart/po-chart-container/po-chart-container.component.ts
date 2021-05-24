@@ -68,7 +68,7 @@ export class PoChartContainerComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.type || changes.containerSize) {
       this.setViewBox();
-      this.getSvgMatrix();
+      this.setSvgSpace();
     }
   }
 
@@ -98,12 +98,12 @@ export class PoChartContainerComponent implements OnChanges {
     return { ...domain, ...updatedDomainValues };
   }
 
-  private getSvgMatrix() {
+  private setSvgSpace() {
     // Representa um ponto 2D dentro do viewport do SVG. Ele é a representação do cursor do mouse para comparação de coordenadas com cada dado de série.
     const svgPoint = this.svgELement.nativeElement.createSVGPoint();
     // Retorna um DOMMatrix representando as matrizes 2D e 3D transformadas a partir das coordenadas do elemento, em relação ao document, para coordenadas relativas ao viewport do SVG.
     // É utilizado nos gráficos do tipo área para que seja possível equiparar as coordenadas do evento com cada dado de série, para assim ativar o ponto de dado equivalente.
-    const svgDomMatrix = this.svgELement.nativeElement.getScreenCTM().inverse();
+    const svgDomMatrix = this.svgELement.nativeElement.getScreenCTM()?.inverse();
 
     this.svgSpace = { svgPoint, svgDomMatrix };
   }

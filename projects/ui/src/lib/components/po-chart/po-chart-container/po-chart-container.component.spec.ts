@@ -48,7 +48,9 @@ describe('PoChartContainerComponent', () => {
   describe('Methods', () => {
     it('ngOnChanges: should call `setViewBox` if type has new value and apply value to `viewBox`', () => {
       const changes = { type: { firstChange: true } };
+
       const spySetViewBox = spyOn(component, <any>'setViewBox').and.callThrough();
+      const spySetSvgSpace = spyOn(component, <any>'setSvgSpace').and.callThrough();
       component.type = PoChartType.Donut;
 
       component.ngOnChanges(<any>changes);
@@ -56,6 +58,7 @@ describe('PoChartContainerComponent', () => {
       const expectedResult = `1 -1 ${containerSize.svgWidth} ${containerSize.svgHeight}`;
 
       expect(spySetViewBox).toHaveBeenCalled();
+      expect(spySetSvgSpace).toHaveBeenCalled();
       expect(component.viewBox).toEqual(expectedResult);
     });
 
@@ -72,14 +75,16 @@ describe('PoChartContainerComponent', () => {
       expect(component.viewBox).toEqual(expectedResult);
     });
 
-    it('ngOnChanges: shouldn`t call `setViewBox`', () => {
+    it('ngOnChanges: shouldn`t call `setViewBox` and `setSvgSpace^', () => {
       const changes = { type: undefined, containerSize: undefined };
 
       const spySetViewBox = spyOn(component, <any>'setViewBox');
+      const spySetSvgSpace = spyOn(component, <any>'setSvgSpace');
 
       component.ngOnChanges(<any>changes);
 
       expect(spySetViewBox).not.toHaveBeenCalled();
+      expect(spySetSvgSpace).not.toHaveBeenCalled();
     });
 
     it('onSerieClick: should emit `serieClick`', () => {
@@ -240,6 +245,36 @@ describe('PoChartContainerComponent', () => {
       component.getCategoriesCoordinates(value);
 
       expect(component.categoriesCoordinates).toEqual(value);
+    });
+
+    it('setSvgSpace: should set svgSpace with { svgPoint, svgDomMatrix }', () => {
+      const inverseMatrix = { a: 1, b: 2, c: 3 };
+
+      const svgPointMock = { x: 0, y: 0 };
+      const screenCTMMock = { inverse: () => inverseMatrix };
+
+      component.svgSpace = undefined;
+
+      spyOn(component.svgELement.nativeElement, 'createSVGPoint').and.returnValue(svgPointMock);
+      spyOn(component.svgELement.nativeElement, 'getScreenCTM').and.returnValue(screenCTMMock);
+
+      component['setSvgSpace']();
+
+      expect(component.svgSpace).toEqual({ svgPoint: svgPointMock, svgDomMatrix: inverseMatrix });
+    });
+
+    it('setSvgSpace: should not throw error if getScreenCTM return null', () => {
+      const svgPointMock = { x: 0, y: 0 };
+      const screenCTMMock = null;
+
+      component.svgSpace = undefined;
+
+      spyOn(component.svgELement.nativeElement, 'createSVGPoint').and.returnValue(svgPointMock);
+      spyOn(component.svgELement.nativeElement, 'getScreenCTM').and.returnValue(null);
+
+      const fnError = () => component['setSvgSpace']();
+
+      expect(fnError).not.toThrow();
     });
   });
 
