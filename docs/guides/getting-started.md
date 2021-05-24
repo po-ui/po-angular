@@ -22,7 +22,7 @@ yarn global add @angular/cli@^11
 O [Angular CLI](https://cli.angular.io/) se encarrega de construir toda estrutura inicial do projeto. Para isso, execute o seguinte comando:
 
 ```
-ng new my-po-project --skipInstall
+ng new my-po-project --skip-install
 ```
 
 > O parâmetro `--skip-install` permite criar o projeto, contudo, não instalará as dependências automaticamente.
@@ -61,6 +61,8 @@ Instalando com npm:
 ```
 npm install
 ```
+
+> Caso utilizar a versão 7 do npm pode ocorrer erro de versão das dependências, neste caso utilize `npm install --legacy-peer-deps`
 
 Caso prefira instalar com o yarn:
 ```

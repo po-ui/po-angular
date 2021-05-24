@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.17.0](https://github.com/po-ui/po-angular/compare/v4.16.1...v4.17.0) (2021-05-24)
+
+
+### Features
+
+* **button-group:** adiciona compatibilidade com outras fontes de ícones ([f6b5eb5](https://github.com/po-ui/po-angular/commit/f6b5eb5aaaa2e216e742c66b92de1eada62e25b3))
+* **calendar:** adiciona a propriedade `p-mode` que permite utiliza-lo em modo `Range` ([3af3804](https://github.com/po-ui/po-angular/commit/3af380463e6f1169c70094352ad5e65bab94877b))
+* **combo:** adiciona compatibilidade com outras fontes de ícones ([1c84fca](https://github.com/po-ui/po-angular/commit/1c84fca4ba765030834e61a99ae7d480c3faa3ff))
+* **decimal:** adiciona compatibilidade com outras fontes de ícones ([d9546e1](https://github.com/po-ui/po-angular/commit/d9546e173fbafbd38f07f42c0418bfa8cd7ddeb5))
+* **input:** adiciona compatibilidade com outras fontes de ícones ([f404254](https://github.com/po-ui/po-angular/commit/f4042548b379e9fbfdc5d46820b992fc7be9e215))
+* **number:** adiciona compatibilidade com outras fontes de ícones ([dfc6140](https://github.com/po-ui/po-angular/commit/dfc614045b33333e9aea8f4b470df22907b534db))
+* **icons:** adiciona novos icones a biblioteca ([669b014](https://github.com/po-ui/po-style/commit/669b01457696d67cce62e1a4e705099eade2eecc))
+  - doc-xls
+  - screen-full
+  - screen-minimize
+
+
+
 ## [4.16.1](https://github.com/po-ui/po-angular/compare/v4.16.0...v4.16.1) (2021-05-17)
 
 
