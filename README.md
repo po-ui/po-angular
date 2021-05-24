@@ -20,16 +20,16 @@ Biblioteca de componentes de UI para Angular.
 
 ### Pré-requisitos
 
-Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 10.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 12.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@11
+npm i -g @angular/cli@12
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@11
+yarn global add @angular/cli@12
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -53,23 +53,23 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "~11.2.0",
-    "@angular/common": "~11.2.0",
-    "@angular/compiler": "~11.2.0",
-    "@angular/core": "~11.2.0",
-    "@angular/forms": "~11.2.0",
-    "@angular/platform-browser": "~11.2.0",
-    "@angular/platform-browser-dynamic": "~11.2.0",
-    "@angular/platform-server": "~11.2.0",
-    "@angular/router": "~11.2.0",
-    "tslib": "^2.0.0",
+    "@angular/animations": "~12.0.1",
+    "@angular/common": "~12.0.1",
+    "@angular/compiler": "~12.0.1",
+    "@angular/core": "~12.0.1",
+    "@angular/forms": "~12.0.1",
+    "@angular/platform-browser": "~12.0.1",
+    "@angular/platform-browser-dynamic": "~12.0.1",
+    "@angular/platform-server": "~12.0.1",
+    "@angular/router": "~12.0.1",
+    "tslib": "^2.1.0",
     "rxjs": "~6.6.0",
-    "zone.js": "~0.10.3"
+    "zone.js": "~0.11.4"
     ...
   },
   "devDependencies": {
     ...
-    "typescript": "~4.1.3"
+    "typescript": "~4.2.4"
   }
 ```
 
@@ -79,6 +79,8 @@ Instalando com npm:
 ```
 npm install
 ```
+
+> Caso utilizar a versão 7 do npm pode ocorrer erro de versão das dependências, neste caso utilize `npm install --legacy-peer-deps`.
 
 Caso prefira instalar com o yarn:
 ```
@@ -118,6 +120,6 @@ Caso você queira utilizar nossos componentes de templates, como o **[po-page-lo
 ```
 ng add @po-ui/ng-templates
 ```
-> Ao executar este comando, será instalado o pacote `@po-ui/ng-templates` e configurado o `PoTemplatesModules` no `app.module`
+> Ao executar este comando, será instalado o pacote `@po-ui/ng-templates` e configurado o `PoTemplatesModules` no `app.module`.
 
 A partir dai o seu projeto está preparado para receber outros componentes do **[PO UI](https://po-ui.io/documentation)**! \o/

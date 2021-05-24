@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsPOPageDefault",
+  "$id": "SchematicsPOPageDefault",
   "title": "Page Default Options Schema",
   "type": "object",
   "properties": {

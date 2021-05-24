@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsPOSyncSchema",
+  "$id": "SchematicsPOSyncSchema",
   "title": "Sync Schema Options Schema",
   "type": "object",
   "properties": {

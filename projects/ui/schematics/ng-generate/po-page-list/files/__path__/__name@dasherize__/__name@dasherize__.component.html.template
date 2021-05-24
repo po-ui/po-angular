@@ -1,12 +1,12 @@
 <po-page-list p-title="<%= classify(name) %>" [p-actions]="actions">
 <% if(dataView === 'table') { %>
   <po-table
-    p-container
-    p-sort="true"
-    p-striped="true"
     [p-columns]="columns"
+    [p-container]="true"
     [p-items]="items"
-    [p-height]="400">
+    [p-height]="400"
+    [p-sort]="true"
+    [p-striped]="true">
   </po-table>
 <% } else { %>
   <po-list-view

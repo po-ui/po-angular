@@ -6,10 +6,7 @@ const del = require('del');
 const fs = require('fs');
 const path = require('path');
 const configuration = require('./docs/configuration');
-const sonarqubeScanner = require('sonarqube-scanner');
-const argv = require('yargs').argv;
 const util = require('./docs/util');
-const git = require('gulp-git');
 const marked = require('marked');
 const _ = require('lodash');
 
@@ -232,28 +229,6 @@ gulp.task('clean-docs', () => {
     'src/assets/json/api-list.json',
     'src/app/documentation/documentation-routing.module.ts'
   ]);
-});
-
-gulp.task('projects:update', function (callback) {
-  util.projects.forEach(project => {
-    const path = configurations.sourceFolder + project.name;
-    const url_type = argv.url_type || 'ssh';
-
-    const pullAndCheckout = (name, branch, path) => {
-      pull(name, path, () => {
-        checkout(name, branch, path);
-      });
-    };
-
-    if (!fs.existsSync(`${path}/.git`)) {
-      clone(project.name, project.url[url_type], path, () => {
-        const tag = argv.version || project.version;
-        pullAndCheckout(project.name, tag, path);
-      });
-    } else {
-      pullAndCheckout(project.name, tag, path);
-    }
-  });
 });
 
 /**

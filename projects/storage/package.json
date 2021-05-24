@@ -15,15 +15,15 @@
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
     "custom-idle-queue": "2.1.2",
     "localforage": "1.9.0",
-    "lokijs": "1.5.8",
-    "tslib": "^2.0.0"
+    "lokijs": "1.5.12",
+    "tslib": "^2.1.0"
   },
   "peerDependencies": {
-    "@angular/core": "~11.2.0",
+    "@angular/core": "~12.0.1",
     "custom-idle-queue": "2.1.2",
     "localforage": "1.9.0",
-    "lokijs": "1.5.8",
+    "lokijs": "1.5.12",
     "rxjs": "~6.6.0",
-    "zone.js": "~0.10.3"
+    "zone.js": "~0.11.4"
   }
 }

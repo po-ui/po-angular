@@ -3,16 +3,16 @@
 
 ### Pré-requisitos
 
-Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 10.13.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 12.13.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@^11
+npm i -g @angular/cli@^12
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@^11
+yarn global add @angular/cli@^12
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -36,22 +36,22 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "~11.2.0",
-    "@angular/common": "~11.2.0",
-    "@angular/compiler": "~11.2.0",
-    "@angular/core": "~11.2.0",
-    "@angular/forms": "~11.2.0",
-    "@angular/platform-browser": "~11.2.0",
-    "@angular/platform-browser-dynamic": "~11.2.0",
-    "@angular/router": "~11.2.0",
+    "@angular/animations": "~12.0.1",
+    "@angular/common": "~12.0.1",
+    "@angular/compiler": "~12.0.1",
+    "@angular/core": "~12.0.1",
+    "@angular/forms": "~12.0.1",
+    "@angular/platform-browser": "~12.0.1",
+    "@angular/platform-browser-dynamic": "~12.0.1",
+    "@angular/router": "~12.0.1",
     "rxjs": "~6.6.0",
-    "tslib": "^2.0.0",
-    "zone.js": "~0.10.3"
+    "tslib": "^2.1.0",
+    "zone.js": "~0.11.4"
     ...
   },
   "devDependencies": {
     ...
-    "typescript": "~4.1.3"
+    "typescript": "~4.2.4"
   }
 ```
 
