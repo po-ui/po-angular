@@ -53,7 +53,6 @@
             "main": "projects/app/src/main.ts",
             "polyfills": "projects/app/src/polyfills.ts",
             "tsConfig": "projects/app/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/app/src/favicon.ico",
               "projects/app/src/assets",
@@ -69,7 +68,13 @@
               }
             ],
             "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -294,7 +299,6 @@
             "main": "projects/portal/src/main.ts",
             "polyfills": "projects/portal/src/polyfills.ts",
             "tsConfig": "projects/portal/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/portal/src/favicon.ico",
               "projects/portal/src/web.config",
@@ -315,7 +319,13 @@
               "projects/portal/src/assets/css/code-highlight.css",
               "projects/portal/src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {

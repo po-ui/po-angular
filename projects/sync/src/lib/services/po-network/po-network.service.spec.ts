@@ -31,17 +31,16 @@ describe('PoNetworkService:', () => {
       expect(poNetworkStatus.type).toEqual(PoNetworkType.ethernet);
     });
 
-    it('getNavigatorStatus: should returns Observable', done => {
-      const fromEventSpy = jasmine.createSpy('fromEvent').and.returnValue(of());
-
-      spyOnProperty(rxjs, 'fromEvent', 'get').and.returnValue(fromEventSpy);
-      spyOn(Observable, 'create').and.callThrough();
-
+    it('getNavigatorStatus: should returns Observable', () => {
       poNetworkService['getNavigatorStatus']().subscribe(() => {
+        const fromEventSpy = jasmine.createSpy('fromEvent').and.returnValue(of());
+
+        spyOnProperty(rxjs, 'fromEvent', 'get').and.returnValue(fromEventSpy);
+        spyOn(Observable, 'create').and.callThrough();
+
         expect(<any>fromEvent).toHaveBeenCalledWith(window, 'offline');
         expect(<any>fromEvent).toHaveBeenCalledWith(window, 'online');
         expect(Observable.create).toHaveBeenCalled();
-        done();
       });
     });
 

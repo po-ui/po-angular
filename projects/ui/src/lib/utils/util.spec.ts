@@ -1,5 +1,4 @@
-import { ViewContainerRef } from '@angular/core';
-import { handleThrowError, changeChromeProperties } from './../util-test/util-expect.spec';
+import { handleThrowError } from './../util-test/util-expect.spec';
 
 import {
   callFunction,
@@ -36,13 +35,23 @@ import * as UtilFunctions from './util';
 
 describe('Language:', () => {
   let navigatorLanguageSpy;
+  let navigatorUserLanguageSpy;
+
+  Object.defineProperty(navigator, 'userLanguage', {
+    get: function () {
+      return undefined;
+    },
+    configurable: true
+  });
 
   beforeEach(() => {
     navigatorLanguageSpy = spyOnProperty(window.navigator, 'language', 'get');
+    navigatorUserLanguageSpy = spyOnProperty(window.navigator, <any>'userLanguage', 'get');
   });
 
   afterEach(() => {
     navigatorLanguageSpy.calls.reset();
+    navigatorUserLanguageSpy.calls.reset();
   });
 
   describe('Function browserLanguage:', () => {
@@ -86,18 +95,14 @@ describe('Language:', () => {
 
     it('should return the value of `navigator.userLanguage` if it`s defined and `navigator.language` is undefined', () => {
       navigatorLanguageSpy.and.returnValue(undefined);
-
-      changeChromeProperties(navigator, 'userLanguage', 'en');
+      navigatorUserLanguageSpy.and.returnValue('en');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
-
-      changeChromeProperties(navigator, 'userLanguage', undefined);
     });
 
     it('should return undefined if `navigator.language` and `navigator.userLanguage` are undefined', () => {
       navigatorLanguageSpy.and.returnValue(undefined);
-
-      changeChromeProperties(navigator, 'userLanguage', undefined);
+      navigatorUserLanguageSpy.and.returnValue(undefined);
 
       expect(UtilFunctions.getBrowserLanguage()).toBe(undefined);
     });

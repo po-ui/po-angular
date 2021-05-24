@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsPOSidemenu",
+  "$id": "SchematicsPOSidemenu",
   "title": "Sidemenu Options Schema",
   "type": "object",
   "properties": {
