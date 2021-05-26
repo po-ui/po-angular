@@ -80,9 +80,29 @@ export interface PoChartSerie {
    */
   type?: PoChartType;
 
-  // **Deprecated 6.x.x**. Define o valor do objeto.
+  /**
+   * @deprecated 6.x.x
+   *
+   * @optional
+   *
+   * @description
+   *
+   * **Deprecated 6.x.x**.
+   *
+   * Define o valor do objeto.
+   */
   value?: number;
 
-  // **Deprecated 6.x.x**. Define o valor da categoria do objeto.
+  /**
+   * @deprecated 6.x.x
+   *
+   * @optional
+   *
+   * @description
+   *
+   * **Deprecated 6.x.x**.
+   *
+   * Define o valor da categoria do objeto.
+   */
   category?: string;
 }
