@@ -399,10 +399,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  showMoreDisabled?: boolean;
-  @Input('p-show-more-disabled') set setShowMoreDisabled(showMoreDisabled: boolean) {
-    this.showMoreDisabled = <any>showMoreDisabled === '' ? false : convertToBoolean(showMoreDisabled);
-  }
+  @Input('p-show-more-disabled') @InputBoolean() showMoreDisabled?: boolean = false;
 
   /**
    * @description
