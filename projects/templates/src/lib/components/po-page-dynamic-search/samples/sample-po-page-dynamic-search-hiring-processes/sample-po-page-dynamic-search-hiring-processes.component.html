@@ -11,10 +11,10 @@
   (p-advanced-search)="onAdvancedSearch($event)"
 >
   <po-table
-    p-selectable
-    p-single-select
-    p-sort="true"
-    p-striped="true"
+    [p-selectable]="true"
+    [p-single-select]="true"
+    [p-sort]="true"
+    [p-striped]="true"
     [p-columns]="hiringProcessesColumns"
     [p-items]="hiringProcesses"
   >

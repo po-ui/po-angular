@@ -49,10 +49,10 @@
     <div class="po-row po-lookup-container-table" [style.height.px]="containerHeight">
       <po-table
         class="po-md-12"
-        p-selectable="true"
-        p-hide-detail="true"
-        p-single-select="true"
-        p-sort="true"
+        [p-selectable]="true"
+        [p-hide-detail]="true"
+        [p-single-select]="true"
+        [p-sort]="true"
         [p-columns]="columns"
         [p-height]="tableHeight"
         [p-items]="items"
