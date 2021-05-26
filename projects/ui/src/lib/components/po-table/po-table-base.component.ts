@@ -390,10 +390,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  sort?: boolean;
-  @Input('p-sort') set setSort(sort: boolean) {
-    this.sort = <any>sort === '' ? false : convertToBoolean(sort);
-  }
+  @Input('p-sort') @InputBoolean() sort: boolean = false;
 
   /**
    * @description
