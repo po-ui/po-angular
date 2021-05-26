@@ -89,7 +89,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _container?: string;
   private _height?: number;
   private _hideDetail?: boolean = false;
-  private _hideTextOverflow?: boolean = false;
   private _items: Array<PoTableColumn>;
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
@@ -186,13 +185,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * > Quando ocorrer a quebra de texto, ao passar o mouse no conteúdo da célula,
    * o mesmo será exibido através do [`po-tooltip`](/documentation/po-tooltip).
    */
-  @Input('p-hide-text-overflow') set hideTextOverflow(hideTextOverflow: boolean) {
-    this._hideTextOverflow = convertToBoolean(hideTextOverflow);
-  }
-
-  get hideTextOverflow() {
-    return this._hideTextOverflow;
-  }
+  @Input('p-hide-text-overflow') @InputBoolean() hideTextOverflow: boolean = false;
 
   /**
    * @optional
