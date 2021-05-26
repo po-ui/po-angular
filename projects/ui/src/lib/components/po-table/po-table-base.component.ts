@@ -409,10 +409,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  striped?: boolean;
-  @Input('p-striped') set setStriped(striped: boolean) {
-    this.striped = <any>striped === '' ? false : convertToBoolean(striped);
-  }
+  @Input('p-striped') @InputBoolean() striped?: boolean = false;
 
   /**
    * @description
