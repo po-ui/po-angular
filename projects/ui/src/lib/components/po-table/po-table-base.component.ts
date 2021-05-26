@@ -429,10 +429,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * > Esta definição não se aplica aos itens filhos, os mesmos possuem comportamento independente do item pai.
    */
-  singleSelect?: boolean;
-  @Input('p-single-select') set setSingleSelect(value: boolean) {
-    this.singleSelect = <any>value === '' ? true : convertToBoolean(value);
-  }
+  @Input('p-single-select') @InputBoolean() singleSelect?: boolean = false;
 
   /**
    * @optional
