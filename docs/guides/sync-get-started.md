@@ -67,7 +67,7 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"
     ...
-  },12
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.0.1",
     "@angular/cli": "~12.0.1",
