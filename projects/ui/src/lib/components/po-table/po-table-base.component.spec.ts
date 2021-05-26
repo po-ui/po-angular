@@ -114,49 +114,12 @@ describe('PoTableBaseComponent:', () => {
     expect(component.calculateWidthHeaders).toHaveBeenCalled();
   });
 
-  it('should set sort', () => {
-    expectSettersMethod(component, 'setSort', '', 'sort', false);
-    expectSettersMethod(component, 'setSort', 'true', 'sort', true);
-    expectSettersMethod(component, 'setSort', 'false', 'sort', false);
-  });
-
-  it('should set striped', () => {
-    expectSettersMethod(component, 'setStriped', '', 'striped', false);
-    expectSettersMethod(component, 'setStriped', 'true', 'striped', true);
-    expectSettersMethod(component, 'setStriped', 'false', 'striped', false);
-  });
-
-  it('should set showMoreDisabled', () => {
-    expectSettersMethod(component, 'setShowMoreDisabled', '', 'showMoreDisabled', false);
-    expectSettersMethod(component, 'setShowMoreDisabled', 'true', 'showMoreDisabled', true);
-    expectSettersMethod(component, 'setShowMoreDisabled', 'false', 'showMoreDisabled', false);
-  });
-
   it('should set hideDetail and call calculateWidthHeaders', () => {
     spyOn(component, 'calculateWidthHeaders');
     expectSettersMethod(component, 'hideDetail', '', 'hideDetail', true);
     expectSettersMethod(component, 'hideDetail', 'true', 'hideDetail', true);
     expectSettersMethod(component, 'hideDetail', 'false', 'hideDetail', false);
     expect(component.calculateWidthHeaders).toHaveBeenCalled();
-  });
-
-  it('should set hideSelectAll', () => {
-    expectSettersMethod(component, 'setHideSelectAll', '', 'hideSelectAll', false);
-    expectSettersMethod(component, 'setHideSelectAll', 'true', 'hideSelectAll', true);
-    expectSettersMethod(component, 'setHideSelectAll', 'false', 'hideSelectAll', false);
-  });
-
-  it('should set singleSelect', () => {
-    expectSettersMethod(component, 'setSingleSelect', '', 'singleSelect', true);
-    expectSettersMethod(component, 'setSingleSelect', 'true', 'singleSelect', true);
-    expectSettersMethod(component, 'setSingleSelect', 'false', 'singleSelect', false);
-  });
-
-  it('should update property `p-hide-text-overflow` with valid values', () => {
-    const validValues = [false, true, '', undefined];
-    const expectedValues = [false, true, true, false];
-
-    expectPropertiesValues(component, 'hideTextOverflow', validValues, expectedValues);
   });
 
   it('should call setColumnLink when set columns', () => {
