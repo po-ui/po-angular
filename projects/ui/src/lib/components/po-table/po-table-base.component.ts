@@ -420,10 +420,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  hideSelectAll?: boolean;
-  @Input('p-hide-select-all') set setHideSelectAll(hideSelectAll: boolean) {
-    this.hideSelectAll = <any>hideSelectAll === '' ? false : convertToBoolean(hideSelectAll);
-  }
+  @Input('p-hide-select-all') @InputBoolean() hideSelectAll: boolean = false;
 
   /**
    * @description
