@@ -75,7 +75,7 @@ A partir de agora, os pacotes que publicaremos serão enviados ao nosso registry
 
 Antes de testarmos o pacotes, devemos fazer duas configurações, são elas:
 
-- Adicionar dentro do arquivo ```verdacio/config.yaml``` a configuração: `max_body_size: 200mb`;
+- Adicionar dentro do arquivo ```verdaccio/config.yaml``` a configuração: `max_body_size: 200mb`;
 - Executar o comando: ``` npm adduser --registry http://localhost:4873 ```
 
 Para testarmos o pacote, devemos incrementar a versão do mesmo e ter o npm registry local em execução. confirmando essas situações, podemos rodar o script abaixo:

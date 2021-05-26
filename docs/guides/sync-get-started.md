@@ -9,13 +9,13 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (^11.0.0):
+- [Angular CLI](https://cli.angular.io/) (^12.0.0):
   - ```shell
-    npm install -g @angular/cli@^11.0.0
+    npm install -g @angular/cli@^12.0.0
     ```
-- [Ionic](https://ionicframework.com/docs/cli/) (5.4.16):
+- [Ionic](https://ionicframework.com/docs/cli/) (^6.0.0):
   - ```shell
-    npm install -g ionic@5.4.16
+    npm install -g @ionic/cli@^6.0.0
     ```
 - [Cordova](https://cordova.apache.org/docs/en/latest/) (10.0.0):
   - ```shell
@@ -51,31 +51,31 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~11.2.0",
-    "@angular/common": "~11.2.0",
-    "@angular/core": "~11.2.0",
-    "@angular/forms": "~11.2.0",
-    "@angular/platform-browser": "~11.2.0",
-    "@angular/platform-browser-dynamic": "~11.2.0",
-    "@angular/router": "~11.2.0",
-    "@angular/service-worker": "~11.2.0",
+    "@angular/animations": "~12.0.1",
+    "@angular/common": "~12.0.1",
+    "@angular/core": "~12.0.1",
+    "@angular/forms": "~12.0.1",
+    "@angular/platform-browser": "~12.0.1",
+    "@angular/platform-browser-dynamic": "~12.0.1",
+    "@angular/router": "~12.0.1",
+    "@angular/service-worker": "~12.0.1",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/splash-screen": "^5.0.0",
     "@ionic-native/status-bar": "^5.0.0",
-    "@ionic/angular": "^5.0.0",
+    "@ionic/angular": "^5.5.2",
     "rxjs": "~6.6.0",
-    "tslib": "^2.0.0",
-    "zone.js": "~0.10.3"
+    "tslib": "^2.1.0",
+    "zone.js": "~0.11.4"
     ...
-  },
+  },12
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1102.1",
-    "@angular/cli": "~11.2.0",
-    "@angular/compiler": "~11.2.0",
-    "@angular/compiler-cli": "~11.2.0",
-    "@angular/language-service": "~11.2.0",
-    "@ionic/angular-toolkit": "^3.0.0",
-    "typescript": "~4.1.3"
+    "@angular-devkit/build-angular": "~12.0.1",
+    "@angular/cli": "~12.0.1",
+    "@angular/compiler": "~12.0.1",
+    "@angular/compiler-cli": "~12.0.1",
+    "@angular/language-service": "~12.0.1",
+    "@ionic/angular-toolkit": "^4.0.0",
+    "typescript": "~4.2.4"
   },
   ...
 ```
