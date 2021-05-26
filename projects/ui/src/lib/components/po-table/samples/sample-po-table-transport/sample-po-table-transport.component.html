@@ -1,9 +1,9 @@
 <po-table
-  p-hide-columns-manager
-  p-sort="true"
-  p-auto-collapse
+  [p-auto-collapse]="true"
   [p-columns]="columns"
+  [p-hide-columns-manager]="true"
   [p-items]="items"
+  [p-sort]="true"
   [p-striped]="true"
 >
   <ng-template
