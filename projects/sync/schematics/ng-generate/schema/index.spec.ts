@@ -16,8 +16,7 @@ describe('schema:', () => {
   };
 
   const componentOptions: any = {
-    name: 'po',
-    project: 'po'
+    name: 'po'
   };
 
   let appTree: UnitTestTree;
@@ -37,11 +36,11 @@ describe('schema:', () => {
 
     const files: Array<string> = tree.files;
 
-    const fullFilePath = `/projects/${componentOptions.project}/src/app/${schemaName}/${schemaName}.constants.ts`;
+    const fullFilePath = `/projects/${componentOptions.name}/src/app/${schemaName}/${schemaName}.constants.ts`;
 
     const schemaContent = getFileContent(
       tree,
-      `/projects/${componentOptions.project}/src/app/${schemaName}/${schemaName}.constants.ts`
+      `/projects/${componentOptions.name}/src/app/${schemaName}/${schemaName}.constants.ts`
     );
 
     expect(files).toContain(fullFilePath);

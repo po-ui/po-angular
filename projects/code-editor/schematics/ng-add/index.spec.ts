@@ -23,8 +23,7 @@ describe('Schematic: ng-add', () => {
   };
 
   const componentOptions: any = {
-    name: 'po',
-    appName: 'po'
+    name: 'po'
   };
 
   let appTree: UnitTestTree;
@@ -54,7 +53,7 @@ describe('Schematic: ng-add', () => {
       const poCodeEditorModuleName = 'PoCodeEditorModule';
 
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
-      const fileContent = getFileContent(tree, `projects/${componentOptions.appName}/src/app/app.module.ts`);
+      const fileContent = getFileContent(tree, `projects/${componentOptions.name}/src/app/app.module.ts`);
 
       expect(fileContent).toContain(poCodeEditorModuleName);
     });
@@ -81,7 +80,7 @@ describe('Schematic: ng-add', () => {
       const project = getProjectFromWorkspace(workspace);
       const styles = getProjectTargetOptions(project, 'build').styles;
 
-      expect(styles).toEqual([`projects/${componentOptions.appName}/src/styles.css`, defaultThemePath]);
+      expect(styles).toEqual([`projects/${componentOptions.name}/src/styles.css`, defaultThemePath]);
     });
   });
 
