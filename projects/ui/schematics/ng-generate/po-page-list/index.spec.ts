@@ -17,8 +17,6 @@ describe('po-page-list:', () => {
 
   const componentOptions: any = {
     name: 'po',
-    appName: 'po',
-    project: 'po',
     style: 'css',
     skipTests: false
   };
@@ -41,7 +39,7 @@ describe('po-page-list:', () => {
     const files: Array<string> = tree.files;
 
     const fullFilePath = (ext: string) =>
-      `/projects/${componentOptions.project}/src/app/${componentName}/${componentName}.component.${ext}`;
+      `/projects/${componentOptions.name}/src/app/${componentName}/${componentName}.component.${ext}`;
 
     expect(files).toContain(fullFilePath('ts'));
     expect(files).toContain(fullFilePath('html'));
@@ -53,7 +51,7 @@ describe('po-page-list:', () => {
     const componentName = 'supply';
     const createModule = true;
 
-    const options = { ...componentOptions, name: componentName, createModule };
+    const options = { ...componentOptions, name: componentName, createModule, project: 'po' };
 
     const tree = await runner.runSchematicAsync('po-page-list', options, appTree).toPromise();
 

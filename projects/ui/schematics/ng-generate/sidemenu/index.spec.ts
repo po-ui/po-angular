@@ -17,8 +17,6 @@ describe('sidemenu:', () => {
 
   const componentOptions: any = {
     name: 'po',
-    appName: 'po',
-    project: 'po',
     style: 'css',
     skipTests: false
   };
@@ -37,7 +35,7 @@ describe('sidemenu:', () => {
       const routerModuleName = 'RouterModule';
 
       const tree = await runner.runSchematicAsync('sidemenu', componentOptions, appTree).toPromise();
-      const fileContent = getFileContent(tree, `projects/${componentOptions.project}/src/app/app.module.ts`);
+      const fileContent = getFileContent(tree, `projects/${componentOptions.name}/src/app/app.module.ts`);
 
       expect(fileContent).toContain(routerModuleName);
     });
@@ -49,9 +47,9 @@ describe('sidemenu:', () => {
 
       const files: Array<string> = tree.files;
 
-      expect(files).toContain(`/projects/${componentOptions.project}/src/app/app.component.ts`);
-      expect(files).toContain(`/projects/${componentOptions.project}/src/app/app.component.html`);
-      expect(files).toContain(`/projects/${componentOptions.project}/src/app/app.component.${componentOptions.style}`);
+      expect(files).toContain(`/projects/${componentOptions.name}/src/app/app.component.ts`);
+      expect(files).toContain(`/projects/${componentOptions.name}/src/app/app.component.html`);
+      expect(files).toContain(`/projects/${componentOptions.name}/src/app/app.component.${componentOptions.style}`);
     });
 
     it('should contains `po-wrapper`, `po-toolbar` and `po-menu` in app.component.html', async () => {
@@ -59,7 +57,7 @@ describe('sidemenu:', () => {
       const poToolbar = 'po-toolbar';
       const poMenu = '<po-menu [p-menus]="menus"></po-menu>';
 
-      const htmlComponent = `projects/${componentOptions.project}/src/app/app.component.html`;
+      const htmlComponent = `projects/${componentOptions.name}/src/app/app.component.html`;
 
       const tree = await runner.runSchematicAsync('sidemenu', componentOptions, appTree).toPromise();
 
