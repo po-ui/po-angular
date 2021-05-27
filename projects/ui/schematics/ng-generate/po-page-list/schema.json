@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsPOPageList",
+  "$id": "SchematicsPOPageList",
   "title": "PageList Options Schema",
   "type": "object",
   "properties": {

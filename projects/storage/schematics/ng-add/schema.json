@@ -2,6 +2,5 @@
   "$schema": "http://json-schema.org/schema",
   "$id": "SchematicsNgAdd",
   "title": "Ng Add Options Schema",
-  "type": "object",
-  "required": []
+  "type": ["object"]
 }

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsPOPageDynamicTable",
+  "$id": "SchematicsPOPageDynamicTable",
   "title": "Page Dynamic Table Options Schema",
   "type": "object",
   "properties": {
