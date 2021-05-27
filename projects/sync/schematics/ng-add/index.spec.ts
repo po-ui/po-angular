@@ -16,8 +16,7 @@ describe('Schematic: ng-add', () => {
   };
 
   const componentOptions: any = {
-    name: 'po',
-    appName: 'po'
+    name: 'po'
   };
 
   let appTree: UnitTestTree;
@@ -59,7 +58,7 @@ describe('Schematic: ng-add', () => {
       const poStorageModuleName = 'PoStorageModule';
 
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
-      const fileContent = getFileContent(tree, `projects/${componentOptions.appName}/src/app/app.module.ts`);
+      const fileContent = getFileContent(tree, `projects/${componentOptions.name}/src/app/app.module.ts`);
 
       expect(fileContent).toContain(poSyncModuleName);
       expect(fileContent).toContain(poStorageModuleName);
