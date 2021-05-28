@@ -587,6 +587,14 @@ describe('PoInputGeneric:', () => {
       expect(fakeThis.controlChangeEmitter).not.toHaveBeenCalled();
     });
 
+    it('eventOnBlur: shouldn´t throw error if onTouched is falsy', () => {
+      component['onTouched'] = null;
+
+      const fnError = () => component.eventOnBlur(fakeEvent);
+
+      expect(fnError).not.toThrow();
+    });
+
     it('validateClassesForPattern: should add invalid classes if pattern validation failed.', () => {
       component.pattern = '[a-z]';
       component.inputEl.nativeElement.value = '2';

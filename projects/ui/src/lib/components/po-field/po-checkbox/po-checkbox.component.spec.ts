@@ -147,6 +147,14 @@ describe('PoCheckboxComponent:', () => {
 
       expect(component.onTouched).toHaveBeenCalledWith();
     });
+
+    it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
+      component['onTouched'] = null;
+
+      const fnError = () => component.onBlur();
+
+      expect(fnError).not.toThrow();
+    });
   });
 
   describe('Templates:', () => {

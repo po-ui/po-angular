@@ -481,6 +481,14 @@ describe('PoMultiselectComponent:', () => {
       expect(component['onModelTouched']).toHaveBeenCalled();
     });
 
+    it('onBlur: shouldn´t throw error if onModelTouched is falsy', () => {
+      component['onModelTouched'] = null;
+
+      const fnError = () => component.onBlur();
+
+      expect(fnError).not.toThrow();
+    });
+
     it('debounceResize: should call `calculateVisibleItems` after 200 milliseconds', done => {
       spyOn(component, 'calculateVisibleItems');
       component.debounceResize();

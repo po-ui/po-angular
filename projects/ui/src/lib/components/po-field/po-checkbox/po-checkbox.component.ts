@@ -78,7 +78,7 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   }
 
   onBlur() {
-    this.onTouched();
+    this.onTouched?.();
   }
 
   ngAfterViewInit() {

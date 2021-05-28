@@ -235,7 +235,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   /** Método responsável por **abrir** a janela para seleção de arquivo(s). */
   selectFiles() {
-    this.onModelTouched();
+    this.onModelTouched?.();
     this.calledByCleanInputValue = false;
     this.inputFile.nativeElement.click();
   }

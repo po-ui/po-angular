@@ -102,7 +102,7 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
   }
 
   onBlur() {
-    this.onTouched();
+    this.onTouched?.();
   }
 
   onChangeValue(value: any) {

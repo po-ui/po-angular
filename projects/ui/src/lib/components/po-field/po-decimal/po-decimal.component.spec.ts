@@ -1196,6 +1196,16 @@ describe('PoDecimalComponent:', () => {
       expect(component['callOnChange']).toHaveBeenCalledWith(undefined);
     });
 
+    it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
+      const fakeEvent = { target: { value: '' } };
+
+      component['onTouched'] = null;
+
+      const fnError = () => component.onBlur(fakeEvent);
+
+      expect(fnError).not.toThrow();
+    });
+
     describe('containsMoreThanOneDecimalSeparator:', () => {
       it('should return `false` if param contains one comma', () => {
         const value = '1.200,55';

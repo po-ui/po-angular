@@ -468,6 +468,14 @@ describe('PoUploadComponent:', () => {
       expect(component[calledByCleanInputValue]).toBeFalsy();
     });
 
+    it('selectFiles: shouldn´t throw error if onModelTouched is falsy', () => {
+      component['onModelTouched'] = null;
+
+      const fnError = () => component.selectFiles();
+
+      expect(fnError).not.toThrow();
+    });
+
     it('sendFiles: should call `uploadFiles` if currentFile is true.', () => {
       component.currentFiles = [fileMock];
       const uploadFiles = spyOn(component, <any>'uploadFiles');

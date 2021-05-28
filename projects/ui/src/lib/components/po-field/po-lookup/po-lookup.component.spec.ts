@@ -175,6 +175,14 @@ describe('PoLookupComponent:', () => {
       }
     ));
 
+    it('searchEvent: shouldn´t throw error if onTouched is falsy', () => {
+      component['onTouched'] = null;
+
+      const fnError = () => component.searchEvent();
+
+      expect(fnError).not.toThrow();
+    });
+
     it('modalSubscription: should `unsubscribe` on destroy.', () => {
       component['modalSubscription'] = fakeSubscription;
 

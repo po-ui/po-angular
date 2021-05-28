@@ -89,7 +89,7 @@ export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterVie
   }
 
   onBlur() {
-    this.onTouched();
+    this.onTouched?.();
   }
 
   getLabelPosition() {

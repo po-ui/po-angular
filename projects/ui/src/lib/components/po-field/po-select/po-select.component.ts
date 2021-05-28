@@ -195,7 +195,7 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   }
 
   onBlur() {
-    this.onModelTouched();
+    this.onModelTouched?.();
   }
 
   onOptionClick(option: PoSelectOption) {

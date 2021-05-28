@@ -733,6 +733,14 @@ describe('PoDatepickerComponent:', () => {
         expect(component['onTouchedModel']).toHaveBeenCalled();
         expect(component.controlModel).toHaveBeenCalledWith(null);
       });
+
+      it('shouldn´t throw error if onTouchedModel is falsy', () => {
+        component['onTouchedModel'] = null;
+
+        const fnError = () => component.eventOnBlur(fakeEvent);
+
+        expect(fnError).not.toThrow();
+      });
     });
 
     it('refreshDate: should call formatToDate when have a value', () => {

@@ -297,6 +297,16 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['removeFocusFromDatePickerRangeField']).toHaveBeenCalled();
     });
 
+    it('onBlur: shouldn´t throw error if onTouchedModel is falsy', () => {
+      const fakeEvent = { target: {} };
+
+      component['onTouchedModel'] = null;
+
+      const fnError = () => component.onBlur(fakeEvent);
+
+      expect(fnError).not.toThrow();
+    });
+
     it('onFocus: should call `applyFocusOnDatePickerRangeField`', () => {
       spyOn(component, <any>'applyFocusOnDatePickerRangeField');
       spyOn(component['poMaskObject'], 'resetPositions');
