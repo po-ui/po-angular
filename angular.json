@@ -119,12 +119,7 @@
           "options": {
             "browserTarget": "app:build:es5",
             "open": true,
-            "host": "0.0.0.0",
-            "sourceMap": {
-              "scripts": true,
-              "styles": true,
-              "vendor": true
-            }
+            "host": "0.0.0.0"
           },
           "configurations": {
             "production": {
