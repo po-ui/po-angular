@@ -4,5 +4,5 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@po-ui/ng-components", "@po-ui/ng-schematics"]
+  "allowedNonPeerDependencies": ["@po-ui/ng-components", "@po-ui/ng-schematics"]
 }

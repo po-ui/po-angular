@@ -21,15 +21,11 @@ export const configureTestSuite = (configureModule?: any) => {
   });
 
   if (configureModule) {
-    beforeAll(done =>
-      (async () => {
-        configureModule();
+    beforeAll(async () => {
+      configureModule();
 
-        await TestBed.compileComponents();
-      })()
-        .then(done)
-        .catch(done.fail)
-    );
+      await TestBed.compileComponents();
+    });
   }
 
   afterEach(() => {
