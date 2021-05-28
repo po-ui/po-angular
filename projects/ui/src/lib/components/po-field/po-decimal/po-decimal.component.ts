@@ -309,7 +309,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   // função responsável por adicionar os zeroes com as casa decimais ao sair do campo.
   onBlur(event: any) {
-    this.onTouched();
+    this.onTouched?.();
     const value = event.target.value;
 
     if (value) {

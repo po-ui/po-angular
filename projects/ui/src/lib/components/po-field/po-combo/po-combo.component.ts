@@ -205,7 +205,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   onBlur() {
-    this.onModelTouched();
+    this.onModelTouched?.();
   }
 
   onKeyDown(event?: any) {

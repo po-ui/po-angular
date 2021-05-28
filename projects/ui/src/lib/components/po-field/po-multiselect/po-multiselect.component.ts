@@ -209,7 +209,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   onBlur() {
-    this.onModelTouched();
+    this.onModelTouched?.();
   }
 
   onKeyDown(event?: any) {

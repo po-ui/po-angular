@@ -224,6 +224,14 @@ describe('PoSelectComponent:', () => {
       expect(component['onModelTouched']).toHaveBeenCalled();
     });
 
+    it('onBlur: shouldn´t throw error if onModelTouched is falsy', () => {
+      component['onModelTouched'] = null;
+
+      const fnError = () => component.onBlur();
+
+      expect(fnError).not.toThrow();
+    });
+
     it('getSelectItemHeight: should return height of po-select-item class', () => {
       const selectItem: any = { clientHeight: 5 };
 

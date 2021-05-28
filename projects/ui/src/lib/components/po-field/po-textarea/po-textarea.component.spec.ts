@@ -94,6 +94,14 @@ describe('PoTextareaComponent:', () => {
     expect(component.controlChangeEmitter).toHaveBeenCalled();
   });
 
+  it('eventOnBlur: shouldn´t throw error if onTouched is falsy', () => {
+    component['onTouched'] = null;
+
+    const fnError = () => component.eventOnBlur();
+
+    expect(fnError).not.toThrow();
+  });
+
   describe('Methods:', () => {
     it('controlChangeEmitter: shouldn´t call change event if input value is not changed', () => {
       const fakeThis = {

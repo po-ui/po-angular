@@ -422,6 +422,14 @@ describe('PoComboComponent:', () => {
       expect(component['onModelTouched']).toHaveBeenCalled();
     });
 
+    it('onBlur: shouldn´t throw error if onModelTouched is falsy', () => {
+      component['onModelTouched'] = null;
+
+      const fnError = () => component.onBlur();
+
+      expect(fnError).not.toThrow();
+    });
+
     describe('onKeyUp:', () => {
       function fakeKeypressEvent(code: number, target: any = 1) {
         return {

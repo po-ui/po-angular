@@ -162,6 +162,14 @@ describe('PoRichTextComponent:', () => {
       expect(component['onTouched']).toHaveBeenCalled();
     });
 
+    it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
+      component['onTouched'] = null;
+
+      const fnError = () => component.onBlur();
+
+      expect(fnError).not.toThrow();
+    });
+
     it('updateValue: should apply values to value, invalid and call updateModel', () => {
       spyOn(component, <any>'updateModel');
       spyOn(component, <any>'controlChangeModelEmitter');

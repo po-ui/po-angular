@@ -181,7 +181,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   searchEvent() {
-    this.onTouched();
+    this.onTouched?.();
     const value = this.getViewValue();
 
     if (this.oldValue.toString() !== value) {
