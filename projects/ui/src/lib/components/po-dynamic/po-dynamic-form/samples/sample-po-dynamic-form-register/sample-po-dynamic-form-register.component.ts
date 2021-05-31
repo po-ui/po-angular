@@ -26,7 +26,8 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       maxLength: 50,
       gridColumns: 6,
       gridSmColumns: 12,
-      order: 1
+      order: 1,
+      placeholder: 'Type your name'
     },
     {
       property: 'birthday',
@@ -42,14 +43,22 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
     { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'genre', gridColumns: 6, gridSmColumns: 12, options: ['Male', 'Female', 'Other'], order: 2 },
-    { property: 'shortDescription', label: 'Short Description', gridColumns: 12, gridSmColumns: 12, rows: 5 },
+    {
+      property: 'shortDescription',
+      label: 'Short Description',
+      gridColumns: 12,
+      gridSmColumns: 12,
+      rows: 5,
+      placeholder: 'Type short description'
+    },
     {
       property: 'secretKey',
       label: 'Secret Key',
       gridColumns: 6,
       secret: true,
       pattern: '[a-zA]{5}[Z0-9]{3}',
-      errorMessage: 'At least 5 alphabetic and 3 numeric characters are required.'
+      errorMessage: 'At least 5 alphabetic and 3 numeric characters are required.',
+      placeholder: 'Type your password'
     },
     { property: 'email', divider: 'CONTACTS', gridColumns: 6, icon: 'po-icon-mail' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },

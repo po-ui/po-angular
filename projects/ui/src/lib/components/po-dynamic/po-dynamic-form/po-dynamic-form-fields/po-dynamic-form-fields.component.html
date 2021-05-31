@@ -20,6 +20,7 @@
       [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      [p-placeholder]="field.placeholder"
     >
     </po-datepicker>
 
@@ -44,6 +45,7 @@
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
       [p-icon]="field.icon"
+      [p-placeholder]="field.placeholder"
     >
     </po-input>
 
@@ -67,6 +69,7 @@
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
       [p-icon]="field.icon"
+      [p-placeholder]="field.placeholder"
     >
     </po-number>
 
@@ -87,6 +90,7 @@
       [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      [p-placeholder]="field.placeholder"
     >
     </po-decimal>
 
@@ -104,6 +108,7 @@
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      [p-placeholder]="field.placeholder"
     >
     </po-select>
 
@@ -160,6 +165,7 @@
       [p-required]="field.required"
       (p-change)="onChangeField(field, $event)"
       [p-icon]="field.icon"
+      [p-placeholder]="field.placeholder"
     >
     </po-combo>
 
@@ -184,6 +190,7 @@
       [p-optional]="field.optional"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      [p-placeholder]="field.placeholder"
     >
     </po-lookup>
 
@@ -219,6 +226,7 @@
       [p-options]="field.options"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      [p-placeholder]="field.placeholder"
     >
     </po-multiselect>
 
@@ -238,6 +246,7 @@
       [p-required]="field.required"
       [p-rows]="field.rows"
       (p-change)="onChangeField(field)"
+      [p-placeholder]="field.placeholder"
     >
     </po-textarea>
 
@@ -259,6 +268,7 @@
       [p-pattern]="field.pattern"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      [p-placeholder]="field.placeholder"
     >
     </po-password>
   </ng-container>
