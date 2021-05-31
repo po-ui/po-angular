@@ -2,6 +2,259 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v4.17.0...v5.0.0-rc.1) (2021-05-31)
+
+
+### BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v12
+
+Atualize seu projeto para utilizar a versão 12 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+* **chart:** remove a interface `PoPieChartSeries`
+
+Remove a interface interface `PoPieChartSeries` em
+seu lugar deve ser utilizado a interface `PoChartSerie`.
+
+Antes:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoPieChartSeries } from '@po-ui/ng-components';
+...
+series: Array<PoPieChartSeries> = [...];
+```
+
+Depois:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoChartSerie } from '@po-ui/ng-components';
+...
+series: Array<PoChartSerie> = [...];
+```
+* **chart:** remove a interface `PoDonutChartSeries`
+
+Remove a interface interface `PoDonutChartSeries` em
+seu lugar deve ser utilizado a interface `PoChartSerie`.
+
+Antes:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoDonutChartSeries } from '@po-ui/ng-components';
+...
+series: Array<PoDonutChartSeries> = [...];
+```
+
+Depois:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoChartSerie } from '@po-ui/ng-components';
+...
+series: Array<PoChartSerie> = [...];
+```
+* **chart:** remove a interface `PoBarChartSeries`
+
+Remove a interface interface `PoBarChartSeries` em
+seu lugar deve ser utilizado a interface `PoChartSerie`.
+
+Antes:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoBarChartSeries } from '@po-ui/ng-components';
+...
+series: Array<PoBarChartSeries> = [...];
+```
+
+Depois:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoChartSerie } from '@po-ui/ng-components';
+...
+series: Array<PoChartSerie> = [...];
+```
+* **chart:** remove a interface `PoColumnChartSeries`
+
+Remove a interface interface `PoColumnChartSeries`, em
+seu lugar deve ser utilizado a interface `PoChartSerie`.
+
+Antes:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoColumnChartSeries } from '@po-ui/ng-components';
+...
+series: Array<PoColumnChartSeries> = [...];
+```
+
+Depois:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoChartSerie } from '@po-ui/ng-components';
+...
+series: Array<PoChartSerie> = [...];
+```
+* **chart:** remove a interface `PoLineChartSeries`
+
+Remove a interface `PoLineChartSeries`,
+em seu lugar deve ser utilizado a interface `PoChartSerie`.
+
+Antes:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoLineChartSeries } from '@po-ui/ng-components';
+...
+series: Array<PoLineChartSeries> = [...];
+```
+
+Depois:
+```
+// html
+<po-chart [p-series]="series" ...></po-chart>
+
+//ts
+import { PoChartSerie } from '@po-ui/ng-components';
+...
+series: Array<PoChartSerie> = [...];
+```
+* **table:** altera comportamento da propriedade `p-single-select`
+
+Foi alterado comportamento da propriedade `p-single-select`
+quando usada de forma isolada no Template.
+Ao utiliza-la de forma isolada anteriormente o seu
+valor era definido como `false`, agora passará a ser `true`.
+
+Antes:
+```
+<po-table p-single-select>
+</po-table>
+```
+Depois:
+```
+<po-table>
+</po-table>
+```
+* **table:** altera comportamento da propriedade `p-hide-select-all`
+
+Foi alterado comportamento da propriedade `p-hide-select-all`
+quando usada de forma isolada no Template.
+Ao utiliza-la de forma isolada anteriormente o
+seu valor era definido como `false`, agora passará a ser `true`.
+
+Antes:
+```
+<po-table p-hide-select-all>
+</po-table>
+```
+Depois:
+```
+<po-table>
+</po-table>
+```
+* **table:** altera comportamento da
+propriedade `p-striped`
+
+Foi alterado comportamento da propriedade `p-striped`
+quando usada de forma isolada no Template.
+Ao utiliza-la de forma isolada anteriormente o seu valor
+era definido como `false`, agora passará a ser `true`.
+
+Antes:
+```
+<po-table p-striped>
+</po-table>
+```
+Depois:
+```
+<po-table>
+</po-table>
+```
+* **table:** altera comportamento da
+propriedade `p-show-more-disabled`
+
+Foi alterado comportamento da propriedade `p-show-more-disabled`
+quando usada de forma isolada no Template.
+Ao utiliza-la de forma isolada anteriormente o
+seu valor era definido como `false`, agora passará a ser `true`.
+
+Antes:
+```
+<po-table p-show-more-disabled>
+</po-table>
+```
+Depois:
+```
+<po-table>
+</po-table>
+```
+* **table:** altera comportamento da propriedade `p-sort`
+
+Foi alterado comportamento da propriedade `p-sort`
+quando usada de forma isolada no Template. Ao utiliza-la de forma isolada anteriormente o seu valor
+era definido como `false`, agora passará a ser `true`.
+
+Antes:
+```
+<po-table p-sort>
+</po-table>
+```
+Depois:
+```
+<po-table>
+</po-table>
+```
+
+
+### Bug Fixes
+
+* **chart:** corrige erro no firefox ao incia-lo escondido ([b79fa40](https://github.com/po-ui/po-angular/commit/b79fa40763fc90f4d82d5de0d5a1d26abb7b0738)), closes [#874](https://github.com/po-ui/po-angular/issues/874)
+* **fields:** corrige erro inesperado ao sair do campo sem model ([3af2426](https://github.com/po-ui/po-angular/commit/3af24268236d834405eb0c5c01ddab6491e61bfe)), closes [#872](https://github.com/po-ui/po-angular/issues/872)
+
+
+### Code Refactoring
+
+* **chart:** remove a interface `PoBarChartSeries` ([b914e5a](https://github.com/po-ui/po-angular/commit/b914e5a0fd79595c5d9d2631bbb8a1dea806c685))
+* **chart:** remove a interface `PoColumnChartSeries` ([f012324](https://github.com/po-ui/po-angular/commit/f012324fa557d0b9747a99f7e4a2c02039f5852b))
+* **chart:** remove a interface `PoDonutChartSeries` ([70f1a7b](https://github.com/po-ui/po-angular/commit/70f1a7b01f484ddc3fcf3498bd03c8b191406c26))
+* **chart:** remove a interface `PoLineChartSeries` ([1b3c8ed](https://github.com/po-ui/po-angular/commit/1b3c8ed15809bcba60e0f025b06eef7c4ffad453))
+* **chart:** remove a interface `PoPieChartSeries` ([0e92746](https://github.com/po-ui/po-angular/commit/0e9274671aac0fdfcd8c2cf1b2dc9c0eee8045d8))
+* **table:** altera comportamento da propriedade `p-show-more-disabled` ([1df9a26](https://github.com/po-ui/po-angular/commit/1df9a260353a2ef49398e6c34fa820206d903d3b))
+* **table:** altera comportamento da propriedade `p-single-select` ([de3d18c](https://github.com/po-ui/po-angular/commit/de3d18c968fa406f82d9d5c6941766f82000931d))
+* **table:** altera comportamento da propriedade `p-hide-select-all` ([607bcb6](https://github.com/po-ui/po-angular/commit/607bcb6f21e8a833a8be63af250f061453c072d5))
+* **table:** altera comportamento da propriedade `p-sort` ([557c42f](https://github.com/po-ui/po-angular/commit/557c42f9a7757edb0682ab37d6c52b44d67ae660))
+* **table:** altera comportamento da propriedade `p-striped` ([963b2ad](https://github.com/po-ui/po-angular/commit/963b2add495140bde75133e920c8e9be5ba778ab))
+
+
+### Features
+
+* **angular:** atualiza para o angular v12 ([a5b0d70](https://github.com/po-ui/po-angular/commit/a5b0d707f40794ec896c53a81a6c297a4b02c55f))
+
+
+
 # [4.17.0](https://github.com/po-ui/po-angular/compare/v4.16.1...v4.17.0) (2021-05-24)
 
 
