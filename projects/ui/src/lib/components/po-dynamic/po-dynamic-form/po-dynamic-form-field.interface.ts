@@ -255,4 +255,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * array.
    */
   order?: number;
+
+  /** Mensagem que será exibida enquanto o campo não estiver preenchido. */
+  placeholder?: string;
 }
