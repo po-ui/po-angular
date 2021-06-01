@@ -1,6 +1,8 @@
 [comment]: # (@label Começando com o PO Sync)
 [comment]: # (@link guides/sync-get-started)
 
+> Instale a versão 6 do NPM antes de iniciar: ```npm i -g npm@6```
+
 Esse guia servirá para criar e configurar uma aplicação em [Ionic 5](https://beta.ionicframework.com/docs/) com o uso do PO Sync.
 
 Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, consulte a documentação de
@@ -93,7 +95,7 @@ npm install
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 
 ```shell
-ng add @po-ui/ng-sync
+ng add @po-ui/ng-sync@5.0.0-rc.1
 ```
 
 Após a instalação do `po-sync`, é necessário instalar o plugin
