@@ -1,6 +1,8 @@
 [comment]: # (@label Primeiros passos)
 [comment]: # (@link guides/getting-started)
 
+> Instale a versão 6 do NPM antes de iniciar: ```npm i -g npm@6```
+
 ### Pré-requisitos
 
 Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 12.13.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
@@ -76,7 +78,7 @@ Utilizando o comando `ng add` do [Angular CLI](https://cli.angular.io/), vamos a
 Execute o comando abaixo na pasta raiz do seu projeto:
 
 ```
-ng add @po-ui/ng-components
+ng add @po-ui/ng-components@5.0.0-rc.1
 ```
 
 > Ao executar o comando acima, será perguntado se deseja incluir uma estrutura inicial em seu projeto com menu lateral, página e toolbar, utilizando componentes do **Po**, **caso desejar, apenas informe: `Y`**.
@@ -104,7 +106,7 @@ Agora é só abrir seu **editor / IDE** favorito e começar a trabalhar no seu p
 Caso você queira utilizar nossos componentes de templates, como o **[po-page-login](/documentation/po-page-login)**, **[po-modal-password-recovery](/documentation/po-modal-password-recovery)**, **[po-page-blocked-user](/documentation/po-page-blocked-user)**, **[po-page-dynamic-table](/documentation/po-page-dynamic-table)** entre outros, basta adicionar o pacote `@po-ui/ng-templates` executando o comando abaixo:
 
 ```
-ng add @po-ui/ng-templates
+ng add @po-ui/ng-templates@5.0.0-rc.1
 ```
 > Ao executar este comando, será instalado o pacote `@po-ui/ng-templates` e configurado o `PoTemplatesModules` no `app.module`
 
