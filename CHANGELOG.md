@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [5.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v4.17.0...v5.0.0-rc.1) (2021-05-31)
+# [5.0.0](https://github.com/po-ui/po-angular/compare/v4.17.0...v5.0.0) (2021-06-07)
 
 
 ### BREAKING CHANGES
@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file. See [standa
 * **angular:** deve ser utilizado o Angular v12
 
 Atualize seu projeto para utilizar a versão 12 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+Veja nossa [**documentação para fazer a migração**](https://po-ui.io/guides/migration-poui) para a versão 5.
 
 * **chart:** remove a interface `PoPieChartSeries`
 
@@ -252,6 +254,8 @@ Depois:
 ### Features
 
 * **angular:** atualiza para o angular v12 ([a5b0d70](https://github.com/po-ui/po-angular/commit/a5b0d707f40794ec896c53a81a6c297a4b02c55f))
+* **dynamic-form:** adiciona a propriedade `placeholder` no `PoDynamicFormField` ([14b4097](https://github.com/po-ui/po-angular/commit/14b40971e27d8eaba9a1c961d5760f4cfd194e2f))
+* **migration:** adiciona ng update e documentação de migração para v5 ([f091784](https://github.com/po-ui/po-angular/commit/f09178445cc2a690001294d9a028afc74deb56ce))
 
 
 

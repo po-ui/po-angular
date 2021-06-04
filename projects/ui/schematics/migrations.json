@@ -17,7 +17,7 @@
       "factory": "./ng-update/v4/index"
     },
     "migration-v5": {
-      "version": "0.0.0-PLACEHOLDER",
+      "version": "5",
       "description": "Atualiza @po-ui/ng-components para v5",
       "factory": "./ng-update/v5/index"
     }

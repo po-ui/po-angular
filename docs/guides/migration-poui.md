@@ -47,11 +47,15 @@ Para facilitar a migração do seu projeto para o PO UI mais recente, implementa
 Para realizar a migração, devemos executar o comando `ng update`, conforme exemplo abaixo. Mas antes verifique se comitou os arquivos alterados pela migração do Angular, se preferir você pode utilizar a
 *flag* `--allow-dirty` em conjunto.
 
-``` ng update @po-ui/ng-components@<version> --allow-dirty```
+```
+ng update @po-ui/ng-components@<version> --allow-dirty
+```
 
 Por exemplo:
 
-``` ng update @po-ui/ng-components@5 --allow-dirty```
+```
+ng update @po-ui/ng-components@5 --allow-dirty
+```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
   - Caso houver *breaking changes*, serão realizados as alterações possíveis, mas fique atento ao
@@ -73,11 +77,15 @@ O `ng update` ajudará nas alterações necessárias para seu projeto seguir atu
 Para realizar a migração, devemos executar o comando `ng update`, conforme exemplo abaixo. Mas antes verifique se comitou os arquivos alterados pela migração do Angular, se preferir você pode utilizar a
 *flag* `--allow-dirty` em conjunto.
 
-``` ng update @po-ui/ng-sync@<version> --allow-dirty```
+```
+ng update @po-ui/ng-sync@<version> --allow-dirty
+```
 
 Por exemplo:
 
-``` ng update @po-ui/ng-sync@5 --allow-dirty```
+```
+ng update @po-ui/ng-sync@5 --allow-dirty
+```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:
   - `@po-ui/ng-sync`;
