@@ -14,7 +14,7 @@
         [class.po-popup-item-selected]="action.selected"
         (click)="onActionClick(action)"
       >
-        <span *ngIf="action.icon" class="po-icon {{ action.icon }} po-popup-icon-item"></span>
+        <po-icon *ngIf="action.icon" class="po-popup-icon-item po-icon" [p-icon]="action.icon"></po-icon>
         {{ action.label }}
       </div>
     </ng-container>

@@ -34,7 +34,9 @@ export class SamplePoPopupLabsComponent implements OnInit {
   public readonly iconOptions: Array<PoSelectOption> = [
     { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
-    { value: 'po-icon-world', label: 'po-icon-world' }
+    { value: 'po-icon-world', label: 'po-icon-world' },
+    { label: 'fa fa-address-card', value: 'fa fa-address-card' },
+    { label: 'fa fa-bell', value: 'fa fa-bell' }
   ];
 
   public readonly positionOptions: Array<PoSelectOption> = [
