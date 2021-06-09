@@ -743,12 +743,38 @@ describe('PoEventSourcingService:', () => {
       expect(eventSourcingService['poHttpClient']['createRequest']).toHaveBeenCalledWith(poHttpRequestData);
     });
 
-    it('createPoHttpRequestData: should return newRequestData', async () => {
+    it('createPoHttpRequestData: should return newRequestData if record.body', async () => {
+      const url = 'http://url.com/customers';
+      const method = PoHttpRequestType.POST;
+      const record = { body: { title: 'New note', text: 'test' } };
+      const headers = [{ name: 'test', value: 'teste1' }];
+
       const poHttpRequestData: PoHttpRequestData = {
-        url: 'http://url.com/customers',
-        method: PoHttpRequestType.POST,
-        headers: [{ name: 'test', value: 'teste1' }],
-        body: {}
+        url,
+        method,
+        body: record.body,
+        headers
+      };
+
+      spyOn(eventSourcingService, <any>'createFormData');
+
+      const result = await eventSourcingService['createPoHttpRequestData'](url, method, record, headers);
+
+      expect(result).toEqual(poHttpRequestData);
+      expect(eventSourcingService['createFormData']).not.toHaveBeenCalled();
+    });
+
+    it('createPoHttpRequestData: should return newRequestData if record.body is undefined', async () => {
+      const url = 'http://url.com/customers';
+      const method = PoHttpRequestType.POST;
+      const record = { title: 'New note', text: 'test' };
+      const headers = [{ name: 'test', value: 'teste1' }];
+
+      const poHttpRequestData: PoHttpRequestData = {
+        url,
+        method,
+        body: record,
+        headers
       };
 
       spyOn(eventSourcingService, <any>'createFormData');
