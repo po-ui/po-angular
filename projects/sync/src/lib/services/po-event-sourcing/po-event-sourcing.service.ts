@@ -462,7 +462,7 @@ export class PoEventSourcingService {
     record?: PoEventSourcingItem['record'],
     headers?: Array<PoHttpHeaderOption>
   ): Promise<PoHttpRequestData> {
-    let body = record.body;
+    let body = record.body ?? record;
 
     if (record.bodyType === 'File') {
       body = await this.createFormData(body, record.fileName, record.mimeType, record.formField);
