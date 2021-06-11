@@ -1,4 +1,14 @@
-import { EventEmitter, Input, OnChanges, Output, Directive, SimpleChanges, OnDestroy } from '@angular/core';
+import {
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  Directive,
+  SimpleChanges,
+  OnDestroy,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
@@ -97,6 +107,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _serviceApi: string;
   private poTableServiceSubscription: Subscription;
   private sortStore: PoTableColumnSort;
+  private _infiniteScrollDistance?: number = 100;
+  private _infiniteScroll?: boolean = false;
 
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
@@ -108,7 +120,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   page = 1;
   pageSize = 10;
   hasService?: boolean = false;
-
+  hasInfiniteScroll?: boolean = false;
   /**
    * @description
    *
@@ -393,6 +405,45 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @default `false`
    */
   @Input('p-show-more-disabled') @InputBoolean() showMoreDisabled?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Se verdadeiro, ativa a funcionalidade de scroll infinito para a tabela e o botão "Carregar Mais" deixará de ser exibido. Ao chegar no fim da tabela
+   * executará a função p-show-more.
+   *
+   * **Regras de utilização:**
+   *  - O scroll inifito só funciona para tabelas que utilizam a diretiva p-height e possuam um scroll já carga inicial de dados
+   *
+   * @default `false`
+   */
+  @Input('p-infinite-scroll') set infiniteScroll(value: boolean) {
+    this._infiniteScroll = convertToBoolean(value && this.height > 0);
+  }
+
+  get infiniteScroll() {
+    return this._infiniteScroll;
+  }
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o percentual necessário para disparar o serviço para carregar mais dados na tabela. Caso o valor informado seja maior que 100 ou menor
+   * que 0, o valor padrão será 100%
+   *
+   * **Exemplos:**
+   *  - p-infinite-scroll-distance = 80: Quando atingir 80%  do scroll da tabela, o `p-show-more` será disparado.
+   */
+  @Input('p-infinite-scroll-distance') set infiniteScrollDistance(value: number) {
+    this._infiniteScrollDistance = value > 100 || value < 0 ? 100 : value;
+  }
+
+  get infiniteScrollDistance() {
+    return this._infiniteScrollDistance;
+  }
 
   /**
    * @description

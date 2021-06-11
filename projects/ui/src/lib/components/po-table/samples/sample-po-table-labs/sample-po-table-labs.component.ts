@@ -38,6 +38,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   maxColumns: number;
   properties: Array<string>;
   selection: Array<string>;
+  infiniteScrollDistance: number;
 
   actionsDefinitionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Actions', value: 'actions' },
@@ -84,7 +85,8 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Hide detail', value: 'hideDetail' },
     { label: 'Loading', value: 'loading' },
     { label: 'Auto collapse', value: 'autoCollapse' },
-    { label: 'Hide columns manager', value: 'hideColumnsManager' }
+    { label: 'Hide columns manager', value: 'hideColumnsManager' },
+    { label: 'Infinite Scroll', value: 'infiniteScroll' }
   ];
 
   public readonly typeHeaderOptions: Array<PoRadioGroupOption> = [
@@ -166,6 +168,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.maxColumns = undefined;
     this.properties = [];
     this.selection = [];
+    this.infiniteScrollDistance = undefined;
 
     this.updateColumns();
     this.changeActionOptions();

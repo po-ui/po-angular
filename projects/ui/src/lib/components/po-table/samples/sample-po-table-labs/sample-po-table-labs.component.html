@@ -25,6 +25,8 @@
   (p-show-more)="showMore()"
   (p-unselected)="changeEvent('p-unselected')"
   [p-auto-collapse]="properties.includes('autoCollapse')"
+  [p-infinite-scroll]="properties.includes('infiniteScroll')"
+  [p-infinite-scroll-distance]="infiniteScrollDistance"
 >
 </po-table>
 
@@ -107,6 +109,18 @@
       p-clean
       p-help="Max columns to be visible"
       p-label="Max Columns"
+    >
+    </po-number>
+  </div>
+
+  <div class="po-row">
+    <po-number
+      class="po-md-3"
+      name="infiniteScrollDistance"
+      [(ngModel)]="infiniteScrollDistance"
+      p-clean
+      p-help="Distance of Scrool"
+      p-label="Infinite Scroll Distance"
     >
     </po-number>
   </div>

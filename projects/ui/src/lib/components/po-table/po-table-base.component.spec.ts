@@ -1430,5 +1430,30 @@ describe('PoTableBaseComponent:', () => {
     it('p-auto-collapse: should update property `p-auto-collapse` with invalid values.', () => {
       expectPropertiesValues(component, 'autoCollapse', booleanInvalidValues, false);
     });
+
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
+      expectPropertiesValues(component, 'loading', booleanValidTrueValues, true);
+    });
+
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
+      expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
+    });
+
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
+      component.height = 10;
+      expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+    });
+
+    it('p-infinite-scroll-distance: should update property `p-infinite-scroll-distance` with valid values .', () => {
+      expectSettersMethod(component, 'infiniteScrollDistance', 50, 'infiniteScrollDistance', 50);
+    });
+
+    it('p-infinite-scroll-distance: should update property `p-infinite-scroll-distance` with negative values .', () => {
+      expectSettersMethod(component, 'infiniteScrollDistance', -50, 'infiniteScrollDistance', 100);
+    });
+
+    it('p-infinite-scroll-distance: should update property `p-infinite-scroll-distance` with values > 100 .', () => {
+      expectSettersMethod(component, 'infiniteScrollDistance', 150, 'infiniteScrollDistance', 100);
+    });
   });
 });

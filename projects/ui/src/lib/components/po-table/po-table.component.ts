@@ -1,3 +1,4 @@
+import { Observable, Subscriber, Subscription } from 'rxjs';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -77,6 +78,7 @@ import { PoTableService } from './services/po-table.service';
  *  <file name="sample-po-table-components/sample-po-table-components.service.ts"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.component.css"> </file>
  * </example>
+ *
  */
 @Component({
   selector: 'po-table',
@@ -85,6 +87,7 @@ import { PoTableService } from './services/po-table.service';
 })
 export class PoTableComponent extends PoTableBaseComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
   private _columnManagerTarget: ElementRef;
+  private _poTableTbody: ElementRef;
 
   heightTableContainer: number;
   popupTarget;
@@ -97,6 +100,8 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
   private initialized = false;
   private timeoutResize;
   private visibleElement = false;
+  private scrollEvent$: Observable<any>;
+  private subscriptionScrollEvent: Subscription;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -125,6 +130,14 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
   @ViewChildren('headersTable') headersTable: QueryList<any>;
 
+  @ViewChild('poTableTbody') set poTableTbody(value: ElementRef) {
+    this._poTableTbody = value;
+  }
+
+  get poTableTbody() {
+    return this._poTableTbody;
+  }
+
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
@@ -134,7 +147,7 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private router: Router,
-    defaultService: PoTableService
+    private defaultService: PoTableService
   ) {
     super(poDate, poLanguageService, defaultService);
 
@@ -221,8 +234,11 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
     this.initialized = true;
   }
 
-  ngOnInit() {
-    this.initializeData();
+  showMoreInfiniteScroll(target): void {
+    const scrollPosition = target.target.offsetHeight + target.target.scrollTop;
+    if (!this.showMoreDisabled && scrollPosition >= target.target.scrollHeight * (this.infiniteScrollDistance / 100)) {
+      this.onShowMore();
+    }
   }
 
   ngDoCheck() {
@@ -232,7 +248,22 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
     if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
       this.debounceResize();
+      this.checkInfinitScroll();
       this.visibleElement = true;
+    }
+  }
+
+  includeInfiniteScroll(): void {
+    this.scrollEvent$ = this.defaultService.scrollListner(this.poTableTbody.nativeElement);
+    this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
+  }
+
+  checkInfinitScroll(): void {
+    if (this.infiniteScroll && this.hasItems && !this.subscriptionScrollEvent && this.height) {
+      this.poTableTbody.nativeElement.scrollHeight > this.height
+        ? this.includeInfiniteScroll()
+        : (this.infiniteScroll = false);
+      this.changeDetector.detectChanges();
     }
   }
 
@@ -437,6 +468,7 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
   protected calculateWidthHeaders() {
     setTimeout(() => {
       if (this.height) {
+        this.checkInfinitScroll();
         this.headersTable.forEach(header => {
           const divHeader = header.nativeElement.querySelector('.po-table-header-fixed-inner');
           if (divHeader) {
@@ -509,6 +541,10 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
 
     if (this.clickListener) {
       this.clickListener();
+    }
+
+    if (this.subscriptionScrollEvent) {
+      this.subscriptionScrollEvent.unsubscribe();
     }
   }
 
