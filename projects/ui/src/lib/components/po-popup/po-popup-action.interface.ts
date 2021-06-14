@@ -26,42 +26,36 @@ export interface PoPopupAction {
    * Define um ícone que será exibido ao lado esquerdo do rótulo.
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
-   *
    * ```
-   * <po-popup
-   *  [p-actions]="[ { label: 'PO ICON', icon: 'po-icon-news', action: () => action.bind(this) } ]">
-   * </po-popup>
-   *
+   * <po-component
+   *  [p-property]="[{ label: 'PO ICON', icon: 'po-icon-news' }]">
+   * </po-component>
    * ```
    *
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca Font Awesome, da seguinte forma:
    * ```
-   * <po-popup
-   *  [p-actions]="[ { label: 'FA ICON', icon: 'fa fa-icon-podcast', action: () => action.bind(this) } ]">
-   * </po-popup>
-   *
+   * <po-component
+   *  [p-property]="[{ label: 'FA ICON', icon: 'fa fa-icon-podcast' }]">
+   * </po-component>
    * ```
    *
    * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
    * component.html:
    * ```
-   *
    * <ng-template #iconTemplate>
    *   <ion-icon name="heart"></ion-icon>
    * </ng-template>
    *
-   * <po-popup [p-actions]="actions"></po-popup>
+   * <po-component [p-property]="myProperty"></po-component>
    * ```
    * component.ts:
    * ```
    * @ViewChild('iconTemplate', { static: true } ) iconTemplate : TemplateRef<void>;
-   * actions: Array<PoPopupAction> = [];
    *
-   * this.actions = [
+   * myProperty = [
    *  {
    *    label: 'FA ICON',
-   *    icon: this.iconTemplate,
-   *    action: () => this.action.bind(this)
+   *    icon: this.iconTemplate
    *  }
    * ];
    * ```
