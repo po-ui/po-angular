@@ -28,6 +28,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   private _disabled: boolean = false;
   private _maxlength: number;
   private _minlength: number;
+  private _placeholder: string = '';
   private _readonly: boolean = false;
   private _required: boolean = false;
   private _rows: number = 3;
@@ -58,7 +59,13 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   @Input('p-help') help?: string;
 
   /** Placeholder, mensagem que aparecerá enquanto o campo não estiver preenchido. */
-  @Input('p-placeholder') placeholder?: string = '';
+  @Input('p-placeholder') set placeholder(value: string) {
+    this._placeholder = value || '';
+  }
+
+  get placeholder() {
+    return this._placeholder;
+  }
 
   /** Nome e Id do componente. */
   @Input('name') name: string;
