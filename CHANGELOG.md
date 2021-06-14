@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.1.0](https://github.com/po-ui/po-angular/compare/v5.0.0...v5.1.0) (2021-06-14)
+
+
+### Bug Fixes
+
+* **sync:** corrige envio do body vazio a partir da v4.2.0 ([f382e73](https://github.com/po-ui/po-angular/commit/f382e73df43e52e91b5d563708a7f31ef5b339fd))
+* **textarea:** realiza tratamento no `placeholder` caso informar `undefined` ([08c5cb1](https://github.com/po-ui/po-angular/commit/08c5cb1d344eb82915a254b7cb8e399f26cbdf16))
+
+
+### Features
+
+* **popup:** adiciona compatibilidade com outras fontes de ícones na propriedade `p-actions` ([6ca6e89](https://github.com/po-ui/po-angular/commit/6ca6e89091c5f72b132a6ae2f5c245b7f7911f25))
+* **dropdown:** adiciona compatibilidade com outras fontes de ícones na propriedade `p-actions` ([6ca6e89](https://github.com/po-ui/po-angular/commit/6ca6e89091c5f72b132a6ae2f5c245b7f7911f25))
+* **page-list:** adiciona compatibilidade com outras fontes de ícones na propriedade `p-actions` ([6ca6e89](https://github.com/po-ui/po-angular/commit/6ca6e89091c5f72b132a6ae2f5c245b7f7911f25))
+* **page-default:** adiciona compatibilidade com outras fontes de ícones na propriedade `p-actions` ([6ca6e89](https://github.com/po-ui/po-angular/commit/6ca6e89091c5f72b132a6ae2f5c245b7f7911f25))
+* **toolbar:** adiciona possibilidade de informar outras fontes de ícones nas seguintes propriedades: ([6ca6e89](https://github.com/po-ui/po-angular/commit/6ca6e89091c5f72b132a6ae2f5c245b7f7911f25))
+  - p-actions
+  - p-notification-actions
+  - p-profile-actions
+
+
 # [5.0.0](https://github.com/po-ui/po-angular/compare/v4.17.0...v5.0.0) (2021-06-07)
 
 
