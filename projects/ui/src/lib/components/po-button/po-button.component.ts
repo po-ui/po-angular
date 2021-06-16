@@ -2,6 +2,8 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChil
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
+import '@animaliads/ani-button';
+
 /**
  * @docsExtends PoButtonBaseComponent
  *

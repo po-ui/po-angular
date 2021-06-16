@@ -2,9 +2,10 @@ import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/co
 
 import { convertToBoolean } from '../../utils/util';
 import { InputBoolean } from '../../decorators';
+import { PoButtonType } from './po-button-type.enum';
 
 const PO_BUTTON_TYPES = ['default', 'primary', 'danger', 'link'];
-const PO_BUTTON_TYPE_DEFAULT = 'default';
+const PO_BUTTON_TYPE_DEFAULT = 'secondary';
 
 /**
  * @description
@@ -22,10 +23,11 @@ const PO_BUTTON_TYPE_DEFAULT = 'default';
  */
 @Directive()
 export class PoButtonBaseComponent {
+  danger = false;
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
-  private _type?: string = 'default';
+  private _type?: string = 'secondary';
 
   /**
    * @optional
@@ -126,7 +128,8 @@ export class PoButtonBaseComponent {
    * @default `default`
    */
   @Input('p-type') set type(value: string) {
-    this._type = PO_BUTTON_TYPES.includes(value) ? value : PO_BUTTON_TYPE_DEFAULT;
+    this._type = PO_BUTTON_TYPES.includes(value) ? PoButtonType[value] : PO_BUTTON_TYPE_DEFAULT;
+    this.danger = value === 'danger';
   }
   get type(): string {
     return this._type;
