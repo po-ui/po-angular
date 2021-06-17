@@ -1556,11 +1556,11 @@ describe('PoTableComponent:', () => {
       expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeColumns);
     });
 
-    describe('initializeData', () => {
+    describe('applyFilters', () => {
       it('should be called when `p-service-api` is used', () => {
         spyOn(component, 'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
         component.hasService = true;
-        component['initializeData']();
+        component.applyFilters({});
         expect(component.getFilteredItems).toHaveBeenCalled();
       });
     });

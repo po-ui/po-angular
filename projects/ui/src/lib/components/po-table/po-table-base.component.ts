@@ -26,6 +26,8 @@ import { PoTableService } from './services/po-table.service';
 import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
 import { PoTableFilteredItemsParams } from './interfaces/po-table-filtered-items-params.interface';
 
+export type QueryParamsType = string | number | boolean;
+
 export const poTableContainer = ['border', 'shadow'];
 export const poTableContainerDefault = 'border';
 
@@ -517,8 +519,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   @Input('p-service-api') set serviceApi(service: string) {
     this._serviceApi = service;
     this.setService(this.serviceApi);
-    this.hasService = service && service !== '';
+    this.hasService = !!service;
     this.showMoreDisabled = !this.hasService;
+    this.initializeData();
   }
 
   get serviceApi() {
@@ -897,6 +900,15 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     return this.hasMainColumns ? this.mainColumns.every(column => column.width && column.width.includes('px')) : false;
   }
 
+  initializeData(params?: { [key: string]: QueryParamsType }): void {
+    if (this.hasService) {
+      this.loading = true;
+      this.getFilteredItems(params).subscribe(data => {
+        this.setTableResponseProperties(data);
+      });
+    }
+  }
+
   setTableResponseProperties(data: PoTableResponseApi) {
     this.items = data.items || [];
     this.showMoreDisabled = !data.hasNext;
@@ -909,25 +921,24 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     }
   }
 
-  getFilteredItems(filter?: string): Observable<PoTableResponseApi> {
-    const filteredParams: PoTableFilteredItemsParams = this.getFilteredParams(filter);
+  getFilteredItems(queryParams?: { [key: string]: QueryParamsType }): Observable<PoTableResponseApi> {
+    const filteredParams: PoTableFilteredItemsParams = this.getFilteredParams(queryParams);
 
     return this.poTableService.getFilteredItems(filteredParams);
   }
 
-  private getFilteredParams(filter?: string) {
+  private getFilteredParams(queryParams?: { [key: string]: QueryParamsType }) {
     const { page, pageSize, sortStore } = this;
 
     const filteredParams = {};
     const order = this.getOrderParam(sortStore);
-    const params = { filter, page, pageSize, order };
+    const params = { page, pageSize, order, ...queryParams };
 
     for (const key in params) {
       if (params.hasOwnProperty(key) && params[key] !== undefined) {
         filteredParams[key] = params[key];
       }
     }
-
     return filteredParams;
   }
 

@@ -14,19 +14,18 @@ import {
   ViewChildren,
   ViewContainerRef,
   ContentChildren,
-  TemplateRef,
-  OnInit
+  TemplateRef
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { convertToBoolean, isTypeof } from '../../utils/util';
+import { convertToBoolean } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
 import { PoTableAction } from './interfaces/po-table-action.interface';
-import { PoTableBaseComponent } from './po-table-base.component';
+import { PoTableBaseComponent, QueryParamsType } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
@@ -85,7 +84,7 @@ import { PoTableService } from './services/po-table.service';
   templateUrl: './po-table.component.html',
   providers: [PoDateService]
 })
-export class PoTableComponent extends PoTableBaseComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
+export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
   private _columnManagerTarget: ElementRef;
   private _poTableTbody: ElementRef;
 
@@ -269,6 +268,28 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
 
   ngOnDestroy() {
     this.removeListeners();
+  }
+
+  /**
+   * Método responsável por realizar busca no serviço de dados podendo informar filtros e com o retorno, atualiza a tabela.
+   *
+   * Caso não seja informado parâmetro, nada será adicionado ao GET, conforme abaixo:
+   * ```
+   * url + ?page=1&pageSize=10
+   * ```
+   * > Obs: os parâmetros `page` e `pageSize` sempre serão chamados independente de ser enviados outros parâmetros.
+   *
+   * Caso sejam informados os parâmetros `{ name: 'JOHN', age: '23' }`, todos serão adicionados ao GET, conforme abaixo:
+   * ```
+   * url + ?page=1&pageSize=10&name=JOHN&age=23
+   * ```
+   *
+   * @param { { key: value } } queryParams Formato do objeto a ser enviado.
+   * > Pode ser utilizada qualquer string como key, e qualquer string ou number como value.
+   */
+  applyFilters(queryParams?: { [key: string]: QueryParamsType }) {
+    this.page = 1;
+    this.initializeData(queryParams);
   }
 
   /**
@@ -574,14 +595,5 @@ export class PoTableComponent extends PoTableBaseComponent implements OnInit, Af
       return null;
     }
     return template.templateRef;
-  }
-
-  private initializeData(): void {
-    if (this.hasService) {
-      this.loading = true;
-      this.getFilteredItems().subscribe(data => {
-        this.setTableResponseProperties(data);
-      });
-    }
   }
 }

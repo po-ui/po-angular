@@ -11,9 +11,9 @@ import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.co
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableService } from './services/po-table.service';
-import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @Directive()
 class PoTableComponent extends PoTableBaseComponent {
@@ -32,13 +32,14 @@ describe('PoTableBaseComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      providers: [PoTableService, PoLanguageService, PoDateService]
+      providers: [PoTableService, PoLanguageService, PoDateService],
+      imports: [HttpClientTestingModule]
     });
   });
   beforeEach(() => {
     dateService = new PoDateService();
     languageService = new PoLanguageService();
-    tableService = new PoTableService(undefined);
+    tableService = TestBed.inject(PoTableService);
     component = new PoTableComponent(dateService, languageService, tableService);
 
     actions = [
@@ -466,6 +467,22 @@ describe('PoTableBaseComponent:', () => {
     ];
 
     const itemsColors = [{ destination: 'Paris' }, { country: 'Franch' }, { city: 'Lyon' }];
+
+    describe('initializeData:', () => {
+      it('getFilteredItems should be called when `p-service-api` is used', () => {
+        spyOn(component, 'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
+        component.hasService = true;
+        component.initializeData();
+        expect(component.getFilteredItems).toHaveBeenCalled();
+      });
+
+      it('getFilteredItems should not be called when `p-service-api` is not used', () => {
+        spyOn(component, 'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
+        component.hasService = false;
+        component.initializeData();
+        expect(component.getFilteredItems).not.toHaveBeenCalled();
+      });
+    });
 
     it('ngOnChanges: should call `calculateHeightTableContainer` if height is changed', () => {
       spyOn(component, 'calculateHeightTableContainer');
@@ -1120,8 +1137,8 @@ describe('PoTableBaseComponent:', () => {
       it('should return object with empty filter', () => {
         const page = 1;
         const pageSize = 10;
-        const filter = '';
-        const expectedValue = { filter, page, pageSize };
+        const filter = {};
+        const expectedValue = { page, pageSize };
 
         component.page = page;
         component.pageSize = pageSize;
@@ -1161,7 +1178,7 @@ describe('PoTableBaseComponent:', () => {
       it('should call and return an Observable', () => {
         const page = 1;
         const pageSize = 10;
-        const filter = '';
+        const filter = {};
 
         spyOn(component['poTableService'], <any>'getFilteredItems').and.returnValue(of({ items, hasNext: false }));
 
