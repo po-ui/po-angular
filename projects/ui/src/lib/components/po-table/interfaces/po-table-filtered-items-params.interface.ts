@@ -11,6 +11,11 @@ export interface PoTableFilteredItemsParams {
   filter?: string;
 
   /**
+   * Objeto utilizado para filtros personalizados.
+   */
+  queryParams?: { [key: string]: string | number | boolean };
+
+  /**
    * Controla a paginação dos dados e recebe um valor automaticamente a cada clique no botão 'Carregar mais resultados'.
    */
   page?: number;

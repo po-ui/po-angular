@@ -1,6 +1,48 @@
-<po-table
-  p-service-api="https://po-sample-api.herokuapp.com/v1/people"
-  [p-height]="400"
-  [p-columns]="[{ property: 'id' }, { property: 'nickname' }, { property: 'name' }, { property: 'email' }]"
->
-</po-table>
+<div class="po-row">
+  <po-input
+    class="po-md-12"
+    p-label="URL API service"
+    p-help="https://po-sample-api.herokuapp.com/v1/heroes"
+    [(ngModel)]="service"
+    (p-change)="changeService(service)"
+  >
+  </po-input>
+</div>
+<div class="po-row">
+  <po-divider class="po-md-12" p-label="Columns"></po-divider>
+  <po-textarea
+    class="po-md-12"
+    p-label="Columns"
+    p-help="[{ property: 'name' }]"
+    [(ngModel)]="stringColumns"
+    [p-rows]="5"
+    (p-change)="onChangeColumns($event)"
+  >
+  </po-textarea>
+</div>
+<div class="po-row">
+  <po-divider class="po-md-12" p-label="Filters"></po-divider>
+  <po-input class="po-md-6" p-label="Key" p-help="Object key" [(ngModel)]="key"></po-input>
+  <po-input class="po-md-6" p-label="Value" p-help="Object value" [(ngModel)]="value"></po-input>
+</div>
+<div class="po-row">
+  <po-button
+    class="po-md-3"
+    p-label="Add Filter"
+    (p-click)="addFilter(key, value)"
+    [p-disabled]="!key || !value"
+  ></po-button>
+</div>
+<div class="po-row">
+  <po-disclaimer-group
+    class="po-mt-1 po-md-12"
+    [p-disclaimers]="filters"
+    (p-remove)="removeItem($event)"
+    (p-remove-all)="removeAllItems()"
+  >
+  </po-disclaimer-group>
+</div>
+<div class="po-row">
+  <po-table class="po-mt-1 po-md-12" #table [p-columns]="columns" [p-service-api]="sampleService" [p-height]="400">
+  </po-table>
+</div>
