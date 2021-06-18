@@ -164,7 +164,7 @@ export class ToolsDynamicViewComponent {
         }
       }
 
-      // tslint:disable-next-line:no-self-assignment
+      // eslint-disable-next-line no-self-assign
       this.fields = [...this.fields];
     }
   }
@@ -193,7 +193,7 @@ export class ToolsDynamicViewComponent {
 
     this.addPropertyInValue(newField.property);
 
-    // tslint:disable-next-line:no-self-assignment
+    // eslint-disable-next-line no-self-assign
     this.fields = [...this.fields];
     this.resetForm();
   }

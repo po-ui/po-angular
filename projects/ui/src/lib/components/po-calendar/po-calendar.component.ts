@@ -10,13 +10,13 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 const providers = [
   {
     provide: NG_VALUE_ACCESSOR,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoCalendarComponent),
     multi: true
   },
   {
     provide: NG_VALIDATORS,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoCalendarComponent),
     multi: true
   }

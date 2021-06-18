@@ -154,8 +154,8 @@ Este guia tem por objetivo definir as regras para criação de *Issues* relacion
     <div class="po-row">
       <div class="po-pl-md-5 po-pr-lg-5">
         <img class="card-list-icon" src="./assets/graphics/contribute/lint.png">
-        <h3 class="po-font-subtitle po-pb-1">TSLint</h3>
-        <p>O PO UI utiliza o TSLint como linter de Typescript. Execute <code>ng lint</code> para fazer a checagem de código-fonte e verificar eventuais erros programáticos, estilísticos, construções suspeitas, entre outros.</p>
+        <h3 class="po-font-subtitle po-pb-1">ESLint</h3>
+        <p>O PO UI utiliza o ESLint como linter padrão. Execute <code>ng lint</code> para fazer a checagem de código-fonte e verificar eventuais erros programáticos, estilísticos, construções suspeitas, entre outros.</p>
       </div>
     </div>
   </div>

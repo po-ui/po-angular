@@ -1,0 +1,197 @@
+{
+  "extends": "../../.eslintrc.json",
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["projects/code-editor/tsconfig.lib.json", "projects/code-editor/tsconfig.spec.json"],
+        "createDefaultProgram": true
+      },
+      "plugins": ["sonarjs", "eslint-plugin-react"],
+      "rules": {
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": ["element", "attribute"],
+            "prefix": "",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/directive-class-suffix": "off",
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/no-input-rename": "off",
+        "@angular-eslint/no-output-rename": "off",
+        "@typescript-eslint/array-type": [
+          "error",
+          {
+            "default": "generic"
+          }
+        ],
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/ban-types": [
+          "off",
+          {
+            "types": {
+              "String": {
+                "message": "Use string instead",
+                "fixWith": "string"
+              },
+              "Boolean": {
+                "message": "Use boolean instead",
+                "fixWith": "boolean"
+              },
+              "Number": {
+                "message": "Use number instead",
+                "fixWith": "number"
+              }
+            }
+          }
+        ],
+        "@typescript-eslint/consistent-type-assertions": "off",
+        "@typescript-eslint/consistent-type-definitions": "error",
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/explicit-member-accessibility": [
+          "off",
+          {
+            "accessibility": "explicit"
+          }
+        ],
+        "@typescript-eslint/member-delimiter-style": [
+          "off",
+          {
+            "multiline": {
+              "delimiter": "none",
+              "requireLast": true
+            },
+            "singleline": {
+              "delimiter": "semi",
+              "requireLast": false
+            }
+          }
+        ],
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-extra-semi": "error",
+        "@typescript-eslint/no-for-in-array": "error",
+        "@typescript-eslint/no-inferrable-types": [
+          "off",
+          {
+            "ignoreParameters": true
+          }
+        ],
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
+        "@typescript-eslint/no-var-requires": "error",
+        "@typescript-eslint/prefer-for-of": "off",
+        "@typescript-eslint/quotes": [
+          "off",
+          "single",
+          {
+            "allowTemplateLiterals": true
+          }
+        ],
+        "@typescript-eslint/require-array-sort-compare": [
+          "error",
+          {
+            "ignoreStringArrays": true
+          }
+        ],
+        "@typescript-eslint/semi": ["off", null],
+        "@typescript-eslint/type-annotation-spacing": "off",
+        "arrow-parens": ["off", "always"],
+        "brace-style": ["off", "off"],
+        "default-case-last": "error",
+        "dot-notation": "off",
+        "eol-last": "off",
+        "id-blacklist": "off",
+        "id-match": "off",
+        "import/order": "off",
+        "indent": "off",
+        "linebreak-style": "off",
+        "max-len": "off",
+        "max-lines-per-function": [
+          "off",
+          {
+            "max": 200
+          }
+        ],
+        "max-params": [
+          "error",
+          {
+            "max": 7
+          }
+        ],
+        "new-parens": "off",
+        "newline-per-chained-call": "off",
+        "no-empty-function": "off",
+        "no-empty-pattern": "off",
+        "no-extra-parens": "error",
+        "no-extra-semi": "error",
+        "no-irregular-whitespace": "off",
+        "no-multi-str": "error",
+        "no-self-assign": "error",
+        "no-shadow": "error",
+        "no-trailing-spaces": "off",
+        "no-underscore-dangle": "off",
+        "no-unused-expressions": "error",
+        "no-use-before-define": "off",
+        "object-shorthand": "off",
+        "padded-blocks": [
+          "off",
+          {
+            "blocks": "never"
+          },
+          {
+            "allowSingleLineBlocks": true
+          }
+        ],
+        "prefer-arrow/prefer-arrow-functions": "off",
+        "quote-props": "off",
+        "react/jsx-curly-spacing": "off",
+        "react/jsx-equals-spacing": "off",
+        "react/jsx-tag-spacing": [
+          "off",
+          {
+            "afterOpening": "allow",
+            "closingSlash": "allow"
+          }
+        ],
+        "react/jsx-wrap-multilines": "off",
+        "semi": "off",
+        "sonarjs/cognitive-complexity": "off",
+        "sonarjs/max-switch-cases": "error",
+        "sonarjs/no-all-duplicated-branches": "error",
+        "sonarjs/no-collapsible-if": "error",
+        "sonarjs/no-collection-size-mischeck": "error",
+        "sonarjs/no-duplicate-string": "off",
+        "sonarjs/no-duplicated-branches": "off",
+        "sonarjs/no-element-overwrite": "error",
+        "sonarjs/no-identical-conditions": "error",
+        "sonarjs/no-identical-expressions": "error",
+        "sonarjs/no-identical-functions": "off",
+        "sonarjs/no-inverted-boolean-check": "error",
+        "sonarjs/no-one-iteration-loop": "error",
+        "sonarjs/no-redundant-boolean": "error",
+        "sonarjs/no-redundant-jump": "error",
+        "sonarjs/no-same-line-conditional": "error",
+        "sonarjs/no-small-switch": "error",
+        "sonarjs/no-unused-collection": "error",
+        "sonarjs/no-use-of-empty-return-value": "error",
+        "sonarjs/no-useless-catch": "error",
+        "sonarjs/prefer-immediate-return": "error",
+        "space-before-function-paren": "off",
+        "space-in-parens": ["off", "never"]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "rules": {}
+    }
+  ]
+}

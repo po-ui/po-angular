@@ -58,7 +58,7 @@ export abstract class PoLookupBaseComponent
   protected oldValueToModel = null;
 
   private onChangePropagate: any = null;
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   protected onTouched: any = null;
   private validatorChange: any;
 

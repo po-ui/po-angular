@@ -363,7 +363,6 @@ import { DocumentationListComponent } from './documentation-list.component';
 const documentationRoutes: Routes = [
   { path: '', component: DocumentationComponent, children: [
     {{#each docs}}
-    // tslint:disable-next-line:max-line-length
     { path: '{{name}}', loadChildren: () => import('./samples/sample-{{name}}/doc-{{name}}.module').then(m => m.Doc{{componentName}}Module) },
     {{/each}}
     { path: '', component: DocumentationListComponent }

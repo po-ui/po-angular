@@ -61,7 +61,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private lastLengthModel;
   private onModelChange: any;
   private validatorChange: any;
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   protected onModelTouched: any = null;
 
   selectedOptions: Array<PoMultiselectOption> = [];

@@ -11,14 +11,14 @@ let loadedMonaco: boolean = false;
 let loadPromise: Promise<void>;
 
 declare const monaco: any;
-// tslint:disable-next-line
+// eslint-disable-next-line
 declare const require: any;
 
 /* istanbul ignore next */
 const providers: Array<Provider> = [
   {
     provide: NG_VALUE_ACCESSOR,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoCodeEditorComponent),
     multi: true
   }

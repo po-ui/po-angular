@@ -52,7 +52,7 @@ export class SamplePoTreeViewFolderStructureComponent {
         { label: 'tsconfig.app.json', value: 129 },
         { label: 'tsconfig.json', value: 130 },
         { label: 'tsconfig.spec.json', value: 131 },
-        { label: 'tslint.json', value: 132 }
+        { label: 'eslint.json', value: 132 }
       ]
     }
   ];

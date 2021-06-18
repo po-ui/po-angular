@@ -3,7 +3,7 @@ import { AbstractControl } from '@angular/forms';
 
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
-/* tslint:disable:directive-class-suffix */
+/* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
 export abstract class PoInputGeneric extends PoInputBaseComponent implements AfterViewInit {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
