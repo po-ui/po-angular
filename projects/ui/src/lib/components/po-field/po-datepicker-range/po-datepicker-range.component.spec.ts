@@ -1,6 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+import { PoCalendarModule } from '../../po-calendar/po-calendar.module';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoCleanComponent } from './../po-clean/po-clean.component';
@@ -19,6 +20,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [PoCalendarModule],
       declarations: [
         PoCleanComponent,
         PoDatepickerRangeComponent,
@@ -181,6 +183,8 @@ describe('PoDatepickerRangeComponent:', () => {
   });
 
   describe('Methods:', () => {
+    const poCalendarContentOffset = 8;
+
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -199,6 +203,14 @@ describe('PoDatepickerRangeComponent:', () => {
         component.ngAfterViewInit();
         expect(inputFocus).not.toHaveBeenCalled();
       });
+    });
+
+    it('ngOnDestroy: should call `removeListeners`.', () => {
+      const removeListener = spyOn(component, <any>'removeListeners');
+
+      component.ngOnDestroy();
+
+      expect(removeListener).toHaveBeenCalled();
     });
 
     it('ngOnInit: should set `poMaskObject` with `buildMask` return', () => {
@@ -393,7 +405,11 @@ describe('PoDatepickerRangeComponent:', () => {
 
       expect(component['poMaskObject'].keyup).toHaveBeenCalledWith(eventMock);
       expect(component['setFocus']).toHaveBeenCalledWith(eventMock);
-      expect(component['updateModelWhenComplete']).toHaveBeenCalledWith(isStartDateTargetEvent);
+      expect(component['updateModelWhenComplete']).toHaveBeenCalledWith(
+        isStartDateTargetEvent,
+        component.startDateInputValue,
+        component.endDateInputValue
+      );
     });
 
     it('onKeyup: should call `updateModelWhenComplete` with `false` if `isStartDateTargetEvent` is false', () => {
@@ -407,7 +423,11 @@ describe('PoDatepickerRangeComponent:', () => {
 
       component.onKeyup(eventMock);
 
-      expect(component['updateModelWhenComplete']).toHaveBeenCalledWith(isStartDateTargetEvent);
+      expect(component['updateModelWhenComplete']).toHaveBeenCalledWith(
+        isStartDateTargetEvent,
+        component.startDateInputValue,
+        component.endDateInputValue
+      );
     });
 
     it('updateScreenByModel: should update date range input with value param if its valid', () => {
@@ -983,7 +1003,11 @@ describe('PoDatepickerRangeComponent:', () => {
       spyOn(component, <any>'validateModel');
       spyOn(component, <any>'isEqualBeforeValue').and.returnValue(true);
 
-      component['updateModelWhenComplete'](isStartDateTargetEvent);
+      component['updateModelWhenComplete'](
+        isStartDateTargetEvent,
+        component.startDateInputValue,
+        component.endDateInputValue
+      );
 
       expect(component['getDateRangeFormatValidation']).toHaveBeenCalled();
       expect(component['isEqualBeforeValue']).toHaveBeenCalled();
@@ -1294,6 +1318,295 @@ describe('PoDatepickerRangeComponent:', () => {
       const response = component['verifyFormattedDates'](startDateFormatted, endDateFormatted);
       expect(response).toBeFalsy();
     });
+
+    it('hasAttrCalendar: should return falsy if element is null', () => {
+      expect(component['hasAttrCalendar'](null)).toBeFalsy();
+    });
+
+    it('hasAttrCalendar: should return true if element contain `attr-calendar` atribute', () => {
+      const fakeElement = {
+        hasAttribute: () => 'attr-calendar',
+        parentElement: {
+          hasAttribute: () => {}
+        }
+      };
+
+      expect(component['hasAttrCalendar'](fakeElement)).toBeTruthy();
+    });
+
+    it('hasAttrCalendar: should return true if parent element contain `attr-calendar` atribute', () => {
+      const fakeElement = {
+        hasAttribute: () => {},
+        parentElement: {
+          hasAttribute: () => 'attr-calendar'
+        }
+      };
+
+      expect(component['hasAttrCalendar'](fakeElement)).toBeTruthy();
+    });
+
+    it('hasAttrCalendar: should return false if element and parent element not contain `attr-calendar` atribute', () => {
+      const fakeElement = {
+        hasAttribute: () => {},
+        parentElement: {
+          hasAttribute: () => {}
+        }
+      };
+
+      expect(component['hasAttrCalendar'](fakeElement)).toBeFalsy();
+    });
+
+    it('initializeListeners: should initialize listeners and call `wasClickedOnPicker` and `addEventListener`.', () => {
+      const wasClickedOnPicker = spyOn(component, <any>'wasClickedOnPicker');
+      const addEventListener = spyOn(window, 'addEventListener');
+      const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
+        callback()
+      );
+
+      component['initializeListeners']();
+
+      expect(wasClickedOnPicker).toHaveBeenCalled();
+      expect(addEventListener).toHaveBeenCalled();
+      expect(listen).toHaveBeenCalled();
+    });
+
+    it('onScroll: should call `controlPosition.adjustPosition()`', () => {
+      component.isCalendarVisible = true;
+      spyOn(component['controlPosition'], 'adjustPosition');
+
+      component['onScroll']();
+
+      expect(component['controlPosition'].adjustPosition).toHaveBeenCalled();
+    });
+
+    it('onScroll: should not call `controlPosition.adjustPosition()` if `isCalendarVisible` is falsy', () => {
+      component.isCalendarVisible = false;
+      spyOn(component['controlPosition'], 'adjustPosition');
+
+      component['onScroll']();
+
+      expect(component['controlPosition'].adjustPosition).not.toHaveBeenCalled();
+    });
+
+    it(`setCalendarPosition: should call 'controlPosition.setElements' and 'controlPosition.adjustPosition'.`, () => {
+      component.isCalendarVisible = true;
+
+      const setElements = spyOn(component['controlPosition'], 'setElements');
+      const adjustPosition = spyOn(component['controlPosition'], 'adjustPosition');
+
+      fixture.detectChanges();
+
+      component['setCalendarPosition']();
+
+      expect(adjustPosition).toHaveBeenCalled();
+      expect(setElements).toHaveBeenCalledWith(
+        component.calendarPicker.nativeElement,
+        poCalendarContentOffset,
+        component['dateRangeField'],
+        ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
+        false,
+        true
+      );
+    });
+
+    describe('wasClickedOnPicker: ', () => {
+      it('shouldn`t call calendarPickerElement.contains if isCalendarVisible is false', () => {
+        component.isCalendarVisible = false;
+        component.calendarPicker = { nativeElement: { contains: () => {} } };
+
+        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains');
+
+        component['wasClickedOnPicker']({});
+
+        expect(spyCalendarPickerContains).not.toHaveBeenCalled();
+      });
+
+      it('should not set isCalendarVisible with false if calendarPicker contains event.target', () => {
+        component.isCalendarVisible = true;
+        component.calendarPicker = { nativeElement: { contains: () => {} } };
+
+        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
+          true
+        );
+        const spyIconCalendarContains = spyOn(component.iconCalendar.nativeElement, 'contains').and.returnValue(false);
+
+        component['wasClickedOnPicker']({});
+
+        expect(spyCalendarPickerContains).toHaveBeenCalled();
+        expect(spyIconCalendarContains).not.toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBe(true);
+      });
+
+      it('should not set isCalendarVisible with false if iconCalendar contains event.target', () => {
+        component.isCalendarVisible = true;
+        component.calendarPicker = { nativeElement: { contains: () => {} } };
+
+        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
+          false
+        );
+        const spyIconCalendarContains = spyOn(component.iconCalendar.nativeElement, 'contains').and.returnValue(true);
+
+        component['wasClickedOnPicker']({});
+
+        expect(spyCalendarPickerContains).toHaveBeenCalled();
+        expect(spyIconCalendarContains).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBe(true);
+      });
+
+      it('should not set isCalendarVisible with false if event.target hasAttrCalendar', () => {
+        component.isCalendarVisible = true;
+        component.calendarPicker = { nativeElement: { contains: () => {} } };
+
+        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
+          false
+        );
+        const spyIconCalendarContains = spyOn(component.iconCalendar.nativeElement, 'contains').and.returnValue(false);
+        const spyHasAttrCalendar = spyOn(component, <any>'hasAttrCalendar').and.returnValue(true);
+
+        component['wasClickedOnPicker']({});
+
+        expect(spyCalendarPickerContains).toHaveBeenCalled();
+        expect(spyIconCalendarContains).toHaveBeenCalled();
+        expect(spyHasAttrCalendar).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBe(true);
+      });
+
+      it('should set isCalendarVisible with false if calendarPickerElement and iconElement not contains event.target', () => {
+        component.isCalendarVisible = true;
+        component.calendarPicker = { nativeElement: { contains: () => {} } };
+
+        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
+          false
+        );
+        const spyIconCalendarContains = spyOn(component.iconCalendar.nativeElement, 'contains').and.returnValue(false);
+        const spyHasAttrCalendar = spyOn(component, <any>'hasAttrCalendar').and.returnValue(false);
+
+        component['wasClickedOnPicker']({});
+
+        expect(spyHasAttrCalendar).toHaveBeenCalled();
+        expect(spyIconCalendarContains).toHaveBeenCalled();
+        expect(spyCalendarPickerContains).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBe(false);
+      });
+    });
+
+    it('removeListeners: should remove click, resize and scroll listeners', () => {
+      component['clickListener'] = () => {};
+      component['eventResizeListener'] = () => {};
+
+      spyOn(component, <any>'clickListener');
+      spyOn(component, <any>'eventResizeListener');
+      spyOn(window, 'removeEventListener');
+
+      component['removeListeners']();
+
+      expect(component['clickListener']).toHaveBeenCalled();
+      expect(component['eventResizeListener']).toHaveBeenCalled();
+      expect(window.removeEventListener).toHaveBeenCalled();
+    });
+
+    it('toggleCalendar: should not call initializeListeners if component.disabled is true', () => {
+      component.disabled = true;
+
+      spyOn(component, <any>'removeListeners');
+      spyOn(component, <any>'initializeListeners');
+
+      component['toggleCalendar']();
+
+      expect(component['removeListeners']).not.toHaveBeenCalled();
+      expect(component['initializeListeners']).not.toHaveBeenCalled();
+    });
+
+    it('toggleCalendar: should not call initializeListeners if component.readonly is true', () => {
+      component.readonly = true;
+
+      spyOn(component, <any>'removeListeners');
+      spyOn(component, <any>'initializeListeners');
+
+      component['toggleCalendar']();
+
+      expect(component['removeListeners']).not.toHaveBeenCalled();
+      expect(component['initializeListeners']).not.toHaveBeenCalled();
+    });
+
+    it('toggleCalendar: should call initializeListeners and setCalendarPosition if component.isCalendarVisible is falsy', () => {
+      component.readonly = false;
+      component.disabled = false;
+
+      spyOn(component, <any>'setCalendarPosition');
+      spyOn(component, <any>'initializeListeners');
+
+      component['toggleCalendar']();
+
+      expect(component['setCalendarPosition']).toHaveBeenCalled();
+      expect(component['initializeListeners']).toHaveBeenCalled();
+    });
+
+    it('toggleCalendar: should call removeListeners if component.isCalendarVisible is truthy', () => {
+      component.isCalendarVisible = true;
+      component.readonly = false;
+      component.disabled = false;
+
+      spyOn(component, <any>'removeListeners');
+
+      component['toggleCalendar']();
+
+      expect(component['removeListeners']).toHaveBeenCalled();
+    });
+
+    it(`onCalendarChange: should call updateModelByScreen with true, start and empty value if
+      start param is truthy and end param is falsy`, fakeAsync(() => {
+      component.isCalendarVisible = true;
+
+      const start = new Date(10, 10, 2021);
+      const end = null;
+
+      spyOn(component, <any>'updateScreenByModel');
+      spyOn(component, <any>'updateModelByScreen');
+
+      component.onCalendarChange({ start, end });
+
+      tick(300);
+
+      expect(component.isCalendarVisible).toBe(true);
+
+      expect(component['updateScreenByModel']).toHaveBeenCalledWith({ start, end: '' });
+      expect(component['updateModelByScreen']).toHaveBeenCalledWith(true, start, '');
+    }));
+
+    it(`onCalendarChange: should call updateModelByScreen, updateScreenByModel and set isCalendarVisible with false
+      if start and end param is truthy`, fakeAsync(() => {
+      component.isCalendarVisible = true;
+
+      const start = new Date(10, 10, 2021);
+      const end = new Date(11, 11, 2021);
+
+      spyOn(component, <any>'updateScreenByModel');
+      spyOn(component, <any>'updateModelByScreen');
+
+      component.onCalendarChange({ start, end });
+
+      tick(300);
+
+      expect(component.isCalendarVisible).toBe(false);
+
+      expect(component['updateScreenByModel']).toHaveBeenCalledWith({ start, end });
+      expect(component['updateModelByScreen']).toHaveBeenCalledWith(false, start, end);
+    }));
+
+    it(`onCalendarChange: should call updateModelByScreen, updateScreenByModel with empty value
+      if start and end param is falsy`, fakeAsync(() => {
+      const start = null;
+      const end = null;
+
+      spyOn(component, <any>'updateScreenByModel');
+      spyOn(component, <any>'updateModelByScreen');
+
+      component.onCalendarChange({ start, end });
+
+      expect(component['updateScreenByModel']).toHaveBeenCalledWith({ start: '', end: '' });
+      expect(component['updateModelByScreen']).toHaveBeenCalledWith(null, '', '');
+    }));
   });
 
   describe('Templates:', () => {

@@ -70,7 +70,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private onChangeModel: any;
   private validatorChange: any;
 
-  protected dateRange: PoDatepickerRange = { start: '', end: '' };
+  dateRange: PoDatepickerRange = { start: '', end: '' };
+
   protected format: any = 'dd/mm/yyyy';
   protected isDateRangeInputFormatValid: boolean = true;
   protected isStartDateRangeInputValid: boolean = true;
