@@ -178,6 +178,17 @@ describe('PoComboBaseComponent:', () => {
         });
       });
     });
+
+    it('p-placeholder: should update property p-placeholder with valid value.', () => {
+      const validValues = ['Type your name', '1 number one'];
+
+      expectPropertiesValues(component, 'placeholder', validValues, validValues);
+    });
+
+    it('p-placeholder: should update property p-placeholder with empty value if set with invalid values.', () => {
+      const invalidValues = [null, undefined, '', 0, false];
+      expectPropertiesValues(component, 'placeholder', invalidValues, '');
+    });
   });
 
   it('should update property p-filter-mode', () => {
