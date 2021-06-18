@@ -181,7 +181,7 @@ export class PoI18nModule {
 }
 
 export function initializeLanguageDefault(config: PoI18nConfig, languageService: PoLanguageService) {
-  // tslint:disable-next-line:prefer-immediate-return
+  // eslint-disable-next-line sonarjs/prefer-immediate-return
   const setDefaultLanguage = () => {
     if (config.default.language) {
       languageService.setLanguageDefault(config.default.language);

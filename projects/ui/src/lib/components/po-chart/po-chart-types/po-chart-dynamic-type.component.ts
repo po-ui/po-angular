@@ -7,12 +7,12 @@ import { PoChartType } from '../enums/po-chart-type.enum';
 
 const Padding: number = 24;
 
-/* tslint:disable:directive-class-suffix */
+/* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
 export abstract class PoChartDynamicTypeComponent {
   protected windowResizeListener: () => void;
   protected windowScrollListener: () => void;
-  // tslint:disable-next-line: use-type-alias
+  // eslint-disable-next-line
   protected _series: Array<PoChartGaugeSerie> = [];
 
   centerX: number;

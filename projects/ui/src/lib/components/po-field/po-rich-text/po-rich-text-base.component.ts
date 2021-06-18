@@ -27,7 +27,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   value: string;
 
   private validatorChange: any;
-  // tslint:disable-next-line
+  // eslint-disable-next-line
   protected onTouched: any = null;
 
   /**

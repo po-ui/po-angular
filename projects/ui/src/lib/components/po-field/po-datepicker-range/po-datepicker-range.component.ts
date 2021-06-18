@@ -30,13 +30,13 @@ const poCalendarPositionDefault = 'bottom-left';
 const providers = [
   {
     provide: NG_VALUE_ACCESSOR,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoDatepickerRangeComponent),
     multi: true
   },
   {
     provide: NG_VALIDATORS,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoDatepickerRangeComponent),
     multi: true
   },

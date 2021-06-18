@@ -361,7 +361,7 @@ describe('PoChartComponent:', () => {
       it('should set onResize with function if onResize is defined', () => {
         component['onResize'] = () => true;
         component['removeWindowResizeListener']();
-        // tslint:disable-next-line
+        // eslint-disable-next-line
         expect(component['onResize']()).toBeUndefined();
       });
 

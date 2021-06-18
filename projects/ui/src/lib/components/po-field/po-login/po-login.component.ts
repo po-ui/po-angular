@@ -7,13 +7,13 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 const providers = [
   {
     provide: NG_VALUE_ACCESSOR,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoLoginComponent),
     multi: true
   },
   {
     provide: NG_VALIDATORS,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoLoginComponent),
     multi: true
   }

@@ -22,13 +22,13 @@ const providers = [
   PoLookupModalService,
   {
     provide: NG_VALUE_ACCESSOR,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoLookupComponent),
     multi: true
   },
   {
     provide: NG_VALIDATORS,
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     useExisting: forwardRef(() => PoLookupComponent),
     multi: true
   }
