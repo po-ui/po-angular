@@ -17,6 +17,8 @@ import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 
+import { PoDatepickerModule } from './po-datepicker.module';
+
 function keyboardEvents(event: string, keyCode: number) {
   const eventKeyBoard = document.createEvent('KeyboardEvent');
   eventKeyBoard.initEvent(event, true, true);
@@ -30,13 +32,7 @@ describe('PoDatepickerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoDatepickerComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoCalendarComponent,
-        PoFieldContainerBottomComponent
-      ],
+      imports: [PoDatepickerModule],
       providers: [PoCalendarService, PoCalendarLangService]
     });
   });
@@ -259,15 +255,8 @@ describe('PoDatepicker mocked with form', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule],
-      declarations: [
-        ContentProjectionComponent,
-        PoDatepickerComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoCalendarComponent,
-        PoFieldContainerBottomComponent
-      ],
+      imports: [PoDatepickerModule],
+      declarations: [ContentProjectionComponent],
       providers: [PoCalendarService, PoCalendarLangService]
     });
   });
@@ -295,13 +284,7 @@ describe('PoDatepickerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PoDatepickerComponent,
-        PoFieldContainerComponent,
-        PoCleanComponent,
-        PoCalendarComponent,
-        PoFieldContainerBottomComponent
-      ],
+      imports: [PoDatepickerModule],
       providers: [PoCalendarService, PoCalendarLangService]
     });
   });
