@@ -3,10 +3,11 @@
 <ng-template #rangeTemplate>
   <div class="po-calendar-range">
     <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
-    <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'end' }"></ng-container>
+    <ng-container *ngIf="!isResponsive">
+      <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'end' }"></ng-container>
+    </ng-container>
   </div>
 </ng-template>
-
 <ng-template #calendarTemplate>
   <div class="po-calendar">
     <ng-template [ngTemplateOutlet]="calendarWrapper"></ng-template>
@@ -22,6 +23,7 @@
     [p-max-date]="maxDate"
     [p-part-type]="partType"
     [p-range]="isRange"
+    [p-responsive]="isResponsive"
     [p-selected-value]="value"
     (p-header-change)="onHeaderChange($event, partType)"
     (p-select-date)="onSelectDate($event, partType)"

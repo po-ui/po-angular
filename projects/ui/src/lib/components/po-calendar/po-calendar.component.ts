@@ -22,6 +22,8 @@ const providers = [
   }
 ];
 
+const poCalendarRangeWidth = 600;
+
 /**
  * @docsExtends PoCalendarBaseComponent
  *
@@ -51,6 +53,10 @@ const providers = [
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit {
   constructor(private changeDetector: ChangeDetectorRef, poDate: PoDateService, languageService: PoLanguageService) {
     super(poDate, languageService);
+  }
+
+  get isResponsive() {
+    return window.innerWidth < poCalendarRangeWidth;
   }
 
   ngOnInit() {
@@ -169,7 +175,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   private convertDateFromIso(stringDate: string) {
-    if (typeof stringDate === 'string') {
+    if (stringDate && typeof stringDate === 'string') {
       const { year, month, day } = this.poDate.getDateFromIso(stringDate);
       const date = new Date(year, month - 1, day);
       this.poDate.setYearFrom0To100(date, year);

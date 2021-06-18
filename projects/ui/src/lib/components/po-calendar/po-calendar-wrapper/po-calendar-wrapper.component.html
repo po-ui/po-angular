@@ -2,7 +2,7 @@
   <ng-container *ngIf="isDayVisible">
     <po-calendar-header
       [p-hide-previous]="isEndPart"
-      [p-hide-next]="isStartPart"
+      [p-hide-next]="isStartPart && !responsive"
       (p-previous)="onPreviousMonth()"
       (p-next)="onNextMonth()"
     >
@@ -23,6 +23,7 @@
           class="po-calendar-day"
           [ngClass]="getDayBackgroundColor(day)"
           (click)="onSelectDate(day)"
+          attr-calendar
         >
           <span *ngIf="day != 0" [ngClass]="getDayForegroundColor(day)">
             {{ day.getDate() }}
@@ -51,6 +52,7 @@
           class="po-calendar-month"
           [ngClass]="getBackgroundColor(i, displayMonthNumber)"
           (click)="onSelectMonth(displayYear, i)"
+          attr-calendar
         >
           <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
             {{ month }}

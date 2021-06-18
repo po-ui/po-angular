@@ -492,5 +492,23 @@ describe('PoCalendarComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-calendar')).toBeTruthy();
     });
+
+    it('should show 1 po-calendar-wrapper if isResponsive is true and mode is range', () => {
+      spyOnProperty(component, 'isRange').and.returnValue(true);
+      spyOnProperty(component, 'isResponsive').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelectorAll('po-calendar-wrapper').length).toBe(1);
+    });
+
+    it('should show 2 po-calendar-wrapper if isResponsive is false and mode is range', () => {
+      spyOnProperty(component, 'isRange').and.returnValue(true);
+      spyOnProperty(component, 'isResponsive').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelectorAll('po-calendar-wrapper').length).toBe(2);
+    });
   });
 });

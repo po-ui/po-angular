@@ -52,6 +52,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   @Input('p-mode') mode: 'day' | 'month' | 'year' = 'day';
 
+  @Input('p-responsive') responsive: boolean = false;
+
   @Input('p-part-type') partType: 'start' | 'end';
 
   @Input('p-range') range: boolean = false;

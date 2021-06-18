@@ -43,10 +43,22 @@
     </div>
 
     <div class="po-datepicker-range-icon">
-      <span class="po-icon po-field-icon po-icon-calendar" [class.po-field-icon-disabled]="disabled || readonly">
+      <span
+        #iconCalendar
+        class="po-icon po-field-icon po-icon-calendar"
+        [class.po-clickable]="!disabled && !readonly"
+        [class.po-field-icon-disabled]="disabled || readonly"
+        (click)="toggleCalendar()"
+      >
       </span>
     </div>
   </div>
 
   <po-field-container-bottom [p-error-pattern]="getErrorMessage"></po-field-container-bottom>
 </po-field-container>
+
+<ng-container *ngIf="isCalendarVisible">
+  <div #calendarPicker class="po-calendar-range-picker">
+    <po-calendar p-mode="range" [ngModel]="dateRange" (ngModelChange)="onCalendarChange($event)"></po-calendar>
+  </div>
+</ng-container>
