@@ -48,6 +48,7 @@ export abstract class PoLookupBaseComponent
   private _fieldLabel: string;
   private _filterService: PoLookupFilter | string;
   private _noAutocomplete: boolean;
+  private _placeholder: string = '';
   private _required?: boolean = false;
 
   protected getSubscription: Subscription;
@@ -136,7 +137,13 @@ export abstract class PoLookupBaseComponent
   @Input('p-help') help?: string;
 
   /** Mensagem que aparecerá enquanto o campo não estiver preenchido. */
-  @Input('p-placeholder') placeholder?: string = '';
+  @Input('p-placeholder') set placeholder(value: string) {
+    this._placeholder = value || '';
+  }
+
+  get placeholder() {
+    return this._placeholder;
+  }
 
   /** Nome e Id do componente. */
   @Input('name') name: string;

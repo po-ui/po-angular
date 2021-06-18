@@ -570,5 +570,16 @@ describe('PoLookupBaseComponent:', () => {
 
       expect(component['keysDescription']).toEqual(['label']);
     });
+
+    it('p-placeholder: should update property p-placeholder with valid value.', () => {
+      const validValues = ['Type your name', '1 number one'];
+
+      expectPropertiesValues(component, 'placeholder', validValues, validValues);
+    });
+
+    it('p-placeholder: should update property p-placeholder with empty value if set with invalid values.', () => {
+      const invalidValues = [false, 0, null, undefined, NaN];
+      expectPropertiesValues(component, 'placeholder', invalidValues, '');
+    });
   });
 });
