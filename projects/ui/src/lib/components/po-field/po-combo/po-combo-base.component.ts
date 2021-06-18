@@ -64,6 +64,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _filterParams?: any;
   private _literals?: PoComboLiterals;
   private _options: Array<PoComboOption | PoComboOptionGroup> = [];
+  private _placeholder: string = '';
   private _required?: boolean = false;
   private _sort?: boolean = false;
   private language: string;
@@ -112,7 +113,13 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   @Input('p-help') help?: string;
 
   /** Mensagem apresentada enquanto o campo estiver vazio. */
-  @Input('p-placeholder') placeholder?: string = '';
+  @Input('p-placeholder') set placeholder(value: string) {
+    this._placeholder = value || '';
+  }
+
+  get placeholder() {
+    return this._placeholder;
+  }
 
   /** Nome do componente. */
   @Input('name') name: string;
