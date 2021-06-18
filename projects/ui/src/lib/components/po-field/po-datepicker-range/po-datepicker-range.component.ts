@@ -1,5 +1,16 @@
-import { ChangeDetectorRef, Component, ElementRef, forwardRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  Renderer2
+} from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+
+import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
@@ -11,6 +22,9 @@ const arrowLeftKey = 37;
 const arrowRightKey = 39;
 const backspaceKey = 8;
 const poDatepickerRangeDateLengthDefault = 10;
+
+const poCalendarContentOffset = 8;
+const poCalendarPositionDefault = 'bottom-left';
 
 /* istanbul ignore next */
 const providers = [
@@ -25,7 +39,8 @@ const providers = [
     // tslint:disable-next-line
     useExisting: forwardRef(() => PoDatepickerRangeComponent),
     multi: true
-  }
+  },
+  PoControlPositionService
 ];
 /**
  * @docsExtends PoDatepickerRangeBaseComponent
@@ -60,12 +75,20 @@ const providers = [
   providers
 })
 export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent implements AfterViewInit, OnInit {
+  isCalendarVisible = false;
+
+  private clickListener;
+  private eventResizeListener;
   private poDatepickerRangeElement: ElementRef<any>;
   private poMaskObject: PoMask;
 
   @ViewChild('dateRangeField', { read: ElementRef, static: true }) dateRangeField: ElementRef;
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;
+
+  @ViewChild('iconCalendar', { read: ElementRef, static: true }) iconCalendar: ElementRef;
+
+  @ViewChild('calendarPicker', { read: ElementRef }) calendarPicker: ElementRef;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -123,6 +146,8 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
 
   constructor(
     private changeDetector: ChangeDetectorRef,
+    private controlPosition: PoControlPositionService,
+    private renderer: Renderer2,
     poDateService: PoDateService,
     poDatepickerRangeElement: ElementRef,
     poLanguageService: PoLanguageService
@@ -140,6 +165,10 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   ngOnInit() {
     // Classe de máscara
     this.poMaskObject = this.buildMask();
+  }
+
+  ngOnDestroy() {
+    this.removeListeners();
   }
 
   clear() {
@@ -186,6 +215,17 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     this.removeFocusFromDatePickerRangeField();
   }
 
+  onCalendarChange({ start, end }) {
+    const isStartDateTargetEvent = start && !end;
+
+    this.updateScreenByModel({ start: start || '', end: end || '' });
+    this.updateModelByScreen(isStartDateTargetEvent, start || '', end || '');
+
+    if (start && end) {
+      setTimeout(() => (this.isCalendarVisible = false), 300);
+    }
+  }
+
   onFocus(event: any) {
     this.applyFocusOnDatePickerRangeField();
     this.poMaskObject.resetPositions(event);
@@ -213,12 +253,28 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
 
     this.setFocus(event);
     this.poMaskObject.keyup(event);
-    this.updateModelWhenComplete(isStartDateTargetEvent);
+    this.updateModelWhenComplete(isStartDateTargetEvent, this.startDateInputValue, this.endDateInputValue);
   }
 
   resetDateRangeInputValidation() {
     this.isStartDateRangeInputValid = true;
     this.isDateRangeInputFormatValid = true;
+  }
+
+  toggleCalendar() {
+    if (this.disabled || this.readonly) {
+      return;
+    }
+
+    this.isCalendarVisible = !this.isCalendarVisible;
+    this.changeDetector.detectChanges();
+
+    if (this.isCalendarVisible) {
+      this.setCalendarPosition();
+      this.initializeListeners();
+    } else {
+      this.removeListeners();
+    }
   }
 
   updateScreenByModel(model: PoDatepickerRange) {
@@ -300,11 +356,29 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     return dateRangeModel;
   }
 
+  private hasAttrCalendar(element) {
+    const attrCalendar = 'attr-calendar';
+
+    return element?.hasAttribute(attrCalendar) || element?.parentElement?.hasAttribute(attrCalendar);
+  }
+
   private hasInvalidClass(): boolean {
     return (
       this.poDatepickerRangeElement.nativeElement.classList.contains('ng-invalid') &&
       this.poDatepickerRangeElement.nativeElement.classList.contains('ng-dirty')
     );
+  }
+
+  private initializeListeners() {
+    this.clickListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
+      this.wasClickedOnPicker(event);
+    });
+
+    this.eventResizeListener = this.renderer.listen('window', 'resize', () => {
+      this.isCalendarVisible = false;
+    });
+
+    window.addEventListener('scroll', this.onScroll, true);
   }
 
   private isEqualBeforeValue(startDate: string, endDate: string): boolean {
@@ -319,6 +393,12 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
       event.keyCode === backspaceKey
     );
   }
+
+  private onScroll = (): void => {
+    if (this.isCalendarVisible) {
+      this.controlPosition.adjustPosition(poCalendarPositionDefault);
+    }
+  };
 
   private removeFocusFromDatePickerRangeField() {
     this.dateRangeField.nativeElement.classList.remove('po-datepicker-range-field-focused');
@@ -352,6 +432,31 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
 
   private focusOnElement(inputElement: ElementRef) {
     inputElement.nativeElement.focus();
+  }
+
+  private removeListeners() {
+    if (this.clickListener) {
+      this.clickListener();
+    }
+
+    if (this.eventResizeListener) {
+      this.eventResizeListener();
+    }
+
+    window.removeEventListener('scroll', this.onScroll, true);
+  }
+
+  private setCalendarPosition() {
+    this.controlPosition.setElements(
+      this.calendarPicker.nativeElement,
+      poCalendarContentOffset,
+      this.dateRangeField,
+      ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
+      false,
+      true
+    );
+
+    this.controlPosition.adjustPosition(poCalendarPositionDefault);
   }
 
   private setFocusOnArrowLeft(keyCode: number, inputName: string) {
@@ -389,9 +494,9 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     }
   }
 
-  private updateModelWhenComplete(isStartDateTargetEvent: boolean) {
-    const endDateFormatted = this.formatScreenToModel(this.endDateInputValue);
-    const startDateFormatted = this.formatScreenToModel(this.startDateInputValue);
+  private updateModelWhenComplete(isStartDateTargetEvent: boolean, startDate, endDate) {
+    const endDateFormatted = this.formatScreenToModel(endDate);
+    const startDateFormatted = this.formatScreenToModel(startDate);
     const dateFormatValidation = this.getDateRangeFormatValidation(
       startDateFormatted,
       endDateFormatted,
@@ -411,9 +516,9 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     }
   }
 
-  private updateModelByScreen(isStartDateTargetEvent: boolean) {
-    const endDateFormatted = this.formatScreenToModel(this.endDateInputValue);
-    const startDateFormatted = this.formatScreenToModel(this.startDateInputValue);
+  private updateModelByScreen(isStartDateTargetEvent: boolean, startDate?, endDate?) {
+    const endDateFormatted = endDate || this.formatScreenToModel(this.endDateInputValue);
+    const startDateFormatted = startDate || this.formatScreenToModel(this.startDateInputValue);
     if (this.isDateRangeInputUncompleted && this.isDirtyDateRangeInput) {
       this.updateModel(this.dateRange);
       return;
@@ -445,5 +550,19 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
 
   private verifyFormattedDates(start: string, end: string): boolean {
     return !!start || !!end;
+  }
+
+  private wasClickedOnPicker(event): void {
+    if (!this.isCalendarVisible) {
+      return;
+    }
+
+    if (
+      !this.calendarPicker.nativeElement.contains(event.target) &&
+      !this.iconCalendar.nativeElement.contains(event.target) &&
+      !this.hasAttrCalendar(event.target)
+    ) {
+      this.isCalendarVisible = false;
+    }
   }
 }
