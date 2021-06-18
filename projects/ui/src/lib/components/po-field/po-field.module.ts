@@ -7,6 +7,9 @@ import { PoButtonGroupModule } from '../po-button-group/index';
 import { PoButtonModule } from '../po-button/index';
 import { PoCheckboxGroupModule } from './po-checkbox-group/po-checkbox-group.module';
 import { PoContainerModule } from '../po-container/index';
+import { PoCalendarModule } from '../po-calendar/po-calendar.module';
+import { PoCleanModule } from './po-clean/po-clean.module';
+import { PoDatepickerModule } from './po-datepicker/po-datepicker.module';
 import { PoDisclaimerGroupModule } from './../po-disclaimer-group/po-disclaimer-group.module';
 import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
 import { PoFieldContainerModule } from './po-field-container/po-field-container.module';
@@ -18,8 +21,6 @@ import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
 
-import { PoCalendarComponent } from './po-datepicker/po-calendar/po-calendar.component';
-import { PoCleanComponent } from './po-clean/po-clean.component';
 import { PoCheckboxComponent } from './po-checkbox/po-checkbox.component';
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
@@ -72,8 +73,11 @@ import { PoUrlComponent } from './po-url/po-url.component';
     HttpClientModule,
     PoButtonGroupModule,
     PoButtonModule,
+    PoCleanModule,
+    PoCalendarModule,
     PoCheckboxGroupModule,
     PoContainerModule,
+    PoDatepickerModule,
     PoDisclaimerGroupModule,
     PoDisclaimerModule,
     PoFieldContainerModule,
@@ -86,13 +90,13 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoIconModule
   ],
   exports: [
-    PoCheckboxComponent,
     PoCheckboxGroupModule,
-    PoCleanComponent,
+    PoCleanModule,
+    PoDatepickerModule,
+    PoCheckboxComponent,
     PoComboComponent,
     PoComboOptionTemplateDirective,
     PoDecimalComponent,
-    PoDatepickerComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
     PoFieldContainerModule,
@@ -113,13 +117,10 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoUrlComponent
   ],
   declarations: [
-    PoCalendarComponent,
-    PoCleanComponent,
     PoCheckboxComponent,
     PoComboComponent,
     PoComboOptionTemplateDirective,
     PoDecimalComponent,
-    PoDatepickerComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
     PoInputComponent,

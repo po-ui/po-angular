@@ -46,4 +46,6 @@ export * from './po-upload/po-upload.component';
 export * from './po-url/po-url.component';
 
 export * from './po-checkbox-group/po-checkbox-group.module';
+export * from './po-datepicker/po-datepicker.module';
+
 export * from './po-field.module';
