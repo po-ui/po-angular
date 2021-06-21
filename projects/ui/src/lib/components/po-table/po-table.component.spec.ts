@@ -8,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { of } from 'rxjs';
 import * as utilsFunctions from '../../utils/util';
-import { configureTestSuite } from './../../util-test/util-expect.spec';
+import { configureTestSuite, expectSettersMethod } from './../../util-test/util-expect.spec';
 import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -40,6 +40,7 @@ describe('PoTableComponent:', () => {
   let nativeElement;
   let tableElement;
   let tableFooterElement;
+  let poTableService: PoTableService;
 
   // mocks
   let actions: Array<PoTableAction>;
@@ -186,7 +187,8 @@ describe('PoTableComponent:', () => {
       initialized: true,
       verifyCalculateHeightTableContainer: () => {},
       checkChangesItems: () => {},
-      debounceResize: () => true
+      debounceResize: () => true,
+      checkInfiniteScroll: () => {}
     };
   }
 
@@ -210,7 +212,13 @@ describe('PoTableComponent:', () => {
 
     fixture.detectChanges();
 
+    component.infiniteScroll = false;
+
+    poTableService = TestBed.inject(PoTableService);
+
     nativeElement = fixture.debugElement.nativeElement;
+
+    component.poTableTbody = fixture.debugElement;
 
     tableElement = nativeElement.querySelector('.po-table-wrapper');
     tableFooterElement = nativeElement.querySelector('.po-table-footer');
@@ -2575,5 +2583,116 @@ describe('PoTableComponent:', () => {
     };
 
     expect(component.hasRowTemplateWithArrowDirectionRight).toBe(true);
+  });
+
+  it('ngOnDestroy: should call `removeListeners` on destroy using infiniteScroll', () => {
+    const dummyElement = document.createElement('div');
+
+    component.height = 100;
+    component.infiniteScroll = true;
+
+    component['subscriptionScrollEvent'] = poTableService.scrollListener(dummyElement).subscribe();
+
+    component['removeListeners']();
+
+    expect(component.infiniteScroll).toBeTrue();
+  });
+
+  it('showMoreInfiniteScroll: should call `onShowMore` if showMoreDisabled is false ', () => {
+    const event = { target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } };
+    const spyOnShowMore = spyOn(component, 'onShowMore');
+
+    component.infiniteScrollDistance = 10;
+    component['showMoreDisabled'] = false;
+
+    component.showMoreInfiniteScroll(event);
+
+    expect(spyOnShowMore).toHaveBeenCalled();
+  });
+
+  it('showMoreInfiniteScroll: should call `onShowMore` if scrollPosition is close to the scrollHeight', () => {
+    const event = { target: { offsetHeight: 100, scrollTop: 199, scrollHeight: 300 } };
+    const spyOnShowMore = spyOn(component, 'onShowMore');
+
+    component.infiniteScrollDistance = 100;
+
+    component.showMoreInfiniteScroll(event);
+
+    expect(spyOnShowMore).toHaveBeenCalled();
+  });
+
+  it('showMoreInfiniteScroll: should not call `onShowMore` if showMoreDisabled is false but scrollPosition smaller then scrollHeight', () => {
+    const event = { target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1000 } };
+    const spyOnShowMore = spyOn(component, 'onShowMore');
+
+    component.infiniteScrollDistance = 100;
+
+    component.showMoreInfiniteScroll(event);
+
+    expect(spyOnShowMore).not.toHaveBeenCalled();
+  });
+
+  it('showMoreInfiniteScroll: should call `onShowMore` when showMoreDisabled Disabled ', () => {
+    const event = { target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } };
+    const spy = spyOn(component, 'onShowMore');
+
+    component.infiniteScrollDistance = 10;
+    component['showMoreDisabled'] = true;
+
+    component.showMoreInfiniteScroll(event);
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('includeInfiniteScroll: should call `scrollListeneter called when `infiniteScroll` is used', () => {
+    component.height = 100;
+    component.infiniteScroll = true;
+    const spy = spyOn(poTableService, 'scrollListener').and.returnValue(
+      of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
+    );
+
+    component['includeInfiniteScroll']();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('checkInfiniteScroll: should call includeInfiniteScroll if height is smaller than scrollHeight', () => {
+    const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+    const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
+
+    component.height = 10;
+    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    component.infiniteScroll = true;
+
+    component['checkInfiniteScroll']();
+
+    expect(spyIncludeInfiniteScroll).toHaveBeenCalled();
+    expect(spyDetectChanges).toHaveBeenCalled();
+  });
+
+  it('checkInfiniteScroll: should not call `includeInfiniteScroll` if height is bigger than scrollHeight', () => {
+    const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+    const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
+
+    component.height = 1000;
+    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    component.infiniteScroll = true;
+
+    component['checkInfiniteScroll']();
+
+    expect(spyDetectChanges).toHaveBeenCalled();
+    expect(spyIncludeInfiniteScroll).not.toHaveBeenCalled();
+  });
+
+  it('hasInfiniteScroll: should return false if infiniteScroll is false', () => {
+    component.infiniteScroll = false;
+    component.poTableTbody = {
+      nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 }
+    };
+
+    spyOnProperty(component, 'hasItems').and.returnValue(false);
+
+    component.height = 200;
+
+    expect(component['hasInfiniteScroll']()).toBeFalse();
   });
 });

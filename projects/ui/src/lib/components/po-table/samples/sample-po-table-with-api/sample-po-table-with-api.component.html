@@ -43,6 +43,13 @@
   </po-disclaimer-group>
 </div>
 <div class="po-row">
-  <po-table class="po-mt-1 po-md-12" #table [p-columns]="columns" [p-service-api]="sampleService" [p-height]="400">
+  <po-table
+    class="po-mt-1 po-md-12"
+    #table
+    [p-columns]="columns"
+    [p-service-api]="sampleService"
+    [p-height]="300"
+    [p-infinite-scroll]="true"
+  >
   </po-table>
 </div>

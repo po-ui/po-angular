@@ -1,3 +1,4 @@
+import { Observable, Subscriber, Subscription } from 'rxjs';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -76,6 +77,7 @@ import { PoTableService } from './services/po-table.service';
  *  <file name="sample-po-table-components/sample-po-table-components.service.ts"> </file>
  *  <file name="sample-po-table-components/sample-po-table-components.component.css"> </file>
  * </example>
+ *
  */
 @Component({
   selector: 'po-table',
@@ -92,6 +94,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
   @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
   @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
+  @ViewChild('poTableTbody', { read: ElementRef, static: false }) poTableTbody;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
@@ -109,6 +112,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private initialized = false;
   private timeoutResize;
   private visibleElement = false;
+  private scrollEvent$: Observable<any>;
+  private subscriptionScrollEvent: Subscription;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -131,7 +136,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private router: Router,
-    defaultService: PoTableService
+    private defaultService: PoTableService
   ) {
     super(poDate, poLanguageService, defaultService);
 
@@ -218,6 +223,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.initialized = true;
   }
 
+  showMoreInfiniteScroll({ target }): void {
+    const scrollPosition = target.offsetHeight + target.scrollTop;
+    if (!this.showMoreDisabled && scrollPosition >= target.scrollHeight * (this.infiniteScrollDistance / 110)) {
+      this.onShowMore();
+    }
+  }
+
   ngDoCheck() {
     this.checkChangesItems();
     this.verifyCalculateHeightTableContainer();
@@ -225,6 +237,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
     if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
       this.debounceResize();
+      this.checkInfiniteScroll();
       this.visibleElement = true;
     }
   }
@@ -475,6 +488,17 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     });
   }
 
+  protected checkInfiniteScroll(): void {
+    if (this.hasInfiniteScroll()) {
+      if (this.poTableTbody.nativeElement.scrollHeight > this.height) {
+        this.includeInfiniteScroll();
+      } else {
+        this.infiniteScroll = false;
+      }
+    }
+    this.changeDetector.detectChanges();
+  }
+
   private checkChangesItems() {
     const changesItems = this.differ.diff(this.items);
 
@@ -517,6 +541,21 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.tableFooterElement ? this.tableFooterElement.nativeElement.offsetHeight : 0;
   }
 
+  private hasInfiniteScroll(): boolean {
+    return (
+      this.infiniteScroll &&
+      this.hasItems &&
+      !this.subscriptionScrollEvent &&
+      this.height &&
+      this.poTableTbody.nativeElement.scrollHeight
+    );
+  }
+
+  private includeInfiniteScroll(): void {
+    this.scrollEvent$ = this.defaultService.scrollListener(this.poTableTbody.nativeElement);
+    this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
+  }
+
   private mergeCustomIcons(rowIcons: Array<string>, customIcons: Array<any>) {
     const mergedIcons = [];
 
@@ -537,6 +576,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     if (this.clickListener) {
       this.clickListener();
+    }
+
+    if (this.subscriptionScrollEvent) {
+      this.subscriptionScrollEvent.unsubscribe();
     }
   }
 

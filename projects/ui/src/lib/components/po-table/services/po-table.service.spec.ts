@@ -59,4 +59,12 @@ describe('PoTableService', () => {
       expect(response).toBeDefined();
     });
   });
+
+  it('scrollListener: should call scrollListener on scroll', () => {
+    const dummyElement = document.createElement('div');
+
+    service.scrollListener(dummyElement).subscribe(response => {
+      expect(response).toBeDefined();
+    });
+  });
 });
