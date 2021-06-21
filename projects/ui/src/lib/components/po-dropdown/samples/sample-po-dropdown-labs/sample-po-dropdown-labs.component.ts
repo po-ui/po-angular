@@ -22,7 +22,8 @@ export class SamplePoDropdownLabsComponent implements OnInit {
   public readonly iconOptions: Array<PoSelectOption> = [
     { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
-    { value: 'po-icon-world', label: 'po-icon-world' }
+    { value: 'po-icon-world', label: 'po-icon-world' },
+    { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
