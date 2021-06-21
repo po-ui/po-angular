@@ -1,6 +1,7 @@
+import { debounceTime } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import { isTypeof } from '../../../utils/util';
 import { PoTableFilter } from '../interfaces/po-table-filter.interface';
 import { PoTableFilteredItemsParams } from '../interfaces/po-table-filtered-items-params.interface';
@@ -25,6 +26,10 @@ export class PoTableService implements PoTableFilter {
 
   setUrl(url: string) {
     this.url = url;
+  }
+
+  scrollListener(componentListner: HTMLElement): Observable<any> {
+    return fromEvent(componentListner, 'scroll').pipe(debounceTime(100));
   }
 
   private validateParams(params: any) {

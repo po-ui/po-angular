@@ -17,7 +17,7 @@
       >
         <div *ngIf="height" class="po-table-container" [style.height.px]="heightTableContainer">
           <div class="po-table-header-fixed po-table-header"></div>
-          <div class="po-table-container-fixed-inner">
+          <div #poTableTbody class="po-table-container-fixed-inner">
             <ng-container *ngTemplateOutlet="tableTemplate"></ng-container>
           </div>
         </div>
@@ -37,6 +37,7 @@
 </ng-template>
 
 <div
+  *ngIf="!infiniteScroll"
   class="po-row po-table-footer-show-more"
   [class.po-invisible]="showMore.observers.length === 0 && !hasService"
   #tableFooter
