@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.2.0](https://github.com/po-ui/po-angular/compare/v5.1.0...v5.2.0) (2021-06-21)
+
+
+### Bug Fixes
+
+* **combo:** realiza tratamento no `placeholder` caso informar `undefined` ([d92aeec](https://github.com/po-ui/po-angular/commit/d92aeece0bc97321bb5ffb33fbe62d5a11227dcb))
+* **lookup:** realiza tratamento no `placeholder` caso informar `undefined` ([bd0fdd0](https://github.com/po-ui/po-angular/commit/bd0fdd0192dcf189dee28e976d3d6c30bca60f0f))
+
+
+### Features
+
+* **datepicker-range:** adiciona calendário para selecionar a data ([d4e68f4](https://github.com/po-ui/po-angular/commit/d4e68f479d30488ae25191e12f8498d9f07157f9))
+* **table:** cria método `applyFilters` ([8b6ab0d](https://github.com/po-ui/po-angular/commit/8b6ab0d5b6889f67ebce2b8204669feaaff4f511))
+
+
+
 # [5.1.0](https://github.com/po-ui/po-angular/compare/v5.0.0...v5.1.0) (2021-06-14)
 
 
