@@ -88,7 +88,7 @@ import { PoCustomAreaModule } from '../po-custom-area/po-custom-area.module';
     PoServicesModule,
     PoTableModule,
     PoTooltipModule,
-    PoIconModule
+    PoIconModule,
     PoCustomAreaModule
   ],
   exports: [
