@@ -83,11 +83,9 @@ describe('PoStorageService:', () => {
     });
 
     it('constructor: should call setStoragePromise with config', () => {
-      let storageService: PoStorageService;
-
       spyOn(PoStorageService.prototype, <any>'setStoragePromise');
 
-      storageService = new PoStorageService(getConfigMock());
+      const storageService: PoStorageService = new PoStorageService(getConfigMock());
 
       expect(storageService['setStoragePromise']).toHaveBeenCalledWith(getConfigMock());
     });

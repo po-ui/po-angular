@@ -3,8 +3,6 @@ import { PoSchemaUtil } from './po-schema-util.model';
 import { PoSyncSchema } from '../../po-sync/interfaces/po-sync-schema.interface';
 
 describe('PoSchemaUtil:', () => {
-  let schemas: Array<PoSyncSchema>;
-
   const mySchema: PoSyncSchema = {
     getUrlApi: 'http://poservices.po-ui.com.br/customer-api/api/v1/customers',
     diffUrlApi: 'http://poservices.po-ui.com.br/customer-api/api/v1/customers/diff',
@@ -28,7 +26,7 @@ describe('PoSchemaUtil:', () => {
 
   const currentDate = new Date();
 
-  schemas = [
+  const schemas: Array<PoSyncSchema> = [
     {
       getUrlApi: 'url',
       diffUrlApi: 'urldiff',

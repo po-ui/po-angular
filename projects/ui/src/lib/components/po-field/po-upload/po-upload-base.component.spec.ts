@@ -307,10 +307,9 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('checkRestrictions: should be check restrictions', () => {
-      let fakeThis;
       let isTruthy;
 
-      fakeThis = {
+      const fakeThis = {
         fileRestrictions: { minFileSize: 10, maxFileSize: 100, allowedExtensions: ['.png'] }
       };
 

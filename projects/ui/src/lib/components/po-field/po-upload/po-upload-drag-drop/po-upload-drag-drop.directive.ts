@@ -127,9 +127,8 @@ export class PoUploadDragDropDirective {
   private async readDirectory(entry) {
     const dirReader = entry.createReader();
     let files = [];
-    let newFiles;
 
-    newFiles = await this.readDirectoryEntries(dirReader);
+    const newFiles = await this.readDirectoryEntries(dirReader);
     files = files.concat(newFiles);
     return files;
   }

@@ -341,7 +341,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const selectionEnd = event.target.selectionEnd;
 
     let modelValue;
-    let viewValue;
 
     // - Browsers nativos do Android ex: Samsung Browser.
     if (this.isKeyboardAndroid) {
@@ -350,7 +349,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
     modelValue = this.formatValueWithoutThousandSeparator(event.target.value);
     modelValue = this.addZeroBefore(modelValue);
-    viewValue = this.formatMask(modelValue);
+    const viewValue = this.formatMask(modelValue);
 
     // validação para não quebrar IE com placeholder definido e Input vazio
     if (viewValue) {
@@ -470,20 +469,15 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   private formatToViewValue(value: string) {
-    let formatedNumber;
-    let numberValue;
-    let valueBeforeDot;
-    let valueAfterDot;
-
     // - Necessário para tratar valores que contenham decimalSeparator
     value = this.replaceCommaToDot(value);
 
-    numberValue = Number(value).toFixed(this.decimalsLength);
+    const numberValue = Number(value).toFixed(this.decimalsLength);
 
-    valueBeforeDot = this.getValueBeforeSeparator(numberValue, '.');
-    valueAfterDot = this.getValueAfterSeparator(numberValue, '.');
+    const valueBeforeDot = this.getValueBeforeSeparator(numberValue, '.');
+    const valueAfterDot = this.getValueAfterSeparator(numberValue, '.');
 
-    formatedNumber = this.formatMask(valueBeforeDot);
+    const formatedNumber = this.formatMask(valueBeforeDot);
 
     if (this.decimalsLength === 0) {
       return formatedNumber;

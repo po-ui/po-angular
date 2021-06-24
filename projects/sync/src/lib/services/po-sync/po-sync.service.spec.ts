@@ -43,8 +43,6 @@ describe('PoSyncService:', () => {
     expect(actual).toEqual(expected);
   });
 
-  let customerSchema: PoSyncSchema;
-  let userSchema: PoSyncSchema;
   let poSync: PoSyncService;
   let poNetworkServiceMock: TypeMoq.IMock<PoNetworkService>;
   let poEventSourcing: TypeMoq.IMock<PoEventSourcingService>;
@@ -52,7 +50,7 @@ describe('PoSyncService:', () => {
   let poSchemaService: TypeMoq.IMock<PoSchemaService>;
   let http: TypeMoq.IMock<PoHttpClientService>;
 
-  customerSchema = {
+  const customerSchema: PoSyncSchema = {
     idField: 'code',
     name: 'Customers',
     getUrlApi: 'http://localhost:8200/api/v1/customers',
@@ -63,7 +61,7 @@ describe('PoSyncService:', () => {
     lastSync: new Date().toISOString()
   };
 
-  userSchema = {
+  const userSchema: PoSyncSchema = {
     idField: 'id',
     getUrlApi: 'http://localhost:8200/api/v1/users',
     diffUrlApi: 'http://localhost:8200/api/v1/users/diff',

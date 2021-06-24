@@ -20,8 +20,7 @@ class PoDatepickerComponent extends PoDatepickerBaseComponent {
 
 describe('PoDatepickerBaseComponent:', () => {
   let component: PoDatepickerComponent;
-  let languageService: PoLanguageService;
-  languageService = new PoLanguageService();
+  const languageService: PoLanguageService = new PoLanguageService();
 
   beforeEach(() => {
     component = new PoDatepickerComponent(languageService);

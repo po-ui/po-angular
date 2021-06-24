@@ -19,26 +19,20 @@ import { PoPageContentComponent } from '../po-page-content/po-page-content.compo
 import { PoPageHeaderComponent } from '../po-page-header/po-page-header.component';
 import { PoPageListComponent } from './po-page-list.component';
 
-let routerStub;
-let eventClick;
-let eventResize;
-let eventInput;
-let eventSubmit;
-
-routerStub = {
+const routerStub = {
   navigate: jasmine.createSpy('navigate')
 };
 
-eventClick = document.createEvent('Event');
+const eventClick = document.createEvent('Event');
 eventClick.initEvent('click', false, true);
 
-eventResize = document.createEvent('Event');
+const eventResize = document.createEvent('Event');
 eventResize.initEvent('resize', false, true);
 
-eventInput = document.createEvent('Event');
+const eventInput = document.createEvent('Event');
 eventInput.initEvent('input', true, false);
 
-eventSubmit = document.createEvent('Event');
+const eventSubmit = document.createEvent('Event');
 eventSubmit.initEvent('submit', true, false);
 
 @Component({
