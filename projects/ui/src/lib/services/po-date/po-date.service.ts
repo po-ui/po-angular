@@ -126,6 +126,7 @@ export class PoDateService {
 
   /**
    * Retorna `true` caso o período seja válido, para isso a primeira data deve ser maior que a segunda data.
+   *
    * @param dateA primeira data
    * @param dateB segunda data
    */

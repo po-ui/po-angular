@@ -17,6 +17,7 @@ export class PoColorService {
 
   /**
    * Avalia a propriedade `color` na lista de items passada. Caso sim, trata se é decimal ou string `po-color`. Caso não haja, retorna a cor default.
+   *
    * @param data
    */
   getColors<T extends PoColorArgs>(data: Array<T>): Array<T> {

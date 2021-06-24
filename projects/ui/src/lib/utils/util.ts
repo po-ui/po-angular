@@ -192,6 +192,7 @@ export function convertDateToISOExtended(date: Date, time?: string) {
 
 /**
  * Transforma o ano em uma string no formato yyyy e caso o ano seja menor que 1000 preenche com zeros a esquerda.
+ *
  * @param year Ano
  */
 export function formatYear(year: number) {
@@ -249,6 +250,7 @@ export function isKeyCodeEnter(event: any): boolean {
 
 /**
  * Caso o ano original da data seja entre 0 e 100 atribui esse valor ao ano, pois o `new Date` do javascript transforma o ano para 190X.
+ *
  * @param date Data
  * @param year Ano original
  */

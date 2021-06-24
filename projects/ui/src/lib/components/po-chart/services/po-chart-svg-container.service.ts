@@ -11,6 +11,7 @@ export class PoChartSvgContainerService {
 
   /**
    * Retorna um objeto do tipo PoChartContainerSize contendo as dimensões necessárias para plotagem do SVG.
+   *
    * @param chartHeight
    * @param chartWrapperWidth
    * @param chartHeaderHeight

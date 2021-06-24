@@ -4,6 +4,7 @@
  *
  * Esta função é útil para testes onde se deseja verificar se o retorno foi uma exceção em uma função assíncrona e
  * poder utilizar o .toThrow() do jasmine.
+ *
  * @param testFunction Função que será verificado o retorno.
  */
 export function handleThrowError(testFunction) {
