@@ -135,7 +135,7 @@
         "newline-per-chained-call": "off",
         "no-empty-function": "off",
         "no-empty-pattern": "off",
-        "no-extra-parens": "error",
+        "no-extra-parens": "off",
         "no-extra-semi": "error",
         "no-irregular-whitespace": "off",
         "no-multi-str": "error",
