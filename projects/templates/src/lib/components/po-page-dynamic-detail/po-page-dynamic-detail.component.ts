@@ -140,71 +140,8 @@ export const poPageDynamicDetailLiteralsDefault = {
   providers: [PoPageDynamicService, PoPageDynamicDetailActionsService]
 })
 export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
-  private subscriptions: Array<Subscription> = [];
-
-  private _actions: PoPageDynamicDetailActions = {};
-  private _autoRouter: boolean = false;
-  private _duplicates: Array<any> = [];
-  private _fields: Array<any> = [];
-  private _keys: Array<any> = [];
-  private _pageActions: Array<PoPageAction> = [];
-
-  literals;
-  model: any = {};
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define as ações da página de acordo com a interface `PoPageDynamicDetailActions`.
-   */
-  @Input('p-actions') set actions(value: PoPageDynamicDetailActions) {
-    this._actions = this.isObject(value) ? value : {};
-
-    this._pageActions = this.getPageActions(this._actions);
-  }
-
-  get actions() {
-    return { ...this._actions };
-  }
-
-  /**
-   * @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
-   *
-   * @optional
-   *
-   * @description
-   *
-   * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso as ações
-   * estejam definidas nas ações.
-   *
-   * > Para o correto funcionamento não pode haver nenhum rota coringa (`**`) especificada.
-   *
-   * @default false
-   */
-  @Input('p-auto-router') set autoRouter(value: boolean) {
-    this._autoRouter = convertToBoolean(value);
-  }
-
-  get autoRouter(): boolean {
-    return this._autoRouter;
-  }
-
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
-
-  /** Lista dos campos exibidos na página. */
-  @Input('p-fields') set fields(value: Array<PoPageDynamicDetailField>) {
-    this._fields = Array.isArray(value) ? [...value] : [];
-
-    this._keys = this.getKeysByFields(this.fields);
-    this._duplicates = this.getDuplicatesByFields(this.fields);
-  }
-
-  get fields(): Array<PoPageDynamicDetailField> {
-    return this._fields;
-  }
 
   /**
    * Função ou serviço que será executado na inicialização do componente.
@@ -275,6 +212,69 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
    * > `GET {end-point}/metadata?type=detail&version={version}`
    */
   @Input('p-service-api') serviceApi: string;
+
+  literals;
+  model: any = {};
+
+  private subscriptions: Array<Subscription> = [];
+
+  private _actions: PoPageDynamicDetailActions = {};
+  private _autoRouter: boolean = false;
+  private _duplicates: Array<any> = [];
+  private _fields: Array<any> = [];
+  private _keys: Array<any> = [];
+  private _pageActions: Array<PoPageAction> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define as ações da página de acordo com a interface `PoPageDynamicDetailActions`.
+   */
+  @Input('p-actions') set actions(value: PoPageDynamicDetailActions) {
+    this._actions = this.isObject(value) ? value : {};
+
+    this._pageActions = this.getPageActions(this._actions);
+  }
+
+  get actions() {
+    return { ...this._actions };
+  }
+
+  /**
+   * @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso as ações
+   * estejam definidas nas ações.
+   *
+   * > Para o correto funcionamento não pode haver nenhum rota coringa (`**`) especificada.
+   *
+   * @default false
+   */
+  @Input('p-auto-router') set autoRouter(value: boolean) {
+    this._autoRouter = convertToBoolean(value);
+  }
+
+  get autoRouter(): boolean {
+    return this._autoRouter;
+  }
+
+  /** Lista dos campos exibidos na página. */
+  @Input('p-fields') set fields(value: Array<PoPageDynamicDetailField>) {
+    this._fields = Array.isArray(value) ? [...value] : [];
+
+    this._keys = this.getKeysByFields(this.fields);
+    this._duplicates = this.getDuplicatesByFields(this.fields);
+  }
+
+  get fields(): Array<PoPageDynamicDetailField> {
+    return this._fields;
+  }
 
   constructor(
     private router: Router,

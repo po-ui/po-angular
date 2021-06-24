@@ -25,6 +25,9 @@ import { SampleDashboardService } from './sample-po-page-default-dashboard.servi
   providers: [SampleDashboardService]
 })
 export class SamplePoPageDefaultDashboardComponent {
+  @ViewChild('formShare', { static: true }) formShare: NgForm;
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   columns: Array<PoTableColumn> = this.sampleDashboardService.getColumns();
   email: string = undefined;
   isSubscribed: boolean = false;
@@ -54,9 +57,6 @@ export class SamplePoPageDefaultDashboardComponent {
     },
     label: 'Share'
   };
-
-  @ViewChild('formShare', { static: true }) formShare: NgForm;
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor(private poNotification: PoNotificationService, private sampleDashboardService: SampleDashboardService) {}
 

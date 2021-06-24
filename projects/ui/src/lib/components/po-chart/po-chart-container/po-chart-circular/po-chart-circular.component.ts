@@ -25,8 +25,15 @@ import { PoChartSerie } from '../../interfaces/po-chart-serie.interface';
 
 @Directive()
 export abstract class PoChartCircularComponent {
-  private _options: PoChartOptions;
-  private _series: Array<PoChartSerie>;
+  @Input('p-container-size') containerSize: PoChartContainerSize;
+
+  @Output('p-circular-click') circularClick = new EventEmitter<any>();
+
+  @Output('p-circular-hover') circularHover = new EventEmitter<any>();
+
+  @ViewChildren('svgPaths') private svgPaths: QueryList<PoChartCircularPathComponent>;
+
+  @ViewChildren('svgLabels') private svgLabels: QueryList<PoChartCircularLabelComponent>;
 
   canDisplayLabels: boolean = false;
   seriesLabels: Array<PoChartLabelCoordinates> = [];
@@ -36,9 +43,10 @@ export abstract class PoChartCircularComponent {
   protected innerRadius: number;
   protected totalValue: number;
 
-  private animate: boolean;
+  private _options: PoChartOptions;
+  private _series: Array<PoChartSerie>;
 
-  @Input('p-container-size') containerSize: PoChartContainerSize;
+  private animate: boolean;
 
   @Input('p-options') set options(value: PoChartOptions) {
     if (!isNaN(value?.innerRadius)) {
@@ -60,14 +68,6 @@ export abstract class PoChartCircularComponent {
   get series() {
     return this._series;
   }
-
-  @Output('p-circular-click') circularClick = new EventEmitter<any>();
-
-  @Output('p-circular-hover') circularHover = new EventEmitter<any>();
-
-  @ViewChildren('svgPaths') private svgPaths: QueryList<PoChartCircularPathComponent>;
-
-  @ViewChildren('svgLabels') private svgLabels: QueryList<PoChartCircularLabelComponent>;
 
   constructor(private ngZone: NgZone, private changeDetector: ChangeDetectorRef) {}
 

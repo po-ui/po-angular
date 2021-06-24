@@ -47,13 +47,13 @@ export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, O
   state: string;
   stateOptions: Array<PoSelectOption>;
 
-  private citiesSubscription: Subscription;
-  private statesSubscription: Subscription;
-
   readonly options: Array<PoRadioGroupOption> = [
     { label: 'CPF', value: 'CPF' },
     { label: 'CNPJ', value: 'CNPJ' }
   ];
+
+  private citiesSubscription: Subscription;
+  private statesSubscription: Subscription;
 
   constructor(private sampleService: SamplePoSelectCustomerRegistrationService) {}
 

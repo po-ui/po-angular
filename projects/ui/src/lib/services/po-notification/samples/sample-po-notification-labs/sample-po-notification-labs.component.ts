@@ -15,6 +15,8 @@ import {
   providers: [PoNotificationService]
 })
 export class SamplePoNotificationLabsComponent implements OnInit {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   action: boolean;
   actionLabel: string;
   message: string;
@@ -33,8 +35,6 @@ export class SamplePoNotificationLabsComponent implements OnInit {
     { label: 'Warning', value: PoToasterType.Warning },
     { label: 'Information', value: PoToasterType.Information }
   ];
-
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor(private poNotification: PoNotificationService) {}
 

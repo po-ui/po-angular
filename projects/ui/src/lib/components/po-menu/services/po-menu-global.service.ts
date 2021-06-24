@@ -13,8 +13,13 @@ export class PoMenuGlobalService {
   private menus = new Subject<Array<PoMenuItem>>();
   private removedApplicationMenu = new Subject<string>();
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   receiveApplicationMenu$ = this.applicationMenu.asObservable();
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   receiveMenus$ = this.menus.asObservable();
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   receiveRemovedApplicationMenu$ = this.removedApplicationMenu.asObservable();
 
   sendApplicationMenu(menu: PoMenuComponent) {

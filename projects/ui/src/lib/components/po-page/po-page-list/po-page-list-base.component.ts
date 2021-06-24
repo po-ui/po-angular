@@ -40,17 +40,33 @@ export const poPageListLiteralsDefault = {
  */
 @Directive()
 export abstract class PoPageListBaseComponent {
-  private _actions?: Array<PoPageAction> = [];
-  private _disclaimerGroup?: PoDisclaimerGroup;
-  private _literals: PoPageListLiterals;
-  private _title: string;
+  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto que implementa as propriedades da interface `PoBreadcrumb`.
+   */
+  @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb;
+
+  /**
+   * @description
+   *
+   * Objeto que implementa as propriedades da interface `PoPageFilter`.
+   */
+  @Input('p-filter') filter: PoPageFilter;
 
   visibleActions: Array<PoPageAction> = [];
 
   protected language: string;
   protected resizeListener: () => void;
 
-  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
+  private _actions?: Array<PoPageAction> = [];
+  private _disclaimerGroup?: PoDisclaimerGroup;
+  private _literals: PoPageListLiterals;
+  private _title: string;
 
   /**
    * @optional
@@ -74,15 +90,6 @@ export abstract class PoPageListBaseComponent {
    *
    * @description
    *
-   * Objeto que implementa as propriedades da interface `PoBreadcrumb`.
-   */
-  @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Objeto que implementa as propriedades da interface `PoDisclaimerGroup`.
    */
   @Input('p-disclaimer-group') set disclaimerGroup(value: PoDisclaimerGroup) {
@@ -96,13 +103,6 @@ export abstract class PoPageListBaseComponent {
   get disclaimerGroup(): PoDisclaimerGroup {
     return this._disclaimerGroup;
   }
-
-  /**
-   * @description
-   *
-   * Objeto que implementa as propriedades da interface `PoPageFilter`.
-   */
-  @Input('p-filter') filter: PoPageFilter;
 
   /**
    * @optional

@@ -13,17 +13,6 @@ import { PoChartSerie } from '../interfaces/po-chart-serie.interface';
   templateUrl: './po-chart-container.component.html'
 })
 export class PoChartContainerComponent implements OnChanges {
-  private _options: PoChartOptions;
-  private _series: Array<PoChartSerie> = [];
-
-  alignByTheCorners: boolean;
-  axisOptions: PoChartAxisOptions;
-  categoriesCoordinates: Array<number>;
-  range: PoChartMinMaxValues;
-  seriesByType;
-  svgSpace;
-  viewBox: string;
-
   @Input('p-categories') categories: Array<string>;
 
   @Input('p-type') type: PoChartType;
@@ -33,6 +22,19 @@ export class PoChartContainerComponent implements OnChanges {
   @Output('p-serie-click') serieClick = new EventEmitter<any>();
 
   @Output('p-serie-hover') serieHover = new EventEmitter<any>();
+
+  @ViewChild('svgELement', { static: true }) svgELement: ElementRef;
+
+  alignByTheCorners: boolean;
+  axisOptions: PoChartAxisOptions;
+  categoriesCoordinates: Array<number>;
+  range: PoChartMinMaxValues;
+  seriesByType;
+  svgSpace;
+  viewBox: string;
+
+  private _options: PoChartOptions;
+  private _series: Array<PoChartSerie> = [];
 
   @Input('p-options') set options(value: PoChartOptions) {
     if (value instanceof Object && !(value instanceof Array)) {
@@ -45,8 +47,6 @@ export class PoChartContainerComponent implements OnChanges {
   get options() {
     return this._options;
   }
-
-  @ViewChild('svgELement', { static: true }) svgELement: ElementRef;
 
   @Input('p-series') set series(data: Array<PoChartSerie>) {
     this._series = data;

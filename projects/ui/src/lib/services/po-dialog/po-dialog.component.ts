@@ -39,8 +39,6 @@ export const poDialogConfirmLiteralsDefault = {
   templateUrl: './po-dialog.component.html'
 })
 export class PoDialogComponent implements OnDestroy, OnInit {
-  private language: string;
-
   // ViewChild para o uso do po-modal.component
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
@@ -68,6 +66,7 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   // Atributo para armazenar a referencia do componente criado via serviço.
   private componentRef: ComponentRef<PoDialogComponent>;
   private closeSubscription: Subscription;
+  private language: string;
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -23,17 +23,23 @@ const PoUploadDragDropHeightMin = 160;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoUploadDragDropComponent {
-  private _dragDropHeight?: number = PoUploadDragDropHeightDefault;
-
-  areaElement: HTMLElement;
-  isDragOver: boolean = false;
-
   @ViewChild('dragDropOverlay', { read: ElementRef }) dragDropOverlayElement: ElementRef;
   @ViewChild(PoUploadDragDropAreaComponent, { static: true }) dragDropAreaComponent: PoUploadDragDropAreaComponent;
 
   @Input('p-directory-compatible') directoryCompatible: boolean;
 
   @Input('p-disabled') disabled: boolean;
+
+  @Input('p-literals') literals: PoUploadLiterals;
+
+  @Output('p-file-change') fileChange: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output('p-select-files') selectFiles: EventEmitter<any> = new EventEmitter<any>();
+
+  areaElement: HTMLElement;
+  isDragOver: boolean = false;
+
+  private _dragDropHeight?: number = PoUploadDragDropHeightDefault;
 
   @Input('p-drag-drop-height') set dragDropHeight(value: number) {
     const dragDropHeight = convertToInt(value, PoUploadDragDropHeightDefault);
@@ -44,12 +50,6 @@ export class PoUploadDragDropComponent {
   get dragDropHeight() {
     return this._dragDropHeight;
   }
-
-  @Input('p-literals') literals: PoUploadLiterals;
-
-  @Output('p-file-change') fileChange: EventEmitter<any> = new EventEmitter<any>();
-
-  @Output('p-select-files') selectFiles: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 

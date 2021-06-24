@@ -28,13 +28,48 @@ export const poDisclaimerGroupLiteralsDefault = {
  */
 @Directive()
 export class PoDisclaimerGroupBaseComponent implements DoCheck {
+  /** Título do grupo de *disclaimers*. */
+  @Input('p-title') title?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será disparada quando a lista de *disclaimers* for modificada.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será disparada quando um *disclaimer* for removido da lista de *disclaimers* pelo usuário.
+   *
+   * Recebe como parâmetro um objeto conforme a interface `PoDisclaimerGroupRemoveAction`.
+   */
+  @Output('p-remove') remove: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será disparada quando todos os *disclaimers* forem removidos da lista de *disclaimers* pelo usuário,
+   * utilizando o botão "remover todos".
+   *
+   * Recebe como parâmetro uma lista contendo todos os `disclaimers` removidos.
+   */
+  @Output('p-remove-all') removeAll: EventEmitter<any> = new EventEmitter<any>();
+
+  literals;
+
   private _disclaimers: Array<PoDisclaimer> = [];
   private _hideRemoveAll: boolean = false;
 
   private differ;
   private previousDisclaimers: Array<PoDisclaimer> = [];
-
-  literals;
 
   /** Lista de *disclaimers*. */
 
@@ -85,41 +120,6 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
   get hideRemoveAll() {
     return this._hideRemoveAll;
   }
-
-  /** Título do grupo de *disclaimers*. */
-  @Input('p-title') title?: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função que será disparada quando a lista de *disclaimers* for modificada.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função que será disparada quando um *disclaimer* for removido da lista de *disclaimers* pelo usuário.
-   *
-   * Recebe como parâmetro um objeto conforme a interface `PoDisclaimerGroupRemoveAction`.
-   */
-  @Output('p-remove') remove: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função que será disparada quando todos os *disclaimers* forem removidos da lista de *disclaimers* pelo usuário,
-   * utilizando o botão "remover todos".
-   *
-   * Recebe como parâmetro uma lista contendo todos os `disclaimers` removidos.
-   */
-  @Output('p-remove-all') removeAll: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(differs: IterableDiffers, languageService: PoLanguageService) {
     const language = languageService.getShortLanguage();

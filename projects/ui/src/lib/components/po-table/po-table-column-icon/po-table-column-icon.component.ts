@@ -16,10 +16,13 @@ import { PoTableColumnIcon } from './po-table-column-icon.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTableColumnIconComponent {
-  private _icons: Array<PoTableColumnIcon> = [];
-
   /** Definição da coluna que utiliza os icones. */
   @Input('p-column') column: PoTableColumn;
+
+  /** Dados da linha da tabela. */
+  @Input('p-row') row: any;
+
+  private _icons: Array<PoTableColumnIcon> = [];
 
   /** Lista de colunas com ícones. */
   @Input('p-icons') set icons(icons: Array<PoTableColumnIcon> | Array<string> | string) {
@@ -29,9 +32,6 @@ export class PoTableColumnIconComponent {
   get icons() {
     return this._icons;
   }
-
-  /** Dados da linha da tabela. */
-  @Input('p-row') row: any;
 
   click(columnIcon: PoTableColumnIcon, event): void {
     const isAbleAction = !this.isDisabled(columnIcon);

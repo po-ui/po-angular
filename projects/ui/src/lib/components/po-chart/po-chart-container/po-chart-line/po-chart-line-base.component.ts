@@ -12,9 +12,19 @@ import { PoChartSerie } from '../../interfaces/po-chart-serie.interface';
 
 @Directive()
 export abstract class PoChartLineBaseComponent {
-  private _containerSize: PoChartContainerSize = {};
-  private _range: PoChartMinMaxValues = {};
-  private _series: Array<PoChartSerie> = [];
+  @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;
+
+  @Input('p-categories') categories: Array<string>;
+
+  @Input('p-categories-coordinates') categoriesCoordinates: Array<number>;
+
+  @Input('p-svg-space') svgSpace;
+
+  @Output('p-point-click') pointClick = new EventEmitter<any>();
+
+  @Output('p-point-hover') pointHover = new EventEmitter<any>();
+
+  @ViewChild('chartLine') chartLine: ElementRef;
 
   activeTooltip: boolean;
   animate: boolean = true;
@@ -25,11 +35,9 @@ export abstract class PoChartLineBaseComponent {
   protected firstValidItemFromSerieArray: boolean;
   protected seriesLength: number;
 
-  @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;
-
-  @Input('p-categories') categories: Array<string>;
-
-  @Input('p-categories-coordinates') categoriesCoordinates: Array<number>;
+  private _containerSize: PoChartContainerSize = {};
+  private _range: PoChartMinMaxValues = {};
+  private _series: Array<PoChartSerie> = [];
 
   @Input('p-range') set range(value: PoChartMinMaxValues) {
     if (value instanceof Object && !(value instanceof Array)) {
@@ -72,14 +80,6 @@ export abstract class PoChartLineBaseComponent {
   get series() {
     return this._series;
   }
-
-  @Input('p-svg-space') svgSpace;
-
-  @Output('p-point-click') pointClick = new EventEmitter<any>();
-
-  @Output('p-point-hover') pointHover = new EventEmitter<any>();
-
-  @ViewChild('chartLine') chartLine: ElementRef;
 
   constructor(
     protected mathsService: PoChartMathsService,

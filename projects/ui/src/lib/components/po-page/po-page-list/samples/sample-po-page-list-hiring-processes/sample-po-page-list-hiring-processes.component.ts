@@ -19,6 +19,9 @@ import { SamplePoPageListHiringProcessesService } from './sample-po-page-list-hi
   providers: [SamplePoPageListHiringProcessesService]
 })
 export class SamplePoPageListHiringProcessesComponent implements OnInit {
+  @ViewChild('advancedFilterModal', { static: true }) advancedFilterModal: PoModalComponent;
+  @ViewChild('poPageList', { static: true }) poPageList: PoPageListComponent;
+
   disclaimerGroup;
   hiringProcesses: Array<object>;
   hiringProcessesColumns: Array<PoTableColumn>;
@@ -55,9 +58,6 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   };
 
   private disclaimers = [];
-
-  @ViewChild('advancedFilterModal', { static: true }) advancedFilterModal: PoModalComponent;
-  @ViewChild('poPageList', { static: true }) poPageList: PoPageListComponent;
 
   constructor(
     private sampleHiringProcessesService: SamplePoPageListHiringProcessesService,

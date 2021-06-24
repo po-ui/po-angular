@@ -40,11 +40,8 @@ import { PoCalendarMode } from './po-calendar-mode.enum';
  */
 @Directive()
 export class PoCalendarBaseComponent {
-  private shortLanguage: string;
-  private _locale: string = this.languageService.getShortLanguage();
-  private _maxDate: Date;
-  private _minDate: Date;
-  private _mode: PoCalendarMode;
+  /** Evento disparado ao selecionar um dia do calendário. */
+  @Output('p-change') change = new EventEmitter<string | { start; end }>();
 
   activateDate;
   value;
@@ -52,6 +49,12 @@ export class PoCalendarBaseComponent {
   protected onTouched: any = null;
   protected propagateChange: any = null;
   protected today: Date = new Date();
+
+  private shortLanguage: string;
+  private _locale: string = this.languageService.getShortLanguage();
+  private _maxDate: Date;
+  private _minDate: Date;
+  private _mode: PoCalendarMode;
 
   /**
    * @optional
@@ -145,9 +148,6 @@ export class PoCalendarBaseComponent {
   get mode() {
     return this._mode;
   }
-
-  /** Evento disparado ao selecionar um dia do calendário. */
-  @Output('p-change') change = new EventEmitter<string | { start; end }>();
 
   get isRange() {
     return this.mode === PoCalendarMode.Range;

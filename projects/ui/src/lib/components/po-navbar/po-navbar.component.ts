@@ -36,8 +36,14 @@ const poNavbarTiming = '250ms ease';
   templateUrl: './po-navbar.component.html'
 })
 export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterViewInit, OnDestroy, OnInit {
+  @ViewChild(PoNavbarItemsComponent, { read: ElementRef, static: true }) navbarItemsElement: ElementRef;
+
+  @ViewChild(PoNavbarItemsComponent, { static: true }) navbarItems: PoNavbarItemsComponent;
+
   disableRight: boolean;
   showItemsNavigation: boolean = false;
+
+  protected windowResizeListener: () => void;
 
   private _menuComponent;
 
@@ -54,8 +60,6 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   private menusSubscription: Subscription;
   private removedMenuSubscription: Subscription;
 
-  protected windowResizeListener: () => void;
-
   get navbarItemNavigationDisableLeft() {
     return this.offset === 0;
   }
@@ -63,10 +67,6 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   get navbarItemNavigationDisableRight() {
     return this.disableRight && this.offset !== 0;
   }
-
-  @ViewChild(PoNavbarItemsComponent, { read: ElementRef, static: true }) navbarItemsElement: ElementRef;
-
-  @ViewChild(PoNavbarItemsComponent, { static: true }) navbarItems: PoNavbarItemsComponent;
 
   @ViewChild(PoMenuComponent) set menuComponent(menu: PoMenuComponent) {
     this._menuComponent = menu;
@@ -156,6 +156,13 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
     orientation === 'left' ? this.navigateLeft() : this.navigateRight();
 
     this.animate(this.offset);
+  }
+
+  protected validateMenuLogo() {
+    if (this.applicationMenu.logo && this.logo) {
+      this.applicationMenu.logo = undefined;
+      this.changeDetector.detectChanges();
+    }
   }
 
   private allNavbarItemsWidth() {
@@ -276,13 +283,6 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
     if (this.offset >= maxAllowedOffset) {
       this.offset = maxAllowedOffset;
       this.disableRight = true;
-    }
-  }
-
-  protected validateMenuLogo() {
-    if (this.applicationMenu.logo && this.logo) {
-      this.applicationMenu.logo = undefined;
-      this.changeDetector.detectChanges();
     }
   }
 }

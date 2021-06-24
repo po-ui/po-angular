@@ -17,6 +17,9 @@ import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
   providers: [SamplePoTableAirfareService, PoDialogService]
 })
 export class SamplePoTableAirfareComponent {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+  @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
+
   actions: Array<PoTableAction> = [
     {
       action: this.discount.bind(this),
@@ -31,9 +34,6 @@ export class SamplePoTableAirfareComponent {
   items: Array<any> = this.sampleAirfare.getItems();
   total: number = 0;
   totalExpanded = 0;
-
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
-  @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
 
   constructor(
     private sampleAirfare: SamplePoTableAirfareService,

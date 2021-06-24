@@ -10,6 +10,11 @@ import { delay, finalize, map, tap } from 'rxjs/operators';
   templateUrl: './sample-po-stepper-sales.component.html'
 })
 export class SamplePoStepperSalesComponent {
+  @ViewChild('addressForm', { static: true }) addressForm: NgForm;
+  @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
+  @ViewChild('personalForm', { static: true }) personalForm: NgForm;
+  @ViewChild('successData', { static: true }) successData: PoModalComponent;
+
   address: any;
   birthday: string;
   cardCode: string;
@@ -22,11 +27,6 @@ export class SamplePoStepperSalesComponent {
   name: string;
   nextLabelWidget: string = 'Next Step';
   previousLabelWidget: string = 'Previous Step';
-
-  @ViewChild('addressForm', { static: true }) addressForm: NgForm;
-  @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
-  @ViewChild('personalForm', { static: true }) personalForm: NgForm;
-  @ViewChild('successData', { static: true }) successData: PoModalComponent;
 
   constructor() {
     this.address = this.getAddress();

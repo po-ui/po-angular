@@ -60,6 +60,10 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
 export class PoPageChangePasswordComponent
   extends PoPageChangePasswordBaseComponent
   implements AfterViewInit, OnDestroy, OnInit {
+  @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;
+  @ViewChild('pageChangePassword', { read: ViewContainerRef, static: true }) pageChangePassword: ViewContainerRef;
+  @ViewChild('passwordForm', { read: NgForm, static: true }) passwordForm: NgForm;
+
   literals: {
     backButton: string;
     confirmPassword: string;
@@ -80,17 +84,13 @@ export class PoPageChangePasswordComponent
     saveButton: string;
   } = poPageChangePasswordLiterals[poLocaleDefault];
 
-  private newPasswordSubscription: Subscription;
-  private componentRef: ComponentRef<any> = null;
-
   modalAction: PoModalAction = {
     action: this.navigateTo.bind(this, this.urlHome),
     label: this.literals.enterSystemButton
   };
 
-  @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;
-  @ViewChild('pageChangePassword', { read: ViewContainerRef, static: true }) pageChangePassword: ViewContainerRef;
-  @ViewChild('passwordForm', { read: NgForm, static: true }) passwordForm: NgForm;
+  private newPasswordSubscription: Subscription;
+  private componentRef: ComponentRef<any> = null;
 
   constructor(
     private activatedRoute: ActivatedRoute,

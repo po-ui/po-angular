@@ -10,10 +10,9 @@ const Padding: number = 24;
 /* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
 export abstract class PoChartDynamicTypeComponent {
-  protected windowResizeListener: () => void;
-  protected windowScrollListener: () => void;
-  // eslint-disable-next-line
-  protected _series: Array<PoChartGaugeSerie> = [];
+  @ViewChild('chartBody', { static: true }) chartBody: ElementRef;
+
+  @ViewChild('svgContainer', { static: true }) svgContainer: ElementRef;
 
   centerX: number;
   chartElementCategory: any;
@@ -35,9 +34,10 @@ export abstract class PoChartDynamicTypeComponent {
   totalValue: number;
   type: PoChartType;
 
-  @ViewChild('chartBody', { static: true }) chartBody: ElementRef;
-
-  @ViewChild('svgContainer', { static: true }) svgContainer: ElementRef;
+  protected windowResizeListener: () => void;
+  protected windowScrollListener: () => void;
+  // eslint-disable-next-line
+  protected _series: Array<PoChartGaugeSerie> = [];
 
   get isChartGaugeType(): boolean {
     return this.type === PoChartType.Gauge;

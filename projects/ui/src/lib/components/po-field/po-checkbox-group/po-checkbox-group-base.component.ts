@@ -42,19 +42,6 @@ const poCheckboxGroupColumnsTotalLength: number = 12;
  */
 @Directive()
 export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Validator {
-  checkboxGroupOptionsView: Array<PoCheckboxGroupOptionView>;
-  checkedOptions: any = {};
-  checkedOptionsList: any = [];
-  mdColumns: number = poCheckboxGroupColumnsDefaultLength;
-  propagateChange: any;
-  validatorChange: any;
-
-  private _columns: number = poCheckboxGroupColumnsDefaultLength;
-  private _disabled?: boolean = false;
-  private _indeterminate?: boolean = false;
-  private _options?: Array<PoCheckboxGroupOption>;
-  private _required?: boolean = false;
-
   /**
    * @optional
    *
@@ -70,6 +57,58 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
 
   /** Nome dos checkboxes */
   @Input('name') name: string;
+
+  /** Texto de apoio do campo */
+  @Input('p-help') help?: string;
+
+  /** Label do campo */
+  @Input('p-label') label?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - O campo conter `p-required`;
+   * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o `ngModel` do componente, necessário quando não for utilizado dentro da tag form.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor do campo
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  checkboxGroupOptionsView: Array<PoCheckboxGroupOptionView>;
+  checkedOptions: any = {};
+  checkedOptionsList: any = [];
+  mdColumns: number = poCheckboxGroupColumnsDefaultLength;
+  propagateChange: any;
+  validatorChange: any;
+
+  private _columns: number = poCheckboxGroupColumnsDefaultLength;
+  private _disabled?: boolean = false;
+  private _indeterminate?: boolean = false;
+  private _options?: Array<PoCheckboxGroupOption>;
+  private _required?: boolean = false;
 
   /**
    * @optional
@@ -116,9 +155,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     return this._disabled;
   }
 
-  /** Texto de apoio do campo */
-  @Input('p-help') help?: string;
-
   /**
    * @optional
    *
@@ -139,24 +175,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   get indeterminate() {
     return this._indeterminate;
   }
-
-  /** Label do campo */
-  @Input('p-label') label?: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
 
   /**
    * @optional
@@ -193,24 +211,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   get required() {
     return this._required;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função para atualizar o `ngModel` do componente, necessário quando não for utilizado dentro da tag form.
-   */
-  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao alterar valor do campo
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
   changeValue() {
     const value = this.checkIndeterminate();

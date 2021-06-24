@@ -11,14 +11,14 @@ import { PoPageBlockedUserReasonParams } from '../interfaces/po-page-blocked-use
   templateUrl: './po-page-blocked-user-reason.component.html'
 })
 export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
+  @Input('p-params') params: PoPageBlockedUserReasonParams;
+
+  @Input('p-reason') reason: PoPageBlockedUserReason;
+
   literalParams;
   literals: { title: string; firstPhrase: string; secondPhrase: string; thirdPhrase: string };
 
   private language: string;
-
-  @Input('p-params') params: PoPageBlockedUserReasonParams;
-
-  @Input('p-reason') reason: PoPageBlockedUserReason;
 
   constructor(private changeDetector: ChangeDetectorRef, languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

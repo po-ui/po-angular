@@ -23,12 +23,6 @@ const poRichTextBodyCommands = [
   templateUrl: './po-rich-text-body.component.html'
 })
 export class PoRichTextBodyComponent implements OnInit, OnDestroy {
-  private isLinkEditing: boolean;
-  private linkElement: any;
-  private timeoutChange: any;
-  private valueBeforeChange: any;
-  private modelSubscription: Subscription;
-
   @ViewChild('bodyElement', { static: true }) bodyElement: ElementRef;
 
   @Input('p-height') height?: string;
@@ -50,6 +44,12 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   @Output('p-value') value = new EventEmitter<any>();
 
   @Output('p-blur') blur = new EventEmitter<any>();
+
+  private isLinkEditing: boolean;
+  private linkElement: any;
+  private timeoutChange: any;
+  private valueBeforeChange: any;
+  private modelSubscription: Subscription;
 
   constructor(private richTextService: PoRichTextService) {}
 

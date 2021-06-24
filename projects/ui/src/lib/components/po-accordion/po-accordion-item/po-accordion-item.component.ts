@@ -38,12 +38,12 @@ import { PoAccordionService } from '../services/po-accordion.service';
   templateUrl: 'po-accordion-item.component.html'
 })
 export class PoAccordionItemComponent {
-  expanded: boolean;
-
   /** Título do item. */
   @Input('p-label') label: string;
 
   @ViewChild(TemplateRef, { static: true }) templateRef: TemplateRef<any>;
+
+  expanded: boolean;
 
   constructor(private accordionService: PoAccordionService) {}
 

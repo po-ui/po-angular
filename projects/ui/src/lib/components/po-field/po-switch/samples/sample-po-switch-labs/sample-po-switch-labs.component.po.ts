@@ -7,20 +7,6 @@ export class PoSwitchPage {
 
   private _poSwitch;
 
-  private getPoCheckBox(checkbox: string) {
-    return element(
-      by.css(`${this.sampleSwitch} [name="properties"] .po-checkbox-group-input[value="${checkbox}"]+${this.boxLabel}`)
-    );
-  }
-
-  private getPoInputLabel(labelName) {
-    return element(by.css(`${this.sampleSwitch} po-input [name="${labelName}"]`));
-  }
-
-  navigateTo() {
-    return browser.get(browser.baseUrl);
-  }
-
   get poSwitch() {
     if (!this._poSwitch) {
       this._poSwitch = element(by.css(`${this.sampleSwitch} .po-switch-container`));
@@ -54,5 +40,19 @@ export class PoSwitchPage {
 
   get poFieldOptional() {
     return element(by.css(`${this.sampleSwitch} po-switch .po-field-optional`));
+  }
+
+  navigateTo() {
+    return browser.get(browser.baseUrl);
+  }
+
+  private getPoCheckBox(checkbox: string) {
+    return element(
+      by.css(`${this.sampleSwitch} [name="properties"] .po-checkbox-group-input[value="${checkbox}"]+${this.boxLabel}`)
+    );
+  }
+
+  private getPoInputLabel(labelName) {
+    return element(by.css(`${this.sampleSwitch} po-input [name="${labelName}"]`));
   }
 }

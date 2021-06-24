@@ -23,12 +23,6 @@ import { poModalLiterals } from './po-modal.literals';
  */
 @Directive()
 export class PoModalBaseComponent {
-  language;
-  literals;
-
-  private _hideClose?: boolean = false;
-  private _size?: string = 'md';
-
   /** Título da modal. */
   @Input('p-title') title: string;
 
@@ -41,6 +35,18 @@ export class PoModalBaseComponent {
 
   /** Deve ser definido um objeto que implementa a interface `PoModalAction` contendo a label e a função da segunda ação. */
   @Input('p-secondary-action') secondaryAction?: PoModalAction;
+
+  language;
+  literals;
+
+  // Controla se a modal fica oculto ou visível, por padrão é oculto
+  isHidden = true;
+
+  // Event emmiter para quando a modal é fechada pelo 'X'.
+  public onXClosed = new EventEmitter<boolean>();
+
+  private _hideClose?: boolean = false;
+  private _size?: string = 'md';
 
   /**
    * Define o tamanho da modal.
@@ -70,6 +76,7 @@ export class PoModalBaseComponent {
    * Define o fechamento da modal ao clicar fora da mesma.
    * Informe o valor `true` para ativar o fechamento ao clicar fora da modal.
    */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   clickOut?: boolean = false;
   @Input('p-click-out') set setClickOut(value: boolean | string) {
     this.clickOut = value === '' ? false : convertToBoolean(value);
@@ -93,12 +100,6 @@ export class PoModalBaseComponent {
   get hideClose() {
     return this._hideClose;
   }
-
-  // Controla se a modal fica oculto ou visível, por padrão é oculto
-  isHidden = true;
-
-  // Event emmiter para quando a modal é fechada pelo 'X'.
-  public onXClosed = new EventEmitter<boolean>();
 
   constructor(poLanguageService: PoLanguageService) {
     this.language = poLanguageService.getShortLanguage();

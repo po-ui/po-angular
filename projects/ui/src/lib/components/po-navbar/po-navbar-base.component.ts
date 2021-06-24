@@ -37,6 +37,39 @@ export const poNavbarLiteralsDefault = {
  */
 @Directive()
 export abstract class PoNavbarBaseComponent {
+  /**
+   * @deprecated 6.x.x
+   *
+   * @optional
+   *
+   * @description
+   * **Depreciado 6.x.x**
+   *
+   * Caso já possua um menu na aplicação o mesmo deve ser repassado para essa propriedade para que quando entre em modo
+   * responsivo os items do `po-navbar` possam ser adicionados no primeiro item do menu definido.
+   *
+   * > Ao utilizar menu e navbar com logo mantém apenas a logo do navbar.
+   *
+   * Exemplo:
+   *
+   * ```
+   * <po-navbar
+   *  [p-items]="items"
+   *  [p-icon-actions]="iconActions"
+   *  [p-menu]="userMenu">
+   * </po-navbar>
+   * <div class="po-wrapper">
+   *  <po-menu #userMenu
+   *   [p-menus]="[{ label: 'Item 1', link: '/' }]">
+   *  </po-menu>
+   * </div>
+   * ```
+   */
+  @Input('p-menu') menu?: PoMenuComponent;
+
+  // Menu que esta sendo exibido na pagina corrente.
+  applicationMenu: PoMenuComponent;
+
   private _iconActions: Array<PoNavbarIconAction> = [];
   private _items: Array<PoNavbarItem> = [];
   private _literals: PoNavbarLiterals;
@@ -44,9 +77,6 @@ export abstract class PoNavbarBaseComponent {
   private _menu: PoMenuComponent;
   private _shadow: boolean = false;
   private language: string = poLocaleDefault;
-
-  // Menu que esta sendo exibido na pagina corrente.
-  applicationMenu: PoMenuComponent;
 
   /**
    * @optional
@@ -136,36 +166,6 @@ export abstract class PoNavbarBaseComponent {
   get logo() {
     return this._logo;
   }
-
-  /**
-   * @deprecated 6.x.x
-   *
-   * @optional
-   *
-   * @description
-   * **Depreciado 6.x.x**
-   *
-   * Caso já possua um menu na aplicação o mesmo deve ser repassado para essa propriedade para que quando entre em modo
-   * responsivo os items do `po-navbar` possam ser adicionados no primeiro item do menu definido.
-   *
-   * > Ao utilizar menu e navbar com logo mantém apenas a logo do navbar.
-   *
-   * Exemplo:
-   *
-   * ```
-   * <po-navbar
-   *  [p-items]="items"
-   *  [p-icon-actions]="iconActions"
-   *  [p-menu]="userMenu">
-   * </po-navbar>
-   * <div class="po-wrapper">
-   *  <po-menu #userMenu
-   *   [p-menus]="[{ label: 'Item 1', link: '/' }]">
-   *  </po-menu>
-   * </div>
-   * ```
-   */
-  @Input('p-menu') menu?: PoMenuComponent;
 
   /**
    * @optional

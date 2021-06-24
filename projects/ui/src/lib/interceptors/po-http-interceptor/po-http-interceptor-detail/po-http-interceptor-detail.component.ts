@@ -25,15 +25,16 @@ export class PoHttpInterceptorDetailComponent {
 
   closed = new EventEmitter<any>();
   details: Array<PoHttpInterceptorDetail> = [];
+  title: string;
+
   private language = this.languageService.getShortLanguage();
   private literals = poHttpInterceptorDetailLiteralsDefault[this.language];
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   primaryAction: PoModalAction = {
     action: () => this.close(),
     label: this.literals.closeButton
   };
-
-  title: string;
 
   constructor(private languageService: PoLanguageService) {}
 

@@ -33,18 +33,20 @@ const poPopupDefaultPosition = 'bottom-left';
  */
 @Directive()
 export class PoPopupBaseComponent {
+  arrowDirection: string = 'top-right';
+  showPopup: boolean = false;
+
+  protected oldTarget;
+  protected param;
+  protected clickoutListener: () => void;
+  protected resizeListener: () => void;
+
   private _actions: Array<PoPopupAction>;
   private _customPositions?: Array<string>;
   private _hideArrow: boolean = false;
   private _isCornerAlign: boolean = false;
   private _position?: string = poPopupDefaultPosition;
   private _target: any;
-
-  arrowDirection: string = 'top-right';
-  showPopup: boolean = false;
-
-  protected oldTarget;
-  protected param;
 
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoPopupAction>) {
@@ -194,7 +196,4 @@ export class PoPopupBaseComponent {
   get target() {
     return this._target;
   }
-
-  protected clickoutListener: () => void;
-  protected resizeListener: () => void;
 }

@@ -7,6 +7,18 @@ export class PoDialogPage {
 
   private _poButtonDialog;
 
+  getRadioAlert() {
+    return this.getPoRadio('alert');
+  }
+
+  getRadioConfirm() {
+    return this.getPoRadio('confirm');
+  }
+
+  navigateTo() {
+    return browser.get(browser.baseUrl);
+  }
+
   private getPoInput(inputName: string) {
     return element(by.css(`${this.sampleDialog} po-input input[name="${inputName}"]`));
   }
@@ -25,10 +37,6 @@ export class PoDialogPage {
 
   private getModalButton(buttonLabel: string) {
     return element(by.cssContainingText(`.po-modal po-button button`, `${buttonLabel}`));
-  }
-
-  navigateTo() {
-    return browser.get(browser.baseUrl);
   }
 
   get poButtonDialog() {
@@ -53,14 +61,6 @@ export class PoDialogPage {
 
   get inputMensage() {
     return this.getPoInput('mensage');
-  }
-
-  getRadioAlert() {
-    return this.getPoRadio('alert');
-  }
-
-  getRadioConfirm() {
-    return this.getPoRadio('confirm');
   }
 
   get poModal() {

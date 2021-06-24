@@ -16,6 +16,8 @@ import { SamplePoListViewHiringProcessesService } from './sample-po-list-view-hi
   providers: [SamplePoListViewHiringProcessesService]
 })
 export class SamplePoListViewHiringProcessesComponent implements OnInit {
+  @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;
+
   hiringProcesses: Array<any>;
   hiringProcessesFiltered: Array<object>;
   labelFilter: string = '';
@@ -58,8 +60,6 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
     action: this.hiringProcessesFilter.bind(this),
     placeholder: 'Search'
   };
-
-  @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;
 
   constructor(
     private poNotification: PoNotificationService,

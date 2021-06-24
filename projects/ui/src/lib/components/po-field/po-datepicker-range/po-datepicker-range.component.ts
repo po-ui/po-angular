@@ -75,13 +75,6 @@ const providers = [
   providers
 })
 export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent implements AfterViewInit, OnInit {
-  isCalendarVisible = false;
-
-  private clickListener;
-  private eventResizeListener;
-  private poDatepickerRangeElement: ElementRef<any>;
-  private poMaskObject: PoMask;
-
   @ViewChild('dateRangeField', { read: ElementRef, static: true }) dateRangeField: ElementRef;
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;
@@ -89,6 +82,13 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
   @ViewChild('iconCalendar', { read: ElementRef, static: true }) iconCalendar: ElementRef;
 
   @ViewChild('calendarPicker', { read: ElementRef }) calendarPicker: ElementRef;
+
+  isCalendarVisible = false;
+
+  private clickListener;
+  private eventResizeListener;
+  private poDatepickerRangeElement: ElementRef<any>;
+  private poMaskObject: PoMask;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -129,6 +129,18 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     return this.startDateInput.nativeElement.value;
   }
 
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private controlPosition: PoControlPositionService,
+    private renderer: Renderer2,
+    poDateService: PoDateService,
+    poDatepickerRangeElement: ElementRef,
+    poLanguageService: PoLanguageService
+  ) {
+    super(poDateService, poLanguageService);
+    this.poDatepickerRangeElement = poDatepickerRangeElement;
+  }
+
   static getKeyCode(event: KeyboardEvent) {
     return event.keyCode || event.which;
   }
@@ -142,18 +154,6 @@ export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent i
     const isNumericNumpadKey = keyCode >= 96 && keyCode <= 105;
 
     return isNumericKey || isNumericNumpadKey;
-  }
-
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    private controlPosition: PoControlPositionService,
-    private renderer: Renderer2,
-    poDateService: PoDateService,
-    poDatepickerRangeElement: ElementRef,
-    poLanguageService: PoLanguageService
-  ) {
-    super(poDateService, poLanguageService);
-    this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
 
   ngAfterViewInit() {

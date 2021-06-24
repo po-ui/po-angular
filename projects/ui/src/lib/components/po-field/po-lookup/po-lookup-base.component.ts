@@ -44,28 +44,6 @@ import { finalize } from 'rxjs/operators';
 @Directive()
 export abstract class PoLookupBaseComponent
   implements ControlValueAccessor, OnDestroy, OnInit, Validator, AfterViewInit {
-  private _disabled?: boolean = false;
-  private _fieldLabel: string;
-  private _filterService: PoLookupFilter | string;
-  private _noAutocomplete: boolean;
-  private _placeholder: string = '';
-  private _required?: boolean = false;
-
-  protected getSubscription: Subscription;
-  protected keysDescription: Array<any>;
-  protected oldValue: string = '';
-  protected valueToModel;
-  protected oldValueToModel = null;
-
-  private onChangePropagate: any = null;
-  // eslint-disable-next-line
-  protected onTouched: any = null;
-  private validatorChange: any;
-
-  private control!: AbstractControl;
-
-  service: any;
-
   /**
    * @optional
    *
@@ -214,6 +192,95 @@ export abstract class PoLookupBaseComponent
   @Input('p-columns') columns?: Array<PoLookupColumn>;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - O campo conter `p-required`;
+   * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /**
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Lista de objetos dos campos que serão criados na busca avançada.
+   *
+   * > Caso não seja passado um objeto ou então ele esteja em branco o link de busca avançada ficará escondido.
+   *
+   * Exemplo de URL com busca avançada:
+   *
+   * ```
+   * url + ?page=1&pageSize=20&name=Tony%20Stark&nickname=Homem%20de%20Ferro
+   * ```
+   *
+   * Caso algum parâmetro seja uma lista, a concatenação é feita utilizando vírgula.
+   * Exemplo:
+   *
+   * ```
+   * url + ?page=1&pageSize=20&name=Tony%20Stark,Peter%20Parker,Gohan
+   * ```
+   *
+   */
+  @Input('p-advanced-filters') advancedFilters: Array<PoLookupAdvancedFilter>;
+
+  /**
+   * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
+   * Será passado por parâmetro o objeto de erro retornado.
+   */
+  @Output('p-error') onError: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento será disparado quando ocorrer alguma seleção.
+   * Será passado por parâmetro o objeto com o valor selecionado.
+   */
+  @Output('p-selected') selected: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   *  Evento que será disparado ao alterar o model.
+   *  Por parâmetro será passado o novo valor.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  service: any;
+
+  protected getSubscription: Subscription;
+  protected keysDescription: Array<any>;
+  protected oldValue: string = '';
+  protected valueToModel;
+  protected oldValueToModel = null;
+  // eslint-disable-next-line
+  protected onTouched: any = null;
+
+  private _disabled?: boolean = false;
+  private _fieldLabel: string;
+  private _filterService: PoLookupFilter | string;
+  private _noAutocomplete: boolean;
+  private _placeholder: string = '';
+  private _required?: boolean = false;
+
+  private onChangePropagate: any = null;
+  private validatorChange: any;
+
+  private control!: AbstractControl;
+
+  /**
    * Serviço responsável por buscar os dados da tabela na janela. Pode ser informado um serviço que implemente a interface
    * `PoLookupFilter` ou uma URL.
    *
@@ -283,21 +350,6 @@ export abstract class PoLookupBaseComponent
 
   /**
    * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
-
-  /**
-   * @optional
    * @description
    *
    * Indica que o campo será obrigatório. Esta propriedade é desconsiderada quando o campo está desabilitado (p-disabled).
@@ -330,58 +382,6 @@ export abstract class PoLookupBaseComponent
     return this._disabled;
   }
 
-  /**
-   *
-   * @optional
-   *
-   * @description
-   *
-   * Lista de objetos dos campos que serão criados na busca avançada.
-   *
-   * > Caso não seja passado um objeto ou então ele esteja em branco o link de busca avançada ficará escondido.
-   *
-   * Exemplo de URL com busca avançada:
-   *
-   * ```
-   * url + ?page=1&pageSize=20&name=Tony%20Stark&nickname=Homem%20de%20Ferro
-   * ```
-   *
-   * Caso algum parâmetro seja uma lista, a concatenação é feita utilizando vírgula.
-   * Exemplo:
-   *
-   * ```
-   * url + ?page=1&pageSize=20&name=Tony%20Stark,Peter%20Parker,Gohan
-   * ```
-   *
-   */
-  @Input('p-advanced-filters') advancedFilters: Array<PoLookupAdvancedFilter>;
-
-  /**
-   * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
-   * Será passado por parâmetro o objeto de erro retornado.
-   */
-  @Output('p-error') onError: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento será disparado quando ocorrer alguma seleção.
-   * Será passado por parâmetro o objeto com o valor selecionado.
-   */
-  @Output('p-selected') selected: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   *  Evento que será disparado ao alterar o model.
-   *  Por parâmetro será passado o novo valor.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
-
   constructor(private defaultService: PoLookupFilterService, @Inject(Injector) private injector: Injector) {}
 
   ngOnDestroy() {
@@ -396,24 +396,6 @@ export abstract class PoLookupBaseComponent
 
   ngAfterViewInit(): void {
     this.setControl();
-  }
-
-  private setControl() {
-    const ngControl: NgControl = this.injector.get(NgControl, null, InjectFlags.Self);
-
-    if (ngControl) {
-      this.control = ngControl.control as FormControl;
-    }
-  }
-
-  private initializeColumn(): void {
-    if (this.fieldLabel) {
-      this.keysDescription = [this.fieldLabel];
-    } else {
-      this.keysDescription = [];
-
-      this.keysDescription = this.columns.filter(element => element.fieldLabel).map(element => element.property);
-    }
   }
 
   // Função implementada do ControlValueAccessor
@@ -533,12 +515,6 @@ export abstract class PoLookupBaseComponent
     }
   }
 
-  // Atribui um ou mais valores ao campo.
-  abstract setViewValue(value: any, object: any): void;
-
-  // Método com a implementação para abrir o lookup.
-  abstract openLookup(): void;
-
   protected cleanModel() {
     this.cleanViewValue();
     this.callOnChange(undefined);
@@ -579,4 +555,28 @@ export abstract class PoLookupBaseComponent
       this.service.setUrl(service);
     }
   }
+
+  private setControl() {
+    const ngControl: NgControl = this.injector.get(NgControl, null, InjectFlags.Self);
+
+    if (ngControl) {
+      this.control = ngControl.control as FormControl;
+    }
+  }
+
+  private initializeColumn(): void {
+    if (this.fieldLabel) {
+      this.keysDescription = [this.fieldLabel];
+    } else {
+      this.keysDescription = [];
+
+      this.keysDescription = this.columns.filter(element => element.fieldLabel).map(element => element.property);
+    }
+  }
+
+  // Atribui um ou mais valores ao campo.
+  abstract setViewValue(value: any, object: any): void;
+
+  // Método com a implementação para abrir o lookup.
+  abstract openLookup(): void;
 }

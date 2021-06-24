@@ -53,6 +53,14 @@ import { PoChartMathsService } from './services/po-chart-maths.service';
   templateUrl: './po-chart.component.html'
 })
 export class PoChartComponent extends PoChartBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
+  @ViewChild('chartContainer', { read: ViewContainerRef, static: true }) chartContainer: ViewContainerRef;
+
+  @ViewChild('chartHeader', { static: true }) chartHeader: ElementRef;
+
+  @ViewChild('chartLegend', { read: ElementRef }) chartLegend: ElementRef;
+
+  @ViewChild('chartWrapper', { static: true }) chartWrapper: ElementRef;
+
   private calculatedComponentRefElement: boolean = false;
   private calculatedSvgContainerElement: boolean = false;
   private componentRef: ComponentRef<{}>;
@@ -63,14 +71,6 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   private mappings = {
     [PoChartType.Gauge]: PoChartGaugeComponent
   };
-
-  @ViewChild('chartContainer', { read: ViewContainerRef, static: true }) chartContainer: ViewContainerRef;
-
-  @ViewChild('chartHeader', { static: true }) chartHeader: ElementRef;
-
-  @ViewChild('chartLegend', { read: ElementRef }) chartLegend: ElementRef;
-
-  @ViewChild('chartWrapper', { static: true }) chartWrapper: ElementRef;
 
   constructor(
     protected colorService: PoColorService,

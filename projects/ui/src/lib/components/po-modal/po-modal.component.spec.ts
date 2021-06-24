@@ -26,8 +26,8 @@ import { PoModalComponent } from './po-modal.component';
   `
 })
 class ContentProjectionComponent {
-  primaryAction: PoModalAction = { label: 'action', action: () => {} };
   @ViewChild(PoModalComponent, { static: true }) poModal;
+  primaryAction: PoModalAction = { label: 'action', action: () => {} };
   teste;
   userName;
   openModal() {

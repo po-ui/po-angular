@@ -8,6 +8,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
   templateUrl: './sample-po-login-confirm.component.html'
 })
 export class SamplePoLoginConfirmComponent {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   userLogin: string;
   userPassword: string;
 
@@ -17,8 +19,6 @@ export class SamplePoLoginConfirmComponent {
       this.confirmAction();
     }
   };
-
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor(private poNotification: PoNotificationService) {}
 

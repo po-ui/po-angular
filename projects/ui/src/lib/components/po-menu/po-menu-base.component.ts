@@ -34,16 +34,6 @@ export const poMenuLiteralsDefault = {
  */
 @Directive()
 export abstract class PoMenuBaseComponent {
-  private _collapsed = false;
-  private _filter = false;
-  private _level;
-  private _logo: string;
-  private _maxLevel = 4;
-  private _menus = [];
-  private _params: any;
-  private _service: string | PoMenuFilter;
-  private _shortLogo: string;
-
   allowIcons: boolean;
   allowCollapseMenu: boolean;
 
@@ -54,6 +44,16 @@ export abstract class PoMenuBaseComponent {
     ...poMenuLiteralsDefault[this.languageService.getLanguageDefault()],
     ...poMenuLiteralsDefault[this.languageService.getShortLanguage()]
   };
+
+  private _collapsed = false;
+  private _filter = false;
+  private _level;
+  private _logo: string;
+  private _maxLevel = 4;
+  private _menus = [];
+  private _params: any;
+  private _service: string | PoMenuFilter;
+  private _shortLogo: string;
 
   /**
    * @optional
@@ -237,19 +237,6 @@ export abstract class PoMenuBaseComponent {
     public languageService: PoLanguageService
   ) {}
 
-  private configService(service: string | PoMenuFilter) {
-    if (typeof service === 'string' && service.trim()) {
-      // service url
-      this.menuService.configProperties(service);
-      this.filterService = this.menuService;
-    } else if (typeof service === 'object' && service.getFilteredData) {
-      // custom service
-      this.filterService = service;
-    } else {
-      this.filterService = undefined;
-    }
-  }
-
   protected setMenuExtraProperties() {
     this.allowIcons = !!this.menus.length;
     this.allowCollapseMenu = !!this.menus.length;
@@ -289,6 +276,19 @@ export abstract class PoMenuBaseComponent {
       return 'externalLink';
     }
     return 'internalLink';
+  }
+
+  private configService(service: string | PoMenuFilter) {
+    if (typeof service === 'string' && service.trim()) {
+      // service url
+      this.menuService.configProperties(service);
+      this.filterService = this.menuService;
+    } else if (typeof service === 'object' && service.getFilteredData) {
+      // custom service
+      this.filterService = service;
+    } else {
+      this.filterService = undefined;
+    }
   }
 
   private processSubItems(menu) {

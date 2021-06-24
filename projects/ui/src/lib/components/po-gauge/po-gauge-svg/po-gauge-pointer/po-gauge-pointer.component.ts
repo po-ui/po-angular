@@ -6,9 +6,11 @@ import { PoGaugeCoordinates } from '../../interfaces/po-gauge-coordinates.interf
   templateUrl: './po-gauge-pointer.component.svg'
 })
 export class PoGaugePointerComponent implements AfterViewInit {
-  private _coordinates: PoGaugeCoordinates;
+  @ViewChild('pointer') pointer: ElementRef;
 
   radiusScale: number;
+
+  private _coordinates: PoGaugeCoordinates;
 
   private afterViewInit = false;
 
@@ -27,8 +29,6 @@ export class PoGaugePointerComponent implements AfterViewInit {
   get coordinates() {
     return this._coordinates;
   }
-
-  @ViewChild('pointer') pointer: ElementRef;
 
   constructor(private renderer: Renderer2) {}
 

@@ -48,10 +48,15 @@ export const poAdvancedFiltersLiteralsDefault = {
 export class PoAdvancedFilterBaseComponent {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  private _filters: Array<PoDynamicFormField> = [];
-  private _literals: PoAdvancedFilterLiterals;
+  /**
+   * Mantém na modal de busca avançada os valores preenchidos do último filtro realizado pelo usuário.
+   */
+  @InputBoolean()
+  @Input('p-keep-filters')
+  keepFilters: boolean = false;
 
-  protected optionsServiceChosenOptions: Array<PoComboOption> = [];
+  /** Função que será disparada e receberá os valores do formulário ao ser clicado no botão buscar. */
+  @Output('p-search-event') searchEvent = new EventEmitter<any>();
 
   filter = {};
   language: string = poLocaleDefault;
@@ -73,6 +78,11 @@ export class PoAdvancedFilterBaseComponent {
     label: this.literals.cancelLabel
   };
 
+  protected optionsServiceChosenOptions: Array<PoComboOption> = [];
+
+  private _filters: Array<PoDynamicFormField> = [];
+  private _literals: PoAdvancedFilterLiterals;
+
   /**
    * Coleção de objetos que implementam a interface PoPageDynamicSearchFilters, para definição dos campos que serão criados
    * dinamicamente.
@@ -84,13 +94,6 @@ export class PoAdvancedFilterBaseComponent {
   get filters(): Array<PoPageDynamicSearchFilters> {
     return this._filters;
   }
-
-  /**
-   * Mantém na modal de busca avançada os valores preenchidos do último filtro realizado pelo usuário.
-   */
-  @InputBoolean()
-  @Input('p-keep-filters')
-  keepFilters: boolean = false;
 
   /** Objeto com as literais usadas no `po-advanced-filter`. */
   @Input('p-literals') set literals(value: PoAdvancedFilterLiterals) {
@@ -111,9 +114,6 @@ export class PoAdvancedFilterBaseComponent {
   get literals() {
     return this._literals || poAdvancedFiltersLiteralsDefault[this.language];
   }
-
-  /** Função que será disparada e receberá os valores do formulário ao ser clicado no botão buscar. */
-  @Output('p-search-event') searchEvent = new EventEmitter<any>();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

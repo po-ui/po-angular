@@ -36,6 +36,9 @@ export const poToasterLiteralsDefault = {
   templateUrl: './po-toaster.component.html'
 })
 export class PoToasterComponent extends PoToasterBaseComponent {
+  /* Componente toaster */
+  @ViewChild('toaster') toaster: ElementRef;
+
   private literals = {
     ...poToasterLiteralsDefault[poLocaleDefault]
   };
@@ -52,9 +55,6 @@ export class PoToasterComponent extends PoToasterBaseComponent {
   private toasterPosition: string = 'po-toaster-bottom';
   /* Tipo do Toaster */
   private toasterType: string;
-
-  /* Componente toaster */
-  @ViewChild('toaster') toaster: ElementRef;
 
   constructor(
     languageService: PoLanguageService,

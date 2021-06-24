@@ -13,16 +13,6 @@ import { PoPageJobSchedulerService } from '../po-page-job-scheduler.service';
   templateUrl: 'po-page-job-scheduler-execution.component.html'
 })
 export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewInit {
-  private _value: any = {};
-
-  dayPattern = '^(3[0-1]|[0-2][0-9]|[1-9]|0[1-9])$';
-  existProcessAPI = true;
-  minDateFirstExecution = new Date();
-  periodicityOptions: Array<PoRadioGroupOption> = [];
-  periodicityTemplates: { daily: TemplateRef<any>; weekly: TemplateRef<any>; monthly: TemplateRef<any> };
-  timePattern = '^(2[0-3]|[01][0-9]):?([0-5][0-9])$';
-  weekDays: Array<PoCheckboxGroupOption> = [];
-
   @ViewChild('formExecution', { static: true }) form: NgForm;
 
   // templates
@@ -34,6 +24,18 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
 
   @Input('p-literals') literals = <any>{};
 
+  @Output('p-change-process') changeProcess: EventEmitter<any> = new EventEmitter<any>();
+
+  dayPattern = '^(3[0-1]|[0-2][0-9]|[1-9]|0[1-9])$';
+  existProcessAPI = true;
+  minDateFirstExecution = new Date();
+  periodicityOptions: Array<PoRadioGroupOption> = [];
+  periodicityTemplates: { daily: TemplateRef<any>; weekly: TemplateRef<any>; monthly: TemplateRef<any> };
+  timePattern = '^(2[0-3]|[01][0-9]):?([0-5][0-9])$';
+  weekDays: Array<PoCheckboxGroupOption> = [];
+
+  private _value: any = {};
+
   @Input('p-value') set value(value: any) {
     this._value = value && isTypeof(value, 'object') ? value : {};
   }
@@ -41,8 +43,6 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
   get value() {
     return this._value;
   }
-
-  @Output('p-change-process') changeProcess: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
     private poPageJobSchedulerService: PoPageJobSchedulerService,

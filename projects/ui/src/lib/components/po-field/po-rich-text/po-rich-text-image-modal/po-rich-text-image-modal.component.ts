@@ -16,6 +16,14 @@ const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.
   templateUrl: './po-rich-text-image-modal.component.html'
 })
 export class PoRichTextImageModalComponent {
+  @ViewChild('modal', { static: true }) modal: PoModalComponent;
+
+  @ViewChild('modalImageForm') modalImageForm: NgForm;
+
+  @ViewChild('upload', { static: true }) upload: PoUploadComponent;
+
+  @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();
+
   savedCursorPosition;
   selection = document.getSelection();
   uploadModel: Array<any>;
@@ -51,14 +59,6 @@ export class PoRichTextImageModalComponent {
   get isUrlValid(): boolean {
     return !!this.urlImage && this.modalImageForm && this.modalImageForm.valid;
   }
-
-  @ViewChild('modal', { static: true }) modal: PoModalComponent;
-
-  @ViewChild('modalImageForm') modalImageForm: NgForm;
-
-  @ViewChild('upload', { static: true }) upload: PoUploadComponent;
-
-  @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();
 
   constructor(private languageService: PoLanguageService) {}
 

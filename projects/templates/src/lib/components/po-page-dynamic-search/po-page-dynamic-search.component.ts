@@ -43,6 +43,8 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
   templateUrl: './po-page-dynamic-search.component.html'
 })
 export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit, OnDestroy {
+  @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
+
   private loadSubscription: Subscription;
 
   private readonly _disclaimerGroup: PoDisclaimerGroup = {
@@ -58,8 +60,6 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     placeholder: this.literals.searchPlaceholder,
     width: this.quickSearchWidth
   };
-
-  @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
 
   constructor(
     languageService: PoLanguageService,

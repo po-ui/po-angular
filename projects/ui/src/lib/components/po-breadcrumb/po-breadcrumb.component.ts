@@ -32,6 +32,9 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
   templateUrl: './po-breadcrumb.component.html'
 })
 export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
+  @ViewChild('breadcrumb', { read: ElementRef, static: true }) breadcrumbElement: ElementRef;
+  @ViewChild('dropdownIcon', { read: ElementRef }) dropdownIcon: ElementRef;
+
   showDropdown: boolean = false;
   showDropdownToggle: boolean = false;
   dropdownItems: Array<PoBreadcrumbItem>;
@@ -42,9 +45,6 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
   private hiddenWithoutResize = false;
   private initialized = false;
   private timeoutResize;
-
-  @ViewChild('breadcrumb', { read: ElementRef, static: true }) breadcrumbElement: ElementRef;
-  @ViewChild('dropdownIcon', { read: ElementRef }) dropdownIcon: ElementRef;
 
   constructor(differs: IterableDiffers, private element: ElementRef, public renderer: Renderer2) {
     super();

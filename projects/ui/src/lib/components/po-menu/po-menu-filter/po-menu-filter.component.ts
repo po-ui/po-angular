@@ -21,17 +21,18 @@ export const poMenuFilterLiteralsDefault = {
   templateUrl: './po-menu-filter.component.html'
 })
 export class PoMenuFilterComponent {
-  public literals = {
-    ...poMenuFilterLiteralsDefault[this.languageService.getLanguageDefault()],
-    ...poMenuFilterLiteralsDefault[this.languageService.getShortLanguage()]
-  };
-
   @Input('p-loading') loading: boolean;
 
   // utilizado para repassar ao po-clean
   @ViewChild('inputFilter', { read: ElementRef, static: true }) inputFilterElement: ElementRef;
 
   @Output('p-filter') filter = new EventEmitter();
+
+  public literals = {
+    ...poMenuFilterLiteralsDefault[this.languageService.getLanguageDefault()],
+    ...poMenuFilterLiteralsDefault[this.languageService.getShortLanguage()]
+  };
+
   constructor(public languageService: PoLanguageService) {}
   filterItems(search: string) {
     this.filter.emit(search);

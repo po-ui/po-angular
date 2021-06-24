@@ -8,14 +8,14 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
   templateUrl: './sample-po-input-reactive-form.component.html'
 })
 export class SamplePoInputReactiveFormComponent {
+  @ViewChild('reactiveFormData', { static: true }) reactiveFormModal: PoModalComponent;
+
   reactiveForm: FormGroup;
 
   public readonly modalPrimaryAction: PoModalAction = {
     action: () => this.reactiveFormModal.close(),
     label: 'Close'
   };
-
-  @ViewChild('reactiveFormData', { static: true }) reactiveFormModal: PoModalComponent;
 
   constructor(private fb: FormBuilder) {
     this.createReactiveForm();

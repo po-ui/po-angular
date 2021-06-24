@@ -21,37 +21,6 @@ const poTreeViewMaxLevel = 4;
  */
 @Directive()
 export class PoTreeViewBaseComponent {
-  private _items: Array<PoTreeViewItem> = [];
-  private _selectable: boolean = false;
-
-  /**
-   * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.
-   */
-  @Input('p-items') set items(value: Array<PoTreeViewItem>) {
-    this._items = Array.isArray(value) ? this.getItemsByMaxLevel(value) : [];
-  }
-
-  get items() {
-    return this._items;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Habilita uma caixa de seleção para selecionar e/ou desmarcar um item da lista.
-   *
-   * @default false
-   */
-  @Input('p-selectable') set selectable(value: boolean) {
-    this._selectable = convertToBoolean(value);
-  }
-
-  get selectable() {
-    return this._selectable;
-  }
-
   /**
    * @optional
    *
@@ -95,6 +64,37 @@ export class PoTreeViewBaseComponent {
    * > Como parâmetro o componente envia o item que foi desmarcado.
    */
   @Output('p-unselected') unselected = new EventEmitter<PoTreeViewItem>();
+
+  private _items: Array<PoTreeViewItem> = [];
+  private _selectable: boolean = false;
+
+  /**
+   * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.
+   */
+  @Input('p-items') set items(value: Array<PoTreeViewItem>) {
+    this._items = Array.isArray(value) ? this.getItemsByMaxLevel(value) : [];
+  }
+
+  get items() {
+    return this._items;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita uma caixa de seleção para selecionar e/ou desmarcar um item da lista.
+   *
+   * @default false
+   */
+  @Input('p-selectable') set selectable(value: boolean) {
+    this._selectable = convertToBoolean(value);
+  }
+
+  get selectable() {
+    return this._selectable;
+  }
 
   protected emitExpanded(treeViewItem: PoTreeViewItem) {
     const event = treeViewItem.expanded ? 'expanded' : 'collapsed';

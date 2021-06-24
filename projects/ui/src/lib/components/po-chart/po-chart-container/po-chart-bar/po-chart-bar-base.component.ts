@@ -9,6 +9,12 @@ import { PoChartSerie } from '../../interfaces/po-chart-serie.interface';
 
 @Directive()
 export abstract class PoChartBarBaseComponent {
+  @Input('p-categories') categories: Array<string>;
+
+  @Output('p-bar-click') barClick = new EventEmitter<any>();
+
+  @Output('p-bar-hover') barHover = new EventEmitter<any>();
+
   seriesPathsCoordinates: Array<Array<PoChartBarCoordinates>>;
 
   protected seriesGreaterLength: number;
@@ -16,8 +22,6 @@ export abstract class PoChartBarBaseComponent {
   private _containerSize: PoChartContainerSize = {};
   private _range: PoChartMinMaxValues = {};
   private _series: Array<PoChartSerie> = [];
-
-  @Input('p-categories') categories: Array<string>;
 
   @Input('p-range') set range(value: PoChartMinMaxValues) {
     if (value instanceof Object && !(value instanceof Array)) {
@@ -58,10 +62,6 @@ export abstract class PoChartBarBaseComponent {
   get series() {
     return this._series;
   }
-
-  @Output('p-bar-click') barClick = new EventEmitter<any>();
-
-  @Output('p-bar-hover') barHover = new EventEmitter<any>();
 
   constructor(protected mathsService: PoChartMathsService) {}
 

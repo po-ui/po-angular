@@ -20,6 +20,8 @@ import { PoChartGaugeTextContentComponent } from './po-chart-gauge-text-content/
   templateUrl: '../po-chart-dynamic-type.component.html'
 })
 export class PoChartGaugeComponent extends PoChartCircular implements AfterViewInit {
+  @ViewChild('svgContainer', { static: true, read: ViewContainerRef }) svgContainerRef: ViewContainerRef;
+
   chartItemStartAngle: number = poChartGaugeStartAngle;
 
   protected _series: Array<PoChartGaugeSerie> = [];
@@ -31,8 +33,6 @@ export class PoChartGaugeComponent extends PoChartCircular implements AfterViewI
   get series() {
     return this._series;
   }
-
-  @ViewChild('svgContainer', { static: true, read: ViewContainerRef }) svgContainerRef: ViewContainerRef;
 
   /* istanbul ignore next */
   constructor(

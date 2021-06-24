@@ -21,8 +21,6 @@ import { Subscription } from 'rxjs';
  */
 @Directive()
 export class PoPageJobSchedulerBaseComponent implements OnDestroy {
-  private _subscription = new Subscription();
-
   /** Objeto com as propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
 
@@ -160,6 +158,8 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
   @Input('p-title') title: string;
 
   model: PoJobSchedulerInternal = new PoPageJobSchedulerInternal();
+
+  private _subscription = new Subscription();
 
   constructor(protected poPageJobSchedulerService: PoPageJobSchedulerService) {}
 

@@ -20,10 +20,12 @@ import { poLocales } from '../../../../services/po-language/po-language.constant
   providers: [PoCalendarService, PoCalendarLangService]
 })
 export class PoCalendarComponent {
-  private _dateEnd: Date;
-  private _dateStart: Date;
-  private _locale: string = this.languageService.getShortLanguage();
-  private _selectedDate?: Date;
+  @ViewChild('days', { read: ElementRef, static: true }) elDays: ElementRef;
+  @ViewChild('months', { read: ElementRef, static: true }) elMonths: ElementRef;
+  @ViewChild('years', { read: ElementRef, static: true }) elYears: ElementRef;
+
+  @Output('p-selected-dateChange') selectedDateChange = new EventEmitter<Date>();
+  @Output('p-submit') submit = new EventEmitter<Date>();
 
   currentYear: number;
   dayVisible: boolean = false;
@@ -41,15 +43,15 @@ export class PoCalendarComponent {
   visible: boolean = false;
   yearVisible: boolean = false;
 
+  private _dateEnd: Date;
+  private _dateStart: Date;
+  private _locale: string = this.languageService.getShortLanguage();
+  private _selectedDate?: Date;
   private currentMonthNumber: number;
   private isMobile: any = isMobile;
   private lastDisplay: string;
   private today: Date = new Date();
   private shortLanguage: string;
-
-  @ViewChild('days', { read: ElementRef, static: true }) elDays: ElementRef;
-  @ViewChild('months', { read: ElementRef, static: true }) elMonths: ElementRef;
-  @ViewChild('years', { read: ElementRef, static: true }) elYears: ElementRef;
 
   /**
    * @optional
@@ -131,9 +133,6 @@ export class PoCalendarComponent {
   get dateStart() {
     return this._dateStart;
   }
-
-  @Output('p-selected-dateChange') selectedDateChange = new EventEmitter<Date>();
-  @Output('p-submit') submit = new EventEmitter<Date>();
 
   constructor(
     private poCalendarService: PoCalendarService,

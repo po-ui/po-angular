@@ -6,14 +6,14 @@ import { PoPageChangePasswordComponent, PoPageChangePasswordRequirement } from '
   templateUrl: './sample-po-page-change-password-create.component.html'
 })
 export class SamplePoPageChangePasswordCreateComponent {
+  @ViewChild(PoPageChangePasswordComponent, { static: true }) changePassword: PoPageChangePasswordComponent;
+
   login: boolean = false;
   requirements: Array<PoPageChangePasswordRequirement> = [
     { requirement: 'Use at least one symbol (ex. !, @, #).', status: this.validateSymbols.bind(this) },
     { requirement: 'Mix uppercase and lowercase characters.', status: this.validateCases.bind(this) },
     { requirement: 'Min of 5 characters.', status: this.validateCharacters.bind(this) }
   ];
-
-  @ViewChild(PoPageChangePasswordComponent, { static: true }) changePassword: PoPageChangePasswordComponent;
 
   checkLogin() {
     this.login = !this.login;

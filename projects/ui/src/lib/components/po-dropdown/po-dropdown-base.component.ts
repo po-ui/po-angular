@@ -38,11 +38,14 @@ import { PoDropdownAction } from './po-dropdown-action.interface';
 
 @Directive()
 export class PoDropdownBaseComponent {
-  private _actions: Array<PoDropdownAction>;
-  private _disabled: boolean = false;
+  /** Adiciona um rótulo ao `dropdown`. */
+  @Input('p-label') label: string;
 
   icon: string = 'po-icon-arrow-down';
   open: boolean = false;
+
+  private _actions: Array<PoDropdownAction>;
+  private _disabled: boolean = false;
 
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoDropdownAction>) {
@@ -69,7 +72,4 @@ export class PoDropdownBaseComponent {
   get disabled(): boolean {
     return this._disabled;
   }
-
-  /** Adiciona um rótulo ao `dropdown`. */
-  @Input('p-label') label: string;
 }

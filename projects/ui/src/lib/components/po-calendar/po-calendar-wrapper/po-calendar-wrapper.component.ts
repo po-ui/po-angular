@@ -21,34 +21,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoCalendarWrapperComponent implements OnInit, OnChanges {
-  private _locale: string;
-
-  currentYear: number;
-  displayDays: Array<number>;
-  displayDecade: Array<number>;
-  displayFinalDecade: number;
-  displayMonth: any;
-  displayMonthNumber: number;
-  displayMonths: Array<any> = Array();
-  displayStartDecade: number;
-  displayWeekDays: Array<any> = Array();
-  displayYear: number;
-
-  protected currentMonthNumber: number;
-  protected date: Date;
-  protected lastDisplay: string;
-  protected today: Date = new Date();
-
   @Input('p-value') value;
-
-  @Input('p-locale') set locale(value: string) {
-    this._locale = value;
-    this.initializeLanguage();
-  }
-
-  get locale() {
-    return this._locale;
-  }
 
   @Input('p-mode') mode: 'day' | 'month' | 'year' = 'day';
 
@@ -69,6 +42,33 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Output('p-header-change') headerChange = new EventEmitter<any>();
 
   @Output('p-select-date') selectDate = new EventEmitter<any>();
+
+  currentYear: number;
+  displayDays: Array<number>;
+  displayDecade: Array<number>;
+  displayFinalDecade: number;
+  displayMonth: any;
+  displayMonthNumber: number;
+  displayMonths: Array<any> = Array();
+  displayStartDecade: number;
+  displayWeekDays: Array<any> = Array();
+  displayYear: number;
+
+  protected currentMonthNumber: number;
+  protected date: Date;
+  protected lastDisplay: string;
+  protected today: Date = new Date();
+
+  private _locale: string;
+
+  @Input('p-locale') set locale(value: string) {
+    this._locale = value;
+    this.initializeLanguage();
+  }
+
+  get locale() {
+    return this._locale;
+  }
 
   get monthLabel() {
     return this.poCalendarLangService.getMonthLabel();

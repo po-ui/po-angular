@@ -66,23 +66,6 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  */
 @Directive()
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, Validator {
-  private _format?: string = poDatepickerFormatDefault;
-  private _isoFormat: PoDatepickerIsoFormat;
-  private _maxDate: Date;
-  private _minDate: Date;
-  private _noAutocomplete?: boolean = false;
-  private _placeholder?: string = '';
-  private shortLanguage: string;
-  private previousValue: any;
-  protected date: Date;
-  protected firstStart = true;
-  protected hour: string = 'T00:00:01-00:00';
-  protected isExtendedISO: boolean = false;
-  protected objMask: any;
-  protected onChangeModel: any = null;
-  protected validatorChange: any;
-  protected onTouchedModel: any = null;
-
   /**
    * @optional
    *
@@ -98,6 +81,64 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   /* Nome do componente datepicker. */
   @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - O campo conter `p-required`;
+   * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /**
+   * Mensagem apresentada quando a data for inválida ou fora do período.
+   *
+   * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja obrigatório.
+   */
+  @Input('p-error-pattern') errorPattern?: string = '';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao sair do campo.
+   */
+  @Output('p-blur') onblur: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor do campo.
+   */
+  @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
+
+  protected date: Date;
+  protected firstStart = true;
+  protected hour: string = 'T00:00:01-00:00';
+  protected isExtendedISO: boolean = false;
+  protected objMask: any;
+  protected onChangeModel: any = null;
+  protected validatorChange: any;
+  protected onTouchedModel: any = null;
+
+  private _format?: string = poDatepickerFormatDefault;
+  private _isoFormat: PoDatepickerIsoFormat;
+  private _maxDate: Date;
+  private _minDate: Date;
+  private _noAutocomplete?: boolean = false;
+  private _placeholder?: string = '';
+  private shortLanguage: string;
+  private previousValue: any;
 
   /**
    * @optional
@@ -131,22 +172,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     return this._placeholder;
   }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
-
   /** Desabilita o campo. */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   disabled?: boolean = false;
   @Input('p-disabled') set setDisabled(disabled: string) {
     this.disabled = disabled === '' ? true : convertToBoolean(disabled);
@@ -155,12 +182,14 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   }
 
   /** Torna o elemento somente leitura. */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly?: boolean = false;
   @Input('p-readonly') set setReadonly(readonly: string) {
     this.readonly = readonly === '' ? true : convertToBoolean(readonly);
   }
 
   /** Faz com que o campo seja obrigatório. */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   required?: boolean = false;
   @Input('p-required') set setRequired(required: string) {
     this.required = required === '' ? true : convertToBoolean(required);
@@ -169,17 +198,11 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   }
 
   /** Habilita ação para limpar o campo. */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   clean?: boolean = false;
   @Input('p-clean') set setClean(clean: string) {
     this.clean = clean === '' ? true : convertToBoolean(clean);
   }
-
-  /**
-   * Mensagem apresentada quando a data for inválida ou fora do período.
-   *
-   * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja obrigatório.
-   */
-  @Input('p-error-pattern') errorPattern?: string = '';
 
   /**
    * @optional
@@ -294,6 +317,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * > O locale padrão sera recuperado com base no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   _locale?: string;
   @Input('p-locale') set locale(value: string) {
     if (value) {
@@ -306,31 +330,9 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     return this._locale || this.shortLanguage;
   }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao sair do campo.
-   */
-  @Output('p-blur') onblur: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao alterar valor do campo.
-   */
-  @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
-
   constructor(private languageService: PoLanguageService) {
     this.shortLanguage = this.languageService.getShortLanguage();
   }
-
-  abstract writeValue(value: any): void;
-
-  abstract refreshValue(value: Date): void;
 
   ngOnInit() {
     // Classe de máscara
@@ -405,23 +407,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.validatorChange = fn;
   }
 
-  protected validateModel(model: any) {
-    if (this.validatorChange) {
-      this.validatorChange(model);
-    }
-  }
-
-  // Retorna um objeto do tipo PoMask com a mascara configurada.
-  protected buildMask() {
-    let mask = this.format.toUpperCase();
-
-    mask = mask.replace(/DD/g, '99');
-    mask = mask.replace(/MM/g, '99');
-    mask = mask.replace(/YYYY/g, '9999');
-
-    return new PoMask(mask, true);
-  }
-
   validate(c: AbstractControl): { [key: string]: any } {
     // Verifica se já possui algum error pattern padrão.
     this.errorPattern =
@@ -457,4 +442,25 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
     return null;
   }
+
+  protected validateModel(model: any) {
+    if (this.validatorChange) {
+      this.validatorChange(model);
+    }
+  }
+
+  // Retorna um objeto do tipo PoMask com a mascara configurada.
+  protected buildMask() {
+    let mask = this.format.toUpperCase();
+
+    mask = mask.replace(/DD/g, '99');
+    mask = mask.replace(/MM/g, '99');
+    mask = mask.replace(/YYYY/g, '9999');
+
+    return new PoMask(mask, true);
+  }
+
+  abstract writeValue(value: any): void;
+
+  abstract refreshValue(value: Date): void;
 }

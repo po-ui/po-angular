@@ -17,6 +17,63 @@ import { convertToBoolean, isTypeof } from '../../utils/util';
  */
 @Directive()
 export abstract class PoWidgetBaseComponent {
+  /** Descrição da segunda ação. */
+  @Input('p-secondary-label') secondaryLabel?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será executada quando o usuário clicar sobre a área total do `po-widget`.
+   */
+  @Output('p-click') click: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será disparada com o valor do `p-disabled` quando esta propriedade for alterada.
+   */
+  @Output('p-on-disabled') onDisabled: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será chamada na primeira ação.
+   */
+  @Output('p-primary-action') primaryAction: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será chamada na segunda ação.
+   */
+  @Output('p-secondary-action') secondaryAction: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Função chamada ao clicar no ícone de configuração
+   */
+  @Output('p-setting') setting: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Função que será chamada ao clicar no título.
+   */
+  @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
+
+  containerHeight?: string = 'auto';
+
   private _background?: string;
   private _disabled?: boolean = false;
   private _height?: number;
@@ -25,8 +82,6 @@ export abstract class PoWidgetBaseComponent {
   private _primary?: boolean = false;
   private _primaryLabel?: string;
   private _title?: string;
-
-  containerHeight?: string = 'auto';
 
   /**
    * @optional
@@ -153,9 +208,6 @@ export abstract class PoWidgetBaseComponent {
     return this._primaryLabel;
   }
 
-  /** Descrição da segunda ação. */
-  @Input('p-secondary-label') secondaryLabel?: string;
-
   /**
    * @optional
    *
@@ -173,58 +225,6 @@ export abstract class PoWidgetBaseComponent {
   get title(): string {
     return this._title;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ação que será executada quando o usuário clicar sobre a área total do `po-widget`.
-   */
-  @Output('p-click') click: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função que será disparada com o valor do `p-disabled` quando esta propriedade for alterada.
-   */
-  @Output('p-on-disabled') onDisabled: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função que será chamada na primeira ação.
-   */
-  @Output('p-primary-action') primaryAction: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função que será chamada na segunda ação.
-   */
-  @Output('p-secondary-action') secondaryAction: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   * Função chamada ao clicar no ícone de configuração
-   */
-  @Output('p-setting') setting: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   * Função que será chamada ao clicar no título.
-   */
-  @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
 
   abstract setHeight(height: number);
 }

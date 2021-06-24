@@ -4,6 +4,22 @@ import { poLocales, poLocaleDefault } from '../../../../services/po-language/po-
 
 @Injectable()
 export class PoCalendarLangService {
+  wordMonth = {
+    pt: 'Mês',
+    en: 'Month',
+    es: 'Mes',
+    ru: 'Месяц'
+  };
+
+  wordYear = {
+    pt: 'Ano',
+    en: 'Year',
+    es: 'Año',
+    ru: 'Год'
+  };
+
+  lang = 'pt';
+
   private months = [
     {
       pt: 'Janeiro',
@@ -123,22 +139,6 @@ export class PoCalendarLangService {
       ru: 'Сб'
     }
   ];
-
-  wordMonth = {
-    pt: 'Mês',
-    en: 'Month',
-    es: 'Mes',
-    ru: 'Месяц'
-  };
-
-  wordYear = {
-    pt: 'Ano',
-    en: 'Year',
-    es: 'Año',
-    ru: 'Год'
-  };
-
-  lang = 'pt';
 
   constructor() {}
 

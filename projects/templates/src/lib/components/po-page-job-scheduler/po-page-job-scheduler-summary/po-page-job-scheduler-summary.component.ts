@@ -10,17 +10,17 @@ import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.
   templateUrl: 'po-page-job-scheduler-summary.component.html'
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {
-  executionValue = '';
-  firstExecutionValue = '';
-  infoOrientation = PoInfoOrientation.Horizontal;
-  periodicityValue = '';
-  recurrentValue = '';
-
   @Input('p-literals') literals = <any>{};
 
   @Input('p-parameters') parameters: Array<PoDynamicViewField> = [];
 
   @Input('p-value') value: PoJobSchedulerInternal = <any>{};
+
+  executionValue = '';
+  firstExecutionValue = '';
+  infoOrientation = PoInfoOrientation.Horizontal;
+  periodicityValue = '';
+  recurrentValue = '';
 
   constructor(private datePipe: DatePipe) {}
 

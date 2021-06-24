@@ -17,13 +17,6 @@ import { InputBoolean } from '../../../decorators';
  */
 @Directive()
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
-  checkboxValue: boolean | null;
-  id = uuid();
-  propagateChange: any;
-  onTouched;
-
-  private _disabled?: boolean = false;
-
   /** Define o nome do *checkbox*. */
   @Input('name') name: string;
 
@@ -39,6 +32,25 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    * @default `false`
    */
   @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+
+  /** Texto de exibição do *checkbox*. */
+  @Input('p-label') label?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado quando o valor do *checkbox* for alterado.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  checkboxValue: boolean | null;
+  id = uuid();
+  propagateChange: any;
+  onTouched;
+
+  private _disabled?: boolean = false;
 
   /**
    * @optional
@@ -56,18 +68,6 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   get disabled(): boolean {
     return this._disabled;
   }
-
-  /** Texto de exibição do *checkbox*. */
-  @Input('p-label') label?: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado quando o valor do *checkbox* for alterado.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
   changeValue() {
     if (this.propagateChange) {

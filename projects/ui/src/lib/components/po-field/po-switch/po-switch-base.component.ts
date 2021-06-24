@@ -21,12 +21,6 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  */
 @Directive()
 export class PoSwitchBaseComponent implements ControlValueAccessor {
-  private _disabled?: boolean = false;
-
-  propagateChange: any;
-  onTouched;
-  switchValue: boolean = false;
-
   /** Nome do componente. */
   @Input('name') name: string;
 
@@ -50,10 +44,35 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
   @Input('p-help') help?: string;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor do campo.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
+
+  propagateChange: any;
+  onTouched;
+  switchValue: boolean = false;
+
+  private _disabled?: boolean = false;
+
+  /**
    * Texto exibido quando o valor do componente for `true`.
    *
    * @default `true`
    */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   labelOn?: string = 'true';
   @Input('p-label-on') set setLabelOn(label: string) {
     this.labelOn = label || 'true';
@@ -64,6 +83,7 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
    *
    * @default `false`
    */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   labelOff?: string = 'false';
   @Input('p-label-off') set setLabelOff(label: string) {
     this.labelOff = label || 'false';
@@ -78,6 +98,7 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
    *
    * > Por padrão exibe à direita.
    */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   labelPosition?: PoSwitchLabelPosition = PoSwitchLabelPosition.Right;
   @Input('p-label-position') set setLabelPosition(position: PoSwitchLabelPosition) {
     this.labelPosition = position in PoSwitchLabelPosition ? parseInt(<any>position, 10) : PoSwitchLabelPosition.Right;
@@ -99,24 +120,6 @@ export class PoSwitchBaseComponent implements ControlValueAccessor {
   get disabled() {
     return this._disabled;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao alterar valor do campo.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
-   */
-  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 

@@ -50,6 +50,38 @@ export const poListViewLiteralsDefault = {
  */
 @Directive()
 export class PoListViewBaseComponent {
+  /** Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será usado como link para o título. */
+  @Input('p-property-link') propertyLink?: string;
+
+  /** Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será exibido como o título de cada item. */
+  @Input('p-property-title') propertyTitle?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Recebe uma ação, que será executada quando clicar no botão "Carregar mais resultados".
+   *
+   * > Caso nenhuma ação for definida o mesmo não ficará visível.
+   */
+  @Output('p-show-more') showMore: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será executada ao clicar no título.
+   *
+   * Ao ser disparado, o método inserido na ação irá receber como parâmetro o item da lista clicado.
+   */
+  @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
+
+  popupTarget: any;
+  selectAll: boolean = false;
+  showHeader: boolean = false;
+
   private _actions: Array<PoListViewAction>;
   private _height: number;
   private _hideSelectAll: boolean;
@@ -58,10 +90,6 @@ export class PoListViewBaseComponent {
   private _select: boolean;
   private _showMoreDisabled: boolean;
   private language: string = poLocaleDefault;
-
-  popupTarget: any;
-  selectAll: boolean = false;
-  showHeader: boolean = false;
 
   /**
    * @optional
@@ -171,12 +199,6 @@ export class PoListViewBaseComponent {
     return this._literals || poListViewLiteralsDefault[this.language];
   }
 
-  /** Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será usado como link para o título. */
-  @Input('p-property-link') propertyLink?: string;
-
-  /** Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será exibido como o título de cada item. */
-  @Input('p-property-title') propertyTitle?: string;
-
   /**
    * @optional
    *
@@ -218,28 +240,6 @@ export class PoListViewBaseComponent {
   get showMoreDisabled(): boolean {
     return this._showMoreDisabled;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Recebe uma ação, que será executada quando clicar no botão "Carregar mais resultados".
-   *
-   * > Caso nenhuma ação for definida o mesmo não ficará visível.
-   */
-  @Output('p-show-more') showMore: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ação que será executada ao clicar no título.
-   *
-   * Ao ser disparado, o método inserido na ação irá receber como parâmetro o item da lista clicado.
-   */
-  @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -34,10 +34,10 @@ import { PoAccordionService } from './services/po-accordion.service';
   providers: [PoAccordionService]
 })
 export class PoAccordionComponent extends PoAccordionBaseComponent implements OnDestroy {
+  @ContentChildren(PoAccordionItemComponent) poAccordionItems: QueryList<PoAccordionItemComponent>;
+
   private accordionServiceSubscription: Subscription;
   private expandedActiveAccordionItem: PoAccordionItemComponent;
-
-  @ContentChildren(PoAccordionItemComponent) poAccordionItems: QueryList<PoAccordionItemComponent>;
 
   constructor(private accordionService: PoAccordionService) {
     super();

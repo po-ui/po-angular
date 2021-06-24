@@ -22,11 +22,6 @@ const PO_BUTTON_TYPE_DEFAULT = 'default';
  */
 @Directive()
 export class PoButtonBaseComponent {
-  private _disabled?: boolean = false;
-  private _loading?: boolean = false;
-  private _small?: boolean = false;
-  private _type?: string = 'default';
-
   /**
    * @optional
    *
@@ -53,25 +48,6 @@ export class PoButtonBaseComponent {
    * @optional
    *
    * @description
-   *
-   * Exibe um ícone de carregamento à esquerda do _label_ do botão.
-   *
-   * > Quando esta propriedade estiver habilitada, desabilitará o botão.
-   *
-   * @default `false`
-   */
-  @Input('p-loading') set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
-  }
-
-  get loading(): boolean {
-    return this._loading;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
    * Ícone exibido ao lado esquerdo do label do botão.
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
@@ -93,6 +69,33 @@ export class PoButtonBaseComponent {
    * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
    */
   @Input('p-icon') icon?: string | TemplateRef<void>;
+
+  /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
+  @Output('p-click') click = new EventEmitter<null>();
+
+  private _disabled?: boolean = false;
+  private _loading?: boolean = false;
+  private _small?: boolean = false;
+  private _type?: string = 'default';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe um ícone de carregamento à esquerda do _label_ do botão.
+   *
+   * > Quando esta propriedade estiver habilitada, desabilitará o botão.
+   *
+   * @default `false`
+   */
+  @Input('p-loading') set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
 
   /**
    * @optional
@@ -147,7 +150,4 @@ export class PoButtonBaseComponent {
   get disabled(): boolean {
     return this._disabled;
   }
-
-  /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
-  @Output('p-click') click = new EventEmitter<null>();
 }

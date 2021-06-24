@@ -16,8 +16,19 @@ const poRichTextDefaultColor = '#000000';
   templateUrl: './po-rich-text-toolbar.component.html'
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
-  private _readonly: boolean;
-  private selectedLinkElement;
+  @ViewChild('colorPickerInput', { read: ElementRef }) colorPickerInput: ElementRef;
+
+  @ViewChild('toolbarElement', { static: true }) toolbarElement: ElementRef;
+
+  @ViewChild(PoRichTextImageModalComponent, { static: true }) richTextImageModal: PoRichTextImageModalComponent;
+
+  @ViewChild(PoRichTextLinkModalComponent, { static: true }) richTextLinkModal: PoRichTextLinkModalComponent;
+
+  @Output('p-command') command = new EventEmitter<string | { command: string; value: string }>();
+
+  @Output('p-modal') modal = new EventEmitter<any>();
+
+  @Output('p-link-editing') linkEditing = new EventEmitter<any>();
 
   readonly literals = {
     ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
@@ -98,13 +109,8 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     }
   ];
 
-  @ViewChild('colorPickerInput', { read: ElementRef }) colorPickerInput: ElementRef;
-
-  @ViewChild('toolbarElement', { static: true }) toolbarElement: ElementRef;
-
-  @ViewChild(PoRichTextImageModalComponent, { static: true }) richTextImageModal: PoRichTextImageModalComponent;
-
-  @ViewChild(PoRichTextLinkModalComponent, { static: true }) richTextLinkModal: PoRichTextLinkModalComponent;
+  private _readonly: boolean;
+  private selectedLinkElement;
 
   @Input('p-readonly') set readonly(value: boolean) {
     this._readonly = value;
@@ -114,12 +120,6 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   get readonly() {
     return this._readonly;
   }
-
-  @Output('p-command') command = new EventEmitter<string | { command: string; value: string }>();
-
-  @Output('p-modal') modal = new EventEmitter<any>();
-
-  @Output('p-link-editing') linkEditing = new EventEmitter<any>();
 
   get isInternetExplorer() {
     return isIE();
@@ -160,6 +160,10 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.richTextLinkModal.openModal(this.selectedLinkElement);
   }
 
+  emitCommand(command: string) {
+    this.command.emit(command);
+  }
+
   private emitAlignCommand(command: string) {
     const index = this.alignButtons.findIndex(btn => btn.command === command);
 
@@ -167,10 +171,6 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
       this.alignButtons[index].selected = false;
     }
 
-    this.command.emit(command);
-  }
-
-  emitCommand(command: string) {
     this.command.emit(command);
   }
 

@@ -8,6 +8,8 @@ import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationServi
   templateUrl: './sample-po-datepicker-range-vacations-reactive-form.component.html'
 })
 export class SamplePoDatepickerRangeVacationsReactiveFormComponent implements OnInit {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   datepickerRange: PoDatepickerRange;
   formVacationSuggestion: FormGroup;
   quantityOfDays: number;
@@ -36,8 +38,6 @@ export class SamplePoDatepickerRangeVacationsReactiveFormComponent implements On
       this.formVacationSuggestion.get('datepickerRange').value.end
     );
   }
-
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor(private poNotification: PoNotificationService, private formBuilder: FormBuilder) {}
 

@@ -22,13 +22,6 @@ import { PoSelectOption } from './po-select-option.interface';
  */
 @Directive()
 export abstract class PoSelectBaseComponent implements ControlValueAccessor, Validator {
-  private _disabled?: boolean = false;
-  private _options: Array<PoSelectOption>;
-  private _readonly: boolean = false;
-  private _required?: boolean = false;
-
-  private onValidatorChange;
-
   /**
    * @optional
    *
@@ -70,6 +63,38 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
   @Input('p-optional') optional: boolean;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser informada uma função que será disparada quando houver alterações no ngModel.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
+
+  changeDetector: ChangeDetectorRef;
+  onModelChange: any;
+  onModelTouched: any;
+  readyToValidation: boolean = false;
+
+  protected clickoutListener: () => void;
+
+  private _disabled?: boolean = false;
+  private _options: Array<PoSelectOption>;
+  private _readonly: boolean = false;
+  private _required?: boolean = false;
+
+  private onValidatorChange;
+
+  /**
    * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`.
    *
    * Caso esta lista estiver vazia, o model será `undefined`.
@@ -95,24 +120,6 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
   get options() {
     return this._options;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Deve ser informada uma função que será disparada quando houver alterações no ngModel.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
-   */
-  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @optional
@@ -167,13 +174,6 @@ export abstract class PoSelectBaseComponent implements ControlValueAccessor, Val
   get required() {
     return this._required;
   }
-
-  changeDetector: ChangeDetectorRef;
-  onModelChange: any;
-  onModelTouched: any;
-  readyToValidation: boolean = false;
-
-  protected clickoutListener: () => void;
 
   constructor(public element: ElementRef, changeDetector: ChangeDetectorRef) {
     this.element = element;

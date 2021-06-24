@@ -32,16 +32,47 @@ const poChartMinHeight = 200;
  */
 @Directive()
 export abstract class PoChartBaseComponent implements OnChanges {
-  private _options: PoChartOptions;
-  private _categories: Array<string>;
-  private _height: number;
-  private _series: Array<PoChartSerie> | PoChartGaugeSerie;
-  private _type: PoChartType;
+  /** Define o título do gráfico. */
+  @Input('p-title') title?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento executado quando o usuário clicar sobre um elemento do gráfico.
+   *
+   * O evento emitirá o seguinte parâmetro:
+   * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
+   * - *area*, *line*, *column* e *bar*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
+   */
+  @Output('p-series-click')
+  seriesClick = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento executado quando o usuário passar o *mouse* sobre um elemento do gráfico.
+   *
+   * O evento emitirá o seguinte parâmetro de acordo com o tipo de gráfico:
+   * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
+   * - *area*, *line*, *column* e *bar*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
+   */
+  @Output('p-series-hover')
+  seriesHover = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();
 
   // manipulação das séries tratadas internamente para preservar 'p-series';
   chartSeries: Array<PoChartSerie | PoChartGaugeSerie> = [];
   chartType: PoChartType;
   svgContainerSize: PoChartContainerSize;
+
+  private _options: PoChartOptions;
+  private _categories: Array<string>;
+  private _height: number;
+  private _series: Array<PoChartSerie> | PoChartGaugeSerie;
+  private _type: PoChartType;
 
   private defaultType: PoChartType;
 
@@ -145,9 +176,6 @@ export abstract class PoChartBaseComponent implements OnChanges {
     return this._categories;
   }
 
-  /** Define o título do gráfico. */
-  @Input('p-title') title?: string;
-
   /**
    * @optional
    *
@@ -182,34 +210,6 @@ export abstract class PoChartBaseComponent implements OnChanges {
   get options() {
     return this._options;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento executado quando o usuário clicar sobre um elemento do gráfico.
-   *
-   * O evento emitirá o seguinte parâmetro:
-   * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
-   * - *area*, *line*, *column* e *bar*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
-   */
-  @Output('p-series-click')
-  seriesClick = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento executado quando o usuário passar o *mouse* sobre um elemento do gráfico.
-   *
-   * O evento emitirá o seguinte parâmetro de acordo com o tipo de gráfico:
-   * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
-   * - *area*, *line*, *column* e *bar*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
-   */
-  @Output('p-series-hover')
-  seriesHover = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();
 
   constructor(protected colorService: PoColorService) {}
 
@@ -285,8 +285,9 @@ export abstract class PoChartBaseComponent implements OnChanges {
     });
   }
 
+  abstract rebuildComponentRef(): void;
+
   // válido para gráficos do tipo circular e que será refatorado.
   protected abstract getSvgContainerSize(): void;
   protected abstract calculateAxisXLabelArea(): number;
-  abstract rebuildComponentRef(): void;
 }

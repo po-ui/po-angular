@@ -24,17 +24,6 @@ const poRadioGroupColumnsTotalLength: number = 12;
  */
 @Directive()
 export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor, Validator {
-  private _columns: number = poRadioGroupColumnsDefaultLength;
-  private _disabled?: boolean = false;
-  private _options: Array<PoRadioGroupOption>;
-  private _required?: boolean = false;
-
-  mdColumns: number = poRadioGroupColumnsDefaultLength;
-  value: any;
-
-  private onChangePropagate: any = null;
-  private validatorChange;
-
   /**
    * @optional
    *
@@ -50,6 +39,41 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
 
   /** Nome das opções. */
   @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - O campo conter `p-required`;
+   * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento ao alterar valor do campo.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  mdColumns: number = poRadioGroupColumnsDefaultLength;
+  value: any;
+
+  private _columns: number = poRadioGroupColumnsDefaultLength;
+  private _disabled?: boolean = false;
+  private _options: Array<PoRadioGroupOption>;
+  private _required?: boolean = false;
+
+  private onChangePropagate: any = null;
+  private validatorChange;
 
   /**
    * @optional
@@ -127,33 +151,6 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     return this._options;
   }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento ao alterar valor do campo.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
-
-  // Deve retornar o valor elemento que contém o valor passado por parâmetro
-  abstract getElementByValue(value: any): any;
-
   // Função que controla quando deve ser emitido onChange e atualiza o Model
   changeValue(changedValue: any) {
     if (this.onChangePropagate) {
@@ -221,4 +218,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
       this.validatorChange();
     }
   }
+
+  // Deve retornar o valor elemento que contém o valor passado por parâmetro
+  abstract getElementByValue(value: any): any;
 }

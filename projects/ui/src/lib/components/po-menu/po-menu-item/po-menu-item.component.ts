@@ -22,16 +22,6 @@ const poMenuItemSubItemSize = 98;
   templateUrl: './po-menu-item.component.html'
 })
 export class PoMenuItemComponent implements OnDestroy, OnInit {
-  private _badgeValue: number;
-  private _isSelected: boolean = false;
-  private _isSubItem: boolean = false;
-  private _subItems: Array<PoMenuItem>;
-
-  isSelectedSubItem;
-  maxHeight: number = 0;
-
-  private itemSubscription: Subscription;
-
   // Ação que será chamada ao clicar no item.
   @Input('p-action') action: Function;
 
@@ -40,15 +30,6 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
 
   // Cor do badge.
   @Input('p-badge-color') badgeColor: string;
-
-  // Valor do badge.
-  @Input('p-badge-value') set badgeValue(badgeValue: number) {
-    this._badgeValue = convertToInt(badgeValue);
-  }
-
-  get badgeValue() {
-    return this._badgeValue;
-  }
 
   // Indica se o menu está colapsado
   @Input('p-collapsed-menu') collapsedMenu: boolean;
@@ -61,6 +42,41 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
 
   // Indica se o item está aberto (menu agrupado)
   @Input('p-is-opened') isOpened: boolean;
+
+  // Texto que aparecerá representando o item.
+  @Input('p-label') label: string;
+
+  // Indica qual em nível do po-menu encontra-se.
+  @Input('p-level') level: number;
+
+  // Link do item.
+  @Input('p-link') link?: string;
+
+  // Texto que aparecerá representando o item.
+  @Input('p-short-label') shortLabel: string;
+
+  // Indica o tipo de item, como 'internalLink' ou 'subItems'.
+  @Input('p-type') type: string;
+
+  @ViewChild('menuSubItems') menuSubItems: ElementRef;
+
+  isSelectedSubItem;
+  maxHeight: number = 0;
+
+  private itemSubscription: Subscription;
+  private _badgeValue: number;
+  private _isSelected: boolean = false;
+  private _isSubItem: boolean = false;
+  private _subItems: Array<PoMenuItem>;
+
+  // Valor do badge.
+  @Input('p-badge-value') set badgeValue(badgeValue: number) {
+    this._badgeValue = convertToInt(badgeValue);
+  }
+
+  get badgeValue() {
+    return this._badgeValue;
+  }
 
   // Indica se o item está selecionado.
   @Input('p-is-selected') set isSelected(value: boolean) {
@@ -81,18 +97,6 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
     return this._isSubItem;
   }
 
-  // Texto que aparecerá representando o item.
-  @Input('p-label') label: string;
-
-  // Indica qual em nível do po-menu encontra-se.
-  @Input('p-level') level: number;
-
-  // Link do item.
-  @Input('p-link') link?: string;
-
-  // Texto que aparecerá representando o item.
-  @Input('p-short-label') shortLabel: string;
-
   // Lista de sub-items.
   @Input('p-sub-items') set subItems(subitems: Array<PoMenuItem>) {
     this._subItems = subitems;
@@ -104,11 +108,6 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
   get subItems() {
     return this._subItems;
   }
-
-  // Indica o tipo de item, como 'internalLink' ou 'subItems'.
-  @Input('p-type') type: string;
-
-  @ViewChild('menuSubItems') menuSubItems: ElementRef;
 
   get canShowBadge() {
     return this.type !== 'subItems' && (this.badgeValue || this.badgeValue === 0) && this.badgeValue >= 0;

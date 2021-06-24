@@ -91,50 +91,6 @@ export const poLookupLiteralsDefault = {
  */
 @Directive()
 export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
-  private _literals: PoLookupLiterals;
-  private _title: string;
-  private language: string = poLocaleDefault;
-
-  hasNext = true;
-  isLoading = false;
-  page = 1;
-  pageSize = 10;
-  primaryAction: PoModalAction = {
-    action: () => {
-      this.items.forEach(element => {
-        if (element['$selected']) {
-          this.model.emit(element);
-          this.poModal.close();
-        }
-      });
-    },
-    label: this.literals.modalPrimaryActionLabel
-  };
-  searchValue: string = '';
-  secondaryAction: PoModalAction = {
-    action: () => {
-      this.model.emit(null);
-      this.poModal.close();
-    },
-    label: this.literals.modalSecondaryActionLabel
-  };
-  tableLiterals: any;
-
-  // Propriedade da modal de busca avançada:
-  advancedFilterModalTitle = '';
-  dynamicFormValue = {};
-  disclaimer!: PoDisclaimer;
-  disclaimerGroup!: PoDisclaimerGroup;
-  isAdvancedFilter = false;
-  primaryActionAdvancedFilter!: PoModalAction;
-  secondaryActionAdvancedFilter!: PoModalAction;
-
-  protected sort: PoTableColumnSort;
-
-  private filterSubscription: Subscription;
-  private searchSubscription: Subscription;
-  private showMoreSubscription: Subscription;
-
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   /**
@@ -158,6 +114,63 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   /** Lista de itens da tabela. */
   @Input('p-items') items: Array<any>;
+
+  /** Classe de serviço com a implementação do cliente. */
+  @Input('p-filter-service') filterService: PoLookupFilter;
+
+  /** Classe de serviço com a implementação do cliente. */
+  @Input('p-filter-params') filterParams: any;
+
+  /** Evento utilizado ao selecionar um registro da tabela. */
+  @Output('p-change-model') model: EventEmitter<any> = new EventEmitter<any>();
+
+  hasNext = true;
+  isLoading = false;
+  page = 1;
+  pageSize = 10;
+  searchValue: string = '';
+  tableLiterals: any;
+
+  // Propriedade da modal de busca avançada:
+  advancedFilterModalTitle = '';
+  dynamicFormValue = {};
+  disclaimer!: PoDisclaimer;
+  disclaimerGroup!: PoDisclaimerGroup;
+  isAdvancedFilter = false;
+  primaryActionAdvancedFilter!: PoModalAction;
+  secondaryActionAdvancedFilter!: PoModalAction;
+
+  protected sort: PoTableColumnSort;
+
+  private filterSubscription: Subscription;
+  private searchSubscription: Subscription;
+  private showMoreSubscription: Subscription;
+
+  private _literals: PoLookupLiterals;
+  private _title: string;
+  private language: string = poLocaleDefault;
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  primaryAction: PoModalAction = {
+    action: () => {
+      this.items.forEach(element => {
+        if (element['$selected']) {
+          this.model.emit(element);
+          this.poModal.close();
+        }
+      });
+    },
+    label: this.literals.modalPrimaryActionLabel
+  };
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  secondaryAction: PoModalAction = {
+    action: () => {
+      this.model.emit(null);
+      this.poModal.close();
+    },
+    label: this.literals.modalSecondaryActionLabel
+  };
 
   /** Objeto com as literais usadas no `po-lookup-modal`. */
   @Input('p-literals') set literals(value: PoLookupLiterals) {
@@ -191,15 +204,6 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     return this._title;
   }
 
-  /** Classe de serviço com a implementação do cliente. */
-  @Input('p-filter-service') filterService: PoLookupFilter;
-
-  /** Classe de serviço com a implementação do cliente. */
-  @Input('p-filter-params') filterParams: any;
-
-  /** Evento utilizado ao selecionar um registro da tabela. */
-  @Output('p-change-model') model: EventEmitter<any> = new EventEmitter<any>();
-
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
@@ -222,32 +226,6 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     this.setAdvancedFilterModalProperties();
     this.initializeData();
     this.setTableLiterals();
-  }
-
-  private setAdvancedFilterModalProperties() {
-    this.advancedFilterModalTitle = this.literals.modalAdvancedSearchTitle;
-
-    this.disclaimerGroup = {
-      title: this.literals.modalDisclaimerGroupTitle,
-      disclaimers: []
-    };
-
-    this.primaryActionAdvancedFilter = {
-      action: () => {
-        this.destroyDynamicForm();
-        this.isAdvancedFilter = false;
-        this.createDisclaimer();
-      },
-      label: this.literals.modalAdvancedSearchPrimaryActionLabel
-    };
-
-    this.secondaryActionAdvancedFilter = {
-      action: () => {
-        this.destroyDynamicForm();
-        this.isAdvancedFilter = false;
-      },
-      label: this.literals.modalAdvancedSearchSecondaryActionLabel
-    };
   }
 
   createDisclaimer() {
@@ -277,23 +255,6 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
       this.searchFilteredItems();
     }
-  }
-
-  private getAdvancedFilters(advancedParams: any) {
-    if (advancedParams && advancedParams.length > 0) {
-      const filters: Object = {};
-      let validatedAdvacendFilters: any;
-
-      advancedParams.forEach((filter: any) => {
-        filters[filter.property] = filter.value instanceof Array ? filter.value.join() : filter.value;
-
-        validatedAdvacendFilters = { ...validatedAdvacendFilters, ...filters };
-      });
-
-      return validatedAdvacendFilters;
-    }
-
-    return undefined;
   }
 
   search(): void {
@@ -345,11 +306,48 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       );
   }
 
-  // Método responsável por abrir a modal de busca das informações.
-  abstract openModal(): void;
+  private setAdvancedFilterModalProperties() {
+    this.advancedFilterModalTitle = this.literals.modalAdvancedSearchTitle;
 
-  // Método responsável por destruir o dynamicForm
-  abstract destroyDynamicForm(): void;
+    this.disclaimerGroup = {
+      title: this.literals.modalDisclaimerGroupTitle,
+      disclaimers: []
+    };
+
+    this.primaryActionAdvancedFilter = {
+      action: () => {
+        this.destroyDynamicForm();
+        this.isAdvancedFilter = false;
+        this.createDisclaimer();
+      },
+      label: this.literals.modalAdvancedSearchPrimaryActionLabel
+    };
+
+    this.secondaryActionAdvancedFilter = {
+      action: () => {
+        this.destroyDynamicForm();
+        this.isAdvancedFilter = false;
+      },
+      label: this.literals.modalAdvancedSearchSecondaryActionLabel
+    };
+  }
+
+  private getAdvancedFilters(advancedParams: any) {
+    if (advancedParams && advancedParams.length > 0) {
+      const filters: Object = {};
+      let validatedAdvacendFilters: any;
+
+      advancedParams.forEach((filter: any) => {
+        filters[filter.property] = filter.value instanceof Array ? filter.value.join() : filter.value;
+
+        validatedAdvacendFilters = { ...validatedAdvacendFilters, ...filters };
+      });
+
+      return validatedAdvacendFilters;
+    }
+
+    return undefined;
+  }
 
   private getFilteredItems(filter: string): Observable<PoLookupResponseApi> {
     const filteredParams: PoLookupFilteredItemsParams = this.getFilteredParams(filter);
@@ -410,4 +408,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       'loadMoreData': this.literals.modalTableLoadMoreData
     };
   }
+
+  // Método responsável por abrir a modal de busca das informações.
+  abstract openModal(): void;
+
+  // Método responsável por destruir o dynamicForm
+  abstract destroyDynamicForm(): void;
 }

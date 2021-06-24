@@ -47,10 +47,6 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     super();
   }
 
-  ngOnInit() {
-    this.initScrollEventListenerFunction();
-  }
-
   @HostListener('mouseenter') onMouseEnter() {
     if (!this.displayTooltip) {
       this.addTooltipAction();
@@ -63,12 +59,8 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     }
   }
 
-  private addArrow(arrowDirection) {
-    this.renderer.addClass(this.divArrow, `po-arrow-${arrowDirection}`);
-  }
-
-  private addScrollEventListener() {
-    window.addEventListener('scroll', this.eventListenerFunction, true);
+  ngOnInit() {
+    this.initScrollEventListenerFunction();
   }
 
   protected addTooltipAction() {
@@ -86,6 +78,27 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
         this.lastTooltipText = this.tooltip;
       }
     });
+  }
+
+  protected removeTooltipAction() {
+    // necessita do timeout para conseguir adicionar ".po-invisible", pois quando tem alguns elementos
+    // próximos com tooltips e ficar passando o mouse em cima, os mesmos não estavam ficando invisiveis.
+    setTimeout(() => {
+      if (this.appendInBody && this.tooltipContent) {
+        this.renderer.removeChild(document.body, this.tooltipContent);
+        this.tooltipContent = undefined;
+      } else {
+        this.hideTooltip();
+      }
+    });
+  }
+
+  private addArrow(arrowDirection) {
+    this.renderer.addClass(this.divArrow, `po-arrow-${arrowDirection}`);
+  }
+
+  private addScrollEventListener() {
+    window.addEventListener('scroll', this.eventListenerFunction, true);
   }
 
   // Monta a estrutura do tooltip
@@ -140,19 +153,6 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
 
   private removeScrollEventListener() {
     window.removeEventListener('scroll', this.eventListenerFunction, true);
-  }
-
-  protected removeTooltipAction() {
-    // necessita do timeout para conseguir adicionar ".po-invisible", pois quando tem alguns elementos
-    // próximos com tooltips e ficar passando o mouse em cima, os mesmos não estavam ficando invisiveis.
-    setTimeout(() => {
-      if (this.appendInBody && this.tooltipContent) {
-        this.renderer.removeChild(document.body, this.tooltipContent);
-        this.tooltipContent = undefined;
-      } else {
-        this.hideTooltip();
-      }
-    });
   }
 
   private showTooltip() {

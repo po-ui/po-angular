@@ -9,11 +9,6 @@ import { PoUploadLiterals } from '../interfaces/po-upload-literals.interface';
   providers: [PoI18nPipe]
 })
 export class PoUploadDragDropDirective {
-  timeout: any;
-
-  private files: Array<File>;
-  private invalidFileType: number;
-
   @Input('p-area-element') areaElement: HTMLElement;
 
   @Input('p-directory-compatible') directoryCompatible: boolean;
@@ -27,6 +22,11 @@ export class PoUploadDragDropDirective {
   @Output('p-drag-over') dragOver: EventEmitter<any> = new EventEmitter<any>();
 
   @Output('p-file-change') fileChange: EventEmitter<any> = new EventEmitter<any>();
+
+  timeout: any;
+
+  private files: Array<File>;
+  private invalidFileType: number;
 
   constructor(private i18nPipe: PoI18nPipe, private notification: PoNotificationService) {}
 

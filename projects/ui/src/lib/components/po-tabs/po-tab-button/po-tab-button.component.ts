@@ -14,33 +14,8 @@ import { convertToBoolean } from '../../../utils/util';
   templateUrl: './po-tab-button.component.html'
 })
 export class PoTabButtonComponent implements OnChanges {
-  private _active: boolean;
-  private _hide: boolean;
-
-  // Ativa o botão
-  @Input('p-active') set active(value: boolean) {
-    this._active = value;
-
-    this.emitActivated();
-  }
-
-  get active() {
-    return this._active;
-  }
-
   // Desabilita o botão
   @Input('p-disabled') disabled: boolean;
-
-  // Oculta o botão
-  @Input('p-hide') set hide(value: boolean) {
-    this._hide = convertToBoolean(value);
-
-    this.setDisplayOnHide();
-  }
-
-  get hide(): boolean {
-    return this._hide;
-  }
 
   // Identificador do componente
   @Input('p-id') id: string;
@@ -59,6 +34,31 @@ export class PoTabButtonComponent implements OnChanges {
 
   // Método recebido do usuário para ser disparado quando clicar na aba
   @Output('p-click') click = new EventEmitter();
+
+  private _active: boolean;
+  private _hide: boolean;
+
+  // Ativa o botão
+  @Input('p-active') set active(value: boolean) {
+    this._active = value;
+
+    this.emitActivated();
+  }
+
+  get active() {
+    return this._active;
+  }
+
+  // Oculta o botão
+  @Input('p-hide') set hide(value: boolean) {
+    this._hide = convertToBoolean(value);
+
+    this.setDisplayOnHide();
+  }
+
+  get hide(): boolean {
+    return this._hide;
+  }
 
   constructor(private elementRef: ElementRef) {}
 

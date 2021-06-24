@@ -12,13 +12,24 @@ import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup
 
 @Directive()
 export class PoDynamicFormFieldsBaseComponent {
-  private _fields: Array<PoDynamicFormField>;
-  private _validateFields: Array<string>;
-  private _value?: any = {};
+  @Input('p-auto-focus') autoFocus?: string;
+
+  @Input('p-disabled-form') disabledForm: boolean;
+
+  @Input('p-validate') validate?: string | Function;
+
+  @Output('p-form-validate') formValidate = new EventEmitter<any>();
+
+  @Output('p-fieldsChange') fieldsChange = new EventEmitter<any>();
+
+  // Evento disparado se existir optionsService em visibleField. Necessário resgatar referência do objeto selecionado para quando se tratar de recebimento de opções via serviço.
+  @Output('p-object-value') objectValue = new EventEmitter<any>();
 
   visibleFields: Array<PoDynamicFormFieldInternal> = [];
 
-  @Input('p-auto-focus') autoFocus?: string;
+  private _fields: Array<PoDynamicFormField>;
+  private _validateFields: Array<string>;
+  private _value?: any = {};
 
   // array de objetos que implementam a interface PoDynamicFormField, que serão exibidos no componente.
   @Input('p-fields') set fields(value: Array<PoDynamicFormField>) {
@@ -29,11 +40,6 @@ export class PoDynamicFormFieldsBaseComponent {
     return this._fields;
   }
 
-  @Output('p-fieldsChange') fieldsChange = new EventEmitter<any>();
-
-  // Evento disparado se existir optionsService em visibleField. Necessário resgatar referência do objeto selecionado para quando se tratar de recebimento de opções via serviço.
-  @Output('p-object-value') objectValue = new EventEmitter<any>();
-
   // valor que será utilizado para iniciar valor no componente.
   @Input('p-value') set value(value: any) {
     this._value = value && isTypeof(value, 'object') ? value : {};
@@ -43,10 +49,6 @@ export class PoDynamicFormFieldsBaseComponent {
     return this._value;
   }
 
-  @Input('p-disabled-form') disabledForm: boolean;
-
-  @Input('p-validate') validate?: string | Function;
-
   @Input('p-validate-fields') set validateFields(value: Array<string>) {
     this._validateFields = Array.isArray(value) ? [...value] : [];
   }
@@ -54,8 +56,6 @@ export class PoDynamicFormFieldsBaseComponent {
   get validateFields() {
     return this._validateFields;
   }
-
-  @Output('p-form-validate') formValidate = new EventEmitter<any>();
 
   constructor(private titleCasePipe: TitleCasePipe) {}
 

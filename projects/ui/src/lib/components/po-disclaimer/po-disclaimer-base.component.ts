@@ -17,11 +17,6 @@ const PO_DISCLAIMER_DEFAULT_TYPE = 'default';
  */
 @Directive()
 export class PoDisclaimerBaseComponent {
-  private _type: string = 'default';
-  private _hideClose?: boolean = false;
-
-  showDisclaimer = true;
-
   /**
    * Label que aparecerá dentro do po-disclaimer.
    * Quando não for definido um label será apresentada a propriedade p-value.
@@ -33,6 +28,21 @@ export class PoDisclaimerBaseComponent {
 
   /** Nome da propriedade vinculada à este po-disclaimer. */
   @Input('p-property') property?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao fechar o disclaimer.
+   * Para este evento será passado como parâmetro um objeto com value, label e property.
+   */
+  @Output('p-close-action') closeAction: EventEmitter<any> = new EventEmitter<any>();
+
+  showDisclaimer = true;
+
+  private _type: string = 'default';
+  private _hideClose?: boolean = false;
 
   /**
    * @description
@@ -49,16 +59,6 @@ export class PoDisclaimerBaseComponent {
   get hideClose(): boolean {
     return this._hideClose;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao fechar o disclaimer.
-   * Para este evento será passado como parâmetro um objeto com value, label e property.
-   */
-  @Output('p-close-action') closeAction: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @description

@@ -15,17 +15,17 @@ export const poGaugeStartAngle = -Math.PI;
   templateUrl: './po-gauge-svg.component.html'
 })
 export class PoGaugeSvgComponent implements OnChanges {
-  addSvgElement: boolean = false;
-  baseCoordinates: PoGaugeCoordinates;
-  coordinates: Array<PoGaugeCoordinates>;
-  pointerCoordinates: PoGaugeCoordinates;
-  viewBox: string;
-
   @Input('p-container') container: PoGaugeSvgContainer;
 
   @Input('p-ranges') ranges: Array<PoGaugeRanges>;
 
   @Input('p-value') value: number;
+
+  addSvgElement: boolean = false;
+  baseCoordinates: PoGaugeCoordinates;
+  coordinates: Array<PoGaugeCoordinates>;
+  pointerCoordinates: PoGaugeCoordinates;
+  viewBox: string;
 
   get hasRanges(): boolean {
     return this.ranges.length > 0;

@@ -17,19 +17,6 @@ import { PoRichTextService } from './po-rich-text.service';
  */
 @Directive()
 export abstract class PoRichTextBaseComponent implements ControlValueAccessor, Validator {
-  private _height?: number;
-  private _placeholder: string;
-  private _readonly: boolean;
-  private _required: boolean;
-
-  invalid: boolean = false;
-  onChangeModel: any = null;
-  value: string;
-
-  private validatorChange: any;
-  // eslint-disable-next-line
-  protected onTouched: any = null;
-
   /**
    * @optional
    *
@@ -49,23 +36,6 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    * Mensagem que será apresentada quando a propriedade required estiver habilitada e o campo for limpo após algo ser digitado.
    */
   @Input('p-error-message') errorMessage?: string = '';
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define a altura da área de edição de texto.
-   *
-   * > Altura mínima do componente é `94` e a altura máxima é `262`.
-   */
-  @Input('p-height') set height(height: number) {
-    this._height = height;
-  }
-
-  get height() {
-    return this._height;
-  }
 
   /**
    * @optional
@@ -102,6 +72,54 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    * @default `false`
    */
   @Input('p-optional') optional: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao deixar o campo e que recebe como parâmetro o valor alterado.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao modificar valor do model e que recebe como parâmetro o valor alterado.
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
+
+  invalid: boolean = false;
+  onChangeModel: any = null;
+  value: string;
+
+  private _height?: number;
+  private _placeholder: string;
+  private _readonly: boolean;
+  private _required: boolean;
+
+  private validatorChange: any;
+  // eslint-disable-next-line
+  protected onTouched: any = null;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a altura da área de edição de texto.
+   *
+   * > Altura mínima do componente é `94` e a altura máxima é `262`.
+   */
+  @Input('p-height') set height(height: number) {
+    this._height = height;
+  }
+
+  get height() {
+    return this._height;
+  }
 
   /**
    * @optional
@@ -155,24 +173,6 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   get required() {
     return this._required;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao deixar o campo e que recebe como parâmetro o valor alterado.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao modificar valor do model e que recebe como parâmetro o valor alterado.
-   */
-  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
 
   constructor(private richTextService: PoRichTextService) {}
 

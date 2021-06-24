@@ -16,9 +16,6 @@ import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-mult
   templateUrl: './po-multiselect-dropdown.component.html'
 })
 export class PoMultiselectDropdownComponent {
-  scrollTop = 0;
-  show: boolean = false;
-
   /** Propriedade que indica se o campo de pesquisa deverá ser escondido. */
   @Input('p-hide-search') hideSearch?: boolean = false;
 
@@ -54,8 +51,18 @@ export class PoMultiselectDropdownComponent {
   @ViewChild('ulElement', { read: ElementRef, static: true }) ulElement: ElementRef;
   @ViewChild('searchElement') searchElement: PoMultiselectSearchComponent;
 
+  scrollTop = 0;
+  show: boolean = false;
+
   get hasOptions() {
     return !!this.options?.length;
+  }
+
+  @HostListener('keydown', ['$event'])
+  onKeydown(event: any) {
+    if (event.keyCode === 9) {
+      this.closeDropdown.emit();
+    }
   }
 
   scrollTo(index) {
@@ -87,13 +94,6 @@ export class PoMultiselectDropdownComponent {
 
   callChangeSearch(event) {
     this.changeSearch.emit(event);
-  }
-
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: any) {
-    if (event.keyCode === 9) {
-      this.closeDropdown.emit();
-    }
   }
 
   controlVisibility(toOpen) {

@@ -68,10 +68,6 @@ const PoPageBlockedUserParamsDefault: PoPageBlockedUserReasonParams = { attempts
  */
 @Directive()
 export class PoPageBlockedUserBaseComponent {
-  private _params: PoPageBlockedUserReasonParams = { ...PoPageBlockedUserParamsDefault };
-  private _reason: PoPageBlockedUserReason = PoPageBlockedUserReason.None;
-  private _urlBack: string = '/';
-
   /**
    * @optional
    *
@@ -92,6 +88,22 @@ export class PoPageBlockedUserBaseComponent {
    * > A propriedade não contem tratamento de máscara, fica a critério do desenvolvedor defini-la.
    */
   @Input('p-contact-phone') contactPhone: string;
+
+  /** Caminho para a logomarca localizada na parte superior, caso não seja definida ou seja inválida assume a logo padrão do PO UI. */
+  @Input('p-logo') logo?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Caminho para a logomarca localizada no rodapé.
+   */
+  @Input('p-secondary-logo') secondaryLogo?: string;
+
+  private _params: PoPageBlockedUserReasonParams = { ...PoPageBlockedUserParamsDefault };
+  private _reason: PoPageBlockedUserReason = PoPageBlockedUserReason.None;
+  private _urlBack: string = '/';
 
   /**
    * @optional
@@ -133,9 +145,6 @@ export class PoPageBlockedUserBaseComponent {
     return this._params;
   }
 
-  /** Caminho para a logomarca localizada na parte superior, caso não seja definida ou seja inválida assume a logo padrão do PO UI. */
-  @Input('p-logo') logo?: string;
-
   /**
    * @optional
    *
@@ -156,15 +165,6 @@ export class PoPageBlockedUserBaseComponent {
   get reason() {
     return this._reason;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Caminho para a logomarca localizada no rodapé.
-   */
-  @Input('p-secondary-logo') secondaryLogo?: string;
 
   /**
    * @optional

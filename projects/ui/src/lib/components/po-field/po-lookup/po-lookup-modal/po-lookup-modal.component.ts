@@ -72,17 +72,6 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
     this.sort = sort;
   }
 
-  private setTableHeight() {
-    if (window.innerHeight < 615) {
-      this.tableHeight -= 50;
-      this.containerHeight -= 50;
-    }
-  }
-
-  private validateEnterPressed(e: any) {
-    return e.keyCode === 13;
-  }
-
   destroyDynamicForm() {
     if (this.componentRef) {
       this.componentRef.destroy();
@@ -92,6 +81,17 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   onAdvancedFilter() {
     this.setupModalAdvancedFilter();
     this.createDynamicForm();
+  }
+
+  private setTableHeight() {
+    if (window.innerHeight < 615) {
+      this.tableHeight -= 50;
+      this.containerHeight -= 50;
+    }
+  }
+
+  private validateEnterPressed(e: any) {
+    return e.keyCode === 13;
   }
 
   private setupModalAdvancedFilter() {

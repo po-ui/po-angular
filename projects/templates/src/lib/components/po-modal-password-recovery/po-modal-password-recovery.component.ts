@@ -45,6 +45,12 @@ import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-
   templateUrl: './po-modal-password-recovery.component.html'
 })
 export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseComponent implements OnDestroy {
+  @ViewChild('emailForm') emailForm: NgForm;
+
+  @ViewChild('recoveryModal', { static: true }) recoveryModalElement: PoModalComponent;
+
+  @ViewChild('smsCodeForm') smsCodeForm: NgForm;
+
   chosenTypeFormOption: string = PoModalPasswordRecoveryType.Email;
   codeMask: string = '9 9 9 9 9 9';
   control: AbstractControl;
@@ -60,16 +66,6 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   submittedCodeValue = {} as PoModalPasswordRecovery;
   submittedContactValue = {} as PoModalPasswordRecovery;
 
-  private passwordRecoverySubscription: Subscription;
-  private smsBodyResponse;
-  private smsCodeSubscription: Subscription;
-
-  @ViewChild('emailForm') emailForm: NgForm;
-
-  @ViewChild('recoveryModal', { static: true }) recoveryModalElement: PoModalComponent;
-
-  @ViewChild('smsCodeForm') smsCodeForm: NgForm;
-
   primaryAction: PoModalAction = { label: undefined, action: () => {} };
 
   secondaryAction: PoModalAction = { label: undefined, action: () => {} };
@@ -78,6 +74,10 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
     { label: 'e-mail', value: PoModalPasswordRecoveryType.Email },
     { label: 'SMS', value: PoModalPasswordRecoveryType.SMS }
   ];
+
+  private passwordRecoverySubscription: Subscription;
+  private smsBodyResponse;
+  private smsCodeSubscription: Subscription;
 
   constructor(
     private router: Router,

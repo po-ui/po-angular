@@ -8,6 +8,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
   templateUrl: './sample-po-tooltip-new-user.component.html'
 })
 export class SamplePoTooltipNewUserComponent implements OnInit {
+  @ViewChild('formNewUser', { static: true }) formNewUser: FormControl;
+
   birthDate: Date;
   confirmPassword: string;
   CPF: string;
@@ -20,8 +22,6 @@ export class SamplePoTooltipNewUserComponent implements OnInit {
   passwordTooltip: string;
   registration: number;
   registrationTooltip: string;
-
-  @ViewChild('formNewUser', { static: true }) formNewUser: FormControl;
 
   constructor(private poNotification: PoNotificationService) {}
 

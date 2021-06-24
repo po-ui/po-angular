@@ -27,10 +27,10 @@ const PO_BADGE_COLOR_DEFAULT = 'color-07';
  */
 @Directive()
 export class PoBadgeBaseComponent {
+  badgeValue: string;
+
   private _color: string;
   private _value: number;
-
-  badgeValue: string;
 
   /**
    * @optional

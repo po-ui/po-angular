@@ -62,9 +62,23 @@ const poSlideTiming = '250ms ease';
   templateUrl: './po-slide.component.html'
 })
 export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
+  @ContentChild(PoSlideContentTemplateDirective, { static: true })
+  slideContentTemplate: PoSlideContentTemplateDirective;
+
+  @ViewChild('slide', { static: true }) private slide: ElementRef;
+
+  @ViewChildren(PoSlideItemComponent) private itemsElements: QueryList<PoSlideItemComponent>;
+
+  currentSlideIndex = 0;
+  imageHeight: number;
+  slideItems: Array<PoSlideItem | any> = [];
+  slideItemWidth: number;
+
   private isLoaded: boolean = false;
   private player: AnimationPlayer;
   private setInterval: any;
+  private resize$ = new Subject<any>();
+  private resizeSubscription: Subscription;
 
   private get hasElements() {
     return !!this.slide.nativeElement.offsetWidth && !!this.itemsElements && !!this.itemsElements.length;
@@ -81,21 +95,6 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
   get hasSlides() {
     return !!this.slides && !!this.slides.length;
   }
-
-  currentSlideIndex = 0;
-  imageHeight: number;
-  slideItems: Array<PoSlideItem | any> = [];
-  slideItemWidth: number;
-
-  private resize$ = new Subject<any>();
-  private resizeSubscription: Subscription;
-
-  @ContentChild(PoSlideContentTemplateDirective, { static: true })
-  slideContentTemplate: PoSlideContentTemplateDirective;
-
-  @ViewChild('slide', { static: true }) private slide: ElementRef;
-
-  @ViewChildren(PoSlideItemComponent) private itemsElements: QueryList<PoSlideItemComponent>;
 
   constructor(private builder: AnimationBuilder) {
     super();
@@ -218,6 +217,42 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
     this.setHeight(height);
   }
 
+  protected cancelInterval() {
+    clearInterval(this.setInterval);
+  }
+
+  protected setSlideItems(slides: Array<PoSlideItem | string | any>) {
+    if (this.hasSlides) {
+      this.slideContentTemplate ? this.createArrayForTemplate(slides) : this.createArrayFromSlides(slides);
+    } else {
+      this.slideItems = [];
+      this.cancelInterval();
+    }
+  }
+
+  protected startSlide() {
+    this.setSlideHeight(this.height);
+
+    if (this.interval > poSlideIntervalMin) {
+      this.startInterval();
+    }
+
+    this.currentSlideIndex = 0;
+  }
+
+  protected startInterval() {
+    if (this.setInterval) {
+      this.cancelInterval();
+    }
+
+    this.setInterval =
+      this.hasSlides && this.hasElements
+        ? setInterval(() => {
+            this.next();
+          }, this.interval)
+        : undefined;
+  }
+
   private animate(offset: number) {
     if (this.hasElements) {
       const animation: AnimationFactory = this.buildTransitionAnimation(offset);
@@ -267,41 +302,5 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
     if (this.hasElements) {
       this.slideItemWidth = this.itemsElements.first.itemElement.nativeElement.getBoundingClientRect().width;
     }
-  }
-
-  protected cancelInterval() {
-    clearInterval(this.setInterval);
-  }
-
-  protected setSlideItems(slides: Array<PoSlideItem | string | any>) {
-    if (this.hasSlides) {
-      this.slideContentTemplate ? this.createArrayForTemplate(slides) : this.createArrayFromSlides(slides);
-    } else {
-      this.slideItems = [];
-      this.cancelInterval();
-    }
-  }
-
-  protected startSlide() {
-    this.setSlideHeight(this.height);
-
-    if (this.interval > poSlideIntervalMin) {
-      this.startInterval();
-    }
-
-    this.currentSlideIndex = 0;
-  }
-
-  protected startInterval() {
-    if (this.setInterval) {
-      this.cancelInterval();
-    }
-
-    this.setInterval =
-      this.hasSlides && this.hasElements
-        ? setInterval(() => {
-            this.next();
-          }, this.interval)
-        : undefined;
   }
 }

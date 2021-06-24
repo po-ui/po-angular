@@ -3,16 +3,16 @@ import { browser, by, element } from 'protractor';
 export class PoSelectPage {
   private sample = 'sample-po-select';
 
+  navigateTo() {
+    return browser.get(browser.baseUrl);
+  }
+
   private getPoSelect(selectName: string) {
     return element(by.css(`${this.sample} [name=${selectName}] .po-select-button`));
   }
 
   private getPoSelectItem(selectVal: string, stateVal: number) {
     return element(by.css(`${this.sample} po-select[name=${selectVal}] .po-select-content > li[value="${stateVal}"]`));
-  }
-
-  navigateTo() {
-    return browser.get(browser.baseUrl);
   }
 
   get poSelectState() {

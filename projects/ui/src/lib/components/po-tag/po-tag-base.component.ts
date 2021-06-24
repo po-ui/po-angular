@@ -23,13 +23,34 @@ const poTagOrientationDefault = PoTagOrientation.Vertical;
  */
 @Directive()
 export class PoTagBaseComponent {
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma legenda que será exibida acima ou ao lado da *tag*, de acordo com a `p-orientation`.
+   */
+  @Input('p-label') label?: string;
+
+  /** Texto da tag. */
+  @Input('p-value') value: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
+   */
+  @Output('p-click') click: EventEmitter<any> = new EventEmitter<PoTagItem>();
+
+  public readonly poTagOrientation = PoTagOrientation;
+
   private _color?: string;
   private _icon?: boolean | string | TemplateRef<void>;
   private _inverse?: boolean;
   private _orientation?: PoTagOrientation = poTagOrientationDefault;
   private _type?: PoTagType;
-
-  public readonly poTagOrientation = PoTagOrientation;
 
   /**
    * @optional
@@ -132,15 +153,6 @@ export class PoTagBaseComponent {
    *
    * @description
    *
-   * Define uma legenda que será exibida acima ou ao lado da *tag*, de acordo com a `p-orientation`.
-   */
-  @Input('p-label') label?: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Define o *layout* de exibição.
    *
    * @default `vertical`
@@ -177,16 +189,4 @@ export class PoTagBaseComponent {
   get type(): PoTagType {
     return this._type;
   }
-
-  /** Texto da tag. */
-  @Input('p-value') value: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
-   */
-  @Output('p-click') click: EventEmitter<any> = new EventEmitter<PoTagItem>();
 }

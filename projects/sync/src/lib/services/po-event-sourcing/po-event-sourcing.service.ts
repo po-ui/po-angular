@@ -49,6 +49,13 @@ export class PoEventSourcingService {
 
   private schemasSyncConfig = {};
 
+  constructor(
+    private poSchemaDefinition: PoSchemaDefinitionService,
+    private poSchemaService: PoSchemaService,
+    private poStorage: PoStorageService,
+    private poHttpClient: PoHttpClientService
+  ) {}
+
   private static getUrl(eventSourcingItem, schema, requestType): string {
     const schemaUrl = PoSchemaUtil.getUrl(schema, requestType);
     const schemaId = eventSourcingItem.record[schema.idField];
@@ -65,13 +72,6 @@ export class PoEventSourcingService {
       return schemaUrl ? schemaUrl : PoSchemaUtil.getUrl(schema, PoRequestType.GET);
     }
   }
-
-  constructor(
-    private poSchemaDefinition: PoSchemaDefinitionService,
-    private poSchemaService: PoSchemaService,
-    private poStorage: PoStorageService,
-    private poHttpClient: PoHttpClientService
-  ) {}
 
   create(schemaName: string, newItem: any, customRequestId?: string): Promise<any> {
     const eventSourcingItem = this.createEventSourcingItem(
@@ -113,20 +113,6 @@ export class PoEventSourcingService {
 
     await this.insertEventSourcingQueue(eventSourcingItem);
     return eventSourcingItem.id;
-  }
-
-  /* Avalia se o body é do tipo File e se for converte para base64 */
-  private async serializeBody(requestData: PoHttpRequestData): Promise<PoHttpRequestData> {
-    let { body, mimeType, bodyType, fileName } = requestData;
-
-    if (body instanceof File) {
-      bodyType = 'File';
-      mimeType = body.type;
-      fileName = body.name;
-      body = await toBase64(body);
-    }
-
-    return { ...requestData, body, mimeType, bodyType, fileName };
   }
 
   responsesSubject(): Observable<PoSyncResponse> {
@@ -193,6 +179,20 @@ export class PoEventSourcingService {
       customRequestId
     );
     return this.insertEventSourcingQueue(eventSourcingItem);
+  }
+
+  /* Avalia se o body é do tipo File e se for converte para base64 */
+  private async serializeBody(requestData: PoHttpRequestData): Promise<PoHttpRequestData> {
+    let { body, mimeType, bodyType, fileName } = requestData;
+
+    if (body instanceof File) {
+      bodyType = 'File';
+      mimeType = body.type;
+      fileName = body.name;
+      body = await toBase64(body);
+    }
+
+    return { ...requestData, body, mimeType, bodyType, fileName };
   }
 
   private buildUrlParams(schema: PoSyncSchema, baseUrl: string, pageNumber: number): string {

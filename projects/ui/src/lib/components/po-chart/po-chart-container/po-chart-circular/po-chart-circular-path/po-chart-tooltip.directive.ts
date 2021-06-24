@@ -4,12 +4,12 @@ import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/
   selector: '[p-chart-tooltip]'
 })
 export class PoChartTooltipDirective {
+  @Input('p-chart-tooltip') tooltip: string;
+
   private lastTooltipText: string;
   private tooltipElement;
   private tooltipText;
   private tooltipTextContent;
-
-  @Input('p-chart-tooltip') tooltip: string;
 
   constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
 

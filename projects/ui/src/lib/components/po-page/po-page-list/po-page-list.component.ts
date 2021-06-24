@@ -51,19 +51,18 @@ import { PoPageListBaseComponent } from './po-page-list-base.component';
 export class PoPageListComponent
   extends PoPageListBaseComponent
   implements AfterContentInit, OnChanges, OnDestroy, OnInit {
+  @ViewChild('filterInput') filterInput: ElementRef;
+  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
+
   advancedSearch: string;
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
   limitPrimaryActions: number = 3;
 
-  @ViewChild('filterInput') filterInput: ElementRef;
+  callFunction = callFunction;
 
   private isRecalculate = true;
   private maxWidthMobile: number = 480;
-
-  callFunction = callFunction;
-
-  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
 
   /* istanbul ignore next */
   constructor(
@@ -128,27 +127,6 @@ export class PoPageListComponent
       width = Math.max(width, 2);
     }
     return `po-sm-${smWidth} po-md-${mdWidth} po-lg-${width} po-xl-${width}`;
-  }
-
-  private onResize(event: Event): void {
-    const width = (event.target as Window).innerWidth;
-
-    if (width < this.maxWidthMobile) {
-      this.isMobile = true;
-      this.limitPrimaryActions = 2;
-      this.setDropdownActions();
-    } else {
-      this.isMobile = false;
-      this.limitPrimaryActions = 3;
-      this.setDropdownActions();
-    }
-  }
-
-  private setIsMobile(): void {
-    if (window.innerWidth < this.maxWidthMobile) {
-      this.isMobile = true;
-      this.limitPrimaryActions = 2;
-    }
   }
 
   setDropdownActions(): void {
@@ -228,5 +206,26 @@ export class PoPageListComponent
 
   private removeListeners() {
     this.resizeListener();
+  }
+
+  private onResize(event: Event): void {
+    const width = (event.target as Window).innerWidth;
+
+    if (width < this.maxWidthMobile) {
+      this.isMobile = true;
+      this.limitPrimaryActions = 2;
+      this.setDropdownActions();
+    } else {
+      this.isMobile = false;
+      this.limitPrimaryActions = 3;
+      this.setDropdownActions();
+    }
+  }
+
+  private setIsMobile(): void {
+    if (window.innerWidth < this.maxWidthMobile) {
+      this.isMobile = true;
+      this.limitPrimaryActions = 2;
+    }
   }
 }

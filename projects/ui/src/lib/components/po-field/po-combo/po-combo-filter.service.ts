@@ -18,16 +18,15 @@ import { validateObjectType } from '../../../utils/util';
  */
 @Injectable()
 export class PoComboFilterService implements PoComboFilter {
-  private _url: string;
-
   fieldLabel: string = 'label';
   fieldValue: string = 'value';
-
-  private messages = [];
 
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'
   });
+
+  private _url: string;
+  private messages = [];
 
   get url(): string {
     return this._url;

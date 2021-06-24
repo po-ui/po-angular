@@ -20,6 +20,17 @@ const poSlideIntervalDefault = 4000;
  */
 @Directive()
 export abstract class PoSlideBaseComponent {
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a exibição das setas de navegação.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-arrows') @InputBoolean() hideArrows: boolean = false;
+
   private _interval: number = poSlideIntervalDefault;
   private _height?: number;
   private _slides: Array<PoSlideItem | string | any>;
@@ -90,17 +101,6 @@ export abstract class PoSlideBaseComponent {
   get slides(): Array<PoSlideItem | string | any> {
     return this._slides;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define a exibição das setas de navegação.
-   *
-   * @default `false`
-   */
-  @Input('p-hide-arrows') @InputBoolean() hideArrows: boolean = false;
 
   abstract setSlideHeight(height: number): void;
 

@@ -8,6 +8,9 @@ import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@p
   templateUrl: './sample-po-combo-hotels.component.html'
 })
 export class SamplePoComboHotelsComponent {
+  @ViewChild('bookingForm', { static: true }) form: NgForm;
+  @ViewChild('datepicker', { static: true }) datepickerComponent: PoDatepickerComponent;
+
   adults: number = 1;
   category: boolean = false;
   checkin: Date;
@@ -35,9 +38,6 @@ export class SamplePoComboHotelsComponent {
     { label: '2 Rooms', value: 2 },
     { label: '3 Rooms', value: 3 }
   ];
-
-  @ViewChild('bookingForm', { static: true }) form: NgForm;
-  @ViewChild('datepicker', { static: true }) datepickerComponent: PoDatepickerComponent;
 
   constructor(private poNotification: PoNotificationService) {}
 

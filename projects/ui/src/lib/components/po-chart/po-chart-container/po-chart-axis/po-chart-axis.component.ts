@@ -19,6 +19,14 @@ import { PoChartType } from '../../enums/po-chart-type.enum';
   templateUrl: './po-chart-axis.component.svg'
 })
 export class PoChartAxisComponent {
+  @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;
+
+  @Input('p-type') type: PoChartType;
+
+  @Input('p-range') range: PoChartMinMaxValues;
+
+  @Output('p-categories-coordinates') categoriesCoordinates: EventEmitter<Array<number>> = new EventEmitter();
+
   axisXCoordinates: Array<PoChartPathCoordinates>;
   axisXLabelCoordinates: Array<PoChartLabelCoordinates>;
   axisYCoordinates: Array<PoChartPathCoordinates>;
@@ -33,12 +41,6 @@ export class PoChartAxisComponent {
   private _categories: Array<string> = [];
   private _containerSize: PoChartContainerSize = {};
   private _series: Array<any> = [];
-
-  @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;
-
-  @Input('p-type') type: PoChartType;
-
-  @Input('p-range') range: PoChartMinMaxValues;
 
   @Input('p-series') set series(seriesList: Array<any>) {
     const seriesDataArrayFilter = seriesList.filter(serie => {
@@ -103,8 +105,6 @@ export class PoChartAxisComponent {
   get axisOptions() {
     return this._axisOptions;
   }
-
-  @Output('p-categories-coordinates') categoriesCoordinates: EventEmitter<Array<number>> = new EventEmitter();
 
   constructor(private mathsService: PoChartMathsService) {}
 

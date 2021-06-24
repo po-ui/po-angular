@@ -12,12 +12,14 @@ import { poUploadLiteralsDefault } from '../po-upload-base.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoUploadFileRestrictionsComponent implements OnInit {
+  @Input('p-max-files') maxFiles: number;
+
+  literals: any;
+
   private _allowedExtensions: string;
   private _maxFileSize: string;
   private _minFileSize: string;
   private language: string;
-
-  literals: any;
 
   @Input('p-allowed-extensions') set allowedExtensions(value) {
     this._allowedExtensions = this.formatAllowedExtensions(<any>value);
@@ -26,8 +28,6 @@ export class PoUploadFileRestrictionsComponent implements OnInit {
   get allowedExtensions(): string {
     return this._allowedExtensions;
   }
-
-  @Input('p-max-files') maxFiles: number;
 
   @Input('p-max-file-size') set maxFileSize(value) {
     this._maxFileSize = formatBytes(<any>value);

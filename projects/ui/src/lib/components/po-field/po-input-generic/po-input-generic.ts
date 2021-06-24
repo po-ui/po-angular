@@ -24,6 +24,23 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     this.el = el;
   }
 
+  @HostListener('keydown', ['$event']) onKeydown(e: any) {
+    if (this.mask && !this.readonly && e.target.keyCode !== 229) {
+      this.eventOnBlur(e);
+      this.objMask.keydown(e);
+    }
+  }
+
+  @HostListener('keyup', ['$event']) onKeyup(e: any) {
+    if (this.mask && !this.readonly) {
+      if (e.target.keyCode !== 229) {
+        this.eventOnBlur(e);
+        this.objMask.keyup(e);
+      }
+      this.callOnChange(this.objMask.valueToModel);
+    }
+  }
+
   ngAfterViewInit() {
     this.afterViewInit();
   }
@@ -57,23 +74,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   verifyAutoFocus() {
     if (this.autoFocus) {
       this.focus();
-    }
-  }
-
-  @HostListener('keydown', ['$event']) onKeydown(e: any) {
-    if (this.mask && !this.readonly && e.target.keyCode !== 229) {
-      this.eventOnBlur(e);
-      this.objMask.keydown(e);
-    }
-  }
-
-  @HostListener('keyup', ['$event']) onKeyup(e: any) {
-    if (this.mask && !this.readonly) {
-      if (e.target.keyCode !== 229) {
-        this.eventOnBlur(e);
-        this.objMask.keyup(e);
-      }
-      this.callOnChange(this.objMask.valueToModel);
     }
   }
 

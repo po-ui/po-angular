@@ -5,8 +5,6 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
   templateUrl: './po-gauge-description.component.html'
 })
 export class PoGaugeDescriptionComponent {
-  tooltip: string;
-
   @Input('p-description') description: string;
 
   @Input('p-has-ranges') hasRanges: boolean;
@@ -16,6 +14,8 @@ export class PoGaugeDescriptionComponent {
   @Input('p-value') value: number;
 
   @ViewChild('descriptionText') descriptionText: ElementRef;
+
+  tooltip: string;
 
   get isValidValue() {
     return this.value || this.value === 0;

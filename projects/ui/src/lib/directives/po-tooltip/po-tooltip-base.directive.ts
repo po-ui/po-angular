@@ -22,11 +22,23 @@ const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
 
 @Directive()
 export abstract class PoTooltipBaseDirective {
-  private _displayTooltip: boolean = false;
-  private _tooltip: string = '';
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o po-tooltip será incluido no body e não dentro do elemento ao qual o tooltip foi especificado.
+   * Opção necessária para o caso de uso de tooltip em um elemento SVG.
+   *
+   * @default `false`
+   */
+  @Input('p-append-in-body') @InputBoolean() appendInBody: boolean = false;
 
   protected _tooltipPosition?: string = 'bottom';
   protected tooltipContent;
+
+  private _displayTooltip: boolean = false;
+  private _tooltip: string = '';
 
   /**
    * @description
@@ -75,18 +87,6 @@ export abstract class PoTooltipBaseDirective {
   get tooltipPosition(): string {
     return this._tooltipPosition;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define que o po-tooltip será incluido no body e não dentro do elemento ao qual o tooltip foi especificado.
-   * Opção necessária para o caso de uso de tooltip em um elemento SVG.
-   *
-   * @default `false`
-   */
-  @Input('p-append-in-body') @InputBoolean() appendInBody: boolean = false;
 
   @Input('p-display-tooltip') @InputBoolean() set displayTooltip(value: boolean) {
     this._displayTooltip = value;

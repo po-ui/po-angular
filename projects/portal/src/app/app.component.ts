@@ -9,11 +9,11 @@ import { VersionService } from './shared/version.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
-  private location;
-
   menus: Array<PoMenuItem> = [];
   items: Array<PoNavbarItem> = [];
   iconActions: Array<PoNavbarIconAction> = [];
+
+  private location;
 
   constructor(private versionService: VersionService) {}
 

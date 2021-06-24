@@ -168,83 +168,11 @@ export const poPageDynamicEditLiteralsDefault = {
   providers: [PoPageDynamicService]
 })
 export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
-  private subscriptions: Array<Subscription> = [];
-
-  private _actions: PoPageDynamicEditActions = {};
-  private _autoRouter: boolean = false;
-  private _controlFields: Array<any> = [];
-  private _detailFields: Array<any> = [];
-  private _duplicates: Array<any> = [];
-  private _fields: Array<any> = [];
-  private _keys: Array<any> = [];
-  private _pageActions: Array<PoPageAction> = [];
-
-  literals;
-  model: any = {};
-
-  // beforeSave: return boolean
-  // afterSave
-  // beforeRemove: return boolean
-  // afterRemove
-  // beforeInsert: : return boolean
-  readonly detailActions: PoGridRowActions = {};
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ações da página.
-   */
-  @Input('p-actions') set actions(value: PoPageDynamicEditActions) {
-    this._actions = this.isObject(value) ? value : {};
-
-    this._pageActions = this.getPageActions(this._actions);
-  }
-
-  get actions() {
-    return { ...this._actions };
-  }
-
-  /**
-   * @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
-   *
-   * @optional
-   *
-   * @description
-   *
-   * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso as ações
-   * estejam definidas nas ações.
-   *
-   * > Para o correto funcionamento não pode haver nenhum rota coringa (`**`) especificada.
-   *
-   * @default false
-   */
-  @Input('p-auto-router') set autoRouter(value: boolean) {
-    this._autoRouter = convertToBoolean(value);
-  }
-
-  get autoRouter(): boolean {
-    return this._autoRouter;
-  }
+  @ViewChild('dynamicForm') dynamicForm: PoDynamicFormComponent;
+  @ViewChild('gridDetail') gridDetail: PoGridComponent;
 
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
-
-  /** Lista dos campos usados na tabela e busca avançada. */
-  @Input('p-fields') set fields(value: Array<PoPageDynamicEditField>) {
-    this._fields = Array.isArray(value) ? [...value] : [];
-
-    this._keys = this.getKeysByFields(this._fields);
-    this._duplicates = this.getDuplicatesByFields(this._fields);
-
-    this._controlFields = this.getControlFields(this._fields);
-    this._detailFields = this.getDetailFields(this._fields);
-  }
-
-  get fields(): Array<PoPageDynamicEditField> {
-    return this._fields;
-  }
 
   /**
    * @description
@@ -351,8 +279,79 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    */
   @Input('p-load') onLoad: string | (() => PoPageDynamicEditOptions);
 
-  @ViewChild('dynamicForm') dynamicForm: PoDynamicFormComponent;
-  @ViewChild('gridDetail') gridDetail: PoGridComponent;
+  literals;
+  model: any = {};
+
+  // beforeSave: return boolean
+  // afterSave
+  // beforeRemove: return boolean
+  // afterRemove
+  // beforeInsert: : return boolean
+  readonly detailActions: PoGridRowActions = {};
+
+  private subscriptions: Array<Subscription> = [];
+  private _actions: PoPageDynamicEditActions = {};
+  private _autoRouter: boolean = false;
+  private _controlFields: Array<any> = [];
+  private _detailFields: Array<any> = [];
+  private _duplicates: Array<any> = [];
+  private _fields: Array<any> = [];
+  private _keys: Array<any> = [];
+  private _pageActions: Array<PoPageAction> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ações da página.
+   */
+  @Input('p-actions') set actions(value: PoPageDynamicEditActions) {
+    this._actions = this.isObject(value) ? value : {};
+
+    this._pageActions = this.getPageActions(this._actions);
+  }
+
+  get actions() {
+    return { ...this._actions };
+  }
+
+  /**
+   * @todo Validar rotas na mão pois se existir uma rota '**' o catch do navigation não funciona.
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso as ações
+   * estejam definidas nas ações.
+   *
+   * > Para o correto funcionamento não pode haver nenhum rota coringa (`**`) especificada.
+   *
+   * @default false
+   */
+  @Input('p-auto-router') set autoRouter(value: boolean) {
+    this._autoRouter = convertToBoolean(value);
+  }
+
+  get autoRouter(): boolean {
+    return this._autoRouter;
+  }
+
+  /** Lista dos campos usados na tabela e busca avançada. */
+  @Input('p-fields') set fields(value: Array<PoPageDynamicEditField>) {
+    this._fields = Array.isArray(value) ? [...value] : [];
+
+    this._keys = this.getKeysByFields(this._fields);
+    this._duplicates = this.getDuplicatesByFields(this._fields);
+
+    this._controlFields = this.getControlFields(this._fields);
+    this._detailFields = this.getDetailFields(this._fields);
+  }
+
+  get fields(): Array<PoPageDynamicEditField> {
+    return this._fields;
+  }
 
   constructor(
     private router: Router,
@@ -384,20 +383,8 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  private loadDataFromAPI() {
-    const { serviceApi: serviceApiFromRoute, serviceMetadataApi, serviceLoadApi } = this.activatedRoute.snapshot.data;
-    const { id } = this.activatedRoute.snapshot.params;
-    const { duplicate } = this.activatedRoute.snapshot.queryParams;
-
-    const onLoad = serviceLoadApi || this.onLoad;
-    this.serviceApi = serviceApiFromRoute || this.serviceApi;
-
-    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
-
-    const metadata$ = this.getMetadata(serviceApiFromRoute, id, onLoad);
-    const data$ = this.loadData(id, duplicate);
-
-    this.subscriptions.push(concat(metadata$, data$).subscribe());
+  detailActionNew() {
+    this.gridDetail.insertRow();
   }
 
   get duplicates() {
@@ -420,8 +407,20 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return this._detailFields;
   }
 
-  detailActionNew() {
-    this.gridDetail.insertRow();
+  private loadDataFromAPI() {
+    const { serviceApi: serviceApiFromRoute, serviceMetadataApi, serviceLoadApi } = this.activatedRoute.snapshot.data;
+    const { id } = this.activatedRoute.snapshot.params;
+    const { duplicate } = this.activatedRoute.snapshot.queryParams;
+
+    const onLoad = serviceLoadApi || this.onLoad;
+    this.serviceApi = serviceApiFromRoute || this.serviceApi;
+
+    this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
+
+    const metadata$ = this.getMetadata(serviceApiFromRoute, id, onLoad);
+    const data$ = this.loadData(id, duplicate);
+
+    this.subscriptions.push(concat(metadata$, data$).subscribe());
   }
 
   private cancel(

@@ -11,6 +11,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
   templateUrl: './sample-po-page-edit-user.component.html'
 })
 export class SamplePoPageEditUserComponent implements OnInit {
+  @ViewChild('formEditUser', { static: true }) formEditUser: NgForm;
+
   birthDate: Date;
   email: string;
   fathersName: string;
@@ -26,8 +28,6 @@ export class SamplePoPageEditUserComponent implements OnInit {
   public readonly breadcrumb: PoBreadcrumb = {
     items: [{ label: 'Home', action: this.beforeRedirect.bind(this) }, { label: 'User Edit' }]
   };
-
-  @ViewChild('formEditUser', { static: true }) formEditUser: NgForm;
 
   constructor(
     private route: Router,

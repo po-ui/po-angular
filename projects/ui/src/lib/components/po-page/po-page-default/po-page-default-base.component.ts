@@ -30,15 +30,18 @@ export const poPageDefaultLiteralsDefault = {
  */
 @Directive()
 export abstract class PoPageDefaultBaseComponent {
-  private _actions?: Array<PoPageAction> = [];
-  private _literals: PoPageDefaultLiterals;
-  private _title: string;
+  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
+
+  /** Objeto com propriedades do breadcrumb. */
+  @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb;
 
   visibleActions: Array<PoPageAction> = [];
 
   protected language: string;
 
-  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
+  private _actions?: Array<PoPageAction> = [];
+  private _literals: PoPageDefaultLiterals;
+  private _title: string;
 
   /**
    * @optional
@@ -56,9 +59,6 @@ export abstract class PoPageDefaultBaseComponent {
   get actions(): Array<PoPageAction> {
     return this._actions;
   }
-
-  /** Objeto com propriedades do breadcrumb. */
-  @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb;
 
   /**
    * @optional

@@ -7,6 +7,8 @@ import { PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
   templateUrl: './sample-po-url-shortener.component.html'
 })
 export class SamplePoUrlShortenerComponent {
+  @ViewChild('boxUrl', { read: ElementRef, static: true }) boxUrlElement;
+
   baseUrls: Array<any> = [];
   shortenedUrl: string;
   url: string;
@@ -15,8 +17,6 @@ export class SamplePoUrlShortenerComponent {
     { property: 'url', label: 'Long URL' },
     { property: 'short', label: 'Shortened URL' }
   ];
-
-  @ViewChild('boxUrl', { read: ElementRef, static: true }) boxUrlElement;
 
   constructor(private poNotification: PoNotificationService) {}
 

@@ -46,6 +46,9 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
   ]
 })
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit {
+  @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
+  @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
+
   isEdit = false;
   literals = {
     ...poPageJobSchedulerLiteralsDefault[poLocaleDefault]
@@ -54,6 +57,8 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   publicValues: PoJobSchedulerInternal;
   saveOperation: Observable<any>;
   step: number = 1;
+
+  readonly steps: Array<PoStepperItem> = [];
 
   private backPageAction: PoPageAction = {
     label: this.literals.back,
@@ -76,12 +81,8 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
 
   private nextPageActions: Array<PoPageAction> = [this.nextPageAction, this.backPageAction];
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   jobSchedulerActions: Array<PoPageAction> = [...this.nextPageActions];
-
-  readonly steps: Array<PoStepperItem> = [];
-
-  @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
-  @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
 
   constructor(
     public poPageDynamicLookupService: PoPageJobSchedulerLookupService,

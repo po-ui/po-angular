@@ -9,11 +9,11 @@ import { PoTableFilteredItemsParams } from '../interfaces/po-table-filtered-item
   providedIn: 'root'
 })
 export class PoTableService implements PoTableFilter {
-  private url: string;
-
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'
   });
+
+  private url: string;
 
   constructor(private http: HttpClient) {}
 
