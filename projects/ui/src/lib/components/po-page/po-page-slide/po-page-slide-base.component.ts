@@ -19,8 +19,6 @@ import { InputBoolean } from '../../../decorators';
  */
 @Directive()
 export class PoPageSlideBaseComponent {
-  private _size = 'md';
-
   /**
    * @description
    *
@@ -34,33 +32,6 @@ export class PoPageSlideBaseComponent {
    * Subtítulo da página.
    */
   @Input('p-subtitle') subtitle?: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o tamanho da página.
-   *
-   * Valores válidos:
-   *  - `sm` (pequeno)
-   *  - `md` (médio)
-   *  - `lg` (grande)
-   *  - `xl` (extra-grande)
-   *  - `auto` (automático)
-   *
-   * > Todas as opções de tamanho possuem uma largura máxima de **768px**.
-   *
-   * @default `md`
-   */
-  @Input('p-size') set size(value: string) {
-    const sizes = ['sm', 'md', 'lg', 'xl', 'auto'];
-    this._size = sizes.indexOf(value) > -1 ? value : 'md';
-  }
-
-  get size() {
-    return this._size;
-  }
 
   /**
    * @optional
@@ -88,6 +59,35 @@ export class PoPageSlideBaseComponent {
 
   // Controla se a página está ou não oculta, por padrão é oculto.
   public hidden = true;
+
+  private _size = 'md';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho da página.
+   *
+   * Valores válidos:
+   *  - `sm` (pequeno)
+   *  - `md` (médio)
+   *  - `lg` (grande)
+   *  - `xl` (extra-grande)
+   *  - `auto` (automático)
+   *
+   * > Todas as opções de tamanho possuem uma largura máxima de **768px**.
+   *
+   * @default `md`
+   */
+  @Input('p-size') set size(value: string) {
+    const sizes = ['sm', 'md', 'lg', 'xl', 'auto'];
+    this._size = sizes.indexOf(value) > -1 ? value : 'md';
+  }
+
+  get size() {
+    return this._size;
+  }
 
   /**
    * Ativa a visualização da página.

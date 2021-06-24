@@ -58,6 +58,10 @@ import { PoUploadStatus } from './po-upload-status.enum';
   ]
 })
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
+  @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
+  @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
+  @ViewChild('uploadButton') private uploadButton: PoButtonComponent;
+
   infoByUploadStatus: { [key: string]: { text: (percent?: number) => string; icon?: string } } = {
     [PoUploadStatus.Uploaded]: {
       text: () => this.literals.sentWithSuccess,
@@ -77,10 +81,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   };
 
   private calledByCleanInputValue: boolean = false;
-
-  @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
-  @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
-  @ViewChild('uploadButton') private uploadButton: PoButtonComponent;
 
   constructor(
     uploadService: PoUploadService,

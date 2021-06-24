@@ -10,6 +10,8 @@ import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.ser
   providers: [SamplePoComboSchedulingService]
 })
 export class SamplePoComboSchedulingComponent implements OnInit {
+  @ViewChild('schedulingForm', { static: true }) form: NgForm;
+
   birthday: string;
   citiesOptions: Array<PoComboOptionGroup>;
   city: string;
@@ -25,8 +27,6 @@ export class SamplePoComboSchedulingComponent implements OnInit {
     { label: 'Particular', value: 'particular' },
     { label: 'Health Insurance', value: 'healthInsurance' }
   ];
-
-  @ViewChild('schedulingForm', { static: true }) form: NgForm;
 
   constructor(
     private poNotification: PoNotificationService,

@@ -8,9 +8,9 @@ import { PoChartType } from '../enums/po-chart-type.enum';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoChartLegendComponent {
-  private _series: Array<any>;
-
   @Input('p-type') type: PoChartType;
+
+  private _series: Array<any>;
 
   @Input('p-series') set series(value: Array<any>) {
     this._series = value;

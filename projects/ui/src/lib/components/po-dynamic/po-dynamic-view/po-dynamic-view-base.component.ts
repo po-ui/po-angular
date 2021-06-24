@@ -19,11 +19,46 @@ import { PoDynamicViewService } from './po-dynamic-view.service';
  */
 @Directive()
 export class PoDynamicViewBaseComponent {
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Possibilita executar uma função quando o componente é inicializado.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - **String**: Endpoint usado pelo componente para requisição via `POST`.
+   * - **Function**: Método que será executado na inicialização do componente.
+   *
+   * Para os dois tipos de utilização da propriedade espera-se o seguinte retorno:
+   *
+   * ```
+   * {
+   *   value: {
+   *     cnpj: '**************', // altera valor do campo
+   *     updated: (new Date()).toString() // atribui valor ao campo novo
+   *   },
+   *   fields: [
+   *     { property: 'cnpj', tag: true, inverse: true }, // atribui novas propriedades ao field
+   *     { property: 'updated', tag: true } // inclui campo novo
+   *   ]
+   * }
+   * ```
+   * > **value**: any = atribui novo valor do model.
+   *
+   * > **fields**: `Array<PoDynamicViewField>` = Lista de campos que deseja alterar as propriedades,
+   * caso enviar um campo a mais será criado um novo campo.
+   *
+   * - Para esconder/remover campos precisa informar no field a propriedade `visible = false`.
+   *
+   */
+  @Input('p-load') load: string | Function;
+
+  visibleFields = [];
+
   private _fields: Array<PoDynamicViewField> = [];
   private _showAllValue: boolean = false;
   private _value = {};
-
-  visibleFields = [];
 
   /**
    * @optional
@@ -71,41 +106,6 @@ export class PoDynamicViewBaseComponent {
   get showAllValue() {
     return this._showAllValue;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Possibilita executar uma função quando o componente é inicializado.
-   *
-   * A propriedade aceita os seguintes tipos:
-   * - **String**: Endpoint usado pelo componente para requisição via `POST`.
-   * - **Function**: Método que será executado na inicialização do componente.
-   *
-   * Para os dois tipos de utilização da propriedade espera-se o seguinte retorno:
-   *
-   * ```
-   * {
-   *   value: {
-   *     cnpj: '**************', // altera valor do campo
-   *     updated: (new Date()).toString() // atribui valor ao campo novo
-   *   },
-   *   fields: [
-   *     { property: 'cnpj', tag: true, inverse: true }, // atribui novas propriedades ao field
-   *     { property: 'updated', tag: true } // inclui campo novo
-   *   ]
-   * }
-   * ```
-   * > **value**: any = atribui novo valor do model.
-   *
-   * > **fields**: `Array<PoDynamicViewField>` = Lista de campos que deseja alterar as propriedades,
-   * caso enviar um campo a mais será criado um novo campo.
-   *
-   * - Para esconder/remover campos precisa informar no field a propriedade `visible = false`.
-   *
-   */
-  @Input('p-load') load: string | Function;
 
   /**
    * @description

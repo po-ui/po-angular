@@ -7,6 +7,10 @@ export class PoTableLabsPage {
 
   private checkInput = '.po-checkbox-group-input';
 
+  navigateTo() {
+    return browser.get(browser.baseUrl);
+  }
+
   private getPoCheckbox(checkGroup: string, checkValue: string) {
     return element(
       by.css(
@@ -19,10 +23,6 @@ export class PoTableLabsPage {
     return element.all(
       by.cssContainingText(`${this.sampleTable} po-table .po-table-header-ellipsis span`, `${columnName}`)
     );
-  }
-
-  navigateTo() {
-    return browser.get(browser.baseUrl);
   }
 
   get poCheckboxAllowSort() {

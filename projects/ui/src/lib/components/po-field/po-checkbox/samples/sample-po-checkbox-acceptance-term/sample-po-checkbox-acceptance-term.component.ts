@@ -7,6 +7,8 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
   templateUrl: './sample-po-checkbox-acceptance-term.component.html'
 })
 export class SamplePoCheckboxAcceptanceTermComponent {
+  @ViewChild(PoModalComponent, { static: true }) modalTerm: PoModalComponent;
+
   acceptance: boolean = false;
 
   primaryAction: PoModalAction = {
@@ -16,6 +18,4 @@ export class SamplePoCheckboxAcceptanceTermComponent {
     disabled: true,
     label: 'Confirm'
   };
-
-  @ViewChild(PoModalComponent, { static: true }) modalTerm: PoModalComponent;
 }

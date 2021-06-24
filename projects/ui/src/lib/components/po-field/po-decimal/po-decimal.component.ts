@@ -69,6 +69,8 @@ const poDecimalTotalLengthLimit = 16;
   ]
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit {
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+
   private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
   private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
   private _locale?: string;
@@ -87,8 +89,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     thousand: new RegExp('\\' + ',', 'g'),
     decimal: new RegExp('\\' + '.', 'g')
   };
-
-  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';

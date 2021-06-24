@@ -27,11 +27,11 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  */
 @Directive()
 export class PoButtonGroupBaseComponent {
-  private _small?: boolean = false;
-  private _toggle?: string = PO_TOGGLE_TYPE_DEFAULT;
-
   /** Lista de botões. */
   @Input('p-buttons') buttons: Array<PoButtonGroupItem> = [];
+
+  private _small?: boolean = false;
+  private _toggle?: string = PO_TOGGLE_TYPE_DEFAULT;
 
   /**
    * @optional

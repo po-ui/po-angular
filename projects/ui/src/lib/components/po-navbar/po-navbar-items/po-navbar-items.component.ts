@@ -11,15 +11,15 @@ import { PoNavbarItemComponent } from './po-navbar-item/po-navbar-item.component
   templateUrl: './po-navbar-items.component.html'
 })
 export class PoNavbarItemsComponent implements OnInit, OnDestroy {
-  selectedItem: PoNavbarItem;
-
-  private routeSubscription: Subscription;
-
   @ViewChild('navbarItemsContainer', { read: ElementRef, static: true }) navbarItemsContainer: ElementRef;
 
   @ViewChildren(PoNavbarItemComponent, { read: ElementRef }) allNavbarItems: QueryList<any>;
 
   @Input('p-items') items: Array<PoNavbarItem>;
+
+  selectedItem: PoNavbarItem;
+
+  private routeSubscription: Subscription;
 
   constructor(private router: Router) {}
 

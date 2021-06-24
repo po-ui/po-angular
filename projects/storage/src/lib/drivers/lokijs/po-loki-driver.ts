@@ -157,6 +157,7 @@ export class PoLokiDriver {
 
   // Funções de acesso ao storage
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   getDriver() {
     return this.driver;
   }

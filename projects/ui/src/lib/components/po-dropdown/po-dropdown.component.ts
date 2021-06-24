@@ -31,11 +31,11 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
   templateUrl: './po-dropdown.component.html'
 })
 export class PoDropdownComponent extends PoDropdownBaseComponent {
-  private clickoutListener: () => void;
-  private resizeListener: () => void;
-
   @ViewChild('dropdownRef', { read: ElementRef, static: true }) dropdownRef: ElementRef;
   @ViewChild('popupRef') popupRef: any;
+
+  private clickoutListener: () => void;
+  private resizeListener: () => void;
 
   constructor(private renderer: Renderer2) {
     super();

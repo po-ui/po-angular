@@ -27,6 +27,8 @@ import {
   ]
 })
 export class SamplePoMenuLabsComponent implements OnInit {
+  @ViewChild(PoMenuComponent, { static: true }) menu: PoMenuComponent;
+
   badgeColor: string;
   badgeValue: number;
   buttons: Array<PoButtonGroupItem> = [
@@ -73,8 +75,6 @@ export class SamplePoMenuLabsComponent implements OnInit {
     { label: 'po-icon-message', value: 'po-icon-message' },
     { label: 'po-icon-stock', value: 'po-icon-stock' }
   ];
-
-  @ViewChild(PoMenuComponent, { static: true }) menu: PoMenuComponent;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 

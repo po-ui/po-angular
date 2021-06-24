@@ -18,19 +18,6 @@ import { PoTableDetailColumn } from './po-table-detail-column.interface';
   templateUrl: './po-table-detail.component.html'
 })
 export class PoTableDetailComponent {
-  private _detail: PoTableDetail;
-
-  /**
-   * Configuração da linha de detalhes.
-   */
-  @Input('p-detail') set detail(value: PoTableDetail) {
-    this._detail = this.returnPoTableDetailObject(value);
-  }
-
-  get detail() {
-    return this._detail;
-  }
-
   /**
    * Lista de itens do _detail_ da tabela.
    */
@@ -49,6 +36,19 @@ export class PoTableDetailComponent {
    * Ação executada ao selecionar ou desmarcar a seleção de uma linha de detalhe do `po-table`.
    */
   @Output('p-select-row') selectRow: EventEmitter<any> = new EventEmitter<any>();
+
+  private _detail: PoTableDetail;
+
+  /**
+   * Configuração da linha de detalhes.
+   */
+  @Input('p-detail') set detail(value: PoTableDetail) {
+    this._detail = this.returnPoTableDetailObject(value);
+  }
+
+  get detail() {
+    return this._detail;
+  }
 
   constructor(private decimalPipe: DecimalPipe) {}
 

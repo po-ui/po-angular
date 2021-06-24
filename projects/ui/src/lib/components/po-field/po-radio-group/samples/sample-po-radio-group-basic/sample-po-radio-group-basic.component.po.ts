@@ -7,6 +7,10 @@ export class PoRadioTest {
 
   private inputRadio = '.po-radio-group-input';
 
+  navigateTo() {
+    return browser.get(browser.baseUrl);
+  }
+
   private getInterestArea(area) {
     return element(
       by.css(
@@ -21,10 +25,6 @@ export class PoRadioTest {
         `${this.sampleRadio} po-radio-group[name="genderName"] ${this.inputRadio}[value="${gender}"]+${this.labelRadio}`
       )
     );
-  }
-
-  navigateTo() {
-    return browser.get(browser.baseUrl);
   }
 
   get poButton() {

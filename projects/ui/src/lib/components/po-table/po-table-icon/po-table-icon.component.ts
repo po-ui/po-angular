@@ -13,8 +13,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTableIconComponent {
-  tooltip: string;
-
   /** Define se o ícone é clicável. */
   @Input('p-clickable') clickable: boolean;
 
@@ -32,6 +30,8 @@ export class PoTableIconComponent {
 
   /** Output click. */
   @Output('p-click') click: EventEmitter<any> = new EventEmitter();
+
+  tooltip: string;
 
   private get allowTooltip() {
     return !this.disabled && this.iconTooltip;

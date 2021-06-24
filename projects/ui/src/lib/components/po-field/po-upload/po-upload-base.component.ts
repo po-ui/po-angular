@@ -141,32 +141,6 @@ const poUploadMinFileSize = 0;
  */
 @Directive()
 export abstract class PoUploadBaseComponent implements ControlValueAccessor, Validator {
-  private _directory?: boolean;
-  private _disabled?: boolean;
-  private _dragDrop?: boolean = false;
-  private _fileRestrictions?: PoUploadFileRestrictions;
-  private _formField?: string;
-  private _hideRestrictionsInfo?: boolean;
-  private _hideSelectButton?: boolean;
-  private _hideSendButton?: boolean;
-  private _isMultiple?: boolean;
-  private _literals?: any;
-  private _required?: boolean;
-  private language: string;
-
-  allowedExtensions: string;
-  currentFiles: Array<PoUploadFile>;
-
-  canHandleDirectory: boolean;
-  onModelChange: any;
-
-  private validatorChange: any;
-
-  protected extensionNotAllowed = 0;
-  protected quantityNotAllowed = 0;
-  protected sizeNotAllowed = 0;
-  protected onModelTouched: any = null;
-
   /**
    * @optional
    *
@@ -179,6 +153,130 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @default `false`
    */
   @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define em *pixels* a altura da área onde podem ser arrastados os arquivos. A altura mínima aceita é `160px`.
+   *
+   * > Esta propriedade funciona somente se a propriedade `p-drag-drop` estiver habilitada.
+   *
+   * @default `320`
+   */
+  @Input('p-drag-drop-height') dragDropHeight: number;
+
+  /** Rótulo do campo. */
+  @Input('p-label') label?: string;
+
+  /** Texto de apoio para o campo. */
+  @Input('p-help') help?: string;
+
+  /** URL que deve ser feita a requisição com os arquivos selecionados. */
+  @Input('p-url') url: string;
+
+  /** Define o valor do atributo `name` do componente. */
+  @Input('name') name: string = 'file';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se o envio do arquivo será automático ao selecionar o mesmo.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-upload') autoUpload?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   *  - O campo conter `p-required`;
+   *  - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /** Objeto que contém os cabeçalhos que será enviado na requisição dos arquvios. */
+  @Input('p-headers') headers: { [name: string]: string | Array<string> };
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será executada no momento de realizar o envio do arquivo,
+   * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
+   * É passado por parâmetro um objeto com o arquivo e a propiedade data nesta propriedade pode ser informado algum dado,
+   * que será enviado em conjunto com o arquivo na requisição, por exemplo:
+   *
+   * ```
+   *   event.data = {id: 'id do usuario'};
+   * ```
+   */
+  @Output('p-upload') onUpload: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento será disparado quando ocorrer algum erro no envio do arquivo.
+   * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpErrorResponse`.
+   */
+  @Output('p-error') onError: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento será disparado quando o envio do arquivo for realizado com sucesso.
+   * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpResponse`.
+   */
+  @Output('p-success') onSuccess: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da *tag* `form`.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
+
+  allowedExtensions: string;
+  currentFiles: Array<PoUploadFile>;
+
+  canHandleDirectory: boolean;
+  onModelChange: any;
+
+  protected extensionNotAllowed = 0;
+  protected quantityNotAllowed = 0;
+  protected sizeNotAllowed = 0;
+  protected onModelTouched: any = null;
+
+  private _directory?: boolean;
+  private _disabled?: boolean;
+  private _dragDrop?: boolean = false;
+  private _fileRestrictions?: PoUploadFileRestrictions;
+  private _formField?: string;
+  private _hideRestrictionsInfo?: boolean;
+  private _hideSelectButton?: boolean;
+  private _hideSendButton?: boolean;
+  private _isMultiple?: boolean;
+  private _literals?: any;
+  private _required?: boolean;
+  private language: string;
+  private validatorChange: any;
 
   /**
    * @optional
@@ -203,19 +301,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   get directory() {
     return this._directory;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define em *pixels* a altura da área onde podem ser arrastados os arquivos. A altura mínima aceita é `160px`.
-   *
-   * > Esta propriedade funciona somente se a propriedade `p-drag-drop` estiver habilitada.
-   *
-   * @default `320`
-   */
-  @Input('p-drag-drop-height') dragDropHeight: number;
 
   /**
    * @optional
@@ -292,9 +377,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     return this._hideSendButton;
   }
 
-  /** Rótulo do campo. */
-  @Input('p-label') label?: string;
-
   /**
    * @optional
    *
@@ -339,12 +421,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     return this._literals || poUploadLiteralsDefault[this.language];
   }
 
-  /** Texto de apoio para o campo. */
-  @Input('p-help') help?: string;
-
-  /** URL que deve ser feita a requisição com os arquivos selecionados. */
-  @Input('p-url') url: string;
-
   /**
    * @optional
    *
@@ -362,9 +438,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   get fileRestrictions(): PoUploadFileRestrictions {
     return this._fileRestrictions;
   }
-
-  /** Define o valor do atributo `name` do componente. */
-  @Input('name') name: string = 'file';
 
   /**
    * @optional
@@ -407,17 +480,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @description
    *
-   * Define se o envio do arquivo será automático ao selecionar o mesmo.
-   *
-   * @default `false`
-   */
-  @Input('p-auto-upload') autoUpload?: boolean = false;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Define se pode selecionar mais de um arquivo.
    *
    * > Se utilizada a `p-directory`, habilita-se automaticamente esta propriedade.
@@ -429,21 +491,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   get isMultiple() {
     return this.canHandleDirectory ? true : this._isMultiple;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   *  - O campo conter `p-required`;
-   *  - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
 
   /**
    * @optional
@@ -464,59 +511,9 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     return this._required;
   }
 
-  /** Objeto que contém os cabeçalhos que será enviado na requisição dos arquvios. */
-  @Input('p-headers') headers: { [name: string]: string | Array<string> };
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função que será executada no momento de realizar o envio do arquivo,
-   * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
-   * É passado por parâmetro um objeto com o arquivo e a propiedade data nesta propriedade pode ser informado algum dado,
-   * que será enviado em conjunto com o arquivo na requisição, por exemplo:
-   *
-   * ```
-   *   event.data = {id: 'id do usuario'};
-   * ```
-   */
-  @Output('p-upload') onUpload: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento será disparado quando ocorrer algum erro no envio do arquivo.
-   * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpErrorResponse`.
-   */
-  @Output('p-error') onError: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento será disparado quando o envio do arquivo for realizado com sucesso.
-   * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpResponse`.
-   */
-  @Output('p-success') onSuccess: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da *tag* `form`.
-   */
-  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
-
   constructor(protected uploadService: PoUploadService, languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
-
-  abstract sendFeedback(): void;
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar os estados de habilitado via forms api
@@ -675,6 +672,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
     return files;
   }
+
+  abstract sendFeedback(): void;
 
   abstract setDirectoryAttribute(value: boolean);
 }

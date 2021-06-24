@@ -20,10 +20,10 @@ const poToolbarActionsIconDefault = 'po-icon-more';
   templateUrl: './po-toolbar-actions.component.html'
 })
 export class PoToolbarActionsComponent {
-  private _actionsIcon?: string | TemplateRef<void> = poToolbarActionsIconDefault;
-
   /** Define uma lista de ações. */
   @Input('p-actions') actions?: Array<PoToolbarAction>;
+
+  private _actionsIcon?: string | TemplateRef<void> = poToolbarActionsIconDefault;
 
   /** Define o ícone das ações. */
   @Input('p-actions-icon') set actionsIcon(icon: string | TemplateRef<void>) {

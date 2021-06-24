@@ -17,11 +17,11 @@ import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-it
  */
 @Injectable()
 export class PoLookupFilterService implements PoLookupFilter {
-  private url: string;
-
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'
   });
+
+  private url: string;
 
   constructor(private httpClient: HttpClient) {}
 

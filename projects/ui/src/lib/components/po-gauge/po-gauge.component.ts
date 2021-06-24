@@ -30,14 +30,14 @@ import { PoGaugeSvgContainer } from './interfaces/po-gauge-svg-container.interfa
   templateUrl: './po-gauge.component.html'
 })
 export class PoGaugeComponent extends PoGaugeBaseComponent implements DoCheck {
-  svgContainer: PoGaugeSvgContainer;
-
-  private isLoaded: boolean = false;
-
   @ViewChild('descriptionEl', { read: ElementRef }) descriptionEl: ElementRef;
   @ViewChild('legendEl', { read: ElementRef }) legendEl: ElementRef;
   @ViewChild('titleEl', { read: ElementRef }) titleEl: ElementRef;
   @ViewChild('svgEl', { read: ElementRef }) svgEl: ElementRef;
+
+  svgContainer: PoGaugeSvgContainer;
+
+  private isLoaded: boolean = false;
 
   constructor(protected colorService: PoColorService, private changeDetector: ChangeDetectorRef) {
     super(colorService);

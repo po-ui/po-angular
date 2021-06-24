@@ -42,10 +42,6 @@ export const poPageEditLiteralsDefault = {
  */
 @Directive()
 export class PoPageEditBaseComponent {
-  private _literals: PoPageEditLiterals;
-  private _title: string;
-  private language: string;
-
   @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
 
   /** Objeto com propriedades do breadcrumb. */
@@ -53,6 +49,46 @@ export class PoPageEditBaseComponent {
 
   /** Desabilita botões de submissão (save e saveNew) */
   @Input('p-disable-submit') disableSubmit?: boolean;
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Cancelar".
+   *
+   * ```
+   * <po-page-edit (p-cancel)="myCancelFunction()">
+   * </po-page-edit>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Cancelar" não será exibido.
+   */
+  @Output('p-cancel') cancel = new EventEmitter();
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Salvar".
+   *
+   * ```
+   * <po-page-edit (p-save)="mySaveFunction()">
+   * </po-page-edit>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Salvar" não será exibido.
+   */
+  @Output('p-save') save = new EventEmitter();
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Salvar e Novo".
+   *
+   * ```
+   * <po-page-edit (p-save-new)="mySaveNewFunction()">
+   * </po-page-edit>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Salvar e Novo" não será exibido.
+   */
+  @Output('p-save-new') saveNew = new EventEmitter();
+
+  private _literals: PoPageEditLiterals;
+  private _title: string;
+  private language: string;
 
   /**
    * @optional
@@ -114,42 +150,6 @@ export class PoPageEditBaseComponent {
   get title() {
     return this._title;
   }
-
-  /**
-   * Evento que será disparado ao clicar no botão de "Cancelar".
-   *
-   * ```
-   * <po-page-edit (p-cancel)="myCancelFunction()">
-   * </po-page-edit>
-   * ```
-   *
-   * > Caso não utilizar esta propriedade, o botão de "Cancelar" não será exibido.
-   */
-  @Output('p-cancel') cancel = new EventEmitter();
-
-  /**
-   * Evento que será disparado ao clicar no botão de "Salvar".
-   *
-   * ```
-   * <po-page-edit (p-save)="mySaveFunction()">
-   * </po-page-edit>
-   * ```
-   *
-   * > Caso não utilizar esta propriedade, o botão de "Salvar" não será exibido.
-   */
-  @Output('p-save') save = new EventEmitter();
-
-  /**
-   * Evento que será disparado ao clicar no botão de "Salvar e Novo".
-   *
-   * ```
-   * <po-page-edit (p-save-new)="mySaveNewFunction()">
-   * </po-page-edit>
-   * ```
-   *
-   * > Caso não utilizar esta propriedade, o botão de "Salvar e Novo" não será exibido.
-   */
-  @Output('p-save-new') saveNew = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -19,9 +19,6 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  */
 @Directive()
 export class PoBreadcrumbBaseComponent {
-  itemsView: Array<PoBreadcrumbItem> = [];
-  private _items: Array<PoBreadcrumbItem> = [];
-
   /**
    * @optional
    *
@@ -86,6 +83,22 @@ export class PoBreadcrumbBaseComponent {
   @Input('p-favorite-service') favoriteService?: string;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto que possibilita o envio de parâmetros adicionais à requisição.
+   */
+  @Input('p-params-service') paramsService?: object;
+
+  itemsView: Array<PoBreadcrumbItem> = [];
+
+  protected clickoutListener: () => void;
+  protected resizeListener: () => void;
+
+  private _items: Array<PoBreadcrumbItem> = [];
+
+  /**
    * @description
    *
    * Lista de itens do _breadcrumb_.
@@ -103,17 +116,4 @@ export class PoBreadcrumbBaseComponent {
   get items() {
     return this._items;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Objeto que possibilita o envio de parâmetros adicionais à requisição.
-   */
-  @Input('p-params-service') paramsService?: object;
-
-  protected clickoutListener: () => void;
-
-  protected resizeListener: () => void;
 }

@@ -39,12 +39,12 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
   providers: [PoControlPositionService]
 })
 export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('popoverElement', { read: ElementRef, static: true }) popoverElement: ElementRef;
+
   arrowDirection = 'left';
   timeoutResize;
   targetElement;
   eventListenerFunction: () => void;
-
-  @ViewChild('popoverElement', { read: ElementRef, static: true }) popoverElement: ElementRef;
 
   constructor(private renderer: Renderer2, private poControlPosition: PoControlPositionService) {
     super();

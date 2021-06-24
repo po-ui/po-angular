@@ -39,12 +39,6 @@ export const PoBreadcrumbLiterals: Object = {
   providers: [PoBreadcrumbFavoriteService]
 })
 export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
-  favorite: boolean = false;
-  literals;
-
-  private getSubscription: Subscription;
-  private setSubscription: Subscription;
-
   // URL do serviço.
   @Input('p-favorite-service') favoriteService: string;
 
@@ -53,6 +47,12 @@ export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
 
   // Parâmetro que será enviado junto com o serviço de favoritar.
   @Input('p-params-service') paramsService: object;
+
+  favorite: boolean = false;
+  literals;
+
+  private getSubscription: Subscription;
+  private setSubscription: Subscription;
 
   constructor(private service: PoBreadcrumbFavoriteService, private languageService: PoLanguageService) {
     const language = languageService.getShortLanguage();

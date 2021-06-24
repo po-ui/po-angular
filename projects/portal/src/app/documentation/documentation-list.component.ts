@@ -10,19 +10,19 @@ import { DocumentationService } from '../documentation/documentation.service';
   templateUrl: './documentation-list.component.html'
 })
 export class DocumentationListComponent implements OnInit {
-  private _items: Array<Documentation> = [];
-
-  private _listActions: Array<PoListViewAction> = [
-    { label: 'Documentação', action: this.viewDocumentation.bind(this), icon: 'po-icon-document-double' },
-    { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'po-icon-light' }
-  ];
-
   public filteredItems;
 
   public filter = {
     placeholder: 'Pesquise',
     action: this.filterAction.bind(this)
   };
+
+  private _items: Array<Documentation> = [];
+
+  private _listActions: Array<PoListViewAction> = [
+    { label: 'Documentação', action: this.viewDocumentation.bind(this), icon: 'po-icon-document-double' },
+    { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'po-icon-light' }
+  ];
 
   constructor(private docService: DocumentationService, private router: Router) {}
 

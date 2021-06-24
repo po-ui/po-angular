@@ -82,6 +82,12 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     );
   }
 
+  setDropdownActions(): void {
+    if (this.visibleActions.length > this.limitPrimaryActions) {
+      this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
+    }
+  }
+
   private onResize(event: Event): void {
     const width = (event.target as Window).innerWidth;
 
@@ -100,12 +106,6 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     if (window.innerWidth < this.maxWidthMobile) {
       this.isMobile = true;
       this.limitPrimaryActions = 2;
-    }
-  }
-
-  setDropdownActions(): void {
-    if (this.visibleActions.length > this.limitPrimaryActions) {
-      this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
     }
   }
 }

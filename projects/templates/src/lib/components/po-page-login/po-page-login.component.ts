@@ -58,13 +58,14 @@ import { PoPageLoginService } from './po-page-login.service';
   templateUrl: './po-page-login.component.html'
 })
 export class PoPageLoginComponent extends PoPageLoginBaseComponent implements AfterViewChecked, OnInit {
+  @ViewChild('loginForm', { read: NgForm, static: true }) loginForm: NgForm;
+  @ViewChild('pageLogin', { read: ViewContainerRef, static: true }) pageLogin: ViewContainerRef;
+
+  initialSelectLanguage: string;
+
   private componentRef: ComponentRef<any> = null;
   private differ: any;
   private readonly customPasswordError = { custom: false };
-  initialSelectLanguage: string;
-
-  @ViewChild('loginForm', { read: NgForm, static: true }) loginForm: NgForm;
-  @ViewChild('pageLogin', { read: ViewContainerRef, static: true }) pageLogin: ViewContainerRef;
 
   constructor(
     public changeDetector: ChangeDetectorRef,
@@ -145,6 +146,23 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
         break;
       }
     }
+  }
+
+  protected concatenateLoginHintWithContactEmail(contactEmail: string) {
+    const defaultLoginHintLiteral = poPageLoginLiteralsDefault[this.language].loginHint;
+    const prepositionLiteral = poPageLoginLiteralIn[this.language];
+
+    return this.concatenateLiteral(contactEmail, 'loginHint', defaultLoginHintLiteral, prepositionLiteral);
+  }
+
+  protected setLoginErrors(errors: Array<string>) {
+    const control = this.loginForm.form.controls['login'];
+    this.setControlErrors('allLoginErrors', control, errors, this.pageLoginLiterals.loginErrorPattern);
+  }
+
+  protected setPasswordErrors(errors: Array<string>) {
+    const control = this.loginForm.form.controls['password'];
+    this.setControlErrors('allPasswordErrors', control, errors, this.pageLoginLiterals.passwordErrorPattern);
   }
 
   private checkingForMetadataProperty(object, property) {
@@ -240,23 +258,6 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
         this.changeDetector.detectChanges();
       }
     });
-  }
-
-  protected concatenateLoginHintWithContactEmail(contactEmail: string) {
-    const defaultLoginHintLiteral = poPageLoginLiteralsDefault[this.language].loginHint;
-    const prepositionLiteral = poPageLoginLiteralIn[this.language];
-
-    return this.concatenateLiteral(contactEmail, 'loginHint', defaultLoginHintLiteral, prepositionLiteral);
-  }
-
-  protected setLoginErrors(errors: Array<string>) {
-    const control = this.loginForm.form.controls['login'];
-    this.setControlErrors('allLoginErrors', control, errors, this.pageLoginLiterals.loginErrorPattern);
-  }
-
-  protected setPasswordErrors(errors: Array<string>) {
-    const control = this.loginForm.form.controls['password'];
-    this.setControlErrors('allPasswordErrors', control, errors, this.pageLoginLiterals.passwordErrorPattern);
   }
 
   private initializeLanguage() {

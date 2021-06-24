@@ -14,13 +14,16 @@ const PO_AVATAR_SIZE_DEFAULT = 'md';
  */
 @Directive()
 export class PoAvatarBaseComponent {
-  private _size: string = 'md';
-
   /**
    * Fonte da imagem que pode ser um caminho local (`./assets/images/logo-black-small.png`)
    * ou um servidor externo (`https://po-ui.io/assets/images/logo-black-small.png`).
    */
   @Input('p-src') src: string;
+
+  /** Evento disparado ao clicar na imagem do *avatar*. */
+  @Output('p-click') click = new EventEmitter<any>();
+
+  private _size: string = 'md';
 
   /**
    * @optional
@@ -44,9 +47,6 @@ export class PoAvatarBaseComponent {
   get size(): string {
     return this._size;
   }
-
-  /** Evento disparado ao clicar na imagem do *avatar*. */
-  @Output('p-click') click = new EventEmitter<any>();
 
   get hasClickEvent() {
     return !!this.click.observers.length;

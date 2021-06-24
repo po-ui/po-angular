@@ -18,16 +18,35 @@ import { convertToBoolean, isTypeof } from './../../utils/util';
  * de `po-page-login` e demais templates de login.
  */
 export class PoPageBackgroundComponent implements OnInit {
+  /** Insere uma imagem de destaque ao lado direito do container. */
+  @Input('p-background') background?: string;
+
+  /** Idioma inicial selecionado no combo */
+  @Input('p-initial-language') initialSelectLanguage?: string;
+
+  /** Designa se o logotipo deve desaparecer em resoluções menores. */
+  @Input('p-hide-logo') hideLogo?: boolean;
+
+  /** Texto de destaque sobreposto à imagem de destaque. Essa opção é utilizada em conjunto com o atributo `p-background`. */
+  @Input('p-highlight-info') highlightInfo?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao selecionar alguma opção no seletor de idiomas.
+   * Para este evento será passado como parâmetro o valor de idioma selecionado.
+   */
+  @Output('p-selected-language') selectedLanguage: EventEmitter<string> = new EventEmitter<string>();
+
+  selectedLanguageOption: string;
+
   private _logo?: string;
   private _secondaryLogo?: string;
   private _showSelectLanguage?: boolean = false;
   private _languagesList: Array<PoLanguage>;
   private _selectLanguageOptions: Array<PoSelectOption>;
-
-  selectedLanguageOption: string;
-
-  /** Insere uma imagem de destaque ao lado direito do container. */
-  @Input('p-background') background?: string;
 
   /** Lista de idiomas para o combo box */
   @Input('p-languages') set languagesList(value: Array<PoLanguage>) {
@@ -40,15 +59,6 @@ export class PoPageBackgroundComponent implements OnInit {
     }
     return poLanguageDefault;
   }
-
-  /** Idioma inicial selecionado no combo */
-  @Input('p-initial-language') initialSelectLanguage?: string;
-
-  /** Designa se o logotipo deve desaparecer em resoluções menores. */
-  @Input('p-hide-logo') hideLogo?: boolean;
-
-  /** Texto de destaque sobreposto à imagem de destaque. Essa opção é utilizada em conjunto com o atributo `p-background`. */
-  @Input('p-highlight-info') highlightInfo?: string;
 
   /** Caminho para a logomarca localizada na parte superior. */
   @Input('p-logo') set logo(value: any) {
@@ -81,16 +91,6 @@ export class PoPageBackgroundComponent implements OnInit {
   get showSelectLanguage() {
     return this._showSelectLanguage;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao selecionar alguma opção no seletor de idiomas.
-   * Para este evento será passado como parâmetro o valor de idioma selecionado.
-   */
-  @Output('p-selected-language') selectedLanguage: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(public poLanguageService: PoLanguageService) {}
 

@@ -7,6 +7,8 @@ import { PoModalComponent } from '@po-ui/ng-components';
   templateUrl: './sample-po-tag-bank-account.component.html'
 })
 export class SamplePoTagBankAccountComponent {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   investiments = [
     { label: 'Stocks', type: 'danger', value: 'Low -3.50%' },
     { label: 'Treasury bills', type: 'success', value: 'Growing +2.25%' },
@@ -66,8 +68,6 @@ export class SamplePoTagBankAccountComponent {
     'email': 'natasha.romanova@po-ui.com.br',
     'photo': 'avatar2.png'
   };
-
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   openModal() {
     this.poModal.open();

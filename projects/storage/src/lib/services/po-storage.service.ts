@@ -89,6 +89,11 @@ export class PoStorageService {
   private storagePromise: Promise<LocalForage>;
   private lokijsDriver: PoLokiDriver;
 
+  constructor(@Inject(PO_STORAGE_CONFIG_TOKEN) config?: PoStorageConfig) {
+    this.lokijsDriver = new PoLokiDriver();
+    this.setStoragePromise(config);
+  }
+
   /**
    * Retorna a configuração padrão para o armazenamento. Caso nenhuma configuração seja inserida,
    * essa configuração será utilizada.
@@ -115,11 +120,6 @@ export class PoStorageService {
 
   private static getConfig(storageConfig?: PoStorageConfig) {
     return storageConfig || PoStorageService.getDefaultConfig();
-  }
-
-  constructor(@Inject(PO_STORAGE_CONFIG_TOKEN) config?: PoStorageConfig) {
-    this.lokijsDriver = new PoLokiDriver();
-    this.setStoragePromise(config);
   }
 
   /**

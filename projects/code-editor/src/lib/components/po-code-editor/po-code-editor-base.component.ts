@@ -66,16 +66,16 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  */
 @Directive()
 export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor {
+  editor: any;
+  modifiedValue: string = '';
+  value: any = '';
+
   private _height: number = 150;
   private _language = 'plainText';
   private _readonly: boolean = false;
   private _showDiff: boolean = false;
   private _suggestions: Array<PoCodeEditorRegisterableSuggestion>;
   private _theme = PO_CODE_EDITOR_THEME_DEFAULT;
-
-  editor: any;
-  modifiedValue: string = '';
-  value: any = '';
 
   /**
    * @optional
@@ -251,16 +251,6 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
     this.onTouched = fn;
   }
 
-  abstract writeValue(value: any);
-
-  abstract setLanguage(value: any);
-
-  abstract setTheme(value: any);
-
-  abstract setReadOnly(value: any);
-
-  abstract setSuggestions(value: any);
-
   protected convertToBoolean(val: any): boolean {
     if (typeof val === 'string') {
       val = val.toLowerCase().trim();
@@ -273,4 +263,14 @@ export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor 
 
     return !!val;
   }
+
+  abstract writeValue(value: any);
+
+  abstract setLanguage(value: any);
+
+  abstract setTheme(value: any);
+
+  abstract setReadOnly(value: any);
+
+  abstract setSuggestions(value: any);
 }

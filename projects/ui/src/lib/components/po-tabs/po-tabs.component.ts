@@ -38,14 +38,14 @@ const poTabsMaxNumberOfTabs = 5;
   templateUrl: './po-tabs.component.html'
 })
 export class PoTabsComponent extends PoTabsBaseComponent {
-  maxNumberOfTabs = poTabsMaxNumberOfTabs;
-
-  private previousActiveTab: PoTabComponent;
-
   // Tabs utilizados no ng-content
   @ContentChildren(PoTabComponent) tabs: QueryList<PoTabComponent>;
 
   @ViewChild('tabDropdown', { static: true }) tabDropdown: PoTabDropdownComponent;
+
+  maxNumberOfTabs = poTabsMaxNumberOfTabs;
+
+  private previousActiveTab: PoTabComponent;
 
   constructor(private changeDetector: ChangeDetectorRef) {
     super();

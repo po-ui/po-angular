@@ -60,20 +60,118 @@ export const poPageDynamicSearchLiteralsDefault = {
  */
 @Directive()
 export abstract class PoPageDynamicSearchBaseComponent {
-  private _filters: Array<PoDynamicFormField> = [];
-  private _literals: PoPageDynamicSearchLiterals;
-  private _quickSearchWidth: number;
-
-  advancedFilterLiterals: PoAdvancedFilterLiterals;
-
-  private previousFilters: Array<PoDynamicFormField>;
-  private language: string;
-
   /** Nesta propriedade deve ser definido um array de objetos que implementam a interface `PoPageAction`. */
   @Input('p-actions') actions?: Array<PoPageAction> = [];
 
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Mantém na busca avançada os valores preenchidos do último filtro realizado pelo usuário.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-keep-filters')
+  keepFilters: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a utilização da pesquisa rápida junto com a pesquisa avançada.
+   *
+   * Desta forma, ao ter uma pesquisa avançada estabelecida e ser
+   * preenchido a pesquisa rápida, o filtro será concatenado adicionando a pesquisa
+   * rápida também na lista de `disclaimers`.
+   *
+   * > Os valores que são emitidos no `p-quick-search` e no `p-advanced-search`
+   * permanecem separados durante a emissão dos valores alterados. A concatenação
+   * é apenas nos `disclaimers`.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-concat-filters')
+  concatFilters: boolean = false;
+
+  /**
+   * Função ou serviço que será executado na inicialização do componente.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
+   * - `function`: Método que será executado.
+   *
+   * O retorno desta função deve ser do tipo `PoPageDynamicSearchOptions`,
+   * onde o usuário poderá customizar novos filtros, breadcrumb, title e actions
+   *
+   * Por exemplo:
+   *
+   * ```
+   * getPageOptions(): PoPageDynamicSearchOptions {
+   * return {
+   *   actions: [
+   *     { label: 'Find on Google' },
+   *   ],
+   *   filters: [
+   *     { property: 'idCard', gridColumns: 6 }
+   *   ]
+   * };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-load]="onLoadOptions.bind(this)"
+   * ```
+   */
+  @Input('p-load') onLoad: string | (() => PoPageDynamicSearchOptions);
+
+  /** Título da página. */
+  @Input('p-title') title: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao executar a pesquisa avançada, o mesmo irá repassar um objeto com os valores preenchidos no modal de pesquisa.
+   *
+   * > Campos não preenchidos não irão aparecer no objeto passado por parâmetro.
+   */
+  @Output('p-advanced-search') advancedSearch: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao remover um ou todos os disclaimers pelo usuário.
+   */
+  @Output('p-change-disclaimers') changeDisclaimers: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao realizar uma busca pelo campo de pesquisa rápida, o mesmo será chamado repassando o valor digitado.
+   */
+  @Output('p-quick-search') quickSearch: EventEmitter<string> = new EventEmitter();
+
+  advancedFilterLiterals: PoAdvancedFilterLiterals;
+
+  private _filters: Array<PoDynamicFormField> = [];
+  private _literals: PoPageDynamicSearchLiterals;
+  private _quickSearchWidth: number;
+
+  private previousFilters: Array<PoDynamicFormField>;
+  private language: string;
 
   /**
    * @optional
@@ -157,75 +255,6 @@ export abstract class PoPageDynamicSearchBaseComponent {
    *
    * @description
    *
-   * Mantém na busca avançada os valores preenchidos do último filtro realizado pelo usuário.
-   *
-   * @default `false`
-   */
-  @InputBoolean()
-  @Input('p-keep-filters')
-  keepFilters: boolean = false;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Permite a utilização da pesquisa rápida junto com a pesquisa avançada.
-   *
-   * Desta forma, ao ter uma pesquisa avançada estabelecida e ser
-   * preenchido a pesquisa rápida, o filtro será concatenado adicionando a pesquisa
-   * rápida também na lista de `disclaimers`.
-   *
-   * > Os valores que são emitidos no `p-quick-search` e no `p-advanced-search`
-   * permanecem separados durante a emissão dos valores alterados. A concatenação
-   * é apenas nos `disclaimers`.
-   *
-   * @default `false`
-   */
-  @InputBoolean()
-  @Input('p-concat-filters')
-  concatFilters: boolean = false;
-
-  /**
-   * Função ou serviço que será executado na inicialização do componente.
-   *
-   * A propriedade aceita os seguintes tipos:
-   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
-   * - `function`: Método que será executado.
-   *
-   * O retorno desta função deve ser do tipo `PoPageDynamicSearchOptions`,
-   * onde o usuário poderá customizar novos filtros, breadcrumb, title e actions
-   *
-   * Por exemplo:
-   *
-   * ```
-   * getPageOptions(): PoPageDynamicSearchOptions {
-   * return {
-   *   actions: [
-   *     { label: 'Find on Google' },
-   *   ],
-   *   filters: [
-   *     { property: 'idCard', gridColumns: 6 }
-   *   ]
-   * };
-   * }
-   *
-   * ```
-   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
-   * ```
-   *  [p-load]="onLoadOptions.bind(this)"
-   * ```
-   */
-  @Input('p-load') onLoad: string | (() => PoPageDynamicSearchOptions);
-
-  /** Título da página. */
-  @Input('p-title') title: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Largura do campo de busca, utilizando o *Grid System*,
    * e limitado ao máximo de 6 colunas. O tamanho mínimo é controlado
    * conforme resolução de tela para manter a consistência do layout.
@@ -238,40 +267,9 @@ export abstract class PoPageDynamicSearchBaseComponent {
     return this._quickSearchWidth;
   }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao executar a pesquisa avançada, o mesmo irá repassar um objeto com os valores preenchidos no modal de pesquisa.
-   *
-   * > Campos não preenchidos não irão aparecer no objeto passado por parâmetro.
-   */
-  @Output('p-advanced-search') advancedSearch: EventEmitter<any> = new EventEmitter();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao remover um ou todos os disclaimers pelo usuário.
-   */
-  @Output('p-change-disclaimers') changeDisclaimers: EventEmitter<any> = new EventEmitter();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao realizar uma busca pelo campo de pesquisa rápida, o mesmo será chamado repassando o valor digitado.
-   */
-  @Output('p-quick-search') quickSearch: EventEmitter<string> = new EventEmitter();
-
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
-
-  abstract onChangeFilters(filters: Array<PoPageDynamicSearchFilters>);
 
   protected setAdvancedFilterLiterals(literals: PoPageDynamicSearchLiterals) {
     this.advancedFilterLiterals = {
@@ -280,4 +278,6 @@ export abstract class PoPageDynamicSearchBaseComponent {
       title: literals.filterTitle
     };
   }
+
+  abstract onChangeFilters(filters: Array<PoPageDynamicSearchFilters>);
 }

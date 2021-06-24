@@ -185,6 +185,22 @@ export class PoI18nBaseService {
     return this.languageService.getLanguage();
   }
 
+  getLiterals(options: PoI18nLiterals = {}): Observable<object> {
+    const language = options['language'] ? options['language'].toLowerCase() : this.getLanguage();
+    const context = options['context'] ? options['context'] : this.contextDefault;
+    const literals: Array<string> = options['literals'] ? options['literals'] : [];
+
+    return new Observable(observer => {
+      if (this.servicesContext[context]) {
+        // Faz o processo de busca de um contexto que contém serviço
+        this.getLiteralsFromContextService(language, context, literals, observer);
+      } else {
+        // Faz o processo de busca de um contexto que utiliza constante
+        this.getLiteralsFromContextConstant(language, context, literals, observer);
+      }
+    });
+  }
+
   /**
    * Método que retorna o idioma padrão ativo, com somente a abreviação do idioma (duas primeiras letras).
    * Por exemplo: "pt" ou "es".
@@ -252,22 +268,6 @@ export class PoI18nBaseService {
         }
       }
     }
-  }
-
-  getLiterals(options: PoI18nLiterals = {}): Observable<object> {
-    const language = options['language'] ? options['language'].toLowerCase() : this.getLanguage();
-    const context = options['context'] ? options['context'] : this.contextDefault;
-    const literals: Array<string> = options['literals'] ? options['literals'] : [];
-
-    return new Observable(observer => {
-      if (this.servicesContext[context]) {
-        // Faz o processo de busca de um contexto que contém serviço
-        this.getLiteralsFromContextService(language, context, literals, observer);
-      } else {
-        // Faz o processo de busca de um contexto que utiliza constante
-        this.getLiteralsFromContextConstant(language, context, literals, observer);
-      }
-    });
   }
 
   // Processo de busca de um contexto que contém serviço.

@@ -15,15 +15,15 @@ import { poFieldContainerLiterals } from './po-field-container-literals';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoFieldContainerComponent {
-  literals;
-
-  private _optional: boolean = false;
-
   /** Label do campo. */
   @Input('p-label') label?: string;
 
   /** Texto de apoio do campo. */
   @Input('p-help') help: string;
+
+  literals;
+
+  private _optional: boolean = false;
 
   /** Indica se o campo será opcional. */
   @Input('p-optional') set optional(value: boolean) {

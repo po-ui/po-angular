@@ -25,18 +25,30 @@ const poStepLiteralsDefault = {
   templateUrl: 'po-stepper-step.component.html'
 })
 export class PoStepperStepComponent {
-  private _label: string;
-  private _status: PoStepperStatus;
-  private _stepIcons?: boolean = false;
-  private _stepSize: number = poStepperStepSizeDefault;
+  // Conteúdo que será repassado para o componente `p-circle-content` através da propriedade `p-content`.
+  @Input('p-circle-content') circleContent: any;
+
+  // Define a orientação de exibição.
+  @Input('p-orientation') orientation: PoStepperOrientation;
+
+  // Evento que será emitido quando o status do *step* estiver ativo (`PoStepperStatus.Active`).
+  @Output('p-activated') activated = new EventEmitter<any>();
+
+  // Evento que será emitido ao clicar no *step*.
+  @Output('p-click') click = new EventEmitter<any>();
+
+  // Evento que será emitido ao focar no *step* e pressionar a tecla *enter*.
+  @Output('p-enter') enter = new EventEmitter<any>();
 
   readonly literals = {
     ...poStepLiteralsDefault[poLocaleDefault],
     ...poStepLiteralsDefault[browserLanguage()]
   };
 
-  // Conteúdo que será repassado para o componente `p-circle-content` através da propriedade `p-content`.
-  @Input('p-circle-content') circleContent: any;
+  private _label: string;
+  private _status: PoStepperStatus;
+  private _stepIcons?: boolean = false;
+  private _stepSize: number = poStepperStepSizeDefault;
 
   // Label do *step*.
   @Input('p-label') set label(value: string) {
@@ -46,9 +58,6 @@ export class PoStepperStepComponent {
   get label(): string {
     return this._label;
   }
-
-  // Define a orientação de exibição.
-  @Input('p-orientation') orientation: PoStepperOrientation;
 
   // Define o estado de exibição.
   @Input('p-status') set status(value: PoStepperStatus) {
@@ -81,15 +90,6 @@ export class PoStepperStepComponent {
   get stepSize(): number {
     return this._stepSize;
   }
-
-  // Evento que será emitido quando o status do *step* estiver ativo (`PoStepperStatus.Active`).
-  @Output('p-activated') activated = new EventEmitter<any>();
-
-  // Evento que será emitido ao clicar no *step*.
-  @Output('p-click') click = new EventEmitter<any>();
-
-  // Evento que será emitido ao focar no *step* e pressionar a tecla *enter*.
-  @Output('p-enter') enter = new EventEmitter<any>();
 
   get halfStepSize(): number {
     return this.stepSize / 2;

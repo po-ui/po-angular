@@ -14,8 +14,6 @@ export class SamplePoLookupSwFilmsComponent implements OnInit {
   filmItemsFiltered;
   filterParams = 'people';
 
-  private filmItems;
-
   readonly characterColumns = [
     { property: 'name', label: 'Name' },
     { property: 'gender', label: 'Gender' },
@@ -50,6 +48,8 @@ export class SamplePoLookupSwFilmsComponent implements OnInit {
     { property: 'max_atmosphering_speed', label: 'Max Speed' },
     { property: 'consumables', label: 'Consumables' }
   ];
+
+  private filmItems;
 
   constructor(public filterService: SamplePoLookupSwFilmsService) {}
 

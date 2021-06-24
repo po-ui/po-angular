@@ -121,16 +121,86 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
   providers: [PoPageDynamicService]
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
-  private _actions: PoPageDynamicTableActions = {};
-  private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
-  private _quickSearchWidth: number;
-  private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
+  /**
+   * Função ou serviço que será executado na inicialização do componente.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
+   * - `function`: Método que será executado.
+   *
+   * O retorno desta função deve ser do tipo `PoPageDynamicTableOptions`,
+   * onde o usuário poderá customizar novos campos, breadcrumb, title e actions
+   *
+   * Por exemplo:
+   *
+   * ```
+   * getPageOptions(): PoPageDynamicTableOptions {
+   * return {
+   *   actions:
+   *     { new: 'new', edit: 'edit/:id', remove: true },
+   *   fields: [
+   *     { property: 'idCard', gridColumns: 6 }
+   *   ]
+   * };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-load]="onLoadOptions.bind(this)"
+   * ```
+   */
+  @Input('p-load') onLoad: string | (() => PoPageDynamicTableOptions);
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Mantém na modal de `Busca Avançada` os valores preenchidos do último filtro realizado pelo usuário.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-keep-filters')
+  keepFilters: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a utilização da pesquisa rápida junto com a pesquisa avançada.
+   *
+   * Desta forma, ao ter uma pesquisa avançada estabelecida e ser
+   * preenchido a pesquisa rápida, o filtro será concatenado adicionando a pesquisa
+   * rápida também na lista de `disclaimers` a aplicando uma nova busca com a concatenação.
+   *
+   * Por exemplo, com os seguintes filtros aplicados:
+   *   - filtro avançado: `{ name: 'Mike', age: '12' }`
+   *   - filtro rápido: `{ search: 'paper' }`
+   *
+   * A requisição dos dados na API ficará com os parâmetros:
+   * ```
+   * page=1&pageSize=10&name=Mike&age=12&search=paper
+   * ```
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-concat-filters')
+  concatFilters: boolean = false;
 
   hasNext = false;
   items = [];
   literals;
   pageActions: Array<PoPageAction> = [];
   tableActions: Array<PoTableAction> = [];
+
+  private _actions: PoPageDynamicTableActions = {};
+  private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
+  private _quickSearchWidth: number;
+  private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
   private page: number = 1;
   private params = {};
@@ -162,37 +232,6 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this._customTableActions = value;
     this.updateTableActions();
   }
-
-  /**
-   * Função ou serviço que será executado na inicialização do componente.
-   *
-   * A propriedade aceita os seguintes tipos:
-   * - `string`: *Endpoint* usado pelo componente para requisição via `POST`.
-   * - `function`: Método que será executado.
-   *
-   * O retorno desta função deve ser do tipo `PoPageDynamicTableOptions`,
-   * onde o usuário poderá customizar novos campos, breadcrumb, title e actions
-   *
-   * Por exemplo:
-   *
-   * ```
-   * getPageOptions(): PoPageDynamicTableOptions {
-   * return {
-   *   actions:
-   *     { new: 'new', edit: 'edit/:id', remove: true },
-   *   fields: [
-   *     { property: 'idCard', gridColumns: 6 }
-   *   ]
-   * };
-   * }
-   *
-   * ```
-   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
-   * ```
-   *  [p-load]="onLoadOptions.bind(this)"
-   * ```
-   */
-  @Input('p-load') onLoad: string | (() => PoPageDynamicTableOptions);
 
   /**
    * @optional
@@ -269,45 +308,6 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   get tableCustomActions(): Array<PoPageDynamicTableCustomTableAction> {
     return this._tableCustomActions;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Mantém na modal de `Busca Avançada` os valores preenchidos do último filtro realizado pelo usuário.
-   *
-   * @default `false`
-   */
-  @InputBoolean()
-  @Input('p-keep-filters')
-  keepFilters: boolean = false;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Permite a utilização da pesquisa rápida junto com a pesquisa avançada.
-   *
-   * Desta forma, ao ter uma pesquisa avançada estabelecida e ser
-   * preenchido a pesquisa rápida, o filtro será concatenado adicionando a pesquisa
-   * rápida também na lista de `disclaimers` a aplicando uma nova busca com a concatenação.
-   *
-   * Por exemplo, com os seguintes filtros aplicados:
-   *   - filtro avançado: `{ name: 'Mike', age: '12' }`
-   *   - filtro rápido: `{ search: 'paper' }`
-   *
-   * A requisição dos dados na API ficará com os parâmetros:
-   * ```
-   * page=1&pageSize=10&name=Mike&age=12&search=paper
-   * ```
-   *
-   * @default `false`
-   */
-  @InputBoolean()
-  @Input('p-concat-filters')
-  concatFilters: boolean = false;
 
   /**
    * @optional

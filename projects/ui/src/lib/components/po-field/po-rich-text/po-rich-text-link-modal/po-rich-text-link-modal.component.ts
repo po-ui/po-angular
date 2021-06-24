@@ -12,15 +12,18 @@ import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
   templateUrl: './po-rich-text-link-modal.component.html'
 })
 export class PoRichTextLinkModalComponent {
+  @ViewChild('modal', { static: true }) modal: PoModalComponent;
+
+  @ViewChild('modalLinkForm') modalLinkForm: NgForm;
+
+  @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();
+
+  @Output('p-link-editing') linkEditing = new EventEmitter<any>();
+
   savedCursorPosition;
   selection = document.getSelection();
   urlLink: string;
   urlLinkText: string;
-
-  private isLinkEditing: boolean;
-  private isSelectedLink: boolean;
-  private linkElement: any;
-  private savedSelection: Range | null;
 
   readonly literals = {
     ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
@@ -42,13 +45,10 @@ export class PoRichTextLinkModalComponent {
     action: () => (this.isLinkEditing ? this.toEditLink() : this.toInsertLink(this.urlLink, this.urlLinkText))
   };
 
-  @ViewChild('modal', { static: true }) modal: PoModalComponent;
-
-  @ViewChild('modalLinkForm') modalLinkForm: NgForm;
-
-  @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();
-
-  @Output('p-link-editing') linkEditing = new EventEmitter<any>();
+  private isLinkEditing: boolean;
+  private isSelectedLink: boolean;
+  private linkElement: any;
+  private savedSelection: Range | null;
 
   constructor(private languageService: PoLanguageService) {}
 

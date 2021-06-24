@@ -16,18 +16,27 @@ const ANIMATION_DURATION_TIME = 700;
   templateUrl: './po-chart-series-point.component.svg'
 })
 export class PoChartSeriesPointComponent {
-  private _color: string;
-  private _coordinates: Array<PoChartPointsCoordinates> = [];
+  @Input('p-animate') animate: boolean;
+
+  @Input('p-is-active') @InputBoolean() isActive: boolean;
+
+  @Input('p-chart-line') @InputBoolean() chartLine: boolean = false;
+
+  // Referência para o svgPathGroup ao qual pertence o ponto. Necessário para reordenação dos svgElements no DOM para tratamento onHover
+  @Input('p-relative-to') relativeTo: string;
+
+  @Output('p-point-click') pointClick = new EventEmitter<any>();
+
+  @Output('p-point-hover') pointHover = new EventEmitter<any>();
 
   coordinates$: Observable<Array<PoChartPointsCoordinates>>;
   radius: number = RADIUS_DEFAULT_SIZE;
   strokeColor: string;
 
+  private _color: string;
+  private _coordinates: Array<PoChartPointsCoordinates> = [];
+
   private animationState: boolean = true;
-
-  @Input('p-animate') animate: boolean;
-
-  @Input('p-is-active') @InputBoolean() isActive: boolean;
 
   @Input('p-color') set color(value: string) {
     this.strokeColor = value.includes('po-color') ? value.replace('po-color', 'po-border-color') : value;
@@ -47,15 +56,6 @@ export class PoChartSeriesPointComponent {
   get coordinates() {
     return this._coordinates;
   }
-
-  @Input('p-chart-line') @InputBoolean() chartLine: boolean = false;
-
-  // Referência para o svgPathGroup ao qual pertence o ponto. Necessário para reordenação dos svgElements no DOM para tratamento onHover
-  @Input('p-relative-to') relativeTo: string;
-
-  @Output('p-point-click') pointClick = new EventEmitter<any>();
-
-  @Output('p-point-hover') pointHover = new EventEmitter<any>();
 
   constructor(private renderer: Renderer2, private elementRef: ElementRef) {}
 

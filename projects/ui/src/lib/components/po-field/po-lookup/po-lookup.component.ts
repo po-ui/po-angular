@@ -91,9 +91,9 @@ const providers = [
   providers
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit {
-  private modalSubscription: Subscription;
-
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+
+  private modalSubscription: Subscription;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';

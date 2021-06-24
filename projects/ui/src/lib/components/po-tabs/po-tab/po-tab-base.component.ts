@@ -14,12 +14,18 @@ import { convertToBoolean, uuid } from '../../../utils/util';
  */
 @Directive()
 export abstract class PoTabBaseComponent {
-  private _active?: boolean = false;
-  private _disabled?: boolean = false;
-  private _hide?: boolean = false;
+  /** Rótulo da aba. */
+  @Input('p-label') label: string;
+
+  /** Método disparado ao clicar na aba. */
+  @Output('p-click') click = new EventEmitter();
 
   // ID da aba
   id?: string = uuid();
+
+  private _active?: boolean = false;
+  private _disabled?: boolean = false;
+  private _hide?: boolean = false;
 
   /**
    * @optional
@@ -74,12 +80,6 @@ export abstract class PoTabBaseComponent {
   get hide(): boolean {
     return this._hide;
   }
-
-  /** Rótulo da aba. */
-  @Input('p-label') label: string;
-
-  /** Método disparado ao clicar na aba. */
-  @Output('p-click') click = new EventEmitter();
 
   protected abstract setDisplayOnActive();
 }

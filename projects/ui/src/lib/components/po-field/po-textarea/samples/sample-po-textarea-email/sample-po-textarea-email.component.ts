@@ -9,6 +9,9 @@ import { PoPageAction } from '@po-ui/ng-components';
   templateUrl: './sample-po-textarea-email.component.html'
 })
 export class SamplePoTextareaEmailComponent {
+  @ViewChild('formEmail', { static: true }) formEmail: FormControl;
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   cc: string = '';
   emailText: string = '';
   from: string = '';
@@ -23,10 +26,6 @@ export class SamplePoTextareaEmailComponent {
     },
     label: 'Ok'
   };
-
-  @ViewChild('formEmail', { static: true }) formEmail: FormControl;
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
-
   getPageAction() {
     const isDisabled = this.formEmail ? !this.formEmail['valid'] : true;
     return [

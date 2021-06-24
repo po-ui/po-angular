@@ -12,6 +12,17 @@ export abstract class PoDataTransform {
   protected data: any;
 
   /**
+   * @docsPrivate
+   *
+   * Método responsável por receber e armazenar os dados retornados pela API para manipulação na classe `PoDataTransform`.
+   *
+   * @param {any} data Dados retornados pela API.
+   */
+  transform(data: any): void {
+    this.data = data;
+  }
+
+  /**
    * Retorna o nome da propriedade responsável por informar a data da última sincronização.
    *
    * @returns {string} Nome do campo que contém a data da última sincronização.
@@ -47,15 +58,4 @@ export abstract class PoDataTransform {
    * @returns {boolean} Informa se existe próxima página de registros.
    */
   abstract hasNext(): boolean;
-
-  /**
-   * @docsPrivate
-   *
-   * Método responsável por receber e armazenar os dados retornados pela API para manipulação na classe `PoDataTransform`.
-   *
-   * @param {any} data Dados retornados pela API.
-   */
-  transform(data: any): void {
-    this.data = data;
-  }
 }

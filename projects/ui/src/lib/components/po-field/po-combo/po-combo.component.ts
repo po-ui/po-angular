@@ -97,7 +97,12 @@ const poComboContainerPositionDefault = 'bottom';
   ]
 })
 export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
-  private _isServerSearching: boolean = false;
+  @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;
+
+  @ViewChild('containerElement', { read: ElementRef }) containerElement: ElementRef;
+  @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef;
+  @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   comboIcon: string = 'po-icon-arrow-down';
   comboOpen: boolean = false;
@@ -107,18 +112,13 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   service: PoComboFilterService;
   shouldMarkLetters: boolean = true;
 
+  private _isServerSearching: boolean = false;
+
   private clickoutListener: () => void;
   private eventResizeListener: () => void;
 
   private filterSubscription: Subscription;
   private getSubscription: Subscription;
-
-  @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;
-
-  @ViewChild('containerElement', { read: ElementRef }) containerElement: ElementRef;
-  @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef;
-  @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
-  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   constructor(
     public element: ElementRef,

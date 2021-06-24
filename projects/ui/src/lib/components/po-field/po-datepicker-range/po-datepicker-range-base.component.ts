@@ -55,7 +55,68 @@ import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals
  */
 @Directive()
 export abstract class PoDatepickerRangeBaseComponent implements ControlValueAccessor, Validator {
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Texto de apoio do campo.
+   */
+  @Input('p-help') help?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Rótulo do campo.
+   */
+  @Input('p-label') label?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - O campo conter `p-required`;
+   * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor do campo.
+   */
+  @Output('p-change') onChange: EventEmitter<any> = new EventEmitter<any>();
+
   errorMessage: string = '';
+  dateRange: PoDatepickerRange = { start: '', end: '' };
+
+  protected format: any = 'dd/mm/yyyy';
+  protected isDateRangeInputFormatValid: boolean = true;
+  protected isStartDateRangeInputValid: boolean = true;
+  protected onTouchedModel: any;
 
   private _clean?: boolean = false;
   private _disabled?;
@@ -70,29 +131,9 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private onChangeModel: any;
   private validatorChange: any;
 
-  dateRange: PoDatepickerRange = { start: '', end: '' };
-
-  protected format: any = 'dd/mm/yyyy';
-  protected isDateRangeInputFormatValid: boolean = true;
-  protected isStartDateRangeInputValid: boolean = true;
-  protected onTouchedModel: any;
-
   get isDateRangeInputValid() {
     return this.isDateRangeInputFormatValid && this.isStartDateRangeInputValid;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   *
-   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
-   *
-   * @default `false`
-   */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
    * @optional
@@ -148,24 +189,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   get endDate() {
     return this._endDate;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Texto de apoio do campo.
-   */
-  @Input('p-help') help?: string;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Rótulo do campo.
-   */
-  @Input('p-label') label?: string;
 
   /**
    * @optional
@@ -240,21 +263,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @description
    *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Indica que o campo será somente leitura.
    *
    * @default `false`
@@ -307,22 +315,9 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
     return this._startDate;
   }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao alterar valor do campo.
-   */
-  @Output('p-change') onChange: EventEmitter<any> = new EventEmitter<any>();
-
   constructor(protected poDateService: PoDateService, languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
-
-  protected abstract resetDateRangeInputValidation(): void;
-
-  protected abstract updateScreenByModel(dateRange: PoDatepickerRange);
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar os estados de habilitado via forms api
@@ -462,4 +457,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
       requiredFailed(this.required, this.disabled, endDate)
     );
   }
+
+  protected abstract resetDateRangeInputValidation(): void;
+
+  protected abstract updateScreenByModel(dateRange: PoDatepickerRange);
 }

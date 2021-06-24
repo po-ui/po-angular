@@ -83,7 +83,19 @@ import { PoTableService } from './services/po-table.service';
   providers: [PoDateService]
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
-  private _columnManagerTarget: ElementRef;
+  @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
+  @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
+
+  @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
+
+  @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
+  @ViewChild('popup') poPopupComponent: PoPopupComponent;
+  @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
+  @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
+
+  @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
+  @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
+  @ViewChildren('headersTable') headersTable: QueryList<any>;
 
   heightTableContainer: number;
   popupTarget;
@@ -91,6 +103,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   tooltipText: string;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
 
+  private _columnManagerTarget: ElementRef;
   private differ;
   private footerHeight;
   private initialized = false;
@@ -99,10 +112,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private clickListener: () => void;
   private resizeListener: () => void;
-
-  @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
-  @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
-  @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
@@ -113,16 +122,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   get columnManagerTarget() {
     return this._columnManagerTarget;
   }
-
-  @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
-  @ViewChild('popup') poPopupComponent: PoPopupComponent;
-
-  @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
-  @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
-
-  @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
-  @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
-  @ViewChildren('headersTable') headersTable: QueryList<any>;
 
   constructor(
     poDate: PoDateService,
@@ -444,6 +443,19 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.lastVisibleColumnsSelected = [...this.columns];
   }
 
+  public getTemplate(column: PoTableColumn): TemplateRef<any> {
+    const template: PoTableColumnTemplateDirective = this.tableColumnTemplates.find(tableColumnTemplate => {
+      return tableColumnTemplate.targetProperty === column.property;
+    });
+    if (!template) {
+      console.warn(
+        `Não foi possível encontrar o template para a coluna: ${column.property}, por gentileza informe a propriedade [p-property]`
+      );
+      return null;
+    }
+    return template.templateRef;
+  }
+
   protected calculateHeightTableContainer(height) {
     const value = parseFloat(height);
     this.heightTableContainer = value ? value - this.getHeightTableFooter() : undefined;
@@ -542,18 +554,5 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.footerHeight = this.getHeightTableFooter();
       this.calculateHeightTableContainer(this.height);
     }
-  }
-
-  public getTemplate(column: PoTableColumn): TemplateRef<any> {
-    const template: PoTableColumnTemplateDirective = this.tableColumnTemplates.find(tableColumnTemplate => {
-      return tableColumnTemplate.targetProperty === column.property;
-    });
-    if (!template) {
-      console.warn(
-        `Não foi possível encontrar o template para a coluna: ${column.property}, por gentileza informe a propriedade [p-property]`
-      );
-      return null;
-    }
-    return template.templateRef;
   }
 }

@@ -7,6 +7,9 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
   templateUrl: './sample-po-popover-labs.component.html'
 })
 export class SamplePoPopoverLabsComponent {
+  @ViewChild('buttonClick', { read: ElementRef, static: true }) buttonClickRef: ElementRef;
+  @ViewChild('buttonHover', { read: ElementRef, static: true }) buttonHoverRef: ElementRef;
+
   content: string = '';
   position: string = '';
   properties: Array<string> = [];
@@ -28,9 +31,6 @@ export class SamplePoPopoverLabsComponent {
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'hideArrow', label: 'Hide arrow' }];
-
-  @ViewChild('buttonClick', { read: ElementRef, static: true }) buttonClickRef: ElementRef;
-  @ViewChild('buttonHover', { read: ElementRef, static: true }) buttonHoverRef: ElementRef;
 
   restore() {
     this.content = '';

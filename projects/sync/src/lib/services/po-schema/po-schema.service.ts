@@ -15,6 +15,8 @@ import { PoSyncSchema } from '../po-sync/interfaces/po-sync-schema.interface';
  */
 @Injectable()
 export class PoSchemaService {
+  constructor(private poSchemaDefinitionService: PoSchemaDefinitionService, private poStorage: PoStorageService) {}
+
   /**
    * Retorna o id a partir de uma chave de um *schema*.
    *
@@ -44,8 +46,6 @@ export class PoSchemaService {
   private static isSchemaKey(data: string, schemaName: string): boolean {
     return data ? data.startsWith(`${schemaName}:`) : false;
   }
-
-  constructor(private poSchemaDefinitionService: PoSchemaDefinitionService, private poStorage: PoStorageService) {}
 
   /**
    * Cria um novo registro para o *schema* informado.

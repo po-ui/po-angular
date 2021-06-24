@@ -8,6 +8,8 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
   templateUrl: './sample-po-datepicker-airfare.component.html'
 })
 export class SamplePoDatepickerAirfareComponent {
+  @ViewChild('formAirfare', { static: true }) formAirfare: FormControl;
+
   accompany: number = 0;
   destination: string;
   endDate: string = <any>new Date();
@@ -33,8 +35,6 @@ export class SamplePoDatepickerAirfareComponent {
     { value: 'Business', label: 'Business' },
     { value: 'First', label: 'First' }
   ];
-
-  @ViewChild('formAirfare', { static: true }) formAirfare: FormControl;
 
   constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
 

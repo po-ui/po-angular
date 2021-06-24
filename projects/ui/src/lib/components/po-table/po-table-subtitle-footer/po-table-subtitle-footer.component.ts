@@ -14,17 +14,18 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
   templateUrl: './po-table-subtitle-footer.component.html'
 })
 export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, OnDestroy {
-  showSubtitle: boolean;
-
-  private isVisible: boolean;
-  private timeoutResize;
-  protected resizeListener: () => void;
-
   /** Propriedade que recebe as literais definidas no `po-table`. */
   @Input('p-literals') literals;
 
   /** Propriedade que recebe as legendas definidas no `PoTableSubtitleCircleComponent`. */
   @Input('p-subtitles') subtitles: Array<PoTableSubtitleColumn>;
+
+  showSubtitle: boolean;
+
+  protected resizeListener: () => void;
+
+  private isVisible: boolean;
+  private timeoutResize;
 
   constructor(private element: ElementRef, public renderer: Renderer2) {}
 

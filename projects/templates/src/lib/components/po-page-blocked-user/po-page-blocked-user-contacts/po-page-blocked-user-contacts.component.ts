@@ -8,10 +8,16 @@ const poPageBlockedUserContactItemMargin = 16;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoPageBlockedUserContactsComponent {
-  private _email: string;
-  private _phone: string;
+  @ViewChild('contactGroup', { static: true }) contactGroup: ElementRef;
+
+  @ViewChild('mailItem', { static: true }) mailItem: ElementRef;
+
+  @ViewChild('phoneItem', { static: true }) phoneItem: ElementRef;
 
   overflowItem: boolean = true;
+
+  private _email: string;
+  private _phone: string;
 
   @Input('p-email') set email(value: string) {
     this._email = value;
@@ -32,12 +38,6 @@ export class PoPageBlockedUserContactsComponent {
   get phone() {
     return this._phone;
   }
-
-  @ViewChild('contactGroup', { static: true }) contactGroup: ElementRef;
-
-  @ViewChild('mailItem', { static: true }) mailItem: ElementRef;
-
-  @ViewChild('phoneItem', { static: true }) phoneItem: ElementRef;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 

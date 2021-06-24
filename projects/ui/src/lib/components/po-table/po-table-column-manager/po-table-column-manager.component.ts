@@ -45,25 +45,9 @@ export const poTableColumnManagerLiteralsDefault = {
   templateUrl: './po-table-column-manager.component.html'
 })
 export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
-  literals;
-  columnsOptions: Array<PoCheckboxGroupOption> = [];
-  visibleColumns: Array<string> = [];
-
-  private _maxColumns: number = PoTableColumnManagerMaxColumnsDefault;
-  private defaultColumns: Array<PoTableColumn> = [];
-  private resizeListener: () => void;
-  private restoreDefaultEvent: boolean;
-  private lastEmittedValue: Array<string>;
+  @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
 
   @Input('p-columns') columns: Array<PoTableColumn> = [];
-
-  @Input('p-max-columns') set maxColumns(value: number) {
-    this._maxColumns = convertToInt(value, PoTableColumnManagerMaxColumnsDefault);
-  }
-
-  get maxColumns() {
-    return this._maxColumns;
-  }
 
   @Input('p-target') target: ElementRef;
 
@@ -75,7 +59,23 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   // O po-table envia como parâmetro um array de string com as colunas visíveis atualizadas. Por exemplo: ["idCard", "name", "hireStatus", "age"].
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
 
-  @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
+  literals;
+  columnsOptions: Array<PoCheckboxGroupOption> = [];
+  visibleColumns: Array<string> = [];
+
+  private _maxColumns: number = PoTableColumnManagerMaxColumnsDefault;
+  private defaultColumns: Array<PoTableColumn> = [];
+  private resizeListener: () => void;
+  private restoreDefaultEvent: boolean;
+  private lastEmittedValue: Array<string>;
+
+  @Input('p-max-columns') set maxColumns(value: number) {
+    this._maxColumns = convertToInt(value, PoTableColumnManagerMaxColumnsDefault);
+  }
+
+  get maxColumns() {
+    return this._maxColumns;
+  }
 
   constructor(private renderer: Renderer2, languageService: PoLanguageService) {
     const language = languageService.getShortLanguage();
@@ -114,6 +114,13 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
       // controla emissões para o dev
       this.verifyToEmitVisibleColumns();
     }
+  }
+
+  restore() {
+    this.restoreDefaultEvent = true;
+    const defaultColumns = this.getVisibleColumns(this.defaultColumns);
+
+    this.checkChanges(defaultColumns, this.restoreDefaultEvent);
   }
 
   private verifyToEmitChange(event: Array<string>) {
@@ -212,13 +219,6 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     const secondString = JSON.stringify(secondSort);
 
     return firstString === secondString;
-  }
-
-  restore() {
-    this.restoreDefaultEvent = true;
-    const defaultColumns = this.getVisibleColumns(this.defaultColumns);
-
-    this.checkChanges(defaultColumns, this.restoreDefaultEvent);
   }
 
   // desabilitará as colunas, que não estiverem selecionadas, após exeder o numero maximo de colunas.

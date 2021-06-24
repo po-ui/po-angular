@@ -19,6 +19,8 @@ import { poChartGaugeSerieWidth } from '../../po-chart-circular/po-chart-circula
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoChartGaugeTextContentComponent implements AfterViewInit {
+  @ViewChild('description', { read: ElementRef }) descriptionElement: ElementRef;
+
   serieValueConverted: string;
   tooltip: string;
 
@@ -47,8 +49,6 @@ export class PoChartGaugeTextContentComponent implements AfterViewInit {
   get serie() {
     return this._serie;
   }
-
-  @ViewChild('description', { read: ElementRef }) descriptionElement: ElementRef;
 
   constructor(private changeDetection: ChangeDetectorRef) {}
 

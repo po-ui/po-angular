@@ -7,34 +7,6 @@ export class SamplePoButtonLabsComponentPO {
   private poCheckboxGroupPropertiesLabel = '.po-checkbox-group-label';
   private poRadioGroupLabel = '.po-radio-group-label';
 
-  private getPoButtonProperties(prop) {
-    return element(
-      by.css(
-        `${this.sampleName} ${this.poCheckboxGroupProperties}[value="${prop}"]+${this.poCheckboxGroupPropertiesLabel}`
-      )
-    );
-  }
-
-  private getPoButtonIcon(icon) {
-    return element(
-      by.css(
-        `${this.sampleName} po-radio-group[name="icon"] .po-radio-group-input[value="${icon}"]+${this.poRadioGroupLabel}`
-      )
-    );
-  }
-
-  private getPoButtonType(type) {
-    return element(
-      by.css(
-        `${this.sampleName} po-radio-group[name="type"] .po-radio-group-input[value="${type}"]+${this.poRadioGroupLabel}`
-      )
-    );
-  }
-
-  navigateTo() {
-    return browser.get(browser.baseUrl + '/documentation/po-button?view=web' + '/documentation/po-button?view=web');
-  }
-
   get poButton() {
     return element(by.css(`${this.sampleName} .po-button`));
   }
@@ -96,5 +68,33 @@ export class SamplePoButtonLabsComponentPO {
 
   get poInputGroup() {
     return element(by.css(`${this.sampleName} po-input`));
+  }
+
+  navigateTo() {
+    return browser.get(browser.baseUrl + '/documentation/po-button?view=web' + '/documentation/po-button?view=web');
+  }
+
+  private getPoButtonProperties(prop) {
+    return element(
+      by.css(
+        `${this.sampleName} ${this.poCheckboxGroupProperties}[value="${prop}"]+${this.poCheckboxGroupPropertiesLabel}`
+      )
+    );
+  }
+
+  private getPoButtonIcon(icon) {
+    return element(
+      by.css(
+        `${this.sampleName} po-radio-group[name="icon"] .po-radio-group-input[value="${icon}"]+${this.poRadioGroupLabel}`
+      )
+    );
+  }
+
+  private getPoButtonType(type) {
+    return element(
+      by.css(
+        `${this.sampleName} po-radio-group[name="type"] .po-radio-group-input[value="${type}"]+${this.poRadioGroupLabel}`
+      )
+    );
   }
 }

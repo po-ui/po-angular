@@ -8,6 +8,11 @@ import { PoModalAction, PoModalComponent, PoStepperComponent, PoUploadComponent 
   templateUrl: 'sample-po-upload-rs.component.html'
 })
 export class SamplePoUploadRsComponent implements OnInit {
+  @ViewChild('upload', { static: true }) upload: PoUploadComponent;
+  @ViewChild('stepper', { static: true }) stepper: PoStepperComponent;
+  @ViewChild('submitForm', { static: true }) submitForm: NgForm;
+  @ViewChild('sucessData', { static: true }) sucessData: PoModalComponent;
+
   confirm: PoModalAction = {
     action: () => {
       this.sucessData.close();
@@ -19,11 +24,6 @@ export class SamplePoUploadRsComponent implements OnInit {
   project: Array<any> = [];
   restrictions = { allowedExtensions: ['.zip', '.7z', '.tar', '.wim'] };
   title: string;
-
-  @ViewChild('upload', { static: true }) upload: PoUploadComponent;
-  @ViewChild('stepper', { static: true }) stepper: PoStepperComponent;
-  @ViewChild('submitForm', { static: true }) submitForm: NgForm;
-  @ViewChild('sucessData', { static: true }) sucessData: PoModalComponent;
 
   ngOnInit() {
     this.newSubmit();

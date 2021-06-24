@@ -66,9 +66,23 @@ const poCalendarPositionDefault = 'bottom-left';
   ]
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;
+  @ViewChild('dialogPicker', { read: ElementRef, static: true }) dialogPicker: ElementRef;
+  @ViewChild('iconDatepicker', { read: ElementRef, static: true }) iconDatepicker: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+
+  /** Rótulo do campo. */
+  @Input('p-label') label?: string;
+
+  /** Texto de apoio do campo. */
+  @Input('p-help') help?: string;
+
   date;
   el: ElementRef;
   hour: string;
+
+  eventListenerFunction: () => void;
+  eventResizeListener: () => void;
 
   private clickListener;
   private readonly dateRegex = new RegExp(
@@ -85,23 +99,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   private timeoutChange: any;
   private valueBeforeChange: string;
 
-  eventListenerFunction: () => void;
-  eventResizeListener: () => void;
-
-  @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;
-  @ViewChild('dialogPicker', { read: ElementRef, static: true }) dialogPicker: ElementRef;
-  @ViewChild('iconDatepicker', { read: ElementRef, static: true }) iconDatepicker: ElementRef;
-  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
-
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
   }
-
-  /** Rótulo do campo. */
-  @Input('p-label') label?: string;
-
-  /** Texto de apoio do campo. */
-  @Input('p-help') help?: string;
 
   constructor(
     private controlPosition: PoControlPositionService,
@@ -111,6 +111,36 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   ) {
     super(languageService);
     this.el = el;
+  }
+
+  @HostListener('keyup', ['$event'])
+  onKeyup($event: any) {
+    if (this.readonly) {
+      return;
+    }
+
+    this.objMask.keyup($event);
+    // Controla a atualização do model, verificando se a data é valida
+    if (this.objMask.valueToModel || this.objMask.valueToModel === '') {
+      if (this.objMask.valueToModel.length >= 10) {
+        this.controlModel(this.getDateFromString(this.inputEl.nativeElement.value));
+        this.date = this.getDateFromString(this.inputEl.nativeElement.value);
+      } else {
+        this.date = undefined;
+        this.controlModel(this.date);
+      }
+    } else {
+      this.date = undefined;
+    }
+  }
+
+  @HostListener('keydown', ['$event'])
+  onKeydown($event?: any) {
+    if (this.readonly) {
+      return;
+    }
+
+    this.objMask.keydown($event);
   }
 
   ngAfterViewInit() {
@@ -186,36 +216,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     ) {
       this.closeCalendar();
     }
-  }
-
-  @HostListener('keyup', ['$event'])
-  onKeyup($event: any) {
-    if (this.readonly) {
-      return;
-    }
-
-    this.objMask.keyup($event);
-    // Controla a atualização do model, verificando se a data é valida
-    if (this.objMask.valueToModel || this.objMask.valueToModel === '') {
-      if (this.objMask.valueToModel.length >= 10) {
-        this.controlModel(this.getDateFromString(this.inputEl.nativeElement.value));
-        this.date = this.getDateFromString(this.inputEl.nativeElement.value);
-      } else {
-        this.date = undefined;
-        this.controlModel(this.date);
-      }
-    } else {
-      this.date = undefined;
-    }
-  }
-
-  @HostListener('keydown', ['$event'])
-  onKeydown($event?: any) {
-    if (this.readonly) {
-      return;
-    }
-
-    this.objMask.keydown($event);
   }
 
   hasInvalidClass() {

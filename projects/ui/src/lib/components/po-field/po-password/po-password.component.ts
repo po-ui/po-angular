@@ -44,10 +44,10 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   ]
 })
 export class PoPasswordComponent extends PoInputGeneric {
-  private _hidePasswordPeek?: boolean = false;
-
   type = 'password';
   visiblePassword = false;
+
+  private _hidePasswordPeek?: boolean = false;
 
   /**
    * @optional

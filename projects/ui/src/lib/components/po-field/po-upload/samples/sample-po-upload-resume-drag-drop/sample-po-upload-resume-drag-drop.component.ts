@@ -8,13 +8,13 @@ import { PoNotificationService } from '@po-ui/ng-components';
   templateUrl: 'sample-po-upload-resume-drag-drop.component.html'
 })
 export class SamplePoUploadResumeDragDropComponent implements OnInit {
+  @ViewChild('formOpportunity', { static: true }) formOpportunity: FormControl;
+
   biograph: string;
   linkedin: string;
   name: string;
   resume: string;
   uploadedResume: boolean;
-
-  @ViewChild('formOpportunity', { static: true }) formOpportunity: FormControl;
 
   constructor(private poNotification: PoNotificationService) {}
 

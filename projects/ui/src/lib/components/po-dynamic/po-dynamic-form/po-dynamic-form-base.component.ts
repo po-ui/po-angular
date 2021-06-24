@@ -15,8 +15,6 @@ import { PoDynamicFormField } from './po-dynamic-form-field.interface';
  */
 @Directive()
 export class PoDynamicFormBaseComponent {
-  private _groupForm?: boolean = false;
-
   /**
    * @optional
    *
@@ -123,30 +121,6 @@ export class PoDynamicFormBaseComponent {
   @Output('p-form') formOutput: EventEmitter<NgForm> = new EventEmitter<NgForm>();
 
   /**
-   * @optional
-   *
-   * @description
-   * Ao informar esta propriedade, o componente passará a utilizar o formulário pai para criar os `FormControl`
-   * e com isso é possível recuperar o valor do formulário e suas validações a partir do formulário pai.
-   *
-   * ```html
-   * <form #parentForm="ngForm">
-   *
-   *   <po-dynamic-form p-group-form [p-fields]="fields"></po-dynamic-form>
-   *
-   *  <po-button p-label="Adicionar" [p-disabled]="parentForm.invalid"></po-button>
-   * </form>
-   * ```
-   */
-  @Input('p-group-form') set groupForm(value: boolean) {
-    this._groupForm = <any>value === '' ? true : convertToBoolean(value);
-  }
-
-  get groupForm(): boolean {
-    return this._groupForm;
-  }
-
-  /**
    * Função ou serviço que será executado na inicialização do componente.
    *
    * A propriedade aceita os seguintes tipos:
@@ -230,4 +204,30 @@ export class PoDynamicFormBaseComponent {
    * Lista que define os campos que irão disparar o validate do form.
    */
   @Input('p-validate-fields') validateFields?: Array<string>;
+
+  private _groupForm?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Ao informar esta propriedade, o componente passará a utilizar o formulário pai para criar os `FormControl`
+   * e com isso é possível recuperar o valor do formulário e suas validações a partir do formulário pai.
+   *
+   * ```html
+   * <form #parentForm="ngForm">
+   *
+   *   <po-dynamic-form p-group-form [p-fields]="fields"></po-dynamic-form>
+   *
+   *  <po-button p-label="Adicionar" [p-disabled]="parentForm.invalid"></po-button>
+   * </form>
+   * ```
+   */
+  @Input('p-group-form') set groupForm(value: boolean) {
+    this._groupForm = <any>value === '' ? true : convertToBoolean(value);
+  }
+
+  get groupForm(): boolean {
+    return this._groupForm;
+  }
 }

@@ -25,20 +25,6 @@ import { InputBoolean } from '../../../decorators';
  */
 @Directive()
 export abstract class PoTextareaBaseComponent implements ControlValueAccessor, Validator {
-  private _disabled: boolean = false;
-  private _maxlength: number;
-  private _minlength: number;
-  private _placeholder: string = '';
-  private _readonly: boolean = false;
-  private _required: boolean = false;
-  private _rows: number = 3;
-
-  private modelLastUpdate: any;
-  private onChangePropagate: any = null;
-  private validatorChange: any;
-  // eslint-disable-next-line
-  protected onTouched: any = null;
-
   /**
    * @optional
    *
@@ -58,6 +44,74 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
 
+  /** Nome e Id do componente. */
+  @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - O campo conter `p-required`;
+   * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao sair do campo.
+   */
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao entrar do campo.
+   */
+  @Output('p-enter') enter: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor e deixar o campo.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar valor do model.
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter<any>();
+
+  private _disabled: boolean = false;
+  private _maxlength: number;
+  private _minlength: number;
+  private _placeholder: string = '';
+  private _readonly: boolean = false;
+  private _required: boolean = false;
+  private _rows: number = 3;
+
+  private modelLastUpdate: any;
+  private onChangePropagate: any = null;
+  private validatorChange: any;
+  // eslint-disable-next-line
+  protected onTouched: any = null;
+
   /** Placeholder, mensagem que aparecerá enquanto o campo não estiver preenchido. */
   @Input('p-placeholder') set placeholder(value: string) {
     this._placeholder = value || '';
@@ -66,9 +120,6 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   get placeholder() {
     return this._placeholder;
   }
-
-  /** Nome e Id do componente. */
-  @Input('name') name: string;
 
   /**
    * @optional
@@ -86,21 +137,6 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   get disabled(): boolean {
     return this._disabled;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
 
   /**
    * @optional
@@ -187,42 +223,6 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   get rows(): number {
     return this._rows;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao sair do campo.
-   */
-  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao entrar do campo.
-   */
-  @Output('p-enter') enter: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao alterar valor e deixar o campo.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao alterar valor do model.
-   */
-  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter<any>();
 
   callOnChange(value: any) {
     // Quando o input não possui um formulário, então esta função não é registrada

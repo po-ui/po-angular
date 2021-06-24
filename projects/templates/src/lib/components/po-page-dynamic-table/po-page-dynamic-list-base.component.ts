@@ -8,56 +8,8 @@ import { PoPageDynamicTableFilters } from './interfaces/po-page-dynamic-table-fi
 
 @Directive()
 export class PoPageDynamicListBaseComponent {
-  private _autoRouter: boolean = false;
-  private _columns: Array<any> = [];
-  private _duplicates: Array<string> = [];
-  private _fields: Array<any> = [];
-  private _filters: Array<any> = [];
-  private _keys: Array<string> = [];
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso sejam definidas ações na propriedade `p-actions`
-   *
-   * As rotas criadas serão baseadas na propriedade `p-actions`.
-   *
-   * > Para o correto funcionamento não pode haver nenhuma rota coringa (`**`) especificada.
-   *
-   * @default false
-   */
-  @Input('p-auto-router') set autoRouter(value: boolean) {
-    this._autoRouter = convertToBoolean(value);
-  }
-
-  get autoRouter(): boolean {
-    return this._autoRouter;
-  }
-
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Lista dos campos usados na tabela e busca avançada.
-   *
-   *
-   * > Caso não seja definido fields a tabela assumirá o comportamento padrão.
-   */
-  @Input('p-fields') set fields(fields: Array<PoPageDynamicTableFilters>) {
-    this._fields = Array.isArray(fields) ? [...fields] : [];
-
-    this.setFieldsProperties(this.fields);
-  }
-
-  get fields(): Array<PoPageDynamicTableFilters> {
-    return this._fields;
-  }
 
   /** Endpoint da API dos recursos que serão exibidos. */
   /**
@@ -139,6 +91,54 @@ export class PoPageDynamicListBaseComponent {
 
   /** Título da página. */
   @Input('p-title') title: string;
+
+  private _autoRouter: boolean = false;
+  private _columns: Array<any> = [];
+  private _duplicates: Array<string> = [];
+  private _fields: Array<any> = [];
+  private _filters: Array<any> = [];
+  private _keys: Array<string> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Cria automaticamente as rotas de edição (novo/duplicate) e detalhes caso sejam definidas ações na propriedade `p-actions`
+   *
+   * As rotas criadas serão baseadas na propriedade `p-actions`.
+   *
+   * > Para o correto funcionamento não pode haver nenhuma rota coringa (`**`) especificada.
+   *
+   * @default false
+   */
+  @Input('p-auto-router') set autoRouter(value: boolean) {
+    this._autoRouter = convertToBoolean(value);
+  }
+
+  get autoRouter(): boolean {
+    return this._autoRouter;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista dos campos usados na tabela e busca avançada.
+   *
+   *
+   * > Caso não seja definido fields a tabela assumirá o comportamento padrão.
+   */
+  @Input('p-fields') set fields(fields: Array<PoPageDynamicTableFilters>) {
+    this._fields = Array.isArray(fields) ? [...fields] : [];
+
+    this.setFieldsProperties(this.fields);
+  }
+
+  get fields(): Array<PoPageDynamicTableFilters> {
+    return this._fields;
+  }
 
   set columns(value) {
     this._columns = [...value];

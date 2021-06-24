@@ -47,11 +47,6 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
   templateUrl: 'po-step.component.html'
 })
 export class PoStepComponent implements AfterContentInit {
-  private _status?: PoStepperStatus = PoStepperStatus.Disabled;
-
-  // ID do step
-  id?: string = uuid();
-
   /**
    * @optional
    *
@@ -81,6 +76,11 @@ export class PoStepComponent implements AfterContentInit {
 
   /** Título que será exibido descrevendo o passo (*step*). */
   @Input('p-label') label: string;
+
+  // ID do step
+  id?: string = uuid();
+
+  private _status?: PoStepperStatus = PoStepperStatus.Disabled;
 
   // Estado de exibição do `po-step`.
   @Input('p-status') set status(status: PoStepperStatus) {

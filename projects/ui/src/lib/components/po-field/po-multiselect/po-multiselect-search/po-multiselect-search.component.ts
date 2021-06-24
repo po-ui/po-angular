@@ -16,10 +16,15 @@ import { PoMultiselectLiterals } from '../../index';
   templateUrl: './po-multiselect-search.component.html'
 })
 export class PoMultiselectSearchComponent {
-  private _placeholder?: string;
+  @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 
   /** Propriedade que recebe as literais definidas no `po-multiselect`. */
   @Input('p-literals') literals?: PoMultiselectLiterals;
+
+  /** Evento que será disparado a cada tecla digitada no campo de busca. */
+  @Output('p-change') change = new EventEmitter();
+
+  private _placeholder?: string;
 
   /**
    * @optional
@@ -39,11 +44,6 @@ export class PoMultiselectSearchComponent {
   get placeholder() {
     return this._placeholder || this.literals.placeholderSearch;
   }
-
-  /** Evento que será disparado a cada tecla digitada no campo de busca. */
-  @Output('p-change') change = new EventEmitter();
-
-  @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 
   onChange(event) {
     this.change.emit({ event: event, value: this.inputElement.nativeElement.value });

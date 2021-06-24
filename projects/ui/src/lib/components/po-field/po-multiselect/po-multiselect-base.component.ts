@@ -49,25 +49,6 @@ export const poMultiselectLiteralsDefault = {
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
-  private _disabled?: boolean = false;
-  private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
-  private _hideSearch?: boolean = false;
-  private _literals: PoMultiselectLiterals;
-  private _options: Array<PoMultiselectOption>;
-  private _required?: boolean = false;
-  private _sort?: boolean = false;
-  private language: string;
-
-  private lastLengthModel;
-  private onModelChange: any;
-  private validatorChange: any;
-  // eslint-disable-next-line
-  protected onModelTouched: any = null;
-
-  selectedOptions: Array<PoMultiselectOption> = [];
-  visibleOptionsDropdown: Array<PoMultiselectOption> = [];
-  visibleDisclaimers = [];
-
   /**
    * @optional
    *
@@ -86,6 +67,70 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   /** Texto de apoio para o campo. */
   @Input('p-help') help?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - O campo conter `p-required`;
+   * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /** Mensagem apresentada enquanto o campo estiver vazio. */
+  @Input('p-placeholder') placeholder?: string = '';
+
+  /**
+   * @description
+   *
+   * Placeholder do campo de pesquisa.
+   *
+   * > Caso o mesmo não seja informado, o valor padrão será traduzido com base no idioma do navegador (pt, es e en).
+   *
+   * @default `Buscar`
+   */
+  @Input('p-placeholder-search') placeholderSearch?: string = '';
+
+  /** Nome do componente. */
+  @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Pode ser informada uma função que será disparada quando houver alterações no ngModel.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  selectedOptions: Array<PoMultiselectOption> = [];
+  visibleOptionsDropdown: Array<PoMultiselectOption> = [];
+  visibleDisclaimers = [];
+
+  // eslint-disable-next-line
+  protected onModelTouched: any = null;
+
+  protected clickOutListener: () => void;
+  protected resizeListener: () => void;
+
+  private _disabled?: boolean = false;
+  private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
+  private _hideSearch?: boolean = false;
+  private _literals: PoMultiselectLiterals;
+  private _options: Array<PoMultiselectOption>;
+  private _required?: boolean = false;
+  private _sort?: boolean = false;
+  private language: string;
+
+  private lastLengthModel;
+  private onModelChange: any;
+  private validatorChange: any;
 
   /**
    * @optional
@@ -136,38 +181,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   get literals() {
     return this._literals || poMultiselectLiteralsDefault[this.language];
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
-
-  /** Mensagem apresentada enquanto o campo estiver vazio. */
-  @Input('p-placeholder') placeholder?: string = '';
-
-  /**
-   * @description
-   *
-   * Placeholder do campo de pesquisa.
-   *
-   * > Caso o mesmo não seja informado, o valor padrão será traduzido com base no idioma do navegador (pt, es e en).
-   *
-   * @default `Buscar`
-   */
-  @Input('p-placeholder-search') placeholderSearch?: string = '';
-
-  /** Nome do componente. */
-  @Input('name') name: string;
 
   /**
    * @optional
@@ -299,18 +312,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   get filterMode() {
     return this._filterMode;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Pode ser informada uma função que será disparada quando houver alterações no ngModel.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
-
-  protected clickOutListener: () => void;
-  protected resizeListener: () => void;
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

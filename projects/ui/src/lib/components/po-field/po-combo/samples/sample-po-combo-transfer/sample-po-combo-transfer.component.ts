@@ -8,6 +8,9 @@ import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption 
   templateUrl: './sample-po-combo-transfer.component.html'
 })
 export class SamplePoComboTransferComponent {
+  @ViewChild('transferForm', { static: true }) form: NgForm;
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   contact: any;
   dateTransfer: Date = new Date();
   typeAccount: string = 'Checking Account';
@@ -27,9 +30,6 @@ export class SamplePoComboTransferComponent {
     { label: 'Checking Account', value: 'Checking Account' },
     { label: 'Savings Account', value: 'Savings Account' }
   ];
-
-  @ViewChild('transferForm', { static: true }) form: NgForm;
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor(private poNotification: PoNotificationService) {}
 

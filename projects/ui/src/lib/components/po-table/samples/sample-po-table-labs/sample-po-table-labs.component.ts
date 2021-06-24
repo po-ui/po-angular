@@ -17,6 +17,8 @@ import { SamplePoTableLabsService } from './sample-po-table-labs.service';
   providers: [SamplePoTableLabsService]
 })
 export class SamplePoTableLabsComponent implements OnInit {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   actions: Array<PoTableAction>;
   actionsDefinition: any;
   actionTableFirst: PoTableAction = {
@@ -92,8 +94,6 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'None', value: 'none' },
     { label: 'Top', value: 'top' }
   ];
-
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor(private samplePoTableLabsService: SamplePoTableLabsService) {}
 

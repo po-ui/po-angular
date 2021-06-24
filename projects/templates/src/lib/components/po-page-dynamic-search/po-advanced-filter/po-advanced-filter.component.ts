@@ -23,9 +23,9 @@ import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search-filters.in
   templateUrl: './po-advanced-filter.component.html'
 })
 export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent implements OnDestroy, OnInit {
-  private subscription = new Subscription();
-
   @ViewChild(PoDynamicFormComponent, { static: true }) poDynamicForm: PoDynamicFormComponent;
+
+  private subscription = new Subscription();
 
   constructor(languageService: PoLanguageService) {
     super(languageService);

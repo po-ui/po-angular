@@ -35,12 +35,6 @@ export class SamplePoLookupLabsComponent implements OnInit {
   advancedFilters: string;
   customAdvancedFilters: Array<PoDynamicFormField>;
 
-  private readonly columnsDefinition = {
-    id: <PoLookupColumn>{ property: 'id', label: 'Id' },
-    name: <PoLookupColumn>{ property: 'name', label: 'Name' },
-    email: <PoLookupColumn>{ property: 'email', label: 'Email' }
-  };
-
   public readonly columnsOptions: Array<PoCheckboxGroupOption> = [
     { value: 'id', label: 'Id' },
     { value: 'name', label: 'Name' },
@@ -63,6 +57,12 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' }
   ];
+
+  private readonly columnsDefinition = {
+    id: <PoLookupColumn>{ property: 'id', label: 'Id' },
+    name: <PoLookupColumn>{ property: 'name', label: 'Name' },
+    email: <PoLookupColumn>{ property: 'email', label: 'Email' }
+  };
 
   constructor(public sampleFilterService: SamplePoLookupService) {}
 

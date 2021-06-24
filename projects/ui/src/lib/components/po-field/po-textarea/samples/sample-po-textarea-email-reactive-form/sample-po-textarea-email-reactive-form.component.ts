@@ -9,6 +9,8 @@ import { PoPageAction } from '@po-ui/ng-components';
   templateUrl: './sample-po-textarea-email-reactive-form.component.html'
 })
 export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   formEmail: FormGroup;
   pageActions: Array<PoPageAction>;
   primaryAction: PoModalAction = {
@@ -18,8 +20,6 @@ export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
     },
     label: 'Ok'
   };
-
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor(private formBuilder: FormBuilder) {}
 

@@ -52,10 +52,10 @@ const providers = [
   providers
 })
 export class PoRichTextComponent extends PoRichTextBaseComponent implements AfterViewInit, OnDestroy {
+  @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
+
   private listener = this.validateClassesForRequired.bind(this);
   private modelLastUpdate: any;
-
-  @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
 
   get errorMsg() {
     return this.errorMessage !== '' && !this.value && this.required && this.invalid ? this.errorMessage : '';

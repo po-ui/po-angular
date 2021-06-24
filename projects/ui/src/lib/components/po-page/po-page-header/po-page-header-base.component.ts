@@ -12,6 +12,9 @@ import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
  */
 @Directive()
 export class PoPageHeaderBaseComponent {
+  /** Título da página. */
+  @Input('p-title') title: string;
+
   private _breadcrumb: PoBreadcrumb;
 
   /** Objeto com propriedades do breadcrumb. */
@@ -22,7 +25,4 @@ export class PoPageHeaderBaseComponent {
   get breadcrumb(): PoBreadcrumb {
     return this._breadcrumb;
   }
-
-  /** Título da página. */
-  @Input('p-title') title: string;
 }

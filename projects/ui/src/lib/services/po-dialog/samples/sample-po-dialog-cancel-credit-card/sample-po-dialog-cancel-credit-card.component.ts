@@ -10,6 +10,8 @@ import { PoDialogService, PoNotificationService, PoPageAction, PoRadioGroupOptio
   templateUrl: './sample-po-dialog-cancel-credit-card.component.html'
 })
 export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnInit {
+  @ViewChild('form', { static: true }) form: FormControl;
+
   action: Array<PoPageAction>;
   address: string;
   cardNumber: string;
@@ -22,8 +24,6 @@ export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnIni
   stateProvince: string;
   zipPostalCode: string;
 
-  private statusSubscription: Subscription;
-
   public readonly cardTypeOptions: Array<PoRadioGroupOption> = [
     { label: 'Master Card', value: 'Master' },
     { label: 'Visa', value: 'visa' },
@@ -31,7 +31,7 @@ export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnIni
     { label: 'Hipercard', value: 'hipercard' }
   ];
 
-  @ViewChild('form', { static: true }) form: FormControl;
+  private statusSubscription: Subscription;
 
   constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
 

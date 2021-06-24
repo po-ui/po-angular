@@ -67,6 +67,14 @@ const poSelectContentPositionDefault = 'bottom';
   ]
 })
 export class PoSelectComponent extends PoSelectBaseComponent implements AfterViewInit, DoCheck {
+  @ContentChild(PoSelectOptionTemplateDirective, { static: true })
+  selectOptionTemplate: PoSelectOptionTemplateDirective;
+
+  @ViewChild('contentList', { read: ElementRef, static: true }) contentList: ElementRef;
+  @ViewChild('icon', { read: ElementRef, static: true }) iconElement: ElementRef;
+  @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
+  @ViewChild('selectButton', { read: ElementRef, static: true }) selectButtonElement: ElementRef;
+
   displayValue;
   isMobile: any = isMobile();
   modelValue: any;
@@ -75,18 +83,10 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   selectIcon: string = 'po-icon-arrow-down';
   scrollPosition: number;
 
-  private differ: any;
-
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
 
-  @ContentChild(PoSelectOptionTemplateDirective, { static: true })
-  selectOptionTemplate: PoSelectOptionTemplateDirective;
-
-  @ViewChild('contentList', { read: ElementRef, static: true }) contentList: ElementRef;
-  @ViewChild('icon', { read: ElementRef, static: true }) iconElement: ElementRef;
-  @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
-  @ViewChild('selectButton', { read: ElementRef, static: true }) selectButtonElement: ElementRef;
+  private differ: any;
 
   constructor(
     element: ElementRef,

@@ -53,46 +53,6 @@ export const poComboLiteralsDefault = {
  */
 @Directive()
 export abstract class PoComboBaseComponent implements ControlValueAccessor, OnInit, Validator {
-  private _changeOnEnter?: boolean = false;
-  private _debounceTime?: number = 400;
-  private _disabled?: boolean = false;
-  private _disabledInitFilter?: boolean = false;
-  private _fieldLabel?: string = 'label';
-  private _fieldValue?: string = 'value';
-  private _filterMinlength?: number = 0;
-  private _filterMode?: PoComboFilterMode = PoComboFilterMode.startsWith;
-  private _filterParams?: any;
-  private _literals?: PoComboLiterals;
-  private _options: Array<PoComboOption | PoComboOptionGroup> = [];
-  private _placeholder: string = '';
-  private _required?: boolean = false;
-  private _sort?: boolean = false;
-  private language: string;
-
-  // utilizado para fazer o controle de atualizar o model.
-  // não deve forçar a atualização se o gatilho for o writeValue para não deixar o campo dirty.
-  private fromWriteValue: boolean = false;
-
-  protected cacheStaticOptions: Array<PoComboOption | PoComboGroup> = [];
-  protected comboOptionsList: Array<PoComboOption | PoComboGroup> = [];
-
-  cacheOptions: Array<PoComboOption | PoComboGroup> = [];
-  defaultService: PoComboFilterService;
-  firstInWriteValue: boolean = true;
-  isFirstFilter: boolean = true;
-  isFiltering: boolean = false;
-  keyupSubscribe: any;
-  onModelChange: any;
-  previousSearchValue: string = '';
-  selectedOption: PoComboOption | PoComboGroup;
-  selectedValue: any;
-  selectedView: any;
-  service: PoComboFilterService;
-  visibleOptions: Array<PoComboOption | PoComboGroup> = [];
-
-  private validatorChange: any;
-  protected onModelTouched: any = null;
-
   /**
    * @optional
    *
@@ -111,15 +71,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   /** Texto de apoio para o campo. */
   @Input('p-help') help?: string;
-
-  /** Mensagem apresentada enquanto o campo estiver vazio. */
-  @Input('p-placeholder') set placeholder(value: string) {
-    this._placeholder = value || '';
-  }
-
-  get placeholder() {
-    return this._placeholder;
-  }
 
   /** Nome do componente. */
   @Input('name') name: string;
@@ -148,6 +99,131 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * ```
    */
   @Input('p-filter-service') filterService: PoComboFilter | string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o ícone que será exibido no início do campo.
+   *
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * ```
+   * <po-combo p-icon="po-icon-user" p-label="PO combo"></po-combo>
+   * ```
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
+   * ```
+   * <po-combo p-icon="fa fa-podcast" p-label="PO combo"></po-combo>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-combo [p-icon]="template" p-label="combo template ionic"></po-combo>
+   *
+   * <ng-template #template>
+   *  <ion-icon style="font-size: inherit" name="heart"></ion-icon>
+   * </ng-template>
+   * ```
+   * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
+   */
+  @Input('p-icon') icon?: string | TemplateRef<void>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a indicação de campo opcional será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - O campo conter `p-required`;
+   * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * @default `false`
+   */
+  @Input('p-optional') optional: boolean;
+
+  /** Se verdadeiro, o campo receberá um botão para ser limpo. */
+  @Input('p-clean') @InputBoolean() clean?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Se verdadeiro, o evento `p-change` receberá como argumento o `PoComboOption` referente à opção selecionada.
+   *
+   * @default `false`
+   */
+  @Input('p-emit-object-value') @InputBoolean() emitObjectValue?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser informada uma função que será disparada quando houver alterações no ngModel. A função receberá como argumento o model modificado.
+   *
+   * > Pode-se optar pelo recebimento do objeto selecionado ao invés do model através da propriedade `p-emit-object-value`.
+   */
+  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
+
+  cacheOptions: Array<PoComboOption | PoComboGroup> = [];
+  defaultService: PoComboFilterService;
+  firstInWriteValue: boolean = true;
+  isFirstFilter: boolean = true;
+  isFiltering: boolean = false;
+  keyupSubscribe: any;
+  onModelChange: any;
+  previousSearchValue: string = '';
+  selectedOption: PoComboOption | PoComboGroup;
+  selectedValue: any;
+  selectedView: any;
+  service: PoComboFilterService;
+  visibleOptions: Array<PoComboOption | PoComboGroup> = [];
+
+  protected cacheStaticOptions: Array<PoComboOption | PoComboGroup> = [];
+  protected comboOptionsList: Array<PoComboOption | PoComboGroup> = [];
+  protected onModelTouched: any = null;
+
+  private _changeOnEnter?: boolean = false;
+  private _debounceTime?: number = 400;
+  private _disabled?: boolean = false;
+  private _disabledInitFilter?: boolean = false;
+  private _fieldLabel?: string = 'label';
+  private _fieldValue?: string = 'value';
+  private _filterMinlength?: number = 0;
+  private _filterMode?: PoComboFilterMode = PoComboFilterMode.startsWith;
+  private _filterParams?: any;
+  private _literals?: PoComboLiterals;
+  private _options: Array<PoComboOption | PoComboOptionGroup> = [];
+  private _placeholder: string = '';
+  private _required?: boolean = false;
+  private _sort?: boolean = false;
+  private language: string;
+
+  // utilizado para fazer o controle de atualizar o model.
+  // não deve forçar a atualização se o gatilho for o writeValue para não deixar o campo dirty.
+  private fromWriteValue: boolean = false;
+
+  private validatorChange: any;
+
+  /** Mensagem apresentada enquanto o campo estiver vazio. */
+  @Input('p-placeholder') set placeholder(value: string) {
+    this._placeholder = value || '';
+  }
+
+  get placeholder() {
+    return this._placeholder;
+  }
 
   /**
    * @optional
@@ -303,33 +379,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return this._disabled;
   }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o ícone que será exibido no início do campo.
-   *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
-   * ```
-   * <po-combo p-icon="po-icon-user" p-label="PO combo"></po-combo>
-   * ```
-   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
-   * ```
-   * <po-combo p-icon="fa fa-podcast" p-label="PO combo"></po-combo>
-   * ```
-   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
-   * ```
-   * <po-combo [p-icon]="template" p-label="combo template ionic"></po-combo>
-   *
-   * <ng-template #template>
-   *  <ion-icon style="font-size: inherit" name="heart"></ion-icon>
-   * </ng-template>
-   * ```
-   * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
-   */
-  @Input('p-icon') icon?: string | TemplateRef<void>;
-
   /** Indica que a lista definida na propriedade p-options será ordenada pela descrição. */
   @Input('p-sort') set sort(sort: boolean) {
     this._sort = convertToBoolean(sort);
@@ -361,21 +410,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   get options() {
     return this._options;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se a indicação de campo opcional será exibida.
-   *
-   * > Não será exibida a indicação se:
-   * - O campo conter `p-required`;
-   * - Não possuir `p-help` e/ou `p-label`.
-   *
-   * @default `false`
-   */
-  @Input('p-optional') optional: boolean;
 
   /**
    * @optional
@@ -466,53 +500,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return this._literals || poComboLiteralsDefault[this.language];
   }
 
-  /** Se verdadeiro, o campo receberá um botão para ser limpo. */
-  @Input('p-clean') @InputBoolean() clean?: boolean;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Se verdadeiro, o evento `p-change` receberá como argumento o `PoComboOption` referente à opção selecionada.
-   *
-   * @default `false`
-   */
-  @Input('p-emit-object-value') @InputBoolean() emitObjectValue?: boolean = false;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Deve ser informada uma função que será disparada quando houver alterações no ngModel. A função receberá como argumento o model modificado.
-   *
-   * > Pode-se optar pelo recebimento do objeto selecionado ao invés do model através da propriedade `p-emit-object-value`.
-   */
-  @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
-   */
-  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
-
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
-
-  abstract setInputValue(value: any): void;
-
-  abstract applyFilter(value: string): void;
-
-  abstract getObjectByValue(value: string): void;
-
-  abstract getInputValue(): string;
-
-  abstract initInputObservable(): void;
 
   get isOptionGroupList(): boolean {
     return this._options.length && this._options[0].hasOwnProperty('options');
@@ -760,6 +750,12 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
+  clear(value) {
+    this.callModelChange(value);
+    this.updateSelectedValue(null);
+    this.updateComboList();
+  }
+
   protected configAfterSetFilterService(service: PoComboFilter | string) {
     if (service) {
       this.comboOptionsList = [];
@@ -778,12 +774,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     if (this.keyupSubscribe) {
       this.keyupSubscribe.unsubscribe();
     }
-  }
-
-  clear(value) {
-    this.callModelChange(value);
-    this.updateSelectedValue(null);
-    this.updateComboList();
   }
 
   protected validateModel(model: any) {
@@ -927,4 +917,14 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       return this.updateSelectedValue(oldOption);
     }
   }
+
+  abstract setInputValue(value: any): void;
+
+  abstract applyFilter(value: string): void;
+
+  abstract getObjectByValue(value: string): void;
+
+  abstract getInputValue(): string;
+
+  abstract initInputObservable(): void;
 }

@@ -9,6 +9,8 @@ import { PoBreadcrumb, PoSelectOption } from '@po-ui/ng-components';
   templateUrl: './sample-po-page-change-password-modify.component.html'
 })
 export class SamplePoPageChangePasswordModifyComponent implements OnInit {
+  @ViewChild(PoPageChangePasswordComponent) changePassword: PoPageChangePasswordComponent;
+
   birthday: string;
   changePasswordScreen: boolean;
   city: string;
@@ -17,8 +19,6 @@ export class SamplePoPageChangePasswordModifyComponent implements OnInit {
   fullName: string;
   phoneNumber: string;
   url: string;
-
-  @ViewChild(PoPageChangePasswordComponent) changePassword: PoPageChangePasswordComponent;
 
   public readonly breadcrumb: PoBreadcrumb = {
     items: [{ label: 'Home', link: '/documentation/po-page-change-password' }, { label: 'Profile' }]

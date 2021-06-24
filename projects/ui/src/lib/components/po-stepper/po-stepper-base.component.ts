@@ -52,6 +52,38 @@ const poStepperOrientationDefault = PoStepperOrientation.Horizontal;
  */
 @Directive()
 export class PoStepperBaseComponent {
+  /**
+   *
+   * @optional
+   *
+   * @description
+   *
+   * <a id="stepIconsProperty"></a>
+   *
+   * Habilita a exibição de ícone ao invés de número no centro do círculo dos *steps*.
+   *
+   * @default `false`
+   */
+  @Input('p-step-icons') stepIcons: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos *steps* em *pixels*, possibilitando um maior destaque.
+   *
+   * O valor informado deve ser entre `24` e `64`.
+   *
+   * > Valores que não se enquadrarem a esta regra serão ignorados, mantendo-se o valor *default*.
+   *
+   * @default `24`
+   */
+  @Input('p-step-size') stepSize: number;
+
+  /** Ação que será executada quando o usuário mudar o passo do `po-stepper`. */
+  @Output('p-change-step') onChangeStep = new EventEmitter<number | PoStepComponent>();
+
   private _orientation?: PoStepperOrientation = poStepperOrientationDefault;
   private _sequential?: boolean = true;
   private _step: number = 1;
@@ -122,35 +154,6 @@ export class PoStepperBaseComponent {
   }
 
   /**
-   *
-   * @optional
-   *
-   * @description
-   *
-   * <a id="stepIconsProperty"></a>
-   *
-   * Habilita a exibição de ícone ao invés de número no centro do círculo dos *steps*.
-   *
-   * @default `false`
-   */
-  @Input('p-step-icons') stepIcons: boolean;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o tamanho dos *steps* em *pixels*, possibilitando um maior destaque.
-   *
-   * O valor informado deve ser entre `24` e `64`.
-   *
-   * > Valores que não se enquadrarem a esta regra serão ignorados, mantendo-se o valor *default*.
-   *
-   * @default `24`
-   */
-  @Input('p-step-size') stepSize: number;
-
-  /**
    * @optional
    *
    * @description
@@ -168,7 +171,4 @@ export class PoStepperBaseComponent {
   get sequential(): boolean {
     return this._sequential;
   }
-
-  /** Ação que será executada quando o usuário mudar o passo do `po-stepper`. */
-  @Output('p-change-step') onChangeStep = new EventEmitter<number | PoStepComponent>();
 }

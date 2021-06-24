@@ -297,6 +297,17 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     }
   }
 
+  protected checkingRouterChildrenFragments() {
+    const childrenPrimary = this.router.parseUrl(this.router.url).root.children['primary'];
+
+    return childrenPrimary ? `/${childrenPrimary.segments.map(it => it.path).join('/')}` : '';
+  }
+
+  protected validateCollapseClass(collapsedMobile: boolean = false) {
+    const wrapper = this.element.nativeElement.parentNode;
+    this.renderer[this.isCollapsed && !collapsedMobile ? 'addClass' : 'removeClass'](wrapper, 'po-collapsed-menu');
+  }
+
   private activateCollapseSubMenuItem() {
     this.clearGroupMenuIfFirstLevel(this.activeMenuItem);
 
@@ -322,12 +333,6 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
 
   private areSubMenus(menus: Array<PoMenuItem>) {
     return menus.every(menu => menu['level'] > poMenuRootLevel);
-  }
-
-  protected checkingRouterChildrenFragments() {
-    const childrenPrimary = this.router.parseUrl(this.router.url).root.children['primary'];
-
-    return childrenPrimary ? `/${childrenPrimary.segments.map(it => it.path).join('/')}` : '';
   }
 
   private clearGroupMenuIfFirstLevel(activeMenuItem: PoMenuItem) {
@@ -576,10 +581,5 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     this.filteredItems = [...this.menus];
     this.menuPrevious = JSON.stringify(this.menus);
     this.validateMenus(this.menus);
-  }
-
-  protected validateCollapseClass(collapsedMobile: boolean = false) {
-    const wrapper = this.element.nativeElement.parentNode;
-    this.renderer[this.isCollapsed && !collapsedMobile ? 'addClass' : 'removeClass'](wrapper, 'po-collapsed-menu');
   }
 }

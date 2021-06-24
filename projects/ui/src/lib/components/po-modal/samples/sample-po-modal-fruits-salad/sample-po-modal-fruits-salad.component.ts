@@ -11,6 +11,9 @@ import { PoNotificationService } from '@po-ui/ng-components';
   templateUrl: './sample-po-modal-fruits-salad.component.html'
 })
 export class SamplePoModalFruitsSaladComponent {
+  @ViewChild('optionsForm', { static: true }) form: NgForm;
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   accompaniment: string = '';
   fruits: Array<string>;
   orderDetail: string = '';
@@ -43,9 +46,6 @@ export class SamplePoModalFruitsSaladComponent {
     { value: 'graple', label: 'Grape' },
     { value: 'strawberry', label: 'Strawberry' }
   ];
-
-  @ViewChild('optionsForm', { static: true }) form: NgForm;
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor(private poNotification: PoNotificationService) {}
 

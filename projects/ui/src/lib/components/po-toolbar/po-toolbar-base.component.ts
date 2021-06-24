@@ -12,8 +12,6 @@ import { PoToolbarProfile } from './po-toolbar-profile/po-toolbar-profile.interf
  */
 @Directive()
 export class PoToolbarBaseComponent {
-  private _notificationNumber?: number;
-
   /**
    * @optional
    *
@@ -74,6 +72,8 @@ export class PoToolbarBaseComponent {
    * Lista de ações da notificação.
    */
   @Input('p-notification-actions') notificationActions?: Array<PoToolbarAction>;
+
+  private _notificationNumber?: number;
 
   /**
    * @optional

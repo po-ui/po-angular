@@ -38,14 +38,50 @@ export const poPageDetailLiteralsDefault = {
  */
 @Directive()
 export class PoPageDetailBaseComponent {
-  private _literals: PoPageDetailLiterals;
-  private _title: string;
-  private language: string;
-
   @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
 
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb: PoBreadcrumb;
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Voltar".
+   *
+   * ```
+   * <po-page-detail (p-back)="myBackFunction()">
+   * </po-page-detail>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Voltar" não será exibido.
+   */
+  @Output('p-back') back = new EventEmitter();
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Editar".
+   *
+   * ```
+   * <po-page-detail (p-edit)="myEditFunction()">
+   * </po-page-detail>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Editar" não será exibido.
+   */
+  @Output('p-edit') edit = new EventEmitter();
+
+  /**
+   * Evento que será disparado ao clicar no botão de "Remover".
+   *
+   * ```
+   * <po-page-detail (p-remove)="myRemoveFunction()">
+   * </po-page-detail>
+   * ```
+   *
+   * > Caso não utilizar esta propriedade, o botão de "Remover" não será exibido.
+   */
+  @Output('p-remove') remove = new EventEmitter();
+
+  private _literals: PoPageDetailLiterals;
+  private _title: string;
+  private language: string;
 
   /**
    * @optional
@@ -107,42 +143,6 @@ export class PoPageDetailBaseComponent {
   get title() {
     return this._title;
   }
-
-  /**
-   * Evento que será disparado ao clicar no botão de "Voltar".
-   *
-   * ```
-   * <po-page-detail (p-back)="myBackFunction()">
-   * </po-page-detail>
-   * ```
-   *
-   * > Caso não utilizar esta propriedade, o botão de "Voltar" não será exibido.
-   */
-  @Output('p-back') back = new EventEmitter();
-
-  /**
-   * Evento que será disparado ao clicar no botão de "Editar".
-   *
-   * ```
-   * <po-page-detail (p-edit)="myEditFunction()">
-   * </po-page-detail>
-   * ```
-   *
-   * > Caso não utilizar esta propriedade, o botão de "Editar" não será exibido.
-   */
-  @Output('p-edit') edit = new EventEmitter();
-
-  /**
-   * Evento que será disparado ao clicar no botão de "Remover".
-   *
-   * ```
-   * <po-page-detail (p-remove)="myRemoveFunction()">
-   * </po-page-detail>
-   * ```
-   *
-   * > Caso não utilizar esta propriedade, o botão de "Remover" não será exibido.
-   */
-  @Output('p-remove') remove = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -31,13 +31,13 @@ export const poPageDynamicLiterals: { [key: string]: PoPageDynamicLiterals } = {
   providedIn: 'root'
 })
 export class PoPageDynamicService {
-  private endpoint = '/';
-  private language: string;
-  private metadata: string;
-
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'
   });
+
+  private endpoint = '/';
+  private language: string;
+  private metadata: string;
 
   constructor(
     private http: HttpClient,

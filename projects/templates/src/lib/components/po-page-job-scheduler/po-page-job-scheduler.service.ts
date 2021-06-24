@@ -12,11 +12,11 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
 
 @Injectable()
 export class PoPageJobSchedulerService {
-  private endpoint = '/';
-
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'
   });
+
+  private endpoint = '/';
 
   constructor(private http: HttpClient) {}
 

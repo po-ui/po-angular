@@ -62,9 +62,9 @@ const providers: Array<Provider> = [
   providers
 })
 export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements AfterViewInit, DoCheck {
-  canLoad = false;
-
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef;
+
+  canLoad = false;
 
   constructor(
     private zone: NgZone,

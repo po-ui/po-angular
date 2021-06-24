@@ -8,11 +8,11 @@ import { debounceTime } from 'rxjs/operators';
   selector: '[p-resize-observer]'
 })
 export class PoResizeObserverDirective implements OnDestroy, OnInit {
+  @Output('p-resize-observer') resize = new EventEmitter();
+
   private subscription = new Subscription();
   private observer;
   private chartWidthResize$ = new Subject();
-
-  @Output('p-resize-observer') resize = new EventEmitter();
 
   constructor(private elementRef: ElementRef) {}
 

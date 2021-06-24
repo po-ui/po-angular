@@ -26,6 +26,8 @@ import { PoSyncSchema } from './interfaces/po-sync-schema.interface';
  */
 @Injectable()
 export class PoSyncService {
+  models: Array<PoEntity> = [];
+
   private config: PoSyncConfig;
   private emitter: any;
   private eventSub: Observable<any>;
@@ -35,8 +37,6 @@ export class PoSyncService {
   private subscription: Subscription;
   private syncing: boolean = false;
   private timer: Observable<number>;
-
-  models: Array<PoEntity> = [];
 
   constructor(
     private poEventSourcingService: PoEventSourcingService,

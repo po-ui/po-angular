@@ -17,9 +17,9 @@ import { PoMenuPanelItemsService } from '../services/po-menu-panel-items.service
   templateUrl: './po-menu-panel-item.component.html'
 })
 export class PoMenuPanelItemComponent implements OnDestroy, OnInit {
-  itemsSubscription: Subscription;
-
   @Input('p-menu-item-internal') menuItemInternal: PoMenuPanelItemInternal;
+
+  itemsSubscription: Subscription;
 
   constructor(private menuItemsService: PoMenuPanelItemsService) {}
 

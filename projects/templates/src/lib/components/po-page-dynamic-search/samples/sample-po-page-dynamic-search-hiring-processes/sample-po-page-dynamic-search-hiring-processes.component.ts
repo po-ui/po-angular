@@ -24,9 +24,6 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   hiringProcessesColumns: Array<PoTableColumn>;
   quickSearchWidth: number = 6;
 
-  private jobDescriptionOptions: Array<PoSelectOption> = [];
-  private statusOptions: Array<PoSelectOption> = [];
-
   public readonly actions: Array<PoPageAction> = [
     { label: 'Hire', action: this.hireCandidate.bind(this), disabled: this.disableHireButton.bind(this) },
     { label: 'Find on Google', action: this.findOnGoogle.bind(this), disabled: true }
@@ -36,18 +33,22 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     items: [{ label: 'Home', action: this.beforeRedirect.bind(this) }, { label: 'Hiring processes' }]
   };
 
+  readonly literals: PoPageDynamicSearchLiterals = {
+    filterConfirmLabel: 'Aplicar',
+    filterTitle: 'Filtro avançado',
+    quickSearchLabel: 'Valor pesquisado:'
+  };
+
+  private jobDescriptionOptions: Array<PoSelectOption> = [];
+  private statusOptions: Array<PoSelectOption> = [];
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   public readonly filters: Array<PoPageDynamicSearchFilters> = [
     { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
     { property: 'name', gridColumns: 6 },
     { property: 'city', gridColumns: 6 },
     { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
   ];
-
-  readonly literals: PoPageDynamicSearchLiterals = {
-    filterConfirmLabel: 'Aplicar',
-    filterTitle: 'Filtro avançado',
-    quickSearchLabel: 'Valor pesquisado:'
-  };
 
   constructor(
     private sampleHiringProcessesService: SamplePoPageDynamicSearchHiringProcessesService,
@@ -79,6 +80,10 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
 
   onQuickSearch(filter) {
     filter ? this.searchItems({ name: filter }) : this.resetFilters();
+  }
+
+  onLoadFields() {
+    return this.sampleHiringProcessesService.getPageOptions();
   }
 
   private beforeRedirect(itemBreadcrumbLabel) {
@@ -136,9 +141,5 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     const selectedItem = this.hiringProcesses.find(item => item['$selected']);
     const jobDescription = selectedItem ? selectedItem['jobDescription'] : '';
     window.open(`http://google.com/search?q=${jobDescription}`, '_blank');
-  }
-
-  onLoadFields() {
-    return this.sampleHiringProcessesService.getPageOptions();
   }
 }

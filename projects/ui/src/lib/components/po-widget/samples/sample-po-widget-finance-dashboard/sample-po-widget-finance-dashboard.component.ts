@@ -7,6 +7,8 @@ import { PoModalComponent, PoTableColumn } from '@po-ui/ng-components';
   templateUrl: './sample-po-widget-finance-dashboard.component.html'
 })
 export class SamplePoWidgetFinanceDashboardComponent {
+  @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;
+
   paymentLink: string = 'https://www.google.com.br/search?q=days+to+payment';
   itemsDetails: Array<any>;
   titleDetailsModal: string;
@@ -31,8 +33,6 @@ export class SamplePoWidgetFinanceDashboardComponent {
     { dateUpdate: '02-05-2018', statement: '-200' },
     { dateUpdate: '12-05-2017', statement: '2000' }
   ];
-
-  @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;
 
   daysPayment() {
     window.open(this.paymentLink, '_blank');

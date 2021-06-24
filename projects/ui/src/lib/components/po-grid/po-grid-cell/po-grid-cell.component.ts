@@ -5,12 +5,6 @@ import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef, Output, Eve
   templateUrl: './po-grid-cell.component.html'
 })
 export class PoGridCellComponent {
-  private _width: string | number;
-
-  _value: any = '';
-  edit: boolean = false;
-  editValue: string = '';
-
   @Input('p-align') align?: string = 'left';
 
   @Input('p-freeze') freeze?: boolean = false;
@@ -18,6 +12,21 @@ export class PoGridCellComponent {
   @Input('p-tab-index') tabIndex?: number = -1;
 
   @Input('p-position') position?: string = '';
+
+  @Input('p-readonly') readonly?: boolean = false;
+
+  @Input('p-required') required?: boolean = false;
+
+  @Output('p-valueChange') valueChange = new EventEmitter<any>();
+
+  @ViewChild('inputElement') inputElement: ElementRef;
+  @ViewChild('contentElement') contentElement: ElementRef;
+
+  _value: any = '';
+  edit: boolean = false;
+  editValue: string = '';
+
+  private _width: string | number;
 
   @Input('p-width') set width(value: string | number) {
     this._width = value;
@@ -30,12 +39,6 @@ export class PoGridCellComponent {
     return this._width ? `${this._width}px` : '100%';
   }
 
-  @Input('p-readonly') readonly?: boolean = false;
-
-  @Input('p-required') required?: boolean = false;
-
-  @Output('p-valueChange') valueChange = new EventEmitter<any>();
-
   @Input('p-value') set value(value: any) {
     this._value = value;
     this.valueChange.emit(this._value);
@@ -43,9 +46,6 @@ export class PoGridCellComponent {
   get value(): any {
     return this._value;
   }
-
-  @ViewChild('inputElement') inputElement: ElementRef;
-  @ViewChild('contentElement') contentElement: ElementRef;
 
   constructor(private changeDetectorRef: ChangeDetectorRef) {}
 

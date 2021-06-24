@@ -27,6 +27,9 @@ import {
   providers: [SampleDashboardService]
 })
 export class SamplePoContainerDashboardComponent implements AfterContentChecked {
+  @ViewChild('formShare', { static: true }) formShare: NgForm;
+  @ViewChild(PoModalComponent) poModal: PoModalComponent;
+
   columns: Array<PoTableColumn> = this.sampleDashboardService.getColumns();
   email: string = undefined;
   isSubscribed: boolean = false;
@@ -59,9 +62,6 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked 
     },
     label: 'Share'
   };
-
-  @ViewChild('formShare', { static: true }) formShare: NgForm;
-  @ViewChild(PoModalComponent) poModal: PoModalComponent;
 
   constructor(private poNotification: PoNotificationService, private sampleDashboardService: SampleDashboardService) {}
 

@@ -12,6 +12,8 @@ import {
   templateUrl: './sample-po-modal-password-recovery-labs.component.html'
 })
 export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
+  @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
+
   codeError: string;
   email: string;
   event: string;
@@ -26,8 +28,6 @@ export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
     { label: 'Email', value: PoModalPasswordRecoveryType.Email },
     { label: 'SMS', value: PoModalPasswordRecoveryType.SMS }
   ];
-
-  @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 
   constructor(private poDialog: PoDialogService) {}
 

@@ -16,30 +16,6 @@ const poProgressMinValue = 0;
  */
 @Directive()
 export class PoProgressBaseComponent {
-  private _indeterminate?: boolean;
-  private _value?: number = 0;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Habilita o modo indeterminado na barra de progresso, que mostra uma animação fixa sem um valor estabelecido.
-   *
-   * Esta opção pode ser utilizada quando não souber quanto tempo levará para que um processo seja concluído.
-   *
-   * > Caso esta propriedade e a `p-value` seja habilitada, a propriedade `p-value` será ignorada.
-   *
-   * @default `false`
-   */
-  @Input('p-indeterminate') set indeterminate(indeterminate: boolean) {
-    this._indeterminate = convertToBoolean(indeterminate);
-  }
-
-  get indeterminate(): boolean {
-    return this._indeterminate;
-  }
-
   /**
    * @optional
    *
@@ -86,28 +62,6 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
-   * Valor que representará o progresso.
-   *
-   * > Os valores aceitos são números inteiros de `0` à `100`.
-   *
-   * @default `0`
-   */
-  @Input('p-value') set value(value: number) {
-    const integerValue = convertToInt(value, poProgressMinValue);
-    const isProgressRangeValue = this.isProgressRangeValue(integerValue);
-
-    this._value = isProgressRangeValue ? integerValue : poProgressMinValue;
-  }
-
-  get value() {
-    return this._value;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Evento que será disparado ao clicar no ícone de cancelamento ("x") na parte inferior da barra de progresso.
    *
    * Ao ser disparado, a função receberá como parâmetro o status atual da barra de progresso.
@@ -128,6 +82,52 @@ export class PoProgressBaseComponent {
    * `PoProgressStatus.Error`.
    */
   @Output('p-retry') retry: EventEmitter<any> = new EventEmitter();
+
+  private _indeterminate?: boolean;
+  private _value?: number = 0;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o modo indeterminado na barra de progresso, que mostra uma animação fixa sem um valor estabelecido.
+   *
+   * Esta opção pode ser utilizada quando não souber quanto tempo levará para que um processo seja concluído.
+   *
+   * > Caso esta propriedade e a `p-value` seja habilitada, a propriedade `p-value` será ignorada.
+   *
+   * @default `false`
+   */
+  @Input('p-indeterminate') set indeterminate(indeterminate: boolean) {
+    this._indeterminate = convertToBoolean(indeterminate);
+  }
+
+  get indeterminate(): boolean {
+    return this._indeterminate;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Valor que representará o progresso.
+   *
+   * > Os valores aceitos são números inteiros de `0` à `100`.
+   *
+   * @default `0`
+   */
+  @Input('p-value') set value(value: number) {
+    const integerValue = convertToInt(value, poProgressMinValue);
+    const isProgressRangeValue = this.isProgressRangeValue(integerValue);
+
+    this._value = isProgressRangeValue ? integerValue : poProgressMinValue;
+  }
+
+  get value() {
+    return this._value;
+  }
 
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;

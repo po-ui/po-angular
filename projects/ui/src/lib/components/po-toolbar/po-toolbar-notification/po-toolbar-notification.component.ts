@@ -23,10 +23,10 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
   providers: [PoControlPositionService]
 })
 export class PoToolbarNotificationComponent {
-  private _notificationNumber?: number = 0;
-
   /** Define uma lista de ações. */
   @Input('p-notification-actions') notificationActions?: Array<PoToolbarAction>;
+
+  private _notificationNumber?: number = 0;
 
   /** Define o número de notificações. */
   @Input('p-notification-number') set notificationNumber(value: number) {

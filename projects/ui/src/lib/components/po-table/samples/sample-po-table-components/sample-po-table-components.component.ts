@@ -13,6 +13,8 @@ import { SamplePoTableComponentStatus } from './sample-po-table-components.enum'
   providers: [SamplePoTableComponentsService]
 })
 export class SamplePoTableComponentsComponent {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+
   extraInformation: any;
   items: Array<any> = this.sampleComponents.getItems();
   showMoreDisabled: boolean = false;
@@ -81,8 +83,6 @@ export class SamplePoTableComponentsComponent {
     }
   ];
 
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
-
   constructor(public sampleComponents: SamplePoTableComponentsService, private router: Router) {}
 
   experimentalColor(row) {
@@ -113,6 +113,10 @@ export class SamplePoTableComponentsComponent {
     this.items = this.getItems(sort);
   }
 
+  public showAlert(msg): void {
+    alert(msg);
+  }
+
   private canGoToDocumentation(row) {
     return row.status !== SamplePoTableComponentStatus.Stable;
   }
@@ -131,9 +135,5 @@ export class SamplePoTableComponentsComponent {
 
   private isFavorite(row) {
     return row.isFavorite ? 'color-08' : 'color-11';
-  }
-
-  public showAlert(msg): void {
-    alert(msg);
   }
 }

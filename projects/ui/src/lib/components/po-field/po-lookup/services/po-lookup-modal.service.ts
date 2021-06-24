@@ -14,9 +14,9 @@ import { PoLookupModalComponent } from '../po-lookup-modal/po-lookup-modal.compo
  */
 @Injectable()
 export class PoLookupModalService {
-  private componentRef: ComponentRef<any> = null;
-
   selectValueEvent: EventEmitter<any> = new EventEmitter<any>();
+
+  private componentRef: ComponentRef<any> = null;
 
   constructor(private poComponentInjector: PoComponentInjectorService) {}
 

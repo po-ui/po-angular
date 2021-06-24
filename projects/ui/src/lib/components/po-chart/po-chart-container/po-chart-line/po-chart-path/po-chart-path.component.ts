@@ -11,14 +11,18 @@ const pathDashoffsetDefaultWidth = 0;
   templateUrl: './po-chart-path.component.svg'
 })
 export class PoChartPathComponent implements AfterViewInit {
+  @Input('p-is-active') @InputBoolean() isActive: boolean = true;
+
+  @Input('p-chart-line') @InputBoolean() chartLine: boolean = false;
+
+  @Input('p-coordinates') coordinates: string;
+
+  @ViewChild('chartPath', { static: true }) chartPath: ElementRef;
+
   pathWidth: number;
 
   private _animate: boolean;
   private _color: string;
-
-  @Input('p-is-active') @InputBoolean() isActive: boolean = true;
-
-  @Input('p-chart-line') @InputBoolean() chartLine: boolean = false;
 
   @Input('p-color') set color(value: string) {
     this._color = value.includes('po-color') && this.chartLine ? value.replace('po-color', 'po-border-color') : value;
@@ -39,10 +43,6 @@ export class PoChartPathComponent implements AfterViewInit {
   get animate() {
     return this._animate;
   }
-
-  @Input('p-coordinates') coordinates: string;
-
-  @ViewChild('chartPath', { static: true }) chartPath: ElementRef;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
