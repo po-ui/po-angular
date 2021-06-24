@@ -16,13 +16,10 @@ import { PoPageComponent } from '../po-page.component';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageHeaderComponent } from '../po-page-header/po-page-header.component';
 
-let eventClick;
-let eventResize;
-
-eventClick = document.createEvent('Event');
+const eventClick = document.createEvent('Event');
 eventClick.initEvent('click', false, true);
 
-eventResize = document.createEvent('Event');
+const eventResize = document.createEvent('Event');
 eventResize.initEvent('resize', false, true);
 
 @Component({

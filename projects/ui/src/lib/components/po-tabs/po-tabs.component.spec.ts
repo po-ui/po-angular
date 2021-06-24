@@ -155,21 +155,19 @@ describe('PoTabsComponent:', () => {
     });
 
     it('activeFirstTab: should `active` first tab if it isn`t disabled or hide', () => {
-      let tab;
       component.tabs = <any>[defaultTab];
 
       component['activeFirstTab']();
-      tab = component.tabs[0];
+      const tab = component.tabs[0];
 
       expect(tab.active).toBeTruthy();
     });
 
     it('activeFirstTab: shouldn`t `active` first tab if them are disabled or hide', () => {
-      let tab;
       component.tabs = <any>[disabledTab, hiddenTab];
 
       component['activeFirstTab']();
-      tab = component.tabs[0];
+      const tab = component.tabs[0];
 
       expect(tab.active).toBeFalsy();
     });

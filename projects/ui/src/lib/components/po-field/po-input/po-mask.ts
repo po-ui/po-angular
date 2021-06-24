@@ -223,8 +223,7 @@ export class PoMask {
   revertPositions(initialPosition: number, finalPosition: number) {
     if (initialPosition > finalPosition) {
       // inverte o controle de posição caso o inicial esteja maior que o final
-      let tempPosition;
-      tempPosition = initialPosition;
+      const tempPosition = initialPosition;
       this.initialPosition = finalPosition;
       this.finalPosition = tempPosition;
     }
