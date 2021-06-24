@@ -303,6 +303,7 @@ export class PoStorageService {
 
   /**
    * Lista com todas as chaves armazenadas.
+   *
    * @returns {Promise<Array<string>>} Promessa que é resolvida com todas as chaves armazenadas.
    */
   keys(): Promise<Array<string>> {
@@ -311,6 +312,7 @@ export class PoStorageService {
 
   /**
    * Quantidade de chaves armazenadas.
+   *
    * @returns {Promise<number>} Promessa que é resolvida com o número de chaves armazenadas.
    */
   length(): Promise<number> {

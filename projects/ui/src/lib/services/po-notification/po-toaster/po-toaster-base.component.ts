@@ -36,12 +36,14 @@ export abstract class PoToasterBaseComponent {
 
   /**
    * Altera a posição da notificação.
+   *
    * @param number value
    */
   abstract changePosition(value: number): void;
 
   /**
    * Configura o componente po-toaster de acordo com as definições do usuário.
+   *
    * @param PoToaster poToaster
    * @param ComponentRef comp
    */
