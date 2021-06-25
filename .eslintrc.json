@@ -34,6 +34,7 @@
         ],
         "@angular-eslint/no-input-rename": "off",
         "@angular-eslint/no-output-rename": "off",
+        "@angular-eslint/no-conflicting-lifecycle": "off",
         "@typescript-eslint/array-type": [
           "error",
           {
