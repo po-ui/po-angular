@@ -509,6 +509,16 @@ describe('PoMenuComponent:', () => {
     expect(component['itemSubscription'].unsubscribe).toHaveBeenCalled();
   });
 
+  it('routeSubscription: should `unsubscribe` `routeSubscription` on destroy.', () => {
+    component['routeSubscription'] = <any>{ unsubscribe: () => {} };
+
+    spyOn(component['routeSubscription'], <any>'unsubscribe');
+
+    component.ngOnDestroy();
+
+    expect(component['routeSubscription'].unsubscribe).toHaveBeenCalled();
+  });
+
   it('should set menu item not found with `literals.itemNotFound`.', () => {
     component.noData = true;
 
@@ -820,12 +830,14 @@ describe('PoMenuComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it(`ngOnInit: should call 'subscribeToMenuItem'`, () => {
+    it(`ngOnInit: should call 'subscribeToMenuItem' and 'subscribeToRoute'`, () => {
       spyOn(component, 'subscribeToMenuItem');
+      spyOn(component, 'subscribeToRoute');
 
       component.ngOnInit();
 
       expect(component['subscribeToMenuItem']).toHaveBeenCalled();
+      expect(component['subscribeToRoute']).toHaveBeenCalled();
     });
 
     it(`ngAfterViewInit: should call 'menuGlobalService.sendApplicationMenu' with component instance`, () => {
