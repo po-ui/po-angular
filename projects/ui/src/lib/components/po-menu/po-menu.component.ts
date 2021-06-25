@@ -10,7 +10,7 @@ import {
   Renderer2
 } from '@angular/core';
 
-import { Router } from '@angular/router';
+import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -136,6 +136,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   private resizeListener: () => void;
 
   private itemSubscription: Subscription;
+  private routeSubscription: Subscription;
 
   constructor(
     public changeDetector: ChangeDetectorRef,
@@ -185,6 +186,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
 
   ngOnDestroy() {
     this.itemSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
 
     if (this.resizeListener) {
       this.resizeListener();
@@ -195,6 +197,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
 
   ngOnInit() {
     this.subscribeToMenuItem();
+    this.subscribeToRoute();
   }
 
   ngAfterViewInit() {
@@ -256,6 +259,15 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   subscribeToMenuItem() {
     this.itemSubscription = this.menuItemsService.receiveFromChildMenuClicked().subscribe((menu: PoMenuItem) => {
       this.clickMenuItem(menu);
+    });
+  }
+
+  subscribeToRoute() {
+    this.routeSubscription = this.router.events.subscribe(val => {
+      if (val instanceof NavigationEnd || val instanceof NavigationCancel) {
+        const urlRouter = this.checkingRouterChildrenFragments();
+        this.checkActiveMenuByUrl(urlRouter);
+      }
     });
   }
 
