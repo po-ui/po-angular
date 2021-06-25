@@ -5,18 +5,18 @@ import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-
 
 describe('PoCodeEditorSuggestionService', () => {
   let service: PoCodeEditorSuggestionService;
-  const htmlSuggestions_1: Array<PoCodeEditorRegisterableSuggestion> = [
+  const htmlSuggestions1: Array<PoCodeEditorRegisterableSuggestion> = [
     { label: 'po', insertText: '<po-ui></po-ui>', documentation: 'best library!' },
     { label: 'angular', insertText: '<angular></angular>', documentation: 'best framework!' }
   ];
 
-  const htmlSuggestions_2: Array<PoCodeEditorRegisterableSuggestion> = [
+  const htmlSuggestions2: Array<PoCodeEditorRegisterableSuggestion> = [
     { label: 'po', insertText: '<po-ui></po-ui>', documentation: 'best library!' },
     { label: 'angular', insertText: '<angular></angular>', documentation: 'best framework!' },
     { label: 'vue', insertText: '<vue></vue>', documentation: 'vuezin' }
   ];
 
-  const htmlSuggestions_3: Array<PoCodeEditorRegisterableSuggestion> = [
+  const htmlSuggestions3: Array<PoCodeEditorRegisterableSuggestion> = [
     { label: 'po', insertText: '<po-ui></po-ui>', documentation: 'best library!' },
     { label: 'angular', insertText: '<angular></angular>', documentation: 'best framework!' },
     { label: 'react', insertText: '<vue></vue>', documentation: 'me' }
@@ -37,16 +37,16 @@ describe('PoCodeEditorSuggestionService', () => {
   });
 
   it('should add a array of new suggestion for two different languages', () => {
-    expect(service.getSuggestion('html', htmlSuggestions_1)).toEqual(htmlSuggestions_1);
+    expect(service.getSuggestion('html', htmlSuggestions1)).toEqual(htmlSuggestions1);
     expect(service.getSuggestion('js', jsSuggestions)).toEqual(jsSuggestions);
   });
 
   it('should deduplicate two arrays of new suggestion from the same language', () => {
-    service.getSuggestion('html', htmlSuggestions_1);
-    expect(service.getSuggestion('html', htmlSuggestions_2)).toEqual([
+    service.getSuggestion('html', htmlSuggestions1);
+    expect(service.getSuggestion('html', htmlSuggestions2)).toEqual([
       { label: 'vue', insertText: '<vue></vue>', documentation: 'vuezin' }
     ]);
-    expect(service.getSuggestion('html', htmlSuggestions_3)).toEqual([
+    expect(service.getSuggestion('html', htmlSuggestions3)).toEqual([
       { label: 'react', insertText: '<vue></vue>', documentation: 'me' }
     ]);
   });
