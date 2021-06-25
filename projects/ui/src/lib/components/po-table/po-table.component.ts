@@ -126,7 +126,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
-    viewRef: ViewContainerRef,
     renderer: Renderer2,
     poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
