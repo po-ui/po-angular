@@ -140,7 +140,7 @@
         "no-irregular-whitespace": "off",
         "no-multi-str": "error",
         "no-self-assign": "error",
-        "no-shadow": "error",
+        "no-shadow": "off",
         "no-trailing-spaces": "off",
         "no-underscore-dangle": "off",
         "no-unused-expressions": "error",
