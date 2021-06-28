@@ -25,7 +25,7 @@
           (click)="onSelectDate(day)"
           attr-calendar
         >
-          <span *ngIf="day != 0" [ngClass]="getDayForegroundColor(day)">
+          <span *ngIf="day !== 0" [ngClass]="getDayForegroundColor(day)">
             {{ day.getDate() }}
           </span>
         </div>

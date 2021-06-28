@@ -182,7 +182,7 @@
             [style.max-width]="column.width"
             [style.min-width]="column.width"
             [class.po-table-column]="column.type !== 'icon'"
-            [class.po-table-column-right]="column.type == 'currency' || column.type == 'number'"
+            [class.po-table-column-right]="column.type === 'currency' || column.type === 'number'"
             [class.po-table-column-center]="column.type === 'subtitle'"
             [class.po-table-column-icons]="column.type === 'icon'"
             [ngClass]="getClassColor(row, column)"

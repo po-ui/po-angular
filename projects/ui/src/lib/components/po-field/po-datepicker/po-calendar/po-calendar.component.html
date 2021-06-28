@@ -22,7 +22,7 @@
           (click)="onSelectDate(day)"
           [ngClass]="getDayBackgroundColor(day)"
         >
-          <span *ngIf="day != 0" [ngClass]="getDayForegroundColor(day)">
+          <span *ngIf="day !== 0" [ngClass]="getDayForegroundColor(day)">
             {{ day.getDate() }}
           </span>
         </div>
