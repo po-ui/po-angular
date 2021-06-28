@@ -686,7 +686,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       this.updateSelectedValue(optionFound);
 
       this.previousSearchValue = optionFound.label;
-      return;
     } else if (this.selectedValue && this.selectedOption && this.selectedOption.label !== inputValue) {
       this.updateSelectedValueWithOldOption();
 

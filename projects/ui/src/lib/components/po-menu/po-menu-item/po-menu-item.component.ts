@@ -230,7 +230,6 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
 
     if (this.type === 'subItems') {
       this.groupedMenu(menu.active, menu.grouped, menu.activatedByRoute);
-      return;
     }
   }
 }
