@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.1](https://github.com/po-ui/po-angular/compare/v5.2.0...v5.2.1) (2021-06-28)
+
+
+### Bug Fixes
+
+* **menu:** corrige item de menu que não estava ativando ([fde6651](https://github.com/po-ui/po-angular/commit/fde665140a4908fa60a63caeefc66e73dbfde861)), closes [#852](https://github.com/po-ui/po-angular/issues/852)
+
+
+
 # [5.2.0](https://github.com/po-ui/po-angular/compare/v5.1.0...v5.2.0) (2021-06-21)
 
 
