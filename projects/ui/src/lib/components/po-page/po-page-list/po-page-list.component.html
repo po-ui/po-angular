@@ -28,7 +28,7 @@
         </po-button>
 
         <po-button
-          *ngIf="visibleActions.length == 3 && visibleActions[2] && !isMobile"
+          *ngIf="visibleActions.length === 3 && visibleActions[2] && !isMobile"
           [p-disabled]="actionIsDisabled(visibleActions[2])"
           [p-label]="visibleActions[2].label"
           (p-click)="callAction(visibleActions[2])"

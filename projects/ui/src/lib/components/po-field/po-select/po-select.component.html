@@ -36,7 +36,7 @@
     <ul #contentList class="po-select-content" [ngClass]="{ 'po-invisible': isMobile }">
       <li
         *ngFor="let option of options"
-        [class.po-select-item-selected]="selectedValue == option.value"
+        [class.po-select-item-selected]="selectedValue === option.value"
         [value]="option.value"
         (click)="onOptionClick(option)"
       >
