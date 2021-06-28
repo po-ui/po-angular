@@ -126,7 +126,6 @@ export class PoAdvancedFilterBaseComponent {
     Object.keys(this.filter).forEach(property => {
       if (this.filter[property] === undefined || this.filter[property] === '') {
         delete this.filter[property];
-        return;
       }
     });
 

@@ -15,8 +15,6 @@ export class PoGridCellActionComponent {
     // ENTER
     if (event.keyCode === 13) {
       event.preventDefault();
-
-      return;
     }
   }
 }

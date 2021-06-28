@@ -176,8 +176,6 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
       if (!this.isEdit) {
         this.model.executionParameter = {};
       }
-
-      return;
     }
   }
 

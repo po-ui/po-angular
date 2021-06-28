@@ -109,7 +109,6 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     if ((inputWidth && !this.visibleElement && this.initialized) || (inputWidth && this.isCalculateVisibleItems)) {
       this.debounceResize();
       this.visibleElement = true;
-      return;
     }
   }
 
@@ -221,7 +220,6 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
     if (event.keyCode === PoKeyCodeEnum.tab) {
       this.controlDropdownVisibility(false);
-      return;
     }
   }
 
