@@ -36,7 +36,7 @@ function createUpgradeRule() {
     for (const projectName of projectNames) {
       const project = workspace.projects[projectName];
 
-      applyUpdateInContent(tree, project.sourceRoot!);
+      applyUpdateInContent(tree, project.sourceRoot);
     }
   };
 }
