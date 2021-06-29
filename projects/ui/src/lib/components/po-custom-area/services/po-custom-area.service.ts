@@ -37,6 +37,10 @@ export class PoCustomAreaService {
         this.loaded.push(customNoSrc);
         const script = document.createElement('script');
         script.text = src;
+        if (custom?.integrity) {
+          script.integrity = custom.integrity;
+          script.crossOrigin = 'anonymous';
+        }
         document.body.appendChild(script);
         return true;
       })
