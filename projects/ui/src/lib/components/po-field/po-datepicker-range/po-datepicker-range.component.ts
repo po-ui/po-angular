@@ -6,7 +6,8 @@ import {
   OnInit,
   ViewChild,
   AfterViewInit,
-  Renderer2
+  Renderer2,
+  OnDestroy
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -74,13 +75,13 @@ const providers = [
   templateUrl: './po-datepicker-range.component.html',
   providers
 })
-export class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent implements AfterViewInit, OnInit {
+export class PoDatepickerRangeComponent
+  extends PoDatepickerRangeBaseComponent
+  implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('dateRangeField', { read: ElementRef, static: true }) dateRangeField: ElementRef;
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;
-
   @ViewChild('iconCalendar', { read: ElementRef, static: true }) iconCalendar: ElementRef;
-
   @ViewChild('calendarPicker', { read: ElementRef }) calendarPicker: ElementRef;
 
   isCalendarVisible = false;
