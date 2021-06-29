@@ -101,9 +101,9 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
   private hiringProcessesFilter(labelFilter: string | Array<string>) {
     const filters = typeof labelFilter === 'string' ? [labelFilter] : [...labelFilter];
 
-    this.hiringProcessesFiltered = this.hiringProcesses.filter(item => {
-      return Object.keys(item).some(key => !(item[key] instanceof Object) && this.includeFilter(item[key], filters));
-    });
+    this.hiringProcessesFiltered = this.hiringProcesses.filter(item =>
+      Object.keys(item).some(key => !(item[key] instanceof Object) && this.includeFilter(item[key], filters))
+    );
   }
 
   private includeFilter(item, filters) {

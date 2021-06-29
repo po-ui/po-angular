@@ -105,9 +105,7 @@ export class PoUploadBaseService {
   }
 
   public stopRequestByFile(file: any, callback: () => void) {
-    const requestObj = this.requests.find(req => {
-      return req.file.uid === file.uid;
-    });
+    const requestObj = this.requests.find(req => req.file.uid === file.uid);
 
     if (requestObj) {
       const request = requestObj.request;
@@ -123,9 +121,7 @@ export class PoUploadBaseService {
   }
 
   public addRequest(file: PoUploadFile, request: Subscription) {
-    const hasRequest = this.requests.some(req => {
-      return req.file.uid === file.uid;
-    });
+    const hasRequest = this.requests.some(req => req.file.uid === file.uid);
 
     if (!hasRequest) {
       this.requests.push({ file, request });

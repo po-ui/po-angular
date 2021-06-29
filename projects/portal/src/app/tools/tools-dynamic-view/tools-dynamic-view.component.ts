@@ -136,9 +136,7 @@ export class ToolsDynamicViewComponent {
   constructor(private poNotification: PoNotificationService) {}
 
   openValueForm() {
-    this.valueFields = this.fields.map(field => {
-      return { property: field.property, gridColumns: 6 };
-    });
+    this.valueFields = this.fields.map(field => ({ property: field.property, gridColumns: 6 }));
 
     this.valueForms.open();
   }

@@ -39,16 +39,15 @@ describe('PoLookupFilterService', () => {
         .getFilteredItems({ filter, page, pageSize, filterParams })
         .subscribe(response => expect(response).toEqual(expectedResponse));
 
-      const req = httpMock.expectOne(httpRequest => {
-        return (
+      const req = httpMock.expectOne(
+        httpRequest =>
           httpRequest.url === service['url'] &&
           httpRequest.method === 'GET' &&
           httpRequest.params.get('page') === <any>page &&
           httpRequest.params.get('pageSize') === <any>pageSize &&
           httpRequest.params.get('filter') === 'name' &&
           httpRequest.params.get('name') === 'test'
-        );
-      });
+      );
 
       expect(req.request.headers.get('X-PO-No-Message')).toBe('true');
 
@@ -85,13 +84,12 @@ describe('PoLookupFilterService', () => {
         expect(response).toEqual(expectedResponse);
       });
 
-      const req = httpMock.expectOne(httpRequest => {
-        return (
+      const req = httpMock.expectOne(
+        httpRequest =>
           httpRequest.url === 'http://url.com/test%2Fencoding' &&
           httpRequest.method === 'GET' &&
           httpRequest.params.get('name') === 'test'
-        );
-      });
+      );
 
       expect(req.request.headers.get('X-PO-No-Message')).toBe('true');
 

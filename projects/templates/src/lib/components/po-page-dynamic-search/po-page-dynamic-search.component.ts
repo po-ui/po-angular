@@ -98,9 +98,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   onChangeFilters(filters: Array<PoPageDynamicSearchFilters>) {
     const filterObjectWithValue = filters
       .filter(filter => filter.initValue)
-      .reduce((prev, current) => {
-        return { ...prev, ...{ [current.property]: current.initValue } };
-      }, {});
+      .reduce((prev, current) => ({ ...prev, ...{ [current.property]: current.initValue } }), {});
 
     if (Object.keys(filterObjectWithValue).length) {
       this.onAdvancedSearch({ filter: filterObjectWithValue });

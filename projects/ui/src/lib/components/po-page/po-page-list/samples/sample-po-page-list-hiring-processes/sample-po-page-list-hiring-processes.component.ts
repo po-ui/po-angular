@@ -120,9 +120,9 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   }
 
   hiringProcessesFilter(filters) {
-    this.hiringProcessesFiltered = this.hiringProcesses.filter(item => {
-      return Object.keys(item).some(key => !(item[key] instanceof Object) && this.includeFilter(item[key], filters));
-    });
+    this.hiringProcessesFiltered = this.hiringProcesses.filter(item =>
+      Object.keys(item).some(key => !(item[key] instanceof Object) && this.includeFilter(item[key], filters))
+    );
   }
 
   includeFilter(item, filters) {

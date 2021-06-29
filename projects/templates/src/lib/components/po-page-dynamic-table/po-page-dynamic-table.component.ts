@@ -680,11 +680,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.subscriptions.add(
       this.poPageDynamicTableActionsService
         .beforeRemove(actionBeforeRemove, uniqueKey, item)
-        .pipe(
-          switchMap(beforeRemove => {
-            return this.deleteAction(item, actionRemove, beforeRemove);
-          })
-        )
+        .pipe(switchMap(beforeRemove => this.deleteAction(item, actionRemove, beforeRemove)))
         .subscribe()
     );
   }
@@ -734,11 +730,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.subscriptions.add(
       this.poPageDynamicTableActionsService
         .beforeRemoveAll(actionBeforeRemoveAll, originalResourcesKeys)
-        .pipe(
-          switchMap(beforeRemove => {
-            return this.deleteAllAction(actionRemoveAll, beforeRemove, originalResourcesKeys);
-          })
-        )
+        .pipe(switchMap(beforeRemove => this.deleteAllAction(actionRemoveAll, beforeRemove, originalResourcesKeys)))
         .subscribe()
     );
   }
@@ -805,22 +797,18 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private transformCustomActionsToPageListAction(
     customActions: Array<PoPageDynamicTableCustomAction>
   ): Array<PoPageAction> {
-    return customActions.map(customAction => {
-      return {
-        label: customAction.label,
-        action: this.callPageCustomAction.bind(this, customAction),
-        disabled: this.isDisablePageCustomAction.bind(this, customAction)
-      };
-    });
+    return customActions.map(customAction => ({
+      label: customAction.label,
+      action: this.callPageCustomAction.bind(this, customAction),
+      disabled: this.isDisablePageCustomAction.bind(this, customAction)
+    }));
   }
 
   private transformTableCustomActionsToTableActions(tableCustomActions: Array<PoPageDynamicTableCustomTableAction>) {
-    return tableCustomActions.map(tableCustomAction => {
-      return {
-        label: tableCustomAction.label,
-        action: this.callTableCustomAction.bind(this, tableCustomAction)
-      };
-    });
+    return tableCustomActions.map(tableCustomAction => ({
+      label: tableCustomAction.label,
+      action: this.callTableCustomAction.bind(this, tableCustomAction)
+    }));
   }
 
   private isDisablePageCustomAction(customAction): boolean {

@@ -446,19 +446,17 @@ describe('PoPageDynamicEditComponent: ', () => {
         component.fields = [{ property: 'filter1' }, { property: 'filter2' }];
         component.title = 'Original Title';
 
-        component.onLoad = () => {
-          return {
-            title: 'New Title',
-            breadcrumb: {
-              items: [{ label: 'Test' }, { label: 'Test2' }]
-            },
-            actions: {
-              cancel: '/newcancel',
-              saveNew: '/savenew'
-            },
-            fields: [{ property: 'filter1' }, { property: 'filter3' }]
-          };
-        };
+        component.onLoad = () => ({
+          title: 'New Title',
+          breadcrumb: {
+            items: [{ label: 'Test' }, { label: 'Test2' }]
+          },
+          actions: {
+            cancel: '/newcancel',
+            saveNew: '/savenew'
+          },
+          fields: [{ property: 'filter1' }, { property: 'filter3' }]
+        });
 
         spyOn(component, <any>'loadData').and.returnValue(of({}));
 

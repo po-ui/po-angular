@@ -740,9 +740,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
     return keys
       .filter(key => typeof item[key] !== 'object')
-      .map(key => {
-        return { label: capitalizeFirstLetter(key), property: key };
-      });
+      .map(key => ({ label: capitalizeFirstLetter(key), property: key }));
   }
 
   protected setShowDetail(rowIdentifier: any | number, isShowDetail: boolean) {
@@ -849,9 +847,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   }
 
   private sortArray(column: PoTableColumn, ascending: boolean) {
-    this.items.sort((leftSide, rightSide): number => {
-      return sortValues(leftSide[column.property], rightSide[column.property], ascending);
-    });
+    this.items.sort((leftSide, rightSide): number =>
+      sortValues(leftSide[column.property], rightSide[column.property], ascending)
+    );
   }
 
   private unselectOtherRows(rows: Array<any>, row) {

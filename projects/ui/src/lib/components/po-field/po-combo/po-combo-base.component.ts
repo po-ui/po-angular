@@ -559,9 +559,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   getOptionFromLabel(label: any, options: any) {
     if (options) {
-      return options.find((option: any) => {
-        return option.label.toString().toLowerCase() === label.toString().toLowerCase();
-      });
+      return options.find((option: any) => option.label.toString().toLowerCase() === label.toString().toLowerCase());
     } else {
       return null;
     }

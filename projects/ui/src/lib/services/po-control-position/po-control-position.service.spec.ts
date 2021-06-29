@@ -663,14 +663,12 @@ describe('PoControlPositionService:', () => {
 
 function getFakeOverflows(positionTrue) {
   return {
-    getOverflows: () => {
-      return {
-        right: positionTrue === 'right',
-        left: positionTrue === 'left',
-        top: positionTrue === 'top',
-        bottom: positionTrue === 'bottom'
-      };
-    }
+    getOverflows: () => ({
+      right: positionTrue === 'right',
+      left: positionTrue === 'left',
+      top: positionTrue === 'top',
+      bottom: positionTrue === 'bottom'
+    })
   };
 }
 
@@ -683,31 +681,29 @@ function getFakeSizesAndPositions(top, right, bottom, left) {
     setBottomPositions: () => {},
     arrowDirection: 'bottom',
     setElementWidth: () => {},
-    getSizesAndPositions: () => {
-      return {
-        window: {
-          scrollY: 0,
-          scrollX: 0,
-          innerWidth: 100,
-          innerHeight: 100
-        },
-        element: {
-          top: top,
-          left: left,
-          right: right,
-          bottom: bottom,
-          height: 0,
-          width: 0
-        },
-        target: {
-          top: top,
-          left: left,
-          right: right,
-          bottom: bottom,
-          height: 0,
-          width: 0
-        }
-      };
-    }
+    getSizesAndPositions: () => ({
+      window: {
+        scrollY: 0,
+        scrollX: 0,
+        innerWidth: 100,
+        innerHeight: 100
+      },
+      element: {
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom,
+        height: 0,
+        width: 0
+      },
+      target: {
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom,
+        height: 0,
+        width: 0
+      }
+    })
   };
 }

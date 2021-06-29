@@ -1105,13 +1105,9 @@ describe('PoRichTextBodyComponent:', () => {
     it('verifyCursorPositionInFirefoxIEEdge: should return true if childNodes of fragmentDocument is an A tag', () => {
       const element = { element: 'test', nodeName: 'A' };
       const textSelection = {
-        getRangeAt: () => {
-          return {
-            cloneContents: () => {
-              return { childNodes: [{ element: 'test', nodeName: 'A' }] };
-            }
-          };
-        }
+        getRangeAt: () => ({
+          cloneContents: () => ({ childNodes: [{ element: 'test', nodeName: 'A' }] })
+        })
       };
 
       spyOn(document, 'getSelection').and.returnValue(<any>textSelection);
@@ -1123,16 +1119,12 @@ describe('PoRichTextBodyComponent:', () => {
     it('verifyCursorPositionInFirefoxIEEdge: should return true if firstElementChild of fragmentDocument is an A tag', () => {
       const element = { element: 'test', nodeName: 'A' };
       const textSelection = {
-        getRangeAt: () => {
-          return {
-            cloneContents: () => {
-              return {
-                firstElementChild: { element: 'test', nodeName: 'A' },
-                childNodes: []
-              };
-            }
-          };
-        }
+        getRangeAt: () => ({
+          cloneContents: () => ({
+            firstElementChild: { element: 'test', nodeName: 'A' },
+            childNodes: []
+          })
+        })
       };
 
       spyOn(document, 'getSelection').and.returnValue(<any>textSelection);
@@ -1144,16 +1136,12 @@ describe('PoRichTextBodyComponent:', () => {
     it(`verifyCursorPositionInFirefoxIEEdge: should return false if focusNode and firstElementChild of fragmentDocument
       are not an A tag and childNodes is undefined `, () => {
       const textSelection = {
-        getRangeAt: () => {
-          return {
-            cloneContents: () => {
-              return {
-                firstElementChild: { element: 'test', nodeName: 'DIV' },
-                childNodes: []
-              };
-            }
-          };
-        }
+        getRangeAt: () => ({
+          cloneContents: () => ({
+            firstElementChild: { element: 'test', nodeName: 'DIV' },
+            childNodes: []
+          })
+        })
       };
 
       spyOn(document, 'getSelection').and.returnValue(<any>textSelection);
@@ -1165,16 +1153,12 @@ describe('PoRichTextBodyComponent:', () => {
     it(`verifyCursorPositionInFirefoxIEEdge: should return false if focusNode and childNodes of fragmentDocument
       are not an A tag and firstElementChild is undefined`, () => {
       const textSelection = {
-        getRangeAt: () => {
-          return {
-            cloneContents: () => {
-              return {
-                firstElementChild: undefined,
-                childNodes: [{ element: 'test', nodeName: 'DIV' }]
-              };
-            }
-          };
-        }
+        getRangeAt: () => ({
+          cloneContents: () => ({
+            firstElementChild: undefined,
+            childNodes: [{ element: 'test', nodeName: 'DIV' }]
+          })
+        })
       };
 
       spyOn(document, 'getSelection').and.returnValue(<any>textSelection);

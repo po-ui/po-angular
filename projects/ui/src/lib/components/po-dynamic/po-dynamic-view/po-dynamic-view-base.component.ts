@@ -163,9 +163,7 @@ export class PoDynamicViewBaseComponent {
 
   // retorna o objeto value como fields.
   protected getValueFields() {
-    return Object.keys(this.value).map(property => {
-      return this.createField({ property });
-    });
+    return Object.keys(this.value).map(property => this.createField({ property }));
   }
 
   private createField(field: PoDynamicViewField) {

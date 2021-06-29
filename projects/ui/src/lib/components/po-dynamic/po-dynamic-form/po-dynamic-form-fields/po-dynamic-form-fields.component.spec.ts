@@ -786,11 +786,9 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       });
 
       it('should update field of visibleFields with disabled true', async () => {
-        const validate = () => {
-          return {
-            field: { disabled: true }
-          };
-        };
+        const validate = () => ({
+          field: { disabled: true }
+        });
 
         component.fields[0].validate = validate;
         spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(validate()));
@@ -801,11 +799,9 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       });
 
       it('should update field of visibleFields with help', async () => {
-        const validate = () => {
-          return {
-            field: { help: 'new help' }
-          };
-        };
+        const validate = () => ({
+          field: { help: 'new help' }
+        });
 
         component.fields[0].validate = validate;
 
@@ -819,12 +815,10 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       it('should update field value', async () => {
         const expectedValue = 'new value';
 
-        const validate = () => {
-          return {
-            value: expectedValue,
-            field: { help: 'new help' }
-          };
-        };
+        const validate = () => ({
+          value: expectedValue,
+          field: { help: 'new help' }
+        });
 
         component.fields[0].validate = validate;
 

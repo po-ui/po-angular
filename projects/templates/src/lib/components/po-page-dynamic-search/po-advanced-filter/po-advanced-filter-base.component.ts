@@ -130,9 +130,9 @@ export class PoAdvancedFilterBaseComponent {
     });
 
     if (this.optionsServiceChosenOptions.length) {
-      optionServiceOptions = this.optionsServiceChosenOptions.filter((optionItem: PoComboOption) => {
-        return Object.values(this.filter).includes(optionItem.value);
-      });
+      optionServiceOptions = this.optionsServiceChosenOptions.filter((optionItem: PoComboOption) =>
+        Object.values(this.filter).includes(optionItem.value)
+      );
     }
 
     return { filter: this.filter, optionsService: optionServiceOptions };

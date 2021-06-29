@@ -43,9 +43,7 @@ export class PoChartAxisComponent {
   private _series: Array<any> = [];
 
   @Input('p-series') set series(seriesList: Array<any>) {
-    const seriesDataArrayFilter = seriesList.filter(serie => {
-      return Array.isArray(serie.data);
-    });
+    const seriesDataArrayFilter = seriesList.filter(serie => Array.isArray(serie.data));
 
     if (seriesDataArrayFilter.length) {
       this._series = seriesDataArrayFilter;
@@ -398,9 +396,9 @@ export class PoChartAxisComponent {
   }
 
   private getCategoriesRangeForMouseMove(amountOfAxisY: number, containerSize: PoChartContainerSize) {
-    const categoriesCoordinates = [...Array(amountOfAxisY)].map((_, index: number) => {
-      return this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, index, true);
-    });
+    const categoriesCoordinates = [...Array(amountOfAxisY)].map((_, index: number) =>
+      this.calculateAxisYCoordinateX(containerSize, amountOfAxisY, index, true)
+    );
 
     this.categoriesCoordinates.emit(categoriesCoordinates);
   }
@@ -425,9 +423,7 @@ export class PoChartAxisComponent {
   }
 
   private formatCategoriesLabels(amountOfAxisX: number, categories: Array<string> = []) {
-    return [...Array(amountOfAxisX)].map((_, index: number) => {
-      return categories[index] ?? '-';
-    });
+    return [...Array(amountOfAxisX)].map((_, index: number) => categories[index] ?? '-');
   }
 
   private generateAverageOfLabels(minMaxAxisValues: PoChartMinMaxValues, amountOfAxisLines: number) {

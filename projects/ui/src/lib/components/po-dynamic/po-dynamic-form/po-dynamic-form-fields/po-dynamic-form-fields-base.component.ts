@@ -132,9 +132,7 @@ export class PoDynamicFormFieldsBaseComponent {
   }
 
   private existsProperty(fields: Array<PoDynamicFormField>, property: string) {
-    return fields.some(field => {
-      return field.property === property;
-    });
+    return fields.some(field => field.property === property);
   }
 
   // recupera o componente de acordo com algumas regras do field.

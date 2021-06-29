@@ -21,12 +21,8 @@ describe('PoMenuBaseComponent:', () => {
     sendMenus: menus => {}
   };
   const languageService: any = {
-    getShortLanguage: () => {
-      return 'pt';
-    },
-    getLanguageDefault: () => {
-      return 'pt';
-    }
+    getShortLanguage: () => 'pt',
+    getLanguageDefault: () => 'pt'
   };
   const menuService: any = {
     configProperties: () => {},
@@ -215,9 +211,7 @@ describe('PoMenuBaseComponent:', () => {
     it(`configService: shouldn't call 'menuService.configProperties' and should set 'filterService' if service parameter
       is a custom service`, () => {
       const service: PoMenuFilter = {
-        getFilteredData: (search, params) => {
-          return of([{ label: 'Menu', link: '/' }]);
-        }
+        getFilteredData: (search, params) => of([{ label: 'Menu', link: '/' }])
       };
 
       const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');

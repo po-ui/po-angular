@@ -308,9 +308,7 @@ describe('PoRichTextLinkModalComponent', () => {
         urlLinkText: '',
         selection: {
           anchorNode: 'div',
-          getRangeAt: () => {
-            return { endOffset: 0 };
-          },
+          getRangeAt: () => ({ endOffset: 0 }),
           toString: () => 'value'
         }
       };
