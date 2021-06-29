@@ -1,7 +1,7 @@
 import { Directive, ElementRef } from '@angular/core';
 import { AfterViewInit } from '@angular/core';
 
-declare var hljs: any;
+declare const hljs: any;
 
 @Directive({
   selector: '[appCodeHighlight]'
