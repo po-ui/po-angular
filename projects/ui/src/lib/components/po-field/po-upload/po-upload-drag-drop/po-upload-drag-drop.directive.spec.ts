@@ -170,9 +170,7 @@ describe('PoUploadDragDropDirective:', () => {
         disabled: false,
         directoryCompatible: true,
         invalidFileType: 0,
-        getOnlyDirectories: arg => {
-          return { then: callback => callback() };
-        },
+        getOnlyDirectories: arg => ({ then: callback => callback() }),
         sendFiles: (arg1, arg2) => {},
         getOnlyFiles: () => {}
       };
@@ -274,9 +272,7 @@ describe('PoUploadDragDropDirective:', () => {
     it('should call `webkitGetAsEntry`, increment `invalidFileType` and not to call `getFilesFromEntry`', () => {
       const dataTransfer = [
         {
-          webkitGetAsEntry: () => {
-            return { isFile: true };
-          }
+          webkitGetAsEntry: () => ({ isFile: true })
         }
       ];
       directive['invalidFileType'] = 0;
@@ -294,9 +290,7 @@ describe('PoUploadDragDropDirective:', () => {
     it('getOnlyDirectories: should call `webkitGetAsEntry`, not increment `invalidFileType` and call `getFilesFromEntry`', () => {
       const dataTransfer = [
         {
-          webkitGetAsEntry: () => {
-            return { isFile: false };
-          }
+          webkitGetAsEntry: () => ({ isFile: false })
         }
       ];
       directive['invalidFileType'] = 0;

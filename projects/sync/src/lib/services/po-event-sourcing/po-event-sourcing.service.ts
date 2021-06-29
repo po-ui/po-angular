@@ -141,13 +141,12 @@ export class PoEventSourcingService {
   }
 
   syncGet(): Promise<any> {
-    const syncGetFunction = async () => {
-      return this.poSchemaDefinition.getAll().then(schemas => {
+    const syncGetFunction = async () =>
+      this.poSchemaDefinition.getAll().then(schemas => {
         const schemaPromises = this.updateStorageSchemas(schemas);
 
         return Promise.all(schemaPromises);
       });
-    };
 
     return this.poSchemaService.limitedCallWrap(syncGetFunction);
   }

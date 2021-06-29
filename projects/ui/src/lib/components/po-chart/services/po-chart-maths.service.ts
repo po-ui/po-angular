@@ -157,8 +157,6 @@ export class PoChartMathsService {
   }
 
   private sortLongestData<T>(serie: Array<T>): T {
-    return serie.sort((longest, current) => {
-      return current.toString().length - longest.toString().length;
-    })['0'];
+    return serie.sort((longest, current) => current.toString().length - longest.toString().length)['0'];
   }
 }

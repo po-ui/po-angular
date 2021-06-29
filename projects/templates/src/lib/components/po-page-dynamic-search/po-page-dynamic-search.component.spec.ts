@@ -538,21 +538,19 @@ describe('PoPageDynamicSearchComponent:', () => {
         component.title = 'Original Title';
         component.quickSearchWidth = 3;
 
-        component.onLoad = () => {
-          return {
-            title: 'New Title',
-            breadcrumb: {
-              items: [{ label: 'Test' }, { label: 'Test2' }]
-            },
-            actions: [
-              { label: 'Feature 1', url: '/new-feature1' },
-              { label: 'Feature 3', url: '/new-feature3' }
-            ],
-            filters: [{ property: 'filter1' }, { property: 'filter3' }],
-            keepFilters: true,
-            quickSearchWidth: 6
-          };
-        };
+        component.onLoad = () => ({
+          title: 'New Title',
+          breadcrumb: {
+            items: [{ label: 'Test' }, { label: 'Test2' }]
+          },
+          actions: [
+            { label: 'Feature 1', url: '/new-feature1' },
+            { label: 'Feature 3', url: '/new-feature3' }
+          ],
+          filters: [{ property: 'filter1' }, { property: 'filter3' }],
+          keepFilters: true,
+          quickSearchWidth: 6
+        });
 
         component.ngOnInit();
         tick();

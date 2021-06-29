@@ -42,9 +42,7 @@ describe('PoCodeEditorComponent', () => {
     const fakeThis = {
       showDiff: true,
       editor: {
-        getModel: () => {
-          return { original: '', modified: '' };
-        }
+        getModel: () => ({ original: '', modified: '' })
       },
       setMonacoLanguage: () => {}
     };
@@ -58,9 +56,7 @@ describe('PoCodeEditorComponent', () => {
     const fakeThis = {
       showDiff: false,
       editor: {
-        getModel: () => {
-          return { original: '', modified: '' };
-        }
+        getModel: () => ({ original: '', modified: '' })
       },
       setMonacoLanguage: () => {}
     };
@@ -77,16 +73,14 @@ describe('PoCodeEditorComponent', () => {
         language: 'terraform',
         options: {},
         suggestions: {
-          provideCompletionItems: () => {
-            return {
-              suggestions: [
-                {
-                  label: 'terraform',
-                  insertText: '#terraform language'
-                }
-              ]
-            };
-          }
+          provideCompletionItems: () => ({
+            suggestions: [
+              {
+                label: 'terraform',
+                insertText: '#terraform language'
+              }
+            ]
+          })
         }
       }
     };

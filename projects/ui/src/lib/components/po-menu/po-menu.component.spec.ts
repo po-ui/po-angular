@@ -1621,9 +1621,7 @@ describe('PoMenuComponent:', () => {
     it(`filterProcess: should set 'filterLoading' to true when 'filterProcess' is called`, () => {
       component.filterLoading = false;
 
-      spyOn(component, <any>'filterItems').and.callFake(() => {
-        return { then: () => ({ catch: () => {} }) };
-      });
+      spyOn(component, <any>'filterItems').and.callFake(() => ({ then: () => ({ catch: () => {} }) }));
 
       component['filterProcess']('filter');
 

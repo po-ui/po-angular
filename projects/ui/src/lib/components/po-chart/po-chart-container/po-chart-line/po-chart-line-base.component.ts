@@ -62,9 +62,7 @@ export abstract class PoChartLineBaseComponent {
   }
 
   @Input('p-series') set series(seriesList: Array<PoChartSerie>) {
-    const seriesDataArrayFilter = seriesList.filter(serie => {
-      return Array.isArray(serie.data);
-    });
+    const seriesDataArrayFilter = seriesList.filter(serie => Array.isArray(serie.data));
 
     if (seriesDataArrayFilter.length) {
       this._series = seriesDataArrayFilter;

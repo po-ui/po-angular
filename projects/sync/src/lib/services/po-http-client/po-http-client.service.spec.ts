@@ -53,14 +53,13 @@ describe('PoHttpClientService', () => {
       });
 
       httpMock
-        .expectOne(httpRequest => {
-          return (
+        .expectOne(
+          httpRequest =>
             httpRequest.url === poHttpOperationDataMock.url &&
             httpRequest.method === PoHttpRequestType.GET &&
             httpRequest.headers.get(headerMock.name) === headerMock.value &&
             httpRequest.body === poHttpOperationDataMock.body
-          );
-        })
+        )
         .flush({});
     });
 

@@ -208,9 +208,7 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
 
   private hasSubItem(subItems: Array<PoMenuItem>, id: string): boolean {
     if (subItems) {
-      return subItems.some(item => {
-        return item['id'] === id ? true : this.hasSubItem(item.subItems, id);
-      });
+      return subItems.some(item => (item['id'] === id ? true : this.hasSubItem(item.subItems, id)));
     }
   }
 

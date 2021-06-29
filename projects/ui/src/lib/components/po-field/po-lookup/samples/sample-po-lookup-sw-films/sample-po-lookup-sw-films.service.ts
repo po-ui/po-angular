@@ -25,12 +25,10 @@ export class SamplePoLookupSwFilmsService implements PoLookupFilter {
     }
 
     return this.http.get(`${this.baseUrl}/${filterParams}`, { params }).pipe(
-      map((response: { results: Array<any>; next: string }) => {
-        return {
-          items: response.results,
-          hasNext: !!response.next
-        };
-      })
+      map((response: { results: Array<any>; next: string }) => ({
+        items: response.results,
+        hasNext: !!response.next
+      }))
     );
   }
 

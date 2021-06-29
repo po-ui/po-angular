@@ -110,9 +110,7 @@ describe('PoDynamicViewComponent:', () => {
     it(`getValuesAndFieldsFromLoad: should call 'component.load' if 'component.load' is function`, async () => {
       const expectedValue = { value: { rg: '6.111' } };
 
-      component.load = () => {
-        return expectedValue;
-      };
+      component.load = () => expectedValue;
 
       expect(await component['getValuesAndFieldsFromLoad']()).toEqual(expectedValue);
     });

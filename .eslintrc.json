@@ -162,6 +162,7 @@
           }
         ],
         "arrow-parens": ["off", "always"],
+        "arrow-body-style": ["error", "as-needed"],
         "brace-style": ["off", "off"],
         "default-case-last": "error",
         "dot-notation": "off",

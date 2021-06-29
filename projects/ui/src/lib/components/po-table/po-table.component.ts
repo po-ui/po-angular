@@ -443,9 +443,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   public getTemplate(column: PoTableColumn): TemplateRef<any> {
-    const template: PoTableColumnTemplateDirective = this.tableColumnTemplates.find(tableColumnTemplate => {
-      return tableColumnTemplate.targetProperty === column.property;
-    });
+    const template: PoTableColumnTemplateDirective = this.tableColumnTemplates.find(
+      tableColumnTemplate => tableColumnTemplate.targetProperty === column.property
+    );
     if (!template) {
       console.warn(
         `Não foi possível encontrar o template para a coluna: ${column.property}, por gentileza informe a propriedade [p-property]`

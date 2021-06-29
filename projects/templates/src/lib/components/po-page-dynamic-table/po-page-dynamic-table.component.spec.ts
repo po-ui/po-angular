@@ -151,24 +151,22 @@ describe('PoPageDynamicTableComponent:', () => {
         component.title = 'Original Title';
         component.quickSearchWidth = 3;
 
-        component.onLoad = () => {
-          return {
-            quickSearchWidth: 6,
-            title: 'New Title',
-            breadcrumb: {
-              items: [{ label: 'Test' }, { label: 'Test2' }]
-            },
-            pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }],
-            tableCustomActions: [{ label: 'Details', action: 'endpoint/' }],
-            actions: {
-              detail: '/new_datail',
-              new: '/new'
-            },
-            fields: [{ property: 'filter1' }, { property: 'filter3' }],
-            keepFilters: true,
-            concatFilters: true
-          };
-        };
+        component.onLoad = () => ({
+          quickSearchWidth: 6,
+          title: 'New Title',
+          breadcrumb: {
+            items: [{ label: 'Test' }, { label: 'Test2' }]
+          },
+          pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }],
+          tableCustomActions: [{ label: 'Details', action: 'endpoint/' }],
+          actions: {
+            detail: '/new_datail',
+            new: '/new'
+          },
+          fields: [{ property: 'filter1' }, { property: 'filter3' }],
+          keepFilters: true,
+          concatFilters: true
+        });
 
         spyOn(component, <any>'loadData').and.returnValue(EMPTY);
 

@@ -335,8 +335,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   }
 
   private setCheckboxGroupOptionsView(optionsList: Array<PoCheckboxGroupOption>) {
-    this.checkboxGroupOptionsView = optionsList.map(option => {
-      return { ...option, id: uuid() };
-    });
+    this.checkboxGroupOptionsView = optionsList.map(option => ({ ...option, id: uuid() }));
   }
 }

@@ -458,9 +458,7 @@ describe('PoEventSourcingService:', () => {
       spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValues(<any>{ item: 'test' });
       spyOn(eventSourcingService, <any>'selectOperation');
 
-      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => {
-        return callback();
-      });
+      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
 
       eventSourcingService.stoppedQueueEventSourcing = false;
 
@@ -474,9 +472,7 @@ describe('PoEventSourcingService:', () => {
       spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValue(undefined);
       spyOn(eventSourcingService, <any>'selectOperation');
 
-      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => {
-        return callback();
-      });
+      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
 
       eventSourcingService.stoppedQueueEventSourcing = true;
 
@@ -490,9 +486,7 @@ describe('PoEventSourcingService:', () => {
       spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValues(<any>{ item: 'test' });
       spyOn(eventSourcingService, <any>'selectOperation');
 
-      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => {
-        return callback();
-      });
+      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
 
       eventSourcingService.stoppedQueueEventSourcing = true;
 
@@ -506,9 +500,7 @@ describe('PoEventSourcingService:', () => {
       spyOn(eventSourcingService['poStorage'], 'getFirstItem').and.returnValues(undefined);
       spyOn(eventSourcingService, <any>'selectOperation');
 
-      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => {
-        return callback();
-      });
+      spyOn(eventSourcingService['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
 
       eventSourcingService.stoppedQueueEventSourcing = false;
 

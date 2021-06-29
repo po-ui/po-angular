@@ -90,11 +90,7 @@ describe('PoSyncService:', () => {
 
     poSchemaService = TypeMoq.Mock.ofType(PoSchemaService);
 
-    poNetworkServiceMock
-      .setup(e => e.getConnectionStatus())
-      .returns(() => {
-        return new PoNetworkStatus('wifi');
-      });
+    poNetworkServiceMock.setup(e => e.getConnectionStatus()).returns(() => new PoNetworkStatus('wifi'));
 
     poSync = new PoSyncService(
       poEventSourcing.object,

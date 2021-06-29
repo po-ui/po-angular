@@ -132,13 +132,9 @@ describe('PoChartGaugeComponent:', () => {
         { value: 30, description: 'desc' }
       ];
 
-      spyOn(component['el'].nativeElement, 'querySelector').and.callFake(() => {
-        return {
-          getBoundingClientRect: () => {
-            return { width: 200 };
-          }
-        };
-      });
+      spyOn(component['el'].nativeElement, 'querySelector').and.callFake(() => ({
+        getBoundingClientRect: () => ({ width: 200 })
+      }));
 
       const expectedResult = component['getGaugeBaseWidth']();
 

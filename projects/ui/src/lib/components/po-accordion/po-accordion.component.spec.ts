@@ -89,9 +89,7 @@ describe('PoAccordionComponent:', () => {
         toggle: arg => {},
         accordionServiceSubscription: undefined,
         accordionService: {
-          receiveFromChildAccordionClicked: () => {
-            return { subscribe: callback => callback(poAccordionItem) };
-          }
+          receiveFromChildAccordionClicked: () => ({ subscribe: callback => callback(poAccordionItem) })
         }
       };
 

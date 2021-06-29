@@ -8,9 +8,9 @@ export class SamplePoPageDynamicSearchHiringProcessesService {
     let filteredItems = [...this.getItems()];
 
     Object.keys(filters).forEach(filter => {
-      filteredItems = filteredItems.filter(register => {
-        return register[filter].toLocaleLowerCase().includes(filters[filter].toLocaleLowerCase());
-      });
+      filteredItems = filteredItems.filter(register =>
+        register[filter].toLocaleLowerCase().includes(filters[filter].toLocaleLowerCase())
+      );
     });
 
     return filteredItems;
