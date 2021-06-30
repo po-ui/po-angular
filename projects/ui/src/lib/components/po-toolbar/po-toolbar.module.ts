@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PoAvatarModule } from './../po-avatar/po-avatar.module';
+import { PoIconModule } from './../po-icon/po-icon.module';
 import { PoPopupModule } from '../po-popup/po-popup.module';
 import { PoToolbarActionsComponent } from './po-toolbar-actions/po-toolbar-actions.component';
 import { PoToolbarComponent } from './po-toolbar.component';
@@ -15,7 +16,7 @@ import { PoToolbarProfileComponent } from './po-toolbar-profile/po-toolbar-profi
  *
  */
 @NgModule({
-  imports: [CommonModule, PoAvatarModule, PoPopupModule],
+  imports: [CommonModule, PoAvatarModule, PoPopupModule, PoIconModule],
   declarations: [
     PoToolbarActionsComponent,
     PoToolbarComponent,

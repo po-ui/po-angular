@@ -36,16 +36,15 @@ export class SamplePoToolbarLabsComponent implements OnInit {
     { value: 'po-icon-exit', label: 'po-icon-exit' },
     { value: 'po-icon-lock', label: 'po-icon-lock' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' },
-    { value: 'fa fa-podcast', label: 'fa fa-podcast' }
+    { value: 'far fa-comment-alt', label: 'far fa-comment-alt' }
   ];
 
   public readonly actionsIconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-chat', label: 'po-icon-chat' },
     { value: 'po-icon-clock', label: 'po-icon-clock' },
     { value: 'po-icon-exit', label: 'po-icon-exit' },
     { value: 'po-icon-lock', label: 'po-icon-lock' },
     { value: 'po-icon-settings', label: 'po-icon-settings' },
-    { value: 'po-icon-star', label: 'po-icon-star' }
+    { value: 'far fa-comment-alt', label: 'far fa-comment-alt' }
   ];
 
   public readonly toolbarActionTypes: Array<PoRadioGroupOption> = [
