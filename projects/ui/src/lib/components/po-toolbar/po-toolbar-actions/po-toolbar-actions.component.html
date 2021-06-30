@@ -1,5 +1,7 @@
-<div class="po-toolbar-actions po-clickable" (click)="popup.toggle()">
-  <span #toolbarActions class="po-icon {{ actionsIcon }} po-toolbar-icon"></span>
+<div class="po-toolbar-actions" (click)="popup.toggle()">
+  <span #toolbarActions>
+    <po-icon class="po-toolbar-icon po-clickable" [p-icon]="actionsIcon"></po-icon>
+  </span>
 </div>
 
 <po-popup #popup [p-actions]="actions" [p-target]="toolbarActions"> </po-popup>

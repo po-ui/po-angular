@@ -1,7 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 
 import { isTypeof } from '../../../utils/util';
-import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
 import { PoToolbarAction } from '../po-toolbar-action.interface';
 
@@ -18,18 +17,17 @@ const poToolbarActionsIconDefault = 'po-icon-more';
  */
 @Component({
   selector: 'po-toolbar-actions',
-  templateUrl: './po-toolbar-actions.component.html',
-  providers: [PoControlPositionService]
+  templateUrl: './po-toolbar-actions.component.html'
 })
 export class PoToolbarActionsComponent {
-  private _actionsIcon?: string = poToolbarActionsIconDefault;
+  private _actionsIcon?: string | TemplateRef<void> = poToolbarActionsIconDefault;
 
   /** Define uma lista de ações. */
   @Input('p-actions') actions?: Array<PoToolbarAction>;
 
   /** Define o ícone das ações. */
-  @Input('p-actions-icon') set actionsIcon(icon: string) {
-    this._actionsIcon = isTypeof(icon, 'string') ? icon : poToolbarActionsIconDefault;
+  @Input('p-actions-icon') set actionsIcon(icon: string | TemplateRef<void>) {
+    this._actionsIcon = isTypeof(icon, 'string') || icon instanceof TemplateRef ? icon : poToolbarActionsIconDefault;
   }
 
   get actionsIcon() {
