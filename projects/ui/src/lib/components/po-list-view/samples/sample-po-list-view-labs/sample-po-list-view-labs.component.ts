@@ -41,7 +41,9 @@ export class SamplePoListViewLabsComponent implements OnInit {
   readonly iconOptions: Array<PoSelectOption> = [
     { value: 'po-icon-news', label: 'po-icon-news' },
     { value: 'po-icon-search', label: 'po-icon-search' },
-    { value: 'po-icon-world', label: 'po-icon-world' }
+    { value: 'po-icon-world', label: 'po-icon-world' },
+    { value: 'fa fa-calculator', label: 'fa fa-calculator' },
+    { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
 
   readonly propertyTitleOptions: Array<PoSelectOption> = [
