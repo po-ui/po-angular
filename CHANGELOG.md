@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.3.0](https://github.com/po-ui/po-angular/compare/v5.2.1...v5.3.0) (2021-07-05)
+
+
+### Features
+
+* **list-view:** adiciona compatibilidade com outras fontes de ícones ([e1833d1](https://github.com/po-ui/po-angular/commit/e1833d10fb901cd07c0d310da0da3c726f1eb2b3))
+* **table:** adiciona as propriedades `p-infinite-scroll` e `p-infinite-scroll-distance` ([ba6ee60](https://github.com/po-ui/po-angular/commit/ba6ee60e3bec8281170dcd89a63eb5c16da65cf7)), closes [#903](https://github.com/po-ui/po-angular/issues/903)
+* **toolbar:** permite uso outras fontes de icones na propriedade  `p-actions-icon` ([ced8be1](https://github.com/po-ui/po-angular/commit/ced8be1a833812605d3caca827e1af8bb0e70590))
+
+
+
 ## [5.2.1](https://github.com/po-ui/po-angular/compare/v5.2.0...v5.2.1) (2021-06-28)
 
 
