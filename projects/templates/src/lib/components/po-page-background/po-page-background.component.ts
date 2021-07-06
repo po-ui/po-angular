@@ -51,6 +51,7 @@ export class PoPageBackgroundComponent implements OnInit {
   /** Lista de idiomas para o combo box */
   @Input('p-languages') set languagesList(value: Array<PoLanguage>) {
     this._languagesList = value;
+    this.setLanguageOptions();
   }
 
   get languagesList(): Array<PoLanguage> {
@@ -96,10 +97,6 @@ export class PoPageBackgroundComponent implements OnInit {
 
   ngOnInit() {
     this.selectedLanguageOption = this.initialSelectLanguage || this.poLanguageService.getShortLanguage();
-    this._selectLanguageOptions = this.languagesList.map<PoSelectOption>(language => ({
-      label: language.description,
-      value: language.language
-    }));
   }
 
   onChangeLanguage() {
@@ -108,5 +105,12 @@ export class PoPageBackgroundComponent implements OnInit {
 
   get selectLanguageOptions(): Array<PoSelectOption> {
     return this._selectLanguageOptions;
+  }
+
+  private setLanguageOptions() {
+    this._selectLanguageOptions = this.languagesList.map<PoSelectOption>(language => ({
+      label: language.description,
+      value: language.language
+    }));
   }
 }

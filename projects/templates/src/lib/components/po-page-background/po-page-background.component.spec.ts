@@ -83,15 +83,19 @@ describe('PoPageBackgroundComponent:', () => {
     });
 
     it('p-languages: should set property with default languages if invalid.', () => {
+      spyOn(component, <any>'setLanguageOptions');
       const invalidValues = [[], null, undefined];
       const expectedValue = [poLanguageDefault];
       expectPropertiesValues(component, 'languagesList', invalidValues, expectedValue);
+      expect(component['setLanguageOptions']).toHaveBeenCalled();
     });
 
     it('p-languages: should set property with languages.', () => {
+      spyOn(component, <any>'setLanguageOptions');
       const languages: Array<PoLanguage> = [{ description: 'portugues', language: 'pt' }];
       const validValues = [languages];
       expectPropertiesValues(component, 'languagesList', validValues, validValues);
+      expect(component['setLanguageOptions']).toHaveBeenCalled();
     });
   });
 
@@ -104,8 +108,14 @@ describe('PoPageBackgroundComponent:', () => {
     it('onChangeLanguage: should emit `selectedLanguage`', () => {
       spyOn(component.selectedLanguage, 'emit');
       component.onChangeLanguage();
-
       expect(component.selectedLanguage.emit).toHaveBeenCalled();
+    });
+
+    it('setLanguageOptions: should set `selectLanguageOptions` with `languageList`', () => {
+      const languages: Array<PoLanguage> = [{ description: 'portugues', language: 'pt' }];
+      component.languagesList = languages;
+      component['setLanguageOptions']();
+      expect(component['_selectLanguageOptions']).toEqual([{ label: 'portugues', value: 'pt' }]);
     });
   });
 
