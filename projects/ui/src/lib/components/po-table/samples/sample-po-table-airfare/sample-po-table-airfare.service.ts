@@ -49,6 +49,7 @@ export class SamplePoTableAirfareService {
       },
       { property: 'date', type: 'date', width: '100px' },
       { property: 'returnDate', label: 'Return Date', type: 'date', width: '100px' },
+      { property: 'value', type: 'currency', format: 'USD', width: '100px' },
       { property: 'id', label: 'Flight Number', type: 'number', width: '150px' },
       {
         property: 'onBoardService',
@@ -60,7 +61,6 @@ export class SamplePoTableAirfareService {
           falseLabel: 'No'
         }
       },
-      { property: 'value', type: 'currency', format: 'USD', width: '100px' },
       { property: 'detail', label: 'Details', type: 'detail', detail: airfareDetail }
     ];
   }
