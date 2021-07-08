@@ -455,6 +455,37 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.lastVisibleColumnsSelected = [...this.columns];
   }
 
+  /**
+   * Método que remove um item da tabela.
+   *
+   * @param { number | { key: value } } item Índice da linha ou o item que será removido.
+   * > Ao remover o item, a linha que o representa será excluída da tabela.
+   */
+  removeItem(item: number | { [key: string]: any }) {
+    if (item instanceof Object) {
+      this.items = this.items.filter(filterItem => filterItem !== item);
+    } else if (typeof item === 'number') {
+      const index: number = item;
+      this.items.splice(index, 1);
+    }
+  }
+
+  /**
+   * Método que atualiza um item da tabela.
+   *
+   * @param { number | { key: value } } item Índice da linha ou o item que será atualizado.
+   * @param { { key: value } } updatedItem Item que foi atualizado.
+   * > Ao atualizar o item, a informação será alterada na tabela.
+   */
+  updateItem(item: number | { [key: string]: any }, updatedItem: { [key: string]: any }) {
+    if (typeof item === 'number') {
+      this.items.splice(item, 1, updatedItem);
+    } else {
+      const index = this.items.findIndex(indexItem => indexItem === item);
+      this.items.splice(index, 1, updatedItem);
+    }
+  }
+
   public getTemplate(column: PoTableColumn): TemplateRef<any> {
     const template: PoTableColumnTemplateDirective = this.tableColumnTemplates.find(
       tableColumnTemplate => tableColumnTemplate.targetProperty === column.property

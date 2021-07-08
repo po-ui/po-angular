@@ -27,7 +27,8 @@ export class SamplePoTableAirfareComponent {
       label: 'Apply Discount',
       disabled: this.validateDiscount.bind(this)
     },
-    { action: this.details.bind(this), icon: 'po-icon-info', label: 'Details' }
+    { action: this.details.bind(this), icon: 'po-icon-info', label: 'Details' },
+    { action: this.remove.bind(this), icon: 'po-icon po-icon-delete', label: 'Remove' }
   ];
   columns: Array<PoTableColumn> = this.sampleAirfare.getColumns();
   detail: any;
@@ -94,10 +95,14 @@ export class SamplePoTableAirfareComponent {
     this.poModal.open();
   }
 
+  remove(item: { [key: string]: any }) {
+    this.poTable.removeItem(item);
+  }
+
   discount(item) {
     if (!item.disableDiscount) {
-      item.value = item.value - item.value * 0.2;
-      item.disableDiscount = true;
+      const updatedItem = { ...item, value: item.value - item.value * 0.2, disableDiscount: true };
+      this.poTable.updateItem(item, updatedItem);
     }
   }
 

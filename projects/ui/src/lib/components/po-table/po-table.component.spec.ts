@@ -1747,6 +1747,71 @@ describe('PoTableComponent:', () => {
 
       expect(component.selectAll).toBeFalsy();
     });
+
+    describe('removeItem:', () => {
+      it('remove: should remove the item by index', () => {
+        component.items = items;
+        const firstItem = component.items[0];
+        const numberItems = component.items.length;
+        component.removeItem(0);
+        expect(component.items.length).toEqual(numberItems - 1);
+        expect(component.items).not.toContain(firstItem);
+      });
+
+      it('remove: should remove item if received an object', () => {
+        component.items = items;
+        const numberItems = component.items.length;
+        const elementRemove = component.items[0];
+        component.removeItem(elementRemove);
+        expect(component.items.length).toEqual(numberItems - 1);
+        expect(component.items).not.toContain(elementRemove);
+      });
+    });
+
+    describe('updateItem:', () => {
+      it('updateItem: should update item if pass index and updated item', () => {
+        component.items = items;
+        const updatedItem = {
+          id: 1,
+          initial: 'BR',
+          name: 'Brasil',
+          total: 90.0,
+          atualization: '2017-10-09',
+          detail: [{ property: 'teste', label: 'Label teste' }]
+        };
+        component.updateItem(0, updatedItem);
+        const itemValue = component.items[0].total;
+        expect(itemValue).toBe(updatedItem.total);
+      });
+
+      it('updateItem: should update item if pass object and updated item', () => {
+        component.items = items;
+        const updatedItem = {
+          id: 1,
+          initial: 'BR',
+          name: 'Brasil',
+          total: 90.0,
+          atualization: '2017-10-09',
+          detail: [{ property: 'teste', label: 'Label teste' }]
+        };
+        const itemChanged = component.items[0];
+        component.updateItem(itemChanged, updatedItem);
+        const newValue = component.items[0].total;
+        expect(newValue).toBe(updatedItem.total);
+      });
+
+      it('updateItem: should update item if pass object and specific value for update', () => {
+        component.items = items;
+        const updatedItem = {
+          ...items[0],
+          total: 77.0
+        };
+        const changedItem = component.items[0];
+        component.updateItem(changedItem, updatedItem);
+        const newValue = component.items[0].total;
+        expect(newValue).toBe(updatedItem.total);
+      });
+    });
   });
 
   describe('Templates:', () => {
