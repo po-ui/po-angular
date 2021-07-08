@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PoIconModule } from './../po-icon/index';
@@ -14,6 +14,7 @@ import { PoButtonComponent } from './po-button.component';
 @NgModule({
   imports: [CommonModule, PoLoadingModule, PoIconModule],
   declarations: [PoButtonComponent],
-  exports: [PoButtonComponent]
+  exports: [PoButtonComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class PoButtonModule {}
