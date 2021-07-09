@@ -47,6 +47,7 @@ describe('PoLookupModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoLookupModalComponent);
     component = fixture.componentInstance;
+    component.infiniteScroll = false;
     component.filterService = {
       getFilteredItems: () =>
         of({
@@ -181,6 +182,26 @@ describe('PoLookupModalComponent', () => {
 
     expect(component.tableHeight).toBe(defaultTableHeight);
     expect(component.containerHeight).toBe(defaultContainerHeight);
+  });
+
+  it('shouldn`t set tableHeight with Infinite Scroll enabled', () => {
+    changeBrowserInnerHeight(650);
+
+    component.tableHeight = defaultTableHeight;
+    component.infiniteScroll = true;
+    component['setTableHeight']();
+
+    expect(component.tableHeight).toBe(315);
+  });
+
+  it('shouldn`t set tableHeight with Infinite Scroll disabled', () => {
+    changeBrowserInnerHeight(650);
+
+    component.tableHeight = defaultTableHeight;
+    component.infiniteScroll = false;
+    component['setTableHeight']();
+
+    expect(component.tableHeight).toBe(defaultTableHeight);
   });
 
   describe('AdvancedSearch: ', () => {

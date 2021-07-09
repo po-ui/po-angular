@@ -388,9 +388,18 @@ describe('PoLookupComponent:', () => {
         component.service = lookupFilterService;
         component.label = 'Estabelecimento';
         component.literals = undefined;
+        component.infiniteScroll = false;
 
-        const { advancedFilters, service, columns, filterParams, literals } = component;
-        const params = { advancedFilters, service, columns, filterParams, title: component.label, literals };
+        const { advancedFilters, service, columns, filterParams, literals, infiniteScroll } = component;
+        const params = {
+          advancedFilters,
+          service,
+          columns,
+          filterParams,
+          title: component.label,
+          literals,
+          infiniteScroll
+        };
 
         spyOn(component['poLookupModalService'], 'openModal');
         spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);

@@ -37,8 +37,9 @@ export class PoLookupModalService {
     filterParams: any;
     title: string;
     literals: PoLookupLiterals;
+    infiniteScroll: boolean;
   }): void {
-    const { advancedFilters, service, columns, filterParams, title, literals } = params;
+    const { advancedFilters, service, columns, filterParams, title, literals, infiniteScroll } = params;
 
     this.componentRef = this.poComponentInjector.createComponentInApplication(PoLookupModalComponent);
     this.componentRef.instance.advancedFilters = advancedFilters;
@@ -50,6 +51,7 @@ export class PoLookupModalService {
     this.componentRef.instance.model.subscribe($event => {
       this.selectValue($event);
     });
+    this.componentRef.instance.infiniteScroll = infiniteScroll;
     this.componentRef.changeDetectorRef.detectChanges();
     this.componentRef.instance.openModal();
   }

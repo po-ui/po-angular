@@ -84,6 +84,13 @@ describe('PoLookupBaseComponent:', () => {
     expectSettersMethod(component, 'required', undefined, 'required', false);
   });
 
+  it('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
+    const booleanValidTrueValues = [true, 'true', 1, ''];
+    const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
+    expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
+    expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+  });
+
   it('should register function OnChangePropagate', () => {
     component['onChangePropagate'] = undefined;
     const func = () => true;

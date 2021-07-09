@@ -149,7 +149,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   openLookup(): void {
     if (this.isAllowedOpenModal()) {
-      const { advancedFilters, service, columns, filterParams, literals } = this;
+      const { advancedFilters, service, columns, filterParams, literals, infiniteScroll } = this;
 
       this.poLookupModalService.openModal({
         advancedFilters,
@@ -157,7 +157,8 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         columns,
         filterParams,
         title: this.label,
-        literals
+        literals,
+        infiniteScroll
       });
 
       if (!this.modalSubscription) {
