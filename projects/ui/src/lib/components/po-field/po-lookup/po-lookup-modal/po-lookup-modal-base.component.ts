@@ -3,6 +3,8 @@ import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive } 
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import { InputBoolean } from '../../../../decorators';
+
 import { isTypeof } from '../../../../utils/util';
 import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoModalAction } from '../../../../components/po-modal';
@@ -120,6 +122,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   /** Classe de serviço com a implementação do cliente. */
   @Input('p-filter-params') filterParams: any;
+
+  /** Se verdadeiro, ativa a funcionalidade de scroll infinito para a tabela exibida no retorno da consulta. */
+  @Input('p-infinite-scroll') @InputBoolean() infiniteScroll: boolean = false;
 
   /** Evento utilizado ao selecionar um registro da tabela. */
   @Output('p-change-model') model: EventEmitter<any> = new EventEmitter<any>();

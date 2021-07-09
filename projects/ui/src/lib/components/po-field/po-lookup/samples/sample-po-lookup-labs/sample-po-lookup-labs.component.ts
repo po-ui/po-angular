@@ -55,7 +55,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
-    { value: 'required', label: 'Required' }
+    { value: 'required', label: 'Required' },
+    { value: 'infiniteScroll', label: 'Infinite Scroll' }
   ];
 
   private readonly columnsDefinition = {

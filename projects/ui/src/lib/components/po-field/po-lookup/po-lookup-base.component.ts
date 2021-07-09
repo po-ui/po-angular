@@ -233,6 +233,17 @@ export abstract class PoLookupBaseComponent
   @Input('p-advanced-filters') advancedFilters: Array<PoLookupAdvancedFilter>;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Ativa a funcionalidade de scroll infinito para a tabela exibida no retorno da consulta.
+   *
+   * @default `false`
+   */
+  @Input('p-infinite-scroll') @InputBoolean() infiniteScroll: boolean = false;
+
+  /**
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
    * Será passado por parâmetro o objeto de erro retornado.
    */

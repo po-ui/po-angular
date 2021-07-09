@@ -15,6 +15,7 @@
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
   [p-required]="properties.includes('required')"
+  [p-infinite-scroll]="properties.includes('infiniteScroll')"
   (p-error)="changeEvent('p-error')"
   (p-selected)="changeEvent('p-selected')"
   (p-change)="changeEvent('p-change')"

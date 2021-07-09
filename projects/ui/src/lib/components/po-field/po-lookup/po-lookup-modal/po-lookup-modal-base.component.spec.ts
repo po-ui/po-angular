@@ -492,5 +492,12 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.disclaimer).toEqual(expectedValueDisclaimer);
       expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
     });
+
+    it('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
+      const booleanValidTrueValues = [true, 'true', 1, ''];
+      const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
+      expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
+      expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+    });
   });
 });
