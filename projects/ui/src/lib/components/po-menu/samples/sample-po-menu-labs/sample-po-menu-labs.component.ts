@@ -67,13 +67,15 @@ export class SamplePoMenuLabsComponent implements OnInit {
     { label: 'color-12', value: 'color-12' }
   ];
 
-  public readonly iconsOptions: Array<PoRadioGroupOption> = [
+  public readonly iconsOptions: Array<PoSelectOption> = [
     { label: 'po-icon-news', value: 'po-icon-news' },
     { label: 'po-icon-camera', value: 'po-icon-camera' },
     { label: 'po-icon-calendar', value: 'po-icon-calendar' },
     { label: 'po-icon-user', value: 'po-icon-user' },
     { label: 'po-icon-message', value: 'po-icon-message' },
-    { label: 'po-icon-stock', value: 'po-icon-stock' }
+    { label: 'po-icon-stock', value: 'po-icon-stock' },
+    { value: 'fa fa-calculator', label: 'fa fa-calculator' },
+    { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
 
   constructor(private changeDetector: ChangeDetectorRef) {}

@@ -10,6 +10,7 @@ import { configureTestSuite, expectPropertiesValues } from './../../../util-test
 import { PoBadgeComponent } from '../../po-badge';
 import { PoMenuItemsService } from '../services/po-menu-items.service';
 import { PoMenuItemComponent } from './po-menu-item.component';
+import { PoIconModule } from '../../po-icon/po-icon.module';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -30,7 +31,7 @@ describe('PoMenuItemComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
+      imports: [RouterTestingModule.withRoutes(routes), PoIconModule],
       declarations: [SearchComponent, HomeComponent, PoMenuItemComponent, PoBadgeComponent],
       providers: [PoMenuItemsService]
     });

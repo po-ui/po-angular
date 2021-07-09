@@ -12,6 +12,7 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 
 import { PoLoadingModule } from '../po-loading/po-loading.module';
+import { PoIconModule } from '../po-icon/po-icon.module';
 
 import { PoBadgeComponent } from '../po-badge';
 import { PoMenuComponent } from './po-menu.component';
@@ -43,7 +44,7 @@ describe('PoMenuComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes), PoLoadingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes), PoLoadingModule, PoIconModule],
       declarations: [
         PoCleanComponent,
         PoMenuComponent,
@@ -467,7 +468,7 @@ describe('PoMenuComponent:', () => {
 
   it('should not call updateMenu if it has been initialized and not changed', () => {
     component['menuInitialized'] = true;
-    component['menuPrevious'] = JSON.stringify(component.menus);
+    component['menuPrevious'] = component['stringify'](component.menus);
     spyOn(component, <any>'updateMenu');
 
     component.ngDoCheck();
@@ -486,17 +487,17 @@ describe('PoMenuComponent:', () => {
     expect(component['setMenuExtraProperties']).toHaveBeenCalled();
     expect(component['validateMenus']).toHaveBeenCalled();
     expect(component.filteredItems).toEqual(component.menus);
-    expect(component['menuPrevious']).toBe(JSON.stringify(component.menus));
+    expect(component['menuPrevious']).toEqual(component['stringify'](component.menus));
     expect(component['menuInitialized']).toBeTruthy();
   });
 
   it('should set the value of menuPrevious to menuCurrent if it is null', () => {
     component['menuPrevious'] = null;
-    const menuCurrent = JSON.stringify(component.menus);
+    const menuCurrent = component['stringify'](component.menus);
 
     component.ngDoCheck();
 
-    expect(component['menuPrevious']).toBe(menuCurrent);
+    expect(component['menuPrevious']).toEqual(menuCurrent);
   });
 
   it('itemSubscription: should `unsubscribe` `itemSubscription` on destroy.', () => {

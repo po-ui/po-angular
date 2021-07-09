@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -35,7 +35,7 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
   @Input('p-collapsed-menu') collapsedMenu: boolean;
 
   // Ícone de menu
-  @Input('p-icon') icon: string;
+  @Input('p-icon') icon: string | TemplateRef<void>;
 
   // Identificador do item.
   @Input('p-id') id: string;

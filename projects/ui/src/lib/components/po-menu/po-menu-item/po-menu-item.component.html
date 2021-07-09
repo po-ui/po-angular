@@ -53,7 +53,7 @@
       [p-value]="badgeValue"
     >
     </po-badge>
-    <span *ngIf="level === 1 && icon" class="po-icon {{ icon }} po-menu-icon-item"></span>
+    <po-icon *ngIf="level === 1 && icon" class="po-menu-icon-item" [p-icon]="icon"></po-icon>
     <div
       *ngIf="badgeAlert"
       class="po-color-07"
