@@ -132,7 +132,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
 
   private filteringItems: boolean = false;
   private menuInitialized: boolean = false;
-  private menuPrevious: string = null;
+  private menuPrevious = null;
   private resizeListener: () => void;
 
   private itemSubscription: Subscription;
@@ -176,7 +176,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
       return;
     }
 
-    const menuCurrent = JSON.stringify(this.menus);
+    const menuCurrent = this.stringify(this.menus);
 
     if (this.menuPrevious !== menuCurrent || !this.menuInitialized) {
       this.updateMenu();
@@ -534,6 +534,15 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     this.noData = this.filteredItems.length === 0;
   }
 
+  private stringify(menus: Array<PoMenuItem>): string {
+    // não faz o stringify da propriedade icon, pois pode conter objeto complexo e disparar um erro.
+    return JSON.stringify(this.menus, (key, value) => {
+      if (key !== 'icon') {
+        return value;
+      }
+    });
+  }
+
   private toggleGroupedMenuItem() {
     this.groupedMenuItem['isOpened'] = !this.collapsed && this.allowCollapseMenu;
   }
@@ -579,7 +588,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     this.menuInitialized = true;
     this.setMenuExtraProperties();
     this.filteredItems = [...this.menus];
-    this.menuPrevious = JSON.stringify(this.menus);
+    this.menuPrevious = this.stringify(this.menus);
     this.validateMenus(this.menus);
   }
 }

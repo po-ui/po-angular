@@ -1,3 +1,4 @@
+import { TemplateRef } from '@angular/core';
 import { PoMenuItemBadge } from './po-menu-item/po-menu-item-badge.interface';
 
 /**
@@ -32,11 +33,45 @@ export interface PoMenuItem {
   action?: Function;
 
   /**
-   * Ícone para o item de menu, os [ícones aceitos](/guides/icons) são os definidos no guia de estilo da PO.
-   * São exibidos apenas no primeiro nível de menu e serão visíveis apenas se todos os itens de primeiro nível possuírem ícones.
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * ```
+   * <po-menu
+   *  [p-menus]="[{ link: '/', label: 'PO ICON', icon: 'po-icon-news' }]">
+   * </po-menu>
+   * ```
+   *
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca Font Awesome, da seguinte forma:
+   * ```
+   * <po-menu
+   *  [p-menus]="[{ link: '/', label: 'FA ICON', icon: 'fa fa-podcast' }]">
+   * </po-menu>
+   * ```
+   *
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * component.html:
+   * ```
+   * <ng-template #iconTemplate>
+   *   <ion-icon name="heart"></ion-icon>
+   * </ng-template>
+   *
+   * <po-menu [p-menus]="myProperty"></po-menu>
+   * ```
+   * component.ts:
+   * ```
+   * @ViewChild('iconTemplate', { static: true } ) iconTemplate : TemplateRef<void>;
+   *
+   * myProperty = [
+   *  {
+   *    link: '/',
+   *    label: 'Icon',
+   *    icon: this.iconTemplate
+   *  }
+   * ];
+   * ```
+   * > São exibidos apenas no primeiro nível de menu e serão visíveis apenas se todos os itens de primeiro nível possuírem ícones.
    * O menu colapsado também aparecerá somente se todos os itens de primeiro nível de menu possuírem ícones e textos curtos.
    */
-  icon?: string;
+  icon?: string | TemplateRef<void>;
 
   /**
    * Texto curto para o item que aparece quando o menu estiver colapsado.
