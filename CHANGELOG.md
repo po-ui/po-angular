@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.4.0](https://github.com/po-ui/po-angular/compare/v5.3.0...v5.4.0) (2021-07-12)
+
+
+### Bug Fixes
+
+* **page-login:** corrige atualização das linguagens dinamicamente ([c74eac4](https://github.com/po-ui/po-angular/commit/c74eac465167b08e9321fcdabd9ab5b898425fa6))
+
+
+### Features
+
+* **lookup:** adiciona a propriedade `p-infinite-scroll` ([6eb0c37](https://github.com/po-ui/po-angular/commit/6eb0c37fb9b24da14a1d22a41f69a789bf7e8529)), closes [#653](https://github.com/po-ui/po-angular/issues/653)
+
+
+
 # [5.3.0](https://github.com/po-ui/po-angular/compare/v5.2.1...v5.3.0) (2021-07-05)
 
 
