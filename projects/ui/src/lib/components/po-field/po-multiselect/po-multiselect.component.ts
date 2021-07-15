@@ -71,7 +71,6 @@ const providers = [
 export class PoMultiselectComponent extends PoMultiselectBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
   @ViewChild('dropdownElement', { read: ElementRef, static: true }) dropdownElement: ElementRef;
   @ViewChild('dropdownElement', { static: true }) dropdown;
-  @ViewChild('disclaimerContainer', { read: ElementRef, static: true }) disclaimerContainerElement: ElementRef;
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 
@@ -189,6 +188,16 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     }
   }
 
+  changeItems(selectedValues) {
+    this.updateSelectedOptions(selectedValues);
+    this.callOnChange(this.selectedOptions);
+
+    if (this.autoHeight && this.dropdownOpen) {
+      this.changeDetector.detectChanges();
+      this.adjustContainerPosition();
+    }
+  }
+
   updateVisibleItems() {
     this.visibleDisclaimers = [].concat(this.selectedOptions);
 
@@ -201,10 +210,12 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   debounceResize() {
-    clearTimeout(this.timeoutResize);
-    this.timeoutResize = setTimeout(() => {
-      this.calculateVisibleItems();
-    }, 200);
+    if (!this.autoHeight) {
+      clearTimeout(this.timeoutResize);
+      this.timeoutResize = setTimeout(() => {
+        this.calculateVisibleItems();
+      }, 200);
+    }
   }
 
   onBlur() {
@@ -261,10 +272,6 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     setTimeout(() => this.adjustContainerPosition());
   }
 
-  getPlaceholder() {
-    return this.placeholder && !this.visibleDisclaimers.length ? this.placeholder : '';
-  }
-
   closeDisclaimer(value) {
     const index = this.selectedOptions.findIndex(option => option.value === value);
     this.selectedOptions.splice(index, 1);
@@ -275,11 +282,10 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
   wasClickedOnToggle(event: MouseEvent): void {
     if (
+      this.dropdownOpen &&
       !this.inputElement.nativeElement.contains(event.target) &&
       !this.iconElement.nativeElement.contains(event.target) &&
-      !this.dropdownElement.nativeElement.contains(event.target) &&
-      !this.disclaimerContainerElement.nativeElement.contains(event.target) &&
-      this.dropdownOpen
+      !this.dropdownElement.nativeElement.contains(event.target)
     ) {
       this.controlDropdownVisibility(false);
     }

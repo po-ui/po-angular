@@ -25,28 +25,27 @@
   </div>
 
   <div class="po-row">
-    <po-radio-group
-      class="po-lg-12"
-      name="days"
-      formControlName="days"
-      p-help="Maximum of days that employs can choose"
-      p-label="How many days of vacation the employees will be able to have?"
-      p-required
-      [p-options]="daysOptions"
-    >
-    </po-radio-group>
-  </div>
-
-  <div class="po-row">
     <po-multiselect
-      class="po-md-12"
+      class="po-md-4"
       name="employeesVacations"
       formControlName="employeesVacations"
       p-label="Select your employees for collective vacations"
+      [p-auto-height]="true"
       [p-options]="employees"
-      p-required
+      [p-required]="true"
     >
     </po-multiselect>
+
+    <po-radio-group
+      class="po-lg-8"
+      name="days"
+      formControlName="days"
+      p-label="How many days of vacation the employees will be able to have?"
+      p-required
+      [p-options]="daysOptions"
+      [p-columns]="3"
+    >
+    </po-radio-group>
   </div>
 
   <div class="po-row">

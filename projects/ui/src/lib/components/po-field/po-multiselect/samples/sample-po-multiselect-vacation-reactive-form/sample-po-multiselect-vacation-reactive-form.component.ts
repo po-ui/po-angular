@@ -20,6 +20,8 @@ export class SamplePoMultiselectVacationReactiveFormComponent implements OnInit 
     { value: '518734', label: 'Alice' },
     { value: '986237', label: 'Bradley' },
     { value: '941278', label: 'Jackie' },
+    { value: '112333', label: 'Jane' },
+    { value: '989898', label: 'John' },
     { value: '897643', label: 'Phillip' },
     { value: '423767', label: 'Reynold' },
     { value: '423837', label: 'Robert' }

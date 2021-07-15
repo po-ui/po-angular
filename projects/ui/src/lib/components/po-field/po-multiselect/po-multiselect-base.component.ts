@@ -62,6 +62,18 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    */
   @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que a altura do componente será auto ajustável, possuindo uma altura minima porém a altura máxima será de acordo
+   * com o número de itens selecionados e a extensão dos mesmos, mantendo-os sempre visíveis.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-height') @InputBoolean() autoHeight: boolean = false;
+
   /** Label no componente. */
   @Input('p-label') label?: string;
 
@@ -368,11 +380,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   getLabelByValue(value) {
     const index = this.options.findIndex(option => option.value === value);
     return this.options[index].label;
-  }
-
-  changeItems(selectedValues) {
-    this.updateSelectedOptions(selectedValues);
-    this.callOnChange(this.selectedOptions);
   }
 
   searchByLabel(search: string, options: Array<PoMultiselectOption>, filterMode: PoMultiselectFilterMode) {
