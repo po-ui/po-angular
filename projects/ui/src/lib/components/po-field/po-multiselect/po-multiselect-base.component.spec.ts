@@ -259,14 +259,6 @@ describe('PoMultiselectBaseComponent:', () => {
     expect(component.getLabelByValue(2)).toBe('Label 2');
   });
 
-  it('should call updateSelectedOptions and callOnChange', () => {
-    spyOn(component, 'updateSelectedOptions');
-    spyOn(component, 'callOnChange');
-    component.changeItems([]);
-    expect(component.updateSelectedOptions).toHaveBeenCalled();
-    expect(component.callOnChange).toHaveBeenCalled();
-  });
-
   it('should search and find options by label', () => {
     component.visibleOptionsDropdown = [];
     const options = [

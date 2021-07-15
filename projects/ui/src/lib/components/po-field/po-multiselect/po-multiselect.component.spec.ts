@@ -35,6 +35,7 @@ describe('PoMultiselectComponent:', () => {
     component = fixture.componentInstance;
 
     component.options = [{ label: 'label', value: 1 }];
+    component.autoHeight = true;
 
     fixture.detectChanges();
   });
@@ -91,7 +92,7 @@ describe('PoMultiselectComponent:', () => {
     component.initialized = false;
     component.autoFocus = true;
     component.ngAfterViewInit();
-    expect(document.activeElement.tagName.toLowerCase()).toBe('input');
+    expect(document.activeElement.tagName.toLowerCase()).toBe('div');
     expect(component.initialized).toBeTruthy();
   });
 
@@ -206,18 +207,6 @@ describe('PoMultiselectComponent:', () => {
     component.visibleOptionsDropdown = [];
     component.setVisibleOptionsDropdown([{ label: 'label', value: 1 }]);
     expect(component.visibleOptionsDropdown.length).toBe(1);
-  });
-
-  it('should get placeholder', () => {
-    component.placeholder = 'PLACEHOLDER';
-    component.visibleDisclaimers = [];
-    expect(component.getPlaceholder()).toBe('PLACEHOLDER');
-  });
-
-  it('should get "" as placeholder', () => {
-    component.placeholder = 'PLACEHOLDER';
-    component.visibleDisclaimers = [{ label: 'label', value: 1 }];
-    expect(component.getPlaceholder()).toBe('');
   });
 
   it('should remove item, call updateVisibleItems and callOnChange', () => {
@@ -400,6 +389,21 @@ describe('PoMultiselectComponent:', () => {
       expect(fakeThis.isCalculateVisibleItems).toBeTruthy();
     });
 
+    it(`calculateVisibleItems: should not set isCalculateVisibleItems to false if inputWidth is 0`, () => {
+      const fakeThis = {
+        getDisclaimersWidth: () => [0, 0, 0],
+        getInputWidth: () => 0,
+        visibleDisclaimers: [],
+        selectedOptions: [],
+        isCalculateVisibleItems: false
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).toBe(0);
+      expect(fakeThis.isCalculateVisibleItems).toBe(false);
+    });
+
     it('calculateVisibleItems: should calc visible items with lots of space', () => {
       const selectedOptions = [
         { label: 'label', value: 1 },
@@ -490,6 +494,8 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('debounceResize: should call `calculateVisibleItems` after 200 milliseconds', done => {
+      component.autoHeight = false;
+
       spyOn(component, 'calculateVisibleItems');
       component.debounceResize();
 
@@ -500,6 +506,8 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('debounceResize: should call `calculateVisibleItems` just once', done => {
+      component.autoHeight = false;
+
       spyOn(component, 'calculateVisibleItems');
       component.debounceResize();
 
@@ -509,6 +517,17 @@ describe('PoMultiselectComponent:', () => {
 
       setTimeout(() => {
         expect(component.calculateVisibleItems).toHaveBeenCalledTimes(1);
+        done();
+      }, 210);
+    });
+
+    it('debounceResize: shouldn`t call `calculateVisibleItems` if `autoHeight` is true', done => {
+      spyOn(component, 'calculateVisibleItems');
+
+      component.debounceResize();
+
+      setTimeout(() => {
+        expect(component.calculateVisibleItems).not.toHaveBeenCalled();
         done();
       }, 210);
     });
@@ -726,6 +745,27 @@ describe('PoMultiselectComponent:', () => {
         isSetElementWidth
       );
     });
+
+    it('changeItems: should call updateSelectedOptions and callOnChange', () => {
+      const spyUpdateSelectedOptions = spyOn(component, 'updateSelectedOptions');
+      const spyCallOnChange = spyOn(component, 'callOnChange');
+
+      component.changeItems([]);
+
+      expect(spyUpdateSelectedOptions).toHaveBeenCalled();
+      expect(spyCallOnChange).toHaveBeenCalled();
+    });
+
+    it('changeItems: should call `adjustContainerPosition` if `autoHeight` and `dropdownOpen` are true', () => {
+      component.autoHeight = true;
+      component.dropdownOpen = true;
+
+      const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
+
+      component.changeItems([]);
+
+      expect(spyAdjustContainerPosition).toHaveBeenCalled();
+    });
   });
 
   describe('Templates:', () => {
@@ -757,6 +797,24 @@ describe('PoMultiselectComponent:', () => {
       fixture.detectChanges();
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
+    });
+
+    it(`should show placeholder element if contains 'placeholder' and not contains 'visibleDisclaimers'`, () => {
+      component.placeholder = 'Placeholder';
+      component.visibleDisclaimers = [];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-multiselect-input-placeholder')).toBeTruthy();
+    });
+
+    it(`should not show placeholder element if contains 'visibleDisclaimers'`, () => {
+      component.placeholder = 'Placeholder';
+      component.visibleDisclaimers = [{ label: 'One', value: 1 }];
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-multiselect-input-placeholder')).toBeNull();
     });
   });
 

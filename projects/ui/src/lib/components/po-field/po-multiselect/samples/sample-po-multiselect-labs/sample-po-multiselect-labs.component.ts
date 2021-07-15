@@ -36,6 +36,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'hideSearch', label: 'Hide Search' },
+    { value: 'autoHeight', label: 'Auto Height' },
     { value: 'sort', label: 'Sort' }
   ];
 

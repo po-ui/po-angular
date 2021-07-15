@@ -1,30 +1,24 @@
 <po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
   <div class="po-field-container-content" [class.po-multiselect-show]="dropdownOpen">
-    <input
+    <div
       #inputElement
+      [tabindex]="disabled ? -1 : 0"
       class="po-input po-input-icon-right po-multiselect-input po-clickable"
-      readonly
-      type="text"
-      [value]="getPlaceholder()"
-      [disabled]="disabled"
+      [class.po-multiselect-input-auto]="autoHeight"
+      [class.po-multiselect-input-static]="!autoHeight"
+      [class.po-multiselect-input-disabled]="disabled"
+      (keyup.enter)="toggleDropdownVisibility()"
       (keydown)="onKeyDown($event)"
       (click)="toggleDropdownVisibility()"
       (blur)="onBlur()"
-    />
-
-    <div class="po-field-icon-container-right">
-      <span
-        #iconElement
-        class="po-icon po-field-icon {{ dropdownIcon }}"
-        [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
-        (click)="toggleDropdownVisibility()"
-      >
+    >
+      <span *ngIf="placeholder && !visibleDisclaimers?.length" class="po-multiselect-input-placeholder">
+        {{ placeholder }}
       </span>
-    </div>
 
-    <div #disclaimerContainer class="po-multiselect-field" [class.po-multiselect-field-disabled]="disabled">
       <po-disclaimer
         *ngFor="let disclaimer of visibleDisclaimers"
+        class="po-multiselect-input-disclaimer"
         [p-label]="disclaimer.label"
         [p-value]="disclaimer.value"
         [p-hide-close]="disclaimer.value === '' || disabled"
@@ -33,6 +27,15 @@
         (p-close-action)="closeDisclaimer(disclaimer.value)"
       >
       </po-disclaimer>
+
+      <div class="po-field-icon-container-right">
+        <span
+          #iconElement
+          class="po-icon po-field-icon {{ dropdownIcon }}"
+          [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
+        >
+        </span>
+      </div>
     </div>
   </div>
 

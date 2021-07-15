@@ -3,6 +3,7 @@
     class="po-md-12"
     name="PO Multiselect"
     [(ngModel)]="multiselect"
+    [p-auto-height]="properties.includes('autoHeight')"
     [p-disabled]="properties.includes('disabled')"
     [p-filter-mode]="filterMode"
     [p-help]="help"
