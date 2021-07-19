@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.5.0](https://github.com/po-ui/po-angular/compare/v5.4.0...v5.5.0) (2021-07-19)
+
+
+### Features
+
+* **menu:** adiciona compatibilidade com outras fontes de ícones ([a9efa03](https://github.com/po-ui/po-angular/commit/a9efa03281ab343e8cdf584be6bfa3b610444c71))
+* **multiselect:** adiciona propriedade `p-auto-height` ([c007bfc](https://github.com/po-ui/po-angular/commit/c007bfce0cf5e0f4f560185134a44016bbbd0928))
+* **table:** adiciona métodos `removeItem` e `updateItem` ([b0196cc](https://github.com/po-ui/po-angular/commit/b0196cc16f361fe61f91b641ad7ef127fac918b8))
+
+
+
 # [5.4.0](https://github.com/po-ui/po-angular/compare/v5.3.0...v5.4.0) (2021-07-12)
 
 
