@@ -680,6 +680,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
     const optionFound = this.getOptionFromLabel(inputValue, this.comboOptionsList);
 
+    if (!this.service) {
+      this.updateComboList([...this.cacheStaticOptions]);
+    }
+
     if (optionFound && optionFound.value !== this.selectedValue) {
       this.updateSelectedValue(optionFound);
 

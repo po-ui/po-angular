@@ -249,10 +249,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       if (!this.service) {
         // caso for changeOnEnter e nao ter selectedValue deve limpar o selectedView para reinicia-lo.
         this.selectedView = this.changeOnEnter && !this.selectedValue ? undefined : this.selectedView;
-
-        this.updateComboList();
       }
-
       return;
     }
 
@@ -265,7 +262,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.updateSelectedValue(this.selectedView, isUpdateModel);
       this.isFiltering = false;
 
-      this.updateComboList();
+      if (!this.service) {
+        this.updateComboList([...this.cacheStaticOptions]);
+      }
       return;
     }
 
@@ -458,7 +457,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     this.updateSelectedValue(option, isUpdateModel);
     this.controlComboVisibility(false);
-    this.updateComboList([{ ...this.selectedView }]);
+    if (!this.service) {
+      this.updateComboList([...this.cacheStaticOptions]);
+    }
 
     this.previousSearchValue = this.selectedView.label;
   }
@@ -492,8 +493,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
       // caso for changeOnEnter deve limpar o selectedView para reinicia-lo
       this.selectedView = this.changeOnEnter && !this.selectedValue ? undefined : this.selectedView;
-
-      this.updateComboList();
     } else {
       if (this.service && !this.getInputValue() && !this.isFirstFilter) {
         this.applyFilter('');

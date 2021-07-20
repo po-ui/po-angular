@@ -37,8 +37,25 @@ class PoComboTest extends PoComboBaseComponent {
 describe('PoComboBaseComponent:', () => {
   let component: PoComboTest;
 
+  const defaultService: any = {
+    url: '',
+    fieldLabel: 'label',
+    fieldValue: 'value',
+    getFilteredData: (params: any) => new Observable(),
+    getObjectByValue: (value: string | number) => new Observable(),
+    configProperties: (url: string, label: string, value: string) => {}
+  };
+
+  const service: PoComboFilter = {
+    getFilteredData: (params: any) => new Observable(),
+    getObjectByValue: (value: string | number) => new Observable()
+  };
+
   beforeEach(() => {
     component = new PoComboTest();
+
+    component.filterService = service;
+    component.defaultService = defaultService;
   });
 
   it('should be created', () => {
@@ -711,6 +728,27 @@ describe('PoComboBaseComponent:', () => {
       expect(component.getInputValue).toHaveBeenCalled();
       expect(component.getOptionFromLabel).toHaveBeenCalled();
       expect(component.updateSelectedValue).not.toHaveBeenCalled();
+    });
+
+    it('verifyValidOption: should call `updateComboList` if itens service is undefined', () => {
+      component.service = undefined;
+
+      spyOn(component, 'updateComboList');
+
+      component.verifyValidOption();
+
+      expect(component.updateComboList).toHaveBeenCalled();
+    });
+
+    it('verifyValidOption: shouldn`t call `updateComboList` if itens service is not undefined', () => {
+      const urlService = 'https://po-ui.io/sample/api/new/heros';
+      component.setService(urlService);
+
+      spyOn(component, 'updateComboList');
+
+      component.verifyValidOption();
+
+      expect(component.updateComboList).not.toHaveBeenCalled();
     });
 
     it('registerOnValidatorChange: should register validatorChange function.', () => {
