@@ -53,14 +53,14 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~12.0.1",
-    "@angular/common": "~12.0.1",
-    "@angular/core": "~12.0.1",
-    "@angular/forms": "~12.0.1",
-    "@angular/platform-browser": "~12.0.1",
-    "@angular/platform-browser-dynamic": "~12.0.1",
-    "@angular/router": "~12.0.1",
-    "@angular/service-worker": "~12.0.1",
+    "@angular/animations": "^12.0.1",
+    "@angular/common": "^12.0.1",
+    "@angular/core": "^12.0.1",
+    "@angular/forms": "^12.0.1",
+    "@angular/platform-browser": "^12.0.1",
+    "@angular/platform-browser-dynamic": "^12.0.1",
+    "@angular/router": "^12.0.1",
+    "@angular/service-worker": "^12.0.1",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/splash-screen": "^5.0.0",
     "@ionic-native/status-bar": "^5.0.0",
@@ -71,13 +71,13 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~12.0.1",
-    "@angular/cli": "~12.0.1",
-    "@angular/compiler": "~12.0.1",
-    "@angular/compiler-cli": "~12.0.1",
-    "@angular/language-service": "~12.0.1",
+    "@angular-devkit/build-angular": "^12.0.1",
+    "@angular/cli": "^12.0.1",
+    "@angular/compiler": "^12.0.1",
+    "@angular/compiler-cli": "^12.0.1",
+    "@angular/language-service": "^12.0.1",
     "@ionic/angular-toolkit": "^4.0.0",
-    "typescript": "~4.2.4"
+    "typescript": "~4.3.0"
   },
   ...
 ```
