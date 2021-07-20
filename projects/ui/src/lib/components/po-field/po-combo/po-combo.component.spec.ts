@@ -680,13 +680,11 @@ describe('PoComboComponent:', () => {
 
         const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
         const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
-        const spyUpdateComboList = spyOn(component, 'updateComboList');
 
         component.onKeyDown(event);
 
         expect(spyControlComboVisibility).toHaveBeenCalledWith(false);
         expect(spyVerifyValidOption).toHaveBeenCalled();
-        expect(spyUpdateComboList).toHaveBeenCalled();
       });
 
       it('should call `controlComboVisibility` and set `selectedView` with undefined if typed "esc" and changeOnEnter is true', () => {
@@ -698,13 +696,11 @@ describe('PoComboComponent:', () => {
 
         const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
         const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
-        const spyUpdateComboList = spyOn(component, 'updateComboList');
 
         component.onKeyDown(event);
 
         expect(spyControlComboVisibility).toHaveBeenCalledWith(false);
         expect(spyVerifyValidOption).toHaveBeenCalled();
-        expect(spyUpdateComboList).toHaveBeenCalled();
         expect(component.selectedView).toBe(undefined);
       });
 
@@ -748,13 +744,11 @@ describe('PoComboComponent:', () => {
 
         const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
         const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
-        const spyUpdateComboList = spyOn(component, 'updateComboList');
 
         component.onKeyDown(event);
 
         expect(spyControlComboVisibility).toHaveBeenCalledWith(false);
         expect(spyVerifyValidOption).toHaveBeenCalled();
-        expect(spyUpdateComboList).toHaveBeenCalled();
       });
 
       it(`should call 'controlComboVisibility', 'updateComboList' and 'updateSelectedValue' with 'selectedView' and 'true'
@@ -768,13 +762,11 @@ describe('PoComboComponent:', () => {
 
         spyOn(component, 'controlComboVisibility');
         spyOn(component, 'updateSelectedValue');
-        spyOn(component, 'updateComboList');
 
         component.onKeyDown(event);
 
         expect(component.controlComboVisibility).toHaveBeenCalled();
         expect(component.updateSelectedValue).toHaveBeenCalledWith(component.selectedView, true);
-        expect(component.updateComboList).toHaveBeenCalled();
         expect(component.isFiltering).toBe(false);
       });
 
@@ -789,13 +781,11 @@ describe('PoComboComponent:', () => {
 
         spyOn(component, 'controlComboVisibility');
         spyOn(component, 'updateSelectedValue');
-        spyOn(component, 'updateComboList');
 
         component.onKeyDown(event);
 
         expect(component.controlComboVisibility).toHaveBeenCalled();
         expect(component.updateSelectedValue).toHaveBeenCalledWith(component.selectedView, true);
-        expect(component.updateComboList).toHaveBeenCalled();
         expect(component.isFiltering).toBe(false);
       });
 
@@ -874,6 +864,34 @@ describe('PoComboComponent:', () => {
 
         expect(spyControlComboVisibility).not.toHaveBeenCalled();
       });
+
+      it('should call `updateComboList` if itens service is undefined', () => {
+        const event = { ...fakeEvent, keyCode: 13 };
+
+        component.service = undefined;
+        component.selectedView = { value: 1, label: 'Label 01' };
+        component.comboOpen = true;
+
+        spyOn(component, 'updateComboList');
+
+        component.onKeyDown(event);
+
+        expect(component.updateComboList).toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `updateComboList` if itens service is not undefined', () => {
+        const event = { ...fakeEvent, keyCode: 13 };
+
+        component.service = component.defaultService;
+        component.selectedView = { value: 1, label: 'Label 01' };
+        component.comboOpen = true;
+
+        spyOn(component, 'updateComboList');
+
+        component.onKeyDown(event);
+
+        expect(component.updateComboList).not.toHaveBeenCalled();
+      });
     });
 
     it('onOptionClick: should call `stopPropagation` if has an event parameter', () => {
@@ -940,6 +958,30 @@ describe('PoComboComponent:', () => {
       expect(component.updateComboList).toHaveBeenCalled();
       expect(component.controlComboVisibility).toHaveBeenCalledWith(false);
       expect(component.getInputValue).toHaveBeenCalled();
+    });
+
+    it('onOptionClick: should call `updateComboList` if itens service is undefined', () => {
+      const option: PoComboOption = { value: 'value', label: 'label' };
+      component.selectedValue = 'value';
+      component.service = undefined;
+
+      spyOn(component, 'updateComboList');
+
+      component.onOptionClick(option);
+
+      expect(component.updateComboList).toHaveBeenCalled();
+    });
+
+    it('onOptionClick: shouldn`t call `updateComboList` if itens service is not undefined', () => {
+      const option: PoComboOption = { value: 'value', label: 'label' };
+      component.selectedValue = 'value';
+      component.service = component.defaultService;
+
+      spyOn(component, 'updateComboList');
+
+      component.onOptionClick(option);
+
+      expect(component.updateComboList).not.toHaveBeenCalled();
     });
 
     it('selectPreviousOption: should call `updateSelectedValue` with nextOption and false if changeOnEnter is true', () => {
@@ -1019,13 +1061,11 @@ describe('PoComboComponent:', () => {
 
       const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
       const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
-      const spyUpdateComboList = spyOn(component, 'updateComboList');
 
       component.wasClickedOnToggle(eventClick);
 
       expect(spyControlComboVisibility).toHaveBeenCalledWith(false);
       expect(spyVerifyValidOption).toHaveBeenCalled();
-      expect(spyUpdateComboList).toHaveBeenCalled();
       expect(component.selectedView).toBe(undefined);
     });
 
@@ -1043,13 +1083,11 @@ describe('PoComboComponent:', () => {
 
       const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
       const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
-      const spyUpdateComboList = spyOn(component, 'updateComboList');
 
       component.wasClickedOnToggle(eventClick);
 
       expect(spyControlComboVisibility).toHaveBeenCalledWith(false);
       expect(spyVerifyValidOption).toHaveBeenCalled();
-      expect(spyUpdateComboList).toHaveBeenCalled();
       expect(component.selectedView).toBe(undefined);
     });
 
