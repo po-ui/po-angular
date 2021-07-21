@@ -1050,7 +1050,7 @@ describe('PoDatepickerComponent:', () => {
         component.dialogPicker.nativeElement,
         poCalendarContentOffset,
         component['inputEl'],
-        ['top-left', 'bottom-left'],
+        ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
         false,
         true
       );

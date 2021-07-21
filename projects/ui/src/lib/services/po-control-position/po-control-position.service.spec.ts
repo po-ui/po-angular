@@ -42,8 +42,10 @@ describe('PoControlPositionService:', () => {
     expect(component['overflowAllSides'].call(getFakeOverflows('left'), 'top')).toBe(true);
     expect(component['overflowAllSides'].call(getFakeOverflows('top'), 'top-right')).toBe(true);
     expect(component['overflowAllSides'].call(getFakeOverflows('right'), 'top-right')).toBe(true);
+    expect(component['overflowAllSides'].call(getFakeOverflows('left'), 'top-right')).toBe(true);
     expect(component['overflowAllSides'].call(getFakeOverflows('top'), 'top-left')).toBe(true);
     expect(component['overflowAllSides'].call(getFakeOverflows('left'), 'top-left')).toBe(true);
+    expect(component['overflowAllSides'].call(getFakeOverflows('right'), 'top-left')).toBe(true);
   });
 
   it('should call overflowAllSides() in right positions', () => {
@@ -62,8 +64,10 @@ describe('PoControlPositionService:', () => {
     expect(component['overflowAllSides'].call(getFakeOverflows('left'), 'bottom')).toBe(true);
     expect(component['overflowAllSides'].call(getFakeOverflows('bottom'), 'bottom-right')).toBe(true);
     expect(component['overflowAllSides'].call(getFakeOverflows('right'), 'bottom-right')).toBe(true);
+    expect(component['overflowAllSides'].call(getFakeOverflows('left'), 'bottom-right')).toBe(true);
     expect(component['overflowAllSides'].call(getFakeOverflows('bottom'), 'bottom-left')).toBe(true);
     expect(component['overflowAllSides'].call(getFakeOverflows('left'), 'bottom-left')).toBe(true);
+    expect(component['overflowAllSides'].call(getFakeOverflows('right'), 'bottom-left')).toBe(true);
   });
 
   it('should call overflowAllSides() in left positions', () => {

@@ -418,7 +418,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.dialogPicker.nativeElement,
       poCalendarContentOffset,
       this.inputEl,
-      ['top-left', 'bottom-left'],
+      ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
       false,
       true
     );
