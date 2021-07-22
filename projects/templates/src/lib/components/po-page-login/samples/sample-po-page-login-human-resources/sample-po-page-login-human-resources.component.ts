@@ -29,7 +29,7 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
   passwordErrors = [];
   params: PoPageBlockedUserReasonParams = { attempts: 3, hours: 24 };
   passwordRecovery: PoPageLoginRecovery = {
-    url: 'https://thf.totvs.com.br/sample/api/users',
+    url: 'https://po-sample-api.herokuapp.com/v1/users',
     type: PoModalPasswordRecoveryType.All,
     contactMail: 'support@mail.com'
   };
