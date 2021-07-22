@@ -69,7 +69,7 @@
             "styles": [
               "./node_modules/@animaliads/animalia-brand/theme.css",
               "./node_modules/@animaliads/css-tokens/global-tokens.css",
-              "/home/nicolesilva/po/po-style/dist/style/css/po-theme-animalia.css",
+              "/Users/aline.lariguet/dev/po-ui/po-style/dist/style/css/po-theme-animalia.css",
               "projects/app/src/styles.css"
             ],
             "scripts": [],
@@ -318,7 +318,7 @@
             "styles": [
               "./node_modules/@animaliads/animalia-brand/theme.css",
               "./node_modules/@animaliads/css-tokens/global-tokens.css",
-              "node_modules/@po-ui/style/css/po-theme-default.min.css",
+              "/Users/aline.lariguet/dev/po-ui/po-style/dist/style/css/po-theme-animalia.css",
               "projects/portal/src/assets/css/code-highlight.css",
               "projects/portal/src/styles.css"
             ],

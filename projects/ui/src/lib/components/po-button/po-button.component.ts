@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
@@ -33,13 +33,18 @@ import '@animaliads/ani-button';
   templateUrl: './po-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoButtonComponent extends PoButtonBaseComponent implements AfterViewInit {
+export class PoButtonComponent extends PoButtonBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
 
   ngAfterViewInit() {
     if (this.autoFocus) {
       this.focus();
     }
+    this.initializeListeners();
+  }
+
+  ngOnDestroy() {
+    this.buttonElement.nativeElement.removeEventListener('onClick', true);
   }
 
   /**
@@ -65,7 +70,13 @@ export class PoButtonComponent extends PoButtonBaseComponent implements AfterVie
     }
   }
 
-  onClick() {
+  private onClick() {
     this.click.emit(null);
+  }
+
+  private initializeListeners() {
+    this.buttonElement.nativeElement.addEventListener('onClick', () => {
+      this.onClick();
+    });
   }
 }
