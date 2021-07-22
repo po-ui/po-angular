@@ -210,9 +210,9 @@ export class PoControlPositionService {
       case 'top':
         return overflows.top || overflows.right || overflows.left;
       case 'top-right':
-        return overflows.top || overflows.right;
+        return overflows.top || overflows.right || overflows.left;
       case 'top-left':
-        return overflows.top || overflows.left;
+        return overflows.top || overflows.left || overflows.right;
       case 'right':
         return overflows.right || overflows.top || overflows.bottom;
       case 'right-top':
@@ -222,9 +222,9 @@ export class PoControlPositionService {
       case 'bottom':
         return overflows.bottom || overflows.right || overflows.left;
       case 'bottom-right':
-        return overflows.bottom || overflows.right;
+        return overflows.bottom || overflows.right || overflows.left;
       case 'bottom-left':
-        return overflows.bottom || overflows.left;
+        return overflows.bottom || overflows.left || overflows.right;
       case 'left':
         return overflows.left || overflows.top || overflows.bottom;
       case 'left-top':
