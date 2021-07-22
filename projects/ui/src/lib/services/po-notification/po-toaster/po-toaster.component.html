@@ -10,7 +10,11 @@
 
   <div class="po-toaster-message">{{ message }}</div>
 
-  <div *ngIf="action !== undefined" (click)="poToasterAction()" class="po-toaster-action">
+  <div *ngIf="action && actionLabel" (click)="poToasterAction()" class="po-toaster-action">
     {{ actionLabel }}
   </div>
+
+  <button class="po-toaster-close" (click)="onButtonClose()">
+    <span class="po-icon po-icon-close"></span>
+  </button>
 </div>

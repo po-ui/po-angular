@@ -114,47 +114,46 @@ describe('PoToasterComponent', () => {
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Error and with action correctly', () => {
-    const toasterActionLabel = component['literals'].closeToaster;
-
     component.configToaster(toasterErrorWithAction);
+
     fixture.detectChanges();
+
     expect(fixture.debugElement.query(By.css('.po-toaster-error'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-icon-close'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain(
-      toasterActionLabel
-    );
+    expect(fixture.debugElement.query(By.css('.po-icon-warning'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-close'))).toBeTruthy();
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Info and with action correctly', () => {
     component.configToaster(toasterInfoWithAction);
+
     fixture.detectChanges();
+
     expect(fixture.debugElement.query(By.css('.po-toaster-info'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-info'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain('Texto Botão');
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Success and with action correctly', () => {
-    const toasterActionLabel = component['literals'].closeToaster;
-
     component.configToaster(toasterSuccessWithAction);
+
     fixture.detectChanges();
+
     expect(fixture.debugElement.query(By.css('.po-toaster-success'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-ok'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain(
-      toasterActionLabel
-    );
+    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-close'))).toBeTruthy();
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Warning and with action correctly', () => {
-    const toasterActionLabel = component['literals'].closeToaster;
-
     component.configToaster(toasterWarningWithAction);
+
     fixture.detectChanges();
+
     expect(fixture.debugElement.query(By.css('.po-toaster-warning'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-warning'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain(
-      toasterActionLabel
-    );
+    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-close'))).toBeTruthy();
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Error and without action correctly', () => {
@@ -196,6 +195,47 @@ describe('PoToasterComponent', () => {
     component.close();
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.po-toaster'))).toBeNull();
+  });
+
+  describe('Methods:', () => {
+    it('onButtonClose: should call `close` if action and actionLabel are truthy', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+
+      const spyClose = spyOn(component, 'close');
+      const spyToasterAction = spyOn(component, 'poToasterAction');
+
+      component.onButtonClose();
+
+      expect(spyToasterAction).not.toHaveBeenCalled();
+      expect(spyClose).toHaveBeenCalled();
+    });
+
+    it('onButtonClose: should call `poToasterAction` if action is truthy and actionLabel is null', () => {
+      component.action = () => {};
+      component.actionLabel = null;
+
+      const spyToasterAction = spyOn(component, 'poToasterAction');
+      const spyClose = spyOn(component, 'close');
+
+      component.onButtonClose();
+
+      expect(spyClose).not.toHaveBeenCalled();
+      expect(spyToasterAction).toHaveBeenCalled();
+    });
+
+    it('onButtonClose: should call `close` if action and actionLabel are null', () => {
+      component.action = null;
+      component.actionLabel = null;
+
+      const spyToasterAction = spyOn(component, 'poToasterAction');
+      const spyClose = spyOn(component, 'close');
+
+      component.onButtonClose();
+
+      expect(spyClose).toHaveBeenCalled();
+      expect(spyToasterAction).not.toHaveBeenCalled();
+    });
   });
 
   describe('Properties', () => {

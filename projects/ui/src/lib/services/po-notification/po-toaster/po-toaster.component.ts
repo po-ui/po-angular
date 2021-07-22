@@ -11,21 +11,6 @@ import { PoToaster } from './po-toaster.interface';
 import { PoToasterType } from './po-toaster-type.enum';
 import { PoToasterOrientation } from './po-toaster-orientation.enum';
 
-export const poToasterLiteralsDefault = {
-  en: {
-    closeToaster: 'Close'
-  },
-  es: {
-    closeToaster: 'Cerca'
-  },
-  pt: {
-    closeToaster: 'Fechar'
-  },
-  ru: {
-    closeToaster: 'близко'
-  }
-};
-
 /**
  * @docsPrivate
  *
@@ -38,10 +23,6 @@ export const poToasterLiteralsDefault = {
 export class PoToasterComponent extends PoToasterBaseComponent {
   /* Componente toaster */
   @ViewChild('toaster') toaster: ElementRef;
-
-  private literals = {
-    ...poToasterLiteralsDefault[poLocaleDefault]
-  };
 
   /* Ícone do Toaster */
   private icon: string;
@@ -62,11 +43,6 @@ export class PoToasterComponent extends PoToasterBaseComponent {
     private elementeRef?: ElementRef
   ) {
     super();
-
-    this.literals = {
-      ...this.literals,
-      ...poToasterLiteralsDefault[languageService.getShortLanguage()]
-    };
   }
 
   /* Muda a posição do Toaster na tela*/
@@ -95,7 +71,7 @@ export class PoToasterComponent extends PoToasterBaseComponent {
     this.orientation = poToaster.orientation;
     this.position = poToaster.position;
     this.action = poToaster.action;
-    this.actionLabel = poToaster.actionLabel ? poToaster.actionLabel : this.literals.closeToaster;
+    this.actionLabel = poToaster.actionLabel;
     this.componentRef = poToaster.componentRef;
 
     /* Muda a orientação do Toaster */
@@ -110,7 +86,7 @@ export class PoToasterComponent extends PoToasterBaseComponent {
     switch (this.type) {
       case PoToasterType.Error: {
         this.toasterType = 'po-toaster-error';
-        this.icon = 'po-icon-close';
+        this.icon = 'po-icon-warning';
         break;
       }
       case PoToasterType.Information: {
@@ -147,6 +123,14 @@ export class PoToasterComponent extends PoToasterBaseComponent {
 
   getToasterType() {
     return this.toasterType;
+  }
+
+  onButtonClose() {
+    if (this.action && !this.actionLabel) {
+      this.poToasterAction();
+    } else {
+      this.close();
+    }
   }
 
   /* Chama a função passada pelo atributo `action` */
