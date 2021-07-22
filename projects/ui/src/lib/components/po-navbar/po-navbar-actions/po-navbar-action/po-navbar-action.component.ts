@@ -1,4 +1,4 @@
-import { Component, Input, ViewContainerRef } from '@angular/core';
+import { Component, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { callFunction, isExternalLink, openExternalLink } from '../../../../utils/util';
@@ -10,7 +10,7 @@ import { callFunction, isExternalLink, openExternalLink } from '../../../../util
 export class PoNavbarActionComponent {
   @Input('p-action') action?: Function;
 
-  @Input('p-icon') icon: string;
+  @Input('p-icon') icon: string | TemplateRef<void>;
 
   @Input('p-label') label: string;
 

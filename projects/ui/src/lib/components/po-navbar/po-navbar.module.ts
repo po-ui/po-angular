@@ -7,6 +7,7 @@ import { PoNavbarComponent } from './po-navbar.component';
 import { PoNavbarItemsModule } from './po-navbar-items/po-navbar-items.module';
 import { PoNavbarLogoComponent } from './po-navbar-logo/po-navbar-logo.component';
 import { PoNavbarItemNavigationModule } from './po-navbar-item-navigation/po-navbar-item-navigation.module';
+import { PoIconModule } from './../po-icon/po-icon.module';
 
 /**
  * @description
@@ -40,7 +41,14 @@ import { PoNavbarItemNavigationModule } from './po-navbar-item-navigation/po-nav
  * ```
  */
 @NgModule({
-  imports: [CommonModule, PoNavbarActionsModule, PoNavbarItemsModule, PoNavbarItemNavigationModule, PoMenuModule],
+  imports: [
+    CommonModule,
+    PoNavbarActionsModule,
+    PoNavbarItemsModule,
+    PoNavbarItemNavigationModule,
+    PoMenuModule,
+    PoIconModule
+  ],
   declarations: [PoNavbarComponent, PoNavbarLogoComponent],
   exports: [PoNavbarComponent]
 })
