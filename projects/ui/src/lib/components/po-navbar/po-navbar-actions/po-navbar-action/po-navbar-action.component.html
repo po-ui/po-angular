@@ -1,3 +1,7 @@
-<div tabindex="0" class="po-navbar-action-content po-clickable" (click)="click()">
-  <span class="po-icon {{ icon }}" [p-tooltip]="tooltip"> </span>
-</div>
+<po-icon
+  tabindex="0"
+  class="po-navbar-action-content po-clickable"
+  [p-icon]="icon"
+  [p-tooltip]="tooltip"
+  (click)="click()"
+></po-icon>
