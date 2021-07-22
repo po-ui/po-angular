@@ -15,7 +15,7 @@ import { PoToasterType } from './po-toaster/po-toaster-type.enum';
  * - error,
  * - information.
  *
- * Cada um destes métodos recebe como parâmetro o objeto "PoNotification" que contém os dados da mensagem e o
+ * Cada um destes métodos recebe como parâmetro o objeto `PoNotification` que contém os dados da mensagem e o
  * objeto ViewContainerRef que é a representação do container do componente onde será criada a notificação.
  *
  * Estas notificações serão exibidas durante 10 segundos por padrão, podendo ser alterada conforme necessidade.
