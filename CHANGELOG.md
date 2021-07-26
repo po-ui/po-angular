@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.6.0](https://github.com/po-ui/po-angular/compare/v5.5.0...v5.6.0) (2021-07-26)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige posição do calendário quando aberto nas extremidades ([8221040](https://github.com/po-ui/po-angular/commit/82210407c1ab894b134dd1d35b604117e6f722b5))
+
+
+### Features
+
+* **combo:** mantém lista de opções mesmo com item selecionado ([461a14e](https://github.com/po-ui/po-angular/commit/461a14e68646d35d3ff2c76a99a381e54954769e))
+* **notification:** adiciona botão de fechar por padrão ([ac6b6c3](https://github.com/po-ui/po-angular/commit/ac6b6c31a625441ac0596bd1660010d5712c7773))
+
+
+
 # [5.5.0](https://github.com/po-ui/po-angular/compare/v5.4.0...v5.5.0) (2021-07-19)
 
 
