@@ -297,7 +297,7 @@ sample-po-menu-human-resources .po-wrapper.po-collapsed-menu .po-toolbar {
 }
 
 .docs-sample-container .po-wrapper .po-page .po-page-content {
-  height: 824px !important;
+  height: 100% !important;
 }
 
 .docs-sample-container .po-page {
@@ -305,16 +305,12 @@ sample-po-menu-human-resources .po-wrapper.po-collapsed-menu .po-toolbar {
   flex-direction: column;
   margin-left: 0;
   width: 100%;
+  height: 100% !important;
 }
 
 .docs-sample-container .po-wrapper po-toolbar ~ po-menu .po-menu,
 .docs-sample-container .po-wrapper-menu-panel po-toolbar ~ po-menu-panel .po-menu-panel {
   margin-top: -40px;
-}
-
-.docs-sample-container .po-wrapper.po-collapsed-menu .po-toolbar {
-  margin-left: 60px;
-  margin-top: 14px;
 }
 
 .docs-sample-container .po-wrapper.po-collapsed-menu .po-page {
@@ -354,8 +350,13 @@ sample-po-menu-human-resources .po-wrapper.po-collapsed-menu .po-toolbar {
 }
 
 .docs-sample-container .po-menu {
-  height: 943px;
+  height: 894px !important;
   position: relative;
+  top: 0 !important;
+}
+
+sample-po-menu-human-resources-view .docs-sample-container .po-menu {
+  height: 763px !important;
 }
 
 .docs-sample-container .po-page-background-wrap {
@@ -659,11 +660,18 @@ blockquote {
   }
 }
 
+@media screen and (min-width: 961px) {
+  sample-po-menu-basic-view .docs-sample-container .po-menu {
+    height: 256px !important;
+  }
+}
+
 @media screen and (min-width: 961px) and (max-width: 1366px) {
   .guides-grid-system-containers .po-visible-lg-12 {
     background-color: #7fb7be;
   }
 }
+
 @media screen and (max-width: 1366px) {
   .list-item-preview {
     padding: 0 8px;
@@ -674,6 +682,10 @@ blockquote {
   .guides-grid-system-containers .po-visible-xl-12 {
     background-color: #ffed66;
     color: #75732e;
+  }
+
+  .docs-sample-container .po-menu {
+    height: 997px !important;
   }
 }
 
