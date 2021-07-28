@@ -1,6 +1,8 @@
 import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
+import { Observable, Subscription } from 'rxjs';
+
 import {
   convertToBoolean,
   removeDuplicatedOptions,
@@ -15,6 +17,7 @@ import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
 import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { InputBoolean } from '../../../decorators';
+import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 
 export const poMultiselectLiteralsDefault = {
   en: <PoMultiselectLiterals>{
@@ -117,6 +120,28 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @description
    *
+   * Documentar.
+   *
+   * > Documentar.
+   */
+  @Input('p-field-label') fieldLabel: string = 'label';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Documentar.
+   *
+   * > Documentar.
+   */
+  @Input('p-field-value') fieldValue: string = 'value';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Pode ser informada uma função que será disparada quando houver alterações no ngModel.
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
@@ -124,13 +149,17 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   selectedOptions: Array<PoMultiselectOption> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption> = [];
   visibleDisclaimers = [];
+  isServerSearching = false;
+  isFirstFilter: boolean = true;
 
   // eslint-disable-next-line
   protected onModelTouched: any = null;
 
   protected clickOutListener: () => void;
   protected resizeListener: () => void;
+  protected getSubscription: Subscription;
 
+  private _filterService?: PoMultiselectFilter;
   private _disabled?: boolean = false;
   private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
   private _hideSearch?: boolean = false;
@@ -143,6 +172,25 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private lastLengthModel;
   private onModelChange: any;
   private validatorChange: any;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Documentar.
+   *
+   * > Documentar.
+   */
+  @Input('p-filter-service') set filterService(value: PoMultiselectFilter) {
+    this._filterService = value;
+    this.autoHeight = true;
+    this.options = [];
+  }
+
+  get filterService() {
+    return this._filterService;
+  }
 
   /**
    * @optional
@@ -391,6 +439,14 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
         }
       });
       this.visibleOptionsDropdown = newOptions;
+
+      if (this.filterService) {
+        this.isServerSearching = true;
+        this.getSubscription = this.filterService.getObjectsByValues([search]).subscribe(
+          data => this.updateOptionByFilteredValue(data),
+          error => this.onErrorGetObjectByValue()
+        );
+      }
     }
   }
 
@@ -429,16 +485,20 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     return null;
   }
 
-  updateSelectedOptions(values) {
+  updateSelectedOptions(values: Array<any>, options = this.options) {
     this.selectedOptions = [];
 
-    values.forEach(value => {
-      this.options.forEach(option => {
-        if (option.value === value) {
-          this.selectedOptions.push(option);
-        }
+    if (this.filterService) {
+      this.selectedOptions = values;
+    } else {
+      values.forEach(item => {
+        options.forEach(option => {
+          if (option.value === item) {
+            this.selectedOptions.push(option);
+          }
+        });
       });
-    });
+    }
 
     this.updateVisibleItems();
   }
@@ -446,10 +506,22 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   writeValue(values: any): void {
     values = values || [];
 
-    // Validar se todos os items existem entre os options, senão atualizar o model
-    this.updateSelectedOptions(values);
+    if (this.filterService && values.length > 0) {
+      if (this.isFirstFilter) {
+        this.isServerSearching = true;
+        this.applyFilter().subscribe();
+        this.isFirstFilter = false;
+      }
 
-    if (this.selectedOptions.length < values.length) {
+      this.getSubscription = this.filterService.getObjectsByValues(values).subscribe(data => {
+        this.updateSelectedOptions(data);
+      });
+    } else {
+      // Validar se todos os items existem entre os options, senão atualizar o model
+      this.updateSelectedOptions(values);
+    }
+
+    if (this.selectedOptions && this.selectedOptions.length < values.length) {
       this.callOnChange(this.selectedOptions);
     }
   }
@@ -472,11 +544,24 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     this.validatorChange = fn;
   }
 
+  private onErrorGetObjectByValue() {
+    this.updateOptionByFilteredValue(null);
+  }
+
+  private updateOptionByFilteredValue(items: Array<PoMultiselectOption>) {
+    if (items) {
+      this.visibleOptionsDropdown = [...items];
+    }
+
+    this.isServerSearching = false;
+  }
+
   private validateModel() {
     if (this.validatorChange) {
       this.validatorChange();
     }
   }
 
+  abstract applyFilter(value?: string): Observable<Array<PoMultiselectOption>>;
   abstract updateVisibleItems(): void;
 }

@@ -11,12 +11,16 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
+
 import { isMobile } from './../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
@@ -113,6 +117,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
   ngOnDestroy() {
     this.removeListeners();
+    this.getSubscription?.unsubscribe();
   }
 
   /**
@@ -199,7 +204,9 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   updateVisibleItems() {
-    this.visibleDisclaimers = [].concat(this.selectedOptions);
+    if (this.selectedOptions) {
+      this.visibleDisclaimers = [].concat(this.selectedOptions);
+    }
 
     this.debounceResize();
 
@@ -237,6 +244,10 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   toggleDropdownVisibility() {
     if (this.disabled) {
       return;
+    }
+
+    if (this.filterService) {
+      this.applyFilterInFirstClick();
     }
 
     this.controlDropdownVisibility(!this.dropdownOpen);
@@ -289,6 +300,39 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     ) {
       this.controlDropdownVisibility(false);
     }
+  }
+
+  applyFilter(value: string = ''): Observable<Array<PoMultiselectOption>> {
+    const param = { property: this.fieldLabel, value };
+
+    return this.filterService.getFilteredData(param).pipe(
+      tap(
+        data => {
+          this.isServerSearching = true;
+          this.setOptionsByApplyFilter(data);
+        },
+        error => this.onErrorFilteredData()
+      ),
+      take(1)
+    );
+  }
+
+  private applyFilterInFirstClick() {
+    if (this.isFirstFilter) {
+      this.isFirstFilter = false;
+      this.isServerSearching = true;
+      this.applyFilter().subscribe();
+    }
+  }
+
+  private setOptionsByApplyFilter(items: Array<PoMultiselectOption>) {
+    this.options = [...items];
+    this.isServerSearching = false;
+    this.setVisibleOptionsDropdown(this.options);
+  }
+
+  private onErrorFilteredData() {
+    console.log('deu erro na busca');
   }
 
   private adjustContainerPosition(): void {

@@ -10,7 +10,10 @@
 
   <ul class="po-multiselect-items-container" [scrollTop]="scrollTop" #ulElement>
     <div *ngIf="!visibleOptions.length" class="po-multiselect-container-no-data po-text-center">
-      <span> {{ literals.noData }}</span>
+      <span *ngIf="!isServerSearching"> {{ literals.noData }}</span>
+      <div *ngIf="isServerSearching">
+        <po-loading></po-loading>
+      </div>
     </div>
 
     <po-multiselect-item
