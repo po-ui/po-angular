@@ -16,6 +16,9 @@ import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-mult
   templateUrl: './po-multiselect-dropdown.component.html'
 })
 export class PoMultiselectDropdownComponent {
+  /** Propriedade que indica se deve exibir o loading. */
+  @Input('p-searching') isServerSearching?: boolean = false;
+
   /** Propriedade que indica se o campo de pesquisa deverá ser escondido. */
   @Input('p-hide-search') hideSearch?: boolean = false;
 
@@ -26,7 +29,7 @@ export class PoMultiselectDropdownComponent {
   @Input('p-placeholder-search') placeholderSearch: string;
 
   /** Propriedade que recebe a lista de opções selecionadas. */
-  @Input('p-selected-values') selectedValues: Array<any> = [];
+  @Input('p-selected-options') selectedOptions: Array<any> = [];
 
   /** Propriedade que recebe a lista com todas as opções. */
   @Input('p-options') options: Array<PoMultiselectOption> = [];
@@ -70,7 +73,7 @@ export class PoMultiselectDropdownComponent {
   }
 
   isSelectedItem(option: PoMultiselectOption) {
-    return this.selectedValues.some(selectedItem => selectedItem === option.value);
+    return this.selectedOptions.some(selectedItem => selectedItem.value === option.value);
   }
 
   clickItem(check, option) {
@@ -83,13 +86,12 @@ export class PoMultiselectDropdownComponent {
 
   updateSelectedValues(checked, option) {
     if (checked) {
-      this.selectedValues.push(option.value);
+      this.selectedOptions.push(option);
     } else {
-      const indexSelectedValues = this.selectedValues.indexOf(option.value);
-      this.selectedValues.splice(indexSelectedValues, 1);
+      this.selectedOptions = this.selectedOptions.filter(selectedOption => selectedOption.value !== option.value);
     }
 
-    this.change.emit(this.selectedValues);
+    this.change.emit(this.selectedOptions);
   }
 
   callChangeSearch(event) {

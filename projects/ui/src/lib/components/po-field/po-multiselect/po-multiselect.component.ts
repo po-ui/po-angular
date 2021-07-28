@@ -11,12 +11,16 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { Observable, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+
 import { isMobile } from './../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
@@ -62,6 +66,12 @@ const providers = [
  *   <file name="sample-po-multiselect-vacation-reactive-form/sample-po-multiselect-vacation-reactive-form.component.html"> </file>
  *   <file name="sample-po-multiselect-vacation-reactive-form/sample-po-multiselect-vacation-reactive-form.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-multiselect-heroes" title="PO Multiselect - Heroes - using API">
+ *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.component.html"> </file>
+ *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.component.ts"> </file>
+ *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.service.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-multiselect',
@@ -83,6 +93,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   visibleElement = false;
 
   private isCalculateVisibleItems: boolean = true;
+  private cacheOptions: Array<PoMultiselectOption>;
 
   constructor(
     private renderer: Renderer2,
@@ -113,6 +124,8 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
   ngOnDestroy() {
     this.removeListeners();
+    this.getObjectsByValuesSubscription?.unsubscribe();
+    this.filterSubject?.unsubscribe();
   }
 
   /**
@@ -188,8 +201,8 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     }
   }
 
-  changeItems(selectedValues) {
-    this.updateSelectedOptions(selectedValues);
+  changeItems(changedItems) {
+    this.updateSelectedOptions(changedItems);
     this.callOnChange(this.selectedOptions);
 
     if (this.autoHeight && this.dropdownOpen) {
@@ -199,7 +212,9 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   updateVisibleItems() {
-    this.visibleDisclaimers = [].concat(this.selectedOptions);
+    if (this.selectedOptions) {
+      this.visibleDisclaimers = [].concat(this.selectedOptions);
+    }
 
     this.debounceResize();
 
@@ -239,6 +254,10 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
       return;
     }
 
+    if (this.filterService) {
+      this.applyFilterInFirstClick();
+    }
+
     this.controlDropdownVisibility(!this.dropdownOpen);
   }
 
@@ -264,9 +283,15 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   changeSearch(event) {
-    event && event.value
-      ? this.searchByLabel(event.value, this.options, this.filterMode)
-      : this.setVisibleOptionsDropdown(this.options);
+    if (event && event.value !== undefined) {
+      if (this.filterService) {
+        this.filterSubject.next(event.value);
+      } else {
+        this.searchByLabel(event.value, this.options, this.filterMode);
+      }
+    } else {
+      this.setVisibleOptionsDropdown(this.options);
+    }
 
     // timeout necessário para reposicionar corretamente quando dropdown estiver pra cima do input e realizar busca no input
     setTimeout(() => this.adjustContainerPosition());
@@ -289,6 +314,40 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     ) {
       this.controlDropdownVisibility(false);
     }
+  }
+
+  applyFilter(value: string = ''): Observable<Array<PoMultiselectOption>> {
+    const param = { property: 'label', value };
+
+    return this.filterService.getFilteredData(param).pipe(
+      catchError(err => {
+        this.isServerSearching = false;
+        return of([]);
+      }),
+      tap((options: Array<PoMultiselectOption>) => {
+        this.setOptionsByApplyFilter(options);
+      })
+    );
+  }
+
+  private applyFilterInFirstClick() {
+    if (this.isFirstFilter) {
+      this.isServerSearching = true;
+
+      this.filterSubject.next();
+    } else {
+      this.options = [...this.cacheOptions];
+    }
+  }
+
+  private setOptionsByApplyFilter(items: Array<PoMultiselectOption>) {
+    if (this.isFirstFilter) {
+      this.cacheOptions = [...items];
+      this.isFirstFilter = false;
+    }
+
+    this.options = [...items];
+    this.setVisibleOptionsDropdown(this.options);
   }
 
   private adjustContainerPosition(): void {

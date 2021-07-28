@@ -1,26 +1,46 @@
 import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { fakeAsync, tick } from '@angular/core/testing';
+
+import { Observable, of } from 'rxjs';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty } from '../../../utils/util';
 import * as UtilsFunctions from '../../../utils/util';
+
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
-
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 
+const poMultiselectFilterServiceStub: PoMultiselectFilter = {
+  getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
+    return of([{ label: '', value: '' }]);
+  },
+  getObjectsByValues: function (values: Array<string | number>): Observable<Array<PoMultiselectOption>> {
+    return of([{ label: '', value: '' }]);
+  }
+};
 @Directive()
 class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   constructor() {
     super(new PoLanguageService());
   }
 
+  applyFilter(value?: string): Observable<Array<PoMultiselectOption>> {
+    return of([{ value: 123, label: 'teste' }]);
+  }
+
   updateVisibleItems() {}
 }
 
 describe('PoMultiselectBaseComponent:', () => {
-  const component = new PoMultiselectTestComponent();
+  let component;
+  beforeEach(() => {
+    component = new PoMultiselectTestComponent();
+  });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
@@ -119,6 +139,17 @@ describe('PoMultiselectBaseComponent:', () => {
     spyOn(component, 'updateList');
     component.options = [];
     component.ngOnInit();
+    expect(component.updateList).toHaveBeenCalledWith([]);
+  });
+
+  it('should call updateList in OnInit if has filterService', () => {
+    component.filterService = poMultiselectFilterServiceStub;
+    spyOn(component, 'updateList');
+    spyOn(component.filterSubject, 'subscribe');
+
+    component.options = [];
+    component.ngOnInit();
+    expect(component.filterSubject.subscribe).toHaveBeenCalled();
     expect(component.updateList).toHaveBeenCalledWith([]);
   });
 
@@ -336,7 +367,7 @@ describe('PoMultiselectBaseComponent:', () => {
     ];
 
     spyOn(component, 'updateVisibleItems');
-    component.updateSelectedOptions([1, 3]);
+    component.updateSelectedOptions([{ value: 1 }, { value: 3 }]);
     expect(component.updateVisibleItems).toHaveBeenCalled();
     expect(component.selectedOptions.length).toBe(1);
   });
@@ -353,7 +384,7 @@ describe('PoMultiselectBaseComponent:', () => {
 
     component.writeValue([2, 3]);
 
-    expect(component.updateSelectedOptions).toHaveBeenCalledWith([2, 3]);
+    expect(component.updateSelectedOptions).toHaveBeenCalledWith([{ value: 2 }, { value: 3 }]);
     expect(component.callOnChange).toHaveBeenCalledWith([{ value: 2, label: '2' }]);
   });
 
@@ -420,9 +451,72 @@ describe('PoMultiselectBaseComponent:', () => {
     it('writeValue: should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
       spyOn(component, 'updateSelectedOptions');
 
-      component.writeValue(null);
+      component.writeValue(undefined);
 
       expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
+    });
+
+    it('writeValue: should call `updateSelectedOptions` with values if model value is `valid`.', () => {
+      spyOn(component, 'updateSelectedOptions');
+      component.filterService = poMultiselectFilterServiceStub;
+
+      const values = [{ label: '', value: '' }];
+
+      component.writeValue(values);
+
+      expect(component.updateSelectedOptions).toHaveBeenCalledWith(values);
+    });
+
+    it('writeValue: should call `updateSelectedOptions` with value if model value is `valid`.', () => {
+      spyOn(component, 'updateSelectedOptions');
+
+      const values = ['teste'];
+
+      component.writeValue(values);
+
+      expect(component.updateSelectedOptions).toHaveBeenCalledWith([{ value: 'teste' }]);
+    });
+
+    it('writeValue: should call `updateSelectedOptions` with value `undefined` and returns `[]`', () => {
+      component.filterService = undefined;
+
+      spyOn(component, 'updateSelectedOptions');
+
+      component.writeValue(undefined);
+
+      expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
+    });
+
+    it('applyFilters: should be called with valid value', fakeAsync(() => {
+      component.filterService = poMultiselectFilterServiceStub;
+      component.debounceTime = 50;
+      component.options = [];
+      const value = 'abc';
+      component.ngOnInit();
+      spyOn(component, 'applyFilter').and.returnValue(of([]));
+      component.filterSubject.next(value);
+      tick(50);
+      expect(component.applyFilter).toHaveBeenCalledWith(value);
+    }));
+
+    it('updateSelectedOptions: should call `updateVisibleItems` and set `selectedOptions`', () => {
+      spyOn(component, 'updateVisibleItems');
+      const params = [1, 2, 3];
+      component.options = [];
+      component.filterService = poMultiselectFilterServiceStub;
+      component['updateSelectedOptions'](params);
+      expect(component.selectedOptions).toEqual([1, 2, 3]);
+      expect(component.updateVisibleItems).toHaveBeenCalled();
+    });
+
+    it('updateSelectedOptions: should be called with params, options and `service` and set `selectedOptions`', () => {
+      spyOn(component, 'updateVisibleItems');
+      const params = [1, 2, 3];
+      const options = [];
+      component.filterService = poMultiselectFilterServiceStub;
+      component['updateSelectedOptions'](params, options);
+      expect(component.selectedOptions).toEqual([1, 2, 3]);
+      expect(component.updateVisibleItems).toHaveBeenCalled();
     });
   });
 
@@ -486,6 +580,45 @@ describe('PoMultiselectBaseComponent:', () => {
       component['language'] = poLocaleDefault;
 
       expectPropertiesValues(component, 'literals', invalidValues, poMultiselectLiteralsDefault[poLocaleDefault]);
+    });
+
+    it('p-filter-service: should set `options` with empty array and set `autoheight` with true if `autoHeightInitialValue` is `undefined`', () => {
+      const value = {};
+      component.filterService = value;
+      component.autoHeightInitialValue = undefined;
+
+      expect(component.filterService).toBe(value);
+      expect(component.autoHeight).toBeTrue();
+      expect(component.options).toEqual([]);
+    });
+
+    it('p-filter-service: should set `autoheight` with `false`', () => {
+      const value = {};
+      component.autoHeightInitialValue = false;
+      component.filterService = value;
+
+      expect(component.filterService).toBe(value);
+      expect(component.autoHeight).toBeFalse();
+      expect(component.options).toEqual([]);
+    });
+
+    it('p-auto-height: should set `autoHeightInitialValue` with `value`', () => {
+      const value: boolean = true;
+      component.autoHeight = value;
+
+      expect(component.autoHeight).toBe(value);
+    });
+
+    it('p-debounce-time: should set default value', () => {
+      component.debounceTime = 0;
+
+      expect(component.debounceTime).toBe(400);
+    });
+
+    it('p-debounce-time: should set value and be defined', () => {
+      component.debounceTime = 600;
+
+      expect(component.debounceTime).toBe(600);
     });
   });
 });
