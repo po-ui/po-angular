@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunction from '../../../utils/util';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -11,6 +12,17 @@ import { PoMultiselectComponent } from './po-multiselect.component';
 import { PoMultiselectDropdownComponent } from './po-multiselect-dropdown/po-multiselect-dropdown.component';
 import { PoMultiselectItemComponent } from './po-multiselect-item/po-multiselect-item.component';
 import { PoMultiselectSearchComponent } from './po-multiselect-search/po-multiselect-search.component';
+import { PoMultiselectFilter } from './po-multiselect-filter.interface';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
+
+const poMultiselectFilterServiceStub: PoMultiselectFilter = {
+  getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
+    return of([{ label: params.property, value: params.value }]);
+  },
+  getObjectsByValues: function (values: Array<string | number>): Observable<Array<PoMultiselectOption>> {
+    return of([{ label: '', value: '' }]);
+  }
+};
 
 describe('PoMultiselectComponent:', () => {
   let component: PoMultiselectComponent;
@@ -152,6 +164,16 @@ describe('PoMultiselectComponent:', () => {
 
     spyOn(component, 'controlDropdownVisibility');
     component.toggleDropdownVisibility();
+    expect(component.controlDropdownVisibility).toHaveBeenCalled();
+  });
+
+  it('should call controlDropdownVisibility when enabled and has filterService', () => {
+    component.disabled = false;
+    component.filterService = poMultiselectFilterServiceStub;
+
+    spyOn(component, 'controlDropdownVisibility');
+    component.toggleDropdownVisibility();
+
     expect(component.controlDropdownVisibility).toHaveBeenCalled();
   });
 
@@ -331,12 +353,28 @@ describe('PoMultiselectComponent:', () => {
       expect(fakeThis.visibleElement).toBeFalsy();
     });
 
-    it('ngOnDestroy: should call removeListeners.', () => {
+    it('ngOnDestroy: should call removeListeners and call unsubscribe from subscription', () => {
       const removeListenersSpy = spyOn(component, <any>'removeListeners');
+      component['getObjectsByValuesSubscription'] = <any>{ unsubscribe: () => {} };
+      component['filterSubject'] = <any>{ unsubscribe: () => {} };
+
+      spyOn(component['getObjectsByValuesSubscription'], 'unsubscribe');
+      spyOn(component['filterSubject'], 'unsubscribe');
 
       component.ngOnDestroy();
 
+      expect(component['getObjectsByValuesSubscription']['unsubscribe']).toHaveBeenCalled();
+      expect(component['filterSubject']['unsubscribe']).toHaveBeenCalled();
       expect(removeListenersSpy).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: shouldn`t throw error if subscriptions are undefined', () => {
+      component['getObjectsByValuesSubscription'] = undefined;
+      component['filterSubject'] = undefined;
+
+      const fnDestroy = () => component.ngOnDestroy();
+
+      expect(fnDestroy).not.toThrow();
     });
 
     it('focus: should call `focus` of multiselect', () => {
@@ -554,6 +592,28 @@ describe('PoMultiselectComponent:', () => {
       expect(fakeThis['isCalculateVisibleItems']).toBeTruthy();
     });
 
+    it('updateVisibleItems: should call `debounceResize`, do not set `visibleDisclaimers` and set `isCalculateVisibleItems` to true', () => {
+      const fakeThis = {
+        selectedOptions: undefined,
+        visibleDisclaimers: [],
+        inputElement: {
+          nativeElement: {
+            offsetWidth: 0
+          }
+        },
+        debounceResize: () => {},
+        isCalculateVisibleItems: false
+      };
+
+      spyOn(fakeThis, 'debounceResize');
+
+      component.updateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).not.toBe(1);
+      expect(fakeThis.debounceResize).toHaveBeenCalled();
+      expect(fakeThis['isCalculateVisibleItems']).toBeTruthy();
+    });
+
     it('openDropdown: should call `controlDropdownVisibility` when recive true on call and `disabled` is false.', () => {
       spyOn(component, <any>'controlDropdownVisibility');
 
@@ -594,6 +654,17 @@ describe('PoMultiselectComponent:', () => {
       expect(searchByLabelSpy).toHaveBeenCalledWith(event.value, component.options, component.filterMode);
       expect(adjustContainerPositionSpy).toHaveBeenCalled();
     }));
+
+    it('changeSearch: should call `filterSubject.next` with `event.value`', () => {
+      const event = { value: 'abc' };
+      component.filterService = <any>{};
+
+      spyOn(component.filterSubject, 'next');
+
+      component.changeSearch(event);
+
+      expect(component.filterSubject.next).toHaveBeenCalledWith(event.value);
+    });
 
     it(`changeSearch: should call 'setVisibleOptionsDropdown' with 'options' if 'event.value' is 'invalid'
       and call 'adjustContainerPosition'.`, fakeAsync(() => {
@@ -765,6 +836,74 @@ describe('PoMultiselectComponent:', () => {
       component.changeItems([]);
 
       expect(spyAdjustContainerPosition).toHaveBeenCalled();
+    });
+
+    it('applyFilter: should be called', fakeAsync(() => {
+      component.filterService = poMultiselectFilterServiceStub;
+      spyOn(component, <any>'setOptionsByApplyFilter').and.callThrough();
+      spyOn(component.filterService, <any>'getFilteredData').and.returnValue(throwError([]));
+
+      component.applyFilter('').subscribe(
+        () => {},
+        () => {
+          expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
+        }
+      );
+    }));
+
+    it('applyFilter: should be called with undefined', fakeAsync(() => {
+      component.filterService = poMultiselectFilterServiceStub;
+      spyOn(component, <any>'setOptionsByApplyFilter').and.callThrough();
+      spyOn(component.filterService, <any>'getFilteredData').and.returnValue(throwError([]));
+
+      component.applyFilter(undefined).subscribe(
+        () => {},
+        () => {
+          expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
+        }
+      );
+    }));
+
+    it('setOptionsByApplyFilter: should be called by first time', () => {
+      const items = [{ label: '123', value: 1 }];
+      component.isFirstFilter = true;
+      component['setOptionsByApplyFilter'](items);
+
+      expect(component['cacheOptions']).toEqual(items);
+      expect(component.isFirstFilter).toBeFalsy();
+    });
+
+    it('setOptionsByApplyFilter: should be called', () => {
+      const items = [{ label: '123', value: 1 }];
+      component.isFirstFilter = false;
+      spyOn(component, 'setVisibleOptionsDropdown');
+      component['setOptionsByApplyFilter'](items);
+
+      expect(component.options).toEqual(items);
+      expect(component.setVisibleOptionsDropdown).toHaveBeenCalledWith(items);
+    });
+
+    it('applyFilterInFirstClick: should be call `filterSubject` when it is the first filter', () => {
+      component['filterSubject'] = <any>{
+        next: () => {},
+        unsubscribe: () => {}
+      };
+      spyOn(component['filterSubject'], 'next');
+      component.isFirstFilter = true;
+
+      component['applyFilterInFirstClick']();
+
+      expect(component['filterSubject'].next).toHaveBeenCalled();
+    });
+
+    it('applyFilterInFirstClick: should set `options` with `cacheOptions` data', () => {
+      const values = [{ label: '', value: '' }];
+      component['cacheOptions'] = values;
+      component.isFirstFilter = false;
+
+      component['applyFilterInFirstClick']();
+
+      expect(component.options).toEqual([...values]);
     });
   });
 

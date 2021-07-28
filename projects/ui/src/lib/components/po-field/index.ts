@@ -28,6 +28,7 @@ export * from './po-lookup/po-lookup.component';
 export * from './po-multiselect/po-multiselect-filter-mode.enum';
 export * from './po-multiselect/po-multiselect-literals.interface';
 export * from './po-multiselect/po-multiselect-option.interface';
+export * from './po-multiselect/po-multiselect-filter.interface';
 export * from './po-multiselect/po-multiselect.component';
 export * from './po-number/po-number.component';
 export * from './po-password/po-password.component';

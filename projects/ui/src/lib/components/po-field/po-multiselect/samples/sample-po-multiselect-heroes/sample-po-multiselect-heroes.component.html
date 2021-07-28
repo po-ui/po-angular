@@ -1,0 +1,23 @@
+<div class="po-row">
+  <po-multiselect
+    class="po-md-6"
+    name="multiselect"
+    [(ngModel)]="multiselect"
+    p-label="Search a Hero"
+    [p-filter-service]="filterService"
+    [p-debounce-time]="debounce"
+    (p-change)="changeOptions($event)"
+  >
+  </po-multiselect>
+
+  <po-container class="po-md-6 po-mt-4">
+    <po-table
+      [p-columns]="columns"
+      [p-items]="heroes"
+      [p-height]="220"
+      [p-striped]="true"
+      [p-hide-columns-manager]="true"
+    >
+    </po-table>
+  </po-container>
+</div>

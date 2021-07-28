@@ -41,11 +41,12 @@
 
   <po-multiselect-dropdown
     #dropdownElement
+    [p-searching]="isServerSearching"
     [p-hide-search]="hideSearch"
     [p-literals]="literals"
     [p-options]="options"
     [p-visible-options]="visibleOptionsDropdown"
-    [p-selected-values]="getValuesFromOptions(selectedOptions)"
+    [p-selected-options]="selectedOptions"
     [p-placeholder-search]="placeholderSearch"
     (p-change)="changeItems($event)"
     (p-change-search)="changeSearch($event)"
