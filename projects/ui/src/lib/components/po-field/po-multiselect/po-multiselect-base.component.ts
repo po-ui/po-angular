@@ -1,7 +1,8 @@
 import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
 import {
   convertToBoolean,
@@ -18,6 +19,8 @@ import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { InputBoolean } from '../../../decorators';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
+
+const PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT = 400;
 
 export const poMultiselectLiteralsDefault = {
   en: <PoMultiselectLiterals>{
@@ -120,28 +123,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @description
    *
-   * Documentar.
-   *
-   * > Documentar.
-   */
-  @Input('p-field-label') fieldLabel: string = 'label';
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Documentar.
-   *
-   * > Documentar.
-   */
-  @Input('p-field-value') fieldValue: string = 'value';
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Pode ser informada uma função que será disparada quando houver alterações no ngModel.
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
@@ -151,15 +132,17 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   visibleDisclaimers = [];
   isServerSearching = false;
   isFirstFilter: boolean = true;
+  filterSubject = new Subject();
 
   // eslint-disable-next-line
   protected onModelTouched: any = null;
 
   protected clickOutListener: () => void;
   protected resizeListener: () => void;
-  protected getSubscription: Subscription;
+  protected getObjectsByValuesSubscription: Subscription;
 
   private _filterService?: PoMultiselectFilter;
+  private _debounceTime?: number = 400;
   private _disabled?: boolean = false;
   private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
   private _hideSearch?: boolean = false;
@@ -190,6 +173,25 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   get filterService() {
     return this._filterService;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Esta propriedade define em quanto tempo (em milissegundos), aguarda para acionar o evento de filtro após cada pressionamento de tecla.
+   * Será utilizada apenas quando houver serviço (`p-filter-service`).
+   *
+   * @default `400`
+   */
+  @Input('p-debounce-time') set debounceTime(value: number) {
+    const parsedValue = parseInt(<any>value, 10);
+
+    this._debounceTime = !isNaN(parsedValue) && parsedValue > 0 ? parsedValue : PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT;
+  }
+
+  get debounceTime(): number {
+    return this._debounceTime;
   }
 
   /**
@@ -378,6 +380,18 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   }
 
   ngOnInit() {
+    if (this.filterService) {
+      this.filterSubject
+        .pipe(
+          debounceTime(this.debounceTime),
+          distinctUntilChanged(),
+          // tap(() => this.isServerSearching = true),
+          switchMap((search: string) => this.applyFilter(search))
+          // tap(() => this.isServerSearching = false))
+        )
+        .subscribe();
+    }
+
     this.updateList(this.options);
   }
 
@@ -439,14 +453,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
         }
       });
       this.visibleOptionsDropdown = newOptions;
-
-      if (this.filterService) {
-        this.isServerSearching = true;
-        this.getSubscription = this.filterService.getObjectsByValues([search]).subscribe(
-          data => this.updateOptionByFilteredValue(data),
-          error => this.onErrorGetObjectByValue()
-        );
-      }
     }
   }
 
@@ -490,6 +496,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
     if (this.filterService) {
       this.selectedOptions = values;
+      // values.forEach(item => {this.selectedOptions.push(item)});
     } else {
       values.forEach(item => {
         options.forEach(option => {
@@ -508,14 +515,14 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
     if (this.filterService && values.length > 0) {
       if (this.isFirstFilter) {
-        this.isServerSearching = true;
+        // this.isServerSearching = true;
         this.applyFilter().subscribe();
-        this.isFirstFilter = false;
+        // this.isFirstFilter = false;
       }
 
-      this.getSubscription = this.filterService.getObjectsByValues(values).subscribe(data => {
-        this.updateSelectedOptions(data);
-      });
+      this.getObjectsByValuesSubscription = this.filterService
+        .getObjectsByValues(values)
+        .subscribe(data => this.updateSelectedOptions(data));
     } else {
       // Validar se todos os items existem entre os options, senão atualizar o model
       this.updateSelectedOptions(values);
@@ -542,18 +549,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   registerOnValidatorChange(fn: () => void) {
     this.validatorChange = fn;
-  }
-
-  private onErrorGetObjectByValue() {
-    this.updateOptionByFilteredValue(null);
-  }
-
-  private updateOptionByFilteredValue(items: Array<PoMultiselectOption>) {
-    if (items) {
-      this.visibleOptionsDropdown = [...items];
-    }
-
-    this.isServerSearching = false;
   }
 
   private validateModel() {

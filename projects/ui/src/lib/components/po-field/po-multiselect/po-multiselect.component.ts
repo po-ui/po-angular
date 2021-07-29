@@ -87,6 +87,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   visibleElement = false;
 
   private isCalculateVisibleItems: boolean = true;
+  private cacheOptions: Array<PoMultiselectOption>;
 
   constructor(
     private renderer: Renderer2,
@@ -117,7 +118,8 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
   ngOnDestroy() {
     this.removeListeners();
-    this.getSubscription?.unsubscribe();
+    this.getObjectsByValuesSubscription?.unsubscribe();
+    this.filterSubject?.unsubscribe();
   }
 
   /**
@@ -247,6 +249,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     }
 
     if (this.filterService) {
+      // this.isServerSearching = true;
       this.applyFilterInFirstClick();
     }
 
@@ -275,9 +278,15 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   changeSearch(event) {
-    event && event.value
-      ? this.searchByLabel(event.value, this.options, this.filterMode)
-      : this.setVisibleOptionsDropdown(this.options);
+    if (event && event.value !== undefined) {
+      if (this.filterService) {
+        this.filterSubject.next(event.value);
+      } else {
+        this.searchByLabel(event.value, this.options, this.filterMode);
+      }
+    } else {
+      this.setVisibleOptionsDropdown(this.options);
+    }
 
     // timeout necessário para reposicionar corretamente quando dropdown estiver pra cima do input e realizar busca no input
     setTimeout(() => this.adjustContainerPosition());
@@ -303,12 +312,12 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   applyFilter(value: string = ''): Observable<Array<PoMultiselectOption>> {
-    const param = { property: this.fieldLabel, value };
+    const param = { property: 'label', value };
 
     return this.filterService.getFilteredData(param).pipe(
       tap(
         data => {
-          this.isServerSearching = true;
+          // this.isServerSearching = true;
           this.setOptionsByApplyFilter(data);
         },
         error => this.onErrorFilteredData()
@@ -319,15 +328,20 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
 
   private applyFilterInFirstClick() {
     if (this.isFirstFilter) {
+      this.filterSubject.next();
       this.isFirstFilter = false;
-      this.isServerSearching = true;
-      this.applyFilter().subscribe();
+    } else {
+      this.options = this.cacheOptions.length ? [...this.cacheOptions] : [...this.options];
     }
   }
 
   private setOptionsByApplyFilter(items: Array<PoMultiselectOption>) {
+    if (this.isFirstFilter) {
+      this.cacheOptions = [...items];
+      // this.isFirstFilter = false;
+    }
     this.options = [...items];
-    this.isServerSearching = false;
+    // this.isServerSearching = false;
     this.setVisibleOptionsDropdown(this.options);
   }
 

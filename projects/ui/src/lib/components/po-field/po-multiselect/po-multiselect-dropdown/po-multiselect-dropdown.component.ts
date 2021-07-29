@@ -17,7 +17,7 @@ import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-mult
 })
 export class PoMultiselectDropdownComponent {
   /** TO DO. */
-  @Input('p-searching') isServerSearching?: boolean;
+  @Input('p-searching') isServerSearching?: boolean = false;
 
   /** Propriedade que indica se o campo de pesquisa deverá ser escondido. */
   @Input('p-hide-search') hideSearch?: boolean = false;

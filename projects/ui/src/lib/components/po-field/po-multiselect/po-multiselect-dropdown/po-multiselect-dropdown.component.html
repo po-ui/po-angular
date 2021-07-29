@@ -9,19 +9,22 @@
   </po-multiselect-search>
 
   <ul class="po-multiselect-items-container" [scrollTop]="scrollTop" #ulElement>
-    <div *ngIf="!visibleOptions.length" class="po-multiselect-container-no-data po-text-center">
-      <span *ngIf="!isServerSearching"> {{ literals.noData }}</span>
-      <div *ngIf="isServerSearching">
-        <po-loading></po-loading>
-      </div>
+    <div *ngIf="!visibleOptions.length && !isServerSearching" class="po-multiselect-container-no-data po-text-center">
+      <span> {{ literals.noData }}</span>
     </div>
 
-    <po-multiselect-item
-      *ngFor="let option of visibleOptions"
-      [p-label]="option.label"
-      [p-selected]="isSelectedItem(option)"
-      (p-change)="clickItem($event, option)"
-    >
-    </po-multiselect-item>
+    <div *ngIf="isServerSearching" class="po-multiselect-container-no-data po-text-center">
+      <po-loading></po-loading>
+    </div>
+
+    <ng-container *ngIf="!isServerSearching">
+      <po-multiselect-item
+        *ngFor="let option of visibleOptions"
+        [p-label]="option.label"
+        [p-selected]="isSelectedItem(option)"
+        (p-change)="clickItem($event, option)"
+      >
+      </po-multiselect-item>
+    </ng-container>
   </ul>
 </div>
