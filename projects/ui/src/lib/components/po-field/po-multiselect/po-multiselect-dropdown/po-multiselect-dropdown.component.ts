@@ -16,7 +16,7 @@ import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-mult
   templateUrl: './po-multiselect-dropdown.component.html'
 })
 export class PoMultiselectDropdownComponent {
-  /** TO DO. */
+  /** Propriedade que indica se deve exibir o loading. */
   @Input('p-searching') isServerSearching?: boolean = false;
 
   /** Propriedade que indica se o campo de pesquisa deverá ser escondido. */

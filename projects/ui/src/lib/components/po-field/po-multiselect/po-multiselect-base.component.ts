@@ -160,10 +160,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @optional
    *
    * @description
-   *
-   * Documentar.
-   *
-   * > Documentar.
+   * Nesta propriedade deve ser informado um serviço implementando a interface PoMultiselectFilter.
    */
   @Input('p-filter-service') set filterService(value: PoMultiselectFilter) {
     this._filterService = value;

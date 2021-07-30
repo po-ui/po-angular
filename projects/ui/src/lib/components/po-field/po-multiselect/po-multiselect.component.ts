@@ -12,7 +12,7 @@ import {
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
-import { take, tap, catchError } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 
 import { isMobile } from './../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
@@ -65,6 +65,12 @@ const providers = [
  * <example name="po-multiselect-vacation-reactive-form" title="PO Multiselect - Vacation Reactive Form">
  *   <file name="sample-po-multiselect-vacation-reactive-form/sample-po-multiselect-vacation-reactive-form.component.html"> </file>
  *   <file name="sample-po-multiselect-vacation-reactive-form/sample-po-multiselect-vacation-reactive-form.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-multiselect-heroes" title="PO Multiselect - Heroes - using API">
+ *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.component.html"> </file>
+ *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.component.ts"> </file>
+ *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.service.ts"> </file>
  * </example>
  */
 @Component({

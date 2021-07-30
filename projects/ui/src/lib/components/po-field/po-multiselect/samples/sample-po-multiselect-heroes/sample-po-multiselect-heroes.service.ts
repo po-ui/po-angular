@@ -4,31 +4,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { PoMultiselectOption } from '../../../ui/src/lib';
-import { PoMultiselectFilter } from './../../../ui/src/lib/components/po-field/po-multiselect/po-multiselect-filter.interface';
+import { PoMultiselectOption, PoMultiselectFilter } from '@po-ui/ng-components';
 
-/**
- * @docsPrivate
- *
- * @description
- *
- * Serviço padrão utilizado para filtrar os dados do componente po-multiselect.
- */
 @Injectable()
-export class PoAppService implements PoMultiselectFilter {
-  fieldLabel: string = 'label';
-  fieldValue: string = 'value';
-
+export class SamplePoMultiselectHeroesService implements PoMultiselectFilter {
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'
   });
 
   constructor(private http: HttpClient) {}
 
-  getFilteredData(param?: any): Observable<Array<PoMultiselectOption>> {
-    const value = param.value ?? param.search;
-
-    const params = { filter: value };
+  getFilteredData(param: { property: 'string'; value: 'string' }): Observable<Array<PoMultiselectOption>> {
+    const params = { filter: param.value };
 
     return this.http
       .get(`https://po-sample-api.herokuapp.com/v1/heroes?page=1&pageSize=10`, {
@@ -54,8 +41,8 @@ export class PoAppService implements PoMultiselectFilter {
   }
 
   private parseToMultiselectOption(item: any): PoMultiselectOption {
-    const label = item[this.fieldLabel];
-    const value = item[this.fieldValue];
+    const label = item.label;
+    const value = item.value;
 
     return { label, value };
   }
