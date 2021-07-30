@@ -2018,19 +2018,19 @@ describe('PoDatepickerRangeComponent:', () => {
       end date input has value`, () => {
       // keyCode 8 is backspace
       const keydownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
-      // keyCode 37 is arrow left
-      const keyupBoardEventArrowLeft = new KeyboardEvent('keyup', <any>{ keyCode: 37 });
       spyOn(component.startDateInput.nativeElement, 'focus');
 
+      // set value for start date input
       component.startDateInput.nativeElement.value = '24/1';
+
+      // set value for input end date input
       component.endDateInput.nativeElement.value = '12/02/2003';
+
+      // set focus on end date input
       component.endDateInput.nativeElement.focus();
 
-      // position the cursor after the number 1
-      component.endDateInput.nativeElement.setSelectionRange(1, 1);
-
-      // move the arrow to the left and position the cursor before the number 1
-      component.endDateInput.nativeElement.dispatchEvent(keyupBoardEventArrowLeft);
+      // set cursor position on 0 in end date input
+      component.endDateInput.nativeElement.setSelectionRange(0, 0);
 
       // press the backspace key
       component.endDateInput.nativeElement.dispatchEvent(keydownBoardEventBackspace);
