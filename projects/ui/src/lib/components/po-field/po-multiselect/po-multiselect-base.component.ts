@@ -385,9 +385,9 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
         .pipe(
           debounceTime(this.debounceTime),
           distinctUntilChanged(),
-          // tap(() => this.isServerSearching = true),
-          switchMap((search: string) => this.applyFilter(search))
-          // tap(() => this.isServerSearching = false))
+          tap(() => (this.isServerSearching = true)),
+          switchMap((search: string) => this.applyFilter(search)),
+          tap(() => (this.isServerSearching = false))
         )
         .subscribe();
     }
@@ -491,16 +491,15 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     return null;
   }
 
-  updateSelectedOptions(values: Array<any>, options = this.options) {
+  updateSelectedOptions(newOptions: Array<any>, options = this.options) {
     this.selectedOptions = [];
 
     if (this.filterService) {
-      this.selectedOptions = values;
-      // values.forEach(item => {this.selectedOptions.push(item)});
+      this.selectedOptions = newOptions;
     } else {
-      values.forEach(item => {
+      newOptions.forEach(newOption => {
         options.forEach(option => {
-          if (option.value === item) {
+          if (option.value === newOption.value) {
             this.selectedOptions.push(option);
           }
         });
@@ -513,23 +512,18 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   writeValue(values: any): void {
     values = values || [];
 
-    if (this.filterService && values.length > 0) {
-      if (this.isFirstFilter) {
-        // this.isServerSearching = true;
-        this.applyFilter().subscribe();
-        // this.isFirstFilter = false;
-      }
-
-      this.getObjectsByValuesSubscription = this.filterService
-        .getObjectsByValues(values)
-        .subscribe(data => this.updateSelectedOptions(data));
+    if (this.filterService && values.length) {
+      this.getObjectsByValuesSubscription = this.filterService.getObjectsByValues(values).subscribe(options => {
+        this.updateSelectedOptions(options);
+        this.callOnChange(this.selectedOptions);
+      });
     } else {
       // Validar se todos os items existem entre os options, senão atualizar o model
-      this.updateSelectedOptions(values);
-    }
+      this.updateSelectedOptions(values?.map(value => ({ value })));
 
-    if (this.selectedOptions && this.selectedOptions.length < values.length) {
-      this.callOnChange(this.selectedOptions);
+      if (this.selectedOptions && this.selectedOptions.length < values.length) {
+        this.callOnChange(this.selectedOptions);
+      }
     }
   }
 

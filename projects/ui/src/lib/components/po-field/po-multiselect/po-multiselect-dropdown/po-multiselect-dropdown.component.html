@@ -1,7 +1,7 @@
 <div #container class="po-multiselect-container" [hidden]="!show">
   <po-multiselect-search
     #searchElement
-    *ngIf="!hideSearch && hasOptions"
+    *ngIf="!hideSearch"
     [p-literals]="literals"
     [p-placeholder]="placeholderSearch"
     (p-change)="callChangeSearch($event)"
