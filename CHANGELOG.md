@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.7.0](https://github.com/po-ui/po-angular/compare/v5.6.0...v5.7.0) (2021-08-02)
+
+
+### Features
+
+* **navbar:** adiciona compatibilidade com outras fontes de ícones ([7a152bf](https://github.com/po-ui/po-angular/commit/7a152bf705e84f427e3e2518b8e6d3861c5508c3))
+
+
+
 # [5.6.0](https://github.com/po-ui/po-angular/compare/v5.5.0...v5.6.0) (2021-07-26)
 
 
