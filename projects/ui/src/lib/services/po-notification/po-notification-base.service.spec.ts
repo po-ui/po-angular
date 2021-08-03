@@ -38,6 +38,7 @@ class PoNotificationService extends PoNotificationBaseService {
   }
 
   destroyToaster(toaster: number | ComponentRef<PoToasterBaseComponent>): void {}
+  verifyLimitToaster(): void {}
 }
 
 describe('PoNotificationService ', () => {

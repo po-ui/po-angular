@@ -21,6 +21,8 @@ import { PoToasterType } from './po-toaster/po-toaster-type.enum';
  * Estas notificações serão exibidas durante 10 segundos por padrão, podendo ser alterada conforme necessidade.
  * Após este tempo a mesma é removida automaticamente.
  *
+ * O serviço possui um limite de até 5 notificações por vez, a partir do sexto a primeira notificação será removida dando lugar a nova.
+ *
  */
 export abstract class PoNotificationBaseService {
   // Array responsável por guardar a instância de po-toaster's superiores.
