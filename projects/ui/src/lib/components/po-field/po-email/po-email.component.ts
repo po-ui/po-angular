@@ -55,7 +55,27 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
 
   type = 'email';
 
-  pattern = '^([\\w-]+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([A-Za-z]{2,6}(?:\\.[A-Za-z]{2})?)$';
+  // Consideramos o uso do nosso pattern com a seguinte expressão.
+  // Antes do símbolo @:
+  // - não há limite de caracteres.
+  // - não pode haver espaços em branco, caracteres acentuados, caracteres especiais ou símbolos.
+  // - pode começar com letras, números, hífen ou undescore (underline).
+  //
+  // Depois do símbolo @:
+  // - o domínio tem um limite de até 66 caracteres após um separador.
+  // - separador deve ser um 'ponto' (.).
+  // - o primeiro bloco pode conter letras, números, hífen ou underscore (underline).
+  // - após o primeiro separador é permitido apenas letras.
+  // - não pode haver espaços em branco, caracteres acentuados, caracteres especiais ou símbolos.
+  //
+  // Limite total de 254 caracteres para o e-mail.
+  //
+  // As recomendações foram consultadas nas RFC 1034, RFC 5321 e RFC 5322.
+  //
+  // RFC 1034 - https://datatracker.ietf.org/doc/html/rfc1034#section-3
+  // RFC 5321 - https://datatracker.ietf.org/doc/html/rfc5321#section-4.5.3.1
+  // RFC 5322 - https://datatracker.ietf.org/doc/html/rfc5322#section-3.4
+  pattern = '^([\\w-]+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([A-Za-z]{2,66}(?:\\.[A-Za-z]{2})?)$';
 
   mask = '';
 
