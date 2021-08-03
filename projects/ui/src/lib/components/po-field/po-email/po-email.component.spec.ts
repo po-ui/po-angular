@@ -162,6 +162,7 @@ describe('PoEmailComponent:', () => {
     it(`should return null on validate if email is valid`, () => {
       expect(component.validate(new FormControl('JOHN@EMAIL.COM'))).toBe(null);
       expect(component.validate(new FormControl('JOHN@email.com'))).toBe(null);
+      expect(component.validate(new FormControl('JOHN@EMAIL.EMAILEXTENSION'))).toBe(null);
     });
 
     it(`should return '{ pattern: { valid: false } }' on validate if email is invalid`, () => {
@@ -170,6 +171,11 @@ describe('PoEmailComponent:', () => {
       expect(component.validate(new FormControl('JOHN@'))).toEqual(patternError);
       expect(component.validate(new FormControl('JOHN@EMAIL.'))).toEqual(patternError);
       expect(component.validate(new FormControl('JOHN'))).toEqual(patternError);
+      expect(
+        component.validate(
+          new FormControl('JOHN@EMAIL.EMAILEXTENSIONWITHMORETHANSIXTYSIXCHARACTERSBECAUSEWENEEDANERRORCONDITION')
+        )
+      ).toEqual(patternError);
     });
   });
 });
