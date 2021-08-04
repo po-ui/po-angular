@@ -49,13 +49,13 @@ describe('PoMultiselectDropdownComponent:', () => {
   });
 
   it('should return true in isSelectedItem', () => {
-    component.selectedValues = [1, 2];
+    component.selectedOptions = [{ value: 1 }, { value: 2 }];
     const selected = component.isSelectedItem({ label: 'label1', value: 1 });
     expect(selected).toBeTruthy();
   });
 
   it('should return false in isSelectedItem', () => {
-    component.selectedValues = [1, 2];
+    component.selectedOptions = [1, 2];
     const selected = component.isSelectedItem({ label: 'label3', value: 3 });
     expect(selected).toBeFalsy();
   });
@@ -78,21 +78,21 @@ describe('PoMultiselectDropdownComponent:', () => {
     expect(component.searchElement.setFocus).not.toHaveBeenCalled();
   });
 
-  it('should add value to selectedValues and emit change', () => {
-    component['selectedValues'] = [];
+  it('should add value to selectedOptions and emit change', () => {
+    component['selectedOptions'] = [];
 
     spyOn(component.change, 'emit');
     component.updateSelectedValues(true, { label: 'label1', value: 1 });
-    expect(component['selectedValues'].length).toBe(1);
+    expect(component['selectedOptions'].length).toBe(1);
     expect(component.change.emit).toHaveBeenCalled();
   });
 
-  it('should remove value to selectedValues and emit change', () => {
-    component['selectedValues'] = [1];
+  it('should remove value to selectedOptions and emit change', () => {
+    component['selectedOptions'] = [{ value: 1 }];
 
     spyOn(component.change, 'emit');
     component.updateSelectedValues(false, { label: 'label1', value: 1 });
-    expect(component['selectedValues'].length).toBe(0);
+    expect(component['selectedOptions'].length).toBe(0);
     expect(component.change.emit).toHaveBeenCalled();
   });
 
@@ -241,7 +241,7 @@ describe('PoMultiselectDropdownComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toBe(null);
+      expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toEqual(null);
     });
   });
 });

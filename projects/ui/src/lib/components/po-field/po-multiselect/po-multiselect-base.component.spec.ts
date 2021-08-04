@@ -9,11 +9,17 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
+import { Observable } from 'rxjs';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 @Directive()
 class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   constructor() {
     super(new PoLanguageService());
+  }
+
+  applyFilter(value?: string): Observable<Array<PoMultiselectOption>> {
+    throw new Error('Method not implemented.');
   }
 
   updateVisibleItems() {}
@@ -336,7 +342,7 @@ describe('PoMultiselectBaseComponent:', () => {
     ];
 
     spyOn(component, 'updateVisibleItems');
-    component.updateSelectedOptions([1, 3]);
+    component.updateSelectedOptions([{ value: 1 }, { value: 3 }]);
     expect(component.updateVisibleItems).toHaveBeenCalled();
     expect(component.selectedOptions.length).toBe(1);
   });
@@ -353,7 +359,7 @@ describe('PoMultiselectBaseComponent:', () => {
 
     component.writeValue([2, 3]);
 
-    expect(component.updateSelectedOptions).toHaveBeenCalledWith([2, 3]);
+    expect(component.updateSelectedOptions).toHaveBeenCalledWith([{ value: 2 }, { value: 3 }]);
     expect(component.callOnChange).toHaveBeenCalledWith([{ value: 2, label: '2' }]);
   });
 
