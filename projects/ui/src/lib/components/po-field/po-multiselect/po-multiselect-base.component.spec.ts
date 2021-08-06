@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
+import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty } from '../../../utils/util';
 import * as UtilsFunctions from '../../../utils/util';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -9,9 +9,19 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { PoMultiselectFilter } from './po-multiselect-filter.interface';
+import { fakeAsync, tick } from '@angular/core/testing';
 
+const poMultiselectFilterServiceStub: PoMultiselectFilter = {
+  getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
+    return of([{ label: '', value: '' }]);
+  },
+  getObjectsByValues: function (values: Array<string | number>): Observable<Array<PoMultiselectOption>> {
+    return of([{ label: '', value: '' }]);
+  }
+};
 @Directive()
 class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   constructor() {
@@ -19,14 +29,17 @@ class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   }
 
   applyFilter(value?: string): Observable<Array<PoMultiselectOption>> {
-    throw new Error('Method not implemented.');
+    return of([{ value: 123, label: 'teste' }]);
   }
 
   updateVisibleItems() {}
 }
 
 describe('PoMultiselectBaseComponent:', () => {
-  const component = new PoMultiselectTestComponent();
+  let component;
+  beforeEach(() => {
+    component = new PoMultiselectTestComponent();
+  });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
@@ -125,6 +138,17 @@ describe('PoMultiselectBaseComponent:', () => {
     spyOn(component, 'updateList');
     component.options = [];
     component.ngOnInit();
+    expect(component.updateList).toHaveBeenCalledWith([]);
+  });
+
+  it('should call updateList in OnInit if has filterService', () => {
+    component.filterService = poMultiselectFilterServiceStub;
+    spyOn(component, 'updateList');
+    spyOn(component.filterSubject, 'subscribe');
+
+    component.options = [];
+    component.ngOnInit();
+    expect(component.filterSubject.subscribe).toHaveBeenCalled();
     expect(component.updateList).toHaveBeenCalledWith([]);
   });
 
@@ -426,10 +450,43 @@ describe('PoMultiselectBaseComponent:', () => {
     it('writeValue: should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
       spyOn(component, 'updateSelectedOptions');
 
-      component.writeValue(null);
+      component.writeValue(undefined);
 
       expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
     });
+
+    it('writeValue: BRUNO should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
+      spyOn(component, 'updateSelectedOptions');
+      component.filterService = poMultiselectFilterServiceStub;
+
+      const values = [{ label: '', value: '' }];
+
+      component.writeValue(values);
+
+      expect(component.updateSelectedOptions).toHaveBeenCalledWith(values);
+    });
+
+    xit('writeValue: BRUNO 2 should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
+      spyOn(component, 'updateSelectedOptions');
+
+      const values = ['teste'];
+
+      component.writeValue(values);
+
+      expect(component.updateSelectedOptions).toHaveBeenCalledWith({ value: 'teste' });
+    });
+
+    it('applyFilters: should be called', fakeAsync(() => {
+      component.filterService = poMultiselectFilterServiceStub;
+      component.debounceTime = 50;
+      component.options = [];
+      const value = 'abc';
+      component.ngOnInit();
+      spyOn(component, 'applyFilter').and.returnValue(of([]));
+      component.filterSubject.next(value);
+      tick(50);
+      expect(component.applyFilter).toHaveBeenCalledWith(value);
+    }));
   });
 
   describe('Properties:', () => {
@@ -492,6 +549,18 @@ describe('PoMultiselectBaseComponent:', () => {
       component['language'] = poLocaleDefault;
 
       expectPropertiesValues(component, 'literals', invalidValues, poMultiselectLiteralsDefault[poLocaleDefault]);
+    });
+
+    it('p-debounce-time: should not be defined', () => {
+      component.debounceTime = 0;
+
+      expect(component.debounceTime).toBe(400);
+    });
+
+    it('p-debounce-time: should set value and be defined', () => {
+      component.debounceTime = 600;
+
+      expect(component.debounceTime).toBe(600);
     });
   });
 });
