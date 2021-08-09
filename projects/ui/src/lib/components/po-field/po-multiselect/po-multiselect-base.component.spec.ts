@@ -35,7 +35,7 @@ class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   updateVisibleItems() {}
 }
 
-describe('PoMultiselectBaseComponent:', () => {
+fdescribe('PoMultiselectBaseComponent:', () => {
   let component;
   beforeEach(() => {
     component = new PoMultiselectTestComponent();
@@ -466,7 +466,7 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.updateSelectedOptions).toHaveBeenCalledWith(values);
     });
 
-    xit('writeValue: BRUNO 2 should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
+    it('writeValue: BRUNO 2 should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
       spyOn(component, 'updateSelectedOptions');
 
       const values = ['teste'];

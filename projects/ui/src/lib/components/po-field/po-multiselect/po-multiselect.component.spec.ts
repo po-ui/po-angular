@@ -17,7 +17,7 @@ import { Observable, of } from 'rxjs';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
-    return of([{ label: '', value: '' }]);
+    return of([{ label: params.property, value: params.value }]);
   },
   getObjectsByValues: function (values: Array<string | number>): Observable<Array<PoMultiselectOption>> {
     return of([{ label: '', value: '' }]);
@@ -647,7 +647,7 @@ describe('PoMultiselectComponent:', () => {
       component.changeSearch(event);
 
       flush();
-      expect(component['filterSubject'].next).toHaveBeenCalledWith(1);
+      expect(component['filterSubject'].next).toHaveBeenCalledWith(event.value);
     }));
 
     it(`changeSearch: should call 'setVisibleOptionsDropdown' with 'options' if 'event.value' is 'invalid'
@@ -825,9 +825,12 @@ describe('PoMultiselectComponent:', () => {
     xit('applyFilter: should be called', () => {
       component.filterService = poMultiselectFilterServiceStub;
       spyOn(component.filterService, 'getFilteredData').and.throwError('Error');
-      component.applyFilter('abc');
-
-      expect(component.filterService.getFilteredData).toHaveBeenCalled();
+      spyOn(component, <any>'setOptionsByApplyFilter');
+      const value = '';
+      component.applyFilter(value);
+      const param = { property: 'label', value };
+      expect(component.filterService.getFilteredData).toHaveBeenCalledWith(param);
+      expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
     });
 
     it('setOptionsByApplyFilter: should be called by first time', () => {
