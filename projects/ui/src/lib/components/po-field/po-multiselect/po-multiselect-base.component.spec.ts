@@ -35,7 +35,7 @@ class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   updateVisibleItems() {}
 }
 
-fdescribe('PoMultiselectBaseComponent:', () => {
+describe('PoMultiselectBaseComponent:', () => {
   let component;
   beforeEach(() => {
     component = new PoMultiselectTestComponent();
