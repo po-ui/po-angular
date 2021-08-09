@@ -466,14 +466,14 @@ fdescribe('PoMultiselectBaseComponent:', () => {
       expect(component.updateSelectedOptions).toHaveBeenCalledWith(values);
     });
 
-    it('writeValue: BRUNO 2 should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
+    it('writeValue: should call `updateSelectedOptions` with value if model value is `valid`.', () => {
       spyOn(component, 'updateSelectedOptions');
 
       const values = ['teste'];
 
       component.writeValue(values);
 
-      expect(component.updateSelectedOptions).toHaveBeenCalledWith({ value: 'teste' });
+      expect(component.updateSelectedOptions).toHaveBeenCalledWith([{ value: 'teste' }]);
     });
 
     it('applyFilters: should be called', fakeAsync(() => {
