@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.8.0](https://github.com/po-ui/po-angular/compare/v5.7.0...v5.8.0) (2021-08-09)
+
+
+### Bug Fixes
+
+* **email:** corrige o limite de caracteres ([b32dfee](https://github.com/po-ui/po-angular/commit/b32dfee62ce0eb463ff0adb21c59b59c50f1f841))
+
+
+### Features
+
+* **table:** aumenta o tamanho do ícone de ações ([42b6b7a](https://github.com/po-ui/po-style/commit/42b6b7a51e984a7e06713b960a8a21bbf6bfb57f))
+
+
 # [5.7.0](https://github.com/po-ui/po-angular/compare/v5.6.0...v5.7.0) (2021-08-02)
 
 
