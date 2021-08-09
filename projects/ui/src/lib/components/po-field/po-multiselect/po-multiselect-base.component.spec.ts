@@ -455,7 +455,7 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
     });
 
-    it('writeValue: BRUNO should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
+    it('writeValue: should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
       spyOn(component, 'updateSelectedOptions');
       component.filterService = poMultiselectFilterServiceStub;
 
@@ -487,6 +487,26 @@ describe('PoMultiselectBaseComponent:', () => {
       tick(50);
       expect(component.applyFilter).toHaveBeenCalledWith(value);
     }));
+
+    it('updateSelectedOptions: should be called with params and `service` and set `selectedOptions`', () => {
+      spyOn(component, 'updateVisibleItems');
+      const params = [1, 2, 3];
+      component.options = [];
+      component.filterService = poMultiselectFilterServiceStub;
+      component['updateSelectedOptions'](params);
+      expect(component.selectedOptions).toEqual([1, 2, 3]);
+      expect(component.updateVisibleItems).toHaveBeenCalledWith();
+    });
+
+    it('updateSelectedOptions: should be called with params, options and `service` and set `selectedOptions`', () => {
+      spyOn(component, 'updateVisibleItems');
+      const params = [1, 2, 3];
+      const options = [];
+      component.filterService = poMultiselectFilterServiceStub;
+      component['updateSelectedOptions'](params, options);
+      expect(component.selectedOptions).toEqual([1, 2, 3]);
+      expect(component.updateVisibleItems).toHaveBeenCalledWith();
+    });
   });
 
   describe('Properties:', () => {
