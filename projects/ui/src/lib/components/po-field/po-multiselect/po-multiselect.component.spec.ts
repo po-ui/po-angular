@@ -24,7 +24,7 @@ const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   }
 };
 
-describe('PoMultiselectComponent:', () => {
+fdescribe('PoMultiselectComponent:', () => {
   let component: PoMultiselectComponent;
   let fixture: ComponentFixture<PoMultiselectComponent>;
 
@@ -650,6 +650,17 @@ describe('PoMultiselectComponent:', () => {
       expect(component['filterSubject'].next).toHaveBeenCalledWith(event.value);
     }));
 
+    it('changeSearch: JHONY', () => {
+      const event = { value: 'abc' };
+      component.filterService = <any>{}; // ou new ServiceStub();
+
+      spyOn(component.filterSubject, 'next');
+
+      component.changeSearch(event);
+
+      expect(component.filterSubject.next).toHaveBeenCalledWith(event.value);
+    });
+
     it(`changeSearch: should call 'setVisibleOptionsDropdown' with 'options' if 'event.value' is 'invalid'
       and call 'adjustContainerPosition'.`, fakeAsync(() => {
       const event = {};
@@ -822,16 +833,18 @@ describe('PoMultiselectComponent:', () => {
       expect(spyAdjustContainerPosition).toHaveBeenCalled();
     });
 
-    xit('applyFilter: should be called', () => {
-      component.filterService = poMultiselectFilterServiceStub;
-      spyOn(component.filterService, 'getFilteredData').and.throwError('Error');
+    it('applyFilter: should be called', fakeAsync(() => {
+      component.filterService = <any>{
+        getFilteredData() {}
+      }; // ou new ServiceStub();
       spyOn(component, <any>'setOptionsByApplyFilter');
+      const teste = spyOn(component.filterService, <any>'getFilteredData').and.throwError('Error');
       const value = '';
       component.applyFilter(value);
       const param = { property: 'label', value };
-      expect(component.filterService.getFilteredData).toHaveBeenCalledWith(param);
+      expect(teste).toHaveBeenCalledWith(param);
       expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
-    });
+    }));
 
     it('setOptionsByApplyFilter: should be called by first time', () => {
       const items = [{ label: '123', value: 1 }];
