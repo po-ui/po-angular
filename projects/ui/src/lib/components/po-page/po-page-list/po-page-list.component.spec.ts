@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, SimpleChange } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -205,6 +205,25 @@ describe('PoPageListComponent - Desktop:', () => {
     expect(component.dropdownActions.length).toBe(2);
   });
 
+  it('should limit primary changed to range [2..10] actions when screen width is desktop', () => {
+    expect(component.isMobile).toBeFalsy();
+
+    component.maxVisibleActionButtons = 1;
+    component.ngOnChanges({ prop1: new SimpleChange('', '', false) });
+    expect(component.limitPrimaryActions).toBe(2);
+    expect(component.dropdownActions.length).toBe(3);
+
+    component.maxVisibleActionButtons = 4;
+    component.ngOnChanges({ prop1: new SimpleChange('', '', false) });
+    expect(component.limitPrimaryActions).toBe(4);
+    expect(component.dropdownActions.length).toBe(0);
+
+    component.maxVisibleActionButtons = 11;
+    component.ngOnChanges({ prop1: new SimpleChange('', '', false) });
+    expect(component.limitPrimaryActions).toBe(10);
+    expect(component.dropdownActions.length).toBe(0);
+  });
+
   it('should be call method of parent passsing function', fakeAsync(() => {
     const element = desktopFixture.debugElement.nativeElement;
     const poButton = element.querySelectorAll('po-button > button')[0];
@@ -368,19 +387,20 @@ describe('PoPageListComponent - Desktop:', () => {
       expect(nativeElement.querySelector('po-disclaimer-group')).toBeTruthy();
     });
 
-    it('actionIsDisabled: should disable page button with boolean value', () => {
-      component.actions[0] = { label: 'First Action', disabled: true };
-      component.actions[1] = { label: 'Second Action', disabled: true };
+    it('actionisdisabled: should disable page button with boolean value', () => {
+      component.visibleActions[0] = { label: 'first action', disabled: true };
+      component.visibleActions[1] = { label: 'second action', disabled: true };
 
       fixture.detectChanges();
 
       const buttons = nativeElement.querySelectorAll('.po-button:disabled');
+
       expect(buttons.length).toBe(2);
     });
 
     it('actionIsDisabled: should disable page button with function value', () => {
-      component.actions[0] = { label: 'First Action', disabled: () => true };
-      component.actions[1] = { label: 'Second Action', disabled: () => true };
+      component.visibleActions[0] = { label: 'first action', disabled: () => true };
+      component.visibleActions[1] = { label: 'second action', disabled: () => true };
 
       fixture.detectChanges();
 
@@ -449,16 +469,37 @@ describe('PoPageListComponent - Desktop:', () => {
       expect(nativeElement.querySelector('.po-page-list-actions-padding')).toBeTruthy();
     });
 
-    it('should show only one icon in button actions.', () => {
-      component.actions[0].icon = 'po-icon-news';
-      component.actions[1].icon = 'po-icon-news';
-      component.actions[2].icon = 'po-icon-news';
+    it('should show only one icon in visible button actions.', () => {
+      component.visibleActions[0].icon = 'po-icon-news';
 
       fixture.detectChanges();
 
       const icons = nativeElement.querySelectorAll('.po-icon-news');
 
       expect(icons.length).toBe(1);
+    });
+
+    it('should show two icons in visible buttons actions.', () => {
+      component.visibleActions[0].icon = 'po-icon-news';
+      component.visibleActions[1].icon = 'po-icon-news';
+
+      fixture.detectChanges();
+
+      const icons = nativeElement.querySelectorAll('.po-icon-news');
+
+      expect(icons.length).toBe(2);
+    });
+
+    it('should show only two icons in visible buttons actions.', () => {
+      component.visibleActions[0].icon = 'po-icon-news';
+      component.visibleActions[1].icon = 'po-icon-news';
+      component.visibleActions[2].icon = 'po-icon-news';
+
+      fixture.detectChanges();
+
+      const icons = nativeElement.querySelectorAll('.po-icon-news');
+
+      expect(icons.length).toBe(2);
     });
 
     it('should show `filter.placeholder` value if has `filter.placeholder`.', () => {

@@ -141,5 +141,15 @@ describe('PoPageListBaseComponent:', () => {
 
       expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
     }));
+
+    it('p-maxVisibleActionButtons: should be in the range [2..10]', () => {
+      expect(component.maxVisibleActionButtons).toBe(3);
+
+      component.maxVisibleActionButtons = 1;
+      expect(component.maxVisibleActionButtons).toBe(2);
+
+      component.maxVisibleActionButtons = 11;
+      expect(component.maxVisibleActionButtons).toBe(10);
+    });
   });
 });

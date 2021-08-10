@@ -67,6 +67,8 @@ export abstract class PoPageListBaseComponent {
   private _disclaimerGroup?: PoDisclaimerGroup;
   private _literals: PoPageListLiterals;
   private _title: string;
+  private _maxVisibleActionButtons: number = 3;
+  private _limitPrimaryActions: number = 3;
 
   /**
    * @optional
@@ -161,6 +163,31 @@ export abstract class PoPageListBaseComponent {
 
   get title() {
     return this._title;
+  }
+
+  /**
+   * @optional
+   * @default 3
+   * @description
+   *
+   * Máximo de botões das ações que são visíveis
+   */
+  @Input('p-max-visible-action-buttons') set maxVisibleActionButtons(maxVisibleActionButtons: number) {
+    this._maxVisibleActionButtons =
+      maxVisibleActionButtons > 10 ? 10 : maxVisibleActionButtons < 2 ? 2 : maxVisibleActionButtons;
+    this._limitPrimaryActions = this._maxVisibleActionButtons;
+  }
+
+  get maxVisibleActionButtons() {
+    return this._maxVisibleActionButtons;
+  }
+
+  get limitPrimaryActions() {
+    return this._limitPrimaryActions;
+  }
+
+  set limitPrimaryActions(value: number) {
+    this._limitPrimaryActions = value;
   }
 
   constructor(languageService: PoLanguageService) {
