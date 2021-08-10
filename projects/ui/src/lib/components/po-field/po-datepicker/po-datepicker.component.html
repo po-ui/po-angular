@@ -31,13 +31,15 @@
   </div>
 
   <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()">
+    <div *ngIf="verifyMobile()" class="po-datepicker-calendar-overlay"></div>
     <po-calendar
+      [class.po-datepicker-calendar-mobile]="verifyMobile()"
       #calendar
-      [p-date-end]="maxDate"
-      [p-date-start]="minDate"
+      [(ngModel)]="date"
+      [p-max-date]="maxDate"
+      [p-min-date]="minDate"
       [p-locale]="locale"
-      [(p-selected-date)]="date"
-      (p-submit)="dateSelected()"
+      (p-change)="dateSelected()"
     >
     </po-calendar>
   </div>

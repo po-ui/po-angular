@@ -1,21 +1,17 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import * as UtilsFunctions from '../../../utils/util';
 import { formatYear, setYearFrom0To100 } from '../../../utils/util';
 
-import { PoCalendarLangService } from './po-calendar/po-calendar.lang.service';
-import { PoCalendarService } from './po-calendar/po-calendar.service';
+import { PoCalendarService } from '../../po-calendar/services/po-calendar.service';
+import { PoCalendarLangService } from '../../po-calendar/services/po-calendar.lang.service';
+import { PoCalendarModule } from '../../po-calendar/po-calendar.module';
 
-import { PoCalendarComponent } from './po-calendar/po-calendar.component';
-import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { PoDatepickerComponent } from './po-datepicker.component';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
-import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
-import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 
 import { PoDatepickerModule } from './po-datepicker.module';
 
@@ -32,7 +28,7 @@ describe('PoDatepickerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoDatepickerModule],
+      imports: [PoDatepickerModule, PoCalendarModule],
       providers: [PoCalendarService, PoCalendarLangService]
     });
   });
@@ -63,21 +59,6 @@ describe('PoDatepickerComponent:', () => {
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
   });
 
-  it('should open and close the datepicker', () => {
-    const btnCalendar = fixture.debugElement.nativeElement.querySelector('.po-icon-calendar');
-    const evt = document.createEvent('HTMLEvents');
-
-    evt.initEvent('click', false, true);
-    btnCalendar.dispatchEvent(evt);
-    fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.querySelector('.po-invisible')).not.toBeNull();
-
-    evt.initEvent('click', false, true);
-    btnCalendar.dispatchEvent(evt);
-    fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.querySelector('.po-invisible')).not.toBeNull();
-  });
-
   it('should be valid form', () => {
     expect(component.hasInvalidClass()).toBe(false);
   });
@@ -91,14 +72,6 @@ describe('PoDatepickerComponent:', () => {
     const date = new Date(2017, 5, 5);
     const formatted = component.formatToDate(date);
     expect(formatted).toBe('05/06/2017');
-  });
-
-  it('should close the picker when selected a date', () => {
-    // Mostra o datepicker
-    component.dialogPicker.nativeElement.classList.remove('po-invisible');
-    component.dateSelected();
-    fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.querySelector('.po-invisible')).not.toBeNull();
   });
 
   it('blocking typing in keyup event', () => {
@@ -197,7 +170,7 @@ describe('PoDatepickerComponent:', () => {
 
   it('check if element has overlay class ', () => {
     const datepicker = fixture.nativeElement.querySelector('.po-input');
-    datepicker.classList.add('po-calendar-overlay');
+    datepicker.classList.add('po-datepicker-calendar-overlay');
 
     expect(component.hasOverlayClass(datepicker)).toBeTruthy();
   });
@@ -457,26 +430,6 @@ describe('PoDatepickerComponent:', () => {
     expect(component.onblur.emit).toHaveBeenCalled();
   });
 
-  it('Block calendar opening with disable property', () => {
-    let dialogPickerDiv = component.dialogPicker.nativeElement.querySelector('.po-invisible');
-    component.disabled = true;
-    expect(dialogPickerDiv).not.toBeNull();
-    component.togglePicker();
-
-    dialogPickerDiv = component.dialogPicker.nativeElement.querySelector('.po-invisible');
-    expect(dialogPickerDiv).not.toBeNull();
-  });
-
-  it('Block calendar opening with readonly property', () => {
-    let dialogPickerDiv = component.dialogPicker.nativeElement.querySelector('.po-invisible');
-    component.readonly = true;
-    expect(dialogPickerDiv).not.toBeNull();
-    component.togglePicker();
-
-    dialogPickerDiv = component.dialogPicker.nativeElement.querySelector('.po-invisible');
-    expect(dialogPickerDiv).not.toBeNull();
-  });
-
   it('should get error pattern with no error pattern', () => {
     const fakeThis = {
       errorPattern: '',
@@ -572,7 +525,7 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('addListener: should call wasClickedOnPicker when click in document', () => {
-      component.calendar.visible = false;
+      component.visible = false;
       component.togglePicker();
       const documentBody = document.body;
       const event = document.createEvent('MouseEvents');
@@ -602,44 +555,23 @@ describe('PoDatepickerComponent:', () => {
       expect(component['formatToDate']).toHaveBeenCalledWith(dateMock);
     });
 
-    it('togglePicker: should return when component is disable', () => {
-      const input = fixture.debugElement.nativeElement.querySelector('input');
-      input.value = '01/01/2018';
+    it('togglePicker: should keep the component invisible when `disabled` and `readonly` is true', () => {
       component.disabled = true;
-
-      spyOn(component.calendar, <any>'init');
+      component.readonly = true;
 
       component.togglePicker();
 
-      expect(component.calendar['init']).not.toHaveBeenCalled();
+      expect(component.visible).toBeFalse();
     });
 
-    it('togglePicker: should call `init`, `setCalendarPosition` and `initializeListeners` when calendar is not visible.', () => {
+    it('togglePicker: should call `closeCalendar` when `disabled`, `readonly` is false and `visible` is true', () => {
       component.disabled = false;
       component.readonly = false;
-      component.calendar.visible = false;
+      component.visible = true;
 
-      const init = spyOn(component.calendar, <any>'init');
-      const setCalendarPosition = spyOn(component, <any>'setCalendarPosition');
-      const initializeListeners = spyOn(component, <any>'initializeListeners');
-      component.togglePicker();
-
-      expect(init).toHaveBeenCalled();
-      expect(setCalendarPosition).toHaveBeenCalled();
-      expect(initializeListeners).toHaveBeenCalled();
-    });
-
-    it('togglePicker: should set `calendar.visible` to false and not call `init` when calendar is visible', () => {
-      component.disabled = false;
-      component.readonly = false;
-      component.calendar.visible = true;
-
-      spyOn(component.calendar, <any>'init');
       spyOn(component, <any>'closeCalendar');
-
       component.togglePicker();
 
-      expect(component.calendar['init']).not.toHaveBeenCalled();
       expect(component['closeCalendar']).toHaveBeenCalled();
     });
 
@@ -744,7 +676,7 @@ describe('PoDatepickerComponent:', () => {
 
     describe('dateSelected:', () => {
       it('should set `calendar.visible` to false', () => {
-        component.calendar.visible = true;
+        component.visible = true;
 
         spyOn(component, <any>'closeCalendar');
 
@@ -937,16 +869,6 @@ describe('PoDatepickerComponent:', () => {
       expect(component['hasAttrCalendar'](fakeElement)).toBeFalsy();
     });
 
-    it('closeCalendar: should call `calendar.close` and `removeListeners`', () => {
-      const close = spyOn(component.calendar, 'close');
-      const removeListeners = spyOn(component, <any>'removeListeners');
-
-      component['closeCalendar']();
-
-      expect(close).toHaveBeenCalled();
-      expect(removeListeners).toHaveBeenCalled();
-    });
-
     it(`controlChangeEmitter: should update 'valueBeforeChange', call 'formatToDate' and emit value if 'valueBeforeChange'
       is different of date model formatted`, fakeAsync(() => {
       const value = '30/08/2018';
@@ -1054,18 +976,6 @@ describe('PoDatepickerComponent:', () => {
         false,
         true
       );
-    });
-
-    it('closeCalendar: should call `close`, `removeListeners` and `setDialogPickerStyleDisplay`.', () => {
-      const close = spyOn(component.calendar, 'close');
-      const removeListeners = spyOn(component, <any>'removeListeners');
-      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
-
-      component['closeCalendar']();
-
-      expect(close).toHaveBeenCalled();
-      expect(removeListeners).toHaveBeenCalled();
-      expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
     });
 
     it('onScroll: should call `controlPosition.adjustPosition()`.', () => {
