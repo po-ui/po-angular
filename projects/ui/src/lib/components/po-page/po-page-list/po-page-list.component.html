@@ -12,28 +12,67 @@
         <po-button
           *ngIf="visibleActions[0]"
           p-type="primary"
-          [p-disabled]="actionIsDisabled(actions[0])"
+          [p-disabled]="actionIsDisabled(visibleActions[0])"
           [p-icon]="visibleActions[0].icon"
           [p-label]="visibleActions[0].label"
           (p-click)="callAction(visibleActions[0])"
-        >
-        </po-button>
-
+        ></po-button>
         <po-button
-          *ngIf="visibleActions[1] && (visibleActions.length === 2 || !isMobile)"
-          [p-disabled]="actionIsDisabled(actions[1])"
+          *ngIf="isVisibleButton(1)"
+          [p-disabled]="actionIsDisabled(visibleActions[1])"
+          [p-icon]="visibleActions[1].icon"
           [p-label]="visibleActions[1].label"
           (p-click)="callAction(visibleActions[1])"
-        >
-        </po-button>
-
+        ></po-button>
         <po-button
-          *ngIf="visibleActions.length === 3 && visibleActions[2] && !isMobile"
+          *ngIf="isVisibleButton(2)"
           [p-disabled]="actionIsDisabled(visibleActions[2])"
+          [p-icon]="visibleActions[2].icon"
           [p-label]="visibleActions[2].label"
           (p-click)="callAction(visibleActions[2])"
-        >
-        </po-button>
+        ></po-button>
+        <po-button
+          *ngIf="isVisibleButton(3)"
+          [p-disabled]="actionIsDisabled(visibleActions[3])"
+          [p-label]="visibleActions[3].label"
+          (p-click)="callAction(visibleActions[3])"
+        ></po-button>
+        <po-button
+          *ngIf="isVisibleButton(4)"
+          [p-disabled]="actionIsDisabled(visibleActions[4])"
+          [p-label]="visibleActions[4].label"
+          (p-click)="callAction(visibleActions[4])"
+        ></po-button>
+        <po-button
+          *ngIf="isVisibleButton(5)"
+          [p-disabled]="actionIsDisabled(visibleActions[5])"
+          [p-label]="visibleActions[5].label"
+          (p-click)="callAction(visibleActions[5])"
+        ></po-button>
+        <po-button
+          *ngIf="isVisibleButton(6)"
+          [p-disabled]="actionIsDisabled(visibleActions[6])"
+          [p-label]="visibleActions[6].label"
+          (p-click)="callAction(visibleActions[6])"
+        ></po-button>
+        <po-button
+          *ngIf="isVisibleButton(7)"
+          [p-disabled]="actionIsDisabled(visibleActions[7])"
+          [p-label]="visibleActions[7].label"
+          (p-click)="callAction(visibleActions[7])"
+        ></po-button>
+        <po-button
+          *ngIf="isVisibleButton(8)"
+          [p-disabled]="actionIsDisabled(visibleActions[8])"
+          [p-label]="visibleActions[8].label"
+          (p-click)="callAction(visibleActions[8])"
+        ></po-button>
+        <po-button
+          *ngIf="isVisibleButton(9)"
+          [p-disabled]="actionIsDisabled(visibleActions[9])"
+          [p-label]="visibleActions[9].label"
+          (p-click)="callAction(visibleActions[9])"
+        ></po-button>
 
         <po-dropdown
           *ngIf="visibleActions.length > limitPrimaryActions"

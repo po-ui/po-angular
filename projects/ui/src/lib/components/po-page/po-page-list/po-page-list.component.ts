@@ -57,7 +57,6 @@ export class PoPageListComponent
   advancedSearch: string;
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
-  limitPrimaryActions: number = 3;
 
   callFunction = callFunction;
 
@@ -78,6 +77,7 @@ export class PoPageListComponent
 
   ngOnInit(): void {
     this.advancedSearch = this.initializeFixedLiterals();
+    this.limitPrimaryActions = this.maxVisibleActionButtons;
   }
 
   ngAfterContentInit(): void {
@@ -86,6 +86,7 @@ export class PoPageListComponent
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    this.limitPrimaryActions = this.maxVisibleActionButtons;
     this.setDropdownActions();
   }
 
@@ -132,13 +133,24 @@ export class PoPageListComponent
   setDropdownActions(): void {
     if (this.visibleActions.length > this.limitPrimaryActions) {
       this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
+    } else {
+      this.dropdownActions = [];
     }
+  }
+
+  isVisibleButton(column: number): boolean {
+    return (
+      !this.isMobile &&
+      (this.visibleActions.length <= this.limitPrimaryActions || column + 1 < this.limitPrimaryActions) &&
+      !!this.visibleActions[column]
+    );
   }
 
   callActionFilter(field: string) {
     this.filter[field](this.filterInput.nativeElement.value);
     this.changeDetector.detectChanges();
   }
+
   /**
    * Limpa o campo de pesquisa.
    */
@@ -217,7 +229,7 @@ export class PoPageListComponent
       this.setDropdownActions();
     } else {
       this.isMobile = false;
-      this.limitPrimaryActions = 3;
+      this.limitPrimaryActions = this.maxVisibleActionButtons;
       this.setDropdownActions();
     }
   }
