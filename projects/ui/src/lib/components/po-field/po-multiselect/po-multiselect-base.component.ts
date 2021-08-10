@@ -516,7 +516,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       });
     } else {
       // Validar se todos os items existem entre os options, senão atualizar o model
-      this.updateSelectedOptions(values?.map(value => ({ value })));
+      this.updateSelectedOptions(values.map(value => ({ value })));
 
       if (this.selectedOptions && this.selectedOptions.length < values.length) {
         this.callOnChange(this.selectedOptions);

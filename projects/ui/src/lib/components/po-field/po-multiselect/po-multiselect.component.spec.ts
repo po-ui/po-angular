@@ -13,7 +13,7 @@ import { PoMultiselectItemComponent } from './po-multiselect-item/po-multiselect
 import { PoMultiselectSearchComponent } from './po-multiselect-search/po-multiselect-search.component';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
@@ -592,6 +592,28 @@ fdescribe('PoMultiselectComponent:', () => {
       expect(fakeThis['isCalculateVisibleItems']).toBeTruthy();
     });
 
+    it('updateVisibleItems: should call `debounceResize`, do not set `visibleDisclaimers` and set `isCalculateVisibleItems` to true', () => {
+      const fakeThis = {
+        selectedOptions: undefined,
+        visibleDisclaimers: [],
+        inputElement: {
+          nativeElement: {
+            offsetWidth: 0
+          }
+        },
+        debounceResize: () => {},
+        isCalculateVisibleItems: false
+      };
+
+      spyOn(fakeThis, 'debounceResize');
+
+      component.updateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).not.toBe(1);
+      expect(fakeThis.debounceResize).toHaveBeenCalled();
+      expect(fakeThis['isCalculateVisibleItems']).toBeTruthy();
+    });
+
     it('openDropdown: should call `controlDropdownVisibility` when recive true on call and `disabled` is false.', () => {
       spyOn(component, <any>'controlDropdownVisibility');
 
@@ -633,26 +655,9 @@ fdescribe('PoMultiselectComponent:', () => {
       expect(adjustContainerPositionSpy).toHaveBeenCalled();
     }));
 
-    xit(`changeSearch: should call 'searchByLabel' with 'event.value', 'options', 'filterService' and 'filterMode' if 'event.value' is 'valid'
-      and call 'adjustContainerPosition'.`, fakeAsync(() => {
-      const event = { value: '1' };
-      component['filterSubject'] = <any>{
-        next: () => {},
-        unsubscription: () => {}
-      };
-      component.filterService = poMultiselectFilterServiceStub;
-
-      spyOn(component['filterSubject'], 'next');
-
-      component.changeSearch(event);
-
-      flush();
-      expect(component['filterSubject'].next).toHaveBeenCalledWith(event.value);
-    }));
-
-    it('changeSearch: JHONY', () => {
+    it('changeSearch: should call `filterSubject.next` with `event.value`', () => {
       const event = { value: 'abc' };
-      component.filterService = <any>{}; // ou new ServiceStub();
+      component.filterService = <any>{};
 
       spyOn(component.filterSubject, 'next');
 
@@ -834,16 +839,29 @@ fdescribe('PoMultiselectComponent:', () => {
     });
 
     it('applyFilter: should be called', fakeAsync(() => {
-      component.filterService = <any>{
-        getFilteredData() {}
-      }; // ou new ServiceStub();
-      spyOn(component, <any>'setOptionsByApplyFilter');
-      const teste = spyOn(component.filterService, <any>'getFilteredData').and.throwError('Error');
-      const value = '';
-      component.applyFilter(value);
-      const param = { property: 'label', value };
-      expect(teste).toHaveBeenCalledWith(param);
-      expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
+      component.filterService = poMultiselectFilterServiceStub;
+      spyOn(component, <any>'setOptionsByApplyFilter').and.callThrough();
+      spyOn(component.filterService, <any>'getFilteredData').and.returnValue(throwError([]));
+
+      component.applyFilter('').subscribe(
+        () => {},
+        () => {
+          expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
+        }
+      );
+    }));
+
+    it('applyFilter: should be called with undefined', fakeAsync(() => {
+      component.filterService = poMultiselectFilterServiceStub;
+      spyOn(component, <any>'setOptionsByApplyFilter').and.callThrough();
+      spyOn(component.filterService, <any>'getFilteredData').and.returnValue(throwError([]));
+
+      component.applyFilter(undefined).subscribe(
+        () => {},
+        () => {
+          expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
+        }
+      );
     }));
 
     it('setOptionsByApplyFilter: should be called by first time', () => {
@@ -857,6 +875,7 @@ fdescribe('PoMultiselectComponent:', () => {
 
     it('setOptionsByApplyFilter: should be called', () => {
       const items = [{ label: '123', value: 1 }];
+      component.isFirstFilter = false;
       spyOn(component, 'setVisibleOptionsDropdown');
       component['setOptionsByApplyFilter'](items);
 

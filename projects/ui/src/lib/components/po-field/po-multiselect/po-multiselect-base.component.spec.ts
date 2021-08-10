@@ -35,7 +35,7 @@ class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   updateVisibleItems() {}
 }
 
-fdescribe('PoMultiselectBaseComponent:', () => {
+describe('PoMultiselectBaseComponent:', () => {
   let component;
   beforeEach(() => {
     component = new PoMultiselectTestComponent();
@@ -474,6 +474,16 @@ fdescribe('PoMultiselectBaseComponent:', () => {
       component.writeValue(values);
 
       expect(component.updateSelectedOptions).toHaveBeenCalledWith([{ value: 'teste' }]);
+    });
+
+    it('writeValue: JHONY', () => {
+      component.filterService = undefined;
+
+      spyOn(component, 'updateSelectedOptions');
+
+      component.writeValue(undefined);
+
+      expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
     });
 
     it('applyFilters: should be called', fakeAsync(() => {
