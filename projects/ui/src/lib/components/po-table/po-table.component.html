@@ -86,7 +86,7 @@
           [style.width]="column.width"
           [style.max-width]="column.width"
           [style.min-width]="column.width"
-          [class.po-clickable]="sort || hasService"
+          [class.po-clickable]="(sort && column.sortable !== false) || hasService"
           [class.po-table-header-subtitle]="column.type === 'subtitle'"
           (click)="sortColumn(column)"
         >
@@ -354,7 +354,7 @@
     {{ column.label || (column.property | titlecase) }}
   </span>
   <span
-    *ngIf="sort"
+    *ngIf="sort && column.sortable !== false"
     [class.po-table-header-icon-unselected]="sortedColumn?.property !== column"
     [class.po-table-header-icon-descending]="sortedColumn?.property === column && sortedColumn.ascending"
     [class.po-table-header-icon-ascending]="sortedColumn?.property === column && !sortedColumn.ascending"

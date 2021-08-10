@@ -735,7 +735,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   }
 
   sortColumn(column: PoTableColumn) {
-    if (!this.sort || column.type === 'detail') {
+    if (!this.sort || column.type === 'detail' || column.sortable === false) {
       return;
     }
 
