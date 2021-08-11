@@ -1,3 +1,5 @@
+import { TemplateRef } from '@angular/core';
+
 /**
  * @usedBy PoTableComponent
  *
@@ -39,11 +41,40 @@ export interface PoTableColumnIcon {
   disabled?: Function;
 
   /**
-   * Ícone que será exibido, veja os valores válidos na [biblioteca de ícones](/guides/icons).
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * ```
+   * [ { icon: 'po-icon-plus' } ]
+   * ```
+   *
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca Font Awesome, da seguinte forma:
+   * ```
+   * [ {  icon: 'fas fa-plus' } ]
+   * ```
+   *
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * `component.html`:
+   * ```
+   * <ng-template #iconTemplateAdd>
+   *  <span class="material-icons" style="font-size: inherit;">add</span>
+   * </ng-template>
+   *
+   * <po-table [p-column]="myProperty"></po-table>
+   * ```
+   * `component.ts`:
+   * ```
+   *
+   * @ViewChild('iconTemplateAdd', { static: true }) iconTemplateAdd: TemplateRef<void>;
+   *
+   * myProperty = [
+   *  { property: 'columnIcon', label: 'Icons', type: 'icon', icons: [
+   *   { value: 'plus', icon: this.iconTemplateAdd },
+   *  ]}
+   * ];
+   * ```
    *
    * > Caso esta propriedade não seja definida, a mesma receberá o valor contido em `value`.
    */
-  icon?: string;
+  icon?: string | TemplateRef<void>;
 
   /** Define um texto de ajuda que será exibido ao passar o *mouse* em cima do ícone. */
   tooltip?: string;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -23,7 +23,7 @@ export class PoTableIconComponent {
   @Input('p-disabled') disabled: boolean;
 
   /** Classe css do ícone. */
-  @Input('p-icon') icon: string;
+  @Input('p-icon') icon: string | TemplateRef<void>;
 
   /** Texto do tooltip. */
   @Input('p-icon-tooltip') iconTooltip: string;
