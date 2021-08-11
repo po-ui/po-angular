@@ -1766,6 +1766,13 @@ describe('PoTableComponent:', () => {
         expect(component.items.length).toEqual(numberItems - 1);
         expect(component.items).not.toContain(elementRemove);
       });
+
+      it('remove: should not remove item if received a value different from an object or a number', () => {
+        component.items = items;
+        const numberItems = component.items.length;
+        component.removeItem(<any>'item');
+        expect(component.items.length).toEqual(numberItems);
+      });
     });
 
     describe('updateItem:', () => {

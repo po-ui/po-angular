@@ -1,9 +1,9 @@
-<span
-  class="po-icon {{ icon }} {{ disabled ? '' : color }}"
+<po-icon
+  class="po-table-icon-content {{ disabled ? '' : color }}"
   [ngClass]="{ 'po-clickable': clickable, 'po-table-icon-disabled': disabled }"
+  [p-icon]="icon"
   [p-tooltip]="tooltip"
   (click)="onClick($event)"
   (mouseenter)="tooltipMouseEnter()"
   (mouseleave)="tooltipMouseLeave()"
->
-</span>
+></po-icon>

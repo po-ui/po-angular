@@ -104,9 +104,9 @@ describe('PoTableIconComponent:', () => {
       return nativeElement.querySelector(elementClass);
     }
 
-    it('Should have `po-icon`.', () => {
+    it('Should have `po-table-icon-content`.', () => {
       fixture.detectChanges();
-      expect(getNativeElement('.po-icon')).toBeTruthy();
+      expect(getNativeElement('.po-table-icon-content')).toBeTruthy();
     });
 
     it('Should have `po-icon-copy`.', () => {
