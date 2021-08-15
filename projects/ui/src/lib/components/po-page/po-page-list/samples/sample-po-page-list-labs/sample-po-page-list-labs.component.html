@@ -4,7 +4,6 @@
   [p-disclaimer-group]="disclaimerGroup"
   [p-filter]="filter"
   [p-literals]="customLiterals"
-  [p-max-visible-action-buttons]="maxVisibleActionButtons"
   [p-title]="title"
 >
   <hr />
@@ -223,15 +222,7 @@
 
   <div class="po-row">
     <po-input
-      class="po-md-3"
-      name="maxVisibleActions"
-      [(ngModel)]="maxVisibleActionButtons"
-      p-help="Value between 2 and 10"
-      p-label="Max visible actions buttons"
-    >
-    </po-input>
-    <po-input
-      class="po-lg-9"
+      class="po-lg-12"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: {"otherActions": "Mais ações"}'

@@ -26,7 +26,6 @@ export class SamplePoPageListLabsComponent implements OnInit {
   filterModel: string;
   literals: string;
   title: string;
-  maxVisibleActionButtons: number;
 
   public disclaimerGroup;
 
@@ -138,7 +137,6 @@ export class SamplePoPageListLabsComponent implements OnInit {
     this.filter.width = undefined;
     this.literals = '';
     this.title = 'PO Page List';
-    this.maxVisibleActionButtons = 3;
 
     this.restoreDisclaimerModel();
     this.restoreActionForm();
