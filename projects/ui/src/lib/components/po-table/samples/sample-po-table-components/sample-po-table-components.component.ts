@@ -64,7 +64,6 @@ export class SamplePoTableComponentsComponent {
       property: 'favorite',
       label: 'Actions',
       type: 'icon',
-      sortable: false,
       icons: [
         {
           action: this.favorite.bind(this),

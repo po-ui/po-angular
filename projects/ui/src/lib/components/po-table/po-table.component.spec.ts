@@ -70,7 +70,7 @@ describe('PoTableComponent:', () => {
       { property: 'id', label: 'Codigo', type: 'number' },
       { property: 'initial', label: 'Sigla' },
       { property: 'name', label: 'Nome' },
-      { property: 'total', label: 'Total', type: 'currency', format: 'BRL', sortable: false },
+      { property: 'total', label: 'Total', type: 'currency', format: 'BRL' },
       { property: 'atualization', label: 'Atualização', type: 'date' }
     ];
 
@@ -486,34 +486,6 @@ describe('PoTableComponent:', () => {
 
     columnSorted = tableElement.querySelector('.po-table-header-icon-ascending');
     expect(columnSorted).toBeTruthy();
-  });
-
-  it('should toggle column sortable as false', () => {
-    component.sort = true;
-
-    fixture.detectChanges();
-
-    let tableHeaders = fixture.nativeElement.querySelectorAll('th');
-
-    let columnSorted = tableHeaders[3].querySelector('.po-table-header-icon-unselected');
-    expect(columnSorted).toBeNull();
-
-    columnSorted = tableHeaders[3].querySelector('.po-clickable');
-    expect(columnSorted).toBeNull();
-
-    const itemSorted = component.columns[3];
-
-    component.sortColumn(itemSorted);
-    fixture.detectChanges();
-
-    columnSorted = tableElement.querySelector('.po-table-header-icon-descending');
-    expect(columnSorted).toBeNull();
-
-    component.sortColumn(itemSorted);
-    fixture.detectChanges();
-
-    columnSorted = tableElement.querySelector('.po-table-header-icon-ascending');
-    expect(columnSorted).toBeNull();
   });
 
   it('should not find subtitles columns', () => {

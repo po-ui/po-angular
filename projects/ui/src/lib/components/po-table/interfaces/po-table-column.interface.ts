@@ -165,18 +165,6 @@ export interface PoTableColumn {
   property?: string;
 
   /**
-   * @optional
-   *
-   * @description
-   *
-   * Controla se a coluna será considerada como "ordenavel". Caso seja definido um valor falso, a coluna não será usada para
-   * ordenação.
-   *
-   * @default `true`
-   */
-  sortable?: boolean;
-
-  /**
    * Define um array de objetos para as colunas de legenda. Onde, `subtitles` é uma lista de objetos do tipo PoTableSubtitle na qual
    * devem ser definidas as opções de legenda. Por exemplo:
    *
