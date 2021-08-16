@@ -4,7 +4,7 @@ import { fakeAsync, tick } from '@angular/core/testing';
 
 import { Observable, of } from 'rxjs';
 
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty } from '../../../utils/util';
 import * as UtilsFunctions from '../../../utils/util';
 
