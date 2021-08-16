@@ -14,7 +14,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { formatYear, isMobile, setYearFrom0To100 } from '../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
-import { PoCalendarComponent } from './po-calendar/po-calendar.component';
+import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
@@ -77,9 +77,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
 
-  date;
   el: ElementRef;
   hour: string;
+  visible: boolean = false;
 
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
@@ -182,10 +182,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
 
-    if (!this.calendar.visible) {
-      this.calendar.init();
+    if (!this.visible) {
       this.setCalendarPosition();
       this.initializeListeners();
+      this.visible = true;
     } else {
       this.inputEl.nativeElement.disabled = false;
       this.closeCalendar();
@@ -343,7 +343,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   hasOverlayClass(element: any) {
-    return element.classList.contains('po-calendar-overlay');
+    return element.classList.contains('po-datepicker-calendar-overlay');
   }
 
   /* istanbul ignore next */
@@ -352,7 +352,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private closeCalendar() {
-    this.calendar.close();
+    this.visible = false;
     this.removeListeners();
     this.setDialogPickerStyleDisplay('none');
   }

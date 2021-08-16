@@ -142,7 +142,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   private allowsChangeVisibleColumns(): boolean {
     const visibleTableColumns = this.getVisibleTableColumns(this.visibleColumns);
 
-    return JSON.stringify(visibleTableColumns) !== JSON.stringify(this.columns);
+    return this.stringify(visibleTableColumns) !== this.stringify(this.columns);
   }
 
   private verifyToEmitVisibleColumns() {
@@ -293,12 +293,12 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     const { currentValue = [], previousValue = [] } = columns;
 
     // atualizara o defaultColumns, quando for a primeira vez ou quando o defaultColumns for diferente do currentValue
-    if (!this.lastVisibleColumnsSelected && JSON.stringify(this.defaultColumns) !== JSON.stringify(currentValue)) {
+    if (!this.lastVisibleColumnsSelected && this.stringify(this.defaultColumns) !== this.stringify(currentValue)) {
       this.defaultColumns = [...currentValue];
     }
 
     // verifica se o valor anterior é diferente do atual para atualizar as columnsOptions apenas quando for necessario
-    if (JSON.stringify(previousValue) !== JSON.stringify(currentValue)) {
+    if (this.stringify(previousValue) !== this.stringify(currentValue)) {
       this.updateValues(currentValue);
     }
   }
@@ -317,5 +317,14 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     if (this.resizeListener) {
       this.resizeListener();
     }
+  }
+
+  private stringify(columns: Array<PoTableColumn>) {
+    // não faz o stringify da propriedade icon, pois pode conter objeto complexo e disparar um erro.
+    return JSON.stringify(columns, (key, value) => {
+      if (key !== 'icon') {
+        return value;
+      }
+    });
   }
 }

@@ -52,6 +52,8 @@ export const poMultiselectLiteralsDefault = {
  *
  * Este componente também não deve ser utilizado em casos onde a seleção seja única. Nesses casos, deve-se utilizar o
  * po-select, po-combo ou po-radio-group.
+ *
+ * Com ele também é possível definir uma lista à partir da requisição de um serviço definido em `p-filter-service`.
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
@@ -67,18 +69,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @default `false`
    */
   @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define que a altura do componente será auto ajustável, possuindo uma altura minima porém a altura máxima será de acordo
-   * com o número de itens selecionados e a extensão dos mesmos, mantendo-os sempre visíveis.
-   *
-   * @default `false`
-   */
-  @Input('p-auto-height') @InputBoolean() autoHeight: boolean = false;
 
   /** Label no componente. */
   @Input('p-label') label?: string;
@@ -150,11 +140,72 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _options: Array<PoMultiselectOption>;
   private _required?: boolean = false;
   private _sort?: boolean = false;
+  private _autoHeight: boolean = false;
   private language: string;
 
   private lastLengthModel;
   private onModelChange: any;
   private validatorChange: any;
+  private autoHeightInitialValue: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Nesta propriedade deve ser informado um serviço implementando a interface PoMultiselectFilter.
+   *
+   * > Definirá por padrão a propriedade `p-auto-height` como `true`, mas a mesma pode ser redefinida caso necessário.
+   */
+  @Input('p-filter-service') set filterService(value: PoMultiselectFilter) {
+    this._filterService = value;
+    this.autoHeight = this.autoHeightInitialValue !== undefined ? this.autoHeightInitialValue : true;
+    this.options = [];
+  }
+
+  get filterService() {
+    return this._filterService;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que a altura do componente será auto ajustável, possuindo uma altura minima porém a altura máxima será de acordo
+   * com o número de itens selecionados e a extensão dos mesmos, mantendo-os sempre visíveis.
+   *
+   * > O valor padrão será `true` quando houver serviço (`p-filter-service`).
+   *
+   * @default `false`
+   */
+  @Input('p-auto-height') @InputBoolean() set autoHeight(value: boolean) {
+    this._autoHeight = value;
+    this.autoHeightInitialValue = value;
+  }
+
+  get autoHeight(): boolean {
+    return this._autoHeight;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Esta propriedade define em quanto tempo (em milissegundos), aguarda para acionar o evento de filtro após cada pressionamento de tecla.
+   *
+   * > Será utilizada apenas quando houver serviço (`p-filter-service`) e somente será aceito valor maior do que *zero*.
+   *
+   * @default `400`
+   */
+  @Input('p-debounce-time') set debounceTime(value: number) {
+    const parsedValue = parseInt(<any>value, 10);
+
+    this._debounceTime = !isNaN(parsedValue) && parsedValue > 0 ? parsedValue : PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT;
+  }
+
+  get debounceTime(): number {
+    return this._debounceTime;
+  }
 
   /**
    * @optional

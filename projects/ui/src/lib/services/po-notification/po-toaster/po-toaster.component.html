@@ -1,20 +1,15 @@
-<div
-  #toaster
-  *ngIf="getShowToaster()"
-  class="po-toaster {{ getToasterType() }} {{ getToasterPosition() }} po-clickable"
-  (click)="close()"
->
+<div #toaster class="po-toaster {{ getToasterType() }} {{ getToasterPosition() }} po-clickable" (click)="close()">
   <div class="po-toaster-icon">
     <span class="po-icon {{ getIcon() }}"></span>
   </div>
 
   <div class="po-toaster-message">{{ message }}</div>
 
-  <div *ngIf="action && actionLabel" (click)="poToasterAction()" class="po-toaster-action">
+  <div *ngIf="action && actionLabel" (click)="poToasterAction($event)" class="po-toaster-action">
     {{ actionLabel }}
   </div>
 
-  <button class="po-toaster-close" (click)="onButtonClose()">
+  <button class="po-toaster-close" (click)="onButtonClose($event)">
     <span class="po-icon po-icon-close"></span>
   </button>
 </div>

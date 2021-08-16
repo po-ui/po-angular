@@ -9,7 +9,9 @@ import { sortValues } from '../../utils/util';
  *
  * Serviço responsável por gerenciar o tratamento dos formatos de data e hora.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoDateService {
   private readonly dateRegex = new RegExp(
     '^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' + '(?:0[1-9]|1[0-2])-' + '(?:0[1-9]|[12]\\d|3[01])$'

@@ -28,7 +28,7 @@ export class SamplePoMultiselectHeroesService implements PoMultiselectFilter {
 
   getObjectsByValues(value: Array<string | number>): Observable<Array<PoMultiselectOption>> {
     return this.http
-      .get(`http://localhost:3000/v1/heroes/${value.toString()}`, { headers: this.headers })
+      .get(`https://po-sample-api.herokuapp.com/v1/heroes/?value=${value.toString()}`, { headers: this.headers })
       .pipe(map(response => this.parseToArrayMultiselectOptions(response['items'])));
   }
 

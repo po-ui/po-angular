@@ -279,14 +279,17 @@
               [class.po-table-action-disabled]="firstAction.disabled ? validateTableAction(row, firstAction) : false"
               (click)="executeTableAction(row, firstAction)"
             >
-              <span *ngIf="firstAction.icon" class="po-icon {{ firstAction.icon }}"></span>
+              <po-icon
+                *ngIf="firstAction.icon"
+                class="po-table-single-action-content"
+                [p-icon]="firstAction.icon"
+              ></po-icon>
               {{ firstAction.label }}
             </div>
           </td>
 
           <td *ngIf="visibleActions.length > 1" class="po-table-column-actions">
-            <span #popupTarget class="po-icon po-icon-more po-clickable" (click)="togglePopup(row, popupTarget)">
-            </span>
+            <span #popupTarget class="po-icon po-icon-more po-clickable" (click)="togglePopup(row, popupTarget)"></span>
           </td>
           <!-- Column Manager -->
           <td
