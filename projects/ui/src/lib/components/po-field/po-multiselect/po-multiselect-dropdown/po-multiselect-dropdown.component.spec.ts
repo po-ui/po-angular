@@ -235,9 +235,8 @@ describe('PoMultiselectDropdownComponent:', () => {
       expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeTruthy();
     });
 
-    it('shouldn`t show `po-multiselect-search` if haven`t options', () => {
-      component.options = [];
-      component.hideSearch = false;
+    it('shouldn`t show `po-multiselect-search` if `hideSearch` is `true`', () => {
+      component.hideSearch = true;
 
       fixture.detectChanges();
 

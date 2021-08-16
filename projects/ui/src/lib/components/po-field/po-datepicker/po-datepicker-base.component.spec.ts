@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 
 import * as UtilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from './../validators';
-import { convertDateToISOExtended, formatYear, getShortBrowserLanguage, setYearFrom0To100 } from '../../../utils/util';
+import { convertDateToISOExtended, formatYear, setYearFrom0To100, convertIsoToDate } from '../../../utils/util';
 import { expectSettersMethod, expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
@@ -125,6 +125,11 @@ describe('PoDatepickerBaseComponent:', () => {
     expectPropertiesValues(component, 'locale', 'en', 'en');
     expectPropertiesValues(component, 'locale', 'es', 'es');
     expectPropertiesValues(component, 'locale', 'ru', 'ru');
+  });
+
+  it('should be update property date', () => {
+    const expectedValue = convertIsoToDate('2021/08/20', false, false);
+    expectPropertiesValues(component, 'date', '2021/08/20', expectedValue);
   });
 
   it('should transform a String to Date', () => {

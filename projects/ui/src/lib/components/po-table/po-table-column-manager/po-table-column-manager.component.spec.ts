@@ -9,6 +9,7 @@ import { PoPopoverModule } from '../../po-popover/po-popover.module';
 import { PoTableModule } from '../po-table.module';
 
 import { PoTableColumnManagerComponent } from './po-table-column-manager.component';
+import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 describe('PoTableColumnManagerComponent:', () => {
   let component: PoTableColumnManagerComponent;
@@ -1088,6 +1089,22 @@ describe('PoTableColumnManagerComponent:', () => {
       component['removeListeners']();
 
       expect(component['resizeListener']).toHaveBeenCalled();
+    });
+
+    describe('stringify', () => {
+      it(`should return stringify value with no difference`, () => {
+        const columns: Array<PoTableColumn> = [{ icons: [{ value: 'value', tooltip: 'tooltip' }] }];
+        const result = '[{"icons":[{"value":"value","tooltip":"tooltip"}]}]';
+        const filter = component['stringify'](columns);
+        expect(filter).toEqual(result);
+      });
+
+      it('should return stringify value with difference by filtered key', () => {
+        const columns: Array<PoTableColumn> = [{ icons: [{ icon: 'icon', value: 'value', tooltip: 'tooltip' }] }];
+        const result = '[{"icons":[{"value":"value","tooltip":"tooltip"}]}]';
+        const filter = component['stringify'](columns);
+        expect(filter).toEqual(result);
+      });
     });
   });
 });

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.9.0](https://github.com/po-ui/po-angular/compare/v5.8.0...v5.9.0) (2021-08-16)
+
+
+### Features
+
+* **multiselect:** permite utilizar serviço para realizar filtro ([e126183](https://github.com/po-ui/po-angular/commit/e1261839c97daee834a48016087a939c650bacfb))
+* **notification:** limita em até 5 notificações na tela ([8cb665d](https://github.com/po-ui/po-angular/commit/8cb665d7710c04c2433867e0371164783d72b6a0))
+* **table:** adiciona compatibilidade com outras fontes de ícones ([95f1cba](https://github.com/po-ui/po-angular/commit/95f1cbade90fa6215d95809c7a0bf5e4e8a3d620))
+
+
+
 ## [5.8.0](https://github.com/po-ui/po-angular/compare/v5.7.0...v5.8.0) (2021-08-09)
 
 
