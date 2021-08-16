@@ -1,18 +1,19 @@
 import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { fakeAsync, tick } from '@angular/core/testing';
 
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
+import { Observable, of } from 'rxjs';
+
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty } from '../../../utils/util';
 import * as UtilsFunctions from '../../../utils/util';
+
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
-
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-import { Observable, of } from 'rxjs';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
-import { fakeAsync, tick } from '@angular/core/testing';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
@@ -455,7 +456,7 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
     });
 
-    it('writeValue: should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
+    it('writeValue: should call `updateSelectedOptions` with values if model value is `valid`.', () => {
       spyOn(component, 'updateSelectedOptions');
       component.filterService = poMultiselectFilterServiceStub;
 
@@ -476,7 +477,7 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.updateSelectedOptions).toHaveBeenCalledWith([{ value: 'teste' }]);
     });
 
-    it('writeValue: JHONY', () => {
+    it('writeValue: should call `updateSelectedOptions` with value `undefined` and returns `[]`', () => {
       component.filterService = undefined;
 
       spyOn(component, 'updateSelectedOptions');
@@ -486,7 +487,7 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
     });
 
-    it('applyFilters: should be called', fakeAsync(() => {
+    it('applyFilters: should be called with valid value', fakeAsync(() => {
       component.filterService = poMultiselectFilterServiceStub;
       component.debounceTime = 50;
       component.options = [];
@@ -498,14 +499,14 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.applyFilter).toHaveBeenCalledWith(value);
     }));
 
-    it('updateSelectedOptions: should be called with params and `service` and set `selectedOptions`', () => {
+    it('updateSelectedOptions: should call `updateVisibleItems` and set `selectedOptions`', () => {
       spyOn(component, 'updateVisibleItems');
       const params = [1, 2, 3];
       component.options = [];
       component.filterService = poMultiselectFilterServiceStub;
       component['updateSelectedOptions'](params);
       expect(component.selectedOptions).toEqual([1, 2, 3]);
-      expect(component.updateVisibleItems).toHaveBeenCalledWith();
+      expect(component.updateVisibleItems).toHaveBeenCalled();
     });
 
     it('updateSelectedOptions: should be called with params, options and `service` and set `selectedOptions`', () => {
@@ -515,7 +516,7 @@ describe('PoMultiselectBaseComponent:', () => {
       component.filterService = poMultiselectFilterServiceStub;
       component['updateSelectedOptions'](params, options);
       expect(component.selectedOptions).toEqual([1, 2, 3]);
-      expect(component.updateVisibleItems).toHaveBeenCalledWith();
+      expect(component.updateVisibleItems).toHaveBeenCalled();
     });
   });
 
@@ -581,7 +582,34 @@ describe('PoMultiselectBaseComponent:', () => {
       expectPropertiesValues(component, 'literals', invalidValues, poMultiselectLiteralsDefault[poLocaleDefault]);
     });
 
-    it('p-debounce-time: should not be defined', () => {
+    it('p-filter-service: should set `options` with empty array and set `autoheight` with true if `autoHeightInitialValue` is `undefined`', () => {
+      const value = {};
+      component.filterService = value;
+      component.autoHeightInitialValue = undefined;
+
+      expect(component.filterService).toBe(value);
+      expect(component.autoHeight).toBeTrue();
+      expect(component.options).toEqual([]);
+    });
+
+    it('p-filter-service: should set `autoheight` with `false`', () => {
+      const value = {};
+      component.autoHeightInitialValue = false;
+      component.filterService = value;
+
+      expect(component.filterService).toBe(value);
+      expect(component.autoHeight).toBeFalse();
+      expect(component.options).toEqual([]);
+    });
+
+    it('p-auto-height: should set `autoHeightInitialValue` with `value`', () => {
+      const value: boolean = true;
+      component.autoHeight = value;
+
+      expect(component.autoHeight).toBe(value);
+    });
+
+    it('p-debounce-time: should set default value', () => {
       component.debounceTime = 0;
 
       expect(component.debounceTime).toBe(400);

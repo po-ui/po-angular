@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunction from '../../../utils/util';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -13,7 +14,6 @@ import { PoMultiselectItemComponent } from './po-multiselect-item/po-multiselect
 import { PoMultiselectSearchComponent } from './po-multiselect-search/po-multiselect-search.component';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
-import { Observable, of, throwError } from 'rxjs';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
@@ -24,7 +24,7 @@ const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   }
 };
 
-fdescribe('PoMultiselectComponent:', () => {
+describe('PoMultiselectComponent:', () => {
   let component: PoMultiselectComponent;
   let fixture: ComponentFixture<PoMultiselectComponent>;
 
@@ -353,7 +353,7 @@ fdescribe('PoMultiselectComponent:', () => {
       expect(fakeThis.visibleElement).toBeFalsy();
     });
 
-    it('ngOnDestroy: should call removeListeners.', () => {
+    it('ngOnDestroy: should call removeListeners and call unsubscribe from subscription', () => {
       const removeListenersSpy = spyOn(component, <any>'removeListeners');
       component['getObjectsByValuesSubscription'] = <any>{ unsubscribe: () => {} };
       component['filterSubject'] = <any>{ unsubscribe: () => {} };

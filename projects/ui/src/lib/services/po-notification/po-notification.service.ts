@@ -5,6 +5,11 @@ import { PoNotificationBaseService } from './po-notification-base.service';
 import { PoToaster } from './po-toaster/po-toaster.interface';
 import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
 import { PoToasterComponent } from './po-toaster/po-toaster.component';
+import { timer } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+
+const PoNotificationMaxLength = 5;
+const PoNotificationFadeTime = 200;
 
 /**
  * @docsExtends PoNotificationBaseService
@@ -37,49 +42,56 @@ export class PoNotificationService extends PoNotificationBaseService {
 
   createToaster(toaster: PoToaster): void {
     const componentRef: ComponentRef<any> = this.poComponentInjector.createComponentInApplication(PoToasterComponent);
-
     toaster.componentRef = componentRef;
 
     componentRef.changeDetectorRef.detectChanges();
     componentRef.instance.configToaster(toaster);
 
-    if (toaster.orientation === PoToasterOrientation.Top) {
-      this.stackTop.push(componentRef);
-    } else {
-      this.stackBottom.push(componentRef);
-    }
+    const stack = toaster.orientation === PoToasterOrientation.Top ? this.stackTop : this.stackBottom;
+    stack.push(componentRef);
+
+    this.verifyLimitToaster(stack);
 
     this.observableOnClose(componentRef);
 
     if (!(toaster.action && toaster.actionLabel)) {
-      setTimeout(() => {
-        this.destroyToaster(componentRef);
-      }, toaster.duration);
+      timer(toaster.duration)
+        .pipe(takeWhile(() => componentRef.instance.alive))
+        .subscribe(() => {
+          this.destroyToaster(componentRef);
+        });
     }
   }
 
   destroyToaster(toaster: any): void {
     let stack;
-
     if (toaster.instance.orientation === PoToasterOrientation.Top) {
       stack = this.stackTop;
     } else {
       stack = this.stackBottom;
     }
 
+    toaster.instance.setFadeOut();
     const index = stack.indexOf(toaster);
     stack.splice(index, 1);
 
-    this.poComponentInjector.destroyComponentInApplication(toaster);
-
-    for (let count = 0; count < stack.length; count++) {
-      stack[count].instance.changePosition(count);
-    }
+    setTimeout(() => {
+      this.poComponentInjector.destroyComponentInApplication(toaster);
+      for (let count = 0; count < stack.length; count++) {
+        stack[count].instance.changePosition(count);
+      }
+    }, PoNotificationFadeTime);
   }
 
   private observableOnClose(componentRef: any) {
     componentRef.instance.observableOnClose.subscribe(() => {
       this.destroyToaster(componentRef);
     });
+  }
+
+  private verifyLimitToaster(stack: Array<any>) {
+    if (stack.length > PoNotificationMaxLength) {
+      this.destroyToaster(stack[0]);
+    }
   }
 }

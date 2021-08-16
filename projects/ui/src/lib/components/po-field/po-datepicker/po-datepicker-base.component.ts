@@ -122,7 +122,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
-  protected date: Date;
   protected firstStart = true;
   protected hour: string = 'T00:00:01-00:00';
   protected isExtendedISO: boolean = false;
@@ -139,6 +138,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _placeholder?: string = '';
   private shortLanguage: string;
   private previousValue: any;
+  private _date: Date;
 
   /**
    * @optional
@@ -332,6 +332,14 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   constructor(private languageService: PoLanguageService) {
     this.shortLanguage = this.languageService.getShortLanguage();
+  }
+
+  set date(value: any) {
+    this._date = typeof value === 'string' ? convertIsoToDate(value, false, false) : value;
+  }
+
+  get date() {
+    return this._date;
   }
 
   ngOnInit() {

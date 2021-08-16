@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser/';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -182,43 +182,91 @@ describe('PoToasterComponent', () => {
 
   it('should be call the `component.action` method how must call a function correctly', () => {
     component.configToaster(toasterErrorWithAction);
+    const event = {
+      metaKey: false,
+      preventDefault: () => {},
+      stopPropagation: () => {}
+    };
     fixture.detectChanges();
     spyOn(component, 'action');
-    component.poToasterAction();
+    component.poToasterAction(event);
     expect(component.action).toHaveBeenCalled();
   });
 
-  it('should be call the `component.close` method how must close my `component` correctly', () => {
-    component.configToaster(toasterErrorWithAction);
-    expect(fixture.debugElement.query(By.css('.po-toaster'))).not.toBeNull();
-
-    component.close();
+  it('should set the `alive` attribute to false after the end of the component lifetime', fakeAsync(() => {
+    component.configToaster(toasterInfoWithoutAction);
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-toaster'))).toBeNull();
-  });
+    fixture.destroy();
+
+    tick(10301);
+
+    expect(component.alive).toBeFalse();
+  }));
 
   describe('Methods:', () => {
     it('onButtonClose: should call `close` if action and actionLabel are truthy', () => {
       component.action = () => {};
       component.actionLabel = 'Details';
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
 
       const spyClose = spyOn(component, 'close');
       const spyToasterAction = spyOn(component, 'poToasterAction');
 
-      component.onButtonClose();
+      component.onButtonClose(event);
 
       expect(spyToasterAction).not.toHaveBeenCalled();
       expect(spyClose).toHaveBeenCalled();
     });
 
+    it('onButtonClose: should call `poToasterAction` if action are truthy and actionLabel is null', () => {
+      component.action = () => {};
+      component.actionLabel = null;
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      const spyToasterAction = spyOn(component, 'poToasterAction');
+
+      component.onButtonClose(event);
+
+      expect(spyToasterAction).toHaveBeenCalled();
+    });
+
+    it('onButtonClose: should call `close` if actionLabel are truthy and action is null', () => {
+      component.action = null;
+      component.actionLabel = 'Details';
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      const spyCloseCall = spyOn(component, 'close').and.callThrough();
+
+      component.onButtonClose(event);
+
+      expect(spyCloseCall).toBeTruthy();
+    });
+
     it('onButtonClose: should call `poToasterAction` if action is truthy and actionLabel is null', () => {
       component.action = () => {};
       component.actionLabel = null;
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
 
       const spyToasterAction = spyOn(component, 'poToasterAction');
       const spyClose = spyOn(component, 'close');
 
-      component.onButtonClose();
+      component.onButtonClose(event);
 
       expect(spyClose).not.toHaveBeenCalled();
       expect(spyToasterAction).toHaveBeenCalled();
@@ -227,14 +275,69 @@ describe('PoToasterComponent', () => {
     it('onButtonClose: should call `close` if action and actionLabel are null', () => {
       component.action = null;
       component.actionLabel = null;
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
 
       const spyToasterAction = spyOn(component, 'poToasterAction');
       const spyClose = spyOn(component, 'close');
 
-      component.onButtonClose();
+      component.onButtonClose(event);
 
       expect(spyClose).toHaveBeenCalled();
       expect(spyToasterAction).not.toHaveBeenCalled();
+    });
+
+    it('setFadeOut: if the class is `po-toaster-invisible` it must keep fade out', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      component.toaster.nativeElement.className = 'po-toaster-invisible';
+
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-invisible');
+      expect(component.toaster.nativeElement.className).not.toContain('po-toaster-visible');
+    });
+
+    it('setFadeOut: if the css class is different from fade-in/out, it must keep the same class', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      component.toaster.nativeElement.className = 'po-toaster-test';
+
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).not.toContain('fade-in');
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-test');
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-invisible');
+    });
+
+    it('setFadeOut: if the class is `po-toaster-visible` it must change to `po-toaster-invisible`', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      component.toaster.nativeElement.className = 'po-toaster-visible';
+
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).not.toContain('po-toaster-visible');
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-invisible');
+    });
+
+    it('poToasterAction: should call `action` when called action attribute', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      component.poToasterAction(event);
+
+      const spyAction = spyOn(component, 'action');
+
+      expect(spyAction).toBeTruthy();
     });
   });
 
