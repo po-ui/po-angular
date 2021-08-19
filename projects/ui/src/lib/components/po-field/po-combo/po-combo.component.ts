@@ -107,7 +107,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   comboIcon: string = 'po-icon-arrow-down';
   comboOpen: boolean = false;
   differ: any;
-  isProcessingGetObjectByValue: boolean = false;
+  isProcessingValueByTab: boolean = false;
   scrollTop = 0;
   service: PoComboFilterService;
   shouldMarkLetters: boolean = true;
@@ -213,7 +213,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     const inputValue = event.target.value;
 
     // busca um registro quando acionar o tab
-    if (this.service && key === PoKeyCodeEnum.tab && inputValue) {
+    if (this.service && key === PoKeyCodeEnum.tab && inputValue && !this.disabledTabFilter) {
       this.controlComboVisibility(false);
       return this.getObjectByValue(inputValue);
     }
@@ -245,7 +245,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
       this.controlComboVisibility(false);
       this.verifyValidOption();
-
+      this.isProcessingValueByTab = true;
       if (!this.service) {
         // caso for changeOnEnter e nao ter selectedValue deve limpar o selectedView para reinicia-lo.
         this.selectedView = this.changeOnEnter && !this.selectedValue ? undefined : this.selectedView;
@@ -335,9 +335,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   controlApplyFilter(value) {
-    if (!this.isProcessingGetObjectByValue && (!this.selectedOption || value !== this.selectedOption.label)) {
+    if (!this.isProcessingValueByTab && (!this.selectedOption || value !== this.selectedOption.label)) {
       this.applyFilter(value);
     }
+    this.isProcessingValueByTab = false;
   }
 
   applyFilter(value: string) {
@@ -372,7 +373,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   getObjectByValue(value) {
     if (this.selectedValue !== value && this.selectedOption?.label !== value) {
-      this.isProcessingGetObjectByValue = true;
+      this.isProcessingValueByTab = true;
 
       this.getSubscription = this.service.getObjectByValue(value, this.filterParams).subscribe(
         item => this.updateOptionByFilteredValue(item),
@@ -390,7 +391,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     setTimeout(() => {
-      this.isProcessingGetObjectByValue = false;
+      this.isProcessingValueByTab = false;
     }, this.debounceTime);
   }
 
