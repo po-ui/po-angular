@@ -161,6 +161,17 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
+   * Se verdadeiro, desabilitará a busca de um item via TAB.
+   *
+   * @default `false`
+   */
+  @Input('p-disabled-tab-filter') @InputBoolean() disabledTabFilter?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Deve ser informada uma função que será disparada quando houver alterações no ngModel. A função receberá como argumento o model modificado.
    *
    * > Pode-se optar pelo recebimento do objeto selecionado ao invés do model através da propriedade `p-emit-object-value`.
