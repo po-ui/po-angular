@@ -27,7 +27,7 @@ export class PoPageCustomizationService {
   changeOriginalOptionsToNewOptions<T, K>(objectToChange: T, newOptions: K) {
     Object.keys(newOptions).forEach(key => {
       const value = newOptions[key];
-      if (objectToChange[key] !== undefined) {
+      if (key in objectToChange) {
         if (Array.isArray(value)) {
           objectToChange[key] = [...value];
           return;
