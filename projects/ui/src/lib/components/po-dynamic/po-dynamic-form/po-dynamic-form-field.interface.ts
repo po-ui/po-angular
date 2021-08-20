@@ -258,4 +258,21 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /** Mensagem que será exibida enquanto o campo não estiver preenchido. */
   placeholder?: string;
+
+  /**
+   * Define a localidade a ser utilizada no componente.
+   * Por padrão o valor será configurado segundo a o módulo [`I18n`](documentation/po-i18n)
+   *
+   * Exemplo de utilização:
+   * ```
+   * [
+   *   { property: 'birthday', locale: 'en', type: 'date' },
+   *   { property: 'wage', locale: 'ru', type: 'currency' }
+   * ];
+   * ```
+   *
+   * > Para ver quais linguagens suportadas acesse [`I18n`](documentation/po-i18n)
+   * > A propriedade será repassada para os componentes que suportam a mesma.
+   */
+  locale?: string;
 }
