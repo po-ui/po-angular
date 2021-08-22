@@ -4,7 +4,7 @@ import { fakeAsync, tick } from '@angular/core/testing';
 
 import { Observable, of } from 'rxjs';
 
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty } from '../../../utils/util';
 import * as UtilsFunctions from '../../../utils/util';
 
@@ -12,7 +12,6 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 
