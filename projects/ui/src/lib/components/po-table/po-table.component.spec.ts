@@ -493,7 +493,7 @@ describe('PoTableComponent:', () => {
 
     fixture.detectChanges();
 
-    let tableHeaders = fixture.nativeElement.querySelectorAll('th');
+    const tableHeaders = fixture.nativeElement.querySelectorAll('th');
 
     let columnSorted = tableHeaders[3].querySelector('.po-table-header-icon-unselected');
     expect(columnSorted).toBeNull();
