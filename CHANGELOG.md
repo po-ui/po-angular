@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.10.0](https://github.com/po-ui/po-angular/compare/v5.9.0...v5.10.0) (2021-08-23)
+
+
+### Bug Fixes
+
+* **chart:** corrige ordenação indevida das categorias no gráfico de barras ([152f02a](https://github.com/po-ui/po-angular/commit/152f02a99d611350599356d0931301a68ab0cddc))
+* **page-dynamic-table:** corrige atualização da propriedade `quickSearchWidth` via serviceLoadApi ([1468421](https://github.com/po-ui/po-angular/commit/14684214eff989a4a0185a91c973e0756dc3484e))
+
+
+### Features
+
+* **combo:** adiciona propriedade `p-disabled-tab-filter` para desabilitar busca por tab ([6bf691b](https://github.com/po-ui/po-angular/commit/6bf691b44a0d6330eb1fcba93f21644f7870618a))
+* **dynamic-form:** adiciona a propriedade `PoDynamicFormField.locale` ([75933fc](https://github.com/po-ui/po-angular/commit/75933fcd31f5c510ed6ca66c77b7fc92f165bf6f))
+
+
+
 # [5.9.0](https://github.com/po-ui/po-angular/compare/v5.8.0...v5.9.0) (2021-08-16)
 
 
