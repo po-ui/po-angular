@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
@@ -50,7 +58,7 @@ const poCalendarRangeWidth = 600;
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers
 })
-export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit {
+export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
   constructor(private changeDetector: ChangeDetectorRef, poDate: PoDateService, languageService: PoLanguageService) {
     super(poDate, languageService);
   }
@@ -61,6 +69,12 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   ngOnInit() {
     this.setActivateDate();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.minDate || changes.maxDate) {
+      this.setActivateDate();
+    }
   }
 
   getActivateDate(partType) {

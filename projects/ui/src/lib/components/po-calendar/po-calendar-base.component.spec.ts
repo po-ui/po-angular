@@ -136,5 +136,43 @@ describe('PoCalendarBaseComponent:', () => {
       expect(component.activateDate.getFullYear()).toBe(2010);
       expect(component.activateDate.getMonth()).toBe(9);
     });
+
+    it('verifyActivateDate: `activateDate` should receive `minDate` if the minimum date is later than today', () => {
+      const today = new Date();
+      component.minDate = new Date(new Date(today).setMonth(today.getMonth() + 1));
+
+      spyOnProperty(component, 'isRange').and.returnValue(false);
+      component['setActivateDate'](null);
+
+      spyOn(component, <any>'verifyActivateDate').and.callThrough();
+
+      expect(component.activateDate).toEqual(component.minDate);
+    });
+
+    it('verifyActivateDate: `activateDate` should receive `maxDate` if `minDate` is null and `maxDate` is before today', () => {
+      const today = new Date();
+      component.minDate = null;
+      component.maxDate = new Date(new Date(today).setMonth(today.getMonth() - 1));
+
+      spyOnProperty(component, 'isRange').and.returnValue(false);
+      component['setActivateDate'](null);
+
+      spyOn(component, <any>'verifyActivateDate').and.callThrough();
+
+      expect(component.activateDate).toEqual(component.maxDate);
+    });
+
+    it('verifyActivateDate: `activateDate` should receive `today` if `minDate` and `maxDate` is null', () => {
+      const today = new Date();
+      component.minDate = null;
+      component.maxDate = null;
+
+      spyOnProperty(component, 'isRange').and.returnValue(false);
+      component['setActivateDate'](null);
+
+      spyOn(component, <any>'verifyActivateDate').and.callThrough();
+
+      expect(component.activateDate).toEqual(today);
+    });
   });
 });

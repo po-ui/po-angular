@@ -158,13 +158,25 @@ export class PoCalendarBaseComponent {
   }
 
   protected setActivateDate(date?: Date | string) {
+    const activateDate = date ? date : this.verifyActivateDate();
+
     if (this.isRange) {
-      const checkedStart = new Date(date || this.today);
+      const checkedStart = new Date(activateDate);
       const checkedEnd = new Date(new Date(checkedStart).setMonth(checkedStart.getMonth() + 1));
 
       this.activateDate = { start: checkedStart, end: checkedEnd };
     } else {
-      this.activateDate = date instanceof Date ? new Date(date) : new Date(date || this.today);
+      this.activateDate = new Date(activateDate);
     }
+  }
+
+  private verifyActivateDate(): Date {
+    let today = this.today;
+    if (this.minDate && this.minDate > this.today) {
+      today = this.minDate;
+    } else if (this.maxDate && this.maxDate < this.today) {
+      today = this.maxDate;
+    }
+    return today;
   }
 }
