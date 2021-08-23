@@ -109,14 +109,14 @@ describe('PoComboComponent:', () => {
   }));
 
   it('should call apply filter when is not processing "getObjectByValue"', () => {
-    component.isProcessingGetObjectByValue = false;
+    component.isProcessingValueByTab = false;
     spyOn(component, 'applyFilter');
     component.controlApplyFilter('valor');
     expect(component.applyFilter).toHaveBeenCalledWith('valor');
   });
 
   it('shouldn`t call apply filter when is processing "getObjectByValue"', () => {
-    component.isProcessingGetObjectByValue = true;
+    component.isProcessingValueByTab = true;
     spyOn(component, 'applyFilter');
     component.controlApplyFilter('valor');
     expect(component.applyFilter).not.toHaveBeenCalled();
@@ -152,7 +152,7 @@ describe('PoComboComponent:', () => {
 
   it('should update SelectedValue to null', fakeAsync((): void => {
     component.debounceTime = 10;
-    component.isProcessingGetObjectByValue = true;
+    component.isProcessingValueByTab = true;
     component.selectedValue = null;
 
     spyOn(component, 'updateSelectedValue');
@@ -161,7 +161,7 @@ describe('PoComboComponent:', () => {
 
     tick(11);
 
-    expect(component.isProcessingGetObjectByValue).toBeFalsy();
+    expect(component.isProcessingValueByTab).toBeFalsy();
   }));
 
   it('selectPreviousOption: should select a previous value when a selected value already exists', () => {
@@ -1998,7 +1998,7 @@ describe('PoComboComponent - with service:', () => {
     it('controlApplyFilter: should call applyFilter if value is not equal selectedOption.label', fakeAsync((): void => {
       const value = 'abc';
 
-      component.isProcessingGetObjectByValue = false;
+      component.isProcessingValueByTab = false;
       component.selectedOption = { label: 'po', value: 'po' };
 
       spyOn(component, 'applyFilter');
@@ -2006,6 +2006,19 @@ describe('PoComboComponent - with service:', () => {
       component.controlApplyFilter(value);
 
       expect(component.applyFilter).toHaveBeenCalled();
+    }));
+
+    it(`controlApplyFilter: shouldn't call applyFilter if isProcessingValueByTab is true`, fakeAsync((): void => {
+      const value = 'abc';
+
+      component.isProcessingValueByTab = true;
+      component.selectedOption = { label: 'abc', value: 'abc' };
+
+      spyOn(component, 'applyFilter');
+
+      component.controlApplyFilter(value);
+
+      expect(component.applyFilter).not.toHaveBeenCalled();
     }));
 
     it(`onKeyUp: should call 'updateComboList' with 'cacheOptions' if has 'service', 'selectedValue'

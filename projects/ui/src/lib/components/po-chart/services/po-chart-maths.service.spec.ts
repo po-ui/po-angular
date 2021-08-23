@@ -139,17 +139,17 @@ describe('PoChartMathsService', () => {
       });
     });
 
-    it('getLongestDataValue: should call `sortLongestData` if type is `bar`', () => {
+    it('getLongestDataValue: should call `getLongestData` if type is `bar`', () => {
       const data = ['Vancouver', 'Otawa'];
       const type = PoChartType.Bar;
       const options = {};
 
-      const spySortLongestData = spyOn(service, <any>'sortLongestData');
+      const spyGetLongestData = spyOn(service, <any>'getLongestData');
       const spyGetAxisXLabelLongestValue = spyOn(service, <any>'getAxisXLabelLongestValue');
 
       service.getLongestDataValue(data, type, options);
 
-      expect(spySortLongestData).toHaveBeenCalledWith(data);
+      expect(spyGetLongestData).toHaveBeenCalledWith(data);
       expect(spyGetAxisXLabelLongestValue).not.toHaveBeenCalled();
     });
 
@@ -158,26 +158,26 @@ describe('PoChartMathsService', () => {
       const type = PoChartType.Line;
       const options = { axis: { gridLines: 5 } };
 
-      const spySortLongestData = spyOn(service, <any>'sortLongestData');
+      const spyGetLongestData = spyOn(service, <any>'getLongestData');
       const spyGetAxisXLabelLongestValue = spyOn(service, <any>'getAxisXLabelLongestValue');
 
       service.getLongestDataValue(data, type, options);
 
       expect(spyGetAxisXLabelLongestValue).toHaveBeenCalledWith(data, 5);
-      expect(spySortLongestData).not.toHaveBeenCalled();
+      expect(spyGetLongestData).not.toHaveBeenCalled();
     });
 
     it('getLongestDataValue: should call `getAxisXLabelLongestValue` passing data and 5 as params if options.axis is undefined', () => {
       const type = PoChartType.Line;
       const options = undefined;
 
-      const spySortLongestData = spyOn(service, <any>'sortLongestData');
+      const spyGetLongestData = spyOn(service, <any>'getLongestData');
       const spyGetAxisXLabelLongestValue = spyOn(service, <any>'getAxisXLabelLongestValue');
 
       service.getLongestDataValue(undefined, type, options);
 
       expect(spyGetAxisXLabelLongestValue).toHaveBeenCalledWith([], 5);
-      expect(spySortLongestData).not.toHaveBeenCalled();
+      expect(spyGetLongestData).not.toHaveBeenCalled();
     });
 
     it('getAxisXLabelLongestValue: should call `calculateMinAndMaxValues` passing data and allowNegativeData false as params', () => {
@@ -186,7 +186,7 @@ describe('PoChartMathsService', () => {
 
       const spyCalculateMinAndMaxValues = spyOn(service, <any>'calculateMinAndMaxValues');
       spyOn(service, <any>'range');
-      spyOn(service, <any>'sortLongestData');
+      spyOn(service, <any>'getLongestData');
 
       service['getAxisXLabelLongestValue'](data, gridLines);
 
@@ -199,25 +199,25 @@ describe('PoChartMathsService', () => {
 
       const spyCalculateMinAndMaxValues = spyOn(service, <any>'calculateMinAndMaxValues');
       spyOn(service, <any>'range');
-      spyOn(service, <any>'sortLongestData');
+      spyOn(service, <any>'getLongestData');
 
       service['getAxisXLabelLongestValue'](data, gridLines);
 
       expect(spyCalculateMinAndMaxValues).toHaveBeenCalledWith(data, true);
     });
 
-    it('getAxisXLabelLongestValue: should call `range` and `sortLongestData`', () => {
+    it('getAxisXLabelLongestValue: should call `range` and `getLongestData`', () => {
       const data = [{ data: [-30, 0, 10], type: PoChartType.Line }];
       const gridLines = 5;
 
       spyOn(service, <any>'calculateMinAndMaxValues');
       const spyRange = spyOn(service, <any>'range');
-      const spySortLongestData = spyOn(service, <any>'sortLongestData');
+      const spyGetLongestData = spyOn(service, <any>'getLongestData');
 
       service['getAxisXLabelLongestValue'](data, gridLines);
 
       expect(spyRange).toHaveBeenCalled();
-      expect(spySortLongestData).toHaveBeenCalled();
+      expect(spyGetLongestData).toHaveBeenCalled();
     });
 
     it('amountOfGridLines: should return 5 if options is undefined', () => {
@@ -244,10 +244,11 @@ describe('PoChartMathsService', () => {
       expect(service['amountOfGridLines'](options)).toBe(7);
     });
 
-    it('sortLongestData: should return 400 as longest data value', () => {
+    it('getLongestData: should return 400 as longest data value and do not change list order', () => {
       const data = [1, 2, 400, 3];
 
-      expect(service['sortLongestData'](data)).toBe(400);
+      expect(service['getLongestData'](data)).toBe(400);
+      expect(data).toEqual([1, 2, 400, 3]);
     });
   });
 });

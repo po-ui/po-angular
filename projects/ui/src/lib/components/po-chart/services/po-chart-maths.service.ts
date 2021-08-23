@@ -42,7 +42,7 @@ export class PoChartMathsService {
     options: PoChartOptions
   ): number | string {
     if (type === PoChartType.Bar) {
-      return this.sortLongestData<string>(data as Array<string>);
+      return this.getLongestData<string>(data as Array<string>);
     } else {
       return this.getAxisXLabelLongestValue(data as Array<PoChartSerie>, this.amountOfGridLines(options?.axis));
     }
@@ -127,7 +127,7 @@ export class PoChartMathsService {
     const domain: PoChartMinMaxValues = this.calculateMinAndMaxValues(data, allowNegativeData);
     const axisXLabelsList: Array<number> = this.range(domain, gridLines);
 
-    return this.sortLongestData<number>(axisXLabelsList);
+    return this.getLongestData<number>(axisXLabelsList);
   }
 
   // Cálculo que retorna o valor obtido de gridLines em relação ao alcance dos valores mínimos e máximos das séries (maxMinValues)
@@ -156,7 +156,8 @@ export class PoChartMathsService {
     return (1 / value) * (100 / 1);
   }
 
-  private sortLongestData<T>(serie: Array<T>): T {
-    return serie.sort((longest, current) => current.toString().length - longest.toString().length)['0'];
+  private getLongestData<T>(serie: Array<T>): T {
+    const newSerie = [...serie];
+    return newSerie.sort((longest, current) => current.toString().length - longest.toString().length)['0'];
   }
 }
