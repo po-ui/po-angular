@@ -162,6 +162,82 @@ describe('PoPageLoginComponent: ', () => {
     expect(divRegisterUrl.innerHTML).toContain(component.pageLoginLiterals.registerUrl);
   });
 
+  it('Should show a icon if not send literals', () => {
+    fixture.detectChanges();
+
+    const spanLoginHint = nativeElement.querySelector('span.po-icon-info');
+
+    expect(spanLoginHint).not.toBeNull();
+  });
+
+  it('Should show a icon if send literals', () => {
+    component.literals = {
+      loginHint: 'test'
+    };
+
+    fixture.detectChanges();
+
+    const spanLoginHint = nativeElement.querySelector('span.po-icon-info');
+
+    expect(spanLoginHint).not.toBeNull();
+  });
+
+  it('shouldn`t show a icon if literals is empty', () => {
+    component.literals = {
+      loginHint: '',
+      rememberUserHint: ''
+    };
+
+    fixture.detectChanges();
+
+    const spanLoginHint = nativeElement.querySelector('span.po-icon-info');
+
+    expect(spanLoginHint).toBeNull();
+  });
+
+  it('Should contain dynamic class in login and password fields if literals is empty', () => {
+    component.literals = {
+      loginHint: '',
+      rememberUserHint: ''
+    };
+
+    fixture.detectChanges();
+
+    const loginField = nativeElement.querySelector('po-login.po-page-login-info-field');
+    const passwordHint = nativeElement.querySelector('po-password.po-page-login-field-size');
+
+    expect(loginField).toHaveClass('po-page-login-info-field-dynamic');
+    expect(passwordHint).toHaveClass('po-page-login-field-size-dynamic');
+  });
+
+  it('shouldn`t contain dynamic class in login and password fields if contain literals', () => {
+    component.literals = {
+      loginHint: 'test',
+      rememberUserHint: 'test'
+    };
+
+    fixture.detectChanges();
+
+    const loginField = nativeElement.querySelector('po-login.po-page-login-info-field');
+    const passwordHint = nativeElement.querySelector('po-password.po-page-login-field-size');
+
+    expect(loginField).not.toHaveClass('po-page-login-info-field-dynamic');
+    expect(passwordHint).not.toHaveClass('po-page-login-field-size-dynamic');
+  });
+
+  it('Should contain dynamic class in `remember-user` field if `literals.loginHint` not is empty', () => {
+    component.literals = {
+      loginHint: 'test',
+      rememberUserHint: ''
+    };
+
+    fixture.detectChanges();
+
+    const divRememberUser = nativeElement.querySelector('div.po-page-login-info-icon-remember-user');
+
+    expect(divRememberUser).toHaveClass('po-page-login-info-icon-container-dynamic');
+  });
+
   describe('Methods:', () => {
     describe('ngOnInit:', () => {
       it('should call checkingForRouteMetadata', () => {
@@ -1038,6 +1114,52 @@ describe('PoPageLoginComponent: ', () => {
       expect(nativeElement.querySelector('.po-page-login-recovery-link').innerHTML).toContain(
         component.literals.forgotPassword
       );
+    });
+
+    it('should contain class `po-page-login-field-size-dynamic` in `po-combo` if literals is empty and `customField` is combo', () => {
+      customField = {
+        property: 'domain',
+        placeholder: 'Enter your domain',
+        url: 'https://po-ui.io/sample/api/comboOption/heroes',
+        fieldValue: 'nickname'
+      };
+      component.customField = customField;
+
+      component.literals = {
+        loginHint: '',
+        rememberUserHint: ''
+      };
+
+      fixture.detectChanges();
+
+      const poCombo = nativeElement.querySelector('po-combo');
+
+      expect(poCombo).toHaveClass('po-page-login-field-size-dynamic');
+    });
+
+    it('should contain class `po-page-login-field-size-dynamic` in `po-select` if literals is empty and `customField` is select', () => {
+      customField = {
+        property: 'domain',
+        placeholder: 'Enter your domain',
+        options: [
+          { label: 'Option 1', value: '1' },
+          { label: 'Option 2', value: '2' }
+        ],
+        url: 'https://po-ui.io/sample/api/comboOption/heroes',
+        fieldValue: 'nickname'
+      };
+      component.customField = customField;
+
+      component.literals = {
+        loginHint: '',
+        rememberUserHint: ''
+      };
+
+      fixture.detectChanges();
+
+      const poSelect = nativeElement.querySelector('po-select');
+
+      expect(poSelect).toHaveClass('po-page-login-field-size-dynamic');
     });
   });
 
