@@ -28,6 +28,9 @@
         <div class="po-page-login-hint po-page-login-info-container">
           <po-login
             class="po-page-login-info-field"
+            [class.po-page-login-info-field-dynamic]="
+              !pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint
+            "
             name="login"
             [(ngModel)]="login"
             p-auto-focus
@@ -41,8 +44,15 @@
           >
           </po-login>
 
-          <div class="po-page-login-info-icon-container">
+          <div
+            *ngIf="pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint"
+            class="po-page-login-info-icon-container"
+            [class.po-page-login-info-icon-container-dynamic]="
+              !pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint
+            "
+          >
             <span
+              *ngIf="pageLoginLiterals.loginHint"
               class="po-icon po-field-icon po-icon-info"
               p-tooltip-position="right"
               [p-tooltip]="pageLoginLiterals.loginHint"
@@ -66,6 +76,9 @@
         <div class="po-page-login-password-container">
           <po-password
             class="po-page-login-field-size po-page-login-password-item"
+            [class.po-page-login-field-size-dynamic]="
+              !pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint
+            "
             name="password"
             [(ngModel)]="password"
             p-required
@@ -77,7 +90,10 @@
             (p-change-model)="changePasswordModel()"
           >
           </po-password>
-          <div class="po-page-login-password-item po-page-login-password-popover-container">
+          <div
+            *ngIf="pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint"
+            class="po-page-login-password-item po-page-login-password-popover-container"
+          >
             <po-page-login-popover
               *ngIf="showExceededAttemptsWarning && exceededAttemptsWarning"
               [p-literals]="pageLoginLiterals"
@@ -101,6 +117,7 @@
 
       <po-input
         *ngIf="customField && customFieldType === 'input'"
+        [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
         class="po-page-login-field-size po-lg-12"
         name="customFieldInput"
         [(ngModel)]="customFieldObject.value"
@@ -114,6 +131,7 @@
 
       <po-combo
         *ngIf="customField && customFieldType === 'combo'"
+        [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
         class="po-page-login-field-size po-lg-12"
         name="customFieldCombo"
         [(ngModel)]="customFieldObject.value"
@@ -126,6 +144,7 @@
 
       <po-select
         *ngIf="customField && customFieldType === 'select'"
+        [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
         class="po-page-login-field-size po-lg-12"
         name="customFieldSelect"
         [(ngModel)]="customFieldObject.value"
@@ -148,8 +167,13 @@
           >
           </po-switch>
 
-          <div class="po-page-login-info-icon-container po-page-login-info-icon-remember-user">
+          <div
+            *ngIf="pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint"
+            class="po-page-login-info-icon-container po-page-login-info-icon-remember-user"
+            [class.po-page-login-info-icon-container-dynamic]="!pageLoginLiterals.rememberUserHint"
+          >
             <span
+              *ngIf="pageLoginLiterals.rememberUserHint"
               class="po-icon po-field-icon po-icon-info"
               p-tooltip-position="right"
               [p-tooltip]="pageLoginLiterals.rememberUserHint"
@@ -160,6 +184,7 @@
       </div>
 
       <po-button
+        [class.po-page-login-button-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
         class="po-lg-12 po-page-login-button po-page-login-field-size"
         p-type="primary"
         [p-disabled]="loginForm.invalid"
