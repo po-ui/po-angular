@@ -23,6 +23,8 @@
           class="po-calendar-day"
           [ngClass]="getDayBackgroundColor(day)"
           (click)="onSelectDate(day)"
+          (mouseenter)="onMouseEnter(day)"
+          (mouseleave)="onMouseLeave()"
           attr-calendar
         >
           <span *ngIf="day !== 0" [ngClass]="getDayForegroundColor(day)">
