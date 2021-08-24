@@ -1,18 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  forwardRef,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  EventEmitter
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, Output, EventEmitter } from '@angular/core';
+
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { PoCalendarLangService } from '../services/po-calendar.lang.service';
 import { PoCalendarService } from '../services/po-calendar.service';
 import { PoDateService } from '../../../services/po-date/po-date.service';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 @Component({
   selector: 'po-calendar-wrapper',
@@ -39,9 +32,13 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   @Input('p-max-date') maxDate;
 
+  @Input('p-hover-value') hoverValue: Date;
+
   @Output('p-header-change') headerChange = new EventEmitter<any>();
 
   @Output('p-select-date') selectDate = new EventEmitter<any>();
+
+  @Output('p-hover-date') hoverDate = new Subject<Date>().pipe(debounceTime(100));
 
   currentYear: number;
   displayDays: Array<number>;
@@ -101,8 +98,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   constructor(
     private poCalendarService: PoCalendarService,
     private poCalendarLangService: PoCalendarLangService,
-    private poDate: PoDateService,
-    private languageService: PoLanguageService
+    private poDate: PoDateService
   ) {}
 
   ngOnInit() {
@@ -149,6 +145,14 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
 
     this.headerChange.emit({ month: this.displayMonthNumber, year: this.displayYear });
+  }
+
+  onMouseEnter(day) {
+    (<Subject<Date>>this.hoverDate).next(day);
+  }
+
+  onMouseLeave() {
+    (<Subject<Date>>this.hoverDate).next(null);
   }
 
   // Ao selecionar uma data
@@ -247,6 +251,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       return this.getColorForDate(date, local);
     } else if (this.range && start && end && date > start && date < end) {
       return this.getColorForDateRange(date, local);
+    } else if (this.range && start && !end && date > start && date < this.hoverValue) {
+      return `po-calendar-box-${local}-hover`;
     } else if (!this.range && this.equalsDate(date, this.value)) {
       return this.getColorForDate(date, local);
     } else if (this.equalsDate(date, this.today)) {

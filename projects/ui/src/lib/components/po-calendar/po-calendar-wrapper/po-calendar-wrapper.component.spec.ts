@@ -476,6 +476,18 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component['getColorForDateRange']).toHaveBeenCalledWith(dateParam, local);
     });
 
+    it(`getDayColor: should return 'po-calendar-box-background-hover' if range is true and date between startDate and hoverValue`, () => {
+      const colorClass = 'po-calendar-box-background-hover';
+      const dateParam = new Date(2019, 4, 11);
+      const local = 'background';
+
+      component.selectedValue = { start: new Date(2019, 4, 10), end: null };
+      component.range = true;
+      component.hoverValue = new Date(2019, 4, 20);
+
+      expect(component['getDayColor'](dateParam, local)).toBe(colorClass);
+    });
+
     it(`getColorForDateRange: should return 'po-calendar-box-background-in-range' if 'poDate.validateDateRange'
       return 'true'`, () => {
       spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
@@ -581,6 +593,24 @@ describe('PoCalendarWrapperComponent', () => {
       component['onSelectDate'](date);
 
       expect(component.selectDate.emit).toHaveBeenCalledWith(date);
+    });
+
+    it(`onMouseEnter: should call 'hoverDate.next' with date param`, () => {
+      const date = new Date(2021, 5, 5);
+
+      const spyHoverDate = spyOn(component.hoverDate, <any>'next');
+
+      component['onMouseEnter'](date);
+
+      expect(spyHoverDate).toHaveBeenCalledWith(date);
+    });
+
+    it(`onMouseLeave: should call 'hoverDate.next' with null`, () => {
+      const spyHoverDate = spyOn(component.hoverDate, <any>'next');
+
+      component['onMouseLeave']();
+
+      expect(spyHoverDate).toHaveBeenCalledWith(null);
     });
   });
 });

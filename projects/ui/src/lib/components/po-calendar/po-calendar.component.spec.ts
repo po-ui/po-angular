@@ -474,6 +474,14 @@ describe('PoCalendarComponent:', () => {
 
       expect(component.activateDate).toEqual(null);
     });
+
+    it('onHoverDate: should set hoverValue', () => {
+      const expectedValue = new Date(2010, 7, 10);
+
+      component.onHoverDate(expectedValue);
+
+      expect(component.hoverValue).toBe(expectedValue);
+    });
   });
 
   describe('Templates:', () => {
