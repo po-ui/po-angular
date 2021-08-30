@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.11.0](https://github.com/po-ui/po-angular/compare/v5.10.0...v5.11.0) (2021-08-30)
+
+
+### Features
+
+* **calendar:** aplica estilo quando o mouse estiver sobre as datas ([6c8cbe6](https://github.com/po-ui/po-angular/commit/6c8cbe6f21cbdead2a9609f277e20fa49d06af28))
+* **calendar:** exibe a primeira data disponivel ([45b6c48](https://github.com/po-ui/po-angular/commit/45b6c48eabe44aeb0a43da09fa809a36b1b10cb2))
+
+
+
 # [5.10.0](https://github.com/po-ui/po-angular/compare/v5.9.0...v5.10.0) (2021-08-23)
 
 
