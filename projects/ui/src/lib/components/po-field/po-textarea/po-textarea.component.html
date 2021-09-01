@@ -1,6 +1,18 @@
 <po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
   <div class="po-field-container-content">
-    <textarea
+    <ani-textarea
+      #inp
+      (blur)="eventOnBlur()"
+      (focus)="eventOnFocus()"
+      (input)="eventOnInput($event)"
+      [attr.placeholder]="placeholder"
+      [attr.readonly]="readonly"
+      [attr.required]="required"
+      [attr.rows]="rows"
+      [attr.name]="name"
+    >
+    </ani-textarea>
+    <!-- <textarea
       #inp
       class="po-textarea"
       (blur)="eventOnBlur()"
@@ -13,7 +25,7 @@
       [required]="required"
       [rows]="rows"
     >
-    </textarea>
+    </textarea> -->
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>

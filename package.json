@@ -103,6 +103,7 @@
     "@angular/cli": "^12.0.1",
     "@angular/compiler-cli": "^12.0.1",
     "@angular/language-service": "^12.0.1",
+    "@animaliads/web-components": "^1.0.0",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-angular": "^12.1.4",
     "@po-ui/ng-schematics": "^5.0.0",

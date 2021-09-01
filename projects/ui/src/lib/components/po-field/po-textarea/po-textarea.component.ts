@@ -3,6 +3,8 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
+import '@animaliads/web-components';
+
 /**
  * @docsExtends PoTextareaBaseComponent
  *
@@ -46,7 +48,7 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
   ]
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit {
-  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: false }) inputEl: any;
 
   valueBeforeChange: any;
   fireChange: boolean = false;
@@ -74,7 +76,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
    */
   focus(): void {
     if (!this.disabled) {
-      this.inputEl.nativeElement.focus();
+      this.inputEl.nativeElement['setFocus']();
     }
   }
 
@@ -88,9 +90,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (this.inputEl) {
       if (!value) {
         // Se for o valor for undefined, deve limpar o campo
-        this.inputEl.nativeElement.value = '';
+        this.inputEl.nativeElement.setAttribute('value', '');
       } else {
-        this.inputEl.nativeElement.value = value;
+        this.inputEl.nativeElement.setAttribute('value', value);
       }
     }
 
@@ -107,12 +109,12 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   eventOnInput(event: any) {
     const value = this.validMaxLength(this.maxlength, event.target.value);
     this.callOnChange(value);
-    this.inputEl.nativeElement.value = value;
+    this.inputEl.nativeElement.setAttribute('value', value);
   }
 
   eventOnFocus() {
     // Atualiza valor da variável que será usada para verificar se o campo teve alteração
-    this.valueBeforeChange = this.inputEl.nativeElement.value;
+    this.valueBeforeChange = this.inputEl.nativeElement.getAttribute('value');
 
     // Dispara evento quando o usuário entrar no campo
     // Este evento também é disparado quando o campo inicia com foco.
@@ -126,7 +128,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   controlChangeEmitter() {
-    const elementValue = this.inputEl.nativeElement.value;
+    const elementValue = this.inputEl.nativeElement.getAttribute('value');
 
     if (elementValue !== this.valueBeforeChange) {
       this.change.emit(elementValue);
