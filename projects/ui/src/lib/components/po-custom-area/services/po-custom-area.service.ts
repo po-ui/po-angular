@@ -8,13 +8,12 @@ import { CustomComponent, CustomComponents } from '../po-custom-area.interface';
   providedIn: 'root'
 })
 export class PoCustomAreaService {
-  constructor(private http: HttpClient) {}
+  loaded: CustomComponents = [];
+  componentsAdded: Array<any> = [];
 
   //:TODO: Implementar o método de set da API do I18N
   private _api: string;
 
-  loaded: CustomComponents = [];
-  componentsAdded: Array<any> = [];
   private _model: any = {};
 
   get api() {
@@ -25,23 +24,76 @@ export class PoCustomAreaService {
     this._api = api;
   }
 
+  constructor(private http: HttpClient) {}
+
+  add(
+    tileKind: string,
+    element: string,
+    props?: { [key: string]: string },
+    classStyle?: string,
+    events?: { [key: string]: (event: any) => void },
+    slotText?: string
+  ): Observable<boolean> {
+    console.log({ tileKind });
+    return this.load(tileKind).pipe(
+      tap(loaded => {
+        if (loaded) {
+          const tile = this.createComponent(tileKind, element, props, classStyle, events, slotText);
+          this.componentsAdded.push(tile);
+        }
+      })
+    );
+  }
+
+  notifyAll(props?: any) {
+    // console.log('notify', this._model);
+    this.componentsAdded.forEach(component => {
+      console.log('testinho', props, this._model);
+      if (typeof component.notify === 'function') {
+        component.notify(props, this._model);
+      }
+    });
+  }
+
+  setModel(model) {
+    this._model = { ...this._model, ...model };
+    console.log('setModel', model, this._model);
+  }
+
   private load(component: string): Observable<boolean> {
+    const teste = this.loaded.find(custom => custom.component === component);
+    console.log(teste);
     if (this.loaded.find(custom => custom.component === component)) {
-      return of(true);
+      console.log('retornei');
+      const element = document.getElementById(component);
+      document.body.removeChild(element);
+      this.loaded.shift();
+      // return of(true);
     }
 
     return this.http.get<CustomComponent>(`${this.api}/${component}`).pipe(
       map(custom => ({ ...custom, src: atob(custom.src) })),
       map(custom => {
         const { src, ...customNoSrc } = custom;
+        const customId = customNoSrc.component;
         this.loaded.push(customNoSrc);
         const script = document.createElement('script');
         script.text = src;
+        script.id = customId;
         if (custom?.integrity) {
           script.integrity = custom.integrity;
           script.crossOrigin = 'anonymous';
         }
-        document.body.appendChild(script);
+        const element = document.getElementById(customId);
+        console.log({ element });
+        if (element == null) {
+          console.log('nao exite');
+          document.body.appendChild(script);
+        } else {
+          console.log('existe');
+          document.body.removeChild(element);
+          document.body.appendChild(script);
+        }
         return true;
       })
     );
@@ -81,36 +133,5 @@ export class PoCustomAreaService {
     content.appendChild(tile);
 
     return tile;
-  }
-
-  add(
-    tileKind: string,
-    element: string,
-    props?: { [key: string]: string },
-    classStyle?: string,
-    events?: { [key: string]: (event: any) => void },
-    slotText?: string
-  ): Observable<boolean> {
-    return this.load(tileKind).pipe(
-      tap(loaded => {
-        if (loaded) {
-          const tile = this.createComponent(tileKind, element, props, classStyle, events, slotText);
-          this.componentsAdded.push(tile);
-        }
-      })
-    );
-  }
-
-  notifyAll(props?: any) {
-    console.log('notify', this._model);
-    this.componentsAdded.forEach(component => {
-      if (typeof component.notify === 'function') {
-        component.notify(props, this._model);
-      }
-    });
-  }
-
-  setModel(model) {
-    this._model = { ...this._model, ...model };
   }
 }
