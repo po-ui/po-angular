@@ -48,6 +48,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   addCustomEventListener() {
+    // todo precisa ser implementado em todos os inputs de entrada
     document.addEventListener('emitValue', (object: any) => {
       object.detail.forEach(element => {
         if (element.name === this.name) {
