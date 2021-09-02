@@ -1,4 +1,6 @@
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunction from '../../../utils/util';
@@ -14,6 +16,7 @@ import { PoMultiselectItemComponent } from './po-multiselect-item/po-multiselect
 import { PoMultiselectSearchComponent } from './po-multiselect-search/po-multiselect-search.component';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
@@ -28,8 +31,14 @@ describe('PoMultiselectComponent:', () => {
   let component: PoMultiselectComponent;
   let fixture: ComponentFixture<PoMultiselectComponent>;
 
+  let multiSelectService: PoMultiselectFilterService;
+  let httpMock: HttpTestingController;
+
+  const mockURL = 'rest/tecnologies';
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       declarations: [
         PoDisclaimerComponent,
         PoFieldContainerComponent,
@@ -38,7 +47,8 @@ describe('PoMultiselectComponent:', () => {
         PoMultiselectItemComponent,
         PoMultiselectSearchComponent,
         PoFieldContainerBottomComponent
-      ]
+      ],
+      providers: [HttpClient, HttpHandler, PoMultiselectFilterService]
     });
   });
 
@@ -50,6 +60,13 @@ describe('PoMultiselectComponent:', () => {
     component.autoHeight = true;
 
     fixture.detectChanges();
+
+    multiSelectService = TestBed.inject(PoMultiselectFilterService);
+    httpMock = TestBed.inject(HttpTestingController);
+
+    multiSelectService.configProperties(mockURL, 'name', 'id');
+
+    component.service = multiSelectService;
   });
 
   it('should be created', () => {
@@ -375,6 +392,26 @@ describe('PoMultiselectComponent:', () => {
       const fnDestroy = () => component.ngOnDestroy();
 
       expect(fnDestroy).not.toThrow();
+    });
+
+    it('Should call `setService` if a change occurs', () => {
+      const changes = { filterService: 'filterServiceURL' };
+
+      spyOn(component, <any>'setService');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['setService']).toHaveBeenCalledWith(component.filterService);
+    });
+
+    it(`Shouldn't call 'setService' if not a change occurs`, () => {
+      const changes = {};
+
+      spyOn(component, <any>'setService');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['setService']).not.toHaveBeenCalledWith(component.filterService);
     });
 
     it('focus: should call `focus` of multiselect', () => {
@@ -894,6 +931,8 @@ describe('PoMultiselectComponent:', () => {
       component['applyFilterInFirstClick']();
 
       expect(component['filterSubject'].next).toHaveBeenCalled();
+      /* eslint-disable no-new-wrappers */
+      expect(component['filterSubject'].next).toHaveBeenCalledWith(new String());
     });
 
     it('applyFilterInFirstClick: should set `options` with `cacheOptions` data', () => {
