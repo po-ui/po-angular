@@ -5,6 +5,9 @@
     [(ngModel)]="multiselect"
     [p-auto-height]="properties.includes('autoHeight')"
     [p-disabled]="properties.includes('disabled')"
+    [p-field-label]="fieldLabel"
+    [p-field-value]="fieldValue"
+    [p-filter-service]="filterService"
     [p-filter-mode]="filterMode"
     [p-help]="help"
     [p-hide-search]="properties.includes('hideSearch')"
@@ -78,6 +81,24 @@
       (p-change)="changeLiterals()"
     >
     </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-12"
+      name="filterService"
+      [(ngModel)]="filterService"
+      p-clean
+      p-help="https://po-sample-api.herokuapp.com/v1/heroes"
+      p-label="Filter Service"
+    >
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input class="po-md-6" name="fieldValue" [(ngModel)]="fieldValue" p-clean p-label="Field Value"> </po-input>
+
+    <po-input class="po-md-6" name="fieldLabel" [(ngModel)]="fieldLabel" p-clean p-label="Field Label"> </po-input>
   </div>
 
   <div class="po-row">

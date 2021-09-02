@@ -5,8 +5,10 @@ import {
   DoCheck,
   ElementRef,
   forwardRef,
+  OnChanges,
   OnDestroy,
   Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -21,12 +23,14 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
 
 /* istanbul ignore next */
 const providers = [
+  PoMultiselectFilterService,
   PoControlPositionService,
   {
     provide: NG_VALUE_ACCESSOR,
@@ -78,7 +82,9 @@ const providers = [
   templateUrl: './po-multiselect.component.html',
   providers
 })
-export class PoMultiselectComponent extends PoMultiselectBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
+export class PoMultiselectComponent
+  extends PoMultiselectBaseComponent
+  implements AfterViewInit, DoCheck, OnDestroy, OnChanges {
   @ViewChild('dropdownElement', { read: ElementRef, static: true }) dropdownElement: ElementRef;
   @ViewChild('dropdownElement', { static: true }) dropdown;
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;
@@ -100,6 +106,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     private changeDetector: ChangeDetectorRef,
     private el: ElementRef,
     private controlPosition: PoControlPositionService,
+    public defaultService: PoMultiselectFilterService,
     languageService: PoLanguageService
   ) {
     super(languageService);
@@ -110,6 +117,12 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
       this.focus();
     }
     this.initialized = true;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.filterService || changes.fieldValue || changes.fieldLabel) {
+      this.setService(this.filterService);
+    }
   }
 
   ngDoCheck() {
@@ -317,9 +330,8 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   applyFilter(value: string = ''): Observable<Array<PoMultiselectOption>> {
-    const param = { property: 'label', value };
-
-    return this.filterService.getFilteredData(param).pipe(
+    const param = { property: 'label', value: value };
+    return this.service.getFilteredData(param).pipe(
       catchError(err => {
         this.isServerSearching = false;
         return of([]);
@@ -334,7 +346,10 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     if (this.isFirstFilter) {
       this.isServerSearching = true;
 
-      this.filterSubject.next();
+      // necessario enviar um objeto string vazia para refazer a busca, quando alterar filterService, fieldValue e fieldLabel
+      // pois temos o distinctUntilChange no pipe do filterSubject
+      /* eslint-disable no-new-wrappers */
+      this.filterSubject.next(new String());
     } else {
       this.options = [...this.cacheOptions];
     }

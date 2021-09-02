@@ -23,6 +23,16 @@ const poMultiselectFilterServiceStub: PoMultiselectFilter = {
     return of([{ label: '', value: '' }]);
   }
 };
+
+const defaultService: any = {
+  url: '',
+  fieldLabel: 'label',
+  fieldValue: 'value',
+  getFilteredData: (params: any) => new Observable(),
+  getObjectByValue: (value: string | number) => new Observable(),
+  configProperties: (url: string, label: string, value: string) => {}
+};
+
 @Directive()
 class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
   constructor() {
@@ -133,6 +143,44 @@ describe('PoMultiselectBaseComponent:', () => {
     spyOn(component, 'validAndSortOptions');
     component.sort = true;
     expect(component.validAndSortOptions).toHaveBeenCalled();
+  });
+
+  it('should set p-field-label with `defaultValue` if param is empty', () => {
+    component.filterService = 'http://exemple.com';
+    component.defaultService = defaultService;
+    const defaultValue = 'label';
+    component.setService(component.filterService);
+
+    expectSettersMethod(component, 'fieldLabel', '', 'fieldLabel', defaultValue);
+    expect(component.service.fieldLabel).toEqual(defaultValue);
+  });
+
+  it('should set p-field-label if param is not empty', () => {
+    component.filterService = defaultService;
+    component.service = defaultService;
+    const otherValueLabel = 'email';
+
+    expectSettersMethod(component, 'fieldLabel', 'email', 'fieldLabel', otherValueLabel);
+    expect(component.service.fieldLabel).not.toEqual(otherValueLabel);
+  });
+
+  it('should set p-field-value with `defaultValue` if param is empty', () => {
+    component.filterService = 'http://exemple.com';
+    component.defaultService = defaultService;
+    const defaultValue = 'value';
+    component.setService(component.filterService);
+
+    expectSettersMethod(component, 'fieldValue', '', 'fieldValue', defaultValue);
+    expect(component.service.fieldValue).toEqual(defaultValue);
+  });
+
+  it('should set p-field-value if param is not empty', () => {
+    component.filterService = defaultService;
+    component.service = defaultService;
+    const otherValue = 'id';
+
+    expectSettersMethod(component, 'fieldValue', 'id', 'fieldValue', otherValue);
+    expect(component.service.fieldValue).not.toEqual(otherValue);
   });
 
   it('should call updateList in OnInit', () => {
@@ -458,7 +506,7 @@ describe('PoMultiselectBaseComponent:', () => {
 
     it('writeValue: should call `updateSelectedOptions` with values if model value is `valid`.', () => {
       spyOn(component, 'updateSelectedOptions');
-      component.filterService = poMultiselectFilterServiceStub;
+      component.service = poMultiselectFilterServiceStub;
 
       const values = [{ label: '', value: '' }];
 

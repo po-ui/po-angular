@@ -24,6 +24,9 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   placeholder: string;
   placeholderSearch: string;
   properties: Array<string>;
+  filterService: string;
+  fieldLabel: string;
+  fieldValue: string;
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Starts With', value: 'startsWith' },
@@ -70,6 +73,9 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     this.placeholder = '';
     this.placeholderSearch = undefined;
     this.properties = [];
+    this.filterService = '';
+    this.fieldLabel = '';
+    this.fieldValue = '';
 
     this.option = { label: undefined, value: undefined };
     this.options = [];
