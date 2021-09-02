@@ -44,6 +44,7 @@ export class ClientesComponent {
     items: [{ label: 'Home', action: this.beforeRedirect.bind(this) }, { label: 'User Edit' }]
   };
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @ViewChild('formEditUser', { static: true }) formEditUser: NgForm;
 
   constructor(
@@ -53,6 +54,7 @@ export class ClientesComponent {
     private poCustomAreaService: PoCustomAreaService
   ) {}
 
+  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnInit() {
     this.initialize();
   }
@@ -96,6 +98,7 @@ export class ClientesComponent {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   changePerson(personType) {
     //this.poCustomAreaService.notifyAll({ personType });
   }

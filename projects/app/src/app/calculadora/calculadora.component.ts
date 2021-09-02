@@ -15,22 +15,6 @@ export class CalculadoraComponent {
     label: 'Resultado',
     action: () => {}
   };
-  local = {
-    name: 'local',
-    disabled: false,
-    value: 'Sansão',
-    placeholder: 'Local',
-    label: 'Local',
-    action: () => {}
-  };
-  endereco = {
-    name: 'address',
-    disabled: true,
-    value: '',
-    placeholder: 'Endereco',
-    label: 'Endereco',
-    action: () => {}
-  };
   url = 'http://localhost:3000/custom';
   constructor() {}
 

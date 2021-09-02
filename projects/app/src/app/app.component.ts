@@ -12,6 +12,9 @@ export class AppComponent {
     { label: 'Cliente', link: '/cliente' },
     { label: 'Teste', link: '/teste' },
     { label: 'Calculadora', link: '/calculadora' },
-    { label: 'Resultados', link: '/resultados' }
+    { label: 'Resultados', link: '/resultados' },
+    { label: 'POC', link: '/poc' },
+    { label: 'Form', link: '/form' },
+    { label: 'Chart', link: '/chart' }
   ];
 }

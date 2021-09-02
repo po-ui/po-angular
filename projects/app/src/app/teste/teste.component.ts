@@ -6,7 +6,6 @@ import { PoCustomAreaService, PoRadioGroupOption } from '../../../../ui/src/lib'
   templateUrl: './teste.component.html'
 })
 export class TesteComponent {
-  constructor(private poCustomAreaService: PoCustomAreaService) {}
   open = false;
   personType: string = 'CPF';
   cnpj = 'aaa';
@@ -18,13 +17,15 @@ export class TesteComponent {
   };
   classButton = 'po-md-4';
   eventButon = { clickButton: this.toggle.bind(this) };
-  slotButton = 'Teste';
+  slotButton = 'Teste 13';
   eventInput = { emitValue: this.setCNPJ.bind(this) };
 
   readonly personOptions: Array<PoRadioGroupOption> = [
     { label: 'Jurídica', value: 'CNPJ' },
     { label: 'Física', value: 'CPF' }
   ];
+
+  constructor(private poCustomAreaService: PoCustomAreaService) {}
 
   setCNPJ(event) {
     const { value } = event.detail;

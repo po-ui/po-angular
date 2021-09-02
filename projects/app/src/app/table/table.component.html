@@ -1,0 +1,16 @@
+<po-page-default p-title="Table">
+  <po-divider p-label="Formulário"></po-divider>
+
+  <po-dynamic-form class="po-md-12" [p-fields]="fields" [p-value]="value"> </po-dynamic-form>
+
+  <po-divider p-label="webcomponets"></po-divider>
+
+  <po-custom-area
+    class="po-md-12"
+    p-api-custom="http://localhost:3000/custom"
+    p-component-name="fp-root"
+    p-class-container="po-md-12"
+    [p-events]="eventButton"
+    p-id-container="content1"
+  ></po-custom-area>
+</po-page-default>
