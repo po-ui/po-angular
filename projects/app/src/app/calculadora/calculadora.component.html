@@ -1,5 +1,4 @@
 <po-page-default p-title="Calculadora">
-  <p>calculadora works!</p>
   <po-info p-label="Resultado" [p-value]="resultado.value"></po-info>
   <po-input
     id="resultado"
@@ -9,25 +8,6 @@
     [p-label]="resultado.label"
     [p-placeholder]="resultado.placeholder"
   ></po-input>
-  <po-input
-    id="local"
-    [name]="local.name"
-    [(ngModel)]="local.value"
-    [p-disabled]="local.disabled"
-    [p-label]="local.label"
-    [p-placeholder]="local.placeholder"
-  ></po-input>
-  <po-input
-    id="endereco"
-    [name]="endereco.name"
-    [(ngModel)]="endereco.value"
-    [p-disabled]="endereco.disabled"
-    [p-label]="endereco.label"
-    [p-placeholder]="endereco.placeholder"
-  ></po-input>
-  <po-input></po-input>
-
-  <button *ngIf="resultado" (click)="resultado.action()">Show</button>
 
   <po-custom-area
     class="po-row po-mt-1"

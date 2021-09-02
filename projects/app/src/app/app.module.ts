@@ -6,14 +6,26 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-route.routing';
 import { PoTemplatesModule } from './../../../templates/src/lib/po-templates.module';
 import { ClientesComponent } from './clientes/clientes.component';
-import { PoModule } from '../../../ui/src/lib';
+import { PoModule, PoTableModule } from '../../../ui/src/lib';
 import { TesteComponent } from './teste/teste.component';
 import { CalculadoraComponent } from './calculadora/calculadora.component';
 import { ResultadosComponent } from './resultados/resultados.component';
+import { PocComponent } from './poc/poc.component';
+import { TableComponent } from './table/table.component';
+import { ChartComponent } from './chart/chart.component';
 
 @NgModule({
-  declarations: [AppComponent, ClientesComponent, TesteComponent, CalculadoraComponent, ResultadosComponent],
-  imports: [BrowserModule, FormsModule, AppRoutingModule, PoModule, PoTemplatesModule],
+  declarations: [
+    AppComponent,
+    ClientesComponent,
+    TesteComponent,
+    CalculadoraComponent,
+    ResultadosComponent,
+    PocComponent,
+    TableComponent,
+    ChartComponent
+  ],
+  imports: [BrowserModule, FormsModule, AppRoutingModule, PoModule, PoTemplatesModule, PoTableModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

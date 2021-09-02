@@ -1,0 +1,22 @@
+<po-page-default p-title="POC">
+  <po-switch name="whatis" [(ngModel)]="whatis"></po-switch>
+
+  <po-custom-area
+    class="po-md-12"
+    [p-api-custom]="url"
+    p-component-name="app-cnpj"
+    p-class-style="po-md-12"
+    p-class-container="po-md-12"
+    p-id-container="content5"
+    *ngIf="whatis"
+  ></po-custom-area>
+  <po-custom-area
+    class="po-md-12"
+    [p-api-custom]="url"
+    p-component-name="poc-cpf"
+    p-class-style="po-md-12"
+    p-class-container="po-md-12"
+    p-id-container="content5"
+    *ngIf="!whatis"
+  ></po-custom-area>
+</po-page-default>
