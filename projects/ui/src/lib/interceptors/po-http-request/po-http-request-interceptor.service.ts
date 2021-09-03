@@ -1,12 +1,11 @@
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { ComponentRef, Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 import { PoComponentInjectorService } from '../../services/po-component-injector/po-component-injector.service';
 import { PoLoadingOverlayComponent } from '../../components/po-loading/po-loading-overlay/po-loading-overlay.component';
-
 import { PoHttpRequesControltService } from './po-http-request-control-service';
 
 const noCountPendingRequests = 'X-PO-No-Count-Pending-Requests';
@@ -118,17 +117,9 @@ export class PoHttpRequestInterceptorService implements HttpInterceptor {
     this.setCountOverlayRequests(true, requestClone);
 
     return next.handle(request).pipe(
-      tap((response: HttpEvent<any>) => {
-        if (response instanceof HttpResponse) {
-          this.setCountPendingRequests(false, requestClone);
-          this.setCountOverlayRequests(false, requestClone);
-        }
-      }),
-      catchError(error => {
+      finalize(() => {
         this.setCountPendingRequests(false, requestClone);
         this.setCountOverlayRequests(false, requestClone);
-
-        return throwError(error);
       })
     );
   }
