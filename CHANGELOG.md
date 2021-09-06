@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.12.0](https://github.com/po-ui/po-angular/compare/v5.11.0...v5.12.0) (2021-09-06)
+
+
+### Bug Fixes
+
+* **interceptor:** corrige interceptor quando a requisição é cancelada ([cb4dfd4](https://github.com/po-ui/po-angular/commit/cb4dfd4a95799fdfd5f3a5edb3fbb4255db1d093))
+
+
+### Features
+
+* **page-login:** esconde os ícones das dicas quando não contém as respectivas literais ([bcb4a72](https://github.com/po-ui/po-angular/commit/bcb4a72ac9010d0bd1af97fbd3df50fe5f886fbc))
+
+
+
 # [5.11.0](https://github.com/po-ui/po-angular/compare/v5.10.0...v5.11.0) (2021-08-30)
 
 
