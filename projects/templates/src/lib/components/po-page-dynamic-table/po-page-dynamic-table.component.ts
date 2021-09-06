@@ -800,7 +800,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return customActions.map(customAction => ({
       label: customAction.label,
       action: this.callPageCustomAction.bind(this, customAction),
-      disabled: this.isDisablePageCustomAction.bind(this, customAction)
+      disabled: this.isDisablePageCustomAction.bind(this, customAction),
+      ...(customAction.icon && { icon: customAction.icon })
     }));
   }
 

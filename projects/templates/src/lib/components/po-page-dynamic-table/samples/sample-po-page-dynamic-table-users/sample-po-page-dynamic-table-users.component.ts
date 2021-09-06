@@ -70,8 +70,12 @@ export class SamplePoPageDynamicTableUsersComponent {
   ];
 
   pageCustomActions: Array<PoPageDynamicTableCustomAction> = [
-    { label: 'Print', action: this.printPage.bind(this) },
-    { label: 'Download .csv', action: this.usersService.downloadCsv.bind(this.usersService, this.serviceApi) }
+    { label: 'Print', action: this.printPage.bind(this), icon: 'po-icon-print' },
+    {
+      label: 'Download .csv',
+      action: this.usersService.downloadCsv.bind(this.usersService, this.serviceApi),
+      icon: 'po-icon-download'
+    }
   ];
 
   tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [
