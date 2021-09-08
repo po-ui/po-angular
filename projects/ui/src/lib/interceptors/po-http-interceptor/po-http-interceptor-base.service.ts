@@ -122,6 +122,7 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  *    - Caso for informado, será exibido uma ação de "Ajuda" na notificação, para isso não deverá ter a propriedade `detailedMessage`.
  * - `type`: É possível informar `error`, `warning` e `information`, sendo `error` o valor padrão.
  * - `details`: Uma lista de objetos de mensagem (recursiva) com mais detalhes sobre a mensagem principal.
+ * - `detailTitle`: caso for informado, será apresentado como título dos detalhes substituindo o padrão `code - message`
  *
  * > Veja o [Guia de implementação de APIs](guides/api) para mais detalhes sobre a estrutura das mensagens.
  *
