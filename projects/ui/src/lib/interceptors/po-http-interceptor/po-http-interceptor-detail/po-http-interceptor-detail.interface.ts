@@ -11,6 +11,9 @@ export interface PoHttpInterceptorDetail {
   /** Código */
   code: string;
 
+  /** Título do detalhe */
+  detailTitle?: string;
+
   /** Mensagem detalhada */
   detailedMessage: string;
 
