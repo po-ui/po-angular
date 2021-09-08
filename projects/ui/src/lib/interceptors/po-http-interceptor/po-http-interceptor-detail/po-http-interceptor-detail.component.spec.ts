@@ -149,6 +149,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
         detailedMessage: 'test 1',
         message: 'message 1',
         type: 'success',
+        detailTitle: 'detail title 1',
         details: [],
         _messages: []
       };
@@ -157,7 +158,8 @@ describe('PoHttpInterceptorDetailComponent:', () => {
         code: '200',
         detailedMessage: 'test 1',
         message: 'message 1',
-        type: 'success'
+        type: 'success',
+        detailTitle: 'detail title 1'
       };
 
       expect(component['getValidDetailProperties'](detail)).toEqual(expectedDetail);
@@ -166,9 +168,9 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     it('formatTitle: should return literals.detail if details length is 1', () => {
       const details = [{ code: '200', detailedMessage: 'test 1', message: 'message 1', type: 'success' }];
 
-      component['literals'].detail = 'Detail';
+      const expectedTitle = '200 - message 1';
 
-      expect(component['formatTitle'](details)).toBe(component['literals'].detail);
+      expect(component['formatTitle'](details)).toBe(expectedTitle);
     });
 
     it('formatTitle: should return literals.details and details legth if details length isn`t 1', () => {
@@ -203,6 +205,17 @@ describe('PoHttpInterceptorDetailComponent:', () => {
       };
 
       expect(component['formatDetailItemTitle'](detail)).toBe('1000 - message');
+    });
+
+    it('formatDetailItemTitle: should return detail title when his exists', () => {
+      const detail: PoHttpInterceptorDetail = {
+        message: 'message',
+        code: '1000',
+        detailedMessage: '',
+        detailTitle: 'title'
+      };
+
+      expect(component['formatDetailItemTitle'](detail)).toBe('title');
     });
 
     it('typeValue: should return type if poHttpInterceptorDetailLiteralsDefault not contain type', () => {

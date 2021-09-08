@@ -52,7 +52,11 @@ export class PoHttpInterceptorDetailComponent {
   }
 
   formatDetailItemTitle(detail) {
-    return detail.code ? `${detail.code} - ${detail.message}` : detail.message;
+    return detail.detailTitle
+      ? detail.detailTitle
+      : detail.code
+      ? `${detail.code} - ${detail.message}`
+      : detail.message;
   }
 
   open() {
@@ -71,8 +75,10 @@ export class PoHttpInterceptorDetailComponent {
     return detail.message ? newDetails.concat(this.getValidDetailProperties(detail)) : newDetails;
   }
 
-  private getValidDetailProperties({ code, message, detailedMessage, type }: PoHttpInterceptorDetail) {
-    return { code, message, detailedMessage, type };
+  private getValidDetailProperties({ code, message, detailedMessage, type, detailTitle }: PoHttpInterceptorDetail) {
+    return detailTitle
+      ? { code, message, detailedMessage, type, detailTitle }
+      : { code, message, detailedMessage, type };
   }
 
   private filterByValidDetails(details: Array<PoHttpInterceptorDetail>) {
@@ -80,6 +86,10 @@ export class PoHttpInterceptorDetailComponent {
   }
 
   private formatTitle(details: Array<PoHttpInterceptorDetail>) {
-    return details.length > 1 ? `${this.literals.details} (${details.length})` : this.literals.detail;
+    return details.length > 1
+      ? `${this.literals.details} (${details.length})`
+      : details.length === 1
+      ? this.formatDetailItemTitle(details[0])
+      : this.literals.detail;
   }
 }
