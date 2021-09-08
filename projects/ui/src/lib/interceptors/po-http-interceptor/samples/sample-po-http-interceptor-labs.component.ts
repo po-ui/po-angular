@@ -17,6 +17,7 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
   errorMessage = `{
     "code": "401",
     "message": "Not Authorized",
+    "detailTitle": "Invalid credentials",
     "detailedMessage": "The request has not been applied because it lacks valid authentication credentials for the target resource.",
     "type": "error",
     "helpUrl": "",
@@ -39,6 +40,7 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
             "details": [{
               "code": "202",
               "message": "Accepted",
+              "detailTitle": "Request was received",
               "detailedMessage": "The request has been accepted for processing, but the processing has not been completed.",
               "type": "warning"
             }]
