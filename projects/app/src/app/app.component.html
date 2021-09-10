@@ -8,29 +8,35 @@
 <po-button p-label="teste Animalia primary" p-type="primary" (p-click)="testa()"></po-button>
 <br />
 <br />
-<po-button p-label="teste Animalia link" p-type="link" (p-click)="testa()"></po-button>
+<po-button p-label="teste Animalia default/secondary" (p-click)="testa()"></po-button>
 <br />
 <br />
-<po-button p-label="teste Animalia danger" p-type="danger" (p-click)="testa()"></po-button>
+<po-button p-label="teste Animalia link/tertiary" p-type="link" (p-click)="testa()"></po-button>
+<br />
+<br />
+<po-button p-label="teste Animalia danger/secondary danger" p-type="danger" (p-click)="testa()"></po-button>
 <br />
 <br />
 <po-button p-label="teste Animalia primary disabled" p-type="primary" p-disabled (p-click)="testa()"></po-button>
 <br />
 <br />
-<po-button p-label="teste Animalia disabled default" p-disabled (p-click)="testa()"></po-button>
+<po-button p-label="teste Animalia default disabled" p-disabled (p-click)="testa()"></po-button>
+<br />
+<br />
+<po-button p-label="teste Animalia link disabled" p-type="link" p-disabled (p-click)="testa()"></po-button>
 <br />
 <br />
 <div>
   <po-button
-    class="po-sm-12"
+    class="po-sm-12 po-mb-5"
     p-label="teste Animalia com grid system po-sm-12"
     p-disabled
     (p-click)="testa()"
   ></po-button>
 </div>
-
 <po-divider p-label="icons"></po-divider>
-
+<br />
+<br />
 <div class="po-row">
   <po-button
     p-icon="po-icon-calendar"
@@ -67,11 +73,21 @@
 ></po-button>
 <br />
 <br />
+<po-button
+  p-icon="po-icon-calendar"
+  p-loading
+  p-type="link"
+  p-label="teste Animalia disabled default"
+  p-disabled
+  (p-click)="testa()"
+></po-button>
+<br />
+<br />
 <div>
   <po-button
     p-icon="po-icon-calendar"
     p-loading
-    class="po-sm-12"
+    class="po-sm-12 po-mb-5"
     p-label="Teste Animalia com grid system po-sm-12"
     p-disabled
     (p-click)="testa()"
