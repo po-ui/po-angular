@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.13.0](https://github.com/po-ui/po-angular/compare/v5.12.0...v5.13.0) (2021-09-13)
+
+
+### Features
+
+* **interceptor:** adiciona a propriedade `detailTitle` para permitir definir o titulo da mensagem retornada ([8cf3895](https://github.com/po-ui/po-angular/commit/8cf38952910c8a0f10cead909bfa227b3dc1abba))
+* **interceptor:** exibe a mensagem principal na modal caso houver apenas uma mensagem de retorno ([0e1d9a1](https://github.com/po-ui/po-angular/commit/0e1d9a1014a5644af252fb78c00d488f193228ab))
+* **multiselect:** permite informar url na propriedade `p-filter-service` ([b776de5](https://github.com/po-ui/po-angular/commit/b776de5af5a95d37b9604ac622a337606d2e115e))
+* **po-page-dynamic-table:** adiciona icon a interface `PoPageDynamicTableCustomAction` ([cad36e0](https://github.com/po-ui/po-angular/commit/cad36e0a28973e29a3b53b5f98f7f245b2ed9c31)), closes [#987](https://github.com/po-ui/po-angular/issues/987)
+* **table:** adicionada propriedade `PoTableColumn.sortable` ([ed65201](https://github.com/po-ui/po-angular/commit/ed65201a4c154d6fd5d7b8d6c5177c64cd1153ed)), closes [#960](https://github.com/po-ui/po-angular/issues/960)
+
+
+
 # [5.12.0](https://github.com/po-ui/po-angular/compare/v5.11.0...v5.12.0) (2021-09-06)
 
 
