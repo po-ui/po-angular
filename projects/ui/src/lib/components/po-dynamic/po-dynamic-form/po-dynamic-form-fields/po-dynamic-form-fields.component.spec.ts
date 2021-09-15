@@ -90,6 +90,36 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     describe('onChangeField', () => {
       const changedFieldIndex = 0;
 
+      it('should call `getField` with `propertyOfVisibleFields` if field type boolean', () => {
+        const fakeVisibleField = { property: 'test1', validate: 'teste', type: 'boolean' };
+
+        component['previousValue']['test1'] = 'value';
+        component['value']['test1'] = 'new value';
+
+        const field = { changedField: fakeVisibleField, changedFieldIndex };
+        component['form'] = <any>{ touched: false };
+
+        spyOn(component, <any>'getField').and.returnValue(field);
+        component.onChangeField(fakeVisibleField);
+
+        expect(component['getField']).toHaveBeenCalledWith(fakeVisibleField.property);
+      });
+
+      it(`shouldn't call 'getField' with 'propertyOfVisibleFields' if field type not boolean and 'form.touched' is false`, () => {
+        const fakeVisibleField = { property: 'test1', validate: 'teste' };
+
+        component['previousValue']['test1'] = 'value';
+        component['value']['test1'] = 'new value';
+
+        const field = { changedField: fakeVisibleField, changedFieldIndex };
+        component['form'] = <any>{ touched: false };
+
+        spyOn(component, <any>'getField').and.returnValue(field);
+        component.onChangeField(fakeVisibleField);
+
+        expect(component['getField']).not.toHaveBeenCalledWith(fakeVisibleField.property);
+      });
+
       it('should call `getField` with `propertyOfVisibleFields` if field value changed', () => {
         const fakeVisibleField = { property: 'test1', validate: 'teste' };
 
