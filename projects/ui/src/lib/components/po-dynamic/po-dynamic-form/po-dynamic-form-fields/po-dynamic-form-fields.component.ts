@@ -53,6 +53,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   async onChangeField(visibleField: PoDynamicFormField, objectValue?: any) {
     const { property } = visibleField;
+    const isBooleanType = visibleField.type === 'boolean';
     const isChangedValueField = this.previousValue[property] !== this.value[property];
 
     if (visibleField.optionsService) {
@@ -60,7 +61,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     }
 
     // verifica se o formulario esta touched para não disparar o validate ao carregar a tela.
-    if (this.form.touched && isChangedValueField) {
+    if ((this.form.touched || isBooleanType) && isChangedValueField) {
       const { changedField, changedFieldIndex } = this.getField(property);
 
       if (changedField.validate) {
