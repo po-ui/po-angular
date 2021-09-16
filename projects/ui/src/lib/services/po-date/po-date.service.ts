@@ -33,7 +33,7 @@ export class PoDateService {
    * @param minDate Definir `true` caso seja `minDate`.
    * @param maxDate Definir `true` caso seja `maxDate`.
    */
-  convertIsoToDate(dateString: string, minDate: boolean, maxDate: boolean): Date {
+  convertIsoToDate(dateString: string, minDate?: boolean, maxDate?: boolean): Date {
     if (dateString) {
       const { year, month, day } = this.getDateFromIso(dateString);
 

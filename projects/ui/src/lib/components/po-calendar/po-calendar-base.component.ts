@@ -161,9 +161,9 @@ export class PoCalendarBaseComponent {
     const activateDate = date ? date : this.verifyActivateDate();
 
     if (this.isRange) {
-      const checkedStart = new Date(activateDate);
+      const checkedStart =
+        typeof activateDate === 'string' ? this.poDate.convertIsoToDate(activateDate) : new Date(activateDate);
       const checkedEnd = new Date(new Date(checkedStart).setMonth(checkedStart.getMonth() + 1));
-
       this.activateDate = { start: checkedStart, end: checkedEnd };
     } else {
       this.activateDate = new Date(activateDate);
