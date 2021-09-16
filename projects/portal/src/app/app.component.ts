@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoMenuItem, PoNavbarItem, PoNavbarIconAction } from '@po-ui/ng-components';
+import { PoMenuItem, PoNavbarItem, PoNavbarIconAction, PoNotificationService } from '@po-ui/ng-components';
 
 import { VersionService } from './shared/version.service';
+
+const KEY_STORAGE_REVIEW_SURVEY = 'review_survey_po_ui';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +17,7 @@ export class AppComponent implements OnInit {
 
   private location;
 
-  constructor(private versionService: VersionService) {}
+  constructor(private versionService: VersionService, private notification: PoNotificationService) {}
 
   async ngOnInit() {
     const version = await this.versionService.getCurrentVersion().toPromise();
@@ -36,9 +38,23 @@ export class AppComponent implements OnInit {
       { icon: 'po-icon-social-twitter', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
       { icon: 'po-icon-social-instagram', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' }
     ];
+
+    setTimeout(this.showReviewNotification.bind(this), 1000);
   }
 
-  // private sortDocs(docs) {
-  //   return docs.sort((prev, next) => prev.name < next.name ? -1 : 1);
-  // }
+  openExternalLink(url) {
+    window.open(url, '_blank');
+  }
+
+  private showReviewNotification() {
+    if (!localStorage.getItem(KEY_STORAGE_REVIEW_SURVEY)) {
+      this.notification.information({
+        message: 'Queremos ouvir você, participe da nossa Pesquisa de Review!',
+        action: this.openExternalLink.bind(this, 'https://forms.gle/uZRrFcQLc7cmdckN7'),
+        actionLabel: 'Responder'
+      });
+
+      localStorage.setItem(KEY_STORAGE_REVIEW_SURVEY, 'true');
+    }
+  }
 }
