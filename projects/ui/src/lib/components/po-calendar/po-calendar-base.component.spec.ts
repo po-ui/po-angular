@@ -101,6 +101,29 @@ describe('PoCalendarBaseComponent:', () => {
       expect(end.getFullYear()).toBe(year);
     });
 
+    it('setActivateDate: should set {start, end } with date param of type string if isRange is true', () => {
+      const date = '2021-09-15';
+      const day = 15;
+      const year = 2021;
+      const month = 9;
+
+      spyOnProperty(component, 'isRange').and.returnValue(true);
+
+      component['setActivateDate'](date);
+      const { start, end } = component.activateDate;
+
+      expect(start instanceof Date).toBe(true);
+      expect(end instanceof Date).toBe(true);
+
+      expect(start.getDate()).toBe(day);
+      expect(start.getMonth()).toBe(month - 1);
+      expect(start.getFullYear()).toBe(year);
+
+      expect(end.getDate()).toBe(day);
+      expect(end.getMonth()).toBe(month);
+      expect(end.getFullYear()).toBe(year);
+    });
+
     it('setActivateDate: should set with date param if isRange is false', () => {
       const date = new Date(2019, 10, 5);
 
