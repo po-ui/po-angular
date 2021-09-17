@@ -1,15 +1,15 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   forwardRef,
+  Injector,
   OnDestroy,
   OnInit,
-  ViewChild,
-  AfterViewInit,
-  Injector
+  Renderer2,
+  ViewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-
 import { Subscription } from 'rxjs';
 
 import { PoLookupBaseComponent } from './po-lookup-base.component';
@@ -84,6 +84,12 @@ const providers = [
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.component.ts"> </file>
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.service.ts"> </file>
  * </example>
+ *
+ * <example name="po-lookup-multiple" title="PO Lookup - Multiple">
+ *  <file name="sample-po-lookup-multiple/sample-po-lookup-multiple.component.html"> </file>
+ *  <file name="sample-po-lookup-multiple/sample-po-lookup-multiple.component.ts"> </file>
+ *  <file name="sample-po-lookup-multiple/sample-po-lookup-multiple.service.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-lookup',
@@ -91,15 +97,24 @@ const providers = [
   providers
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit {
-  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
+
+  initialized = false;
+  timeoutResize;
+  visibleElement = false;
+
+  disclaimers = [];
+  visibleDisclaimers = [];
 
   private modalSubscription: Subscription;
+  private isCalculateVisibleItems: boolean = true;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
   }
 
   constructor(
+    private renderer: Renderer2,
     poLookupFilterService: PoLookupFilterService,
     private poLookupModalService: PoLookupModalService,
     injector: Injector
@@ -109,8 +124,21 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
+
     if (this.autoFocus) {
       this.focus();
+    }
+
+    this.initialized = true;
+  }
+
+  ngDoCheck() {
+    const inputWidth = this.inputEl?.nativeElement.offsetWidth;
+    // Permite que os disclaimers sejam calculados na primeira vez que o componente torna-se visível,
+    // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
+    if ((inputWidth && !this.visibleElement && this.initialized) || (inputWidth && this.isCalculateVisibleItems)) {
+      this.debounceResize();
+      this.visibleElement = true;
     }
   }
 
@@ -122,6 +150,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   ngOnInit() {
     super.ngOnInit();
+    this.initializeListeners();
   }
 
   /**
@@ -149,7 +178,19 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   openLookup(): void {
     if (this.isAllowedOpenModal()) {
-      const { advancedFilters, service, columns, filterParams, literals, infiniteScroll } = this;
+      const {
+        advancedFilters,
+        service,
+        columns,
+        filterParams,
+        literals,
+        infiniteScroll,
+        multiple,
+        fieldLabel,
+        fieldValue
+      } = this;
+
+      const selectedItems = this.checkSelectedItems();
 
       this.poLookupModalService.openModal({
         advancedFilters,
@@ -158,21 +199,52 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         filterParams,
         title: this.label,
         literals,
-        infiniteScroll
+        infiniteScroll,
+        multiple,
+        selectedItems,
+        fieldLabel,
+        fieldValue
       });
 
       if (!this.modalSubscription) {
-        this.modalSubscription = this.poLookupModalService.selectValueEvent.subscribe(element => {
-          this.selectModel(element);
+        this.modalSubscription = this.poLookupModalService.selectValueEvent.subscribe(selectedOptions => {
+          if (selectedOptions.length > 1 || this.disclaimers.length) {
+            this.setDisclaimers(selectedOptions);
+            this.updateVisibleItems();
+          }
+
+          this.selectModel(selectedOptions);
         });
       }
     }
   }
 
-  setViewValue(value: any, object: any): void {
-    if (this.fieldFormat) {
-      this.setInputValueWipoieldFormat(object);
+  checkSelectedItems() {
+    if (this.multiple) {
+      if (!this.disclaimers.length && this.valueToModel?.length) {
+        return [{ value: this.valueToModel[0], label: this.oldValue, ...this.selectedOptions[0] }];
+      }
+
+      return this.disclaimers;
     } else {
+      return this.valueToModel;
+    }
+  }
+
+  setDisclaimers(selectedOptions: Array<any>) {
+    this.disclaimers = selectedOptions.map(selectedOption => ({
+      value: selectedOption[this.fieldValue],
+      label: selectedOption[this.fieldLabel],
+      ...selectedOption
+    }));
+
+    this.visibleDisclaimers = [...this.disclaimers];
+  }
+
+  setViewValue(value: any, object: any): void {
+    if (this.inputEl && this.fieldFormat) {
+      this.setInputValueWipoieldFormat(object);
+    } else if (this.inputEl) {
       this.inputEl.nativeElement.value = this.valueToModel || this.valueToModel === 0 ? value : '';
     }
   }
@@ -185,9 +257,91 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     this.onTouched?.();
     const value = this.getViewValue();
 
-    if (this.oldValue.toString() !== value) {
+    if (this.oldValue?.toString() !== value) {
       this.searchById(value);
     }
+  }
+
+  closeDisclaimer(value) {
+    this.disclaimers = this.disclaimers.filter(disclaimer => disclaimer.value !== value);
+    this.valueToModel = this.valueToModel.filter(model => model !== value);
+
+    this.updateVisibleItems();
+    this.callOnChange(this.valueToModel.length ? this.valueToModel : undefined);
+  }
+
+  updateVisibleItems() {
+    if (this.disclaimers && this.disclaimers.length > 0) {
+      this.visibleDisclaimers = [].concat(this.disclaimers);
+    }
+
+    this.debounceResize();
+
+    if (!this.inputEl.nativeElement.offsetWidth) {
+      this.isCalculateVisibleItems = true;
+    }
+  }
+
+  debounceResize() {
+    if (!this.autoHeight) {
+      clearTimeout(this.timeoutResize);
+      this.timeoutResize = setTimeout(() => {
+        this.calculateVisibleItems();
+      }, 200);
+    }
+  }
+
+  getInputWidth() {
+    return this.inputEl.nativeElement.offsetWidth - 40;
+  }
+
+  getDisclaimersWidth() {
+    const disclaimers = this.inputEl.nativeElement.querySelectorAll('po-disclaimer');
+    return Array.from(disclaimers).map(disclaimer => disclaimer['offsetWidth']);
+  }
+
+  calculateVisibleItems() {
+    const disclaimersWidth = this.getDisclaimersWidth();
+    const inputWidth = this.getInputWidth();
+    const extraDisclaimerSize = 38;
+    const disclaimersVisible = disclaimersWidth[0];
+
+    const newDisclaimers = [];
+    const disclaimers = this.disclaimers;
+
+    if (inputWidth > 0) {
+      let sum = 0;
+      let i = 0;
+      for (i = 0; i < disclaimers.length; i++) {
+        sum += disclaimersWidth[i];
+        newDisclaimers.push(disclaimers[i]);
+
+        if (sum > inputWidth) {
+          sum -= disclaimersWidth[i];
+          this.isCalculateVisibleItems = false;
+          break;
+        }
+      }
+
+      if (disclaimersVisible || !disclaimers.length) {
+        if (i === disclaimers.length) {
+          this.isCalculateVisibleItems = false;
+          return;
+        }
+
+        if (sum + extraDisclaimerSize > inputWidth) {
+          newDisclaimers.splice(-2, 2);
+          const label = '+' + (disclaimers.length + 1 - i).toString();
+          newDisclaimers.push({ value: '', label: label });
+        } else {
+          newDisclaimers.splice(-1, 1);
+          const label = '+' + (disclaimers.length - i).toString();
+          newDisclaimers.push({ value: '', label: label });
+        }
+      }
+    }
+
+    this.visibleDisclaimers = [...newDisclaimers];
   }
 
   private isAllowedOpenModal(): boolean {
@@ -197,6 +351,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
     return !!(this.service && !this.disabled);
   }
+
   private formatFields(objectSelected, properties) {
     let formatedField;
     if (Array.isArray(properties)) {
@@ -229,5 +384,11 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
     this.oldValue = isEmpty ? '' : fieldFormated;
     this.inputEl.nativeElement.value = isEmpty ? '' : fieldFormated;
+  }
+
+  private initializeListeners(): void {
+    this.resizeListener = this.renderer.listen('window', 'resize', () => {
+      this.updateVisibleItems();
+    });
   }
 }

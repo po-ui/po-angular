@@ -17,6 +17,8 @@
   [p-placeholder]="placeholder"
   [p-required]="properties.includes('required')"
   [p-infinite-scroll]="properties.includes('infiniteScroll')"
+  [p-multiple]="properties.includes('multiple')"
+  [p-auto-height]="properties.includes('autoHeight')"
   (p-error)="changeEvent('p-error')"
   (p-selected)="changeEvent('p-selected')"
   (p-change)="changeEvent('p-change')"
