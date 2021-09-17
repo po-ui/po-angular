@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive } from '@angular/core';
+import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive, ChangeDetectorRef } from '@angular/core';
 
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -22,6 +22,7 @@ import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interf
 import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerGroup } from './../../../po-disclaimer-group/po-disclaimer-group.interface';
 import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
+import { PoTableComponent } from './../../../po-table/po-table.component';
 
 export const poLookupLiteralsDefault = {
   en: <PoLookupLiterals>{
@@ -94,6 +95,7 @@ export const poLookupLiteralsDefault = {
 @Directive()
 export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+  @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
 
   /**
    * Objeto com os campos que serão criados no busca avançada.
@@ -126,8 +128,26 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   /** Se verdadeiro, ativa a funcionalidade de scroll infinito para a tabela exibida no retorno da consulta. */
   @Input('p-infinite-scroll') @InputBoolean() infiniteScroll: boolean = false;
 
+  /** Se verdadeiro, ativa a funcionalidade de multipla seleção. */
+  @Input('p-multiple') @InputBoolean() multiple: boolean = false;
+
   /** Evento utilizado ao selecionar um registro da tabela. */
   @Output('p-change-model') model: EventEmitter<any> = new EventEmitter<any>();
+
+  /** Classe de serviço com items selecionados */
+  @Input('p-selected-items') selectedItems: any;
+
+  /** Indica a coluna que será utilizada como descrição do campo e como filtro dentro da janela. */
+  @Input('p-field-label') fieldLabel: string;
+
+  /**
+   * @description
+   *
+   * Indica a coluna que será utilizada como valor do campo.
+   *
+   * > Atenção: Caso não seja passada ou tenha o conteúdo incorreto, não irá atualizar o model do formulário.
+   */
+  @Input('p-field-value') fieldValue: string;
 
   hasNext = true;
   isLoading = false;
@@ -144,6 +164,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   isAdvancedFilter = false;
   primaryActionAdvancedFilter!: PoModalAction;
   secondaryActionAdvancedFilter!: PoModalAction;
+  selecteds: Array<any> = [];
 
   protected sort: PoTableColumnSort;
 
@@ -158,12 +179,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   primaryAction: PoModalAction = {
     action: () => {
-      this.items.forEach(element => {
-        if (element['$selected']) {
-          this.model.emit(element);
-          this.poModal.close();
-        }
-      });
+      const selectedsItems = this.selecteds;
+
+      this.model.emit(selectedsItems);
+      this.poModal.close();
     },
     label: this.literals.modalPrimaryActionLabel
   };
@@ -209,7 +228,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     return this._title;
   }
 
-  constructor(languageService: PoLanguageService) {
+  constructor(languageService: PoLanguageService, private changeDetector: ChangeDetectorRef) {
     this.language = languageService.getShortLanguage();
   }
 
@@ -306,9 +325,30 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
           this.items = [...this.items, ...data.items];
           this.hasNext = data.hasNext;
           this.isLoading = false;
+          this.changeDetector.detectChanges();
+          this.setSelectedItems();
         },
         () => {}
       );
+  }
+
+  //Método responsável por selecionar as linhas quando abre o modal.
+  setSelectedItems() {
+    this.selecteds.forEach(selectedItem =>
+      this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem.value)
+    );
+  }
+
+  //Método responsável por criar os disclaimers quando abre o modal.
+  setDisclaimersItems() {
+    if (this.selectedItems && !Array.isArray(this.selectedItems)) {
+      this.selecteds = [{ value: this.selectedItems }];
+      return;
+    }
+
+    if (this.selectedItems && this.selectedItems.length) {
+      this.selecteds = [...this.selectedItems];
+    }
   }
 
   private setAdvancedFilterModalProperties() {
@@ -403,6 +443,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     this.items = data?.items ?? [];
     this.hasNext = data?.hasNext ?? false;
     this.isLoading = false;
+    this.changeDetector.detectChanges();
+    this.setDisclaimersItems();
+    this.setSelectedItems();
   }
 
   private setTableLiterals() {

@@ -15,7 +15,6 @@ import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupComponent } from './po-lookup.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { NgControl } from '@angular/forms';
-
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
     return of({ items: [{ value: 123, label: 'teste' }] });
@@ -183,6 +182,34 @@ describe('PoLookupComponent:', () => {
       expect(fnError).not.toThrow();
     });
 
+    it(`searchEvent: should call searchById if 'oldValue' is null`, () => {
+      component['oldValue'] = null;
+      const spySearchById = spyOn(component, 'searchById');
+
+      component.searchEvent();
+      expect(spySearchById).toHaveBeenCalled();
+    });
+
+    it(`searchEvent: should call searchById if 'oldValue' is different than value`, () => {
+      component['oldValue'] = 'test';
+      const spySearchById = spyOn(component, 'searchById');
+      spyOn(component, 'getViewValue').and.returnValue('test1');
+
+      component.searchEvent();
+
+      expect(spySearchById).toHaveBeenCalled();
+    });
+
+    it(`searchEvent: shouldn´t call searchById if 'oldValue' is equal value`, () => {
+      component['oldValue'] = 'test';
+      const spySearchById = spyOn(component, 'searchById');
+      spyOn(component, 'getViewValue').and.returnValue('test');
+
+      component.searchEvent();
+
+      expect(spySearchById).not.toHaveBeenCalled();
+    });
+
     it('modalSubscription: should `unsubscribe` on destroy.', () => {
       component['modalSubscription'] = fakeSubscription;
 
@@ -280,18 +307,37 @@ describe('PoLookupComponent:', () => {
       'modalSubscription' is undefined`, inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
       component.service = lookupFilterService;
       component['modalSubscription'] = undefined;
-      component['poLookupModalService'].selectValueEvent = <any>of(objectSelected);
+      component['poLookupModalService'].selectValueEvent = <any>of([objectSelected]);
 
       spyOn(component, <any>'selectModel');
       spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
 
       component.openLookup();
 
-      expect(component['selectModel']).toHaveBeenCalledWith(objectSelected);
+      expect(component['selectModel']).toHaveBeenCalledWith([objectSelected]);
       expect(component['modalSubscription']).toBeDefined();
     }));
 
-    it('setViewValue: should call `setInputValueWipoieldFormat` when `fieldFormat` is defined', () => {
+    it(`openLookup: should set 'modalSubscription' and call 'setDisclaimers' if 'selectedOptions' is greater than one and
+    'modalSubscription' is undefined`, inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+      component.service = lookupFilterService;
+      component['modalSubscription'] = undefined;
+      component['poLookupModalService'].selectValueEvent = <any>of([objectSelected, objectSelected]);
+
+      spyOn(component, 'setDisclaimers');
+      spyOn(component, 'updateVisibleItems');
+      spyOn(component, <any>'selectModel');
+      spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+
+      component.openLookup();
+
+      expect(component['selectModel']).toHaveBeenCalledWith([objectSelected, objectSelected]);
+      expect(component['modalSubscription']).toBeDefined();
+      expect(component['setDisclaimers']).toHaveBeenCalled();
+      expect(component['updateVisibleItems']).toBeDefined();
+    }));
+
+    it('setViewValue: should call `setInputValueWipoieldFormat` if `fieldFormat` is defined', () => {
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
 
       spyOn(component, <any>'setInputValueWipoieldFormat');
@@ -301,7 +347,7 @@ describe('PoLookupComponent:', () => {
       expect(component['setInputValueWipoieldFormat']).toHaveBeenCalledWith(objectSelected);
     });
 
-    it('setViewValue: should set nativeElement value with value when not have a formatField and have a valueToModel', () => {
+    it('setViewValue: should set nativeElement value with value if not have a formatField and have a valueToModel', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = 123;
 
@@ -322,7 +368,7 @@ describe('PoLookupComponent:', () => {
       expect(component.inputEl.nativeElement.value).toBe('valueTeste');
     });
 
-    it('setViewValue: should set nativeElement value with `` when not have a formatField and not have a valueToModel', () => {
+    it('setViewValue: should set nativeElement value with `` if not have a formatField and not have a valueToModel', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = undefined;
 
@@ -332,6 +378,510 @@ describe('PoLookupComponent:', () => {
 
       expect(component.inputEl.nativeElement.value).toBe('');
       expect(component['setInputValueWipoieldFormat']).not.toHaveBeenCalled();
+    });
+
+    it('setViewValue: should not set input.value if inputEl is undefined', () => {
+      component.fieldFormat = undefined;
+      component.inputEl = undefined;
+      component['valueToModel'] = undefined;
+
+      spyOn(component, <any>'setInputValueWipoieldFormat');
+
+      component.setViewValue(null, null);
+
+      expect(component.inputEl).toBeUndefined();
+      expect(component['setInputValueWipoieldFormat']).not.toHaveBeenCalled();
+    });
+
+    it('checkSelectedItems: should return disclaimers if contain `disclaimers` and `valueToModel`', () => {
+      component.multiple = true;
+      const expectedValue = {
+        value: 'test',
+        label: 'testLabel'
+      };
+
+      component.disclaimers = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        }
+      ];
+
+      component['valueToModel'] = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        },
+        {
+          value: 'test2',
+          label: 'testLabel2'
+        }
+      ];
+
+      const valueCheckSelectedItems = component.checkSelectedItems();
+
+      expect(valueCheckSelectedItems[0]).toEqual(expectedValue);
+    });
+
+    it('checkSelectedItems: should return disclaimers if `valueToModel.length` is falsy', () => {
+      component.multiple = true;
+
+      component.disclaimers = [];
+      component['valueToModel'] = undefined;
+
+      expect(component.checkSelectedItems()).toEqual(component.disclaimers);
+    });
+
+    it('checkSelectedItems: should return object with value and label if not contain `disclaimers` but contain `valueToModel`', () => {
+      component.multiple = true;
+      const expectedValue = [
+        {
+          value: {
+            value: 'test',
+            label: 'testLabel'
+          },
+          label: ''
+        }
+      ];
+
+      component.disclaimers = [];
+
+      component['valueToModel'] = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        }
+      ];
+
+      const valueCheckSelectedItems = component.checkSelectedItems();
+
+      expect(valueCheckSelectedItems[0]).toEqual(expectedValue[0]);
+    });
+
+    it('checkSelectedItems: should return `valueToModel` if multiple is false', () => {
+      component.multiple = false;
+      const expectedValue = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        }
+      ];
+
+      component.disclaimers = [];
+
+      component['valueToModel'] = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        }
+      ];
+
+      const valueCheckSelectedItems = component.checkSelectedItems();
+
+      expect(valueCheckSelectedItems).toEqual(expectedValue);
+    });
+
+    it('setDisclaimers: should set disclaimers with items selected', () => {
+      const selectedOptions = [
+        {
+          value: 1,
+          label: 'label'
+        },
+        {
+          value: 2,
+          label: 'label2'
+        }
+      ];
+
+      component.visibleDisclaimers = [
+        {
+          value: 1,
+          label: 'label'
+        }
+      ];
+
+      component.setDisclaimers(selectedOptions);
+
+      expect(component.visibleDisclaimers.length).toEqual(2);
+      expect(component.disclaimers.length).toEqual(2);
+    });
+
+    it('closeDisclaimer: should set disclaimers with items selected', () => {
+      const itemsDisclaimers = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        },
+        {
+          value: 'test1',
+          label: 'testLabel1'
+        }
+      ];
+
+      const spyUpdateVisibleItems = spyOn(component, 'updateVisibleItems');
+      const spyCallOnChange = spyOn(component, 'callOnChange').and.callThrough();
+
+      component.disclaimers = itemsDisclaimers;
+      component['valueToModel'] = itemsDisclaimers;
+
+      component.closeDisclaimer('test');
+
+      expect(component.disclaimers.length).toEqual(1);
+      expect(spyUpdateVisibleItems).toHaveBeenCalled();
+      expect(spyCallOnChange).toHaveBeenCalled();
+    });
+
+    it('closeDisclaimer: should set disclaimers with items selected and call `callOnChange` sent undefined', () => {
+      const itemsDisclaimers = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        },
+        {
+          value: 'test1',
+          label: 'testLabel1'
+        }
+      ];
+
+      const spyUpdateVisibleItems = spyOn(component, 'updateVisibleItems');
+      const spyCallOnChange = spyOn(component, 'callOnChange').and.callThrough();
+
+      component.disclaimers = itemsDisclaimers;
+      component['valueToModel'] = [];
+
+      component.closeDisclaimer('test');
+
+      expect(component.disclaimers.length).toEqual(1);
+      expect(spyUpdateVisibleItems).toHaveBeenCalled();
+      expect(spyCallOnChange).toHaveBeenCalled();
+    });
+
+    it('updateVisibleItems: should concat `visibleDisclaimers` with items of disclaimers', () => {
+      const itemsDisclaimers = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        },
+        {
+          value: 'test1',
+          label: 'testLabel1'
+        }
+      ];
+
+      const spyDebounceResize = spyOn(component, 'debounceResize');
+
+      component.disclaimers = itemsDisclaimers;
+
+      component.updateVisibleItems();
+
+      expect(component.visibleDisclaimers.length).toEqual(2);
+      expect(spyDebounceResize).toHaveBeenCalled();
+    });
+
+    it(`updateVisibleItems: shouldn't concat 'visibleDisclaimers' with items of disclaimers`, () => {
+      const spyDebounceResize = spyOn(component, 'debounceResize');
+
+      component.disclaimers = [];
+
+      component.visibleDisclaimers = [
+        {
+          value: 'test',
+          label: 'test'
+        }
+      ];
+      component.updateVisibleItems();
+
+      expect(component.disclaimers.length).toEqual(0);
+      expect(component.visibleDisclaimers.length).toEqual(1);
+      expect(spyDebounceResize).toHaveBeenCalled();
+    });
+
+    it('updateVisibleItems: should set true in `isCalculateVisibleItems` if `offsetWidth` is false', () => {
+      const spyDebounceResize = spyOn(component, 'debounceResize');
+      component.disclaimers = [];
+
+      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(false);
+
+      component.updateVisibleItems();
+
+      expect(component['isCalculateVisibleItems']).toBeTruthy();
+      expect(spyDebounceResize).toHaveBeenCalled();
+    });
+
+    it('updateVisibleItems: should set false in `isCalculateVisibleItems` if `offsetWidth` is true', () => {
+      component['isCalculateVisibleItems'] = false;
+      const spyDebounceResize = spyOn(component, 'debounceResize');
+      component.disclaimers = [];
+
+      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(true);
+
+      component.updateVisibleItems();
+
+      expect(component['isCalculateVisibleItems']).toBeFalsy();
+      expect(spyDebounceResize).toHaveBeenCalled();
+    });
+
+    it(`debounceResize: should call 'calculateVisibleItems'`, fakeAsync(() => {
+      component.autoHeight = false;
+
+      const spyCalculateVisibleItems = spyOn(component, 'calculateVisibleItems');
+
+      component.debounceResize();
+      tick(201);
+
+      expect(spyCalculateVisibleItems).toHaveBeenCalled();
+    }));
+
+    it(`debounceResize: shouldn't call 'calculateVisibleItems'`, fakeAsync(() => {
+      component.autoHeight = true;
+
+      const spyCalculateVisibleItems = spyOn(component, 'calculateVisibleItems');
+
+      component.debounceResize();
+      tick(201);
+
+      expect(spyCalculateVisibleItems).not.toHaveBeenCalled();
+    }));
+
+    it(`getInputWidth: should decrease by 40 the value of 'offsetWidth'`, () => {
+      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(100);
+
+      const inputWidthValue = component.getInputWidth();
+
+      expect(inputWidthValue).toEqual(60);
+    });
+
+    it(`getDisclaimersWidth: should return a Array of width disclaimers'`, () => {
+      const itemsOfDisclaimer = [
+        {
+          value: 'valueTest',
+          label: 'valueLabel',
+          offsetWidth: 106
+        },
+        {
+          value: 'valueTest2',
+          label: 'valueLabel2',
+          offsetWidth: 97
+        }
+      ];
+
+      component.visibleDisclaimers = itemsOfDisclaimer;
+      component.disclaimers = itemsOfDisclaimer;
+
+      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth');
+
+      fixture.detectChanges();
+
+      const getDisclaimersWidthValue = component.getDisclaimersWidth();
+
+      expect(getDisclaimersWidthValue.length).toEqual(2);
+    });
+
+    it(`calculateVisibleItems: should set 'visibleDisclaimers' with value and '+1' in input`, () => {
+      const arrayDisclaimers: Array<Number> = [116, 97];
+      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
+      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(186);
+      const expectValue = [
+        {
+          label: 'valueTest'
+        },
+        {
+          value: '',
+          label: '+1'
+        }
+      ];
+
+      const itemsOfDisclaimer = [
+        {
+          label: 'valueTest'
+        },
+        {
+          label: 'valueTest2'
+        }
+      ];
+
+      component.visibleDisclaimers = itemsOfDisclaimer;
+      component.disclaimers = itemsOfDisclaimer;
+
+      component.calculateVisibleItems();
+
+      const valueOfVisibleDisclaimers = component.visibleDisclaimers;
+
+      expect(valueOfVisibleDisclaimers).toEqual(expectValue);
+      expect(spyGetDisclaimersWidth).toHaveBeenCalled();
+      expect(spyGetInputWidth).toHaveBeenCalled();
+    });
+
+    it(`calculateVisibleItems: should set empty array in'visibleDisclaimers' if 'InputWidth' is less than 0`, () => {
+      const arrayDisclaimers: Array<Number> = [116, 97];
+      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
+      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(0);
+
+      const itemsOfDisclaimer = [
+        {
+          label: 'valueTest'
+        },
+        {
+          label: 'valueTest2'
+        }
+      ];
+
+      component.visibleDisclaimers = itemsOfDisclaimer;
+      component.disclaimers = itemsOfDisclaimer;
+
+      component.calculateVisibleItems();
+
+      const valueOfVisibleDisclaimers = component.visibleDisclaimers;
+
+      expect(valueOfVisibleDisclaimers).toEqual([]);
+      expect(spyGetDisclaimersWidth).toHaveBeenCalled();
+      expect(spyGetInputWidth).toHaveBeenCalled();
+    });
+
+    it(`calculateVisibleItems: should set empty array in 'visibleDisclaimers' if 'disclaimers' are empty`, () => {
+      const arrayDisclaimers: Array<Number> = [116, 97];
+      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
+      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(0);
+
+      component.visibleDisclaimers = [];
+      component.disclaimers = [];
+
+      component.calculateVisibleItems();
+
+      const valueOfVisibleDisclaimers = component.visibleDisclaimers;
+
+      expect(valueOfVisibleDisclaimers).toEqual([]);
+      expect(spyGetDisclaimersWidth).toHaveBeenCalled();
+      expect(spyGetInputWidth).toHaveBeenCalled();
+    });
+
+    it(`calculateVisibleItems: set 'Object' in 'disclaimers' when 'visibleDisclaimers' is empty but 'disclaimers' contain item`, () => {
+      const arrayDisclaimers: Array<Number> = [90];
+      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
+      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
+      const expectValue = [
+        {
+          value: '',
+          label: '+3'
+        }
+      ];
+
+      const itemsOfDisclaimer = [
+        {
+          label: 'valueTest'
+        },
+        {
+          label: 'valueTest2'
+        }
+      ];
+
+      component.visibleDisclaimers = itemsOfDisclaimer;
+      component.disclaimers = itemsOfDisclaimer;
+
+      component.calculateVisibleItems();
+
+      const valueOfVisibleDisclaimers = component.visibleDisclaimers;
+
+      expect(valueOfVisibleDisclaimers).toEqual(expectValue);
+      expect(spyGetDisclaimersWidth).toHaveBeenCalled();
+      expect(spyGetInputWidth).toHaveBeenCalled();
+    });
+
+    it(`calculateVisibleItems: set object in 'visibleDisclaimers' if disclaimers is empty `, () => {
+      const arrayDisclaimers: Array<Number> = [90];
+      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
+      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
+
+      const itemsOfDisclaimer = [
+        {
+          label: 'valueTest'
+        },
+        {
+          label: 'valueTest2'
+        }
+      ];
+
+      component.visibleDisclaimers = itemsOfDisclaimer;
+      component.disclaimers = [];
+
+      component.calculateVisibleItems();
+
+      const valueOfVisibleDisclaimers = component.visibleDisclaimers;
+
+      expect(valueOfVisibleDisclaimers).toEqual(itemsOfDisclaimer);
+      expect(spyGetDisclaimersWidth).toHaveBeenCalled();
+      expect(spyGetInputWidth).toHaveBeenCalled();
+      expect(component['isCalculateVisibleItems']).toBeFalsy();
+    });
+
+    it(`calculateVisibleItems: should calc visible items and not set 'isCalculateVisibleItems' to false when disclaimers width is 0`, () => {
+      const disclaimers = [
+        { label: 'label', value: 1 },
+        { label: 'label', value: 2 },
+        { label: 'label', value: 3 }
+      ];
+      const fakeThis = {
+        getDisclaimersWidth: () => [0, 0, 0],
+        getInputWidth: () => 100,
+        visibleDisclaimers: [],
+        disclaimers: disclaimers,
+        isCalculateVisibleItems: true
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).toBe(3);
+      expect(fakeThis.isCalculateVisibleItems).toBeTruthy();
+    });
+
+    it(`calculateVisibleItems: should not set isCalculateVisibleItems to false if inputWidth is 0`, () => {
+      const fakeThis = {
+        getDisclaimersWidth: () => [0, 0, 0],
+        getInputWidth: () => 0,
+        visibleDisclaimers: [],
+        disclaimers: [],
+        isCalculateVisibleItems: false
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).toBe(0);
+      expect(fakeThis.isCalculateVisibleItems).toBe(false);
+    });
+
+    it('calculateVisibleItems: should calc visible items with a little space', () => {
+      const disclaimers = [
+        { label: 'label', value: 1 },
+        { label: 'label', value: 2 },
+        { label: 'label', value: 3 }
+      ];
+      const fakeThis = {
+        getDisclaimersWidth: () => [100, 100, 100],
+        getInputWidth: () => 200,
+        visibleDisclaimers: [],
+        disclaimers: disclaimers,
+        isCalculateVisibleItems: true
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).toBe(2);
+      expect(fakeThis.visibleDisclaimers[1].value).toBe('');
+      expect(fakeThis.isCalculateVisibleItems).toBeFalsy();
+    });
+
+    it('calculateVisibleItems: shouldn`t calc visible items when not have `disclaimers`', () => {
+      const fakeThis = {
+        getDisclaimersWidth: () => [0],
+        getInputWidth: () => 200,
+        visibleDisclaimers: [],
+        disclaimers: [],
+        isCalculateVisibleItems: true
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+      expect(fakeThis.visibleDisclaimers.length).toBe(0);
+      expect(fakeThis.isCalculateVisibleItems).toBeFalsy();
     });
 
     it('setInputValueWipoieldFormat: should set `inputValue` and `oldValue` with value returned of `fieldFormat`', () => {
@@ -389,8 +939,24 @@ describe('PoLookupComponent:', () => {
         component.label = 'Estabelecimento';
         component.literals = undefined;
         component.infiniteScroll = false;
+        component.multiple = false;
+        component.fieldLabel = 'label';
+        component.fieldValue = 'value';
 
-        const { advancedFilters, service, columns, filterParams, literals, infiniteScroll } = component;
+        const {
+          advancedFilters,
+          service,
+          columns,
+          filterParams,
+          literals,
+          infiniteScroll,
+          multiple,
+          fieldLabel,
+          fieldValue
+        } = component;
+
+        const selectedItems = undefined;
+
         const params = {
           advancedFilters,
           service,
@@ -398,7 +964,11 @@ describe('PoLookupComponent:', () => {
           filterParams,
           title: component.label,
           literals,
-          infiniteScroll
+          infiniteScroll,
+          multiple,
+          selectedItems,
+          fieldLabel,
+          fieldValue
         };
 
         spyOn(component['poLookupModalService'], 'openModal');
@@ -444,6 +1014,18 @@ describe('PoLookupComponent:', () => {
 
       expect(component['isAllowedOpenModal']()).toBe(false);
       expect(console.warn).toHaveBeenCalledWith('No service informed');
+    });
+
+    it('ngDoCheck: should call debounceResize if isCalculateVisibleItems is true', () => {
+      component.visibleElement = true;
+      component.initialized = true;
+      component['isCalculateVisibleItems'] = true;
+
+      spyOn(component, 'debounceResize');
+
+      component.ngDoCheck();
+
+      expect(component.debounceResize).toHaveBeenCalled();
     });
   });
 

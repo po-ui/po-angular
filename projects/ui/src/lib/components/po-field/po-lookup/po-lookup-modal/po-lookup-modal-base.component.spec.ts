@@ -1,14 +1,14 @@
-import { Directive } from '@angular/core';
+import { ChangeDetectorRef, Directive } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of, throwError } from 'rxjs';
 
-import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
-import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
-import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
-
-import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
+import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+import { configureTestSuite, expectPropertiesValues } from '../../../../util-test/util-expect.spec';
+import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
+import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
 
 @Directive()
 class PoLookupModalComponent extends PoLookupModalBaseComponent {
@@ -18,19 +18,20 @@ class PoLookupModalComponent extends PoLookupModalBaseComponent {
 
 describe('PoLookupModalBaseComponent:', () => {
   let component: PoLookupModalComponent;
-  let fakeSubscription;
+  let fixture: ComponentFixture<PoLookupModalComponent>;
+
+  let fakeSubscription = <any>{ unsubscribe: () => {} };
   let items;
 
   beforeEach(() => {
-    component = new PoLookupModalComponent(new PoLanguageService());
+    const changeDetector: any = { detectChanges: () => {} };
+    component = new PoLookupModalComponent(new PoLanguageService(), changeDetector);
 
     component.filterService = {
       getFilteredItems: ({ filter, pageSize }) => of({ items: [], hasNext: false }),
       getObjectByValue: () => of()
     };
-
     fakeSubscription = { unsubscribe: () => {} };
-
     items = [
       { value: 1, label: 'Água' },
       { value: 2, label: 'Café' },
@@ -38,6 +39,8 @@ describe('PoLookupModalBaseComponent:', () => {
       { value: 4, label: 'Suco Natural' },
       { value: 5, label: 'Suco em lata' }
     ];
+
+    component.poTable = <any>{ selectRowItem: cb => cb({}) };
 
     component.ngOnInit();
   });
@@ -338,6 +341,16 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.isLoading).toBeFalsy();
     });
 
+    it('setSelectedItems: should call `selectRowItem`', () => {
+      component.selecteds = [{ value: 1495832652942 }, { value: 1495832596999 }];
+
+      const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
+
+      component.setSelectedItems();
+
+      expect(spySelectRowItem).toHaveBeenCalled();
+    });
+
     it('setTableLiterals: should set table literals.', () => {
       component.literals = {
         'modalTableLoadMoreData': 'moreData',
@@ -498,6 +511,26 @@ describe('PoLookupModalBaseComponent:', () => {
       const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
       expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
       expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+    });
+
+    it('setDisclaimersItems: should set selecteds with component.selectedItems if component.selectedItems is array', () => {
+      const expectSelecteds = [{ value: 123, label: '123' }];
+
+      component.selectedItems = [...expectSelecteds];
+
+      component.setDisclaimersItems();
+
+      expect(component.selecteds).toEqual(expectSelecteds);
+    });
+
+    it('setDisclaimersItems: should set selecteds with [{ value: component.selectedItems }] if selectedItems isnt array', () => {
+      const expectSelecteds = [{ value: 123456789 }];
+
+      component.selectedItems = 123456789;
+
+      component.setDisclaimersItems();
+
+      expect(component.selecteds).toEqual(expectSelecteds);
     });
   });
 });
