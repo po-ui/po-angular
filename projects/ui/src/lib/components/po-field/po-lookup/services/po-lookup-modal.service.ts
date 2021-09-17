@@ -29,6 +29,9 @@ export class PoLookupModalService {
    * @param filterParams {any} Valor que será repassado aos métodos do serviço para auxiliar no filtro dos dados.
    * @param title {string} Definição do título da modal.
    * @param literals {PoLookupLiterals} Literais utilizadas no componente.
+   * @param selectedItems {any} Valor que está selecionado que será repassado para o modal para apresentar na tabela.
+   * @param fieldLabel {string} Valor que será utilizado como descrição do campo.
+   * @param fieldValue {string} Valor que será utilizado como valor do campo.
    */
   openModal(params: {
     advancedFilters: Array<PoDynamicFormField>;
@@ -38,8 +41,24 @@ export class PoLookupModalService {
     title: string;
     literals: PoLookupLiterals;
     infiniteScroll: boolean;
+    multiple: boolean;
+    selectedItems: Array<any>;
+    fieldLabel: string;
+    fieldValue: string;
   }): void {
-    const { advancedFilters, service, columns, filterParams, title, literals, infiniteScroll } = params;
+    const {
+      advancedFilters,
+      service,
+      columns,
+      filterParams,
+      title,
+      literals,
+      infiniteScroll,
+      multiple,
+      selectedItems,
+      fieldLabel,
+      fieldValue
+    } = params;
 
     this.componentRef = this.poComponentInjector.createComponentInApplication(PoLookupModalComponent);
     this.componentRef.instance.advancedFilters = advancedFilters;
@@ -52,6 +71,10 @@ export class PoLookupModalService {
       this.selectValue($event);
     });
     this.componentRef.instance.infiniteScroll = infiniteScroll;
+    this.componentRef.instance.multiple = multiple;
+    this.componentRef.instance.selectedItems = selectedItems;
+    this.componentRef.instance.fieldLabel = fieldLabel;
+    this.componentRef.instance.fieldValue = fieldValue;
     this.componentRef.changeDetectorRef.detectChanges();
     this.componentRef.instance.openModal();
   }

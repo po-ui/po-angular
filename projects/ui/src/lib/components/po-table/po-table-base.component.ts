@@ -693,7 +693,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
         item.$selected = this.selectAll;
       });
 
-      this.emitSelectAllEvents(this.selectAll, this.items);
+      this.emitSelectAllEvents(this.selectAll, [...this.items]);
     }
   }
 

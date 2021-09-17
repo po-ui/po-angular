@@ -1,20 +1,16 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { Observable, of } from 'rxjs';
-
-import { changeBrowserInnerHeight } from '../../../../util-test/util-expect.spec';
-import { PoComponentInjectorService } from '../../../../services/po-component-injector/po-component-injector.service';
-import { PoModalModule } from '../../../../components/po-modal/po-modal.module';
-import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
-
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalComponent } from '../../../../components/po-field/po-lookup/po-lookup-modal/po-lookup-modal.component';
-
+import { PoModalModule } from '../../../../components/po-modal/po-modal.module';
+import { PoComponentInjectorService } from '../../../../services/po-component-injector/po-component-injector.service';
+import { changeBrowserInnerHeight } from '../../../../util-test/util-expect.spec';
 import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
@@ -97,15 +93,6 @@ describe('PoLookupModalComponent', () => {
     expect(component.model.emit).toHaveBeenCalled();
   });
 
-  it('call primaryAction in the modal with unselected line', () => {
-    component.ngOnInit();
-
-    spyOn(component.model, 'emit');
-
-    component.primaryAction.action();
-    expect(component.model.emit).not.toHaveBeenCalled();
-  });
-
   it('call secondaryAction in the modal', () => {
     component.ngOnInit();
     component.items[0].$selected = true;
@@ -172,11 +159,90 @@ describe('PoLookupModalComponent', () => {
     expect(component.containerHeight).toBe(defaultContainerHeight - 50);
   });
 
+  it('should set tableHeight and containerHeight when window.innerHeight < 615 pixels and multiple is true and has selecteds array', () => {
+    changeBrowserInnerHeight(610);
+    component.multiple = true;
+    component.selecteds = [{ value: 1, label: 'John' }];
+
+    component.tableHeight = 370;
+    component.containerHeight = 375;
+
+    component['setTableHeight']();
+
+    expect(component.tableHeight).toBe(defaultTableHeight - 50);
+    expect(component.containerHeight).toBe(defaultContainerHeight - 50);
+  });
+  it('should set tableHeight and containerHeight when window.innerHeight < 615 pixels and multiple is true and has selecteds is empty', () => {
+    changeBrowserInnerHeight(610);
+    component.multiple = true;
+    component.selecteds = [];
+
+    component.tableHeight = 370;
+    component.containerHeight = 375;
+
+    component['setTableHeight']();
+
+    expect(component.tableHeight).toBe(defaultTableHeight - 50);
+    expect(component.containerHeight).toBe(defaultContainerHeight - 50);
+  });
+  it('should set tableHeight and containerHeight when window.innerHeight < 615 pixels and multiple is true and has selecteds is undefined', () => {
+    changeBrowserInnerHeight(610);
+    component.multiple = true;
+    component.selecteds = undefined;
+
+    component.tableHeight = 370;
+    component.containerHeight = 375;
+
+    component['setTableHeight']();
+
+    expect(component.tableHeight).toBe(defaultTableHeight - 50);
+    expect(component.containerHeight).toBe(defaultContainerHeight - 50);
+  });
+
   it('shouldn`t set tableHeight and containerHeight when window.innerHeight > 615 pixels', () => {
     changeBrowserInnerHeight(650);
 
     component.tableHeight = defaultTableHeight;
     component.containerHeight = defaultContainerHeight;
+
+    component['setTableHeight']();
+
+    expect(component.tableHeight).toBe(defaultTableHeight);
+    expect(component.containerHeight).toBe(defaultContainerHeight);
+  });
+  it('shouldn`t set tableHeight and containerHeight when window.innerHeight > 615 pixels and multiple is true and has selecteds array', () => {
+    changeBrowserInnerHeight(650);
+    component.multiple = true;
+    component.selecteds = [{ value: 1, label: 'John' }];
+
+    component.tableHeight = defaultTableHeight;
+    component.containerHeight = defaultContainerHeight;
+
+    component['setTableHeight']();
+
+    expect(component.tableHeight).toBe(defaultTableHeight);
+    expect(component.containerHeight).toBe(defaultContainerHeight);
+  });
+  it('shouldn`t set tableHeight and containerHeight when window.innerHeight > 615 pixels and multiple is true and has selecteds is empty', () => {
+    changeBrowserInnerHeight(650);
+    component.multiple = true;
+    component.selecteds = [];
+
+    component.tableHeight = 370;
+    component.containerHeight = 375;
+
+    component['setTableHeight']();
+
+    expect(component.tableHeight).toBe(defaultTableHeight);
+    expect(component.containerHeight).toBe(defaultContainerHeight);
+  });
+  it('shouldn`t set tableHeight and containerHeight when window.innerHeight > 615 pixels and multiple is true and has selecteds is undefined', () => {
+    changeBrowserInnerHeight(650);
+    component.multiple = true;
+    component.selecteds = undefined;
+
+    component.tableHeight = 370;
+    component.containerHeight = 375;
 
     component['setTableHeight']();
 
@@ -287,6 +353,103 @@ describe('PoLookupModalComponent', () => {
       component.sortBy(expectedValue);
 
       expect(component['sort']).toEqual(expectedValue);
+    });
+
+    it('onSelect: should concat table item in selecteds', () => {
+      component.multiple = true;
+      component.selecteds = [{ value: 'Doe', label: 'Jane' }];
+
+      component.fieldLabel = 'name';
+      component.fieldValue = 'value';
+      const item = {
+        name: 'John',
+        value: 'Lenon'
+      };
+      component.onSelect(item);
+
+      expect(component.selecteds).toEqual([
+        { value: 'Doe', label: 'Jane' },
+        { value: 'Lenon', label: 'John', name: 'John' }
+      ]);
+    });
+
+    it('onSelect: should override table item in selecteds', () => {
+      component.multiple = false;
+      component.selecteds = [{ value: 'Doe', label: 'Jane' }];
+
+      component.fieldLabel = 'name';
+      component.fieldValue = 'value';
+      const item = {
+        name: 'John',
+        value: 'Lenon'
+      };
+      component.onSelect(item);
+
+      expect(component.selecteds).toEqual([{ value: 'Lenon', label: 'John', name: 'John' }]);
+    });
+
+    it('onAllUnselected: should be called and clean all items on table', () => {
+      spyOn(component['poTable'], 'unselectRows');
+
+      component.onAllUnselected('');
+
+      expect(component['poTable'].unselectRows).toHaveBeenCalled();
+      expect(component.selecteds).toEqual([]);
+    });
+
+    it('onUnselectFromDisclaimer: should be called and remove disclaimer', () => {
+      spyOn(component['poTable'], 'unselectRowItem').and.callThrough();
+
+      component.fieldValue = 'value';
+
+      const removedDisclaimer = { label: 'John', value: 1 };
+
+      component.onUnselectFromDisclaimer(removedDisclaimer);
+
+      expect(component['poTable'].unselectRowItem).toHaveBeenCalled();
+    });
+
+    it('onUnselect: should be called and unselect item', () => {
+      component.fieldValue = 'value';
+      component.selecteds = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 },
+        { label: 'George', value: 3 },
+        { label: 'Ringo', value: 4 }
+      ];
+
+      const unselectedItem = { label: 'Paul', value: 2 };
+      const expected = [
+        { label: 'John', value: 1 },
+        { label: 'George', value: 3 },
+        { label: 'Ringo', value: 4 }
+      ];
+
+      component.onUnselect(unselectedItem);
+      expect(component.selecteds).toEqual(expected);
+    });
+
+    it('onAllSelected: should be called and select all visible itens', () => {
+      const items = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 },
+        { label: 'George', value: 3 },
+        { label: 'Ringo', value: 4 }
+      ];
+
+      const expectedSelecteds = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 },
+        { label: 'George', value: 3 },
+        { label: 'Ringo', value: 4 }
+      ];
+
+      component.fieldValue = 'value';
+      component.fieldLabel = 'label';
+
+      component.onAllSelected(items);
+
+      expect(component.selecteds).toEqual(expectedSelecteds);
     });
   });
 });

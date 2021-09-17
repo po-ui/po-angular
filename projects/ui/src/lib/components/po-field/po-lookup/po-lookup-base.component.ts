@@ -1,35 +1,35 @@
-import { AbstractControl, ControlValueAccessor, NgControl, Validator, FormControl } from '@angular/forms';
 import {
+  AfterViewInit,
+  Directive,
   EventEmitter,
+  Inject,
+  InjectFlags,
+  Injector,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  Directive,
-  Injector,
-  AfterViewInit,
-  Inject,
-  InjectFlags
+  SimpleChanges
 } from '@angular/core';
-
+import { AbstractControl, ControlValueAccessor, FormControl, NgControl, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
+import { InputBoolean } from '../../../decorators';
 import { convertToBoolean, isTypeof } from '../../../utils/util';
 import { requiredFailed } from '../validators';
-
 import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
-import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
-import { InputBoolean } from '../../../decorators';
-import { finalize } from 'rxjs/operators';
+import { PoLookupFilterService } from './services/po-lookup-filter.service';
 
 /**
  * @description
  *
  * Componente utilizado para abrir uma janela de busca com uma tabela que lista dados de um serviço. Nesta janela é possível buscar e
- * selecionar o registro que será enviado para o campo. O `po-lookup` permite que o usuário digite um valor e pressione a tecla *TAB* para
+ * selecionar um ou mais registros que serão enviados para o campo. O `po-lookup` permite que o usuário digite um valor e pressione a tecla *TAB* para
  * buscar um registro.
  *
  * > Caso o campo seja iniciado ou preenchido com um valor inexistente na busca, o mesmo será limpado.
@@ -43,7 +43,7 @@ import { finalize } from 'rxjs/operators';
  */
 @Directive()
 export abstract class PoLookupBaseComponent
-  implements ControlValueAccessor, OnDestroy, OnInit, Validator, AfterViewInit {
+  implements ControlValueAccessor, OnDestroy, OnInit, Validator, AfterViewInit, OnChanges {
   /**
    * @optional
    *
@@ -247,6 +247,31 @@ export abstract class PoLookupBaseComponent
   @Input('p-clean') @InputBoolean() clean: boolean = false;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a seleção de múltiplos itens.
+   *
+   * > Quando habilitado o valor do campo passará a ser uma lista de valores, por exemplo: `[ 12345, 67890 ]`
+   *
+   * @default `false`
+   */
+  @Input('p-multiple') @InputBoolean() multiple: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que a altura do componente será auto ajustável, possuindo uma altura minima porém a altura máxima será de acordo
+   * com o número de itens selecionados e a extensão dos mesmos, mantendo-os sempre visíveis.
+   *
+   * @default `false`
+   */
+  @Input('p-auto-height') @InputBoolean() autoHeight: boolean = false;
+
+  /**
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
    * Será passado por parâmetro o objeto de erro retornado.
    */
@@ -274,6 +299,7 @@ export abstract class PoLookupBaseComponent
 
   service: any;
 
+  protected selectedOptions = [];
   protected getSubscription: Subscription;
   protected keysDescription: Array<any>;
   protected oldValue: string = '';
@@ -281,6 +307,7 @@ export abstract class PoLookupBaseComponent
   protected oldValueToModel = null;
   // eslint-disable-next-line
   protected onTouched: any = null;
+  protected resizeListener: () => void;
 
   private _disabled?: boolean = false;
   private _fieldLabel: string;
@@ -288,7 +315,9 @@ export abstract class PoLookupBaseComponent
   private _noAutocomplete: boolean;
   private _placeholder: string = '';
   private _required?: boolean = false;
+  private _autoHeight: boolean = false;
 
+  private autoHeightInitialValue: boolean;
   private onChangePropagate: any = null;
   private validatorChange: any;
 
@@ -320,6 +349,20 @@ export abstract class PoLookupBaseComponent
    *
    * ```
    * url + ?page=1&pageSize=20&age=23&filter=Peter
+   * ```
+   *
+   * Ao iniciar o campo com valor, os registros serão buscados da seguinte forma:
+   * ```
+   * model = 1234;
+   *
+   * GET url/1234
+   * ```
+   *
+   * Caso estiver com múltipla seleção habilitada:
+   * ```
+   * model = [1234, 5678]
+   *
+   * GET url?${fieldValue}=1234,5678
    * ```
    *
    * > Esta URL deve retornar e receber os dados no padrão de [API do PO UI](https://po-ui.io/guides/api) e utiliza os valores
@@ -417,6 +460,12 @@ export abstract class PoLookupBaseComponent
     this.callOnChange(undefined);
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.multiple && isTypeof(this.filterService, 'string')) {
+      this.service.setConfig(this.filterService, this.fieldValue, this.multiple);
+    }
+  }
+
   // Função implementada do ControlValueAccessor
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
@@ -441,8 +490,7 @@ export abstract class PoLookupBaseComponent
 
   // Seleciona o valor do model.
   selectValue(valueSelected: any) {
-    this.valueToModel = valueSelected[this.fieldValue];
-
+    this.valueToModel = valueSelected;
     this.callOnChange(this.valueToModel);
     this.selected.emit(valueSelected);
   }
@@ -461,7 +509,7 @@ export abstract class PoLookupBaseComponent
     this.oldValueToModel = this.valueToModel;
   }
 
-  searchById(value: string) {
+  searchById(value) {
     let checkedValue = value;
 
     if (typeof checkedValue === 'string') {
@@ -492,10 +540,13 @@ export abstract class PoLookupBaseComponent
         )
         .subscribe(
           element => {
-            if (element) {
-              this.oldValue = element[this.fieldLabel];
-              this.selectValue(element);
-              this.setViewValue(this.getFormattedLabel(element), element);
+            if (element?.length || (!Array.isArray(element) && element)) {
+              if (Array.isArray(element) && element.length > 1) {
+                this.setDisclaimers(element);
+                this.updateVisibleItems();
+              }
+
+              this.selectModel(this.multiple ? element : [element]);
             } else {
               this.cleanModel();
             }
@@ -521,12 +572,7 @@ export abstract class PoLookupBaseComponent
   }
 
   writeValue(value: any): void {
-    if (value && value instanceof Object) {
-      // Esta condição é executada quando é retornado o objeto selecionado do componente Po Lookup Modal.
-      this.oldValue = value[this.fieldLabel];
-      this.valueToModel = value[this.fieldValue];
-      this.setViewValue(this.getFormattedLabel(value), value);
-    } else if (value) {
+    if (value?.length || (!Array.isArray(value) && value)) {
       // Esta condição é executada somente quando é passado o ID para realizar a busca pelo ID.
       this.searchById(value);
     } else {
@@ -546,10 +592,20 @@ export abstract class PoLookupBaseComponent
   }
 
   // Chama o método writeValue e preenche o model.
-  protected selectModel(value: any) {
-    this.writeValue(value);
-    if (value && value instanceof Object) {
-      this.selectValue(value);
+  protected selectModel(options: Array<any>) {
+    if (options.length) {
+      this.selectedOptions = [...options];
+
+      const newModel = this.multiple ? options.map(option => option[this.fieldValue]) : options[0][this.fieldValue];
+      this.selectValue(newModel);
+
+      if (options.length === 1) {
+        this.oldValue = options[0][this.fieldLabel];
+        this.setViewValue(this.getFormattedLabel(options[0]), options[0]);
+      }
+    } else {
+      this.selectValue(undefined);
+      this.cleanViewValue();
     }
   }
 
@@ -566,7 +622,7 @@ export abstract class PoLookupBaseComponent
 
     if (service && isTypeof(service, 'string')) {
       this.service = this.defaultService;
-      this.service.setUrl(service);
+      this.service.setConfig(service, this.fieldValue, this.multiple);
     }
   }
 
@@ -593,4 +649,7 @@ export abstract class PoLookupBaseComponent
 
   // Método com a implementação para abrir o lookup.
   abstract openLookup(): void;
+
+  abstract setDisclaimers(a);
+  abstract updateVisibleItems();
 }

@@ -22,8 +22,11 @@ export interface PoLookupFilter {
   /**
    * Método responsável por enviar um valor que será buscado no serviço.
    *
-   * @param {string} value Valor único a ser buscado na fonte de dados.
+   * Caso a funcionalidade de múltipla seleção estver habilitada, o parametro value será enviado como uma lista de valores
+   * e o observable deve retornar uma lista de objetos.
+   *
+   * @param {string|Array<any>} value Valor único a ser buscado na fonte de dados.
    * @param {any} filterParams Valor informado através da propriedade `p-filter-params`.
    */
-  getObjectByValue(value: string, filterParams?: any): Observable<any>;
+  getObjectByValue(value: string | Array<any>, filterParams?: any): Observable<any>;
 }
