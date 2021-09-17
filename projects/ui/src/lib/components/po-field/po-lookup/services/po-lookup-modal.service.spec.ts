@@ -39,7 +39,11 @@ describe('PoLookupModalService:', () => {
     filterParams: undefined,
     title: 'Teste',
     literals: undefined,
-    infiniteScroll: false
+    infiniteScroll: false,
+    multiple: false,
+    selectedItems: null,
+    fieldValue: 'value',
+    fieldLabel: 'label'
   };
 
   beforeEach(() => {

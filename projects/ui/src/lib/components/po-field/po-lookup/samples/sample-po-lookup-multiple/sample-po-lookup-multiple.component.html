@@ -1,0 +1,23 @@
+<div class="po-row">
+  <po-lookup
+    class="po-md-6"
+    name="lookup"
+    [(ngModel)]="multiLookup"
+    p-field-label="label"
+    p-field-value="value"
+    p-filter-service="https://po-sample-api.herokuapp.com/v1/heroes"
+    p-label="Search a Hero"
+    [p-multiple]="true"
+    (p-change)="changeOptions($event)"
+  ></po-lookup>
+  <po-container class="po-md-6 po-mt-4">
+    <po-table
+      [p-columns]="columns"
+      [p-items]="heroes"
+      [p-height]="220"
+      [p-striped]="true"
+      [p-hide-columns-manager]="true"
+      [p-loading]="loading"
+    ></po-table>
+  </po-container>
+</div>
