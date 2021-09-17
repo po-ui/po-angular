@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { isTypeof } from '../../../../utils/util';
 
@@ -22,6 +23,8 @@ export class PoLookupFilterService implements PoLookupFilter {
   });
 
   private url: string;
+  private fieldValue;
+  private multiple = false;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -36,15 +39,29 @@ export class PoLookupFilterService implements PoLookupFilter {
     return this.httpClient.get(this.url, { headers: this.headers, params });
   }
 
-  getObjectByValue(value: string, filterParams?: any): Observable<any> {
-    const encodedValue = encodeURIComponent(value);
+  getObjectByValue(value: any, filterParams?: any): Observable<Array<any> | { [key: string]: any }> {
     const validatedFilterParams = this.validateParams(filterParams);
 
-    return this.httpClient.get(`${this.url}/${encodedValue}`, { headers: this.headers, params: validatedFilterParams });
+    let newURL;
+    let encodedValue;
+
+    if (this.multiple) {
+      encodedValue = encodeURIComponent(Array.isArray(value) ? value.join(',') : value);
+      newURL = `${this.url}?${this.fieldValue}=${encodedValue}`;
+    } else {
+      encodedValue = encodeURIComponent(value);
+      newURL = `${this.url}/${encodedValue}`;
+    }
+
+    return this.httpClient
+      .get(newURL, { headers: this.headers, params: validatedFilterParams })
+      .pipe(map((response: any) => ('items' in response ? response.items : response)));
   }
 
-  setUrl(url: string) {
+  setConfig(url: string, fieldValue: string, multiple: boolean) {
     this.url = url;
+    this.fieldValue = fieldValue;
+    this.multiple = multiple;
   }
 
   private validateParams(params: any) {

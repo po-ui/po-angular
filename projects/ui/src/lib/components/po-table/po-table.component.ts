@@ -338,6 +338,32 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
   }
 
+  /**
+   * Desmarca uma linha que está selecionada.
+   */
+  unselectRowItem(itemfn: { [key: string]: any } | ((item) => boolean)) {
+    this.toggleSelect(itemfn, false);
+
+    if (this.items.every(item => !item.$selected)) {
+      this.selectAll = false;
+    } else {
+      this.selectAll = null;
+    }
+  }
+
+  /**
+   * Seleciona uma linha do 'po-table'.
+   */
+  selectRowItem(itemfn: { [key: string]: any } | ((item) => boolean)) {
+    this.toggleSelect(itemfn, true);
+
+    if (this.items.every(item => item.$selected)) {
+      this.selectAll = true;
+    } else {
+      this.selectAll = null;
+    }
+  }
+
   formatNumber(value: any, format: string) {
     if (!format) {
       return value;
@@ -626,6 +652,22 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     if (this.height && this.verifyChangeHeightInFooter()) {
       this.footerHeight = this.getHeightTableFooter();
       this.calculateHeightTableContainer(this.height);
+    }
+  }
+
+  private toggleSelect(compare, selectValue: boolean) {
+    if (typeof compare !== 'function') {
+      this.items.forEach(item => {
+        if (item === compare) {
+          item.$selected = selectValue;
+        }
+      });
+    } else {
+      this.items.forEach(item => {
+        if (compare(item)) {
+          item.$selected = selectValue;
+        }
+      });
     }
   }
 }

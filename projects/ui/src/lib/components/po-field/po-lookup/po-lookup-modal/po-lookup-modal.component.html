@@ -38,8 +38,8 @@
 
     <!-- DISCLAIMER -->
     <po-disclaimer-group
-      class="po-md-12"
       *ngIf="!!disclaimerGroup"
+      class="po-md-12"
       [p-disclaimers]="disclaimerGroup?.disclaimers"
       [p-title]="disclaimerGroup?.title"
       (p-change)="onChangeDisclaimerGroup()"
@@ -48,10 +48,11 @@
 
     <div class="po-row po-lookup-container-table" [style.height.px]="containerHeight">
       <po-table
+        #poTable
         class="po-md-12"
         [p-selectable]="true"
         [p-hide-detail]="true"
-        [p-single-select]="true"
+        [p-single-select]="!multiple"
         [p-sort]="true"
         [p-columns]="columns"
         [p-height]="tableHeight"
@@ -60,10 +61,24 @@
         [p-loading]="isLoading"
         [p-show-more-disabled]="!hasNext"
         [p-infinite-scroll]="infiniteScroll"
+        (p-selected)="onSelect($event)"
+        (p-unselected)="onUnselect($event)"
+        (p-all-selected)="onAllSelected($event)"
+        (p-all-unselected)="onAllUnselected($event)"
         (p-show-more)="showMoreEvent()"
         (p-sort-by)="sortBy($event)"
       >
       </po-table>
+    </div>
+
+    <div class="po-row" *ngIf="multiple">
+      <po-disclaimer-group
+        class="po-md-12"
+        [p-disclaimers]="selecteds"
+        (p-remove)="onUnselectFromDisclaimer($event.removedDisclaimer)"
+        (p-remove-all)="onAllUnselected($event)"
+      >
+      </po-disclaimer-group>
     </div>
   </div>
   <div [hidden]="!isAdvancedFilter">
