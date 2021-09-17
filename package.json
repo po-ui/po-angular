@@ -72,7 +72,7 @@
     "@angular/platform-browser": "~12.0.1",
     "@angular/platform-browser-dynamic": "~12.0.1",
     "@angular/router": "~12.0.1",
-    "@animaliads/ani-button": "1.0.0",
+    "@animaliads/ani-button": "1.1.0-dev.21",
     "@ionic-native/core": "5.33.0",
     "@ionic-native/network": "5.33.0",
     "@po-ui/style": "file:/Users/aline.lariguet/dev/po-ui/po-style/dist/style",
