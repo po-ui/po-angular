@@ -6,7 +6,8 @@ import {
   OnInit,
   ViewChild,
   AfterViewInit,
-  Injector
+  Injector,
+  Renderer2
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -91,15 +92,24 @@ const providers = [
   providers
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit {
-  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
+
+  initialized = false;
+  timeoutResize;
+  visibleElement = false;
+
+  disclaimers = [];
+  visibleDisclaimers = [];
 
   private modalSubscription: Subscription;
+  private isCalculateVisibleItems: boolean = true;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
   }
 
   constructor(
+    private renderer: Renderer2,
     poLookupFilterService: PoLookupFilterService,
     private poLookupModalService: PoLookupModalService,
     injector: Injector
@@ -109,6 +119,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
+
     if (this.autoFocus) {
       this.focus();
     }
@@ -122,6 +133,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   ngOnInit() {
     super.ngOnInit();
+    this.initializeListeners();
   }
 
   /**
@@ -149,7 +161,18 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   openLookup(): void {
     if (this.isAllowedOpenModal()) {
-      const { advancedFilters, service, columns, filterParams, literals, infiniteScroll } = this;
+      const {
+        advancedFilters,
+        service,
+        columns,
+        filterParams,
+        literals,
+        infiniteScroll,
+        multiple,
+        fieldLabel,
+        fieldValue
+      } = this;
+      const selectedItems = !this.multiple ? this.valueToModel : this.disclaimers;
 
       this.poLookupModalService.openModal({
         advancedFilters,
@@ -158,21 +181,43 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         filterParams,
         title: this.label,
         literals,
-        infiniteScroll
+        infiniteScroll,
+        multiple,
+        selectedItems,
+        fieldLabel,
+        fieldValue
       });
 
       if (!this.modalSubscription) {
-        this.modalSubscription = this.poLookupModalService.selectValueEvent.subscribe(element => {
-          this.selectModel(element);
+        this.modalSubscription = this.poLookupModalService.selectValueEvent.subscribe(selectedOptions => {
+          if (selectedOptions.length > 1) {
+            this.setDisclaimers(selectedOptions);
+            this.updateVisibleItems();
+          }
+
+          if (this.disclaimers.length > 0) {
+            this.setDisclaimers(selectedOptions);
+          }
+
+          this.selectModel(selectedOptions);
         });
       }
     }
   }
 
+  setDisclaimers(selectedOptions: Array<any>) {
+    this.disclaimers = selectedOptions.map(selectedOption => ({
+      value: selectedOption[this.fieldValue],
+      label: selectedOption[this.fieldLabel]
+    }));
+
+    this.visibleDisclaimers = [...this.disclaimers];
+  }
+
   setViewValue(value: any, object: any): void {
     if (this.fieldFormat) {
       this.setInputValueWipoieldFormat(object);
-    } else {
+    } else if (this.inputEl) {
       this.inputEl.nativeElement.value = this.valueToModel || this.valueToModel === 0 ? value : '';
     }
   }
@@ -185,9 +230,91 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     this.onTouched?.();
     const value = this.getViewValue();
 
-    if (this.oldValue.toString() !== value) {
+    if (this.oldValue?.toString() !== value) {
       this.searchById(value);
     }
+  }
+
+  closeDisclaimer(value) {
+    this.disclaimers = this.disclaimers.filter(disclaimer => disclaimer.value !== value);
+    this.valueToModel = this.valueToModel.filter(model => model !== value);
+
+    this.updateVisibleItems();
+    this.callOnChange(this.valueToModel.length ? this.valueToModel : undefined);
+  }
+
+  updateVisibleItems() {
+    if (this.disclaimers) {
+      this.visibleDisclaimers = [].concat(this.disclaimers);
+    }
+
+    this.debounceResize();
+
+    if (!this.inputEl.nativeElement.offsetWidth) {
+      this.isCalculateVisibleItems = true;
+    }
+  }
+
+  debounceResize() {
+    if (!this.autoHeight) {
+      clearTimeout(this.timeoutResize);
+      this.timeoutResize = setTimeout(() => {
+        this.calculateVisibleItems();
+      }, 200);
+    }
+  }
+
+  getInputWidth() {
+    return this.inputEl.nativeElement.offsetWidth - 40;
+  }
+
+  getDisclaimersWidth() {
+    const disclaimers = this.inputEl.nativeElement.querySelectorAll('po-disclaimer');
+    return Array.from(disclaimers).map(disclaimer => disclaimer['offsetWidth']);
+  }
+
+  calculateVisibleItems() {
+    const disclaimersWidth = this.getDisclaimersWidth();
+    const inputWidth = this.getInputWidth();
+    const extraDisclaimerSize = 38;
+    const disclaimersVisible = disclaimersWidth[0];
+
+    const newDisclaimers = [];
+    const disclaimers = this.disclaimers;
+
+    if (inputWidth > 0) {
+      let sum = 0;
+      let i = 0;
+      for (i = 0; i < disclaimers.length; i++) {
+        sum += disclaimersWidth[i];
+        newDisclaimers.push(disclaimers[i]);
+
+        if (sum > inputWidth) {
+          sum -= disclaimersWidth[i];
+          this.isCalculateVisibleItems = false;
+          break;
+        }
+      }
+
+      if (disclaimersVisible || !disclaimers.length) {
+        if (i === disclaimers.length) {
+          this.isCalculateVisibleItems = false;
+          return;
+        }
+
+        if (sum + extraDisclaimerSize > inputWidth) {
+          newDisclaimers.splice(-2, 2);
+          const label = '+' + (disclaimers.length + 1 - i).toString();
+          newDisclaimers.push({ value: '', label: label });
+        } else {
+          newDisclaimers.splice(-1, 1);
+          const label = '+' + (disclaimers.length - i).toString();
+          newDisclaimers.push({ value: '', label: label });
+        }
+      }
+    }
+
+    this.visibleDisclaimers = [...newDisclaimers];
   }
 
   private isAllowedOpenModal(): boolean {
@@ -197,6 +324,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
     return !!(this.service && !this.disabled);
   }
+
   private formatFields(objectSelected, properties) {
     let formatedField;
     if (Array.isArray(properties)) {
@@ -229,5 +357,11 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
     this.oldValue = isEmpty ? '' : fieldFormated;
     this.inputEl.nativeElement.value = isEmpty ? '' : fieldFormated;
+  }
+
+  private initializeListeners(): void {
+    this.resizeListener = this.renderer.listen('window', 'resize', () => {
+      this.updateVisibleItems();
+    });
   }
 }
