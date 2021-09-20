@@ -79,7 +79,7 @@ export class SamplePoPageDynamicTableUsersComponent {
   ];
 
   tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [
-    { label: 'Details', action: this.onClickUserDetail.bind(this) }
+    { label: 'Details', action: this.onClickUserDetail.bind(this), icon: 'po-icon-user' }
   ];
 
   constructor(private usersService: SamplePoPageDynamicTableUsersService) {}
