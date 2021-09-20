@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.13.1](https://github.com/po-ui/po-angular/compare/v5.13.0...v5.13.1) (2021-09-20)
+
+
+### Bug Fixes
+
+* **datepicker-range:** corrige calendario ao selecionar 01/mm/yyyy ([132b9ec](https://github.com/po-ui/po-angular/commit/132b9ec5396b52a887d212617156e3b12378b06c))
+
+* **dynamic-form:** corrige evento `validate` ao clicar no campo booleano ([4dd7f3e](https://github.com/po-ui/po-angular/commit/4dd7f3e193f8ef9c204036bf66252d6d530efa9b))
+
+
 # [5.13.0](https://github.com/po-ui/po-angular/compare/v5.12.0...v5.13.0) (2021-09-13)
 
 
