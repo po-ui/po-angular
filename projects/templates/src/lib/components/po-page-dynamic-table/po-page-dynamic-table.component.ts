@@ -808,6 +808,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private transformTableCustomActionsToTableActions(tableCustomActions: Array<PoPageDynamicTableCustomTableAction>) {
     return tableCustomActions.map(tableCustomAction => ({
       label: tableCustomAction.label,
+      icon: tableCustomAction.icon,
       action: this.callTableCustomAction.bind(this, tableCustomAction)
     }));
   }
