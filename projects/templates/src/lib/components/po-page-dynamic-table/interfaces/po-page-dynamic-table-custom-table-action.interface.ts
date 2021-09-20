@@ -31,6 +31,13 @@ export interface PoPageDynamicTableCustomTableAction {
   action?: string | ((resource?: any) => any);
 
   /**
+   * Função que deve retornar um booleano para habilitar ou desabilitar a ação para o registro selecionado.
+   *
+   * Também é possível informar diretamente um valor booleano que vai habilitar ou desabilitar a ação para todos os registros.
+   */
+  disabled?: boolean | Function;
+
+  /**
    * Rota para o qual será redirecionado ao clicar no botão.
    *
    * > Ao utilizar a propriedade `url` e a `action`, somente a `action` será executada.

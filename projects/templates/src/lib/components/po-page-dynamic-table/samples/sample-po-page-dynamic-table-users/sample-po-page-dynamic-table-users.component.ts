@@ -79,7 +79,12 @@ export class SamplePoPageDynamicTableUsersComponent {
   ];
 
   tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [
-    { label: 'Details', action: this.onClickUserDetail.bind(this), icon: 'po-icon-user' }
+    {
+      label: 'Details',
+      action: this.onClickUserDetail.bind(this),
+      disabled: this.isUserInactive.bind(this),
+      icon: 'po-icon-user'
+    }
   ];
 
   constructor(private usersService: SamplePoPageDynamicTableUsersService) {}
@@ -90,7 +95,7 @@ export class SamplePoPageDynamicTableUsersComponent {
         { property: 'id', key: true, visible: true, filter: true },
         { property: 'name', label: 'Name', filter: true, gridColumns: 6 },
         { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true },
-        { property: 'search', initValue: '0748093840433' },
+        { property: 'search', initValue: 'São Paulo' },
         {
           property: 'birthdate',
           label: 'Birthdate',
@@ -101,6 +106,10 @@ export class SamplePoPageDynamicTableUsersComponent {
         }
       ]
     };
+  }
+
+  isUserInactive(person) {
+    return person.status === 'inactive';
   }
 
   printPage() {

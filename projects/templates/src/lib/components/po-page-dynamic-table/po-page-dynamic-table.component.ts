@@ -805,11 +805,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     }));
   }
 
-  private transformTableCustomActionsToTableActions(tableCustomActions: Array<PoPageDynamicTableCustomTableAction>) {
+  private transformTableCustomActionsToTableActions(
+    tableCustomActions: Array<PoPageDynamicTableCustomTableAction>
+  ): Array<PoTableAction> {
     return tableCustomActions.map(tableCustomAction => ({
       label: tableCustomAction.label,
       icon: tableCustomAction.icon,
-      action: this.callTableCustomAction.bind(this, tableCustomAction)
+      action: this.callTableCustomAction.bind(this, tableCustomAction),
+      disabled: tableCustomAction.disabled
     }));
   }
 
