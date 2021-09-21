@@ -12,9 +12,13 @@
     <div
       [class.po-stepper-step-bar-bottom]="isVerticalOrientation"
       [class.po-stepper-step-bar-right]="!isVerticalOrientation"
+      [class.po-stepper-step-dashed-border]="nextStatus === 'disabled'"
       [style.margin-left.px]="marginHorizontalBar"
     ></div>
   </div>
 
   <po-stepper-label class="po-stepper-step-label-position" [p-content]="label"> </po-stepper-label>
 </div>
+<!-- <p>
+  {{ nextStatus }}
+</p> -->

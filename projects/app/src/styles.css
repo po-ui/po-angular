@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+.po-stepper-circle .po-stepper-circle-content.po-icon {
+  color: #c9357d;
+}
+
+.po-stepper-step-disabled .po-stepper-circle .po-stepper-circle-content.po-icon {
+  color: inherit;
+}
+
+.po-stepper-circle-radio {
+  border-radius: 50%;
+  background: #c9357d;
+  height: 16px;
+  width: 16px;
+  margin: 2px;
+}
+
+.po-stepper-step-error .po-stepper-circle-radio {
+  background: #c64840;
+}
+
+.po-stepper-step-disabled .po-stepper-step-bar-right {
+  border-top-style: dashed;
+}
+
+.po-stepper-step-disabled .po-stepper-step-bar-left {
+  border-top-style: dashed;
+}
+
+.po-stepper-step-dashed-border {
+  border-top-style: dashed;
+}

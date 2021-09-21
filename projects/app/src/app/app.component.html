@@ -1,0 +1,29 @@
+<!-- <po-input name="input" [(ngModel)]="input" p-label="INPUT" [p-clean]="true"></po-input>
+
+<hr>
+
+model: {{ input }}
+
+<hr>
+
+<po-button (p-click)="onclick()" p-label="ALTERAR INPUT NGMODEL"></po-button>
+
+<hr>
+
+<form [formGroup]="group">
+  <po-input formControlName="inputreativo" p-label="INPUT REATIVO" [p-clean]="true"></po-input>
+</form>
+
+model: {{ group.get('inputreativo').value }}
+
+<hr>
+
+<po-button (p-click)="disableReactive()" p-label="DISABLE REACTIVE INPUT"></po-button>
+<hr> -->
+<po-stepper [p-step-icons]="true">
+  <po-step p-label="Step 1"></po-step>
+  <po-step p-label="Step 2"></po-step>
+  <po-step p-label="Step 3" [p-can-active-next-step]="canActive.bind(this)"></po-step>
+  <po-step p-label="Step 4"></po-step>
+</po-stepper>
+<!-- <po-avatar></po-avatar> -->

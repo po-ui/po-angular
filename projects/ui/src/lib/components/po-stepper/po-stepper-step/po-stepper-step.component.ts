@@ -87,6 +87,8 @@ export class PoStepperStepComponent {
       value >= poStepperStepSizeDefault && value <= poStepperStepSizeMax ? value : poStepperStepSizeDefault;
   }
 
+  @Input('p-next-status') nextStatus;
+
   get stepSize(): number {
     return this._stepSize;
   }
@@ -106,11 +108,11 @@ export class PoStepperStepComponent {
   getStatusClass(status: string): string {
     switch (status) {
       case PoStepperStatus.Active:
-        return 'po-stepper-step-active';
+        return 'po-stepper-step-default';
       case PoStepperStatus.Disabled:
         return 'po-stepper-step-disabled';
       case PoStepperStatus.Done:
-        return 'po-stepper-step-done';
+        return 'po-stepper-step-default';
       case PoStepperStatus.Error:
         return 'po-stepper-step-error';
       default:
