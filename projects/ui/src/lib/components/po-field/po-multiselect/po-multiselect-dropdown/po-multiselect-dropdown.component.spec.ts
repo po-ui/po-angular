@@ -96,6 +96,78 @@ describe('PoMultiselectDropdownComponent:', () => {
     expect(component.change.emit).toHaveBeenCalled();
   });
 
+  it('onClickSelectAll: should select all items if no items selecteds', () => {
+    component.visibleOptions = [...component.options];
+    component.selectedOptions = [];
+
+    const spyChange = spyOn(component.change, 'emit');
+
+    component.onClickSelectAll();
+
+    expect(component.selectedOptions.length).toBe(2);
+    expect(spyChange).toHaveBeenCalledWith(component.selectedOptions);
+  });
+
+  it('onClickSelectAll: should select all items if all items are not selecteds', () => {
+    component.visibleOptions = [...component.options];
+    component.selectedOptions = [
+      { label: 'label1', value: 'value1' },
+      { label: 'label3', value: 'value3' }
+    ];
+
+    component.onClickSelectAll();
+
+    expect(component.selectedOptions.length).toBe(3);
+  });
+
+  it('onClickSelectAll: should unselect all items if all items are selecteds', () => {
+    component.selectedOptions = [...component.options];
+    component.visibleOptions = [...component.options];
+
+    component.onClickSelectAll();
+
+    expect(component.selectedOptions.length).toBe(0);
+  });
+
+  it('someVisibleOptionsSelected: should return true if have some option selected', () => {
+    const selectedValues = component.options.map(({ value }) => value);
+
+    component.visibleOptions = [...component.options, { value: 'value3', label: 'label3' }];
+
+    expect(component.someVisibleOptionsSelected(selectedValues)).toBe(true);
+  });
+
+  it('everyVisibleOptionsSelected: should return true if have every options selected', () => {
+    const selectedValues = component.options.map(({ value }) => value);
+
+    component.visibleOptions = [...component.options];
+
+    expect(component.everyVisibleOptionsSelected(selectedValues)).toBe(true);
+  });
+
+  it('getStateSelectAll: should return false if selectedOptions.length is 0', () => {
+    component.selectedOptions = [];
+    component.visibleOptions = [...component.options];
+
+    component.getStateSelectAll();
+
+    expect(component.getStateSelectAll()).toBe(false);
+  });
+
+  it('getStateSelectAll: should return true if selectedOptions is equal visibleOptions', () => {
+    component.selectedOptions = [...component.options];
+    component.visibleOptions = [...component.options];
+
+    expect(component.getStateSelectAll()).toBe(true);
+  });
+
+  it('getStateSelectAll: should return null if some option selected', () => {
+    component.selectedOptions = [...component.options];
+    component.visibleOptions = [...component.options, { value: 'value3', label: 'label3' }];
+
+    expect(component.getStateSelectAll()).toBe(null);
+  });
+
   it('should emit changeSearch', () => {
     spyOn(component.changeSearch, 'emit');
     component.callChangeSearch({});

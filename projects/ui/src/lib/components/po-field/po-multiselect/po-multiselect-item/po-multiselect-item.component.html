@@ -3,6 +3,7 @@
     <input
       [checked]="selected"
       class="po-multiselect-checkbox-input"
+      [class.po-multiselect-checkbox-input-indeterminate]="selected === null"
       [class.po-multiselect-checkbox-input-checked]="selected"
       type="checkbox"
     />

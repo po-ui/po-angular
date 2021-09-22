@@ -37,4 +37,12 @@ describe('PoMultiselectItemComponent', () => {
     const checked = fixture.debugElement.nativeElement.querySelector(':checked');
     expect(checked).not.toBeNull();
   });
+
+  it('should find .po-multiselect-checkbox-input-indeterminate if selected is null', () => {
+    component.selected = null;
+    fixture.detectChanges();
+
+    const checked = fixture.debugElement.nativeElement.querySelector('.po-multiselect-checkbox-input-indeterminate');
+    expect(checked).toBeTruthy();
+  });
 });

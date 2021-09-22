@@ -37,6 +37,9 @@ export class PoMultiselectDropdownComponent {
   /** Propriedade que recebe a lista de opções que deverão ser criadas no dropdown. */
   @Input('p-visible-options') visibleOptions: Array<PoMultiselectOption> = [];
 
+  /** Propriedade que indica se o campo "Selecionar todos" deverá ser escondido. */
+  @Input('p-hide-select-all') hideSelectAll?: boolean = false;
+
   /** Evento disparado a cada tecla digitada na pesquisa. */
   @Output('p-change-search') changeSearch = new EventEmitter();
 
@@ -84,6 +87,18 @@ export class PoMultiselectDropdownComponent {
     }
   }
 
+  onClickSelectAll() {
+    const selectedValues = this.selectedOptions.map(({ value }) => value);
+
+    if (this.everyVisibleOptionsSelected(selectedValues)) {
+      this.selectedOptions = [];
+    } else {
+      this.selectedOptions = this.uniqueSelectedOptions(selectedValues);
+    }
+
+    this.change.emit(this.selectedOptions);
+  }
+
   updateSelectedValues(checked, option) {
     if (checked) {
       this.selectedOptions.push(option);
@@ -92,6 +107,26 @@ export class PoMultiselectDropdownComponent {
     }
 
     this.change.emit(this.selectedOptions);
+  }
+
+  everyVisibleOptionsSelected(selectedValues) {
+    return this.visibleOptions.every(visibleOption => selectedValues.includes(visibleOption.value));
+  }
+
+  someVisibleOptionsSelected(selectedValues) {
+    return this.visibleOptions.some(visibleOption => selectedValues.includes(visibleOption.value));
+  }
+
+  getStateSelectAll() {
+    const selectedValues = this.selectedOptions.map(({ value }) => value);
+
+    if (this.everyVisibleOptionsSelected(selectedValues)) {
+      return true;
+    } else if (this.someVisibleOptionsSelected(selectedValues)) {
+      return null;
+    } else {
+      return false;
+    }
   }
 
   callChangeSearch(event) {
@@ -107,5 +142,17 @@ export class PoMultiselectDropdownComponent {
         this.searchElement.clean();
       }
     });
+  }
+
+  private uniqueSelectedOptions(selectedValues) {
+    const newSelectedOptions = [...this.selectedOptions];
+
+    for (const visibleOption of this.visibleOptions) {
+      if (!selectedValues.includes(visibleOption.value)) {
+        newSelectedOptions.push(visibleOption);
+      }
+    }
+
+    return newSelectedOptions;
   }
 }

@@ -29,19 +29,23 @@ const PO_MULTISELECT_FIELD_VALUE_DEFAULT = 'value';
 export const poMultiselectLiteralsDefault = {
   en: <PoMultiselectLiterals>{
     noData: 'No data found',
-    placeholderSearch: 'Search'
+    placeholderSearch: 'Search',
+    selectAll: 'Select all'
   },
   es: <PoMultiselectLiterals>{
     noData: 'Datos no encontrados',
-    placeholderSearch: 'Busca'
+    placeholderSearch: 'Busca',
+    selectAll: 'Seleccionar todo'
   },
   pt: <PoMultiselectLiterals>{
     noData: 'Nenhum dado encontrado',
-    placeholderSearch: 'Buscar'
+    placeholderSearch: 'Buscar',
+    selectAll: 'Selecionar todos'
   },
   ru: <PoMultiselectLiterals>{
     noData: 'Данные не найдены',
-    placeholderSearch: 'искать'
+    placeholderSearch: 'искать',
+    selectAll: 'Выбрать все'
   }
 };
 
@@ -111,6 +115,17 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   /** Nome do componente. */
   @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Indica se o campo "Selecionar todos" será escondido.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-select-all') @InputBoolean() hideSelectAll: boolean;
 
   /**
    * @optional
@@ -554,6 +569,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
         }
       });
       this.visibleOptionsDropdown = newOptions;
+    } else {
+      this.visibleOptionsDropdown = [...options];
     }
   }
 

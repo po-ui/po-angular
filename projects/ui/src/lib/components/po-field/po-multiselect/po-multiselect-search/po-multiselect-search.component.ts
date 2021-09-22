@@ -45,6 +45,10 @@ export class PoMultiselectSearchComponent {
     return this._placeholder || this.literals.placeholderSearch;
   }
 
+  get inputValue() {
+    return this.inputElement.nativeElement.value;
+  }
+
   onChange(event) {
     this.change.emit({ event: event, value: this.inputElement.nativeElement.value });
   }
