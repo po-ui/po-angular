@@ -1,4 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from '@angular/core';
+
+import { Button } from '@animaliads/ani-button';
+import '@animaliads/ani-button';
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
@@ -31,14 +34,10 @@ import { PoButtonBaseComponent } from './po-button-base.component';
   templateUrl: './po-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoButtonComponent extends PoButtonBaseComponent implements AfterViewInit {
-  @ViewChild('button', { static: true }) buttonElement: ElementRef;
+export class PoButtonComponent extends PoButtonBaseComponent {
+  @ViewChild('button', { static: true }) buttonElement: Button;
 
-  ngAfterViewInit() {
-    if (this.autoFocus) {
-      this.focus();
-    }
-  }
+  @HostListener('onClick') onClick = () => this.click.emit(null);
 
   /**
    * Função que atribui foco ao componente.
@@ -59,11 +58,7 @@ export class PoButtonComponent extends PoButtonBaseComponent implements AfterVie
    */
   focus(): void {
     if (!this.disabled) {
-      this.buttonElement.nativeElement.focus();
+      this.buttonElement.nativeElement.setFocus();
     }
-  }
-
-  onClick() {
-    this.click.emit(null);
   }
 }

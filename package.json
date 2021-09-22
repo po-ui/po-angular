@@ -71,6 +71,7 @@
     "@angular/platform-browser": "^12.0.1",
     "@angular/platform-browser-dynamic": "^12.0.1",
     "@angular/router": "^12.0.1",
+    "@animaliads/ani-button": "1.1.0-dev.24",
     "@ionic-native/core": "5.33.0",
     "@ionic-native/network": "5.33.0",
     "@po-ui/style": "5.15.0",

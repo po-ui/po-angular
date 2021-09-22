@@ -37,10 +37,10 @@ describe('PoButtonComponent: ', () => {
 
   it('should only start with the default classes and elements, shouldn`t have variations', () => {
     expect(nativeElement.querySelector('.po-button')).toBeTruthy();
-    expect(nativeElement.querySelector('.po-button-primary')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-danger')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-link')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-sm')).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[kind='primary']`)).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[danger='true']`)).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[kind='tertiary']`)).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[size='small']`)).toBeFalsy();
 
     expect(nativeElement.querySelector('span.po-icon')).toBeFalsy();
   });
@@ -52,38 +52,38 @@ describe('PoButtonComponent: ', () => {
     expect(nativeElement.querySelector('.po-button-label').innerHTML).toContain('Po Button');
   });
 
-  it('should add the class `po-button-sm` when `p-small` is `true`', () => {
+  it(`should add the class 'ani-button[size='small']' when 'p-small' is 'true'`, () => {
     component.small = true;
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('.po-button-sm')).toBeTruthy();
+    expect(nativeElement.querySelector(`ani-button[size='small']`)).toBeTruthy();
   });
 
-  it('should add the class `po-button-primary` when `p-type` is `primary` and remove `po-button-danger` and `po-button-link`', () => {
+  it(`should add 'ani-button[kind='primary']' when 'p-type' is 'primary'`, () => {
     component.type = 'primary';
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('.po-button-primary')).toBeTruthy();
-    expect(nativeElement.querySelector('.po-button-danger')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-link')).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[kind='primary']`)).toBeTruthy();
+    expect(nativeElement.querySelector(`ani-button[danger='true']`)).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[kind='tertiary']`)).toBeFalsy();
   });
 
-  it('should add the class `po-button-danger` when `p-type` is `danger` and remove `po-button-primary` and `po-button-link`', () => {
+  it(`should add 'ani-button[danger='true']' when 'p-type' is 'danger'`, () => {
     component.type = 'danger';
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('.po-button-danger')).toBeTruthy();
-    expect(nativeElement.querySelector('.po-button-primary')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-link')).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[danger='true']`)).toBeTruthy();
+    expect(nativeElement.querySelector(`ani-button[kind='primary']`)).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[kind='tertiary']`)).toBeFalsy();
   });
 
-  it('should add the class `po-button-link` when `p-type` is `link` and remove `po-button-primary` and `po-button-danger`', () => {
+  it(`should add the class 'ani-button[kind='tertiary']' when 'p-type' is 'link'`, () => {
     component.type = 'link';
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('.po-button-link')).toBeTruthy();
-    expect(nativeElement.querySelector('.po-button-primary')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-danger')).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[kind='tertiary']`)).toBeTruthy();
+    expect(nativeElement.querySelector(`ani-button[kind='primary']`)).toBeFalsy();
+    expect(nativeElement.querySelector(`ani-button[danger='true']`)).toBeFalsy();
   });
 
   it('should add i with an icon when `p-icon` is defined', () => {
@@ -96,7 +96,7 @@ describe('PoButtonComponent: ', () => {
   it('should simulate button click.', () => {
     spyOn(component.click, 'emit');
 
-    component.onClick();
+    component['onClick']();
 
     expect(component.click.emit).toHaveBeenCalled();
   });
@@ -128,36 +128,18 @@ describe('PoButtonComponent: ', () => {
   });
 
   describe('Methods:', () => {
-    it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
-      component.autoFocus = true;
-
-      const spyFocus = spyOn(component, 'focus');
-      component.ngAfterViewInit();
-
-      expect(spyFocus).toHaveBeenCalled();
-    });
-
-    it('ngAfterViewInit: shouldn´t call `focus` if `autoFocus` is false.', () => {
-      component.autoFocus = false;
-
-      const spyFocus = spyOn(component, 'focus');
-      component.ngAfterViewInit();
-
-      expect(spyFocus).not.toHaveBeenCalled();
-    });
-
     it('focus: should call `focus` of button', () => {
       component.buttonElement = {
         nativeElement: {
-          focus: () => {}
+          setFocus: () => {}
         }
       };
 
-      spyOn(component.buttonElement.nativeElement, 'focus');
+      spyOn(component.buttonElement.nativeElement, 'setFocus');
 
       component.focus();
 
-      expect(component.buttonElement.nativeElement.focus).toHaveBeenCalled();
+      expect(component.buttonElement.nativeElement.setFocus).toHaveBeenCalled();
     });
 
     it('focus: should`t call `focus` of button if `disabled`', () => {
@@ -182,7 +164,7 @@ describe('PoButtonComponent: ', () => {
 
       beforeEach(() => {
         component.loading = true;
-        button = fixture.debugElement.nativeElement.querySelector('button');
+        button = fixture.debugElement.nativeElement.querySelector('ani-button.po-button');
         fixture.detectChanges();
       });
 
