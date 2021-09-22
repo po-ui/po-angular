@@ -5,6 +5,7 @@
     [class.po-button-group-button-selected]="button.selected"
     [class.po-button-group-disabled]="button.disabled"
     p-tooltip-position="bottom"
+    [p-type]="button.selected ? 'primary' : 'default'"
     [p-disabled]="button.disabled"
     [p-icon]="button.icon"
     [p-label]="button.label"
