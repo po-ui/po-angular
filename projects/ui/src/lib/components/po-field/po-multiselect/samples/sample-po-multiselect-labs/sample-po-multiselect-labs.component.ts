@@ -40,7 +40,8 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'hideSearch', label: 'Hide Search' },
     { value: 'autoHeight', label: 'Auto Height' },
-    { value: 'sort', label: 'Sort' }
+    { value: 'sort', label: 'Sort' },
+    { value: 'hideSelectAll', label: 'Hide Select All' }
   ];
 
   ngOnInit() {

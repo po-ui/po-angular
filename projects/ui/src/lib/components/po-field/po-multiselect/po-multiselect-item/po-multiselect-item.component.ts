@@ -16,7 +16,7 @@ export class PoMultiselectItemComponent {
   /** Rótulo do item. */
   @Input('p-label') label: string;
 
-  /** Esta propriedade indica se o campo está selecionado ou não. */
+  /** Esta propriedade indica se o campo está selecionado, indenterminate ou não. */
   @Input('p-selected') selected?: boolean = false;
 
   /** Evento que será disparado toda vez que o usuário marcar ou desmarcar um item. */

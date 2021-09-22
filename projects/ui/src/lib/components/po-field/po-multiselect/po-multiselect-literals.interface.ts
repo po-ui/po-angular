@@ -11,4 +11,7 @@ export interface PoMultiselectLiterals {
 
   /** Texto do *placeholder* do campo de busca. */
   placeholderSearch?: string;
+
+  /** Texto exibido no botão de selecionar todos. */
+  selectAll?: string;
 }

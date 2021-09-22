@@ -11,6 +11,7 @@
     [p-filter-mode]="filterMode"
     [p-help]="help"
     [p-hide-search]="properties.includes('hideSearch')"
+    [p-hide-select-all]="properties.includes('hideSelectAll')"
     [p-label]="label"
     [p-literals]="customLiterals"
     [p-optional]="properties.includes('optional')"
@@ -103,7 +104,7 @@
 
   <div class="po-row">
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-7"
       name="properties"
       [(ngModel)]="properties"
       p-columns="4"
@@ -113,7 +114,7 @@
     </po-checkbox-group>
 
     <po-radio-group
-      class="po-md-6"
+      class="po-md-5"
       name="filterMode"
       [(ngModel)]="filterMode"
       p-columns="3"
