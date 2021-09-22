@@ -1,14 +1,10 @@
-<button
+<ani-button
   #button
   class="po-button po-text-ellipsis"
-  type="button"
-  [class.po-button-danger]="type === 'danger'"
-  [class.po-button-link]="type === 'link'"
-  [class.po-button-primary]="type === 'primary'"
-  [class.po-button-sm]="small"
-  [class.po-clickable]="type === 'link'"
-  [disabled]="disabled || loading"
-  (click)="onClick()"
+  [attr.size]="small === true ? 'small' : 'medium'"
+  [attr.danger]="danger"
+  [attr.kind]="type"
+  [attr.disabled]="disabled || loading"
 >
   <div *ngIf="loading" class="po-button-loading-icon">
     <po-loading-icon p-neutral-color></po-loading-icon>
@@ -16,4 +12,4 @@
 
   <po-icon *ngIf="icon" class="po-button-icon" [p-icon]="icon"></po-icon>
   <span *ngIf="label" class="po-button-label">{{ label }}</span>
-</button>
+</ani-button>
