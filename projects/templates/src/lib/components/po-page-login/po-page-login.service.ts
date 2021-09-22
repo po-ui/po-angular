@@ -15,7 +15,7 @@ export class PoPageLoginService {
       loginForm.password = btoa(loginForm.password);
       return this.http.post(url, loginForm);
     } else {
-      const user = `(${loginForm.login}:${loginForm.password})`;
+      const user = `${loginForm.login}:${loginForm.password}`;
       const headers = new HttpHeaders({
         'Authorization': `${type} ` + btoa(user)
       });
