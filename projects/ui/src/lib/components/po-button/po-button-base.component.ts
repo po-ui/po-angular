@@ -5,8 +5,10 @@ import { InputBoolean } from '../../decorators';
 
 import { PoButtonType } from './po-button-type.enum';
 
+
 const PO_BUTTON_TYPES = ['primary', 'secondary', 'tertiary'];
 const PO_BUTTON_TYPE_DEFAULT = 'secondary';
+
 
 /**
  * @description
@@ -62,7 +64,9 @@ export class PoButtonBaseComponent {
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
 
+
   private _danger?: boolean = false;
+
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
@@ -124,6 +128,7 @@ export class PoButtonBaseComponent {
     this._type = PO_BUTTON_TYPES.includes(value) ? value : PoButtonType[value] ? PoButtonType[value] : PO_BUTTON_TYPE_DEFAULT;
 
     this.danger = value === 'danger' ? true : this.danger;
+
   }
 
   get type(): string {
