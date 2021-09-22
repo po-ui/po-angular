@@ -28,6 +28,7 @@ const poMultiselectFilterServiceStub: PoMultiselectFilter = {
 };
 
 describe('PoMultiselectComponent:', () => {
+  let fnAdjustContainerPosition;
   let component: PoMultiselectComponent;
   let fixture: ComponentFixture<PoMultiselectComponent>;
 
@@ -55,6 +56,8 @@ describe('PoMultiselectComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoMultiselectComponent);
     component = fixture.componentInstance;
+    fnAdjustContainerPosition = component['adjustContainerPosition'];
+    component['adjustContainerPosition'] = () => {};
 
     component.options = [{ label: 'label', value: 1 }];
     component.autoHeight = true;
@@ -530,7 +533,6 @@ describe('PoMultiselectComponent:', () => {
       };
 
       component.calculateVisibleItems.call(fakeThis);
-
       expect(fakeThis.visibleDisclaimers.length).toBe(0);
       expect(fakeThis.isCalculateVisibleItems).toBeFalsy();
     });
@@ -718,6 +720,7 @@ describe('PoMultiselectComponent:', () => {
     }));
 
     it(`adjustContainerPosition: should call 'controlPosition.adjustPosition' with 'poMultiselectContainerPositionDefault'.`, () => {
+      component['adjustContainerPosition'] = fnAdjustContainerPosition;
       const poMultiselectContainerPositionDefault = 'bottom';
       const adjustPositionSpy = spyOn(component['controlPosition'], 'adjustPosition');
 
