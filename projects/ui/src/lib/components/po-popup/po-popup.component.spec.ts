@@ -15,8 +15,7 @@ describe('PoPopupComponent:', () => {
   let fixture: ComponentFixture<PoPopupComponent>;
   let nativeElement;
 
-  const eventClick = document.createEvent('MouseEvents');
-  eventClick.initEvent('click', false, true);
+  const eventClick = new MouseEvent('click', { 'bubbles': false, 'cancelable': true });
 
   const eventResize = document.createEvent('Event');
   eventResize.initEvent('resize', false, true);
