@@ -4,5 +4,5 @@
   "lib": {
     "entryFile": "./src/public-api.ts"
   },
-  "allowedNonPeerDependencies": ["@po-ui/style", "@po-ui/ng-schematics"]
+  "allowedNonPeerDependencies": ["@po-ui/style", "@po-ui/ng-schematics", "@animaliads/ani-button"]
 }
