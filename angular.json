@@ -66,7 +66,12 @@
                 "output": "/assets/monaco"
               }
             ],
-            "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
+            "styles": [
+              "./node_modules/@animaliads/animalia-brand/theme.css",
+              "./node_modules/@animaliads/css-tokens/global-tokens.css",
+              "./node_modules/@po-ui/style/css/po-theme-default.min.css",
+              "projects/app/src/styles.css"
+            ],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -311,7 +316,9 @@
               }
             ],
             "styles": [
-              "node_modules/@po-ui/style/css/po-theme-default.min.css",
+              "./node_modules/@animaliads/animalia-brand/theme.css",
+              "./node_modules/@animaliads/css-tokens/global-tokens.css",
+              "/Users/aline.lariguet/dev/po-ui/po-style/dist/style/css/po-theme-default.min.css",
               "projects/portal/src/assets/css/code-highlight.css",
               "projects/portal/src/styles.css"
             ],

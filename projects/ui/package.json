@@ -23,6 +23,7 @@
   "dependencies": {
     "@po-ui/style": "0.0.0-PLACEHOLDER",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
+    "@animaliads/ani-button": "1.1.0-dev.21",
     "tslib": "^2.1.0"
   },
   "peerDependencies": {
