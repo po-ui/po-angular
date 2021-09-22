@@ -175,9 +175,13 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   }
 
   private removeButtonFocus() {
-    const buttons = this.toolbarElement.nativeElement.querySelectorAll('button');
+    const buttons = this.toolbarElement.nativeElement.querySelectorAll('.po-button');
+    const inputColorPicker = this.toolbarElement.nativeElement.querySelectorAll(
+      '.po-rich-text-toolbar-color-picker-input'
+    );
 
     buttons.forEach(button => button.setAttribute('tabindex', '-1'));
+    inputColorPicker[0].setAttribute('tabindex', '-1');
   }
 
   private setColorInColorPicker(color: string): void {
