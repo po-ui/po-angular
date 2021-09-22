@@ -66,14 +66,14 @@ describe('PoButtonGroupComponent:', () => {
   });
 
   it('should create buttons in container', () => {
-    const buttons = containerButtons.querySelectorAll('.po-button-group .po-button');
+    const buttons = containerButtons.querySelectorAll('.po-button-group ani-button');
 
     const buttonEnabled = buttons[0];
     const buttonDisabled = buttons[1];
 
     expect(buttons.length).toBe(3);
 
-    expect(buttonEnabled.disabled).toBeFalsy();
+    expect(buttonEnabled.disabled).toBe('false');
     expect(buttonEnabled.innerHTML).toContain('enabled');
 
     expect(buttonDisabled.disabled).toBeTruthy();
@@ -81,7 +81,7 @@ describe('PoButtonGroupComponent:', () => {
   });
 
   it('should call actions of enabled buttons, disabled ones should not be called', () => {
-    const buttons = containerButtons.querySelectorAll('.po-button-group .po-button');
+    const buttons = containerButtons.querySelectorAll('.po-button-group ani-button');
 
     const buttonEnabled = buttons[0];
     const buttonDisabled = buttons[1];
@@ -103,6 +103,20 @@ describe('PoButtonGroupComponent:', () => {
 
       button.dispatchEvent(event);
     };
+
+    it('should set type `primary` when the button is selected', () => {
+      const buttons = containerButtons.querySelectorAll(
+        `.po-button-group.po-button-group-button-selected ani-button[kind='primary']`
+      );
+
+      expect(buttons[0]).toBeTruthy();
+    });
+
+    it('should set type `secondary` when the button isn`t selected', () => {
+      const buttons = containerButtons.querySelectorAll(`.po-button-group ani-button[kind='secondary']`);
+
+      expect(buttons[0]).toBeTruthy();
+    });
 
     it('should apply po-button-group-button-selected class when button is selected', () => {
       const buttons = containerButtons.querySelectorAll('.po-button-group.po-button-group-button-selected');
