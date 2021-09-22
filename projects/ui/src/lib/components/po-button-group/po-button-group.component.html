@@ -9,6 +9,7 @@
     [p-icon]="button.icon"
     [p-label]="button.label"
     [p-small]="small"
+    [p-type]="button.selected ? 'primary' : 'default'"
     [p-tooltip]="!button.disabled ? button.tooltip : undefined"
     (p-click)="button.action(button); onButtonClick(button, i)"
   >
