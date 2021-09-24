@@ -1,7 +1,17 @@
-<po-page-default p-title="Table">
-  <po-divider p-label="Formulário"></po-divider>
+<po-page-default p-title="Formulário">
+  <po-divider p-label="Padrão"></po-divider>
 
-  <po-dynamic-form class="po-md-12" [p-fields]="fields" [p-value]="value"> </po-dynamic-form>
+  <po-dynamic-form class="po-md-12" [p-fields]="fields" [p-value]="person"> </po-dynamic-form>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-2 po-m-1"
+      p-label="Gravar Dados"
+      (p-click)="sendNotify(person)"
+      p-type="primary"
+      [p-disabled]="setDisabled(person)"
+    ></po-button>
+  </div>
 
   <po-divider p-label="webcomponets"></po-divider>
 
@@ -10,7 +20,7 @@
     p-api-custom="http://localhost:3000/custom"
     p-component-name="fp-root"
     p-class-container="po-md-12"
-    [p-events]="eventButton"
+    [p-events]="eventInput"
     p-id-container="content1"
   ></po-custom-area>
 </po-page-default>

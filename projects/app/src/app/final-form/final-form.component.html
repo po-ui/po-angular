@@ -1,0 +1,22 @@
+<po-page-default p-title="Final Form" [p-actions]="actions">
+  <po-divider p-label="Padrão"></po-divider>
+
+  <po-dynamic-form [p-fields]="fields" [p-value]="values"></po-dynamic-form>
+  <!-- <div *ngFor="let field of fields">
+    <po-input name="field.property" [p-placeholder]="field.placeholder" [p-label]="field.label"></po-input>
+  </div> -->
+
+  <po-divider p-label="Webcomponets"></po-divider>
+  <po-custom-area
+    class="po-md-12"
+    [p-api-custom]="customUrl"
+    p-component-name="final-form"
+    p-class-style="po-md-12"
+    p-class-container="po-md-12"
+    p-id-container="content2"
+    [p-events]="eventInput"
+  ></po-custom-area>
+
+  <po-divider p-label="Area 2"></po-divider>
+  <h2>Teste</h2>
+</po-page-default>

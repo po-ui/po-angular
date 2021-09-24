@@ -1,13 +1,14 @@
-import { Routes, RouterModule } from '@angular/router';
-
 import { NgModule } from '@angular/core';
-import { ClientesComponent } from './clientes/clientes.component';
-import { TesteComponent } from './teste/teste.component';
+import { RouterModule, Routes } from '@angular/router';
 import { CalculadoraComponent } from './calculadora/calculadora.component';
-import { ResultadosComponent } from './resultados/resultados.component';
-import { PocComponent } from './poc/poc.component';
-import { TableComponent } from './table/table.component';
 import { ChartComponent } from './chart/chart.component';
+import { ClientesComponent } from './clientes/clientes.component';
+import { FinalFormComponent } from './final-form/final-form.component';
+import { HcAppComponent } from './hc-app/hc-app.component';
+import { PocComponent } from './poc/poc.component';
+import { ResultadosComponent } from './resultados/resultados.component';
+import { TableComponent } from './table/table.component';
+import { TesteComponent } from './teste/teste.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,14 @@ const routes: Routes = [
   {
     path: 'chart',
     component: ChartComponent
+  },
+  {
+    path: 'hc',
+    component: HcAppComponent
+  },
+  {
+    path: 'final-form',
+    component: FinalFormComponent
   }
 ];
 

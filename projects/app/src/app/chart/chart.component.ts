@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styles: []
 })
 export class ChartComponent implements OnInit {
+  chart;
   constructor() {}
-
   ngOnInit(): void {}
 }

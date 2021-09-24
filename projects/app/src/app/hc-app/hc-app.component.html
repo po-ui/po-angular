@@ -1,0 +1,29 @@
+<po-page-default>
+  <po-divider p-label="Padrão"></po-divider>
+  <!-- <po-input name="url" [(ngModel)]="url" p-label="Serviço de Dados" p-placeholder="Digite aqui a API de dados" p-help="https://po-sample-api.herokuapp.com/v1/heroes" (p-blur)="changeUrl(url)" [p-disabled]="true"></po-input> -->
+  <po-info p-label="Table API URL" [p-value]="url" p-orientation="horizontal"> </po-info>
+  <po-table
+    #poTable
+    [p-service-api]="url"
+    [p-columns]="[{ 'property': 'id' }, { 'property': 'name' }, { 'property': 'email' }]"
+    [p-infinite-scroll]="true"
+    p-height="400"
+    [p-selectable]="true"
+    [p-single-select]="true"
+    (p-selected)="selectItem($event)"
+  ></po-table>
+
+  <po-button (p-click)="sendItem()" p-label="Enviar Item" [p-disabled]="buttonDisabled" p-type="primary"></po-button>
+
+  <po-divider p-label="Web Component"></po-divider>
+
+  <po-custom-area
+    class="po-md-12"
+    [p-api-custom]="customUrl"
+    p-component-name="final-form"
+    p-class-style="po-md-12"
+    p-class-container="po-md-12"
+    [p-events]="eventInput"
+    p-id-container="content2"
+  ></po-custom-area>
+</po-page-default>

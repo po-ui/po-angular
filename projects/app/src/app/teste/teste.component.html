@@ -22,7 +22,7 @@
       class="po-lg-4"
       name="personType"
       [(ngModel)]="personType"
-      p-label="Tipo de Pessoa"
+      p-label="Person Type"
       [p-options]="personOptions"
       (p-change)="changePerson($event)"
     >
@@ -38,6 +38,6 @@
       p-id-container="content2"
     ></po-custom-area>
 
-    <po-info p-label="Identificação" [p-value]="cnpj" class="po-lg-4"> </po-info>
+    <po-info p-label="Identification" [p-value]="cnpj" class="po-lg-4"> </po-info>
   </div>
 </po-page-default>
