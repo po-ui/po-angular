@@ -13,6 +13,9 @@ import { ResultadosComponent } from './resultados/resultados.component';
 import { PocComponent } from './poc/poc.component';
 import { TableComponent } from './table/table.component';
 import { ChartComponent } from './chart/chart.component';
+import { HcAppComponent } from './hc-app/hc-app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FinalFormComponent } from './final-form/final-form.component';
 
 @NgModule({
   declarations: [
@@ -23,9 +26,19 @@ import { ChartComponent } from './chart/chart.component';
     ResultadosComponent,
     PocComponent,
     TableComponent,
-    ChartComponent
+    ChartComponent,
+    HcAppComponent,
+    FinalFormComponent
   ],
-  imports: [BrowserModule, FormsModule, AppRoutingModule, PoModule, PoTemplatesModule, PoTableModule],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    AppRoutingModule,
+    PoModule,
+    PoTemplatesModule,
+    PoTableModule
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

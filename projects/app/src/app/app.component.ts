@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { PoPageDynamicTableActions } from 'projects/templates/src/lib';
-import { PoBreadcrumb } from '@po-ui/ng-components/lib';
 import { PoMenuItem } from '../../../ui/src/lib';
 
 @Component({
@@ -15,6 +13,8 @@ export class AppComponent {
     { label: 'Resultados', link: '/resultados' },
     { label: 'POC', link: '/poc' },
     { label: 'Form', link: '/form' },
-    { label: 'Chart', link: '/chart' }
+    { label: 'Chart', link: '/chart' },
+    { label: 'HcApp', link: '/hc' },
+    { label: 'Final Form', link: '/final-form' }
   ];
 }

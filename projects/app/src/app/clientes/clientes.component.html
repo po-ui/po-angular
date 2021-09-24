@@ -8,6 +8,7 @@
   p-custom-component-name="pods-input-cnpj"
   [p-custom-events]="eventInput"
 >
+  <po-divider p-label="Padrão"></po-divider>
   <form #formEditUser="ngForm">
     <div class="po-row">
       <po-number class="po-md-4" name="userId" [(ngModel)]="userId" p-clean p-label="User ID" p-required> </po-number>
@@ -61,6 +62,7 @@
       >
       </po-radio-group>
 
+      <po-divider p-label="Webcomponets"></po-divider>
       <po-custom-area
         class="po-lg-4"
         [p-api-custom]="url"
