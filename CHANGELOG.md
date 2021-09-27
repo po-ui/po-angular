@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.14.0](https://github.com/po-ui/po-angular/compare/v5.13.1...v5.14.0) (2021-09-27)
+
+
+### Features
+
+* **multiselect:** adiciona campo para selecionar todos os itens ([d732cf0](https://github.com/po-ui/po-angular/commit/d732cf0ccb6922705a179a5cf4e36cc8198cda07))
+* **page-dynamic-table:** add disabled to interface custom table action ([2468bdb](https://github.com/po-ui/po-angular/commit/2468bdb27242c1f4e329dcfd642e429f74514c7c))
+* **page-dynamic-table:** add icon to interface custom table action ([182ac8f](https://github.com/po-ui/po-angular/commit/182ac8fa0af24a6465957b7b2941b14c596d7b94))
+
+
+### Performance Improvements
+
+* **input:** implementa `ChangeDetectionStrategy OnPush` ([9ac7322](https://github.com/po-ui/po-angular/commit/9ac7322a5b33a6c8054bab09649bb194cd8077dc))
+
+
+
 # [5.13.1](https://github.com/po-ui/po-angular/compare/v5.13.0...v5.13.1) (2021-09-20)
 
 
