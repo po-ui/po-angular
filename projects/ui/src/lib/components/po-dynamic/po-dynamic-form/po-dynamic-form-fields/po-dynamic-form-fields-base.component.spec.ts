@@ -478,9 +478,29 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(component['compareTo']).toHaveBeenCalledWith(field.type, PoDynamicFieldType.Date);
       });
 
+      it('should call `compareTo` and return `datepickerrange` if type is `date` and range is `true`', () => {
+        const expectedValue = 'datepickerrange';
+        const field = { type: 'date', property: 'code', range: true };
+
+        spyOn(component, <any>'compareTo').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['compareTo']).toHaveBeenCalledWith(field.type, PoDynamicFieldType.Date);
+      });
+
       it('should call `compareTo` and return `datepicker` if type is `dateTime`', () => {
         const expectedValue = 'datepicker';
         const field = { type: 'dateTime', property: 'code' };
+
+        spyOn(component, <any>'compareTo').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['compareTo']).toHaveBeenCalledWith('datetime', PoDynamicFieldType.DateTime);
+      });
+
+      it('should call `compareTo` and return `datepickerrange` if type is `dateTime` and range is `true`', () => {
+        const expectedValue = 'datepickerrange';
+        const field = { type: 'dateTime', property: 'code', range: true };
 
         spyOn(component, <any>'compareTo').and.callThrough();
 

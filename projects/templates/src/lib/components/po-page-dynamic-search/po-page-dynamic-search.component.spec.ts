@@ -350,6 +350,20 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(result).toBe('12/08/2020');
     });
 
+    it('getFilterValueToDisclaimer: should return formated date if field type is PoDynamicFieldType.Date with range', () => {
+      const field = { type: PoDynamicFieldType.Date, property: '1', label: 'date', range: true };
+      const originalValue = { start: '2020-08-12', end: '2020-08-12' };
+      const formatedDateStart = '12/08/2020';
+      const formatedDateEnd = '15/08/2021';
+      const formatedDateRange = '12/08/2020 - 15/08/2021';
+
+      spyOn(component, <any>'formatDate').and.returnValues(formatedDateStart, formatedDateEnd);
+
+      const result = component['getFilterValueToDisclaimer'](field, originalValue);
+
+      expect(result).toBe(formatedDateRange);
+    });
+
     it('getFilterValueToDisclaimer: should return label of option if options and label are defined', () => {
       const field = {
         property: '1',

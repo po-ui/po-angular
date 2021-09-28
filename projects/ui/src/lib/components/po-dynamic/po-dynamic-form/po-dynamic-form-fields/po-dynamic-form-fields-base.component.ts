@@ -154,7 +154,7 @@ export class PoDynamicFormFieldsBaseComponent {
     } else if (this.compareTo(type, PoDynamicFieldType.Boolean)) {
       return 'switch';
     } else if (this.compareTo(type, PoDynamicFieldType.Date) || this.compareTo(type, PoDynamicFieldType.DateTime)) {
-      return 'datepicker';
+      return field.range ? 'datepickerrange' : 'datepicker';
     } else if (this.compareTo(type, PoDynamicFieldType.Time)) {
       field.mask = field.mask || '99:99';
 

@@ -275,4 +275,11 @@ export interface PoDynamicFormField extends PoDynamicField {
    * > A propriedade será repassada para os componentes que suportam a mesma.
    */
   locale?: string;
+
+  /**
+   * O controle passa a permitir a entrada de um intervalo ao invés de um único valor.
+   *
+   * > Atualmente essa propriedade está disponível apenas para o tipo 'date' e 'dateTime'.
+   */
+  range?: boolean;
 }
