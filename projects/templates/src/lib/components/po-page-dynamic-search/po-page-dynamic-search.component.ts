@@ -224,7 +224,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     }
 
     if (field.type === PoDynamicFieldType.Date) {
-      return this.formatDate(value);
+      return field.range ? this.formatDate(value.start) + ' - ' + this.formatDate(value.end) : this.formatDate(value);
     }
 
     if (field.options && value) {

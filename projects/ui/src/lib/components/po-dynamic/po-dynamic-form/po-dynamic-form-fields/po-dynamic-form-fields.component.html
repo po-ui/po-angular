@@ -25,6 +25,23 @@
     >
     </po-datepicker>
 
+    <po-datepicker-range
+      #component
+      *ngIf="compareTo(field.control, 'datepickerrange')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      p-clean
+      [p-disabled]="isDisabled(field)"
+      [p-auto-focus]="field.focus"
+      [p-help]="field.help"
+      [p-label]="field.label"
+      [p-optional]="field.optional"
+      [p-required]="field.required"
+      (p-change)="onChangeField(field)"
+    >
+    </po-datepicker-range>
+
     <po-input
       #component
       *ngIf="compareTo(field.control, 'input')"

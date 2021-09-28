@@ -82,12 +82,27 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       ]
     },
     { property: 'city', disabled: true, gridColumns: 6 },
-    { property: 'entryTime', label: 'Entry time', type: 'time', divider: 'Work data', gridColumns: 6 },
-    { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 6 },
+    {
+      property: 'vacation',
+      type: 'date',
+      divider: 'Work data',
+      range: true,
+      gridColumns: 5,
+      gridSmColumns: 12
+    },
+    {
+      property: 'entryTime',
+      label: 'Entry time',
+      type: 'time',
+      gridColumns: 2,
+      gridSmColumns: 6
+    },
+    { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 2, gridSmColumns: 6 },
     {
       property: 'wage',
       type: 'currency',
-      gridColumns: 6,
+      gridColumns: 3,
+      gridSmColumns: 12,
       decimalsLength: 2,
       thousandMaxlength: 7,
       icon: 'po-icon-finance'
