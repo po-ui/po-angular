@@ -329,6 +329,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     } else if (this.inputEl) {
       this.inputEl.nativeElement.value = '';
       this.date = undefined;
+      this.callOnChange(this.date, false);
     }
 
     this.valueBeforeChange = this.formatToDate(this.date);
