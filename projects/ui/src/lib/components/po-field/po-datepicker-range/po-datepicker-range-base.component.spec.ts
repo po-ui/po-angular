@@ -269,6 +269,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
         spyOn(component, <any>'convertPatternDateFormat');
         spyOn(component, <any>'requiredDateRangeFailed');
+        spyOn(component, <any>'verifyValidDate');
         spyOn(component, <any>'dateRangeFormatFailed');
         spyOn(component, <any>'dateRangeFailed');
 
@@ -301,12 +302,13 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         expect(component.disabled).toBe(expectedValue);
       });
 
-      it(`should call 'dateRangeObjectFailed', set 'errorMessage' as 'literals.invalidFormat'
+      it(`should call 'dateRangeFormatFailed', set 'errorMessage' as 'literals.invalidFormat'
         and return 'invalidDateRangeError'.`, () => {
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
         spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(true);
         spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
+        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
         spyOn(component, <any>'requiredDateRangeFailed');
         spyOn(component, <any>'dateRangeFailed');
 
@@ -321,7 +323,9 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         and return 'invalidDateRangeError'.`, () => {
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
+        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
         spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(true);
+        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
         spyOn(component, <any>'requiredDateRangeFailed');
         spyOn(component, <any>'dateRangeFailed');
 
@@ -338,6 +342,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
         spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
         spyOn(component, <any>'dateRangeFailed').and.returnValue(true);
+        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
         spyOn(component, <any>'requiredDateRangeFailed');
         spyOn(component, <any>'dateRangeFormatFailed');
 
@@ -354,6 +359,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         const returnNull = null;
 
         spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(spyOnReturns);
+        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
         spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(spyOnReturns);
         spyOn(component, <any>'dateRangeFailed').and.returnValue(spyOnReturns);
 
@@ -699,6 +705,99 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const date = '2018-10-25';
 
       expect(component['convertPatternDateFormat'](date)).toBe(date);
+    });
+
+    it(`should call 'verifyValidDate with startDate valid and return true`, () => {
+      const date = '2021-10-04';
+
+      expect(component['verifyValidDate'](date, '')).toBeTruthy();
+    });
+    it(`should call 'verifyValidDate with startDate invalid and return false`, () => {
+      const date = '2021-02-29';
+
+      expect(component['verifyValidDate'](date, '')).toBeFalsy();
+    });
+    it(`should call 'verifyValidDate with endDate valid and return true`, () => {
+      const date = '2021-10-04';
+
+      expect(component['verifyValidDate']('', date)).toBeTruthy();
+    });
+    it(`should call 'verifyValidDate with endDate invalid and return false`, () => {
+      const date = '2021-02-29';
+
+      expect(component['verifyValidDate']('', date)).toBeFalsy();
+    });
+    it(`should call 'verifyValidDate with startDate e endDate valid and return false`, () => {
+      const startDate = '2021-02-27';
+      const endDate = '2021-02-28';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeTruthy();
+    });
+    it(`should call 'verifyValidDate with startDate e endDate invalid and return false`, () => {
+      const startDate = '2021-02-29';
+      const endDate = '2021-03-32';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeFalsy();
+    });
+    it('should call dateIsValid with a date that is with a month that is 31 days', () => {
+      const startDate = '2021-02-28';
+      const endDate = '2021-03-31';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeTruthy();
+    });
+    it('should call dateIsValid with a date that is with a month that is 30 days', () => {
+      const startDate = '2021-02-28';
+      const endDate = '2021-09-30';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeTruthy();
+    });
+    it('should call dateIsValid with a date with leap year date', () => {
+      const startDate = '2020-02-29';
+      const endDate = '2021-03-31';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeTruthy();
+    });
+    it('should call dateIsValid with a date without a leap year date', () => {
+      const startDate = '2021-02-28';
+      const endDate = '2021-03-31';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeTruthy();
+    });
+
+    it('should call dateIsValid with a invalid date that is with a month that is 31 days', () => {
+      const startDate = '2021-02-28';
+      const endDate = '2021-03-32';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeFalsy();
+    });
+    it('should call dateIsValid with a invalid date that is with a month that is 30 days', () => {
+      const startDate = '2021-02-28';
+      const endDate = '2021-09-31';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeFalsy();
+    });
+    it('should call dateIsValid with a invalid date with leap year date', () => {
+      const startDate = '2020-02-30';
+      const endDate = '2021-03-31';
+
+      expect(component['verifyValidDate'](startDate, endDate)).toBeFalsy();
+    });
+
+    it(`should call 'verifyValidDate', set 'errorMessage' as 'literals.invalidFormat'`, () => {
+      component.literals = poDatepickerRangeLiteralsDefault.pt;
+
+      spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
+      spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
+      spyOn(component, <any>'verifyValidDate').and.returnValue(false);
+      spyOn(component, <any>'requiredDateRangeFailed');
+      spyOn(component, <any>'dateRangeFormatFailed');
+
+      const value = { value: { start: '2021-02-29', end: '' } };
+
+      component.validate(<any>value);
+
+      expect(component['verifyValidDate']).toHaveBeenCalled();
+      expect(component.errorMessage).toEqual(component.literals.invalidDate);
     });
   });
 });

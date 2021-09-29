@@ -11,4 +11,7 @@ export interface PoDatepickerRangeLiterals {
 
   /** Data inicial maior que data final. */
   startDateGreaterThanEndDate?: string;
+
+  /** Data inválida. */
+  invalidDate?: string;
 }
