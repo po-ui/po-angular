@@ -2,8 +2,9 @@
   <div class="po-field-container-content">
     <input
       #inp
-      class="po-input po-input-icon-right"
+      class="po-input"
       type="text"
+      [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [autocomplete]="autocomplete"
       [disabled]="disabled"
       [placeholder]="placeholder"
@@ -12,6 +13,8 @@
     />
 
     <div class="po-field-icon-container-right">
+      <po-clean *ngIf="clean && !disabled" [p-element-ref]="inputEl" (p-change-event)="cleanModel()"> </po-clean>
+
       <span
         #iconLookup
         class="po-icon po-field-icon po-icon-search"

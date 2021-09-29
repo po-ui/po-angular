@@ -243,6 +243,9 @@ export abstract class PoLookupBaseComponent
    */
   @Input('p-infinite-scroll') @InputBoolean() infiniteScroll: boolean = false;
 
+  /** Exibe um ícone que permite limpar o campo. */
+  @Input('p-clean') @InputBoolean() clean: boolean = false;
+
   /**
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
    * Será passado por parâmetro o objeto de erro retornado.
@@ -409,6 +412,11 @@ export abstract class PoLookupBaseComponent
     this.setControl();
   }
 
+  cleanModel() {
+    this.cleanViewValue();
+    this.callOnChange(undefined);
+  }
+
   // Função implementada do ControlValueAccessor
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
@@ -524,11 +532,6 @@ export abstract class PoLookupBaseComponent
     } else {
       this.cleanViewValue();
     }
-  }
-
-  protected cleanModel() {
-    this.cleanViewValue();
-    this.callOnChange(undefined);
   }
 
   protected cleanViewValue() {
