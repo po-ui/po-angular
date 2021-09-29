@@ -477,6 +477,24 @@ describe('PoLookupComponent:', () => {
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
+
+    it('should find .po-input-double-icon-right if clean and inputValue are truthy', () => {
+      component.clean = true;
+      component.inputEl.nativeElement.value = 'abc';
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-input-double-icon-right')).toBeTruthy();
+    });
+
+    it('should find .po-input-icon-right if clean and inputValue are falsy', () => {
+      component.clean = false;
+      component.inputEl.nativeElement.value = '';
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-input-icon-right')).toBeTruthy();
+    });
   });
 
   describe('Integration', () => {

@@ -52,6 +52,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'clean', label: 'Clean' },
     { value: 'disabled', label: 'Disabled' },
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },

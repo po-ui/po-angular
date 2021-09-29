@@ -1,6 +1,7 @@
 <po-lookup
   name="lookup"
   [(ngModel)]="lookup"
+  [p-clean]="properties.includes('clean')"
   [p-columns]="columns"
   [p-disabled]="properties.includes('disabled')"
   [p-field-label]="fieldLabel"
