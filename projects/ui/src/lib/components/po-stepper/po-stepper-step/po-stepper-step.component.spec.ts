@@ -137,10 +137,10 @@ describe('PoStepperStepComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('getStatusClass: should return `po-stepper-step-active` if status is `active`.', () => {
+    it('getStatusClass: should return `po-stepper-step-default` if status is `active`.', () => {
       const result = component.getStatusClass(PoStepperStatus.Active);
 
-      expect(result).toBe('po-stepper-step-active');
+      expect(result).toBe('po-stepper-step-default');
     });
 
     it('getStatusClass: should return `po-stepper-step-disabled` if status is `disabled`.', () => {
@@ -149,10 +149,10 @@ describe('PoStepperStepComponent:', () => {
       expect(result).toBe('po-stepper-step-disabled');
     });
 
-    it('getStatusClass: should return `po-stepper-step-done` if status is `done`.', () => {
+    it('getStatusClass: should return `po-stepper-step-default` if status is `done`.', () => {
       const result = component.getStatusClass(PoStepperStatus.Done);
 
-      expect(result).toBe('po-stepper-step-done');
+      expect(result).toBe('po-stepper-step-default');
     });
 
     it('getStatusClass: should return `po-stepper-step-default` if status is `default`.', () => {
@@ -317,14 +317,14 @@ describe('PoStepperStepComponent:', () => {
       expect(stepperCircle.style.height).toBe('24px');
     });
 
-    it('should add class `po-stepper-step-active` if step active.', () => {
+    it('should add class `po-stepper-step-default` if step active.', () => {
       component.orientation = PoStepperOrientation.Horizontal;
       component.status = PoStepperStatus.Active;
       component.label = 'Step 1';
 
       fixture.detectChanges();
 
-      expect(elementByClass('po-stepper-step-active')).toBeTruthy();
+      expect(elementByClass('po-stepper-step-default')).toBeTruthy();
     });
 
     it('should add class `po-stepper-step-disabled` if step disabled.', () => {
@@ -336,13 +336,13 @@ describe('PoStepperStepComponent:', () => {
       expect(elementByClass('po-stepper-step-disabled')).toBeTruthy();
     });
 
-    it('should add class `po-stepper-step-done` if step done.', () => {
+    it('should add class `po-stepper-step-default` if step done.', () => {
       component.status = PoStepperStatus.Done;
       component.label = 'Step 1';
 
       fixture.detectChanges();
 
-      expect(elementByClass('po-stepper-step-done')).toBeTruthy();
+      expect(elementByClass('po-stepper-step-default')).toBeTruthy();
     });
 
     it('should add class `po-stepper-step-default` if step default.', () => {
@@ -352,6 +352,28 @@ describe('PoStepperStepComponent:', () => {
       fixture.detectChanges();
 
       expect(elementByClass('po-stepper-step-default')).toBeTruthy();
+    });
+
+    it(`should create class 'po-stepper-step-dashed-border' if 'nextStatus' is disabled and position is not vertical`, () => {
+      component.orientation = PoStepperOrientation.Horizontal;
+      component.nextStatus = 'disabled';
+
+      fixture.detectChanges();
+
+      const stepperDashedBorder = elementByClass('po-stepper-step-dashed-border');
+
+      expect(stepperDashedBorder).toBeTruthy();
+    });
+
+    it(`should create class 'po-stepper-step-dashed-border-vertical' if 'nextStatus' is disabled and position is vertical`, () => {
+      component.orientation = PoStepperOrientation.Vertical;
+      component.nextStatus = 'disabled';
+
+      fixture.detectChanges();
+
+      const stepperDashedBorderVertical = elementByClass('po-stepper-step-dashed-border-vertical');
+
+      expect(stepperDashedBorderVertical).toBeTruthy();
     });
   });
 });

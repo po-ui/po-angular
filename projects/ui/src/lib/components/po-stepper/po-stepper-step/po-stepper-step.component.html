@@ -12,6 +12,8 @@
     <div
       [class.po-stepper-step-bar-bottom]="isVerticalOrientation"
       [class.po-stepper-step-bar-right]="!isVerticalOrientation"
+      [class.po-stepper-step-dashed-border]="nextStatus === 'disabled' && !isVerticalOrientation"
+      [class.po-stepper-step-dashed-border-vertical]="nextStatus === 'disabled' && isVerticalOrientation"
       [style.margin-left.px]="marginHorizontalBar"
     ></div>
   </div>

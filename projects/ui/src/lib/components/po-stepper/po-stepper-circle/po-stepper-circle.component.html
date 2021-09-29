@@ -1,19 +1,16 @@
-<div
-  class="po-stepper-circle"
-  [class.po-stepper-circle-with-icon]="icons"
-  [style.height.px]="size"
-  [style.width.px]="size"
-  [tabindex]="isDisabled ? -1 : 0"
->
+<div class="po-stepper-circle" [style.height.px]="size" [style.width.px]="size" [tabindex]="isDisabled ? -1 : 0">
   <span
+    *ngIf="!isActive"
     class="po-stepper-circle-content"
-    [class.po-icon]="icons"
+    [class.po-icon]="icons || isDone"
     [class.po-icon-exclamation]="icons && isError"
     [class.po-icon-info]="icons && (isActive || isDefault || isDisabled)"
-    [class.po-icon-ok]="icons && isDone"
+    [class.po-icon-ok]="isDone"
     [class.po-stepper-circle-content-lg]="isLargeStep"
     [class.po-stepper-circle-content-md]="isMediumStep"
   >
-    {{ !icons ? content : '' }}
+    {{ !icons && !isDone ? content : '' }}
   </span>
+
+  <div *ngIf="isActive || isError" class="po-stepper-circle-active"></div>
 </div>
