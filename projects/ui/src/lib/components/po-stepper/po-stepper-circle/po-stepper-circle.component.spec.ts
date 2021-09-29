@@ -206,15 +206,14 @@ describe('PoStepperCircleComponent:', () => {
       expect(stepperCircleContentLg).toBeTruthy();
     });
 
-    it('should find `po-stepper-circle-with-icon` if `icons` is `true`.', () => {
-      component.icons = true;
+    it('shouldn`t find `po-stepper-circle-content` if `isActive` is true', () => {
+      spyOnProperty(component, 'isActive').and.returnValue(true);
 
       fixture.detectChanges();
-      const StepperCircleWitchIcon = nativeElement.querySelector('.po-stepper-circle-with-icon');
-      const iconClass = nativeElement.querySelector('.po-icon');
 
-      expect(StepperCircleWitchIcon).toBeTruthy();
-      expect(iconClass).toBeTruthy();
+      const stepperCircleContent = nativeElement.querySelector('.po-stepper-circle-content');
+
+      expect(stepperCircleContent).toBeNull();
     });
 
     it('shouldn`t find `po-stepper-circle-with-icon` and `po-icon` if `icons` is `false`.', () => {
@@ -231,10 +230,6 @@ describe('PoStepperCircleComponent:', () => {
     it('should find `po-icon-info` if `status` is `Active`, `Default` or `Disabled` and `icons` is true.', () => {
       component.icons = true;
 
-      component.status = PoStepperStatus.Active;
-      fixture.detectChanges();
-      expect(PoIconInfo()).toBeTruthy();
-
       component.status = PoStepperStatus.Default;
       fixture.detectChanges();
       expect(PoIconInfo()).toBeTruthy();
@@ -246,6 +241,59 @@ describe('PoStepperCircleComponent:', () => {
       component.status = PoStepperStatus.Error;
       fixture.detectChanges();
       expect(PoIconInfo()).toBeNull();
+    });
+
+    it('should find `po-icon` if `isDone` is true.', () => {
+      component.icons = false;
+      spyOnProperty(component, 'isDone').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      const poIcon = nativeElement.querySelector('.po-icon');
+      expect(poIcon).toBeTruthy();
+    });
+
+    it('shouldn`t find `po-icon` if `isDone` and `icons` is false.', () => {
+      component.icons = false;
+      spyOnProperty(component, 'isDone').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      const poIcon = nativeElement.querySelector('.po-icon');
+      expect(poIcon).toBeNull();
+    });
+
+    it('should find `po-stepper-circle-active` if `isActive` is true.', () => {
+      spyOnProperty(component, 'isError').and.returnValue(false);
+      spyOnProperty(component, 'isActive').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      const stepperCircleActive = nativeElement.querySelector('.po-stepper-circle-active');
+
+      expect(stepperCircleActive).toBeTruthy();
+    });
+
+    it('should find `po-stepper-circle-active` if `isError` is true.', () => {
+      spyOnProperty(component, 'isError').and.returnValue(true);
+      spyOnProperty(component, 'isActive').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      const stepperCircleActive = nativeElement.querySelector('.po-stepper-circle-active');
+
+      expect(stepperCircleActive).toBeTruthy();
+    });
+
+    it('shouldn`t find `po-stepper-circle-active` if `isError` and `isActive` is false.', () => {
+      spyOnProperty(component, 'isError').and.returnValue(false);
+      spyOnProperty(component, 'isActive').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      const stepperCircleActive = nativeElement.querySelector('.po-stepper-circle-active');
+
+      expect(stepperCircleActive).toBeNull();
     });
 
     it('should find `po-icon-ok` if `status` is `Done` and `icons` is true.', () => {

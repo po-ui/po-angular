@@ -815,13 +815,13 @@ describe('PoStepperComponent:', () => {
       expect(component.steps.length).toBe(0);
     });
 
-    it('should add the class `po-stepper-step-active` to the first step.', () => {
+    it('should add the class `po-stepper-step-default` to the first step.', () => {
       component.step = 1;
       component.steps = poSteps;
 
       fixture.detectChanges();
 
-      expect(elementByClass('po-stepper-step-active')).toBeTruthy();
+      expect(elementByClass('po-stepper-step-default')).toBeTruthy();
     });
 
     it('should create `po-stepper-content` if `usePoSteps` is `true`.', () => {
@@ -902,7 +902,7 @@ describe('PoStepperComponent:', () => {
 
       const steps = nativeElement.querySelectorAll('.po-stepper-step');
 
-      expect(steps[0].classList.contains('po-stepper-step-active')).toBeTruthy();
+      expect(steps[0].classList.contains('po-stepper-step-default')).toBeTruthy();
       expect(steps[1].classList.contains('po-stepper-step-default')).toBeTruthy();
       expect(steps[2].classList.contains('po-stepper-step-disabled')).toBeTruthy();
       expect(steps[3].classList.contains('po-stepper-step-disabled')).toBeTruthy();
@@ -913,8 +913,8 @@ describe('PoStepperComponent:', () => {
       fixture.detectChanges();
       flush();
 
-      expect(steps[0].classList.contains('po-stepper-step-done')).toBeTruthy();
-      expect(steps[1].classList.contains('po-stepper-step-active')).toBeTruthy();
+      expect(steps[0].classList.contains('po-stepper-step-default')).toBeTruthy();
+      expect(steps[1].classList.contains('po-stepper-step-default')).toBeTruthy();
       expect(steps[2].classList.contains('po-stepper-step-default')).toBeTruthy();
       expect(steps[3].classList.contains('po-stepper-step-disabled')).toBeTruthy();
       expect(steps[4].classList.contains('po-stepper-step-disabled')).toBeTruthy();
@@ -946,10 +946,10 @@ describe('PoStepperComponent:', () => {
 
       const steps = nativeElement.querySelectorAll('.po-stepper-step');
 
-      expect(steps[0].classList.contains('po-stepper-step-done')).toBeTruthy();
-      expect(steps[1].classList.contains('po-stepper-step-done')).toBeTruthy();
-      expect(steps[2].classList.contains('po-stepper-step-done')).toBeTruthy();
-      expect(steps[3].classList.contains('po-stepper-step-active')).toBeTruthy();
+      expect(steps[0].classList.contains('po-stepper-step-default')).toBeTruthy();
+      expect(steps[1].classList.contains('po-stepper-step-default')).toBeTruthy();
+      expect(steps[2].classList.contains('po-stepper-step-default')).toBeTruthy();
+      expect(steps[3].classList.contains('po-stepper-step-default')).toBeTruthy();
       expect(steps[4].classList.contains('po-stepper-step-default')).toBeTruthy();
 
       steps[1].dispatchEvent(eventClick);
@@ -957,8 +957,8 @@ describe('PoStepperComponent:', () => {
       fixture.detectChanges();
       flush();
 
-      expect(steps[0].classList.contains('po-stepper-step-done')).toBeTruthy();
-      expect(steps[1].classList.contains('po-stepper-step-active')).toBeTruthy();
+      expect(steps[0].classList.contains('po-stepper-step-default')).toBeTruthy();
+      expect(steps[1].classList.contains('po-stepper-step-default')).toBeTruthy();
       expect(steps[2].classList.contains('po-stepper-step-default')).toBeTruthy();
       expect(steps[3].classList.contains('po-stepper-step-disabled')).toBeTruthy();
       expect(steps[4].classList.contains('po-stepper-step-disabled')).toBeTruthy();

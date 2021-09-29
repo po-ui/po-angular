@@ -31,6 +31,9 @@ export class PoStepperStepComponent {
   // Define a orientação de exibição.
   @Input('p-orientation') orientation: PoStepperOrientation;
 
+  // Informa o status da proxima etapa.
+  @Input('p-next-status') nextStatus;
+
   // Evento que será emitido quando o status do *step* estiver ativo (`PoStepperStatus.Active`).
   @Output('p-activated') activated = new EventEmitter<any>();
 
@@ -106,11 +109,11 @@ export class PoStepperStepComponent {
   getStatusClass(status: string): string {
     switch (status) {
       case PoStepperStatus.Active:
-        return 'po-stepper-step-active';
+        return 'po-stepper-step-default';
       case PoStepperStatus.Disabled:
         return 'po-stepper-step-disabled';
       case PoStepperStatus.Done:
-        return 'po-stepper-step-done';
+        return 'po-stepper-step-default';
       case PoStepperStatus.Error:
         return 'po-stepper-step-error';
       default:

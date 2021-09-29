@@ -9,6 +9,7 @@
       [p-status]="step.status"
       [p-step-icons]="stepIcons"
       [p-step-size]="stepSize"
+      [p-next-status]="poSteps.get(index + 1)?.status"
       (p-activated)="onStepActive(step)"
       (p-click)="changeStep(index, step)"
       (p-enter)="changeStep(index, step)"
