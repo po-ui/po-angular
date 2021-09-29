@@ -1,15 +1,13 @@
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
-
-import { convertToBoolean } from './../../../utils/util';
-import { requiredFailed } from '../validators';
 import { InputBoolean } from '../../../decorators';
-import { PoDateService } from './../../../services/po-date/po-date.service';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
-
-import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { requiredFailed } from '../validators';
+import { PoDateService } from './../../../services/po-date/po-date.service';
+import { convertToBoolean } from './../../../utils/util';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
+import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
 
 /**
@@ -356,6 +354,15 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
       };
     }
 
+    if (!this.verifyValidDate(startDate, endDate)) {
+      this.errorMessage = this.literals.invalidDate;
+      return {
+        date: {
+          valid: false
+        }
+      };
+    }
+
     if (this.dateRangeObjectFailed(control.value) || this.dateRangeFormatFailed(startDate, endDate)) {
       this.errorMessage = this.literals.invalidFormat;
 
@@ -375,7 +382,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
         }
       };
     }
-
     return null;
   }
 
@@ -426,6 +432,16 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
     }
   }
 
+  protected verifyValidDate(startDate: string, endDate: string) {
+    if (startDate !== '' && endDate !== '') {
+      return this.dateIsValid(startDate) && this.dateIsValid(endDate);
+    } else if (startDate !== '') {
+      return this.dateIsValid(startDate);
+    } else {
+      return this.dateIsValid(endDate);
+    }
+  }
+
   private convertPatternDateFormat(value: any) {
     if (value instanceof Date) {
       return this.poDateService.convertDateToISO(value);
@@ -456,6 +472,28 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
       requiredFailed(this.required, this.disabled, startDate) &&
       requiredFailed(this.required, this.disabled, endDate)
     );
+  }
+
+  private dateIsValid(date: string) {
+    const [strYear, strMonth, strDay] = date.split('-');
+    const year = Number(strYear);
+    const month = Number(strMonth);
+    const day = Number(strDay);
+
+    //verificação dos meses com 31 dias
+    if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
+      return day < 1 || day > 31 ? false : true;
+    } else if (month === 4 || month === 6 || month === 9 || month === 11) {
+      //verificação dos meses com 30 dias
+      return day < 1 || day > 30 ? false : true;
+    } else {
+      //verificacao de ano bissexto para verificar até qual dia irá o mês de fevereiro
+      if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
+        return day < 1 || day > 29 ? false : true;
+      } else {
+        return day < 1 || day > 28 ? false : true;
+      }
+    }
   }
 
   protected abstract resetDateRangeInputValidation(): void;

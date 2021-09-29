@@ -336,9 +336,9 @@ export class PoDatepickerRangeComponent
     isStartDateTargetEvent: boolean
   ): { isValid: boolean; dateRangeModel: PoDatepickerRange } {
     this.setDateRangeInputValidation(startDate, endDate);
-
     return {
-      isValid: this.isDateRangeInputFormatValid && this.isStartDateRangeInputValid,
+      isValid:
+        this.isDateRangeInputFormatValid && this.isStartDateRangeInputValid && this.verifyValidDate(startDate, endDate),
       dateRangeModel: this.getValidatedModel(startDate, endDate, isStartDateTargetEvent)
     };
   }
