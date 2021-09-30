@@ -31,15 +31,47 @@ describe('PoButtonBaseComponent', () => {
     expectPropertiesValues(component, 'small', booleanInvalidValues, false);
   });
 
-  it('should update property `p-type` with valid values', () => {
-    const validValues = ['default', 'primary', 'danger', 'link'];
+  it('should update property `p-type` with `primary`', () => {
+    const validValues = ['primary'];
 
-    expectPropertiesValues(component, 'type', validValues, validValues);
+    expectPropertiesValues(component, 'type', validValues, 'primary');
+  });
+
+  it('should update property `p-type` with `secondary`', () => {
+    const validValues = ['secondary'];
+
+    expectPropertiesValues(component, 'type', validValues, 'secondary');
+  });
+
+  it('should update property `p-type` with `tertiary`', () => {
+    const validValues = ['tertiary'];
+
+    expectPropertiesValues(component, 'type', validValues, 'tertiary');
+  });
+
+  it('should update property `p-type` with `tertiary` if `link`', () => {
+    const validValues = ['link'];
+
+    expectPropertiesValues(component, 'type', validValues, 'tertiary');
+  });
+
+  it('should update property `p-type` with `secondary` if `danger`', () => {
+    const validValues = ['danger'];
+
+    expectPropertiesValues(component, 'type', validValues, 'secondary');
+  });
+
+  it('should update property `p-type` with `secondary` if `default`', () => {
+    const validValues = ['default'];
+    component.danger = false;
+
+    expectPropertiesValues(component, 'type', validValues, 'secondary');
   });
 
   it('should update property `p-type` with `default` when invalid values', () => {
     const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
 
-    expectPropertiesValues(component, 'type', invalidValues, 'default');
+    expectPropertiesValues(component, 'type', invalidValues, 'secondary');
+  });
   });
 });
