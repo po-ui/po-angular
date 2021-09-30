@@ -75,7 +75,7 @@ export class PoButtonBaseComponent {
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
 
-  danger = false;
+  private _danger?: boolean = false;
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
@@ -125,7 +125,7 @@ export class PoButtonBaseComponent {
    *
    * Valore válidos:
    *  - `default`: **Deprecated 16.x.x** Usar `secondary`.
-   *  - `danger`: **Deprecated 16.x.x** Usar `secondary`.
+   *  - `danger`: **Deprecated 16.x.x** Usar `secondary` em conjunto com a propriedade `p-danger`.
    *  - `link`: **Deprecated 16.x.x** o `po-button` recebe o estilo de um link.
    *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
    *  - `secondary`: estilo padrão do `po-button`.
@@ -134,8 +134,9 @@ export class PoButtonBaseComponent {
    * @default `secondary`
    */
   @Input('p-type') set type(value: string) {
-    this._type = PO_BUTTON_TYPES.includes(value) ? value : PoButtonType[value] ? PoButtonType[value] : PO_BUTTON_TYPE_DEFAULT
+    this._type = PO_BUTTON_TYPES.includes(value) ? value : PoButtonType[value] ? PoButtonType[value] : PO_BUTTON_TYPE_DEFAULT;
 
+    this.danger = value === 'danger' ? true : this.danger;
   }
 
   get type(): string {
@@ -156,5 +157,27 @@ export class PoButtonBaseComponent {
   }
   get disabled(): boolean {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser usado para ações que o usuário precisa ter cuidado ao executa-lá.
+   *
+   * > Exibirá o `po-button` no estilo padrão (type = secondary).
+   *
+   * @default `false`
+   */
+  @Input('p-danger') @InputBoolean() set danger(value: boolean) {
+    this._danger = value;
+    if (this.type && value && this.type !== PO_BUTTON_TYPE_DEFAULT) {
+      this.type = PO_BUTTON_TYPE_DEFAULT;
+    }
+  }
+
+  get danger(): boolean {
+    return this._danger;
   }
 }
