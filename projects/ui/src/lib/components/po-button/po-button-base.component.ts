@@ -134,7 +134,11 @@ export class PoButtonBaseComponent {
    * @default `secondary`
    */
   @Input('p-type') set type(value: string) {
-    this._type = PO_BUTTON_TYPES.includes(value) ? value : PoButtonType[value] ? PoButtonType[value] : PO_BUTTON_TYPE_DEFAULT;
+    this._type = PO_BUTTON_TYPES.includes(value)
+      ? value
+      : PoButtonType[value]
+      ? PoButtonType[value]
+      : PO_BUTTON_TYPE_DEFAULT;
 
     this.danger = value === 'danger' ? true : this.danger;
   }
