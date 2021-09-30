@@ -994,7 +994,7 @@ describe('PoUploadComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-button-primary')).toBeTruthy();
+      expect(fixture.debugElement.nativeElement.querySelector(`po-button ani-button[kind='primary']`)).toBeTruthy();
     });
 
     it('shouldn´t show send files button if `displaySendButton` returns false', () => {
@@ -1002,7 +1002,7 @@ describe('PoUploadComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-button-primary')).toBeFalsy();
+      expect(fixture.debugElement.nativeElement.querySelector(`ani-button[kind='primary']`)).toBeFalsy();
     });
 
     it('should show `po-upload-drag-drop` and doesn`t show upload button if `displayDragDrop` return true', () => {
