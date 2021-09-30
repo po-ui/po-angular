@@ -26,10 +26,9 @@ export class SamplePoButtonLabsComponent implements OnInit {
   ];
 
   typesOptions: Array<PoRadioGroupOption> = [
-    { label: 'default', value: 'default' },
     { label: 'primary', value: 'primary' },
-    { label: 'danger', value: 'danger' },
-    { label: 'link', value: 'link' }
+    { label: 'secondary', value: 'secondary' },
+    { label: 'tertiary', value: 'tertiary' }
   ];
 
   constructor(private poDialog: PoDialogService) {}
