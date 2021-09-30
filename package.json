@@ -74,7 +74,7 @@
     "@animaliads/ani-button": "1.1.0-dev.21",
     "@ionic-native/core": "5.33.0",
     "@ionic-native/network": "5.33.0",
-    "@po-ui/style": "file:/Users/aline.lariguet/dev/po-ui/po-style/dist/style",
+    "@po-ui/style": "5.13.1",
     "capitalize": "^2.0.3",
     "colors": "^1.4.0",
     "core-js": "3.13.0",
