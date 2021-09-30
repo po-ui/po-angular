@@ -7,3 +7,37 @@
   background-color: #060402c7;
   color: #f7f6f5;
 }
+
+.po-button-primary {
+  font-size: var(--font-size-default);
+  height: 44px;
+  padding: 0;
+  border-radius: 4px;
+  background-color: var(--color-brand-03-base);
+  font-family: var(--font-family-theme-bold);
+  border: none;
+  cursor: pointer;
+}
+
+.po-button-primary:disabled {
+  color: var(--color-neutral-dark-70);
+  background-color: var(--color-action-disabled);
+  cursor: not-allowed;
+}
+
+.po-button-primary:pressed {
+  color: var(--color-neutral-dark-90);
+  background-color: var(--color-action-pressed);
+}
+
+.po-button-primary:enabled:hover {
+  color: var(--color-neutral-dark-90);
+  background-color: var(--color-action-hover);
+}
+
+@media screen and (max-width: 1366px) {
+  .po-button-primary {
+    height: 32px;
+    font-size: var(--font-size-sm);
+  }
+}
