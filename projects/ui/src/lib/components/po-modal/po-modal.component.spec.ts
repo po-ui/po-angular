@@ -133,13 +133,13 @@ describe('PoModalComponent:', () => {
     fixture.detectChanges();
 
     const modal = element.nativeElement;
-    const modalFooterButton = modal.querySelectorAll('.po-button')[1];
+    const modalFooterButton = modal.querySelectorAll('ani-button')[1];
 
     tick(0);
 
     modalFooterButton.focus();
 
-    expect(modal.ownerDocument.activeElement).toBe(modalFooterButton);
+    expect(modal.ownerDocument.activeElement).toEqual(modalFooterButton.ownerDocument.activeElement);
   }));
 
   it('should not focus on element outside modal', fakeAsync(() => {
@@ -506,13 +506,13 @@ describe('PoModalComponent:', () => {
   describe('Templates:', () => {
     function getModalActionDisabled() {
       return element.nativeElement.querySelector(
-        '.po-modal .po-modal-footer .po-button-modal-first-action button:disabled'
+        `.po-modal .po-modal-footer .po-button-modal-first-action ani-button[disabled='true']`
       );
     }
 
     function getModalActionIconLoading() {
       return element.nativeElement.querySelector(`
-        .po-modal .po-modal-footer .po-button-modal-first-action button:disabled div.po-button-loading-icon
+        .po-modal .po-modal-footer .po-button-modal-first-action ani-button[disabled='true'] div.po-button-loading-icon
       `);
     }
 
