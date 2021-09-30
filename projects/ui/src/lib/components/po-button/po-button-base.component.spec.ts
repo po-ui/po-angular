@@ -33,24 +33,28 @@ describe('PoButtonBaseComponent', () => {
 
   it('should update property `p-type` with `primary`', () => {
     const validValues = ['primary'];
+    component.danger = false;
 
     expectPropertiesValues(component, 'type', validValues, 'primary');
   });
 
   it('should update property `p-type` with `secondary`', () => {
     const validValues = ['secondary'];
+    component.danger = false;
 
     expectPropertiesValues(component, 'type', validValues, 'secondary');
   });
 
   it('should update property `p-type` with `tertiary`', () => {
     const validValues = ['tertiary'];
+    component.danger = false;
 
     expectPropertiesValues(component, 'type', validValues, 'tertiary');
   });
 
   it('should update property `p-type` with `tertiary` if `link`', () => {
     const validValues = ['link'];
+    component.danger = false;
 
     expectPropertiesValues(component, 'type', validValues, 'tertiary');
   });
@@ -73,5 +77,10 @@ describe('PoButtonBaseComponent', () => {
 
     expectPropertiesValues(component, 'type', invalidValues, 'secondary');
   });
+
+  it('should update property `p-type` with `secondary` if `danger` is true', () => {
+    component.danger = true;
+    const expectedValue = 'secondary';
+    expect(component.type).toEqual(expectedValue);
   });
 });

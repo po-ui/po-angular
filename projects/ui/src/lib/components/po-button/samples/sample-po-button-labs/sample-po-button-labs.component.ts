@@ -15,7 +15,8 @@ export class SamplePoButtonLabsComponent implements OnInit {
   propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
     { value: 'loading', label: 'Loading' },
-    { value: 'small', label: 'Small' }
+    { value: 'small', label: 'Small' },
+    { value: 'danger', label: 'danger' }
   ];
 
   iconsOptions: Array<PoRadioGroupOption> = [
