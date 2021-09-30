@@ -5,8 +5,8 @@ import { InputBoolean } from '../../decorators';
 
 import { PoButtonType } from './po-button-type.enum';
 
-const PO_BUTTON_TYPES = ['default', 'primary', 'danger', 'link'];
-const PO_BUTTON_TYPE_DEFAULT = 'default';
+const PO_BUTTON_TYPES = ['primary', 'secondary', 'tertiary'];
+const PO_BUTTON_TYPE_DEFAULT = 'secondary';
 
 /**
  * @description
@@ -79,7 +79,7 @@ export class PoButtonBaseComponent {
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
-  private _type?: string = 'default';
+  private _type?: string = 'secondary';
 
   /**
    * @optional
@@ -124,17 +124,20 @@ export class PoButtonBaseComponent {
    * Define o estilo do `po-button`.
    *
    * Valore válidos:
-   *  - `default`: estilo padrão do `po-button`.
+   *  - `default`: **Deprecated 16.x.x** Usar `secondary`.
+   *  - `danger`: **Deprecated 16.x.x** Usar `secondary`.
+   *  - `link`: **Deprecated 16.x.x** o `po-button` recebe o estilo de um link.
    *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
-   *  - `danger`: deve ser usado para ações que o usuário precisa ter cuidado ao executa-lá.
-   *  - `link`: o `po-button` recebe o estilo de um link.
+   *  - `secondary`: estilo padrão do `po-button`.
+   *  - `tertiary`: o `po-button` é exibido sem cor de fundo, recebendo menos destaque entre as ações.
    *
-   * @default `default`
+   * @default `secondary`
    */
   @Input('p-type') set type(value: string) {
-    this._type = PO_BUTTON_TYPES.includes(value) ? PoButtonType[value] : PO_BUTTON_TYPE_DEFAULT;
-    this.danger = value === 'danger';
+    this._type = PO_BUTTON_TYPES.includes(value) ? value : PoButtonType[value] ? PoButtonType[value] : PO_BUTTON_TYPE_DEFAULT
+
   }
+
   get type(): string {
     return this._type;
   }
