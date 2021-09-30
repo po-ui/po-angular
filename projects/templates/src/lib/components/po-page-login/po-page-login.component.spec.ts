@@ -936,21 +936,21 @@ describe('PoPageLoginComponent: ', () => {
 
     it('Loading: should disabled button when property is `true`.', () => {
       switchLoading(true);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
+      const button = fixture.debugElement.nativeElement.querySelector(`ani-button[kind='primary']`);
 
       expect(button.getAttribute('disabled')).not.toBeNull();
     });
 
     it('Label: should have label equal Enter on loading when `p-loading` is `false`.', () => {
       switchLoading(false);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
+      const button = fixture.debugElement.nativeElement.querySelector(`ani-button[kind='primary']`);
 
       expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submitLabel);
     });
 
     it('Label: should set alternative label on loading when `p-loading` is `true`.', () => {
       switchLoading(true);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
+      const button = fixture.debugElement.nativeElement.querySelector(`ani-button[kind='primary']`);
 
       expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submittedLabel);
     });
