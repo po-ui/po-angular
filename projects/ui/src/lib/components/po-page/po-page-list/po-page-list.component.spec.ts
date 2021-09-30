@@ -207,7 +207,7 @@ describe('PoPageListComponent - Desktop:', () => {
 
   it('should be call method of parent passsing function', fakeAsync(() => {
     const element = desktopFixture.debugElement.nativeElement;
-    const poButton = element.querySelectorAll('po-button > button')[0];
+    const poButton = element.querySelectorAll('po-button > ani-button')[0];
 
     spyOn(poButton, 'dispatchEvent');
 
@@ -220,7 +220,7 @@ describe('PoPageListComponent - Desktop:', () => {
   }));
 
   it('should be call method of parent passing null', () => {
-    const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[1];
+    const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > ani-button')[1];
 
     spyOn(poButton, 'dispatchEvent');
 
@@ -374,7 +374,7 @@ describe('PoPageListComponent - Desktop:', () => {
 
       fixture.detectChanges();
 
-      const buttons = nativeElement.querySelectorAll('.po-button:disabled');
+      const buttons = nativeElement.querySelectorAll(`ani-button[disabled='true']`);
       expect(buttons.length).toBe(2);
     });
 
@@ -384,7 +384,7 @@ describe('PoPageListComponent - Desktop:', () => {
 
       fixture.detectChanges();
 
-      const buttons = nativeElement.querySelectorAll('.po-button:disabled');
+      const buttons = nativeElement.querySelectorAll(`ani-button[disabled='true']`);
       expect(buttons.length).toBe(2);
     });
 
@@ -512,6 +512,26 @@ describe('PoPageListComponent - Desktop:', () => {
       component.callAction({ label: 'PO', url });
 
       expect(UtilsFunction.openExternalLink).toHaveBeenCalledWith(url);
+    });
+
+    it('callAction: should call `item.action` if `item.url` is undefined', () => {
+      const fakethis = {
+        item: { label: 'PO', action: () => {} }
+      };
+
+      const spyAction = spyOn(fakethis.item, 'action');
+
+      component.callAction(fakethis.item);
+
+      expect(spyAction).toHaveBeenCalled();
+    });
+
+    it('callAction: shouldn`t call Utils`s openExternalLink method', () => {
+      spyOn(UtilsFunction, 'openExternalLink');
+
+      component.callAction({ label: 'PO' });
+
+      expect(UtilsFunction.openExternalLink).not.toHaveBeenCalled();
     });
 
     it('actionIsDisabled: should return boolean value', () => {
