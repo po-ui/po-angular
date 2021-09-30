@@ -73,7 +73,7 @@ describe('PoPageDetailComponent:', () => {
   });
 
   it('should be execute method of parent.', fakeAsync(() => {
-    const poButton = containerFixture.debugElement.nativeElement.querySelector('po-button > button');
+    const poButton = containerFixture.debugElement.nativeElement.querySelector('po-button > ani-button');
 
     spyOn(poButton, 'dispatchEvent');
 
@@ -223,7 +223,7 @@ describe('PoPageDetailComponent:', () => {
 
       fixture.detectChanges();
 
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
+      const primaryButtonLabel = debugElement.querySelector(`po-button > ani-button[kind='primary'] > span`);
 
       expect(primaryButtonLabel).toBeTruthy();
       expect(primaryButtonLabel.innerHTML).toBe(editLabel);
@@ -239,7 +239,7 @@ describe('PoPageDetailComponent:', () => {
 
       fixture.detectChanges();
 
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
+      const primaryButtonLabel = debugElement.querySelector(`po-button > ani-button[kind='primary'] > span`);
 
       expect(primaryButtonLabel).toBeTruthy();
       expect(primaryButtonLabel.innerHTML).toBe(removeLabel);
@@ -254,7 +254,7 @@ describe('PoPageDetailComponent:', () => {
 
       fixture.detectChanges();
 
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
+      const primaryButtonLabel = debugElement.querySelector(`po-button > ani-button[kind='primary'] > span`);
 
       expect(primaryButtonLabel).toBeTruthy();
       expect(primaryButtonLabel.innerHTML).toBe(backLabel);
