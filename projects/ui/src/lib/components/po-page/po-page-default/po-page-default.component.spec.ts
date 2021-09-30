@@ -97,7 +97,7 @@ describe('PoPageDefaultComponent mobile', () => {
   });
 
   it('should be call method of parent passing string', () => {
-    const poButton = mobileFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[0];
+    const poButton = mobileFixture.debugElement.nativeElement.querySelectorAll('po-button > ani-button')[0];
 
     spyOn(poButton, 'dispatchEvent');
 
@@ -188,7 +188,7 @@ describe('PoPageDefaultComponent desktop', () => {
   });
 
   it('should be call function of parent passsing function reference', () => {
-    const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[0];
+    const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > ani-button')[0];
 
     spyOn(poButton, 'dispatchEvent');
 
@@ -198,7 +198,7 @@ describe('PoPageDefaultComponent desktop', () => {
   });
 
   it('should be call function of parent passing null', () => {
-    const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[1];
+    const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > ani-button')[1];
 
     spyOn(poButton, 'dispatchEvent');
 
@@ -214,7 +214,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
       fixture.detectChanges();
 
-      const buttons = fixture.debugElement.nativeElement.querySelectorAll('.po-button:disabled');
+      const buttons = fixture.debugElement.nativeElement.querySelectorAll(`ani-button[disabled='true']`);
       expect(buttons.length).toBe(2);
     });
 
@@ -224,7 +224,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
       fixture.detectChanges();
 
-      const buttons = fixture.debugElement.nativeElement.querySelectorAll('.po-button:disabled');
+      const buttons = fixture.debugElement.nativeElement.querySelectorAll(`ani-button[disabled='true']`);
       expect(buttons.length).toBe(2);
     });
 
