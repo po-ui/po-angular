@@ -1,6 +1,10 @@
 import { PoDynamicViewField } from '@po-ui/ng-components';
 
 /**
+ * @docsExtends PoDynamicViewField
+ *
+ * @ignoreExtendedDescription
+ *
  * @usedBy PoPageDynamicDetailComponent
  *
  * @description
