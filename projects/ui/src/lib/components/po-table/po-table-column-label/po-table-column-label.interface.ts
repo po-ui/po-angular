@@ -1,5 +1,5 @@
 /**
- * @usedBy PoTableComponent
+ * @usedBy PoTableComponent, PoPageDynamicTableComponent
  *
  * @description
  *

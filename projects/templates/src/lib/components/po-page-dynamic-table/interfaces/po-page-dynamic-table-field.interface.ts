@@ -1,4 +1,4 @@
-import { PoDynamicFormField } from '@po-ui/ng-components';
+import { PoDynamicFormField, PoTableColumnLabel } from '@po-ui/ng-components';
 
 /**
  * @docsExtends PoDynamicFormField
@@ -21,4 +21,23 @@ export interface PoPageDynamicTableField extends PoDynamicFormField {
    * > Quando for `false`, será desconsiderado.
    */
   allowColumnsManager?: boolean;
+
+  /**
+   * Lista de objetos do tipo `PoTableColumnLabel` que representa as labels disponíveis na coluna do tipo `label`.
+   *
+   * Exemplo de utilização
+   *
+   * ```
+   * {
+   *   property: 'uf',
+   *   label: 'Estados',
+   *   type: 'label',
+   *   labels: [
+   *     { value: 'SC', label: 'SANTA CATARINA', color: 'color-02' },
+   *     { value: 'SP', label: 'SAO PAULO', color: 'color-10' }
+   *   ],
+   * }
+   * ```
+   */
+  labels?: Array<PoTableColumnLabel>;
 }
