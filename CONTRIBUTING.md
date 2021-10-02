@@ -2,38 +2,35 @@
 
 ## Conteúdo
 
-- [Introdução](#introduction)
-- [Fluxo](#flow)
-- [Regras para criação de *branches*](#branches)
-- [Regras para criação de *commits*](#commits)
-  - [Tipo](#type)
-  - [Escopo](#scope)
-  - [Descrição curta](#short-description)
-  - [Corpo](#body)
-  - [Rodapé](#footer)
+- [Introdução](#introdução)
+- [Fluxo](#fluxo)
+- [Regras para criação de *branches*](#regras-para-criação-da-branch)
+- [Regras para criação de *commits*](#regras-para-criação-de-commits)
+  - [Tipo](#tipo)
+  - [Escopo](#escopo)
+  - [Descrição curta](#descrição-curta)
+  - [Corpo](#corpo)
+  - [Rodapé](#rodapé)
   - [*Breaking Changes*](#breaking-changes)
-  - [Exemplos de descrições de commits completos](#commit-example)
-- [Regras para criação de *Pull Requests*](#pull-requests)
+  - [Exemplos de descrições de commits completos](#exemplos-de-descrições-de-commits-completos)
+- [Regras para criação de *Pull Requests*](#regras-para-criação-de-pull-requests)
   - [Componente](#componente)
-  - [Número da ISSUE](#issue-number)
+  - [Número da ISSUE](#número-da-issue)
   - [*PR Checklist*](#pr-checklist)
-  - [Qual o comportamento atual?](#current-behavior)
-  - [Qual o novo comportamento?](#new-behavior)
-  - [Simulação](#simulation)
+  - [Qual o comportamento atual?](#qual-o-comportamento-atual)
+  - [Qual o novo comportamento?](#qual-o-novo-comportamento)
+  - [Simulação](#simulação)
 
 
-<a id="introduction"></a>
 ## Introdução
 
 Este guia tem por objetivo definir as regras para criação de *Branches*, *Pull Requests* e *Commits* no projeto PO UI.
 Para seguir o guia é fundamental o conhecimento da [ferramenta Git](https://git-scm.com/book/en/v2).
 
-<a id="flow"></a>
 ## Fluxo
 
 O fluxo para o desenvolvimento e criação de issues e Pull Requests está definido em [Contribuindo para o PO UI](https://po-ui.io/guides/development-flow)
 
-<a id="branches"></a>
 ## Regras para criação da *Branch*
 
 Antes de criar uma nova *branch* deve-se assegurar de estar na *branch master* do projeto.
@@ -74,7 +71,6 @@ Exemplo:
 git checkout -b po-button/fulano
 ```
 
-<a id="commits"></a>
 ## Regras para criação de *Commits*
 
 A descrição dos *commits* podem ser feitos em português ou inglês.
@@ -92,7 +88,6 @@ Deve-se seguir um padrão para criação dos *commits*:
 ```
 Agora vamos detalhar melhor o que deve ser descrito em cada parte:
 
-<a id="type"></a>
 ### Tipo
 
 Deve ser utilizado um dos tipos descritos abaixo conforme o objetivo da alteração:
@@ -107,7 +102,6 @@ Deve ser utilizado um dos tipos descritos abaixo conforme o objetivo da alteraç
 
 > Nunca colocar espaço entre a descrição do tipo e a abertura de parênteses do escopo.
 
-<a id="scope"></a>
 ### Escopo
 
 No escopo deverá ser definido o nome do componente ou serviço diretamente afetado pelo *commit*, caso mais de um componente seja afetado, deve-se definir o principal. Não deve ser utilizado o prefixo na nomenclatura, por exemplo:
@@ -120,7 +114,6 @@ Errados:
 
 > Sempre deve estar entre parênteses e após o fechamento do parênteses deve-se colocar dois pontos e um espaço.
 
-<a id="short-description"></a>
 ### Descrição curta
 
 - Deve-se colocar uma breve descrição do que foi feito no *commit*.
@@ -149,7 +142,6 @@ Adicionada nova funcionalidade.
 Removida variável não mais utilizada no componente po-button devido a quebra no uso do mesmo.
 ```
 
-<a id="body"></a>
 ### Corpo
 
 - Deve-se utilizar o modo imperativo na descrição.
@@ -158,7 +150,6 @@ Removida variável não mais utilizada no componente po-button devido a quebra n
 
 > Antes da declaração do corpo deve-se deixar uma linha em branco.
 
-<a id="footer"></a>
 ### Rodapé
 
 No rodapé deve-se colocar a palavra `Fixes` e em seguida o número da ISSUE atendida. Exemplos:
@@ -180,7 +171,6 @@ Fixes #235, #456, #665
 
 > Antes da declaração do rodapé deve-se deixar uma linha em branco.
 
-<a id="breaking-changes"></a>
 ### *Breaking Changes*
 
 - As *breaking changes* devem ser declaradas no rodapé uma linha após a declaração do *Fixes*.
@@ -189,7 +179,6 @@ Fixes #235, #456, #665
 - Deve-se quebrar linha a cada 72 caracteres para que a mesma não seja cortada no GitHub.
 - O tipo do item de *breaking change* depende do que está sendo implementado, por exemplo, caso for apenas removida alguma propriedade o tipo deve ser definido como *refactor*, caso ao corrigir um problema seja gerado um *breaking change* então o tipo deve ser definido como *fix*.
 
-<a id="commit-example"></a>
 ### Exemplos de descrições de *commits* completos
 
 Sem *Breaking Changes*:
@@ -222,7 +211,6 @@ Depois:
 <po-button class="po-md-4"></po-button>
 ```
 
-<a id="pull-requests"></a>
 ## Regras para criação de *Pull Requests*
 
 Antes de criar a *Pull Request* é importante verificar se algumas perguntas foram respondidas:
@@ -234,7 +222,6 @@ Antes de criar a *Pull Request* é importante verificar se algumas perguntas for
 
 Após essas verificações e tudo estando correto basta gerar a *Pull Request*. Por padrão virá um template onde deverão ser preenchidos alguns requisitos citados abaixo:
 
-<a id="componente"></a>
 ### Componente
 
 Esse texto deve ser substituído pelo nome do componente diretamente afetado pela alteração gerada na *Pull Request*. 
@@ -247,7 +234,6 @@ po-modal
 po-button
 ```
 
-<a id="issue-number"></a>
 ### Número da ISSUE
 
 Esse texto deve ser substituído pelo número da ISSUE gerada no Jira ou no GitHub. 
@@ -260,7 +246,6 @@ DTHFUI-577
 #334
 ```
 
-<a id="pr-checklist"></a>
 ### PR Checklist
 
 Deve-se adicionar um `x` dentro dos colchetes sem deixar espaço em cada um dos itens que forem alterados na *Pull Request*.
@@ -273,7 +258,6 @@ Exemplo:
 - [x] Samples
 ```
 
-<a id="current-behavior"></a>
 ### Qual o comportamento atual?
 
 Deve-se descrever o atual comportamento e o motivo que levou a gerar a alteração.
@@ -284,7 +268,6 @@ Exemplo:
 O po-modal não está permitindo definir uma largura maior que 768px. Está gerando problema pois ao criar um formulário maior gera-se um scroll dificultando a visualização do cliente.
 ```
 
-<a id="new-behavior"></a>
 ### Qual o novo comportamento?
 
 Deve-se descrever o novo comportamento gerado, bem como o que e como foi alterado para solucionar o motivo que foi descrito no comportamento atual.
@@ -296,7 +279,6 @@ Criação do novo valor "full" na propriedade p-size.
 Este valor serve para poder deixar o po-modal ter o tamanho conforme o conteúdo sem a limitação de tamanho.
 ```
 
-<a id="simulation"></a>
 ### Simulação
 
 Aqui deve-se descrever sugestões de formas de validar a alteração gerada.
