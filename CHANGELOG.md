@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.15.0](https://github.com/po-ui/po-angular/compare/v5.14.0...v5.15.0) (2021-10-04)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige atualização do model após limpeza do campo ([0c72f08](https://github.com/po-ui/po-angular/commit/0c72f08d1b4eb9af9d900768603c04d216cfa38a))
+
+
+### Features
+
+* **dynamic-form:** add range to interface dynamic form ([672c058](https://github.com/po-ui/po-angular/commit/672c0582d7c0de2baac06252d4e87bcca1d421a5))
+
+
+
 # [5.14.0](https://github.com/po-ui/po-angular/compare/v5.13.1...v5.14.0) (2021-09-27)
 
 
