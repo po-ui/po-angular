@@ -1,20 +1,34 @@
 import {
-  AfterViewChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   forwardRef,
+  Input,
   ViewChild
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoSwitchBaseComponent } from './po-switch-base.component';
+import { PoFieldModel } from '../po-field.model';
+import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
+
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 
 /**
- * @docsExtends PoSwitchBaseComponent
+ * @docsExtends PoFieldModel
+ *
+ * @description
+ *
+ * O componente `po-switch` é um [checkbox](/documentation/po-checkbox-group) mais intuitivo, pois faz analogia a um interruptor.
+ * Deve ser usado quando deseja-se transmitir a ideia de ligar / desligar uma funcionalidade específica.
+ *
+ * Pode-se ligar ou deligar o botão utilizando a tecla de espaço ou o clique do mouse.
+ *
+ * O texto exibido pode ser alterado de acordo com o valor setado aumentando as possibilidades de uso do componente,
+ * portanto, recomenda-se informar textos que contextualizem seu uso para que facilite a compreensão do usuário.
+ *
+ * > O componente não altera o valor incial informado no *model*, portanto indica-se inicializa-lo caso ter necessidade.
  *
  * @example
  *
@@ -52,11 +66,60 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
     }
   ]
 })
-export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterViewInit {
+export class PoSwitchComponent extends PoFieldModel<boolean> implements AfterViewInit {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
-  constructor(changeDetector: ChangeDetectorRef) {
-    super(changeDetector);
+  value = false;
+
+  private _labelOff: string = 'false';
+  private _labelOn: string = 'true';
+  private _labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Right;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Posição de exibição do rótulo.
+   *
+   * > Por padrão exibe à direita.
+   */
+  @Input('p-label-position') set labelPosition(position: PoSwitchLabelPosition) {
+    this._labelPosition = position in PoSwitchLabelPosition ? parseInt(<any>position, 10) : PoSwitchLabelPosition.Right;
+  }
+
+  get labelPosition() {
+    return this._labelPosition;
+  }
+
+  /**
+   * Texto exibido quando o valor do componente for `false`.
+   *
+   * @default `false`
+   */
+  @Input('p-label-off') set labelOff(label: string) {
+    this._labelOff = label || 'false';
+  }
+
+  get labelOff() {
+    return this._labelOff;
+  }
+
+  /**
+   * Texto exibido quando o valor do componente for `true`.
+   *
+   * @default `true`
+   */
+  @Input('p-label-on') set labelOn(label: string) {
+    this._labelOn = label || 'true';
+  }
+
+  get labelOn() {
+    return this._labelOn;
+  }
+
+  constructor(private changeDetector: ChangeDetectorRef) {
+    super();
   }
 
   ngAfterViewInit() {
@@ -115,9 +178,31 @@ export class PoSwitchComponent extends PoSwitchBaseComponent implements AfterVie
   }
 
   onKeyDown(event) {
-    if (event.which === 32 || event.keyCode === 32) {
+    if (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space) {
       event.preventDefault();
       this.eventClick();
+    }
+  }
+
+  changeValue(value: any) {
+    if (this.value !== value) {
+      this.value = value;
+      this.updateModel(value);
+      this.change.emit(this.value);
+    }
+  }
+
+  eventClick() {
+    if (!this.disabled) {
+      this.changeValue(!this.value);
+    }
+  }
+
+  onWriteValue(value: any): void {
+    if (value !== this.value) {
+      this.value = !!value;
+
+      this.changeDetector.markForCheck();
     }
   }
 }
