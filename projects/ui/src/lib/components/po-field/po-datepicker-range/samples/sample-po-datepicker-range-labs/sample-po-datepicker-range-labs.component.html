@@ -14,6 +14,7 @@
   [p-required]="properties.includes('required')"
   [p-start-date]="startDate"
   (p-change)="changeEvent('p-change')"
+  [p-locale]="locale"
 >
 </po-datepicker-range>
 
@@ -54,6 +55,11 @@
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-select class="po-lg-6 po-md-12" p-label="Locales" [(ngModel)]="locale" [p-options]="poDefaultLanguages">
+    </po-select>
   </div>
 
   <div class="po-row">

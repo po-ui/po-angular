@@ -126,6 +126,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _readonly: boolean = false;
   private _required?: boolean = false;
   private _startDate?;
+  private _locale?: string;
 
   private language;
   private onChangeModel: any;
@@ -313,6 +314,27 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
 
   get startDate() {
     return this._startDate;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Idioma que o calendário utilizará para exibir as datas.
+   *
+   * > O locale padrão será recuperado com base no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
+   */
+  @Input('p-locale') set locale(value: string) {
+    if (value) {
+      this._locale = value.length >= 2 ? value : poLocaleDefault;
+    } else {
+      this._locale = this.language;
+    }
+  }
+
+  get locale(): string {
+    return this._locale || this.language;
   }
 
   constructor(protected poDateService: PoDateService, languageService: PoLanguageService) {
