@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.16.0](https://github.com/po-ui/po-angular/compare/v5.15.0...v5.16.0) (2021-10-11)
+
+
+### Bug Fixes
+
+* **datepicker-range:** corrige para permitir apenas datas válidas ([4aa3b91](https://github.com/po-ui/po-angular/commit/4aa3b91bceed749d6f2debf2047dc95b8a456b02))
+
+
+### Features
+
+* **lookup:** adiciona a propriedade `p-clean` ([be4dcad](https://github.com/po-ui/po-angular/commit/be4dcad915b33db7d810ba60ab0f72ae8bb6f347)), closes [#775](https://github.com/po-ui/po-angular/issues/775)
+* **page-dynamic-table:** adiciona propriedade labels na interface `PoPageDynamicTableFilters` ([afa73ed](https://github.com/po-ui/po-angular/commit/afa73edf876d571d05ebd1de0b5349941dc70965)), closes [#1038](https://github.com/po-ui/po-angular/issues/1038)
+* **page:** melhorias de espaçamentos no cabeçalho ([ad14513](https://github.com/po-ui/po-angular/commit/ad14513a50b170335c1acb87d6e7cbebdd61b34e))
+* **stepper:** implementa nova identificação visual dos passos ([6a7c82c](https://github.com/po-ui/po-angular/commit/6a7c82cbc38dfde6d8cd2ab6fa793247d8b6ad5c))
+
+
+
 # [5.15.0](https://github.com/po-ui/po-angular/compare/v5.14.0...v5.15.0) (2021-10-04)
 
 
