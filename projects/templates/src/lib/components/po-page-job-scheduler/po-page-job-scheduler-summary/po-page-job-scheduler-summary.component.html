@@ -10,6 +10,14 @@
   <po-info [p-label]="literals.periodicity" [p-orientation]="infoOrientation" [p-value]="periodicityValue"> </po-info>
 
   <po-info
+    *ngIf="frequencyValue !== ''"
+    [p-label]="literals.frequency"
+    [p-orientation]="infoOrientation"
+    [p-value]="frequencyValue"
+  >
+  </po-info>
+
+  <po-info
     *ngIf="value.periodicity !== 'single'"
     [p-label]="literals.execution"
     [p-orientation]="infoOrientation"

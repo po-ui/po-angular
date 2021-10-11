@@ -35,11 +35,17 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
   periodicityTemplates: { daily: TemplateRef<any>; weekly: TemplateRef<any>; monthly: TemplateRef<any> };
   timePattern = '^(2[0-3]|[01][0-9]):?([0-5][0-9])$';
   weekDays: Array<PoCheckboxGroupOption> = [];
+  frequencyOptions: Array<PoRadioGroupOption> = [];
+  containsFrequency = false;
+  frequency: string = 'hour';
+  rangeLimitHour: string;
 
   private _value: any = {};
 
   @Input('p-value') set value(value: any) {
     this._value = value && isTypeof(value, 'object') ? value : {};
+
+    this.containsFrequency = this._value.frequency && this._value.frequency.value ? true : false;
   }
 
   get value() {
@@ -55,9 +61,24 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
     return this.isEdit ? undefined : this.minDateFirstExecution;
   }
 
+  get hourLabel() {
+    return this.containsFrequency ? this.literals.startTime : this.literals.time;
+  }
+
+  get dayLabel() {
+    return this.containsFrequency ? this.literals.startDay : this.literals.day;
+  }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.subscribeProcessIdValueChanges();
+
+      if (this.value.periodicity) {
+        this.frequencyOptions = this.frequencyOptions.map(frequencyOption => ({
+          ...frequencyOption,
+          disabled: frequencyOption.value === 'day' && this.value.periodicity !== 'monthly'
+        }));
+      }
     });
   }
 
@@ -68,10 +89,38 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
       weekly: this.weeklyTempalte
     };
 
-    this.checkExistsProcessesAPI();
+    if (this.noParameters) {
+      this.checkExistsProcessesAPI();
+    }
 
     this.periodicityOptions = this.getPeriodicityOptions();
     this.weekDays = this.getWeekDays();
+    this.frequencyOptions = this.getFrequencyOptions();
+  }
+
+  onChangeContainsFrequency(containsFrequency) {
+    if (containsFrequency) {
+      this.value.frequency = { type: 'hour', value: null };
+    } else {
+      this.value.frequency = {};
+    }
+
+    this.value.rangeLimitHour = null;
+    this.value.rangeLimitDay = null;
+    this.value.dayOfMonth = null;
+  }
+
+  onChangePeriodicityOptions(periodicity) {
+    this.frequencyOptions = this.frequencyOptions.map(frequencyOption => ({
+      ...frequencyOption,
+      disabled: frequencyOption.value === 'day' && periodicity !== 'monthly'
+    }));
+
+    this.value.frequency.type = null;
+  }
+
+  onChangeFrequencyOptions() {
+    this.value.rangeLimitHour = null;
   }
 
   private checkExistsProcessesAPI() {
@@ -86,6 +135,14 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
       { label: this.literals.daily, value: 'daily' },
       { label: this.literals.weekly, value: 'weekly' },
       { label: this.literals.monthly, value: 'monthly' }
+    ];
+  }
+
+  private getFrequencyOptions() {
+    return [
+      { label: this.literals.day, value: 'day' },
+      { label: this.literals.hour, value: 'hour' },
+      { label: this.literals.minute, value: 'minute' }
     ];
   }
 

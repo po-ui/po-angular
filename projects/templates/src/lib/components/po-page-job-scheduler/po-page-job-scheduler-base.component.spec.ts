@@ -30,7 +30,36 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('Properties:', () => {
+    it('value: should set `model`', fakeAsync(() => {
+      const returnValue: PoJobSchedulerInternal = {
+        firstExecution: new Date('2019-02-04'),
+        firstExecutionHour: '06:45',
+        periodicity: 'single',
+        recurrent: true
+      };
+      const jobSchedulerInternal = {
+        firstExecution: new Date('2019-02-04'),
+        periodicity: 'single',
+        recurrent: true
+      };
+
+      spyOn(component['poPageJobSchedulerService'], 'convertToJobSchedulerInternal').and.returnValue(returnValue);
+      component.value = jobSchedulerInternal;
+
+      expect(component.model).toEqual(returnValue);
+    }));
+  });
+
   describe('Methods:', () => {
+    it('ngOnDestroy: should call unsubscribe', () => {
+      const spyUnsubscribe = spyOn(component['_subscription'], 'unsubscribe');
+
+      component.ngOnDestroy();
+
+      expect(spyUnsubscribe).toHaveBeenCalled();
+    });
+
     it('loadData: should set `model` with `new PoPageJobSchedulerInternal()` and exit of method if `id` is invalid.', () => {
       const invalidId = 0;
       component.model = undefined;
