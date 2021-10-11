@@ -59,6 +59,7 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    * ```
    *
    * > Veja mais sobre paginação e filtros no [Guia de implementação de APIs](guides/api).
+   * Caso seja informada a propriedade `p-parameters` não serão realizadas as requisições de processos e nem de parametros automaticamente.
    *
    * Também é possível fazer um agendamento de um processo específico, sem que seja necessário um endpoint para busca desses
    * processos. Então, caso o endpoint `{service-api}/processes` não seja válido, será apresentado um campo de entrada de
@@ -112,8 +113,9 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    * {
    *   "firstExecution": "2018-12-07T00:00:01-00:00",
    *   "recurrent": true,
-   *   "daily": { "hour": 10, "minute": 12 },
-   *   "processID": "ac0405"
+   *   "monthly": { "day": 1, "hour": 10, "minute": 0 },
+   *   "processID": "ac0405",
+   *   "rangeExecutions: { "frequency": { "type": "hour", "value": 2 }, "rangeLimit": { "hour": 18, "minute": 0, "day": 20 } }
    * }
    * ```
    *
@@ -147,9 +149,11 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    * ```
    * {
    *   "firstExecution": "2018-12-07T00:00:01-00:00",
-   *   "recurrent": false,
-   *   "daily": { "hour": 11, "minute": 30 },
-   *   "processID": "ac0405"
+   *   "recurrent": true,
+   *   "processID": "ac0405",
+   *   "monthly": { "day": 1, "hour": 10, "minute": 0 },
+   *   "processID": "ac0405",
+   *   "rangeExecutions: { "frequency": { "type": "hour", "value": 2 }, "rangeLimit": { "hour": 18, "minute": 0, "day": 20 } }
    * }
    * ```
    */
@@ -166,6 +170,10 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    */
   @Input('p-parameters') parameters: Array<PoDynamicFormField> = [];
 
+  @Input('p-value') set value(value: any) {
+    this.model = this.poPageJobSchedulerService.convertToJobSchedulerInternal(value);
+  }
+
   model: PoJobSchedulerInternal = new PoPageJobSchedulerInternal();
 
   private _subscription = new Subscription();
@@ -178,7 +186,7 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
 
   protected loadData(id: string | number) {
     if (!id) {
-      this.model = new PoPageJobSchedulerInternal();
+      this.model = this.model || new PoPageJobSchedulerInternal();
       return;
     }
 

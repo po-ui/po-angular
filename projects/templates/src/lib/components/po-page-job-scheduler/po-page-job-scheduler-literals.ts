@@ -16,8 +16,14 @@ export const poPageJobSchedulerLiteralsDefault = {
     parameterization: 'Parameterization',
     conclude: 'Conclude',
     firstExecution: 'First Execution',
+    startTime: 'Start time',
+    endTime: 'End time',
+    time: 'Time',
     hour: 'Hour',
+    minute: 'Minute',
     day: 'Day',
+    endDay: 'End day',
+    startDay: 'Start day',
     weekDays: 'Week days',
     sunday: 'Sunday',
     monday: 'Monday',
@@ -36,7 +42,10 @@ export const poPageJobSchedulerLiteralsDefault = {
     confirmUpdateMessage: 'Are you sure you want to update this schedule?',
     saveNotificationSuccessUpdate: 'Successfully updated scheduling',
     saveNotificationSuccessSave: 'Successfully saved scheduling',
-    parametersNotFound: 'Parameters not found.'
+    parametersNotFound: 'Parameters not found.',
+    frequency: 'Frequency',
+    to: 'to',
+    from: 'from'
   },
   es: {
     at: 'a las',
@@ -55,8 +64,14 @@ export const poPageJobSchedulerLiteralsDefault = {
     parameterization: 'Parametrización',
     conclude: 'Completar',
     firstExecution: 'Primera ejecución',
-    hour: 'Horario',
+    startTime: 'Hora de inicio',
+    endTime: 'Hora de finalización',
+    time: 'Horário',
+    hour: 'Hora',
+    minute: 'Minute',
     day: 'Día',
+    endDay: 'Último Día',
+    startDay: 'Día de inicio',
     weekDays: 'Dias de la semana',
     sunday: 'Domingo',
     monday: 'Lunes',
@@ -75,7 +90,10 @@ export const poPageJobSchedulerLiteralsDefault = {
     confirmUpdateMessage: '¿Está seguro de que desea cambiar esta programación de proceso?',
     saveNotificationSuccessUpdate: 'Programación de proceso actualizada con éxito.',
     saveNotificationSuccessSave: 'Programación de proceso salvo con éxito.',
-    parametersNotFound: 'No se encontraron parámetros.'
+    parametersNotFound: 'No se encontraron parámetros.',
+    frequency: 'Frecuencia',
+    to: 'de',
+    from: 'a'
   },
   pt: {
     at: 'às',
@@ -94,8 +112,14 @@ export const poPageJobSchedulerLiteralsDefault = {
     parameterization: 'Parametrização',
     conclude: 'Concluir',
     firstExecution: 'Primeira execução',
-    hour: 'Horário',
+    startTime: 'Horário inicial',
+    endTime: 'Horário final',
+    time: 'Horário',
+    hour: 'Hora',
+    minute: 'Minuto',
     day: 'Dia',
+    endDay: 'Dia final',
+    startDay: 'Dia inicial',
     weekDays: 'Dias de semana',
     sunday: 'Domingo',
     monday: 'Segunda-feira',
@@ -114,7 +138,10 @@ export const poPageJobSchedulerLiteralsDefault = {
     confirmUpdateMessage: 'Tem certeza que deseja alterar este agendamento de processo?',
     saveNotificationSuccessUpdate: 'Agendamento de processo atualizado com sucesso.',
     saveNotificationSuccessSave: 'Agendamento de processo salvo com sucesso.',
-    parametersNotFound: 'Parâmetros não foram encontrados.'
+    parametersNotFound: 'Parâmetros não foram encontrados.',
+    frequency: 'Frequência',
+    to: 'das',
+    from: 'até'
   },
   ru: {
     at: 'в',
@@ -133,8 +160,14 @@ export const poPageJobSchedulerLiteralsDefault = {
     parameterization: 'Параметризация',
     conclude: 'Завершить',
     firstExecution: 'Первичное выполнение',
+    startTime: 'начальное время',
+    endTime: 'время окончания',
+    time: 'расписание',
     hour: 'Час',
     day: 'День',
+    minute: 'минута',
+    endDay: 'последний день',
+    startDay: 'день начала',
     weekDays: 'Рабочие дни',
     sunday: 'Воскресенье',
     monday: 'Понедельник',
@@ -153,6 +186,9 @@ export const poPageJobSchedulerLiteralsDefault = {
     confirmUpdateMessage: 'Вы уверены, что хотите обновить это расписание?',
     saveNotificationSuccessUpdate: 'Расписание успешно обновлено',
     saveNotificationSuccessSave: 'Расписание успешно сохранено ',
-    parametersNotFound: 'Параметры не найдены'
+    parametersNotFound: 'Параметры не найдены',
+    frequency: 'Частота',
+    to: 'с',
+    from: 'до'
   }
 };

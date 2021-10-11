@@ -27,7 +27,7 @@
       p-placeholder="HH:mm"
       p-required
       [p-disabled]="isEdit"
-      [p-label]="literals.hour"
+      [p-label]="literals.time"
       [p-pattern]="timePattern"
     >
     </po-input>
@@ -44,13 +44,41 @@
       p-required
       [p-label]="literals.periodicity"
       [p-options]="periodicityOptions"
+      (p-change)="onChangePeriodicityOptions($event)"
     >
     </po-radio-group>
 
     <ng-container *ngIf="value.periodicity !== 'single'">
-      <po-divider class="po-md-12" [p-label]="literals.periodicityData"> </po-divider>
+      <div class="po-row">
+        <po-switch
+          class="po-md-12"
+          name="containsFrequency"
+          [(ngModel)]="containsFrequency"
+          [p-label]="literals.frequency"
+          [p-label-off]="literals.no"
+          [p-label-on]="literals.yes"
+          (p-change)="onChangeContainsFrequency($event)"
+        >
+        </po-switch>
+        <ng-container *ngIf="containsFrequency">
+          <po-radio-group
+            class="po-md-10"
+            name="frequencyType"
+            p-required
+            [(ngModel)]="value.frequency.type"
+            [p-columns]="3"
+            [p-options]="frequencyOptions"
+            (p-change)="onChangeFrequencyOptions()"
+          >
+          </po-radio-group>
+
+          <po-number class="po-md-2" name="frequencyValue" p-required [(ngModel)]="value.frequency.value"> </po-number>
+        </ng-container>
+      </div>
 
       <div class="po-row">
+        <po-divider class="po-md-12" [p-label]="literals.periodicityData"> </po-divider>
+
         <ng-container *ngTemplateOutlet="periodicityTemplates[value.periodicity]"> </ng-container>
       </div>
 
@@ -126,7 +154,20 @@
       [(ngModel)]="value.dayOfMonth"
       p-required
       [p-error-pattern]="'Dia inválido'"
-      [p-label]="literals.day"
+      [p-label]="dayLabel"
+      [p-max]="31"
+      [p-pattern]="dayPattern"
+    >
+    </po-number>
+
+    <po-number
+      *ngIf="containsFrequency"
+      class="po-md-3"
+      name="rangeLimitDay"
+      [(ngModel)]="value.rangeLimitDay"
+      p-required
+      [p-error-pattern]="'Dia inválido'"
+      [p-label]="literals.endDay"
       [p-max]="31"
       [p-pattern]="dayPattern"
     >
@@ -144,7 +185,21 @@
       p-mask-format-model
       p-placeholder="HH:mm"
       p-required
-      [p-label]="literals.hour"
+      [p-label]="hourLabel"
+      [p-pattern]="timePattern"
+    >
+    </po-input>
+
+    <po-input
+      *ngIf="containsFrequency && value.frequency.type !== 'day'"
+      class="po-md-2"
+      name="rangeLimitHour"
+      [(ngModel)]="value.rangeLimitHour"
+      p-mask="99:99"
+      p-mask-format-model
+      p-placeholder="HH:mm"
+      p-required
+      [p-label]="literals.endTime"
       [p-pattern]="timePattern"
     >
     </po-input>
