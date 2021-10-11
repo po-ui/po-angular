@@ -22,27 +22,64 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
   firstExecutionValue = '';
   infoOrientation = PoInfoOrientation.Horizontal;
   periodicityValue = '';
+  frequencyValue = '';
+  rangeLimitHour = '';
+  rangeLimitDay = '';
   recurrentValue = '';
 
   constructor(private datePipe: DatePipe) {}
 
   ngOnInit() {
-    const { periodicity, hour, dayOfMonth, daysOfWeek, recurrent, firstExecution, firstExecutionHour } = this.value;
+    const {
+      periodicity,
+      hour,
+      dayOfMonth,
+      daysOfWeek,
+      recurrent,
+      firstExecution,
+      firstExecutionHour,
+      frequency,
+      rangeLimitHour,
+      rangeLimitDay
+    } = this.value;
 
     this.periodicityValue = this.getPeriodicityLabel(periodicity);
-    this.executionValue = this.getExecutionValue(periodicity, hour, daysOfWeek, dayOfMonth);
+    if (frequency) {
+      this.frequencyValue = this.getFrequencyValue(frequency, periodicity);
+    }
+    this.executionValue = this.getExecutionValue(
+      periodicity,
+      hour,
+      daysOfWeek,
+      dayOfMonth,
+      rangeLimitHour,
+      rangeLimitDay
+    );
     this.firstExecutionValue = this.getFirstExecutionLabel(firstExecution, firstExecutionHour);
     this.recurrentValue = this.getRecurrentValue(recurrent);
   }
 
-  private getExecutionValue(periodicity: string, hour?: string, daysOfWeek?: Array<string>, dayOfMonth?: number) {
+  private getFrequencyValue(frequency, periodicity) {
+    return frequency['value'] && frequency['type'] && periodicity !== 'single'
+      ? `${frequency['value']} - ${frequency['type']}`
+      : '';
+  }
+
+  private getExecutionValue(
+    periodicity: string,
+    hour?: string,
+    daysOfWeek?: Array<string>,
+    dayOfMonth?: number,
+    rangeLimitHour?: string,
+    rangeLimitDay?: number
+  ) {
     switch (periodicity) {
       case 'daily':
-        return this.getHourLabel(hour);
+        return this.getHourLabel(hour, rangeLimitHour);
       case 'monthly':
-        return this.getMonthlyLabelExecution(dayOfMonth, hour);
+        return this.getMonthlyLabelExecution(dayOfMonth, hour, rangeLimitHour, rangeLimitDay);
       case 'weekly':
-        return this.getWeeklyLabelExecution(daysOfWeek, hour);
+        return this.getWeeklyLabelExecution(daysOfWeek, hour, rangeLimitHour);
       default:
         return this.literals.notReported;
     }
@@ -58,14 +95,18 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
     }
   }
 
-  private getHourLabel(hour: string) {
-    return `${this.literals.at} ${hour || '00:00'}h`;
+  private getHourLabel(hour: string, rangeLimitHour?) {
+    return `${rangeLimitHour ? this.literals.from : this.literals.at} ${hour || '00:00'} ${
+      rangeLimitHour ? this.literals.to + ' ' + rangeLimitHour : ''
+    }`;
   }
 
-  private getMonthlyLabelExecution(dayOfMonth: number, hour: string) {
-    const hourLabel = this.getHourLabel(hour);
+  private getMonthlyLabelExecution(dayOfMonth: number, hour: string, rangeLimitHour?: string, rangeLimitDay?: number) {
+    const hourLabel = this.getHourLabel(hour, rangeLimitHour);
 
-    return `${this.literals.day} ${dayOfMonth} ${hourLabel}`;
+    return `${rangeLimitDay ? this.literals.from : ''} ${dayOfMonth} ${rangeLimitDay ? this.literals.to : ''} ${
+      rangeLimitDay ? rangeLimitDay : ''
+    } ${hourLabel}`;
   }
 
   private getPeriodicityLabel(periodicity) {
@@ -117,9 +158,9 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
     return weekDaysSorted.map(day => this.getTranslateWeekDay(day)).join(', ');
   }
 
-  private getWeeklyLabelExecution(daysOfWeek: Array<string>, hour: string) {
+  private getWeeklyLabelExecution(daysOfWeek: Array<string>, hour: string, rangeLimitHour?: string) {
     if (daysOfWeek && Array.isArray(daysOfWeek)) {
-      return `${this.getWeekDaysLabel(daysOfWeek)} ${this.getHourLabel(hour)}`;
+      return `${this.getWeekDaysLabel(daysOfWeek)} ${this.getHourLabel(hour, rangeLimitHour)}`;
     } else {
       return this.literals.notReported;
     }

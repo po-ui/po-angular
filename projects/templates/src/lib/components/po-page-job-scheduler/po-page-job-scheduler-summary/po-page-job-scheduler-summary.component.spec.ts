@@ -47,19 +47,22 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       component.executionValue = undefined;
       component.firstExecutionValue = undefined;
       component.recurrentValue = undefined;
+      component.frequencyValue = undefined;
 
       component.value = {
         periodicity: 'single',
         processID: 'ab03',
         firstExecution: new Date(),
         firstExecutionHour: '11:30',
-        recurrent: false
+        recurrent: false,
+        frequency: { type: 'day', value: 2 }
       };
 
       spyOn(component, <any>'getPeriodicityLabel').and.callThrough();
       spyOn(component, <any>'getExecutionValue').and.callThrough();
       spyOn(component, <any>'getFirstExecutionLabel').and.callThrough();
       spyOn(component, <any>'getRecurrentValue').and.callThrough();
+      spyOn(component, <any>'getFrequencyValue').and.callThrough();
 
       component.ngOnInit();
 
@@ -67,11 +70,33 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       expect(component['getExecutionValue']).toHaveBeenCalled();
       expect(component['getFirstExecutionLabel']).toHaveBeenCalled();
       expect(component['getRecurrentValue']).toHaveBeenCalled();
+      expect(component['getFrequencyValue']).toHaveBeenCalled();
 
       expect(component.periodicityValue).toBeDefined();
       expect(component.executionValue).toBeDefined();
       expect(component.firstExecutionValue).toBeDefined();
       expect(component.recurrentValue).toBeDefined();
+      expect(component.frequencyValue).toBeDefined();
+    });
+
+    it('getFrequencyValue: should return `frequency[value] - frequency[type]`', () => {
+      const periodicity = 'daily';
+      const frequency = { type: 'day', value: 2 };
+      const expectedValue = '2 - day';
+
+      const result = component['getFrequencyValue'](frequency, periodicity);
+
+      expect(result).toBe(expectedValue);
+    });
+
+    it('getFrequencyValue: should return a empty string if `periodicity` is `single`', () => {
+      const periodicity = 'single';
+      const frequency = { type: 'day', value: 2 };
+      const expectedValue = '';
+
+      const result = component['getFrequencyValue'](frequency, periodicity);
+
+      expect(result).toBe(expectedValue);
     });
 
     it('getExecutionValue: should return `literals.notReported` if periodicity is `single`', () => {
@@ -109,10 +134,13 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       const periodicity = 'weekly';
       const hour = '11:20';
       const daysOfWeek = ['Saturday'];
+      const rangeLimitHour = '18:00';
+      const dayOfMonth = null;
+      component.value = { firstExecution: new Date(), firstExecutionHour: '', recurrent: false, periodicity: 'single' };
 
       spyOn(component, <any>'getWeeklyLabelExecution').and.callThrough();
 
-      const executionValue = component['getExecutionValue'](periodicity, hour, daysOfWeek);
+      const executionValue = component['getExecutionValue'](periodicity, hour, daysOfWeek, dayOfMonth, rangeLimitHour);
 
       expect(typeof executionValue === 'string').toBe(true);
       expect(component['getWeeklyLabelExecution']).toHaveBeenCalled();
@@ -151,14 +179,14 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
     });
 
     it('getHourLabel: should return formatted string value with 00:00h if `hour`is undefined', () => {
-      const expectedValue = `${component.literals.at} 00:00h`;
+      const expectedValue = `${component.literals.at} 00:00 `;
 
       expect(component['getHourLabel'](undefined)).toBe(expectedValue);
     });
 
     it('getHourLabel: should return formatted string value with 12:00h if `hour` is 12:00', () => {
       const hour = '12:00';
-      const expectedValue = `${component.literals.at} ${hour}h`;
+      const expectedValue = `${component.literals.at} ${hour} `;
 
       expect(component['getHourLabel'](hour)).toBe(expectedValue);
     });
@@ -166,15 +194,24 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
     it('getMonthlyLabelExecution: should return formatted string value with 12:00h if `hour` is 12:00', () => {
       const hour = '12:00';
       const dayOfMonth = 10;
+      const rangeLimitHour = '18:00';
+      const rangeLimitDay = 20;
 
-      const expectedValue = `${component.literals.day} ${dayOfMonth} ${component['getHourLabel'](hour)}`;
+      const expectedValue = `${component.literals.from} ${dayOfMonth} ${
+        component.literals.to
+      } ${rangeLimitDay} ${component['getHourLabel'](hour, rangeLimitHour)}`;
 
       spyOn(component, <any>'getHourLabel').and.callThrough();
 
-      const monthlyLabelExecution = component['getMonthlyLabelExecution'](dayOfMonth, hour);
+      const monthlyLabelExecution = component['getMonthlyLabelExecution'](
+        dayOfMonth,
+        hour,
+        rangeLimitHour,
+        rangeLimitDay
+      );
 
       expect(monthlyLabelExecution).toBe(expectedValue);
-      expect(component['getHourLabel']).toHaveBeenCalledWith(hour);
+      expect(component['getHourLabel']).toHaveBeenCalledWith(hour, rangeLimitHour);
     });
 
     it('getPeriodicityLabel: should return `literals.single`', () => {
