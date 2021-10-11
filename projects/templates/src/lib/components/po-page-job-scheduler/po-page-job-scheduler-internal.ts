@@ -5,6 +5,7 @@ export class PoPageJobSchedulerInternal implements PoJobSchedulerInternal {
   firstExecution = new Date();
   firstExecutionHour = this.getCurrentHour(this.firstExecution);
   recurrent = true;
+  frequency = {};
 
   private getCurrentHour(date: Date): string {
     const hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();

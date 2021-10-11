@@ -26,9 +26,9 @@ export class PoPageJobSchedulerService {
 
   // Cria um recurso
   createResource(resource): Observable<any> {
-    const jobScheduler = this.convertToJobScheduler(resource);
+    const newResouce = this.convertToJobScheduler(resource);
 
-    return this.http.post(`${this.endpoint}`, jobScheduler, { headers: this.headers });
+    return this.http.post(`${this.endpoint}`, newResouce, { headers: this.headers });
   }
 
   getHeadProcesses() {
@@ -63,12 +63,11 @@ export class PoPageJobSchedulerService {
 
   // Atualiza um recurso
   updateResource(id, resource): Observable<any> {
-    const jobScheduler = this.convertToJobScheduler(resource);
-
-    return this.http.put(`${this.endpoint}/${id}`, jobScheduler, { headers: this.headers });
+    const newResouce = this.convertToJobScheduler(resource);
+    return this.http.put(`${this.endpoint}/${id}`, newResouce, { headers: this.headers });
   }
 
-  private convertToJobScheduler(jobSchedulerInternal): PoJobScheduler {
+  convertToJobScheduler(jobSchedulerInternal): PoJobScheduler {
     const jobScheduler = { ...jobSchedulerInternal };
 
     if (jobSchedulerInternal.periodicity) {
@@ -86,6 +85,28 @@ export class PoPageJobSchedulerService {
       );
     }
 
+    if (jobSchedulerInternal.frequency && jobSchedulerInternal.frequency.type) {
+      jobScheduler.rangeExecutions = {
+        frequency: { ...jobSchedulerInternal.frequency }
+      };
+
+      if (jobSchedulerInternal.rangeLimitHour) {
+        const splitRangeLimitHour = jobSchedulerInternal.rangeLimitHour.split(':');
+
+        jobScheduler.rangeExecutions.rangeLimit = {
+          hour: parseInt(splitRangeLimitHour[0], 10),
+          minute: parseInt(splitRangeLimitHour[1], 10)
+        };
+      }
+
+      if (jobSchedulerInternal.rangeLimitDay) {
+        jobScheduler.rangeExecutions.rangeLimit = {
+          ...jobScheduler.rangeExecutions.rangeLimit,
+          day: jobSchedulerInternal.rangeLimitDay
+        };
+      }
+    }
+
     if (!Object.keys(this.returnValidExecutionParameter(jobScheduler.executionParameter)).length) {
       delete jobScheduler.executionParameter;
     }
@@ -95,7 +116,7 @@ export class PoPageJobSchedulerService {
     return jobScheduler;
   }
 
-  private convertToJobSchedulerInternal(jobScheduler = <any>{}): PoJobSchedulerInternal {
+  convertToJobSchedulerInternal(jobScheduler = <any>{}): PoJobSchedulerInternal {
     const jobSchedulerInternal = { ...jobScheduler };
 
     if (jobScheduler.firstExecution) {
@@ -103,6 +124,23 @@ export class PoPageJobSchedulerService {
     }
 
     Object.assign(jobSchedulerInternal, this.convertToPeriodicityInternal(jobScheduler));
+
+    if (jobScheduler.rangeExecutions) {
+      jobSchedulerInternal.rangeLimitHour = `${
+        jobScheduler.rangeExecutions.rangeLimit.hour < 10
+          ? '0' + jobScheduler.rangeExecutions.rangeLimit.hour
+          : jobScheduler.rangeExecutions.rangeLimit.hour
+      }:${
+        jobScheduler.rangeExecutions.rangeLimit.minute < 10
+          ? '0' + jobScheduler.rangeExecutions.rangeLimit.minute
+          : jobScheduler.rangeExecutions.rangeLimit.minute
+      }`;
+      jobSchedulerInternal.rangeLimitDay = jobScheduler.rangeExecutions.rangeLimit.day;
+      jobSchedulerInternal.frequency = {
+        type: jobScheduler.rangeExecutions.frequency.type,
+        value: jobScheduler.rangeExecutions.frequency.value
+      };
+    }
 
     this.removeInvalidKeys(jobSchedulerInternal, ['weekly', 'monthly', 'daily']);
 
@@ -178,11 +216,16 @@ export class PoPageJobSchedulerService {
       'day',
       'daysOfWeek',
       'dayOfMonth',
-      'firstExecutionHour'
+      'firstExecutionHour',
+      'frequency',
+      'rangeLimitHour',
+      'rangeLimitDay'
     ];
 
     Object.keys(value).forEach(key => {
       if (invalidKeys.includes(key)) {
+        delete value[key];
+      } else if (key === 'rangeExecutions' && value['periodicity'] === 'single') {
         delete value[key];
       }
     });
