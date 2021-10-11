@@ -65,33 +65,33 @@ pre::-webkit-scrollbar-thumb {
   background-color: #1d242630;
 }
 
-h1,
-h2,
-h3,
-h4 {
+.docs-api h1,
+.docs-api h2,
+.docs-api h3,
+.docs-api h4 {
   color: var(--color-portal-titles);
   margin-bottom: 10px;
   margin-top: 20px;
 }
 
-h1 {
+.docs-api h1 {
   font-size: 28px;
   font-weight: 200;
   line-height: 1.2;
 }
 
-h2 {
+.docs-api h2 {
   font-size: 26px;
   font-weight: 200;
   line-height: 1.29;
 }
 
-h3 {
+.docs-api h3 {
   font-size: 22px;
   font-weight: 500;
 }
 
-h4 {
+.docs-api h4 {
   font-family: Roboto-Bold;
   font-size: 16px;
   line-height: 24px;
