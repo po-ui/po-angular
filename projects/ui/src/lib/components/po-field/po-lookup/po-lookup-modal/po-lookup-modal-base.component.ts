@@ -336,6 +336,8 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       this.selectedItems.forEach(selectedItem =>
         this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem.value)
       );
+    } else {
+      this.poTable.selectRowItem(item => item[this.fieldValue] === this.selectedItems)
     }
   }
 
