@@ -332,12 +332,14 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   //Método responsável por selecionar as linhas quando abre o modal.
   setSelectedItems() {
+    console.log(this.selectedItems);
+
     if (this.selectedItems && this.selectedItems.length) {
       this.selectedItems.forEach(selectedItem =>
         this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem.value)
       );
-    } else {
-      this.poTable.selectRowItem(item => item[this.fieldValue] === this.selectedItems)
+    } else if (!Array.isArray(this.selectedItems)) {
+      this.poTable.selectRowItem(item => item[this.fieldValue] === this.selectedItems);
     }
   }
 
