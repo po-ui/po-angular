@@ -1,8 +1,5 @@
 <po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
-  <div
-    class="po-field-container-content"
-    *ngIf="!disclaimers.length || disclaimers.length === 1; else disclaimersTemplate"
-  >
+  <div class="po-field-container-content" *ngIf="!disclaimers.length; else disclaimersTemplate">
     <input
       #inp
       class="po-input"

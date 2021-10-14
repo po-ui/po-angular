@@ -173,7 +173,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         fieldValue
       } = this;
 
-      const selectedItems = !this.multiple || !this.disclaimers.length ? this.valueToModel : this.disclaimers;
+      const selectedItems = this.checkSelectedItems();
 
       this.poLookupModalService.openModal({
         advancedFilters,
@@ -191,18 +191,25 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
       if (!this.modalSubscription) {
         this.modalSubscription = this.poLookupModalService.selectValueEvent.subscribe(selectedOptions => {
-          if (selectedOptions.length > 0) {
+          if (selectedOptions.length > 1) {
             this.setDisclaimers(selectedOptions);
             this.updateVisibleItems();
-          }
-
-          if (this.disclaimers.length > 0) {
-            this.setDisclaimers(selectedOptions);
           }
 
           this.selectModel(selectedOptions);
         });
       }
+    }
+  }
+
+  checkSelectedItems() {
+    if (this.multiple) {
+      if (!this.disclaimers.length) {
+        return [{ value: this.valueToModel[0], label: this.oldValue }];
+      }
+      return this.disclaimers;
+    } else {
+      return this.valueToModel;
     }
   }
 
@@ -216,6 +223,8 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   setViewValue(value: any, object: any): void {
+    console.log('setViewValue', { value: value, object: object });
+
     if (this.fieldFormat) {
       this.setInputValueWipoieldFormat(object);
     } else if (this.inputEl) {
