@@ -25,8 +25,6 @@ describe('PoUrlComponent:', () => {
     component.label = 'Label de teste';
     component.help = 'Help de teste';
     component.clean = true;
-
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -34,6 +32,7 @@ describe('PoUrlComponent:', () => {
   });
 
   it('should return null in extraValidation()', () => {
+    fixture.detectChanges();
     expect(component.extraValidation(null)).toBeNull();
   });
 
@@ -190,6 +189,7 @@ describe('PoUrlComponent:', () => {
     const eventKeyup = new KeyboardEvent('keyup', { 'key': 'a' });
 
     it('should have `world` icon', () => {
+      fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector('.po-icon-world')).toBeTruthy();
     });
 

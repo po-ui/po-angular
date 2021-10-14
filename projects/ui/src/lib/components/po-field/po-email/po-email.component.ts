@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  OnDestroy
+} from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
@@ -48,6 +56,7 @@ const providers = [
 @Component({
   selector: 'po-email',
   templateUrl: '../po-input/po-input.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers
 })
 export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
@@ -82,8 +91,8 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
   private listener = this.validateClassesForPattern.bind(this);
 
   /* istanbul ignore next */
-  constructor(el: ElementRef) {
-    super(el);
+  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+    super(el, cd);
     this.maxlength = 254;
   }
 

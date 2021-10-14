@@ -22,8 +22,6 @@ describe('PoLoginComponent:', () => {
     component = fixture.componentInstance;
     component.clean = true;
     component.type = 'text';
-
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -31,10 +29,12 @@ describe('PoLoginComponent:', () => {
   });
 
   it('should return null in extraValidation()', () => {
+    fixture.detectChanges();
     expect(component.extraValidation(null)).toBeNull();
   });
 
   it('should be type text', () => {
+    fixture.detectChanges();
     expect(component.type === 'text').toBeTruthy();
   });
 
