@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
@@ -46,14 +46,15 @@ const providers = [
 @Component({
   selector: 'po-login',
   templateUrl: './po-login.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers
 })
 export class PoLoginComponent extends PoInputGeneric {
   type = 'text';
 
   /* istanbul ignore next */
-  constructor(el: ElementRef) {
-    super(el);
+  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+    super(el, cd);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {
