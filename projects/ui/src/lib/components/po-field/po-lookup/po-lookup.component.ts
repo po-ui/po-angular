@@ -173,9 +173,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         fieldValue
       } = this;
 
-      console.log(this.disclaimers);
-
-      const selectedItems = !this.multiple ? this.valueToModel : this.disclaimers;
+      const selectedItems = !this.multiple || !this.disclaimers.length ? this.valueToModel : this.disclaimers;
 
       this.poLookupModalService.openModal({
         advancedFilters,
