@@ -43,6 +43,40 @@ describe('PoCalendarComponent:', () => {
       expect(component['setActivateDate']).toHaveBeenCalled();
     });
 
+    it('ngOnChanges: should call `setActivateDate` if `changes` contain minDate', () => {
+      const changes: any = {
+        minDate: '2021-08-08'
+      };
+
+      const spy = spyOn(component, <any>'setActivateDate');
+
+      component.ngOnChanges(changes);
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should call `setActivateDate` if `changes` contain maxDate', () => {
+      const changes: any = {
+        maxDate: '2021-08-08'
+      };
+
+      const spy = spyOn(component, <any>'setActivateDate');
+
+      component.ngOnChanges(changes);
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it(`ngOnChanges: shouldn't call 'setActivateDate' if 'changes' not contain maxDate ou minDate`, () => {
+      const changes = {};
+
+      const spy = spyOn(component, <any>'setActivateDate');
+
+      component.ngOnChanges(changes);
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
     it('getActivateDate: should get activateDate if range is true', () => {
       const expectedValue = new Date(2020, 10, 10);
       component.activateDate = { start: expectedValue, end: new Date(2020, 11, 10) };
