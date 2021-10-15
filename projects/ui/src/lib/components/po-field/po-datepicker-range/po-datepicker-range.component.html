@@ -59,6 +59,12 @@
 
 <ng-container *ngIf="isCalendarVisible">
   <div #calendarPicker class="po-calendar-range-picker">
-    <po-calendar p-mode="range" [ngModel]="dateRange" (ngModelChange)="onCalendarChange($event)"></po-calendar>
+    <po-calendar
+      p-mode="range"
+      [ngModel]="dateRange"
+      [p-max-date]="maxDate"
+      [p-min-date]="minDate"
+      (ngModelChange)="onCalendarChange($event)"
+    ></po-calendar>
   </div>
 </ng-container>

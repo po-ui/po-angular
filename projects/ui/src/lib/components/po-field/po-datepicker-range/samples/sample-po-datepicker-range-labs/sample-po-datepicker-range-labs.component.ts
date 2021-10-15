@@ -17,6 +17,8 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   literals: string;
   properties: Array<string>;
   startDate: string | Date;
+  maxDate: string | Date;
+  minDate: string | Date;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
@@ -57,6 +59,8 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     this.literals = undefined;
     this.properties = [];
     this.startDate = undefined;
+    this.maxDate = undefined;
+    this.minDate = undefined;
     setTimeout(() => (this.datepickerRange = undefined));
   }
 }
