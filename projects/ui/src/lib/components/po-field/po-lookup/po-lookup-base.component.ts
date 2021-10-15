@@ -253,7 +253,9 @@ export abstract class PoLookupBaseComponent
    *
    * @description
    *
-   * Ativa a funcionalidade de múltipla seleção, com isso o valor do campo passará a ser uma lista de valores, por exemplo: `[ 12345, 67890 ]`
+   * Permite a seleção de múltiplos itens.
+   * **Importante:**
+   * - quando habilitado o valor do campo passará a ser uma lista de valores, por exemplo: `[ 12345, 67890 ]`
    *
    * @default `false`
    */
