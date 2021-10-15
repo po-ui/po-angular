@@ -5,7 +5,7 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { requiredFailed } from '../validators';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { convertToBoolean } from './../../../utils/util';
+import { convertIsoToDate, convertToBoolean, setYearFrom0To100, validateDateRange } from './../../../utils/util';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
@@ -120,6 +120,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _disabled?;
   private _endDate?;
   private _literals?: any;
+  private _maxDate: Date;
+  private _minDate: Date;
   private _noAutocomplete?: boolean = false;
   private _readonly: boolean = false;
   private _required?: boolean = false;
@@ -237,6 +239,54 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
 
   get literals() {
     return this._literals || poDatepickerRangeLiteralsDefault[this.language];
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma data mínima para o `po-datepicker-range`.
+   */
+  @Input('p-min-date') set minDate(value: string | Date) {
+    if (value instanceof Date) {
+      const year = value.getFullYear();
+
+      const date = new Date(year, value.getMonth(), value.getDate(), 0, 0, 0);
+      setYearFrom0To100(date, year);
+
+      this._minDate = date;
+    } else {
+      this._minDate = convertIsoToDate(value, true, false);
+    }
+  }
+
+  get minDate() {
+    return this._minDate;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma data máxima para o `po-datepicker-range`.
+   */
+  @Input('p-max-date') set maxDate(value: string | Date) {
+    if (value instanceof Date) {
+      const year = value.getFullYear();
+
+      const date = new Date(year, value.getMonth(), value.getDate(), 23, 59, 59);
+      setYearFrom0To100(date, year);
+
+      this._maxDate = date;
+    } else {
+      this._maxDate = convertIsoToDate(value, false, true);
+    }
+  }
+
+  get maxDate() {
+    return this._maxDate;
   }
 
   /**
@@ -382,7 +432,22 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
         }
       };
     }
+
+    if ((startDate && !this.validateDateInRange(startDate)) || (endDate && !this.validateDateInRange(endDate))) {
+      this.errorMessage = this.literals.dateOutOfPeriod;
+
+      return {
+        date: {
+          valid: false
+        }
+      };
+    }
+
     return null;
+  }
+
+  validateDateInRange(startDate: any): boolean {
+    return validateDateRange(convertIsoToDate(startDate, false, false), this._minDate, this._maxDate);
   }
 
   writeValue(dateRange: PoDatepickerRange): void {

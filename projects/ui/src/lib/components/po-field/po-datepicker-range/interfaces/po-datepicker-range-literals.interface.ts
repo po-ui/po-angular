@@ -14,4 +14,7 @@ export interface PoDatepickerRangeLiterals {
 
   /** Data inválida. */
   invalidDate?: string;
+
+  /** Data fora do período. */
+  dateOutOfPeriod?: string;
 }

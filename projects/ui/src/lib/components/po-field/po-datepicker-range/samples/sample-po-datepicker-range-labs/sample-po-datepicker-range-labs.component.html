@@ -8,6 +8,8 @@
   [p-help]="help"
   [p-label]="label"
   [p-literals]="customLiterals"
+  [p-max-date]="maxDate"
+  [p-min-date]="minDate"
   [p-no-autocomplete]="properties?.includes('noAutocomplete')"
   [p-optional]="properties.includes('optional')"
   [p-readonly]="properties.includes('readonly')"
@@ -32,6 +34,28 @@
     <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
 
     <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-datepicker
+      class="po-md-6"
+      name="minDate"
+      [(ngModel)]="minDate"
+      p-clean
+      p-label="Min date"
+      [p-max-date]="maxDate"
+    >
+    </po-datepicker>
+
+    <po-datepicker
+      class="po-md-6"
+      name="maxDate"
+      [(ngModel)]="maxDate"
+      p-clean
+      p-label="Max date"
+      [p-min-date]="minDate"
+    >
+    </po-datepicker>
   </div>
 
   <div class="po-row">

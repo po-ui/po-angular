@@ -63,6 +63,38 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       expectPropertiesValues(component, 'clean', booleanInvalidValues, false);
     });
 
+    it('max-date: should be update property p-max-date using string', () => {
+      component.maxDate = new Date(2021, 7, 1).toISOString();
+
+      expect(component['_maxDate'].getDate()).toBe(1);
+      expect(component['_maxDate'].getMonth()).toBe(7);
+      expect(component['_maxDate'].getFullYear()).toBe(2021);
+    });
+
+    it('max-date: should be update property p-max-date using Date', () => {
+      component.maxDate = new Date(2021, 7, 1);
+
+      expect(component['_maxDate'].getDate()).toBe(1);
+      expect(component['_maxDate'].getMonth()).toBe(7);
+      expect(component['_maxDate'].getFullYear()).toBe(2021);
+    });
+
+    it('min-date: should be update property p-min-date using string', () => {
+      component.minDate = new Date(2021, 7, 1).toISOString();
+
+      expect(component['_minDate'].getDate()).toBe(1);
+      expect(component['_minDate'].getMonth()).toBe(7);
+      expect(component['_minDate'].getFullYear()).toBe(2021);
+    });
+
+    it('min-date: should be update property p-min-date using Date', () => {
+      component.minDate = new Date(2021, 7, 1);
+
+      expect(component['_minDate'].getDate()).toBe(1);
+      expect(component['_minDate'].getMonth()).toBe(7);
+      expect(component['_minDate'].getFullYear()).toBe(2021);
+    });
+
     it('disabled: should update with true value.', () => {
       const booleanValidTrueValues = [true, 'true', 1, ''];
 
@@ -369,6 +401,46 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         expect(component['dateRangeFormatFailed']).toHaveBeenCalled();
         expect(component['dateRangeFailed']).toHaveBeenCalled();
         expect(validate).toEqual(returnNull);
+      });
+
+      it(`should call 'validateDateInRange' if contain startDate and set 'errorMessage' with 'dateOutOfPeriod'`, () => {
+        component.literals = poDatepickerRangeLiteralsDefault.pt;
+
+        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(false);
+        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
+        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
+        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
+        spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
+        spyOn(component, <any>'validateDateInRange').and.returnValue(false);
+
+        const value = { value: { start: '2021-10-14', end: '' } };
+
+        component.validate(<any>value);
+        const validate = component.validate(<any>value);
+
+        expect(component.errorMessage).toEqual(component.literals.dateOutOfPeriod);
+        expect(component['validateDateInRange']).toHaveBeenCalled();
+        expect(validate).toEqual(invalidDateRangeError);
+      });
+
+      it(`should call 'validateDateInRange' if contain endDate and set 'errorMessage' with 'dateOutOfPeriod'`, () => {
+        component.literals = poDatepickerRangeLiteralsDefault.pt;
+
+        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(false);
+        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
+        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
+        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
+        spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
+        spyOn(component, <any>'validateDateInRange').and.returnValue(false);
+
+        const value = { value: { start: '', end: '2021-10-14' } };
+
+        component.validate(<any>value);
+        const validate = component.validate(<any>value);
+
+        expect(component.errorMessage).toEqual(component.literals.dateOutOfPeriod);
+        expect(component['validateDateInRange']).toHaveBeenCalled();
+        expect(validate).toEqual(invalidDateRangeError);
       });
     });
 
@@ -790,6 +862,22 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
       expect(component['verifyValidDate']).toHaveBeenCalled();
       expect(component.errorMessage).toEqual(component.literals.invalidDate);
+    });
+
+    it('validateDateInRange: should return false if `date` is out of range', () => {
+      const date = '2021-09-13';
+      component.minDate = new Date(2021, 9, 14);
+      component.maxDate = new Date(2021, 11, 14);
+
+      expect(component['validateDateInRange'](date)).toBeFalsy();
+    });
+
+    it('validateDateInRange: should return true if `date` is inside of range', () => {
+      const date = '2021-10-15';
+      component.minDate = new Date(2021, 9, 14);
+      component.maxDate = new Date(2021, 11, 14);
+
+      expect(component['validateDateInRange'](date)).toBeTruthy();
     });
   });
 });

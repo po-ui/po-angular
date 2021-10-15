@@ -224,6 +224,40 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['poMaskObject']).toEqual(buildMaskReturn);
     });
 
+    it('ngOnChanges: should call `validateModel` if `changes` contain minDate', () => {
+      const changes: any = {
+        minDate: '2021-08-08'
+      };
+
+      const spy = spyOn(component, <any>'validateModel');
+
+      component.ngOnChanges(changes);
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should call `validateModel` if `changes` contain maxDate', () => {
+      const changes: any = {
+        maxDate: '2021-08-08'
+      };
+
+      const spy = spyOn(component, <any>'validateModel');
+
+      component.ngOnChanges(changes);
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it(`ngOnChanges: shouldn't call 'validateModel' if 'changes' not contain maxDate ou minDate`, () => {
+      const changes = {};
+
+      const spy = spyOn(component, <any>'validateModel');
+
+      component.ngOnChanges(changes);
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
     it('clear: should call `updateScreenByModel`, `resetDateRangeInputValidation` and `updateModel`', () => {
       spyOn(component, 'updateScreenByModel');
       spyOn(component, <any>'resetDateRangeInputValidation');
