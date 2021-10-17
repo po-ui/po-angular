@@ -86,4 +86,19 @@ describe('PoAvatarComponent:', () => {
       expect(nativeElement.querySelector('.po-avatar.po-clickable')).toBeNull();
     });
   });
+
+  describe('Loading:', () => {
+    it('should start with eager as default', () => {
+      expect(component.loading).toEqual('eager');
+    });
+
+    it(`should set 'loading' attribute to img tag`, () => {
+      component.src = 'image_path';
+      component.loading = 'lazy';
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('[loading="lazy"]')).toHaveClass('po-avatar-image');
+    });
+  });
 });

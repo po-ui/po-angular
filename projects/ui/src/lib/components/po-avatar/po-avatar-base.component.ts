@@ -20,6 +20,21 @@ export class PoAvatarBaseComponent {
    */
   @Input('p-src') src: string;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Indica como o navegador deve carregar a imagem.
+   *
+   * Valores válidos:
+   *  - `eager` (a imagem é carregada imediatamente, independente de estar visível ou não)
+   *  - `lazy` (a imagem só é carregada quando estiver próxima de ser renderizada)
+   *
+   * @default `eager`
+   */
+  @Input('p-loading') loading: 'eager' | 'lazy' = 'eager';
+
   /** Evento disparado ao clicar na imagem do *avatar*. */
   @Output('p-click') click = new EventEmitter<any>();
 
