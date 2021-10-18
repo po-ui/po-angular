@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.17.0](https://github.com/po-ui/po-angular/compare/v5.16.0...v5.17.0) (2021-10-18)
+
+### Bug Fixes
+
+* **datepicker-range:** corrige calendário ao abrir nas extremidades ([9cd28ed](https://github.com/po-ui/po-style/commit/9cd28ede67b3e63881816bae6f74767ba2df9f37))
+
+### Features
+
+* **avatar:** adiciona a propriedade `p-loading` ([ec6ba93](https://github.com/po-ui/po-angular/commit/ec6ba93ed1ca7f934d5de714899c272a82ca45e3)), closes [#1058](https://github.com/po-ui/po-angular/issues/1058)
+* **datepicker-range:** inclui as propriedades `min-date` e `max-date` ([62cbc7e](https://github.com/po-ui/po-angular/commit/62cbc7e262ebfe44bb5c0782936a8cf5fc4f3bb0))
+
+
+### Performance Improvements
+
+* **fields:** implementa ChangeDetectionStrategy.OnPush nos componentes Email, Password, Url e Login([907a584](https://github.com/po-ui/po-angular/commit/907a584b85ff4240e8006f5d821f00f13948b4e3))
+
 # [5.16.0](https://github.com/po-ui/po-angular/compare/v5.15.0...v5.16.0) (2021-10-11)
 
 
