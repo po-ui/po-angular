@@ -1,9 +1,8 @@
-import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-
 import { PoLookupFilterService } from './po-lookup-filter.service';
 
-describe('PoLookupFilterService', () => {
+fdescribe('PoLookupFilterService', () => {
   let service: PoLookupFilterService;
   let httpMock: HttpTestingController;
 
@@ -109,6 +108,36 @@ describe('PoLookupFilterService', () => {
       });
 
       httpMock.expectOne(httpRequest => httpRequest.params.get('name') === 'test').flush({});
+    });
+
+    it(`getObjectByValue: should call 'validateParams' with 'multiple' is true and one value and set its return as the request parameter`, () => {
+      service['url'] = 'http://url.com';
+      service['multiple'] = true;
+      const filterParams = { name: 'test' };
+      const value = 1;
+
+      spyOn(service, <any>'validateParams').and.returnValue(filterParams);
+
+      service.getObjectByValue(value, filterParams).subscribe(() => {
+        expect(service['validateParams']).toHaveBeenCalledWith(filterParams);
+      });
+
+      httpMock.expectOne(httpRequest => httpRequest.params.get('name') === 'test').flush({});
+    });
+
+    it(`getObjectByValue: should call 'validateParams' with 'multiple' is true and array of value and set its return as the request parameter`, () => {
+      service['url'] = 'http://url.com';
+      service['multiple'] = true;
+      const filterParams = { name: 'test' };
+      const value = [1, 2];
+
+      spyOn(service, <any>'validateParams').and.returnValue(filterParams);
+
+      service.getObjectByValue(value, filterParams).subscribe(() => {
+        expect(service['validateParams']).toHaveBeenCalledWith(filterParams);
+      });
+
+      httpMock.expectOne(httpRequest => httpRequest.params.get('name') === 'test').flush({ items: [] });
     });
 
     it('setConfig: should set `url` to the value of the parameter', () => {
