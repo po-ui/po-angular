@@ -1,16 +1,15 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   forwardRef,
+  Injector,
   OnDestroy,
   OnInit,
-  ViewChild,
-  AfterViewInit,
-  Injector,
-  Renderer2
+  Renderer2,
+  ViewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-
 import { Subscription } from 'rxjs';
 
 import { PoLookupBaseComponent } from './po-lookup-base.component';
@@ -84,6 +83,12 @@ const providers = [
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.component.html"> </file>
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.component.ts"> </file>
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.service.ts"> </file>
+ * </example>
+ *
+ * <example name="po-lookup-multiple" title="PO Lookup - Multiple">
+ *  <file name="sample-po-lookup-multiple/sample-po-lookup-multiple.component.html"> </file>
+ *  <file name="sample-po-lookup-multiple/sample-po-lookup-multiple.component.ts"> </file>
+ *  <file name="sample-po-lookup-multiple/sample-po-lookup-multiple.service.ts"> </file>
  * </example>
  */
 @Component({
