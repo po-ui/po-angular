@@ -17,8 +17,6 @@ class PoLookupModalComponent extends PoLookupModalBaseComponent {
 }
 
 describe('PoLookupModalBaseComponent:', () => {
-  // let changeDetector: ChangeDetectorRef;
-  // let component: PoLookupModalComponent;
   let component: PoLookupModalComponent;
   let fixture: ComponentFixture<PoLookupModalComponent>;
 
@@ -28,7 +26,7 @@ describe('PoLookupModalBaseComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       providers: [PoLanguageService]
-    });
+    }).compileComponents();
   });
 
   beforeEach(() => {
