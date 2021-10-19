@@ -1,14 +1,14 @@
-import { Directive, ChangeDetectorRef } from '@angular/core';
+import { Directive } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of, throwError } from 'rxjs';
 
-import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
-import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
-import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
-
-import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
+import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+import { configureTestSuite, expectPropertiesValues } from '../../../../util-test/util-expect.spec';
+import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
+import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
 
 @Directive()
 class PoLookupModalComponent extends PoLookupModalBaseComponent {
@@ -17,14 +17,24 @@ class PoLookupModalComponent extends PoLookupModalBaseComponent {
 }
 
 describe('PoLookupModalBaseComponent:', () => {
-  let changeDetector: ChangeDetectorRef;
+  // let changeDetector: ChangeDetectorRef;
+  // let component: PoLookupModalComponent;
   let component: PoLookupModalComponent;
-  let fakeSubscription;
+  let fixture: ComponentFixture<PoLookupModalComponent>;
+
+  let fakeSubscription = <any>{ unsubscribe: () => {} };
   let items;
 
-  beforeEach(() => {
-    component = new PoLookupModalComponent(new PoLanguageService(), changeDetector);
+  configureTestSuite(() => {
+    TestBed.configureTestingModule({
+      providers: [PoLanguageService]
+    });
+  });
 
+  beforeEach(() => {
+    // component = new PoLookupModalComponent(new PoLanguageService(), changeDetector);
+    fixture = TestBed.createComponent(PoLookupModalComponent);
+    component = fixture.componentInstance;
     component.filterService = {
       getFilteredItems: ({ filter, pageSize }) => of({ items: [], hasNext: false }),
       getObjectByValue: () => of()
@@ -41,6 +51,7 @@ describe('PoLookupModalBaseComponent:', () => {
     ];
 
     component.ngOnInit();
+    fixture.detectChanges();
   });
 
   it('should init modal with items', () => {
