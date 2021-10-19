@@ -228,8 +228,6 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   setViewValue(value: any, object: any): void {
-    console.log('setViewValue', { value: value, object: object });
-
     if (this.fieldFormat) {
       this.setInputValueWipoieldFormat(object);
     } else if (this.inputEl) {

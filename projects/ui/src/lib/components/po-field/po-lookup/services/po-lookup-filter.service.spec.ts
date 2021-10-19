@@ -26,7 +26,7 @@ describe('PoLookupFilterService', () => {
   });
 
   describe('Methods:', () => {
-    it(`getFilteredItems: should return the request response and create request with url, page, pageSize, filter, 
+    it(`getFilteredItems: should return the request response and create request with url, page, pageSize, filter,
     headers and params correctly`, fakeAsync(() => {
       service['url'] = 'http://url.com';
       const page = 1;
@@ -111,11 +111,13 @@ describe('PoLookupFilterService', () => {
       httpMock.expectOne(httpRequest => httpRequest.params.get('name') === 'test').flush({});
     });
 
-    it('setUrl: should set `url` to the value of the parameter', () => {
+    it('setConfig: should set `url` to the value of the parameter', () => {
       service['url'] = undefined;
       const paramValue = 'http://url.com.br';
+      const fieldValue = 'teste';
+      const multiple = false;
 
-      service.setUrl(paramValue);
+      service.setConfig(paramValue, fieldValue, multiple);
 
       expect(service['url']).toBe(paramValue);
     });
