@@ -204,7 +204,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   checkSelectedItems() {
     if (this.multiple) {
-      if (!this.disclaimers.length) {
+      if (!this.disclaimers.length && this.valueToModel?.length) {
         return [{ value: this.valueToModel[0], label: this.oldValue }];
       }
       return this.disclaimers;
