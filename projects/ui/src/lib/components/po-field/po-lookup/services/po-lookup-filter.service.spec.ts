@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { PoLookupFilterService } from './po-lookup-filter.service';
 
-fdescribe('PoLookupFilterService', () => {
+describe('PoLookupFilterService', () => {
   let service: PoLookupFilterService;
   let httpMock: HttpTestingController;
 
