@@ -117,7 +117,7 @@ describe('PoLookupComponent:', () => {
   });
 
   describe('Methods:', () => {
-    const objectSelected = { label: 'teste', value: 123 };
+    const objectSelected: any = { label: 'teste', value: 123 };
 
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
@@ -389,8 +389,24 @@ describe('PoLookupComponent:', () => {
         component.label = 'Estabelecimento';
         component.literals = undefined;
         component.infiniteScroll = false;
+        component.multiple = false;
+        component.fieldLabel = 'label';
+        component.fieldValue = 'value';
 
-        const { advancedFilters, service, columns, filterParams, literals, infiniteScroll } = component;
+        const {
+          advancedFilters,
+          service,
+          columns,
+          filterParams,
+          literals,
+          infiniteScroll,
+          multiple,
+          fieldLabel,
+          fieldValue
+        } = component;
+
+        const selectedItems = undefined;
+
         const params = {
           advancedFilters,
           service,
@@ -398,7 +414,11 @@ describe('PoLookupComponent:', () => {
           filterParams,
           title: component.label,
           literals,
-          infiniteScroll
+          infiniteScroll,
+          multiple,
+          selectedItems,
+          fieldLabel,
+          fieldValue
         };
 
         spyOn(component['poLookupModalService'], 'openModal');

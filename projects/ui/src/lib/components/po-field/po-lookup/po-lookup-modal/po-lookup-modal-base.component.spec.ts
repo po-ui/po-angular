@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, ChangeDetectorRef } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 
 import { expectPropertiesValues } from '../../../../util-test/util-expect.spec';
@@ -17,12 +17,13 @@ class PoLookupModalComponent extends PoLookupModalBaseComponent {
 }
 
 describe('PoLookupModalBaseComponent:', () => {
+  let changeDetector: ChangeDetectorRef;
   let component: PoLookupModalComponent;
   let fakeSubscription;
   let items;
 
   beforeEach(() => {
-    component = new PoLookupModalComponent(new PoLanguageService());
+    component = new PoLookupModalComponent(new PoLanguageService(), changeDetector);
 
     component.filterService = {
       getFilteredItems: ({ filter, pageSize }) => of({ items: [], hasNext: false }),

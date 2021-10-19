@@ -68,6 +68,7 @@ describe('PoLookupModalComponent', () => {
   });
 
   it('should init modal with items', () => {
+    console.log('ou esse!');
     component.ngOnInit();
 
     expect(component.items.length).toBe(2);
