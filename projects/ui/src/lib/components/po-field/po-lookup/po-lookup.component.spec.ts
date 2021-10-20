@@ -34,7 +34,7 @@ const closeModalInstance = (modalInstance: ComponentRef<any>) => {
 
 export const routes: Routes = [{ path: '', redirectTo: 'home', pathMatch: 'full' }];
 
-describe('PoLookupComponent:', () => {
+fdescribe('PoLookupComponent:', () => {
   let component: PoLookupComponent;
   let fixture: ComponentFixture<PoLookupComponent>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
@@ -332,6 +332,85 @@ describe('PoLookupComponent:', () => {
 
       expect(component.inputEl.nativeElement.value).toBe('');
       expect(component['setInputValueWipoieldFormat']).not.toHaveBeenCalled();
+    });
+
+    it('checkSelectedItems: should return disclaimers if contain `disclaimers` and `valueToModel`', () => {
+      component.multiple = true;
+      const expectedValue = {
+        value: 'teste',
+        label: 'testeLabel'
+      };
+
+      component.disclaimers = [
+        {
+          value: 'teste',
+          label: 'testeLabel'
+        }
+      ];
+
+      component['valueToModel'] = [
+        {
+          value: 'teste',
+          label: 'testeLabel'
+        },
+        {
+          value: 'teste2',
+          label: 'testeLabel2'
+        }
+      ];
+
+      const valueCheckSelectedItems = component.checkSelectedItems();
+
+      expect(valueCheckSelectedItems[0]).toEqual(expectedValue);
+    });
+
+    it('checkSelectedItems: should return object with value and label if not contain `disclaimers` but contain `valueToModel`', () => {
+      component.multiple = true;
+      const expectedValue = [
+        {
+          value: {
+            value: 'teste',
+            label: 'testeLabel'
+          },
+          label: ''
+        }
+      ];
+
+      component.disclaimers = [];
+
+      component['valueToModel'] = [
+        {
+          value: 'teste',
+          label: 'testeLabel'
+        }
+      ];
+
+      const valueCheckSelectedItems = component.checkSelectedItems();
+
+      expect(valueCheckSelectedItems[0]).toEqual(expectedValue[0]);
+    });
+
+    it('checkSelectedItems: should return `valueToModel` if multiple is false', () => {
+      component.multiple = false;
+      const expectedValue = [
+        {
+          value: 'teste',
+          label: 'testeLabel'
+        }
+      ];
+
+      component.disclaimers = [];
+
+      component['valueToModel'] = [
+        {
+          value: 'teste',
+          label: 'testeLabel'
+        }
+      ];
+
+      const valueCheckSelectedItems = component.checkSelectedItems();
+
+      expect(valueCheckSelectedItems).toEqual(expectedValue);
     });
 
     it('setInputValueWipoieldFormat: should set `inputValue` and `oldValue` with value returned of `fieldFormat`', () => {
