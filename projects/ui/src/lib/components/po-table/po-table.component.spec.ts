@@ -1861,7 +1861,7 @@ describe('PoTableComponent:', () => {
 
         component['toggleSelect'](newItem, true);
 
-        component.unselectRowItem(item => false);
+        component.unselectRowItem(itemSelect => false);
 
         expect(component.selectAll).toBeFalsy();
       });
@@ -1900,7 +1900,7 @@ describe('PoTableComponent:', () => {
 
         component['toggleSelect'](newItem, true);
 
-        component.selectRowItem(newItem => true);
+        component.selectRowItem(itemSelect => true);
 
         expect(component.selectAll).toBeTruthy();
       });
